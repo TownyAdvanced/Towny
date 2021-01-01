@@ -610,11 +610,10 @@ public class SiegeWarEventListener implements Listener {
 	}
 	
 	/*
-	 * SiegeWar will disable nation-zones if the Towny config disables nationzones during war.
+	 * SiegeWar will disable nation-zones if the town has a siege.
 	 */
 	public void onNationZoneStatus(NationZoneTownBlockStatusEvent event) {
 		if (SiegeWarSettings.getWarSiegeEnabled() 
-			&& TownySettings.getNationZonesWarDisables()
 			&& SiegeController.hasActiveSiege(event.getTown()))	{
 			event.setCancelled(true);
 		}

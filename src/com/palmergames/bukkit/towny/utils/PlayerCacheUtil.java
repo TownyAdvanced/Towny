@@ -22,8 +22,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
-import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 
 import net.citizensnpcs.api.CitizensAPI;
 
@@ -460,13 +458,6 @@ public class PlayerCacheUtil {
 							nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), nearestTown);
 							Nation nearestNation = nearestTown.getNation();
 			
-							//During an active siege, nobody can alter the nation zone
-							if(SiegeWarSettings.getWarSiegeEnabled()
-								&& SiegeController.hasActiveSiege(nearestTown)) {
-								cacheBlockErrMsg(player, Translation.of("msg_err_siege_war_nation_zone_this_area_protected_but_besieged", pos.getTownyWorld().getUnclaimedZoneName(), nearestNation.getName()));
-								return false;
-							}
-
 							try {
 								playersNation = playersTown.getNation();
 							} catch (Exception e1) {							
