@@ -5653,3 +5653,5 @@ v0.92.0.11:
   - Fix towns being able to go over the maximum residents, courtesy of Warriorrrr with PR #4650.
   - Automatically add SHEARS to the global_town_settings.farm_plot_allow_blocks list in the config.
     - Closes #4652.
+0.96.5.11:
+  - Fix possible NPE in TownyPlayerListener.
