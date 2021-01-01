@@ -2917,6 +2917,10 @@ public class TownySettings {
 	public static boolean isNationTaxKickingTownsThatReachDebtCap() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_NATION_KICKS_TOWNS_THAT_REACH_DEBT_CAP);
 	}
+	
+	public static boolean doesNationTaxDeleteConqueredTownsWhichCannotPay() {
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_DOES_NATION_TAX_DELETE_CONQUERED_TOWNS);
+	}
 
 	public static boolean doBankruptTownsPayNationTax() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_DO_BANKRUPT_TOWNS_PAY_NATION_TAX);

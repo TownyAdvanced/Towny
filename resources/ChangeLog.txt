@@ -5658,3 +5658,6 @@ v0.92.0.11:
   - API: Added NationZoneTownBlockStatusEvent
     - A cancellable event thrown when a townblockstatus would return a NationZone result.
     - Cancelling this will have Towny return a UnclaimedZone result instead.
+  - New Config Option: economy.bankruptcy.nation_tax.does_nation_tax_delete_conquered_towns_that_cannot_pay
+    - Default: false
+    - Does a conquered town which cannot pay the nation tax get deleted?

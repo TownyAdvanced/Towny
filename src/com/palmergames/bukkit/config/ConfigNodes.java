@@ -1913,6 +1913,11 @@ public enum ConfigNodes {
 			"",
 			"# If a town can no longer pay their nation tax with debt because they have",
 			"# reach their debtcap, are they kicked from the nation?"),
+	ECO_BANKRUPTCY_DOES_NATION_TAX_DELETE_CONQUERED_TOWNS(
+			"economy.bankruptcy.nation_tax.does_nation_tax_delete_conquered_towns_that_cannot_pay",
+			"false",
+			"",
+			"# Does a conquered town which cannot pay the nation tax get deleted?"),
 	
 	ECO_PLOT_TYPE_COSTS("economy.plot_type_costs","",""),
 	ECO_PLOT_TYPE_COSTS_COMMERCIAL("economy.plot_type_costs.set_commercial",
