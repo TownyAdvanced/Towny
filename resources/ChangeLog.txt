@@ -5655,3 +5655,6 @@ v0.92.0.11:
     - Closes #4652.
 0.96.5.11:
   - Fix possible NPE in TownyPlayerListener.
+  - API: Added NationZoneTownBlockStatusEvent
+    - A cancellable event thrown when a townblockstatus would return a NationZone result.
+    - Cancelling this will have Towny return a UnclaimedZone result instead.
