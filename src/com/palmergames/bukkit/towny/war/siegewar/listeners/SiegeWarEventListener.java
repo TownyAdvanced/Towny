@@ -37,12 +37,14 @@ import com.palmergames.bukkit.towny.event.nation.NationTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
 import com.palmergames.bukkit.towny.event.time.NewHourEvent;
 import com.palmergames.bukkit.towny.event.time.NewShortTimeEvent;
+import com.palmergames.bukkit.towny.event.time.dailytaxes.PreTownPaysNationTaxEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleOpenEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePVPEvent;
+import com.palmergames.bukkit.towny.event.townblockstatus.NationZoneTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -593,6 +595,26 @@ public class SiegeWarEventListener implements Listener {
 		
 		for (Siege siege : SiegeController.getSiegesByNationUUID(event.getNationUUID())) {
 			SiegeController.removeSiege(siege, SiegeSide.DEFENDERS);
+		}
+	}
+
+	/*
+	 * In SiegeWar neutral/peaceful towns do not pay their Nation tax. 
+	 */
+	public void onTownPayNationTax(PreTownPaysNationTaxEvent event) {
+		if (SiegeWarSettings.getWarSiegeEnabled() && SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && event.getTown().isNeutral()) {
+			event.setCancelled(true);
+		}
+	}
+	
+	/*
+	 * SiegeWar will disable nation-zones if the Towny config disables nationzones during war.
+	 */
+	public void onNationZoneStatus(NationZoneTownBlockStatusEvent event) {
+		if (SiegeWarSettings.getWarSiegeEnabled() 
+			&& TownySettings.getNationZonesWarDisables()
+			&& SiegeController.hasActiveSiege(event.getTown()))	{
+			event.setCancelled(true);
 		}
 	}
 }

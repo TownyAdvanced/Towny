@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.event.townblockstatus.NationZoneTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -16,8 +17,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
-import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import org.bukkit.Bukkit;
@@ -493,12 +492,6 @@ public class TownyAPI {
 			
 			nearestTown = nearestTownblock.getTown();
 			
-			//If nearest town has an in-progress siege, and war disables config is true, nationzone is disabled.
-			if(SiegeWarSettings.getWarSiegeEnabled()
-				&& TownySettings.getNationZonesWarDisables()
-				&& SiegeController.hasActiveSiege(nearestTown))	{
-				return TownBlockStatus.UNCLAIMED_ZONE;
-			}
 			// Safety validation, both these cases should never occur.
 			if (nearestTown == null || !nearestTown.hasNation()) {
 				return TownBlockStatus.UNCLAIMED_ZONE;
@@ -524,6 +517,11 @@ public class TownyAPI {
 			}
 
 			if (distance <= nationZoneRadius) {
+				NationZoneTownBlockStatusEvent event = new NationZoneTownBlockStatusEvent(nearestTown);
+				Bukkit.getPluginManager().callEvent(event);
+				if (event.isCancelled())
+					return TownBlockStatus.UNCLAIMED_ZONE;
+				
 				return TownBlockStatus.NATION_ZONE;
 			}
 		} catch (NumberFormatException | NotRegisteredException ignored) {

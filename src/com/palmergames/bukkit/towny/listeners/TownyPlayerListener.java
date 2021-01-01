@@ -267,8 +267,10 @@ public class TownyPlayerListener implements Listener {
 			
 			Material item =  event.getItem().getType();
 			
-			Location loc = clickedBlock.getLocation();
-			if (loc == null)
+			Location loc = null;
+			if (clickedBlock != null)
+				loc = clickedBlock.getLocation();
+			else 
 				loc = player.getLocation();
 			/*
 			 * Test item_use. 

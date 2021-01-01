@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
+import com.palmergames.bukkit.towny.event.time.dailytaxes.PreTownPaysNationTaxEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -16,7 +17,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import java.util.ArrayList;
@@ -197,9 +197,9 @@ public class DailyTimerTask extends TownyTimerTask {
 		
 		if (nation.getTaxes() > 0) {
 
-			List<String> localTownsDestroyed = new ArrayList<>();
 			double taxAmount = nation.getTaxes();
 			List<String> localNewlyDelinquentTowns = new ArrayList<>();
+			List<String> localTownsDestroyed = new ArrayList<>();
 			List<Town> towns = new ArrayList<>(nation.getTowns());
 			ListIterator<Town> townItr = towns.listIterator();
 			Town town;
@@ -208,18 +208,22 @@ public class DailyTimerTask extends TownyTimerTask {
 				town = townItr.next();
 
 				/*
-				 * Only collect nation tax from this town if 
-				 * - It exists
-				 * - It is not the capital
-				 * - It is not ruined
-				 * - It is not neutral
-				 * 
+				 * Only collect nation tax from this town if it really still
+				 * exists.
 				 * We are running in an Async thread so MUST verify all objects.
 				 */
 				if (universe.getDataSource().hasTown(town.getName())) {
-					if (town.isCapital() || !town.hasUpkeep() || town.isRuined() || (SiegeWarSettings.getWarSiegeEnabled()
-							&& SiegeWarSettings.getWarCommonPeacefulTownsEnabled() && town.isNeutral()))
+					if (town.isCapital() || !town.hasUpkeep() || town.isRuined())
 						continue;
+					
+					PreTownPaysNationTaxEvent event = new PreTownPaysNationTaxEvent(town, nation, taxAmount);
+					Bukkit.getPluginManager().callEvent(event);
+					if (event.isCancelled()) {
+						TownyMessaging.sendPrefixedTownMessage(town, event.getCancellationMessage());
+						continue;
+					}
+					taxAmount = event.getTax();
+					
 					if (town.getAccount().canPayFromHoldings(taxAmount)) {
 					// Town is able to pay the nation's tax.
 						town.getAccount().payTo(taxAmount, nation, "Nation Tax to " + nation.getName());
@@ -227,23 +231,15 @@ public class DailyTimerTask extends TownyTimerTask {
 					} else {
 					// Town is unable to pay the nation's tax.
 						if (!TownySettings.isTownBankruptcyEnabled() || !TownySettings.doBankruptTownsPayNationTax()) {
-						
-							/*
-							 * TODO: RECHECK THIS IS WORKING. 
-							 */
-							//If town is occupied, destroy it, otherwise remove from nation
-							if (SiegeWarSettings.getWarSiegeEnabled() && town.isConquered()) {
-								universe.getDataSource().removeTown(town);
-								localTownsDestroyed.add(town.getName());
-							}
-							/*
-							 * TODO: This is part of the messy business with getting bankruptcy in SW and Towny to work together again.
-							 * Towny's dailytimertask got a lot of work done on it.
-							 */
-							
-
 						// Bankruptcy disabled, remove town for not paying nation tax, 
 						// OR Bankruptcy enabled but towns aren't allowed to use debt to pay nation tax. 
+							
+							if (TownySettings.doesNationTaxDeleteConqueredTownsWhichCannotPay() && town.isConquered()) {
+								universe.getDataSource().removeTown(town);
+								localTownsDestroyed.add(town.getName());
+								continue;
+							}
+							
 							localNewlyDelinquentTowns.add(town.getName());		
 							town.removeNation();
 							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_couldnt_pay_the_nation_tax_of", TownyEconomyHandler.getFormattedBalance(taxAmount)));
@@ -291,20 +287,18 @@ public class DailyTimerTask extends TownyTimerTask {
 				msg1 = "msg_town_bankrupt_by_nation_tax";
 				msg2 = "msg_town_bankrupt_by_nation_tax_multiple";
 			}
+			if (!localNewlyDelinquentTowns.isEmpty())
+				if (localNewlyDelinquentTowns.size() == 1)
+					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of(msg1, localNewlyDelinquentTowns.get(0), Translation.of("nation_sing")));
+				else
+					TownyMessaging.sendPrefixedNationMessage(nation, ChatTools.list(localNewlyDelinquentTowns, msg2));
 			
-			if (localNewlyDelinquentTowns.size() == 1)
-				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of(msg1, localNewlyDelinquentTowns.get(0), Translation.of("nation_sing")));
-			else
-				TownyMessaging.sendPrefixedNationMessage(nation, ChatTools.list(localNewlyDelinquentTowns, msg2));
+			if (!localTownsDestroyed.isEmpty())
+				if (localTownsDestroyed.size() == 1)
+					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_town_destroyed_by_nation_tax", ChatTools.list(localTownsDestroyed)));
+				else
+					TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localTownsDestroyed, Translation.of("msg_town_destroyed_by_nation_tax_multiple")));
 			
-			if(SiegeWarSettings.getWarSiegeEnabled()) {
-				if (localTownsDestroyed.size() > 0) {
-					if (localTownsDestroyed.size() == 1)
-						TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_town_destroyed_by_nation_tax", ChatTools.list(localTownsDestroyed)));
-					else
-						TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localTownsDestroyed, Translation.of("msg_town_destroyed_by_nation_tax_multiple")));
-				}
-			}
 		}
 
 	}
