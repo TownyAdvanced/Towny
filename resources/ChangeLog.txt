@@ -5664,3 +5664,6 @@ v0.92.0.11:
   - API: Added PreTownPaysNationTaxEvent
     - A cancellable event that precedes a town paying the nation tax.
     - Also allows you to alter the amount a town would pay in tax.
+  - API: Add StatusScreenEvents
+    - ResidentStatusScreenEvent, TownStatusScreenEvent, NationStatusScreenEvent
+    - Makes it possible to add additional lines to the above objects' status screens.

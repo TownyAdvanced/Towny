@@ -1,5 +1,8 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.event.statusscreen.NationStatusScreenEvent;
+import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
+import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -24,6 +27,8 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.util.ChatPaginator;
 
@@ -248,6 +253,11 @@ public class TownyFormatter {
 		
 		out.addAll(getExtraFields(resident));
 		
+		ResidentStatusScreenEvent event = new ResidentStatusScreenEvent(resident);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.hasAdditionalLines())
+			out.addAll(event.getAdditionalLines());
+		
 		out = formatStatusScreens(out);
 		return out;
 	}
@@ -456,6 +466,11 @@ public class TownyFormatter {
 
 		out.addAll(getExtraFields(town));
 		
+		TownStatusScreenEvent event = new TownStatusScreenEvent(town);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.hasAdditionalLines())
+			out.addAll(event.getAdditionalLines());
+		
 		out = formatStatusScreens(out);
 		return out;
 	}
@@ -576,6 +591,11 @@ public class TownyFormatter {
         out.addAll(ChatTools.listArr(enemies, Translation.of("status_nation_enemies", nation.getEnemies().size())));
 
 		out.addAll(getExtraFields(nation));
+		
+		NationStatusScreenEvent event = new NationStatusScreenEvent(nation);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.hasAdditionalLines())
+			out.addAll(event.getAdditionalLines());
 		
 		out = formatStatusScreens(out);
 		return out;
