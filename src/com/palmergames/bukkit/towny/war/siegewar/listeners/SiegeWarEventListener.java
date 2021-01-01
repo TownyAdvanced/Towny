@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -28,6 +29,7 @@ import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.event.RenameTownEvent;
+import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
@@ -616,5 +618,35 @@ public class SiegeWarEventListener implements Listener {
 			&& SiegeController.hasActiveSiege(event.getTown()))	{
 			event.setCancelled(true);
 		}
+	}
+	
+	/*
+	 * SiegeWar prevents people from spawning to siege areas if they are not peaceful and do not belong to the town in question.
+	 */
+	public void onPlayerUsesTownySpawnCommand(SpawnEvent event) {
+		if (SiegeWarSettings.getWarSiegeEnabled() && SiegeWarSettings.getWarSiegeNonResidentSpawnIntoSiegeZonesOrBesiegedTownsDisabled()) {
+			Town destinationTown = TownyAPI.getInstance().getTown(event.getTo());
+			Resident res = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
+			if (destinationTown == null || res == null)
+				return;
+			
+			// Don't block spawning for residents which belong to the Town, or to neutral towns.
+			if (destinationTown.hasResident(res) || destinationTown.isNeutral())
+				return;
+
+			//Block TP if the target town is besieged
+			if (SiegeController.hasActiveSiege(destinationTown)) {
+				event.setCancelled(true);
+				event.setCancelMessage(Translation.of("msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town"));
+				return;
+			}
+
+			//Block TP if the target spawn point is in a siege zone
+			if (SiegeWarDistanceUtil.isLocationInActiveSiegeZone(event.getTo())) {
+				event.setCancelled(true);
+				event.setCancelMessage(Translation.of("msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town"));
+
+			}
+		}		
 	}
 }

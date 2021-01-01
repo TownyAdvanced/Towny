@@ -2896,18 +2896,6 @@ public enum ConfigNodes {
 			"5",
 			"# This value determines how long it takes to confirm a town peacefulness status change.",
 			"# It is recommended to be high, for use by genuinely peaceful towns, not just for war cost avoidance."),
-	WAR_COMMON_PEACEFUL_TOWNS_VISITOR_T_SPAWN_OVERRIDE(
-			"war.common.peaceful_towns.visitor_t_spawn_override",
-			"true",
-			"# If this value is true, then visitors can always spawn to public peaceful towns."),
-	WAR_COMMON_PEACEFUL_TOWNS_TRAVELLER_N_SPAWN_OVERRIDE(
-			"war.common.peaceful_towns.traveller_n_spawn_override",
-			"true",
-			"# If this value is true, then residents of peaceful towns can always travel to public nations."),
-	WAR_COMMON_PEACEFUL_TOWNS_TRAVELLER_DISALLOWED_ZONES_OVERRIDE(
-			"war.common.peaceful_towns.traveller_disallowed_zones_override",
-			"true",
-			"# If this value is true, then residents of peaceful towns are not affected by disallowed zones when spawning."),
 	WAR_COMMON_PEACEFUL_TOWNS_ALLOWED_TO_MAKE_NATION(
 			"war.common.peaceful_towns.allowed_to_make_nation",
 			"false",

@@ -328,18 +328,6 @@ public class SiegeWarSettings {
 		return TownySettings.getInt(ConfigNodes.WAR_SIEGE_PEACEFUL_TOWNS_GUARDIAN_TOWN_MIN_DISTANCE_REQUIREMENT_TOWNBLOCKS);
 	}
 
-	public static boolean getWarCommonPeacefulTownsVisitorTSpawnOverride() {
-		return TownySettings.getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_VISITOR_T_SPAWN_OVERRIDE);
-	}
-
-	public static boolean getWarCommonPeacefulTownsTravellerNSpawnOverride() {
-		return TownySettings.getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_TRAVELLER_N_SPAWN_OVERRIDE);
-	}
-
-	public static boolean getWarCommonPeacefulTownsDisallowedZonesOverride() {
-		return TownySettings.getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_TRAVELLER_DISALLOWED_ZONES_OVERRIDE);
-	}
-
 	public static boolean getWarCommonPeacefulTownsAllowedToMakeNation() {
 		return TownySettings.getBoolean(ConfigNodes.WAR_COMMON_PEACEFUL_TOWNS_ALLOWED_TO_MAKE_NATION);
 	}

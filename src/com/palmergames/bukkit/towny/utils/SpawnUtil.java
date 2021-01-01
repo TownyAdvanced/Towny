@@ -5,11 +5,6 @@ import java.util.List;
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
-import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
-import com.palmergames.bukkit.towny.war.siegewar.siege.SiegeController;
-import com.palmergames.bukkit.towny.war.siegewar.utils.SiegeWarDistanceUtil;
 import com.palmergames.bukkit.towny.event.teleport.ResidentSpawnEvent;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.economy.Account;
@@ -167,15 +162,6 @@ public class SpawnUtil {
 			} else
 				spawnLoc = town.getSpawn();
 
-			//If town is peaceful and public, skip further t spawn checks
-			if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
-				&& SiegeWarSettings.getWarCommonPeacefulTownsVisitorTSpawnOverride()
-				&& town.isNeutral()
-				&& town.isPublic()) {
-				townSpawnPermission = TownSpawnLevel.TOWN_RESIDENT;
-				break;
-			}
-
 			// Determine conditions
 			if (isTownyAdmin) {
 				townSpawnPermission = TownSpawnLevel.ADMIN;
@@ -198,7 +184,7 @@ public class SpawnUtil {
 						else
 							townSpawnPermission = TownSpawnLevel.PART_OF_NATION;
 					} else if (targetNation.hasEnemy(playerNation)) {
-						// Prevent enemies from using spawn travel. (except when peaceful towns are involved)
+						// Prevent enemies from using spawn travel.
 						throw new TownyException(Translation.of("msg_err_public_spawn_enemy"));
 					} else if (targetNation.hasAlly(playerNation)) {
 						if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
@@ -231,16 +217,6 @@ public class SpawnUtil {
 			nation = (Nation) townyObject;
 			spawnLoc = nation.getSpawn();
 
-			//If resident is from a peaceful town, and nation is public, skip further n spawn checks
-			if(SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
-				&& SiegeWarSettings.getWarCommonPeacefulTownsTravellerNSpawnOverride()
-				&& resident.hasTown()
-				&& resident.getTown().isNeutral()
-				&& nation.isPublic()) {
-				nationSpawnPermission = NationSpawnLevel.PART_OF_NATION;
-				break;
-			}
-
 			// Determine conditions
 			if (isTownyAdmin) {
 				nationSpawnPermission = NationSpawnLevel.ADMIN;
@@ -256,7 +232,7 @@ public class SpawnUtil {
 					if (playerNation == nation) {
 						nationSpawnPermission = NationSpawnLevel.PART_OF_NATION;
 					} else if (nation.hasEnemy(playerNation)) {
-						// Prevent enemies from using spawn travel. (except when the traveller is peaceful)
+						// Prevent enemies from using spawn travel.
 						throw new TownyException(Translation.of("msg_err_public_spawn_enemy"));
 					} else if (nation.hasAlly(playerNation)) {
 						nationSpawnPermission = NationSpawnLevel.NATION_ALLY;
@@ -278,12 +254,7 @@ public class SpawnUtil {
 		}
 
 		// Prevent spawn travel while in disallowed zones (if configured.)
-		if (!isTownyAdmin
-			&& !(SiegeWarSettings.getWarCommonPeacefulTownsEnabled()
-				 && SiegeWarSettings.getWarCommonPeacefulTownsDisallowedZonesOverride()
-			     && resident.hasTown()
-			     && resident.getTown().isNeutral())) {
-
+		if (!isTownyAdmin) {
 			List<String> disallowedZones = TownySettings.getDisallowedTownSpawnZones();
 
 			if (!disallowedZones.isEmpty()) {
@@ -310,45 +281,6 @@ public class SpawnUtil {
 						throw new TownyException(
 								Translation.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translation.of("msg_neutral_towns")));
 				}
-			}
-		}
-
-		/* 
-		 Prevent spawning into siegezones OR besieged towns except if:
-		 1. It is a town resident spawning into their own town, OR
-		 2. It is a player spawning into a peaceful town
-		 */
-		if (!isTownyAdmin 
-			&& SiegeWarSettings.getWarSiegeEnabled() 
-			&& SiegeWarSettings.getWarSiegeNonResidentSpawnIntoSiegeZonesOrBesiegedTownsDisabled()) {
-
-			try {
-				String townNameAtSpawnLocation = TownyAPI.getInstance().getTownName(spawnLoc);
-				boolean residentSpawningIntoOwnTown =
-				    townNameAtSpawnLocation != null
-					&& resident.hasTown()
-					&& resident.getTown().getName().equalsIgnoreCase(townNameAtSpawnLocation);
-
-				if(!residentSpawningIntoOwnTown) {   //No block if this is a resident spawning into own town
-					Town townAtSpawnLocation = townyUniverse.getDataSource().getTown(townNameAtSpawnLocation);
-
-					if(!townAtSpawnLocation.isNeutral()) {  //No block if this is a peaceful town
-
-						//Block TP if the target town is besieged
-						if (SiegeController.hasActiveSiege(townAtSpawnLocation))
-							throw new TownyException(Translation.of("msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town"));
-
-						//Block TP if the target spawn point is in a siege zone
-						for (Siege siege : SiegeController.getSieges()) {
-							if (siege.getStatus().isActive()
-								&& SiegeWarDistanceUtil.isInSiegeZone(spawnLoc, siege)) {
-								throw new TownyException(Translation.of("msg_err_siege_war_cannot_spawn_into_siegezone_or_besieged_town"));
-							}
-						}
-					}
-				}
-			} catch (NotRegisteredException e) { 
-				//No exception expected due to logic
 			}
 		}
 
