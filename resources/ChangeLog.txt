@@ -5644,3 +5644,12 @@ v0.92.0.11:
   - Backend Nation UUID Implementation, courtesy of silverwolfg11 with PR #4608.
     - Continues the progress of changing the Towny objects over to maps based on UUIDs rather than names.
   - Fix titles, surnames and nation ranks resetting.
+0.96.5.10:
+  - Fix teleport queue not replacing previous warmups.
+    - Should help out Tuinity and PurPur servers who have seen warmups stacking.
+    - Closes #4624.
+  - Fix debt account conversion on servers that use TheNewEconomy.
+  - Fix /n deposit [amount] [town] going into the specified town bank rather than the town bank of the depositor, courtesy of Momshroom with PR #4651.
+  - Fix towns being able to go over the maximum residents, courtesy of Warriorrrr with PR #4650.
+  - Automatically add SHEARS to the global_town_settings.farm_plot_allow_blocks list in the config.
+    - Closes #4652.

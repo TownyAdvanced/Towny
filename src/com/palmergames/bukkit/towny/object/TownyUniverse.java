@@ -153,10 +153,6 @@ public class TownyUniverse {
 		return TownyAPI.getInstance().getOnlineResidents(residentList);
 	}
 
-	public void requestTeleport(Player player, Location spawnLoc) {
-		TownyAPI.getInstance().requestTeleport(player, spawnLoc);
-	}
-
 	public void abortTeleportRequest(Resident resident) {
 		TownyAPI.getInstance().abortTeleportRequest(resident);
 	}

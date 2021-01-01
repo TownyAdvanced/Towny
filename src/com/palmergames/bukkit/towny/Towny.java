@@ -299,15 +299,12 @@ public class Towny extends JavaPlugin {
 		if (TownySettings.isUsingEconomy()) {			
 			if (TownyEconomyHandler.setupEconomy()) {
 				output += System.lineSeparator() + "  Economy: " + TownyEconomyHandler.getVersion();				
-				if (TownyEconomyHandler.getVersion().startsWith("Essentials Economy")) {
+				if (TownyEconomyHandler.getVersion().startsWith("Essentials Economy"))
 					ecowarn = "Warning: Essentials Economy has been known to reset town and nation bank accounts to their default amount. The authors of Essentials recommend using another economy plugin until they have fixed this bug.";
-				}
 				
-		        File f = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");   // For a short time Towny stored debt accounts in
-		        if (!f.exists()) {                                                                             // the server's economy plugin. This practice had 
-		        	MoneyUtil.convertLegacyDebtAccounts();                                                      // to end, being replaced with the debtBalance 
-		        	saveResource("debtAccountsConverted.txt", false);                                          // which is stored in the Town object. 
-		        }
+		        File f = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");                   // For a short time Towny stored debt accounts in the server's
+		        if (!f.exists())                                                                                               // economy plugin. This practice had to end, being replaced 
+		        	Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> MoneyUtil.convertLegacyDebtAccounts(), 600l); // with the debtBalance which is stored in the Town object.
 					
 			} else {
 				ecowarn = "Warning: No compatible Economy plugins found. Install Vault.jar or Reserve.jar with any of the supported eco systems. If you do not want an economy to be used, set using_economy: false in your Towny config.yml.";
