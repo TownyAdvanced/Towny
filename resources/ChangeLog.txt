@@ -5667,3 +5667,4 @@ v0.92.0.11:
   - API: Add StatusScreenEvents
     - ResidentStatusScreenEvent, TownStatusScreenEvent, NationStatusScreenEvent
     - Makes it possible to add additional lines to the above objects' status screens.
+  - Plot perm hud now shows full town name, courtesy of Warriorrrr with PR #4655.
