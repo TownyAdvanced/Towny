@@ -18,8 +18,6 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarSettings;
-import com.palmergames.bukkit.towny.war.siegewar.SiegeWarFormatter;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
@@ -464,9 +462,6 @@ public class TownyFormatter {
 			}
 			out.addAll(ChatTools.listArr(residents, Translation.of("status_town_reslist", town.getNumResidents())));
 
-			//Siege  Info
-			if (SiegeWarSettings.getWarSiegeEnabled())
-				out.addAll(SiegeWarFormatter.getStatus(town));
 		}
 
 		out.addAll(getExtraFields(town));
@@ -595,9 +590,6 @@ public class TownyFormatter {
 		}
         out.addAll(ChatTools.listArr(enemies, Translation.of("status_nation_enemies", nation.getEnemies().size())));
 
-		if (SiegeWarSettings.getWarSiegeEnabled())
-			out.addAll(SiegeWarFormatter.getStatus(nation));
-		
 		out.addAll(getExtraFields(nation));
 		
 		NationStatusScreenEvent event = new NationStatusScreenEvent(nation);
