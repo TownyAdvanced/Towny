@@ -100,19 +100,36 @@ public class TownyEntityListener implements Listener {
 		
 		Entity attacker = event.getDamager();
 		Entity defender = event.getEntity();
-		
-		/*
-		 * This test blocks all types of Entity_Explosion-caused damage based on the
-		 * explosion-setting of the plot permissions, (and then alterable via the
-		 * TownyExplosionDamagesEntityEvent,) EXCEPT for cases where the defender is a
-		 * (Player or non-protected mob) and the attacker is an Explosive EntityType.
+
+		/* 
+		 * This test will check all Entity_Explosion-caused damaged, as long as it is
+		 * not from a projectile (FireWorks and Fireballs will be handled later using
+		 * the CombatUtil#preventDamageCall.) 
 		 */
-		List<Class<?>> protectedMobs = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
-		if (!(EntityTypeUtil.isExplosive(attacker.getType()) && (defender instanceof Player || !EntityTypeUtil.isInstanceOfAny(protectedMobs, defender))) 
-				&& event.getCause() == DamageCause.ENTITY_EXPLOSION 
+		if (event.getCause() == DamageCause.ENTITY_EXPLOSION && !(attacker instanceof Projectile)) {
+			/*
+			 * First we protect all protectedMobs as long as the location cannot explode.
+			 */
+			if (EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defender)
 				&& !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause())) {
-			event.setDamage(0);
-			event.setCancelled(true);
+				event.setDamage(0);
+				event.setCancelled(true);
+				return;
+			}
+			
+			/*
+			 * Second we protect players from PVP-based explosions which 
+			 * aren't projectiles based on whether the location has PVP enabled.
+			 */
+			boolean noPVP = false;
+			try {
+				noPVP = CombatUtil.preventPvP(TownyUniverse.getInstance().getDataSource().getWorld(defender.getWorld().getName()), TownyAPI.getInstance().getTownBlock(defender.getLocation()));
+			} catch (NotRegisteredException ignored) {}
+			if (EntityTypeUtil.isPVPExplosive(attacker.getType()) && defender instanceof Player && noPVP) {
+				event.setDamage(0);
+				event.setCancelled(true);
+				return;
+			}
 		}
 
 		
