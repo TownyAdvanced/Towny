@@ -248,6 +248,9 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerDamagePlayer(TownyPlayerDamagePlayerEvent event) {
+		if (!TownyAPI.getInstance().isWarTime())
+			return;
+		
 		try {
 			
 			Town attackerTown = event.getAttackerTown();
