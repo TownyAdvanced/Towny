@@ -24,7 +24,21 @@ public class EntityTypeUtil {
 			EntityType.WITHER, 
 			EntityType.WITHER_SKULL,
 			EntityType.ENDER_CRYSTAL));
+	
+	private static List<EntityType> ExplosivePVMEntityTypes = new ArrayList<>(Arrays.asList(
+			EntityType.CREEPER,
+			EntityType.DRAGON_FIREBALL, 
+			EntityType.FIREBALL, 
+			EntityType.SMALL_FIREBALL,
+			EntityType.WITHER, 
+			EntityType.WITHER_SKULL,
+			EntityType.ENDER_CRYSTAL));
 
+	private static List<EntityType> ExplosivePVPEntityTypes = new ArrayList<>(Arrays.asList(
+			EntityType.FIREWORK, 
+			EntityType.MINECART_TNT, 
+			EntityType.PRIMED_TNT));
+	
 	public static boolean isInstanceOfAny(List<Class<?>> classesOfWorldMobsToRemove2, Object obj) {
 
 		for (Class<?> c : classesOfWorldMobsToRemove2)
@@ -129,11 +143,33 @@ public class EntityTypeUtil {
 	/**
 	 * A list of explosion-causing entities.
 	 * 
-	 * @param entityType - EntityType to test.
+	 * @param entityType EntityType to test.
 	 * @return true if the EntityType will explode.
 	 */
 	public static boolean isExplosive(EntityType entityType) {
 
 		return ExplosiveEntityTypes.contains(entityType);	
+	}
+	
+	/**
+	 * A list of PVP explosion-causing entities.
+	 * 
+	 * @param entityType EntityType to test.
+	 * @return true if the EntityType is PVP and will explode.
+	 */
+	public static boolean isPVPExplosive(EntityType entityType) {
+
+		return ExplosivePVPEntityTypes.contains(entityType);	
+	}
+	
+	/**
+	 * A list of PVM explosion-causing entities.
+	 * 
+	 * @param entityType EntityType to test.
+	 * @return true if the EntityType is PVM and will explode.
+	 */
+	public static boolean isPVMExplosive(EntityType entityType) {
+
+		return ExplosivePVMEntityTypes.contains(entityType);	
 	}
 }
