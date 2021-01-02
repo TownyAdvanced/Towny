@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.PreTownPaysNationTaxEvent;
+import com.palmergames.bukkit.towny.event.town.TownUnconquerEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -133,13 +134,18 @@ public class DailyTimerTask extends TownyTimerTask {
 		/*
 		 * Reduce the number of days conquered towns are conquered for.
 		 */
-		for (Town towns : universe.getDataSource().getTowns()) {
-			if (towns.isConquered()) {
-				if (towns.getConqueredDays() == 1) {
-					towns.setConquered(false);
-					towns.setConqueredDays(0);
+		for (Town town : universe.getDataSource().getTowns()) {
+			if (town.isConquered()) {
+				if (town.getConqueredDays() == 1) {
+					TownUnconquerEvent event = new TownUnconquerEvent(town);
+					Bukkit.getPluginManager().callEvent(event);
+					if (event.isCancelled())
+						return;
+					
+					town.setConquered(false);
+					town.setConqueredDays(0);
 				} else
-					towns.setConqueredDays(towns.getConqueredDays() - 1);				
+					town.setConqueredDays(town.getConqueredDays() - 1);				
 			}
 		}
 
