@@ -984,6 +984,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			player = (Player) sender;
 		}
 
+		/*
+		 * The default comparator on /n list is by residents, test it before we start anything else.
+		 */
+		if (split.length < 2 && !console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_RESIDENTS.getNode()))
+			throw new TownyException(Translation.of("msg_err_command_disable"));
+		
 		List<Nation> nationsToSort = new ArrayList<>(TownyUniverse.getInstance().getNations());
 		int page = 1;
 		boolean pageSet = false;
@@ -991,7 +997,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		ComparatorType type = ComparatorType.RESIDENTS;
 		int total = (int) Math.ceil(((double) nationsToSort.size()) / ((double) 10));
 		for (int i = 1; i < split.length; i++) {
-			if (split[i].equalsIgnoreCase("by")) {
+			if (split[i].equalsIgnoreCase("by")) { // Is a case of someone using /n list by {comparator}
 				if (comparatorSet) {
 					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_multiple_comparators_nation"));
 					return;
@@ -1014,15 +1020,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				comparatorSet = true;
-			} else {
-				if (!console && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_RESIDENTS.getNode()))
-					throw new TownyException(Translation.of("msg_err_command_disable"));
+			} else { // Is a case of someone using /n list, /n list # or /n list by {comparator} #
 				if (pageSet) {
 					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_too_many_pages"));
 					return;
 				}
 				try {
-					page = Integer.parseInt(split[1]);
+					page = Integer.parseInt(split[i]);
 					if (page < 0) {
 						TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_negative"));
 						return;
