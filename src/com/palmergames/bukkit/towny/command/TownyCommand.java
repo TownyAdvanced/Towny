@@ -42,9 +42,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
@@ -565,24 +563,18 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	public List<String> getTopBankBalance(final List<Government> governments) {
 		final int maxListing = TownySettings.getTownyTopSize();
 		final List<String> output = new ArrayList<>();
-		final Map<Government, Double> data = new HashMap<>();
 
 		// Sort by their bank balance first
 		governments.sort(GovernmentComparators.BY_BANK_BALANCE);
-		// Reverse it to show top down
-		Collections.reverse(governments);
+
+		int index = 0;
 		// Loop through each one (already sorted) and add to the map
 		for (final Government gov : governments) {
-			data.put(gov, gov.getAccount().getCachedBalance());
-		}
-		int index = 0;
-		for (Map.Entry<Government, Double> entry : data.entrySet()) {
 			index++;
 			if (maxListing != -1 && index > maxListing) {
 				break;
 			}
-			final Government government = entry.getKey();
-			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", government.getFormattedName(), TownyEconomyHandler.getFormattedBalance(entry.getValue())));
+			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", gov.getFormattedName(), TownyEconomyHandler.getFormattedBalance(gov.getAccount().getCachedBalance())));
 		}
 		return output;
 	}

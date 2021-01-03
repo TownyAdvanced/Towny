@@ -5678,3 +5678,4 @@ v0.92.0.11:
 0.96.5.13:
   - Make the build/destroy/switch/itemuse seen in the status screens' colour formattable.
   - Bump language files to 0.97.
+  - Fix /towny top balance output being mis-ordered.
