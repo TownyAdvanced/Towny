@@ -83,7 +83,7 @@ public enum ConfigNodes {
 			"town.default_taxes.tax",
 			"0.0",
 			"",
-			"# Default amount of tax of a new town. This must be lower than the economy.daily_taxes.max_tax_percent setting."),
+			"# Default amount of tax of a new town. This must be lower than the economy.daily_taxes.max_town_tax_amount setting."),
 	TOWN_DEF_TAXES_SHOP_TAX(
 			"town.default_taxes.shop_tax",
 			"0.0",
