@@ -1266,4 +1266,4 @@ msg_town_destroyed_by_nation_tax_multiple: '&bThe following conquered towns coul
 msg_your_town_was_exempt_from_the_nation_tax: '&bYour town was exempt from the nation tax.'s
 
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' # The Build=---- Destroy=---- seen in the status screen.
+status_perm_line_format: '&a%s = &7' # The Build = ---- Destroy = ---- seen in the status screen.
