@@ -136,16 +136,22 @@ public class TownySpigotMessaging {
 			String slug = null;
 			switch (compType) {
 			case BALANCE:
-				slug = TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance());
+				slug = Colors.LightBlue + "(" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance()) + ")";
 				break;
 			case TOWNBLOCKS:
-				slug = town.getTownBlocks().size() + "";
+				slug = Colors.LightBlue + "(" + town.getTownBlocks().size() + ")";
+				break;
+			case RUINED:
+				slug = Colors.LightBlue + "(" + town.getResidents().size() + ") " + (town.isRuined() ? Translation.of("msg_ruined"):"");
+				break;
+			case BANKRUPT:
+				slug = Colors.LightBlue + "(" + town.getResidents().size() + ") " + (town.isBankrupt() ? Translation.of("msg_bankrupt"):"");
 				break;
 			default:
-				slug = town.getResidents().size() + "";
+				slug = Colors.LightBlue + "(" + town.getResidents().size() + ")";
 				break;
 			}
-			townName.addExtra(new TextComponent(Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")"));
+			townName.addExtra(new TextComponent(Colors.Gray + " - " + slug));
 			
 			if (town.isOpen())
 				townName.addExtra(new TextComponent(" " + Colors.LightBlue + Translation.of("status_title_open")));

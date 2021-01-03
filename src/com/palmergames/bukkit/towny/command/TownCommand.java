@@ -158,10 +158,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	private static final List<String> townListTabCompletes = Arrays.asList(
 		"residents",
 		"balance",
+		"bankrupt",
 		"name",		
 		"online",
 		"open",
 		"public",
+		"ruined",
 		"townblocks"
 	);
 	static final List<String> townToggleTabCompletes = Arrays.asList(
@@ -1239,18 +1241,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			String slug = null;
 			switch (type) {
 			case BALANCE:
-				slug = TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance());
+				slug = Colors.LightBlue + "(" +TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance()) + ")";
 				break;
 			case TOWNBLOCKS:
-				slug = town.getTownBlocks().size() + "";
+				slug = Colors.LightBlue + "(" +town.getTownBlocks().size() + ")";
+				break;
+			case RUINED:
+				slug = town.isRuined() ? Translation.of("msg_ruined"):"";
+				break;
+			case BANKRUPT:
+				slug = town.isBankrupt() ? Translation.of("msg_bankrupt"):"";
 				break;
 			default:
-				slug = town.getResidents().size() + "";
+				slug = Colors.LightBlue + "(" +town.getResidents().size() + ")";
 				break;
 			}
 			
-			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + 
-					(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")");
+			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + slug);
 			if (town.isOpen())
 				output += " " + Translation.of("status_title_open");
 			townsformatted.add(output);

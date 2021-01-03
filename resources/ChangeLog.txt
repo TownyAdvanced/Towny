@@ -5681,3 +5681,11 @@ v0.92.0.11:
   - Fix /towny top balance output being mis-ordered.
   - Fix arrows on the /n and /t list pages missing the comparator in the clickable commands.
   - Fix setting pages in /t and /n list when a comparator is specified.
+  - New Commands: 
+    - /t list by ruined 
+    - /t list by bankrupt
+    - Closes #4663.
+  - New Permission Nodes:
+    - towny.command.town.list.ruined
+    - towny.command.town.list.bankrupt
+    - both are child nodes of towny.command.town.list.*

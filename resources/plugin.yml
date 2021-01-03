@@ -346,6 +346,8 @@ permissions:
             towny.command.town.list.name: true
             towny.command.town.list.townblocks: true
             towny.command.town.list.online: true
+            towny.command.town.list.ruined: true
+            towny.command.town.list.bankrupt: true
 
     towny.command.town.claim.*:
         description: User can access all town claim related commands.
