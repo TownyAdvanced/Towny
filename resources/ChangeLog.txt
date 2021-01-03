@@ -5675,3 +5675,6 @@ v0.92.0.11:
   - Fix colour being stripped from warning messages on login.
     - Closes #4662.
   - Fix config mentioning a config section which doesn't exist any more.
+0.96.5.13:
+  - Make the build/destroy/switch/itemuse seen in the status screens' colour formattable.
+  - Bump language files to 0.97.
