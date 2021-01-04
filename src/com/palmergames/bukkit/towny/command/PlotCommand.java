@@ -465,7 +465,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// The follow test will clean up the initial selection fairly well, the plotTestOwner later on in the setPlotForSale will ultimately stop any funny business.
 					if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && (resident.hasTown() && resident.getTown() == pos.getTownBlock().getTown())) {
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection); // Treat it as a mayor able to set their town's plots not for sale.
-						selection = AreaSelectionUtil.filterOutResidentBlocks(selection); // Filter out any resident-owned plots.
+						selection = AreaSelectionUtil.filterOutResidentBlocks(resident, selection); // Filter out any resident-owned plots.
 					} else {
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection); // Treat it as a resident making their own plots not for sale.
 					}
@@ -510,7 +510,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// The follow test will clean up the initial selection fairly well, the plotTestOwner later on in the setPlotForSale will ultimately stop any funny business.
 							if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && (resident.hasTown() && resident.getTown() == pos.getTownBlock().getTown())) {
 								selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection); // Treat it as a mayor able to put their town's plots for sale.
-								selection = AreaSelectionUtil.filterOutResidentBlocks(selection); // Filter out any resident-owned plots.
+								selection = AreaSelectionUtil.filterOutResidentBlocks(resident, selection); // Filter out any resident-owned plots.
 							} else {
 								selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection); // Treat it as a resident putting their own plots up for sale.
 							}
@@ -1057,10 +1057,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (forSale != -1) {
 				TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), Translation.of("MSG_PLOT_FOR_SALE", resident.getName(), worldCoord.toString()));
 				if (!resident.hasTown() || (resident.hasTown() && townBlock.getTown() != resident.getTown()))
-					TownyMessaging.sendMessage(resident, Translation.of("MSG_PLOT_FOR_SALE", resident.getName(), worldCoord.toString()));
+					TownyMessaging.sendMsg(resident, Translation.of("MSG_PLOT_FOR_SALE", resident.getName(), worldCoord.toString()));
 				Bukkit.getPluginManager().callEvent(new PlotSetForSaleEvent(resident, forSale, townBlock));
 			} else {
-				TownyMessaging.sendMessage(resident, Translation.of("msg_plot_set_to_nfs"));
+				TownyMessaging.sendMsg(resident, Translation.of("msg_plot_set_to_nfs"));
 				Bukkit.getPluginManager().callEvent(new PlotNotForSaleEvent(resident, townBlock));
 			}
 

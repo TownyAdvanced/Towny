@@ -5691,3 +5691,4 @@ v0.92.0.11:
     - both are child nodes of towny.command.town.list.*
   - Fix spanish.yml having bad yaml.
   - Potentially fix Towny not getting the largest meta node value in some cases where a player's primary permission group could not be resolved.
+  - Fix mayors and assistants not being able to /plot nfs their own personal plots.

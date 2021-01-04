@@ -478,17 +478,19 @@ public class AreaSelectionUtil {
 	}
 	
 	/**
-	 * Returns a List containing only claimed townblocks, which are not personally owned by a resident.
+	 * Returns a List containing only claimed townblocks, which are:
+	 * - not personally owned by a resident who isn't the given resident 
 	 * 
-	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
-	 * @return List of townblocks not owned by the given owner.
+	 * @param resident The Resident to ignore.
+	 * @param selection List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of townblocks which does not includes townblocks owned by players who aren't the given resident.
 	 */
-	public static List<WorldCoord> filterOutResidentBlocks(List<WorldCoord> selection) {
+	public static List<WorldCoord> filterOutResidentBlocks(Resident resident, List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
-				if (!worldCoord.getTownBlock().hasResident())
+				if (!worldCoord.getTownBlock().hasResident() || (worldCoord.getTownBlock().hasResident() && worldCoord.getTownBlock().getResident().equals(resident)))
 					out.add(worldCoord);
 			} catch (NotRegisteredException ignored) {
 			}
