@@ -28,7 +28,6 @@ public class HourlyTimerTask extends TownyTimerTask {
 			TownRuinUtil.evaluateRuinedTownRemovals();
 		}
 		
-		System.out.println("exp time " + TownySettings.getInviteExpirationTime());
 		if (TownySettings.getInviteExpirationTime() > 0)
 			InviteHandler.searchForExpiredInvites();
 		
