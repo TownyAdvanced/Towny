@@ -70,6 +70,7 @@ public class InviteHandler {
 			if (getInviteTime(activeInvite) + time < System.currentTimeMillis()) {
 				activeInvite.getReceiver().deleteReceivedInvite(activeInvite);
 				activeInvite.getSender().deleteSentInvite(activeInvite);
+				removeInvite(activeInvite);
 			}
 		}
 	}
