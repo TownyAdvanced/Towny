@@ -3,7 +3,9 @@ package com.palmergames.bukkit.towny.tasks;
 import org.bukkit.Bukkit;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.time.NewHourEvent;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 
@@ -25,6 +27,9 @@ public class HourlyTimerTask extends TownyTimerTask {
 		if (TownRuinSettings.getTownRuinsEnabled()) {
 			TownRuinUtil.evaluateRuinedTownRemovals();
 		}
+		
+		if (TownySettings.getInviteExpirationTime() > 0)
+			InviteHandler.searchForExpiredInvites();
 		
 		/*
 		 * Fire an event other plugins can use.

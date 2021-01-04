@@ -10,7 +10,9 @@ import com.palmergames.bukkit.towny.object.Town;
 import java.io.InvalidObjectException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -21,6 +23,7 @@ public class InviteHandler {
 	private static Towny plugin;
 	
 	private static final Set<Invite> activeInvites = new HashSet<>();
+	private static final Map<Invite, Long> invitesTimes = new HashMap<>();
 
 	public static void initialize(Towny plugin) {
 
@@ -30,7 +33,7 @@ public class InviteHandler {
 	public static void acceptInvite(Invite invite) throws InvalidObjectException, TownyException {
 		if (activeInvites.contains(invite)) {
 			invite.accept();
-			activeInvites.remove(invite);
+			removeInvite(invite);
 			return;
 		}
 		throw new InvalidObjectException("Invite not valid!"); // I throw this as a backup (failsafe)
@@ -40,7 +43,7 @@ public class InviteHandler {
 	public static void declineInvite(Invite invite, boolean fromSender) throws InvalidObjectException {
 		if (activeInvites.contains(invite)) {
 			invite.decline(fromSender);
-			activeInvites.remove(invite);
+			removeInvite(invite);
 			return;
 		}
 		throw new InvalidObjectException("Invite not valid!"); // I throw this as a backup (failsafe)
@@ -49,6 +52,30 @@ public class InviteHandler {
 	
 	public static void addInvite(Invite invite) {
 		activeInvites.add(invite);
+		invitesTimes.put(invite, System.currentTimeMillis());
+	}
+	
+	public static void removeInvite(Invite invite) {
+		activeInvites.remove(invite);
+		invitesTimes.remove(invite);
+	}
+	
+	private static long getInviteTime(Invite invite) {
+		return invitesTimes.get(invite);
+	}
+	
+	public static void searchForExpiredInvites() {
+		for (Invite activeInvite : getActiveInvites()) {
+			if (getInviteTime(activeInvite) + TownySettings.getInviteExpirationTime() > System.currentTimeMillis()) {
+				activeInvite.getReceiver().deleteReceivedInvite(activeInvite);
+				activeInvite.getSender().deleteSentInvite(activeInvite);
+				try {
+					declineInvite(activeInvite, false);
+				} catch (InvalidObjectException e) {
+					System.err.println(e.getMessage());
+				}
+			}
+		}
 	}
 	
 	public static Collection<Invite> getActiveInvites() {
