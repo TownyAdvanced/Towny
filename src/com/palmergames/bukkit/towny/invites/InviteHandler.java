@@ -65,15 +65,11 @@ public class InviteHandler {
 	}
 	
 	public static void searchForExpiredInvites() {
+		final long time = TownySettings.getInviteExpirationTime() * 1000;
 		for (Invite activeInvite : getActiveInvites()) {
-			if (getInviteTime(activeInvite) + TownySettings.getInviteExpirationTime() > System.currentTimeMillis()) {
+			if (getInviteTime(activeInvite) + time < System.currentTimeMillis()) {
 				activeInvite.getReceiver().deleteReceivedInvite(activeInvite);
 				activeInvite.getSender().deleteSentInvite(activeInvite);
-				try {
-					declineInvite(activeInvite, false);
-				} catch (InvalidObjectException e) {
-					System.err.println(e.getMessage());
-				}
 			}
 		}
 	}
