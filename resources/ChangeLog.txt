@@ -5689,3 +5689,5 @@ v0.92.0.11:
     - towny.command.town.list.ruined
     - towny.command.town.list.bankrupt
     - both are child nodes of towny.command.town.list.*
+  - Fix spanish.yml having bad yaml.
+  - Potentially fix Towny not getting the largest meta node value in some cases where a player's primary permission group could not be resolved.
