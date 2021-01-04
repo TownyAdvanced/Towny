@@ -8,13 +8,14 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.event.actions.TownyActionEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
-import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
@@ -129,15 +130,10 @@ public class SiegeWarActionListener implements Listener {
 	 * SW can affect whether an inventory is dropped and also can degrade an inventory.
 	 */
 	@EventHandler
-	public void onPlayerKillsPlayer(PlayerKilledPlayerEvent event) {
+	public void onPlayerKillsPlayer(PlayerDeathEvent event) {
 		//Check for siege-war related death effects
 		if(SiegeWarSettings.getWarSiegeEnabled()) {
-			/*
-			 * TODO: Evaluate if we're doing something bad in the SiegeWarDeathController
-			 * by moving to an PlayerKilledPlayerEvent which is fired from a MONITOR 
-			 * priority PlayerDeathEvent.
-			 */
-			SiegeWarDeathController.evaluateSiegePlayerDeath(event.getVictim(), event.getPlayerDeathEvent());
+			SiegeWarDeathController.evaluateSiegePlayerDeath(event.getEntity(), event);
 		}
 	}
 

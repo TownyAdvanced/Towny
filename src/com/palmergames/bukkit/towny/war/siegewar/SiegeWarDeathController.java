@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeSide;
 import com.palmergames.bukkit.towny.war.siegewar.enums.SiegeWarPermissionNodes;
 import com.palmergames.bukkit.towny.war.siegewar.objects.Siege;
@@ -46,10 +47,23 @@ public class SiegeWarDeathController {
 	 */
 	public static void evaluateSiegePlayerDeath(Player deadPlayer, PlayerDeathEvent playerDeathEvent)  {
 		try {
-			TownyUniverse universe = TownyUniverse.getInstance();
-			Resident deadResident = universe.getResident(deadPlayer.getUniqueId());
+			if (!SiegeWarDistanceUtil.isSiegeWarEnabledInWorld(playerDeathEvent.getEntity().getWorld()))
+				return;
+
+			TownyPermissionSource tps = TownyUniverse.getInstance().getPermissionSource();
+			Resident deadResident = TownyUniverse.getInstance().getResident(deadPlayer.getUniqueId());
 
 			if (deadResident == null || !deadResident.hasTown())
+				return;
+			
+			/*
+			 * Do an early permission test to avoid hitting the sieges list if
+			 * it could never return a proper SiegeSide.
+			 */			
+			if (!tps.testPermission(deadPlayer, SiegeWarPermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())
+				&& !hasTownMilitaryRank(deadResident)
+				&& !tps.testPermission(deadPlayer, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
+				&& !hasNationMilitaryRank(deadResident))
 				return;
 
 			Town deadResidentTown = deadResident.getTown();
@@ -75,7 +89,7 @@ public class SiegeWarDeathController {
 				//Is player eligible ?
 				if (SiegeController.hasActiveSiege(deadResidentTown)
 					&& SiegeController.getSiege(deadResidentTown) == candidateSiege
-					&& (universe.getPermissionSource().testPermission(deadPlayer, SiegeWarPermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())
+					&& (tps.testPermission(deadPlayer, SiegeWarPermissionNodes.TOWNY_TOWN_SIEGE_POINTS.getNode())
 						|| hasTownMilitaryRank(deadResident))
 				) {
 					candidateSiegePlayerSide = SiegeSide.DEFENDERS; //Candidate siege has player defending own-town
@@ -83,7 +97,7 @@ public class SiegeWarDeathController {
 				} else if (deadResidentTown.hasNation()
 					&& candidateSiege.getDefendingTown().hasNation()
 					&& candidateSiege.getStatus().isActive()
-					&& (universe.getPermissionSource().testPermission(deadPlayer, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
+					&& (tps.testPermission(deadPlayer, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
 						|| hasNationMilitaryRank(deadResident))
 					&& (deadResidentTown.getNation() == candidateSiege.getDefendingTown().getNation()
 						|| deadResidentTown.getNation().hasMutualAlly(candidateSiege.getDefendingTown().getNation()))) {
@@ -92,7 +106,7 @@ public class SiegeWarDeathController {
 
 				} else if (deadResidentTown.hasNation()
 					&& candidateSiege.getStatus().isActive()
-					&& (universe.getPermissionSource().testPermission(deadPlayer, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
+					&& (tps.testPermission(deadPlayer, SiegeWarPermissionNodes.TOWNY_NATION_SIEGE_POINTS.getNode())
 						|| hasNationMilitaryRank(deadResident))
 					&& (deadResidentTown.getNation() == candidateSiege.getAttackingNation() 
 						|| deadResidentTown.getNation().hasMutualAlly(candidateSiege.getAttackingNation()))) {
