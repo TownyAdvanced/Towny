@@ -5667,3 +5667,11 @@ v0.92.0.11:
   - API: Add StatusScreenEvents
     - ResidentStatusScreenEvent, TownStatusScreenEvent, NationStatusScreenEvent
     - Makes it possible to add additional lines to the above objects' status screens.
+  - Plot perm hud now shows full town name, courtesy of Warriorrrr with PR #4655.
+0.96.5.12:
+  - API: TownUnconquerEvent
+    - Cancellable event allowing a plugin to prevent a town losing its conquered/occupied status.
+  - Bump language files to 0.96.
+  - Fix colour being stripped from warning messages on login.
+    - Closes #4662.
+  - Fix config mentioning a config section which doesn't exist any more.

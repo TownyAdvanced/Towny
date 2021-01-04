@@ -1,5 +1,5 @@
 name: Towny
-version: 0.95
+version: 0.96
 language: 한국어
 author: 'Daybreak 새벽'
 website: 'http://townyadvanced.github.io/'
@@ -1172,3 +1172,8 @@ towny_prices_plots_jail: '&c                        &2Jail: &a%s &8| &2Farm: &a%
 towny_prices_plots_bank: '&c                        &2Bank: &a%s'
 towny_prices_nationname: '&cNation: &6%s'
 towny_prices_nation_tax: '&c    [Taxes] &2Town: &a%s &8| &2Peace: &a%s'
+
+#Added in 0.96
+msg_town_destroyed_by_nation_tax: '&bThe conquered town %s couldn''t pay the nation tax and has fallen.'
+msg_town_destroyed_by_nation_tax_multiple: '&bThe following conquered towns could not afford the nation tax and have fallen: '
+msg_your_town_was_exempt_from_the_nation_tax: '&bYour town was exempt from the nation tax.'
