@@ -1449,6 +1449,13 @@ public enum ConfigNodes {
 			"",
 			"# When set for more than 0m, the amount of time (in minutes) which must have passed between",
 			"# a player's first log in and when they can be invited to a town."),
+	INVITE_SYSTEM_EXPIRATION_TIME(
+			"invite_system.expirationtime",
+			"0m",
+			"",
+			"# When set for more than 0m, the amount of time until an invite is considered",
+			"# expired and is removed. Invites are checked for expiration once every hour.",
+			"# Valid values would include: 30s, 30m, 24h, 2d, etc."),
 	INVITE_SYSTEM_MAXIMUM_INVITES_SENT(
 			"invite_system.maximum_invites_sent",
 			"",

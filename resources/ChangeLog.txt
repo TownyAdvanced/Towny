@@ -5692,3 +5692,8 @@ v0.92.0.11:
   - Fix spanish.yml having bad yaml.
   - Potentially fix Towny not getting the largest meta node value in some cases where a player's primary permission group could not be resolved.
   - Fix mayors and assistants not being able to /plot nfs their own personal plots.
+  - New Config Option: invite_system.expirationtime
+    - default: 0m
+    - When set for more than 0m, the amount of time (in minutes) until an invite is considered expired and is removed. Invites are checked for expiration once every hour.
+    - Valid values would include: 30s, 30m, 24h, 2d, etc.
+    - Closes #4086.

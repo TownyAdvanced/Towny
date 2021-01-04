@@ -2499,6 +2499,11 @@ public class TownySettings {
 
 		return getSeconds(ConfigNodes.INVITE_SYSTEM_COOLDOWN_TIME);
 	}
+	
+	public static long getInviteExpirationTime() {
+		
+		return getSeconds(ConfigNodes.INVITE_SYSTEM_EXPIRATION_TIME);
+	}
 
 	public static boolean isAppendingToLog() {
 
