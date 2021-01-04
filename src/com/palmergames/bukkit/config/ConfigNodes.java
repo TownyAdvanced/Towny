@@ -1453,8 +1453,9 @@ public enum ConfigNodes {
 			"invite_system.expirationtime",
 			"0m",
 			"",
-			"# When set for more than 0m, the amount of time (in minutes) until an invite is considered",
-			"# expired and is removed. Invites are checked for expiration once every hour."),
+			"# When set for more than 0m, the amount of time until an invite is considered",
+			"# expired and is removed. Invites are checked for expiration once every hour.",
+			"# Valid values would include: 30s, 30m, 24h, 2d, etc."),
 	INVITE_SYSTEM_MAXIMUM_INVITES_SENT(
 			"invite_system.maximum_invites_sent",
 			"",
