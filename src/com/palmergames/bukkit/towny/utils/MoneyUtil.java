@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownTransactionEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -234,15 +233,4 @@ public class MoneyUtil {
 		}
 		Towny.getPlugin().saveResource("debtAccountsConverted.txt", false);
 	}
-	
-	public static void parseBankHistoryCommand(Player player, int pages, Government government) {
-		if (government.getAccount().getAuditor().getAuditHistory().size() < 1) {
-			TownyMessaging.sendErrorMsg(player, "No pages to display!");
-			return;
-		}
-
-		pages = Math.min(pages, government.getAccount().getAuditor().getAuditHistory().size());
-		government.generateBankHistoryBook(player, pages);
-	}
-
 }

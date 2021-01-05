@@ -677,7 +677,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							return;
 						}
 
-					MoneyUtil.parseBankHistoryCommand(player, pages, TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().getNation());
+					TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().getNation().generateBankHistoryBook(player, pages);
 				} else {
 
 					final Nation nation = townyUniverse.getNation(split[0]);

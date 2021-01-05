@@ -330,10 +330,13 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	public void generateBankHistoryBook(Player player, int desiredPages) {
 		int size = getAccount().getAuditor().getAuditHistory().size();
 
-		if (desiredPages > size) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("list_err_not_enough_pages", size));
+		if (size < 1) {
+			TownyMessaging.sendErrorMsg(player, "No pages to display!");
 			return;
 		}
+
+		desiredPages = Math.min(desiredPages, size);
+		
 		List<String> pages = new ArrayList<>(desiredPages);
 		for (int i = 1; i <= desiredPages; i++) {
 			pages.add(getAccount().getAuditor().getAuditHistory().get(size-i));

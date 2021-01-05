@@ -154,5 +154,4 @@ public class BookFactory {
 			pages.add(pageText);
 		return pages;
 	}
-
 }

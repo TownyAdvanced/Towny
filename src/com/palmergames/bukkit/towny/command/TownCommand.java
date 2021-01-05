@@ -723,7 +723,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							return;
 						}
 
-					MoneyUtil.parseBankHistoryCommand(player, pages, TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown());
+					TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().generateBankHistoryBook(player, pages);
 
 				} else {
 					/*
