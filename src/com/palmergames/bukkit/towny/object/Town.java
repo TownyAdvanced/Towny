@@ -1223,7 +1223,7 @@ public class Town extends Government implements TownBlockOwner {
 			for (TownBlock tb : getTownBlocks()) {
 				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
 					tb.getPlotObjectGroup().setID(null);
-					TownyUniverse.getInstance().getDataSource().saveTownBlock(tb);
+					tb.save();
 				}
 			}
 		}

@@ -2042,7 +2042,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMsg(player, Translation.of("msg_key_x_was_successfully_updated_to_x", mdKey, cdf.getValue()));
 
 				// Save changes.
-				townyUniverse.getDataSource().saveTownBlock(townBlock);
+				townBlock.save();
 				return true;
 			}
 			else {

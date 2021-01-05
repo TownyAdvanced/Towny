@@ -202,7 +202,7 @@ public class TownClaim extends Thread {
 				}
 			}
 			
-			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 			
 			// Raise an event for the claim
 			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock, player));

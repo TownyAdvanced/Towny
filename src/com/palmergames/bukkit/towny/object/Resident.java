@@ -393,7 +393,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
-				TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+				townBlock.save();
 
 				// Set the plot permissions to mirror the towns.
 				townBlock.setType(townBlock.getType());

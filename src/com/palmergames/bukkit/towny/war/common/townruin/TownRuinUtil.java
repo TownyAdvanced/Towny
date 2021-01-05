@@ -98,7 +98,7 @@ public class TownRuinUtil {
 			townBlock.setPlotPrice(-1);
 			townBlock.setResident(null);
 			townBlock.removePlotObjectGroup();
-			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 		}
 		
 		town.save();
@@ -147,7 +147,7 @@ public class TownRuinUtil {
 			for (TownBlock townBlock : town.getTownBlocks()) {
 				townBlock.getPermissions().loadDefault(town);
 				townBlock.setChanged(false);
-				tds.saveTownBlock(townBlock);
+				townBlock.save();
 			}
 			
 			town.save();

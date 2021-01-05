@@ -445,7 +445,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							townBlock.setPlotPrice(-1);
 							// Set the plot permissions to mirror the towns.
 							townBlock.setType(townBlock.getType());
-							universe.getDataSource().saveTownBlock(townBlock);
+							townBlock.save();
 						}
 					}
 				} catch (NotRegisteredException ignored) {

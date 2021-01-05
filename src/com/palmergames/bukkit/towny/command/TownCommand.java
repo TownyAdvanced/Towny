@@ -1571,7 +1571,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				for (TownBlock townBlock : town.getTownBlocks()) {
 					if (!townBlock.hasResident() && !townBlock.isChanged()) {
 						townBlock.setType(townBlock.getType());
-						townyUniverse.getDataSource().saveTownBlock(townBlock);
+						townBlock.save();
 					}
 				}
 
@@ -2511,7 +2511,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 		
 		resident.save();
-		townyDataSource.saveTownBlock(townBlock);
+		townBlock.save();
 		town.save();
 		world.save();
 
@@ -3171,7 +3171,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 							// Reset permissions
 							townBlock.setType(townBlock.getType());
-							townyUniverse.getDataSource().saveTownBlock(townBlock);
+							townBlock.save();
 						}
 					}
 					if (townBlockOwner instanceof Town)
@@ -3271,12 +3271,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
 					if (!townBlock.isChanged()) {
 						townBlock.setType(townBlock.getType());
-						townyUniverse.getDataSource().saveTownBlock(townBlock);
+						townBlock.save();
 					}
 				} else if (townBlockOwner instanceof Resident)
 					if (!townBlock.isChanged()) {
 						townBlock.setType(townBlock.getType());
-						townyUniverse.getDataSource().saveTownBlock(townBlock);
+						townBlock.save();
 					}
 			}
 

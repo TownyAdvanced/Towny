@@ -201,7 +201,7 @@ public class FlagWarCustomListener implements Listener {
 				// Attacker Claim Automatically
 				try {
 					townBlock.setTown(attackingTown);
-					TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+					townBlock.save();
 				} catch (Exception te) {
 					// Couldn't claim it.
 					TownyMessaging.sendErrorMsg(te.getMessage());
