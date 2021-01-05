@@ -1437,4 +1437,9 @@ public class Town extends Government implements TownBlockOwner {
 	public String getTownBoard() {
 		return getBoard();
 	}
+
+	@Override
+	public void save() {
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
+	}
 }

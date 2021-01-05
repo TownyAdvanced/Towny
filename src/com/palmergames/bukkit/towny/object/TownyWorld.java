@@ -869,5 +869,9 @@ public class TownyWorld extends TownyObject {
 	public boolean isFriendlyFireEnabled( ) {
 		return isFriendlyFire;
 	}
-	
+
+	@Override
+	public void save() {
+		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+	}
 }

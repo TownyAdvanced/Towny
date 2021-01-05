@@ -920,5 +920,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.guiInventory = inventory;
 	}
 
+	@Override
+	public void save() {
+		TownyUniverse.getInstance().getDataSource().saveResident(this);
+	}
 }
 

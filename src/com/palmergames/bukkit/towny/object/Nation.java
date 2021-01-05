@@ -765,4 +765,9 @@ public class Nation extends Government {
 	public void toggleNeutral(boolean neutral) {
 		setNeutral(neutral);
 	}
+
+	@Override
+	public void save() {
+		TownyUniverse.getInstance().getDataSource().saveNation(this);
+	}
 }

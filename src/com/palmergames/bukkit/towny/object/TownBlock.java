@@ -416,4 +416,9 @@ public class TownBlock extends TownyObject {
 			TownyMessaging.sendErrorMsg("Townblock failed to setPlotObjectGroup(group), group is null. " + group);
 		}
 	}
+
+	@Override
+	public void save() {
+		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+	}
 }
