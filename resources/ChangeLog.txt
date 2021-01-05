@@ -5716,3 +5716,4 @@ v0.92.0.11:
       - child node of towny.command.townyadmin.town.*
     - towny.command.townyadmin.nation.bankhistory
       - child node of towny.command.townyadmin.nation.*
+  - Add save method to Towny objects, courtesy of silverwolfg11 with PR #4670.
