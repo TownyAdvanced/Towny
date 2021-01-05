@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.tasks;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -213,7 +212,6 @@ public class PlotClaim extends Thread {
 
 				if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
 					throw new TownyException(Translation.of("msg_err_not_part_town"));
-				TownyUniverse townyUniverse = TownyUniverse.getInstance();
 				try {
 					Resident owner = townBlock.getPlotObjectGroup().getResident();
 
@@ -301,7 +299,6 @@ public class PlotClaim extends Thread {
 			Town town = townBlock.getTown();
 			if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
 				throw new TownyException(Translation.of("msg_err_not_part_town"));
-			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 			try {
 				Resident owner = townBlock.getResident();
@@ -436,7 +433,6 @@ public class PlotClaim extends Thread {
 			TownBlock townBlock = worldCoord.getTownBlock();
 			@SuppressWarnings("unused") // Used to make sure a plot/town is here.
 			Town town = townBlock.getTown();
-			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 			
 			townBlock.setPlotPrice(-1);
 			townBlock.setResident(resident);

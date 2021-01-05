@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownyAdminCommand;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -114,7 +113,6 @@ public class TownRuinUtil {
 	public static void processRuinedTownReclaimRequest(Player player, Towny plugin) {
 		Town town;
 		try {
-			TownyDataSource tds = TownyUniverse.getInstance().getDataSource();
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
 			if (resident == null || !resident.hasTown())

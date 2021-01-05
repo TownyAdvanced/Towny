@@ -1129,7 +1129,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseAdminTownRankCommand(Player player, Town town, String[] split) throws TownyException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length < 3) {
 			throw new TownyException("Eg: /townyadmin town [townname] rank add/remove [resident] [rank]");
 		}

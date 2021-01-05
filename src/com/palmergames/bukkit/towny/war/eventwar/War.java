@@ -712,7 +712,6 @@ public class War {
 	 * @throws NotRegisteredException - When a Towny Object does not exist.
 	 */
 	public void remove(Town attacker, Town town) throws NotRegisteredException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Nation losingNation = town.getNation();
 		
 		int towns = 0;

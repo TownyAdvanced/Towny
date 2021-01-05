@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
@@ -2465,7 +2464,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 
 	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
-		TownyDataSource townyDataSource = TownyUniverse.getInstance().getDataSource();
 
 		TownyUniverse.getInstance().newTown(name);
 		Town town = TownyUniverse.getInstance().getTown(name);
@@ -2793,7 +2791,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 		resident.setTown(town);
 		plugin.deleteCache(resident.getName());
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		resident.save();
 		town.save();
 	}
@@ -2886,7 +2883,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 		}
 		
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (kicking.size() > 0) {
 			StringBuilder msg = new StringBuilder();
 			for (Resident member : kicking) {
@@ -3133,7 +3129,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 
 	public static void setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
 			player.sendMessage(ChatTools.formatTitle("/... set perm"));

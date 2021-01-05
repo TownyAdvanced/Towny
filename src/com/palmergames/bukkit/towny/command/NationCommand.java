@@ -1505,8 +1505,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * @throws AlreadyRegisteredException - Shouldn't happen but could.
 	 */
 	public static void nationAdd(Nation nation, List<Town> towns) throws AlreadyRegisteredException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
 		for (Town town : towns) {
 			if (!town.hasNation()) {
 				town.setNation(nation);
