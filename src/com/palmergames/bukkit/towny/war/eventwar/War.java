@@ -674,7 +674,7 @@ public class War {
 							if (resident.getJailTown().equals(defenderTown.toString())) 
 								if (Coord.parseCoord(defenderTown.getJailSpawn(resident.getJailSpawn())).toString().equals(townBlock.getCoord().toString())){
 									resident.setJailed(false);
-									townyUniverse.getDataSource().saveResident(resident);
+									resident.save();
 									count++;
 								}
 					} catch (TownyException e) {

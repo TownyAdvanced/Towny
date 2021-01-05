@@ -1187,7 +1187,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		 * If we got here we have made a change Save the altered resident
 		 * data.
 		 */
-		townyUniverse.getDataSource().saveResident(target);
+		target.save();
 		
 	}
 
@@ -1415,7 +1415,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						newMayor.setLastOnline(0);
 						newMayor.setNPC(true);
 
-						townyUniverse.getDataSource().saveResident(newMayor);
+						newMayor.save();
 
 						// set for no upkeep as an NPC mayor is assigned
 						town.setHasUpkeep(false);
@@ -1488,7 +1488,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
 			resident.setTitle(title + " ");
-			townyUniverse.getDataSource().saveResident(resident);
+			resident.save();
 
 			if (resident.hasTitle()) {
 				TownyMessaging.sendMessage(sender, Translation.of("msg_set_title", resident.getName(), resident.getTitle()));
@@ -1517,7 +1517,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
 			resident.setSurname(surname + " ");
-			townyUniverse.getDataSource().saveResident(resident);
+			resident.save();
 
 			if (resident.hasSurname()) {
 				TownyMessaging.sendMessage(sender, Translation.of("msg_set_surname", resident.getName(), resident.getSurname()));
@@ -1881,7 +1881,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			resident.setNPC(!resident.isNPC());
 
-			townyUniverse.getDataSource().saveResident(resident);
+			resident.save();
 
 			TownyMessaging.sendMessage(sender, Translation.of("msg_npc_flag", resident.isNPC(), resident.getName()));
 		} else {

@@ -302,7 +302,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						resident.setJailTown("");
 						TownyMessaging.sendGlobalMessage(Colors.Red + player.getName() + Translation.of("msg_has_paid_bail"));
 						player.teleport(resident.getTown().getSpawn());
-						townyUniverse.getDataSource().saveResident(resident);
+						resident.save();
 					} else {
 						TownyMessaging.sendErrorMsg(player, Colors.Red + Translation.of("msg_err_unable_to_pay_bail"));
 					}
@@ -441,7 +441,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		notifyPerms(player, perm);
-		townyUniverse.getDataSource().saveResident(resident);
+		resident.save();
 
 	}
 
@@ -544,7 +544,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			}
 			
-			townyUniverse.getDataSource().saveResident(resident);
+			resident.save();
 		}
 	}
 
@@ -697,7 +697,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
 			msg.append(Translation.of("msg_to_list"));
 			TownyMessaging.sendMsg(player, msg.toString());
-			TownyUniverse.getInstance().getDataSource().saveResident(resident);
+			resident.save();
 
 		} else {
 
@@ -732,7 +732,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
 			msg.append(Translation.of("msg_from_list"));
 			TownyMessaging.sendMsg(player, msg.toString());
-			TownyUniverse.getInstance().getDataSource().saveResident(resident);
+			resident.save();
 		} else
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
 

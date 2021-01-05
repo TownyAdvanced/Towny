@@ -127,7 +127,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						resident.setJailDays(resident.getJailDays() - 1);
 					
 				}
-				universe.getDataSource().saveResident(resident);
+				resident.save();
 			}			
 		}
 		

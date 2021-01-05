@@ -94,7 +94,7 @@ public class GatherResidentUUIDTask implements Runnable {
 		} catch (AlreadyRegisteredException e) {
 			TownyMessaging.sendErrorMsg(String.format("Error registering resident UUID. Resident '%s' already has a UUID registered!", resident.getName()));
 		}
-		TownyUniverse.getInstance().getDataSource().saveResident(resident);
+		resident.save();
 		TownySettings.incrementUUIDCount();
 		TownyMessaging.sendDebugMsg("UUID stored for " + resident.getName() + " received from " + source + ". Progress: " + TownySettings.getUUIDPercent() + ".");
 	}

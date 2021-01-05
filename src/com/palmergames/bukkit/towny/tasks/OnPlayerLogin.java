@@ -92,7 +92,7 @@ public class OnPlayerLogin implements Runnable {
 						}
 					}
 					
-					universe.getDataSource().saveResident(resident);
+					resident.save();
 					
 				} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
 
@@ -182,7 +182,7 @@ public class OnPlayerLogin implements Runnable {
 			}
 			TownySettings.incrementUUIDCount();
 		}
-		universe.getDataSource().saveResident(resident);
+		resident.save();
 			
 	}
 	

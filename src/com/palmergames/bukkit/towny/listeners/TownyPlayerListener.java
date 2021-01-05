@@ -138,7 +138,7 @@ public class TownyPlayerListener implements Listener {
 		if (resident != null) {
 			resident.setLastOnline(System.currentTimeMillis());
 			resident.clearModes();
-			dataSource.saveResident(resident);
+			resident.save();
 
 			if (TownyTimerHandler.isTeleportWarmupRunning()) {
 				TownyAPI.getInstance().abortTeleportRequest(resident);
@@ -958,7 +958,7 @@ public class TownyPlayerListener implements Listener {
 
 		if (resident.isJailed()) {
 			resident.freeFromJail(resident.getJailSpawn(), true);
-			townyUniverse.getDataSource().saveResident(resident);
+			resident.save();
 		}		
 	}
 	

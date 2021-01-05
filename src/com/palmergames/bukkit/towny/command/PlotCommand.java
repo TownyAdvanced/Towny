@@ -371,7 +371,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								// Set the plot permissions to mirror the towns.
 								tb.setType(townBlock.getType());
 
-								townyUniverse.getDataSource().saveResident(owner);
+								owner.save();
 								// Update the townBlock data file so it's no longer using custom settings.
 								townyUniverse.getDataSource().saveTownBlock(tb);
 							}
@@ -386,7 +386,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Set the plot permissions to mirror the towns.
 						townBlock.setType(townBlock.getType());
 						
-						townyUniverse.getDataSource().saveResident(owner);
+						owner.save();
 						// Update the townBlock data file so it's no longer using custom settings.
 						townyUniverse.getDataSource().saveTownBlock(townBlock);
 						

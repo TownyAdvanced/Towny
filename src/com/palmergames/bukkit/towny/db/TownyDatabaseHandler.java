@@ -856,7 +856,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					res.setSurname("");
 				}
 				res.updatePermsForNationRemoval();
-				TownyUniverse.getInstance().getDataSource().saveResident(res);
+				saveResident(res);
 			}
 			try {
 				town.setNation(null);

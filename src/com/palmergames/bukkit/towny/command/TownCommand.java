@@ -1699,7 +1699,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			 * If we got here we have made a change Save the altered resident
 			 * data.
 			 */
-			townyUniverse.getDataSource().saveResident(target);
+			target.save();
 
 		}
 
@@ -1792,7 +1792,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 
 				resident.setTitle(title);
-				townyUniverse.getDataSource().saveResident(resident);
+				resident.save();
 
 				if (resident.hasTitle())
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_set_title", resident.getName(), resident.getTitle()));
@@ -1841,7 +1841,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 				
 				resident.setSurname(surname);
-				townyUniverse.getDataSource().saveResident(resident);
+				resident.save();
 
 				if (resident.hasSurname())
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_set_surname", resident.getName(), resident.getSurname()));
@@ -2510,7 +2510,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 		}
 		
-		townyDataSource.saveResident(resident);
+		resident.save();
 		townyDataSource.saveTownBlock(townBlock);
 		town.save();
 		townyDataSource.saveWorld(world);
@@ -2794,7 +2794,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		resident.setTown(town);
 		plugin.deleteCache(resident.getName());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		townyUniverse.getDataSource().saveResident(resident);
+		resident.save();
 		town.save();
 	}
 

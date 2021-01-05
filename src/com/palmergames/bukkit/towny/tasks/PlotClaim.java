@@ -184,7 +184,7 @@ public class PlotClaim extends Thread {
 			}
 		}
 		
-		TownyUniverse.getInstance().getDataSource().saveResident(resident);
+		resident.save();
 		plugin.resetCache();
 
 	}
@@ -239,7 +239,7 @@ public class PlotClaim extends Thread {
 						// TODO: Plot types for groups.
 						//group.setType(townBlock.getType());
 
-						townyUniverse.getDataSource().saveResident(owner);
+						owner.save();
 						townyUniverse.getDataSource().savePlotGroup(group);
 						townyUniverse.getDataSource().saveTownBlock(townBlock);
 
@@ -261,7 +261,7 @@ public class PlotClaim extends Thread {
 						// Set the plot permissions to mirror the towns.
 						//townBlock.setType(townBlock.getType());
 
-						townyUniverse.getDataSource().saveResident(owner);
+						owner.save();
 						townyUniverse.getDataSource().savePlotGroup(group);
 						// Update the townBlock data file so it's no longer using custom settings.
 						townyUniverse.getDataSource().saveTownBlock(townBlock);
@@ -330,7 +330,7 @@ public class PlotClaim extends Thread {
 					// Set the plot permissions to mirror the new owners.
 					townBlock.setType(townBlock.getType());
 					
-					townyUniverse.getDataSource().saveResident(owner);
+					owner.save();
 					townyUniverse.getDataSource().saveTownBlock(townBlock);
 
 					// Update any caches for this WorldCoord
@@ -349,7 +349,7 @@ public class PlotClaim extends Thread {
 					// Set the plot permissions to mirror the towns.
 					townBlock.setType(townBlock.getType());
 					
-					townyUniverse.getDataSource().saveResident(owner);
+					owner.save();
 					// Update the townBlock data file so it's no longer using custom settings.
 					townyUniverse.getDataSource().saveTownBlock(townBlock);
 

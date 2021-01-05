@@ -183,7 +183,7 @@ public class Town extends Government implements TownBlockOwner {
 				res.setSurname("");
 			}
 			res.updatePermsForNationRemoval();
-			TownyUniverse.getInstance().getDataSource().saveResident(res);
+			res.save();
 		}
 
 		try {
