@@ -106,16 +106,32 @@ public abstract class Account implements Nameable {
 	}
 	
 	protected boolean payToServer(double amount, String reason) throws EconomyException {
+		
 		// Take money out.
 		TownyEconomyHandler.subtract(getName(), amount, getBukkitWorld());
+
+		/*
+		 * TODO: This would appear to be adding money to the server account in all cases, 
+		 * even when the person is pulling money from their town/nation and onto their person.
+		 */
 		
 		// Put it back into the server.
 		return TownyEconomyHandler.addToServer(amount, getBukkitWorld());
 	}
 	
 	protected boolean payFromServer(double amount, String reason) throws EconomyException {
+		
+		/*
+		 * The following has been commented out in order to account for line 61 already doing the adding.
+		 */
+		
 //		// Put money in.
 //		TownyEconomyHandler.add(getName(), amount, getBukkitWorld());
+		
+		/*
+		 * TODO: This would appear to be taking money from the server account in all cases, 
+		 * even when the person is putting money into their town/nation from their person.
+		 */
 		
 		// Remove it from the server economy.
 		return TownyEconomyHandler.subtractFromServer(amount, getBukkitWorld());
