@@ -1195,7 +1195,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				e.printStackTrace();
 			}
 		}
-		townyUniverse.getDataSource().saveTown(town);
+		town.save();
 		townyUniverse.getDataSource().saveNation(nation);
 
 		BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
@@ -1510,7 +1510,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		for (Town town : towns) {
 			if (!town.hasNation()) {
 				town.setNation(nation);
-				townyUniverse.getDataSource().saveTown(town);
+				town.save();
 				TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_join_nation", town.getName()));
 			}
 

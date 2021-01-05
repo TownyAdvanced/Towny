@@ -716,7 +716,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 												town.getAccount().withdraw(TownySettings.getOutpostCost(), "Plot Set Outpost");
 											} catch (EconomyException ignored) {
 											}
-										townyUniverse.getDataSource().saveTown(town);
+										town.save();
 										townyUniverse.getDataSource().saveTownBlock(townBlock);
 										TownyMessaging.sendMessage(player, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translation.of("outpost")));
 									})
@@ -1452,7 +1452,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			// Save changes.
 			townyUniverse.getDataSource().savePlotGroup(newGroup);
 			townyUniverse.getDataSource().saveTownBlock(townBlock);
-			townyUniverse.getDataSource().saveTown(town);
+			town.save();
 
 			TownyMessaging.sendMsg(player, Translation.of("msg_plot_was_put_into_group_x", townBlock.getX(), townBlock.getZ(), newGroup.getName()));
 

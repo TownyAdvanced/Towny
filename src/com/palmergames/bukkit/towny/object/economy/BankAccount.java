@@ -290,6 +290,6 @@ public class BankAccount extends Account {
 	
 	private void setTownDebt(double amount) {
 		getTown().setDebtBalance(amount);
-		TownyUniverse.getInstance().getDataSource().saveTown(getTown());
+		getTown().save();
 	}
 }

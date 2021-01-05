@@ -947,7 +947,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							TownyMessaging.sendPrefixedTownMessage(town,Translation.of("msg_kicked", outlawer, target.getName()));
 						}
 					town.addOutlaw(target);
-					townyUniverse.getDataSource().saveTown(town);
+					town.save();
 					if (target.getPlayer().isOnline())
 						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_declared_outlaw", town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_you_have_declared_an_outlaw", target.getName(), town.getName()));
@@ -962,7 +962,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			} else if (target != null && split[0].equalsIgnoreCase("remove")) {
 				if (town.hasOutlaw(target)) {
 					town.removeOutlaw(target);
-					townyUniverse.getDataSource().saveTown(town);
+					town.save();
 					if (target.getPlayer().isOnline())
 						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_undeclared_outlaw", town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_you_have_undeclared_an_outlaw", target.getName(), town.getName()));
@@ -983,7 +983,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			 * If we got here we have made a change Save the altered resident
 			 * data.
 			 */
-			townyUniverse.getDataSource().saveTown(town);
+			town.save();
 
 		}
 
@@ -1579,7 +1579,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			Bukkit.getServer().getPluginManager().callEvent(new TownBlockSettingsChangedEvent(town));
 
 			// Save the Town.
-			townyUniverse.getDataSource().saveTown(town);
+			town.save();
 		}
 	}
 
@@ -2243,7 +2243,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 			}
 			
-			townyUniverse.getDataSource().saveTown(town);
+			town.save();
 
 			if (nation != null)
 				townyUniverse.getDataSource().saveNation(nation);
@@ -2349,7 +2349,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 			town.addPurchasedBlocks(n);
 			TownyMessaging.sendMsg(player, Translation.of("msg_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
-			TownyUniverse.getInstance().getDataSource().saveTown(town);
+			town.save();
 		})
 			.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 			.build();
@@ -2512,7 +2512,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		
 		townyDataSource.saveResident(resident);
 		townyDataSource.saveTownBlock(townBlock);
-		townyDataSource.saveTown(town);
+		town.save();
 		townyDataSource.saveWorld(world);
 
 		// Reset cache permissions for anyone in this TownBlock
@@ -2781,7 +2781,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			msg = new StringBuilder(Translation.of("msg_invited_join_town", name, msg.toString()));
 			TownyMessaging.sendPrefixedTownMessage(town, msg.toString());
-			townyUniverse.getDataSource().saveTown(town);
+			town.save();
 		} else
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_invalid_name"));
 	}
@@ -2795,7 +2795,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		plugin.deleteCache(resident.getName());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		townyUniverse.getDataSource().saveResident(resident);
-		townyUniverse.getDataSource().saveTown(town);
+		town.save();
 	}
 
 	private static void townInviteResident(CommandSender sender,Town town, Resident newMember) throws TownyException {
@@ -2905,7 +2905,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					TownyMessaging.sendMessage(sender, msg.toString());
 			} catch (NotRegisteredException e) {
 			}
-			townyUniverse.getDataSource().saveTown(town);
+			town.save();
 		} else {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_invalid_name"));
 		}

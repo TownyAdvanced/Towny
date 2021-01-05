@@ -199,7 +199,7 @@ public class Town extends Government implements TownBlockOwner {
 			// Cannot occur when setting null;
 		}
 		
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
+		this.save();
 		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(this, nation));
 	}
 	
@@ -682,7 +682,7 @@ public class Town extends Government implements TownBlockOwner {
 				findNewMayor();
 
 				// Town is not removing its last resident so be sure to save it.
-				TownyUniverse.getInstance().getDataSource().saveTown(this);
+				this.save();
 			}
 		}
 		// Remove resident.
@@ -795,7 +795,7 @@ public class Town extends Government implements TownBlockOwner {
 				}
 			} catch (TownyException ignored) {}
 			townBlocks.remove(townBlock.getWorldCoord());
-			TownyUniverse.getInstance().getDataSource().saveTown(this);
+			this.save();
 		}
 	}
 
@@ -825,7 +825,7 @@ public class Town extends Government implements TownBlockOwner {
 				throw new TownyException(Translation.of("msg_err_location_is_not_within_an_outpost_plot"));
 
 			outpostSpawns.add(spawn);
-			TownyUniverse.getInstance().getDataSource().saveTown(this);
+			this.save();
 
 		} catch (NotRegisteredException e) {
 			throw new TownyException(Translation.of("msg_err_location_is_not_within_a_town"));
@@ -880,7 +880,7 @@ public class Town extends Government implements TownBlockOwner {
 			Coord spawnBlock = Coord.parseCoord(spawn);
 			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				outpostSpawns.remove(spawn);
-				TownyUniverse.getInstance().getDataSource().saveTown(this);
+				this.save();
 			}
 		}
 	}
@@ -1017,7 +1017,7 @@ public class Town extends Government implements TownBlockOwner {
 				throw new TownyException(Translation.of("msg_err_location_is_not_within_a_jail_plot"));
 				
 			jailSpawns.add(spawn);
-			TownyUniverse.getInstance().getDataSource().saveTown(this);
+			this.save();
 
 		} catch (NotRegisteredException e) {
 			throw new TownyException(Translation.of("msg_err_location_is_not_within_a_town"));
@@ -1031,7 +1031,7 @@ public class Town extends Government implements TownBlockOwner {
 			Coord spawnBlock = Coord.parseCoord(spawn);
 			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				jailSpawns.remove(spawn);
-				TownyUniverse.getInstance().getDataSource().saveTown(this);
+				this.save();
 			}
 		}
 	}
@@ -1168,13 +1168,13 @@ public class Town extends Government implements TownBlockOwner {
 	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
 
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
+		this.save();
 	}
 
 	@Override
 	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
+		this.save();
 	}
 	
 	public void setConquered(boolean conquered) {

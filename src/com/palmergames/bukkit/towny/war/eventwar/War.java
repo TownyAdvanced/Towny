@@ -650,8 +650,8 @@ public class War {
 					remove(attacker, defenderTown.getNation());
 				else
 					remove(attacker, defenderTown);
-				townyUniverse.getDataSource().saveTown(defenderTown);
-				townyUniverse.getDataSource().saveTown(attacker);
+				defenderTown.save();
+				attacker.save();
 				return;
 			} else
 				TownyMessaging.sendPrefixedTownMessage(defenderTown, Translation.of("msg_war_town_lost_money_townblock", TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
@@ -684,8 +684,8 @@ public class War {
 					TownyMessaging.sendGlobalMessage(Translation.of("msg_war_jailbreak", defenderTown, count));
 			}				
 		}
-		townyUniverse.getDataSource().saveTown(defenderTown);
-		townyUniverse.getDataSource().saveTown(attacker);
+		defenderTown.save();
+		attacker.save();
 	}
 
 	/** 
@@ -740,7 +740,7 @@ public class War {
 				town.setNation(attacker.getNation());
 			} catch (AlreadyRegisteredException e) {
 			}
-			townyUniverse.getDataSource().saveTown(town);
+			town.save();
 			townyUniverse.getDataSource().saveNation(attacker.getNation());
 			townyUniverse.getDataSource().saveNation(losingNation);
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));

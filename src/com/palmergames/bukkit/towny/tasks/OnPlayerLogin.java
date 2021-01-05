@@ -87,7 +87,7 @@ public class OnPlayerLogin implements Runnable {
 						if (town != null) {
 							try {
 								resident.setTown(town);
-								universe.getDataSource().saveTown(town);
+								town.save();
 							} catch (AlreadyRegisteredException ignore) {}
 						}
 					}

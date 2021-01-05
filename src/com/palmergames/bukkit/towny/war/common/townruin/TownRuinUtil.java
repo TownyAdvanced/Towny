@@ -101,7 +101,7 @@ public class TownRuinUtil {
 			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
 		}
 		
-		TownyUniverse.getInstance().getDataSource().saveTown(town);
+		town.save();
 		plugin.resetCache();
 	}
 
@@ -150,7 +150,7 @@ public class TownRuinUtil {
 				tds.saveTownBlock(townBlock);
 			}
 			
-			tds.saveTown(town);
+			town.save();
 			plugin.resetCache();
 			
 			TownReclaimedEvent event = new TownReclaimedEvent(town, resident);

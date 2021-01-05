@@ -280,7 +280,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						// Check if the town was newly bankrupted and punish them for it.
 						if (!townWasBankrupt) {
 							town.setOpen(false);
-							universe.getDataSource().saveTown(town);
+							town.save();
 							localNewlyDelinquentTowns.add(town.getName());
 						}
 					}
@@ -529,7 +529,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						// Check if the town was newly bankrupted and punish them for it.
 						if(!townWasBankrupt) {
 							town.setOpen(false);
-							universe.getDataSource().saveTown(town);
+							town.save();
 							bankruptedTowns.add(town.getName());
 						}
 					}

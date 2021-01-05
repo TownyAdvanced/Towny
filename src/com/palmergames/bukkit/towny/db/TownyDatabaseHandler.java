@@ -863,7 +863,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (AlreadyRegisteredException ignored) {
 				// Cannot reach AlreadyRegisteredException
 			}
-			TownyUniverse.getInstance().getDataSource().saveTown(town);
+			town.save();
 			BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, nation));			
 		}
 

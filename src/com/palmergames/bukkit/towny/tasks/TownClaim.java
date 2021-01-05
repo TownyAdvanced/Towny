@@ -151,7 +151,7 @@ public class TownClaim extends Thread {
 
 		if (!towns.isEmpty()) {
 			for (Town test : towns) {
-				townyUniverse.getDataSource().saveTown(test);
+				test.save();
 			}
 		}
 
