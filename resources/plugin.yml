@@ -595,6 +595,7 @@ permissions:
             towny.command.townyadmin.town.set: true
             towny.command.townyadmin.town.toggle: true
             towny.command.townyadmin.town.meta: true
+            towny.command.townyadmin.town.bankhistory: true
 
     towny.command.townyadmin.nation.*:
         description: User can access the admin nation commands.
@@ -607,6 +608,7 @@ permissions:
             towny.command.townyadmin.nation.merge: true
             towny.command.townyadmin.nation.toggle: true
             towny.command.townyadmin.nation.set: true
+            towny.command.townyadmin.nation.bankhistory: true
 
     towny.command.townyadmin.plot.*:
         description: User can access the admin plot commans.
