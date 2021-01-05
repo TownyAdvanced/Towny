@@ -335,6 +335,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 			return;
 		}
 
+		if (desiredPages < 1)
+			desiredPages = 1;
 		desiredPages = Math.min(desiredPages, size);
 		
 		List<String> pages = new ArrayList<>(desiredPages);
