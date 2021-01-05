@@ -714,7 +714,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_BANKHISTORY.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 
-					parseTownBankHistoryCommand(player, newSplit, TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown());
+					int pages = 10;
+					if (newSplit.length > 0)
+						try {
+							pages = Integer.parseInt(newSplit[0]);
+						} catch (NumberFormatException e) {
+							TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
+							return;
+						}
+
+					MoneyUtil.parseBankHistoryCommand(player, pages, TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown());
+
 				} else {
 					/*
 					 * We've gotten this far without a match, check if the argument is a town name.
@@ -3723,22 +3733,5 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOutlaws(town));
 		else 
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_name"));
-	}
-
-	private void parseTownBankHistoryCommand(Player player, String[] newSplit, Town town) {
-		if (town.getAccount().getAuditor().getAuditHistory().size() < 1) {
-			TownyMessaging.sendErrorMsg(player, "No pages to display!");
-			return;
-		}
-
-		int pages;
-		try {
-			pages = Integer.parseInt(newSplit[0]);
-		} catch (NumberFormatException e) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
-			return;
-		}
-		
-		town.generateBankHistoryBook(player, pages);
 	}
 }

@@ -321,6 +321,12 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 
 	public abstract Collection<TownBlock> getTownBlocks();
 	
+	/**
+	 * Opens a book gui of bank transactions for the player to browse.
+	 * 
+	 * @param player Player who will get a book GUI opened.
+	 * @param desiredPages The number of pages requested.
+	 */
 	public void generateBankHistoryBook(Player player, int desiredPages) {
 		int size = getAccount().getAuditor().getAuditHistory().size();
 
@@ -333,7 +339,6 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 			pages.add(getAccount().getAuditor().getAuditHistory().get(size-i));
 		}
 
-		player.getInventory().addItem(BookFactory.makeBook("Bank History", getName(), pages));
-		TownyMessaging.sendMsg(player, "Bank Transaction Book Given!");
+		player.openBook(BookFactory.makeBook("Bank History", getName(), pages));
 	}
 }

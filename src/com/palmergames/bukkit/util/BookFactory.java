@@ -42,7 +42,7 @@ public class BookFactory {
 	 * @param title   Title of the book.
 	 * @param author  Author of the book.
 	 * @param pages List of Strings, each string intended to become one page in a book. 
-	 * @return book ItemStack suitable for giving directly to a player inventory.
+	 * @return book ItemStack suitable for giving directly to a player inventory or opening using Player#openBook().
 	 */
 	public static ItemStack makeBook(String title, String author, List<String> pages) {
 		
