@@ -123,7 +123,7 @@ public class PlotClaim extends Thread {
 							worldCoord.getTownBlock().getPlotObjectGroup().setPrice(-1);
 							TownyMessaging.sendPrefixedTownMessage(worldCoord.getTownBlock().getTown(), Translation.of("msg_player_successfully_bought_group_x", player.getName(), worldCoord.getTownBlock().getPlotObjectGroup().getName()));
 							
-							TownyUniverse.getInstance().getDataSource().savePlotGroup(worldCoord.getTownBlock().getPlotObjectGroup());
+							worldCoord.getTownBlock().getPlotObjectGroup().save();
 							break;
 						}
 					}
@@ -240,7 +240,7 @@ public class PlotClaim extends Thread {
 						//group.setType(townBlock.getType());
 
 						owner.save();
-						townyUniverse.getDataSource().savePlotGroup(group);
+						group.save();
 						townBlock.save();
 
 						if (i >= worldCoords.size() - 2) {
@@ -262,7 +262,7 @@ public class PlotClaim extends Thread {
 						//townBlock.setType(townBlock.getType());
 
 						owner.save();
-						townyUniverse.getDataSource().savePlotGroup(group);
+						group.save();
 						// Update the townBlock data file so it's no longer using custom settings.
 						townBlock.save();
 						

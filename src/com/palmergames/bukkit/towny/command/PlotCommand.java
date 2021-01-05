@@ -1450,7 +1450,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townyUniverse.getDataSource().savePlotGroupList();
 
 			// Save changes.
-			townyUniverse.getDataSource().savePlotGroup(newGroup);
+			newGroup.save();
 			townBlock.save();
 			town.save();
 
@@ -1517,7 +1517,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			group.setPrice(price);
 			
 			// Save
-			TownyUniverse.getInstance().getDataSource().savePlotGroup(group);
+			group.save();
 			TownyUniverse.getInstance().getDataSource().savePlotGroupList();
 
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_put_group_up_for_sale", player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
@@ -1537,7 +1537,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			group.setPrice(-1);
 
 			// Save
-			TownyUniverse.getInstance().getDataSource().savePlotGroup(group);
+			group.save();
 			TownyUniverse.getInstance().getDataSource().savePlotGroupList();
 
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_made_group_not_for_sale", player.getName(), group.getName()));
