@@ -82,7 +82,7 @@ public class TownyWorldListener implements Listener {
 				if (!dungeonWorld)
 					if (!townyUniverse.getDataSource().loadWorld(world)) {
 						// First time world has been noticed
-						townyUniverse.getDataSource().saveWorld(world);
+						world.save();
 					}
 			}
 		} catch (AlreadyRegisteredException e) {

@@ -157,7 +157,7 @@ public class TownClaim extends Thread {
 
 		if (!worlds.isEmpty()) {
 			for (TownyWorld test : worlds) {
-				townyUniverse.getDataSource().saveWorld(test);
+				test.save();
 			}
 		}
 

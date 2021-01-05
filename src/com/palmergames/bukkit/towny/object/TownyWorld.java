@@ -821,14 +821,14 @@ public class TownyWorld extends TownyObject {
 	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
 
-		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+		this.save();
 	}
 
 	@Override
 	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
 
-		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+		this.save();
 	}
 	
 	/**

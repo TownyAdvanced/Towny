@@ -2251,8 +2251,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			// If the town (homeblock) has moved worlds we need to update the
 			// world files.
 			if (oldWorld != null) {
-				townyUniverse.getDataSource().saveWorld(town.getHomeblockWorld());
-				townyUniverse.getDataSource().saveWorld(oldWorld);
+				town.getHomeblockWorld().save();
+				oldWorld.save();
 			}
 		}
 	}
@@ -2513,7 +2513,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		resident.save();
 		townyDataSource.saveTownBlock(townBlock);
 		town.save();
-		townyDataSource.saveWorld(world);
+		world.save();
 
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());

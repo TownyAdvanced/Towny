@@ -523,7 +523,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			townyUniverse.getDataSource().saveWorld(Globalworld);
+			Globalworld.save();
 			
 			//Change settings event
 			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(Globalworld);
@@ -643,7 +643,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
-			TownyUniverse.getInstance().getDataSource().saveWorld(Globalworld);
+			Globalworld.save();
 		}
 	}
 
