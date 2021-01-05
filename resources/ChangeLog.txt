@@ -5697,3 +5697,22 @@ v0.92.0.11:
     - When set for more than 0m, the amount of time (in minutes) until an invite is considered expired and is removed. Invites are checked for expiration once every hour.
     - Valid values would include: 30s, 30m, 24h, 2d, etc.
     - Closes #4086.
+  - Bank history commands added.
+    - See new commands below for /t, /n and /ta.
+    - Displays a book GUI to the player using the command.
+    - When {page} is not specified, up to 10 transactions will be shown.
+    - Does not persist across reloads, stop and starts.
+  - New Commands:
+    - /town bankhistory {pages}
+    - /nation bankhistory {pages}
+    - /ta town {townname} bankhistory {pages}
+    - /ta nation {nationname} bankhistory {pages}
+  - New permission nodes:
+    - towny.commmand.town.bankhistory
+      - child node of towny.command.town.*
+    - towny.command.nation.bankhistory
+      - child node of towny.command.nation.*
+    - towny.command.townyadmin.town.bankhistory
+      - child node of towny.command.townyadmin.town.*
+    - towny.command.townyadmin.nation.bankhistory
+      - child node of towny.command.townyadmin.nation.*
