@@ -856,14 +856,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					res.setSurname("");
 				}
 				res.updatePermsForNationRemoval();
-				TownyUniverse.getInstance().getDataSource().saveResident(res);
+				res.save();
 			}
 			try {
 				town.setNation(null);
 			} catch (AlreadyRegisteredException ignored) {
 				// Cannot reach AlreadyRegisteredException
 			}
-			TownyUniverse.getInstance().getDataSource().saveTown(town);
+			town.save();
 			BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(town, nation));			
 		}
 

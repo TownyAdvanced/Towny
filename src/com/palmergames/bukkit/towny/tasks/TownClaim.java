@@ -151,13 +151,13 @@ public class TownClaim extends Thread {
 
 		if (!towns.isEmpty()) {
 			for (Town test : towns) {
-				townyUniverse.getDataSource().saveTown(test);
+				test.save();
 			}
 		}
 
 		if (!worlds.isEmpty()) {
 			for (TownyWorld test : worlds) {
-				townyUniverse.getDataSource().saveWorld(test);
+				test.save();
 			}
 		}
 
@@ -202,7 +202,7 @@ public class TownClaim extends Thread {
 				}
 			}
 			
-			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 			
 			// Raise an event for the claim
 			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock, player));

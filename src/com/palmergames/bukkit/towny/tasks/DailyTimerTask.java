@@ -127,7 +127,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						resident.setJailDays(resident.getJailDays() - 1);
 					
 				}
-				universe.getDataSource().saveResident(resident);
+				resident.save();
 			}			
 		}
 		
@@ -280,7 +280,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						// Check if the town was newly bankrupted and punish them for it.
 						if (!townWasBankrupt) {
 							town.setOpen(false);
-							universe.getDataSource().saveTown(town);
+							town.save();
 							localNewlyDelinquentTowns.add(town.getName());
 						}
 					}
@@ -445,7 +445,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							townBlock.setPlotPrice(-1);
 							// Set the plot permissions to mirror the towns.
 							townBlock.setType(townBlock.getType());
-							universe.getDataSource().saveTownBlock(townBlock);
+							townBlock.save();
 						}
 					}
 				} catch (NotRegisteredException ignored) {
@@ -529,7 +529,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						// Check if the town was newly bankrupted and punish them for it.
 						if(!townWasBankrupt) {
 							town.setOpen(false);
-							universe.getDataSource().saveTown(town);
+							town.save();
 							bankruptedTowns.add(town.getName());
 						}
 					}
@@ -616,7 +616,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (nation.isNeutral()) {
 						if (!nation.getAccount().withdraw(TownySettings.getNationNeutralityCost(), "Nation Peace Upkeep")) {
 							nation.setNeutral(false);
-							universe.getDataSource().saveNation(nation);
+							nation.save();
 							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_not_peaceful"));
 						}
 					}

@@ -87,12 +87,12 @@ public class OnPlayerLogin implements Runnable {
 						if (town != null) {
 							try {
 								resident.setTown(town);
-								universe.getDataSource().saveTown(town);
+								town.save();
 							} catch (AlreadyRegisteredException ignore) {}
 						}
 					}
 					
-					universe.getDataSource().saveResident(resident);
+					resident.save();
 					
 				} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
 
@@ -182,7 +182,7 @@ public class OnPlayerLogin implements Runnable {
 			}
 			TownySettings.incrementUUIDCount();
 		}
-		universe.getDataSource().saveResident(resident);
+		resident.save();
 			
 	}
 	

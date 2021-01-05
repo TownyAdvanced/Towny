@@ -371,9 +371,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								// Set the plot permissions to mirror the towns.
 								tb.setType(townBlock.getType());
 
-								townyUniverse.getDataSource().saveResident(owner);
+								owner.save();
 								// Update the townBlock data file so it's no longer using custom settings.
-								townyUniverse.getDataSource().saveTownBlock(tb);
+								tb.save();
 							}
 							
 							player.sendMessage(Translation.of("msg_plot_evict_group", townBlock.getPlotObjectGroup().getName()));
@@ -386,9 +386,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Set the plot permissions to mirror the towns.
 						townBlock.setType(townBlock.getType());
 						
-						townyUniverse.getDataSource().saveResident(owner);
+						owner.save();
 						// Update the townBlock data file so it's no longer using custom settings.
-						townyUniverse.getDataSource().saveTownBlock(townBlock);
+						townBlock.save();
 						
 						player.sendMessage(Translation.of("msg_plot_evict"));
 					}
@@ -661,7 +661,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							if (split.length == 1) {
 								townBlock.setName("");
 								TownyMessaging.sendMsg(player, Translation.of("msg_plot_name_removed"));
-								townyUniverse.getDataSource().saveTownBlock(townBlock);
+								townBlock.save();
 								return true;
 							}
 							
@@ -670,7 +670,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								townBlock.setName(StringMgmt.join(StringMgmt.remFirstArg(split), ""));
 
 								//townBlock.setChanged(true);
-								townyUniverse.getDataSource().saveTownBlock(townBlock);
+								townBlock.save();
 
 								TownyMessaging.sendMsg(player, Translation.of("msg_plot_name_set_to", townBlock.getName()));
 
@@ -716,8 +716,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 												town.getAccount().withdraw(TownySettings.getOutpostCost(), "Plot Set Outpost");
 											} catch (EconomyException ignored) {
 											}
-										townyUniverse.getDataSource().saveTown(town);
-										townyUniverse.getDataSource().saveTownBlock(townBlock);
+										town.save();
+										townBlock.save();
 										TownyMessaging.sendMessage(player, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translation.of("outpost")));
 									})
 									.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())))
@@ -887,7 +887,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	public static TownyPermissionChange setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownBlock townBlock, String[] split) {
 		TownyPermissionChange permChange = null;
 
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
 			player.sendMessage(ChatTools.formatTitle("/... set perm"));
@@ -916,7 +915,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					permChange = new TownyPermissionChange(TownyPermissionChange.Action.RESET, false, townBlock);
 
 					perm.change(permChange);
-					townyUniverse.getDataSource().saveTownBlock(townBlock);
+					townBlock.save();
 
 					TownyMessaging.sendMsg(player, Translation.of("msg_set_perms_reset_single"));
 					// Reset all caches as this can affect everyone.
@@ -1012,7 +1011,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				perm.change(permChange);
 
 			townBlock.setChanged(true);
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendMsg(player, Translation.of("msg_set_perms"));
 				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
@@ -1065,7 +1064,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			// Save this townblock so the for sale status is remembered.
-			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 
 		} catch (NotRegisteredException e) {
 			throw new TownyException(Translation.of("msg_err_not_part_town"));
@@ -1187,7 +1186,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, e.getMessage());
 			}
 			
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 		}
 	}
 
@@ -1274,7 +1273,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					Bukkit.getServer().getPluginManager().callEvent(event);
 					
 					// Save
-					townyUniverse.getDataSource().saveTownBlock(groupBlock);
+					groupBlock.save();
 				}
 				
 				// Finally send the message.
@@ -1450,9 +1449,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townyUniverse.getDataSource().savePlotGroupList();
 
 			// Save changes.
-			townyUniverse.getDataSource().savePlotGroup(newGroup);
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
-			townyUniverse.getDataSource().saveTown(town);
+			newGroup.save();
+			townBlock.save();
+			town.save();
 
 			TownyMessaging.sendMsg(player, Translation.of("msg_plot_was_put_into_group_x", townBlock.getX(), townBlock.getZ(), newGroup.getName()));
 
@@ -1472,7 +1471,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townBlock.removePlotObjectGroup();
 
 			// Save
-			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 			TownyMessaging.sendMsg(player, Translation.of("msg_plot_was_removed_from_group_x", townBlock.getX(), townBlock.getZ(), name));
 
 		} else if (split[0].equalsIgnoreCase("rename")) {
@@ -1517,7 +1516,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			group.setPrice(price);
 			
 			// Save
-			TownyUniverse.getInstance().getDataSource().savePlotGroup(group);
+			group.save();
 			TownyUniverse.getInstance().getDataSource().savePlotGroupList();
 
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_put_group_up_for_sale", player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
@@ -1537,7 +1536,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			group.setPrice(-1);
 
 			// Save
-			TownyUniverse.getInstance().getDataSource().savePlotGroup(group);
+			group.save();
 			TownyUniverse.getInstance().getDataSource().savePlotGroupList();
 
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_made_group_not_for_sale", player.getName(), group.getName()));
@@ -1618,7 +1617,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							tb.getPermissions().change(permChange);
 
 							tb.setChanged(true);
-							townyUniverse.getDataSource().saveTownBlock(tb);
+							tb.save();
 
 							// Change settings event
 							TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(tb);

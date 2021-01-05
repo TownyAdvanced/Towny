@@ -272,7 +272,7 @@ public class TownBlock extends TownyObject {
 			this.getTown().addJailSpawn(p.getLocation());
 		}
 
-		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+		this.save();
 	}
 
 	public boolean isHomeBlock() {
@@ -388,13 +388,13 @@ public class TownBlock extends TownyObject {
 	@Override
 	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
-		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+		this.save();
 	}
 	
 	@Override
 	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
-		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+		this.save();
 	}
 	
 	public boolean hasPlotObjectGroup() { return plotGroup != null; }
@@ -415,5 +415,10 @@ public class TownBlock extends TownyObject {
 		} catch (NullPointerException e) {
 			TownyMessaging.sendErrorMsg("Townblock failed to setPlotObjectGroup(group), group is null. " + group);
 		}
+	}
+
+	@Override
+	public void save() {
+		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 	}
 }

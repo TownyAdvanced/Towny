@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object.inviteobjects;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -27,8 +26,8 @@ public class NationAllyNationInvite extends AbstractInvite<Nation, Nation> {
 		receiverNation.deleteReceivedInvite(this);
 		senderNation.deleteSentAllyInvite(this);
 			
-		TownyUniverse.getInstance().getDataSource().saveNation(receiverNation);
-		TownyUniverse.getInstance().getDataSource().saveNation(senderNation);
+		receiverNation.save();
+		senderNation.save();
 	}
 
 	@Override

@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
@@ -963,7 +962,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 							TownyMessaging.sendPrefixedTownMessage(town,Translation.of("msg_kicked", outlawer, target.getName()));
 						}
 					town.addOutlaw(target);
-					townyUniverse.getDataSource().saveTown(town);
+					town.save();
 					if (target.getPlayer().isOnline())
 						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_declared_outlaw", town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_you_have_declared_an_outlaw", target.getName(), town.getName()));
@@ -978,7 +977,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			} else if (target != null && split[0].equalsIgnoreCase("remove")) {
 				if (town.hasOutlaw(target)) {
 					town.removeOutlaw(target);
-					townyUniverse.getDataSource().saveTown(town);
+					town.save();
 					if (target.getPlayer().isOnline())
 						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_undeclared_outlaw", town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_you_have_undeclared_an_outlaw", target.getName(), town.getName()));
@@ -999,7 +998,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			 * If we got here we have made a change Save the altered resident
 			 * data.
 			 */
-			townyUniverse.getDataSource().saveTown(town);
+			town.save();
 
 		}
 
@@ -1587,7 +1586,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				for (TownBlock townBlock : town.getTownBlocks()) {
 					if (!townBlock.hasResident() && !townBlock.isChanged()) {
 						townBlock.setType(townBlock.getType());
-						townyUniverse.getDataSource().saveTownBlock(townBlock);
+						townBlock.save();
 					}
 				}
 
@@ -1595,7 +1594,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			Bukkit.getServer().getPluginManager().callEvent(new TownBlockSettingsChangedEvent(town));
 
 			// Save the Town.
-			townyUniverse.getDataSource().saveTown(town);
+			town.save();
 		}
 	}
 
@@ -1715,7 +1714,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			 * If we got here we have made a change Save the altered resident
 			 * data.
 			 */
-			townyUniverse.getDataSource().saveResident(target);
+			target.save();
 
 		}
 
@@ -1808,7 +1807,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 
 				resident.setTitle(title);
-				townyUniverse.getDataSource().saveResident(resident);
+				resident.save();
 
 				if (resident.hasTitle())
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_set_title", resident.getName(), resident.getTitle()));
@@ -1857,7 +1856,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 				
 				resident.setSurname(surname);
-				townyUniverse.getDataSource().saveResident(resident);
+				resident.save();
 
 				if (resident.hasSurname())
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_set_surname", resident.getName(), resident.getSurname()));
@@ -2259,16 +2258,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				}
 			}
 			
-			townyUniverse.getDataSource().saveTown(town);
+			town.save();
 
 			if (nation != null)
-				townyUniverse.getDataSource().saveNation(nation);
+				nation.save();
 
 			// If the town (homeblock) has moved worlds we need to update the
 			// world files.
 			if (oldWorld != null) {
-				townyUniverse.getDataSource().saveWorld(town.getHomeblockWorld());
-				townyUniverse.getDataSource().saveWorld(oldWorld);
+				town.getHomeblockWorld().save();
+				oldWorld.save();
 			}
 		}
 	}
@@ -2365,7 +2364,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 			town.addPurchasedBlocks(n);
 			TownyMessaging.sendMsg(player, Translation.of("msg_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
-			TownyUniverse.getInstance().getDataSource().saveTown(town);
+			town.save();
 		})
 			.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 			.build();
@@ -2481,7 +2480,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 
 	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
-		TownyDataSource townyDataSource = TownyUniverse.getInstance().getDataSource();
 
 		TownyUniverse.getInstance().newTown(name);
 		Town town = TownyUniverse.getInstance().getTown(name);
@@ -2526,10 +2524,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 		}
 		
-		townyDataSource.saveResident(resident);
-		townyDataSource.saveTownBlock(townBlock);
-		townyDataSource.saveTown(town);
-		townyDataSource.saveWorld(world);
+		resident.save();
+		townBlock.save();
+		town.save();
+		world.save();
 
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
@@ -2797,7 +2795,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			msg = new StringBuilder(Translation.of("msg_invited_join_town", name, msg.toString()));
 			TownyMessaging.sendPrefixedTownMessage(town, msg.toString());
-			townyUniverse.getDataSource().saveTown(town);
+			town.save();
 		} else
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_invalid_name"));
 	}
@@ -2809,9 +2807,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 		resident.setTown(town);
 		plugin.deleteCache(resident.getName());
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		townyUniverse.getDataSource().saveResident(resident);
-		townyUniverse.getDataSource().saveTown(town);
+		resident.save();
+		town.save();
 	}
 
 	private static void townInviteResident(CommandSender sender,Town town, Resident newMember) throws TownyException {
@@ -2902,7 +2899,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			}
 		}
 		
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (kicking.size() > 0) {
 			StringBuilder msg = new StringBuilder();
 			for (Resident member : kicking) {
@@ -2921,7 +2917,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					TownyMessaging.sendMessage(sender, msg.toString());
 			} catch (NotRegisteredException e) {
 			}
-			townyUniverse.getDataSource().saveTown(town);
+			town.save();
 		} else {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_invalid_name"));
 		}
@@ -3149,7 +3145,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	}
 
 	public static void setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
 			player.sendMessage(ChatTools.formatTitle("/... set perm"));
@@ -3187,7 +3182,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 							// Reset permissions
 							townBlock.setType(townBlock.getType());
-							townyUniverse.getDataSource().saveTownBlock(townBlock);
+							townBlock.save();
 						}
 					}
 					if (townBlockOwner instanceof Town)
@@ -3287,12 +3282,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
 					if (!townBlock.isChanged()) {
 						townBlock.setType(townBlock.getType());
-						townyUniverse.getDataSource().saveTownBlock(townBlock);
+						townBlock.save();
 					}
 				} else if (townBlockOwner instanceof Resident)
 					if (!townBlock.isChanged()) {
 						townBlock.setType(townBlock.getType());
-						townyUniverse.getDataSource().saveTownBlock(townBlock);
+						townBlock.save();
 					}
 			}
 

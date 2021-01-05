@@ -961,7 +961,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * If we got here we have made a change Save the altered resident
 			 * data.
 			 */
-			townyUniverse.getDataSource().saveResident(target);
+			target.save();
 
 		}
 
@@ -1211,8 +1211,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				e.printStackTrace();
 			}
 		}
-		townyUniverse.getDataSource().saveTown(town);
-		townyUniverse.getDataSource().saveNation(nation);
+		town.save();
+		nation.save();
 
 		BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
 
@@ -1521,18 +1521,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * @throws AlreadyRegisteredException - Shouldn't happen but could.
 	 */
 	public static void nationAdd(Nation nation, List<Town> towns) throws AlreadyRegisteredException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
 		for (Town town : towns) {
 			if (!town.hasNation()) {
 				town.setNation(nation);
-				townyUniverse.getDataSource().saveTown(town);
+				town.save();
 				TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_join_nation", town.getName()));
 			}
 
 		}
 		plugin.resetCache();
-		townyUniverse.getDataSource().saveNation(nation);
+		nation.save();
 
 	}
 
@@ -2217,14 +2215,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								nation.setCapital(newCapital);
 								plugin.resetCache();
 								TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
-								TownyUniverse.getInstance().getDataSource().saveNation(nation);
+								nation.save();
 							}
 						// Proximity doesn't factor in.
 						} else {
 							nation.setCapital(newCapital);
 							plugin.resetCache();
 							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
-							TownyUniverse.getInstance().getDataSource().saveNation(nation);
+							nation.save();
 						}
 					}
 				} catch (TownyException e) {
@@ -2364,7 +2362,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				resident.setTitle(title);
-				townyUniverse.getDataSource().saveResident(resident);
+				resident.save();
 
 				if (resident.hasTitle())
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_title", resident.getName(), resident.getTitle()));
@@ -2394,7 +2392,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				resident.setSurname(surname);
-				townyUniverse.getDataSource().saveResident(resident);
+				resident.save();
 
 				if (resident.hasSurname())
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_surname", resident.getName(), resident.getSurname()));
@@ -2452,7 +2450,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			townyUniverse.getDataSource().saveNation(nation);
+			nation.save();
 		}
 	}
 
@@ -2564,7 +2562,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				
 			}
 
-			townyUniverse.getDataSource().saveNation(nation);
+			nation.save();
 		}
 	}
 

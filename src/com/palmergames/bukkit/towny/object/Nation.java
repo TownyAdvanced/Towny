@@ -379,7 +379,7 @@ public class Nation extends Government {
 		} else if (isCapital) {
 			findNewCapital();
 		}
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		this.save();
 	}
 
 	private void remove(Town town) {
@@ -475,7 +475,7 @@ public class Nation extends Government {
 		if (!king.isMayor())
 			throw new TownyException(Translation.of("msg_err_new_king_notmayor"));
 		setCapital(king.getTown());
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		this.save();
 	}
 
 	public boolean hasResident(Resident resident) {
@@ -618,14 +618,14 @@ public class Nation extends Government {
 	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
 
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		this.save();
 	}
 
 	@Override
 	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
 
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		this.save();
 	}
 
 	@Override
@@ -760,5 +760,10 @@ public class Nation extends Government {
 	@Deprecated
 	public void toggleNeutral(boolean neutral) {
 		setNeutral(neutral);
+	}
+
+	@Override
+	public void save() {
+		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 }
