@@ -616,7 +616,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (nation.isNeutral()) {
 						if (!nation.getAccount().withdraw(TownySettings.getNationNeutralityCost(), "Nation Peace Upkeep")) {
 							nation.setNeutral(false);
-							universe.getDataSource().saveNation(nation);
+							nation.save();
 							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_not_peaceful"));
 						}
 					}

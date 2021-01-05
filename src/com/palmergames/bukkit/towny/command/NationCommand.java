@@ -1196,7 +1196,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 		town.save();
-		townyUniverse.getDataSource().saveNation(nation);
+		nation.save();
 
 		BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
 
@@ -1516,7 +1516,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		}
 		plugin.resetCache();
-		townyUniverse.getDataSource().saveNation(nation);
+		nation.save();
 
 	}
 
@@ -2201,14 +2201,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								nation.setCapital(newCapital);
 								plugin.resetCache();
 								TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
-								TownyUniverse.getInstance().getDataSource().saveNation(nation);
+								nation.save();
 							}
 						// Proximity doesn't factor in.
 						} else {
 							nation.setCapital(newCapital);
 							plugin.resetCache();
 							TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
-							TownyUniverse.getInstance().getDataSource().saveNation(nation);
+							nation.save();
 						}
 					}
 				} catch (TownyException e) {
@@ -2436,7 +2436,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			townyUniverse.getDataSource().saveNation(nation);
+			nation.save();
 		}
 	}
 
@@ -2548,7 +2548,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				
 			}
 
-			townyUniverse.getDataSource().saveNation(nation);
+			nation.save();
 		}
 	}
 

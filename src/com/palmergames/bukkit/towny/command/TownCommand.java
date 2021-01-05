@@ -2246,7 +2246,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			town.save();
 
 			if (nation != null)
-				townyUniverse.getDataSource().saveNation(nation);
+				nation.save();
 
 			// If the town (homeblock) has moved worlds we need to update the
 			// world files.

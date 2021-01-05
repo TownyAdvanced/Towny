@@ -741,8 +741,8 @@ public class War {
 			} catch (AlreadyRegisteredException e) {
 			}
 			town.save();
-			townyUniverse.getDataSource().saveNation(attacker.getNation());
-			townyUniverse.getDataSource().saveNation(losingNation);
+			attacker.getNation().save();
+			losingNation.save();
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
 		}
 		

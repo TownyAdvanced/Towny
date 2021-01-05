@@ -27,8 +27,8 @@ public class NationAllyNationInvite extends AbstractInvite<Nation, Nation> {
 		receiverNation.deleteReceivedInvite(this);
 		senderNation.deleteSentAllyInvite(this);
 			
-		TownyUniverse.getInstance().getDataSource().saveNation(receiverNation);
-		TownyUniverse.getInstance().getDataSource().saveNation(senderNation);
+		receiverNation.save();
+		senderNation.save();
 	}
 
 	@Override
