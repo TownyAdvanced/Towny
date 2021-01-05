@@ -107,7 +107,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"enemylist",
 		"ally",
 		"spawn",
-		"king"
+		"king",
+		"bankhistory"
 	);
 
 	private static final List<String> nationSetTabCompletes = Arrays.asList(
@@ -662,6 +663,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					String message = StringMgmt.join(newSplit);
 					TownyMessaging.sendPrefixedNationMessage(nation, message);
 
+				} else if (split[0].equalsIgnoreCase("bankhistory")) {
+					
+					if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_BANKHISTORY.getNode()))
+						throw new TownyException(Translation.of("msg_err_command_disable"));
+
+					int pages = 10;
+					if (newSplit.length > 0)
+						try {
+							pages = Integer.parseInt(newSplit[0]);
+						} catch (NumberFormatException e) {
+							TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
+							return;
+						}
+
+					TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().getNation().generateBankHistoryBook(player, pages);
 				} else {
 
 					final Nation nation = townyUniverse.getNation(split[0]);

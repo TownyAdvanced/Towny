@@ -894,6 +894,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] meta", ""));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] deposit [amount]", ""));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] withdraw [amount]", ""));
+			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] bankhistory", ""));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] outlaw [add|remove] [name]", ""));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] leavenation", ""));
 			return;
@@ -1031,7 +1032,20 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				TownCommand.townSet(player, StringMgmt.remArgs(split, 2), true, town);
 			} else if (split[1].equalsIgnoreCase("meta")) {
+				
 				handleTownMetaCommand(player, town, split);
+			} else if (split[1].equalsIgnoreCase("bankhistory")) {
+
+				int pages = 10;
+				if (split.length > 1)
+					try {
+						pages = Integer.parseInt(split[2]);
+					} catch (NumberFormatException e) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
+						return;
+					}
+
+				town.generateBankHistoryBook(player, pages);
 			} else if (split[1].equalsIgnoreCase("deposit")) {
 				
 				if (!TownySettings.isUsingEconomy())
@@ -1116,6 +1130,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] meta", ""));
 				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] deposit [amount]", ""));
 				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] withdraw [amount]", ""));
+				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] bankhistory", ""));
 				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] outlaw [add|remove] [name]", ""));
 				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] leavenation", ""));
 				
@@ -1208,6 +1223,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] set", ""));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] deposit [amount]", ""));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] withdraw [amount]", ""));
+			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] bankhistory", ""));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[oldnation] merge [newnation]", ""));
 
 			return;
@@ -1308,6 +1324,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if(split[1].equalsIgnoreCase("toggle")) {
 				
 				NationCommand.nationToggle(sender, StringMgmt.remArgs(split, 2), true, nation);
+			} else if (split[1].equalsIgnoreCase("bankhistory")) {
+
+				int pages = 10;
+				if (split.length > 1)
+					try {
+						pages = Integer.parseInt(split[2]);
+					} catch (NumberFormatException e) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
+						return;
+					}
+
+				nation.generateBankHistoryBook(player, pages);
 			} else if (split[1].equalsIgnoreCase("deposit")) {
 				
 				if (!TownySettings.isUsingEconomy())

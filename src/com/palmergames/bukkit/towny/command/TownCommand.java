@@ -131,7 +131,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"join",
 		"invite",
 		"buy",
-		"mayor"
+		"mayor",
+		"bankhistory"
 		);
 	private static final List<String> townSetTabCompletes = Arrays.asList(
 		"board",
@@ -708,6 +709,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 
 					parseTownOutlawCommand(player, newSplit, false, getResidentOrThrow(player.getUniqueId()).getTown());
+				} else if (split[0].equalsIgnoreCase("bankhistory")) {
+					
+					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_BANKHISTORY.getNode()))
+						throw new TownyException(Translation.of("msg_err_command_disable"));
+
+					int pages = 10;
+					if (newSplit.length > 0)
+						try {
+							pages = Integer.parseInt(newSplit[0]);
+						} catch (NumberFormatException e) {
+							TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
+							return;
+						}
+
+					TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().generateBankHistoryBook(player, pages);
 
 				} else {
 					/*
