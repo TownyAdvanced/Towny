@@ -232,6 +232,15 @@ public enum HelpMenu {
 				.add(Translation.of("admin_sing"), "say", "[message]");
 		}
 	},
+	
+	NATION_HELP_CONSOLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("nation", Translation.of("nation_help_1"))
+				.add(Translation.of("nation_help_2"), Translation.of("nation_help_3"))
+				.add("list", Translation.of("nation_help_4"));
+		}
+	},
 
 	KING_HELP {
 		@Override
