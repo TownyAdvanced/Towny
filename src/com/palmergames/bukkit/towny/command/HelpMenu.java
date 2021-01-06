@@ -181,6 +181,15 @@ public enum HelpMenu {
 				.add("spawn", "");
 		}
 	},
+	
+	RESIDENT_HELP_CONSOLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("resident", Translation.of("res_1"))
+				.add(Translation.of("res_2"), Translation.of("res_3"))
+				.add("list", Translation.of("res_4"));
+		}
+	},
 
 	PLOT_HELP {
 		@Override
