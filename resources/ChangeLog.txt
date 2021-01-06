@@ -5717,3 +5717,6 @@ v0.92.0.11:
     - towny.command.townyadmin.nation.bankhistory
       - child node of towny.command.townyadmin.nation.*
   - Add save method to Towny objects, courtesy of silverwolfg11 with PR #4670.
+0.96.5.14:
+  - Added Placeholder: %townyadvanced_nation_map_color_hex%, courtesy of Kovalskki with PR #4661.
+    - returns the hex colour code of the nation's mapcolor set with /t set mapcolor (seen in dynmap-towny.)
