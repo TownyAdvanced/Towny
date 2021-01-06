@@ -143,6 +143,15 @@ public enum HelpMenu {
 				.add(Translation.of("admin_sing"), "delete [town]", "");
 		}
 	},
+	
+	TOWN_HELP_CONSOLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town", Translation.of("town_help_1"))
+				.add("[town]", Translation.of("town_help_3"))
+				.add("list", "");
+		}
+	},
 
 	TOWN_INVITE {
 		@Override
