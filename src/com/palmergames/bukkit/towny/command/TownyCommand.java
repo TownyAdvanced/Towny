@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
@@ -195,7 +196,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseTownyCommand(Player player, String[] split) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		if (split.length == 0) {
 			HelpMenu.GENERAL_HELP.send(player);
 			return;
@@ -207,7 +208,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		try {
 
 			if (split[0].equalsIgnoreCase("map")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
 				if (split.length > 1 && split[1].equalsIgnoreCase("big"))
@@ -220,7 +221,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_no_economy"));
 				
 				if (split.length > 1) {
-					town = townyUniverse.getTown(split[1]);
+					town = TownyUniverse.getInstance().getTown(split[1]);
 					
 					if (town == null) {
 						sendErrorMsg(player, Translation.of("msg_err_not_registered_1", split[1]));
@@ -255,28 +256,28 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getPlotManagementMayorDelete(), "Towny Plot Clear Delete List");
 			} else if (split[0].equalsIgnoreCase("top")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				TopCommand(player, StringMgmt.remFirstArg(split));
 			} else if (split[0].equalsIgnoreCase("tree")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				consoleUseOnly(player);
 			} else if (split[0].equalsIgnoreCase("time")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				TownyMessaging.sendMsg(player, Translation.of("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
 			} else if (split[0].equalsIgnoreCase("universe")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				for (String line : getUniverseStats())
 					player.sendMessage(line);
 			} else if (split[0].equalsIgnoreCase("version") || split[0].equalsIgnoreCase("v")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				player.sendMessage(towny_version);
 			} else if (split[0].equalsIgnoreCase("war")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				boolean war = TownyWar(StringMgmt.remFirstArg(split), player);
 				if (war)
@@ -287,7 +288,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 				towny_war.clear();
 			} else if (split[0].equalsIgnoreCase("spy")) {
-				if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
+				if (permSource.testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
 					Resident resident = getResidentOrThrow(player.getUniqueId());
 					resident.toggleMode(split, true);
 				} else
