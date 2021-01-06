@@ -59,11 +59,10 @@ public abstract class Account implements Nameable {
 	 */
 	public boolean deposit(double amount, String reason) throws EconomyException {
 		if (addMoney(amount)) {
-			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
-				notifyObserversDeposit(this, amount, reason);
-				return payFromServer(amount, reason);
-			}
 			notifyObserversDeposit(this, amount, reason);
+			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
+				return payFromServer(amount, reason);
+
 			return true;
 		}
 		
@@ -81,11 +80,10 @@ public abstract class Account implements Nameable {
 	 */
 	public boolean withdraw(double amount, String reason) throws EconomyException {
 		if (subtractMoney(amount)) {
-			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
-				notifyObserversWithdraw(this, amount, reason);
-				return payToServer(amount, reason);
-			}
 			notifyObserversWithdraw(this, amount, reason);
+			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
+				return payToServer(amount, reason);
+
 			return true;
 		}
 		
