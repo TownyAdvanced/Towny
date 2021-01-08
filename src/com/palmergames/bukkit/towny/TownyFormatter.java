@@ -1,5 +1,8 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.event.statusscreen.NationStatusScreenEvent;
+import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
+import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -24,6 +27,8 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.util.ChatPaginator;
 
@@ -248,6 +253,11 @@ public class TownyFormatter {
 		
 		out.addAll(getExtraFields(resident));
 		
+		ResidentStatusScreenEvent event = new ResidentStatusScreenEvent(resident);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.hasAdditionalLines())
+			out.addAll(event.getAdditionalLines());
+		
 		out = formatStatusScreens(out);
 		return out;
 	}
@@ -327,11 +337,19 @@ public class TownyFormatter {
 		// ___[ Raccoon City ]___
 		// (PvP) (Open) (Peaceful)
 		out.add(ChatTools.formatTitle(town.getFormattedName()));
-		String subtitle = ((!town.isAdminDisabledPVP()) && ((town.isPVP() || town.getHomeblockWorld().isForcePVP())) ? Translation.of("status_title_pvp") : "");
-		subtitle += (!subtitle.isEmpty() ? " " : "") + (town.isOpen() ? Translation.of("status_title_open") : "");
-		subtitle += (!subtitle.isEmpty() ? " " : "") + (town.isNeutral() ? Translation.of("status_town_title_peaceful") : "");
-		if (!subtitle.isEmpty())
-			out.add(ChatTools.formatSubTitle(subtitle));
+		List<String> sub = new ArrayList<>();
+		if (!town.isAdminDisabledPVP() && (town.isPVP() || town.getHomeblockWorld().isForcePVP()))
+			sub.add(Translation.of("status_title_pvp"));
+		if (town.isOpen())
+			sub.add(Translation.of("status_title_open"));
+		if (town.isPublic())
+			sub.add(Translation.of("status_public"));
+		if (town.isNeutral())
+			sub.add(Translation.of("status_town_title_peaceful"));
+		if (town.isConquered())
+			sub.add(Translation.of("msg_conquered"));
+		if (!sub.isEmpty())
+			out.add(ChatTools.formatSubTitle(StringMgmt.join(sub, " ")));
 
 		// Lord: Mayor Quimby
 		// Board: Get your fried chicken
@@ -419,23 +437,22 @@ public class TownyFormatter {
 				out.add(bankString);
 			}
 
+			// Nation: Azur Empire
+			if (town.hasNation())
+				try {
+					out.add(Translation.of("status_town_nation", town.getNation().getFormattedName()));
+				} catch (TownyException ignored) {
+				}
+			
 			// Mayor: MrSand | Bank: 534 coins
 			out.add(Translation.of("rank_list_mayor", town.getMayor().getFormattedName()));
 
 			// Assistants [2]: Sammy, Ginger
 			List<String> ranklist = new ArrayList<>();
 			getRanks(town, ranklist);
-
 			out.addAll(ranklist);
 
-			// Nation: Azur Empire
-			try {
-				out.add(Translation.of("status_town_nation", town.getNation().getFormattedName()) + (town.isConquered() ? Translation.of("msg_conquered") : ""));
-			} catch (TownyException ignored) {
-			}
-
 			// Residents [12]: James, Carry, Mason
-
 			String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
 			if (residents.length > 34) {
 				String[] entire = residents;
@@ -448,6 +465,11 @@ public class TownyFormatter {
 		}
 
 		out.addAll(getExtraFields(town));
+		
+		TownStatusScreenEvent event = new TownStatusScreenEvent(town);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.hasAdditionalLines())
+			out.addAll(event.getAdditionalLines());
 		
 		out = formatStatusScreens(out);
 		return out;
@@ -569,6 +591,11 @@ public class TownyFormatter {
         out.addAll(ChatTools.listArr(enemies, Translation.of("status_nation_enemies", nation.getEnemies().size())));
 
 		out.addAll(getExtraFields(nation));
+		
+		NationStatusScreenEvent event = new NationStatusScreenEvent(nation);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.hasAdditionalLines())
+			out.addAll(event.getAdditionalLines());
 		
 		out = formatStatusScreens(out);
 		return out;

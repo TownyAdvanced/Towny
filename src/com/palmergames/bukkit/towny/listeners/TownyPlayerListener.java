@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
@@ -132,13 +131,12 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
-		TownyDataSource dataSource = TownyUniverse.getInstance().getDataSource();
 		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 		
 		if (resident != null) {
 			resident.setLastOnline(System.currentTimeMillis());
 			resident.clearModes();
-			dataSource.saveResident(resident);
+			resident.save();
 
 			if (TownyTimerHandler.isTeleportWarmupRunning()) {
 				TownyAPI.getInstance().abortTeleportRequest(resident);
@@ -266,11 +264,17 @@ public class TownyPlayerListener implements Listener {
 		if (event.hasItem()) {
 			
 			Material item =  event.getItem().getType();
+			
+			Location loc = null;
+			if (clickedBlock != null)
+				loc = clickedBlock.getLocation();
+			else 
+				loc = player.getLocation();
 			/*
 			 * Test item_use. 
 			 */
 			if (TownySettings.isItemUseMaterial(item.name()))
-				event.setCancelled(!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), item));
+				event.setCancelled(!TownyActionEventExecutor.canItemuse(player, loc, item));
 
 			/*
 			 * Test other Items using non-ItemUse test.
@@ -293,14 +297,14 @@ public class TownyPlayerListener implements Listener {
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
 					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
 
-					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
+					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, loc, clickedMat));
 				}
 
 				/*
 				 * Test bonemeal usage. Treat interaction as a Build test.
 				 */
 				if (item == Material.BONE_MEAL) 
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, clickedBlock.getLocation(), item));
+					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
 
 				/*
 				 * Test if we're about to spawn either entity. Uses build test.
@@ -952,7 +956,7 @@ public class TownyPlayerListener implements Listener {
 
 		if (resident.isJailed()) {
 			resident.freeFromJail(resident.getJailSpawn(), true);
-			townyUniverse.getDataSource().saveResident(resident);
+			resident.save();
 		}		
 	}
 	

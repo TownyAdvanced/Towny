@@ -8,10 +8,15 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.util.BlockUtil;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Chest;
+import org.bukkit.block.data.type.Chest.Type;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,6 +28,7 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TownyBlockListener implements Listener {
@@ -73,6 +79,38 @@ public class TownyBlockListener implements Listener {
 			event.setBuild(true);
 			event.setCancelled(true);
 		}
+		
+		if (!event.isCancelled() && block.getType() == Material.CHEST)
+			testDoubleChest(event.getPlayer(), event.getBlock(), event);
+	}
+
+	private void testDoubleChest(Player player, Block block, BlockPlaceEvent event) {
+		List<Block> blocksToUpdate = new ArrayList<>(); // To avoid glitchy-looking chests, we need to update the blocks later on.
+		for (BlockFace face : BlockUtil.CARDINAL_BLOCKFACES) {
+			Block testBlock = block.getRelative(face); // The block which we do not want to combine with.
+			if (testBlock.getType() != Material.CHEST) // Not a chest, continue.
+				continue;
+
+			Chest data = (Chest) block.getBlockData();          // We are only going to glitch
+			Chest testData = (Chest) testBlock.getBlockData();  // out chests which are facing 
+			if (!data.getFacing().equals(testData.getFacing())) // the same direction as our 
+				continue;                                       // newly-placed chest.
+			
+			blocksToUpdate.add(testBlock); // This chest has the same facing as the new chest, save it for updating later.
+			
+			if (BlockUtil.sameOwner(block, testBlock)) // If the blocks have a same-owner relationship, continue.
+				continue;
+			
+			data.setType(Type.SINGLE);  // Set the chest just-placed to a single chest.
+			block.setBlockData(data);
+			
+			testData.setType(Type.SINGLE); // Set the existing chest to a single chest.
+			testBlock.setBlockData(testData);
+		}
+		
+		if (!blocksToUpdate.isEmpty())  // Update the player with the new chest appearances.
+			for (Block b : blocksToUpdate)
+				player.sendBlockChange(b.getLocation(), b.getBlockData());
 	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.

@@ -136,16 +136,22 @@ public class TownySpigotMessaging {
 			String slug = null;
 			switch (compType) {
 			case BALANCE:
-				slug = TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance());
+				slug = Colors.LightBlue + "(" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance()) + ")";
 				break;
 			case TOWNBLOCKS:
-				slug = town.getTownBlocks().size() + "";
+				slug = Colors.LightBlue + "(" + town.getTownBlocks().size() + ")";
+				break;
+			case RUINED:
+				slug = Colors.LightBlue + "(" + town.getResidents().size() + ") " + (town.isRuined() ? Translation.of("msg_ruined"):"");
+				break;
+			case BANKRUPT:
+				slug = Colors.LightBlue + "(" + town.getResidents().size() + ") " + (town.isBankrupt() ? Translation.of("msg_bankrupt"):"");
 				break;
 			default:
-				slug = town.getResidents().size() + "";
+				slug = Colors.LightBlue + "(" + town.getResidents().size() + ")";
 				break;
 			}
-			townName.addExtra(new TextComponent(Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")"));
+			townName.addExtra(new TextComponent(Colors.Gray + " - " + slug));
 			
 			if (town.isOpen())
 				townName.addExtra(new TextComponent(" " + Colors.LightBlue + Translation.of("status_title_open")));
@@ -167,19 +173,19 @@ public class TownySpigotMessaging {
 		}
 		
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("towny:town", page, total);
+		TextComponent pageFooter = getPageNavigationFooter("towny:town", page, compType.getCommandString(), total);
 		sender.spigot().sendMessage(pageFooter);
 	}
 	
-	public static TextComponent getPageNavigationFooter(String prefix, int page, int total) {
+	public static TextComponent getPageNavigationFooter(String prefix, int page, String arg, int total) {
 		TextComponent backButton = new TextComponent("<<<");
 		backButton.setColor(net.md_5.bungee.api.ChatColor.GOLD);
-		backButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (page - 1)));
+		backButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (arg.isEmpty() ? "" : arg + " ") + (page - 1)));
 		adaptForHover(backButton).setHoverText(Translation.of("msg_hover_previous_page"));
 		
 		TextComponent forwardButton = new TextComponent(">>>");
 		forwardButton.setColor(net.md_5.bungee.api.ChatColor.GOLD);
-		forwardButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (page + 1)));
+		forwardButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + prefix + " list " + (arg.isEmpty() ? "" : arg + " ") + (page + 1)));
 		adaptForHover(forwardButton).setHoverText(Translation.of("msg_hover_next_page"));
 		
 		TextComponent pageText = new TextComponent("   " + Translation.of("LIST_PAGE", page, total) + "   ");
@@ -272,7 +278,7 @@ public class TownySpigotMessaging {
 		}
 
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("towny:nation", page, total);
+		TextComponent pageFooter = getPageNavigationFooter("towny:nation", page, compType.getCommandString(), total);
 		sender.spigot().sendMessage(pageFooter);
 	}
 	
@@ -335,7 +341,7 @@ public class TownySpigotMessaging {
 		}
 		
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("towny:town outpost", page, total);
+		TextComponent pageFooter = getPageNavigationFooter("towny:town outpost", page, "", total);
 		player.spigot().sendMessage(pageFooter);
 	}
 }

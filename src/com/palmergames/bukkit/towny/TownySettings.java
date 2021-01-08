@@ -1685,6 +1685,11 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_OUTLAWS);
 	}
+	
+	public static int getJailedOutlawJailDays() {
+		
+		return getInt(ConfigNodes.JAIL_OUTLAW_JAIL_DAYS);
+	}
 
 	public static boolean JailAllowsEnderPearls() {
 		
@@ -2494,10 +2499,19 @@ public class TownySettings {
 
 		return getSeconds(ConfigNodes.INVITE_SYSTEM_COOLDOWN_TIME);
 	}
+	
+	public static long getInviteExpirationTime() {
+		
+		return getSeconds(ConfigNodes.INVITE_SYSTEM_EXPIRATION_TIME);
+	}
 
 	public static boolean isAppendingToLog() {
 
 		return !getBoolean(ConfigNodes.PLUGIN_RESET_LOG_ON_BOOT);
+	}
+	
+	public static int getTownyTopSize() {
+		return getInt(ConfigNodes.PLUGIN_TOWNY_TOP_SIZE);
 	}
 
 	public static String getNameFilterRegex() {
@@ -2548,10 +2562,6 @@ public class TownySettings {
 	public static String getTownAccountPrefix() {
 
 		return getString(ConfigNodes.ECO_TOWN_PREFIX);
-	}
-	
-	public static String getDebtAccountPrefix() {
-		return getString(ConfigNodes.ECO_DEBT_PREFIX);
 	}
 
 	public static String getNationAccountPrefix() {
@@ -2911,6 +2921,10 @@ public class TownySettings {
 	
 	public static boolean isNationTaxKickingTownsThatReachDebtCap() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_NATION_KICKS_TOWNS_THAT_REACH_DEBT_CAP);
+	}
+	
+	public static boolean doesNationTaxDeleteConqueredTownsWhichCannotPay() {
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_DOES_NATION_TAX_DELETE_CONQUERED_TOWNS);
 	}
 
 	public static boolean doBankruptTownsPayNationTax() {

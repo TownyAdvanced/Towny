@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
+import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
@@ -29,6 +30,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,7 +68,8 @@ public class TownyUniverse {
     private final Map<UUID, Town> townUUIDMap = new ConcurrentHashMap<>();
     private final Trie townsTrie = new Trie();
     
-    private final Map<String, Nation> nations = new ConcurrentHashMap<>();
+    private final Map<String, Nation> nationNameMap = new ConcurrentHashMap<>();
+	private final Map<UUID, Nation> nationUUIDMap = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
     
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
@@ -180,7 +183,8 @@ public class TownyUniverse {
      */
     public void clearAllObjects() {
     	worlds.clear();
-        nations.clear();
+        nationNameMap.clear();
+        nationUUIDMap.clear();
         townNameMap.clear();
         townUUIDMap.clear();
         residentNameMap.clear();
@@ -202,6 +206,8 @@ public class TownyUniverse {
         if (!loadDatabase(loadDbType)) {
             System.out.println("[Towny] Error: Failed to load!");
             return false;
+        } else {
+        	Bukkit.getPluginManager().callEvent(new TownyLoadedDatabaseEvent());
         }
         
         long time = System.currentTimeMillis() - startTime;
@@ -674,8 +680,156 @@ public class TownyUniverse {
 		}
 	}
 
+	// =========== Nation Methods ===========
+
+	/**
+	 * Check if the nation matching the given name exists.
+	 *
+	 * @param nationName Name of the nation to check.
+	 * @return whether the nation matching the name exists.
+	 */
+	public boolean hasNation(@NotNull String nationName) {
+		Validate.notNull(nationName, "Nation Name cannot be null!");
+
+		// Fast-fail if empty
+		if (nationName.isEmpty())
+			return false;
+
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(nationName).toLowerCase();
+		} catch (InvalidNameException ignored) {
+			return false;
+		}
+
+		return nationNameMap.containsKey(filteredName);
+	}
+
+	/**
+	 * Check if the nation matching the given UUID exists.
+	 * 
+	 * @param nationUUID UUID of the nation to check.
+	 * @return whether the nation matching the UUID exists.
+	 */
+	public boolean hasNation(@NotNull UUID nationUUID) {
+		Validate.notNull(nationUUID, "Nation UUID cannot be null!");
+		
+		return nationUUIDMap.containsKey(nationUUID);
+	}
+
+	/**
+	 * Get the nation with the passed-in nation name if it exists.
+	 * 
+	 * @param nationName Name of the nation to fetch.
+	 * @return the nation matching the name or {@code null} if it doesn't exist.
+	 */
+	@Nullable
+	public Nation getNation(@NotNull String nationName) {
+		Validate.notNull(nationName, "Nation Name cannot be null!");
+		
+		// Fast-fail if empty
+		if (nationName.isEmpty())
+			return null;
+
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(nationName).toLowerCase();
+		} catch (InvalidNameException ignored) {
+			return null;
+		}
+		
+		return nationNameMap.get(filteredName);
+	}
+
+	/**
+	 * Get the nation with the given UUID if it exists.
+	 * 
+	 * @param nationUUID UUID of the nation to get.
+	 * @return the nation with the given UUID or {@code null} if it doesn't exist.
+	 */
+	@Nullable
+	public Nation getNation(@NotNull UUID nationUUID) {
+		Validate.notNull(nationUUID, "Nation UUID cannot be null!");
+		
+		return nationUUIDMap.get(nationUUID);
+	}
+	
+	@Unmodifiable
+	public Collection<Nation> getNations() {
+		return Collections.unmodifiableCollection(nationNameMap.values());
+	}
+	
+	public int getNumNations() {
+		return nationNameMap.size();
+	}
+
+	// This is used internally since UUIDs are assigned after nation objects are created.
+	public void registerNationUUID(@NotNull Nation nation) throws AlreadyRegisteredException {
+		Validate.notNull(nation, "Nation cannot be null!");
+
+		if (nation.getUUID() != null) {
+
+			if (nationUUIDMap.containsKey(nation.getUUID())) {
+				throw new AlreadyRegisteredException("UUID of nation " + nation.getName() + " was already registered!");
+			}
+
+			nationUUIDMap.put(nation.getUUID(), nation);
+		}
+	}
+
+	/**
+	 * Used to register a nation into the TownyUniverse internal maps.
+	 *
+	 * This does not create a new nation, or save a new nation.
+	 *
+	 * @param nation Nation to register.
+	 * @throws AlreadyRegisteredException Nation is already in the universe maps.
+	 */
+	public void registerNation(@NotNull Nation nation) throws AlreadyRegisteredException {
+		Validate.notNull(nation, "Nation cannot be null!");
+
+		if (nationNameMap.putIfAbsent(nation.getName().toLowerCase(), nation) != null) {
+			throw new AlreadyRegisteredException(String.format("The nation with name '%s' is already registered!", nation.getName()));
+		}
+
+		nationsTrie.addKey(nation.getName());
+		registerNationUUID(nation);
+	}
+
+	/**
+	 * Used to unregister a nation from the TownyUniverse internal maps.
+	 *
+	 * This does not delete a nation, nor perform any actions that affect the nation internally.
+	 *
+	 * @param nation Nation to unregister
+	 * @throws NotRegisteredException Nation is not registered in the universe maps.
+	 */
+	public void unregisterNation(@NotNull Nation nation) throws NotRegisteredException {
+		Validate.notNull(nation, "Nation cannot be null!");
+
+		if (nationNameMap.remove(nation.getName().toLowerCase()) == null) {
+			throw new NotRegisteredException(String.format("The nation with the name '%s' is not registered!", nation.getName()));
+		}
+
+		nationsTrie.removeKey(nation.getName());
+
+		if (nation.getUUID() != null) {
+			if (nationUUIDMap.remove(nation.getUUID()) == null) {
+				throw new NotRegisteredException(String.format("The nation with the UUID '%s' is not registered!", nation.getUUID().toString()));
+			}
+		}
+	}
+
+	/**
+	 * Get direct access to the internal nation map.
+	 * 
+	 * @return direct access to internal nation map.
+	 * 
+	 * @deprecated It is not safe, nor recommended, to directly access the internal nation map. 
+	 */
+	@Deprecated
 	public Map<String, Nation> getNationsMap() {
-		return nations;
+		return nationNameMap;
 	}
 
 	public Trie getNationsTrie() {
@@ -705,8 +859,8 @@ public class TownyUniverse {
             out.addAll(world.getTreeString(depth + 2));
         }
         
-        out.add(getTreeDepth(depth + 1) + "Nations (" + nations.size() + "):");
-        for (Nation nation : nations.values()) {
+        out.add(getTreeDepth(depth + 1) + "Nations (" + nationNameMap.size() + "):");
+        for (Nation nation : nationNameMap.values()) {
             out.addAll(nation.getTreeString(depth + 2));
         }
         
@@ -984,7 +1138,7 @@ public class TownyUniverse {
     public void setWarEvent(War warEvent) {
         this.warEvent = warEvent;
     }
-
+    
 	/**
 	 * Retrieves the configuration's output database type.
 	 * 

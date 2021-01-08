@@ -13,8 +13,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
-import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
-import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -39,11 +37,8 @@ public class Nation extends Government {
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
 	private String mapColorHexCode = "";
-	public UUID uuid;
 	private Location nationSpawn;
 	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
-	@SuppressWarnings("unused")
-	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 
 	public Nation(String name) {
 		super(name);
@@ -86,6 +81,11 @@ public class Nation extends Government {
 	public boolean hasAlly(Nation nation) {
 
 		return getAllies().contains(nation);
+	}
+
+	public boolean hasMutualAlly(Nation nation) {
+		
+		return getAllies().contains(nation) && nation.getAllies().contains(this);
 	}
 
 	public boolean IsAlliedWith(Nation nation) {
@@ -339,6 +339,15 @@ public class Nation extends Government {
 		return allies;
 	}
 
+	public List<Nation> getMutualAllies() {
+		List<Nation> result = new ArrayList<>();
+		for(Nation ally: getAllies()) {
+			if(ally.hasAlly(this))
+				result.add(ally);
+		}
+		return result;
+	}
+
 	public int getNumTowns() {
 
 		return towns.size();
@@ -370,10 +379,8 @@ public class Nation extends Government {
 		} else if (isCapital) {
 			findNewCapital();
 		}
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		this.save();
 	}
-	
-
 
 	private void remove(Town town) {
 
@@ -468,7 +475,7 @@ public class Nation extends Government {
 		if (!king.isMayor())
 			throw new TownyException(Translation.of("msg_err_new_king_notmayor"));
 		setCapital(king.getTown());
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		this.save();
 	}
 
 	public boolean hasResident(Resident resident) {
@@ -542,12 +549,27 @@ public class Nation extends Government {
 		return Collections.unmodifiableList(out);
 	}
 
+	/**
+	 * Gets the nation's UUID.
+	 * @return nation UUID
+	 * 
+	 * @deprecated Use {@link Government#getUUID()} instead.
+	 */
+	@Deprecated
 	public UUID getUuid() {
-		return uuid;
+		return getUUID();
 	}
 
+	/**
+	 * Set the nation's UUID. This should only be used internally! 
+	 * 
+	 * @param uuid UUID to set.
+	 *             
+	 * @deprecated Use {@link Government#setUUID(UUID)} instead.
+	 */
+	@Deprecated
 	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
+		setUUID(uuid);
 	}
 
 	public boolean hasValidUUID() {
@@ -596,14 +618,14 @@ public class Nation extends Government {
 	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
 
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		this.save();
 	}
 
 	@Override
 	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
 
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		this.save();
 	}
 
 	@Override
@@ -658,7 +680,6 @@ public class Nation extends Government {
 	public String getEconomyName() {
 		return StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 	}
-	
 	
 	/**
 	 * @deprecated as of 0.95.2.15, please use {@link EconomyAccount#getHoldingBalance()} instead.
@@ -739,5 +760,10 @@ public class Nation extends Government {
 	@Deprecated
 	public void toggleNeutral(boolean neutral) {
 		setNeutral(neutral);
+	}
+
+	@Override
+	public void save() {
+		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 }

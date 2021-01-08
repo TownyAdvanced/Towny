@@ -163,6 +163,7 @@ permissions:
         default: false
         children:
             towny.command.nation.ally.*: true
+            towny.command.nation.bankhistory: true
             towny.command.nation.delete: true
             towny.command.nation.deposit: true
             towny.command.nation.enemy: true
@@ -198,6 +199,7 @@ permissions:
             towny.command.nation.list.residents: true
             towny.command.nation.list.towns: true
             towny.command.nation.list.open: true
+            towny.command.nation.list.public: true
             towny.command.nation.list.balance: true
             towny.command.nation.list.name: true
             towny.command.nation.list.townblocks: true
@@ -303,6 +305,7 @@ permissions:
         description: User can access all town related commands.
         default: false
         children:
+            towny.command.town.bankhistory: true
             towny.command.town.buy: true
             towny.command.town.claim.*: true
             towny.command.town.delete: true
@@ -317,6 +320,7 @@ permissions:
             towny.command.town.new: true
             towny.command.town.online: true
             towny.command.town.othertown: true
+            towny.command.town.outlaw: true
             towny.command.town.plots: true
             towny.command.town.rank.*: true
             towny.command.town.ranklist: true
@@ -340,10 +344,13 @@ permissions:
         children:
             towny.command.town.list.residents: true
             towny.command.town.list.open: true
+            towny.command.town.list.public: true
             towny.command.town.list.balance: true
             towny.command.town.list.name: true
             towny.command.town.list.townblocks: true
             towny.command.town.list.online: true
+            towny.command.town.list.ruined: true
+            towny.command.town.list.bankrupt: true
 
     towny.command.town.claim.*:
         description: User can access all town claim related commands.
@@ -588,6 +595,7 @@ permissions:
             towny.command.townyadmin.town.set: true
             towny.command.townyadmin.town.toggle: true
             towny.command.townyadmin.town.meta: true
+            towny.command.townyadmin.town.bankhistory: true
 
     towny.command.townyadmin.nation.*:
         description: User can access the admin nation commands.
@@ -600,6 +608,7 @@ permissions:
             towny.command.townyadmin.nation.merge: true
             towny.command.townyadmin.nation.toggle: true
             towny.command.townyadmin.nation.set: true
+            towny.command.townyadmin.nation.bankhistory: true
 
     towny.command.townyadmin.plot.*:
         description: User can access the admin plot commans.

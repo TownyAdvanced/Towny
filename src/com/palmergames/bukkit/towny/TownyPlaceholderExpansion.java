@@ -124,6 +124,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 		String amount = "";
 		String name = "";
 		String rank = "";
+		String hex = "";
 		Double cost = 0.0;
 
 		switch (identifier) {
@@ -497,6 +498,19 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			} catch (NotRegisteredException ignored) {
 			}
 			return tag;
+		case "nation_map_color_hex": // %townyadvanced_nation_map_color_hex%
+			if (resident.hasTown()){
+				try {
+					if (resident.getTown().hasNation()){
+						hex = resident.getTown().getNation().getMapColorHexCode();
+						if (!hex.isEmpty()){
+							hex = "#"+hex;
+						}
+					}
+				} catch (NotRegisteredException ignored) {
+				}
+			}
+			return hex;	
 		case "town_ranks": // %townyadvanced_town_ranks%
 			if (resident.isMayor())
 				rank = Translation.of("mayor_sing");

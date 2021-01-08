@@ -143,6 +143,15 @@ public enum HelpMenu {
 				.add(Translation.of("admin_sing"), "delete [town]", "");
 		}
 	},
+	
+	TOWN_HELP_CONSOLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town", Translation.of("town_help_1"))
+				.add("[town]", Translation.of("town_help_3"))
+				.add("list", "");
+		}
+	},
 
 	TOWN_INVITE {
 		@Override
@@ -170,6 +179,15 @@ public enum HelpMenu {
 				.add("friend [add/remove] " + Translation.of("res_2"), Translation.of("res_6"))
 				.add("friend [add+/remove+] " + Translation.of("res_2") + " ", Translation.of("res_7"))
 				.add("spawn", "");
+		}
+	},
+	
+	RESIDENT_HELP_CONSOLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("resident", Translation.of("res_1"))
+				.add(Translation.of("res_2"), Translation.of("res_3"))
+				.add("list", Translation.of("res_4"));
 		}
 	},
 
@@ -212,6 +230,15 @@ public enum HelpMenu {
 				.add(Translation.of("admin_sing"), "new " + Translation.of("nation_help_2") + " [capital]", Translation.of("nation_help_8"))
 				.add(Translation.of("admin_sing"), "delete " + Translation.of("nation_help_2"), "")
 				.add(Translation.of("admin_sing"), "say", "[message]");
+		}
+	},
+	
+	NATION_HELP_CONSOLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("nation", Translation.of("nation_help_1"))
+				.add(Translation.of("nation_help_2"), Translation.of("nation_help_3"))
+				.add("list", Translation.of("nation_help_4"));
 		}
 	},
 

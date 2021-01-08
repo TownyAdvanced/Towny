@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.event.world.PortalCreateEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.event.world.WorldInitEvent;
@@ -80,7 +82,7 @@ public class TownyWorldListener implements Listener {
 				if (!dungeonWorld)
 					if (!townyUniverse.getDataSource().loadWorld(world)) {
 						// First time world has been noticed
-						townyUniverse.getDataSource().saveWorld(world);
+						world.save();
 					}
 			}
 		} catch (AlreadyRegisteredException e) {
@@ -88,6 +90,27 @@ public class TownyWorldListener implements Listener {
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg("Could not create data for " + worldName);
 			e.printStackTrace();
+		}
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onLightningStrike(LightningStrikeEvent event) {
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getWorld()))
+			return;
+
+		TownyWorld townyWorld = null;
+		try {
+			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getLightning().getWorld().getName());
+		} catch (NotRegisteredException ignored) {}
+
+		if (townyWorld != null && event.getCause().equals(LightningStrikeEvent.Cause.TRIDENT)) {
+			event.setCancelled(CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(event.getLightning().getLocation())));
 		}
 	}
 	

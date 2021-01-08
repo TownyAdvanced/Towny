@@ -20,8 +20,11 @@ public class DeleteNationEvent extends TownyObjDeleteEvent  {
 		return handlers;
 	}
 
-    public DeleteNationEvent(Nation nation) {
-        super(nation.getName(), nation.getUuid(), nation.getRegistered());
+    private final UUID kingUUID;
+    
+    public DeleteNationEvent(Nation nation, UUID uuid) {
+        super(nation.getName(), nation.getUUID(), nation.getRegistered());
+        kingUUID = uuid;
     }
 
     /**
@@ -44,5 +47,12 @@ public class DeleteNationEvent extends TownyObjDeleteEvent  {
 	 */
 	public long getNationCreated() {
     	return registered;
+	}
+	
+	/**
+	 * @return deleted nation king uuid.
+	 */
+	public UUID getNationKing() {
+		return kingUUID;
 	}
 }

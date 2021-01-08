@@ -50,6 +50,7 @@ public class Town extends Government implements TownBlockOwner {
 	private double embassyPlotTax = TownySettings.getTownDefaultEmbassyTax();
 	private double maxPercentTaxAmount = TownySettings.getMaxTownTaxPercentAmount();
 	private double commercialPlotPrice, embassyPlotPrice;
+	private double debtBalance = 0.0;
 	private Nation nation;
 	private boolean hasUpkeep = true;
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
@@ -182,7 +183,7 @@ public class Town extends Government implements TownBlockOwner {
 				res.setSurname("");
 			}
 			res.updatePermsForNationRemoval();
-			TownyUniverse.getInstance().getDataSource().saveResident(res);
+			res.save();
 		}
 
 		try {
@@ -198,7 +199,7 @@ public class Town extends Government implements TownBlockOwner {
 			// Cannot occur when setting null;
 		}
 		
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
+		this.save();
 		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(this, nation));
 	}
 	
@@ -681,7 +682,7 @@ public class Town extends Government implements TownBlockOwner {
 				findNewMayor();
 
 				// Town is not removing its last resident so be sure to save it.
-				TownyUniverse.getInstance().getDataSource().saveTown(this);
+				this.save();
 			}
 		}
 		// Remove resident.
@@ -794,7 +795,7 @@ public class Town extends Government implements TownBlockOwner {
 				}
 			} catch (TownyException ignored) {}
 			townBlocks.remove(townBlock.getWorldCoord());
-			TownyUniverse.getInstance().getDataSource().saveTown(this);
+			this.save();
 		}
 	}
 
@@ -824,7 +825,7 @@ public class Town extends Government implements TownBlockOwner {
 				throw new TownyException(Translation.of("msg_err_location_is_not_within_an_outpost_plot"));
 
 			outpostSpawns.add(spawn);
-			TownyUniverse.getInstance().getDataSource().saveTown(this);
+			this.save();
 
 		} catch (NotRegisteredException e) {
 			throw new TownyException(Translation.of("msg_err_location_is_not_within_a_town"));
@@ -879,7 +880,7 @@ public class Town extends Government implements TownBlockOwner {
 			Coord spawnBlock = Coord.parseCoord(spawn);
 			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				outpostSpawns.remove(spawn);
-				TownyUniverse.getInstance().getDataSource().saveTown(this);
+				this.save();
 			}
 		}
 	}
@@ -1016,7 +1017,7 @@ public class Town extends Government implements TownBlockOwner {
 				throw new TownyException(Translation.of("msg_err_location_is_not_within_a_jail_plot"));
 				
 			jailSpawns.add(spawn);
-			TownyUniverse.getInstance().getDataSource().saveTown(this);
+			this.save();
 
 		} catch (NotRegisteredException e) {
 			throw new TownyException(Translation.of("msg_err_location_is_not_within_a_town"));
@@ -1030,7 +1031,7 @@ public class Town extends Government implements TownBlockOwner {
 			Coord spawnBlock = Coord.parseCoord(spawn);
 			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
 				jailSpawns.remove(spawn);
-				TownyUniverse.getInstance().getDataSource().saveTown(this);
+				this.save();
 			}
 		}
 	}
@@ -1167,13 +1168,13 @@ public class Town extends Government implements TownBlockOwner {
 	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
 
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
+		this.save();
 	}
 
 	@Override
 	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
+		this.save();
 	}
 	
 	public void setConquered(boolean conquered) {
@@ -1222,7 +1223,7 @@ public class Town extends Government implements TownBlockOwner {
 			for (TownBlock tb : getTownBlocks()) {
 				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
 					tb.getPlotObjectGroup().setID(null);
-					TownyUniverse.getInstance().getDataSource().saveTownBlock(tb);
+					tb.save();
 				}
 			}
 		}
@@ -1321,11 +1322,21 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return true if bankrupt.
 	 */
 	public boolean isBankrupt() { 
-		try {
-			return TownySettings.isUsingEconomy() && getAccount().isBankrupt();
-		} catch (EconomyException ignored) {}
+		return TownySettings.isUsingEconomy() && debtBalance > 0;
+	}
 
-		return false;
+	/**
+	 * @return the amount of debt held by the Town.
+	 */
+	public double getDebtBalance() {
+		return debtBalance;
+	}
+
+	/**
+	 * @param balance the amount to set the debtBalance of the town to.
+	 */
+	public void setDebtBalance(double balance) {
+		this.debtBalance = balance;
 	}
 
 	public boolean isRuined() {
@@ -1425,5 +1436,10 @@ public class Town extends Government implements TownBlockOwner {
 	@Deprecated
 	public String getTownBoard() {
 		return getBoard();
+	}
+
+	@Override
+	public void save() {
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
 }

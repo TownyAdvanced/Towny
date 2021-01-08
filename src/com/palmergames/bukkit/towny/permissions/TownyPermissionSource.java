@@ -45,18 +45,18 @@ public abstract class TownyPermissionSource {
 		 */
 		Player player = BukkitTools.getPlayer(playerName);
 
+		int biggest = -1;
 		for (PermissionAttachmentInfo test : player.getEffectivePermissions()) {
 			if (test.getPermission().startsWith(node + ".")) {
 				String[] split = test.getPermission().split("\\.");
 				try {
-					return Integer.parseInt(split[split.length - 1]);
+					int i = Integer.parseInt(split[split.length - 1]);
+					biggest = Math.max(biggest, i);
 				} catch (NumberFormatException e) {
 				}
 			}
 		}
-
-		return -1;
-
+		return biggest;
 	}
 
 	/**

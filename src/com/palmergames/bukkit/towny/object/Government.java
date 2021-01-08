@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.GovernmentTagChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -11,10 +12,12 @@ import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
 import com.palmergames.bukkit.towny.object.economy.BankEconomyHandler;
 import com.palmergames.bukkit.towny.object.economy.BankAccount;
 import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
+import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -248,7 +251,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		if (!TownySettings.isUsingEconomy()) {
 			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
-		if (!getAccount().payTo(amount, resident, getName() + " - " + " Withdraw")) {
+		if (!getAccount().payTo(amount, resident, "Withdraw by " + resident.getName())) {
 			throw new TownyException(Translation.of("msg_err_no_money"));
 		}
 	}
@@ -317,4 +320,30 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	public abstract Collection<TownBlock> getTownBlocks();
+	
+	/**
+	 * Opens a book gui of bank transactions for the player to browse.
+	 * 
+	 * @param player Player who will get a book GUI opened.
+	 * @param desiredPages The number of pages requested.
+	 */
+	public void generateBankHistoryBook(Player player, int desiredPages) {
+		int size = getAccount().getAuditor().getAuditHistory().size();
+
+		if (size < 1) {
+			TownyMessaging.sendErrorMsg(player, "No pages to display!");
+			return;
+		}
+
+		if (desiredPages < 1)
+			desiredPages = 1;
+		desiredPages = Math.min(desiredPages, size);
+		
+		List<String> pages = new ArrayList<>(desiredPages);
+		for (int i = 1; i <= desiredPages; i++) {
+			pages.add(getAccount().getAuditor().getAuditHistory().get(size-i));
+		}
+
+		player.openBook(BookFactory.makeBook("Bank History", getName(), pages));
+	}
 }

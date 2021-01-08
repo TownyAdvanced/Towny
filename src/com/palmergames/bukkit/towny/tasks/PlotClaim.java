@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.tasks;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -123,7 +122,7 @@ public class PlotClaim extends Thread {
 							worldCoord.getTownBlock().getPlotObjectGroup().setPrice(-1);
 							TownyMessaging.sendPrefixedTownMessage(worldCoord.getTownBlock().getTown(), Translation.of("msg_player_successfully_bought_group_x", player.getName(), worldCoord.getTownBlock().getPlotObjectGroup().getName()));
 							
-							TownyUniverse.getInstance().getDataSource().savePlotGroup(worldCoord.getTownBlock().getPlotObjectGroup());
+							worldCoord.getTownBlock().getPlotObjectGroup().save();
 							break;
 						}
 					}
@@ -184,7 +183,7 @@ public class PlotClaim extends Thread {
 			}
 		}
 		
-		TownyUniverse.getInstance().getDataSource().saveResident(resident);
+		resident.save();
 		plugin.resetCache();
 
 	}
@@ -213,7 +212,6 @@ public class PlotClaim extends Thread {
 
 				if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
 					throw new TownyException(Translation.of("msg_err_not_part_town"));
-				TownyUniverse townyUniverse = TownyUniverse.getInstance();
 				try {
 					Resident owner = townBlock.getPlotObjectGroup().getResident();
 
@@ -239,9 +237,9 @@ public class PlotClaim extends Thread {
 						// TODO: Plot types for groups.
 						//group.setType(townBlock.getType());
 
-						townyUniverse.getDataSource().saveResident(owner);
-						townyUniverse.getDataSource().savePlotGroup(group);
-						townyUniverse.getDataSource().saveTownBlock(townBlock);
+						owner.save();
+						group.save();
+						townBlock.save();
 
 						if (i >= worldCoords.size() - 2) {
 							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_successfully_bought_group_x", resident.getName(), group.getName()));
@@ -261,10 +259,10 @@ public class PlotClaim extends Thread {
 						// Set the plot permissions to mirror the towns.
 						//townBlock.setType(townBlock.getType());
 
-						townyUniverse.getDataSource().saveResident(owner);
-						townyUniverse.getDataSource().savePlotGroup(group);
+						owner.save();
+						group.save();
 						// Update the townBlock data file so it's no longer using custom settings.
-						townyUniverse.getDataSource().saveTownBlock(townBlock);
+						townBlock.save();
 						
 					} else {
 						//Should never reach here.
@@ -282,7 +280,7 @@ public class PlotClaim extends Thread {
 
 					// Set the plot permissions to mirror the new owners.
 					townBlock.setType(townBlock.getType());
-					townyUniverse.getDataSource().saveTownBlock(townBlock);
+					townBlock.save();
 					
 				}
 			} catch (NotRegisteredException e) {
@@ -301,7 +299,6 @@ public class PlotClaim extends Thread {
 			Town town = townBlock.getTown();
 			if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
 				throw new TownyException(Translation.of("msg_err_not_part_town"));
-			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 			try {
 				Resident owner = townBlock.getResident();
@@ -330,8 +327,8 @@ public class PlotClaim extends Thread {
 					// Set the plot permissions to mirror the new owners.
 					townBlock.setType(townBlock.getType());
 					
-					townyUniverse.getDataSource().saveResident(owner);
-					townyUniverse.getDataSource().saveTownBlock(townBlock);
+					owner.save();
+					townBlock.save();
 
 					// Update any caches for this WorldCoord
 					plugin.updateCache(worldCoord);
@@ -349,9 +346,9 @@ public class PlotClaim extends Thread {
 					// Set the plot permissions to mirror the towns.
 					townBlock.setType(townBlock.getType());
 					
-					townyUniverse.getDataSource().saveResident(owner);
+					owner.save();
 					// Update the townBlock data file so it's no longer using custom settings.
-					townyUniverse.getDataSource().saveTownBlock(townBlock);
+					townBlock.save();
 
 					return true;
 				} else {
@@ -379,7 +376,7 @@ public class PlotClaim extends Thread {
 
 				// Set the plot permissions to mirror the new owners.
 				townBlock.setType(townBlock.getType());
-				townyUniverse.getDataSource().saveTownBlock(townBlock);
+				townBlock.save();
 
 				return true;
 			}
@@ -398,7 +395,7 @@ public class PlotClaim extends Thread {
 
 			// Set the plot permissions to mirror the towns.
 			townBlock.setType(townBlock.getType());
-			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 
 			plugin.updateCache(worldCoord);
 
@@ -436,12 +433,11 @@ public class PlotClaim extends Thread {
 			TownBlock townBlock = worldCoord.getTownBlock();
 			@SuppressWarnings("unused") // Used to make sure a plot/town is here.
 			Town town = townBlock.getTown();
-			TownyUniverse townyUniverse = TownyUniverse.getInstance();
 			
 			townBlock.setPlotPrice(-1);
 			townBlock.setResident(resident);
 			townBlock.setType(townBlock.getType());
-			townyUniverse.getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 			
 			TownyMessaging.sendMessage(BukkitTools.getPlayer(resident.getName()), Translation.of("msg_admin_has_given_you_a_plot", worldCoord.toString()));
 		} catch (NotRegisteredException e) {

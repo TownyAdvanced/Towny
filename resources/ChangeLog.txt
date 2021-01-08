@@ -5593,3 +5593,130 @@ v0.92.0.11:
     - The MojangAPI is apparently sending the incorrect response for many accounts which have not really been deleted.
   - New Towny Top Command, courtesy of Glare with PR #4605.
     - Reactivates the long-removed /towny top balance using the new cached bank balances.
+  - Implemented configurable towny top size output, courtesy of Glare with PR #4614.
+  - New Config Option: plugin.towny_top_size
+    - default: 10
+    - Sets the default size that /towny top commands display.
+0.96.5.8:
+  - Add (Public) to Town status screen upper bar.
+  - Add (Conquered) to Town status screen upper bar.
+  - API: Added TownyLoadedDatabaseEvent.
+    - Called when has successfully loaded the database on startup as well as /ta database load and /ta reload db|all.
+  - Add Nation#getMutualAllies() and Nation#hasMutualAlly() from SiegeWar.
+  - API: add king and mayor UUIDs to the DeleteNationEvent & DeleteTownEvent.
+  - Add some Time methods from SiegeWar.
+  - Format for colour codes when retrieving TownyEconomyHandler#getFormattedBalance().
+    - Closes #4619.
+  - Fix for NPE which could be thrown via the PlayerInteractEvent when an item was used without clicking a block.
+  - Fix /plot group toggle explosion showing the feedback message for fire.
+  - API: Add NationTownLeaveEvent.
+  - API Change: NationPreTownKickEvent no longer extends NationPreTownLeaveEvent.
+  - Alter the explosion damage protection to only stop damage to the config's protection.mob_types.
+    - Players will once again take explosion damage as they used to. 
+  - Add protection for double chests being created when straddling plot boundaries.
+    - Closes #4610.
+  - Add /n list by public & /t list by public
+    - Closes #4628.
+  - New permission nodes:
+    - towny.command.town.list.public
+      - child node of towny.command.town.list.*
+    - towny.command.nation.list.public
+      - child node of towny.command.nation.list.*
+  - Fix the title bar being a bit too wide for the chat line.
+  - Move the Nation line on the town status screen up and out of the town ranks/resident list.
+    - Closes #4640.
+  - Add [Not For Sale] chunk notification for when players move from a plot which is for sale, to one that is not.
+    - Closes #4638.
+  - Fix Tab Completion Issues, courtesy of silverwolfg11 with PR #4634.
+  - New Config Option: jail.outlaw_jail_days
+    - Default: 1
+    - How many days an attacking outlaw will be jailed for.
+  - Improve some messages in es-419.yml, courtesy of EuGNosii with PR #4607.
+  - Removed config option: economy.debt_prefix
+  - Towny will now internally track debt balances of bankrupt towns.
+  - Towny prices now fully translatable.
+    - Closes #4639.
+  - Bump language files to 0.95.
+  - Fix for duped residents, courtesy of silverwolfg11 and LlmDl with PR #4649.
+    - Fixes possible safemode caused by old resident files which did not delete correctly.
+0.96.5.9:
+  - Trident Lightning Strike On PVP Disabled Plots, courtesy of Kovalskki with PR #4648.
+  - Backend Nation UUID Implementation, courtesy of silverwolfg11 with PR #4608.
+    - Continues the progress of changing the Towny objects over to maps based on UUIDs rather than names.
+  - Fix titles, surnames and nation ranks resetting.
+0.96.5.10:
+  - Fix teleport queue not replacing previous warmups.
+    - Should help out Tuinity and PurPur servers who have seen warmups stacking.
+    - Closes #4624.
+  - Fix debt account conversion on servers that use TheNewEconomy.
+  - Fix /n deposit [amount] [town] going into the specified town bank rather than the town bank of the depositor, courtesy of Momshroom with PR #4651.
+  - Fix towns being able to go over the maximum residents, courtesy of Warriorrrr with PR #4650.
+  - Automatically add SHEARS to the global_town_settings.farm_plot_allow_blocks list in the config.
+    - Closes #4652.
+0.96.5.11:
+  - Fix possible NPE in TownyPlayerListener.
+  - API: Added NationZoneTownBlockStatusEvent
+    - A cancellable event thrown when a townblockstatus would return a NationZone result.
+    - Cancelling this will have Towny return a UnclaimedZone result instead.
+  - New Config Option: economy.bankruptcy.nation_tax.does_nation_tax_delete_conquered_towns_that_cannot_pay
+    - Default: false
+    - Does a conquered town which cannot pay the nation tax get deleted?
+  - API: Added PreTownPaysNationTaxEvent
+    - A cancellable event that precedes a town paying the nation tax.
+    - Also allows you to alter the amount a town would pay in tax.
+  - API: Add StatusScreenEvents
+    - ResidentStatusScreenEvent, TownStatusScreenEvent, NationStatusScreenEvent
+    - Makes it possible to add additional lines to the above objects' status screens.
+  - Plot perm hud now shows full town name, courtesy of Warriorrrr with PR #4655.
+0.96.5.12:
+  - API: TownUnconquerEvent
+    - Cancellable event allowing a plugin to prevent a town losing its conquered/occupied status.
+  - Bump language files to 0.96.
+  - Fix colour being stripped from warning messages on login.
+    - Closes #4662.
+  - Fix config mentioning a config section which doesn't exist any more.
+0.96.5.13:
+  - Make the build/destroy/switch/itemuse seen in the status screens' colour formattable.
+  - Bump language files to 0.97.
+  - Fix /towny top balance output being mis-ordered.
+  - Fix arrows on the /n and /t list pages missing the comparator in the clickable commands.
+  - Fix setting pages in /t and /n list when a comparator is specified.
+  - New Commands: 
+    - /t list by ruined 
+    - /t list by bankrupt
+    - Closes #4663.
+  - New Permission Nodes:
+    - towny.command.town.list.ruined
+    - towny.command.town.list.bankrupt
+    - both are child nodes of towny.command.town.list.*
+  - Fix spanish.yml having bad yaml.
+  - Potentially fix Towny not getting the largest meta node value in some cases where a player's primary permission group could not be resolved.
+  - Fix mayors and assistants not being able to /plot nfs their own personal plots.
+  - New Config Option: invite_system.expirationtime
+    - default: 0m
+    - When set for more than 0m, the amount of time (in minutes) until an invite is considered expired and is removed. Invites are checked for expiration once every hour.
+    - Valid values would include: 30s, 30m, 24h, 2d, etc.
+    - Closes #4086.
+  - Bank history commands added.
+    - See new commands below for /t, /n and /ta.
+    - Displays a book GUI to the player using the command.
+    - When {page} is not specified, up to 10 transactions will be shown.
+    - Does not persist across reloads, stop and starts.
+  - New Commands:
+    - /town bankhistory {pages}
+    - /nation bankhistory {pages}
+    - /ta town {townname} bankhistory {pages}
+    - /ta nation {nationname} bankhistory {pages}
+  - New permission nodes:
+    - towny.commmand.town.bankhistory
+      - child node of towny.command.town.*
+    - towny.command.nation.bankhistory
+      - child node of towny.command.nation.*
+    - towny.command.townyadmin.town.bankhistory
+      - child node of towny.command.townyadmin.town.*
+    - towny.command.townyadmin.nation.bankhistory
+      - child node of towny.command.townyadmin.nation.*
+  - Add save method to Towny objects, courtesy of silverwolfg11 with PR #4670.
+0.96.5.14:
+  - Added Placeholder: %townyadvanced_nation_map_color_hex%, courtesy of Kovalskki with PR #4661.
+    - returns the hex colour code of the nation's mapcolor set with /t set mapcolor (seen in dynmap-towny.)

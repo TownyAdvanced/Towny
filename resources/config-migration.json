@@ -79,5 +79,15 @@
         "value": "1.0"
       }
     ]
+  },
+  {
+    "version": "0.96.5.10",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "global_town_settings.farm_plot_allow_blocks",
+        "value": ",SHEARS"
+      }
+    ]
   }
 ]

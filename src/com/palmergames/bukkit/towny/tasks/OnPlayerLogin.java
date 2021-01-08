@@ -87,12 +87,12 @@ public class OnPlayerLogin implements Runnable {
 						if (town != null) {
 							try {
 								resident.setTown(town);
-								universe.getDataSource().saveTown(town);
+								town.save();
 							} catch (AlreadyRegisteredException ignore) {}
 						}
 					}
 					
-					universe.getDataSource().saveResident(resident);
+					resident.save();
 					
 				} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
 
@@ -182,7 +182,7 @@ public class OnPlayerLogin implements Runnable {
 			}
 			TownySettings.incrementUUIDCount();
 		}
-		universe.getDataSource().saveResident(resident);
+		resident.save();
 			
 	}
 	
@@ -203,9 +203,9 @@ public class OnPlayerLogin implements Runnable {
 					 */
 					if(TownySettings.isTownBankruptcyEnabled()) {
 						if (!town.isBankrupt()) //Is town already bankrupt?
-							TownyMessaging.sendMessage(resident, Translation.of("msg_warning_bankrupt", town.getName()));
+							TownyMessaging.sendMsg(resident, Translation.of("msg_warning_bankrupt", town.getName()));
 					} else {
-						TownyMessaging.sendMessage(resident, Translation.of("msg_warning_delete", town.getName()));
+						TownyMessaging.sendMsg(resident, Translation.of("msg_warning_delete", town.getName()));
 					}
 				}
 			} catch (EconomyException ex) {
@@ -220,7 +220,7 @@ public class OnPlayerLogin implements Runnable {
 					/*
 					 *  Warn that the nation is due to be deleted.
 					 */
-					TownyMessaging.sendMessage(resident, Translation.of("msg_warning_delete", nation.getName()));
+					TownyMessaging.sendMsg(resident, Translation.of("msg_warning_delete", nation.getName()));
 				}
 			} catch (EconomyException ex) {
 				// Economy error, so ignore it and try to continue.

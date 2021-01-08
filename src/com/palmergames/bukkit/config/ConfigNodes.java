@@ -83,7 +83,7 @@ public enum ConfigNodes {
 			"town.default_taxes.tax",
 			"0.0",
 			"",
-			"# Default amount of tax of a new town. This must be lower than the economy.daily_taxes.max_tax_percent setting."),
+			"# Default amount of tax of a new town. This must be lower than the economy.daily_taxes.max_town_tax_amount setting."),
 	TOWN_DEF_TAXES_SHOP_TAX(
 			"town.default_taxes.shop_tax",
 			"0.0",
@@ -620,7 +620,7 @@ public enum ConfigNodes {
 	),
 	GTOWN_FARM_PLOT_ALLOW_BLOCKS(
 			"global_town_settings.farm_plot_allow_blocks",
-			"BAMBOO,BAMBOO_SAPLING,JUNGLE_LOG,JUNGLE_SAPLING,JUNGLE_LEAVES,OAK_LOG,OAK_SAPLING,OAK_LEAVES,BIRCH_LOG,BIRCH_SAPLING,BIRCH_LEAVES,ACACIA_LOG,ACACIA_SAPLING,ACACIA_LEAVES,DARK_OAK_LOG,DARK_OAK_SAPLING,DARK_OAK_LEAVES,SPRUCE_LOG,SPRUCE_SAPLING,SPRUCE_LEAVES,BEETROOTS,COCOA,CHORUS_PLANT,CHORUS_FLOWER,SWEET_BERRY_BUSH,KELP,SEAGRASS,TALL_SEAGRASS,GRASS,TALL_GRASS,FERN,LARGE_FERN,CARROTS,WHEAT,POTATOES,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,NETHER_WART,COCOA,VINE,MELON,MELON_STEM,ATTACHED_MELON_STEM,SUGAR_CANE,CACTUS,ALLIUM,AZURE_BLUET,BLUE_ORCHID,CORNFLOWER,DANDELION,LILAC,LILY_OF_THE_VALLEY,ORANGE_TULIP,OXEYE_DAISY,PEONY,PINK_TULIP,POPPY,RED_TULIP,ROSE_BUSH,SUNFLOWER,WHITE_TULIP,WITHER_ROSE,CRIMSON_FUNGUS,CRIMSON_STEM,CRIMSON_HYPHAE,CRIMSON_ROOTS,MUSHROOM_STEM,NETHER_WART_BLOCK,BROWN_MUSHROOM,BROWN_MUSHROOM_BLOCK,RED_MUSHROOM,RED_MUSHROOM_BLOCK,SHROOMLIGHT,WARPED_FUNGUS,WARPED_HYPHAE,WARPED_ROOTS,WARPED_STEM,WARPED_WART_BLOCK,WEEPING_VINES_PLANT,WEEPING_VINES,NETHER_SPROUTS",
+			"BAMBOO,BAMBOO_SAPLING,JUNGLE_LOG,JUNGLE_SAPLING,JUNGLE_LEAVES,OAK_LOG,OAK_SAPLING,OAK_LEAVES,BIRCH_LOG,BIRCH_SAPLING,BIRCH_LEAVES,ACACIA_LOG,ACACIA_SAPLING,ACACIA_LEAVES,DARK_OAK_LOG,DARK_OAK_SAPLING,DARK_OAK_LEAVES,SPRUCE_LOG,SPRUCE_SAPLING,SPRUCE_LEAVES,BEETROOTS,COCOA,CHORUS_PLANT,CHORUS_FLOWER,SWEET_BERRY_BUSH,KELP,SEAGRASS,TALL_SEAGRASS,GRASS,TALL_GRASS,FERN,LARGE_FERN,CARROTS,WHEAT,POTATOES,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,NETHER_WART,COCOA,VINE,MELON,MELON_STEM,ATTACHED_MELON_STEM,SUGAR_CANE,CACTUS,ALLIUM,AZURE_BLUET,BLUE_ORCHID,CORNFLOWER,DANDELION,LILAC,LILY_OF_THE_VALLEY,ORANGE_TULIP,OXEYE_DAISY,PEONY,PINK_TULIP,POPPY,RED_TULIP,ROSE_BUSH,SUNFLOWER,WHITE_TULIP,WITHER_ROSE,CRIMSON_FUNGUS,CRIMSON_STEM,CRIMSON_HYPHAE,CRIMSON_ROOTS,MUSHROOM_STEM,NETHER_WART_BLOCK,BROWN_MUSHROOM,BROWN_MUSHROOM_BLOCK,RED_MUSHROOM,RED_MUSHROOM_BLOCK,SHROOMLIGHT,WARPED_FUNGUS,WARPED_HYPHAE,WARPED_ROOTS,WARPED_STEM,WARPED_WART_BLOCK,WEEPING_VINES_PLANT,WEEPING_VINES,NETHER_SPROUTS,SHEARS",
 			"",
 			"# List of blocks which can be modified on farm plots, as long as player is also allowed in the plot's '/plot perm' line.",
 			"# Not included by default but some servers add GRASS_BLOCK,FARMLAND,DIRT,NETHERRACK,CRIMSON_NYLIUM,WARPED_NYLIUM to their list."
@@ -968,6 +968,12 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# If true this will cause the log to be wiped at every startup."),
+	PLUGIN_TOWNY_TOP_SIZE(
+		"plugin.towny_top_size",
+		"10",
+		"",
+		"# Sets the default size that /towny top commands display."
+	),
 	FILTERS_COLOUR_CHAT(
 			"filters_colour_chat",
 			"",
@@ -1249,6 +1255,7 @@ public enum ConfigNodes {
 			"notification.plot.outpostblock",
 			"&b[Outpost]"),
 	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
+	NOTIFICATION_PLOT_NOTFORSALE("notification.plot.notforsale", "&e[Not For Sale]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
 	NOTIFICATION_TOWN_NAMES_ARE_VERBOSE(
 			"notification.town_names_are_verbose",
@@ -1442,6 +1449,13 @@ public enum ConfigNodes {
 			"",
 			"# When set for more than 0m, the amount of time (in minutes) which must have passed between",
 			"# a player's first log in and when they can be invited to a town."),
+	INVITE_SYSTEM_EXPIRATION_TIME(
+			"invite_system.expirationtime",
+			"0m",
+			"",
+			"# When set for more than 0m, the amount of time until an invite is considered",
+			"# expired and is removed. Invites are checked for expiration once every hour.",
+			"# Valid values would include: 30s, 30m, 24h, 2d, etc."),
 	INVITE_SYSTEM_MAXIMUM_INVITES_SENT(
 			"invite_system.maximum_invites_sent",
 			"",
@@ -1587,12 +1601,6 @@ public enum ConfigNodes {
 			"0",
 			"",
 			"# The cost of renaming a nation."),
-	ECO_DEBT_PREFIX(
-		"economy.debt_prefix",
-		"[DEBT]-",
-		"",
-		"# The debt prefix for the debt eco account"
-	),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",
@@ -1912,6 +1920,11 @@ public enum ConfigNodes {
 			"",
 			"# If a town can no longer pay their nation tax with debt because they have",
 			"# reach their debtcap, are they kicked from the nation?"),
+	ECO_BANKRUPTCY_DOES_NATION_TAX_DELETE_CONQUERED_TOWNS(
+			"economy.bankruptcy.nation_tax.does_nation_tax_delete_conquered_towns_that_cannot_pay",
+			"false",
+			"",
+			"# Does a conquered town which cannot pay the nation tax get deleted?"),
 	
 	ECO_PLOT_TYPE_COSTS("economy.plot_type_costs","",""),
 	ECO_PLOT_TYPE_COSTS_COMMERCIAL("economy.plot_type_costs.set_commercial",
@@ -1973,6 +1986,11 @@ public enum ConfigNodes {
 			"",
 			"#If true attacking players who are considered an outlaw, that are killed inside town land will be placed into the defending town's jail if it exists.",
 			"#Requires town_respawn to be true in order to work."),
+	JAIL_OUTLAW_JAIL_DAYS(
+			"jail.outlaw_jail_days",
+			"1",
+			"",
+			"#How many days an attacking outlaw will be jailed for."),
 	JAIL_JAIL_ALLOWS_ENDER_PEARLS(
 			"jail.jail_allows_ender_pearls",
 			"false",

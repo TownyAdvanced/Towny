@@ -182,7 +182,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				e.printStackTrace();
 			}
 		}
-		TownyUniverse.getInstance().getDataSource().saveResident(this);
+		this.save();
 	}
 
 	public void setJailed(Integer index, Town town) {
@@ -216,7 +216,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				e.printStackTrace();
 			}
 		}
-		TownyUniverse.getInstance().getDataSource().saveResident(this);
+		this.save();
 	}
 	public boolean isJailed() {
 
@@ -393,7 +393,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
-				TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+				townBlock.save();
 
 				// Set the plot permissions to mirror the towns.
 				townBlock.setType(townBlock.getType());
@@ -407,7 +407,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			// It cannot reach the point in the code at which the exception can be thrown.
 		}
 		
-		TownyUniverse.getInstance().getDataSource().saveResident(this);
+		this.save();
 	}
 
 	public void setFriends(List<Resident> newFriends) {
@@ -775,14 +775,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void addMetaData(CustomDataField<?> md) {
 		super.addMetaData(md);
 
-		TownyUniverse.getInstance().getDataSource().saveResident(this);
+		this.save();
 	}
 
 	@Override
 	public void removeMetaData(CustomDataField<?> md) {
 		super.removeMetaData(md);
 
-		TownyUniverse.getInstance().getDataSource().saveResident(this);
+		this.save();
 	}
 
 	@Override
@@ -920,5 +920,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.guiInventory = inventory;
 	}
 
+	@Override
+	public void save() {
+		TownyUniverse.getInstance().getDataSource().saveResident(this);
+	}
 }
 

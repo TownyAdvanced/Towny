@@ -202,7 +202,7 @@ public class War {
 			}
 
 		//Gather all nations at war
-		for (Nation nation : com.palmergames.bukkit.towny.TownyUniverse.getInstance().getDataSource().getNations()) {
+		for (Nation nation : com.palmergames.bukkit.towny.TownyUniverse.getInstance().getNations()) {
 			if (!nation.isNeutral()) {
 				add(nation);
 				if (warringNations.contains(nation))
@@ -637,7 +637,7 @@ public class War {
 		// We only change the townblocks over to the winning Town if the WinnerTakesOwnershipOfTown is false and WinnerTakesOwnershipOfTownblocks is true.
 		if (!TownySettings.getWarEventWinnerTakesOwnershipOfTown() && TownySettings.getWarEventWinnerTakesOwnershipOfTownblocks()) {
 			townBlock.setTown(attacker);
-			TownyUniverse.getInstance().getDataSource().saveTownBlock(townBlock);
+			townBlock.save();
 		}		
 		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -650,8 +650,8 @@ public class War {
 					remove(attacker, defenderTown.getNation());
 				else
 					remove(attacker, defenderTown);
-				townyUniverse.getDataSource().saveTown(defenderTown);
-				townyUniverse.getDataSource().saveTown(attacker);
+				defenderTown.save();
+				attacker.save();
 				return;
 			} else
 				TownyMessaging.sendPrefixedTownMessage(defenderTown, Translation.of("msg_war_town_lost_money_townblock", TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
@@ -674,7 +674,7 @@ public class War {
 							if (resident.getJailTown().equals(defenderTown.toString())) 
 								if (Coord.parseCoord(defenderTown.getJailSpawn(resident.getJailSpawn())).toString().equals(townBlock.getCoord().toString())){
 									resident.setJailed(false);
-									townyUniverse.getDataSource().saveResident(resident);
+									resident.save();
 									count++;
 								}
 					} catch (TownyException e) {
@@ -684,8 +684,8 @@ public class War {
 					TownyMessaging.sendGlobalMessage(Translation.of("msg_war_jailbreak", defenderTown, count));
 			}				
 		}
-		townyUniverse.getDataSource().saveTown(defenderTown);
-		townyUniverse.getDataSource().saveTown(attacker);
+		defenderTown.save();
+		attacker.save();
 	}
 
 	/** 
@@ -712,7 +712,6 @@ public class War {
 	 * @throws NotRegisteredException - When a Towny Object does not exist.
 	 */
 	public void remove(Town attacker, Town town) throws NotRegisteredException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Nation losingNation = town.getNation();
 		
 		int towns = 0;
@@ -740,9 +739,9 @@ public class War {
 				town.setNation(attacker.getNation());
 			} catch (AlreadyRegisteredException e) {
 			}
-			townyUniverse.getDataSource().saveTown(town);
-			townyUniverse.getDataSource().saveNation(attacker.getNation());
-			townyUniverse.getDataSource().saveNation(losingNation);
+			town.save();
+			attacker.getNation().save();
+			losingNation.save();
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), attacker.getNation(), TownySettings.getWarEventConquerTime()));
 		}
 		

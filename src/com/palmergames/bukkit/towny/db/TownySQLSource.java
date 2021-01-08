@@ -716,7 +716,33 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			try {
 				if (rs.getString("uuid") != null && !rs.getString("uuid").isEmpty()) {
-					resident.setUUID(UUID.fromString(rs.getString("uuid")));
+					
+					UUID uuid = UUID.fromString(rs.getString("uuid"));
+					if (TownyUniverse.getInstance().hasResident(uuid)) {
+						Resident olderRes = TownyUniverse.getInstance().getResident(uuid);
+						if (resident.getLastOnline() > olderRes.getLastOnline()) {
+							TownyMessaging.sendDebugMsg("Deleting : " + olderRes.getName() + " which is a dupe of " + resident.getName());
+							try {
+								TownyUniverse.getInstance().unregisterResident(olderRes);
+							} catch (NotRegisteredException ignored) {}
+							// Check if the older resident is a part of a town
+							if (olderRes.hasTown()) {
+								try {
+									// Resident#removeTown saves the resident, so we can't use it.
+									olderRes.getTown().removeResident(olderRes);
+								} catch (NotRegisteredException nre) {}
+							}
+							deleteResident(olderRes);					
+						} else {
+							TownyMessaging.sendDebugMsg("Deleting resident : " + resident.getName() + " which is a dupe of " + olderRes.getName());
+							try {
+								TownyUniverse.getInstance().unregisterResident(resident);
+							} catch (NotRegisteredException ignored) {}
+							deleteResident(resident);
+							return true;
+						}
+					}	
+					resident.setUUID(uuid);
 					universe.registerResidentUUID(resident);
 				}
 			} catch (Exception e) {
@@ -1085,12 +1111,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			try {
 				line = rs.getString("nation");
 				if (line != null && !line.isEmpty()) {
-					Nation nation = null;
-					try {
-						nation = getNation(line);
-					} catch (NotRegisteredException ignored) {
-						// Town tried to load a nation that doesn't exist, do not set nation.
-					}
+					Nation nation = universe.getNation(line);
+					// Only set nation if it exists
 					if (nation != null)
 						town.setNation(nation);
 				}
@@ -1100,6 +1122,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setRuined(rs.getBoolean("ruined"));
 			town.setRuinedTime(rs.getLong("ruinedTime"));
 			town.setNeutral(rs.getBoolean("neutral"));
+
+			town.setDebtBalance(rs.getFloat("debtBalance"));
 
 			return true;
 		} catch (SQLException e) {
@@ -1157,7 +1181,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		String search;
 		String name = null;
 		try {
-			Nation nation = getNation(rs.getString("name"));
+			Nation nation = universe.getNation(rs.getString("name"));
+			
+			// Could not find nation in universe maps
+			if (nation == null) {
+				System.out.println(String.format("[Towny] Error: The nation with the name '%s' was not registered and cannot be loaded!"));
+				return false;
+			}
+			
 			name = nation.getName();
 
 			TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
@@ -1215,10 +1246,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nation.setSpawnCost(rs.getFloat("spawnCost"));
 			nation.setNeutral(rs.getBoolean("neutral"));
 			try {
-				nation.setUuid(UUID.fromString(rs.getString("uuid")));
+				nation.setUUID(UUID.fromString(rs.getString("uuid")));
 			} catch (IllegalArgumentException | NullPointerException ee) {
-				nation.setUuid(UUID.randomUUID());
+				nation.setUUID(UUID.randomUUID());
 			}
+			universe.registerNationUUID(nation);
 
 			line = rs.getString("nationSpawn");
 			if (line != null) {
@@ -1914,6 +1946,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("ruinedTime", town.getRuinedTime());
 			twn_hm.put("neutral", town.isNeutral());
 			
+			twn_hm.put("debtBalance", town.getDebtBalance());
+
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;
 
@@ -1966,7 +2000,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 									+ nation.getSpawn().getPitch() + "#" + nation.getSpawn().getYaw()
 							: "");
 			if (nation.hasValidUUID()) {
-				nat_hm.put("uuid", nation.getUuid());
+				nat_hm.put("uuid", nation.getUUID());
 			} else {
 				nat_hm.put("uuid", UUID.randomUUID());
 			}

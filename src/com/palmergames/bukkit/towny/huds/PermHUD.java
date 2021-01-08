@@ -61,7 +61,7 @@ public class PermHUD {
 			firespread = (town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			mobspawn = (town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			if (townBlock.hasResident()) {
-				title = ChatColor.GOLD + townBlock.getResident().getName() + "(" + townBlock.getTown().getName() + ")";
+				title = ChatColor.GOLD + townBlock.getResident().getName() + " (" + townBlock.getTown().getName() + ")";
 			} else {
 				title = ChatColor.GOLD + townBlock.getTown().getName();
 			}
@@ -81,7 +81,7 @@ public class PermHUD {
 		board.getTeam("explosions").setSuffix(explosions);
 		board.getTeam("firespread").setSuffix(firespread);
 		board.getTeam("mobspawn").setSuffix(mobspawn);
-		board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(title));
+		board.getObjective("PERM_HUD_OBJ").setDisplayName(title.length() >= 128 ? title.substring(0, 128) : title);
 	}
 
 	private static void clearPerms (Player p) {

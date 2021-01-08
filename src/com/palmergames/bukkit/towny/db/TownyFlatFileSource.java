@@ -386,7 +386,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	@Override
 	public boolean loadResident(Resident resident) {
-		
+		boolean save = true;
 		String line = null;
 		String path = getResidentFilename(resident);
 		File fileResident = new File(path);
@@ -399,7 +399,33 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("uuid");
 				if (line != null) {
-					resident.setUUID(UUID.fromString(line));
+					UUID uuid = UUID.fromString(line);
+					if (TownyUniverse.getInstance().hasResident(uuid)) {
+						Resident olderRes = TownyUniverse.getInstance().getResident(uuid);
+						if (resident.getLastOnline() > olderRes.getLastOnline()) {
+							TownyMessaging.sendDebugMsg("Deleting : " + olderRes.getName() + " which is a dupe of " + resident.getName());
+							try {
+								TownyUniverse.getInstance().unregisterResident(olderRes);
+							} catch (NotRegisteredException ignored) {}
+							// Check if the older resident is a part of a town
+							if (olderRes.hasTown()) {
+								try {
+									// Resident#removeTown saves the resident, so we can't use it.
+									olderRes.getTown().removeResident(olderRes);
+								} catch (NotRegisteredException nre) {}
+							}
+							deleteResident(olderRes);					
+						} else {
+							TownyMessaging.sendDebugMsg("Deleting resident : " + resident.getName() + " which is a dupe of " + olderRes.getName());
+							try {
+								TownyUniverse.getInstance().unregisterResident(resident);
+							} catch (NotRegisteredException ignored) {}
+							deleteResident(resident);
+							save = false;
+							return true;
+						}
+					}					
+					resident.setUUID(uuid);
 					universe.registerResidentUUID(resident);
 				}
 				
@@ -481,7 +507,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				e.printStackTrace();
 				return false;
 			} finally {
-				saveResident(resident);
+				if (save) saveResident(resident);
 			}
 			return true;
 		} else {
@@ -802,12 +828,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("nation");
 				if (line != null && !line.isEmpty()) {
-					Nation nation = null;
-					try {
-						nation = getNation(line);
-					} catch (NotRegisteredException ignored) {
-						// Town tried to load a nation that doesn't exist, do not set nation.
-					}
+					Nation nation = universe.getNation(line);;
+					// Only set the nation if it exists
 					if (nation != null)
 						town.setNation(nation);
 				}
@@ -831,6 +853,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("neutral");
 				if (line != null)
 					town.setNeutral(Boolean.parseBoolean(line));
+				
+				line = keys.get("debtBalance");
+				if (line != null)
+					try {
+						town.setDebtBalance(Double.parseDouble(line));
+					} catch (Exception e) {
+						town.setDebtBalance(0.0);
+					}
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading town file " + town.getName() + " at line: " + line + ", in towny\\data\\towns\\" + town.getName() + ".txt");
@@ -945,10 +975,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("uuid");
 				if (line != null) {
 					try {
-						nation.setUuid(UUID.fromString(line));
+						nation.setUUID(UUID.fromString(line));
 					} catch (IllegalArgumentException ee) {
-						nation.setUuid(UUID.randomUUID());
+						nation.setUUID(UUID.randomUUID());
 					}
+					universe.registerNationUUID(nation);
 				}
 				line = keys.get("registered");
 				if (line != null) {
@@ -1704,6 +1735,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("ruinedTime=" + town.getRuinedTime());
 		// Peaceful
 		list.add("neutral=" + town.isNeutral());
+		
+		// Debt balance
+		list.add("debtBalance=" + town.getDebtBalance());
 
 		/*
 		 *  Make sure we only save in async
@@ -1763,7 +1797,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Peaceful
 		list.add("neutral=" + nation.isNeutral());
 		if (nation.hasValidUUID()){
-			list.add("uuid=" + nation.getUuid());
+			list.add("uuid=" + nation.getUUID());
 		} else {
 			list.add("uuid=" + UUID.randomUUID());
 		}

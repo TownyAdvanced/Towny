@@ -9,12 +9,10 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
-import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
@@ -22,8 +20,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.object.economy.BankAccount;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
@@ -45,9 +43,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
@@ -200,7 +196,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseTownyCommand(Player player, String[] split) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		if (split.length == 0) {
 			HelpMenu.GENERAL_HELP.send(player);
 			return;
@@ -212,7 +208,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		try {
 
 			if (split[0].equalsIgnoreCase("map")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
 				if (split.length > 1 && split[1].equalsIgnoreCase("big"))
@@ -225,7 +221,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_no_economy"));
 				
 				if (split.length > 1) {
-					town = townyUniverse.getTown(split[1]);
+					town = TownyUniverse.getInstance().getTown(split[1]);
 					
 					if (town == null) {
 						sendErrorMsg(player, Translation.of("msg_err_not_registered_1", split[1]));
@@ -260,28 +256,28 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getPlotManagementMayorDelete(), "Towny Plot Clear Delete List");
 			} else if (split[0].equalsIgnoreCase("top")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				TopCommand(player, StringMgmt.remFirstArg(split));
 			} else if (split[0].equalsIgnoreCase("tree")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				consoleUseOnly(player);
 			} else if (split[0].equalsIgnoreCase("time")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				TownyMessaging.sendMsg(player, Translation.of("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
 			} else if (split[0].equalsIgnoreCase("universe")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				for (String line : getUniverseStats())
 					player.sendMessage(line);
 			} else if (split[0].equalsIgnoreCase("version") || split[0].equalsIgnoreCase("v")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				player.sendMessage(towny_version);
 			} else if (split[0].equalsIgnoreCase("war")) {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				boolean war = TownyWar(StringMgmt.remFirstArg(split), player);
 				if (war)
@@ -292,7 +288,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 				towny_war.clear();
 			} else if (split[0].equalsIgnoreCase("spy")) {
-				if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
+				if (permSource.testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
 					Resident resident = getResidentOrThrow(player.getUniqueId());
 					resident.toggleMode(split, true);
 				} else
@@ -409,15 +405,15 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		} else if (args[0].equalsIgnoreCase("residents"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<ResidentList> list = new ArrayList<>(universe.getDataSource().getTowns());
-				list.addAll(universe.getDataSource().getNations());
+				list.addAll(universe.getNations());
 				towny_top.add(ChatTools.formatTitle("Most Residents"));
-				towny_top.addAll(getMostResidents(list, 10));
+				towny_top.addAll(getMostResidents(list));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				towny_top.add(ChatTools.formatTitle("Most Residents in a Town"));
-				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getDataSource().getTowns()), 10));
+				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getDataSource().getTowns())));
 			} else if (args[1].equalsIgnoreCase("nation")) {
 				towny_top.add(ChatTools.formatTitle("Most Residents in a Nation"));
-				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getDataSource().getNations()), 10));
+				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getNations())));
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
 		else if (args[0].equalsIgnoreCase("land"))
@@ -425,30 +421,30 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				List<TownBlockOwner> list = new ArrayList<>(universe.getResidents());
 				list.addAll(universe.getDataSource().getTowns());
 				towny_top.add(ChatTools.formatTitle("Most Land Owned"));
-				towny_top.addAll(getMostLand(list, 10));
+				towny_top.addAll(getMostLand(list));
 			} else if (args[1].equalsIgnoreCase("resident")) {
 				towny_top.add(ChatTools.formatTitle("Most Land Owned by Resident"));
-				towny_top.addAll(getMostLand(new ArrayList<>(universe.getResidents()), 10));
+				towny_top.addAll(getMostLand(new ArrayList<>(universe.getResidents())));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				towny_top.add(ChatTools.formatTitle("Most Land Owned by Town"));
-				towny_top.addAll(getMostLand(new ArrayList<>(universe.getDataSource().getTowns()), 10));
+				towny_top.addAll(getMostLand(new ArrayList<>(universe.getDataSource().getTowns())));
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
 		else if (args[0].equalsIgnoreCase("balance")) {
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<Government> list = new ArrayList<>();
 				list.addAll(universe.getTowns());
-				list.addAll(universe.getNationsMap().values());
+				list.addAll(universe.getNations());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances"));
-				towny_top.addAll(getTopBankBalance(list, 10));
+				towny_top.addAll(getTopBankBalance(list));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				List<Government> list = new ArrayList<>(universe.getTowns());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Town"));
-				towny_top.addAll(getTopBankBalance(list, 10));
+				towny_top.addAll(getTopBankBalance(list));
 			} else if (args[1].equalsIgnoreCase("nation")) {
-				List<Government> list = new ArrayList<>(universe.getNationsMap().values());
+				List<Government> list = new ArrayList<>(universe.getNations());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Nation"));
-				towny_top.addAll(getTopBankBalance(list, 10));
+				towny_top.addAll(getTopBankBalance(list));
 			} else {
 				sendErrorMsg(player, "Invalid sub command.");
 			}
@@ -472,7 +468,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   " + Colors.Blue + Translation.of("msg_universe_attribution") + Colors.LightBlue + "Chris H (Shade), ElgarL, LlmDl");
 		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   " + Colors.LightBlue + Translation.of("msg_universe_contributors") + Colors.Rose + Translation.of("msg_universe_heart"));
 		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
-		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + Colors.Blue + Translation.of("res_list")+ ": " + Colors.LightBlue + townyUniverse.getNumResidents() + Colors.Gray + " | " + Colors.Blue + Translation.of("town_plu") + ": " + Colors.LightBlue + townyDS.getTowns().size() + Colors.Gray + " | " + Colors.Blue + Translation.of("nation_plu") + ": " + Colors.LightBlue + townyDS.getNations().size());
+		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + Colors.Blue + Translation.of("res_list")+ ": " + Colors.LightBlue + townyUniverse.getNumResidents() + Colors.Gray + " | " + Colors.Blue + Translation.of("town_plu") + ": " + Colors.LightBlue + townyDS.getTowns().size() + Colors.Gray + " | " + Colors.Blue + Translation.of("nation_plu") + ": " + Colors.LightBlue + townyUniverse.getNumNations());
 		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + Colors.Blue + Translation.of("world_plu") + ": " + Colors.LightBlue + townyDS.getWorlds().size() + Colors.Gray + " | " + Colors.Blue + Translation.of("townblock_plu") + ": " + Colors.LightBlue + townyUniverse.getTownBlocks().size());
 		output.add("\u00A70-----\u00A74#\u00A70-----   " + Colors.LightGreen + "https://TownyAdvanced.github.io/");
 		output.add(""); // Intentionally left blank
@@ -524,72 +520,68 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (town.hasNation())
 				try {
 					nation = town.getNation();
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
+				} catch (NotRegisteredException ignored) {}
 
-		output.add(ChatTools.formatTitle("Prices"));
-		output.add(Colors.Yellow + "[New] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice()) + Colors.Gray + " | " + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice()));
-		output.add(Colors.Yellow + "[Reclaim] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownRuinSettings.getEcoPriceReclaimTown()));
+		output.add(ChatTools.formatTitle(Translation.of("towny_prices_title")));
+		output.add(Translation.of("towny_prices_town_nation", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice()), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())));
+		output.add(Translation.of("towny_prices_reclaim", TownyEconomyHandler.getFormattedBalance(TownRuinSettings.getEcoPriceReclaimTown())));
 		if (town != null) {
-			output.add(Colors.Yellow + "[Upkeep] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)) + Colors.Gray + " | " + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation)));
+			output.add(Translation.of("towny_prices_upkeep", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation))));
+			output.add(Translation.of("towny_prices_upkeep_based_on", (TownySettings.isUpkeepByPlot() ? Translation.of("towny_prices_upkeep_num_plots") : Translation.of("towny_prices_upkeep_town_level"))));
 			if (town.isOverClaimed() && TownySettings.getUpkeepPenalty() > 0)
-				output.add(Colors.Yellow + "[Overclaimed Upkeep] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownPenaltyUpkeepCost(town)));
-			output.add(Colors.Yellow + "[Claiming] " + Colors.Green + "TownBlock: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getTownBlockCost()) + Colors.Gray + 
-					(Double.valueOf(TownySettings.getClaimPriceIncreaseValue()).equals(1.0) ? "" : " | " + Colors.Green + "Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getClaimPriceIncreaseValue()-1)));
-			output.add(Colors.Yellow + "[Claiming] " + Colors.Green + "Outposts: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
+				output.add(Translation.of("towny_prices_overclaimed_upkeep", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownPenaltyUpkeepCost(town))));
+			if (TownySettings.getUpkeepPenalty() > 0 )
+				output.add(Translation.of("towny_prices_overclaimed_based_on", (TownySettings.isUpkeepPenaltyByPlot() ? Translation.of("towny_prices_overclaimed_num_plots") : Translation.of("towny_prices_overclaimed_flat_cost")), TownySettings.getUpkeepPenalty()));
+
+			output.add(Translation.of("towny_prices_claiming_townblock", TownyEconomyHandler.getFormattedBalance(town.getTownBlockCost()) +  
+					(Double.valueOf(TownySettings.getClaimPriceIncreaseValue()).equals(1.0) ? "" : Translation.of("towny_prices_claiming_townblock_increase", new DecimalFormat("##.##%").format(TownySettings.getClaimPriceIncreaseValue()-1)))));
+			output.add(Translation.of("towny_prices_claiming_outposts", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())));
 		}
 		if (town == null)
-			output.add(Colors.Yellow + "[Upkeep] " + Colors.Green + "Town: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeep()) + Colors.Gray + " | " + Colors.Green + "Nation: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeep()));
-		output.add(Colors.Gray + "Town upkeep is based on " + Colors.LightGreen + " the " + (TownySettings.isUpkeepByPlot() ? " number of plots" : " town level (num residents)."));
-		if (TownySettings.getUpkeepPenalty() > 0 )
-			output.add(Colors.Gray + "Overclaimed upkeep is based on " + Colors.LightGreen + (TownySettings.isUpkeepPenaltyByPlot() ? "the number of plots overclaimed * " + TownySettings.getUpkeepPenalty() : "a flat cost of " + TownySettings.getUpkeepPenalty()));
+			output.add(Translation.of("towny_prices_upkeep", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeep()), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeep())));
 
 		if (town != null) {
-			output.add(Colors.Yellow + "Town [" + town.getFormattedName() + "]");
-			output.add(Colors.Rose + "    [Price] " + Colors.Green + "Plot: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Outpost: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()));
-			output.add(Colors.Rose + "             " + Colors.Green + "Shop: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getCommercialPlotPrice()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getEmbassyPlotPrice()));
+			output.add(Translation.of("towny_prices_townname", town.getFormattedName()));
+			output.add(Translation.of("towny_prices_price_plot", TownyEconomyHandler.getFormattedBalance(town.getPlotPrice()),TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())));
+			output.add(Translation.of("towny_prices_price_shop", TownyEconomyHandler.getFormattedBalance(town.getCommercialPlotPrice()), TownyEconomyHandler.getFormattedBalance(town.getEmbassyPlotPrice())));
 
-			output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Resident: " + Colors.LightGreen + (town.isTaxPercentage()? town.getTaxes() + "%" : TownyEconomyHandler.getFormattedBalance(town.getTaxes())) + Colors.Gray + " | " + Colors.Green + "Plot: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getPlotTax()));
-			output.add(Colors.Rose + "              " + Colors.Green + "Shop: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getCommercialPlotTax()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(town.getEmbassyPlotTax()));
+			output.add(Translation.of("towny_prices_taxes_plot", (town.isTaxPercentage()? town.getTaxes() + "%" : TownyEconomyHandler.getFormattedBalance(town.getTaxes())), TownyEconomyHandler.getFormattedBalance(town.getPlotTax())));
+			output.add(Translation.of("towny_prices_taxes_shop", TownyEconomyHandler.getFormattedBalance(town.getCommercialPlotTax()), TownyEconomyHandler.getFormattedBalance(town.getEmbassyPlotTax())));
 
-			output.add(Colors.Rose + "    [Setting Plots] " + Colors.Green + "Shop: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetCommercialCost()) + Colors.Gray + " | " + Colors.Green + "Embassy: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetEmbassyCost()) + Colors.Gray + " | "  + Colors.Green + "Wilds: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetWildsCost()));
-			output.add(Colors.Rose + "                      " + Colors.Green + "Inn: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetInnCost()) + Colors.Gray + " | " + Colors.Green + "Jail: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetJailCost()) + Colors.Gray + " | " + Colors.Green + "Farm: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetFarmCost()));
-			output.add(Colors.Rose + "                      " + Colors.Green + "Bank: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetBankCost()));
+			output.add(Translation.of("towny_prices_plots_shop", TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetCommercialCost()), TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetEmbassyCost())));
+			output.add(Translation.of("towny_prices_plots_wilds", TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetWildsCost()), TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetInnCost())));
+			output.add(Translation.of("towny_prices_plots_jail", TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetJailCost()), TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetFarmCost())));
+			output.add(Translation.of("towny_prices_plots_bank", TownyEconomyHandler.getFormattedBalance(TownySettings.getPlotSetBankCost())));
 			
 			if (nation != null) {
-				output.add(Colors.Yellow + "Nation [" + nation.getFormattedName() + "]");
-				output.add(Colors.Rose + "    [Taxes] " + Colors.Green + "Town: " + Colors.LightGreen + nation.getTaxes() + Colors.Gray + " | " + Colors.Green + "Peace: " + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost()));
+				output.add(Translation.of("towny_prices_nationname", nation.getFormattedName()));
+				output.add(Translation.of("towny_prices_nation_tax", nation.getTaxes(), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationNeutralityCost())));
 			}
 		}
 		return output;
 	}
 	
-	public List<String> getTopBankBalance(final List<Government> governments, final int maxListing) {
+	public List<String> getTopBankBalance(final List<Government> governments) {
+		final int maxListing = TownySettings.getTownyTopSize();
 		final List<String> output = new ArrayList<>();
-		final Map<Government, Double> data = new HashMap<>();
 
 		// Sort by their bank balance first
 		governments.sort(GovernmentComparators.BY_BANK_BALANCE);
-		// Reverse it to show top down
-		Collections.reverse(governments);
+
+		int index = 0;
 		// Loop through each one (already sorted) and add to the map
 		for (final Government gov : governments) {
-			data.put(gov, gov.getAccount().getCachedBalance());
-		}
-		int index = 0;
-		for (Map.Entry<Government, Double> entry : data.entrySet()) {
 			index++;
 			if (maxListing != -1 && index > maxListing) {
 				break;
 			}
-			final Government government = entry.getKey();
-			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", government.getFormattedName(), TownyEconomyHandler.getFormattedBalance(entry.getValue())));
+			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", gov.getFormattedName(), TownyEconomyHandler.getFormattedBalance(gov.getAccount().getCachedBalance())));
 		}
 		return output;
 	}
 
-	public List<String> getMostResidents(List<ResidentList> list, int maxListing) {
+	public List<String> getMostResidents(List<ResidentList> list) {
+		final int maxListing = TownySettings.getTownyTopSize();
 
 		List<String> output = new ArrayList<>();
 		KeyValueTable<ResidentList, Integer> kvTable = new KeyValueTable<>();
@@ -608,7 +600,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return output;
 	}
 
-	public List<String> getMostLand(List<TownBlockOwner> list, int maxListing) {
+	public List<String> getMostLand(List<TownBlockOwner> list) {
+		final int maxListing = TownySettings.getTownyTopSize();
 
 		List<String> output = new ArrayList<>();
 		KeyValueTable<TownBlockOwner, Integer> kvTable = new KeyValueTable<>();

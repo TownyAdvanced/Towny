@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @deprecated Use {@link com.palmergames.bukkit.towny.TownyAPI}.getInstance() for future calls.
@@ -100,7 +101,10 @@ public class TownyUniverse {
 	}
 
 	public Hashtable<String, Nation> getNationsMap() {
-		return new Hashtable<>(com.palmergames.bukkit.towny.TownyUniverse.getInstance().getNationsMap());
+		return new Hashtable<>(
+			com.palmergames.bukkit.towny.TownyUniverse.getInstance().getNations().stream()
+			.collect(Collectors.toMap(TownyObject::getName, nation -> nation))
+		);
 	}
 
 	public Hashtable<String, TownyWorld> getWorldMap() {
@@ -147,10 +151,6 @@ public class TownyUniverse {
 
 	public static List<Resident> getOnlineResidents(ResidentList residentList) {
 		return TownyAPI.getInstance().getOnlineResidents(residentList);
-	}
-
-	public void requestTeleport(Player player, Location spawnLoc) {
-		TownyAPI.getInstance().requestTeleport(player, spawnLoc);
 	}
 
 	public void abortTeleportRequest(Resident resident) {
