@@ -5722,3 +5722,4 @@ v0.92.0.11:
     - returns the hex colour code of the nation's mapcolor set with /t set mapcolor (seen in dynmap-towny.)
   - es-419.yml updated to 0.97, courtesy of EuGNosii with PR #4675.
   - Fix friendly-fire-disabled message not being sent via TownyMessaging.
+  - Fix PreNationEvent cancellation message, courtesy of Warriorrrr with PR #4676.
