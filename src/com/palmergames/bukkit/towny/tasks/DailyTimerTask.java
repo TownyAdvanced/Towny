@@ -596,6 +596,8 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * and its capital town also pays upkeep costs.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
+			System.out.println("nation UUID " + nation.getUUID());
+			System.out.println("hasNation   " + universe.hasNation(nation.getUUID()));
 			if (universe.hasNation(nation.getUUID()) && nation.getCapital().hasUpkeep()) {
 
 				double upkeep = TownySettings.getNationUpkeepCost(nation);

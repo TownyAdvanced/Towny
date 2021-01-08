@@ -5720,3 +5720,4 @@ v0.92.0.11:
 0.96.5.14:
   - Added Placeholder: %townyadvanced_nation_map_color_hex%, courtesy of Kovalskki with PR #4661.
     - returns the hex colour code of the nation's mapcolor set with /t set mapcolor (seen in dynmap-towny.)
+  - es-419.yml updated to 0.97, courtesy of EuGNosii with PR #4675.
