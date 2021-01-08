@@ -299,7 +299,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					break;
 				case "add":
 					if (args.length == 2)
-						return null;
+						return getResidentsWithoutTownStartingWith(args[1]);
 					break;
 				case "kick":
 					if (args.length == 2)

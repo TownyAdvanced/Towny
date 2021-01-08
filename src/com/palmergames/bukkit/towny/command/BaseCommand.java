@@ -6,6 +6,8 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.NameUtil;
+import com.palmergames.bukkit.util.BukkitTools;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -187,6 +189,20 @@ public class BaseCommand implements TabCompleter{
 		
 		return Collections.emptyList();
 	}
+	
+	/**
+	 * Returns a list of residents which are online and have no town.
+	 * 
+	 * @param str the string to check if the resident's name starts with.
+	 * @return the residents name or an empty list.
+	 */
+	public static List<String> getResidentsWithoutTownStartingWith(String str) {
+		
+		if (!getOnlinePlayersWithoutTown().isEmpty())
+			return NameUtil.filterByStart(NameUtil.getNames(getOnlinePlayersWithoutTown()), str);
+		else 
+			return Collections.emptyList();
+	}
 
 	/**
 	 * Parses the given string into a boolean choice.
@@ -219,5 +235,15 @@ public class BaseCommand implements TabCompleter{
 		}
 
 		return res;
+	}
+	
+	private static List<Resident> getOnlinePlayersWithoutTown() {
+		List<Resident> townlessResidents = new ArrayList<>();
+		for (Player player : BukkitTools.getOnlinePlayers()) {
+			if (TownyUniverse.getInstance().getResident(player.getUniqueId()).hasTown())
+				continue;
+			townlessResidents.add(TownyUniverse.getInstance().getResident(player.getUniqueId()));
+		}
+		return townlessResidents;
 	}
 }
