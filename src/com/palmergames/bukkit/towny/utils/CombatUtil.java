@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
@@ -363,13 +364,13 @@ public class CombatUtil {
 				try {
 					TownBlock townBlock = new WorldCoord(defender.getWorld().getName(), Coord.parseCoord(defender)).getTownBlock();
 					if (!townBlock.getType().equals(TownBlockType.ARENA))
-						attacker.sendMessage(Translation.of("msg_err_friendly_fire_disable"));
+						TownyMessaging.sendErrorMsg(attacker, Translation.of("msg_err_friendly_fire_disable"));
 						return true;
 				} catch (TownyException x) {
 					// World or TownBlock failure
 					// But we are configured to prevent friendly fire in the
 					// wilderness too.					
-					attacker.sendMessage(Translation.of("msg_err_friendly_fire_disable"));
+					TownyMessaging.sendErrorMsg(attacker, Translation.of("msg_err_friendly_fire_disable"));
 					return true;
 				}
 			}		
