@@ -5723,3 +5723,4 @@ v0.92.0.11:
   - es-419.yml updated to 0.97, courtesy of EuGNosii with PR #4675.
   - Fix friendly-fire-disabled message not being sent via TownyMessaging.
   - Fix PreNationEvent cancellation message, courtesy of Warriorrrr with PR #4676.
+  - Fix [Not For Sale] being seen when walking into the wilderness from a forsale plot.

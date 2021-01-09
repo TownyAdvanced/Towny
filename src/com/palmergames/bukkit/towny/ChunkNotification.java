@@ -338,7 +338,7 @@ public class ChunkNotification {
 		if (toForSale && !toPlotGroupBlock)
 			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()));
 		
-		if (!toForSale && fromForSale)
+		if (!toForSale && fromForSale && !toWild)
 			return notForSaleNotificationFormat;
 		
 		return null;
