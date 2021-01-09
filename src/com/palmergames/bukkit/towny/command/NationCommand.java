@@ -2314,10 +2314,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						.sendTo(player);
 				    	
                     } else {
-    					if(!NameValidation.isBlacklistName(split[1]))
-    						throw new TownyException(Translation.of("msg_invalid_name"));
-    					else 
-    						nationRename(player, nation, split[1]);
+                    	nationRename(player, nation, split[1]);
                     }
 				}
 
