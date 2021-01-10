@@ -797,9 +797,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								player.sendMessage(Translation.of("msg_plot_set_type", plotTypeName));
 							}
 						} catch (NotRegisteredException nre) {
-							player.sendMessage(Translation.of("msg_err_not_part_town"));
+							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_part_town"));
 						} catch (TownyException te){
-							player.sendMessage(te.getLocalizedMessage());
+							TownyMessaging.sendErrorMsg(player, te.getMessage());
 						}
 
 					} else {

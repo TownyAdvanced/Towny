@@ -2,14 +2,18 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -245,24 +249,25 @@ public class TownBlock extends TownyObject {
 		setType(TownBlockType.lookup(typeId));
 	}
 	
-	public void setType(String typeName, Resident resident) throws TownyException, EconomyException {
-		if (typeName.equalsIgnoreCase("reset"))
-			typeName = "default";
-
-		TownBlockType type = TownBlockType.lookup(typeName);
-
-		if (type == null)
-			throw new TownyException(Translation.of("msg_err_not_block_type"));
-		
-		setType(type, resident);
-	}
-
 	public void setType(TownBlockType type, Resident resident) throws TownyException {
 		// Attempt to clear a jail spawn in case this was a jail plot until now.
 		if (this.isJail())
 			this.getTown().removeJailSpawn(this.getCoord());
 
-		setType(type);
+		System.out.println("getType " + getType());
+		System.out.println("setType " + type);
+		if ((getType().equals(TownBlockType.ARENA) || type.equals(TownBlockType.ARENA))
+			&& TownySettings.getPVPCoolDownTime() > 0 
+			&& !TownyUniverse.getInstance().getPermissionSource().testPermission(resident.getPlayer(), PermissionNodes.TOWNY_ADMIN.getNode())) {
+			// Test to see if the pvp cooldown timer is active for this plot.
+			if (CooldownTimerTask.hasCooldown(getWorldCoord().toString(), CooldownType.PVP))
+				throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(getWorldCoord().toString(), CooldownType.PVP)));
+			
+			setType(type);
+			CooldownTimerTask.addCooldownTimer(getWorldCoord().toString(), CooldownType.PVP);
+
+		} else
+			setType(type);
 
 		if (this.isJail()) {
 			Player p = TownyAPI.getInstance().getPlayer(resident);

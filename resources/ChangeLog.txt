@@ -5730,3 +5730,4 @@ v0.92.0.11:
     - Should stop errors appearing when the economy on the server is not set up properly.
 0.96.5.15:
   - API: add cancellationMsg to PlotToggleEvents.
+  - Add PVP cooldown to setting and unsetting the Arena plot type.
