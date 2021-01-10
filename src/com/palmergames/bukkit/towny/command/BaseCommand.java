@@ -197,9 +197,9 @@ public class BaseCommand implements TabCompleter{
 	 * @return the residents name or an empty list.
 	 */
 	public static List<String> getResidentsWithoutTownStartingWith(String str) {
-		
-		if (!getOnlinePlayersWithoutTown().isEmpty())
-			return NameUtil.filterByStart(NameUtil.getNames(getOnlinePlayersWithoutTown()), str);
+		List<Resident> residents = getOnlinePlayersWithoutTown();
+		if (!residents.isEmpty())
+			return NameUtil.filterByStart(NameUtil.getNames(residents), str);
 		else 
 			return Collections.emptyList();
 	}
@@ -240,9 +240,10 @@ public class BaseCommand implements TabCompleter{
 	private static List<Resident> getOnlinePlayersWithoutTown() {
 		List<Resident> townlessResidents = new ArrayList<>();
 		for (Player player : BukkitTools.getOnlinePlayers()) {
-			if (TownyUniverse.getInstance().getResident(player.getUniqueId()).hasTown())
+			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+			if (resident.hasTown())
 				continue;
-			townlessResidents.add(TownyUniverse.getInstance().getResident(player.getUniqueId()));
+			townlessResidents.add(resident);
 		}
 		return townlessResidents;
 	}
