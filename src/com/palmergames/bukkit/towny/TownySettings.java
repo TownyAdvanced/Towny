@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.util.Colors;
@@ -63,6 +64,7 @@ public class TownySettings {
 	
 	private static final List<String> ItemUseMaterials = new ArrayList<>();
 	private static final List<String> SwitchUseMaterials = new ArrayList<>();
+	private static final List<Class<?>> protectedMobs = new ArrayList<>();
 	
 	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier) {
 
@@ -277,10 +279,16 @@ public class TownySettings {
 			
 			loadWarMaterialsLists(); // TODO: move this to be with the other war stuff.
 			loadSwitchAndItemUseMaterialsLists();
+			loadProtectedMobsList();
 			ChunkNotification.loadFormatStrings();
 		}
 	}
 	
+	private static void loadProtectedMobsList() {
+		protectedMobs.clear();
+		protectedMobs.addAll(EntityTypeUtil.parseLivingEntityClassNames(getStrArr(ConfigNodes.PROT_MOB_TYPES), "TownMobPVM:"));
+	}
+
 	private static void loadSwitchAndItemUseMaterialsLists() {
 
 		SwitchUseMaterials.clear();
@@ -1413,10 +1421,9 @@ public class TownySettings {
 
 		return getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE);
 	}
-
-	public static List<String> getEntityTypes() {
-
-		return getStrArr(ConfigNodes.PROT_MOB_TYPES);
+	
+	public static List<Class<?>> getProtectedEntityTypes() {
+		return protectedMobs;
 	}
 	
 	public static List<String> getPotionTypes() {

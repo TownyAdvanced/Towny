@@ -100,19 +100,43 @@ public class TownyEntityListener implements Listener {
 		
 		Entity attacker = event.getDamager();
 		Entity defender = event.getEntity();
-		
-		/*
-		 * This test blocks all types of Entity_Explosion-caused damage based on the
-		 * explosion-setting of the plot permissions, (and then alterable via the
-		 * TownyExplosionDamagesEntityEvent,) EXCEPT for cases where the defender is a
-		 * (Player or non-protected mob) and the attacker is an Explosive EntityType.
+
+		/* 
+		 * This test will check all Entity_Explosion-caused damaged, as long as it is
+		 * not from a projectile (FireWorks and Fireballs will be handled later using
+		 * the CombatUtil#preventDamageCall.) 
+		 * 
+		 * The reason for this is while we want to protect some mobs from explosions,
+		 * players should be hurt by monster-related explosions or they will exploit their
+		 * explosion-immunity while farming creepers/withers. PVP-related explosions are
+		 * like-wise tested vs the area's PVP status.
 		 */
-		List<Class<?>> protectedMobs = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
-		if (!(EntityTypeUtil.isExplosive(attacker.getType()) && (defender instanceof Player || !EntityTypeUtil.isInstanceOfAny(protectedMobs, defender))) 
-				&& event.getCause() == DamageCause.ENTITY_EXPLOSION 
-				&& !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause())) {
-			event.setDamage(0);
-			event.setCancelled(true);
+		if (event.getCause() == DamageCause.ENTITY_EXPLOSION && !(attacker instanceof Projectile)) {
+			boolean cancelExplosiveDamage = false;
+			/*
+			 * First we protect all protectedMobs as long as the location cannot explode.
+			 */
+			if (EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defender)
+				&& !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause()))
+				cancelExplosiveDamage = true;
+			
+			/*
+			 * Second we protect players from PVP-based explosions which 
+			 * aren't projectiles based on whether the location has PVP enabled.
+			 */
+			if (defender instanceof Player && EntityTypeUtil.isPVPExplosive(attacker.getType()))
+				try {
+					cancelExplosiveDamage = CombatUtil.preventPvP(TownyUniverse.getInstance().getDataSource().getWorld(defender.getWorld().getName()), TownyAPI.getInstance().getTownBlock(defender.getLocation()));
+				} catch (NotRegisteredException ignored) {}
+			
+			/*
+			 * Cancel explosion damage accordingly.
+			 */
+			if (cancelExplosiveDamage) {
+				event.setDamage(0);
+				event.setCancelled(true);
+				return;
+			}
 		}
 
 		
