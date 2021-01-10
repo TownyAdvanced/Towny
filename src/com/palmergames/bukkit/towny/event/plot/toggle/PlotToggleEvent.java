@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.event.plot.toggle;
 
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -14,6 +16,7 @@ public abstract class PlotToggleEvent extends Event implements Cancellable {
 	private final boolean futureState;
 	private final Player player;
 	private boolean isCancelled = false;
+	private String cancellationMsg = Translation.of("msg_err_command_disable");
 
 	public PlotToggleEvent(Town town, Player player, boolean futureState) {
 		this.town = town;
@@ -29,6 +32,14 @@ public abstract class PlotToggleEvent extends Event implements Cancellable {
 	@Override
 	public void setCancelled(boolean isCancelled) {
 		this.isCancelled = isCancelled;
+	}
+	
+	public String getCancellationMsg() {
+		return cancellationMsg;
+	}
+
+	public void setCancellationMsg(String cancellationMsg) {
+		this.cancellationMsg = cancellationMsg;
 	}
 
 	@NotNull

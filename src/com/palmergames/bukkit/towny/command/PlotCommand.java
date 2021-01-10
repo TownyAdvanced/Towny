@@ -1126,9 +1126,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// Fire cancellable event directly before setting the toggle.
 					PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(townBlock.getTown(), player, choice.orElse(!townBlock.getPermissions().pvp));
 					Bukkit.getPluginManager().callEvent(plotTogglePvpEvent);
-					if (plotTogglePvpEvent.isCancelled()){
-						return;
-					}
+					if (plotTogglePvpEvent.isCancelled())
+						throw new TownyException(plotTogglePvpEvent.getCancellationMsg());
+
 					townBlock.getPermissions().pvp = choice.orElse(!townBlock.getPermissions().pvp);
 					// Add a cooldown timer for this plot.
 					if (TownySettings.getPVPCoolDownTime() > 0 && !permSource.testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
@@ -1141,9 +1141,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// Fire cancellable event directly before setting the toggle.
 					PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(townBlock.getTown(), player, choice.orElse(!townBlock.getPermissions().explosion));
 					Bukkit.getPluginManager().callEvent(plotToggleExplosionEvent);
-					if (plotToggleExplosionEvent.isCancelled()){
-						return;
-					}
+					if (plotToggleExplosionEvent.isCancelled())
+						throw new TownyException(plotToggleExplosionEvent.getCancellationMsg());
+
 					townBlock.getPermissions().explosion = choice.orElse(!townBlock.getPermissions().explosion);
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_expl", "the Plot", townBlock.getPermissions().explosion ? Translation.of("enabled") : Translation.of("disabled")));
 
@@ -1153,9 +1153,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// Fire cancellable event directly before setting the toggle.
 					PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(townBlock.getTown(), player, choice.orElse(!townBlock.getPermissions().fire));
 					Bukkit.getPluginManager().callEvent(plotToggleFireEvent);
-					if (plotToggleFireEvent.isCancelled()){
-						return;
-					}
+					if (plotToggleFireEvent.isCancelled())
+						throw new TownyException(plotToggleFireEvent.getCancellationMsg());
+
 					townBlock.getPermissions().fire = choice.orElse(!townBlock.getPermissions().fire);
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_fire", "the Plot", townBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled")));
 
@@ -1165,9 +1165,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// Fire cancellable event directly before setting the toggle.
 					PlotToggleMobsEvent plotToggleMobsEvent= new PlotToggleMobsEvent(townBlock.getTown(), player, choice.orElse(!townBlock.getPermissions().mobs));
 					Bukkit.getPluginManager().callEvent(plotToggleMobsEvent);
-					if (plotToggleMobsEvent.isCancelled()){
-						return;
-					}
+					if (plotToggleMobsEvent.isCancelled())
+						throw new TownyException(plotToggleMobsEvent.getCancellationMsg());
+
 					townBlock.getPermissions().mobs = choice.orElse(!townBlock.getPermissions().mobs);
 					
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled")));
