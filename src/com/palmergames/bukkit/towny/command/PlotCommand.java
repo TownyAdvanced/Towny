@@ -786,7 +786,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									} catch (TownyException e) {
 										TownyMessaging.sendErrorMsg(resident, e.getMessage());
 									}
-									player.sendMessage(Translation.of("msg_plot_set_type", townBlockType));
+									TownyMessaging.sendMsg(player, Translation.of("msg_plot_set_type", townBlockType));
 								})
 									.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 									.sendTo(BukkitTools.getPlayerExact(resident.getName()));
@@ -794,7 +794,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// No cost or economy so no confirmation.
 							} else {
 								townBlock.setType(townBlockType, resident);
-								player.sendMessage(Translation.of("msg_plot_set_type", plotTypeName));
+								TownyMessaging.sendMsg(player, Translation.of("msg_plot_set_type", plotTypeName));
 							}
 						} catch (NotRegisteredException nre) {
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_part_town"));
