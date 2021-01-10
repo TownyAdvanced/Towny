@@ -667,7 +667,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		// Clear accounts
-		if (TownySettings.isUsingEconomy() && TownySettings.isDeleteEcoAccount() && TownyEconomyHandler.isActive())
+		if (TownySettings.isDeleteEcoAccount() && TownyEconomyHandler.isActive())
 			resident.getAccount().removeAccount();
 
 		plugin.deleteCache(resident.getName());
@@ -912,7 +912,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			// Save the towns bank balance to set in the new account.
 			// Clear accounts
-			if (TownySettings.isUsingEconomy())
+			if (TownyEconomyHandler.isActive())
 				try {
 					townBalance = town.getAccount().getHoldingBalance();					
 					if (TownySettings.isEcoClosedEconomyEnabled()){
@@ -956,7 +956,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			town.setUUID(oldUUID);
 			town.setRegistered(oldregistration);
-			if (TownySettings.isUsingEconomy()) {
+			if (TownyEconomyHandler.isActive()) {
 				try {
 					town.getAccount().setName(TownySettings.getTownAccountPrefix() + town.getName());
 					town.getAccount().setBalance(townBalance, "Rename Town - Transfer to new account");
@@ -1035,7 +1035,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			// Save the nations bank balance to set in the new account.
 			// Clear accounts
-			if (TownySettings.isUsingEconomy())
+			if (TownyEconomyHandler.isActive())
 				try {
 					nationBalance = nation.getAccount().getHoldingBalance();
 					if (TownySettings.isEcoClosedEconomyEnabled()){
@@ -1126,7 +1126,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			double balance = 0.0D;
 
 			// Get balance in case this a server using ico5.  
-			if(TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()){
+			if(TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownyEconomyHandler.isActive()){
 				try {
 					balance = resident.getAccount().getHoldingBalance();
 					resident.getAccount().removeAccount();
@@ -1134,7 +1134,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				}				
 			}
 			// Change account name over.
-			if (TownySettings.isUsingEconomy())
+			if (TownyEconomyHandler.isActive())
 				resident.getAccount().setName(newName);
 			
 			// Remove the resident from the universe name storage.
@@ -1144,7 +1144,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Re-register the resident with the new name.
 			universe.registerResident(resident);
 			// Set the economy account balance in ico5 (because it doesn't use UUIDs.)
-			if (TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownySettings.isUsingEconomy()) {
+			if (TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownyEconomyHandler.isActive()) {
 				try {
 					resident.getAccount().setName(resident.getName());
 					resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");
@@ -1537,7 +1537,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Iterator<Town> towns = succumbingNation.getTowns().iterator();
 		while (towns.hasNext()) {
 			try {
-				if (TownySettings.isUsingEconomy())
+				if (TownyEconomyHandler.isActive())
 					succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
 				Town town = towns.next();
 				town.removeNation();

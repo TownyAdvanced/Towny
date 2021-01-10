@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -962,7 +963,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	public void collect(double amount) throws EconomyException {
 		
-		if (TownySettings.isUsingEconomy()) {
+		if (TownyEconomyHandler.isActive()) {
 			double bankcap = TownySettings.getTownBankCap();
 			if (bankcap > 0) {
 				if (amount + getAccount().getHoldingBalance() > bankcap) {
@@ -1322,7 +1323,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return true if bankrupt.
 	 */
 	public boolean isBankrupt() { 
-		return TownySettings.isUsingEconomy() && debtBalance > 0;
+		return TownyEconomyHandler.isActive() && debtBalance > 0;
 	}
 
 	/**

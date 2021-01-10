@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -297,7 +296,7 @@ public class FlagWar {
 
 		// Check that the user can pay for the warflag + fines from losing/winning.
 		double costToPlaceWarFlag = FlagWarConfig.getCostToPlaceWarFlag();
-		if (TownySettings.isUsingEconomy()) {
+		if (TownyEconomyHandler.isActive()) {
 			try {
 				double requiredAmount = costToPlaceWarFlag;
 				double balance = attackingResident.getAccount().getHoldingBalance();
@@ -364,7 +363,7 @@ public class FlagWar {
 		// Successful Attack
 
 		// Pay for war flag
-		if (TownySettings.isUsingEconomy()) {
+		if (TownyEconomyHandler.isActive()) {
 			// Skip payment + message if no cost.
 			if (costToPlaceWarFlag > 0) {
 				try {

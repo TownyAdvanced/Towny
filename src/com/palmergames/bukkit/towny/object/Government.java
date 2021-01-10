@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.GovernmentTagChangeEvent;
@@ -248,7 +249,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * @throws TownyException On general error.
 	 */
 	public final void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
-		if (!TownySettings.isUsingEconomy()) {
+		if (!TownyEconomyHandler.isActive()) {
 			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
 		if (!getAccount().payTo(amount, resident, "Withdraw by " + resident.getName())) {
@@ -265,7 +266,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * @throws TownyException On general error.
 	 */
 	public final void depositToBank(Resident resident, int amount) throws EconomyException, TownyException {
-		if (!TownySettings.isUsingEconomy()) {
+		if (!TownyEconomyHandler.isActive()) {
 			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
 		if (!resident.getAccount().payTo(amount, getAccount(), "Deposit from " + resident.getName())) {

@@ -202,7 +202,7 @@ public class TownyEntityMonitorListener implements Listener {
 	
 	public void deathPayment(Player defenderPlayer, Resident defenderResident) throws NotRegisteredException {
 
-		if (!TownySettings.isUsingEconomy())
+		if (!TownyEconomyHandler.isActive())
 			return;
 
 		if (TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation()) != null) {

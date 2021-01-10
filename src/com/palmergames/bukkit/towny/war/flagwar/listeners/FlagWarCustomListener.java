@@ -92,7 +92,7 @@ public class FlagWarCustomListener implements Listener {
 		// Defender Reward
 		// It doesn't entirely matter if the attacker can pay.
 		// Also doesn't take into account of paying as much as the attacker can afford (Eg: cost=10 and balance=9).
-		if (TownySettings.isUsingEconomy()) {
+		if (TownyEconomyHandler.isActive()) {
 			try {
 				Resident attackingPlayer, defendingPlayer = null;
 				attackingPlayer = universe.getResident(cell.getNameOfFlagOwner());
@@ -160,7 +160,7 @@ public class FlagWarCustomListener implements Listener {
 			// Payments
 			double amount = 0;
 			String moneyTranserMsg = null;
-			if (TownySettings.isUsingEconomy()) {
+			if (TownyEconomyHandler.isActive()) {
 				try {
 					String reasonType;
 					if (townBlock.isHomeBlock()) {
@@ -220,7 +220,7 @@ public class FlagWarCustomListener implements Listener {
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_enemy_war_area_won", attackingResident.getFormattedName(), (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()), cell.getCellString()));
 
 			// Money Transfer message.
-			if (TownySettings.isUsingEconomy()) {
+			if (TownyEconomyHandler.isActive()) {
 				if (amount != 0 && moneyTranserMsg != null) {
 					try {
 						TownyMessaging.sendResidentMessage(attackingResident, moneyTranserMsg);

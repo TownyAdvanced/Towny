@@ -2,8 +2,8 @@ package com.palmergames.bukkit.towny.war.common.townruin;
 
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownyAdminCommand;
 import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
@@ -125,7 +125,7 @@ public class TownRuinUtil {
 
 			//Validate if player can pay
 			double townReclaimCost = TownRuinSettings.getEcoPriceReclaimTown();
-			if (TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(townReclaimCost))
+			if (TownyEconomyHandler.isActive() && !resident.getAccount().canPayFromHoldings(townReclaimCost))
 				throw new TownyException(Translation.of("msg_err_no_money"));
 
 			//Validate if player can remove at this time

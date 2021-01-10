@@ -60,7 +60,7 @@ public class TownyEconomyHandler {
 	 * @return true if we found one.
 	 */
 	public static boolean isActive() {
-		return (Type != EcoType.NONE);
+		return (Type != EcoType.NONE && TownySettings.isUsingEconomy());
 	}
 
 	/**

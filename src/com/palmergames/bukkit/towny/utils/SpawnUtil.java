@@ -287,7 +287,7 @@ public class SpawnUtil {
 		double travelCost = 0.0;
 		String spawnPermission = null;
 		Account payee = null;
-		if (TownySettings.isUsingEconomy() && 
+		if (TownyEconomyHandler.isActive() && 
 				(!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode()) 
 						&& !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCHARGE.getNode()))) {
 			// Figure out costs, payee and spawnPermmission slug for money.csv log.
@@ -325,7 +325,7 @@ public class SpawnUtil {
 		}
 		
 		// Cost to spawn, prompt with confirmation unless ignoreWarn is true.
-		if (TownySettings.isUsingEconomy() && travelCost > 0) {
+		if (TownyEconomyHandler.isActive() && travelCost > 0) {
 			final double finalCost = travelCost;
 			final Account finalPayee = payee;
 			final String finalSpawnPerm = spawnPermission;

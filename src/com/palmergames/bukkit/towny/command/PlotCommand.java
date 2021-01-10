@@ -275,7 +275,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									// This block is part of a group, special tasks need to be done.
 									PlotGroup group = townBlock.getPlotObjectGroup();
 									
-									if (TownySettings.isUsingEconomy() && (!resident.getAccount().canPayFromHoldings(group.getPrice())))
+									if (TownyEconomyHandler.isActive() && (!resident.getAccount().canPayFromHoldings(group.getPrice())))
 										throw new TownyException(Translation.of("msg_no_funds_claim_plot_group", group.getTownBlocks().size(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
 
 									// Add the confirmation for claiming a plot group.
@@ -317,7 +317,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
 							throw new TownyException(Translation.of("msg_max_plot_own", maxPlots));
 
-						if (TownySettings.isUsingEconomy() && (!resident.getAccount().canPayFromHoldings(cost)))
+						if (TownyEconomyHandler.isActive() && (!resident.getAccount().canPayFromHoldings(cost)))
 							throw new TownyException(Translation.of("msg_no_funds_claim_plot", TownyEconomyHandler.getFormattedBalance(cost)));
 
 						if (cost != 0) {
@@ -697,7 +697,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								
 								if (OutpostUtil.OutpostTests(town, resident, townyWorld, key, isAdmin, true)) {
 									// Test if they can pay.
-									if (TownySettings.isUsingEconomy() && !town.getAccount().canPayFromHoldings(TownySettings.getOutpostCost())) 
+									if (TownyEconomyHandler.isActive() && !town.getAccount().canPayFromHoldings(TownySettings.getOutpostCost())) 
 										throw new TownyException(Translation.of("msg_err_cannot_afford_to_set_outpost"));
 									 
 									// Create a confirmation for setting outpost.
@@ -712,7 +712,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										}
 
 										//Make them pay, ignoring exception because we already know they can pay.
-										if (TownySettings.isUsingEconomy() && TownySettings.getOutpostCost() > 0 )
+										if (TownyEconomyHandler.isActive() && TownySettings.getOutpostCost() > 0 )
 											try {
 												town.getAccount().withdraw(TownySettings.getOutpostCost(), "Plot Set Outpost");
 											} catch (EconomyException ignored) {
@@ -766,11 +766,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							double cost = townBlockType.getCost();
 							
 							// Test if we can pay first to throw an exception.
-							if (cost > 0 && TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(cost))
+							if (cost > 0 && TownyEconomyHandler.isActive() && !resident.getAccount().canPayFromHoldings(cost))
 								throw new EconomyException(Translation.of("msg_err_cannot_afford_plot_set_type_cost", townBlockType, TownyEconomyHandler.getFormattedBalance(cost)));
 
 							// Handle payment via a confirmation to avoid suprise costs.
-							if (cost > 0 && TownySettings.isUsingEconomy()) {
+							if (cost > 0 && TownyEconomyHandler.isActive()) {
 								Confirmation.runOnAccept(() -> {
 							
 									try {
@@ -1692,11 +1692,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			try {
 				// Test if we can pay first to throw an exception.
-				if (cost > 0 && TownySettings.isUsingEconomy() && !resident.getAccount().canPayFromHoldings(cost))
+				if (cost > 0 && TownyEconomyHandler.isActive() && !resident.getAccount().canPayFromHoldings(cost))
 					throw new EconomyException(Translation.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost)));
 
 				// Handle payment via a confirmation to avoid suprise costs.
-				if (cost > 0 && TownySettings.isUsingEconomy()) {
+				if (cost > 0 && TownyEconomyHandler.isActive()) {
 					Confirmation.runOnAccept(() -> {
 				
 						try {
