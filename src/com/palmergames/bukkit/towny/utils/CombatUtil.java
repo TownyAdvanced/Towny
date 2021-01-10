@@ -21,13 +21,11 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Wolf;
@@ -246,18 +244,12 @@ public class CombatUtil {
 					return true;
 				}
 				
-				/*
-				 * Event War's WarzoneBlockPermissions explosions: option. Prevents damage from the explosion.
-				 * TODO: remove this entirely or move it to an event.
-				 */
-				if (TownyAPI.getInstance().isWarTime() && !WarZoneConfig.isAllowingExplosionsInWarZone() && attackingEntity.getType() == EntityType.PRIMED_TNT)
-					return true;
-				
 			/*
 			 * DefendingEntity is not a player.
 			 * This is now non-player vs non-player damage.
 			 */
 			} else {
+
 			    /*
 			     * Prevents projectiles fired by non-players harming non-player entities.
 			     * Could be a monster or it could be a dispenser.
