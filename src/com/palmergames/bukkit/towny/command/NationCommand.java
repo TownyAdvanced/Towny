@@ -519,7 +519,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (!resident.isMayor() && !resident.getTown().hasResidentWithRank(resident, "assistant"))
 						throw new TownyException(Translation.of("msg_peasant_right"));
 					
-					boolean noCharge = TownySettings.getNewNationPrice() == 0.0 || !TownySettings.isUsingEconomy();
+					boolean noCharge = TownySettings.getNewNationPrice() == 0.0 || !TownyEconomyHandler.isActive();
 					
 					String[] newSplit = StringMgmt.remFirstArg(split);
 					String nationName = String.join("_", newSplit);
@@ -1150,7 +1150,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			// If it isn't free to make a nation, send a confirmation.
-			if (!noCharge && TownySettings.isUsingEconomy()) {
+			if (!noCharge && TownyEconomyHandler.isActive()) {
 				// Test if they can pay.
 				if (!capitalTown.getAccount().canPayFromHoldings(TownySettings.getNewNationPrice()))			
 					throw new TownyException(Translation.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
@@ -1202,9 +1202,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
 		town.setNation(nation);
 		nation.setCapital(town);
-		if (TownySettings.isUsingEconomy()) {
+		if (TownyEconomyHandler.isActive()) {
 			try {
-				nation.getAccount().setBalance(0, "Deleting Nation");
+				nation.getAccount().setBalance(0, "New Nation Account");
 			} catch (EconomyException e) {
 				e.printStackTrace();
 			}
@@ -2297,7 +2297,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if(NameValidation.isBlacklistName(split[1]))
 						throw new TownyException(Translation.of("msg_invalid_name"));
 					
-				    if(TownySettings.isUsingEconomy() && TownySettings.getNationRenameCost() > 0) {
+				    if(TownyEconomyHandler.isActive() && TownySettings.getNationRenameCost() > 0) {
 						if (!nation.getAccount().canPayFromHoldings(TownySettings.getNationRenameCost()))
 							throw new EconomyException(Translation.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
 
@@ -2484,7 +2484,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				// Check if they could pay.
 				try {
-					if (value && TownySettings.isUsingEconomy() && !nation.getAccount().canPayFromHoldings(cost))
+					if (value && TownyEconomyHandler.isActive() && !nation.getAccount().canPayFromHoldings(cost))
 						throw new TownyException(Translation.of("msg_nation_cant_peaceful"));
 				} catch (EconomyException e1) {}
 
@@ -2496,14 +2496,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				
 				// Make them pay after we know the preEvent isn't cancelled.
 				try {
-					if (value && TownySettings.isUsingEconomy())
+					if (value && TownyEconomyHandler.isActive() && cost > 0)
 						nation.getAccount().withdraw(cost, "Peaceful Nation Cost");
 				} catch (EconomyException ignored) {}
 
 				nation.setNeutral(value);
 				
 				// If they setting neutral status on send a message confirming they paid something, if they did.
-				if (value && TownySettings.isUsingEconomy() && cost > 0)
+				if (value && TownyEconomyHandler.isActive() && cost > 0)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
 
 				// Send message feedback to the whole nation.

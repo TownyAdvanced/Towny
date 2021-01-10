@@ -157,7 +157,7 @@ public class MoneyUtil {
 	 */
 	private static void commonTests(int amount, Resident resident, Town town, Location loc, boolean nation, boolean withdraw) throws TownyException, EconomyException {
 		
-		if (!TownySettings.isUsingEconomy())
+		if (!TownyEconomyHandler.isActive())
 			throw new TownyException(Translation.of("msg_err_no_economy"));
 		
 		if (amount < 0)

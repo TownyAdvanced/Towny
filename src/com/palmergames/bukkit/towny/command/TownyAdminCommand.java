@@ -569,7 +569,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				parseAdminTpPlotCommand(StringMgmt.remFirstArg(split));
 
 			} else if (split[0].equalsIgnoreCase("depositall")) {
-				if (!TownySettings.isUsingEconomy())
+				if (!TownyEconomyHandler.isActive())
 					throw new TownyException(Translation.of("msg_err_no_economy"));
 				
 				parseAdminDepositAllCommand(StringMgmt.remFirstArg(split));
@@ -1048,7 +1048,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				town.generateBankHistoryBook(player, pages);
 			} else if (split[1].equalsIgnoreCase("deposit")) {
 				
-				if (!TownySettings.isUsingEconomy())
+				if (!TownyEconomyHandler.isActive())
 					throw new TownyException(Translation.of("msg_err_no_economy"));
 				
 				int amount;
@@ -1075,7 +1075,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[1].equalsIgnoreCase("withdraw")) {
 				
-				if (!TownySettings.isUsingEconomy())
+				if (!TownyEconomyHandler.isActive())
 					throw new TownyException(Translation.of("msg_err_no_economy"));
 				
 				int amount;
@@ -1337,7 +1337,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				nation.generateBankHistoryBook(player, pages);
 			} else if (split[1].equalsIgnoreCase("deposit")) {
 				
-				if (!TownySettings.isUsingEconomy())
+				if (!TownyEconomyHandler.isActive())
 					throw new TownyException(Translation.of("msg_err_no_economy"));
 				
 				int amount;
@@ -1362,7 +1362,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 			else if (split[1].equalsIgnoreCase("withdraw")) {
 				
-				if (!TownySettings.isUsingEconomy())
+				if (!TownyEconomyHandler.isActive())
 					throw new TownyException(Translation.of("msg_err_no_economy"));
 				
 				int amount;

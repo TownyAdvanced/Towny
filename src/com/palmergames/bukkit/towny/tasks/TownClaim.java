@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -137,7 +138,7 @@ public class TownClaim extends Thread {
 			// Send confirmation message,
 			Confirmation.runOnAccept(() -> { 
 				TownClaim.townUnclaimAll(plugin, town);
-				if (TownySettings.isUsingEconomy() && refund > 0.0) {
+				if (TownyEconomyHandler.isActive() && refund > 0.0) {
 					try {
 						town.getAccount().deposit(TownySettings.getClaimRefundPrice()*townSize - 1, "Town Unclaim Refund"); 
 						TownyMessaging.sendMsg(player, Translation.of("refund_message", TownySettings.getClaimRefundPrice()*townSize, townSize));

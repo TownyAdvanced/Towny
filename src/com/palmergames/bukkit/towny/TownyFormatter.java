@@ -187,9 +187,8 @@ public class TownyFormatter {
 		// }
 
 		// Bank: 534 coins
-		if (TownySettings.isUsingEconomy())
-			if (TownyEconomyHandler.isActive())
-				out.add(Translation.of("status_bank", resident.getAccount().getHoldingFormattedBalance()));
+		if (TownyEconomyHandler.isActive())
+			out.add(Translation.of("status_bank", resident.getAccount().getHoldingFormattedBalance()));
 
 		// Town: Camelot
 		String line = Translation.of("status_town");
@@ -418,7 +417,7 @@ public class TownyFormatter {
 			// Only display the remaining fields if town is not ruined
 		} else {
 			// | Bank: 534 coins
-			if (TownySettings.isUsingEconomy() && TownyEconomyHandler.isActive()) {
+			if (TownyEconomyHandler.isActive()) {
 				String bankString = "";
 
 				bankString = Translation.of(town.isBankrupt() ? "status_bank_bankrupt" : "status_bank",
@@ -505,14 +504,13 @@ public class TownyFormatter {
 		}
 		// Bank: 534 coins
 		String line = "";
-		if (TownySettings.isUsingEconomy())
-			if (TownyEconomyHandler.isActive()) {
-				line = Translation.of("status_bank", nation.getAccount().getHoldingFormattedBalance());
+		if (TownyEconomyHandler.isActive()) {
+			line = Translation.of("status_bank", nation.getAccount().getHoldingFormattedBalance());
 
-				if (TownySettings.getNationUpkeepCost(nation) > 0)
-					line += Translation.of("status_bank_town2", TownySettings.getNationUpkeepCost(nation));
+			if (TownySettings.getNationUpkeepCost(nation) > 0)
+				line += Translation.of("status_bank_town2", TownySettings.getNationUpkeepCost(nation));
 
-			}
+		}
 
 		if (nation.isNeutral()) {
 			if (line.length() > 0)
