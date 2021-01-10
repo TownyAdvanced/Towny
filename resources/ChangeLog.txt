@@ -5731,3 +5731,6 @@ v0.92.0.11:
 0.96.5.15:
   - API: add cancellationMsg to PlotToggleEvents.
   - Add PVP cooldown to setting and unsetting the Arena plot type.
+  - Add tab-completion to /t add.
+    - Tab-completion shows only online, town-less players.
+    - Closes #4674.
