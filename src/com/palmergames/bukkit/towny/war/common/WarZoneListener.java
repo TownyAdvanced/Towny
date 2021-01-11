@@ -257,7 +257,7 @@ public class WarZoneListener implements Listener {
 			Town defenderTown = event.getVictimTown();
 			
 			//Cancel because one of two players has no town and should not be interfering during war.
-			if (event.getAttackerTown() == null || event.getVictimTown() == null){
+			if (TownySettings.isWarTimeTownsNeutral() && (event.getAttackerTown() == null || event.getVictimTown() == null)){
 				event.setMessage(Translation.of("msg_war_a_player_has_no_town"));
 				event.setCancelled(true);
 				return;
