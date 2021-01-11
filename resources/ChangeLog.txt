@@ -5737,3 +5737,4 @@ v0.92.0.11:
   - Fix health regen task not healing.
     - Closes #4682.
   - Fix the ability for the economy plugin to prevent a town and nation from being renamed.
+  - Fix NotRegisteredException thrown via EventWar.
