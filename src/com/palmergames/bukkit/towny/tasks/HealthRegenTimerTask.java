@@ -65,7 +65,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 		double currentHP = player.getHealth();
 		double maxHP = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 		if (currentHP < maxHP) {
-			player.setHealth(Math.min(maxHP, currentHP++));
+			player.setHealth(Math.min(maxHP, ++currentHP));
 
 			// Raise an event so other plugins can keep in sync.
 			Bukkit.getServer().getPluginManager().callEvent(new EntityRegainHealthEvent(player, currentHP, RegainReason.REGEN));
