@@ -920,8 +920,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					} 
 					town.getAccount().removeAccount();
 					
-				} catch (EconomyException ignored) {
+				} catch (Exception ignored) {
+					TownyMessaging.sendErrorMsg("The bank balance for the town " + oldName + ", could not be received from the economy plugin and will not be able to be converted.");
 				}
+				
 			UUID oldUUID = town.getUUID();
 			long oldregistration = town.getRegistered();
 
@@ -1043,7 +1045,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					}
 					nation.getAccount().removeAccount();
 					
-				} catch (EconomyException ignored) {
+				} catch (Exception ignored) {
+					TownyMessaging.sendErrorMsg("The bank balance for the nation " + nation.getName() + ", could not be received from the economy plugin and will not be able to be converted.");
 				}
 
 			//Tidy up old files
