@@ -5738,3 +5738,4 @@ v0.92.0.11:
     - Closes #4682.
   - Fix the ability for the economy plugin to prevent a town and nation from being renamed.
   - Fix NotRegisteredException thrown via EventWar.
+  - Fix townless players not being able to pvp in EventWar when towns_are_neutral is false.
