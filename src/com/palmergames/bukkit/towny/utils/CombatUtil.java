@@ -11,8 +11,6 @@ import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.damage.WorldPVPTestEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -359,22 +357,27 @@ public class CombatUtil {
 
 		if ((attacker != null) && (defender != null))
 			if (!world.isFriendlyFireEnabled() && CombatUtil.isAlly(attacker.getName(), defender.getName())) {
-				try {
-					TownBlock townBlock = new WorldCoord(defender.getWorld().getName(), Coord.parseCoord(defender)).getTownBlock();
-					if (!townBlock.getType().equals(TownBlockType.ARENA))
-						TownyMessaging.sendErrorMsg(attacker, Translation.of("msg_err_friendly_fire_disable"));
-						return true;
-				} catch (TownyException x) {
-					// World or TownBlock failure
-					// But we are configured to prevent friendly fire in the
-					// wilderness too.					
-					TownyMessaging.sendErrorMsg(attacker, Translation.of("msg_err_friendly_fire_disable"));
-					return true;
-				}
+				if (isArenaPlot(attacker, defender))
+					return false;
+				
+				TownyMessaging.sendErrorMsg(attacker, Translation.of("msg_err_friendly_fire_disable"));
+				return true;
 			}		
 		return false;
 	}
 
+	/**
+	 * Returns true if both players are in an arena townblock.
+	 * @param attacker Attacking Player
+	 * @param defender Defending Player
+	 * @return true if both player in an Arena plot.
+	 */
+	public static boolean isArenaPlot(Player attacker, Player defender) {
+		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attacker.getLocation());
+		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defender.getLocation());
+		return isArenaPlot(attackerTB, defenderTB);
+	}
+	
 	/**
 	 * Return true if both TownBlocks are Arena plots.
 	 * 
@@ -384,7 +387,7 @@ public class CombatUtil {
 	 */
 	public static boolean isArenaPlot(TownBlock attackerTB, TownBlock defenderTB) {
 
-		if (defenderTB.getType() == TownBlockType.ARENA && attackerTB.getType() == TownBlockType.ARENA)
+		if (defenderTB != null && attackerTB != null && defenderTB.getType() == TownBlockType.ARENA && attackerTB.getType() == TownBlockType.ARENA)
 			return true;
 		return false;
 	}
@@ -392,24 +395,15 @@ public class CombatUtil {
 	/**
 	 * Return true if both attacker and defender are in Arena Plots.
 	 * 
+	 * @deprecated use {@link CombatUtil#isArenaPlot(Player, Player)}.
 	 * @param attacker - Attacking Player
 	 * @param defender - Defending Player (receiving damage)
 	 * @return true if both players in an Arena plot.
 	 */
+	@Deprecated
 	public static boolean isPvPPlot(Player attacker, Player defender) {
 
-		if ((attacker != null) && (defender != null)) {
-			TownBlock attackerTB, defenderTB;
-			try {
-				attackerTB = new WorldCoord(attacker.getWorld().getName(), Coord.parseCoord(attacker)).getTownBlock();
-				defenderTB = new WorldCoord(defender.getWorld().getName(), Coord.parseCoord(defender)).getTownBlock();
-
-				if (defenderTB.getType().equals(TownBlockType.ARENA) && attackerTB.getType().equals(TownBlockType.ARENA))
-					return true;
-
-			} catch (NotRegisteredException ignored) {}
-		}
-		return false;
+		return isArenaPlot(attacker, defender);
 	}
 
 	/**
