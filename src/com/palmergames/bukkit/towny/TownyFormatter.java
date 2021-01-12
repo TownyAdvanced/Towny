@@ -664,35 +664,30 @@ public class TownyFormatter {
 	public static List<String> getTaxStatus(Resident resident) {
 
 		List<String> out = new ArrayList<>();
-		Town town;
-
+		Town town = null;
+		boolean taxExempt = TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt");
 		double plotTax = 0.0;
+		double townTax = 0.0;
 
 		out.add(ChatTools.formatTitle(resident.getFormattedName() + ((BukkitTools.isOnline(resident.getName())) ? Colors.LightGreen + " (Online)" : "")));
 
+		out.add(Translation.of("owner_of_x_plots", resident.getTownBlocks().size()));
+
+		/*
+		 * Calculate what the player will be paying their town for tax.
+		 */
 		if (resident.hasTown()) {
 			try {
 				town = resident.getTown();
-				out.add(Translation.of("owner_of_x_plots", resident.getTownBlocks().size()));
 
-				if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt")) {
+				if (taxExempt) {
 					out.add(Translation.of("status_res_taxexempt"));
 				} else {
-					if (town.isTaxPercentage()) {
-						out.add(Translation.of("status_res_tax", resident.getAccount().getHoldingBalance() * town.getTaxes() / 100));
-					} else {
-						out.add(Translation.of("status_res_tax", town.getTaxes()));
-
-						if ((resident.getTownBlocks().size() > 0)) {
-
-							for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
-								plotTax += townBlock.getType().getTax(townBlock.getTown());
-							}
-
-							out.add(Translation.of("status_res_plottax") + plotTax);
-						}
-						out.add(Translation.of("status_res_totaltax") + (town.getTaxes() + plotTax));
-					}
+					if (town.isTaxPercentage())
+						townTax = resident.getAccount().getHoldingBalance() * town.getTaxes() / 100;
+					else
+						townTax = town.getTaxes();
+					out.add(Translation.of("status_res_tax", TownyEconomyHandler.getFormattedBalance(townTax)));
 				}
 
 			} catch (NotRegisteredException e) {
@@ -701,6 +696,26 @@ public class TownyFormatter {
 				// Economy failed
 			}
 		}
+
+		/*
+		 * Calculate what the player will be paying for their plots' tax.
+		 */
+		if (resident.getTownBlocks().size() > 0) {
+
+			for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
+				try {
+					town = townBlock.getTown();
+				} catch (NotRegisteredException ignored) {}
+				if (town != null) {
+					if (taxExempt && town.hasResident(resident)) // Resident will not pay any tax for plots owned by their towns.
+						continue;
+					plotTax += townBlock.getType().getTax(town);
+				}
+			}
+
+			out.add(Translation.of("status_res_plottax") + TownyEconomyHandler.getFormattedBalance(plotTax));
+		}
+		out.add(Translation.of("status_res_totaltax") + TownyEconomyHandler.getFormattedBalance(townTax + plotTax));
 
 		return out;
 	}

@@ -252,9 +252,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TAX.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 
+				if (!TownyEconomyHandler.isActive())
+					throw new TownyException(Translation.of("msg_err_no_economy"));
+				
 				Resident res = getResidentOrThrow(player.getUniqueId());
 				
 				TownyMessaging.sendMessage(player, TownyFormatter.getTaxStatus(res));
+
 			} else if (split[0].equalsIgnoreCase("jail")) {
 
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_JAIL.getNode()))
