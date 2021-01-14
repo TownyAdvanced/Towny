@@ -1035,7 +1035,7 @@ msg_war_defender_keeps_claims: 'Capturing disabled. Defending town will keep it'
 
 # Added in 0.67
 msg_war_town_has_been_conquered_by_nation_x_for_x_days: 'The town %s has been conquered and has joined the nation %s for %s days.'
-msg_conquered: '&4(Conquered)'
+msg_conquered: '&4(Occupied)'
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Your town cannot leave the nation because it is still conquered-status.'
 
 # Added in 0.68
