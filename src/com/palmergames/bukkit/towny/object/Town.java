@@ -200,6 +200,10 @@ public class Town extends Government implements TownBlockOwner {
 			// Cannot occur when setting null;
 		}
 		
+		//The town is no longer conquered/occupied because it has left the nation
+		this.isConquered = false;
+		this.conqueredDays = 0;
+		
 		this.save();
 		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(this, nation));
 	}
