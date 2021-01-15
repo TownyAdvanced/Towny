@@ -5743,3 +5743,5 @@ v0.92.0.11:
   - Fixed Conquered Flag not changing when town leaves nation, courtesy of Goosius1 with PR #4689.
   - Change the lang string for the (Conquered) town status screen to (Occupied).
     - Closes #4688.
+0.96.6.0:
+  - Bump version for release.
