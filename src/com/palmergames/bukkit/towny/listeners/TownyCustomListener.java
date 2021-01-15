@@ -58,16 +58,12 @@ public class TownyCustomListener implements Listener {
 		WorldCoord from = event.getFrom();
 		WorldCoord to = event.getTo();
 
-		// TODO: Player mode
 		if (plugin.hasPlayerMode(player, "townclaim"))
 			TownCommand.parseTownClaimCommand(player, new String[] {});
 		if (plugin.hasPlayerMode(player, "townunclaim"))
 			TownCommand.parseTownUnclaimCommand(player, new String[] {});
 		if (plugin.hasPlayerMode(player, "map"))
 			TownyCommand.showMap(player);
-
-		// claim: attempt to claim area
-		// claim remove: remove area from town
 
 		// Check if player has entered a new town/wilderness
 		try {
@@ -80,7 +76,7 @@ public class TownyCustomListener implements Listener {
 						msg = chunkNotifier.getNotificationString(resident);
 					}
 				} catch (NullPointerException e) {
-					System.out.println("Chunk Notifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful:");
+					System.out.println("Towny ChunkNotifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful:");
 					System.out.println("  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ());
 					e.printStackTrace();
 				}

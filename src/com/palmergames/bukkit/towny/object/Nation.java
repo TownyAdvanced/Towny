@@ -281,33 +281,6 @@ public class Nation extends Government {
 		this.nationSpawn = nationSpawn;
 	}
 
-	//TODO: Remove
-	public boolean setAllegiance(String type, Nation nation) {
-
-		try {
-			if (type.equalsIgnoreCase("ally")) {
-				removeEnemy(nation);
-				addAlly(nation);
-				if (!hasEnemy(nation) && hasAlly(nation))
-					return true;
-			} else if (type.equalsIgnoreCase("peaceful") || type.equalsIgnoreCase("neutral")) {
-				removeEnemy(nation);
-				removeAlly(nation);
-				if (!hasEnemy(nation) && !hasAlly(nation))
-					return true;
-			} else if (type.equalsIgnoreCase("enemy")) {
-				removeAlly(nation);
-				addEnemy(nation);
-				if (hasEnemy(nation) && !hasAlly(nation))
-					return true;
-			}
-		} catch (AlreadyRegisteredException | NotRegisteredException x) {
-			return false;
-		}
-		
-		return false;
-	}
-
 	public List<Resident> getAssistants() {
 
 		List<Resident> assistants = new ArrayList<>();
@@ -399,7 +372,6 @@ public class Nation extends Government {
 
 	public void clear() {
 
-		//TODO: Check cleanup
 		removeAllAllies();
 		removeAllEnemies();
 		removeAllTowns();

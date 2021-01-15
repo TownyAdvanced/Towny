@@ -73,9 +73,6 @@ public class DailyTimerTask extends TownyTimerTask {
 			} catch (EconomyException ex) {
 				TownyMessaging.sendErrorMsg("Economy Exception");
 				ex.printStackTrace();
-			} catch (TownyException e) {
-				// TODO king exception
-				e.printStackTrace();
 			}
 		} else
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_new_day"));
@@ -467,7 +464,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @throws EconomyException if there is an error with the economy handling
 	 * @throws TownyException if there is a error with Towny
 	 */
-	public void collectTownCosts() throws EconomyException, TownyException {
+	public void collectTownCosts() throws EconomyException {
 		List<Town> towns = new ArrayList<>(universe.getDataSource().getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
 		Town town;
@@ -543,9 +540,14 @@ public class DailyTimerTask extends TownyTimerTask {
 						List<TownBlock> plots = new ArrayList<>(town.getTownBlocks());
 
 						for (TownBlock townBlock : plots) {
-							if (townBlock.hasResident())
-								townBlock.getResident().getAccount().withdraw((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
-							else
+							if (townBlock.hasResident()) {
+								Resident resident = null;
+								try {
+									resident = townBlock.getResident();
+								} catch (NotRegisteredException ignored) {}
+								if (resident != null)
+									resident.getAccount().withdraw((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+							} else
 								town.getAccount().withdraw((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
 						}
 

@@ -21,8 +21,6 @@ import java.util.Objects;
 
 public class TownBlock extends TownyObject {
 
-	// TODO: Admin only or possibly a group check
-	// private List<Group> groups;
 	private TownyWorld world;
 	private Town town = null;
 	private Resident resident = null;

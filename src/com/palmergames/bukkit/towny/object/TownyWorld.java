@@ -66,9 +66,6 @@ public class TownyWorld extends TownyObject {
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
 	public Map<Location, Material> bedMap = new HashMap<Location, Material>();
 
-	// TODO: private List<TownBlock> adminTownBlocks = new
-	// ArrayList<TownBlock>();
-
 	public TownyWorld(String name) {
 		super(name);
 	}

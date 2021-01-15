@@ -77,7 +77,6 @@ public class TownyAsciiMap {
 			for (int tbx = pos.getZ() - halfLineHeight; tbx <= pos.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
 				try {
 					TownBlock townblock = world.getTownBlock(tby, tbx);
-					//TODO: possibly claim outside of towns
 					if (!townblock.hasTown())
 						throw new TownyException();
 					if (x == halfLineHeight && y == halfLineWidth)

@@ -151,11 +151,6 @@ public class TownyVehicleListener implements Listener {
 				case MULE:
 					vehicle = Material.SADDLE;
 					break;
-				default:
-				    /*
-				     * TODO: Consider adding a warning message for unexpected
-				     * vehicle type.
-				     */
 			}
 
 			if (vehicle != null) {

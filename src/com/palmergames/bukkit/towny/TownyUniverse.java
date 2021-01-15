@@ -903,7 +903,7 @@ public class TownyUniverse {
 		
 		// Check if there is a duplicate
 		if (town.hasPlotGroupName(newGroup.getName())) {
-			TownyMessaging.sendErrorMsg("group " + town.getName() + ":" + id + " already exists"); // FIXME Debug message
+			TownyMessaging.sendDebugMsg("group " + town.getName() + ":" + id + " already exists");
 			throw new AlreadyRegisteredException();
 		}
 		
