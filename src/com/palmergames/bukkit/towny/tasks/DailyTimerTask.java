@@ -462,7 +462,6 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * Collect or pay upkeep for all towns.
 	 * 
 	 * @throws EconomyException if there is an error with the economy handling
-	 * @throws TownyException if there is a error with Towny
 	 */
 	public void collectTownCosts() throws EconomyException {
 		List<Town> towns = new ArrayList<>(universe.getDataSource().getTowns());
