@@ -5745,3 +5745,5 @@ v0.92.0.11:
     - Closes #4688.
 0.96.6.0:
   - Bump version for release.
+0.96.6.1:
+  - Prevent deaths by crossbow suicide from awarding death payments.

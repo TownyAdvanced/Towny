@@ -125,6 +125,10 @@ public class TownyEntityMonitorListener implements Listener {
 				attackerResident = townyUniverse.getResident(attackerPlayer.getUniqueId());
 			}
 
+			// This was a suicide, don't award money or jail.
+			if (attackerPlayer != null && attackerPlayer == defenderPlayer)
+				return;
+			
 			/*
 			 * Player has died by a player: 
 			 * 
