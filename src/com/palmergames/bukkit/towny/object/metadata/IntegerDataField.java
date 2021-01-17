@@ -19,6 +19,15 @@ public class IntegerDataField extends CustomDataField<Integer> {
     }
 
 	@Override
+	protected String getTypeID() {
+		return typeID();
+	}
+	
+	public static String typeID() {
+		return "towny_intdf";
+	}
+
+	@Override
 	public void setValueFromString(String strValue) {
 		setValue(Integer.parseInt(strValue));
 	}

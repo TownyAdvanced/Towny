@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.util.FileMgmt;
@@ -469,7 +470,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
-					resident.setMetadata(line.trim());
+					MetadataLoader.getInstance().deserializeMetadata(resident, line.trim());
 
 				line = keys.get("town");
 				if (line != null) {
@@ -824,7 +825,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
-					town.setMetadata(line.trim());
+					MetadataLoader.getInstance().deserializeMetadata(town, line.trim());
 				
 				line = keys.get("nation");
 				if (line != null && !line.isEmpty()) {
@@ -1025,7 +1026,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
-					nation.setMetadata(line.trim());
+					MetadataLoader.getInstance().deserializeMetadata(nation, line.trim());
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading nation file " + nation.getName() + " at line: " + line + ", in towny\\data\\nations\\" + nation.getName() + ".txt");
@@ -1320,7 +1321,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
-					world.setMetadata(line.trim());
+					MetadataLoader.getInstance().deserializeMetadata(world, line.trim());
 				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg("Loading Error: Exception while reading world file " + path + " at line: " + line + ", in towny\\data\\worlds\\" + world.getName() + ".txt");
@@ -1503,7 +1504,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 					line = keys.get("metadata");
 					if (line != null && !line.isEmpty())
-						townBlock.setMetadata(line.trim());
+						MetadataLoader.getInstance().deserializeMetadata(townBlock, line.trim());
 
 					line = keys.get("groupID");
 					UUID groupID = null;
@@ -2034,18 +2035,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		return true;
 
-	}
-
-	private String serializeMetadata(TownyObject obj) {
-		if (!obj.hasMeta())
-			return "";
-
-		StringJoiner serializer = new StringJoiner(";");
-		for (CustomDataField<?> cdf : obj.getMetadata()) {
-			serializer.add(cdf.toString());
-		}
-
-		return serializer.toString();
 	}
 
 	/*

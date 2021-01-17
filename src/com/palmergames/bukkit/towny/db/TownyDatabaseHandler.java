@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.metadata.DataFieldIO;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
@@ -1467,6 +1468,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			
 		}
 		
+	}
+	
+	protected final String serializeMetadata(TownyObject obj) {
+		return DataFieldIO.serializeCDFs(obj.getMetadata());
 	}
 	
 	@Override

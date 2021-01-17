@@ -16,6 +16,15 @@ public class DecimalDataField extends CustomDataField<Double> {
     }
 
 	@Override
+	protected String getTypeID() {
+		return typeID();
+	}
+	
+	public static String typeID() {
+    	return "towny_decdf";
+	}
+
+	@Override
 	public void setValueFromString(String strValue) {
     	setValue(Double.parseDouble(strValue));
 	}

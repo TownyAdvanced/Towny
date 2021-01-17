@@ -18,6 +18,15 @@ public class BooleanDataField extends CustomDataField<Boolean> {
     }
 
 	@Override
+	protected String getTypeID() {
+		return typeID();
+	}
+	
+	public static String typeID() {
+    	return "towny_booldf";
+	}
+
+	@Override
 	public void setValueFromString(String strValue) {
 		setValue(Boolean.parseBoolean(strValue));
 	}

@@ -17,6 +17,15 @@ public class LongDataField extends CustomDataField<Long> {
 	}
 
 	@Override
+	protected String getTypeID() {
+		return typeID();
+	}
+	
+	public static String typeID() {
+		return "towny_longdf";
+	}
+
+	@Override
 	public void setValueFromString(String strValue) {
 		setValue(Long.parseLong(strValue));
 	}

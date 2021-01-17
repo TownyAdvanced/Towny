@@ -17,6 +17,15 @@ public class StringDataField extends CustomDataField<String> {
     }
 
 	@Override
+	protected String getTypeID() {
+		return typeID();
+	}
+	
+	public static String typeID() {
+    	return "towny_stringdf";
+	}
+
+	@Override
 	public void setValueFromString(String strValue) {
 		setValue(strValue);
 	}

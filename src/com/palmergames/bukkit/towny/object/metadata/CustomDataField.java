@@ -35,6 +35,8 @@ public abstract class CustomDataField<T> implements Cloneable {
     public CustomDataFieldType getType() {
         return type;
     }
+    
+    protected abstract String getTypeID();
 
     public T getValue() {
         
@@ -48,6 +50,10 @@ public abstract class CustomDataField<T> implements Cloneable {
     }
     
     public abstract void setValueFromString(String strValue);
+    
+    protected String serializeValueToString() {
+    	return String.valueOf(getValue());
+	}
 
     public String getKey() {
         return key;

@@ -1,6 +1,10 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.annotations.Unmodifiable;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import org.apache.commons.lang.Validate;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,14 +56,16 @@ public abstract class TownyObject implements Nameable, Savable {
 		return getName();
 	}
 
-	public void addMetaData(CustomDataField<?> md) {
+	public void addMetaData(@NotNull CustomDataField<?> md) {
+		Validate.notNull(md);
 		if (metadata == null)
 			metadata = new HashMap<>();
 		
 		metadata.put(md.getKey(), md);
 	}
 
-	public void removeMetaData(CustomDataField<?> md) {
+	public void removeMetaData(@NotNull CustomDataField<?> md) {
+		Validate.notNull(md);
 		if (!hasMeta())
 			return;
 		
@@ -69,6 +75,7 @@ public abstract class TownyObject implements Nameable, Savable {
 			this.metadata = null;
 	}
 	
+	@Unmodifiable
 	public Collection<CustomDataField<?>> getMetadata() {
 		if (metadata == null || metadata.isEmpty())
 			return Collections.emptyList();
@@ -76,10 +83,29 @@ public abstract class TownyObject implements Nameable, Savable {
 		return Collections.unmodifiableCollection(metadata.values());
 	}
 	
-	public CustomDataField<?> getMetadata(String key) {
+	@Nullable
+	public CustomDataField<?> getMetadata(@NotNull String key) {
+		Validate.notNull(key);
+		
 		if(metadata != null)
 			return metadata.get(key);
 		
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Nullable
+	public <T extends CustomDataField<?>> T getMetadata(@NotNull String key, @NotNull Class<T> cdfClass) {
+		Validate.notNull(cdfClass);
+		Validate.notNull(key);
+		
+		if(metadata != null) {
+			CustomDataField<?> cdf = metadata.get(key);
+			if (cdfClass.isInstance(cdf)) {
+				return (T) cdf;
+			}
+		}
+
 		return null;
 	}
 
@@ -87,23 +113,24 @@ public abstract class TownyObject implements Nameable, Savable {
 		return metadata != null;
 	}
 
-	public boolean hasMeta(String key) {
+	public boolean hasMeta(@NotNull String key) {
+		Validate.notNull(key);
 		if (metadata != null)
 			return metadata.containsKey(key);
 		
 		return false;
 	}
+	
+	public <T extends CustomDataField<?>> boolean hasMeta(@NotNull String key, @NotNull Class<T> cdfClass) {
+		Validate.notNull(cdfClass);
+		Validate.notNull(key);
 
-	public void setMetadata(String str) {
-		String[] objects = str.split(";");
-
-		if (metadata == null)
-			metadata = new HashMap<>(objects.length);
-		
-		for (String object : objects) {
-			CustomDataField<?> cdf = CustomDataField.load(object);
-			metadata.put(cdf.getKey(), cdf);
+		if(metadata != null) {
+			CustomDataField<?> cdf = metadata.get(key);
+			return cdfClass.isInstance(cdf);
 		}
+
+		return false;
 	}
 	
 }
