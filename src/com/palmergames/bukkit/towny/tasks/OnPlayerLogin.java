@@ -67,7 +67,7 @@ public class OnPlayerLogin implements Runnable {
 				loginExistingResident(resident);
 
 			// We have a resident but the resident's UUID was not recorded properly (or the server has somehow altered the player's UUID since recording it.)
-			} else if (resident != null && resident.getUUID() != player.getUniqueId()) {
+			} else if (resident != null && !resident.getUUID().equals(player.getUniqueId())) {
 				try {
 					universe.unregisterResident(resident);   // Unregister.
 					resident.setUUID(player.getUniqueId());  // Set proper UUID.
