@@ -1206,6 +1206,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				town.loadEnemies(getTowns(uuids));
 			}
 			
+			town.setOfflinePlayer();
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " sql Error - " + e.getMessage());
@@ -1369,6 +1370,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (SQLException ignored) {
 			}
 
+			nation.setOfflinePlayer();
+			
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " SQL Error - " + e.getMessage());

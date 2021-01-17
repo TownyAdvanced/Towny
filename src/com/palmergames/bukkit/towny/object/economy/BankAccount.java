@@ -5,7 +5,11 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Town;
+
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
@@ -20,31 +24,133 @@ public class BankAccount extends Account {
 	private static final long CACHE_TIMEOUT = TownySettings.getCachedBankTimeout();
 	private double balanceCap;
 	private double debtCap;
-	private CachedBalance cachedBalance = null; 
+	private CachedBalance cachedBalance = null;
+	private Government government;
 
-	public BankAccount(String name, World world, double balanceCap) {
-		super(name, world);
+	public BankAccount(UUID uuid, World world, double balanceCap, Government government) {
+		super(uuid, world);
 		this.balanceCap = balanceCap;
+		this.government = government;
 		this.cachedBalance = new CachedBalance(getHoldingBalance());
+
 	}
 
 
+	@Override
+	public String getName() {
+		return government.getName();
+	}
+	
+	public UUID getUUID() {
+		return government.getUUID();
+	}
+	
+	public World getBukkitWorld() {
+		return world;
+	}
+
+	/*
+	 * BankAccount Balance Methods.
+	 */
+	
+	@Override
+	protected boolean subtractMoney(double amount) {
+		if (isBankrupt() && (getTownDebt() + amount > getDebtCap()))
+			return false;  //subtraction not allowed as it would exceed the debt cap
+
+		if (isBankrupt())
+			return addDebt(amount);
+
+		if (!canPayFromHoldings(amount)) {
+
+			// Calculate debt.
+			double amountInDebt = amount - getHoldingBalance();
+
+			if(amountInDebt <= getDebtCap()) {
+				// Empty out account.
+				boolean success = TownyEconomyHandler.setBalance(government, 0, world);
+				success &= addDebt(amountInDebt);
+
+				return success;
+			} else {
+				return false; //Subtraction not allowed as it would exceed the debt cap
+			}
+		}
+
+		// Otherwise continue like normal.
+		return TownyEconomyHandler.subtract(government, amount, world);
+	}
+
+	@Override
+	protected boolean addMoney(double amount) {
+		// Check balance cap.
+		if (balanceCap != 0 && (getHoldingBalance() + amount > balanceCap))
+			return false;
+		
+		if (isBankrupt())
+			return removeDebt(amount);
+
+		// Otherwise continue like normal.
+		return TownyEconomyHandler.add(government, amount, world);
+	}
+
+	@Override
+	public double getHoldingBalance() {
+		if (isBankrupt()) {
+			return getTownDebt() * -1;
+		}
+		return TownyEconomyHandler.getBalance(government, world);
+	}
+
+	@Override
+	public String getHoldingFormattedBalance() {
+		if (isBankrupt()) {
+			return "-" + TownyEconomyHandler.getFormattedBalance(getTownDebt());
+		}
+		return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
+	}
+	
+	@Override
+	public boolean canPayFromHoldings(double amount) {
+		return TownyEconomyHandler.hasEnough(government, amount, world);
+	}
+
+	@Override
+	protected boolean payToServer(double amount, String reason) {
+		// Take money out.
+		TownyEconomyHandler.subtract(government, amount, world);
+		
+		// Put it back into the server.
+		return TownyEconomyHandler.addToServer(amount, world);
+	}
+	
+	@Override
+	protected boolean payFromServer(double amount, String reason) {
+		// Put money in.
+		TownyEconomyHandler.add(government, amount, world);
+		
+		// Remove it from the server economy.
+		return TownyEconomyHandler.subtractFromServer(amount, world);
+	}
+	
+	@Override
+	public void removeAccount() {
+		TownyEconomyHandler.removeAccount(government);
+	}
+
+	/*
+	 * Town BankAccount Debt Methods.
+	 */
+
 	/**
-	 * Sets the max amount of money allowed in this account.
+	 * Whether the account is in debt or not.
 	 * 
-	 * @param balanceCap The max amount allowed in this account.
+	 * @return true if in debt, false otherwise.
 	 */
-	public void setBalanceCap(double balanceCap) {
-		this.balanceCap = balanceCap;
-	}
-
-	/**
-	 * Sets the maximum amount of money this account can have.
-	 *
-	 * @return the max amount allowed in this account.
-	 */
-	public double getBalanceCap() {
-		return balanceCap;
+	public boolean isBankrupt() {
+		if (isTownAccount())
+			return getTown().isBankrupt();
+		return false;
 	}
 
 	/**
@@ -57,7 +163,7 @@ public class BankAccount extends Account {
 	 */
 	public double getDebtCap() {
 		if (TownySettings.isDebtCapDeterminedByTownLevel()) { // town_level debtCapModifier * debt_cap.override.
-			String townName = this.getName().replace(TownySettings.getTownAccountPrefix(), "");
+			String townName = TownyUniverse.getInstance().getTown(getUUID()).getName();
 			Town town = getTown();
 			
 			// For whatever reason, this just errors and continues
@@ -76,68 +182,34 @@ public class BankAccount extends Account {
 		
 		return debtCap;
 	}
-
+	
 	/**
-	 * Sets the maximum amount of debt this account can have.
-	 * 
-	 * @param debtCap The new cap for debt on this account.
+	 * return true if this BankAcount is one belonging to a Town.
 	 */
-	public void setDebtCap(double debtCap) {
-		this.debtCap = debtCap;
-	}
-
-	@Override
-	protected boolean subtractMoney(double amount) {
-		if (isBankrupt() && (getTownDebt() + amount > getDebtCap()))
-			return false;  //subtraction not allowed as it would exceed the debt cap
-
-		if (isBankrupt())
-			return addDebt(amount);
-
-		if (!canPayFromHoldings(amount)) {
-
-			// Calculate debt.
-			double amountInDebt = amount - getHoldingBalance();
-
-			if(amountInDebt <= getDebtCap()) {
-				// Empty out account.
-				boolean success = TownyEconomyHandler.setBalance(getName(), 0, world);
-				success &= addDebt(amountInDebt);
-
-				return success;
-			} else {
-				return false; //Subtraction not allowed as it would exceed the debt cap
-			}
-		}
-
-		// Otherwise continue like normal.
-		return TownyEconomyHandler.subtract(getName(), amount, world);
-	}
-
-	@Override
-	protected boolean addMoney(double amount) {
-		// Check balance cap.
-		if (balanceCap != 0 && (getHoldingBalance() + amount > balanceCap))
-			return false;
-		
-		if (isBankrupt())
-			return removeDebt(amount);
-
-		// Otherwise continue like normal.
-		return TownyEconomyHandler.add(getName(), amount, world);
-	}
-
-	/**
-	 * Whether the account is in debt or not.
-	 * 
-	 * @return true if in debt, false otherwise.
-	 */
-	public boolean isBankrupt() {
-		if (isTownAccount())
-			return getTown().isBankrupt();
-		return false;
+	private boolean isTownAccount() {
+		return TownyUniverse.getInstance().getTown(getUUID()) != null;
 	}
 	
+	/**
+	 * @return town or null, if this BankAccount does not belong to a town.
+	 */
+	@Nullable
+	private Town getTown() {
+		Town town = null;
+		if (isTownAccount()) 
+			town = TownyUniverse.getInstance().getTown(getUUID());
+		return town;
+	}
+	
+	private double getTownDebt() {
+		return getTown().getDebtBalance();
+	}
+	
+	private void setTownDebt(double amount) {
+		getTown().setDebtBalance(amount);
+		getTown().save();
+	}
+
 	/**
 	 * Adds debt to a Town debtBalance
 	 * @param amount the amount to add to the debtBalance.
@@ -164,9 +236,9 @@ public class BankAccount extends Account {
 			// Sometimes there's money in the bank account 
 			// (from a player manually putting money in via
 			// eco plugin, maybe.)
-			double bankBalance = TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+			double bankBalance = TownyEconomyHandler.getBalance(government, world);
 			//Set positive balance in regular account
-			TownyEconomyHandler.setBalance(getName(), bankBalance + netMoney, world);
+			TownyEconomyHandler.setBalance(government, bankBalance + netMoney, world);
 			return true;
 		} else {
 			setTownDebt(getTownDebt() - amount);
@@ -174,27 +246,20 @@ public class BankAccount extends Account {
 		}
 	}
 
-	@Override
-	public double getHoldingBalance() {
-		if (isBankrupt()) {
-			return getTownDebt() * -1;
-		}
-		return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+	/**
+	 * Sets the maximum amount of debt this account can have.
+	 * 
+	 * @param debtCap The new cap for debt on this account.
+	 */
+	public void setDebtCap(double debtCap) {
+		this.debtCap = debtCap;
 	}
 
-	@Override
-	public String getHoldingFormattedBalance() {
-		if (isBankrupt()) {
-			return "-" + TownyEconomyHandler.getFormattedBalance(getTownDebt());
-		}
-		return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
-	}
-
-	@Override
-	public void removeAccount() {
-		TownyEconomyHandler.removeAccount(getName());
-	}
-
+	
+	/*
+	 * Caching System
+	 */
+	
 	private class CachedBalance {
 		private double balance = 0;
 		private long time;
@@ -239,30 +304,26 @@ public class BankAccount extends Account {
 		return cachedBalance.getBalance();
 	}
 
-	/**
-	 * return true if this BankAcount is one belonging to a Town.
+
+	/*
+	 * Balance Cap Methods
 	 */
-	private boolean isTownAccount() {
-		return this.getName().startsWith(TownySettings.getTownAccountPrefix());
-	}
 	
 	/**
-	 * @return town or null, if this BankAccount does not belong to a town.
+	 * Sets the max amount of money allowed in this account.
+	 * 
+	 * @param balanceCap The max amount allowed in this account.
 	 */
-	@Nullable
-	private Town getTown() {
-		Town town = null;
-		if (isTownAccount()) 
-			town = TownyUniverse.getInstance().getTown(this.getName().replace(TownySettings.getTownAccountPrefix(), ""));
-		return town;
+	public void setBalanceCap(double balanceCap) {
+		this.balanceCap = balanceCap;
 	}
-	
-	private double getTownDebt() {
-		return getTown().getDebtBalance();
-	}
-	
-	private void setTownDebt(double amount) {
-		getTown().setDebtBalance(amount);
-		getTown().save();
+
+	/**
+	 * Sets the maximum amount of money this account can have.
+	 *
+	 * @return the max amount allowed in this account.
+	 */
+	public double getBalanceCap() {
+		return balanceCap;
 	}
 }
