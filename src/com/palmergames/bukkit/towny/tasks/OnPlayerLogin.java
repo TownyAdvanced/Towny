@@ -65,6 +65,16 @@ public class OnPlayerLogin implements Runnable {
 			// If the universe has a resident and the resident has no UUID, log them in with their current name.
 			if (resident != null && !resident.hasUUID()) {
 				loginExistingResident(resident);
+
+			// We have a resident but the resident's UUID was not recorded properly (or the server has somehow altered the player's UUID since recording it.)
+			} else if (resident != null && !resident.getUUID().equals(player.getUniqueId())) {
+				try {
+					universe.unregisterResident(resident);   // Unregister.
+					resident.setUUID(player.getUniqueId());  // Set proper UUID.
+					universe.registerResident(resident);     // Re-register.
+					
+				} catch (NotRegisteredException | AlreadyRegisteredException ignored) {}
+				loginExistingResident(resident);
 				
 			// Else we're dealing with a new resident, because there's no resident by that UUID or resident by that Name without a UUID.
 			} else {
