@@ -5747,3 +5747,4 @@ v0.92.0.11:
   - Bump version for release.
 0.96.6.1:
   - Prevent deaths by crossbow suicide from awarding death payments.
+  - Assign the correct UUID to players who have somehow gotten a previous UUID stored.
