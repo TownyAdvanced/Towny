@@ -58,11 +58,11 @@ public abstract class Account implements Nameable {
 	 * @throws EconomyException On an economy error.
 	 */
 	public boolean deposit(double amount, String reason) throws EconomyException {
-		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
-			return payFromServer(amount, reason);
-		}
 		if (addMoney(amount)) {
 			notifyObserversDeposit(this, amount, reason);
+			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
+				return payFromServer(amount, reason);
+
 			return true;
 		}
 		
@@ -79,11 +79,11 @@ public abstract class Account implements Nameable {
 	 * @throws EconomyException On an economy error.
 	 */
 	public boolean withdraw(double amount, String reason) throws EconomyException {
-		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
-			return payToServer(amount, reason);
-		}
 		if (subtractMoney(amount)) {
 			notifyObserversWithdraw(this, amount, reason);
+			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
+				return payToServer(amount, reason);
+
 			return true;
 		}
 		
@@ -104,16 +104,12 @@ public abstract class Account implements Nameable {
 	}
 	
 	protected boolean payToServer(double amount, String reason) throws EconomyException {
-		// Take money out.
-		TownyEconomyHandler.subtract(getName(), amount, getBukkitWorld());
 		
 		// Put it back into the server.
 		return TownyEconomyHandler.addToServer(amount, getBukkitWorld());
 	}
 	
 	protected boolean payFromServer(double amount, String reason) throws EconomyException {
-		// Put money in.
-		TownyEconomyHandler.add(getName(), amount, getBukkitWorld());
 		
 		// Remove it from the server economy.
 		return TownyEconomyHandler.subtractFromServer(amount, getBukkitWorld());
