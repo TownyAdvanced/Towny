@@ -118,6 +118,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"meta",
 		"deposit",
 		"withdraw",
+		"bankhistory",
 		"outlaw",
 		"leavenation",
 		"invite"
@@ -132,7 +133,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"set",
 		"meta",
 		"deposit",
-		"withdraw"
+		"withdraw",
+		"bankhistory"
 	);
 
 	private static final List<String> adminToggleTabCompletes = Arrays.asList(
@@ -1037,7 +1039,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("bankhistory")) {
 
 				int pages = 10;
-				if (split.length > 1)
+				if (split.length > 2)
 					try {
 						pages = Integer.parseInt(split[2]);
 					} catch (NumberFormatException e) {
@@ -1326,7 +1328,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("bankhistory")) {
 
 				int pages = 10;
-				if (split.length > 1)
+				if (split.length > 2)
 					try {
 						pages = Integer.parseInt(split[2]);
 					} catch (NumberFormatException e) {
