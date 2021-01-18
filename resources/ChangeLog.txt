@@ -5750,3 +5750,4 @@ v0.92.0.11:
   - Assign the correct UUID to players who have somehow gotten a previous UUID stored.
   - Fix admin bankhistory commands.
     - Closes #4701.
+  - Fix closed_economy not working with bankruptcy or bankhistory features.
