@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class DailyTimerTask extends TownyTimerTask {
 	
@@ -93,34 +92,6 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 			if (!deletedTowns.isEmpty())
 				TownyMessaging.sendGlobalMessage(Translation.of("msg_the_following_towns_were_deleted_for_having_0_claims", String.join(", ", deletedTowns)));
-		}
-		
-		/*
-		 * Reduce the number of days jailed residents are jailed for.
-		 */
-		if (!universe.getJailedResidentMap().isEmpty()) {
-			for (Resident resident : universe.getJailedResidentMap()) {
-				if (resident.hasJailDays()) {
-					if (resident.getJailDays() == 1) {
-						resident.setJailDays(0);
-						new BukkitRunnable() {
-
-				            @Override
-				            public void run() {				            	
-				            	Town jailTown = universe.getTown(resident.getJailTown());
-				            	if (jailTown != null) {
-									int index = resident.getJailSpawn();
-									resident.setJailed(index, jailTown);
-								}
-				            }
-				            
-				        }.runTaskLater(this.plugin, 20);
-					} else 
-						resident.setJailDays(resident.getJailDays() - 1);
-					
-				}
-				resident.save();
-			}			
 		}
 		
 		/*

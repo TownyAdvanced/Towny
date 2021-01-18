@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
+import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -636,6 +637,27 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		}
 		return false;
 	}
+	
+	public boolean loadJailList() {
+		TownyMessaging.sendDebugMsg("Loading Jail List");
+		if (!getContext())
+			return false;
+		try {
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "JAILS");
+				while (rs.next()) {
+					TownyUniverse.getInstance().newJailInternal(rs.getString("uuid"));
+				}
+			}
+			return true;
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: jail list sql error : " + e.getMessage());
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: jail list unknown error : ");
+			e.printStackTrace();
+		}
+		return false;
+	}
 
 	/*
 	 * Load individual towny object
@@ -756,26 +778,26 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			try {
-				resident.setJailed(rs.getBoolean("isJailed"));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				resident.setJailSpawn(rs.getInt("JailSpawn"));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				resident.setJailDays(rs.getInt("JailDays"));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				resident.setJailTown(rs.getString("JailTown"));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			try {
+//				resident.setJailed(rs.getBoolean("isJailed"));
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//			try {
+//				resident.setJailSpawn(rs.getInt("JailSpawn"));
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//			try {
+//				resident.setJailDays(rs.getInt("JailDays"));
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//			try {
+//				resident.setJailTown(rs.getString("JailTown"));
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 
 			String line;
 			try {
@@ -1026,7 +1048,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						}
 				}
 			}
-			// Load jail spawns
+			// Load legacy jail spawns into new Jail objects.
 			line = rs.getString("jailSpawns");
 			if (line != null) {
 				String[] jails = line.split(";");
@@ -1045,7 +1067,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 								loc.setPitch(Float.parseFloat(tokens[4]));
 								loc.setYaw(Float.parseFloat(tokens[5]));
 							}
-							town.forceAddJailSpawn(loc);
+
+							TownBlock tb = TownyUniverse.getInstance().getTownBlock(WorldCoord.parseWorldCoord(loc));
+							if (tb == null)
+								continue;
+							Jail jail = new Jail(UUID.randomUUID(), town, tb, new ArrayList<>(Collections.singleton(loc)));
+							jail.save();
+
 						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
 						}
 				}
@@ -1808,6 +1836,116 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return true;
 	}
 
+	@Override
+	public boolean loadJails() {
+		TownyMessaging.sendDebugMsg("Loading Jails");
+		if (!getContext())
+			return false;
+
+		try (Statement s = cntx.createStatement();
+				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "JAILS ")) {
+			while (rs.next()) {
+				if (!loadJail(rs)) {
+					System.out.println("[Towny] Loading Error: Could not read jail data properly.");
+					return false;
+				}
+			}
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Jail sql Error - " + e.getMessage());
+			return false;
+		}
+
+		return true;
+	}
+	
+	@Override
+	public boolean loadJail(Jail jail) {
+		TownyMessaging.sendDebugMsg("Loading jail " + jail.getUUID());
+		if (!getContext())
+			return false;
+
+		try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "JAILS " + " WHERE uuid=?")) {
+			ps.setString(1, jail.getUUID().toString());
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next())
+					return loadJail(rs);
+			}
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Jail sql Error - " + e.getMessage());
+		}
+
+		return false;
+	}
+	
+	private boolean loadJail(ResultSet rs) {
+		String line;
+		String[] tokens;
+		String uuid = null;
+		try {
+			Jail jail = universe.getJail(UUID.fromString(rs.getString("uuid")));
+			if (jail == null) {
+				TownyMessaging.sendErrorMsg("SQL: A jail was not registered properly on load!");
+				return true;
+			}
+			
+			line = rs.getString("townBlock");
+			if (line != null) {
+				tokens = line.split("#");
+				TownBlock tb = null;
+				try {
+					tb = TownyUniverse.getInstance().getTownBlock(WorldCoord.parseWorldCoord(tokens[0], Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+					jail.setTownBlock(tb);
+					jail.setTown(tb.getTown());
+				} catch (NumberFormatException | NotRegisteredException e) {
+					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid townblock " + line + " deleting jail.");
+					deleteJail(jail);
+					return true;
+				}
+			}
+			
+			line = rs.getString("spawns");
+			if (line != null) {
+				String[] jails = line.split(";");
+				for (String spawn : jails) {
+					tokens = spawn.split("#");
+					if (tokens.length >= 4)
+						try {
+							World world = plugin.getServerWorld(tokens[0]);
+							double x = Double.parseDouble(tokens[1]);
+							double y = Double.parseDouble(tokens[2]);
+							double z = Double.parseDouble(tokens[3]);
+							
+							Location loc = new Location(world, x, y, z);
+							if (tokens.length == 6) {
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+							}
+							jail.addJailCell(loc);
+						} catch (NumberFormatException | NullPointerException | NotRegisteredException e) {
+							TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid spawn " + line + " skipping.");
+							continue;
+						}
+				}
+				if (jail.getJailCellLocations().size() < 1) {
+					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " loaded with zero spawns " + line + " deleting jail.");
+					deleteJail(jail);
+					return true;
+				}
+			}
+			
+				
+			return true;
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Jail " + uuid + " sql Error - " + e.getMessage());
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Jail " + uuid + " unknown Error - ");
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+	
 	/*
 	 * Save individual towny objects
 	 */
@@ -1824,10 +1962,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("registered", resident.getRegistered());
 			res_hm.put("joinedTownAt", resident.getJoinedTownAt());
 			res_hm.put("isNPC", resident.isNPC());
-			res_hm.put("isJailed", resident.isJailed());
-			res_hm.put("JailSpawn", resident.getJailSpawn());
-			res_hm.put("JailDays", resident.getJailDays());
-			res_hm.put("JailTown", resident.getJailTown());
+			if (resident.isJailed()) {
+				res_hm.put("jail", resident.getJail().getUUID());
+				res_hm.put("jailCell", resident.getJailCell());
+				res_hm.put("jailHours", resident.getJailHours());
+			}
 			res_hm.put("title", resident.getTitle());
 			res_hm.put("surname", resident.getSurname());
 			res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
@@ -1909,14 +2048,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							.append("#").append(spawn.getYaw()).append(";");
 				}
 			twn_hm.put("outpostSpawns", outpostArray.toString());
-			StringBuilder jailArray = new StringBuilder();
-			if (town.hasJailSpawn())
-				for (Location spawn : new ArrayList<>(town.getAllJailSpawns())) {
-					jailArray.append(spawn.getWorld().getName()).append("#").append(spawn.getX()).append("#")
-							.append(spawn.getY()).append("#").append(spawn.getZ()).append("#").append(spawn.getPitch())
-							.append("#").append(spawn.getYaw()).append(";");
-				}
-			twn_hm.put("jailSpawns", jailArray.toString());
 			if (town.hasValidUUID()) {
 				twn_hm.put("uuid", town.getUUID());
 			} else {
@@ -2153,6 +2284,35 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		}
 		return true;
 	}
+	
+	@Override
+	public synchronized boolean saveJail(Jail jail) {
+
+		TownyMessaging.sendDebugMsg("Saving jail " + jail.getUUID());
+		
+		try {
+			HashMap<String, Object> jail_hm = new HashMap<>();
+			jail_hm.put("townBlock", jail.getTownBlock().getWorld().getName() + "#" + jail.getTownBlock().getX() + "#" + jail.getTownBlock().getZ());
+			
+			StringBuilder jailCellArray = new StringBuilder();
+			if (jail.hasCells())
+				for (Location cell : new ArrayList<>(jail.getJailCellLocations())) {
+					jailCellArray.append(cell.getWorld().getName()).append("#").append(cell.getX()).append("#")
+							.append(cell.getY()).append("#").append(cell.getZ()).append("#").append(cell.getPitch())
+							.append("#").append(cell.getYaw()).append(";");
+				}
+			
+			jail_hm.put("spawns", jailCellArray);
+			
+			UpdateDB("JAILS", jail_hm, Collections.singletonList("uuid"));
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save jail unknown error");
+			e.printStackTrace();
+		}
+		return true;
+		
+	}
 
 	/*
 	 * Delete objects
@@ -2203,7 +2363,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		pltgrp_hm.put("name", group.getName());
 		DeleteDB("PLOTGROUPS", pltgrp_hm);
 	}
-
+	
+	@Override
+	public void deleteJail(Jail jail) {
+		
+		HashMap<String, Object> jail_hm = new HashMap<>();
+		jail_hm.put("uuid", jail.getUUID());
+		DeleteDB("JAILS", jail_hm);
+	}
+ 
 	/*
 	 * Save keys (Unused by SQLSource)
 	 */
@@ -2222,4 +2390,5 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public HikariDataSource getHikariDataSource() {
 		return hikariDataSource;
 	}
+
 }

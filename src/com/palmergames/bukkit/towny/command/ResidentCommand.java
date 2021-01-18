@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -16,10 +17,12 @@ import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
+import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -276,11 +279,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				if (split.length == 1 ) {
-					TownyMessaging.sendMessage(player, ChatTools.formatTitle("/resident jail"));
-					TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/resident", "jail paybail", ""));
-					TownyMessaging.sendMessage(player, Colors.LightBlue + Translation.of("msg_resident_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmount()));
-					TownyMessaging.sendMessage(player, Colors.LightBlue + Translation.of("msg_mayor_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountMayor()));
-					TownyMessaging.sendMessage(player, Colors.LightBlue + Translation.of("msg_king_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountKing()));
+					HelpMenu.RESIDENT_JAIL_HELP.send(player);
 					return;
 				}
 
@@ -292,36 +291,47 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				if (split[1].equalsIgnoreCase("paybail")) {
-					double cost = TownySettings.getBailAmount();
 					
+					// Fail if the economy isn't active.
+					if (!TownyEconomyHandler.isActive())
+						throw new TownyException(Translation.of("msg_err_no_economy"));
+
+					// Get Town the player is jailed in.
+					Town jailTown = TownyUniverse.getInstance().getTown(resident.getJailTown());						
+					if (jailTown == null)
+						throw new TownyException(Translation.of("msg_err_not_registered_1", resident.getJailTown()));
+					
+					// Set cost of bail.
+					double cost = TownySettings.getBailAmount();
 					if (resident.isMayor())
 						cost = TownySettings.getBailAmountMayor();
 					if (resident.isKing())
 						cost = TownySettings.getBailAmountKing();
-					if (resident.getAccount().canPayFromHoldings(cost)) {
-						Town JailTown = TownyUniverse.getInstance().getTown(resident.getJailTown());
+					
+					if (cost > 0) {			
+						if (resident.getAccount().canPayFromHoldings(cost)) {
+							final double finalCost = cost;
+							final Town town = jailTown;
+							Confirmation.runOnAccept(() -> {
+								if (resident.getAccount().canPayFromHoldings(finalCost)) {
+									resident.getAccount().payTo(finalCost, town, "Bail");
+									JailUtil.unJailResident(resident, UnJailReason.BAIL);
+								} else {
+									TownyMessaging.sendErrorMsg(resident, Translation.of("msg_err_unable_to_pay_bail"));
+								}
+							});
+						} else {
+							throw new TownyException(Translation.of("msg_err_unable_to_pay_bail"));
+						}					
 						
-						if (JailTown == null) {
-							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", resident.getJailTown()));
-							return;
-						}
-						
-						resident.getAccount().payTo(cost, JailTown, "Bail");
-						resident.setJailed(false);
-						resident.setJailSpawn(0);
-						resident.setJailTown("");
-						TownyMessaging.sendGlobalMessage(Colors.Red + player.getName() + Translation.of("msg_has_paid_bail"));
-						player.teleport(resident.getTown().getSpawn());
-						resident.save();
 					} else {
-						TownyMessaging.sendErrorMsg(player, Colors.Red + Translation.of("msg_err_unable_to_pay_bail"));
+						// No cost, so they can pay bail.
+						JailUtil.unJailResident(resident, UnJailReason.BAIL);
 					}
+
 				} else {
-					TownyMessaging.sendMessage(player, ChatTools.formatTitle("/resident jail"));
-					TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/resident", "jail paybail", ""));
-					TownyMessaging.sendMessage(player, Colors.LightBlue + Translation.of("msg_resident_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmount()));
-					TownyMessaging.sendMessage(player, Colors.LightBlue + Translation.of("msg_mayor_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountMayor()));
-					TownyMessaging.sendMessage(player, Colors.LightBlue + Translation.of("msg_king_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountKing()));					
+					HelpMenu.RESIDENT_JAIL_HELP.send(player);
+					return;
 				}
 
 			} else if (split[0].equalsIgnoreCase("set")) {

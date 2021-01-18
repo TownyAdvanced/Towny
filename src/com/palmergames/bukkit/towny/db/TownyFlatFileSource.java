@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
+import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.util.FileMgmt;
@@ -31,6 +32,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -105,6 +107,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return dataFolderPath + File.separator + "plotgroups" + File.separator + group.getID() + ".data";
 	}
 
+	public String getJailFilename(Jail jail) {
+		return dataFolderPath + File.separator + "jails" + File.separator + jail.getUUID() + ".txt";
+	}
+	
 	/*
 	 * Load keys
 	 */
@@ -336,6 +342,19 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 	}
 
+	public boolean loadJailList() {
+		TownyMessaging.sendDebugMsg("Loading Jail List");
+		File[] jailFiles = receiveObjectFiles("jails");
+		assert jailFiles != null;
+		
+		for (File jail : jailFiles) {
+			String uuid = jail.getName().replace(".txt", "");
+			TownyUniverse.getInstance().newJailInternal(uuid);
+		}
+		
+		return true;
+	}
+	
 	/**
 	 * Util method to procur a list of Towny Objects that will no longer be saved.
 	 * ex: residents.txt, towns.txt, nations.txt, etc.
@@ -428,21 +447,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					resident.setNPC(Boolean.parseBoolean(line));
 				
-				line = keys.get("isJailed");
-				if (line != null)
-					resident.setJailed(Boolean.parseBoolean(line));
+				line = keys.get("jail");
+				if (line != null && universe.hasJail(UUID.fromString(line)))
+					resident.setJail(universe.getJail(UUID.fromString(line)));
 				
-				line = keys.get("JailSpawn");
-				if (line != null)
-					resident.setJailSpawn(Integer.parseInt(line));
+				line = keys.get("jailCell");
 				
-				line = keys.get("JailDays");
-				if (line != null)
-					resident.setJailDays(Integer.parseInt(line));
-				
-				line = keys.get("JailTown");
-				if (line != null)
-					resident.setJailTown(line);
+				line = keys.get("jailHours");
 
 				line = keys.get("friends");
 				if (line != null) {
@@ -778,7 +789,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 				
-				// Load jail spawns
+				// Load legacy jail spawns into new Jail objects.
 				line = keys.get("jailspawns");
 				if (line != null) {
 					String[] jails = line.split(";");
@@ -796,7 +807,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 									loc.setPitch(Float.parseFloat(tokens[4]));
 									loc.setYaw(Float.parseFloat(tokens[5]));
 								}
-								town.forceAddJailSpawn(loc);
+
+								TownBlock tb = TownyUniverse.getInstance().getTownBlock(WorldCoord.parseWorldCoord(loc));
+								if (tb == null)
+									continue;
+								Jail jail = new Jail(UUID.randomUUID(), town, tb, new ArrayList<>(Collections.singleton(loc)));
+								jail.save();
 							} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
 							}
 					}
@@ -1542,6 +1558,63 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 	}
 
+	public boolean loadJail(Jail jail) {
+		String line = "";
+		String[] tokens;
+		String path = getJailFilename(jail);
+		File jailFile = new File(path);
+		if (jailFile.exists() && jailFile.isFile()) {
+			HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(jailFile);
+			
+			line = keys.get("townblock");
+			if (line != null) {
+				tokens = line.split(",");
+				TownBlock tb = null;
+				try {
+					tb = TownyUniverse.getInstance().getTownBlock(WorldCoord.parseWorldCoord(tokens[0], Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+					jail.setTownBlock(tb);
+					jail.setTown(tb.getTown());
+				} catch (NumberFormatException | NotRegisteredException e) {
+					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid townblock " + line + " deleting jail.");
+					deleteJail(jail);
+					return true;
+				}
+			}
+			
+			line = keys.get("spawns");
+			if (line != null) {
+				String[] jails = line.split(";");
+				for (String spawn : jails) {
+					tokens = spawn.split(",");
+					if (tokens.length >= 4)
+						try {
+							World world = plugin.getServerWorld(tokens[0]);
+							double x = Double.parseDouble(tokens[1]);
+							double y = Double.parseDouble(tokens[2]);
+							double z = Double.parseDouble(tokens[3]);
+							
+							Location loc = new Location(world, x, y, z);
+							if (tokens.length == 6) {
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+							}
+							jail.addJailCell(loc);
+						} catch (NumberFormatException | NullPointerException | NotRegisteredException e) {
+							TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid spawn " + line + " skipping.");
+							continue;
+						}
+				}
+				if (jail.getJailCellLocations().size() < 1) {
+					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " loaded with zero spawns " + line + " deleting jail.");
+					deleteJail(jail);
+					return true;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
 	/*
 	 * Save keys
 	 */
@@ -1599,15 +1672,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("joinedTownAt=" + resident.getJoinedTownAt());
 		// isNPC
 		list.add("isNPC=" + resident.isNPC());
-		// isJailed
-		list.add("isJailed=" + resident.isJailed());
-		// JailSpawn
-		list.add("JailSpawn=" + resident.getJailSpawn());
-		// JailDays
-		list.add("JailDays=" + resident.getJailDays());
-		// JailTown
-		list.add("JailTown=" + resident.getJailTown());
-
+		
+		// if they are jailed:
+		if (resident.isJailed()) {
+			// jail uuid
+			list.add("jail=" + resident.getJail().getUUID());
+			// jailCell
+			list.add("jailCell=" + resident.getJailCell());
+			// jailHours
+			list.add("jailHours=" + resident.getJailHours());
+		}
+		
 		// title
 		list.add("title=" + resident.getTitle());
 		// surname
@@ -1732,14 +1807,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				outpostArray.append(spawn.getWorld().getName()).append(",").append(spawn.getX()).append(",").append(spawn.getY()).append(",").append(spawn.getZ()).append(",").append(spawn.getPitch()).append(",").append(spawn.getYaw()).append(";");
 			}
 		list.add(outpostArray.toString());
-
-		// Jail Spawns
-		StringBuilder jailArray = new StringBuilder("jailspawns=");
-		if (town.hasJailSpawn())
-			for (Location spawn : new ArrayList<>(town.getAllJailSpawns())) {
-				jailArray.append(spawn.getWorld().getName()).append(",").append(spawn.getX()).append(",").append(spawn.getY()).append(",").append(spawn.getZ()).append(",").append(spawn.getPitch()).append(",").append(spawn.getYaw()).append(";");
-			}
-		list.add(jailArray.toString());
 
 		// Outlaws
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
@@ -2047,6 +2114,26 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	}
 
+	public boolean saveJail(Jail jail) {
+		
+		List<String> list = new ArrayList<>();
+		
+		list.add("townblock=" + jail.getTownBlock().getWorldCoord().toString());
+		StringBuilder jailArray = new StringBuilder("spawns=");
+		for (Location spawn : new ArrayList<>(jail.getJailCellLocations())) {
+			jailArray.append(spawn.getWorld().getName()).append(",")
+					.append(spawn.getX()).append(",")
+					.append(spawn.getY()).append(",")
+					.append(spawn.getZ()).append(",")
+					.append(spawn.getPitch()).append(",")
+					.append(spawn.getYaw()).append(";");
+		}
+		list.add(jailArray.toString());
+
+		this.queryQueue.add(new FlatFileSaveTask(list, getJailFilename(jail)));
+		return true;
+	}
+	
 	/*
 	 * Delete objects
 	 */
@@ -2104,4 +2191,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
     	File file = new File(getPlotGroupFilename(group));
     	queryQueue.add(new DeleteFileTask(file, false));
 	}
+	
+	@Override
+	public void deleteJail(Jail jail) {
+		File file = new File(getJailFilename(jail));
+		queryQueue.add(new DeleteFileTask(file, false));
+	}
+	
 }

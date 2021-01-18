@@ -12,7 +12,6 @@ import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -20,6 +19,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -29,6 +29,7 @@ import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -194,20 +195,12 @@ public class TownyPlayerListener implements Listener {
 		if (!TownySettings.isTownRespawning())
 			return;
 	
-		try {
-			Location respawn = null;			
-			Resident resident = townyUniverse.getResident(event.getPlayer().getUniqueId());
-			// If player is jailed send them to their jailspawn.
-			if (resident != null && resident.isJailed()) {
-				Town respawnTown = townyUniverse.getTown(resident.getJailTown());
-				if (respawnTown != null) {
-					respawn = respawnTown.getJailSpawn(resident.getJailSpawn());
-					event.setRespawnLocation(respawn);
-				}
-			}
-		} catch (TownyException e) {
-			// Town has not set respawn location. Using default.
-		}
+		Resident resident = townyUniverse.getResident(event.getPlayer().getUniqueId());
+
+		// If player is jailed send them to their jailspawn.
+		if (resident != null && resident.isJailed())
+			event.setRespawnLocation(resident.getJail().getJailCellLocations().get(resident.getJailCell()));
+
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -936,10 +929,8 @@ public class TownyPlayerListener implements Listener {
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);		
 		}
 
-		if (resident.isJailed()) {
-			resident.freeFromJail(resident.getJailSpawn(), true);
-			resident.save();
-		}		
+		if (resident.isJailed())
+			JailUtil.unJailResident(resident, UnJailReason.LEFT_TOWN);
 	}
 	
 	/**

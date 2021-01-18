@@ -88,6 +88,21 @@ public class SQL_Schema {
 		columns.add("`town` VARCHAR(32) NOT NULL");
 		return columns;
 	}
+	
+    private static String getJAILS() {
+		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "JAILS ("
+			+ "`uuid` VARCHAR(36) NOT NULL,"
+			+ "PRIMARY KEY (`uuid`)"
+			+ ")";
+	}
+	
+	private static List<String> getJailsColumns() {
+    	List<String> columns = new ArrayList<>();
+    	columns.add("`townBlock` mediumtext NOT NULL");
+    	columns.add("`spawns`  mediumtext DEFAULT NULL");
+		
+		return columns;
+	}
 
     private static List<String> getNationColumns(){
     	List<String> columns = new ArrayList<>();
@@ -440,6 +455,44 @@ public class SQL_Schema {
 			}
 			TownyMessaging.sendDebugMsg("Table PLOTGROUPS is updated!");
 		}
+        
+		/*
+         *  Fetch JAILS Table schema.
+		 */
+        String jail_create = SQL_Schema.getJAILS();
+
+        try {
+
+            Statement s = cntx.createStatement();
+            s.executeUpdate(jail_create);
+
+            TownyMessaging.sendDebugMsg("Table JAILS is ok!");
+
+        } catch (SQLException ee) {
+            TownyMessaging.sendErrorMsg("Creating table JAILS :" + ee.getMessage());
+        }
+		/*
+		 * Update the table structures for older databases.
+		 *
+		 * Update JAILS. ( Add columns)
+		 */
+		String jail_update;
+		List<String> jailColumns = getJailsColumns();
+		for (String column : jailColumns) {
+			try {
+				jail_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "JAILS` "
+						+ "ADD COLUMN " + column;
+
+				PreparedStatement ps = cntx.prepareStatement(jail_update);
+				ps.executeUpdate();
+
+			} catch (SQLException ee) {
+				if (ee.getErrorCode() != 1060)
+					TownyMessaging.sendErrorMsg("Error updating table JAILS :" + ee.getMessage());
+			}
+		}
+		TownyMessaging.sendDebugMsg("Table JAILS is updated!");
+        
     }
     
     /**

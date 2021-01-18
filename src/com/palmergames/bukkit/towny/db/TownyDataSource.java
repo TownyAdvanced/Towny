@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
 
@@ -52,12 +53,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadJails() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorldList() && savePlotGroupList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveRegenList() && saveSnapshotList();
+		return saveWorldList() && savePlotGroupList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -88,6 +89,8 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadTownBlocks();
 
+	abstract public boolean loadJailList();
+	
 	abstract public boolean loadResident(Resident resident);
 
 	abstract public boolean loadTown(Town town);
@@ -95,6 +98,8 @@ public abstract class TownyDataSource {
 	abstract public boolean loadNation(Nation nation);
 
 	abstract public boolean loadWorld(TownyWorld world);
+	
+	abstract public boolean loadJail(Jail jail);
 
 	abstract public boolean loadPlotGroupList();
 
@@ -113,6 +118,8 @@ public abstract class TownyDataSource {
 	abstract public boolean saveTown(Town town);
 	
 	abstract public boolean savePlotGroup(PlotGroup group);
+	
+	abstract public boolean saveJail(Jail jail);
 
 	abstract public boolean saveNation(Nation nation);
 
@@ -141,6 +148,8 @@ public abstract class TownyDataSource {
 	abstract public void deleteFile(String file);
 	
 	abstract public void deletePlotGroup(PlotGroup group);
+	
+	abstract public void deleteJail(Jail jail);
 
 	public boolean cleanup() {
 
@@ -202,6 +211,18 @@ public abstract class TownyDataSource {
 			}
 		return true;
 	}
+	
+	public boolean loadJails() {
+		TownyMessaging.sendDebugMsg("Loading Jails");
+		for (Jail jail : getAllJails()) {
+			if (!loadJail(jail)) {
+				System.out.println("[Towny] Loading Error: Could not read jail data '" + jail.getUUID() + "'.");
+				return false;
+			}
+			jail.getTown().addJail(jail);
+		}
+		return true;
+	}
 
 	/*
 	 * Save all of category
@@ -222,6 +243,13 @@ public abstract class TownyDataSource {
 		return true;
 	}
 
+	public boolean saveJails() {
+		TownyMessaging.sendDebugMsg("Saving Jails");
+		for (Jail jail : getAllJails())
+			saveJail(jail);
+		return true;
+	}
+	
 	public boolean saveTowns() {
 
 		TownyMessaging.sendDebugMsg("Saving Towns");
@@ -261,6 +289,8 @@ public abstract class TownyDataSource {
 	abstract public List<Resident> getResidents();
 	
 	abstract public List<PlotGroup> getAllPlotGroups();
+	
+	abstract public List<Jail> getAllJails();
 
 	abstract public List<Resident> getResidents(String[] names);
 
@@ -354,6 +384,8 @@ public abstract class TownyDataSource {
 
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
 
+	abstract public void removeJail(Jail jail);
+	
 	/**
 	 * @deprecated as of 0.96.4.0, We do not advise messing with the Residents Map.
 	 * 

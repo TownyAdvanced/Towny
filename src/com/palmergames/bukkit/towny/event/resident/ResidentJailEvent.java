@@ -1,13 +1,13 @@
 package com.palmergames.bukkit.towny.event.resident;
 
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.jail.Jail;
 
+import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ResidentJailEvent extends Event {
 
@@ -33,20 +33,27 @@ public class ResidentJailEvent extends Event {
 		return resident;
 	}
 	
-	public int getJailSpawn() {
-		return resident.getJailSpawn();
+	public Jail getJail() {
+		return resident.getJail();
 	}
 	
-	public String getJailTownName() {
-		return resident.getJailTown();
+	public int getJailCell() {
+		return resident.getJailCell();
 	}
 	
-	@Nullable
+	public int getJailHours() {
+		return resident.getJailHours();
+	}
+	
 	public Town getJailTown() {
-		return TownyUniverse.getInstance().getTown(getJailTownName());
+		return getJail().getTown();
 	}
-	
-	public int getJailDays() {
-		return resident.getJailDays();
+
+	public String getJailTownName() {
+		return getJailTown().getName();
+	}
+
+	public Location getJailSpawnLocation() {
+		return getJail().getJailCellLocations().get(getJailCell());
 	}
 }

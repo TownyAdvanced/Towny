@@ -33,9 +33,12 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.DataFieldIO;
+import com.palmergames.bukkit.towny.object.jail.Jail;
+import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
+import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
@@ -610,6 +613,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<PlotGroup> getAllPlotGroups() {
 		return new ArrayList<>(universe.getGroups());
 	}
+	
+	/*
+	 * get Jails method.
+	 */
+	public List<Jail> getAllJails() {
+		return new ArrayList<>(universe.getJailUUIDMap().values());
+	}
 
 	/*
 	 * Remove Object Methods
@@ -690,6 +700,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			logger.warn(event.getCancelMessage());
 			return;
 		}
+		
+		if (townBlock.isJail())
+			removeJail(townBlock.getJail());
 
 		TownyUniverse.getInstance().removeTownBlock(townBlock);
 		deleteTownBlock(townBlock);
@@ -768,8 +781,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// Look for residents inside of this town's jail and free them
 		for (Resident jailedRes : TownyUniverse.getInstance().getJailedResidentMap()) {
 			if (jailedRes.hasJailTown(town.getName())) {
-                jailedRes.setJailed(0, town);
-                saveResident(jailedRes);
+                JailUtil.unJailResident(jailedRes, UnJailReason.JAIL_DELETED);
             }
 		}
 
@@ -897,6 +909,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public void removeJail(Jail jail) {
+		for (Resident resident : universe.getJailedResidentMap()) 
+			if (resident.getJail().equals(jail))
+				JailUtil.unJailResident(resident, UnJailReason.JAIL_DELETED);
+
+		TownyUniverse.getInstance().unregisterJail(jail);
+		deleteJail(jail);
+	}
+	
 	/*
 	 * Rename Object Methods
 	 */
@@ -988,16 +1010,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				saveResident(resident);
 			}
 
-			//search and update all resident's jailTown with new name.
-
-            for (Resident toCheck : universe.getResidents()){
-                    if (toCheck.hasJailTown(oldName)) {
-                        toCheck.setJailTown(newName);
-                        
-                        saveResident(toCheck);
-                    }
-            }
-            
 			// Update all townBlocks with the new name
 
 			for (TownBlock townBlock : town.getTownBlocks()) {
@@ -1580,7 +1592,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (NotRegisteredException ignored) {}
 		}
 		String mayorName = mergeFrom.getMayor().getName();
-		List<Location> jails = new ArrayList<Location>(mergeFrom.getAllJailSpawns());
+		List<Jail> jails = TownyUniverse.getInstance().getJailUUIDMap().values().stream()
+				.filter(jail -> jail.getTown().equals(mergeFrom))
+				.collect(Collectors.toList());
 		List<Location> outposts = new ArrayList<Location>(mergeFrom.getAllOutpostSpawns());
 
 		mergeInto.addPurchasedBlocks(mergeFrom.getPurchasedBlocks());
@@ -1620,21 +1634,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		}
 
-		for (Location jail : jails) {
-			try {
-				TownBlock jailPlot = TownyAPI.getInstance().getTownBlock(jail);
-				if (jailPlot.getType() != TownBlockType.JAIL)
-					jailPlot.setType(TownBlockType.JAIL);
-				
-				mergeInto.addJailSpawn(jail);
-			} catch (TownyException ignored) {}
-		}
-
-		for (Resident jailedResident : TownyUniverse.getInstance().getJailedResidentMap()) {
-			if (jailedResident.hasJailTown(mergeFrom.getName())) {
-				jailedResident.setJailTown(mergeInto.getName());
-				jailedResident.setJailSpawn(jailedResident.getJailSpawn() + mergeInto.getAllJailSpawns().size());
-			}
+		for (Jail jail : jails) {
+			TownBlock jailPlot = jail.getTownBlock();
+			if (jailPlot.getType() != TownBlockType.JAIL)
+				jailPlot.setType(TownBlockType.JAIL);
+			
+			jail.setTown(mergeInto);
 		}
 
 		for (Location outpost : outposts)

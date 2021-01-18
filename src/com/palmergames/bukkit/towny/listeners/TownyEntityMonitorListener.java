@@ -15,9 +15,12 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.jail.Jail;
+import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -427,101 +430,80 @@ public class TownyEntityMonitorListener implements Listener {
 	public void isJailingAttackers(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) throws NotRegisteredException {
 		if (TownySettings.isJailingAttackingEnemies() || TownySettings.isJailingAttackingOutlaws()) {
 			Location loc = defenderPlayer.getLocation();
-			TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
+			// Not a Towny World.
 			if (!TownyAPI.getInstance().isTownyWorld(loc.getWorld()))
 				return;
-			if (TownyAPI.getInstance().getTownBlock(loc) == null)
+
+			// Not in a Town.
+			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(loc);
+			if (townBlock == null)
 				return;
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(loc); 
-			
+
+			// Not in an arena plot.
 			if (townBlock.getType() == TownBlockType.ARENA)
 				return;
+
+			// Not if they're already jailed.
 			if (defenderResident.isJailed()) {
-				if (!townBlock.isJail()) {
+				if (!townBlock.isJail())
 					TownyMessaging.sendGlobalMessage(Translation.of("msg_killed_attempting_to_escape_jail", defenderPlayer.getName()));
-					return;
-				}							
 				return;			
 			}
+			
+			// Not if the killer has no Town.
 			if (!attackerResident.hasTown()) 
 				return;
+			
 			Town attackerTown = attackerResident.getTownOrNull();
-
-			// Try outlaw jailing first.
-			if (TownySettings.isJailingAttackingOutlaws()) {
-				if (attackerTown.hasOutlaw(defenderResident)) {
-
-					if (TownyAPI.getInstance().isWilderness(loc))
-						return;
-
-					if (!TownyAPI.getInstance().getTown(loc).hasResident(attackerResident))
-						return;
-
-					if (!attackerTown.hasJailSpawn()) 
-						return;
-
-					if (!TownyAPI.getInstance().isWarTime()) {
-						if (!townyUniverse.getPermissionSource().testPermission(attackerPlayer, PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
-							return;
-						defenderResident.setJailed(1, attackerTown);
-						defenderResident.setJailDays(TownySettings.getJailedOutlawJailDays());
-						defenderResident.save();
-						return;
-						
-					} else {
-						TownBlock jailBlock = null;
-						Integer index = 1;
-						for (Location jailSpawn : attackerTown.getAllJailSpawns()) {
-							jailBlock = TownyAPI.getInstance().getTownBlock(jailSpawn);
-
-							if (War.isWarZone(jailBlock.getWorldCoord())) {
-								defenderResident.setJailed(index, attackerTown);
-								TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
-								return;
-							}
-							index++;
-							TownyMessaging.sendDebugMsg("A jail spawn was skipped because the plot has fallen in war.");
-						}
-						TownyMessaging.sendPrefixedTownMessage(attackerTown, Translation.of("msg_war_player_cant_be_jailed_plot_fallen"));
-						return;
-					}
-				}
-			}
 			
-			// Try enemy jailing second
-			if (!townBlock.getTownOrNull().getName().equals(attackerTown.getName()))
+			// Not if victim died in a town that isn't the attackerResident's town.
+			if (!TownyAPI.getInstance().getTown(loc).getUUID().equals(attackerTown.getUUID()))
 				return;
 			
-			if (!attackerResident.hasNation() || !defenderResident.hasNation()) 
+			// Not if the town has no jails.
+			if (!attackerTown.hasJails()) 
 				return;
-			try {
-				if (!attackerResident.getTown().getNation().getEnemies().contains(defenderResident.getTown().getNation())) 
+
+			// Try outlaw jailing first
+			if (!TownyAPI.getInstance().isWarTime() && TownySettings.isJailingAttackingOutlaws() && attackerTown.hasOutlaw(defenderResident)) {
+				// Not if they don't have the jailer node.
+				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(attackerPlayer, PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
 					return;
-			} catch (NotRegisteredException e) {
-				e.printStackTrace();
-			}								
-			if (!attackerTown.hasJailSpawn()) 
+				
+				// Send to jail. Hours are set later on.
+				JailUtil.jailResident(defenderResident, attackerTown.getJail(0), 0, 0, JailReason.OUTLAW_DEATH, attackerResident.getPlayer());
 				return;
-			
-			if (!TownyAPI.getInstance().isWarTime()) {
-				defenderResident.setJailed(1, attackerTown);
-			} else {
-				TownBlock jailBlock = null;
-				Integer index = 1;
-				for (Location jailSpawn : attackerTown.getAllJailSpawns()) {
-					jailBlock = TownyAPI.getInstance().getTownBlock(jailSpawn);
-					if (jailBlock != null && War.isWarZone(jailBlock.getWorldCoord())) {
-						defenderResident.setJailed(index, attackerTown);
-						TownyMessaging.sendTitleMessageToResident(defenderResident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
-						return;
+
+			// Try enemy jailing second
+			} else if (TownyAPI.getInstance().isWarTime() && TownySettings.isJailingAttackingEnemies()){
+				
+				// Not if the victim has no Town.
+				if (!defenderResident.hasTown())
+					return;
+				Town defenderTown = defenderResident.getTownOrNull();
+				
+				// Not if they aren't considered enemies.
+				if (!CombatUtil.isEnemy(attackerTown, defenderTown))
+					return;
+
+				// Attempt to send them to the Town's primary jail first if it is still in the war.
+				if (War.isWarZone(attackerTown.getPrimaryJail().getTownBlock().getWorldCoord())) {
+					JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 0, JailReason.PRISONER_OF_WAR.getHours(), JailReason.PRISONER_OF_WAR, attackerResident.getPlayer());
+					return;
+					
+ 				} else {
+				// Find a jail that hasn't had its HP dropped to 0.
+					for (Jail jail : attackerTown.getJails()) {
+						if (War.isWarZone(jail.getTownBlock().getWorldCoord())) {
+							// Send to jail. Hours are set later on.
+							JailUtil.jailResident(defenderResident, jail, 0, 0, JailReason.PRISONER_OF_WAR, attackerResident.getPlayer());
+							break;
+						}
 					}
-					index++;
-					TownyMessaging.sendDebugMsg("A jail spawn was skipped because the plot has fallen in war.");
 				}
 				TownyMessaging.sendPrefixedTownMessage(attackerTown, Translation.of("msg_war_player_cant_be_jailed_plot_fallen"));
-				return;
 			}
-
 		}
 	}
 }

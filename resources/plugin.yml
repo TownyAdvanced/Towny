@@ -314,6 +314,7 @@ permissions:
             towny.command.town.deposit: true
             towny.command.town.here: true
             towny.command.town.invites.*: true
+            towny.command.town.jail: true
             towny.command.town.join: true
             towny.command.town.kick: true
             towny.command.town.leave: true
@@ -334,6 +335,7 @@ permissions:
             towny.command.town.withdraw: true
             towny.command.town.unclaim.*: true
             towny.command.town.merge: true
+            towny.command.town.unjail: true
 
     towny.command.town.list:
         description: Users are able to use all the various methods of sorting the town list.
@@ -430,7 +432,6 @@ permissions:
         children:
             towny.command.town.toggle.explosion: true
             towny.command.town.toggle.fire: true
-            towny.command.town.toggle.jail: true
             towny.command.town.toggle.mobs: true
             towny.command.town.toggle.neutral: true
             towny.command.town.toggle.open: true
