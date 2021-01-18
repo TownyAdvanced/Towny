@@ -123,8 +123,8 @@ public abstract class Account implements Nameable {
 		 * The following has been commented out in order to account for line 61 already doing the adding.
 		 */
 		
-//		// Put money in.
-//		TownyEconomyHandler.add(getName(), amount, getBukkitWorld());
+		// Put money in.
+		TownyEconomyHandler.add(getName(), amount, getBukkitWorld());
 		
 		/*
 		 * TODO: This would appear to be taking money from the server account in all cases, 

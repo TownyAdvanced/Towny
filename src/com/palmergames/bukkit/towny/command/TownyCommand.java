@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.command;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyAsciiMap;
@@ -492,6 +493,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 		if (plugins > 0)
 			output.add(townyPlugins + Colors.Gold + "]");
+		
+		if (TownyEconomyHandler.isActive()) {
+			output.add("TownyServerAccount: " + TownyEconomyHandler.getFormattedBalance(TownyEconomyHandler.getBalance(TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT), Bukkit.getWorlds().get(0))));
+			output.add("Towny War Chest:    " + TownyEconomyHandler.getFormattedBalance(TownyEconomyHandler.getBalance("towny-war-chest", Bukkit.getWorlds().get(0))));
+		}
 		return output;
 	}
 
