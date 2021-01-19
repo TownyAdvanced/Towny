@@ -5751,3 +5751,5 @@ v0.92.0.11:
   - Fix admin bankhistory commands.
     - Closes #4701.
   - Fix closed_economy not working with bankruptcy or bankhistory features.
+  - Fix allied players triggering death payments.
+    - Closes #4705.
