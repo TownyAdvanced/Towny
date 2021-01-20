@@ -1271,3 +1271,7 @@ msg_comptype_ruined: 'Ruined Status'
 msg_comptype_bankrupt: 'Bankrupt Status'
 msg_ruined: '&c(Ruined)'
 msg_bankrupt: '&c(Bankrupt)'
+
+town_invite_help_7: 'Revoke all invites to join your town.'
+town_revoke_no_invites: '&cThere are no existing invites to revoke.'
+town_revoke_invite_successful_all: '&bYou have successfully revoked all invites to join your town.'

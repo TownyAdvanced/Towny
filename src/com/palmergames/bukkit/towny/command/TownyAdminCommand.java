@@ -614,7 +614,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		if (split.length == 0 || split.length < 1 || split[0].equalsIgnoreCase("?")) {
+		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			sender.sendMessage(ChatTools.formatTitle("/townyadmin plot"));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin plot claim", "[player]", ""));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin plot meta", "", ""));
@@ -770,7 +770,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public void parseAdminUnclaimCommand(String[] split) {
 
 		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
-			HelpMenu.TA_UNCLAIM.send((CommandSender) getSender());
+			HelpMenu.TA_UNCLAIM.send(getSender());
 		} else {
 
 			if (isConsole) {
@@ -788,14 +788,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				new TownClaim(plugin, player, null, selection, false, false, true).start();
 
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
-				return;
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(player, e.getMessage());
 			}
 		}
 	}
 
-	public void parseAdminResidentCommand(String[] split) throws TownyException {
+	public void parseAdminResidentCommand(String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			sender.sendMessage(ChatTools.formatTitle("/townyadmin resident"));
@@ -878,7 +877,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 	
-	public void parseAdminTownCommand(String[] split) throws TownyException {
+	public void parseAdminTownCommand(String[] split) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
@@ -943,7 +942,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			if (split[1].equalsIgnoreCase("invite")) {
 				// Give admins the ability to invite a player to town, invite still requires acceptance.
-				TownCommand.townAdd(getSender(), town, StringMgmt.remArgs(split, 2));
+				TownCommand.townAddOrRemove(getSender(), town, StringMgmt.remArgs(split, 2));
 				
 			} else if (split[1].equalsIgnoreCase("add")) {
 				// Force-join command for admins to use to bypass invites system.
@@ -1104,7 +1103,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("outlaw")) {
 				TownCommand.parseTownOutlawCommand(sender, StringMgmt.remArgs(split, 2), true, town);
 			} else if (split[1].equalsIgnoreCase("leavenation")) {
-				Nation nation = null;
+				Nation nation;
 				if (town.hasNation())
 					nation = town.getNation();
 				else
@@ -1135,8 +1134,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] bankhistory", ""));
 				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] outlaw [add|remove] [name]", ""));
 				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] leavenation", ""));
-				
-				return;
 			}
 
 		} catch (TownyException | EconomyException e) {
@@ -2010,7 +2007,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public static boolean handlePlotMetaCommand(Player player, String[] split) throws TownyException {
 		
 		String world = player.getWorld().getName();
-		TownBlock townBlock = null;
+		TownBlock townBlock;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		try {
@@ -2119,13 +2116,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	private void parseAdminDepositAllCommand(String[] split) {
-		if (split.length == 0)
-			showDepositAllHelp();
-		else if (split.length > 1)
-			showDepositAllHelp();
-		else if (split.length == 1) {
+		if (split.length == 1) {
 			String reason = "townyadmin depositall";
-			double amount = 0;
+			double amount;
 			try {
 				amount = Double.parseDouble(split[0]);				
 			} catch (NumberFormatException e) {
@@ -2136,18 +2129,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			for (Nation nation : TownyUniverse.getInstance().getNations()) {
 				try {
 					nation.getAccount().deposit(amount, reason);
-				} catch (EconomyException e) {
-				}
+				} catch (EconomyException ignore) { }
 			}
 			
 			for (Town town : TownyUniverse.getInstance().getTowns()) {
 				try {
 					town.getAccount().deposit(amount, reason);
-				} catch (EconomyException e) {
-				}
+				} catch (EconomyException ignore) { }
 			}
 			TownyMessaging.sendMsg(sender, Translation.of("msg_ta_deposit_all_success", TownyEconomyHandler.getFormattedBalance(amount)));
 		}
+		else if (split.length == 0) showDepositAllHelp();
+		else showDepositAllHelp();
 	}
 	
 	private void showDepositAllHelp() {
