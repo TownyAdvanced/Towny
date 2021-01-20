@@ -252,8 +252,6 @@ public class TownBlock extends TownyObject {
 		if (this.isJail())
 			this.getTown().removeJailSpawn(this.getCoord());
 
-		System.out.println("getType " + getType());
-		System.out.println("setType " + type);
 		if ((getType().equals(TownBlockType.ARENA) || type.equals(TownBlockType.ARENA))
 			&& TownySettings.getPVPCoolDownTime() > 0 
 			&& !TownyUniverse.getInstance().getPermissionSource().testPermission(resident.getPlayer(), PermissionNodes.TOWNY_ADMIN.getNode())) {
