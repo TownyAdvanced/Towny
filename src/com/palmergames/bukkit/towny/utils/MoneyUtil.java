@@ -169,7 +169,7 @@ public class MoneyUtil {
 		if (!nation && town.isRuined())
 			throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
 		
-		if (withdraw && (nation && !TownySettings.getNationBankAllowWithdrawls()) || (!nation && !TownySettings.getTownBankAllowWithdrawls()))
+		if (withdraw && ((nation && !TownySettings.getNationBankAllowWithdrawls()) || (!nation && !TownySettings.getTownBankAllowWithdrawls())))
 			throw new TownyException(Translation.of("msg_err_withdraw_disabled"));
 		
 		if (!withdraw && (TownySettings.getTownBankCap() > 0 || TownySettings.getNationBankCap() > 0)) {

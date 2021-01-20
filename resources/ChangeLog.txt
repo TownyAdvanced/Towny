@@ -5753,3 +5753,5 @@ v0.92.0.11:
   - Fix closed_economy not working with bankruptcy or bankhistory features.
   - Fix allied players triggering death payments.
     - Closes #4705.
+  - Fix disallowed-withdrawing-from-banks affecting depositing as well.
+    - Closes #4707.
