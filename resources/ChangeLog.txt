@@ -5757,3 +5757,5 @@ v0.92.0.11:
     - Closes #4707.
   - Fix withers being able to smash through walls.
     - Closes #4708.
+0.96.7.0:
+  - Bump version for hotfix release.
