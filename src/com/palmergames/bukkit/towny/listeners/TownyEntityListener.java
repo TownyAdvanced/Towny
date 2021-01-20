@@ -66,6 +66,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -669,6 +670,10 @@ public class TownyEntityListener implements Listener {
 					event.setCancelled(true);
 				break;
 		
+			case WITHER:
+				List<Block> allowed = TownyActionEventExecutor.filterExplodableBlocks(new ArrayList<>(Collections.singleton(event.getBlock())), event.getBlock().getType(), event.getEntity());
+				event.setCancelled(allowed.isEmpty());
+				break;
 			/*
 			 * Protect campfires from SplashWaterBottles. Uses a destroy test.
 			 */
