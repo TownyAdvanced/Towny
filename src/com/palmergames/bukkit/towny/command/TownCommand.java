@@ -205,8 +205,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	);
 	
 	private static final List<String> townInviteTabCompletes = Arrays.asList(
-		"-all",
 		"sent",
+		"revokeall",
 		"received",
 		"accept",
 		"deny"
@@ -892,7 +892,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					}
 				}
 			}
-			if (newSplit[0].equalsIgnoreCase("-all")) 
+			if (newSplit[0].equalsIgnoreCase("revokeall")) 
 			{
 				townRevokeAll(player, resident.getTown());
 			} else {
@@ -3048,8 +3048,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 	 * @throws TownyException - General Exception, or if Town's spawn has not been set
 	 */
 	public static void townAddOrRemove(CommandSender sender, Town specifiedTown, String[] names) throws TownyException {
-		
-		if (names[0].equals("-all")) return;
 		
 		String name;
 		if (sender instanceof Player) {

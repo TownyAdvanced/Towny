@@ -159,11 +159,11 @@ public enum HelpMenu {
 			return new MenuBuilder("town invite")
 				.add("[player]", Translation.of("town_invite_help_1"))
 				.add("-[player]", Translation.of("town_invite_help_2"))
-				.add("-all", Translation.of("town_invite_help_7"))
 				.add("sent", Translation.of("town_invite_help_3"))
 				.add("received", Translation.of("town_invite_help_4"))
 				.add("accept [nation]", Translation.of("town_invite_help_5"))
-				.add("deny [nation]", Translation.of("town_invite_help_6"));
+				.add("deny [nation]", Translation.of("town_invite_help_6"))
+				.add("revokeall", Translation.of("town_invite_help_7"));
 		}
 	},
 
