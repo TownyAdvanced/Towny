@@ -40,7 +40,7 @@ public abstract class TownyDamageEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * Set the event to cancelled.
+	 * Set the event to cancelled. False meaning damage, True meaning damage will be prevented.
 	 */
 	@Override
 	public void setCancelled(boolean cancel) {

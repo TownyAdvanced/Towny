@@ -32,7 +32,7 @@ public class TownyPlayerDamagePlayerEvent extends TownyDamageEvent {
 	 * @param cause DamageCause.
 	 * @param townblock TownBlock or null if in the wilderness.
 	 * @param cancelled Whether Towny will cancel this already.
-	 * @param player Player causing the damage to the harmedEntity.
+	 * @param attackingPlayer Player causing the damage to the harmedEntity.
 	 */
 	public TownyPlayerDamagePlayerEvent(Location location, Entity harmedEntity, DamageCause cause, TownBlock townblock, boolean cancelled, Player attackingPlayer) {
 		super(location, harmedEntity, cause, townblock, cancelled);
@@ -48,26 +48,38 @@ public class TownyPlayerDamagePlayerEvent extends TownyDamageEvent {
 	}
 
 	/**
-	 * @return Player harming the entity.
+	 * @return Player harming the other player.
 	 */
 	public Player getAttackingPlayer() {
 		return player;
 	}
-	
+
+	/**
+	 * @return Player being harmed by another player.
+	 */
 	public Player getVictimPlayer() {
 		return (Player) entity;
 	}
 	
+	/**
+	 * @return Resident object of the attacking player or (unlikely,) null.
+	 */
 	@Nullable
 	public Resident getAttackingResident() {
 		return TownyUniverse.getInstance().getResident(player.getUniqueId());
 	}
-	
+
+	/**
+	 * @return Resident object of the victim player or (unlikely,) null.
+	 */
 	@Nullable
 	public Resident getVictimResident() {
 		return TownyUniverse.getInstance().getResident(getVictimPlayer().getUniqueId());
 	}
 	
+	/**
+	 * @return Town object of the attacking Resident or (unlikely,) null.
+	 */
 	@Nullable
 	public Town getAttackerTown() {
 		try {
@@ -76,6 +88,9 @@ public class TownyPlayerDamagePlayerEvent extends TownyDamageEvent {
 		return null;
 	}
 
+	/**
+	 * @return Town object of the victim Resident or (unlikely,) null.
+	 */
 	@Nullable
 	public Town getVictimTown() {
 		try {

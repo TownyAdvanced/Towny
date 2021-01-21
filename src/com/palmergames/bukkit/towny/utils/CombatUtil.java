@@ -8,7 +8,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
-import com.palmergames.bukkit.towny.event.damage.WorldPVPTestEvent;
+import com.palmergames.bukkit.towny.event.damage.WildernessPVPTestEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -281,9 +281,9 @@ public class CombatUtil {
 		} else {
 
 			/*
-			 * Attacker isn't in a TownBlock so check the world PvP
+			 * Attacker isn't in a TownBlock so check the wilderness PvP status.
 			 */
-			WorldPVPTestEvent event = new WorldPVPTestEvent(world, isWorldPvP(world));
+			WildernessPVPTestEvent event = new WildernessPVPTestEvent(world, isWorldPvP(world));
 			Bukkit.getPluginManager().callEvent(event);
 			return !event.isPvp();
 		}
