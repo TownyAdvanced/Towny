@@ -57,22 +57,43 @@ public abstract class TownyObject implements Nameable, Savable {
 	}
 
 	public void addMetaData(@NotNull CustomDataField<?> md) {
+		this.addMetaData(md, false);
+	}
+
+	// Exists to maintain backwards compatibility
+	// DO NOT OVERRIDE THIS METHOD ANYWHERE
+	public void addMetaData(@NotNull CustomDataField<?> md, boolean save) {
 		Validate.notNull(md);
 		if (metadata == null)
 			metadata = new HashMap<>();
-		
+
 		metadata.put(md.getKey(), md);
+		
+		if (save) 
+			this.save();
 	}
 
 	public void removeMetaData(@NotNull CustomDataField<?> md) {
+		this.removeMetaData(md, false);
+	}
+
+	// Exists to maintain backwards compatibility
+	// DO NOT OVERRIDE THIS METHOD ANYWHERE
+	public boolean removeMetaData(@NotNull CustomDataField<?> md, boolean save) {
 		Validate.notNull(md);
 		if (!hasMeta())
-			return;
-		
-		metadata.remove(md.getKey());
-		
+			return false;
+
+		final boolean removed = metadata.remove(md.getKey()) != null;
+
 		if (metadata.isEmpty())
 			this.metadata = null;
+		
+		// Only save if the element was actually removed
+		if (save && removed)
+			this.save();
+		
+		return removed;
 	}
 	
 	@Unmodifiable

@@ -5,19 +5,19 @@ import com.palmergames.bukkit.util.Colors;
 public class StringDataField extends CustomDataField<String> {
 
     public StringDataField(String key) {
-        super(key, CustomDataFieldType.StringField);
+        super(key);
     }
 
 	public StringDataField(String key, String value, String label) {
-		super(key, CustomDataFieldType.StringField, value, label);
+		super(key, value, label);
 	}
     
     public StringDataField(String key, String value) {
-        super(key, CustomDataFieldType.StringField, value, null);
+        super(key, value, null);
     }
 
 	@Override
-	protected String getTypeID() {
+	public String getTypeID() {
 		return typeID();
 	}
 	

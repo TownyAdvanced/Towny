@@ -31,11 +31,14 @@ public class DataFieldIO {
 		JsonArray array = new JsonArray();
 		array.add(cdf.getTypeID());
 		array.add(cdf.getKey());
-		array.add(cdf.serializeValueToString());
-		if (cdf.hasLabel())
-			array.add(cdf.getLabel());
+		
+		if (cdf.getValue() != null)
+			array.add(cdf.serializeValueToString());
 		else
 			array.add(JsonNull.INSTANCE);
+		
+		if (cdf.hasLabel())
+			array.add(cdf.getLabel());
 		
 		return array;
 	}
@@ -80,7 +83,10 @@ public class DataFieldIO {
 		
 		final String key = array.get(1).getAsString();
 		final String value = array.get(2).isJsonNull() ? null : array.get(2).getAsString();
-		final String label = array.get(3).isJsonNull() ? null : array.get(3).getAsString();
+		String label = null;
+		
+		if (array.size() == 4 && !array.get(3).isJsonNull())
+			label = array.get(3).getAsString();
 		
 		T cdf = deserializer.deserialize(key, value);
 		
@@ -90,4 +96,62 @@ public class DataFieldIO {
 		return cdf;
 	}
 	
+	public static Collection<CustomDataField<?>> deserializeLegacyMeta(String metadata) {
+		String[] split = metadata.split(";");
+		
+		List<CustomDataField<?>> cdfList = new ArrayList<>(split.length);
+		
+		for (String cdfStr : split) {
+			CustomDataField<?> cdf = deserializeLegacyCDF(cdfStr);
+			if (cdf != null)
+				cdfList.add(cdf);
+		}
+		
+		return cdfList;
+	}
+	
+	private static CustomDataField<?> deserializeLegacyCDF(String str) {
+		String[] tokens = str.split(",");
+		
+		if (tokens.length < 2)
+			return null;
+		
+		int typeInt = Integer.parseInt(tokens[0]);
+		String key = tokens[1];
+		CustomDataField<?> field = null;
+
+		switch (typeInt) {
+			case 0:
+				field = new IntegerDataField(key);
+				break;
+			case 1:
+				field = new StringDataField(key);
+				break;
+			case 2:
+				field = new BooleanDataField(key);
+				break;
+			case 3:
+				field = new DecimalDataField(key);
+				break;
+			case 4:
+				field = new LongDataField(key);
+				break;
+		}
+
+		if (field.canParseFromString(tokens[2]))
+			field.setValueFromString(tokens[2]);
+
+		String label;
+		if (tokens[3] == null || tokens[3].equalsIgnoreCase("nil"))
+			label = null;
+		else
+			label = tokens[3];
+
+		field.setLabel(label);
+
+		return field;
+	}
+
+
+
 }

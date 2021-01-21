@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import org.bukkit.Bukkit;
 
@@ -27,7 +28,6 @@ public class MetadataLoader {
 	public static MetadataLoader getInstance() {
 		return instance;
 	}
-	
 	
 	Map<String, DataFieldDeserializer<?>> deserializerMap = new HashMap<>();
 	ArrayList<ObjectMetadata> storedMetadata = new ArrayList<>();
@@ -65,16 +65,32 @@ public class MetadataLoader {
 			return;
 		
 		for (ObjectMetadata storedMeta : storedMetadata) {
+			final String serializedMeta = storedMeta.serializedMetadata;
 			try {
-				Collection<CustomDataField<?>> fields = DataFieldIO.deserializeMeta(
-					storedMeta.serializedMetadata, deserializerMap
-				);
+				boolean saveObj = false;
+				Collection<CustomDataField<?>> fields;
+				// Check if JSON array
+				if (serializedMeta.charAt(0) != '[') {
+					fields = DataFieldIO.deserializeLegacyMeta(serializedMeta);
+					saveObj = true;
+				}
+				else {
+					fields = DataFieldIO.deserializeMeta(
+						serializedMeta, deserializerMap
+					);
+				}
 
 				for (CustomDataField<?> cdf : fields) {
-					storedMeta.object.addMetaData(cdf);
+					storedMeta.object.addMetaData(cdf, false);
 				}
+				
+				// Save the object if legacy metadata has been converted.
+				if (saveObj)
+					storedMeta.object.save();
 			} catch (IOException ex) {
-				// TODO Throw Error
+				TownyMessaging.sendErrorMsg("Error loading metadata for towny object " + storedMeta.object.getClass().getName()
+					+ storedMeta.object.getName() + "!");
+				ex.printStackTrace();
 			}
 		}
 		storedMetadata.clear();

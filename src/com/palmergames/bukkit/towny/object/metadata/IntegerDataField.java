@@ -6,20 +6,20 @@ public class IntegerDataField extends CustomDataField<Integer> {
     
     // Initializes default value to zero.
     public IntegerDataField(String key) {
-        super(key, CustomDataFieldType.IntegerField);
+        super(key);
     }
 
 	public IntegerDataField(String key, Integer value, String label) {
-		super(key, CustomDataFieldType.IntegerField, value, label);
+		super(key, value, label);
 	}
     
     // Allow for initialization with default value provided.
     public IntegerDataField(String key, Integer value) {
-        super(key, CustomDataFieldType.IntegerField, value);
+        super(key, value);
     }
 
 	@Override
-	protected String getTypeID() {
+	public String getTypeID() {
 		return typeID();
 	}
 	
