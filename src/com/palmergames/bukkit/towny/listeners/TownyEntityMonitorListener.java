@@ -123,6 +123,9 @@ public class TownyEntityMonitorListener implements Listener {
 				// This was a player kill
 				attackerPlayer = (Player) attackerEntity;
 				attackerResident = townyUniverse.getResident(attackerPlayer.getUniqueId());
+				if (attackerResident == null)
+					// Probably an NPC.
+					return;
 			}
 
 			// This was a suicide, don't award money or jail.

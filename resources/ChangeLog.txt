@@ -5759,3 +5759,5 @@ v0.92.0.11:
     - Closes #4708.
 0.96.7.0:
   - Bump version for hotfix release.
+0.96.7.1:
+  - Fix NPCs being able to throw an exception when they kill a player.
