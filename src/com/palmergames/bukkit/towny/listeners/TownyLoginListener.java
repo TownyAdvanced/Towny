@@ -6,8 +6,9 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.util.Colors;
+
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -36,7 +37,7 @@ public class TownyLoginListener implements Listener {
 			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Towny is preventing you from logging in using this account name.");
 			disallowed = true;
 		} else if (player.getName().equals(serverAccount) || player.getName().equals(serverAccount.replace("-", "_"))){
-			// Deny because this is the warChest account.
+			// Deny because this is the closed economy server account.
 			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Towny is preventing you from logging in using this account name.");
 			disallowed = true;
 		} else if (player.getName().startsWith(TownySettings.getTownAccountPrefix()) || 
@@ -50,7 +51,7 @@ public class TownyLoginListener implements Listener {
 		if (disallowed) {
 			String ip = event.getAddress().toString();
 			ip = ip.substring(1);
-			String msg = "A player using the IP address " + Color.RED + ip + Color.GREEN + " tried to log in using an account name which could damage your server's economy, but was prevented by Towny. Consider banning this IP address!";
+			String msg = "A player using the IP address " + Colors.Red + ip + Colors.Green + " tried to log in using an account name (" + event.getPlayer().getName() + ") which could damage your server's economy, but was prevented by Towny. Consider banning this IP address!";
 			TownyMessaging.sendMsg(msg);
 			for (Player ops : Bukkit.getOnlinePlayers()) {     	 
         		if (ops.isOp() || ops.hasPermission("towny.admin"))
