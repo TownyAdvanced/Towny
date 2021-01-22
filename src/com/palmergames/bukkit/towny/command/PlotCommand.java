@@ -666,9 +666,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								return true;
 							}
 							
+							String newName = StringMgmt.join(StringMgmt.remFirstArg(split), "_");
+							
 							// Test if the plot name contains invalid characters.
-							if (!NameValidation.isBlacklistName(split[1])) {								
-								townBlock.setName(StringMgmt.join(StringMgmt.remFirstArg(split), ""));
+							if (!NameValidation.isBlacklistName(newName)) {								
+								townBlock.setName(newName);
 
 								//townBlock.setChanged(true);
 								townBlock.save();

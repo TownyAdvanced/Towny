@@ -5762,3 +5762,5 @@ v0.92.0.11:
 0.96.7.1:
   - Fix NPCs being able to throw an exception when they kill a player.
   - Fix up the message shown to admins when a player has tried to log in with a dis-allowed name.
+  - Fix plot names having their spaces parsed out.
+  - Fix debug messaging in DailyTimerTask.
