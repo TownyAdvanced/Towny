@@ -9,8 +9,8 @@ import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class DataFieldIO {
 	
@@ -37,10 +37,24 @@ public class DataFieldIO {
 		else
 			array.add(JsonNull.INSTANCE);
 		
-		if (cdf.hasLabel())
-			array.add(cdf.getLabel());
+		final String label = cdf.getLabel();
+		// RawDataFields return false for hasLabel regardless, so do a null check instead.
+		if (label != null)
+			array.add(label);
 		
 		return array;
+	}
+
+	public static Collection<CustomDataField<?>> deserializeMeta(String metadata) throws IOException {
+		if (metadata == null || metadata.isEmpty())
+			return Collections.emptyList();
+		
+		if (metadata.charAt(0) != '[') {
+			return deserializeLegacyMeta(metadata);
+		}
+		else {
+			return deserializeMetaToRaw(metadata);
+		}
 	}
 	
 	private static JsonArray convertToArray(String metadata) throws IOException {
@@ -57,7 +71,7 @@ public class DataFieldIO {
 		}
 	}
 	
-	public static Collection<CustomDataField<?>> deserializeMeta(String metadata, Map<String, DataFieldDeserializer<?>> deserializerMap) throws IOException {
+	private static Collection<CustomDataField<?>> deserializeMetaToRaw(String metadata) throws IOException {
 		JsonArray array = convertToArray(metadata);
 		List<CustomDataField<?>> cdfList = new ArrayList<>(array.size());
 		for (JsonElement element : array) {
@@ -68,19 +82,15 @@ public class DataFieldIO {
 			if (cdfArray.size() < 2)
 				continue;
 			
-			String typeID = cdfArray.get(0).getAsString();
-			CustomDataField<?> cdf = deserializeCDF(cdfArray, deserializerMap.get(typeID));
-			if (cdf != null)
-				cdfList.add(cdf);
+			RawDataField rdf = deserializeCDFToRaw(cdfArray);
+			cdfList.add(rdf);
 		}
 		
 		return cdfList;
 	}
 	
-	private static <T extends CustomDataField<?>> T deserializeCDF(JsonArray array, DataFieldDeserializer<T> deserializer) {
-		if (deserializer == null)
-			return null;
-		
+	private static RawDataField deserializeCDFToRaw(JsonArray array) {
+		final String typeID = array.get(0).getAsString();
 		final String key = array.get(1).getAsString();
 		final String value = array.get(2).isJsonNull() ? null : array.get(2).getAsString();
 		String label = null;
@@ -88,12 +98,8 @@ public class DataFieldIO {
 		if (array.size() == 4 && !array.get(3).isJsonNull())
 			label = array.get(3).getAsString();
 		
-		T cdf = deserializer.deserialize(key, value);
 		
-		if (cdf != null && label != null)
-			cdf.setLabel(label);
-		
-		return cdf;
+		return new RawDataField(typeID, key, value, label);
 	}
 	
 	public static Collection<CustomDataField<?>> deserializeLegacyMeta(String metadata) {

@@ -1,27 +1,18 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MetadataLoader {
-	
-	private static class ObjectMetadata {
-		private final TownyObject object;
-		private final String serializedMetadata;
-		
-		private ObjectMetadata(TownyObject obj, String metadata) {
-			this.object = obj;
-			this.serializedMetadata = metadata;
-		}
-	}
 	
 	private static final MetadataLoader instance = new MetadataLoader();
 	
@@ -30,7 +21,7 @@ public class MetadataLoader {
 	}
 	
 	Map<String, DataFieldDeserializer<?>> deserializerMap = new HashMap<>();
-	ArrayList<ObjectMetadata> storedMetadata = new ArrayList<>();
+	ArrayList<TownyObject> storedMetadata = new ArrayList<>();
 	
 	
 	private MetadataLoader() {
@@ -53,7 +44,33 @@ public class MetadataLoader {
 	}
 
 	public void deserializeMetadata(TownyObject object, String serializedMetadata) {
-		storedMetadata.add(new ObjectMetadata(object, serializedMetadata));
+		initialDeserialization(object, serializedMetadata);
+		storedMetadata.add(object);
+	}
+	
+	private void initialDeserialization(TownyObject object, String serializedMetadata) {
+		if (serializedMetadata == null || serializedMetadata.isEmpty())
+			return;
+		
+		// Immediately deserialize all metadata.
+		// Legacy Metadata will be parsed to actual metadata classes.
+		// Modern metadata will be parsed to RawDataFields
+
+		Collection<CustomDataField<?>> fields = Collections.emptyList();
+		try {
+			fields = DataFieldIO.deserializeMeta(serializedMetadata);
+		} catch (IOException e) {
+			// Unsure if logger is loaded at this point
+			System.out.println("[Towny] Error loading metadata for towny object " + object.getClass().getName()
+				+ object.getName() + "!");
+			e.printStackTrace();
+		}
+		
+		if (!fields.isEmpty()) {
+			for (CustomDataField<?> cdf : fields) {
+				object.addMetaData(cdf, false);
+			}
+		}
 	}
 	
 	public void scheduleDeserialization() {
@@ -63,36 +80,43 @@ public class MetadataLoader {
 	private void runDeserialization() {
 		if (storedMetadata.isEmpty())
 			return;
-		
-		for (ObjectMetadata storedMeta : storedMetadata) {
-			final String serializedMeta = storedMeta.serializedMetadata;
-			try {
-				boolean saveObj = false;
-				Collection<CustomDataField<?>> fields;
-				// Check if JSON array
-				if (serializedMeta.charAt(0) != '[') {
-					fields = DataFieldIO.deserializeLegacyMeta(serializedMeta);
-					saveObj = true;
-				}
-				else {
-					fields = DataFieldIO.deserializeMeta(
-						serializedMeta, deserializerMap
-					);
-				}
 
-				for (CustomDataField<?> cdf : fields) {
-					storedMeta.object.addMetaData(cdf, false);
-				}
+		List<CustomDataField<?>> deserializedFields = new ArrayList<>();
+		for (TownyObject tObj : storedMetadata) {
+			// Convert all RawDataFields to actual CustomDataField classes.
+			for (CustomDataField<?> cdf : tObj.getMetadata()) {
+				if (!(cdf instanceof RawDataField))
+					continue;
 				
-				// Save the object if legacy metadata has been converted.
-				if (saveObj)
-					storedMeta.object.save();
-			} catch (IOException ex) {
-				TownyMessaging.sendErrorMsg("Error loading metadata for towny object " + storedMeta.object.getClass().getName()
-					+ storedMeta.object.getName() + "!");
-				ex.printStackTrace();
+				RawDataField rdf = (RawDataField) cdf;
+				
+				final String typeID = rdf.getTypeID();
+				DataFieldDeserializer<?> deserializer = deserializerMap.get(typeID);
+				
+				if (deserializer == null)
+					continue;
+				
+				CustomDataField<?> deserializedCDF = deserializer.deserialize(rdf.getKey(), rdf.getValue());
+				
+				if (deserializedCDF == null)
+					continue;
+
+				final String label = rdf.getLabel();
+				if (label != null)
+					deserializedCDF.setLabel(label);
+				
+				deserializedFields.add(deserializedCDF);
+			}
+			
+			if (!deserializedFields.isEmpty()) {
+				for (CustomDataField<?> cdf : deserializedFields) {
+					// Will override the metadata
+					tObj.addMetaData(cdf, false);
+				}
+				deserializedFields.clear();
 			}
 		}
+		
 		storedMetadata.clear();
 		// Reduce memory alloc after load.
 		storedMetadata.trimToSize();
