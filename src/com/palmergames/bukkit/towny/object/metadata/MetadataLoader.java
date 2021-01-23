@@ -33,8 +33,14 @@ public class MetadataLoader {
 		deserializerMap.put(DecimalDataField.typeID(), TownyCDFDeserializer.DECIMAL_DF);
 		deserializerMap.put(LongDataField.typeID(), TownyCDFDeserializer.LONG_DF);
 	}
-	
-	
+
+	/**
+	 * Register a deserializer for a specific custom CustomDataField class.
+	 * @param typeID type id of the CustomDataField class to deserialize.
+	 * @param deserializer actual deserializer for the class.
+	 *                        
+	 * @return whether or not the deserializer was registered.
+	 */
 	public boolean registerDeserializer(String typeID, DataFieldDeserializer<?> deserializer) {
 		if (deserializerMap.containsKey(typeID))
 			return false;

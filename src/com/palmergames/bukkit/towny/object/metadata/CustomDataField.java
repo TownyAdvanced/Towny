@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class CustomDataField<T> implements Cloneable {
     private T value;
@@ -29,8 +31,16 @@ public abstract class CustomDataField<T> implements Cloneable {
     {
         this(key, null, null);
     }
-    
-    public abstract String getTypeID();
+
+	/**
+	 * Gets the type id for the given CustomDataField class. 
+	 * This value is attached to the class, and not a specific instance. 
+	 * Used for serialization purposes. 
+	 * 
+	 * @return type id of the given CustomDataField class.
+	 */
+	@NotNull
+	public abstract String getTypeID();
 
     public T getValue() {
         
@@ -40,13 +50,27 @@ public abstract class CustomDataField<T> implements Cloneable {
     public void setValue(T value) {
         this.value = value;
     }
-    
-    public abstract void setValueFromString(String strValue);
-    
-    protected String serializeValueToString() {
+
+	/**
+	 * Sets the value based on the given input.
+	 * Used when admins want to edit metadata in-game.
+	 * 
+	 * @param strValue input.
+	 */
+	public abstract void setValueFromString(String strValue);
+
+	/**
+	 * Serializes the current value to a string. 
+	 * Used for saving the CustomDataField object.
+	 * 
+	 * @return serialized string
+	 */
+	@Nullable
+	protected String serializeValueToString() {
     	return String.valueOf(getValue());
 	}
 
+	@NotNull
     public String getKey() {
         return key;
     }
@@ -55,6 +79,7 @@ public abstract class CustomDataField<T> implements Cloneable {
     	return hasLabel();
 	}
     
+	@NotNull
     public String getLabel() {
     	if (hasLabel())
     		return label;
@@ -90,7 +115,14 @@ public abstract class CustomDataField<T> implements Cloneable {
         return out;
     }
 
-    // Overridable validation function
+	/**
+	 * Determines whether the given input can be parsed to the appropriate value.
+	 * Used to parse admin input for in-game metadata editing.
+	 * 
+	 * @param strValue admin input
+	 * @return whether the string can be parsed or not
+	 */
+	// Overridable validation function
 	protected boolean canParseFromString(String strValue) {
     	return true;
 	}
@@ -120,6 +152,7 @@ public abstract class CustomDataField<T> implements Cloneable {
         return getKey().hashCode();
     }
     
+    @NotNull
     public abstract CustomDataField<T> clone();
     
 	/**
