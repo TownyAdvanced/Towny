@@ -797,7 +797,7 @@ public class TownyFormatter {
 		List<String> extraFields = new ArrayList<>();
 		for (CustomDataField<?> cdf : to.getMetadata()) {
 			String newAdd = "";
-			if (!cdf.hasLabel())
+			if (!cdf.shouldDisplayInStatus())
 				continue;
 			
 			newAdd = Colors.Green + cdf.getLabel() + ": ";

@@ -100,10 +100,9 @@ public class MetadataLoader {
 				
 				if (deserializedCDF == null)
 					continue;
-
-				final String label = rdf.getLabel();
-				if (label != null)
-					deserializedCDF.setLabel(label);
+				
+				if (rdf.hasLabel())
+					deserializedCDF.setLabel(rdf.getLabel());
 				
 				deserializedFields.add(deserializedCDF);
 			}

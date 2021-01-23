@@ -37,10 +37,8 @@ public class DataFieldIO {
 		else
 			array.add(JsonNull.INSTANCE);
 		
-		final String label = cdf.getLabel();
-		// RawDataFields return false for hasLabel regardless, so do a null check instead.
-		if (label != null)
-			array.add(label);
+		if (cdf.hasLabel())
+			array.add(cdf.getLabel());
 		
 		return array;
 	}

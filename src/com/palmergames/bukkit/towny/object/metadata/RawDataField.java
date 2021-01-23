@@ -30,16 +30,10 @@ class RawDataField extends CustomDataField<String> {
 		return "UNLOADED - " + getValue();
 	}
 
-	// Never display a RawDataField on the status board of an object. 
+	// Never display a RawDataField on the status board of an object.
 	@Override
-	public boolean hasLabel() {
+	public boolean shouldDisplayInStatus() {
 		return false;
-	}
-
-	// Return the raw label which can actually be a null value.
-	@Override
-	public String getLabel() {
-		return label;
 	}
 
 	@Override

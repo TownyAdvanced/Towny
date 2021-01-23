@@ -38,8 +38,6 @@ public abstract class CustomDataField<T> implements Cloneable {
     }
 
     public void setValue(T value) {
-        // TODO: Save to yml
-        
         this.value = value;
     }
     
@@ -52,6 +50,10 @@ public abstract class CustomDataField<T> implements Cloneable {
     public String getKey() {
         return key;
     }
+    
+    public boolean shouldDisplayInStatus() {
+    	return hasLabel();
+	}
     
     public String getLabel() {
     	if (hasLabel())
