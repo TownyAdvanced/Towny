@@ -753,7 +753,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								// are only checking for an
 								// exception
 							} catch (TownyException e) {
-								TownyMessaging.sendErrorMsg(resident, e.getMessage());
+								TownyMessaging.sendErrorMsg(player, e.getMessage());
 								return false;
 							}
 							

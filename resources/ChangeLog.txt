@@ -5764,3 +5764,4 @@ v0.92.0.11:
   - Fix up the message shown to admins when a player has tried to log in with a dis-allowed name.
   - Fix plot names having their spaces parsed out.
   - Fix debug messaging in DailyTimerTask.
+  - Fix error message being sent to resident instead of player.
