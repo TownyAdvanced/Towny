@@ -102,6 +102,8 @@ public class TownRuinUtil {
 		
 		town.save();
 		plugin.resetCache();
+		
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_ruin_town", town.getName()));
 	}
 
 	/**

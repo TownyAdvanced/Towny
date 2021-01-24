@@ -1,5 +1,5 @@
 name: Towny
-version: 0.97
+version: 0.98
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -1280,3 +1280,7 @@ msg_comptype_ruined: 'Estado de Ruina'
 msg_comptype_bankrupt: 'Estado de Bancarrota'
 msg_ruined: '&c(Ruina)'
 msg_bankrupt: '&c(Bancarrota)'
+
+#Added in 0.98
+msg_del_town2: '&bThe town of %s has been deleted!'
+msg_ruin_town: '&bThe town of %s fell into ruin!'

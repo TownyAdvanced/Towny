@@ -732,7 +732,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeTown(Town town, boolean delayFullRemoval) {
 		
-		TownyMessaging.sendGlobalMessage(Translation.of("msg_del_town", town.getName()));
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_del_town2", town.getName()));
 		
 		if (delayFullRemoval) {
 			/*
@@ -796,6 +796,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		deleteTown(town);
 		
 		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town, mayor.getUUID()));
+		
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_del_town2", town.getName()));
 	}
 
 	@Override

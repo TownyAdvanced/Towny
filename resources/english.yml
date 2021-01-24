@@ -1,5 +1,5 @@
 name: Towny
-version: 0.97
+version: 0.98
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -163,7 +163,6 @@ msg_nation_peaceful: '&bYour nation is now'
 msg_tax_exempt: '&bTown staff are exempt from taxes.'
 msg_del_nation: '&bThe nation %s was disbanded!'
 msg_del_resident: '&b%s lost all his Towny data!'
-msg_del_town: '&bThe town of %s fell into ruin!'
 msg_join_nation: '&bThe town of %s joined the nation!'
 msg_join_town: '&b%s joined the town!'
 msg_friend_add: '&b%s added you as a friend.'
@@ -1271,3 +1270,7 @@ msg_comptype_ruined: 'Ruined Status'
 msg_comptype_bankrupt: 'Bankrupt Status'
 msg_ruined: '&c(Ruined)'
 msg_bankrupt: '&c(Bankrupt)'
+
+#Added in 0.98
+msg_del_town2: '&bThe town of %s has been deleted!'
+msg_ruin_town: '&bThe town of %s fell into ruin!'

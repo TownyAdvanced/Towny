@@ -1,5 +1,5 @@
 name: Towny
-version: 0.97
+version: 0.98
 language: polish
 authors: Continuator - Martinez, Helper - EmpressKedavra, First translation (0.19 version) - Serip
 website: 'http://townyadvanced.github.io/'
@@ -1270,3 +1270,7 @@ msg_comptype_ruined: 'Ruined Status'
 msg_comptype_bankrupt: 'Bankrupt Status'
 msg_ruined: '&c(Ruined)'
 msg_bankrupt: '&c(Bankrupt)'
+
+#Added in 0.98
+msg_del_town2: '&bThe town of %s has been deleted!'
+msg_ruin_town: '&bThe town of %s fell into ruin!'
