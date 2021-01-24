@@ -522,29 +522,6 @@ public class Nation extends Government {
 		return Collections.unmodifiableList(out);
 	}
 
-	/**
-	 * Gets the nation's UUID.
-	 * @return nation UUID
-	 * 
-	 * @deprecated Use {@link Government#getUUID()} instead.
-	 */
-	@Deprecated
-	public UUID getUuid() {
-		return getUUID();
-	}
-
-	/**
-	 * Set the nation's UUID. This should only be used internally! 
-	 * 
-	 * @param uuid UUID to set.
-	 *             
-	 * @deprecated Use {@link Government#setUUID(UUID)} instead.
-	 */
-	@Deprecated
-	public void setUuid(UUID uuid) {
-		setUUID(uuid);
-	}
-
 	public boolean hasValidUUID() {
 		return uuid != null;
 	}
@@ -630,6 +607,19 @@ public class Nation extends Government {
 		return allies.contains(nation);
 	}
 
+	public String getMapColorHexCode() {
+		return mapColorHexCode;
+	}
+
+	public void setMapColorHexCode(String mapColorHexCode) {
+		this.mapColorHexCode = mapColorHexCode;
+	}
+	
+	@Override
+	public void save() {
+		TownyUniverse.getInstance().getDataSource().saveNation(this);
+	}
+	
 	/**
 	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 *
@@ -652,56 +642,6 @@ public class Nation extends Government {
 	@Deprecated
 	public String getEconomyName() {
 		return StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
-	}
-	
-	/**
-	 * @deprecated as of 0.95.2.15, please use {@link EconomyAccount#getHoldingBalance()} instead.
-	 * 
-	 * @return the holding balance of the economy account.
-	 * @throws EconomyException When an economy error occurs
-	 */
-	@Deprecated
-	public double getHoldingBalance() throws EconomyException {
-		try {
-			return getAccount().getHoldingBalance();
-		} catch (NoClassDefFoundError e) {
-			e.printStackTrace();
-			throw new EconomyException("Economy error getting holdings for " + getEconomyName());
-		}
-	}
-
-	/**
-	 * @deprecated As of 0.95.1.15, please use {@link EconomyAccount#withdraw(double, String)} instead.
-	 *
-	 * @param amount value to deduct from the player's account
-	 * @param reason leger memo stating why amount is deducted
-	 * @return true if successful
-	 * @throws EconomyException if the transaction fails
-	 */
-	@Deprecated
-	public boolean pay(double amount, String reason) throws EconomyException {
-		return getAccount().withdraw(amount, reason);
-	}
-
-	/**
-	 * @deprecated As of 0.95.1.15, please use {@link EconomyAccount#collect(double, String)} instead.
-	 *
-	 * @param amount currency to collect
-	 * @param reason memo regarding transaction
-	 * @return collected or pay to server account   
-	 * @throws EconomyException if transaction fails
-	 */
-	@Deprecated
-	public boolean collect(double amount, String reason) throws EconomyException {
-		return getAccount().deposit(amount, reason);
-	}
-
-	public String getMapColorHexCode() {
-		return mapColorHexCode;
-	}
-
-	public void setMapColorHexCode(String mapColorHexCode) {
-		this.mapColorHexCode = mapColorHexCode;
 	}
 	
 	/**
@@ -735,8 +675,27 @@ public class Nation extends Government {
 		setNeutral(neutral);
 	}
 
-	@Override
-	public void save() {
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+	/**
+	 * Gets the nation's UUID.
+	 * @return nation UUID
+	 * 
+	 * @deprecated as of 0.96.6.0, use {@link Government#getUUID()} instead.
+	 */
+	@Deprecated
+	public UUID getUuid() {
+		return getUUID();
 	}
+
+	/**
+	 * Set the nation's UUID. This should only be used internally! 
+	 * 
+	 * @param uuid UUID to set.
+	 *             
+	 * @deprecated as of 0.96.6.0, use {@link Government#setUUID(UUID)} instead.
+	 */
+	@Deprecated
+	public void setUuid(UUID uuid) {
+		setUUID(uuid);
+	}
+
 }

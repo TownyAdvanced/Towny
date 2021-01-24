@@ -502,7 +502,7 @@ public class TownyUniverse {
 	 *
 	 * @return map of string -&gt; resident.
 	 * 
-	 * @deprecated Towny does not recommend directly accessing internal structures.
+	 * @deprecated as of 0.96.6.0. Towny does not recommend directly accessing internal structures.
 	 */
 	@Deprecated
     public Map<String, Resident> getResidentMap() {
@@ -586,7 +586,7 @@ public class TownyUniverse {
 	 * 
 	 * @return direct access to the town name map that TownyUniverse uses.
 	 * 
-	 * @deprecated It is not recommended to directly access the map, but rather use
+	 * @deprecated as of 0.96.4.0. It is not recommended to directly access the map, but rather use
 	 * other towny universe methods to ensure safe-access and safe-manipulation.
 	 */
 	@Deprecated
@@ -825,7 +825,7 @@ public class TownyUniverse {
 	 * 
 	 * @return direct access to internal nation map.
 	 * 
-	 * @deprecated It is not safe, nor recommended, to directly access the internal nation map. 
+	 * @deprecated as of 0.96.4.0, It is not safe, nor recommended, to directly access the internal nation map. 
 	 */
 	@Deprecated
 	public Map<String, Nation> getNationsMap() {
@@ -1144,7 +1144,7 @@ public class TownyUniverse {
 	 * 
 	 * @return Returns the output of {@link TownySettings#getSaveDatabase()}
 	 * 
-	 * @deprecated Use {@link TownySettings#getSaveDatabase()} instead.
+	 * @deprecated as of 0.96.3.0, use {@link TownySettings#getSaveDatabase()} instead.
 	 */
 	@Deprecated
 	public String getSaveDbType() {
@@ -1156,7 +1156,7 @@ public class TownyUniverse {
 	 * 
 	 * @return Returns the output of {@link TownySettings#getLoadDatabase()}
 	 * 
-	 * @deprecated Use {@link TownySettings#getLoadDatabase()} instead.
+	 * @deprecated as of 0.96.3.0, use {@link TownySettings#getLoadDatabase()} instead.
 	 */
 	@Deprecated
 	public String getLoadDbType() {

@@ -25,9 +25,6 @@ import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-//import java.util.Hashtable;
-//import com.palmergames.bukkit.towny.TownySettings;
-
 /*
  * --- : Loading process : ---
  *
@@ -267,11 +264,22 @@ public abstract class TownyDataSource {
 
 	abstract public List<Resident> getResidents(String[] names);
 
+	/**
+	 * @deprecated as of 0.96.6.0. Use {@link TownyUniverse#getResident(String)} instead.
+	 * @param name The name of the resident.
+	 * @return Resident with the given name.
+	 * @throws NotRegisteredException if the Resident does not exist.
+	 */
 	@Deprecated
 	abstract public Resident getResident(String name) throws NotRegisteredException;
 
 	abstract public void removeNation(Nation nation);
 
+	/**
+	 * @deprecated as of 0.96.6.0. Use {@link TownyUniverse#hasResident(String)} instead.
+	 * @param name The name of the resident.
+	 * @return true if the resident exists.
+	 */
 	@Deprecated
 	abstract public boolean hasResident(String name);
 
@@ -300,13 +308,13 @@ public abstract class TownyDataSource {
 	abstract public List<TownyWorld> getWorlds();
 
 	/**
+	 * @deprecated as of 0.96.3.0, Use {@link Town#getHomeblockWorld()} instead.
+	 * 
 	 * Legacy method to get a world associated with a town.
 	 * 
 	 * @param townName The name of a town.
 	 * 
 	 * @return Returns a {@link TownyWorld} associated with the town.
-	 * 
-	 * @deprecated Use {@link Town#getHomeblockWorld()} instead.
 	 */
 	@Deprecated // TODO: Scrap worlds holding Towns. Towns' homeblocks should be reliable enough to return a world when needed (if we need it at all anymore.)
 	public TownyWorld getTownWorld(String townName) {
@@ -347,25 +355,25 @@ public abstract class TownyDataSource {
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
 
 	/**
-	 * @return Returns a {@link Set} of the Residents Map
+	 * @deprecated as of 0.96.4.0, We do not advise messing with the Residents Map.
 	 * 
-	 * @deprecated We do not advise messing with the Residents Map.
+	 * @return Returns a {@link Set} of the Residents Map
 	 */
 	@Deprecated
 	abstract public Set<String> getResidentKeys();
 
 	/**
-	 * @return Returns a {@link Set} of the Towns Map
+	 * @deprecated as of 0.96.4.0, We do not advise messing with the Towns Map.
 	 * 
-	 * @deprecated We do not advise messing with the Towns Map.
+	 * @return Returns a {@link Set} of the Towns Map
 	 */
 	@Deprecated
 	abstract public Set<String> getTownsKeys();
 
 	/**
-	 * @return Returns a {@link Set} of the Nations Map
+	 * @deprecated as of 0.96.4.0, We do not advise messing with the Nations Map.
 	 * 
-	 * @deprecated We do not advise messing with the Nations Map.
+	 * @return Returns a {@link Set} of the Nations Map
 	 */
 	@Deprecated
 	abstract public Set<String> getNationsKeys();

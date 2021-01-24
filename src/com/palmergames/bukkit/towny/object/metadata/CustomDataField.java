@@ -162,8 +162,8 @@ public abstract class CustomDataField<T> implements Cloneable {
     public abstract CustomDataField<T> clone();
     
 	/**
+	 * @deprecated as of 0.96.3.0, use {@link #clone()} instead.
 	 * Returns a duplicate instance of the object.
-	 * @deprecated Use {@link #clone()} instead.
 	 * @return See {@link #clone()}.
 	 */
 	@Deprecated

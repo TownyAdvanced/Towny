@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -29,8 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static com.palmergames.bukkit.towny.object.EconomyAccount.SERVER_ACCOUNT;
 
 public class Town extends Government implements TownBlockOwner {
 
@@ -233,7 +230,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	/**
-	 * @deprecated Use {@link #getRank(String)} instead.
+	 * @deprecated as of 0.96.3.0, use {@link #getRank(String)} instead.
 	 * @return Returns a list of residents with the assistant rank.
 	 */
 	@Deprecated
@@ -268,10 +265,10 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	/**
+	 * @deprecated Since 0.96.3.0, use {@link Resident#hasTownRank(String)} (using "assistant" as argument) instead.
 	 * Whether a resident has an assistant role or not.
 	 * 
 	 * @param resident - Resident to check for a rank.
-	 * @deprecated Since 0.96.2.5, use {@link Resident#hasTownRank(String)} (using "assistant" as argument) instead.
 	 * @return A true if the resident is an assistant, false otherwise.
 	 */
 	@Deprecated
@@ -1123,15 +1120,6 @@ public class Town extends Government implements TownBlockOwner {
 			outlaws.remove(resident);			
 	}
 
-	/**
-	 * @return The UUID for this town.
-	 * @deprecated Use {@link #getUUID()} instead.
-	 */
-	@Deprecated
-	public UUID getUuid() {
-		return getUUID();
-	}
-
 	public boolean hasValidUUID() {
 		return uuid != null;
 	}
@@ -1363,8 +1351,13 @@ public class Town extends Government implements TownBlockOwner {
 		return ruinedTime;
 	}
 
+	@Override
+	public void save() {
+		TownyUniverse.getInstance().getDataSource().saveTown(this);
+	}
+	
 	/**
-	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
+	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 * 
 	 * @return The world this resides in.
 	 */
@@ -1378,7 +1371,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	/**
-	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getName()} instead.
+	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getName()} instead.
 	 * 
 	 * @return The name of the economy account.
 	 */
@@ -1387,52 +1380,6 @@ public class Town extends Government implements TownBlockOwner {
 		return StringMgmt.trimMaxLength(Town.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
 	}
 	
-	/**
-	 * @deprecated as of 0.95.2.15, please use {@link EconomyAccount#getHoldingBalance()} instead.
-	 * 
-	 * @return the holding balance of the economy account.
-	 * @throws EconomyException On an economy error.
-	 */
-	@Deprecated
-	public double getHoldingBalance() throws EconomyException {
-		try {
-			return getAccount().getHoldingBalance();
-		} catch (NoClassDefFoundError e) {
-			e.printStackTrace();
-			throw new EconomyException("Economy error getting holdings for " + getEconomyName());
-		}
-	}
-
-	/**
-	 * @deprecated As of 0.95.1.15, please use {@link EconomyAccount#pay(double, String)} instead.
-	 *
-	 * @param amount value to deduct from the player's account
-	 * @param reason leger memo stating why amount is deducted
-	 * @return true if successful
-	 * @throws EconomyException if the transaction fails
-	 */
-	@Deprecated
-	public boolean pay(double amount, String reason) throws EconomyException {
-		if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED)) {
-			return getAccount().payTo(amount, SERVER_ACCOUNT, reason);
-		} else {
-			return getAccount().withdraw(amount, null);
-		}
-	}
-
-	/**
-	 * @deprecated As of 0.95.1.15, please use {@link EconomyAccount#collect(double, String)} instead.
-	 *
-	 * @param amount currency to collect
-	 * @param reason memo regarding transaction
-	 * @return collected or pay to server account   
-	 * @throws EconomyException if transaction fails
-	 */
-	@Deprecated
-	public boolean collect(double amount, String reason) throws EconomyException {
-		return getAccount().deposit(amount, reason);
-	}
-
 	/**
 	 * @deprecated As of 0.96.2.0, please use {@link #getBoard()} instead.
 	 * 
@@ -1443,8 +1390,13 @@ public class Town extends Government implements TownBlockOwner {
 		return getBoard();
 	}
 
-	@Override
-	public void save() {
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
+	/**
+	 * @return The UUID for this town.
+	 * @deprecated as of 0.96.4.0, use {@link #getUUID()} instead.
+	 */
+	@Deprecated
+	public UUID getUuid() {
+		return getUUID();
 	}
+
 }

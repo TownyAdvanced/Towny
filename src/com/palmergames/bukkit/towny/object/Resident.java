@@ -304,10 +304,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public boolean isKing() {
 
 		try {
-			return getTown().getNation().isKing(this);
-		} catch (TownyException e) {
-			return false;
-		}
+			return hasNation() && town.getNation().isKing(this);
+		} catch (NotRegisteredException ignored) {}
+		return false;
 	}
 
 	public boolean isMayor() {
@@ -629,7 +628,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return BukkitTools.getPlayer(getName());
 	}
 
-
 	public boolean addTownRank(String rank) throws AlreadyRegisteredException {
 		if (this.hasTown()) {
 			if (hasTownRank(rank))
@@ -889,21 +887,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return permissions;
 	}
 
-	/**
-	 * @deprecated As of 0.97.0.0+ please use {@link EconomyAccount#getWorld()} instead.
-	 *
-	 * @return The world this resides in.
-	 */
-	@Deprecated
-	public World getBukkitWorld() {
-		Player player = getPlayer();
-		if (player != null) {
-			return player.getWorld();
-		} else {
-			return BukkitTools.getWorlds().get(0);
-		}
-	}
-
 	public Confirmation getConfirmation() {
 		return confirmation;
 	}
@@ -923,6 +906,21 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
+	}
+
+	/**
+	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.
+	 *
+	 * @return The world this resides in.
+	 */
+	@Deprecated
+	public World getBukkitWorld() {
+		Player player = getPlayer();
+		if (player != null) {
+			return player.getWorld();
+		} else {
+			return BukkitTools.getWorlds().get(0);
+		}
 	}
 }
 

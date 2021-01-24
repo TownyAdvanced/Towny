@@ -243,39 +243,6 @@ public class TownyMessaging {
 	}
 
 	/**
-	 * Send a message to all online residents of a town
-	 * Doesn't use a [Towny] or [TownName] prefix.
-	 *
-	 * @param town to receive message
-	 * @param lines String list to send as a message
-	 * 
-	 * @deprecated Please use {@link #sendTownMessagePrefixed(Town, String)},
-	 *   {@link #sendPrefixedTownMessage(Town, String)}, {@link #sendPrefixedTownMessage(Town, String[])},
-	 *   or {@link #sendPrefixedTownMessage(Town, List)} instead. 
-	 */
-	@Deprecated
-	public static void sendTownMessage(Town town, List<String> lines) {
-		sendTownMessage(town, lines.toArray(new String[0]));
-	}
-
-	/**
-	 * Send a message to all online residents of a nation
-	 * Doesn't use a [Towny] or [NationName] prefix.
-	 * It is prefered to use sendPrefixedNationMessage or sendNationMessagePrefixed.
-	 *
-	 * @param nation nation to receive message
-	 * @param lines String list to send as a message
-	 * 
-	 * @deprecated Please use {@link #sendNationMessagePrefixed(Nation, String)},
-	 *   {@link #sendNationMessagePrefixed(Nation, List)}, {@link #sendPrefixedNationMessage(Nation, String)},
-	 *   {@link #sendPrefixedNationMessage(Nation, String[])}, or {@link #sendPrefixedNationMessage(Nation, List)} instead.
-	 */
-	@Deprecated
-	public static void sendNationMessage(Nation nation, List<String> lines) {
-		sendNationMessage(nation, lines.toArray(new String[0]));
-	}
-
-	/**
 	 * Send a message to ALL online players and the log.
 	 * Uses default_towny_prefix
 	 *
@@ -323,7 +290,6 @@ public class TownyMessaging {
 		}
 	}
 	
-
 	/**
 	 * Send a message to All online players and the log.
 	 * Does not use the default_towny_prefix.
@@ -358,49 +324,6 @@ public class TownyMessaging {
 			throw new TownyException("Player could not be found!");
 		}
 		player.sendMessage(Translation.of("default_towny_prefix") + line);
-	}
-
-	/**
-	 * Send a multi-line message to All online residents of a town and log
-	 * Doesn't use a [Towny] or [TownName] prefix.
-	 * It is prefered to use sendPrefixedTownMessage or sendTownMessagePrefixed.
-	 * 
-	 * @param town the town to send a message to
-	 * @param lines array of Strings constituting the message.
-	 *
-	 * @deprecated Please use {@link #sendTownMessagePrefixed(Town, String)},
-	 *   {@link #sendPrefixedTownMessage(Town, String)}, {@link #sendPrefixedTownMessage(Town, String[])},
-	 *   or {@link #sendPrefixedTownMessage(Town, List)} instead.    
-	 */
-	@Deprecated
-	public static void sendTownMessage(Town town, String[] lines) {
-		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + line));
-		}
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town)) {
-			for (String line : lines) {
-				player.sendMessage(line);
-			}
-		}
-	}
-
-	/**
-	 * Send a message to All online residents of a town and log
-	 * Doesn't use a [Towny] or [TownName] prefix.
-	 * It is prefered to use sendPrefixedTownMessage or sendTownMessagePrefixed.
-	 *
-	 * @param town town to send message to
-	 * @param line the message to be sent
-	 *
-	 * @deprecated Please use {@link #sendTownMessagePrefixed(Town, String)},
-	 *   {@link #sendPrefixedTownMessage(Town, String)}, {@link #sendPrefixedTownMessage(Town, String[])},
-	 *   or {@link #sendPrefixedTownMessage(Town, List)} instead.    
-	 */
-	@Deprecated
-	public static void sendTownMessage(Town town, String line) {
-		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + line));
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendMessage(line);
 	}
 
 	/**
@@ -457,49 +380,6 @@ public class TownyMessaging {
 		sendPrefixedTownMessage(town, lines.toArray(new String[0]));
 	}
 	
-	/**
-	 * Send a multi-line message to All online residents of a nation and log
-	 * Doesn't use a [Towny] or [NationName] prefix.
-	 * It is prefered to use sendPrefixedNationMessage or sendNationMessagePrefixed.
-	 *
-	 * @param nation the nation to send to
-	 * @param lines array of Strings containing the message
-	 *
-	 * @deprecated Please use {@link #sendNationMessagePrefixed(Nation, String)},
-	 *   {@link #sendNationMessagePrefixed(Nation, List)}, {@link #sendPrefixedNationMessage(Nation, String)},
-	 *   {@link #sendPrefixedNationMessage(Nation, String[])}, or {@link #sendPrefixedNationMessage(Nation, List)} instead.
-	 */
-	@Deprecated
-	public static void sendNationMessage(Nation nation, String[] lines) {
-		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
-		}
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation)) {
-			for (String line : lines) {
-				player.sendMessage(line);
-			}
-		}
-	}
-
-	/**
-	 * Send a message to All online residents of a nation and log
-	 * Doesn't use a [Towny] or [NationName] prefix.
-	 * It is prefered to use sendPrefixedNationMessage or sendNationMessagePrefixed.
-	 *
-	 * @param nation nation to send message to
-	 * @param line the message
-	 *
-	 * @deprecated Please use {@link #sendNationMessagePrefixed(Nation, String)},
-	 *   {@link #sendNationMessagePrefixed(Nation, List)}, {@link #sendPrefixedNationMessage(Nation, String)},
-	 *   {@link #sendPrefixedNationMessage(Nation, String[])}, or {@link #sendPrefixedNationMessage(Nation, List)} instead.
-	 */
-	@Deprecated
-	public static void sendNationMessage(Nation nation, String line) {
-		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendMessage(line);
-	}
-
 	/**
 	 * Send a message to All online residents of a nation and log
 	 * with the [nationname] prefixed to the beginning
@@ -708,8 +588,6 @@ public class TownyMessaging {
 			sendMessage(sender, message);
 		}
 	}
-
-	
 
 	public static void sendRequestMessage(CommandSender player, Invite invite) {
 		

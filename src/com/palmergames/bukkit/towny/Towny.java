@@ -482,18 +482,6 @@ public class Towny extends JavaPlugin {
 		}
 	}
 
-	/**
-	 * Fetch the TownyUniverse instance.
-	 * 
-	 * @return TownyUniverse
-	 * @deprecated Use {@link com.palmergames.bukkit.towny.TownyUniverse#getInstance()} instead.
-	 */
-	@Deprecated
-	public com.palmergames.bukkit.towny.TownyUniverse getTownyUniverse() {
-
-		return townyUniverse;
-	}
-
 	public String getVersion() {
 
 		return version;

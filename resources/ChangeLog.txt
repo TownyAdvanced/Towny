@@ -5767,3 +5767,5 @@ v0.92.0.11:
   - Fix error message being sent to resident instead of player.
   - Bump language files to version 0.98.
     - Replaces ruin/deletion messages to be clearer about what is happening to the town.
+  - Removal of any methods deprecated earlier than 0.96.0.0.
+    - Marked many deprecated methods with the version in which they were deprecated for easier future removal.

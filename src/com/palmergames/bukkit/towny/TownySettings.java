@@ -1312,7 +1312,7 @@ public class TownySettings {
 	}
 	
 	/**
-	 * @deprecated use {@link #getMaxPurchasedBlocks(Town town)}
+	 * @deprecated as of 0.96.6.0, use {@link #getMaxPurchasedBlocks(Town town)}
 	 * @param town Town to get the maximum number of blocks they can buy.
 	 * @return {@link #getMaxPurchasedBlocks(Town)}
 	 */

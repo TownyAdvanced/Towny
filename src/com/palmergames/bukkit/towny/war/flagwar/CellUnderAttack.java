@@ -22,13 +22,13 @@ public class CellUnderAttack extends Cell {
 	private long timeBetweenColorChange;
 
 	/**
+	 * @deprecated as of 0.96.4.0, To be removed in a future release of Towny. Please transition to using {@link #CellUnderAttack(Towny, String, Block, long)}.
+	 * 
 	 * Old CellUnderAttack class constructor, marked for eventual removal.
 	 * 
 	 * @param plugin Instance of {@link Towny}
 	 * @param nameOfFlagOwner Name of the Resident that placed the flag
 	 * @param flagBaseBlock Flag representing the "flag pole" of the block
-	 * 
-	 * @deprecated To be removed in a future release of Towny. Please transition to using {@link #CellUnderAttack(Towny, String, Block, long)}.   
 	 */
 	@Deprecated
 	public CellUnderAttack(Towny plugin, String nameOfFlagOwner, Block flagBaseBlock) {

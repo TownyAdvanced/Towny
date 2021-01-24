@@ -200,13 +200,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.4.0, use {@link TownyUniverse#newTown(String)} instead.
 	 * Create a new town from a name
 	 * 
 	 * @param name town name
 	 * @throws AlreadyRegisteredException thrown if town already exists.
 	 * @throws NotRegisteredException thrown if town has an invalid name.
-	 * 
-	 * @deprecated Use {@link TownyUniverse#newTown(String)} instead.
 	 */
 	@Deprecated
 	@Override
@@ -261,10 +260,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 */
 
 	/**
+	 * @deprecated as of 0.96.6.0, use {@link TownyUniverse#hasResident(String)} instead.
+	 * 
 	 * @param name Name to check for.
 	 * @return whether Towny has a resident by the name.
-	 * 
-	 * @deprecated Use {@link TownyUniverse#hasResident(String)} instead.
 	 */
 	@Override
 	@Deprecated
@@ -273,12 +272,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.4.0, use {@link TownyUniverse#hasTown(String)} instead.
+	 * 
 	 * Checks if a town with the name exists.
 	 * 
 	 * @param name Name of the town to check.
 	 * @return whether the town exists.
-	 * 
-	 * @deprecated Use {@link TownyUniverse#hasTown(String)} instead.
 	 */
 	@Deprecated
 	@Override
@@ -287,12 +286,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.4.0, use {@link TownyUniverse#hasNation(String)} instead.
+	 * 
 	 * Check if a nation with the given name exists.
 	 * 
 	 * @param name Name of the nation to check.
 	 * @return whether the nation with the given name exists.
-	 * 
-	 * @deprecated Use {@link TownyUniverse#hasNation(String)} instead.
 	 */
 	@Deprecated
 	@Override
@@ -301,11 +300,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.4.0, No longer used by Towny. Messing with the Resident map is ill advised.
+	 * 
 	 * Gets the names of all residents.
 	 * 
 	 * @return Returns a set of all resident names.
-	 * 
-	 * @deprecated No longer used by Towny. Messing with the Resident map is ill advised.
 	 */
 	@Override
 	@Deprecated
@@ -315,11 +314,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.4.0, No longer used by Towny. Messing with the Towns map is ill advised.
+	 * 
 	 * Gets the keys of TownyUniverse's Towns Map.
 	 * 
 	 * @return Returns {@link Map#keySet()} of {@link TownyUniverse#getTownsMap()}
-	 * 
-	 * @deprecated No longer used by Towny. Messing with the Towns map is ill advised.
 	 */
 	@Override
 	@Deprecated
@@ -329,11 +328,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.4.0, No longer used by Towny. Messing with the Nations map is ill advised. Also this method is inefficient.
+	 * 
 	 * Gets the names of all nations.
 	 * 
 	 * @return Returns a set of all nation names from all registered nations.
-	 * 
-	 * @deprecated No longer used by Towny. Messing with the Nations map is ill advised. Also this method is inefficient.
 	 */
 	@Override
 	@Deprecated
@@ -376,10 +375,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.6.0, Use {@link TownyUniverse#getResidents()} instead.
+	 * 
 	 * Gets a list of all Towny residents.
 	 * @return list of all towny residents
-	 * 
-	 * @deprecated Use {@link TownyUniverse#getResidents()} instead.
 	 */
 	@Override
 	@Deprecated
@@ -388,12 +387,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.6.0, Use {@link TownyUniverse#getResident(String)} instead.
+	 * 
 	 * Get a resident matching a specific name.
 	 * @param name Name of the resident to find.
 	 * @return the resident matching the name.
 	 * @throws NotRegisteredException if no resident matching the name is found.
-	 * 
-	 * @deprecated Use {@link TownyUniverse#getResident(String)} instead.
 	 */
 	@Override
 	@Deprecated
@@ -436,9 +435,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
-	 * @return a list of all towns.
+	 * @deprecated as of 0.96.4.0, Use {@link TownyUniverse#getTowns()} instead.
 	 * 
-	 * @deprecated Use {@link TownyUniverse#getTowns()} instead.
+	 * @return a list of all towns.
 	 */
 	@Deprecated
 	@Override
@@ -448,12 +447,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.4.0, Use {@link TownyUniverse#getTown(String)} instead.
+	 * 
 	 * Gets a town from the passed-in name.
 	 * @param name Town Name
 	 * @return town associated with the name.
 	 * @throws NotRegisteredException Town does not exist.
-	 * 
-	 * @deprecated Use {@link TownyUniverse#getTown(String)} instead.
 	 */
 	@Deprecated
 	@Override
@@ -467,6 +466,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.4.0, Use {@link TownyUniverse#getTown(UUID)} instead.
+	 * 
 	 * Returns the associated town with the passed-in uuid.
 	 * 
 	 * @param uuid UUID of the town to fetch.
@@ -474,8 +475,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * @return town associated with the uuid.
 	 * 
 	 * @throws NotRegisteredException Thrown if town doesn't exist.
-	 * 
-	 * @deprecated Use {@link TownyUniverse#getTown(UUID)} instead.
 	 */
 	@Deprecated
 	@Override
@@ -516,11 +515,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.6.0, Use {@link TownyUniverse#getNations()} instead.
+	 * 
 	 * Get all nations.
 	 * 
 	 * @return all nations.
-	 * 
-	 * @deprecated Use {@link TownyUniverse#getNations()} instead.
 	 */
 	@Deprecated
 	@Override
@@ -530,13 +529,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.6.0, Please use {@link TownyUniverse#getNation(String)} instead.
+	 * 
 	 * Get the nation matching the passed-in name.
 	 * 
 	 * @param name Name of the nation to get.
 	 * @return the nation that matches the name
 	 * @throws NotRegisteredException if no nation is found matching the given name.
-	 *
-	 * @deprecated Please use {@link TownyUniverse#getNation(String)} instead.
 	 */
 	@Deprecated
 	@Override
@@ -550,13 +549,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/**
+	 * @deprecated as of 0.96.6.0, Use {@link TownyUniverse#getNation(UUID)} instead.
+	 * 
 	 * Get the nation matching the given UUID.
 	 * 
 	 * @param uuid UUID of nation to get.
 	 * @return the nation matching the given UUID.
 	 * @throws NotRegisteredException if no nation is found matching the given UUID.
-	 * 
-	 * @deprecated Use {@link TownyUniverse#getNation(UUID)} instead.
 	 */
 	@Deprecated
 	@Override
@@ -619,7 +618,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void removeResident(Resident resident) {
 
 		// Remove resident from towns' outlawlists.
-		for (Town townOutlaw : getTowns()) {
+		for (Town townOutlaw : TownyUniverse.getInstance().getTowns()) {
 			if (townOutlaw.hasOutlaw(resident)) {
 				townOutlaw.removeOutlaw(resident);
 				saveTown(townOutlaw);
@@ -901,7 +900,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				throw new NotRegisteredException(e.getMessage());
 			}
 
-			if (hasTown(filteredName))
+			if (TownyUniverse.getInstance().hasTown(filteredName))
 				throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
 
 			// TODO: Delete/rename any invites.

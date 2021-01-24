@@ -14,9 +14,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
-import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
-import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import org.bukkit.Bukkit;
@@ -363,17 +361,6 @@ public class TownyAPI {
     }
     
     /**
-     * Gets the {@link TownyPermissionSource} that is active.
-     *
-     * @return {@link TownyPermissionSource} that is in use.
-	 * @deprecated use {@link TownyUniverse#getPermissionSource()}
-     */
-    @Deprecated
-    public TownyPermissionSource getPermissionSource() {
-        return townyUniverse.getPermissionSource();
-    }
-    
-    /**
      * Checks if server is currently in war-time.
      *
      * @return true if the server is in war-time.
@@ -410,17 +397,6 @@ public class TownyAPI {
     public void jailTeleport(final Player player, final Location location) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(towny, () -> player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN),
 			(long) TownySettings.getTeleportWarmupTime() * 20);
-    }
-    
-    /**
-     * Gets the {@link War} that is currently active
-     
-     * @return Returns the currently active {@link War}, null if none is active.
-     * @deprecated Use {@link TownyUniverse#getWarEvent()} instead. 
-     */
-    @Deprecated
-    public War getWarEvent() {
-        return com.palmergames.bukkit.towny.TownyUniverse.getInstance().getWarEvent();
     }
     
     public void clearWarEvent() {
