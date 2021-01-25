@@ -1282,5 +1282,5 @@ msg_ruined: '&c(Ruina)'
 msg_bankrupt: '&c(Bancarrota)'
 
 # Añadido en la versión 0.98
-msg_del_town2: '&b¡La ciudad %s ha sido borrada!'
+msg_del_town2: '&b¡Se borró la ciudad de %s!'
 msg_ruin_town: '&b¡La ciudad de %s cayó en la ruina!'
