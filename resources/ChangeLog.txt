@@ -5773,3 +5773,8 @@ v0.92.0.11:
   - Update es-419.yml, courtesy of EuGNosii with PR #4717.
   - Made GUI titles translatable.
     - Closes #4719.
+  - Placeholders:
+    - %townyadvanced_is_nation_peaceful%
+    - %townyadvanced_is_town_peaceful%
+    - If the player has a town/nation which is peaceful the language string "status_town_title_peaceful" will be shown: "&b(Peaceful)".
+    - Addresses https://github.com/TownyAdvanced/SiegeWar/issues/72

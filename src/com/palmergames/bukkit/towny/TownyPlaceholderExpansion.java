@@ -583,6 +583,16 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			try {
 				return townblock != null ? (townblock.getPermissions().pvp ? Translation.of("status_title_pvp"):"") : (TownyAPI.getInstance().getDataSource().getWorld(player.getWorld().getName()).isPVP() ? Translation.of("status_title_pvp"):"");
 			} catch (NotRegisteredException ignored) {}
+		case "is_nation_peaceful": // %townyadvanced_is_nation_peaceful%	
+			try {
+				return resident.hasNation() ? (resident.getTown().getNation().isNeutral() ? Translation.of("status_town_title_peaceful"): "") : "";
+			} catch (NotRegisteredException ignored) {}
+		case "is_town_peaceful": // %townyadvanced_is_town_peaceful%	
+			try {
+				return resident.hasTown() ? (resident.getTown().isNeutral() ? Translation.of("status_town_title_peaceful"): "") : "";
+			} catch (NotRegisteredException ignored) {}
+			
+		
 		default:
 			return null;
 		}
