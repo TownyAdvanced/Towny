@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.util.Colors;
 
@@ -15,7 +17,7 @@ import com.palmergames.bukkit.util.Colors;
  * 
  * Nice and simple.
  */
-public class TownyInventory {
+public class TownyInventory implements InventoryHolder {
 
 	public ArrayList<Inventory> pages = new ArrayList<Inventory>();
 	public int currentPage = 0;
@@ -56,5 +58,14 @@ public class TownyInventory {
 		page.setItem(53, nextpage);
 		page.setItem(45, prevpage);
 		return page;
+	}
+
+	/**
+	 * This is not meant to be accessed like a normal inventory
+	 */
+	@Override
+	@Nullable
+	public Inventory getInventory() {
+		return null;
 	}
 }

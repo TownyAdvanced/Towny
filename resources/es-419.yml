@@ -1284,3 +1284,8 @@ msg_bankrupt: '&c(Bancarrota)'
 # Añadido en la versión 0.98
 msg_del_town2: '&b¡Se borró la ciudad de %s!'
 msg_ruin_town: '&b¡La ciudad de %s cayó en la ruina!'
+gui_title_towny_farmblocks: 'Towny FarmBlocks List'
+gui_title_towny_wildsblocks: 'Towny WildsBlocks List'
+gui_title_towny_itemuse: 'Towny ItemUse List'
+gui_title_towny_switch: 'Towny Switch List'
+gui_title_towny_plotclear: 'Towny Plot Clear Delete List'
