@@ -147,7 +147,7 @@ public class HUDManager implements Listener{
 	}
 
 	public static String check(String string) {
-		return string.length() > 32 ? string.substring(0, 32) : string;
+		return string.length() > 64 ? string.substring(0, 64) : string;
 	}
 
 	public static boolean isUsingHUD(Player player) {
