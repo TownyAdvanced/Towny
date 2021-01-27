@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.event.plot.toggle.PlotTogglePvpEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -577,7 +578,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_HUD.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
 						
-						plugin.getHUDManager().togglePermHUD(player);
+						HUDManager.togglePermHUD(player);
 						
 					} else {
 						if (TownyAPI.getInstance().isWilderness(player.getLocation())) {

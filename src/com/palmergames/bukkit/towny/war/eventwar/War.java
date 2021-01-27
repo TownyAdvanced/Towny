@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -298,7 +299,7 @@ public class War {
 
 			@Override
 			public void run() {
-				plugin.getHUDManager().toggleAllWarHUD();
+				HUDManager.toggleAllWarHUD();
 			}
 			
 		}.runTask(plugin);
