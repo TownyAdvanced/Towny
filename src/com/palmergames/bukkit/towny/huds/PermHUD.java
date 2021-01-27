@@ -72,6 +72,8 @@ public class PermHUD {
 		}
 		if (!plotName.isEmpty())
 			board.getTeam("plot").setSuffix(HUDManager.check(plotName));
+		else
+			board.getTeam("plot").setSuffix(" ");
 		board.getTeam("build").setSuffix(build);
 		board.getTeam("destroy").setSuffix(destroy);
 		board.getTeam("switching").setSuffix(switching);
