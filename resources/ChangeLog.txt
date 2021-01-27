@@ -5780,3 +5780,11 @@ v0.92.0.11:
     - Addresses https://github.com/TownyAdvanced/SiegeWar/issues/72
   - Update spanish.yml, courtesy of ElMoha943 with PR #4722.
   - Update es-419.yml, courtesy of EuGNosii with PR #4723.
+  - API: add convenience methods to TownyAPI:
+    - getNation(name)
+    - getTown(name)
+    - getResident(name)
+    - getNation(uuid)
+    - getTown(uuid)
+    - getResident(uuid)
+  - Fix goofy replacing in TownySpigotMessaging sendSpigotConfirmMessage.

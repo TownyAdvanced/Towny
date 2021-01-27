@@ -111,8 +111,8 @@ public class TownySpigotMessaging {
 		
 		// Use spigot to send the message.
 		player.spigot().sendMessage(new ComponentBuilder(firstline + "\n")
-			.append(confirmComponent).append(ChatColor.WHITE + " - " + Translation.of("msg_confirmation_spigot_click_accept", confirmline.replace('/', '[').replace("[",""), confirmline) + "\n")
-			.append(cancelComponent).append(ChatColor.WHITE + " - " + Translation.of("msg_confirmation_spigot_click_cancel", cancelline.replace('/', '['), cancelline).replace("[","") + "\n")
+			.append(confirmComponent).append(ChatColor.WHITE + " - " + Translation.of("msg_confirmation_spigot_click_accept", confirmline.replace("/", ""), confirmline) + "\n")
+			.append(cancelComponent).append(ChatColor.WHITE + " - " + Translation.of("msg_confirmation_spigot_click_cancel", cancelline.replace("/", ""), cancelline) + "\n")
 			.append(lastline)
 			.create());
 	}

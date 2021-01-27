@@ -23,6 +23,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -93,6 +95,65 @@ public class TownyAPI {
 		return null;
     }
     
+    /**
+     * Gets the nation from the given UUID.
+     * @param uuid UUID of the nation.
+     * @return nation or null if it doesn't exist.
+     */
+    @Nullable
+    public Nation getNation(UUID uuid) {
+    	return TownyUniverse.getInstance().getNation(uuid);
+    }
+    
+    /**
+     * Gets the town from the given UUID.
+     * @param uuid UUID name of the town.
+     * @return town or null if it doesn't exist.
+     */
+    @Nullable
+    public Town getTown(UUID uuid) {
+    	return TownyUniverse.getInstance().getTown(uuid);
+    }
+    
+    /**
+     * Gets the resident from the given UUID.
+     * @param uuid UUID name of the resident.
+     * @return resident or null if it doesn't exist.
+     */
+    @Nullable
+    public Resident getResident(UUID uuid) {
+    	return TownyUniverse.getInstance().getResident(uuid);
+    }  
+
+    /**
+     * Gets the nation from the given name.
+     * @param name String name of the nation.
+     * @return nation or null if it doesn't exist.
+     */
+    @Nullable
+    public Nation getNation(String name) {
+    	return TownyUniverse.getInstance().getNation(name);
+    }
+    
+    /**
+     * Gets the town from the given name.
+     * @param name String name of the town.
+     * @return town or null if it doesn't exist.
+     */
+    @Nullable
+    public Town getTown(String name) {
+    	return TownyUniverse.getInstance().getTown(name);
+    }
+    
+    /**
+     * Gets the resident from the given name.
+     * @param name String name of the resident.
+     * @return resident or null if it doesn't exist.
+     */
+    @Nullable
+    public Resident getResident(String name) {
+    	return TownyUniverse.getInstance().getResident(name);
+    }    
     
     /**
      * Find the the matching {@link Player} of the specified {@link Resident}.
