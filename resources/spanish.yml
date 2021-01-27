@@ -1,7 +1,7 @@
 name: Towny
 version: 0.98
 language: spanish
-author: Seruhio, Alvarote1998, Beelzebu, ElMoha943
+author: Seruhio, Alvarote1998, Beelzebu, ElMoha943, Ngzhiwei
 website: 'http://townyadvanced.github.io/'
 description: >
     Archivo con todos los mensajes del juego, no modificar.
@@ -1276,8 +1276,8 @@ msg_bankrupt: '&c(Bancarrota)'
 #Added in 0.98
 msg_del_town2: '&bLa ciudad de %s fue borrada!'
 msg_ruin_town: '&bLa ciudad de %s cayo en ruinas!'
-gui_title_towny_farmblocks: 'Towny FarmBlocks List'
-gui_title_towny_wildsblocks: 'Towny WildsBlocks List'
-gui_title_towny_itemuse: 'Towny ItemUse List'
-gui_title_towny_switch: 'Towny Switch List'
-gui_title_towny_plotclear: 'Towny Plot Clear Delete List'
+gui_title_towny_farmblocks: 'Lista de Bloques de Granja'
+gui_title_towny_wildsblocks: 'Lista de Bloques de Campo'
+gui_title_towny_itemuse: 'Lista de Uso de Items'
+gui_title_towny_switch: 'Lista de Cambios'
+gui_title_towny_plotclear: 'Lista de Limpiezas de Parcela'
