@@ -32,6 +32,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -67,7 +69,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private final List<String> nationRanks = new ArrayList<>();
 	private List<TownBlock> townBlocks = new ArrayList<>();
 	private final TownyPermission permissions = new TownyPermission();
-	private TownyInventory guiInventory;
+
+	private ArrayList<Inventory> guiPages;
+	private int guiPageNum = 0;
 
 	public Resident(String name) {
 		super(name);
@@ -894,13 +898,28 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setConfirmation(Confirmation confirmation) {
 		this.confirmation = confirmation;
 	}
-	
-	public TownyInventory getGUIInventory() {
-		return guiInventory;
+
+	/**
+	 * @return the current inventory which the player is looking at for the GUIs.
+	 */
+	public Inventory getGUIPage() {
+		return guiPages.get(guiPageNum);
+	}
+
+	public ArrayList<Inventory> getGUIPages() {
+		return guiPages;
 	}
 	
-	public void setGUIInventory(TownyInventory inventory) {
-		this.guiInventory = inventory;
+	public void setGUIPages(ArrayList<Inventory> inventory) {
+		this.guiPages = inventory;
+	}
+	
+	public int getGUIPageNum() {
+		return guiPageNum;
+	}
+
+	public void setGUIPageNum(int currentInventoryPage) {
+		this.guiPageNum = currentInventoryPage;
 	}
 
 	@Override

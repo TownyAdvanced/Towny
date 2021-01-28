@@ -5788,3 +5788,4 @@ v0.92.0.11:
     - getTown(uuid)
     - getResident(uuid)
   - Fix goofy replacing in TownySpigotMessaging sendSpigotConfirmMessage.
+  - Fix regression in GUIs which made inventories unusable.
