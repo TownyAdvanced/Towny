@@ -51,7 +51,6 @@ public class MetadataLoader {
 
 	public void deserializeMetadata(TownyObject object, String serializedMetadata) {
 		initialDeserialization(object, serializedMetadata);
-		storedMetadata.add(object);
 	}
 	
 	private void initialDeserialization(TownyObject object, String serializedMetadata) {
@@ -73,9 +72,26 @@ public class MetadataLoader {
 		}
 		
 		if (!fields.isEmpty()) {
+			boolean hasCustomTypes = false;
 			for (CustomDataField<?> cdf : fields) {
+				// If the rawdatafield is a Towny meta type, convert it immediately.
+				if (cdf instanceof RawDataField) {
+					cdf = convertRawMetadata((RawDataField) cdf);
+				}
+				
+				// CDF is null due to a bad conversion
+				if (cdf == null)
+					continue;
+				
+				// Did not convert, so it has to be a custom meta type
+				if (cdf instanceof RawDataField)
+					hasCustomTypes = true;
+					
 				object.addMetaData(cdf, false);
 			}
+			// If metadata has a custom type, store it to be converted at the first tick
+			if (hasCustomTypes)
+				storedMetadata.add(object);
 		}
 	}
 	
@@ -94,23 +110,13 @@ public class MetadataLoader {
 				if (!(cdf instanceof RawDataField))
 					continue;
 				
-				RawDataField rdf = (RawDataField) cdf;
+				CustomDataField<?> convertedCDF = convertRawMetadata((RawDataField) cdf);
 				
-				final String typeID = rdf.getTypeID();
-				DataFieldDeserializer<?> deserializer = deserializerMap.get(typeID);
-				
-				if (deserializer == null)
+				if (convertedCDF == null ||
+					convertedCDF instanceof RawDataField)
 					continue;
 				
-				CustomDataField<?> deserializedCDF = deserializer.deserialize(rdf.getKey(), rdf.getValue());
-				
-				if (deserializedCDF == null)
-					continue;
-				
-				if (rdf.hasLabel())
-					deserializedCDF.setLabel(rdf.getLabel());
-				
-				deserializedFields.add(deserializedCDF);
+				deserializedFields.add(convertedCDF);
 			}
 			
 			if (!deserializedFields.isEmpty()) {
@@ -125,6 +131,26 @@ public class MetadataLoader {
 		storedMetadata.clear();
 		// Reduce memory alloc after load.
 		storedMetadata.trimToSize();
+	}
+	
+	private CustomDataField<?> convertRawMetadata(RawDataField rdf) {
+		final String typeID = rdf.getTypeID();
+		DataFieldDeserializer<?> deserializer = deserializerMap.get(typeID);
+
+		// If there is no deserializer, just return the raw data field.
+		if (deserializer == null)
+			return rdf;
+
+		CustomDataField<?> deserializedCDF = deserializer.deserialize(rdf.getKey(), rdf.getValue());
+
+		// The CDF did not deserialize properly, return null to indicate bad conversion.
+		if (deserializedCDF == null)
+			return null;
+
+		if (rdf.hasLabel())
+			deserializedCDF.setLabel(rdf.getLabel());
+		
+		return deserializedCDF;
 	}
 	
 	
