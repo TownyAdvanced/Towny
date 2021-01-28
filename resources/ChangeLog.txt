@@ -5789,3 +5789,5 @@ v0.92.0.11:
     - getResident(uuid)
   - Fix goofy replacing in TownySpigotMessaging sendSpigotConfirmMessage.
   - Fix regression in GUIs which made inventories unusable.
+  - Fix "/res toggle reset" not resetting modes.
+    - Closes #4730.

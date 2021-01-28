@@ -71,7 +71,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"ignoreplots",
 		"townclaim",
 		"map",
-		"spy"
+		"spy",
+		"reset",
+		"clear"
 	);
 	
 	private static final List<String> residentModeTabCompletes = Arrays.asList(
@@ -391,13 +393,20 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "ignoreplots", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "townclaim", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "map", ""));			
+			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "reset|clear", ""));
 			player.sendMessage(ChatTools.formatCommand("", "/res toggle", "spy", ""));
 
 			TownyMessaging.sendMsg(resident, (Translation.of("msg_modes_set") + StringMgmt.join(resident.getModes(), ",")));
 			return;
 
 		}
-
+		
+		// Check if we're reseting before trying for nodes.
+		if (newSplit[0].equalsIgnoreCase("reset") || newSplit[0].equalsIgnoreCase("clear")) {
+			plugin.removePlayerMode(player);
+			return;
+		}
+		
 		if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE.getNode(newSplit[0].toLowerCase())))
 			throw new TownyException(Translation.of("msg_err_command_disable"));
 
