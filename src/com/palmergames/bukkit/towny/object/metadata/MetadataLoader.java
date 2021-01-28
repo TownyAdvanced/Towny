@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.event.LoadedMetadataEvent;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import org.bukkit.Bukkit;
 
@@ -131,6 +132,9 @@ public class MetadataLoader {
 		storedMetadata.clear();
 		// Reduce memory alloc after load.
 		storedMetadata.trimToSize();
+		
+		// Call event
+		Bukkit.getPluginManager().callEvent(new LoadedMetadataEvent());
 	}
 	
 	private CustomDataField<?> convertRawMetadata(RawDataField rdf) {
