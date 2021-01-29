@@ -1956,7 +1956,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				// Check if the given value is valid for this field.
 				try {
 					if (val == null)
-						throw new InvalidMetadataTypeException(cdf.getType());
+						throw new InvalidMetadataTypeException(cdf);
 
 					cdf.isValidType(val);
 				} catch (InvalidMetadataTypeException e) {
@@ -2055,7 +2055,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				// Change state
 				try {
 					if (val == null)
-						throw new InvalidMetadataTypeException(cdf.getType()); 
+						throw new InvalidMetadataTypeException(cdf); 
 							
 					cdf.isValidType(val);
 				} catch (InvalidMetadataTypeException e) {

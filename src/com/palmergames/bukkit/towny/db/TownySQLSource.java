@@ -20,7 +20,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -807,7 +807,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			try {
 				line = rs.getString("metadata");
 				if (line != null && !line.isEmpty()) {
-					resident.setMetadata(line);
+					MetadataLoader.getInstance().deserializeMetadata(resident, line);
 				}
 			} catch (SQLException ignored) {
 			}
@@ -1103,7 +1103,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			try {
 				line = rs.getString("metadata");
 				if (line != null && !line.isEmpty()) {
-					town.setMetadata(line);
+					MetadataLoader.getInstance().deserializeMetadata(town, line);
 				}
 			} catch (SQLException ignored) {
 			}
@@ -1292,7 +1292,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			try {
 				line = rs.getString("metadata");
 				if (line != null && !line.isEmpty()) {
-					nation.setMetadata(line);
+					MetadataLoader.getInstance().deserializeMetadata(nation, line);
 				}
 			} catch (SQLException ignored) {
 			}
@@ -1609,7 +1609,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			try {
 				line = rs.getString("metadata");
 				if (line != null && !line.isEmpty()) {
-					world.setMetadata(line);
+					MetadataLoader.getInstance().deserializeMetadata(world, line);
 				}
 			} catch (SQLException ignored) {
 			}
@@ -1738,7 +1738,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				try {
 					line = rs.getString("metadata");
 					if (line != null && !line.isEmpty()) {
-						townBlock.setMetadata(line);
+						MetadataLoader.getInstance().deserializeMetadata(townBlock, line);
 					}
 				} catch (SQLException ignored) {
 				}
@@ -1857,7 +1857,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
 
 			if (resident.hasMeta())
-				res_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField<?>>(resident.getMetadata()), ";"));
+				res_hm.put("metadata", serializeMetadata(resident));
 			else
 				res_hm.put("metadata", "");
 
@@ -1903,7 +1903,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
 			twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
 			if (town.hasMeta())
-				twn_hm.put("metadata", StringMgmt.join(town.getMetadata(), ";"));
+				twn_hm.put("metadata", serializeMetadata(town));
 			else
 				twn_hm.put("metadata", "");
 
@@ -2009,7 +2009,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("isOpen", nation.isOpen());
 
 			if (nation.hasMeta())
-				nat_hm.put("metadata", StringMgmt.join(nation.getMetadata(), ";"));
+				nat_hm.put("metadata", serializeMetadata(nation));
 			else
 				nat_hm.put("metadata", "");
 
@@ -2119,7 +2119,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("warAllowed", world.isWarAllowed());
 
 			if (world.hasMeta())
-				nat_hm.put("metadata", StringMgmt.join(world.getMetadata(), ";"));
+				nat_hm.put("metadata", serializeMetadata(world));
 			else
 				nat_hm.put("metadata", "");
 
@@ -2158,7 +2158,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			else
 				tb_hm.put("groupID", "");
 			if (townBlock.hasMeta())
-				tb_hm.put("metadata", StringMgmt.join(new ArrayList<CustomDataField<?>>(townBlock.getMetadata()), ";"));
+				tb_hm.put("metadata", serializeMetadata(townBlock));
 			else
 				tb_hm.put("metadata", "");
 

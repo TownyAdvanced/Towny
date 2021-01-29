@@ -20,6 +20,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -565,17 +566,13 @@ public class Nation extends Government {
 	}
 	
 	@Override
-	public void addMetaData(CustomDataField<?> md) {
-		super.addMetaData(md);
-
-		this.save();
+	public void addMetaData(@NotNull CustomDataField<?> md) {
+		this.addMetaData(md, true);
 	}
 
 	@Override
-	public void removeMetaData(CustomDataField<?> md) {
-		super.removeMetaData(md);
-
-		this.save();
+	public void removeMetaData(@NotNull CustomDataField<?> md) {
+		this.removeMetaData(md, true);
 	}
 
 	@Override

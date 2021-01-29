@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -387,15 +388,13 @@ public class TownBlock extends TownyObject {
 	}
 	
 	@Override
-	public void addMetaData(CustomDataField<?> md) {
-		super.addMetaData(md);
-		this.save();
+	public void addMetaData(@NotNull CustomDataField<?> md) {
+		this.addMetaData(md, true);
 	}
 	
 	@Override
-	public void removeMetaData(CustomDataField<?> md) {
-		super.removeMetaData(md);
-		this.save();
+	public void removeMetaData(@NotNull CustomDataField<?> md) {
+		this.removeMetaData(md, true);
 	}
 	
 	public boolean hasPlotObjectGroup() { return plotGroup != null; }

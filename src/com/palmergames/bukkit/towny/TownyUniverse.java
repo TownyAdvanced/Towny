@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
@@ -124,6 +125,9 @@ public class TownyUniverse {
         // Try to load and save the database.
         if (!loadAndSaveDatabase(TownySettings.getLoadDatabase(), TownySettings.getSaveDatabase()))
         	return false;
+        
+        // Schedule metadata to be loaded
+		MetadataLoader.getInstance().scheduleDeserialization();
 
         // Try migrating the config and world files if the version has changed.
         if (!TownySettings.getLastRunVersion().equals(towny.getVersion())) {
