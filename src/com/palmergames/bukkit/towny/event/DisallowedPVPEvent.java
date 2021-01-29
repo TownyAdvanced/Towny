@@ -8,6 +8,8 @@ import org.bukkit.event.HandlerList;
 
 /**
  * Deprecated as of 0.96.7.1. Use {@link com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent} instead.
+ * 
+ * This event is no longer called.
  */
 @Deprecated
 public class DisallowedPVPEvent extends Event implements Cancellable {

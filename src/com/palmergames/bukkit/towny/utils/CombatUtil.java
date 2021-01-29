@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.damage.WildernessPVPTestEvent;
@@ -32,10 +31,9 @@ import java.util.List;
 
 /**
  * 
- * @author ElgarL,Shade
+ * @author ElgarL,Shade,LlmDl
  * 
  */
-@SuppressWarnings("deprecation")
 public class CombatUtil {
 
 	/**
@@ -144,16 +142,10 @@ public class CombatUtil {
 				 */
 				TownyPlayerDamagePlayerEvent event = new TownyPlayerDamagePlayerEvent(defendingPlayer.getLocation(), defendingPlayer, defendingPlayer.getLastDamageCause().getCause(), defenderTB, cancelled, attackingPlayer);
 				BukkitTools.getPluginManager().callEvent(event);
-				
-				if (event.isCancelled()) {
-					// A cancelled event should contain a message.
-					if (event.getMessage() != null)
-						TownyMessaging.sendErrorMsg(attackingPlayer, event.getMessage());
-					
-					// Call the old event, don't let it make any decisions.
-					DisallowedPVPEvent deprecatedEvent = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
-					plugin.getServer().getPluginManager().callEvent(deprecatedEvent);					
-				}
+
+				// A cancelled event should contain a message.
+				if (event.isCancelled() && event.getMessage() != null)
+					TownyMessaging.sendErrorMsg(attackingPlayer, event.getMessage());
 				
 				return event.isCancelled();
 
@@ -322,13 +314,13 @@ public class CombatUtil {
 	}
 
 	/**
+	 * @deprecated as of 0.96.2.20 use {@link CombatUtil#preventFriendlyFire(Player, Player, TownyWorld) instead}
 	 * Should we be preventing friendly fire?
 	 * 
 	 * @param attacker - Attacking Player
 	 * @param defender - Defending Player (receiving damage)
 	 * 
 	 * @return true if we should cancel damage.
-	 * @deprecated as of 0.96.2.20 use {@link CombatUtil#preventFriendlyFire(Player, Player, TownyWorld) instead}
 	 */
 	@Deprecated
 	public static boolean preventFriendlyFire(Player attacker, Player defender) {
@@ -393,9 +385,9 @@ public class CombatUtil {
 	}
 	
 	/**
+	 * @deprecated as of 0.96.7.1. Use {@link CombatUtil#isArenaPlot(Player, Player)}.
 	 * Return true if both attacker and defender are in Arena Plots.
 	 * 
-	 * @deprecated use {@link CombatUtil#isArenaPlot(Player, Player)}.
 	 * @param attacker - Attacking Player
 	 * @param defender - Defending Player (receiving damage)
 	 * @return true if both players in an Arena plot.
