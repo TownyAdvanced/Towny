@@ -5793,3 +5793,5 @@ v0.92.0.11:
     - Closes #4730.
   - Fix empty-selection message showing when claiming single plots is blocked because the area is actually already claimed.
     - Closes #4729.
+  - Custom Metadata Types, courtesy of silverwolfg11 with PR #4700.
+  - Small HUDManager overhaul, courtesy of Warriorrrr with PR #4726.
