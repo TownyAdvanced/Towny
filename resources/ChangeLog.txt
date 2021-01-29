@@ -5795,3 +5795,9 @@ v0.92.0.11:
     - Closes #4729.
   - Custom Metadata Types, courtesy of silverwolfg11 with PR #4700.
   - Small HUDManager overhaul, courtesy of Warriorrrr with PR #4726.
+  - API: new damage/pvp events:
+    - TownBlockPVPTestEvent - thrown when a townblock in a town has the PVP status decided.
+    - WildernessPVPTestEvent - thrown when determining what the wilderness status for PVP is.
+    - TownyDamageEvent - Abstract event for the following:
+    - TownyPlayerDamagePlayerEvent - used to override players hurting players.
+    - TownyExplosionDamagesEntityEvent (Part of the earlier API expansion, now moved to the damage package and extending the TownyDamageEvent.)
