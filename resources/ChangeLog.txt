@@ -5791,3 +5791,5 @@ v0.92.0.11:
   - Fix regression in GUIs which made inventories unusable.
   - Fix "/res toggle reset" not resetting modes.
     - Closes #4730.
+  - Fix empty-selection message showing when claiming single plots is blocked because the area is actually already claimed.
+    - Closes #4729.

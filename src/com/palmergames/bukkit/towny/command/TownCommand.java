@@ -2348,10 +2348,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 		if (n == 0)
 			return;
-		double cost = town.getBonusBlockCostN(n);
-		// Test if the town can pay and throw economy exception if not.
-		if (!town.getAccount().canPayFromHoldings(cost))
-			throw new EconomyException(Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+			double cost = town.getBonusBlockCostN(n);
+			// Test if the town can pay and throw economy exception if not.
+			if (!town.getAccount().canPayFromHoldings(cost))
+				throw new EconomyException(Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 		
 		Confirmation confirmation = Confirmation.runOnAccept(() -> {
 			try {
@@ -3368,6 +3368,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				// Not enough available claims.
 				if (selection.size() > TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size())
 					throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
+
+				// If this is a single claim and it is already claimed, by someone else.
+				if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasTown())
+					throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownBlock().getTown()));
 				
 				/*
 				 * Filter out any unallowed claims.

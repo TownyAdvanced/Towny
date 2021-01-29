@@ -251,6 +251,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translation.of("msg_war_cannot_do"));
 
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
+					
+					// Fast-fail if this is a single plot and it is already claimed.
+					if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasResident())
+						throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownBlock().getResident()));
+					
 					// Filter to just plots that are for sale.
 					selection = AreaSelectionUtil.filterPlotsForSale(selection);
 
