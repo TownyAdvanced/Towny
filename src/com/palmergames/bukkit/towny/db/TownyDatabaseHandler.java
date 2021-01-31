@@ -62,7 +62,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -1541,23 +1540,22 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * @author LlmDl
 	 */
 	public void mergeNation(Nation succumbingNation, Nation prevailingNation) {
+
+		if (TownyEconomyHandler.isActive())
+			try {
+				succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
+			} catch (EconomyException ignored) {}
+
 		
 		lock.lock();
-		Iterator<Town> towns = succumbingNation.getTowns().iterator();
-		while (towns.hasNext()) {
+		List<Town> towns = new ArrayList<>(succumbingNation.getTowns());
+		for (Town town : towns) {			
+			town.removeNation();
 			try {
-				if (TownyEconomyHandler.isActive())
-					succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
-				Town town = towns.next();
-				town.removeNation();
-				try {
-					town.setNation(prevailingNation);
-				} catch (AlreadyRegisteredException ignored) {
-				}
-				saveTown(town);
-			} catch (EconomyException ignored) {			
+				town.setNation(prevailingNation);
+			} catch (AlreadyRegisteredException ignored) {
 			}
-			towns.remove();
+			saveTown(town);
 		}
 		lock.unlock();
 	}

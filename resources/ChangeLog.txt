@@ -5801,3 +5801,5 @@ v0.92.0.11:
     - TownyDamageEvent - Abstract event for the following:
     - TownyPlayerDamagePlayerEvent - used to override players hurting players.
     - TownyExplosionDamagesEntityEvent (Part of the earlier API expansion, now moved to the damage package and extending the TownyDamageEvent.)
+  - Fix nation merging.
+    - Closes #4732.
