@@ -1236,7 +1236,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				 * Moved from TownCommand as of 0.92.0.13
 				 */
 				if (split.length != 3)
-					throw new TownyException(Translation.of("msg_err_not_enough_variables") + "/ta town new [name] [mayor]");
+					throw new TownyException(Translation.of("msg_err_not_enough_variables") + "/ta town new [name] [capital]");
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_NEW.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
