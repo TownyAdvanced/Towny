@@ -15,8 +15,6 @@ import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
-import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
-import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
@@ -1422,14 +1420,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				switch(split[2].toLowerCase()) {
 					case "add":
-						NationRankAddEvent nationRankAddEvent = new NationRankAddEvent(nation, rank, target);
-						BukkitTools.getPluginManager().callEvent(nationRankAddEvent);
-						
-						if (nationRankAddEvent.isCancelled()) {
-							TownyMessaging.sendErrorMsg(player, nationRankAddEvent.getCancelMessage());
-							return;
-						}
-
 						try {
 							if (target.addNationRank(rank)) {
 								if (BukkitTools.isOnline(target.getName())) {
@@ -1437,6 +1427,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 									plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 								}
 								TownyMessaging.sendMsg(player, Translation.of("msg_you_have_given_rank", "Nation", rank, target.getName()));
+								target.save();
 							} else {
 								TownyMessaging.sendErrorMsg(player, Translation.of("msg_resident_not_part_of_any_town"));
 								return;
@@ -1447,14 +1438,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						}
 						return;
 					case "remove":
-						NationRankRemoveEvent nationRankRemoveEvent = new NationRankRemoveEvent(nation, rank, target);
-						BukkitTools.getPluginManager().callEvent(nationRankRemoveEvent);
-		
-						if (nationRankRemoveEvent.isCancelled()) {
-							TownyMessaging.sendErrorMsg(player, nationRankRemoveEvent.getCancelMessage());
-							return;
-						}
-
 						try {
 							if (target.removeNationRank(rank)) {
 								if (BukkitTools.isOnline(target.getName())) {
@@ -1462,6 +1445,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 									plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 								}
 								TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Nation", rank, target.getName()));
+								target.save();
 							}
 						} catch (NotRegisteredException e) {
 							TownyMessaging.sendMsg(player, String.format("msg_resident_doesnt_have_rank", target.getName(), "Nation"));
