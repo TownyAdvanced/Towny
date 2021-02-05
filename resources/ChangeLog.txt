@@ -5803,3 +5803,4 @@ v0.92.0.11:
     - TownyExplosionDamagesEntityEvent (Part of the earlier API expansion, now moved to the damage package and extending the TownyDamageEvent.)
   - Fix nation merging.
     - Closes #4732.
+  - Fix BookFactory skipping the 15th line of a book.
