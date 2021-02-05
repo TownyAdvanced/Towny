@@ -24,6 +24,7 @@ nomad:
     - towny.command.town.list.*
     - towny.command.town.reslist
     - towny.command.plot.perm
+    - towny.command.plot.perm.hud
     - towny.command.nation.list.*
     - towny.command.nation.townlist  
     - towny.command.nation.allylist
