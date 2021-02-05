@@ -5805,3 +5805,4 @@ v0.92.0.11:
     - Closes #4732.
   - Fix BookFactory skipping the 15th line of a book.
   - Add towny.command.plot.perm.hud to the nomad group in townyperms.yml by default.
+  - Add townyadmin command for giving/removing nation ranks, courtesy of Warriorrrr with PR #4736.
