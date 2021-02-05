@@ -134,7 +134,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"meta",
 		"deposit",
 		"withdraw",
-		"bankhistory"
+		"bankhistory",
+		"rank"
 	);
 
 	private static final List<String> adminToggleTabCompletes = Arrays.asList(
@@ -406,6 +407,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "merge":
 							if (args.length == 4)
 								return getTownyStartingWith(args[3], "n");
+						case "rank":
+							if (args.length == 4)
+								return NameUtil.filterByStart(Arrays.asList("add","remove"), args[3]);
+							else if (args.length == 5)
+								return getTownyStartingWith(args[4], "r");
+							else if (args.length == 6)
+								return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[5]);
 						default:
 							if (args.length == 3)
 								return NameUtil.filterByStart(adminNationTabCompletes, args[2]);
@@ -1226,6 +1234,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] withdraw [amount]", ""));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] bankhistory", ""));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[oldnation] merge [newnation]", ""));
+			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "rank [add/remove] [resident] [rank]"));
 
 			return;
 		}
@@ -1386,6 +1395,68 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				String withdrawMessage = Translation.of("msg_xx_withdrew_xx", (isConsole ? "Console" : player.getName()), amount,  Translation.of("nation_sing"));
 				TownyMessaging.sendMessage(sender, withdrawMessage);
 				TownyMessaging.sendPrefixedNationMessage(nation, withdrawMessage);
+			}
+			else if (split[1].equalsIgnoreCase("rank")) {
+				if (split.length < 5) {
+					sender.sendMessage(ChatTools.formatTitle("/townyadmin nation rank"));
+					sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank add [resident] [rank] ", ""));
+					sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank remove [resident] [rank] ", ""));
+					return;
+				}
+				Resident target;
+				String rank;
+
+				try {
+					target = getResidentOrThrow(split[3]);
+				} catch (TownyException exception) {
+					TownyMessaging.sendMessage(sender, exception.getMessage());
+					return;
+				}
+				rank = TownyPerms.matchNationRank(split[4]);
+				if (rank == null) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_unknown_rank_available_ranks", split[4], StringMgmt.join(TownyPerms.getNationRanks(), ", ")));
+					return;
+				}
+
+				switch(split[2].toLowerCase()) {
+					case "add":
+						try {
+							if (target.addNationRank(rank)) {
+								if (BukkitTools.isOnline(target.getName())) {
+									TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_given_rank", "Nation", rank));
+									plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
+								}
+								TownyMessaging.sendMsg(player, Translation.of("msg_you_have_given_rank", "Nation", rank, target.getName()));
+								target.save();
+							} else {
+								TownyMessaging.sendErrorMsg(player, Translation.of("msg_resident_not_part_of_any_town"));
+								return;
+							}
+						} catch (AlreadyRegisteredException e) {
+							TownyMessaging.sendMsg(player, Translation.of("msg_resident_already_has_rank", target.getName(), "Nation"));
+							return;
+						}
+						return;
+					case "remove":
+						try {
+							if (target.removeNationRank(rank)) {
+								if (BukkitTools.isOnline(target.getName())) {
+									TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Nation", rank));
+									plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
+								}
+								TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Nation", rank, target.getName()));
+								target.save();
+							}
+						} catch (NotRegisteredException e) {
+							TownyMessaging.sendMsg(player, String.format("msg_resident_doesnt_have_rank", target.getName(), "Nation"));
+							return;
+						}
+					default:
+						sender.sendMessage(ChatTools.formatTitle("/townyadmin nation rank"));
+						sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank add [resident] [rank] ", ""));
+						sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank remove [resident] [rank] ", ""));
+						return;
+				}
 			}
 
 		} catch (NotRegisteredException | AlreadyRegisteredException | InvalidNameException | EconomyException e) {

@@ -151,6 +151,8 @@ public class TownyVehicleListener implements Listener {
 				case MULE:
 					vehicle = Material.SADDLE;
 					break;
+				default:
+					break;
 			}
 
 			if (vehicle != null) {
