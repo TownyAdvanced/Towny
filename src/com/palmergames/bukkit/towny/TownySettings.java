@@ -1190,6 +1190,11 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_USE_ASYNC);
 	}
 	
+	public static boolean perWorldCurrencyEnabled() {
+		
+		return getBoolean(ConfigNodes.ECO_PER_WORLD_CURRENCY);
+	}
+	
 	public static long getCachedBankTimeout() {
 		return getSeconds(ConfigNodes.ECO_BANK_CACHE_TIMEOUT) * 1000;
 	}

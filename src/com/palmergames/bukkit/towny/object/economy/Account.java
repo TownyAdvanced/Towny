@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.util.BukkitTools;
+
 import org.bukkit.World;
 
 import java.util.ArrayList;
@@ -139,7 +140,11 @@ public abstract class Account implements Nameable {
 	 * @return Bukkit world for the object
 	 */
 	public World getBukkitWorld() {
-		return BukkitTools.getWorlds().get(0);
+		World world = BukkitTools.getWorlds().get(0);
+		if (TownySettings.perWorldCurrencyEnabled() && BukkitTools.isOnline(getName()))
+			return BukkitTools.getPlayerExact(getName()).getWorld();
+
+		return world;
 	}
 
 	/**

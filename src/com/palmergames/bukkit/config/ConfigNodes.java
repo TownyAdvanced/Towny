@@ -1574,6 +1574,12 @@ public enum ConfigNodes {
 			"",
 			"# By default it is set to true.",
 			"# Rarely set to false. Set to false if you get concurrent modification errors on timers for daily tax collections."),
+	ECO_PER_WORLD_CURRENCY(
+			"economy.per_world_currency",
+			"false",
+			"",
+			"# When true, Towny will attempt to use the world wherein a player stands, or where a town has it's homeblock.",
+			"# Not guaranteed to work with every per-world-currency enabled plugin."),
 	ECO_BANK_CACHE_TIMEOUT(
 			"economy.bank_account_cache_timeout",
 			"600s",
