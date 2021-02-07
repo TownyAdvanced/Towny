@@ -5811,3 +5811,4 @@ v0.92.0.11:
     - Closes #4741.
   - Fix event war plot attacking not working.
     - Closes #4740.
+  - Fix free town/nation rename exploit, courtesy of Warriorrrr with PR #4743.
