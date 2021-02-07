@@ -5809,3 +5809,5 @@ v0.92.0.11:
 0.96.7.2:
   - Fix /ta command for setting town title/surnames not respecting the admin override.
     - Closes #4741.
+  - Fix event war plot attacking not working.
+    - Closes #4740.
