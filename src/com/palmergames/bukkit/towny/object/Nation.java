@@ -558,6 +558,10 @@ public class Nation extends Government {
 	public Resident getKing() {
 		return capital.getMayor();
 	}
+	
+	public boolean hasKing() {
+		return capital.getMayor() != null;
+	}
 
 	@Override
 	public String getFormattedName() {

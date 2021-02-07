@@ -808,7 +808,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (preEvent.isCancelled())
 			return;
 
-		Resident king = nation.getKing();
+		Resident king = null;
+		if (nation.hasKing())
+			king = nation.getKing();
 		
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<>();
@@ -869,8 +871,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		plugin.resetCache();
+		
+		UUID kingUUID = null;
+		if (king != null)
+			kingUUID = king.getUUID();
 
-		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation, king.getUUID()));
+		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation, kingUUID));
 	}
 
 	@Override

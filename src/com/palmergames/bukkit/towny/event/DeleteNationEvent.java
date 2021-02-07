@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Nation;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -52,6 +53,7 @@ public class DeleteNationEvent extends TownyObjDeleteEvent  {
 	/**
 	 * @return deleted nation king uuid.
 	 */
+	@Nullable
 	public UUID getNationKing() {
 		return kingUUID;
 	}
