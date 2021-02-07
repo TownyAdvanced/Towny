@@ -1793,7 +1793,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				else
 					resident = getResidentOrThrow(split[1]);
 				
-				if (!CombatUtil.isSameTown(getResidentOrThrow(player.getUniqueId()), resident)) {
+				if (!admin && !CombatUtil.isSameTown(getResidentOrThrow(player.getUniqueId()), resident)) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_town", resident.getName()));
 					return;
 				}
@@ -1842,7 +1842,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				else
 					resident = getResidentOrThrow(split[1]);
 
-				if (!CombatUtil.isSameTown(getResidentOrThrow(player.getUniqueId()), resident)) {
+				if (!admin && !CombatUtil.isSameTown(getResidentOrThrow(player.getUniqueId()), resident)) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_town", resident.getName()));
 					return;
 				}
