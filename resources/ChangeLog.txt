@@ -5816,3 +5816,7 @@ v0.92.0.11:
   - Remove 1.14 crafting blocks from config's switch ids, courtesy of Warriorrrr with PR #4744.
 0.96.7.3:
   - Fix town delete message being sent twice, courtesy of Warriorrrr with PR #4746.
+  - New RELATIONAL placeholder: %rel_townyadvanced_color%
+    - Applies the colour codes set in the config.yml's new papi_relational_formatting section.
+    - Used in TAB and other plugins which can do Relational placeholders.
+    - Closes #4747, Closes #4349.

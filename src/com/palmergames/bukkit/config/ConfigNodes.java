@@ -1049,9 +1049,35 @@ public enum ConfigNodes {
 			"filters_colour_chat.papi_chat_formatting.ranks.mayor","&b"),
 	FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING(
 			"filters_colour_chat.papi_chat_formatting.ranks.king","&6"),
-	
-
-
+	FILTERS_PAPI_REL_FORMATTING(
+			"filters_colour_chat.papi_relational_formatting",
+			"",
+			"",
+			"# Colour codes used in the RELATIONAL placeholder %rel_townyadvanced_color% to display the relation between two players."),
+	FILTERS_PAPI_REL_FORMATTING_NONE(
+			"filters_colour_chat.papi_relational_formatting.none",
+			"&f",
+			"# Used when two players have no special relationship."),
+	FILTERS_PAPI_REL_FORMATTING_SAME_TOWN(
+			"filters_colour_chat.papi_relational_formatting.same_town",
+			"&2",
+			"",
+			"# Used when two players are in the same town."),
+	FILTERS_PAPI_REL_FORMATTING_SAME_NATION(
+			"filters_colour_chat.papi_relational_formatting.same_nation",
+			"&2",
+			"",
+			"# Used when two players are in the same nation."),
+	FILTERS_PAPI_REL_FORMATTING_ALLY(
+			"filters_colour_chat.papi_relational_formatting.ally",
+			"&b",
+			"",
+			"# Used when two players' nations are allied."),
+	FILTERS_PAPI_REL_FORMATTING_ENEMY(
+			"filters_colour_chat.papi_relational_formatting.enemy",
+			"&c",
+			"",
+			"# Used when two players are enemies."),
 	
 	PROT(
 			"protection",

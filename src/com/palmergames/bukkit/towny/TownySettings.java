@@ -2795,6 +2795,26 @@ public class TownySettings {
 	public static String getPAPIFormattingKing() {
 		return getString(ConfigNodes.FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING);
 	}
+	
+	public static String getPAPIRelationNone() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_NONE);
+	}
+	
+	public static String getPAPIRelationSameTown() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_SAME_TOWN);
+	}
+	
+	public static String getPAPIRelationSameNation() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_SAME_NATION);
+	}
+	
+	public static String getPAPIRelationAlly() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_ALLY);
+	}
+	
+	public static String getPAPIRelationEnemy() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_ENEMY);
+	}
 
 	public static double getPlotSetCommercialCost() {
 		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_COMMERCIAL);
