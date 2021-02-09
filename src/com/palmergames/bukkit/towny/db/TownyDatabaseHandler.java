@@ -730,9 +730,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTown(Town town, boolean delayFullRemoval) {
-		
-		TownyMessaging.sendGlobalMessage(Translation.of("msg_del_town2", town.getName()));
-		
 		if (delayFullRemoval) {
 			/*
 			 * When Town ruining is active, send the Town into a ruined state, prior to real removal.
