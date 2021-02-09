@@ -5814,3 +5814,5 @@ v0.92.0.11:
   - Fix free town/nation rename exploit, courtesy of Warriorrrr with PR #4743.
   - Fix potential safe mode from removing corrupted nation which cannot return a king.
   - Remove 1.14 crafting blocks from config's switch ids, courtesy of Warriorrrr with PR #4744.
+0.96.7.3:
+  - Fix town delete message being sent twice, courtesy of Warriorrrr with PR #4746.
