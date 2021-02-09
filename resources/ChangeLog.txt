@@ -5820,3 +5820,4 @@ v0.92.0.11:
     - Applies the colour codes set in the config.yml's new papi_relational_formatting section.
     - Used in TAB and other plugins which can do Relational placeholders.
     - Closes #4747, Closes #4349.
+  - Make /t set outpost do more than show null when used in the wilderness.

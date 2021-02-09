@@ -824,7 +824,7 @@ public class Town extends Government implements TownBlockOwner {
 
 		try {
 			TownBlock outpost = TownyAPI.getInstance().getTownBlock(spawn);
-			if (!outpost.isOutpost())
+			if (outpost == null || !outpost.isOutpost())
 				throw new TownyException(Translation.of("msg_err_location_is_not_within_an_outpost_plot"));
 
 			outpostSpawns.add(spawn);

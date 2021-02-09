@@ -2223,7 +2223,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				} else if (split[0].equalsIgnoreCase("outpost")) {
 
 					try {
-						if (TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown().getName().equals(town.getName())) {
+						TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());						
+						if (townBlock == null || !townBlock.isOutpost())
+							throw new TownyException(Translation.of("msg_err_location_is_not_within_an_outpost_plot"));
+						
+						if (townBlock.getTown().equals(town)) {
 							town.addOutpostSpawn(player.getLocation());
 							TownyMessaging.sendMsg(player, Translation.of("msg_set_outpost_spawn"));
 						} else
