@@ -28,7 +28,7 @@ public interface ItemLists {
 	/**
 	 * List of Redstone blocks that can be interacted with.
 	 */
-	public static List<String> REDSTONE_INTERACTABLES = new ArrayList<>(Arrays.asList("COMPARATOR","REPEATER","DAYLIGHT_DETECTOR","NOTE_BLOCK"));
+	public static List<String> REDSTONE_INTERACTABLES = new ArrayList<>(Arrays.asList("COMPARATOR","REPEATER","DAYLIGHT_DETECTOR","NOTE_BLOCK","REDSTONE_WIRE"));
 
 	/**
 	 * List of Potted Plants.
