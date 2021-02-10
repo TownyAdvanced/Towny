@@ -1246,6 +1246,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(groupBlock.getWorldCoord().toString(), CooldownType.PVP)));
 						}
 
+						PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(groupBlock.getTown(), player, choice.orElse(!groupBlock.getPermissions().pvp));
+						Bukkit.getPluginManager().callEvent(plotTogglePvpEvent);
+						if (plotTogglePvpEvent.isCancelled()) {
+							player.sendMessage(plotTogglePvpEvent.getCancellationMsg());
+							return;
+						}
+
 						groupBlock.getPermissions().pvp = choice.orElse(!groupBlock.getPermissions().pvp);
 						// Add a cooldown timer for this plot.
 						if (TownySettings.getPVPCoolDownTime() > 0)
@@ -1255,18 +1262,42 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					} else if (split[0].equalsIgnoreCase("explosion")) {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
+
+						PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(groupBlock.getTown(), player, choice.orElse(!groupBlock.getPermissions().explosion));
+						Bukkit.getPluginManager().callEvent(plotToggleExplosionEvent);
+						if (plotToggleExplosionEvent.isCancelled()) {
+							player.sendMessage(plotToggleExplosionEvent.getCancellationMsg());
+							return;
+						}
+
 						groupBlock.getPermissions().explosion = choice.orElse(!groupBlock.getPermissions().explosion);
 						endingMessage = Translation.of("msg_changed_expl", "the Plot Group", groupBlock.getPermissions().explosion ? Translation.of("enabled") : Translation.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("fire")) {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
+
+						PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(groupBlock.getTown(), player, choice.orElse(!groupBlock.getPermissions().fire));
+						Bukkit.getPluginManager().callEvent(plotToggleFireEvent);
+						if (plotToggleFireEvent.isCancelled()) {
+							player.sendMessage(plotToggleFireEvent.getCancellationMsg());
+							return;
+						}
+						
 						groupBlock.getPermissions().fire = choice.orElse(!groupBlock.getPermissions().fire);
 						endingMessage =  Translation.of("msg_changed_fire", "the Plot Group", groupBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("mobs")) {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
+
+						PlotToggleMobsEvent plotToggleMobsEvent = new PlotToggleMobsEvent(groupBlock.getTown(), player, choice.orElse(!groupBlock.getPermissions().mobs));
+						Bukkit.getPluginManager().callEvent(plotToggleMobsEvent);
+						if (plotToggleMobsEvent.isCancelled()) {
+							player.sendMessage(plotToggleMobsEvent.getCancellationMsg());
+							return;
+						}
+
 						groupBlock.getPermissions().mobs = choice.orElse(!groupBlock.getPermissions().mobs);
 						endingMessage =  Translation.of("msg_changed_mobs", "the Plot Group", groupBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled"));
 
