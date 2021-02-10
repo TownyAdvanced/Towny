@@ -5821,3 +5821,4 @@ v0.92.0.11:
     - Used in TAB and other plugins which can do Relational placeholders.
     - Closes #4747, Closes #4349.
   - Make /t set outpost do more than show null when used in the wilderness.
+  - Add PlotToggle events to toggling plot groups, courtesy of Warriorrrr with PR #4748.
