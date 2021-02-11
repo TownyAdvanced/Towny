@@ -560,6 +560,8 @@ public class Nation extends Government {
 	}
 	
 	public boolean hasKing() {
+		if (capital == null)
+			return false;
 		return capital.getMayor() != null;
 	}
 
