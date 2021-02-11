@@ -68,11 +68,11 @@
         </repository>
         <repository>
             <id>citizens-repo</id>
-            <url>http://repo.citizensnpcs.co/</url>
+            <url>https://repo.citizensnpcs.co/</url>
         </repository>
         <repository>
             <id>placeholderapi</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
     </repositories>
 
