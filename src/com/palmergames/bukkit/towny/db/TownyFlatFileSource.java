@@ -906,6 +906,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							return true;
 						}
 					}
+				} else {
+					if (!nation.findNewCapital()) {
+						System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
+						removeNation(nation);
+						return true;
+					}
 				}
 				line = keys.get("nationBoard");
 				if (line != null)
