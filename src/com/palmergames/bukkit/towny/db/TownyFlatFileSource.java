@@ -907,6 +907,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					}
 				} else {
+					TownyMessaging.sendDebugMsg("Nation " + nation.getName() + " did not have a capital defined, selecting a new capital...");
 					if (!nation.findNewCapital()) {
 						System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
 						removeNation(nation);
