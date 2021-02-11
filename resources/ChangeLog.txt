@@ -5824,3 +5824,9 @@ v0.92.0.11:
   - Add PlotToggle events to toggling plot groups, courtesy of Warriorrrr with PR #4748.
   - Make toggling REDSTONE_WIRE into a destroy test.
   - Update POM: Dependencies, Plugins, and HTTPS, courtesy of TheFlagCourier with PR #4749.
+  - Fix empty nations not being deleted on startup with flatfile, courtesy of Warriorrrr with PR #4753.
+  - Add config option for ignoring min_distance's for allies, courtesy of Warriorrrr with PR #4752.
+  - New Config Option: town.min_distances_ignored_for_towns_in_allied_nation
+    - Default: false
+    - If true, the settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock will be ignored for towns that are mutually allied. 
+    - Setting to false will keep all towns separated the same if they are allies.
