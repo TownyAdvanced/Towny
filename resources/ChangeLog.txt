@@ -5823,3 +5823,4 @@ v0.92.0.11:
   - Make /t set outpost do more than show null when used in the wilderness.
   - Add PlotToggle events to toggling plot groups, courtesy of Warriorrrr with PR #4748.
   - Make toggling REDSTONE_WIRE into a destroy test.
+  - Update POM: Dependencies, Plugins, and HTTPS, courtesy of TheFlagCourier with PR #4749.
