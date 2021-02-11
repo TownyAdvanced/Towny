@@ -145,6 +145,12 @@ public enum ConfigNodes {
 			"",
 			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
 			"# will be ignored for towns that are in the same nation. Setting to false will keep all towns separated the same."),
+	TOWN_MIN_DISTANCE_IGNORED_FOR_ALLIES(
+			"town.min_distances_ignored_for_towns_in_allied_nation",
+			"false",
+			"",
+			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
+			"# will be ignored for towns that are mutually allied. Setting to false will keep all towns separated the same."),
 	TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT(
 			"town.min_plot_distance_from_town_plot",
 			"5",
