@@ -3604,7 +3604,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_not_enough_money", finalRemainingTown.getAccount().getHoldingBalance(), finalCost));
 				} catch (EconomyException ignored) {}
 			}
-			System.out.println("f");
 
 			TownPreMergeEvent townPreMergeEvent = new TownPreMergeEvent(finalTown, finalRemainingTown);
 			Bukkit.getPluginManager().callEvent(townPreMergeEvent);
@@ -3838,8 +3837,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	private static int homeBlockDistance(Town town1, Town town2) {
 		try {
-			double distance = Math.sqrt((Math.abs(town1.getHomeBlock().getX() - town2.getHomeBlock().getX())^2) + (Math.abs(town1.getHomeBlock().getZ() - town2.getHomeBlock().getZ())^2));
-			return (int) distance * TownySettings.getTownBlockSize();
+			return (int) Math.sqrt((Math.abs(town1.getHomeBlock().getX() - town2.getHomeBlock().getX())^2) + (Math.abs(town1.getHomeBlock().getZ() - town2.getHomeBlock().getZ())^2));
 		} catch (TownyException e) {
 			return Integer.MAX_VALUE;
 		}
