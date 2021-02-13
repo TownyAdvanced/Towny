@@ -9,14 +9,14 @@ import org.bukkit.event.HandlerList;
 
 public class TownPreMergeEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-	private final Town town;
 	private final Town remainingTown;
+	private final Town succumbingTown;
 	boolean cancelled;
 	private String cancelMessage = Translation.of("msg_town_merge_cancelled");
 
-	public TownPreMergeEvent(Town town, Town remainingTown) {
-		this.town = town;
+	public TownPreMergeEvent(Town remainingTown, Town succumbingTown) {
 		this.remainingTown = remainingTown;
+		this.succumbingTown = succumbingTown;
 	}
 
 	public boolean isCancelled() {
@@ -37,8 +37,8 @@ public class TownPreMergeEvent extends Event implements Cancellable {
 		return remainingTown;
 	}
 
-	public Town getTown() {
-		return town;
+	public Town getSuccumbingTown() {
+		return succumbingTown;
 	}
 
 	public static HandlerList getHandlerList() {

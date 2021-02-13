@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.event.town;
 
+import java.util.UUID;
+
 import com.palmergames.bukkit.towny.object.Town;
 
 import org.bukkit.Bukkit;
@@ -9,8 +11,9 @@ import org.bukkit.event.HandlerList;
 public class TownMergeEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     
-    private final Town town;
     private final Town remainingTown;
+    private final String succumbingTownName;
+    private final UUID succumbingTownUUID;
 
     @Override
     public HandlerList getHandlers() {
@@ -21,14 +24,19 @@ public class TownMergeEvent extends Event {
 		return handlers;
 	}
 
-    public TownMergeEvent(Town town, Town remainingTown) {
+    public TownMergeEvent(Town remainingTown, String succumbingTownName, UUID succumbingTownUUID) {
         super(!Bukkit.getServer().isPrimaryThread());
         this.remainingTown = remainingTown;
-        this.town = town;
+        this.succumbingTownName = succumbingTownName;
+        this.succumbingTownUUID = succumbingTownUUID;
     }
     
-    public Town getTown() {
-        return town;
+    public String getSuccumbingTownName() {
+        return succumbingTownName;
+    }
+
+    public UUID getSuccumbingTownUUID() {
+        return succumbingTownUUID;
     }
 
     public Town getRemainingTown() {
