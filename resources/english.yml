@@ -1,5 +1,5 @@
 name: Towny
-version: 0.98
+version: 0.99
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1279,3 +1279,18 @@ gui_title_towny_wildsblocks: 'Towny WildsBlocks List'
 gui_title_towny_itemuse: 'Towny ItemUse List'
 gui_title_towny_switch: 'Towny Switch List'
 gui_title_towny_plotclear: 'Towny Plot Clear Delete List'
+
+#Added in 0.99
+msg_town_merge_err_mayor_only: '&cMerging can only be done by a mayor.'
+msg_town_merge_err_not_close: '&cThe town of %s is too far away from your town. Their homeblock has to be at least %d townblocks from your homeblock.'
+msg_town_merge_request_sent: '&bMerge request sent to the mayor of %s.'
+msg_town_merge_request_received: '&bThe mayor of %s, %s, has requested to merge with your town. This will transfer all townblocks, residents and town bank money to %s.'
+msg_town_merge_request_denied: '&cMerge request denied.'
+msg_town_merge_other_offline: '&cThe mayor of %s, %s, is currently offline. Merge failed.'
+msg_town_merge_err_too_many_residents: '&cMerge failed: New resident amount exceeds the limit (%d)'
+msg_town_merge_err_too_many_townblocks: '&cMerge failed: New town size exceeds the limit (%d)'
+msg_town_merge_err_not_enough_money: '&cMerge failed: Not enough money. (%d/%d)'
+msg_town_merge_warning: '&cWarning: If accepted, merging with %s will cost %d.'
+msg_town_merge_failed: '&cMerge failed.'
+msg_town_merge_cancelled: '&cMerge canceled.'
+msg_town_merge_success: '&bThe town of %s, owned by %s, has successfully merged into the town of %s.'
