@@ -388,7 +388,7 @@ public abstract class TownyDataSource {
 	
 	abstract public void mergeNation(Nation succumbingNation, Nation prevailingNation) throws AlreadyRegisteredException, NotRegisteredException;
 
-	abstract public void mergeTown(Town mergeFrom, Town mergeInto);
+	abstract public void mergeTown(Town mergeInto, Town mergeFrom);
 
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 

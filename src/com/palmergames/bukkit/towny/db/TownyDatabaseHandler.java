@@ -1580,14 +1580,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		lock.lock();
 		for (TownBlock tb : mergeFrom.getTownBlocks()) {
 			tb.setTown(mergeInto);
-			saveTownBlock(tb);
+			tb.save();
 		}
 		
 		for (Resident resident : mergeFrom.getResidents()) {
 			try {
 				resident.removeTown(); // TODO: Test if all residents get set correctly
 				resident.setTown(mergeInto);
-				saveResident(resident);
+				resident.save();
 			} catch (AlreadyRegisteredException ignored) {}
 		}
 		lock.unlock();
@@ -1598,7 +1598,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			mayor.save();
 		} catch (AlreadyRegisteredException ignored) {}
 
-		saveTown(mergeInto);
+		mergeInto.save();
 		TownyMessaging.sendGlobalMessage(Translation.of("msg_town_merge_success", mergeFrom.getName(), mayor.getName(), mergeInto.getName()));
 	}
 }
