@@ -2098,6 +2098,10 @@ public class TownySettings {
 
 		return getInt(ConfigNodes.TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT);
 	}
+
+	public static int getMaxDistanceForTownMerge() {
+		return getInt(ConfigNodes.TOWN_MAX_DISTANCE_FOR_MERGE);
+	}
 	
 	public static boolean isMinDistanceIgnoringTownsInSameNation() {
 

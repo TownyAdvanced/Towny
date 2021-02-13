@@ -139,6 +139,11 @@ public enum ConfigNodes {
 			"3000",
 			"",
 			"# Maximum number of towns allowed on the server."),
+	TOWN_MAX_DISTANCE_FOR_MERGE(
+			"town.max_distance_for_merge",
+			"10",
+			"",
+			"# The maximum distance (in townblocks) that 2 town's homeblocks can be to be eligible for merging."),
 	TOWN_MIN_DISTANCE_IGNORED_FOR_NATIONS(
 			"town.min_distances_ignored_for_towns_in_same_nation",
 			"true",
