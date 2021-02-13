@@ -1562,4 +1562,43 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		lock.unlock();
 	}
+
+	/**
+	 * Merges the mergeFrom town into the mergeInto town.
+	 * @param mergeInto The town that the other town merges into.
+	 * @param mergeFrom The town that will be deleted.
+	 */
+	public void mergeTown(Town mergeInto, Town mergeFrom) {
+		if (TownyEconomyHandler.isActive()) {
+			try {
+				mergeFrom.getAccount().payTo(mergeFrom.getAccount().getHoldingBalance(), mergeInto, "Town merge");
+			} catch (EconomyException ignored) {}
+		}
+
+		Resident mayor = mergeFrom.getMayor();
+
+		lock.lock();
+		for (TownBlock tb : mergeFrom.getTownBlocks()) {
+			tb.setTown(mergeInto);
+			saveTownBlock(tb);
+		}
+		
+		for (Resident resident : mergeFrom.getResidents()) {
+			try {
+				resident.removeTown(); // TODO: Test if all residents get set correctly
+				resident.setTown(mergeInto);
+				saveResident(resident);
+			} catch (AlreadyRegisteredException ignored) {}
+		}
+		lock.unlock();
+		removeTown(mergeFrom, false);
+
+		try { // The mayor wasn't added yet, add them to the merged town
+			mayor.setTown(mergeInto);
+			mayor.save();
+		} catch (AlreadyRegisteredException ignored) {}
+
+		saveTown(mergeInto);
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_town_merge_success", mergeFrom.getName(), mayor.getName(), mergeInto.getName()));
+	}
 }
