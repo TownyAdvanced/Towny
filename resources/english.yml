@@ -1290,7 +1290,10 @@ msg_town_merge_other_offline: '&cThe mayor of %s, %s, is currently offline. Merg
 msg_town_merge_err_too_many_residents: '&cMerge failed: New resident amount exceeds the limit (%d)'
 msg_town_merge_err_too_many_townblocks: '&cMerge failed: New town size exceeds the limit (%d)'
 msg_town_merge_err_not_enough_money: '&cMerge failed: Not enough money. (%d/%d)'
-msg_town_merge_warning: '&cWarning: If accepted, merging with %s will cost %d.'
+msg_town_merge_warning: '&cWarning: If accepted, merging with %s will cost %s.'
 msg_town_merge_failed: '&cMerge failed.'
 msg_town_merge_cancelled: '&cMerge canceled.'
 msg_town_merge_success: '&bThe town of %s, owned by %s, has successfully merged into the town of %s.'
+#Reasons for withdrawing/depositing for the bankhistory book.
+msg_town_merge_cost_withdraw: 'Town Merge Costs'
+msg_town_merge_transaction_reason: 'Town Merge'

@@ -3589,7 +3589,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (cost > 0) {
-			TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_warning", succumbingTown.getName(), (int) cost));
+			TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_warning", succumbingTown.getName(), TownyEconomyHandler.getFormattedBalance(cost)));
 			final Town finalSuccumbingTown = succumbingTown;
 			final Town finalRemainingTown = remainingTown;
 			final double finalCost = cost;
@@ -3616,7 +3616,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				// Check if town can still pay merging costs.
 				try {
 					if (!finalRemainingTown.getAccount().canPayFromHoldings(finalCost))
-						TownyMessaging.sendErrorMsg(sender, Translation.of("msg_town_merge_err_not_enough_money", finalRemainingTown.getAccount().getHoldingBalance(), finalCost));
+						TownyMessaging.sendErrorMsg(sender, Translation.of("msg_town_merge_err_not_enough_money", (int) finalRemainingTown.getAccount().getHoldingBalance(), (int) finalCost));
 				} catch (EconomyException ignored) {}
 			}
 
@@ -3632,6 +3632,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			String succumbingTownName = finalSuccumbingTown.getName();
 
 			// Start merge
+			if (finalCost > 0) {
+				try {
+					finalRemainingTown.getAccount().withdraw(finalCost, Translation.of("msg_town_merge_cost_withdraw"));
+				} catch (EconomyException e) {
+					return;
+				}
+			}
 			TownyUniverse.getInstance().getDataSource().mergeTown(finalRemainingTown, finalSuccumbingTown);
 
 			TownMergeEvent townMergeEvent = new TownMergeEvent(finalRemainingTown, succumbingTownName, succumbingTownUUID);

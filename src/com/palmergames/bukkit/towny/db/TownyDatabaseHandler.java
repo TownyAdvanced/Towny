@@ -1571,7 +1571,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void mergeTown(Town mergeInto, Town mergeFrom) {
 		if (TownyEconomyHandler.isActive()) {
 			try {
-				mergeFrom.getAccount().payTo(mergeFrom.getAccount().getHoldingBalance(), mergeInto, "Town merge");
+				if (mergeFrom.getAccount().getHoldingBalance() > 0)
+					mergeFrom.getAccount().payTo(mergeFrom.getAccount().getHoldingBalance(), mergeInto, Translation.of("msg_town_merge_transaction_reason"));
 			} catch (EconomyException ignored) {}
 		}
 
