@@ -282,9 +282,7 @@ public class Town extends Government implements TownBlockOwner {
 		return hasResident(resident) && resident.hasTownRank(rank);
 	}
 
-	void addResident(Resident resident) throws AlreadyRegisteredException {
-
-		addResidentCheck(resident);
+	void addResident(Resident resident) {
 		residents.add(resident);
 	}
 

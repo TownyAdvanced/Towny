@@ -353,7 +353,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		}
 
 		if (hasTown())
-			throw new AlreadyRegisteredException();
+			town.addResidentCheck(this);
 
 		this.town = town;
 		updatePerms();

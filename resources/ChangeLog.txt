@@ -5830,3 +5830,5 @@ v0.92.0.11:
     - Default: false
     - If true, the settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock will be ignored for towns that are mutually allied. 
     - Setting to false will keep all towns separated the same if they are allies.
+0.96.7.4:
+  - Correctly show the proper already registered messages when using /ta set mayor TOWN PLAYER command.
