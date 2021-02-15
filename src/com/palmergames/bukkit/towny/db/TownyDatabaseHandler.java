@@ -20,13 +20,16 @@ import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -62,6 +65,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -1576,30 +1580,58 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (EconomyException ignored) {}
 		}
 
-		Resident mayor = mergeFrom.getMayor();
-
 		lock.lock();
+		String mayorName = mergeFrom.getMayor().getName();
+
 		for (TownBlock tb : mergeFrom.getTownBlocks()) {
 			tb.setTown(mergeInto);
 			tb.save();
 		}
 		
-		for (Resident resident : mergeFrom.getResidents()) {
+		List<Resident> residents = new ArrayList<Resident>(mergeFrom.getResidents());
+		for (Resident resident : residents) {
 			try {
-				resident.removeTown(); // TODO: Test if all residents get set correctly
+				resident.removeTown();
 				resident.setTown(mergeInto);
 				resident.save();
-			} catch (AlreadyRegisteredException ignored) {}
+			} catch (TownyException ignored) {}
 		}
+
+		for (Resident outlaw : mergeFrom.getOutlaws()) {
+			if (!mergeInto.hasOutlaw(outlaw) && !mergeInto.hasResident(outlaw)) {
+				try {
+					mergeInto.addOutlaw(outlaw);
+				} catch (AlreadyRegisteredException ignored) {}
+			}
+		}
+
+		List<Location> jails = new ArrayList<Location>(mergeFrom.getAllJailSpawns());
+		for (Location jail : jails) {
+			try {
+				TownBlock jailPlot = TownyAPI.getInstance().getTownBlock(jail);
+				if (jailPlot.getType() != TownBlockType.JAIL)
+					jailPlot.setType(TownBlockType.JAIL);
+				
+				mergeInto.addJailSpawn(jail);
+			} catch (TownyException ignored) {}
+		}
+
+		for (Resident jailedResident : TownyUniverse.getInstance().getJailedResidentMap()) {
+			if (jailedResident.hasJailTown(mergeFrom.getName()))
+				jailedResident.setJailTown(mergeInto.getName());
+		}
+
+		List<Location> outposts = new ArrayList<Location>(mergeFrom.getAllOutpostSpawns());
+		for (Location outpost : outposts) {
+			try {
+				mergeInto.addOutpostSpawn(outpost);
+			} catch (TownyException ignored) {}
+		}
+
 		lock.unlock();
 		removeTown(mergeFrom, false);
 
-		try { // The mayor wasn't added yet, add them to the merged town
-			mayor.setTown(mergeInto);
-			mayor.save();
-		} catch (AlreadyRegisteredException ignored) {}
-
 		mergeInto.save();
-		TownyMessaging.sendGlobalMessage(Translation.of("msg_town_merge_success", mergeFrom.getName(), mayor.getName(), mergeInto.getName()));
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_town_merge_success", mergeFrom.getName(), mayorName, mergeInto.getName()));
 	}
 }

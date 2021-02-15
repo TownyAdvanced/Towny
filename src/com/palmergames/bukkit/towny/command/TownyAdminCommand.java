@@ -105,7 +105,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> adminTownTabCompletes = Arrays.asList(
 		"new",
 		"add",
-		"remove",
 		"kick",
 		"rename",
 		"spawn",
