@@ -5832,3 +5832,8 @@ v0.92.0.11:
     - Setting to false will keep all towns separated the same if they are allies.
 0.96.7.4:
   - Correctly show the proper already registered messages when using /ta set mayor TOWN PLAYER command.
+  - API: added convenience methods to TownyAPI:
+    - getResidentTownOrNull(resident)
+    - getResidentNationOrNull(resident)
+    - getTownNationOrNull(town)
+   
