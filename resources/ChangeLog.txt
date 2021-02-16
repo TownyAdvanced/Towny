@@ -5836,4 +5836,4 @@ v0.92.0.11:
     - getResidentTownOrNull(resident)
     - getResidentNationOrNull(resident)
     - getTownNationOrNull(town)
-   
+  - Fix possible NPE when unjailing a resident.
