@@ -1607,13 +1607,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		}
 
-		for (Resident jailedResident : TownyUniverse.getInstance().getJailedResidentMap()) {
-			if (jailedResident.hasJailTown(mergeFrom.getName())) {
-				jailedResident.setJailTown(mergeInto.getName());
-				jailedResident.setJailSpawn(jailedResident.getJailSpawn() + mergeInto.getAllJailSpawns().size());
-			}
-		}
-
 		for (Location jail : jails) {
 			try {
 				TownBlock jailPlot = TownyAPI.getInstance().getTownBlock(jail);
@@ -1622,6 +1615,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				
 				mergeInto.addJailSpawn(jail);
 			} catch (TownyException ignored) {}
+		}
+
+		for (Resident jailedResident : TownyUniverse.getInstance().getJailedResidentMap()) {
+			if (jailedResident.hasJailTown(mergeFrom.getName())) {
+				jailedResident.setJailTown(mergeInto.getName());
+				jailedResident.setJailSpawn(jailedResident.getJailSpawn() + mergeInto.getAllJailSpawns().size());
+			}
 		}
 
 		for (Location outpost : outposts) {
