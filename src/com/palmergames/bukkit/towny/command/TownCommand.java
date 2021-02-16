@@ -3539,8 +3539,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public static void parseTownMergeCommand(Player player, String[] args) {
-		// TODO: Finish unfinished parts.
-		// - Preserve plot settings on merge
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		Town succumbingTown = TownyUniverse.getInstance().getTown(args[0]);
 		Town remainingTown = null;
@@ -3577,7 +3575,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		double cost = 0;
 		if (TownyEconomyHandler.isActive()) {
 			try {
-				cost = remainingTown.getTownBlockCostN(succumbingTown.getTownBlocks().size())/2; // Cost is cost to claim the other's townblocks divided by 2.
+				cost = TownySettings.getBaseCostForTownMerge() + remainingTown.getTownBlockCostN(succumbingTown.getTownBlocks().size()) * (TownySettings.getPercentageCostPerPlot() * 0.01);
 				if (!remainingTown.getAccount().canPayFromHoldings(cost)) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_not_enough_money", (int) remainingTown.getAccount().getHoldingBalance(), (int) cost));
 					return;

@@ -2102,6 +2102,14 @@ public class TownySettings {
 	public static int getMaxDistanceForTownMerge() {
 		return getInt(ConfigNodes.TOWN_MAX_DISTANCE_FOR_MERGE);
 	}
+
+	public static int getBaseCostForTownMerge() {
+		return getInt(ConfigNodes.ECO_PRICE_TOWN_MERGE);
+	}
+
+	public static int getPercentageCostPerPlot() {
+		return getInt(ConfigNodes.ECO_PRICE_TOWN_MERGE_PER_PLOT_PERCENTAGE);
+	}
 	
 	public static boolean isMinDistanceIgnoringTownsInSameNation() {
 
