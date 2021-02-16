@@ -1582,6 +1582,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		lock.lock();
 		String mayorName = mergeFrom.getMayor().getName();
+		List<Location> jails = new ArrayList<Location>(mergeFrom.getAllJailSpawns());
+		List<Location> outposts = new ArrayList<Location>(mergeFrom.getAllOutpostSpawns());
 
 		for (TownBlock tb : mergeFrom.getTownBlocks()) {
 			tb.setTown(mergeInto);
@@ -1605,7 +1607,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		}
 
-		List<Location> jails = new ArrayList<Location>(mergeFrom.getAllJailSpawns());
+		for (Resident jailedResident : TownyUniverse.getInstance().getJailedResidentMap()) {
+			if (jailedResident.hasJailTown(mergeFrom.getName())) {
+				jailedResident.setJailTown(mergeInto.getName());
+				jailedResident.setJailSpawn(jailedResident.getJailSpawn() + mergeInto.getAllJailSpawns().size());
+			}
+		}
+
 		for (Location jail : jails) {
 			try {
 				TownBlock jailPlot = TownyAPI.getInstance().getTownBlock(jail);
@@ -1616,12 +1624,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (TownyException ignored) {}
 		}
 
-		for (Resident jailedResident : TownyUniverse.getInstance().getJailedResidentMap()) {
-			if (jailedResident.hasJailTown(mergeFrom.getName()))
-				jailedResident.setJailTown(mergeInto.getName());
-		}
-
-		List<Location> outposts = new ArrayList<Location>(mergeFrom.getAllOutpostSpawns());
 		for (Location outpost : outposts) {
 			try {
 				mergeInto.addOutpostSpawn(outpost);
