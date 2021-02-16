@@ -3567,6 +3567,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
+		if (TownySettings.isAllowingOutposts() && (remainingTown.getMaxOutpostSpawn() + succumbingTown.getMaxOutpostSpawn()) > remainingTown.getOutpostLimit()) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_outposts"));
+			return;
+		}
+
 		if (!BukkitTools.isOnline(succumbingTown.getMayor().getName()) || succumbingTown.getMayor().isNPC()) {
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_other_offline", succumbingTown.getName(), succumbingTown.getMayor().getName()));
 			return;
