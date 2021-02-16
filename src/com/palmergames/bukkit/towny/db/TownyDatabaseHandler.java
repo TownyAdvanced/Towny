@@ -1593,6 +1593,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<Resident> residents = new ArrayList<Resident>(mergeFrom.getResidents());
 		for (Resident resident : residents) {
 			try {
+				if (mergeInto.hasOutlaw(resident))
+					continue;
+				
 				resident.removeTown();
 				resident.setTown(mergeInto);
 				resident.save();
