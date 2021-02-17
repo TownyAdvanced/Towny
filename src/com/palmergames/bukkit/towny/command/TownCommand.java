@@ -3557,18 +3557,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		if (TownySettings.getMaxResidentsPerTown() > 0 && (remainingTown.getResidents().size() + succumbingTown.getResidents().size()) > TownySettings.getMaxResidentsPerTown()) {
+		int newResidentsAmount = remainingTown.getResidents().size() + succumbingTown.getResidents().size();
+		if (TownySettings.getMaxResidentsPerTown() > 0 && newResidentsAmount > TownySettings.getMaxResidentsPerTown()) {
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_residents", TownySettings.getMaxResidentsPerTown()));
 			return;
 		}
-
-		if ((remainingTown.getTownBlocks().size() + succumbingTown.getTownBlocks().size()) > TownySettings.getMaxTownBlocks(remainingTown)) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_townblocks", TownySettings.getMaxTownBlocks(remainingTown)));
+		
+		if ((remainingTown.getTownBlocks().size() + succumbingTown.getTownBlocks().size()) > TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_townblocks", TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)));
 			return;
 		}
 
 		if (TownySettings.isAllowingOutposts() && (remainingTown.getMaxOutpostSpawn() + succumbingTown.getMaxOutpostSpawn()) > remainingTown.getOutpostLimit()) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_outposts"));
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_outposts", remainingTown.getOutpostLimit()));
 			return;
 		}
 
