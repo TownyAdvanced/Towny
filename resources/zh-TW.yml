@@ -1280,6 +1280,8 @@ gui_title_towny_switch: 'Towny Switch List'
 gui_title_towny_plotclear: 'Towny Plot Clear Delete List'
 
 #Added in 0.99 - FlatFile L10N
+# NOTICE
+# While these strings can be translated, we caution you to keep them in English.
 flatfile_dbg_cannot_set_capital_try_next: 'Nation %s could not set capital to %s, selecting a new capital...'
 flatfile_dbg_deleting_duplicate: 'Deleting: %s which is a duplicate of %s'
 flatfile_dbg_folders_found: 'Folders found %s'
