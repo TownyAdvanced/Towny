@@ -704,8 +704,13 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
-			return;
+		if(event.getEntity() != null) {
+			if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+				return;
+		} else {
+			if (!TownyAPI.getInstance().isTownyWorld(event.getLocation().getWorld()))
+				return;
+		}
 
 		TownyWorld townyWorld = null;
 		try {
