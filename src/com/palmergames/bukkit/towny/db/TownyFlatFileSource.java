@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
@@ -58,7 +59,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "worlds.txt",
 			dataFolderPath + File.separator + "plotgroups.txt"
 		)) {
-			TownyMessaging.sendErrorMsg("Could not create flatfile default files and folders.");
+			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_cannot_create_defaults"));
 		}
 	}
 	
@@ -111,11 +112,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadTownBlockList() {
 		
-		TownyMessaging.sendDebugMsg("Loading TownBlock List");
+		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_townblock_list"));
 
 		File townblocksFolder = new File(dataFolderPath + File.separator + "townblocks");
 		File[] worldFolders = townblocksFolder.listFiles(File::isDirectory);
-		TownyMessaging.sendDebugMsg(String.format("Folders found %s", worldFolders.length));
+		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_folders_found", worldFolders.length));
 		boolean mismatched = false;
 		int mismatchedCount = 0;
 		try {
@@ -146,12 +147,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	                TownyUniverse.getInstance().addTownBlock(townBlock);
 					total++;
 				}
-				TownyMessaging.sendDebugMsg(String.format("World: %s loaded %s TownBlocks.", worldName, total));
+				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_world_loaded_townblocks", worldName, total));
 			}
 			if (mismatched)
-				TownyMessaging.sendDebugMsg(String.format(
-					"%s townblocks were found with a town_block_size that does not match your config, they were not loaded into memory.",
-					mismatchedCount));
+				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_mismatched_townblock_size", mismatchedCount));
 
 			return true;
 		} catch (Exception e1) {
@@ -162,7 +161,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	@Override
 	public boolean loadPlotGroupList() {
-		TownyMessaging.sendDebugMsg("Loading Group List");
+		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_group_list"));
 		String line = null;
 
 		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "plotgroups.txt"), StandardCharsets.UTF_8))) {
@@ -194,7 +193,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			return true;
 			
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(String.format("Error loading Group List at %s, in towny/data/groups.txt", line));
+			TownyMessaging.sendErrorMsg(Translation.of("msg_err_loading_group_list_at_line", line));
 			e.printStackTrace();
 			return false;
 		}
@@ -203,7 +202,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadResidentList() {
 		
-		TownyMessaging.sendDebugMsg("Loading Resident List");
+		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_resident_list"));
 		List<String> residents = receiveListFromLegacyFile("residents.txt");
 		File[] residentFiles = receiveObjectFiles("residents");
 		assert residentFiles != null;
@@ -213,7 +212,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			// Don't load resident files if they weren't in the residents.txt file.
 			if (!residents.isEmpty() && !residents.contains(name)) {
-				TownyMessaging.sendDebugMsg(String.format("Removing %s because they are not found in the residents.txt", resident.getName()));
+				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_removing_resident_not_found", resident.getName()));
 				deleteFile(resident.getAbsolutePath());
 				continue;
 			}
@@ -239,7 +238,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadTownList() {
 		
-		TownyMessaging.sendDebugMsg("Loading Town List");
+		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_town_list"));
 		List<String> towns = receiveListFromLegacyFile("towns.txt");
 		File[] townFiles = receiveObjectFiles("towns");
 		assert townFiles != null;
@@ -249,7 +248,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			// Don't load town files if they weren't in the towns.txt file.
 			if (!towns.isEmpty() && !towns.contains(name)) {
-				TownyMessaging.sendDebugMsg(String.format("Removing %s because they are not found in the towns.txt.", town.getName()));
+				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_removing_town_not_found", town.getName()));
 				deleteFile(town.getAbsolutePath());
 				continue;
 			}
@@ -275,7 +274,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadNationList() {
 		
-		TownyMessaging.sendDebugMsg("Loading Nation List");
+		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_nation_list"));
 		List<String> nations = receiveListFromLegacyFile("nations.txt");
 		File[] nationFiles = receiveObjectFiles("nations");
 		assert nationFiles != null;
@@ -284,7 +283,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			// Don't load nation files if they weren't in the nations.txt file.
 			if (!nations.isEmpty() && !nations.contains(name)) {
-				TownyMessaging.sendDebugMsg(String.format("Removing %s because they are not found in the nations.txt", nation.getName()));
+				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_removing_nation_not_found", nation.getName()));
 				deleteFile(nation.getAbsolutePath());
 				continue;
 			}
@@ -311,7 +310,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadWorldList() {
 		
 		if (plugin != null) {
-			TownyMessaging.sendDebugMsg("Loading Server World List");
+			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_server_world_list"));
 			for (World world : plugin.getServer().getWorlds()) {
 				try {
 					newWorld(world.getName());
@@ -323,7 +322,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		// Can no longer reply on Bukkit to report ALL available worlds.
 		
-		TownyMessaging.sendDebugMsg("Loading World List");
+		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_world_list"));
 		
 		String line = null;
 		
@@ -340,7 +339,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			return true;
 			
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(String.format("Error loading World list at %s, in towny/data/worlds.txt", line));
+			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_loading_world_list_at_line", line));
 			e.printStackTrace();
 			return false;
 			
@@ -390,7 +389,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String path = getResidentFilename(resident);
 		File fileResident = new File(path);
 		if (fileResident.exists() && fileResident.isFile()) {
-			TownyMessaging.sendDebugMsg(String.format("Loading Resident: %s", resident.getName()));
+			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_resident", resident.getName()));
 			try {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileResident);
 				
@@ -402,8 +401,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (TownyUniverse.getInstance().hasResident(uuid)) {
 						Resident olderRes = TownyUniverse.getInstance().getResident(uuid);
 						if (resident.getLastOnline() > olderRes.getLastOnline()) {
-							TownyMessaging.sendDebugMsg(String.format(
-								"Deleting: %s which is a duplicate of %s", olderRes.getName(), resident.getName()));
+							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_deleting_duplicate", olderRes.getName(), resident.getName()));
 							try {
 								TownyUniverse.getInstance().unregisterResident(olderRes);
 							} catch (NotRegisteredException ignored) {}
@@ -416,8 +414,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							}
 							deleteResident(olderRes);					
 						} else {
-							TownyMessaging.sendDebugMsg(String.format(
-								"Deleting: %s which is a duplicate of %s", resident.getName(), olderRes.getName()));
+							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_deleting_duplicate", resident.getName(), olderRes.getName()));
 							try {
 								TownyUniverse.getInstance().unregisterResident(resident);
 							} catch (NotRegisteredException ignored) {}
@@ -477,9 +474,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					Town town = universe.getTown(line);
 					
 					if (town == null) {
-						TownyMessaging.sendErrorMsg(String.format(
-							"Loading Error: %s tried to load the town %s which is invalid. Removing town from the resident.",
-							resident.getName(), line));
+						TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_resident_tried_load_invalid_town", resident.getName(), line));
 					}
 					else {
 						resident.setTown(town);
@@ -506,9 +501,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(String.format(
-					"Loading Error: Exception while reading resident file %s at line: %s, in towny/data/residents/%s.txt",
-					resident.getName(), line, resident.getName()));
+				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_resident_at_line", resident.getName(), line, resident.getName()));
 				e.printStackTrace();
 				return false;
 			} finally {
@@ -528,7 +521,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String path = getTownFilename(town);
 		File fileTown = new File(path);		
 		if (fileTown.exists() && fileTown.isFile()) {
-			TownyMessaging.sendDebugMsg(String.format("Loading Town: %s", town.getName()));
+			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_town", town.getName()));
 			try {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileTown);
 
@@ -554,21 +547,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					for (String token : tokens) {
 						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg(String.format("Town Fetching Outlaw: %s", token));
+							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_town_fetch_outlaw", token));
 							Resident outlaw = universe.getResident(token);
 							if (outlaw != null) {
 								try { 
 									town.addOutlaw(outlaw);
 								} catch (AlreadyRegisteredException ex) {
-									TownyMessaging.sendErrorMsg(String.format(
-										"Loading Error: Exception while reading an outlaw of town file %s.txt. The outlaw %s is duplicated! Skipping adding duplicate...",
-										town.getName(), token));
+									TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_outlaw_of_town_duplicate", town.getName(), token));
 								}
 							}
 							else {
-								TownyMessaging.sendErrorMsg(String.format(
-									"Loading Error: Exception while reading an outlaw of town file %s.txt. The outlaw %s does not exist! Removing from list...",
-									town.getName(), token));
+								TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_outlaw_of_town_not_exist", town.getName(), token));
 							}
 						}
 					}
@@ -731,14 +720,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								TownBlock homeBlock = TownyUniverse.getInstance().getTownBlock(new WorldCoord(world.getName(), x, z));
 								town.forceSetHomeBlock(homeBlock);
 							} catch (NumberFormatException e) {
-								TownyMessaging.sendErrorMsg(String.format("[Warning] %s - HomeBlock tried to load invalid Location.", town.getName()));
+								TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_location", town.getName()));
 							} catch (NotRegisteredException e) {
-								TownyMessaging.sendErrorMsg(String.format("[Warning] %s - HomeBlock tried to load invalid TownBlock.", town.getName()));
+								TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_townblock", town.getName()));
 							} catch (TownyException e) {
-								TownyMessaging.sendErrorMsg(String.format("[Warning] %s does not have a HomeBlock.", town.getName()));
+								TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_town_homeblock_not_exist", town.getName()));
 							}
                         } catch (NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg(String.format("[Warning] %s - HomeBlock tried to load invalid World.", town.getName()));
+							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_world", town.getName()));
 						}
 				}
 				
@@ -872,9 +861,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(String.format(
-					"Loading Error: Exception while reading town file %s at line: %s, in towny/data/towns/%s.txt", 
-					town.getName(), line, town.getName()));
+				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_town_file_at_line", town.getName(), line, town.getName()));
 				e.printStackTrace();
 				return false;
 			} finally {
@@ -895,35 +882,35 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		File fileNation = new File(path);
 		
 		if (fileNation.exists() && fileNation.isFile()) {
-			TownyMessaging.sendDebugMsg(String.format("Loading Nation: %s", nation.getName()));
+			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_nation", nation.getName()));
 			try {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileNation);
 				
 				line = keys.get("capital");
-				String couldNotLoadSoDisband = String.format("The nation %s could not load a capital city and is being disbanded.", nation.getName());
+				String cantLoadCapital = Translation.of("flatfile_err_nation_could_not_load_capital_disband", nation.getName());
 				if (line != null) {
 					Town town = universe.getTown(line);
 					if (town != null) {
 						try {
 							nation.forceSetCapital(town);
 						} catch (EmptyNationException e1) {
-							plugin.getLogger().warning(couldNotLoadSoDisband);
+							plugin.getLogger().warning(cantLoadCapital);
 							removeNation(nation);
 							return true;
 						}
 					}
 					else {
-						TownyMessaging.sendDebugMsg(String.format("Nation %s could not set capital to %s, selecting a new capital...", nation.getName(), line));
+						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_cannot_set_capital_try_next", nation.getName(), line));
 						if (!nation.findNewCapital()) {
-							plugin.getLogger().warning(couldNotLoadSoDisband);
+							plugin.getLogger().warning(cantLoadCapital);
 							removeNation(nation);
 							return true;
 						}
 					}
 				} else {
-					TownyMessaging.sendDebugMsg(String.format("Nation %s did not have a capital defined, selecting a new capital...", nation.getName()));
+					TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_undefined_capital_select_new", nation.getName()));
 					if (!nation.findNewCapital()) {
-						plugin.getLogger().warning(couldNotLoadSoDisband);
+						plugin.getLogger().warning(cantLoadCapital);
 						removeNation(nation);
 						return true;
 					}
@@ -1047,9 +1034,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					MetadataLoader.getInstance().deserializeMetadata(nation, line.trim());
 
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(String.format(
-					"Loading Error: Exception while reading nation file %s at line %s, in towny/data/nations/%s.txt",
-					nation.getName(), line, nation.getName()));
+				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_nation_file_at_line", nation.getName(), line, nation.getName()));
 				e.printStackTrace();
 				return false;
 			} finally {
@@ -1069,12 +1054,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		// create the world file if it doesn't exist
 		if (!FileMgmt.checkOrCreateFile(path)) {
-			TownyMessaging.sendErrorMsg(String.format("Loading Error: Exception while reading file %s", path));
+			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_file", path));
 		}
 		
 		File fileWorld = new File(path);
 		if (fileWorld.exists() && fileWorld.isFile()) {
-			TownyMessaging.sendDebugMsg(String.format("Loading World: %s", world.getName()));
+			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_world", world.getName()));
 			try {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileWorld);
 				
@@ -1344,18 +1329,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					MetadataLoader.getInstance().deserializeMetadata(world, line.trim());
 				
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(String.format(
-					"Loading Error: Exception while reading world file %s at line: %s, in towny/data/worlds/%s.txt",
-					path, line, world.getName()));
+				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_world_file_at_line", path, line, world.getName()));
 				return false;
 			} finally {
 				saveWorld(world);
 			}
 			return true;
 		} else {
-			TownyMessaging.sendErrorMsg(String.format(
-				"Loading Error: File error while reading %s at line: %s, in towny/data/worlds/%s.txt",
-				world.getName(), line, world.getName()));
+			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_file_error_reading_world_file_at_line", world.getName(), line, world.getName()));
 			return false;
 		}
 	}
@@ -1388,14 +1369,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							group.setTown(town);	
 						}
 						else {
-							TownyMessaging.sendDebugMsg(String.format("Group file missing Town, deleting %s", path));
+							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_group_file_missing_town_delete", path));
 							deletePlotGroup(group);
-							TownyMessaging.sendDebugMsg(String.format("Missing file: %s deleting entry in group.txt", path));
+							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_group_entry", path));
 							continue;
 						}
 					}
 					else {
-						TownyMessaging.sendErrorMsg("Could not add to town!");
+						TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_could_not_add_to_town"));
 						deletePlotGroup(group);
 					}
 					
@@ -1404,11 +1385,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						group.setPrice(Double.parseDouble(line.trim()));
 
 				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg(String.format("Loading Error: Exception while reading Group file %s at line: %s", path, line));
+					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_group_file_at_line", path, line));
 					return false;
 				}
 			} else {
-				TownyMessaging.sendDebugMsg(String.format("Missing file: %s deleting entry in groups.txt", path));
+				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_groups_entry", path));
 			}
 		}
 		
@@ -1436,7 +1417,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					line = keys.get("town");
 					if (line != null) {
 						if (line.isEmpty()) {
-							TownyMessaging.sendErrorMsg(String.format("TownBlock file missing Town, deleting %s", path));
+							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_townblock_file_missing_town_delete", path));
 							TownyUniverse.getInstance().removeTownBlock(townBlock);
 							deleteTownBlock(townBlock);
 							continue;
@@ -1444,7 +1425,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						Town town = universe.getTown(line.trim());
 						
 						if (town == null) {
-							TownyMessaging.sendErrorMsg(String.format("TownBlock file contains unregistered Town: %s, deleting %s", line, path));
+							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_townblock_file_contains_unregistered_town_delete", line, path));
 							TownyUniverse.getInstance().removeTownBlock(townBlock);
 							deleteTownBlock(townBlock);
 							continue;
@@ -1460,7 +1441,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					} else {
 						// Town line is null, townblock is invalid.
-						TownyMessaging.sendErrorMsg(String.format("TownBlock file missing Town, deleting %s", path));
+						TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_townblock_file_missing_town_delete", path));
 						TownyUniverse.getInstance().removeTownBlock(townBlock);
 						deleteTownBlock(townBlock);
 						continue;
@@ -1487,7 +1468,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.setResident(res);
 						}
 						else {
-							TownyMessaging.sendErrorMsg(String.format("Invalid resident for TownBlock %s. Skipped setting resident for TownBlock...", townBlock.toString()));
+							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_invalid_townblock_resident", townBlock.toString()));
 						}
 					}
 					
@@ -1542,12 +1523,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 
 				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg(String.format("Loading Error: Exception while reading TownBlock file %s at line: %s.", path, line));
+					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_townblock_file_at_line", path, line));
 					return false;
 				}
 
 			} else {
-				TownyMessaging.sendErrorMsg(String.format("TownBlock file contains unknown error, deleting %s.", path));
+				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_townblock_file_unknown_err", path));
 				TownyUniverse.getInstance().removeTownBlock(townBlock);
 				deleteTownBlock(townBlock);
 			}
