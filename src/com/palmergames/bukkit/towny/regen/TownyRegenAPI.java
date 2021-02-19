@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.regen;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -13,6 +14,10 @@ import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -506,10 +511,11 @@ public class TownyRegenAPI {
 	 * @param block - {@link Block} which is being exploded.
 	 * @param count - int for setting the delay to do one block at a time.
 	 * @param world - {@link TownyWorld} for where the regen is being triggered.
+	 * @param event 
 	 * 
 	 * @return true if the protectiontask was begun successfully. 
 	 */
-	public static boolean beginProtectionRegenTask(Block block, int count, TownyWorld world) {
+	public static boolean beginProtectionRegenTask(Block block, int count, TownyWorld world, Event event) {
 		if (!hasProtectionRegenTask(new BlockLocation(block.getLocation())) && !isBlacklistedBlock(world, block.getType())) {
 			// Piston extensions which are broken by explosions ahead of the base block
 			// cause baseblocks to drop as items and no base block to be regenerated.
@@ -521,7 +527,17 @@ public class TownyRegenAPI {
 			ProtectionRegenTask task = new ProtectionRegenTask(Towny.getPlugin(), block);
 			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, (TownySettings.getPlotManagementWildRegenDelay() + count) * 20));
 			addProtectionRegenTask(task);
-			block.setType(Material.AIR);
+
+			// If this was a TownyExplodingBlocksEvent we want to get the bukkit event from it first.
+			if (event instanceof TownyExplodingBlocksEvent)
+				event = ((TownyExplodingBlocksEvent) event).getBukkitExplodeEvent();
+			
+			// Remove the drops from the explosion.
+			if (event instanceof EntityExplodeEvent) 
+				((EntityExplodeEvent) event).setYield(0);
+			else if (event instanceof BlockExplodeEvent)
+				((BlockExplodeEvent) event).setYield(0);
+
 			return true;
 		}
 		return false;

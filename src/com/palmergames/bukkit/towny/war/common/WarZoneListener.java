@@ -160,7 +160,7 @@ public class WarZoneListener implements Listener {
 					continue;
 				}
 				count++;
-				TownyRegenAPI.beginProtectionRegenTask(block, count, TownyAPI.getInstance().getTownyWorld(block.getLocation().getWorld().getName()));
+				TownyRegenAPI.beginProtectionRegenTask(block, count, TownyAPI.getInstance().getTownyWorld(block.getLocation().getWorld().getName()), event);
 			}
 			// This is an allowed explosion, so add it to our War-allowed list.
 			toAllow.add(block);

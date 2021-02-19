@@ -573,7 +573,7 @@ public class TownyEntityListener implements Listener {
 				break;
 		
 			case WITHER:
-				List<Block> allowed = TownyActionEventExecutor.filterExplodableBlocks(new ArrayList<>(Collections.singleton(event.getBlock())), event.getBlock().getType(), event.getEntity());
+				List<Block> allowed = TownyActionEventExecutor.filterExplodableBlocks(new ArrayList<>(Collections.singleton(event.getBlock())), event.getBlock().getType(), event.getEntity(), event);
 				event.setCancelled(allowed.isEmpty());
 				break;
 			/*
@@ -614,7 +614,7 @@ public class TownyEntityListener implements Listener {
 			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getLocation().getWorld().getName());
 		} catch (NotRegisteredException ignored) {}
 
-		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), null, event.getEntity());
+		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), null, event.getEntity(), event);
 		event.blockList().clear();
 		event.blockList().addAll(blocks);
 
@@ -630,7 +630,7 @@ public class TownyEntityListener implements Listener {
 					return;
 				count++;
 				// Cancel the event outright if this will cause a revert to start on an already operating revert.
-				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld));
+				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event));
 			}
 		}
 	}
