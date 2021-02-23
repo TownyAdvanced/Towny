@@ -4,7 +4,6 @@ import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -250,11 +249,8 @@ public class TownyPerms {
 		
 		//Check for town membership
 		if (resident.hasTown()) {
-			try {
-				permList.addAll(getTownDefault(resident.getTown()));
-			} catch (NotRegisteredException e) {
-				// Not Possible!
-			}
+			permList.addAll(getTownDefault(TownyAPI.getInstance().getResidentTownOrNull(resident)));
+			
 			// Is Mayor?
 			if (resident.isMayor()) permList.addAll(getTownMayor());
 				
@@ -282,19 +278,15 @@ public class TownyPerms {
 		Boolean value = false;
 		for (String permission : playerPermArray) {			
 			if (permission.contains("{townname}")) {
-				if (resident.hasTown())
-					try {
-						String placeholderPerm = permission.replace("{townname}", resident.getTown().getName().toLowerCase());
-						newPerms.put(placeholderPerm, true);
-					} catch (NotRegisteredException e) {
-					}
+				if (resident.hasTown()) {
+					String placeholderPerm = permission.replace("{townname}", TownyAPI.getInstance().getResidentTownOrNull(resident).getName().toLowerCase());
+					newPerms.put(placeholderPerm, true);
+				}
 			} else if (permission.contains("{nationname}")) {
-				if (resident.hasNation())
-					try {
-						String placeholderPerm = permission.replace("{nationname}", resident.getTown().getNation().getName().toLowerCase());
-						newPerms.put(placeholderPerm, true);
-					} catch (NotRegisteredException e) {
-					}
+				if (resident.hasNation()) {
+					String placeholderPerm = permission.replace("{nationname}", TownyAPI.getInstance().getResidentNationOrNull(resident).getName().toLowerCase());
+					newPerms.put(placeholderPerm, true);
+				}
 			} else {
 				value = (!permission.startsWith("-"));
 				newPerms.put((value ? permission : permission.substring(1)), value);

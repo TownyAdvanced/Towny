@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Suneet Tipirneni (Siris)
@@ -92,9 +93,8 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 			this.resident = resident;
 	}
 
-	public Resident getResident() throws NotRegisteredException {
-		if (!hasResident())
-			throw new NotRegisteredException("The Group " + this.toString() + "is not registered to a resident.");
+	@Nullable
+	public Resident getResident() {
 		return resident;
 	}
 

@@ -244,13 +244,8 @@ public class PlayerCacheUtil {
 	 */
 	public static TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
 
-		try {
-			if (!worldCoord.getTownyWorld().isUsingTowny())
-				return TownBlockStatus.OFF_WORLD;
-		} catch (NotRegisteredException ex) {
-			// Not a registered world
-			return TownBlockStatus.NOT_REGISTERED;
-		}
+		if (!TownyAPI.getInstance().isTownyWorld(worldCoord.getBukkitWorld()))
+			return TownBlockStatus.OFF_WORLD;
 
 		if (!worldCoord.hasTownBlock()) {
 			// Has to be wilderness.

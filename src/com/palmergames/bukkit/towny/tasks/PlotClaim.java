@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -12,7 +13,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -83,7 +83,11 @@ public class PlotClaim extends Thread {
 						 *  Handle paying for the plot here so it is not payed for per-townblock in the group.
 						 */
 						if (TownyEconomyHandler.isActive() && worldCoord.getTownBlock().getPlotObjectGroup().getPrice() != -1) {
-							try {
+
+							if (worldCoord.getTownBlock().getPlotObjectGroup().hasResident()) {
+								/*
+								 * The plots are resident owned.
+								 */
 								if (!resident.getAccount().payTo(worldCoord.getTownBlock().getPlotObjectGroup().getPrice(), worldCoord.getTownBlock().getPlotObjectGroup().getResident(), "Plot Group - Buy From Seller")) {
 									/*
 									 * Should not be possible, as the resident has already been tested to see if they have enough to pay.
@@ -91,9 +95,9 @@ public class PlotClaim extends Thread {
 									TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_money_purchase_plot"));
 									break;
 								}
-							} catch (NotRegisteredException e) {
+							} else {
 								/*
-								 *  worldCoord.getTownBlock().getPlotObjectGroup().getResident() will return NotRegisteredException if the plots are town-owned.								
+								 *  The plots are town-owned.								
 								 */
 								double bankcap = TownySettings.getTownBankCap();
 								if (bankcap > 0) {
@@ -131,13 +135,9 @@ public class PlotClaim extends Thread {
 				}
 
 				// Make sure this is a valid world (mainly when unclaiming).
-				try {
-					@SuppressWarnings("unused")
-					TownyWorld world = worldCoord.getTownyWorld();
-				} catch (NotRegisteredException e) {
-					TownyMessaging.sendMsg(player, Translation.of("msg_err_not_configured"));
+				if (!TownyAPI.getInstance().isTownyWorld(worldCoord.getBukkitWorld()))
 					continue;
-				}
+
 				try {
 					if (claim) {
 						if (groupClaim) {
@@ -205,7 +205,11 @@ public class PlotClaim extends Thread {
 
 				if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
 					throw new TownyException(Translation.of("msg_err_not_part_town"));
-				try {
+
+				if (townBlock.getPlotObjectGroup().hasResident()) {
+					/*
+					 * Plotgroup is resident-owned.
+					 */
 					Resident owner = townBlock.getPlotObjectGroup().getResident();
 
 					if (group.getPrice() != -1) {
@@ -262,8 +266,10 @@ public class PlotClaim extends Thread {
 						throw new AlreadyRegisteredException(Translation.of("msg_already_claimed", owner.getName()));
 					}
 
-				} catch (NotRegisteredException e) {
-					//Plot has no owner so it's the town selling it
+				} else {
+					/*
+					 * Plot group is town-owned.
+					 */
 
 					if (townBlock.getPlotObjectGroup().getPrice() == -1) {
 						throw new TownyException(Translation.of("msg_err_plot_nfs"));

@@ -64,7 +64,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world.getName());
 			if (townyWorld == null)
 				continue;
-
+			
 			// Filter worlds that will always pass all checks in a world, regardless of possible conditions.
 			if (townyWorld.isForceTownMobs() && townyWorld.hasWorldMobs())
 				continue;
