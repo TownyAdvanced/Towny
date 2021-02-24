@@ -3568,6 +3568,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
+		if ((remainingTown.getPurchasedBlocks() + succumbingTown.getPurchasedBlocks()) > TownySettings.getMaxPurchasedBlocks(remainingTown)) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_purchased_townblocks", TownySettings.getMaxPurchasedBlocks(remainingTown)));
+			return;
+		}
+
 		if (TownySettings.isAllowingOutposts() && (remainingTown.getMaxOutpostSpawn() + succumbingTown.getMaxOutpostSpawn()) > remainingTown.getOutpostLimit()) {
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_outposts", remainingTown.getOutpostLimit()));
 			return;
@@ -3594,6 +3599,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if (cost > 0) {
 			TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_warning", succumbingTown.getName(), TownyEconomyHandler.getFormattedBalance(cost)));
+			if (succumbingTown.isBankrupt())
+				TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_debt_warning", succumbingTown.getName()));
 			final Town finalSuccumbingTown = succumbingTown;
 			final Town finalRemainingTown = remainingTown;
 			final double finalCost = cost;

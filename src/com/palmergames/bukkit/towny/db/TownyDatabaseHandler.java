@@ -1579,9 +1579,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		lock.lock();
+		boolean isSameNation = false;
+		if (mergeInto.hasNation() && mergeFrom.hasNation()) {
+			try {
+				isSameNation = mergeInto.getNation().hasTown(mergeFrom);
+			} catch (NotRegisteredException ignored) {}
+		}
 		String mayorName = mergeFrom.getMayor().getName();
 		List<Location> jails = new ArrayList<Location>(mergeFrom.getAllJailSpawns());
 		List<Location> outposts = new ArrayList<Location>(mergeFrom.getAllOutpostSpawns());
+
+		mergeInto.addPurchasedBlocks(mergeFrom.getPurchasedBlocks());
+		mergeInto.addBonusBlocks(mergeFrom.getBonusBlocks());
 
 		for (TownBlock tb : mergeFrom.getTownBlocks()) {
 			tb.setTown(mergeInto);
@@ -1594,8 +1603,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				if (mergeInto.hasOutlaw(resident))
 					continue;
 				
+				List<String> nationRanks = new ArrayList<String>(resident.getNationRanks());
+				
 				resident.removeTown();
 				resident.setTown(mergeInto);
+
+				if (isSameNation) {
+					for (String rank : nationRanks)
+						resident.addNationRank(rank);
+				}
 				resident.save();
 			} catch (TownyException ignored) {}
 		}

@@ -1686,11 +1686,11 @@ public enum ConfigNodes {
 	ECO_PRICE_TOWN_MERGE(
 			"economy.new_expand.price_town_merge",
 			"0",
-			"# The base cost a town has to pay to merge with another town."),
+			"# The base cost a town has to pay to merge with another town. The town that initiates the merge pays the cost."),
 	ECO_PRICE_TOWN_MERGE_PER_PLOT_PERCENTAGE(
 			"economy.new_expand.price_town_merge_per_plot_percentage",
 			"50",
-			"# The percentage that a town has to pay per plot to merge with another town.",
+			"# The percentage that a town has to pay per plot to merge with another town. The town that initiates the merge pays the cost.",
 			"# This is based on the price_claim_townblock."),
 	ECO_PRICE_RECLAIM_RUINED_TOWN(
 			"economy.new_expand.price_reclaim_ruined_town",
