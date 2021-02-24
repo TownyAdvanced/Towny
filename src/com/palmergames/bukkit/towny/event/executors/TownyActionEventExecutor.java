@@ -239,6 +239,7 @@ public class TownyActionEventExecutor {
 	 * @param blockList - List of Blocks which might be exploded.
 	 * @param mat - Material which caused a block explosion.
 	 * @param entity - Entity which caused a entity explosion.
+	 * @param bukkitExplodeEvent - The Bukkit Explosion Event that caused this explosion.
 	 * @return filteredBlocks - List of Blocks which are going to be allowed to explode.
 	 */
 	public static List<Block> filterExplodableBlocks(List<Block> blockList, Material mat, Entity entity, Event bukkitExplodeEvent) {

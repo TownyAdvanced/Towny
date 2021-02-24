@@ -46,6 +46,7 @@ public class CombatUtil {
 	 * @param plugin - Reference to Towny
 	 * @param attacker - Entity attacking the Defender
 	 * @param defender - Entity defending from the Attacker
+	 * @param cause - The DamageCause behind this DamageCall.
 	 * @return true if we should cancel.
 	 */
 	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender, DamageCause cause) {
@@ -107,6 +108,7 @@ public class CombatUtil {
 	 * @param defendingEntity - Entity defending
 	 * @param attackingPlayer - Player attacking
 	 * @param defendingPlayer - Player defending
+	 * @param cause - The DamageCause behind this DamageCall.
 	 * @return true if we should cancel.
 	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */

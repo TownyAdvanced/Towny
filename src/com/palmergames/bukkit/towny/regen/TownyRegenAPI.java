@@ -511,7 +511,7 @@ public class TownyRegenAPI {
 	 * @param block - {@link Block} which is being exploded.
 	 * @param count - int for setting the delay to do one block at a time.
 	 * @param world - {@link TownyWorld} for where the regen is being triggered.
-	 * @param event 
+	 * @param event - The Bukkit Event causing this explosion.
 	 * 
 	 * @return true if the protectiontask was begun successfully. 
 	 */
