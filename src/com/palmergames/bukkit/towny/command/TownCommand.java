@@ -3583,10 +3583,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
+		double baseCost = TownySettings.getBaseCostForTownMerge();
+		double townblockCost = 0;
+		double bankruptcyCost = 0;
 		double cost = 0;
 		if (TownyEconomyHandler.isActive()) {
 			try {
-				cost = TownySettings.getBaseCostForTownMerge() + remainingTown.getTownBlockCostN(succumbingTown.getTownBlocks().size()) * (TownySettings.getPercentageCostPerPlot() * 0.01);
+				townblockCost = remainingTown.getTownBlockCostN(succumbingTown.getTownBlocks().size()) * (TownySettings.getPercentageCostPerPlot() * 0.01);
+				cost = baseCost + townblockCost;
+				if (succumbingTown.isBankrupt()) {
+					bankruptcyCost = succumbingTown.getAccount().getHoldingBalance();
+				}
+
 				if (!remainingTown.getAccount().canPayFromHoldings(cost)) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_not_enough_money", (int) remainingTown.getAccount().getHoldingBalance(), (int) cost));
 					return;
@@ -3601,6 +3609,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_warning", succumbingTown.getName(), TownyEconomyHandler.getFormattedBalance(cost)));
 			if (succumbingTown.isBankrupt())
 				TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_debt_warning", succumbingTown.getName()));
+			TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_cost_breakdown", TownyEconomyHandler.getFormattedBalance(baseCost), TownyEconomyHandler.getFormattedBalance(townblockCost), TownyEconomyHandler.getFormattedBalance(bankruptcyCost)));
 			final Town finalSuccumbingTown = succumbingTown;
 			final Town finalRemainingTown = remainingTown;
 			final double finalCost = cost;
@@ -3655,7 +3664,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownMergeEvent townMergeEvent = new TownMergeEvent(finalRemainingTown, succumbingTownName, succumbingTownUUID);
 			Bukkit.getPluginManager().callEvent(townMergeEvent);
 		}).runOnCancel(() -> {
-			TownyMessaging.sendMsg(sender, Translation.of("msg_town_merge_cancelled"));
+			TownyMessaging.sendMsg(sender, Translation.of("msg_town_merge_request_denied"));
 			TownyMessaging.sendMsg(succumbingTown.getMayor(), Translation.of("msg_town_merge_cancelled"));
 		}).sendTo(BukkitTools.getPlayerExact(succumbingTown.getMayor().getName()));
 	}
