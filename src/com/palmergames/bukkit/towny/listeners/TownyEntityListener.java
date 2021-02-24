@@ -136,7 +136,7 @@ public class TownyEntityListener implements Listener {
 		/*
 		 * This handles the remaining non-explosion damages. 
 		 */
-		if (CombatUtil.preventDamageCall(plugin, attacker, defender)) {
+		if (CombatUtil.preventDamageCall(plugin, attacker, defender, event.getCause())) {
 			// Remove the projectile here so no
 			// other events can fire to cause damage
 			if (attacker instanceof Projectile && !attacker.getType().equals(EntityType.TRIDENT))
@@ -392,7 +392,7 @@ public class TownyEntityListener implements Listener {
 				 * yet allow the use of beneficial potions on all.
 				 */
 				if (attacker != defender)
-					if (CombatUtil.preventDamageCall(plugin, attacker, defender) && detrimental) {
+					if (CombatUtil.preventDamageCall(plugin, attacker, defender, DamageCause.MAGIC) && detrimental) {
 
 						event.setIntensity(defender, -1.0);
 					}
@@ -670,7 +670,7 @@ public class TownyEntityListener implements Listener {
 			// There is an attacker and Not war time.
 			if ((attacker != null) && (!TownyAPI.getInstance().isWarTime())) {
 
-				if (CombatUtil.preventDamageCall(plugin, attacker, defender)) {
+				if (CombatUtil.preventDamageCall(plugin, attacker, defender, DamageCause.PROJECTILE)) {
 					// Remove the projectile here so no
 					// other events can fire to cause damage
 					combuster.remove();

@@ -5845,3 +5845,4 @@ v0.92.0.11:
     - Closes #4771.
   - API: TownyExplodingBlocksEvent 
     - Add getBukkitExplodeEvent for convenience.
+  - Fix PVP-related issue where people could be hit once in non-PVP areas.
