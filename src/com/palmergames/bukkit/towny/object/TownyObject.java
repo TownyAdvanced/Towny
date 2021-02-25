@@ -165,6 +165,7 @@ public abstract class TownyObject implements Nameable, Savable {
 	/**
 	 * Fetch the metadata associated with the specific key and class.
 	 * 
+	 * @param <T> The Class.
 	 * @param key Key of the metadata to fetch.
 	 * @param cdfClass Class of the CustomDataField to fetch.
 	 *
@@ -211,6 +212,7 @@ public abstract class TownyObject implements Nameable, Savable {
 	/**
 	 * Check whether metadata associated with the given key and class exists.
 	 * 
+	 * @param <T> The Class.
 	 * @param key Key of the metadata to check
 	 * @param cdfClass Class extending CustomDataField to check.
 	 * 

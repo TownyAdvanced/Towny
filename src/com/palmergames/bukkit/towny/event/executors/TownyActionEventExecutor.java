@@ -239,9 +239,10 @@ public class TownyActionEventExecutor {
 	 * @param blockList - List of Blocks which might be exploded.
 	 * @param mat - Material which caused a block explosion.
 	 * @param entity - Entity which caused a entity explosion.
+	 * @param bukkitExplodeEvent - The Bukkit Explosion Event that caused this explosion.
 	 * @return filteredBlocks - List of Blocks which are going to be allowed to explode.
 	 */
-	public static List<Block> filterExplodableBlocks(List<Block> blockList, Material mat, Entity entity) {
+	public static List<Block> filterExplodableBlocks(List<Block> blockList, Material mat, Entity entity, Event bukkitExplodeEvent) {
 		/* 
 		 * Sort blocks into lowest Y to highest Y in order to preserve
 		 * blocks affected by gravity or tile entities requiring a base. 
@@ -258,7 +259,7 @@ public class TownyActionEventExecutor {
 		 * Fire a TownyExplodingBlockEvent to let Towny's war systems 
 		 * and other plugins have a say in the results.
 		 */
-		TownyExplodingBlocksEvent event = new TownyExplodingBlocksEvent(blockList, filteredBlocks, mat, entity);
+		TownyExplodingBlocksEvent event = new TownyExplodingBlocksEvent(blockList, filteredBlocks, mat, entity, bukkitExplodeEvent);
 		BukkitTools.getPluginManager().callEvent(event);
 
 		/*

@@ -252,7 +252,7 @@ public class TownyBlockListener implements Listener {
 		if (material == Material.AIR && townyWorld.hasBedExplosionAtBlock(event.getBlock().getLocation()))
 			material = townyWorld.getBedExplosionMaterial(event.getBlock().getLocation());
 		
-		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), material, null);
+		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), material, null, event);
 		event.blockList().clear();
 		event.blockList().addAll(blocks);
 
@@ -270,7 +270,7 @@ public class TownyBlockListener implements Listener {
 					continue;
 				count++;
 				// Cancel the event outright if this will cause a revert to start on an already operating revert.
-				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld));
+				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event));
 			}
 		}
 	}

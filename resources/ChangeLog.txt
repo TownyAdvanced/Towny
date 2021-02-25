@@ -5837,4 +5837,14 @@ v0.92.0.11:
     - getResidentNationOrNull(resident)
     - getTownNationOrNull(town)
   - Fix possible NPE when unjailing a resident.
+  - Fix being unable to claim a personally-owned plot being sold by a resident.
+    - Closes #4767.
+  - Fix mayors unable to use /plot nfs on personally-owned plots owned by their town.
+  - Adapt to spigot bug being closed, allowing us to prevent explosions from dropping items without setting the exploded block to air.
+    - Closes #4770.
+    - Closes #4771.
+  - API: TownyExplodingBlocksEvent 
+    - Add getBukkitExplodeEvent for convenience.
+  - Fix PVP-related issue where people could be hit once in non-PVP areas.
+0.96.7.5:
   - Add localization strings for Towny's FlatFile datasource handler, courtesy of TheFlagCourier with PR #4761

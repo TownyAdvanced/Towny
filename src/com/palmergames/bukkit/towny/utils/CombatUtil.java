@@ -26,6 +26,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Wolf;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import java.util.List;
 
@@ -45,9 +46,10 @@ public class CombatUtil {
 	 * @param plugin - Reference to Towny
 	 * @param attacker - Entity attacking the Defender
 	 * @param defender - Entity defending from the Attacker
+	 * @param cause - The DamageCause behind this DamageCall.
 	 * @return true if we should cancel.
 	 */
-	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender) {
+	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender, DamageCause cause) {
 
 		try {
 			TownyWorld world = TownyUniverse.getInstance().getDataSource().getWorld(defender.getWorld().getName());
@@ -84,7 +86,7 @@ public class CombatUtil {
 			if (a == b)
 				return false;
 
-			return preventDamageCall(plugin, world, attacker, defender, a, b);
+			return preventDamageCall(plugin, world, attacker, defender, a, b, cause);
 
 		} catch (Exception e) {
 			// Failed to fetch world
@@ -106,10 +108,11 @@ public class CombatUtil {
 	 * @param defendingEntity - Entity defending
 	 * @param attackingPlayer - Player attacking
 	 * @param defendingPlayer - Player defending
+	 * @param cause - The DamageCause behind this DamageCall.
 	 * @return true if we should cancel.
 	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
-	private static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer) throws NotRegisteredException {
+	private static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer, DamageCause cause) throws NotRegisteredException {
 
 		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation());
 		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attackingEntity.getLocation());
@@ -140,7 +143,7 @@ public class CombatUtil {
 				/*
 				 * A player has attempted to damage a player. Throw a TownPlayerDamagePlayerEvent.
 				 */
-				TownyPlayerDamagePlayerEvent event = new TownyPlayerDamagePlayerEvent(defendingPlayer.getLocation(), defendingPlayer, defendingPlayer.getLastDamageCause().getCause(), defenderTB, cancelled, attackingPlayer);
+				TownyPlayerDamagePlayerEvent event = new TownyPlayerDamagePlayerEvent(defendingPlayer.getLocation(), defendingPlayer, cause, defenderTB, cancelled, attackingPlayer);
 				BukkitTools.getPluginManager().callEvent(event);
 
 				// A cancelled event should contain a message.
