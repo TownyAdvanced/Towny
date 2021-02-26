@@ -5846,3 +5846,5 @@ v0.92.0.11:
   - API: TownyExplodingBlocksEvent 
     - Add getBukkitExplodeEvent for convenience.
   - Fix PVP-related issue where people could be hit once in non-PVP areas.
+0.96.7.5:
+  - Add localization strings for Towny's FlatFile datasource handler, courtesy of TheFlagCourier with PR #4761
