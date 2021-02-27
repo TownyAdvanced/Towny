@@ -369,7 +369,7 @@ msg_cache_block_error_town_outsider: '&cOutsiders aren''t allowed to %s.'
 
 msg_err_cant_afford_tp_town: '&cCannot afford to teleport to %s.'
 msg_err_not_public: '&cThat town is not public.'
-msg_err_not_open: '&cThe town %s does not have it''s doors open to everyone. Ask the mayor or an assistant to join.'
+msg_err_not_open: '&cThe town %s does not have its doors open to everyone. Ask the mayor or an assistant to join.'
 msg_err_town_spawn_forbidden: '&cTown spawn travel is forbidden.'
 msg_err_town_spawn_nation_forbidden: '&cTown spawn travel to other towns in your nation is forbidden.'
 msg_err_town_spawn_ally_forbidden: '&cTown spawn travel to towns allied with your nation is forbidden.'
