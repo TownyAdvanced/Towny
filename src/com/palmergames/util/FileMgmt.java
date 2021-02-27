@@ -10,7 +10,6 @@ import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +21,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -135,28 +136,27 @@ public final class FileMgmt {
 		try {
 			writeLock.lock();
 			if (sourceLocation.isDirectory()) {
-				if (!targetLocation.exists())
-					targetLocation.mkdir();
+				if (!targetLocation.exists() && !targetLocation.mkdir())
+					System.out.printf("[Towny] Could not create the target location (%s).%n", targetLocation);
 
 				String[] children = sourceLocation.list();
 				for (String aChildren : children)
 					copyDirectory(new File(sourceLocation, aChildren), new File(targetLocation, aChildren));
 			} else {
-				OutputStream out = new FileOutputStream(targetLocation);
-				try {
-					InputStream in = new FileInputStream(sourceLocation);
-					// Copy the bits from in stream to out stream.
-					byte[] buf = new byte[1024];
-					int len;
-					while ((len = in.read(buf)) > 0)
-						out.write(buf, 0, len);
-					in.close();
-					out.close();
-				} catch (IOException ex) {
-					// failed to access file.
-					System.out.println("Error: Could not access: " + sourceLocation);
+				try (OutputStream out = new FileOutputStream(targetLocation)) {
+					try {
+						try (InputStream in = new FileInputStream(sourceLocation)) {
+							// Copy the bits from in stream to out stream.
+							byte[] buf = new byte[1024];
+							int len;
+							while ((len = in.read(buf)) > 0)
+								out.write(buf, 0, len);
+						}
+					} catch (IOException ex) {
+						// failed to access file.
+						System.out.println("Error: Could not access: " + sourceLocation);
+					}
 				}
-				out.close();
 			}
 		} finally {
 			writeLock.unlock();
@@ -184,13 +184,13 @@ public final class FileMgmt {
 			// Populate a new file
 			try {
 				resString = convertStreamToString("/" + resource);
-				FileMgmt.stringToFile(resString, filePath);
+				stringToFile(resString, filePath);
 
 			} catch (IOException e) {
 				// No resource file found
 				try {
 					resString = convertStreamToString("/" + defaultRes);
-					FileMgmt.stringToFile(resString, filePath);
+					stringToFile(resString, filePath);
 				} catch (IOException e1) {
 					// Default resource not found
 					e1.printStackTrace();
@@ -210,27 +210,20 @@ public final class FileMgmt {
 		try {
 			readLock.lock();
 			if (name != null) {
-				Writer writer = new StringWriter();
-				InputStream is = FileMgmt.class.getResourceAsStream(name);
+				try (Writer writer = new StringWriter()) {
+					InputStream is = FileMgmt.class.getResourceAsStream(name);
 
-				char[] buffer = new char[1024];
-				try {
-					Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-					int n;
-					while ((n = reader.read(buffer)) != -1) {
-						writer.write(buffer, 0, n);
+					char[] buffer = new char[1024];
+					try (Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+						int n;
+						while ((n = reader.read(buffer)) != -1) {
+							writer.write(buffer, 0, n);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					try {
-						is.close();
-					} catch (NullPointerException e) {
-						//Failed to open a stream
-						throw new IOException();
-					}
+					return writer.toString();
 				}
-				return writer.toString();
 			} else {
 				return "";
 			}
@@ -250,34 +243,42 @@ public final class FileMgmt {
 		try {
 			readLock.lock();
 			if (file != null && file.exists() && file.canRead() && !file.isDirectory()) {
-				Writer writer = new StringWriter();
+				try (Writer writer = new StringWriter()) {
 
-				char[] buffer = new char[1024];
-				try (InputStream is = new FileInputStream(file)) {
-					Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-					int n;
-					while ((n = reader.read(buffer)) != -1) {
-						writer.write(buffer, 0, n);
-					}
-					reader.close();
+					char[] buffer = new char[1024];
+					readFromInputStream(file, writer, buffer);
+					return writer.toString();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				return writer.toString();
 			} else {
 				return "";
 			}
 		} finally {
 			readLock.unlock();
 		}
+		return null;
+	}
+
+	private static void readFromInputStream(File file, Writer writer, char[] buffer) {
+		try (InputStream is = new FileInputStream(file)) {
+			Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+			int n;
+			while ((n = reader.read(buffer)) != -1) {
+				writer.write(buffer, 0, n);
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//writes a string to a file making all newline codes platform specific
-	public static void stringToFile(String source, String FileName) {
+	public static void stringToFile(String source, String fileName) {
 
 		if (source != null) {
 			// Save the string to file (*.yml)
-			stringToFile(source, new File(FileName));
+			stringToFile(source, new File(fileName));
 		}
 
 	}
@@ -340,10 +341,13 @@ public final class FileMgmt {
 				// check for an already existing file of that name
 				File f = new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + sourceFile.getName()));
 				if ((f.exists() && f.isFile()))
-					f.delete();
+					Files.delete(f.toPath());
 				// Move file to new directory
-				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation), sourceFile.getName()));
+				if (!sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation), sourceFile.getName())))
+					System.out.printf("[Towny] Could not move file (%s) to the target location (%s).%n", sourceFile.getName(), targetLocation);
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
 			writeLock.unlock();
 		}
@@ -360,11 +364,13 @@ public final class FileMgmt {
 				// check for an already existing file of that name
 				File f = new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir + File.separator + sourceFile.getName()));
 				if ((f.exists() && f.isFile()))
-					f.delete();
+					Files.delete(f.toPath());
 				// Move file to new directory
-				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir), sourceFile.getName()));
-
+				if (!sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir), sourceFile.getName())))
+					System.out.printf("[Towny] Could not move file (%s) to the target location (%s).%n", sourceFile.getName(), targetLocation);
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
 			writeLock.unlock();
 		}
@@ -383,20 +389,22 @@ public final class FileMgmt {
 						 new GzipCompressorOutputStream(
 							 new FileOutputStream(destination)))) {
 				for (File source : sources) {
-					Files.walk(source.toPath()).forEach((path -> {
-						File file = path.toFile();
+					try (Stream<Path> fileWalker = Files.walk(source.toPath())) {
+						fileWalker.forEach((path -> {
+							File file = path.toFile();
 
-						if (!file.isDirectory()) {
-							TarArchiveEntry entry_1 = new TarArchiveEntry(file, file.toString());
-							try (FileInputStream fis = new FileInputStream(file)) {
-								archive.putArchiveEntry(entry_1);
-								IOUtils.copy(fis, archive);
-								archive.closeArchiveEntry();
-							} catch (IOException e) {
-								e.printStackTrace();
+							if (!file.isDirectory()) {
+								TarArchiveEntry entry1 = new TarArchiveEntry(file, file.toString());
+								try (FileInputStream fis = new FileInputStream(file)) {
+									archive.putArchiveEntry(entry1);
+									IOUtils.copy(fis, archive);
+									archive.closeArchiveEntry();
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 							}
-						}
-					}));
+						}));
+					}
 				}
 			}
 		} finally {
@@ -423,8 +431,6 @@ public final class FileMgmt {
                     zos.write(buffer, 0, len);
                 }
             }			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -435,10 +441,10 @@ public final class FileMgmt {
 	public static void zipDirectories(File destination, File... sourceFolders) throws IOException {
 		try {
 			readLock.lock();
-			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination), StandardCharsets.UTF_8);
-			for (File sourceFolder : sourceFolders)
-				recursiveZipDirectory(sourceFolder, output);
-			output.close();
+			try (ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination), StandardCharsets.UTF_8)) {
+				for (File sourceFolder : sourceFolders)
+					recursiveZipDirectory(sourceFolder, output);
+			}
 		} finally {
 			readLock.unlock();
 		}
@@ -455,12 +461,12 @@ public final class FileMgmt {
 				if (f.isDirectory()) {
 					recursiveZipDirectory(f, zipStream);
 				} else if (f.isFile() && f.canRead()) {
-					FileInputStream input = new FileInputStream(f);
-					ZipEntry anEntry = new ZipEntry(f.getPath());
-					zipStream.putNextEntry(anEntry);
-					while ((bytesIn = input.read(readBuffer)) != -1)
-						zipStream.write(readBuffer, 0, bytesIn);
-					input.close();
+					try (FileInputStream input = new FileInputStream(f)) {
+						ZipEntry anEntry = new ZipEntry(f.getPath());
+						zipStream.putNextEntry(anEntry);
+						while ((bytesIn = input.read(readBuffer)) != -1)
+							zipStream.write(readBuffer, 0, bytesIn);
+					}
 				}
 			}
 		} finally {
@@ -484,14 +490,12 @@ public final class FileMgmt {
 						deleteFile(child);
 				}
 				children = file.listFiles();
-				if (children == null || children.length == 0) {
-					if (!file.delete())
-						System.out.println("Error: Could not delete folder: " + file.getPath());
-				}
-			} else if (file.isFile()) {
-				if (!file.delete())
-					System.out.println("Error: Could not delete file: " + file.getPath());
-			}
+				if ((children == null || children.length == 0))
+					Files.delete(file.toPath());
+			} else if (file.isFile())
+				Files.delete(file.toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
 			writeLock.unlock();
 		}
@@ -513,35 +517,37 @@ public final class FileMgmt {
 				File[] children = backupsDir.listFiles();
 				if (children != null) {
 					for (File child : children) {
-						try {
-							String filename = child.getName();
-							if (child.isFile()) {
-								if (filename.contains("."))
-									filename = filename.split("\\.")[0];
-							}
-							String[] tokens = filename.split(" ");
-							String lastToken = tokens[tokens.length - 1];
-							long timeMade = Long.parseLong(lastToken);
-
-							if (timeMade >= 0) {
-								long age = System.currentTimeMillis() - timeMade;
-								if (age >= deleteAfter) {
-									deleteFile(child);
-									deleted.add(age);
-								}
-							}
-						} catch (Exception e) {
-							// Ignore file as it doesn't follow the backup format.
-						}
+						tryDeleteChild(deleteAfter, deleted, child);
 					}
 				}
 			}
 
-			if (deleted.size() > 0) {
-				System.out.println(String.format("[Towny] Deleting %d Old Backups (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
+			if (!deleted.isEmpty()) {
+				System.out.printf("[Towny] Deleting %d Old Backups (%s).%n", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()))));
 			}
 		} finally {
 			writeLock.unlock();
+		}
+	}
+
+	private static void tryDeleteChild(long deleteAfter, TreeSet<Long> deleted, File child) {
+		try {
+			String filename = child.getName();
+			if (child.isFile() && filename.contains("."))
+				filename = filename.split("\\.")[0];
+			String[] tokens = filename.split(" ");
+			String lastToken = tokens[tokens.length - 1];
+			long timeMade = Long.parseLong(lastToken);
+
+			if (timeMade >= 0) {
+				long age = System.currentTimeMillis() - timeMade;
+				if (age >= deleteAfter) {
+					deleteFile(child);
+					deleted.add(age);
+				}
+			}
+		} catch (Exception e) {
+			// Ignore file as it doesn't follow the backup format.
 		}
 	}
 
@@ -600,16 +606,5 @@ public final class FileMgmt {
 		} finally {
 			writeLock.unlock();
 		}
-	}
-
-	/**
-	 * @deprecated as of 0.96.5.0, No longer used. You can get this yourself with {@link System#getProperty(String)}.
-	 * 
-	 * @return Returns a file separator System Property.
-	 */
-	@Deprecated
-	public static String fileSeparator() {
-
-		return System.getProperty("file.separator");
 	}
 }
