@@ -616,6 +616,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("maxPercentTaxAmount");
+				if (line != null)
+					town.setMaxPercentTaxAmount(Double.parseDouble(line));
+				else 
+					town.setMaxPercentTaxAmount(TownySettings.getMaxTownTaxPercentAmount());
+				
 				line = keys.get("taxes");
 				if (line != null)
 					try {
@@ -1666,6 +1672,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("purchasedBlocks=" + town.getPurchasedBlocks());
 		// Taxpercent
 		list.add("taxpercent=" + town.isTaxPercentage());
+		// Taxpercent Cap
+		list.add("maxPercentTaxAmount=" + town.getMaxPercentTaxAmount());
 		// Taxes
 		list.add("taxes=" + town.getTaxes());
 		// Plot Price
