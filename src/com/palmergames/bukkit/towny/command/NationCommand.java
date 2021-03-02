@@ -2148,7 +2148,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				else
 					try {
 						Resident newKing = getResidentOrThrow(split[1]);
-						String oldKingsName = nation.getCapital().getMayor().getName();
+						Resident oldKing = nation.getKing();
 
 			            if ((TownySettings.getNumResidentsCreateNation() > 0) && (newKing.getTown().getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
 			              TownyMessaging.sendMessage(player, Translation.of("msg_not_enough_residents_capital", newKing.getTown().getName()));
@@ -2156,8 +2156,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			            }
 
 						nation.setKing(newKing);
-						plugin.deleteCache(oldKingsName);
+						plugin.deleteCache(oldKing.getName());
 						plugin.deleteCache(newKing.getName());
+						TownyPerms.assignPermissions(oldKing, player); // remove permissions from old King.
 						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_new_king", newKing.getName(), nation.getName()));
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());

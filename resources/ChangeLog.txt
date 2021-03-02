@@ -5850,3 +5850,5 @@ v0.92.0.11:
   - Add localization strings for Towny's FlatFile datasource handler, courtesy of TheFlagCourier with PR #4761
   - Fix up double-chest-on-plot-borders visual bugginess.
     - Closes #4783.
+  - Fix kings who give up their position willingly, not losing their King permission nodes given in TownyPerms.yml
+    - Closes #4784.
