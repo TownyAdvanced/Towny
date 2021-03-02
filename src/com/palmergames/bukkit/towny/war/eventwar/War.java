@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -298,7 +299,7 @@ public class War {
 
 			@Override
 			public void run() {
-				plugin.getHUDManager().toggleAllWarHUD();
+				HUDManager.toggleAllWarHUD();
 			}
 			
 		}.runTask(plugin);
@@ -558,8 +559,12 @@ public class War {
 				for (Town town : wzd.getAttackerTowns()) {
 					for (Player player : wzd.getAttackers()) {
 						Resident playerRes = TownyUniverse.getInstance().getResident(player.getUniqueId());
-						if (playerRes != null && playerRes.hasTown() && town.hasResident(playerRes))
-							attackerCount.put(town, attackerCount.get(town) + 1);
+						if (playerRes != null && playerRes.hasTown() && town.hasResident(playerRes)) {
+							int i = 0;
+							if (attackerCount.contains(town))
+								i = attackerCount.get(town);
+							attackerCount.put(town, i + 1);
+						}
 					}
 				}
 				KeyValueTable<Town, Integer> kvTable = new KeyValueTable<>(attackerCount);

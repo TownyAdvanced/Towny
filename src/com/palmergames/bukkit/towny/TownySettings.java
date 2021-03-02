@@ -2104,6 +2104,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.TOWN_MIN_DISTANCE_IGNORED_FOR_NATIONS);
 	}
 
+	public static boolean isMinDistanceIgnoringTownsInAlliedNation() {
+		return getBoolean(ConfigNodes.TOWN_MIN_DISTANCE_IGNORED_FOR_ALLIES);
+	}
+
 	public static int getMaxDistanceBetweenHomeblocks() {
 
 		return getInt(ConfigNodes.TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS);
@@ -2794,6 +2798,26 @@ public class TownySettings {
 
 	public static String getPAPIFormattingKing() {
 		return getString(ConfigNodes.FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING);
+	}
+	
+	public static String getPAPIRelationNone() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_NONE);
+	}
+	
+	public static String getPAPIRelationSameTown() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_SAME_TOWN);
+	}
+	
+	public static String getPAPIRelationSameNation() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_SAME_NATION);
+	}
+	
+	public static String getPAPIRelationAlly() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_ALLY);
+	}
+	
+	public static String getPAPIRelationEnemy() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_ENEMY);
 	}
 
 	public static double getPlotSetCommercialCost() {

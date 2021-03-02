@@ -1,40 +1,46 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class CustomDataField<T> implements Cloneable {
-    private final CustomDataFieldType type;
     private T value;
     private final String key;
     
     protected String label;
     
-    public CustomDataField(String key, CustomDataFieldType type, T value, String label)
+    public CustomDataField(String key, T value, String label)
     {
-        this.type = type;
         this.setValue(value);
         this.key = key;
         this.label = label;
     }
 
-	public CustomDataField(String key, CustomDataFieldType type, T value)
+	public CustomDataField(String key, T value)
 	{
-		this(key, type, value, null);
+		this(key, value, null);
 	}
 
-	public CustomDataField(String key, CustomDataFieldType type, String label)
+	public CustomDataField(String key, String label)
 	{
-		this(key, type, null, label);
+		this(key, null, label);
 	}
 
-    public CustomDataField(String key, CustomDataFieldType type)
+    public CustomDataField(String key)
     {
-        this(key, type, null, null);
+        this(key, null, null);
     }
 
-    public CustomDataFieldType getType() {
-        return type;
-    }
+	/**
+	 * Gets the type id for the given CustomDataField class. 
+	 * This value is attached to the class, and not a specific instance. 
+	 * Used for serialization purposes. 
+	 * 
+	 * @return type id of the given CustomDataField class.
+	 */
+	@NotNull
+	public abstract String getTypeID();
 
     public T getValue() {
         
@@ -42,17 +48,38 @@ public abstract class CustomDataField<T> implements Cloneable {
     }
 
     public void setValue(T value) {
-        // TODO: Save to yml
-        
         this.value = value;
     }
-    
-    public abstract void setValueFromString(String strValue);
 
+	/**
+	 * Sets the value based on the given input.
+	 * Used when admins want to edit metadata in-game.
+	 * 
+	 * @param strValue input.
+	 */
+	public abstract void setValueFromString(String strValue);
+
+	/**
+	 * Serializes the current value to a string. 
+	 * Used for saving the CustomDataField object.
+	 * 
+	 * @return serialized string
+	 */
+	@Nullable
+	protected String serializeValueToString() {
+    	return String.valueOf(getValue());
+	}
+
+	@NotNull
     public String getKey() {
         return key;
     }
     
+    public boolean shouldDisplayInStatus() {
+    	return hasLabel();
+	}
+    
+	@NotNull
     public String getLabel() {
     	if (hasLabel())
     		return label;
@@ -68,12 +95,13 @@ public abstract class CustomDataField<T> implements Cloneable {
 		this.label = label;
 	}
 
+	// Not used for serialization anymore. Just for human readable format.
 	@Override
     public String toString() {
         String out = "";
         
         // Type
-        out += type.getValue().toString();
+        out += getTypeID();
         
         // Key
         out += "," + getKey();
@@ -88,55 +116,20 @@ public abstract class CustomDataField<T> implements Cloneable {
     }
 
 	/**
-	 * @param str - The metadata string to load
-	 * @return - The data field defined by the string
+	 * Determines whether the given input can be parsed to the appropriate value.
+	 * Used to parse admin input for in-game metadata editing.
+	 * 
+	 * @param strValue admin input
+	 * @return whether the string can be parsed or not
 	 */
-    public static CustomDataField<?> load(String str) {
-        String[] tokens = str.split(",");
-        CustomDataFieldType type = CustomDataFieldType.fromValue(Integer.parseInt(tokens[0]));
-        String key = tokens[1];
-        CustomDataField<?> field = null;
-        
-        switch (type) {
-            case IntegerField:
-                field = new IntegerDataField(key);
-                break;
-            case StringField:
-                field = new StringDataField(key);
-                break;
-            case BooleanField:
-                field = new BooleanDataField(key);
-                break;
-            case DecimalField:
-                field = new DecimalDataField(key);
-                break;
-			case LongField:
-				field = new LongDataField(key);
-				break;
-        }
-        
-        if (field.canParseFromString(tokens[2]))
-        	field.setValueFromString(tokens[2]);
-        
-		String label;
-		if (tokens[3] == null || tokens[3].equalsIgnoreCase("nil"))
-			label = null;
-		else
-			label = tokens[3];
-        
-		field.setLabel(label);
-		
-        return field;
-    }
-
-    // Overridable validation function
+	// Overridable validation function
 	protected boolean canParseFromString(String strValue) {
     	return true;
 	}
 	
 	public final void isValidType(String str) throws InvalidMetadataTypeException {
     	if (!canParseFromString(str))
-    		throw new InvalidMetadataTypeException(this.type);
+    		throw new InvalidMetadataTypeException(this);
 	}
 
 	/**
@@ -159,6 +152,7 @@ public abstract class CustomDataField<T> implements Cloneable {
         return getKey().hashCode();
     }
     
+    @NotNull
     public abstract CustomDataField<T> clone();
     
 	/**

@@ -1793,7 +1793,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				else
 					resident = getResidentOrThrow(split[1]);
 				
-				if (!CombatUtil.isSameTown(getResidentOrThrow(player.getUniqueId()), resident)) {
+				if (!admin && !CombatUtil.isSameTown(getResidentOrThrow(player.getUniqueId()), resident)) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_town", resident.getName()));
 					return;
 				}
@@ -1842,7 +1842,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				else
 					resident = getResidentOrThrow(split[1]);
 
-				if (!CombatUtil.isSameTown(getResidentOrThrow(player.getUniqueId()), resident)) {
+				if (!admin && !CombatUtil.isSameTown(getResidentOrThrow(player.getUniqueId()), resident)) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_same_town", resident.getName()));
 					return;
 				}
@@ -2100,6 +2100,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
                     	final String name = split[1];
                     	Confirmation confirmation = Confirmation.runOnAccept(() -> {
 							try {
+								// Check if town can still pay rename cost
+								if (!finalTown.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost())) {
+									TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
+									return;
+								}
+								
 								finalTown.getAccount().withdraw(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", name));
 							} catch (EconomyException ignored) {}
 
@@ -2217,7 +2223,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				} else if (split[0].equalsIgnoreCase("outpost")) {
 
 					try {
-						if (TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown().getName().equals(town.getName())) {
+						TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());						
+						if (townBlock == null || !townBlock.isOutpost())
+							throw new TownyException(Translation.of("msg_err_location_is_not_within_an_outpost_plot"));
+						
+						if (townBlock.getTown().equals(town)) {
 							town.addOutpostSpawn(player.getLocation());
 							TownyMessaging.sendMsg(player, Translation.of("msg_set_outpost_spawn"));
 						} else
@@ -2348,10 +2358,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 		if (n == 0)
 			return;
-		double cost = town.getBonusBlockCostN(n);
-		// Test if the town can pay and throw economy exception if not.
-		if (!town.getAccount().canPayFromHoldings(cost))
-			throw new EconomyException(Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+			double cost = town.getBonusBlockCostN(n);
+			// Test if the town can pay and throw economy exception if not.
+			if (!town.getAccount().canPayFromHoldings(cost))
+				throw new EconomyException(Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 		
 		Confirmation confirmation = Confirmation.runOnAccept(() -> {
 			try {
@@ -3368,6 +3378,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				// Not enough available claims.
 				if (selection.size() > TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size())
 					throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
+
+				// If this is a single claim and it is already claimed, by someone else.
+				if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasTown())
+					throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownBlock().getTown()));
 				
 				/*
 				 * Filter out any unallowed claims.

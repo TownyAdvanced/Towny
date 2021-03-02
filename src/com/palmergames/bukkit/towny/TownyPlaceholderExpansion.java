@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
+
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -9,12 +11,13 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.util.StringMgmt;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import me.clip.placeholderapi.expansion.Relational;
 
 /**
  * This class will be registered through the register-method in the plugins
  * onEnable-method.
  */
-public class TownyPlaceholderExpansion extends PlaceholderExpansion {
+public class TownyPlaceholderExpansion extends PlaceholderExpansion implements Relational {
 
 	final String nomad = Translation.of("nomad_sing");
 	final String res = Translation.of("res_sing");
@@ -91,6 +94,29 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 	@Override
 	public String getVersion() {
 		return plugin.getDescription().getVersion();
+	}
+	
+	@Override
+	public String onPlaceholderRequest(Player player, Player player2, String identifier) {
+
+		if (!identifier.equalsIgnoreCase("color"))
+			return null;
+
+		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		Resident res2 = TownyUniverse.getInstance().getResident(player2.getUniqueId());
+		if (res == null || res2 == null)
+			return null;
+		
+		if (CombatUtil.isSameTown(res, res2))
+			return TownySettings.getPAPIRelationSameTown();
+		else if (CombatUtil.isSameNation(res, res2))
+			return TownySettings.getPAPIRelationSameNation();
+		else if (CombatUtil.isAlly(player.getName(), player2.getName()))
+			return TownySettings.getPAPIRelationAlly();
+		else if (CombatUtil.isEnemy(player.getName(), player2.getName()))
+			return TownySettings.getPAPIRelationEnemy();
+		else 
+			return TownySettings.getPAPIRelationNone();
 	}
 
 	/**
@@ -583,6 +609,16 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion {
 			try {
 				return townblock != null ? (townblock.getPermissions().pvp ? Translation.of("status_title_pvp"):"") : (TownyAPI.getInstance().getDataSource().getWorld(player.getWorld().getName()).isPVP() ? Translation.of("status_title_pvp"):"");
 			} catch (NotRegisteredException ignored) {}
+		case "is_nation_peaceful": // %townyadvanced_is_nation_peaceful%	
+			try {
+				return resident.hasNation() ? (resident.getTown().getNation().isNeutral() ? Translation.of("status_town_title_peaceful"): "") : "";
+			} catch (NotRegisteredException ignored) {}
+		case "is_town_peaceful": // %townyadvanced_is_town_peaceful%	
+			try {
+				return resident.hasTown() ? (resident.getTown().isNeutral() ? Translation.of("status_town_title_peaceful"): "") : "";
+			} catch (NotRegisteredException ignored) {}
+			
+		
 		default:
 			return null;
 		}

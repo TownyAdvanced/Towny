@@ -5,17 +5,26 @@ import com.palmergames.bukkit.util.Colors;
 public class BooleanDataField extends CustomDataField<Boolean> {
     
     public BooleanDataField(String key, Boolean value) {
-        super(key, CustomDataFieldType.BooleanField, value);
+        super(key, value);
     }
     
     public BooleanDataField(String key, Boolean value, String label) {
-    	super(key, CustomDataFieldType.BooleanField, value, label);
+    	super(key, value, label);
 	}
     
     public BooleanDataField(String key) {
         // Initialized to false
-        super(key, CustomDataFieldType.BooleanField, false);
+        super(key, false);
     }
+
+	@Override
+	public String getTypeID() {
+		return typeID();
+	}
+	
+	public static String typeID() {
+    	return "towny_booldf";
+	}
 
 	@Override
 	public void setValueFromString(String strValue) {

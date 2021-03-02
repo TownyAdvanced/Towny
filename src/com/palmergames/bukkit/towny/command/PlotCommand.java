@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.event.plot.toggle.PlotTogglePvpEvent;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -251,6 +252,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translation.of("msg_war_cannot_do"));
 
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
+					
+					// Fast-fail if this is a single plot and it is already claimed.
+					if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasResident() && !selection.get(0).getTownBlock().isForSale())
+						throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownBlock().getResident()));
+					
 					// Filter to just plots that are for sale.
 					selection = AreaSelectionUtil.filterPlotsForSale(selection);
 
@@ -466,7 +472,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// The follow test will clean up the initial selection fairly well, the plotTestOwner later on in the setPlotForSale will ultimately stop any funny business.
 					if (permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && (resident.hasTown() && resident.getTown() == pos.getTownBlock().getTown())) {
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection); // Treat it as a mayor able to set their town's plots not for sale.
-						selection = AreaSelectionUtil.filterOutResidentBlocks(resident, selection); // Filter out any resident-owned plots.
 					} else {
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection); // Treat it as a resident making their own plots not for sale.
 					}
@@ -577,7 +582,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_HUD.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
 						
-						plugin.getHUDManager().togglePermHUD(player);
+						HUDManager.togglePermHUD(player);
 						
 					} else {
 						if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
@@ -1240,6 +1245,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(groupBlock.getWorldCoord().toString(), CooldownType.PVP)));
 						}
 
+						PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(groupBlock.getTown(), player, choice.orElse(!groupBlock.getPermissions().pvp));
+						Bukkit.getPluginManager().callEvent(plotTogglePvpEvent);
+						if (plotTogglePvpEvent.isCancelled()) {
+							player.sendMessage(plotTogglePvpEvent.getCancellationMsg());
+							return;
+						}
+
 						groupBlock.getPermissions().pvp = choice.orElse(!groupBlock.getPermissions().pvp);
 						// Add a cooldown timer for this plot.
 						if (TownySettings.getPVPCoolDownTime() > 0)
@@ -1249,18 +1261,42 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					} else if (split[0].equalsIgnoreCase("explosion")) {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
+
+						PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(groupBlock.getTown(), player, choice.orElse(!groupBlock.getPermissions().explosion));
+						Bukkit.getPluginManager().callEvent(plotToggleExplosionEvent);
+						if (plotToggleExplosionEvent.isCancelled()) {
+							player.sendMessage(plotToggleExplosionEvent.getCancellationMsg());
+							return;
+						}
+
 						groupBlock.getPermissions().explosion = choice.orElse(!groupBlock.getPermissions().explosion);
 						endingMessage = Translation.of("msg_changed_expl", "the Plot Group", groupBlock.getPermissions().explosion ? Translation.of("enabled") : Translation.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("fire")) {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
+
+						PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(groupBlock.getTown(), player, choice.orElse(!groupBlock.getPermissions().fire));
+						Bukkit.getPluginManager().callEvent(plotToggleFireEvent);
+						if (plotToggleFireEvent.isCancelled()) {
+							player.sendMessage(plotToggleFireEvent.getCancellationMsg());
+							return;
+						}
+						
 						groupBlock.getPermissions().fire = choice.orElse(!groupBlock.getPermissions().fire);
 						endingMessage =  Translation.of("msg_changed_fire", "the Plot Group", groupBlock.getPermissions().fire ? Translation.of("enabled") : Translation.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("mobs")) {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
+
+						PlotToggleMobsEvent plotToggleMobsEvent = new PlotToggleMobsEvent(groupBlock.getTown(), player, choice.orElse(!groupBlock.getPermissions().mobs));
+						Bukkit.getPluginManager().callEvent(plotToggleMobsEvent);
+						if (plotToggleMobsEvent.isCancelled()) {
+							player.sendMessage(plotToggleMobsEvent.getCancellationMsg());
+							return;
+						}
+
 						groupBlock.getPermissions().mobs = choice.orElse(!groupBlock.getPermissions().mobs);
 						endingMessage =  Translation.of("msg_changed_mobs", "the Plot Group", groupBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled"));
 

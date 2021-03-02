@@ -72,6 +72,8 @@ public class PermHUD {
 		}
 		if (!plotName.isEmpty())
 			board.getTeam("plot").setSuffix(HUDManager.check(plotName));
+		else
+			board.getTeam("plot").setSuffix(" ");
 		board.getTeam("build").setSuffix(build);
 		board.getTeam("destroy").setSuffix(destroy);
 		board.getTeam("switching").setSuffix(switching);
@@ -81,7 +83,7 @@ public class PermHUD {
 		board.getTeam("explosions").setSuffix(explosions);
 		board.getTeam("firespread").setSuffix(firespread);
 		board.getTeam("mobspawn").setSuffix(mobspawn);
-		board.getObjective("PERM_HUD_OBJ").setDisplayName(title.length() >= 128 ? title.substring(0, 128) : title);
+		board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(title));
 	}
 
 	private static void clearPerms (Player p) {

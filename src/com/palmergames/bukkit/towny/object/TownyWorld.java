@@ -12,6 +12,7 @@ import com.palmergames.util.MathUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -649,7 +650,9 @@ public class TownyWorld extends TownyObject {
 				if (homeTown != null)
 					// If the townblock either: the town is the same as homeTown OR
 					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
-					if (homeTown.getUUID().equals(town.getUUID()) || (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNation().equals(homeTown.getNation())))
+					if (homeTown.getUUID().equals(town.getUUID())
+						|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNation().equals(homeTown.getNation()))
+						|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
 						continue;
 				
 				if (!town.getHomeblockWorld().equals(this)) continue;
@@ -691,7 +694,9 @@ public class TownyWorld extends TownyObject {
 				if (homeTown != null)
 					// If the townblock either: the town is the same as homeTown OR 
 					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
-					if (homeTown.getUUID().equals(town.getUUID()) || (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNation().equals(homeTown.getNation())))
+					if (homeTown.getUUID().equals(town.getUUID())
+						|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNation().equals(homeTown.getNation()))
+						|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
 						continue;
 				for (TownBlock b : town.getTownBlocks()) {
 					if (!b.getWorld().equals(this)) continue;
@@ -796,17 +801,13 @@ public class TownyWorld extends TownyObject {
 	}
 
 	@Override
-	public void addMetaData(CustomDataField<?> md) {
-		super.addMetaData(md);
-
-		this.save();
+	public void addMetaData(@NotNull CustomDataField<?> md) {
+		this.addMetaData(md, true);
 	}
 
 	@Override
-	public void removeMetaData(CustomDataField<?> md) {
-		super.removeMetaData(md);
-
-		this.save();
+	public void removeMetaData(@NotNull CustomDataField<?> md) {
+		this.removeMetaData(md, true);
 	}
 	
 	/**

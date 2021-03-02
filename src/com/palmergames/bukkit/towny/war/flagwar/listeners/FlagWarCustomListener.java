@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
+import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
@@ -353,4 +354,16 @@ public class FlagWarCustomListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
+
+	/*
+	 * Make it so that flagged plots will have their PVP status turned on.
+	 */
+	@EventHandler
+	public void onTownBlockPVPTest(TownBlockPVPTestEvent event) {
+		if (!FlagWarConfig.isAllowingAttacks() || event.isPvp() || FlagWar.getCellsUnderAttack(event.getTown()).isEmpty())
+			return;
+		if (event.getTownBlock().getWorld().isWarZone(event.getTownBlock().getCoord()))
+			event.setPvp(true);
+	}
+
 }

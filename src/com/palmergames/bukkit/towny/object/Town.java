@@ -19,6 +19,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -281,9 +282,7 @@ public class Town extends Government implements TownBlockOwner {
 		return hasResident(resident) && resident.hasTownRank(rank);
 	}
 
-	void addResident(Resident resident) throws AlreadyRegisteredException {
-
-		addResidentCheck(resident);
+	void addResident(Resident resident) {
 		residents.add(resident);
 	}
 
@@ -823,7 +822,7 @@ public class Town extends Government implements TownBlockOwner {
 
 		try {
 			TownBlock outpost = TownyAPI.getInstance().getTownBlock(spawn);
-			if (!outpost.isOutpost())
+			if (outpost == null || !outpost.isOutpost())
 				throw new TownyException(Translation.of("msg_err_location_is_not_within_an_outpost_plot"));
 
 			outpostSpawns.add(spawn);
@@ -1158,16 +1157,13 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
     @Override
-	public void addMetaData(CustomDataField<?> md) {
-		super.addMetaData(md);
-
-		this.save();
+	public void addMetaData(@NotNull CustomDataField<?> md) {
+		this.addMetaData(md, true);
 	}
 
 	@Override
-	public void removeMetaData(CustomDataField<?> md) {
-		super.removeMetaData(md);
-		this.save();
+	public void removeMetaData(@NotNull CustomDataField<?> md) {
+		this.removeMetaData(md, true);
 	}
 	
 	public void setConquered(boolean conquered) {

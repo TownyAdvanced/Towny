@@ -145,6 +145,12 @@ public enum ConfigNodes {
 			"",
 			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
 			"# will be ignored for towns that are in the same nation. Setting to false will keep all towns separated the same."),
+	TOWN_MIN_DISTANCE_IGNORED_FOR_ALLIES(
+			"town.min_distances_ignored_for_towns_in_allied_nation",
+			"false",
+			"",
+			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
+			"# will be ignored for towns that are mutually allied. Setting to false will keep all towns separated the same."),
 	TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT(
 			"town.min_plot_distance_from_town_plot",
 			"5",
@@ -1049,9 +1055,35 @@ public enum ConfigNodes {
 			"filters_colour_chat.papi_chat_formatting.ranks.mayor","&b"),
 	FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING(
 			"filters_colour_chat.papi_chat_formatting.ranks.king","&6"),
-	
-
-
+	FILTERS_PAPI_REL_FORMATTING(
+			"filters_colour_chat.papi_relational_formatting",
+			"",
+			"",
+			"# Colour codes used in the RELATIONAL placeholder %rel_townyadvanced_color% to display the relation between two players."),
+	FILTERS_PAPI_REL_FORMATTING_NONE(
+			"filters_colour_chat.papi_relational_formatting.none",
+			"&f",
+			"# Used when two players have no special relationship."),
+	FILTERS_PAPI_REL_FORMATTING_SAME_TOWN(
+			"filters_colour_chat.papi_relational_formatting.same_town",
+			"&2",
+			"",
+			"# Used when two players are in the same town."),
+	FILTERS_PAPI_REL_FORMATTING_SAME_NATION(
+			"filters_colour_chat.papi_relational_formatting.same_nation",
+			"&2",
+			"",
+			"# Used when two players are in the same nation."),
+	FILTERS_PAPI_REL_FORMATTING_ALLY(
+			"filters_colour_chat.papi_relational_formatting.ally",
+			"&b",
+			"",
+			"# Used when two players' nations are allied."),
+	FILTERS_PAPI_REL_FORMATTING_ENEMY(
+			"filters_colour_chat.papi_relational_formatting.enemy",
+			"&c",
+			"",
+			"# Used when two players are enemies."),
 	
 	PROT(
 			"protection",
@@ -1075,7 +1107,7 @@ public enum ConfigNodes {
 			"# A full list of proper names can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html "),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"CHEST,SHULKER_BOXES,TRAPPED_CHEST,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,STONECUTTER,SMITHING_TABLE,FLETCHING_TABLE,SMOKER,LOOM,GRINDSTONE,COMPOSTER,CARTOGRAPHY_TABLE,BELL,BARREL,BREWING_STAND,LEVER,PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET",
+			"CHEST,SHULKER_BOXES,TRAPPED_CHEST,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,SMOKER,COMPOSTER,BELL,BARREL,BREWING_STAND,LEVER,PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET",
 			"",
 			"# Blocks that are protected via town/plot flags.",
 			"# These are blocks in the world that will be protected by a town/resident/plot's switch setting.",

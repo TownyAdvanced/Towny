@@ -139,13 +139,15 @@ public class BookFactory {
 	 * @return pages as a List of Strings.
 	 */
 	private static List<String> getPages(String rawText) {
+		// Adding an empty line to take the place of the lines[0] which we will be skipping later on.
+		rawText = "\n" + rawText; 
 		List<String> pages = new ArrayList<String>();
 		List<String> lines = getLines(rawText);
 		String pageText = "";
-		for (int i = 0; i < lines.size(); i++) {
+		for (int i = 1; i < lines.size(); i++) {
 			pageText += lines.get(i);
 			// Dump every 14 lines into the pages Array (a MC book page can hold 14 lines.)
-			if (i != 0 && i % 14 == 0) {
+			if (i != 1 && i % 14 == 0) {
 				pages.add(pageText);
 				pageText = "";
 			}

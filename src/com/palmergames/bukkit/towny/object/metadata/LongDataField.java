@@ -5,15 +5,24 @@ import com.palmergames.bukkit.util.Colors;
 public class LongDataField extends CustomDataField<Long> {
 
 	public LongDataField(String key, Long value) {
-		super(key, CustomDataFieldType.LongField, value);
+		super(key, value);
 	}
 
 	public LongDataField(String key, Long value, String label) {
-		super(key, CustomDataFieldType.LongField, value, label);
+		super(key, value, label);
 	}
 	
 	public LongDataField(String key) {
 		this(key, 0L);
+	}
+
+	@Override
+	public String getTypeID() {
+		return typeID();
+	}
+	
+	public static String typeID() {
+		return "towny_longdf";
 	}
 
 	@Override

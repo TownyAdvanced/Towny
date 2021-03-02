@@ -129,6 +129,8 @@ public class EntityTypeUtil {
 		case BOAT:
 			material = Material.OAK_BOAT;
 			break;
+		default:
+			break;
 		}
 					
 		return material;

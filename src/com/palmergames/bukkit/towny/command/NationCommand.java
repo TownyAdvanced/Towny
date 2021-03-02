@@ -93,7 +93,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"withdraw",
 		"deposit",
 		"new",
-		"rank",
 		"add",
 		"kick",
 		"delete",
@@ -2305,6 +2304,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                     	final String name = split[1];
 				    	Confirmation.runOnAccept(() -> {
 							try {
+								//Check if nation can still pay rename costs.
+								if (!finalNation.getAccount().canPayFromHoldings(TownySettings.getNationRenameCost())) {
+									TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
+									return;
+								}
+								
 								finalNation.getAccount().withdraw(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", name));
 							} catch (EconomyException ignored) {}
 								

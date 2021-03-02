@@ -5769,3 +5769,84 @@ v0.92.0.11:
     - Replaces ruin/deletion messages to be clearer about what is happening to the town.
   - Removal of any methods deprecated earlier than 0.96.0.0.
     - Marked many deprecated methods with the version in which they were deprecated for easier future removal.
+  - Update spanish.yml, courtesy of ElMoha943 with PR #4716.
+  - Update es-419.yml, courtesy of EuGNosii with PR #4717.
+  - Made GUI titles translatable.
+    - Closes #4719.
+  - Placeholders:
+    - %townyadvanced_is_nation_peaceful%
+    - %townyadvanced_is_town_peaceful%
+    - If the player has a town/nation which is peaceful the language string "status_town_title_peaceful" will be shown: "&b(Peaceful)".
+    - Addresses https://github.com/TownyAdvanced/SiegeWar/issues/72
+  - Update spanish.yml, courtesy of ElMoha943 with PR #4722.
+  - Update es-419.yml, courtesy of EuGNosii with PR #4723.
+  - API: add convenience methods to TownyAPI:
+    - getNation(name)
+    - getTown(name)
+    - getResident(name)
+    - getNation(uuid)
+    - getTown(uuid)
+    - getResident(uuid)
+  - Fix goofy replacing in TownySpigotMessaging sendSpigotConfirmMessage.
+  - Fix regression in GUIs which made inventories unusable.
+  - Fix "/res toggle reset" not resetting modes.
+    - Closes #4730.
+  - Fix empty-selection message showing when claiming single plots is blocked because the area is actually already claimed.
+    - Closes #4729.
+  - Custom Metadata Types, courtesy of silverwolfg11 with PR #4700.
+  - Small HUDManager overhaul, courtesy of Warriorrrr with PR #4726.
+  - API: new damage/pvp events:
+    - TownBlockPVPTestEvent - thrown when a townblock in a town has the PVP status decided.
+    - WildernessPVPTestEvent - thrown when determining what the wilderness status for PVP is.
+    - TownyDamageEvent - Abstract event for the following:
+    - TownyPlayerDamagePlayerEvent - used to override players hurting players.
+    - TownyExplosionDamagesEntityEvent (Part of the earlier API expansion, now moved to the damage package and extending the TownyDamageEvent.)
+  - Fix nation merging.
+    - Closes #4732.
+  - Fix BookFactory skipping the 15th line of a book.
+  - Add towny.command.plot.perm.hud to the nomad group in townyperms.yml by default.
+  - Add townyadmin command for giving/removing nation ranks, courtesy of Warriorrrr with PR #4736.
+0.96.7.2:
+  - Fix /ta command for setting town title/surnames not respecting the admin override.
+    - Closes #4741.
+  - Fix event war plot attacking not working.
+    - Closes #4740.
+  - Fix free town/nation rename exploit, courtesy of Warriorrrr with PR #4743.
+  - Fix potential safe mode from removing corrupted nation which cannot return a king.
+  - Remove 1.14 crafting blocks from config's switch ids, courtesy of Warriorrrr with PR #4744.
+0.96.7.3:
+  - Fix town delete message being sent twice, courtesy of Warriorrrr with PR #4746.
+  - New RELATIONAL placeholder: %rel_townyadvanced_color%
+    - Applies the colour codes set in the config.yml's new papi_relational_formatting section.
+    - Used in TAB and other plugins which can do Relational placeholders.
+    - Closes #4747, Closes #4349.
+  - Make /t set outpost do more than show null when used in the wilderness.
+  - Add PlotToggle events to toggling plot groups, courtesy of Warriorrrr with PR #4748.
+  - Make toggling REDSTONE_WIRE into a destroy test.
+  - Update POM: Dependencies, Plugins, and HTTPS, courtesy of TheFlagCourier with PR #4749.
+  - Fix empty nations not being deleted on startup with flatfile, courtesy of Warriorrrr with PR #4753.
+  - Add config option for ignoring min_distance's for allies, courtesy of Warriorrrr with PR #4752.
+  - New Config Option: town.min_distances_ignored_for_towns_in_allied_nation
+    - Default: false
+    - If true, the settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock will be ignored for towns that are mutually allied. 
+    - Setting to false will keep all towns separated the same if they are allies.
+0.96.7.4:
+  - Correctly show the proper already registered messages when using /ta set mayor TOWN PLAYER command.
+  - API: added convenience methods to TownyAPI:
+    - getResidentTownOrNull(resident)
+    - getResidentNationOrNull(resident)
+    - getTownNationOrNull(town)
+  - Fix possible NPE when unjailing a resident.
+  - Fix being unable to claim a personally-owned plot being sold by a resident.
+    - Closes #4767.
+  - Fix mayors unable to use /plot nfs on personally-owned plots owned by their town.
+  - Adapt to spigot bug being closed, allowing us to prevent explosions from dropping items without setting the exploded block to air.
+    - Closes #4770.
+    - Closes #4771.
+  - API: TownyExplodingBlocksEvent 
+    - Add getBukkitExplodeEvent for convenience.
+  - Fix PVP-related issue where people could be hit once in non-PVP areas.
+0.96.7.5:
+  - Add localization strings for Towny's FlatFile datasource handler, courtesy of TheFlagCourier with PR #4761
+  - Fix up double-chest-on-plot-borders visual bugginess.
+    - Closes #4783.

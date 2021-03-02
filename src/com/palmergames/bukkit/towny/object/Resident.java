@@ -32,6 +32,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -67,7 +70,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private final List<String> nationRanks = new ArrayList<>();
 	private List<TownBlock> townBlocks = new ArrayList<>();
 	private final TownyPermission permissions = new TownyPermission();
-	private TownyInventory guiInventory;
+
+	private ArrayList<Inventory> guiPages;
+	private int guiPageNum = 0;
 
 	public Resident(String name) {
 		super(name);
@@ -127,9 +132,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public void freeFromJail(int index, boolean escaped) {
+		Town jailTown = TownyAPI.getInstance().getTown(this.getJailTown());
 		if (!escaped) {
 			TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_freed_from_jail"));
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_freed_from_jail_number", this.getName(), index));
+			if (town != null)
+				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_has_been_freed_from_jail_number", this.getName(), index));
 		} else {
 			try {
 				if (this.hasTown())
@@ -137,7 +144,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				else 
 					TownyMessaging.sendMsg(this, Translation.of("msg_you_have_been_freed_from_jail"));
 				
-				Town jailTown = TownyUniverse.getInstance().getTown(this.getJailTown());
 				if (jailTown != null)
 					TownyMessaging.sendPrefixedTownMessage(jailTown, Translation.of("msg_player_escaped_jail_into_wilderness", this.getName(), TownyUniverse.getInstance().getDataSource().getWorld(getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName()));
 			} catch (NotRegisteredException ignored) {}
@@ -348,7 +354,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		}
 
 		if (hasTown())
-			throw new AlreadyRegisteredException();
+			town.addResidentCheck(this);
 
 		this.town = town;
 		updatePerms();
@@ -770,17 +776,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	@Override
-	public void addMetaData(CustomDataField<?> md) {
-		super.addMetaData(md);
-
-		this.save();
+	public void addMetaData(@NotNull CustomDataField<?> md) {
+		this.addMetaData(md, true);
 	}
 
 	@Override
-	public void removeMetaData(CustomDataField<?> md) {
-		super.removeMetaData(md);
-
-		this.save();
+	public void removeMetaData(@NotNull CustomDataField<?> md) {
+		this.removeMetaData(md, true);
 	}
 
 	@Override
@@ -894,13 +896,28 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setConfirmation(Confirmation confirmation) {
 		this.confirmation = confirmation;
 	}
-	
-	public TownyInventory getGUIInventory() {
-		return guiInventory;
+
+	/**
+	 * @return the current inventory which the player is looking at for the GUIs.
+	 */
+	public Inventory getGUIPage() {
+		return guiPages.get(guiPageNum);
+	}
+
+	public ArrayList<Inventory> getGUIPages() {
+		return guiPages;
 	}
 	
-	public void setGUIInventory(TownyInventory inventory) {
-		this.guiInventory = inventory;
+	public void setGUIPages(ArrayList<Inventory> inventory) {
+		this.guiPages = inventory;
+	}
+	
+	public int getGUIPageNum() {
+		return guiPageNum;
+	}
+
+	public void setGUIPageNum(int currentInventoryPage) {
+		this.guiPageNum = currentInventoryPage;
 	}
 
 	@Override

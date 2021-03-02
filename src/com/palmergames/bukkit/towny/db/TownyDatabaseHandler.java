@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.metadata.DataFieldIO;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
@@ -61,7 +62,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -730,9 +730,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTown(Town town, boolean delayFullRemoval) {
-		
-		TownyMessaging.sendGlobalMessage(Translation.of("msg_del_town2", town.getName()));
-		
 		if (delayFullRemoval) {
 			/*
 			 * When Town ruining is active, send the Town into a ruined state, prior to real removal.
@@ -808,7 +805,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (preEvent.isCancelled())
 			return;
 
-		Resident king = nation.getKing();
+		Resident king = null;
+		if (nation.hasKing())
+			king = nation.getKing();
 		
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<>();
@@ -869,8 +868,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		plugin.resetCache();
+		
+		UUID kingUUID = null;
+		if (king != null)
+			kingUUID = king.getUUID();
 
-		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation, king.getUUID()));
+		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation, kingUUID));
 	}
 
 	@Override
@@ -1469,6 +1472,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 	}
 	
+	protected final String serializeMetadata(TownyObject obj) {
+		return DataFieldIO.serializeCDFs(obj.getMetadata());
+	}
+	
 	@Override
 	public boolean saveRegenList() {
         queryQueue.add(() -> {
@@ -1536,23 +1543,22 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * @author LlmDl
 	 */
 	public void mergeNation(Nation succumbingNation, Nation prevailingNation) {
+
+		if (TownyEconomyHandler.isActive())
+			try {
+				succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
+			} catch (EconomyException ignored) {}
+
 		
 		lock.lock();
-		Iterator<Town> towns = succumbingNation.getTowns().iterator();
-		while (towns.hasNext()) {
+		List<Town> towns = new ArrayList<>(succumbingNation.getTowns());
+		for (Town town : towns) {			
+			town.removeNation();
 			try {
-				if (TownyEconomyHandler.isActive())
-					succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
-				Town town = towns.next();
-				town.removeNation();
-				try {
-					town.setNation(prevailingNation);
-				} catch (AlreadyRegisteredException ignored) {
-				}
-				saveTown(town);
-			} catch (EconomyException ignored) {			
+				town.setNation(prevailingNation);
+			} catch (AlreadyRegisteredException ignored) {
 			}
-			towns.remove();
+			saveTown(town);
 		}
 		lock.unlock();
 	}

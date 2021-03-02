@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -18,14 +17,18 @@ import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
-import com.palmergames.bukkit.towny.event.actions.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
+import com.palmergames.bukkit.towny.event.damage.TownyExplosionDamagesEntityEvent;
+import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
@@ -157,7 +160,7 @@ public class WarZoneListener implements Listener {
 					continue;
 				}
 				count++;
-				TownyRegenAPI.beginProtectionRegenTask(block, count, TownyAPI.getInstance().getTownyWorld(block.getLocation().getWorld().getName()));
+				TownyRegenAPI.beginProtectionRegenTask(block, count, TownyAPI.getInstance().getTownyWorld(block.getLocation().getWorld().getName()), event);
 			}
 			// This is an allowed explosion, so add it to our War-allowed list.
 			toAllow.add(block);
@@ -240,5 +243,56 @@ public class WarZoneListener implements Listener {
 			event.setCancelled(true);
 			event.setCancelMessage(Translation.of("msg_err_fight_like_king"));
 		}
+
+	}
+	
+	@EventHandler
+	public void onPlayerDamagePlayer(TownyPlayerDamagePlayerEvent event) {
+		if (!TownyAPI.getInstance().isWarTime())
+			return;
+		
+		try {
+			
+			Town attackerTown = event.getAttackerTown();
+			Town defenderTown = event.getVictimTown();
+			
+			//Cancel because one of two players has no town and should not be interfering during war.
+			if (TownySettings.isWarTimeTownsNeutral() && (event.getAttackerTown() == null || event.getVictimTown() == null)){
+				event.setMessage(Translation.of("msg_war_a_player_has_no_town"));
+				event.setCancelled(true);
+				return;
+			}
+
+			//Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
+			if (TownySettings.isWarTimeTownsNeutral() && (!attackerTown.hasNation() || !defenderTown.hasNation())) {
+				event.setMessage(Translation.of("msg_war_a_player_has_no_nation"));
+				event.setCancelled(true);
+				return;
+			}
+			
+			//Cancel because one of the two player's nations is neutral.
+			if ((attackerTown.hasNation() && attackerTown.getNation().isNeutral()) || (defenderTown.hasNation() && defenderTown.getNation().isNeutral())) {
+				event.setMessage(Translation.of("msg_war_a_player_has_a_neutral_nation"));
+				event.setCancelled(true);
+				return;
+			}
+			
+			//Cancel because one of the two players are no longer involved in the war.
+			if (!War.isWarringTown(defenderTown) || !War.isWarringTown(attackerTown)) {
+				event.setMessage(Translation.of("msg_war_a_player_has_been_removed_from_war"));
+				event.setCancelled(true);
+				return;
+			}
+			
+			//Cancel because one of the two players considers the other an ally.
+			if (CombatUtil.isAlly(attackerTown, defenderTown)){
+				event.setMessage(Translation.of("msg_war_a_player_is_an_ally"));
+				event.setCancelled(true);
+				return;
+			}
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

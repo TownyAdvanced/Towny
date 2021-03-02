@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -242,19 +243,19 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					player.sendMessage(line);
 			} else if (split[0].equalsIgnoreCase("switches")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getSwitchMaterials(), "Towny Switch List");
+				ResidentUtil.openGUIInventory(resident, TownySettings.getSwitchMaterials(), Translation.of("gui_title_towny_switch"));
 			} else if (split[0].equalsIgnoreCase("itemuse")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getItemUseMaterials(), "Towny ItemUse List");
+				ResidentUtil.openGUIInventory(resident, TownySettings.getItemUseMaterials(), Translation.of("gui_title_towny_itemuse"));
 			} else if (split[0].equalsIgnoreCase("farmblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getFarmPlotBlocks(), "Towny FarmBlocks List");
+				ResidentUtil.openGUIInventory(resident, TownySettings.getFarmPlotBlocks(), Translation.of("gui_title_towny_farmblocks"));
 			} else if (split[0].equalsIgnoreCase("wildsblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getUnclaimedZoneIgnoreMaterials(), "Towny WildsBlocks List");
+				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getUnclaimedZoneIgnoreMaterials(), Translation.of("gui_title_towny_wildsblocks"));
 			} else if (split[0].equalsIgnoreCase("plotclearblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getPlotManagementMayorDelete(), "Towny Plot Clear Delete List");
+				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getPlotManagementMayorDelete(), Translation.of("gui_title_towny_plotclear"));
 			} else if (split[0].equalsIgnoreCase("top")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -322,7 +323,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				towny_war.add("No hud for console!");
 			else if (args[0].equalsIgnoreCase("hud") && p != null) {
 				if (townyUniverse.getPermissionSource().testPermission(p, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR_HUD.getNode())) {
-					plugin.getHUDManager().toggleWarHUD(p);
+					HUDManager.toggleWarHUD(p);
 				} else {
 					TownyMessaging.sendErrorMsg(p, Translation.of("msg_err_command_disable"));
 				}
