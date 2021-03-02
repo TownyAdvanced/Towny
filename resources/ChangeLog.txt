@@ -5848,3 +5848,5 @@ v0.92.0.11:
   - Fix PVP-related issue where people could be hit once in non-PVP areas.
 0.96.7.5:
   - Add localization strings for Towny's FlatFile datasource handler, courtesy of TheFlagCourier with PR #4761
+  - Fix up double-chest-on-plot-borders visual bugginess.
+    - Closes #4783.
