@@ -5853,3 +5853,5 @@ v0.92.0.11:
   - Fix kings who give up their position willingly, not losing their King permission nodes given in TownyPerms.yml
     - Closes #4784.
   - Update es-419, courtesy of EuGNosii with PR #4787.
+  - Fix maxPercentTaxAmount town setting not being persistent.
+  - Fix /res tax not accounting for the maxPercentTaxAmount town setting.
