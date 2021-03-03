@@ -709,34 +709,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									 
 									// Create a confirmation for setting outpost.
 									Confirmation.runOnAccept(() -> {
-										
-										//Make them pay.
-										if (TownyEconomyHandler.isActive() 
-											&& TownySettings.getOutpostCost() > 0 
+										// Make them pay.
+										if (TownyEconomyHandler.isActive() && TownySettings.getOutpostCost() > 0 
 											&& !town.getAccount().withdraw(TownySettings.getOutpostCost(), "Plot Set Outpost")) {
 												TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_cannot_afford_to_set_outpost"));
 												return;
-											}
-										
-										townBlock.setOutpost(true);
-										 
-										try {
-											town.addOutpostSpawn(player.getLocation());
-										} catch (TownyException e) {
-											TownyMessaging.sendErrorMsg(e.getMessage());
-											return;
 										}
-
-										town.save();
-										townBlock.save();
+										// Set the outpost spawn and display feedback.
+										town.addOutpostSpawn(player.getLocation());
 										TownyMessaging.sendMessage(player, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translation.of("outpost")));
 									})
 									.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())))
 									.sendTo(player);
-	
 								}
-								return true;
 							}
+							return true;
 						}
 						
 						/*

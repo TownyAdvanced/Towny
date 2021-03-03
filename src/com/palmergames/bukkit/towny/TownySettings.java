@@ -2710,6 +2710,10 @@ public class TownySettings {
 	public static int getNationZonesCapitalBonusSize() {
 		return getInt(ConfigNodes.GNATION_SETTINGS_NATIONZONE_CAPITAL_BONUS_SIZE);
 	}
+	
+	public static boolean isNationSpawnOnlyAllowedInCapital() { 
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN);
+	}
 
 	public static boolean isShowingRegistrationMessage() {
 		return getBoolean(ConfigNodes.RES_SETTING_IS_SHOWING_WELCOME_MESSAGE);

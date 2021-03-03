@@ -49,6 +49,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
@@ -68,6 +69,7 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -2227,12 +2229,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SET_SPAWN.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 
-				try{
-					nation.setSpawn(player.getLocation());
-					TownyMessaging.sendMsg(player, Translation.of("msg_set_nation_spawn"));
-				} catch (TownyException e){
-					TownyMessaging.sendErrorMsg(player, e.getMessage());
-				}
+				parseNationSetCommand(player, nation);
 			}
 			else if (split[0].equalsIgnoreCase("taxes")) {
 
@@ -2446,6 +2443,38 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			
 			nation.save();
 		}
+	}
+
+	private static void parseNationSetCommand(Player player, Nation nation) {
+		try{
+			Location newSpawn = player.getLocation();
+			
+			if (TownyAPI.getInstance().isWilderness(newSpawn))
+				throw new TownyException(Translation.of("msg_cache_block_error_wild", "set spawn"));
+
+			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(newSpawn);
+
+			// Nation spawns either have to be inside of the capital.
+			if (nation.getCapital() != null 
+				&& TownySettings.isNationSpawnOnlyAllowedInCapital()
+				&& !townBlock.getTown().getUUID().equals(nation.getCapital().getUUID()))
+					throw new TownyException(Translation.of("msg_err_spawn_not_within_capital"));
+			// Or they can be in any town in the nation.
+			else 
+				if(!nation.getTowns().contains(townBlock.getTown()))
+					throw new TownyException(Translation.of("msg_err_spawn_not_within_nationtowns"));
+			
+			// Remove the SpawnPoint particles.
+			if (nation.hasSpawn())
+				TownyUniverse.getInstance().removeSpawnPoint(nation.getSpawn());
+			
+			// Set the spawn point and send feedback message.
+			nation.setSpawn(newSpawn);
+			TownyMessaging.sendMsg(player, Translation.of("msg_set_nation_spawn"));
+		} catch (TownyException e){
+			TownyMessaging.sendErrorMsg(player, e.getMessage());
+		}
+		
 	}
 
 	public static void nationToggle(CommandSender sender, String[] split, boolean admin, Nation nation) throws TownyException {

@@ -13,13 +13,16 @@ import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -102,11 +105,7 @@ public class Town extends Government implements TownBlockOwner {
 		else {
 			townBlocks.put(townBlock.getWorldCoord(), townBlock);
 			if (townBlocks.size() < 2 && !hasHomeBlock())
-				try {
-					setHomeBlock(townBlock);
-				} catch (TownyException e) {
-					e.printStackTrace();
-				}
+				setHomeBlock(townBlock);
 		}
 	}
 	
@@ -527,54 +526,46 @@ public class Town extends Government implements TownBlockOwner {
 	 * Sets the HomeBlock of a town
 	 * 
 	 * @param homeBlock - The TownBlock to set as the HomeBlock
-	 * @return true if the HomeBlock was successfully set
-	 * @throws TownyException if the TownBlock is not owned by the town
 	 */
-	public boolean setHomeBlock(TownBlock homeBlock) throws TownyException {
+	public void setHomeBlock(@Nullable TownBlock homeBlock) {
 
-		if (homeBlock == null) {
-			this.homeBlock = null;
-			return false;
-		}
-		if (!hasTownBlock(homeBlock))
-			throw new TownyException(Translation.of("msg_err_town_has_no_claim_over_this_town_block"));
 		this.homeBlock = homeBlock;
+		
+		if (homeBlock == null)
+			return;
 
-		// Set the world as it may have changed
-		if (this.world != homeBlock.getWorld()) {
-			if ((world != null) && (world.hasTown(this)))
-				world.removeTown(this);
-
+		// Set the world if it has changed.
+		if (!getHomeblockWorld().getName().equals(homeBlock.getWorld().getName()))
 			setWorld(homeBlock.getWorld());
+
+		// Unset the spawn if it is not inside of the new homeblock.
+		if (spawn != null && !homeBlock.getWorldCoord().equals(WorldCoord.parseCoord(spawn))) {
+			TownyUniverse.getInstance().removeSpawnPoint(spawn);
+			spawn = null;
 		}
 
-		// Attempt to reset the spawn to make sure it's in the homeblock
-		try {
-			setSpawn(spawn);
-		} catch (TownyException e) {
-			// Spawn is not in the homeblock so null.
-			spawn = null;
-		} catch (NullPointerException e) {
-			// In the event that spawn is already null
-		}
-		if (this.hasNation() && TownySettings.getNationRequiresProximity() > 0)
-			if (!this.getNation().getCapital().equals(this)) {
-				Nation nation = this.getNation();
-				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
-				Coord townCoord = this.getHomeBlock().getCoord();
-				if (!nation.getCapital().getHomeBlock().getWorld().getName().equals(this.getHomeBlock().getWorld().getName())) {
-					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", this.getName()));
+		if (this.hasNation() && TownySettings.getNationRequiresProximity() > 0) {
+			Nation nation = TownyAPI.getInstance().getTownNationOrNull(this);
+			if (!nation.getCapital().equals(this) && nation.getCapital().hasHomeBlock() && hasHomeBlock()) {
+				WorldCoord capitalCoord = null;
+				WorldCoord townCoord = null;
+				try {
+					capitalCoord = nation.getCapital().getHomeBlock().getWorldCoord();
+					townCoord = this.getHomeBlock().getWorldCoord();
+				} catch (TownyException ignored) {}
+				
+				if (!nation.getCapital().getHomeblockWorld().equals(getHomeblockWorld())) {
+					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
 					removeNation();
 				}
-				double distance;
-				distance = Math.sqrt(Math.pow(capitalCoord.getX() - (double)townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - (double)townCoord.getZ(), 2));			
+
+				double distance = MathUtil.distance(capitalCoord.getX(), townCoord.getX(), capitalCoord.getZ(), townCoord.getZ());
 				if (distance > TownySettings.getNationRequiresProximity()) {
-					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", this.getName()));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
 					removeNation();
 				}	
 			}
-			
-		return true;
+		}
 	}
 	
 	/**
@@ -594,12 +585,8 @@ public class Town extends Government implements TownBlockOwner {
 		this.homeBlock = homeBlock;
 
 		// Set the world as it may have changed
-		if (this.world != homeBlock.getWorld()) {
-			if ((world != null) && (world.hasTown(this)))
-				world.removeTown(this);
-
+		if (this.world != homeBlock.getWorld())
 			setWorld(homeBlock.getWorld());
-		}
 
 	}
 
@@ -648,13 +635,12 @@ public class Town extends Government implements TownBlockOwner {
 	 * 
 	 * @return world
 	 */
-	@SuppressWarnings("deprecation")
 	public TownyWorld getHomeblockWorld() {
 
 		if (world != null)
 			return world;
 
-		return TownyUniverse.getInstance().getDataSource().getTownWorld(this.getName());
+		return homeBlock.getWorld();
 	}
 
 	public boolean hasMayor() {
@@ -740,23 +726,9 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	@Override
-	public void setSpawn(Location spawn) throws TownyException {
-		if (!hasHomeBlock())
-			throw new TownyException(Translation.of("msg_err_homeblock_has_not_been_set"));
-		Coord spawnBlock = Coord.parseCoord(spawn);
-		if (homeBlock.getX() == spawnBlock.getX() && homeBlock.getZ() == spawnBlock.getZ()) {
-			this.spawn = spawn;
-		} else
-			throw new TownyException(Translation.of("msg_err_spawn_not_within_homeblock"));
-	}
-	
-	/**
-	 * Only to be called from the Loading methods.
-	 * 
-	 * @param spawn - Location to forcefully set as town spawn
-	 */
-	public void forceSetSpawn(Location spawn) {
-		this.spawn = spawn;
+	public void setSpawn(Location spawn) {
+		this.spawn = spawn;		
+		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.TOWN_SPAWN));
 	}
 
 	@Override
@@ -811,27 +783,32 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	/**
-	 * Add or update an outpost spawn
+	 * Add or update an outpost spawn for a town.
+	 * Saves the TownBlock if it is not already an Outpost.
+	 * Saves the Town when finished.
 	 * 
 	 * @param spawn - Location to set an outpost's spawn point
-	 * @throws TownyException if the Location is not within an Outpost plot.
 	 */
-	public void addOutpostSpawn(Location spawn) throws TownyException {
+	public void addOutpostSpawn(Location spawn) {
 
+		// Remove any potential previous outpost spawn at this location (when run via /t set outpost.)
 		removeOutpostSpawn(Coord.parseCoord(spawn));
 
-		try {
-			TownBlock outpost = TownyAPI.getInstance().getTownBlock(spawn);
-			if (outpost == null || !outpost.isOutpost())
-				throw new TownyException(Translation.of("msg_err_location_is_not_within_an_outpost_plot"));
-
-			outpostSpawns.add(spawn);
-			this.save();
-
-		} catch (NotRegisteredException e) {
-			throw new TownyException(Translation.of("msg_err_location_is_not_within_a_town"));
+		// Set the TownBlock to be an outpost.
+		TownBlock outpost = TownyAPI.getInstance().getTownBlock(spawn);
+		if (!outpost.isOutpost()) {
+			outpost.setOutpost(true);
+			outpost.save();
 		}
 
+		// Add to the towns' outpost list.
+		outpostSpawns.add(spawn);
+		
+		// Add a SpawnPoint so a particle effect is displayed.
+		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.OUTPOST_SPAWN));
+		
+		// Save the town.
+		this.save();
 	}
 	
 	/**
@@ -841,6 +818,7 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public void forceAddOutpostSpawn(Location spawn) {
 		outpostSpawns.add(spawn);
+		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.OUTPOST_SPAWN));
 	}
 
 	/**
@@ -876,14 +854,12 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void removeOutpostSpawn(Coord coord) {
-
-		for (Location spawn : new ArrayList<>(outpostSpawns)) {
-			Coord spawnBlock = Coord.parseCoord(spawn);
-			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
+		getAllOutpostSpawns().stream()
+			.filter(spawn -> Coord.parseCoord(spawn).equals(coord))
+			.forEach(spawn -> {
 				outpostSpawns.remove(spawn);
-				this.save();
-			}
-		}
+				TownyUniverse.getInstance().removeSpawnPoint(spawn);
+			});
 	}
 
 	public void setPlotPrice(double plotPrice) {
@@ -1017,7 +993,10 @@ public class Town extends Government implements TownBlockOwner {
 			if (!jail.isJail())
 				throw new TownyException(Translation.of("msg_err_location_is_not_within_a_jail_plot"));
 				
+			TownyUniverse.getInstance().removeSpawnPoint(spawn);
+			
 			jailSpawns.add(spawn);
+			TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.JAIL_SPAWN));
 			this.save();
 
 		} catch (NotRegisteredException e) {
@@ -1028,13 +1007,12 @@ public class Town extends Government implements TownBlockOwner {
 	
 	public void removeJailSpawn(Coord coord) {
 
-		for (Location spawn : new ArrayList<>(jailSpawns)) {
-			Coord spawnBlock = Coord.parseCoord(spawn);
-			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
+		getAllJailSpawns().stream()
+			.filter(spawn -> Coord.parseCoord(spawn).toString().equals(coord.toString()))
+			.forEach(spawn -> {
 				jailSpawns.remove(spawn);
-				this.save();
-			}
-		}
+				TownyUniverse.getInstance().removeSpawnPoint(spawn);
+			});
 	}
 
 	/**
@@ -1044,6 +1022,7 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public void forceAddJailSpawn(Location spawn) {
 		jailSpawns.add(spawn);
+		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.JAIL_SPAWN));
 	}
 
 	/**

@@ -84,6 +84,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.InvalidObjectException;
 import java.text.DecimalFormat;
@@ -1741,7 +1742,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			Resident resident;
 
 			Nation nation = null;
-			TownyWorld oldWorld = null;
 
 			try {
 				if (!admin) {
@@ -2134,89 +2134,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					}
 					
 				} else if (split[0].equalsIgnoreCase("homeblock")) {
-
-					Coord coord = Coord.parseCoord(player);
-					TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
-					TownyWorld world;
-					try {
-
-						if (townBlock == null || townBlock.getTown() != town)
-							throw new TownyException(Translation.of("msg_area_not_own"));
-
-						if (TownyAPI.getInstance().isWarTime())
-							throw new TownyException(Translation.of("msg_war_cannot_do"));
-
-						world = TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName());
-						final int minDistanceFromHomeblock = world.getMinDistanceFromOtherTowns(coord, resident.getTown());
-						if (minDistanceFromHomeblock < TownySettings.getMinDistanceFromTownHomeblocks())
-							throw new TownyException(Translation.of("msg_too_close2", Translation.of("homeblock")));
-
-						if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
-							if ((minDistanceFromHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
-								throw new TownyException(Translation.of("msg_too_far"));
-
-						TownPreSetHomeBlockEvent preEvent = new TownPreSetHomeBlockEvent(town, townBlock, player);
-						Bukkit.getPluginManager().callEvent(preEvent);
-						if (preEvent.isCancelled()) 
-							throw new TownyException(preEvent.getCancelMessage());
-						
-						// Test whether towns will be removed from the nation
-						if (nation != null && TownySettings.getNationRequiresProximity() > 0) {
-							// Do a dry-run of the proximity test.
-							List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns(), town);
-							
-							// Oh no, some the nation will lose at least one town, better make a confirmation.
-							if (!removedTowns.isEmpty()) {
-								final Town finalTown = town;
-								final TownBlock finalTB = townBlock;
-								final Nation finalNation = nation;
-								oldWorld = town.getHomeblockWorld();
-								Confirmation confirmation = Confirmation.runOnAccept(() -> {
-									try {
-										// Set town homeblock and run the recheckTownDistance for real.
-										finalTown.setHomeBlock(finalTB);
-										finalTown.setSpawn(player.getLocation());
-										finalNation.recheckTownDistance();
-										TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
-									} catch (TownyException e) {
-										TownyMessaging.sendErrorMsg(player, e.getMessage());
-										return;
-									}
-								})
-									.setTitle(Translation.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
-									.build();
-								ConfirmationHandler.sendConfirmation(player, confirmation);
-
-							// Phew, the nation won't lose any towns, let's do this.
-							} else {
-								oldWorld = town.getHomeblockWorld();
-								town.setHomeBlock(townBlock);
-								town.setSpawn(player.getLocation());		
-								TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
-							}
-						// No nation to check proximity for/proximity isn't tested anyways.
-						} else {
-							oldWorld = town.getHomeblockWorld();
-							town.setHomeBlock(townBlock);
-							town.setSpawn(player.getLocation());
-	
-							TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
-
-						}
-
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(player, e.getMessage());
-						return;
-					}
-
+					
+					parseTownSetHomeblock(player, town, nation);
+					
 				} else if (split[0].equalsIgnoreCase("spawn")) {
-					try {
-						town.setSpawn(player.getLocation());
-						TownyMessaging.sendMsg(player, Translation.of("msg_set_town_spawn"));
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(player, e.getMessage());
-						return;
-					}
+					
+					parseTownSetSpawn(player, town);
 
 				} else if (split[0].equalsIgnoreCase("outpost")) {
 
@@ -2268,13 +2191,103 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			if (nation != null)
 				nation.save();
+		}
+	}
 
-			// If the town (homeblock) has moved worlds we need to update the
-			// world files.
-			if (oldWorld != null) {
-				town.getHomeblockWorld().save();
-				oldWorld.save();
+	private static void parseTownSetHomeblock(Player player, Town town, @Nullable Nation nation) {
+		Coord coord = Coord.parseCoord(player);
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+
+		try {
+
+			if (world == null || townBlock == null || townBlock.getTown() != town)
+				throw new TownyException(Translation.of("msg_area_not_own"));
+
+			if (TownyAPI.getInstance().isWarTime())
+				throw new TownyException(Translation.of("msg_war_cannot_do"));
+			
+			if (town.hasHomeBlock() && town.getHomeBlock().getWorldCoord().equals(townBlock.getWorldCoord()))
+				throw new TownyException(Translation.of("msg_err_homeblock_already_set_here"));
+
+			final int minDistanceFromHomeblock = world.getMinDistanceFromOtherTowns(coord, town);
+			if (minDistanceFromHomeblock < TownySettings.getMinDistanceFromTownHomeblocks())
+				throw new TownyException(Translation.of("msg_too_close2", Translation.of("homeblock")));
+
+			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
+				if ((minDistanceFromHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
+					throw new TownyException(Translation.of("msg_too_far"));
+
+			TownPreSetHomeBlockEvent preEvent = new TownPreSetHomeBlockEvent(town, townBlock, player);
+			Bukkit.getPluginManager().callEvent(preEvent);
+			if (preEvent.isCancelled()) 
+				throw new TownyException(preEvent.getCancelMessage());
+			
+			// Test whether towns will be removed from the nation
+			if (nation != null && TownySettings.getNationRequiresProximity() > 0) {
+				// Do a dry-run of the proximity test.
+				List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns(), town);
+				
+				// Oh no, some the nation will lose at least one town, better make a confirmation.
+				if (!removedTowns.isEmpty()) {
+					final Town finalTown = town;
+					final TownBlock finalTB = townBlock;
+					final Nation finalNation = nation;
+					Confirmation.runOnAccept(() -> {
+						try {
+							// Set town homeblock and run the recheckTownDistance for real.
+							finalTown.setHomeBlock(finalTB);
+							finalTown.setSpawn(player.getLocation());
+							finalNation.recheckTownDistance();
+							TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
+						} catch (TownyException e) {
+							TownyMessaging.sendErrorMsg(player, e.getMessage());
+							return;
+						}
+					}).setTitle(Translation.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
+					  .sendTo(player);
+
+				// Phew, the nation won't lose any towns, let's do this.
+				} else {
+					town.setHomeBlock(townBlock);
+					town.setSpawn(player.getLocation());		
+					TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
+				}
+			// No nation to check proximity for/proximity isn't tested anyways.
+			} else {
+				town.setHomeBlock(townBlock);
+				town.setSpawn(player.getLocation());
+				TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
 			}
+
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(player, e.getMessage());
+			return;
+		}
+	}
+	
+	private static void parseTownSetSpawn(Player player, Town town) {
+		try {
+			// Towns can only set their spawn if they have a homeblock.
+			if (!town.hasHomeBlock())
+				throw new TownyException(Translation.of("msg_err_homeblock_has_not_been_set"));
+
+			TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
+			
+			// The townblock needs to exist, belong to the town and also be inside of the homeblock.
+			if (tb == null || !tb.getTown().equals(town) || !town.getHomeBlock().getWorldCoord().equals(tb.getWorldCoord()))
+				throw new TownyException(Translation.of("msg_err_spawn_not_within_homeblock"));
+
+			// Throw unset event, for SpawnPoint particles.
+			if (town.getSpawn() != null)
+				TownyUniverse.getInstance().removeSpawnPoint(town.getSpawn());
+			
+			// Set the spawn point and send feedback message.
+			town.setSpawn(player.getLocation());
+			TownyMessaging.sendMsg(player, Translation.of("msg_set_town_spawn"));
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(player, e.getMessage());
+			return;
 		}
 	}
 

@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.SpawnPoint;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -32,6 +33,7 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -78,6 +80,7 @@ public class TownyUniverse {
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private CompletableFuture<Void> backupFuture;
     
+	private final Map<Location, SpawnPoint> spawnPoints = new ConcurrentHashMap<>(); 
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -194,6 +197,7 @@ public class TownyUniverse {
         residentNameMap.clear();
         residentUUIDMap.clear();
         townBlocks.clear();
+        spawnPoints.clear();
     }
     
     /**
@@ -1143,6 +1147,27 @@ public class TownyUniverse {
         this.warEvent = warEvent;
     }
     
+	public Map<Location, SpawnPoint> getSpawnPoints() {
+		return spawnPoints;
+	}
+	
+	public SpawnPoint getSpawnPoint(Location loc) {
+		return spawnPoints.get(loc);
+	}
+	
+	public boolean hasSpawnPoint(Location loc) {
+		return spawnPoints.containsKey(loc); 
+	}
+	
+	public void addSpawnPoint(SpawnPoint spawn) {
+		spawnPoints.put(spawn.getLocation(), spawn);
+	}
+
+	public void removeSpawnPoint(Location loc) {
+		if (hasSpawnPoint(loc))
+			spawnPoints.remove(loc);
+	}
+	
 	/**
 	 * Retrieves the configuration's output database type.
 	 * 
