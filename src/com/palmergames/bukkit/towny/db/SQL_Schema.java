@@ -129,6 +129,7 @@ public class SQL_Schema {
 		columns.add("`bonus` int(11) DEFAULT 0");
 		columns.add("`purchased` int(11)  DEFAULT 0");
 		columns.add("`taxpercent` bool NOT NULL DEFAULT '0'");
+		columns.add("`maxPercentTaxAmount` float DEFAULT NULL");
 		columns.add("`taxes` float DEFAULT 0");
 		columns.add("`hasUpkeep` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotPrice` float DEFAULT NULL");
