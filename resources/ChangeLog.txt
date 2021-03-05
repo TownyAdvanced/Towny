@@ -5855,3 +5855,5 @@ v0.92.0.11:
   - Update es-419, courtesy of EuGNosii with PR #4787.
   - Fix maxPercentTaxAmount town setting not being persistent.
   - Fix /res tax not accounting for the maxPercentTaxAmount town setting.
+  - Fix the method of dealing with PVP damage caused by Channeling Tridents, also preventing hurting of mobs where PVP was disabled.
+    - Closes #4778.

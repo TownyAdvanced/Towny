@@ -65,7 +65,9 @@ public class TownyWorld extends TownyObject {
 	
 	private boolean isDisablePlayerTrample = TownySettings.isPlayerTramplingCropsDisabled();
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
-	public Map<Location, Material> bedMap = new HashMap<Location, Material>();
+	
+	public Map<Location, Material> bedMap = new HashMap<>();
+	public List<String> tridentStrikeMap = new ArrayList<>();
 
 	public TownyWorld(String name) {
 		super(name);
@@ -838,6 +840,19 @@ public class TownyWorld extends TownyObject {
 	public void removeBedExplosionAtBlock(Location location) {
 		if (hasBedExplosionAtBlock(location))
 			bedMap.remove(location);
+	}
+	
+	public boolean hasTridentStrike(int entityID) {
+		return tridentStrikeMap.contains(String.valueOf(entityID));
+	}
+
+	public void addTridentStrike(int entityID) {
+		tridentStrikeMap.add(String.valueOf(entityID));
+	}
+	
+	public void removeTridentStrike(int entityID) {
+		if (hasTridentStrike(entityID))
+			tridentStrikeMap.remove(String.valueOf(entityID));
 	}
 
 	public void setFriendlyFire(boolean parseBoolean) {
