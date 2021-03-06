@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -85,9 +84,6 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 					resident.getAccount().deposit(resident.getTeleportCost(), Translation.of("msg_cost_spawn_refund"));
 					resident.setTeleportCost(0);
 					TownyMessaging.sendResidentMessage(resident, Translation.of("msg_cost_spawn_refund"));
-				} catch (EconomyException e) {
-					// Economy error trap
-					e.printStackTrace();
 				} catch (TownyException e) {
 					// Resident not registered exception.
 				}

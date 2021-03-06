@@ -2204,19 +2204,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			for (Nation nation : TownyUniverse.getInstance().getNations()) {
-				try {
-					nation.getAccount().deposit(amount, reason);
-				} catch (EconomyException e) {
-				}
-			}
+			for (Nation nation : TownyUniverse.getInstance().getNations())
+				nation.getAccount().deposit(amount, reason);
 			
-			for (Town town : TownyUniverse.getInstance().getTowns()) {
-				try {
-					town.getAccount().deposit(amount, reason);
-				} catch (EconomyException e) {
-				}
-			}
+			for (Town town : TownyUniverse.getInstance().getTowns())
+				town.getAccount().deposit(amount, reason);
+
 			TownyMessaging.sendMsg(sender, Translation.of("msg_ta_deposit_all_success", TownyEconomyHandler.getFormattedBalance(amount)));
 		}
 	}

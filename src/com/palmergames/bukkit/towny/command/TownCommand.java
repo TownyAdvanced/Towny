@@ -2364,12 +2364,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				throw new EconomyException(Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 		
 		Confirmation confirmation = Confirmation.runOnAccept(() -> {
-			try {
-				if (!town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n))) {
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
-					return;
-				}
-			} catch (EconomyException ignored) {
+			if (!town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n))) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+				return;
 			}
 			town.addPurchasedBlocks(n);
 			TownyMessaging.sendMsg(player, Translation.of("msg_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
@@ -2451,14 +2448,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 					throw new TownyException(Translation.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translation.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
 				
 				Confirmation.runOnAccept(() -> {			
-					try {
-						// Make the resident pay here.
-						if (!resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost")) {
-							// Send economy message
-							TownyMessaging.sendErrorMsg(player,Translation.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translation.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
-							return;
-						}
-					} catch (EconomyException ignored) {
+					// Make the resident pay here.
+					if (!resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost")) {
+						// Send economy message
+						TownyMessaging.sendErrorMsg(player,Translation.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translation.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
+						return;
 					}
 					
 					try {
@@ -2956,11 +2950,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			TownyUniverse.getInstance().getDataSource().removeNation(town.getNation());
 
 			if (TownyEconomyHandler.isActive() && TownySettings.isRefundNationDisbandLowResidents()) {
-				try {
-					town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");
-				} catch (EconomyException e) {
-					e.printStackTrace();
-				}
+				town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_not_enough_residents_refunded", TownySettings.getNewNationPrice()));
 			}
 		} else if ((!town.isCapital()) && (TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {

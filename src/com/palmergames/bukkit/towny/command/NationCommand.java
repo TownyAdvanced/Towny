@@ -1155,13 +1155,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
 
 				Confirmation.runOnAccept(() -> {				
-					try {
-						// Town pays for nation here.
-						if (!capitalTown.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost")) {
-							TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
-							return;
-						}
-					} catch (EconomyException ignored) {
+					// Town pays for nation here.
+					if (!capitalTown.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost")) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
+						return;
 					}
 					try {
 						// Actually make nation.
@@ -2500,17 +2497,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancelMessage());
 				
-				// Make them pay after we know the preEvent isn't cancelled.
-				try {
-					if (value && TownyEconomyHandler.isActive() && cost > 0)
-						nation.getAccount().withdraw(cost, "Peaceful Nation Cost");
-				} catch (EconomyException ignored) {}
+				// If they setting neutral status on send a message confirming they paid something, if they did.
+				if (value && TownyEconomyHandler.isActive() && cost > 0) {
+					nation.getAccount().withdraw(cost, "Peaceful Nation Cost");
+					TownyMessaging.sendMsg(sender, Translation.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
+				}
 
 				nation.setNeutral(value);
-				
-				// If they setting neutral status on send a message confirming they paid something, if they did.
-				if (value && TownyEconomyHandler.isActive() && cost > 0)
-					TownyMessaging.sendMsg(sender, Translation.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
 
 				// Send message feedback to the whole nation.
 				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_peaceful") + (nation.isNeutral
