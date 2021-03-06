@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 
+import com.palmergames.bukkit.towny.Towny;
+
 public class SpawnPoint {
 	private final Location location;
 	private final WorldCoord wc;
@@ -35,7 +37,9 @@ public class SpawnPoint {
 	}
 
 	public void drawParticle() {
-		Bukkit.getWorld(location.getWorld().getName()).spawnParticle(Particle.WATER_SPLASH, centreLocation(location), 100);	
+		Bukkit.getWorld(location.getWorld().getName()).spawnParticle(Particle.WATER_SPLASH, centreLocation(location), 20, 0.0, 0.0, 0.0, 0.1);
+		if (Towny.is116Plus())
+			Bukkit.getWorld(location.getWorld().getName()).spawnParticle(Particle.SOUL_FIRE_FLAME, centreLocation(location), 4, 0.15, 0.0, 0.15, 0.0);
 	}
 	
 	private Location centreLocation(Location loc) {
