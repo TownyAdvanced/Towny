@@ -715,6 +715,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 												TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_cannot_afford_to_set_outpost"));
 												return;
 										}
+
 										// Set the outpost spawn and display feedback.
 										town.addOutpostSpawn(player.getLocation());
 										TownyMessaging.sendMessage(player, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translation.of("outpost")));
