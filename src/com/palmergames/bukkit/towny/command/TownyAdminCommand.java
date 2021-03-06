@@ -161,7 +161,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	
 	private static final List<String> adminDatabaseTabCompletes = Arrays.asList(
 		"save",
-		"load"
+		"load",
+		"remove"
 	);
 	
 	private static final List<String> adminResidentTabCompletes = Arrays.asList(
@@ -295,6 +296,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			case "database":
 				if (args.length == 2)
 					return NameUtil.filterByStart(adminDatabaseTabCompletes, args[1]);
+				if (args.length == 3 && args[1].equalsIgnoreCase("remove"))
+					return Collections.singletonList("titles");
 				break;
 			case "resident":
 				switch (args.length) {
@@ -595,10 +598,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	private void parseAdminDatabaseCommand(String[] split) {
 	
-		if (split.length == 0 || split.length > 2 || split[0].equalsIgnoreCase("?")) {
+		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			sender.sendMessage(ChatTools.formatTitle("/townyadmin database"));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin database", "save", ""));
 			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin database", "load", ""));
+			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin database", "remove ?", ""));
 			return;
 		}
 		
@@ -612,7 +616,28 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMsg(getSender(), Translation.of("msg_load_success"));
 				Bukkit.getPluginManager().callEvent(new TownyLoadedDatabaseEvent());
 			}
+		} else if (split[0].equalsIgnoreCase("remove")) {
+			parseAdminDatabaseRemoveCommand(StringMgmt.remFirstArg(split));
 		}
+	}
+
+	private void parseAdminDatabaseRemoveCommand(String[] split) {
+		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
+			sender.sendMessage(ChatTools.formatTitle("/townyadmin database remove"));
+			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin database remove", "titles", "Removes all titles and surnames from every resident."));
+			return;
+		}
+		
+		if (split[0].equalsIgnoreCase("titles")) {
+			TownyUniverse.getInstance().getResidents().stream()
+				.forEach(resident -> {
+					resident.setTitle("");
+					resident.setSurname("");
+					resident.save();
+				});
+			TownyMessaging.sendMsg(getSender(), Translation.of("msg_ta_removed_all_titles_and_surnames_removed"));
+		}
+		
 	}
 
 	private void parseAdminPlotCommand(String[] split) throws TownyException {
