@@ -55,9 +55,8 @@ public abstract class Account implements Nameable {
 	 * @param amount The amount to add.
 	 * @param reason The reason for adding.
 	 * @return boolean indicating success.
-	 * @throws EconomyException On an economy error.
 	 */
-	public boolean deposit(double amount, String reason) throws EconomyException {
+	public boolean deposit(double amount, String reason) {
 		if (addMoney(amount)) {
 			notifyObserversDeposit(this, amount, reason);
 			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
@@ -76,9 +75,8 @@ public abstract class Account implements Nameable {
 	 * @param amount The amount to withdraw.
 	 * @param reason The reason for subtracting.
 	 * @return boolean indicating success.
-	 * @throws EconomyException On an economy error.
 	 */
-	public boolean withdraw(double amount, String reason) throws EconomyException {
+	public boolean withdraw(double amount, String reason) {
 		if (subtractMoney(amount)) {
 			notifyObserversWithdraw(this, amount, reason);
 			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
@@ -103,13 +101,13 @@ public abstract class Account implements Nameable {
 		return payTo(amount, collector.getAccount(), reason);
 	}
 	
-	protected boolean payToServer(double amount, String reason) throws EconomyException {
+	protected boolean payToServer(double amount, String reason) {
 		
 		// Put it back into the server.
 		return TownyEconomyHandler.addToServer(amount, getBukkitWorld());
 	}
 	
-	protected boolean payFromServer(double amount, String reason) throws EconomyException {
+	protected boolean payFromServer(double amount, String reason) {
 		
 		// Remove it from the server economy.
 		return TownyEconomyHandler.subtractFromServer(amount, getBukkitWorld());
