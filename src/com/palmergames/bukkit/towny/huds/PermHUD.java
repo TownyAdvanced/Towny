@@ -83,7 +83,10 @@ public class PermHUD {
 		board.getTeam("explosions").setSuffix(explosions);
 		board.getTeam("firespread").setSuffix(firespread);
 		board.getTeam("mobspawn").setSuffix(mobspawn);
-		board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(title));
+		if (board.getObjective("PERM_HUD_OBJ") != null)  // This may solve the issue of the below line throwing an NPE.
+			board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(title));
+		else
+			HUDManager.toggleOff(p);
 	}
 
 	private static void clearPerms (Player p) {

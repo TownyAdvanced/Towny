@@ -5857,3 +5857,4 @@ v0.92.0.11:
   - Fix /res tax not accounting for the maxPercentTaxAmount town setting.
   - Fix the method of dealing with PVP damage caused by Channeling Tridents, also preventing hurting of mobs where PVP was disabled.
     - Closes #4778.
+  - Potential fix for PermHud being able to throw an NPE on line 86.
