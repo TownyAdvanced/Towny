@@ -28,12 +28,9 @@ public class SpawnPoint {
 	public Location getLocation() {
 		return location;
 	}
-
-	public enum SpawnPointType {
-		TOWN_SPAWN,
-		NATION_SPAWN,
-		OUTPOST_SPAWN,
-		JAIL_SPAWN
+	
+	public SpawnPointLocation getSpawnPointLocation() {
+		return new SpawnPointLocation(location);
 	}
 
 	public void drawParticle() {
@@ -47,5 +44,36 @@ public class SpawnPoint {
 		loc.setY(Math.floor(loc.getY()) + 0.1);
 		loc.setZ(Math.floor(loc.getZ()) + 0.5);
 		return loc;
+	}
+	
+	public enum SpawnPointType {
+		TOWN_SPAWN,
+		NATION_SPAWN,
+		OUTPOST_SPAWN,
+		JAIL_SPAWN
+	}
+	
+	public class SpawnPointLocation {
+		private final int x;
+		private final int y;
+		private final int z;
+		
+		public SpawnPointLocation(Location loc) {
+			this.x = loc.getBlockX();
+			this.y = loc.getBlockY();
+			this.z = loc.getBlockZ();
+		}
+
+		public int getX() {
+			return x;
+		}
+
+		public int getY() {
+			return y;
+		}
+
+		public int getZ() {
+			return z;
+		}
 	}
 }
