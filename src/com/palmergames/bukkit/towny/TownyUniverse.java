@@ -1160,7 +1160,7 @@ public class TownyUniverse {
 	}
 	
 	public void addSpawnPoint(SpawnPoint spawn) {
-		spawnPoints.put(spawn.getLocation(), spawn);
+		spawnPoints.put(spawn.getBukkitLocation(), spawn);
 	}
 
 	public void removeSpawnPoint(Location loc) {
