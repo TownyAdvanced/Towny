@@ -5858,3 +5858,5 @@ v0.92.0.11:
   - Fix the method of dealing with PVP damage caused by Channeling Tridents, also preventing hurting of mobs where PVP was disabled.
     - Closes #4778.
   - Potential fix for PermHud being able to throw an NPE on line 86.
+  - Fix for NPE when someone activates another scoreboard (ex: featherboard) while the perm hud is active.
+    - Closes #4754. 

@@ -43,6 +43,12 @@ public class PermHUD {
 			toggleOn(p);
 			return;
 		}
+		
+		if (board.getObjective("PERM_HUD_OBJ") == null) { // Some other plugin's scoreboard has  
+			HUDManager.toggleOff(p);                      // likely been activated, meaning we
+			return;                                       // will throw NPEs if we continue.
+		}
+
 		try {
 			TownBlock townBlock = worldCoord.getTownBlock();
 			TownBlockOwner owner = townBlock.hasResident() ? townBlock.getResident() : townBlock.getTown();
@@ -83,10 +89,7 @@ public class PermHUD {
 		board.getTeam("explosions").setSuffix(explosions);
 		board.getTeam("firespread").setSuffix(firespread);
 		board.getTeam("mobspawn").setSuffix(mobspawn);
-		if (board.getObjective("PERM_HUD_OBJ") != null)  // This may solve the issue of the below line throwing an NPE.
-			board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(title));
-		else
-			HUDManager.toggleOff(p);
+		board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(title));
 	}
 
 	private static void clearPerms (Player p) {
