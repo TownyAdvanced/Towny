@@ -5862,3 +5862,4 @@ v0.92.0.11:
     - Closes #4754. 
   - Make it so that admins can use /plot evict on any resident-owned plot.
     - Closes #4678.
+  - Update banned town and nation names to reflect some of the newer commands.
