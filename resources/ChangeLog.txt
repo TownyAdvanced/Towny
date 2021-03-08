@@ -5860,3 +5860,5 @@ v0.92.0.11:
   - Potential fix for PermHud being able to throw an NPE on line 86.
   - Fix for NPE when someone activates another scoreboard (ex: featherboard) while the perm hud is active.
     - Closes #4754. 
+  - Make it so that admins can use /plot evict on any resident-owned plot.
+    - Closes #4678.

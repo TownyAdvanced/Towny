@@ -362,7 +362,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					} else {
 						
 						Resident owner = townBlock.getResident();
-						if (!town.equals(resident.getTown())){ 
+						if (!town.equals(resident.getTown()) && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
 							
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_part_town"));
 							return false;							
