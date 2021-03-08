@@ -94,6 +94,48 @@ public class TownyAPI {
 
 		return null;
     }
+ 
+    /**
+     * Gets the resident's town if they have one.
+     * 
+     * @param resident Resident to get the town from.
+     * @return The resident's Town or null if they have none.
+     */
+    @Nullable
+    public Town getResidentTownOrNull(Resident resident) {
+    	if (resident.hasTown())
+	    	try {
+				return resident.getTown();
+			} catch (NotRegisteredException ignored) {}
+
+    	return null;
+    }
+    
+    /**
+     * Gets the resident's nation if they have one.
+     * 
+     * @param resident Resident to get the nation from.
+     * @return The resident's Nation or null if they have none.
+     */
+    @Nullable
+    public Nation getResidentNationOrNull(Resident resident) {
+    	if (resident.hasNation())
+			try {
+				return resident.getTown().getNation();
+			} catch (NotRegisteredException ignored) {}
+    	
+    	return null;
+    }
+    
+    @Nullable
+    public Nation getTownNationOrNull(Town town) {
+    	if (town.hasNation())
+			try {
+				return town.getNation();
+			} catch (NotRegisteredException ignored) {}
+    	
+    	return null;
+    }
     
     /**
      * Gets the nation from the given UUID.

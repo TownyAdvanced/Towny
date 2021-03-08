@@ -197,10 +197,7 @@ public class War {
 		EventWarPreStartEvent preEvent = new EventWarPreStartEvent();
 		Bukkit.getServer().getPluginManager().callEvent(preEvent);
 		if (preEvent.getWarSpoils() != 0.0)
-			try {
-				warSpoils.deposit(preEvent.getWarSpoils(), "WarSpoils EventWarPreStartEvent Added");
-			} catch (EconomyException ignored) {
-			}
+			warSpoils.deposit(preEvent.getWarSpoils(), "WarSpoils EventWarPreStartEvent Added");
 
 		//Gather all nations at war
 		for (Nation nation : com.palmergames.bukkit.towny.TownyUniverse.getInstance().getNations()) {

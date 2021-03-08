@@ -5830,3 +5830,36 @@ v0.92.0.11:
     - Default: false
     - If true, the settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock will be ignored for towns that are mutually allied. 
     - Setting to false will keep all towns separated the same if they are allies.
+0.96.7.4:
+  - Correctly show the proper already registered messages when using /ta set mayor TOWN PLAYER command.
+  - API: added convenience methods to TownyAPI:
+    - getResidentTownOrNull(resident)
+    - getResidentNationOrNull(resident)
+    - getTownNationOrNull(town)
+  - Fix possible NPE when unjailing a resident.
+  - Fix being unable to claim a personally-owned plot being sold by a resident.
+    - Closes #4767.
+  - Fix mayors unable to use /plot nfs on personally-owned plots owned by their town.
+  - Adapt to spigot bug being closed, allowing us to prevent explosions from dropping items without setting the exploded block to air.
+    - Closes #4770.
+    - Closes #4771.
+  - API: TownyExplodingBlocksEvent 
+    - Add getBukkitExplodeEvent for convenience.
+  - Fix PVP-related issue where people could be hit once in non-PVP areas.
+0.96.7.5:
+  - Add localization strings for Towny's FlatFile datasource handler, courtesy of TheFlagCourier with PR #4761
+  - Fix up double-chest-on-plot-borders visual bugginess.
+    - Closes #4783.
+  - Fix kings who give up their position willingly, not losing their King permission nodes given in TownyPerms.yml
+    - Closes #4784.
+  - Update es-419, courtesy of EuGNosii with PR #4787.
+  - Fix maxPercentTaxAmount town setting not being persistent.
+  - Fix /res tax not accounting for the maxPercentTaxAmount town setting.
+  - Fix the method of dealing with PVP damage caused by Channeling Tridents, also preventing hurting of mobs where PVP was disabled.
+    - Closes #4778.
+  - Potential fix for PermHud being able to throw an NPE on line 86.
+  - Fix for NPE when someone activates another scoreboard (ex: featherboard) while the perm hud is active.
+    - Closes #4754. 
+  - Make it so that admins can use /plot evict on any resident-owned plot.
+    - Closes #4678.
+  - Update banned town and nation names to reflect some of the newer commands.

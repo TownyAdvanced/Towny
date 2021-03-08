@@ -684,7 +684,7 @@ public class TownyFormatter {
 					out.add(Translation.of("status_res_taxexempt"));
 				} else {
 					if (town.isTaxPercentage())
-						townTax = resident.getAccount().getHoldingBalance() * town.getTaxes() / 100;
+						townTax = Math.min(resident.getAccount().getHoldingBalance() * town.getTaxes() / 100, town.getMaxPercentTaxAmount());
 					else
 						townTax = town.getTaxes();
 					out.add(Translation.of("status_res_tax", TownyEconomyHandler.getFormattedBalance(townTax)));

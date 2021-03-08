@@ -254,7 +254,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
 					
 					// Fast-fail if this is a single plot and it is already claimed.
-					if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasResident())
+					if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasResident() && !selection.get(0).getTownBlock().isForSale())
 						throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownBlock().getResident()));
 					
 					// Filter to just plots that are for sale.
@@ -362,7 +362,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					} else {
 						
 						Resident owner = townBlock.getResident();
-						if (!town.equals(resident.getTown())){ 
+						if (!town.equals(resident.getTown()) && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
 							
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_part_town"));
 							return false;							
@@ -472,7 +472,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// The follow test will clean up the initial selection fairly well, the plotTestOwner later on in the setPlotForSale will ultimately stop any funny business.
 					if (permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && (resident.hasTown() && resident.getTown() == pos.getTownBlock().getTown())) {
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection); // Treat it as a mayor able to set their town's plots not for sale.
-						selection = AreaSelectionUtil.filterOutResidentBlocks(resident, selection); // Filter out any resident-owned plots.
 					} else {
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection); // Treat it as a resident making their own plots not for sale.
 					}
@@ -710,6 +709,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									 
 									// Create a confirmation for setting outpost.
 									Confirmation.runOnAccept(() -> {
+										
+										//Make them pay.
+										if (TownyEconomyHandler.isActive() 
+											&& TownySettings.getOutpostCost() > 0 
+											&& !town.getAccount().withdraw(TownySettings.getOutpostCost(), "Plot Set Outpost")) {
+												TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_cannot_afford_to_set_outpost"));
+												return;
+											}
+										
 										townBlock.setOutpost(true);
 										 
 										try {
@@ -719,12 +727,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 											return;
 										}
 
-										//Make them pay, ignoring exception because we already know they can pay.
-										if (TownyEconomyHandler.isActive() && TownySettings.getOutpostCost() > 0 )
-											try {
-												town.getAccount().withdraw(TownySettings.getOutpostCost(), "Plot Set Outpost");
-											} catch (EconomyException ignored) {
-											}
 										town.save();
 										townBlock.save();
 										TownyMessaging.sendMessage(player, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translation.of("outpost")));
@@ -781,10 +783,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							if (cost > 0 && TownyEconomyHandler.isActive()) {
 								Confirmation.runOnAccept(() -> {
 							
-									try {
-										resident.getAccount().withdraw(cost, String.format("Plot set to %s", townBlockType));
-									} catch (EconomyException ignored) {
-									}					
+									if (!resident.getAccount().withdraw(cost, String.format("Plot set to %s", townBlockType))) {
+										TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_cannot_afford_plot_set_type_cost", townBlockType, TownyEconomyHandler.getFormattedBalance(cost)));
+										return;
+									}
 
 									TownyMessaging.sendMessage(resident, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), townBlockType));
 
@@ -1738,9 +1740,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				if (cost > 0 && TownyEconomyHandler.isActive()) {
 					Confirmation.runOnAccept(() -> {
 				
-						try {
-							resident.getAccount().withdraw(cost, String.format("Plot (" + amount + ") set to %s", type));
-						} catch (EconomyException ignored) {
+						if (!resident.getAccount().withdraw(cost, String.format("Plot (" + amount + ") set to %s", type))) {
+							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost)));
+							return;
 						}					
 
 						TownyMessaging.sendMessage(resident, Translation.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), type));

@@ -950,6 +950,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setBonusBlocks(rs.getInt("bonus"));
 			town.setTaxPercentage(rs.getBoolean("taxpercent"));
 			town.setTaxes(rs.getFloat("taxes"));
+			town.setMaxPercentTaxAmount(rs.getFloat("maxPercentTaxAmount"));
 			town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
 			town.setPlotPrice(rs.getFloat("plotPrice"));
 			town.setPlotTax(rs.getFloat("plotTax"));
@@ -965,6 +966,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
 
 			town.setPurchasedBlocks(rs.getInt("purchased"));
+			
+			line = rs.getString("maxPercentTaxAmount");
+			if (line != null)
+				town.setMaxPercentTaxAmount(Double.parseDouble(line));
+			else 
+				town.setMaxPercentTaxAmount(TownySettings.getMaxTownTaxPercentAmount());
 
 			line = rs.getString("homeBlock");
 			if (line != null) {
@@ -1896,6 +1903,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("taxes", town.getTaxes());
 			twn_hm.put("hasUpkeep", town.hasUpkeep());
 			twn_hm.put("taxpercent", town.isTaxPercentage());
+			twn_hm.put("maxPercentTaxAmount", town.getMaxPercentTaxAmount());
 			twn_hm.put("open", town.isOpen());
 			twn_hm.put("public", town.isPublic());
 			twn_hm.put("conquered", town.isConquered());

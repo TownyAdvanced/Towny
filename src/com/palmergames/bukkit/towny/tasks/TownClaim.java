@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -114,12 +113,8 @@ public class TownClaim extends Thread {
 			}
 		
 			if (!claim && TownySettings.getClaimRefundPrice() > 0.0) {
-				try {
-					town.getAccount().deposit(TownySettings.getClaimRefundPrice()*selection.size(), "Town Unclaim Refund");
-					TownyMessaging.sendMsg(player, Translation.of("refund_message", TownySettings.getClaimRefundPrice()*selection.size(), selection.size()));
-				} catch (EconomyException e) {
-					e.printStackTrace();
-				}
+				town.getAccount().deposit(TownySettings.getClaimRefundPrice()*selection.size(), "Town Unclaim Refund");
+				TownyMessaging.sendMsg(player, Translation.of("refund_message", TownySettings.getClaimRefundPrice()*selection.size(), selection.size()));
 			}
 
 		} else if (!claim) {
@@ -139,12 +134,8 @@ public class TownClaim extends Thread {
 			Confirmation.runOnAccept(() -> { 
 				TownClaim.townUnclaimAll(plugin, town);
 				if (TownyEconomyHandler.isActive() && refund > 0.0) {
-					try {
-						town.getAccount().deposit(TownySettings.getClaimRefundPrice()*townSize - 1, "Town Unclaim Refund"); 
-						TownyMessaging.sendMsg(player, Translation.of("refund_message", TownySettings.getClaimRefundPrice()*townSize, townSize));
-					} catch (EconomyException e) {
-						e.printStackTrace();
-					}
+					town.getAccount().deposit(TownySettings.getClaimRefundPrice()*townSize - 1, "Town Unclaim Refund"); 
+					TownyMessaging.sendMsg(player, Translation.of("refund_message", TownySettings.getClaimRefundPrice()*townSize, townSize));
 				}
 			})
 			.sendTo(player);

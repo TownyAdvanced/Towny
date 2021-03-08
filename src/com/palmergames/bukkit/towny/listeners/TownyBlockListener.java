@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BlockUtil;
 
@@ -76,30 +77,51 @@ public class TownyBlockListener implements Listener {
 
 		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
 		if (!TownyActionEventExecutor.canBuild(event.getPlayer(), block.getLocation(), block.getType())) {
-			event.setBuild(true);
+			event.setBuild(false);
 			event.setCancelled(true);
 		}
 		
-		if (!event.isCancelled() && block.getType() == Material.CHEST)
+		if (!event.isCancelled() && block.getType() == Material.CHEST && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer()))
 			testDoubleChest(event.getPlayer(), event.getBlock(), event);
 	}
 
 	private void testDoubleChest(Player player, Block block, BlockPlaceEvent event) {
 		List<Block> blocksToUpdate = new ArrayList<>(); // To avoid glitchy-looking chests, we need to update the blocks later on.
+		List<WorldCoord> safeWorldCoords = new ArrayList<>(); // Some worldcoords will be concidered safe;
+
 		for (BlockFace face : BlockUtil.CARDINAL_BLOCKFACES) {
 			Block testBlock = block.getRelative(face); // The block which we do not want to combine with.
+
+			if (BlockUtil.sameWorldCoord(block, testBlock)) // Same worldCoord, continue;
+				continue;
+
 			if (testBlock.getType() != Material.CHEST) // Not a chest, continue.
 				continue;
 
-			Chest data = (Chest) block.getBlockData();          // We are only going to glitch
-			Chest testData = (Chest) testBlock.getBlockData();  // out chests which are facing 
-			if (!data.getFacing().equals(testData.getFacing())) // the same direction as our 
-				continue;                                       // newly-placed chest.
-			
-			blocksToUpdate.add(testBlock); // This chest has the same facing as the new chest, save it for updating later.
-			
-			if (BlockUtil.sameOwner(block, testBlock)) // If the blocks have a same-owner relationship, continue.
+			WorldCoord wc = WorldCoord.parseWorldCoord(testBlock);
+			if (safeWorldCoords.contains(wc)) {
 				continue;
+			}
+			Chest data = (Chest) block.getBlockData();            // We are only going to glitch out chests which are facing
+			Chest testData = (Chest) testBlock.getBlockData();    // the same direction as our newly-placed chest.  
+			if (!data.getFacing().equals(testData.getFacing())) 
+				continue;
+
+			if ((data.getFacing().equals(BlockFace.SOUTH) || data.getFacing().equals(BlockFace.NORTH))
+					&& block.getZ() != testBlock.getZ()) // The two chests are not on the axis, although they face the same direction.
+				continue;
+			
+			if ((data.getFacing().equals(BlockFace.EAST) || data.getFacing().equals(BlockFace.WEST)) 
+					&& block.getX() != testBlock.getX()) // The two chests are not on the axis, although they face the same direction.
+				continue;
+
+			if (BlockUtil.sameOwnerOrHasMayorOverride(block, testBlock, player)) { // If the blocks have a same-owner relationship, continue.
+				System.out.println("new safe WC " + wc.toString());
+				safeWorldCoords.add(wc);
+				continue;
+			}
+			
+			blocksToUpdate.add(testBlock); // This chest could potentially snap to the given Block based on proximity and facing.
 			
 			data.setType(Type.SINGLE);  // Set the chest just-placed to a single chest.
 			block.setBlockData(data);
@@ -252,7 +274,7 @@ public class TownyBlockListener implements Listener {
 		if (material == Material.AIR && townyWorld.hasBedExplosionAtBlock(event.getBlock().getLocation()))
 			material = townyWorld.getBedExplosionMaterial(event.getBlock().getLocation());
 		
-		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), material, null);
+		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), material, null, event);
 		event.blockList().clear();
 		event.blockList().addAll(blocks);
 
@@ -270,7 +292,7 @@ public class TownyBlockListener implements Listener {
 					continue;
 				count++;
 				// Cancel the event outright if this will cause a revert to start on an already operating revert.
-				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld));
+				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event));
 			}
 		}
 	}

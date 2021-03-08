@@ -31,6 +31,7 @@ public class TownyExplodingBlocksEvent extends Event {
 	private final Entity entity;
 	private List<Block> blockList = new ArrayList<Block>();
 	private boolean isChanged = false;
+	private Event event;
 
 	/**
 	 * Event thrown when blocks are exploded by a block or entity.
@@ -38,13 +39,15 @@ public class TownyExplodingBlocksEvent extends Event {
 	 * @param vanillaBlockList - List of Blocks which were involved in the original explosion.
 	 * @param townyFilteredList - List of Blocks Towny has already filtered, these blocks will explode unless {@link #setBlockList(List)} is used.
 	 * @param mat - Material which caused the block explosion or null if it is an entity explosion.
-	 * @param entity - Entity which caused the entity explosion or null if it is a block explosion. 
+	 * @param entity - Entity which caused the entity explosion or null if it is a block explosion.
+	 * @param bukkitExplodeEvent - The Bukkit Explosion Event that caused this explosion. 
 	 */
-	public TownyExplodingBlocksEvent(List<Block> vanillaBlockList, List<Block> townyFilteredList, Material mat, Entity entity) {
+	public TownyExplodingBlocksEvent(List<Block> vanillaBlockList, List<Block> townyFilteredList, Material mat, Entity entity, Event bukkitExplodeEvent) {
 		this.vanillaBlockList = vanillaBlockList;
 		this.filteredBlockList = townyFilteredList;
 		this.material = mat;
 		this.entity = entity;
+		this.event = bukkitExplodeEvent;
 	}
 
 	public static HandlerList getHandlerList() {
@@ -142,4 +145,12 @@ public class TownyExplodingBlocksEvent extends Event {
 		return entity;
 	}
 
+	/**
+	 * Returns the bukkit event which originally fired when the explosion happened.
+	 * 
+	 * @return event which can be either an EntityExplodeEvent or a BlockExplodeEvent.
+	 */
+	public Event getBukkitExplodeEvent() {
+		return event;
+	}
 }
