@@ -3643,11 +3643,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// Start merge
 			if (finalCost > 0) {
-				try {
-					finalRemainingTown.getAccount().withdraw(finalCost, Translation.of("msg_town_merge_cost_withdraw"));
-				} catch (EconomyException e) {
-					return;
-				}
+				finalRemainingTown.getAccount().withdraw(finalCost, Translation.of("msg_town_merge_cost_withdraw"));
 			}
 			TownyUniverse.getInstance().getDataSource().mergeTown(finalRemainingTown, finalSuccumbingTown);
 
