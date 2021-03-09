@@ -186,7 +186,7 @@ public abstract class Account implements Nameable {
 	 * @return true if there is enough.
 	 * @throws EconomyException if failure
 	 */
-	public boolean canPayFromHoldings(double amount) throws EconomyException {
+	public boolean canPayFromHoldings(double amount) {
 		return TownyEconomyHandler.hasEnough(getName(), amount, getBukkitWorld());
 	}
 
@@ -291,7 +291,7 @@ public abstract class Account implements Nameable {
 	 * @throws EconomyException On an economy error.
 	 */
 	@Deprecated
-	public boolean collect(double amount, String reason) throws EconomyException {
+	public boolean collect(double amount, String reason) {
 		return deposit(amount, reason);
 	}
 	
@@ -304,7 +304,7 @@ public abstract class Account implements Nameable {
 	 * @throws EconomyException On an economy error.
 	 */
 	@Deprecated
-	public boolean pay(double amount, String reason) throws EconomyException {
+	public boolean pay(double amount, String reason) {
 		return withdraw(amount, reason);
 	}
 }

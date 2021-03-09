@@ -2099,15 +2099,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
                     	final Town finalTown = town;
                     	final String name = split[1];
                     	Confirmation confirmation = Confirmation.runOnAccept(() -> {
-							try {
-								// Check if town can still pay rename cost
-								if (!finalTown.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost())) {
-									TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
-									return;
-								}
-								
-								finalTown.getAccount().withdraw(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", name));
-							} catch (EconomyException ignored) {}
+							// Check if town can still pay rename cost
+							if (!finalTown.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost())) {
+								TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
+								return;
+							}
+							
+							finalTown.getAccount().withdraw(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", name));
 
 							townRename(player, finalTown, name);
 						})
@@ -2475,8 +2473,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 			// TODO: delete town data that might have been done
-		} catch (EconomyException x) {
-			TownyMessaging.sendErrorMsg(player, "No valid economy found, your server admin might need to install Vault.jar or set using_economy: false in the Towny config.yml");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

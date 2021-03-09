@@ -6,9 +6,9 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownyAdminCommand;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -134,32 +134,46 @@ public class TownRuinUtil {
 			if (TownRuinSettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town) > 0)
 				throw new TownyException(Translation.of("msg_err_cannot_reclaim_town_yet", TownRuinSettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town)));
 
-			//Recover Town now
-			resident.getAccount().withdraw(townReclaimCost, "Cost of town reclaim.");
-			town.setRuined(false);
-			town.setRuinedTime(0);
-
-			//Set player as mayor (and remove npc)
-			setMayor(plugin, town, resident.getName());
-
-			// Set permission line to the config's default settings.
-			town.getPermissions().loadDefault(town);
-			for (TownBlock townBlock : town.getTownBlocks()) {
-				townBlock.getPermissions().loadDefault(town);
-				townBlock.setChanged(false);
-				townBlock.save();
+			if (TownyEconomyHandler.isActive() && townReclaimCost > 0) { 
+				Confirmation.runOnAccept(() -> {
+					if (!resident.getAccount().canPayFromHoldings(townReclaimCost)) {
+						TownyMessaging.sendErrorMsg(resident, Translation.of("msg_err_no_money"));
+						return;
+					}
+					resident.getAccount().withdraw(townReclaimCost, "Cost of town reclaim.");
+					reclaimTown(resident, town);					
+				});
+			} else {
+				reclaimTown(resident, town);
 			}
-			
-			town.save();
-			plugin.resetCache();
-			
-			TownReclaimedEvent event = new TownReclaimedEvent(town, resident);
-			Bukkit.getPluginManager().callEvent(event);
-
-			TownyMessaging.sendGlobalMessage(Translation.of("msg_town_reclaimed", resident.getName(), town.getName()));
-		} catch (TownyException | EconomyException e) {
+		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player,e.getMessage());
 		}
+	}
+
+	private static void reclaimTown(Resident resident, Town town) {
+		town.setRuined(false);
+		town.setRuinedTime(0);
+
+		//Set player as mayor (and remove npc)
+		setMayor(Towny.getPlugin(), town, resident.getName());
+
+		// Set permission line to the config's default settings.
+		town.getPermissions().loadDefault(town);
+		for (TownBlock townBlock : town.getTownBlocks()) {
+			townBlock.getPermissions().loadDefault(town);
+			townBlock.setChanged(false);
+			townBlock.save();
+		}
+		
+		town.save();
+		Towny.getPlugin().resetCache();
+		
+		TownReclaimedEvent event = new TownReclaimedEvent(town, resident);
+		Bukkit.getPluginManager().callEvent(event);
+
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_town_reclaimed", resident.getName(), town.getName()));
+		
 	}
 
 	// TODO: Make this into a method somewhere else, instead of this.

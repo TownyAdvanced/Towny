@@ -1177,7 +1177,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				newNation(name, capitalTown);
 				TownyMessaging.sendGlobalMessage(Translation.of("msg_new_nation", player.getName(), StringMgmt.remUnderscore(name)));
 			}
-		} catch (TownyException | EconomyException x) {
+		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 	}
@@ -2301,15 +2301,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						final Nation finalNation = nation;
                     	final String name = split[1];
 				    	Confirmation.runOnAccept(() -> {
-							try {
-								//Check if nation can still pay rename costs.
-								if (!finalNation.getAccount().canPayFromHoldings(TownySettings.getNationRenameCost())) {
-									TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
-									return;
-								}
-								
-								finalNation.getAccount().withdraw(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", name));
-							} catch (EconomyException ignored) {}
+							//Check if nation can still pay rename costs.
+							if (!finalNation.getAccount().canPayFromHoldings(TownySettings.getNationRenameCost())) {
+								TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
+								return;
+							}
+							
+							finalNation.getAccount().withdraw(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", name));
 								
 							nationRename(player, finalNation, name);
 				    	})
@@ -2479,31 +2477,28 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			if (split[0].equalsIgnoreCase("peaceful") || split[0].equalsIgnoreCase("neutral")) {
 
-				boolean value = choice.orElse(!nation.isNeutral());
+				boolean peacefulState = choice.orElse(!nation.isNeutral());
 				double cost = TownySettings.getNationNeutralityCost();
 				
-				if (nation.isNeutral() && value) throw new TownyException(Translation.of("msg_nation_already_peaceful"));
-				else if (!nation.isNeutral() && !value) throw new TownyException(Translation.of("msg_nation_already_not_peaceful"));
+				if (nation.isNeutral() && peacefulState) throw new TownyException(Translation.of("msg_nation_already_peaceful"));
+				else if (!nation.isNeutral() && !peacefulState) throw new TownyException(Translation.of("msg_nation_already_not_peaceful"));
 
-				// Check if they could pay.
-				try {
-					if (value && TownyEconomyHandler.isActive() && !nation.getAccount().canPayFromHoldings(cost))
-						throw new TownyException(Translation.of("msg_nation_cant_peaceful"));
-				} catch (EconomyException e1) {}
+				if (peacefulState && TownyEconomyHandler.isActive() && !nation.getAccount().canPayFromHoldings(cost))
+					throw new TownyException(Translation.of("msg_nation_cant_peaceful"));
 
 				// Fire cancellable event directly before setting the toggle.
-				NationToggleNeutralEvent preEvent = new NationToggleNeutralEvent(sender, nation, admin, value);
+				NationToggleNeutralEvent preEvent = new NationToggleNeutralEvent(sender, nation, admin, peacefulState);
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancelMessage());
 				
 				// If they setting neutral status on send a message confirming they paid something, if they did.
-				if (value && TownyEconomyHandler.isActive() && cost > 0) {
+				if (peacefulState && TownyEconomyHandler.isActive() && cost > 0) {
 					nation.getAccount().withdraw(cost, "Peaceful Nation Cost");
 					TownyMessaging.sendMsg(sender, Translation.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
 				}
 
-				nation.setNeutral(value);
+				nation.setNeutral(peacefulState);
 
 				// Send message feedback to the whole nation.
 				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_peaceful") + (nation.isNeutral
