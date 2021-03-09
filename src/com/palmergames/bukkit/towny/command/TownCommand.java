@@ -3580,10 +3580,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (TownyEconomyHandler.isActive()) {
 			try {
 				townblockCost = remainingTown.getTownBlockCostN(succumbingTown.getTownBlocks().size()) * (TownySettings.getPercentageCostPerPlot() * 0.01);
-				cost = baseCost + townblockCost;
-				if (succumbingTown.isBankrupt()) {
-					bankruptcyCost = succumbingTown.getAccount().getHoldingBalance();
-				}
+				if (succumbingTown.isBankrupt())
+					bankruptcyCost = Math.abs(succumbingTown.getAccount().getHoldingBalance());
+				
+				cost = baseCost + townblockCost + bankruptcyCost;
 
 				if (!remainingTown.getAccount().canPayFromHoldings(cost)) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_not_enough_money", (int) remainingTown.getAccount().getHoldingBalance(), (int) cost));
@@ -3597,7 +3597,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if (cost > 0) {
 			TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_warning", succumbingTown.getName(), TownyEconomyHandler.getFormattedBalance(cost)));
-			if (succumbingTown.isBankrupt())
+			if (bankruptcyCost > 0)
 				TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_debt_warning", succumbingTown.getName()));
 			TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_cost_breakdown", TownyEconomyHandler.getFormattedBalance(baseCost), TownyEconomyHandler.getFormattedBalance(townblockCost), TownyEconomyHandler.getFormattedBalance(bankruptcyCost)));
 			final Town finalSuccumbingTown = succumbingTown;
