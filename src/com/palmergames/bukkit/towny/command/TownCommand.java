@@ -732,8 +732,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_MERGE.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 
-					if (split.length < 2)
+					if (split.length < 2) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_name"));
+						return;
+					}
 					Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 					if (!resident.isMayor())
 						throw new TownyException(Translation.of("msg_town_merge_err_mayor_only"));

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.99
+version: 0.100
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1333,6 +1333,7 @@ flatfile_err_townblock_file_unknown_err: 'TownBlock file contains unknown error,
 
 msg_ta_removed_all_titles_and_surnames_removed: 'All residents have had their titles and surnames removed.'
 
+#Added in 0.100
 msg_town_merge_err_mayor_only: '&cMerging can only be done by a mayor.'
 msg_town_merge_err_not_close: '&cThe town of %s is too far away from your town. Their homeblock has to be at least %d townblocks from your homeblock.'
 msg_town_merge_request_sent: '&bMerge request sent to the mayor of %s.'
