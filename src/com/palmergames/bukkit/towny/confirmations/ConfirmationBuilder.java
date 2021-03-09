@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.confirmations;
 
 import org.bukkit.command.CommandSender;
 
+import com.palmergames.bukkit.towny.TownySettings;
+
 /**
  * A class responsible for assembling confirmations.
  */
@@ -9,7 +11,7 @@ public class ConfirmationBuilder {
 	Runnable acceptHandler;
 	Runnable cancelHandler;
 	String title;
-	int duration = 20;
+	int duration = TownySettings.getConfirmationTimeoutSeconds();
 	boolean runAsync;
 
 	/**

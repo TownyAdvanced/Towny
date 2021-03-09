@@ -2483,10 +2483,6 @@ public class TownySettings {
 	public static String getCancelCommand(){
 		return getString(ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND);
 	}
-	//public static void setUsingQuestioner(boolean newSetting) {
-	//
-	//	setProperty(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE.getRoot(), newSetting);
-	//}
 
 	public static boolean getOutsidersPreventPVPToggle() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE);
@@ -2496,15 +2492,9 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP);
 	}
 
-	//public static String questionerAccept() {
-	//
-	//	return getString(ConfigNodes.PLUGIN_QUESTIONER_ACCEPT);
-	//}
-
-	//public static String questionerDeny() {
-	//
-	//	return getString(ConfigNodes.PLUGIN_QUESTIONER_DENY);
-	//}
+	public static int getConfirmationTimeoutSeconds() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_CONFIRMATION_TIMEOUT);
+	}
 	
 	public static long getTownInviteCooldown() {
 
