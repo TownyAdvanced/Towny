@@ -5870,3 +5870,6 @@ v0.92.0.11:
     - default: 20
     - How many seconds before a confirmation times out for the receiver. 
     - This is used for cost-confirmations and confirming important decisions.
+  - New Feature: Visualized SpawnPoints
+    - Adds a ring of particles on top of the various spawn points.
+    - Includes Jail, Outpost, Town and Nation Spawns.
