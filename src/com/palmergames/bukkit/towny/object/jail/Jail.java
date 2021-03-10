@@ -5,8 +5,10 @@ import java.util.UUID;
 
 import org.bukkit.Location;
 
+import com.palmergames.bukkit.towny.object.SpawnPoint;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.TownyUniverse;
 
 public class Jail {
@@ -56,12 +58,15 @@ public class Jail {
 	
 	public void addJailCell(Location location) {
 		jailCells.add(location);
+		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(location, SpawnPointType.JAIL_SPAWN));
 	}
 	
 	public void removeJailCell(int index) {
 		if (index > jailCells.size())
 			return;
+		TownyUniverse.getInstance().removeSpawnPoint(jailCells.get(--index));
 		jailCells.remove(--index);
+		
 	}
 	
 	public boolean hasJailCell(int index) {
