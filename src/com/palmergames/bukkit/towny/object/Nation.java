@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -14,6 +12,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
+import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -244,42 +243,9 @@ public class Nation extends Government {
 	}
 
 	@Override
-	public void setSpawn(Location spawn) throws TownyException {
-		if (TownyAPI.getInstance().isWilderness(spawn))
-			throw new TownyException(Translation.of("msg_cache_block_error_wild", "set spawn"));
-
-		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(spawn);
-
-		if(TownySettings.getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN)){
-			if(this.capital == null){
-				throw new TownyException(Translation.of("msg_err_spawn_not_within_capital"));
-			}
-			if(!townBlock.hasTown()){
-				throw new TownyException(Translation.of("msg_err_spawn_not_within_capital"));
-			}
-			if(townBlock.getTown() != this.getCapital()){
-				throw new TownyException(Translation.of("msg_err_spawn_not_within_capital"));
-			}
-		} else {
-			if(!townBlock.hasTown()){
-				throw new TownyException(Translation.of("msg_err_spawn_not_within_nationtowns"));
-			}
-
-			if(!towns.contains(townBlock.getTown())){
-				throw new TownyException(Translation.of("msg_err_spawn_not_within_nationtowns"));
-			}
-		}
-
+	public void setSpawn(Location spawn) {
 		this.nationSpawn = spawn;
-	}
-
-	/**
-	 * Only to be called from the Loading methods.
-	 *
-	 * @param nationSpawn - Location to set as Nation Spawn
-	 */
-	public void forceSetNationSpawn(Location nationSpawn){
-		this.nationSpawn = nationSpawn;
+		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.NATION_SPAWN));
 	}
 
 	public List<Resident> getAssistants() {

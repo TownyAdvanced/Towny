@@ -178,7 +178,7 @@ public class TownClaim extends Thread {
 			// Set the plot permissions to mirror the towns.
 			townBlock.setType(townBlock.getType());
 			if (isOutpost) {
-				townBlock.setOutpost(true); // set this to true to fineally find our problem!
+				townBlock.setOutpost(true);
 				town.addOutpostSpawn(outpostLocation);
 			}
 

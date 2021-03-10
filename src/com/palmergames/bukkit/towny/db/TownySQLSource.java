@@ -996,7 +996,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							loc.setPitch(Float.parseFloat(tokens[4]));
 							loc.setYaw(Float.parseFloat(tokens[5]));
 						}
-						town.forceSetSpawn(loc);
+						town.setSpawn(loc);
 					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
 					}
 			}
@@ -1243,7 +1243,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							loc.setPitch(Float.parseFloat(tokens[4]));
 							loc.setYaw(Float.parseFloat(tokens[5]));
 						}
-						nation.forceSetNationSpawn(loc);
+						nation.setSpawn(loc);
 					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
 					}
 			}
