@@ -1330,8 +1330,11 @@ flatfile_err_town_homeblock_not_exist: '[Warning] %s does not have a HomeBlock.'
 flatfile_err_townblock_file_contains_unregistered_town_delete: 'TownBlock file contains unregistered Town: %s, deleting %s'
 flatfile_err_townblock_file_missing_town_delete: 'TownBlock file missing Town, deleting %s'
 flatfile_err_townblock_file_unknown_err: 'TownBlock file contains unknown error, deleting %s.'
+msg_ta_removed_all_titles_and_surnames_removed: 'All residents have had their titles and surnames removed.'
 
 msg_ta_removed_all_titles_and_surnames_removed: 'All residents have had their titles and surnames removed.'
+
+msg_err_homeblock_already_set_here: 'This location is already your town''s homeblock.'
 
 #Added in 0.100
 msg_town_merge_err_mayor_only: '&cMerging can only be done by a mayor.'

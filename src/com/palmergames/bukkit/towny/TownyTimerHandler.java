@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.DrawSmokeTask;
+import com.palmergames.bukkit.towny.tasks.DrawSpawnPointsTask;
 import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
@@ -43,6 +44,7 @@ public class TownyTimerHandler{
 	private static int cooldownTimerTask = -1;
 	private static int drawSmokeTask = -1;
 	private static int gatherResidentUUIDTask = -1;
+	private static int drawSpawnPointsTask = -1;
 
 	public static void newDay() {
 
@@ -197,6 +199,17 @@ public class TownyTimerHandler{
 			TownyMessaging.sendDebugMsg("Shutting down GatherResidentUUIDTask.");
 		}
 	}
+	
+	public static void toggleDrawSpointsTask(boolean on) {
+		if (on && !isDrawSpawnPointsTaskRunning()) {
+			drawSpawnPointsTask = BukkitTools.scheduleAsyncRepeatingTask(new DrawSpawnPointsTask(plugin), 0, 20);
+			if (drawSpawnPointsTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule draw spawn points loop");			
+		} else if (!on && isDrawSpawnPointsTaskRunning()) {
+			BukkitTools.getScheduler().cancelTask(drawSpawnPointsTask);
+			drawSpawnPointsTask = -1;
+		}
+	}
 
 	public static boolean isTownyRepeatingTaskRunning() {
 
@@ -247,6 +260,11 @@ public class TownyTimerHandler{
 	public static boolean isGatherResidentUUIDTaskRunning() {
 		
 		return gatherResidentUUIDTask != -1;
+	}
+	
+	public static boolean isDrawSpawnPointsTaskRunning() {
+		
+		return drawSpawnPointsTask != -1;
 	}
 	
 	/**

@@ -1480,6 +1480,12 @@ public enum ConfigNodes {
 			"",
 			"# Command used to cancel some towny actions/tasks",
 			"#e.g Purging database or removing a large amount of townblocks"),
+	INVITE_SYSTEM_CONFIRMATION_TIMEOUT(
+			"invite_system.confirmation_timeout",
+			"20",
+			"",
+			"# How many seconds before a confirmation times out for the receiver.", 
+			"# This is used for cost-confirmations and confirming important decisions."),
 	INVITE_SYSTEM_COOLDOWN_TIME(
 			"invite_system.cooldowntime",
 			"0m",

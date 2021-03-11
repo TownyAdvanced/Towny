@@ -159,7 +159,7 @@ public class BankAccount extends Account {
 	 * @param amount the amount to add to the debtBalance.
 	 * @return true if the BankAccount is a town bank account.
 	 */
-	private boolean addDebt(double amount) throws EconomyException {
+	private boolean addDebt(double amount) {
 		if (isTownAccount()) {
 			setTownDebt(getTownDebt() + amount);
 			return true;
@@ -171,7 +171,7 @@ public class BankAccount extends Account {
 	 * @param amount the amount to remove from the debtBalance.
 	 * @return true always.
 	 */
-	private boolean removeDebt(double amount) throws EconomyException {
+	private boolean removeDebt(double amount) {
 		if (getTownDebt() < amount) {
 			// Calculate money to go into regular account.
 			double netMoney = amount - getTownDebt();

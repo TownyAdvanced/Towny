@@ -5863,3 +5863,14 @@ v0.92.0.11:
   - Make it so that admins can use /plot evict on any resident-owned plot.
     - Closes #4678.
   - Update banned town and nation names to reflect some of the newer commands.
+  - New Command: /ta database remove titles
+    - Removes all titles and surnames from all residents.
+0.96.7.6:
+  - New Config Node: invite_system.confirmation_timeout
+    - default: 20
+    - How many seconds before a confirmation times out for the receiver. 
+    - This is used for cost-confirmations and confirming important decisions.
+  - New Feature: Visualized SpawnPoints
+    - Adds a ring of particles on top of the various spawn points.
+    - Includes Jail, Outpost, Town and Nation Spawns.
+  - Fix $0 plot taxes being paid by residents.

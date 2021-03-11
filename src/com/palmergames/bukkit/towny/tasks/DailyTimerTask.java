@@ -428,6 +428,8 @@ public class DailyTimerTask extends TownyTimerTask {
 								continue;
 						
 						double tax = townBlock.getType().getTax(town);
+						if (tax < 1)
+							continue;
 
 						// If the tax would put the town over the bank cap we reduce what will be
 						// paid by the plot owner to what will be allowed.
