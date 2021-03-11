@@ -5873,3 +5873,4 @@ v0.92.0.11:
   - New Feature: Visualized SpawnPoints
     - Adds a ring of particles on top of the various spawn points.
     - Includes Jail, Outpost, Town and Nation Spawns.
+  - Fix $0 plot taxes being paid by residents.
