@@ -1641,11 +1641,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		}
 
-		for (Location outpost : outposts) {
-			try {
-				mergeInto.addOutpostSpawn(outpost);
-			} catch (TownyException ignored) {}
-		}
+		for (Location outpost : outposts)
+			mergeInto.addOutpostSpawn(outpost);
 
 		lock.unlock();
 		removeTown(mergeFrom, false);
