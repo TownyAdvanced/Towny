@@ -534,6 +534,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (TownySettings.getUpkeepPenalty() > 0 )
 				output.add(Translation.of("towny_prices_overclaimed_based_on", (TownySettings.isUpkeepPenaltyByPlot() ? Translation.of("towny_prices_overclaimed_num_plots") : Translation.of("towny_prices_overclaimed_flat_cost")), TownySettings.getUpkeepPenalty()));
 
+			output.add(Translation.of("towny_prices_town_merge", TownyEconomyHandler.getFormattedBalance(TownySettings.getBaseCostForTownMerge()), TownyEconomyHandler.getFormattedBalance(town.getTownBlockCost()/2)));
 			output.add(Translation.of("towny_prices_claiming_townblock", TownyEconomyHandler.getFormattedBalance(town.getTownBlockCost()) +  
 					(Double.valueOf(TownySettings.getClaimPriceIncreaseValue()).equals(1.0) ? "" : Translation.of("towny_prices_claiming_townblock_increase", new DecimalFormat("##.##%").format(TownySettings.getClaimPriceIncreaseValue()-1)))));
 			output.add(Translation.of("towny_prices_claiming_outposts", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())));
