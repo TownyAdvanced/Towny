@@ -184,7 +184,6 @@ public abstract class Account implements Nameable {
 	 *
 	 * @param amount currency to check for
 	 * @return true if there is enough.
-	 * @throws EconomyException if failure
 	 */
 	public boolean canPayFromHoldings(double amount) {
 		return TownyEconomyHandler.hasEnough(getName(), amount, getBukkitWorld());
@@ -288,7 +287,6 @@ public abstract class Account implements Nameable {
 	 * @param amount The amount to add.
 	 * @param reason The reason for adding.
 	 * @return boolean indicating success.
-	 * @throws EconomyException On an economy error.
 	 */
 	@Deprecated
 	public boolean collect(double amount, String reason) {
@@ -301,7 +299,6 @@ public abstract class Account implements Nameable {
 	 * @param amount The amount to subtract.
 	 * @param reason The reason for subcracting.
 	 * @return boolean indicating success.
-	 * @throws EconomyException On an economy error.
 	 */
 	@Deprecated
 	public boolean pay(double amount, String reason) {

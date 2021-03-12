@@ -737,9 +737,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_name"));
 						return;
 					}
-					Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-					if (!resident.isMayor())
-						throw new TownyException(Translation.of("msg_town_merge_err_mayor_only"));
 
 					parseTownMergeCommand(player, newSplit);
 				} else {
@@ -3544,11 +3541,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static void parseTownMergeCommand(Player player, String[] args) {
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		if (!resident.isMayor()) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_mayor_only"));
+			return;
+		}
+		Town remainingTown = TownyAPI.getInstance().getResidentTownOrNull(resident); // The isMayor() test guarantees we get a town.		
 		Town succumbingTown = TownyUniverse.getInstance().getTown(args[0]);
-		Town remainingTown = null;
-		try {
-			remainingTown = resident.getTown();
-		} catch (NotRegisteredException ignored) {}
 
 		// A lot of checks.
 		if (succumbingTown == null || succumbingTown.getName().equals(remainingTown.getName())) {
