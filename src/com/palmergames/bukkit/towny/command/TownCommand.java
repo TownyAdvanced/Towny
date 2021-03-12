@@ -933,11 +933,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			if (split.length < 2)
 				throw new TownyException("Eg: /town outlaw add/remove [name]");
 
-			if (!admin) {
+			if (!admin)
 				resident = getResidentOrThrow(sender.getName());
-			}
 			else
-				resident = town.getMayor();				
+				resident = town.getMayor();	// if this is an Admin-initiated command, dupe the action as if it were done by the mayor.
 			
 			target = townyUniverse.getResident(split[1]);
 			
@@ -948,24 +947,28 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 
 			if (target != null && split[0].equalsIgnoreCase("add")) {
 				try {
-					try {
-						targetTown = target.getTown();
-					} catch (Exception e1) {
-					}
+					// Get the target resident's town if they have a town.
+					if (target.hasTown())
+						targetTown = TownyAPI.getInstance().getResidentTownOrNull(target);
+					
 					// Don't allow a resident to outlaw their own mayor.
 					if (resident.getTown().getMayor().equals(target))
 						return;
+
 					// Kick outlaws from town if they are residents.
-					if (targetTown != null)
-						if (targetTown == town){
-							townRemoveResident(town, target);
-							String outlawer = (admin ? Translation.of("admin_sing") : sender.getName());
-							TownyMessaging.sendMsg(target, Translation.of("msg_kicked_by", outlawer));
-							TownyMessaging.sendPrefixedTownMessage(town,Translation.of("msg_kicked", outlawer, target.getName()));
-						}
+					if (targetTown != null && targetTown.getUUID().equals(town.getUUID())) {
+						townRemoveResident(town, target);
+						String outlawer = (admin ? Translation.of("admin_sing") : sender.getName());
+						TownyMessaging.sendMsg(target, Translation.of("msg_kicked_by", outlawer));
+						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_kicked", outlawer, target.getName()));
+					}
+					
+					// Add the outlaw and save the town.
 					town.addOutlaw(target);
 					town.save();
-					if (target.getPlayer().isOnline())
+					
+					// Send feedback messages.
+					if (target.getPlayer() != null && target.getPlayer().isOnline())
 						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_declared_outlaw", town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_you_have_declared_an_outlaw", target.getName(), town.getName()));
 					if (admin)
@@ -980,7 +983,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				if (town.hasOutlaw(target)) {
 					town.removeOutlaw(target);
 					town.save();
-					if (target.getPlayer().isOnline())
+					if (target.getPlayer() != null && target.getPlayer().isOnline())
 						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_undeclared_outlaw", town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_you_have_undeclared_an_outlaw", target.getName(), town.getName()));
 					if (admin)

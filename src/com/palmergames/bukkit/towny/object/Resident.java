@@ -34,6 +34,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -630,6 +631,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
 	}
 	
+	@Nullable
 	public Player getPlayer() {
 		return BukkitTools.getPlayer(getName());
 	}
