@@ -19,6 +19,8 @@ import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
+import com.palmergames.bukkit.towny.event.town.TownMergeEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreMergeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
@@ -82,7 +84,6 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
@@ -94,13 +95,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
  * Send a list of all town help commands to player Command: /town
  */
 
-public class TownCommand extends BaseCommand implements CommandExecutor, TabCompleter {
+public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
 
@@ -133,7 +135,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		"invite",
 		"buy",
 		"mayor",
-		"bankhistory"
+		"bankhistory",
+		"merge"
 		);
 	private static final List<String> townSetTabCompletes = Arrays.asList(
 		"board",
@@ -230,6 +233,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 				case "plots":
 				case "delete":
 				case "join":
+				case "merge":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "t");
 					break;
@@ -725,7 +729,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 						}
 
 					TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().generateBankHistoryBook(player, pages);
+				} else if (split[0].equalsIgnoreCase("merge")) {
+					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_MERGE.getNode()))
+						throw new TownyException(Translation.of("msg_err_command_disable"));
 
+					if (split.length < 2) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_name"));
+						return;
+					}
+					Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+					if (!resident.isMayor())
+						throw new TownyException(Translation.of("msg_town_merge_err_mayor_only"));
+
+					parseTownMergeCommand(player, newSplit);
 				} else {
 					/*
 					 * We've gotten this far without a match, check if the argument is a town name.
@@ -3526,6 +3542,133 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 		}
 	}
 
+	public static void parseTownMergeCommand(Player player, String[] args) {
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		Town succumbingTown = TownyUniverse.getInstance().getTown(args[0]);
+		Town remainingTown = null;
+		try {
+			remainingTown = resident.getTown();
+		} catch (NotRegisteredException ignored) {}
+
+		// A lot of checks.
+		if (succumbingTown == null || succumbingTown.getName().equals(remainingTown.getName())) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_name", args[0]));
+			return;
+		}
+		
+		if (TownySettings.getMaxDistanceForTownMerge() > 0 && homeBlockDistance(remainingTown, succumbingTown) > TownySettings.getMaxDistanceForTownMerge()) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_not_close", succumbingTown.getName(), TownySettings.getMaxDistanceForTownMerge()));
+			return;
+		}
+
+		int newResidentsAmount = remainingTown.getResidents().size() + succumbingTown.getResidents().size();
+		if (TownySettings.getMaxResidentsPerTown() > 0 && newResidentsAmount > TownySettings.getMaxResidentsPerTown()) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_residents", TownySettings.getMaxResidentsPerTown()));
+			return;
+		}
+		
+		if ((remainingTown.getTownBlocks().size() + succumbingTown.getTownBlocks().size()) > TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_townblocks", TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)));
+			return;
+		}
+
+		if ((remainingTown.getPurchasedBlocks() + succumbingTown.getPurchasedBlocks()) > TownySettings.getMaxPurchasedBlocks(remainingTown)) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_purchased_townblocks", TownySettings.getMaxPurchasedBlocks(remainingTown)));
+			return;
+		}
+
+		if (TownySettings.isAllowingOutposts() && (remainingTown.getMaxOutpostSpawn() + succumbingTown.getMaxOutpostSpawn()) > remainingTown.getOutpostLimit()) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_outposts", remainingTown.getOutpostLimit()));
+			return;
+		}
+
+		if (!BukkitTools.isOnline(succumbingTown.getMayor().getName()) || succumbingTown.getMayor().isNPC()) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_other_offline", succumbingTown.getName(), succumbingTown.getMayor().getName()));
+			return;
+		}
+
+		double baseCost = TownySettings.getBaseCostForTownMerge();
+		double townblockCost = 0;
+		double bankruptcyCost = 0;
+		double cost = 0;
+		if (TownyEconomyHandler.isActive()) {
+			try {
+				townblockCost = remainingTown.getTownBlockCostN(succumbingTown.getTownBlocks().size()) * (TownySettings.getPercentageCostPerPlot() * 0.01);
+				if (succumbingTown.isBankrupt())
+					bankruptcyCost = Math.abs(succumbingTown.getAccount().getHoldingBalance());
+				
+				cost = baseCost + townblockCost + bankruptcyCost;
+
+				if (!remainingTown.getAccount().canPayFromHoldings(cost)) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_not_enough_money", (int) remainingTown.getAccount().getHoldingBalance(), (int) cost));
+					return;
+				}
+			} catch (TownyException | EconomyException e) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_failed"));
+				return;
+			}			
+		}
+		
+		if (cost > 0) {
+			TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_warning", succumbingTown.getName(), TownyEconomyHandler.getFormattedBalance(cost)));
+			if (bankruptcyCost > 0)
+				TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_debt_warning", succumbingTown.getName()));
+			TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_cost_breakdown", TownyEconomyHandler.getFormattedBalance(baseCost), TownyEconomyHandler.getFormattedBalance(townblockCost), TownyEconomyHandler.getFormattedBalance(bankruptcyCost)));
+			final Town finalSuccumbingTown = succumbingTown;
+			final Town finalRemainingTown = remainingTown;
+			final double finalCost = cost;
+			Confirmation.runOnAccept(() -> {
+				sendTownMergeRequest(player, finalRemainingTown, finalSuccumbingTown, finalCost);
+			}).runOnCancel(() -> {
+				TownyMessaging.sendMsg(player, Translation.of("msg_town_merge_cancelled"));
+				return;
+			}).sendTo(player);
+		} else
+			sendTownMergeRequest(player, remainingTown, succumbingTown, cost);
+	}
+
+	private static void sendTownMergeRequest(Player sender, Town remainingTown, Town succumbingTown, double cost) {
+		Resident resident = TownyUniverse.getInstance().getResident(sender.getUniqueId());
+		TownyMessaging.sendMsg(sender, Translation.of("msg_town_merge_request_sent", succumbingTown.getName()));
+		TownyMessaging.sendMsg(succumbingTown.getMayor(), Translation.of("msg_town_merge_request_received", remainingTown.getName(), resident.getName(), remainingTown.getName()));
+
+		final Town finalSuccumbingTown = succumbingTown;
+		final Town finalRemainingTown = remainingTown;
+		final double finalCost = cost;
+		Confirmation.runOnAccept(() -> {
+			if (TownyEconomyHandler.isActive()) {
+				// Check if town can still pay merging costs.
+				try {
+					if (!finalRemainingTown.getAccount().canPayFromHoldings(finalCost))
+						TownyMessaging.sendErrorMsg(sender, Translation.of("msg_town_merge_err_not_enough_money", (int) finalRemainingTown.getAccount().getHoldingBalance(), (int) finalCost));
+				} catch (EconomyException ignored) {}
+			}
+
+			TownPreMergeEvent townPreMergeEvent = new TownPreMergeEvent(finalSuccumbingTown, finalRemainingTown);
+			Bukkit.getPluginManager().callEvent(townPreMergeEvent);
+			if (townPreMergeEvent.isCancelled()) {
+				TownyMessaging.sendErrorMsg(finalSuccumbingTown.getMayor().getPlayer(), townPreMergeEvent.getCancelMessage());
+				TownyMessaging.sendErrorMsg(sender, townPreMergeEvent.getCancelMessage());
+				return;
+			}
+
+			UUID succumbingTownUUID = finalSuccumbingTown.getUUID();
+			String succumbingTownName = finalSuccumbingTown.getName();
+
+			// Start merge
+			if (finalCost > 0) {
+				finalRemainingTown.getAccount().withdraw(finalCost, Translation.of("msg_town_merge_cost_withdraw"));
+			}
+			TownyUniverse.getInstance().getDataSource().mergeTown(finalRemainingTown, finalSuccumbingTown);
+
+			TownMergeEvent townMergeEvent = new TownMergeEvent(finalRemainingTown, succumbingTownName, succumbingTownUUID);
+			Bukkit.getPluginManager().callEvent(townMergeEvent);
+		}).runOnCancel(() -> {
+			TownyMessaging.sendMsg(sender, Translation.of("msg_town_merge_request_denied"));
+			TownyMessaging.sendMsg(succumbingTown.getMayor(), Translation.of("msg_town_merge_cancelled"));
+		}).sendTo(BukkitTools.getPlayerExact(succumbingTown.getMayor().getName()));
+	}
+
 	public static boolean isEdgeBlock(TownBlockOwner owner, List<WorldCoord> worldCoords) {
 
 		// TODO: Better algorithm that doesn't duplicates checks.
@@ -3738,5 +3881,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor, TabComp
 			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOutlaws(town));
 		else 
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_name"));
+	}
+
+	private static int homeBlockDistance(Town town1, Town town2) {
+		try {
+			return (int) Math.sqrt((Math.abs(town1.getHomeBlock().getX() - town2.getHomeBlock().getX())^2) + (Math.abs(town1.getHomeBlock().getZ() - town2.getHomeBlock().getZ())^2));
+		} catch (TownyException e) {
+			return Integer.MAX_VALUE;
+		}
 	}
 }

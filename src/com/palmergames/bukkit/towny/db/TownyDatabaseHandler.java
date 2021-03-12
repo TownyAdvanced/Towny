@@ -22,11 +22,13 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -1561,5 +1563,91 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			saveTown(town);
 		}
 		lock.unlock();
+	}
+
+	/**
+	 * Merges the mergeFrom town into the mergeInto town.
+	 * @param mergeInto The town that the other town merges into.
+	 * @param mergeFrom The town that will be deleted.
+	 */
+	public void mergeTown(Town mergeInto, Town mergeFrom) {
+		if (TownyEconomyHandler.isActive()) {
+			try {
+				if (mergeFrom.getAccount().getHoldingBalance() > 0)
+					mergeFrom.getAccount().payTo(mergeFrom.getAccount().getHoldingBalance(), mergeInto, Translation.of("msg_town_merge_transaction_reason"));
+			} catch (EconomyException ignored) {}
+		}
+
+		lock.lock();
+		boolean isSameNation = false;
+		if (mergeInto.hasNation() && mergeFrom.hasNation()) {
+			try {
+				isSameNation = mergeInto.getNation().hasTown(mergeFrom);
+			} catch (NotRegisteredException ignored) {}
+		}
+		String mayorName = mergeFrom.getMayor().getName();
+		List<Location> jails = new ArrayList<Location>(mergeFrom.getAllJailSpawns());
+		List<Location> outposts = new ArrayList<Location>(mergeFrom.getAllOutpostSpawns());
+
+		mergeInto.addPurchasedBlocks(mergeFrom.getPurchasedBlocks());
+		mergeInto.addBonusBlocks(mergeFrom.getBonusBlocks());
+
+		for (TownBlock tb : mergeFrom.getTownBlocks()) {
+			tb.setTown(mergeInto);
+			tb.save();
+		}
+		
+		List<Resident> residents = new ArrayList<Resident>(mergeFrom.getResidents());
+		for (Resident resident : residents) {
+			try {
+				if (mergeInto.hasOutlaw(resident))
+					continue;
+				
+				List<String> nationRanks = new ArrayList<String>(resident.getNationRanks());
+				
+				resident.removeTown();
+				resident.setTown(mergeInto);
+
+				if (isSameNation) {
+					for (String rank : nationRanks)
+						resident.addNationRank(rank);
+				}
+				resident.save();
+			} catch (TownyException ignored) {}
+		}
+
+		for (Resident outlaw : mergeFrom.getOutlaws()) {
+			if (!mergeInto.hasOutlaw(outlaw) && !mergeInto.hasResident(outlaw)) {
+				try {
+					mergeInto.addOutlaw(outlaw);
+				} catch (AlreadyRegisteredException ignored) {}
+			}
+		}
+
+		for (Location jail : jails) {
+			try {
+				TownBlock jailPlot = TownyAPI.getInstance().getTownBlock(jail);
+				if (jailPlot.getType() != TownBlockType.JAIL)
+					jailPlot.setType(TownBlockType.JAIL);
+				
+				mergeInto.addJailSpawn(jail);
+			} catch (TownyException ignored) {}
+		}
+
+		for (Resident jailedResident : TownyUniverse.getInstance().getJailedResidentMap()) {
+			if (jailedResident.hasJailTown(mergeFrom.getName())) {
+				jailedResident.setJailTown(mergeInto.getName());
+				jailedResident.setJailSpawn(jailedResident.getJailSpawn() + mergeInto.getAllJailSpawns().size());
+			}
+		}
+
+		for (Location outpost : outposts)
+			mergeInto.addOutpostSpawn(outpost);
+
+		lock.unlock();
+		removeTown(mergeFrom, false);
+
+		mergeInto.save();
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_town_merge_success", mergeFrom.getName(), mayorName, mergeInto.getName()));
 	}
 }

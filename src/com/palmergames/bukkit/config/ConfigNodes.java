@@ -139,6 +139,11 @@ public enum ConfigNodes {
 			"3000",
 			"",
 			"# Maximum number of towns allowed on the server."),
+	TOWN_MAX_DISTANCE_FOR_MERGE(
+			"town.max_distance_for_merge",
+			"10",
+			"",
+			"# The maximum distance (in townblocks) that 2 town's homeblocks can be to be eligible for merging."),
 	TOWN_MIN_DISTANCE_IGNORED_FOR_NATIONS(
 			"town.min_distances_ignored_for_towns_in_same_nation",
 			"true",
@@ -1684,6 +1689,15 @@ public enum ConfigNodes {
 			"250.0",
 			"",
 			"# How much it costs to start a town."),
+	ECO_PRICE_TOWN_MERGE(
+			"economy.new_expand.price_town_merge",
+			"0",
+			"# The base cost a town has to pay to merge with another town. The town that initiates the merge pays the cost."),
+	ECO_PRICE_TOWN_MERGE_PER_PLOT_PERCENTAGE(
+			"economy.new_expand.price_town_merge_per_plot_percentage",
+			"50",
+			"# The percentage that a town has to pay per plot to merge with another town. The town that initiates the merge pays the cost.",
+			"# This is based on the price_claim_townblock."),
 	ECO_PRICE_RECLAIM_RUINED_TOWN(
 			"economy.new_expand.price_reclaim_ruined_town",
 			"500.0",

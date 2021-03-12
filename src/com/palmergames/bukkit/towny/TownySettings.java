@@ -202,6 +202,10 @@ public class TownySettings {
 		return getTownLevel(calcTownLevel(town));
 	}
 
+	public static Map<TownySettings.TownLevel, Object> getTownLevel(Town town, int residents) {
+		return getTownLevel(calcTownLevel(town, residents));
+	}
+
 	public static Map<TownySettings.NationLevel, Object> getNationLevel(Nation nation) {
 
 		return getNationLevel(calcNationLevel(nation));
@@ -222,6 +226,15 @@ public class TownySettings {
 		int n = town.getNumResidents();
 		for (Integer level : configTownLevel.keySet())
 			if (n >= level)
+				return level;
+		return 0;
+	}
+
+	public static int calcTownLevel(Town town, int residents) {
+		if (town.isRuined())
+			return 0;
+		for (int level : configTownLevel.keySet())
+			if (residents >= level)
 				return level;
 		return 0;
 	}
@@ -937,6 +950,19 @@ public class TownySettings {
 		n += getNationBonusBlocks(town);
 
 		return n;
+	}
+
+	public static int getMaxTownBlocks(Town town, int residents) {
+		int ratio = getTownBlockRatio();
+		int amount = town.getBonusBlocks() + town.getPurchasedBlocks();
+
+		if (ratio == 0)
+			amount += (int) getTownLevel(town, residents).get(TownySettings.TownLevel.TOWN_BLOCK_LIMIT);
+		else
+			amount += residents * ratio;
+
+		amount += getNationBonusBlocks(town);
+		return amount;
 	}
 	
 	public static int getMaxOutposts(Town town) {
@@ -2097,6 +2123,18 @@ public class TownySettings {
 	public static int getMinDistanceFromTownPlotblocks() {
 
 		return getInt(ConfigNodes.TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT);
+	}
+
+	public static int getMaxDistanceForTownMerge() {
+		return getInt(ConfigNodes.TOWN_MAX_DISTANCE_FOR_MERGE);
+	}
+
+	public static int getBaseCostForTownMerge() {
+		return getInt(ConfigNodes.ECO_PRICE_TOWN_MERGE);
+	}
+
+	public static int getPercentageCostPerPlot() {
+		return getInt(ConfigNodes.ECO_PRICE_TOWN_MERGE_PER_PLOT_PERCENTAGE);
 	}
 	
 	public static boolean isMinDistanceIgnoringTownsInSameNation() {
