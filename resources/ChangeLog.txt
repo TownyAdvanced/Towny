@@ -5896,3 +5896,7 @@ v0.92.0.11:
   - Bump language files to 0.100.
   - Fix TownPreMergeEvent being set improperly.
   - Fix NPE when deleting a Town.
+0.96.7.7:
+  - Fix "Error Updating item_use/build/destroy permission" messages seen in EventWar.
+    - Closes #4802.
+  - Do a tidy of the PlayerCacheUtil so we aren't throwing and catching NREs.
