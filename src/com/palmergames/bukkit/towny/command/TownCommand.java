@@ -2467,6 +2467,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
 				if ((minDistFromOtherTowns > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 					throw new TownyException(Translation.of("msg_too_far"));
+			
+			Location spawnLocation = player.getLocation();
 
 			// If the town isn't free to make, send a confirmation.
 			if (!noCharge && TownyEconomyHandler.isActive()) { 
@@ -2484,7 +2486,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					
 					try {
 						// Make town.
-						newTown(world, name, resident, key, player.getLocation(), player);
+						newTown(world, name, resident, key, spawnLocation, player);
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 						e.printStackTrace();
@@ -2496,7 +2498,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// Or, if the town doesn't cost money to create, just make the Town.
 			} else {
-				newTown(world, name, resident, key, player.getLocation(), player);
+				newTown(world, name, resident, key, spawnLocation, player);
 				TownyMessaging.sendGlobalMessage(Translation.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(name)));
 			}
 		} catch (TownyException x) {
