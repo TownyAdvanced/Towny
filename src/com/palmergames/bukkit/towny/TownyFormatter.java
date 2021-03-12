@@ -337,7 +337,7 @@ public class TownyFormatter {
 		// (PvP) (Open) (Peaceful)
 		out.add(ChatTools.formatTitle(town.getFormattedName()));
 		List<String> sub = new ArrayList<>();
-		if (!town.isAdminDisabledPVP() && (town.isPVP() || town.getHomeblockWorld().isForcePVP()))
+		if (!town.isAdminDisabledPVP() && (town.isPVP() || world.isForcePVP()))
 			sub.add(Translation.of("status_title_pvp"));
 		if (town.isOpen())
 			sub.add(Translation.of("status_title_open"));
