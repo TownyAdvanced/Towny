@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
+import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -294,5 +295,14 @@ public class WarZoneListener implements Listener {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	@EventHandler
+	public void onTownBlockPVPTest(TownBlockPVPTestEvent event) {
+		if (!TownyAPI.getInstance().isWarTime())
+			return;
+		
+		if (War.isWarZone(event.getTownBlock().getWorldCoord()))
+			event.setPvp(true);
 	}
 }

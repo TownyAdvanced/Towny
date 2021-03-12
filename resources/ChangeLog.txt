@@ -5875,3 +5875,4 @@ v0.92.0.11:
     - Includes Jail, Outpost, Town and Nation Spawns.
   - Fix $0 plot taxes being paid by residents.
   - Fix for a "null" feedback message when using /t outlaw add NAME.
+  - Fix EventWar not turning PVP on in the townblocks where the war is active.
