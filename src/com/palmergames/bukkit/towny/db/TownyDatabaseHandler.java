@@ -777,12 +777,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (Exception ignored) {
 			}
 
-		try {
-			townyWorld.removeTown(town);
-		} catch (NotRegisteredException e) {
-			// Must already be removed
+		if (townyWorld != null) {
+			try {
+				townyWorld.removeTown(town);
+			} catch (NotRegisteredException e) {
+				// Must already be removed
+			}
+			saveWorld(townyWorld);
 		}
-		saveWorld(townyWorld);
 
 		try {
 			universe.unregisterTown(town);
