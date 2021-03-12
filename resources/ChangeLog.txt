@@ -5894,3 +5894,5 @@ v0.92.0.11:
     - The percentage that a town has to pay per plot to merge with another town. The town that initiates the merge pays the cost.
     - This is based on the price_claim_townblock.
   - Bump language files to 0.100.
+  - Fix TownPreMergeEvent being set improperly.
+  - Fix NPE when deleting a Town.

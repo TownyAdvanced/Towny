@@ -747,11 +747,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			return;
 		
 		Resident mayor = town.getMayor();
+		TownyWorld townyWorld = town.getHomeblockWorld();
 		
 		removeTownBlocks(town);
 
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
-		TownyWorld townyWorld = town.getHomeblockWorld();
 
 		if (town.hasNation()) {
 			town.removeNation();

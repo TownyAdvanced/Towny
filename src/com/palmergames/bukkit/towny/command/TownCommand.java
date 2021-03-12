@@ -3642,7 +3642,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} catch (EconomyException ignored) {}
 			}
 
-			TownPreMergeEvent townPreMergeEvent = new TownPreMergeEvent(finalSuccumbingTown, finalRemainingTown);
+			TownPreMergeEvent townPreMergeEvent = new TownPreMergeEvent(finalRemainingTown, finalSuccumbingTown);
 			Bukkit.getPluginManager().callEvent(townPreMergeEvent);
 			if (townPreMergeEvent.isCancelled()) {
 				TownyMessaging.sendErrorMsg(finalSuccumbingTown.getMayor().getPlayer(), townPreMergeEvent.getCancelMessage());
