@@ -5901,3 +5901,4 @@ v0.92.0.11:
     - Closes #4802.
   - Do a tidy of the PlayerCacheUtil so we aren't throwing and catching NREs.
   - Regression: Remove "spawn" from the list of black-listed Town/Nation names, added to the list recently in error.
+  - Fix unbankrupting a town resetting a town's bank account, vanishing any money that might have been added to the town bank manually during bankruptcy.
