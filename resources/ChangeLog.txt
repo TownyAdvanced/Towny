@@ -5900,3 +5900,4 @@ v0.92.0.11:
   - Fix "Error Updating item_use/build/destroy permission" messages seen in EventWar.
     - Closes #4802.
   - Do a tidy of the PlayerCacheUtil so we aren't throwing and catching NREs.
+  - Regression: Remove "spawn" from the list of black-listed Town/Nation names, added to the list recently in error.
