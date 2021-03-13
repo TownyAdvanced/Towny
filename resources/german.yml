@@ -1340,7 +1340,7 @@ msg_err_homeblock_already_set_here: 'This location is already your town''s homeb
 
 #Added in 0.100
 msg_town_merge_err_mayor_only: '&cMerging can only be done by a mayor.'
-msg_town_merge_err_not_close: '&cThe town of %s is too far away from your town. Their homeblock has to be at least %d townblocks from your homeblock.'
+msg_town_merge_err_not_close: '&cThe town of %s is too far away from your town. Their homeblock has to be within %d townblocks of your homeblock.'
 msg_town_merge_request_sent: '&bMerge request sent to the mayor of %s.'
 msg_town_merge_request_received: '&bThe mayor of %s, %s, has requested to merge with your town. This will transfer all townblocks, residents and town bank money to %s.'
 msg_town_merge_request_denied: '&cMerge request denied.'
