@@ -182,6 +182,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_PLOT_UNCLAIM("towny.command.plot.unclaim"),
 		TOWNY_COMMAND_PLOT_NOTFORSALE("towny.command.plot.notforsale"),
 		TOWNY_COMMAND_PLOT_FORSALE("towny.command.plot.forsale"),
+		TOWNY_COMMAND_PLOT_JAILCELL("towny.command.plot.jailcell"),
 		TOWNY_COMMAND_PLOT_PERM("towny.command.plot.perm"),
 		TOWNY_COMMAND_PLOT_PERM_HUD("towny.command.plot.perm.hud"),
 		

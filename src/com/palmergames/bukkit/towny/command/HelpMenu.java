@@ -623,6 +623,15 @@ public enum HelpMenu {
 				.add("", "/nation toggle", "public", "")
 				.add("", "/nation toggle", "open", "");
 		}
+	}, 
+	
+	PLOT_JAILCELL {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot jailcell")
+				.add("", "/plot jailcell", "add", "Adds a JailCell where you stand.")
+				.add("", "/plot jailcell", "remove", "Removes a JailCell where you stand.");
+		}
 	};
 
 
