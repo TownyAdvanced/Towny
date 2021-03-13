@@ -456,6 +456,7 @@ permissions:
             towny.command.plot.clear: true
             towny.command.plot.evict: true
             towny.command.plot.forsale: true
+            towny.command.plot.jailcell: true
             towny.command.plot.notforsale: true
             towny.command.plot.perm: true
             towny.command.plot.perm.hud: true
