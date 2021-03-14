@@ -179,7 +179,7 @@ public class TownyAsciiMap {
 		CompoundTag compoundTag = new CompoundTag();
 		compoundTag.putString("town", townblock != null && townblock.hasTown() ? townblock.getTown().getName() : "");
 		compoundTag.putString("ownerStatus", townblock != null && townblock.hasResident() ? townblock.getResident().getName() : "");
-		ListTag<ListTag<StringTag>> listTag = new ListTag<>(ListTag.class);
+		ListTag<ListTag<StringTag>> townyMapListTag = new ListTag<>(ListTag.class);
 		for (String[] coordY : townyMap)
 		{
 			ListTag<StringTag> coordsList = new ListTag<>(StringTag.class);
@@ -187,26 +187,26 @@ public class TownyAsciiMap {
 			{
 				coordsList.addString(coordX);
 			}
-			listTag.add(coordsList);
+			townyMapListTag.add(coordsList);
 		}
-		compoundTag.put("map", listTag);
+		compoundTag.put("map", townyMapListTag);
 		compoundTag.putInt("lineWidth", lineWidth);
 		compoundTag.putInt("lineHeight", lineHeight);
-		ListTag<ListTag<StringTag>> listTag1 = new ListTag<>(ListTag.class);
+		ListTag<ListTag<StringTag>> townBlockTypeListTag = new ListTag<>(ListTag.class);
 		for (TownBlockType blockType : TownBlockType.values())
 		{
 			ListTag<StringTag> typeData = new ListTag<>(StringTag.class);
 			typeData.addString(blockType.getAsciiMapKey());
 			typeData.addString(blockType.toString());
-			listTag1.add(typeData);
+			townBlockTypeListTag.add(typeData);
 		}
-		compoundTag.put("townBlockTypes", listTag1);
-		ListTag<StringTag> listTag2 = new ListTag<>(StringTag.class);
+		compoundTag.put("townBlockTypes", townBlockTypeListTag);
+		ListTag<StringTag> helpTypeListTag = new ListTag<>(StringTag.class);
 		for (String helpItem : help)
 		{
-			listTag2.addString(helpItem);
+			helpTypeListTag.addString(helpItem);
 		}
-		compoundTag.put("townHelpTypes", listTag2);
+		compoundTag.put("townHelpTypes", helpTypeListTag);
 		int[] chunkCoords = new int[2];
 		chunkCoords[0] = pos.getX();
 		chunkCoords[1] = pos.getZ();
