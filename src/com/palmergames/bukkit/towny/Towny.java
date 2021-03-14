@@ -420,6 +420,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
 		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
+		TownyTimerHandler.toggleDrawSpointsTask(true);
 		if (!TownySettings.getUUIDPercent().equals("100%") && TownySettings.isGatheringResidentUUIDS())
 			TownyTimerHandler.toggleGatherResidentUUIDTask(true);
 	}
@@ -435,6 +436,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleTeleportWarmup(false);
 		TownyTimerHandler.toggleCooldownTimer(false);
 		TownyTimerHandler.toggleDrawSmokeTask(false);
+		TownyTimerHandler.toggleDrawSpointsTask(false);
 	}
 
 	private void registerEvents() {

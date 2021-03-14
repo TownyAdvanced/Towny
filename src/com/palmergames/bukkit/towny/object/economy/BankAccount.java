@@ -159,7 +159,7 @@ public class BankAccount extends Account {
 	 * @param amount the amount to add to the debtBalance.
 	 * @return true if the BankAccount is a town bank account.
 	 */
-	private boolean addDebt(double amount) throws EconomyException {
+	private boolean addDebt(double amount) {
 		if (isTownAccount()) {
 			setTownDebt(getTownDebt() + amount);
 			return true;
@@ -171,14 +171,18 @@ public class BankAccount extends Account {
 	 * @param amount the amount to remove from the debtBalance.
 	 * @return true always.
 	 */
-	private boolean removeDebt(double amount) throws EconomyException {
+	private boolean removeDebt(double amount) {
 		if (getTownDebt() < amount) {
 			// Calculate money to go into regular account.
 			double netMoney = amount - getTownDebt();
 			//Clear debt account
 			setTownDebt(0.0);
+			// Sometimes there's money in the bank account 
+			// (from a player manually putting money in via
+			// eco plugin, maybe.)
+			double bankBalance = TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
 			//Set positive balance in regular account
-			TownyEconomyHandler.setBalance(getName(), netMoney, world);
+			TownyEconomyHandler.setBalance(getName(), bankBalance + netMoney, world);
 			return true;
 		} else {
 			setTownDebt(getTownDebt() - amount);
