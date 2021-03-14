@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.event.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.NationTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.TownTransactionEvent;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -60,7 +59,7 @@ public class MoneyUtil {
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_withdrew_xx", resident.getName(), amount, Translation.of("town_sing")));
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 			
-		} catch (TownyException | EconomyException e) {
+		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
 
@@ -90,7 +89,7 @@ public class MoneyUtil {
 			
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 			
-		} catch (TownyException | EconomyException e) {
+		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
 
@@ -114,7 +113,7 @@ public class MoneyUtil {
 			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_withdrew_xx", resident.getName(), amount, Translation.of("nation_sing")));
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 			
-		} catch (TownyException | EconomyException e) {
+		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
 		
@@ -138,7 +137,7 @@ public class MoneyUtil {
 			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("nation_sing")));
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 			
-		} catch (TownyException | EconomyException e) {
+		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
 	}
@@ -153,9 +152,8 @@ public class MoneyUtil {
 	 * @param nation boolean that is True if this is a nation transaction and not a town transaction.
 	 * @param withdraw boolean that is True if this is withdraw and not a deposit. 
 	 * @throws TownyException thrown if any of the tests are failed.
-	 * @throws EconomyException thrown if any of the economy accounts are not found.
 	 */
-	private static void commonTests(int amount, Resident resident, Town town, Location loc, boolean nation, boolean withdraw) throws TownyException, EconomyException {
+	private static void commonTests(int amount, Resident resident, Town town, Location loc, boolean nation, boolean withdraw) throws TownyException {
 		
 		if (!TownyEconomyHandler.isActive())
 			throw new TownyException(Translation.of("msg_err_no_economy"));

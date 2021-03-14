@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.PlotGroup;
@@ -155,12 +154,6 @@ public class PlotClaim extends Thread {
 					} else {
 						residentUnclaim(worldCoord);
 					}
-				} catch (EconomyException e) {
-					/*
-					 * Can't pay, but try the rest as we may be
-					 * re-possessing and claiming for personal plots.
-					 */
-					TownyMessaging.sendErrorMsg(player, e.getError());
 				} catch (TownyException x) {
 					TownyMessaging.sendErrorMsg(player, x.getMessage());
 				}
@@ -196,10 +189,9 @@ public class PlotClaim extends Thread {
 	 * @param worldCoords The coordinates of the blocks to be claimed.
 	 * @return A boolean indicating if the transaction was successful.
 	 * @throws TownyException Whenever an object could not be retrieved.
-	 * @throws EconomyException Whenever a sender cannot pay for transaction.
 	 * @author Suneet Tipirneni (Siris)
 	 */
-	private boolean residentGroupClaim(List<WorldCoord> worldCoords) throws TownyException, EconomyException {
+	private boolean residentGroupClaim(List<WorldCoord> worldCoords) throws TownyException {
 		
 		for (int i = 0; i < worldCoords.size(); ++i) {
 			
@@ -293,7 +285,7 @@ public class PlotClaim extends Thread {
 		return true;
 	}
 
-	private boolean residentClaim(WorldCoord worldCoord) throws TownyException, EconomyException {
+	private boolean residentClaim(WorldCoord worldCoord) throws TownyException {
 
 		try {
 			TownBlock townBlock = worldCoord.getTownBlock();

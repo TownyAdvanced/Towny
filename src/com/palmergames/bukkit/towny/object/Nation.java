@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -426,7 +425,7 @@ public class Nation extends Government {
 		return false;
 	}
 	
-	public void collect(double amount) throws EconomyException {
+	public void collect(double amount) {
 		
 		if (TownyEconomyHandler.isActive()) {
 			double bankcap = TownySettings.getNationBankCap();

@@ -36,7 +36,6 @@ import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePVPEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePublicEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleTaxPercentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -1692,7 +1691,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	public static void townSet(Player player, String[] split, boolean admin, Town town) throws TownyException, EconomyException {
+	public static void townSet(Player player, String[] split, boolean admin, Town town) throws TownyException {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
 		if (split.length == 0) {
@@ -2070,7 +2069,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
                     if(TownyEconomyHandler.isActive() && TownySettings.getTownRenameCost() > 0) {
                 		if (!town.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost()))							
-							throw new EconomyException(Translation.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
+							throw new TownyException(Translation.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
 
                     	final Town finalTown = town;
                     	final String name = split[1];
@@ -2310,15 +2309,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			try {
 				if (split[0].equalsIgnoreCase("bonus")) {
-					if (split.length == 2) {
-						try {
-							townBuyBonusTownBlocks(town, Integer.parseInt(split[1].trim()), player);
-						} catch (EconomyException e) {
-							player.sendMessage(e.getMessage());
-						}
-					} else {
+					if (split.length == 2)
+						townBuyBonusTownBlocks(town, Integer.parseInt(split[1].trim()), player);
+					else
 						throw new TownyException(Translation.of("msg_must_specify_amnt", "/town buy bonus"));
-					}
 				}
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
@@ -2333,9 +2327,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param inputN - Number of townblocks being bought.
 	 * @param player - Player.
 	 * @throws TownyException - Exception.
-	 * @throws EconomyException - If the town cannot pay.
 	 */
-	public static void townBuyBonusTownBlocks(Town town, int inputN, Player player) throws EconomyException, TownyException {
+	public static void townBuyBonusTownBlocks(Town town, int inputN, Player player) throws TownyException {
 
 		if (inputN < 0)
 			throw new TownyException(Translation.of("msg_err_negative"));
@@ -2354,7 +2347,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			double cost = town.getBonusBlockCostN(n);
 			// Test if the town can pay and throw economy exception if not.
 			if (!town.getAccount().canPayFromHoldings(cost))
-				throw new EconomyException(Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+				throw new TownyException(Translation.of("msg_no_funds_to_buy", n, Translation.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 		
 		Confirmation confirmation = Confirmation.runOnAccept(() -> {
 			if (!town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n))) {

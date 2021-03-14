@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.PreTownPaysNationTaxEvent;
 import com.palmergames.bukkit.towny.event.town.TownUnconquerEvent;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -58,22 +57,16 @@ public class DailyTimerTask extends TownyTimerTask {
 		 */		
 		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_new_day_tax"));
-			try {
-				TownyMessaging.sendDebugMsg("Collecting Town Taxes");
-				collectTownTaxes();
-				TownyMessaging.sendDebugMsg("Collecting Nation Taxes");
-				collectNationTaxes();
-				TownyMessaging.sendDebugMsg("Collecting Town Costs");
-				collectTownCosts();
-				TownyMessaging.sendDebugMsg("Collecting Nation Costs");
-				collectNationCosts();
-				
-				Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(bankruptedTowns, removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
-				
-			} catch (EconomyException ex) {
-				TownyMessaging.sendErrorMsg("Economy Exception");
-				ex.printStackTrace();
-			}
+			TownyMessaging.sendDebugMsg("Collecting Town Taxes");
+			collectTownTaxes();
+			TownyMessaging.sendDebugMsg("Collecting Nation Taxes");
+			collectNationTaxes();
+			TownyMessaging.sendDebugMsg("Collecting Town Costs");
+			collectTownCosts();
+			TownyMessaging.sendDebugMsg("Collecting Nation Costs");
+			collectNationCosts();
+			
+			Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(bankruptedTowns, removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
 		} else
 			TownyMessaging.sendGlobalMessage(Translation.of("msg_new_day"));
 
@@ -171,10 +164,8 @@ public class DailyTimerTask extends TownyTimerTask {
 
 	/**
 	 * Collect taxes for all nations due from their member towns
-	 * 
-	 * @throws EconomyException - EconomyException
 	 */
-	public void collectNationTaxes() throws EconomyException {
+	public void collectNationTaxes() {
 		List<Nation> nations = new ArrayList<>(universe.getNations());
 		ListIterator<Nation> nationItr = nations.listIterator();
 		Nation nation;
@@ -194,9 +185,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * Collect taxes due to the nation from it's member towns.
 	 * 
 	 * @param nation - Nation to collect taxes from.
-	 * @throws EconomyException - EconomyException
 	 */
-	protected void collectNationTaxes(Nation nation) throws EconomyException {
+	protected void collectNationTaxes(Nation nation) {
 		
 		if (nation.getTaxes() > 0) {
 
@@ -308,10 +298,8 @@ public class DailyTimerTask extends TownyTimerTask {
 
 	/**
 	 * Collect taxes for all towns due from their residents.
-	 * 
-	 * @throws EconomyException - EconomyException
 	 */
-	public void collectTownTaxes() throws EconomyException {
+	public void collectTownTaxes() {
 		List<Town> towns = new ArrayList<>(universe.getDataSource().getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
 		Town town;
@@ -332,9 +320,8 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * Collect taxes due to the town from it's residents.
 	 * 
 	 * @param town - Town to collect taxes from
-	 * @throws EconomyException - EconomyException
 	 */
-	protected void collectTownTaxes(Town town) throws EconomyException {
+	protected void collectTownTaxes(Town town) {
 		// Resident Tax
 		if (town.getTaxes() > 0) {
 
@@ -462,10 +449,8 @@ public class DailyTimerTask extends TownyTimerTask {
 
 	/**
 	 * Collect or pay upkeep for all towns.
-	 * 
-	 * @throws EconomyException if there is an error with the economy handling
 	 */
-	public void collectTownCosts() throws EconomyException {
+	public void collectTownCosts() {
 		List<Town> towns = new ArrayList<>(universe.getDataSource().getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
 		Town town;
@@ -583,10 +568,8 @@ public class DailyTimerTask extends TownyTimerTask {
 
 	/**
 	 * Collect upkeep due from all nations.
-	 * 
-	 * @throws EconomyException if there is an error with Economy handling
 	 */
-	public void collectNationCosts() throws EconomyException {
+	public void collectNationCosts() {
 		List<Nation> nations = new ArrayList<>(universe.getNations());
 		ListIterator<Nation> nationItr = nations.listIterator();
 		Nation nation;

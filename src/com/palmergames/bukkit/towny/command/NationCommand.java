@@ -35,7 +35,6 @@ import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -2105,7 +2104,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(resident, Translation.of("msg_invalid_name"));
 	}
 
-	public static void nationSet(Player player, String[] split, boolean admin, Nation nation) throws TownyException, InvalidNameException, EconomyException {
+	public static void nationSet(Player player, String[] split, boolean admin, Nation nation) throws TownyException, InvalidNameException {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		if (split.length == 0) {
 			player.sendMessage(ChatTools.formatTitle("/nation set"));
@@ -2317,7 +2316,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					
 				    if(TownyEconomyHandler.isActive() && TownySettings.getNationRenameCost() > 0) {
 						if (!nation.getAccount().canPayFromHoldings(TownySettings.getNationRenameCost()))
-							throw new EconomyException(Translation.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
+							throw new TownyException(Translation.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
 
 						final Nation finalNation = nation;
                     	final String name = split[1];
