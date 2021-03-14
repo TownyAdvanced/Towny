@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.listeners.FMapOverlayListener;
 import com.palmergames.bukkit.towny.listeners.TownyBlockListener;
 import com.palmergames.bukkit.towny.listeners.TownyCustomListener;
 import com.palmergames.bukkit.towny.listeners.TownyEntityListener;
@@ -91,6 +92,7 @@ public class Towny extends JavaPlugin {
 	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private static final Version NETHER_VER = Version.fromString("1.16.1");
 	private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
+	public static final String FMAPOVERLAY_PLUGIN_CHANNEL = "fmapoverlay:towny";
 	private final String version = this.getDescription().getVersion();
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
@@ -108,6 +110,7 @@ public class Towny extends JavaPlugin {
 	private final WarZoneListener warzoneListener = new WarZoneListener(this);
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
+	private final FMapOverlayListener FMapOverlayListener = new FMapOverlayListener(this);
 
 	private TownyUniverse townyUniverse;
 
@@ -170,6 +173,9 @@ public class Towny extends JavaPlugin {
 
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
+			
+			// Register FMapOverlay plugin channel
+			getServer().getMessenger().registerOutgoingPluginChannel(this, FMAPOVERLAY_PLUGIN_CHANNEL);
 		}
 
 		registerEvents();
@@ -224,6 +230,9 @@ public class Towny extends JavaPlugin {
 		TownyRegenAPI.cancelProtectionRegenTasks();
 
 		playerCache.clear();
+		
+		//Unregister plugin channel
+		getServer().getMessenger().unregisterOutgoingPluginChannel(this, FMAPOVERLAY_PLUGIN_CHANNEL);
 		
 		try {
 			// Shut down our saving task.
@@ -449,6 +458,9 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(worldListener, this);
 			pluginManager.registerEvents(loginListener, this);
 			pluginManager.registerEvents(warzoneListener, this);
+			
+			// FMapOverlay towny plugin channel
+			pluginManager.registerEvents(FMapOverlayListener, this);
 		}
 
 		// Always register these events.
