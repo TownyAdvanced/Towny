@@ -2517,8 +2517,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendDebugMsg("Creating new Town account: " + TownySettings.getTownAccountPrefix() + name);
 			try {
 				town.getAccount().setBalance(0, "Setting 0 balance for Town");
-			} catch (EconomyException e) {
-				e.printStackTrace();
 			} catch (NullPointerException e1) {
 				throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
 			}

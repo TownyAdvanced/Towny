@@ -22,7 +22,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.NationSpawnLevel;
@@ -329,25 +328,17 @@ public class SpawnUtil {
 			
 			// Skipping the confirmation.
 			if (ignoreWarn || !TownySettings.isSpawnWarnConfirmationUsed()) {
-				try {
-					if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
-						TownyMessaging.sendMsg(player, Translation.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
-						initiateSpawn(player, finalLoc);
-					}
-				} catch (EconomyException ignored) {
+				if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
+					TownyMessaging.sendMsg(player, Translation.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
+					initiateSpawn(player, finalLoc);
 				}
 			} else {
 			// Sending the confirmation.
 				String title = Translation.of("msg_spawn_warn", TownyEconomyHandler.getFormattedBalance(travelCost));
 				Confirmation.runOnAccept(() -> {		
-					// Actual taking of monies here.
-					// Show message if we are using an Economy and are charging for spawn travel.
-					try {
-						if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
-							TownyMessaging.sendMsg(player, Translation.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
-							initiateSpawn(player, finalLoc);
-						}
-					} catch (EconomyException ignored) {
+					if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
+						TownyMessaging.sendMsg(player, Translation.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
+						initiateSpawn(player, finalLoc);
 					}
 				})
 				.setTitle(title)

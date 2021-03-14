@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.object.economy;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.Nameable;
@@ -95,9 +94,8 @@ public abstract class Account implements Nameable {
 	 * @param collector The account to pay.
 	 * @param reason The reason for the pay. 
 	 * @return boolean indicating success.
-	 * @throws EconomyException On an economy error.
 	 */
-	public boolean payTo(double amount, EconomyHandler collector, String reason) throws EconomyException {
+	public boolean payTo(double amount, EconomyHandler collector, String reason) {
 		return payTo(amount, collector.getAccount(), reason);
 	}
 	
@@ -120,9 +118,8 @@ public abstract class Account implements Nameable {
 	 * @param collector The account to pay.
 	 * @param reason The reason for the pay.
 	 * @return boolean indicating success.
-	 * @throws EconomyException On an economy error.
 	 */
-	public boolean payTo(double amount, Account collector, String reason) throws EconomyException {
+	public boolean payTo(double amount, Account collector, String reason) {
 		
 		if (amount > getHoldingBalance()) {
 			return false;
@@ -146,9 +143,8 @@ public abstract class Account implements Nameable {
 	 * @param amount currency to transact
 	 * @param reason memo regarding transaction
 	 * @return true, or pay/collect balance for given reason
-	 * @throws EconomyException if transaction fails
 	 */
-	public boolean setBalance(double amount, String reason) throws EconomyException {
+	public boolean setBalance(double amount, String reason) {
 		double balance = getHoldingBalance();
 		double diff = amount - balance;
 		if (diff > 0) {

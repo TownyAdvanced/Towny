@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.event.EventWarEndEvent;
 import com.palmergames.bukkit.towny.event.EventWarPreStartEvent;
 import com.palmergames.bukkit.towny.event.EventWarStartEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -303,31 +302,28 @@ public class War {
 		
 		double halfWinnings;
 		double nationWinnings = 0;
+		// Compute war spoils
+		halfWinnings = getWarSpoils().getHoldingBalance() / 2.0;
 		try {
-			
-			// Compute war spoils
-			halfWinnings = getWarSpoils().getHoldingBalance() / 2.0;
-			try {
-				nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
-				for (Nation winningNation : warringNations) {
-					getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
-					TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_WINNING_NATION_SPOILS", winningNation.getName(), TownyEconomyHandler.getFormattedBalance(nationWinnings)));
-				}
-			} catch (ArithmeticException e) {
-				TownyMessaging.sendDebugMsg("[War]   War ended with 0 nations.");
+			nationWinnings = halfWinnings / warringNations.size(); // Again, might leave residue.
+			for (Nation winningNation : warringNations) {
+				getWarSpoils().payTo(nationWinnings, winningNation, "War - Nation Winnings");
+				TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_WINNING_NATION_SPOILS", winningNation.getName(), TownyEconomyHandler.getFormattedBalance(nationWinnings)));
 			}
+		} catch (ArithmeticException e) {
+			TownyMessaging.sendDebugMsg("[War]   War ended with 0 nations.");
+		}
 
-			// Pay money to winning town and print message
-			try {
-				KeyValue<Town, Integer> winningTownScore = getWinningTownScore();
-				getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Town Winnings");
-				TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_WINNING_TOWN_SPOILS", winningTownScore.key.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  winningTownScore.value));
-				
-				EventWarEndEvent event = new EventWarEndEvent(warringTowns, winningTownScore.key, halfWinnings, warringNations, nationWinnings);
-				Bukkit.getServer().getPluginManager().callEvent(event);
-			} catch (TownyException e) {
-			}
-		} catch (EconomyException e1) {}
+		// Pay money to winning town and print message
+		try {
+			KeyValue<Town, Integer> winningTownScore = getWinningTownScore();
+			getWarSpoils().payTo(halfWinnings, winningTownScore.key, "War - Town Winnings");
+			TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_WINNING_TOWN_SPOILS", winningTownScore.key.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  winningTownScore.value));
+			
+			EventWarEndEvent event = new EventWarEndEvent(warringTowns, winningTownScore.key, halfWinnings, warringNations, nationWinnings);
+			Bukkit.getServer().getPluginManager().callEvent(event);
+		} catch (TownyException e) {
+		}
 		
 		
 		
@@ -638,21 +634,19 @@ public class War {
 		}		
 		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		try {
-			// Check for money loss in the defending town
-			if (TownyEconomyHandler.isActive() && !defenderTown.getAccount().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
-				TownyMessaging.sendPrefixedTownMessage(defenderTown, Translation.of("msg_war_town_ran_out_of_money"));
-				TownyMessaging.sendTitleMessageToTown(defenderTown, Translation.of("msg_war_town_removed_from_war_titlemsg"), "");
-				if (defenderTown.isCapital())
-					remove(attacker, defenderTown.getNation());
-				else
-					remove(attacker, defenderTown);
-				defenderTown.save();
-				attacker.save();
-				return;
-			} else
-				TownyMessaging.sendPrefixedTownMessage(defenderTown, Translation.of("msg_war_town_lost_money_townblock", TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
-		} catch (EconomyException ignored) {}
+		// Check for money loss in the defending town
+		if (TownyEconomyHandler.isActive() && !defenderTown.getAccount().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
+			TownyMessaging.sendPrefixedTownMessage(defenderTown, Translation.of("msg_war_town_ran_out_of_money"));
+			TownyMessaging.sendTitleMessageToTown(defenderTown, Translation.of("msg_war_town_removed_from_war_titlemsg"), "");
+			if (defenderTown.isCapital())
+				remove(attacker, defenderTown.getNation());
+			else
+				remove(attacker, defenderTown);
+			defenderTown.save();
+			attacker.save();
+			return;
+		} else
+			TownyMessaging.sendPrefixedTownMessage(defenderTown, Translation.of("msg_war_town_lost_money_townblock", TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
 		
 		// Check to see if this is a special TownBlock
 		if (defenderHomeblock && defenderTown.isCapital()){
