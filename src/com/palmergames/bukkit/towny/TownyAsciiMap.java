@@ -1,6 +1,10 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.listeners.FMapOverlayListener;
 import com.palmergames.bukkit.towny.object.Translation;
+import net.querz.nbt.tag.CompoundTag;
+import net.querz.nbt.tag.ListTag;
+import net.querz.nbt.tag.StringTag;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -162,10 +166,51 @@ public class TownyAsciiMap {
 		try {
 			TownBlock townblock = TownyAPI.getInstance().getTownBlock(plugin.getCache(player).getLastLocation());
 			TownyMessaging.sendMsg(player, (Translation.of("town_sing") + ": " + (townblock != null && townblock.hasTown() ? townblock.getTown().getName() : Translation.of("status_no_town")) + " : " + Translation.of("owner_status") + ": " + (townblock != null && townblock.hasResident() ? townblock.getResident().getName() : Translation.of("status_no_town"))));
+			sendFMapOverlayInfo(townblock, townyMap, lineHeight, pos, player);
 		} catch (TownyException e) {
 			//plugin.sendErrorMsg(player, e.getError());
 			// Send a blank line instead of an error, to keep the map position tidy.
 			player.sendMessage("");
 		}
+	}
+	
+	private static void sendFMapOverlayInfo(TownBlock townblock, String[][] townyMap, int lineHeight, Coord pos, Player player) throws NotRegisteredException
+	{
+		CompoundTag compoundTag = new CompoundTag();
+		compoundTag.putString("town", townblock != null && townblock.hasTown() ? townblock.getTown().getName() : "");
+		compoundTag.putString("ownerStatus", townblock != null && townblock.hasResident() ? townblock.getResident().getName() : "");
+		ListTag<ListTag<StringTag>> listTag = new ListTag<>(ListTag.class);
+		for (String[] coordY : townyMap)
+		{
+			ListTag<StringTag> coordsList = new ListTag<>(StringTag.class);
+			for (String coordX : coordY)
+			{
+				coordsList.addString(coordX);
+			}
+			listTag.add(coordsList);
+		}
+		compoundTag.put("map", listTag);
+		compoundTag.putInt("lineWidth", lineWidth);
+		compoundTag.putInt("lineHeight", lineHeight);
+		ListTag<ListTag<StringTag>> listTag1 = new ListTag<>(ListTag.class);
+		for (TownBlockType blockType : TownBlockType.values())
+		{
+			ListTag<StringTag> typeData = new ListTag<>(StringTag.class);
+			typeData.addString(blockType.getAsciiMapKey());
+			typeData.addString(blockType.toString());
+			listTag1.add(typeData);
+		}
+		compoundTag.put("townBlockTypes", listTag1);
+		ListTag<StringTag> listTag2 = new ListTag<>(StringTag.class);
+		for (String helpItem : help)
+		{
+			listTag2.addString(helpItem);
+		}
+		compoundTag.put("townHelpTypes", listTag2);
+		int[] chunkCoords = new int[2];
+		chunkCoords[0] = pos.getX();
+		chunkCoords[1] = pos.getZ();
+		compoundTag.putIntArray("chunkCoords", chunkCoords);
+		FMapOverlayListener.getInstance().sendFMapOverlayTowny(player, compoundTag);
 	}
 }
