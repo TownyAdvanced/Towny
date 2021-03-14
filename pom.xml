@@ -156,6 +156,12 @@
             <version>20.1.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- NBT library for FMapOverlay info -->
+        <dependency>
+            <groupId>com.github.Querz</groupId>
+            <artifactId>NBT</artifactId>
+            <version>6.0</version>
+        </dependency>
     </dependencies>
 
     <build>
