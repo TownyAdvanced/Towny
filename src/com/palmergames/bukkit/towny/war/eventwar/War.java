@@ -240,18 +240,13 @@ public class War {
 
 		warTime = true;
 
-		// Seed spoils of war		
-		try {
-			warSpoils.deposit(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");			
-			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_seeding_spoils_with", TownySettings.getBaseSpoilsOfWar()));			
-			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_total_seeding_spoils", warSpoils.getHoldingBalance()));
-			TownyMessaging.sendGlobalMessage(Translation.of("msg_war_activate_war_hud_tip"));
-			
-			EventWarStartEvent event = new EventWarStartEvent(warringTowns, warringNations, warSpoils.getHoldingBalance());
-			Bukkit.getServer().getPluginManager().callEvent(event);
-		} catch (EconomyException e) {
-			TownyMessaging.sendErrorMsg("[War] Could not seed spoils of war.");
-		}
+		warSpoils.deposit(TownySettings.getBaseSpoilsOfWar(), "Start of War - Base Spoils");			
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_war_seeding_spoils_with", TownySettings.getBaseSpoilsOfWar()));			
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_war_total_seeding_spoils", warSpoils.getHoldingBalance()));
+		TownyMessaging.sendGlobalMessage(Translation.of("msg_war_activate_war_hud_tip"));
+		
+		EventWarStartEvent event = new EventWarStartEvent(warringTowns, warringNations, warSpoils.getHoldingBalance());
+		Bukkit.getServer().getPluginManager().callEvent(event);
 		
 		// Start the WarTimerTask
 		int id = BukkitTools.scheduleAsyncRepeatingTask(new WarTimerTask(plugin, this), 0, TimeTools.convertToTicks(5));
@@ -861,12 +856,8 @@ public class War {
 		output.add(Colors.Green + Translation.of("war_stats_nations") + Colors.LightGreen + warringNations.size());
 		output.add(Colors.Green + Translation.of("war_stats_towns") + Colors.LightGreen + warringTowns.size() + " / " + townScores.size());
 		output.add(Colors.Green + Translation.of("war_stats_warzone") + Colors.LightGreen + warZone.size() + " Town blocks");
-		try {
-			output.add(Colors.Green + Translation.of("war_stats_spoils_of_war") + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(warSpoils.getHoldingBalance()));
-			return output;
-		} catch (EconomyException e) {
-		}
-		return null;
+		output.add(Colors.Green + Translation.of("war_stats_spoils_of_war") + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(warSpoils.getHoldingBalance()));
+		return output;
 	}
 	
 	public void sendStats(Player player) {

@@ -3454,8 +3454,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						if (!town.getAccount().canPayFromHoldings(blockCost))
 							throw new TownyException(Translation.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
 						town.getAccount().withdraw(blockCost, String.format("Town Claim (%d)", selection.size()));
-					} catch (EconomyException e1) {
-						throw new TownyException("Economy Error");
 					} catch (NullPointerException e2) {
 						throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
 					}
@@ -3590,7 +3588,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_not_enough_money", TownyEconomyHandler.getFormattedBalance(remainingTown.getAccount().getHoldingBalance()), TownyEconomyHandler.getFormattedBalance(cost)));
 					return;
 				}
-			} catch (TownyException | EconomyException e) {
+			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_failed"));
 				return;
 			}			
@@ -3623,13 +3621,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		final Town finalRemainingTown = remainingTown;
 		final double finalCost = cost;
 		Confirmation.runOnAccept(() -> {
-			if (TownyEconomyHandler.isActive()) {
-				// Check if town can still pay merging costs.
-				try {
-					if (!finalRemainingTown.getAccount().canPayFromHoldings(finalCost))
-						TownyMessaging.sendErrorMsg(sender, Translation.of("msg_town_merge_err_not_enough_money", (int) finalRemainingTown.getAccount().getHoldingBalance(), (int) finalCost));
-				} catch (EconomyException ignored) {}
-			}
+			if (TownyEconomyHandler.isActive() && !finalRemainingTown.getAccount().canPayFromHoldings(finalCost))
+					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_town_merge_err_not_enough_money", (int) finalRemainingTown.getAccount().getHoldingBalance(), (int) finalCost));
+
 
 			TownPreMergeEvent townPreMergeEvent = new TownPreMergeEvent(finalRemainingTown, finalSuccumbingTown);
 			Bukkit.getPluginManager().callEvent(townPreMergeEvent);

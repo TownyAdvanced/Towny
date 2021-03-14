@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.event.statusscreen.NationStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -677,23 +676,16 @@ public class TownyFormatter {
 		 * Calculate what the player will be paying their town for tax.
 		 */
 		if (resident.hasTown()) {
-			try {
-				town = resident.getTown();
+			town = TownyAPI.getInstance().getResidentTownOrNull(resident);
 
-				if (taxExempt) {
-					out.add(Translation.of("status_res_taxexempt"));
-				} else {
-					if (town.isTaxPercentage())
-						townTax = Math.min(resident.getAccount().getHoldingBalance() * town.getTaxes() / 100, town.getMaxPercentTaxAmount());
-					else
-						townTax = town.getTaxes();
-					out.add(Translation.of("status_res_tax", TownyEconomyHandler.getFormattedBalance(townTax)));
-				}
-
-			} catch (NotRegisteredException e) {
-				// Failed to fetch town
-			} catch (EconomyException e) {
-				// Economy failed
+			if (taxExempt) {
+				out.add(Translation.of("status_res_taxexempt"));
+			} else {
+				if (town.isTaxPercentage())
+					townTax = Math.min(resident.getAccount().getHoldingBalance() * town.getTaxes() / 100, town.getMaxPercentTaxAmount());
+				else
+					townTax = town.getTaxes();
+				out.add(Translation.of("status_res_tax", TownyEconomyHandler.getFormattedBalance(townTax)));
 			}
 		}
 

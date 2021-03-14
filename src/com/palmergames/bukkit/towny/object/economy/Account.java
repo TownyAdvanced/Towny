@@ -168,15 +168,9 @@ public abstract class Account implements Nameable {
 	 * Gets the current balance of this account.
 	 * 
 	 * @return The amount in this account.
-	 * @throws EconomyException On an economy error.
 	 */
-	public double getHoldingBalance() throws EconomyException {
-		try {
-			return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
-		} catch (NoClassDefFoundError e) {
-			e.printStackTrace();
-			throw new EconomyException("Economy error getting holdings for " + getName());
-		}
+	public double getHoldingBalance() {
+		return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
 	}
 
 	/**
@@ -195,11 +189,7 @@ public abstract class Account implements Nameable {
 	 * @return current account balance formatted in a string.
 	 */
 	public String getHoldingFormattedBalance() {
-		try {
-			return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
-		} catch (EconomyException e) {
-			return "Error Accessing Bank Account";
-		}
+		return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
 	}
 
 	/**

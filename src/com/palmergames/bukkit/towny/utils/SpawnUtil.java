@@ -312,12 +312,8 @@ public class SpawnUtil {
 			}
 			if (!TownySettings.isTownSpawnPaidToTown())	payee = EconomyAccount.SERVER_ACCOUNT;
 			
-			// Check if need/can pay.
-			try {
-				if (travelCost > 0 && (resident.getAccount().getHoldingBalance() < travelCost))
-					throw new TownyException(notAffordMSG);
-			} catch (EconomyException ignored) {
-			}
+			if (travelCost > 0 && (resident.getAccount().getHoldingBalance() < travelCost))
+				throw new TownyException(notAffordMSG);
 		}
 		// Allow for a cancellable event right before a player would actually pay.
 		if (!sendSpawnEvent(player, spawnType, spawnLoc)) {

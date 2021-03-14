@@ -1154,12 +1154,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			double balance = 0.0D;
 
 			// Get balance in case this a server using ico5.  
-			if(TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownyEconomyHandler.isActive()){
-				try {
-					balance = resident.getAccount().getHoldingBalance();
-					resident.getAccount().removeAccount();
-				} catch (EconomyException ignored) {
-				}				
+			if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getVersion().startsWith("iConomy 5")) {
+				balance = resident.getAccount().getHoldingBalance();
+				resident.getAccount().removeAccount();				
 			}
 			// Change account name over.
 			if (TownyEconomyHandler.isActive())
@@ -1172,7 +1169,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Re-register the resident with the new name.
 			universe.registerResident(resident);
 			// Set the economy account balance in ico5 (because it doesn't use UUIDs.)
-			if (TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownyEconomyHandler.isActive()) {
+			if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getVersion().startsWith("iConomy 5")) {
 				try {
 					resident.getAccount().setName(resident.getName());
 					resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");
