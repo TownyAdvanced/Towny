@@ -47,9 +47,8 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin", Translation.of("admin_panel_1"))
-				.add("set [] .. []", "'/townyadmin set' " + Translation.of("res_5"))
+				.add("set [] .. []", "")
 				.add("unclaim [radius]", "")
-				.add("town/nation", "")
 				.add("plot", "")
 				.add("givebonus [town/player] [num]", "")
 				.add("toggle peaceful/war/debug/devmode", "")
@@ -67,6 +66,49 @@ public enum HelpMenu {
 		}
 	},
 
+	TA_TOWN {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin town")
+				.add("new [name] [mayor]", "")
+				.add("[town]", "")
+				.add("[town] add/kick [] .. []", "")
+				.add("[town] rename [newname]", "")
+				.add("[town] delete", "")
+				.add("[town] spawn", "")
+				.add("[town] outpost #", "")
+				.add("[town] rank", "")
+				.add("[town] set", "")
+				.add("[town] toggle", "")
+				.add("[town] meta", "")
+				.add("[town] deposit [amount]", "")
+				.add("[town] withdraw [amount]", "")
+				.add("[town] bankhistory", "")
+				.add("[town] outlaw [add|remove] [name]", "")
+				.add("[town] leavenation", "");
+		}
+	},
+	
+	TA_NATION {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin nation")
+				.add("new [name] [capital]", "")
+				.add("[nation]", "")
+				.add("[nation] add [] .. []", "")
+				.add("[nation] kick [] .. []", "")
+				.add("[nation] rename [newname]", "")
+				.add("[nation] delete", "")
+				.add("[nation] recheck", "")
+				.add("[nation] toggle", "")
+				.add("[nation] set", "")
+				.add("[nation] deposit [amount]", "")
+				.add("[nation] withdraw [amount]", "")
+				.add("[nation] bankhistory", "")
+				.add("[oldnation] merge [newnation]", "")
+				.add("rank [add/remove] [resident] [rank]", "");
+		}
+	},
 
 	TA_UNCLAIM {
 		@Override

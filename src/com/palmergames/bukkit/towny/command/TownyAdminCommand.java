@@ -914,23 +914,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-			sender.sendMessage(ChatTools.formatTitle("/townyadmin town"));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "new [name] [mayor]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] add/kick [] .. []", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] rename [newname]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] delete", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] spawn", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] outpost #", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] rank", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] set", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] toggle", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] meta", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] deposit [amount]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] withdraw [amount]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] bankhistory", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] outlaw [add|remove] [name]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] leavenation", ""));
+			HelpMenu.TA_TOWN.send(sender);
 			return;
 		}
 
@@ -1150,24 +1134,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", StringMgmt.remUnderscore(nation.getName())));
 
 			} else {
-				sender.sendMessage(ChatTools.formatTitle("/townyadmin town"));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "new [name] [mayor]", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town]", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] add/kick [] .. []", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] rename [newname]", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] delete", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] spawn", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] outpost #", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] rank", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] set", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] toggle", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] meta", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] deposit [amount]", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] withdraw [amount]", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] bankhistory", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] outlaw [add|remove] [name]", ""));
-				sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin town", "[town] leavenation", ""));
-				
+				HelpMenu.TA_TOWN.send(sender);
 				return;
 			}
 
@@ -1243,23 +1210,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-
-			sender.sendMessage(ChatTools.formatTitle("/townyadmin nation"));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "new", "[name] [capital]"));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] add [] .. []", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] kick [] .. []", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] rename [newname]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] delete", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] recheck", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] toggle", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] set", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] deposit [amount]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] withdraw [amount]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[nation] bankhistory", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "[oldnation] merge [newnation]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation", "rank [add/remove] [resident] [rank]"));
-
+			HelpMenu.TA_NATION.send(sender);
 			return;
 		}
 		try {
@@ -1269,7 +1220,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				 * Moved from TownCommand as of 0.92.0.13
 				 */
 				if (split.length != 3)
-					throw new TownyException(Translation.of("msg_err_not_enough_variables") + "/ta town new [name] [capital]");
+					throw new TownyException(Translation.of("msg_err_not_enough_variables") + "/ta nation new [name] [capital]");
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_NEW.getNode()))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -1298,12 +1249,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 
 			if (split[1].equalsIgnoreCase("add")) {
-				/*
-				 * if (isConsole) { sender.sendMessage(
-				 * "[Towny] InputError: This command was designed for use in game only."
-				 * ); return; }
-				 */
-				NationCommand.nationAdd(nation, townyUniverse.getDataSource().getTowns(StringMgmt.remArgs(split, 2)));
+
+				if (split.length != 3)
+					throw new TownyException(Translation.of("msg_err_not_enough_variables") + "/ta nation [nationname] add [townname]");
+				
+				townyAdminNationAddTown(sender, nation, StringMgmt.remArgs(split, 2));
 
 			} else if (split[1].equalsIgnoreCase("kick")) {
 
@@ -1486,6 +1436,38 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} catch (NotRegisteredException | AlreadyRegisteredException | InvalidNameException | EconomyException e) {
 			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 		}
+	}
+
+	/**
+	 * Force-join command for admins which will bypass the invite system.
+	 * This also bypasses other limits Towny imposes on towns and nations
+	 * such as the max-towns-per-nation and nation-proximity, and doesn't
+	 * fire a cancellable pre-join event either. Any admin who runs this
+	 * can be assumed to know what they want. 
+	 * @param sender CommandSender
+	 * @param nation Nation which will have a town added.
+	 * @param townName Name of Town to add to Nation.
+	 */
+	private void townyAdminNationAddTown(CommandSender sender, Nation nation, String[] townName) {
+
+		Town town = TownyUniverse.getInstance().getTown(townName[0]);
+		
+		if (town == null) {
+			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_invalid_name", townName[0]));
+			return;
+		}
+
+		if (town.hasNation()) {
+			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_already_nation"));
+			TownyMessaging.sendMessage(sender, "Suggestion: /townyadmin town " + town.getName() + "leavenation");
+		} else {
+			try {
+				town.setNation(nation);
+			} catch (AlreadyRegisteredException ignored) {}
+			town.save();
+			TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_join_nation", town.getName()));
+			TownyMessaging.sendMessage(sender, Translation.of("msg_join_nation", town.getName()));
+		} 
 	}
 
 	public void adminSet(String[] split) throws TownyException {
