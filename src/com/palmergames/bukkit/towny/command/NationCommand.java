@@ -34,6 +34,9 @@ import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveAllyEvent;
 import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
+import com.palmergames.bukkit.towny.event.nation.NationDisplayedNumOnlinePlayersCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationDisplayedNumTownsCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationDisplayedNumResidentsCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -1096,13 +1099,22 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				slug = TownyEconomyHandler.getFormattedBalance(nation.getAccount().getCachedBalance());
 				break;
 			case ONLINE:
-				slug = TownyAPI.getInstance().getOnlinePlayersInNation(nation).size() + "";
+				int rawNumPlayers = TownyAPI.getInstance().getOnlinePlayersInNation(nation).size();
+				NationDisplayedNumOnlinePlayersCalculationEvent pEvent = new NationDisplayedNumOnlinePlayersCalculationEvent(nation, rawNumPlayers);
+				Bukkit.getPluginManager().callEvent(pEvent);
+				slug = pEvent.getDisplayedNumOnlinePlayers() + "";
 				break;
 			case TOWNS:
-				slug = nation.getTowns().size() + "";
+				int rawNumTowns = nation.getTowns().size();
+				NationDisplayedNumTownsCalculationEvent tEvent = new NationDisplayedNumTownsCalculationEvent(nation, rawNumTowns);
+				Bukkit.getPluginManager().callEvent(tEvent);
+				slug = tEvent.getDisplayedNumTowns() + "";
 				break;
 			default:
-				slug = nation.getResidents().size() + "";
+				int rawNumResidents =  nation.getResidents().size();
+				NationDisplayedNumResidentsCalculationEvent rEvent = new NationDisplayedNumResidentsCalculationEvent(nation, rawNumResidents);
+				Bukkit.getPluginManager().callEvent(rEvent);
+				slug = rEvent.getDisplayedNumResidents() + "";
 				break;			
 			}
 			String output = Colors.Gold + StringMgmt.remUnderscore(nation.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")";
