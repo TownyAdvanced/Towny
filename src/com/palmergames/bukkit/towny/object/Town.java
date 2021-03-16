@@ -1330,6 +1330,7 @@ public class Town extends Government implements TownBlockOwner {
 		return ruinedTime;
 	}
 
+	@Nullable 
 	public String getMapColorHexCode() {
 		String rawMapColorHexCode = hasNation() ? nation.getMapColorHexCode() : null;
 		TownMapColourCalculationEvent event = new TownMapColourCalculationEvent(this, rawMapColorHexCode);
