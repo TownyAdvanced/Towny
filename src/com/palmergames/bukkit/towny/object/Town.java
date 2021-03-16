@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownMapColourCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
@@ -19,6 +20,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -1326,6 +1328,13 @@ public class Town extends Government implements TownBlockOwner {
 	
 	public long getRuinedTime() {
 		return ruinedTime;
+	}
+
+	public String getMapColorHexCode() {
+		String rawMapColorHexCode = hasNation() ? nation.getMapColorHexCode() : null;
+		TownMapColourCalculationEvent event = new TownMapColourCalculationEvent(this, rawMapColorHexCode);
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getMapColorHexCode();
 	}
 
 	@Override
