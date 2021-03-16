@@ -34,9 +34,9 @@ import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveAllyEvent;
 import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
-import com.palmergames.bukkit.towny.event.nation.NationDisplayedNumOnlinePlayersCalculationEvent;
-import com.palmergames.bukkit.towny.event.nation.NationDisplayedNumTownsCalculationEvent;
-import com.palmergames.bukkit.towny.event.nation.NationDisplayedNumResidentsCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumOnlinePlayersCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownsCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumResidentsCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -1100,21 +1100,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				break;
 			case ONLINE:
 				int rawNumPlayers = TownyAPI.getInstance().getOnlinePlayersInNation(nation).size();
-				NationDisplayedNumOnlinePlayersCalculationEvent pEvent = new NationDisplayedNumOnlinePlayersCalculationEvent(nation, rawNumPlayers);
+				NationListDisplayedNumOnlinePlayersCalculationEvent pEvent = new NationListDisplayedNumOnlinePlayersCalculationEvent(nation, rawNumPlayers);
 				Bukkit.getPluginManager().callEvent(pEvent);
-				slug = pEvent.getDisplayedNumOnlinePlayers() + "";
+				slug = pEvent.getDisplayedValue() + "";
 				break;
 			case TOWNS:
 				int rawNumTowns = nation.getTowns().size();
-				NationDisplayedNumTownsCalculationEvent tEvent = new NationDisplayedNumTownsCalculationEvent(nation, rawNumTowns);
+				NationListDisplayedNumTownsCalculationEvent tEvent = new NationListDisplayedNumTownsCalculationEvent(nation, rawNumTowns);
 				Bukkit.getPluginManager().callEvent(tEvent);
-				slug = tEvent.getDisplayedNumTowns() + "";
+				slug = tEvent.getDisplayedValue() + "";
 				break;
 			default:
 				int rawNumResidents =  nation.getResidents().size();
-				NationDisplayedNumResidentsCalculationEvent rEvent = new NationDisplayedNumResidentsCalculationEvent(nation, rawNumResidents);
+				NationListDisplayedNumResidentsCalculationEvent rEvent = new NationListDisplayedNumResidentsCalculationEvent(nation, rawNumResidents);
 				Bukkit.getPluginManager().callEvent(rEvent);
-				slug = rEvent.getDisplayedNumResidents() + "";
+				slug = rEvent.getDisplayedValue() + "";
 				break;			
 			}
 			String output = Colors.Gold + StringMgmt.remUnderscore(nation.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")";

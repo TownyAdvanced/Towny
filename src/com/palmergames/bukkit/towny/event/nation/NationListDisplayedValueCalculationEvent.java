@@ -5,27 +5,27 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class NationDisplayedNumTownsCalculationEvent extends Event {
+public abstract class NationListDisplayedValueCalculationEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
-	private int displayedNumTowns;
+	private int displayedValue;
 	private final Nation nation;
 
-	public NationDisplayedNumTownsCalculationEvent(Nation nation, int displayedNumTowns) {
+	public NationListDisplayedValueCalculationEvent(Nation nation, int displayedValue) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.nation = nation;
-		this.displayedNumTowns = displayedNumTowns;
+		this.displayedValue = displayedValue;
 	}
 
 	public Nation getNation() {
 		return nation;
 	}
 
-	public void setDisplayedNumTowns(int value) {
-		this.displayedNumTowns = value;
+	public void setDisplayedValue(int value) {
+		this.displayedValue = value;
 	}
 
-	public int getDisplayedNumTowns() {
-		return displayedNumTowns;
+	public int getDisplayedValue() {
+		return displayedValue;
 	}
 
 	@Override
