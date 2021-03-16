@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Event called whenever town map color is being calculated
@@ -24,6 +25,7 @@ public class TownMapColourCalculationEvent extends Event {
 		return town;
 	}
 
+	@Nullable
 	public String getMapColorHexCode() {
 		return mapColorHexCode;
 	}
