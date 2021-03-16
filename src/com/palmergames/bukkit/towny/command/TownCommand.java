@@ -1740,20 +1740,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
 		if (split.length == 0) {
-			player.sendMessage(ChatTools.formatTitle("/town set"));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "board [message ... ]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "mayor " + Translation.of("town_help_2"), ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "homeblock", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "spawn/outpost/jail", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "perm ...", "'/town set perm' " + Translation.of("res_5")));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "taxes [$]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "[plottax/shoptax/embassytax] [$]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "[plotprice/shopprice/embassyprice] [$]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "spawncost [$]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "name [name]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "tag [upto 4 letters] or clear", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "title/surname [resident] [text]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/town set", "taxpercentcap [amount]", ""));
+			HelpMenu.TOWN_SET.send(player);
 		} else {
 			Resident resident;
 
@@ -3326,12 +3313,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void parseTownClaimCommand(Player player, String[] split) {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
-			player.sendMessage(ChatTools.formatTitle("/town claim"));
-			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town claim", "", Translation.of("msg_block_claim")));
-			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town claim", "outpost", Translation.of("mayor_help_3")));
-			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town claim", "[auto]", Translation.of("mayor_help_5")));
-			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town claim", "[circle/rect] [radius]", Translation.of("mayor_help_4")));
-			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town claim", "[circle/rect] auto", Translation.of("mayor_help_5")));
+			HelpMenu.TOWN_CLAIM.send(player);
 		} else {
 			Resident resident;
 			Town town;
@@ -3486,10 +3468,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void parseTownUnclaimCommand(Player player, String[] split) {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
-			player.sendMessage(ChatTools.formatTitle("/town unclaim"));
-			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town unclaim", "", Translation.of("mayor_help_6")));
-			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town unclaim", "[circle/rect] [radius]", Translation.of("mayor_help_7")));
-			player.sendMessage(ChatTools.formatCommand(Translation.of("mayor_sing"), "/town unclaim", "all", Translation.of("mayor_help_8")));
+			HelpMenu.TOWN_UNCLAIM.send(player);
 		} else {
 			Resident resident;
 			Town town;

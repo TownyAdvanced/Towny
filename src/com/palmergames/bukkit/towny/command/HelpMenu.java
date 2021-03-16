@@ -118,6 +118,38 @@ public enum HelpMenu {
 				.add("[radius]", Translation.of("townyadmin_help_2"));
 		}
 	},
+	
+	TA_DATABASE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin database")
+				.add("save", "")
+				.add("load", "")
+				.add("remove ?", "");
+		}
+	},
+	
+	TA_PLOT {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin plot")
+				.add("claim [player]", "")
+				.add("meta", "")
+				.add("meta set [key] [value]", "")
+				.add("meta [add|remove] [key]", "");
+		}
+	},
+	
+	TA_RESIDENT {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin resident")
+				.add("[resident]", "")
+				.add("[resident] rename [newname]", "")
+				.add("[resident] friend... [add|remove] [resident]", "")
+				.add("[resident] friend... |list|clear]", "");
+		}
+	},
 
 	TOWNYWORLD_HELP {
 		@Override
@@ -194,6 +226,64 @@ public enum HelpMenu {
 				.add("list", "");
 		}
 	},
+	
+	TOWN_SET {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town set")
+				.add("board [message ... ]", "")
+				.add("mayor " + Translation.of("town_help_2"), "")
+				.add("homeblock", "")
+				.add("spawn/outpost/jail", "")
+				.add("perm ...", "'/town set perm' " + Translation.of("res_5"))
+				.add("taxes [$]", "")
+				.add("[plottax/shoptax/embassytax] [$]", "")
+				.add("[plotprice/shopprice/embassyprice] [$]", "")
+				.add("spawncost [$]", "")
+				.add("name [name]", "")
+				.add("tag [upto 4 letters] or clear", "")
+				.add("title/surname [resident] [text]", "")
+				.add("taxpercentcap [amount]", "");
+		}
+	},
+	
+	TOWN_TOGGLE_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town toggle")
+				.add("pvp", "")
+				.add("public", "")
+				.add("explosion", "")
+				.add("fire", "")
+				.add("mobs", "")
+				.add("taxpercent", "")
+				.add("open", "")
+				.add("jail [number] [resident]", "");
+		}
+	},
+	
+	TOWN_CLAIM {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town claim")
+				.add("", Translation.of("msg_block_claim"))
+				.add("outpost", Translation.of("mayor_help_3"))
+				.add("[auto]", Translation.of("mayor_help_5"))
+				.add("[circle/rect] [radius]", Translation.of("mayor_help_4"))
+				.add("[circle/rect] auto", Translation.of("mayor_help_5"));
+		}
+	},
+	
+	TOWN_UNCLAIM {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town unclaim")
+				.add("", Translation.of("mayor_help_6"))
+				.add("[circle/rect] [radius]", Translation.of("mayor_help_7"))
+				.add("all", Translation.of("mayor_help_8"));
+		}
+	},
+	
 
 	TOWN_INVITE {
 		@Override
@@ -357,21 +447,6 @@ public enum HelpMenu {
 				.add(Translation.of("mayor_sing"), "/town", "toggle", "")
 				.add(Translation.of("mayor_sing"), "/town", "rank add/remove [resident] [rank]", "'/town rank ?' " + Translation.of("res_5"))
 				.add(Translation.of("mayor_sing"), "/town", "delete", "");
-		}
-	},
-	
-	TOWN_TOGGLE_HELP {
-		@Override
-		protected MenuBuilder load() {
-			return new MenuBuilder("town toggle")
-				.add("", "/town toggle", "pvp", "")
-				.add("", "/town toggle", "public", "")
-				.add("", "/town toggle", "explosion", "")
-				.add("", "/town toggle", "fire", "")
-				.add("", "/town toggle", "mobs", "")
-				.add("", "/town toggle", "taxpercent", "")
-				.add("", "/town toggle", "open", "")
-				.add("", "/town toggle", "jail [number] [resident]", "");
 		}
 	},
 	

@@ -598,10 +598,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private void parseAdminDatabaseCommand(String[] split) {
 	
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-			sender.sendMessage(ChatTools.formatTitle("/townyadmin database"));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin database", "save", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin database", "load", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin database", "remove ?", ""));
+			HelpMenu.TA_DATABASE.send(sender);
 			return;
 		}
 		
@@ -647,11 +644,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (split.length == 0 || split.length < 1 || split[0].equalsIgnoreCase("?")) {
-			sender.sendMessage(ChatTools.formatTitle("/townyadmin plot"));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin plot claim", "[player]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin plot meta", "", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin plot meta", "set [key] [value]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin plot meta", "[add|remove] [key]", ""));
+			HelpMenu.TA_PLOT.send(sender);
 			return;
 		}
 
@@ -830,12 +823,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public void parseAdminResidentCommand(String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-			sender.sendMessage(ChatTools.formatTitle("/townyadmin resident"));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin resident", "[resident]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin resident", "[resident] rename [newname]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin resident", "[resident] friend... [add|remove] [resident]", ""));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin resident", "[resident] friend... |list|clear]", ""));
-			
+			HelpMenu.TA_RESIDENT.send(sender);
 			return;
 		}
 
