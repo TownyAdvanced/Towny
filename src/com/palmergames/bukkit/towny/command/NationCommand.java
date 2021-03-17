@@ -34,6 +34,9 @@ import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveAllyEvent;
 import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumOnlinePlayersCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownsCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumResidentsCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -1096,13 +1099,22 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				slug = TownyEconomyHandler.getFormattedBalance(nation.getAccount().getCachedBalance());
 				break;
 			case ONLINE:
-				slug = TownyAPI.getInstance().getOnlinePlayersInNation(nation).size() + "";
+				int rawNumPlayers = TownyAPI.getInstance().getOnlinePlayersInNation(nation).size();
+				NationListDisplayedNumOnlinePlayersCalculationEvent pEvent = new NationListDisplayedNumOnlinePlayersCalculationEvent(nation, rawNumPlayers);
+				Bukkit.getPluginManager().callEvent(pEvent);
+				slug = pEvent.getDisplayedValue() + "";
 				break;
 			case TOWNS:
-				slug = nation.getTowns().size() + "";
+				int rawNumTowns = nation.getTowns().size();
+				NationListDisplayedNumTownsCalculationEvent tEvent = new NationListDisplayedNumTownsCalculationEvent(nation, rawNumTowns);
+				Bukkit.getPluginManager().callEvent(tEvent);
+				slug = tEvent.getDisplayedValue() + "";
 				break;
 			default:
-				slug = nation.getResidents().size() + "";
+				int rawNumResidents =  nation.getResidents().size();
+				NationListDisplayedNumResidentsCalculationEvent rEvent = new NationListDisplayedNumResidentsCalculationEvent(nation, rawNumResidents);
+				Bukkit.getPluginManager().callEvent(rEvent);
+				slug = rEvent.getDisplayedValue() + "";
 				break;			
 			}
 			String output = Colors.Gold + StringMgmt.remUnderscore(nation.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")";
