@@ -30,7 +30,7 @@ public class TownMapColourCalculationEvent extends Event {
 		return mapColorHexCode;
 	}
 
-	private void setMapColorHexCode(String mapColorHexCode) {
+	public void setMapColorHexCode(String mapColorHexCode) {
 		this.mapColorHexCode = mapColorHexCode;
 	}
 

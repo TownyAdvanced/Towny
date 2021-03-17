@@ -5906,3 +5906,10 @@ v0.92.0.11:
   - /ta nation NATIONNAME add TOWNNAME now bypasses the invite and other rules allowing an admin to force-add a town to a nation. 
   - Change it so that admins with the bypass node will not warn towns that an outlawed admin is spying on them.
     - Previously only full admins were preventing warns.
+  - Add 3 new events around the displayed nation list, courtesy of Goosius with PR #4810.
+    - NationListDisplayedNumOnlinePlayersCalculationEvent
+    - NationListDisplayedNumResidentsCalculationEvent
+    - NationListDisplayedNumTownsCalculationEvent
+  - Add event for the calculation of town map color. courtesy of Goosius with PR #4809.
+    - TownMapColourCalculationEvent
+  - Update korean.yml, courtesy of yumjunstar with PR #4811.
