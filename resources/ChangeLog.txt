@@ -5913,3 +5913,4 @@ v0.92.0.11:
   - Add event for the calculation of town map color. courtesy of Goosius with PR #4809.
     - TownMapColourCalculationEvent
   - Update korean.yml, courtesy of yumjunstar with PR #4811.
+  - Fix ConcurrentModificationException in Town.
