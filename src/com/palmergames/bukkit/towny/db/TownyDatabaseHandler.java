@@ -941,9 +941,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				isCapital = town.isCapital();
 			}
 
-			TownyWorld world = town.getHomeblockWorld();
-			world.removeTown(town);
-			/*
+			TownyWorld world = town.getHomeblockWorld(); // TODO: This was added because renaming was throwing an NRE
+			if (world.hasTown(town))                     // At some point worlds storing Towns will have to be re-evaluated.
+				world.removeTown(town);                  // Worlds holding Towns is only useful when it comes to checking 
+			                                             // distances between townblocks.
+
+			/*                         
 			 * Tidy up old files.
 			 * Has to be done here else the town no longer exists
 			 * and the file move command may fail.

@@ -5914,3 +5914,6 @@ v0.92.0.11:
     - TownMapColourCalculationEvent
   - Update korean.yml, courtesy of yumjunstar with PR #4811.
   - Fix ConcurrentModificationException in Town.
+0.96.7.9:
+  - Fix for displayed-nation-list events, courtesy of Goosius with PR #4814.
+  - Potential fix for being show "Not registered." when attempting to rename a town.
