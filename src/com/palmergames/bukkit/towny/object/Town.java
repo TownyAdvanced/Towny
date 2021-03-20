@@ -624,10 +624,7 @@ public class Town extends Government implements TownBlockOwner {
 
 		this.world = world;
 
-		try {
-			this.world.addTown(this);
-		} catch (AlreadyRegisteredException ignored) {
-		}
+		this.world.addTown(this);
 	}
 
 	/**

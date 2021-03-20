@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
@@ -93,14 +92,10 @@ public class TownyWorld extends TownyObject {
 		return hasTown(town.getName());
 	}
 
-	public void addTown(Town town) throws AlreadyRegisteredException {
+	public void addTown(Town town) {
 
-		if (hasTown(town))
-			throw new AlreadyRegisteredException();
-		else {
+		if (!hasTown(town))
 			towns.put(town.getName(), town);
-			town.setWorld(this);
-		}
 	}
 
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
