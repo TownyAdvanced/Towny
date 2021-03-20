@@ -204,6 +204,8 @@ public class TownBlock extends TownyObject {
 
 			case BANK:
 
+			case INN:
+
 				if (this.hasResident()) {
 					setPermissions(this.resident.getPermissions().toString());
 				} else {
@@ -224,11 +226,6 @@ public class TownBlock extends TownyObject {
 				setPermissions("denyAll");
 				break;
 
-			case INN:
-			
-				setPermissions("residentSwitch,nationSwitch,allySwitch,outsiderSwitch");
-				break;
-			
 			case FARM:
 			
 			case WILDS:
