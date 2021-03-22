@@ -128,7 +128,7 @@ public class TownRuinUtil {
 			//Validate if player can pay
 			double townReclaimCost = TownRuinSettings.getEcoPriceReclaimTown();
 			if (TownyEconomyHandler.isActive() && !resident.getAccount().canPayFromHoldings(townReclaimCost))
-				throw new TownyException(Translation.of("msg_err_no_money"));
+				throw new TownyException(Translation.of("msg_insuf_funds"));
 
 			//Validate if player can remove at this time
 			if (TownRuinSettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town) > 0)
@@ -137,12 +137,12 @@ public class TownRuinUtil {
 			if (TownyEconomyHandler.isActive() && townReclaimCost > 0) { 
 				Confirmation.runOnAccept(() -> {
 					if (!resident.getAccount().canPayFromHoldings(townReclaimCost)) {
-						TownyMessaging.sendErrorMsg(resident, Translation.of("msg_err_no_money"));
+						TownyMessaging.sendErrorMsg(resident, Translation.of("msg_insuf_funds"));
 						return;
 					}
 					resident.getAccount().withdraw(townReclaimCost, "Cost of town reclaim.");
-					reclaimTown(resident, town);					
-				});
+					reclaimTown(resident, town);
+				}).sendTo(player);
 			} else {
 				reclaimTown(resident, town);
 			}
