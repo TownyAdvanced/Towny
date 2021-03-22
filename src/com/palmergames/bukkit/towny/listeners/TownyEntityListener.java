@@ -803,9 +803,20 @@ public class TownyEntityListener implements Listener {
 
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
+		
+		Material mat = null;
+		switch (event.getEntity().getType()) {
+			case PAINTING:
+			case LEASH_HITCH:
+			case ITEM_FRAME:
+				mat = EntityTypeUtil.parseEntityToMaterial(event.getEntity().getType());
+				break;
+			default:
+				mat = Material.GRASS_BLOCK;
+		}
 
 		//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-		event.setCancelled(!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getEntity().getLocation(), Material.PAINTING));
+		event.setCancelled(!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getEntity().getLocation(), mat));
 	}
 
 	/**

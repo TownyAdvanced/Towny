@@ -5923,3 +5923,5 @@ v0.92.0.11:
   - Fix reclamation cost confirmation not being sent to the player using the /t reclaim command.
   - New Command: /ta town TOWNNAME unruin
     - Closes #4824.
+0.96.7.11:
+  - Fix HangingEntity placement all using Painting material for permission tests.
