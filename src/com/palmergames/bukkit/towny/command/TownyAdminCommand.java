@@ -42,6 +42,7 @@ import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -65,7 +66,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -120,7 +120,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"bankhistory",
 		"outlaw",
 		"leavenation",
-		"invite"
+		"invite",
+		"unruin"
 	);
 
 	private static final List<String> adminNationTabCompletes = Arrays.asList(
@@ -1121,6 +1122,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_town_left", StringMgmt.remUnderscore(town.getName())));
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", StringMgmt.remUnderscore(nation.getName())));
 
+			} else if (split[1].equalsIgnoreCase("unruin")) {
+				// Sets the town to unruined with the existing NPC mayor still in place.
+				TownRuinUtil.reclaimTown(town.getMayor(), town);
+				town.save();
+				
 			} else {
 				HelpMenu.TA_TOWN.send(sender);
 				return;
@@ -1458,7 +1464,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} 
 	}
 
-	public void adminSet(String[] split) throws TownyException {
+	private void adminSet(String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET.getNode()))
@@ -1497,18 +1503,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					}
 
 					if (split[2].equalsIgnoreCase("npc")) {
-						String name = nextNpcName();
-						final UUID npcUUID = UUID.randomUUID();
-						townyUniverse.getDataSource().newResident(name, npcUUID);
-
-						newMayor = townyUniverse.getResident(npcUUID);
-
-						newMayor.setRegistered(System.currentTimeMillis());
-						newMayor.setLastOnline(0);
-						newMayor.setNPC(true);
-
-						newMayor.save();
-
+						newMayor = ResidentUtil.createAndGetNPCResident();
 						// set for no upkeep as an NPC mayor is assigned
 						town.setHasUpkeep(false);
 
@@ -1674,19 +1669,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public String nextNpcName() throws TownyException {
-
-		String name;
-		int i = 0;
-		do {
-			name = TownySettings.getNPCPrefix() + ++i;
-			if (!TownyUniverse.getInstance().hasResident(name))
-				return name;
-			if (i > 100000)
-				throw new TownyException(Translation.of("msg_err_too_many_npc"));
-		} while (true);
-	}
-	
 	public void reloadLangs() {
 		String rootFolder = TownyUniverse.getInstance().getRootFolder();
 		try {

@@ -5,10 +5,10 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.command.TownyAdminCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.util.TimeTools;
 
 import org.bukkit.Bukkit;
@@ -77,7 +78,13 @@ public class TownRuinUtil {
 			town.removeNation();
 
 		//Set NPC mayor, otherwise mayor of ruined town cannot leave until full deletion 
-		setMayor(plugin, town, "npc");
+		Resident resident = ResidentUtil.createAndGetNPCResident();
+		try {
+			resident.setTown(town);
+		} catch (AlreadyRegisteredException ignored) {}
+		resident.save();
+		setMayor(town, resident);
+		town.setHasUpkeep(false);
 
 		// Call the TownRuinEvent.
 		TownRuinedEvent event = new TownRuinedEvent(town);
@@ -142,7 +149,9 @@ public class TownRuinUtil {
 					}
 					resident.getAccount().withdraw(townReclaimCost, "Cost of town reclaim.");
 					reclaimTown(resident, town);
-				}).sendTo(player);
+				})
+				.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(townReclaimCost)))
+				.sendTo(player);
 			} else {
 				reclaimTown(resident, town);
 			}
@@ -151,12 +160,13 @@ public class TownRuinUtil {
 		}
 	}
 
-	private static void reclaimTown(Resident resident, Town town) {
+	public static void reclaimTown(Resident resident, Town town) {
 		town.setRuined(false);
 		town.setRuinedTime(0);
 
-		//Set player as mayor (and remove npc)
-		setMayor(Towny.getPlugin(), town, resident.getName());
+		// The admin unruin command would result in the NPC mayor being deleted without this check.
+		if (!town.getMayor().equals(resident))
+			setMayor(town, resident); //Set player as mayor (and remove npc)
 
 		// Set permission line to the config's default settings.
 		town.getPermissions().loadDefault(town);
@@ -176,14 +186,17 @@ public class TownRuinUtil {
 		
 	}
 
-	// TODO: Make this into a method somewhere else, instead of this.
-	private static void setMayor(Towny plugin, Town town, String name) {
-		try {
-			TownyAdminCommand adminCommand = new TownyAdminCommand(plugin);
-			adminCommand.adminSet(new String[]{"mayor", town.getName(), name});
-		} catch (TownyException e) {
-			e.printStackTrace();
+	private static void setMayor(Town town, Resident newMayor) {
+		Resident oldMayor = town.getMayor();
+		town.setMayor(newMayor);
+		if (oldMayor.isNPC()) {
+			// Delete the resident if the old mayor was an NPC.
+			oldMayor.removeTown();
+			TownyUniverse.getInstance().getDataSource().removeResident(oldMayor);
+			// set upkeep again
+			town.setHasUpkeep(true);
 		}
+		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_new_mayor", newMayor.getName()));
 	}
 
 	/**

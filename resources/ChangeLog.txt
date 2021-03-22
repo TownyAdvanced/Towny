@@ -5921,3 +5921,5 @@ v0.92.0.11:
   - Fix TownyWorld setting a town's world when a town is added to a townyworld.
   - Inn Plots no longer turn switch perms on for all groups, instead it uses the TownBlockOwner's perm line like most plot types.
   - Fix reclamation cost confirmation not being sent to the player using the /t reclaim command.
+  - New Command: /ta town TOWNNAME unruin
+    - Closes #4824.
