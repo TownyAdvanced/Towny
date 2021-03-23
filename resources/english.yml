@@ -1,5 +1,5 @@
 name: Towny
-version: 0.100
+version: 0.101
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1357,3 +1357,15 @@ msg_town_merge_cost_withdraw: 'Town Merge Costs'
 msg_town_merge_transaction_reason: 'Town Merge'
 
 towny_prices_town_merge: '&e[Merging] &2Base Cost: &a%s &8| &2Per Plot: &a%s'
+
+#Added in 0.101
+msg_err_nation_not_allied_with: '&cYour nation isn''t allied with %s.'
+msg_err_nation_not_enemies_with: '&cYour nation isn''t enemies with %s.'
+msg_err_nation_already_enemies_with: '&cYour nation is already enemies with %s.'
+msg_err_ally_already_requested: '&cYou have already requested to ally with %s.'
+
+msg_err_nation_not_allied_with_2: '&c%s isn''t allied with %s.'
+msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
+msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
+msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
+msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
