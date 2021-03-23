@@ -1439,7 +1439,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				Nation ally = townyUniverse.getNation(split[3]);
 				if (ally == null) {
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_name", split[3]));
+					TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_name", split[3]));
 					return;
 				}
 
@@ -1460,9 +1460,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						plugin.resetCache();
 						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_added_ally", ally.getName()));
 						TownyMessaging.sendPrefixedNationMessage(ally, Translation.of("msg_added_ally", nation.getName()));
-						TownyMessaging.sendMessage(player, Translation.of("default_towny_prefix") + Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
+						TownyMessaging.sendMsg(getSender(), Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
 					} else
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_already_allied_with_2", nation.getName(), ally.getName()));
+						TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_nation_already_allied_with_2", nation.getName(), ally.getName()));
 				} else if (split[2].equalsIgnoreCase("remove")) {
 					if (nation.hasAlly(ally)) {
 						nation.removeAlly(ally);
@@ -1474,9 +1474,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						plugin.resetCache();
 						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_removed_ally", ally.getName()));
 						TownyMessaging.sendPrefixedNationMessage(ally, Translation.of("msg_removed_ally", nation.getName()));
-						TownyMessaging.sendMessage(player, Translation.of("default_towny_prefix") + Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
+						TownyMessaging.sendMsg(getSender(), Translation.of("default_towny_prefix") + Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
 					} else
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_not_allied_with_2", nation.getName(), ally.getName()));
+						TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_nation_not_allied_with_2", nation.getName(), ally.getName()));
 				}
 			} else if (split[1].equalsIgnoreCase("enemy")) {
 				if (split.length < 4)
@@ -1484,7 +1484,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				Nation enemy = townyUniverse.getNation(split[3]);
 				if (enemy == null) {
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_name", split[3]));
+					TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_name", split[3]));
 					return;
 				}
 
@@ -1503,7 +1503,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						enemy.save();
 						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_added_enemy", enemy.getName()));
 						TownyMessaging.sendPrefixedNationMessage(enemy, Translation.of("msg_added_enemy", nation.getName()));
-						TownyMessaging.sendMessage(player, Translation.of("default_towny_prefix") + Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
+						TownyMessaging.sendMsg(getSender(), Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
 					} else
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_already_enemies_with_2", nation.getName(), enemy.getName()));
 				} else if (split[2].equalsIgnoreCase("remove")) {
@@ -1512,9 +1512,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						nation.save();
 						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_enemy_to_neutral", player.getName()));
 						TownyMessaging.sendPrefixedNationMessage(enemy, Translation.of("msg_removed_enemy", nation.getName()));
-						TownyMessaging.sendMessage(player, Translation.of("default_towny_prefix") + Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
+						TownyMessaging.sendMsg(getSender(), Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
 					} else
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_not_enemies_with_2", nation.getName(), enemy.getName()));
+						TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_nation_not_enemies_with_2", nation.getName(), enemy.getName()));
 				}
 			}
 
