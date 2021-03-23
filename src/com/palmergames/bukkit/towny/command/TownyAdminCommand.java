@@ -135,7 +135,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"deposit",
 		"withdraw",
 		"bankhistory",
-		"rank"
+		"rank",
+		"enemy",
+		"ally"
 	);
 
 	private static final List<String> adminToggleTabCompletes = Arrays.asList(
@@ -417,6 +419,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return getTownyStartingWith(args[4], "r");
 							else if (args.length == 6)
 								return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[5]);
+						case "enemy":
+						case "ally":
+							if (args.length == 4)
+								return Arrays.asList("add", "remove");
+							if (args.length == 5)
+								return getTownyStartingWith(args[4], "n");
 						default:
 							if (args.length == 3)
 								return NameUtil.filterByStart(adminNationTabCompletes, args[2]);
@@ -1424,6 +1432,89 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank add [resident] [rank] ", ""));
 						sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank remove [resident] [rank] ", ""));
 						return;
+				}
+			} else if (split[1].equalsIgnoreCase("ally")) {
+				if (split.length < 4)
+					return;
+				
+				Nation ally = townyUniverse.getNation(split[3]);
+				if (ally == null) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_name", split[3]));
+					return;
+				}
+
+				if (split[2].equalsIgnoreCase("add")) {
+					if (!nation.hasAlly(ally)) {
+						if (nation.hasEnemy(ally))
+							nation.removeEnemy(ally);
+						
+						if (ally.hasEnemy(nation))
+							ally.removeEnemy(nation);
+						
+						nation.addAlly(ally);
+						nation.save();
+
+						ally.addAlly(nation);
+						ally.save();
+
+						plugin.resetCache();
+						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_added_ally", ally.getName()));
+						TownyMessaging.sendPrefixedNationMessage(ally, Translation.of("msg_added_ally", nation.getName()));
+						TownyMessaging.sendMessage(player, Translation.of("default_towny_prefix") + Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
+					} else
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_already_allied_with_2", nation.getName(), ally.getName()));
+				} else if (split[2].equalsIgnoreCase("remove")) {
+					if (nation.hasAlly(ally)) {
+						nation.removeAlly(ally);
+						nation.save();
+
+						ally.removeAlly(nation);
+						ally.save();
+
+						plugin.resetCache();
+						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_removed_ally", ally.getName()));
+						TownyMessaging.sendPrefixedNationMessage(ally, Translation.of("msg_removed_ally", nation.getName()));
+						TownyMessaging.sendMessage(player, Translation.of("default_towny_prefix") + Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
+					} else
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_not_allied_with_2", nation.getName(), ally.getName()));
+				}
+			} else if (split[1].equalsIgnoreCase("enemy")) {
+				if (split.length < 4)
+					return;
+				
+				Nation enemy = townyUniverse.getNation(split[3]);
+				if (enemy == null) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_name", split[3]));
+					return;
+				}
+
+				if (split[2].equalsIgnoreCase("add")) {
+					if (!nation.hasEnemy(enemy)) {
+						if (nation.hasAlly(enemy)) {
+							nation.removeAlly(enemy);
+							enemy.removeAlly(nation);
+							plugin.resetCache();
+						}
+
+						nation.addEnemy(enemy);
+						enemy.addEnemy(nation);
+
+						nation.save();
+						enemy.save();
+						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_added_enemy", enemy.getName()));
+						TownyMessaging.sendPrefixedNationMessage(enemy, Translation.of("msg_added_enemy", nation.getName()));
+						TownyMessaging.sendMessage(player, Translation.of("default_towny_prefix") + Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
+					} else
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_already_enemies_with_2", nation.getName(), enemy.getName()));
+				} else if (split[2].equalsIgnoreCase("remove")) {
+					if (nation.hasEnemy(enemy)) {
+						nation.removeEnemy(enemy);
+						nation.save();
+						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_enemy_to_neutral", player.getName()));
+						TownyMessaging.sendPrefixedNationMessage(enemy, Translation.of("msg_removed_enemy", nation.getName()));
+						TownyMessaging.sendMessage(player, Translation.of("default_towny_prefix") + Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
+					} else
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_not_enemies_with_2", nation.getName(), enemy.getName()));
 				}
 			}
 

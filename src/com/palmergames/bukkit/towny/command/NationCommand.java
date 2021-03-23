@@ -281,7 +281,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "enemy":
 					if (args.length == 2) {
 						return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
-					} else if (args.length == 3){
+					} else if (args.length >= 3){
 						switch (args[1].toLowerCase()) {
 							case "add":
 								return getTownyStartingWith(args[2], "n");
@@ -1677,12 +1677,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			for (String name : names) {
 				ally = townyUniverse.getNation(name);
 				if (ally != null) {
-					if (nation.equals(ally)) {
+					if (nation.equals(ally))
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_own_nation_disallow"));
-						return;
-					} else {
+					else if (!nation.isAlliedWith(ally))
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_not_allied_with", ally.getName()));
+					else
 						list.add(ally);
-					}
 				}
 			}
 			if (!list.isEmpty()) {
@@ -1854,7 +1854,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (invite.getSender().equals(nation)) {
 						try {
 							InviteHandler.declineInvite(invite, true);
-							TownyMessaging.sendMessage(sender, Translation.of("town_revoke_invite_successful"));
+							TownyMessaging.sendMessage(sender, Translation.of("nation_revoke_ally_successful"));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
@@ -1877,7 +1877,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendRequestMessage(mayor,invite);
 				Bukkit.getPluginManager().callEvent(new NationRequestAllyNationEvent(invite));
 			} else {
-				throw new TownyException(Translation.of("msg_err_player_already_invited", receiver.getName()));
+				throw new TownyException(Translation.of("msg_err_ally_already_requested", receiver.getName()));
 			}
 		} catch (TooManyInvitesException e) {
 			receiver.deleteReceivedInvite(invite);
@@ -2031,6 +2031,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		// test add or remove
 		String test = split[0];
 		String[] newSplit = StringMgmt.remFirstArg(split);
+		boolean add = test.equalsIgnoreCase("add");
 
 		if ((test.equalsIgnoreCase("remove") || test.equalsIgnoreCase("add")) && newSplit.length > 0) {
 			for (String name : newSplit) {
@@ -2042,11 +2043,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				if (nation.equals(enemy))
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_own_nation_disallow"));
+				else if (add && nation.hasEnemy(enemy))
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_already_enemies_with", enemy.getName()));
+				else if (!add && !nation.hasEnemy(enemy))
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_not_enemies_with", enemy.getName()));
 				else
 					list.add(enemy);
 			}
 			if (!list.isEmpty())
-				nationEnemy(resident, nation, list, test.equalsIgnoreCase("add"));
+				nationEnemy(resident, nation, list, add);
 
 		} else {
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "[add/remove]"));
