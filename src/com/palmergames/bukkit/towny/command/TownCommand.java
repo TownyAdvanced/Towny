@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
+import com.palmergames.bukkit.towny.event.town.TownKickEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownMergeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreMergeEvent;
@@ -2906,10 +2907,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				kicking.remove(member);
 				continue;
 			} else {
-				try {
-					townRemoveResident(town, member);
-				} catch (NotRegisteredException e) {
+				if (!town.hasResident(member))
 					kicking.remove(member);
+				else {
+					TownKickEvent townKickEvent = new TownKickEvent(member, sender);
+					Bukkit.getPluginManager().callEvent(townKickEvent);
+
+					if (townKickEvent.isCancelled()) {
+						if (player != null)
+							TownyMessaging.sendErrorMsg(player, townKickEvent.getCancelMessage());
+						else if (sender instanceof CommandSender)
+							TownyMessaging.sendErrorMsg((CommandSender) sender, townKickEvent.getCancelMessage());
+						
+						kicking.remove(member);
+					} else
+						member.removeTown();
 				}
 			}
 		}
