@@ -31,7 +31,9 @@ public class TownPreMergeEvent extends Event implements Cancellable {
 		this.cancelMessage = cancelMessage;
 	}
 	
-	public String getCancelMessage() { return this.cancelMessage; }
+	public String getCancelMessage() {
+		return cancelMessage;
+	}
 
 	public Town getRemainingTown() {
 		return remainingTown;
