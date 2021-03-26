@@ -1345,7 +1345,7 @@ msg_town_merge_other_offline: '&cThe mayor of %s, %s, is currently offline. Merg
 msg_town_merge_err_too_many_residents: '&cMerge failed: New resident amount exceeds the limit (%d)'
 msg_town_merge_err_too_many_townblocks: '&cMerge failed: New town size exceeds the limit (%d)'
 msg_town_merge_err_too_many_outposts: '&cMerge failed: New outpost amount exceeds the limit (%d)'
-msg_town_merge_err_not_enough_money: '&cMerge failed: Not enough money. (%d/%d)'
+msg_town_merge_err_not_enough_money: '&cMerge failed: Not enough money. (%s/%s)'
 msg_town_merge_err_too_many_purchased_townblocks: '&cMerge failed: Too many purchased townblocks (%d)'
 msg_town_merge_warning: '&cWarning: If accepted, merging with %s will cost %s.'
 msg_town_merge_debt_warning: '&cWarning: %s is currently in debt, you will have to pay their debt if accepted.'

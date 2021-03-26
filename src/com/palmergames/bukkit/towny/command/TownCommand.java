@@ -3551,12 +3551,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		if ((remainingTown.getPurchasedBlocks() + succumbingTown.getPurchasedBlocks()) > TownySettings.getMaxPurchasedBlocks(remainingTown)) {
+		if ((remainingTown.getPurchasedBlocks() + succumbingTown.getPurchasedBlocks()) > TownySettings.getMaxPurchasedBlocks(remainingTown) && succumbingTown.getPurchasedBlocks() > 0) {
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_purchased_townblocks", TownySettings.getMaxPurchasedBlocks(remainingTown)));
 			return;
 		}
 
-		if (TownySettings.isAllowingOutposts() && (remainingTown.getMaxOutpostSpawn() + succumbingTown.getMaxOutpostSpawn()) > remainingTown.getOutpostLimit()) {
+		if (TownySettings.isAllowingOutposts() && (remainingTown.getMaxOutpostSpawn() + succumbingTown.getMaxOutpostSpawn()) > remainingTown.getOutpostLimit() && succumbingTown.getMaxOutpostSpawn() > 0) {
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_too_many_outposts", remainingTown.getOutpostLimit()));
 			return;
 		}
@@ -3579,7 +3579,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				cost = baseCost + townblockCost + bankruptcyCost;
 
 				if (!remainingTown.getAccount().canPayFromHoldings(cost)) {
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_not_enough_money", (int) remainingTown.getAccount().getHoldingBalance(), (int) cost));
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_town_merge_err_not_enough_money", TownyEconomyHandler.getFormattedBalance(remainingTown.getAccount().getHoldingBalance()), TownyEconomyHandler.getFormattedBalance(cost)));
 					return;
 				}
 			} catch (TownyException | EconomyException e) {
