@@ -5929,3 +5929,4 @@ v0.92.0.11:
   - Fix Spawn Point particles not disappearing when spawn points are moved.
     - Closes #4830.
   - Fix formatted balance for not enough money error, courtesy of Warriorrrr with PR #4833.
+  - Fix not using the filteredname earlier on when a town is made. 

@@ -2429,6 +2429,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if ((filteredName == null) || dataSource.hasTown(filteredName))
 				throw new TownyException(Translation.of("msg_err_invalid_name", name));
 			
+			name = filteredName;
+			
 			if (resident.hasTown())
 				throw new TownyException(Translation.of("msg_err_already_res", resident.getName()));
 
@@ -2464,7 +2466,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (!resident.getAccount().canPayFromHoldings(TownySettings.getNewTownPrice()))
 					throw new TownyException(Translation.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translation.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
 				
-				Confirmation.runOnAccept(() -> {			
+				final String finalName = name;
+				Confirmation.runOnAccept(() -> {
+					
 					// Make the resident pay here.
 					if (!resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost")) {
 						// Send economy message
@@ -2474,12 +2478,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					
 					try {
 						// Make town.
-						newTown(world, name, resident, key, spawnLocation, player);
+						newTown(world, finalName, resident, key, spawnLocation, player);
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage());
 						e.printStackTrace();
 					}
-					TownyMessaging.sendGlobalMessage(Translation.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(name)));
+					TownyMessaging.sendGlobalMessage(Translation.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
 				})
 					.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())))
 					.sendTo(player);
