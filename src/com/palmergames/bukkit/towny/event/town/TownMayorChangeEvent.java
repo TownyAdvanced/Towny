@@ -38,6 +38,14 @@ public class TownMayorChangeEvent extends Event implements Cancellable {
         return TownyAPI.getInstance().getResidentTownOrNull(newMayor);
     }
 
+    public boolean isNationCapital() {
+        return getTown().isCapital();
+    }
+
+    public boolean isKingChange() {
+        return oldMayor.isKing();
+    }
+
     public boolean isCancelled() {
         return cancelled;
     }
