@@ -17,9 +17,11 @@ import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
+import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.town.TownKickEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
+import com.palmergames.bukkit.towny.event.town.TownMayorChangeEvent;
 import com.palmergames.bukkit.towny.event.town.TownMergeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreMergeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
@@ -1888,6 +1890,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							Resident newMayor = getResidentOrThrow(split[1]);
 							if (!town.hasResident(split[1]))
 								throw new TownyException(Translation.of("msg_err_mayor_doesnt_belong_to_town"));
+
+							TownMayorChangeEvent townMayorChangeEvent = new TownMayorChangeEvent(oldMayor, newMayor);
+							Bukkit.getPluginManager().callEvent(townMayorChangeEvent);
+							if (townMayorChangeEvent.isCancelled() && !admin) {
+								TownyMessaging.sendErrorMsg(player, townMayorChangeEvent.getCancelMessage());
+								return;
+							}
+
+							if (town.isCapital()) {
+								NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldMayor, newMayor);
+								Bukkit.getPluginManager().callEvent(nationKingChangeEvent);
+								if (nationKingChangeEvent.isCancelled() && !admin) {
+									TownyMessaging.sendErrorMsg(player, nationKingChangeEvent.getCancelMessage());
+									return;
+								}
+							}
+							
 							town.setMayor(newMayor);
 							TownyPerms.assignPermissions(oldMayor, null);
 							plugin.deleteCache(oldMayor.getName());
