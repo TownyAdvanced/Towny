@@ -1434,11 +1434,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						return;
 				}
 			} else if (split[1].equalsIgnoreCase("ally")) {
-				if (split.length < 4)
+				if (split.length < 4) {
+					TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_input", "/ta nation [nation] ally [add/remove] [nation]"));
 					return;
+				}
 				
 				Nation ally = townyUniverse.getNation(split[3]);
-				if (ally == null) {
+				if (ally == null || ally.equals(nation)) {
 					TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_name", split[3]));
 					return;
 				}
@@ -1474,16 +1476,19 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						plugin.resetCache();
 						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_removed_ally", ally.getName()));
 						TownyMessaging.sendPrefixedNationMessage(ally, Translation.of("msg_removed_ally", nation.getName()));
-						TownyMessaging.sendMsg(getSender(), Translation.of("default_towny_prefix") + Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
+						TownyMessaging.sendMsg(getSender(), Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
 					} else
 						TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_nation_not_allied_with_2", nation.getName(), ally.getName()));
-				}
+				} else
+					TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_input", "/ta nation [nation] ally [add/remove] [nation]"));
 			} else if (split[1].equalsIgnoreCase("enemy")) {
-				if (split.length < 4)
+				if (split.length < 4) {
+					TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_input", "/ta nation [nation] enemy [add/remove] [nation]"));
 					return;
+				}
 				
 				Nation enemy = townyUniverse.getNation(split[3]);
-				if (enemy == null) {
+				if (enemy == null || enemy.equals(nation)) {
 					TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_name", split[3]));
 					return;
 				}
@@ -1497,12 +1502,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						nation.addEnemy(enemy);
-						enemy.addEnemy(nation);
-
 						nation.save();
-						enemy.save();
-						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_added_enemy", enemy.getName()));
-						TownyMessaging.sendPrefixedNationMessage(enemy, Translation.of("msg_added_enemy", nation.getName()));
+						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_enemy_nations", getSenderFormatted(), enemy.getName()));
 						TownyMessaging.sendMsg(getSender(), Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
 					} else
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_already_enemies_with_2", nation.getName(), enemy.getName()));
@@ -1510,17 +1511,22 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					if (nation.hasEnemy(enemy)) {
 						nation.removeEnemy(enemy);
 						nation.save();
-						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_enemy_to_neutral", player.getName()));
+						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_enemy_to_neutral", getSenderFormatted(), enemy.getName()));
 						TownyMessaging.sendPrefixedNationMessage(enemy, Translation.of("msg_removed_enemy", nation.getName()));
 						TownyMessaging.sendMsg(getSender(), Translation.of("msg_ta_allies_enemies_updated", nation.getName()));
 					} else
 						TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_nation_not_enemies_with_2", nation.getName(), enemy.getName()));
-				}
+				} else
+					TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_input", "/ta nation [nation] enemy [add/remove] [nation]"));
 			}
 
 		} catch (NotRegisteredException | AlreadyRegisteredException | InvalidNameException | EconomyException e) {
 			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 		}
+	}
+
+	private String getSenderFormatted() {
+		return isConsole ? "CONSOLE" : ((Player) getSender()).getName();
 	}
 
 	/**
