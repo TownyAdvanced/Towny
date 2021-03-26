@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.event.town;
 
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 
 import org.bukkit.Bukkit;
@@ -30,6 +32,10 @@ public class TownMayorChangeEvent extends Event implements Cancellable {
 
     public Resident getNewMayor() {
         return newMayor;
+    }
+
+    public Town getTown() {
+        return TownyAPI.getInstance().getResidentTownOrNull(newMayor);
     }
 
     public boolean isCancelled() {

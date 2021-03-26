@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.event.nation;
 
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translation;
 
@@ -30,6 +32,10 @@ public class NationKingChangeEvent extends Event implements Cancellable {
 
     public Resident getNewKing() {
         return newKing;
+    }
+
+    public Nation getNation() {
+        return TownyAPI.getInstance().getTownNationOrNull(TownyAPI.getInstance().getResidentTownOrNull(newKing));
     }
 
     public boolean isCancelled() {
