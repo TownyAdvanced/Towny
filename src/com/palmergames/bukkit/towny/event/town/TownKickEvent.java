@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.event.town;
 
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 
 import org.bukkit.Bukkit;
@@ -26,6 +28,10 @@ public class TownKickEvent extends Event implements Cancellable {
 
     public Resident getKickedResident() {
         return kickedResident;
+    }
+
+    public Town getTown() {
+        return TownyAPI.getInstance().getResidentTownOrNull(kickedResident);
     }
 
     /**
