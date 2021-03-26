@@ -35,6 +35,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -80,7 +81,7 @@ public class TownyUniverse {
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private CompletableFuture<Void> backupFuture;
     
-	private final Map<Location, SpawnPoint> spawnPoints = new ConcurrentHashMap<>(); 
+	private final Map<Block, SpawnPoint> spawnPoints = new ConcurrentHashMap<>(); 
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
@@ -1147,25 +1148,25 @@ public class TownyUniverse {
         this.warEvent = warEvent;
     }
     
-	public Map<Location, SpawnPoint> getSpawnPoints() {
+	public Map<Block, SpawnPoint> getSpawnPoints() {
 		return spawnPoints;
 	}
 	
 	public SpawnPoint getSpawnPoint(Location loc) {
-		return spawnPoints.get(loc);
+		return spawnPoints.get(loc.getBlock());
 	}
 	
 	public boolean hasSpawnPoint(Location loc) {
-		return spawnPoints.containsKey(loc); 
+		return spawnPoints.containsKey(loc.getBlock()); 
 	}
 	
 	public void addSpawnPoint(SpawnPoint spawn) {
-		spawnPoints.put(spawn.getBukkitLocation(), spawn);
+		spawnPoints.put(spawn.getBukkitLocation().getBlock(), spawn);
 	}
 
 	public void removeSpawnPoint(Location loc) {
 		if (hasSpawnPoint(loc))
-			spawnPoints.remove(loc);
+			spawnPoints.remove(loc.getBlock());
 	}
 	
 	/**

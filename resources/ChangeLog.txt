@@ -5926,3 +5926,5 @@ v0.92.0.11:
 0.96.7.11:
   - Fix HangingEntity placement all using Painting material for permission tests.
   - API: Add a TownKickEvent, courtesy of Warriorrrr with PR #4831.
+  - Fix Spawn Point particles not disappearing when spawn points are moved.
+    - Closes #4830.
