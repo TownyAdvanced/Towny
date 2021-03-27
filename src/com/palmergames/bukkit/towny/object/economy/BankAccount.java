@@ -221,7 +221,7 @@ public class BankAccount extends Account {
 	}
 
 	private class CachedBalance {
-		private double balance;
+		private double balance = 0;
 		private long time;
 		
 		private CachedBalance(double _balance) {
@@ -240,6 +240,23 @@ public class BankAccount extends Account {
 			balance = _balance;
 			time = System.currentTimeMillis();
 		}
+		
+		void updateCache() {
+			if (!TownySettings.isEconomyAsync()) // Some economy plugins don't handle things async, 
+				try {                            // luckily we have a config option for this such case.
+					setBalance(getHoldingBalance());
+				} catch (EconomyException e1) {
+					e1.printStackTrace();
+				}
+			else 
+				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> {
+					try {
+						setBalance(getHoldingBalance());
+					} catch (EconomyException e) {
+						e.printStackTrace();
+					}
+				});				
+		}
 	}
 	
 	/**
@@ -251,21 +268,8 @@ public class BankAccount extends Account {
 	 * @return a cached balance of a town or nation bank account.
 	 */
 	public double getCachedBalance() {
-		if (System.currentTimeMillis() - cachedBalance.getTime() > CACHE_TIMEOUT) {			
-			if (!TownySettings.isEconomyAsync()) // Some economy plugins don't handle things async, 
-				try {                            // luckily we have a config option for this such case.
-					cachedBalance.setBalance(getHoldingBalance());
-				} catch (EconomyException e1) {
-					e1.printStackTrace();
-				}
-			else 
-				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> {
-					try {
-						cachedBalance.setBalance(getHoldingBalance());
-					} catch (EconomyException e) {
-						e.printStackTrace();
-					}
-				});				
+		if (System.currentTimeMillis() - cachedBalance.getTime() > CACHE_TIMEOUT) {
+			cachedBalance.updateCache();
 		}
 		return cachedBalance.getBalance();
 	}
