@@ -34,6 +34,7 @@ import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveAllyEvent;
 import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
+import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumOnlinePlayersCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownsCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumResidentsCalculationEvent;
@@ -2166,6 +2167,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			              return;
 			            }
 
+						NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldKing, newKing);
+						Bukkit.getPluginManager().callEvent(nationKingChangeEvent);
+						if (nationKingChangeEvent.isCancelled() && !admin) {
+							TownyMessaging.sendErrorMsg(player, nationKingChangeEvent.getCancelMessage());
+							return;
+						}
+
 						nation.setKing(newKing);
 						plugin.deleteCache(oldKing.getName());
 						plugin.deleteCache(newKing.getName());
@@ -2194,6 +2202,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (split.length < 2)
 						TownyMessaging.sendErrorMsg(player, "Eg: /nation set capital {town name}");
 					else {
+						Resident oldKing = nation.getKing();
+						Resident newKing = newCapital.getMayor();
+
+						NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldKing, newKing);
+						Bukkit.getPluginManager().callEvent(nationKingChangeEvent);
+						if (nationKingChangeEvent.isCancelled() && !admin) {
+							TownyMessaging.sendErrorMsg(player, nationKingChangeEvent.getCancelMessage());
+							return;
+						}
+
 						// Do proximity tests.
 						if (TownySettings.getNationRequiresProximity() > 0 ) {
 							List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns(), newCapital);
