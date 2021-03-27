@@ -597,6 +597,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			try {
 				return townblock != null ? townblock.getTown().getFormattedName() : TownyAPI.getInstance().getDataSource().getWorld(player.getWorld().getName()).getUnclaimedZoneName();
 			} catch (NotRegisteredException ignored) {}
+		case "player_location_plot_name": // %townyadvanced_player_location_plot_name%
+			return townblock != null ? townblock.getName() : "";
 		case "player_location_town_prefix": // %townyadvanced_player_location_town_prefix%
 			try {
 				return townblock != null ? townblock.getTown().getPrefix(): "";

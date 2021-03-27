@@ -5932,3 +5932,5 @@ v0.92.0.11:
   - Fix not using the filteredname earlier on when a town is made. 
   - API: Add NationKingChangeEvent and TownMayorChangeEvent, courtesy of Warriorrrr with PR #4834.
   - Small refactor of the bank balance caching. 
+  - Placeholder: %townyadvanced_player_location_plot_name%
+    - Displays a plot's name if it has one.
