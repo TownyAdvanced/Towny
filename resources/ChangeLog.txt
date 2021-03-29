@@ -5935,3 +5935,10 @@ v0.92.0.11:
   - Placeholder: %townyadvanced_player_location_plot_name%
     - Displays a plot's name if it has one.
   - Add townyadmin command for adding/removing nation allies or enemies, courtesy of Warriorrrr with PR #4826
+  - New Commands:
+    - /ta nation NATIONNAME ally [add|remove] NATIONNAME
+    - /ta nation NATIONNAME enemy [add|remove] NATIONNAME
+  - New Permission nodes:
+    - towny.command.townyadmin.nation.enemy
+    - towny.command.townyadmin.nation.ally
+    - both are child nodes of towny.command.townyadmin.nation and therefore you will not need to add these (in most situations.)
