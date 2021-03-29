@@ -5934,3 +5934,4 @@ v0.92.0.11:
   - Small refactor of the bank balance caching. 
   - Placeholder: %townyadvanced_player_location_plot_name%
     - Displays a plot's name if it has one.
+  - Add townyadmin command for adding/removing nation allies or enemies, courtesy of Warriorrrr with PR #4826
