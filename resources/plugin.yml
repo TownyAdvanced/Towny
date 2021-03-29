@@ -610,6 +610,8 @@ permissions:
             towny.command.townyadmin.nation.toggle: true
             towny.command.townyadmin.nation.set: true
             towny.command.townyadmin.nation.bankhistory: true
+            towny.command.townyadmin.nation.enemy: true
+            towny.command.townyadmin.nation.ally: true
 
     towny.command.townyadmin.plot.*:
         description: User can access the admin plot commans.
