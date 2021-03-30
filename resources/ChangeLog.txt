@@ -5942,3 +5942,5 @@ v0.92.0.11:
     - towny.command.townyadmin.nation.enemy
     - towny.command.townyadmin.nation.ally
     - both are child nodes of towny.command.townyadmin.nation and therefore you will not need to add these (in most situations.)
+0.96.7.12:
+  - Swedish translation, added courtesy of OskyEdz with PR #4840.
