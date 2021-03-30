@@ -2,23 +2,18 @@ name: Published Release / PreRelease
 
 on:
     release:
-        types: [published]
+        types: [released]
         branches: [master]
 jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v1
-            - name: Set up JDK 11
+            - uses: actions/checkout@v2
+            - name: Set up OpenJDK 8
               uses: actions/setup-java@v1
               with:
-                  java-version: 11.0.4
-                  java-package: jdk
-                  architecture: x64
-            - name: Deploy to GitHub
+                  java-version: 8.0.232
+            - name: Deploy to GitHub Package Registry
+              run: mvn -B deploy -P github-actions
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
-                  echo "<settings><servers><server><id>github-towny</id><username>TownyAdvanced</username><password>${GITHUB_TOKEN}</password></server>" > ~/.m2/settings.xml
-                  echo "<server><id>github-tne</id><username>TownyAdvanced</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" >> ~/.m2/settings.xml
-                  mvn -B deploy --file pom_deb.xml

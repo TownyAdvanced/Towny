@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import com.palmergames.bukkit.towny.object.Resident;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.attribute.Attribute;
@@ -11,15 +12,14 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 
 public class HealthRegenTimerTask extends TownyTimerTask {
 
-	private Server server;
+	private final Server server;
 
 	public HealthRegenTimerTask(Towny plugin, Server server) {
 
@@ -36,44 +36,39 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 		for (Player player : server.getOnlinePlayers()) {
 			if (player.getHealth() <= 0)
 				continue;
-
-			Coord coord = Coord.parseCoord(player);
+			
+			// Is wilderness
+			if (TownyAPI.getInstance().isWilderness(player.getLocation()))
+				continue;
+			
 			try {
-				TownyUniverse townyUniverse = TownyUniverse.getInstance();
-				TownyWorld world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
-				TownBlock townBlock = world.getTownBlock(coord);
+				TownBlock townBlock = TownyUniverse.getInstance().getTownBlock(WorldCoord.parseWorldCoord(player.getLocation()));
+				Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
-				if (CombatUtil.isAlly(townBlock.getTown(), townyUniverse.getDataSource().getResident(player.getName()).getTown()))
-					if (!townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
-						incHealth(player);
-			} catch (TownyException x) {
+				if (resident != null 
+					&& resident.hasTown() 
+					&& CombatUtil.isAlly(townBlock.getTown(), resident.getTown())
+					&& !townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
+					incHealth(player);
+			} catch (TownyException ignore) {
 			}
 		}
-
-		//if (TownySettings.getDebug())
-		//	System.out.println("[Towny] Debug: Health Regen");
 	}
 
 	public void incHealth(Player player) {
 
 		// Keep saturation above zero while in town.
-		float currentSat = player.getSaturation();
-		if (currentSat == 0) {
-			
+		if (player.getSaturation() == 0)			
 			player.setSaturation(1F);
-		}
 		
 		// Heal while in town.
 		double currentHP = player.getHealth();
-		if (currentHP < player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-			player.setHealth(Math.min(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), ++currentHP));
+		double maxHP = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+		if (currentHP < maxHP) {
+			player.setHealth(Math.min(maxHP, ++currentHP));
 
 			// Raise an event so other plugins can keep in sync.
-			EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, currentHP, RegainReason.REGEN);
-			Bukkit.getServer().getPluginManager().callEvent(event);
-
+			Bukkit.getServer().getPluginManager().callEvent(new EntityRegainHealthEvent(player, currentHP, RegainReason.REGEN));
 		}
-		
 	}
-
 }

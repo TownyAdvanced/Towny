@@ -1,19 +1,23 @@
 package com.palmergames.bukkit.towny.regen;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.util.BukkitTools;
-
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -25,13 +29,6 @@ import java.util.Set;
  * 
  */
 public class TownyRegenAPI {
-
-	//private static Towny plugin = null;
-	
-	public static void initialize(Towny plugin) {
-
-		//TownyRegenAPI.plugin = plugin;
-	}
 
 	// table containing snapshot data of active reversions.
 	private static Hashtable<String, PlotBlockData> PlotChunks = new Hashtable<>();
@@ -57,6 +54,44 @@ public class TownyRegenAPI {
 
 		if (!worldCoords.contains(worldCoord))
 			worldCoords.add(worldCoord);
+	}
+	
+	/**
+	 * Removes a TownBlock from having a snapshot taken.
+	 * 
+	 * @param worldCoord - WorldCoord of TownBlock to remove from snapshot list.
+	 */
+	private static void removeWorldCoord(WorldCoord worldCoord) {
+
+		if (worldCoords.contains(worldCoord))
+			worldCoords.remove(worldCoord);
+	}
+	
+	/**
+	 * Gets a list of WorldCoords which are having snapshots taken, for one TownyWorld.
+	 * 
+	 * @param world - TownyWorld to gather a list of WorldCoords in.
+	 * @return list - List<WorldCoord> matched to above world.
+	 */
+	private static List<WorldCoord> getWorldCoords(TownyWorld world) {
+		List<WorldCoord> list = new ArrayList<>();
+		for (WorldCoord wc : worldCoords) {
+			try {
+				if (wc.getTownyWorld().equals(world))
+					list.add(wc);
+			} catch (NotRegisteredException ignored) {}
+		}		
+		return list;
+	}
+	
+	/**
+	 * Removes all worldcoords of given TownyWorld from having their snapshots taken.
+	 * 
+	 * @param world - TownyWorld to stop having snapshots made in.
+	 */
+	public static void removeWorldCoords(TownyWorld world) {
+		for (WorldCoord wc : getWorldCoords(world))
+			removeWorldCoord(wc);
 	}
 
 	/**
@@ -114,6 +149,26 @@ public class TownyRegenAPI {
 
 		PlotChunks = plotChunks;
 	}
+	
+	/**
+	 * Removes all plotchunks currently in regeneration list for one world.
+	 * 
+	 * @param world - TownyWorld to have regeneration stop in.
+	 * @param save - True to save regen list.
+	 */
+	public static void removePlotChunksForWorld(TownyWorld world, boolean save) {
+		Hashtable<String, PlotBlockData> plotChunks = new Hashtable<>();
+		for (String key : getPlotChunks().keySet()) {
+			if (!getPlotChunks().get(key).getWorldName().equals(world.getName()))
+				plotChunks.put(key, getPlotChunks().get(key));
+		}
+		
+		if (!plotChunks.isEmpty())
+			setPlotChunks(plotChunks);
+		
+		if (save)
+			TownyUniverse.getInstance().getDataSource().saveRegenList();
+	}
 
 	/**
 	 * Removes a Plot Chunk from the regeneration Hashtable
@@ -169,10 +224,14 @@ public class TownyRegenAPI {
 	 * Loads a Plot Chunk snapshot from the data source
 	 * 
 	 * @param townBlock - TownBlock to get
-	 * @return loads the PlotData for the given townBlock   
+	 * @return loads the PlotData for the given townBlock or returns null.   
 	 */
 	public static PlotBlockData getPlotChunkSnapshot(TownBlock townBlock) {
-		return TownyUniverse.getInstance().getDataSource().loadPlotData(townBlock);
+		PlotBlockData data = TownyUniverse.getInstance().getDataSource().loadPlotData(townBlock);
+		if (data != null) 
+			return data;
+		else
+			return null;
 	}
 
 	/**
@@ -332,7 +391,7 @@ public class TownyRegenAPI {
 //
 //		}
 //
-//		TownyMessaging.sendMessage(BukkitTools.getPlayerExact(resident.getName()), TownySettings.getLangString("msg_undo_complete"));
+//		TownyMessaging.sendMessage(BukkitTools.getPlayerExact(resident.getName()), Translation.of("msg_undo_complete"));
 //
 //	}
 
@@ -418,8 +477,6 @@ public class TownyRegenAPI {
 		//Block block = null;
 		int plotSize = TownySettings.getTownBlockSize();
 
-		TownyMessaging.sendDebugMsg("Processing deleteTownBlockMaterial");
-
 		World world = BukkitTools.getServer().getWorld(townBlock.getWorld().getName());
 
 		if (world != null) {
@@ -448,6 +505,48 @@ public class TownyRegenAPI {
 	 * Protection Regen follows
 	 */
 	
+	/**
+	 * Called from various explosion listeners.
+	 * 
+	 * @param block - {@link Block} which is being exploded.
+	 * @param count - int for setting the delay to do one block at a time.
+	 * @param world - {@link TownyWorld} for where the regen is being triggered.
+	 * @param event - The Bukkit Event causing this explosion.
+	 * 
+	 * @return true if the protectiontask was begun successfully. 
+	 */
+	public static boolean beginProtectionRegenTask(Block block, int count, TownyWorld world, Event event) {
+		if (!hasProtectionRegenTask(new BlockLocation(block.getLocation())) && !isBlacklistedBlock(world, block.getType())) {
+			// Piston extensions which are broken by explosions ahead of the base block
+			// cause baseblocks to drop as items and no base block to be regenerated.
+			if (block.getType().equals(Material.PISTON_HEAD)) {
+				org.bukkit.block.data.type.PistonHead blockData = (org.bukkit.block.data.type.PistonHead) block.getBlockData(); 
+				Block baseBlock = block.getRelative(blockData.getFacing().getOppositeFace());
+				block = baseBlock;
+			}
+			ProtectionRegenTask task = new ProtectionRegenTask(Towny.getPlugin(), block);
+			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, (TownySettings.getPlotManagementWildRegenDelay() + count) * 20));
+			addProtectionRegenTask(task);
+
+			// If this was a TownyExplodingBlocksEvent we want to get the bukkit event from it first.
+			if (event instanceof TownyExplodingBlocksEvent)
+				event = ((TownyExplodingBlocksEvent) event).getBukkitExplodeEvent();
+			
+			// Remove the drops from the explosion.
+			if (event instanceof EntityExplodeEvent) 
+				((EntityExplodeEvent) event).setYield(0);
+			else if (event instanceof BlockExplodeEvent)
+				((BlockExplodeEvent) event).setYield(0);
+
+			return true;
+		}
+		return false;
+	}
+	
+	private static boolean isBlacklistedBlock(TownyWorld world, Material type) {
+		return world.isPlotManagementIgnoreIds(type);
+	}
+
 	/**
 	 * Does a task for this block already exist?
 	 * 

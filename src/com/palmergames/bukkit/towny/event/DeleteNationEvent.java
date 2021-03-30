@@ -1,15 +1,14 @@
 package com.palmergames.bukkit.towny.event;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.Event;
+import com.palmergames.bukkit.towny.object.Nation;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
 
-public class DeleteNationEvent extends Event  {
+public class DeleteNationEvent extends TownyObjDeleteEvent  {
 
     private static final HandlerList handlers = new HandlerList();
-    
-    private String nationName;
 
     @Override
     public HandlerList getHandlers() {
@@ -22,9 +21,11 @@ public class DeleteNationEvent extends Event  {
 		return handlers;
 	}
 
-    public DeleteNationEvent(String nation) {
-        super(!Bukkit.getServer().isPrimaryThread());
-        this.nationName = nation;
+    private final UUID kingUUID;
+    
+    public DeleteNationEvent(Nation nation, UUID uuid) {
+        super(nation.getName(), nation.getUUID(), nation.getRegistered());
+        kingUUID = uuid;
     }
 
     /**
@@ -32,7 +33,28 @@ public class DeleteNationEvent extends Event  {
      * @return the deleted nation name.
      */
     public String getNationName() {
-        return nationName;
+        return name;
     }
-    
+
+	/**
+	 * @return the deleted nation uuid.
+	 */
+	public UUID getNationUUID() {
+    	return uuid;
+    }
+
+	/**
+	 * @return deleted nation time of creation (in ms).
+	 */
+	public long getNationCreated() {
+    	return registered;
+	}
+	
+	/**
+	 * @return deleted nation king uuid.
+	 */
+	@Nullable
+	public UUID getNationKing() {
+		return kingUUID;
+	}
 }

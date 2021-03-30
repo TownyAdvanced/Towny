@@ -17,10 +17,14 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.War;
+
+import net.citizensnpcs.api.CitizensAPI;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -40,7 +44,16 @@ public class PlayerCacheUtil {
 		PlayerCacheUtil.plugin = plugin;
 	}
 
-	
+	/**
+	 * Returns the PlayerCache of a Player.
+	 * @param player The {@link Player} for which to fetch the {@link PlayerCache}.
+	 * @return PlayerCache
+	 */
+	public static PlayerCache getCache(Player player) {
+		
+		return plugin.getCache(player);
+	}
+
 	/**
 	 * Returns player cached permission for BUILD, DESTROY, SWITCH or ITEM_USE
 	 * at this location for the specified item id.
@@ -229,9 +242,6 @@ public class PlayerCacheUtil {
 	 * @return TownBlockStatus type.
 	 */
 	public static TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
-		
-		//if (isTownyAdmin(player))
-		//        return TownBlockStatus.ADMIN;
 
 		try {
 			if (!worldCoord.getTownyWorld().isUsingTowny())
@@ -241,66 +251,15 @@ public class PlayerCacheUtil {
 			return TownBlockStatus.NOT_REGISTERED;
 		}
 
-		//TownyUniverse universe = plugin.getTownyUniverse();
-		TownBlock townBlock;
-		Town town;
-		try {
-			townBlock = worldCoord.getTownBlock();
-			town = townBlock.getTown();
-
-			if (townBlock.isLocked()) {
-				// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
-				if (town.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
-					TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
-					return TownBlockStatus.LOCKED;
-				}
-				townBlock.setLocked(false);
-			}
-
-		} catch (NotRegisteredException e) {
-			// Has to be wilderness because townblock = null;
+		if (!worldCoord.hasTownBlock()) {
+			// Has to be wilderness.
 
 			// When nation zones are enabled we do extra tests to determine if this is near to a nation.
 			if (TownySettings.getNationZonesEnabled()) {
 				// This nation zone system can be disabled during wartime.
 				if (!(TownySettings.getNationZonesWarDisables() && TownyAPI.getInstance().isWarTime())) {
-					Town nearestTown = null;
-					int distance;
-					try {
-						nearestTown = worldCoord.getTownyWorld().getClosestTownFromCoord(worldCoord.getCoord(), nearestTown);
-						if (nearestTown == null) {
-							return TownBlockStatus.UNCLAIMED_ZONE;
-						}
-						if (!nearestTown.hasNation()) {
-							return TownBlockStatus.UNCLAIMED_ZONE;
-						}
-						distance = worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord.getCoord());
-					} catch (NotRegisteredException e1) {
-						// There will almost always be a town in any world where towny is enabled. 
-						// If there isn't then we fall back on normal unclaimed zone status.
-						return TownBlockStatus.UNCLAIMED_ZONE;
-					}
-
-					// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
-					if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
-						return TownBlockStatus.UNCLAIMED_ZONE;
-					}
-
-					try {
-						int nationZoneRadius;
-						if (nearestTown.isCapital()) {
-							nationZoneRadius =
-								Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString())
-									+ TownySettings.getNationZonesCapitalBonusSize();
-						} else {
-							nationZoneRadius = Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
-						}
-
-						if (distance <= nationZoneRadius) {
-							return TownBlockStatus.NATION_ZONE;
-						}
-					} catch (NumberFormatException | NotRegisteredException ignored) {
-					}
+					// Returns either UNCLAIMED_ZONE or NATION_ZONE.
+					return TownyAPI.getInstance().hasNationZone(worldCoord);
 				}				
 			}
 	
@@ -308,15 +267,38 @@ public class PlayerCacheUtil {
 			return TownBlockStatus.UNCLAIMED_ZONE;
 		}
 
+		TownBlock townBlock = null;
+		Town town = null;
+		try {
+			townBlock = worldCoord.getTownBlock();
+			town = townBlock.getTown();
+
+			if (townBlock.isLocked()) {
+				// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
+				if (townBlock.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
+					TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
+					return TownBlockStatus.LOCKED;
+				}
+				townBlock.setLocked(false);
+			}
+
+		} catch (NotRegisteredException ignored) {}
+
 		/*
 		 * Find the resident data for this player.
 		 */
-		Resident resident;
-		try {
-			resident = TownyUniverse.getInstance().getDataSource().getResident(player.getName());
-		} catch (TownyException e) {
-			System.out.print("Failed to fetch resident: " + player.getName());
-			return TownBlockStatus.NOT_REGISTERED;
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		
+		if (resident == null) {
+			// Check if entity is a Citizens NPC
+			if (plugin.isCitizens2()) {
+				if (CitizensAPI.getNPCRegistry().isNPC(player))
+					return TownBlockStatus.NOT_REGISTERED;
+			} else {
+				// If not an NPC then there is likely some sort of problem that should be logged.
+				System.out.print("[Towny] Failed to fetch resident: " + player.getName());
+				return TownBlockStatus.NOT_REGISTERED;
+			}
 		}
 
 		try {
@@ -402,6 +384,25 @@ public class PlayerCacheUtil {
 	 * @return true if allowed.
 	 */
 	private static boolean getPermission(Player player, TownBlockStatus status, WorldCoord pos, Material material, TownyPermission.ActionType action) {
+		// Allow admins to have ALL permissions
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		if (townyUniverse.getPermissionSource().isTownyAdmin(player))
+			return true;
+
+		//If town is bankrupt (but not ruined), nobody can build
+		TownBlock townBlock = null;
+		Town targetTown = null;
+		if(TownySettings.isTownBankruptcyEnabled() && action == ActionType.BUILD) {
+			try {
+				townBlock = pos.getTownBlock();
+				targetTown = townBlock.getTown();
+				if(targetTown.isBankrupt() && !targetTown.isRuined())  {
+					cacheBlockErrMsg(player, Translation.of("msg_err_bankrupt_town_cannot_build"));
+					return false;
+				}
+			} catch (NotRegisteredException ignored) {
+			}
+		}
 
 		if (status == TownBlockStatus.OFF_WORLD || status == TownBlockStatus.PLOT_OWNER || status == TownBlockStatus.TOWN_OWNER) // || plugin.isTownyAdmin(player)) // status == TownBlockStatus.ADMIN ||
 			return true;
@@ -410,91 +411,114 @@ public class PlayerCacheUtil {
 			return true;
 
 		if (status == TownBlockStatus.NOT_REGISTERED) {
-			cacheBlockErrMsg(player, TownySettings.getLangString("msg_cache_block_error"));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error"));
 			return false;
 		}
 
 		if (status == TownBlockStatus.LOCKED) {
-			cacheBlockErrMsg(player, TownySettings.getLangString("msg_cache_block_error_locked"));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_locked"));
 			return false;
 		}
 
-		TownBlock townBlock = null;
 		Town playersTown = null;
-		Town targetTown = null;
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		Resident res = townyUniverse.getResident(player.getUniqueId());
+		if (res != null && res.hasTown())
+			playersTown = TownyAPI.getInstance().getResidentTownOrNull(res);
 
-		try {
-			playersTown = townyUniverse.getDataSource().getResident(player.getName()).getTown();
-		} catch (NotRegisteredException e) {
-		}
-
-		try {
-			townBlock = pos.getTownBlock();
-			targetTown = townBlock.getTown();
-		} catch (NotRegisteredException e) {
-
-			try {
-				// Wilderness Permissions
-				if (status == TownBlockStatus.UNCLAIMED_ZONE) {
-					if (townyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, material, action)) {
-						return true;
-					} else {
-						// Don't have permission to build/destroy/switch/item_use here
-						cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), TownySettings.getLangString(action.toString())));
-						return false;
-					}
-				}
-				if (TownySettings.getNationZonesEnabled()) {
-					// Nation_Zone wilderness type Permissions 
-					if (status == TownBlockStatus.NATION_ZONE) {
-						// Admins that also have wilderness permission can bypass the nation zone.
-						if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()) && townyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, material, action)) {
-							return true;
-						} else {
-						
-							Nation playersNation;
-							Town nearestTown = null; 
-							nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), nearestTown);
-							Nation nearestNation = nearestTown.getNation();
+		/*
+		 * Handle the wilderness. 
+		 */
+		if (TownyAPI.getInstance().isWilderness(pos)) {
 			
-							try {
-								playersNation = playersTown.getNation();
-							} catch (Exception e1) {							
-								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
-								return false;
-							}
-							if (playersNation.equals(nearestNation)){
-								if (townyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, material, action)) {
-									return true;
-								} else {
-									// Don't have permission to build/destroy/switch/item_use here
-									cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_wild"), TownySettings.getLangString(action.toString())));
-									return false;
-								}
-							} else {
-								cacheBlockErrMsg(player, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), pos.getTownyWorld().getUnclaimedZoneName() ,nearestNation.getName()));
-								return false;
-							}
-						}
-					}
-				}
-			} catch (NotRegisteredException e2) {
+			/*
+			 * Get the TownyWorld.
+			 */
+			TownyWorld townyWorld = null;
+			try {
+				townyWorld = pos.getTownyWorld();
+			} catch (NotRegisteredException e) {
+				// Should not be possible to get here.
 				TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
 				return false;
 			}
+			
+			/*
+			 * Handle the Wilderness.
+			 */
+			if (status == TownBlockStatus.UNCLAIMED_ZONE) {
+				if (townyUniverse.getPermissionSource().hasWildOverride(townyWorld, player, material, action)) {
+					return true;
+				} else {
+					// Don't have permission to build/destroy/switch/item_use here
+					cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_wild", Translation.of(action.toString())));
+					return false;
+				}
+			}
+			
+			/*
+			 * Handle the possiblity that NationZones are enabled the 
+			 * TownBlockStatus is NATION_ZONE instead of UNCLAIMED_ZONE.
+			 */
+			if (TownySettings.getNationZonesEnabled()) {
+				// Nation_Zone wilderness type Permissions 
+				if (status == TownBlockStatus.NATION_ZONE) {
+					// Admins that also have wilderness permission can bypass the nation zone.
+					if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()) && townyUniverse.getPermissionSource().hasWildOverride(townyWorld, player, material, action)) {
+						return true;
+					} else {
+						// Get the nearest Town that has a Nation. 
+						Town nearestTown = townyWorld.getClosestTownWithNationFromCoord(pos.getCoord(), null);
+						// We know that the nearest Town will have a nation.
+						Nation nearestNation = TownyAPI.getInstance().getTownNationOrNull(nearestTown);
+		
+						// If the player has a Nation then they could be able to use this NationZone. 
+						if (res.hasNation()) {
+							// Player is a member of this NationZone's nation.
+							if (TownyAPI.getInstance().getResidentNationOrNull(res).getUUID().equals(nearestNation.getUUID())){
+								// Players are still required to be able to use the Wilderness in their NationZones.
+								if (townyUniverse.getPermissionSource().hasWildOverride(townyWorld, player, material, action)) {
+									return true;
+								} else {
+									// Don't have permission to build/destroy/switch/item_use here
+									cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_wild", Translation.of(action.toString())));
+									return false;
+								}
+							// Player is not a member of this NationZone's nation.
+							} else {
+								cacheBlockErrMsg(player, Translation.of("nation_zone_this_area_under_protection_of", townyWorld.getUnclaimedZoneName(), nearestNation.getName()));
+								return false;
+							}
+
+						// Without a nation we know this player cannot use the NationZone.
+						} else {
+							cacheBlockErrMsg(player, Translation.of("nation_zone_this_area_under_protection_of", townyWorld.getUnclaimedZoneName(), nearestNation.getName()));
+							return false;
+						}
+
+					}
+				}
+			}
 
 		}
+		
+		/*
+		 * Not going to be in the wilderness.
+		 */
+		try {
+			if(townBlock == null)
+				townBlock = pos.getTownBlock();
+			if(targetTown == null)
+				targetTown = townBlock.getTown();
+		} catch (NotRegisteredException e) {
+			// Should not be possible to get here unless something is very wrong.
+			TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
+			return false;
+		}
 
-		// Allow admins to have ALL permissions over towns.
-		if (townyUniverse.getPermissionSource().isTownyAdmin(player))
-			return true;
-
-
-		// Plot Permissions
-
+		/*
+		 * Handle Personally owned plots first.
+		 */
 		if (townBlock.hasResident()) {
-
 			/*
 			 * Check town overrides before testing plot permissions
 			 */
@@ -526,7 +550,7 @@ public class PlayerCacheUtil {
 
 				}
 
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "friends", TownySettings.getLangString(action.toString())));
+				cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_plot", Translation.of("msg_cache_block_error_plot_friends"), Translation.of(action.toString())));
 				return false;
 
 			} else if (status == TownBlockStatus.PLOT_TOWN) {
@@ -551,7 +575,7 @@ public class PlayerCacheUtil {
 
 				}
 				
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "town members", TownySettings.getLangString(action.toString())));
+				cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_plot", Translation.of("msg_cache_block_error_plot_town_members"), Translation.of(action.toString())));
 				return false;
 
 			} else if (status == TownBlockStatus.PLOT_ALLY) {
@@ -576,7 +600,7 @@ public class PlayerCacheUtil {
 
 				}
 				
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "allies", TownySettings.getLangString(action.toString())));
+				cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_plot", Translation.of("msg_cache_block_error_plot_allies"), Translation.of(action.toString())));
 				return false;
 
 			} else {
@@ -602,13 +626,16 @@ public class PlayerCacheUtil {
 
 				}
 
-				cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_plot"), "outsiders", TownySettings.getLangString(action.toString())));
+				cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_plot", Translation.of("msg_cache_block_error_plot_outsiders"), Translation.of(action.toString())));
 				return false;
 
 			}
 		}
 
-		// Town Permissions
+
+		/*
+		 * Handle town-owned plots last.
+		 */
 		if (status == TownBlockStatus.TOWN_RESIDENT) {
 
 			/*
@@ -641,7 +668,7 @@ public class PlayerCacheUtil {
 
 			}
 
-			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_resident"), TownySettings.getLangString(action.toString())));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_town_resident", Translation.of(action.toString())));
 			return false;
 		} else if (status == TownBlockStatus.TOWN_NATION) {
 			/*
@@ -674,7 +701,7 @@ public class PlayerCacheUtil {
 
 			}
 
-			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_nation"), TownySettings.getLangString(action.toString())));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_town_nation", Translation.of(action.toString())));
 			return false;
 
 		} else if (status == TownBlockStatus.TOWN_ALLY) {
@@ -709,7 +736,7 @@ public class PlayerCacheUtil {
 
 			}
 
-			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_allies"), TownySettings.getLangString(action.toString())));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_town_allies", Translation.of(action.toString())));
 			return false;
 
 		} else if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY) {
@@ -740,10 +767,15 @@ public class PlayerCacheUtil {
 				}
 
 			}
-			cacheBlockErrMsg(player, String.format(TownySettings.getLangString("msg_cache_block_error_town_outsider"), TownySettings.getLangString(action.toString())));
+			cacheBlockErrMsg(player, Translation.of("msg_cache_block_error_town_outsider", Translation.of(action.toString())));
 			return false;
+		} else if (status == TownBlockStatus.WARZONE) {
+			
+			/*
+			 * Towny will determine what to do in Warzones in other places.
+			 */
+			return true;
 		}
-
 		TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
 		return false;
 	}

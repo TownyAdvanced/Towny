@@ -1,7 +1,7 @@
 name: Towny
-version: 0.71
+version: 0.101
 language: french
-author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK
+author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious
 website: 'http://townyadvanced.github.io/'
 description: >
     Language file for all game messages.  Do not alter this file.
@@ -801,7 +801,6 @@ msg_err_nation_not_public: '&cCette nation n''est pas publique.'
 msg_nation_toggle_public: '&aLa nation a changé son statut à publique avec succès.'
 status_yes: '&aOUI'
 status_no: '&cNON'
-status_public: '&2Publique: '
 msg_err_unable_to_use_bank_outside_bank_plot: 'Vous ne pouvez pas utiliser cette commande en dehors d''une banque ou d''une zone principale.'
 msg_err_nation_spawn_forbidden: '&cLe voyage vers le spawn de la nation est interdit.'
 msg_err_nation_spawn_forbidden_war: '&cLe voyage vers le spawn de la ville est autorisé que durant la guerre.'
@@ -823,8 +822,8 @@ status_plot_type: '&2Type de parcelle : &a'
 msg_no_self_jailing: 'Vous ne pouvez pas vous emprisonnez vous-même.'
 online2: ' &a(En-ligne)'
 build: 'Construire'
-destroy: 'Destruire'
-switch: 'Ouvrir/fermer'
+destroy: 'Détruire'
+switch: 'Ouvrir/Fermer'
 item_use: 'Utilisation Item'
 towny_map_header: 'Carte Towny '
 towny_map_unclaimed: 'Libre'
@@ -1077,3 +1076,298 @@ msg_you_cannot_kick_this_resident: 'Vous ne pouvez pas expulser %s, il est le Ma
 # Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: 'La parcelle: %s appartient à un groupe, faites /plot group fs [nombre]'
 msg_err_plot_belongs_to_group_plot_nfs: 'La parcelle: %s appartient à un groupe, faites /plot group nfs'
+
+# Added in 0.72
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Le paramètre %s, géré par le serveur, vous empêche de définir le PvP à %s.'
+
+# Added in 0.73
+msg_err_you_aren't currently jailed: 'Vous n''êtes actuellement pas emprisonné.'
+
+# Added in 0.74
+msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Vous n''êtes pas autorisé à créer l''autre côté de ce portail à cet emplacement.'
+
+# Added in 0.75
+msg_already_ally: 'Votre nation est déjà alliée à %s.'
+
+# Added in 0.76
+msg_you: 'Vous'
+
+# Added in 0.77
+msg_click_spawn: '&aCliquer pour être téléporté à: &e%s'
+msg_spawn_cost: '&aCoût de téléportation: &e%s'
+
+# Added in 0.78
+msg_reload_error: 'Une erreur s''est produite lors du rechargement de Towny.'
+msg_reloaded_config: '&2La configuration a été rechargée avec succès.'
+msg_reloaded_perms: '&2Les permissions ont été rechargées avec succès.'
+msg_reloaded_db: '&2La base de données a été rechargée avec succès.'
+msg_reloaded_lang: '&2Le fichier de langue a été rechargé avec succès.'
+msg_reset_config: '&2La configuration a été réinitialisée.'
+msg_err_teleport_cancelled: 'Vous avez bougé, la téléportation a été annulée.'
+
+# Added in 0.79
+msg_cache_block_error_plot_friends: 'amis'
+msg_cache_block_error_plot_allies: 'alliés'
+msg_cache_block_error_plot_outsiders: 'étrangers'
+msg_cache_block_error_plot_town_members: 'membres de la ville'
+msg_err_invalid_nation_map_color: '&cCouleur de carte inconnue. Les couleurs autorisées sont: %s.'
+msg_nation_map_color_changed: '&bLa couleur de la nation sur la carte a été changée à %s.'
+msg_err_unable_to_add_more_residents_without_nation: 'Votre ville ne peut pas inviter plus de %s résidents sans avoir rejoint ou créée une nation.'
+msg_the_following_towns_were_deleted_for_having_0_claims: 'Les villes suivantes n''avaient pas de claims et ont été supprimées: %s'
+msg_spawn_warn: 'Coût de téléportation: %s. Continuer ? Astuce: ajoutez -ignore pour éviter ces confirmations.'
+msg_confirm_purchase: 'Faire cela coûtera %s. Continuer ?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Les villes suivantes seront retirées de votre nation: %s. Souhaitez-vous continuer ?'
+msg_ta_deposit_all_success: '%s ont été déposés avec succès dans toutes les banques des nations et villes.'
+bonus_townblocks: 'townblocks bonus'
+
+# Added in 0.80
+nomad_sing: 'Nomade'
+msg_new_town_advice: "Félicitations, vous venez de fonder votre ville. Celle-ci va devoir payer un coût d'entretien quotidien de %s. Vous pouvez déposer de l'argent dans la banque de votre ville en utilisant /town deposit <montant>. Sans argent pour payer ce coût d'entretien, la ville sera supprimée. Vous pouvez voir ces coûts à tout moment en utilisant /towny prices. Prochain paiement dans %s."
+
+# Added in 0.81
+msg_err_teleport_cancelled_damage: 'Vous avez reçu ou infligé des dégâts, la téléportation a été annulée.'
+
+# Added in 0.82
+invitation_prefix: '&8[&7Invitation&8] &9'
+confirmation_prefix: '&8[&7Confirmation&8] &9'
+this_message_will_expire2: '&9Cela expirera automatiquement dans 20 secondes.'
+msg_hover_next_page: 'Page Suivante'
+msg_hover_previous_page: 'Page Précédente'
+
+# Added in 0.83
+msg_max_tax_amount_only_for_percent: 'Les montants maximum de taxe ne peuvent être définis que pour les villes utilisant le mode "pourcentages de taxe".'
+msg_town_set_tax_max_percent_amount: '%s a défini le montant maximum des taxes a %s.'
+
+# Added in 0.84
+msg_err_plot_belongs_to_group_toggle: 'La parcelle appartient à un groupe, utilisez /plot group toggle'
+
+# Added in 0.85
+msg_set_perms_reset_single: '&bPermissions de la parcelle réinitialisée avec succès.'
+
+#Added in 0.86
+status_bank_bankrupt: '&2Banque: &a%s &c(BANQUEROUTE)'
+msg_warning_bankrupt: '&4*** ATTENTION, %s VA ÊTRE EN BANQUEROUTE AU PROCHAIN PRÉLÈVEMENT DES TAXE À CAUSE D''UN MANQUE D''ARGENT ***'
+msg_town_bankrupt_by_upkeep: '&b%s n''a pas pu payer sa taxe journallière et est tombée en banqueroute.'
+msg_town_bankrupt_by_upkeep_multiple: '&bLes villes suivantes n''ont pas pu payer leur taxe journallière et sont tombées en banqueroute: '
+msg_town_bankrupt_by_nation_tax: '&b%s n''a pas pu payer les %s de taxe et tombe donc en banqueroute.'
+msg_town_bankrupt_by_nation_tax_multiple:  '&bLes villes suivantes n''ont pas pu payer les taxes de leur nation et tombent donc en banqueroute: '
+msg_town_debts_cleared: '%s a payé toutes ses dettes et n''est plus en banqueroute.'
+msg_err_bankrupt_town_cannot_claim: 'Interdiction d''annexer de nouvelles terres pour une ville en banqueroute.'
+msg_err_bankrupt_town_cannot_build: 'Interdiction de construire dans une ville en banqueroute.'
+msg_err_bankrupt_town_cannot_toggle_open: 'Interdiction d''ouvrir une ville en banqueroute au public.'
+msg_err_bankrupt_town_cannot_invite: 'Interdiction d''inviter des personnes dans une ville en banqueroute.'
+msg_payed_nation_tax: '&bTaxe de nation de %s payée'
+msg_your_town_couldnt_pay_the_nation_tax_of: '&bVotre ville n''a pas pu payer la taxe de nation d''un montant de %s et a donc été exclue de la nation.'
+msg_your_town_payed_upkeep: '&bVotre ville a payé la taxe journallière de %s.'
+msg_your_nation_payed_upkeep: '&bVotre nation a payé la taxe journallière de %s.'
+msg_your_town_couldnt_pay_upkeep: '&bVotre ville n''a pas pu payer la taxe journallière et a donc été démantelée.'
+msg_your_nation_couldnt_pay_upkeep: '&bbVotre nation n''a pas pu payer la taxe journallière et a donc été démantelée.'
+
+#Added in 0.87
+msg_town_reached_debtcap_and_is_disbanded: '&b%s n''a pas pu payer leurs taxe journallière, a atteint leurs endettement maximum et a donc été démantelée.'
+msg_town_reached_debtcap_and_is_disbanded_multiple: '&bLes villes suivantes n''ont pas pu payer leur taxe journallière, ont atteint leurs endettement maximum et ont donc été démantelée: '
+msg_unable_to_deposit_x: 'Impossible de déposer %s dans la banque de cette ville.'
+msg_unable_to_withdraw_x: 'Impossible de récuperer %s de la banque de cette ville.'
+status_debtcap: '&2Endettement maximum: &a%s'
+status_world_explrevert_entity: '&2Entity Explosion Revert: '
+status_world_explrevert_block: '&2Block Explosion Revert: '
+
+#Added in 0.88
+msg_nation_already_peaceful: '&cLa nation est déjà en paie.'
+msg_nation_already_not_peaceful: '&cLa nation est déjà engagée dans les guerres.'
+
+#Added in 0.89
+status_world_friendlyfire: '&2FriendlyFire: '
+status_world_wildernessmobs: '&2Wilderness Mobs: '
+msg_outlaw_kick_cooldown: '&cYou''re considered an outlaw in %s. You have %s remaining for you to leave the town, otherwise, you will get teleported back to your spawnpoint.'
+msg_outlaw_kicked: '&4You are not welcome in %s. You were teleported away.'
+msg_outlaw_town_notify: '&cAn outlaw, %s, has entered your town''s territory.'
+msg_your_town_payed_upkeep_with_debt: '&cYour town paid the daily upkeep of %s with debt.'
+msg_payed_nation_tax_with_debt: '&cYour town paid the nation tax of %s with debt.'
+
+#Added in 0.90
+status_plot_clear_deletion: '&2PlotClearBlockDelete: '
+msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'
+
+#Added in 0.91
+msg_universe_attribution: 'Authors: '
+msg_universe_contributors: ' And contributors like you. '
+msg_universe_heart: '<3'
+townblock_plu: 'TownBlocks'
+
+#Added in 0.92
+#Town Ruins
+admin_panel_4: 'Run the new hour code'
+msg_newhour_success: 'newhour command executed successfully'
+town_help_12: 'Reclaim your town from a ruined state.'
+msg_warning_town_ruined_if_deleted: "WARNING!!!: If you delete your town it will enter a ruined state for %d hours. After this time full deletion will occur. In the ruined state, all perms are enabled and the town can be griefed."
+msg_warning_town_ruined_if_deleted2: "The town can be reclaimed by any town resident by using ''/t reclaim'' after %d hours."
+msg_err_cannot_reclaim_town_unless_ruined: '&cYou cannot reclaim your town because it is not ruined.'
+msg_err_cannot_reclaim_town_yet: '&cYou cannot reclaim your town for another %d hours.'
+msg_town_reclaimed: '&b%s has reclaimed the town of %s.'
+msg_err_cannot_attack_ruined_town: '&6[War]&c You cannot attack a ruined town.'
+msg_err_cannot_use_command_because_town_ruined: "&cYou cannot use this command because your town is ruined. To resume normal command usage, either reclaim the town using ''/town reclaim'', or leave the town using ''/town leave''."
+msg_warning_your_town_is_ruined_for_x_more_hours: '&cYour town lies in a ruined state for %d more hours. Use ''/town reclaim'' to save the town and become mayor.'
+msg_time_remaining_before_full_removal: '&cTime remaining before full removal: %d hours.'
+msg_time_until_reclaim_available: '&cTime until reclaim available: %d hours.'
+msg_reclaim_available: '&aReclaim available.'
+
+#Added in 0.93
+msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
+msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'
+
+#Added in 0.94
+msg_comptype_residents: 'Number of Residents'
+msg_comptype_townblocks: 'Number of Claimed Townblocks'
+msg_comptype_balance: 'Bank Balance'
+msg_comptype_online: 'Online Players'
+msg_comptype_towns: 'Number of Towns'
+msg_comptype_name: 'Alphabetical Order'
+msg_comptype_open: 'Open Status'
+msg_status_npc: '&c%s is not an real player, and is limited to Towny only.'
+npc_created: '&2Created: &a%s'
+msg_no_funds_claim_plot: '&cYou cannot afford to claim the plot costing %s.'
+msg_no_funds_claim_plot_group: '&cYou cannot afford to claim the %s plots costing %s.'
+status_town_title_peaceful: '&b(Peacful)'
+
+#Added in 0.95
+status_public: '&b(Public)'
+msg_days: ' days'
+msg_comptype_public: 'Public Status'
+towny_prices_title: 'Prices'
+towny_prices_town_nation: '&e[New] &2Town: &a%s &8| &2Nation: &a%s'
+towny_prices_reclaim: '&e[Reclaim] &2Town: &a%s'
+towny_prices_upkeep: '&e[Upkeep] &2Town: &a%s &8| &2Nation: &a%s'
+towny_prices_overclaimed_upkeep: '&e[Overclaimed Upkeep] &2Town: &a%s'
+towny_prices_claiming_townblock: '&e[Claiming] &2TownBlock: &a%s'
+towny_prices_claiming_townblock_increase: ' &8| &2Increase per TownBlock: &a+%s'
+towny_prices_claiming_outposts: '&e[Claiming] &2Outposts: &a%s'
+towny_prices_upkeep_based_on: '&7Town upkeep is based on &athe %s'
+towny_prices_upkeep_num_plots: 'number of plots.'
+towny_prices_upkeep_town_level: 'town level (num residents.)'
+towny_prices_overclaimed_based_on: '&8Overclaimed upkeep is based on &a %s %s'
+towny_prices_overclaimed_num_plots: 'the number of plots overclaimed *'
+towny_prices_overclaimed_flat_cost: 'a flat cost of'
+towny_prices_townname: '&cTown: &b%s'
+towny_prices_price_plot: '&c    [Price] &2Plot: &a%s &8| &2Outpost: &a%s'
+towny_prices_price_shop: '&c            &2Shop: &a%s &8| &2Embassy: &a%s'
+towny_prices_taxes_plot: '&c    [Taxes]    &2Resident: &a%s &8| &2Plot: &a%s'
+towny_prices_taxes_shop: '&c            &2Shop: &a%s &8| &2Embassy: &a%s'
+towny_prices_plots_shop: '&c    [Setting Plots] &2Shop: &a%s &8| &2Embassy: &a%s'
+towny_prices_plots_wilds: '&c                       &2Wilds: &a%s &8| &2Inn: &a%s'
+towny_prices_plots_jail: '&c                        &2Jail: &a%s &8| &2Farm: &a%s'
+towny_prices_plots_bank: '&c                        &2Bank: &a%s'
+towny_prices_nationname: '&cNation: &6%s'
+towny_prices_nation_tax: '&c    [Taxes] &2Town: &a%s &8| &2Peace: &a%s'
+
+#Added in 0.96
+msg_town_destroyed_by_nation_tax: '&bThe conquered town %s couldn''t pay the nation tax and has fallen.'
+msg_town_destroyed_by_nation_tax_multiple: '&bThe following conquered towns could not afford the nation tax and have fallen: '
+msg_your_town_was_exempt_from_the_nation_tax: '&bYour town was exempt from the nation tax.'
+
+#Added in 0.97
+status_perm_line_format: '&a%s = &7' # The Build = ---- Destroy = ---- seen in the status screen.
+msg_comptype_ruined: 'Ruined Status'
+msg_comptype_bankrupt: 'Bankrupt Status'
+msg_ruined: '&c(Ruined)'
+msg_bankrupt: '&c(Bankrupt)'
+
+#Added in 0.98
+msg_del_town2: '&bThe town of %s has been deleted!'
+msg_ruin_town: '&bThe town of %s fell into ruin!'
+gui_title_towny_farmblocks: 'Towny FarmBlocks List'
+gui_title_towny_wildsblocks: 'Towny WildsBlocks List'
+gui_title_towny_itemuse: 'Towny ItemUse List'
+gui_title_towny_switch: 'Towny Switch List'
+gui_title_towny_plotclear: 'Towny Plot Clear Delete List'
+
+#Added in 0.99 - FlatFile L10N
+# NOTICE
+# While these strings can be translated, we caution you to keep them in English.
+flatfile_dbg_cannot_set_capital_try_next: 'Nation %s could not set capital to %s, selecting a new capital...'
+flatfile_dbg_deleting_duplicate: 'Deleting: %s which is a duplicate of %s'
+flatfile_dbg_folders_found: 'Folders found %s'
+flatfile_dbg_group_file_missing_town_delete: 'Group file missing Town, deleting %s'
+flatfile_dbg_loading_group_list: 'Loading Group list...'
+flatfile_dbg_loading_nation: 'Loading Nation: %s'
+flatfile_dbg_loading_nation_list: 'Loading Nation list...'
+flatfile_dbg_loading_resident: 'Loading Resident: %s'
+flatfile_dbg_loading_resident_list: 'Loading Resident list...'
+flatfile_dbg_loading_server_world_list: 'Loading Server World List...'
+flatfile_dbg_loading_town: 'Loading Town: %s'
+flatfile_dbg_loading_town_list: 'Loading Town list...'
+flatfile_dbg_loading_townblock_list: 'Loading TownBlock list...'
+flatfile_dbg_loading_world: 'Loading World: %s'
+flatfile_dbg_loading_world_list: 'Loading World List...'
+flatfile_dbg_mismatched_townblock_size: '%s townblocks were found with a town_block_size that does not match your config, they were not loaded into memory.'
+flatfile_dbg_missing_file_delete_group_entry: 'Missing file: %s deleting entry in group.txt'
+flatfile_dbg_missing_file_delete_groups_entry: 'Missing file: %s deleting entry in groups.txt'
+flatfile_dbg_removing_nation_not_found: 'Removing %s because they are not found in the nations.txt'
+flatfile_dbg_removing_resident_not_found: 'Removing %s because they are not found in the residents.txt'
+flatfile_dbg_removing_town_not_found: 'Removing %s because they are not found in the towns.txt.'
+flatfile_dbg_town_fetch_outlaw: 'Town Fetching Outlaw: %s'
+flatfile_dbg_undefined_capital_select_new: 'Nation %s did not have a capital defined, selecting a new capital...'
+flatfile_dbg_world_loaded_townblocks: 'World: %s loaded %s TownBlocks.'
+flatfile_err_cannot_create_defaults: 'Could not create flatfile default files and folders.'
+flatfile_err_could_not_add_to_town: 'Could not add to town!'
+flatfile_err_exception_reading_file: 'Loading Error: Exception while reading file %s'
+flatfile_err_exception_reading_group_file_at_line: 'Loading Error: Exception while reading Group file %s at line: %s'
+flatfile_err_exception_reading_townblock_file_at_line: 'Loading Error: Exception while reading TownBlock file %s at line: %s.'
+flatfile_err_exception_reading_world_file_at_line: 'Loading Error: Exception while reading world file %s at line: %s, in towny/data/worlds/%s.txt'
+flatfile_err_file_error_reading_world_file_at_line: 'Loading Error: File error while reading %s at line: %s, in towny/data/worlds/%s.txt'
+flatfile_err_homeblock_load_invalid_location: '[Warning] %s - HomeBlock tried to load invalid Location.'
+flatfile_err_homeblock_load_invalid_townblock: '[Warning] %s - HomeBlock tried to load invalid TownBlock.'
+flatfile_err_homeblock_load_invalid_world: '[Warning] %s - HomeBlock tried to load invalid World.'
+flatfile_err_invalid_townblock_resident: 'Invalid resident for TownBlock %s. Skipped setting resident for TownBlock...'
+flatfile_err_loading_group_list_at_line: 'Error loading Group List at %s, in towny/data/groups.txt'
+flatfile_err_loading_world_list_at_line: 'Error loading World list at %s, in towny/data/worlds.txt'
+flatfile_err_nation_could_not_load_capital_disband: 'The nation %s could not load a capital city and is being disbanded.'
+flatfile_err_reading_nation_file_at_line: 'Loading Error: Exception while reading nation file %s at line %s, in towny/data/nations/%s.txt'
+flatfile_err_reading_outlaw_of_town_duplicate: 'Loading Error: Exception while reading an outlaw of town file %s.txt. The outlaw %s is duplicated! Skipping adding duplicate...'
+flatfile_err_reading_outlaw_of_town_not_exist: 'Loading Error: Exception while reading an outlaw of town file %s.txt. The outlaw %s does not exist! Removing from list...'
+flatfile_err_reading_resident_at_line: 'Loading Error: Exception while reading resident file %s at line: %s, in towny/data/residents/%s.txt'
+flatfile_err_reading_town_file_at_line: 'Loading Error: Exception while reading town file %s at line: %s, in towny/data/towns/%s.txt'
+flatfile_err_resident_tried_load_invalid_town: 'Loading Error: %s tried to load the town %s which is invalid. Removing town from the resident.'
+flatfile_err_town_homeblock_not_exist: '[Warning] %s does not have a HomeBlock.'
+flatfile_err_townblock_file_contains_unregistered_town_delete: 'TownBlock file contains unregistered Town: %s, deleting %s'
+flatfile_err_townblock_file_missing_town_delete: 'TownBlock file missing Town, deleting %s'
+flatfile_err_townblock_file_unknown_err: 'TownBlock file contains unknown error, deleting %s.'
+msg_ta_removed_all_titles_and_surnames_removed: 'All residents have had their titles and surnames removed.'
+
+msg_err_homeblock_already_set_here: 'This location is already your town''s homeblock.'
+
+#Added in 0.100
+msg_town_merge_err_mayor_only: '&cMerging can only be done by a mayor.'
+msg_town_merge_err_not_close: '&cThe town of %s is too far away from your town. Their homeblock has to be within %d townblocks of your homeblock.'
+msg_town_merge_request_sent: '&bMerge request sent to the mayor of %s.'
+msg_town_merge_request_received: '&bThe mayor of %s, %s, has requested to merge with your town. This will transfer all townblocks, residents and town bank money to %s.'
+msg_town_merge_request_denied: '&cMerge request denied.'
+msg_town_merge_other_offline: '&cThe mayor of %s, %s, is currently offline. Merge failed.'
+msg_town_merge_err_too_many_residents: '&cMerge failed: New resident amount exceeds the limit (%d)'
+msg_town_merge_err_too_many_townblocks: '&cMerge failed: New town size exceeds the limit (%d)'
+msg_town_merge_err_too_many_outposts: '&cMerge failed: New outpost amount exceeds the limit (%d)'
+msg_town_merge_err_not_enough_money: '&cMerge failed: Not enough money. (%s/%s)'
+msg_town_merge_err_too_many_purchased_townblocks: '&cMerge failed: Too many purchased townblocks (%d)'
+msg_town_merge_warning: '&cWarning: If accepted, merging with %s will cost %s.'
+msg_town_merge_debt_warning: '&cWarning: %s is currently in debt, you will have to pay their debt if accepted.'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s'
+msg_town_merge_failed: '&cMerge failed.'
+msg_town_merge_cancelled: '&cMerge canceled.'
+msg_town_merge_success: '&bThe town of %s, owned by %s, has successfully merged into the town of %s.'
+#Reasons for withdrawing/depositing for the bankhistory book.
+msg_town_merge_cost_withdraw: 'Town Merge Costs'
+msg_town_merge_transaction_reason: 'Town Merge'
+
+towny_prices_town_merge: '&e[Merging] &2Base Cost: &a%s &8| &2Per Plot: &a%s'
+
+#Added in 0.101
+msg_err_nation_not_allied_with: '&cYour nation isn''t allied with %s.'
+msg_err_nation_not_enemies_with: '&cYour nation isn''t enemies with %s.'
+msg_err_nation_already_enemies_with: '&cYour nation is already enemies with %s.'
+msg_err_ally_already_requested: '&cYou have already requested to ally with %s.'
+
+msg_err_nation_not_allied_with_2: '&c%s isn''t allied with %s.'
+msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
+msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
+msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
+msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'

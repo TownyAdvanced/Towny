@@ -31,7 +31,7 @@ public enum NationSpawnLevel {
 			"msg_err_public_nation_spawn_forbidden_war",
 			"msg_err_public_nation_spawn_forbidden_peace",
 			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC,
-			PermissionNodes.TOWNY_SPAWN_PUBLIC.getNode()),
+			PermissionNodes.TOWNY_NATION_SPAWN_PUBLIC.getNode()),
 	ADMIN(
 			null,
 			null,
@@ -40,10 +40,14 @@ public enum NationSpawnLevel {
 			null,
 			null);
 
-	private ConfigNodes isAllowingConfigNode, ecoPriceConfigNode;
-	private String permissionNode, notAllowedLangNode, notAllowedLangNodeWar, notAllowedLangNodePeace;
+	private final ConfigNodes isAllowingConfigNode;
+	private final ConfigNodes ecoPriceConfigNode;
+	private final String permissionNode;
+	private final String notAllowedLangNode;
+	private final String notAllowedLangNodeWar;
+	private final String notAllowedLangNodePeace;
 
-	private NationSpawnLevel(ConfigNodes isAllowingConfigNode, String notAllowedLangNode, String notAllowedLangNodeWar, String notAllowedLangNodePeace, ConfigNodes ecoPriceConfigNode, String permissionNode) {
+	NationSpawnLevel(ConfigNodes isAllowingConfigNode, String notAllowedLangNode, String notAllowedLangNodeWar, String notAllowedLangNodePeace, ConfigNodes ecoPriceConfigNode, String permissionNode) {
 
 		this.isAllowingConfigNode = isAllowingConfigNode;
 		this.notAllowedLangNode = notAllowedLangNode;
@@ -59,12 +63,12 @@ public enum NationSpawnLevel {
 			boolean war = TownyAPI.getInstance().isWarTime();
 			NSpawnLevel level = TownySettings.getNSpawnLevel(this.isAllowingConfigNode);
 			if(level == NSpawnLevel.WAR && !war) {
-				throw new TownyException(TownySettings.getLangString(notAllowedLangNodeWar));
+				throw new TownyException(Translation.of(notAllowedLangNodeWar));
 			}
 			else if(level == NSpawnLevel.PEACE && war) {
-				throw new TownyException(TownySettings.getLangString(notAllowedLangNodePeace));
+				throw new TownyException(Translation.of(notAllowedLangNodePeace));
 			}
-			throw new TownyException(TownySettings.getLangString(notAllowedLangNode));
+			throw new TownyException(Translation.of(notAllowedLangNode));
 		}
 	}
 
@@ -74,7 +78,7 @@ public enum NationSpawnLevel {
 
 	public boolean hasPermissionNode(Towny plugin, Player player, Nation nation) {
 
-		return this == NationSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().has(player, this.permissionNode)) && (isAllowedNation(nation));
+		return this == NationSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().testPermission(player, this.permissionNode)) && (isAllowedNation(nation));
 	}
 	
 	private boolean isAllowedNation(Nation nation) {

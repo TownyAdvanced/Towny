@@ -97,11 +97,11 @@ public class Cell {
 
 	public boolean isUnderAttack() {
 
-		return TownyWar.isUnderAttack(this);
+		return FlagWar.isUnderAttack(this);
 	}
 
 	public CellUnderAttack getAttackData() {
 
-		return TownyWar.getAttackData(this);
+		return FlagWar.getAttackData(this);
 	}
 }

@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -12,18 +13,17 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
+
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-//import java.util.Hashtable;
-//import com.palmergames.bukkit.towny.TownySettings;
 
 /*
  * --- : Loading process : ---
@@ -50,18 +50,14 @@ public abstract class TownyDataSource {
 
 	public abstract boolean backup() throws IOException;
 
-	public abstract void cleanupBackups();
-
-	public abstract void deleteUnusedResidents();
-
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadNations() && loadTowns() && loadResidents() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorldList() && saveNationList() && saveTownList() && savePlotGroupList() && saveResidentList() && saveTownBlockList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveAllTownBlocks() && saveRegenList() && saveSnapshotList();
+		return saveWorldList() && savePlotGroupList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -74,7 +70,7 @@ public abstract class TownyDataSource {
 		return saveRegenList() && saveSnapshotList();
 	}
 
-	abstract public void cancelTask();
+	abstract public void finishTasks();
 
 	abstract public boolean loadTownBlockList();
 
@@ -104,15 +100,7 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadPlotGroups();
 
-	abstract public boolean saveTownBlockList();
-
-	abstract public boolean saveResidentList();
-
-	abstract public boolean saveTownList();
-
 	abstract public boolean savePlotGroupList();
-
-	abstract public boolean saveNationList();
 
 	abstract public boolean saveWorldList();
 
@@ -129,8 +117,6 @@ public abstract class TownyDataSource {
 	abstract public boolean saveNation(Nation nation);
 
 	abstract public boolean saveWorld(TownyWorld world);
-
-	abstract public boolean saveAllTownBlocks();
 
 	abstract public boolean saveTownBlock(TownBlock townBlock);
 
@@ -166,21 +152,19 @@ public abstract class TownyDataSource {
 
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
-		List<Resident> toRemove = new ArrayList<>();
-
-		for (Resident resident : new ArrayList<>(getResidents()))
+		TownySettings.setUUIDCount(0);
+		
+		for (Resident resident : universe.getResidents()) {
 			if (!loadResident(resident)) {
 				System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
-				toRemove.add(resident);
-				//return false;
+				return false;
 			}
 
-		// Remove any resident which failed to load.
-		for (Resident resident : toRemove) {
-			System.out.println("[Towny] Loading Error: Removing resident data for '" + resident.getName() + "'.");
-			removeResidentList(resident);
+			if (resident.hasUUID())
+				TownySettings.incrementUUIDCount();
+			else
+				GatherResidentUUIDTask.addResident(resident);
 		}
-
 		return true;
 	}
 
@@ -198,7 +182,7 @@ public abstract class TownyDataSource {
 	public boolean loadNations() {
 
 		TownyMessaging.sendDebugMsg("Loading Nations");
-		for (Nation nation : getNations())
+		for (Nation nation : universe.getNations())
 			if (!loadNation(nation)) {
 				System.out.println("[Towny] Loading Error: Could not read nation data '" + nation.getName() + "'.");
 				return false;
@@ -226,7 +210,7 @@ public abstract class TownyDataSource {
 	public boolean saveResidents() {
 
 		TownyMessaging.sendDebugMsg("Saving Residents");
-		for (Resident resident : getResidents())
+		for (Resident resident : universe.getResidents())
 			saveResident(resident);
 		return true;
 	}
@@ -249,7 +233,7 @@ public abstract class TownyDataSource {
 	public boolean saveNations() {
 
 		TownyMessaging.sendDebugMsg("Saving Nations");
-		for (Nation nation : getNations())
+		for (Nation nation : universe.getNations())
 			saveNation(nation);
 		return true;
 	}
@@ -259,6 +243,15 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Saving Worlds");
 		for (TownyWorld world : getWorlds())
 			saveWorld(world);
+		return true;
+	}
+	
+	public boolean saveTownBlocks() {
+		TownyMessaging.sendDebugMsg("Saving Townblocks");
+		for (Town town : getTowns()) {
+			for (TownBlock townBlock : town.getTownBlocks())
+				saveTownBlock(townBlock);
+		}
 		return true;
 	}
 
@@ -271,12 +264,23 @@ public abstract class TownyDataSource {
 
 	abstract public List<Resident> getResidents(String[] names);
 
+	/**
+	 * @deprecated as of 0.96.6.0. Use {@link TownyUniverse#getResident(String)} instead.
+	 * @param name The name of the resident.
+	 * @return Resident with the given name.
+	 * @throws NotRegisteredException if the Resident does not exist.
+	 */
+	@Deprecated
 	abstract public Resident getResident(String name) throws NotRegisteredException;
-
-	abstract public void removeResidentList(Resident resident);
 
 	abstract public void removeNation(Nation nation);
 
+	/**
+	 * @deprecated as of 0.96.6.0. Use {@link TownyUniverse#hasResident(String)} instead.
+	 * @param name The name of the resident.
+	 * @return true if the resident exists.
+	 */
+	@Deprecated
 	abstract public boolean hasResident(String name);
 
 	abstract public boolean hasTown(String name);
@@ -303,7 +307,26 @@ public abstract class TownyDataSource {
 
 	abstract public List<TownyWorld> getWorlds();
 
-	abstract public TownyWorld getTownWorld(String townName);
+	/**
+	 * @deprecated as of 0.96.3.0, Use {@link Town#getHomeblockWorld()} instead.
+	 * 
+	 * Legacy method to get a world associated with a town.
+	 * 
+	 * @param townName The name of a town.
+	 * 
+	 * @return Returns a {@link TownyWorld} associated with the town.
+	 */
+	@Deprecated // TODO: Scrap worlds holding Towns. Towns' homeblocks should be reliable enough to return a world when needed (if we need it at all anymore.)
+	public TownyWorld getTownWorld(String townName) {
+
+		for (TownyWorld world : universe.getWorldMap().values()) {
+			if (world.hasTown(townName))
+				return world;
+		}
+
+		// If this has failed the Town has no land claimed at all but should be given a world regardless.
+		return universe.getDataSource().getWorlds().get(0);
+	}
 
 	abstract public void removeResident(Resident resident);
 
@@ -311,24 +334,48 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTownBlocks(Town town);
 
-	abstract public List<TownBlock> getAllTownBlocks();
+	abstract public Collection<TownBlock> getAllTownBlocks();
 
 	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
+	abstract public void newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
+	
 	abstract public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;
+
+	abstract public void newNation(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newWorld(String name) throws AlreadyRegisteredException;
 
 	abstract public void removeTown(Town town);
 
+	abstract public void removeTown(Town town, boolean delayFullRemoval);
+
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
 
+	/**
+	 * @deprecated as of 0.96.4.0, We do not advise messing with the Residents Map.
+	 * 
+	 * @return Returns a {@link Set} of the Residents Map
+	 */
+	@Deprecated
 	abstract public Set<String> getResidentKeys();
 
+	/**
+	 * @deprecated as of 0.96.4.0, We do not advise messing with the Towns Map.
+	 * 
+	 * @return Returns a {@link Set} of the Towns Map
+	 */
+	@Deprecated
 	abstract public Set<String> getTownsKeys();
 
+	/**
+	 * @deprecated as of 0.96.4.0, We do not advise messing with the Nations Map.
+	 * 
+	 * @return Returns a {@link Set} of the Nations Map
+	 */
+	@Deprecated
 	abstract public Set<String> getNationsKeys();
 
 	abstract public List<Town> getTownsWithoutNation();
@@ -340,6 +387,8 @@ public abstract class TownyDataSource {
 	abstract public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 	
 	abstract public void mergeNation(Nation succumbingNation, Nation prevailingNation) throws AlreadyRegisteredException, NotRegisteredException;
+
+	abstract public void mergeTown(Town mergeInto, Town mergeFrom);
 
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 

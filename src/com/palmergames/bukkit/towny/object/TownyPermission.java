@@ -1,8 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.util.Colors;
-
 import java.util.Arrays;
 
 public class TownyPermission {
@@ -204,7 +202,7 @@ public class TownyPermission {
 	@Override
 	public String toString() {
 		
-		StringBuilder output = new StringBuilder("");
+		StringBuilder output = new StringBuilder();
 		
 		for (PermLevel permLevel : PermLevel.values) {
 			String permLevelName = permLevel.name().toLowerCase();
@@ -262,7 +260,7 @@ public class TownyPermission {
 	}
 	
 	public String getColoredPermLevel(ActionType type, String typeCommonName) {
-		StringBuilder output = new StringBuilder(Colors.LightGreen).append(typeCommonName).append(" = ").append(Colors.LightGray);
+		StringBuilder output = new StringBuilder(Translation.of("status_perm_line_format", typeCommonName));
 		
 		for (PermLevel permLevel : PermLevel.values) {
 			if (perms[permLevel.getIndex()][type.getIndex()]) {

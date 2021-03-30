@@ -1,40 +1,46 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public abstract class CustomDataField<T> {
-    private CustomDataFieldType type;
+public abstract class CustomDataField<T> implements Cloneable {
     private T value;
-    private String key;
+    private final String key;
     
-    private String label;
+    protected String label;
     
-    public CustomDataField(String key, CustomDataFieldType type, T value, String label)
+    public CustomDataField(String key, T value, String label)
     {
-        this.type = type;
         this.setValue(value);
         this.key = key;
         this.label = label;
     }
 
-	public CustomDataField(String key, CustomDataFieldType type, T value)
+	public CustomDataField(String key, T value)
 	{
-		this(key, type, value, null);
+		this(key, value, null);
 	}
 
-	public CustomDataField(String key, CustomDataFieldType type, String label)
+	public CustomDataField(String key, String label)
 	{
-		this(key, type, null, label);
+		this(key, null, label);
 	}
 
-    public CustomDataField(String key, CustomDataFieldType type)
+    public CustomDataField(String key)
     {
-        this(key, type, null, null);
+        this(key, null, null);
     }
 
-    public CustomDataFieldType getType() {
-        return type;
-    }
+	/**
+	 * Gets the type id for the given CustomDataField class. 
+	 * This value is attached to the class, and not a specific instance. 
+	 * Used for serialization purposes. 
+	 * 
+	 * @return type id of the given CustomDataField class.
+	 */
+	@NotNull
+	public abstract String getTypeID();
 
     public T getValue() {
         
@@ -42,15 +48,38 @@ public abstract class CustomDataField<T> {
     }
 
     public void setValue(T value) {
-        // TODO: Save to yml
-        
         this.value = value;
     }
 
+	/**
+	 * Sets the value based on the given input.
+	 * Used when admins want to edit metadata in-game.
+	 * 
+	 * @param strValue input.
+	 */
+	public abstract void setValueFromString(String strValue);
+
+	/**
+	 * Serializes the current value to a string. 
+	 * Used for saving the CustomDataField object.
+	 * 
+	 * @return serialized string
+	 */
+	@Nullable
+	protected String serializeValueToString() {
+    	return String.valueOf(getValue());
+	}
+
+	@NotNull
     public String getKey() {
         return key;
     }
     
+    public boolean shouldDisplayInStatus() {
+    	return hasLabel();
+	}
+    
+	@NotNull
     public String getLabel() {
     	if (hasLabel())
     		return label;
@@ -66,12 +95,13 @@ public abstract class CustomDataField<T> {
 		this.label = label;
 	}
 
+	// Not used for serialization anymore. Just for human readable format.
 	@Override
     public String toString() {
         String out = "";
         
         // Type
-        out += type.getValue().toString();
+        out += getTypeID();
         
         // Key
         out += "," + getKey();
@@ -86,70 +116,32 @@ public abstract class CustomDataField<T> {
     }
 
 	/**
-	 * @param str - The metadata string to load
-	 * @return - The data field defined by the string
+	 * Determines whether the given input can be parsed to the appropriate value.
+	 * Used to parse admin input for in-game metadata editing.
+	 * 
+	 * @param strValue admin input
+	 * @return whether the string can be parsed or not
 	 */
-    public static CustomDataField load(String str) {
-        String[] tokens = str.split(",");
-        CustomDataFieldType type = CustomDataFieldType.values()[Integer.parseInt(tokens[0])];
-        String key = tokens[1];
-        CustomDataField field = null;
-        
-        switch (type) {
-            case IntegerField:
-                Integer intValue = Integer.parseInt(tokens[2]);
-                field = new IntegerDataField(key, intValue);
-                break;
-            case StringField:
-                field = new StringDataField(key, tokens[2]);
-                break;
-            case BooleanField:
-                field = new BooleanDataField(key, Boolean.parseBoolean(tokens[2]));
-                break;
-            case DecimalField:
-                field = new DecimalDataField(key, Double.parseDouble(tokens[2]));
-                break;
-        }
-        
-		String label;
-		if (tokens[3] == null || tokens[3].equalsIgnoreCase("nil"))
-			label = null;
-		else
-			label = tokens[3];
-        
-		field.setLabel(label);
-		
-        return field;
-    }
-    
-    public void isValidType(String str) throws InvalidMetadataTypeException {
-        switch (type) {
-            case IntegerField:
-                try {
-                    Integer.parseInt(str);
-                } catch (NumberFormatException e) {
-                    throw new InvalidMetadataTypeException(type);
-                }
-                break;
-            case BooleanField:
-                // Apparently any string that isn't "true" is just evaluated to false.
-                break;
-            case DecimalField:
-                try {
-                    Double.parseDouble(str);
-                } catch (NumberFormatException e) {
-                    throw new InvalidMetadataTypeException(type);
-                }
-                break;
-            default:
-            	break;
-        }
-    }
+	// Overridable validation function
+	protected boolean canParseFromString(String strValue) {
+    	return true;
+	}
+	
+	public final void isValidType(String str) throws InvalidMetadataTypeException {
+    	if (!canParseFromString(str))
+    		throw new InvalidMetadataTypeException(this);
+	}
+
+	/**
+	 * Formats and colors the value of the custom data field object.
+	 * @return the formatted value of this data field.
+	 */
+	public abstract String displayFormattedValue();
     
     @Override
     public boolean equals(Object rhs) {
         if (rhs instanceof CustomDataField)
-            return ((CustomDataField) rhs).getKey().equals(this.getKey());
+            return ((CustomDataField<?>) rhs).getKey().equals(this.getKey());
         
         return false;
     }
@@ -160,19 +152,17 @@ public abstract class CustomDataField<T> {
         return getKey().hashCode();
     }
     
-    public CustomDataField newCopy() {
-        switch (type) {
-            case BooleanField:
-                return new BooleanDataField(getKey(), (Boolean)getValue());
-            case IntegerField:
-                return new IntegerDataField(getKey(), (Integer)getValue());
-            case DecimalField:
-                return new DecimalDataField(getKey(), (Double)getValue());
-            case StringField:
-                return new StringDataField(getKey(), (String)getValue());
-        }
-        
-        return null;
+    @NotNull
+    public abstract CustomDataField<T> clone();
+    
+	/**
+	 * @deprecated as of 0.96.3.0, use {@link #clone()} instead.
+	 * Returns a duplicate instance of the object.
+	 * @return See {@link #clone()}.
+	 */
+	@Deprecated
+    public CustomDataField<T> newCopy() {
+    	return clone();
     }
     
 }

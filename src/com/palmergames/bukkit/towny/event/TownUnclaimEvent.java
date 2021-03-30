@@ -6,13 +6,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-
+/**
+ * This event is no longer fired by Towny and is marked for future removal.
+ *
+ * @deprecated As of 0.96.5.5, please use {@link com.palmergames.bukkit.towny.event.town.TownUnclaimEvent}.
+ */
+@Deprecated
 public class TownUnclaimEvent extends Event  {
 
     private static final HandlerList handlers = new HandlerList();
     
-    private Town town;
-    private WorldCoord worldCoord;
+    private final Town town;
+    private final WorldCoord worldCoord;
 
     @Override
     public HandlerList getHandlers() {

@@ -1,33 +1,45 @@
 package com.palmergames.bukkit.towny.invites;
 
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import org.bukkit.command.CommandSender;
 
 /**
+ * An object that represents an invitation.
+ * 
  * @author Articdive
  */
 public interface Invite {
-
 	/**
-	 * @return - Playername of who sent the invite or null (Console).
+	 * Gets the sender of the invitation
+	 * 
+	 * @return - The {@link CommandSender} of the invitation.
 	 */
-	String getDirectSender();
+	CommandSender getDirectSender();
 
 	/**
-	 * @return - Resident, Town or Nation as a TownyEconomyObject.
+	 * Gets the receiver of the invitation.
+	 * 
+	 * @return - The {@link InviteReceiver} object receiving the invite.
 	 */
-	TownyInviteReceiver getReceiver();
+	InviteReceiver getReceiver();
 
 	/**
-	 * @return - Resident, Town or Nation as TownyEconomyObject.
+	 * Gets the sender of the invitation.
+	 * 
+	 * @return - The {@link InviteSender} object that sent the invite.
 	 */
-	TownyInviteSender getSender();
+	InviteSender getSender();
 
 	/**
+	 * Runs the accept code for the given invitation.
+	 * 
 	 * @throws TownyException - Sends errors back up to be processed by the caller.
 	 */
 	void accept() throws TownyException;
 
 	/**
+	 * Runs the reject code for the given invitation.
+	 * 
 	 * @param fromSender - Tells if invite was revoked (true) or declined (false).
 	 */
 	void decline(boolean fromSender);

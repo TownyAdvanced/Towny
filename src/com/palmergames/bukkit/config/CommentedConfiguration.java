@@ -14,11 +14,12 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * @author dumptruckman &amp; Articdive
+ * @author dumptruckman
+ * @author Lukas Mansour (Articdive)
  */
 public class CommentedConfiguration extends YamlConfiguration {
-	private HashMap<String, String> comments;
-	private File file;
+	private final HashMap<String, String> comments;
+	private final File file;
 
 	private final DumperOptions yamlOptions = new DumperOptions();
 	private final Representer yamlRepresenter = new YamlRepresenter();

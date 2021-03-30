@@ -21,9 +21,11 @@ nomad:
     - towny.command.town.here
     - towny.command.town.new
     - towny.command.town.join
-    - towny.command.town.list
+    - towny.command.town.list.*
+    - towny.command.town.reslist
     - towny.command.plot.perm
-    - towny.command.nation.list
+    - towny.command.plot.perm.hud
+    - towny.command.nation.list.*
     - towny.command.nation.townlist  
     - towny.command.nation.allylist
     - towny.command.nation.enemylist

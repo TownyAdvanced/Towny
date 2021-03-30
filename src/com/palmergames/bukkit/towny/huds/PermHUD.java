@@ -12,6 +12,8 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -41,6 +43,12 @@ public class PermHUD {
 			toggleOn(p);
 			return;
 		}
+		
+		if (board.getObjective("PERM_HUD_OBJ") == null) { // Some other plugin's scoreboard has  
+			HUDManager.toggleOff(p);                      // likely been activated, meaning we
+			return;                                       // will throw NPEs if we continue.
+		}
+
 		try {
 			TownBlock townBlock = worldCoord.getTownBlock();
 			TownBlockOwner owner = townBlock.hasResident() ? townBlock.getResident() : townBlock.getTown();
@@ -54,12 +62,12 @@ public class PermHUD {
 			switching = (tp.getResidentPerm(ActionType.SWITCH) ? v : "-") + (tp.getNationPerm(ActionType.SWITCH) ? u : "-") + (tp.getAllyPerm(ActionType.SWITCH) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.SWITCH) ? "o" : "-");
 			item = (tp.getResidentPerm(ActionType.ITEM_USE) ? v : "-") + (tp.getNationPerm(ActionType.ITEM_USE) ? u : "-") + (tp.getAllyPerm(ActionType.ITEM_USE) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.ITEM_USE) ? "o" : "-");
 			type = (townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().name());
-			pvp = (town.isPVP() || world.isForcePVP() || townBlock.getPermissions().pvp) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
+			pvp = (!CombatUtil.preventPvP(worldCoord.getTownyWorld(), townBlock)) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			explosions = (world.isForceExpl() || townBlock.getPermissions().explosion) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			firespread = (town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			mobspawn = (town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			if (townBlock.hasResident()) {
-				title = ChatColor.GOLD + townBlock.getResident().getName() + "(" + townBlock.getTown().getName() + ")";
+				title = ChatColor.GOLD + townBlock.getResident().getName() + " (" + townBlock.getTown().getName() + ")";
 			} else {
 				title = ChatColor.GOLD + townBlock.getTown().getName();
 			}
@@ -70,6 +78,8 @@ public class PermHUD {
 		}
 		if (!plotName.isEmpty())
 			board.getTeam("plot").setSuffix(HUDManager.check(plotName));
+		else
+			board.getTeam("plot").setSuffix(" ");
 		board.getTeam("build").setSuffix(build);
 		board.getTeam("destroy").setSuffix(destroy);
 		board.getTeam("switching").setSuffix(switching);

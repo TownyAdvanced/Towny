@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -16,6 +17,7 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
@@ -39,34 +41,35 @@ public class ChunkNotification {
 	public static String homeBlockNotification = Colors.LightBlue + "[Home]";
 	public static String outpostBlockNotification = Colors.LightBlue + "[Outpost]";
 	public static String forSaleNotificationFormat = Colors.Yellow + "[For Sale: %s]";
+	public static String notForSaleNotificationFormat = Colors.Yellow + "[Not For Sale]";
 	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";	
 	public static String groupNotificationFormat = Colors.White + "[%s]";
 
 	/**
 	 * Called on Config load.
-	 * Specifically: TownySettings.loadCachedLangStrings()
+	 * Specifically: TownySettings.loadConfig()
 	 */
 	public static void loadFormatStrings() {
 
-		notificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_FORMAT);
-		notificationSpliter = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_SPLITTER);
-		areaWildernessNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_WILDERNESS);
-		areaWildernessPvPNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_WILDERNESS_PVP);
-		areaTownNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_TOWN);
-		areaTownPvPNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_AREA_TOWN_PVP);
-		ownerNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_OWNER);
-		noOwnerNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_NO_OWNER);
-		plotNotficationSplitter = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_SPLITTER);
-		plotNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_FORMAT);
-		homeBlockNotification = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_HOMEBLOCK);
-		outpostBlockNotification = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_OUTPOSTBLOCK);
-		forSaleNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_FORSALE);
-		plotTypeNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_PLOT_TYPE);
-		groupNotificationFormat = TownySettings.getConfigLang(ConfigNodes.NOTIFICATION_GROUP);
+		notificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_FORMAT));
+		notificationSpliter = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_SPLITTER));
+		areaWildernessNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_WILDERNESS));
+		areaWildernessPvPNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_WILDERNESS_PVP));
+		areaTownNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_TOWN));
+		areaTownPvPNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_TOWN_PVP));
+		ownerNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_OWNER));
+		noOwnerNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_NO_OWNER));
+		plotNotficationSplitter = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_SPLITTER));
+		plotNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_FORMAT));
+		homeBlockNotification = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_HOMEBLOCK));
+		outpostBlockNotification = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_OUTPOSTBLOCK));
+		forSaleNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_FORSALE));
+		plotTypeNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_TYPE));
+		groupNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_GROUP));
 	}
 
 	WorldCoord from, to;
-	boolean fromWild = false, toWild = false, toForSale = false,
+	boolean fromWild = false, toWild = false, toForSale = false, fromForSale = false,
 			toHomeBlock = false, toOutpostBlock = false, toPlotGroupBlock = false;
 	TownBlock fromTownBlock, toTownBlock = null;
 	Town fromTown = null, toTown = null;
@@ -82,6 +85,8 @@ public class ChunkNotification {
 		try {
 			fromTownBlock = from.getTownBlock();
 			fromPlotType = fromTownBlock.getType();
+			if (fromTownBlock.hasPlotObjectGroup())
+				fromPlotGroup = fromTownBlock.getPlotObjectGroup();
 			try {
 				fromTown = fromTownBlock.getTown();
 			} catch (NotRegisteredException e) {
@@ -90,6 +95,8 @@ public class ChunkNotification {
 				fromResident = fromTownBlock.getResident();
 			} catch (NotRegisteredException e) {
 			}
+			fromForSale = fromTownBlock.getPlotPrice() != -1;
+			
 		} catch (NotRegisteredException e) {
 			fromWild = true;
 		}
@@ -97,6 +104,8 @@ public class ChunkNotification {
 		try {
 			toTownBlock = to.getTownBlock();
 			toPlotType = toTownBlock.getType();
+			if (toTownBlock.hasPlotObjectGroup())
+				toPlotGroup = toTownBlock.getPlotObjectGroup();
 			try {
 				toTown = toTownBlock.getTown();
 			} catch (NotRegisteredException e) {
@@ -117,16 +126,7 @@ public class ChunkNotification {
 		} catch (NotRegisteredException e) {
 			toWild = true;
 		}
-		
-		try {
-			if (toTownBlock.hasPlotObjectGroup()) {
-				toPlotGroup = toTownBlock.getPlotObjectGroup();
-			}
-			
-			if (fromTownBlock.hasPlotObjectGroup()) {
-				fromPlotGroup = fromTownBlock.getPlotObjectGroup();
-			}
-		} catch (Exception ignored) { }
+
 	}
 
 	public String getNotificationString(Resident resident) {
@@ -187,7 +187,7 @@ public class ChunkNotification {
 							if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE)) {
 								Town nearestTown = null; 
 								nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
-								return String.format(areaWildernessNotificationFormat, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), toWorld.getUnclaimedZoneName(), nearestTown.getNation().getName()));
+								return String.format(areaWildernessNotificationFormat, Translation.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNation().getName()));
 							}
 						} catch (NotRegisteredException ignored) {
 						}
@@ -199,7 +199,7 @@ public class ChunkNotification {
 				}
 			
 			} else if (TownySettings.isNotificationsTownNamesVerbose())
-				return String.format(areaTownNotificationFormat, TownyFormatter.getFormattedName(toTown));
+				return String.format(areaTownNotificationFormat, toTown.getFormattedName());
 			else 
 				return String.format(areaTownNotificationFormat, toTown);
 			
@@ -212,7 +212,7 @@ public class ChunkNotification {
 						if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.UNCLAIMED_ZONE)) {
 							Town nearestTown = null; 
 							nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
-							return String.format(areaWildernessNotificationFormat, String.format(TownySettings.getLangString("nation_zone_this_area_under_protection_of"), toWorld.getUnclaimedZoneName(), nearestTown.getNation().getName()));
+							return String.format(areaWildernessNotificationFormat, Translation.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNation().getName()));
 						} else if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.UNCLAIMED_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.NATION_ZONE)) {
 							return String.format(areaWildernessNotificationFormat, to.getTownyWorld().getUnclaimedZoneName());
 						}
@@ -244,9 +244,9 @@ public class ChunkNotification {
 			
 			if (toResident != null)
 				if (TownySettings.isNotificationOwnerShowingNationTitles()) {
-					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownyFormatter.getFormattedResidentTitleName(toResident) : toTownBlock.getName());
+					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? toResident.getFormattedTitleName() : toTownBlock.getName());
 				} else {
-					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownyFormatter.getFormattedName(toResident) : toTownBlock.getName());
+					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? toResident.getFormattedName() : toTownBlock.getName());
 				}
 			else
 				return  String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownySettings.getUnclaimedPlotName() : toTownBlock.getName());
@@ -257,9 +257,9 @@ public class ChunkNotification {
 
 	public String getTownPVPNotification() {
 
-		if (!toWild && ((fromWild) || ((toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp) && !toTown.isPVP()))) {
+		if (!toWild && ((fromWild) || (toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp))) {
 			try {
-				return String.format(areaTownPvPNotificationFormat, ((testWorldPVP() && ((!toTown.isAdminDisabledPVP() && (to.getTownyWorld().isForcePVP() || toTown.isPVP() || toTownBlock.getPermissions().pvp)))) ? Colors.Red + "(PvP)" : Colors.Green + "(No PVP)"));
+				return String.format(areaTownPvPNotificationFormat, ( !CombatUtil.preventPvP(to.getTownyWorld(), toTownBlock) ? Colors.Red + "(PvP)" : Colors.Green + "(No PVP)"));
 			} catch (NotRegisteredException e) {
 				// Not a Towny registered world.
 			}
@@ -337,6 +337,10 @@ public class ChunkNotification {
 		
 		if (toForSale && !toPlotGroupBlock)
 			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()));
+		
+		if (!toForSale && fromForSale && !toWild)
+			return notForSaleNotificationFormat;
+		
 		return null;
 	}
 	

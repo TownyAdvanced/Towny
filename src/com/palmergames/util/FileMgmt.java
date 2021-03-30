@@ -1,8 +1,16 @@
 package com.palmergames.util;
 
+import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.apache.commons.compress.utils.IOUtils;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,14 +21,26 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Set;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Properties;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class FileMgmt {
+public final class FileMgmt {
+	
+	private static final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+	private static final Lock readLock = readWriteLock.readLock();
+	private static final Lock writeLock = readWriteLock.writeLock();
+	
 	/**
 	 * Checks a folderPath to see if it exists, if it doesn't it will attempt
 	 * to create the folder at the designated path.
@@ -30,7 +50,12 @@ public class FileMgmt {
 	 */
 	public static boolean checkOrCreateFolder(String folderPath) {
 		File file = new File(folderPath);
-		return file.exists() || file.mkdirs() || file.isDirectory();
+		
+		if (file.exists() || file.isDirectory()) {
+			return true;
+		}
+		
+		return newDir(file);
 	}
 	
 	/**
@@ -61,10 +86,31 @@ public class FileMgmt {
 		if (!checkOrCreateFolder(file.getParentFile().getPath())) {
 			return false;
 		}
+
+		if (file.exists()) {
+			return true;
+		}
+
+		return newFile(file);
+	}
+	
+	private static boolean newDir(File dir) {
 		try {
-			return file.exists() || file.createNewFile();
+			writeLock.lock();
+			return dir.mkdirs();
+		} finally {
+			writeLock.unlock();
+		}
+	}
+	
+	private static boolean newFile(File file) {
+		try {
+			writeLock.lock();
+			return file.createNewFile();
 		} catch (IOException e) {
 			return false;
+		} finally {
+			writeLock.unlock();
 		}
 	}
 	
@@ -86,7 +132,8 @@ public class FileMgmt {
 
 	// http://www.java-tips.org/java-se-tips/java.io/how-to-copy-a-directory-from-one-location-to-another-loc.html
 	public static void copyDirectory(File sourceLocation, File targetLocation) throws IOException {
-		synchronized (sourceLocation) {
+		try {
+			writeLock.lock();
 			if (sourceLocation.isDirectory()) {
 				if (!targetLocation.exists())
 					targetLocation.mkdir();
@@ -111,72 +158,84 @@ public class FileMgmt {
 				}
 				out.close();
 			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
 	public static File unpackResourceFile(String filePath, String resource, String defaultRes) {
-
-		// open a handle to yml file
-		File file = new File(filePath);
-
-		if ((file.exists())/* && (!filePath.contains(FileMgmt.fileSeparator() + defaultRes))*/)
-			return file;
-
-		String resString;
-
-		/*
-		 * create the file as it doesn't exist,
-		 * or it's the default file
-		 * so refresh just in case.
-		 */
-		checkOrCreateFile(filePath);
-
-		// Populate a new file
 		try {
-			resString = convertStreamToString("/" + resource);
-			FileMgmt.stringToFile(resString, filePath);
+			writeLock.lock();
+			// open a handle to yml file
+			File file = new File(filePath);
 
-		} catch (IOException e) {
-			// No resource file found
+			if ((file.exists())/* && (!filePath.contains(FileMgmt.fileSeparator() + defaultRes))*/)
+				return file;
+
+			String resString;
+
+			/*
+			 * create the file as it doesn't exist,
+			 * or it's the default file
+			 * so refresh just in case.
+			 */
+			checkOrCreateFile(filePath);
+
+			// Populate a new file
 			try {
-				resString = convertStreamToString("/" + defaultRes);
+				resString = convertStreamToString("/" + resource);
 				FileMgmt.stringToFile(resString, filePath);
-			} catch (IOException e1) {
-				// Default resource not found
-				e1.printStackTrace();
-			}
-		}
 
-		return file;
+			} catch (IOException e) {
+				// No resource file found
+				try {
+					resString = convertStreamToString("/" + defaultRes);
+					FileMgmt.stringToFile(resString, filePath);
+				} catch (IOException e1) {
+					// Default resource not found
+					e1.printStackTrace();
+				}
+			}
+
+			return file;
+			
+		} finally {
+			writeLock.unlock();
+		}
 	}
 
 	// pass a resource name and it will return it's contents as a string
 	public static String convertStreamToString(String name) throws IOException {
+		
+		try {
+			readLock.lock();
+			if (name != null) {
+				Writer writer = new StringWriter();
+				InputStream is = FileMgmt.class.getResourceAsStream(name);
 
-		if (name != null) {
-			Writer writer = new StringWriter();
-			InputStream is = FileMgmt.class.getResourceAsStream(name);
-
-			char[] buffer = new char[1024];
-			try {
-				Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-				int n;
-				while ((n = reader.read(buffer)) != -1) {
-					writer.write(buffer, 0, n);
-				}
-			} catch (IOException e) {
-				System.out.println("Exception ");
-			} finally {
+				char[] buffer = new char[1024];
 				try {
-					is.close();
-				} catch (NullPointerException e) {
-					//Failed to open a stream
-					throw new IOException();
+					Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+					int n;
+					while ((n = reader.read(buffer)) != -1) {
+						writer.write(buffer, 0, n);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						is.close();
+					} catch (NullPointerException e) {
+						//Failed to open a stream
+						throw new IOException();
+					}
 				}
+				return writer.toString();
+			} else {
+				return "";
 			}
-			return writer.toString();
-		} else {
-			return "";
+		} finally {
+			readLock.unlock();
 		}
 	}
 
@@ -188,24 +247,28 @@ public class FileMgmt {
 	 * @return Contents of file. String will be empty in case of any errors.
 	 */
 	public static String convertFileToString(File file) {
+		try {
+			readLock.lock();
+			if (file != null && file.exists() && file.canRead() && !file.isDirectory()) {
+				Writer writer = new StringWriter();
 
-		if (file != null && file.exists() && file.canRead() && !file.isDirectory()) {
-			Writer writer = new StringWriter();
-
-			char[] buffer = new char[1024];
-			try (InputStream is = new FileInputStream(file)) {
-				Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-				int n;
-				while ((n = reader.read(buffer)) != -1) {
-					writer.write(buffer, 0, n);
+				char[] buffer = new char[1024];
+				try (InputStream is = new FileInputStream(file)) {
+					Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+					int n;
+					while ((n = reader.read(buffer)) != -1) {
+						writer.write(buffer, 0, n);
+					}
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-				reader.close();
-			} catch (IOException e) {
-				System.out.println("Exception ");
+				return writer.toString();
+			} else {
+				return "";
 			}
-			return writer.toString();
-		} else {
-			return "";
+		} finally {
+			readLock.unlock();
 		}
 	}
 
@@ -226,15 +289,18 @@ public class FileMgmt {
 	 * @param file   File to write to.
 	 */
 	public static void stringToFile(String source, File file) {
-
 		try {
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+			writeLock.lock();
+			try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+				 BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
 
-			out.write(source);
-			out.close();
+				bufferedWriter.write(source);
 
-		} catch (IOException e) {
-			System.out.println("Exception ");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
@@ -245,32 +311,31 @@ public class FileMgmt {
 	 * @param targetLocation - Target location on Filesystem
 	 * @return true on success, false on IOException
 	 */
-	public static boolean listToFile(List<String> source, String targetLocation) {
-
+	public static boolean listToFile(Collection<String> source, String targetLocation) {
 		try {
-
+			writeLock.lock();
 			File file = new File(targetLocation);
-			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+			try(OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+				BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
 
-			for (String aSource : source) {
+				for (String aSource : source) {
+					bufferedWriter.write(aSource + System.getProperty("line.separator"));
+				}
 
-				out.write(aSource + System.getProperty("line.separator"));
-
+				return true;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
 			}
-
-			out.close();
-			return true;
-
-		} catch (IOException e) {
-			System.out.println("Exception ");
-			return false;
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
 	// move a file to a sub directory
 	public static void moveFile(File sourceFile, String targetLocation) {
-
-		synchronized (sourceFile) {
+		try {
+			writeLock.lock();
 			if (sourceFile.isFile()) {
 				// check for an already existing file of that name
 				File f = new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + sourceFile.getName()));
@@ -278,25 +343,110 @@ public class FileMgmt {
 					f.delete();
 				// Move file to new directory
 				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation), sourceFile.getName()));
-				
 			}
+		} finally {
+			writeLock.unlock();
+		}
+	}
+	
+	public static void moveTownBlockFile(File sourceFile, String targetLocation, String townDir) {
+		try {
+			writeLock.lock();
+			if (sourceFile.isFile()) {
+				if (!townDir.isEmpty())
+					checkOrCreateFolder(sourceFile.getParent() + File.separator + "deleted" + File.separator + townDir);
+				else
+					checkOrCreateFolder(sourceFile.getParent() + File.separator + "deleted");
+				// check for an already existing file of that name
+				File f = new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir + File.separator + sourceFile.getName()));
+				if ((f.exists() && f.isFile()))
+					f.delete();
+				// Move file to new directory
+				sourceFile.renameTo(new File((sourceFile.getParent() + File.separator + targetLocation + File.separator + townDir), sourceFile.getName()));
+
+			}
+		} finally {
+			writeLock.unlock();
+		}
+	}
+	
+	public static String getFileTimeStamp() {
+		long t = System.currentTimeMillis();
+		return new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t);
+	}
+	
+	public static void tar(File destination, File... sources) throws IOException {
+		try {
+			readLock.lock();
+			try (TarArchiveOutputStream archive =
+					 new TarArchiveOutputStream(
+						 new GzipCompressorOutputStream(
+							 new FileOutputStream(destination)))) {
+				for (File source : sources) {
+					Files.walk(source.toPath()).forEach((path -> {
+						File file = path.toFile();
+
+						if (!file.isDirectory()) {
+							TarArchiveEntry entry_1 = new TarArchiveEntry(file, file.toString());
+							try (FileInputStream fis = new FileInputStream(file)) {
+								archive.putArchiveEntry(entry_1);
+								IOUtils.copy(fis, archive);
+								archive.closeArchiveEntry();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}));
+				}
+			}
+		} finally {
+			readLock.unlock();
 		}
 	}
 
-	public static void zipDirectories(File destination, File... sourceFolders) throws IOException {
 
-		synchronized (sourceFolders) {
+	/**
+	 * Zip a given file into the given path.
+	 * 
+	 * @param file - File to zip.
+	 * @param path - Path to put file.
+	 */
+	public static void zipFile(File file, String path) {
+		
+		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(path), StandardCharsets.UTF_8)) {
+			writeLock.lock();
+			byte[] buffer = new byte[2056];  // Buffer with which to write the bytes of the zip file.
+			zos.putNextEntry(new ZipEntry(file.getName())); // Place file into zip.
+			try (FileInputStream in = new FileInputStream(file)) { 
+                int len;
+                while ((len = in.read(buffer)) > 0) { // While there is data to write, write up to the buffer.
+                    zos.write(buffer, 0, len);
+                }
+            }			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			writeLock.unlock();
+		}
+	}
+	
+	public static void zipDirectories(File destination, File... sourceFolders) throws IOException {
+		try {
+			readLock.lock();
 			ZipOutputStream output = new ZipOutputStream(new FileOutputStream(destination), StandardCharsets.UTF_8);
 			for (File sourceFolder : sourceFolders)
 				recursiveZipDirectory(sourceFolder, output);
 			output.close();
+		} finally {
+			readLock.unlock();
 		}
 	}
 
 	public static void recursiveZipDirectory(File sourceFolder, ZipOutputStream zipStream) throws IOException {
-
-		synchronized (sourceFolder) {
-
+		try {
+			readLock.lock();
 			String[] dirList = sourceFolder.list();
 			byte[] readBuffer = new byte[2156];
 			int bytesIn;
@@ -313,6 +463,8 @@ public class FileMgmt {
 					input.close();
 				}
 			}
+		} finally {
+			readLock.unlock();
 		}
 	}
 
@@ -323,9 +475,8 @@ public class FileMgmt {
 	 * @param file - {@link File} to delete
 	 */
 	public static void deleteFile(File file) {
-
-		synchronized (file) {
-
+		try {
+			writeLock.lock();
 			if (file.isDirectory()) {
 				File[] children = file.listFiles();
 				if (children != null) {
@@ -341,6 +492,8 @@ public class FileMgmt {
 				if (!file.delete())
 					System.out.println("Error: Could not delete file: " + file.getPath());
 			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
@@ -352,8 +505,8 @@ public class FileMgmt {
 	 * @param deleteAfter - Maximum age of files, in milliseconds
 	 */
 	public static void deleteOldBackups(File backupsDir, long deleteAfter) {
-
-		synchronized (backupsDir) {
+		try {
+			writeLock.lock();
 
 			TreeSet<Long> deleted = new TreeSet<>();
 			if (backupsDir.isDirectory()) {
@@ -387,44 +540,73 @@ public class FileMgmt {
 			if (deleted.size() > 0) {
 				System.out.println(String.format("[Towny] Deleting %d Old Backups (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
 			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
-	public synchronized static void deleteUnusedFiles(File residentDir, Set<String> fileNames) {
-
-		synchronized (residentDir) {
-
-			int count = 0;
-
-			if (residentDir.isDirectory()) {
-				File[] children = residentDir.listFiles();
-				if (children != null) {
-					for (File child : children) {
-						try {
-							String filename = child.getName();
-							if (child.isFile()) {
-								if (filename.contains(".txt"))
-									filename = filename.split("\\.txt")[0];
-
-								// Delete the file if there is no matching resident.
-								if (!fileNames.contains(filename.toLowerCase())) {
-									deleteFile(child);
-									count++;
-								}
-							}
-
-						} catch (Exception ignored) {}
-					}
-
-					if (count > 0) {
-						System.out.println(String.format("[Towny] Deleted %d old files.", count));
-					}
+	/**
+	 * Function which reads from a resident, town, nation, townyobject file, returning a hashmap. 
+	 *
+	 * @param file - File from which the HashMap will be made.
+	 * @return HashMap - Used for loading keys and values from object files. 
+	 */
+	public static HashMap<String, String> loadFileIntoHashMap(File file) {
+		
+		try {
+			readLock.lock();
+			HashMap<String, String> keys = new HashMap<>();
+			try (FileInputStream fis = new FileInputStream(file);
+				 InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
+				Properties properties = new Properties();
+				properties.load(isr);
+				for (String key : properties.stringPropertyNames()) {
+					String value = properties.getProperty(key);
+					keys.put(key, String.valueOf(value));
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+			return keys;
+		} finally {
+			readLock.unlock();
 		}
-
 	}
 	
+	/**
+	 * Method to save a PlotBlockData object to disk.
+	 * 
+	 * @param data PlotBlockData object containing a plot snapshot used for the unclaim-on-revert feature.
+	 * @param file Directory to save the PlotBlockData to.
+	 * @param path Zip file location to save to.
+	 */
+	public static void savePlotData(PlotBlockData data, File file, String path) {
+		checkOrCreateFolder(file.getPath()); // Make the folder if it doesn't exist.
+		try (ZipOutputStream output = new ZipOutputStream(new FileOutputStream(path), StandardCharsets.UTF_8)) {
+			writeLock.lock();
+			output.putNextEntry(new ZipEntry(data.getX() + "_" + data.getZ() + "_" + data.getSize() + ".data")); // Create x_z_size.data file inside of .zip
+			try (DataOutputStream fout = new DataOutputStream(output)) {
+				// Data version goes first.
+				fout.write("VER".getBytes(StandardCharsets.UTF_8));
+				fout.write(data.getVersion());
+				// Write the plot height (who knows Mojang might change it a second time.
+				fout.writeInt(data.getHeight());
+				// Write the actual blocks with their BlockData included.
+				for (String block : new ArrayList<>(data.getBlockList()))
+					fout.writeUTF(block);
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} finally {
+			writeLock.unlock();
+		}
+	}
+
+	/**
+	 * @deprecated as of 0.96.5.0, No longer used. You can get this yourself with {@link System#getProperty(String)}.
+	 * 
+	 * @return Returns a file separator System Property.
+	 */
 	@Deprecated
 	public static String fileSeparator() {
 

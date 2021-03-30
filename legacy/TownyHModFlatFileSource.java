@@ -20,7 +20,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.KeyValueFile;
 
-// TODO: Make sure the lack of a particular value doesn't error out the entire file
+
 
 public class TownyHModFlatFileSource extends TownyFlatFileSource {
 

@@ -15,10 +15,10 @@ import java.util.ArrayList;
  */
 public class ResidentPurge extends Thread {
 
-	Towny plugin;
-	private CommandSender sender = null;
-	long deleteTime;
-	boolean townless;
+	final Towny plugin;
+	private final CommandSender sender;
+	final long deleteTime;
+	final boolean townless;
 
 	/**
 	 * @param plugin reference to Towny
@@ -33,6 +33,7 @@ public class ResidentPurge extends Thread {
 		this.deleteTime = deleteTime;
 		this.setPriority(NORM_PRIORITY);
 		this.townless = townless;
+		this.sender = sender;
 	}
 
 	@Override
@@ -42,7 +43,7 @@ public class ResidentPurge extends Thread {
 
 		message("Scanning for old residents...");
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		for (Resident resident : new ArrayList<>(townyUniverse.getDataSource().getResidents())) {
+		for (Resident resident : new ArrayList<>(townyUniverse.getResidents())) {
 			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > (this.deleteTime)) && !BukkitTools.isOnline(resident.getName())) {
 				if (townless && resident.hasTown()) {
 					continue;
@@ -50,7 +51,6 @@ public class ResidentPurge extends Thread {
 				count++;
 				message("Deleting resident: " + resident.getName());
 				townyUniverse.getDataSource().removeResident(resident);
-				townyUniverse.getDataSource().removeResidentList(resident);
 			}
 		}
 

@@ -16,6 +16,6 @@ public class CellAttackThread extends TimerTask {
 
 		cell.changeFlag();
 		if (cell.hasEnded())
-			TownyWar.attackWon(cell);
+			FlagWar.attackWon(cell);
 	}
 }

@@ -3,10 +3,14 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.DrawSmokeTask;
+import com.palmergames.bukkit.towny.tasks.DrawSpawnPointsTask;
+import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.RepeatingTimerTask;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.towny.tasks.HourlyTimerTask;
+import com.palmergames.bukkit.towny.tasks.ShortTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
@@ -32,11 +36,15 @@ public class TownyTimerHandler{
 	
 	private static int townyRepeatingTask = -1;
 	private static int dailyTask = -1;
+	private static int hourlyTask = -1;
+	private static int shortTask = -1;
 	private static int mobRemoveTask = -1;
 	private static int healthRegenTask = -1;
 	private static int teleportWarmupTask = -1;
 	private static int cooldownTimerTask = -1;
 	private static int drawSmokeTask = -1;
+	private static int gatherResidentUUIDTask = -1;
+	private static int drawSpawnPointsTask = -1;
 
 	public static void newDay() {
 
@@ -50,6 +58,14 @@ public class TownyTimerHandler{
 			if (BukkitTools.scheduleSyncDelayedTask(new DailyTimerTask(plugin),0L) == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule newDay.");
 		}
+	}
+
+	public static void newHour() {
+		if (!isHourlyTimerRunning())
+			toggleHourlyTimer(true);
+
+		if (BukkitTools.scheduleAsyncDelayedTask(new HourlyTimerTask(plugin),0L) == -1)
+			TownyMessaging.sendErrorMsg("Could not schedule new hour.");
 	}
 
 	public static void toggleTownyRepeatingTimer(boolean on) {
@@ -92,6 +108,35 @@ public class TownyTimerHandler{
 		} else if (!on && isDailyTimerRunning()) {
 			BukkitTools.getScheduler().cancelTask(dailyTask);
 			dailyTask = -1;
+		}
+	}
+
+	public static void toggleHourlyTimer(boolean on) {
+		if (on && !isHourlyTimerRunning()) {
+			long timeUntilNextHourInSections = getTimeUntilNextHourInSeconds();
+			hourlyTask = BukkitTools.scheduleAsyncRepeatingTask(new HourlyTimerTask(plugin), timeUntilNextHourInSections, TimeTools.convertToTicks(TownySettings.getHourInterval()));
+
+			if (hourlyTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule hourly timer.");
+
+		} else if (!on && isHourlyTimerRunning()) {
+			BukkitTools.getScheduler().cancelTask(hourlyTask);
+			hourlyTask = -1;
+		}
+	}
+
+	public static void toggleShortTimer(boolean on) {
+		if (on && !isShortTimerRunning()) {
+			//This small delay is a safeguard against race conditions
+			long delayTicks = TimeTools.convertToTicks(60);
+			shortTask = BukkitTools.scheduleAsyncRepeatingTask(new ShortTimerTask(plugin), delayTicks, TimeTools.convertToTicks(TownySettings.getShortInterval()));
+
+			if (shortTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule short timer.");
+
+		} else if (!on && isDailyTimerRunning()) {
+			BukkitTools.getScheduler().cancelTask(shortTask);
+			shortTask = -1;
 		}
 	}
 
@@ -141,6 +186,30 @@ public class TownyTimerHandler{
 			drawSmokeTask = -1;
 		}
 	}
+	
+	public static void toggleGatherResidentUUIDTask(boolean on) {
+		if (on && !isGatherResidentUUIDTaskRunning()) {
+			gatherResidentUUIDTask = BukkitTools.scheduleAsyncRepeatingTask(new GatherResidentUUIDTask(plugin) , 1200, 40);
+			TownyMessaging.sendDebugMsg("Starting GatherResidentUUIDTask in 60 seconds.");
+			if (gatherResidentUUIDTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule gather resident UUID loop");
+		} else if (!on && isGatherResidentUUIDTaskRunning()) {
+			BukkitTools.getScheduler().cancelTask(gatherResidentUUIDTask);
+			gatherResidentUUIDTask = -1;
+			TownyMessaging.sendDebugMsg("Shutting down GatherResidentUUIDTask.");
+		}
+	}
+	
+	public static void toggleDrawSpointsTask(boolean on) {
+		if (on && !isDrawSpawnPointsTaskRunning()) {
+			drawSpawnPointsTask = BukkitTools.scheduleAsyncRepeatingTask(new DrawSpawnPointsTask(plugin), 0, 20);
+			if (drawSpawnPointsTask == -1)
+				TownyMessaging.sendErrorMsg("Could not schedule draw spawn points loop");			
+		} else if (!on && isDrawSpawnPointsTaskRunning()) {
+			BukkitTools.getScheduler().cancelTask(drawSpawnPointsTask);
+			drawSpawnPointsTask = -1;
+		}
+	}
 
 	public static boolean isTownyRepeatingTaskRunning() {
 
@@ -156,6 +225,16 @@ public class TownyTimerHandler{
 	public static boolean isDailyTimerRunning() {
 
 		return dailyTask != -1;
+	}
+
+	public static boolean isHourlyTimerRunning() {
+
+		return hourlyTask != -1;
+	}
+
+	public static boolean isShortTimerRunning() {
+
+		return shortTask != -1;
 	}
 
 	public static boolean isHealthRegenRunning() {
@@ -176,6 +255,16 @@ public class TownyTimerHandler{
 	public static boolean isDrawSmokeTaskRunning() {
 		
 		return drawSmokeTask != -1;
+	}
+
+	public static boolean isGatherResidentUUIDTaskRunning() {
+		
+		return gatherResidentUUIDTask != -1;
+	}
+	
+	public static boolean isDrawSpawnPointsTaskRunning() {
+		
+		return drawSpawnPointsTask != -1;
 	}
 	
 	/**
@@ -203,4 +292,10 @@ public class TownyTimerHandler{
 		return (secondsInDay + (TownySettings.getNewDayTime() - ((timeMilli/1000) % secondsInDay) - timeOffset)) % secondsInDay;
 	}
 
+	public static Long getTimeUntilNextHourInSeconds() {
+		long timeSinceLastHourMillis = System.currentTimeMillis() % (1000 * 60 * 60);
+		long timeSinceLastHourSeconds = timeSinceLastHourMillis / 1000;
+		long timeUntilNextHourSeconds = (60 * 60) - timeSinceLastHourSeconds;
+		return timeUntilNextHourSeconds;
+	}
 }

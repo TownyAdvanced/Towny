@@ -8,8 +8,12 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 
 import java.io.InvalidObjectException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author - Articdive
@@ -18,7 +22,8 @@ public class InviteHandler {
 	@SuppressWarnings("unused")
 	private static Towny plugin;
 	
-	private static List<Invite> activeInvites = new ArrayList<>();
+	private static final Set<Invite> activeInvites = new HashSet<>();
+	private static final Map<Invite, Long> invitesTimes = new HashMap<>();
 
 	public static void initialize(Towny plugin) {
 
@@ -28,7 +33,7 @@ public class InviteHandler {
 	public static void acceptInvite(Invite invite) throws InvalidObjectException, TownyException {
 		if (activeInvites.contains(invite)) {
 			invite.accept();
-			activeInvites.remove(invite);
+			removeInvite(invite);
 			return;
 		}
 		throw new InvalidObjectException("Invite not valid!"); // I throw this as a backup (failsafe)
@@ -38,7 +43,7 @@ public class InviteHandler {
 	public static void declineInvite(Invite invite, boolean fromSender) throws InvalidObjectException {
 		if (activeInvites.contains(invite)) {
 			invite.decline(fromSender);
-			activeInvites.remove(invite);
+			removeInvite(invite);
 			return;
 		}
 		throw new InvalidObjectException("Invite not valid!"); // I throw this as a backup (failsafe)
@@ -47,10 +52,31 @@ public class InviteHandler {
 	
 	public static void addInvite(Invite invite) {
 		activeInvites.add(invite);
+		invitesTimes.put(invite, System.currentTimeMillis());
 	}
 	
-	public static List<Invite> getActiveInvites() {
-		return activeInvites;
+	public static void removeInvite(Invite invite) {
+		activeInvites.remove(invite);
+		invitesTimes.remove(invite);
+	}
+	
+	private static long getInviteTime(Invite invite) {
+		return invitesTimes.get(invite);
+	}
+	
+	public static void searchForExpiredInvites() {
+		final long time = TownySettings.getInviteExpirationTime() * 1000;
+		for (Invite activeInvite : getActiveInvites()) {
+			if (getInviteTime(activeInvite) + time < System.currentTimeMillis()) {
+				activeInvite.getReceiver().deleteReceivedInvite(activeInvite);
+				activeInvite.getSender().deleteSentInvite(activeInvite);
+				removeInvite(activeInvite);
+			}
+		}
+	}
+	
+	public static Collection<Invite> getActiveInvites() {
+		return Collections.unmodifiableSet(activeInvites);
 	}
 	
 	public static boolean inviteIsActive(Invite invite) {
@@ -61,27 +87,12 @@ public class InviteHandler {
 		return false;
 	}
 	
-	public static boolean inviteIsActive(TownyInviteSender sender, TownyInviteReceiver receiver) {
+	public static boolean inviteIsActive(InviteSender sender, InviteReceiver receiver) {
 		for (Invite activeInvite : activeInvites) {
 			if (activeInvite.getReceiver().equals(receiver) && activeInvite.getSender().equals(sender))
 				return true;
 		}
 		return false;
-	}
-
-	public static int getReceivedInvitesAmount(TownyInviteReceiver receiver) {
-		List<Invite> invites = receiver.getReceivedInvites();
-		return invites.size();
-	}
-
-	public static int getSentInvitesAmount(TownyInviteSender sender) {
-		List<Invite> invites = sender.getSentInvites();
-		return invites.size();
-	}
-
-	public static int getSentAllyRequestsAmount(Nation sender) {
-		List<Invite> invites = sender.getSentAllyInvites();
-		return invites.size();
 	}
 
 	public static int getSentAllyRequestsMaxAmount(Nation sender) {
@@ -96,7 +107,7 @@ public class InviteHandler {
 		return amount;
 	}
 
-	public static int getReceivedInvitesMaxAmount(TownyInviteReceiver receiver) {
+	public static int getReceivedInvitesMaxAmount(InviteReceiver receiver) {
 
 		int amount = 0;
 		if (receiver instanceof Resident) {
@@ -123,7 +134,7 @@ public class InviteHandler {
 		return amount;
 	}
 
-	public static int getSentInvitesMaxAmount(TownyInviteSender sender) {
+	public static int getSentInvitesMaxAmount(InviteSender sender) {
 		int amount = 0;
 		if (sender instanceof Town) {
 			if (TownySettings.getMaximumInvitesSentTown() == 0) {

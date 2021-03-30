@@ -1368,4 +1368,6 @@ msg_err_nation_not_allied_with_2: '&c%s isn''t allied with %s.'
 msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
 msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
 msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
+
 msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
+

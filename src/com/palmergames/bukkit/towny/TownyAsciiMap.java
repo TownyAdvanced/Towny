@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -19,13 +20,13 @@ public class TownyAsciiMap {
 	public static final int lineWidth = 27;
 	public static final int halfLineWidth = lineWidth / 2;
 	public static final String[] help = {
-			"  " + Colors.Gray + "-" + Colors.LightGray + " = " + TownySettings.getLangString("towny_map_unclaimed"),
-			"  " + Colors.White + "+" + Colors.LightGray + " = " + TownySettings.getLangString("towny_map_claimed"),
-			"  " + Colors.White + "$" + Colors.LightGray + " = " + TownySettings.getLangString("towny_map_forsale"),
-			"  " + Colors.LightGreen + "+" + Colors.LightGray + " = " + TownySettings.getLangString("towny_map_yourtown"),
-			"  " + Colors.Yellow + "+" + Colors.LightGray + " = " + TownySettings.getLangString("towny_map_yourplot"),
-			"  " + Colors.Green + "+" + Colors.LightGray + " = " + TownySettings.getLangString("towny_map_ally"),
-			"  " + Colors.Red + "+" + Colors.LightGray + " = " + TownySettings.getLangString("towny_map_enemy")};
+			"  " + Colors.Gray + "-" + Colors.LightGray + " = " + Translation.of("towny_map_unclaimed"),
+			"  " + Colors.White + "+" + Colors.LightGray + " = " + Translation.of("towny_map_claimed"),
+			"  " + Colors.White + "$" + Colors.LightGray + " = " + Translation.of("towny_map_forsale"),
+			"  " + Colors.LightGreen + "+" + Colors.LightGray + " = " + Translation.of("towny_map_yourtown"),
+			"  " + Colors.Yellow + "+" + Colors.LightGray + " = " + Translation.of("towny_map_yourplot"),
+			"  " + Colors.Green + "+" + Colors.LightGray + " = " + Translation.of("towny_map_ally"),
+			"  " + Colors.Red + "+" + Colors.LightGray + " = " + Translation.of("towny_map_enemy")};
 
 	public static String[] generateCompass(Player player) {
 
@@ -42,16 +43,17 @@ public class TownyAsciiMap {
 
 		// Collect Sample Data
 		boolean hasTown = false;
-		Resident resident;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		try {
-			resident = townyUniverse.getDataSource().getResident(player.getName());
-			if (resident.hasTown())
-				hasTown = true;
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
+
+		Resident resident = townyUniverse.getResident(player.getUniqueId());
+		
+		if (resident == null) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered"));
 			return;
 		}
+		
+		if (resident.hasTown())
+			hasTown = true;
 
 		TownyWorld world;
 		try {
@@ -75,7 +77,6 @@ public class TownyAsciiMap {
 			for (int tbx = pos.getZ() - halfLineHeight; tbx <= pos.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
 				try {
 					TownBlock townblock = world.getTownBlock(tby, tbx);
-					//TODO: possibly claim outside of towns
 					if (!townblock.hasTown())
 						throw new TownyException();
 					if (x == halfLineHeight && y == halfLineWidth)
@@ -138,7 +139,7 @@ public class TownyAsciiMap {
 		String[] compass = generateCompass(player);
 
 		// Output
-		player.sendMessage(ChatTools.formatTitle(TownySettings.getLangString("towny_map_header") + Colors.White + "(" + pos.toString() + ")"));
+		player.sendMessage(ChatTools.formatTitle(Translation.of("towny_map_header") + Colors.White + "(" + pos.toString() + ")"));
 		String line;
 		int lineCount = 0;
 		// Variables have been rotated to fit N/S/E/W properly
@@ -159,8 +160,8 @@ public class TownyAsciiMap {
 
 		// Current town block data
 		try {
-			TownBlock townblock = world.getTownBlock(pos);
-			TownyMessaging.sendMsg(player, (TownySettings.getLangString("town_sing") + ": " + (townblock.hasTown() ? townblock.getTown().getName() : TownySettings.getLangString("status_no_town")) + " : " + TownySettings.getLangString("owner_status") + ": " + (townblock.hasResident() ? townblock.getResident().getName() : TownySettings.getLangString("status_no_town"))));
+			TownBlock townblock = TownyAPI.getInstance().getTownBlock(plugin.getCache(player).getLastLocation());
+			TownyMessaging.sendMsg(player, (Translation.of("town_sing") + ": " + (townblock != null && townblock.hasTown() ? townblock.getTown().getName() : Translation.of("status_no_town")) + " : " + Translation.of("owner_status") + ": " + (townblock != null && townblock.hasResident() ? townblock.getResident().getName() : Translation.of("status_no_town"))));
 		} catch (TownyException e) {
 			//plugin.sendErrorMsg(player, e.getError());
 			// Send a blank line instead of an error, to keep the map position tidy.

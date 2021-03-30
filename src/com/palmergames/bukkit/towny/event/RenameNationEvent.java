@@ -10,8 +10,8 @@ public class RenameNationEvent extends Event  {
 
     private static final HandlerList handlers = new HandlerList();
     
-    private String oldName;
-    private Nation nation;
+    private final String oldName;
+    private final Nation nation;
 
     @Override
     public HandlerList getHandlers() {

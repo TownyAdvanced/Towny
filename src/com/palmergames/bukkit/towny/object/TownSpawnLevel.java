@@ -9,7 +9,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWar;
+import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 
 public enum TownSpawnLevel {
 	TOWN_RESIDENT(
@@ -58,7 +58,7 @@ public enum TownSpawnLevel {
 	private ConfigNodes isAllowingConfigNode, ecoPriceConfigNode;
 	private String permissionNode, notAllowedLangNode, notAllowedLangNodeWar, notAllowedLangNodePeace;
 
-	private TownSpawnLevel(ConfigNodes isAllowingConfigNode, String notAllowedLangNode, String notAllowedLangNodeWar, String notAllowedLangNodePeace, ConfigNodes ecoPriceConfigNode, String permissionNode) {
+	TownSpawnLevel(ConfigNodes isAllowingConfigNode, String notAllowedLangNode, String notAllowedLangNodeWar, String notAllowedLangNodePeace, ConfigNodes ecoPriceConfigNode, String permissionNode) {
 
 		this.isAllowingConfigNode = isAllowingConfigNode;
 		this.notAllowedLangNode = notAllowedLangNode;
@@ -71,15 +71,15 @@ public enum TownSpawnLevel {
 	public void checkIfAllowed(Towny plugin, Player player, Town town) throws TownyException {
 
 		if (!(isAllowed(town) && hasPermissionNode(plugin, player, town))) {
-			boolean war = TownyAPI.getInstance().isWarTime() || TownyWar.isUnderAttack(town);
+			boolean war = TownyAPI.getInstance().isWarTime() || FlagWar.isUnderAttack(town);
 			SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
 			if(level == SpawnLevel.WAR && !war) {
-				throw new TownyException(TownySettings.getLangString(notAllowedLangNodeWar));
+				throw new TownyException(Translation.of(notAllowedLangNodeWar));
 			}
 			else if(level == SpawnLevel.PEACE && war) {
-				throw new TownyException(TownySettings.getLangString(notAllowedLangNodePeace));
+				throw new TownyException(Translation.of(notAllowedLangNodePeace));
 			}
-			throw new TownyException(TownySettings.getLangString(notAllowedLangNode));
+			throw new TownyException(Translation.of(notAllowedLangNode));
 		}
 	}
 
@@ -90,12 +90,12 @@ public enum TownSpawnLevel {
 
 	public boolean hasPermissionNode(Towny plugin, Player player, Town town) {
 
-		return this == TownSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().has(player, this.permissionNode)) && (isAllowedTown(town));
+		return this == TownSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().testPermission(player, this.permissionNode)) && (isAllowedTown(town));
 	}
 
 	private boolean isAllowedTown(Town town)
 	{
-		boolean war = TownyAPI.getInstance().isWarTime() || TownyWar.isUnderAttack(town);
+		boolean war = TownyAPI.getInstance().isWarTime() || FlagWar.isUnderAttack(town);
 		SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
 		return level == SpawnLevel.TRUE || (level != SpawnLevel.FALSE && ((level == SpawnLevel.WAR) == war));
 	}

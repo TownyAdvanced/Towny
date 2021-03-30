@@ -4,7 +4,9 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -27,12 +29,13 @@ public class SQL_Schema {
 
 	private static List<String> getWorldColumns() {
 		List<String> columns = new ArrayList<>();
-		columns.add("`towns` mediumtext NOT NULL");
 		columns.add("`claimable` bool NOT NULL DEFAULT '0'");
 		columns.add("`pvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcepvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcetownmobs` bool NOT NULL DEFAULT '0'");
+		columns.add("`friendlyFire` bool NOT NULL DEFAULT '0'");
 		columns.add("`worldmobs` bool NOT NULL DEFAULT '0'");
+		columns.add("`wildernessmobs` bool NOT NULL DEFAULT '0'");
 		columns.add("`firespread` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcefirespread` bool NOT NULL DEFAULT '0'");
 		columns.add("`explosions` bool NOT NULL DEFAULT '0'");
@@ -51,11 +54,12 @@ public class SQL_Schema {
 		columns.add("`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementMayorDelete` mediumtext NOT NULL");
 		columns.add("`usingPlotManagementRevert` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotManagementRevertSpeed` long NOT NULL");
 		columns.add("`plotManagementIgnoreIds` mediumtext NOT NULL");
 		columns.add("`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementWildRegenEntities` mediumtext NOT NULL");
 		columns.add("`plotManagementWildRegenSpeed` long NOT NULL");
+		columns.add("`usingPlotManagementWildRegenBlocks` bool NOT NULL DEFAULT '0'");
+		columns.add("`plotManagementWildRegenBlocks` mediumtext NOT NULL");		
 		columns.add("`usingTowny` bool NOT NULL DEFAULT '0'");
 		columns.add("`warAllowed` bool NOT NULL DEFAULT '0'");
 		columns.add("`metadata` text DEFAULT NULL");
@@ -88,9 +92,7 @@ public class SQL_Schema {
 
     private static List<String> getNationColumns(){
     	List<String> columns = new ArrayList<>();
-    	columns.add("`towns` mediumtext NOT NULL");
 		columns.add("`capital` mediumtext NOT NULL");
-		columns.add("`assistants` mediumtext NOT NULL");
 		columns.add("`tag` mediumtext NOT NULL");
 		columns.add("`allies` mediumtext NOT NULL");
 		columns.add("`enemies` mediumtext NOT NULL");
@@ -100,6 +102,7 @@ public class SQL_Schema {
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
 		columns.add("`registered` BIGINT DEFAULT NULL");
 		columns.add("`nationBoard` mediumtext DEFAULT NULL");
+		columns.add("`mapColorHexCode` mediumtext DEFAULT NULL");
 		columns.add("`nationSpawn` mediumtext DEFAULT NULL");
 		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
 		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
@@ -117,9 +120,8 @@ public class SQL_Schema {
 
     private static List<String> getTownColumns() {
     	List<String> columns = new ArrayList<>();
-    	columns.add("`residents` mediumtext");
 		columns.add("`mayor` mediumtext");
-		columns.add("`nation` mediumtext NOT NULL");
+		columns.add("`nation` mediumtext");
 		columns.add("`assistants` text DEFAULT NULL");
 		columns.add("`townBoard` mediumtext DEFAULT NULL");
 		columns.add("`tag` mediumtext DEFAULT NULL");
@@ -127,6 +129,7 @@ public class SQL_Schema {
 		columns.add("`bonus` int(11) DEFAULT 0");
 		columns.add("`purchased` int(11)  DEFAULT 0");
 		columns.add("`taxpercent` bool NOT NULL DEFAULT '0'");
+		columns.add("`maxPercentTaxAmount` float DEFAULT NULL");
 		columns.add("`taxes` float DEFAULT 0");
 		columns.add("`hasUpkeep` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotPrice` float DEFAULT NULL");
@@ -150,6 +153,10 @@ public class SQL_Schema {
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`conqueredDays` mediumint");
 		columns.add("`conquered` bool NOT NULL DEFAULT '0'");
+		columns.add("`ruined` bool NOT NULL DEFAULT '0'");
+		columns.add("`ruinedTime` BIGINT DEFAULT '0'");
+		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
+		columns.add("`debtBalance` float NOT NULL");
 		return columns;
 	}
 
@@ -178,6 +185,7 @@ public class SQL_Schema {
 		columns.add("`protectionStatus` mediumtext");
 		columns.add("`friends` mediumtext");
 		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`uuid` mediumtext");
 		return columns;
 	}
 
@@ -251,8 +259,6 @@ public class SQL_Schema {
 			}
 		}
 		TownyMessaging.sendDebugMsg("Table WORLDS is updated!");
-
-		TownyMessaging.sendDebugMsg("Checking done!");
 
 		/*
          *  Fetch NATIONS Table schema.
@@ -433,37 +439,75 @@ public class SQL_Schema {
 			TownyMessaging.sendDebugMsg("Table PLOTGROUPS is updated!");
 		}
     }
-
+    
     /**
      * Call after loading to remove any old database elements we no longer need.
      *
      * @param cntx - Connection.
      * @param db_name - Name of database.
-	 * @deprecated - This method no longer does anything do to being empty.
      */
-    @Deprecated
     public static void cleanup(Connection cntx, String db_name) {
     	
-		/*
-		 * Update RESIDENTS.
-		 */
-//        String resident_update;
-//
-//        try {
-//
-//            resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` "
-//                    + "DROP COLUMN `townBlocks`";
-//
-//            Statement s = cntx.createStatement();
-//            s.executeUpdate(resident_update);
-//
-//            TownyMessaging.sendDebugMsg("Table RESIDENTS is updated!");
-//
-//        } catch (SQLException ee) {
-//
-//            if (ee.getErrorCode() != 1060)
-//                TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
-//
-//        }
-	}
-}
+    	List<ColumnUpdate> cleanups = new ArrayList<ColumnUpdate>();
+    	cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
+    	cleanups.add(ColumnUpdate.of("NATIONS", "assistants"));
+    	cleanups.add(ColumnUpdate.of("NATIONS", "towns"));
+    	cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
+    	cleanups.add(ColumnUpdate.of("WORLDS", "plotManagementRevertSpeed"));
+    	
+    	for (ColumnUpdate update : cleanups)
+    		dropColumn(cntx, db_name, update.getTable(), update.getColumn());
+    }
+    
+    /**
+     * Drops the given column from the given table, if the column is present.
+     * 
+     * @param cntx database connection.
+     * @param db_name database name.
+     * @param table table name.
+     * @param column column to drop from the given table.
+     */
+    private static void dropColumn(Connection cntx, String db_name, String table, String column) {
+    	String update;
+    	
+    	try {
+    		DatabaseMetaData md = cntx.getMetaData();
+        	ResultSet rs = md.getColumns(null, null, table, column);
+        	if (!rs.next())
+        		return;
+        	
+    		update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + table + "` DROP COLUMN `" + column + "`";
+    		
+    		Statement s = cntx.createStatement();
+    		s.executeUpdate(update);
+    		
+    		TownyMessaging.sendDebugMsg("Table " + table + " has dropped the " + column + " column.");
+        	
+    	} catch (SQLException ee) {
+    		if (ee.getErrorCode() != 1060)
+    			TownyMessaging.sendErrorMsg("Error updating table " + table + ":" + ee.getMessage());
+    	}
+    }
+    
+    private static class ColumnUpdate {
+    	private String table;
+    	private String column;
+    	
+    	private ColumnUpdate(String table, String column) {
+    		this.table = table;
+    		this.column = column;
+    	}
+    	    	
+    	private String getTable() {
+    		return this.table;
+    	}
+    	
+    	private String getColumn() {
+    		return this.column;
+    	}
+    	
+    	private static ColumnUpdate of(String table, String column) {
+    		return new ColumnUpdate(table, column);
+    	}
+    }
+ }

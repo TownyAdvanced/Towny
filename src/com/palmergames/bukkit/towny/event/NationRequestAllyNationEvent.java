@@ -9,7 +9,7 @@ import org.bukkit.event.HandlerList;
 public class NationRequestAllyNationEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
-	private NationAllyNationInvite invite;
+	private final NationAllyNationInvite invite;
 
 	@Override
 	public HandlerList getHandlers() {

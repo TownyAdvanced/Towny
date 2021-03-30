@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class WorldCoord extends Coord {
 
-	private String worldName;
+	private final String worldName;
 
 	public WorldCoord(String worldName, int x, int z) {
 		super(x, z);
@@ -34,36 +34,23 @@ public class WorldCoord extends Coord {
 	}
 
 	public Coord getCoord() {
-		return new Coord(x, z);
-	}
-
-	@Deprecated
-	public TownyWorld getWorld() throws NotRegisteredException {
-		return getTownyWorld();
-	}
-
-	@Deprecated
-	public WorldCoord(TownyWorld world, int x, int z) {
-		super(x, z);
-		this.worldName = world.getName();
-	}
-
-	@Deprecated
-	public WorldCoord(TownyWorld world, Coord coord) {
-		super(coord);
-		this.worldName = world.getName();
+		return new Coord(getX(), getZ());
 	}
 
 	public static WorldCoord parseWorldCoord(Entity entity) {
 		return parseWorldCoord(entity.getLocation());
 	}
 
+	public static WorldCoord parseWorldCoord(String worldName, int blockX, int blockZ) {
+		return new WorldCoord(worldName, toCell(blockX), toCell(blockZ));
+	}
+	
 	public static WorldCoord parseWorldCoord(Location loc) {
-		return new WorldCoord(loc.getWorld().getName(), parseCoord(loc));
+		return parseWorldCoord(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ());
 	}
 
 	public static WorldCoord parseWorldCoord(Block block) {
-		return new WorldCoord(block.getWorld().getName(), parseCoord(block.getX(), block.getZ()));
+		return parseWorldCoord(block.getWorld().getName(), block.getX(), block.getZ());
 	}
 
 	public WorldCoord add(int xOffset, int zOffset) {
@@ -76,8 +63,8 @@ public class WorldCoord extends Coord {
 
 		int hash = 17;
 		hash = hash * 27 + (worldName == null ? 0 : worldName.hashCode());
-		hash = hash * 27 + x;
-		hash = hash * 27 + z;
+		hash = hash * 27 + getX();
+		hash = hash * 27 + getZ();
 		return hash;
 	}
 
@@ -90,11 +77,11 @@ public class WorldCoord extends Coord {
 
 		if (!(obj instanceof WorldCoord)) {
 			Coord that = (Coord) obj;
-			return this.x == that.x && this.z == that.z;
+			return this.getX() == that.getZ() && this.getZ() == that.getZ();
 		}
 
 		WorldCoord that = (WorldCoord) obj;
-		return this.x == that.x && this.z == that.z && (this.worldName == null ? that.worldName == null : this.worldName.equals(that.worldName));
+		return this.getX() == that.getX() && this.getZ() == that.getZ() && (Objects.equals(this.worldName, that.worldName));
 	}
 
 	@Override
@@ -122,13 +109,19 @@ public class WorldCoord extends Coord {
 	}
 
 	/**
-	 * Shortcut for getTownyWorld().getTownBlock(getCoord())
+	 * Shortcut for TownyUniverse.getInstance().getTownBlock(WorldCoord).
 	 * 
 	 * @return the relevant TownBlock instance.
 	 * @throws NotRegisteredException - If there is no TownBlock @ WorldCoord, then this exception.
 	 */
 	public TownBlock getTownBlock() throws NotRegisteredException {
-		return getTownyWorld().getTownBlock(getCoord());
+		if (!hasTownBlock())
+			throw new NotRegisteredException();
+		return TownyUniverse.getInstance().getTownBlock(this);
+	}
+	
+	public boolean hasTownBlock() {
+		return TownyUniverse.getInstance().hasTownBlock(this);
 	}
 
 	/**

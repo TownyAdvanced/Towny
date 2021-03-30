@@ -1,9 +1,10 @@
 package com.palmergames.bukkit.towny.permissions;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Colors;
+
 import net.milkbowl.vault.chat.Chat;
 
 import org.bukkit.Bukkit;
@@ -40,18 +41,18 @@ public class VaultPermSource extends TownyPermissionSource {
 					groupPrefixSuffix = chat.getGroupSuffix(player.getWorld(), primaryGroup);
 				}
 				playerPrefixSuffix = chat.getPlayerSuffix(player);
-			} else if (node == "userprefix") {
+			} else if (node.equals("userprefix")) {
 				playerPrefixSuffix = chat.getPlayerPrefix(player);
-			} else if (node == "usersuffix") {
+			} else if (node.equals("usersuffix")) {
 				playerPrefixSuffix = chat.getPlayerSuffix(player);
-			} else if (node == "groupprefix") {
+			} else if (node.equals("groupprefix")) {
 				if (!primaryGroup.isEmpty()) {
 					groupPrefixSuffix = chat.getGroupPrefix(player.getWorld(), primaryGroup);
 				} else {
 					groupPrefixSuffix = "";
 				}
 
-			} else if (node == "groupsuffix") {
+			} else if (node.equals("groupsuffix")) {
 				if (!primaryGroup.isEmpty()) {
 					groupPrefixSuffix = chat.getGroupSuffix(player.getWorld(), primaryGroup);
 				} else {
@@ -70,7 +71,7 @@ public class VaultPermSource extends TownyPermissionSource {
 			if (!playerPrefixSuffix.equals(groupPrefixSuffix))
 				prefixSuffix = groupPrefixSuffix + playerPrefixSuffix;
 
-			return TownySettings.parseSingleLineString(prefixSuffix);
+			return Colors.translateColorCodes(prefixSuffix);
 		}
 		return "";
 	}

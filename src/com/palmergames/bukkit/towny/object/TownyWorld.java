@@ -2,47 +2,61 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.util.MathUtil;
+
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TownyWorld extends TownyObject {
 
-	private List<Town> towns = new ArrayList<>();
-	private boolean isClaimable = true;
+	private HashMap<String, Town> towns = new HashMap<>();
+
 	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
-	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
-	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
-	private boolean isUsingPlotManagementWildRevert = TownySettings.isUsingPlotManagementWildRegen();
-	private long plotManagementRevertSpeed = TownySettings.getPlotManagementSpeed();
-	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
-	private List<String> unclaimedZoneIgnoreBlockMaterials = null;
 	private List<String> plotManagementDeleteIds = null;
+	
+	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
 	private List<String> plotManagementMayorDelete = null;
+	
+	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
 	private List<String> plotManagementIgnoreIds = null;
-	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
-			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
-	private String unclaimedZoneName = null;
-	private ConcurrentHashMap<Coord, TownBlock> townBlocks = new ConcurrentHashMap<>();
-	private List<Coord> warZones = new ArrayList<>();
+
+	private boolean isUsingPlotManagementWildEntityRevert = TownySettings.isUsingPlotManagementWildEntityRegen();	
+	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
 	private List<String> entityExplosionProtection = null;
 	
+	private boolean isUsingPlotManagementWildBlockRevert = TownySettings.isUsingPlotManagementWildBlockRegen();
+	private List<String> blockExplosionProtection = null;
+	
+	private List<String> unclaimedZoneIgnoreBlockMaterials = null;
+	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
+			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
+
+	private String unclaimedZoneName = null;
+	private List<Coord> warZones = new ArrayList<>();
+	
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
+	private boolean isClaimable = true;
 	private boolean isWarAllowed = TownySettings.isWarAllowed();
 	private boolean isPVP = TownySettings.isPvP();
 	private boolean isForcePVP = TownySettings.isForcingPvP();
+	private boolean isFriendlyFire = TownySettings.isFriendlyFireEnabled();
 	private boolean isFire = TownySettings.isFire();
 	private boolean isForceFire = TownySettings.isForcingFire();
 	private boolean hasWorldMobs = TownySettings.isWorldMonstersOn();
+	private boolean hasWildernessMonsters = TownySettings.isWildernessMonstersOn();
 	private boolean isForceTownMobs = TownySettings.isForcingMonsters();
 	private boolean isExplosion = TownySettings.isExplosions();
 	private boolean isForceExpl = TownySettings.isForcingExplosions();
@@ -50,15 +64,15 @@ public class TownyWorld extends TownyObject {
 	
 	private boolean isDisablePlayerTrample = TownySettings.isPlayerTramplingCropsDisabled();
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
-
-	// TODO: private List<TownBlock> adminTownBlocks = new
-	// ArrayList<TownBlock>();
+	
+	public Map<Location, Material> bedMap = new HashMap<>();
+	public List<String> tridentStrikeMap = new ArrayList<>();
 
 	public TownyWorld(String name) {
 		super(name);
 	}
 
-	public List<Town> getTowns() {
+	public HashMap<String, Town> getTowns() {
 
 		return towns;
 	}
@@ -70,52 +84,29 @@ public class TownyWorld extends TownyObject {
 
 	public boolean hasTown(String name) {
 
-		for (Town town : towns)
-			if (town.getName().equalsIgnoreCase(name))
-				return true;
-		return false;
+		return towns.containsKey(name);
 	}
 
 	public boolean hasTown(Town town) {
 
-		return towns.contains(town);
+		return hasTown(town.getName());
 	}
 
-	public void addTown(Town town) throws AlreadyRegisteredException {
+	public void addTown(Town town) {
 
-		if (hasTown(town))
-			throw new AlreadyRegisteredException();
-		else {
-			towns.add(town);
-			town.setWorld(this);
-		}
+		if (!hasTown(town))
+			towns.put(town.getName(), town);
 	}
 
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
-
-		TownBlock townBlock = townBlocks.get(coord);
-		if (townBlock == null)
+		if (!hasTownBlock(coord))
 			throw new NotRegisteredException();
-		else
-			return townBlock;
-	}
-
-	public void newTownBlock(int x, int z) throws AlreadyRegisteredException {
-
-		newTownBlock(new Coord(x, z));
-	}
-
-	public TownBlock newTownBlock(Coord key) throws AlreadyRegisteredException {
-
-		if (hasTownBlock(key))
-			throw new AlreadyRegisteredException();
-		townBlocks.put(new Coord(key.getX(), key.getZ()), new TownBlock(key.getX(), key.getZ(), this));
-		return townBlocks.get(new Coord(key.getX(), key.getZ()));
+		return TownyUniverse.getInstance().getTownBlock(new WorldCoord(this.getName(), coord));
 	}
 
 	public boolean hasTownBlock(Coord key) {
 
-		return townBlocks.containsKey(key);
+		return TownyUniverse.getInstance().hasTownBlock(new WorldCoord(this.getName(), key));
 	}
 
 	public TownBlock getTownBlock(int x, int z) throws NotRegisteredException {
@@ -132,9 +123,16 @@ public class TownyWorld extends TownyObject {
 		return out;
 	}
 
+	/*
+	 * Used only in the getTreeString() method.
+	 */
 	public Collection<TownBlock> getTownBlocks() {
 
-		return townBlocks.values();
+		List<TownBlock> townBlocks = new ArrayList<>();
+		for (TownBlock townBlock : TownyUniverse.getInstance().getTownBlocks().values())
+			if (townBlock.getWorld() == this)
+				townBlocks.add(townBlock);
+		return townBlocks;
 	}
 
 	public void removeTown(Town town) throws NotRegisteredException {
@@ -142,7 +140,7 @@ public class TownyWorld extends TownyObject {
 		if (!hasTown(town))
 			throw new NotRegisteredException();
 		else {
-			towns.remove(town);
+			towns.remove(town.getName());
 			/*
 			 * try {
 			 * town.setWorld(null);
@@ -150,36 +148,6 @@ public class TownyWorld extends TownyObject {
 			 * }
 			 */
 		}
-	}
-
-	public void removeTownBlock(TownBlock townBlock) {
-
-		if (hasTownBlock(townBlock.getCoord())) {			
-	
-			try {
-				if (townBlock.hasResident())
-					townBlock.getResident().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
-			try {
-				if (townBlock.hasTown())
-					townBlock.getTown().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
-	
-			removeTownBlock(townBlock.getCoord());
-		}
-	}
-
-	public void removeTownBlocks(List<TownBlock> townBlocks) {
-
-		for (TownBlock townBlock : new ArrayList<>(townBlocks))
-			removeTownBlock(townBlock);
-	}
-
-	public void removeTownBlock(Coord coord) {
-
-		townBlocks.remove(coord);
 	}
 
 	@Override
@@ -294,6 +262,16 @@ public class TownyWorld extends TownyObject {
 	public boolean hasWorldMobs() {
 
 		return this.hasWorldMobs;
+	}
+	
+	public void setWildernessMobs(boolean hasMonsters) {
+		
+		this.hasWildernessMonsters = hasMonsters;
+	}
+	
+	public boolean hasWildernessMobs() {
+		
+		return this.hasWildernessMonsters;
 	}
 
 	public void setForceTownMobs(boolean setMobs) {
@@ -416,15 +394,6 @@ public class TownyWorld extends TownyObject {
 	public boolean isPlotManagementIgnoreIds(Material mat) {
 		return getPlotManagementIgnoreIds().contains(mat.toString());
 	}
-	
-	@Deprecated
-	public boolean isPlotManagementIgnoreIds(String id, Byte data) {
-
-		if (getPlotManagementIgnoreIds().contains(id + ":" + Byte.toString(data)))
-			return true;
-		
-		return getPlotManagementIgnoreIds().contains(id);
-	}
 
 	public void setPlotManagementIgnoreIds(List<String> plotManagementIgnoreIds) {
 
@@ -432,39 +401,37 @@ public class TownyWorld extends TownyObject {
 	}
 
 	/**
-	 * @return the isUsingPlotManagementWildRevert
+	 * @return the isUsingPlotManagementWildEntityRevert
 	 */
-	public boolean isUsingPlotManagementWildRevert() {
+	public boolean isUsingPlotManagementWildEntityRevert() {
 
-		return isUsingPlotManagementWildRevert;
+		return isUsingPlotManagementWildEntityRevert;
+	}
+	
+	/**
+	 * @return the isUsingPlotManagementWildBlockRevert
+	 */
+	public boolean isUsingPlotManagementWildBlockRevert() {
+
+		return isUsingPlotManagementWildBlockRevert;
 	}
 
 	/**
-	 * @param isUsingPlotManagementWildRevert the
+	 * @param isUsingPlotManagementWildEntityRevert the
 	 *            isUsingPlotManagementWildRevert to set
 	 */
-	public void setUsingPlotManagementWildRevert(boolean isUsingPlotManagementWildRevert) {
+	public void setUsingPlotManagementWildEntityRevert(boolean isUsingPlotManagementWildEntityRevert) {
 
-		this.isUsingPlotManagementWildRevert = isUsingPlotManagementWildRevert;
+		this.isUsingPlotManagementWildEntityRevert = isUsingPlotManagementWildEntityRevert;
 	}
-
-	/*
-	 * No longer used - Never was used. Sadly not configurable per-world based on how the timer runs.
-	 */
+	
 	/**
-	 * @return the plotManagementRevertSpeed
+	 * @param isUsingPlotManagementWildBlockRevert the
+	 *            isUsingPlotManagementWildBlockRevert to set
 	 */
-	public long getPlotManagementRevertSpeed() {
+	public void setUsingPlotManagementWildBlockRevert(boolean isUsingPlotManagementWildBlockRevert) {
 
-		return plotManagementRevertSpeed;
-	}
-
-	/**
-	 * @param plotManagementRevertSpeed the plotManagementRevertSpeed to set
-	 */
-	public void setPlotManagementRevertSpeed(long plotManagementRevertSpeed) {
-
-		this.plotManagementRevertSpeed = plotManagementRevertSpeed;
+		this.isUsingPlotManagementWildBlockRevert = isUsingPlotManagementWildBlockRevert;
 	}
 
 	/**
@@ -509,6 +476,33 @@ public class TownyWorld extends TownyObject {
 			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
 
 		return (entityExplosionProtection.contains(entity.getType().getEntityClass().getSimpleName().toLowerCase()));
+
+	}
+
+	public void setPlotManagementWildRevertMaterials(List<String> mats) {
+
+		blockExplosionProtection = new ArrayList<>();
+
+		for (String mat : mats)
+			if (!mat.equals(""))
+				blockExplosionProtection.add(mat);
+
+	}
+
+	public List<String> getPlotManagementWildRevertBlocks() {
+
+		if (blockExplosionProtection == null)
+			setPlotManagementWildRevertMaterials(TownySettings.getWildExplosionProtectionBlocks());
+
+		return blockExplosionProtection;
+	}
+
+	public boolean isProtectingExplosionBlock(Material material) {
+
+		if (blockExplosionProtection == null)
+			setPlotManagementWildRevertMaterials(TownySettings.getWildExplosionProtectionBlocks());
+
+		return (blockExplosionProtection.contains(material.toString()));
 
 	}
 
@@ -643,24 +637,30 @@ public class TownyWorld extends TownyObject {
 	 * @return the closest distance to another towns homeblock.
 	 */
 	public int getMinDistanceFromOtherTowns(Coord key, Town homeTown) {
-
-		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns())
+		double minSqr = -1;
+		final int keyX = key.getX();
+		final int keyZ = key.getZ();
+		
+		for (Town town : getTowns().values()) {
 			try {
 				Coord townCoord = town.getHomeBlock().getCoord();
 				if (homeTown != null)
-					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
+					// If the townblock either: the town is the same as homeTown OR
+					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
+					if (homeTown.getUUID().equals(town.getUUID())
+						|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNation().equals(homeTown.getNation()))
+						|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
 						continue;
 				
-				if (!town.getWorld().equals(this)) continue;
+				if (!town.getHomeblockWorld().equals(this)) continue;
 				
-				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
-				if (dist < min)
-					min = dist;
+				final double distSqr = MathUtil.distanceSquared((double) townCoord.getX() - keyX, (double) townCoord.getZ() - keyZ);
+				if (minSqr == -1 || distSqr < minSqr)
+					minSqr = distSqr;
 			} catch (TownyException e) {
 			}
-
-		return (int) Math.ceil(min);
+		}
+		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
 	}
 
 	/**
@@ -682,52 +682,36 @@ public class TownyWorld extends TownyObject {
 	 * @return the closest distance to another towns nearest plot.
 	 */
 	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
-
-		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns())
+		final int keyX = key.getX();
+		final int keyZ = key.getZ();
+		
+		double minSqr = -1;
+		for (Town town : getTowns().values()) {
 			try {
 				if (homeTown != null)
-					if (homeTown.getHomeBlock().equals(town.getHomeBlock()))
+					// If the townblock either: the town is the same as homeTown OR 
+					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
+					if (homeTown.getUUID().equals(town.getUUID())
+						|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNation().equals(homeTown.getNation()))
+						|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
 						continue;
 				for (TownBlock b : town.getTownBlocks()) {
 					if (!b.getWorld().equals(this)) continue;
 
-					Coord townCoord = b.getCoord();
+					final int tbX = b.getX();
+					final int tbZ = b.getZ();
 					
-					if (key.equals(townCoord)) continue;
+					if (keyX == tbX && keyZ == tbZ)
+						continue;
 					
-					double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
-					if (dist < min)
-						min = dist;
+					final double distSqr = MathUtil.distanceSquared((double) tbX - keyX, (double) tbZ - keyZ);
+					if (minSqr == -1 || distSqr < minSqr)
+						minSqr = distSqr;
 				}
 			} catch (TownyException e) {
 			}
-
-		return (int) Math.ceil(min);
-	}
-	
-	/**
-	 * Returns the closest town from a given coord (key).
-	 * @param key - Coord
-	 * @param nearestTown - Closest town to the given coord.
-	 * @return the nearestTown
-	 */
-	public Town getClosestTownFromCoord(Coord key, Town nearestTown) {
-		
-		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns()) {
-			for (TownBlock b : town.getTownBlocks()) {
-				if (!b.getWorld().equals(this)) continue;
-				
-				Coord townCoord = b.getCoord();
-				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
-				if (dist < min) {
-					min = dist;
-					nearestTown = town;
-				}						
-			}		
-		}		
-		return (nearestTown);		
+		}
+		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
 	}
 	
 	/**
@@ -738,22 +722,63 @@ public class TownyWorld extends TownyObject {
 	 * @return the nearest town belonging to a nation.   
 	 */
 	public Town getClosestTownWithNationFromCoord(Coord key, Town nearestTown) {
+		final int keyX = key.getX();
+		final int keyZ = key.getZ();
 		
-		double min = Integer.MAX_VALUE;
-		for (Town town : getTowns()) {
+		double minSqr = -1;
+		for (Town town : getTowns().values()) {
 			if (!town.hasNation()) continue;
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
 				
-				Coord townCoord = b.getCoord();
-				double dist = Math.sqrt(Math.pow(townCoord.getX() - key.getX(), 2) + Math.pow(townCoord.getZ() - key.getZ(), 2));
-				if (dist < min) {
-					min = dist;
+				final int tbX = b.getX();
+				final int tbZ = b.getZ();
+				
+				double distSqr = MathUtil.distanceSquared((double) tbX - keyX, (double) tbZ - keyZ);
+				if (minSqr == -1 || distSqr < minSqr) {
+					minSqr = distSqr;
 					nearestTown = town;
 				}						
 			}		
 		}		
 		return (nearestTown);		
+	}
+
+	/**
+	 * Get the town block that belongs to the closest town with a nation
+	 * from the specified coord.
+	 * 
+	 * @param key - Coordinate to compare distance to
+	 * @return The nearest townblock that belongs to a town or
+	 * null if there are no towns in the world.
+	 */
+	@Nullable
+	public TownBlock getClosestTownblockWithNationFromCoord(Coord key) {
+		final int keyX = key.getX();
+		final int keyZ = key.getZ();
+		
+		double minSqr = -1;
+		TownBlock tb = null;
+		
+		for (Town town : getTowns().values()) {
+			if (!town.hasNation())
+				continue;
+			for (TownBlock b : town.getTownBlocks()) {
+				if (!b.getWorld().equals(this))
+					continue;
+
+				final int tbX = b.getX();
+				final int tbZ = b.getZ();
+				
+				double distSqr = MathUtil.distanceSquared((double) tbX - keyX, (double) tbZ - keyZ);
+				if (minSqr == -1 || distSqr < minSqr) {
+					minSqr = distSqr;
+					tb = b;
+				}
+			}
+		}
+		
+		return tb;
 	}
 
 	public void addWarZone(Coord coord) {
@@ -772,15 +797,70 @@ public class TownyWorld extends TownyObject {
 		return warZones.contains(coord);
 	}
 
-	public void addMetaData(CustomDataField md) {
-		super.addMetaData(md);
-
-		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+	@Override
+	public void addMetaData(@NotNull CustomDataField<?> md) {
+		this.addMetaData(md, true);
 	}
 
-	public void removeMetaData(CustomDataField md) {
-		super.removeMetaData(md);
+	@Override
+	public void removeMetaData(@NotNull CustomDataField<?> md) {
+		this.removeMetaData(md, true);
+	}
+	
+	/**
+	 * Does this world have an exploded bet at the location?
+	 * @param location Location to test.
+	 * @return true when the bed map contains the location.
+	 */
+	public boolean hasBedExplosionAtBlock(Location location) {
+		return bedMap.containsKey(location);
+	}
 
+	/**
+	 * Gets the exploded bed material.
+	 * @param location Location to get the material.
+	 * @return material of the bed or null if the bedMap doesn't contain the location.
+	 */
+	@Nullable
+	public Material getBedExplosionMaterial(Location location) {
+		if (hasBedExplosionAtBlock(location))
+			return bedMap.get(location);
+		return null;
+	}
+	
+	public void addBedExplosionAtBlock(Location location, Material material) {
+		bedMap.put(location, material);
+	}
+
+	public void removeBedExplosionAtBlock(Location location) {
+		if (hasBedExplosionAtBlock(location))
+			bedMap.remove(location);
+	}
+	
+	public boolean hasTridentStrike(int entityID) {
+		return tridentStrikeMap.contains(String.valueOf(entityID));
+	}
+
+	public void addTridentStrike(int entityID) {
+		tridentStrikeMap.add(String.valueOf(entityID));
+	}
+	
+	public void removeTridentStrike(int entityID) {
+		if (hasTridentStrike(entityID))
+			tridentStrikeMap.remove(String.valueOf(entityID));
+	}
+
+	public void setFriendlyFire(boolean parseBoolean) {
+		isFriendlyFire = parseBoolean;
+		
+	}
+	
+	public boolean isFriendlyFireEnabled( ) {
+		return isFriendlyFire;
+	}
+
+	@Override
+	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveWorld(this);
 	}
 }

@@ -7,13 +7,17 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.util.StringMgmt;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -47,22 +51,17 @@ public class TownyMessaging {
 	 * @param msg the message to send
 	 */
 	public static void sendErrorMsg(Object sender, String msg) {
-		boolean isPlayer = false;
-		if (sender instanceof Player) {
-			isPlayer = true;
-		}
-
-		if (sender == null) {
-			System.out.print("Message called with null sender");
-		}
-
-		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Rose + msg)) {
-			if (isPlayer) {
-				((Player) sender).sendMessage(line);
+		if (sender != null) {
+			CommandSender toSend = (CommandSender) sender;
+			if (toSend instanceof ConsoleCommandSender) {
+				toSend.sendMessage(ChatColor.stripColor(msg));
 			} else {
-				((CommandSender) sender).sendMessage(Colors.strip(line));
+				toSend.sendMessage(Translation.of("default_towny_prefix") + ChatColor.RED + msg);
 			}
+		} else {
+			sendErrorMsg("Sender cannot be null!");
 		}
+		
 		sendDevMsg(msg);
 	}
 
@@ -75,17 +74,9 @@ public class TownyMessaging {
 	 * @param msg the message array being sent.
 	 */
 	public static void sendErrorMsg(Object sender, String[] msg) {
-		boolean isPlayer = false;
-		if (sender instanceof Player) {
-			isPlayer = true;
+		for (String line : msg) {
+			sendErrorMsg(sender, line);
 		}
-
-		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Rose + msg))
-			if (isPlayer)
-				((Player) sender).sendMessage(line);
-			else
-				((CommandSender) sender).sendMessage(Colors.strip(line));
-		sendDevMsg(msg);
 	}
 
 	/**
@@ -104,26 +95,41 @@ public class TownyMessaging {
 	 * and to the named Dev if DevMode is enabled.
 	 * Uses default_towny_prefix
 	 *
-	 * @param sender the Object sending the message
+	 * @param sender the CommandSender receiving the msg
 	 * @param msg the message being sent
 	 */
-	public static void sendMsg(Object sender, String msg) {
-		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Green + msg)) {
-			if (sender instanceof Player) {
-				((Player) sender).sendMessage(line);
-			} else if (sender instanceof CommandSender) {
-				((CommandSender) sender).sendMessage(Colors.strip(line));
-			} else if (sender instanceof Resident) {
-				Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
-				if (p == null) {
-					return;
-				}
-				p.sendMessage(Colors.strip(line));
-			}
+	public static void sendMsg(CommandSender sender, String msg) {
+		if (sender == null) {
+			sendErrorMsg("Sender cannot be null!");
+			return;
 		}
+		
+		if (sender instanceof Player) {
+			Player p = (Player)sender;
+			p.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
+		} else if (sender instanceof ConsoleCommandSender) {
+			sender.sendMessage(ChatColor.stripColor(msg));
+		} else {
+			sender.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
+		}
+		
 		sendDevMsg(msg);
 	}
+	
+	/**
+	 * Sends a message (green) to the resident
+	 * and to the named Dev if DevMode is enabled.
+	 * Uses default_towny_prefix
+	 *
+	 * @param resident to receive the msg
+	 * @param msg the message being sent
+	 */
+	public static void sendMsg(Resident resident, String msg) {
+		if (BukkitTools.isOnline(resident.getName()))
+			sendMsg(resident.getPlayer(), msg);
+	}
 
+	// todo: these two can probably be consolidated
 	/**
 	 * Sends a message (green) to the Player or console
 	 * and to the named Dev if DevMode is enabled.
@@ -133,8 +139,8 @@ public class TownyMessaging {
 	 * @param msg the message to be sent
 	 */
 	public static void sendMsg(Player player, String[] msg) {
-		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Green + msg)) {
-			player.sendMessage(line);
+		for (String line : msg) {
+			sendMsg(player, line);
 		}
 	}
 	
@@ -147,8 +153,8 @@ public class TownyMessaging {
 	 * @param msg the message to be sent
 	 */
 	public static void sendMsg(Player player, List<String> msg) {
-		for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + Colors.Green + msg)) {
-			player.sendMessage(line);
+		for (String line : msg) {
+			sendMsg(player, line);
 		}
 	}
 
@@ -164,8 +170,7 @@ public class TownyMessaging {
 			if (townyDev == null) {
 				return;
 			}
-			for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " DevMode: " + Colors.Rose + msg))
-				townyDev.sendMessage(line);
+			townyDev.sendMessage(Translation.of("default_towny_prefix") + " DevMode: " + ChatColor.RED + msg);
 		}
 	}
 
@@ -176,12 +181,8 @@ public class TownyMessaging {
 	 * @param msg the message to be sent
 	 */
 	public static void sendDevMsg(String[] msg) {
-		if (TownySettings.isDevMode()) {
-			Player townyDev = BukkitTools.getPlayer(TownySettings.getDevName());
-			if (townyDev == null)
-				return;
-			for (String line : ChatTools.color(TownySettings.getLangString("default_towny_prefix") + " DevMode: " + Colors.Rose + msg))
-				townyDev.sendMessage(line);
+		for (String line : msg) {
+			sendDevMsg(line);
 		}
 	}
 
@@ -220,7 +221,7 @@ public class TownyMessaging {
 		if ((sender instanceof Player)) {
 			((Player) sender).sendMessage(line);
 		} else if (sender instanceof CommandSender) {
-			((CommandSender) sender).sendMessage(line);
+			((CommandSender) sender).sendMessage(Colors.strip(line));
 		} else if (sender instanceof Resident) {
 			Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
 			if (p == null) {
@@ -237,50 +238,8 @@ public class TownyMessaging {
 	 * @param lines String array to send as message.
 	 */
 	public static void sendMessage(Object sender, String[] lines) {
-		boolean isPlayer = false;
-		if (sender instanceof Player) {
-			isPlayer = true;
-		}
-
-		for (String line : lines) {
-			if (isPlayer) {
-				((Player) sender).sendMessage(line);
-			} else if (sender instanceof CommandSender) {
-				((CommandSender) sender).sendMessage(line);
-			} else if (sender instanceof Resident) {
-				Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
-				if (p == null) {
-					return;
-				}
-				p.sendMessage(Colors.strip(line));
-			}
-		}
-	}
-
-	/**
-	 * Send a message to all online residents of a town
-	 * Doesn't use a [Towny] or [TownName] prefix.
-	 * It is prefered to use sendPrefixedTownMessage or sendTownMessagePrefixed.
-	 *
-	 * @param town to receive message
-	 * @param lines String list to send as a message
-	 */
-	@Deprecated
-	public static void sendTownMessage(Town town, List<String> lines) {
-		sendTownMessage(town, lines.toArray(new String[0]));
-	}
-
-	/**
-	 * Send a message to all online residents of a nation
-	 * Doesn't use a [Towny] or [NationName] prefix.
-	 * It is prefered to use sendPrefixedNationMessage or sendNationMessagePrefixed.
-	 *
-	 * @param nation nation to receive message
-	 * @param lines String list to send as a message
-	 */
-	@Deprecated
-	public static void sendNationMessage(Nation nation, List<String> lines) {
-		sendNationMessage(nation, lines.toArray(new String[0]));
+		for (String line : lines)
+			sendMessage(sender, line);
 	}
 
 	/**
@@ -306,7 +265,7 @@ public class TownyMessaging {
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null) {
 				for (String line : lines) {
-					player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
+					player.sendMessage(Translation.of("default_towny_prefix") + line);
 				}
 			}
 		}
@@ -324,14 +283,13 @@ public class TownyMessaging {
 			if (player != null)
 				try {
 					if (TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
-						player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
+						player.sendMessage(Translation.of("default_towny_prefix") + line);
 				} catch (NotRegisteredException e) {
 					e.printStackTrace();
 				}
 		}
 	}
 	
-
 	/**
 	 * Send a message to All online players and the log.
 	 * Does not use the default_towny_prefix.
@@ -365,42 +323,7 @@ public class TownyMessaging {
 		if (player == null) {
 			throw new TownyException("Player could not be found!");
 		}
-		player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
-	}
-
-	/**
-	 * Send a multi-line message to All online residents of a town and log
-	 * Doesn't use a [Towny] or [TownName] prefix.
-	 * It is prefered to use sendPrefixedTownMessage or sendTownMessagePrefixed.
-	 * 
-	 * @param town the town to send a message to
-	 * @param lines array of Strings constituting the message.
-	 */
-	@Deprecated
-	public static void sendTownMessage(Town town, String[] lines) {
-		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
-		}
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town)) {
-			for (String line : lines) {
-				player.sendMessage(line);
-			}
-		}
-	}
-
-	/**
-	 * Send a message to All online residents of a town and log
-	 * Doesn't use a [Towny] or [TownName] prefix.
-	 * It is prefered to use sendPrefixedTownMessage or sendTownMessagePrefixed.
-	 *
-	 * @param town town to send message to
-	 * @param line the message to be sent
-	 */
-	@Deprecated
-	public static void sendTownMessage(Town town, String line) {
-		LOGGER.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendMessage(line);
+		player.sendMessage(Translation.of("default_towny_prefix") + line);
 	}
 
 	/**
@@ -413,7 +336,7 @@ public class TownyMessaging {
 	public static void sendTownMessagePrefixed(Town town, String line) {
 		LOGGER.info(ChatTools.stripColour(line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
+			player.sendMessage(Translation.of("default_towny_prefix") + line);
 	}
 
 	/**
@@ -424,9 +347,9 @@ public class TownyMessaging {
 	 * @param line the actual message
 	 */
 	public static void sendPrefixedTownMessage(Town town, String line) {
-		LOGGER.info(ChatTools.stripColour("[Town Msg] " + town.getName() + ": " + line));
+		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendMessage(String.format(TownySettings.getLangString("default_town_prefix"), town.getName()) + line);
+			player.sendMessage(Translation.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())) + line);
 	}
 
 	/**
@@ -442,7 +365,7 @@ public class TownyMessaging {
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
 			for (String line : lines) {
-				player.sendMessage(String.format(TownySettings.getLangString("default_town_prefix"), town.getName()) + line);
+				player.sendMessage(Translation.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())) + line);
 			}
 	}
 	
@@ -458,41 +381,6 @@ public class TownyMessaging {
 	}
 	
 	/**
-	 * Send a multi-line message to All online residents of a nation and log
-	 * Doesn't use a [Towny] or [NationName] prefix.
-	 * It is prefered to use sendPrefixedNationMessage or sendNationMessagePrefixed.
-	 *
-	 * @param nation the nation to send to
-	 * @param lines array of Strings containing the message
-	 */
-	@Deprecated
-	public static void sendNationMessage(Nation nation, String[] lines) {
-		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
-		}
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation)) {
-			for (String line : lines) {
-				player.sendMessage(line);
-			}
-		}
-	}
-
-	/**
-	 * Send a message to All online residents of a nation and log
-	 * Doesn't use a [Towny] or [NationName] prefix.
-	 * It is prefered to use sendPrefixedNationMessage or sendNationMessagePrefixed.
-	 *
-	 * @param nation nation to send message to
-	 * @param line the message
-	 */
-	@Deprecated
-	public static void sendNationMessage(Nation nation, String line) {
-		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendMessage(line);
-	}
-
-	/**
 	 * Send a message to All online residents of a nation and log
 	 * with the [nationname] prefixed to the beginning
 	 *
@@ -500,9 +388,9 @@ public class TownyMessaging {
 	 * @param line the message
 	 */
 	public static void sendPrefixedNationMessage(Nation nation, String line) {
-		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendMessage(String.format(TownySettings.getLangString("default_nation_prefix"), nation.getName()) + line);
+			player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())) + line);
 	}
 
 	/**
@@ -525,11 +413,11 @@ public class TownyMessaging {
 	 */
 	public static void sendPrefixedNationMessage(Nation nation, String[] lines) {
 		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation)) {
 			for (String line : lines) {
-				player.sendMessage(String.format(TownySettings.getLangString("default_nation_prefix"), nation.getName()) + line);
+				player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())) + line);
 			}
 		}
 	}
@@ -542,9 +430,9 @@ public class TownyMessaging {
 	 * @param line the message
 	 */
 	public static void sendNationMessagePrefixed(Nation nation, String line) {
-		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
+			player.sendMessage(Translation.of("default_towny_prefix") + line);
 	}
 	
 	/**
@@ -556,11 +444,11 @@ public class TownyMessaging {
 	 */
 	public static void sendNationMessagePrefixed(Nation nation, List<String> lines) {
 		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + nation.getName() + ": " + line));
+			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		}
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
 			for (String line : lines) {
-				player.sendMessage(TownySettings.getLangString("default_towny_prefix") + line);
+				player.sendMessage(Translation.of("default_towny_prefix") + line);
 			}
 	}
 
@@ -571,9 +459,10 @@ public class TownyMessaging {
 	 * @param town the town for which to show it's board
 	 */
 	public static void sendTownBoard(Player player, Town town) {
-		for (String line : ChatTools.color(TownySettings.getLangString("townboard_message_colour_1") + "[" + town.getName() + "] " + TownySettings.getLangString("townboard_message_colour_2") + town.getTownBoard())) {
-			player.sendMessage(line);
-		}
+		String tbColor1 = Translation.of("townboard_message_colour_1");
+		String tbColor2 = Translation.of("townboard_message_colour_2");
+		
+		player.sendMessage(tbColor1 + "[" + StringMgmt.remUnderscore(town.getName()) + "] " + tbColor2 + town.getBoard());
 	}
 	
 	/**
@@ -583,9 +472,10 @@ public class TownyMessaging {
 	 * @param nation the nation for which to show it's board
 	 */
 	public static void sendNationBoard(Player player, Nation nation) {
-		for (String line : ChatTools.color(TownySettings.getLangString("nationboard_message_colour_1") + "[" + nation.getName() + "] " + TownySettings.getLangString("townboard_message_colour_2") + nation.getNationBoard())) {
-			player.sendMessage(line);
-		}
+		String nbColor1 = Translation.of("nationboard_message_colour_1");
+		String nbColor2 = Translation.of("nationboard_message_colour_2");
+
+		player.sendMessage(nbColor1 + "[" + StringMgmt.remUnderscore(nation.getName()) + "] " + nbColor2 + nation.getBoard());
 	}
 	
 	/**
@@ -638,12 +528,11 @@ public class TownyMessaging {
 	 * @param resident resident to receive title &amp; subtitle message
 	 * @param title title message to send
 	 * @param subtitle subtitle message to send
-	 * @throws TownyException if the player is null
 	 */
-	public static void sendTitleMessageToResident(Resident resident, String title, String subtitle) throws TownyException {
+	public static void sendTitleMessageToResident(Resident resident, String title, String subtitle) {
 		Player player = TownyAPI.getInstance().getPlayer(resident);
 		if (player == null) {
-			throw new TownyException("Player could not be found!");
+			return;
 		}
 		player.sendTitle(title, subtitle, 10, 70, 10);
 	}
@@ -672,15 +561,15 @@ public class TownyMessaging {
 			player.sendTitle(title, subtitle, 10, 70, 10);
 	}
 
-	public static void sendConfirmationMessage(CommandSender player, String firstline, String confirmline, String cancelline, String lastline) {
+	public static void sendConfirmationMessage(CommandSender sender, String firstline, String confirmline, String cancelline, String lastline) {
 		
-		if (Towny.isSpigot) {
-			TownySpigotMessaging.sendSpigotConfirmMessage(player, firstline, confirmline, cancelline, lastline);
+		if (Towny.isSpigot && sender instanceof Player) {
+			TownySpigotMessaging.sendSpigotConfirmMessage(sender, firstline, confirmline, cancelline, lastline);
 			return;
 		}
 		
 		if (firstline == null) {
-			firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Confirmation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + TownySettings.getLangString("are_you_sure_you_want_to_continue");
+			firstline = Translation.of("confirmation_prefix") + Translation.of("are_you_sure_you_want_to_continue");
 		}
 		if (confirmline == null) {
 			confirmline = ChatColor.GREEN + "          /" + TownySettings.getConfirmCommand();
@@ -690,17 +579,15 @@ public class TownyMessaging {
 		}
 		if (lastline != null && lastline.equals("")) {
 			String[] message = new String[]{firstline, confirmline, cancelline};
-			sendMessage(player, message);
+			sendMessage(sender, message);
 			return;
 		}
 		if (lastline == null) {
-			lastline = ChatColor.BLUE + TownySettings.getLangString("this_message_will_expire");
+			lastline = Translation.of("this_message_will_expire2");
 			String[] message = new String[]{firstline, confirmline, cancelline, lastline};
-			sendMessage(player, message);
+			sendMessage(sender, message);
 		}
 	}
-
-	
 
 	public static void sendRequestMessage(CommandSender player, Invite invite) {
 		
@@ -710,25 +597,35 @@ public class TownyMessaging {
 		}
 		
 		if (invite.getSender() instanceof Town) { // Town invited Resident
-			String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
+			String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
 			String secondline = ChatColor.GREEN + "          /" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
 			String thirdline = ChatColor.GREEN +  "          /" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
 			sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_invited_to_join2"), invite.getSender().getName());
+				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
 				String secondline = ChatColor.GREEN + "          /t invite accept " + invite.getSender().getName();
 				String thirdline = ChatColor.GREEN +  "          /t invite deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstline = ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Invitation" + ChatColor.DARK_GRAY + "] " + ChatColor.BLUE + String.format(TownySettings.getLangString("you_have_been_requested_to_ally2"), invite.getSender().getName());
+				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_requested_to_ally2", invite.getSender().getName());
 				String secondline = ChatColor.GREEN + "          /n ally accept " + invite.getSender().getName();
 				String thirdline = ChatColor.GREEN +  "          /n ally deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 			}
 		}
 	}
-
+	
+	/**
+	 * @param object - One receiving the message.
+	 * @param message - Message being sent.
+	 * 
+	 * @deprecated Deprecated as of 0.96.2.13 use {@link #sendMsg(CommandSender, String)} instead.
+	 */
+	@Deprecated
+	public static void sendMsg(Object object, String message) {
+		sendMsg((CommandSender) object, message);
+	}
 }

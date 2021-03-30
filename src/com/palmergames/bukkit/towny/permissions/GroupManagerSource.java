@@ -1,11 +1,11 @@
 package com.palmergames.bukkit.towny.permissions;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Colors;
+
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.events.GMGroupEvent;
@@ -55,22 +55,22 @@ public class GroupManagerSource extends TownyPermissionSource {
 		//sendDebugMsg("    GroupManager installed.");
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
 
-		if (node == "prefix") {
+		if (node.equals("prefix")) {
 			group = handler.getGroupPrefix(handler.getPrimaryGroup(player.getName()));
 			user = handler.getUserPrefix(player.getName());
-		} else if (node == "suffix") {
+		} else if (node.equals("suffix")) {
 			group = handler.getGroupSuffix(handler.getPrimaryGroup(player.getName()));
 			user = handler.getUserSuffix(player.getName());
-		} else if (node == "userprefix") {
+		} else if (node.equals("userprefix")) {
+			group = "";
+			user = handler.getUserPrefix(player.getName());					
+		} else if (node.equals("usersuffix")) {
 			group = "";
 			user = handler.getUserSuffix(player.getName());					
-		} else if (node == "usersuffix") {
-			group = "";
-			user = handler.getUserSuffix(player.getName());					
-		} else if (node == "groupprefix") {
+		} else if (node.equals("groupprefix")) {
 			group = handler.getGroupPrefix(handler.getPrimaryGroup(player.getName()));
 			user = "";
-		} else if (node == "groupsuffix") {
+		} else if (node.equals("groupsuffix")) {
 			group = handler.getGroupSuffix(handler.getPrimaryGroup(player.getName()));
 			user = "";
 		}
@@ -81,7 +81,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 		if (!group.equals(user))
 			user = group + user;
-		user = TownySettings.parseSingleLineString(user);
+		user = Colors.translateColorCodes(user);
 
 		return user;
 
@@ -165,32 +165,26 @@ public class GroupManagerSource extends TownyPermissionSource {
 		@EventHandler(priority = EventPriority.HIGH)
 		public void onGMUserEvent(GMUserEvent event) {
 
-			Resident resident = null;
-			Player player = null;
-
 			try {
-				if (PermissionEventEnums.GMUser_Action.valueOf(event.getAction().name()) != null) {
-
-					try {
-						resident = TownyUniverse.getInstance().getDataSource().getResident(event.getUserName());
-						player = BukkitTools.getPlayerExact(resident.getName());
-						if (player != null) {
-							//setup default modes for this player.
-							String[] modes = getPlayerPermissionStringNode(player.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-							plugin.setPlayerMode(player, modes, false);
-							plugin.resetCache(player);
-						}
-					} catch (NotRegisteredException ignored) {
-					}
-
-				}
+				PermissionEventEnums.GMUser_Action.valueOf(event.getAction().name());
 			} catch (IllegalArgumentException e) {
 				// Not tracking this event type
+				return;
 			}
 
+			Resident resident = TownyUniverse.getInstance().getResident(event.getUserName());
+			if (resident != null) {
+				Player player = BukkitTools.getPlayerExact(resident.getName());
+
+				if (player != null) {
+					//setup default modes for this player.
+					String[] modes = getPlayerPermissionStringNode(player.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
+					plugin.setPlayerMode(player, modes, false);
+					plugin.resetCache(player);
+				}
+			}
 		}
 
-		@SuppressWarnings("unlikely-arg-type")
 		@EventHandler(priority = EventPriority.HIGH)
 		public void onGMGroupEvent(GMGroupEvent event) {
 
@@ -201,7 +195,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 					// Update all players who are in this group.
 					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
 						if (toUpdate != null) {
-							if (group.equals(getPlayerGroup(toUpdate))) {
+							if (group.toString().equals(getPlayerGroup(toUpdate))) {
 								//setup default modes
 								String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
 								plugin.setPlayerMode(toUpdate, modes, false);

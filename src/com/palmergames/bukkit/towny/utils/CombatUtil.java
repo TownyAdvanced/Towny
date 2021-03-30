@@ -1,35 +1,39 @@
 package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.DisallowedPVPEvent;
+import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
+import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
+import com.palmergames.bukkit.towny.event.damage.WildernessPVPTestEvent;
+import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.util.BukkitTools;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Wolf;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import java.util.List;
 
 /**
  * 
- * @author ElgarL,Shade
+ * @author ElgarL,Shade,LlmDl
  * 
  */
 public class CombatUtil {
@@ -43,9 +47,10 @@ public class CombatUtil {
 	 * @param plugin - Reference to Towny
 	 * @param attacker - Entity attacking the Defender
 	 * @param defender - Entity defending from the Attacker
+	 * @param cause - The DamageCause behind this DamageCall.
 	 * @return true if we should cancel.
 	 */
-	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender) {
+	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender, DamageCause cause) {
 
 		try {
 			TownyWorld world = TownyUniverse.getInstance().getDataSource().getWorld(defender.getWorld().getName());
@@ -82,7 +87,7 @@ public class CombatUtil {
 			if (a == b)
 				return false;
 
-			return preventDamageCall(plugin, world, attacker, defender, a, b);
+			return preventDamageCall(plugin, world, attacker, defender, a, b, cause);
 
 		} catch (Exception e) {
 			// Failed to fetch world
@@ -104,175 +109,156 @@ public class CombatUtil {
 	 * @param defendingEntity - Entity defending
 	 * @param attackingPlayer - Player attacking
 	 * @param defendingPlayer - Player defending
+	 * @param cause - The DamageCause behind this DamageCall.
 	 * @return true if we should cancel.
 	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
-	public static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer) throws NotRegisteredException {
+	private static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer, DamageCause cause) throws NotRegisteredException {
 
-		// World using Towny
-		if (!world.isUsingTowny())
-			return false;
-
-		Coord coord = Coord.parseCoord(defendingEntity);
-		TownBlock defenderTB = null;
-		TownBlock attackerTB = null;
-
-		try {
-			attackerTB = world.getTownBlock(Coord.parseCoord(attackingEntity));
-		} catch (NotRegisteredException ex) {
-		}
-
-		try {
-			defenderTB = world.getTownBlock(coord);
-		} catch (NotRegisteredException ex) {
-		}
-		
+		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation());
+		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attackingEntity.getLocation());
 		/*
 		 * We have an attacking player
 		 */
 		if (attackingPlayer != null) {
 
+			boolean cancelled = false;
+			
 			/*
-			 * If another player is the target
-			 * or
-			 * The target is in a TownBlock and...
-			 * the target is a tame wolf and we are not it's owner
+			 * Defender is a player.
 			 */
-			if ((defendingPlayer != null) || ((defenderTB != null) && ((defendingEntity instanceof Wolf) && ((Wolf) defendingEntity).isTamed() && !((Wolf) defendingEntity).getOwner().equals((AnimalTamer) attackingEntity)))) {
-
+			if (defendingPlayer != null) {
+				
 				/*
-				 * Defending player is in a warzone
+				 * Both townblocks are not Arena plots.
 				 */
-				if (world.isWarZone(coord))
-					return false;
-
-				/*
-				 * Check for special pvp plots (arena)
-				 */
-				if (isPvPPlot(attackingPlayer, defendingPlayer))
-					return false;
-
-				/*
-				 * Check if we are preventing friendly fire between allies
-				 * Check the attackers TownBlock and it's Town for their PvP
-				 * status, else the world.
-				 * Check the defenders TownBlock and it's Town for their PvP
-				 * status, else the world.
-				 */
-				if (preventFriendlyFire(attackingPlayer, defendingPlayer) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) {
-
-					DisallowedPVPEvent event = new DisallowedPVPEvent(attackingPlayer, defendingPlayer);
-					plugin.getServer().getPluginManager().callEvent(event);
-
-					return !event.isCancelled();
+				if (!isArenaPlot(attackerTB, defenderTB)) {
+					/*
+					 * Check if we are preventing friendly fire between allies
+					 * Check the attackers TownBlock and it's Town for their PvP status, else the world.
+					 * Check the defenders TownBlock and it's Town for their PvP status, else the world.
+					 */
+					cancelled = preventFriendlyFire(attackingPlayer, defendingPlayer, world) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB);
 				}
 
+				/*
+				 * A player has attempted to damage a player. Throw a TownPlayerDamagePlayerEvent.
+				 */
+				TownyPlayerDamagePlayerEvent event = new TownyPlayerDamagePlayerEvent(defendingPlayer.getLocation(), defendingPlayer, cause, defenderTB, cancelled, attackingPlayer);
+				BukkitTools.getPluginManager().callEvent(event);
+
+				// A cancelled event should contain a message.
+				if (event.isCancelled() && event.getMessage() != null)
+					TownyMessaging.sendErrorMsg(attackingPlayer, event.getMessage());
+				
+				return event.isCancelled();
+
+			/*
+			 * Defender is not a player.
+			 */
 			} else {
 				/*
-				 * Remove animal killing prevention start
-				 */
-				
-				
-				/*
-				 * Defender is not a player so check for PvM
+				 * First test protections for Non-Player defenders who are being protected
+				 * because they are specifically in Town-Claimed land.
 				 */
 				if (defenderTB != null) {
-					if(defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString())) {
-						if (PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), Material.WHEAT, ActionType.DESTROY))
-							return false;
-					}
-					List<Class<?>> prots = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getEntityTypes(), "TownMobPVM:");
-					if (EntityTypeUtil.isInstanceOfAny(prots, defendingEntity)) {
-						
-						/*
-						 * Only allow the player to kill protected entities etc,
-						 * if they are from the same town
-						 * and have destroy permissions (dirt) in the defending
-						 * TownBlock
-						 */
-						if (!PlayerCacheUtil.getCachePermission(attackingPlayer, attackingPlayer.getLocation(), Material.DIRT, ActionType.DESTROY))
-							return true;
-					}
+					
+					/*
+					 * Protect tamed dogs in town land which are not owned by the attacking player.
+					 */
+					if (defendingEntity instanceof Wolf && isNotTheAttackersPetDog((Wolf) defendingEntity, attackingPlayer))
+						return true;
+					
+					/*
+					 * Farm Animals - based on whether this is allowed using the PlayerCache and then a cancellable event.
+					 */
+					if (defenderTB.getType() == TownBlockType.FARM && TownySettings.getFarmAnimals().contains(defendingEntity.getType().toString()))
+						return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.WHEAT);
+
+					/*
+					 * Config's protected entities: Animals,WaterMob,NPC,Snowman,ArmorStand,Villager
+					 */
+					if (EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) 						
+						return(!TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT));
 				}
-
-				/*
-				 * Remove prevention end
-				 */
-
+				
 				/*
 				 * Protect specific entity interactions (faked with Materials).
+				 * Requires destroy permissions in either the Wilderness or in Town-Claimed land.
 				 */
-				Material block = null;
+				Material material = null;
 
 				switch (defendingEntity.getType()) {
-	
+					/*
+					 * Below are the entities we specifically want to protect with this test.
+					 * Any other entity will mean that block is still null and will not be
+					 * tested with a destroy test.
+					 */
 					case ITEM_FRAME:
-						block = Material.ITEM_FRAME;
-						break;
-	
 					case PAINTING:
-						block = Material.PAINTING;
-						break;
-	
+					case ARMOR_STAND:
+					case ENDER_CRYSTAL:
 					case MINECART:
-						block = Material.MINECART;
-						break;
-						
 					case MINECART_CHEST:
-						block = Material.CHEST_MINECART;
-						break;
-					
 					case MINECART_FURNACE:
-						block = Material.FURNACE_MINECART;
-						break;
-	
 					case MINECART_COMMAND:
-						block = Material.COMMAND_BLOCK_MINECART;
-						break;
-	
 					case MINECART_HOPPER:
-						block = Material.HOPPER_MINECART;
+						material = EntityTypeUtil.parseEntityToMaterial(defendingEntity.getType());
 						break;
 					
 					default:
 						break;
 				}
 
-				if (block != null) {
-					// Get permissions (updates if none exist)
-					boolean bDestroy = PlayerCacheUtil.getCachePermission(attackingPlayer, defendingEntity.getLocation(), block, TownyPermission.ActionType.DESTROY);
-
-					if (!bDestroy) {
-
-						/*
-						 * Fetch the players cache
-						 */
-						PlayerCache cache = plugin.getCache(attackingPlayer);
-
-						if (cache.hasBlockErrMsg())
-							TownyMessaging.sendErrorMsg(attackingPlayer, cache.getBlockErrMsg());
-
-						return true;
-					}
-
+				if (material != null) {
+					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+					return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), material);
 				}
+			}
 
+		/*
+		 * This is not an attack by a player....
+		 */
+		} else {
+
+			/*
+			 * If Defender is a player, Attacker is not.
+			 */
+			if (defendingPlayer != null) {
+
+				/*
+				 * If attackingEntity is a tamed Wolf and...
+				 * Defender is a player and...
+				 * Either player or wolf is in a non-PVP area
+				 * 
+				 * Prevent pvp and remove Wolf targeting.
+				 */
+				if ( attackingEntity instanceof Wolf && ((Wolf) attackingEntity).isTamed() && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB))) {
+					((Wolf) attackingEntity).setTarget(null);
+					return true;
+				}
+				
+				if (attackingEntity instanceof LightningStrike 
+					&& world.hasTridentStrike(attackingEntity.getEntityId())
+					&& preventPvP(world, defenderTB)) {
+					return true;
+				}
+				
+			/*
+			 * DefendingEntity is not a player.
+			 * This is now non-player vs non-player damage.
+			 */
+			} else {
+
+			    /*
+			     * Prevents projectiles fired by non-players harming non-player entities.
+			     * Could be a monster or it could be a dispenser.
+			     */
+				if (attackingEntity instanceof Projectile) {
+					return true;	
+				}
 			}
 		}
-		
-		/*
-		 * If attackingEntity is a tamed Wolf and...
-		 * Defender is a player and...
-		 * Either player or wolf is in a non-PVP area
-		 * 
-		 * Prevent pvp and remove Wolf targeting.
-		 */
-		if ( attackingEntity instanceof Wolf && ((Wolf) attackingEntity).isTamed() && defendingPlayer != null && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB)) ) {
-			((Wolf) attackingEntity).setTarget(null);
-			return true;
-		}
-		
-
 		return false;
 	}
 
@@ -286,39 +272,40 @@ public class CombatUtil {
 	public static boolean preventPvP(TownyWorld world, TownBlock townBlock) {
 
 		if (townBlock != null) {
-			try {
 
-				/*
-				 * Check the attackers TownBlock and it's Town for their PvP
-				 * status
-				 */
-				if (townBlock.getTown().isAdminDisabledPVP())
-					return true;
-
-				if (!townBlock.getTown().isPVP() && !townBlock.getPermissions().pvp && !world.isForcePVP())
-					return true;
-				
-				if (townBlock.isHomeBlock() && world.isForcePVP() && TownySettings.isForcePvpNotAffectingHomeblocks())
-					return true;
-
-			} catch (NotRegisteredException ex) {
-				/*
-				 * Failed to fetch the town data
-				 * so check world PvP
-				 */
-				if (!isWorldPvP(world))
-					return true;
-			}
+			/*
+			 * Check the attackers TownBlock and it's Town for their PvP status.
+			 */
+			TownBlockPVPTestEvent event = new TownBlockPVPTestEvent(townBlock, isPvP(townBlock));
+			Bukkit.getPluginManager().callEvent(event);
+			return !event.isPvp();
 
 		} else {
 
 			/*
-			 * Attacker isn't in a TownBlock so check the world PvP
+			 * Attacker isn't in a TownBlock so check the wilderness PvP status.
 			 */
-			if (!isWorldPvP(world))
-				return true;
+			WildernessPVPTestEvent event = new WildernessPVPTestEvent(world, isWorldPvP(world));
+			Bukkit.getPluginManager().callEvent(event);
+			return !event.isPvp();
 		}
-		return false;
+	}
+	
+	private static boolean isPvP(TownBlock townBlock) {
+		
+		try {
+			if (townBlock.getTown().isAdminDisabledPVP())
+				return false;
+
+			// Checks PVP perm: 1. Plot PVP, 2. Town PVP, 3. World Force PVP 
+			if (!townBlock.getPermissions().pvp && !townBlock.getTown().isPVP() && !townBlock.getWorld().isForcePVP()) 
+				return false;
+			
+			if (townBlock.isHomeBlock() && townBlock.getWorld().isForcePVP() && TownySettings.isForcePvpNotAffectingHomeblocks())
+				return false;
+		} catch (NotRegisteredException ignored) {}
+		
+		return true;
 	}
 
 	/**
@@ -337,13 +324,32 @@ public class CombatUtil {
 	}
 
 	/**
+	 * @deprecated as of 0.96.2.20 use {@link CombatUtil#preventFriendlyFire(Player, Player, TownyWorld) instead}
 	 * Should we be preventing friendly fire?
 	 * 
 	 * @param attacker - Attacking Player
 	 * @param defender - Defending Player (receiving damage)
+	 * 
 	 * @return true if we should cancel damage.
 	 */
+	@Deprecated
 	public static boolean preventFriendlyFire(Player attacker, Player defender) {
+		TownyWorld world = null;
+		try {
+			world = TownyUniverse.getInstance().getDataSource().getWorld(attacker.getLocation().getWorld().getName());
+		} catch (NotRegisteredException ignored) {}
+		return preventFriendlyFire(attacker, defender, world);
+	}
+	
+	/**
+	 * Should we be preventing friendly fire?
+	 * 
+	 * @param attacker - Attacking Player
+	 * @param defender - Defending Player (receiving damage)
+	 * @param world - TownyWorld being tested.
+	 * @return true if we should cancel damage.
+	 */
+	public static boolean preventFriendlyFire(Player attacker, Player defender, TownyWorld world) {
 
 		/*
 		 * Don't block potion use (self damaging) on ourselves.
@@ -352,46 +358,54 @@ public class CombatUtil {
 			return false;
 
 		if ((attacker != null) && (defender != null))
-			if (!TownySettings.getFriendlyFire() && CombatUtil.isAlly(attacker.getName(), defender.getName())) {
-				try {
-					TownBlock townBlock = new WorldCoord(defender.getWorld().getName(), Coord.parseCoord(defender)).getTownBlock();
-					if (!townBlock.getType().equals(TownBlockType.ARENA))
-						attacker.sendMessage(TownySettings.getLangString("msg_err_friendly_fire_disable"));
-						return true;
-				} catch (TownyException x) {
-					// World or TownBlock failure
-					// But we are configured to prevent friendly fire in the
-					// wilderness too.					
-					attacker.sendMessage(TownySettings.getLangString("msg_err_friendly_fire_disable"));
-					return true;
-				}
+			if (!world.isFriendlyFireEnabled() && CombatUtil.isAlly(attacker.getName(), defender.getName())) {
+				if (isArenaPlot(attacker, defender))
+					return false;
+				
+				TownyMessaging.sendErrorMsg(attacker, Translation.of("msg_err_friendly_fire_disable"));
+				return true;
 			}		
 		return false;
 	}
 
 	/**
+	 * Returns true if both players are in an arena townblock.
+	 * @param attacker Attacking Player
+	 * @param defender Defending Player
+	 * @return true if both player in an Arena plot.
+	 */
+	public static boolean isArenaPlot(Player attacker, Player defender) {
+		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attacker.getLocation());
+		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defender.getLocation());
+		return isArenaPlot(attackerTB, defenderTB);
+	}
+	
+	/**
+	 * Return true if both TownBlocks are Arena plots.
+	 * 
+	 * @param defenderTB TownBlock being tested.
+	 * @param attackerTB TownBlock being tested.
+	 * @return true if both TownBlocks are Arena plots.
+	 */
+	public static boolean isArenaPlot(TownBlock attackerTB, TownBlock defenderTB) {
+
+		if (defenderTB != null && attackerTB != null && defenderTB.getType() == TownBlockType.ARENA && attackerTB.getType() == TownBlockType.ARENA)
+			return true;
+		return false;
+	}
+	
+	/**
+	 * @deprecated as of 0.96.7.1. Use {@link CombatUtil#isArenaPlot(Player, Player)}.
 	 * Return true if both attacker and defender are in Arena Plots.
 	 * 
 	 * @param attacker - Attacking Player
 	 * @param defender - Defending Player (receiving damage)
 	 * @return true if both players in an Arena plot.
 	 */
+	@Deprecated
 	public static boolean isPvPPlot(Player attacker, Player defender) {
 
-		if ((attacker != null) && (defender != null)) {
-			TownBlock attackerTB, defenderTB;
-			try {
-				attackerTB = new WorldCoord(attacker.getWorld().getName(), Coord.parseCoord(attacker)).getTownBlock();
-				defenderTB = new WorldCoord(defender.getWorld().getName(), Coord.parseCoord(defender)).getTownBlock();
-
-				if (defenderTB.getType().equals(TownBlockType.ARENA) && attackerTB.getType().equals(TownBlockType.ARENA))
-					return true;
-
-			} catch (NotRegisteredException e) {
-				// Not a Town owned Plot
-			}
-		}
-		return false;
+		return isArenaPlot(attacker, defender);
 	}
 
 	/**
@@ -403,19 +417,24 @@ public class CombatUtil {
 	 */
 	public static boolean isAlly(String attackingResident, String defendingResident) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
+		Resident residentA = townyUniverse.getResident(attackingResident);
+		Resident residentB = townyUniverse.getResident(defendingResident);
+		
+		// Fast-fail
+		if (residentA == null || residentB == null || !residentA.hasTown() || !residentB.hasTown())
+			return false;
 		
 		try {
-			Resident residentA = townyUniverse.getDataSource().getResident(attackingResident);
-			Resident residentB = townyUniverse.getDataSource().getResident(defendingResident);
-			if (residentA.getTown() == residentB.getTown())
+			if (residentA.getTown().equals(residentB.getTown()))
 				return true;
-			if (residentA.getTown().getNation() == residentB.getTown().getNation())
+			
+			if (residentA.getTown().getNation().equals(residentB.getTown().getNation()))
 				return true;
+			
 			if (residentA.getTown().getNation().hasAlly(residentB.getTown().getNation()))
 				return true;
-		} catch (NotRegisteredException e) {
-			return false;
-		}
+		} catch (NotRegisteredException ignored) {}
 		return false;
 	}
 
@@ -435,9 +454,7 @@ public class CombatUtil {
 				return true;
 			if (a.getNation().hasAlly(b.getNation()))
 				return true;
-		} catch (NotRegisteredException e) {
-			return false;
-		}
+		} catch (NotRegisteredException ignored) {}
 		return false;
 	}
 
@@ -446,7 +463,7 @@ public class CombatUtil {
 	 * 
 	 * @param a - Town A in comparison
 	 * @param b - Town B in comparison
-	 * @return true if they are allies.
+	 * @return true if they are in the same nation.
 	 */
 	public static boolean isSameNation(Town a, Town b) {
 
@@ -475,7 +492,52 @@ public class CombatUtil {
 		return false;
 	}
 
+	/**
+	 * Is resident a in a nation with resident b?
+	 * 
+	 * @param a - Resident A in comparison.
+	 * @param b - Resident B in comparison.
+	 * @return true if they are in the same nation.
+	 */
+	public static boolean isSameNation(Resident a, Resident b) {
+		if (!a.hasTown() || !b.hasTown())
+			return false;
+		
+		Town townA = null;
+		Town townB = null;
+		try {
+			townA = a.getTown();
+			townB = b.getTown();
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+				
+		return isSameNation(townA, townB);
+	}
 	
+	
+	/**
+	 * Is resident a in a town with resident b?
+	 * @param a - Resident A in comparison.
+	 * @param b - Resident B in comparison.
+	 * @return true if they are in the same town.
+	 */
+	public static boolean isSameTown(Resident a, Resident b) {
+		if (!a.hasTown() || !b.hasTown())
+			return false;
+		
+		Town townA = null;
+		Town townB = null;
+		try {
+			townA = a.getTown();
+			townB = b.getTown();
+		} catch (NotRegisteredException e) {
+			return false;
+		}
+		
+		return isSameTown(townA, townB);
+	}
+
 	/**
 	 * Can resident a attack resident b?
 	 * 
@@ -485,13 +547,17 @@ public class CombatUtil {
 	 */
 	public static boolean canAttackEnemy(String a, String b) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		Resident residentA = townyUniverse.getResident(a);
+		Resident residentB = townyUniverse.getResident(b);
+		
+		// Fast-fail
+		if (residentA == null || residentB == null || !residentA.hasTown() || !residentB.hasTown())
+			return false;
 		
 		try {
-			Resident residentA = townyUniverse.getDataSource().getResident(a);
-			Resident residentB = townyUniverse.getDataSource().getResident(b);
-			if (residentA.getTown() == residentB.getTown())
+			if (residentA.getTown().equals(residentB.getTown()))
 				return false;
-			if (residentA.getTown().getNation() == residentB.getTown().getNation())
+			if (residentA.getTown().getNation().equals(residentB.getTown().getNation()))
 				return false;
 			Nation nationA = residentA.getTown().getNation();
 			Nation nationB = residentB.getTown().getNation();
@@ -499,9 +565,7 @@ public class CombatUtil {
 				return false;
 			if (nationA.hasEnemy(nationB))
 				return true;
-		} catch (NotRegisteredException e) {
-			return false;
-		}
+		} catch (NotRegisteredException ignored) {}
 		return false;
 	}
 
@@ -532,19 +596,20 @@ public class CombatUtil {
 	 */
 	public static boolean isEnemy(String a, String b) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		Resident residentA = townyUniverse.getResident(a);
+		Resident residentB = townyUniverse.getResident(b);
+		
+		if (residentA == null || residentB == null || !residentA.hasNation() || !residentB.hasNation())
+			return false;
 		
 		try {
-			Resident residentA = townyUniverse.getDataSource().getResident(a);
-			Resident residentB = townyUniverse.getDataSource().getResident(b);
-			if (residentA.getTown() == residentB.getTown())
+			if (residentA.getTown().equals(residentB.getTown()))
 				return false;
-			if (residentA.getTown().getNation() == residentB.getTown().getNation())
+			if (residentA.getTown().getNation().equals(residentB.getTown().getNation()))
 				return false;
 			if (residentA.getTown().getNation().hasEnemy(residentB.getTown().getNation()))
 				return true;
-		} catch (NotRegisteredException e) {
-			return false;
-		}
+		} catch (NotRegisteredException ignored) {}
 		return false;
 	}
 
@@ -564,9 +629,7 @@ public class CombatUtil {
 				return false;
 			if (a.getNation().hasEnemy(b.getNation()))
 				return true;
-		} catch (NotRegisteredException e) {
-			return false;
-		}
+		} catch (NotRegisteredException ignored) {}
 		return false;
 	}
 
@@ -577,12 +640,22 @@ public class CombatUtil {
 	 * @param worldCoord - Location
 	 * @return true if it is an enemy plot.
 	 */
-	public boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
-
+	public static boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		try {
-			return CombatUtil.isEnemy(TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown(), worldCoord.getTownBlock().getTown());
-		} catch (NotRegisteredException e) {
-			return false;
-		}
+			if (resident != null && resident.hasTown())
+				return CombatUtil.isEnemy(resident.getTown(), worldCoord.getTownBlock().getTown());
+		} catch (NotRegisteredException ignored) {}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param wolf Wolf being attacked by a player.
+	 * @param attackingPlayer Player attacking the wolf.
+	 * @return true when a dog who is not owned by the attacker is injured inside of a town's plot.
+	 */
+	private static boolean isNotTheAttackersPetDog(Wolf wolf, Player attackingPlayer) {
+		return wolf.isTamed() && !wolf.getOwner().equals(attackingPlayer);
 	}
 }
