@@ -11,18 +11,18 @@ description: >
 
 #
 #
-#         You MUST retain spacing in the texts.
-#  If a text begins or ends with a space, it must remain that way.
+#         Du MÅSTE behålla formateringen på texten.
+#  Om texten börjar eller slutar på ett mellanrum, så måste det fortsätta vara där.
 #
 #
-#       %s = data to be supplied by the plugin.
+#       %s = data som kommer ifrån pluginet.
 
-# Text colouring
+# Textfärg
 # --------------
-# Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
-# Purple = &5, Gold = &6, LightGray = &7, Gray = &8
-# DarkPurple = &9, LightGreen = &a, LightBlue = &b
-# Rose = &c, LightPurple = &d, Yellow = &e, White = &f
+# Svart = &0, Marinblå = &1, Grön = &2, Blå = &3, Röd = &4
+# Lila = &5, Guld = &6, Ljusgrå = &7, Grå = &8
+# Mörklila = &9, Ljusgrön = &a, Ljusblå = &b
+# Rosenrött = &c, Ljuslila = &d, Gul = &e, Vit = &f
 
 
 default_towny_prefix: '&6[Towny] &b'
@@ -34,7 +34,7 @@ unclaimed_zone_name: 'Vildmark'
 
 ############################################################
 # +------------------------------------------------------+ #
-# |help messages                                         | #
+# |hjälpmeddelanden                                      | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -138,7 +138,7 @@ msg_plot_fs: 'Lägg upp mark för aktion.'
 
 ############################################################
 # +------------------------------------------------------+ #
-# |   Messages                                           | #
+# |   Meddelanden                                        | #
 # +------------------------------------------------------+ #
 ############################################################
 
