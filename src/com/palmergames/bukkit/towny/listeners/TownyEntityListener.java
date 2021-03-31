@@ -407,7 +407,7 @@ public class TownyEntityListener implements Listener {
 	 * @param event - CreatureSpawnEvent
 	 * @throws NotRegisteredException - If failed to fetch a world or not
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onCreatureSpawn(CreatureSpawnEvent event) throws NotRegisteredException {
 		if (plugin.isError()) {
 			event.setCancelled(true);
