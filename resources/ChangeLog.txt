@@ -5945,3 +5945,5 @@ v0.92.0.11:
 0.96.7.12:
   - Swedish translation, added courtesy of OskyEdz with PR #4840.
   - Lower CreatureSpawnEvent priority to make Towny play nice with EliteMobs and not be the worst.
+  - Fix unclaimedZoneIgnoreIds not working properly.
+    - Closes #4844.
