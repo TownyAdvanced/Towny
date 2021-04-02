@@ -5947,3 +5947,5 @@ v0.92.0.11:
   - Lower CreatureSpawnEvent priority to make Towny play nice with EliteMobs and not be the worst.
   - Fix unclaimedZoneIgnoreIds not working properly.
     - Closes #4844.
+  - Fix personally-owned plots not taking on a fully-open perm line when a town is ruined.
+    - Closes #4846.
