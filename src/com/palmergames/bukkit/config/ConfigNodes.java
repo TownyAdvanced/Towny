@@ -771,7 +771,7 @@ public enum ConfigNodes {
 	
 	GTOWN_TOWN_BLACKLISTED_COMMANDS(
 			"global_town_settings.town_blacklisted_commands",
-			"somecommandhere",
+			"somecommandhere, someothercommandhere",
 			"",
 			"# Similar to the jail command blacklist feature, but allows blocking commands inside towns.",
 			"# This can be useful if you want to block sethome/home commands while inside any town."

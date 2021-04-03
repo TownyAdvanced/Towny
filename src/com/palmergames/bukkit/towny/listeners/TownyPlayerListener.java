@@ -1018,7 +1018,8 @@ public class TownyPlayerListener implements Listener {
 		
 		Resident res = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 		
-		if (res == null)
+		if (res == null || TownyAPI.getInstance().isWilderness(event.getPlayer().getLocation()) ||
+				event.getPlayer().hasPermission(PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
 			return;
 		
 		String[] split = event.getMessage().substring(1).split(" ");
