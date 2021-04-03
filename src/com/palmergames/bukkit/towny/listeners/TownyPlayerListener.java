@@ -1018,12 +1018,19 @@ public class TownyPlayerListener implements Listener {
 		
 		Resident res = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 		
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+			return;
+		
 		if (res == null || TownyAPI.getInstance().isWilderness(event.getPlayer().getLocation()) ||
 				event.getPlayer().hasPermission(PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
 			return;
 		
 		String[] split = event.getMessage().substring(1).split(" ");
 		if (TownySettings.getTownBlacklistedCommands().contains(split[0])) {
+			if (TownySettings.getTownLimitedCommands().contains(split[0])) {
+				
+			}
+			
 			TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_command_blocked_inside_towns"));
 			event.setCancelled(true);
 		}

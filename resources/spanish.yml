@@ -1376,3 +1376,4 @@ msg_err_nation_capital_too_many_residents: '&cThe current capital city has too m
 msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your nation will mean your town is over the population limit of %d, resulting in the removal of %d residents.'
 
 msg_command_blocked_inside_towns: '&cYou cannot use that command inside towns.'
+msg_command_limited: 'You can only use that command inside your own plots.'

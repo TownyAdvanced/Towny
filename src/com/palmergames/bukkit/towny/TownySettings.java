@@ -3056,5 +3056,9 @@ public class TownySettings {
 	public static List<String> getTownBlacklistedCommands() {
 		return getStrArr(ConfigNodes.GTOWN_TOWN_BLACKLISTED_COMMANDS);
 	}
+	
+	public static List<String> getTownLimitedCommands() {
+		return getStrArr(ConfigNodes.GTOWN_TOWN_LIMITED_COMMANDS);
+	}
 }
 

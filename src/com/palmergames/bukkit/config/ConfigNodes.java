@@ -761,8 +761,15 @@ public enum ConfigNodes {
 			"# For example, to give a `visemayor` preference over an `assistant`, change this parameter to `visemayor,assistant`."
 	),
 	
+	GTOWN_SETTINGS_COMMAND_BLACKLISTING(
+			"global_town_settings.town_command_blacklisting",
+			"",
+			"",
+			"# Allows blocking commands inside towns and limiting them to plots owned by the players only.",
+			"# Useful for limiting sethome/home commands to plots owned by the players themselves and not someone else."
+	),
 	GTOWN_SETTINGS_ENABLE_COMMAND_BLACKLISTING(
-			"global_town_settings.allow_town_command_blacklisting",
+			"global_town_settings.town_command_blacklisting.enabled",
 			"true",
 			"",
 			"# Allows blocking commands inside towns through the town_blacklisted_commands setting.",
@@ -770,11 +777,17 @@ public enum ConfigNodes {
 	),
 	
 	GTOWN_TOWN_BLACKLISTED_COMMANDS(
-			"global_town_settings.town_blacklisted_commands",
-			"somecommandhere, someothercommandhere",
+			"global_town_settings.town_command_blacklisting.blacklisted_commands",
+			"somecommandhere,othercommandhere",
 			"",
-			"# Similar to the jail command blacklist feature, but allows blocking commands inside towns.",
-			"# This can be useful if you want to block sethome/home commands while inside any town."
+			"# Comma separated list of commands to block inside towns."
+	),
+
+	GTOWN_TOWN_LIMITED_COMMANDS(
+			"global_town_settings.town_command_blacklisting.limited_commands",
+			"sethome,home",
+			"",
+			"# This allows the usage of blacklisted commands only in plots owned by the player."
 	),
 	
 	GNATION_SETTINGS(
