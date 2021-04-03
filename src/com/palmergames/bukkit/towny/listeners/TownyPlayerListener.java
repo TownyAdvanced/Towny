@@ -1003,6 +1003,31 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 	
+	/** 
+	 * Allows restricting commands while being on an town.
+	 * Works almost the same way as jail command blacklisting.
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerUsesCommandInsideTown(PlayerCommandPreprocessEvent event) {
+		if (plugin.isError())
+			return;
+		
+		if (!TownySettings.allowTownCommandBlacklisting())
+			return;
+		
+		Resident res = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
+		
+		if (res == null)
+			return;
+		
+		String[] split = event.getMessage().substring(1).split(" ");
+		if (TownySettings.getTownBlacklistedCommands().contains(split[0])) {
+			TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_command_blocked_inside_towns"));
+			event.setCancelled(true);
+		}
+	}
+	
 	/*
 	 *  Handles AdminTool use on Blocks
 	 */

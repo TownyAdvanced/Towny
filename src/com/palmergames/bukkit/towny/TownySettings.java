@@ -3048,5 +3048,13 @@ public class TownySettings {
 	public static boolean isNotificationsAppearingOnBossbar() {
 		return getBoolean(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_ON_BOSSBAR);
 	}
+	
+	public static boolean allowTownCommandBlacklisting() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ENABLE_COMMAND_BLACKLISTING);
+	}
+	
+	public static List<String> getTownBlacklistedCommands() {
+		return getStrArr(ConfigNodes.GTOWN_TOWN_BLACKLISTED_COMMANDS);
+	}
 }
 

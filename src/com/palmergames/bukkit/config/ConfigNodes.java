@@ -761,6 +761,22 @@ public enum ConfigNodes {
 			"# For example, to give a `visemayor` preference over an `assistant`, change this parameter to `visemayor,assistant`."
 	),
 	
+	GTOWN_SETTINGS_ENABLE_COMMAND_BLACKLISTING(
+			"global_town_settings.allow_town_command_blacklisting",
+			"true",
+			"",
+			"# Allows blocking commands inside towns through the town_blacklisted_commands setting.",
+			"# This boolean allows you to disable this feature altogether if you don't need it"
+	),
+	
+	GTOWN_TOWN_BLACKLISTED_COMMANDS(
+			"global_town_settings.town_blacklisted_commands",
+			"somecommandhere",
+			"",
+			"# Similar to the jail command blacklist feature, but allows blocking commands inside towns.",
+			"# This can be useful if you want to block sethome/home commands while inside any town."
+	),
+	
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",
