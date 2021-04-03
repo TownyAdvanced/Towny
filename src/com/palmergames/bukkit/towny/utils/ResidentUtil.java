@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.palmergames.bukkit.towny.object.Translation;
 
@@ -13,7 +14,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.TownyInventory;
@@ -149,5 +152,37 @@ public class ResidentUtil {
 		page.setItem(53, nextpage);
 		page.setItem(45, prevpage);
 		return page;
+	}
+	
+	
+	public static Resident createAndGetNPCResident() {
+		Resident npc = null;
+		try {
+			String name = nextNpcName();
+			final UUID npcUUID = UUID.randomUUID();
+			TownyUniverse.getInstance().getDataSource().newResident(name, npcUUID);
+			npc = TownyUniverse.getInstance().getResident(npcUUID);
+			npc.setRegistered(System.currentTimeMillis());
+			npc.setLastOnline(0);
+			npc.setNPC(true);
+			npc.save();
+		} catch (TownyException e) {
+			e.printStackTrace();
+		}
+		
+		return npc;
+	}
+	
+	public static String nextNpcName() throws TownyException {
+
+		String name;
+		int i = 0;
+		do {
+			name = TownySettings.getNPCPrefix() + ++i;
+			if (!TownyUniverse.getInstance().hasResident(name))
+				return name;
+			if (i > 100000)
+				throw new TownyException(Translation.of("msg_err_too_many_npc"));
+		} while (true);
 	}
 }

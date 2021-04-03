@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -206,34 +205,26 @@ public class OnPlayerLogin implements Runnable {
 	private void warningMessage(Resident resident, Town town, Nation nation) {
 		if (town.hasUpkeep()) {
 			double upkeep = TownySettings.getTownUpkeepCost(town);
-			try {
-				if (upkeep > 0 && !town.getAccount().canPayFromHoldings(upkeep)) {
-					/*
-					 *  Warn that the town is due to be deleted/bankrupted.
-					 */
-					if(TownySettings.isTownBankruptcyEnabled()) {
-						if (!town.isBankrupt()) //Is town already bankrupt?
-							TownyMessaging.sendMsg(resident, Translation.of("msg_warning_bankrupt", town.getName()));
-					} else {
-						TownyMessaging.sendMsg(resident, Translation.of("msg_warning_delete", town.getName()));
-					}
+			if (upkeep > 0 && !town.getAccount().canPayFromHoldings(upkeep)) {
+				/*
+				 *  Warn that the town is due to be deleted/bankrupted.
+				 */
+				if(TownySettings.isTownBankruptcyEnabled()) {
+					if (!town.isBankrupt()) //Is town already bankrupt?
+						TownyMessaging.sendMsg(resident, Translation.of("msg_warning_bankrupt", town.getName()));
+				} else {
+					TownyMessaging.sendMsg(resident, Translation.of("msg_warning_delete", town.getName()));
 				}
-			} catch (EconomyException ex) {
-				// Economy error, so ignore it and try to continue.
 			}
 		}
 			
 		if (nation != null) {
 			double upkeep = TownySettings.getNationUpkeepCost(nation);
-			try {
-				if (upkeep > 0 && !nation.getAccount().canPayFromHoldings(upkeep)) {
-					/*
-					 *  Warn that the nation is due to be deleted.
-					 */
-					TownyMessaging.sendMsg(resident, Translation.of("msg_warning_delete", nation.getName()));
-				}
-			} catch (EconomyException ex) {
-				// Economy error, so ignore it and try to continue.
+			if (upkeep > 0 && !nation.getAccount().canPayFromHoldings(upkeep)) {
+				/*
+				 *  Warn that the nation is due to be deleted.
+				 */
+				TownyMessaging.sendMsg(resident, Translation.of("msg_warning_delete", nation.getName()));
 			}
 		}
 	}

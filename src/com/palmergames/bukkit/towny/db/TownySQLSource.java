@@ -690,24 +690,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadResident(Resident resident) {
 
-		TownyMessaging.sendDebugMsg("Loading resident " + resident.getName());
-		if (!getContext())
-			return false;
+		/*
+		 * Never called in SQL setups.
+		 */
+		return true;
 
-		try (PreparedStatement ps = cntx
-				.prepareStatement("SELECT * FROM " + tb_prefix + "RESIDENTS" + " WHERE name=?")) {
-			ps.setString(1, resident.getName());
-
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					return loadResident(resident, rs);
-				}
-			}
-
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
-		}
-		return false;
 	}
 
 	private boolean loadResident(Resident resident, ResultSet rs) {
@@ -886,22 +873,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadTown(Town town) {
-		TownyMessaging.sendDebugMsg("Loading town " + town.getName());
-		if (!getContext())
-			return false;
 
-		try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "TOWNS " + " WHERE name=?")) {
-			ps.setString(1, town.getName());
+		/*
+		 * Never called in SQL setups.
+		 */
+		return true;
 
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next())
-					return loadTown(rs);
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Town sql Error - " + e.getMessage());
-		}
-
-		return false;
 	}
 
 	private boolean loadTown(ResultSet rs) {
@@ -913,7 +890,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			Town town = universe.getTown(rs.getString("name"));
 			
 			if (town == null) {
-				TownyMessaging.sendErrorMsg("SQL: Load Town " + name + ". Town was not registered properly on load!");
+				TownyMessaging.sendErrorMsg("SQL: Load Town " + rs.getString("name") + ". Town was not registered properly on load!");
 				return false;
 			}
 			
@@ -950,6 +927,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setBonusBlocks(rs.getInt("bonus"));
 			town.setTaxPercentage(rs.getBoolean("taxpercent"));
 			town.setTaxes(rs.getFloat("taxes"));
+			town.setMaxPercentTaxAmount(rs.getFloat("maxPercentTaxAmount"));
 			town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
 			town.setPlotPrice(rs.getFloat("plotPrice"));
 			town.setPlotTax(rs.getFloat("plotTax"));
@@ -965,6 +943,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
 
 			town.setPurchasedBlocks(rs.getInt("purchased"));
+			
+			line = rs.getString("maxPercentTaxAmount");
+			if (line != null)
+				town.setMaxPercentTaxAmount(Double.parseDouble(line));
+			else 
+				town.setMaxPercentTaxAmount(TownySettings.getMaxTownTaxPercentAmount());
 
 			line = rs.getString("homeBlock");
 			if (line != null) {
@@ -1012,7 +996,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							loc.setPitch(Float.parseFloat(tokens[4]));
 							loc.setYaw(Float.parseFloat(tokens[5]));
 						}
-						town.forceSetSpawn(loc);
+						town.setSpawn(loc);
 					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
 					}
 			}
@@ -1158,21 +1142,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadNation(Nation nation) {
-		if (!getContext())
-			return false;
 
-		try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "NATIONS WHERE name=?")) {
-			ps.setString(1, nation.getName());
+		/*
+		 * Never called in SQL setups.
+		 */
+		return true;
 
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					return loadNation(rs);
-				}
-			}
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Nation sql error " + e.getMessage());
-		}
-		return false;
 	}
 
 	private boolean loadNation(ResultSet rs) {
@@ -1185,7 +1160,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			// Could not find nation in universe maps
 			if (nation == null) {
-				System.out.println(String.format("[Towny] Error: The nation with the name '%s' was not registered and cannot be loaded!"));
+				System.out.println(String.format("[Towny] Error: The nation with the name '%s' was not registered and cannot be loaded!", rs.getString("name")));
 				return false;
 			}
 			
@@ -1268,7 +1243,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							loc.setPitch(Float.parseFloat(tokens[4]));
 							loc.setYaw(Float.parseFloat(tokens[5]));
 						}
-						nation.forceSetNationSpawn(loc);
+						nation.setSpawn(loc);
 					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
 					}
 			}
@@ -1896,6 +1871,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("taxes", town.getTaxes());
 			twn_hm.put("hasUpkeep", town.hasUpkeep());
 			twn_hm.put("taxpercent", town.isTaxPercentage());
+			twn_hm.put("maxPercentTaxAmount", town.getMaxPercentTaxAmount());
 			twn_hm.put("open", town.isOpen());
 			twn_hm.put("public", town.isPublic());
 			twn_hm.put("conquered", town.isConquered());

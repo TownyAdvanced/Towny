@@ -1,5 +1,5 @@
 name: Towny
-version: 0.99
+version: 0.101
 language: português (Brasil)
 author: BannerGames, Plugner
 website: 'http://townyadvanced.github.io/'
@@ -1335,3 +1335,42 @@ flatfile_err_town_homeblock_not_exist: '[Warning] %s does not have a HomeBlock.'
 flatfile_err_townblock_file_contains_unregistered_town_delete: 'TownBlock file contains unregistered Town: %s, deleting %s'
 flatfile_err_townblock_file_missing_town_delete: 'TownBlock file missing Town, deleting %s'
 flatfile_err_townblock_file_unknown_err: 'TownBlock file contains unknown error, deleting %s.'
+msg_ta_removed_all_titles_and_surnames_removed: 'All residents have had their titles and surnames removed.'
+
+msg_err_homeblock_already_set_here: 'This location is already your town''s homeblock.'
+
+#Added in 0.100
+msg_town_merge_err_mayor_only: '&cMerging can only be done by a mayor.'
+msg_town_merge_err_not_close: '&cThe town of %s is too far away from your town. Their homeblock has to be within %d townblocks of your homeblock.'
+msg_town_merge_request_sent: '&bMerge request sent to the mayor of %s.'
+msg_town_merge_request_received: '&bThe mayor of %s, %s, has requested to merge with your town. This will transfer all townblocks, residents and town bank money to %s.'
+msg_town_merge_request_denied: '&cMerge request denied.'
+msg_town_merge_other_offline: '&cThe mayor of %s, %s, is currently offline. Merge failed.'
+msg_town_merge_err_too_many_residents: '&cMerge failed: New resident amount exceeds the limit (%d)'
+msg_town_merge_err_too_many_townblocks: '&cMerge failed: New town size exceeds the limit (%d)'
+msg_town_merge_err_too_many_outposts: '&cMerge failed: New outpost amount exceeds the limit (%d)'
+msg_town_merge_err_not_enough_money: '&cMerge failed: Not enough money. (%s/%s)'
+msg_town_merge_err_too_many_purchased_townblocks: '&cMerge failed: Too many purchased townblocks (%d)'
+msg_town_merge_warning: '&cWarning: If accepted, merging with %s will cost %s.'
+msg_town_merge_debt_warning: '&cWarning: %s is currently in debt, you will have to pay their debt if accepted.'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s'
+msg_town_merge_failed: '&cMerge failed.'
+msg_town_merge_cancelled: '&cMerge canceled.'
+msg_town_merge_success: '&bThe town of %s, owned by %s, has successfully merged into the town of %s.'
+#Reasons for withdrawing/depositing for the bankhistory book.
+msg_town_merge_cost_withdraw: 'Town Merge Costs'
+msg_town_merge_transaction_reason: 'Town Merge'
+
+towny_prices_town_merge: '&e[Merging] &2Base Cost: &a%s &8| &2Per Plot: &a%s'
+
+#Added in 0.101
+msg_err_nation_not_allied_with: '&cYour nation isn''t allied with %s.'
+msg_err_nation_not_enemies_with: '&cYour nation isn''t enemies with %s.'
+msg_err_nation_already_enemies_with: '&cYour nation is already enemies with %s.'
+msg_err_ally_already_requested: '&cYou have already requested to ally with %s.'
+
+msg_err_nation_not_allied_with_2: '&c%s isn''t allied with %s.'
+msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
+msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
+msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
+msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'

@@ -5850,3 +5850,102 @@ v0.92.0.11:
   - Add localization strings for Towny's FlatFile datasource handler, courtesy of TheFlagCourier with PR #4761
   - Fix up double-chest-on-plot-borders visual bugginess.
     - Closes #4783.
+  - Fix kings who give up their position willingly, not losing their King permission nodes given in TownyPerms.yml
+    - Closes #4784.
+  - Update es-419, courtesy of EuGNosii with PR #4787.
+  - Fix maxPercentTaxAmount town setting not being persistent.
+  - Fix /res tax not accounting for the maxPercentTaxAmount town setting.
+  - Fix the method of dealing with PVP damage caused by Channeling Tridents, also preventing hurting of mobs where PVP was disabled.
+    - Closes #4778.
+  - Potential fix for PermHud being able to throw an NPE on line 86.
+  - Fix for NPE when someone activates another scoreboard (ex: featherboard) while the perm hud is active.
+    - Closes #4754. 
+  - Make it so that admins can use /plot evict on any resident-owned plot.
+    - Closes #4678.
+  - Update banned town and nation names to reflect some of the newer commands.
+  - New Command: /ta database remove titles
+    - Removes all titles and surnames from all residents.
+0.96.7.6:
+  - New Config Node: invite_system.confirmation_timeout
+    - default: 20
+    - How many seconds before a confirmation times out for the receiver. 
+    - This is used for cost-confirmations and confirming important decisions.
+  - New Feature: Visualized SpawnPoints
+    - Adds a ring of particles on top of the various spawn points.
+    - Includes Jail, Outpost, Town and Nation Spawns.
+  - Fix $0 plot taxes being paid by residents.
+  - Fix for a "null" feedback message when using /t outlaw add NAME.
+  - Fix EventWar not turning PVP on in the townblocks where the war is active.
+  - New Feature: Town Merging, courtesy of Warriorrrr with PR #4755.
+    - Closes #3193.
+  - New Command: /t merge town
+    - town is the town which will be merged into the town owned by the mayor using the command.
+  	- Comes with potential economic costs (related to base merging costs, as well as townblock costs.)
+  - New Permission node: towny.command.town.merge.
+    - Child node of towny.command.town.*
+  - New Config Option: town.max_distance_for_merge
+    - Default: 10
+    - The maximum distance (in townblocks) that 2 town's homeblocks can be to be eligible for merging.
+  - New Config Option: economy.new_expand.price_town_merge
+    - Default: 0
+    - The base cost a town has to pay to merge with another town. The town that initiates the merge pays the cost.
+  - New Config Option: economy.new_expand.price_town_merge_per_plot_percentage
+    - Default: 50
+    - The percentage that a town has to pay per plot to merge with another town. The town that initiates the merge pays the cost.
+    - This is based on the price_claim_townblock.
+  - Bump language files to 0.100.
+  - Fix TownPreMergeEvent being set improperly.
+  - Fix NPE when deleting a Town.
+0.96.7.7:
+  - Fix "Error Updating item_use/build/destroy permission" messages seen in EventWar.
+    - Closes #4802.
+  - Do a tidy of the PlayerCacheUtil so we aren't throwing and catching NREs.
+  - Regression: Remove "spawn" from the list of black-listed Town/Nation names, added to the list recently in error.
+  - Fix unbankrupting a town resetting a town's bank account, vanishing any money that might have been added to the town bank manually during bankruptcy.
+0.96.7.8:
+  - /ta nation NATIONNAME add TOWNNAME now bypasses the invite and other rules allowing an admin to force-add a town to a nation. 
+  - Change it so that admins with the bypass node will not warn towns that an outlawed admin is spying on them.
+    - Previously only full admins were preventing warns.
+  - Add 3 new events around the displayed nation list, courtesy of Goosius with PR #4810.
+    - NationListDisplayedNumOnlinePlayersCalculationEvent
+    - NationListDisplayedNumResidentsCalculationEvent
+    - NationListDisplayedNumTownsCalculationEvent
+  - Add event for the calculation of town map color. courtesy of Goosius with PR #4809.
+    - TownMapColourCalculationEvent
+  - Update korean.yml, courtesy of yumjunstar with PR #4811.
+  - Fix ConcurrentModificationException in Town.
+0.96.7.9:
+  - Fix for displayed-nation-list events, courtesy of Goosius with PR #4814.
+  - Potential fix for being show "Not registered." when attempting to rename a town.
+0.96.7.10:
+  - Fix TownyWorld setting a town's world when a town is added to a townyworld.
+  - Inn Plots no longer turn switch perms on for all groups, instead it uses the TownBlockOwner's perm line like most plot types.
+  - Fix reclamation cost confirmation not being sent to the player using the /t reclaim command.
+  - New Command: /ta town TOWNNAME unruin
+    - Closes #4824.
+0.96.7.11:
+  - Fix HangingEntity placement all using Painting material for permission tests.
+  - API: Add a TownKickEvent, courtesy of Warriorrrr with PR #4831.
+  - Fix Spawn Point particles not disappearing when spawn points are moved.
+    - Closes #4830.
+  - Fix formatted balance for not enough money error, courtesy of Warriorrrr with PR #4833.
+  - Fix not using the filteredname earlier on when a town is made. 
+  - API: Add NationKingChangeEvent and TownMayorChangeEvent, courtesy of Warriorrrr with PR #4834.
+  - Small refactor of the bank balance caching. 
+  - Placeholder: %townyadvanced_player_location_plot_name%
+    - Displays a plot's name if it has one.
+  - Add townyadmin command for adding/removing nation allies or enemies, courtesy of Warriorrrr with PR #4826
+  - New Commands:
+    - /ta nation NATIONNAME ally [add|remove] NATIONNAME
+    - /ta nation NATIONNAME enemy [add|remove] NATIONNAME
+  - New Permission nodes:
+    - towny.command.townyadmin.nation.enemy
+    - towny.command.townyadmin.nation.ally
+    - both are child nodes of towny.command.townyadmin.nation and therefore you will not need to add these (in most situations.)
+0.96.7.12:
+  - Swedish translation, added courtesy of OskyEdz with PR #4840.
+  - Lower CreatureSpawnEvent priority to make Towny play nice with EliteMobs and not be the worst.
+  - Fix unclaimedZoneIgnoreIds not working properly.
+    - Closes #4844.
+  - Fix personally-owned plots not taking on a fully-open perm line when a town is ruined.
+    - Closes #4846.

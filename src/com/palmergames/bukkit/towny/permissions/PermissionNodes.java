@@ -110,6 +110,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_WITHDRAW("towny.command.town.withdraw"),
 		TOWNY_COMMAND_TOWN_DEPOSIT("towny.command.town.deposit"),
 		TOWNY_COMMAND_TOWN_PLOTS("towny.command.town.plots"),
+		TOWNY_COMMAND_TOWN_MERGE("towny.command.town.merge"),
 		
 		// Covers all assignable ranks
 		TOWNY_COMMAND_TOWN_RANK("towny.command.town.rank.*"),
@@ -273,6 +274,8 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_NATION_SET("towny.command.townyadmin.nation.set"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_TOGGLE("towny.command.townyadmin.nation.toggle"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_BANKHISTORY("towny.command.townyadmin.nation.bankhistory"),
+		TOWNY_COMMAND_TOWNYADMIN_NATION_ENEMY("towny.command.townyadmin.nation.enemy"),
+		TOWNY_COMMAND_TOWNYADMIN_NATION_ALLY("towny.command.townyadmin.nation.ally"),
 	
 	TOWNY_COMMAND_TOWNYADMIN_TOGGLE("towny.command.townyadmin.toggle.*"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_WAR("towny.command.townyadmin.toggle.war"),

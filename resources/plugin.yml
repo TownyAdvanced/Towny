@@ -331,6 +331,7 @@ permissions:
             towny.command.town.toggle.*: true
             towny.command.town.withdraw: true
             towny.command.town.unclaim.*: true
+            towny.command.town.merge: true
 
     towny.command.town.list:
         description: Users are able to use all the various methods of sorting the town list.
@@ -609,6 +610,8 @@ permissions:
             towny.command.townyadmin.nation.toggle: true
             towny.command.townyadmin.nation.set: true
             towny.command.townyadmin.nation.bankhistory: true
+            towny.command.townyadmin.nation.enemy: true
+            towny.command.townyadmin.nation.ally: true
 
     towny.command.townyadmin.plot.*:
         description: User can access the admin plot commans.

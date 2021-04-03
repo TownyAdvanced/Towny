@@ -23,6 +23,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Wolf;
@@ -234,6 +235,12 @@ public class CombatUtil {
 				 */
 				if ( attackingEntity instanceof Wolf && ((Wolf) attackingEntity).isTamed() && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB))) {
 					((Wolf) attackingEntity).setTarget(null);
+					return true;
+				}
+				
+				if (attackingEntity instanceof LightningStrike 
+					&& world.hasTridentStrike(attackingEntity.getEntityId())
+					&& preventPvP(world, defenderTB)) {
 					return true;
 				}
 				

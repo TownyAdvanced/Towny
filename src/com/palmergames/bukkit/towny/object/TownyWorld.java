@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
@@ -65,7 +64,9 @@ public class TownyWorld extends TownyObject {
 	
 	private boolean isDisablePlayerTrample = TownySettings.isPlayerTramplingCropsDisabled();
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
-	public Map<Location, Material> bedMap = new HashMap<Location, Material>();
+	
+	public Map<Location, Material> bedMap = new HashMap<>();
+	public List<String> tridentStrikeMap = new ArrayList<>();
 
 	public TownyWorld(String name) {
 		super(name);
@@ -91,14 +92,10 @@ public class TownyWorld extends TownyObject {
 		return hasTown(town.getName());
 	}
 
-	public void addTown(Town town) throws AlreadyRegisteredException {
+	public void addTown(Town town) {
 
-		if (hasTown(town))
-			throw new AlreadyRegisteredException();
-		else {
+		if (!hasTown(town))
 			towns.put(town.getName(), town);
-			town.setWorld(this);
-		}
 	}
 
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
@@ -522,10 +519,9 @@ public class TownyWorld extends TownyObject {
 			return unclaimedZoneIgnoreBlockMaterials;
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	public boolean isUnclaimedZoneIgnoreMaterial(Material mat) {
 
-		return getUnclaimedZoneIgnoreMaterials().contains(mat);
+		return getUnclaimedZoneIgnoreMaterials().contains(mat.name());
 	}
 
 
@@ -838,6 +834,19 @@ public class TownyWorld extends TownyObject {
 	public void removeBedExplosionAtBlock(Location location) {
 		if (hasBedExplosionAtBlock(location))
 			bedMap.remove(location);
+	}
+	
+	public boolean hasTridentStrike(int entityID) {
+		return tridentStrikeMap.contains(String.valueOf(entityID));
+	}
+
+	public void addTridentStrike(int entityID) {
+		tridentStrikeMap.add(String.valueOf(entityID));
+	}
+	
+	public void removeTridentStrike(int entityID) {
+		if (hasTridentStrike(entityID))
+			tridentStrikeMap.remove(String.valueOf(entityID));
 	}
 
 	public void setFriendlyFire(boolean parseBoolean) {

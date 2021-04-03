@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.utils.CombatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -104,13 +103,16 @@ public class TownyWorldListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getWorld()))
 			return;
 
-		TownyWorld townyWorld = null;
-		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getLightning().getWorld().getName());
-		} catch (NotRegisteredException ignored) {}
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getWorld().getName());
 
-		if (townyWorld != null && event.getCause().equals(LightningStrikeEvent.Cause.TRIDENT)) {
-			event.setCancelled(CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(event.getLightning().getLocation())));
+		/*
+		 * Add trident-caused lightning strikes to a map temporarily. 
+		 */
+		if (event.getCause().equals(LightningStrikeEvent.Cause.TRIDENT)) {
+			townyWorld.addTridentStrike(event.getLightning().getEntityId());
+			
+			final TownyWorld finalWorld = townyWorld;
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> finalWorld.removeTridentStrike(event.getLightning().getEntityId()), 20L);
 		}
 	}
 	

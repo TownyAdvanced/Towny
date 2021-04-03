@@ -43,6 +43,12 @@ public class PermHUD {
 			toggleOn(p);
 			return;
 		}
+		
+		if (board.getObjective("PERM_HUD_OBJ") == null) { // Some other plugin's scoreboard has  
+			HUDManager.toggleOff(p);                      // likely been activated, meaning we
+			return;                                       // will throw NPEs if we continue.
+		}
+
 		try {
 			TownBlock townBlock = worldCoord.getTownBlock();
 			TownBlockOwner owner = townBlock.hasResident() ? townBlock.getResident() : townBlock.getTown();

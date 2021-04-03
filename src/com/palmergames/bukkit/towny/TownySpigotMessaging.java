@@ -1,5 +1,8 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumResidentsCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownBlocksCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownsCalculationEvent;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
@@ -15,6 +18,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -246,13 +250,22 @@ public class TownySpigotMessaging {
 				slug = TownyEconomyHandler.getFormattedBalance(nation.getAccount().getCachedBalance());
 				break;
 			case TOWNBLOCKS:
-				slug = nation.getTownBlocks().size() + "";
+				int rawNumTownsBlocks = nation.getTownBlocks().size();
+				NationListDisplayedNumTownBlocksCalculationEvent tbEvent = new NationListDisplayedNumTownBlocksCalculationEvent(nation, rawNumTownsBlocks);
+				Bukkit.getPluginManager().callEvent(tbEvent);
+				slug = tbEvent.getDisplayedValue() + "";
 				break;
 			case TOWNS:
-				slug = nation.getTowns().size() + "";
+				int rawNumTowns = nation.getTowns().size();
+				NationListDisplayedNumTownsCalculationEvent tEvent = new NationListDisplayedNumTownsCalculationEvent(nation, rawNumTowns);
+				Bukkit.getPluginManager().callEvent(tEvent);
+				slug = tEvent.getDisplayedValue() + "";
 				break;
 			default:
-				slug = nation.getResidents().size() + "";
+				int rawNumResidents = nation.getResidents().size();
+				NationListDisplayedNumResidentsCalculationEvent rEvent = new NationListDisplayedNumResidentsCalculationEvent(nation, rawNumResidents);
+				Bukkit.getPluginManager().callEvent(rEvent);
+				slug = rEvent.getDisplayedValue() + "";
 				break;
 			}
 			
