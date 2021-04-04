@@ -2741,7 +2741,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
-			townyUniverse.getDataSource().removeTown(town);
+			Confirmation.runOnAccept(() -> {
+				TownyMessaging.sendMsg(player, Translation.of("town_deleted_by_admin", town.getName()));
+				TownyUniverse.getInstance().getDataSource().removeTown(town);
+			})
+				.sendTo(player);
+			
 		}
 
 	}
