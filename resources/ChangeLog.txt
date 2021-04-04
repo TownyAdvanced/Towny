@@ -5942,3 +5942,11 @@ v0.92.0.11:
     - towny.command.townyadmin.nation.enemy
     - towny.command.townyadmin.nation.ally
     - both are child nodes of towny.command.townyadmin.nation and therefore you will not need to add these (in most situations.)
+0.96.7.12:
+  - Swedish translation, added courtesy of OskyEdz with PR #4840.
+  - Lower CreatureSpawnEvent priority to make Towny play nice with EliteMobs and not be the worst.
+  - Fix unclaimedZoneIgnoreIds not working properly.
+    - Closes #4844.
+  - Fix personally-owned plots not taking on a fully-open perm line when a town is ruined.
+    - Closes #4846.
+  - Fix missing confirmation for admins using /t delete NAME and /n delete NAME.

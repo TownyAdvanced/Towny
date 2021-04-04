@@ -1313,8 +1313,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				Nation nation = resident.getTown().getNation();
 				Confirmation.runOnAccept(() -> {
-					TownyUniverse.getInstance().getDataSource().removeNation(nation);
 					TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_NATION", nation.getName()));
+					TownyUniverse.getInstance().getDataSource().removeNation(nation);					
 				})
 				.sendTo(player);
 			} catch (TownyException x) {
@@ -1326,8 +1326,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_admin_only_delete_nation"));
 
 				Nation nation = getNationOrThrow(split[0]);
-				townyUniverse.getDataSource().removeNation(nation);
-				TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_NATION", nation.getName()));
+				Confirmation.runOnAccept(() -> {
+					TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_NATION", nation.getName()));
+					TownyUniverse.getInstance().getDataSource().removeNation(nation);					
+				})
+				.sendTo(player);
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			}
