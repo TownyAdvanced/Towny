@@ -486,7 +486,7 @@ public class TownyFormatter {
 
 		// ___[ Azur Empire (Open)]___
 		String title = nation.getFormattedName();
-		title += (nation.isOpen() ? Translation.of("status_title_open") : "");
+		title += (nation.isOpen() ? " " + Translation.of("status_title_open") : "");
 		out.add(ChatTools.formatTitle(title));
 
 		// Board: Get your fried chicken

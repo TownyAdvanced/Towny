@@ -2247,7 +2247,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(preEvent.getCancelMessage());
 			
 			// Test whether towns will be removed from the nation
-			if (nation != null && TownySettings.getNationRequiresProximity() > 0) {
+			if (nation != null && TownySettings.getNationRequiresProximity() > 0 && town.isCapital()) {
 				// Do a dry-run of the proximity test.
 				List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns(), town);
 				
