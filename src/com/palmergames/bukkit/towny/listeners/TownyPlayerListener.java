@@ -1012,10 +1012,8 @@ public class TownyPlayerListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerUsesCommandInsideTown(PlayerCommandPreprocessEvent event) {
-		if (plugin.isError())
-			return;
-		
-		if (!TownySettings.allowTownCommandBlacklisting())
+		if (plugin.isError() || !TownySettings.allowTownCommandBlacklisting() ||
+				!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
 		Player player = event.getPlayer();
@@ -1024,7 +1022,7 @@ public class TownyPlayerListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
-		if (res == null || event.getPlayer().hasPermission(PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
+		if (res == null || TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
 			return;
 		
 		String[] split = event.getMessage().substring(1).split(" ");
@@ -1039,7 +1037,7 @@ public class TownyPlayerListener implements Listener {
 			WorldCoord worldCoord = WorldCoord.parseWorldCoord(player.getLocation());
 			
 			if (worldCoord.hasTownBlock()) {
-				TownBlock tb;
+				TownBlock tb = null;
 				
 				try {
 					tb = worldCoord.getTownBlock();
@@ -1055,6 +1053,10 @@ public class TownyPlayerListener implements Listener {
 					} catch(NotRegisteredException nre) {}
 					
 					if (owner.getName() != player.getName()) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
+						event.setCancelled(true);
+						return;
+					} else {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
 						event.setCancelled(true);
 						return;
