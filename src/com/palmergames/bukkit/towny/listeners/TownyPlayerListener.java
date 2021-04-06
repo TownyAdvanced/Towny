@@ -1051,7 +1051,8 @@ public class TownyPlayerListener implements Listener {
 						owner = tb.getResident();
 					} catch(NotRegisteredException nre) {}
 					
-					if (owner.getName() != player.getName()) {
+					if (owner.getName() != player.getName() || 
+							!TownyUniverse.getInstance().getPermissionSource().has(player, "towny.claimed.owntown.*")) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
 						event.setCancelled(true);
 						return;
@@ -1060,7 +1061,13 @@ public class TownyPlayerListener implements Listener {
 						event.setCancelled(true);
 						return;
 					}
-				} 
+				} else {
+					if (!TownyUniverse.getInstance().getPermissionSource().has(player, "towny.claimed.townowned.*")) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
+						event.setCancelled(true);
+						return;
+					}
+				}
 			}
 		}
 		
