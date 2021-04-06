@@ -77,6 +77,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.awt.image.RescaleOp;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -1005,8 +1006,9 @@ public class TownyPlayerListener implements Listener {
 	
 	/** 
 	 * Allows restricting commands while being on an town.
+	 * Also allows limiting commands to self owned plots only.
 	 * Works almost the same way as jail command blacklisting.
-	 * @param event
+	 * @param event PlayerCommandPreprocessEvent
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerUsesCommandInsideTown(PlayerCommandPreprocessEvent event) {
@@ -1016,22 +1018,35 @@ public class TownyPlayerListener implements Listener {
 		if (!TownySettings.allowTownCommandBlacklisting())
 			return;
 		
-		Resident res = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
+		Player player = event.getPlayer();
+		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
-		if (res == null || TownyAPI.getInstance().isWilderness(event.getPlayer().getLocation()) ||
+		if (res == null || TownyAPI.getInstance().isWilderness(player.getLocation()) ||
 				event.getPlayer().hasPermission(PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
 			return;
 		
 		String[] split = event.getMessage().substring(1).split(" ");
-		if (TownySettings.getTownBlacklistedCommands().contains(split[0])) {
-			if (TownySettings.getTownLimitedCommands().contains(split[0])) {
-				
-			}
+		
+		if (TownySettings.getTownLimitedCommands().contains(split[0])) {
+			WorldCoord worldCoord = WorldCoord.parseWorldCoord(player.getLocation());
 			
-			TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_command_blocked_inside_towns"));
+			if (worldCoord.hasTownBlock()) {
+				TownBlock tb = worldCoord.getTownBlock();
+				
+				if (tb.hasResident()) {
+					if (tb.getResident().getName() != player.getName()) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
+						event.setCancelled(true);
+					}
+				}
+			}
+		}
+		
+		if (TownySettings.getTownBlacklistedCommands().contains(split[0])) {	
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_blocked_inside_towns"));
 			event.setCancelled(true);
 		}
 	}
