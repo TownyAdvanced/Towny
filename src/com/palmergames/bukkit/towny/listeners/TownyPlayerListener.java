@@ -1024,13 +1024,18 @@ public class TownyPlayerListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
-		if (res == null || TownyAPI.getInstance().isWilderness(player.getLocation()) ||
-				event.getPlayer().hasPermission(PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
+		if (res == null || event.getPlayer().hasPermission(PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
 			return;
 		
 		String[] split = event.getMessage().substring(1).split(" ");
 		
 		if (TownySettings.getTownLimitedCommands().contains(split[0])) {
+			if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
+				event.setCancelled(true);
+				return;
+			}
+			
 			WorldCoord worldCoord = WorldCoord.parseWorldCoord(player.getLocation());
 			
 			if (worldCoord.hasTownBlock()) {
@@ -1043,23 +1048,22 @@ public class TownyPlayerListener implements Listener {
 				}
 				
 				if (tb.hasResident()) {
+					Resident owner = null;
 					
-					Resident owner;
 					try {
 						owner = tb.getResident();
-					} catch(NotRegisteredException nre) {
-						return;
-					}
+					} catch(NotRegisteredException nre) {}
 					
 					if (owner.getName() != player.getName()) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
 						event.setCancelled(true);
+						return;
 					}
-				}
+				} 
 			}
 		}
 		
-		if (TownySettings.getTownBlacklistedCommands().contains(split[0])) {	
+		if (TownySettings.getTownBlacklistedCommands().contains(split[0]) && !TownyAPI.getInstance().isWilderness(player.getLocation())) {	
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_blocked_inside_towns"));
 			event.setCancelled(true);
 		}
