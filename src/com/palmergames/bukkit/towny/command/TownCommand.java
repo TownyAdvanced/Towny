@@ -2256,11 +2256,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					final Town finalTown = town;
 					final TownBlock finalTB = townBlock;
 					final Nation finalNation = nation;
+					final Location playerLocation = player.getLocation();
 					Confirmation.runOnAccept(() -> {
 						try {
 							// Set town homeblock and run the recheckTownDistance for real.
 							finalTown.setHomeBlock(finalTB);
-							finalTown.setSpawn(player.getLocation());
+							finalTown.setSpawn(playerLocation);
 							finalNation.recheckTownDistance();
 							TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
 						} catch (TownyException e) {
