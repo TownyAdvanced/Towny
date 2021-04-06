@@ -1057,8 +1057,6 @@ public class TownyPlayerListener implements Listener {
 						event.setCancelled(true);
 						return;
 					} else {
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
-						event.setCancelled(true);
 						return;
 					}
 				} else {
