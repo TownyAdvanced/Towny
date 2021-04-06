@@ -3057,7 +3057,7 @@ public class TownySettings {
 		return getStrArr(ConfigNodes.GTOWN_TOWN_BLACKLISTED_COMMANDS);
 	}
 	
-	public static List<String> getTownLimitedCommands() {
+	public static List<String> getPlayerOwnedPlotLimitedCommands() {
 		return getStrArr(ConfigNodes.GTOWN_TOWN_LIMITED_COMMANDS);
 	}
 }

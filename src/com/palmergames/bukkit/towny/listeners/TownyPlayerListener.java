@@ -1027,7 +1027,7 @@ public class TownyPlayerListener implements Listener {
 		
 		String[] split = event.getMessage().substring(1).split(" ");
 		
-		if (TownySettings.getTownLimitedCommands().contains(split[0])) {
+		if (TownySettings.getPlayerOwnedPlotLimitedCommands().contains(split[0])) {
 			if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
 				event.setCancelled(true);
