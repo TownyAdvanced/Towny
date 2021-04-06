@@ -77,7 +77,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.awt.image.RescaleOp;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
