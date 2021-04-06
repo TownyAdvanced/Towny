@@ -1009,10 +1009,9 @@ public class TownyPlayerListener implements Listener {
 	 * Also allows limiting commands to self owned plots only.
 	 * Works almost the same way as jail command blacklisting.
 	 * @param event PlayerCommandPreprocessEvent
-	 * @throws exception NotRegisteredException
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerUsesCommandInsideTown(PlayerCommandPreprocessEvent event) throws NotRegisteredException {
+	public void onPlayerUsesCommandInsideTown(PlayerCommandPreprocessEvent event) {
 		if (plugin.isError())
 			return;
 		
@@ -1035,10 +1034,24 @@ public class TownyPlayerListener implements Listener {
 			WorldCoord worldCoord = WorldCoord.parseWorldCoord(player.getLocation());
 			
 			if (worldCoord.hasTownBlock()) {
-				TownBlock tb = worldCoord.getTownBlock();
+				TownBlock tb;
+				
+				try {
+					tb = worldCoord.getTownBlock();
+				} catch(NotRegisteredException nre) {
+					return;
+				}
 				
 				if (tb.hasResident()) {
-					if (tb.getResident().getName() != player.getName()) {
+					
+					Resident owner;
+					try {
+						owner = tb.getResident();
+					} catch(NotRegisteredException nre) {
+						return;
+					}
+					
+					if (owner.getName() != player.getName()) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
 						event.setCancelled(true);
 					}
