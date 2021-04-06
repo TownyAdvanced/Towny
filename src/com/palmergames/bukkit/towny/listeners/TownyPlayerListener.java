@@ -1009,9 +1009,10 @@ public class TownyPlayerListener implements Listener {
 	 * Also allows limiting commands to self owned plots only.
 	 * Works almost the same way as jail command blacklisting.
 	 * @param event PlayerCommandPreprocessEvent
+	 * @throws exception NotRegisteredException
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerUsesCommandInsideTown(PlayerCommandPreprocessEvent event) {
+	public void onPlayerUsesCommandInsideTown(PlayerCommandPreprocessEvent event) throws NotRegisteredException {
 		if (plugin.isError())
 			return;
 		
