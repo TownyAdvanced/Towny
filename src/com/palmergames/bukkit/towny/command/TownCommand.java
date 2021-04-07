@@ -2247,7 +2247,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(preEvent.getCancelMessage());
 			
 			// Test whether towns will be removed from the nation
-			if (nation != null && TownySettings.getNationRequiresProximity() > 0) {
+			if (nation != null && TownySettings.getNationRequiresProximity() > 0 && town.isCapital()) {
 				// Do a dry-run of the proximity test.
 				List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns(), town);
 				
@@ -2256,11 +2256,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					final Town finalTown = town;
 					final TownBlock finalTB = townBlock;
 					final Nation finalNation = nation;
+					final Location playerLocation = player.getLocation();
 					Confirmation.runOnAccept(() -> {
 						try {
 							// Set town homeblock and run the recheckTownDistance for real.
 							finalTown.setHomeBlock(finalTB);
-							finalTown.setSpawn(player.getLocation());
+							finalTown.setSpawn(playerLocation);
 							finalNation.recheckTownDistance();
 							TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
 						} catch (TownyException e) {
