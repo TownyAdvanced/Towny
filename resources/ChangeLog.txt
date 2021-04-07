@@ -5950,3 +5950,6 @@ v0.92.0.11:
   - Fix personally-owned plots not taking on a fully-open perm line when a town is ruined.
     - Closes #4846.
   - Fix missing confirmation for admins using /t delete NAME and /n delete NAME.
+  - Misc fixes courtesy of Warriorrrr with PR #4854.
+  - More Swedish translating courtesy of OskyEdz with PR #4853.
+  - es-419.yml updated couresty of EuGNosii with PR #4848.
