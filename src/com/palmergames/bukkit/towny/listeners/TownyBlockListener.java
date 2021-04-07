@@ -16,6 +16,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Chest.Type;
 import org.bukkit.entity.Player;
@@ -24,7 +25,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
@@ -174,7 +177,7 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		if (testBlockMove(event.getBlock(), event.isSticky() ? event.getDirection().getOppositeFace() : event.getDirection()))
+		if (testBlockMove(event.getBlock(), event.isSticky() ? event.getBlock().getRelative(event.getDirection().getOppositeFace()) : event.getBlock().getRelative(event.getDirection())))
 			event.setCancelled(true);
 
 		List<Block> blocks = event.getBlocks();
@@ -182,7 +185,7 @@ public class TownyBlockListener implements Listener {
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (testBlockMove(block, event.getDirection()))
+				if (testBlockMove(block, block.getRelative(event.getDirection())))
 					event.setCancelled(true);
 			}
 		}
@@ -196,7 +199,7 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 		
-		if (testBlockMove(event.getBlock(), event.getDirection()))
+		if (testBlockMove(event.getBlock(), event.getBlock().getRelative(event.getDirection())))
 			event.setCancelled(true);
 		
 		List<Block> blocks = event.getBlocks();
@@ -204,25 +207,27 @@ public class TownyBlockListener implements Listener {
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (testBlockMove(block, event.getDirection()))
+				if (testBlockMove(block, block.getRelative(event.getDirection())))
 					event.setCancelled(true);
 			}
 		}
 	}
 
 	/**
-	 * Decides whether blocks moved by pistons follow the rules.
+	 * Decides whether blocks moved by pistons or fluids flowing follow the rules.
 	 * 
 	 * @param block - block that is being moved.
-	 * @param direction - direction the piston is facing.
+	 * @param blockTo - block that is being moved to.
 	 * 
-	 * @return true if block is able to be moved. 
+	 * @return true if block shouldn't be able to be moved.
 	 */
-	private boolean testBlockMove(Block block, BlockFace direction) {
-
-		Block blockTo = block.getRelative(direction);
+	private boolean testBlockMove(Block block, Block blockTo) {
 		Location loc = block.getLocation();
 		Location locTo = blockTo.getLocation();
+
+		if (TownyAPI.getInstance().isWilderness(locTo))
+			return false;
+		
 		TownBlock currentTownBlock = null, destinationTownBlock = null;
 
 		currentTownBlock = TownyAPI.getInstance().getTownBlock(loc);
@@ -316,4 +321,39 @@ public class TownyBlockListener implements Listener {
 		}
 	}
 	
+	/*
+	* Prevents water or lava from going into other people's plots.
+	*/
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onBlockFromToEvent(BlockFromToEvent event) {
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownySettings.getPreventFluidGriefingEnabled() || event.getBlock().getType() == Material.DRAGON_EGG)
+			return;
+				
+		event.setCancelled(testBlockMove(event.getBlock(), event.getToBlock()));
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onBlockDispense(BlockDispenseEvent event) {
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownySettings.getPreventFluidGriefingEnabled())
+			return;
+		
+		if (event.getItem().getType() != Material.WATER_BUCKET && event.getItem().getType() != Material.LAVA_BUCKET && event.getItem().getType() != Material.BUCKET)
+			return;
+
+		if (event.getBlock().getType() != Material.DISPENSER)
+			return;
+		
+		event.setCancelled(testBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getBlockData()).getFacing())));
+	}
+
 }

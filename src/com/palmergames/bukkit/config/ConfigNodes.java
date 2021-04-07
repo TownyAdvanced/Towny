@@ -760,6 +760,12 @@ public enum ConfigNodes {
 			"# All ranks should be as defined in `townyperms.yml`.",
 			"# For example, to give a `visemayor` preference over an `assistant`, change this parameter to `visemayor,assistant`."
 	),
+	GTOWN_SETTINGS_PREVENT_FLUID_GRIEFING(
+			"global_town_settings.prevent_fluid_griefing",
+			"true",
+			"",
+			"# When enabled, blocks like lava or water will be unable to flow into other plots, if the owners aren't the same."
+	),
 	
 	GTOWN_SETTINGS_COMMAND_BLACKLISTING(
 			"global_town_settings.town_command_blacklisting",

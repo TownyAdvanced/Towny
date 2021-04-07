@@ -3060,5 +3060,9 @@ public class TownySettings {
 	public static List<String> getPlayerOwnedPlotLimitedCommands() {
 		return getStrArr(ConfigNodes.GTOWN_TOWN_LIMITED_COMMANDS);
 	}
+
+	public static boolean getPreventFluidGriefingEnabled() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_PREVENT_FLUID_GRIEFING);
+	}
 }
 
