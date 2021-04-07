@@ -6,7 +6,7 @@ website: 'http://townyadvanced.github.io/'
 description: >
     Archivo de lenguaje para todos los mensajes del juego.  No alteres este archivo.
     Si quieres cambiar algun mensaje, crea una copia de este archivo con otro nombre.
-    Los archivos de lenguajes alternativos pueden ser activados alterando la entrada
+    Los archivos de lenguaje alternativos pueden ser activados alterando la entrada
     [language] en config.yml.
 
 #
@@ -1341,42 +1341,43 @@ flatfile_err_town_homeblock_not_exist: '[Advertencia] %s does not have a HomeBlo
 flatfile_err_townblock_file_contains_unregistered_town_delete: 'TownBlock file contains unregistered Town: %s, deleting %s'
 flatfile_err_townblock_file_missing_town_delete: 'TownBlock file missing Town, deleting %s'
 flatfile_err_townblock_file_unknown_err: 'TownBlock file contains unknown error, deleting %s.'
-msg_ta_removed_all_titles_and_surnames_removed: 'All residents have had their titles and surnames removed.'
+msg_ta_removed_all_titles_and_surnames_removed: 'Todos los residentes tuvieron sus títulos y apellidos borrados.'
 
-msg_err_homeblock_already_set_here: 'This location is already your town''s homeblock.'
+msg_err_homeblock_already_set_here: 'Esta ubicación ya es el homeblock de tu ciudad.'
 
-#Added in 0.100
-msg_town_merge_err_mayor_only: '&cMerging can only be done by a mayor.'
-msg_town_merge_err_not_close: '&cThe town of %s is too far away from your town. Their homeblock has to be within %d townblocks of your homeblock.'
-msg_town_merge_request_sent: '&bMerge request sent to the mayor of %s.'
-msg_town_merge_request_received: '&bThe mayor of %s, %s, has requested to merge with your town. This will transfer all townblocks, residents and town bank money to %s.'
-msg_town_merge_request_denied: '&cMerge request denied.'
-msg_town_merge_other_offline: '&cThe mayor of %s, %s, is currently offline. Merge failed.'
-msg_town_merge_err_too_many_residents: '&cMerge failed: New resident amount exceeds the limit (%d)'
-msg_town_merge_err_too_many_townblocks: '&cMerge failed: New town size exceeds the limit (%d)'
-msg_town_merge_err_too_many_outposts: '&cMerge failed: New outpost amount exceeds the limit (%d)'
-msg_town_merge_err_not_enough_money: '&cMerge failed: Not enough money. (%s/%s)'
-msg_town_merge_err_too_many_purchased_townblocks: '&cMerge failed: Too many purchased townblocks (%d)'
-msg_town_merge_warning: '&cWarning: If accepted, merging with %s will cost %s.'
-msg_town_merge_debt_warning: '&cWarning: %s is currently in debt, you will have to pay their debt if accepted.'
-msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s'
-msg_town_merge_failed: '&cMerge failed.'
-msg_town_merge_cancelled: '&cMerge canceled.'
-msg_town_merge_success: '&bThe town of %s, owned by %s, has successfully merged into the town of %s.'
-#Reasons for withdrawing/depositing for the bankhistory book.
-msg_town_merge_cost_withdraw: 'Town Merge Costs'
-msg_town_merge_transaction_reason: 'Town Merge'
+# Añadido en la versión 0.100
+msg_town_merge_err_mayor_only: '&cLa fusión debe ser llevada a cabo por el alcalde.'
+msg_town_merge_err_not_close: '&cLa ciudad de %s está muy lejos de la tuya. Necesita estar a %d chunks de tu homeblock.'
+msg_town_merge_request_sent: '&bSolicitud de fusión enviada a %s.'
+msg_town_merge_request_received: '&bEl o la alcalde de %s, %s, ha solicitado. Esto transferirá todos los reclamos, residentes, y todo el dinero del banco a %s.'
+msg_town_merge_request_denied: '&cSolicitud de fusión rechazada.'
+msg_town_merge_other_offline: '&El alcalde de %s, %s, está desconectado. Fusión fallida.'
+msg_town_merge_err_too_many_residents: '&cFusión fallida: Al fusionar se llegaría al límite de residentes (%d)'
+msg_town_merge_err_too_many_townblocks: '&cFusión fallida: Al fusionar se llegaría al límite de reclamos (%d)'
+msg_town_merge_err_too_many_outposts: '&cFusión fallida: Al fusionar se llegaría al límite de outposts (%d)'
+msg_town_merge_err_not_enough_money: '&cFusión fallida: Fondos insuficientes (%s/%s)'
+msg_town_merge_err_too_many_purchased_townblocks: '&cFusión fallida: Muchos reclamos comprados (%d)'
+msg_town_merge_warning: '&cAdvertencia: Aceptar la fusión con %s costará %s.'
+msg_town_merge_debt_warning: '&cAdvertencia: %s está en deuda, al fusionarse TÚ deberás pagarla.'
+msg_town_merge_cost_breakdown: '&bAquí puedes ver algunos costos aproximados: Costo base: %s, Costo por reclamo: %s, Costo de bancarrota: %s'
+msg_town_merge_failed: '&cFusión fallida.'
+msg_town_merge_cancelled: '&cFusión cancelada.'
+msg_town_merge_success: '&bLa ciudad de %s, originalmente liderada por %s, se ha fusionado con la ciudad de %s.'
 
-towny_prices_town_merge: '&e[Merging] &2Base Cost: &a%s &8| &2Per Plot: &a%s'
+# Razones de depositos/retiros de fondos en el historial de transacciones
+msg_town_merge_cost_withdraw: 'Costos de fusión de las ciudades'
+msg_town_merge_transaction_reason: 'Fusión de las ciudades'
 
-#Added in 0.101
-msg_err_nation_not_allied_with: '&cYour nation isn''t allied with %s.'
-msg_err_nation_not_enemies_with: '&cYour nation isn''t enemies with %s.'
-msg_err_nation_already_enemies_with: '&cYour nation is already enemies with %s.'
-msg_err_ally_already_requested: '&cYou have already requested to ally with %s.'
+towny_prices_town_merge: '&e[Fusión] &2Costo base: &a%s &8| &2Por parcela: &a%s'
 
-msg_err_nation_not_allied_with_2: '&c%s isn''t allied with %s.'
-msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
-msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
-msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
-msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
+# Añadido en la versión 0.101
+msg_err_nation_not_allied_with: '&cTu nación no está aliada con %s.'
+msg_err_nation_not_enemies_with: '&cTu nación no es enemiga de %s.'
+msg_err_nation_already_enemies_with: '&cTu nación ya es enemiga de %s.'
+msg_err_ally_already_requested: '&cYa solicitaste una alianza con %s.'
+
+msg_err_nation_not_allied_with_2: '&c%s no está aliada con %s.'
+msg_err_nation_not_enemies_with_2: '&c%s no es enemiga de %s.'
+msg_err_nation_already_allied_with_2: '&c%s ya tiene una alianza con %s.'
+msg_err_nation_already_enemies_with_2: '&c%s ya es enemiga de %s.'
+msg_ta_allies_enemies_updated: '&bSe actualizaron los aliados/enemigos de %s.'
