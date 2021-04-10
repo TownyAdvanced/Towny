@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.event.resident.ResidentJailEvent;
+import com.palmergames.bukkit.towny.event.resident.ResidentPreJailEvent;
 import com.palmergames.bukkit.towny.event.resident.ResidentUnjailEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -171,6 +172,15 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			}
 
 		} else {
+			
+			ResidentPreJailEvent preEvent = new ResidentPreJailEvent(this, town);
+			Bukkit.getPluginManager().callEvent(preEvent);
+			
+			if (preEvent.isCancelled()) {
+				TownyMessaging.sendMsg(preEvent.getCancelMessage());
+				return;
+			}
+			
 			try {
 				Location loc = town.getJailSpawn(index);
 
@@ -214,6 +224,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		} else {
 			try {
+				ResidentPreJailEvent preEvent = new ResidentPreJailEvent(this, town);
+				Bukkit.getPluginManager().callEvent(preEvent);
+				
+				if (preEvent.isCancelled()) {
+					TownyMessaging.sendMsg(preEvent.getCancelMessage());
+					return;
+				}
+				
 				if (player != null) {
 					Location loc = town.getJailSpawn(index);
 					player.teleport(loc);
