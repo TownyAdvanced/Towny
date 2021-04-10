@@ -5953,3 +5953,5 @@ v0.92.0.11:
   - Misc fixes courtesy of Warriorrrr with PR #4854.
   - More Swedish translating courtesy of OskyEdz with PR #4853.
   - es-419.yml updated couresty of EuGNosii with PR #4848.
+  - Fix plot notifications not showing information when you've left a plotgroup into a non-plotgroup townblock.
+    - Closes #4856.

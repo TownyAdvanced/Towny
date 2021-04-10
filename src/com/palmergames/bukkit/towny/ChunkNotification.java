@@ -153,9 +153,9 @@ public class ChunkNotification {
 		if (output != null && output.length() > 0)
 			out.add(output);
 		
-		// Only show the owner of individual plots if they do not have this mode applied 
+		// Only show the owner of individual plots if they do not have this mode applied		
 		if (!resident.hasMode("ignoreplots")) {
-			output = getOwnerNotification();
+			output = getOwnerOrPlotNameNotification();
 			if (output != null && output.length() > 0)
 				out.add(output);
 		}
@@ -237,19 +237,19 @@ public class ChunkNotification {
 		return null;
 	}
 
-	public String getOwnerNotification() {
-			
-		if (((fromResident != toResident) || ((fromTownBlock != null) && (toTownBlock != null) && (!fromTownBlock.getName().equalsIgnoreCase(toTownBlock.getName()))))
-				&& !toWild) {
-			
-			if (toResident != null)
-				if (TownySettings.isNotificationOwnerShowingNationTitles()) {
-					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? toResident.getFormattedTitleName() : toTownBlock.getName());
-				} else {
-					return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? toResident.getFormattedName() : toTownBlock.getName());
-				}
-			else
-				return  String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? TownySettings.getUnclaimedPlotName() : toTownBlock.getName());
+	public String getOwnerOrPlotNameNotification() {
+
+		if (toWild) return null;
+		
+		if (fromResident != toResident  // Not owned by the same resident.
+		|| (fromTownBlock != null && !fromTownBlock.getName().equalsIgnoreCase(toTownBlock.getName())) // Townblock not named the same.
+		|| (fromTownBlock != null && fromTownBlock.hasPlotObjectGroup() && !toTownBlock.hasPlotObjectGroup())) // Left a plot group and entered to a regular plot. 
+		{
+			if (toResident != null) {
+				String resName = (TownySettings.isNotificationOwnerShowingNationTitles() ? toResident.getFormattedTitleName() : toResident.getFormattedName());
+				return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? resName : toTownBlock.getName());
+			} else
+				return  String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? Translation.of("UNCLAIMED_PLOT_NAME") : toTownBlock.getName());
 
 		}
 		return null;
