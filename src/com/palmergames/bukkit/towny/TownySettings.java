@@ -3008,5 +3008,9 @@ public class TownySettings {
 	public static boolean doTownsGetWarnedOnOutlaw() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW);
 	}
+
+	public static boolean getVisualizedSpawnPointsEnabled() {
+		return getBoolean(ConfigNodes.PLUGIN_VISUALIZED_SPAWN_POINTS_ENABLED);
+	}
 }
 
