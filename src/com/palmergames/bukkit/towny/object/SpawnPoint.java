@@ -1,11 +1,14 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+
+import com.palmergames.bukkit.towny.Towny;
 
 public class SpawnPoint {
 	private final Location location;
@@ -40,12 +43,13 @@ public class SpawnPoint {
 
 	public void drawParticle() {
 		Location origin = centreLocation(location);
+		int i = 0;
 
-		for (double posX : RING_PATTERN.keySet()) {
-		    Location point = origin.clone().add(posX, 0.0d, RING_PATTERN.get(posX));
-		    Bukkit.getWorld(location.getWorld().getName()).spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0);
+		for (Entry<Double, Double> ringPosition : RING_PATTERN.entrySet()) {
+		    Location point = origin.clone().add(ringPosition.getKey(), 0.0d, ringPosition.getValue());
+		    Bukkit.getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), ()-> Bukkit.getWorld(location.getWorld().getName()).spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0), i*4);		    
+		    i++;
 		}
-		
 	}
 	
 	private Location centreLocation(Location loc) {
@@ -56,19 +60,19 @@ public class SpawnPoint {
 	}
 	
 	private static Map<Double, Double> createRing() {
-		Map<Double, Double> ring = new HashMap<Double, Double>();
+		Map<Double, Double> ring = new LinkedHashMap<Double, Double>();
 		ring.put(0.0, 0.45);
-		ring.put(0.22499999999999998, 0.38971143170299744);
-		ring.put(0.3897114317029974, 0.22500000000000006);
-		ring.put(0.45, 0.000000000000000027554552980815448);
-		ring.put(0.38971143170299744, -0.2249999999999999);
-		ring.put(0.22499999999999998, -0.38971143170299744);
-		ring.put(0.000000000000000055109105961630896, -0.45);
-		ring.put(-0.22499999999999987, -0.3897114317029975);
-		ring.put(-0.3897114317029973, -0.2250000000000002);
-		ring.put(-0.45, 0.00000000000000000266365894244634);
-		ring.put(-0.3897114317029974, 0.22500000000000006);
-		ring.put(-0.2250000000000002, 0.38971143170299727);
+		ring.put(0.225, 0.3897);
+		ring.put(0.3897, 0.225);
+		ring.put(0.45, 0.00);
+		ring.put(0.3897, -0.225);
+		ring.put(0.225, -0.3897);
+		ring.put(0.00, -0.45);
+		ring.put(-0.225, -0.3897);
+		ring.put(-0.3897, -0.225);
+		ring.put(-0.45, 0.0);
+		ring.put(-0.3897, 0.225);
+		ring.put(-0.225, 0.3897);
 		return ring;		
 	}
 	

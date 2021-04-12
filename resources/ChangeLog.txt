@@ -5957,3 +5957,5 @@ v0.92.0.11:
     - Closes #4856.
   - API: Added ResidentPreJailEvent, a Cancellable event.
     - Closes #4862.
+  - Fix Economy formatting with colours able to muck about with the bankhistory books.
+  - Make the spawn particles chill out.
