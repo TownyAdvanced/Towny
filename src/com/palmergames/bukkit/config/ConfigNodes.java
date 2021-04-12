@@ -985,6 +985,12 @@ public enum ConfigNodes {
 		"",
 		"# Sets the default size that /towny top commands display."
 	),
+	PLUGIN_VISUALIZED_SPAWN_POINTS_ENABLED(
+		"plugin.visualized_spawn_points_enabled",
+		"true",
+		"",
+		"# If enabled, particles will appear around town, nation, outpost & jail spawns."
+	),
 	FILTERS_COLOUR_CHAT(
 			"filters_colour_chat",
 			"",
