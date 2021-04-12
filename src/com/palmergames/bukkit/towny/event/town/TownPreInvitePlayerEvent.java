@@ -16,7 +16,7 @@ public class TownPreInvitePlayerEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private final Invite invite;
     private boolean cancelled = false;
-    private String cancelMessage = "Sorry, but this event was cancelled.";
+    private String cancelMessage = "You cannot invite this player to your town.";
 
     public TownPreInvitePlayerEvent(Invite invite) {
         super(!Bukkit.getServer().isPrimaryThread());
