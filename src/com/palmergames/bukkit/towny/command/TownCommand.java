@@ -23,6 +23,7 @@ import com.palmergames.bukkit.towny.event.town.TownKickEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownMayorChangeEvent;
 import com.palmergames.bukkit.towny.event.town.TownMergeEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreMergeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
@@ -2859,6 +2860,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static void townInviteResident(CommandSender sender,Town town, Resident newMember) throws TownyException {
 
 		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender, newMember, town);
+
+		TownPreInvitePlayerEvent townPreInvitePlayerEvent = new TownPreInvitePlayerEvent(invite);
+		Bukkit.getPluginManager().callEvent(townPreInvitePlayerEvent);
+		if (townPreInvitePlayerEvent.isCancelled())
+			throw new TownyException(townPreInvitePlayerEvent.getCancelMessage());
+		
 		try {
 			if (!InviteHandler.inviteIsActive(invite)) {
 				newMember.newReceivedInvite(invite);
