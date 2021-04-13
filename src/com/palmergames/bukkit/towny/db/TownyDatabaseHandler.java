@@ -749,6 +749,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Resident mayor = town.getMayor();
 		TownyWorld townyWorld = town.getHomeblockWorld();
 		
+		// Remove the Town's spawn particle.
+		if (town.hasSpawn()) {
+			try {
+				TownyUniverse.getInstance().removeSpawnPoint(town.getSpawn());
+			} catch (TownyException ignored) {}
+		}
+		
 		removeTownBlocks(town);
 
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
@@ -812,6 +819,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Resident king = null;
 		if (nation.hasKing())
 			king = nation.getKing();
+		
+		// Remove the Nation's spawn particle.
+		if (nation.hasSpawn()) {
+			try {
+				TownyUniverse.getInstance().removeSpawnPoint(nation.getSpawn());
+			} catch (TownyException ignored) {}
+		}
 		
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<>();

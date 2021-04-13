@@ -5964,3 +5964,5 @@ v0.92.0.11:
     - Closes #4857.
 0.96.7.13:
   - Danish translation, courtesy of Davidoen.
+  - French translation updated, courtesy of PainOchoco with PR #4864.
+  - Fix spawn particles not disappearing when a town or nation is deleted.
