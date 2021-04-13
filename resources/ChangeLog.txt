@@ -5962,3 +5962,5 @@ v0.92.0.11:
   - API: Add TownPreInvitePlayerEvent, courtesy of Warriorrrr with PR #4867.
   - Add config option for toggling visualized spawn points, courtesy of Warriorrrr with PR #4865
     - Closes #4857.
+0.96.7.13:
+  - Danish translation, courtesy of Davidoen.

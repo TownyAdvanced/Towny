@@ -13,7 +13,9 @@ public enum ConfigNodes {
 	LANGUAGE(
 			"language",
 			"english.yml",
-			"# The language file you wish to use"),
+			"# The language file you wish to use",
+			"# Available languages: chinese, danish, english, es-419, french, german, italian, korean,",
+			"# norwegian, polish, pt-br, russian, se-SV, spanish, zh-TW"),
 	PERMS(
 			"permissions",
 			"",
