@@ -1006,7 +1006,7 @@ public class TownyPlayerListener implements Listener {
 	/** 
 	 * Allows restricting commands while being on an town.
 	 * Also allows limiting commands to self owned plots only.
-	 * Works almost the same way as jail command blacklisting.
+	 * Works almost the same way as jail command blacklisting, except has more stuff
 	 * @param event PlayerCommandPreprocessEvent
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -1049,10 +1049,14 @@ public class TownyPlayerListener implements Listener {
 					
 					try {
 						owner = tb.getResident();
-					} catch(NotRegisteredException nre) {}
+					} catch(NotRegisteredException nre) { return; }
 					
-					if (owner.getName() != player.getName() || 
-							!TownyUniverse.getInstance().getPermissionSource().has(player, "towny.claimed.owntown.*")) {
+					if (TownyUniverse.getInstance().getPermissionSource().has(player, "towny.claimed.owntown.*")) return;
+					
+					TownyMessaging.sendMsg("OwnerName: " + owner.getName());
+					TownyMessaging.sendMsg("PlayerName: " + player.getName());
+					
+					if (!owner.getName().equals(player.getName())) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
 						event.setCancelled(true);
 						return;
@@ -1072,6 +1076,7 @@ public class TownyPlayerListener implements Listener {
 		if (TownySettings.getTownBlacklistedCommands().contains(split[0]) && !TownyAPI.getInstance().isWilderness(player.getLocation())) {	
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_blocked_inside_towns"));
 			event.setCancelled(true);
+			return;
 		}
 	}
 	
