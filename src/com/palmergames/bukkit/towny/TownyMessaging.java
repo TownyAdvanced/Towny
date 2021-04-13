@@ -1,5 +1,8 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumResidentsCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownBlocksCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownsCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -7,7 +10,9 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -15,10 +20,19 @@ import com.palmergames.util.StringMgmt;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.List;
 
@@ -561,61 +575,275 @@ public class TownyMessaging {
 			player.sendTitle(title, subtitle, 10, 70, 10);
 	}
 
-	public static void sendConfirmationMessage(CommandSender sender, String firstline, String confirmline, String cancelline, String lastline) {
-		
-		if (Towny.isSpigot && sender instanceof Player) {
-			TownySpigotMessaging.sendSpigotConfirmMessage(sender, firstline, confirmline, cancelline, lastline);
-			return;
-		}
-		
-		if (firstline == null) {
-			firstline = Translation.of("confirmation_prefix") + Translation.of("are_you_sure_you_want_to_continue");
-		}
-		if (confirmline == null) {
-			confirmline = ChatColor.GREEN + "          /" + TownySettings.getConfirmCommand();
-		}
-		if (cancelline == null) {
-			cancelline = ChatColor.GREEN + "          /" + TownySettings.getCancelCommand();
-		}
-		if (lastline != null && lastline.equals("")) {
-			String[] message = new String[]{firstline, confirmline, cancelline};
-			sendMessage(sender, message);
-			return;
-		}
-		if (lastline == null) {
-			lastline = Translation.of("this_message_will_expire2");
-			String[] message = new String[]{firstline, confirmline, cancelline, lastline};
-			sendMessage(sender, message);
-		}
-	}
-
 	public static void sendRequestMessage(CommandSender player, Invite invite) {
-		
-		if (Towny.isSpigot) {
-			TownySpigotMessaging.sendSpigotRequestMessage(player, invite);
-			return;
-		}
-		
 		if (invite.getSender() instanceof Town) { // Town invited Resident
 			String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
-			String secondline = ChatColor.GREEN + "          /" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
-			String thirdline = ChatColor.GREEN +  "          /" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
+			String secondline = "/" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
+			String thirdline = "/" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
 			sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
 				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
-				String secondline = ChatColor.GREEN + "          /t invite accept " + invite.getSender().getName();
-				String thirdline = ChatColor.GREEN +  "          /t invite deny " + invite.getSender().getName();
+				String secondline = "/t invite accept " + invite.getSender().getName();
+				String thirdline = "/t invite deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
 				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_requested_to_ally2", invite.getSender().getName());
-				String secondline = ChatColor.GREEN + "          /n ally accept " + invite.getSender().getName();
-				String thirdline = ChatColor.GREEN +  "          /n ally deny " + invite.getSender().getName();
+				String secondline = "/n ally accept " + invite.getSender().getName();
+				String thirdline = "/n ally deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
 			}
 		}
+	}
+
+	/**
+	 * Sends a player click-able confirmation messages.
+	 * @param player - The player (CommandSender) to send the confirmation
+	 * @param firstline - The question regarding the confirmation.
+	 * @param confirmline - Line for sending the confirmation.
+	 * @param cancelline - Line for sending the cancellation.
+	 * @param lastline - If null, announces that the message will expire. Otherwise, ignored.
+	 */
+	public static void sendConfirmationMessage(CommandSender player, String firstline, String confirmline, String cancelline, String lastline) {
+
+		if (firstline == null) {
+			firstline = Translation.of("confirmation_prefix") + Translation.of("are_you_sure_you_want_to_continue");
+		}
+		if (confirmline == null) {
+			confirmline = "/" + TownySettings.getConfirmCommand();
+		}
+		if (cancelline == null) {
+			cancelline = "/" + TownySettings.getCancelCommand();
+		}
+		if (lastline == null) {
+			lastline = Translation.of("this_message_will_expire2");
+		} else {
+			lastline = "";
+		}
+
+		// Create confirm button based on given params.
+		TextComponent confirmComponent = Component.text(confirmline.replace('/', '[').concat("]"))
+			.color(NamedTextColor.GREEN)
+			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_confirmation_spigot_hover_accept"))))
+			.clickEvent(ClickEvent.runCommand("/towny:" + confirmline.replace("/","")));
+
+		// Create cancel button based on given params.
+		TextComponent cancelComponent = Component.text(cancelline.replace('/', '[').concat("]"))
+			.color(NamedTextColor.GREEN)
+			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_confirmation_spigot_hover_cancel"))))
+			.clickEvent(ClickEvent.runCommand("/towny:" + cancelline.replace("/","")));
+		
+		Towny.getAdventure().sender(player).sendMessage(Component.text(firstline).append(Component.newline())
+			.append(confirmComponent).append(Component.text(" - " + Translation.of("msg_confirmation_spigot_click_accept", confirmline.replace("/", ""), confirmline)).color(NamedTextColor.WHITE).append(Component.newline()))
+			.append(cancelComponent).append(Component.text(" - " + Translation.of("msg_confirmation_spigot_click_cancel", cancelline.replace("/", ""), cancelline)).color(NamedTextColor.WHITE).append(Component.newline()))
+			.append(Component.text(lastline))
+		);
+	}
+
+	public static void sendTownList(CommandSender sender, List<Town> towns, ComparatorType compType, int page, int total) {
+		int iMax = Math.min(page * 10, towns.size());
+
+		TextComponent[] townsformatted;
+		
+		if ((page * 10) > towns.size()) {
+			townsformatted = new TextComponent[towns.size() % 10];
+		} else {
+			townsformatted = new TextComponent[10];
+		}
+		
+		
+		for (int i = (page - 1) * 10; i < iMax; i++) {
+			Town town = towns.get(i);
+			TextComponent townName = Component.text(Colors.LightBlue + StringMgmt.remUnderscore(town.getName()))
+				.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
+			
+			String slug = null;
+			switch (compType) {
+			case BALANCE:
+				slug = Colors.LightBlue + "(" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance()) + ")";
+				break;
+			case TOWNBLOCKS:
+				slug = Colors.LightBlue + "(" + town.getTownBlocks().size() + ")";
+				break;
+			case RUINED:
+				slug = Colors.LightBlue + "(" + town.getResidents().size() + ") " + (town.isRuined() ? Translation.of("msg_ruined"):"");
+				break;
+			case BANKRUPT:
+				slug = Colors.LightBlue + "(" + town.getResidents().size() + ") " + (town.isBankrupt() ? Translation.of("msg_bankrupt"):"");
+				break;
+			default:
+				slug = Colors.LightBlue + "(" + town.getResidents().size() + ")";
+				break;
+			}
+			townName = townName.append(Component.text(Colors.Gray + " - " + slug));
+			
+			if (town.isOpen())
+				townName = townName.append(Component.text(" " + Colors.LightBlue + Translation.of("status_title_open")));
+			
+			String spawnCost = "Free";
+			if (TownyEconomyHandler.isActive())
+				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+
+			townName = townName.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_click_spawn", town) + "\n" + spawnCost).color(NamedTextColor.GOLD)));
+			
+			townsformatted[i % 10] = townName;
+		}
+		
+		Audience audience = Towny.getAdventure().sender(sender);
+		sender.sendMessage(ChatTools.formatTitle(Translation.of("town_plu")));
+		sender.sendMessage(Colors.Blue + Translation.of("town_name") + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + Translation.of(compType.getName())));
+		for (TextComponent textComponent : townsformatted)
+			audience.sendMessage(textComponent);
+		
+		// Page navigation
+		TextComponent pageFooter = getPageNavigationFooter("towny:town", page, compType.getCommandString(), total);
+		audience.sendMessage(pageFooter);
+	}
+
+	public static TextComponent getPageNavigationFooter(String prefix, int page, String arg, int total) {
+		TextComponent backButton = Component.text("<<<")
+			.color(NamedTextColor.GOLD)
+			.clickEvent(ClickEvent.runCommand("/" + prefix + " list " + (arg.isEmpty() ? "" : arg + " ") + (page - 1)))
+			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_hover_previous_page"))));
+		
+		TextComponent forwardButton = Component.text(">>>")
+			.color(NamedTextColor.GOLD)
+			.clickEvent(ClickEvent.runCommand("/" + prefix + " list " + (arg.isEmpty() ? "" : arg + " ") + (page + 1)))
+			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_hover_next_page"))));
+		
+		TextComponent pageText = Component.text("   " + Translation.of("LIST_PAGE", page, total) + "   ");
+
+		if (page == 1 && page == total) {
+			backButton = backButton.clickEvent(null).hoverEvent(null).color(NamedTextColor.DARK_GRAY);
+			forwardButton = forwardButton.clickEvent(null).hoverEvent(null).color(NamedTextColor.DARK_GRAY);
+		} else if (page == 1) {
+			backButton = backButton.clickEvent(null).hoverEvent(null).color(NamedTextColor.DARK_GRAY);
+		} else if (page == total) {
+			forwardButton = forwardButton.clickEvent(null).hoverEvent(null).color(NamedTextColor.DARK_GRAY);
+		}
+
+		return backButton.append(pageText).append(forwardButton);
+	}
+
+	public static void sendNationList(CommandSender sender, List<Nation> nations, ComparatorType compType, int page, int total) {
+		int iMax = Math.min(page * 10, nations.size());
+
+		TextComponent[] nationsformatted;
+		if ((page * 10) > nations.size()) {
+			nationsformatted = new TextComponent[nations.size() % 10];
+		} else {
+			nationsformatted = new TextComponent[10];
+		}
+		
+		for (int i = (page - 1) * 10; i < iMax; i++) {
+			Nation nation = nations.get(i);
+			TextComponent nationName = Component.text(Colors.LightBlue + StringMgmt.remUnderscore(nation.getName()))
+				.clickEvent(ClickEvent.runCommand("/towny:nation spawn " + nation + " -ignore"));
+
+			String slug = "";
+			switch (compType) {
+			case BALANCE:
+				slug = TownyEconomyHandler.getFormattedBalance(nation.getAccount().getCachedBalance());
+				break;
+			case TOWNBLOCKS:
+				int rawNumTownsBlocks = nation.getTownBlocks().size();
+				NationListDisplayedNumTownBlocksCalculationEvent tbEvent = new NationListDisplayedNumTownBlocksCalculationEvent(nation, rawNumTownsBlocks);
+				Bukkit.getPluginManager().callEvent(tbEvent);
+				slug = tbEvent.getDisplayedValue() + "";
+				break;
+			case TOWNS:
+				int rawNumTowns = nation.getTowns().size();
+				NationListDisplayedNumTownsCalculationEvent tEvent = new NationListDisplayedNumTownsCalculationEvent(nation, rawNumTowns);
+				Bukkit.getPluginManager().callEvent(tEvent);
+				slug = tEvent.getDisplayedValue() + "";
+				break;
+			default:
+				int rawNumResidents = nation.getResidents().size();
+				NationListDisplayedNumResidentsCalculationEvent rEvent = new NationListDisplayedNumResidentsCalculationEvent(nation, rawNumResidents);
+				Bukkit.getPluginManager().callEvent(rEvent);
+				slug = rEvent.getDisplayedValue() + "";
+				break;
+			}
+			
+			nationName = nationName.append(Component.text(Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")"));
+
+			if (nation.isOpen())
+				nationName = nationName.append(Component.text(" " + Colors.LightBlue + Translation.of("status_title_open")));
+
+			String spawnCost = "Free";
+			if (TownyEconomyHandler.isActive())
+				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
+			
+			nationName = nationName.hoverEvent(HoverEvent.showText(Component.text(Colors.Gold + Translation.of("msg_click_spawn", nation) + "\n" + spawnCost)));
+			nationsformatted[i % 10] = nationName;
+		}
+
+		sender.sendMessage(ChatTools.formatTitle(Translation.of("nation_plu")));
+		sender.sendMessage(Colors.Blue + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + Translation.of(compType.getName()));
+		Audience audience = Towny.getAdventure().sender(sender);
+		for (TextComponent textComponent : nationsformatted) {
+			audience.sendMessage(textComponent);
+		}
+
+		// Page navigation
+		TextComponent pageFooter = getPageNavigationFooter("towny:nation", page, compType.getCommandString(), total);
+		audience.sendMessage(pageFooter);
+	}
+
+	public static void sendOutpostList(Player player, Town town, int page, int total) {
+		int outpostsCount = town.getAllOutpostSpawns().size();
+		int iMax = Math.min(page * 10, outpostsCount);
+		List<Location> outposts = town.getAllOutpostSpawns();
+		
+		TextComponent[] outpostsFormatted;
+		
+		if ((page * 10) > outpostsCount) {
+			outpostsFormatted = new TextComponent[outpostsCount % 10];
+		} else {
+			outpostsFormatted = new TextComponent[10];
+		}
+		
+		for (int i = (page - 1) * 10; i < iMax; i++) {
+			Location outpost = outposts.get(i);
+			TownBlock tb = TownyAPI.getInstance().getTownBlock(outpost);
+			if (tb == null)
+				continue;
+			String name = !tb.hasPlotObjectGroup() ? tb.getName() : tb.getPlotObjectGroup().getName();
+			TextComponent dash = Component.text(" - ").color(NamedTextColor.DARK_GRAY);		
+			TextComponent line = Component.text(Integer.toString(i + 1))
+				.color(NamedTextColor.GOLD)
+				.clickEvent(ClickEvent.runCommand("/towny:town outpost " + (i + 1)))
+				.append(dash);
+
+			TextComponent outpostName = Component.text(name).color(NamedTextColor.GREEN);
+			TextComponent worldName = Component.text(outpost.getWorld().getName()).color(NamedTextColor.BLUE);
+			TextComponent coords = Component.text("(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")").color(NamedTextColor.BLUE);
+
+			if (!name.equalsIgnoreCase("")) {
+				line = line.append(outpostName).append(dash);
+			}
+			line = line.append(worldName).append(dash).append(coords);
+			
+			String spawnCost = "Free";
+
+			if (TownyEconomyHandler.isActive())
+				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+
+			line = line.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_click_spawn", name.equalsIgnoreCase("") ? "outpost" : name) + "\n" + spawnCost).color(NamedTextColor.GOLD)));
+			outpostsFormatted[i % 10] = line;
+		}
+		
+		Audience audience = Towny.getAdventure().player(player);
+		player.sendMessage(ChatTools.formatTitle(Translation.of("outpost_plu")));
+		for (TextComponent textComponent : outpostsFormatted) {
+			audience.sendMessage(textComponent);
+		}
+		
+		// Page navigation
+		TextComponent pageFooter = getPageNavigationFooter("towny:town outpost", page, "", total);
+		audience.sendMessage(pageFooter);
 	}
 	
 	/**

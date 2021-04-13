@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
@@ -35,9 +34,6 @@ import com.palmergames.bukkit.towny.event.NationRemoveAllyEvent;
 import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
-import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumOnlinePlayersCalculationEvent;
-import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownsCalculationEvent;
-import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumResidentsCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -1074,60 +1070,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		try {
 			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 				nations.sort(comparator);
-				sendList(sender, nations, finalType, pageNumber, total);
+				TownyMessaging.sendNationList(sender, nations, finalType, pageNumber, total);
 			});
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_comparator_failed"));
 		}
 
-	}
-	
-	public void sendList(CommandSender sender, List<Nation> nations, ComparatorType type, int page, int total) {
-		
-		if (Towny.isSpigot  && sender instanceof Player) {
-			TownySpigotMessaging.sendSpigotNationList(sender, nations, type, page, total);
-			return;
-		}
-
-		int iMax = Math.min(page * 10, nations.size());
-		List<String> nationsordered = new ArrayList<>(10);
-		
-		for (int i = (page - 1) * 10; i < iMax; i++) {
-			Nation nation = nations.get(i);
-			String slug = null;
-			switch (type) {
-			case BALANCE:
-				slug = TownyEconomyHandler.getFormattedBalance(nation.getAccount().getCachedBalance());
-				break;
-			case ONLINE:
-				int rawNumPlayers = TownyAPI.getInstance().getOnlinePlayersInNation(nation).size();
-				NationListDisplayedNumOnlinePlayersCalculationEvent pEvent = new NationListDisplayedNumOnlinePlayersCalculationEvent(nation, rawNumPlayers);
-				Bukkit.getPluginManager().callEvent(pEvent);
-				slug = pEvent.getDisplayedValue() + "";
-				break;
-			case TOWNS:
-				int rawNumTowns = nation.getTowns().size();
-				NationListDisplayedNumTownsCalculationEvent tEvent = new NationListDisplayedNumTownsCalculationEvent(nation, rawNumTowns);
-				Bukkit.getPluginManager().callEvent(tEvent);
-				slug = tEvent.getDisplayedValue() + "";
-				break;
-			default:
-				int rawNumResidents =  nation.getResidents().size();
-				NationListDisplayedNumResidentsCalculationEvent rEvent = new NationListDisplayedNumResidentsCalculationEvent(nation, rawNumResidents);
-				Bukkit.getPluginManager().callEvent(rEvent);
-				slug = rEvent.getDisplayedValue() + "";
-				break;			
-			}
-			String output = Colors.Gold + StringMgmt.remUnderscore(nation.getName()) + Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")";
-			nationsordered.add(output);
-		}
-		sender.sendMessage(
-				ChatTools.formatList(
-						Translation.of("nation_plu"),
-						Colors.Gold + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + Translation.of(type.getName()),
-						nationsordered,
-						Translation.of("LIST_PAGE", page, total)
-				));		
 	}
 
 	/**
