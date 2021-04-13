@@ -137,8 +137,13 @@ public class TownyAsciiMap {
 					if (townblock.hasResident())
 						owner = townblock.getResident();
 					
+					TextComponent forSaleComponent = Component.empty();
+					if (TownyEconomyHandler.isActive() && townblock.getPlotPrice() != -1)
+						forSaleComponent = Component.text(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(townblock.getPlotPrice())).replaceAll("[\\[\\]]", "")).color(NamedTextColor.YELLOW).append(Component.newline());
+
 					TextComponent hoverComponent = Component.text(Translation.of("status_town") + townblock.getTown().getName() + (townblock.hasResident() ? " (" + townblock.getResident().getName() + ")" : "")).color(NamedTextColor.GREEN).append(Component.text(" (" + tby + ", " + tbx + ")").color(NamedTextColor.WHITE)).append(Component.newline())
-						.append(Component.text(Translation.of("status_plot_type")).color(NamedTextColor.GREEN)).append(Component.text(townblock.getType().getName()).color(NamedTextColor.DARK_GREEN)).append(Component.newline())
+						.append(Component.text(Translation.of("status_plot_type")).color(NamedTextColor.GREEN)).append(Component.text(townblock.getType().getName()).color(NamedTextColor.GREEN)).append(Component.newline())
+						.append(forSaleComponent)
 						.append(Component.text(Translation.of("status_perm") + ((owner instanceof Resident) ? townblock.getPermissions().getColourString().replace("n", "t") : townblock.getPermissions().getColourString().replace("f", "r")))).append(Component.newline())
 						.append(Component.text(Translation.of("status_perm") + ((owner instanceof Resident) ? townblock.getPermissions().getColourString2().replace("n", "t") : townblock.getPermissions().getColourString2().replace("f", "r")))).append(Component.newline())
 						.append(Component.text(Translation.of("status_pvp") + ((!CombatUtil.preventPvP(world, townblock)) ? Translation.of("status_on"): Translation.of("status_off")) + 
