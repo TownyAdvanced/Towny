@@ -1234,18 +1234,31 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			Resident resident = getResidentOrThrow(player.getUniqueId());
 			town = resident.getTown();
 
+			
 			NationPreTownLeaveEvent event = new NationPreTownLeaveEvent(town.getNation(), town);
 			Bukkit.getPluginManager().callEvent(event);
 			
 			if (event.isCancelled())
 				throw new TownyException(event.getCancelMessage());
 
+			boolean tooManyResidents = false;
+			if (town.isCapital()) {
+				// Check that the capital wont have too many residents after deletion. 
+				tooManyResidents = TownySettings.getMaxResidentsPerTown() > 0 && TownySettings.getMaxResidentsPerTownCapitalOverride() > 0 && town.getNumResidents() > TownySettings.getMaxResidentsPerTown(); 
+				// Show a message preceding the confirmation message if they will lose residents. 
+				if (tooManyResidents)
+					TownyMessaging.sendMsg(player, Translation.of("msg_deleting_nation_will_result_in_losing_residents", TownySettings.getMaxResidentsPerTown(), town.getNumResidents() - TownySettings.getMaxResidentsPerTown()));
+			}
 			final Town finalTown = town;
 			final Nation nation = town.getNation();
+			final boolean finalTooManyResidents = tooManyResidents;
 			Confirmation.runOnAccept(() -> {
 				Bukkit.getPluginManager().callEvent(new NationTownLeaveEvent(nation, finalTown));
 				finalTown.removeNation();
 
+				if (finalTooManyResidents)
+					ResidentUtil.reduceResidentCountToFitTownMaxPop(finalTown);
+				
 				plugin.resetCache();
 
 				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_town_left", StringMgmt.remUnderscore(finalTown.getName())));
