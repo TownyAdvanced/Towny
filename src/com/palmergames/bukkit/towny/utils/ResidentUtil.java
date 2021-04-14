@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
@@ -184,5 +185,31 @@ public class ResidentUtil {
 			if (i > 100000)
 				throw new TownyException(Translation.of("msg_err_too_many_npc"));
 		} while (true);
+	}
+	
+	/**
+	 * Method to remove the newest residents in order to bring a town's population
+	 * low enough to meet the population cap.
+	 * 
+	 * @param town The Town to reduce the population of.
+	 */
+	public static void reduceResidentCountToFitTownMaxPop(Town town) {
+		if (TownySettings.getMaxResidentsPerTown() == 0)
+			return;
+		
+		int max = TownySettings.getMaxResidentsForTown(town);
+		if (town.getNumResidents() <= max)
+			return;
+		
+		int i = 1;
+		List<Resident> toRemove = new ArrayList<Resident>(town.getNumResidents() - max);
+		for (Resident res : town.getResidents()) {
+			if (i > max)
+				toRemove.add(res);
+			i++;
+		}
+		
+		if (!toRemove.isEmpty())
+			toRemove.stream().forEach(res -> res.removeTown());
 	}
 }

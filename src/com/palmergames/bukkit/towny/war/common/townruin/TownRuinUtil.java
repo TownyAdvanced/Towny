@@ -4,6 +4,7 @@ package com.palmergames.bukkit.towny.war.common.townruin;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
@@ -106,6 +107,10 @@ public class TownRuinUtil {
 			townBlock.removePlotObjectGroup();   // Removes plotgroup if it were present.
 			townBlock.save();
 		}
+		
+		// Check if Town has more residents than it should be allowed (if it were the capital of a nation.)
+		if (TownySettings.getMaxResidentsPerTown() > 0)
+			ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
 		
 		town.save();
 		plugin.resetCache();

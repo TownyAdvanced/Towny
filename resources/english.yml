@@ -1370,3 +1370,4 @@ msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
 
 #Added in 0.102
 towny_map_detailed_information: '&2Click to see detailed plot information.'
+msg_err_nation_capital_too_many_residents: '&cThe current capital city has too many residents to be replaced by %s.'
