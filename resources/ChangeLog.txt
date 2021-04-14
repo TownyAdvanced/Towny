@@ -5977,3 +5977,4 @@ v0.92.0.11:
   - New Config Option: nation.set_tag_automatically
     - Default: false
     - Setting this to true will set a nation's tag automatically using the first four characters of the nation's name.
+  - Fix plotgroups being able to be named with characters that ought to be filtered out.
