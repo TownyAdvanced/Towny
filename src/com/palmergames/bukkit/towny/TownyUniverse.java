@@ -911,10 +911,8 @@ public class TownyUniverse {
 		PlotGroup newGroup = new PlotGroup(id, name, town);
 		
 		// Check if there is a duplicate
-		if (town.hasPlotGroupName(newGroup.getName())) {
-			TownyMessaging.sendDebugMsg("group " + town.getName() + ":" + id + " already exists");
-			throw new AlreadyRegisteredException();
-		}
+		if (town.hasPlotGroupName(newGroup.getName()))
+			throw new AlreadyRegisteredException("group " + town.getName() + ":" + id + " already exists");
 		
 		// Create key and store group globally.
 		town.addPlotGroup(newGroup);
