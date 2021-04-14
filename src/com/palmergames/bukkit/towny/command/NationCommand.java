@@ -1259,22 +1259,33 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void nationDelete(Player player, String[] split) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (split.length == 0)
+
+		// Player is using "/n delete"
+		if (split.length == 0) {
 			try {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
+				Town town = resident.getTown();
 				Nation nation = resident.getTown().getNation();
+				// Check that the capital wont have too many residents after deletion. 
+				boolean tooManyResidents = TownySettings.getMaxResidentsPerTown() > 0 && TownySettings.getMaxResidentsPerTownCapitalOverride() > 0 && town.getNumResidents() > TownySettings.getMaxResidentsPerTown(); 
+				// Show a message preceding the confirmation message if they will lose residents. 
+				if (tooManyResidents)
+					TownyMessaging.sendMsg(player, Translation.of("msg_deleting_nation_will_result_in_losing_residents", TownySettings.getMaxResidentsPerTown(), town.getNumResidents() - TownySettings.getMaxResidentsPerTown()));
+
 				Confirmation.runOnAccept(() -> {
 					TownyMessaging.sendGlobalMessage(Translation.of("MSG_DEL_NATION", nation.getName()));
-					TownyUniverse.getInstance().getDataSource().removeNation(nation);					
+					TownyUniverse.getInstance().getDataSource().removeNation(nation);
+					if (tooManyResidents)
+						ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
 				})
 				.sendTo(player);
 			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			}
-		else
+		// Admin is using "/n delete NATIONNAME"
+		} else
 			try {
-				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode()))
+				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode()))
 					throw new TownyException(Translation.of("msg_err_admin_only_delete_nation"));
 
 				Nation nation = getNationOrThrow(split[0]);
