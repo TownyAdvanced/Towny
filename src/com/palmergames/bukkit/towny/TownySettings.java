@@ -1288,6 +1288,14 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.NATION_DEF_OPEN);
 	}
+	
+	public static boolean isNationTagSetAutomatically() {
+		return getBoolean(ConfigNodes.NATION_DEF_TAG);
+	}
+	
+	public static boolean isTownTagSetAutomatically() {
+		return getBoolean(ConfigNodes.TOWN_DEF_TAG);
+	}
 
 	public static double getTownDefaultTax() {
 

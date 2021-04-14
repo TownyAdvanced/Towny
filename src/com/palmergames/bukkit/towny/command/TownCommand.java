@@ -2151,6 +2151,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendMessage(player, Translation.of("msg_reset_town_tag", player.getName()));
 						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_reset_town_tag", player.getName()));
 					} else {
+						
+
+						if (split[1].length() > 4)
+							throw new TownyException(Translation.of("msg_err_tag_too_long"));
+						
 						town.setTag(NameValidation.checkAndFilterName(split[1]));
 						if (admin)
 							TownyMessaging.sendMessage(player, Translation.of("msg_set_town_tag", player.getName(), town.getTag()));
@@ -2566,6 +2571,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
 			}
 		}
+		
+		if (TownySettings.isTownTagSetAutomatically())
+			town.setTag(name.substring(0, Math.min(name.length(), 4)));
 		
 		resident.save();
 		townBlock.save();

@@ -209,12 +209,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * Sets the concise string representation of this object.
 	 * 
 	 * @param text An upper-cased four or less letter string.
-	 * @throws TownyException Thrown on an error setting.
 	 */
-	public final void setTag(String text) throws TownyException {
-
-		if (text.length() > 4)
-			throw new TownyException(Translation.of("msg_err_tag_too_long"));
+	public final void setTag(String text) {
 
 		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))

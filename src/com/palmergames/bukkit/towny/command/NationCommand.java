@@ -1220,6 +1220,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				e.printStackTrace();
 			}
 		}
+		
+		if (TownySettings.isNationTagSetAutomatically())
+			nation.setTag(name.substring(0, Math.min(name.length(), 4)));
+			
 		town.save();
 		nation.save();
 
@@ -2365,6 +2369,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					nation.setTag(" ");
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_reset_nation_tag", player.getName()));
 				} else {
+					if (split[1].length() > 4)
+						throw new TownyException(Translation.of("msg_err_tag_too_long"));
+					
 					nation.setTag(NameValidation.checkAndFilterName(split[1]));
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_nation_tag", player.getName(), nation.getTag()));
 				}

@@ -76,6 +76,10 @@ public enum ConfigNodes {
 			"/town set board [msg]",
 			"",
 			"# Default town board"),
+	TOWN_DEF_TAG("town.set_tag_automatically",
+			"false",
+			"",
+			"# Setting this to true will set a town's tag automatically using the first four characters of the town's name."),
 	TOWN_DEF_TAXES(
 			"town.default_taxes", 
 			"",
@@ -220,6 +224,10 @@ public enum ConfigNodes {
 			"/nation set board [msg]",
 			"",
 			"# Default nation board"),
+	NATION_DEF_TAG("nation.set_tag_automatically",
+			"false",
+			"",
+			"# Setting this to true will set a nation's tag automatically using the first four characters of the nation's name."),
 	
 	NWS(
 			"new_world_settings",

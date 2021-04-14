@@ -5962,7 +5962,18 @@ v0.92.0.11:
   - API: Add TownPreInvitePlayerEvent, courtesy of Warriorrrr with PR #4867.
   - Add config option for toggling visualized spawn points, courtesy of Warriorrrr with PR #4865
     - Closes #4857.
+  - New Config Option: plugin.visualized_spawn_points_enabled
+    - Default: true
+    - If enabled, particles will appear around town, nation, outpost & jail spawns.
 0.96.7.13:
   - Danish translation, courtesy of Davidoen.
   - French translation updated, courtesy of PainOchoco with PR #4864.
   - Fix spawn particles not disappearing when a town or nation is deleted.
+  - Add ability to set town and nation tags automatically using the town/nation name.
+    - Closes #4869.
+  - New Config Option: town.set_tag_automatically
+    - Default: false
+    - Setting this to true will set a town's tag automatically using the first four characters of the town's name.
+  - New Config Option: nation.set_tag_automatically
+    - Default: false
+    - Setting this to true will set a nation's tag automatically using the first four characters of the nation's name.

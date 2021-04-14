@@ -918,11 +918,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setBoard(rs.getString("townBoard"));
 			line = rs.getString("tag");
 			if (line != null)
-				try {
-					town.setTag(line);
-				} catch (TownyException e) {
-					town.setTag("");
-				}
+				town.setTag(line);
 			town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
 			town.setBonusBlocks(rs.getInt("bonus"));
 			town.setTaxPercentage(rs.getBoolean("taxpercent"));

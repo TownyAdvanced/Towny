@@ -568,11 +568,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				line = keys.get("tag");
 				if (line != null)
-					try {
-						town.setTag(line);
-					} catch (TownyException e) {
-						town.setTag("");
-					}
+					town.setTag(line);
 				
 				line = keys.get("protectionStatus");
 				if (line != null)
@@ -942,11 +938,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				line = keys.get("tag");
 				if (line != null)
-					try {
-						nation.setTag(line);
-					} catch (TownyException e) {
-						nation.setTag("");
-					}
+					nation.setTag(line);
 				
 				line = keys.get("allies");
 				if (line != null) {
