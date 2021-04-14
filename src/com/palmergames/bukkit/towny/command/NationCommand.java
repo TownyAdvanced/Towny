@@ -1264,6 +1264,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_town_left", StringMgmt.remUnderscore(finalTown.getName())));
 				TownyMessaging.sendPrefixedTownMessage(finalTown, Translation.of("msg_town_left_nation", StringMgmt.remUnderscore(nation.getName())));
 
+				try {
+					nation.recheckTownDistance();
+				} catch (TownyException e) {}
 			}).sendTo(player);
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
