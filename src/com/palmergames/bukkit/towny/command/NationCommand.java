@@ -2121,12 +2121,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					try {
 						Resident newKing = getResidentOrThrow(split[1]);
 						Resident oldKing = nation.getKing();
+						Town newCapital = newKing.getTown();
 
-			            if ((TownySettings.getNumResidentsCreateNation() > 0) && (newKing.getTown().getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
-			              TownyMessaging.sendMessage(player, Translation.of("msg_not_enough_residents_capital", newKing.getTown().getName()));
-			              return;
+			            if (TownySettings.getNumResidentsCreateNation() > 0 && newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation()) {
+			            	TownyMessaging.sendErrorMsg(player, Translation.of("msg_not_enough_residents_capital", newCapital.getName()));
+			            	return;
 			            }
-
+			            
+			            if (TownySettings.getMaxResidentsPerTown() > 0 && nation.getNumResidents() > TownySettings.getMaxResidentsPerTown()) {
+			            	TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_capital_too_many_residents", newCapital.getName()));
+			            	return;
+			            }
+			            
 						NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldKing, newKing);
 						Bukkit.getPluginManager().callEvent(nationKingChangeEvent);
 						if (nationKingChangeEvent.isCancelled() && !admin) {
@@ -2151,9 +2157,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 
-		            if ((TownySettings.getNumResidentsCreateNation() > 0) && (newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
-		              TownyMessaging.sendMessage(player, Translation.of("msg_not_enough_residents_capital", newCapital.getName()));
-		              return;
+		            if (TownySettings.getNumResidentsCreateNation() > 0 && newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation()) {
+		            	TownyMessaging.sendErrorMsg(player, Translation.of("msg_not_enough_residents_capital", newCapital.getName()));
+		            	return;
+		            }
+		            
+		            if (TownySettings.getMaxResidentsPerTown() > 0 && nation.getNumResidents() > TownySettings.getMaxResidentsPerTown()) {
+		            	TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_capital_too_many_residents", newCapital.getName()));
+		            	return;
 		            }
 
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_SET_CAPITOL.getNode()))
