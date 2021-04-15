@@ -36,7 +36,7 @@ public class Colors {
 	}
 
 	/**
-	 * @param color The color code.
+	 * @param colorCode The color code.
 	 * @return the {@link NamedTextColor} for the entered color string, or null if it is invalid.
 	 */
 	@Nullable
