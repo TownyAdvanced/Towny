@@ -1066,8 +1066,6 @@ msg_err_cannot_set_group_to_jail: "Les groupes de parcelles ne peuvent pas être
 
 # Added in 0.70
 msg_err_plot_group_name_required: "Vous devez spécifier le nom du groupe de parcelles, ex: /plot group add {nom}"
-msg_confirmation_spigot_hover_accept: "Cliquez ici pour accepter"
-msg_confirmation_spigot_hover_cancel: "Cliquez ici pour annuler"
 msg_confirmation_spigot_click_accept: "Cliquez sur %s ou faites %s"
 msg_confirmation_spigot_click_cancel: "Cliquez sur %s ou faites %s"
 msg_you_cannot_kick_yourself: "Vous ne pouvez pas vous expulser."

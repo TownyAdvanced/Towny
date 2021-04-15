@@ -609,7 +609,7 @@ public class TownyMessaging {
 	public static void sendConfirmationMessage(CommandSender player, String firstline, String confirmline, String cancelline, String lastline) {
 
 		if (firstline == null) {
-			firstline = Translation.of("confirmation_prefix") + Translation.of("are_you_sure_you_want_to_continue");
+			firstline = Translation.of("are_you_sure_you_want_to_continue");
 		}
 		if (confirmline == null) {
 			confirmline = "/" + TownySettings.getConfirmCommand();
@@ -617,28 +617,28 @@ public class TownyMessaging {
 		if (cancelline == null) {
 			cancelline = "/" + TownySettings.getCancelCommand();
 		}
+		
+		TextComponent lastLineComponent;
 		if (lastline == null) {
-			lastline = Translation.of("this_message_will_expire2");
-		} else {
-			lastline = "";
-		}
+			lastLineComponent = Component.newline().append(Component.text(Translation.of("this_message_will_expire2")));
+		} else
+			lastLineComponent = Component.newline().append(Component.text(lastline));
 
 		// Create confirm button based on given params.
-		TextComponent confirmComponent = Component.text(confirmline.replace('/', '[').concat("]"))
+		TextComponent confirmComponent = Component.text(confirmline.replace("/", "[/").concat("]"))
 			.color(NamedTextColor.GREEN)
-			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_confirmation_spigot_hover_accept"))))
+			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_confirmation_spigot_click_accept", confirmline.replace("/", ""), confirmline))))
 			.clickEvent(ClickEvent.runCommand("/towny:" + confirmline.replace("/","")));
 
 		// Create cancel button based on given params.
-		TextComponent cancelComponent = Component.text(cancelline.replace('/', '[').concat("]"))
-			.color(NamedTextColor.GREEN)
-			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_confirmation_spigot_hover_cancel"))))
+		TextComponent cancelComponent = Component.text(cancelline.replace("/", "[/").concat("]"))
+			.color(NamedTextColor.RED)
+			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_confirmation_spigot_click_cancel", cancelline.replace("/", ""), cancelline))))
 			.clickEvent(ClickEvent.runCommand("/towny:" + cancelline.replace("/","")));
 		
-		Towny.getAdventure().sender(player).sendMessage(Component.text(firstline).append(Component.newline())
-			.append(confirmComponent).append(Component.text(" - " + Translation.of("msg_confirmation_spigot_click_accept", confirmline.replace("/", ""), confirmline)).color(NamedTextColor.WHITE).append(Component.newline()))
-			.append(cancelComponent).append(Component.text(" - " + Translation.of("msg_confirmation_spigot_click_cancel", cancelline.replace("/", ""), cancelline)).color(NamedTextColor.WHITE).append(Component.newline()))
-			.append(Component.text(lastline))
+		Towny.getAdventure().sender(player).sendMessage(Component.text(Translation.of("confirmation_prefix") + firstline).append(Component.newline())
+			.append(confirmComponent).append(Component.text(" ")).append(cancelComponent)
+			.append(lastLineComponent)
 		);
 	}
 

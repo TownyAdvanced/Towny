@@ -1065,8 +1065,6 @@ msg_err_cannot_set_group_to_jail: 'Группы участков не могут
 
 # Added in 0.70
 msg_err_plot_group_name_required: 'Вы должны указать имя группы участков, т.е., /plot group add {имя}'
-msg_confirmation_spigot_hover_accept: 'Нажмите, чтобы принять'
-msg_confirmation_spigot_hover_cancel: 'Нажмите, чтобы отменить'
 msg_confirmation_spigot_click_accept: 'Нажмите %s или введите %s'
 msg_confirmation_spigot_click_cancel: 'Нажмите %s или введите %s'
 msg_you_cannot_kick_yourself: 'Вы не можете выгнать самого себя.'

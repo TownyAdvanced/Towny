@@ -1066,8 +1066,6 @@ msg_err_cannot_set_group_to_jail: '土地组无法设置为监狱.'
 
 # Added in 0.70
 msg_err_plot_group_name_required: '你必须设置土地组名, 指令为/plot group add {名称}'
-msg_confirmation_spigot_hover_accept: '点击接受'
-msg_confirmation_spigot_hover_cancel: '点击'
 msg_confirmation_spigot_click_accept: '点击%s或输入%s'
 msg_confirmation_spigot_click_cancel: '点击%s或输入%s'
 msg_you_cannot_kick_yourself: '你不能踢出自己.'

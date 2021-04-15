@@ -1063,8 +1063,6 @@ msg_err_cannot_set_group_to_jail: 'Markgrupper kan inte bli fängelseplotter.'
 
 # Added in 0.70
 msg_err_plot_group_name_required: 'You must specify plot group name ie, /plot group add {name}'
-msg_confirmation_spigot_hover_accept: 'Klicka för att acceptera'
-msg_confirmation_spigot_hover_cancel: 'Klicka för att avbryta'
 msg_confirmation_spigot_click_accept: 'Klicka %s eller skriv %s'
 msg_confirmation_spigot_click_cancel: 'Klicka %s eller skriv %s'
 msg_you_cannot_kick_yourself: 'Du kan inte sparka dig själv.'

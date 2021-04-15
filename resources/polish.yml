@@ -1064,8 +1064,6 @@ msg_err_cannot_set_group_to_jail: 'Grupy działek nie mogą być więzieniem.'
 
 # Added in 0.70
 msg_err_plot_group_name_required: 'Musisz podać nazwę grupy. Prawdidłowa komenda: /plot group add {nazwa}'
-msg_confirmation_spigot_hover_accept: 'Kliknij, aby zaakceptować'
-msg_confirmation_spigot_hover_cancel: 'Kliknij, aby anulować'
 msg_confirmation_spigot_click_accept: 'Kliknij %s lub użyj komendy %s'
 msg_confirmation_spigot_click_cancel: 'Kliknij %s lub użyj komendy %s'
 msg_you_cannot_kick_yourself: 'Nie możesz wyrzucić siebie. To byłoby głupie.'

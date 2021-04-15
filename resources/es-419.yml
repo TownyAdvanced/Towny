@@ -1074,8 +1074,6 @@ msg_err_cannot_set_group_to_jail: 'Los grupos de parcelas no se pueden establece
 
 # Añadido en la versión 0.70
 msg_err_plot_group_name_required: 'Debes especificar el nombre del grupo. Ejemplo: /plot group add [Nombre]'
-msg_confirmation_spigot_hover_accept: 'Presiona para aceptar'
-msg_confirmation_spigot_hover_cancel: 'Presiona para cancelar'
 msg_confirmation_spigot_click_accept: 'Presiona %s o escribe %s'
 msg_confirmation_spigot_click_cancel: 'Presiona %s o escribe %s'
 msg_you_cannot_kick_yourself: 'No puedes expulsarte a ti mismo.'
