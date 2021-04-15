@@ -151,7 +151,7 @@ public class TownyAsciiMap {
 							Translation.of("firespread") + ((townblock.getTown().isFire() || world.isForceFire() || townblock.getPermissions().fire) ? Translation.of("status_on"):Translation.of("status_off")) + 
 							Translation.of("mobspawns") + ((world.isForceTownMobs() || townblock.getPermissions().mobs) ?  Translation.of("status_on"): Translation.of("status_off"))));
 
-					townyMap[y][x] = townyMap[y][x].hoverEvent(HoverEvent.showText(hoverComponent));
+					townyMap[y][x] = townyMap[y][x].hoverEvent(HoverEvent.showText(hoverComponent)).clickEvent(ClickEvent.runCommand("/towny:plot perm " + tby + " " + tbx));
 				} catch (TownyException e) {
 					if (x == halfLineHeight && y == halfLineWidth)
 						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.GOLD);
