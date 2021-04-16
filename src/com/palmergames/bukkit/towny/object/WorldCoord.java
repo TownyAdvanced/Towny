@@ -112,7 +112,7 @@ public class WorldCoord extends Coord {
 	 * Shortcut for TownyUniverse.getInstance().getTownBlock(WorldCoord).
 	 * 
 	 * @return the relevant TownBlock instance.
-	 * @throws NotRegisteredException - If there is no TownBlock @ WorldCoord, then this exception.
+	 * @throws NotRegisteredException If there is no TownBlock at this WorldCoord.
 	 */
 	public TownBlock getTownBlock() throws NotRegisteredException {
 		if (!hasTownBlock())
