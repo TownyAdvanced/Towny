@@ -12,7 +12,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BlockUtil;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -177,7 +176,7 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		if (testBlockMove(event.getBlock(), event.isSticky() ? event.getBlock().getRelative(event.getDirection().getOppositeFace()) : event.getBlock().getRelative(event.getDirection())))
+		if (!canBlockMove(event.getBlock(), event.isSticky() ? event.getBlock().getRelative(event.getDirection().getOppositeFace()) : event.getBlock().getRelative(event.getDirection())))
 			event.setCancelled(true);
 
 		List<Block> blocks = event.getBlocks();
@@ -185,7 +184,7 @@ public class TownyBlockListener implements Listener {
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (testBlockMove(block, block.getRelative(event.getDirection())))
+				if (!canBlockMove(block, block.getRelative(event.getDirection())))
 					event.setCancelled(true);
 			}
 		}
@@ -199,7 +198,7 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 		
-		if (testBlockMove(event.getBlock(), event.getBlock().getRelative(event.getDirection())))
+		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(event.getDirection())))
 			event.setCancelled(true);
 		
 		List<Block> blocks = event.getBlocks();
@@ -207,7 +206,7 @@ public class TownyBlockListener implements Listener {
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (testBlockMove(block, block.getRelative(event.getDirection())))
+				if (!canBlockMove(block, block.getRelative(event.getDirection())))
 					event.setCancelled(true);
 			}
 		}
@@ -219,44 +218,33 @@ public class TownyBlockListener implements Listener {
 	 * @param block - block that is being moved.
 	 * @param blockTo - block that is being moved to.
 	 * 
-	 * @return true if block shouldn't be able to be moved.
+	 * @return true if block the block can move.
 	 */
-	private boolean testBlockMove(Block block, Block blockTo) {
-		Location loc = block.getLocation();
-		Location locTo = blockTo.getLocation();
+	private boolean canBlockMove(Block block, Block blockTo) {
+		WorldCoord from = WorldCoord.parseWorldCoord(block);
+		WorldCoord to = WorldCoord.parseWorldCoord(blockTo);
 
-		if (TownyAPI.getInstance().isWilderness(locTo))
-			return false;
-		
-		TownBlock currentTownBlock = null, destinationTownBlock = null;
+		if (from.equals(to) || TownyAPI.getInstance().isWilderness(to))
+			return true;
 
-		currentTownBlock = TownyAPI.getInstance().getTownBlock(loc);
-		destinationTownBlock = TownyAPI.getInstance().getTownBlock(locTo);
+		try {
+			TownBlock currentTownBlock = from.getTownBlock();
+			TownBlock destinationTownBlock = to.getTownBlock();
 
-		if (currentTownBlock != destinationTownBlock) {
-			// Cancel if either is not null, but other is (wild to town).
-			if (((currentTownBlock == null) && (destinationTownBlock != null)) || ((currentTownBlock != null) && (destinationTownBlock == null))) {
-				return true;
-			}
-
-			// If both blocks are owned by the town.
-			if (!currentTownBlock.hasResident() && !destinationTownBlock.hasResident()) {
-				return false;
-			}
-
-			try {
-				if ((!currentTownBlock.hasResident() && destinationTownBlock.hasResident()) || (currentTownBlock.hasResident() && !destinationTownBlock.hasResident()) || (currentTownBlock.getResident() != destinationTownBlock.getResident())
-
-				|| (currentTownBlock.getPlotPrice() != -1) || (destinationTownBlock.getPlotPrice() != -1)) {
+			//Both townblocks are owned by the same resident.
+			if (currentTownBlock.hasResident() && destinationTownBlock.hasResident())
+				if (currentTownBlock.getResident() == destinationTownBlock.getResident())
 					return true;
-				}
-			} catch (NotRegisteredException e) {
-				// Failed to fetch a resident
-				return true;
-			}
-		}
 
-		return false;
+			//Both townblocks are owned by the same town.
+			if (currentTownBlock.getTown() == destinationTownBlock.getTown() && !currentTownBlock.hasResident() && !destinationTownBlock.hasResident())
+				return true;
+
+			return false;
+		} catch (NotRegisteredException e) {
+			//The 'from' townblock is wilderness.
+			return false;
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -333,8 +321,9 @@ public class TownyBlockListener implements Listener {
 
 		if (!TownySettings.getPreventFluidGriefingEnabled() || event.getBlock().getType() == Material.DRAGON_EGG)
 			return;
-				
-		event.setCancelled(testBlockMove(event.getBlock(), event.getToBlock()));
+		
+		if (!canBlockMove(event.getBlock(), event.getToBlock()))
+			event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -353,7 +342,8 @@ public class TownyBlockListener implements Listener {
 		if (event.getBlock().getType() != Material.DISPENSER)
 			return;
 		
-		event.setCancelled(testBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getBlockData()).getFacing())));
+		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getBlockData()).getFacing())))
+			event.setCancelled(true);
 	}
 
 }
