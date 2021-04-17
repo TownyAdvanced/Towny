@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.utils.CombatUtil;
 
 import org.bukkit.entity.Player;
 
@@ -133,10 +132,6 @@ public class TownyAsciiMap {
 					else
 						townyMap[y][x] = townyMap[y][x].content(townblock.getType().getAsciiMapKey());
 					
-					TownyObject owner = townblock.getTown();
-					if (townblock.hasResident())
-						owner = townblock.getResident();
-					
 					TextComponent forSaleComponent = Component.empty();
 					if (TownyEconomyHandler.isActive() && townblock.getPlotPrice() != -1)
 						forSaleComponent = Component.text(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(townblock.getPlotPrice())).replaceAll("[\\[\\]]", "")).color(NamedTextColor.YELLOW).append(Component.newline());
@@ -144,12 +139,7 @@ public class TownyAsciiMap {
 					TextComponent hoverComponent = Component.text(Translation.of("status_town") + townblock.getTown().getName() + (townblock.hasResident() ? " (" + townblock.getResident().getName() + ")" : "")).color(NamedTextColor.GREEN).append(Component.text(" (" + tby + ", " + tbx + ")").color(NamedTextColor.WHITE)).append(Component.newline())
 						.append(Component.text(Translation.of("status_plot_type")).color(NamedTextColor.GREEN)).append(Component.text(townblock.getType().getName()).color(NamedTextColor.GREEN)).append(Component.newline())
 						.append(forSaleComponent)
-						.append(Component.text(Translation.of("status_perm") + ((owner instanceof Resident) ? townblock.getPermissions().getColourString().replace("n", "t") : townblock.getPermissions().getColourString().replace("f", "r")))).append(Component.newline())
-						.append(Component.text(Translation.of("status_perm") + ((owner instanceof Resident) ? townblock.getPermissions().getColourString2().replace("n", "t") : townblock.getPermissions().getColourString2().replace("f", "r")))).append(Component.newline())
-						.append(Component.text(Translation.of("status_pvp") + ((!CombatUtil.preventPvP(world, townblock)) ? Translation.of("status_on"): Translation.of("status_off")) + 
-							Translation.of("explosions") + ((world.isForceExpl() || townblock.getPermissions().explosion) ? Translation.of("status_on"): Translation.of("status_off")) + 
-							Translation.of("firespread") + ((townblock.getTown().isFire() || world.isForceFire() || townblock.getPermissions().fire) ? Translation.of("status_on"):Translation.of("status_off")) + 
-							Translation.of("mobspawns") + ((world.isForceTownMobs() || townblock.getPermissions().mobs) ?  Translation.of("status_on"): Translation.of("status_off"))));
+						.append(Component.text(Translation.of("towny_map_detailed_information")).color(NamedTextColor.DARK_GREEN));
 
 					townyMap[y][x] = townyMap[y][x].hoverEvent(HoverEvent.showText(hoverComponent)).clickEvent(ClickEvent.runCommand("/towny:plot perm " + tby + " " + tbx));
 				} catch (TownyException e) {

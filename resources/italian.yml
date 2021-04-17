@@ -1,5 +1,5 @@
 name: Towny
-version: 0.101
+version: 0.102
 language: italian
 author: Leonardo_DGS
 website: 'https://townyadvanced.github.io/'
@@ -1370,3 +1370,6 @@ msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
 msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
 msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
 msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
+
+#Added in 0.102
+towny_map_detailed_information: '&2Click to see detailed plot information.'

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.101
+version: 0.102
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious,PainOchoco
 website: "http://townyadvanced.github.io/"
@@ -1369,3 +1369,6 @@ msg_err_nation_not_enemies_with_2: "&c%s n'est pas ennemis avec %s."
 msg_err_nation_already_allied_with_2: "&c%s est déjà allié avec %s."
 msg_err_nation_already_enemies_with_2: "&c%s est déjà ennemis avec %s."
 msg_ta_allies_enemies_updated: "&bAlliés / Ennemis mis à jour pour %s."
+
+#Added in 0.102
+towny_map_detailed_information: '&2Click to see detailed plot information.'
