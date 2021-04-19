@@ -1001,6 +1001,13 @@ public enum ConfigNodes {
 		"",
 		"# If enabled, particles will appear around town, nation, outpost & jail spawns."
 	),
+	PLUGIN_NAME_BLACKLIST(
+		"plugin.name_blacklist",
+		"",
+		"",
+		"# A blacklist used for validating town/nation names.",
+		"# Names must be seperated by a comma: name1,name2"
+	),
 	FILTERS_COLOUR_CHAT(
 			"filters_colour_chat",
 			"",
