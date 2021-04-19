@@ -1004,8 +1004,8 @@ public class TownyPlayerListener implements Listener {
 	}
 	
 	/** 
-	 * Allows restricting commands while being on an town.
-	 * Also allows limiting commands to self owned plots only.
+	 * Allows restricting commands while being in a town.
+	 * Also allows limiting commands to personally-owned plots only.
 	 * Works almost the same way as jail command blacklisting, except has more stuff
 	 * @param event PlayerCommandPreprocessEvent
 	 */
