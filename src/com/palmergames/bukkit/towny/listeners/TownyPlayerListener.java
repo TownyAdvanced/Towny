@@ -1061,7 +1061,7 @@ public class TownyPlayerListener implements Listener {
 						return;
 					}
 				} else {
-					if (!TownyUniverse.getInstance().getPermissionSource().has(player, "towny.claimed.townowned.*")) {
+					if (!TownyUniverse.getInstance().getPermissionSource().has(player, "towny.claimed.townowned.*") && tb.getTown().hasResident(player.getName())) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
 						event.setCancelled(true);
 						return;
