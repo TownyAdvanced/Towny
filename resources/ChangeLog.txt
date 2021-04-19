@@ -5979,3 +5979,4 @@ v0.92.0.11:
     - Setting this to true will set a nation's tag automatically using the first four characters of the nation's name.
   - Fix plotgroups being able to be named with characters that ought to be filtered out.
   - Make plotgroups which load and throw an AlreadyRegisteredException actually print out which one is no good.
+  - Add Adventure library, courtesy of Warriorrrr with PR #4870.
