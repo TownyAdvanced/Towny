@@ -770,7 +770,7 @@ public enum ConfigNodes {
 	),
 	GTOWN_SETTINGS_ENABLE_COMMAND_BLACKLISTING(
 			"global_town_settings.town_command_blacklisting.enabled",
-			"true",
+			"false",
 			"",
 			"# Allows blocking commands inside towns through the town_blacklisted_commands setting.",
 			"# This boolean allows you to disable this feature altogether if you don't need it"
