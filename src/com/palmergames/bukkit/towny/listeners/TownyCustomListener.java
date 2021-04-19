@@ -26,8 +26,8 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import com.palmergames.util.TimeMgmt;
 
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -83,8 +83,9 @@ public class TownyCustomListener implements Listener {
 				if (msg != null) {
 					msg = Colors.translateColorCodes(msg);
 					
-					if (Towny.isSpigot && TownySettings.isNotificationsAppearingInActionBar()) {
+					if (TownySettings.isNotificationsAppearingInActionBar()) {
 						int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_ACTIONBAR_DURATION);
+						Audience playerAudience = Towny.getAdventure().player(player);
 						if (seconds > 3) {
 							// Vanilla action bar displays for 3 seconds, so we shouldn't bother with any scheduling.
 							// Cancel any older tasks running to prevent them from leaking over.
@@ -96,7 +97,7 @@ public class TownyCustomListener implements Listener {
 							final String message = msg;
 							AtomicInteger remainingSeconds = new AtomicInteger(seconds);
 							int taskID = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-								player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
+								playerAudience.sendActionBar(Component.text(message));
 								remainingSeconds.getAndDecrement();
 								
 								if (remainingSeconds.get() == 0 && playerActionTasks.containsKey(player)) {
@@ -106,8 +107,8 @@ public class TownyCustomListener implements Listener {
 							}, 0, 20L).getTaskId();
 							
 							playerActionTasks.put(player, taskID);
-						} else {						
-							player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
+						} else {
+							playerAudience.sendActionBar(Component.text(msg));
 						}
 					} else {
 						player.sendMessage(msg);

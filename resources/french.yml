@@ -1,5 +1,5 @@
 name: Towny
-version: 0.101
+version: 0.102
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious,PainOchoco
 website: "http://townyadvanced.github.io/"
@@ -1066,8 +1066,6 @@ msg_err_cannot_set_group_to_jail: "Les groupes de parcelles ne peuvent pas être
 
 # Added in 0.70
 msg_err_plot_group_name_required: "Vous devez spécifier le nom du groupe de parcelles, ex: /plot group add {nom}"
-msg_confirmation_spigot_hover_accept: "Cliquez ici pour accepter"
-msg_confirmation_spigot_hover_cancel: "Cliquez ici pour annuler"
 msg_confirmation_spigot_click_accept: "Cliquez sur %s ou faites %s"
 msg_confirmation_spigot_click_cancel: "Cliquez sur %s ou faites %s"
 msg_you_cannot_kick_yourself: "Vous ne pouvez pas vous expulser."
@@ -1371,3 +1369,6 @@ msg_err_nation_not_enemies_with_2: "&c%s n'est pas ennemis avec %s."
 msg_err_nation_already_allied_with_2: "&c%s est déjà allié avec %s."
 msg_err_nation_already_enemies_with_2: "&c%s est déjà ennemis avec %s."
 msg_ta_allies_enemies_updated: "&bAlliés / Ennemis mis à jour pour %s."
+
+#Added in 0.102
+towny_map_detailed_information: '&2Click to see detailed plot information.'

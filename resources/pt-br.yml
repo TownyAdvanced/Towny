@@ -1,5 +1,5 @@
 name: Towny
-version: 0.101
+version: 0.102
 language: português (Brasil)
 author: BannerGames, Plugner
 website: 'http://townyadvanced.github.io/'
@@ -1069,8 +1069,6 @@ msg_err_cannot_set_group_to_jail: 'Grupos de terrenos não podem ser defimidos c
 
 # Added in 0.70
 msg_err_plot_group_name_required: 'Você deve especificar o nome do grupo de terrenos. Ex.: /plot group add {nome}'
-msg_confirmation_spigot_hover_accept: 'Clique para aceitar'
-msg_confirmation_spigot_hover_cancel: 'Clique para negar'
 msg_confirmation_spigot_click_accept: 'Clique %s ou digite %s'
 msg_confirmation_spigot_click_cancel: 'Clique %s ou digite %s'
 msg_you_cannot_kick_yourself: 'Você não pode se expulsar a si próprio.'
@@ -1374,3 +1372,6 @@ msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
 msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
 msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
 msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
+
+#Added in 0.102
+towny_map_detailed_information: '&2Click to see detailed plot information.'

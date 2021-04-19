@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
@@ -1251,64 +1250,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!TownySettings.isTownListRandom()) {
 				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 					towns.sort(comparator);
-					sendList(sender, towns, finalType, pageNumber, totalNumber);
+					TownyMessaging.sendTownList(sender, towns, finalType, pageNumber, totalNumber);
 				});
 			} else { 
 				Collections.shuffle(towns);
-				sendList(sender, towns, finalType, pageNumber, totalNumber);
+				TownyMessaging.sendTownList(sender, towns, finalType, pageNumber, totalNumber);
 			}
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_comparator_failed"));
 		}
 	}
 	
-	public void sendList(CommandSender sender, List<Town> towns, ComparatorType type, int page, int total) {
-		
-		if (Towny.isSpigot && sender instanceof Player) {
-			TownySpigotMessaging.sendSpigotTownList(sender, towns, type, page, total);
-			return;
-		}
-
-		int iMax = Math.min(page * 10, towns.size());
-		List<String> townsformatted = new ArrayList<>(10);
-		
-		for (int i = (page - 1) * 10; i < iMax; i++) {
-			Town town = towns.get(i);
-			String slug = null;
-			switch (type) {
-			case BALANCE:
-				slug = Colors.LightBlue + "(" +TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance()) + ")";
-				break;
-			case TOWNBLOCKS:
-				slug = Colors.LightBlue + "(" +town.getTownBlocks().size() + ")";
-				break;
-			case RUINED:
-				slug = town.isRuined() ? Translation.of("msg_ruined"):"";
-				break;
-			case BANKRUPT:
-				slug = town.isBankrupt() ? Translation.of("msg_bankrupt"):"";
-				break;
-			default:
-				slug = Colors.LightBlue + "(" +town.getResidents().size() + ")";
-				break;
-			}
-			
-			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + slug);
-			if (town.isOpen())
-				output += " " + Translation.of("status_title_open");
-			townsformatted.add(output);
-		}
-		
-		String[] messages = ChatTools.formatList(Translation.of("town_plu"),
-			Colors.Blue + Translation.of("town_name") +
-				(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + Translation.of(type.getName())),
-			townsformatted, Translation.of("LIST_PAGE", page, total)
-		);
-		
-		sender.sendMessage(messages);
-		
-	}
-
 	public static void townToggle(CommandSender sender, String[] split, boolean admin, Town town) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
@@ -3811,38 +3763,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (page > total)
 						throw new TownyException(Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 
-					int iMax = page * 10;
-					if ((page * 10) > outposts.size())
-						iMax = outposts.size();
-					
-					if (Towny.isSpigot) {
-						TownySpigotMessaging.sendSpigotOutpostList(player, town, page, total);
-						return;
-					}
-					
-					List<String> outputs = new ArrayList<String>();
-					for (int i = (page - 1) * 10; i < iMax; i++) {
-						Location outpost = outposts.get(i);
-						String output;
-						TownBlock tb = TownyAPI.getInstance().getTownBlock(outpost);
-						if (tb == null)
-							continue;
-						String name = !tb.hasPlotObjectGroup() ? tb.getName() : tb.getPlotObjectGroup().getName();
-						if (!name.equalsIgnoreCase("")) {
-							output = Colors.Gold + (i + 1) + Colors.Gray + " - " + Colors.LightGreen  + name +  Colors.Gray + " - " + Colors.LightBlue + outpost.getWorld().getName() +  Colors.Gray + " - " + Colors.LightBlue + "(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")";
-						} else {
-							output = Colors.Gold + (i + 1) + Colors.Gray + " - " + Colors.LightBlue + outpost.getWorld().getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")";
-						}
-						outputs.add(output);
-					}
-					player.sendMessage(
-							ChatTools.formatList(
-									Translation.of("outpost_plu"),
-									Colors.Gold + "#" + Colors.Gray + " - " + Colors.LightGreen + "(Plot Name)" + Colors.Gray + " - " + Colors.LightBlue + "(Outpost World)"+ Colors.Gray + " - " + Colors.LightBlue + "(Outpost Location)",
-									outputs,
-									Translation.of("LIST_PAGE", page, total)
-							));
-
+					TownyMessaging.sendOutpostList(player, town, page, total);
 				} else {
 					boolean ignoreWarning = false;
 
