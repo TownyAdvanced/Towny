@@ -1010,7 +1010,7 @@ public class TownyPlayerListener implements Listener {
 	 * @param event PlayerCommandPreprocessEvent
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerUsesCommandInsideTown(PlayerCommandPreprocessEvent event) {
+	public void onPlayerUsesCommandInsideTown(PlayerCommandPreprocessEvent event) throws NotRegisteredException {
 		if (plugin.isError() || !TownySettings.allowTownCommandBlacklisting() ||
 				!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
