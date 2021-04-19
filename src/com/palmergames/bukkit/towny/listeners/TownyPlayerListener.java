@@ -1052,10 +1052,7 @@ public class TownyPlayerListener implements Listener {
 					} catch(NotRegisteredException nre) { return; }
 					
 					if (TownyUniverse.getInstance().getPermissionSource().has(player, "towny.claimed.owntown.*")) return;
-					
-					TownyMessaging.sendMsg("OwnerName: " + owner.getName());
-					TownyMessaging.sendMsg("PlayerName: " + player.getName());
-					
+				
 					if (!owner.getName().equals(player.getName())) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
 						event.setCancelled(true);
