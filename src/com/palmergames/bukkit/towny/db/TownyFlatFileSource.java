@@ -489,6 +489,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						} catch (Exception e) {}
 					}
 				}
+				line = keys.get("joinedTownAt");
+				if (line != null) {
+					resident.setJoinedTownAt(Long.parseLong(line));
+				}
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_resident_at_line", resident.getName(), line, resident.getName()));
 				e.printStackTrace();
@@ -1577,6 +1581,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("lastOnline=" + resident.getLastOnline());
 		// Registered
 		list.add("registered=" + resident.getRegistered());
+		// Joined Town At
+		list.add("joinedTownAt=" + resident.getJoinedTownAt());
 		// isNPC
 		list.add("isNPC=" + resident.isNPC());
 		// isJailed

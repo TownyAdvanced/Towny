@@ -53,6 +53,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private Town town = null;
 	private long lastOnline;
 	private long registered;
+	private long joinedTownAt;
 	private boolean isNPC = false;
 	private boolean isJailed = false;
 	private int jailSpawn;
@@ -378,6 +379,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.town = town;
 		updatePerms();
 		town.addResident(this);
+		setJoinedTownAt(System.currentTimeMillis());
 		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
 	}
 	
@@ -943,6 +945,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
+	}
+
+	public long getJoinedTownAt() {
+		return joinedTownAt;
+	}
+
+	public void setJoinedTownAt(long joinedTownAt) {
+		this.joinedTownAt = joinedTownAt;
 	}
 
 	/**

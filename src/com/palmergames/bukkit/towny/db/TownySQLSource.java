@@ -747,6 +747,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				e.printStackTrace();
 			}
 			try {
+				resident.setJoinedTownAt(rs.getLong("joinedTownAt"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
 				resident.setNPC(rs.getBoolean("isNPC"));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1814,6 +1819,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("uuid", resident.hasUUID() ? resident.getUUID().toString() : "");
 			res_hm.put("lastOnline", resident.getLastOnline());
 			res_hm.put("registered", resident.getRegistered());
+			res_hm.put("joinedTownAt", resident.getJoinedTownAt());
 			res_hm.put("isNPC", resident.isNPC());
 			res_hm.put("isJailed", resident.isJailed());
 			res_hm.put("JailSpawn", resident.getJailSpawn());
