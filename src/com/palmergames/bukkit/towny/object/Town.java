@@ -238,9 +238,14 @@ public class Town extends Government implements TownBlockOwner {
 		BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(this, nation));
 	}
 
+	private boolean residentsSorted = false;
+
 	@Override
 	public List<Resident> getResidents() {
-		return Collections.unmodifiableList(residents.stream().sorted(Comparator.comparingLong(Resident::getJoinedTownAt)).collect(Collectors.toList()));
+		if (!residentsSorted)
+			sortResidents();
+		
+		return Collections.unmodifiableList(residents);
 	}
 
 	/**
@@ -1402,5 +1407,12 @@ public class Town extends Government implements TownBlockOwner {
 
 	public void setJoinedNationAt(long joinedNationAt) {
 		this.joinedNationAt = joinedNationAt;
+	}
+
+	private void sortResidents() {
+		List<Resident> sortedResidents = new ArrayList<Resident>(residents.stream().sorted(Comparator.comparingLong(Resident::getJoinedTownAt)).collect(Collectors.toList()));
+		residents.clear();
+		residents.addAll(sortedResidents);
+		residentsSorted = true;
 	}
 }
