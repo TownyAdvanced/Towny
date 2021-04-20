@@ -1388,3 +1388,6 @@ msg_err_nation_not_enemies_with_2: '&c%s no es enemiga de %s.'
 msg_err_nation_already_allied_with_2: '&c%s ya tiene una alianza con %s.'
 msg_err_nation_already_enemies_with_2: '&c%s ya es enemiga de %s.'
 msg_ta_allies_enemies_updated: '&bSe actualizaron los aliados/enemigos de %s.'
+
+#Added in 0.102
+towny_map_detailed_information: '&2Click to see detailed plot information.'
