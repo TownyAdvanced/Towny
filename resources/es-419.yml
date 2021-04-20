@@ -31,6 +31,7 @@ description: >
 # Town: ciudad
 # Nation: nación
 # Merge: fusión
+# Townblock o plot: terreno o parcela (dependiendo del contexto se cambian entre si)
 
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
@@ -1387,9 +1388,5 @@ msg_err_nation_already_allied_with_2: '&c%s ya tiene una alianza con %s.'
 msg_err_nation_already_enemies_with_2: '&c%s ya es enemiga de %s.'
 msg_ta_allies_enemies_updated: '&bSe actualizaron los aliados/enemigos de %s.'
 
-#Added in 0.102
-towny_map_detailed_information: '&2Click to see detailed plot information.'
-<<<<<<< HEAD
-
-=======
->>>>>>> b5feee9fc70e0c92bbace412b73e35fca642d782
+# Añadido en la versión 0.102
+towny_map_detailed_information: '&2Clic para ver información detallada del terreno.'
