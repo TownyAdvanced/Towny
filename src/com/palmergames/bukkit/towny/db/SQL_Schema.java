@@ -175,6 +175,7 @@ public class SQL_Schema {
 		columns.add("`nation-ranks` mediumtext");
 		columns.add("`lastOnline` BIGINT NOT NULL");
 		columns.add("`registered` BIGINT NOT NULL");
+		columns.add("`joinedTownAt` BIGINT NOT NULL");
 		columns.add("`isNPC` bool NOT NULL DEFAULT '0'");
 		columns.add("`isJailed` bool NOT NULL DEFAULT '0'");
 		columns.add("`JailSpawn` mediumint");

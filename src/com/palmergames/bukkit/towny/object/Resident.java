@@ -359,6 +359,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public void setTown(Town town) throws AlreadyRegisteredException {
+		setTown(town, true);
+	}
+
+	public void setTown(Town town, boolean updateJoinedAt) throws AlreadyRegisteredException {
 
 		if (this.town == town)
 			return;
@@ -379,7 +383,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.town = town;
 		updatePerms();
 		town.addResident(this);
-		setJoinedTownAt(System.currentTimeMillis());
+
+		if (updateJoinedAt)
+			setJoinedTownAt(System.currentTimeMillis());
+		
 		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
 	}
 	

@@ -812,7 +812,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					resident.setTown(null);
 				}
 				else {
-					resident.setTown(town);
+					resident.setTown(town, false);
 
 					try {
 						resident.setTitle(rs.getString("title"));

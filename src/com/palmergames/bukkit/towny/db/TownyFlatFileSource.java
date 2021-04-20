@@ -466,7 +466,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_resident_tried_load_invalid_town", resident.getName(), line));
 					}
 					else {
-						resident.setTown(town);
+						resident.setTown(town, false);
 						
 						line = keys.get("title");
 						if (line != null)
