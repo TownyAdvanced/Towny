@@ -9,21 +9,28 @@ description: >
     Los archivos de lenguaje alternativos pueden ser activados alterando la entrada
     [language] en config.yml.
 
-#
-#
-#         ¡Debes mantener los espacios en los textos!
+#         ¡DEBES mantener los espacios en los textos!
 #  Si un texto comienza o termina con un espacio, debe permanecer así.
 #
+#             %s = datos suministrados por Towny.
 #
-#       %s = datos suministrados por Towny.
+#  Si deseas cambiar el orden de alguna variable puedes usar el Formatter de Java
+#  Más información: https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html
 
-# Colores en el texto
+# Para asegurarte de que sea más fácil ayudarte con errores, te recomendamos no traducir los mensajes relacionados a errores de flatfile.
+
+# Puedes usar estos códigos de color para colorear los mensajes:
 # --------------
-# Negro = &0, Azul Marino = &1, Verde = &2, Azul = &3, Rojo = &4
-# Morado = &5, Dorado = &6, Gris Claro = &7, Gris = &8
-# Morado Oscuro = &9, Verde Claro = &a, Azul Claro = &b
-# Rosa = &c, Morado Claro = &d, Amarillo = &e, Claro = &f
+# Negro = &0, Azul = &1, Verde = &2, Cian = &3, Rojo = &4
+# Morado = &5, Dorado = &6, Gris claro/Plomo = &7, Gris = &8
+# Azul claro = &9, Verde claro = &a, Celeste = &b
+# Rojo = &c, Rosado = &d, Amarillo = &e, Blanco = &f
 
+# Términos de traducción:
+# Outlaw: bandido
+# Town: ciudad
+# Nation: nación
+# Merge: fusión
 
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
