@@ -657,6 +657,7 @@ public class Town extends Government implements TownBlockOwner {
 		} else {
 
 			remove(resident);
+			resident.setJoinedTownAt(0);
 
 			if (getNumResidents() == 0) {
 				throw new EmptyTownException(this);
