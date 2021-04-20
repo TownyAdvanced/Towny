@@ -942,6 +942,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setConquered(rs.getBoolean("conquered"));
 			town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
 			town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
+			town.setJoinedNationAt(rs.getLong("joinedNationAt"));
 
 			town.setPurchasedBlocks(rs.getInt("purchased"));
 			
@@ -1099,7 +1100,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					Nation nation = universe.getNation(line);
 					// Only set nation if it exists
 					if (nation != null)
-						town.setNation(nation);
+						town.setNation(nation, false);
 				}
 			} catch (SQLException ignored) {
 			}
@@ -1655,7 +1656,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						continue;
 					}
 					
-					townBlock.setTown(town);
+					townBlock.setTown(town, false);
 					try {
 						town.addTownBlock(townBlock);
 						TownyWorld townyWorld = townBlock.getWorld();
@@ -1710,6 +1711,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					townBlock.setLocked(result);
 				} catch (Exception ignored) {
 				}
+
+				townBlock.setClaimedAt(rs.getLong("claimedAt"));
 
 				try {
 					line = rs.getString("metadata");
@@ -1880,6 +1883,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("conqueredDays", town.getConqueredDays());
 			twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
 			twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
+			twn_hm.put("joinedNationAt", town.getJoinedNationAt());
 			if (town.hasMeta())
 				twn_hm.put("metadata", serializeMetadata(town));
 			else
@@ -2131,6 +2135,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					(townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
 			tb_hm.put("locked", townBlock.isLocked());
 			tb_hm.put("changed", townBlock.isChanged());
+			tb_hm.put("claimedAt", townBlock.getClaimedAt());
 			if (townBlock.hasPlotObjectGroup())
 				tb_hm.put("groupID", townBlock.getPlotObjectGroup().getID().toString());
 			else
