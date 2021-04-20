@@ -1288,6 +1288,14 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.NATION_DEF_OPEN);
 	}
+	
+	public static boolean isNationTagSetAutomatically() {
+		return getBoolean(ConfigNodes.NATION_DEF_TAG);
+	}
+	
+	public static boolean isTownTagSetAutomatically() {
+		return getBoolean(ConfigNodes.TOWN_DEF_TAG);
+	}
 
 	public static double getTownDefaultTax() {
 
@@ -3007,6 +3015,10 @@ public class TownySettings {
 	}
 	public static boolean doTownsGetWarnedOnOutlaw() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW);
+	}
+
+	public static boolean getVisualizedSpawnPointsEnabled() {
+		return getBoolean(ConfigNodes.PLUGIN_VISUALIZED_SPAWN_POINTS_ENABLED);
 	}
 }
 

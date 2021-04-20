@@ -585,12 +585,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						HUDManager.togglePermHUD(player);
 						
 					} else {
-						if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
-							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName())));
-						} else {
-							TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
-							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(townBlock));
-						}
+						WorldCoord coord = WorldCoord.parseWorldCoord(player);
+
+						try {
+							coord = new WorldCoord(world, Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+						} catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {}
+
+						if (TownyAPI.getInstance().isWilderness(coord))
+							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyUniverse.getInstance().getDataSource().getWorld(world)));
+						else
+							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(coord.getTownBlock()));
 					}
 
 				} else if (split[0].equalsIgnoreCase("toggle")) {
@@ -1453,7 +1457,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (split.length == 2) {
 				// Create a brand new plot group.
 				UUID plotGroupID = TownyUniverse.getInstance().generatePlotGroupID();
-				String plotGroupName = split[1];
+				String plotGroupName = NameValidation.filterName(split[1]);
 
 				newGroup = new PlotGroup(plotGroupID, plotGroupName, town);
 

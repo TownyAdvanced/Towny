@@ -53,6 +53,7 @@ import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.milkbowl.vault.permission.Permission;
 
 import org.apache.commons.lang.WordUtils;
@@ -120,6 +121,8 @@ public class Towny extends JavaPlugin {
 	private boolean error = false;
 	
 	private static Towny plugin;
+
+	private static BukkitAudiences adventure;
 	
 	public Towny() {
 		
@@ -133,7 +136,7 @@ public class Towny extends JavaPlugin {
 
 		townyUniverse = TownyUniverse.getInstance();
 		
-		isSpigot = BukkitTools.isSpigot();
+		isSpigot = isSpigot();
 
 		// Setup classes
 		BukkitTools.initialize(this);
@@ -156,6 +159,8 @@ public class Towny extends JavaPlugin {
 
 			// Begin FlagWar.
 			FlagWar.onEnable();
+
+			adventure = BukkitAudiences.create(this);
 
 			if (TownySettings.isTownyUpdating(getVersion())) {
 				
@@ -232,6 +237,11 @@ public class Towny extends JavaPlugin {
 			townyUniverse.finishTasks();
 		} catch (NullPointerException ignored) {
 			// The saving task will not have started if this disable was fired by onEnable failing.			
+		}
+
+		if (adventure != null) {
+			adventure.close();
+			adventure = null;
 		}
 
 		this.townyUniverse = null;
@@ -411,7 +421,7 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0);
 		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
-		TownyTimerHandler.toggleDrawSpointsTask(true);
+		TownyTimerHandler.toggleDrawSpointsTask(TownySettings.getVisualizedSpawnPointsEnabled());
 		if (!TownySettings.getUUIDPercent().equals("100%") && TownySettings.isGatheringResidentUUIDS())
 			TownyTimerHandler.toggleGatherResidentUUIDTask(true);
 	}
@@ -810,6 +820,10 @@ public class Towny extends JavaPlugin {
 		return HUDManager;
 	}
 
+	public static BukkitAudiences getAdventure() {
+		return adventure;
+	}
+
 	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
 	private void registerSpecialCommands() {
 		List<Command> commands = new ArrayList<>(4);
@@ -877,5 +891,18 @@ public class Towny extends JavaPlugin {
 	
 	public static boolean is116Plus() {
 		return CUR_BUKKIT_VER.compareTo(NETHER_VER) >= 0;
+	}
+
+	/**
+	 * @return whether server is running spigot (and not CraftBukkit.)
+	 */
+	public static boolean isSpigot() {
+		try {
+			Class.forName("org.bukkit.entity.Player$Spigot");
+			return true;
+		} catch (Throwable tr) {
+			return false;
+		}
+
 	}
 }

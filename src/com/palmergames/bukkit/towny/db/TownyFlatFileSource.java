@@ -169,20 +169,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			while ((line = fin.readLine()) != null) {
 				if (!line.equals("")) {
 					String[] tokens = line.split(",");
-					String townName;
-					UUID groupID;
-					String groupName;
-					
-					// While in development the PlotGroupList stored a 4th element, a worldname. This was scrapped pre-release. 
-					if (tokens.length == 4) {
-						townName = tokens[1];
-						groupID = UUID.fromString(tokens[2]);
-						groupName = tokens[3];
-					} else {
-						townName = tokens[0];
-						groupID = UUID.fromString(tokens[1]);
-						groupName = tokens[2];
-					}
+					String townName = tokens[0];
+					UUID groupID = UUID.fromString(tokens[1]);
+					String groupName = tokens[2];
 					Town town = universe.getTown(townName);
 					
 					if (town != null)
@@ -568,11 +557,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				line = keys.get("tag");
 				if (line != null)
-					try {
-						town.setTag(line);
-					} catch (TownyException e) {
-						town.setTag("");
-					}
+					town.setTag(line);
 				
 				line = keys.get("protectionStatus");
 				if (line != null)
@@ -942,11 +927,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				line = keys.get("tag");
 				if (line != null)
-					try {
-						nation.setTag(line);
-					} catch (TownyException e) {
-						nation.setTag("");
-					}
+					nation.setTag(line);
 				
 				line = keys.get("allies");
 				if (line != null) {

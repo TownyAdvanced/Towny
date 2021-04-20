@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownySpigotMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
@@ -23,6 +22,7 @@ import com.palmergames.bukkit.towny.event.town.TownKickEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownMayorChangeEvent;
 import com.palmergames.bukkit.towny.event.town.TownMergeEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreMergeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
@@ -1250,64 +1250,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!TownySettings.isTownListRandom()) {
 				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 					towns.sort(comparator);
-					sendList(sender, towns, finalType, pageNumber, totalNumber);
+					TownyMessaging.sendTownList(sender, towns, finalType, pageNumber, totalNumber);
 				});
 			} else { 
 				Collections.shuffle(towns);
-				sendList(sender, towns, finalType, pageNumber, totalNumber);
+				TownyMessaging.sendTownList(sender, towns, finalType, pageNumber, totalNumber);
 			}
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_comparator_failed"));
 		}
 	}
 	
-	public void sendList(CommandSender sender, List<Town> towns, ComparatorType type, int page, int total) {
-		
-		if (Towny.isSpigot && sender instanceof Player) {
-			TownySpigotMessaging.sendSpigotTownList(sender, towns, type, page, total);
-			return;
-		}
-
-		int iMax = Math.min(page * 10, towns.size());
-		List<String> townsformatted = new ArrayList<>(10);
-		
-		for (int i = (page - 1) * 10; i < iMax; i++) {
-			Town town = towns.get(i);
-			String slug = null;
-			switch (type) {
-			case BALANCE:
-				slug = Colors.LightBlue + "(" +TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance()) + ")";
-				break;
-			case TOWNBLOCKS:
-				slug = Colors.LightBlue + "(" +town.getTownBlocks().size() + ")";
-				break;
-			case RUINED:
-				slug = town.isRuined() ? Translation.of("msg_ruined"):"";
-				break;
-			case BANKRUPT:
-				slug = town.isBankrupt() ? Translation.of("msg_bankrupt"):"";
-				break;
-			default:
-				slug = Colors.LightBlue + "(" +town.getResidents().size() + ")";
-				break;
-			}
-			
-			String output = Colors.Blue + StringMgmt.remUnderscore(town.getName()) + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + slug);
-			if (town.isOpen())
-				output += " " + Translation.of("status_title_open");
-			townsformatted.add(output);
-		}
-		
-		String[] messages = ChatTools.formatList(Translation.of("town_plu"),
-			Colors.Blue + Translation.of("town_name") +
-				(TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + Translation.of(type.getName())),
-			townsformatted, Translation.of("LIST_PAGE", page, total)
-		);
-		
-		sender.sendMessage(messages);
-		
-	}
-
 	public static void townToggle(CommandSender sender, String[] split, boolean admin, Town town) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
@@ -2150,6 +2103,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendMessage(player, Translation.of("msg_reset_town_tag", player.getName()));
 						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_reset_town_tag", player.getName()));
 					} else {
+						
+
+						if (split[1].length() > 4)
+							throw new TownyException(Translation.of("msg_err_tag_too_long"));
+						
 						town.setTag(NameValidation.checkAndFilterName(split[1]));
 						if (admin)
 							TownyMessaging.sendMessage(player, Translation.of("msg_set_town_tag", player.getName(), town.getTag()));
@@ -2247,7 +2205,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(preEvent.getCancelMessage());
 			
 			// Test whether towns will be removed from the nation
-			if (nation != null && TownySettings.getNationRequiresProximity() > 0) {
+			if (nation != null && TownySettings.getNationRequiresProximity() > 0 && town.isCapital()) {
 				// Do a dry-run of the proximity test.
 				List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns(), town);
 				
@@ -2256,11 +2214,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					final Town finalTown = town;
 					final TownBlock finalTB = townBlock;
 					final Nation finalNation = nation;
+					final Location playerLocation = player.getLocation();
 					Confirmation.runOnAccept(() -> {
 						try {
 							// Set town homeblock and run the recheckTownDistance for real.
 							finalTown.setHomeBlock(finalTB);
-							finalTown.setSpawn(player.getLocation());
+							finalTown.setSpawn(playerLocation);
 							finalNation.recheckTownDistance();
 							TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
 						} catch (TownyException e) {
@@ -2565,6 +2524,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 		
+		if (TownySettings.isTownTagSetAutomatically())
+			town.setTag(name.substring(0, Math.min(name.length(), 4)));
+		
 		resident.save();
 		townBlock.save();
 		town.save();
@@ -2741,7 +2703,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
-			townyUniverse.getDataSource().removeTown(town);
+			Confirmation.runOnAccept(() -> {
+				TownyMessaging.sendMsg(player, Translation.of("town_deleted_by_admin", town.getName()));
+				TownyUniverse.getInstance().getDataSource().removeTown(town);
+			})
+				.sendTo(player);
+			
 		}
 
 	}
@@ -2853,6 +2820,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static void townInviteResident(CommandSender sender,Town town, Resident newMember) throws TownyException {
 
 		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender, newMember, town);
+
+		TownPreInvitePlayerEvent townPreInvitePlayerEvent = new TownPreInvitePlayerEvent(invite);
+		Bukkit.getPluginManager().callEvent(townPreInvitePlayerEvent);
+		if (townPreInvitePlayerEvent.isCancelled())
+			throw new TownyException(townPreInvitePlayerEvent.getCancelMessage());
+		
 		try {
 			if (!InviteHandler.inviteIsActive(invite)) {
 				newMember.newReceivedInvite(invite);
@@ -3790,38 +3763,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (page > total)
 						throw new TownyException(Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 
-					int iMax = page * 10;
-					if ((page * 10) > outposts.size())
-						iMax = outposts.size();
-					
-					if (Towny.isSpigot) {
-						TownySpigotMessaging.sendSpigotOutpostList(player, town, page, total);
-						return;
-					}
-					
-					List<String> outputs = new ArrayList<String>();
-					for (int i = (page - 1) * 10; i < iMax; i++) {
-						Location outpost = outposts.get(i);
-						String output;
-						TownBlock tb = TownyAPI.getInstance().getTownBlock(outpost);
-						if (tb == null)
-							continue;
-						String name = !tb.hasPlotObjectGroup() ? tb.getName() : tb.getPlotObjectGroup().getName();
-						if (!name.equalsIgnoreCase("")) {
-							output = Colors.Gold + (i + 1) + Colors.Gray + " - " + Colors.LightGreen  + name +  Colors.Gray + " - " + Colors.LightBlue + outpost.getWorld().getName() +  Colors.Gray + " - " + Colors.LightBlue + "(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")";
-						} else {
-							output = Colors.Gold + (i + 1) + Colors.Gray + " - " + Colors.LightBlue + outpost.getWorld().getName() + Colors.Gray + " - " + Colors.LightBlue + "(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")";
-						}
-						outputs.add(output);
-					}
-					player.sendMessage(
-							ChatTools.formatList(
-									Translation.of("outpost_plu"),
-									Colors.Gold + "#" + Colors.Gray + " - " + Colors.LightGreen + "(Plot Name)" + Colors.Gray + " - " + Colors.LightBlue + "(Outpost World)"+ Colors.Gray + " - " + Colors.LightBlue + "(Outpost Location)",
-									outputs,
-									Translation.of("LIST_PAGE", page, total)
-							));
-
+					TownyMessaging.sendOutpostList(player, town, page, total);
 				} else {
 					boolean ignoreWarning = false;
 

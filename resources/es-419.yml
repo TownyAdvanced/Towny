@@ -1,5 +1,5 @@
 name: Towny
-version: 0.101
+version: 0.102
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -1081,8 +1081,6 @@ msg_err_cannot_set_group_to_jail: 'Los grupos de parcelas no se pueden establece
 
 # Añadido en la versión 0.70
 msg_err_plot_group_name_required: 'Debes especificar el nombre del grupo. Ejemplo: /plot group add [Nombre]'
-msg_confirmation_spigot_hover_accept: 'Presiona para aceptar'
-msg_confirmation_spigot_hover_cancel: 'Presiona para cancelar'
 msg_confirmation_spigot_click_accept: 'Presiona %s o escribe %s'
 msg_confirmation_spigot_click_cancel: 'Presiona %s o escribe %s'
 msg_you_cannot_kick_yourself: 'No puedes expulsarte a ti mismo.'
@@ -1388,3 +1386,7 @@ msg_err_nation_not_enemies_with_2: '&c%s no es enemiga de %s.'
 msg_err_nation_already_allied_with_2: '&c%s ya tiene una alianza con %s.'
 msg_err_nation_already_enemies_with_2: '&c%s ya es enemiga de %s.'
 msg_ta_allies_enemies_updated: '&bSe actualizaron los aliados/enemigos de %s.'
+
+#Added in 0.102
+towny_map_detailed_information: '&2Click to see detailed plot information.'
+

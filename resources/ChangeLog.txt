@@ -5949,3 +5949,34 @@ v0.92.0.11:
     - Closes #4844.
   - Fix personally-owned plots not taking on a fully-open perm line when a town is ruined.
     - Closes #4846.
+  - Fix missing confirmation for admins using /t delete NAME and /n delete NAME.
+  - Misc fixes courtesy of Warriorrrr with PR #4854.
+  - More Swedish translating courtesy of OskyEdz with PR #4853.
+  - es-419.yml updated couresty of EuGNosii with PR #4848.
+  - Fix plot notifications not showing information when you've left a plotgroup into a non-plotgroup townblock.
+    - Closes #4856.
+  - API: Added ResidentPreJailEvent, a Cancellable event.
+    - Closes #4862.
+  - Fix Economy formatting with colours able to muck about with the bankhistory books.
+  - Make the spawn particles chill out.
+  - API: Add TownPreInvitePlayerEvent, courtesy of Warriorrrr with PR #4867.
+  - Add config option for toggling visualized spawn points, courtesy of Warriorrrr with PR #4865
+    - Closes #4857.
+  - New Config Option: plugin.visualized_spawn_points_enabled
+    - Default: true
+    - If enabled, particles will appear around town, nation, outpost & jail spawns.
+0.96.7.13:
+  - Danish translation, courtesy of Davidoen.
+  - French translation updated, courtesy of PainOchoco with PR #4864.
+  - Fix spawn particles not disappearing when a town or nation is deleted.
+  - Add ability to set town and nation tags automatically using the town/nation name.
+    - Closes #4869.
+  - New Config Option: town.set_tag_automatically
+    - Default: false
+    - Setting this to true will set a town's tag automatically using the first four characters of the town's name.
+  - New Config Option: nation.set_tag_automatically
+    - Default: false
+    - Setting this to true will set a nation's tag automatically using the first four characters of the nation's name.
+  - Fix plotgroups being able to be named with characters that ought to be filtered out.
+  - Make plotgroups which load and throw an AlreadyRegisteredException actually print out which one is no good.
+  - Add Adventure library, courtesy of Warriorrrr with PR #4870.

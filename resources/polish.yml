@@ -1,5 +1,5 @@
 name: Towny
-version: 0.101
+version: 0.102
 language: polish
 authors: Continuator - Martinez, Helper - EmpressKedavra, First translation (0.19 version) - Serip
 website: 'http://townyadvanced.github.io/'
@@ -1064,8 +1064,6 @@ msg_err_cannot_set_group_to_jail: 'Grupy działek nie mogą być więzieniem.'
 
 # Added in 0.70
 msg_err_plot_group_name_required: 'Musisz podać nazwę grupy. Prawdidłowa komenda: /plot group add {nazwa}'
-msg_confirmation_spigot_hover_accept: 'Kliknij, aby zaakceptować'
-msg_confirmation_spigot_hover_cancel: 'Kliknij, aby anulować'
 msg_confirmation_spigot_click_accept: 'Kliknij %s lub użyj komendy %s'
 msg_confirmation_spigot_click_cancel: 'Kliknij %s lub użyj komendy %s'
 msg_you_cannot_kick_yourself: 'Nie możesz wyrzucić siebie. To byłoby głupie.'
@@ -1369,3 +1367,6 @@ msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
 msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
 msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
 msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
+
+#Added in 0.102
+towny_map_detailed_information: '&2Click to see detailed plot information.'

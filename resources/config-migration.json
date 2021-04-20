@@ -89,5 +89,16 @@
         "value": ",SHEARS"
       }
     ]
+  },
+  {
+    "version": "0.96.7.12",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "new_world_settings.plot_management.revert_on_unclaim.block_ignore",
+        "value": ",ANCIENT_DEBRIS,NETHERITE_BLOCK,GILDED_BLACKSTONE",
+        "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
+      }
+    ]
   }
 ]

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.101
+version: 0.102
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://townyadvanced.github.io/'
@@ -1068,8 +1068,6 @@ msg_err_cannot_set_group_to_jail: 'Plotgruppen kannst zu nicht zum Jail-Typ änd
 
 # Added in 0.70
 msg_err_plot_group_name_required: 'Du musst der Plotgruppe einen Namen geben. Bsp: /plot group add {name}'
-msg_confirmation_spigot_hover_accept: 'Klicken um anzunehmen'
-msg_confirmation_spigot_hover_cancel: 'Klicken um abzulehnen'
 msg_confirmation_spigot_click_accept: 'Klicke %s oder gib %s ein'
 msg_confirmation_spigot_click_cancel: 'Klicke %s oder gib %s ein'
 msg_you_cannot_kick_yourself: 'Du kannst dich nicht selber kicken...'
@@ -1373,3 +1371,6 @@ msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
 msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
 msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
 msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
+
+#Added in 0.102
+towny_map_detailed_information: '&2Click to see detailed plot information.'
