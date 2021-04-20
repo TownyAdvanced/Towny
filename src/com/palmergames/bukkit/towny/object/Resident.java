@@ -947,9 +947,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
-	public long getJoinedTownAt() {
-		return joinedTownAt;
-	}
+        public long getJoinedTownAt() {
+            if (joinedTownAt == null)
+                return 0;
+            return joinedTownAt;
+        }
 
 	public void setJoinedTownAt(long joinedTownAt) {
 		this.joinedTownAt = joinedTownAt;
@@ -970,4 +972,3 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		}
 	}
 }
-
