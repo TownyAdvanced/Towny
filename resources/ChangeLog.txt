@@ -5988,3 +5988,9 @@ v0.92.0.11:
     - The maximum number of residents that can be joined to a capital city.
     - Requires max_residents_capital_override to be above 0.
     - Uses the greater of max_residents_capital_override and max_residents_per_town.
+  - Add town/nation name blacklist config option, courtesy of Warriorrrr with PR #4878.
+    - Closes #4875.
+  - New Config Option: plugin.name_blacklist
+    - Default: empty
+    - A blacklist used for validating town/nation names.
+    - Names must be seperated by a comma: name1,name2
