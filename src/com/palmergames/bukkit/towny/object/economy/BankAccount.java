@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -26,9 +25,7 @@ public class BankAccount extends Account {
 	public BankAccount(String name, World world, double balanceCap) {
 		super(name, world);
 		this.balanceCap = balanceCap;
-		try {
-			this.cachedBalance = new CachedBalance(getHoldingBalance());
-		} catch (EconomyException e) {}
+		this.cachedBalance = new CachedBalance(getHoldingBalance());
 	}
 
 
@@ -91,32 +88,26 @@ public class BankAccount extends Account {
 
 	@Override
 	protected boolean subtractMoney(double amount) {
-		try {
-			if (isBankrupt() && (getTownDebt() + amount > getDebtCap())) {
-				return false;  //subtraction not allowed as it would exceed the debt cap
+		if (isBankrupt() && (getTownDebt() + amount > getDebtCap()))
+			return false;  //subtraction not allowed as it would exceed the debt cap
+
+		if (isBankrupt())
+			return addDebt(amount);
+
+		if (!canPayFromHoldings(amount)) {
+
+			// Calculate debt.
+			double amountInDebt = amount - getHoldingBalance();
+
+			if(amountInDebt <= getDebtCap()) {
+				// Empty out account.
+				boolean success = TownyEconomyHandler.setBalance(getName(), 0, world);
+				success &= addDebt(amountInDebt);
+
+				return success;
+			} else {
+				return false; //Subtraction not allowed as it would exceed the debt cap
 			}
-
-			if (isBankrupt()) {
-				return addDebt(amount);
-			}
-
-			if (!canPayFromHoldings(amount)) {
-
-				// Calculate debt.
-				double amountInDebt = amount - getHoldingBalance();
-
-				if(amountInDebt <= getDebtCap()) {
-					// Empty out account.
-					boolean success = TownyEconomyHandler.setBalance(getName(), 0, world);
-					success &= addDebt(amountInDebt);
-
-					return success;
-				} else {
-					return false; //Subtraction not allowed as it would exceed the debt cap
-				}
-			}
-		} catch (EconomyException e) {
-			e.printStackTrace();
 		}
 
 		// Otherwise continue like normal.
@@ -125,19 +116,12 @@ public class BankAccount extends Account {
 
 	@Override
 	protected boolean addMoney(double amount) {
-		try {
-			
-			// Check balance cap.
-			if (balanceCap != 0 && (getHoldingBalance() + amount > balanceCap)) {
-				return false;
-			}
-			
-			if (isBankrupt()) {
-				return removeDebt(amount);
-			}
-		} catch (EconomyException e) {
-			e.printStackTrace();
-		}
+		// Check balance cap.
+		if (balanceCap != 0 && (getHoldingBalance() + amount > balanceCap))
+			return false;
+		
+		if (isBankrupt())
+			return removeDebt(amount);
 
 		// Otherwise continue like normal.
 		return TownyEconomyHandler.add(getName(), amount, world);
@@ -191,28 +175,19 @@ public class BankAccount extends Account {
 	}
 
 	@Override
-	public double getHoldingBalance() throws EconomyException {
-		try {
-			if (isBankrupt()) {
-				return getTownDebt() * -1;
-			}
-			return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
-		} catch (NoClassDefFoundError e) {
-			e.printStackTrace();
-			throw new EconomyException("Economy error getting holdings for " + getName());
+	public double getHoldingBalance() {
+		if (isBankrupt()) {
+			return getTownDebt() * -1;
 		}
+		return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
 	}
 
 	@Override
 	public String getHoldingFormattedBalance() {
-		try {
-			if (isBankrupt()) {
-				return "-" + TownyEconomyHandler.getFormattedBalance(getTownDebt());
-			}
-			return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
-		} catch (EconomyException e) {
-			return "Error";
+		if (isBankrupt()) {
+			return "-" + TownyEconomyHandler.getFormattedBalance(getTownDebt());
 		}
+		return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
 	}
 
 	@Override
@@ -242,20 +217,10 @@ public class BankAccount extends Account {
 		}
 		
 		void updateCache() {
-			if (!TownySettings.isEconomyAsync()) // Some economy plugins don't handle things async, 
-				try {                            // luckily we have a config option for this such case.
-					setBalance(getHoldingBalance());
-				} catch (EconomyException e1) {
-					e1.printStackTrace();
-				}
+			if (!TownySettings.isEconomyAsync()) // Some economy plugins don't handle things async, luckily we have a config option for this such case. 
+				setBalance(getHoldingBalance());
 			else 
-				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> {
-					try {
-						setBalance(getHoldingBalance());
-					} catch (EconomyException e) {
-						e.printStackTrace();
-					}
-				});				
+				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> cachedBalance.setBalance(getHoldingBalance()));			
 		}
 	}
 	
@@ -268,9 +233,9 @@ public class BankAccount extends Account {
 	 * @return a cached balance of a town or nation bank account.
 	 */
 	public double getCachedBalance() {
-		if (System.currentTimeMillis() - cachedBalance.getTime() > CACHE_TIMEOUT) {
+		if (System.currentTimeMillis() - cachedBalance.getTime() > CACHE_TIMEOUT)
 			cachedBalance.updateCache();
-		}
+
 		return cachedBalance.getBalance();
 	}
 

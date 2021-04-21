@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -938,7 +937,7 @@ public class Town extends Government implements TownBlockOwner {
 		return embassyPlotTax;
 	}
 
-	public void collect(double amount) throws EconomyException {
+	public void collect(double amount) {
 		
 		if (TownyEconomyHandler.isActive()) {
 			double bankcap = TownySettings.getTownBankCap();
