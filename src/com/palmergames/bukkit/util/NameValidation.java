@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 /**
  * @author ElgarL
@@ -96,6 +97,9 @@ public class NameValidation {
 		 */
 		// Banned names
 		if (bannedNames.contains(name.toLowerCase()))
+			return true;
+		
+		if (TownySettings.getBlacklistedNames().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(name.toLowerCase()))
 			return true;
 
 		return !isValidName(name);

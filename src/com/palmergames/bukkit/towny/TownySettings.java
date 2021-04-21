@@ -3032,5 +3032,9 @@ public class TownySettings {
 	public static boolean getVisualizedSpawnPointsEnabled() {
 		return getBoolean(ConfigNodes.PLUGIN_VISUALIZED_SPAWN_POINTS_ENABLED);
 	}
+
+	public static List<String> getBlacklistedNames() {
+		return getStrArr(ConfigNodes.PLUGIN_NAME_BLACKLIST);
+	}
 }
 
