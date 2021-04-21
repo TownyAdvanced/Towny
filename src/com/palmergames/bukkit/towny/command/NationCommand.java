@@ -2,11 +2,13 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyAddonAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
@@ -304,13 +306,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				default:
 					if (args.length == 1) {
-						List<String> nationNames = NameUtil.filterByStart(nationTabCompletes, args[0]);
+						List<String> suggestions = TownyAddonAPI.getTabCompletes(CommandType.NATION);
+						suggestions.addAll(nationTabCompletes);
+						List<String> nationNames = NameUtil.filterByStart(suggestions, args[0]);
 						if (nationNames.size() > 0) {
 							return nationNames;
 						} else {
 							return getTownyStartingWith(args[0], "n");
 						}
-					}
+					} else if (args.length > 1 && TownyAddonAPI.hasCommand(CommandType.NATION, args[0]))
+						return NameUtil.filterByStart(TownyAddonAPI.getAddonCommand(CommandType.NATION, args[0]).getTabCompletion(args.length), args[args.length-1]);
 			}
 		} else if (args.length == 1) {
 			return filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
@@ -679,6 +684,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						}
 
 					TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().getNation().generateBankHistoryBook(player, pages);
+				} else if (TownyAddonAPI.hasCommand(CommandType.NATION, split[0])) {
+					TownyAddonAPI.getAddonCommand(CommandType.NATION, split[0]).run(player, null, "nation", split);
 				} else {
 
 					final Nation nation = TownyUniverse.getInstance().getNation(split[0]);

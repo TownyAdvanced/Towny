@@ -2,11 +2,13 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyAddonAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -195,9 +197,11 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					break;
 				default:
 					if (args.length == 1) {
-						return filterByStartOrGetTownyStartingWith(residentTabCompletes, args[0], "r");
-					}
-					break;
+						List<String> suggestions = TownyAddonAPI.getTabCompletes(CommandType.RESIDENT);
+						suggestions.addAll(residentTabCompletes);
+						return filterByStartOrGetTownyStartingWith(suggestions, args[0], "r");
+					} else if (args.length > 1 && TownyAddonAPI.hasCommand(CommandType.RESIDENT, args[0]))
+						return NameUtil.filterByStart(TownyAddonAPI.getAddonCommand(CommandType.RESIDENT, args[0]).getTabCompletion(args.length), args[args.length-1]);
 			}
 		} else if (args.length == 1){
 				return filterByStartOrGetTownyStartingWith(residentConsoleTabCompletes, args[0], "r");
@@ -352,6 +356,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				Resident res = getResidentOrThrow(player.getUniqueId());
 				
 				SpawnUtil.sendToTownySpawn(player, split, res, Translation.of("msg_err_cant_afford_tp"), false, false, SpawnType.RESIDENT);
+			} else if (TownyAddonAPI.hasCommand(CommandType.RESIDENT, split[0])) {
+				TownyAddonAPI.getAddonCommand(CommandType.RESIDENT, split[0]).run(player, null, "resident", split);
 			} else {
 				final Resident resident = TownyUniverse.getInstance().getResidentOpt(split[0])
 											.orElseThrow(() -> new TownyException(Translation.of("msg_err_not_registered_1", split[0])));

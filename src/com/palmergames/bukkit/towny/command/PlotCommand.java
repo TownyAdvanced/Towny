@@ -3,11 +3,13 @@ package com.palmergames.bukkit.towny.command;
 import com.google.common.collect.Iterables;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyAddonAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
@@ -213,9 +215,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						return NameUtil.filterByStart(Collections.singletonList("hud"), args[1]);
 					break;
 				default:
-					if (args.length == 1)
-						return NameUtil.filterByStart(plotTabCompletes, args[0]);
-					break;
+					if (args.length == 1) {
+						List<String> suggestions = TownyAddonAPI.getTabCompletes(CommandType.PLOT);
+						suggestions.addAll(plotTabCompletes);
+						return NameUtil.filterByStart(suggestions, args[0]);
+					} else if (args.length > 1 && TownyAddonAPI.hasCommand(CommandType.PLOT, args[0]))
+						return NameUtil.filterByStart(TownyAddonAPI.getAddonCommand(CommandType.PLOT, args[0]).getTabCompletion(args.length), args[args.length-1]);
 			}
 		}
 
@@ -865,7 +870,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("group")) {
 
 					return handlePlotGroupCommand(StringMgmt.remFirstArg(split), player);
-					
+				} else if (TownyAddonAPI.hasCommand(CommandType.PLOT, split[0])) {
+					TownyAddonAPI.getAddonCommand(CommandType.PLOT, split[0]).run(player, null, "plot", split);
 				} else
 					throw new TownyException(Translation.of("msg_err_invalid_property", split[0]));
 

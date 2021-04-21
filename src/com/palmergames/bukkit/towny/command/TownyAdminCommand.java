@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyAddonAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyLogger;
@@ -9,6 +10,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
@@ -436,8 +438,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (args.length == 2)
 					return NameUtil.filterByStart(TownCommand.townUnclaimTabCompletes, args[1]);
 			default:
-				if (args.length == 1)
-					return NameUtil.filterByStart(adminTabCompletes, args[0]);
+				if (args.length == 1) {
+					List<String> tabCompletes = TownyAddonAPI.getTabCompletes(CommandType.TOWNYADMIN);
+					tabCompletes.addAll(adminTabCompletes);
+					return NameUtil.filterByStart(tabCompletes, args[0]);
+				} else if (args.length > 1 && TownyAddonAPI.hasCommand(CommandType.TOWNYADMIN, args[0]))
+					return NameUtil.filterByStart(TownyAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, args[0]).getTabCompletion(args.length), args[args.length-1]);
 		}
 		
 		return Collections.emptyList();
@@ -593,7 +599,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_no_economy"));
 				
 				parseAdminDepositAllCommand(StringMgmt.remFirstArg(split));
-				
+			} else if (TownyAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
+				TownyAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).run(getSender(), null, "townyadmin", split);
 			}  else {
 				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_sub"));
 				return false;

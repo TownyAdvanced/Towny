@@ -2,11 +2,13 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyAddonAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
@@ -393,8 +395,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							return NameUtil.filterByStart(townListTabCompletes, args[2]);
 					}
 				default:
-					if (args.length == 1)
-						return filterByStartOrGetTownyStartingWith(townTabCompletes, args[0], "t");
+					if (args.length == 1) {
+						List<String> tabCompletes = TownyAddonAPI.getTabCompletes(CommandType.TOWN);
+						tabCompletes.addAll(townTabCompletes);
+						return filterByStartOrGetTownyStartingWith(tabCompletes, args[0], "t");
+					} else if (args.length > 1 && TownyAddonAPI.hasCommand(CommandType.TOWN, args[0]))
+						return NameUtil.filterByStart(TownyAddonAPI.getAddonCommand(CommandType.TOWN, args[0]).getTabCompletion(args.length), args[args.length-1]);
 			}
 		} else if (args.length == 1) {
 			return filterByStartOrGetTownyStartingWith(townConsoleTabCompletes, args[0], "t");
@@ -741,6 +747,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 
 					parseTownMergeCommand(player, newSplit);
+				} else if (TownyAddonAPI.hasCommand(CommandType.TOWN, split[0])) {
+					TownyAddonAPI.getAddonCommand(CommandType.TOWN, split[0]).run(player, null, "town", split);
 				} else {
 					/*
 					 * We've gotten this far without a match, check if the argument is a town name.
