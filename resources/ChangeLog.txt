@@ -5994,3 +5994,6 @@ v0.92.0.11:
     - Default: empty
     - A blacklist used for validating town/nation names.
     - Names must be seperated by a comma: name1,name2
+  - Deprecated: EconomyException
+    - The economy exception is no longer thrown by Towny.
+    - After close examination it was found that the exception is no longer needed.     
