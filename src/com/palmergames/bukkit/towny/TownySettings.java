@@ -2092,6 +2092,18 @@ public class TownySettings {
 		
 		return getInt(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN);
 	}
+	
+	public static int getMaxResidentsPerTownCapitalOverride() {
+		
+		return Math.max(getInt(ConfigNodes.GTOWN_MAX_RESIDENTS_CAPITAL_OVERRIDE), getMaxResidentsPerTown());
+	}
+	
+	public static int getMaxResidentsForTown(Town town) {
+		if (town.isCapital())
+			return getMaxResidentsPerTownCapitalOverride();
+		else 
+			return getMaxResidentsPerTown();
+	}
 
 	public static boolean isTownyUpdating(String currentVersion) {
 		// Assume

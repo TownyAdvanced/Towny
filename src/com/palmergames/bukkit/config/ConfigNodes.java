@@ -658,6 +658,14 @@ public enum ConfigNodes {
 			"",
 			"# The maximum number of residents that can be joined to a town. Setting to 0 disables this feature."
 	),
+	GTOWN_MAX_RESIDENTS_CAPITAL_OVERRIDE(
+			"global_town_settings.max_residents_capital_override",
+			"0",
+			"",
+			"# The maximum number of residents that can be joined to a capital city.", 
+			"# Requires max_residents_capital_override to be above 0.",
+			"# Uses the greater of max_residents_capital_override and max_residents_per_town."
+	),
 	GTOWN_SETTINGS_DISPLAY_TOWNBOARD_ONLOGIN(
 			"global_town_settings.display_board_onlogin",
 			"true",
