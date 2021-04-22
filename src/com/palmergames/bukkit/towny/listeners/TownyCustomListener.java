@@ -27,6 +27,7 @@ import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import com.palmergames.util.TimeMgmt;
 
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 
 import org.bukkit.Bukkit;
@@ -46,6 +47,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TownyCustomListener implements Listener {
 	private final Towny plugin;
 	private final Map<Player, Integer> playerActionTasks = new HashMap<>();
+	private final Map<Player, BossBar> playerBossBarMap = new HashMap<>();
 
 	public TownyCustomListener(Towny instance) {
 		plugin = instance;
@@ -83,9 +85,9 @@ public class TownyCustomListener implements Listener {
 				if (msg != null) {
 					msg = Colors.translateColorCodes(msg);
 					
-					if (TownySettings.isNotificationsAppearingInActionBar()) {
-						int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_ACTIONBAR_DURATION);
-						Audience playerAudience = Towny.getAdventure().player(player);
+					Audience playerAudience = Towny.getAdventure().player(player);
+					if (TownySettings.isNotificationsAppearingInActionBar() && !TownySettings.isNotificationsAppearingOnBossbar()) {
+						int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION);
 						if (seconds > 3) {
 							// Vanilla action bar displays for 3 seconds, so we shouldn't bother with any scheduling.
 							// Cancel any older tasks running to prevent them from leaking over.
@@ -110,9 +112,29 @@ public class TownyCustomListener implements Listener {
 						} else {
 							playerAudience.sendActionBar(Component.text(msg));
 						}
-					} else {
+					} else if (TownySettings.isNotificationsAppearingOnBossbar()) {
+						int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION);
+						BossBar bossBar = BossBar.bossBar(Component.text(msg), 1, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS);
+
+						if (playerBossBarMap.containsKey(player)) {
+							Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
+							playerAudience.hideBossBar(playerBossBarMap.get(player));
+							playerActionTasks.remove(player);
+							playerBossBarMap.remove(player);
+						}
+
+						playerAudience.showBossBar(bossBar);
+						playerBossBarMap.put(player, bossBar);
+
+						int taskID = Bukkit.getScheduler().runTaskLater(plugin, () -> {
+							playerAudience.hideBossBar(bossBar);
+							playerActionTasks.remove(player);
+							playerBossBarMap.remove(player);
+						}, seconds*20).getTaskId();
+
+						playerActionTasks.put(player, taskID);						
+					} else
 						player.sendMessage(msg);
-					}
 				}
 			}
 		} catch (NotRegisteredException e) {

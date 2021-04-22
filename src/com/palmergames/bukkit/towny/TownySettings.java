@@ -3040,5 +3040,9 @@ public class TownySettings {
 	public static boolean doesFrostWalkerRequireBuildPerms() {
 		return getBoolean(ConfigNodes.PROT_FROST_WALKER);
 	}
+
+	public static boolean isNotificationsAppearingOnBossbar() {
+		return getBoolean(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_ON_BOSSBAR);
+	}
 }
 
