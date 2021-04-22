@@ -3036,5 +3036,9 @@ public class TownySettings {
 	public static List<String> getBlacklistedNames() {
 		return getStrArr(ConfigNodes.PLUGIN_NAME_BLACKLIST);
 	}
+	
+	public static boolean doesFrostWalkerRequireBuildPerms() {
+		return getBoolean(ConfigNodes.PROT_FROST_WALKER);
+	}
 }
 

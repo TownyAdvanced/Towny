@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.listeners;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -28,6 +29,7 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.EntityBlockFormEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -296,4 +298,22 @@ public class TownyBlockListener implements Listener {
 			}
 		}
 	}
+	
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onFrostWalkerFreezeWater(EntityBlockFormEvent event) {
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()) || !TownySettings.doesFrostWalkerRequireBuildPerms())
+			return;
+
+		// Snowmen making snow will also throw this event. 
+		if (event.getEntity() instanceof Player) {
+			//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
+			event.setCancelled(!TownyActionEventExecutor.canBuild((Player) event.getEntity(), event.getBlock().getLocation(), event.getBlock().getType()));
+		}
+	}
+	
 }

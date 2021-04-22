@@ -5997,3 +5997,9 @@ v0.92.0.11:
   - Deprecated: EconomyException
     - The economy exception is no longer thrown by Towny.
     - After close examination it was found that the exception is no longer needed.     
+0.96.7.14:
+  - Add option to require FrostWalker enchantment to require build rights to freeze water.
+    - Closes #4887
+  - New Config Option: protection.prevent_frost_walker_freezing
+    - Default: false
+    - When set to true, players with the Frost Walker enchant will need to be able to build where they are attempting to freeze.

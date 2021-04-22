@@ -1235,6 +1235,11 @@ public enum ConfigNodes {
 			"# SPEED, WATER_BREATHING, WEAKNESS, WITHER.",
 			"",
 			"# When preventing PVP prevent the use of these potions."),
+	PROT_FROST_WALKER(
+			"protection.prevent_frost_walker_freezing",
+			"false",
+			"",
+			"# When set to true, players with the Frost Walker enchant will need to be able to build where they are attempting to freeze."),
 	UNCLAIMED_ZONE(
 			"unclaimed",
 			"",
