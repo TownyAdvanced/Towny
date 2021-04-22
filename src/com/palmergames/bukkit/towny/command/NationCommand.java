@@ -2,13 +2,13 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyAddonAPI;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.TownyAddonAPI.CommandType;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
@@ -178,7 +178,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			switch (args[0].toLowerCase()) {
 				case "toggle":
 					if (args.length == 2)
-						return NameUtil.filterByStart(nationToggleTabCompletes, args[1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.NATION_TOGGLE, nationToggleTabCompletes), args[1]);
 					else if (args.length == 3)
 						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 					break;
@@ -306,16 +306,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				default:
 					if (args.length == 1) {
-						List<String> suggestions = TownyAddonAPI.getTabCompletes(CommandType.NATION);
-						suggestions.addAll(nationTabCompletes);
-						List<String> nationNames = NameUtil.filterByStart(suggestions, args[0]);
+						List<String> nationNames = NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.NATION, nationTabCompletes), args[0]);
 						if (nationNames.size() > 0) {
 							return nationNames;
 						} else {
 							return getTownyStartingWith(args[0], "n");
 						}
-					} else if (args.length > 1 && TownyAddonAPI.hasCommand(CommandType.NATION, args[0]))
-						return NameUtil.filterByStart(TownyAddonAPI.getAddonCommand(CommandType.NATION, args[0]).getTabCompletion(args.length), args[args.length-1]);
+					} else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.NATION, args[0]))
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, args[0]).getTabCompletion(args.length), args[args.length-1]);
 			}
 		} else if (args.length == 1) {
 			return filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
@@ -326,7 +324,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	
 	static List<String> nationSetTabComplete(Nation nation, String[] args) {
 		if (args.length == 2) {
-			return NameUtil.filterByStart(nationSetTabCompletes, args[1]);
+			return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.NATION_SET, nationSetTabCompletes), args[1]);
 		} else if (args.length == 3){
 			switch (args[1].toLowerCase()) {
 				case "king":
@@ -684,8 +682,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						}
 
 					TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().getNation().generateBankHistoryBook(player, pages);
-				} else if (TownyAddonAPI.hasCommand(CommandType.NATION, split[0])) {
-					TownyAddonAPI.getAddonCommand(CommandType.NATION, split[0]).run(player, null, "nation", split);
+				} else if (TownyCommandAddonAPI.hasCommand(CommandType.NATION, split[0])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).run(player, null, "nation", split);
 				} else {
 
 					final Nation nation = TownyUniverse.getInstance().getNation(split[0]);
@@ -2469,6 +2467,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					nation.setMapColorHexCode(TownySettings.getNationColorsMap().get(line.toLowerCase()));
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_map_color_changed", line.toLowerCase()));
 				}
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, split[0]).run(player, null, "nation", split);
 			} else {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", split[0]));
 				return;
@@ -2593,7 +2593,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 
                 // Send message feedback.
                 TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_open", nation.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
-
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_TOGGLE, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_TOGGLE, split[0]).run(sender, null, "nation", split);
             } else {
             	/*
             	 * Fire of an event if we don't recognize the command being used.

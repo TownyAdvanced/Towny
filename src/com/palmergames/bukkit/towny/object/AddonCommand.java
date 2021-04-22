@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.palmergames.bukkit.towny.TownyAddonAPI.CommandType;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 
 import org.bukkit.command.Command;

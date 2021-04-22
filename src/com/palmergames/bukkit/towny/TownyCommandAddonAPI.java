@@ -13,16 +13,29 @@ import org.jetbrains.annotations.Nullable;
  * @author Warriorrrr
  * @since 0.96.7.14
  */
-public class TownyAddonAPI {
+public class TownyCommandAddonAPI {
     private static List<AddonCommand> addedCommands = new ArrayList<AddonCommand>();
 
     public enum CommandType {
         RESIDENT,
+        RESIDENT_SET,
+        RESIDENT_TOGGLE,
         NATION,
+        NATION_SET,
+        NATION_TOGGLE,
         TOWN,
+        TOWN_SET,
+        TOWN_TOGGLE,
         PLOT,
+        PLOT_SET,
+        PLOT_TOGGLE,
         TOWNY,
-        TOWNYADMIN
+        TOWNYADMIN,
+        TOWNYADMIN_SET,
+        TOWNYADMIN_TOGGLE,
+        TOWNYWORLD,
+        TOWNYWORLD_SET,
+        TOWNYWORLD_TOGGLE
     }
 
     public static boolean addSubCommand(CommandType commandType, String subCommandName, CommandExecutor commandExecutor) {
@@ -64,8 +77,10 @@ public class TownyAddonAPI {
         return null;
     }
 
-    public static List<String> getTabCompletes(CommandType commandType) {
-        return addedCommands.stream().filter(command -> command.getCommandType() == commandType).map(AddonCommand::getName).collect(Collectors.toList());
+    public static List<String> getTabCompletes(CommandType commandType, List<String> addFrom) {
+        List<String> suggestions = addedCommands.stream().filter(command -> command.getCommandType() == commandType).map(AddonCommand::getName).collect(Collectors.toList());
+        suggestions.addAll(addFrom);
+        return suggestions;
     }
 
     public static List<AddonCommand> getAddedCommands() {

@@ -2,13 +2,13 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyAddonAPI;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.TownyAddonAPI.CommandType;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -156,7 +156,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			switch (args[0].toLowerCase()) {
 				case "toggle":
 					if (args.length == 2) {
-						return NameUtil.filterByStart(residentToggleTabCompletes, args[1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_TOGGLE, residentToggleTabCompletes), args[1]);
 					} else if (args.length == 3 && residentToggleChoices.contains(args[1].toLowerCase())) {
 						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 					} else if (args.length >= 3) {
@@ -169,9 +169,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					}
 					break;
 				case "set":
-					if (args.length == 2) {
-						return NameUtil.filterByStart(residentSetTabCompletes, args[1]);
-					}
+					if (args.length == 2)
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_SET, residentSetTabCompletes), args[1]);
 					if (args.length > 2) {
 						switch (args[1].toLowerCase()) {
 							case "mode":
@@ -196,12 +195,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					}
 					break;
 				default:
-					if (args.length == 1) {
-						List<String> suggestions = TownyAddonAPI.getTabCompletes(CommandType.RESIDENT);
-						suggestions.addAll(residentTabCompletes);
-						return filterByStartOrGetTownyStartingWith(suggestions, args[0], "r");
-					} else if (args.length > 1 && TownyAddonAPI.hasCommand(CommandType.RESIDENT, args[0]))
-						return NameUtil.filterByStart(TownyAddonAPI.getAddonCommand(CommandType.RESIDENT, args[0]).getTabCompletion(args.length), args[args.length-1]);
+					if (args.length == 1)
+						return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT, residentTabCompletes), args[0], "r");
+					else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT, args[0]))
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT, args[0]).getTabCompletion(args.length), args[args.length-1]);
 			}
 		} else if (args.length == 1){
 				return filterByStartOrGetTownyStartingWith(residentConsoleTabCompletes, args[0], "r");
@@ -356,8 +353,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				Resident res = getResidentOrThrow(player.getUniqueId());
 				
 				SpawnUtil.sendToTownySpawn(player, split, res, Translation.of("msg_err_cant_afford_tp"), false, false, SpawnType.RESIDENT);
-			} else if (TownyAddonAPI.hasCommand(CommandType.RESIDENT, split[0])) {
-				TownyAddonAPI.getAddonCommand(CommandType.RESIDENT, split[0]).run(player, null, "resident", split);
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT, split[0]).run(player, null, "resident", split);
 			} else {
 				final Resident resident = TownyUniverse.getInstance().getResidentOpt(split[0])
 											.orElseThrow(() -> new TownyException(Translation.of("msg_err_not_registered_1", split[0])));
@@ -452,6 +449,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			perm.explosion = choice.orElse(!perm.explosion);
 		} else if (newSplit[0].equalsIgnoreCase("mobs")) {
 			perm.mobs = choice.orElse(!perm.mobs);
+		} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_TOGGLE, newSplit[0])) {
+			TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_TOGGLE, newSplit[0]).run(player, null, "resident", newSplit);
 		} else {
 
 			resident.toggleMode(newSplit, true);
@@ -556,9 +555,11 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 				String[] newSplit = StringMgmt.remFirstArg(split);
 				setMode(player, newSplit);
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, split[0]).run(player, null, "resident", split);
 			} else {
 
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "town"));
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "resident"));
 				return;
 
 			}

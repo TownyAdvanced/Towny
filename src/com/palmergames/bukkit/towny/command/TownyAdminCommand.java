@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyAddonAPI;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyLogger;
@@ -10,7 +10,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.TownyAddonAPI.CommandType;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
@@ -249,7 +249,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return getTownyStartingWith(args[2], "r");
 						default:
 							if (args.length == 2)
-								return NameUtil.filterByStart(adminSetCompletes, args[1]);
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN_SET, adminSetCompletes), args[1]);
+							else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_SET, args[1]))
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, args[1]).getTabCompletion(args.length), args[args.length]);
 					}
 				}
 				break;
@@ -272,7 +274,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				break;
 			case "toggle":
 				if (args.length == 2) {
-					return NameUtil.filterByStart(adminToggleTabCompletes, args[1]);
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN_TOGGLE, adminToggleTabCompletes), args[1]);
 				} else if (args.length >= 3 && args[1].equalsIgnoreCase("npc")) {
 					if (args.length == 3) {
 						return getTownyStartingWith(args[2], "r");
@@ -438,12 +440,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (args.length == 2)
 					return NameUtil.filterByStart(TownCommand.townUnclaimTabCompletes, args[1]);
 			default:
-				if (args.length == 1) {
-					List<String> tabCompletes = TownyAddonAPI.getTabCompletes(CommandType.TOWNYADMIN);
-					tabCompletes.addAll(adminTabCompletes);
-					return NameUtil.filterByStart(tabCompletes, args[0]);
-				} else if (args.length > 1 && TownyAddonAPI.hasCommand(CommandType.TOWNYADMIN, args[0]))
-					return NameUtil.filterByStart(TownyAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, args[0]).getTabCompletion(args.length), args[args.length-1]);
+				if (args.length == 1)
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN, adminTabCompletes), args[0]);
+				else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, args[0]))
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, args[0]).getTabCompletion(args.length), args[args.length-1]);
 		}
 		
 		return Collections.emptyList();
@@ -599,8 +599,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_no_economy"));
 				
 				parseAdminDepositAllCommand(StringMgmt.remFirstArg(split));
-			} else if (TownyAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
-				TownyAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).run(getSender(), null, "townyadmin", split);
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).run(getSender(), null, "townyadmin", split);
 			}  else {
 				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_sub"));
 				return false;
@@ -2061,6 +2061,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			resident.save();
 
 			TownyMessaging.sendMessage(sender, Translation.of("msg_npc_flag", resident.isNPC(), resident.getName()));
+		} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_TOGGLE, split[0])) {
+			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOGGLE, split[0]).run(getSender(), null, "townyadmin", split);
 		} else {
 			// parameter error message
 			// peaceful/war/townmobs/worldmobs
