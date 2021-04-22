@@ -135,6 +135,9 @@ public class TownyFormatter {
 
 			if (townBlock.hasPlotObjectGroup())
 				out.add(Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
+			if (townBlock.getClaimedAt() > 0)
+				out.add(Translation.of("msg_plot_perm_claimed_at", registeredFormat.format(townBlock.getClaimedAt())));
+			
 			out.addAll(getExtraFields(townBlock));
 		} catch (NotRegisteredException e) {
 			out.add("Error: " + e.getMessage());
