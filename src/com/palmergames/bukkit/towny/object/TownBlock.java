@@ -427,7 +427,7 @@ public class TownBlock extends TownyObject {
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
 	}
 
-	public Long getClaimedAt() {
+	public long getClaimedAt() {
 		return claimedAt;
 	}
 

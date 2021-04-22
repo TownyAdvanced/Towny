@@ -1410,7 +1410,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	private void sortResidents() {
-		List<Resident> sortedResidents = new ArrayList<Resident>(residents.stream().sorted(Comparator.comparingLong(Resident::getJoinedTownAt)).collect(Collectors.toList()));
+		List<Resident> sortedResidents = residents.stream().sorted(Comparator.comparingLong(Resident::getJoinedTownAt)).collect(Collectors.toList());
 		residents.clear();
 		residents.addAll(sortedResidents);
 		residentsSorted = true;
