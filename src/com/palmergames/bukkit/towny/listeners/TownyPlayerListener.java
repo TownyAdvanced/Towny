@@ -1009,69 +1009,90 @@ public class TownyPlayerListener implements Listener {
 	 * Works almost the same way as jail command blacklisting, except has more stuff
 	 * @param event PlayerCommandPreprocessEvent
 	 */
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerUsesCommandInsideTown(PlayerCommandPreprocessEvent event) throws NotRegisteredException {
-		if (plugin.isError() || !TownySettings.allowTownCommandBlacklisting() ||
-				!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerUsesCommandInsideTown(PlayerCommandPreprocessEvent event) {
+		if (plugin.isError() 
+			|| !TownySettings.allowTownCommandBlacklisting() 
+			|| !TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
 		Player player = event.getPlayer();
 		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
-		
-		if (res == null || TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
+		if (res == null)
 			return;
 		
-		String[] split = event.getMessage().substring(1).split(" ");
+		String command = event.getMessage().substring(1).split(" ")[0];
+
+		/*
+		 * Commands are sometimes blocked from being run inside any town.
+		 */
+		if (TownySettings.getTownBlacklistedCommands().contains(command) && !TownyAPI.getInstance().isWilderness(player.getLocation())) {
+			// Let admins run commands.
+			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
+				return;
+			
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_blocked_inside_towns"));
+			event.setCancelled(true);
+			return;
+		}
 		
-		if (TownySettings.getPlayerOwnedPlotLimitedCommands().contains(split[0])) {
+		/*
+		 * Commands are sometimes limited to only plots that players personally own.
+		 */
+		if (TownySettings.getPlayerOwnedPlotLimitedCommands().contains(command)) {
+			// Let admins run commands.
+			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
+				return;
+			
+			// Stop the command being run because this is in the wilderness.
 			if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
 				event.setCancelled(true);
 				return;
 			}
 			
-			WorldCoord worldCoord = WorldCoord.parseWorldCoord(player.getLocation());
+			TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
+			Town town = TownyAPI.getInstance().getTown(player.getLocation());
+			if (tb == null || town == null)
+				return;
+
+			// If the player is in their own town and has towny.claimed.owntown.build.dirt 
+			// (or more likely towny.claimed.owntown.*) then allow them to use the command.
+			// It is likely a mayor/assistant.
+			if (town.hasResident(res) && TownyUniverse.getInstance().getPermissionSource().hasOwnTownOverride(player, Material.DIRT, ActionType.BUILD))
+				return;
 			
-			if (worldCoord.hasTownBlock()) {
-				TownBlock tb = null;
+			if (tb.hasResident()) {
+				// This is a personally-owned plot, let's make sure the player is the plot owner.
 				
+				Resident owner = null;
 				try {
-					tb = worldCoord.getTownBlock();
-				} catch(NotRegisteredException nre) {
-					return;
+					owner = tb.getResident();
+				} catch(NotRegisteredException nre) { return; }
+			
+				// The owner and player are not the same, cancel the command.
+				if (!owner.getName().equals(player.getName())) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
+					event.setCancelled(true);
 				}
+				// Player owns this plot personally, we won't limit their command-usage.
+			} else {
+				// This is not a personally-owned plot, but let's only block this command if the player isn't special to the town.
 				
-				if (tb.hasResident()) {
-					Resident owner = null;
+				// If the player is in their own town and has towny.claimed.townowned.build.dirt 
+				// (or more likely towny.claimed.townowned.*) then allow them to use the command.
+				// It is likely a assistant or town-ranked player. 
+				if (town.hasResident(res) && TownyUniverse.getInstance().getPermissionSource().hasTownOwnedOverride(player, Material.DIRT, ActionType.BUILD)) {
+					return;
 					
-					try {
-						owner = tb.getResident();
-					} catch(NotRegisteredException nre) { return; }
-					
-					if (TownyUniverse.getInstance().getPermissionSource().has(player, "towny.claimed.owntown.*")) return;
-				
-					if (!owner.getName().equals(player.getName())) {
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
-						event.setCancelled(true);
-						return;
-					} else {
-						return;
-					}
-				} else {
-					if (!TownyUniverse.getInstance().getPermissionSource().has(player, "towny.claimed.townowned.*") && tb.getTown().hasResident(player.getName())) {
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
-						event.setCancelled(true);
-						return;
-					}
+				// Not a special person, and not in a personally-owned plot, cancel this command.
+				} else { 
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
+					event.setCancelled(true);
 				}
 			}
 		}
-		
-		if (TownySettings.getTownBlacklistedCommands().contains(split[0]) && !TownyAPI.getInstance().isWilderness(player.getLocation())) {	
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_blocked_inside_towns"));
-			event.setCancelled(true);
-			return;
-		}
+
 	}
 	
 	/*
