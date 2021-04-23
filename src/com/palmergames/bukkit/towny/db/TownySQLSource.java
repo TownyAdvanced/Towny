@@ -778,26 +778,24 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-//			try {
-//				resident.setJailed(rs.getBoolean("isJailed"));
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//			try {
-//				resident.setJailSpawn(rs.getInt("JailSpawn"));
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//			try {
-//				resident.setJailDays(rs.getInt("JailDays"));
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//			try {
-//				resident.setJailTown(rs.getString("JailTown"));
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
+			
+			if (rs.getString("jailUUID") != null && !rs.getString("jailUUID").isEmpty()) {
+				UUID uuid = UUID.fromString(rs.getString("jailUUID"));
+				if (TownyUniverse.getInstance().hasJail(uuid)) {
+					resident.setJail(TownyUniverse.getInstance().getJail(uuid));
+				}
+			}
+			try {
+				resident.setJailCell(rs.getInt("jailCell"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				resident.setJailHours(rs.getInt("jailHours"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 
 			String line;
 			try {
@@ -1138,6 +1136,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setNeutral(rs.getBoolean("neutral"));
 
 			town.setDebtBalance(rs.getFloat("debtBalance"));
+			
+			line = rs.getString("primaryJail");
+			if (line != null && !line.isEmpty()) {
+				UUID uuid = UUID.fromString(line);
+				if (TownyUniverse.getInstance().hasJail(uuid))
+					town.setPrimaryJail(TownyUniverse.getInstance().getJail(uuid));
+			}
 
 			return true;
 		} catch (SQLException e) {
@@ -2061,6 +2066,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			twn_hm.put("debtBalance", town.getDebtBalance());
 
+			if (town.getPrimaryJail() != null)
+				twn_hm.put("primaryJail", town.getPrimaryJail().getUUID());
+			
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;
 

@@ -172,6 +172,7 @@ public class SQL_Schema {
 		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
 		columns.add("`debtBalance` float NOT NULL");
 		columns.add("`joinedNationAt` BIGINT NOT NULL");
+		columns.add("`primaryJail` VARCHAR(36) DEFAULT NULL");
 		return columns;
 	}
 
@@ -192,10 +193,9 @@ public class SQL_Schema {
 		columns.add("`registered` BIGINT NOT NULL");
 		columns.add("`joinedTownAt` BIGINT NOT NULL");
 		columns.add("`isNPC` bool NOT NULL DEFAULT '0'");
-		columns.add("`isJailed` bool NOT NULL DEFAULT '0'");
-		columns.add("`JailSpawn` mediumint");
-		columns.add("`JailDays` mediumint");
-		columns.add("`JailTown` mediumtext");
+		columns.add("`jailUUID` VARCHAR(36) DEFAULT NULL");
+		columns.add("`jailCell` mediumint");
+		columns.add("`jailHours` mediumint");
 		columns.add("`title` mediumtext");
 		columns.add("`surname` mediumtext");
 		columns.add("`protectionStatus` mediumtext");
@@ -510,7 +510,11 @@ public class SQL_Schema {
     	cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
     	cleanups.add(ColumnUpdate.of("WORLDS", "plotManagementRevertSpeed"));
     	cleanups.add(ColumnUpdate.of("PLOTGROUPS", "claimedAt"));
-    	
+    	cleanups.add(ColumnUpdate.of("RESIDENTS", "isJailed"));
+    	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailSpawn"));
+    	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailDays"));
+    	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailTown"));
+
     	for (ColumnUpdate update : cleanups)
     		dropColumn(cntx, db_name, update.getTable(), update.getColumn());
     }
