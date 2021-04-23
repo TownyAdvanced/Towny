@@ -128,6 +128,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_SET_HOMEBLOCK("towny.command.town.set.homeblock"),
 			TOWNY_COMMAND_TOWN_SET_SPAWN("towny.command.town.set.spawn"),
 			TOWNY_COMMAND_TOWN_SET_OUTPOST("towny.command.town.set.outpost"),
+			TOWNY_COMMAND_TOWN_SET_PRIMARYJAIL("towny.command.town.set.primaryjail"),
 			TOWNY_COMMAND_TOWN_SET_PERM("towny.command.town.set.perm"),
 			TOWNY_COMMAND_TOWN_SET_TAXES("towny.command.town.set.taxes"),
 			TOWNY_COMMAND_TOWN_SET_PLOTTAX("towny.command.town.set.plottax"),

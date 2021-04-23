@@ -420,6 +420,7 @@ permissions:
             towny.command.town.set.tag: true
             towny.command.town.set.taxes: true
             towny.command.town.set.plottax: true
+            towny.command.town.set.primaryjail: true
             towny.command.town.set.shoptax: true
             towny.command.town.set.embassytax: true
             towny.command.town.set.taxpercentcap: true

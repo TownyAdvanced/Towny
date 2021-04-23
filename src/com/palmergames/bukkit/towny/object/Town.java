@@ -71,6 +71,7 @@ public class Town extends Government implements TownBlockOwner {
 	private boolean ruined = false;
 	private long ruinedTime;
 	private long joinedNationAt;
+	private Jail primaryJail;
 
 	public Town(String name) {
 		super(name);
@@ -1219,12 +1220,25 @@ public class Town extends Government implements TownBlockOwner {
 		return Collections.unmodifiableCollection(jails);
 	}
 	
+	@Nullable
 	public Jail getJail(int i) {
 		if (!hasJails() || jails.size() < i)
 			return null;
 		
 		return jails.get(--i);
 	}
+	
+	public void setPrimaryJail(Jail jail) {
+		primaryJail = jail;
+	}
+	
+	@Nullable
+	public Jail getPrimaryJail() {
+		if (primaryJail == null)
+			return getJail(0);
+		return primaryJail;
+	}
+	
 	
 	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {
 		ArrayList<TownBlock> retVal = new ArrayList<>();

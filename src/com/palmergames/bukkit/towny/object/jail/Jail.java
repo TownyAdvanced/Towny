@@ -69,14 +69,6 @@ public class Jail {
 		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(location, SpawnPointType.JAIL_SPAWN));
 	}
 	
-//	public void removeJailCell(int index) {
-//		if (index > jailCells.size())
-//			return;
-//		TownyUniverse.getInstance().removeSpawnPoint(jailCells.get(--index));
-//		jailCellMap.remove(SpawnPointLocation.parseSpawnPointLocaiton(jailCells.get(--index)));
-//		jailCells.remove(--index);
-//	}
-	
 	public void removeJailCell(Location loc) {
 		TownyUniverse.getInstance().removeSpawnPoint(loc);
 		jailCellMap.remove(SpawnPointLocation.parseSpawnPointLocaiton(loc));
@@ -103,5 +95,15 @@ public class Jail {
 
 	public boolean hasCells() {
 		return !jailCells.isEmpty();
+	}
+	
+	public boolean hasName() {
+		return getTownBlock().getName() != null;
+	}
+	
+	public String getName() {
+		if (hasName())
+			return getTownBlock().getName();
+		return "";
 	}
 }
