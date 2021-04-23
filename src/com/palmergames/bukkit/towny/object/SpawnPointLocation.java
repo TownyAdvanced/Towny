@@ -34,7 +34,7 @@ public class SpawnPointLocation {
 		return z;
 	}
 	
-	public static SpawnPointLocation parseSpawnPointLocaiton(Location loc) {
+	public static SpawnPointLocation parseSpawnPointLocation(Location loc) {
 		return new SpawnPointLocation(loc);
 	}
 }

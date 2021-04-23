@@ -28,7 +28,7 @@ public class Jail {
 		this.jailCells = jailCells;
 		
 		for (Location loc : jailCells)
-			jailCellMap.put(SpawnPointLocation.parseSpawnPointLocaiton(loc), loc);
+			jailCellMap.put(SpawnPointLocation.parseSpawnPointLocation(loc), loc);
 	}
 
 	public UUID getUUID() {
@@ -65,13 +65,13 @@ public class Jail {
 	
 	public void addJailCell(Location location) {
 		jailCells.add(location);
-		jailCellMap.put(SpawnPointLocation.parseSpawnPointLocaiton(location), location);
+		jailCellMap.put(SpawnPointLocation.parseSpawnPointLocation(location), location);
 		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(location, SpawnPointType.JAIL_SPAWN));
 	}
 	
 	public void removeJailCell(Location loc) {
 		TownyUniverse.getInstance().removeSpawnPoint(loc);
-		jailCellMap.remove(SpawnPointLocation.parseSpawnPointLocaiton(loc));
+		jailCellMap.remove(SpawnPointLocation.parseSpawnPointLocation(loc));
 		jailCells.remove(loc);
 	}
 	

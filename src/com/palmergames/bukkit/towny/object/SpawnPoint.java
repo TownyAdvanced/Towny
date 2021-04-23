@@ -40,10 +40,6 @@ public class SpawnPoint {
 	public SpawnPointLocation getSpawnPointLocation() {
 		return spawnLocation;
 	}
-	
-	public static SpawnPointLocation parseSpawnPointLocation(Location loc) {
-		return new SpawnPointLocation(loc);
-	}
 
 	public void drawParticle() {
 		Location origin = centreLocation(location);
