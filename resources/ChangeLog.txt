@@ -6003,3 +6003,9 @@ v0.92.0.11:
   - New Config Option: protection.prevent_frost_walker_freezing
     - Default: false
     - When set to true, players with the Frost Walker enchant will need to be able to build where they are attempting to freeze.
+  - Add ability to show chunk notifications in the BossBar, courtesy of Warriorrrr with PR #4888.
+    - Closes #4882
+  - New Config Option: notification.notifications_appear_on_bossbar
+    - Default: false
+    - When enabled, notifications will appear on the bossbar instead of in chat or above the action bar.
+    - Uses the duration from below for how long the bossbar appears.
