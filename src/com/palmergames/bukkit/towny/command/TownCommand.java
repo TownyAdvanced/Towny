@@ -1559,7 +1559,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		int hours;
 		int jailNum = 1;		
 		int cell = 0;
-		Jail jail = null;
+		Jail jail = town.getPrimaryJail();
 		if (split.length <= 1) {
 			HelpMenu.TOWN_JAIL.send(sender);
 
