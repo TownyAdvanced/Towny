@@ -1570,7 +1570,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_resident_not_your_town"));
 
 				if (jailedResident.isJailed())
-					throw new TownyException(jailedResident.getName() + " is already jailed");
+					throw new TownyException(Translation.of("msg_err_resident_is_already_jailed", jailedResident.getName()));
 				
 				Player jailedPlayer = jailedResident.getPlayer();
 				if (jailedPlayer == null)
@@ -1598,12 +1598,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					jailNum = Integer.valueOf(split[2]);
 					jail = town.getJail(jailNum);
 					if (jail == null) 
-						throw new TownyException("The town does not have that many jails.");
+						throw new TownyException(Translation.of("msg_err_the_town_does_not_have_that_many_jails"));
 				}
 				if (split.length == 4) {
 					cell = Integer.valueOf(split[3]);
 					if (!jail.hasJailCell(cell))
-						throw new TownyException("The jail does not have that many jail cells.");
+						throw new TownyException("msg_err_the_town_does_not_have_that_many_jail_cells");
 				}
 
 				JailUtil.jailResident(jailedResident, jail, cell, hours, JailReason.MAYOR, sender);
@@ -2222,16 +2222,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		try {
 			if (TownyAPI.getInstance().isWilderness(player.getLocation()))
-				throw new TownyException("This command can only be used in a jail plot.");
+				throw new TownyException("msg_err_location_is_not_within_a_jail_plot");
 			
 			TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
 			if (tb == null || !tb.isJail())
-				throw new TownyException("This command can only be used in a jail plot.");
+				throw new TownyException("msg_err_location_is_not_within_a_jail_plot");
 			
 			Jail jail = tb.getJail();
 			town.setPrimaryJail(jail);
+			TownyMessaging.sendMsg(player, Translation.of("msg_primary_jail_set_for_town"));
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage());
+			TownyMessaging.sendErrorMsg(player, Translation.of(e.getMessage()));
 		}
 		
 	}

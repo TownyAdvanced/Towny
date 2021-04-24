@@ -44,8 +44,8 @@ public class Town extends Government implements TownBlockOwner {
 	private final List<Resident> residents = new ArrayList<>();
 	private final List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
-	private HashMap<String, PlotGroup> plotGroups = null;
 	private List<Jail> jails = null;
+	private HashMap<String, PlotGroup> plotGroups = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -1018,75 +1018,6 @@ public class Town extends Government implements TownBlockOwner {
 			out.addAll(resident.getTreeString(depth + 2));
 		return out;
 	}
-	
-//	public List<Location> getJailSpawns() {
-//		return jailSpawns;
-//	}
-//
-//	public void addJailSpawn(Location spawn) throws TownyException {
-//		if (TownyAPI.getInstance().isWilderness(spawn))
-//			throw new TownyException(Translation.of("msg_err_location_is_not_within_a_town"));
-//			
-//		removeJailSpawn(Coord.parseCoord(spawn));
-//		
-//		TownBlock jail = TownyAPI.getInstance().getTownBlock(spawn);
-//		if (!jail.isJail())
-//			throw new TownyException(Translation.of("msg_err_location_is_not_within_a_jail_plot"));
-//			
-//		jailSpawns.add(spawn);
-//		this.save();
-//	}
-//	
-//	public void removeJailSpawn(Coord coord) {
-//
-//		for (Location spawn : new ArrayList<>(jailSpawns)) {
-//			Coord spawnBlock = Coord.parseCoord(spawn);
-//			if ((coord.getX() == spawnBlock.getX()) && (coord.getZ() == spawnBlock.getZ())) {
-//				jailSpawns.remove(spawn);
-//				this.save();
-//			}
-//		}
-//	}
-//
-//	/**
-//	 * Only to be called from the Loading methods.
-//	 * 
-//	 * @param spawn - Location to set a Jail's spawn
-//	 */
-//	public void forceAddJailSpawn(Location spawn) {
-//		jailSpawns.add(spawn);
-//	}
-//
-//	/**
-//	 * Return the Location for this Jail index.
-//	 * 
-//	 * @param index - Numerical identifier of a Town Jail
-//	 * @return Location of a jail spawn
-//	 * @throws TownyException if there are no jail spawns set
-//	 */
-//	public Location getJailSpawn(Integer index) throws TownyException {
-//		if (getMaxJailSpawn() == 0)
-//			throw new TownyException(Translation.of("msg_err_town_has_no_jail_spawns_set"));
-//
-//		return jailSpawns.get(Math.min(getMaxJailSpawn() - 1, Math.max(0, index - 1)));
-//	}
-//
-//	public int getMaxJailSpawn() {
-//		return jailSpawns.size();
-//	}
-//
-//	public boolean hasJailSpawn() {
-//		return (jailSpawns.size() > 0);
-//	}
-//	
-//	/**
-//	 * Get an unmodifiable List of all jail spawns.
-//	 * 
-//	 * @return List of jailSpawns
-//	 */
-//	public List<Location> getAllJailSpawns() {
-//		return Collections.unmodifiableList(jailSpawns);
-//	}
 
 	@Override
 	public Collection<Resident> getOutlaws() {
@@ -1239,7 +1170,6 @@ public class Town extends Government implements TownBlockOwner {
 		return primaryJail;
 	}
 	
-	
 	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {
 		ArrayList<TownBlock> retVal = new ArrayList<>();
 		TownyMessaging.sendErrorMsg(group.toString());
@@ -1262,6 +1192,7 @@ public class Town extends Government implements TownBlockOwner {
 			plotGroups = new HashMap<>();
 		
 		plotGroups.put(group.getName(), group);
+		
 	}
 	
 	public void removePlotGroup(PlotGroup plotGroup) {

@@ -869,16 +869,17 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				if (args[0].equalsIgnoreCase("add")) {
 					
 					jail.addJailCell(player.getLocation());
+					TownyMessaging.sendMsg(player, Translation.of("msg_jail_cell_set"));
 
 				} else if (args[0].equalsIgnoreCase("remove")) {
 					
 					if (!jail.hasCells())
-						throw new TownyException("This jail has no cells.");
+						throw new TownyException("msg_err_this_jail_has_no_cells");
 					
 					SpawnPointLocation cellLoc = SpawnPointLocation.parseSpawnPointLocation(player.getLocation());
 					
 					if (!jail.getCellMap().containsKey(cellLoc))
-						throw new TownyException("No jail cell found at this location.");
+						throw new TownyException("msg_err_no_cell_found_at_this_location");
 					
 					jail.removeJailCell(jail.getCellMap().get(cellLoc));
 				} else {
@@ -886,7 +887,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage());
+			TownyMessaging.sendErrorMsg(player, Translation.of(e.getMessage()));
 		}
 	}
 	

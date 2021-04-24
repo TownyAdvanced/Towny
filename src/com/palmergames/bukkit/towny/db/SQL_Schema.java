@@ -514,6 +514,7 @@ public class SQL_Schema {
     	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailSpawn"));
     	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailDays"));
     	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailTown"));
+    	cleanups.add(ColumnUpdate.of("TOWNS", "jailSpawns"));
 
     	for (ColumnUpdate update : cleanups)
     		dropColumn(cntx, db_name, update.getTable(), update.getColumn());

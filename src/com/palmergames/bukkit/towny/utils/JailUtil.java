@@ -27,7 +27,6 @@ import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.util.BookFactory;
-import com.palmergames.bukkit.util.Colors;
 
 public class JailUtil {
 	
@@ -52,7 +51,7 @@ public class JailUtil {
 			hours = reason.getHours();
 		case PRISONER_OF_WAR:
 			hours = reason.getHours();
-			TownyMessaging.sendTitleMessageToResident(resident, "You have been jailed", "Run to the wilderness or wait for a jailbreak.");
+			TownyMessaging.sendTitleMessageToResident(resident, Translation.of("msg_you_have_been_jailed"), Translation.of("msg_run_to_the_wilderness_or_wait_for_a_jailbreak"));
 			break;
 		}
 		
@@ -62,7 +61,7 @@ public class JailUtil {
 			hours = 10000;
 		resident.setJailHours(hours);
 		
-		TownyMessaging.sendMsg(resident, Translation.of("msg_you've_been_jailed_for_x_days", hours)); //TODO: new lang string here.
+		TownyMessaging.sendMsg(resident, Translation.of("msg_you've_been_jailed_for_x_hours", hours));
 		TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_sent_to_jail"));
 
 		teleportToJail(resident);
@@ -79,7 +78,7 @@ public class JailUtil {
 	public static void unJailResident(Resident resident, UnJailReason reason) {
 		
 		Jail jail = resident.getJail();
-		String jailNumber = "Placeholder"; // TODO: replace placeholder/figure out how jails will be named/cells will be named.
+		String jailName = jail.hasName() ? jail.getName() : ", cell unknown.";
 		Town town = null;
 		switch (reason) {
 		case ESCAPE:
@@ -99,10 +98,11 @@ public class JailUtil {
 			break;
 
 		case BAIL:
-			if (resident.getPlayer().isOnline())
+			if (resident.getPlayer().isOnline()) {
 				teleportAwayFromJail(resident);
-			
-			TownyMessaging.sendGlobalMessage(Colors.Red + resident.getName() + Translation.of("msg_has_paid_bail")); // TODO: Change this from a global message to a different one.
+				TownyMessaging.sendMsg(resident.getPlayer(), resident.getName() + Translation.of("msg_has_paid_bail")); 
+			}
+			TownyMessaging.sendPrefixedTownMessage(town, resident.getName() + Translation.of("msg_has_paid_bail"));
 
 			break;
 		case PARDONED:
@@ -120,7 +120,7 @@ public class JailUtil {
 
 			// Send a message to the resident and town.
 			TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_freed_from_jail"));
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_player_has_been_freed_from_jail_number", resident.getName(), jailNumber));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_x_has_been_freed_from_x", resident.getName(), jailName));
 			break;
 		case JAILBREAK:
 			break;

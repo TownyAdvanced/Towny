@@ -900,8 +900,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					// Use teleport warmup
 					TownyMessaging.sendMessage(jailedPlayer, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 					TownyAPI.getInstance().jailTeleport(jailedPlayer, loc);
-					TownyMessaging.sendMsg(player, "You have been freed from jail.");
-					TownyMessaging.sendPrefixedTownMessage(jailTown, jailedPlayer.getName() + " has been freed from cell number " + resident.getJailCell() + (resident.getJail().hasName() ? " in jail " + resident.getJail().getName() : ""));
+					TownyMessaging.sendMsg(player, Translation.of("msg_you_have_been_freed_from_jail"));
+					TownyMessaging.sendPrefixedTownMessage(jailTown, jailedPlayer.getName() + Translation.of("msg_x_has_been_freed_from_x") + resident.getJailCell() + 
+							(resident.getJail().hasName() ? Translation.of(" in jail ", resident.getJail().getName()) : ""));
 				} else {
 					throw new TownyException(Translation.of("msg_player_not_jailed_in_your_town"));
 				}

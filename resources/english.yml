@@ -1386,3 +1386,16 @@ msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
 
 #Added in 0.106
 msg_command_outsider_blocked: 'You cannot run that command because you don''t live in %s.'
+
+msg_jailed_for_x_hours: ' &2for %s hours.'
+msg_err_this_jail_has_no_cells: 'This jail has no cells.'
+msg_err_no_cell_found_at_this_location : 'No jail cell found at this location.'
+msg_jail_cell_set: 'Jail cell set.'
+msg_err_resident_is_already_jailed: '%s is already jailed'
+msg_err_the_town_does_not_have_that_many_jails: 'The town does not have that many jails.'
+msg_err_the_town_does_not_have_that_many_jail_cells: 'The town does not have that many jail cells.'
+msg_primary_jail_set_for_town: 'Your town''s primary jail has been set.'
+msg_x_has_been_freed_from_x: ' has been freed from jail '
+msg_in_jail_x: ' in jail %s.'
+msg_you_have_been_jailed: 'You have been jailed.'
+msg_run_to_the_wilderness_or_wait_for_a_jailbreak: 'Run to the wilderness or wait for a jailbreak.'
