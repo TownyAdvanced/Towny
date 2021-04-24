@@ -2222,9 +2222,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static void setPrimaryJail(Player player, Town town) {
 		
 		try {
-			if (TownyAPI.getInstance().isWilderness(player.getLocation()))
-				throw new TownyException("msg_err_location_is_not_within_a_jail_plot");
-			
 			TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
 			if (tb == null || !tb.isJail())
 				throw new TownyException("msg_err_location_is_not_within_a_jail_plot");

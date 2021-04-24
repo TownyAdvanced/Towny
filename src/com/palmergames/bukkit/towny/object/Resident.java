@@ -140,6 +140,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setJailCell(int i) {
 		if (jail.hasJailCell(i))
 			this.jailCell = i;
+		else
+			this.jailCell = 0;
 	}
 	
 	public String getJailTown() {
