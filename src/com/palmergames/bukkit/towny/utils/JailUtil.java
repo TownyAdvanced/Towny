@@ -46,9 +46,8 @@ public class JailUtil {
 		
 		switch(reason) {
 		case MAYOR:
-			
+			break;
 		case OUTLAW_DEATH:
-			hours = reason.getHours();
 		case PRISONER_OF_WAR:
 			hours = reason.getHours();
 			TownyMessaging.sendTitleMessageToResident(resident, Translation.of("msg_you_have_been_jailed"), Translation.of("msg_run_to_the_wilderness_or_wait_for_a_jailbreak"));
@@ -56,13 +55,13 @@ public class JailUtil {
 		}
 		
 		resident.setJail(jail);
-		resident.setJailed(true);
+		resident.setJailCell(cell);
 		if (hours > 10000)
 			hours = 10000;
 		resident.setJailHours(hours);
+		resident.setJailed(true);
 		
 		TownyMessaging.sendMsg(resident, Translation.of("msg_you've_been_jailed_for_x_hours", hours));
-		TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_sent_to_jail"));
 
 		teleportToJail(resident);
 		Bukkit.getPluginManager().callEvent(new ResidentJailEvent(resident));
@@ -93,36 +92,36 @@ public class JailUtil {
 				TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_freed_from_jail"));
 			
 			// Second, show a message to the town which has just had a prisoner escape.
-			if (!resident.hasTown() || (town != null && !town.equals(jail.getTown())))
+			if (town != null && !town.equals(jail.getTown()))
 				TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_player_escaped_jail_into_wilderness", resident.getName(), jail.getWildName()));
 			break;
 
 		case BAIL:
-			if (resident.getPlayer().isOnline()) {
-				teleportAwayFromJail(resident);
-				TownyMessaging.sendMsg(resident.getPlayer(), resident.getName() + Translation.of("msg_has_paid_bail")); 
-			}
-			TownyMessaging.sendPrefixedTownMessage(town, resident.getName() + Translation.of("msg_has_paid_bail"));
+			teleportAwayFromJail(resident);
+			TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_paid_bail"));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), resident.getName() + Translation.of("msg_has_paid_bail"));
 
 			break;
-		case PARDONED:
-			break;
 		case SENTENCE_SERVED:
+			teleportAwayFromJail(resident);
+			TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_served_your_sentence_and_are_free"));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_x_has_served_their_sentence_and_is_free", resident.getName()));
 			break;
 		case LEFT_TOWN:
 			town = TownyAPI.getInstance().getResidentTownOrNull(resident);
 			assert town != null;
+			TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_freed_from_jail"));
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_escaped_jail_by_leaving_town", resident.getName()));
 			break;
+		case PARDONED:
 		case JAIL_DELETED:
-			if (resident.getPlayer().isOnline())
-				teleportAwayFromJail(resident);
-
-			// Send a message to the resident and town.
+		case ADMIN:
+			teleportAwayFromJail(resident);
 			TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_freed_from_jail"));
 			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_x_has_been_freed_from_x", resident.getName(), jailName));
 			break;
 		case JAILBREAK:
+			TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_freed_via_jailbreak"));			
 			break;
 		}
 
@@ -151,7 +150,7 @@ public class JailUtil {
 			pages += "While you're jailed you won't be able to leave your town to escape jail.\n";
 		else
 			pages += "You can escape from jail by leaving your town using /town leave.\n";
-		if (TownySettings.isAllowingBail()) {
+		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive()) {
 			pages += "You can also pay your bail using '/res jail paybail' to be freed from jail.";
 			double cost = TownySettings.getBailAmount();
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
@@ -187,6 +186,10 @@ public class JailUtil {
 	}
 	
 	private static void teleportAwayFromJail(Resident resident) {
+		// Don't teleport a player who isn't online.
+		if (resident.getPlayer() == null)
+			return;
+		
 		// Send a pardoned player to the world spawn, or their town's spawn if they have a town with a spawn.
 		Location loc = Bukkit.getWorld(resident.getPlayer().getWorld().getName()).getSpawnLocation();
 		try {
@@ -200,12 +203,10 @@ public class JailUtil {
 	}
 	
 	private static void teleportToJail(Resident resident) {
-		// Send a pardoned player to the world spawn, or their town's spawn if they have a town with a spawn.
-		Location loc = resident.getJail().getJailCellLocations().get(resident.getJailCell());
-
-		// Use teleport warmup
+		// Send a player to their jail cell.
+		TownyMessaging.sendMsg(resident, Translation.of("msg_you_are_being_sent_to_jail"));
 		TownyMessaging.sendMsg(resident, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
-		TownyAPI.getInstance().jailTeleport(resident.getPlayer(), loc);
+		TownyAPI.getInstance().jailTeleport(resident.getPlayer(), resident.getJailSpawn());
 	}
 
 }

@@ -851,15 +851,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.PLOT_JAILCELL.send(player);
 
 		try {
-			if (!TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_PLOT_JAILCELL.getNode())) {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_command_disable"));
-			}
+			if (!TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_PLOT_JAILCELL.getNode()))
+				throw new TownyException("msg_err_command_disable");
 
+			// Fail if the resident isn't registered. (Very unlikely.)
+			Resident resident = TownyAPI.getInstance().getResident(player.getUniqueId());
+			if (resident == null)
+				return;
+			
 			// Fail if we're not in a jail plot.
-			if (townBlock == null || !townBlock.getType().equals(TownBlockType.JAIL))
+			if (townBlock == null || !townBlock.isJail())
 				throw new TownyException("msg_err_location_is_not_within_a_jail_plot");
 
-			Resident resident = TownyAPI.getInstance().getResident(player.getUniqueId());
 			// Test that the player is an owner or considered a mayor and is
 			plotTestOwner(resident, townBlock); // allowed to set a jail spawn.
 

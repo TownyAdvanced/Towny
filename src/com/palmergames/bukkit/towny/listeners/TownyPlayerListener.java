@@ -186,20 +186,15 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJailRespawn(PlayerRespawnEvent event) {
 
-		if (plugin.isError()) {
+		if (plugin.isError() || !TownySettings.isTownRespawning()) {
 			return;
 		}
-		
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
-		if (!TownySettings.isTownRespawning())
-			return;
 	
-		Resident resident = townyUniverse.getResident(event.getPlayer().getUniqueId());
+		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 
 		// If player is jailed send them to their jailspawn.
 		if (resident != null && resident.isJailed())
-			event.setRespawnLocation(resident.getJail().getJailCellLocations().get(resident.getJailCell()));
+			event.setRespawnLocation(resident.getJailSpawn());
 
 	}
 	

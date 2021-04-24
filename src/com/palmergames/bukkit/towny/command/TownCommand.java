@@ -1533,7 +1533,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.TOWN_UNJAIL.send(sender);
 			return;
 		}
-
+		
 		Resident jailedResident = TownyUniverse.getInstance().getResident(split[0]);
 		if (jailedResident == null || !jailedResident.isJailed() || (jailedResident.isJailed() && !jailedResident.getJail().getTown().equals(town)))
 			throw new TownyException(Translation.of("msg_player_not_jailed_in_your_town"));
@@ -1555,14 +1555,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 		if (!town.hasJails())
 			throw new TownyException(Translation.of("msg_town_has_no_jails"));
-
+		
 		int hours;
 		int jailNum = 1;		
 		int cell = 0;
 		Jail jail = town.getPrimaryJail();
 		if (split.length <= 1) {
 			HelpMenu.TOWN_JAIL.send(sender);
-
+			
 		} else if (split.length >= 2) {
 			try {
 				Resident jailedResident = TownyUniverse.getInstance().getResident(split[0]);
@@ -1607,6 +1607,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				JailUtil.jailResident(jailedResident, jail, cell, hours, JailReason.MAYOR, sender);
+				TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), jailNum));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), jailNum));
 
