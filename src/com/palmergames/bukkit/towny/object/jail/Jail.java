@@ -3,9 +3,11 @@ package com.palmergames.bukkit.towny.object.jail;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
 
+import com.palmergames.bukkit.towny.object.Savable;
 import com.palmergames.bukkit.towny.object.SpawnPoint;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -13,12 +15,12 @@ import com.palmergames.bukkit.towny.object.SpawnPointLocation;
 import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.TownyUniverse;
 
-public class Jail {
+public class Jail implements Savable {
 
 	private UUID uuid;
 	private Town town;
 	private TownBlock townBlock;
-	private Map<SpawnPointLocation, Location> jailCellMap;
+	private Map<SpawnPointLocation, Location> jailCellMap = new ConcurrentHashMap<SpawnPointLocation, Location>();
 	private List<Location> jailCells;
 	
 	public Jail(UUID uuid, Town town, TownBlock townBlock, List<Location> jailCells) {
@@ -26,6 +28,7 @@ public class Jail {
 		this.town = town;
 		this.townBlock = townBlock;
 		this.jailCells = jailCells;
+		
 		
 		for (Location loc : jailCells)
 			jailCellMap.put(SpawnPointLocation.parseSpawnPointLocation(loc), loc);

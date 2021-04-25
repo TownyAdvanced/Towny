@@ -56,7 +56,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "worlds",
 			dataFolderPath + File.separator + "worlds" + File.separator + "deleted",
 			dataFolderPath + File.separator + "townblocks",
-			dataFolderPath + File.separator + "plotgroups"
+			dataFolderPath + File.separator + "plotgroups",
+			dataFolderPath + File.separator + "jails"
 		) || !FileMgmt.checkOrCreateFiles(
 			dataFolderPath + File.separator + "worlds.txt",
 			dataFolderPath + File.separator + "plotgroups.txt"
@@ -345,7 +346,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadJailList() {
 		TownyMessaging.sendDebugMsg("Loading Jail List");
 		File[] jailFiles = receiveObjectFiles("jails");
-		assert jailFiles != null;
+		if (jailFiles == null)
+			return true;
 		
 		for (File jail : jailFiles) {
 			String uuid = jail.getName().replace(".txt", "");
