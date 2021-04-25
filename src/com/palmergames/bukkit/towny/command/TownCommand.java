@@ -270,6 +270,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							}
 					}
 					break;
+				case "outpost":
+					if (args.length == 2)
+						return Collections.singletonList("list");
+					break;
 				case "outlaw":
 					switch (args.length) {
 						case 2:

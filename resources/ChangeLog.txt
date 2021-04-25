@@ -6009,3 +6009,4 @@ v0.92.0.11:
     - Default: false
     - When enabled, notifications will appear on the bossbar instead of in chat or above the action bar.
     - Uses the duration from below for how long the bossbar appears.
+  - Fix missing tab completions for /towny map big & /town outpost list.
