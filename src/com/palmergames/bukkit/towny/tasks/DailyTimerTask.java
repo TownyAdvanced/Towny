@@ -428,9 +428,18 @@ public class DailyTimerTask extends TownyTimerTask {
 								lostPlots.add(resident.getName());
 
 							townBlock.setResident(null);
-							townBlock.setPlotPrice(-1);
+							
+							// Set the plot price.
+							if (TownySettings.doesPlotTaxNonPaymentSetPlotForSale())
+								townBlock.setPlotPrice(town.getPlotTypePrice(townBlock.getType()));
+							else 
+								townBlock.setPlotPrice(-1);								
+
 							// Set the plot permissions to mirror the towns.
 							townBlock.setType(townBlock.getType());
+							
+								
+							
 							townBlock.save();
 						}
 					}

@@ -6010,3 +6010,9 @@ v0.92.0.11:
     - When enabled, notifications will appear on the bossbar instead of in chat or above the action bar.
     - Uses the duration from below for how long the bossbar appears.
   - Fix missing tab completions for /towny map big & /town outpost list.
+  - Add config option to make plots lost from non-payment of plottaxes go up for sale.
+    - Closes #4892.
+  - New Config Option: town.default_taxes.plot_tax.does_non-payment_place_plot_for_sale
+    - Default: false
+    - Does a player's plot get put up for sale if they are unable to pay the plot tax?
+    - When false the plot becomes town land and must be set up for-sale by town mayor or staff.

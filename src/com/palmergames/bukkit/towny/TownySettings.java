@@ -1316,6 +1316,10 @@ public class TownySettings {
 		
 		return getDouble(ConfigNodes.TOWN_DEF_TAXES_PLOT_TAX);
 	}
+	
+	public static boolean doesPlotTaxNonPaymentSetPlotForSale() {
+		return getBoolean(ConfigNodes.TOWN_DEF_TAXES_PLOT_TAX_PUTS_PLOT_FOR_SALE);
+	}
 
 	public static boolean getTownDefaultTaxPercentage() {
 
