@@ -6016,3 +6016,25 @@ v0.92.0.11:
     - Default: false
     - Does a player's plot get put up for sale if they are unable to pay the plot tax?
     - When false the plot becomes town land and must be set up for-sale by town mayor or staff.
+  - New command blocking, courtesy of EuGNosii with PR #4849.
+    - Allows blocking commands inside towns and limiting them to plots owned by the players only.
+    - Useful for limiting sethome/home commands to plots owned by the players themselves and not someone else.
+    - Admins and players with the towny.admin.town_commands.blacklist_bypass permission node will not be hindered.
+    - Closes #4835.
+  - New Config Option: global_town_settings.town_command_blacklisting.enabled
+    - Default: false
+    - Allows blocking commands inside towns through the town_blacklisted_commands setting.
+    - This boolean allows you to disable this feature altogether if you don't need it.
+  - New Config Option: global_town_settings.town_command_blacklisting.town_blacklisted_commands
+    - Default: somecommandhere,othercommandhere
+    - Comma separated list of commands which cannot be run inside of any town.
+  - New Config Option: global_town_settings.town_command_blacklisting.player_owned_plot_limited_commands
+    - Default : sethome,home
+    - This allows the usage of blacklisted commands only in plots personally-owned by the player.
+    - Players with the towny.claimed.townowned.* permission node will be able to run these commands inside of town-owned land. This would include mayors, assistants and possibly a builder rank.
+    - Players with the towny.claimed.owntown.* permission node (given to mayors/assistants usually, will also not be limited by this command blacklist.
+  - New Permission Node: towny.admin.town_commands.blacklist_bypass
+    - Child Node of towny.admin
+    - Allows admins to not be restricted by either command-blocking lists.
+  - Fix entity-vs-entity combat always being allowed, courtesy of Warriorrrr with PR #4893.
+  - Update korean.yml, courtesy of yumjunstar with PR #4889.
