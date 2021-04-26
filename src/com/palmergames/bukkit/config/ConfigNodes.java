@@ -761,6 +761,40 @@ public enum ConfigNodes {
 			"# For example, to give a `visemayor` preference over an `assistant`, change this parameter to `visemayor,assistant`."
 	),
 	
+	GTOWN_SETTINGS_COMMAND_BLACKLISTING(
+			"global_town_settings.town_command_blacklisting",
+			"",
+			"",
+			"# Allows blocking commands inside towns and limiting them to plots owned by the players only.",
+			"# Useful for limiting sethome/home commands to plots owned by the players themselves and not someone else.",
+			"# Admins and players with the towny.admin.town_commands.blacklist_bypass permission node will not be hindered."
+	),
+	GTOWN_SETTINGS_ENABLE_COMMAND_BLACKLISTING(
+			"global_town_settings.town_command_blacklisting.enabled",
+			"false",
+			"",
+			"# Allows blocking commands inside towns through the town_blacklisted_commands setting.",
+			"# This boolean allows you to disable this feature altogether if you don't need it"
+	),
+	
+	GTOWN_TOWN_BLACKLISTED_COMMANDS(
+			"global_town_settings.town_command_blacklisting.town_blacklisted_commands",
+			"somecommandhere,othercommandhere",
+			"",
+			"# Comma separated list of commands which cannot be run inside of any town."
+	),
+
+	GTOWN_TOWN_LIMITED_COMMANDS(
+			"global_town_settings.town_command_blacklisting.player_owned_plot_limited_commands",
+			"sethome,home",
+			"",
+			"# This allows the usage of blacklisted commands only in plots personally-owned by the player.",
+			"# Players with the towny.claimed.townowned.* permission node will be able to run these commands",
+			"# inside of town-owned land. This would include mayors, assistants and possibly a builder rank.",
+			"# Players with the towny.claimed.owntown.* permission node (given to mayors/assistants usually,)",
+			"# will also not be limited by this command blacklist."
+	),
+	
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",
