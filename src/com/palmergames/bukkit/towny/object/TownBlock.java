@@ -273,7 +273,7 @@ public class TownBlock extends TownyObject {
 	public void setType(TownBlockType type, Resident resident) throws TownyException {
 
 		// Delete a jail if this is no longer going to be a jail.
-		if (this.isJail() && !type.equals(TownBlockType.JAIL)) {
+		if (this.isJail() && !type.equals(TownBlockType.JAIL)) {			
 			TownyUniverse.getInstance().getDataSource().removeJail(getJail());
 			setJail(null);
 		}

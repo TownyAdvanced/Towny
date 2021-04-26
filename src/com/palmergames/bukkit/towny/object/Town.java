@@ -1165,8 +1165,8 @@ public class Town extends Government implements TownBlockOwner {
 	
 	@Nullable
 	public Jail getPrimaryJail() {
-		if (primaryJail == null)
-			return getJail(0);
+		if (primaryJail == null && hasJails())
+			return getJail(1);
 		return primaryJail;
 	}
 	

@@ -911,11 +911,22 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeJail(Jail jail) {
+		// Unjail residents jailed here.
 		for (Resident resident : universe.getJailedResidentMap()) 
 			if (resident.getJail().equals(jail))
 				JailUtil.unJailResident(resident, UnJailReason.JAIL_DELETED);
 
+		// Delete cells and spawnparticles.
+		if (jail.hasCells())
+			jail.removeAllCells();
+
+		// Remove Town's record of the jail.
+		if (jail.getTown() != null)
+			jail.getTown().removeJail(jail);
+		
+		// Unregister the jail from the Universe.
 		TownyUniverse.getInstance().unregisterJail(jail);
+		
 		deleteJail(jail);
 	}
 	

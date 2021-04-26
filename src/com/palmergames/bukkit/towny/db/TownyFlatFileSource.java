@@ -57,7 +57,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "worlds" + File.separator + "deleted",
 			dataFolderPath + File.separator + "townblocks",
 			dataFolderPath + File.separator + "plotgroups",
-			dataFolderPath + File.separator + "jails"
+			dataFolderPath + File.separator + "jails",
+			dataFolderPath + File.separator + "jails" + File.separator + "deleted"
 		) || !FileMgmt.checkOrCreateFiles(
 			dataFolderPath + File.separator + "worlds.txt",
 			dataFolderPath + File.separator + "plotgroups.txt"
@@ -1584,11 +1585,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				tokens = line.split(",");
 				TownBlock tb = null;
 				try {
-					tb = TownyUniverse.getInstance().getTownBlock(WorldCoord.parseWorldCoord(tokens[0], Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+					tb = TownyUniverse.getInstance().getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
 					jail.setTownBlock(tb);
 					jail.setTown(tb.getTown());
+					tb.setJail(jail);
+					tb.getTown().addJail(jail);
 				} catch (NumberFormatException | NotRegisteredException e) {
 					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid townblock " + line + " deleting jail.");
+					removeJail(jail);
 					deleteJail(jail);
 					return true;
 				}
@@ -1605,7 +1609,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							double x = Double.parseDouble(tokens[1]);
 							double y = Double.parseDouble(tokens[2]);
 							double z = Double.parseDouble(tokens[3]);
-							
 							Location loc = new Location(world, x, y, z);
 							if (tokens.length == 6) {
 								loc.setPitch(Float.parseFloat(tokens[4]));
@@ -1617,8 +1620,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							continue;
 						}
 				}
-				if (jail.getJailCellLocations().size() < 1) {
+				if (jail.getJailCellLocations().isEmpty()) {
 					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " loaded with zero spawns " + line + " deleting jail.");
+					removeJail(jail);
 					deleteJail(jail);
 					return true;
 				}

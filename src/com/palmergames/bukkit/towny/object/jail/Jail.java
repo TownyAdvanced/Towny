@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object.jail;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -20,18 +21,15 @@ public class Jail implements Savable {
 	private UUID uuid;
 	private Town town;
 	private TownBlock townBlock;
-	private Map<SpawnPointLocation, Location> jailCellMap = new ConcurrentHashMap<SpawnPointLocation, Location>();
-	private List<Location> jailCells;
+	private Map<String, Location> jailCellMap = new ConcurrentHashMap<String, Location>();
+	private List<Location> jailCells = new ArrayList<>();
 	
 	public Jail(UUID uuid, Town town, TownBlock townBlock, List<Location> jailCells) {
 		this.uuid = uuid;
 		this.town = town;
 		this.townBlock = townBlock;
-		this.jailCells = jailCells;
-		
-		
-		for (Location loc : jailCells)
-			jailCellMap.put(SpawnPointLocation.parseSpawnPointLocation(loc), loc);
+		if (jailCells != null)
+			jailCells.stream().forEach(loc -> addJailCell(loc));
 	}
 
 	public UUID getUUID() {
@@ -68,14 +66,24 @@ public class Jail implements Savable {
 	
 	public void addJailCell(Location location) {
 		jailCells.add(location);
-		jailCellMap.put(SpawnPointLocation.parseSpawnPointLocation(location), location);
+		jailCellMap.put(SpawnPointLocation.parseSpawnPointLocation(location).toString(), location);
 		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(location, SpawnPointType.JAIL_SPAWN));
 	}
 	
 	public void removeJailCell(Location loc) {
 		TownyUniverse.getInstance().removeSpawnPoint(loc);
-		jailCellMap.remove(SpawnPointLocation.parseSpawnPointLocation(loc));
-		jailCells.remove(loc);
+		String spawn = SpawnPointLocation.parseSpawnPointLocation(loc).toString();
+		jailCells.remove(jailCellMap.get(spawn));
+		jailCellMap.remove(spawn);
+	}
+	
+	public void removeAllCells() {
+		for (Location loc : new ArrayList<>(jailCells))
+			removeJailCell(loc);
+	}
+	
+	public boolean hasJailCell(SpawnPointLocation loc) {
+		return jailCellMap.keySet().stream().anyMatch(spawn -> spawn.equals(loc.toString()));
 	}
 	
 	public boolean hasJailCell(int index) {
@@ -84,7 +92,7 @@ public class Jail implements Savable {
 		return true;
 	}
 	
-	public Map<SpawnPointLocation, Location> getCellMap() {
+	public Map<String, Location> getCellMap() {
 		return jailCellMap;
 	}
 	

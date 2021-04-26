@@ -1898,11 +1898,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				tokens = line.split("#");
 				TownBlock tb = null;
 				try {
-					tb = TownyUniverse.getInstance().getTownBlock(WorldCoord.parseWorldCoord(tokens[0], Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+					tb = TownyUniverse.getInstance().getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
 					jail.setTownBlock(tb);
 					jail.setTown(tb.getTown());
+					tb.setJail(jail);
+					tb.getTown().addJail(jail);
 				} catch (NumberFormatException | NotRegisteredException e) {
 					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid townblock " + line + " deleting jail.");
+					removeJail(jail);
 					deleteJail(jail);
 					return true;
 				}
@@ -1933,6 +1936,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 				if (jail.getJailCellLocations().size() < 1) {
 					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " loaded with zero spawns " + line + " deleting jail.");
+					removeJail(jail);
 					deleteJail(jail);
 					return true;
 				}

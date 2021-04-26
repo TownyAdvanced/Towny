@@ -873,18 +873,24 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					jail.addJailCell(player.getLocation());
 					TownyMessaging.sendMsg(player, Translation.of("msg_jail_cell_set"));
+					jail.save();
 
 				} else if (args[0].equalsIgnoreCase("remove")) {
 					
 					if (!jail.hasCells())
 						throw new TownyException("msg_err_this_jail_has_no_cells");
 					
+					if (jail.getCellMap().size() == 1) 
+						throw new TownyException("msg_err_you_cannot_remove_the_last_cell");
+					
 					SpawnPointLocation cellLoc = SpawnPointLocation.parseSpawnPointLocation(player.getLocation());
 					
-					if (!jail.getCellMap().containsKey(cellLoc))
+					if (!jail.hasJailCell(cellLoc))
 						throw new TownyException("msg_err_no_cell_found_at_this_location");
 					
-					jail.removeJailCell(jail.getCellMap().get(cellLoc));
+					jail.removeJailCell(player.getLocation());
+					TownyMessaging.sendMsg(player, Translation.of("msg_jail_cell_removed"));
+					jail.save();
 				} else {
 					HelpMenu.PLOT_JAILCELL.send(player);
 				}

@@ -37,4 +37,12 @@ public class SpawnPointLocation {
 	public static SpawnPointLocation parseSpawnPointLocation(Location loc) {
 		return new SpawnPointLocation(loc);
 	}
+	
+	public String toString() {
+		return world + "," + x + "," + y + "," + z;  
+	}
+	
+	public boolean equals(SpawnPointLocation loc) {
+		return world.equalsIgnoreCase(loc.getWorld()) && x == loc.getX() && y == loc.getY() && z == loc.getZ();
+	}
 }
