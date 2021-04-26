@@ -84,7 +84,7 @@ public class CombatUtil {
 				b = (Player) defender;
 
 			// Allow players to injure themselves
-			if (a == b)
+			if (a == b && a != null && b != null)
 				return false;
 
 			return preventDamageCall(plugin, world, attacker, defender, a, b, cause);
@@ -233,8 +233,9 @@ public class CombatUtil {
 				 * 
 				 * Prevent pvp and remove Wolf targeting.
 				 */
-				if ( attackingEntity instanceof Wolf && ((Wolf) attackingEntity).isTamed() && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB))) {
+				if (attackingEntity instanceof Wolf && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB))) {
 					((Wolf) attackingEntity).setTarget(null);
+					((Wolf) attackingEntity).setAngry(false);
 					return true;
 				}
 				
@@ -256,6 +257,15 @@ public class CombatUtil {
 			     */
 				if (attackingEntity instanceof Projectile) {
 					return true;	
+				}
+
+				/*
+				* Allow wolves to attack unprotected entites (such as skeletons), but not protected ones.
+				*/
+				if (attackingEntity instanceof Wolf && (EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity))) {
+					((Wolf) attackingEntity).setTarget(null);
+					((Wolf) attackingEntity).setAngry(false);
+					return true;
 				}
 			}
 		}
