@@ -21,6 +21,7 @@ public class EconomyException extends Exception {
 
 	/**
 	 * @deprecated since 0.96.7.12 - Towny no longer throws this Exception internally.
+	 * @param error The error message.
 	 */
 	@Deprecated
 	public EconomyException(String error) {
