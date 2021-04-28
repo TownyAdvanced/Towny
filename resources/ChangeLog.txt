@@ -6039,3 +6039,13 @@ v0.92.0.11:
   - Fix entity-vs-entity combat always being allowed, courtesy of Warriorrrr with PR #4893.
   - Update korean.yml, courtesy of yumjunstar with PR #4889.
   - Bump Language Files to 0.103.
+0.96.7.15:
+  - Fix water & lava being usable to grief others, courtesy of Warriorrrr with PR #4855.
+  - New Config Option: global_town_settings.prevent_fluid_griefing
+    - Default: true
+    - When enabled, blocks like lava or water will be unable to flow into other plots, if the owners aren't the same.
+  - Sort town resident list by date they joined it, courtesy of Warriorrrr with PR #4880.
+    - Also sorts Towns by join date in the Nation,
+    - Also displays claim time in /plot perm.
+    - Closes #4556.
+  
