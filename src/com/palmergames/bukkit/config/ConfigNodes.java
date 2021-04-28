@@ -106,7 +106,7 @@ public enum ConfigNodes {
 			"",
 			"# Default amount for town's plottax costs."),
 	TOWN_DEF_TAXES_PLOT_TAX_PUTS_PLOT_FOR_SALE(
-			"town.default_taxes.plot_tax.does_non-payment_place_plot_for_sale",
+			"town.default_taxes.does_non-payment_place_plot_for_sale",
 			"false",
 			"",
 			"# Does a player's plot get put up for sale if they are unable to pay the plot tax?",
