@@ -53,6 +53,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private Town town = null;
 	private long lastOnline;
 	private long registered;
+	private long joinedTownAt;
 	private boolean isNPC = false;
 	private boolean isJailed = false;
 	private int jailSpawn;
@@ -358,6 +359,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public void setTown(Town town) throws AlreadyRegisteredException {
+		setTown(town, true);
+	}
+
+	public void setTown(Town town, boolean updateJoinedAt) throws AlreadyRegisteredException {
 
 		if (this.town == town)
 			return;
@@ -378,6 +383,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.town = town;
 		updatePerms();
 		town.addResident(this);
+
+		if (updateJoinedAt)
+			setJoinedTownAt(System.currentTimeMillis());
+		
 		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
 	}
 	
@@ -945,6 +954,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
+	public long getJoinedTownAt() {
+		return joinedTownAt;
+	}
+
+	public void setJoinedTownAt(long joinedTownAt) {
+		this.joinedTownAt = joinedTownAt;
+	}
+
 	/**
 	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 *
@@ -960,4 +977,3 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		}
 	}
 }
-

@@ -31,6 +31,7 @@ public class TownBlock extends TownyObject {
 	private boolean locked = false;
 	private boolean outpost = false;
 	private PlotGroup plotGroup;
+	private long claimedAt;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -44,6 +45,10 @@ public class TownBlock extends TownyObject {
 	}
 
 	public void setTown(Town town) {
+		setTown(town, true);
+	}
+
+	public void setTown(Town town, boolean updateClaimedAt) {
 
 		if (hasTown())
 			this.town.removeTownBlock(this);
@@ -51,6 +56,9 @@ public class TownBlock extends TownyObject {
 		try {
 			TownyUniverse.getInstance().addTownBlock(this);
 			town.addTownBlock(this);
+
+			if (updateClaimedAt)
+				setClaimedAt(System.currentTimeMillis());
 		} catch (AlreadyRegisteredException | NullPointerException ignored) {}
 	}
 
@@ -417,5 +425,13 @@ public class TownBlock extends TownyObject {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+	}
+
+	public long getClaimedAt() {
+		return claimedAt;
+	}
+
+	public void setClaimedAt(long claimedAt) {
+		this.claimedAt = claimedAt;
 	}
 }
