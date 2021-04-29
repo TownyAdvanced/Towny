@@ -1773,6 +1773,10 @@ public class TownySettings {
 		
 		return getDouble(ConfigNodes.JAIL_BAIL_BAIL_AMOUNT_KING);
 	}
+	
+	public static boolean doJailPlotsPreventPVP() {
+		return getBoolean(ConfigNodes.JAIL_PLOTS_DENY_PVP);
+	}
 
 	public static double getWartimeTownBlockLossPrice() {
 

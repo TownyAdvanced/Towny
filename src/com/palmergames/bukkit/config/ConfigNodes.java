@@ -2190,6 +2190,11 @@ public enum ConfigNodes {
 			"home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide",
 			"",
 			"# Commands which a jailed player cannot use."),
+	JAIL_PLOTS_DENY_PVP(
+			"jail.do_jail_plots_deny_pvp",
+			"false",
+			"",
+			"# When true, jail plots will prevent any PVP from occuring. Applies to jailed residents only."),
 	
 	BANK(
 			"bank",

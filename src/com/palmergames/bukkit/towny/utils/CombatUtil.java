@@ -139,7 +139,7 @@ public class CombatUtil {
 					 * Check the attackers TownBlock and it's Town for their PvP status, else the world.
 					 * Check the defenders TownBlock and it's Town for their PvP status, else the world.
 					 */
-					cancelled = preventFriendlyFire(attackingPlayer, defendingPlayer, world) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB);
+					cancelled = preventFriendlyFire(attackingPlayer, defendingPlayer, world) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB) || preventJailedPVP(defendingPlayer, attackingPlayer);
 				}
 
 				/*
@@ -271,6 +271,21 @@ public class CombatUtil {
 			}
 		}
 		return false;
+	}
+
+	private static boolean preventJailedPVP(Player defendingPlayer, Player attackingPlayer) {
+		if (TownySettings.doJailPlotsPreventPVP()) {
+			Resident defendingResident = TownyAPI.getInstance().getResident(defendingPlayer.getUniqueId());
+			Resident attackingResident = TownyAPI.getInstance().getResident(attackingPlayer.getUniqueId());
+			TownBlock defTB = TownyAPI.getInstance().getTownBlock(defendingPlayer.getLocation());
+			TownBlock atkTB = TownyAPI.getInstance().getTownBlock(attackingPlayer.getLocation());
+			if (defendingResident == null || attackingResident == null)
+				return false;
+			if (defendingResident.isJailed() && defTB != null && defTB.isJail() || attackingResident.isJailed() && atkTB != null && atkTB.isJail())
+				return true;
+		}
+		return false;
+			
 	}
 
 	/**
