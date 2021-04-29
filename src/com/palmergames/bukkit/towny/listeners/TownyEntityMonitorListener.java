@@ -141,7 +141,7 @@ public class TownyEntityMonitorListener implements Listener {
 			 * - check for jailing attacking residents,
 			 * - award wartime death points.
 			 */
-			if (attackerPlayer != null) {
+			if (attackerPlayer != null && attackerResident != null) {
 				PlayerKilledPlayerEvent deathEvent = new PlayerKilledPlayerEvent(attackerPlayer, defenderPlayer, attackerResident, defenderResident, defenderPlayer.getLocation(), event);
 				BukkitTools.getPluginManager().callEvent(deathEvent);
 
