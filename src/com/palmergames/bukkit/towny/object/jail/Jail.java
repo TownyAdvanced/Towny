@@ -101,6 +101,7 @@ public class Jail implements Savable {
 		return getTownBlock().getWorld().getUnclaimedZoneName();
 	}
 	
+	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveJail(this);
 	}

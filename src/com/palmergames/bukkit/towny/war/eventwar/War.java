@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
@@ -659,7 +658,7 @@ public class War {
 			townScored(attacker, TownySettings.getWarPointsForTownBlock(), townBlock, 0);
 			remove(townBlock.getWorldCoord());
 			// Free players who are jailed in the jail plot.
-			if (townBlock.getType().equals(TownBlockType.JAIL)) {
+			if (townBlock.isJail()) {
 				int count = 0;
 				for (Resident resident : new ArrayList<>(townyUniverse.getJailedResidentMap())) {
 					if (resident.isJailed() && resident.getJail().getTown().getUUID().equals(defenderTown.getUUID()))
