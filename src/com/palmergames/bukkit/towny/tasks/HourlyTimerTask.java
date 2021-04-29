@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -47,7 +49,7 @@ public class HourlyTimerTask extends TownyTimerTask {
 	 * Reduce the number of hours jailed residents are jailed for.
 	 */
 	private void decrementJailedHours() {
-		for (Resident resident : universe.getJailedResidentMap())
+		for (Resident resident : new ArrayList<>(universe.getJailedResidentMap()))
 			if (resident.hasJailTime())
 				if (resident.getJailHours() <= 1)
 					Bukkit.getScheduler().runTaskLater(plugin, () -> JailUtil.unJailResident(resident, UnJailReason.SENTENCE_SERVED), 20);

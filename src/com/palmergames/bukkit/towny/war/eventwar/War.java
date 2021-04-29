@@ -661,8 +661,8 @@ public class War {
 			// Free players who are jailed in the jail plot.
 			if (townBlock.getType().equals(TownBlockType.JAIL)) {
 				int count = 0;
-				for (Resident resident : townyUniverse.getJailedResidentMap()) {
-					if (resident.isJailed() && resident.getJail().getTown().equals(defenderTown))
+				for (Resident resident : new ArrayList<>(townyUniverse.getJailedResidentMap())) {
+					if (resident.isJailed() && resident.getJail().getTown().getUUID().equals(defenderTown.getUUID()))
 						if (resident.getJail().getTownBlock().getWorldCoord().equals(townBlock.getWorldCoord())) {
 							JailUtil.unJailResident(resident, UnJailReason.JAILBREAK);
 							count++;

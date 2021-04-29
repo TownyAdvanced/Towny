@@ -778,14 +778,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			resident.removeTown();
 		}
 		
-		// Look for residents inside of this town's jail(s) and free them,
-		// more than likely the above removeTownBlocks(town) will have 
-		// already set them free. 
-		for (Resident jailedRes : TownyUniverse.getInstance().getJailedResidentMap()) {
-			if (jailedRes.hasJailTown(town.getName())) {
-                JailUtil.unJailResident(jailedRes, UnJailReason.JAIL_DELETED);
-            }
-		}
+		// Look for residents inside of this town's jail(s) and free them, more than 
+		// likely the above removeTownBlocks(town) will have already set them free. 
+		new ArrayList<>(TownyUniverse.getInstance().getJailedResidentMap()).stream()
+			.filter(resident -> resident.hasJailTown(town.getName()))
+			.forEach(resident -> JailUtil.unJailResident(resident, UnJailReason.JAIL_DELETED));
 
 		if (TownyEconomyHandler.isActive())
 			try {
@@ -914,14 +911,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeJail(Jail jail) {
 		// Unjail residents jailed here.
-		for (Resident resident : universe.getJailedResidentMap()) 
-			if (resident.getJail().equals(jail))
-				JailUtil.unJailResident(resident, UnJailReason.JAIL_DELETED);
-
+		new ArrayList<>(TownyUniverse.getInstance().getJailedResidentMap()).stream()
+			.filter(resident -> resident.getJail().getUUID().equals(jail.getUUID()))
+			.forEach(resident -> JailUtil.unJailResident(resident, UnJailReason.JAIL_DELETED));
+		
 		// Delete cells and spawnparticles.
 		if (jail.hasCells())
 			jail.removeAllCells();
-
+		
 		// Remove Town's record of the jail.
 		if (jail.getTown() != null)
 			jail.getTown().removeJail(jail);
