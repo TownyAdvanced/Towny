@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.resident.ResidentJailEvent;
+import com.palmergames.bukkit.towny.event.resident.ResidentPreJailEvent;
 import com.palmergames.bukkit.towny.event.resident.ResidentUnjailEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -39,31 +40,54 @@ public class JailUtil {
 	 * @param cell JailCell to spawn to.
 	 * @param hours Hours resident is jailed for.
 	 * @param reason JailReason resident is jailed for.
-	 * @param jailer CommandSender who did the jailing or null. (For Ticket #4096.)
+	 * @param jailer CommandSender of who did the jailing or null.
 	 */
 	public static void jailResident(Resident resident, Jail jail, int cell, int hours, JailReason reason, CommandSender jailer) {
-		sendJailedBookToResident(resident.getPlayer(), reason);
 		
+		// Set senderName
+		String senderName = "Admin";
+		if (jailer instanceof Player)
+			senderName = ((Player) jailer).getName();
+
+		// Stop mayors from setting incredibly high hours.
+		if (hours > 10000)
+			hours = 10000;
+
+		// Fire cancellable event.
+		ResidentPreJailEvent event = new ResidentPreJailEvent(resident, jail, cell, hours, reason);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			TownyMessaging.sendErrorMsg(jailer, event.getCancelMessage());
+			return;
+		}
+		
+		// Set players an informative book.
+		sendJailedBookToResident(resident.getPlayer(), reason);
+
+		// Send feedback messages. 
 		switch(reason) {
 		case MAYOR:
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_player_has_been_sent_to_jail_number_by_x", resident.getName(), cell, senderName));
 			break;
 		case OUTLAW_DEATH:
 		case PRISONER_OF_WAR:
-			hours = reason.getHours();
 			TownyMessaging.sendTitleMessageToResident(resident, Translation.of("msg_you_have_been_jailed"), Translation.of("msg_run_to_the_wilderness_or_wait_for_a_jailbreak"));
 			break;
 		}
 		
+		// Set the jail, cells, hours, and add resident to the Universe's jailed resident map.
 		resident.setJail(jail);
 		resident.setJailCell(cell);
-		if (hours > 10000)
-			hours = 10000;
 		resident.setJailHours(hours);
 		TownyUniverse.getInstance().getJailedResidentMap().add(resident);
 		
+		// Tell the resident how long they've been jailed for.
 		TownyMessaging.sendMsg(resident, Translation.of("msg_you've_been_jailed_for_x_hours", hours));
 
+		// Teleport them (if possible.)
 		teleportToJail(resident);
+		
+		// Call ResidentJailEvent.
 		Bukkit.getPluginManager().callEvent(new ResidentJailEvent(resident));
 	
 	}

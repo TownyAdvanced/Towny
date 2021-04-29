@@ -297,10 +297,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translation.of("msg_err_no_economy"));
 
 					// Get Town the player is jailed in.
-					Town jailTown = resident.getJailTown();						
-					if (jailTown == null)
-						throw new TownyException(Translation.of("msg_err_not_registered_1", resident.getJailTown().getName()));
-					
+					final Town jailTown = resident.getJailTown();				
+
 					// Set cost of bail.
 					double cost = TownySettings.getBailAmount();
 					if (resident.isMayor())
@@ -311,10 +309,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					if (cost > 0) {			
 						if (resident.getAccount().canPayFromHoldings(cost)) {
 							final double finalCost = cost;
-							final Town town = jailTown;
 							Confirmation.runOnAccept(() -> {
 								if (resident.getAccount().canPayFromHoldings(finalCost)) {
-									resident.getAccount().payTo(finalCost, town, "Bail");
+									resident.getAccount().payTo(finalCost, jailTown, "Bail");
 									JailUtil.unJailResident(resident, UnJailReason.BAIL);
 								} else {
 									TownyMessaging.sendErrorMsg(resident, Translation.of("msg_err_unable_to_pay_bail"));

@@ -778,7 +778,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			resident.removeTown();
 		}
 		
-		// Look for residents inside of this town's jail and free them
+		// Look for residents inside of this town's jail(s) and free them,
+		// more than likely the above removeTownBlocks(town) will have 
+		// already set them free. 
 		for (Resident jailedRes : TownyUniverse.getInstance().getJailedResidentMap()) {
 			if (jailedRes.hasJailTown(town.getName())) {
                 JailUtil.unJailResident(jailedRes, UnJailReason.JAIL_DELETED);
