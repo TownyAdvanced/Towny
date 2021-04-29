@@ -209,6 +209,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						return permTabComplete(StringMgmt.remFirstArg(args));
 					}
 					break;
+				case "jailcell":
+					if (args.length == 2)
+						return NameUtil.filterByStart(TownCommand.townAddRemoveTabCompletes, args [1]);
+					break;
 				case "perm":
 					if (args.length == 2)
 						return NameUtil.filterByStart(Collections.singletonList("hud"), args[1]);

@@ -297,9 +297,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translation.of("msg_err_no_economy"));
 
 					// Get Town the player is jailed in.
-					Town jailTown = TownyUniverse.getInstance().getTown(resident.getJailTown());						
+					Town jailTown = resident.getJailTown();						
 					if (jailTown == null)
-						throw new TownyException(Translation.of("msg_err_not_registered_1", resident.getJailTown()));
+						throw new TownyException(Translation.of("msg_err_not_registered_1", resident.getJailTown().getName()));
 					
 					// Set cost of bail.
 					double cost = TownySettings.getBailAmount();

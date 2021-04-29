@@ -4,7 +4,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 
 public enum JailReason {
 
-	MAYOR("Jailed by mayor.", 1),
+	MAYOR("Jailed by mayor.", 1), // hours is unused, always specified by the mayor when jailing. 
 	OUTLAW_DEATH("Killed as an outlaw.", TownySettings.getJailedOutlawJailHours()),
 	PRISONER_OF_WAR("Prisoner of War.", 99);
 	

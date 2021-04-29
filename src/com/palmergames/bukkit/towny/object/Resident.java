@@ -144,14 +144,12 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			this.jailCell = 0;
 	}
 	
-	public String getJailTown() {
-
-		return jail.getTown().getName();
+	public Town getJailTown() {
+		return jail.getTown();
 	}
 
 	public boolean hasJailTown(String jailtown) {
-
-		return getJailTown().equalsIgnoreCase(jailtown);
+		return getJailTown().getName().equalsIgnoreCase(jailtown);
 	}
 	
 	public int getJailHours() {

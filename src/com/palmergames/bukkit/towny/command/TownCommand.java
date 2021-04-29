@@ -1603,7 +1603,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (split.length == 4) {
 					cell = Integer.valueOf(split[3]);
 					if (!jail.hasJailCell(cell))
-						throw new TownyException("msg_err_the_town_does_not_have_that_many_jail_cells");
+						throw new TownyException("msg_err_that_jail_plot_does_not_have_that_many_cells");
 				}
 
 				JailUtil.jailResident(jailedResident, jail, cell, hours, JailReason.MAYOR, sender);
@@ -2635,7 +2635,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (resident.isMayor())
 				throw new TownyException(Translation.of("msg_mayor_abandon"));
 			
-			if (resident.isJailed() && TownySettings.JailDeniesTownLeave() && resident.getJailTown().equals(town.getName()))
+			if (resident.isJailed() && TownySettings.JailDeniesTownLeave() && resident.getJailTown().getName().equals(town.getName()))
 				throw new TownyException(Translation.of("msg_cannot_abandon_town_while_jailed"));
 			
 			TownLeaveEvent event = new TownLeaveEvent(resident, town);
@@ -2644,7 +2644,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(event.getCancelMessage());
 
 			Confirmation.runOnAccept(() -> {
-				if (resident.isJailed() && resident.getJailTown().equals(town.getName()))
+				if (resident.isJailed() && resident.getJailTown().getName().equals(town.getName()))
 					JailUtil.unJailResident(resident, UnJailReason.LEFT_TOWN);
 
 				try {

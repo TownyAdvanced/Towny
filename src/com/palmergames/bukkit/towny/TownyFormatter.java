@@ -234,7 +234,7 @@ public class TownyFormatter {
 		
 		// Jailed: yes if they are jailed.
 		if (resident.isJailed()){
-			out.add(Translation.of("jailed_in_town", resident.getJailTown()) + ( resident.hasJailTime() ? Translation.of("msg_jailed_for_x_hours", resident.getJailHours()) :  ""));
+			out.add(Translation.of("jailed_in_town", resident.getJailTown().getName()) + ( resident.hasJailTime() ? Translation.of("msg_jailed_for_x_hours", resident.getJailHours()) :  ""));
 		}
 		
 		// Friends [12]: James, Carry, Mason
