@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object.jail;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -57,7 +58,7 @@ public class Jail implements Savable {
 	}
 
 	public List<Location> getJailCellLocations() {
-		return jailCells;
+		return Collections.unmodifiableList(jailCells);
 	}
 
 	public void setJailCells(List<Location> jailCells) {

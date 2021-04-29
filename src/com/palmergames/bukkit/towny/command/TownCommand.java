@@ -1545,12 +1545,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	private static void parseJailCommand(CommandSender sender, Town town, String[] split, boolean admin) throws TownyException {
 		
+		String senderName = "Admin";
 		if (!admin) {
 			Resident resident = TownyUniverse.getInstance().getResident(((Player) sender).getUniqueId());
 			if (resident.hasTown())
 				town = resident.getTown();
 			else
 				throw new TownyException("You have no town");
+			senderName = resident.getName();
 		}
 			
 		if (!town.hasJails())
@@ -1607,7 +1609,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				JailUtil.jailResident(jailedResident, jail, cell, hours, JailReason.MAYOR, sender);
-				TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), jailNum));
+				TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_player_has_been_sent_to_jail_number_by_x", jailedPlayer.getName(), jailNum, senderName));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translation.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), jailNum));
 

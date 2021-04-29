@@ -117,16 +117,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setJail(Jail jail) {
 		this.jail = jail;
 	}
-	
-	public void setJailed(boolean isJailed) {
-		
-		if (isJailed)
-			TownyUniverse.getInstance().getJailedResidentMap().add(this);
-		else {
-			TownyUniverse.getInstance().getJailedResidentMap().remove(this);
-			this.setJail(null);
-		}
-	}
 
 	public boolean isJailed() {
 

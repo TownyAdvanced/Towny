@@ -59,7 +59,7 @@ public class JailUtil {
 		if (hours > 10000)
 			hours = 10000;
 		resident.setJailHours(hours);
-		resident.setJailed(true);
+		TownyUniverse.getInstance().getJailedResidentMap().add(resident);
 		
 		TownyMessaging.sendMsg(resident, Translation.of("msg_you've_been_jailed_for_x_hours", hours));
 
@@ -125,7 +125,8 @@ public class JailUtil {
 			break;
 		}
 
-		resident.setJailed(false);
+		TownyUniverse.getInstance().getJailedResidentMap().remove(resident);
+		resident.setJail(null);
 		resident.save();
 		
 		Bukkit.getPluginManager().callEvent(new ResidentUnjailEvent(resident));
