@@ -2393,6 +2393,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (TownySettings.hasTownLimit() && dataSource.getTowns().size() >= TownySettings.getTownLimit())
 				throw new TownyException(Translation.of("msg_err_universe_limit"));
 
+			if (TownySettings.getTownAutomaticCapitalisationEnabled())
+				name = name.substring(0, 1).toUpperCase() + name.substring(1);
+			
 			// Check the name is valid and doesn't already exist.
 			String filteredName;
 			try {
