@@ -6050,3 +6050,4 @@ v0.92.0.11:
     - Closes #4556.
   - Fix sneaky Citizens/Sentinal NPCs being able to get through the tests surrounding death payments.
     - Closes #4895.
+  - Fix potential NPE in revert-on-unclaim feature.
