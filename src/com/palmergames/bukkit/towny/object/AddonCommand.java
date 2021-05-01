@@ -61,6 +61,10 @@ public class AddonCommand {
         this.tabCompletions = tabCompletions;
     }
 
+    public void setTabCompletion(int index, List<String> completions) {
+        tabCompletions.put(index, completions);
+    }
+
     public List<String> getTabCompletion(int index) {
         List<String> suggestions = tabCompletions.get(index-2);
         if (suggestions == null)
