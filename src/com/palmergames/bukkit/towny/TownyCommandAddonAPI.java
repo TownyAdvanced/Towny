@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Warriorrrr
- * @since 0.96.7.14
+ * @since 0.96.7.15
  */
 public class TownyCommandAddonAPI {
     private static List<AddonCommand> addedCommands = new ArrayList<AddonCommand>();
