@@ -674,6 +674,9 @@ public class TownyMessaging {
 			case BANKRUPT:
 				slug = Colors.LightBlue + "(" + town.getResidents().size() + ") " + (town.isBankrupt() ? Translation.of("msg_bankrupt"):"");
 				break;
+			case ONLINE:
+				slug = Colors.LightBlue + "(" + TownyAPI.getInstance().getOnlinePlayersInTown(town).size() + ")";
+				break;
 			default:
 				slug = Colors.LightBlue + "(" + town.getResidents().size() + ")";
 				break;
