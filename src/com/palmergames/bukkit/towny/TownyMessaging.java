@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumOnlinePlayersCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumResidentsCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownBlocksCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownsCalculationEvent;
@@ -758,6 +759,12 @@ public class TownyMessaging {
 				NationListDisplayedNumTownsCalculationEvent tEvent = new NationListDisplayedNumTownsCalculationEvent(nation, rawNumTowns);
 				Bukkit.getPluginManager().callEvent(tEvent);
 				slug = tEvent.getDisplayedValue() + "";
+				break;
+			case ONLINE:
+				int rawNumOnlinePlayers = TownyAPI.getInstance().getOnlinePlayersInNation(nation).size();
+				NationListDisplayedNumOnlinePlayersCalculationEvent opEvent = new NationListDisplayedNumOnlinePlayersCalculationEvent(nation, rawNumOnlinePlayers);
+				Bukkit.getPluginManager().callEvent(opEvent);
+				slug = opEvent.getDisplayedValue() + "";
 				break;
 			default:
 				int rawNumResidents = nation.getResidents().size();
