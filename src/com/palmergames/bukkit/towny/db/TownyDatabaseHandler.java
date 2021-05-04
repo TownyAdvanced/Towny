@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent;
 import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -749,6 +748,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Resident mayor = town.getMayor();
 		TownyWorld townyWorld = town.getHomeblockWorld();
 		
+		// Remove the Town's spawn particle.
+		if (town.hasSpawn()) {
+			try {
+				TownyUniverse.getInstance().removeSpawnPoint(town.getSpawn());
+			} catch (TownyException ignored) {}
+		}
+		
 		removeTownBlocks(town);
 
 		List<Resident> toSave = new ArrayList<>(town.getResidents());
@@ -812,6 +818,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Resident king = null;
 		if (nation.hasKing())
 			king = nation.getKing();
+		
+		// Remove the Nation's spawn particle.
+		if (nation.hasSpawn()) {
+			try {
+				TownyUniverse.getInstance().removeSpawnPoint(nation.getSpawn());
+			} catch (TownyException ignored) {}
+		}
 		
 		//search and remove from all ally/enemy lists
 		List<Nation> toSaveNation = new ArrayList<>();
@@ -970,12 +983,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.setUUID(oldUUID);
 			town.setRegistered(oldregistration);
 			if (TownyEconomyHandler.isActive()) {
-				try {
-					town.getAccount().setName(TownySettings.getTownAccountPrefix() + town.getName());
-					town.getAccount().setBalance(townBalance, "Rename Town - Transfer to new account");
-				} catch (EconomyException e) {
-					e.printStackTrace();
-				}
+				town.getAccount().setName(TownySettings.getTownAccountPrefix() + town.getName());
+				town.getAccount().setBalance(townBalance, "Rename Town - Transfer to new account");
 			}
 
 			for (Resident resident : toSave) {
@@ -1073,12 +1082,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.registerNation(nation);
 
 			if (TownyEconomyHandler.isActive()) {
-				try {
-					nation.getAccount().setName(TownySettings.getNationAccountPrefix() + nation.getName());
-					nation.getAccount().setBalance(nationBalance, "Rename Nation - Transfer to new account");
-				} catch (EconomyException e) {
-					e.printStackTrace();
-				}
+				nation.getAccount().setName(TownySettings.getNationAccountPrefix() + nation.getName());
+				nation.getAccount().setBalance(nationBalance, "Rename Nation - Transfer to new account");
 			}
 
 			for (Town town : toSave) {
@@ -1140,12 +1145,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			double balance = 0.0D;
 
 			// Get balance in case this a server using ico5.  
-			if(TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownyEconomyHandler.isActive()){
-				try {
-					balance = resident.getAccount().getHoldingBalance();
-					resident.getAccount().removeAccount();
-				} catch (EconomyException ignored) {
-				}				
+			if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getVersion().startsWith("iConomy 5")) {
+				balance = resident.getAccount().getHoldingBalance();
+				resident.getAccount().removeAccount();				
 			}
 			// Change account name over.
 			if (TownyEconomyHandler.isActive())
@@ -1158,13 +1160,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Re-register the resident with the new name.
 			universe.registerResident(resident);
 			// Set the economy account balance in ico5 (because it doesn't use UUIDs.)
-			if (TownyEconomyHandler.getVersion().startsWith("iConomy 5") && TownyEconomyHandler.isActive()) {
-				try {
-					resident.getAccount().setName(resident.getName());
-					resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");
-				} catch (EconomyException e) {
-					e.printStackTrace();
-				}				
+			if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getVersion().startsWith("iConomy 5")) {
+				resident.getAccount().setName(resident.getName());
+				resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");				
 			}
 			
 			// Save resident with new name.
@@ -1552,9 +1550,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void mergeNation(Nation succumbingNation, Nation prevailingNation) {
 
 		if (TownyEconomyHandler.isActive())
-			try {
-				succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
-			} catch (EconomyException ignored) {}
+			succumbingNation.getAccount().payTo(succumbingNation.getAccount().getHoldingBalance(), prevailingNation, "Nation merge bank accounts.");
 
 		
 		lock.lock();
@@ -1576,12 +1572,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * @param mergeFrom The town that will be deleted.
 	 */
 	public void mergeTown(Town mergeInto, Town mergeFrom) {
-		if (TownyEconomyHandler.isActive()) {
-			try {
-				if (mergeFrom.getAccount().getHoldingBalance() > 0)
-					mergeFrom.getAccount().payTo(mergeFrom.getAccount().getHoldingBalance(), mergeInto, Translation.of("msg_town_merge_transaction_reason"));
-			} catch (EconomyException ignored) {}
-		}
+		if (TownyEconomyHandler.isActive() && mergeFrom.getAccount().getHoldingBalance() > 0)
+			mergeFrom.getAccount().payTo(mergeFrom.getAccount().getHoldingBalance(), mergeInto, Translation.of("msg_town_merge_transaction_reason"));
 
 		lock.lock();
 		boolean isSameNation = false;

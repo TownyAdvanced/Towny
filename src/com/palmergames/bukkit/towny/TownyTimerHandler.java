@@ -202,7 +202,7 @@ public class TownyTimerHandler{
 	
 	public static void toggleDrawSpointsTask(boolean on) {
 		if (on && !isDrawSpawnPointsTaskRunning()) {
-			drawSpawnPointsTask = BukkitTools.scheduleAsyncRepeatingTask(new DrawSpawnPointsTask(plugin), 0, 20);
+			drawSpawnPointsTask = BukkitTools.scheduleAsyncRepeatingTask(new DrawSpawnPointsTask(plugin), 0, 52);
 			if (drawSpawnPointsTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule draw spawn points loop");			
 		} else if (!on && isDrawSpawnPointsTaskRunning()) {

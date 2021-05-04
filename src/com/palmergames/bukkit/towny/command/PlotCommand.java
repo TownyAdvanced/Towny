@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleFireEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleMobsEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotTogglePvpEvent;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -585,12 +584,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						HUDManager.togglePermHUD(player);
 						
 					} else {
-						if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
-							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName())));
-						} else {
-							TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
-							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(townBlock));
-						}
+						WorldCoord coord = WorldCoord.parseWorldCoord(player);
+
+						try {
+							coord = new WorldCoord(world, Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+						} catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {}
+
+						if (TownyAPI.getInstance().isWilderness(coord))
+							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyUniverse.getInstance().getDataSource().getWorld(world)));
+						else
+							TownyMessaging.sendMessage(player, TownyFormatter.getStatus(coord.getTownBlock()));
 					}
 
 				} else if (split[0].equalsIgnoreCase("toggle")) {
@@ -765,7 +768,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							// Test if we can pay first to throw an exception.
 							if (cost > 0 && TownyEconomyHandler.isActive() && !resident.getAccount().canPayFromHoldings(cost))
-								throw new EconomyException(Translation.of("msg_err_cannot_afford_plot_set_type_cost", townBlockType, TownyEconomyHandler.getFormattedBalance(cost)));
+								throw new TownyException(Translation.of("msg_err_cannot_afford_plot_set_type_cost", townBlockType, TownyEconomyHandler.getFormattedBalance(cost)));
 
 							// Handle payment via a confirmation to avoid suprise costs.
 							if (cost > 0 && TownyEconomyHandler.isActive()) {
@@ -866,7 +869,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				} else
 					throw new TownyException(Translation.of("msg_err_invalid_property", split[0]));
 
-			} catch (TownyException | EconomyException x) {
+			} catch (TownyException x) {
 				TownyMessaging.sendErrorMsg(player, x.getMessage());
 			}
 		}
@@ -1453,7 +1456,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (split.length == 2) {
 				// Create a brand new plot group.
 				UUID plotGroupID = TownyUniverse.getInstance().generatePlotGroupID();
-				String plotGroupName = split[1];
+				String plotGroupName = NameValidation.filterName(split[1]);
 
 				newGroup = new PlotGroup(plotGroupID, plotGroupName, town);
 
@@ -1722,7 +1725,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			try {
 				// Test if we can pay first to throw an exception.
 				if (cost > 0 && TownyEconomyHandler.isActive() && !resident.getAccount().canPayFromHoldings(cost))
-					throw new EconomyException(Translation.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost)));
+					throw new TownyException(Translation.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost)));
 
 				// Handle payment via a confirmation to avoid suprise costs.
 				if (cost > 0 && TownyEconomyHandler.isActive()) {
@@ -1758,7 +1761,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				
-			} catch (EconomyException e) {
+			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(resident, e.getMessage());
 			}
 			

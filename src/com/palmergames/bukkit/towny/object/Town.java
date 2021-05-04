@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -30,10 +29,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class Town extends Government implements TownBlockOwner {
 
@@ -68,6 +69,7 @@ public class Town extends Government implements TownBlockOwner {
 	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined = false;
 	private long ruinedTime;
+	private long joinedNationAt;
 
 	public Town(String name) {
 		super(name);
@@ -202,12 +204,18 @@ public class Town extends Government implements TownBlockOwner {
 		//The town is no longer conquered/occupied because it has left the nation
 		this.isConquered = false;
 		this.conqueredDays = 0;
+
+		setJoinedNationAt(0);
 		
 		this.save();
 		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(this, nation));
 	}
 	
 	public void setNation(Nation nation) throws AlreadyRegisteredException {
+		setNation(nation, true);
+	}
+	
+	public void setNation(Nation nation, boolean updateJoinedAt) throws AlreadyRegisteredException {
 
 		if (this.nation == nation)
 			return;
@@ -222,12 +230,21 @@ public class Town extends Government implements TownBlockOwner {
 
 		this.nation = nation;
 		nation.addTown(this);
+
+		if (updateJoinedAt)
+			setJoinedNationAt(System.currentTimeMillis());
+
 		TownyPerms.updateTownPerms(this);
 		BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(this, nation));
 	}
 
+	private boolean residentsSorted = false;
+
 	@Override
 	public List<Resident> getResidents() {
+		if (!residentsSorted)
+			sortResidents();
+		
 		return Collections.unmodifiableList(residents);
 	}
 
@@ -245,7 +262,7 @@ public class Town extends Government implements TownBlockOwner {
 
 		List<Resident> residentsWithRank = new ArrayList<>();
 		
-		for (Resident resident: residents) {
+		for (Resident resident : getResidents()) {
 			if (resident.hasTownRank(rank))
 				residentsWithRank.add(resident);
 		}
@@ -656,6 +673,7 @@ public class Town extends Government implements TownBlockOwner {
 		} else {
 
 			remove(resident);
+			resident.setJoinedTownAt(0);
 
 			if (getNumResidents() == 0) {
 				throw new EmptyTownException(this);
@@ -938,7 +956,7 @@ public class Town extends Government implements TownBlockOwner {
 		return embassyPlotTax;
 	}
 
-	public void collect(double amount) throws EconomyException {
+	public void collect(double amount) {
 		
 		if (TownyEconomyHandler.isActive()) {
 			double bankcap = TownySettings.getTownBankCap();
@@ -1383,4 +1401,18 @@ public class Town extends Government implements TownBlockOwner {
 		return getUUID();
 	}
 
+	public long getJoinedNationAt() {
+		return joinedNationAt;
+	}
+
+	public void setJoinedNationAt(long joinedNationAt) {
+		this.joinedNationAt = joinedNationAt;
+	}
+
+	private void sortResidents() {
+		List<Resident> sortedResidents = residents.stream().sorted(Comparator.comparingLong(Resident::getJoinedTownAt)).collect(Collectors.toList());
+		residents.clear();
+		residents.addAll(sortedResidents);
+		residentsSorted = true;
+	}
 }

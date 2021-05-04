@@ -183,6 +183,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				if (args.length == 2)
 					return NameUtil.filterByStart(townyWarTabCompletes, args[1]);
 				break;
+			case "map":
+				if (args.length == 2)
+					return Collections.singletonList("big");
+				break;
 			default:
 				if (args.length == 1) {
 					if (sender instanceof Player) {

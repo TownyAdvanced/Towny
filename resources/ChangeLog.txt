@@ -5949,3 +5949,107 @@ v0.92.0.11:
     - Closes #4844.
   - Fix personally-owned plots not taking on a fully-open perm line when a town is ruined.
     - Closes #4846.
+  - Fix missing confirmation for admins using /t delete NAME and /n delete NAME.
+  - Misc fixes courtesy of Warriorrrr with PR #4854.
+  - More Swedish translating courtesy of OskyEdz with PR #4853.
+  - es-419.yml updated couresty of EuGNosii with PR #4848.
+  - Fix plot notifications not showing information when you've left a plotgroup into a non-plotgroup townblock.
+    - Closes #4856.
+  - API: Added ResidentPreJailEvent, a Cancellable event.
+    - Closes #4862.
+  - Fix Economy formatting with colours able to muck about with the bankhistory books.
+  - Make the spawn particles chill out.
+  - API: Add TownPreInvitePlayerEvent, courtesy of Warriorrrr with PR #4867.
+  - Add config option for toggling visualized spawn points, courtesy of Warriorrrr with PR #4865
+    - Closes #4857.
+  - New Config Option: plugin.visualized_spawn_points_enabled
+    - Default: true
+    - If enabled, particles will appear around town, nation, outpost & jail spawns.
+0.96.7.13:
+  - Danish translation, courtesy of Davidoen.
+  - French translation updated, courtesy of PainOchoco with PR #4864.
+  - Fix spawn particles not disappearing when a town or nation is deleted.
+  - Add ability to set town and nation tags automatically using the town/nation name.
+    - Closes #4869.
+  - New Config Option: town.set_tag_automatically
+    - Default: false
+    - Setting this to true will set a town's tag automatically using the first four characters of the town's name.
+  - New Config Option: nation.set_tag_automatically
+    - Default: false
+    - Setting this to true will set a nation's tag automatically using the first four characters of the nation's name.
+  - Fix plotgroups being able to be named with characters that ought to be filtered out.
+  - Make plotgroups which load and throw an AlreadyRegisteredException actually print out which one is no good.
+  - Add Adventure library, courtesy of Warriorrrr with PR #4870.
+  - es-419 updated by EuGNosii, with PR #4881.
+  - Add ability to make capital cities have a higher resident cap.
+    - Closes #4841.
+  - New Config Option: global_town_settings.max_residents_capital_override
+    - Default: 0
+    - The maximum number of residents that can be joined to a capital city.
+    - Requires max_residents_capital_override to be above 0.
+    - Uses the greater of max_residents_capital_override and max_residents_per_town.
+  - Add town/nation name blacklist config option, courtesy of Warriorrrr with PR #4878.
+    - Closes #4875.
+  - New Config Option: plugin.name_blacklist
+    - Default: empty
+    - A blacklist used for validating town/nation names.
+    - Names must be seperated by a comma: name1,name2
+  - Deprecated: EconomyException
+    - The economy exception is no longer thrown by Towny.
+    - After close examination it was found that the exception is no longer needed.     
+0.96.7.14:
+  - Add option to require FrostWalker enchantment to require build rights to freeze water.
+    - Closes #4887
+  - New Config Option: protection.prevent_frost_walker_freezing
+    - Default: false
+    - When set to true, players with the Frost Walker enchant will need to be able to build where they are attempting to freeze.
+  - Add ability to show chunk notifications in the BossBar, courtesy of Warriorrrr with PR #4888.
+    - Closes #4882
+  - New Config Option: notification.notifications_appear_on_bossbar
+    - Default: false
+    - When enabled, notifications will appear on the bossbar instead of in chat or above the action bar.
+    - Uses the duration from below for how long the bossbar appears.
+  - Fix missing tab completions for /towny map big & /town outpost list.
+  - Add config option to make plots lost from non-payment of plottaxes go up for sale.
+    - Closes #4892.
+  - New Config Option: town.default_taxes.plot_tax.does_non-payment_place_plot_for_sale
+    - Default: false
+    - Does a player's plot get put up for sale if they are unable to pay the plot tax?
+    - When false the plot becomes town land and must be set up for-sale by town mayor or staff.
+  - New command blocking, courtesy of EuGNosii with PR #4849.
+    - Allows blocking commands inside towns and limiting them to plots owned by the players only.
+    - Useful for limiting sethome/home commands to plots owned by the players themselves and not someone else.
+    - Admins and players with the towny.admin.town_commands.blacklist_bypass permission node will not be hindered.
+    - Closes #4835.
+  - New Config Option: global_town_settings.town_command_blacklisting.enabled
+    - Default: false
+    - Allows blocking commands inside towns through the town_blacklisted_commands setting.
+    - This boolean allows you to disable this feature altogether if you don't need it.
+  - New Config Option: global_town_settings.town_command_blacklisting.town_blacklisted_commands
+    - Default: somecommandhere,othercommandhere
+    - Comma separated list of commands which cannot be run inside of any town.
+  - New Config Option: global_town_settings.town_command_blacklisting.player_owned_plot_limited_commands
+    - Default : sethome,home
+    - This allows the usage of blacklisted commands only in plots personally-owned by the player.
+    - Players with the towny.claimed.townowned.* permission node will be able to run these commands inside of town-owned land. This would include mayors, assistants and possibly a builder rank.
+    - Players with the towny.claimed.owntown.* permission node (given to mayors/assistants usually, will also not be limited by this command blacklist.
+  - New Permission Node: towny.admin.town_commands.blacklist_bypass
+    - Child Node of towny.admin
+    - Allows admins to not be restricted by either command-blocking lists.
+  - Fix entity-vs-entity combat always being allowed, courtesy of Warriorrrr with PR #4893.
+  - Update korean.yml, courtesy of yumjunstar with PR #4889.
+  - Bump Language Files to 0.103.
+0.96.7.15:
+  - Fix water & lava being usable to grief others, courtesy of Warriorrrr with PR #4855.
+  - New Config Option: global_town_settings.prevent_fluid_griefing
+    - Default: true
+    - When enabled, blocks like lava or water will be unable to flow into other plots, if the owners aren't the same.
+  - Sort town resident list by date they joined it, courtesy of Warriorrrr with PR #4880.
+    - Also sorts Towns by join date in the Nation,
+    - Also displays claim time in /plot perm.
+    - Closes #4556.
+  - Fix sneaky Citizens/Sentinal NPCs being able to get through the tests surrounding death payments.
+    - Closes #4895.
+  - Fix potential NPE in revert-on-unclaim feature.
+  - Fix german.yml FlagWar message, courtesy of Warriorrrr with PR #4899.
+  - Add missing towny.command.town.reclaim to default townyperms.yml.

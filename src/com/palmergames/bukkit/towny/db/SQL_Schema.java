@@ -86,7 +86,7 @@ public class SQL_Schema {
     	columns.add("`groupName` mediumtext NOT NULL");
     	columns.add("`groupPrice` float DEFAULT NULL");
 		columns.add("`town` VARCHAR(32) NOT NULL");
-		
+		columns.add("`claimedAt` BIGINT NOT NULL");
 		return columns;
 	}
 
@@ -157,6 +157,7 @@ public class SQL_Schema {
 		columns.add("`ruinedTime` BIGINT DEFAULT '0'");
 		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
 		columns.add("`debtBalance` float NOT NULL");
+		columns.add("`joinedNationAt` BIGINT NOT NULL");
 		return columns;
 	}
 
@@ -175,6 +176,7 @@ public class SQL_Schema {
 		columns.add("`nation-ranks` mediumtext");
 		columns.add("`lastOnline` BIGINT NOT NULL");
 		columns.add("`registered` BIGINT NOT NULL");
+		columns.add("`joinedTownAt` BIGINT NOT NULL");
 		columns.add("`isNPC` bool NOT NULL DEFAULT '0'");
 		columns.add("`isJailed` bool NOT NULL DEFAULT '0'");
 		columns.add("`JailSpawn` mediumint");

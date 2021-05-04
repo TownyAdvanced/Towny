@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.event.statusscreen.NationStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -136,6 +135,9 @@ public class TownyFormatter {
 
 			if (townBlock.hasPlotObjectGroup())
 				out.add(Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
+			if (townBlock.getClaimedAt() > 0)
+				out.add(Translation.of("msg_plot_perm_claimed_at", registeredFormat.format(townBlock.getClaimedAt())));
+			
 			out.addAll(getExtraFields(townBlock));
 		} catch (NotRegisteredException e) {
 			out.add("Error: " + e.getMessage());
@@ -486,7 +488,7 @@ public class TownyFormatter {
 
 		// ___[ Azur Empire (Open)]___
 		String title = nation.getFormattedName();
-		title += (nation.isOpen() ? Translation.of("status_title_open") : "");
+		title += (nation.isOpen() ? " " + Translation.of("status_title_open") : "");
 		out.add(ChatTools.formatTitle(title));
 
 		// Board: Get your fried chicken
@@ -677,23 +679,16 @@ public class TownyFormatter {
 		 * Calculate what the player will be paying their town for tax.
 		 */
 		if (resident.hasTown()) {
-			try {
-				town = resident.getTown();
+			town = TownyAPI.getInstance().getResidentTownOrNull(resident);
 
-				if (taxExempt) {
-					out.add(Translation.of("status_res_taxexempt"));
-				} else {
-					if (town.isTaxPercentage())
-						townTax = Math.min(resident.getAccount().getHoldingBalance() * town.getTaxes() / 100, town.getMaxPercentTaxAmount());
-					else
-						townTax = town.getTaxes();
-					out.add(Translation.of("status_res_tax", TownyEconomyHandler.getFormattedBalance(townTax)));
-				}
-
-			} catch (NotRegisteredException e) {
-				// Failed to fetch town
-			} catch (EconomyException e) {
-				// Economy failed
+			if (taxExempt) {
+				out.add(Translation.of("status_res_taxexempt"));
+			} else {
+				if (town.isTaxPercentage())
+					townTax = Math.min(resident.getAccount().getHoldingBalance() * town.getTaxes() / 100, town.getMaxPercentTaxAmount());
+				else
+					townTax = town.getTaxes();
+				out.add(Translation.of("status_res_tax", TownyEconomyHandler.getFormattedBalance(townTax)));
 			}
 		}
 

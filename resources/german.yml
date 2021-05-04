@@ -1,5 +1,5 @@
 name: Towny
-version: 0.101
+version: 0.103
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://townyadvanced.github.io/'
@@ -356,7 +356,7 @@ msg_enemy_war_area_defended: '&6[Krieg]&b %s verteidigte (%s)!'
 msg_err_enemy_war_must_be_placed_above_ground: '&6[Krieg]&c Du musst die Flagge überirdisch setzen.'
 msg_err_enemy_war_not_part_of_nation: '&6[Krieg]&c Dieser Bereich gehört keiner Nation.'
 msg_err_enemy_war_is_peaceful: '&6[Krieg]&c %s ist friedlich.'
-msg_err_enemy_war_require_online: '&6[Krieg]&c In %s müssen mindestens %d Spieler aktiv sein, um angreifen zu können.'
+msg_err_enemy_war_require_online: '&6[Krieg]&c In %d müssen mindestens %d Spieler aktiv sein, um angreifen zu können.'
 msg_err_enemy_war_not_on_edge_of_town: '&6[Krieg]&c Du kannst nur die Stadtgrenze angreifen.'
 msg_err_enemy_war_cell_already_under_attack: '&6[Krieg]&c Dieser Bereich wird bereits von %s angegriffen.'
 msg_err_enemy_war_reached_max_active_flags: '&6[Krieg]&c Du kannst nicht mehr als %s Bereiche gleichzeitig angreifen.'
@@ -1068,8 +1068,6 @@ msg_err_cannot_set_group_to_jail: 'Plotgruppen kannst zu nicht zum Jail-Typ änd
 
 # Added in 0.70
 msg_err_plot_group_name_required: 'Du musst der Plotgruppe einen Namen geben. Bsp: /plot group add {name}'
-msg_confirmation_spigot_hover_accept: 'Klicken um anzunehmen'
-msg_confirmation_spigot_hover_cancel: 'Klicken um abzulehnen'
 msg_confirmation_spigot_click_accept: 'Klicke %s oder gib %s ein'
 msg_confirmation_spigot_click_cancel: 'Klicke %s oder gib %s ein'
 msg_you_cannot_kick_yourself: 'Du kannst dich nicht selber kicken...'
@@ -1373,3 +1371,12 @@ msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
 msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
 msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
 msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
+
+#Added in 0.102
+towny_map_detailed_information: '&2Click to see detailed plot information.'
+msg_err_nation_capital_too_many_residents: '&cThe current capital city has too many residents to be replaced by %s.'
+msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your nation will mean your town is over the population limit of %d, resulting in the removal of %d residents.'
+
+# Added in 0.103
+msg_command_blocked_inside_towns: '&cYou cannot use that command inside towns.'
+msg_command_limited: 'You can only use that command inside your own plots.'

@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -297,55 +296,51 @@ public class FlagWar {
 		// Check that the user can pay for the warflag + fines from losing/winning.
 		double costToPlaceWarFlag = FlagWarConfig.getCostToPlaceWarFlag();
 		if (TownyEconomyHandler.isActive()) {
-			try {
-				double requiredAmount = costToPlaceWarFlag;
-				double balance = attackingResident.getAccount().getHoldingBalance();
+			double requiredAmount = costToPlaceWarFlag;
+			double balance = attackingResident.getAccount().getHoldingBalance();
 
-				// Check that the user can pay for the warflag.
-				if (balance < costToPlaceWarFlag)
-					throw new TownyException(Translation.of("msg_err_insuficient_funds_warflag", TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
+			// Check that the user can pay for the warflag.
+			if (balance < costToPlaceWarFlag)
+				throw new TownyException(Translation.of("msg_err_insuficient_funds_warflag", TownyEconomyHandler.getFormattedBalance(costToPlaceWarFlag)));
 
-				// Check that the user can pay the fines from losing/winning all future warflags.
-				int activeFlagCount = getNumActiveFlags(attackingResident.getName());
-				double defendedAttackCost = FlagWarConfig.getDefendedAttackReward() * (activeFlagCount + 1);
-				double attackWinCost = 0;
+			// Check that the user can pay the fines from losing/winning all future warflags.
+			int activeFlagCount = getNumActiveFlags(attackingResident.getName());
+			double defendedAttackCost = FlagWarConfig.getDefendedAttackReward() * (activeFlagCount + 1);
+			double attackWinCost = 0;
 
-				double amount;
-				amount = FlagWarConfig.getWonHomeblockReward();
-				double homeBlockFine = amount < 0 ? -amount : 0;
-				amount = FlagWarConfig.getWonTownblockReward();
-				double townBlockFine = amount < 0 ? -amount : 0;
+			double amount;
+			amount = FlagWarConfig.getWonHomeblockReward();
+			double homeBlockFine = amount < 0 ? -amount : 0;
+			amount = FlagWarConfig.getWonTownblockReward();
+			double townBlockFine = amount < 0 ? -amount : 0;
 
-				// Assume rest of attacks are townblocks.
-				// Would be incorrect if is also currently attacking a homeblock.
-				// Error would be caught when actually taking the money when the plot has been won.
-				if (townBlock.isHomeBlock())
-					attackWinCost = homeBlockFine + activeFlagCount * townBlockFine;
-				else
-					attackWinCost = (activeFlagCount + 1) * townBlockFine;
+			// Assume rest of attacks are townblocks.
+			// Would be incorrect if is also currently attacking a homeblock.
+			// Error would be caught when actually taking the money when the plot has been won.
+			if (townBlock.isHomeBlock())
+				attackWinCost = homeBlockFine + activeFlagCount * townBlockFine;
+			else
+				attackWinCost = (activeFlagCount + 1) * townBlockFine;
 
-				if (defendedAttackCost > 0 && attackWinCost > 0) {
-					// There could be a fine
-					String reason;
-					double cost;
-					if (defendedAttackCost > attackWinCost) {
-						// Worst case scenario that all attacks are defended.
-						requiredAmount += defendedAttackCost;
-						cost = defendedAttackCost;
-						reason = Translation.of("name_defended_attack");
-					} else {
-						// Worst case scenario that all attacks go through, but is forced to pay a rebuilding fine.
-						requiredAmount += attackWinCost;
-						cost = attackWinCost;
-						reason = Translation.of("name_rebuilding");
-					}
-
-					// Check if player can pay in worst case scenario.
-					if (balance < requiredAmount)
-						throw new TownyException(Translation.of("msg_err_insuficient_funds_future", TownyEconomyHandler.getFormattedBalance(cost), String.format("%d %s", activeFlagCount + 1, reason + "(s)")));
+			if (defendedAttackCost > 0 && attackWinCost > 0) {
+				// There could be a fine
+				String reason;
+				double cost;
+				if (defendedAttackCost > attackWinCost) {
+					// Worst case scenario that all attacks are defended.
+					requiredAmount += defendedAttackCost;
+					cost = defendedAttackCost;
+					reason = Translation.of("name_defended_attack");
+				} else {
+					// Worst case scenario that all attacks go through, but is forced to pay a rebuilding fine.
+					requiredAmount += attackWinCost;
+					cost = attackWinCost;
+					reason = Translation.of("name_rebuilding");
 				}
-			} catch (EconomyException e) {
-				throw new TownyException(e.getError());
+
+				// Check if player can pay in worst case scenario.
+				if (balance < requiredAmount)
+					throw new TownyException(Translation.of("msg_err_insuficient_funds_future", TownyEconomyHandler.getFormattedBalance(cost), String.format("%d %s", activeFlagCount + 1, reason + "(s)")));
 			}
 		}
 

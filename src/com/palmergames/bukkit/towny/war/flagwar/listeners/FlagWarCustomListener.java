@@ -13,7 +13,6 @@ import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -94,39 +93,35 @@ public class FlagWarCustomListener implements Listener {
 		// It doesn't entirely matter if the attacker can pay.
 		// Also doesn't take into account of paying as much as the attacker can afford (Eg: cost=10 and balance=9).
 		if (TownyEconomyHandler.isActive()) {
-			try {
-				Resident attackingPlayer, defendingPlayer = null;
-				attackingPlayer = universe.getResident(cell.getNameOfFlagOwner());
-				
-				// Should never happen
-				if (attackingPlayer == null)
-					return;
-				
-				if (player != null) {
-					defendingPlayer = universe.getResident(player.getUniqueId());
-				}
+			Resident attackingPlayer, defendingPlayer = null;
+			attackingPlayer = universe.getResident(cell.getNameOfFlagOwner());
+			
+			// Should never happen
+			if (attackingPlayer == null)
+				return;
+			
+			if (player != null) {
+				defendingPlayer = universe.getResident(player.getUniqueId());
+			}
 
-				String formattedMoney = TownyEconomyHandler.getFormattedBalance(FlagWarConfig.getDefendedAttackReward());
-				if (defendingPlayer == null) {
-					if (attackingPlayer.getAccount().deposit(FlagWarConfig.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
-						try {
-							TownyMessaging.sendResidentMessage(attackingPlayer, Translation.of("msg_enemy_war_area_defended_greater_forces", formattedMoney));
-						} catch (TownyException ignored) {
-						}
-				} else {
-					if (attackingPlayer.getAccount().payTo(FlagWarConfig.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
-						try {
-							TownyMessaging.sendResidentMessage(attackingPlayer, Translation.of("msg_enemy_war_area_defended_attacker", defendingPlayer.getFormattedName(), formattedMoney));
-						} catch (TownyException ignored) {
-						}
-						try {
-							TownyMessaging.sendResidentMessage(defendingPlayer, Translation.of("msg_enemy_war_area_defended_defender", attackingPlayer.getFormattedName(), formattedMoney));
-						} catch (TownyException ignored) {
-						}
+			String formattedMoney = TownyEconomyHandler.getFormattedBalance(FlagWarConfig.getDefendedAttackReward());
+			if (defendingPlayer == null) {
+				if (attackingPlayer.getAccount().deposit(FlagWarConfig.getDefendedAttackReward(), "War - Attack Was Defended (Greater Forces)"))
+					try {
+						TownyMessaging.sendResidentMessage(attackingPlayer, Translation.of("msg_enemy_war_area_defended_greater_forces", formattedMoney));
+					} catch (TownyException ignored) {
+					}
+			} else {
+				if (attackingPlayer.getAccount().payTo(FlagWarConfig.getDefendedAttackReward(), defendingPlayer, "War - Attack Was Defended")) {
+					try {
+						TownyMessaging.sendResidentMessage(attackingPlayer, Translation.of("msg_enemy_war_area_defended_attacker", defendingPlayer.getFormattedName(), formattedMoney));
+					} catch (TownyException ignored) {
+					}
+					try {
+						TownyMessaging.sendResidentMessage(defendingPlayer, Translation.of("msg_enemy_war_area_defended_defender", attackingPlayer.getFormattedName(), formattedMoney));
+					} catch (TownyException ignored) {
 					}
 				}
-			} catch (EconomyException e) {
-				e.printStackTrace();
 			}
 		}
 	}
@@ -162,38 +157,34 @@ public class FlagWarCustomListener implements Listener {
 			double amount = 0;
 			String moneyTranserMsg = null;
 			if (TownyEconomyHandler.isActive()) {
-				try {
-					String reasonType;
-					if (townBlock.isHomeBlock()) {
-						amount = FlagWarConfig.getWonHomeblockReward();
-						reasonType = "Homeblock";
-					} else {
-						amount = FlagWarConfig.getWonTownblockReward();
-						reasonType = "Townblock";
+				String reasonType;
+				if (townBlock.isHomeBlock()) {
+					amount = FlagWarConfig.getWonHomeblockReward();
+					reasonType = "Homeblock";
+				} else {
+					amount = FlagWarConfig.getWonTownblockReward();
+					reasonType = "Townblock";
+				}
+
+				if (amount > 0) {
+					// Defending Town -> Attacker (Pillage)
+					String reason = String.format("War - Won Enemy %s (Pillage)", reasonType);
+					amount = Math.min(amount, defendingTown.getAccount().getHoldingBalance());
+					defendingTown.getAccount().payTo(amount, attackingResident, reason);
+
+					// Message
+					moneyTranserMsg = Translation.of("msg_enemy_war_area_won_pillage", attackingResident.getFormattedName(), TownyEconomyHandler.getFormattedBalance(amount), defendingTown.getFormattedName());
+				} else if (amount < 0) {
+					// Attacker -> Defending Town (Rebuild cost)
+					amount = -amount; // Inverse the amount so it's positive.
+					String reason = String.format("War - Won Enemy %s (Rebuild Cost)", reasonType);
+					if (!attackingResident.getAccount().payTo(amount, defendingTown, reason)) {
+						// Could Not Pay Defending Town the Rebuilding Cost.
+						TownyMessaging.sendGlobalMessage(Translation.of("msg_enemy_war_area_won", attackingResident.getFormattedName(), (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()), cell.getCellString()));
 					}
 
-					if (amount > 0) {
-						// Defending Town -> Attacker (Pillage)
-						String reason = String.format("War - Won Enemy %s (Pillage)", reasonType);
-						amount = Math.min(amount, defendingTown.getAccount().getHoldingBalance());
-						defendingTown.getAccount().payTo(amount, attackingResident, reason);
-
-						// Message
-						moneyTranserMsg = Translation.of("msg_enemy_war_area_won_pillage", attackingResident.getFormattedName(), TownyEconomyHandler.getFormattedBalance(amount), defendingTown.getFormattedName());
-					} else if (amount < 0) {
-						// Attacker -> Defending Town (Rebuild cost)
-						amount = -amount; // Inverse the amount so it's positive.
-						String reason = String.format("War - Won Enemy %s (Rebuild Cost)", reasonType);
-						if (!attackingResident.getAccount().payTo(amount, defendingTown, reason)) {
-							// Could Not Pay Defending Town the Rebuilding Cost.
-							TownyMessaging.sendGlobalMessage(Translation.of("msg_enemy_war_area_won", attackingResident.getFormattedName(), (attackingNation.hasTag() ? attackingNation.getTag() : attackingNation.getFormattedName()), cell.getCellString()));
-						}
-
-						// Message
-						moneyTranserMsg = Translation.of("msg_enemy_war_area_won_rebuilding", attackingResident.getFormattedName(), TownyEconomyHandler.getFormattedBalance(amount), defendingTown.getFormattedName());
-					}
-				} catch (EconomyException x) {
-					x.printStackTrace();
+					// Message
+					moneyTranserMsg = Translation.of("msg_enemy_war_area_won_rebuilding", attackingResident.getFormattedName(), TownyEconomyHandler.getFormattedBalance(amount), defendingTown.getFormattedName());
 				}
 			}
 

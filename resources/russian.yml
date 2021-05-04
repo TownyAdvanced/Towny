@@ -1,5 +1,5 @@
 name: Towny
-version: 0.101
+version: 0.103
 language: russian
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -1065,8 +1065,6 @@ msg_err_cannot_set_group_to_jail: 'Группы участков не могут
 
 # Added in 0.70
 msg_err_plot_group_name_required: 'Вы должны указать имя группы участков, т.е., /plot group add {имя}'
-msg_confirmation_spigot_hover_accept: 'Нажмите, чтобы принять'
-msg_confirmation_spigot_hover_cancel: 'Нажмите, чтобы отменить'
 msg_confirmation_spigot_click_accept: 'Нажмите %s или введите %s'
 msg_confirmation_spigot_click_cancel: 'Нажмите %s или введите %s'
 msg_you_cannot_kick_yourself: 'Вы не можете выгнать самого себя.'
@@ -1370,3 +1368,12 @@ msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
 msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
 msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
 msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
+
+#Added in 0.102
+towny_map_detailed_information: '&2Click to see detailed plot information.'
+msg_err_nation_capital_too_many_residents: '&cThe current capital city has too many residents to be replaced by %s.'
+msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your nation will mean your town is over the population limit of %d, resulting in the removal of %d residents.'
+
+# Added in 0.103
+msg_command_blocked_inside_towns: '&cYou cannot use that command inside towns.'
+msg_command_limited: 'You can only use that command inside your own plots.'

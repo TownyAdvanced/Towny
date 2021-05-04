@@ -30,7 +30,7 @@ public class RepeatingTimerTask extends TownyTimerTask {
 			// only execute if the correct amount of time has passed.
 			if (Math.max(1L, TownySettings.getPlotManagementSpeed()) <= ++timerCounter) {
 				for (PlotBlockData plotChunk : new ArrayList<PlotBlockData>(TownyRegenAPI.getPlotChunks().values())) {
-					if (!plotChunk.restoreNextBlock()) {
+					if (plotChunk != null && !plotChunk.restoreNextBlock()) {
 						TownyMessaging.sendDebugMsg("Revert on unclaim complete for " + plotChunk.getWorldName() + " " + plotChunk.getX() +"," + plotChunk.getZ());
 						TownyRegenAPI.deletePlotChunk(plotChunk);
 						TownyRegenAPI.deletePlotChunkSnapshot(plotChunk);

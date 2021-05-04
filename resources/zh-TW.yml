@@ -1,5 +1,5 @@
 name: Towny
-version: 0.101
+version: 0.103
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1064,8 +1064,6 @@ msg_err_cannot_set_group_to_jail: '土地組無法設置為監獄.'
 
 # Added in 0.70
 msg_err_plot_group_name_required: '你必須設置土地組名, 指令為/plot group add {名稱}'
-msg_confirmation_spigot_hover_accept: '點擊接受'
-msg_confirmation_spigot_hover_cancel: '點擊'
 msg_confirmation_spigot_click_accept: '點擊 %s 或輸入 %s'
 msg_confirmation_spigot_click_cancel: '點擊 %s 或輸入 %s'
 msg_you_cannot_kick_yourself: '你不能踢出自己.'
@@ -1369,3 +1367,12 @@ msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
 msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
 msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
 msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
+
+#Added in 0.102
+towny_map_detailed_information: '&2Click to see detailed plot information.'
+msg_err_nation_capital_too_many_residents: '&cThe current capital city has too many residents to be replaced by %s.'
+msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your nation will mean your town is over the population limit of %d, resulting in the removal of %d residents.'
+
+# Added in 0.103
+msg_command_blocked_inside_towns: '&cYou cannot use that command inside towns.'
+msg_command_limited: 'You can only use that command inside your own plots.'

@@ -247,8 +247,8 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 
 		if (toAccept != null) {
 			try {
-				if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsPerTown()) {
-					TownyMessaging.sendMessage(player, Translation.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsPerTown()));
+				if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town)) {
+					TownyMessaging.sendMessage(player, Translation.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
 					return;
 				} else
 					InviteHandler.acceptInvite(toAccept);

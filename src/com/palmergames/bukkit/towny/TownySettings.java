@@ -1288,6 +1288,14 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.NATION_DEF_OPEN);
 	}
+	
+	public static boolean isNationTagSetAutomatically() {
+		return getBoolean(ConfigNodes.NATION_DEF_TAG);
+	}
+	
+	public static boolean isTownTagSetAutomatically() {
+		return getBoolean(ConfigNodes.TOWN_DEF_TAG);
+	}
 
 	public static double getTownDefaultTax() {
 
@@ -1307,6 +1315,10 @@ public class TownySettings {
 	public static double getTownDefaultPlotTax() {
 		
 		return getDouble(ConfigNodes.TOWN_DEF_TAXES_PLOT_TAX);
+	}
+	
+	public static boolean doesPlotTaxNonPaymentSetPlotForSale() {
+		return getBoolean(ConfigNodes.TOWN_DEF_TAXES_PLOT_TAX_PUTS_PLOT_FOR_SALE);
 	}
 
 	public static boolean getTownDefaultTaxPercentage() {
@@ -2083,6 +2095,18 @@ public class TownySettings {
 	public static int getMaxResidentsPerTown() {
 		
 		return getInt(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN);
+	}
+	
+	public static int getMaxResidentsPerTownCapitalOverride() {
+		
+		return Math.max(getInt(ConfigNodes.GTOWN_MAX_RESIDENTS_CAPITAL_OVERRIDE), getMaxResidentsPerTown());
+	}
+	
+	public static int getMaxResidentsForTown(Town town) {
+		if (town.isCapital())
+			return getMaxResidentsPerTownCapitalOverride();
+		else 
+			return getMaxResidentsPerTown();
 	}
 
 	public static boolean isTownyUpdating(String currentVersion) {
@@ -3007,6 +3031,38 @@ public class TownySettings {
 	}
 	public static boolean doTownsGetWarnedOnOutlaw() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW);
+	}
+
+	public static boolean getVisualizedSpawnPointsEnabled() {
+		return getBoolean(ConfigNodes.PLUGIN_VISUALIZED_SPAWN_POINTS_ENABLED);
+	}
+
+	public static List<String> getBlacklistedNames() {
+		return getStrArr(ConfigNodes.PLUGIN_NAME_BLACKLIST);
+	}
+	
+	public static boolean doesFrostWalkerRequireBuildPerms() {
+		return getBoolean(ConfigNodes.PROT_FROST_WALKER);
+	}
+
+	public static boolean isNotificationsAppearingOnBossbar() {
+		return getBoolean(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_ON_BOSSBAR);
+	}
+	
+	public static boolean allowTownCommandBlacklisting() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ENABLE_COMMAND_BLACKLISTING);
+	}
+	
+	public static List<String> getTownBlacklistedCommands() {
+		return getStrArr(ConfigNodes.GTOWN_TOWN_BLACKLISTED_COMMANDS);
+	}
+	
+	public static List<String> getPlayerOwnedPlotLimitedCommands() {
+		return getStrArr(ConfigNodes.GTOWN_TOWN_LIMITED_COMMANDS);
+	}
+
+	public static boolean getPreventFluidGriefingEnabled() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_PREVENT_FLUID_GRIEFING);
 	}
 }
 

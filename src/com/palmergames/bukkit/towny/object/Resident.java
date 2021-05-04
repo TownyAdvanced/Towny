@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.event.resident.ResidentJailEvent;
+import com.palmergames.bukkit.towny.event.resident.ResidentPreJailEvent;
 import com.palmergames.bukkit.towny.event.resident.ResidentUnjailEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -52,6 +53,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private Town town = null;
 	private long lastOnline;
 	private long registered;
+	private long joinedTownAt;
 	private boolean isNPC = false;
 	private boolean isJailed = false;
 	private int jailSpawn;
@@ -171,6 +173,15 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			}
 
 		} else {
+			
+			ResidentPreJailEvent preEvent = new ResidentPreJailEvent(this, town);
+			Bukkit.getPluginManager().callEvent(preEvent);
+			
+			if (preEvent.isCancelled()) {
+				TownyMessaging.sendMsg(preEvent.getCancelMessage());
+				return;
+			}
+			
 			try {
 				Location loc = town.getJailSpawn(index);
 
@@ -214,6 +225,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		} else {
 			try {
+				ResidentPreJailEvent preEvent = new ResidentPreJailEvent(this, town);
+				Bukkit.getPluginManager().callEvent(preEvent);
+				
+				if (preEvent.isCancelled()) {
+					TownyMessaging.sendMsg(preEvent.getCancelMessage());
+					return;
+				}
+				
 				if (player != null) {
 					Location loc = town.getJailSpawn(index);
 					player.teleport(loc);
@@ -340,6 +359,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public void setTown(Town town) throws AlreadyRegisteredException {
+		setTown(town, true);
+	}
+
+	public void setTown(Town town, boolean updateJoinedAt) throws AlreadyRegisteredException {
 
 		if (this.town == town)
 			return;
@@ -360,6 +383,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.town = town;
 		updatePerms();
 		town.addResident(this);
+
+		if (updateJoinedAt)
+			setJoinedTownAt(System.currentTimeMillis());
+		
 		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
 	}
 	
@@ -927,6 +954,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
+	public long getJoinedTownAt() {
+		return joinedTownAt;
+	}
+
+	public void setJoinedTownAt(long joinedTownAt) {
+		this.joinedTownAt = joinedTownAt;
+	}
+
 	/**
 	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 *
@@ -942,4 +977,3 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		}
 	}
 }
-

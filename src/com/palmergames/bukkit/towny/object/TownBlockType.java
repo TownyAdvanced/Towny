@@ -10,7 +10,7 @@ import com.palmergames.bukkit.towny.TownySettings;
  * @author dumptruckman
  */
 public enum TownBlockType {
-	RESIDENTIAL(0, "default", "+", 0.0) {  // The default Block Type.
+	RESIDENTIAL(0, "Default", "+", 0.0) {  // The default Block Type.
 	},
 
 	COMMERCIAL(1, "Shop", "C", TownySettings.getPlotSetCommercialCost()) {  // Just like residential but has additional tax
@@ -104,6 +104,10 @@ public enum TownBlockType {
 	public double getCost() {
 		
 		return cost;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public static TownBlockType lookup(int id) {

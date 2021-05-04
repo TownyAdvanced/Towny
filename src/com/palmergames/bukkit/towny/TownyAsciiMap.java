@@ -1,7 +1,14 @@
 package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.object.Translation;
+
 import org.bukkit.entity.Player;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -70,66 +77,78 @@ public class TownyAsciiMap {
 
 		// Generate Map 
 		int halfLineHeight = lineHeight / 2;
-		String[][] townyMap = new String[lineWidth][lineHeight];
+		TextComponent[][] townyMap = new TextComponent[lineWidth][lineHeight];
 		int x, y = 0;
 		for (int tby = pos.getX() + (lineWidth - halfLineWidth - 1); tby >= pos.getX() - halfLineWidth; tby--) {
 			x = 0;
 			for (int tbx = pos.getZ() - halfLineHeight; tbx <= pos.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
 				try {
+					townyMap[y][x] = Component.empty();
 					TownBlock townblock = world.getTownBlock(tby, tbx);
 					if (!townblock.hasTown())
 						throw new TownyException();
 					if (x == halfLineHeight && y == halfLineWidth)
 						// location
-						townyMap[y][x] = Colors.Gold;
+						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.GOLD);
 					else if (hasTown) {
 						if (resident.getTown() == townblock.getTown()) {
 							// own town
-							townyMap[y][x] = Colors.LightGreen;
+							townyMap[y][x] = townyMap[y][x].color(NamedTextColor.GREEN);
 							try {
 								if (resident == townblock.getResident())
 									//own plot
-									townyMap[y][x] = Colors.Yellow;
+									townyMap[y][x] = townyMap[y][x].color(NamedTextColor.YELLOW);
 							} catch (NotRegisteredException e) {
 							}
 						} else if (resident.hasNation()) {
 							if (resident.getTown().getNation().hasTown(townblock.getTown()))
 								// towns
-								townyMap[y][x] = Colors.Green;
+								townyMap[y][x] = townyMap[y][x].color(NamedTextColor.DARK_GREEN);
 							else if (townblock.getTown().hasNation()) {
 								Nation nation = resident.getTown().getNation();
 								if (nation.hasAlly(townblock.getTown().getNation()))
-									townyMap[y][x] = Colors.Green;
+									townyMap[y][x] = townyMap[y][x].color(NamedTextColor.GREEN);
 								else if (nation.hasEnemy(townblock.getTown().getNation()))
 									// towns
-									townyMap[y][x] = Colors.Red;
+									townyMap[y][x] = townyMap[y][x].color(NamedTextColor.DARK_RED);
 								else
-									townyMap[y][x] = Colors.White;
+									townyMap[y][x] = townyMap[y][x].color(NamedTextColor.WHITE);
 							} else
-								townyMap[y][x] = Colors.White;
+								townyMap[y][x] = townyMap[y][x].color(NamedTextColor.WHITE);
 						} else
-							townyMap[y][x] = Colors.White;
+							townyMap[y][x] = townyMap[y][x].color(NamedTextColor.WHITE);
 					} else
-						townyMap[y][x] = Colors.White;
+						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.WHITE);
 
 					// Registered town block
 					if (townblock.getPlotPrice() != -1) {
 						// override the colour if it's a shop plot for sale
 						if (townblock.getType().equals(TownBlockType.COMMERCIAL))
-							townyMap[y][x] = Colors.Blue;
-						townyMap[y][x] += "$";
+							townyMap[y][x] = townyMap[y][x].color(NamedTextColor.BLUE);
+						townyMap[y][x] = townyMap[y][x].content("$");
 					} else if (townblock.isHomeBlock())
-						townyMap[y][x] += "H";
+						townyMap[y][x] = townyMap[y][x].content("H");
 					else
-						townyMap[y][x] += townblock.getType().getAsciiMapKey();
+						townyMap[y][x] = townyMap[y][x].content(townblock.getType().getAsciiMapKey());
+					
+					TextComponent forSaleComponent = Component.empty();
+					if (TownyEconomyHandler.isActive() && townblock.getPlotPrice() != -1)
+						forSaleComponent = Component.text(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(townblock.getPlotPrice())).replaceAll("[\\[\\]]", "")).color(NamedTextColor.YELLOW).append(Component.newline());
+
+					TextComponent hoverComponent = Component.text(Translation.of("status_town") + townblock.getTown().getName() + (townblock.hasResident() ? " (" + townblock.getResident().getName() + ")" : "")).color(NamedTextColor.GREEN).append(Component.text(" (" + tby + ", " + tbx + ")").color(NamedTextColor.WHITE)).append(Component.newline())
+						.append(Component.text(Translation.of("status_plot_type")).color(NamedTextColor.GREEN)).append(Component.text(townblock.getType().getName()).color(NamedTextColor.GREEN)).append(Component.newline())
+						.append(forSaleComponent)
+						.append(Component.text(Translation.of("towny_map_detailed_information")).color(NamedTextColor.DARK_GREEN));
+
+					townyMap[y][x] = townyMap[y][x].hoverEvent(HoverEvent.showText(hoverComponent)).clickEvent(ClickEvent.runCommand("/towny:plot perm " + tby + " " + tbx));
 				} catch (TownyException e) {
 					if (x == halfLineHeight && y == halfLineWidth)
-						townyMap[y][x] = Colors.Gold;
+						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.GOLD);
 					else
-						townyMap[y][x] = Colors.Gray;
+						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.DARK_GRAY);
 
 					// Unregistered town block
-					townyMap[y][x] += "-";
+					townyMap[y][x] = townyMap[y][x].content("-").clickEvent(ClickEvent.runCommand("/towny:townyworld")).hoverEvent(HoverEvent.showText(Component.text(world.getUnclaimedZoneName()).color(NamedTextColor.DARK_RED).append(Component.text(" (" + tby + ", " + tbx + ")").color(NamedTextColor.WHITE))));
 				}
 				x++;
 			}
@@ -148,13 +167,15 @@ public class TownyAsciiMap {
 			if (lineCount < compass.length)
 				line = compass[lineCount];
 
+			TextComponent compassComponent = Component.text(line);
+			TextComponent fullComponent = Component.empty();
 			for (int mx = lineWidth - 1; mx >= 0; mx--)
-				line += townyMap[mx][my];
+				fullComponent = fullComponent.append(townyMap[mx][my]);
 
 			if (lineCount < help.length)
-				line += help[lineCount];
+				fullComponent = fullComponent.append(Component.text(help[lineCount]));
 
-			player.sendMessage(line);
+			Towny.getAdventure().player(player).sendMessage(compassComponent.append(fullComponent));
 			lineCount++;
 		}
 

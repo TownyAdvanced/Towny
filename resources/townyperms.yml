@@ -49,6 +49,7 @@ towns:
         - towny.command.town.online
         - towny.command.town.leave
         - towny.command.town.deposit
+        - towny.command.town.reclaim
         - towny.town.spawn.town
         - towny.chat.town
     mayor:

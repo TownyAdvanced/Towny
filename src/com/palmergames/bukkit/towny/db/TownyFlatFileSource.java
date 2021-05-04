@@ -169,20 +169,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			while ((line = fin.readLine()) != null) {
 				if (!line.equals("")) {
 					String[] tokens = line.split(",");
-					String townName;
-					UUID groupID;
-					String groupName;
-					
-					// While in development the PlotGroupList stored a 4th element, a worldname. This was scrapped pre-release. 
-					if (tokens.length == 4) {
-						townName = tokens[1];
-						groupID = UUID.fromString(tokens[2]);
-						groupName = tokens[3];
-					} else {
-						townName = tokens[0];
-						groupID = UUID.fromString(tokens[1]);
-						groupName = tokens[2];
-					}
+					String townName = tokens[0];
+					UUID groupID = UUID.fromString(tokens[1]);
+					String groupName = tokens[2];
 					Town town = universe.getTown(townName);
 					
 					if (town != null)
@@ -477,7 +466,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_resident_tried_load_invalid_town", resident.getName(), line));
 					}
 					else {
-						resident.setTown(town);
+						resident.setTown(town, false);
 						
 						line = keys.get("title");
 						if (line != null)
@@ -499,6 +488,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								resident.setNationRanks(Arrays.asList((line.split(","))));
 						} catch (Exception e) {}
 					}
+				}
+				line = keys.get("joinedTownAt");
+				if (line != null) {
+					resident.setJoinedTownAt(Long.parseLong(line));
 				}
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_resident_at_line", resident.getName(), line, resident.getName()));
@@ -568,11 +561,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				line = keys.get("tag");
 				if (line != null)
-					try {
-						town.setTag(line);
-					} catch (TownyException e) {
-						town.setTag("");
-					}
+					town.setTag(line);
 				
 				line = keys.get("protectionStatus");
 				if (line != null)
@@ -713,6 +702,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("conqueredDays");
 				if (line != null)
 					town.setConqueredDays(Integer.parseInt(line));
+				
+				line = keys.get("joinedNationAt");
+				if (line != null)
+					try {
+						town.setJoinedNationAt(Long.parseLong(line));
+					} catch (Exception ignored) {}
 
 				line = keys.get("homeBlock");
 				if (line != null) {
@@ -835,7 +830,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					Nation nation = universe.getNation(line);
 					// Only set the nation if it exists
 					if (nation != null)
-						town.setNation(nation);
+						town.setNation(nation, false);
 				}
 					
 				line = keys.get("ruined");
@@ -942,11 +937,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				line = keys.get("tag");
 				if (line != null)
-					try {
-						nation.setTag(line);
-					} catch (TownyException e) {
-						nation.setTag("");
-					}
+					nation.setTag(line);
 				
 				line = keys.get("allies");
 				if (line != null) {
@@ -1437,7 +1428,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							continue;
 						}
 						
-						townBlock.setTown(town);
+						townBlock.setTown(town, false);
 						try {
 							town.addTownBlock(townBlock);
 							TownyWorld townyWorld = townBlock.getWorld();
@@ -1513,6 +1504,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						} catch (Exception ignored) {
 						}
 
+					line = keys.get("claimedAt");
+					if (line != null)
+						try {
+							townBlock.setClaimedAt(Long.parseLong(line));
+						} catch (Exception ignored) {}
+					
 					line = keys.get("metadata");
 					if (line != null && !line.isEmpty())
 						MetadataLoader.getInstance().deserializeMetadata(townBlock, line.trim());
@@ -1596,6 +1593,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("lastOnline=" + resident.getLastOnline());
 		// Registered
 		list.add("registered=" + resident.getRegistered());
+		// Joined Town At
+		list.add("joinedTownAt=" + resident.getJoinedTownAt());
 		// isNPC
 		list.add("isNPC=" + resident.isNPC());
 		// isJailed
@@ -1708,6 +1707,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("uuid=" + UUID.randomUUID());
 		}
         list.add("registered=" + town.getRegistered());
+		list.add("joinedNationAt=" + town.getJoinedNationAt());
         
         // Home Block
 		if (town.hasHomeBlock())
@@ -2026,6 +2026,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("changed=" + townBlock.isChanged());
 
 		list.add("locked=" + townBlock.isLocked());
+
+		list.add("claimedAt=" + townBlock.getClaimedAt());
 		
 		// Metadata
 		list.add("metadata=" + serializeMetadata(townBlock));

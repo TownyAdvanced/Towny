@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.GovernmentTagChangeEvent;
-import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
@@ -209,12 +208,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * Sets the concise string representation of this object.
 	 * 
 	 * @param text An upper-cased four or less letter string.
-	 * @throws TownyException Thrown on an error setting.
 	 */
-	public final void setTag(String text) throws TownyException {
-
-		if (text.length() > 4)
-			throw new TownyException(Translation.of("msg_err_tag_too_long"));
+	public final void setTag(String text) {
 
 		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
@@ -245,10 +240,9 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * 
 	 * @param resident The resident to give the money to.
 	 * @param amount The amount to give.
-	 * @throws EconomyException On economy error.
 	 * @throws TownyException On general error.
 	 */
-	public final void withdrawFromBank(Resident resident, int amount) throws EconomyException, TownyException {
+	public final void withdrawFromBank(Resident resident, int amount) throws TownyException {
 		if (!TownyEconomyHandler.isActive()) {
 			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
@@ -262,10 +256,9 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 *
 	 * @param resident The resident to take money from.
 	 * @param amount The amount to take.
-	 * @throws EconomyException On economy error.
 	 * @throws TownyException On general error.
 	 */
-	public final void depositToBank(Resident resident, int amount) throws EconomyException, TownyException {
+	public final void depositToBank(Resident resident, int amount) throws TownyException {
 		if (!TownyEconomyHandler.isActive()) {
 			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
