@@ -2108,7 +2108,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					} else {
 						
 
-						if (split[1].length() > 4)
+						if (split[1].length() > TownySettings.getMaxTagLength())
 							throw new TownyException(Translation.of("msg_err_tag_too_long"));
 						
 						town.setTag(NameValidation.checkAndFilterName(split[1]));
@@ -2520,7 +2520,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (TownySettings.isTownTagSetAutomatically())
-			town.setTag(name.substring(0, Math.min(name.length(), 4)));
+			town.setTag(name.substring(0, Math.min(name.length(), TownySettings.getMaxTagLength())));
 		
 		resident.save();
 		townBlock.save();

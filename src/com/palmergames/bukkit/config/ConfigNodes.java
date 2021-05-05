@@ -1101,6 +1101,11 @@ public enum ConfigNodes {
 			"20",
 			"",
 			"# Maximum length of Town and Nation names."),
+	FILTERS_MAX_TAG_LENGTH(
+			"filters_colour_chat.modify_chat.max_tag_length",
+			"4",
+			"",
+			"# Maximum length for Town and Nation tags."),
 	FILTERS_MODIFY_CHAT_MAX_LGTH(
 			"filters_colour_chat.modify_chat.max_title_length",
 			"10",

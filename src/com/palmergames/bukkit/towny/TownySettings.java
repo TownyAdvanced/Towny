@@ -3064,5 +3064,9 @@ public class TownySettings {
 	public static boolean getPreventFluidGriefingEnabled() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_PREVENT_FLUID_GRIEFING);
 	}
+
+	public static int getMaxTagLength() {
+		return getInt(ConfigNodes.FILTERS_MAX_TAG_LENGTH);
+	}
 }
 
