@@ -6054,3 +6054,15 @@ v0.92.0.11:
   - Fix german.yml FlagWar message, courtesy of Warriorrrr with PR #4899.
   - Add missing towny.command.town.reclaim to default townyperms.yml.
   - Rework negative upkeep to probably make it compatible with more economy plugins.
+  - Customizable tag lengths, courtesy of Warriorrrr with PR #4907.
+    - Closes #4904.
+  - New Config Option: filters_colour_chat.modify_chat.max_tag_length
+    - Default: 4
+    - Maximum length for Town and Nation tags.
+  - Update korean.yml, courtesy of yumjunstar with PR #4905.
+  - Fix /n list & /t list by online showing total residents, courtesy of Warrorior with PR #4901.
+  - Add auto town name capitalisation, courtesy of Warrior with PR #4898.
+    - Closes #4891.
+  - New Config Option: global_town_settings.automatic_capitalisation
+    - Default: false
+    - When enabled, town names will automatically be capitalised upon creation.
