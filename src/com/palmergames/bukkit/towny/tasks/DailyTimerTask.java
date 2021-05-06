@@ -529,10 +529,14 @@ public class DailyTimerTask extends TownyTimerTask {
 					
 				} else if (upkeep < 0) {
 					// Negative upkeep
+					upkeep = Math.abs(upkeep);
+					
 					if (TownySettings.isUpkeepPayingPlots()) {
 						// Pay each plot owner a share of the negative
 						// upkeep
 						List<TownBlock> plots = new ArrayList<>(town.getTownBlocks());
+						double payment = upkeep / plots.size();
+						double townPayment = 0;
 
 						for (TownBlock townBlock : plots) {
 							if (townBlock.hasResident()) {
@@ -541,14 +545,17 @@ public class DailyTimerTask extends TownyTimerTask {
 									resident = townBlock.getResident();
 								} catch (NotRegisteredException ignored) {}
 								if (resident != null)
-									resident.getAccount().withdraw((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+									resident.getAccount().deposit(payment, "Negative Town Upkeep - Plot income");
 							} else
-								town.getAccount().withdraw((upkeep / plots.size()), "Negative Town Upkeep - Plot income");
+								townPayment = townPayment + payment;
+
 						}
+						if (townPayment > 0)
+							town.getAccount().deposit(townPayment, "Negative Town Upkeep - Plot income");
 
 					} else {
 						// Not paying plot owners so just pay the town
-						town.getAccount().withdraw(upkeep, "Negative Town Upkeep");
+						town.getAccount().deposit(upkeep, "Negative Town Upkeep");
 					}
 
 				}

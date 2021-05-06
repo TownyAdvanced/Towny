@@ -6053,3 +6053,4 @@ v0.92.0.11:
   - Fix potential NPE in revert-on-unclaim feature.
   - Fix german.yml FlagWar message, courtesy of Warriorrrr with PR #4899.
   - Add missing towny.command.town.reclaim to default townyperms.yml.
+  - Rework negative upkeep to probably make it compatible with more economy plugins.
