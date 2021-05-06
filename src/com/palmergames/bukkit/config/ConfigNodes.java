@@ -801,6 +801,12 @@ public enum ConfigNodes {
 			"# will also not be limited by this command blacklist."
 	),
 	
+	GTOWN_SETTINGS_AUTOMATIC_CAPITALISATION(
+			"global_town_settings.automatic_capitalisation",
+			"false",
+			"",
+			"# When enabled, town names will automatically be capitalised upon creation."
+	),
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",

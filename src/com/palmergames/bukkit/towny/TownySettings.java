@@ -3068,5 +3068,9 @@ public class TownySettings {
 	public static int getMaxTagLength() {
 		return getInt(ConfigNodes.FILTERS_MAX_TAG_LENGTH);
 	}
+	
+	public static boolean getTownAutomaticCapitalisationEnabled(){
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_AUTOMATIC_CAPITALISATION);
+	}
 }
 
