@@ -55,6 +55,7 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -151,7 +152,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	
 	private static final List<String> adminPlotTabCompletes = Arrays.asList(
 		"claim",
-		"meta"
+		"meta",
+		"claimedat"
 	);
 	
 	private static final List<String> adminMetaTabCompletes = Arrays.asList(
@@ -681,9 +683,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			List<WorldCoord> selection = new ArrayList<>();
 			selection.add(new WorldCoord(world, Coord.parseCoord(player)));
 			new PlotClaim(plugin, player, resOpt.get(), selection, true, true, false).start();
+		} else if (split[0].equalsIgnoreCase("claimedat")) {
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIMEDAT.getNode()))
+				throw new TownyException(Translation.of("msg_err_command_disable"));
+			
+			WorldCoord wc = WorldCoord.parseWorldCoord((Player) getSender());
+			if (!wc.hasTownBlock() || wc.getTownBlock().getClaimedAt() == 0)
+				throw new NotRegisteredException();
+			
+			TownyMessaging.sendMsg(sender, Translation.of("msg_plot_perm_claimed_at", TownyFormatter.fullDateFormat.format(wc.getTownBlock().getClaimedAt())));
 		}
-		
-		
 	}
 
 	private void parseAdminCheckPermCommand(String[] split) throws TownyException {

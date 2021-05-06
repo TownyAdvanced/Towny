@@ -615,11 +615,12 @@ permissions:
             towny.command.townyadmin.nation.ally: true
 
     towny.command.townyadmin.plot.*:
-        description: User can access the admin plot commans.
+        description: User can access the admin plot commands.
         default: false
         children:
             towny.command.townyadmin.plot.claim: true
             towny.command.townyadmin.plot.meta: true
+            towny.command.townyadmin.plot.claimedat: true
 
     towny.command.townyadmin.toggle.*:
         description: User can access the admin toggle commands.
