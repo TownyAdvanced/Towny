@@ -1165,7 +1165,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation.getAccount().setBalance(0, "New Nation Account");
 
 		if (TownySettings.isNationTagSetAutomatically())
-			nation.setTag(name.substring(0, Math.min(name.length(), 4)));
+			nation.setTag(name.substring(0, Math.min(name.length(), TownySettings.getMaxTagLength())));
 			
 		town.save();
 		nation.save();
@@ -2350,7 +2350,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					nation.setTag(" ");
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_reset_nation_tag", player.getName()));
 				} else {
-					if (split[1].length() > 4)
+					if (split[1].length() > TownySettings.getMaxTagLength())
 						throw new TownyException(Translation.of("msg_err_tag_too_long"));
 					
 					nation.setTag(NameValidation.checkAndFilterName(split[1]));
