@@ -86,7 +86,6 @@ public class SQL_Schema {
     	columns.add("`groupName` mediumtext NOT NULL");
     	columns.add("`groupPrice` float DEFAULT NULL");
 		columns.add("`town` VARCHAR(32) NOT NULL");
-		columns.add("`claimedAt` BIGINT NOT NULL");
 		return columns;
 	}
 
@@ -214,6 +213,7 @@ public class SQL_Schema {
 		columns.add("`changed` bool NOT NULL DEFAULT '0'");
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`groupID` VARCHAR(36) DEFAULT NULL");
+		columns.add("`claimedAt` BIGINT NOT NULL");
 		return columns;
 	}
 
@@ -456,6 +456,7 @@ public class SQL_Schema {
     	cleanups.add(ColumnUpdate.of("NATIONS", "towns"));
     	cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
     	cleanups.add(ColumnUpdate.of("WORLDS", "plotManagementRevertSpeed"));
+    	cleanups.add(ColumnUpdate.of("PLOTGROUPS", "claimedAt"));
     	
     	for (ColumnUpdate update : cleanups)
     		dropColumn(cntx, db_name, update.getTable(), update.getColumn());
