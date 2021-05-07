@@ -1031,18 +1031,18 @@ msg_ta_deposit_all_success: '성공적으로 %s 이 모든 국가와 마을의 �
 bonus_townblocks: '보너스 마을 블록'
 
 # Added in 0.80
-nomad_sing: 'Nomad'
+nomad_sing: '유목민'
 msg_new_town_advice: '마을을 생성하신 것을 축하합니다! 현재 당신 마을의 유지비는 %s입니다. 현재 소유하고 있는 돈을 ''/t deposit #'' 명령어를 사용하여 마을 금고에 넣어보세요. 마을 금고에 돈을 넣지 않아 유지비를 지불하지 못할 경우 마을은 삭제될 것 입니다. 언제든지 /towny prices 명령어를 통해 유지비를 확인하실 수 있습니다. 다음 유지비는 %s 뒤에 걷어집니다.'
 
 # Added in 0.81
 msg_err_teleport_cancelled_damage: '공격을 받아서 이동이 취소되었습니다.'
 
 # Added in 0.82
-invitation_prefix: "&8[&7Invitation&8] &9"
-confirmation_prefix: "&8[&7Confirmation&8] &9"
-this_message_will_expire2: '&9This will auto-expire in 20 seconds'
-msg_hover_next_page: 'Next Page'
-msg_hover_previous_page: 'Previous Page'
+invitation_prefix: "&8[&7초대&8] &9"
+confirmation_prefix: "&8[&7확인&8] &9"
+this_message_will_expire2: '&9이 메세지는 20초뒤 만료됩니다.'
+msg_hover_next_page: '다음 페이지'
+msg_hover_previous_page: '이전 페이지'
 
 # Added in 0.83
 msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns with tax percentages."
@@ -1055,30 +1055,30 @@ msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group 
 msg_set_perms_reset_single: '&bSuccessfully reset permissions on this plot.'
 
 #Added in 0.86
-status_bank_bankrupt: '&2Bank: &a%s &c(BANKRUPT)'
-msg_warning_bankrupt: '&4*** WARNING, %s WILL GO BANKRUPT AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
-msg_town_bankrupt_by_upkeep: '&b%s could not afford its upkeep and has gone bankrupt.'
-msg_town_bankrupt_by_upkeep_multiple: '&bThe following towns could not afford their upkeep and have gone bankrupt: '
-msg_town_bankrupt_by_nation_tax: '&b%s couldn''t pay the %s tax and has gone bankrupt.'
-msg_town_bankrupt_by_nation_tax_multiple:  '&bThe following towns could not afford the nation tax and have gone bankrupt: '
-msg_town_debts_cleared: '%s has cleared all its debts, and is no longer bankrupt.'
+status_bank_bankrupt: '&2금고: &a%s &c(파산)'
+msg_warning_bankrupt: '&4*** 경고, %s 는 금고에 돈이 없어 새 날이 되면 파산할 것 입니다 ***'
+msg_town_bankrupt_by_upkeep: '&b%s 마을이 유지비를 감당 할 수 없어 파산 하였습니다.'
+msg_town_bankrupt_by_upkeep_multiple: '&b다음 마을들이 유지비를 감당 할 수 없어 파산하였습니다.: '
+msg_town_bankrupt_by_nation_tax: '&b%s 마을이 국가 세금을 감당 할 수 없어 파산하였습니다.'
+msg_town_bankrupt_by_nation_tax_multiple:  '&b다음 마을들이 국가 세금을 감당 할 수 없어 파산 하였습니다: '
+msg_town_debts_cleared: '%s 마을이 빚을 청산하여 더이상 파산 상태가 아닙니다.'
 msg_err_bankrupt_town_cannot_claim: 'Not allowed to claim plots for a bankrupt town.'
 msg_err_bankrupt_town_cannot_build: 'Not allowed to build in a bankrupt town.'
 msg_err_bankrupt_town_cannot_toggle_open: 'Not allowed to toggle open in a bankrupt town.'
 msg_err_bankrupt_town_cannot_invite: 'Not allowed to invite players to a bankrupt town.'
-msg_payed_nation_tax: '&bPayed nation tax of %s'
-msg_your_town_couldnt_pay_the_nation_tax_of: '&bYour town could not afford that nation tax of %s and was kicked from the nation.'
-msg_your_town_payed_upkeep: '&bYour town paid the daily upkeep of %s.'
-msg_your_nation_payed_upkeep: '&bYour nation paid the daily upkeep of %s.'
-msg_your_town_couldnt_pay_upkeep: '&bYour town could not pay the daily upkeep of %s and has disbanded.'
-msg_your_nation_couldnt_pay_upkeep: '&bYour nation could not pay the daily upkeep of %s and has disbanded.'
+msg_payed_nation_tax: '&b국가 세금 %s 을 냈습니다'
+msg_your_town_couldnt_pay_the_nation_tax_of: '&b당신의 마을이 국가 세금 %s 을 감당하지 못해 국가로 부터 추방당했습니다.'
+msg_your_town_payed_upkeep: '&b당신의 마을이 하루 유지비 %s 를 냈습니다..'
+msg_your_nation_payed_upkeep: '&b당신의 국가가 하루 유지비 %s 를 냈습니다.'
+msg_your_town_couldnt_pay_upkeep: '&b당신의 마을이 유지비 %s 를 감당하지 못해 해체 되었습니다.'
+msg_your_nation_couldnt_pay_upkeep: '&b당신의 국가가 유지비 %s 를 감당 하지 못해 해체 되었습니다.'
 
 #Added in 0.87
-msg_town_reached_debtcap_and_is_disbanded: '&b%s could not pay their upkeep, reached their debtcap, and has disbanded.'
-msg_town_reached_debtcap_and_is_disbanded_multiple: '&bThe following towns could not pay their upkeep, reached their debtcap, and have disbanded: '
-msg_unable_to_deposit_x: 'Unable to deposit %s into that town''s bank.'
-msg_unable_to_withdraw_x: 'Unable to withdraw %s from that town''s bank.'
-status_debtcap: '&2Debt Cap: &a%s'
+msg_town_reached_debtcap_and_is_disbanded: '&b%s 마을이 유지비를 감당하지 못하고, 부채 한도에 도달하여, 해체 되었습니다.'
+msg_town_reached_debtcap_and_is_disbanded_multiple: '&b다음 마을들이 유지비를 감당하지 못하고, 부채 한도에 도달하여, 해체 되었습니다: '
+msg_unable_to_deposit_x: '%s 을 마을 금고에 입금 할 수 없습니다.'
+msg_unable_to_withdraw_x: '%s 을 마을 금고에서 출금 할 수 없습니다.'
+status_debtcap: '&2부채 한도: &a%s'
 status_world_explrevert_entity: '&2Entity Explosion Revert: '
 status_world_explrevert_block: '&2Block Explosion Revert: '
 
@@ -1183,8 +1183,8 @@ msg_ruined: '&c(폐허)'
 msg_bankrupt: '&c(파산)'
 
 #Added in 0.98
-msg_del_town2: '&bThe town of %s has been deleted!'
-msg_ruin_town: '&bThe town of %s fell into ruin!'
+msg_del_town2: '&b%s 마을이 삭제 되었습니다!'
+msg_ruin_town: '&b%s 마을이 폐허 상태가 되었습니다!'
 gui_title_towny_farmblocks: 'Towny FarmBlocks List'
 gui_title_towny_wildsblocks: 'Towny WildsBlocks List'
 gui_title_towny_itemuse: 'Towny ItemUse List'

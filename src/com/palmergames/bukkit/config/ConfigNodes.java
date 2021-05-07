@@ -801,6 +801,12 @@ public enum ConfigNodes {
 			"# will also not be limited by this command blacklist."
 	),
 	
+	GTOWN_SETTINGS_AUTOMATIC_CAPITALISATION(
+			"global_town_settings.automatic_capitalisation",
+			"false",
+			"",
+			"# When enabled, town names will automatically be capitalised upon creation."
+	),
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",
@@ -1101,6 +1107,11 @@ public enum ConfigNodes {
 			"20",
 			"",
 			"# Maximum length of Town and Nation names."),
+	FILTERS_MAX_TAG_LENGTH(
+			"filters_colour_chat.modify_chat.max_tag_length",
+			"4",
+			"",
+			"# Maximum length for Town and Nation tags."),
 	FILTERS_MODIFY_CHAT_MAX_LGTH(
 			"filters_colour_chat.modify_chat.max_title_length",
 			"10",

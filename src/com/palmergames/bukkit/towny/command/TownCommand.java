@@ -99,6 +99,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Send a list of all town help commands to player Command: /town
@@ -2108,7 +2109,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					} else {
 						
 
-						if (split[1].length() > 4)
+						if (split[1].length() > TownySettings.getMaxTagLength())
 							throw new TownyException(Translation.of("msg_err_tag_too_long"));
 						
 						town.setTag(NameValidation.checkAndFilterName(split[1]));
@@ -2393,6 +2394,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (TownySettings.hasTownLimit() && dataSource.getTowns().size() >= TownySettings.getTownLimit())
 				throw new TownyException(Translation.of("msg_err_universe_limit"));
 
+			if (TownySettings.getTownAutomaticCapitalisationEnabled())
+				name = capitalizeString(name);
+			
 			// Check the name is valid and doesn't already exist.
 			String filteredName;
 			try {
@@ -2520,7 +2524,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (TownySettings.isTownTagSetAutomatically())
-			town.setTag(name.substring(0, Math.min(name.length(), 4)));
+			town.setTag(name.substring(0, Math.min(name.length(), TownySettings.getMaxTagLength())));
 		
 		resident.save();
 		townBlock.save();
@@ -3834,5 +3838,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		} catch (TownyException e) {
 			return Integer.MAX_VALUE;
 		}
+	}
+
+	private static String capitalizeString(String string) {
+		return Stream.of(string.split("_")).map(str -> str.substring(0, 1).toUpperCase() + str.substring(1)).collect(Collectors.joining("_"));
 	}
 }
