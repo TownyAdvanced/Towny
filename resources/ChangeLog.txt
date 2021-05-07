@@ -6066,3 +6066,5 @@ v0.92.0.11:
   - New Config Option: global_town_settings.automatic_capitalisation
     - Default: false
     - When enabled, town names will automatically be capitalised upon creation.
+0.96.7.16:
+  - Fix it so that servers who remove the numResidents: 0 town and nation levels will not generate NPE.
