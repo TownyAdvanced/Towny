@@ -6068,3 +6068,4 @@ v0.92.0.11:
     - When enabled, town names will automatically be capitalised upon creation.
 0.96.7.16:
   - Fix it so that servers who remove the numResidents: 0 town and nation levels will not generate NPE.
+  - Fix SQL_Schema that lead to errors on 0.96.7.15 MySQL servers. 
