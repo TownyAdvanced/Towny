@@ -1,5 +1,5 @@
 name: Towny
-version: 0.103
+version: 0.105
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious,PainOchoco
 website: "http://townyadvanced.github.io/"
@@ -1378,3 +1378,10 @@ msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your n
 # Added in 0.103
 msg_command_blocked_inside_towns: '&cYou cannot use that command inside towns.'
 msg_command_limited: 'You can only use that command inside your own plots.'
+
+#Added in 0.104
+msg_plot_perm_claimed_at: '&2Claimed at: &a%s'
+
+#Added in 0.105
+msg_wilderness_use_x_in_all_worlds: 'Wilderness use turned %s in all worlds.'
+msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'

@@ -140,6 +140,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	);
 
 	private static final List<String> adminToggleTabCompletes = Arrays.asList(
+		"wildernessuse",
+		"regenerations",
 		"war",
 		"neutral",
 		"npc",
@@ -1976,21 +1978,21 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			// command was '/townyadmin toggle'
-			player.sendMessage(ChatTools.formatTitle("/townyadmin toggle"));
-			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "war", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "peaceful", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "devmode", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "debug", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle", "townwithdraw/nationwithdraw", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle npc", "[resident]", ""));
+			HelpMenu.TA_TOGGLE.send(getSender());
 			return;
-
 		}
 
 		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE.getNode(split[0].toLowerCase())))
 			throw new TownyException(Translation.of("msg_err_command_disable"));
-
-		if (split[0].equalsIgnoreCase("war")) {
+		
+		if (split[0].equalsIgnoreCase("wildernessuse")) {
+			// Toggles build/destroy/switch/itemuse on or off in all worlds. True is the default, for installation setup to alter the defaulted false. 
+			toggleWildernessUsage(choice.orElse(true));
+			TownyMessaging.sendMsg(getSender(), Translation.of("msg_wilderness_use_x_in_all_worlds", choice.orElse(true)));
+		} else if (split[0].equalsIgnoreCase("regenerations")) {
+			toggleRegenerations(choice.orElse(false));
+			TownyMessaging.sendMsg(getSender(), Translation.of("msg_regenerations_use_x_in_all_worlds", choice.orElse(false)));
+		} else if (split[0].equalsIgnoreCase("war")) {
 			if (!choice.orElse(TownyAPI.getInstance().isWarTime())) {
 				townyUniverse.startWarEvent();
 				TownyMessaging.sendMsg(getSender(), Translation.of("msg_war_started"));
@@ -2058,6 +2060,25 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			// parameter error message
 			// peaceful/war/townmobs/worldmobs
 			TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_choice"));
+		}
+	}
+
+	private void toggleRegenerations(boolean choice) {
+		for (TownyWorld world : new ArrayList<>(TownyUniverse.getInstance().getWorldMap().values())) {
+			world.setUsingPlotManagementRevert(choice);
+			world.setUsingPlotManagementWildBlockRevert(choice);
+			world.setUsingPlotManagementWildEntityRevert(choice);
+			world.save();
+		}
+	}
+
+	private void toggleWildernessUsage(boolean choice) {
+		for (TownyWorld world : new ArrayList<>(TownyUniverse.getInstance().getWorldMap().values())) {
+			world.setUnclaimedZoneBuild(choice);
+			world.setUnclaimedZoneDestroy(choice);
+			world.setUnclaimedZoneSwitch(choice);
+			world.setUnclaimedZoneItemUse(choice);
+			world.save();
 		}
 	}
 
