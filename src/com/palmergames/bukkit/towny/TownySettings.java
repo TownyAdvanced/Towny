@@ -1744,9 +1744,9 @@ public class TownySettings {
 		return getInt(ConfigNodes.JAIL_OUTLAW_JAIL_HOURS);
 	}
 
-	public static boolean JailAllowsEnderPearls() {
+	public static boolean JailAllowsTeleportItems() {
 		
-		return getBoolean(ConfigNodes.JAIL_JAIL_ALLOWS_ENDER_PEARLS);
+		return getBoolean(ConfigNodes.JAIL_JAIL_ALLOWS_TELEPORT_ITEMS);
 	}
 	
 	public static boolean JailDeniesTownLeave() {

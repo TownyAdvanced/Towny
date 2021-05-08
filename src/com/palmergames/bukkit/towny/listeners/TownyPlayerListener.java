@@ -632,7 +632,7 @@ public class TownyPlayerListener implements Listener {
 			}
 			if (event.getCause() == TeleportCause.PLUGIN)
 				return;
-			if ((event.getCause() != TeleportCause.ENDER_PEARL) || (!TownySettings.JailAllowsEnderPearls())) {
+			if ((event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CHORUS_FRUIT) && !TownySettings.JailAllowsTeleportItems()) {
 				TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_jailed_players_no_teleport"));
 				event.setCancelled(true);
 			}

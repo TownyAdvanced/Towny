@@ -187,8 +187,8 @@ public class JailUtil {
 		}
 		pages += "If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.";
 		pages += "But don't die before you reach the wilderness or you'll end up right back in jail.";
-		if (TownySettings.JailAllowsEnderPearls())
-			pages += "Luckily, enderpearls are allowed to be used to help you escape, now you've just got to get a hold of some.";
+		if (TownySettings.JailAllowsTeleportItems())
+			pages += "Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you've just got to get a hold of some.";
 		pages +="\n\n";
 		if (reason.equals(JailReason.PRISONER_OF_WAR))
 			pages += "As a prisoner of war you will be freed if your countrymen can reduce the jail plot's HP to 0, or if the town you are jailed in is removed from the war.";

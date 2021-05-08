@@ -2154,11 +2154,11 @@ public enum ConfigNodes {
 			"5",
 			"",
 			"#How many hours an attacking outlaw will be jailed for."),
-	JAIL_JAIL_ALLOWS_ENDER_PEARLS(
-			"jail.jail_allows_ender_pearls",
+	JAIL_JAIL_ALLOWS_TELEPORT_ITEMS(
+			"jail.jail_allows_teleport_items",
 			"false",
 			"",
-			"#If true jailed players can use Ender Pearls but are still barred from using other methods of teleporting."),
+			"#If true jailed players can use items that teleport, ie: Ender Pearls & Chorus Fruit, but are still barred from using other methods of teleporting."),
 	JAIL_JAIL_DENIES_TOWN_LEAVE(
 			"jail.jail_denies_town_leave",
 			"false",
