@@ -6069,3 +6069,11 @@ v0.92.0.11:
 0.96.7.16:
   - Fix it so that servers who remove the numResidents: 0 town and nation levels will not generate NPE.
   - Fix SQL_Schema that lead to errors on 0.96.7.15 MySQL servers. 
+0.96.7.17:
+  - New Command: /ta toggle wildernessuse (on|off)
+    - Toggles build/destroy/switch/itemuse in the wilderness of each world off or on.
+    - Toggles on if on/off is not specified.
+  - New Command: /ta toggle regenerations (on|off)
+    - Toggles explosion regen and unclaimed revert in the wilderness of each world off or on.
+    - Toggles off if on/off is not specified.
+  - Bump language files to 0.105.
