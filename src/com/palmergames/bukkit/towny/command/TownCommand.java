@@ -3330,7 +3330,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				resident = getResidentOrThrow(player.getUniqueId());
 				town = resident.getTown();
 
-				if (town.isBankrupt())
+				// Allow a bankrupt town to claim a single plot.
+				if (town.isBankrupt() && town.getTownBlocks().size() != 0)
 					throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_claim"));
 
 				world = TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName());

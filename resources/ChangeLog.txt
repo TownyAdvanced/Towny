@@ -6077,3 +6077,5 @@ v0.92.0.11:
     - Toggles explosion regen and unclaimed revert in the wilderness of each world off or on.
     - Toggles off if on/off is not specified.
   - Bump language files to 0.105.
+  - Allow a bankrupt town with no townblocks claimed to claim one plot.
+    - Closes #4452. 
