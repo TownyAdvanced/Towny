@@ -4,6 +4,8 @@ import org.bukkit.Location;
 
 import com.palmergames.bukkit.towny.object.Coord;
 
+/** @deprecated for future removal. Please use <a href="https://github.com/TownyAdvanced/Flagwar">the FlagWar plugin</a> for future API support. */
+@Deprecated
 public class Cell {
 
 	private String worldName;

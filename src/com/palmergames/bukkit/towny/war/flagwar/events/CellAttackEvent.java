@@ -10,6 +10,8 @@ import org.bukkit.event.HandlerList;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.war.flagwar.CellUnderAttack;
 
+/** @deprecated for removal in a future release. Please use <a href="https://github.com/TownyAdvanced/Flagwar">the FlagWar plugin</a> for continued support. */
+@Deprecated
 public class CellAttackEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
