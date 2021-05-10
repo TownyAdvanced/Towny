@@ -34,6 +34,10 @@ ___
 <tr align=center><td> MC 1.2.5 </td><td> <a href=https://www.dropbox.com/s/xstn1vdexxc1k5q/Towny_Advanced%200.82.0.0%20for%201.2.5.zip?dl=0>0.82.0.0</a> </td>
 </table>
 
+> Note: The bundled implementation of _FlagWar_ has been deprecated and is marked for removal
+> in a future Towny release. Operators are encouraged to install the
+> [standalone implementation](https://github.com/TownyAdvanced/FlagWar).
+
 ___
 
 ### Staying up to date
