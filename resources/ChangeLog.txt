@@ -6081,3 +6081,7 @@ v0.92.0.11:
     - Closes #4452. 
   - Fix potential NPE when loading a resident.
   - Fix missing permission node test.
+0.97.0.0:
+  - Deprecate FlagWar Classes, courtesy of TheFlagCourier with PR #4920.
+    - Is being replaced by the standalone FlagWar plugin.
+  - Bump version for release.
