@@ -6085,3 +6085,5 @@ v0.92.0.11:
   - Deprecate FlagWar Classes, courtesy of TheFlagCourier with PR #4920.
     - Is being replaced by the standalone FlagWar plugin.
   - Bump version for release.
+0.97.0.1: 
+  - Fix german.yml, courtesy of relkai with PR #4924.
