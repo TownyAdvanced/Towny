@@ -6080,3 +6080,4 @@ v0.92.0.11:
   - Allow a bankrupt town with no townblocks claimed to claim one plot.
     - Closes #4452. 
   - Fix potential NPE when loading a resident.
+  - Fix missing permission node test.

@@ -3500,6 +3500,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					// If the unclaim code knows its an outpost or not, doesnt matter its only used once the world deletes the townblock, where it takes the value from the townblock.
 					// Which is why in AreaSelectionUtil, since outpost is not parsed in the main claiming of a section, it is parsed in the unclaiming with the circle, rect & all options.
 				} else {
+					// Check permissions here because of the townunclaim mode.
+					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM.getNode()))
+						throw new TownyException(Translation.of("msg_err_command_disable"));
+					
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
 					selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
 					if (selection.isEmpty())
