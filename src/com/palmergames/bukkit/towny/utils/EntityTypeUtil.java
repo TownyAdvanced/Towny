@@ -94,7 +94,7 @@ public class EntityTypeUtil {
 			break;
 			
 		case LEASH_HITCH:
-			material = Material.LEAD;
+			material = Material.LEASH;
 			break;
 
 		case ENDER_CRYSTAL:
@@ -107,15 +107,15 @@ public class EntityTypeUtil {
 			break;
 			
 		case MINECART_CHEST:
-			material = Material.CHEST_MINECART;
+			material = Material.STORAGE_MINECART;
 			break;
 		
 		case MINECART_FURNACE:
-			material = Material.FURNACE_MINECART;
+			material = Material.POWERED_MINECART;
 			break;
 
 		case MINECART_COMMAND:
-			material = Material.COMMAND_BLOCK_MINECART;
+			material = Material.COMMAND_MINECART;
 			break;
 
 		case MINECART_HOPPER:
@@ -123,11 +123,11 @@ public class EntityTypeUtil {
 			break;
 			
 		case MINECART_TNT:
-			material = Material.TNT_MINECART;
+			material = Material.EXPLOSIVE_MINECART;
 			break;
 		
 		case BOAT:
-			material = Material.OAK_BOAT;
+			material = Material.BOAT;
 			break;
 		default:
 			break;

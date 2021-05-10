@@ -6,12 +6,15 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.MojangException;
 import com.palmergames.bukkit.towny.object.Resident;
 
+import de.themoep.idconverter.IdMappings;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -214,6 +217,23 @@ public class BukkitTools {
 		return m;
 	}
 
+	/*
+	 * Material handling Methods.
+	 */
+	
+	/**
+	 * Find a Material from an Id.
+	 * Helpfully using Phoenix616's useful IdConverter.jar
+	 * https://www.spigotmc.org/resources/id-converter.52099/
+	 * 
+	 * @param id - ID for a material ({@link Integer})
+	 * @return a Material parsed from {@link IdMappings}
+	 */
+	@Deprecated
+	public static Material getMaterial(int id) {
+		return Material.getMaterial(IdMappings.getById(String.valueOf(id)).getFlatteningType());
+	}
+
 	/**
 	 * Accepts an X or Z value and returns the associated Towny plot value.
 	 * 
@@ -250,5 +270,42 @@ public class BukkitTools {
 	
 	public static String convertCoordtoXYZ(Location loc) {
 		return loc.getWorld().getName() + " " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
+	}
+
+	@Deprecated
+	public static int getTypeId(Block block) {
+		return block.getTypeId();
+	}
+	
+	@Deprecated
+	public static byte getData(Block block) {
+		return block.getData();
+	}
+	
+	@Deprecated
+	public static void setTypeIdAndData(Block block, int type, byte data, boolean applyPhysics) {
+		block.setTypeIdAndData(type, data, applyPhysics);
+	}
+	
+	@Deprecated
+	public static void setTypeId(Block block, int type, boolean applyPhysics) {
+		block.setTypeId(type, applyPhysics);
+	}
+	
+	@Deprecated
+	public static void setData(Block block, byte data, boolean applyPhysics) {
+		block.setData(data, applyPhysics);
+	}
+	
+	/**
+	 * Get the Id (magic number) of a Material type.
+	 * 
+	 * @param material
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	public static int getMaterialId(Material material) {
+		
+		return material.getId();
 	}
 }

@@ -4,6 +4,7 @@ import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.util.TimeTools;
 
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 
@@ -11,10 +12,11 @@ import org.bukkit.Tag;
 @Deprecated
 public class FlagWarConfig {
 
-	public static final Material[] woolColors = new Material[] {
-			Material.LIME_WOOL, Material.GREEN_WOOL, Material.BLUE_WOOL, Material.CYAN_WOOL,
-			Material.LIGHT_BLUE_WOOL, Material.GRAY_WOOL, Material.WHITE_WOOL,
-			Material.PINK_WOOL, Material.ORANGE_WOOL, Material.RED_WOOL };
+	public static final DyeColor[] woolColors = new DyeColor[] {
+			DyeColor.LIME, DyeColor.GREEN, DyeColor.BLUE, DyeColor.CYAN,
+			DyeColor.LIGHT_BLUE, DyeColor.SILVER, DyeColor.WHITE,
+			DyeColor.PINK, DyeColor.ORANGE, DyeColor.RED };
+
 
 	private static Material flagBaseMaterial = null;
 	private static Material flagLightMaterial = null;
@@ -25,7 +27,7 @@ public class FlagWarConfig {
 		return Tag.WOOL.isTagged(material) || material == getFlagBaseMaterial() || material == getFlagLightMaterial() || material == getBeaconWireFrameMaterial();
 	}
 
-	public static Material[] getWoolColors() {
+	public static DyeColor[] getWoolColors() {
 
 		return woolColors;
 	}

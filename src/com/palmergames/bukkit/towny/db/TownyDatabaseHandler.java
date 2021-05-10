@@ -1320,8 +1320,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
      */
     private PlotBlockData loadDataStream(PlotBlockData plotBlockData, InputStream stream) {
     	int version = 0;
-    	List<String> blockArr = new ArrayList<>();
-    	String value;
+    	List<Integer> IntArr = new ArrayList<>();
+    	int value = 0;
         try (DataInputStream fin = new DataInputStream(stream)) {
             
             //read the first 3 characters to test for version info
@@ -1345,8 +1345,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
                 // First entry is the plot height
                 fin.reset();
                 plotBlockData.setHeight(fin.readInt());
-                blockArr.add(fin.readUTF());
-                blockArr.add(fin.readUTF());
+                IntArr.add((int) key[1]);
+				IntArr.add((int) key[2]);
             }
             
             /*
@@ -1360,9 +1360,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
                 case 1:
                     
                     // load remainder of file
-                    while ((value = fin.readUTF()) != null) {
-                        blockArr.add(value);
-                    }
+					while ((value = fin.read()) >= 0) {
+						IntArr.add(value);
+					}
                     
                     break;
                 
@@ -1371,7 +1371,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
                     // load remainder of file
                     int temp = 0;
                     while ((temp = fin.readInt()) >= 0) {
-                        blockArr.add(temp + "");
+                    	IntArr.add(value);
                     }
                     
                     break;
@@ -1384,7 +1384,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
             e.printStackTrace();
         }
         
-        plotBlockData.setBlockList(blockArr);
+        plotBlockData.setBlockList(IntArr);
         plotBlockData.resetBlockListRestored();
         return plotBlockData;
     }

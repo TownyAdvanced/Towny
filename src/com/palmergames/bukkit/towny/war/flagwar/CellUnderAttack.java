@@ -3,12 +3,14 @@ package com.palmergames.bukkit.towny.war.flagwar;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.util.BukkitTools;
 
 /** @deprecated for removal in a future release. Please use <a href="https://github.com/TownyAdvanced/Flagwar">the FlagWar plugin</a> for continued support. */
 @Deprecated
@@ -165,16 +167,19 @@ public class CellUnderAttack extends Cell {
 			block.setType(FlagWarConfig.getBeaconWireFrameMaterial());
 	}
 
+	@SuppressWarnings("deprecation")
 	public void updateFlag() {
 
-		Material[] woolColors = FlagWarConfig.getWoolColors();
+		DyeColor[] woolColors = FlagWarConfig.getWoolColors();
 		if (flagColorId < woolColors.length) {
 			System.out.println(String.format("Flag at %s turned %s.", getCellString(), woolColors[flagColorId].toString()));
-			
-			flagBlock.setType(woolColors[flagColorId]);
-			
+			int woolId = BukkitTools.getMaterialId(Material.WOOL);
+			byte woolData = woolColors[flagColorId].getDyeData();
+
+			BukkitTools.setTypeIdAndData(flagBlock, woolId, woolData, true);
+
 			for (Block block : beaconFlagBlocks)
-				block.setType(woolColors[flagColorId]);
+				BukkitTools.setTypeIdAndData(block, woolId, woolData, true);
 			
 		}
 	}

@@ -394,6 +394,15 @@ public class TownyWorld extends TownyObject {
 	public boolean isPlotManagementIgnoreIds(Material mat) {
 		return getPlotManagementIgnoreIds().contains(mat.toString());
 	}
+	
+	@Deprecated
+	public boolean isPlotManagementIgnoreIds(String id, Byte data) {
+
+		if (getPlotManagementIgnoreIds().contains(id + ":" + data))
+			return true;
+		
+		return getPlotManagementIgnoreIds().contains(id);
+	}
 
 	public void setPlotManagementIgnoreIds(List<String> plotManagementIgnoreIds) {
 

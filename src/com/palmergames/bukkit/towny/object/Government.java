@@ -12,7 +12,6 @@ import com.palmergames.bukkit.towny.object.economy.AccountAuditor;
 import com.palmergames.bukkit.towny.object.economy.BankEconomyHandler;
 import com.palmergames.bukkit.towny.object.economy.BankAccount;
 import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
-import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -322,22 +321,25 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * @param desiredPages The number of pages requested.
 	 */
 	public void generateBankHistoryBook(Player player, int desiredPages) {
-		int size = getAccount().getAuditor().getAuditHistory().size();
-
-		if (size < 1) {
-			TownyMessaging.sendErrorMsg(player, "No pages to display!");
-			return;
-		}
-
-		if (desiredPages < 1)
-			desiredPages = 1;
-		desiredPages = Math.min(desiredPages, size);
 		
-		List<String> pages = new ArrayList<>(desiredPages);
-		for (int i = 1; i <= desiredPages; i++) {
-			pages.add(getAccount().getAuditor().getAuditHistory().get(size-i));
-		}
-
-		player.openBook(BookFactory.makeBook("Bank History", getName(), pages));
+		TownyMessaging.sendErrorMsg(player, "1.12 does not support this feature!");
+		return;
+//		int size = getAccount().getAuditor().getAuditHistory().size();
+//
+//		if (size < 1) {
+//			TownyMessaging.sendErrorMsg(player, "No pages to display!");
+//			return;
+//		}
+//
+//		if (desiredPages < 1)
+//			desiredPages = 1;
+//		desiredPages = Math.min(desiredPages, size);
+//		
+//		List<String> pages = new ArrayList<>(desiredPages);
+//		for (int i = 1; i <= desiredPages; i++) {
+//			pages.add(getAccount().getAuditor().getAuditHistory().get(size-i));
+//		}
+//
+//		player.openBook(BookFactory.makeBook("Bank History", getName(), pages));
 	}
 }

@@ -1,9 +1,6 @@
 package com.palmergames.bukkit.towny.regen.block;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 
 /**
  * 
@@ -12,24 +9,66 @@ import org.bukkit.block.data.BlockData;
  */
 public class BlockObject {
 
+	private int typeId;
+	private byte data;
 	private BlockLocation location;
-	private BlockData blockData;
-	
-	public BlockObject(String key) {
-		
-		this.blockData = Bukkit.getServer().createBlockData(key);
+
+	public BlockObject(int typeId) {
+
+		this.typeId = typeId;
+		this.data = 0;
 	}
 	
-	public Material getMaterial() {
-		return this.blockData.getMaterial();
+	public BlockObject(int typeId, Location loc) {
+
+		this.typeId = typeId;
+		this.data = 0;
+		setLocation(loc);
+	}
+
+	public BlockObject(int typeId, byte data) {
+
+		this.typeId = typeId;
+		this.data = data;
 	}
 	
-	public BlockData getBlockData() {
-		return this.blockData;
+	public BlockObject(int typeId, byte data, Location loc) {
+
+		this.typeId = typeId;
+		this.data = data;
+		setLocation(loc);
 	}
-	
-	public void setBlockData(BlockData blockData) {
-		this.blockData = blockData;
+
+	/**
+	 * @return the id
+	 */
+	public int getTypeId() {
+
+		return typeId;
+	}
+
+	/**
+	 * @param typeId the id to set
+	 */
+	public void setTypeId(int typeId) {
+
+		this.typeId = typeId;
+	}
+
+	/**
+	 * @return the data
+	 */
+	public byte getData() {
+
+		return data;
+	}
+
+	/**
+	 * @param data the data to set
+	 */
+	public void setData(byte data) {
+
+		this.data = data;
 	}
 	
 	/**
@@ -47,4 +86,14 @@ public class BlockObject {
 
 		this.location = new BlockLocation(loc);
 	}
+
+	/**
+	 * @param typeId the typeId to set
+	 */
+	public void setTypeIdAndData(int typeId, byte data) {
+
+		this.typeId = typeId;
+		this.data = data;
+	}
+
 }

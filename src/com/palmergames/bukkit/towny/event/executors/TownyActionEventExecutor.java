@@ -168,8 +168,8 @@ public class TownyActionEventExecutor {
 	
 	private static boolean isNotFireSpreadBypassMat(Block block) {
 		switch (block.getType()) {
-			case CAMPFIRE:
-				break;
+//			case CAMPFIRE:
+//				break;
 			default:
 				block = block.getRelative(BlockFace.DOWN);
 		}
