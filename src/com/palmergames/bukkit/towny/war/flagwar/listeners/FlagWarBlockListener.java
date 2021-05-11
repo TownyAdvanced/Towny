@@ -19,6 +19,10 @@ import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 
+/**
+/** @deprecated for future removal. Please use <a href="https://github.com/TownyAdvanced/Flagwar">the FlagWar plugin</a> for future API support.
+ */
+@Deprecated
 public class FlagWarBlockListener implements Listener {
 	
 	private Towny plugin;

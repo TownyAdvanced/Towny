@@ -19,7 +19,7 @@ ___
 
 <table>
 <tr><th> Minecraft Version</th><th>Towny Version</th></tr>
-<tr align=center><td> MC 1.16.* </td><td rowspan=3> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.96.7.0>0.96.7.0</a> or the above Latest Pre-Release. </td>
+<tr align=center><td> MC 1.16.* </td><td rowspan=3> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.97.0.0>0.97.0.0</a> or the above Latest Pre-Release. </td>
 <tr align=center><td> MC 1.15.* </td>
 <tr align=center><td> MC 1.14.* </td>
 <tr align=center><td> MC 1.13.2 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0for1.13.2>0.96.2.0 for 1.13.2</a> </td>
@@ -33,6 +33,10 @@ ___
 <tr align=center><td> MC 1.5.2 </td><td> <a href=https://www.dropbox.com/s/euydq4qsljheoms/Towny_Advanced%200.88.0.0%20%281.5.2%29.zip?dl=0>0.88.0.0 for 1.5.2</a> </td>
 <tr align=center><td> MC 1.2.5 </td><td> <a href=https://www.dropbox.com/s/xstn1vdexxc1k5q/Towny_Advanced%200.82.0.0%20for%201.2.5.zip?dl=0>0.82.0.0</a> </td>
 </table>
+
+> Note: The bundled implementation of _FlagWar_ has been deprecated and is marked for removal
+> in a future Towny release. Operators are encouraged to install the
+> [standalone implementation](https://github.com/TownyAdvanced/FlagWar).
 
 ___
 

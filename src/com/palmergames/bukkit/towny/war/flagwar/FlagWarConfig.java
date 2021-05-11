@@ -7,6 +7,8 @@ import com.palmergames.util.TimeTools;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 
+/** @deprecated for removal in a future release. Please use <a href="https://github.com/TownyAdvanced/Flagwar">the FlagWar plugin</a> for continued support. */
+@Deprecated
 public class FlagWarConfig {
 
 	public static final Material[] woolColors = new Material[] {

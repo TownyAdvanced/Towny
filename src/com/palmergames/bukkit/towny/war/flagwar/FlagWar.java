@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.plugin.PluginManager;
 
+/** @deprecated for removal in a future release. Please use <a href="https://github.com/TownyAdvanced/Flagwar">the FlagWar plugin</a> for continued support. */
+@Deprecated
 public class FlagWar {
 
 	private static Map<Cell, CellUnderAttack> cellsUnderAttack;

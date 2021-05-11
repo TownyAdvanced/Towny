@@ -34,6 +34,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+/** @deprecated for removal in a future release. Please use <a href="https://github.com/TownyAdvanced/Flagwar">the FlagWar plugin</a> for continued support. */
+@Deprecated
 public class FlagWarCustomListener implements Listener {
 
 	private final Towny plugin;

@@ -6066,3 +6066,24 @@ v0.92.0.11:
   - New Config Option: global_town_settings.automatic_capitalisation
     - Default: false
     - When enabled, town names will automatically be capitalised upon creation.
+0.96.7.16:
+  - Fix it so that servers who remove the numResidents: 0 town and nation levels will not generate NPE.
+  - Fix SQL_Schema that lead to errors on 0.96.7.15 MySQL servers. 
+0.96.7.17:
+  - New Command: /ta toggle wildernessuse (on|off)
+    - Toggles build/destroy/switch/itemuse in the wilderness of each world off or on.
+    - Toggles on if on/off is not specified.
+  - New Command: /ta toggle regenerations (on|off)
+    - Toggles explosion regen and unclaimed revert in the wilderness of each world off or on.
+    - Toggles off if on/off is not specified.
+  - Bump language files to 0.105.
+  - Allow a bankrupt town with no townblocks claimed to claim one plot.
+    - Closes #4452. 
+  - Fix potential NPE when loading a resident.
+  - Fix missing permission node test.
+0.97.0.0:
+  - Deprecate FlagWar Classes, courtesy of TheFlagCourier with PR #4920.
+    - Is being replaced by the standalone FlagWar plugin.
+  - Bump version for release.
+0.97.0.1: 
+  - Fix german.yml, courtesy of relkai with PR #4924.

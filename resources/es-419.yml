@@ -1,5 +1,5 @@
 name: Towny
-version: 0.103
+version: 0.105
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -1396,3 +1396,10 @@ msg_deleting_nation_will_result_in_losing_residents: '&cAdvertencia: Borrar tu n
 # Añadido en la versión 0.103
 msg_command_blocked_inside_towns: '&cNo puedes usar ese comando dentro de una ciudad.'
 msg_command_limited: 'Solo puedes usar ese comando en tus propios terrenos.'
+
+# Añadido en la versión 0.104
+msg_plot_perm_claimed_at: '&2Reclamado el: &a%s'
+
+# Añadido en la versión 0.105
+msg_wilderness_use_x_in_all_worlds: 'Uso del Exterior cambiado a %s en todos los mundos.'
+msg_regenerations_use_x_in_all_worlds: 'Regeneración cambiada a %s en todos los mundos.'

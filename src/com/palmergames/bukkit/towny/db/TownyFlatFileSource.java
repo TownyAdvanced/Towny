@@ -382,7 +382,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileResident);
 				
-				resident.setLastOnline(Long.parseLong(keys.get("lastOnline")));
+				line = keys.get("lastOnline");
+				if (line != null)
+					resident.setLastOnline(Long.parseLong(line));
 				
 				line = keys.get("uuid");
 				if (line != null) {
