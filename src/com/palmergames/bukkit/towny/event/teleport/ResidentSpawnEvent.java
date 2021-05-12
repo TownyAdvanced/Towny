@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An event called when /res spawn occurs.
@@ -44,6 +45,7 @@ public class ResidentSpawnEvent extends SpawnEvent {
 	 * 
 	 * @return null if the player was not standing in a townblock, the town they were standing in otherwise.
 	 */
+	@Nullable
 	public Town getFromTown() {
 		return fromTown;
 	}

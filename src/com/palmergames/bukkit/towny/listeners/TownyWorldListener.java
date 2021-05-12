@@ -173,10 +173,7 @@ public class TownyWorldListener implements Listener {
 					continue;
 				}
 			} else {
-				try {
-					town = townBlock.getTown();
-				} catch (NotRegisteredException e) {
-				}
+				town = townBlock.getTownOrNull();
 				try {
 					otherTownBlock = TownyAPI.getInstance().getTownBlock(blockLocation);
 					otherTown = otherTownBlock.getTown();

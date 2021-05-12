@@ -1038,6 +1038,11 @@ public class TownyUniverse {
 		else 
 			throw new NotRegisteredException();
 	}
+	
+	@Nullable
+	public TownBlock getTownBlockOrNull(WorldCoord worldCoord) {
+		return townBlocks.get(worldCoord);
+	}
 
 	/**
 	 * Get Universe-wide ConcurrentHashMap of WorldCoords and their TownBlocks.
