@@ -480,6 +480,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					WorldCoord pos = new WorldCoord(world, Coord.parseCoord(player));
 					Town town = townBlock.getTownOrNull();
+					if (town == null)
+						throw new TownyException(Translation.of("msg_err_empty_area_selection"));
 					double plotPrice = town.getPlotTypePrice(pos.getTownBlock().getType());
 
 					if (split.length > 1) {

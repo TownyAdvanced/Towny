@@ -112,7 +112,6 @@ public class TownyFormatter {
 		
 		TownyObject owner;
 		Town town = townBlock.getTownOrNull();
-		assert town != null;
 		TownyWorld world = townBlock.getWorld();
 		boolean preventPVP = CombatUtil.preventPvP(world, townBlock);
 
@@ -123,7 +122,7 @@ public class TownyFormatter {
 
 		out.add(ChatTools.formatTitle(owner.getFormattedName() + ((BukkitTools.isOnline(owner.getName())) ? Translation.of("online") : "")));
 		if (!townBlock.getType().equals(TownBlockType.RESIDENTIAL))
-			out.add(Translation.of("status_plot_type") + townBlock.getType().toString());							
+			out.add(Translation.of("status_plot_type") + townBlock.getType().toString());
 		out.add(Translation.of("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString().replace("n", "t") : townBlock.getPermissions().getColourString().replace("f", "r")));
 		out.add(Translation.of("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString2().replace("n", "t") : townBlock.getPermissions().getColourString2().replace("f", "r")));
 		out.add(Translation.of("status_pvp") + ((!preventPVP) ? Translation.of("status_on"): Translation.of("status_off")) + 

@@ -39,7 +39,7 @@ public class ShopPlotUtil {
 			if (resident != null) 
 				owner = townBlock.getResidentOrNull().equals(resident);
 		}
-			
+		
 		return owner && isShopPlot(location);
 	}
 

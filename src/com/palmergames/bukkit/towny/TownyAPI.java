@@ -135,12 +135,7 @@ public class TownyAPI {
      */
     @Nullable
     public Nation getTownNationOrNull(Town town) {
-    	if (town.hasNation())
-			try {
-				return town.getNation();
-			} catch (NotRegisteredException ignored) {}
-    	
-    	return null;
+    	return town.getNationOrNull();
     }
     
     /**
@@ -382,11 +377,7 @@ public class TownyAPI {
     @Nullable
     public Town getTown(Location location) {
         WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
-		if (worldCoord.hasTownBlock() && getTownBlock(worldCoord).hasTown())
-			return getTownBlock(worldCoord).getTownOrNull();
-
-		// No data so return null
-		return null;
+		return worldCoord.getTownBlockOrNull().getTownOrNull();
     }
     
     /**
@@ -456,7 +447,7 @@ public class TownyAPI {
 		return null;
     }
     
-    /**
+    /** 
      * Get the {@link TownBlock} at a specific {@link WorldCoord}.
      * 
      * @param wc {@link WorldCoord to get the {@link TownBlock} of (if it claimed by a town.)
@@ -464,11 +455,7 @@ public class TownyAPI {
      */
     @Nullable
     public TownBlock getTownBlock(WorldCoord wc) {
-    	if (wc.hasTownBlock())
-			try {
-				return wc.getTownBlock();
-			} catch (NotRegisteredException ignore) {}
-    	return null;
+    	return wc.getTownBlockOrNull();
     }
     
     /**

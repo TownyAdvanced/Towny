@@ -433,10 +433,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				townBlock.setResident(null);
 				
 				townBlock.setPlotPrice(townBlock.getTownOrNull().getPlotPrice());
-				townBlock.save();
-
 				// Set the plot permissions to mirror the towns.
 				townBlock.setType(townBlock.getType());
+				townBlock.save();
 			}
 		}
 		

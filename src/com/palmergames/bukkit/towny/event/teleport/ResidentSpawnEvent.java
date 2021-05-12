@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.event.teleport;
 
 import com.palmergames.bukkit.towny.event.SpawnEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Location;
@@ -21,13 +20,9 @@ public class ResidentSpawnEvent extends SpawnEvent {
 	public ResidentSpawnEvent(Player player, Location from, Location to) {
 		super(player, from, to);
 
-		try {
-			fromTown = WorldCoord.parseWorldCoord(from).getTownBlock().getTown();
-		} catch (NotRegisteredException ignored) {}
+		fromTown = WorldCoord.parseWorldCoord(from).getTownBlockOrNull().getTownOrNull();
 		
-		try {
-			toTown = WorldCoord.parseWorldCoord(to).getTownBlock().getTown();
-		} catch (NotRegisteredException ignored) {}
+		toTown = WorldCoord.parseWorldCoord(to).getTownBlockOrNull().getTownOrNull();
 		
 	}
 

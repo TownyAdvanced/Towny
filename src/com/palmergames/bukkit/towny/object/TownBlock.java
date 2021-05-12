@@ -299,7 +299,7 @@ public class TownBlock extends TownyObject {
 	}
 
 	public boolean isHomeBlock() {
-		return hasTown() && getTownOrNull().isHomeBlock(null);
+		return hasTown() && getTownOrNull().isHomeBlock(this);
 	}
 	
 	@Override
