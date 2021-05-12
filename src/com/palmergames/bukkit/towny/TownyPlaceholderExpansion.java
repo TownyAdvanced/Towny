@@ -590,15 +590,15 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return townblock != null ? String.valueOf(townblock.isOwner(resident)) : "false";
 			
 		case "player_location_town_or_wildname": // %townyadvanced_player_location_town_or_wildname%
-			return townblock != null ? TownyAPI.getInstance().getTownOrNull(townblock).getName() : TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).getUnclaimedZoneName();
+			return townblock != null ? townblock.getTownOrNull().getName() : TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).getUnclaimedZoneName();
 		case "player_location_formattedtown_or_wildname": // %townyadvanced_player_location_formattedtown_or_wildname%
-			return townblock != null ? TownyAPI.getInstance().getTownOrNull(townblock).getFormattedName() : TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).getUnclaimedZoneName();
+			return townblock != null ? townblock.getTownOrNull().getFormattedName() : TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).getUnclaimedZoneName();
 		case "player_location_plot_name": // %townyadvanced_player_location_plot_name%
 			return townblock != null ? townblock.getName() : "";
 		case "player_location_town_prefix": // %townyadvanced_player_location_town_prefix%
-			return townblock != null ? TownyAPI.getInstance().getTownOrNull(townblock).getPrefix(): "";
+			return townblock != null ? townblock.getTownOrNull().getPrefix(): "";
 		case "player_location_town_postfix": // %townyadvanced_player_location_town_postfix%
-			return townblock != null ? TownyAPI.getInstance().getTownOrNull(townblock).getPostfix(): "";
+			return townblock != null ? townblock.getTownOrNull().getPostfix(): "";
 		case "player_location_pvp": // %townyadvanced_player_location_pvp%
 			try {
 				return townblock != null ? (townblock.getPermissions().pvp ? Translation.of("status_title_pvp"):"") : (TownyAPI.getInstance().getDataSource().getWorld(player.getWorld().getName()).isPVP() ? Translation.of("status_title_pvp"):"");

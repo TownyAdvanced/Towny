@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -68,6 +69,17 @@ public class TownBlock extends TownyObject {
 			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", world.getName(), x, z));
 		return town;
 	}
+	
+	/**
+	 * Relatively safe to use after confirming {@link #hasTown()} is true
+	 * or {@link TownyAPI#isWilderness(org.bukkit.Location)} is false.
+	 * 
+	 * @return Town who owns the TownBlock or null.
+	 */
+	@Nullable 
+	public Town getTownOrNull() {
+		return town;
+	}
 
 	public boolean hasTown() {
 
@@ -99,6 +111,16 @@ public class TownBlock extends TownyObject {
 		return resident;
 	}
 
+	/**
+	 * Relatively safe to use after testing {@link #hasResident()}.
+	 * 
+	 * @return Resident who personally owns the TownBlock or null.
+	 */
+	@Nullable
+	public Resident getResidentOrNull() {
+		return resident;
+	}
+	
 	public boolean hasResident() {
 
 		return resident != null;

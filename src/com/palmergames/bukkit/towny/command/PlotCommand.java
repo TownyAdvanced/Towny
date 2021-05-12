@@ -243,7 +243,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			String world = player.getWorld().getName();
 
 			try {
-				if (!TownyAPI.getInstance().isWilderness(player.getLocation()) && TownyAPI.getInstance().getTownOrNull(townBlock).isRuined())
+				if (!TownyAPI.getInstance().isWilderness(player.getLocation()) && townBlock.getTownOrNull().isRuined())
 					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
 
 				if (split[0].equalsIgnoreCase("claim")) {
@@ -258,7 +258,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					// Fast-fail if this is a single plot and it is already claimed.
 					if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasResident() && !selection.get(0).getTownBlock().isForSale())
-						throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownBlock().getResident()));
+						throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownBlock().getResidentOrNull()));
 					
 					// Filter to just plots that are for sale.
 					selection = AreaSelectionUtil.filterPlotsForSale(selection);
@@ -358,12 +358,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					Town town = townBlock.getTown();										
 					
-					if (townBlock.getResident() == null) {
+					if (!townBlock.hasResident()) {
 						
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_one_to_evict"));						
 					} else {
 						
-						Resident owner = townBlock.getResident();
+						Resident owner = townBlock.getResidentOrNull();
 						if (!town.equals(resident.getTown()) && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
 							
 							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_part_town"));
@@ -372,15 +372,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						if (townBlock.hasPlotObjectGroup()) {
 							for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
-								
-								owner = tb.getResident();
 								tb.setResident(null);
 								tb.setPlotPrice(-1);
 
 								// Set the plot permissions to mirror the towns.
 								tb.setType(townBlock.getType());
 
-								owner.save();
 								// Update the townBlock data file so it's no longer using custom settings.
 								tb.save();
 							}
@@ -1094,7 +1091,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
-				Town town = TownyAPI.getInstance().getTownOrNull(townBlock);
+				Town town = townBlock.getTownOrNull();
 				if (town == null)
 					throw new TownyException(Translation.of("msg_not_claimed_1"));
 				
@@ -1224,7 +1221,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				
 				for (TownBlock groupBlock : plotGroup.getTownBlocks()) {
 					
-					Town town = TownyAPI.getInstance().getTownOrNull(groupBlock);
+					Town town = groupBlock.getTownOrNull();
 					if (town == null) continue;
 					
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE.getNode(split[0].toLowerCase())))
@@ -1382,7 +1379,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		if (townBlock.hasResident()) {
 
-			Resident owner = townBlock.getResident();
+			Resident owner = townBlock.getResidentOrNull();
 			boolean isSameTown = (resident.hasTown()) && resident.getTown() == owner.getTown() && townBlock.getTown() == resident.getTown();  //Last test makes it so mayors cannot alter embassy plots owned by their residents in towns they are not mayor of.
 
 			if ((resident == owner)
@@ -1420,7 +1417,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
 		if (townBlock == null)
 			throw new TownyException(Translation.of("msg_not_claimed_1"));
-		Town town = TownyAPI.getInstance().getTownOrNull(townBlock);
+		Town town = townBlock.getTownOrNull();
 		if (town == null)
 			throw new TownyException(Translation.of("msg_not_claimed_1"));
 		

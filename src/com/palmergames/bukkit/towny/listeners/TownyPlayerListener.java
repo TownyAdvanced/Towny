@@ -1065,10 +1065,7 @@ public class TownyPlayerListener implements Listener {
 			if (tb.hasResident()) {
 				// This is a personally-owned plot, let's make sure the player is the plot owner.
 				
-				Resident owner = null;
-				try {
-					owner = tb.getResident();
-				} catch(NotRegisteredException nre) { return; }
+				Resident owner = tb.getResidentOrNull();
 			
 				// The owner and player are not the same, cancel the command.
 				if (!owner.getName().equals(player.getName())) {

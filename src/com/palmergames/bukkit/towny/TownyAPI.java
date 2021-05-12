@@ -382,11 +382,8 @@ public class TownyAPI {
     @Nullable
     public Town getTown(Location location) {
         WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
-		if (worldCoord.hasTownBlock()) {
-			TownBlock tb = getTownBLock(worldCoord);
-			if (tb.hasTown())
-				return getTownOrNull(tb);
-		}
+		if (worldCoord.hasTownBlock() && getTownBlock(worldCoord).hasTown())
+			return getTownBlock(worldCoord).getTownOrNull();
 
 		// No data so return null
 		return null;
@@ -401,11 +398,7 @@ public class TownyAPI {
      */
     @Nullable
     public Town getTownOrNull(TownBlock townBlock) {
-    	try {
-			return townBlock.getTown();
-		} catch (NotRegisteredException ignored) {}
-    	
-		return null;
+    	return townBlock.getTownOrNull();
     }
     
     /**
@@ -418,10 +411,7 @@ public class TownyAPI {
      */
     @Nullable
     public Resident getResidentOrNull(TownBlock townBlock) {
-    	try {
-			return townBlock.getResident();
-		} catch (NotRegisteredException ignored) {}
-    	return null;
+    	return townBlock.getResidentOrNull();
     }
     
     /**
@@ -473,7 +463,7 @@ public class TownyAPI {
      * @return {@link TownBlock} at this {@link WorldCoord}, or {@code null} if this isn't claimed.
      */
     @Nullable
-    public TownBlock getTownBLock(WorldCoord wc) {
+    public TownBlock getTownBlock(WorldCoord wc) {
     	if (wc.hasTownBlock())
 			try {
 				return wc.getTownBlock();
@@ -619,7 +609,7 @@ public class TownyAPI {
 			return TownBlockStatus.UNCLAIMED_ZONE;
 		}
 		
-		Town nearestTown = TownyAPI.getInstance().getTownOrNull(nearestTownblock);
+		Town nearestTown = nearestTownblock.getTownOrNull();
 		
 		// Safety validation, both these cases should never occur.
 		if (nearestTown == null || !nearestTown.hasNation()) {

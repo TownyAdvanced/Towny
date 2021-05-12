@@ -293,8 +293,8 @@ public class PlotClaim extends Thread {
 			if ((resident.hasTown() && (resident.getTown() != town) && (!townBlock.getType().equals(TownBlockType.EMBASSY))) || ((!resident.hasTown()) && (!townBlock.getType().equals(TownBlockType.EMBASSY))))
 				throw new TownyException(Translation.of("msg_err_not_part_town"));
 
-			try {
-				Resident owner = townBlock.getResident();
+			if (townBlock.hasResident()) {
+				Resident owner = townBlock.getResidentOrNull();
 
 				if (townBlock.getPlotPrice() != -1) {
 					// Plot is for sale
@@ -349,7 +349,7 @@ public class PlotClaim extends Thread {
 					throw new AlreadyRegisteredException(Translation.of("msg_already_claimed", owner.getName()));
 				}
 
-			} catch (NotRegisteredException e) {
+			} else {
 				//Plot has no owner so it's the town selling it
 
 				if (townBlock.getPlotPrice() == -1)

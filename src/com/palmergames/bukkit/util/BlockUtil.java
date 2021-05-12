@@ -48,7 +48,7 @@ public class BlockUtil {
 				if (!tb.hasResident() && !tb2.hasResident() && tb.getTown().getUUID().equals(tb2.getTown().getUUID())) // Both plots are town-owned, by the same town.
 					return true;
 
-				if (tb.hasResident() && tb2.hasResident() && tb.getResident().getName().equals(tb2.getResident().getName())) // Both plots are owned by the same resident.
+				if (tb.hasResident() && tb2.hasResident() && tb.getResidentOrNull().getName().equals(tb2.getResidentOrNull().getName())) // Both plots are owned by the same resident.
 					return true;
 
 			} catch (NotRegisteredException ignored) {}
@@ -95,7 +95,7 @@ public class BlockUtil {
 				if (!tb.hasResident() && !tb2.hasResident()) // Both plots are town-owned.
 					return true;
 
-				if (tb.hasResident() && tb2.hasResident() && tb.getResident().getName().equals(tb2.getResident().getName())) // Both plots are owned by the same resident.
+				if (tb.hasResident() && tb2.hasResident() && tb.getResidentOrNull().getName().equals(tb2.getResidentOrNull().getName())) // Both plots are owned by the same resident.
 					return true;
 
 			} catch (NotRegisteredException ignored) {}

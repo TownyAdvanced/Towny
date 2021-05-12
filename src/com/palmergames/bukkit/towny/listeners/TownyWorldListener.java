@@ -158,27 +158,20 @@ public class TownyWorldListener implements Listener {
 
 			// Resident Owned Location
 			if (townBlock.hasResident()) {
-				try {
-					resident = townBlock.getResident();
-				} catch (NotRegisteredException e) {
-				}
+				resident = townBlock.getResidentOrNull();
 				otherTownBlock = TownyAPI.getInstance().getTownBlock(blockLocation);
-				try {
-					// if residents don't match.
-					if (otherTownBlock.hasResident() && otherTownBlock.getResident() != resident) {
-						removed.add(blockState);
-						continue;
-					// if plot doesn't have a resident.
-					} else if (!otherTownBlock.hasResident()) {
-						removed.add(blockState);
-						continue;
-					// if both townblock have same owner. 
-					} else if (resident == otherTownBlock.getResident()) {
-						continue;
-					}
-				} catch (NotRegisteredException e) {
+				// if residents don't match.
+				if (otherTownBlock.hasResident() && otherTownBlock.getResidentOrNull() != resident) {
+					removed.add(blockState);
+					continue;
+				// if plot doesn't have a resident.
+				} else if (!otherTownBlock.hasResident()) {
+					removed.add(blockState);
+					continue;
+				// if both townblock have same owner. 
+				} else if (resident == otherTownBlock.getResidentOrNull()) {
+					continue;
 				}
-			// Town Owned Location
 			} else {
 				try {
 					town = townBlock.getTown();

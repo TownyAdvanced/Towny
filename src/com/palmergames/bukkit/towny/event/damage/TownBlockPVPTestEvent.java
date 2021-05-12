@@ -4,7 +4,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Nullable;
 
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 
@@ -46,7 +45,7 @@ public class TownBlockPVPTestEvent extends Event {
 	 */
 	@Nullable
 	public Town getTown() {
-		return TownyAPI.getInstance().getTownOrNull(townBlock);
+		return townBlock.getTownOrNull();
 	}
 	
 	/**

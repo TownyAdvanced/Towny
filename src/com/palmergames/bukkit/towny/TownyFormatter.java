@@ -111,12 +111,13 @@ public class TownyFormatter {
 		List<String> out = new ArrayList<>();
 		
 		TownyObject owner;
-		Town town = TownyAPI.getInstance().getTownOrNull(townBlock);
+		Town town = townBlock.getTownOrNull();
+		assert town != null;
 		TownyWorld world = townBlock.getWorld();
 		boolean preventPVP = CombatUtil.preventPvP(world, townBlock);
 
 		if (townBlock.hasResident())
-			owner = TownyAPI.getInstance().getResidentOrNull(townBlock);
+			owner = townBlock.getResidentOrNull();
 		else
 			owner = town;
 
@@ -210,7 +211,7 @@ public class TownyFormatter {
 		String actualTown = resident.hasTown() ? TownyAPI.getInstance().getResidentTownOrNull(resident).getName() : "";
 		
 		for(TownBlock tB : resident.getTownBlocks()) {
-			Town town = TownyAPI.getInstance().getTownOrNull(tB);
+			Town town = tB.getTownOrNull();
 			if (town == null) continue;
 			if (!actualTown.equals(town.getName()) && !townEmbassies.contains(town))
 				townEmbassies.add(town);
@@ -687,7 +688,7 @@ public class TownyFormatter {
 		if (resident.getTownBlocks().size() > 0) {
 
 			for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
-				town = TownyAPI.getInstance().getTownOrNull(townBlock);
+				town = townBlock.getTownOrNull();
 				if (town != null) {
 					if (taxExempt && town.hasResident(resident)) // Resident will not pay any tax for plots owned by their towns.
 						continue;

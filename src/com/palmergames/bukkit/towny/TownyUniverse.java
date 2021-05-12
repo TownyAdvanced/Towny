@@ -1073,9 +1073,9 @@ public class TownyUniverse {
 		
 		if (removeTownBlock(townBlock.getWorldCoord())) {
 			if (townBlock.hasResident())
-				TownyAPI.getInstance().getResidentOrNull(townBlock).removeTownBlock(townBlock);
+				townBlock.getResidentOrNull().removeTownBlock(townBlock);
 			if (townBlock.hasTown())
-				TownyAPI.getInstance().getTownOrNull(townBlock).removeTownBlock(townBlock);
+				townBlock.getTownOrNull().removeTownBlock(townBlock);
 		}
 	}
 	

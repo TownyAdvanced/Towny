@@ -94,12 +94,9 @@ public class TownyAsciiMap {
 						if (resident.getTown() == townblock.getTown()) {
 							// own town
 							townyMap[y][x] = townyMap[y][x].color(NamedTextColor.GREEN);
-							try {
-								if (resident == townblock.getResident())
-									//own plot
-									townyMap[y][x] = townyMap[y][x].color(NamedTextColor.YELLOW);
-							} catch (NotRegisteredException e) {
-							}
+							if (townblock.hasResident() && resident == townblock.getResidentOrNull())
+								//own plot
+								townyMap[y][x] = townyMap[y][x].color(NamedTextColor.YELLOW);
 						} else if (resident.hasNation()) {
 							if (resident.getTown().getNation().hasTown(townblock.getTown()))
 								// towns
@@ -135,7 +132,7 @@ public class TownyAsciiMap {
 					if (TownyEconomyHandler.isActive() && townblock.getPlotPrice() != -1)
 						forSaleComponent = Component.text(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(townblock.getPlotPrice())).replaceAll("[\\[\\]]", "")).color(NamedTextColor.YELLOW).append(Component.newline());
 
-					TextComponent hoverComponent = Component.text(Translation.of("status_town") + townblock.getTown().getName() + (townblock.hasResident() ? " (" + townblock.getResident().getName() + ")" : "")).color(NamedTextColor.GREEN).append(Component.text(" (" + tby + ", " + tbx + ")").color(NamedTextColor.WHITE)).append(Component.newline())
+					TextComponent hoverComponent = Component.text(Translation.of("status_town") + townblock.getTown().getName() + (townblock.hasResident() ? " (" + townblock.getResidentOrNull().getName() + ")" : "")).color(NamedTextColor.GREEN).append(Component.text(" (" + tby + ", " + tbx + ")").color(NamedTextColor.WHITE)).append(Component.newline())
 						.append(Component.text(Translation.of("status_plot_type")).color(NamedTextColor.GREEN)).append(Component.text(townblock.getType().getName()).color(NamedTextColor.GREEN)).append(Component.newline())
 						.append(forSaleComponent)
 						.append(Component.text(Translation.of("towny_map_detailed_information")).color(NamedTextColor.DARK_GREEN));
@@ -182,7 +179,7 @@ public class TownyAsciiMap {
 		// Current town block data
 		try {
 			TownBlock townblock = TownyAPI.getInstance().getTownBlock(plugin.getCache(player).getLastLocation());
-			TownyMessaging.sendMsg(player, (Translation.of("town_sing") + ": " + (townblock != null && townblock.hasTown() ? townblock.getTown().getName() : Translation.of("status_no_town")) + " : " + Translation.of("owner_status") + ": " + (townblock != null && townblock.hasResident() ? townblock.getResident().getName() : Translation.of("status_no_town"))));
+			TownyMessaging.sendMsg(player, (Translation.of("town_sing") + ": " + (townblock != null && townblock.hasTown() ? townblock.getTown().getName() : Translation.of("status_no_town")) + " : " + Translation.of("owner_status") + ": " + (townblock != null && townblock.hasResident() ? townblock.getResidentOrNull().getName() : Translation.of("status_no_town"))));
 		} catch (TownyException e) {
 			//plugin.sendErrorMsg(player, e.getError());
 			// Send a blank line instead of an error, to keep the map position tidy.

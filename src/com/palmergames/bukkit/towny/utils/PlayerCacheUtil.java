@@ -325,8 +325,8 @@ public class PlayerCacheUtil {
 			}
 			
 			// Resident Plot rights
-			try {
-				Resident owner = townBlock.getResident();
+			if (townBlock.hasResident()) {
+				Resident owner = townBlock.getResidentOrNull();
 				if (resident == owner)
 					return TownBlockStatus.PLOT_OWNER;
 				else if (owner.hasFriend(resident))
@@ -335,10 +335,6 @@ public class PlayerCacheUtil {
 					return TownBlockStatus.PLOT_TOWN;
 				else if (resident.hasTown() && CombatUtil.isAlly(owner.getTown(), resident.getTown()))
 					return TownBlockStatus.PLOT_ALLY;
-				else
-					// Exit out and use town permissions
-					throw new TownyException();
-			} catch (TownyException e) {
 			}
 
 			// Resident with no town.

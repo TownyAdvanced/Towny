@@ -2002,13 +2002,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 
 		// resident
-		if (townBlock.hasResident()) {
-
-			try {
-				list.add("resident=" + townBlock.getResident().getName());
-			} catch (NotRegisteredException ignored) {
-			}
-		}
+		if (townBlock.hasResident())
+			list.add("resident=" + townBlock.getResidentOrNull().getName());
 
 		// type
 		list.add("type=" + townBlock.getType().getId());

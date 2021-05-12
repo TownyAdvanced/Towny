@@ -490,7 +490,7 @@ public class AreaSelectionUtil {
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			try {
-				if (!worldCoord.getTownBlock().hasResident() || (worldCoord.getTownBlock().hasResident() && worldCoord.getTownBlock().getResident().equals(resident)))
+				if (!worldCoord.getTownBlock().hasResident() || (worldCoord.getTownBlock().hasResident() && worldCoord.getTownBlock().getResidentOrNull().equals(resident)))
 					out.add(worldCoord);
 			} catch (NotRegisteredException ignored) {
 			}
