@@ -1072,16 +1072,10 @@ public class TownyUniverse {
 	public void removeTownBlock(TownBlock townBlock) {
 		
 		if (removeTownBlock(townBlock.getWorldCoord())) {
-			try {
-				if (townBlock.hasResident())
-					townBlock.getResident().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
-			try {
-				if (townBlock.hasTown())
-					townBlock.getTown().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
+			if (townBlock.hasResident())
+				TownyAPI.getInstance().getResidentOrNull(townBlock).removeTownBlock(townBlock);
+			if (townBlock.hasTown())
+				TownyAPI.getInstance().getTownOrNull(townBlock).removeTownBlock(townBlock);
 		}
 	}
 	

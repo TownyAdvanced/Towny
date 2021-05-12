@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.jetbrains.annotations.Nullable;
 
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 
@@ -54,11 +54,7 @@ public abstract class TownyDamageEvent extends Event implements Cancellable {
 	 */
 	@Nullable
 	public Town getTown() {
-		try {
-			if (hasTownBlock())
-				return townblock.getTown();
-		} catch (NotRegisteredException e) {}
-		return null;
+		return TownyAPI.getInstance().getTownOrNull(townblock);
 	}
 
 	/**

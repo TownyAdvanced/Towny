@@ -127,6 +127,12 @@ public class TownyAPI {
     	return null;
     }
     
+    /**
+     * Gets the town's nation if they have one.
+     * 
+     * @param town Town to get the nation from.
+     * @return The town's Nation or null if they have none.
+     */
     @Nullable
     public Nation getTownNationOrNull(Town town) {
     	if (town.hasNation())
@@ -373,19 +379,49 @@ public class TownyAPI {
      * @param location {@link Location} to get {@link Town} for.
      * @return {@link Town} at this location, or {@code null} for none.
      */
+    @Nullable
     public Town getTown(Location location) {
-        try {
-            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
-            if (worldCoord.hasTownBlock()) {
-            	TownBlock tb = worldCoord.getTownBlock();
-            	if (tb.hasTown())
-            		return tb.getTown();
-			}
-        } catch (NotRegisteredException ignore) {
-        }
+        WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
+		if (worldCoord.hasTownBlock()) {
+			TownBlock tb = getTownBLock(worldCoord);
+			if (tb.hasTown())
+				return getTownOrNull(tb);
+		}
 
 		// No data so return null
 		return null;
+    }
+    
+    /**
+     * Get the {@link Town} of a {@link TownBlock} or null.
+     * Should be used after testing TownBlock.hasTown().
+     * 
+     * @param townBlock {@link TownBlock} from which to get a {@link Town}.
+     * @return {@link Town} or {@code null}. 
+     */
+    @Nullable
+    public Town getTownOrNull(TownBlock townBlock) {
+    	try {
+			return townBlock.getTown();
+		} catch (NotRegisteredException ignored) {}
+    	
+		return null;
+    }
+    
+    /**
+     * Get the {@link Resident} who owns the {@link TownBlock} or null.
+     * Resident will be returned if the TownBlock is owned by a player.
+     * Should be used after testing TownBlock.hasResident().
+     * 
+     * @param townBlock {@link TownBlock} from which to get a {@link Resident}.
+     * @return {@link Resident} or {@code null}. 
+     */
+    @Nullable
+    public Resident getResidentOrNull(TownBlock townBlock) {
+    	try {
+			return townBlock.getResident();
+		} catch (NotRegisteredException ignored) {}
+    	return null;
     }
     
     /**
@@ -417,6 +453,7 @@ public class TownyAPI {
      * @param location {@link Location} to get {@link TownBlock} of.
      * @return {@link TownBlock} at this {@link Location}, or {@code null} for none.
      */
+    @Nullable
     public TownBlock getTownBlock(Location location) {
         try {
             WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
@@ -427,6 +464,21 @@ public class TownyAPI {
 
 		// No data so return null
 		return null;
+    }
+    
+    /**
+     * Get the {@link TownBlock} at a specific {@link WorldCoord}.
+     * 
+     * @param wc {@link WorldCoord to get the {@link TownBlock} of (if it claimed by a town.)
+     * @return {@link TownBlock} at this {@link WorldCoord}, or {@code null} if this isn't claimed.
+     */
+    @Nullable
+    public TownBlock getTownBLock(WorldCoord wc) {
+    	if (wc.hasTownBlock())
+			try {
+				return wc.getTownBlock();
+			} catch (NotRegisteredException ignore) {}
+    	return null;
     }
     
     /**
@@ -560,28 +612,21 @@ public class TownyAPI {
      */
     public TownBlockStatus hasNationZone(WorldCoord worldCoord) {
     	
-		Town nearestTown = null;
 		int distance;
-		try {
-			final TownBlock nearestTownblock = worldCoord.getTownyWorld().getClosestTownblockWithNationFromCoord(worldCoord);
-			
-			if (nearestTownblock == null) {
-				return TownBlockStatus.UNCLAIMED_ZONE;
-			}
-			
-			nearestTown = nearestTownblock.getTown();
-			
-			// Safety validation, both these cases should never occur.
-			if (nearestTown == null || !nearestTown.hasNation()) {
-				return TownBlockStatus.UNCLAIMED_ZONE;
-			}
-			
-			distance = (int) MathUtil.distance(worldCoord.getX(), nearestTownblock.getX(), worldCoord.getZ(), nearestTownblock.getZ());
-		} catch (NotRegisteredException e1) {
-			// There will almost always be a town in any world where towny is enabled. 
-			// If there isn't then we fall back on normal unclaimed zone status.
+		final TownBlock nearestTownblock = TownyAPI.getInstance().getTownyWorld(worldCoord.getWorldName()).getClosestTownblockWithNationFromCoord(worldCoord);
+		
+		if (nearestTownblock == null) {
 			return TownBlockStatus.UNCLAIMED_ZONE;
 		}
+		
+		Town nearestTown = TownyAPI.getInstance().getTownOrNull(nearestTownblock);
+		
+		// Safety validation, both these cases should never occur.
+		if (nearestTown == null || !nearestTown.hasNation()) {
+			return TownBlockStatus.UNCLAIMED_ZONE;
+		}
+		
+		distance = (int) MathUtil.distance(worldCoord.getX(), nearestTownblock.getX(), worldCoord.getZ(), nearestTownblock.getZ());
 
 		// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
 		if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
@@ -589,7 +634,7 @@ public class TownyAPI {
 		}
 
 		try {
-			int nationZoneRadius = Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNation()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
+			int nationZoneRadius = Integer.parseInt(TownySettings.getNationLevel(TownyAPI.getInstance().getTownNationOrNull(nearestTown)).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
 			
 			if (nearestTown.isCapital()) {
 				nationZoneRadius += TownySettings.getNationZonesCapitalBonusSize();
@@ -603,7 +648,7 @@ public class TownyAPI {
 				
 				return TownBlockStatus.NATION_ZONE;
 			}
-		} catch (NumberFormatException | NotRegisteredException ignored) {
+		} catch (NumberFormatException ignored) {
 		}
 		
 		return TownBlockStatus.UNCLAIMED_ZONE;

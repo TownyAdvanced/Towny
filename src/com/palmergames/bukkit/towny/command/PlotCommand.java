@@ -236,10 +236,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				return true;
 			}
 			
+			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+			if (townBlock == null && !split[0].equalsIgnoreCase("perm"))
+				throw new TownyException(Translation.of("msg_not_claimed_1"));
+			
 			String world = player.getWorld().getName();
 
 			try {
-				if (!TownyAPI.getInstance().isWilderness(player.getLocation()) && TownyAPI.getInstance().getTownBlock(player.getLocation()).getTown().isRuined())
+				if (!TownyAPI.getInstance().isWilderness(player.getLocation()) && TownyAPI.getInstance().getTownOrNull(townBlock).isRuined())
 					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
 
 				if (split[0].equalsIgnoreCase("claim")) {
@@ -273,12 +277,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// tally up costs.
 						for (WorldCoord worldCoord : new ArrayList<>(selection)) {
 							try {
-								TownBlock townBlock = worldCoord.getTownBlock();
-								double price = townBlock.getPlotPrice();
+								TownBlock tb = worldCoord.getTownBlock();
+								double price = tb.getPlotPrice();
 								
-								if (townBlock.hasPlotObjectGroup()) {
+								if (tb.hasPlotObjectGroup()) {
 									// This block is part of a group, special tasks need to be done.
-									PlotGroup group = townBlock.getPlotObjectGroup();
+									PlotGroup group = tb.getPlotObjectGroup();
 									
 									if (TownyEconomyHandler.isActive() && (!resident.getAccount().canPayFromHoldings(group.getPrice())))
 										throw new TownyException(Translation.of("msg_no_funds_claim_plot_group", group.getTownBlocks().size(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
@@ -288,7 +292,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										ArrayList<WorldCoord> coords = new ArrayList<>();
 
 										// Get worldcoords from plot group.
-										group.getTownBlocks().forEach((tb) -> coords.add(tb.getWorldCoord()));
+										group.getTownBlocks().forEach((tblock) -> coords.add(tblock.getWorldCoord()));
 
 										// Execute the plot claim.
 										new PlotClaim(Towny.getPlugin(), player, resident, coords, true, false, true).start();
@@ -301,9 +305,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								
 								// Check if a plot has a price.
 								if (price > -1)
-									cost += townBlock.getPlotPrice();
+									cost += tb.getPlotPrice();
 								else {
-									if (!townBlock.getTown().isMayor(resident)) 
+									if (!tb.getTown().isMayor(resident)) 
 										selection.remove(worldCoord);
 								}
 							} catch (NotRegisteredException e) {
@@ -352,7 +356,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 
-					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 					Town town = townBlock.getTown();										
 					
 					if (townBlock.getResident() == null) {
@@ -545,10 +548,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						// Set each WorldCoord in selection for sale.
 						for (WorldCoord worldCoord : selection) {
-							TownBlock townBlock = worldCoord.getTownBlock();
+							TownBlock tb = worldCoord.getTownBlock();
 							
 							// Skip over any plots that are part of a PlotGroup.
-							if (townBlock.hasPlotObjectGroup()) {
+							if (tb.hasPlotObjectGroup()) {
 								TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_belongs_to_group_plot_fs2", worldCoord));
 								continue;
 							}
@@ -601,8 +604,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					/*
 					 * perm test in the plottoggle.
 					 */
-
-					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 					// Test we are allowed to work on this plot
 					plotTestOwner(resident, townBlock); // ignore the return as
 					// we are only checking
@@ -642,8 +643,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase())))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
-						
-						TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 						
 						// Make sure that the player is only operating on a plot object group if one exists.
 						if (townBlock.hasPlotObjectGroup()) {
@@ -815,8 +814,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLEAR.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
-					
-					TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 					
 					if (townBlock != null) {
 						
@@ -1097,6 +1094,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				
+				Town town = TownyAPI.getInstance().getTownOrNull(townBlock);
+				if (town == null)
+					throw new TownyException(Translation.of("msg_not_claimed_1"));
+				
 				Optional<Boolean> choice = Optional.empty();
 				if (split.length == 2) {
 					choice = BaseCommand.parseToggleChoice(split[1]);
@@ -1108,8 +1109,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					if (TownySettings.getPVPCoolDownTime() > 0 && !permSource.testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode())) {
 						// Test to see if the pvp cooldown timer is active for the town this plot belongs to.
-						if (CooldownTimerTask.hasCooldown(townBlock.getTown().getName(), CooldownType.PVP))
-							throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(townBlock.getTown().getName(), CooldownType.PVP)));
+						if (CooldownTimerTask.hasCooldown(town.getName(), CooldownType.PVP))
+							throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.PVP)));
 	
 						// Test to see if the pvp cooldown timer is active for this plot.
 						if (CooldownTimerTask.hasCooldown(townBlock.getWorldCoord().toString(), CooldownType.PVP))
@@ -1117,15 +1118,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 					
 					// Prevent plot pvp from being enabled if admin pvp is disabled
-					if (townBlock.getTown().isAdminDisabledPVP() && !townBlock.getPermissions().pvp)
+					if (town.isAdminDisabledPVP() && !townBlock.getPermissions().pvp)
 						throw new TownyException(Translation.of("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp", "adminDisabledPVP", "on"));
 					
 					// Prevent plot pvp from being disabled if admin pvp is enabled
-					if (townBlock.getTown().isAdminEnabledPVP() && townBlock.getPermissions().pvp)
+					if (town.isAdminEnabledPVP() && townBlock.getPermissions().pvp)
 						throw new TownyException(Translation.of("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp", "adminEnabledPVP", "off"));
 
 					// Fire cancellable event directly before setting the toggle.
-					PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(townBlock.getTown(), player, choice.orElse(!townBlock.getPermissions().pvp));
+					PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(town, player, choice.orElse(!townBlock.getPermissions().pvp));
 					Bukkit.getPluginManager().callEvent(plotTogglePvpEvent);
 					if (plotTogglePvpEvent.isCancelled())
 						throw new TownyException(plotTogglePvpEvent.getCancellationMsg());
@@ -1140,7 +1141,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					// Fire cancellable event directly before setting the toggle.
-					PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(townBlock.getTown(), player, choice.orElse(!townBlock.getPermissions().explosion));
+					PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(town, player, choice.orElse(!townBlock.getPermissions().explosion));
 					Bukkit.getPluginManager().callEvent(plotToggleExplosionEvent);
 					if (plotToggleExplosionEvent.isCancelled())
 						throw new TownyException(plotToggleExplosionEvent.getCancellationMsg());
@@ -1152,7 +1153,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					// Fire cancellable event directly before setting the toggle.
-					PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(townBlock.getTown(), player, choice.orElse(!townBlock.getPermissions().fire));
+					PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(town, player, choice.orElse(!townBlock.getPermissions().fire));
 					Bukkit.getPluginManager().callEvent(plotToggleFireEvent);
 					if (plotToggleFireEvent.isCancelled())
 						throw new TownyException(plotToggleFireEvent.getCancellationMsg());
@@ -1164,7 +1165,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					// Fire cancellable event directly before setting the toggle.
-					PlotToggleMobsEvent plotToggleMobsEvent= new PlotToggleMobsEvent(townBlock.getTown(), player, choice.orElse(!townBlock.getPermissions().mobs));
+					PlotToggleMobsEvent plotToggleMobsEvent= new PlotToggleMobsEvent(town, player, choice.orElse(!townBlock.getPermissions().mobs));
 					Bukkit.getPluginManager().callEvent(plotToggleMobsEvent);
 					if (plotToggleMobsEvent.isCancelled())
 						throw new TownyException(plotToggleMobsEvent.getCancellationMsg());
@@ -1222,6 +1223,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				for (TownBlock groupBlock : plotGroup.getTownBlocks()) {
+					
+					Town town = TownyAPI.getInstance().getTownOrNull(groupBlock);
+					if (town == null) continue;
+					
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE.getNode(split[0].toLowerCase())))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 
@@ -1231,15 +1236,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						if (TownySettings.getPVPCoolDownTime() > 0) {
 							// Test to see if the pvp cooldown timer is active for the town this plot belongs to.
-							if (CooldownTimerTask.hasCooldown(groupBlock.getTown().getName(), CooldownType.PVP))
-								throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(groupBlock.getTown().getName(), CooldownType.PVP)));
+							if (CooldownTimerTask.hasCooldown(town.getName(), CooldownType.PVP))
+								throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.PVP)));
 
 							// Test to see if the pvp cooldown timer is active for this plot.
 							if (CooldownTimerTask.hasCooldown(groupBlock.getWorldCoord().toString(), CooldownType.PVP))
 								throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(groupBlock.getWorldCoord().toString(), CooldownType.PVP)));
 						}
 
-						PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(groupBlock.getTown(), player, choice.orElse(!groupBlock.getPermissions().pvp));
+						PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(town, player, choice.orElse(!groupBlock.getPermissions().pvp));
 						Bukkit.getPluginManager().callEvent(plotTogglePvpEvent);
 						if (plotTogglePvpEvent.isCancelled()) {
 							player.sendMessage(plotTogglePvpEvent.getCancellationMsg());
@@ -1256,7 +1261,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 
-						PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(groupBlock.getTown(), player, choice.orElse(!groupBlock.getPermissions().explosion));
+						PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(town, player, choice.orElse(!groupBlock.getPermissions().explosion));
 						Bukkit.getPluginManager().callEvent(plotToggleExplosionEvent);
 						if (plotToggleExplosionEvent.isCancelled()) {
 							player.sendMessage(plotToggleExplosionEvent.getCancellationMsg());
@@ -1270,7 +1275,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 
-						PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(groupBlock.getTown(), player, choice.orElse(!groupBlock.getPermissions().fire));
+						PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(town, player, choice.orElse(!groupBlock.getPermissions().fire));
 						Bukkit.getPluginManager().callEvent(plotToggleFireEvent);
 						if (plotToggleFireEvent.isCancelled()) {
 							player.sendMessage(plotToggleFireEvent.getCancellationMsg());
@@ -1284,7 +1289,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 
-						PlotToggleMobsEvent plotToggleMobsEvent = new PlotToggleMobsEvent(groupBlock.getTown(), player, choice.orElse(!groupBlock.getPermissions().mobs));
+						PlotToggleMobsEvent plotToggleMobsEvent = new PlotToggleMobsEvent(town, player, choice.orElse(!groupBlock.getPermissions().mobs));
 						Bukkit.getPluginManager().callEvent(plotToggleMobsEvent);
 						if (plotToggleMobsEvent.isCancelled()) {
 							player.sendMessage(plotToggleMobsEvent.getCancellationMsg());
@@ -1409,17 +1414,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	private boolean handlePlotGroupCommand(String[] split, Player player) throws TownyException {
 
-		Resident resident;
-		String world;
-
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
-		resident = getResidentOrThrow(player.getUniqueId());
-		world = player.getWorld().getName();
+		Resident resident = getResidentOrThrow(player.getUniqueId());
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+		if (townBlock == null)
+			throw new TownyException(Translation.of("msg_not_claimed_1"));
+		Town town = TownyAPI.getInstance().getTownOrNull(townBlock);
+		if (town == null)
+			throw new TownyException(Translation.of("msg_not_claimed_1"));
 		
-		TownBlock townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
-		Town town = townBlock.getTown();
-
 		// Test we are allowed to work on this plot
 		plotTestOwner(resident, townBlock);
 

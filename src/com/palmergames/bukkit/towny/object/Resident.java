@@ -903,9 +903,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock) throws NotRegisteredException {
-		if (!townBlocks.remove(townBlock))
-			throw new NotRegisteredException();
+	public void removeTownBlock(TownBlock townBlock) {
+		townBlocks.remove(townBlock);
 	}
 
 	@Override

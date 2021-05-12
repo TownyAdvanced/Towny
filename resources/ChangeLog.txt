@@ -6087,3 +6087,9 @@ v0.92.0.11:
   - Bump version for release.
 0.97.0.1: 
   - Fix german.yml, courtesy of relkai with PR #4924.
+  - API: Add TownyAPI.getResidentOrNull(TownBlock).
+    - Gets the resident who owns the townblock or null if unowned.
+    - Best used after TownBlock.hasResident();
+  - API: Add TownyAPI.getTownOrNull(TownBlock).
+    - Gets the town who owns the townblock or null if wilderness.
+    - Best used after TownBlock.hasTown();

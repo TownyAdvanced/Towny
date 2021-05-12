@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny.event.plot;
 
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -51,10 +51,6 @@ public class PlotNotForSaleEvent extends Event {
 
 	@Nullable
 	public Town getTown() {
-		try {
-			return townBlock.getTown();
-		} catch (NotRegisteredException ignored) {
-		}
-		return null;
+		return TownyAPI.getInstance().getTownOrNull(townBlock);
 	}
 }
