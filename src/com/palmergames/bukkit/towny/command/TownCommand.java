@@ -2130,10 +2130,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					try {
 						TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());						
-						if (townBlock == null || !townBlock.isOutpost())
+						if (townBlock == null || !townBlock.hasTown() || !townBlock.isOutpost())
 							throw new TownyException(Translation.of("msg_err_location_is_not_within_an_outpost_plot"));
 						
-						if (townBlock.getTown().equals(town)) {
+						if (townBlock.getTownOrNull().equals(town)) {
 							town.addOutpostSpawn(player.getLocation());
 							TownyMessaging.sendMsg(player, Translation.of("msg_set_outpost_spawn"));
 						} else
@@ -2186,7 +2186,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		try {
 
-			if (world == null || townBlock == null || townBlock.getTown() != town)
+			if (world == null || townBlock == null || !townBlock.hasTown() || townBlock.getTownOrNull() != town)
 				throw new TownyException(Translation.of("msg_area_not_own"));
 
 			if (TownyAPI.getInstance().isWarTime())
@@ -2261,7 +2261,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
 			
 			// The townblock needs to exist, belong to the town and also be inside of the homeblock.
-			if (tb == null || !tb.getTown().equals(town) || !town.getHomeBlock().getWorldCoord().equals(tb.getWorldCoord()))
+			if (tb == null || !tb.hasTown() || !tb.getTownOrNull().equals(town) || !town.getHomeBlock().getWorldCoord().equals(tb.getWorldCoord()))
 				throw new TownyException(Translation.of("msg_err_spawn_not_within_homeblock"));
 
 			// Throw unset event, for SpawnPoint particles.
@@ -3387,8 +3387,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
 
 				// If this is a single claim and it is already claimed, by someone else.
-				if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasTown())
-					throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownBlock().getTown()));
+				if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlockOrNull().hasTown())
+					throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownBlockOrNull().getTownOrNull()));
 				
 				/*
 				 * Filter out any unallowed claims.

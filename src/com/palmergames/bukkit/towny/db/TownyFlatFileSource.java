@@ -1523,7 +1523,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 					
 					if (groupID != null) {
-						PlotGroup group = getPlotObjectGroup(townBlock.getTown().toString(), groupID);
+						PlotGroup group = getPlotObjectGroup(townBlock.getTownOrNull().toString(), groupID);
 						townBlock.setPlotObjectGroup(group);
 					}
 

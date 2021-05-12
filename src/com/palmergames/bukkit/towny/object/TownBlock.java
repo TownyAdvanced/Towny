@@ -128,15 +128,11 @@ public class TownBlock extends TownyObject {
 
 	public boolean isOwner(TownBlockOwner owner) {
 
-		try {
-			if (owner == getTown())
-				return true;
-		} catch (NotRegisteredException ignored) {}
+		if (hasTown() && owner == getTownOrNull())
+			return true;
 
-		try {
-			if (owner == getResident())
-				return true;
-		} catch (NotRegisteredException ignored) {}
+		if (hasResident() && owner == getResidentOrNull())
+			return true;
 
 		return false;
 	}
@@ -275,8 +271,8 @@ public class TownBlock extends TownyObject {
 	
 	public void setType(TownBlockType type, Resident resident) throws TownyException {
 		// Attempt to clear a jail spawn in case this was a jail plot until now.
-		if (this.isJail())
-			this.getTown().removeJailSpawn(this.getCoord());
+		if (this.isJail() && hasTown())
+			this.getTownOrNull().removeJailSpawn(this.getCoord());
 
 		if ((getType().equals(TownBlockType.ARENA) || type.equals(TownBlockType.ARENA))
 			&& TownySettings.getPVPCoolDownTime() > 0 
@@ -291,24 +287,19 @@ public class TownBlock extends TownyObject {
 		} else
 			setType(type);
 
-		if (this.isJail()) {
+		if (this.isJail() && hasTown()) {
 			Player p = TownyAPI.getInstance().getPlayer(resident);
 			if (p == null)
 				throw new TownyException(Translation.of("msg_err_not_part_town"));
 				
-			this.getTown().addJailSpawn(p.getLocation());
+			this.getTownOrNull().addJailSpawn(p.getLocation());
 		}
 
 		this.save();
 	}
 
 	public boolean isHomeBlock() {
-
-		try {
-			return getTown().isHomeBlock(this);
-		} catch (NotRegisteredException e) {
-			return false;
-		}
+		return hasTown() && getTownOrNull().isHomeBlock(null);
 	}
 	
 	@Override

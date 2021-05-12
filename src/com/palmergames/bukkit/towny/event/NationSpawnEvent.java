@@ -1,10 +1,10 @@
 package com.palmergames.bukkit.towny.event;
 
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An event called when nation spawns occur.
@@ -25,13 +25,9 @@ public class NationSpawnEvent extends SpawnEvent {
 	 */
 	public NationSpawnEvent(Player player, Location from, Location to) {
 		super(player, from, to);
-		try {
-			fromNation = WorldCoord.parseWorldCoord(from).getTownBlock().getTown().getNation();
-		} catch (NotRegisteredException ignored) {}
+		fromNation = WorldCoord.parseWorldCoord(from).getTownBlockOrNull().getTownOrNull().getNationOrNull();
 
-		try {
-			toNation = WorldCoord.parseWorldCoord(to).getTownBlock().getTown().getNation();
-		} catch (NotRegisteredException ignored) {}
+		toNation = WorldCoord.parseWorldCoord(to).getTownBlockOrNull().getTownOrNull().getNationOrNull();
 	}
 
 	/**
@@ -48,6 +44,7 @@ public class NationSpawnEvent extends SpawnEvent {
 	 * 
 	 * @return null if the player is not standing in a nation owned townblock, the nation otherwise.
 	 */
+	@Nullable
 	public Nation getFromNation() {
 		return fromNation;
 	}

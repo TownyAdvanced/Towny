@@ -677,13 +677,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removeTownBlock(TownBlock townBlock) {
-		Town town = null;
-		try {
-			town = townBlock.getTown();
-		} catch (NotRegisteredException e) {
+		Town town = townBlock.getTownOrNull();
+		if (town == null)
 			// Log as error because TownBlocks *must* have a town.
-			logger.error(e.getMessage());
-		}
+			logger.error(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", townBlock.getWorld().getName(), townBlock.getX(), townBlock.getZ()));
 
 		TownPreUnclaimEvent event = new TownPreUnclaimEvent(town, townBlock);
 		BukkitTools.getPluginManager().callEvent(event);
