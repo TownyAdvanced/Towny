@@ -1369,7 +1369,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
                 case 2: {
                     
                     // load remainder of file
-                    int temp = 0;
+                    @SuppressWarnings("unused")
+					int temp = 0;
                     while ((temp = fin.readInt()) >= 0) {
                     	IntArr.add(value);
                     }

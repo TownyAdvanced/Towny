@@ -6,7 +6,6 @@ import com.palmergames.util.TimeTools;
 
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 
 /** @deprecated for removal in a future release. Please use <a href="https://github.com/TownyAdvanced/Flagwar">the FlagWar plugin</a> for continued support. */
 @Deprecated
@@ -24,7 +23,7 @@ public class FlagWarConfig {
 
 	public static boolean isAffectedMaterial(Material material) {
 
-		return Tag.WOOL.isTagged(material) || material == getFlagBaseMaterial() || material == getFlagLightMaterial() || material == getBeaconWireFrameMaterial();
+		return material == Material.WOOL || material == getFlagBaseMaterial() || material == getFlagLightMaterial() || material == getBeaconWireFrameMaterial();
 	}
 
 	public static DyeColor[] getWoolColors() {

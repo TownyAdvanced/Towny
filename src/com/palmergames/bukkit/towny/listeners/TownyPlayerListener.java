@@ -43,7 +43,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -286,8 +285,7 @@ public class TownyPlayerListener implements Listener {
 				 * 
 				 * Treat interaction as a Destroy test.
 				 */
-				if ((ItemLists.AXES.contains(item.name()) && Tag.LOGS.isTagged(clickedMat)) || // This will also catched already stripped logs but it is cleaner than anything else.
-//					(ItemLists.DYES.contains(item.name()) && Tag.SIGNS.isTagged(clickedMat)) ||
+				if (
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
 					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.PUMPKIN))) { 
 
@@ -1140,10 +1138,10 @@ public class TownyPlayerListener implements Listener {
 								ChatTools.formatCommand("", "Material", "", block.getType().name()),								      
 								ChatTools.formatCommand("", "MaterialData", "", block.getType().getData().toString())
 								));
-					}
+//					}
 					event.setUseInteractedBlock(Event.Result.DENY);
 					event.setCancelled(true);
-//		}
+		}
 	}
 
 	/*
