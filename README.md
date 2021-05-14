@@ -23,7 +23,7 @@ ___
 <tr align=center><td> MC 1.15.* </td>
 <tr align=center><td> MC 1.14.* </td>
 <tr align=center><td> MC 1.13.2 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0for1.13.2>0.96.2.0 for 1.13.2</a> </td>
-<tr align=center><td> MC 1.12.2 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0for1.12.2>0.96.2.0 for 1.12.2</a> </td>
+<tr align=center><td> MC 1.12.2 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.97.0.0for1.12.2>0.97.0.0 for 1.12.2</a> </td>
 <tr align=center><td> MC 1.11.2 </td><td> <a href=https://www.dropbox.com/s/cfpm4iy0sbzmti4/Towny_Advanced%200.93.1.0%20for%20MC%201.11.2.zip?dl=0>0.93.1.0 for 1.11.2</a> </td>
 <tr align=center><td> MC 1.10.2 </td><td> <a href=https://www.dropbox.com/s/x2i3wqaj8n6gdh1/Towny_Advanced%200.93.1.0%20for%20MC%201.10.2.rar?dl=0>0.93.1.0 for 1.10.2</a> </td>
 <tr align=center><td> MC 1.9.4 </td><td> <a href=https://www.dropbox.com/s/eh81i4618bfmvjm/Towny_Advanced%200.93.1.0%20for%20MC%201.9.4.zip?dl=0>0.93.1.0 for 1.9.4</a> </td>
