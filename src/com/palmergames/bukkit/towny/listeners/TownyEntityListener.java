@@ -22,11 +22,13 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Hanging;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -680,19 +682,19 @@ public class TownyEntityListener implements Listener {
 		
 		// TODO: Keep an eye on https://hub.spigotmc.org/jira/browse/SPIGOT-3999 to be completed.
 		// This workaround prevent boats from destroying item_frames.
-//		if (event.getCause().equals(RemoveCause.PHYSICS) && hanging.getType().equals(EntityType.ITEM_FRAME)) {
-//			Location loc = hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection());
-//			Block block = loc.getBlock();
-//			if (block.isLiquid() || block.isEmpty())
-//				return;
-//			
-//			for (Entity entity : hanging.getNearbyEntities(0.5, 0.5, 0.5)) {
-//				if (entity instanceof Vehicle) {
-//					event.setCancelled(true);
-//					return;
-//				}
-//			}
-//		}
+		if (event.getCause().equals(RemoveCause.PHYSICS) && hanging.getType().equals(EntityType.ITEM_FRAME)) {
+			Hanging itemframe = (Hanging) hanging;
+			Block block = hanging.getLocation().getBlock().getRelative(itemframe.getAttachedFace());
+			if (block.isLiquid() || block.isEmpty())
+				return;
+			
+			for (Entity entity : hanging.getNearbyEntities(0.5, 0.5, 0.5)) {
+				if (entity instanceof Vehicle) {
+					event.setCancelled(true);
+					return;
+				}
+			}
+		}
 
 		/*
 		 * It's a player or an entity (probably an explosion)
