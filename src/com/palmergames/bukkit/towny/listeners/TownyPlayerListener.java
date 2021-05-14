@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
@@ -43,6 +44,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -68,6 +70,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.material.Bed;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
@@ -287,7 +290,7 @@ public class TownyPlayerListener implements Listener {
 				 */
 				if (
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
-					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.PUMPKIN))) { 
+					((item == Material.SHEARS) && (clickedMat == Material.PUMPKIN))) { 
 
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, loc, clickedMat));
 				}
@@ -371,11 +374,11 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Catches beds blowing up and allows us to track their explosions.
 			 */
-//			if (Tag.BEDS.isTagged(block.getType()) && event.getPlayer().getWorld().getEnvironment().equals(Environment.NETHER)) {
-//				org.bukkit.block.data.type.Bed bed = ((org.bukkit.block.data.type.Bed) block.getBlockData());
-//				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), block.getRelative(bed.getFacing()).getLocation(), block.getType()));
-//				return;
-//			}
+			if (block.getType().equals(Material.BED_BLOCK) && event.getPlayer().getWorld().getEnvironment().equals(Environment.NETHER)) {
+				Bed bed = ((Bed) block.getState().getData());
+				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), block.getRelative(bed.getFacing()).getLocation(), block.getType()));
+				return;
+			}
 			
 			/*
 			 * Prevents setting the spawn point of the player using beds, 
