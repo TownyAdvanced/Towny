@@ -19,6 +19,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
@@ -26,6 +27,7 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
+import org.bukkit.material.Directional;
 
 import java.util.List;
 
@@ -319,24 +321,24 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 	}
 
-//	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-//	public void onBlockDispense(BlockDispenseEvent event) {
-//		if (plugin.isError()) {
-//			event.setCancelled(true);
-//			return;
-//		}
-//
-//		if (!TownySettings.getPreventFluidGriefingEnabled())
-//			return;
-//		
-//		if (event.getItem().getType() != Material.WATER_BUCKET && event.getItem().getType() != Material.LAVA_BUCKET && event.getItem().getType() != Material.BUCKET)
-//			return;
-//
-//		if (event.getBlock().getType() != Material.DISPENSER)
-//			return;
-//		
-//		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getBlockData()).getFacing())))
-//			event.setCancelled(true);
-//	}
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onBlockDispense(BlockDispenseEvent event) {
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownySettings.getPreventFluidGriefingEnabled())
+			return;
+		
+		if (event.getItem().getType() != Material.WATER_BUCKET && event.getItem().getType() != Material.LAVA_BUCKET && event.getItem().getType() != Material.BUCKET)
+			return;
+
+		if (event.getBlock().getType() != Material.DISPENSER)
+			return;
+		
+		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getState().getData()).getFacing())))
+			event.setCancelled(true);
+	}
 
 }
