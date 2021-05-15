@@ -6093,3 +6093,4 @@ v0.92.0.11:
   - API: Add TownyAPI.getTownOrNull(TownBlock).
     - Gets the town who owns the townblock or null if wilderness.
     - Best used after TownBlock.hasTown();
+  - Fix /n set king declaring that the capital has too many residents.

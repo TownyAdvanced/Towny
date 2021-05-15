@@ -2150,7 +2150,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			            	return;
 			            }
 			            
-			            if (TownySettings.getMaxResidentsPerTown() > 0 && nation.getNumResidents() > TownySettings.getMaxResidentsPerTown()) {
+			            if (TownySettings.getMaxResidentsPerTown() > 0 && nation.getCapital().getNumResidents() > TownySettings.getMaxResidentsPerTown()) {
 			            	TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_nation_capital_too_many_residents", newCapital.getName()));
 			            	return;
 			            }
