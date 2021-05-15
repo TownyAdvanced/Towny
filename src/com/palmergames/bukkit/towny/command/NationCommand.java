@@ -2479,15 +2479,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translation.of("msg_cache_block_error_wild", "set spawn"));
 
 			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(newSpawn);
+			Town town = townBlock.getTownOrNull();
 
 			// Nation spawns either have to be inside of the capital.
 			if (nation.getCapital() != null 
 				&& TownySettings.isNationSpawnOnlyAllowedInCapital()
-				&& !townBlock.getTown().getUUID().equals(nation.getCapital().getUUID()))
+				&& !town.getUUID().equals(nation.getCapital().getUUID()))
 					throw new TownyException(Translation.of("msg_err_spawn_not_within_capital"));
 			// Or they can be in any town in the nation.
 			else 
-				if(!nation.getTowns().contains(townBlock.getTown()))
+				if(!nation.getTowns().contains(town))
 					throw new TownyException(Translation.of("msg_err_spawn_not_within_nationtowns"));
 			
 			// Remove the SpawnPoint particles.

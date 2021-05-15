@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.war.flagwar;
 
 import java.util.TimerTask;
 
+/** @deprecated for removal in a future release. Please use <a href="https://github.com/TownyAdvanced/Flagwar">the FlagWar plugin</a> for continued support. */
+@Deprecated
 public class CellAttackThread extends TimerTask {
 
 	CellUnderAttack cell;

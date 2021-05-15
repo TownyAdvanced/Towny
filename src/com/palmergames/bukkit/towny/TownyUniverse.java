@@ -1038,6 +1038,11 @@ public class TownyUniverse {
 		else 
 			throw new NotRegisteredException();
 	}
+	
+	@Nullable
+	public TownBlock getTownBlockOrNull(WorldCoord worldCoord) {
+		return townBlocks.get(worldCoord);
+	}
 
 	/**
 	 * Get Universe-wide ConcurrentHashMap of WorldCoords and their TownBlocks.
@@ -1072,16 +1077,10 @@ public class TownyUniverse {
 	public void removeTownBlock(TownBlock townBlock) {
 		
 		if (removeTownBlock(townBlock.getWorldCoord())) {
-			try {
-				if (townBlock.hasResident())
-					townBlock.getResident().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
-			try {
-				if (townBlock.hasTown())
-					townBlock.getTown().removeTownBlock(townBlock);
-			} catch (NotRegisteredException e) {
-			}
+			if (townBlock.hasResident())
+				townBlock.getResidentOrNull().removeTownBlock(townBlock);
+			if (townBlock.hasTown())
+				townBlock.getTownOrNull().removeTownBlock(townBlock);
 		}
 	}
 	

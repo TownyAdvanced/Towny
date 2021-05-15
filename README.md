@@ -19,11 +19,11 @@ ___
 
 <table>
 <tr><th> Minecraft Version</th><th>Towny Version</th></tr>
-<tr align=center><td> MC 1.16.* </td><td rowspan=3> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.96.7.0>0.96.7.0</a> or the above Latest Pre-Release. </td>
+<tr align=center><td> MC 1.16.* </td><td rowspan=3> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.97.0.0>0.97.0.0</a> or the above Latest Pre-Release. </td>
 <tr align=center><td> MC 1.15.* </td>
 <tr align=center><td> MC 1.14.* </td>
 <tr align=center><td> MC 1.13.2 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0for1.13.2>0.96.2.0 for 1.13.2</a> </td>
-<tr align=center><td> MC 1.12.2 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0for1.12.2>0.96.2.0 for 1.12.2</a> </td>
+<tr align=center><td> MC 1.12.2 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.97.0.0for1.12.2>0.97.0.0 for 1.12.2</a> </td>
 <tr align=center><td> MC 1.11.2 </td><td> <a href=https://www.dropbox.com/s/cfpm4iy0sbzmti4/Towny_Advanced%200.93.1.0%20for%20MC%201.11.2.zip?dl=0>0.93.1.0 for 1.11.2</a> </td>
 <tr align=center><td> MC 1.10.2 </td><td> <a href=https://www.dropbox.com/s/x2i3wqaj8n6gdh1/Towny_Advanced%200.93.1.0%20for%20MC%201.10.2.rar?dl=0>0.93.1.0 for 1.10.2</a> </td>
 <tr align=center><td> MC 1.9.4 </td><td> <a href=https://www.dropbox.com/s/eh81i4618bfmvjm/Towny_Advanced%200.93.1.0%20for%20MC%201.9.4.zip?dl=0>0.93.1.0 for 1.9.4</a> </td>
@@ -33,6 +33,10 @@ ___
 <tr align=center><td> MC 1.5.2 </td><td> <a href=https://www.dropbox.com/s/euydq4qsljheoms/Towny_Advanced%200.88.0.0%20%281.5.2%29.zip?dl=0>0.88.0.0 for 1.5.2</a> </td>
 <tr align=center><td> MC 1.2.5 </td><td> <a href=https://www.dropbox.com/s/xstn1vdexxc1k5q/Towny_Advanced%200.82.0.0%20for%201.2.5.zip?dl=0>0.82.0.0</a> </td>
 </table>
+
+> Note: The bundled implementation of _FlagWar_ has been deprecated and is marked for removal
+> in a future Towny release. Operators are encouraged to install the
+> [standalone implementation](https://github.com/TownyAdvanced/FlagWar).
 
 ___
 

@@ -87,14 +87,8 @@ public class ChunkNotification {
 			fromPlotType = fromTownBlock.getType();
 			if (fromTownBlock.hasPlotObjectGroup())
 				fromPlotGroup = fromTownBlock.getPlotObjectGroup();
-			try {
-				fromTown = fromTownBlock.getTown();
-			} catch (NotRegisteredException e) {
-			}
-			try {
-				fromResident = fromTownBlock.getResident();
-			} catch (NotRegisteredException e) {
-			}
+			fromTown = fromTownBlock.getTownOrNull();
+			fromResident = fromTownBlock.getResidentOrNull();
 			fromForSale = fromTownBlock.getPlotPrice() != -1;
 			
 		} catch (NotRegisteredException e) {
@@ -106,14 +100,8 @@ public class ChunkNotification {
 			toPlotType = toTownBlock.getType();
 			if (toTownBlock.hasPlotObjectGroup())
 				toPlotGroup = toTownBlock.getPlotObjectGroup();
-			try {
-				toTown = toTownBlock.getTown();
-			} catch (NotRegisteredException e) {
-			}
-			try {
-				toResident = toTownBlock.getResident();
-			} catch (NotRegisteredException e) {
-			}
+			toTown = toTownBlock.getTownOrNull();
+			toResident = toTownBlock.getResidentOrNull();
 
 			toForSale = toTownBlock.getPlotPrice() != -1;
 			toHomeBlock = toTownBlock.isHomeBlock();

@@ -110,38 +110,32 @@ public class TownyFormatter {
 
 		List<String> out = new ArrayList<>();
 		
-		try {
-			TownyObject owner;
-			Town town = townBlock.getTown();
-			TownyWorld world = townBlock.getWorld();
-			boolean preventPVP = CombatUtil.preventPvP(world, townBlock);
+		TownyObject owner;
+		Town town = townBlock.getTownOrNull();
+		TownyWorld world = townBlock.getWorld();
+		boolean preventPVP = CombatUtil.preventPvP(world, townBlock);
 
-			if (townBlock.hasResident()) {
-				owner = townBlock.getResident();
-			} else {
-				owner = townBlock.getTown();
-			}
-			
+		if (townBlock.hasResident())
+			owner = townBlock.getResidentOrNull();
+		else
+			owner = town;
 
-			out.add(ChatTools.formatTitle(owner.getFormattedName() + ((BukkitTools.isOnline(owner.getName())) ? Translation.of("online") : "")));
-			if (!townBlock.getType().equals(TownBlockType.RESIDENTIAL))
-				out.add(Translation.of("status_plot_type") + townBlock.getType().toString());							
-			out.add(Translation.of("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString().replace("n", "t") : townBlock.getPermissions().getColourString().replace("f", "r")));
-			out.add(Translation.of("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString2().replace("n", "t") : townBlock.getPermissions().getColourString2().replace("f", "r")));
-			out.add(Translation.of("status_pvp") + ((!preventPVP) ? Translation.of("status_on"): Translation.of("status_off")) + 
-					Translation.of("explosions") + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? Translation.of("status_on"): Translation.of("status_off")) + 
-					Translation.of("firespread") + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? Translation.of("status_on"):Translation.of("status_off")) + 
-					Translation.of("mobspawns") + ((world.isForceTownMobs() || townBlock.getPermissions().mobs) ?  Translation.of("status_on"): Translation.of("status_off")));
+		out.add(ChatTools.formatTitle(owner.getFormattedName() + ((BukkitTools.isOnline(owner.getName())) ? Translation.of("online") : "")));
+		if (!townBlock.getType().equals(TownBlockType.RESIDENTIAL))
+			out.add(Translation.of("status_plot_type") + townBlock.getType().toString());
+		out.add(Translation.of("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString().replace("n", "t") : townBlock.getPermissions().getColourString().replace("f", "r")));
+		out.add(Translation.of("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString2().replace("n", "t") : townBlock.getPermissions().getColourString2().replace("f", "r")));
+		out.add(Translation.of("status_pvp") + ((!preventPVP) ? Translation.of("status_on"): Translation.of("status_off")) + 
+				Translation.of("explosions") + ((world.isForceExpl() || townBlock.getPermissions().explosion) ? Translation.of("status_on"): Translation.of("status_off")) + 
+				Translation.of("firespread") + ((town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? Translation.of("status_on"):Translation.of("status_off")) + 
+				Translation.of("mobspawns") + ((world.isForceTownMobs() || townBlock.getPermissions().mobs) ?  Translation.of("status_on"): Translation.of("status_off")));
 
-			if (townBlock.hasPlotObjectGroup())
-				out.add(Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
-			if (townBlock.getClaimedAt() > 0)
-				out.add(Translation.of("msg_plot_perm_claimed_at", registeredFormat.format(townBlock.getClaimedAt())));
-			
-			out.addAll(getExtraFields(townBlock));
-		} catch (NotRegisteredException e) {
-			out.add("Error: " + e.getMessage());
-		}
+		if (townBlock.hasPlotObjectGroup())
+			out.add(Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
+		if (townBlock.getClaimedAt() > 0)
+			out.add(Translation.of("msg_plot_perm_claimed_at", registeredFormat.format(townBlock.getClaimedAt())));
+		
+		out.addAll(getExtraFields(townBlock));
 		out = formatStatusScreens(out);
 		return out;
 	}
@@ -213,19 +207,14 @@ public class TownyFormatter {
 		
 		// Embassies in: Camelot, London, Tokyo
 		List<Town> townEmbassies = new ArrayList<>();
-		try {
-			
-			String actualTown = resident.hasTown() ? resident.getTown().getName() : "";
-			
-			for(TownBlock tB : resident.getTownBlocks()) {
-				if(!actualTown.equals(tB.getTown().getName()) && !townEmbassies.contains(tB.getTown())) {
-					
-					townEmbassies.add(tB.getTown());
-				
-				}
-				
-			}
-		} catch (NotRegisteredException ignored) {}
+		String actualTown = resident.hasTown() ? TownyAPI.getInstance().getResidentTownOrNull(resident).getName() : "";
+		
+		for(TownBlock tB : resident.getTownBlocks()) {
+			Town town = tB.getTownOrNull();
+			if (town == null) continue;
+			if (!actualTown.equals(town.getName()) && !townEmbassies.contains(town))
+				townEmbassies.add(town);
+		}
 		
 		if (townEmbassies.size() > 0) {
 			out.addAll(getFormattedTowns(Translation.of("status_embassy_town"), townEmbassies));
@@ -698,9 +687,7 @@ public class TownyFormatter {
 		if (resident.getTownBlocks().size() > 0) {
 
 			for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
-				try {
-					town = townBlock.getTown();
-				} catch (NotRegisteredException ignored) {}
+				town = townBlock.getTownOrNull();
 				if (town != null) {
 					if (taxExempt && town.hasResident(resident)) // Resident will not pay any tax for plots owned by their towns.
 						continue;

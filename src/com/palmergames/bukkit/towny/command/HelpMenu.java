@@ -150,6 +150,21 @@ public enum HelpMenu {
 				.add("[resident] friend... |list|clear]", "");
 		}
 	},
+	
+	TA_TOGGLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin toggle")
+				.add("wildernessuse", "")
+				.add("regenerations", "")
+				.add("war", "")
+				.add("peaceful", "")
+				.add("devmode", "")
+				.add("debug", "")
+				.add("townwithdraw/nationwithdraw", "")
+				.add("[resident]", "");
+		}
+	},
 
 	TOWNYWORLD_HELP {
 		@Override

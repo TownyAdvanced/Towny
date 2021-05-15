@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -301,19 +302,17 @@ public class CombatUtil {
 		}
 	}
 	
-	private static boolean isPvP(TownBlock townBlock) {
+	private static boolean isPvP(@NotNull TownBlock townBlock) {
 		
-		try {
-			if (townBlock.getTown().isAdminDisabledPVP())
-				return false;
+		if (townBlock.getTownOrNull().isAdminDisabledPVP())
+			return false;
 
-			// Checks PVP perm: 1. Plot PVP, 2. Town PVP, 3. World Force PVP 
-			if (!townBlock.getPermissions().pvp && !townBlock.getTown().isPVP() && !townBlock.getWorld().isForcePVP()) 
-				return false;
-			
-			if (townBlock.isHomeBlock() && townBlock.getWorld().isForcePVP() && TownySettings.isForcePvpNotAffectingHomeblocks())
-				return false;
-		} catch (NotRegisteredException ignored) {}
+		// Checks PVP perm: 1. Plot PVP, 2. Town PVP, 3. World Force PVP 
+		if (!townBlock.getPermissions().pvp && !townBlock.getTownOrNull().isPVP() && !townBlock.getWorld().isForcePVP()) 
+			return false;
+		
+		if (townBlock.isHomeBlock() && townBlock.getWorld().isForcePVP() && TownySettings.isForcePvpNotAffectingHomeblocks())
+			return false;
 		
 		return true;
 	}
@@ -652,10 +651,8 @@ public class CombatUtil {
 	 */
 	public static boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-		try {
-			if (resident != null && resident.hasTown())
-				return CombatUtil.isEnemy(resident.getTown(), worldCoord.getTownBlock().getTown());
-		} catch (NotRegisteredException ignored) {}
+		if (resident != null && resident.hasTown() && worldCoord.hasTownBlock())
+			return CombatUtil.isEnemy(resident.getTownOrNull(), worldCoord.getTownBlockOrNull().getTownOrNull());
 		return false;
 	}
 	

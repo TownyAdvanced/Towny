@@ -111,6 +111,10 @@ public class TownySettings {
 	 */
 	public static void loadTownLevelConfig() throws IOException {
 
+		// Some configs end up having their numResident: 0 level removed which causes big errors.
+		// Add a 0 level town_level here which may get replaced when the config's town_levels are loaded below.
+		newTownLevel(0, "", " Ruins", "Spirit", "", 1, 1.0, 0, 0, 1.0);
+		
 		List<Map<?, ?>> levels = config.getMapList("levels.town_level");
 		for (Map<?, ?> level : levels) {
 
@@ -153,6 +157,10 @@ public class TownySettings {
 	 */
 
 	public static void loadNationLevelConfig() throws IOException {
+		
+		// Some configs end up having their numResident: 0 level removed which causes big errors.
+		// Add a 0 level nation_level here which may get replaced when the config's nation_levels are loaded below.
+		newNationLevel(0, "Land of ", " (Nation)", "", "", "Leader ", "", 10, 1.0, 1.0, 1, 0);
 
 		List<Map<?, ?>> levels = config.getMapList("levels.nation_level");
 		for (Map<?, ?> level : levels) {

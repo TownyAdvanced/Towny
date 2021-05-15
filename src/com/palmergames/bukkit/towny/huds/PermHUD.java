@@ -51,7 +51,7 @@ public class PermHUD {
 
 		try {
 			TownBlock townBlock = worldCoord.getTownBlock();
-			TownBlockOwner owner = townBlock.hasResident() ? townBlock.getResident() : townBlock.getTown();
+			TownBlockOwner owner = townBlock.hasResident() ? townBlock.getResidentOrNull() : townBlock.getTown();
 			Town town = townBlock.getTown();
 			TownyWorld world = townBlock.getWorld();
 			TownyPermission tp = townBlock.getPermissions();
@@ -67,7 +67,7 @@ public class PermHUD {
 			firespread = (town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			mobspawn = (town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			if (townBlock.hasResident()) {
-				title = ChatColor.GOLD + townBlock.getResident().getName() + " (" + townBlock.getTown().getName() + ")";
+				title = ChatColor.GOLD + townBlock.getResidentOrNull().getName() + " (" + townBlock.getTown().getName() + ")";
 			} else {
 				title = ChatColor.GOLD + townBlock.getTown().getName();
 			}

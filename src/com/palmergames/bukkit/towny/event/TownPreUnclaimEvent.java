@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.event;
 
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
@@ -42,10 +41,7 @@ public class TownPreUnclaimEvent extends Event implements Cancellable {
     public TownPreUnclaimEvent(TownBlock _townBlock) {
         super(!Bukkit.getServer().isPrimaryThread());
         this.townBlock = _townBlock;
-        try {
-			this.town = townBlock.getTown();
-		} catch (NotRegisteredException e) {
-		}
+        this.town = townBlock.getTownOrNull();
     }
 
     @Override

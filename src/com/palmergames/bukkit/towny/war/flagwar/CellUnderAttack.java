@@ -10,6 +10,8 @@ import org.bukkit.block.Block;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Coord;
 
+/** @deprecated for removal in a future release. Please use <a href="https://github.com/TownyAdvanced/Flagwar">the FlagWar plugin</a> for continued support. */
+@Deprecated
 public class CellUnderAttack extends Cell {
 
 	private Towny plugin;

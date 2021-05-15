@@ -400,11 +400,7 @@ public class TownyPlayerListener implements Listener {
 					
 					TownBlock townblock = TownyAPI.getInstance().getTownBlock(block.getLocation());
 					Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
-					Town town = null;
-					try {
-						town = townblock.getTown();
-					} catch (NotRegisteredException ignored) {}
-					
+					Town town = townblock.getTownOrNull();
 					if (resident == null || town == null)
 						return;
 					
@@ -858,12 +854,8 @@ public class TownyPlayerListener implements Listener {
 
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			if (resident != null && resident.hasTown() && !keepInventory) {
-				Town town = null;
-				Town tbTown = null;
-				try {
-					town = resident.getTown();
-					tbTown = tb.getTown();
-				} catch (NotRegisteredException ignored) {}
+				Town town = resident.getTownOrNull();
+				Town tbTown = tb.getTownOrNull();
 				if (TownySettings.getKeepInventoryInOwnTown() && tbTown.equals(town)) {
 					event.setKeepInventory(true);
 					event.getDrops().clear();
@@ -925,35 +917,23 @@ public class TownyPlayerListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerLeaveTown(PlayerLeaveTownEvent event) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		
-		Resident resident = townyUniverse.getResident(event.getPlayer().getUniqueId());
-		String worldName = null;
-		try {
-			worldName = townyUniverse.getDataSource().getWorld(event.getPlayer().getLocation().getWorld().getName()).getUnclaimedZoneName();
-		} catch (NotRegisteredException ignore) {
-		}
+		Resident resident = TownyAPI.getInstance().getResident(event.getPlayer().getUniqueId());
+		String worldName = TownyAPI.getInstance().getTownyWorld(event.getPlayer().getWorld().getName()).getUnclaimedZoneName();
 
 		// Likely a Citizens NPC.
 		if (resident == null || worldName == null)
 			return;
 		
-		WorldCoord to = event.getTo();
-		if (TownySettings.isNotificationUsingTitles()) {
-			try {
-				@SuppressWarnings("unused")
-				Town toTown = to.getTownBlock().getTown();
-			} catch (NotRegisteredException e) { // No town being entered so this is a move into the wilderness.
-				String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle());
-				String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
-				if (title.contains("{wilderness}")) {
-					title = title.replace("{wilderness}", StringMgmt.remUnderscore(worldName));
-				}
-				if (subtitle.contains("{wilderness}")) {
-					subtitle = subtitle.replace("{wilderness}", StringMgmt.remUnderscore(worldName));
-				}
-				TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
-			}			
+		if (TownySettings.isNotificationUsingTitles() && event.getTo().getTownBlockOrNull() == null) {
+			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle());
+			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
+			if (title.contains("{wilderness}")) {
+				title = title.replace("{wilderness}", StringMgmt.remUnderscore(worldName));
+			}
+			if (subtitle.contains("{wilderness}")) {
+				subtitle = subtitle.replace("{wilderness}", StringMgmt.remUnderscore(worldName));
+			}
+			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);		
 		}
 
 		if (resident.isJailed()) {
@@ -1065,10 +1045,7 @@ public class TownyPlayerListener implements Listener {
 			if (tb.hasResident()) {
 				// This is a personally-owned plot, let's make sure the player is the plot owner.
 				
-				Resident owner = null;
-				try {
-					owner = tb.getResident();
-				} catch(NotRegisteredException nre) { return; }
+				Resident owner = tb.getResidentOrNull();
 			
 				// The owner and player are not the same, cancel the command.
 				if (!owner.getName().equals(player.getName())) {

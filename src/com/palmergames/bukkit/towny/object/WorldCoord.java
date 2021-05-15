@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -118,6 +119,17 @@ public class WorldCoord extends Coord {
 		if (!hasTownBlock())
 			throw new NotRegisteredException();
 		return TownyUniverse.getInstance().getTownBlock(this);
+	}
+	
+	/**
+	 * Relatively safe to use if {@link #hasTownBlock()} has already been
+	 * checked and returned true.
+	 * 
+	 * @return TownBlock at this WorldCoord or null;
+	 */
+	@Nullable
+	public TownBlock getTownBlockOrNull() {
+		return TownyUniverse.getInstance().getTownBlockOrNull(this);
 	}
 	
 	public boolean hasTownBlock() {

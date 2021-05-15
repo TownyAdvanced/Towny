@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.PreTownPaysNationTaxEvent;
 import com.palmergames.bukkit.towny.event.town.TownUnconquerEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -401,49 +400,46 @@ public class DailyTimerTask extends TownyTimerTask {
 
 				if (!townBlock.hasResident())
 					continue;
-				try {
-					Resident resident = townBlock.getResident();
+				Resident resident = townBlock.getResidentOrNull();
 
-					/*
-					 * Only collect plot tax from this resident if it really
-					 * still exists. We are running in an Async thread so MUST
-					 * verify all objects.
-					 */
-					if (universe.hasResident(resident.getName())) {
-						if (resident.hasTown() && resident.getTown() == townBlock.getTown())
-							if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
-								continue;
-						
-						double tax = townBlock.getType().getTax(town);
-						if (tax < 1)
+				/*
+				 * Only collect plot tax from this resident if it really
+				 * still exists. We are running in an Async thread so MUST
+				 * verify all objects.
+				 */
+				if (universe.hasResident(resident.getName())) {
+					if (resident.hasTown() && resident.getTownOrNull() == town)
+						if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
 							continue;
+					
+					double tax = townBlock.getType().getTax(town);
+					if (tax < 1)
+						continue;
 
-						// If the tax would put the town over the bank cap we reduce what will be
-						// paid by the plot owner to what will be allowed.
-						if (TownySettings.getTownBankCap() != 0 && tax + town.getAccount().getHoldingBalance() > TownySettings.getTownBankCap())
-							tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
+					// If the tax would put the town over the bank cap we reduce what will be
+					// paid by the plot owner to what will be allowed.
+					if (TownySettings.getTownBankCap() != 0 && tax + town.getAccount().getHoldingBalance() > TownySettings.getTownBankCap())
+						tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
+					
+					if (!resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s)", townBlock.getType()))) {
+						if (!lostPlots.contains(resident.getName()))
+							lostPlots.add(resident.getName());
+
+						townBlock.setResident(null);
 						
-						if (!resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s)", townBlock.getType()))) {
-							if (!lostPlots.contains(resident.getName()))
-								lostPlots.add(resident.getName());
+						// Set the plot price.
+						if (TownySettings.doesPlotTaxNonPaymentSetPlotForSale())
+							townBlock.setPlotPrice(town.getPlotTypePrice(townBlock.getType()));
+						else 
+							townBlock.setPlotPrice(-1);								
 
-							townBlock.setResident(null);
+						// Set the plot permissions to mirror the towns.
+						townBlock.setType(townBlock.getType());
+						
 							
-							// Set the plot price.
-							if (TownySettings.doesPlotTaxNonPaymentSetPlotForSale())
-								townBlock.setPlotPrice(town.getPlotTypePrice(townBlock.getType()));
-							else 
-								townBlock.setPlotPrice(-1);								
-
-							// Set the plot permissions to mirror the towns.
-							townBlock.setType(townBlock.getType());
-							
-								
-							
-							townBlock.save();
-						}
+						
+						townBlock.save();
 					}
-				} catch (NotRegisteredException ignored) {
 				}
 				
 			}
@@ -540,10 +536,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 						for (TownBlock townBlock : plots) {
 							if (townBlock.hasResident()) {
-								Resident resident = null;
-								try {
-									resident = townBlock.getResident();
-								} catch (NotRegisteredException ignored) {}
+								Resident resident = townBlock.getResidentOrNull();
 								if (resident != null)
 									resident.getAccount().deposit(payment, "Negative Town Upkeep - Plot income");
 							} else

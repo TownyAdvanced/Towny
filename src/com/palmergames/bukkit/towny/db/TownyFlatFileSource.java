@@ -382,7 +382,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileResident);
 				
-				resident.setLastOnline(Long.parseLong(keys.get("lastOnline")));
+				line = keys.get("lastOnline");
+				if (line != null)
+					resident.setLastOnline(Long.parseLong(line));
 				
 				line = keys.get("uuid");
 				if (line != null) {
@@ -1521,7 +1523,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 					
 					if (groupID != null) {
-						PlotGroup group = getPlotObjectGroup(townBlock.getTown().toString(), groupID);
+						PlotGroup group = getPlotObjectGroup(townBlock.getTownOrNull().toString(), groupID);
 						townBlock.setPlotObjectGroup(group);
 					}
 
@@ -2000,13 +2002,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 
 		// resident
-		if (townBlock.hasResident()) {
-
-			try {
-				list.add("resident=" + townBlock.getResident().getName());
-			} catch (NotRegisteredException ignored) {
-			}
-		}
+		if (townBlock.hasResident())
+			list.add("resident=" + townBlock.getResidentOrNull().getName());
 
 		// type
 		list.add("type=" + townBlock.getType().getId());
