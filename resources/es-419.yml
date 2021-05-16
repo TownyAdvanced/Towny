@@ -1393,13 +1393,13 @@ towny_map_detailed_information: '&2Clic para ver información detallada del terr
 msg_err_nation_capital_too_many_residents: '&cThe current capital city has too many residents to be replaced by %s.'
 msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your nation will mean your town is over the population limit of %d, resulting in the removal of %d residents.'
 
-# Added in 0.103
-msg_command_blocked_inside_towns: '&cYou cannot use that command inside towns.'
-msg_command_limited: 'You can only use that command inside your own plots.'
+# Añadido en la versión 0.103
+msg_command_blocked_inside_towns: '&cNo puedes usar ese comando dentro de una ciudad.'
+msg_command_limited: 'Solo puedes usar ese comando en tus propios terrenos.'
 
-#Added in 0.104
-msg_plot_perm_claimed_at: '&2Claimed at: &a%s'
+# Añadido en la versión 0.104
+msg_plot_perm_claimed_at: '&2Reclamado el: &a%s'
 
-#Added in 0.105
-msg_wilderness_use_x_in_all_worlds: 'Wilderness use turned %s in all worlds.'
-msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
+# Añadido en la versión 0.105
+msg_wilderness_use_x_in_all_worlds: 'Uso del Exterior cambiado a %s en todos los mundos.'
+msg_regenerations_use_x_in_all_worlds: 'Regeneración cambiada a %s en todos los mundos.'
