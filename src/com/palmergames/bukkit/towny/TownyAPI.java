@@ -450,7 +450,7 @@ public class TownyAPI {
     /** 
      * Get the {@link TownBlock} at a specific {@link WorldCoord}.
      * 
-     * @param wc {@link WorldCoord to get the {@link TownBlock} of (if it claimed by a town.)
+     * @param wc {@link WorldCoord} to get the {@link TownBlock} of (if it claimed by a town.)
      * @return {@link TownBlock} at this {@link WorldCoord}, or {@code null} if this isn't claimed.
      */
     @Nullable
