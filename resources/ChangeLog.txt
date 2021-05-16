@@ -6094,3 +6094,4 @@ v0.92.0.11:
     - Gets the town who owns the townblock or null if wilderness.
     - Best used after TownBlock.hasTown();
   - Fix /n set king declaring that the capital has too many residents.
+  - Fix potential console spam from adventure, courtesy of Warriorrrr with PR #4939.
