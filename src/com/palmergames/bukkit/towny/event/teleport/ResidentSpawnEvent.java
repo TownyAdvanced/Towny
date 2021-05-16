@@ -1,11 +1,11 @@
 package com.palmergames.bukkit.towny.event.teleport;
 
 import com.palmergames.bukkit.towny.event.SpawnEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An event called when /res spawn occurs.
@@ -20,13 +20,9 @@ public class ResidentSpawnEvent extends SpawnEvent {
 	public ResidentSpawnEvent(Player player, Location from, Location to) {
 		super(player, from, to);
 
-		try {
-			fromTown = WorldCoord.parseWorldCoord(from).getTownBlock().getTown();
-		} catch (NotRegisteredException ignored) {}
+		fromTown = WorldCoord.parseWorldCoord(from).getTownBlockOrNull().getTownOrNull();
 		
-		try {
-			toTown = WorldCoord.parseWorldCoord(to).getTownBlock().getTown();
-		} catch (NotRegisteredException ignored) {}
+		toTown = WorldCoord.parseWorldCoord(to).getTownBlockOrNull().getTownOrNull();
 		
 	}
 
@@ -44,6 +40,7 @@ public class ResidentSpawnEvent extends SpawnEvent {
 	 * 
 	 * @return null if the player was not standing in a townblock, the town they were standing in otherwise.
 	 */
+	@Nullable
 	public Town getFromTown() {
 		return fromTown;
 	}

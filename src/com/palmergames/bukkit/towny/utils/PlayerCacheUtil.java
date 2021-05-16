@@ -267,22 +267,19 @@ public class PlayerCacheUtil {
 			return TownBlockStatus.UNCLAIMED_ZONE;
 		}
 
-		TownBlock townBlock = null;
-		Town town = null;
-		try {
-			townBlock = worldCoord.getTownBlock();
-			town = townBlock.getTown();
-
-			if (townBlock.isLocked()) {
-				// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
-				if (townBlock.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
-					TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
-					return TownBlockStatus.LOCKED;
-				}
-				townBlock.setLocked(false);
+		
+		// Has to be in a town.
+		
+		TownBlock townBlock = worldCoord.getTownBlockOrNull();
+		Town town = townBlock.getTownOrNull();
+		if (townBlock.isLocked()) {
+			// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
+			if (townBlock.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
+				TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
+				return TownBlockStatus.LOCKED;
 			}
-
-		} catch (NotRegisteredException ignored) {}
+			townBlock.setLocked(false);
+		}
 
 		/*
 		 * Find the resident data for this player.
@@ -317,16 +314,12 @@ public class PlayerCacheUtil {
 					return TownBlockStatus.WARZONE;
 			}
 
-			// Town Owner Override
-			try {
-				if (townBlock.getTown().isMayor(resident)) // || townBlock.getTown().hasAssistant(resident))
-					return TownBlockStatus.TOWN_OWNER;
-			} catch (NotRegisteredException e) {
-			}
+			if (town.isMayor(resident))
+				return TownBlockStatus.TOWN_OWNER;
 			
 			// Resident Plot rights
-			try {
-				Resident owner = townBlock.getResident();
+			if (townBlock.hasResident()) {
+				Resident owner = townBlock.getResidentOrNull();
 				if (resident == owner)
 					return TownBlockStatus.PLOT_OWNER;
 				else if (owner.hasFriend(resident))
@@ -335,10 +328,6 @@ public class PlayerCacheUtil {
 					return TownBlockStatus.PLOT_TOWN;
 				else if (resident.hasTown() && CombatUtil.isAlly(owner.getTown(), resident.getTown()))
 					return TownBlockStatus.PLOT_ALLY;
-				else
-					// Exit out and use town permissions
-					throw new TownyException();
-			} catch (TownyException e) {
 			}
 
 			// Resident with no town.
@@ -390,17 +379,15 @@ public class PlayerCacheUtil {
 			return true;
 
 		//If town is bankrupt (but not ruined), nobody can build
-		TownBlock townBlock = null;
+		TownBlock townBlock = pos.getTownBlockOrNull();
 		Town targetTown = null;
-		if(TownySettings.isTownBankruptcyEnabled() && action == ActionType.BUILD) {
-			try {
-				townBlock = pos.getTownBlock();
-				targetTown = townBlock.getTown();
-				if(targetTown.isBankrupt() && !targetTown.isRuined())  {
-					cacheBlockErrMsg(player, Translation.of("msg_err_bankrupt_town_cannot_build"));
-					return false;
-				}
-			} catch (NotRegisteredException ignored) {
+		if (townBlock != null && townBlock.hasTown())
+			targetTown = townBlock.getTownOrNull();
+			
+		if(targetTown != null && TownySettings.isTownBankruptcyEnabled() && action == ActionType.BUILD) {
+			if(targetTown.isBankrupt() && !targetTown.isRuined())  {
+				cacheBlockErrMsg(player, Translation.of("msg_err_bankrupt_town_cannot_build"));
+				return false;
 			}
 		}
 
@@ -502,18 +489,8 @@ public class PlayerCacheUtil {
 		}
 		
 		/*
-		 * Not going to be in the wilderness.
+		 * Not going to be in the wilderness at this point.
 		 */
-		try {
-			if(townBlock == null)
-				townBlock = pos.getTownBlock();
-			if(targetTown == null)
-				targetTown = townBlock.getTown();
-		} catch (NotRegisteredException e) {
-			// Should not be possible to get here unless something is very wrong.
-			TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
-			return false;
-		}
 
 		/*
 		 * Handle Personally owned plots first.

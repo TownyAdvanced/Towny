@@ -22,13 +22,13 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
-import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import com.palmergames.util.TimeMgmt;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -83,7 +83,7 @@ public class TownyCustomListener implements Listener {
 					e.printStackTrace();
 				}
 				if (msg != null) {
-					msg = Colors.translateColorCodes(msg);
+					TextComponent msgComponent = LegacyComponentSerializer.builder().build().deserialize(msg);
 					
 					Audience playerAudience = Towny.getAdventure().player(player);
 					if (TownySettings.isNotificationsAppearingInActionBar() && !TownySettings.isNotificationsAppearingOnBossbar()) {
@@ -96,10 +96,10 @@ public class TownyCustomListener implements Listener {
 								playerActionTasks.remove(player);
 							}
 					
-							final String message = msg;
+							final TextComponent messageComponent = msgComponent;
 							AtomicInteger remainingSeconds = new AtomicInteger(seconds);
 							int taskID = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-								playerAudience.sendActionBar(Component.text(message));
+								playerAudience.sendActionBar(messageComponent);
 								remainingSeconds.getAndDecrement();
 								
 								if (remainingSeconds.get() == 0 && playerActionTasks.containsKey(player)) {
@@ -110,11 +110,11 @@ public class TownyCustomListener implements Listener {
 							
 							playerActionTasks.put(player, taskID);
 						} else {
-							playerAudience.sendActionBar(Component.text(msg));
+							playerAudience.sendActionBar(msgComponent);
 						}
 					} else if (TownySettings.isNotificationsAppearingOnBossbar()) {
 						int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION);
-						BossBar bossBar = BossBar.bossBar(Component.text(msg), 1, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS);
+						BossBar bossBar = BossBar.bossBar(msgComponent, 1, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS);
 
 						if (playerBossBarMap.containsKey(player)) {
 							Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));

@@ -590,23 +590,15 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return townblock != null ? String.valueOf(townblock.isOwner(resident)) : "false";
 			
 		case "player_location_town_or_wildname": // %townyadvanced_player_location_town_or_wildname%
-			try {
-				return townblock != null ? townblock.getTown().getName() : TownyAPI.getInstance().getDataSource().getWorld(player.getWorld().getName()).getUnclaimedZoneName();
-			} catch (NotRegisteredException ignored) {}
+			return townblock != null ? townblock.getTownOrNull().getName() : TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).getUnclaimedZoneName();
 		case "player_location_formattedtown_or_wildname": // %townyadvanced_player_location_formattedtown_or_wildname%
-			try {
-				return townblock != null ? townblock.getTown().getFormattedName() : TownyAPI.getInstance().getDataSource().getWorld(player.getWorld().getName()).getUnclaimedZoneName();
-			} catch (NotRegisteredException ignored) {}
+			return townblock != null ? townblock.getTownOrNull().getFormattedName() : TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).getUnclaimedZoneName();
 		case "player_location_plot_name": // %townyadvanced_player_location_plot_name%
 			return townblock != null ? townblock.getName() : "";
 		case "player_location_town_prefix": // %townyadvanced_player_location_town_prefix%
-			try {
-				return townblock != null ? townblock.getTown().getPrefix(): "";
-			} catch (NotRegisteredException ignored) {}
+			return townblock != null ? townblock.getTownOrNull().getPrefix(): "";
 		case "player_location_town_postfix": // %townyadvanced_player_location_town_postfix%
-			try {
-				return townblock != null ? townblock.getTown().getPostfix(): "";
-			} catch (NotRegisteredException ignored) {}
+			return townblock != null ? townblock.getTownOrNull().getPostfix(): "";
 		case "player_location_pvp": // %townyadvanced_player_location_pvp%
 			try {
 				return townblock != null ? (townblock.getPermissions().pvp ? Translation.of("status_title_pvp"):"") : (TownyAPI.getInstance().getDataSource().getWorld(player.getWorld().getName()).isPVP() ? Translation.of("status_title_pvp"):"");

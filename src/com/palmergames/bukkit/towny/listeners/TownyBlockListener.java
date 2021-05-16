@@ -233,7 +233,7 @@ public class TownyBlockListener implements Listener {
 
 			//Both townblocks are owned by the same resident.
 			if (currentTownBlock.hasResident() && destinationTownBlock.hasResident())
-				if (currentTownBlock.getResident() == destinationTownBlock.getResident())
+				if (currentTownBlock.getResidentOrNull() == destinationTownBlock.getResidentOrNull())
 					return true;
 
 			//Both townblocks are owned by the same town.

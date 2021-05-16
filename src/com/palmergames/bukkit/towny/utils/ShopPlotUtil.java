@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 
@@ -32,12 +31,13 @@ public class ShopPlotUtil {
 	 */
 	public static boolean doesPlayerOwnShopPlot(Player player, Location location) {
 		boolean owner = false;
-		try {
-			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-			if (resident != null)
-				owner = TownyAPI.getInstance().getTownBlock(location).getResident().equals(resident);
-		} catch (NotRegisteredException | NullPointerException e) {
+		if (TownyAPI.getInstance().isWilderness(location))
 			return false;
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
+		if (townBlock.hasResident()) {
+			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+			if (resident != null) 
+				owner = townBlock.getResidentOrNull().equals(resident);
 		}
 		
 		return owner && isShopPlot(location);

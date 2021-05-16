@@ -1,10 +1,10 @@
 package com.palmergames.bukkit.towny.event;
 
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An event called when town spawns occur.
@@ -19,13 +19,9 @@ public class TownSpawnEvent extends SpawnEvent {
 	public TownSpawnEvent(Player player, Location from, Location to) {
 		super(player, from, to);
 
-		try {
-			fromTown = WorldCoord.parseWorldCoord(from).getTownBlock().getTown();
-		} catch (NotRegisteredException ignored) {}
+		fromTown = WorldCoord.parseWorldCoord(from).getTownBlockOrNull().getTownOrNull();
 		
-		try {
-			toTown = WorldCoord.parseWorldCoord(to).getTownBlock().getTown();
-		} catch (NotRegisteredException ignored) {}
+		toTown = WorldCoord.parseWorldCoord(to).getTownBlockOrNull().getTownOrNull();
 		
 	}
 
@@ -43,6 +39,7 @@ public class TownSpawnEvent extends SpawnEvent {
 	 * 
 	 * @return null if the player was not standing in a townblock, the town they were standing in otherwise.
 	 */
+	@Nullable
 	public Town getFromTown() {
 		return fromTown;
 	}

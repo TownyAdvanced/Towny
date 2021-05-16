@@ -171,6 +171,16 @@ public class Town extends Government implements TownBlockOwner {
 		else
 			throw new NotRegisteredException(Translation.of("msg_err_town_doesnt_belong_to_any_nation"));
 	}
+	
+	/**
+	 * Safe to use as long as {@link #hasNation()} has returned true.
+	 * 
+	 * @return Nation of the Town or null if no Nation.
+	 */
+	@Nullable
+	public Nation getNationOrNull() {
+		return nation;
+	}
 
 	public void removeNation() {
 

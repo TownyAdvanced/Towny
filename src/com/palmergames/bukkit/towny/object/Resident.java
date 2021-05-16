@@ -357,6 +357,17 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		else
 			throw new NotRegisteredException(Translation.of("msg_err_resident_doesnt_belong_to_any_town"));
 	}
+	
+	/**
+	 * Relatively safe to use after confirming there is a town using
+	 * {@link #hasTown()}.
+	 * 
+	 * @return Town the resident belongs to or null.
+	 */
+	@Nullable 
+	public Town getTownOrNull() {
+		return town;
+	}
 
 	public void setTown(Town town) throws AlreadyRegisteredException {
 		setTown(town, true);
@@ -421,15 +432,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				townBlockIterator.remove();
 				townBlock.setResident(null);
 				
-				try {
-					townBlock.setPlotPrice(townBlock.getTown().getPlotPrice());
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
-				townBlock.save();
-
+				townBlock.setPlotPrice(townBlock.getTownOrNull().getPlotPrice());
 				// Set the plot permissions to mirror the towns.
 				townBlock.setType(townBlock.getType());
+				townBlock.save();
 			}
 		}
 		
@@ -903,9 +909,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock) throws NotRegisteredException {
-		if (!townBlocks.remove(townBlock))
-			throw new NotRegisteredException();
+	public void removeTownBlock(TownBlock townBlock) {
+		townBlocks.remove(townBlock);
 	}
 
 	@Override
