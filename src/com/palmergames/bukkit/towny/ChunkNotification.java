@@ -29,14 +29,14 @@ public class ChunkNotification {
 	// ~ Wak Town - Lord Jebus - [Home] [For Sale: 50 Beli] [Shop]
 
 	public static String notificationFormat = Colors.Gold + " ~ %s";
-	public static String notificationSpliter = Colors.LightGray + " - ";
+	public static String notificationSplitter = Colors.LightGray + " - ";
 	public static String areaWildernessNotificationFormat = Colors.Green + "%s";
 	public static String areaWildernessPvPNotificationFormat = Colors.Green + "%s";
 	public static String areaTownNotificationFormat = Colors.Green + "%s";
 	public static String areaTownPvPNotificationFormat = Colors.Green + "%s";
 	public static String ownerNotificationFormat = Colors.LightGreen + "%s";
 	public static String noOwnerNotificationFormat = Colors.LightGreen + "%s";
-	public static String plotNotficationSplitter = " ";
+	public static String plotNotificationSplitter = " ";
 	public static String plotNotificationFormat = "%s";
 	public static String homeBlockNotification = Colors.LightBlue + "[Home]";
 	public static String outpostBlockNotification = Colors.LightBlue + "[Outpost]";
@@ -52,14 +52,14 @@ public class ChunkNotification {
 	public static void loadFormatStrings() {
 
 		notificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_FORMAT));
-		notificationSpliter = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_SPLITTER));
+		notificationSplitter = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_SPLITTER));
 		areaWildernessNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_WILDERNESS));
 		areaWildernessPvPNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_WILDERNESS_PVP));
 		areaTownNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_TOWN));
 		areaTownPvPNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_TOWN_PVP));
 		ownerNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_OWNER));
 		noOwnerNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_NO_OWNER));
-		plotNotficationSplitter = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_SPLITTER));
+		plotNotificationSplitter = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_SPLITTER));
 		plotNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_FORMAT));
 		homeBlockNotification = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_HOMEBLOCK));
 		outpostBlockNotification = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_OUTPOSTBLOCK));
@@ -124,7 +124,7 @@ public class ChunkNotification {
 		List<String> outputContent = getNotificationContent(resident);
 		if (outputContent.size() == 0)
 			return null;
-		return String.format(notificationFormat, StringMgmt.join(outputContent, notificationSpliter));
+		return String.format(notificationFormat, StringMgmt.join(outputContent, notificationSplitter));
 	}
 
 	public List<String> getNotificationContent(Resident resident) {
@@ -272,7 +272,7 @@ public class ChunkNotification {
 		List<String> outputContent = getPlotNotificationContent();
 		if (outputContent.size() == 0)
 			return null;
-		return String.format(plotNotificationFormat, StringMgmt.join(outputContent, plotNotficationSplitter));
+		return String.format(plotNotificationFormat, StringMgmt.join(outputContent, plotNotificationSplitter));
 	}
 
 	public List<String> getPlotNotificationContent() {
