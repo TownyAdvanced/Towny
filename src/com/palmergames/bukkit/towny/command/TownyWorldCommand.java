@@ -1,9 +1,11 @@
 package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -109,17 +111,21 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		switch (args[0].toLowerCase()) {
 			case "toggle":
 				if (args.length == 2)
-					return NameUtil.filterByStart(townyWorldToggleTabCompletes, args[1]);
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYWORLD_TOGGLE, townyWorldToggleTabCompletes), args[1]);
 				else if (args.length == 3)
 					return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 				break;
 			case "set":
 				if (args.length == 2)
-					return NameUtil.filterByStart(townySetTabCompletes, args[1]);
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYWORLD_SET, townySetTabCompletes), args[1]);
+				else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD_SET, args[1]))
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_SET, args[1]).getTabCompletion(args.length), args[args.length]);
 				break;
 			default:
 				if (args.length == 1)
-					return filterByStartOrGetTownyStartingWith(townyWorldTabCompletes, args[0], "+w");
+					return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYWORLD, townyWorldTabCompletes), args[0], "+w");
+				else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD, args[0]))
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD, args[0]).getTabCompletion(args.length), args[args.length]);
 		}
 		
 		return Collections.emptyList();
@@ -491,7 +497,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(player, msg);
 				else
 					TownyMessaging.sendMsg(msg);
-			
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD_TOGGLE, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_TOGGLE, split[0]).run(sender, null, "townyworld", split);
 			} else {
 				msg = Translation.of("msg_err_invalid_property", "'" + split[0] + "'");
 				if (player != null)
@@ -615,6 +622,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_input", " on/off."));
 					}
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD_SET, split[0])) {
+				try {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_SET, split[0]).run(sender, null, "townyworld", split);
+				} catch (TownyException e) {
+					return;
+				}
 			} else {
 				if (player != null)
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "world"));

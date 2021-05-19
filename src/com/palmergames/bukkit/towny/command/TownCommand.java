@@ -2,11 +2,13 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
@@ -381,7 +383,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				case "toggle":
 					switch (args.length) {
 						case 2:
-							return NameUtil.filterByStart(townToggleTabCompletes, args[1]);
+							return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_TOGGLE, townToggleTabCompletes), args[1]);
 						case 3:
 							if (!args[1].equalsIgnoreCase("jail")) {
 								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
@@ -399,7 +401,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 				default:
 					if (args.length == 1)
-						return filterByStartOrGetTownyStartingWith(townTabCompletes, args[0], "t");
+						return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, townTabCompletes), args[0], "t");
+					else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWN, args[0]))
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, args[0]).getTabCompletion(args.length), args[args.length-1]);
 			}
 		} else if (args.length == 1) {
 			return filterByStartOrGetTownyStartingWith(townConsoleTabCompletes, args[0], "t");
@@ -410,7 +414,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	
 	static List<String> townSetTabComplete(Town town, String[] args) {
 		if (args.length == 2) {
-			return NameUtil.filterByStart(townSetTabCompletes, args[1]);
+			return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_SET, townSetTabCompletes), args[1]);
 		} else if (args.length > 2) {
 			switch (args[1].toLowerCase()) {
 				case "mayor":
@@ -746,6 +750,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 
 					parseTownMergeCommand(player, newSplit);
+				} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN, split[0])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, split[0]).run(player, null, "town", split);
 				} else {
 					/*
 					 * We've gotten this far without a match, check if the argument is a town name.
@@ -1544,7 +1550,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 				}
-
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_TOGGLE, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_TOGGLE, split[0]).run(sender, null, "town", split);
 			} else {
             	/*
             	 * Fire of an event if we don't recognize the command being used.
@@ -2165,7 +2172,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 					String[] newSplit = StringMgmt.remFirstArg(split);
 					setTownBlockOwnerPermissions(player, town, newSplit);
-
+				} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_SET, split[0])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_SET, split[0]).run(player, null, "town", split);
 				} else {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "town"));
 					return;

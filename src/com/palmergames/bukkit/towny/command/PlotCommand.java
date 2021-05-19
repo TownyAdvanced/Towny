@@ -3,11 +3,13 @@ package com.palmergames.bukkit.towny.command;
 import com.google.common.collect.Iterables;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
@@ -173,7 +175,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			switch (args[0].toLowerCase()) {
 				case "set":
 					if (args.length == 2) {
-						return NameUtil.filterByStart(plotSetTabCompletes, args[1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_SET, plotSetTabCompletes), args[1]);
 					}
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
 						return permTabComplete(StringMgmt.remArgs(args, 2));
@@ -181,7 +183,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					break;
 				case "toggle":
 					if (args.length == 2)
-						return NameUtil.filterByStart(plotToggleTabCompletes, args[1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_TOGGLE, plotToggleTabCompletes), args[1]);
 					else if (args.length == 3)
 						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 					break;
@@ -214,8 +216,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					break;
 				default:
 					if (args.length == 1)
-						return NameUtil.filterByStart(plotTabCompletes, args[0]);
-					break;
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT, plotTabCompletes), args[0]);
+					else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.PLOT, args[0]))
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT, args[0]).getTabCompletion(args.length), args[args.length-1]);
 			}
 		}
 
@@ -709,7 +712,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								}
 							}
 							return true;
-						}
+						} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, split[0]))
+							TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_SET, split[0]).run(player, null, "plot", split);
 						
 						/*
 						 * After trying all of the other /plot set subcommands, attempt to set the townblock type.
@@ -836,7 +840,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("group")) {
 
 					return handlePlotGroupCommand(StringMgmt.remFirstArg(split), player);
-					
+				} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT, split[0])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT, split[0]).run(player, null, "plot", split);
 				} else
 					throw new TownyException(Translation.of("msg_err_invalid_property", split[0]));
 
@@ -1137,7 +1142,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					townBlock.getPermissions().mobs = choice.orElse(!townBlock.getPermissions().mobs);
 					
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled")));
-
+				} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_TOGGLE, split[0])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_TOGGLE, split[0]).run(player, null, "plot", split);
 				} else {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "plot"));
 					return;

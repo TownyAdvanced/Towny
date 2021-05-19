@@ -2,12 +2,14 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyAsciiMap;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -190,11 +192,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			default:
 				if (args.length == 1) {
 					if (sender instanceof Player) {
-						return NameUtil.filterByStart(townyTabCompletes, args[0]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNY, townyTabCompletes), args[0]);
 					} else {
-						return NameUtil.filterByStart(townyConsoleTabCompletes, args[0]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNY, townyConsoleTabCompletes), args[0]);
 					}
-				}
+				} else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNY, args[0]))
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, args[0]).getTabCompletion(args.length), args[args.length]);
 		}
 		
 		return Collections.emptyList();
@@ -298,7 +301,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					resident.toggleMode(split, true);
 				} else
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_command_disable"));
-
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNY, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, split[0]).run(player, null, "towny", split);
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
 
