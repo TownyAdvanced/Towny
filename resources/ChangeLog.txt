@@ -6103,3 +6103,4 @@ v0.92.0.11:
   - Replace player.sendMessage() with TownyMessaging.sendMessage().
   - Undo PR #4933 to retain backwards compatibility.
   - Fix no feedback when using a /plot command in the wilderness.
+  - Fix regression: null message shown from /t spawn and /n spawn when used from the wilderness.

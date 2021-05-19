@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -25,9 +26,14 @@ public class NationSpawnEvent extends SpawnEvent {
 	 */
 	public NationSpawnEvent(Player player, Location from, Location to) {
 		super(player, from, to);
-		fromNation = WorldCoord.parseWorldCoord(from).getTownBlockOrNull().getTownOrNull().getNationOrNull();
-
-		toNation = WorldCoord.parseWorldCoord(to).getTownBlockOrNull().getTownOrNull().getNationOrNull();
+		
+		TownBlock fromTownBlock = WorldCoord.parseWorldCoord(from).getTownBlockOrNull();
+		TownBlock toTownBlock = WorldCoord.parseWorldCoord(to).getTownBlockOrNull();
+		
+		if (fromTownBlock != null)
+			fromNation = fromTownBlock.getTownOrNull().getNationOrNull();
+		if (toTownBlock != null)
+			toNation = WorldCoord.parseWorldCoord(to).getTownBlockOrNull().getTownOrNull().getNationOrNull();
 	}
 
 	/**
