@@ -154,12 +154,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				HelpMenu.PLOT_HELP.send(player);
 
 			} else {
-				try {
-					return parsePlotCommand(player, args);
-				} catch (TownyException x) {
-					// No permisisons
-					 x.getMessage();
-				}
+				return parsePlotCommand(player, args);
 			}
 
 		} else
@@ -225,7 +220,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		return Collections.emptyList();
 	}
 
-	public boolean parsePlotCommand(Player player, String[] split) throws TownyException {
+	public boolean parsePlotCommand(Player player, String[] split) {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
@@ -239,13 +234,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				return true;
 			}
 			
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
-			if (townBlock == null && !split[0].equalsIgnoreCase("perm"))
-				throw new TownyException(Translation.of("msg_not_claimed_1"));
-			
 			String world = player.getWorld().getName();
 
 			try {
+				
+				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+				if (townBlock == null && !split[0].equalsIgnoreCase("perm"))
+					throw new TownyException(Translation.of("msg_not_claimed_1"));
+				
 				if (!TownyAPI.getInstance().isWilderness(player.getLocation()) && townBlock.getTownOrNull().isRuined())
 					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
 

@@ -6102,3 +6102,4 @@ v0.92.0.11:
     - Adds a new command addon API, that allows plugin developers to add their own sub commands to Towny's existing commands.
   - Replace player.sendMessage() with TownyMessaging.sendMessage().
   - Undo PR #4933 to retain backwards compatibility.
+  - Fix no feedback when using a /plot command in the wilderness.
