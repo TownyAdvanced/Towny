@@ -5,6 +5,8 @@ import java.util.TimerTask;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
+
 public class ServerBroadCastTimerTask extends TimerTask {
 
 	private JavaPlugin plugin;
@@ -20,7 +22,7 @@ public class ServerBroadCastTimerTask extends TimerTask {
 	public void run() {
 
 		for (Player player : plugin.getServer().getOnlinePlayers())
-			player.sendMessage(msg);
+			TownyMessaging.sendMessage(player, msg);
 	}
 
 }

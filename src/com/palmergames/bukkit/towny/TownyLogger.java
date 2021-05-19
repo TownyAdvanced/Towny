@@ -22,7 +22,7 @@ public class TownyLogger {
 	private static final TownyLogger instance = new TownyLogger();
 	private static final Logger LOGGER_MONEY = LogManager.getLogger("com.palmergames.bukkit.towny.money");
 	
-	//@SuppressWarnings("deprecation") // Until Mojang updates their log4j included with minecraft we have to use the deprecated methods.
+	@SuppressWarnings("deprecation") // Until Mojang updates their log4j included with minecraft we have to use the deprecated methods.
 	private TownyLogger() {
 		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
 		Configuration config = ctx.getConfiguration();
@@ -31,13 +31,13 @@ public class TownyLogger {
 		
 		Appender townyMainAppender = FileAppender.newBuilder()
 			.withFileName(logFolderName + File.separator + "towny.log")
-			.setName("Towny-Main-Log")
+			.withName("Towny-Main-Log")
 			.withAppend(TownySettings.isAppendingToLog())
-			.setIgnoreExceptions(false)
+			.withIgnoreExceptions(false)
 			.withBufferedIo(false)
 			.withBufferSize(0)
 			.setConfiguration(config)
-			.setLayout(PatternLayout.newBuilder()
+			.withLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
 				.withPattern("%d [%t]: %m%n")
 				.withConfiguration(config)
@@ -45,13 +45,13 @@ public class TownyLogger {
 			.build();
 		Appender townyMoneyAppender = FileAppender.newBuilder()
 			.withFileName(logFolderName + File.separator + "money.csv")
-			.setName("Towny-Money")
+			.withName("Towny-Money")
 			.withAppend(TownySettings.isAppendingToLog())
-			.setIgnoreExceptions(false)
+			.withIgnoreExceptions(false)
 			.withBufferedIo(false)
 			.withBufferSize(0)
 			.setConfiguration(config)
-			.setLayout(PatternLayout.newBuilder()
+			.withLayout(PatternLayout.newBuilder()
 				// The comma after the date is to seperate it in CSV, this is a really nice workaround
 				// And avoids having to use apache-csv to make it work with Log4J
 				.withCharset(StandardCharsets.UTF_8)
@@ -61,13 +61,13 @@ public class TownyLogger {
 			.build();
 		Appender townyDebugAppender = FileAppender.newBuilder()
 			.withFileName(logFolderName + File.separator + "debug.log")
-			.setName("Towny-Debug")
+			.withName("Towny-Debug")
 			.withAppend(TownySettings.isAppendingToLog())
-			.setIgnoreExceptions(false)
+			.withIgnoreExceptions(false)
 			.withBufferedIo(false)
 			.withBufferSize(0)
 			.setConfiguration(config)
-			.setLayout(PatternLayout.newBuilder()
+			.withLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
 				.withPattern("%d [%t]: %m%n")
 				.withConfiguration(config)
@@ -75,13 +75,13 @@ public class TownyLogger {
 			.build();
 		Appender townyDatabaseAppender = FileAppender.newBuilder()
 			.withFileName(logFolderName + File.separator + "database.log")
-			.setName("Towny-Database")
+			.withName("Towny-Database")
 			.withAppend(TownySettings.isAppendingToLog())
-			.setIgnoreExceptions(false)
+			.withIgnoreExceptions(false)
 			.withBufferedIo(false)
 			.withBufferSize(0)
 			.setConfiguration(config)
-			.setLayout(PatternLayout.newBuilder()
+			.withLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
 				.withPattern("%d [%t]: %m%n")
 				.withConfiguration(config)

@@ -157,7 +157,7 @@ public class TownyAsciiMap {
 		String[] compass = generateCompass(player);
 
 		// Output
-		player.sendMessage(ChatTools.formatTitle(Translation.of("towny_map_header") + Colors.White + "(" + pos.toString() + ")"));
+		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translation.of("towny_map_header") + Colors.White + "(" + pos.toString() + ")"));
 		String line;
 		int lineCount = 0;
 		// Variables have been rotated to fit N/S/E/W properly

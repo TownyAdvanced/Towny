@@ -104,7 +104,7 @@ public class TownyPlayerListener implements Listener {
 		Player player = event.getPlayer();
 
 		if (plugin.isError()) {
-			player.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+			TownyMessaging.sendMessage(player, Colors.Rose + "[Towny Error] Locked in Safe mode!");
 			return;
 		}
 

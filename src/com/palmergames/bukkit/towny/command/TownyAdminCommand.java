@@ -456,7 +456,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0) {
 			buildTAPanel();
 			for (String line : ta_panel) {
-				sender.sendMessage(line);
+				TownyMessaging.sendMessage(sender, line);
 			}
 
 		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
@@ -629,8 +629,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	private void parseAdminDatabaseRemoveCommand(String[] split) {
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-			sender.sendMessage(ChatTools.formatTitle("/townyadmin database remove"));
-			sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin database remove", "titles", "Removes all titles and surnames from every resident."));
+			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/townyadmin database remove"));
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin database remove", "titles", "Removes all titles and surnames from every resident."));
 			return;
 		}
 		
@@ -649,7 +649,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private void parseAdminPlotCommand(String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (isConsole) {
-			sender.sendMessage("[Towny] InputError: This command was designed for use in game only.");
+			TownyMessaging.sendMessage(sender, "[Towny] InputError: This command was designed for use in game only.");
 			return;
 		}
 
@@ -809,7 +809,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else {
 
 			if (isConsole) {
-				sender.sendMessage("[Towny] InputError: This command was designed for use in game only.");
+				TownyMessaging.sendMessage(sender, "[Towny] InputError: This command was designed for use in game only.");
 				return;
 			}
 
@@ -858,9 +858,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if(split[1].equalsIgnoreCase("friend"))	{
 				
 				if (split.length == 2) {
-					sender.sendMessage(ChatTools.formatTitle("/townyadmin resident {resident} friend"));
-					sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin resident", "[resident] friend... [add|remove] [resident]", ""));
-					sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin resident", "[resident] friend... |list|clear]", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/townyadmin resident {resident} friend"));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin resident", "[resident] friend... [add|remove] [resident]", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin resident", "[resident] friend... |list|clear]", ""));
 					return;
 				}
 				if (isConsole)
@@ -889,7 +889,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					final Location loc = Bukkit.getWorld(jailTown.getHomeblockWorld().getName()).getSpawnLocation();
 
 					// Use teleport warmup
-					jailedPlayer.sendMessage(Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
+					TownyMessaging.sendMessage(jailedPlayer, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 					TownyAPI.getInstance().jailTeleport(jailedPlayer, loc);
 
 					resident.removeJailSpawn();
@@ -1014,17 +1014,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("toggle")) {
 				
 				if (split.length == 2 || split[2].equalsIgnoreCase("?")) {
-					sender.sendMessage(ChatTools.formatTitle("/ta town {townname} toggle"));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "pvp", ""));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "forcepvp", ""));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "public", ""));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "explosion", ""));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "fire", ""));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "mobs", ""));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "taxpercent", ""));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "open", ""));					
-					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "jail [number] [resident]", ""));
-					sender.sendMessage(ChatTools.formatCommand("", "/ta town {townname} toggle", "forcepvp", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/ta town {townname} toggle"));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta town {townname} toggle", "pvp", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta town {townname} toggle", "forcepvp", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta town {townname} toggle", "public", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta town {townname} toggle", "explosion", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta town {townname} toggle", "fire", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta town {townname} toggle", "mobs", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta town {townname} toggle", "taxpercent", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta town {townname} toggle", "open", ""));					
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta town {townname} toggle", "jail [number] [resident]", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta town {townname} toggle", "forcepvp", ""));
 
 					return;
 				}
@@ -1375,9 +1375,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 			else if (split[1].equalsIgnoreCase("rank")) {
 				if (split.length < 5) {
-					sender.sendMessage(ChatTools.formatTitle("/townyadmin nation rank"));
-					sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank add [resident] [rank] ", ""));
-					sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank remove [resident] [rank] ", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/townyadmin nation rank"));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank add [resident] [rank] ", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank remove [resident] [rank] ", ""));
 					return;
 				}
 				Resident target;
@@ -1429,9 +1429,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							return;
 						}
 					default:
-						sender.sendMessage(ChatTools.formatTitle("/townyadmin nation rank"));
-						sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank add [resident] [rank] ", ""));
-						sender.sendMessage(ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank remove [resident] [rank] ", ""));
+						TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/townyadmin nation rank"));
+						TownyMessaging.sendMessage(sender, ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank add [resident] [rank] ", ""));
+						TownyMessaging.sendMessage(sender, ChatTools.formatCommand(Translation.of("admin_sing"), "/townyadmin nation rank remove [resident] [rank] ", ""));
 						return;
 				}
 			} else if (split[1].equalsIgnoreCase("ally")) {
@@ -1569,13 +1569,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translation.of("msg_err_command_disable"));
 
 		if (split.length == 0) {
-			sender.sendMessage(ChatTools.formatTitle("/townyadmin set"));
-			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "mayor [town] " + Translation.of("town_help_2"), ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "mayor [town] npc", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "capital [town]", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "title [resident] [title]", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "surname [resident] [surname]", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin set", "plot [town]", ""));
+			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/townyadmin set"));
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/townyadmin set", "mayor [town] " + Translation.of("town_help_2"), ""));
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/townyadmin set", "mayor [town] npc", ""));
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/townyadmin set", "capital [town]", ""));
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/townyadmin set", "title [resident] [title]", ""));
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/townyadmin set", "surname [resident] [surname]", ""));
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/townyadmin set", "plot [town]", ""));
 
 			return;
 		}
@@ -1586,9 +1586,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			if (split.length < 3) {
 
-				sender.sendMessage(ChatTools.formatTitle("/townyadmin set mayor"));
-				sender.sendMessage(ChatTools.formatCommand("Eg", "/townyadmin set mayor", "[town] " + Translation.of("town_help_2"), ""));
-				sender.sendMessage(ChatTools.formatCommand("Eg", "/townyadmin set mayor", "[town] npc", ""));
+				TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/townyadmin set mayor"));
+				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Eg", "/townyadmin set mayor", "[town] " + Translation.of("town_help_2"), ""));
+				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Eg", "/townyadmin set mayor", "[town] npc", ""));
 
 			} else
 				try {
@@ -1635,8 +1635,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			if (split.length < 2) {
 
-				sender.sendMessage(ChatTools.formatTitle("/townyadmin set capital"));
-				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set capital", "[town name]", "[nation name]"));
+				TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/townyadmin set capital"));
+				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Eg", "/ta set capital", "[town name]", "[nation name]"));
 
 			} else {
 				final Town newCapital = townyUniverse.getTown(split[1]);
@@ -1718,10 +1718,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
 			if (split.length < 2) {
-				sender.sendMessage(ChatTools.formatTitle("/townyadmin set plot"));
-				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set plot", "[town name]", Translation.of("msg_admin_set_plot_help_1")));
-				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set plot", "[town name] {rect|circle} {radius}", Translation.of("msg_admin_set_plot_help_2")));
-				sender.sendMessage(ChatTools.formatCommand("Eg", "/ta set plot", "[town name] {rect|circle} auto", Translation.of("msg_admin_set_plot_help_2")));
+				TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/townyadmin set plot"));
+				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Eg", "/ta set plot", "[town name]", Translation.of("msg_admin_set_plot_help_1")));
+				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Eg", "/ta set plot", "[town name] {rect|circle} {radius}", Translation.of("msg_admin_set_plot_help_2")));
+				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Eg", "/ta set plot", "[town name] {rect|circle} auto", Translation.of("msg_admin_set_plot_help_2")));
 				return;
 			}
 			if (tb != null) {
@@ -1856,10 +1856,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			// command was '/townyadmin purge'
-			sender.sendMessage(ChatTools.formatTitle("/townyadmin purge"));
-			sender.sendMessage(ChatTools.formatCommand("", "/townyadmin purge", "[number of days] {townless}", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "", "Removes offline residents not seen for this duration.", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "", "Optional {townless} flag limits purge to only people that have no town.", ""));
+			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/townyadmin purge"));
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/townyadmin purge", "[number of days] {townless}", ""));
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "", "Removes offline residents not seen for this duration.", ""));
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "", "Optional {townless} flag limits purge to only people that have no town.", ""));
 			return;
 		}
 		String days = "";
@@ -2090,9 +2090,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 2) {
 			if (town.hasMeta()) {
-				player.sendMessage(ChatTools.formatTitle("Custom Meta Data"));
+				TownyMessaging.sendMessage(player, ChatTools.formatTitle("Custom Meta Data"));
 				for (CustomDataField<?> field : town.getMetadata()) {
-					player.sendMessage(field.getKey() + " = " + field.getValue());
+					TownyMessaging.sendMessage(player, field.getKey() + " = " + field.getValue());
 				}
 			} else {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_this_town_doesnt_have_any_associated_metadata"));
@@ -2102,10 +2102,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (split.length < 4) {
-			player.sendMessage(ChatTools.formatTitle("/townyadmin town {townname} meta"));
-			player.sendMessage(ChatTools.formatCommand("", "meta", "set", "The key of a registered data field"));
-			player.sendMessage(ChatTools.formatCommand("", "meta", "add", "Add a key of a registered data field"));
-			player.sendMessage(ChatTools.formatCommand("", "meta", "remove", "Remove a key from the town"));
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/townyadmin town {townname} meta"));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "meta", "set", "The key of a registered data field"));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "meta", "add", "Add a key of a registered data field"));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "meta", "remove", "Remove a key from the town"));
 			return;
 		}
 		
@@ -2189,9 +2189,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		
 		if (split.length == 1) {
 			if (townBlock.hasMeta()) {
-				player.sendMessage(ChatTools.formatTitle("Custom Meta Data"));
+				TownyMessaging.sendMessage(player, ChatTools.formatTitle("Custom Meta Data"));
 				for (CustomDataField<?> field : townBlock.getMetadata()) {
-					player.sendMessage(field.getKey() + " = " + field.getValue());
+					TownyMessaging.sendMessage(player, field.getKey() + " = " + field.getValue());
 				}
 			} else {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_this_plot_doesnt_have_any_associated_metadata"));
@@ -2201,10 +2201,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (split.length < 3) {
-			player.sendMessage(ChatTools.formatTitle("/townyadmin plot meta"));
-			player.sendMessage(ChatTools.formatCommand("", "meta", "set", "The key of a registered data field"));
-			player.sendMessage(ChatTools.formatCommand("", "meta", "add", "Add a key of a registered data field"));
-			player.sendMessage(ChatTools.formatCommand("", "meta", "remove", "Remove a key from the town"));
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/townyadmin plot meta"));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "meta", "set", "The key of a registered data field"));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "meta", "add", "Add a key of a registered data field"));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "meta", "remove", "Remove a key from the town"));
 			return false;
 		}
 
@@ -2274,12 +2274,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	private void showReloadHelp() {
-		sender.sendMessage(ChatTools.formatTitle("/ta reload"));
-		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
-		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "config", "Reloads config"));
-		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
-		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
-		sender.sendMessage(ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
+		TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/ta reload"));
+		TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta reload", "database", "Reloads database"));
+		TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta reload", "config", "Reloads config"));
+		TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta reload", "lang", "Reloads language file."));
+		TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta reload", "perms", "Reloads Towny permissions."));
+		TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta reload", "all", "Reloads all components of towny."));
 	}
 	
 	private void parseAdminDepositAllCommand(String[] split) {
@@ -2308,8 +2308,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	private void showDepositAllHelp() {
-		sender.sendMessage(ChatTools.formatTitle("/townyadmin depositall"));
-		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin depositall", "[amount]", ""));		
+		TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/townyadmin depositall"));
+		TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/townyadmin depositall", "[amount]", ""));		
 	}
 
 }

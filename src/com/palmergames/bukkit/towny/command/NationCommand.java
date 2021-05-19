@@ -349,7 +349,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
-				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
 				return false;
 			}
 			Player player = (Player) sender;
@@ -805,7 +805,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 				InviteCommand.sendInviteList(player, sentinvites, page, true);
-				player.sendMessage(sent);
+				TownyMessaging.sendMessage(player, sent);
 				return;
 			} else {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_ADD.getNode())) {
@@ -850,8 +850,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			// Help output.
-			player.sendMessage(ChatTools.formatTitle("/nation rank"));
-			player.sendMessage(ChatTools.formatCommand("", "/nation rank", "add/remove [resident] rank", ""));
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/nation rank"));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/nation rank", "add/remove [resident] rank", ""));
 
 		} else {
 
@@ -982,15 +982,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Player player = null;
 		
 		if ( split.length == 2 && split[1].equals("?")) {
-			sender.sendMessage(ChatTools.formatTitle("/nation list"));
-			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "{page #}", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "{page #} by residents", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "{page #} by towns", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "{page #} by open", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "{page #} by balance", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "{page #} by name", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "{page #} by townblocks", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/nation list", "{page #} by online", ""));
+			HelpMenu.NATION_LIST.send(sender);
 			return;
 		}
 		
@@ -1699,7 +1691,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 				InviteCommand.sendInviteList(player, sentinvites, page, true);
-				player.sendMessage(sent);
+				TownyMessaging.sendMessage(player, sent);
 				return;
 			}
 			if (split[0].equalsIgnoreCase("received")) {
@@ -1715,7 +1707,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 				InviteCommand.sendInviteList(player, receivedinvites, page, false);
-				player.sendMessage(received);
+				TownyMessaging.sendMessage(player, received);
 				return;
 
 			}
@@ -2107,17 +2099,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public static void nationSet(Player player, String[] split, boolean admin, Nation nation) throws TownyException, InvalidNameException {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		if (split.length == 0) {
-			player.sendMessage(ChatTools.formatTitle("/nation set"));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "king " + Translation.of("res_2"), ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "capital [town]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "taxes [$]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "name [name]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "title/surname [resident] [text]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "tag [upto 4 letters] or clear", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "board [message ... ]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "spawn", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "spawncost [$]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/nation set", "mapcolor [color]", ""));
+			HelpMenu.NATION_SET.send(player);
 		} else {
 			Resident resident;
 			try {
