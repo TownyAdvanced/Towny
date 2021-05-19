@@ -326,7 +326,7 @@ public class TownyFormatter {
 
 		// ___[ Raccoon City ]___
 		// (PvP) (Open) (Peaceful)
-		out.add(ChatTools.formatTitle(town.getFormattedName()));
+		out.add(ChatTools.formatTitle(town));
 		List<String> sub = new ArrayList<>();
 		if (!town.isAdminDisabledPVP() && (town.isPVP() || world.isForcePVP()))
 			sub.add(Translation.of("status_title_pvp"));
@@ -476,9 +476,9 @@ public class TownyFormatter {
 		List<String> out = new ArrayList<>();
 
 		// ___[ Azur Empire (Open)]___
-		String title = nation.getFormattedName();
-		title += (nation.isOpen() ? " " + Translation.of("status_title_open") : "");
-		out.add(ChatTools.formatTitle(title));
+		out.add(ChatTools.formatTitle(nation));
+		String sub = (nation.isOpen() ? " " + Translation.of("status_title_open") : "");
+		out.add(ChatTools.formatSubTitle(sub));
 
 		// Board: Get your fried chicken
 		if (!nation.getBoard().isEmpty()) {

@@ -6107,3 +6107,5 @@ v0.92.0.11:
   - API: Add WorldCoord.getTownOrNull().
     - Gets the town at that WorldCoord or null if it is in the wilderness.
     - Best used after WorldCoord.hasTownBlock();
+  - Fix long town/nation names being able to break the TownyFormatter/ChatTools.
+    - Closes #4942.
