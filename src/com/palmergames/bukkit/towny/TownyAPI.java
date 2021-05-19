@@ -377,7 +377,7 @@ public class TownyAPI {
     @Nullable
     public Town getTown(Location location) {
         WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
-		return worldCoord.getTownBlockOrNull().getTownOrNull();
+		return worldCoord.getTownOrNull();
     }
     
     /**

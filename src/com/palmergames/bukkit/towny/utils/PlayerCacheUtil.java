@@ -271,7 +271,7 @@ public class PlayerCacheUtil {
 		// Has to be in a town.
 		
 		TownBlock townBlock = worldCoord.getTownBlockOrNull();
-		Town town = townBlock.getTownOrNull();
+		Town town = worldCoord.getTownOrNull();
 		if (townBlock.isLocked()) {
 			// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
 			if (townBlock.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
@@ -379,10 +379,7 @@ public class PlayerCacheUtil {
 			return true;
 
 		//If town is bankrupt (but not ruined), nobody can build
-		TownBlock townBlock = pos.getTownBlockOrNull();
-		Town targetTown = null;
-		if (townBlock != null && townBlock.hasTown())
-			targetTown = townBlock.getTownOrNull();
+		Town targetTown = pos.getTownOrNull();
 			
 		if(targetTown != null && TownySettings.isTownBankruptcyEnabled() && action == ActionType.BUILD) {
 			if(targetTown.isBankrupt() && !targetTown.isRuined())  {
@@ -491,6 +488,7 @@ public class PlayerCacheUtil {
 		/*
 		 * Not going to be in the wilderness at this point.
 		 */
+		TownBlock townBlock = pos.getTownBlockOrNull();
 
 		/*
 		 * Handle Personally owned plots first.

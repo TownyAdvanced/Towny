@@ -3388,8 +3388,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
 
 				// If this is a single claim and it is already claimed, by someone else.
-				if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlockOrNull().hasTown())
-					throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownBlockOrNull().getTownOrNull()));
+				if (selection.size() == 1 && selection.get(0).getTownOrNull() != null)
+					throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownOrNull()));
 				
 				/*
 				 * Filter out any unallowed claims.
