@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumOnlinePla
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumResidentsCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownBlocksCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownsCalculationEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -295,13 +294,8 @@ public class TownyMessaging {
 	public static void sendGlobalMessage(String line) {
 		LOGGER.info(ChatTools.stripColour("[Global Message] " + line));
 		for (Player player : BukkitTools.getOnlinePlayers()) {
-			if (player != null)
-				try {
-					if (TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
-						player.sendMessage(Translation.of("default_towny_prefix") + line);
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
+			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
+				player.sendMessage(Translation.of("default_towny_prefix") + line);
 		}
 	}
 	
@@ -314,13 +308,8 @@ public class TownyMessaging {
 	public static void sendPlainGlobalMessage(String line) {
 		LOGGER.info(ChatTools.stripColour("[Global Message] " + line));
 		for (Player player : BukkitTools.getOnlinePlayers()) {
-			if (player != null)
-				try {
-					if (TownyUniverse.getInstance().getDataSource().getWorld(player.getLocation().getWorld().getName()).isUsingTowny())
-						player.sendMessage(line);
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
+			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
+				player.sendMessage(line);
 		}		
 	}
 

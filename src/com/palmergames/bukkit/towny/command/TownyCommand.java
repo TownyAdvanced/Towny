@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Government;
@@ -239,10 +238,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					Optional<Resident> resOpt = TownyUniverse.getInstance().getResidentOpt(player.getUniqueId());
 					
 					if (resOpt.isPresent() && resOpt.get().hasTown()) {
-						try {
-							town = resOpt.get().getTown();
-						} catch (NotRegisteredException ignore) {
-						}
+						town = resOpt.get().getTownOrNull();
 					}
 				}
 
@@ -321,10 +317,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			else if (args[0].equalsIgnoreCase("scores"))
 				towny_war.addAll(townyUniverse.getWarEvent().getScores(-1));
 			else if (args[0].equalsIgnoreCase("participants")) {
-				try {
-					parseWarParticipants(p, args);
-				} catch (NotRegisteredException ignored) {
-				}
+				parseWarParticipants(p, args);
 				return true;
 			}
 			else if (args[0].equalsIgnoreCase("hud") && p == null)
@@ -341,8 +334,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return TownyAPI.getInstance().isWarTime();
 	}
 
-	private void parseWarParticipants(Player player, String[] split) throws NotRegisteredException {
-		Resident resident = getResidentOrThrow(player.getUniqueId());
+	private void parseWarParticipants(Player player, String[] split) {
+		Resident resident = TownyAPI.getInstance().getResident(player.getUniqueId());
+		if (resident == null)
+			return;
 		List<Town> townsToSort = War.warringTowns;
 		List<Nation> nationsToSort = War.warringNations;
 		int page = 1;
@@ -352,13 +347,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		for (Nation nations : nationsToSort) {
 			nationLine = Colors.Gold + "-" + nations.getName();
 			if (resident.hasNation())
-				if (resident.getTown().getNation().hasEnemy(nations))
+				if (resident.getTownOrNull().getNationOrNull().hasEnemy(nations))
 					nationLine += Colors.Red + " (Enemy)";
-				else if (resident.getTown().getNation().hasAlly(nations))
+				else if (resident.getTownOrNull().getNationOrNull().hasAlly(nations))
 					nationLine += Colors.Green + " (Ally)";
 			output.add(nationLine);
 			for (Town towns : townsToSort) {
-				if (towns.getNation().equals(nations)) {
+				if (towns.hasNation() && towns.getNationOrNull().equals(nations)) {
 					townLine = Colors.Blue + "  -" + towns.getName();
 					if (towns.isCapital())
 						townLine += Colors.LightBlue + " (Capital)";
@@ -527,9 +522,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 		if (town != null)
 			if (town.hasNation())
-				try {
-					nation = town.getNation();
-				} catch (NotRegisteredException ignored) {}
+				nation = town.getNationOrNull();
 
 		output.add(ChatTools.formatTitle(Translation.of("towny_prices_title")));
 		output.add(Translation.of("towny_prices_town_nation", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice()), TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())));

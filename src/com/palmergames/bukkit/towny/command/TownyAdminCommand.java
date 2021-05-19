@@ -745,18 +745,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if ((town = townyUniverse.getTown(split[0])) != null) {
 			isTown = true;
-		}
-		else {
+		} else {
 			Resident target = getResidentOrThrow(split[0]);
 
-			if (!target.hasTown()) {
+			if (!target.hasTown())
 				throw new TownyException(Translation.of("msg_err_resident_doesnt_belong_to_any_town"));
-			}
 
-			try {
-				town = target.getTown();
-			} catch (NotRegisteredException ignore) {
-			}
+			town = target.getTownOrNull();
 		}
 		
 		int extraBlocks;

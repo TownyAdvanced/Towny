@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.event.statusscreen.NationStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -374,10 +373,7 @@ public class TownyFormatter {
 					if (!town.hasNation())
 						out.add(Translation.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 					else {
-						int nationBonus = 0;
-						try {
-							nationBonus =  (Integer) TownySettings.getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
-						} catch (NotRegisteredException ignored) {}
+						int nationBonus = (Integer) TownySettings.getNationLevel(town.getNationOrNull()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
 						out.add(Translation.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
 								(nationBonus > 0 ? Translation.of("status_town_outposts2", nationBonus) : "")
 							   );

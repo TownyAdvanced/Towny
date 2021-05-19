@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import org.bukkit.Bukkit;
@@ -109,6 +110,11 @@ public class WorldCoord extends Coord {
 		return TownyUniverse.getInstance().getDataSource().getWorld(worldName);
 	}
 
+	@Nullable
+	public TownyWorld getTownyWorldOrNull() {
+		return TownyAPI.getInstance().getTownyWorld(worldName);
+	}
+	
 	/**
 	 * Shortcut for TownyUniverse.getInstance().getTownBlock(WorldCoord).
 	 * 

@@ -5,11 +5,9 @@ import java.util.List;
 
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Translation;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -82,8 +80,8 @@ public class ChunkNotification {
 		this.from = from;
 		this.to = to;
 
-		try {
-			fromTownBlock = from.getTownBlock();
+		if (from.hasTownBlock()) {
+			fromTownBlock = from.getTownBlockOrNull();
 			fromPlotType = fromTownBlock.getType();
 			if (fromTownBlock.hasPlotObjectGroup())
 				fromPlotGroup = fromTownBlock.getPlotObjectGroup();
@@ -91,12 +89,12 @@ public class ChunkNotification {
 			fromResident = fromTownBlock.getResidentOrNull();
 			fromForSale = fromTownBlock.getPlotPrice() != -1;
 			
-		} catch (NotRegisteredException e) {
+		} else {
 			fromWild = true;
 		}
 
-		try {
-			toTownBlock = to.getTownBlock();
+		if (to.hasTownBlock()) {
+			toTownBlock = to.getTownBlockOrNull();
 			toPlotType = toTownBlock.getType();
 			if (toTownBlock.hasPlotObjectGroup())
 				toPlotGroup = toTownBlock.getPlotObjectGroup();
@@ -111,7 +109,7 @@ public class ChunkNotification {
 			if (toPlotGroupBlock)
 				toForSale = toTownBlock.getPlotObjectGroup().getPrice() != -1;
 			
-		} catch (NotRegisteredException e) {
+		} else {
 			toWild = true;
 		}
 
@@ -167,47 +165,34 @@ public class ChunkNotification {
 
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
 			if (toWild) {
-				try {
-					if (TownySettings.getNationZonesEnabled() && TownySettings.getNationZonesShowNotifications()) {
-						Player player = BukkitTools.getPlayer(resident.getName());
-						TownyWorld toWorld = this.to.getTownyWorld();
-						try {
-							if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE)) {
-								Town nearestTown = null; 
-								nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
-								return String.format(areaWildernessNotificationFormat, Translation.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNation().getName()));
-							}
-						} catch (NotRegisteredException ignored) {
-						}
+				if (TownySettings.getNationZonesEnabled() && TownySettings.getNationZonesShowNotifications()) {
+					Player player = BukkitTools.getPlayer(resident.getName());
+					TownyWorld toWorld = to.getTownyWorldOrNull();
+					if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE)) {
+						Town nearestTown = null; 
+						nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
+						return String.format(areaWildernessNotificationFormat, Translation.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNationOrNull().getName()));
 					}
-					
-					return String.format(areaWildernessNotificationFormat, to.getTownyWorld().getUnclaimedZoneName());
-				} catch (NotRegisteredException ex) {
-					// Not a Towny registered world
 				}
+				
+				return String.format(areaWildernessNotificationFormat, to.getTownyWorldOrNull().getUnclaimedZoneName());
 			
 			} else if (TownySettings.isNotificationsTownNamesVerbose())
 				return String.format(areaTownNotificationFormat, toTown.getFormattedName());
 			else 
 				return String.format(areaTownNotificationFormat, toTown);
 			
-		} else if (fromWild && toWild) 
-			try {
-				if (TownySettings.getNationZonesEnabled() && TownySettings.getNationZonesShowNotifications()) {
-					Player player = BukkitTools.getPlayer(resident.getName());
-					TownyWorld toWorld = this.to.getTownyWorld();
-					try {
-						if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.UNCLAIMED_ZONE)) {
-							Town nearestTown = null; 
-							nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
-							return String.format(areaWildernessNotificationFormat, Translation.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNation().getName()));
-						} else if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.UNCLAIMED_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.NATION_ZONE)) {
-							return String.format(areaWildernessNotificationFormat, to.getTownyWorld().getUnclaimedZoneName());
-						}
-					} catch (NotRegisteredException ignored) {
-					}
+		} else if (fromWild && toWild)
+			if (TownySettings.getNationZonesEnabled() && TownySettings.getNationZonesShowNotifications()) {
+				Player player = BukkitTools.getPlayer(resident.getName());
+				TownyWorld toWorld = this.to.getTownyWorldOrNull();
+				if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.UNCLAIMED_ZONE)) {
+					Town nearestTown = null; 
+					nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
+					return String.format(areaWildernessNotificationFormat, Translation.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNationOrNull().getName()));
+				} else if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.UNCLAIMED_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.NATION_ZONE)) {
+					return String.format(areaWildernessNotificationFormat, to.getTownyWorldOrNull().getUnclaimedZoneName());
 				}
-			} catch (NotRegisteredException ignored) {
 			}
 		return null;
 	}
@@ -216,11 +201,7 @@ public class ChunkNotification {
 
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
 			if (toWild)
-				try {
-					return String.format(areaWildernessPvPNotificationFormat, ((to.getTownyWorld().isPVP() && testWorldPVP()) ? Colors.Red + " (PvP)" : ""));
-				} catch (NotRegisteredException ex) {
-					// Not a Towny registered world
-				}
+				return String.format(areaWildernessPvPNotificationFormat, ((to.getTownyWorldOrNull().isPVP() && testWorldPVP()) ? Colors.Red + " (PvP)" : ""));
 		}
 		return null;
 	}
@@ -246,23 +227,14 @@ public class ChunkNotification {
 	public String getTownPVPNotification() {
 
 		if (!toWild && ((fromWild) || (toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp))) {
-			try {
-				return String.format(areaTownPvPNotificationFormat, ( !CombatUtil.preventPvP(to.getTownyWorld(), toTownBlock) ? Colors.Red + "(PvP)" : Colors.Green + "(No PVP)"));
-			} catch (NotRegisteredException e) {
-				// Not a Towny registered world.
-			}
+			return String.format(areaTownPvPNotificationFormat, ( !CombatUtil.preventPvP(to.getTownyWorldOrNull(), toTownBlock) ? Colors.Red + "(PvP)" : Colors.Green + "(No PVP)"));
 		}
 		return null;
 	}
 
 	private boolean testWorldPVP() {
 
-		try {
-			return Bukkit.getServer().getWorld(to.getTownyWorld().getName()).getPVP();
-		} catch (NotRegisteredException e) {
-			// Not a Towny registered world
-			return true;
-		}
+		return to.getTownyWorldOrNull().isPVP();
 	}
 
 	public String getPlotNotification() {
