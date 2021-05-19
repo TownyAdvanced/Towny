@@ -6098,4 +6098,7 @@ v0.92.0.11:
   - bStats to 2.2.1 (was 1.x), Shade it; make isSpigot() private, rename it. Courtesy of TheFlagCourier with PR #4934.
   - Replace deprecated methods on TownyLogger, courtesy of EuGNosii with PR #4933.
   - Update language file es-419.yml, courtesy of EuGNosii with PR #4910.
-  - Replace player.sendMessage() with TownyMessaging.sendMessage(), to facilitate further integration of the Adventure library for future-translation-plans.
+  - Add Command Addon API, courtesy of Warriorrrr with PR #4886.
+    - Adds a new command addon API, that allows plugin developers to add their own sub commands to Towny's existing commands.
+  - Replace player.sendMessage() with TownyMessaging.sendMessage().
+  - Undo PR #4933 to retain backwards compatibility.
