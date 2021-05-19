@@ -33,7 +33,7 @@ public class NationSpawnEvent extends SpawnEvent {
 		if (fromTownBlock != null)
 			fromNation = fromTownBlock.getTownOrNull().getNationOrNull();
 		if (toTownBlock != null)
-			toNation = WorldCoord.parseWorldCoord(to).getTownBlockOrNull().getTownOrNull().getNationOrNull();
+			toNation = toTownBlock.getTownOrNull().getNationOrNull();
 	}
 
 	/**

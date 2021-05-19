@@ -137,6 +137,17 @@ public class WorldCoord extends Coord {
 	}
 
 	/**
+	 * Relatively safe to use if {@link #hasTownBlock()} has already been used.
+	 * @return Town at this WorldCoord or null;
+	 */
+	@Nullable
+	public Town getTownOrNull() {
+		if (hasTownBlock())
+			return getTownBlockOrNull().getTownOrNull();
+		return null;
+	}
+	
+	/**
 	 * Checks that locations are in different cells without allocating any garbage to the heap.
 	 * 
 	 * @param from Original location
