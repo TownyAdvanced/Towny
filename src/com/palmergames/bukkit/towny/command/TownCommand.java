@@ -416,6 +416,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (args.length == 2) {
 			return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_SET, townSetTabCompletes), args[1]);
 		} else if (args.length > 2) {
+			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_SET, args[1]))
+				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
+			
 			switch (args[1].toLowerCase()) {
 				case "mayor":
 					return NameUtil.filterByStart(NameUtil.getNames(town.getResidents()), args[2]);

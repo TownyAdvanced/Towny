@@ -253,7 +253,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							if (args.length == 2)
 								return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN_SET, adminSetCompletes), args[1]);
 							else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_SET, args[1]))
-								return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, args[1]).getTabCompletion(args.length), args[args.length]);
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
 					}
 				}
 				break;
@@ -1769,6 +1769,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				new TownClaim(plugin, player, town, selection, false, true, false).start();
 
 			}
+		} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_SET, split[0])) {
+			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, split[0]).run(getSender(), null, "townyadmin", split);
 		} else {
 			TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_property", "administrative"));
 		}

@@ -172,6 +172,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 2)
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_SET, residentSetTabCompletes), args[1]);
 					if (args.length > 2) {
+						if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, args[1]))
+							return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
+
 						switch (args[1].toLowerCase()) {
 							case "mode":
 								return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);

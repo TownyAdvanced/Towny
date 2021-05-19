@@ -119,13 +119,13 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				if (args.length == 2)
 					return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYWORLD_SET, townySetTabCompletes), args[1]);
 				else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD_SET, args[1]))
-					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_SET, args[1]).getTabCompletion(args.length), args[args.length]);
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
 				break;
 			default:
 				if (args.length == 1)
 					return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYWORLD, townyWorldTabCompletes), args[0], "+w");
 				else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD, args[0]))
-					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD, args[0]).getTabCompletion(args.length), args[args.length]);
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD, args[0]).getTabCompletion(args.length), args[args.length-1]);
 		}
 		
 		return Collections.emptyList();
@@ -255,16 +255,10 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 //						// Failed to get resident
 //					}
 
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD, split[0]).run(sender, null, "townyworld", split);
 			} else {
-				/*
-				 * try { TownyWorld world =
-				 * plugin.getTownyUniverse().getWorld(split[0]);
-				 * TownyMessaging.sendMessage(player,
-				 * plugin.getTownyUniverse().getStatus(world)); } catch
-				 * (NotRegisteredException x) { plugin.sendErrorMsg(player,
-				 * String.format(Translation.of
-				 * ("msg_err_not_registered_1"), split[0])); }
-				 */
+				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_invalid_property", "townyworld"));
 			}
 
 		} catch (TownyException e) {
