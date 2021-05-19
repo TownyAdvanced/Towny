@@ -134,7 +134,7 @@ public class TownyCustomListener implements Listener {
 
 						playerActionTasks.put(player, taskID);						
 					} else
-						player.sendMessage(msg);
+						TownyMessaging.sendMessage(player, msg);
 				}
 			}
 		} catch (NotRegisteredException e) {

@@ -127,7 +127,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
-				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
 				return false;
 			}
 			Player player = (Player) sender;
@@ -138,23 +138,23 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				HelpMenu.GENERAL_HELP.send(sender);
 			} else if (args[0].equalsIgnoreCase("tree")) {
 				for (String line : TownyUniverse.getInstance().getTreeString(0)) {
-					sender.sendMessage(line);
+					TownyMessaging.sendMessage(sender, line);
 				}
 			} else if (args[0].equalsIgnoreCase("time")) {
 				TownyMessaging.sendMsg(Translation.of("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
 			} else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v"))
-				sender.sendMessage(Colors.strip(towny_version));
+				TownyMessaging.sendMessage(sender, Colors.strip(towny_version));
 			else if (args[0].equalsIgnoreCase("war")) {
 				boolean war = TownyWar(StringMgmt.remFirstArg(args), null);
 				if (war)
 					for (String line : towny_war)
-						sender.sendMessage(Colors.strip(line));
+						TownyMessaging.sendMessage(sender, Colors.strip(line));
 				else
-					sender.sendMessage("The world isn't currently at war.");
+					TownyMessaging.sendMessage(sender, "The world isn't currently at war.");
 				
 			} else if (args[0].equalsIgnoreCase("universe")) {
 				for (String line : getUniverseStats())
-					sender.sendMessage(Colors.strip(line));
+					TownyMessaging.sendMessage(sender, Colors.strip(line));
 			}
 
 		}
@@ -247,7 +247,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				for (String line : getTownyPrices(town))
-					player.sendMessage(line);
+					TownyMessaging.sendMessage(player, line);
 			} else if (split[0].equalsIgnoreCase("switches")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, TownySettings.getSwitchMaterials(), Translation.of("gui_title_towny_switch"));
@@ -279,18 +279,18 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				for (String line : getUniverseStats())
-					player.sendMessage(line);
+					TownyMessaging.sendMessage(player, line);
 			} else if (split[0].equalsIgnoreCase("version") || split[0].equalsIgnoreCase("v")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
-				player.sendMessage(towny_version);
+				TownyMessaging.sendMessage(player, towny_version);
 			} else if (split[0].equalsIgnoreCase("war")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 				boolean war = TownyWar(StringMgmt.remFirstArg(split), player);
 				if (war)
 					for (String line : towny_war)
-						player.sendMessage(Colors.strip(line));
+						TownyMessaging.sendMessage(player, Colors.strip(line));
 				else
 					sendErrorMsg(player, "The world isn't currently at war.");
 
@@ -396,7 +396,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			String line = output.get(i);
 			warparticipantsformatted.add(line);
 		}
-		player.sendMessage(ChatTools.formatList("War Participants",
+		TownyMessaging.sendMessage(player, ChatTools.formatList("War Participants",
 				Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.Blue + "Town Names",
 				warparticipantsformatted, Translation.of("LIST_PAGE", page, total)
 				)
@@ -462,7 +462,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			sendErrorMsg(player, "Invalid sub command.");
 
 		for (String line : towny_top)
-			player.sendMessage(line);
+			TownyMessaging.sendMessage(player, line);
 
 		towny_top.clear();
 
@@ -641,7 +641,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	public void inGameUseOnly(CommandSender sender) {
 
-		sender.sendMessage("[Towny] InputError: This command was designed for use in game only.");
+		TownyMessaging.sendMessage(sender, "[Towny] InputError: This command was designed for use in game only.");
 	}
 
 	public boolean sendErrorMsg(CommandSender sender, String msg) {
@@ -651,7 +651,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, msg);
 		} else
 			// Console
-			sender.sendMessage("[Towny] ConsoleError: " + msg);
+			TownyMessaging.sendMessage(sender, "[Towny] ConsoleError: " + msg);
 
 		return false;
 	}
