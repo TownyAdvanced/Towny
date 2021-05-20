@@ -6109,3 +6109,4 @@ v0.92.0.11:
     - Best used after WorldCoord.hasTownBlock();
   - Fix long town/nation names being able to break the TownyFormatter/ChatTools.
     - Closes #4942.
+  - Fix sheep being protected from shearing in the wilderness.

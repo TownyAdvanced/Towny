@@ -537,9 +537,9 @@ public class TownyPlayerListener implements Listener {
 				Material item = event.getPlayer().getInventory().getItem(event.getHand()).getType();
 
 				/*
-				 * Sheep can be sheared.
+				 * Sheep can be sheared, protect them if they aren't in the wilderness.
 				 */
-				if (event.getRightClicked().getType().equals(EntityType.SHEEP) && item == Material.SHEARS) {
+				if (event.getRightClicked().getType().equals(EntityType.SHEEP) && item == Material.SHEARS && !TownyAPI.getInstance().isWilderness(event.getRightClicked().getLocation())) {
 					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getRightClicked().getLocation(), item));
 					return;
