@@ -479,7 +479,7 @@ public class SQL_Schema {
         	if (!rs.next())
         		return;
         	
-    		update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + table + "` DROP COLUMN `" + column + "`";
+    		update = "ALTER TABLE `" + db_name + "`.`" + table + "` DROP COLUMN `" + column + "`";
     		
     		Statement s = cntx.createStatement();
     		s.executeUpdate(update);
@@ -497,7 +497,7 @@ public class SQL_Schema {
     	private String column;
     	
     	private ColumnUpdate(String table, String column) {
-    		this.table = table;
+    		this.table = SQL_Schema.tb_prefix + table;
     		this.column = column;
     	}
     	    	
