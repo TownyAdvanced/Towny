@@ -149,7 +149,9 @@ public class AreaSelectionUtil {
 			 */
 			int halfSideLength = ((r * 2) + 1) / 2;
 			int x = 0, z = 0, dx = 0, dz = -1;
-			for (int i = 0; i <= available; i++) {
+			for (int i = 0; i <= available - 1; i++) {
+				//TODO: This code doesn't work properly all of the time when /t claim auto is used.
+				//My suspicion is that halfSideLength isn't the correct value in some situations. 
 				if ((-halfSideLength <= x) && (x <= halfSideLength) && (-halfSideLength <= z) && (z <= halfSideLength)) {
 					out.add(pos.add(x,z));
 				}

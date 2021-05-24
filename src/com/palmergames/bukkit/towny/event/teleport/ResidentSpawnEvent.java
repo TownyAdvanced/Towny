@@ -19,11 +19,9 @@ public class ResidentSpawnEvent extends SpawnEvent {
 	
 	public ResidentSpawnEvent(Player player, Location from, Location to) {
 		super(player, from, to);
-
-		fromTown = WorldCoord.parseWorldCoord(from).getTownBlockOrNull().getTownOrNull();
 		
-		toTown = WorldCoord.parseWorldCoord(to).getTownBlockOrNull().getTownOrNull();
-		
+		fromTown = WorldCoord.parseWorldCoord(from).getTownOrNull();
+		toTown = WorldCoord.parseWorldCoord(to).getTownOrNull();
 	}
 
 	/**

@@ -103,12 +103,7 @@ public class TownyAPI {
      */
     @Nullable
     public Town getResidentTownOrNull(Resident resident) {
-    	if (resident.hasTown())
-	    	try {
-				return resident.getTown();
-			} catch (NotRegisteredException ignored) {}
-
-    	return null;
+    	return resident.getTownOrNull();
     }
     
     /**
@@ -120,10 +115,7 @@ public class TownyAPI {
     @Nullable
     public Nation getResidentNationOrNull(Resident resident) {
     	if (resident.hasNation())
-			try {
-				return resident.getTown().getNation();
-			} catch (NotRegisteredException ignored) {}
-    	
+    		return resident.getTownOrNull().getNationOrNull();    	
     	return null;
     }
     
@@ -327,12 +319,8 @@ public class TownyAPI {
      */
     public boolean isWilderness(WorldCoord worldCoord) {
         
-        try {
-        	// Do not throw an exception to reduce object creation
-        	if (worldCoord.hasTownBlock() && worldCoord.getTownBlock().hasTown())
-        		return false;
-        } catch (NotRegisteredException ignore) {
-        }
+		if (worldCoord.hasTownBlock() && worldCoord.getTownBlockOrNull().hasTown())
+			return false;
 
 		// Must be wilderness
 		return true;
@@ -358,6 +346,7 @@ public class TownyAPI {
      * @param worldName - the name of the world to get.
      * @return TownyWorld or {@code null}.
      */
+    @Nullable
     public TownyWorld getTownyWorld(String worldName) {
     	try {
     		TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(worldName);
@@ -377,7 +366,7 @@ public class TownyAPI {
     @Nullable
     public Town getTown(Location location) {
         WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
-		return worldCoord.getTownBlockOrNull().getTownOrNull();
+		return worldCoord.getTownOrNull();
     }
     
     /**
@@ -436,21 +425,14 @@ public class TownyAPI {
      */
     @Nullable
     public TownBlock getTownBlock(Location location) {
-        try {
-            WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
-            if (worldCoord.hasTownBlock())
-            	return worldCoord.getTownBlock();
-        } catch (NotRegisteredException ignore) {
-        }
-
-		// No data so return null
-		return null;
+        WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
+		return worldCoord.getTownBlockOrNull();
     }
     
     /** 
      * Get the {@link TownBlock} at a specific {@link WorldCoord}.
      * 
-     * @param wc {@link WorldCoord to get the {@link TownBlock} of (if it claimed by a town.)
+     * @param wc {@link WorldCoord} to get the {@link TownBlock} of (if it claimed by a town.)
      * @return {@link TownBlock} at this {@link WorldCoord}, or {@code null} if this isn't claimed.
      */
     @Nullable

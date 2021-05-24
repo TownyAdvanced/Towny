@@ -6093,3 +6093,21 @@ v0.92.0.11:
   - API: Add TownyAPI.getTownOrNull(TownBlock).
     - Gets the town who owns the townblock or null if wilderness.
     - Best used after TownBlock.hasTown();
+  - Fix /n set king declaring that the capital has too many residents.
+  - Fix potential console spam from adventure, courtesy of Warriorrrr with PR #4939.
+  - bStats to 2.2.1 (was 1.x), Shade it; make isSpigot() private, rename it. Courtesy of TheFlagCourier with PR #4934.
+  - Replace deprecated methods on TownyLogger, courtesy of EuGNosii with PR #4933.
+  - Update language file es-419.yml, courtesy of EuGNosii with PR #4910.
+  - Add Command Addon API, courtesy of Warriorrrr with PR #4886.
+    - Adds a new command addon API, that allows plugin developers to add their own sub commands to Towny's existing commands.
+  - Replace player.sendMessage() with TownyMessaging.sendMessage().
+  - Undo PR #4933 to retain backwards compatibility.
+  - Fix no feedback when using a /plot command in the wilderness.
+  - Fix regression: null message shown from /t spawn and /n spawn when used from the wilderness.
+  - API: Add WorldCoord.getTownOrNull().
+    - Gets the town at that WorldCoord or null if it is in the wilderness.
+    - Best used after WorldCoord.hasTownBlock();
+  - Fix long town/nation names being able to break the TownyFormatter/ChatTools.
+    - Closes #4942.
+  - Fix sheep being protected from shearing in the wilderness.
+  - Improve /town claim auto, works again but doesn't always claim everything it could in one use. 

@@ -35,14 +35,16 @@ public class BlockUtil {
 		if (wc.hasTownBlock() && wc2.hasTownBlock()) {
 			TownBlock tb = wc.getTownBlockOrNull();
 			TownBlock tb2 = wc2.getTownBlockOrNull();
+			Town town1 = wc.getTownOrNull();
+			Town town2 = wc2.getTownOrNull();
 			
-			if (tb.getTownOrNull().getUUID().equals(tb2.getTownOrNull().getUUID())) // Not the same town.
+			if (town1.getUUID().equals(town2.getUUID())) // Not the same town.
 				return false;
 			
 			if (tb.hasResident() != tb2.hasResident()) // One is player-owned and one isn't.
 				return false;
 
-			if (!tb.hasResident() && !tb2.hasResident() && tb.getTownOrNull().getUUID().equals(tb2.getTownOrNull().getUUID())) // Both plots are town-owned, by the same town.
+			if (!tb.hasResident() && !tb2.hasResident() && town1.getUUID().equals(town2.getUUID())) // Both plots are town-owned, by the same town.
 				return true;
 
 			if (tb.hasResident() && tb2.hasResident() && tb.getResidentOrNull().getName().equals(tb2.getResidentOrNull().getName())) // Both plots are owned by the same resident.
@@ -70,12 +72,14 @@ public class BlockUtil {
 		if (wc.hasTownBlock() && wc2.hasTownBlock()) {
 			TownBlock tb = wc.getTownBlockOrNull();
 			TownBlock tb2 = wc2.getTownBlockOrNull();
+			Town town1 = wc.getTownOrNull();
+			Town town2 = wc2.getTownOrNull();
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
 			if (resident == null)
 				return false;
 
-			if (!tb.getTownOrNull().getUUID().equals(tb2.getTownOrNull().getUUID())) // Not the same town.
+			if (!town1.getUUID().equals(town2.getUUID())) // Not the same town.
 				return false;
 			
 			if (tb.hasResident() != tb2.hasResident()) // One is player-owned and one isn't.

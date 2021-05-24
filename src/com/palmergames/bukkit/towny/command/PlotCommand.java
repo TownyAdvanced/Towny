@@ -3,11 +3,13 @@ package com.palmergames.bukkit.towny.command;
 import com.google.common.collect.Iterables;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
@@ -135,7 +137,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
-				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
 				return false;
 			}
 			Player player = (Player) sender;
@@ -152,12 +154,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				HelpMenu.PLOT_HELP.send(player);
 
 			} else {
-				try {
-					return parsePlotCommand(player, args);
-				} catch (TownyException x) {
-					// No permisisons
-					 x.getMessage();
-				}
+				return parsePlotCommand(player, args);
 			}
 
 		} else
@@ -173,7 +170,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			switch (args[0].toLowerCase()) {
 				case "set":
 					if (args.length == 2) {
-						return NameUtil.filterByStart(plotSetTabCompletes, args[1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_SET, plotSetTabCompletes), args[1]);
 					}
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
 						return permTabComplete(StringMgmt.remArgs(args, 2));
@@ -181,7 +178,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					break;
 				case "toggle":
 					if (args.length == 2)
-						return NameUtil.filterByStart(plotToggleTabCompletes, args[1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_TOGGLE, plotToggleTabCompletes), args[1]);
 					else if (args.length == 3)
 						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 					break;
@@ -214,15 +211,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					break;
 				default:
 					if (args.length == 1)
-						return NameUtil.filterByStart(plotTabCompletes, args[0]);
-					break;
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT, plotTabCompletes), args[0]);
+					else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.PLOT, args[0]))
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT, args[0]).getTabCompletion(args.length), args[args.length-1]);
 			}
 		}
 
 		return Collections.emptyList();
 	}
 
-	public boolean parsePlotCommand(Player player, String[] split) throws TownyException {
+	public boolean parsePlotCommand(Player player, String[] split) {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
@@ -236,13 +234,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				return true;
 			}
 			
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
-			if (townBlock == null && !split[0].equalsIgnoreCase("perm"))
-				throw new TownyException(Translation.of("msg_not_claimed_1"));
-			
 			String world = player.getWorld().getName();
 
 			try {
+				
+				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+				if (townBlock == null && !split[0].equalsIgnoreCase("perm"))
+					throw new TownyException(Translation.of("msg_not_claimed_1"));
+				
 				if (!TownyAPI.getInstance().isWilderness(player.getLocation()) && townBlock.getTownOrNull().isRuined())
 					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
 
@@ -347,7 +346,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							new PlotClaim(plugin, player, resident, selection, true, false, false).start();
 						}
 					} else {
-						player.sendMessage(Translation.of("msg_err_empty_area_selection"));
+						TownyMessaging.sendMessage(player, Translation.of("msg_err_empty_area_selection"));
 					}
 				} else if (split[0].equalsIgnoreCase("evict")) {
 
@@ -370,7 +369,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									tb.setType(townBlock.getType()); // Re-set the plot permissions while maintaining plot type. 
 									tb.save();                       // Save townblock.
 							});
-							player.sendMessage(Translation.of("msg_plot_evict_group", townBlock.getPlotObjectGroup().getName()));
+							TownyMessaging.sendMessage(player, Translation.of("msg_plot_evict_group", townBlock.getPlotObjectGroup().getName()));
 							return true;
 						}
 						
@@ -379,7 +378,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						townBlock.setType(townBlock.getType()); // Re-set the plot permissions while maintaining plot type.
 						townBlock.save(); // Save townblock.
 						
-						player.sendMessage(Translation.of("msg_plot_evict"));
+						TownyMessaging.sendMessage(player, Translation.of("msg_plot_evict"));
 					}
 
 				} else if (split[0].equalsIgnoreCase("unclaim")) {
@@ -427,7 +426,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							}
 
 						} else {
-							player.sendMessage(Translation.of("msg_err_empty_area_selection"));
+							TownyMessaging.sendMessage(player, Translation.of("msg_err_empty_area_selection"));
 						}
 					}
 
@@ -605,21 +604,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
-						player.sendMessage(ChatTools.formatTitle("/... set"));
-						player.sendMessage(ChatTools.formatCommand("", "set", "[plottype]", "Ex: Inn, Wilds, Farm, Embassy etc"));
-						player.sendMessage(ChatTools.formatCommand("", "set", "outpost", "Costs " + TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())));
-						player.sendMessage(ChatTools.formatCommand("", "set", "reset", "Removes a plot type"));
-						player.sendMessage(ChatTools.formatCommand("", "set", "[name]", "Names a plot"));
-						player.sendMessage(ChatTools.formatCommand("Level", "[resident/ally/outsider]", "", ""));
-						player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
-						player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
-						player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
-						player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
-						player.sendMessage(ChatTools.formatCommand("", "set perm", "reset", ""));
-						player.sendMessage(ChatTools.formatCommand("Eg", "/plot set perm", "ally off", ""));
-						player.sendMessage(ChatTools.formatCommand("Eg", "/plot set perm", "friend build on", ""));
-						player.sendMessage(Translation.of("plot_perms", "'friend'", "'resident'"));
-						player.sendMessage(Translation.of("plot_perms_1"));
+						HelpMenu.PLOT_SET.send(player);
 
 					} else if (split.length > 0) {
 
@@ -709,7 +694,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								}
 							}
 							return true;
-						}
+						} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, split[0]))
+							TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_SET, split[0]).run(player, null, "plot", split);
 						
 						/*
 						 * After trying all of the other /plot set subcommands, attempt to set the townblock type.
@@ -741,7 +727,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							BukkitTools.getPluginManager().callEvent(preEvent);
 
 							if (preEvent.isCancelled()) {
-								player.sendMessage(preEvent.getCancelMessage());
+								TownyMessaging.sendMessage(player, preEvent.getCancelMessage());
 								return false;
 							}
 								
@@ -786,10 +772,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					} else {
 
-						player.sendMessage(ChatTools.formatCommand("", "/plot set", "name", ""));
-						player.sendMessage(ChatTools.formatCommand("", "/plot set", "reset", ""));
-						player.sendMessage(ChatTools.formatCommand("", "/plot set", "shop|embassy|arena|wilds|spleef|inn|jail|farm|bank", ""));
-						player.sendMessage(ChatTools.formatCommand("", "/plot set perm", "?", ""));
+						HelpMenu.PLOT_SET.send(player);
 					}
 
 				} else if (split[0].equalsIgnoreCase("clear")) {
@@ -812,7 +795,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						BukkitTools.getPluginManager().callEvent(preEvent);
 						
 						if (preEvent.isCancelled()) {
-							player.sendMessage(preEvent.getCancelMessage());
+							TownyMessaging.sendMessage(player, preEvent.getCancelMessage());
 							return false;
 						}
 							
@@ -820,7 +803,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						for (String material : TownyUniverse.getInstance().getDataSource().getWorld(world).getPlotManagementMayorDelete())
 							if (Material.matchMaterial(material) != null) {
 								TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material));
-								player.sendMessage(Translation.of("msg_clear_plot_material", material));
+								TownyMessaging.sendMessage(player, Translation.of("msg_clear_plot_material", material));
 							} else
 								throw new TownyException(Translation.of("msg_err_invalid_property", material));
 
@@ -830,13 +813,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					} else {
 						// Shouldn't ever reach here as a null townBlock should
 						// be caught already in WorldCoord.
-						player.sendMessage(Translation.of("msg_err_empty_area_selection"));
+						TownyMessaging.sendMessage(player, Translation.of("msg_err_empty_area_selection"));
 					}
 
 				} else if (split[0].equalsIgnoreCase("group")) {
 
 					return handlePlotGroupCommand(StringMgmt.remFirstArg(split), player);
-					
+				} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT, split[0])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT, split[0]).run(player, null, "plot", split);
 				} else
 					throw new TownyException(Translation.of("msg_err_invalid_property", split[0]));
 
@@ -862,18 +846,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
-			player.sendMessage(ChatTools.formatTitle("/... set perm"));
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/... set perm"));
 			if (townBlockOwner instanceof Town)
-				player.sendMessage(ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
 			if (townBlockOwner instanceof Resident)
-				player.sendMessage(ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));
 
-			player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "reset", ""));
-			player.sendMessage(ChatTools.formatCommand("Eg", "/plot set perm", "friend build on", ""));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "set perm", "reset", ""));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Eg", "/plot set perm", "friend build on", ""));
 			return null;
 
 		} else {
@@ -1046,11 +1030,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-			player.sendMessage(ChatTools.formatTitle("/plot toggle"));
-			player.sendMessage(ChatTools.formatCommand("", "/plot toggle", "pvp", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/plot toggle", "explosion", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/plot toggle", "fire", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/plot toggle", "mobs", ""));
+			HelpMenu.PLOT_TOGGLE.send(player);
 		} else {
 
 			try {
@@ -1137,7 +1117,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					townBlock.getPermissions().mobs = choice.orElse(!townBlock.getPermissions().mobs);
 					
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled")));
-
+				} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_TOGGLE, split[0])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_TOGGLE, split[0]).run(player, null, "plot", split);
 				} else {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "plot"));
 					return;
@@ -1169,11 +1150,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-			player.sendMessage(ChatTools.formatTitle("/plot group toggle"));
-			player.sendMessage(ChatTools.formatCommand("", "/plot group toggle", "pvp", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/plot group toggle", "explosion", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/plot group toggle", "fire", ""));
-			player.sendMessage(ChatTools.formatCommand("", "/plot group toggle", "mobs", ""));
+			HelpMenu.PLOT_GROUP_TOGGLE.send(player);
 		} else {
 
 			try {
@@ -1211,7 +1188,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(town, player, choice.orElse(!groupBlock.getPermissions().pvp));
 						Bukkit.getPluginManager().callEvent(plotTogglePvpEvent);
 						if (plotTogglePvpEvent.isCancelled()) {
-							player.sendMessage(plotTogglePvpEvent.getCancellationMsg());
+							TownyMessaging.sendMessage(player, plotTogglePvpEvent.getCancellationMsg());
 							return;
 						}
 
@@ -1228,7 +1205,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(town, player, choice.orElse(!groupBlock.getPermissions().explosion));
 						Bukkit.getPluginManager().callEvent(plotToggleExplosionEvent);
 						if (plotToggleExplosionEvent.isCancelled()) {
-							player.sendMessage(plotToggleExplosionEvent.getCancellationMsg());
+							TownyMessaging.sendMessage(player, plotToggleExplosionEvent.getCancellationMsg());
 							return;
 						}
 
@@ -1242,7 +1219,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(town, player, choice.orElse(!groupBlock.getPermissions().fire));
 						Bukkit.getPluginManager().callEvent(plotToggleFireEvent);
 						if (plotToggleFireEvent.isCancelled()) {
-							player.sendMessage(plotToggleFireEvent.getCancellationMsg());
+							TownyMessaging.sendMessage(player, plotToggleFireEvent.getCancellationMsg());
 							return;
 						}
 						
@@ -1256,7 +1233,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						PlotToggleMobsEvent plotToggleMobsEvent = new PlotToggleMobsEvent(town, player, choice.orElse(!groupBlock.getPermissions().mobs));
 						Bukkit.getPluginManager().callEvent(plotToggleMobsEvent);
 						if (plotToggleMobsEvent.isCancelled()) {
-							player.sendMessage(plotToggleMobsEvent.getCancellationMsg());
+							TownyMessaging.sendMessage(player, plotToggleMobsEvent.getCancellationMsg());
 							return;
 						}
 
@@ -1393,14 +1370,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length <= 0 || split[0].equalsIgnoreCase("?")) {
 
-			player.sendMessage(ChatTools.formatTitle("/plot group"));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "add | new | create", "[name]", "Ex: /plot group new ExpensivePlots"));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "remove", "", "Removes a plot from the specified group."));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "rename", "[newName]", "Renames the group you are standing in."));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "set", "...", "Ex: /plot group set perm resident on."));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "toggle", "...", "Ex: /plot group toggle [pvp|fire|mobs]"));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "forsale | fs", "[price]", "Ex: /plot group forsale 50"));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "notforsale | nfs", "", "Ex: /plot group notforsale"));
+			HelpMenu.PLOT_GROUP_HELP.send(player);
 
 			if (townBlock.hasPlotObjectGroup())
 				TownyMessaging.sendMsg(player, Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
@@ -1573,18 +1543,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownBlockOwner townBlockOwner = plotTestOwner(resident, townBlock);
 			
 			if (split.length < 2) {
-				player.sendMessage(ChatTools.formatTitle("/plot group set"));
+				TownyMessaging.sendMessage(player, ChatTools.formatTitle("/plot group set"));
 				if (townBlockOwner instanceof Town)
-					player.sendMessage(ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
+					TownyMessaging.sendMessage(player, ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
 				if (townBlockOwner instanceof Resident)
-					player.sendMessage(ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));				
-				player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
-				player.sendMessage(ChatTools.formatCommand("/plot group set", "perm", "[on/off]", "Toggle all permissions"));
-				player.sendMessage(ChatTools.formatCommand("/plot group set", "perm", "[level/type] [on/off]", ""));
-				player.sendMessage(ChatTools.formatCommand("/plot group set", "perm", "[level] [type] [on/off]", ""));
-				player.sendMessage(ChatTools.formatCommand("/plot group set", "perm", "reset", ""));
-				player.sendMessage(ChatTools.formatCommand("Eg", "/plot group set perm", "friend build on", ""));				
-				player.sendMessage(ChatTools.formatCommand("/plot group set", "[townblocktype]", "", "Farm, Wilds, Bank, Embassy, etc."));
+					TownyMessaging.sendMessage(player, ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));				
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "perm", "[on/off]", "Toggle all permissions"));
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "perm", "[level/type] [on/off]", ""));
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "perm", "[level] [type] [on/off]", ""));
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "perm", "reset", ""));
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("Eg", "/plot group set perm", "friend build on", ""));				
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "[townblocktype]", "", "Farm, Wilds, Bank, Embassy, etc."));
 				return false;
 			}
 
@@ -1628,7 +1598,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						plugin.resetCache();
 						
 						TownyPermission perm = Iterables.getFirst(plotGroup.getTownBlocks(), null).getPermissions();
-						TownyMessaging.sendMsg(player, Translation.of("msg_set_perms"));
+						TownyMessaging.sendMessage(player, Translation.of("msg_set_perms"));
 						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
 						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
 						TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + (!(CombatUtil.preventPvP(townBlock.getWorld(), townBlock)) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
@@ -1682,7 +1652,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				
 				// If any one of the townblocks is not allowed to be set, cancel setting all of them.
 				if (preEvent.isCancelled()) {
-					player.sendMessage(preEvent.getCancelMessage());
+					TownyMessaging.sendMessage(player, preEvent.getCancelMessage());
 					return false;
 				}
 			}
@@ -1735,17 +1705,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 		} else {
 
-			player.sendMessage(ChatTools.formatTitle("/plot group"));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "add | new | create", "[name]", "Ex: /plot group new ExpensivePlots"));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "remove", "", "Removes a plot from the specified group."));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "rename", "[newName]", "Renames the group you are standing in."));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "set", "...", "Ex: /plot group set perm resident on."));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "toggle", "...", "Ex: /plot group toggle [pvp|fire|mobs]"));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "forsale | fs", "[price]", "Ex: /plot group forsale 50"));
-			player.sendMessage(ChatTools.formatCommand("/plot group", "notforsale | nfs", "", "Ex: /plot group notforsale"));
+			HelpMenu.PLOT_GROUP_HELP.send(player);
 
 			if (townBlock.hasPlotObjectGroup())
-				TownyMessaging.sendMsg(player, Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
+				TownyMessaging.sendMessage(player, Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
 			
 			return true;
 		}

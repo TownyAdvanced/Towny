@@ -10,7 +10,6 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -63,13 +62,12 @@ public class TownyAsciiMap {
 		if (resident.hasTown())
 			hasTown = true;
 
-		TownyWorld world;
-		try {
-			world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
-		} catch (NotRegisteredException e1) {
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+		if (world == null) { 
 			TownyMessaging.sendErrorMsg(player, "You are not in a registered world.");
 			return;
 		}
+		
 		if (!world.isUsingTowny()) {
 			TownyMessaging.sendErrorMsg(player, "This world is not using towny.");
 			return;
@@ -157,7 +155,7 @@ public class TownyAsciiMap {
 		String[] compass = generateCompass(player);
 
 		// Output
-		player.sendMessage(ChatTools.formatTitle(Translation.of("towny_map_header") + Colors.White + "(" + pos.toString() + ")"));
+		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translation.of("towny_map_header") + Colors.White + "(" + pos.toString() + ")"));
 		String line;
 		int lineCount = 0;
 		// Variables have been rotated to fit N/S/E/W properly

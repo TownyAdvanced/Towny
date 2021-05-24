@@ -857,7 +857,7 @@ public class War {
 	public void sendStats(Player player) {
 
 		for (String line : getStats())
-			player.sendMessage(line);
+			TownyMessaging.sendMessage(player, line);
 	}
 
 	//// SCORE CALCULATIONS ////
@@ -917,7 +917,7 @@ public class War {
 	public void sendScores(Player player, int maxListing) {
 
 		for (String line : getScores(maxListing))
-			player.sendMessage(line);
+			TownyMessaging.sendMessage(player, line);
 	}
 	
 }

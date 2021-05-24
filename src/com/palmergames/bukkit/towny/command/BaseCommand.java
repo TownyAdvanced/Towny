@@ -162,11 +162,8 @@ public class BaseCommand implements TabCompleter{
 	public static List<String> getTownResidentNamesOfPlayerStartingWith(Player player, String str){
 		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		
-		try {
-			if (res != null && !res.hasTown()) {
-				return NameUtil.filterByStart(NameUtil.getNames(res.getTown().getResidents()), str);
-			}
-		} catch (NotRegisteredException ignore) {
+		if (res != null && res.hasTown()) {
+			return NameUtil.filterByStart(NameUtil.getNames(res.getTownOrNull().getResidents()), str);
 		}
 
 		return Collections.emptyList();

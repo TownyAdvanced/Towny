@@ -60,6 +60,7 @@ public class SpawnUtil {
 	 * @throws TownyException - Thrown if any of the vital conditions are not met.
 	 */
 	public static void sendToTownySpawn(Player player, String[] split, TownyObject townyObject, String notAffordMSG, boolean outpost, boolean ignoreWarn, SpawnType spawnType) throws TownyException {
+		try {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		Resident resident = townyUniverse.getResident(player.getUniqueId());
@@ -347,6 +348,9 @@ public class SpawnUtil {
 		// No Cost so skip confirmation system.
 		} else {
 			initiateSpawn(player, spawnLoc);
+		}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
 		}
 	}
 	

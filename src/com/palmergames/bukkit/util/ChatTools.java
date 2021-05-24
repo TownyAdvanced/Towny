@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.object.TownyObject;
+
 /**
  * Useful function for use with the Minecraft Server chatbox.
  * 
@@ -46,6 +48,23 @@ public class ChatTools {
 		return out.toString();
 	}
 
+	/**
+	 * Formats a title for a TownyObject, taking into account that on
+	 * servers with high max_name_length could end up breaking the math
+	 * @param object TownyObject (town or nation)
+	 * @return a title bar which won't exceed the allowed length.
+	 */
+	public static String formatTitle(TownyObject object) {
+		
+		String title = object.getFormattedName();
+		if (title.length() > 51)
+			title = object.getName();
+		if (title.length() > 51)
+			title = title.substring(0, 51);
+		
+		return formatTitle(title);
+	}
+	
 	public static String formatTitle(String title) {
 
 		String line = ".oOo.__________________________________________________.oOo.";

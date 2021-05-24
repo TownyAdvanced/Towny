@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.chat.checks;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import net.tnemc.tnc.core.common.chat.ChatCheck;
 import org.bukkit.entity.Player;
@@ -19,12 +18,9 @@ public class KingCheck extends ChatCheck {
 	public boolean runCheck(Player player, String checkString) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Resident resident = townyUniverse.getResident(player.getUniqueId());
-		try {
-			if(resident != null && resident.hasNation()) {
-				return resident.getTown().getNation().isKing(resident);
-			}
-		} catch(NotRegisteredException ignore) {
-		}
+		if(resident != null && resident.hasNation())
+			return resident.getTownOrNull().getNationOrNull().isKing(resident);
+
 		return false;
 	}
 }

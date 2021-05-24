@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
 import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.metrics.Metrics;
 import com.palmergames.bukkit.towny.chat.TNCRegister;
 import com.palmergames.bukkit.towny.command.InviteCommand;
 import com.palmergames.bukkit.towny.command.NationCommand;
@@ -59,6 +58,8 @@ import net.milkbowl.vault.permission.Permission;
 import org.apache.commons.lang.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -116,7 +117,6 @@ public class Towny extends JavaPlugin {
 
 	private Essentials essentials = null;
 	private boolean citizens2 = false;
-	public static boolean isSpigot = false;
 
 	private boolean error = false;
 	
@@ -136,7 +136,6 @@ public class Towny extends JavaPlugin {
 
 		townyUniverse = TownyUniverse.getInstance();
 		
-		isSpigot = isSpigot();
 
 		// Setup classes
 		BukkitTools.initialize(this);
@@ -866,13 +865,13 @@ public class Towny extends JavaPlugin {
 		 */
 		Metrics metrics = new Metrics(this, 2244);
 		
-		metrics.addCustomChart(new Metrics.SimplePie("language", () -> TownySettings.getString(ConfigNodes.LANGUAGE)));
+		metrics.addCustomChart(new SimplePie("language", () -> TownySettings.getString(ConfigNodes.LANGUAGE)));
 		
-		metrics.addCustomChart(new Metrics.SimplePie("server_type", () -> {
+		metrics.addCustomChart(new SimplePie("server_type", () -> {
 			if (Bukkit.getServer().getName().equalsIgnoreCase("paper"))
 				return "Paper";
 			else if (Bukkit.getServer().getName().equalsIgnoreCase("craftbukkit")) {
-				if (isSpigot)
+				if (isSpigotOrDerivative())
 					return "Spigot";
 				else 
 					return "CraftBukkit";
@@ -880,13 +879,13 @@ public class Towny extends JavaPlugin {
 			return "Unknown";
 		}));
 
-		metrics.addCustomChart(new Metrics.SimplePie("nation_zones_enabled", () -> TownySettings.getNationZonesEnabled() ? "true" : "false"));
+		metrics.addCustomChart(new SimplePie("nation_zones_enabled", () -> TownySettings.getNationZonesEnabled() ? "true" : "false"));
 		
-		metrics.addCustomChart(new Metrics.SimplePie("database_type", () -> TownySettings.getSaveDatabase().toLowerCase()));
+		metrics.addCustomChart(new SimplePie("database_type", () -> TownySettings.getSaveDatabase().toLowerCase()));
 		
-		metrics.addCustomChart(new Metrics.SimplePie("town_block_size", () -> String.valueOf(TownySettings.getTownBlockSize())));
+		metrics.addCustomChart(new SimplePie("town_block_size", () -> String.valueOf(TownySettings.getTownBlockSize())));
 		
-		metrics.addCustomChart(new Metrics.SimplePie("resident_uuids_stored", () -> TownySettings.getUUIDPercent()));
+		metrics.addCustomChart(new SimplePie("resident_uuids_stored", TownySettings::getUUIDPercent));
 	}
 	
 	public static boolean is116Plus() {
@@ -896,11 +895,11 @@ public class Towny extends JavaPlugin {
 	/**
 	 * @return whether server is running spigot (and not CraftBukkit.)
 	 */
-	public static boolean isSpigot() {
+	private static boolean isSpigotOrDerivative() {
 		try {
 			Class.forName("org.bukkit.entity.Player$Spigot");
 			return true;
-		} catch (Throwable tr) {
+		} catch (ClassNotFoundException tr) {
 			return false;
 		}
 

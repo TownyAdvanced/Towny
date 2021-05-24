@@ -242,6 +242,20 @@ public enum HelpMenu {
 		}
 	},
 	
+	TOWN_LIST {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town list")
+				.add("{page #}", "")
+				.add("{page #} by residents", "")
+				.add("{page #} by open", "")
+				.add("{page #} by balance", "")
+				.add("{page #} by name", "")
+				.add("{page #} by townblocks", "")
+				.add("{page #} by online", "");
+		}
+	},
+	
 	TOWN_SET {
 		@Override
 		protected MenuBuilder load() {
@@ -337,6 +351,24 @@ public enum HelpMenu {
 				.add("list", Translation.of("res_4"));
 		}
 	},
+	
+	RESIDENT_TOGGLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("resident toggle")
+				.add("pvp", "")
+				.add("fire", "")
+				.add("mobs", "")
+				.add("explosion", "")
+				.add("plotborder", "")
+				.add("constantplotborder", "")
+				.add("ignoreplots", "")
+				.add("townclaim", "")
+				.add("map", "")
+				.add("reset|clear", "")
+				.add("spy", "");
+		}
+	},
 
 	PLOT_HELP {
 		@Override
@@ -358,7 +390,64 @@ public enum HelpMenu {
 				.add(Translation.of("msg_nfs_abr"));
 		}
 	},
+	
+	PLOT_GROUP_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot group")
+				.add("add | new | create", "[name]", "Ex: /plot group new ExpensivePlots")
+				.add("remove", "", "Removes a plot from the specified group.")
+				.add("rename", "[newName]", "Renames the group you are standing in.")
+				.add("set", "...", "Ex: /plot group set perm resident on.")
+				.add("toggle", "...", "Ex: /plot group toggle [pvp|fire|mobs]")
+				.add("forsale | fs", "[price]", "Ex: /plot group forsale 50")
+				.add("notforsale | nfs", "", "Ex: /plot group notforsale");
+		}
+	},
+	
+	PLOT_GROUP_TOGGLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot group toggle")
+				.add("pvp", "")
+				.add("explosion", "")
+				.add("fire", "")
+				.add("mobs", "");
+		}
+	},
+	
+	PLOT_SET {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot set")
+				.add("[plottype]", "Ex: Inn, Wilds, Farm, Embassy etc")
+				.add("outpost")
+				.add("reset", "Removes a plot type")
+				.add("[name]", "Names a plot")
+				.add("Level", "[resident/ally/outsider]", "", "")
+				.add("Type", "[build/destroy/switch/itemuse]", "", "")
+				.add("perm [on/off]", "Toggle all permissions")
+				.add("perm [level/type] [on/off]", "")
+				.add("perm [level] [type] [on/off]", "")
+				.add("perm reset", "")
+				.add("Eg", "/plot set perm", "ally off", "")
+				.add("Eg", "/plot set perm", "friend build on", "")
+				.add(Translation.of("plot_perms", "'friend'", "'resident'"))
+				.add(Translation.of("plot_perms_1"));
+		}
+	},
 
+	PLOT_TOGGLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot toggle")
+				.add("pvp", "")
+				.add("explosion", "")
+				.add("fire", "")
+				.add("mobs", "");
+		}
+	},
+	
 	NATION_HELP {
 		@Override
 		protected MenuBuilder load() {
@@ -386,6 +475,38 @@ public enum HelpMenu {
 			return new MenuBuilder("nation", Translation.of("nation_help_1"))
 				.add(Translation.of("nation_help_2"), Translation.of("nation_help_3"))
 				.add("list", Translation.of("nation_help_4"));
+		}
+	},
+	
+	NATION_LIST {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("nation list")
+				.add("{page #}", "")
+				.add("{page #} by residents", "")
+				.add("{page #} by towns", "")
+				.add("{page #} by open", "")
+				.add("{page #} by balance", "")
+				.add("{page #} by name", "")
+				.add("{page #} by townblocks", "")
+				.add("{page #} by online", "");
+		}
+	},
+	
+	NATION_SET {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("nation set")
+				.add("king " + Translation.of("res_2"), "")
+				.add("capital [town]", "")
+				.add("taxes [$]", "")
+				.add("name [name]", "")
+				.add("title/surname [resident] [text]", "")
+				.add("tag [upto 4 letters] or clear", "")
+				.add("board [message ... ]", "")
+				.add("spawn", "")
+				.add("spawncost [$]", "")
+				.add("mapcolor [color]", "");
 		}
 	},
 

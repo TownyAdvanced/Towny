@@ -2,11 +2,13 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
@@ -381,7 +383,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				case "toggle":
 					switch (args.length) {
 						case 2:
-							return NameUtil.filterByStart(townToggleTabCompletes, args[1]);
+							return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_TOGGLE, townToggleTabCompletes), args[1]);
 						case 3:
 							if (!args[1].equalsIgnoreCase("jail")) {
 								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
@@ -399,7 +401,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 				default:
 					if (args.length == 1)
-						return filterByStartOrGetTownyStartingWith(townTabCompletes, args[0], "t");
+						return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, townTabCompletes), args[0], "t");
+					else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWN, args[0]))
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, args[0]).getTabCompletion(args.length), args[args.length-1]);
 			}
 		} else if (args.length == 1) {
 			return filterByStartOrGetTownyStartingWith(townConsoleTabCompletes, args[0], "t");
@@ -410,7 +414,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	
 	static List<String> townSetTabComplete(Town town, String[] args) {
 		if (args.length == 2) {
-			return NameUtil.filterByStart(townSetTabCompletes, args[1]);
+			return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_SET, townSetTabCompletes), args[1]);
 		} else if (args.length > 2) {
 			switch (args[1].toLowerCase()) {
 				case "mayor":
@@ -435,7 +439,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
-				sender.sendMessage(Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
 				return false;
 			}
 				
@@ -746,6 +750,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 
 					parseTownMergeCommand(player, newSplit);
+				} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN, split[0])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, split[0]).run(player, null, "town", split);
 				} else {
 					/*
 					 * We've gotten this far without a match, check if the argument is a town name.
@@ -811,7 +817,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 				InviteCommand.sendInviteList(player, sentinvites, page, true);
-				player.sendMessage(sent);
+				TownyMessaging.sendMessage(player, sent);
 				return;
 			}
 			if (newSplit[0].equalsIgnoreCase("received")) { // /town invite received
@@ -827,7 +833,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 				InviteCommand.sendInviteList(player, receivedinvites, page, false);
-				player.sendMessage(received);
+				TownyMessaging.sendMessage(player, received);
 				return;
 			}
 			if (newSplit[0].equalsIgnoreCase("accept")) {
@@ -934,11 +940,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0) {
 			// Help output.
 			if (!admin) {
-				sender.sendMessage(ChatTools.formatTitle("/town outlaw"));
-				sender.sendMessage(ChatTools.formatCommand("", "/town outlaw", "add/remove [name]", ""));
+				TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/town outlaw"));
+				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/town outlaw", "add/remove [name]", ""));
 			} else {
-				sender.sendMessage(ChatTools.formatTitle("/ta town [town] outlaw"));
-				sender.sendMessage(ChatTools.formatCommand("", "/ta town [town] outlaw", "add/remove [name]", ""));
+				TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/ta town [town] outlaw"));
+				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta town [town] outlaw", "add/remove [name]", ""));
 			}
 
 		} else {
@@ -1163,14 +1169,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Player player = null;
 		
 		if (split.length == 2 && split[1].equals("?")) {
-			sender.sendMessage(ChatTools.formatTitle("/town list"));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #}", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #} by residents", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #} by open", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #} by balance", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #} by name", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #} by townblocks", ""));
-			sender.sendMessage(ChatTools.formatCommand("", "/town list", "{page #} by online", ""));
+			HelpMenu.TOWN_LIST.send(sender);
 			return;
 		}
 		
@@ -1473,9 +1472,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				Integer index, days;
 				if (split.length <= 2) {
-					sender.sendMessage(ChatTools.formatTitle("/town toggle jail"));
-					sender.sendMessage(ChatTools.formatCommand("", "/town toggle jail", "[number] [resident]", ""));
-					sender.sendMessage(ChatTools.formatCommand("", "/town toggle jail", "[number] [resident] [days]", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/town toggle jail"));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/town toggle jail", "[number] [resident]", ""));
+					TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/town toggle jail", "[number] [resident] [days]", ""));
 
 				} else if (split.length > 2) {
 					try {
@@ -1535,16 +1534,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						}
 
 					} catch (NumberFormatException e) {
-						sender.sendMessage(ChatTools.formatTitle("/town toggle jail"));
-						sender.sendMessage(ChatTools.formatCommand("", "/town toggle jail", "[number] [resident]", ""));
-						sender.sendMessage(ChatTools.formatCommand("", "/town toggle jail", "[number] [resident] [days]", ""));
+						TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/town toggle jail"));
+						TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/town toggle jail", "[number] [resident]", ""));
+						TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/town toggle jail", "[number] [resident] [days]", ""));
 						return;
 					} catch (NullPointerException e) {
 						e.printStackTrace();
 						return;
 					}
 				}
-
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_TOGGLE, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_TOGGLE, split[0]).run(sender, null, "town", split);
 			} else {
             	/*
             	 * Fire of an event if we don't recognize the command being used.
@@ -1606,8 +1606,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			// Help output.
-			player.sendMessage(ChatTools.formatTitle("/town rank"));
-			player.sendMessage(ChatTools.formatCommand("", "/town rank", "add/remove [resident] rank", ""));
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/town rank"));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/town rank", "add/remove [resident] rank", ""));
 
 		} else {
 
@@ -2165,7 +2165,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 					String[] newSplit = StringMgmt.remFirstArg(split);
 					setTownBlockOwnerPermissions(player, town, newSplit);
-
+				} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_SET, split[0])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_SET, split[0]).run(player, null, "town", split);
 				} else {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "town"));
 					return;
@@ -2305,12 +2306,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 		
 		if (split.length == 0) {
-			player.sendMessage(ChatTools.formatTitle("/town buy"));
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/town buy"));
 			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
-			player.sendMessage(String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchasedBlocks(town)));
+			TownyMessaging.sendMessage(player, String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchasedBlocks(town)));
 			if (TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0)
-				player.sendMessage(Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
-			player.sendMessage(ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
+				TownyMessaging.sendMessage(player, Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
 		} else {
 			try {
 				if (split[0].equalsIgnoreCase("bonus")) {
@@ -2927,7 +2928,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				msg.append(member.getName()).append(", ");
 				Player p = BukkitTools.getPlayer(member.getName());
 				if (p != null)
-					p.sendMessage(Translation.of("msg_kicked_by", (player != null) ? player.getName() : "CONSOLE"));
+					TownyMessaging.sendMessage(p, Translation.of("msg_kicked_by", (player != null) ? player.getName() : "CONSOLE"));
 			}
 			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
 			msg = new StringBuilder(Translation.of("msg_kicked", (player != null) ? player.getName() : "CONSOLE", msg.toString()));
@@ -3163,20 +3164,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
-			player.sendMessage(ChatTools.formatTitle("/... set perm"));
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/... set perm"));
 			if (townBlockOwner instanceof Town)
-				player.sendMessage(ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
 			if (townBlockOwner instanceof Resident)
-				player.sendMessage(ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));
-			player.sendMessage(ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
-			player.sendMessage(ChatTools.formatCommand("", "set perm", "reset", ""));
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "set perm", "reset", ""));
 			if (townBlockOwner instanceof Town)
-				player.sendMessage(ChatTools.formatCommand("Eg", "/town set perm", "ally off", ""));
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("Eg", "/town set perm", "ally off", ""));
 			if (townBlockOwner instanceof Resident)
-				player.sendMessage(ChatTools.formatCommand("Eg", "/resident set perm", "friend build on", ""));
+				TownyMessaging.sendMessage(player, ChatTools.formatCommand("Eg", "/resident set perm", "friend build on", ""));
 
 		} else {
 
@@ -3387,8 +3388,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_not_enough_blocks"));
 
 				// If this is a single claim and it is already claimed, by someone else.
-				if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlockOrNull().hasTown())
-					throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownBlockOrNull().getTownOrNull()));
+				if (selection.size() == 1 && selection.get(0).getTownOrNull() != null)
+					throw new TownyException(Translation.of("msg_already_claimed", selection.get(0).getTownOrNull()));
 				
 				/*
 				 * Filter out any unallowed claims.

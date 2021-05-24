@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 
 /**
  * Part of the API which lets Towny's war and other plugins modify Towny's
@@ -82,10 +81,7 @@ public class TownyPlayerDamagePlayerEvent extends TownyDamageEvent {
 	 */
 	@Nullable
 	public Town getAttackerTown() {
-		try {
-			return getAttackingResident().getTown();
-		} catch (NotRegisteredException ignored) {}
-		return null;
+		return getAttackingResident().getTownOrNull();
 	}
 
 	/**
@@ -93,9 +89,6 @@ public class TownyPlayerDamagePlayerEvent extends TownyDamageEvent {
 	 */
 	@Nullable
 	public Town getVictimTown() {
-		try {
-			return getVictimResident().getTown();
-		} catch (NotRegisteredException ignored) {}
-		return null;
+		return getVictimResident().getTownOrNull();
 	}
 }

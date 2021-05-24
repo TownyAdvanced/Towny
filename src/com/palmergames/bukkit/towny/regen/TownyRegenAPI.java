@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -75,12 +74,10 @@ public class TownyRegenAPI {
 	 */
 	private static List<WorldCoord> getWorldCoords(TownyWorld world) {
 		List<WorldCoord> list = new ArrayList<>();
-		for (WorldCoord wc : worldCoords) {
-			try {
-				if (wc.getTownyWorld().equals(world))
-					list.add(wc);
-			} catch (NotRegisteredException ignored) {}
-		}		
+		for (WorldCoord wc : worldCoords)
+			if (wc.getTownyWorldOrNull().equals(world))
+				list.add(wc);
+
 		return list;
 	}
 	
@@ -431,21 +428,11 @@ public class TownyRegenAPI {
 	 */
 	public static void doDeleteTownBlockIds(WorldCoord worldCoord) {
 
-		//Block block = null;
-		World world = null;
+		World world = worldCoord.getBukkitWorld();
+		TownyWorld townyWorld = worldCoord.getTownyWorldOrNull();
 		int plotSize = TownySettings.getTownBlockSize();
 
-		//TownyMessaging.sendDebugMsg("Processing deleteTownBlockIds");
-
-		world = worldCoord.getBukkitWorld();
-
-		if (world != null) {
-			/*
-			 * if
-			 * (!world.isChunkLoaded(MinecraftTools.calcChunk(townBlock.getX()),
-			 * MinecraftTools.calcChunk(townBlock.getZ())))
-			 * return;
-			 */
+		if (world != null && townyWorld != null) {
 			int height = world.getMaxHeight() - 1;
 			int worldx = worldCoord.getX() * plotSize, worldz = worldCoord.getZ() * plotSize;
 
@@ -453,17 +440,12 @@ public class TownyRegenAPI {
 				for (int x = 0; x < plotSize; x++)
 					for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
 						Block block = world.getBlockAt(worldx + x, y, worldz + z);
-						try {
-							if (worldCoord.getTownyWorld().isPlotManagementDeleteIds(block.getType().name())) {
-								block.setType(Material.AIR);
-							}
-						} catch (NotRegisteredException e) {
-							// Not a registered world
-						}
+						if (townyWorld.isPlotManagementDeleteIds(block.getType().name()))
+							block.setType(Material.AIR);
+
 						block = null;
 					}
 		}
-
 	}
 
 	/**
