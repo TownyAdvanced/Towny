@@ -3080,5 +3080,9 @@ public class TownySettings {
 	public static boolean getTownAutomaticCapitalisationEnabled(){
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_AUTOMATIC_CAPITALISATION);
 	}
+	
+	public static List<String> getTouristBlockedCommands() {
+		return getStrArr(ConfigNodes.GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS);
+	}
 }
 

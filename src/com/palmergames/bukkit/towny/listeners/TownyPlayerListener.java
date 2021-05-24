@@ -1017,6 +1017,26 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 		/*
+		 * Commands are sometimes blocked from being run by outsiders on an town.
+		 */
+		if (TownySettings.getTouristBlockedCommands().contains(command)) {
+			// Let admins and globally welcomed players run commands.
+			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode())
+					|| TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOURIST_COMMAND_LIMITATION_BYPASS.getNode()))
+							return;
+			
+			Town town = TownyAPI.getInstance().getTown(player.getLocation());
+			if (town == null)
+				return;
+			
+			if (TownyAPI.getInstance().isWilderness(player.getLocation()) || town.hasResident(res))
+				return;
+			
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
+			event.setCancelled(true);
+		}
+		
+		/*
 		 * Commands are sometimes limited to only plots that players personally own.
 		 */
 		if (TownySettings.getPlayerOwnedPlotLimitedCommands().contains(command)) {

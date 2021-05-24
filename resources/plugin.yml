@@ -57,6 +57,7 @@ permissions:
             towny.town.spawn.*: true
             towny.wild.*: true
             towny.claimed.*: true
+            towny.globally_welcome: true
             towny.admin.nation_zone: true
             towny.admin.outlaw.teleport_bypass: true
             towny.admin.spawn: true
