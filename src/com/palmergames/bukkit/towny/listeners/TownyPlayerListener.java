@@ -1029,7 +1029,12 @@ public class TownyPlayerListener implements Listener {
 			if (town == null)
 				return;
 			
-			if (TownyAPI.getInstance().isWilderness(player.getLocation()) || town.hasResident(res))
+			// Allow for wilderness
+			if (TownyAPI.getInstance().isWilderness(player.getLocation()))
+				return;
+			
+			// Allow own town
+			if (town.hasResident(res))
 				return;
 			
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
