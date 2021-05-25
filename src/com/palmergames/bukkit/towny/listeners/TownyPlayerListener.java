@@ -1024,7 +1024,7 @@ public class TownyPlayerListener implements Listener {
 			if (town.hasResident(res)) {
 				return;
 			} else {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_outsider_blocked", town.getName()));
 			    event.setCancelled(true);
 			    return;
 			}
