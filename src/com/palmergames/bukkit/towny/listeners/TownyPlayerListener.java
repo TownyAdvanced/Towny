@@ -1004,22 +1004,9 @@ public class TownyPlayerListener implements Listener {
 		String command = event.getMessage().substring(1).split(" ")[0];
 
 		/*
-		 * Commands are sometimes blocked from being run inside any town.
-		 */
-		if (TownySettings.getTownBlacklistedCommands().contains(command) && !TownyAPI.getInstance().isWilderness(player.getLocation())) {
-			// Let admins run commands.
-			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
-				return;
-			
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_blocked_inside_towns"));
-			event.setCancelled(true);
-			return;
-		}
-		
-		/*
 		 * Commands are sometimes blocked from being run by outsiders on an town.
 		 */
-		if (TownySettings.getTouristBlockedCommands().contains(command)) {
+		if (TownySettings.getTownBlacklistedCommands().contains(command) && TownySettings.getTouristBlockedCommands().contains(command)) {
 			// Let admins and globally welcomed players run commands.
 			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode())
 					|| TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOURIST_COMMAND_LIMITATION_BYPASS.getNode()))
@@ -1034,13 +1021,28 @@ public class TownyPlayerListener implements Listener {
 				return;
 			
 			// Allow own town
-			if (town.hasResident(res))
+			if (town.hasResident(res)) {
 				return;
-			
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
-			event.setCancelled(true);
+			} else {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_limited"));
+			    event.setCancelled(true);
+			    return;
+			}
 		}
 		
+		/*
+		 * Commands are sometimes blocked from being run inside any town.
+		 */
+		if (TownySettings.getTownBlacklistedCommands().contains(command) && !TownyAPI.getInstance().isWilderness(player.getLocation())) {
+			// Let admins run commands.
+			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
+				return;
+			
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_blocked_inside_towns"));
+			event.setCancelled(true);
+			return;
+		}
+
 		/*
 		 * Commands are sometimes limited to only plots that players personally own.
 		 */
