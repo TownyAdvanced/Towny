@@ -1004,6 +1004,33 @@ public class TownyPlayerListener implements Listener {
 		String command = event.getMessage().substring(1).split(" ")[0];
 
 		/*
+		 * Commands are sometimes blocked from being run by outsiders on an town.
+		 */
+		if (TownySettings.getTownBlacklistedCommands().contains(command) && TownySettings.getTouristBlockedCommands().contains(command)) {
+			// Let admins and globally welcomed players run commands.
+			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode())
+					|| TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOURIST_COMMAND_LIMITATION_BYPASS.getNode()))
+							return;
+			
+			Town town = TownyAPI.getInstance().getTown(player.getLocation());
+			if (town == null)
+				return;
+			
+			// Allow for wilderness
+			if (TownyAPI.getInstance().isWilderness(player.getLocation()))
+				return;
+			
+			// Allow own town
+			if (town.hasResident(res)) {
+				return;
+			} else {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_outsider_blocked", town.getName()));
+			    event.setCancelled(true);
+			    return;
+			}
+		}
+		
+		/*
 		 * Commands are sometimes blocked from being run inside any town.
 		 */
 		if (TownySettings.getTownBlacklistedCommands().contains(command) && !TownyAPI.getInstance().isWilderness(player.getLocation())) {
@@ -1015,7 +1042,7 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		/*
 		 * Commands are sometimes limited to only plots that players personally own.
 		 */

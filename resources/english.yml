@@ -1383,3 +1383,5 @@ msg_plot_perm_claimed_at: '&2Claimed at: &a%s'
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Wilderness use turned %s in all worlds.'
 msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
+
+msg_command_outsider_blocked: 'You cannot run that command because you don''t live in %s.'
