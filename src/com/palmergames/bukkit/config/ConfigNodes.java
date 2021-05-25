@@ -809,7 +809,7 @@ public enum ConfigNodes {
 			"# This allows the usage of blacklisted commands only in the player's town ",
 			"# and the wilderness (essentially blocking commands from being ran by tourists/visitors)",
 			"# Players with the towny.globally_welcome permission node are not going to be limited by this list.",
-			"# Commands have to be on town_command_blacklisting.town_blacklisted_commands, else this is not going to be checked.\""
+			"# Commands have to be on town_command_blacklisting.town_blacklisted_commands, else this is not going to be checked."
 	),
 	
 	GTOWN_SETTINGS_AUTOMATIC_CAPITALISATION(

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.105
+version: 0.106
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -1403,3 +1403,6 @@ msg_plot_perm_claimed_at: '&2Reclamado el: &a%s'
 # Añadido en la versión 0.105
 msg_wilderness_use_x_in_all_worlds: 'Uso del Exterior cambiado a %s en todos los mundos.'
 msg_regenerations_use_x_in_all_worlds: 'Regeneración cambiada a %s en todos los mundos.'
+
+#Added in 0.106
+msg_command_outsider_blocked: 'You cannot run that command because you don''t live in %s.'

@@ -6097,7 +6097,7 @@ v0.92.0.11:
   - Fix potential console spam from adventure, courtesy of Warriorrrr with PR #4939.
   - bStats to 2.2.1 (was 1.x), Shade it; make isSpigot() private, rename it. Courtesy of TheFlagCourier with PR #4934.
   - Replace deprecated methods on TownyLogger, courtesy of EuGNosii with PR #4933.
-  - Update language file es-419.yml, courtesy of EuGNosii with PR #4910.
+  - Update language file es-419.yml, courtesy ofBlock commands from being ran by outsiders #4953#4910.
   - Add Command Addon API, courtesy of Warriorrrr with PR #4886.
     - Adds a new command addon API, that allows plugin developers to add their own sub commands to Towny's existing commands.
   - Replace player.sendMessage() with TownyMessaging.sendMessage().
@@ -6113,3 +6113,15 @@ v0.92.0.11:
   - Improve /town claim auto, works again but doesn't always claim everything it could in one use. 
   - Fix tamed dogs not being hittable inside towns, courtesy of Warriorrrr with PR #4955.
     - Closes #4954.
+  - Fix a few tab completion issues with the addon API, courtesy of Warriorrrr with PR #4943.
+  - Add commands from being ran by outsiders, courtesy of EuGNosii with PR #4953.
+    - Closes #4951.
+  - New Config Option: global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands
+    - Default: sethome,home
+    - This allows the usage of blacklisted commands only in the player's town and the wilderness (essentially blocking commands from being ran by tourists/visitors.)
+    - Players with the towny.globally_welcome permission node are not going to be limited by this list.
+    - Commands have to be on town_command_blacklisting.town_blacklisted_commands, else this is not going to be checked.
+  - Include tb_prefix in column drop check, courtesy of Parsonswy with PR #4952 (First-Time Contributor!)
+    - For the mysql servers that could never get the old columns dropped, this will fix that, and prevent the massive error logs that resulted from it.
+    - Closes #4935.
+  - Bump language files to 0.106.
