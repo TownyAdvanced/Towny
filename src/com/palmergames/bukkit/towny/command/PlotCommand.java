@@ -174,7 +174,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
 						return permTabComplete(StringMgmt.remArgs(args, 2));
-					}
+					} else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, args[1]))
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
 					break;
 				case "toggle":
 					if (args.length == 2)
@@ -694,8 +695,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								}
 							}
 							return true;
-						} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, split[0]))
+						} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, split[0])) {
 							TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_SET, split[0]).run(player, null, "plot", split);
+							return true;
+						}
 						
 						/*
 						 * After trying all of the other /plot set subcommands, attempt to set the townblock type.

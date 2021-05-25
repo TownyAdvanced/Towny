@@ -325,7 +325,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	static List<String> nationSetTabComplete(Nation nation, String[] args) {
 		if (args.length == 2) {
 			return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.NATION_SET, nationSetTabCompletes), args[1]);
-		} else if (args.length == 3){
+		} else if (args.length > 2){
+			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, args[1]))
+				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
+			
 			switch (args[1].toLowerCase()) {
 				case "king":
 				case "title":
