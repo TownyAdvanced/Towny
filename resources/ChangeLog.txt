@@ -6111,3 +6111,5 @@ v0.92.0.11:
     - Closes #4942.
   - Fix sheep being protected from shearing in the wilderness.
   - Improve /town claim auto, works again but doesn't always claim everything it could in one use. 
+  - Fix tamed dogs not being hittable inside towns, courtesy of Warriorrrr with PR #4955.
+    - Closes #4954.
