@@ -2195,6 +2195,12 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When true, jail plots will prevent any PVP from occuring. Applies to jailed residents only."),
+	JAIL_PREVENTS_LOGGING_OUT(
+			"jail.prevent_newly_jailed_players_logging_out",
+			"false",
+			"",
+			"# When true, Towny will prevent a person who has been jailed by their mayor/town from logging out,",
+			"# if they do log out they will be killed first, ensuring they respawn in the jail."),
 	
 	BANK(
 			"bank",

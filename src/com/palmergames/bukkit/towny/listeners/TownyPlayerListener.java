@@ -142,6 +142,9 @@ public class TownyPlayerListener implements Listener {
 			if (TownyTimerHandler.isTeleportWarmupRunning()) {
 				TownyAPI.getInstance().abortTeleportRequest(resident);
 			}
+			
+			if (JailUtil.isQueuedToBeJailed(resident))
+				event.getPlayer().setHealth(0);
 		}
 
 		plugin.deleteCache(event.getPlayer());

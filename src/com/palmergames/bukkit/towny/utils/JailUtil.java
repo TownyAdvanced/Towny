@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -30,6 +31,8 @@ import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.util.BookFactory;
 
 public class JailUtil {
+
+	private static List<Resident> queuedJailedResidents = new ArrayList<Resident>();
 	
 	/**
 	 * Jails a resident.
@@ -68,6 +71,8 @@ public class JailUtil {
 		switch(reason) {
 		case MAYOR:
 			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_player_has_been_sent_to_jail_number_by_x", resident.getName(), cell, senderName));
+			if (TownySettings.doesJailingPreventLoggingOut())
+				addJailedPlayerToLogOutMap(resident);
 			break;
 		case OUTLAW_DEATH:
 		case PRISONER_OF_WAR:
@@ -234,4 +239,15 @@ public class JailUtil {
 		TownyAPI.getInstance().jailTeleport(resident.getPlayer(), resident.getJailSpawn());
 	}
 
+	private static void addJailedPlayerToLogOutMap(Resident resident) {
+		queuedJailedResidents.add(resident);
+		TownyMessaging.sendMsg(resident, Translation.of("msg_do_not_log_out_while_waiting_to_be_teleported"));
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), () -> queuedJailedResidents.remove(resident), TownySettings.getTeleportWarmupTime() + 20);
+		
+	}
+
+	public static boolean isQueuedToBeJailed(Resident resident) {
+		return queuedJailedResidents.contains(resident);
+	}
+	
 }

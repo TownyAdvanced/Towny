@@ -1777,6 +1777,10 @@ public class TownySettings {
 	public static boolean doJailPlotsPreventPVP() {
 		return getBoolean(ConfigNodes.JAIL_PLOTS_DENY_PVP);
 	}
+	
+	public static boolean doesJailingPreventLoggingOut() {
+		return getBoolean(ConfigNodes.JAIL_PREVENTS_LOGGING_OUT);
+	}
 
 	public static double getWartimeTownBlockLossPrice() {
 
