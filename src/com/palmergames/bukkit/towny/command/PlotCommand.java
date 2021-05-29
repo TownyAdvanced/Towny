@@ -1484,8 +1484,19 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_group_specify_price"));
 				return false;
 			}
-
-			int price = Integer.parseInt(split[1]);
+			
+			int price = 0;
+			try {
+				price = Integer.parseInt(split[1]);
+			} catch (NumberFormatException e) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_num"));
+				return false;
+			}
+			
+			if (price < 0) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_negative_money"));
+				return false;
+			}
 
 			group.setPrice(price);
 			
