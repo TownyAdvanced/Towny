@@ -3084,5 +3084,9 @@ public class TownySettings {
 	public static List<String> getTouristBlockedCommands() {
 		return getStrArr(ConfigNodes.GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS);
 	}
+	
+	public static boolean isContextsEnabled() {
+		return getBoolean(ConfigNodes.PLUGINS_LUCKPERMS_CONTEXTS);
+	}
 }
 
