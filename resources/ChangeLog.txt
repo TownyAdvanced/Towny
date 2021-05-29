@@ -6133,3 +6133,5 @@ v0.92.0.11:
   - Shade in slf4j, fixing ClassNotFoundException: org.slf4j.LoggerFactory
     - Closes #4950.
   - Update es-419, courtesy of EuGNosii with PR #4964.
+  - Fix towns that already have a nation being able to be sent nation invites.
+    - Closes #4963.

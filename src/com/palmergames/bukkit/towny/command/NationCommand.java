@@ -1398,6 +1398,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * Second stage of adding towns to a nation.
 	 * 
 	 * Tests here are performed to make sure the Towns are allowed to join the Nation:
+	 * - make sure the town has no nation.
 	 * - make sure the town has enough residents to join a nation (if it is required in the config.)
 	 * - make sure the town is close enough to the nation capital (if it is required in the config.)
 	 * 
@@ -1413,6 +1414,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		ArrayList<Town> remove = new ArrayList<>();
 		for (Town town : invited) {
 			try {
+				if (town.hasNation()) {
+					remove.add(town);
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_already_nation"));
+					continue;
+				}	
 				
 		        if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
 		        	remove.add(town);
