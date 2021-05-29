@@ -6125,3 +6125,11 @@ v0.92.0.11:
     - For the mysql servers that could never get the old columns dropped, this will fix that, and prevent the massive error logs that resulted from it.
     - Closes #4935.
   - Bump language files to 0.106.
+0.97.0.2:
+  - Validate /plot group fs input, courtesy of Warriorrrr with PR #4968.
+    - Closes #4960.
+  - Fix addon api exception in the towny command, courtesy of Warriorrrr with PR #4967.
+    - Closes #4965.
+  - Shade in slf4j, fixing ClassNotFoundException: org.slf4j.LoggerFactory
+    - Closes #4950.
+  - Update es-419, courtesy of EuGNosii with PR #4964.
