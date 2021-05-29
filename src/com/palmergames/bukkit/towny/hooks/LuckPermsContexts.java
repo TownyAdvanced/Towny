@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.hooks;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.context.ContextCalculator;
 import net.luckperms.api.context.ContextConsumer;
@@ -24,8 +25,11 @@ public class LuckPermsContexts implements ContextCalculator<Player>, Listener {
 	private static final String RESIDENT_CONTEXT = "towny:resident";
 	private static final String MAYOR_CONTEXT = "towny:mayor";
 	private static final String KING_CONTEXT = "towny:king";
+	private static final String INSIDETOWN_CONTEXT = "towny:insidetown";
+	private static final String INSIDEOWNTOWN_CONTEXT = "towny:insideowntown";
+	private static final String INSIDEOWNPLOT_CONTEXT = "towny:insideownplot";
 	
-	private static final List<String> booleanContexts = Arrays.asList(RESIDENT_CONTEXT, MAYOR_CONTEXT, KING_CONTEXT);
+	private static final List<String> booleanContexts = Arrays.asList(RESIDENT_CONTEXT, MAYOR_CONTEXT, KING_CONTEXT, INSIDETOWN_CONTEXT, INSIDEOWNTOWN_CONTEXT, INSIDEOWNPLOT_CONTEXT);
 	
 	private static LuckPerms luckPerms;
 
@@ -46,6 +50,18 @@ public class LuckPermsContexts implements ContextCalculator<Player>, Listener {
 		contextConsumer.accept(RESIDENT_CONTEXT, Boolean.toString(resident.hasTown()));
 		contextConsumer.accept(MAYOR_CONTEXT, Boolean.toString(resident.isMayor()));
 		contextConsumer.accept(KING_CONTEXT, Boolean.toString(resident.isKing()));
+		
+		if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
+			contextConsumer.accept(INSIDETOWN_CONTEXT, "false");
+			contextConsumer.accept(INSIDEOWNPLOT_CONTEXT, "false");
+			contextConsumer.accept(INSIDEOWNTOWN_CONTEXT, "false");
+		} else {
+			contextConsumer.accept(INSIDETOWN_CONTEXT, "true");
+
+			WorldCoord wc = WorldCoord.parseWorldCoord(player);
+			contextConsumer.accept(INSIDEOWNTOWN_CONTEXT, Boolean.toString(wc.getTownBlockOrNull().getTownOrNull().hasResident(resident)));
+			contextConsumer.accept(INSIDEOWNPLOT_CONTEXT, Boolean.toString(wc.getTownBlockOrNull().hasResident() && wc.getTownBlockOrNull().getResidentOrNull().equals(resident)));
+		}
 	}
 
 	@Override
