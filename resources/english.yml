@@ -1403,6 +1403,7 @@ msg_x_has_served_their_sentence_and_is_free: '%s has served their jail sentence 
 msg_you've_been_jailed_for_x_hours: 'You''ve been jailed for %s hours.'
 msg_you_are_being_sent_to_jail: 'You are being sent to jail.'
 msg_err_you_cannot_remove_the_last_cell: 'You cannot remove the last jail cell in this jail, until another cell is added'
-msg_player_has_been_sent_to_jail_number_by_x: '%s has been sent to jail number %s by %s.'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Do not log out before being teleported to jail, it would be fatal.'
 jail_plu: 'Jails'
+jail_sing: 'Jail'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s has been sent to %s into cell number %s for %s hours by %s.'

@@ -1571,20 +1571,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!town.hasJails())
 			throw new TownyException(Translation.of("msg_town_has_no_jails"));
 		
-		int hours;
+		int hours = 1;
 		int jailNum = 1;		
 		int cell = 0;
 		Jail jail = town.getPrimaryJail();
-		if (split.length <= 1) {
+		if (split.length == 0) {
 			
-			if (split[0].equalsIgnoreCase("list")) {
-				parseJailListCommand(sender, town, StringMgmt.remFirstArg(split));
-				return;
-			}
-			System.out.println("something");
 			HelpMenu.TOWN_JAIL.send(sender);
-			
-		} else if (split.length >= 2) {
+
+		} else if (split.length == 1 && split[0].equalsIgnoreCase("list")) {
+
+			parseJailListCommand(sender, town, StringMgmt.remFirstArg(split));
+
+		} else {
 			
 			try {
 				Resident jailedResident = TownyUniverse.getInstance().getResident(split[0]);
@@ -1601,31 +1600,33 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (!admin && jailedPlayer.getUniqueId().equals(((Player) sender).getUniqueId()))
 					throw new TownyException(Translation.of("msg_no_self_jailing"));
 
+				if (split.length > 1) {
+					try {
+						Integer.parseInt(split[1]);
+						if (split.length > 2)
+							Integer.parseInt(split[2]);
+						if (split.length > 3)
+							Integer.parseInt(split[3]);
+					} catch (NumberFormatException e) {
+						HelpMenu.TOWN_JAIL.send(sender);
+						return;
+					}
+					hours = Integer.valueOf(split[1]);
+					if (hours < 1)
+						hours = 1;
+	
+					if (split.length >= 3) {
+						jailNum = Integer.valueOf(split[2]);
+						jail = town.getJail(jailNum);
+						if (jail == null) 
+							throw new TownyException(Translation.of("msg_err_the_town_does_not_have_that_many_jails"));
+					}
 
-				try {
-					Integer.parseInt(split[1]);
-					if (split.length > 2)
-						Integer.parseInt(split[2]);
-					if (split.length > 3)
-						Integer.parseInt(split[3]);
-				} catch (NumberFormatException e) {
-					HelpMenu.TOWN_JAIL.send(sender);
-					return;
-				}
-				hours = Integer.valueOf(split[1]);
-				if (hours < 1)
-					hours = 1;
-
-				if (split.length >= 3) {
-					jailNum = Integer.valueOf(split[2]);
-					jail = town.getJail(jailNum);
-					if (jail == null) 
-						throw new TownyException(Translation.of("msg_err_the_town_does_not_have_that_many_jails"));
-				}
-				if (split.length == 4) {
-					cell = Integer.valueOf(split[3]) - 1;
-					if (!jail.hasJailCell(cell))
-						throw new TownyException("msg_err_that_jail_plot_does_not_have_that_many_cells");
+					if (split.length == 4) {
+						cell = Integer.valueOf(split[3]) - 1;
+						if (!jail.hasJailCell(cell))
+							throw new TownyException("msg_err_that_jail_plot_does_not_have_that_many_cells");
+					}
 				}
 
 				JailUtil.jailResident(jailedResident, jail, cell, hours, JailReason.MAYOR, sender);
@@ -1637,7 +1638,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 		}
-		
 	}
 
 	private static void parseJailListCommand(CommandSender sender, Town town, String[] args) {

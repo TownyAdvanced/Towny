@@ -70,7 +70,8 @@ public class JailUtil {
 		// Send feedback messages. 
 		switch(reason) {
 		case MAYOR:
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_player_has_been_sent_to_jail_number_by_x", resident.getName(), cell, senderName));
+			String jailName = jail.hasName() ? jail.getName() : Translation.of("jail_sing");
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x", resident.getName(), jailName, cell+1, hours, senderName));
 			if (TownySettings.doesJailingPreventLoggingOut())
 				addJailedPlayerToLogOutMap(resident);
 			break;
