@@ -278,6 +278,24 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							}
 					}
 					break;
+				case "jail":
+					if (args.length == 2) {
+						List<String> residentOrList = getTownResidentNamesOfPlayerStartingWith(player, args[1]);
+						residentOrList.add("list");
+						return NameUtil.filterByStart(residentOrList, args[1]);
+					}
+				case "unjail":
+					if (args.length == 2) {
+						Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+						if (res != null && res.hasTown()) {
+							Town town = res.getTownOrNull();
+							List<String> jailedResidents = new ArrayList<>();
+							TownyUniverse.getInstance().getJailedResidentMap().stream()
+									.filter(jailee -> town.hasResident(jailee))
+									.forEach(jailee -> jailedResidents.add(jailee.getName()));
+							return NameUtil.filterByStart(jailedResidents, args[1]);
+						}
+					}
 				case "outpost":
 					if (args.length == 2)
 						return Collections.singletonList("list");
@@ -390,10 +408,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						case 2:
 							return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_TOGGLE, townToggleTabCompletes), args[1]);
 						case 3:
-							if (!args[1].equalsIgnoreCase("jail")) {
-								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
-							}
-							break;
+							return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 						case 4:
 							return getTownResidentNamesOfPlayerStartingWith(player, args[3]);
 					}
@@ -1561,9 +1576,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		int cell = 0;
 		Jail jail = town.getPrimaryJail();
 		if (split.length <= 1) {
+			
+			if (split[0].equalsIgnoreCase("list")) {
+				parseJailListCommand(sender, town, StringMgmt.remFirstArg(split));
+				return;
+			}
+			System.out.println("something");
 			HelpMenu.TOWN_JAIL.send(sender);
 			
 		} else if (split.length >= 2) {
+			
 			try {
 				Resident jailedResident = TownyUniverse.getInstance().getResident(split[0]);
 				if (jailedResident == null || !town.hasResident(jailedResident))
@@ -1601,7 +1623,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translation.of("msg_err_the_town_does_not_have_that_many_jails"));
 				}
 				if (split.length == 4) {
-					cell = Integer.valueOf(split[3]);
+					cell = Integer.valueOf(split[3]) - 1;
 					if (!jail.hasJailCell(cell))
 						throw new TownyException("msg_err_that_jail_plot_does_not_have_that_many_cells");
 				}
@@ -1615,6 +1637,44 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 		}
+		
+	}
+
+	private static void parseJailListCommand(CommandSender sender, Town town, String[] args) {
+		try {
+			Player player = null;
+			if (sender instanceof Player) {
+				player = (Player) sender;
+				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_JAIL_LIST.getNode()))
+					throw new TownyException(Translation.of("msg_err_command_disable"));
+				
+				Resident resident = TownyAPI.getInstance().getResident(player.getUniqueId());					
+				if (resident == null || !resident.hasTown())
+					throw new TownyException(Translation.of("msg_err_must_belong_town"));
+			}
+
+			int page = 1;
+			int total = (int) Math.ceil(((double) town.getJails().size()) / ((double) 10));
+			if (args.length == 1) {
+				try {
+					page = Integer.parseInt(args[0]);
+					if (page < 0) {
+						throw new TownyException(Translation.of("msg_err_negative"));
+					} else if (page == 0) {
+						throw new TownyException(Translation.of("msg_error_must_be_int"));
+					}
+				} catch (NumberFormatException e) {
+					throw new TownyException(Translation.of("msg_error_must_be_int"));
+				}
+			}
+			if (page > total)
+				throw new TownyException(Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
+
+			TownyMessaging.sendJailList(player, town, page, total);
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(sender, e.getMessage());
+		}
+
 		
 	}
 

@@ -318,6 +318,7 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("town jail")
+				.add("list", "")
 				.add("[resident] [hours]", "")
 				.add("[resident] [hours] [jail]", "")
 				.add("[resident] [hours] [jail] [cell]", "");

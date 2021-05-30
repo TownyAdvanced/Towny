@@ -219,7 +219,6 @@ public abstract class TownyDataSource {
 				System.out.println("[Towny] Loading Error: Could not read jail data '" + jail.getUUID() + "'.");
 				return false;
 			}
-			jail.getTown().addJail(jail);
 		}
 		return true;
 	}

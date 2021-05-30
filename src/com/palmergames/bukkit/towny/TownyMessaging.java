@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
+import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -34,6 +35,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -837,6 +839,57 @@ public class TownyMessaging {
 		Audience audience = Towny.getAdventure().player(player);
 		player.sendMessage(ChatTools.formatTitle(Translation.of("outpost_plu")));
 		for (TextComponent textComponent : outpostsFormatted) {
+			audience.sendMessage(textComponent);
+		}
+		
+		// Page navigation
+		TextComponent pageFooter = getPageNavigationFooter("towny:town outpost", page, "", total);
+		audience.sendMessage(pageFooter);
+	}
+	
+	public static void sendJailList(Player player, Town town, int page, int total) {
+		int jailCount = town.getJails().size();
+		int iMax = Math.min(page * 10, jailCount);
+		List<Jail> jails = new ArrayList<>(town.getJails());
+		
+		TextComponent[] jailsFormatted;
+		
+		if ((page * 10) > jailCount) {
+			jailsFormatted = new TextComponent[jailCount % 10];
+		} else {
+			jailsFormatted = new TextComponent[10];
+		}
+		String headerMsg = ChatColor.GOLD + "# " +
+							ChatColor.DARK_GRAY + "- "+
+							ChatColor.GREEN + "Jail Name " +
+							ChatColor.DARK_GRAY + "- "+
+							ChatColor.BLUE + "Coord " +
+							ChatColor.DARK_GRAY + "- " +
+							ChatColor.YELLOW + "Cell Count " +
+							ChatColor.DARK_GRAY + "- " +
+							ChatColor.RED + "Primary Jail";
+		for (int i = (page - 1) * 10; i < iMax; i++) {
+			Jail jail = jails.get(i);
+
+			TextComponent name = Component.text(jail.getName()).color(NamedTextColor.GREEN);
+			TextComponent coord = Component.text(jail.getTownBlock().getWorldCoord().toString()).color(NamedTextColor.BLUE);
+			TextComponent cellCount = Component.text(String.valueOf(jail.getJailCellLocations().size())).color(NamedTextColor.YELLOW);
+			TextComponent dash = Component.text(" - ").color(NamedTextColor.DARK_GRAY);
+
+			TextComponent line = Component.text(Integer.toString(i + 1)).color(NamedTextColor.GOLD);
+			if (jail.hasName())
+				line = line.append(dash).append(name);
+			line = line.append(dash).append(coord).append(dash).append(cellCount);
+				
+			if (town.getPrimaryJail().getUUID().equals(jail.getUUID()))
+				line = line.append(dash).append(Component.text("(Primary Jail)").color(NamedTextColor.RED));
+
+			jailsFormatted[i % 10] = line;
+		}
+		Audience audience = Towny.getAdventure().player(player);
+		player.sendMessage(ChatTools.formatTitle(Translation.of("jail_plu")));
+		player.sendMessage(headerMsg);
+		for (TextComponent textComponent : jailsFormatted) {
 			audience.sendMessage(textComponent);
 		}
 		

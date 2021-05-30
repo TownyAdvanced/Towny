@@ -315,6 +315,7 @@ permissions:
             towny.command.town.here: true
             towny.command.town.invites.*: true
             towny.command.town.jail: true
+            towny.command.town.jail.list: true
             towny.command.town.join: true
             towny.command.town.kick: true
             towny.command.town.leave: true

@@ -111,7 +111,7 @@ public class Jail implements Savable {
 	}
 	
 	public boolean hasName() {
-		return getTownBlock().getName() != null;
+		return !getTownBlock().getName().isEmpty();
 	}
 	
 	public String getName() {
