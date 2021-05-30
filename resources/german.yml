@@ -1,5 +1,5 @@
 name: Towny
-version: 0.104
+version: 0.103
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://townyadvanced.github.io/'
@@ -1380,6 +1380,3 @@ msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your n
 # Added in 0.103
 msg_command_blocked_inside_towns: '&cYou cannot use that command inside towns.'
 msg_command_limited: 'You can only use that command inside your own plots.'
-
-#Added in 0.104
-msg_plot_perm_claimed_at: '&2Claimed at: &a%s'
