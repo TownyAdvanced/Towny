@@ -1069,8 +1069,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							if (tb == null)
 								continue;
 							Jail jail = new Jail(UUID.randomUUID(), town, tb, new ArrayList<>(Collections.singleton(loc)));
+							TownyUniverse.getInstance().registerJail(jail);
+							town.addJail(jail);
+							tb.setJail(jail);
 							jail.save();
-
 						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
 						}
 				}
