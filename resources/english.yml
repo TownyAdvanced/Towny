@@ -1407,3 +1407,4 @@ msg_do_not_log_out_while_waiting_to_be_teleported: 'Do not log out before being 
 jail_plu: 'Jails'
 jail_sing: 'Jail'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s has been sent to %s into cell number %s for %s hours by %s.'
+msg_resident_has_not_played_long_enough_to_be_jailed: '%s hasn''t played long enough to be jailed, wait another %s'

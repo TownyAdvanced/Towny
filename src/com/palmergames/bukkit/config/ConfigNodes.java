@@ -2201,6 +2201,11 @@ public enum ConfigNodes {
 			"",
 			"# When true, Towny will prevent a person who has been jailed by their mayor/town from logging out,",
 			"# if they do log out they will be killed first, ensuring they respawn in the jail."),
+	JAIL_NEW_PLAYER_IMMUNITY(
+			"jail.new_player_immunity",
+			"1h",
+			"",
+			"# How long do new players have to be on the server before they can be jailed?"),
 	
 	BANK(
 			"bank",

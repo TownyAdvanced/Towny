@@ -1781,6 +1781,10 @@ public class TownySettings {
 	public static boolean doesJailingPreventLoggingOut() {
 		return getBoolean(ConfigNodes.JAIL_PREVENTS_LOGGING_OUT);
 	}
+	
+	public static long newPlayerJailImmunity() {
+		return TimeTools.getMillis(getString(ConfigNodes.JAIL_NEW_PLAYER_IMMUNITY));
+	}
 
 	public static double getWartimeTownBlockLossPrice() {
 

@@ -87,6 +87,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+import com.palmergames.util.TimeMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -1589,6 +1590,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				Resident jailedResident = TownyUniverse.getInstance().getResident(split[0]);
 				if (jailedResident == null || !town.hasResident(jailedResident))
 					throw new TownyException(Translation.of("msg_resident_not_your_town"));
+				
+				if (TownySettings.newPlayerJailImmunity() > 0) {
+					long time = (jailedResident.getRegistered() + TownySettings.newPlayerJailImmunity()) - System.currentTimeMillis();
+					if (time > 0) {
+						throw new TownyException(Translation.of("msg_resident_has_not_played_long_enough_to_be_jailed", jailedResident.getName(), TimeMgmt.getFormattedTimeValue(time)));
+					}
+				}
 
 				if (jailedResident.isJailed())
 					throw new TownyException(Translation.of("msg_err_resident_is_already_jailed", jailedResident.getName()));
