@@ -85,7 +85,6 @@ public class TownyUniverse {
 	private final Map<Block, SpawnPoint> spawnPoints = new ConcurrentHashMap<>(); 
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final Map<UUID, Jail> jailUUIDMap = new ConcurrentHashMap<>();
-    
     private final String rootFolder;
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;

@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
-
 import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.Collections;

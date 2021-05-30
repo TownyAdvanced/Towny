@@ -650,11 +650,11 @@ public class War {
 			TownyMessaging.sendPrefixedTownMessage(defenderTown, Translation.of("msg_war_town_lost_money_townblock", TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
 		
 		// Check to see if this is a special TownBlock
-		if (defenderHomeblock && defenderTown.isCapital()) {
+		if (defenderHomeblock && defenderTown.isCapital()){
 			remove(attacker, defenderTown.getNation());
-		} else if (defenderHomeblock) {
+		} else if (defenderHomeblock){
 			remove(attacker, defenderTown);
-		} else {
+		} else{
 			townScored(attacker, TownySettings.getWarPointsForTownBlock(), townBlock, 0);
 			remove(townBlock.getWorldCoord());
 			// Free players who are jailed in the jail plot.
@@ -667,9 +667,9 @@ public class War {
 							count++;
 						}
 				}
-				if (count > 0)
+				if (count>0)
 					TownyMessaging.sendGlobalMessage(Translation.of("msg_war_jailbreak", defenderTown, count));
-			}
+			}				
 		}
 		defenderTown.save();
 		attacker.save();

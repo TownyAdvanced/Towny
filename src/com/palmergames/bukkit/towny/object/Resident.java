@@ -62,7 +62,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private Jail jail = null;
 	private int jailCell;
 	private int jailHours;
-	
+
 	private final List<String> townRanks = new ArrayList<>();
 	private final List<String> nationRanks = new ArrayList<>();
 	private List<TownBlock> townBlocks = new ArrayList<>();
