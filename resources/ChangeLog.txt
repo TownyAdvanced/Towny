@@ -6142,3 +6142,4 @@ v0.92.0.11:
   - Add /ta command for getting exact claimedat time, courtesy of Warriorrrr with PR #4911.
   - New Command: /ta plot claimedat
     - Shows when the plot was claimed.
+  - Automatically clean up unused NPC residents, courtesy of Warriorrrr with PR #4972.
