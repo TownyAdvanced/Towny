@@ -696,7 +696,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							}
 							return true;
 						} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, split[0])) {
-							TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_SET, split[0]).run(player, null, "plot", split);
+							TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_SET, split[0]).execute(player, "plot", split);
 							return true;
 						}
 						
@@ -823,7 +823,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					return handlePlotGroupCommand(StringMgmt.remFirstArg(split), player);
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT, split[0])) {
-					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT, split[0]).run(player, null, "plot", split);
+					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT, split[0]).execute(player, "plot", split);
 				} else
 					throw new TownyException(Translation.of("msg_err_invalid_property", split[0]));
 
@@ -1121,7 +1121,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled")));
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_TOGGLE, split[0])) {
-					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_TOGGLE, split[0]).run(player, null, "plot", split);
+					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_TOGGLE, split[0]).execute(player, "plot", split);
 				} else {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "plot"));
 					return;

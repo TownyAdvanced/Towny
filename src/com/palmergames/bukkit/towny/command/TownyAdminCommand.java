@@ -602,7 +602,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				parseAdminDepositAllCommand(StringMgmt.remFirstArg(split));
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).run(getSender(), null, "townyadmin", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).execute(getSender(), "townyadmin", split);
 			}  else {
 				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_sub"));
 				return false;
@@ -1765,7 +1765,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			}
 		} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_SET, split[0])) {
-			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, split[0]).run(getSender(), null, "townyadmin", split);
+			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, split[0]).execute(getSender(), "townyadmin", split);
 		} else {
 			TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_property", "administrative"));
 		}
@@ -2061,7 +2061,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			TownyMessaging.sendMessage(sender, Translation.of("msg_npc_flag", resident.isNPC(), resident.getName()));
 		} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_TOGGLE, split[0])) {
-			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOGGLE, split[0]).run(getSender(), null, "townyadmin", split);
+			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOGGLE, split[0]).execute(getSender(), "townyadmin", split);
 		} else {
 			// parameter error message
 			// peaceful/war/townmobs/worldmobs
