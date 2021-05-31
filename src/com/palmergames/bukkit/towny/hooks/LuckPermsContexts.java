@@ -2,8 +2,11 @@ package com.palmergames.bukkit.towny.hooks;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.object.PlayerCache;
+import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.context.ContextCalculator;
 import net.luckperms.api.context.ContextConsumer;
@@ -50,15 +53,15 @@ public class LuckPermsContexts implements ContextCalculator<Player>, Listener {
 		contextConsumer.accept(RESIDENT_CONTEXT, Boolean.toString(resident.hasTown()));
 		contextConsumer.accept(MAYOR_CONTEXT, Boolean.toString(resident.isMayor()));
 		contextConsumer.accept(KING_CONTEXT, Boolean.toString(resident.isKing()));
-		
-		if (TownyAPI.getInstance().isWilderness(player.getLocation())) {
+
+		WorldCoord wc = PlayerCacheUtil.getCache(player).getLastTownBlock();
+		if (wc == null || TownyAPI.getInstance().isWilderness(wc)) {
 			contextConsumer.accept(INSIDETOWN_CONTEXT, "false");
 			contextConsumer.accept(INSIDEOWNPLOT_CONTEXT, "false");
 			contextConsumer.accept(INSIDEOWNTOWN_CONTEXT, "false");
 		} else {
 			contextConsumer.accept(INSIDETOWN_CONTEXT, "true");
 
-			WorldCoord wc = WorldCoord.parseWorldCoord(player);
 			contextConsumer.accept(INSIDEOWNTOWN_CONTEXT, Boolean.toString(wc.getTownBlockOrNull().getTownOrNull().hasResident(resident)));
 			contextConsumer.accept(INSIDEOWNPLOT_CONTEXT, Boolean.toString(wc.getTownBlockOrNull().hasResident() && wc.getTownBlockOrNull().getResidentOrNull().equals(resident)));
 		}
