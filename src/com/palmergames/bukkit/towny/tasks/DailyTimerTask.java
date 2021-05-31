@@ -76,6 +76,9 @@ public class DailyTimerTask extends TownyTimerTask {
 			// Run a purge in it's own thread
 			new ResidentPurge(plugin, null, TownySettings.getDeleteTime() * 1000, TownySettings.isDeleteTownlessOnly()).start();
 		}
+		
+		//Clean up unused NPC residents
+		new NPCCleanupTask().start();
 
 		/*
 		 * If enabled, remove all 0-plot towns.
