@@ -129,12 +129,17 @@ public class TownyAsciiMap {
 						townyMap[y][x] = townyMap[y][x].content(townblock.getType().getAsciiMapKey());
 					
 					TextComponent forSaleComponent = Component.empty();
-					if (TownyEconomyHandler.isActive() && townblock.getPlotPrice() != -1)
+					TextComponent claimedAtComponent = Component.empty();
+					if (townblock.getPlotPrice() != -1 && TownyEconomyHandler.isActive())
 						forSaleComponent = Component.text(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(townblock.getPlotPrice())).replaceAll("[\\[\\]]", "")).color(NamedTextColor.YELLOW).append(Component.newline());
+					
+					if (townblock.getClaimedAt() > 0)
+						claimedAtComponent = Component.text(Translation.of("msg_plot_perm_claimed_at", TownyFormatter.registeredFormat.format(townblock.getClaimedAt()))).append(Component.newline());
 
 					TextComponent hoverComponent = Component.text(Translation.of("status_town") + town.getName() + (townblock.hasResident() ? " (" + townblock.getResidentOrNull().getName() + ")" : "")).color(NamedTextColor.GREEN).append(Component.text(" (" + tby + ", " + tbx + ")").color(NamedTextColor.WHITE)).append(Component.newline())
 						.append(Component.text(Translation.of("status_plot_type")).color(NamedTextColor.GREEN)).append(Component.text(townblock.getType().getName()).color(NamedTextColor.GREEN)).append(Component.newline())
 						.append(forSaleComponent)
+						.append(claimedAtComponent)
 						.append(Component.text(Translation.of("towny_map_detailed_information")).color(NamedTextColor.DARK_GREEN));
 
 					townyMap[y][x] = townyMap[y][x].hoverEvent(HoverEvent.showText(hoverComponent)).clickEvent(ClickEvent.runCommand("/towny:plot perm " + tby + " " + tbx));

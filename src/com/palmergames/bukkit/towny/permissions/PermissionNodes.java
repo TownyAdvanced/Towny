@@ -250,6 +250,7 @@ public enum PermissionNodes {
     TOWNY_COMMAND_TOWNYADMIN_PLOT("towny.command.townyadmin.plot.*"),
     	TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIM("towny.command.townyadmin.plot.claim"),
 		TOWNY_COMMAND_TOWNYADMIN_PLOT_META("towny.command.townyadmin.plot.meta"),
+		TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIMEDAT("towny.command.townyadmin.plot.claimedat"),
 	
 	TOWNY_COMMAND_TOWNYADMIN_RESIDENT("towny.command.townyadmin.resident.*"),
 		TOWNY_COMMMAND_TOWNYADMIN_RESIDENT_RENAME("towny.command.townyadmin.resident.rename"),

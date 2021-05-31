@@ -44,6 +44,7 @@ public class TownyFormatter {
 	public static final SimpleDateFormat lastOnlineFormat = new SimpleDateFormat("MMMMM dd '@' HH:mm");
 	public static final SimpleDateFormat lastOnlineFormatIncludeYear = new SimpleDateFormat("MMMMM dd yyyy");
 	public static final SimpleDateFormat registeredFormat = new SimpleDateFormat("MMM d yyyy");
+	public static final SimpleDateFormat fullDateFormat = new SimpleDateFormat("MMMMM dd yyyy '@' HH:mm");
 
 	/**
 	 * 1 = Description 2 = Count
