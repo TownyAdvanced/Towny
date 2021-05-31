@@ -178,7 +178,7 @@ public class JailUtil {
 		else
 			pages += "You can escape from jail by leaving your town using '/town leave'.\n";
 		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive()) {
-			pages += "You can be freed from jail by pay your bail using '/res jail paybail'.";
+			pages += "You can be freed from jail by paying your bail using '/res jail paybail'.";
 			double cost = TownySettings.getBailAmount();
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			if (resident.isMayor())
