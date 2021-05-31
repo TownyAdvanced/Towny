@@ -256,7 +256,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 //					}
 
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD, split[0]).run(sender, null, "townyworld", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD, split[0]).execute(sender, "townyworld", split);
 			} else {
 				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_invalid_property", "townyworld"));
 			}
@@ -492,7 +492,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				else
 					TownyMessaging.sendMsg(msg);
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD_TOGGLE, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_TOGGLE, split[0]).run(sender, null, "townyworld", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_TOGGLE, split[0]).execute(sender, "townyworld", split);
 			} else {
 				msg = Translation.of("msg_err_invalid_property", "'" + split[0] + "'");
 				if (player != null)
@@ -618,9 +618,9 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					}
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD_SET, split[0])) {
 				try {
-					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_SET, split[0]).run(sender, null, "townyworld", split);
-				} catch (TownyException e) {
-					return;
+					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_SET, split[0]).execute(sender, "townyworld", split);
+				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
 			} else {
 				if (player != null)

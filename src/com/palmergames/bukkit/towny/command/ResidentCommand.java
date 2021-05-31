@@ -357,7 +357,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				
 				SpawnUtil.sendToTownySpawn(player, split, res, Translation.of("msg_err_cant_afford_tp"), false, false, SpawnType.RESIDENT);
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT, split[0]).run(player, null, "resident", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT, split[0]).execute(player, "resident", split);
 			} else {
 				final Resident resident = TownyUniverse.getInstance().getResidentOpt(split[0])
 											.orElseThrow(() -> new TownyException(Translation.of("msg_err_not_registered_1", split[0])));
@@ -442,7 +442,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		} else if (newSplit[0].equalsIgnoreCase("mobs")) {
 			perm.mobs = choice.orElse(!perm.mobs);
 		} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_TOGGLE, newSplit[0])) {
-			TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_TOGGLE, newSplit[0]).run(player, null, "resident", newSplit);
+			TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_TOGGLE, newSplit[0]).execute(player, "resident", newSplit);
 		} else {
 
 			resident.toggleMode(newSplit, true);
@@ -548,7 +548,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				String[] newSplit = StringMgmt.remFirstArg(split);
 				setMode(player, newSplit);
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, split[0]).run(player, null, "resident", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, split[0]).execute(player, "resident", split);
 			} else {
 
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "resident"));

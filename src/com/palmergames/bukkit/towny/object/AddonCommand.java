@@ -6,28 +6,29 @@ import java.util.List;
 import java.util.Map;
 
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
-public class AddonCommand {
+public class AddonCommand extends Command {
     private CommandType commandType;
     private String name;
     private CommandExecutor commandExecutor;
     private Map<Integer, List<String>> tabCompletions = new HashMap<Integer, List<String>>();
 
     public AddonCommand(CommandType commandType, String name, CommandExecutor commandExecutor) {
+    	super(name);
         this.commandType = commandType;
         this.name = name;
         this.commandExecutor = commandExecutor;
     }
 
-    public void run(CommandSender sender, Command command, String label, String[] args) throws TownyException {
-        if (!commandExecutor.onCommand(sender, command, label, args))
-            throw new TownyException();
-    }
+	@Override
+	public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
+		return commandExecutor.onCommand(sender, this, label, args);
+	}
 
     public CommandType getCommandType() {
         return commandType;
@@ -48,9 +49,10 @@ public class AddonCommand {
     public void setCommandType(CommandType commandType) {
         this.commandType = commandType;
     }
-
-    public void setName(String name) {
+    
+    public boolean setName(String name) {
         this.name = name;
+        return true;
     }
 
     public void setCommandExecutor(CommandExecutor commandExecutor) {

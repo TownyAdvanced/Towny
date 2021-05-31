@@ -754,7 +754,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					parseTownMergeCommand(player, newSplit);
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN, split[0])) {
-					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, split[0]).run(player, null, "town", split);
+					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, split[0]).execute(player, "town", split);
 				} else {
 					/*
 					 * We've gotten this far without a match, check if the argument is a town name.
@@ -1547,7 +1547,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_TOGGLE, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_TOGGLE, split[0]).run(sender, null, "town", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_TOGGLE, split[0]).execute(sender, "town", split);
 			} else {
             	/*
             	 * Fire of an event if we don't recognize the command being used.
@@ -2169,7 +2169,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					String[] newSplit = StringMgmt.remFirstArg(split);
 					setTownBlockOwnerPermissions(player, town, newSplit);
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_SET, split[0])) {
-					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_SET, split[0]).run(player, null, "town", split);
+					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_SET, split[0]).execute(player, "town", split);
 				} else {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "town"));
 					return;

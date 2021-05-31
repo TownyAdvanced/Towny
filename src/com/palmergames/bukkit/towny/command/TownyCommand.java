@@ -298,7 +298,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				} else
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_command_disable"));
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNY, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, split[0]).run(player, null, "towny", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, split[0]).execute(player, "towny", split);
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
 

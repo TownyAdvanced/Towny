@@ -686,7 +686,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 					TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().getNation().generateBankHistoryBook(player, pages);
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.NATION, split[0])) {
-					TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).run(player, null, "nation", split);
+					TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).execute(player, "nation", split);
 				} else {
 
 					final Nation nation = TownyUniverse.getInstance().getNation(split[0]);
@@ -2455,7 +2455,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_map_color_changed", line.toLowerCase()));
 				}
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, split[0]).run(player, null, "nation", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, split[0]).execute(player, "nation", split);
 			} else {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", split[0]));
 				return;
@@ -2582,7 +2582,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 // Send message feedback.
                 TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_open", nation.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_TOGGLE, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_TOGGLE, split[0]).run(sender, null, "nation", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_TOGGLE, split[0]).execute(sender, "nation", split);
             } else {
             	/*
             	 * Fire of an event if we don't recognize the command being used.
