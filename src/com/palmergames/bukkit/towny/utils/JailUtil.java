@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.resident.ResidentJailEvent;
 import com.palmergames.bukkit.towny.event.resident.ResidentPreJailEvent;
 import com.palmergames.bukkit.towny.event.resident.ResidentUnjailEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -111,9 +110,7 @@ public class JailUtil {
 		Town town = null;
 		switch (reason) {
 		case ESCAPE:
-			try {
-				town = resident.getTown();
-			} catch (NotRegisteredException ignored) {}
+			town = resident.getTownOrNull();
 			
 			// First show a message to the resident, either by broadcasting to the resident's town or just the resident (if they have no town.)
 			if (town != null)
@@ -122,7 +119,7 @@ public class JailUtil {
 				TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_freed_from_jail"));
 			
 			// Second, show a message to the town which has just had a prisoner escape.
-			if (town != null && !town.equals(jail.getTown()))
+			if (town != null && !town.getUUID().equals(jail.getTown().getUUID()))
 				TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_player_escaped_jail_into_wilderness", resident.getName(), jail.getWildName()));
 			break;
 
@@ -138,8 +135,7 @@ public class JailUtil {
 			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_x_has_served_their_sentence_and_is_free", resident.getName()));
 			break;
 		case LEFT_TOWN:
-			town = TownyAPI.getInstance().getResidentTownOrNull(resident);
-			assert town != null;
+			town = resident.getTownOrNull();
 			TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_freed_from_jail"));
 			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_escaped_jail_by_leaving_town", resident.getName()));
 			break;
@@ -180,9 +176,9 @@ public class JailUtil {
 		if (TownySettings.JailDeniesTownLeave())
 			pages += "While you're jailed you won't be able to leave your town to escape jail.\n";
 		else
-			pages += "You can escape from jail by leaving your town using /town leave.\n";
+			pages += "You can escape from jail by leaving your town using '/town leave'.\n";
 		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive()) {
-			pages += "You can also pay your bail using '/res jail paybail' to be freed from jail.";
+			pages += "You can be freed from jail by pay your bail using '/res jail paybail'.";
 			double cost = TownySettings.getBailAmount();
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			if (resident.isMayor())
