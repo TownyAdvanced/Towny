@@ -762,7 +762,7 @@ public class TownyFormatter {
 	public static String[] getFormattedNames(TownyObject[] objs) {
 		List<String> names = new ArrayList<>();
 		for (TownyObject obj : objs) {
-			names.add(obj.getFormattedName() + Colors.White);
+			names.add(Colors.translateColorCodes(obj.getFormattedName()) + Colors.White);
 		}
 		
 		return names.toArray(new String[0]);

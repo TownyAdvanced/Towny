@@ -3,6 +3,9 @@ package com.palmergames.bukkit.util;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.Nullable;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.util.StringMgmt;
+
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public class Colors {
@@ -32,7 +35,10 @@ public class Colors {
 	}
 
 	public static String translateColorCodes(String str) {
-		return ChatColor.translateAlternateColorCodes('&', str);
+		String out = ChatColor.translateAlternateColorCodes('&', str);
+		if (Towny.is116Plus())
+			out = StringMgmt.translateHexColors(out);
+		return out;
 	}
 
 	/**

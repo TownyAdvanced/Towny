@@ -6143,3 +6143,5 @@ v0.92.0.11:
   - New Command: /ta plot claimedat
     - Shows when the plot was claimed.
   - Automatically clean up unused NPC residents, courtesy of Warriorrrr with PR #4972.
+  - Parse hex colours in resident titles in the status screens.
+    - Closes #4977.
