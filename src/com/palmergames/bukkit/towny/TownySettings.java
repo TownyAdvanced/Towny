@@ -1739,14 +1739,14 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_OUTLAWS);
 	}
 	
-	public static int getJailedOutlawJailDays() {
+	public static int getJailedOutlawJailHours() {
 		
-		return getInt(ConfigNodes.JAIL_OUTLAW_JAIL_DAYS);
+		return getInt(ConfigNodes.JAIL_OUTLAW_JAIL_HOURS);
 	}
 
-	public static boolean JailAllowsEnderPearls() {
+	public static boolean JailAllowsTeleportItems() {
 		
-		return getBoolean(ConfigNodes.JAIL_JAIL_ALLOWS_ENDER_PEARLS);
+		return getBoolean(ConfigNodes.JAIL_JAIL_ALLOWS_TELEPORT_ITEMS);
 	}
 	
 	public static boolean JailDeniesTownLeave() {
@@ -1772,6 +1772,18 @@ public class TownySettings {
 	public static double getBailAmountKing() {
 		
 		return getDouble(ConfigNodes.JAIL_BAIL_BAIL_AMOUNT_KING);
+	}
+	
+	public static boolean doJailPlotsPreventPVP() {
+		return getBoolean(ConfigNodes.JAIL_PLOTS_DENY_PVP);
+	}
+	
+	public static boolean doesJailingPreventLoggingOut() {
+		return getBoolean(ConfigNodes.JAIL_PREVENTS_LOGGING_OUT);
+	}
+	
+	public static long newPlayerJailImmunity() {
+		return TimeTools.getMillis(getString(ConfigNodes.JAIL_NEW_PLAYER_IMMUNITY));
 	}
 
 	public static double getWartimeTownBlockLossPrice() {

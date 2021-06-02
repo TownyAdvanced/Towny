@@ -2,28 +2,35 @@ package com.palmergames.bukkit.towny.event.resident;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.jail.Jail;
+import com.palmergames.bukkit.towny.object.jail.JailReason;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ResidentPreJailEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	private final Resident resident;
-	private final Town jailTown;
+	private final Jail jail;
+	private final int cell;
+	private final int hours;
+	private final JailReason reason;
 	private boolean isCancelled = false;
 	private String cancelMessage = Translation.of("msg_err_command_disable");
 	
-	public ResidentPreJailEvent(Resident resident, Town jailTown){
-
+	public ResidentPreJailEvent(Resident resident, Jail jail, int cell, int hours, JailReason reason) {
 		this.resident = resident;
-		this.jailTown = jailTown;
+		this.jail = jail;
+		this.cell = cell;
+		this.hours = hours;
+		this.reason = reason;
 	}
-	
+
 	@NotNull
 	@Override
 	public HandlerList getHandlers() {
@@ -38,11 +45,30 @@ public class ResidentPreJailEvent extends Event implements Cancellable {
 		return resident;
 	}
 	
-	@Nullable
+	public Jail getJail() {
+		return jail;
+	}
+
 	public Town getJailTown() {
-		return jailTown;
+		return jail.getTown();
 	}
 	
+	public TownBlock getJailTownBlock() {
+		return jail.getTownBlock();
+	}
+	
+	public int getCell() {
+		return cell;
+	}
+
+	public int getHours() {
+		return hours;
+	}
+
+	public JailReason getReason() {
+		return reason;
+	}
+
 	@Override
 	public boolean isCancelled() {
 		return isCancelled;

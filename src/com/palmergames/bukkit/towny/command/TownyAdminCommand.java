@@ -32,6 +32,7 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -40,6 +41,7 @@ import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
@@ -880,35 +882,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if(split[1].equalsIgnoreCase("unjail")) {
 				
-				Player jailedPlayer = TownyAPI.getInstance().getPlayer(resident);
-				if (player == null) {
-					throw new TownyException(String.format("%s is not online", resident.getName()));
-				}
-
-				if(resident.isJailed())	{
-					resident.setJailed(false);
-					final String jailTownName = resident.getJailTown();
-					final int index = resident.getJailSpawn();
-					
-					final Town jailTown = townyUniverse.getTown(jailTownName);
-					
-					if (jailTown == null) {
-						throw new TownyException(String.format("Invalid jail town of '%s'", jailTownName));
-					}
-					
-					final Location loc = Bukkit.getWorld(jailTown.getHomeblockWorld().getName()).getSpawnLocation();
-
-					// Use teleport warmup
-					TownyMessaging.sendMessage(jailedPlayer, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
-					TownyAPI.getInstance().jailTeleport(jailedPlayer, loc);
-
-					resident.removeJailSpawn();
-					resident.setJailTown("");
-					TownyMessaging.sendMsg(player, "You have been freed from jail.");
-					TownyMessaging.sendPrefixedTownMessage(jailTown, jailedPlayer.getName() + " has been freed from jail number " + index);
-				} else {
-					throw new TownyException(Translation.of("msg_player_not_jailed_in_your_town"));
-				}
+				if (resident.isJailed())
+					JailUtil.unJailResident(resident, UnJailReason.ADMIN);
+				else 
+					throw new TownyException(Translation.of("msg_err_player_is_not_jailed"));
 			}
 
 		} catch (NotRegisteredException e) {

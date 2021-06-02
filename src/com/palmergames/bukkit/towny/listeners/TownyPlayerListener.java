@@ -12,7 +12,6 @@ import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -20,6 +19,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -29,6 +29,7 @@ import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -141,6 +142,9 @@ public class TownyPlayerListener implements Listener {
 			if (TownyTimerHandler.isTeleportWarmupRunning()) {
 				TownyAPI.getInstance().abortTeleportRequest(resident);
 			}
+			
+			if (JailUtil.isQueuedToBeJailed(resident))
+				event.getPlayer().setHealth(0);
 		}
 
 		plugin.deleteCache(event.getPlayer());
@@ -185,29 +189,16 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJailRespawn(PlayerRespawnEvent event) {
 
-		if (plugin.isError()) {
+		if (plugin.isError() || !TownySettings.isTownRespawning()) {
 			return;
 		}
-		
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
-		if (!TownySettings.isTownRespawning())
-			return;
 	
-		try {
-			Location respawn = null;			
-			Resident resident = townyUniverse.getResident(event.getPlayer().getUniqueId());
-			// If player is jailed send them to their jailspawn.
-			if (resident != null && resident.isJailed()) {
-				Town respawnTown = townyUniverse.getTown(resident.getJailTown());
-				if (respawnTown != null) {
-					respawn = respawnTown.getJailSpawn(resident.getJailSpawn());
-					event.setRespawnLocation(respawn);
-				}
-			}
-		} catch (TownyException e) {
-			// Town has not set respawn location. Using default.
-		}
+		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
+
+		// If player is jailed send them to their jailspawn.
+		if (resident != null && resident.isJailed())
+			event.setRespawnLocation(resident.getJailSpawn());
+
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -644,7 +635,7 @@ public class TownyPlayerListener implements Listener {
 			}
 			if (event.getCause() == TeleportCause.PLUGIN)
 				return;
-			if ((event.getCause() != TeleportCause.ENDER_PEARL) || (!TownySettings.JailAllowsEnderPearls())) {
+			if ((event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CHORUS_FRUIT) && !TownySettings.JailAllowsTeleportItems()) {
 				TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_jailed_players_no_teleport"));
 				event.setCancelled(true);
 			}
@@ -936,10 +927,8 @@ public class TownyPlayerListener implements Listener {
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);		
 		}
 
-		if (resident.isJailed()) {
-			resident.freeFromJail(resident.getJailSpawn(), true);
-			resident.save();
-		}		
+		if (resident.isJailed())
+			JailUtil.unJailResident(resident, UnJailReason.ESCAPE);
 	}
 	
 	/**

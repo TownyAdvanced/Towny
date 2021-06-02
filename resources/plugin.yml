@@ -314,6 +314,8 @@ permissions:
             towny.command.town.deposit: true
             towny.command.town.here: true
             towny.command.town.invites.*: true
+            towny.command.town.jail: true
+            towny.command.town.jail.list: true
             towny.command.town.join: true
             towny.command.town.kick: true
             towny.command.town.leave: true
@@ -334,6 +336,7 @@ permissions:
             towny.command.town.withdraw: true
             towny.command.town.unclaim.*: true
             towny.command.town.merge: true
+            towny.command.town.unjail: true
 
     towny.command.town.list:
         description: Users are able to use all the various methods of sorting the town list.
@@ -418,6 +421,7 @@ permissions:
             towny.command.town.set.tag: true
             towny.command.town.set.taxes: true
             towny.command.town.set.plottax: true
+            towny.command.town.set.primaryjail: true
             towny.command.town.set.shoptax: true
             towny.command.town.set.embassytax: true
             towny.command.town.set.taxpercentcap: true
@@ -430,7 +434,6 @@ permissions:
         children:
             towny.command.town.toggle.explosion: true
             towny.command.town.toggle.fire: true
-            towny.command.town.toggle.jail: true
             towny.command.town.toggle.mobs: true
             towny.command.town.toggle.neutral: true
             towny.command.town.toggle.open: true
@@ -455,6 +458,7 @@ permissions:
             towny.command.plot.clear: true
             towny.command.plot.evict: true
             towny.command.plot.forsale: true
+            towny.command.plot.jailcell: true
             towny.command.plot.notforsale: true
             towny.command.plot.perm: true
             towny.command.plot.perm.hud: true

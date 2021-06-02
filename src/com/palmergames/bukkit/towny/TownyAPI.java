@@ -17,6 +17,9 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
+
+import io.papermc.lib.PaperLib;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -509,7 +512,7 @@ public class TownyAPI {
      * @param location {@link Location} of the jail to be teleported to.
      */
     public void jailTeleport(final Player player, final Location location) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(towny, () -> player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN),
+        Bukkit.getScheduler().scheduleSyncDelayedTask(towny, () -> PaperLib.teleportAsync(player, location, PlayerTeleportEvent.TeleportCause.PLUGIN),
 			(long) TownySettings.getTeleportWarmupTime() * 20);
     }
     
