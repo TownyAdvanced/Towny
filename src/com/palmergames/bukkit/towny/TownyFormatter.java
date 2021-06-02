@@ -44,6 +44,7 @@ public class TownyFormatter {
 	public static final SimpleDateFormat lastOnlineFormat = new SimpleDateFormat("MMMMM dd '@' HH:mm");
 	public static final SimpleDateFormat lastOnlineFormatIncludeYear = new SimpleDateFormat("MMMMM dd yyyy");
 	public static final SimpleDateFormat registeredFormat = new SimpleDateFormat("MMM d yyyy");
+	public static final SimpleDateFormat fullDateFormat = new SimpleDateFormat("MMMMM dd yyyy '@' HH:mm");
 
 	/**
 	 * 1 = Description 2 = Count
@@ -233,7 +234,7 @@ public class TownyFormatter {
 		
 		// Jailed: yes if they are jailed.
 		if (resident.isJailed()){
-			out.add(Translation.of("jailed_in_town", resident.getJailTown()) + ( resident.hasJailDays() ? Translation.of("msg_jailed_for_x_days", resident.getJailDays()) :  ""));
+			out.add(Translation.of("jailed_in_town", resident.getJailTown().getName()) + ( resident.hasJailTime() ? Translation.of("msg_jailed_for_x_hours", resident.getJailHours()) :  ""));
 		}
 		
 		// Friends [12]: James, Carry, Mason
@@ -761,7 +762,7 @@ public class TownyFormatter {
 	public static String[] getFormattedNames(TownyObject[] objs) {
 		List<String> names = new ArrayList<>();
 		for (TownyObject obj : objs) {
-			names.add(obj.getFormattedName() + Colors.White);
+			names.add(Colors.translateColorCodes(obj.getFormattedName()) + Colors.White);
 		}
 		
 		return names.toArray(new String[0]);

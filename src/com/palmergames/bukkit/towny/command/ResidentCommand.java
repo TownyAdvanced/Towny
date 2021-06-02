@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -16,10 +17,12 @@ import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
+import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -172,6 +175,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 2)
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_SET, residentSetTabCompletes), args[1]);
 					if (args.length > 2) {
+						if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, args[1]))
+							return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
+
 						switch (args[1].toLowerCase()) {
 							case "mode":
 								return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);
@@ -273,11 +279,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				if (split.length == 1 ) {
-					TownyMessaging.sendMessage(player, ChatTools.formatTitle("/resident jail"));
-					TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/resident", "jail paybail", ""));
-					TownyMessaging.sendMessage(player, Colors.LightBlue + Translation.of("msg_resident_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmount()));
-					TownyMessaging.sendMessage(player, Colors.LightBlue + Translation.of("msg_mayor_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountMayor()));
-					TownyMessaging.sendMessage(player, Colors.LightBlue + Translation.of("msg_king_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountKing()));
+					HelpMenu.RESIDENT_JAIL_HELP.send(player);
 					return;
 				}
 
@@ -289,36 +291,44 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				if (split[1].equalsIgnoreCase("paybail")) {
-					double cost = TownySettings.getBailAmount();
 					
+					// Fail if the economy isn't active.
+					if (!TownyEconomyHandler.isActive())
+						throw new TownyException(Translation.of("msg_err_no_economy"));
+
+					// Get Town the player is jailed in.
+					final Town jailTown = resident.getJailTown();				
+
+					// Set cost of bail.
+					double cost = TownySettings.getBailAmount();
 					if (resident.isMayor())
 						cost = TownySettings.getBailAmountMayor();
 					if (resident.isKing())
 						cost = TownySettings.getBailAmountKing();
-					if (resident.getAccount().canPayFromHoldings(cost)) {
-						Town JailTown = TownyUniverse.getInstance().getTown(resident.getJailTown());
+					
+					if (cost > 0) {			
+						if (resident.getAccount().canPayFromHoldings(cost)) {
+							final double finalCost = cost;
+							Confirmation.runOnAccept(() -> {
+								if (resident.getAccount().canPayFromHoldings(finalCost)) {
+									resident.getAccount().payTo(finalCost, jailTown, "Bail");
+									JailUtil.unJailResident(resident, UnJailReason.BAIL);
+								} else {
+									TownyMessaging.sendErrorMsg(resident, Translation.of("msg_err_unable_to_pay_bail"));
+								}
+							});
+						} else {
+							throw new TownyException(Translation.of("msg_err_unable_to_pay_bail"));
+						}					
 						
-						if (JailTown == null) {
-							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", resident.getJailTown()));
-							return;
-						}
-						
-						resident.getAccount().payTo(cost, JailTown, "Bail");
-						resident.setJailed(false);
-						resident.setJailSpawn(0);
-						resident.setJailTown("");
-						TownyMessaging.sendGlobalMessage(Colors.Red + player.getName() + Translation.of("msg_has_paid_bail"));
-						player.teleport(resident.getTown().getSpawn());
-						resident.save();
 					} else {
-						TownyMessaging.sendErrorMsg(player, Colors.Red + Translation.of("msg_err_unable_to_pay_bail"));
+						// No cost, so they can pay bail.
+						JailUtil.unJailResident(resident, UnJailReason.BAIL);
 					}
+
 				} else {
-					TownyMessaging.sendMessage(player, ChatTools.formatTitle("/resident jail"));
-					TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/resident", "jail paybail", ""));
-					TownyMessaging.sendMessage(player, Colors.LightBlue + Translation.of("msg_resident_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmount()));
-					TownyMessaging.sendMessage(player, Colors.LightBlue + Translation.of("msg_mayor_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountMayor()));
-					TownyMessaging.sendMessage(player, Colors.LightBlue + Translation.of("msg_king_bail_amount") + Colors.Green + TownyEconomyHandler.getFormattedBalance(TownySettings.getBailAmountKing()));					
+					HelpMenu.RESIDENT_JAIL_HELP.send(player);
+					return;
 				}
 
 			} else if (split[0].equalsIgnoreCase("set")) {
@@ -354,7 +364,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				
 				SpawnUtil.sendToTownySpawn(player, split, res, Translation.of("msg_err_cant_afford_tp"), false, false, SpawnType.RESIDENT);
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT, split[0]).run(player, null, "resident", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT, split[0]).execute(player, "resident", split);
 			} else {
 				final Resident resident = TownyUniverse.getInstance().getResidentOpt(split[0])
 											.orElseThrow(() -> new TownyException(Translation.of("msg_err_not_registered_1", split[0])));
@@ -439,7 +449,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		} else if (newSplit[0].equalsIgnoreCase("mobs")) {
 			perm.mobs = choice.orElse(!perm.mobs);
 		} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_TOGGLE, newSplit[0])) {
-			TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_TOGGLE, newSplit[0]).run(player, null, "resident", newSplit);
+			TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_TOGGLE, newSplit[0]).execute(player, "resident", newSplit);
 		} else {
 
 			resident.toggleMode(newSplit, true);
@@ -545,7 +555,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				String[] newSplit = StringMgmt.remFirstArg(split);
 				setMode(player, newSplit);
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, split[0]).run(player, null, "resident", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, split[0]).execute(player, "resident", split);
 			} else {
 
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "resident"));

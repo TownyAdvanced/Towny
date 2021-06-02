@@ -325,7 +325,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	static List<String> nationSetTabComplete(Nation nation, String[] args) {
 		if (args.length == 2) {
 			return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.NATION_SET, nationSetTabCompletes), args[1]);
-		} else if (args.length == 3){
+		} else if (args.length > 2){
+			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, args[1]))
+				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
+			
 			switch (args[1].toLowerCase()) {
 				case "king":
 				case "title":
@@ -683,7 +686,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 					TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().getNation().generateBankHistoryBook(player, pages);
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.NATION, split[0])) {
-					TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).run(player, null, "nation", split);
+					TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).execute(player, "nation", split);
 				} else {
 
 					final Nation nation = TownyUniverse.getInstance().getNation(split[0]);
@@ -1395,6 +1398,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * Second stage of adding towns to a nation.
 	 * 
 	 * Tests here are performed to make sure the Towns are allowed to join the Nation:
+	 * - make sure the town has no nation.
 	 * - make sure the town has enough residents to join a nation (if it is required in the config.)
 	 * - make sure the town is close enough to the nation capital (if it is required in the config.)
 	 * 
@@ -1410,6 +1414,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		ArrayList<Town> remove = new ArrayList<>();
 		for (Town town : invited) {
 			try {
+				if (town.hasNation()) {
+					remove.add(town);
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_already_nation"));
+					continue;
+				}	
 				
 		        if ((TownySettings.getNumResidentsJoinNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
 		        	remove.add(town);
@@ -2446,7 +2455,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_map_color_changed", line.toLowerCase()));
 				}
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, split[0]).run(player, null, "nation", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, split[0]).execute(player, "nation", split);
 			} else {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", split[0]));
 				return;
@@ -2573,7 +2582,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 // Send message feedback.
                 TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_changed_open", nation.isOpen() ? Translation.of("enabled") : Translation.of("disabled")));
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_TOGGLE, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_TOGGLE, split[0]).run(sender, null, "nation", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_TOGGLE, split[0]).execute(sender, "nation", split);
             } else {
             	/*
             	 * Fire of an event if we don't recognize the command being used.

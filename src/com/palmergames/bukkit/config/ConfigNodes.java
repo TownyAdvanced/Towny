@@ -798,7 +798,18 @@ public enum ConfigNodes {
 			"# Players with the towny.claimed.townowned.* permission node will be able to run these commands",
 			"# inside of town-owned land. This would include mayors, assistants and possibly a builder rank.",
 			"# Players with the towny.claimed.owntown.* permission node (given to mayors/assistants usually,)",
-			"# will also not be limited by this command blacklist."
+			"# will also not be limited by this command blacklist.",
+			"# Commands have to be on town_command_blacklisting.town_blacklisted_commands, else this is not going to be checked."
+	),
+	
+	GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS(
+			"global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands",
+			"sethome,home",
+			"",
+			"# This allows the usage of blacklisted commands only in the player's town ",
+			"# and the wilderness (essentially blocking commands from being ran by tourists/visitors)",
+			"# Players with the towny.globally_welcome permission node are not going to be limited by this list.",
+			"# Commands have to be on town_command_blacklisting.town_blacklisted_commands, else this is not going to be checked."
 	),
 	
 	GTOWN_SETTINGS_AUTOMATIC_CAPITALISATION(
@@ -2138,16 +2149,16 @@ public enum ConfigNodes {
 			"",
 			"#If true attacking players who are considered an outlaw, that are killed inside town land will be placed into the defending town's jail if it exists.",
 			"#Requires town_respawn to be true in order to work."),
-	JAIL_OUTLAW_JAIL_DAYS(
-			"jail.outlaw_jail_days",
-			"1",
+	JAIL_OUTLAW_JAIL_HOURS(
+			"jail.outlaw_jail_hours",
+			"5",
 			"",
-			"#How many days an attacking outlaw will be jailed for."),
-	JAIL_JAIL_ALLOWS_ENDER_PEARLS(
-			"jail.jail_allows_ender_pearls",
+			"#How many hours an attacking outlaw will be jailed for."),
+	JAIL_JAIL_ALLOWS_TELEPORT_ITEMS(
+			"jail.jail_allows_teleport_items",
 			"false",
 			"",
-			"#If true jailed players can use Ender Pearls but are still barred from using other methods of teleporting."),
+			"#If true jailed players can use items that teleport, ie: Ender Pearls & Chorus Fruit, but are still barred from using other methods of teleporting."),
 	JAIL_JAIL_DENIES_TOWN_LEAVE(
 			"jail.jail_denies_town_leave",
 			"false",
@@ -2179,6 +2190,22 @@ public enum ConfigNodes {
 			"home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide",
 			"",
 			"# Commands which a jailed player cannot use."),
+	JAIL_PLOTS_DENY_PVP(
+			"jail.do_jail_plots_deny_pvp",
+			"false",
+			"",
+			"# When true, jail plots will prevent any PVP from occuring. Applies to jailed residents only."),
+	JAIL_PREVENTS_LOGGING_OUT(
+			"jail.prevent_newly_jailed_players_logging_out",
+			"false",
+			"",
+			"# When true, Towny will prevent a person who has been jailed by their mayor/town from logging out,",
+			"# if they do log out they will be killed first, ensuring they respawn in the jail."),
+	JAIL_NEW_PLAYER_IMMUNITY(
+			"jail.new_player_immunity",
+			"1h",
+			"",
+			"# How long do new players have to be on the server before they can be jailed?"),
 	
 	BANK(
 			"bank",

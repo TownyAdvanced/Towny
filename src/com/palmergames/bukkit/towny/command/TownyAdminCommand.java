@@ -32,6 +32,7 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -40,6 +41,7 @@ import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
@@ -155,7 +157,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	
 	private static final List<String> adminPlotTabCompletes = Arrays.asList(
 		"claim",
-		"meta"
+		"meta",
+		"claimedat"
 	);
 	
 	private static final List<String> adminMetaTabCompletes = Arrays.asList(
@@ -253,7 +256,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							if (args.length == 2)
 								return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN_SET, adminSetCompletes), args[1]);
 							else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_SET, args[1]))
-								return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, args[1]).getTabCompletion(args.length), args[args.length]);
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
 					}
 				}
 				break;
@@ -602,7 +605,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				parseAdminDepositAllCommand(StringMgmt.remFirstArg(split));
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).run(getSender(), null, "townyadmin", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).execute(getSender(), "townyadmin", split);
 			}  else {
 				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_sub"));
 				return false;
@@ -690,9 +693,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			List<WorldCoord> selection = new ArrayList<>();
 			selection.add(new WorldCoord(world, Coord.parseCoord(player)));
 			new PlotClaim(plugin, player, resOpt.get(), selection, true, true, false).start();
+		} else if (split[0].equalsIgnoreCase("claimedat")) {
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIMEDAT.getNode()))
+				throw new TownyException(Translation.of("msg_err_command_disable"));
+			
+			WorldCoord wc = WorldCoord.parseWorldCoord((Player) getSender());
+			if (!wc.hasTownBlock() || wc.getTownBlock().getClaimedAt() == 0)
+				throw new NotRegisteredException();
+			
+			TownyMessaging.sendMsg(sender, Translation.of("msg_plot_perm_claimed_at", TownyFormatter.fullDateFormat.format(wc.getTownBlock().getClaimedAt())));
 		}
-		
-		
 	}
 
 	private void parseAdminCheckPermCommand(String[] split) throws TownyException {
@@ -872,35 +882,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if(split[1].equalsIgnoreCase("unjail")) {
 				
-				Player jailedPlayer = TownyAPI.getInstance().getPlayer(resident);
-				if (player == null) {
-					throw new TownyException(String.format("%s is not online", resident.getName()));
-				}
-
-				if(resident.isJailed())	{
-					resident.setJailed(false);
-					final String jailTownName = resident.getJailTown();
-					final int index = resident.getJailSpawn();
-					
-					final Town jailTown = townyUniverse.getTown(jailTownName);
-					
-					if (jailTown == null) {
-						throw new TownyException(String.format("Invalid jail town of '%s'", jailTownName));
-					}
-					
-					final Location loc = Bukkit.getWorld(jailTown.getHomeblockWorld().getName()).getSpawnLocation();
-
-					// Use teleport warmup
-					TownyMessaging.sendMessage(jailedPlayer, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
-					TownyAPI.getInstance().jailTeleport(jailedPlayer, loc);
-
-					resident.removeJailSpawn();
-					resident.setJailTown("");
-					TownyMessaging.sendMsg(player, "You have been freed from jail.");
-					TownyMessaging.sendPrefixedTownMessage(jailTown, jailedPlayer.getName() + " has been freed from jail number " + index);
-				} else {
-					throw new TownyException(Translation.of("msg_player_not_jailed_in_your_town"));
-				}
+				if (resident.isJailed())
+					JailUtil.unJailResident(resident, UnJailReason.ADMIN);
+				else 
+					throw new TownyException(Translation.of("msg_err_player_is_not_jailed"));
 			}
 
 		} catch (NotRegisteredException e) {
@@ -1764,6 +1749,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				new TownClaim(plugin, player, town, selection, false, true, false).start();
 
 			}
+		} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_SET, split[0])) {
+			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, split[0]).execute(getSender(), "townyadmin", split);
 		} else {
 			TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_invalid_property", "administrative"));
 		}
@@ -2059,7 +2046,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			TownyMessaging.sendMessage(sender, Translation.of("msg_npc_flag", resident.isNPC(), resident.getName()));
 		} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_TOGGLE, split[0])) {
-			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOGGLE, split[0]).run(getSender(), null, "townyadmin", split);
+			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOGGLE, split[0]).execute(getSender(), "townyadmin", split);
 		} else {
 			// parameter error message
 			// peaceful/war/townmobs/worldmobs

@@ -196,7 +196,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNY, townyConsoleTabCompletes), args[0]);
 					}
 				} else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNY, args[0]))
-					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, args[0]).getTabCompletion(args.length), args[args.length]);
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, args[0]).getTabCompletion(args.length), args[args.length-1]);
 		}
 		
 		return Collections.emptyList();
@@ -298,7 +298,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				} else
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_command_disable"));
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNY, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, split[0]).run(player, null, "towny", split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, split[0]).execute(player, "towny", split);
 			} else
 				sendErrorMsg(player, "Invalid sub command.");
 

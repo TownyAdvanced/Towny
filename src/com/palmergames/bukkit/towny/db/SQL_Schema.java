@@ -88,6 +88,21 @@ public class SQL_Schema {
 		columns.add("`town` VARCHAR(32) NOT NULL");
 		return columns;
 	}
+	
+    private static String getJAILS() {
+		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "JAILS ("
+			+ "`uuid` VARCHAR(36) NOT NULL,"
+			+ "PRIMARY KEY (`uuid`)"
+			+ ")";
+	}
+	
+	private static List<String> getJailsColumns() {
+    	List<String> columns = new ArrayList<>();
+    	columns.add("`townBlock` mediumtext NOT NULL");
+    	columns.add("`spawns`  mediumtext DEFAULT NULL");
+		
+		return columns;
+	}
 
     private static List<String> getNationColumns(){
     	List<String> columns = new ArrayList<>();
@@ -157,6 +172,7 @@ public class SQL_Schema {
 		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
 		columns.add("`debtBalance` float NOT NULL");
 		columns.add("`joinedNationAt` BIGINT NOT NULL");
+		columns.add("`primaryJail` VARCHAR(36) DEFAULT NULL");
 		return columns;
 	}
 
@@ -177,10 +193,9 @@ public class SQL_Schema {
 		columns.add("`registered` BIGINT NOT NULL");
 		columns.add("`joinedTownAt` BIGINT NOT NULL");
 		columns.add("`isNPC` bool NOT NULL DEFAULT '0'");
-		columns.add("`isJailed` bool NOT NULL DEFAULT '0'");
-		columns.add("`JailSpawn` mediumint");
-		columns.add("`JailDays` mediumint");
-		columns.add("`JailTown` mediumtext");
+		columns.add("`jailUUID` VARCHAR(36) DEFAULT NULL");
+		columns.add("`jailCell` mediumint");
+		columns.add("`jailHours` mediumint");
 		columns.add("`title` mediumtext");
 		columns.add("`surname` mediumtext");
 		columns.add("`protectionStatus` mediumtext");
@@ -440,6 +455,44 @@ public class SQL_Schema {
 			}
 			TownyMessaging.sendDebugMsg("Table PLOTGROUPS is updated!");
 		}
+        
+		/*
+         *  Fetch JAILS Table schema.
+		 */
+        String jail_create = SQL_Schema.getJAILS();
+
+        try {
+
+            Statement s = cntx.createStatement();
+            s.executeUpdate(jail_create);
+
+            TownyMessaging.sendDebugMsg("Table JAILS is ok!");
+
+        } catch (SQLException ee) {
+            TownyMessaging.sendErrorMsg("Creating table JAILS :" + ee.getMessage());
+        }
+		/*
+		 * Update the table structures for older databases.
+		 *
+		 * Update JAILS. ( Add columns)
+		 */
+		String jail_update;
+		List<String> jailColumns = getJailsColumns();
+		for (String column : jailColumns) {
+			try {
+				jail_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "JAILS` "
+						+ "ADD COLUMN " + column;
+
+				PreparedStatement ps = cntx.prepareStatement(jail_update);
+				ps.executeUpdate();
+
+			} catch (SQLException ee) {
+				if (ee.getErrorCode() != 1060)
+					TownyMessaging.sendErrorMsg("Error updating table JAILS :" + ee.getMessage());
+			}
+		}
+		TownyMessaging.sendDebugMsg("Table JAILS is updated!");
+        
     }
     
     /**
@@ -457,7 +510,12 @@ public class SQL_Schema {
     	cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
     	cleanups.add(ColumnUpdate.of("WORLDS", "plotManagementRevertSpeed"));
     	cleanups.add(ColumnUpdate.of("PLOTGROUPS", "claimedAt"));
-    	
+    	cleanups.add(ColumnUpdate.of("RESIDENTS", "isJailed"));
+    	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailSpawn"));
+    	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailDays"));
+    	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailTown"));
+    	cleanups.add(ColumnUpdate.of("TOWNS", "jailSpawns"));
+
     	for (ColumnUpdate update : cleanups)
     		dropColumn(cntx, db_name, update.getTable(), update.getColumn());
     }
@@ -479,7 +537,7 @@ public class SQL_Schema {
         	if (!rs.next())
         		return;
         	
-    		update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + table + "` DROP COLUMN `" + column + "`";
+    		update = "ALTER TABLE `" + db_name + "`.`" + table + "` DROP COLUMN `" + column + "`";
     		
     		Statement s = cntx.createStatement();
     		s.executeUpdate(update);
@@ -497,7 +555,7 @@ public class SQL_Schema {
     	private String column;
     	
     	private ColumnUpdate(String table, String column) {
-    		this.table = table;
+    		this.table = SQL_Schema.tb_prefix + table;
     		this.column = column;
     	}
     	    	

@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.SpawnPointLocation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
@@ -36,6 +37,7 @@ import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -85,7 +87,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"set",
 		"toggle",
 		"clear",
-		"group"
+		"group",
+		"jailcell"
 	);
 	
 	private static final List<String> plotGroupTabCompletes = Arrays.asList(
@@ -174,7 +177,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
 						return permTabComplete(StringMgmt.remArgs(args, 2));
-					}
+					} else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, args[1]))
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
 					break;
 				case "toggle":
 					if (args.length == 2)
@@ -204,6 +208,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					} else if (args.length > 2) {
 						return permTabComplete(StringMgmt.remFirstArg(args));
 					}
+					break;
+				case "jailcell":
+					if (args.length == 2)
+						return NameUtil.filterByStart(TownCommand.townAddRemoveTabCompletes, args [1]);
 					break;
 				case "perm":
 					if (args.length == 2)
@@ -694,8 +702,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								}
 							}
 							return true;
-						} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, split[0]))
-							TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_SET, split[0]).run(player, null, "plot", split);
+						} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, split[0])) {
+							TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_SET, split[0]).execute(player, "plot", split);
+							return true;
+						}
 						
 						/*
 						 * After trying all of the other /plot set subcommands, attempt to set the townblock type.
@@ -819,8 +829,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("group")) {
 
 					return handlePlotGroupCommand(StringMgmt.remFirstArg(split), player);
+
+				} else if (split[0].equalsIgnoreCase("jailcell")) {
+					
+					parsePlotJailCell(player, TownyAPI.getInstance().getTownBlock(player.getLocation()), StringMgmt.remFirstArg(split));
+					return true;
+
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT, split[0])) {
-					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT, split[0]).run(player, null, "plot", split);
+					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT, split[0]).execute(player, "plot", split);
 				} else
 					throw new TownyException(Translation.of("msg_err_invalid_property", split[0]));
 
@@ -831,6 +847,62 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		return true;
 	}
+
+	private void parsePlotJailCell(Player player, TownBlock townBlock, String[] args) {
+		
+		if (args.length == 0 || args[0].equalsIgnoreCase("?") || args[0].equalsIgnoreCase("help"))
+			HelpMenu.PLOT_JAILCELL.send(player);
+
+		try {
+			if (!TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_PLOT_JAILCELL.getNode()))
+				throw new TownyException("msg_err_command_disable");
+
+			// Fail if the resident isn't registered. (Very unlikely.)
+			Resident resident = TownyAPI.getInstance().getResident(player.getUniqueId());
+			if (resident == null)
+				return;
+			
+			// Fail if we're not in a jail plot.
+			if (townBlock == null || !townBlock.isJail())
+				throw new TownyException("msg_err_location_is_not_within_a_jail_plot");
+
+			// Test that the player is an owner or considered a mayor and is
+			plotTestOwner(resident, townBlock); // allowed to set a jail spawn.
+
+			Jail jail = townBlock.getJail();
+			
+			if (args.length > 0) {
+				if (args[0].equalsIgnoreCase("add")) {
+					
+					jail.addJailCell(player.getLocation());
+					TownyMessaging.sendMsg(player, Translation.of("msg_jail_cell_set"));
+					jail.save();
+
+				} else if (args[0].equalsIgnoreCase("remove")) {
+					
+					if (!jail.hasCells())
+						throw new TownyException("msg_err_this_jail_has_no_cells");
+					
+					if (jail.getCellMap().size() == 1) 
+						throw new TownyException("msg_err_you_cannot_remove_the_last_cell");
+					
+					SpawnPointLocation cellLoc = SpawnPointLocation.parseSpawnPointLocation(player.getLocation());
+					
+					if (!jail.hasJailCell(cellLoc))
+						throw new TownyException("msg_err_no_cell_found_at_this_location");
+					
+					jail.removeJailCell(player.getLocation());
+					TownyMessaging.sendMsg(player, Translation.of("msg_jail_cell_removed"));
+					jail.save();
+				} else {
+					HelpMenu.PLOT_JAILCELL.send(player);
+				}
+			}
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(player, Translation.of(e.getMessage()));
+		}
+	}
+	
 
 	/**
 	 * Returns a TownyPermissionChange object representing the change action
@@ -1118,7 +1190,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					TownyMessaging.sendMessage(player, Translation.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translation.of("enabled") : Translation.of("disabled")));
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_TOGGLE, split[0])) {
-					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_TOGGLE, split[0]).run(player, null, "plot", split);
+					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_TOGGLE, split[0]).execute(player, "plot", split);
 				} else {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", "plot"));
 					return;
@@ -1393,7 +1465,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			if (split.length == 2) {
 				// Create a brand new plot group.
-				UUID plotGroupID = TownyUniverse.getInstance().generatePlotGroupID();
+				UUID plotGroupID = UUID.randomUUID();
 				String plotGroupName = NameValidation.filterName(split[1]);
 
 				newGroup = new PlotGroup(plotGroupID, plotGroupName, town);
@@ -1481,8 +1553,19 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_group_specify_price"));
 				return false;
 			}
-
-			int price = Integer.parseInt(split[1]);
+			
+			int price = 0;
+			try {
+				price = Integer.parseInt(split[1]);
+			} catch (NumberFormatException e) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_num"));
+				return false;
+			}
+			
+			if (price < 0) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_negative_money"));
+				return false;
+			}
 
 			group.setPrice(price);
 			

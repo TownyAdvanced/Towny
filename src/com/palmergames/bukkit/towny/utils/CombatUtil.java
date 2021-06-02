@@ -139,7 +139,7 @@ public class CombatUtil {
 					 * Check the attackers TownBlock and it's Town for their PvP status, else the world.
 					 * Check the defenders TownBlock and it's Town for their PvP status, else the world.
 					 */
-					cancelled = preventFriendlyFire(attackingPlayer, defendingPlayer, world) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB);
+					cancelled = preventFriendlyFire(attackingPlayer, defendingPlayer, world) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB) || preventJailedPVP(defendingPlayer, attackingPlayer);
 				}
 
 				/*
@@ -167,8 +167,8 @@ public class CombatUtil {
 					/*
 					 * Protect tamed dogs in town land which are not owned by the attacking player.
 					 */
-					if (defendingEntity instanceof Wolf && isNotTheAttackersPetDog((Wolf) defendingEntity, attackingPlayer))
-						return true;
+					if (defendingEntity instanceof Wolf && isNotTheAttackersPetDog((Wolf) defendingEntity, attackingPlayer) && !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT))
+						return !defenderTB.getPermissions().pvp;
 					
 					/*
 					 * Farm Animals - based on whether this is allowed using the PlayerCache and then a cancellable event.
@@ -271,6 +271,21 @@ public class CombatUtil {
 			}
 		}
 		return false;
+	}
+
+	private static boolean preventJailedPVP(Player defendingPlayer, Player attackingPlayer) {
+		if (TownySettings.doJailPlotsPreventPVP()) {
+			Resident defendingResident = TownyAPI.getInstance().getResident(defendingPlayer.getUniqueId());
+			Resident attackingResident = TownyAPI.getInstance().getResident(attackingPlayer.getUniqueId());
+			TownBlock defTB = TownyAPI.getInstance().getTownBlock(defendingPlayer.getLocation());
+			TownBlock atkTB = TownyAPI.getInstance().getTownBlock(attackingPlayer.getLocation());
+			if (defendingResident == null || attackingResident == null)
+				return false;
+			if (defendingResident.isJailed() && defTB != null && defTB.isJail() || attackingResident.isJailed() && atkTB != null && atkTB.isJail())
+				return true;
+		}
+		return false;
+			
 	}
 
 	/**
