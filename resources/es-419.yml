@@ -1407,7 +1407,7 @@ msg_regenerations_use_x_in_all_worlds: 'Regeneración cambiada a %s en todos los
 # Añadido en la versión 0.106
 msg_command_outsider_blocked: 'No puedes ejecutar ese comando porque no vives en %s.'
 
-# Añadido en la versión 0.107 (Overhaul de las carceles)
+# Añadido en la versión 0.107 (Overhaul de las cárceles)
 msg_jailed_for_x_hours: ' &2por %s horas.'
 msg_err_this_jail_has_no_cells: 'Esta cárcel no tiene celdas.'
 msg_err_no_cell_found_at_this_location : 'No se encontro una cárcel en esta ubicación.'
