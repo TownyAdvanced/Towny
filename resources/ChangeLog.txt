@@ -6145,3 +6145,73 @@ v0.92.0.11:
   - Automatically clean up unused NPC residents, courtesy of Warriorrrr with PR #4972.
   - Parse hex colours in resident titles in the status screens.
     - Closes #4977.
+  - Jail Overhaul Project:
+    - New Jail Object and JailUtil.
+      - Jails are stored in the database in the towny\data\jails\ folder.
+      - Towns no longer stores a list of jailspawns.
+      - Old town jailspawns will be converted into new Jail objects on first load.
+        - Jailed residents will not keep their jailed status, getting a clean slate to start from.
+      - Jailing and unjailing code is much better than it used to be.
+      - The jailing system is very much the same still, but there are many new nice things.
+    - Add Jail Book. 
+      - The book is given to players when they are jailed.
+      - It explains to the jailed player what they can do to get out of jail, based on how jails have been configured on the server.
+      - Closes #4686.
+    - Jail plots can now have more than one "cell" or spawn location.
+      - SpawnPoints particles are used to show the jail cell spawns.
+      - Cells are added/removed using /plot jailcell add|remove
+      - Closes #3106.
+    - The jailed message now includes who ran the jail command.
+      - Closes #4096.
+    - Jail plots can now have PVP disabled in them (configurable.)
+      - Closes #4659.
+    - Chorus Fruit are now lumped in with the Ender Pearl in a new config option for whether teleport items can be used by jailed players.
+      -  Closes #4903.
+    - Add optional logout protection for newly-jailed players.
+      - Newly jailed players that logout before they are teleported to jail will be killed, when the feature is activated.
+      - The player is warned of this to prevent surprises.
+      - Similar to combat-logging plugins.
+    - Add new-player jail-immunity.
+      - Players who first joined the server cannot be jailed for their first hour of playtime (configurable.)
+    - Add Town PrimaryJail.
+      - The PrimaryJail is the default jail for a town.
+      - It is used when the /t jail NAME command is used (with no jail/cell/hours specified.)
+      - It is used when outlaw and enemies are jailed by being killed.
+      - PrimaryJail is set using /t set primaryjail.
+    - New Permission Nodes:
+      - towny.command.plot.jailcell - allows for adding/removing of jail cells in a jail plot.
+      - towny.command.town.jail
+      - towny.command.town.jail.list
+      - towny.command.town.unjail
+      - towny.command.town.set.primaryjail
+      - towny.command.plot.jailcell
+    - Removed Permission Node: - towny.command.town.toggle.jail
+    - New Commands: 
+      - /plot jailcell add - Adds a jail cell to a jail plot, where the player is stood.
+      - /plot jailcell remove - Removes a jail cell from a jail plot, where the player is stood.
+      - /town jail list - Shows jail number, name, coord, cellcount and which jail is the primary jail.
+      - /town jail {name} - Jails the given player for 1 hour, must be a resident of your own town.
+      - /town jail {name} {hours} - Jails the given player for the given hours.
+      - /town jail {name} {hours} {jail} - Jails the given player for the given hours, in the given jail plot (which is a number.)
+      - /town jail {name} {hours} {jail} {cell} - Jails the given player for the given hours, in the given jail plot and jail cell (which are both numbers.)
+      - /town unjail {name} - Unjails someone in your town's jail.
+      - /town set primaryjail - Sets your town's primary jail.
+    - Removed Command: /town toggle jail
+    - New Config Options:
+      - jail.outlaw_jail_hours
+        - Default: 5
+        - How many hours an attacking outlaw will be jailed for.
+      - jail.do_jail_plots_deny_pvp
+        - Default: false
+        - When true, jail plots will prevent any PVP from occuring. Applies to jailed residents only.
+      - jail.prevent_newly_jailed_players_logging_out
+        - Default: false
+        - When true, Towny will prevent a person who has been jailed by their mayor/town from logging out if they do log out they will be killed first, ensuring they respawn in the jail.
+      - jail.new_player_immunity
+        - Default: 1h
+        - How long do new players have to be on the server before they can be jailed?
+      - jail.jail_allows_teleport_items
+        - Default: false
+        - If true jailed players can use items that teleport, ie: Ender Pearls & Chorus Fruit, but are still barred from using other methods of teleporting.
+        - Closes #4903
+    - Removed Config Option: jail.outlaw_jail_days
