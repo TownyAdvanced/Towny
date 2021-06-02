@@ -6215,3 +6215,4 @@ v0.92.0.11:
         - If true jailed players can use items that teleport, ie: Ender Pearls & Chorus Fruit, but are still barred from using other methods of teleporting.
         - Closes #4903
     - Removed Config Option: jail.outlaw_jail_days
+  - Bump Language Files to 0.107.

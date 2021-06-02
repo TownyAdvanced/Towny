@@ -1,5 +1,5 @@
 name: Towny
-version: 0.106
+version: 0.107
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1383,6 +1383,7 @@ msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
 #Added in 0.106
 msg_command_outsider_blocked: 'You cannot run that command because you don''t live in %s.'
 
+#Added in 0.107
 msg_jailed_for_x_hours: ' &2for %s hours.'
 msg_err_this_jail_has_no_cells: 'This jail has no cells.'
 msg_err_no_cell_found_at_this_location : 'No jail cell found at this location.'
