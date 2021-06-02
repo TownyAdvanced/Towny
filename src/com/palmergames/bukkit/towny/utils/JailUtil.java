@@ -37,7 +37,6 @@ public class JailUtil {
 	 * Jails a resident.
 	 * 
 	 * @param resident Resident being jailed.
-	 * @param town Town resident is being jailed by.
 	 * @param jail Jail resident is being jailed into.
 	 * @param cell JailCell to spawn to.
 	 * @param hours Hours resident is jailed for.
