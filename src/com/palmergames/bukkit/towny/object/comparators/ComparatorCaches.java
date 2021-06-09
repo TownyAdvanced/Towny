@@ -50,28 +50,25 @@ public class ComparatorCaches {
 			}); 
 	
 	public static List<TextComponent> getTownListCache(ComparatorType compType) {
-		System.out.println("Comparator: " + compType.name());
 		try {
 			return townCompCache.get(compType);
 		} catch (ExecutionException e) {
 			e.printStackTrace();
-			return null;
+			return new ArrayList<>();
 		}
 	}
 	
 	public static List<TextComponent> getNationListCache(ComparatorType compType) {
-		System.out.println("Comparator: " + compType.name());
 		try {
 			return nationCompCache.get(compType);
 		} catch (ExecutionException e) {
 			e.printStackTrace();
-			return null;
+			return new ArrayList<>();
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
 	private static List<TextComponent> gatherTownLines(ComparatorType compType) {
-		System.out.println("Making new Cache for comparator type: " + compType.name());
 		List<TextComponent> output = new ArrayList<>();
 		List<Town> towns = TownyUniverse.getInstance().getDataSource().getTowns();
 		towns.sort((Comparator<? super Town>) compType.getComparator());
@@ -118,7 +115,6 @@ public class ComparatorCaches {
 	
 	@SuppressWarnings("unchecked")
 	private static List<TextComponent> gatherNationLines(ComparatorType compType) {
-		System.out.println("Making new Cache for comparator type: " + compType.name());
 		List<TextComponent> output = new ArrayList<>();
 		List<Nation> nations = TownyUniverse.getInstance().getDataSource().getNations();
 		nations.sort((Comparator<? super Nation>) compType.getComparator());
