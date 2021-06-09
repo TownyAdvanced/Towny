@@ -172,11 +172,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					case 3:
 						switch (args[1].toLowerCase()) {
 							case "residents":
+							case "balance":
 								return NameUtil.filterByStart(townyTopTownNationCompletes, args[2]);
 							case "land":
 								return NameUtil.filterByStart(townyTopLandTabCompletes, args[2]);
-							case "balance":
-								return NameUtil.filterByStart(townyTopTownNationCompletes, args[2]);
 						}
 				}
 				break;
@@ -186,7 +185,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				break;
 			case "map":
 				if (args.length == 2)
-					return Collections.singletonList("big");
+					return NameUtil.filterByStart(Arrays.asList("big", "hud"), args[1]);
 				break;
 			default:
 				if (args.length == 1) {
@@ -220,6 +219,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				
 				if (split.length > 1 && split[1].equalsIgnoreCase("big"))
 					TownyAsciiMap.generateAndSend(plugin, player, 18);
+				else if (split.length > 1 && split[1].equalsIgnoreCase("hud"))
+					HUDManager.toggleMapHud(player);
 				else
 					showMap(player);
 			} else if (split[0].equalsIgnoreCase("prices")) {
