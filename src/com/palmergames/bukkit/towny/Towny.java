@@ -89,6 +89,7 @@ import java.util.Map;
  * 
  * @author Shade, ElgarL, LlmDl
  */
+@SuppressWarnings("deprecation")
 public class Towny extends JavaPlugin {
 	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private static final Version NETHER_VER = Version.fromString("1.16.1");

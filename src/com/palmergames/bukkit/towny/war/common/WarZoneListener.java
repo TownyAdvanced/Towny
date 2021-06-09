@@ -34,6 +34,7 @@ import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 
+@SuppressWarnings("deprecation")
 public class WarZoneListener implements Listener {
 	
 	private final Towny plugin;
