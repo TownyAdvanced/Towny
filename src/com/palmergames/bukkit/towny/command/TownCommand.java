@@ -89,7 +89,15 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -1289,9 +1297,28 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 					TownyMessaging.sendTownList(sender, ComparatorCaches.getTownListCache(finalType), finalType, pageNumber, totalNumber);
 				});
-//			} else { 
-//				Collections.shuffle(towns);
-//				TownyMessaging.sendTownList(sender, towns, finalType, pageNumber, totalNumber);
+			} else { 
+				// Make a randomly sorted output.
+				List<TextComponent> output = new ArrayList<>();
+				List<Town> towns = TownyUniverse.getInstance().getDataSource().getTowns();
+				Collections.shuffle(towns);
+				
+				for (Town town : towns) {
+					TextComponent townName = Component.text(Colors.LightBlue + StringMgmt.remUnderscore(town.getName()))
+							.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
+					townName = townName.append(Component.text(Colors.Gray + " - " + Colors.LightBlue + "(" + town.getResidents().size() + ")"));
+
+					if (town.isOpen())
+						townName = townName.append(Component.text(" " + Colors.LightBlue + Translation.of("status_title_open")));
+					
+					String spawnCost = "Free";
+					if (TownyEconomyHandler.isActive())
+						spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+
+					townName = townName.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_click_spawn", town) + "\n" + spawnCost).color(NamedTextColor.GOLD)));
+					output.add(townName);
+				}
+				TownyMessaging.sendTownList(sender, output, finalType, pageNumber, totalNumber);
 			}
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_comparator_failed"));
