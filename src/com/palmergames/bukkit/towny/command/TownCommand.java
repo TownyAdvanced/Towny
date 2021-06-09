@@ -47,6 +47,7 @@ import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -88,7 +89,15 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -101,7 +110,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -1199,7 +1207,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param split  - Current command arguments.
 	 * @throws TownyException when a player lacks the permission node.
 	 */
-	@SuppressWarnings("unchecked")
 	public void listTowns(CommandSender sender, String[] split) throws TownyException {
 
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
@@ -1282,20 +1289,36 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
-		final List<Town> towns = townsToSort;
-		final Comparator comparator = type.getComparator();
 		final int pageNumber = page;
 		final int totalNumber = total; 
 		final ComparatorType finalType = type;
 		try {
 			if (!TownySettings.isTownListRandom()) {
 				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-					towns.sort(comparator);
-					TownyMessaging.sendTownList(sender, towns, finalType, pageNumber, totalNumber);
+					TownyMessaging.sendTownList(sender, ComparatorCaches.getTownListCache(finalType), finalType, pageNumber, totalNumber);
 				});
 			} else { 
+				// Make a randomly sorted output.
+				List<TextComponent> output = new ArrayList<>();
+				List<Town> towns = TownyUniverse.getInstance().getDataSource().getTowns();
 				Collections.shuffle(towns);
-				TownyMessaging.sendTownList(sender, towns, finalType, pageNumber, totalNumber);
+				
+				for (Town town : towns) {
+					TextComponent townName = Component.text(Colors.LightBlue + StringMgmt.remUnderscore(town.getName()))
+							.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
+					townName = townName.append(Component.text(Colors.Gray + " - " + Colors.LightBlue + "(" + town.getResidents().size() + ")"));
+
+					if (town.isOpen())
+						townName = townName.append(Component.text(" " + Colors.LightBlue + Translation.of("status_title_open")));
+					
+					String spawnCost = "Free";
+					if (TownyEconomyHandler.isActive())
+						spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+
+					townName = townName.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_click_spawn", town) + "\n" + spawnCost).color(NamedTextColor.GOLD)));
+					output.add(townName);
+				}
+				TownyMessaging.sendTownList(sender, output, finalType, pageNumber, totalNumber);
 			}
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_comparator_failed"));
