@@ -6219,3 +6219,6 @@ v0.92.0.11:
 0.97.0.3
   - Fix SQL resident loading new jail properties hitting NPEs
     - Closes #4990.  
+  - Translate es-419 strings (0.107), courtesy of EuGNosii with PR #4983.
+  - Update zh-TW.yml, courtesy of shou692199 with PR #4992.
+  - Town and Nation lists are now cached, able to be updated after 10 minutes.
