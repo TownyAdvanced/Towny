@@ -27,9 +27,10 @@ public class MapHUD {
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		int score = lineHeight + 2;
+		ChatColor[] colors = ChatColor.values();
 		for (int i = 0; i < lineHeight; i++) {
-			board.registerNewTeam("mapTeam" + i).addEntry(ChatColor.values()[i].toString());
-			objective.getScore(ChatColor.values()[i].toString()).setScore(score);
+			board.registerNewTeam("mapTeam" + i).addEntry(colors[i].toString());
+			objective.getScore(colors[i].toString()).setScore(score);
 			score--;
 		}
 		
@@ -63,13 +64,8 @@ public class MapHUD {
 		Objective objective = board.getObjective("MAP_HUD_OBJ");
 		objective.setDisplayName(ChatColor.GOLD + "Towny Map " + ChatColor.WHITE + "(" + wc.getX() + ", " + wc.getZ() + ")");
 
-		TownyWorld world;
-		try {
-			world = wc.getTownyWorld();
-			if (!world.isUsingTowny())
-				throw new NotRegisteredException();
-		} catch (NotRegisteredException e) {
-			//Toggle off if towny world is not registered or not using towny.
+		TownyWorld world = wc.getTownyWorldOrNull();
+		if (world == null || !world.isUsingTowny()) {
 			HUDManager.toggleOff(player);
 			return;
 		}
@@ -85,6 +81,7 @@ public class MapHUD {
 		for (int tby = wc.getX() + (lineWidth - halfLineWidth - 1); tby >= wc.getX() - halfLineWidth; tby--) {
 			x = 0;
 			for (int tbx = wc.getZ() - halfLineHeight; tbx <= wc.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
+				map[y][x] = Colors.White;
 				try {
 					TownBlock townblock = world.getTownBlock(tby+1, tbx);
 					if (!townblock.hasTown())
@@ -113,14 +110,9 @@ public class MapHUD {
 								else if (nation.hasEnemy(townblock.getTown().getNation()))
 									// towns
 									map[y][x] = Colors.Red;
-								else
-									map[y][x] = Colors.White;
-							} else
-								map[y][x] = Colors.White;
-						} else
-							map[y][x] = Colors.White;
-					} else
-						map[y][x] = Colors.White;
+							}
+						}
+					}
 
 					// Registered town block
 					if (townblock.getPlotPrice() != -1) {

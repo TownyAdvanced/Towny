@@ -110,7 +110,7 @@ public class HUDManager implements Listener{
 		} else if (mapUsers.contains(p)) {
 			if (!isMapHudActive(p))
 				mapUsers.remove(p);
-			else	
+			else
 				if (event.getTo().getTownyWorld().isUsingTowny())
 					MapHUD.updateMap(p, event.getTo());
 				else
