@@ -6222,3 +6222,9 @@ v0.92.0.11:
   - Translate es-419 strings (0.107), courtesy of EuGNosii with PR #4983.
   - Update zh-TW.yml, courtesy of shou692199 with PR #4992.
   - Town and Nation lists are now cached, able to be updated after 10 minutes.
+  - Add LuckPerms Contexts, courtesy of Warriorrrr with PR #4966.
+    - Adds towny contexts to LuckPerms. At the moment this is very similar to our townyperms.yml, but the difference is that these can be used together with other contexts (per world permissions for example).
+    - Includes Resident, Mayor, King, InsideTown, InsideOwnTown, InsideOwnPlot.
+  - New Config Option: plugin.interfacing.luckperms_contexts
+    - Default: true
+    - If enabled, Towny contexts will be available in LuckPerms.
