@@ -9,7 +9,7 @@ description: >
     Resident-Town-Nation heirarchy combined with a grid based
     protection system. Including a war event.
 
-softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,Reserve,MultiWorld,TheNewChat,PlaceholderAPI,Essentials,Hyperverse,GroupManager,iConomy]
+softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,Reserve,MultiWorld,TheNewChat,PlaceholderAPI,Essentials,Hyperverse,GroupManager,iConomy,LuckPerms]
 
 ############################################################
 # +------------------------------------------------------+ #

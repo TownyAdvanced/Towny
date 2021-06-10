@@ -998,6 +998,13 @@ public enum ConfigNodes {
 			"# This will first attempt to use Vault or Reserve to bridge your economy plugin with Towny.",
 			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
 			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
+	
+	PLUGINS_LUCKPERMS_CONTEXTS(
+			"plugin.interfacing.luckperms_contexts",
+			"true",
+			"",
+			"# If enabled, Towny contexts will be available in LuckPerms.",
+			"# https://luckperms.net/wiki/Context"),
 
 	PLUGIN_DAY_HEADER("plugin.day_timer", "", ""),
 	PLUGIN_DAY_INTERVAL(
