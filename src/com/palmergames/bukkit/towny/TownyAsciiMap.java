@@ -82,7 +82,7 @@ public class TownyAsciiMap {
 			x = 0;
 			for (int tbx = pos.getZ() - halfLineHeight; tbx <= pos.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
 				try {
-					townyMap[y][x] = Component.empty();
+					townyMap[y][x] = Component.empty().color(NamedTextColor.WHITE);
 					TownBlock townblock = world.getTownBlock(tby, tbx);
 					if (!townblock.hasTown())
 						throw new TownyException();
@@ -108,14 +108,9 @@ public class TownyAsciiMap {
 								else if (nation.hasEnemy(town.getNation()))
 									// towns
 									townyMap[y][x] = townyMap[y][x].color(NamedTextColor.DARK_RED);
-								else
-									townyMap[y][x] = townyMap[y][x].color(NamedTextColor.WHITE);
-							} else
-								townyMap[y][x] = townyMap[y][x].color(NamedTextColor.WHITE);
-						} else
-							townyMap[y][x] = townyMap[y][x].color(NamedTextColor.WHITE);
-					} else
-						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.WHITE);
+							}
+						}
+					}
 
 					// Registered town block
 					if (townblock.getPlotPrice() != -1) {

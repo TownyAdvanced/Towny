@@ -25,10 +25,12 @@ public class HUDManager implements Listener{
 
 	static List<Player> warUsers;
 	static List<Player> permUsers;
+	static List<Player> mapUsers;
 
 	public HUDManager (Towny plugin) {
 		warUsers = new ArrayList<>();
 		permUsers = new ArrayList<>();
+		mapUsers = new ArrayList<>();
 	}
 
 	//**TOGGLES**//
@@ -49,6 +51,15 @@ public class HUDManager implements Listener{
 		} else 
 			toggleAllOff(p);
 	}
+	
+	public static void toggleMapHud(Player player) {
+		if (!mapUsers.contains(player)) {
+			toggleAllOff(player);
+			mapUsers.add(player);
+			MapHUD.toggleOn(player);
+		} else
+			toggleAllOff(player);
+	}
 
 	public static void toggleAllWarHUD () {
 		for (Player p : warUsers)
@@ -59,6 +70,7 @@ public class HUDManager implements Listener{
 	public static void toggleAllOff (Player p) {
 		warUsers.remove(p);
 		permUsers.remove(p);
+		mapUsers.remove(p);
 		if (p.isOnline())
 			toggleOff(p);
 	}
@@ -72,6 +84,7 @@ public class HUDManager implements Listener{
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		warUsers.remove(event.getPlayer());
 		permUsers.remove(event.getPlayer());
+		mapUsers.remove(event.getPlayer());
 	}
 
 	@EventHandler
@@ -93,8 +106,15 @@ public class HUDManager implements Listener{
 					PermHUD.updatePerms(p, event.getTo());
 				else
 					toggleAllOff(p);
-			}
-			
+			}	
+		} else if (mapUsers.contains(p)) {
+			if (!isMapHudActive(p))
+				mapUsers.remove(p);
+			else
+				if (event.getTo().getTownyWorld().isUsingTowny())
+					MapHUD.updateMap(p, event.getTo());
+				else
+					toggleAllOff(p);
 		}
 	}
 
@@ -161,17 +181,25 @@ public class HUDManager implements Listener{
 	public static List<Player> getWarHUDUsers() {
 		return warUsers;
 	}
+	
+	public static List<Player> getMapHUDUsers() {
+		return mapUsers;
+	}
 
 	public static void removePermHUDUser(Player player) {
-		if (permUsers.contains(player)) {
-			permUsers.remove(player);
+		if (permUsers.remove(player)) {
 			toggleOff(player);
 		}
 	}
 
 	public static void removeWarHUDUser(Player player) {
-		if (warUsers.contains(player)) {
-			warUsers.remove(player);
+		if (warUsers.remove(player)) {
+			toggleOff(player);
+		}
+	}
+	
+	public static void removeMapHUDUser(Player player) {
+		if (mapUsers.remove(player)) {
 			toggleOff(player);
 		}
 	}
@@ -182,5 +210,9 @@ public class HUDManager implements Listener{
 
 	public static boolean isWarHUDActive(Player player) {
 		return player.getScoreboard().getTeam("space1") != null;
+	}
+	
+	public static boolean isMapHudActive(Player player) {
+		return player.getScoreboard().getTeam("mapTeam1") != null;
 	}
 }
