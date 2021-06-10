@@ -1,9 +1,6 @@
 package com.palmergames.bukkit.towny.hooks;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
@@ -14,16 +11,13 @@ import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class LuckPermsContexts implements ContextCalculator<Player>, Listener {
+public class LuckPermsContexts implements ContextCalculator<Player> {
 	
 	private static final String RESIDENT_CONTEXT = "towny:resident";
 	private static final String MAYOR_CONTEXT = "towny:mayor";
@@ -75,12 +69,5 @@ public class LuckPermsContexts implements ContextCalculator<Player>, Listener {
 			builder.add(context, "false");
 		}
 		return builder.build();
-	}
-	
-	@EventHandler
-	public void onPluginDisable(PluginDisableEvent event) {
-		if (event.getPlugin() instanceof Towny) {
-			luckPerms.getContextManager().unregisterCalculator(this);
-		}
 	}
 }
