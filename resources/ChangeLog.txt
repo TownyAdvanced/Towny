@@ -6228,3 +6228,6 @@ v0.92.0.11:
   - New Config Option: plugin.interfacing.luckperms_contexts
     - Default: true
     - If enabled, Towny contexts will be available in LuckPerms.
+  - Map HUD, courtesy of Warriorrrr with PR #4996.
+  - New Command: /towny map hud
+    - Activates the map in the player's scoreboard.
