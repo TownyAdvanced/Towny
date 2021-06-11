@@ -6233,3 +6233,7 @@ v0.92.0.11:
     - Activates the map in the player's scoreboard.
 0.97.0.4:
   - Fix tree/mushroom structure growth on plot borders not being tested correctly.
+  - Update to add compatibility for MC 1.17, courtesy of Warriorrrr and LlmDL with PR #5001.
+    - Should account for most of the changes so far. More to come as the API is fleshed out by Spigot.
+    - Revert on unclaim feature will probably not like servers using the World Height data pack.
+    - Config and world files will update their lists of blocks-ignored-from-regeneration automatically.
