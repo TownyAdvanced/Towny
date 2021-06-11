@@ -23,7 +23,7 @@ public class MapHUD {
 	
 	public static void toggleOn(Player player) {
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-		Objective objective = board.registerNewObjective("MAP_HUD_OBJ", "", "");
+		Objective objective = board.registerNewObjective("MAP_HUD_OBJ", "dummy", "maphud");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		int score = lineHeight + 2;

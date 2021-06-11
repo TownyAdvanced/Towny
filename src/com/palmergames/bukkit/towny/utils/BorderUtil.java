@@ -53,18 +53,42 @@ public class BorderUtil {
 				true, true, true, true, true, true, true, true });
 	}
 	
+	/**
+	 * Will return a list of blocks which all either have the same town as an owner, 
+	 * or the same player as owner. Any block in the wilderness is considered allowed. 
+	 * 
+	 * @param blocks List&lt;BlockState&gt; which hasn't been filtered yet.
+	 * @param originBlock Block from which to test against.
+	 * @return List&lt;BlockState&gt; which has been filtered to same-owner and wilderness.
+	 */
 	public static List<BlockState> allowedBlocks(List<BlockState> blocks, Block originBlock) {
 		return blocks.stream()
 			.filter(blockState -> allowedMove(originBlock, blockState.getBlock()))
 			.collect(Collectors.toList());
 	}
 	
+	/**
+	 * Will return a list of blocks which all either do not have the same town as an owner, 
+	 * or do not have the same player as owner. Any block in the wilderness is considered allowed. 
+	 * 
+	 * @param blocks List&lt;BlockState&gt; which hasn't been filtered yet.
+	 * @param originBlock Block from which to test against.
+	 * @return List&lt;BlockState&gt; which has been filtered to same-owner and wilderness.
+	 */	
 	public static List<BlockState> disallowedBlocks(List<BlockState> blocks, Block originBlock) {
 		return blocks.stream()
 			.filter(blockState -> !allowedMove(originBlock, blockState.getBlock()))
 			.collect(Collectors.toList());
 	}
 	
+	/**
+	 * Decides whether a block is in a same-owner relation ship with the given block.
+	 * Wilderness blocks are considered allowed.
+	 * 	
+	 * @param block Block which is the original.
+	 * @param blockTo Block to test the relation to.
+	 * @return true if the blocks are considered same-owner or wilderness.
+	 */
 	public static boolean allowedMove(Block block, Block blockTo) {
 		WorldCoord from = WorldCoord.parseWorldCoord(block);
 		WorldCoord to = WorldCoord.parseWorldCoord(blockTo);

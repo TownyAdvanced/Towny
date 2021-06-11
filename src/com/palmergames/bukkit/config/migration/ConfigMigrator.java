@@ -83,6 +83,7 @@ public class ConfigMigrator {
 			for (TownyWorld world : TownyUniverse.getInstance().getWorldMap().values()) {
 				TownyMessaging.sendDebugMsg("Updating " + world.getName() + " with " + change.value);
 				change.worldAction.getAction().accept(world, change.value);
+				world.save();
 			}
 		}
 	}

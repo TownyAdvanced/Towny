@@ -100,5 +100,16 @@
         "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
       }
     ]
+  },
+  {
+    "version": "0.97.0.4",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "new_world_settings.plot_management.revert_on_unclaim.block_ignore",
+        "value": ",DEEPSLATE_IRON_ORE,DEEPSLATE_GOLD_ORE,DEEPSLATE_COAL_ORE,DEEPSLATE_REDSTONE_ORE,DEEPSLATE_DIAMOND_ORE,DEEPSLATE_EMERALD_ORE,DEEPSLATE_LAPIS_ORE,RAW_IRON_BLOCK,RAW_GOLD_ORE",
+        "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
+      }
+    ]
   }
 ]
