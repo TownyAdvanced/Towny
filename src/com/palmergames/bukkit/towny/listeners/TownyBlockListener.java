@@ -10,12 +10,13 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.util.BlockUtil;
+import com.palmergames.bukkit.util.ItemLists;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Chest.Type;
@@ -316,6 +317,9 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+		
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
 
 		if (!TownySettings.getPreventFluidGriefingEnabled() || event.getBlock().getType() == Material.DRAGON_EGG)
 			return;
@@ -330,14 +334,17 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-
-		if (!TownySettings.getPreventFluidGriefingEnabled())
+		
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 		
-		if (event.getItem().getType() != Material.WATER_BUCKET && event.getItem().getType() != Material.LAVA_BUCKET && event.getItem().getType() != Material.BUCKET && event.getItem().getType() != Material.BONE_MEAL)
+		if (event.getBlock().getType() != Material.DISPENSER)
 			return;
 
-		if (event.getBlock().getType() != Material.DISPENSER)
+		if (ItemLists.BUCKETS.contains(event.getItem().getType().name()) && !TownySettings.getPreventFluidGriefingEnabled())
+			return;
+		
+		if (!ItemLists.BUCKETS.contains(event.getItem().getType().name()) && event.getItem().getType() != Material.BONE_MEAL)
 			return;
 		
 		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getBlockData()).getFacing())))
@@ -346,12 +353,15 @@ public class TownyBlockListener implements Listener {
 
 	@EventHandler
 	public void onBlockFertilize(BlockFertilizeEvent event) {
-		List<BlockState> remove = new ArrayList<>();
-		for (BlockState blockState : event.getBlocks()) {
-			if (canBlockMove(event.getBlock(), blockState.getBlock()))
-				remove.add(blockState);
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
 		}
+		
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
+		
 		event.getBlocks().clear();
-		event.getBlocks().addAll(remove);
+		event.getBlocks().addAll(BorderUtil.allowedBlocks(event.getBlocks(), event.getBlock()));
 	}
 }
