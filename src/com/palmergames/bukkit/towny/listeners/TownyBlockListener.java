@@ -35,7 +35,6 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -340,11 +339,13 @@ public class TownyBlockListener implements Listener {
 		
 		if (event.getBlock().getType() != Material.DISPENSER)
 			return;
+		
+		Material mat = event.getItem().getType();
 
-		if (ItemLists.BUCKETS.contains(event.getItem().getType().name()) && !TownySettings.getPreventFluidGriefingEnabled())
+		if (ItemLists.BUCKETS.contains(mat.name()) && !TownySettings.getPreventFluidGriefingEnabled())
 			return;
 		
-		if (!ItemLists.BUCKETS.contains(event.getItem().getType().name()) && event.getItem().getType() != Material.BONE_MEAL)
+		if (!ItemLists.BUCKETS.contains(mat.name()) && mat != Material.BONE_MEAL && mat != Material.HONEYCOMB)
 			return;
 		
 		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getBlockData()).getFacing())))
