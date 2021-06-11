@@ -6231,3 +6231,5 @@ v0.92.0.11:
   - Map HUD, courtesy of Warriorrrr with PR #4996.
   - New Command: /towny map hud
     - Activates the map in the player's scoreboard.
+0.97.0.4:
+  - Fix tree/mushroom structure growth on plot borders not being tested correctly.
