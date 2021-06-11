@@ -15,6 +15,7 @@ import com.palmergames.bukkit.util.BlockUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Chest.Type;
@@ -26,6 +27,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockFertilizeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
@@ -232,15 +234,11 @@ public class TownyBlockListener implements Listener {
 			TownBlock destinationTownBlock = to.getTownBlock();
 
 			//Both townblocks are owned by the same resident.
-			if (currentTownBlock.hasResident() && destinationTownBlock.hasResident())
-				if (currentTownBlock.getResidentOrNull() == destinationTownBlock.getResidentOrNull())
-					return true;
-
-			//Both townblocks are owned by the same town.
-			if (currentTownBlock.getTown() == destinationTownBlock.getTown() && !currentTownBlock.hasResident() && !destinationTownBlock.hasResident())
+			if (currentTownBlock.hasResident() && destinationTownBlock.hasResident() && currentTownBlock.getResidentOrNull() == destinationTownBlock.getResidentOrNull())
 				return true;
 
-			return false;
+			//Both townblocks are owned by the same town.
+			return currentTownBlock.getTown() == destinationTownBlock.getTown() && !currentTownBlock.hasResident() && !destinationTownBlock.hasResident();
 		} catch (NotRegisteredException e) {
 			//The 'from' townblock is wilderness.
 			return false;
@@ -336,7 +334,7 @@ public class TownyBlockListener implements Listener {
 		if (!TownySettings.getPreventFluidGriefingEnabled())
 			return;
 		
-		if (event.getItem().getType() != Material.WATER_BUCKET && event.getItem().getType() != Material.LAVA_BUCKET && event.getItem().getType() != Material.BUCKET)
+		if (event.getItem().getType() != Material.WATER_BUCKET && event.getItem().getType() != Material.LAVA_BUCKET && event.getItem().getType() != Material.BUCKET && event.getItem().getType() != Material.BONE_MEAL)
 			return;
 
 		if (event.getBlock().getType() != Material.DISPENSER)
@@ -346,4 +344,14 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 	}
 
+	@EventHandler
+	public void onBlockFertilize(BlockFertilizeEvent event) {
+		List<BlockState> remove = new ArrayList<>();
+		for (BlockState blockState : event.getBlocks()) {
+			if (canBlockMove(event.getBlock(), blockState.getBlock()))
+				remove.add(blockState);
+		}
+		event.getBlocks().clear();
+		event.getBlocks().addAll(remove);
+	}
 }
