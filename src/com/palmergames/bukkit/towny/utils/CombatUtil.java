@@ -22,7 +22,9 @@ import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -263,9 +265,15 @@ public class CombatUtil {
 				/*
 				* Allow wolves to attack unprotected entites (such as skeletons), but not protected ones.
 				*/
-				if (attackingEntity instanceof Wolf && (EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity))) {
+				if (attackingEntity instanceof Wolf && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
 					((Wolf) attackingEntity).setTarget(null);
 					((Wolf) attackingEntity).setAngry(false);
+					return true;
+				}
+				
+				if (attackingEntity.getType().name().equals("AXOLOTL") && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
+					//TODO: Targeting not actually removed
+					((Axolotl) attackingEntity).setTarget(null);
 					return true;
 				}
 			}
