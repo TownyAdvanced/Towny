@@ -327,7 +327,7 @@ public class TownyPlayerListener implements Listener {
 				return;
 			}
 			/*
-			 * Test potted plants, redstone interactables, other blocks which 
+			 * Test potted plants, redstone interactables, candles and other blocks which 
 			 * cause an interaction that could be considered destructive, or 
 			 * something which wouldn't be given out like a normal 
 			 * door/inventory permission. 
@@ -336,6 +336,7 @@ public class TownyPlayerListener implements Listener {
 			 */
 			if (ItemLists.POTTED_PLANTS.contains(clickedMat.name()) ||                          
 				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat.name()) ||
+				ItemLists.CANDLES.contains(clickedMat.name()) ||
 				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
 				clickedMat == Material.COMMAND_BLOCK || clickedMat == Material.SWEET_BERRY_BUSH){
 				
