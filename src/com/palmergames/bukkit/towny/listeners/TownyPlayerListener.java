@@ -299,6 +299,12 @@ public class TownyPlayerListener implements Listener {
 					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
 				
 				/*
+				 * Test putting candles on cakes. Treat interaction as a Build test.
+				 */
+				if (ItemLists.CANDLES.contains(item.name()) && clickedMat == Material.CAKE) 
+					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
+				
+				/*
 				 * Test wax usage. Treat interaction as a Build test.
 				 */
 				if (item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat.name()))

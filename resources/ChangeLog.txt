@@ -6239,3 +6239,5 @@ v0.92.0.11:
     - Config and world files will update their lists of blocks-ignored-from-regeneration automatically.
 0.97.0.5:
   - Fix Bonemeal usage not working.
+  - Add candles to the bypass for flint & steel.
+  - Protect candles from being placed on cakes.

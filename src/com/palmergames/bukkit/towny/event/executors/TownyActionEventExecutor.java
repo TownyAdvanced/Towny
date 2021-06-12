@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.util.ArraySort;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.ItemLists;
 
 /**
  * An executor class used to check the internal Towny PlayerCache and then
@@ -144,7 +145,7 @@ public class TownyActionEventExecutor {
 		 *  Something being ignited in the wilderness.
 		 */
 		if (TownyAPI.getInstance().isWilderness(block)) {
-			if (isNotPortal(block) && (!townyWorld.isForceFire() && !townyWorld.isFire()))
+			if (isNotPortal(block) && isNotCandle(block) && (!townyWorld.isForceFire() && !townyWorld.isFire()))
 				// Disallow because it is not above obsidian and neither Fire option is true.
 				return false;
 
@@ -152,7 +153,7 @@ public class TownyActionEventExecutor {
 		 *  Something being ignited in a town.
 		 */
 		} else {
-			if ((isNotPortal(block) && isNotFireSpreadBypassMat(block))          // Allows for NetherPortal/Netherrack/Soul_Sand/Soul_Soil ignition.
+			if ((isNotPortal(block) && isNotCandle(block) && isNotFireSpreadBypassMat(block))          // Allows for NetherPortal/Netherrack/Soul_Sand/Soul_Soil ignition.
 			&& (!townyWorld.isForceFire() && !TownyAPI.getInstance().getTownBlock(block.getLocation()).getPermissions().fire)) // Normal fire rules. 
 				// Disallow because it is not above obsidian or on a FireSpreadBypassMat, and neither Fire option is true.
 				return false;
@@ -164,6 +165,10 @@ public class TownyActionEventExecutor {
 	
 	private static boolean isNotPortal(Block block) {
 		return block.getRelative(BlockFace.DOWN).getType() != Material.OBSIDIAN;
+	}
+	
+	private static boolean isNotCandle(Block block) {
+		return !ItemLists.CANDLES.contains(block.getType().name());
 	}
 	
 	private static boolean isNotFireSpreadBypassMat(Block block) {
