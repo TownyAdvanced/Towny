@@ -6237,3 +6237,5 @@ v0.92.0.11:
     - Should account for most of the changes so far. More to come as the API is fleshed out by Spigot.
     - Revert on unclaim feature will probably not like servers using the World Height data pack.
     - Config and world files will update their lists of blocks-ignored-from-regeneration automatically.
+0.97.0.5:
+  - Fix Bonemeal usage not working.

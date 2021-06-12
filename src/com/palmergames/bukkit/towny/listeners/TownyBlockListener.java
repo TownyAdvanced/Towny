@@ -17,6 +17,7 @@ import com.palmergames.bukkit.util.ItemLists;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Chest.Type;
@@ -362,7 +363,8 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 		
+		List<BlockState> allowed = BorderUtil.allowedBlocks(event.getBlocks(), event.getBlock());
 		event.getBlocks().clear();
-		event.getBlocks().addAll(BorderUtil.allowedBlocks(event.getBlocks(), event.getBlock()));
+        event.getBlocks().addAll(allowed);
 	}
 }
