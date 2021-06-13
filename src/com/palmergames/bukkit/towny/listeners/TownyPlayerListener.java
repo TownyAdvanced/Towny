@@ -278,12 +278,13 @@ public class TownyPlayerListener implements Listener {
 			if (clickedBlock != null) {
 				Material clickedMat = clickedBlock.getType();
 				/*
-				 * Test stripping logs, dye-able signs, glass bottles,
-				 * flint&steel on TNT and shears on beehomes
+				 * Test stripping logs, scraping copper blocks, dye-able signs,
+				 * glass bottles, flint&steel on TNT and shears on beehomes
 				 * 
 				 * Treat interaction as a Destroy test.
 				 */
 				if ((ItemLists.AXES.contains(item.name()) && Tag.LOGS.isTagged(clickedMat)) || // This will also catched already stripped logs but it is cleaner than anything else.
+					(ItemLists.AXES.contains(item.name()) && ItemLists.WAXED_BLOCKS.contains(clickedMat.name())) ||  // Prevents players scraping wax off of copper blocks. 
 					(ItemLists.DYES.contains(item.name()) && Tag.SIGNS.isTagged(clickedMat)) ||
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
 					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
@@ -295,6 +296,18 @@ public class TownyPlayerListener implements Listener {
 				 * Test bonemeal usage. Treat interaction as a Build test.
 				 */
 				if (item == Material.BONE_MEAL) 
+					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
+				
+				/*
+				 * Test putting candles on cakes. Treat interaction as a Build test.
+				 */
+				if (ItemLists.CANDLES.contains(item.name()) && clickedMat == Material.CAKE) 
+					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
+				
+				/*
+				 * Test wax usage. Treat interaction as a Build test.
+				 */
+				if (item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat.name()))
 					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
 
 				/*
@@ -320,7 +333,7 @@ public class TownyPlayerListener implements Listener {
 				return;
 			}
 			/*
-			 * Test potted plants, redstone interactables, other blocks which 
+			 * Test potted plants, redstone interactables, candles and other blocks which 
 			 * cause an interaction that could be considered destructive, or 
 			 * something which wouldn't be given out like a normal 
 			 * door/inventory permission. 
@@ -329,6 +342,7 @@ public class TownyPlayerListener implements Listener {
 			 */
 			if (ItemLists.POTTED_PLANTS.contains(clickedMat.name()) ||                          
 				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat.name()) ||
+				ItemLists.CANDLES.contains(clickedMat.name()) ||
 				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
 				clickedMat == Material.COMMAND_BLOCK || clickedMat == Material.SWEET_BERRY_BUSH){
 				

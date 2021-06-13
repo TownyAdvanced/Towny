@@ -786,12 +786,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 			}
 			try {
-				resident.setJailCell(rs.getInt("jailCell"));
+				if (rs.getString("jailCell") != null && !rs.getString("jailCell").isEmpty())
+					resident.setJailCell(rs.getInt("jailCell"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			try {
-				resident.setJailHours(rs.getInt("jailHours"));
+				if (rs.getString("jailHours") != null && !rs.getString("jailHours").isEmpty())
+					resident.setJailHours(rs.getInt("jailHours"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

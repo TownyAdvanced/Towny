@@ -38,7 +38,7 @@ public class BlockUtil {
 			Town town1 = wc.getTownOrNull();
 			Town town2 = wc2.getTownOrNull();
 			
-			if (town1.getUUID().equals(town2.getUUID())) // Not the same town.
+			if (!town1.getUUID().equals(town2.getUUID())) // Not the same town.
 				return false;
 			
 			if (tb.hasResident() != tb2.hasResident()) // One is player-owned and one isn't.

@@ -6216,3 +6216,29 @@ v0.92.0.11:
         - Closes #4903
     - Removed Config Option: jail.outlaw_jail_days
   - Bump Language Files to 0.107.
+0.97.0.3
+  - Fix SQL resident loading new jail properties hitting NPEs
+    - Closes #4990.  
+  - Translate es-419 strings (0.107), courtesy of EuGNosii with PR #4983.
+  - Update zh-TW.yml, courtesy of shou692199 with PR #4992.
+  - Town and Nation lists are now cached, able to be updated after 10 minutes.
+  - Add LuckPerms Contexts, courtesy of Warriorrrr with PR #4966.
+    - Adds towny contexts to LuckPerms. At the moment this is very similar to our townyperms.yml, but the difference is that these can be used together with other contexts (per world permissions for example).
+    - Includes Resident, Mayor, King, InsideTown, InsideOwnTown, InsideOwnPlot.
+  - New Config Option: plugin.interfacing.luckperms_contexts
+    - Default: true
+    - If enabled, Towny contexts will be available in LuckPerms.
+  - Map HUD, courtesy of Warriorrrr with PR #4996.
+  - New Command: /towny map hud
+    - Activates the map in the player's scoreboard.
+0.97.0.4:
+  - Fix tree/mushroom structure growth on plot borders not being tested correctly.
+  - Update to add compatibility for MC 1.17, courtesy of Warriorrrr and LlmDL with PR #5001.
+    - Should account for most of the changes so far. More to come as the API is fleshed out by Spigot.
+    - Revert on unclaim feature will probably not like servers using the World Height data pack.
+    - Config and world files will update their lists of blocks-ignored-from-regeneration automatically.
+0.97.0.5:
+  - Fix Bonemeal usage not working.
+  - Add candles to the bypass for flint & steel.
+  - Protect candles from being placed on cakes.
+  - Switch over to using new cancelling for PojectileHitEvents.

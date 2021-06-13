@@ -10,11 +10,14 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.util.BlockUtil;
+import com.palmergames.bukkit.util.ItemLists;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Chest.Type;
@@ -26,13 +29,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockFertilizeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -232,15 +235,11 @@ public class TownyBlockListener implements Listener {
 			TownBlock destinationTownBlock = to.getTownBlock();
 
 			//Both townblocks are owned by the same resident.
-			if (currentTownBlock.hasResident() && destinationTownBlock.hasResident())
-				if (currentTownBlock.getResidentOrNull() == destinationTownBlock.getResidentOrNull())
-					return true;
-
-			//Both townblocks are owned by the same town.
-			if (currentTownBlock.getTown() == destinationTownBlock.getTown() && !currentTownBlock.hasResident() && !destinationTownBlock.hasResident())
+			if (currentTownBlock.hasResident() && destinationTownBlock.hasResident() && currentTownBlock.getResidentOrNull() == destinationTownBlock.getResidentOrNull())
 				return true;
 
-			return false;
+			//Both townblocks are owned by the same town.
+			return currentTownBlock.getTown() == destinationTownBlock.getTown() && !currentTownBlock.hasResident() && !destinationTownBlock.hasResident();
 		} catch (NotRegisteredException e) {
 			//The 'from' townblock is wilderness.
 			return false;
@@ -318,6 +317,9 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+		
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
 
 		if (!TownySettings.getPreventFluidGriefingEnabled() || event.getBlock().getType() == Material.DRAGON_EGG)
 			return;
@@ -332,18 +334,37 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-
-		if (!TownySettings.getPreventFluidGriefingEnabled())
+		
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 		
-		if (event.getItem().getType() != Material.WATER_BUCKET && event.getItem().getType() != Material.LAVA_BUCKET && event.getItem().getType() != Material.BUCKET)
-			return;
-
 		if (event.getBlock().getType() != Material.DISPENSER)
+			return;
+		
+		Material mat = event.getItem().getType();
+
+		if (ItemLists.BUCKETS.contains(mat.name()) && !TownySettings.getPreventFluidGriefingEnabled())
+			return;
+		
+		if (!ItemLists.BUCKETS.contains(mat.name()) && mat != Material.BONE_MEAL && mat != Material.HONEYCOMB)
 			return;
 		
 		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getBlockData()).getFacing())))
 			event.setCancelled(true);
 	}
 
+	@EventHandler
+	public void onBlockFertilize(BlockFertilizeEvent event) {
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+		
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
+		
+		List<BlockState> allowed = BorderUtil.allowedBlocks(event.getBlocks(), event.getBlock());
+		event.getBlocks().clear();
+        event.getBlocks().addAll(allowed);
+	}
 }

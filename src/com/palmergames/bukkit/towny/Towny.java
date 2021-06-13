@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.hooks.LuckPermsContexts;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.listeners.TownyBlockListener;
@@ -89,6 +90,7 @@ import java.util.Map;
  * 
  * @author Shade, ElgarL, LlmDl
  */
+@SuppressWarnings("deprecation")
 public class Towny extends JavaPlugin {
 	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private static final Version NETHER_VER = Version.fromString("1.16.1");
@@ -341,6 +343,12 @@ public class Towny extends JavaPlugin {
 		if (test != null) {
             new TownyPlaceholderExpansion(this).register();
             addons.add(String.format("%s v%s", "PlaceholderAPI", test.getDescription().getVersion()));
+		}
+		
+		test = getServer().getPluginManager().getPlugin("LuckPerms");
+		if (test != null && TownySettings.isContextsEnabled()) {
+			new LuckPermsContexts();
+			addons.add(String.format("%s v%s", "LuckPerms", test.getDescription().getVersion()));
 		}
 
 		//Add our chat handler to TheNewChat via the API.

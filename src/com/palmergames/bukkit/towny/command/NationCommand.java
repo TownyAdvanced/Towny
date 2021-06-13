@@ -52,6 +52,7 @@ import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
@@ -79,7 +80,6 @@ import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -978,7 +978,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * @param split  - Current command arguments.
 	 * @throws TownyException - Thrown when player does not have permission node.
 	 */
-	@SuppressWarnings("unchecked")
 	public void listNations(CommandSender sender, String[] split) throws TownyException {
 		
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
@@ -1058,14 +1057,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	        return;
 	    }
 
-	    final List<Nation> nations = nationsToSort;
-		final Comparator comparator = type.getComparator();
 	    final ComparatorType finalType = type;
 	    final int pageNumber = page;
 		try {
 			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-				nations.sort(comparator);
-				TownyMessaging.sendNationList(sender, nations, finalType, pageNumber, total);
+				TownyMessaging.sendNationList(sender, ComparatorCaches.getNationListCache(finalType), finalType, pageNumber, total);
 			});
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_error_comparator_failed"));

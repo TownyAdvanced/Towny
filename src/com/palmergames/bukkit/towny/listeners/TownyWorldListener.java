@@ -7,17 +7,14 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.utils.BorderUtil;
+
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.EntityType;
@@ -130,71 +127,13 @@ public class TownyWorldListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getWorld()))
 			return;
 
-		TownBlock townBlock = null;
-		TownBlock otherTownBlock = null;
-		Town town = null;
-		Town otherTown = null;
-		Resident resident = null;
-		List<BlockState> removed = new ArrayList<>();
 		// The event Location is always one spot, and although 2x2 trees technically should have 4 locations, 
 		// we can trust that the saplings were all placed by one person, or group of people, who were allowed
 		// to place them.
-		Coord coord = Coord.parseCoord(event.getLocation());
-		for (BlockState blockState : event.getBlocks()) {
-			Location blockLocation = blockState.getLocation();
-			Coord blockCoord = Coord.parseCoord(blockLocation);
-
-			// Wilderness so continue.
-			if (TownyAPI.getInstance().isWilderness(blockLocation)) {
-				continue;
-			}
-
-			// Same townblock as event location, continue;
-			if (coord.equals(blockCoord)) {
-				continue;
-			}
-			
-			townBlock = TownyAPI.getInstance().getTownBlock(blockLocation);
-
-			// Resident Owned Location
-			if (townBlock.hasResident()) {
-				resident = townBlock.getResidentOrNull();
-				otherTownBlock = TownyAPI.getInstance().getTownBlock(blockLocation);
-				// if residents don't match.
-				if (otherTownBlock.hasResident() && otherTownBlock.getResidentOrNull() != resident) {
-					removed.add(blockState);
-					continue;
-				// if plot doesn't have a resident.
-				} else if (!otherTownBlock.hasResident()) {
-					removed.add(blockState);
-					continue;
-				// if both townblock have same owner. 
-				} else if (resident == otherTownBlock.getResidentOrNull()) {
-					continue;
-				}
-			} else {
-				town = townBlock.getTownOrNull();
-				try {
-					otherTownBlock = TownyAPI.getInstance().getTownBlock(blockLocation);
-					otherTown = otherTownBlock.getTown();
-				} catch (NotRegisteredException e) {
-				}
-				// If towns don't match.
-				if (town != otherTown) {						
-					removed.add(blockState);
-					continue;
-				// If town-owned is growing into a resident-owned plot.
-				} else if (otherTownBlock.hasResident()) {
-					removed.add(blockState);
-					continue;
-				// If towns match.
-				} else if (town == otherTown) {
-					continue;
-				}
-			}
-		}
-		if (!removed.isEmpty())
-			event.getBlocks().removeAll(removed);
+		List<BlockState> disallowed = BorderUtil.disallowedBlocks(event.getBlocks(), event.getLocation().getBlock());
+		
+		if (!disallowed.isEmpty())
+			event.getBlocks().removeAll(disallowed);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
