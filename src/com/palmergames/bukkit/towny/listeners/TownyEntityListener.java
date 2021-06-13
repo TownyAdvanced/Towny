@@ -857,18 +857,14 @@ public class TownyEntityListener implements Listener {
 		if (ItemLists.PROJECTILE_TRIGGERED_REDSTONE.contains(material.name()) && TownySettings.isSwitchMaterial(material.name())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), block.getLocation(), material)) {
-				
-				if (event instanceof Cancellable) { //TODO: When support is dropped for pre-1.17 MC versions the else can be removed.
-					event.setCancelled(true);
-				} else {
-					/*
-					 * Since we are unable to cancel a ProjectileHitEvent before MC 1.17 we must
-					 * set the block to air then set it back to its original form. 
-					 */
-					BlockData data = block.getBlockData();
-					block.setType(Material.AIR);
-					BukkitTools.getScheduler().runTask(plugin, () -> block.setBlockData(data));
-				}
+				/*
+				 * Since we are unable to cancel a ProjectileHitEvent on buttons & 
+				 * pressure plates even using MC 1.17 we must set the block to air
+				 * then set it back to its original form. 
+				 */
+				BlockData data = block.getBlockData();
+				block.setType(Material.AIR);
+				BukkitTools.getScheduler().runTask(plugin, () -> block.setBlockData(data));
 			}
 		}
 	}
