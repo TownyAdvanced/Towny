@@ -6241,3 +6241,4 @@ v0.92.0.11:
   - Fix Bonemeal usage not working.
   - Add candles to the bypass for flint & steel.
   - Protect candles from being placed on cakes.
+  - Switch over to using new cancelling for PojectileHitEvents.
