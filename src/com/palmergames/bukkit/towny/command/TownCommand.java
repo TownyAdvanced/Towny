@@ -1512,12 +1512,27 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				
 			} else if (split[0].equalsIgnoreCase("neutral") || split[0].equalsIgnoreCase("peaceful")) {
 				
+				boolean peacefulState = choice.orElse(!town.isNeutral());
+				double cost = TownySettings.getTownNeutralityCost();
+				
+				if (town.isNeutral() && peacefulState) throw new TownyException(Translation.of("msg_town_already_peaceful"));
+				else if (!town.isNeutral() && !peacefulState) throw new TownyException(Translation.of("msg_town_already_not_peaceful"));
+
+				if (peacefulState && TownyEconomyHandler.isActive() && !town.getAccount().canPayFromHoldings(cost))
+					throw new TownyException(Translation.of("msg_nation_cant_peaceful"));
+				
 				// Fire cancellable event directly before setting the toggle.
 				TownToggleNeutralEvent preEvent = new TownToggleNeutralEvent(sender, town, admin, choice.orElse(!town.isNeutral()));
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancellationMsg());
 
+				// If they setting neutral status on send a message confirming they paid something, if they did.
+				if (peacefulState && TownyEconomyHandler.isActive() && cost > 0) {
+					town.getAccount().withdraw(cost, "Peaceful Nation Cost");
+					TownyMessaging.sendMsg(sender, Translation.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
+				}
+				
 				// Set the toggle setting.
 				town.setNeutral(preEvent.getFutureState());
 

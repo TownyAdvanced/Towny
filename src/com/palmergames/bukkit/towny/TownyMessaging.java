@@ -571,7 +571,7 @@ public class TownyMessaging {
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
+				String firstline = Translation.of("invitation_prefix") + Translation.of("your_town_has_been_invited_to_join_nation", invite.getSender().getName());
 				String secondline = "/t invite accept " + invite.getSender().getName();
 				String thirdline = "/t invite deny " + invite.getSender().getName();
 				sendConfirmationMessage(player, firstline, secondline, thirdline, "");

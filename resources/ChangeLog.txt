@@ -6242,3 +6242,14 @@ v0.92.0.11:
   - Add candles to the bypass for flint & steel.
   - Protect candles from being placed on cakes.
   - Switch over to using new cancelling for PojectileHitEvents.
+0.97.0.6:
+  - Add upkeep costs for Towns to toggle and remain neutral.
+    - Similar to nation peaceful costs.
+    - Closes #5003.
+  - Fix nations not paying peaceful upkeep if their nation upkeep was 0.
+  - New Config Option: economy.price_town_neutrality
+    - Default: 25.0
+    - The daily upkeep to remain neutral, paid by the Town bank. If unable to pay, neutral/peaceful status is lost.
+  - Language files bumped to 0.108.
+  - Improve message shown to towns which are invited to a nation.
+    - Closes #4998.
