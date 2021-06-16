@@ -84,6 +84,10 @@ public class EntityTypeUtil {
 		case ITEM_FRAME:
 			material = Material.ITEM_FRAME;
 			break;
+			
+		case GLOW_ITEM_FRAME:
+			material = Material.GLOW_ITEM_FRAME;
+			break;
 
 		case PAINTING:
 			material = Material.PAINTING;

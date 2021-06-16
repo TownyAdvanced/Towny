@@ -6253,3 +6253,4 @@ v0.92.0.11:
   - Language files bumped to 0.108.
   - Improve message shown to towns which are invited to a nation.
     - Closes #4998.
+  - Give Glowing Item Frames the same protections we give to the differently-abled Item Frames.
