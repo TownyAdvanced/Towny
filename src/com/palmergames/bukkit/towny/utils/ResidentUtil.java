@@ -214,16 +214,21 @@ public class ResidentUtil {
 			toRemove.stream().forEach(res -> res.removeTown());
 	}
 
-	public static void purgeResidents(CommandSender sender, List<Resident> list, long deleteTime, boolean townless) {
+	/**
+	 * Removes residents from a town who haven't logged in for the given time.
+	 * 
+	 * @param sender CommandSender using the command.
+	 * @param list List of Residents from which to test for inactivity.
+	 * @param deleteTime milliseconds to test for inactivity.
+	 * @since 0.96.0.7
+	 */
+	public static void purgeInactiveResidents(CommandSender sender, List<Resident> list, long deleteTime) {
 		int count = 0;
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		for (Resident resident : list) {
-			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > deleteTime) && !BukkitTools.isOnline(resident.getName())) {
-				if (townless && resident.hasTown())
-					continue;
+			if (!resident.isNPC() && !resident.isMayor() && (System.currentTimeMillis() - resident.getLastOnline() > deleteTime) && !BukkitTools.isOnline(resident.getName())) {
 				count++;
-				TownyMessaging.sendMsg(sender, "Deleting resident: " + resident.getName());
-				townyUniverse.getDataSource().removeResident(resident);
+				TownyMessaging.sendMsg(sender, "Kicking resident: " + resident.getName());
+				resident.removeTown();
 			}
 		}
 		TownyMessaging.sendMsg(sender, "Resident purge complete: " + count + " deleted.");

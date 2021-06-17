@@ -840,8 +840,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} catch (NumberFormatException e) {
 				throw new TownyException(Translation.of("msg_error_must_be_int"));
 			}
-			
-			ResidentUtil.purgeResidents(player, new ArrayList<>(town.getResidents()), TimeTools.getMillis(days + "d"), false);
+			Bukkit.getScheduler().runTask(plugin, ()-> ResidentUtil.purgeInactiveResidents(player, new ArrayList<>(town.getResidents()), TimeTools.getMillis(days + "d")));
 		}
 	}
 
