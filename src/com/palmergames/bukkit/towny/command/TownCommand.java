@@ -81,6 +81,7 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.utils.TownUtil;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -89,8 +90,6 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
-import com.palmergames.util.TimeTools;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -833,14 +832,24 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (res == null || !res.hasTown())
 				throw new TownyException(Translation.of("msg_err_dont_belong_town"));
 			
-			Town town = TownyAPI.getInstance().getResidentTownOrNull(res);
 			int days;
 			try {
 				days = Integer.parseInt(arg[0]);
 			} catch (NumberFormatException e) {
 				throw new TownyException(Translation.of("msg_error_must_be_int"));
 			}
-			Bukkit.getScheduler().runTask(plugin, ()-> ResidentUtil.purgeInactiveResidents(player, new ArrayList<>(town.getResidents()), TimeTools.getMillis(days + "d")));
+
+			Town town = TownyAPI.getInstance().getResidentTownOrNull(res);
+			List<Resident> kickList = TownUtil.gatherInactiveResidents(town.getResidents(), days);
+			if (kickList.isEmpty())
+				throw new TownyException(Translation.of("msg_err_no_one_to_purge"));
+
+			Confirmation.runOnAccept(()-> {
+				kickList.stream().forEach(resident -> resident.removeTown());
+				TownyMessaging.sendMsg(player, Translation.of("msg_purge_complete_x_removed", kickList.size()));
+			})
+			.setTitle(Translation.of("msg_purging_will_remove_the_following_residents", StringMgmt.join(kickList, ", ")))
+			.sendTo(player);
 		}
 	}
 

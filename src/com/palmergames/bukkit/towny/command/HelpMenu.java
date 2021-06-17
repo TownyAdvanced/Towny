@@ -329,7 +329,7 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("town unjail")
-				.add("[resident]");
+				.add("[resident]", "");
 		}
 	},
 	
@@ -337,7 +337,7 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("town purge")
-				.add("[days]");
+				.add("[days]", "");
 		}
 	},
 	
