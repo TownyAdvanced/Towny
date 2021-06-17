@@ -657,7 +657,7 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 		// Cancel teleport if resident is outlawed in Town
-		if (resident != null && !TownySettings.canOutlawsLeaveTowns()) {
+		if (resident != null && !TownySettings.canOutlawsTeleportOutOfTowns()) {
 			TownBlock tb = TownyAPI.getInstance().getTownBlock(event.getFrom());
 			if (tb != null && tb.hasTown()) {
 				Town town = tb.getTownOrNull();

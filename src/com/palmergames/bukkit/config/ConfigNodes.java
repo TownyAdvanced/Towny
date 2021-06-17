@@ -586,18 +586,19 @@ public enum ConfigNodes {
 			"# Can outlaws roam freely on the towns they are outlawed in?",
 			"# If false, outlaws will be teleported away if they spend too long in the towns they are outlawed in.",
 			"# The time is set below in the outlaw_teleport_warmup."),
-	GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_LEAVE_TOWN(
-			"global_town_settings.allow_outlaws_to_leave_town",
+	GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_TELEPORT_OUT_OF_TOWN(
+			"global_town_settings.allow_outlaws_to_teleport_out_of_town",
 			"true",
 			"",
-			"# Can outlaws freely leave on the towns they are outlawed in?",
-			"# If false, outlaws cannot type /",
-			"# The time is set below in the outlaw_teleport_warmup."),
+			"# Can outlaws freely teleport out of the towns they are outlawed in?",
+			"# If false, outlaws cannot use commands to teleport out of town.",
+			"# If you want outlaws to not be able to use teleporting items as well, use allow_outlaws_use_teleport_items."),
 	GTOWN_SETTINGS_ALLOW_OUTLAWS_USE_TELEPORT_ITEMS(
 			"global_town_settings.town_allows_outlaw_teleport_items",
 			"true",
 			"",
-			"# If true outlawed players in towns can use items that teleport, ie: Ender Pearls & Chorus Fruit, but are still barred from using other methods of teleporting.",
+			"# If false, outlawed players in towns cannot use items that teleport, ie: Ender Pearls & Chorus Fruit.",
+			"# If this is true and allow_outlaws_to_teleport_out_of_town is false, outlaws are still barred from using other methods of teleporting.",
 			"# If allow_outlaws_to_leave_town is set to true, this does not do anything."),
 	GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW(
 			"global_town_settings.warn_town_on_outlaw",

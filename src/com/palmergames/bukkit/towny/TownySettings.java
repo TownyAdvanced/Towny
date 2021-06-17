@@ -3048,8 +3048,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_ENTER_TOWN);
 	}
 
-	public static boolean canOutlawsLeaveTowns() {
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_LEAVE_TOWN);
+	public static boolean canOutlawsTeleportOutOfTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_TELEPORT_OUT_OF_TOWN);
 	}
 
 	public static boolean canOutlawsUseTeleportItems() {
