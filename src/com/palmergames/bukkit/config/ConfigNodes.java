@@ -593,6 +593,12 @@ public enum ConfigNodes {
 			"# Can outlaws freely leave on the towns they are outlawed in?",
 			"# If false, outlaws cannot type /",
 			"# The time is set below in the outlaw_teleport_warmup."),
+	GTOWN_SETTINGS_ALLOW_OUTLAWS_USE_TELEPORT_ITEMS(
+			"global_town_settings.town_allows_outlaw_teleport_items",
+			"true",
+			"",
+			"# If true outlawed players in towns can use items that teleport, ie: Ender Pearls & Chorus Fruit, but are still barred from using other methods of teleporting.",
+			"# If allow_outlaws_to_leave_town is set to true, this does not do anything."),
 	GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW(
 			"global_town_settings.warn_town_on_outlaw",
 			"false",
@@ -614,21 +620,19 @@ public enum ConfigNodes {
 			"# What world do you want the outlaw teleported to if they aren't part of a town",
 			"# and don't have a bedspawn outside of the town they are outlawed in.",
 			"# They will go to the listed world's spawn. ", 
-			"# If blank, they will go to the spawnpoint of the world the town is in."
-	),
+			"# If blank, they will go to the spawnpoint of the world the town is in."),
 	GTOWN_SETTINGS_OUTLAW_BLACKLISTED_COMMANDS(
-		"global_town_settings.outlaw_blacklisted_commands",
-		"home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide",
-		"",
-		"# Commands which an outlawed player in the town cannot use."),
+			"global_town_settings.outlaw_blacklisted_commands",
+			"somecommandhere,othercommandhere",
+			"",
+			"# Commands an outlawed player cannot use while in the town they are outlawed in."),
 	GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION(
 			"global_town_settings.maximum_number_residents_without_nation",
 			"0",
 			"",
 			"# When set above zero this is the largest number of residents a town can support before they join/create a nation.",
 			"# Do not set this value to an amount less than the required_number_residents_join_nation below.",
-			"# Do not set this value to an amount less than the required_number_residents_create_nation below."
-	),
+			"# Do not set this value to an amount less than the required_number_residents_create_nation below."),
 	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION(
 			"global_town_settings.required_number_residents_join_nation",
 			"0",
