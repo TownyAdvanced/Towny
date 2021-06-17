@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -211,5 +212,20 @@ public class ResidentUtil {
 		
 		if (!toRemove.isEmpty())
 			toRemove.stream().forEach(res -> res.removeTown());
+	}
+
+	public static void purgeResidents(CommandSender sender, List<Resident> list, long deleteTime, boolean townless) {
+		int count = 0;
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		for (Resident resident : list) {
+			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > deleteTime) && !BukkitTools.isOnline(resident.getName())) {
+				if (townless && resident.hasTown())
+					continue;
+				count++;
+				TownyMessaging.sendMsg(sender, "Deleting resident: " + resident.getName());
+				townyUniverse.getDataSource().removeResident(resident);
+			}
+		}
+		TownyMessaging.sendMsg(sender, "Resident purge complete: " + count + " deleted.");
 	}
 }

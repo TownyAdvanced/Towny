@@ -332,6 +332,15 @@ public enum HelpMenu {
 				.add("[resident]");
 		}
 	},
+	
+	TOWN_PURGE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town purge")
+				.add("[days]");
+		}
+	},
+	
 
 	TOWN_INVITE {
 		@Override

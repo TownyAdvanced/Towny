@@ -1,10 +1,8 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -39,31 +37,7 @@ public class ResidentPurge extends Thread {
 	@Override
 	public void run() {
 
-		int count = 0;
-
-		message("Scanning for old residents...");
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		for (Resident resident : new ArrayList<>(townyUniverse.getResidents())) {
-			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > (this.deleteTime)) && !BukkitTools.isOnline(resident.getName())) {
-				if (townless && resident.hasTown()) {
-					continue;
-				}
-				count++;
-				message("Deleting resident: " + resident.getName());
-				townyUniverse.getDataSource().removeResident(resident);
-			}
-		}
-
-		message("Resident purge complete: " + count + " deleted.");
-
+		ResidentUtil.purgeResidents(sender, new ArrayList<>(TownyUniverse.getInstance().getResidents()), deleteTime, townless);
 	}
 
-	private void message(String msg) {
-
-		if (this.sender != null)
-			TownyMessaging.sendMessage(this.sender, msg);
-		else
-			TownyMessaging.sendMsg(msg);
-
-	}
 }
