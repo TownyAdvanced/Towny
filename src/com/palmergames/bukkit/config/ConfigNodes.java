@@ -586,6 +586,13 @@ public enum ConfigNodes {
 			"# Can outlaws roam freely on the towns they are outlawed in?",
 			"# If false, outlaws will be teleported away if they spend too long in the towns they are outlawed in.",
 			"# The time is set below in the outlaw_teleport_warmup."),
+	GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_LEAVE_TOWN(
+			"global_town_settings.allow_outlaws_to_leave_town",
+			"true",
+			"",
+			"# Can outlaws freely leave on the towns they are outlawed in?",
+			"# If false, outlaws cannot type /",
+			"# The time is set below in the outlaw_teleport_warmup."),
 	GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW(
 			"global_town_settings.warn_town_on_outlaw",
 			"false",
@@ -609,6 +616,11 @@ public enum ConfigNodes {
 			"# They will go to the listed world's spawn. ", 
 			"# If blank, they will go to the spawnpoint of the world the town is in."
 	),
+	GTOWN_SETTINGS_OUTLAW_BLACKLISTED_COMMANDS(
+		"global_town_settings.outlaw_blacklisted_commands",
+		"home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide",
+		"",
+		"# Commands which an outlawed player in the town cannot use."),
 	GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION(
 			"global_town_settings.maximum_number_residents_without_nation",
 			"0",
