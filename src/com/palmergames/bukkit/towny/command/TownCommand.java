@@ -802,7 +802,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_PURGE.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 					
-					parseTownPurgeCommand (player, StringMgmt.remFirstArg(split), false);
+					parseTownPurgeCommand(player, StringMgmt.remFirstArg(split));
 
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN, split[0])) {
 					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, split[0]).execute(player, "town", split);
@@ -827,7 +827,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private void parseTownPurgeCommand(Player player, String[] arg, boolean admin) throws TownyException {
+	private void parseTownPurgeCommand(Player player, String[] arg) throws TownyException {
 		if (arg.length == 0) {
 			HelpMenu.TOWN_PURGE.send(player);
 			return;
@@ -844,6 +844,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translation.of("msg_error_must_be_int"));
 		}
 
+		if (days < 1)
+			throw new TownyException(Translation.of("msg_err_days_must_be_greater_than_0"));
+		
 		Town town = TownyAPI.getInstance().getResidentTownOrNull(res);
 		List<Resident> kickList = TownUtil.gatherInactiveResidents(town.getResidents(), days);
 		if (kickList.isEmpty())
