@@ -1031,7 +1031,7 @@ public class TownyPlayerListener implements Listener {
 			if (town != null && town.hasOutlaw(resident)) {
 				String[] split = event.getMessage().substring(1).split(" ");
 				if (TownySettings.getOutlawBlacklistedCommands().contains(split[0])) {
-					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_you_cannot_use_that_command_while_in_outlaw_town"));
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_you_cannot_use_command_while_in_outlaw_town"));
 					event.setCancelled(true);
 				}
 			}
