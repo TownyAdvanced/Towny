@@ -1009,7 +1009,7 @@ public class TownyPlayerListener implements Listener {
 	}
 
 	/**
-	 * Blocks jailed players using blacklisted commands.
+	 * Blocks outlawed players using blacklisted commands.
 	 * @param event - PlayerCommandPreprocessEvent
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
