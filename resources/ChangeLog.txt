@@ -6254,3 +6254,10 @@ v0.92.0.11:
   - Improve message shown to towns which are invited to a nation.
     - Closes #4998.
   - Give Glowing Item Frames the same protections we give to the differently-abled Item Frames.
+0.97.0.7:
+  - New Command: /town purge {days}
+    - Kicks residents from the town who have been inactive for the given number of days.
+    - NPCs and mayors are exempt.
+  - New Permission Node: towny.command.town.purge
+    - Child node of towny.command.town.*
+    - Not required to be added to the townyperms.yml.
