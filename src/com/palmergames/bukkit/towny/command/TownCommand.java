@@ -81,6 +81,7 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.utils.TownUtil;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
 import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -142,6 +143,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"deposit",
 		"outlaw",
 		"outpost",
+		"purge",
 		"ranklist",
 		"rank",
 		"reclaim",
@@ -796,6 +798,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					
 					parseUnJailCommand(player, null, StringMgmt.remFirstArg(split), false);
 
+				} else if (split[0].equalsIgnoreCase("purge")) {
+					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_PURGE.getNode()))
+						throw new TownyException(Translation.of("msg_err_command_disable"));
+					
+					parseTownPurgeCommand(player, StringMgmt.remFirstArg(split));
+
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN, split[0])) {
 					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, split[0]).execute(player, "town", split);
 				} else {
@@ -817,6 +825,39 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, x.getMessage());
 		}
 
+	}
+
+	private void parseTownPurgeCommand(Player player, String[] arg) throws TownyException {
+		if (arg.length == 0) {
+			HelpMenu.TOWN_PURGE.send(player);
+			return;
+		}
+
+		Resident res = TownyAPI.getInstance().getResident(player.getUniqueId());
+		if (res == null || !res.hasTown())
+			throw new TownyException(Translation.of("msg_err_dont_belong_town"));
+		
+		int days;
+		try {
+			days = Integer.parseInt(arg[0]);
+		} catch (NumberFormatException e) {
+			throw new TownyException(Translation.of("msg_error_must_be_int"));
+		}
+
+		if (days < 1)
+			throw new TownyException(Translation.of("msg_err_days_must_be_greater_than_0"));
+		
+		Town town = TownyAPI.getInstance().getResidentTownOrNull(res);
+		List<Resident> kickList = TownUtil.gatherInactiveResidents(town.getResidents(), days);
+		if (kickList.isEmpty())
+			throw new TownyException(Translation.of("msg_err_no_one_to_purge"));
+
+		Confirmation.runOnAccept(()-> {
+			kickList.stream().forEach(resident -> resident.removeTown());
+			TownyMessaging.sendMsg(player, Translation.of("msg_purge_complete_x_removed", kickList.size()));
+		})
+		.setTitle(Translation.of("msg_purging_will_remove_the_following_residents", StringMgmt.join(kickList, ", ")))
+		.sendTo(player);
 	}
 
 	private void parseInviteCommand(Player player, String[] newSplit) throws TownyException {

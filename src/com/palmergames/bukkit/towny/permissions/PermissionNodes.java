@@ -113,6 +113,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_WITHDRAW("towny.command.town.withdraw"),
 		TOWNY_COMMAND_TOWN_DEPOSIT("towny.command.town.deposit"),
 		TOWNY_COMMAND_TOWN_PLOTS("towny.command.town.plots"),
+		TOWNY_COMMAND_TOWN_PURGE("towny.command.town.purge"),
 		TOWNY_COMMAND_TOWN_MERGE("towny.command.town.merge"),
 		TOWNY_COMMAND_TOWN_BUY("towny.command.town.buy"),
 		TOWNY_COMMAND_TOWN_JAIL("towny.command.town.jail"),
