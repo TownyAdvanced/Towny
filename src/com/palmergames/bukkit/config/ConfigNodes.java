@@ -1131,7 +1131,7 @@ public enum ConfigNodes {
 		"plugin.update_notifications",
 		"true",
 		"",
-		"# If enabled, players with the towny.admin.updatenotifs permission will receive an update notification upon logging in."),
+		"# If enabled, players with the towny.admin.updatenotifications permission will receive an update notification upon logging in."),
 	FILTERS_COLOUR_CHAT(
 			"filters_colour_chat",
 			"",
