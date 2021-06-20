@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
@@ -101,13 +102,16 @@ public class TownyPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-
+		TownyPermissionSource permissionSource = TownyUniverse.getInstance().getPermissionSource();
+		
 		Player player = event.getPlayer();
 
 		if (plugin.isError()) {
-			if (player.isOp()) {
+			// Player is an operator or an admin.
+			if (player.isOp() || permissionSource.has(player, PermissionNodes.TOWNY_ADMIN.getNode())) {
 				TownyMessaging.sendMessage(player, Colors.Rose + "[Towny Error] Towny is locked in Safe Mode due to an error! Please check the server's console for more information.");
 			}
+			// Player is not an operator nor an admin.
 			TownyMessaging.sendMessage(player, Colors.Rose + "[Towny Error] Towny is locked in Safe Mode due to an error! Tell an admin to check the server's console.");
 			return;
 		}
