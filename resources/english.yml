@@ -1409,3 +1409,7 @@ jail_plu: 'Jails'
 jail_sing: 'Jail'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s has been sent to %s into cell number %s for %s hours by %s.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s hasn''t played long enough to be jailed, wait another %s'
+
+msg_safe_mode_base: '[Towny Error] Towny is locked in Safe Mode due to an error! '
+msg_safe_mode_player: 'Tell an admin to check the server''s console.'
+msg_safe_mode_admin: 'Check the server''s console for more information.'
