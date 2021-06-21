@@ -108,13 +108,12 @@ public class TownyPlayerListener implements Listener {
 
 		// Safe Mode Join Messages
 		if (plugin.isError()) {
+			String msg = "[Towny Error] Towny is locked in Safe Mode due to an error! Tell an admin to check the server's console.";
 			// Operator or an admin.
-			if (player.isOp() || permissionSource.has(player, PermissionNodes.TOWNY_ADMIN.getNode())) {
-				TownyMessaging.sendMessage(player, Colors.Rose + "[Towny Error] Towny is locked in Safe Mode due to an error! Please check the server's console for more information.");
-				return;
+			if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
+				msg = "[Towny Error] Towny is locked in Safe Mode due to an error! Please check the server's console for more information.";
 			}
-			// Regular player.
-			TownyMessaging.sendMessage(player, Colors.Rose + "[Towny Error] Towny is locked in Safe Mode due to an error! Tell an admin to check the server's console.");
+			TownyMessaging.sendErrorMsg(player, msg);
 			return;
 		}
 
