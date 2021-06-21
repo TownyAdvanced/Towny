@@ -112,7 +112,7 @@ public class TownyPlayerListener implements Listener {
 
 			// Operator or an admin.
 			if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
-				tipMsg = Translation.of("msg_safe_mode_admin")
+				tipMsg = Translation.of("msg_safe_mode_admin");
 				return;
 			}
 
