@@ -625,10 +625,10 @@ public class TownyEntityListener implements Listener {
 		Entity entity = event.getEntity();
 		if (townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
 			int count = 0;
-			for (Block block : blocks) {
+			for (Block block : event.blockList()) {
 				// Only regenerate in the wilderness.
 				if (!TownyAPI.getInstance().isWilderness(block))
-					return;
+					continue;
 				count++;
 				// Cancel the event outright if this will cause a revert to start on an already operating revert.
 				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event));
@@ -703,7 +703,7 @@ public class TownyEntityListener implements Listener {
 		
 		// TODO: Keep an eye on https://hub.spigotmc.org/jira/browse/SPIGOT-3999 to be completed.
 		// This workaround prevent boats from destroying item_frames.
-		if (event.getCause().equals(RemoveCause.PHYSICS) && hanging.getType().equals(EntityType.ITEM_FRAME)) {
+		if (event.getCause().equals(RemoveCause.PHYSICS) && ItemLists.ITEM_FRAMES.contains(hanging.getType().name())) {
 			Location loc = hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection());
 			Block block = loc.getBlock();
 			if (block.isLiquid() || block.isEmpty())
@@ -738,6 +738,7 @@ public class TownyEntityListener implements Listener {
 					case PAINTING:
 					case LEASH_HITCH:
 					case ITEM_FRAME:
+					case GLOW_ITEM_FRAME:
 						mat = EntityTypeUtil.parseEntityToMaterial(event.getEntity().getType());
 						break;
 					default:
@@ -810,6 +811,7 @@ public class TownyEntityListener implements Listener {
 			case PAINTING:
 			case LEASH_HITCH:
 			case ITEM_FRAME:
+			case GLOW_ITEM_FRAME:				
 				mat = EntityTypeUtil.parseEntityToMaterial(event.getEntity().getType());
 				break;
 			default:

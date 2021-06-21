@@ -1413,6 +1413,11 @@ public class TownySettings {
 
 		return getDouble(ConfigNodes.ECO_PRICE_NATION_NEUTRALITY);
 	}
+	
+	public static double getTownNeutralityCost() {
+		
+		return getDouble(ConfigNodes.ECO_PRICE_TOWN_NEUTRALITY);
+	}
 
 	public static boolean isAllowingOutposts() {
 
