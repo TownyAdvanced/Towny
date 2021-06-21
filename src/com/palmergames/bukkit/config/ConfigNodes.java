@@ -1791,8 +1791,15 @@ public enum ConfigNodes {
 			"economy.price_nation_neutrality",
 			"100.0",
 			"",
-			"# The daily upkeep to remain neutral during a war. Neutrality will exclude you from a war event, as well as deterring enemies."),
+			"# The daily upkeep to remain neutral, paid by the Nation bank. If unable to pay, neutral/peaceful status is lost.",
+			"# Neutrality will exclude you from a war event, as well as deterring enemies."),
+	ECO_PRICE_TOWN_NEUTRALITY(
+			"economy.price_town_neutrality",
+			"25.0",
+			"",
+			"# The daily upkeep to remain neutral, paid by the Town bank. If unable to pay, neutral/peaceful status is lost."),
 
+	
 	ECO_NEW_EXPAND("economy.new_expand", "", ""),
 	ECO_PRICE_NEW_NATION(
 			"economy.new_expand.price_new_nation",

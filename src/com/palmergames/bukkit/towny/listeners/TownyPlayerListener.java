@@ -491,6 +491,7 @@ public class TownyPlayerListener implements Listener {
 				 * First are tested with a Destroy perm check.
 				 */
 				case ITEM_FRAME:
+				case GLOW_ITEM_FRAME:
 				case PAINTING:
 				case LEASH_HITCH:
 				case MINECART_COMMAND:
