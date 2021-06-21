@@ -280,7 +280,7 @@ public class TownyBlockListener implements Listener {
 		 */
 		if (townyWorld.isUsingPlotManagementWildBlockRevert() && townyWorld.isProtectingExplosionBlock(material)) {
 			int count = 0;
-			for (Block block : blocks) {
+			for (Block block : event.blockList()) {
 				// Only regenerate in the wilderness.
 				if (!TownyAPI.getInstance().isWilderness(block))
 					continue;

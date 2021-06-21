@@ -6261,3 +6261,5 @@ v0.92.0.11:
   - New Permission Node: towny.command.town.purge
     - Child node of towny.command.town.*
     - Not required to be added to the townyperms.yml.
+  - Fix wilderness entity explosions' reverting being mucked with by the EventWar.
+    - Closes #5014. 

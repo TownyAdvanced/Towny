@@ -625,10 +625,10 @@ public class TownyEntityListener implements Listener {
 		Entity entity = event.getEntity();
 		if (townyWorld.isUsingPlotManagementWildEntityRevert() && entity != null && townyWorld.isProtectingExplosionEntity(entity)) {
 			int count = 0;
-			for (Block block : blocks) {
+			for (Block block : event.blockList()) {
 				// Only regenerate in the wilderness.
 				if (!TownyAPI.getInstance().isWilderness(block))
-					return;
+					continue;
 				count++;
 				// Cancel the event outright if this will cause a revert to start on an already operating revert.
 				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event));
