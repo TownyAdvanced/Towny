@@ -102,8 +102,6 @@ public class TownyPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		TownyPermissionSource permissionSource = TownyUniverse.getInstance().getPermissionSource();
-		
 		Player player = event.getPlayer();
 
 		// Safe Mode Join Messages
@@ -113,7 +111,6 @@ public class TownyPlayerListener implements Listener {
 			// Operator or an admin.
 			if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
 				tipMsg = Translation.of("msg_safe_mode_admin");
-				return;
 			}
 
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_safe_mode_base") + tipMsg);
