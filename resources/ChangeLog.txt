@@ -6263,3 +6263,4 @@ v0.92.0.11:
     - Not required to be added to the townyperms.yml.
   - Fix wilderness entity explosions' reverting being mucked with by the EventWar.
     - Closes #5014. 
+  - Fix towny.bypass_death_costs node not working in all situations.

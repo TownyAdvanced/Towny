@@ -218,6 +218,9 @@ public class TownyEntityMonitorListener implements Listener {
 		if (townBlock != null && (townBlock.getType().equals(TownBlockType.ARENA) || townBlock.getType().equals(TownBlockType.JAIL)))
 			return;
 		
+		if (defenderPlayer != null && TownyUniverse.getInstance().getPermissionSource().testPermission(defenderPlayer, PermissionNodes.TOWNY_BYPASS_DEATH_COSTS.getNode()))
+			return;
+		
 		if (defenderResident.isJailed())
 			return;
 
