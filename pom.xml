@@ -14,6 +14,7 @@
             <name>CC BY-NC-ND 3.0</name>
             <url>http://creativecommons.org/licenses/by-nc-nd/3.0/</url>
             <comments>Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported</comments>
+            <distribution>repo</distribution>
         </license>
     </licenses>
 
@@ -275,6 +276,10 @@
                         <relocation>
                             <pattern>net.kyori.adventure</pattern>
                             <shadedPattern>com.palmergames.adventure</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.kyori.examination</pattern>
+                            <shadedPattern>com.palmergames.examination</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.bstats</pattern>
