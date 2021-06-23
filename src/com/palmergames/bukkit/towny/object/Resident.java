@@ -330,7 +330,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	public void addFriend(Resident resident) throws AlreadyRegisteredException {
 
-		if (hasFriend(resident))
+		if (hasFriend(resident) || this.equals(resident) || resident.isNPC())
 			throw new AlreadyRegisteredException();
 		else
 			friends.add(resident);
