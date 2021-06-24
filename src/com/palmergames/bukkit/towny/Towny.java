@@ -145,12 +145,15 @@ public class Towny extends JavaPlugin {
 		TownyEconomyHandler.initialize(this);
 		TownyFormatter.initialize();
 		PlayerCacheUtil.initialize(this);
-		SpawnUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
 
 		
 		if (load()) {
+			// Initialize SpawnUtil only after the Translation class has figured out a language,
+			// to avoid ExceptionInInitializerError exceptions from SpawnType.
+			SpawnUtil.initialize(this);
+			
 			// Setup bukkit command interfaces
 			registerSpecialCommands();
 			registerCommands();

@@ -8,12 +8,16 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeTools;
 
 public class TownUtil {
+	
+	private TownUtil() {
+		throw new IllegalStateException("Utility Class");
+	}
 
 	/**
-	 * Makes a list of residents who haven't logged in in the given days.
+	 * Makes a list of {@linkplain Resident}s who haven't logged in in the given days.
 	 * NPCs and Mayors are not included.
 	 * 
-	 * @param list List of Residents from which to test for inactivity.
+	 * @param resList List of Residents from which to test for inactivity.
 	 * @param days Number of days after which players are considered inactive.
 	 * @since 0.97.0.7
 	 */

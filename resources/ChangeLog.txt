@@ -6263,3 +6263,21 @@ v0.92.0.11:
     - Not required to be added to the townyperms.yml.
   - Fix wilderness entity explosions' reverting being mucked with by the EventWar.
     - Closes #5014. 
+  - Fix towny.bypass_death_costs node not working in all situations.
+  - Fix players res friending themselves or NPCs, courtesy of Warriorrrr with PR #5017.
+  - Fix building w/o github-actions maven profile; Ensure JVM 8 compatiblity with JDK9+, courtesy of FlagCourier with PR #5019.
+  - Fix ExceptionInInitializerError preventing Towny from starting up.
+0.97.0.8:
+  - Allow ruined towns' residents to be able to use /town spawn.
+  - Fix loading residents who have friended themselves.
+  - Add ability to prevent outlaws from teleporting or using certain commands while in a town, courtesy of drewdorris with PR #5012 (First-Time Contributor!)
+  - New Config Option: global_town_settings.allow_outlaws_to_teleport_out_of_town
+    - Default: true
+    - Prevents outlawed users teleport commands while located in a town they're outlawed in.
+  - New Config Option: global_town_settings.allow_outlaws_use_teleport_items
+    - Default: true
+    - If false, outlawed players in towns cannot use items that teleport the player, ie: Ender Pearls & Chorus Fruit.
+    - Setting this to false requires allow_outlaws_to_teleport_out_of_town to also be false.
+  - New Config Option: global_town_settings.outlaw_blacklisted_commands
+    - Default: somecommandhere,othercommandhere
+    - Commands outlawed users can't use while inside that town.

@@ -1425,6 +1425,10 @@ msg_purging_will_remove_the_following_residents: '&bPlease confirm you want to p
 msg_purge_complete_x_removed: '&bPurge complete, %s residents removed.'
 msg_err_days_must_be_greater_than_0: 'Days must be greater than zero.'
 
+msg_err_days_must_be_greater_than_0: 'Days must be greater than zero.'
+msg_err_outlawed_players_no_teleport: '&4You are outlawed in the town you are currently in and cannot teleport!'
+msg_err_you_cannot_use_command_while_in_outlaw_town: '&4You cannot use that command while in a town you are outlawed in.'
+
 msg_safe_mode_base: '[Error] Towny is locked in Safe Mode due to an error! '
 msg_safe_mode_player: 'Tell an admin to check the server''s console.'
 msg_safe_mode_admin: 'Check the server''s console for more information.'

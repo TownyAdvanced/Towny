@@ -3047,6 +3047,14 @@ public class TownySettings {
 	public static boolean canOutlawsEnterTowns() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_ENTER_TOWN);
 	}
+
+	public static boolean canOutlawsTeleportOutOfTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_TELEPORT_OUT_OF_TOWN);
+	}
+
+	public static boolean canOutlawsUseTeleportItems() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTLAWS_USE_TELEPORT_ITEMS);
+	}
 	
 	public static int getOutlawTeleportWarmup() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_OUTLAW_TELEPORT_WARMUP);
@@ -3059,6 +3067,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW);
 	}
 
+	public static List<String> getOutlawBlacklistedCommands() {
+		return getStrArr(ConfigNodes.GTOWN_SETTINGS_OUTLAW_BLACKLISTED_COMMANDS);
+	}
+	
 	public static boolean getVisualizedSpawnPointsEnabled() {
 		return getBoolean(ConfigNodes.PLUGIN_VISUALIZED_SPAWN_POINTS_ENABLED);
 	}
