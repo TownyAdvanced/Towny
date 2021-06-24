@@ -6267,3 +6267,5 @@ v0.92.0.11:
   - Fix players res friending themselves or NPCs, courtesy of Warriorrrr with PR #5017.
   - Fix building w/o github-actions maven profile; Ensure JVM 8 compatiblity with JDK9+, courtesy of FlagCourier with PR #5019.
   - Fix ExceptionInInitializerError preventing Towny from starting up.
+0.97.0.8:
+  - Allow ruined towns' residents to be able to use /town spawn.

@@ -620,6 +620,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				townOutlawList(player, split);
 
+			} else if (split[0].equalsIgnoreCase("spawn")) {
+
+				/*
+				 * town spawn handles it's own perms.
+				 */
+				boolean ignoreWarning = false;
+				
+				if ((split.length > 2 && split[2].equals("-ignore"))) {
+					ignoreWarning = true;
+				}
+				
+				townSpawn(player, StringMgmt.remFirstArg(split), false, ignoreWarning);
+
 			} else {
 				/*
 				 * The remaining subcommands are completely blocked from use by ruined towns.
@@ -669,19 +682,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					 * perm test performed in method.
 					 */
 					townToggle(player, newSplit, false, null);
-
-				} else if (split[0].equalsIgnoreCase("spawn")) {
-
-					/*
-					 * town spawn handles it's own perms.
-					 */
-					boolean ignoreWarning = false;
-					
-					if ((split.length > 2 && split[2].equals("-ignore"))) {
-						ignoreWarning = true;
-					}
-					
-					townSpawn(player, newSplit, false, ignoreWarning);
 
 				} else if (split[0].equalsIgnoreCase("outpost")) {
 
