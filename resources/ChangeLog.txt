@@ -6269,3 +6269,4 @@ v0.92.0.11:
   - Fix ExceptionInInitializerError preventing Towny from starting up.
 0.97.0.8:
   - Allow ruined towns' residents to be able to use /town spawn.
+  - Fix loading residents who have friended themselves.

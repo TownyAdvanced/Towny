@@ -805,7 +805,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					search = (line.contains("#")) ? "#" : ",";
 					List<Resident> friends = getResidents(line.split(search));
 					for (Resident friend : friends) {
-						resident.addFriend(friend);
+						try {
+							resident.addFriend(friend);
+						} catch (AlreadyRegisteredException ignored) {}
 					}
 				}
 			} catch (Exception e) {
