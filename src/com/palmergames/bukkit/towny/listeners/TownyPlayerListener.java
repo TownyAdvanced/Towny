@@ -656,6 +656,27 @@ public class TownyPlayerListener implements Listener {
 			}
 		}
 		
+		// Cancel teleport if resident is outlawed in Town
+		if (resident != null && !TownySettings.canOutlawsTeleportOutOfTowns()) {
+			TownBlock tb = TownyAPI.getInstance().getTownBlock(event.getFrom());
+			if (tb != null && tb.hasTown()) {
+				Town town = tb.getTownOrNull();
+				
+				if (town != null && town.hasOutlaw(resident)) {
+					if ((event.getCause() == TeleportCause.COMMAND)) {
+						TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_outlawed_players_no_teleport"));
+						event.setCancelled(true);
+						return;
+					}
+					if (event.getCause() == TeleportCause.PLUGIN)
+						return;
+					if (!TownySettings.canOutlawsUseTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CHORUS_FRUIT)) {
+						TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_outlawed_players_no_teleport"));
+						event.setCancelled(true);
+					}
+				}
+			}
+		}
 
 		/*
 		 * Test to see if CHORUS_FRUIT is in the item_use list.
@@ -984,6 +1005,36 @@ public class TownyPlayerListener implements Listener {
 		if (TownySettings.getJailBlacklistedCommands().contains(split[0])) {
 			TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_you_cannot_use_that_command_while_jailed"));
 			event.setCancelled(true);
+		}
+	}
+
+	/**
+	 * Blocks outlawed players using blacklisted commands.
+	 * @param event - PlayerCommandPreprocessEvent
+	 */
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onOutlawedPlayerUsesCommand(PlayerCommandPreprocessEvent event) {
+		if (plugin.isError()) {
+			return;
+		}
+		Player player = event.getPlayer();
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+
+		// More than likely another plugin using a fake player to run a command. 
+		if (resident == null)
+			return;
+		
+		TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
+		if (tb != null && tb.hasTown()) {
+			Town town = tb.getTownOrNull();
+			
+			if (town != null && town.hasOutlaw(resident)) {
+				String[] split = event.getMessage().substring(1).split(" ");
+				if (TownySettings.getOutlawBlacklistedCommands().contains(split[0])) {
+					TownyMessaging.sendErrorMsg(event.getPlayer(), Translation.of("msg_err_you_cannot_use_command_while_in_outlaw_town"));
+					event.setCancelled(true);
+				}
+			}
 		}
 	}
 	
