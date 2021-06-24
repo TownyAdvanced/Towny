@@ -598,8 +598,7 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# If false, outlawed players in towns cannot use items that teleport the player, ie: Ender Pearls & Chorus Fruit.",
-			"# If this is true and allow_outlaws_to_teleport_out_of_town is false, outlaws are still barred from using other methods of teleporting.",
-			"# This requires allow_outlaws_to_leave_town and allow_outlaws_to_teleport_out_of_town to be false."),
+			"# Setting this to false requires allow_outlaws_to_teleport_out_of_town to also be false."),
 	GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW(
 			"global_town_settings.warn_town_on_outlaw",
 			"false",
