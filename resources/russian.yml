@@ -1,5 +1,5 @@
 name: Towny
-version: 0.108
+version: 0.109
 language: russian
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -1423,3 +1423,9 @@ msg_town_cant_peaceful: '&bTown couldn''t afford to become a peaceful town.'
 msg_town_paid_for_neutral_status: '&bYour town paid %s to retain your peaceful status.'
 msg_nation_paid_for_neutral_status: '&bYour nation paid %s to retain your peaceful status.'
 your_town_has_been_invited_to_join_nation: 'Your town has been invited to join the nation: %s'
+
+#Added in 0.109
+msg_err_no_one_to_purge: '&bThere are no inactive members to purge.'
+msg_purging_will_remove_the_following_residents: '&bPlease confirm you want to purge the following residents: %s'
+msg_purge_complete_x_removed: '&bPurge complete, %s residents removed.'
+msg_err_days_must_be_greater_than_0: 'Days must be greater than zero.'
