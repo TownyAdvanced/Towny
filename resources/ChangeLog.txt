@@ -6254,3 +6254,18 @@ v0.92.0.11:
   - Improve message shown to towns which are invited to a nation.
     - Closes #4998.
   - Give Glowing Item Frames the same protections we give to the differently-abled Item Frames.
+0.97.0.7:
+  - New Command: /town purge {days}
+    - Kicks residents from the town who have been inactive for the given number of days.
+    - NPCs and mayors are exempt.
+  - New Permission Node: towny.command.town.purge
+    - Child node of towny.command.town.*
+    - Not required to be added to the townyperms.yml.
+  - Fix wilderness entity explosions' reverting being mucked with by the EventWar.
+    - Closes #5014. 
+  - Fix towny.bypass_death_costs node not working in all situations.
+  - Fix players res friending themselves or NPCs, courtesy of Warriorrrr with PR #5017.
+  - Fix building w/o github-actions maven profile; Ensure JVM 8 compatiblity with JDK9+, courtesy of FlagCourier with PR #5019.
+  - Fix ExceptionInInitializerError preventing Towny from starting up.
+0.97.0.8:
+  - Allow ruined towns' residents to be able to use /town spawn.
