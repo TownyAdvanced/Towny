@@ -537,7 +537,7 @@ public class TownyPlayerListener implements Listener {
 					return;
 				} 
 			}
-
+			
 			/*
 			 * Handle things which need an item in hand.
 			 */
