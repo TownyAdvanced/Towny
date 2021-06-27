@@ -471,6 +471,9 @@ public class TownyPlayerListener implements Listener {
 			Material mat = null;
 			ActionType actionType = ActionType.DESTROY;
 			
+			// PlayerInventory#getItem(EquipmentSlot) does not exist on <1.16, so this has to be used
+			Material item = event.getHand().equals(EquipmentSlot.HAND) ? event.getPlayer().getInventory().getItemInMainHand().getType() : event.getPlayer().getInventory().getItemInOffHand().getType();
+
 			/*
 			 * The following will get us a Material substituted in for an Entity so that we can run permission tests.
 			 * Anything not in the switch will leave the block null.
@@ -493,10 +496,9 @@ public class TownyPlayerListener implements Listener {
 				 */
 				case SHEEP:
 				case WOLF:
-					if (event.getPlayer().getInventory().getItem(event.getHand()) != null) {
-						Material dye = event.getPlayer().getInventory().getItem(event.getHand()).getType();
-						if (ItemLists.DYES.contains(dye.name())) {
-							mat = dye;
+					if (item != null) {
+						if (ItemLists.DYES.contains(item.name())) {
+							mat = item;
 							break;
 						}
 					}	
@@ -539,8 +541,7 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Handle things which need an item in hand.
 			 */
-			if (event.getPlayer().getInventory().getItem(event.getHand()) != null) {
-				Material item = event.getPlayer().getInventory().getItem(event.getHand()).getType();
+			if (item != null) {
 
 				/*
 				 * Sheep can be sheared, protect them if they aren't in the wilderness.
@@ -558,7 +559,7 @@ public class TownyPlayerListener implements Listener {
 					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getRightClicked().getLocation(), item));
 					return;
-					}
+				}
 				
 				/*
 				 * Item_use protection.
