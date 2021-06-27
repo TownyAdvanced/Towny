@@ -1,5 +1,5 @@
 name: Towny
-version: 0.109
+version: 0.110
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -1448,3 +1448,8 @@ msg_err_no_one_to_purge: '&bThere are no inactive members to purge.'
 msg_purging_will_remove_the_following_residents: '&bPlease confirm you want to purge the following residents: %s'
 msg_purge_complete_x_removed: '&bPurge complete, %s residents removed.'
 msg_err_days_must_be_greater_than_0: 'Days must be greater than zero.'
+
+#Added in 0.110
+msg_safe_mode_base: '[Error] Towny is locked in Safe Mode due to an error! '
+msg_safe_mode_player: 'Tell an admin to check the server''s console.'
+msg_safe_mode_admin: 'Check the server''s console for more information.'
