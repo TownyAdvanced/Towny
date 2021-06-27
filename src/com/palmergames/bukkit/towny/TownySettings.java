@@ -2118,6 +2118,14 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_RESPAWN_ANCHOR_HIGHER_PRECEDENCE);
 	}
 	
+	public static int getHomeBlockMovementCooldownHours() {
+		return getInt(ConfigNodes.GTOWN_HOMEBLOCK_MOVEMENT_COOLDOWN);
+	}
+	
+	public static int getHomeBlockMovementDistanceInTownBlocks() {
+		return getInt(ConfigNodes.GTOWN_HOMEBLOCK_MOVEMENT_DISTANCE);
+	}
+	
 	public static int getMaxResidentsPerTown() {
 		
 		return getInt(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN);

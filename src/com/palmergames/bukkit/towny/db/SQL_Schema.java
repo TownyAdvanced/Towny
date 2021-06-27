@@ -173,6 +173,7 @@ public class SQL_Schema {
 		columns.add("`debtBalance` float NOT NULL");
 		columns.add("`joinedNationAt` BIGINT NOT NULL");
 		columns.add("`primaryJail` VARCHAR(36) DEFAULT NULL");
+		columns.add("`movedHomeBlockAt` BIGINT NOT NULL");
 		return columns;
 	}
 
