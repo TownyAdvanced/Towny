@@ -6286,3 +6286,4 @@ v0.92.0.11:
     - Closes #5029.
   - Improve safe mode messages in-game, courtesy of EuGNosii with PR #5013.
   - Bump language files to 0.110.
+  - Fix Warzone Listener Able to Query null PlayerCache.
