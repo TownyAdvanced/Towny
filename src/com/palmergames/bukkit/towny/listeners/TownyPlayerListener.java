@@ -32,7 +32,6 @@ import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
 
@@ -104,11 +103,6 @@ public class TownyPlayerListener implements Listener {
 
 		Player player = event.getPlayer();
 
-		if (plugin.isError()) {
-			TownyMessaging.sendMessage(player, Colors.Rose + "[Towny Error] Locked in Safe mode!");
-			return;
-		}
-
 		if (!player.isOnline()) {
 			return;
 		}
@@ -119,6 +113,18 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
+		// Safe Mode Join Messages
+		if (plugin.isError()) {
+			String tipMsg = Translation.of("msg_safe_mode_player");
+
+			// Operator or an admin.
+			if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player))
+				tipMsg = Translation.of("msg_safe_mode_admin");
+
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_safe_mode_base") + tipMsg);
+			return;
+		}
+		
 		// Perform login code in it's own thread to update Towny data.
 		if (BukkitTools.scheduleSyncDelayedTask(new OnPlayerLogin(Towny.getPlugin(), player), 0L) == -1) {
 			TownyMessaging.sendErrorMsg("Could not schedule OnLogin.");
