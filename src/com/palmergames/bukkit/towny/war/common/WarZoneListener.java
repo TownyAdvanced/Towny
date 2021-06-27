@@ -50,6 +50,8 @@ public class WarZoneListener implements Listener {
 			return;
 		
 		Player player = event.getPlayer();
+		if (!plugin.hasCache(player))
+			plugin.newCache(player);
 		Material mat = event.getMaterial();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 
@@ -71,6 +73,8 @@ public class WarZoneListener implements Listener {
 			return;
 		
 		Player player = event.getPlayer();
+		if (!plugin.hasCache(player))
+			plugin.newCache(player);
 		Material mat = event.getMaterial();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 		
@@ -92,6 +96,8 @@ public class WarZoneListener implements Listener {
 			return;
 		
 		Player player = event.getPlayer();
+		if (!plugin.hasCache(player))
+			plugin.newCache(player);
 		TownBlockStatus status = plugin.getCache(event.getPlayer()).getStatus();
 		
 		// Allow item_use for Event War if isAllowingItemUseInWarZone is true, FlagWar also handled here
@@ -112,6 +118,8 @@ public class WarZoneListener implements Listener {
 			return;
 		
 		Player player = event.getPlayer();
+		if (!plugin.hasCache(player))
+			plugin.newCache(player);
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 
 		// Allow switch for Event War if isAllowingSwitchesInWarZone is true, FlagWar also handled here
