@@ -23,6 +23,7 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -295,6 +296,17 @@ public class Town extends Government implements TownBlockOwner {
 		return residents.contains(resident);
 	}
 
+	public boolean hasResident(Player player) {
+		
+		return hasResident(player.getUniqueId());
+	}
+	
+	public boolean hasResident(UUID uuid) {
+		
+		Resident resident = TownyAPI.getInstance().getResident(uuid);
+		return resident != null && hasResident(resident);
+	}
+	
 	/**
 	 * @deprecated Since 0.96.3.0, use {@link Resident#hasTownRank(String)} (using "assistant" as argument) instead.
 	 * Whether a resident has an assistant role or not.

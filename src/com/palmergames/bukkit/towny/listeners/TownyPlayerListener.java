@@ -1059,10 +1059,6 @@ public class TownyPlayerListener implements Listener {
 			return;
 		
 		Player player = event.getPlayer();
-		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
-		if (res == null)
-			return;
-		
 		String command = event.getMessage().substring(1).split(" ")[0];
 
 		/*
@@ -1083,7 +1079,7 @@ public class TownyPlayerListener implements Listener {
 				return;
 			
 			// Allow own town
-			if (town.hasResident(res)) {
+			if (town.hasResident(player)) {
 				return;
 			} else {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_command_outsider_blocked", town.getName()));
@@ -1128,7 +1124,7 @@ public class TownyPlayerListener implements Listener {
 			// If the player is in their own town and has towny.claimed.owntown.build.dirt 
 			// (or more likely towny.claimed.owntown.*) then allow them to use the command.
 			// It is likely a mayor/assistant.
-			if (town.hasResident(res) && TownyUniverse.getInstance().getPermissionSource().hasOwnTownOverride(player, Material.DIRT, ActionType.BUILD))
+			if (town.hasResident(player) && TownyUniverse.getInstance().getPermissionSource().hasOwnTownOverride(player, Material.DIRT, ActionType.BUILD))
 				return;
 			
 			if (tb.hasResident()) {
@@ -1148,7 +1144,7 @@ public class TownyPlayerListener implements Listener {
 				// If the player is in their own town and has towny.claimed.townowned.build.dirt 
 				// (or more likely towny.claimed.townowned.*) then allow them to use the command.
 				// It is likely a assistant or town-ranked player. 
-				if (town.hasResident(res) && TownyUniverse.getInstance().getPermissionSource().hasTownOwnedOverride(player, Material.DIRT, ActionType.BUILD)) {
+				if (town.hasResident(player) && TownyUniverse.getInstance().getPermissionSource().hasTownOwnedOverride(player, Material.DIRT, ActionType.BUILD)) {
 					return;
 					
 				// Not a special person, and not in a personally-owned plot, cancel this command.
