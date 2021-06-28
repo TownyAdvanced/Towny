@@ -580,6 +580,18 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# When this is true, players will respawn to respawn anchors on death rather than their own town. 1.16+ only."),
+	GTOWN_HOMEBLOCK_MOVEMENT_COOLDOWN(
+			"global_town_settings.homeblock_movement_cooldown_hours",
+			"0",
+			"",
+			"# When set above 0, the amount of hours a town must wait after setting their homeblock, in order to move it again."),
+	GTOWN_HOMEBLOCK_MOVEMENT_DISTANCE(
+			"global_town_settings.homeblock_movement_distance_limit",
+			"0",
+			"",
+			"# When set above 0, the furthest number of townblocks a homeblock can be moved by.",
+			"# Example: setting it to 3 would mean the player can only move their homeblock over by 3 townblocks at a time.",
+			"# Useful when used with the above homeblock_movement_cooldown_hours setting."),
 	GTOWN_SETTINGS_SHOW_TOWN_NOTIFICATIONS(
 			"global_town_settings.show_town_notifications",
 			"true",

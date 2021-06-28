@@ -88,8 +88,10 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
+import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
+import com.palmergames.util.TimeTools;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -2414,6 +2416,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (world == null || townBlock == null || !townBlock.hasTown() || townBlock.getTownOrNull() != town)
 				throw new TownyException(Translation.of("msg_area_not_own"));
 
+			if (TownySettings.getHomeBlockMovementCooldownHours() > 0 
+				&& town.getMovedHomeBlockAt() > 0
+				&& TimeTools.getHours(System.currentTimeMillis() - town.getMovedHomeBlockAt()) < TownySettings.getHomeBlockMovementCooldownHours()) {
+				long timeRemaining = ((town.getMovedHomeBlockAt() + TimeTools.getMillis(TownySettings.getHomeBlockMovementCooldownHours() + "h")) - System.currentTimeMillis());
+				throw new TownyException(Translation.of("msg_err_you_have_moved_your_homeblock_too_recently_wait_x", TimeMgmt.getFormattedTimeValue(timeRemaining)));
+			}
+			
 			if (TownyAPI.getInstance().isWarTime())
 				throw new TownyException(Translation.of("msg_war_cannot_do"));
 			
@@ -2427,6 +2436,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
 				if ((minDistanceFromHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
 					throw new TownyException(Translation.of("msg_too_far"));
+			
+			if (TownySettings.getHomeBlockMovementDistanceInTownBlocks() > 0) {
+				double distance = MathUtil.distance(town.getHomeBlock().getX(), townBlock.getX(), town.getHomeBlock().getZ(), townBlock.getZ());
+				if (distance > TownySettings.getHomeBlockMovementDistanceInTownBlocks())
+					throw new TownyException(Translation.of("msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x", TownySettings.getHomeBlockMovementDistanceInTownBlocks(), Math.floor(distance)));
+			}
 
 			TownPreSetHomeBlockEvent preEvent = new TownPreSetHomeBlockEvent(town, townBlock, player);
 			Bukkit.getPluginManager().callEvent(preEvent);
@@ -2449,6 +2464,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							// Set town homeblock and run the recheckTownDistance for real.
 							finalTown.setHomeBlock(finalTB);
 							finalTown.setSpawn(playerLocation);
+							town.setMovedHomeBlockAt(System.currentTimeMillis());
 							finalNation.recheckTownDistance();
 							TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
 						} catch (TownyException e) {
@@ -2462,12 +2478,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else {
 					town.setHomeBlock(townBlock);
 					town.setSpawn(player.getLocation());		
+					town.setMovedHomeBlockAt(System.currentTimeMillis());
 					TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
 				}
 			// No nation to check proximity for/proximity isn't tested anyways.
 			} else {
 				town.setHomeBlock(townBlock);
 				town.setSpawn(player.getLocation());
+				town.setMovedHomeBlockAt(System.currentTimeMillis());
 				TownyMessaging.sendMsg(player, Translation.of("msg_set_town_home", coord.toString()));
 			}
 

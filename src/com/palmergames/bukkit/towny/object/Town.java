@@ -72,6 +72,7 @@ public class Town extends Government implements TownBlockOwner {
 	private boolean ruined = false;
 	private long ruinedTime;
 	private long joinedNationAt;
+	private long movedHomeBlockAt;
 	private Jail primaryJail;
 
 	public Town(String name) {
@@ -1412,6 +1413,14 @@ public class Town extends Government implements TownBlockOwner {
 
 	public void setJoinedNationAt(long joinedNationAt) {
 		this.joinedNationAt = joinedNationAt;
+	}
+	
+	public long getMovedHomeBlockAt() {
+		return movedHomeBlockAt;
+	}
+
+	public void setMovedHomeBlockAt(long movedHomeBlockAt) {
+		this.movedHomeBlockAt = movedHomeBlockAt;
 	}
 
 	private void sortResidents() {
