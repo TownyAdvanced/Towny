@@ -6306,3 +6306,13 @@ v0.92.0.11:
     - Set to 0 to disable. When above 0 an outpost may only be claimed within the given number of townblocks from a townblock owned by the town.
     - Setting this to any value above 0 will stop outposts being made off-world from the town's homeworld.
     - Do not set lower than min_distance_for_outpost_from_plot above.
+  - Adds limits to how often and how far a town can move their homeblock.
+    - Closes #4957.
+  - New Config Option: global_town_settings.homeblock_movement_cooldown_hours
+    - Default: 0
+    - When set above 0, the amount of hours a town must wait after setting their homeblock, in order to move it again.
+  - New Config Option: global_town_settings.homeblock_movement_distance_limit
+    - Default: 0
+    - When set above 0, the furthest number of townblocks a homeblock can be moved by.
+    - Example: setting it to 3 would mean the player can only move their homeblock over by 3 townblocks at a time.
+    - Useful when used with the above homeblock_movement_cooldown_hours setting.
