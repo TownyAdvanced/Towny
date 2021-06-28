@@ -189,6 +189,13 @@ public enum ConfigNodes {
     		"# Minimum number of plots an outpost must be from any other town's plots.",
     		"# Useful when min_plot_distance_from_town_plot is set to near-zero to allow towns to have claims",
     		"# near to each other, but want to keep outposts away from towns."),
+    TOWN_MAX_DISTANCE_FOR_OUTPOST_FROM_TOWN_PLOT(
+    		"town.max_distance_for_outpost_from_town_plot",
+    		"0",
+    		"",
+    		"# Set to 0 to disable. When above 0 an outpost may only be claimed within the given number of townblocks from a townblock owned by the town.",
+    		"# Setting this to any value above 0 will stop outposts being made off-world from the town's homeworld.",
+    		"# Do not set lower than min_distance_for_outpost_from_plot above."),
 	TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.max_distance_between_homeblocks",
 			"0",

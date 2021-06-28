@@ -46,6 +46,18 @@ public class OutpostUtil {
 		if (world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
 			throw new TownyException(Translation.of("msg_too_close2", Translation.of("homeblock")));
 
+		int maxDistance = TownySettings.getMaxDistanceForOutpostsFromTown();
+		// Outposts can have a maximum distance they can be from their town's plots.
+		if (maxDistance > 0) {
+			// Doesn't match the world.
+			if (!world.getName().equalsIgnoreCase(town.getHomeblockWorld().getName()))
+				throw new TownyException(Translation.of("msg_err_you_can_only_claim_outposts_in_your_homeblocks_world"));
+			
+			int distance = world.getMinDistanceFromOtherPlotsOwnedByTown(key, town);
+			// Is too far from the nearest townblock.
+			if (distance > maxDistance)
+				throw new TownyException(Translation.of("msg_err_not_close_enough_to_your_town_nearest_plot", distance, maxDistance));
+		}
 		// Outposts can have a minimum required distance from other towns' townblocks.
 		int minDistance = world.getMinDistanceFromOtherTownsPlots(key, isPlotSetOutpost ? town : null);
 		// Outposts can have a minimum required distance from other outposts.

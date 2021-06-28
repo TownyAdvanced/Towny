@@ -2169,6 +2169,10 @@ public class TownySettings {
 		
 		return getInt(ConfigNodes.TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT);
 	}
+	
+	public static int getMaxDistanceForOutpostsFromTown() {
+		return getInt(ConfigNodes.TOWN_MAX_DISTANCE_FOR_OUTPOST_FROM_TOWN_PLOT);
+	}
 
 	public static int getMinDistanceFromTownPlotblocks() {
 

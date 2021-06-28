@@ -6299,3 +6299,10 @@ v0.92.0.11:
   - New Config Option: global_town_settings.outlaw_teleport_away_on_becoming_outlawed
     - Default: false
     - If set to true, when a player is made into an outlaw using /t outlaw add NAME, and that new outlaw is within the town's borders, the new outlaw will be teleported away using the outlaw_teleport_warmup.
+  - Add ability to limit how far away an outpost can be made from a town's existing claims.
+    - Closes #3065.
+  - New Config Option: town.max_distance_for_outpost_from_town_plot
+    - Default: 0
+    - Set to 0 to disable. When above 0 an outpost may only be claimed within the given number of townblocks from a townblock owned by the town.
+    - Setting this to any value above 0 will stop outposts being made off-world from the town's homeworld.
+    - Do not set lower than min_distance_for_outpost_from_plot above.
