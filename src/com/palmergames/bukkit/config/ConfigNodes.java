@@ -2290,6 +2290,12 @@ public enum ConfigNodes {
 			"",
 			"# If this is true, then after a town has been ruined for the minimum configured time,",
 			"# it can then be reclaimed by any resident who runs /t reclaim, and pays the required price. (price is configured in the eco section)"),
+	TOWN_RUINING_TOWNS_BECOME_PUBLIC(
+			"town_ruining.town_ruins.ruins_become_public",
+			"false",
+			"",
+			"# If this is true, when a town becomes a ruin they also receive public status,",
+			"# meaning anyone can use /t spawn NAME to teleport to that town."),
 	WAR(
 			"war",
 			"",
