@@ -3056,6 +3056,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTLAWS_USE_TELEPORT_ITEMS);
 	}
 	
+	public static boolean areNewOutlawsTeleportedAway() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTLAW_TELEPORT_ON_BECOMING_OUTLAWED);
+	}
+	
 	public static int getOutlawTeleportWarmup() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_OUTLAW_TELEPORT_WARMUP);
 	}

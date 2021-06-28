@@ -104,6 +104,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InvalidObjectException;
@@ -1081,8 +1082,30 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					town.save();
 					
 					// Send feedback messages.
-					if (target.getPlayer() != null && target.getPlayer().isOnline())
+					if (target.getPlayer() != null && target.getPlayer().isOnline()) {
 						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_declared_outlaw", town.getName()));
+						Location loc = target.getPlayer().getLocation();
+						
+						// If the newly-outlawed player is within the town's borders and is meant to be teleported away, 
+						// send them using the outlaw teleport warmup time, potentially giving them the chance to escape
+						// the borders.
+						if (TownySettings.areNewOutlawsTeleportedAway() 
+							&& TownyAPI.getInstance().getTownBlock(loc) != null
+							&& TownyAPI.getInstance().getTown(loc) == town) {
+							
+							if (TownySettings.getOutlawTeleportWarmup() > 0)
+								TownyMessaging.sendMsg(target, Translation.of("msg_outlaw_kick_cooldown", town, TimeMgmt.formatCountdownTime(TownySettings.getOutlawTeleportWarmup())));
+							
+							final Resident outlawRes = target;
+							new BukkitRunnable() {
+								@Override
+								public void run() {
+									if (TownyAPI.getInstance().getTown(loc) != null && TownyAPI.getInstance().getTown(loc) == town) 
+										SpawnUtil.outlawTeleport(town, outlawRes);
+								}
+							}.runTaskLater(plugin, TownySettings.getOutlawTeleportWarmup() * 20);
+						}
+					}
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_you_have_declared_an_outlaw", target.getName(), town.getName()));
 					if (admin)
 						TownyMessaging.sendMsg(sender, Translation.of("msg_you_have_declared_an_outlaw", target.getName(), town.getName()));

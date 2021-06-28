@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
+import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.ItemLists;
@@ -37,7 +38,6 @@ import com.palmergames.util.StringMgmt;
 
 import com.palmergames.util.TimeMgmt;
 
-import io.papermc.lib.PaperLib;
 import net.citizensnpcs.api.CitizensAPI;
 
 import org.bukkit.Bukkit;
@@ -80,7 +80,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Handle events for all Player related events
@@ -838,20 +837,8 @@ public class TownyPlayerListener implements Listener {
 				new BukkitRunnable() {
 					@Override
 					public void run() {
-						if (TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) != null && TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) == town && town.hasOutlaw(outlaw.getPlayer().getName())) {
-							Location spawnLocation = town.getWorld().getSpawnLocation();
-							Player outlawedPlayer = outlaw.getPlayer();
-							if (!TownySettings.getOutlawTeleportWorld().equals("")) {
-								spawnLocation = Objects.requireNonNull(Bukkit.getWorld(TownySettings.getOutlawTeleportWorld())).getSpawnLocation();
-							}
-							// sets tp location to their bedspawn only if it isn't in the town they're being teleported from.
-							if ((outlawedPlayer.getBedSpawnLocation() != null) && (TownyAPI.getInstance().getTown(outlawedPlayer.getBedSpawnLocation()) != town))
-								spawnLocation = outlawedPlayer.getBedSpawnLocation();
-							if (outlaw.hasTown() && TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer) != null)
-								spawnLocation = TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer);
-							TownyMessaging.sendMsg(outlaw, Translation.of("msg_outlaw_kicked", town));
-							PaperLib.teleportAsync(outlaw.getPlayer(), spawnLocation, TeleportCause.PLUGIN);
-						}
+						if (TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) != null && TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) == town && town.hasOutlaw(outlaw.getPlayer().getName())) 
+							SpawnUtil.outlawTeleport(town, outlaw);
 					}
 				}.runTaskLater(plugin, TownySettings.getOutlawTeleportWarmup() * 20);
 			}

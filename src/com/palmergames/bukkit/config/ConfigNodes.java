@@ -606,6 +606,12 @@ public enum ConfigNodes {
 			"# Should towns be warned in case an outlaw roams the town?",
 			"# Warning: Outlaws can use this feature to spam residents with warnings!",
 			"# It is recommended to set this to true only if you're using outlaw teleporting with a warmup of 0 seconds."),
+	GTOWN_SETTINGS_OUTLAW_TELEPORT_ON_BECOMING_OUTLAWED(
+			"global_town_settings.outlaw_teleport_away_on_becoming_outlawed",
+			"false",
+			"",
+			"# If set to true, when a player is made into an outlaw using /t outlaw add NAME, and that new",
+			"# outlaw is within the town's borders, the new outlaw will be teleported away using the outlaw_teleport_warmup."),
 	GTOWN_SETTINGS_OUTLAW_TELEPORT_WARMUP(
 			"global_town_settings.outlaw_teleport_warmup",
 			"5",

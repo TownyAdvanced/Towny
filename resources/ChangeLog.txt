@@ -6294,3 +6294,8 @@ v0.92.0.11:
     - If this is true, when a town becomes a ruin they also receive public status, meaning anyone can use /t spawn NAME to teleport to that town.
   - Change max-hours for Town Ruins from 1000 to 8760 (one year.)
     - Closes #4970.
+  - Add ability to teleport newly-outlawed players who are within the town's borders.
+    - Closes #4944.
+  - New Config Option: global_town_settings.outlaw_teleport_away_on_becoming_outlawed
+    - Default: false
+    - If set to true, when a player is made into an outlaw using /t outlaw add NAME, and that new outlaw is within the town's borders, the new outlaw will be teleported away using the outlaw_teleport_warmup.
