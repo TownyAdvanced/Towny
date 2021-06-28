@@ -6292,3 +6292,5 @@ v0.92.0.11:
   - New Config Option: town_ruining.town_ruins.ruins_become_public
     - Default: false
     - If this is true, when a town becomes a ruin they also receive public status, meaning anyone can use /t spawn NAME to teleport to that town.
+  - Change max-hours for Town Ruins from 1000 to 8760 (one year.)
+    - Closes #4970.
