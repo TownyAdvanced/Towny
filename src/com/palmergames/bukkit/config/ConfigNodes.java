@@ -189,6 +189,13 @@ public enum ConfigNodes {
     		"# Minimum number of plots an outpost must be from any other town's plots.",
     		"# Useful when min_plot_distance_from_town_plot is set to near-zero to allow towns to have claims",
     		"# near to each other, but want to keep outposts away from towns."),
+    TOWN_MAX_DISTANCE_FOR_OUTPOST_FROM_TOWN_PLOT(
+    		"town.max_distance_for_outpost_from_town_plot",
+    		"0",
+    		"",
+    		"# Set to 0 to disable. When above 0 an outpost may only be claimed within the given number of townblocks from a townblock owned by the town.",
+    		"# Setting this to any value above 0 will stop outposts being made off-world from the town's homeworld.",
+    		"# Do not set lower than min_distance_for_outpost_from_plot above."),
 	TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.max_distance_between_homeblocks",
 			"0",
@@ -573,6 +580,18 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# When this is true, players will respawn to respawn anchors on death rather than their own town. 1.16+ only."),
+	GTOWN_HOMEBLOCK_MOVEMENT_COOLDOWN(
+			"global_town_settings.homeblock_movement_cooldown_hours",
+			"0",
+			"",
+			"# When set above 0, the amount of hours a town must wait after setting their homeblock, in order to move it again."),
+	GTOWN_HOMEBLOCK_MOVEMENT_DISTANCE(
+			"global_town_settings.homeblock_movement_distance_limit",
+			"0",
+			"",
+			"# When set above 0, the furthest number of townblocks a homeblock can be moved by.",
+			"# Example: setting it to 3 would mean the player can only move their homeblock over by 3 townblocks at a time.",
+			"# Useful when used with the above homeblock_movement_cooldown_hours setting."),
 	GTOWN_SETTINGS_SHOW_TOWN_NOTIFICATIONS(
 			"global_town_settings.show_town_notifications",
 			"true",
@@ -586,6 +605,19 @@ public enum ConfigNodes {
 			"# Can outlaws roam freely on the towns they are outlawed in?",
 			"# If false, outlaws will be teleported away if they spend too long in the towns they are outlawed in.",
 			"# The time is set below in the outlaw_teleport_warmup."),
+	GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_TELEPORT_OUT_OF_TOWN(
+			"global_town_settings.allow_outlaws_to_teleport_out_of_town",
+			"true",
+			"",
+			"# Can outlaws freely teleport out of the towns they are outlawed in?",
+			"# If false, outlaws cannot use commands to teleport out of town.",
+			"# If you want outlaws to not be able to use teleporting items as well, use allow_outlaws_use_teleport_items."),
+	GTOWN_SETTINGS_ALLOW_OUTLAWS_USE_TELEPORT_ITEMS(
+			"global_town_settings.allow_outlaws_use_teleport_items",
+			"true",
+			"",
+			"# If false, outlawed players in towns cannot use items that teleport the player, ie: Ender Pearls & Chorus Fruit.",
+			"# Setting this to false requires allow_outlaws_to_teleport_out_of_town to also be false."),
 	GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW(
 			"global_town_settings.warn_town_on_outlaw",
 			"false",
@@ -593,6 +625,12 @@ public enum ConfigNodes {
 			"# Should towns be warned in case an outlaw roams the town?",
 			"# Warning: Outlaws can use this feature to spam residents with warnings!",
 			"# It is recommended to set this to true only if you're using outlaw teleporting with a warmup of 0 seconds."),
+	GTOWN_SETTINGS_OUTLAW_TELEPORT_ON_BECOMING_OUTLAWED(
+			"global_town_settings.outlaw_teleport_away_on_becoming_outlawed",
+			"false",
+			"",
+			"# If set to true, when a player is made into an outlaw using /t outlaw add NAME, and that new",
+			"# outlaw is within the town's borders, the new outlaw will be teleported away using the outlaw_teleport_warmup."),
 	GTOWN_SETTINGS_OUTLAW_TELEPORT_WARMUP(
 			"global_town_settings.outlaw_teleport_warmup",
 			"5",
@@ -607,16 +645,19 @@ public enum ConfigNodes {
 			"# What world do you want the outlaw teleported to if they aren't part of a town",
 			"# and don't have a bedspawn outside of the town they are outlawed in.",
 			"# They will go to the listed world's spawn. ", 
-			"# If blank, they will go to the spawnpoint of the world the town is in."
-	),
+			"# If blank, they will go to the spawnpoint of the world the town is in."),
+	GTOWN_SETTINGS_OUTLAW_BLACKLISTED_COMMANDS(
+			"global_town_settings.outlaw_blacklisted_commands",
+			"somecommandhere,othercommandhere",
+			"",
+			"# Commands an outlawed player cannot use while in the town they are outlawed in."),
 	GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION(
 			"global_town_settings.maximum_number_residents_without_nation",
 			"0",
 			"",
 			"# When set above zero this is the largest number of residents a town can support before they join/create a nation.",
 			"# Do not set this value to an amount less than the required_number_residents_join_nation below.",
-			"# Do not set this value to an amount less than the required_number_residents_create_nation below."
-	),
+			"# Do not set this value to an amount less than the required_number_residents_create_nation below."),
 	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_JOIN_NATION(
 			"global_town_settings.required_number_residents_join_nation",
 			"0",
@@ -1791,8 +1832,15 @@ public enum ConfigNodes {
 			"economy.price_nation_neutrality",
 			"100.0",
 			"",
-			"# The daily upkeep to remain neutral during a war. Neutrality will exclude you from a war event, as well as deterring enemies."),
+			"# The daily upkeep to remain neutral, paid by the Nation bank. If unable to pay, neutral/peaceful status is lost.",
+			"# Neutrality will exclude you from a war event, as well as deterring enemies."),
+	ECO_PRICE_TOWN_NEUTRALITY(
+			"economy.price_town_neutrality",
+			"25.0",
+			"",
+			"# The daily upkeep to remain neutral, paid by the Town bank. If unable to pay, neutral/peaceful status is lost."),
 
+	
 	ECO_NEW_EXPAND("economy.new_expand", "", ""),
 	ECO_PRICE_NEW_NATION(
 			"economy.new_expand.price_new_nation",
@@ -2254,7 +2302,7 @@ public enum ConfigNodes {
 			"",
 			"# This value determines the maximum duration in which a town can lie in ruins",
 			"# After this time is reached, the town will be completely deleted.",
-			"# Does not accept values greater than 1000."),
+			"# Does not accept values greater than 8760, which is equal to one year."),
 	TOWN_RUINING_TOWN_RUINS_MIN_DURATION_HOURS(
 			"town_ruining.town_ruins.min_duration_hours", 
 			"4",
@@ -2267,6 +2315,12 @@ public enum ConfigNodes {
 			"",
 			"# If this is true, then after a town has been ruined for the minimum configured time,",
 			"# it can then be reclaimed by any resident who runs /t reclaim, and pays the required price. (price is configured in the eco section)"),
+	TOWN_RUINING_TOWNS_BECOME_PUBLIC(
+			"town_ruining.town_ruins.ruins_become_public",
+			"false",
+			"",
+			"# If this is true, when a town becomes a ruin they also receive public status,",
+			"# meaning anyone can use /t spawn NAME to teleport to that town."),
 	WAR(
 			"war",
 			"",

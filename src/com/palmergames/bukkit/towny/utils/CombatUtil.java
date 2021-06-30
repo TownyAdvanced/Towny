@@ -197,6 +197,7 @@ public class CombatUtil {
 					 * tested with a destroy test.
 					 */
 					case ITEM_FRAME:
+					case GLOW_ITEM_FRAME:
 					case PAINTING:
 					case ARMOR_STAND:
 					case ENDER_CRYSTAL:

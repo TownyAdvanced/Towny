@@ -7,13 +7,14 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.97.0.5</version>
+    <version>0.97.0.9</version>
 
     <licenses>
         <license>
             <name>CC BY-NC-ND 3.0</name>
             <url>http://creativecommons.org/licenses/by-nc-nd/3.0/</url>
             <comments>Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported</comments>
+            <distribution>repo</distribution>
         </license>
     </licenses>
 
@@ -100,7 +101,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>4.0.1</version>
+            <version>4.0.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -136,14 +137,14 @@
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizensapi</artifactId>
-            <version>2.0.27-SNAPSHOT</version>
+            <version>2.0.28-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- Included in vanilla minecraft's JAR -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.14.0</version>
+            <version>2.14.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -161,7 +162,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>20.1.0</version>
+            <version>21.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -277,6 +278,10 @@
                             <shadedPattern>com.palmergames.adventure</shadedPattern>
                         </relocation>
                         <relocation>
+                            <pattern>net.kyori.examination</pattern>
+                            <shadedPattern>com.palmergames.examination</shadedPattern>
+                        </relocation>
+                        <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>com.palmergames.bukkit.metrics</shadedPattern>
                         </relocation>
@@ -316,17 +321,13 @@
 
     <profiles>
         <profile>
-            <id>github-actions</id>
+            <id>no-apidoc</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>3.2.0</version>
-                        <configuration>
-                            <source>${java.version}</source>
-                            <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
-                        </configuration>
                         <executions>
                             <execution>
                                 <phase>none</phase>
@@ -335,6 +336,18 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <!-- Enforces JDK 9+ to generate safe bytecode when targeting Java 8. -->
+            <!-- See: https://stackoverflow.com/questions/64868952/how-should-javac-11-link-methods-overridden-in-later-versions-with-a-java-8-targ -->
+            <id>enforce-java-8-bytecode</id>
+            <activation>
+                <!-- Activate automatically for JDK 9+. No manual call needed. -->
+                <jdk>[9,)</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.release>8</maven.compiler.release>
+            </properties>
         </profile>
     </profiles>
 </project>

@@ -66,6 +66,8 @@ public class TownyExplodingBlocksEvent extends Event {
 	public void setBlockList(List<Block> blockList) {
 		this.blockList.clear();
 		this.blockList.addAll(blockList);
+		this.filteredBlockList.clear();
+		this.filteredBlockList.addAll(blockList);
 		this.isChanged = true;
 	}
 

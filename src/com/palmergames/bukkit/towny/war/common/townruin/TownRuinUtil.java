@@ -94,7 +94,7 @@ public class TownRuinUtil {
 		// Set Town settings.
 		town.setRuined(true);
 		town.setRuinedTime(System.currentTimeMillis());
-		town.setPublic(false);
+		town.setPublic(TownRuinSettings.areRuinsMadePublic());
 		town.setOpen(false);
 		town.getPermissions().setAll(true);
 

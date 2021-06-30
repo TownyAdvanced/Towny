@@ -713,6 +713,36 @@ public class TownyWorld extends TownyObject {
 		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
 	}
 	
+	
+	/**
+	 * Returns the distance to the closest townblock 
+	 * from the given coord, for the give town. 
+	 * 
+	 * @param key Coord to be tested from.
+	 * @param town Town to have their townblocks measured.
+	 * @return the closest distance to the towns townblock.
+	 */
+	public int getMinDistanceFromOtherPlotsOwnedByTown(Coord key, Town town) {
+		final int keyX = key.getX();
+		final int keyZ = key.getZ();
+		
+		double minSqr = -1;
+		for (TownBlock b : town.getTownBlocks()) {
+			if (!b.getWorld().equals(this)) continue;
+
+			final int tbX = b.getX();
+			final int tbZ = b.getZ();
+			
+			if (keyX == tbX && keyZ == tbZ)
+				continue;
+			
+			final double distSqr = MathUtil.distanceSquared((double) tbX - keyX, (double) tbZ - keyZ);
+			if (minSqr == -1 || distSqr < minSqr)
+				minSqr = distSqr;
+		}
+		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
+	}
+	
 	/**
 	 * Returns the closest town with a nation from a given coord (key).
 	 * 

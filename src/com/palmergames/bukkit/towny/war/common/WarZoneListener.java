@@ -50,6 +50,8 @@ public class WarZoneListener implements Listener {
 			return;
 		
 		Player player = event.getPlayer();
+		if (!plugin.hasCache(player))
+			plugin.newCache(player);
 		Material mat = event.getMaterial();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 
@@ -71,6 +73,8 @@ public class WarZoneListener implements Listener {
 			return;
 		
 		Player player = event.getPlayer();
+		if (!plugin.hasCache(player))
+			plugin.newCache(player);
 		Material mat = event.getMaterial();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 		
@@ -92,6 +96,8 @@ public class WarZoneListener implements Listener {
 			return;
 		
 		Player player = event.getPlayer();
+		if (!plugin.hasCache(player))
+			plugin.newCache(player);
 		TownBlockStatus status = plugin.getCache(event.getPlayer()).getStatus();
 		
 		// Allow item_use for Event War if isAllowingItemUseInWarZone is true, FlagWar also handled here
@@ -112,6 +118,8 @@ public class WarZoneListener implements Listener {
 			return;
 		
 		Player player = event.getPlayer();
+		if (!plugin.hasCache(player))
+			plugin.newCache(player);
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 
 		// Allow switch for Event War if isAllowingSwitchesInWarZone is true, FlagWar also handled here
@@ -155,7 +163,7 @@ public class WarZoneListener implements Listener {
 			// A war that does allow explosions and explosions regenerate.
 			if (WarZoneConfig.regenBlocksAfterExplosionInWarZone()) {
 				// Skip this block if it is in the ignore list. TODO: with the blockdata nowadays this might not even be necessary.
-				if (WarZoneConfig.getExplosionsIgnoreList().contains(block.getType().name()) || WarZoneConfig.getExplosionsIgnoreList().contains(block.getRelative(BlockFace.UP).getType().toString())) {
+				if (WarZoneConfig.getExplosionsIgnoreList().contains(block.getType().name()) || WarZoneConfig.getExplosionsIgnoreList().contains(block.getRelative(BlockFace.UP).getType().name())) {
 					// Remove from the alreadyAllowed list if it exists there.
 					if (alreadyAllowed.contains(block))
 						alreadyAllowed.remove(block);

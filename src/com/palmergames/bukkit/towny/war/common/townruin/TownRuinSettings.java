@@ -13,7 +13,7 @@ public class TownRuinSettings {
 	}
 
 	public static int getTownRuinsMaxDurationHours() {
-		return Math.min(TownySettings.getInt(ConfigNodes.TOWN_RUINING_TOWN_RUINS_MAX_DURATION_HOURS), 1000);
+		return Math.min(TownySettings.getInt(ConfigNodes.TOWN_RUINING_TOWN_RUINS_MAX_DURATION_HOURS), 8760);
 	}
 
 	public static int getTownRuinsMinDurationHours() {
@@ -26,6 +26,10 @@ public class TownRuinSettings {
 
 	public static double getEcoPriceReclaimTown() {
 		return TownySettings.getDouble(ConfigNodes.ECO_PRICE_RECLAIM_RUINED_TOWN);
+	}
+	
+	public static boolean areRuinsMadePublic() {
+		return TownySettings.getBoolean(ConfigNodes.TOWN_RUINING_TOWNS_BECOME_PUBLIC);
 	}
 
 }

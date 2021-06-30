@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
@@ -411,4 +412,23 @@ public class SpawnUtil {
 
 	}
 
+	/**
+	 * Handles moving outlaws from outside of towns they are outlawed in.
+	 * @param town Town which they are outlawed in.
+	 * @param outlaw Resident which is outlawed and being moved.
+	 */
+	public static void outlawTeleport(Town town, Resident outlaw) {
+		Location spawnLocation = town.getWorld().getSpawnLocation();
+		Player outlawedPlayer = outlaw.getPlayer();
+		if (!TownySettings.getOutlawTeleportWorld().equals("")) {
+			spawnLocation = Objects.requireNonNull(Bukkit.getWorld(TownySettings.getOutlawTeleportWorld())).getSpawnLocation();
+		}
+		// sets tp location to their bedspawn only if it isn't in the town they're being teleported from.
+		if ((outlawedPlayer.getBedSpawnLocation() != null) && (TownyAPI.getInstance().getTown(outlawedPlayer.getBedSpawnLocation()) != town))
+			spawnLocation = outlawedPlayer.getBedSpawnLocation();
+		if (outlaw.hasTown() && TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer) != null)
+			spawnLocation = TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer);
+		TownyMessaging.sendMsg(outlaw, Translation.of("msg_outlaw_kicked", town));
+		PaperLib.teleportAsync(outlaw.getPlayer(), spawnLocation, TeleportCause.PLUGIN);
+	}
 }
