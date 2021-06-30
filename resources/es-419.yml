@@ -861,7 +861,7 @@ msg_no_funds_claim2: '&cLa ciudad no tiene los fondos necesarios para reclamar %
 msg_err_cant_afford_blocks2: '&cLa ciudad no tiene los fondos necesarios para comprar %s terreno(s), costando %s. Deposita %s en el banco de la ciudad usando ''/t deposit %s''.'
 msg_err_not_enough_variables: '&cNo hay suficientes variables: '
 nation_rechecked_by_admin: '&bLas distancias entre las ciudades de %s han sido revisadas nuevamente.'
-msg_err_nation_over_town_limit: '&cTu nación ha llegado al límite de ciudades por nación: %s.'
+msg_err_nation_over_town_limit: '&cTu nación ha llegado al límite de ciudades: %s.'
 
 # Añadido en la versión 0.49
 msg_process_claim: 'Procesando reclamo de terreno...'
