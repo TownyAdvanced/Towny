@@ -1444,10 +1444,10 @@ msg_nation_paid_for_neutral_status: '&bYour nation paid %s to retain your peacef
 your_town_has_been_invited_to_join_nation: 'Your town has been invited to join the nation: %s'
 
 # Añadido en la versión 0.109
-msg_err_no_one_to_purge: '&bThere are no inactive members to purge.'
-msg_purging_will_remove_the_following_residents: '&bPlease confirm you want to purge the following residents: %s'
-msg_purge_complete_x_removed: '&bPurge complete, %s residents removed.'
-msg_err_days_must_be_greater_than_0: 'Days must be greater than zero.'
+msg_err_no_one_to_purge: '&bNo hay residentes inactivos que puedes eliminar.'
+msg_purging_will_remove_the_following_residents: '&bPor favor, confirma que deseas eliminar a los residentes: %s'
+msg_purge_complete_x_removed: '&bLimpieza completa, %s residentes eliminados.'
+msg_err_days_must_be_greater_than_0: 'Deben ser más de 0 días.'
 
 # Añadido en la versión 0.110
 msg_safe_mode_base: '[Error] ¡Towny esta en modo seguro debido a un error! '
