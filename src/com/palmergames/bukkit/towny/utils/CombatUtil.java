@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
+import com.palmergames.bukkit.towny.event.damage.TownyDispenserDamageEntityEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.damage.WildernessPVPTestEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
@@ -22,6 +23,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LightningStrike;
@@ -29,6 +31,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.projectiles.BlockProjectileSource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -74,8 +77,9 @@ public class CombatUtil {
 				
 				if (source instanceof Entity) {
 					attacker = (Entity) source;
-				} else {
-					return false;	// TODO: prevent damage from dispensers
+				} else if (source != null) {
+					if (CombatUtil.preventDispenserDamage(((BlockProjectileSource) source).getBlock(), defender, cause))
+						return true;
 				}
 
 			}
@@ -687,5 +691,24 @@ public class CombatUtil {
 	 */
 	private static boolean isNotTheAttackersPetDog(Wolf wolf, Player attackingPlayer) {
 		return wolf.isTamed() && !wolf.getOwner().equals(attackingPlayer);
+	}
+	
+	public static boolean preventDispenserDamage(Block dispenser, Entity entity, DamageCause cause) {
+		TownBlock dispenserTB = WorldCoord.parseWorldCoord(dispenser).getTownBlockOrNull();
+		TownBlock defenderTB = WorldCoord.parseWorldCoord(entity).getTownBlockOrNull();
+		
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(dispenser.getWorld().getName());
+		if (world == null || !world.isUsingTowny())
+			return false;
+		
+		boolean preventDamage = false;
+		
+		if (!isArenaPlot(dispenserTB, defenderTB))
+			preventDamage = preventPvP(world, dispenserTB) || preventPvP(world, defenderTB);
+
+		TownyDispenserDamageEntityEvent event = new TownyDispenserDamageEntityEvent(entity.getLocation(), entity, cause, defenderTB, preventDamage, dispenser);
+		Bukkit.getPluginManager().callEvent(event);
+		
+		return event.isCancelled();
 	}
 }
