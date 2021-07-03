@@ -6316,3 +6316,9 @@ v0.92.0.11:
     - When set above 0, the furthest number of townblocks a homeblock can be moved by.
     - Example: setting it to 3 would mean the player can only move their homeblock over by 3 townblocks at a time.
     - Useful when used with the above homeblock_movement_cooldown_hours setting.
+  - Handle dispenser damage correctly, courtesy of Warriorrrr with PR #5039.
+    - Finishes some ancient TODOs that meant Dispensers weren't really tested against PVP.
+  - API: TownyDispenserDamageEntityEvent a TownyDamageEvent.
+  - Send a warning if /tw toggle is used when usingtowny is false, courtesy of Warriorrrr with PR #5040.
+  - es-419.yml update, courtesy of EuGNosii with PR #5042.
+  
