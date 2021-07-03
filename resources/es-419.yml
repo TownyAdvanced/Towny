@@ -1435,14 +1435,13 @@ msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s ha sid
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s es muy nuevo, espera otras %s'
 
 # Añadido en la versión 0.108
-# Problematic string, waiting for reply:
-msg_town_not_peaceful: '&bNation couldn''t afford it''s peaceful state.'
+msg_town_not_peaceful: '&bLa ciudad no pudo mantener un estado de paz.'
 msg_town_already_peaceful: '&bLa ciudad ya es pacífica.'
 msg_town_already_not_peaceful: '&bLa ciudad ya es no pacífica.'
-msg_town_cant_peaceful: '&bTown couldn''t afford to become a peaceful town.'
-msg_town_paid_for_neutral_status: '&bYour town paid %s to retain your peaceful status.'
-msg_nation_paid_for_neutral_status: '&bYour nation paid %s to retain your peaceful status.'
-your_town_has_been_invited_to_join_nation: 'Your town has been invited to join the nation: %s'
+msg_town_cant_peaceful: '&bLa ciudad no pudo pagar por su estado de paz.'
+msg_town_paid_for_neutral_status: '&bTu ciudad pagó %s para mantener su estado de paz.'
+msg_nation_paid_for_neutral_status: '&bTu nación pagó %s para mantener su estado de paz.'
+your_town_has_been_invited_to_join_nation: 'Tu ciudad fue invitada a unirse a la nación: %s'
 
 # Añadido en la versión 0.109
 msg_err_no_one_to_purge: '&bNo hay residentes inactivos que puedes eliminar.'
