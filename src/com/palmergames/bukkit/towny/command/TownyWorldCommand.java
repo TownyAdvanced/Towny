@@ -324,6 +324,9 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE.getNode(split[0].toLowerCase())))
 				throw new TownyException(Translation.of("msg_err_command_disable"));
+			
+			if (!Globalworld.isUsingTowny() && !split[0].equalsIgnoreCase("usingtowny"))
+				throw new TownyException(Translation.of("msg_err_usingtowny_disabled"));
 
 			String msg;
 			Optional<Boolean> choice = Optional.empty();
