@@ -109,7 +109,7 @@ public class TownyActionEventExecutor {
 				/*
 				 * Must be inside of a town.
 				 */
-				canExplode = TownyAPI.getInstance().getTownBlock(loc).getPermissions().explosion;			
+				canExplode = world.isForceExpl() || TownyAPI.getInstance().getTownBlock(loc).getPermissions().explosion;			
 			}
 		}
 
