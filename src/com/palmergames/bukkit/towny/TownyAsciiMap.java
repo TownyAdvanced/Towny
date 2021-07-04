@@ -155,7 +155,7 @@ public class TownyAsciiMap {
 					else
 						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.DARK_GRAY);
 
-					WorldCoord wc = WorldCoord.parseWorldCoord(world.getName(), tby * townBlockSize , tby * townBlockSize);
+					WorldCoord wc = WorldCoord.parseWorldCoord(world.getName(), tby * townBlockSize , tbx* townBlockSize);
 					String symbol;
 					TextComponent hoverText;
 					String clickCommand;
@@ -169,14 +169,12 @@ public class TownyAsciiMap {
 					} else {
 						if (wildernessMapDataMap.containsKey(wc))
 							wildernessMapDataMap.remove(wc);
-						WildernessMapEvent wildMapEvent = new WildernessMapEvent(world, tby, tbx);
+						WildernessMapEvent wildMapEvent = new WildernessMapEvent(wc);
 						Bukkit.getPluginManager().callEvent(wildMapEvent);
 						symbol = wildMapEvent.getMapSymbol();
 						hoverText = wildMapEvent.getHoverText();
 						clickCommand = wildMapEvent.getClickCommand();
-						
-						TownyMapData mapData = new TownyMapData(wc, symbol, hoverText, clickCommand);
-						wildernessMapDataMap.put(wc, mapData);
+						wildernessMapDataMap.put(wc, new TownyMapData(wc, symbol, hoverText, clickCommand));
 					}
 
 					townyMap[y][x] = townyMap[y][x].content(symbol)
