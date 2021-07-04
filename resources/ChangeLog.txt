@@ -6323,3 +6323,5 @@ v0.92.0.11:
   - es-419.yml update, courtesy of EuGNosii with PR #5042.
 0.97.0.10:
   - Fix force-explosion world setting not forcing explosions in towns.
+  - API: Add WildernessMapEvent
+    - Event which allows third-party plugins to change what is show on the ASCII map, in the wilderness.

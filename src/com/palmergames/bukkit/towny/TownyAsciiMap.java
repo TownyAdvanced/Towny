@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.object.Translation;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
@@ -10,6 +11,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 
+import com.palmergames.bukkit.towny.event.asciimap.WildernessMapEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -144,8 +146,12 @@ public class TownyAsciiMap {
 					else
 						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.DARK_GRAY);
 
+					WildernessMapEvent wildMapEvent = new WildernessMapEvent(world, y, x);
+					Bukkit.getPluginManager().callEvent(wildMapEvent);
 					// Unregistered town block
-					townyMap[y][x] = townyMap[y][x].content("-").clickEvent(ClickEvent.runCommand("/towny:townyworld")).hoverEvent(HoverEvent.showText(Component.text(world.getUnclaimedZoneName()).color(NamedTextColor.DARK_RED).append(Component.text(" (" + tby + ", " + tbx + ")").color(NamedTextColor.WHITE))));
+					townyMap[y][x] = townyMap[y][x].content(wildMapEvent.getMapSymbol())
+							.clickEvent(ClickEvent.runCommand(wildMapEvent.getClickCommand()))
+							.hoverEvent(HoverEvent.showText(wildMapEvent.getHoverText()));
 				}
 				x++;
 			}
