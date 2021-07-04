@@ -141,14 +141,15 @@ public class TownyAsciiMap {
 
 					townyMap[y][x] = townyMap[y][x].hoverEvent(HoverEvent.showText(hoverComponent)).clickEvent(ClickEvent.runCommand("/towny:plot perm " + tby + " " + tbx));
 				} catch (TownyException e) {
+					// Unregistered town block (Wilderness)
+
 					if (x == halfLineHeight && y == halfLineWidth)
 						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.GOLD);
 					else
 						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.DARK_GRAY);
 
-					WildernessMapEvent wildMapEvent = new WildernessMapEvent(world, y, x);
+					WildernessMapEvent wildMapEvent = new WildernessMapEvent(world, tby, tbx);
 					Bukkit.getPluginManager().callEvent(wildMapEvent);
-					// Unregistered town block
 					townyMap[y][x] = townyMap[y][x].content(wildMapEvent.getMapSymbol())
 							.clickEvent(ClickEvent.runCommand(wildMapEvent.getClickCommand()))
 							.hoverEvent(HoverEvent.showText(wildMapEvent.getHoverText()));

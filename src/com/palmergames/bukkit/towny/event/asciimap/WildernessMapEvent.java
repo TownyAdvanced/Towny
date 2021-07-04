@@ -3,10 +3,9 @@ package com.palmergames.bukkit.towny.event.asciimap;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.util.StringMgmt;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -20,7 +19,7 @@ public class WildernessMapEvent extends Event {
 	final private WorldCoord worldCoord;
 	
 	public WildernessMapEvent(TownyWorld world, int x, int z) {
-		this.worldCoord = WorldCoord.parseWorldCoord(world.getName(), x, z);
+		this.worldCoord = WorldCoord.parseWorldCoord(world.getName(), x * TownySettings.getTownBlockSize(), z * TownySettings.getTownBlockSize());
 		this.hoverText = Component.text(world.getUnclaimedZoneName()).color(NamedTextColor.DARK_RED).append(Component.text(" (" + x + ", " + z + ")").color(NamedTextColor.WHITE));
 	}
 
@@ -37,7 +36,7 @@ public class WildernessMapEvent extends Event {
 	 * @param mapSymbol String which can only be a single character long.
 	 */
 	public void setMapSymbol(String mapSymbol) {
-		this.mapSymbol = StringMgmt.trimMaxLength(mapSymbol, 1);
+		this.mapSymbol = mapSymbol;
 	}
 
 	/**
