@@ -154,4 +154,8 @@ public class NameValidation {
 
 		return input.replaceAll(TownySettings.getNameFilterRegex(), "_").replaceAll(TownySettings.getNameRemoveRegex(), "").replace("&k", "");
 	}
+	
+	public static String filterCommas(String input) {
+		return input.replace(",", "_");
+	}
 }

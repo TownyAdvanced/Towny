@@ -1467,6 +1467,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// Create a brand new plot group.
 				UUID plotGroupID = UUID.randomUUID();
 				String plotGroupName = NameValidation.filterName(split[1]);
+				plotGroupName = NameValidation.filterCommas(plotGroupName);
 
 				newGroup = new PlotGroup(plotGroupID, plotGroupName, town);
 

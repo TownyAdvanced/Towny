@@ -6330,3 +6330,5 @@ v0.92.0.11:
     - Turns on/off the delete-blocks-on-unclaim feature in the world.
   - Fix Tamed Wolfs being attackable where PVP is off.
   - Fix SQL code loading new Jails.
+  - Prevent commas being used in plot group names.
+    - Closes #5049.
