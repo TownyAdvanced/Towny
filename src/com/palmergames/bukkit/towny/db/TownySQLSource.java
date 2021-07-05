@@ -2323,7 +2323,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			jail_hm.put("spawns", jailCellArray);
 			
-			UpdateDB("JAILS", jail_hm, Collections.singletonList("uuid"));
+			UpdateDB("JAILS", jail_hm, Collections.singletonList("name"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save jail unknown error");

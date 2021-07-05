@@ -6329,3 +6329,4 @@ v0.92.0.11:
   - New Command: /tw toggle unclaimblockdelete {on|off} 
     - Turns on/off the delete-blocks-on-unclaim feature in the world.
   - Fix Tamed Wolfs being attackable where PVP is off.
+  - Fix SQL code loading new Jails.
