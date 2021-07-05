@@ -69,6 +69,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"revertentityexpl",
 		"revertblockexpl",
 		"warallowed",
+		"unclaimblockdelete",
 		"plotcleardelete"
 	);
 	
@@ -293,33 +294,11 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 	public void worldToggle(Player player, CommandSender sender, String[] split) throws TownyException {
 		if (split.length == 0 ) {
-			if (!isConsole) {		
-				TownyMessaging.sendMessage(player, ChatTools.formatTitle("/TownyWorld toggle"));
-				TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/TownyWorld toggle", "claimable", ""));
-				TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/TownyWorld toggle", "usingtowny", ""));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/TownyWorld toggle", "warallowed", ""));
-				TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/TownyWorld toggle", "pvp/forcepvp", ""));
-				TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/TownyWorld toggle", "friendlyfire", ""));
-				TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/TownyWorld toggle", "explosion/forceexplosion", ""));
-				TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/TownyWorld toggle", "fire/forcefire", ""));
-				TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/TownyWorld toggle", "townmobs/wildernessmobs/worldmobs", ""));
-				TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/TownyWorld toggle", "revertunclaim", ""));
-				TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/TownyWorld toggle", "revertentityexpl/revertblockexpl", ""));
-				TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/TownyWorld toggle", "plotcleardelete", ""));
-			} else {
-				TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/TownyWorld toggle"));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/TownyWorld {world} toggle", "claimable", ""));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/TownyWorld {world} toggle", "usingtowny", ""));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/TownyWorld {world} toggle", "warallowed", ""));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/TownyWorld {world} toggle", "pvp/forcepvp", ""));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/TownyWorld {world} toggle", "friendlyfire", ""));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/TownyWorld {world} toggle", "explosion/forceexplosion", ""));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/TownyWorld {world} toggle", "fire/forcefire", ""));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/TownyWorld {world} toggle", "townmobs/worldmobs", ""));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/TownyWorld {world} toggle", "revertunclaim", ""));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/TownyWorld {world} toggle", "revertentityexpl/revertblockexpl", ""));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/TownyWorld {world} toggle", "plotcleardelete", ""));
-			}
+			if (!isConsole)		
+				HelpMenu.TOWNYWORLD_TOGGLE.send(player);
+			else
+				HelpMenu.TOWNYWORLD_TOGGLE_CONSOLE.send(sender);
+
 		} else {
 
 			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE.getNode(split[0].toLowerCase())))
@@ -488,12 +467,22 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("plotcleardelete")) {
 
-				Globalworld.setUsingPlotManagementMayorDelete(choice.orElse(!Globalworld.isUsingPlotManagementWildBlockRevert()));
+				Globalworld.setUsingPlotManagementMayorDelete(choice.orElse(!Globalworld.isUsingPlotManagementMayorDelete()));
 				msg = Translation.of("msg_changed_world_setting", "Plot Clear Delete", Globalworld.getName(), Globalworld.isUsingPlotManagementMayorDelete() ? Translation.of("enabled") : Translation.of("disabled"));
 				if (player != null)
 					TownyMessaging.sendMsg(player, msg);
 				else
 					TownyMessaging.sendMsg(msg);
+
+			} else if (split[0].equalsIgnoreCase("unclaimblockdelete")) {
+
+				Globalworld.setUsingPlotManagementDelete(choice.orElse(!Globalworld.isUsingPlotManagementDelete()));
+				msg = Translation.of("msg_changed_world_setting", "Unclaim Block Delete", Globalworld.getName(), Globalworld.isUsingPlotManagementDelete() ? Translation.of("enabled") : Translation.of("disabled"));
+				if (player != null)
+					TownyMessaging.sendMsg(player, msg);
+				else
+					TownyMessaging.sendMsg(msg);
+			
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD_TOGGLE, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_TOGGLE, split[0]).execute(sender, "townyworld", split);
 			} else {

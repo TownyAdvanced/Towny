@@ -209,7 +209,45 @@ public enum HelpMenu {
 			return TOWNYWORLD_SET.load(new MenuBuilder("townyworld set {world}"));
 		}
 	},
+	
+	TOWNYWORLD_TOGGLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyworld toggle")
+				.add("claimable", "")
+				.add("usingtowny", "")
+				.add("warallowed", "")
+				.add("pvp/forcepvp", "")
+				.add("friendlyfire", "")
+				.add("explosion/forceexplosion", "")
+				.add("fire/forcefire", "")
+				.add("townmobs/wildernessmobs/worldmobs", "")
+				.add("revertunclaim", "")
+				.add("revertentityexpl/revertblockexpl", "")
+				.add("plotcleardelete", "")
+				.add("unclaimblockdelete", "");
+		}
+	},
 
+	TOWNYWORLD_TOGGLE_CONSOLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyworld toggle {worldname}")
+				.add("claimable", "")
+				.add("usingtowny", "")
+				.add("warallowed", "")
+				.add("pvp/forcepvp", "")
+				.add("friendlyfire", "")
+				.add("explosion/forceexplosion", "")
+				.add("fire/forcefire", "")
+				.add("townmobs/wildernessmobs/worldmobs", "")
+				.add("revertunclaim", "")
+				.add("revertentityexpl/revertblockexpl", "")
+				.add("plotcleardelete", "")
+				.add("unclaimblockdelete", "");
+		}
+	},
+	
 	TOWN_HELP {
 		@Override
 		protected MenuBuilder load() {
