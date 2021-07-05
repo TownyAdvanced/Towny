@@ -175,6 +175,11 @@ public class TownyAsciiMap {
 						hoverText = wildMapEvent.getHoverText();
 						clickCommand = wildMapEvent.getClickCommand();
 						wildernessMapDataMap.put(wc, new TownyMapData(wc, symbol, hoverText, clickCommand));
+						
+						Bukkit.getScheduler().runTaskLater(Towny.getPlugin(), ()-> {
+							if (wildernessMapDataMap.containsKey(wc) && wildernessMapDataMap.get(wc).isOld())
+								wildernessMapDataMap.remove(wc);
+						}, 20 * 35);
 					}
 
 					townyMap[y][x] = townyMap[y][x].content(symbol)
@@ -212,5 +217,9 @@ public class TownyAsciiMap {
 
 		TownBlock townblock = TownyAPI.getInstance().getTownBlock(plugin.getCache(player).getLastLocation());
 		TownyMessaging.sendMsg(player, (Translation.of("town_sing") + ": " + (townblock != null && townblock.hasTown() ? townblock.getTownOrNull().getName() : Translation.of("status_no_town")) + " : " + Translation.of("owner_status") + ": " + (townblock != null && townblock.hasResident() ? townblock.getResidentOrNull().getName() : Translation.of("status_no_town"))));
+	}
+	
+	public static void clearWildernessMapData() {
+		wildernessMapDataMap.clear();
 	}
 }

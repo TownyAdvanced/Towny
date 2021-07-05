@@ -202,6 +202,7 @@ public class TownyUniverse {
         townBlocks.clear();
         spawnPoints.clear();
         jailUUIDMap.clear();
+        TownyAsciiMap.clearWildernessMapData();
     }
     
     /**
