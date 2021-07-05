@@ -172,7 +172,7 @@ public class CombatUtil {
 					/*
 					 * Protect tamed dogs in town land which are not owned by the attacking player.
 					 */
-					if (defendingEntity instanceof Wolf && isNotTheAttackersPetDog((Wolf) defendingEntity, attackingPlayer) && !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT))
+					if (defendingEntity instanceof Wolf && isNotTheAttackersPetDog((Wolf) defendingEntity, attackingPlayer))
 						return !defenderTB.getPermissions().pvp;
 					
 					/*
@@ -185,7 +185,7 @@ public class CombatUtil {
 					 * Config's protected entities: Animals,WaterMob,NPC,Snowman,ArmorStand,Villager
 					 */
 					if (EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) 						
-						return(!TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT));
+						return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT);
 				}
 				
 				/*
