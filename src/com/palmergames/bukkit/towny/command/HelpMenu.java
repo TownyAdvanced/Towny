@@ -43,7 +43,7 @@ public enum HelpMenu {
 				.add("war", "'/towny war' for more info");
 		}
 	},
-
+	
 	TA_HELP {
 		@Override
 		protected MenuBuilder load() {
@@ -66,7 +66,7 @@ public enum HelpMenu {
 				.add("delete [] .. []", "delete a residents data files.");
 		}
 	},
-
+	
 	TA_TOWN {
 		@Override
 		protected MenuBuilder load() {
@@ -89,6 +89,22 @@ public enum HelpMenu {
 				.add("[town] leavenation", "");
 		}
 	},
+
+	TA_TOWN_TOGGLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("ta town {townname} toggle")
+				.add("pvp", "")
+				.add("forcepvp", "")
+				.add("public", "")
+				.add("explosion", "")
+				.add("fire", "")
+				.add("mobs", "")
+				.add("taxpercent", "")
+				.add("open", "");
+		}
+	},
+
 	
 	TA_NATION {
 		@Override
@@ -151,6 +167,16 @@ public enum HelpMenu {
 				.add("[resident] friend... |list|clear]", "");
 		}
 	},
+
+	TA_RESIDENT_FRIEND {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin resident [resident] friend")
+				.add("[add|remove] [resident]", "")
+				.add("list", "")
+				.add("clear", "");
+		}
+	},
 	
 	TA_TOGGLE {
 		@Override
@@ -166,7 +192,99 @@ public enum HelpMenu {
 				.add("[resident]", "");
 		}
 	},
+	
+	TA_SET {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin set")
+				.add("mayor [town] " + Translation.of("town_help_2"), "")
+				.add("mayor [town] npc", "")
+				.add("capital [town] [nation]", "")
+				.add("title [resident] [title]", "")
+				.add("surname [resident] [surname]", "")
+				.add("plot [town]", "");
+		}
+	},
+	
+	TA_SET_MAYOR {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin set mayor")
+				.add("[town] " + Translation.of("town_help_2"), "")
+				.add("[town] npc", "");
+		}
+	},
 
+	TA_SET_CAPITAL {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin set capital")
+				.add("capital [town] [nation]", "");
+		}
+	},
+
+	TA_SET_PLOT {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin set plot")
+				.add("[town]",  Translation.of("msg_admin_set_plot_help_1"))
+				.add("[town name] {rect|circle} {radius}", Translation.of("msg_admin_set_plot_help_2"))
+				.add("[town name] {rect|circle} auto", Translation.of("msg_admin_set_plot_help_2"));
+		}
+	},
+	
+	TA_PURGE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin purge")
+				.add("[number of days] {townless}", "")
+				.add("", "Removes offline residents not seen for this duration.")
+				.add("", "Optional {townless} flag limits purge to only people that have no town.");
+		}
+	},
+	
+	TA_TOWN_META {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin town [townname] meta")
+				.add("", "View the metadata stored in a town.")
+				.add("set [key] [value]", "Set the key to the value.")
+				.add("add [key]", "Add a key of a registered data field.")
+				.add("remove [key]", "Remove a key from the town.");
+		}
+	},
+
+	TA_PLOT_META {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin plot meta")
+				.add("", "View the metadata stored in the plot you are stood in.")
+				.add("set [key] [value]", "Set the key to the value.")
+				.add("add [key]", "Add a key of a registered data field.")
+				.add("remove [key]", "Remove a key from the plot.");
+		}
+	},
+	
+	TA_RELOAD {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin reload")
+				.add("database", "Reloads database")
+				.add("config", "Reloads config")
+				.add("lang", "Reloads language file.")
+				.add("perms", "Reloads Towny permissions.")
+				.add("all", "Reloads all components of towny.");
+		}
+	},
+	
+	TA_DEPOSITALL {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin depositall")
+				.add("[amount]", "Deposit the given amount into all town and nation banks.");
+		}
+	},
+	
 	TOWNYWORLD_HELP {
 		@Override
 		protected MenuBuilder load(MenuBuilder builder) {
