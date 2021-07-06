@@ -6332,3 +6332,4 @@ v0.92.0.11:
   - Fix SQL code loading new Jails.
   - Prevent commas being used in plot group names.
     - Closes #5049.
+  - Creates a cache of sorts for the wilderness coords on the Towny ASCII map.
