@@ -2311,6 +2311,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		
 		try {
 			HashMap<String, Object> jail_hm = new HashMap<>();
+			jail_hm.put("uuid", jail.getUUID());
 			jail_hm.put("townBlock", jail.getTownBlock().getWorld().getName() + "#" + jail.getTownBlock().getX() + "#" + jail.getTownBlock().getZ());
 			
 			StringBuilder jailCellArray = new StringBuilder();
@@ -2323,7 +2324,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			jail_hm.put("spawns", jailCellArray);
 			
-			UpdateDB("JAILS", jail_hm, Collections.singletonList("name"));
+			UpdateDB("JAILS", jail_hm, Collections.singletonList("uuid"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save jail unknown error");
