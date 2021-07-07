@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.huds;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.asciimap.WildernessMapEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -10,7 +13,12 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.map.TownyMapData;
 import com.palmergames.bukkit.util.Colors;
+
+import net.kyori.adventure.text.TextComponent;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -125,13 +133,45 @@ public class MapHUD {
 					else
 						map[y][x] += townblock.getType().getAsciiMapKey();
 				} catch (TownyException e) {
+					// Unregistered town block
+					
 					if (x == halfLineHeight && y == halfLineWidth)
 						map[y][x] = Colors.Gold;
 					else
 						map[y][x] = Colors.Gray;
 
-					// Unregistered town block
-					map[y][x] += "-";
+					String symbol;
+					TextComponent hoverText; 
+					String clickCommand;
+					// Cached TownyMapData is present and not old.
+					if (getWildernessMapDataMap().containsKey(wc) && !getWildernessMapDataMap().get(wc).isOld()) {
+						TownyMapData mapData = getWildernessMapDataMap().get(wc);
+						symbol = mapData.getSymbol();
+						hoverText = mapData.getHoverText();
+						clickCommand = mapData.getClickCommand();
+					// Cached TownyMapData is either not present or was considered old.
+					} else {
+						if (getWildernessMapDataMap().containsKey(wc))
+							getWildernessMapDataMap().remove(wc);
+						WildernessMapEvent wildMapEvent = new WildernessMapEvent(wc);
+						Bukkit.getPluginManager().callEvent(wildMapEvent);
+						symbol = wildMapEvent.getMapSymbol();
+						hoverText = wildMapEvent.getHoverText();
+						clickCommand = wildMapEvent.getClickCommand();
+						getWildernessMapDataMap().put(wc, new TownyMapData(wc, symbol, hoverText, clickCommand));
+						
+						Bukkit.getScheduler().runTaskLater(Towny.getPlugin(), ()-> {
+							if (getWildernessMapDataMap().containsKey(wc) && getWildernessMapDataMap().get(wc).isOld())
+								getWildernessMapDataMap().remove(wc);
+						}, 20 * 35);
+					}
+
+					/* 
+					 * We are only using symbol here but we have generated hovertext and clickcommands because the same
+					 * TownyMapData cache is used for the ascii map seen in the /towny map commands. We would not want
+					 * to fill only a part of that cache.
+					 */
+					map[y][x] += symbol;
 				}
 				x++;
 			}
@@ -149,5 +189,9 @@ public class MapHUD {
 		TownBlock tb = wc.getTownBlockOrNull();
 		board.getTeam("townTeam").setSuffix(ChatColor.GREEN + (tb != null && tb.hasTown() ? tb.getTownOrNull().getName() : Translation.of("status_no_town")));
 		board.getTeam("ownerTeam").setSuffix(ChatColor.GREEN + (tb != null && tb.hasResident() ? tb.getResidentOrNull().getName() : Translation.of("status_no_town")));
+	}
+	
+	private static Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {
+		return TownyUniverse.getInstance().getWildernessMapDataMap();
 	}
 }

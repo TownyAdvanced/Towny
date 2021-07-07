@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.Jail;
+import com.palmergames.bukkit.towny.object.map.TownyMapData;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
@@ -85,6 +86,7 @@ public class TownyUniverse {
 	private final Map<Block, SpawnPoint> spawnPoints = new ConcurrentHashMap<>(); 
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final Map<UUID, Jail> jailUUIDMap = new ConcurrentHashMap<>();
+    private final Map<WorldCoord, TownyMapData> wildernessMapDataMap = new ConcurrentHashMap<WorldCoord, TownyMapData>();
     private final String rootFolder;
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
@@ -202,7 +204,7 @@ public class TownyUniverse {
         townBlocks.clear();
         spawnPoints.clear();
         jailUUIDMap.clear();
-        TownyAsciiMap.clearWildernessMapData();
+        wildernessMapDataMap.clear();
     }
     
     /**
@@ -1204,8 +1206,11 @@ public class TownyUniverse {
     	Jail jail = new Jail(UUID.fromString(uuid), null, null, null);
     	registerJail(jail);
     }
-    
-    
+
+	public Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {
+		return wildernessMapDataMap;
+	}
+
     /*
      * Deprecated Stuff
      */

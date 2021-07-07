@@ -5,8 +5,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.map.TownyMapData;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -42,7 +40,6 @@ public class TownyAsciiMap {
 			"  " + Colors.Yellow + "+" + Colors.LightGray + " = " + Translation.of("towny_map_yourplot"),
 			"  " + Colors.Green + "+" + Colors.LightGray + " = " + Translation.of("towny_map_ally"),
 			"  " + Colors.Red + "+" + Colors.LightGray + " = " + Translation.of("towny_map_enemy")};
-	private static Map<WorldCoord, TownyMapData> wildernessMapDataMap = new ConcurrentHashMap<WorldCoord, TownyMapData>();
 
 	public static String[] generateCompass(Player player) {
 
@@ -160,25 +157,25 @@ public class TownyAsciiMap {
 					TextComponent hoverText;
 					String clickCommand;
 					// Cached TownyMapData is present and not old.
-					if (wildernessMapDataMap.containsKey(wc) && !wildernessMapDataMap.get(wc).isOld()) {
-						TownyMapData mapData = wildernessMapDataMap.get(wc);
+					if (getWildernessMapDataMap().containsKey(wc) && !getWildernessMapDataMap().get(wc).isOld()) {
+						TownyMapData mapData = getWildernessMapDataMap().get(wc);
 						symbol = mapData.getSymbol();
 						hoverText = mapData.getHoverText();
 						clickCommand = mapData.getClickCommand();
 					// Cached TownyMapData is either not present or was considered old.
 					} else {
-						if (wildernessMapDataMap.containsKey(wc))
-							wildernessMapDataMap.remove(wc);
+						if (getWildernessMapDataMap().containsKey(wc))
+							getWildernessMapDataMap().remove(wc);
 						WildernessMapEvent wildMapEvent = new WildernessMapEvent(wc);
 						Bukkit.getPluginManager().callEvent(wildMapEvent);
 						symbol = wildMapEvent.getMapSymbol();
 						hoverText = wildMapEvent.getHoverText();
 						clickCommand = wildMapEvent.getClickCommand();
-						wildernessMapDataMap.put(wc, new TownyMapData(wc, symbol, hoverText, clickCommand));
+						getWildernessMapDataMap().put(wc, new TownyMapData(wc, symbol, hoverText, clickCommand));
 						
 						Bukkit.getScheduler().runTaskLater(Towny.getPlugin(), ()-> {
-							if (wildernessMapDataMap.containsKey(wc) && wildernessMapDataMap.get(wc).isOld())
-								wildernessMapDataMap.remove(wc);
+							if (getWildernessMapDataMap().containsKey(wc) && getWildernessMapDataMap().get(wc).isOld())
+								getWildernessMapDataMap().remove(wc);
 						}, 20 * 35);
 					}
 
@@ -219,7 +216,7 @@ public class TownyAsciiMap {
 		TownyMessaging.sendMsg(player, (Translation.of("town_sing") + ": " + (townblock != null && townblock.hasTown() ? townblock.getTownOrNull().getName() : Translation.of("status_no_town")) + " : " + Translation.of("owner_status") + ": " + (townblock != null && townblock.hasResident() ? townblock.getResidentOrNull().getName() : Translation.of("status_no_town"))));
 	}
 	
-	public static void clearWildernessMapData() {
-		wildernessMapDataMap.clear();
+	private static Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {
+		return TownyUniverse.getInstance().getWildernessMapDataMap();
 	}
 }
