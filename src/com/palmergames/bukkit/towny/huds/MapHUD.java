@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.huds;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.asciimap.WildernessMapEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -27,7 +28,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 public class MapHUD {
-	private static int lineWidth = 20, lineHeight = 10;
+	private static int lineWidth = 19, lineHeight = 10;
+	private static final int townBlockSize = TownySettings.getTownBlockSize();
 	
 	public static void toggleOn(Player player) {
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -140,29 +142,30 @@ public class MapHUD {
 					else
 						map[y][x] = Colors.Gray;
 
+					WorldCoord worldcoord = WorldCoord.parseWorldCoord(world.getName(), tby * townBlockSize , tbx* townBlockSize);
 					String symbol;
 					TextComponent hoverText; 
 					String clickCommand;
 					// Cached TownyMapData is present and not old.
-					if (getWildernessMapDataMap().containsKey(wc) && !getWildernessMapDataMap().get(wc).isOld()) {
-						TownyMapData mapData = getWildernessMapDataMap().get(wc);
+					if (getWildernessMapDataMap().containsKey(worldcoord) && !getWildernessMapDataMap().get(worldcoord).isOld()) {
+						TownyMapData mapData = getWildernessMapDataMap().get(worldcoord);
 						symbol = mapData.getSymbol();
 						hoverText = mapData.getHoverText();
 						clickCommand = mapData.getClickCommand();
 					// Cached TownyMapData is either not present or was considered old.
 					} else {
-						if (getWildernessMapDataMap().containsKey(wc))
-							getWildernessMapDataMap().remove(wc);
-						WildernessMapEvent wildMapEvent = new WildernessMapEvent(wc);
+						if (getWildernessMapDataMap().containsKey(worldcoord))
+							getWildernessMapDataMap().remove(worldcoord);
+						WildernessMapEvent wildMapEvent = new WildernessMapEvent(worldcoord);
 						Bukkit.getPluginManager().callEvent(wildMapEvent);
 						symbol = wildMapEvent.getMapSymbol();
 						hoverText = wildMapEvent.getHoverText();
 						clickCommand = wildMapEvent.getClickCommand();
-						getWildernessMapDataMap().put(wc, new TownyMapData(wc, symbol, hoverText, clickCommand));
+						getWildernessMapDataMap().put(worldcoord, new TownyMapData(worldcoord, symbol, hoverText, clickCommand));
 						
 						Bukkit.getScheduler().runTaskLater(Towny.getPlugin(), ()-> {
-							if (getWildernessMapDataMap().containsKey(wc) && getWildernessMapDataMap().get(wc).isOld())
-								getWildernessMapDataMap().remove(wc);
+							if (getWildernessMapDataMap().containsKey(worldcoord) && getWildernessMapDataMap().get(worldcoord).isOld())
+								getWildernessMapDataMap().remove(worldcoord);
 						}, 20 * 35);
 					}
 
