@@ -139,7 +139,6 @@ public class TownyEntityMonitorListener implements Listener {
 			 * 
 			 * - Fire PlayerKilledPlayerEvent.
 			 * 
-			 * TODO: Move war-related things onto listeners for the PlayerKilledPlayerEvent.
 			 * - charge death payment,
 			 * - check for jailing attacking residents,
 			 * - award wartime death points.

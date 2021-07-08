@@ -952,8 +952,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownyUniverse.getInstance().hasTown(filteredName))
 				throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
 
-			// TODO: Delete/rename any invites.
-
 			List<Resident> toSave = new ArrayList<>(town.getResidents());
 			boolean isCapital = false;
 			Nation nation = null;
@@ -1068,8 +1066,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			if (universe.hasNation(filteredName))
 				throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
-
-			// TODO: Delete/rename any invites.
 
 			List<Town> toSave = new ArrayList<>(nation.getTowns());
 			double nationBalance = 0.0;
