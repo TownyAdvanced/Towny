@@ -6333,3 +6333,6 @@ v0.92.0.11:
   - Prevent commas being used in plot group names.
     - Closes #5049.
   - Creates a cache of sorts for the wilderness coords on the Towny ASCII map.
+0.97.0.11:
+  - Add WildernessMapEvent awareness to the /towny map hud.
+    - Other plugins like TownyCamps, TownyHistories now appear on the /towny map hud.
