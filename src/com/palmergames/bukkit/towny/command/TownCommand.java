@@ -259,6 +259,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				case "delete":
 				case "join":
 				case "merge":
+				case "plotgrouplist":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "t");
 					break;
@@ -4034,23 +4035,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(town)));
 	}
 
-	private void townResList(CommandSender sender, String[] args) {
+	private void townResList(CommandSender sender, String[] args) throws TownyException {
 
 		Player player = null;
 		if (sender instanceof Player)
 			player = (Player) sender;
 
 		Town town = null;
-		try {
-			if (args.length == 1 && player != null) {
-				if (TownRuinUtil.isPlayersTownRuined(player))
-					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
-				
-				town = getResidentOrThrow(player.getUniqueId()).getTown();
-			} else {
-				town = TownyUniverse.getInstance().getTown(args[1]);
-			}
-		} catch (TownyException e) {
+		if (args.length == 1 && player != null) {
+			if (TownRuinUtil.isPlayersTownRuined(player))
+				throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+			
+			town = getResidentOrThrow(player.getUniqueId()).getTown();
+		} else {
+			town = TownyUniverse.getInstance().getTown(args[1]);
 		}
 		
 		if (town != null)
@@ -4078,29 +4076,43 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (town == null)
 			throw new TownyException(Translation.of("msg_specify_name"));
 		
+		if (!town.hasPlotGroups())
+			throw new TownyException(Translation.of("msg_err_this_town_has_no_plot_groups"));
 		
+		int page = 1;
+		int total = (int) Math.ceil(((double) town.getPlotGroups().size()) / ((double) 10));
+		if (args.length == 2) {
+			try {
+				page = Integer.parseInt(args[1]);
+				if (page < 0) {
+					throw new TownyException(Translation.of("msg_err_negative"));
+				} else if (page == 0) {
+					throw new TownyException(Translation.of("msg_error_must_be_int"));
+				}
+			} catch (NumberFormatException e) {
+				throw new TownyException(Translation.of("msg_error_must_be_int"));
+			}
+		}
+		if (page > total)
+			throw new TownyException(Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 		
-		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedPlotGroups(town));
-
+		TownyMessaging.sendPlotGroupList(player, town, page, total);
 	}
 	
-	private void townOutlawList(CommandSender sender, String[] args) {
+	private void townOutlawList(CommandSender sender, String[] args) throws TownyException {
 		
 		Player player = null;
 		if (sender instanceof Player)
 			player = (Player) sender;
 		
 		Town town = null;
-		try {
-			if (args.length == 1 && player != null) {
-				if (TownRuinUtil.isPlayersTownRuined(player))
-					throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+		if (args.length == 1 && player != null) {
+			if (TownRuinUtil.isPlayersTownRuined(player))
+				throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
 
-				town = getResidentOrThrow(player.getUniqueId()).getTown();
-			} else {
-				town = TownyUniverse.getInstance().getTown(args[1]);
-			}
-		} catch (TownyException e) {
+			town = getResidentOrThrow(player.getUniqueId()).getTown();
+		} else {
+			town = TownyUniverse.getInstance().getTown(args[1]);
 		}
 		
 		if (town != null)

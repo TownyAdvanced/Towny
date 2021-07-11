@@ -1442,3 +1442,5 @@ msg_plot_group_already_exists_did_you_want_to_transfer: 'This townblock is alrea
 msg_townblock_transferred_from_x_to_x_group: 'Townblock transferred from %s to %s plot group.'
 msg_plotgroup_deleted: 'The plotgroup %s has been deleted.'
 msg_plotgroup_empty_deleted: 'The plotgroup %s had no townblocks and has been deleted.'
+plotgroup_plu: 'Plot Groups'
+msg_err_this_town_has_no_plot_groups: 'The specified town has no plot groups.'
