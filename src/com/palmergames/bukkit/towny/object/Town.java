@@ -46,7 +46,7 @@ public class Town extends Government implements TownBlockOwner {
 	private final List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Jail> jails = null;
-	private HashMap<UUID, PlotGroup> plotGroups = null;
+	private HashMap<String, PlotGroup> plotGroups = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -1186,28 +1186,21 @@ public class Town extends Government implements TownBlockOwner {
 		return primaryJail;
 	}
 	
-	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {
-		ArrayList<TownBlock> retVal = new ArrayList<>();
-		TownyMessaging.sendErrorMsg(group.toString());
-		
-		for (TownBlock townBlock : getTownBlocks()) {
-			if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().equals(group))
-				retVal.add(townBlock);
-		}
-		
-		return retVal;
+	public void renamePlotGroup(String oldName, PlotGroup group) {
+		plotGroups.remove(oldName);
+		plotGroups.put(group.getName(), group);
 	}
 	
 	public void addPlotGroup(PlotGroup group) {
 		if (!hasPlotGroups()) 
 			plotGroups = new HashMap<>();
 		
-		plotGroups.put(group.getID(), group);
+		plotGroups.put(group.getName(), group);
 		
 	}
 	
 	public void removePlotGroup(PlotGroup plotGroup) {
-		if (hasPlotGroups() && plotGroups.remove(plotGroup.getID()) != null) {
+		if (hasPlotGroups() && plotGroups.remove(plotGroup.getName()) != null) {
 			for (TownBlock tb : plotGroup.getTownBlocks()) {
 				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
 					tb.getPlotObjectGroup().setID(null);
@@ -1242,13 +1235,13 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean hasPlotGroupName(String name) {
-		return hasPlotGroups() && plotGroups.values().stream().anyMatch(group -> group.getName().equalsIgnoreCase(name));
+		return hasPlotGroups() && plotGroups.containsKey(name);
 	}
 
 	@Nullable
 	public PlotGroup getPlotObjectGroupFromName(String name) {
-		if (hasPlotGroups())
-			return plotGroups.values().stream().filter(group -> group.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+		if (hasPlotGroups() && hasPlotGroupName(name))
+			return plotGroups.get(name);
 		return null;
 	}
 	
