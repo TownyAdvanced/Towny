@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
@@ -257,6 +258,12 @@ public class CombatUtil {
 			 * This is now non-player vs non-player damage.
 			 */
 			} else {
+				
+				/*
+				 * The defending non-player is in the wilderness, do not prevent this combat.
+				 */
+				if (defenderTB == null)
+					return false;
 
 			    /*
 			     * Prevents projectiles fired by non-players harming non-player entities.
@@ -270,9 +277,15 @@ public class CombatUtil {
 				* Allow wolves to attack unprotected entites (such as skeletons), but not protected ones.
 				*/
 				if (attackingEntity instanceof Wolf && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
-					((Wolf) attackingEntity).setTarget(null);
-					((Wolf) attackingEntity).setAngry(false);
-					return true;
+					Wolf wolf = (Wolf) attackingEntity;
+					if (isATamedWolfWithAOnlinePlayer(wolf)) {
+						Player owner = BukkitTools.getPlayer(wolf.getOwner().getName());
+						return !PlayerCacheUtil.getCachePermission(owner, defendingEntity.getLocation(), Material.AIR, ActionType.DESTROY);
+					} else {
+						wolf.setTarget(null);
+						wolf.setAngry(false);
+						return true;
+					}
 				}
 				
 				if (attackingEntity.getType().name().equals("AXOLOTL") && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
@@ -691,6 +704,10 @@ public class CombatUtil {
 	 */
 	private static boolean isNotTheAttackersPetDog(Wolf wolf, Player attackingPlayer) {
 		return wolf.isTamed() && !wolf.getOwner().equals(attackingPlayer);
+	}
+	
+	private static boolean isATamedWolfWithAOnlinePlayer(Wolf wolf) {
+		return wolf.isTamed() && wolf.getOwner().getName() != null && BukkitTools.isOnline(wolf.getOwner().getName());
 	}
 	
 	public static boolean preventDispenserDamage(Block dispenser, Entity entity, DamageCause cause) {
