@@ -6336,3 +6336,4 @@ v0.92.0.11:
 0.97.0.11:
   - Add WildernessMapEvent awareness to the /towny map hud.
     - Other plugins like TownyCamps, TownyHistories now appear on the /towny map hud.
+  - Fix footer of the /town jail list output.

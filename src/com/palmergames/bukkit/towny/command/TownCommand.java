@@ -1684,7 +1684,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			HelpMenu.TOWN_JAIL.send(sender);
 
-		} else if (split.length == 1 && split[0].equalsIgnoreCase("list")) {
+		} else if (split[0].equalsIgnoreCase("list")) {
 
 			parseJailListCommand(sender, town, StringMgmt.remFirstArg(split));
 

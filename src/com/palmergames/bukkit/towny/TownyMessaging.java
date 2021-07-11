@@ -809,7 +809,7 @@ public class TownyMessaging {
 		}
 		
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("towny:town outpost", page, "", total);
+		TextComponent pageFooter = getPageNavigationFooter("towny:town jail list", page, "", total);
 		audience.sendMessage(pageFooter);
 	}
 	
