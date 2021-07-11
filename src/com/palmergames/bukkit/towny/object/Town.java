@@ -34,7 +34,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -1248,13 +1247,8 @@ public class Town extends Government implements TownBlockOwner {
 
 	@Nullable
 	public PlotGroup getPlotObjectGroupFromName(String name) {
-		if (hasPlotGroups()) {
-			Optional<PlotGroup> plotGroup = plotGroups.values().stream().filter(group -> group.getName().equalsIgnoreCase(name)).findFirst();
-			if (plotGroup.isPresent())
-				return plotGroup.get();
-			else 
-				return null;
-		}
+		if (hasPlotGroups())
+			return plotGroups.values().stream().filter(group -> group.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
 		return null;
 	}
 	
