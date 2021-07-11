@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -46,7 +47,7 @@ public class Town extends Government implements TownBlockOwner {
 	private final List<Resident> outlaws = new ArrayList<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Jail> jails = null;
-	private HashMap<String, PlotGroup> plotGroups = null;
+	private HashMap<UUID, PlotGroup> plotGroups = null;
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -1198,22 +1199,17 @@ public class Town extends Government implements TownBlockOwner {
 		return retVal;
 	}
 	
-	public void renamePlotGroup(String oldName, PlotGroup group) {
-		plotGroups.remove(oldName);
-		plotGroups.put(group.getName(), group);
-	}
-	
 	public void addPlotGroup(PlotGroup group) {
 		if (!hasPlotGroups()) 
 			plotGroups = new HashMap<>();
 		
-		plotGroups.put(group.getName(), group);
+		plotGroups.put(group.getID(), group);
 		
 	}
 	
 	public void removePlotGroup(PlotGroup plotGroup) {
-		if (hasPlotGroups() && plotGroups.remove(plotGroup.getName()) != null) {
-			for (TownBlock tb : getTownBlocks()) {
+		if (hasPlotGroups() && plotGroups.remove(plotGroup.getID()) != null) {
+			for (TownBlock tb : plotGroup.getTownBlocks()) {
 				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
 					tb.getPlotObjectGroup().setID(null);
 					tb.save();
@@ -1246,24 +1242,23 @@ public class Town extends Government implements TownBlockOwner {
 		return plotGroups != null;
 	}
 
-	// Override default method for efficient access
 	public boolean hasPlotGroupName(String name) {
-		return hasPlotGroups() && plotGroups.containsKey(name);
+		return hasPlotGroups() && plotGroups.values().stream().anyMatch(group -> group.getName().equalsIgnoreCase(name));
 	}
 
+	@Nullable
 	public PlotGroup getPlotObjectGroupFromName(String name) {
 		if (hasPlotGroups()) {
-			return plotGroups.get(name);
+			Optional<PlotGroup> plotGroup = plotGroups.values().stream().filter(group -> group.getName().equalsIgnoreCase(name)).findFirst();
+			if (plotGroup.isPresent())
+				return plotGroup.get();
+			else 
+				return null;
 		}
-		
 		return null;
 	}
 	
-	// Wraps other functions to provide a better naming scheme for the end developer.
-	public PlotGroup getPlotObjectGroupFromID(UUID ID) {
-		return getObjectGroupFromID(ID);
-	}
-	
+	@Nullable
 	public Collection<PlotGroup> getPlotObjectGroups() {
 		return getPlotGroups();
 	}

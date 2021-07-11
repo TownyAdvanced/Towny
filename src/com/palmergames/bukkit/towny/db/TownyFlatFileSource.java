@@ -60,8 +60,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "jails",
 			dataFolderPath + File.separator + "jails" + File.separator + "deleted"
 		) || !FileMgmt.checkOrCreateFiles(
-			dataFolderPath + File.separator + "worlds.txt",
-			dataFolderPath + File.separator + "plotgroups.txt"
+			dataFolderPath + File.separator + "worlds.txt"
 		)) {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_cannot_create_defaults"));
 		}
@@ -170,30 +169,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadPlotGroupList() {
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_group_list"));
-		String line = null;
-
-		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "plotgroups.txt"), StandardCharsets.UTF_8))) {
-
-			while ((line = fin.readLine()) != null) {
-				if (!line.equals("")) {
-					String[] tokens = line.split(",");
-					String townName = tokens[0];
-					UUID groupID = UUID.fromString(tokens[1]);
-					String groupName = tokens[2];
-					Town town = universe.getTown(townName);
-					
-					if (town != null)
-						universe.newGroup(town, groupName, groupID);
-				}
-			}
-			
+		File[] plotGroupFiles = receiveObjectFiles("plotgroups");
+		if (plotGroupFiles == null)
 			return true;
-			
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(Translation.of("msg_err_loading_group_list_at_line", line));
-			e.printStackTrace();
-			return false;
+		
+		for (File plotGroup : plotGroupFiles) {
+			String uuid = plotGroup.getName().replace(".txt", "");
+			TownyUniverse.getInstance().newPlotGroupInternal(uuid);
 		}
+		
+		return true;
 	}
 	
 	@Override
@@ -1381,59 +1366,46 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 	}
 	
-	@Override
-	public boolean loadPlotGroups() {
+	public boolean loadPlotGroup(PlotGroup group) {
 		String line = "";
-		String path;
+		String path = getPlotGroupFilename(group);
 		
-		for (PlotGroup group : getAllPlotGroups()) {
-			path = getPlotGroupFilename(group);
-			
-			File groupFile = new File(path);
-			if (groupFile.exists() && groupFile.isFile()) {
-				try {
-					HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(groupFile);
+		File groupFile = new File(path);
+		if (groupFile.exists() && groupFile.isFile()) {
+			try {
+				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(groupFile);
 
-					line = keys.get("groupName");
-					if (line != null)
-						group.setName(line.trim());
-					
-					line = keys.get("groupID");
-					if (line != null)
-						group.setID(UUID.fromString(line.trim()));
-					
-					line = keys.get("town");
-					if (line != null && !line.isEmpty()) {
-						Town town = universe.getTown(line.trim());
-						if (town != null) {
-							group.setTown(town);	
-						}
-						else {
-							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_group_file_missing_town_delete", path));
-							deletePlotGroup(group);
-							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_group_entry", path));
-							continue;
-						}
-					}
-					else {
-						TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_could_not_add_to_town"));
+				line = keys.get("groupName");
+				if (line != null)
+					group.setName(line.trim());
+				
+				line = keys.get("town");
+				if (line != null && !line.isEmpty()) {
+					Town town = universe.getTown(line.trim());
+					if (town != null) {
+						group.setTown(town);	
+					} else {
+						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_group_file_missing_town_delete", path));
 						deletePlotGroup(group);
+						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_group_entry", path));
+						return true;
 					}
-					
-					line = keys.get("groupPrice");
-					if (line != null && !line.isEmpty())
-						group.setPrice(Double.parseDouble(line.trim()));
-
-				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_group_file_at_line", path, line));
-					return false;
+				} else {
+					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_could_not_add_to_town"));
+					deletePlotGroup(group);
 				}
-			} else {
-				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_groups_entry", path));
+				
+				line = keys.get("groupPrice");
+				if (line != null && !line.isEmpty())
+					group.setPrice(Double.parseDouble(line.trim()));
+
+			} catch (Exception e) {
+				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_group_file_at_line", path, line));
+				return false;
 			}
+		} else {
+			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_groups_entry", path));
 		}
-		
-		savePlotGroupList();
 		
 		return true;
 	}
@@ -1564,8 +1536,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 					
 					if (groupID != null) {
-						PlotGroup group = getPlotObjectGroup(townBlock.getTownOrNull().toString(), groupID);
+						PlotGroup group = getPlotObjectGroup(groupID);
 						townBlock.setPlotObjectGroup(group);
+						if (townBlock.hasResident()) 
+							group.setResident(townBlock.getResidentOrNull());
 					}
 
 				} catch (Exception e) {
@@ -1646,19 +1620,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	/*
 	 * Save keys
 	 */
-
-	@Override
-	public boolean savePlotGroupList() {
-		List<String> list = new ArrayList<>();
-		
-		for (PlotGroup group : getAllPlotGroups()) {
-			list.add(group.getTown().getName() + "," + group.getID() + "," + group.getName());
-		}
-		
-		this.queryQueue.add(new FlatFileSaveTask(list, dataFolderPath + File.separator + "plotgroups.txt"));
-		
-		return true;
-	}
 
 	@Override
 	public boolean saveWorldList() {
@@ -1867,9 +1828,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean savePlotGroup(PlotGroup group) {
 		
 		List<String> list = new ArrayList<>();
-		
-		// Group ID
-		list.add("groupID=" + group.getID().toString());
 		
 		// Group Name
 		list.add("groupName=" + group.getName());

@@ -255,10 +255,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(name));
 	}
 
-	public void newPlotGroup(PlotGroup group) {
-		universe.getGroups().add(group);
-	}
-
 	/*
 	 * Are these objects in the TownyUniverse maps?
 	 */
@@ -606,8 +602,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * getPlotGroups methods.
 	 */
 
-	public PlotGroup getPlotObjectGroup(String townName, UUID groupID) {
-		return universe.getGroup(townName, groupID);
+	public PlotGroup getPlotObjectGroup(UUID groupID) {
+		return universe.getGroup(groupID);
 	}
 
 	public List<PlotGroup> getAllPlotGroups() {
@@ -928,6 +924,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		deleteJail(jail);
 	}
+
+	@Override
+	public void removePlotGroup(PlotGroup group) {
+		TownyUniverse.getInstance().unregisterGroup(group);
+		deletePlotGroup(group);
+	}
 	
 	/*
 	 * Rename Object Methods
@@ -1032,7 +1034,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				}
 
 			saveTown(town);
-			savePlotGroupList();
 			saveWorld(town.getHomeblockWorld());
 
 			if (nation != null) {
@@ -1143,7 +1144,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		// Save
 		savePlotGroup(group);
-		savePlotGroupList();
 
 		// Delete the old group file.
 		deletePlotGroup(group);

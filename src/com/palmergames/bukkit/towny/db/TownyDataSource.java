@@ -58,7 +58,7 @@ public abstract class TownyDataSource {
 
 	public boolean saveAll() {
 
-		return saveWorldList() && savePlotGroupList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList();
+		return saveWorldList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -102,10 +102,8 @@ public abstract class TownyDataSource {
 	abstract public boolean loadJail(Jail jail);
 
 	abstract public boolean loadPlotGroupList();
-
-	abstract public boolean loadPlotGroups();
-
-	abstract public boolean savePlotGroupList();
+	
+	abstract public boolean loadPlotGroup(PlotGroup group);
 
 	abstract public boolean saveWorldList();
 
@@ -217,6 +215,17 @@ public abstract class TownyDataSource {
 		for (Jail jail : getAllJails()) {
 			if (!loadJail(jail)) {
 				System.out.println("[Towny] Loading Error: Could not read jail data '" + jail.getUUID() + "'.");
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean loadPlotGroups() {
+		TownyMessaging.sendDebugMsg("Loading PlotGroups");
+		for (PlotGroup group : getAllPlotGroups()) {
+			if (!loadPlotGroup(group)) {
+				System.out.println("[Towny] Loading Error: Could not read PlotGroup data: '" + group.getID() + "'.");
 				return false;
 			}
 		}
@@ -384,6 +393,8 @@ public abstract class TownyDataSource {
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
 
 	abstract public void removeJail(Jail jail);
+	
+	abstract public void removePlotGroup(PlotGroup group);
 	
 	/**
 	 * @deprecated as of 0.96.4.0, We do not advise messing with the Residents Map.
