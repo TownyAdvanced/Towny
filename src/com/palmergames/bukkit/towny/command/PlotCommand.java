@@ -1504,7 +1504,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					tb.save();
 				});
 			town.removePlotGroup(group);
-			town.save();
 			TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
 			TownyMessaging.sendMsg(player, Translation.of("msg_plotgroup_deleted", name));
 			
@@ -1530,7 +1529,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			if (group.getTownBlocks().isEmpty()) {
 				town.removePlotGroup(group);
-				town.save();
 				TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
 				TownyMessaging.sendMsg(player, Translation.of("msg_plotgroup_empty_deleted", name));
 			}
@@ -1840,6 +1838,5 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		// Save changes.
 		newGroup.save();
 		townBlock.save();
-		town.save();
 	}
 }

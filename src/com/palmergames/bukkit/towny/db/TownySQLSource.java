@@ -1755,10 +1755,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						try {
 							UUID groupID = UUID.fromString(line.trim());
 							PlotGroup group = getPlotObjectGroup(groupID);
-							townBlock.setPlotObjectGroup(group);
-							if (townBlock.hasResident())
-								group.setResident(townBlock.getResidentOrNull());
-							
+							if (group != null) {
+								townBlock.setPlotObjectGroup(group);
+								if (townBlock.hasResident())
+									group.setResident(townBlock.getResidentOrNull());
+							}
 						} catch (Exception ignored) {
 						}
 
