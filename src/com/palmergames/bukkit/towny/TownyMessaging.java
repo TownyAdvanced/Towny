@@ -847,7 +847,7 @@ public class TownyMessaging {
 			groupsFormatted[i % 10] = line;
 		}
 		Audience audience = Towny.getAdventure().player(player);
-		player.sendMessage(ChatTools.formatTitle(Translation.of("plotgroup_plu")));
+		player.sendMessage(ChatTools.formatTitle(town.getName() + " " + Translation.of("plotgroup_plu")));
 		player.sendMessage(headerMsg);
 		for (TextComponent textComponent : groupsFormatted) {
 			audience.sendMessage(textComponent);

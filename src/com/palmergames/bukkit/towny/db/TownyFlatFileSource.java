@@ -174,7 +174,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			return true;
 		
 		for (File plotGroup : plotGroupFiles) {
-			String uuid = plotGroup.getName().replace(".txt", "");
+			String uuid = plotGroup.getName().replace(".data", "");
 			TownyUniverse.getInstance().newPlotGroupInternal(uuid);
 		}
 		

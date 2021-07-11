@@ -3,11 +3,9 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.event.statusscreen.NationStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
@@ -36,9 +34,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 
 public class TownyFormatter {
@@ -72,7 +68,7 @@ public class TownyFormatter {
 		return new ArrayList<>(ChatTools.listArr(residents, Colors.Green + Translation.of("res_list") + " " + Colors.LightGreen + "[" + town.getNumResidents() + "]" + Colors.Green + ":" + Colors.White + " "));
 
 	}
-	
+
 	public static List<String> getFormattedOutlaws(Town town) {
 
 		String[] residents = getFormattedNames(town.getOutlaws().toArray(new Resident[0]));
@@ -84,27 +80,6 @@ public class TownyFormatter {
 	public static List<String> getFormattedResidents(String prefix, List<Resident> residentList) {
 
 		return ChatTools.listArr(getFormattedNames(residentList), String.format(residentListPrefixFormat, prefix, residentList.size(), Translation.of("res_format_list_1"), Translation.of("res_format_list_2"), Translation.of("res_format_list_3")));
-	}
-
-	public static List<String> getFormattedPlotGroups(Town town) {
-		Collection<PlotGroup> groups = town.getPlotGroups();
-		if (groups == null) {
-			return new ArrayList<>(Arrays.asList("No plot groups to Display!"));
-		}
-		
-		List<String> lines = new ArrayList<>();
-		groups.stream()
-			.forEach(group -> {
-				String line = group.getFormattedName() + " - ";
-				line += "(" + group.getTownBlocks().size() + ") ";
-				if (group.hasResident())
-					try {
-						line += "owned by " + group.getResident().getFormattedName();
-					} catch (NotRegisteredException ignored) {}
-				lines.add(line); 
-			});
-		return lines;
-
 	}
 	
 	public static List<String> getFormattedTowns(String prefix, List<Town> townList) {
