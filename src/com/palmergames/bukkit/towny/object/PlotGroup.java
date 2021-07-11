@@ -137,6 +137,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 		this.permissions.load(line);
 	}
 
+	@Override
 	public TownyPermission getPermissions() {
 		return permissions;
 	}

@@ -147,6 +147,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"outlaw",
 		"outpost",
 		"purge",
+		"plotgrouplist",
 		"ranklist",
 		"rank",
 		"reclaim",
@@ -618,6 +619,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				townResList(player, split);
+				
+			} else if (split[0].equalsIgnoreCase("plotgrouplist")) {
+
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_PLOTGROUPLIST.getNode()))
+					throw new TownyException(Translation.of("msg_err_command_disable"));
+				
+				townPlotGroupList(player, split);
 
 			} else if (split[0].equalsIgnoreCase("outlawlist")) {
 
@@ -4049,6 +4057,31 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedResidents(town));
 		else 
 			TownyMessaging.sendErrorMsg(sender, Translation.of("msg_specify_name"));
+	}
+	
+	private void townPlotGroupList(CommandSender sender, String[] args) throws TownyException {
+		
+		Player player = null;
+		if (sender instanceof Player)
+			player = (Player) sender;
+		
+		Town town = null;
+		if (args.length == 1 && player != null) {
+			if (TownRuinUtil.isPlayersTownRuined(player))
+				throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+
+			town = getResidentOrThrow(player.getUniqueId()).getTown();
+		} else {
+			town = TownyUniverse.getInstance().getTown(args[1]);
+		}
+		
+		if (town == null)
+			throw new TownyException(Translation.of("msg_specify_name"));
+		
+		
+		
+		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedPlotGroups(town));
+
 	}
 	
 	private void townOutlawList(CommandSender sender, String[] args) {

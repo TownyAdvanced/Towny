@@ -1542,7 +1542,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							if (townBlock.hasResident()) 
 								group.setResident(townBlock.getResidentOrNull());
 						} else {
-							townBlock.setPlotObjectGroup(null);
+							townBlock.removePlotObjectGroup();
 						}
 					}
 

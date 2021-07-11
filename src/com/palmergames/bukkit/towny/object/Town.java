@@ -1202,7 +1202,7 @@ public class Town extends Government implements TownBlockOwner {
 		if (hasPlotGroups() && plotGroups.remove(plotGroup.getName()) != null) {
 			for (TownBlock tb : plotGroup.getTownBlocks()) {
 				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().getID().equals(plotGroup.getID())) {
-					tb.getPlotObjectGroup().setID(null);
+					tb.removePlotObjectGroup();
 					tb.save();
 				}
 			}
