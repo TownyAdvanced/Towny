@@ -1196,13 +1196,12 @@ public class Town extends Government implements TownBlockOwner {
 			plotGroups = new HashMap<>();
 		
 		plotGroups.put(group.getName(), group);
-		
 	}
 	
 	public void removePlotGroup(PlotGroup plotGroup) {
 		if (hasPlotGroups() && plotGroups.remove(plotGroup.getName()) != null) {
 			for (TownBlock tb : plotGroup.getTownBlocks()) {
-				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
+				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().getID().equals(plotGroup.getID())) {
 					tb.getPlotObjectGroup().setID(null);
 					tb.save();
 				}
@@ -1220,12 +1219,8 @@ public class Town extends Government implements TownBlockOwner {
 
 	// Method is inefficient compared to getting the group from name.
 	public PlotGroup getObjectGroupFromID(UUID ID) {
-		if (hasPlotGroups()) {
-			for (PlotGroup pg : getPlotGroups()) {
-				if (pg.getID().equals(ID)) 
-					return pg;
-			}
-		}
+		if (hasPlotGroups())
+			getPlotGroups().stream().filter(group -> group.getID().equals(ID)).findFirst().orElse(null);
 		
 		return null;
 	}
@@ -1243,11 +1238,6 @@ public class Town extends Government implements TownBlockOwner {
 		if (hasPlotGroups() && hasPlotGroupName(name))
 			return plotGroups.get(name);
 		return null;
-	}
-	
-	@Nullable
-	public Collection<PlotGroup> getPlotObjectGroups() {
-		return getPlotGroups();
 	}
 
 	@Override

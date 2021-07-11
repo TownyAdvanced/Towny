@@ -1028,7 +1028,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			
 			if (town.hasPlotGroups())
-				for (PlotGroup pg : town.getPlotObjectGroups()) {
+				for (PlotGroup pg : town.getPlotGroups()) {
 					pg.setTown(town);
 					savePlotGroup(pg);
 				}
