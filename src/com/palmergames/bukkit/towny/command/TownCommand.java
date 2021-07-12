@@ -4064,40 +4064,39 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (sender instanceof Player)
 			player = (Player) sender;
 		
+		if (player != null && TownRuinUtil.isPlayersTownRuined(player))
+			throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+
 		Town town = null;
-		if (args.length == 1 && player != null) {
-			if (TownRuinUtil.isPlayersTownRuined(player))
-				throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
-			
-			town = getResidentOrThrow(player.getUniqueId()).getTown();
-		} else {
+		if (args.length > 1) // not just /town plotgrouplist
 			town = TownyUniverse.getInstance().getTown(args[1]);
+
+		if (town == null && player != null) { // Probably a number and not a town name.
+			Resident res = getResidentOrThrow(player.getUniqueId());
+			if (!res.hasTown()) // If the player has no town we cannot go on.
+				throw new TownyException(Translation.of("msg_specify_name"));	
+			town = res.getTownOrNull();
 		}
-		
-		if (town == null)
-			throw new TownyException(Translation.of("msg_specify_name"));
 		
 		if (!town.hasPlotGroups())
 			throw new TownyException(Translation.of("msg_err_this_town_has_no_plot_groups"));
-		
-		int page = 1;
+
+		int page = 1;		
 		int total = (int) Math.ceil(((double) town.getPlotGroups().size()) / ((double) 10));
-		if (args.length == 2) {
+		if (args.length > 1) {
 			try {
-				page = Integer.parseInt(args[1]);
+				page = Integer.parseInt(args[args.length - 1]);
 				if (page < 0) {
 					throw new TownyException(Translation.of("msg_err_negative"));
 				} else if (page == 0) {
 					throw new TownyException(Translation.of("msg_error_must_be_int"));
 				}
-			} catch (NumberFormatException e) {
-				throw new TownyException(Translation.of("msg_error_must_be_int"));
-			}
+			} catch (NumberFormatException ignored) {} // page will continue to be one.
 		}
 		if (page > total)
 			throw new TownyException(Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 		
-		TownyMessaging.sendPlotGroupList(player, town, page, total);
+		TownyMessaging.sendPlotGroupList(sender, town, page, total);
 	}
 
 	private void townOutlawList(CommandSender sender, String[] args) throws TownyException {

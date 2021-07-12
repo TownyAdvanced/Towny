@@ -814,7 +814,7 @@ public class TownyMessaging {
 		audience.sendMessage(pageFooter);
 	}
 	
-	public static void sendPlotGroupList(Player player, Town town, int page, int total) {
+	public static void sendPlotGroupList(CommandSender sender, Town town, int page, int total) {
 		int groupCount = town.getPlotGroups().size();
 		int iMax = Math.min(page * 10,  groupCount);
 		List<PlotGroup> groups = new ArrayList<>(town.getPlotGroups());
@@ -841,14 +841,14 @@ public class TownyMessaging {
 			TextComponent line = Component.text(Integer.toString(i + 1)).color(NamedTextColor.GOLD);
 			line = line.append(dash).append(name).append(dash).append(size);
 			
-			if (TownyEconomyHandler.isActive() && group.getPrice() != -1) 
-				line = line.append(dash).append(Component.text("(" + Translation.of("towny_map_forsale") + ": " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ")")).color(NamedTextColor.BLUE);
-			
+			if (TownyEconomyHandler.isActive() && group.getPrice() != -1)
+				line = line.append(dash).append(Component.text("(" + Translation.of("towny_map_forsale") + ": " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ")").color(NamedTextColor.BLUE));
+
 			groupsFormatted[i % 10] = line;
 		}
-		Audience audience = Towny.getAdventure().player(player);
-		player.sendMessage(ChatTools.formatTitle(town.getName() + " " + Translation.of("plotgroup_plu")));
-		player.sendMessage(headerMsg);
+		Audience audience = Towny.getAdventure().sender(sender);
+		sender.sendMessage(ChatTools.formatTitle(town.getName() + " " + Translation.of("plotgroup_plu")));
+		sender.sendMessage(headerMsg);
 		for (TextComponent textComponent : groupsFormatted) {
 			audience.sendMessage(textComponent);
 		}

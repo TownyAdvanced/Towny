@@ -379,7 +379,7 @@ public enum HelpMenu {
 				.add("reslist (town)", "")
 				.add("ranklist (town)", "")
 				.add("outlawlist (town)", "")
-				.add("plotgrouplist [town] (page)", "")
+				.add("plotgrouplist (town) (page)", "")
 				.add("plots (town)", "")
 				.add("outlaw add/remove [name]", "")
 				.add("say", "[message]")
