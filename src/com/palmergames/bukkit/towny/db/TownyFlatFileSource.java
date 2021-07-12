@@ -57,6 +57,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "worlds" + File.separator + "deleted",
 			dataFolderPath + File.separator + "townblocks",
 			dataFolderPath + File.separator + "plotgroups",
+			dataFolderPath + File.separator + "plotgroups" + File.separator + "deleted",
 			dataFolderPath + File.separator + "jails",
 			dataFolderPath + File.separator + "jails" + File.separator + "deleted"
 		) || !FileMgmt.checkOrCreateFiles(
@@ -169,7 +170,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadPlotGroupList() {
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_group_list"));
-		File[] plotGroupFiles = receiveObjectFiles("plotgroups");
+		File[] plotGroupFiles = receiveObjectFiles("plotgroups", ".data");
+		
 		if (plotGroupFiles == null)
 			return true; 
 		
@@ -184,7 +186,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_resident_list"));
 		List<String> residents = receiveListFromLegacyFile("residents.txt");
-		File[] residentFiles = receiveObjectFiles("residents");
+		File[] residentFiles = receiveObjectFiles("residents", ".txt");
 		assert residentFiles != null;
 
 		for (File resident : residentFiles) {
@@ -220,7 +222,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_town_list"));
 		List<String> towns = receiveListFromLegacyFile("towns.txt");
-		File[] townFiles = receiveObjectFiles("towns");
+		File[] townFiles = receiveObjectFiles("towns", ".txt");
 		assert townFiles != null;
 		
 		for (File town : townFiles) {
@@ -256,7 +258,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_nation_list"));
 		List<String> nations = receiveListFromLegacyFile("nations.txt");
-		File[] nationFiles = receiveObjectFiles("nations");
+		File[] nationFiles = receiveObjectFiles("nations", ".txt");
 		assert nationFiles != null;
 		for (File nation : nationFiles) {
 			String name = nation.getName().replace(".txt", "");
@@ -329,7 +331,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	public boolean loadJailList() {
 		TownyMessaging.sendDebugMsg("Loading Jail List");
-		File[] jailFiles = receiveObjectFiles("jails");
+		File[] jailFiles = receiveObjectFiles("jails", ".txt");
 		if (jailFiles == null)
 			return true;
 		
@@ -366,10 +368,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 * Util method for gathering towny object .txt files from their parent folder.
 	 * ex: "residents" 
 	 * @param folder - Towny object folder
+	 * @param extension - Extension of the filetype to receive objects from.
 	 * @return files - Files from inside the residents\towns\nations folder.
 	 */
-	private File[] receiveObjectFiles(String folder) {
-		return new File(dataFolderPath + File.separator + folder).listFiles(file -> file.getName().toLowerCase().endsWith(".txt"));
+	private File[] receiveObjectFiles(String folder, String extension) {
+		return new File(dataFolderPath + File.separator + folder).listFiles(file -> file.getName().toLowerCase().endsWith(extension));
 	}
 	
 	/*
@@ -1381,7 +1384,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty()) {
 					Town town = universe.getTown(line.trim());
 					if (town != null) {
-						group.setTown(town);	
+						group.setTown(town);
+						System.out.println("town has this many plotgroups: " + town.getPlotGroups().size());
 					} else {
 						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_group_file_missing_town_delete", path));
 						deletePlotGroup(group); 
@@ -1537,7 +1541,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						PlotGroup group = getPlotObjectGroup(groupID);
 						if (group != null) {
 							townBlock.setPlotObjectGroup(group);
-							if (townBlock.hasResident()) 
+							if (group.getPermissions() == null && townBlock.getPermissions() != null) 
+								group.setPermissions(townBlock.getPermissions());
+							if (townBlock.hasResident())
 								group.setResident(townBlock.getResidentOrNull());
 						} else {
 							townBlock.removePlotObjectGroup();

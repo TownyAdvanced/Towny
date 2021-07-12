@@ -1500,11 +1500,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_not_associated_with_a_group"));
 				return false;
 			}
-			PlotGroup group = townBlock.getPlotObjectGroup();
-			String name = group.getName();
-			town.removePlotGroup(group);
-			TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
-			TownyMessaging.sendMsg(player, Translation.of("msg_plotgroup_deleted", name));
+			Confirmation.runOnAccept(()-> {
+				PlotGroup group = townBlock.getPlotObjectGroup();
+				String name = group.getName();
+				town.removePlotGroup(group);
+				TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+				TownyMessaging.sendMsg(player, Translation.of("msg_plotgroup_deleted", name));
+			}).sendTo(player);
 			
 		} else if (split[0].equalsIgnoreCase("remove")) {
 			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_REMOVE.getNode()))

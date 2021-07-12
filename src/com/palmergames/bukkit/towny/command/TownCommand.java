@@ -4058,6 +4058,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	private void townPlotGroupList(CommandSender sender, String[] args) throws TownyException {
+		// args: plotgrouplist townname pagenumber 
 		
 		Player player = null;
 		if (sender instanceof Player)

@@ -1757,6 +1757,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							PlotGroup group = getPlotObjectGroup(groupID);
 							if (group != null) {
 								townBlock.setPlotObjectGroup(group);
+								if (group.getPermissions() == null && townBlock.getPermissions() != null)
+									group.setPermissions(townBlock.getPermissions());
 								if (townBlock.hasResident())
 									group.setResident(townBlock.getResidentOrNull());
 							}
