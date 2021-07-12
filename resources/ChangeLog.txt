@@ -6337,3 +6337,9 @@ v0.92.0.11:
   - Add WildernessMapEvent awareness to the /towny map hud.
     - Other plugins like TownyCamps, TownyHistories now appear on the /towny map hud.
   - Fix footer of the /town jail list output.
+  - Alter non-player vs non-player combat:
+    - In the wilderness it is allowed.
+    - If it is a tamed wolf, and the owner is online, and the owner can destroy in the plot where the defender non-player is, and the non-player is a protected entity, the wolf murdering other non-players is allowed.
+    - Closes #5059.
+  - Make applicable placeholders available when a player is offline, courtesy of BlakeStevenson with PR #4962.
+    - All except for player_plot_* and player_location_* placeholders should function for offline players.
