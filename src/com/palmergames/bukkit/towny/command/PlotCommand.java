@@ -1454,8 +1454,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_ADD.getNode()))
 				throw new TownyException(Translation.of("msg_err_command_disable"));
 			
-			if (townBlock.hasPlotObjectGroup() && split.length < 2) {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_already_belongs_to_a_group", townBlock.getPlotObjectGroup().getName()));
+			if (split.length == 1) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_you_must_specify_a_group_name"));
 				return false;
 			}
 
@@ -1464,6 +1464,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				plotGroupName = NameValidation.filterCommas(plotGroupName);
 				
 				if (townBlock.hasPlotObjectGroup()) {
+					
+					// Already has a PlotGroup and it is the same name being used to re-add.
+					if (townBlock.getPlotObjectGroup().getName().equalsIgnoreCase(plotGroupName)) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_this_plot_is_already_part_of_the_plot_group_x", plotGroupName));
+						return false;
+					}
+
 					final String name = plotGroupName;
 					// Already has a PlotGroup, ask if they want to transfer from one group to another.					
 					Confirmation.runOnAccept( ()-> {
@@ -1495,12 +1502,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 			PlotGroup group = townBlock.getPlotObjectGroup();
 			String name = group.getName();
-			new ArrayList<>(group.getTownBlocks()).stream()
-				.forEach(tb -> {
-					group.removeTownBlock(tb);
-					tb.removePlotObjectGroup();
-					tb.save();
-				});
 			town.removePlotGroup(group);
 			TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
 			TownyMessaging.sendMsg(player, Translation.of("msg_plotgroup_deleted", name));

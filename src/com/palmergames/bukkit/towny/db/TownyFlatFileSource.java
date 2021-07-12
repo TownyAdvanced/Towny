@@ -171,12 +171,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_group_list"));
 		File[] plotGroupFiles = receiveObjectFiles("plotgroups");
 		if (plotGroupFiles == null)
-			return true;
+			return true; 
 		
-		for (File plotGroup : plotGroupFiles) {
-			String uuid = plotGroup.getName().replace(".data", "");
-			TownyUniverse.getInstance().newPlotGroupInternal(uuid);
-		}
+		for (File plotGroup : plotGroupFiles)
+			TownyUniverse.getInstance().newPlotGroupInternal(plotGroup.getName().replace(".data", ""));
 		
 		return true;
 	}
@@ -1369,12 +1367,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadPlotGroup(PlotGroup group) {
 		String line = "";
 		String path = getPlotGroupFilename(group);
-		
+
 		File groupFile = new File(path);
 		if (groupFile.exists() && groupFile.isFile()) {
 			try {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(groupFile);
-
+				
 				line = keys.get("groupName");
 				if (line != null)
 					group.setName(line.trim());
@@ -1386,7 +1384,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						group.setTown(town);	
 					} else {
 						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_group_file_missing_town_delete", path));
-						deletePlotGroup(group);
+						deletePlotGroup(group); 
 						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_group_entry", path));
 						return true;
 					}

@@ -977,7 +977,6 @@ public class TownyUniverse {
 		// Create key and store group globally.
 		town.addPlotGroup(newGroup);
 		
-		plotGroupUUIDMap.put(id, newGroup);
 		return newGroup;
 	}
 

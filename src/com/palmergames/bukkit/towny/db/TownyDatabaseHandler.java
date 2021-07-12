@@ -1144,9 +1144,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		// Save
 		savePlotGroup(group);
-
-		// Delete the old group file.
-		deletePlotGroup(group);
 	}
 
 	@Override

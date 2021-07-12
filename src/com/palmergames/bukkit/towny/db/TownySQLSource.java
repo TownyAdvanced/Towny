@@ -1833,8 +1833,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (line != null) {
 				try {
 					group.setPrice(Float.parseFloat(line.trim()));
-				} catch (Exception ignored) {
-				}
+				} catch (Exception ignored) {}
 			}
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading plot group: " + uuid
@@ -1842,7 +1841,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			e.printStackTrace();
 			return false;
 		}
-		
 		return true;
 	}
 
@@ -1851,7 +1849,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		// Unused in SQL.
 		return true;
 	}
-	
+
 	@Override
 	public boolean loadJails() {
 		TownyMessaging.sendDebugMsg("Loading Jails");
@@ -2087,12 +2085,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Saving group " + group.getName());
 		try {
 			HashMap<String, Object> pltgrp_hm = new HashMap<>();
-			pltgrp_hm.put("groupName", group.getName());
 			pltgrp_hm.put("groupID", group.getID());
+			pltgrp_hm.put("groupName", group.getName());
 			pltgrp_hm.put("groupPrice", group.getPrice());
 			pltgrp_hm.put("town", group.getTown().toString());
 
-			UpdateDB("PLOTGROUPS", pltgrp_hm, Collections.singletonList("name"));
+			UpdateDB("PLOTGROUPS", pltgrp_hm, Collections.singletonList("groupID"));
 
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Plot groups unknown error");
@@ -2372,7 +2370,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public void deletePlotGroup(PlotGroup group) {
 
 		HashMap<String, Object> pltgrp_hm = new HashMap<>();
-		pltgrp_hm.put("name", group.getName());
+		pltgrp_hm.put("groupID", group.getID());
 		DeleteDB("PLOTGROUPS", pltgrp_hm);
 	}
 	

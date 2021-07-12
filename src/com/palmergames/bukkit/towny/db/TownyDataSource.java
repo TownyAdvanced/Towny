@@ -102,7 +102,7 @@ public abstract class TownyDataSource {
 	abstract public boolean loadJail(Jail jail);
 
 	abstract public boolean loadPlotGroupList();
-	
+
 	abstract public boolean loadPlotGroup(PlotGroup group);
 
 	abstract public boolean saveWorldList();
@@ -395,7 +395,7 @@ public abstract class TownyDataSource {
 	abstract public void removeJail(Jail jail);
 	
 	abstract public void removePlotGroup(PlotGroup group);
-	
+
 	/**
 	 * @deprecated as of 0.96.4.0, We do not advise messing with the Residents Map.
 	 * 
