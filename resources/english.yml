@@ -1445,3 +1445,6 @@ msg_plotgroup_empty_deleted: 'The plotgroup %s had no townblocks and has been de
 plotgroup_plu: 'Plot Groups'
 msg_err_this_town_has_no_plot_groups: 'The specified town has no plot groups.'
 msg_err_this_plot_is_already_part_of_the_plot_group_x: 'This townblock is already part of the plot group: %s'
+map_hover_plot_group: 'Plot Group: '
+map_hover_plot_group_size: 'Size: '
+map_hover_plots: '%s plots'
