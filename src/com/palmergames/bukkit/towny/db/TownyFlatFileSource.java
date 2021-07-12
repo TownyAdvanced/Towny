@@ -1385,7 +1385,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					Town town = universe.getTown(line.trim());
 					if (town != null) {
 						group.setTown(town);
-						System.out.println("town has this many plotgroups: " + town.getPlotGroups().size());
 					} else {
 						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_group_file_missing_town_delete", path));
 						deletePlotGroup(group); 

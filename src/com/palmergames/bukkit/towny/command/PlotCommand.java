@@ -1673,7 +1673,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						
 						plotGroup.getTownBlocks().stream()
 							.forEach(tb -> {
-								tb.getPermissions().load(plotGroup.getPermissions().toString());
+								tb.setPermissions(plotGroup.getPermissions().toString());
 								tb.setChanged(!tb.getPermissions().toString().equals(town.getPermissions().toString()));
 								tb.save();
 								// Change settings event
