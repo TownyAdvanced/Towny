@@ -1794,7 +1794,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 			}
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Jail sql Error - " + e.getMessage());
+			TownyMessaging.sendErrorMsg("SQL: Load PlotGroup sql Error - " + e.getMessage());
 			return false;
 		}
 
