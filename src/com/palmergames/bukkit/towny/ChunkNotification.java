@@ -83,11 +83,14 @@ public class ChunkNotification {
 		if (from.hasTownBlock()) {
 			fromTownBlock = from.getTownBlockOrNull();
 			fromPlotType = fromTownBlock.getType();
-			if (fromTownBlock.hasPlotObjectGroup())
+			fromForSale = fromTownBlock.getPlotPrice() != -1;
+			if (fromTownBlock.hasPlotObjectGroup()) {
 				fromPlotGroup = fromTownBlock.getPlotObjectGroup();
+				fromForSale = fromPlotGroup.getPrice() != -1;
+			}
 			fromTown = fromTownBlock.getTownOrNull();
 			fromResident = fromTownBlock.getResidentOrNull();
-			fromForSale = fromTownBlock.getPlotPrice() != -1;
+			
 			
 		} else {
 			fromWild = true;
@@ -96,18 +99,16 @@ public class ChunkNotification {
 		if (to.hasTownBlock()) {
 			toTownBlock = to.getTownBlockOrNull();
 			toPlotType = toTownBlock.getType();
-			if (toTownBlock.hasPlotObjectGroup())
-				toPlotGroup = toTownBlock.getPlotObjectGroup();
 			toTown = toTownBlock.getTownOrNull();
 			toResident = toTownBlock.getResidentOrNull();
-
 			toForSale = toTownBlock.getPlotPrice() != -1;
 			toHomeBlock = toTownBlock.isHomeBlock();
 			toOutpostBlock = toTownBlock.isOutpost();
 			toPlotGroupBlock = toTownBlock.hasPlotObjectGroup();
-
-			if (toPlotGroupBlock)
-				toForSale = toTownBlock.getPlotObjectGroup().getPrice() != -1;
+			if (toPlotGroupBlock) {
+				toPlotGroup = toTownBlock.getPlotObjectGroup();
+				toForSale = toPlotGroup.getPrice() != -1;
+			}
 			
 		} else {
 			toWild = true;

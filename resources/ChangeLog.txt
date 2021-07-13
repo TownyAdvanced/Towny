@@ -6344,3 +6344,5 @@ v0.92.0.11:
   - Make applicable placeholders available when a player is offline, courtesy of BlakeStevenson with PR #4962.
     - All except for player_plot_* and player_location_* placeholders should function for offline players.
   - Update Spanish file and fix type in English file, courtesy of ElMoha943 with PR #5070. (First-Time Contributor!)
+  - Fix ChunkNotifications not correctly handling not-for-sale plotgroups.
+    - Closes #5069.
