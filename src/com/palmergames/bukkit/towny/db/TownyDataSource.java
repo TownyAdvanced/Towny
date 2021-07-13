@@ -247,7 +247,13 @@ public abstract class TownyDataSource {
 	public boolean savePlotGroups() {
 		TownyMessaging.sendDebugMsg("Saving PlotGroups");
 		for (PlotGroup plotGroup : getAllPlotGroups())
-			savePlotGroup(plotGroup);
+			/*
+			 * Only save plotgroups which actually have townblocks associated with them.
+			 */
+			if (plotGroup.hasTownBlocks())
+				savePlotGroup(plotGroup);
+			else
+				deletePlotGroup(plotGroup); 
 		return true;
 	}
 
