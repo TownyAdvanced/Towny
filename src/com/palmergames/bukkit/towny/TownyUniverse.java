@@ -962,7 +962,7 @@ public class TownyUniverse {
 	 * @param id UUID of the group
 	 * @return PlotGroup 
 	 * @throws AlreadyRegisteredException When group name is already taken.
-	 * @Deprecated as of 0.97.0.11 for being unused.
+	 * @deprecated as of 0.97.0.11 for being unused.
 	 */
     @Deprecated
 	public PlotGroup newGroup(Town town, String name, UUID id) throws AlreadyRegisteredException {

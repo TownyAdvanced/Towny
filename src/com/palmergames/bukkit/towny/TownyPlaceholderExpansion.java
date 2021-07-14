@@ -126,7 +126,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 	 * We specify the value identifier in this method. <br>
 	 * Since version 2.9.1 can you use OfflinePlayers in your requests.
 	 *
-	 * @param player     A {@link org.bukkit.entity.OfflinePlayer OfflinePlayer}.
+	 * @param player     A OfflinePlayer.
 	 * @param identifier A String containing the identifier/value.
 	 *
 	 * @return possibly-null String of the requested identifier.
