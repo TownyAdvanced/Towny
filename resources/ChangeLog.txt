@@ -6346,3 +6346,4 @@ v0.92.0.11:
   - Update Spanish file and fix type in English file, courtesy of ElMoha943 with PR #5070. (First-Time Contributor!)
   - Fix ChunkNotifications not correctly handling not-for-sale plotgroups.
     - Closes #5069.
+  - Fix ChunkNotifications creating an error when a forsale plot is entered into where the economy is not active.

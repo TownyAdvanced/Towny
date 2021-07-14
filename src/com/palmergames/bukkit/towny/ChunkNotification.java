@@ -294,10 +294,10 @@ public class ChunkNotification {
 
 		// Were heading to a plot group do some things differently
 		if (toForSale && toPlotGroupBlock && (fromPlotGroup != toPlotGroup))
-			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotObjectGroup().getPrice()));
+			return String.format(forSaleNotificationFormat, TownyEconomyHandler.isActive() ? TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotObjectGroup().getPrice()) : "$ 0");
 		
 		if (toForSale && !toPlotGroupBlock)
-			return String.format(forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()));
+			return String.format(forSaleNotificationFormat, TownyEconomyHandler.isActive() ? TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()): "$ 0");
 		
 		if (!toForSale && fromForSale && !toWild)
 			return notForSaleNotificationFormat;
