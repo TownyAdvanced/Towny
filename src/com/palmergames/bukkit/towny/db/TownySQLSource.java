@@ -5,6 +5,8 @@
  */
 package com.palmergames.bukkit.towny.db;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -29,6 +31,8 @@ import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
@@ -1997,6 +2001,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				res_hm.put("metadata", "");
 
 			UpdateDB("RESIDENTS", res_hm, Collections.singletonList("name"));
+
+			sendBungeeMessage("RESIDENTS", resident.getName());
+			
 			return true;
 
 		} catch (Exception e) {
@@ -2082,6 +2089,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				twn_hm.put("primaryJail", town.getPrimaryJail().getUUID());
 			
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
+			
+			sendBungeeMessage("TOWNS", town.getName());
 			return true;
 
 		} catch (Exception e) {
@@ -2148,6 +2157,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			UpdateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 
+			sendBungeeMessage("NATIONS", nation.getName());
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
 			e.printStackTrace();
@@ -2427,7 +2437,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				return loadTown(rs);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -2446,7 +2455,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				return loadResident(resident, rs);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -2462,9 +2470,19 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				return loadNation(rs);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
 	}
+
+	private void sendBungeeMessage(String object, String name) {
+
+		ByteArrayDataOutput out = ByteStreams.newDataOutput();
+		out.writeUTF("TownyBungeeCord");
+		out.writeUTF(object);
+		out.writeUTF(name);
+		
+		Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+	}
+
 }

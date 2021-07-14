@@ -31,9 +31,9 @@ public class TownyBungeeMessaging implements PluginMessageListener {
 							TownyUniverse.getInstance().registerTown(town);
 						} catch (AlreadyRegisteredException ignored) {}
 					}
-					
 					TownyUniverse.getInstance().getDataSource().loadTown(name);
 					break;
+
 				case "NATION":
 					if (!TownyUniverse.getInstance().hasNation(name)) {
 						Nation nation  = new Nation(name);
@@ -43,6 +43,7 @@ public class TownyBungeeMessaging implements PluginMessageListener {
 					}
 					TownyUniverse.getInstance().getDataSource().loadNation(name);
 					break;
+
 				case "RESIDENT":
 					if (!TownyUniverse.getInstance().hasResident(name)) {
 						Resident res = new Resident(name);
@@ -50,7 +51,6 @@ public class TownyBungeeMessaging implements PluginMessageListener {
 							TownyUniverse.getInstance().registerResident(res);
 						} catch (AlreadyRegisteredException ignored) {}
 					}
-					
 					TownyUniverse.getInstance().getDataSource().loadResident(name);
 					break;
 			}
