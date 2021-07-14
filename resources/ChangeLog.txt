@@ -6347,3 +6347,33 @@ v0.92.0.11:
   - Fix ChunkNotifications not correctly handling not-for-sale plotgroups.
     - Closes #5069.
   - Fix ChunkNotifications creating an error when a forsale plot is entered into where the economy is not active.
+  - Plot Group Overhaul
+    - Adds ability to transfer a townblock from one group to another using /plot group add NAME.
+      - Closes #5050.
+    - Removes the plotgroups.txt file.
+     - All files in the plotgroups folder will be loaded.
+    - Plot Groups now keep a uniform perm line.
+    - PlotGroups which are for sale will show a $ symbol on the ascii and hud maps.
+    - PlotGroups now have their own hovertext when viewed in the /towny map.
+    - Fix empty plotgroups not being deleted.  
+    - Rewrite of the SQL saving/loading for plotgroups is done as well.
+      - Fixes delete code which would never work.
+      - Removes a redundant SQLSource method loadJail(Jail).
+    - Properly PlotGroup.setResident(Resident) where it was not.
+  - New Command: /plot group delete
+    - Deletes a plot group entirely, requested in #5050.
+  - New Command: /town plotgrouplist (townname) (page)
+    - Lists a town's plotgroups with forsale and price indicated.
+    - Closes #4431. 
+  - New Permission Node: towny.command.plot.group.delete
+    - Child node of towny.command.plot.group.*
+    - Not needed to be added to townyperms.yml.
+  - New Permission Node: towny.command.town.plotgrouplist
+      - Child node of towny.command.town.*
+      - Not needed to be added to townyperms.yml.
+
+
+
+
+
+
