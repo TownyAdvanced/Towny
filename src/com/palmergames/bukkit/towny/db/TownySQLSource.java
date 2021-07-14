@@ -68,7 +68,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	private final String password;
 	private final String tb_prefix;
 
-	private static Connection cntx = null;
+	private Connection cntx = null;
 
 	private final HikariConfig config;
 	private final HikariDataSource hikariDataSource;
@@ -186,7 +186,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		hikariDataSource.close();
 	}
 
-
 	/**
 	 * open a connection to the SQL server.
 	 *
@@ -220,7 +219,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			return true;
 
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("Error could not Connect to db " + dsn + ": " + e.getMessage());
+			TownyMessaging.sendErrorMsg("Error could not Connect to db " + this.dsn + ": " + e.getMessage());
 		}
 
 		return false;
@@ -2003,7 +2002,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			UpdateDB("RESIDENTS", res_hm, Collections.singletonList("name"));
 
 			sendBungeeMessage("RESIDENTS", resident.getName());
-			
 			return true;
 
 		} catch (Exception e) {
@@ -2158,6 +2156,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			UpdateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 
 			sendBungeeMessage("NATIONS", nation.getName());
+			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
 			e.printStackTrace();
