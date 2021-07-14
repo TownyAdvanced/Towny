@@ -89,4 +89,12 @@ public class Version implements Comparable<Version> {
 	public String[] getComponents() {
 		return components;
 	}
+	
+	public boolean isPreRelease() {
+		try {
+			return Integer.parseInt(this.components[components.length-1]) != 0;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
 }

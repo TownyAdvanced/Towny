@@ -169,7 +169,7 @@ public class OnPlayerLogin implements Runnable {
 			if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(player.getName(), false), 1) == -1)
 				TownyMessaging.sendErrorMsg("Could not set default modes for " + player.getName() + ".");
 			
-			if (TownyUpdateChecker.hasUpdate() && TownySettings.isShowingUpdateNotifications() && player.hasPermission(PermissionNodes.TOWNY_ADMIN_UPDATENOTIFICATIONS.getNode())) {
+			if (TownyUpdateChecker.shouldShowNotification() && player.hasPermission(PermissionNodes.TOWNY_ADMIN_UPDATEALERTS.getNode())) {
 				Audience audience = Towny.getAdventure().player(player);
 				ClickEvent clickEvent = ClickEvent.openUrl(TownyUpdateChecker.getUpdateURL());
 				

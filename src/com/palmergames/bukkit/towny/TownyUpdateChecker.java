@@ -42,4 +42,19 @@ public class TownyUpdateChecker {
 	public static boolean hasCheckedSuccessfully() {
 		return checkedSuccessfully;
 	}
+	
+	public static boolean shouldShowNotification() {
+		if (!TownySettings.isShowingUpdateNotifications() || !TownyUpdateChecker.hasUpdate())
+			return false;
+		
+		Version currentVersion = Version.fromString(Towny.getPlugin().getVersion());
+		if (currentVersion.isPreRelease())
+			return true;
+
+		if (TownySettings.isUpdateNotificationsMajorOnly()) {
+			return !newVersion.isPreRelease();
+		}
+		
+		return true;
+	}
 }

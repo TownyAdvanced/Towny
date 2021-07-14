@@ -3136,7 +3136,11 @@ public class TownySettings {
 	}
 	
 	public static boolean isShowingUpdateNotifications() {
-		return getBoolean(ConfigNodes.PLUGIN_UPDATE_NOTIFICATIONS);
+		return getBoolean(ConfigNodes.PLUGIN_UPDATE_NOTIFICATIONS_ALERTS);
+	}
+	
+	public static boolean isUpdateNotificationsMajorOnly() {
+		return getBoolean(ConfigNodes.PLUGIN_UPDATE_NOTIFICATIONS_MAJOR_ONLY);
 	}
 }
 
