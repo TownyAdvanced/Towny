@@ -143,7 +143,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("time")) {
 				TownyMessaging.sendMsg(Translation.of("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
 			} else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v")) {
-				if (TownyUpdateChecker.hasUpdate()) {
+				if (TownyUpdateChecker.shouldShowNotification()) {
 					TownyMessaging.sendMessage(sender, Colors.strip(Translation.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion())));
 				} else {
 					TownyMessaging.sendMsg(sender, towny_version);
@@ -289,7 +289,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
 
-				if (TownyUpdateChecker.hasUpdate()) {
+				if (TownyUpdateChecker.shouldShowNotification()) {
 					TownyMessaging.sendMsg(player, Colors.strip(Translation.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion())));
 				} else {
 					TownyMessaging.sendMsg(player, towny_version);
