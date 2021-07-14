@@ -424,4 +424,9 @@ public abstract class TownyDataSource {
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
+
+	public abstract boolean loadTown(String name);
+	public abstract boolean loadResident(String name);
+	public abstract boolean loadNation(String name);
+	
 }

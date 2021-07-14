@@ -64,7 +64,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	private final String password;
 	private final String tb_prefix;
 
-	private Connection cntx = null;
+	private static Connection cntx = null;
 
 	private final HikariConfig config;
 	private final HikariDataSource hikariDataSource;
@@ -182,6 +182,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		hikariDataSource.close();
 	}
 
+
 	/**
 	 * open a connection to the SQL server.
 	 *
@@ -215,7 +216,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			return true;
 
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("Error could not Connect to db " + this.dsn + ": " + e.getMessage());
+			TownyMessaging.sendErrorMsg("Error could not Connect to db " + dsn + ": " + e.getMessage());
 		}
 
 		return false;
@@ -2409,5 +2410,61 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	public HikariDataSource getHikariDataSource() {
 		return hikariDataSource;
+	}
+
+	
+	/*
+	 * Used for Bungee Messaging Only.
+	 */
+
+	public boolean loadTown(String name) {
+		if (!getContext())
+			return false;
+
+		try (Statement s = cntx.createStatement();
+				ResultSet rs = s.executeQuery("SELECT " + name + " FROM " + tb_prefix + "TOWNS ")) {
+			while (rs.next()) {
+				return loadTown(rs);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean loadResident(String name) {
+		if (!getContext())
+			return false;
+
+		
+		Resident resident = universe.getResident(name);
+		
+		try (Statement s = cntx.createStatement();
+				ResultSet rs = s.executeQuery("SELECT " + name + " FROM " + tb_prefix + "RESIDENTS ")) {
+			while (rs.next()) {
+				return loadResident(resident, rs);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean loadNation(String name) {
+		if (!getContext())
+			return false;
+
+		try (Statement s = cntx.createStatement();
+				ResultSet rs = s.executeQuery("SELECT " + name + " FROM " + tb_prefix + "NATIONS ")) {
+			while (rs.next()) {
+				return loadNation(rs);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

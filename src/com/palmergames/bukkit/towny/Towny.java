@@ -183,6 +183,9 @@ public class Towny extends JavaPlugin {
 
 		registerEvents();
 
+		this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+	    this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new TownyBungeeMessaging());
+		
 		System.out.println("=============================================================");
 		if (isError()) {
 			System.out.println("[WARNING] - ***** SAFE MODE ***** " + version);

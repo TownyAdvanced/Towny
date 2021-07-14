@@ -2229,5 +2229,25 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		File file = new File(getJailFilename(jail));
 		queryQueue.add(new DeleteFileTask(file, false));
 	}
+
+	
+	/*
+	 * Unused in FlatFile (BungeeCord Only)
+	 */
+	
+	@Override
+	public boolean loadTown(String name) {
+		return true;
+	}
+
+	@Override
+	public boolean loadResident(String name) {
+		return true;
+	}
+
+	@Override
+	public boolean loadNation(String name) {
+		return true;
+	}
 	
 }
