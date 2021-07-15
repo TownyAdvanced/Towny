@@ -3598,6 +3598,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode()))
 							throw new TownyException(Translation.of("msg_err_command_disable"));
 						
+						if (TownySettings.isBungeeEnabled() && !town.getHomeblockWorld().equals(world))
+							throw new TownyException("You are not allowed to claim land outside of your home block world.");
+						
 						// Run various tests required by configuration/permissions through Util.
 						OutpostUtil.OutpostTests(town, resident, world, key, isAdmin, false);
 						
