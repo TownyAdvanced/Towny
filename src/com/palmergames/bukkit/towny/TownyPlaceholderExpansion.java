@@ -137,6 +137,13 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		if (player == null) {
 			return "";
 		}
+		
+		/*
+		 * This is a location-based placeholder request, use the onPlaceholderRequest to fulfill it.
+		 */
+		if (player.isOnline() && identifier.startsWith("player_"))
+			return onPlaceholderRequest((Player) player, identifier);
+		
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		
 		if (resident == null)

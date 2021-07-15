@@ -6371,9 +6371,5 @@ v0.92.0.11:
   - New Permission Node: towny.command.town.plotgrouplist
       - Child node of towny.command.town.*
       - Not needed to be added to townyperms.yml.
-
-
-
-
-
-
+0.97.0.12:
+  - Fix placeholders starting with %townyadvanced_player_ not working. 
