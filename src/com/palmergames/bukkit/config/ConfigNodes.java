@@ -1018,6 +1018,13 @@ public enum ConfigNodes {
 			"tar",
 			"",
 			"# Valid entries are: tar, tar.gz, zip, or none for no backup."),
+	
+	PLUGIN_BUNGEE("plugin.bungeecord", "", ""),
+	PLUGIN_BUNGEE_ENABLED(
+			"plugin.bungeecord.enabled", 
+			"false", 
+			"",
+			"# When true, Towny will use an experimental bungeecord system. Requires your database to be using mysql."),
 
 	PLUGIN_INTERFACING("plugin.interfacing", "", ""),
 	PLUGIN_MODS(

@@ -35,6 +35,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
@@ -2475,13 +2476,19 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	private void sendBungeeMessage(String object, String name) {
-
+		if (!TownySettings.isBungeeEnabled())
+			return;
+		
+		Player p = Bukkit.getServer().getOnlinePlayers().stream().findFirst().orElse(null);
+		
+		if (p == null)
+			return;
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		out.writeUTF("TownyBungeeCord");
 		out.writeUTF(object);
 		out.writeUTF(name);
 		
-		Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+		p.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
 	}
 
 }

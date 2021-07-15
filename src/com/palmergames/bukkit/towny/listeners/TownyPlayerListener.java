@@ -124,6 +124,9 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
+		if (Bukkit.getOnlinePlayers().size() == 1 && TownySettings.isBungeeEnabled())
+			TownyUniverse.getInstance().getDataSource().loadAll();
+		
 		// Perform login code in it's own thread to update Towny data.
 		if (BukkitTools.scheduleSyncDelayedTask(new OnPlayerLogin(Towny.getPlugin(), player), 0L) == -1) {
 			TownyMessaging.sendErrorMsg("Could not schedule OnLogin.");

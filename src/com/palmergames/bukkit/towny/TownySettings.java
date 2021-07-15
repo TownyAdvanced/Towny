@@ -3134,5 +3134,9 @@ public class TownySettings {
 	public static boolean isContextsEnabled() {
 		return getBoolean(ConfigNodes.PLUGINS_LUCKPERMS_CONTEXTS);
 	}
+	
+	public static boolean isBungeeEnabled() {
+		return getBoolean(ConfigNodes.PLUGIN_BUNGEE_ENABLED);
+	}
 }
 
