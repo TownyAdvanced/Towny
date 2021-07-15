@@ -3134,5 +3134,13 @@ public class TownySettings {
 	public static boolean isContextsEnabled() {
 		return getBoolean(ConfigNodes.PLUGINS_LUCKPERMS_CONTEXTS);
 	}
+	
+	public static boolean isShowingUpdateNotifications() {
+		return getBoolean(ConfigNodes.PLUGIN_UPDATE_NOTIFICATIONS_ALERTS);
+	}
+	
+	public static boolean isUpdateNotificationsMajorOnly() {
+		return getBoolean(ConfigNodes.PLUGIN_UPDATE_NOTIFICATIONS_MAJOR_ONLY);
+	}
 }
 
