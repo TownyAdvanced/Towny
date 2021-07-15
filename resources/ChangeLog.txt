@@ -6373,3 +6373,16 @@ v0.92.0.11:
       - Not needed to be added to townyperms.yml.
 0.97.0.12:
   - Fix placeholders starting with %townyadvanced_player_ not working. 
+  - Version checker, courtesy of Warriorrrr with PR #5016.
+    - Automatically checks for updates on startup, and notifies players with the update notifications permission node when logging in (if enabled).
+    - Servers can choose to be notified of Release versions.
+    - If a server is using a pre-release version, and they have the checker enabled, they will be notified of new pre-releases (ignoring the release-versions-only option.)
+    - Presents a download link.
+  - New permission node: towny.admin.updatealerts
+    - Child node of towny.admin.
+  - New config node: plugin.update_notifications.alerts
+    - Default: true
+    - If enabled, players with the towny.admin.updatealerts permission will receive an update notification upon logging in.
+  - New config node: plugin.update_notifications.major_only
+    - Default: true
+    - If enabled, only full releases will trigger notifications if you are running a full release, unless you're using a pre-release version.

@@ -1136,7 +1136,8 @@ public enum ConfigNodes {
 		"plugin.update_notifications.major_only",
 		"true",
 		"",
-		"# If enabled, only full releases will trigger notifications if you are running a full release."),
+		"# If enabled, only full releases will trigger notifications if you are running a full release.",
+		"# This is ignored if the server is currently using a pre-release version."),
 	FILTERS_COLOUR_CHAT(
 			"filters_colour_chat",
 			"",
