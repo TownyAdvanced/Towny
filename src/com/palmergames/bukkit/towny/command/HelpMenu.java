@@ -591,14 +591,14 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("plot group")
-				.add("add | new | create", "[name]", "Ex: /plot group new ExpensivePlots")
-				.add("remove", "", "Removes a plot from the specified group.")
-				.add("delete", "", "Deletes a plotgroup completely.")
-				.add("rename", "[newName]", "Renames the group you are standing in.")
-				.add("set", "...", "Ex: /plot group set perm resident on.")
-				.add("toggle", "...", "Ex: /plot group toggle [pvp|fire|mobs]")
-				.add("forsale | fs", "[price]", "Ex: /plot group forsale 50")
-				.add("notforsale | nfs", "", "Ex: /plot group notforsale");
+				.add("add|new|create [name]", "Ex: /plot group new ExpensivePlots")
+				.add("remove", "Removes a plot from the specified group.")
+				.add("delete", "Deletes a plotgroup completely.")
+				.add("rename [newName]", "Renames the group you are standing in.")
+				.add("set ...", "Ex: /plot group set perm resident on.")
+				.add("toggle ...", "Ex: /plot group toggle [pvp|fire|mobs]")
+				.add("forsale|fs [price]", "Ex: /plot group forsale 50")
+				.add("notforsale|nfs", "Ex: /plot group notforsale");
 		}
 	},
 	
