@@ -44,10 +44,6 @@ import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneListener;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
-import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarBlockListener;
-import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarCustomListener;
-import com.palmergames.bukkit.towny.war.flagwar.listeners.FlagWarEntityListener;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.JavaUtil;
@@ -106,9 +102,6 @@ public class Towny extends JavaPlugin {
 	private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
 	private final TownyWorldListener worldListener = new TownyWorldListener(this);
 	private final TownyInventoryListener inventoryListener = new TownyInventoryListener();
-	private final FlagWarBlockListener flagWarBlockListener = new FlagWarBlockListener(this);
-	private final FlagWarCustomListener flagWarCustomListener = new FlagWarCustomListener(this);
-	private final FlagWarEntityListener flagWarEntityListener = new FlagWarEntityListener();
 	private final WarZoneListener warzoneListener = new WarZoneListener(this);
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
@@ -160,9 +153,6 @@ public class Towny extends JavaPlugin {
 
 			// Add custom metrics charts.
 			addMetricsCharts();
-
-			// Begin FlagWar.
-			FlagWar.onEnable();
 
 			adventure = BukkitAudiences.create(this);
 
@@ -217,10 +207,6 @@ public class Towny extends JavaPlugin {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (townyUniverse.getDataSource() != null && !error) {
 			townyUniverse.getDataSource().saveQueues();
-		}
-
-		if (!error) {
-			FlagWar.onDisable();
 		}
 
 		if (TownyAPI.getInstance().isWarTime()) {
@@ -457,11 +443,7 @@ public class Towny extends JavaPlugin {
 
 		final PluginManager pluginManager = getServer().getPluginManager();
 
-		if (!isError()) {
-			// Have War Events get launched before regular events.
-			pluginManager.registerEvents(flagWarBlockListener, this);
-			pluginManager.registerEvents(flagWarEntityListener, this);
-			
+		if (!isError()) {			
 			// Huds
 			pluginManager.registerEvents(HUDManager, this);
 
@@ -469,7 +451,6 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(entityMonitorListener, this);
 			pluginManager.registerEvents(vehicleListener, this);
 			pluginManager.registerEvents(serverListener, this);
-			pluginManager.registerEvents(flagWarCustomListener, this);
 			pluginManager.registerEvents(customListener, this);
 			pluginManager.registerEvents(worldListener, this);
 			pluginManager.registerEvents(loginListener, this);
@@ -796,33 +777,6 @@ public class Towny extends JavaPlugin {
 	public TownyWorldListener getWorldListener() {
 	
 		return worldListener;
-	}
-
-	
-	/**
-	 * @return the flagWarBlockListener
-	 */
-	public FlagWarBlockListener getFlagWarBlockListener() {
-	
-		return flagWarBlockListener;
-	}
-
-	
-	/**
-	 * @return the flagWarCustomListener
-	 */
-	public FlagWarCustomListener getFlagWarCustomListener() {
-	
-		return flagWarCustomListener;
-	}
-
-	
-	/**
-	 * @return the flagWarEntityListener
-	 */
-	public FlagWarEntityListener getFlagWarEntityListener() {
-	
-		return flagWarEntityListener;
 	}
 	
 	/**

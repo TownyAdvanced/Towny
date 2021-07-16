@@ -32,7 +32,6 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 
 @SuppressWarnings("deprecation")
 public class WarZoneListener implements Listener {
@@ -56,8 +55,7 @@ public class WarZoneListener implements Listener {
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 
 		// Allow destroy for Event War if material is an EditableMaterial, FlagWar also handled here
-		if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
-				|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
+		if ((TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) {
 			if (!WarZoneConfig.isEditableMaterialInWarZone(mat)) {
 				event.setCancelled(true);
 				event.setMessage(Translation.of("msg_err_warzone_cannot_edit_material", "destroy", mat.toString().toLowerCase()));
@@ -79,8 +77,7 @@ public class WarZoneListener implements Listener {
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 		
 		// Allow build for Event War if material is an EditableMaterial, FlagWar also handled here
-		if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War 
-				|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
+		if (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) { // Event War
 			if (!WarZoneConfig.isEditableMaterialInWarZone(mat)) {
 				event.setCancelled(true);
 				event.setMessage(Translation.of("msg_err_warzone_cannot_edit_material", "build", mat.toString().toLowerCase()));
@@ -101,8 +98,7 @@ public class WarZoneListener implements Listener {
 		TownBlockStatus status = plugin.getCache(event.getPlayer()).getStatus();
 		
 		// Allow item_use for Event War if isAllowingItemUseInWarZone is true, FlagWar also handled here
-		if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
-				|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
+		if (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) { // Event War
 			if (!WarZoneConfig.isAllowingItemUseInWarZone()) {				
 				event.setCancelled(true);
 				event.setMessage(Translation.of("msg_err_warzone_cannot_use_item"));
@@ -123,8 +119,7 @@ public class WarZoneListener implements Listener {
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 
 		// Allow switch for Event War if isAllowingSwitchesInWarZone is true, FlagWar also handled here
-		if ((status == TownBlockStatus.WARZONE && FlagWarConfig.isAllowingAttacks()) // Flag War
-				|| (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) { // Event War
+		if (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) { // Event War
 			if (!WarZoneConfig.isAllowingSwitchesInWarZone()) {
 				event.setCancelled(true);
 				event.setMessage(Translation.of("msg_err_warzone_cannot_use_switches"));
