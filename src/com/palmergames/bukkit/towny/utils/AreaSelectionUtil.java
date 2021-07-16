@@ -67,6 +67,9 @@ public class AreaSelectionUtil {
 					out = selectWorldCoordAreaRect(available, pos, StringMgmt.remFirstArg(args));
 				} else if (args[0].equalsIgnoreCase("circle")) {
 					out = selectWorldCoordAreaCircle(available, pos, StringMgmt.remFirstArg(args));
+				} else if (args.length == 3 && args[1].startsWith("x") && args[2].startsWith("z")) {
+					// "/plot claim world x# z#" was run by clicking on the towny map.
+					out.add(new WorldCoord(args[0], Integer.parseInt(args[1].replace("x","")), Integer.parseInt(args[2].replace("z",""))));
 				} else {
 					throw new TownyException(Translation.of("msg_err_invalid_property", StringMgmt.join(args, " ")));
 				}

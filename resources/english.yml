@@ -1457,3 +1457,6 @@ msg_download_here: 'Download it here: %s'
 msg_click_to_download: '&bClick here to download it.'
 msg_latest_version: '&2Towny version: &a%s &2| Latest version: &a%s'
 msg_up_to_date: '&aYou are up to date.'
+
+
+msg_click_purchase: 'Click to purchase'

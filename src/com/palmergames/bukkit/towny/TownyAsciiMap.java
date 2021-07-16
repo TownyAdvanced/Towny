@@ -141,7 +141,7 @@ public class TownyAsciiMap {
 							cost = townblock.getPlotPrice();
 						
 						if (cost > -1)
-							forSaleComponent = Component.text(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(cost)).replaceAll("[\\[\\]]", "")).color(NamedTextColor.YELLOW).append(Component.newline());
+							forSaleComponent = Component.text(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(cost)).replaceAll("[\\[\\]]", "") + " " + Translation.of("msg_click_purchase")).color(NamedTextColor.YELLOW).append(Component.newline());
 					}
 					
 					if (townblock.getClaimedAt() > 0)
@@ -162,8 +162,12 @@ public class TownyAsciiMap {
 						.append(forSaleComponent)
 						.append(claimedAtComponent)
 						.append(Component.text(Translation.of("towny_map_detailed_information")).color(NamedTextColor.DARK_GREEN))));
+					
+					ClickEvent clickEvent = ClickEvent.runCommand("/towny:plot perm " + tby + " " + tbx);
+					if (!forSaleComponent.equals(Component.empty()))
+						clickEvent = ClickEvent.runCommand("/towny:plot claim " + world.getName() + " x" + tby + " z" + tbx);
 
-					townyMap[y][x] = townyMap[y][x].hoverEvent(HoverEvent.showText(hoverComponent)).clickEvent(ClickEvent.runCommand("/towny:plot perm " + tby + " " + tbx));
+					townyMap[y][x] = townyMap[y][x].hoverEvent(HoverEvent.showText(hoverComponent)).clickEvent(clickEvent);
 				} catch (TownyException e) {
 					// Unregistered town block (Wilderness)
 

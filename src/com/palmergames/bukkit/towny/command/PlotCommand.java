@@ -246,7 +246,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			try {
 				
 				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
-				if (townBlock == null && !split[0].equalsIgnoreCase("perm"))
+				if (townBlock == null && !split[0].equalsIgnoreCase("perm") && !split[0].equalsIgnoreCase("claim"))
 					throw new TownyException(Translation.of("msg_not_claimed_1"));
 				
 				if (!TownyAPI.getInstance().isWilderness(player.getLocation()) && townBlock.getTownOrNull().isRuined())
