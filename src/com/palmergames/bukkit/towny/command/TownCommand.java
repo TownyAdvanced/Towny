@@ -3619,6 +3619,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					} else
 						throw new TownyException(Translation.of("msg_outpost_disable"));
 				} else {
+					
+					// Prevent someone manually running /t claim world x z (a command which should only be run via /plot claim world x z)
+					if (TownyAPI.getInstance().getTownyWorld(split[0]) != null)
+						throw new TownyException(Translation.of("tc_err_invalid_command"));
 
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -3751,6 +3755,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					// Check permissions here because of the townunclaim mode.
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM.getNode()))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
+					
+					// Prevent someone manually running /t unclaim world x z (a command which should only be run via /plot claim world x z)
+					if (TownyAPI.getInstance().getTownyWorld(split[0]) != null)
+						throw new TownyException(Translation.of("tc_err_invalid_command"));
 					
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
 					selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
