@@ -136,7 +136,7 @@ public class TownyFormatter {
 			out.add(Translation.of("msg_plot_perm_claimed_at", registeredFormat.format(townBlock.getClaimedAt())));
 		
 		if (townBlock.getTrustedResidents().size() > 0) {
-			out.addAll(getFormattedResidents(Translation.of("status_trustedlist"), townBlock.getTrustedResidents()));
+			out.addAll(getFormattedResidents(Translation.of("status_trustedlist"), new ArrayList<>(townBlock.getTrustedResidents())));
 		}
 		
 		out.addAll(getExtraFields(townBlock));
@@ -292,7 +292,7 @@ public class TownyFormatter {
 		}
 		
 		if (town.getTrustedResidents().size() > 0)
-			ranklist.addAll(getFormattedResidents(Translation.of("status_trustedlist"), town.getTrustedResidents()));
+			ranklist.addAll(getFormattedResidents(Translation.of("status_trustedlist"), new ArrayList<>(town.getTrustedResidents())));
 	}
 
 	/**

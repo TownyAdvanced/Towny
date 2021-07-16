@@ -598,7 +598,8 @@ public enum HelpMenu {
 				.add("set ...", "Ex: /plot group set perm resident on.")
 				.add("toggle ...", "Ex: /plot group toggle [pvp|fire|mobs]")
 				.add("forsale|fs [price]", "Ex: /plot group forsale 50")
-				.add("notforsale|nfs", "Ex: /plot group notforsale");
+				.add("notforsale|nfs", "Ex: /plot group notforsale")
+				.add("trust [add/remove] [resident", "Adds or removes a resident as trusted.");
 		}
 	},
 	
@@ -828,6 +829,25 @@ public enum HelpMenu {
 			return new MenuBuilder("town trust")
 				.add("add [resident]", "")
 				.add("remove [resident]", "");
+		}
+	},
+	
+	PLOT_GROUP_TRUST_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot group trust")
+				.add("add [resident]", "")
+				.add("remove [resident]", "");
+		}
+	},
+	
+	PLOT_GROUP_PERM_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot group perm")
+				.add("gui", "")
+				.add("add [player]", "")
+				.add("remove [player]", "");
 		}
 	};
 

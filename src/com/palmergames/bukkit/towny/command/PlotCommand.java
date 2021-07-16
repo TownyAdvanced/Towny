@@ -16,11 +16,12 @@ import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotNotForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotSetForSaleEvent;
+import com.palmergames.bukkit.towny.event.plot.PlotTrustAddEvent;
+import com.palmergames.bukkit.towny.event.plot.PlotTrustRemoveEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleFireEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleMobsEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotTogglePvpEvent;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -103,7 +104,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"notforsale",
 		"forsale",
 		"perm",
-		"rename"
+		"rename",
+		"trust"
 	);
 	
 	private static final List<String> plotSetTabCompletes = Arrays.asList(
@@ -213,12 +215,27 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 					break;
 				case "group":
-					if (args.length == 2) {
+					if (args.length == 2)
 						return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);
-					} else if (args.length > 2) {
-						return permTabComplete(StringMgmt.remFirstArg(args));
+					
+					if (args.length < 2)
+						break;
+					
+					switch (args[1].toLowerCase()) {
+						case "trust":
+							if (args.length == 3)
+								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[2]);
+							if (args.length == 4)
+								return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
+						case "perm":
+							if (args.length == 3)
+								return NameUtil.filterByStart(Arrays.asList("add", "remove", "gui"), args[2]);
+							if (args.length == 4)
+								return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
+						default:
+							return permTabComplete(StringMgmt.remFirstArg(args));
 					}
-					break;
+
 				case "jailcell":
 					if (args.length == 2)
 						return NameUtil.filterByStart(TownCommand.townAddRemoveTabCompletes, args [1]);
@@ -1755,7 +1772,130 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(resident, e.getMessage());
 			}
+		} else if (split[0].equalsIgnoreCase("trust")) {
+			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_TRUST.getNode()))
+				throw new TownyException(Translation.of("msg_err_command_disable"));
 			
+			if (split.length < 3) {
+				HelpMenu.PLOT_GROUP_TRUST_HELP.send(player);
+				return true;
+			}
+
+			PlotGroup group = townBlock.getPlotObjectGroup();
+
+			if (group == null) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_not_associated_with_a_group"));
+				return false;
+			}
+
+			Resident trustedResident = TownyAPI.getInstance().getResident(split[2]);
+			if (trustedResident == null || trustedResident.isNPC()) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", split[2]));
+				return false;
+			}
+
+			if (split[1].equalsIgnoreCase("add")) {
+				if (group.hasTrustedResident(trustedResident)) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_already_trusted", trustedResident.getName(), Translation.of("plotgroup_sing").toLowerCase()));
+					return false;
+				}
+
+				PlotTrustAddEvent event = new PlotTrustAddEvent(new ArrayList<>(group.getTownBlocks()), trustedResident, player);
+				Bukkit.getPluginManager().callEvent(event);
+
+				if (event.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
+					return false;
+				}
+
+				group.addTrustedResident(trustedResident);
+				plugin.deleteCache(trustedResident.getName());
+
+				TownyMessaging.sendMsg(player, Translation.of("msg_trusted_added", trustedResident.getName(), Translation.of("plotgroup_sing").toLowerCase()));
+				if (BukkitTools.isOnline(trustedResident.getName()) && !trustedResident.getName().equals(player.getName()))
+					TownyMessaging.sendMsg(trustedResident, Translation.of("msg_trusted_added_2", player.getName(), Translation.of("plotgroup_sing").toLowerCase(), group.getName()));
+
+				return true;
+			} else if (split[1].equalsIgnoreCase("remove")) {
+				if (!group.hasTrustedResident(trustedResident)) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_not_trusted", trustedResident.getName(), Translation.of("plotgroup_sing").toLowerCase()));
+					return false;
+				}
+
+				PlotTrustRemoveEvent event = new PlotTrustRemoveEvent(new ArrayList<>(group.getTownBlocks()), trustedResident, player);
+				Bukkit.getPluginManager().callEvent(event);
+
+				if (event.isCancelled()) {
+					TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
+					return false;
+				}
+
+				group.removeTrustedResident(trustedResident);
+				plugin.deleteCache(trustedResident.getName());
+
+				TownyMessaging.sendMsg(player, Translation.of("msg_trusted_removed", trustedResident.getName(), Translation.of("plotgroup_sing").toLowerCase()));
+				if (BukkitTools.isOnline(trustedResident.getName()) && !trustedResident.getName().equals(player.getName()))
+					TownyMessaging.sendMsg(trustedResident, Translation.of("msg_trusted_removed_2", player.getName(), Translation.of("plotgroup_sing").toLowerCase(), group.getName()));
+
+				return true;
+			} else {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", split[1]));
+				return false;
+			}
+
+		} else if (split[0].equalsIgnoreCase("perm")) {
+			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_PERM.getNode()))
+				throw new TownyException(Translation.of("msg_err_command_disable"));
+			
+			if (split.length < 2) {
+				HelpMenu.PLOT_GROUP_PERM_HELP.send(player);
+				return true;
+			}
+
+			PlotGroup group = townBlock.getPlotObjectGroup();
+
+			if (group == null) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_not_associated_with_a_group"));
+				return false;
+			}
+			
+			if (split[1].equalsIgnoreCase("gui")) {
+				PermissionGUIUtil.openPermissionGUI(resident, townBlock);
+			} else {
+				if (split.length < 3) {
+					HelpMenu.PLOT_GROUP_PERM_HELP.send(player);
+					return true;
+				}
+				
+				Resident overrideResident = TownyAPI.getInstance().getResident(split[2]);
+				if (overrideResident == null || overrideResident.isNPC()) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", split[2]));
+					return true;
+				}
+
+				if (split[1].equalsIgnoreCase("add")) {
+					if (group.getPermissionOverrides() != null && group.getPermissionOverrides().containsKey(overrideResident)) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_overrides_already_set", overrideResident.getName(), Translation.of("plotgroup_sing").toLowerCase()));
+						return true;
+					}
+
+					group.putPermissionOverride(overrideResident, new PermissionData(PermissionGUIUtil.getDefaultTypes(), player.getName()));
+
+					TownyMessaging.sendMsg(player, Translation.of("msg_overrides_added", overrideResident.getName()));
+				} else if (split[1].equalsIgnoreCase("remove")) {
+					if (group.getPermissionOverrides() != null && !group.getPermissionOverrides().containsKey(overrideResident)) {
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_overrides_set", overrideResident.getName(), Translation.of("plotgroup_sing").toLowerCase()));
+						return true;
+					}
+					
+					group.removePermissionOverride(overrideResident);
+
+					TownyMessaging.sendMsg(player, Translation.of("msg_overrides_removed", overrideResident.getName()));
+				} else {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", split[1]));
+					return false;
+				}
+			}
 		} else {
 
 			HelpMenu.PLOT_GROUP_HELP.send(player);
@@ -1782,6 +1922,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			newGroup = new PlotGroup(UUID.randomUUID(), plotGroupName, town);
 			TownyUniverse.getInstance().registerGroup(newGroup);
 			newGroup.setPermissions(townBlock.getPermissions());
+			newGroup.setTrustedResidents(townBlock.getTrustedResidents());
+			newGroup.setPermissionOverrides(townBlock.getPermissionOverrides());
 		}
 
 		// Add group to townblock, this also adds the townblock to the group.
@@ -1817,6 +1959,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
 
+		if (townBlock.hasPlotObjectGroup()) {
+			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_belongs_to_group", "/plot group trust"));
+			return;
+		}
+
 		Resident resident = TownyAPI.getInstance().getResident(args[1]);
 		if (resident == null || resident.isNPC()) {
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", args[1]));
@@ -1824,16 +1971,24 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (args[0].equalsIgnoreCase("add")) {
-			try {
-				townBlock.addTrustedResident(resident);
-				plugin.deleteCache(resident.getName());
-			} catch (AlreadyRegisteredException e) {
+			if (townBlock.hasTrustedResident(resident)) {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_already_trusted", resident.getName(), Translation.of("townblock")));
 				return;
 			}
-		
+
+			PlotTrustAddEvent event = new PlotTrustAddEvent(townBlock, resident, player);
+			Bukkit.getPluginManager().callEvent(event);
+			
+			if (event.isCancelled()) {
+				TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
+				return;
+			}
+
+			townBlock.addTrustedResident(resident);
+			plugin.deleteCache(resident.getName());
+
 			TownyMessaging.sendMsg(player, Translation.of("msg_trusted_added", resident.getName(), Translation.of("townblock")));
-			if (BukkitTools.isOnline(resident.getName()))
+			if (BukkitTools.isOnline(resident.getName()) && !resident.getName().equals(player.getName()))
 				TownyMessaging.sendMsg(resident, Translation.of("msg_trusted_added_2", player.getName(), Translation.of("townblock"), townBlock.getWorldCoord().getCoord().toString()));
 		} else if (args[0].equalsIgnoreCase("remove")) {
 			if (!townBlock.hasTrustedResident(resident)) {
@@ -1841,11 +1996,19 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
+			PlotTrustRemoveEvent event = new PlotTrustRemoveEvent(townBlock, resident, player);
+			Bukkit.getPluginManager().callEvent(event);
+			
+			if (event.isCancelled()) {
+				TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
+				return;
+			}
+
 			townBlock.removeTrustedResident(resident);
 			plugin.deleteCache(resident.getName());
 
 			TownyMessaging.sendMsg(player, Translation.of("msg_trusted_removed", resident.getName(), Translation.of("townblock")));
-			if (BukkitTools.isOnline(resident.getName()))
+			if (BukkitTools.isOnline(resident.getName()) && !resident.getName().equals(player.getName()))
 				TownyMessaging.sendMsg(resident, Translation.of("msg_trusted_removed_2", player.getName(), Translation.of("townblock"), townBlock.getWorldCoord().getCoord().toString()));
 		} else {
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", args[0]));
@@ -1968,6 +2131,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					HelpMenu.PLOT_PERM_HELP.send(player);
 					return;
 				}
+
+				if (townBlock.hasPlotObjectGroup()) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_belongs_to_group", "/plot group perm remove"));
+					return;
+				}
 				
 				Resident resident = TownyAPI.getInstance().getResident(args[1]);
 				if (resident == null) {
@@ -1976,7 +2144,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				if (!townBlock.getPermissionOverrides().containsKey(resident)) {
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_overrides_set", resident.getName()));
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_overrides_set", resident.getName(), Translation.of("townblock")));
 					return;
 				}
 				
@@ -1990,6 +2158,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 
+				if (townBlock.hasPlotObjectGroup()) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_belongs_to_group", "/plot group perm add"));
+					return;
+				}
+
 				Resident resident = TownyAPI.getInstance().getResident(args[1]);
 				if (resident == null || resident.isNPC()) {
 					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", args[1]));
@@ -1997,7 +2170,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				if (townBlock.getPermissionOverrides().containsKey(resident)) {
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_overrides_already_set", resident.getName()));
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_overrides_already_set", resident.getName(), Translation.of("townblock")));
 					return;
 				}
 				

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.112
+version: 0.113
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1424,7 +1424,6 @@ msg_err_no_one_to_purge: '&bThere are no inactive members to purge.'
 msg_purging_will_remove_the_following_residents: '&bPlease confirm you want to purge the following residents: %s'
 msg_purge_complete_x_removed: '&bPurge complete, %s residents removed.'
 msg_err_days_must_be_greater_than_0: 'Days must be greater than zero.'
-msg_err_days_must_be_greater_than_0: 'Days must be greater than zero.'
 msg_err_outlawed_players_no_teleport: '&4You are outlawed in the town you are currently in and cannot teleport!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4You cannot use that command while in a town you are outlawed in.'
 
@@ -1461,6 +1460,7 @@ msg_up_to_date: '&aYou are up to date.'
 msg_click_purchase: 'Click to purchase'
 msg_you_must_join_this_town_to_claim_this_plot: 'You must join this town: %s, in order to claim this plot. Would you like to join the town and continue claiming?'
 
+#Added in 0.113
 status_trustedlist: '&2Trusted'
 msg_click_to_edit: '&6Click to edit.'
 permission_gui_header: 'Towny Permission GUI'
@@ -1473,6 +1473,8 @@ msg_trusted_removed: '&bRemoved %s as trusted in this %s.'
 msg_trusted_removed_2: '&b%s has removed you as trusted in a %s: %s.'
 msg_overrides_removed: '&bRemoved permission overrides for %s.'
 msg_overrides_added: '&bAdded default permission overrides for %s.'
-msg_no_overrides_set: '&b%s does not have any overrides set for this townblock.'
-msg_overrides_already_set: '&b%s already has overrides set for this townblock.'
+msg_no_overrides_set: '&b%s does not have any overrides set for this %s.'
+msg_overrides_already_set: '&b%s already has overrides set for this %s.'
 msg_cache_block_err: '&cYou are not allowed to %s here.'
+msg_err_plot_belongs_to_group: '&cPlot belongs to a group, use %s.'
+plotgroup_sing: 'Plot Group'

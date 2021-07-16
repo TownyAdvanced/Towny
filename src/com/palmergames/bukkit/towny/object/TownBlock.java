@@ -20,11 +20,11 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public class TownBlock extends TownyObject {
 
@@ -39,8 +39,8 @@ public class TownBlock extends TownyObject {
 	private PlotGroup plotGroup;
 	private long claimedAt;
 	private Jail jail;
-	private final Map<Resident, PermissionData> permissionOverrides = new HashMap<>();
-	private List<Resident> trustedResidents = new ArrayList<>();
+	private Map<Resident, PermissionData> permissionOverrides = new HashMap<>();
+	private Set<Resident> trustedResidents = new HashSet<>();
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -445,6 +445,8 @@ public class TownBlock extends TownyObject {
 
 		try {
 			group.addTownBlock(this);
+			setTrustedResidents(group.getTrustedResidents());
+			setPermissionOverrides(group.getPermissionOverrides());
 		} catch (NullPointerException e) {
 			TownyMessaging.sendErrorMsg("Townblock failed to setPlotObjectGroup(group), group is null. " + group);
 		}
@@ -467,7 +469,7 @@ public class TownBlock extends TownyObject {
 		return permissionOverrides;
 	}
 
-	public List<Resident> getTrustedResidents() {
+	public Set<Resident> getTrustedResidents() {
 		return trustedResidents;
 	}
 	
@@ -475,10 +477,7 @@ public class TownBlock extends TownyObject {
 		return trustedResidents.contains(resident);
 	}
 	
-	public void addTrustedResident(Resident resident) throws AlreadyRegisteredException {
-		if (trustedResidents.contains(resident))
-			throw new AlreadyRegisteredException();
-		
+	public void addTrustedResident(Resident resident) {
 		trustedResidents.add(resident);
 	}
 	
@@ -492,6 +491,12 @@ public class TownBlock extends TownyObject {
 		
 		return resident.equals(this.resident);
 	}
-	
-	//TODO: Figure out how we're going to handle permissionOverrides/Trusted residents on the PlotGroup level.
+
+	public void setTrustedResidents(Set<Resident> trustedResidents) {
+		this.trustedResidents = new HashSet<>(trustedResidents);
+	}
+
+	public void setPermissionOverrides(Map<Resident, PermissionData> permissionOverrides) {
+		this.permissionOverrides = new HashMap<>(permissionOverrides);
+	}
 }

@@ -224,6 +224,8 @@ public enum PermissionNodes {
 		    TOWNY_COMMAND_PLOT_GROUP_TOGGLE("towny.command.plot.group.toggle"),
 		    TOWNY_COMMAND_PLOT_GROUP_FORSALE("towny.command.plot.group.forsale"),
 		    TOWNY_COMMAND_PLOT_GROUP_NOTFORSALE("towny.command.plot.group.notforsale"),
+			TOWNY_COMMAND_PLOT_GROUP_TRUST("towny.command.plot.group.trust"),
+			TOWNY_COMMAND_PLOT_GROUP_PERM("towny.command.plot.group.perm"),
 		
 		TOWNY_COMMAND_PLOT_CLEAR("towny.command.plot.clear"),
 	

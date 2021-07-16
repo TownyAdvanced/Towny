@@ -28,6 +28,8 @@ import com.palmergames.bukkit.towny.event.town.TownPreInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreMergeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
+import com.palmergames.bukkit.towny.event.town.TownTrustAddEvent;
+import com.palmergames.bukkit.towny.event.town.TownTrustRemoveEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleUnknownEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
@@ -4163,14 +4165,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
-		if (args[0].equalsIgnoreCase("add")) {			
-			try {
-				town.addTrustedResident(resident);
-				plugin.deleteCache(resident.getName());
-			} catch (AlreadyRegisteredException ignored) {
+		if (args[0].equalsIgnoreCase("add")) {
+			if (town.hasTrustedResident(resident)) {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_already_trusted", resident.getName(), Translation.of("town_sing")));
 				return;
 			}
+
+			TownTrustAddEvent event = new TownTrustAddEvent(player, resident, town);
+			Bukkit.getPluginManager().callEvent(event);
+			
+			if (event.isCancelled()) {
+				TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
+				return;
+			}
+
+			town.addTrustedResident(resident);
+			plugin.deleteCache(resident.getName());
 			
 			TownyMessaging.sendMsg(player, Translation.of("msg_trusted_added", resident.getName(), Translation.of("town_sing")));
 			if (BukkitTools.isOnline(resident.getName()))
@@ -4178,6 +4188,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		} else if (args[0].equalsIgnoreCase("remove")) {
 			if (!town.hasTrustedResident(resident)) {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_not_trusted", resident.getName(), Translation.of("town_sing")));
+				return;
+			}
+
+			TownTrustRemoveEvent event = new TownTrustRemoveEvent(player, resident, town);
+			Bukkit.getPluginManager().callEvent(event);
+			
+			if (event.isCancelled()) {
+				TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
 				return;
 			}
 			

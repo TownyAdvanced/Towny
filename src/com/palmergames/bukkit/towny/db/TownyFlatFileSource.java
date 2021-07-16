@@ -898,9 +898,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("trustedResidents");
 				if (line != null && !line.isEmpty()) {
 					for (Resident resident : getResidents(toUUIDArray(line.split(","))))
-						try {
-							town.addTrustedResident(resident);
-						} catch (AlreadyRegisteredException ignored) {}
+						town.addTrustedResident(resident);
 				}
 
 			} catch (Exception e) {
@@ -1563,15 +1561,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 
 					line = keys.get("trustedResidents");
-					if (line != null && !line.isEmpty()) {
+					if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
 						for (Resident resident : getResidents(toUUIDArray(line.split(","))))
-							try {
-								townBlock.addTrustedResident(resident);
-							} catch (AlreadyRegisteredException ignored) {}
+							townBlock.addTrustedResident(resident);
+						
+						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.getTrustedResidents().size() > 0)
+							townBlock.getPlotObjectGroup().setTrustedResidents(townBlock.getTrustedResidents());
 					}
 					
 					line = keys.get("customPermissionData");
-					if (line != null && !line.isEmpty()) {
+					if (line != null && !line.isEmpty() && townBlock.getPermissionOverrides().isEmpty()) {
 						Map<String, String> map = new Gson().fromJson(line, Map.class);
 						
 						for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -1587,6 +1586,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							
 							townBlock.getPermissionOverrides().put(resident, new PermissionData(entry.getValue()));
 						}
+						
+						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPermissionOverrides().isEmpty() && townBlock.getPermissionOverrides().size() > 0)
+							townBlock.getPlotObjectGroup().setPermissionOverrides(townBlock.getPermissionOverrides());
 					}
 
 				} catch (Exception e) {

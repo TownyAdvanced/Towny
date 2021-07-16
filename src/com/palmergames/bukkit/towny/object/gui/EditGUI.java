@@ -37,8 +37,12 @@ public class EditGUI extends PermissionGUI {
 			}
 		}
 
-		getTownBlock().getPermissionOverrides().put(selectedResident, new PermissionData(newTypes, editor.getName()));
-		getTownBlock().save();
+		if (getTownBlock().hasPlotObjectGroup())
+			getTownBlock().getPlotObjectGroup().putPermissionOverride(selectedResident, new PermissionData(newTypes, editor.getName()));
+		else {
+			getTownBlock().getPermissionOverrides().put(selectedResident, new PermissionData(newTypes, editor.getName()));
+			getTownBlock().save();
+		}
 
 		Towny.getPlugin().deleteCache(selectedResident.getName());
 
@@ -50,8 +54,12 @@ public class EditGUI extends PermissionGUI {
 	}
 	
 	public void deleteResident() {
-		getTownBlock().getPermissionOverrides().remove(selectedResident);
-		getTownBlock().save();
+		if (getTownBlock().hasPlotObjectGroup())
+			getTownBlock().getPlotObjectGroup().removePermissionOverride(selectedResident);
+		else {
+			getTownBlock().getPermissionOverrides().remove(selectedResident);
+			getTownBlock().save();
+		}
 		
 		Towny.getPlugin().deleteCache(selectedResident.getName());
 

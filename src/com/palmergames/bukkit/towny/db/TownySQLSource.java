@@ -1145,9 +1145,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (line != null && !line.isEmpty()) {
 				search = (line.contains("#")) ? "#" : ",";
 				for (Resident resident : getResidents(toUUIDArray(line.split(search))))
-					try {
-						town.addTrustedResident(resident);
-					} catch (AlreadyRegisteredException ignored) {}
+					town.addTrustedResident(resident);
 			}
 
 			return true;
@@ -1782,17 +1780,17 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 
 				line = rs.getString("trustedResidents");
-				if (line != null && !line.isEmpty()) {
+				if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
 					String search = (line.contains("#")) ? "#" : ",";
-					for (Resident resident : getResidents(toUUIDArray(line.split(search)))) {
-						try {
-							townBlock.addTrustedResident(resident);
-						} catch (AlreadyRegisteredException ignored) {}
-					}
+					for (Resident resident : getResidents(toUUIDArray(line.split(search))))
+						townBlock.addTrustedResident(resident);
+
+					if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.getTrustedResidents().size() > 0)
+						townBlock.getPlotObjectGroup().setTrustedResidents(townBlock.getTrustedResidents());
 				}
 				
 				line = rs.getString("customPermissionData");
-				if (line != null && !line.isEmpty()) {
+				if (line != null && !line.isEmpty() && townBlock.getPermissionOverrides().isEmpty()) {
 					Map<String, String> map = new Gson().fromJson(line, Map.class);
 
 					for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -1808,6 +1806,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 						townBlock.getPermissionOverrides().put(resident, new PermissionData(entry.getValue()));
 					}
+
+					if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPermissionOverrides().isEmpty() && townBlock.getPermissionOverrides().size() > 0)
+						townBlock.getPlotObjectGroup().setPermissionOverrides(townBlock.getPermissionOverrides());
 				}
 			}
 

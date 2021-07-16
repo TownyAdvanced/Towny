@@ -1662,7 +1662,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		TownyMessaging.sendGlobalMessage(Translation.of("msg_town_merge_success", mergeFrom.getName(), mayorName, mergeInto.getName()));
 	}
 	
-	public List<UUID> toUUIDList(List<Resident> residents) {
+	public List<UUID> toUUIDList(Collection<Resident> residents) {
 		return residents.stream().filter(Resident::hasUUID).map(Resident::getUUID).collect(Collectors.toList());
 	}
 	
