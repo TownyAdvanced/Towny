@@ -278,10 +278,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (selection.size() + resident.getTownBlocks().size()  > TownySettings.getMaxResidentPlots(resident))
 							throw new TownyException(Translation.of("msg_max_plot_own", TownySettings.getMaxResidentPlots(resident)));
 						
+						/*
+						 * If a resident has no town, the Town is open, and the plot is not an Embassy:
+						 * Attempt to add the Resident to the town IF the town is not null, the Town is
+						 * not going to exceed the maxResidentsWithoutANation value, and the Town will 
+						 * not exceed the maxResidentsPerTown value.
+						 */
 						if (!resident.hasTown() && townBlock.getTownOrNull().isOpen() && !townBlock.getType().equals(TownBlockType.EMBASSY)) {
 							final Town town = townBlock.getTownOrNull();
-							final List<WorldCoord> coords = selection;
-							if (town != null) {								
+							if (town == null ||
+								(TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() >= TownySettings.getMaxNumResidentsWithoutNation()) ||
+								(TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town))) {
+								// Town is null (unlikely) or it would have too many residents, we won't be adding 
+								// them to the town, continue as per usual (it could be an embassy plot.)
+							} else {
+								final List<WorldCoord> coords = selection;
 								Confirmation.runOnAccept(() -> {
 									try {
 										resident.setTown(town);										
@@ -294,10 +305,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								})
 									.setTitle(Translation.of("msg_you_must_join_this_town_to_claim_this_plot", town.getName()))
 									.sendTo(player);
+								return true;
 							}
-							return true;
 						}
-						
 						continuePlotClaimProcess(selection, resident, player);
 
 					} else {
