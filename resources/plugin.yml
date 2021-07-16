@@ -519,6 +519,8 @@ permissions:
             towny.command.plot.group.toggle: true
             towny.command.plot.group.forsale: true
             towny.command.plot.group.notforsale: true
+            towny.command.plot.group.perm: true
+            towny.command.plot.group.trust: true
 
     # Resident command permissions
     towny.command.resident.*:
