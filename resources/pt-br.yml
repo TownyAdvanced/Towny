@@ -1,5 +1,5 @@
 name: Towny
-version: 0.111
+version: 0.112
 language: português (Brasil)
 author: BannerGames, Plugner
 website: 'http://townyadvanced.github.io/'
@@ -1454,3 +1454,14 @@ msg_err_this_plot_is_already_part_of_the_plot_group_x: 'This townblock is alread
 map_hover_plot_group: 'Plot Group: '
 map_hover_plot_group_size: ' Size: '
 map_hover_plots: '%s plots'
+
+#Added in 0.112
+msg_checking_for_updates: 'Checking for updates...'
+msg_no_new_updates: 'No new updates found.'
+msg_new_update_available: '&bNew update available: %s | Current version: %s'
+msg_download_here: 'Download it here: %s'
+msg_click_to_download: '&bClick here to download it.'
+msg_latest_version: '&2Towny version: &a%s &2| Latest version: &a%s'
+msg_up_to_date: '&aYou are up to date.'
+msg_click_purchase: 'Click to purchase'
+msg_you_must_join_this_town_to_claim_this_plot: 'You must join this town: %s, in order to claim this plot. Would you like to join the town and continue claiming?'
