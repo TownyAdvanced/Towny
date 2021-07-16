@@ -631,16 +631,14 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				return townblock != null ? townblock.getTownOrNull().getFormattedName() : TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).getUnclaimedZoneName();
 			case "player_location_plot_name": // %townyadvanced_player_location_plot_name%
 				return townblock != null ? townblock.getName() : "";
+			case "player_location_plot_owner_name": // %townyadvanced_player_location_plot_owner_name%
+				return (townblock != null && townblock.hasResident()) ? townblock.getResidentOrNull().getName() : ""; 
 			case "player_location_town_prefix": // %townyadvanced_player_location_town_prefix%
 				return townblock != null ? townblock.getTownOrNull().getPrefix(): "";
 			case "player_location_town_postfix": // %townyadvanced_player_location_town_postfix%
 				return townblock != null ? townblock.getTownOrNull().getPostfix(): "";
 			case "player_location_pvp": // %townyadvanced_player_location_pvp%
-				try {
-					return townblock != null ? (townblock.getPermissions().pvp ? Translation.of("status_title_pvp"):"") : (TownyAPI.getInstance().getDataSource().getWorld(player.getWorld().getName()).isPVP() ? Translation.of("status_title_pvp"):"");
-				} catch (NotRegisteredException ignored) {}
-
-
+				return townblock != null ? (townblock.getPermissions().pvp ? Translation.of("status_title_pvp"):"") : (TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).isPVP() ? Translation.of("status_title_pvp"):"");
 			default:
 				return null;
 		}

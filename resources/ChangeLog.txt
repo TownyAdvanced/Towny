@@ -6386,3 +6386,6 @@ v0.92.0.11:
   - New config node: plugin.update_notifications.major_only
     - Default: true
     - If enabled, only full releases will trigger notifications if you are running a full release, unless you're using a pre-release version.
+  - New Placeholder: %townyadvanced_player_location_plot_owner_name%
+    - Displays the name of the resident who owns the plot, or blank if no one personally owns it.
+    - Closes #4916.
