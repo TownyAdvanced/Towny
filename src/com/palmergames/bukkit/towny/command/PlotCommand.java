@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleFireEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleMobsEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotTogglePvpEvent;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -276,82 +277,39 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						
 						if (selection.size() + resident.getTownBlocks().size()  > TownySettings.getMaxResidentPlots(resident))
 							throw new TownyException(Translation.of("msg_max_plot_own", TownySettings.getMaxResidentPlots(resident)));
-
-						double cost = 0;
-
-						// Remove any plots Not for sale (if not the mayor) and
-						// tally up costs.
-						for (WorldCoord worldCoord : new ArrayList<>(selection)) {
-							if (!worldCoord.hasTownBlock()) 
-								selection.remove(worldCoord);
-							else { 
-								TownBlock tb = worldCoord.getTownBlockOrNull();
-								if (tb == null) {
-									selection.remove(worldCoord);
-									continue;
-								}
-								double price = tb.getPlotPrice();
-								
-								if (tb.hasPlotObjectGroup()) {
-									// This block is part of a group, special tasks need to be done.
-									PlotGroup group = tb.getPlotObjectGroup();
-									
-									if (TownyEconomyHandler.isActive() && (!resident.getAccount().canPayFromHoldings(group.getPrice())))
-										throw new TownyException(Translation.of("msg_no_funds_claim_plot_group", group.getTownBlocks().size(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
-
-									// Add the confirmation for claiming a plot group.
-									Confirmation.runOnAccept(() -> {
-										ArrayList<WorldCoord> coords = new ArrayList<>();
-
-										// Get worldcoords from plot group.
-										group.getTownBlocks().forEach((tblock) -> coords.add(tblock.getWorldCoord()));
-
-										// Execute the plot claim.
-										new PlotClaim(Towny.getPlugin(), player, resident, coords, true, false, true).start();
-									})
-									.setTitle(Translation.of("msg_plot_group_claim_confirmation", group.getTownBlocks().size()) + " " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ". " + Translation.of("are_you_sure_you_want_to_continue"))
+						
+						/*
+						 * If a resident has no town, the Town is open, and the plot is not an Embassy:
+						 * Attempt to add the Resident to the town IF the town is not null, the Town is
+						 * not going to exceed the maxResidentsWithoutANation value, and the Town will 
+						 * not exceed the maxResidentsPerTown value.
+						 */
+						if (!resident.hasTown() && townBlock.getTownOrNull().isOpen() && !townBlock.getType().equals(TownBlockType.EMBASSY)) {
+							final Town town = townBlock.getTownOrNull();
+							if (town == null ||
+								(TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() >= TownySettings.getMaxNumResidentsWithoutNation()) ||
+								(TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town))) {
+								// Town is null (unlikely) or it would have too many residents, we won't be adding 
+								// them to the town, continue as per usual (it could be an embassy plot.)
+							} else {
+								final List<WorldCoord> coords = selection;
+								Confirmation.runOnAccept(() -> {
+									try {
+										resident.setTown(town);										
+									} catch (AlreadyRegisteredException ignored) {}
+									try {
+										continuePlotClaimProcess(coords, resident, player);
+									} catch (TownyException e) {
+										TownyMessaging.sendErrorMsg(player, e.getMessage());
+									}
+								})
+									.setTitle(Translation.of("msg_you_must_join_this_town_to_claim_this_plot", town.getName()))
 									.sendTo(player);
-									
-									return true;
-								}
-								
-								// Check if a plot has a price.
-								if (price > -1)
-									cost += tb.getPlotPrice();
-								else {
-									if (!tb.getTownOrNull().isMayor(resident)) 
-										selection.remove(worldCoord);
-								}
+								return true;
 							}
 						}
+						continuePlotClaimProcess(selection, resident, player);
 
-						int maxPlots = TownySettings.getMaxResidentPlots(resident);
-						int extraPlots = TownySettings.getMaxResidentExtraPlots(resident);
-						
-						//Infinite plots
-						if (maxPlots != -1) {
-							maxPlots = maxPlots + extraPlots;
-						}
-						
-						if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
-							throw new TownyException(Translation.of("msg_max_plot_own", maxPlots));
-
-						if (TownyEconomyHandler.isActive() && (!resident.getAccount().canPayFromHoldings(cost)))
-							throw new TownyException(Translation.of("msg_no_funds_claim_plot", TownyEconomyHandler.getFormattedBalance(cost)));
-
-						if (cost != 0) {
-							String title = Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost));
-							final List<WorldCoord> finalSelection = selection;
-							Confirmation.runOnAccept(() ->  {	
-								// Start the claim task
-								new PlotClaim(plugin, player, resident, finalSelection, true, false, false).start();
-							})
-							.setTitle(title)
-							.sendTo(player);
-						} else {
-							// Start the claim task
-							new PlotClaim(plugin, player, resident, selection, true, false, false).start();
-						}
 					} else {
 						TownyMessaging.sendMessage(player, Translation.of("msg_err_empty_area_selection"));
 					}
@@ -1830,5 +1788,84 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		// Save changes.
 		newGroup.save();
 		townBlock.save();
+	}
+	
+	private void continuePlotClaimProcess(List<WorldCoord> selection, Resident resident, Player player) throws TownyException {
+		double cost = 0;
+
+		// Remove any plots Not for sale (if not the mayor) and
+		// tally up costs.
+		for (WorldCoord worldCoord : new ArrayList<>(selection)) {
+			if (!worldCoord.hasTownBlock()) 
+				selection.remove(worldCoord);
+			else { 
+				TownBlock tb = worldCoord.getTownBlockOrNull();
+				if (tb == null) {
+					selection.remove(worldCoord);
+					continue;
+				}
+				double price = tb.getPlotPrice();
+				
+				if (tb.hasPlotObjectGroup()) {
+					// This block is part of a group, special tasks need to be done.
+					PlotGroup group = tb.getPlotObjectGroup();
+					
+					if (TownyEconomyHandler.isActive() && (!resident.getAccount().canPayFromHoldings(group.getPrice())))
+						throw new TownyException(Translation.of("msg_no_funds_claim_plot_group", group.getTownBlocks().size(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
+
+					// Add the confirmation for claiming a plot group.
+					Confirmation.runOnAccept(() -> {
+						ArrayList<WorldCoord> coords = new ArrayList<>();
+
+						// Get worldcoords from plot group.
+						group.getTownBlocks().forEach((tblock) -> coords.add(tblock.getWorldCoord()));
+
+						// Execute the plot claim.
+						new PlotClaim(Towny.getPlugin(), player, resident, coords, true, false, true).start();
+					})
+					.setTitle(Translation.of("msg_plot_group_claim_confirmation", group.getTownBlocks().size()) + " " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ". " + Translation.of("are_you_sure_you_want_to_continue"))
+					.sendTo(player);
+					
+					return;
+				}
+				
+				// Check if a plot has a price.
+				if (price > -1)
+					cost += tb.getPlotPrice();
+				else {
+					if (!tb.getTownOrNull().isMayor(resident)) 
+						selection.remove(worldCoord);
+				}
+			}
+		}
+
+		int maxPlots = TownySettings.getMaxResidentPlots(resident);
+		int extraPlots = TownySettings.getMaxResidentExtraPlots(resident);
+		
+		//Infinite plots
+		if (maxPlots != -1) {
+			maxPlots = maxPlots + extraPlots;
+		}
+		
+		if (maxPlots >= 0 && resident.getTownBlocks().size() + selection.size() > maxPlots)
+			throw new TownyException(Translation.of("msg_max_plot_own", maxPlots));
+
+		if (TownyEconomyHandler.isActive() && (!resident.getAccount().canPayFromHoldings(cost)))
+			throw new TownyException(Translation.of("msg_no_funds_claim_plot", TownyEconomyHandler.getFormattedBalance(cost)));
+
+		if (cost != 0) {
+			String title = Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost));
+			final List<WorldCoord> finalSelection = selection;
+			Confirmation.runOnAccept(() ->  {	
+				// Start the claim task
+				new PlotClaim(plugin, player, resident, finalSelection, true, false, false).start();
+			})
+			.setTitle(title)
+			.sendTo(player);
+		} else {
+			// Start the claim task
+			new PlotClaim(plugin, player, resident, selection, true, false, false).start();
+		}
+		
 	}
 }
