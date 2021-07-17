@@ -35,10 +35,12 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -2002,7 +2004,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			UpdateDB("RESIDENTS", res_hm, Collections.singletonList("name"));
 
-			sendBungeeMessage("RESIDENTS", resident.getName());
+			sendBungeeMessage("RESIDENT", resident.getName());
 			return true;
 
 		} catch (Exception e) {
@@ -2089,7 +2091,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			
-			sendBungeeMessage("TOWNS", town.getName());
+			sendBungeeMessage("TOWN", town.getName());
 			return true;
 
 		} catch (Exception e) {
@@ -2156,7 +2158,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			UpdateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 
-			sendBungeeMessage("NATIONS", nation.getName());
+			sendBungeeMessage("NATION", nation.getName());
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
@@ -2431,10 +2433,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 
-		try (Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT " + name + " FROM " + tb_prefix + "TOWNS ")) {
-			while (rs.next()) {
-				return loadTown(rs);
+		try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "TOWNS WHERE name=?")) {
+			ps.setString(1, name);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next())
+					return loadTown(rs);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -2449,9 +2452,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		
 		Resident resident = universe.getResident(name);
 		
-		try (Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT " + name + " FROM " + tb_prefix + "RESIDENTS ")) {
-			while (rs.next()) {
+		try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "RESIDENTS WHERE name=?")) {
+			ps.setString(1, name);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next())
 				return loadResident(resident, rs);
 			}
 		} catch (SQLException e) {
@@ -2464,9 +2468,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 
-		try (Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT " + name + " FROM " + tb_prefix + "NATIONS ")) {
-			while (rs.next()) {
+		try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "NATIONS WHERE name=?")) {
+			ps.setString(1, name);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next())
 				return loadNation(rs);
 			}
 		} catch (SQLException e) {
@@ -2476,24 +2481,25 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	private void sendBungeeMessage(String object, String name) {
-		System.out.println("sending bungee message");
 		if (!TownySettings.isBungeeEnabled())
 			return;
-		
-		Player p = Bukkit.getServer().getOnlinePlayers().stream().findFirst().orElse(null);
-		
-		if (p == null)
-			return;
-		
-		System.out.println("player not null");
+
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		out.writeUTF("Forward");
 		out.writeUTF("ALL");
 		out.writeUTF("TownyBungeeCord");
-		out.writeUTF(object);
-		out.writeUTF(name);
+		ByteArrayOutputStream msgbytes = new ByteArrayOutputStream();
+		DataOutputStream msgout = new DataOutputStream(msgbytes);
+		try {
+			msgout.writeUTF(object); // You can do anything you want with msgout
+			msgout.writeUTF(name);
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+		out.writeShort(msgbytes.toByteArray().length);
+		out.write(msgbytes.toByteArray());
+		Bukkit.getServer().sendPluginMessage(Towny.getPlugin(), "BungeeCord", out.toByteArray());
 		
-		p.sendPluginMessage(Towny.getPlugin(), "BungeeCord", out.toByteArray());
 	}
 
 }

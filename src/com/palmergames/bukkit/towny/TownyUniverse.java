@@ -645,7 +645,8 @@ public class TownyUniverse {
 		if (town.getUUID() != null) {
 			
 			if (townUUIDMap.containsKey(town.getUUID())) {
-				throw new AlreadyRegisteredException("UUID of town " + town.getName() + " was already registered!");
+				return;
+//				throw new AlreadyRegisteredException("UUID of town " + town.getName() + " was already registered!");
 			}
 			
 			townUUIDMap.put(town.getUUID(), town);
