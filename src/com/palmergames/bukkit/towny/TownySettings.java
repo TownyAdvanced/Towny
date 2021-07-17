@@ -3123,5 +3123,9 @@ public class TownySettings {
 	public static boolean isUpdateNotificationsMajorOnly() {
 		return getBoolean(ConfigNodes.PLUGIN_UPDATE_NOTIFICATIONS_MAJOR_ONLY);
 	}
+	
+	public static int getMaxNationAllies() {
+		return getInt(ConfigNodes.GNATION_SETTINGS_MAX_ALLIES);
+	}
 }
 
