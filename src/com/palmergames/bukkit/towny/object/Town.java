@@ -33,7 +33,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -44,6 +46,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	private final List<Resident> residents = new ArrayList<>();
 	private final List<Resident> outlaws = new ArrayList<>();
+	private final Set<Resident> trustedResidents = new HashSet<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Jail> jails = null;
 	private HashMap<String, PlotGroup> plotGroups = null;
@@ -1410,5 +1413,21 @@ public class Town extends Government implements TownBlockOwner {
 		residents.clear();
 		residents.addAll(sortedResidents);
 		residentsSorted = true;
+	}
+
+	public Set<Resident> getTrustedResidents() {
+		return trustedResidents;
+	}
+	
+	public boolean hasTrustedResident(Resident resident) {
+		return trustedResidents.contains(resident);
+	}
+	
+	public void addTrustedResident(Resident resident) {
+		trustedResidents.add(resident);
+	}
+	
+	public void removeTrustedResident(Resident resident) {
+		trustedResidents.remove(resident);
 	}
 }

@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 
 import com.palmergames.bukkit.towny.object.Town;
@@ -101,12 +102,18 @@ public class TownRuinUtil {
 		//Return town blocks to the basic, unowned, type
 		for(TownBlock townBlock: town.getTownBlocks()) {
 			if (townBlock.hasResident())
-				townBlock.setResident(null);     // Removes any personal ownership.
-			townBlock.setType(0);                // Sets the townblock's perm line to the Town's perm line set above.
-			townBlock.setPlotPrice(-1);          // Makes the plot not for sale.
-			townBlock.removePlotObjectGroup();   // Removes plotgroup if it were present.
+				townBlock.setResident(null);     		// Removes any personal ownership.
+			townBlock.setType(0);                		// Sets the townblock's perm line to the Town's perm line set above.
+			townBlock.setPlotPrice(-1);          		// Makes the plot not for sale.
+			townBlock.removePlotObjectGroup();   		// Removes plotgroup if it were present.
+			townBlock.getPermissionOverrides().clear(); // Removes all permission overrides from the plot.
+			townBlock.getTrustedResidents().clear();	// Removes all trusted residents.
 			townBlock.save();
 		}
+		
+		// Unregister the now empty plotgroups.
+		for (PlotGroup group : town.getPlotGroups())
+			TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
 		
 		// Check if Town has more residents than it should be allowed (if it were the capital of a nation.)
 		if (TownySettings.getMaxResidentsPerTown() > 0)

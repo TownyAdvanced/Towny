@@ -163,7 +163,7 @@ public class TownyAsciiMap {
 						.append(claimedAtComponent)
 						.append(Component.text(Translation.of("towny_map_detailed_information")).color(NamedTextColor.DARK_GREEN))));
 					
-					ClickEvent clickEvent = ClickEvent.runCommand("/towny:plot perm " + tby + " " + tbx);
+					ClickEvent clickEvent = ClickEvent.runCommand("/towny:plot info " + tby + " " + tbx);
 					if (!forSaleComponent.equals(Component.empty()))
 						clickEvent = ClickEvent.runCommand("/towny:plot claim " + world.getName() + " x" + tby + " z" + tbx);
 
