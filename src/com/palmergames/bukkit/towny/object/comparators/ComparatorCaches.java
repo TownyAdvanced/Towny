@@ -15,6 +15,7 @@ import com.google.common.cache.LoadingCache;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.nation.DisplayedNationsListSortEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumOnlinePlayersCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumResidentsCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownBlocksCalculationEvent;
@@ -117,8 +118,13 @@ public class ComparatorCaches {
 	private static List<TextComponent> gatherNationLines(ComparatorType compType) {
 		List<TextComponent> output = new ArrayList<>();
 		List<Nation> nations = TownyUniverse.getInstance().getDataSource().getNations();
+
+		//Sort nations
 		nations.sort((Comparator<? super Nation>) compType.getComparator());
-		
+		DisplayedNationsListSortEvent nationListSortEvent = new DisplayedNationsListSortEvent(nations, compType);
+		Bukkit.getPluginManager().callEvent(nationListSortEvent);
+		nations = nationListSortEvent.getNations();
+
 		for (Nation nation : nations) {
 			TextComponent nationName = Component.text(Colors.LightBlue + StringMgmt.remUnderscore(nation.getName()))
 					.clickEvent(ClickEvent.runCommand("/towny:nation spawn " + nation + " -ignore"));
