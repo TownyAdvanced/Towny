@@ -958,7 +958,7 @@ public enum ConfigNodes {
 			"global_nation_settings.max_allies",
 			"-1",
 			"",
-			"# The maximum amount of allies that a nation can have, set to -1 to disable."),
+			"# The maximum amount of allies that a nation can have, set to -1 to have no limit."),
 
 	PLUGIN(
 			"plugin",
