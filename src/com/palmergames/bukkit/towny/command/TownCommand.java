@@ -3621,7 +3621,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else {
 					
 					// Prevent someone manually running /t claim world x z (a command which should only be run via /plot claim world x z)
-					if (TownyAPI.getInstance().getTownyWorld(split[0]) != null)
+					if (split.length != 0 && TownyAPI.getInstance().getTownyWorld(split[0]) != null)
 						throw new TownyException(Translation.of("tc_err_invalid_command"));
 
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN.getNode()))

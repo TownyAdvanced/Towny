@@ -6393,3 +6393,5 @@ v0.92.0.11:
     - Closes #4020.
   - Add ability for a nomad to be prompted to a join a town when they /plot claim, if the town is open and the townblock is not an embassy plot.
     - Closes #4019.
+0.97.0.13:
+  - Fix /town claim throwing Index 0 out of bounds for length 0 error.
