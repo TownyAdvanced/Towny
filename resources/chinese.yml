@@ -1440,3 +1440,22 @@ msg_latest_version: '&2Towny version: &a%s &2| Latest version: &a%s'
 msg_up_to_date: '&aYou are up to date.'
 msg_click_purchase: 'Click to purchase'
 msg_you_must_join_this_town_to_claim_this_plot: 'You must join this town: %s, in order to claim this plot. Would you like to join the town and continue claiming?'
+
+#Added in 0.113
+status_trustedlist: '&2Trusted'
+msg_click_to_edit: '&6Click to edit.'
+permission_gui_header: 'Towny Permission GUI'
+msg_last_edited: '&7&oLast changed at %s by %s.'
+msg_trusted_added: '&bAdded %s as trusted in this %s.' # Last %s is either town or townblock
+msg_already_trusted: '&b%s is already trusted in this %s.'
+msg_trusted_added_2: '&b%s has trusted you in a %s: %s.' # Last %s is the town name or worldcoord.
+msg_not_trusted: '&b%s is not trusted in this %s.'
+msg_trusted_removed: '&bRemoved %s as trusted in this %s.'
+msg_trusted_removed_2: '&b%s has removed you as trusted in a %s: %s.'
+msg_overrides_removed: '&bRemoved permission overrides for %s.'
+msg_overrides_added: '&bAdded default permission overrides for %s.'
+msg_no_overrides_set: '&b%s does not have any overrides set for this %s.'
+msg_overrides_already_set: '&b%s already has overrides set for this %s.'
+msg_cache_block_err: '&cYou are not allowed to %s here.'
+msg_err_plot_belongs_to_group: '&cPlot belongs to a group, use %s.'
+plotgroup_sing: 'Plot Group'

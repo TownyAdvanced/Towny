@@ -6395,3 +6395,45 @@ v0.92.0.11:
     - Closes #4019.
 0.97.0.13:
   - Fix /town claim throwing Index 0 out of bounds for length 0 error.
+0.97.0.14:
+  - Add Trusted to TownBlocks and Towns, PermOverrides to TownBlocks, courtesy of Warriorrrr with PR #5085.
+    - Use /town trust add|remove NAME or /plot trust add|remove NAME to give people full build/destroy/switch/itemuse permissions in the given town or plot.
+    - Use /plot perm add|remove NAME to add a player to a plot's permission overrides.
+    - Use /plot perm GUI to open the plot permission editor.
+      - Hover over the player's head who you've added to the plot to see their BDSI settings.
+      - Click their head to edit the individual build/destroy/switch/itemuse settings.
+    - PlotGroups also have the same ability to have trusted|permission overrides applied to players for the entire plotgroup.
+      - Use the same /plot group trust|perm commands.
+    - New Commands:
+      - /town trust add|remove NAME
+      - /plot trust add|remove NAME
+      - /plot perm add|remove NAME
+      - /plot perm gui
+      - /plot group trust add|remove NAME
+      - /plot group perm add|remove NAME
+      - /plot group perm gui
+    - New Permission Nodes:
+      - These are all child nodes of towny.command.plot.perm (which is already in townyperms.yml) no editing required. 
+      - towny.command.plot.perm.*
+      - towny.command.plot.perm.gui
+      - towny.command.plot.perm.add
+      - towny.command.plot.perm.remove
+      - Mayors are already given this via towny.command.town.*
+      - towny.command.town.trust
+    - New Permission Nodes:      
+      - towny.command.plot.trust
+      - towny.command.plot.group.trust
+      - towny.command.plot.group.perm
+    - REQUIRED TOWNYPERMS.YML change: 
+      - to the nomad group add:
+      - towny.command.plot.trust
+      - towny.command.plot.group.*    
+    - Closes #4981, #4975, #3437.
+  - Remove Integrated FlagWar, courtesy of TheFlagCourier with PR #5081.
+    - Completes the separation of FlagWar into a standalone .jar available here: https://github.com/TownyAdvanced/FlagWar
+    - This new jar has already had a couple new features added which were not available in Towny's version of FlagWar.
+    - There could be some bugs still in the standalone version so if you see something, say something.
+      - Bugs can be reported on the issue tracker: https://github.com/TownyAdvanced/FlagWar/issues
+  - API: DisplayedNationsListSortEvent added courtesy of Goosius with PR #5084.
+    - Allows for a plugin to alter how nations are listed on /n list.
+  - Bump Language Files to 0.113.

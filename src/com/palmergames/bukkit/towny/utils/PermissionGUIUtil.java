@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -70,7 +71,7 @@ public class PermissionGUIUtil {
 			
 			if (!entry.getKey().hasUUID())
 				//noinspection deprecation
-				meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.getKey().getName())); 
+				meta.setOwningPlayer(BukkitTools.getOfflinePlayer(entry.getKey().getName())); 
 			else
 				meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.getKey().getUUID()));
 			

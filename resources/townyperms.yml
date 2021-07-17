@@ -23,8 +23,10 @@ nomad:
     - towny.command.town.join
     - towny.command.town.list.*
     - towny.command.town.reslist
+    - towny.command.plot.group.*
     - towny.command.plot.perm
     - towny.command.plot.perm.hud
+    - towny.command.plot.trust
     - towny.command.nation.list.*
     - towny.command.nation.townlist  
     - towny.command.nation.allylist

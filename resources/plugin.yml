@@ -497,11 +497,16 @@ permissions:
             towny.command.plot.set.spleef: true
             towny.command.plot.set.wilds: true
 
+    towny.command.plot.perm:
+        description: User can access all plot perm commands (legacy townyperms.yml support.)
+        default: false
+        children:
+            towny.command.plot.perm.*: true
+        
     towny.command.plot.perm.*:
         description: User can access all plot perm commands.
         default: false
         children:
-            towny.command.plot.perm: true
             towny.command.plot.perm.hud: true
             towny.command.plot.perm.gui: true
             towny.command.plot.perm.add: true
