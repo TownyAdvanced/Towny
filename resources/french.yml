@@ -1,5 +1,5 @@
 name: Towny
-version: 0.112
+version: 0.113
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious,PainOchoco
 website: "http://townyadvanced.github.io/"
@@ -350,16 +350,6 @@ msg_war_cannot_do: "&cVous ne pouvez pas faire cela pendant que le monde est en 
 msg_war_started: "&eCommencement de la guerre."
 msg_war_ended: "&eLa guerre a pris fin."
 
-msg_enemy_war_area_under_attack: "&6[Guerre]&b %s (%s) est attaqué par %s!"
-msg_enemy_war_area_won: "&6[Guerre]&b %s (%s) gagne (%s)!"
-msg_enemy_war_area_defended: "&6[Guerre]&b %s a défendu (%s)!"
-msg_err_enemy_war_must_be_placed_above_ground: "&6[Guerre]&c Le drapeau doit se situer en surface."
-msg_err_enemy_war_not_part_of_nation: "&6[Guerre]&c Cette zone n'appartient pas à une nation."
-msg_err_enemy_war_is_peaceful: "&6[Guerre]&c %s est pacifique."
-msg_err_enemy_war_require_online: "&6[Guerre]&c Nécessite au moins %d joueurs connectés dans %s pour attaquer."
-msg_err_enemy_war_not_on_edge_of_town: "&6[Guerre]&c Seulement autorisé à attaquer la bordure d'une ville."
-msg_err_enemy_war_cell_already_under_attack: "&6[Guerre]&c Cette zone est déjà attaquée par %s."
-msg_err_enemy_war_reached_max_active_flags: "&6[Guerre]&c Vous ne pouvez pas attaquer plus de %d zones à la fois."
 
 msg_cache_block_error: "&cVous n'avez pas été enregistré avec Towny. Essayez de vous reconnecter."
 msg_cache_block_error_wild: "&cPas autorisé à %s dans la nature."
@@ -433,18 +423,10 @@ msg_err_cannot_perform_action: "&cNe peut pas effectuer cette action dans le %s.
 msg_npc_flag: "&bLe drapeau du PNJ est désormais %s pour %s."
 
 # WarFlag Economy
-msg_enemy_war_purchased_warflag: "&6[Guerre]&c Vous payez %s de frais pour attaquer."
-msg_enemy_war_area_won_pillage: "&6[Guerre]&c %s a pillé %s de %s."
-msg_enemy_war_area_won_rebuilding: "&6[Guerre]&c %s a payé %s à %s pour reconstruire."
-msg_enemy_war_area_won_rebuilding_err: "Vous n'avez pas assez pour payer %s %s pour aider à reconstruire."
-msg_enemy_war_area_won_rebuilding_err_global: "%s ne pouvais pas payer de %s. L'attaque à %s a été annulé."
 msg_err_insuficient_funds_warflag: "Vous avez besoin de %s afin de placer un drapeau de guerre."
 msg_err_insuficient_funds_future: "Vous avez besoin %s dans le cas ou vous avez besoin de payer pour %s."
 name_defended_attack: "Attaque défendu"
 name_rebuilding: "Bonne reconstruction"
-msg_enemy_war_area_defended_attacker: "&6[Guerre]&c Vous avez été forcé à payer %s %s pour votre attaque manquée."
-msg_enemy_war_area_defended_defender: "&6[Guerre]&c %s Vous a payé %s pour l'attaque manquée."
-msg_enemy_war_area_defended_greater_forces: "&6[Guerre]&c Votre attaque manquée vous a couté %s."
 
 msg_warning_delete: "&4*** ATTENTION, %s VA ÊTRE SUPPRIMÉ AU PROCHAIN JOUR À CAUSE D'UN MANQUE DE FONDS ***"
 
@@ -775,7 +757,6 @@ status_res_plottax: "&2Taxe Total de Parcelle: &a"
 status_res_totaltax: "&2Taxe Total à payer: &a"
 
 # Added in 0.45
-msg_err_enemy_war_your_town_has_no_claims: "Vous ne pouvez pas attaquer pendant que votre ville n'a aucun terrain annexé."
 msg_err_unable_to_use_bank_outside_nation_capital: "Vous ne pouvez pas utiliser votre banque de nation en dehors de la capitale de votre nation."
 msg_err_unable_to_use_bank_outside_your_town: "Vous ne pouvez pas utiliser votre banque de ville en dehors de votre ville."
 msg_time_until_a_new_day: "Temps jusqu'au nouveau jour: "
@@ -1008,9 +989,6 @@ msg_war_participants_header: "&6[Guerre] &eNom de la nation &f(&bTowns&f)"
 msg_war_participants: "&6[War] &e%s &f(&b%s&f)"
 
 # Added in 0.61
-msg_war_flag_deny_town_under_attack: "Vous ne pouvez pas faire ça tout en étant attaqué !"
-msg_war_flag_deny_nation_under_attack: "Vous ne pouvez pas faire ça pendant qu'une ville ou une nation est sous attaque !"
-msg_war_flag_deny_recently_attacked: "Vous ne pouvez pas faire ça ! Vous avez été attaqué trop récemment !"
 
 # Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: "Vous ne pouvez pas basculer le pvp pendant encore %s secondes."

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.112
+version: 0.113
 language: norwegian
 author: Nectuz, Walbern
 website: 'http://townyadvanced.github.io/'
@@ -349,16 +349,6 @@ msg_war_cannot_do: '&cDu kan ikke gjøre dette når verdenen er i krig.'
 msg_war_started: '&eStartet nedtellingen for krig.'
 msg_war_ended: '&eAvsluttet krigen.'
 
-msg_enemy_war_area_under_attack: '&6[War]&b %s (%s) er under angrep av %s!'
-msg_enemy_war_area_won: '&6[War]&b %s (%s) vant (%s)!'
-msg_enemy_war_area_defended: '&6[War]&b %s forsvarte (%s)!'
-msg_err_enemy_war_must_be_placed_above_ground: '&6[War]&c Må plassere flagg over bakken.'
-msg_err_enemy_war_not_part_of_nation: '&6[War]&c Dette området tilhører ingen nasjon.'
-msg_err_enemy_war_is_peaceful: '&6[War]&c %s er fredfull.'
-msg_err_enemy_war_require_online: '&6[War]&c Krever at %d spillere pålogget i %s to attack.'
-msg_err_enemy_war_not_on_edge_of_town: '&6[War]&c Det er bare lov å angripe i utkanten av en by.'
-msg_err_enemy_war_cell_already_under_attack: '&6[War]&c Dette området er allerede under angrep av %s.'
-msg_err_enemy_war_reached_max_active_flags: '&6[War]&c Du kan ikke angripe mer enn %d områder på en gang.'
 
 msg_cache_block_error: '&cDu har ikke blitt registrert med towny. Prøv å relogg.'
 msg_cache_block_error_wild: '&cIkke lov til å %s i villmarken.'
@@ -432,18 +422,10 @@ msg_err_cannot_perform_action: '&cKan ikke fullføre denne handlingen i %s.'
 msg_npc_flag: '&bNPC flagg er nå %s for %s.'
 
 # WarFlag Economy
-msg_enemy_war_purchased_warflag: '&6[War]&c Du betalte %s i avgifter for å angripe.'
-msg_enemy_war_area_won_pillage: '&6[War]&c %s plyndret %s fra %s.'
-msg_enemy_war_area_won_rebuilding: '&6[War]&c %s betalte %s til %s for ombygging.'
-msg_enemy_war_area_won_rebuilding_err: 'Du har ikke nok til å betale %s %s å hjelpe til med å gjenoppbygge.'
-msg_enemy_war_area_won_rebuilding_err_global: '%s kunne ikke betale %s. Angrepet på %s ble kansellert.'
 msg_err_insuficient_funds_warflag: 'Du krever %s for å plassere et krigsflagg.'
 msg_err_insuficient_funds_future: 'Du krever %s i tilfelle du må betale for %s.'
 name_defended_attack: 'Forsvarte angrepet'
 name_rebuilding: 'gjenoppbygging fine'
-msg_enemy_war_area_defended_attacker: '&6[War]&c Du ble tvunget til å betale %s %s for ditt mislykkede angrep.'
-msg_enemy_war_area_defended_defender: '&6[War]&c %s betalte deg %s for det mislykkede angrepet.'
-msg_enemy_war_area_defended_greater_forces: '&6[War]&c Ditt mislykkede angrep kostet deg %s.'
 
 msg_warning_delete: '&4*** ADVARSEL, %s VIL BLI SLETTET NESTE DAG PÅ GRUNN AV MANGEL PÅ PENGER ***'
 
@@ -775,7 +757,6 @@ status_res_plottax: '&2Total Plot Taxes: &a'
 status_res_totaltax: '&2Total Tax to pay: &a'
 
 # Added in 0.45
-msg_err_enemy_war_your_town_has_no_claims: 'You cannot attack while your town has 0 townblocks claimed.'
 msg_err_unable_to_use_bank_outside_nation_capital: 'You cannot make use of your nation bank outside of the nation capital.'
 msg_err_unable_to_use_bank_outside_your_town: 'You cannot make use of your town bank outside of your town.'
 msg_time_until_a_new_day: 'Time until a New Day: '
@@ -1007,9 +988,6 @@ msg_war_participants_header: '&6[War] &eNation Name &f(&bTowns&f)'
 msg_war_participants: '&6[War] &e%s &f(&b%s&f)'
 
 # Added in 0.61
-msg_war_flag_deny_town_under_attack: 'You cannot do that while under attack!'
-msg_war_flag_deny_nation_under_attack: 'You cannot do this while a town in your nation is under attack!'
-msg_war_flag_deny_recently_attacked: 'You cannot do that! You were attacked too recently!'
 
 # Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'You cannot toggle PVP, %s seconds remaining.'
