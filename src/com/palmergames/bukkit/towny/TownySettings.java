@@ -42,7 +42,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-@SuppressWarnings("deprecation")
 public class TownySettings {
 
 	// Town Level

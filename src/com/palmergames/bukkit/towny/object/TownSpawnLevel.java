@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 
-@SuppressWarnings("deprecation")
 public enum TownSpawnLevel {
 	TOWN_RESIDENT(
 			ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN,
