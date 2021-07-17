@@ -348,16 +348,6 @@ msg_war_cannot_do: '&cYou cannot do this when the world is at war.'
 msg_war_started: '&eStarted the war countdown.'
 msg_war_ended: '&eEnded the current war.'
 
-msg_enemy_war_area_under_attack: '&6[War]&b %s (%s) is under attack by %s!'
-msg_enemy_war_area_won: '&6[War]&b %s (%s) won (%s)!'
-msg_enemy_war_area_defended: '&6[War]&b %s defended (%s)!'
-msg_err_enemy_war_must_be_placed_above_ground: '&6[War]&c Must place flag above ground.'
-msg_err_enemy_war_not_part_of_nation: '&6[War]&c This area doesn''t belong to a nation.'
-msg_err_enemy_war_is_peaceful: '&6[War]&c %s is peaceful.'
-msg_err_enemy_war_require_online: '&6[War]&c Require at least %d people online in %s to attack.'
-msg_err_enemy_war_not_on_edge_of_town: '&6[War]&c Only allowed to attack the borders of a town.'
-msg_err_enemy_war_cell_already_under_attack: '&6[War]&c This area is already under attack by %s.'
-msg_err_enemy_war_reached_max_active_flags: '&6[War]&c You can''t attack more than %d areas at once.'
 
 msg_cache_block_error: '&cYou have not been registered with Towny. Try relogging.'
 msg_cache_block_error_wild: '&cNot allowed to %s in the wild.'
@@ -431,18 +421,10 @@ msg_err_cannot_perform_action: '&cCannot perform this action in the %s.'
 msg_npc_flag: '&bNPC flag is now %s for %s.'
 
 # WarFlag Economy
-msg_enemy_war_purchased_warflag: '&6[War]&c You paid %s in fees to attack.'
-msg_enemy_war_area_won_pillage: '&6[War]&c %s pillaged %s from %s.'
-msg_enemy_war_area_won_rebuilding: '&6[War]&c %s paid %s to %s for rebuilding.'
-msg_enemy_war_area_won_rebuilding_err: 'You don''t have enough to pay %s %s to aid in rebuilding.'
-msg_enemy_war_area_won_rebuilding_err_global: '%s could not pay the %s. Attack at %s was canceled.'
 msg_err_insuficient_funds_warflag: 'You require %s in order to place a warflag.'
 msg_err_insuficient_funds_future: 'You require %s in the event you need to pay for %s.'
 name_defended_attack: 'defended attack'
 name_rebuilding: 'rebuilding fine'
-msg_enemy_war_area_defended_attacker: '&6[War]&c You were forced to pay %s %s for your failed attack.'
-msg_enemy_war_area_defended_defender: '&6[War]&c %s payed you %s for the failed attack.'
-msg_enemy_war_area_defended_greater_forces: '&6[War]&c Your failed attack costed you %s.'
 
 msg_warning_delete: '&4*** WARNING, %s WILL BE DELETED AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
 
@@ -773,7 +755,6 @@ status_res_plottax: '&2Total Plot Taxes: &a'
 status_res_totaltax: '&2Total Tax to pay: &a'
 
 # Added in 0.45
-msg_err_enemy_war_your_town_has_no_claims: 'You cannot attack while your town has 0 townblocks claimed.'
 msg_err_unable_to_use_bank_outside_nation_capital: 'You cannot make use of your nation bank outside of the nation capital.'
 msg_err_unable_to_use_bank_outside_your_town: 'You cannot make use of your town bank outside of your town.'
 msg_time_until_a_new_day: 'Time until a New Day: '
@@ -1002,9 +983,6 @@ msg_war_participants_header: '&6[War] &eNation Name &f(&bTowns&f)'
 msg_war_participants: '&6[War] &e%s &f(&b%s&f)'
 
 # Added in 0.61
-msg_war_flag_deny_town_under_attack: 'You cannot do that while under attack!'
-msg_war_flag_deny_nation_under_attack: 'You cannot do this while a town in your nation is under attack!'
-msg_war_flag_deny_recently_attacked: 'You cannot do that! You were attacked too recently!'
 
 # Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'You cannot toggle PVP, %s seconds remaining.'

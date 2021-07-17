@@ -1,5 +1,5 @@
 name: Towny
-version: 0.112
+version: 0.113
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -347,16 +347,6 @@ msg_war_cannot_do: '&c世界處於水深火熱之中, 您不能這麽做.'
 msg_war_started: '&e戰爭即將開始.'
 msg_war_ended: '&e戰爭已經結束.'
 
-msg_enemy_war_area_under_attack: '&6[戰爭]&b %s (%s) 正被 %s 攻擊!'
-msg_enemy_war_area_won: '&6[戰爭]&b %s (%s) 戰勝了 (%s)!'
-msg_enemy_war_area_defended: '&6[戰爭]&b %s 擋下了 (%s) 的進攻!'
-msg_err_enemy_war_must_be_placed_above_ground: '&6[戰爭]&c 旗幟必須被插在地上.'
-msg_err_enemy_war_not_part_of_nation: '&6[戰爭]&c 這片區域不屬於任何一個國家.'
-msg_err_enemy_war_is_neutral: '&6[戰爭]&c %s 是中立的.'
-msg_err_enemy_war_require_online: '&6[戰爭]&c 至少需要 %d 在 %s 內才能發動攻擊.'
-msg_err_enemy_war_not_on_edge_of_town: '&6[戰爭]&c 您只能進攻城鎮邊界.'
-msg_err_enemy_war_cell_already_under_attack: '&6[戰爭]&c 這片區域已經被 %s 進攻了.'
-msg_err_enemy_war_reached_max_active_flags: '&6[戰爭]&c 您不能一次攻占多於 %d 片區域.'
 
 msg_cache_block_error: '&c城鎮沒有您的資訊. 請嘗試重新註冊.'
 msg_cache_block_error_wild: '&c您不能在荒野中 %s .'
@@ -430,18 +420,10 @@ msg_err_cannot_perform_action: '&c您無法在 %s 執行這個操作.'
 msg_npc_flag: '&bNPC flag 現在 %s for %s.'
 
 # 戰爭經濟
-msg_enemy_war_purchased_warflag: '&6[戰爭]&c 您支付了 %s 來發動戰爭.'
-msg_enemy_war_area_won_pillage: '&6[戰爭]&c %s 掠奪了 %s ,戰敗國: %s.'
-msg_enemy_war_area_won_rebuilding: '&6[戰爭]&c %s 支付了 %s 給 %s 來進行重建.'
-msg_enemy_war_area_won_rebuilding_err: '您沒有足夠的資金向 %s 支付 %s 來幫助重建城鎮.'
-msg_enemy_war_area_won_rebuilding_err_global: '%s 沒錢支付給 %s. 對 %s 的進攻被取消.'
 msg_err_insuficient_funds_warflag: '您需要 %s 來放置戰旗.'
 msg_err_insuficient_funds_future: '您需要 %s 來為 %s 付款.'
 name_defended_attack: '保衛戰'
 name_rebuilding: '重建資金'
-msg_enemy_war_area_defended_attacker: '&6[戰爭]&c 您因進攻%s失敗而花費了 %s .'
-msg_enemy_war_area_defended_defender: '&6[戰爭]&c 因為進攻失敗, %s 付給了您 %s .'
-msg_enemy_war_area_defended_greater_forces: '&6[戰爭]&c 因為進攻失敗, 您消耗了 %s.'
 
 msg_warning_delete: '&4*** 警告,由於資金不足, %s 這個城鎮將在明天倒閉! ***'
 
@@ -772,7 +754,6 @@ status_res_plottax: '&2總區域稅: &a'
 status_res_totaltax: '&2支出總稅額: &a'
 
 # 在 0.45 版本加入的資訊
-msg_err_enemy_war_your_town_has_no_claims: '您在城鎮沒有區域給敵方進攻.'
 msg_err_unable_to_use_bank_outside_nation_capital: '您不能在國外使用國家銀行.'
 msg_err_unable_to_use_bank_outside_your_town: '您不能在城鎮外使用城鎮銀行.'
 msg_time_until_a_new_day: '距離明天還剩: '
@@ -1005,9 +986,6 @@ msg_war_participants_header: '&6[戰爭] &e國家名 &f(&b城鎮&f)'
 msg_war_participants: '&6[戰爭] &e%s &f(&b%s&f)'
 
 # Added in 0.61
-msg_war_flag_deny_town_under_attack: '在您受到攻擊時您不能這麽做!'
-msg_war_flag_deny_nation_under_attack: '您不能在國內城鎮受到攻擊時這麽做!'
-msg_war_flag_deny_recently_attacked: '您不能這麽做! 您受到的攻擊太多了!'
 
 # Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: '您在 %s 秒內無法無法切換PVP狀態.'

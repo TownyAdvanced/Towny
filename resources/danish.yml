@@ -1,5 +1,5 @@
 name: Towny
-version: 0.112
+version: 0.113
 language: dansk
 author: LifeOnEarth
 website: 'http://townyadvanced.github.io/'
@@ -349,16 +349,6 @@ msg_war_cannot_do: '&cDu kan ikke gøre dette, når verden er i krig.'
 msg_war_started: '&eStartede krigsnedtællingen.'
 msg_war_ended: '&eAfsluttede det nuværende krig.'
 
-msg_enemy_war_area_under_attack: '&6[Krig]&b %s (%s) er under angreb af %s!'
-msg_enemy_war_area_won: '&6[Krig]&b %s (%s) vandt (%s)!'
-msg_enemy_war_area_defended: '&6[Krig]&b %s forsvarede (%s)!'
-msg_err_enemy_war_must_be_placed_above_ground: '&6[Krig]&c Du skal placere flag over jorden.'
-msg_err_enemy_war_not_part_of_nation: '&6[Krig]&c Dette område tilhører ikke en nation.'
-msg_err_enemy_war_is_peaceful: '&6[Krig]&c %s er fredet.'
-msg_err_enemy_war_require_online: '&6[Krig]&c Det kræver mindst %d personer online i %s for at angribe.'
-msg_err_enemy_war_not_on_edge_of_town: '&6[Krig]&c Det er kun tilladt at angribe grænserne på en by.'
-msg_err_enemy_war_cell_already_under_attack: '&6[Krig]&c Dette område er allerede under angreb af %s.'
-msg_err_enemy_war_reached_max_active_flags: '&6[Krig]&c Du kan ikke angribe mere end %d områder af gangen.'
 
 msg_cache_block_error: '&cDu er ikke blevet registreret af Towny. Prøv at logge ind igen.'
 msg_cache_block_error_wild: '&cDet er ikke tilladt at %s i ødemarken.'
@@ -432,18 +422,10 @@ msg_err_cannot_perform_action: '&cDenne handling kan ikke udføres i %s.'
 msg_npc_flag: '&bNPC-flag er nu %s for %s.'
 
 # WarFlag Economy
-msg_enemy_war_purchased_warflag: '&6[War]&c You paid %s in fees to attack.'
-msg_enemy_war_area_won_pillage: '&6[War]&c %s pillaged %s from %s.'
-msg_enemy_war_area_won_rebuilding: '&6[War]&c %s paid %s to %s for rebuilding.'
-msg_enemy_war_area_won_rebuilding_err: 'You don''t have enough to pay %s %s to aid in rebuilding.'
-msg_enemy_war_area_won_rebuilding_err_global: '%s could not pay the %s. Attack at %s was canceled.'
 msg_err_insuficient_funds_warflag: 'You require %s in order to place a warflag.'
 msg_err_insuficient_funds_future: 'You require %s in the event you need to pay for %s.'
 name_defended_attack: 'defended attack'
 name_rebuilding: 'rebuilding fine'
-msg_enemy_war_area_defended_attacker: '&6[War]&c You were forced to pay %s %s for your failed attack.'
-msg_enemy_war_area_defended_defender: '&6[War]&c %s payed you %s for the failed attack.'
-msg_enemy_war_area_defended_greater_forces: '&6[War]&c Your failed attack costed you %s.'
 
 msg_warning_delete: '&4*** WARNING, %s WILL BE DELETED AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
 
@@ -774,7 +756,6 @@ status_res_plottax: '&2Total grundskat: &a'
 status_res_totaltax: '&2Total skat at betale: &a'
 
 # Added in 0.45
-msg_err_enemy_war_your_town_has_no_claims: 'Du kan ikke angribe, når din by ikke har gjort krav på nogen byblokke.'
 msg_err_unable_to_use_bank_outside_nation_capital: 'Du kan ikke gøre brug af din nationsbank, når du er ude for nationens hovedstad.'
 msg_err_unable_to_use_bank_outside_your_town: 'Du kan ikke gøre brug af din bybank uden for din by.'
 msg_time_until_a_new_day: 'Tid indtil ny dag: '
@@ -799,7 +780,6 @@ msg_err_nation_not_public: '&cDen nation er ikke offentlig.'
 msg_nation_toggle_public: '&aSkiftede succesfuldt nationens indstilling til offentlig.'
 status_yes: '&aJA'
 status_no: '&cNEJ'
-status_public: '&2Offentlig: '
 msg_err_unable_to_use_bank_outside_bank_plot: 'Du kan ikke bruge den kommando uden for en bank- eller hjemgrund.'
 msg_err_nation_spawn_forbidden: '&cNationsspawnrejse er forbudt.'
 msg_err_nation_spawn_forbidden_war: '&cNationsspawnrejse er kun tilladt under krig.'
@@ -1008,9 +988,6 @@ msg_war_participants_header: '&6[Krig] &eNation Name &f(&bTowns&f)'
 msg_war_participants: '&6[Krig] &e%s &f(&b%s&f)'
 
 # Added in 0.61
-msg_war_flag_deny_town_under_attack: 'Du kan ikke gøre dette, mens du er under angreb!'
-msg_war_flag_deny_nation_under_attack: 'Du kan ikke gøre dette, mens en by i din nation er under angreb!'
-msg_war_flag_deny_recently_attacked: 'Du kan ikke gøre det! Du blev angrebet for for kort tid siden!'
 
 # Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Du kan ikke skifte PVP, %s sekunder tilbage.'
