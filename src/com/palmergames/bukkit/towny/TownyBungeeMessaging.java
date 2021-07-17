@@ -14,15 +14,18 @@ public class TownyBungeeMessaging implements PluginMessageListener {
 
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
+		System.out.println("Message spotted on channel " + channel);
 		if (!channel.equals("BungeeCord")) {
 			return;
 		}
 		ByteArrayDataInput in = ByteStreams.newDataInput(message);
 		String subchannel = in.readUTF();
+		System.out.println("Subchannel: " + subchannel);
 		if (subchannel.equals("TownyBungeeCord")) {
 			String object = in.readUTF();
 			String name = in.readUTF();
 			
+			System.out.println("object: " + object + " : name " + name);
 			switch (object) {
 				case "TOWN":
 					if (!TownyUniverse.getInstance().hasTown(name)) {

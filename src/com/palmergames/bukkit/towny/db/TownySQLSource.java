@@ -2476,6 +2476,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	private void sendBungeeMessage(String object, String name) {
+		System.out.println("sending bungee message");
 		if (!TownySettings.isBungeeEnabled())
 			return;
 		
@@ -2483,12 +2484,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		
 		if (p == null)
 			return;
+		
+		System.out.println("player not null");
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
+		out.writeUTF("Forward");
+		out.writeUTF("ALL");
 		out.writeUTF("TownyBungeeCord");
 		out.writeUTF(object);
 		out.writeUTF(name);
 		
-		p.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+		p.sendPluginMessage(Towny.getPlugin(), "BungeeCord", out.toByteArray());
 	}
 
 }
