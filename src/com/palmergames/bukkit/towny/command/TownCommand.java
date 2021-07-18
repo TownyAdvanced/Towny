@@ -3773,7 +3773,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translation.of("msg_err_command_disable"));
 					
 					// Prevent someone manually running /t unclaim world x z (a command which should only be run via /plot claim world x z)
-					if (TownyAPI.getInstance().getTownyWorld(split[0]) != null)
+					if (split.length == 3 && TownyAPI.getInstance().getTownyWorld(split[0]) != null)
 						throw new TownyException(Translation.of("tc_err_invalid_command"));
 					
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
