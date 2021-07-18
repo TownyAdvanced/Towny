@@ -6441,3 +6441,4 @@ v0.92.0.11:
   - New Config Option: global_nation_settings.max_allies
     - Default: -1
     - The maximum amount of allies that a nation can have, set to -1 to have no limit.
+  - Fix /town unclaim throwing Index out of bounds error, courtesy of Silverwolfg11 with PR #5088.
