@@ -6420,15 +6420,11 @@ v0.92.0.11:
       - towny.command.plot.perm.remove
       - Mayors are already given this via towny.command.town.*
       - towny.command.town.trust
-    - New Permission Nodes:      
+    - New Permission Nodes which will automatically be given to the nomad rank:      
       - towny.command.plot.trust
-      - towny.command.plot.group.trust
-      - towny.command.plot.group.perm
-    - REQUIRED TOWNYPERMS.YML change: 
-      - to the nomad group add:
-      - towny.command.plot.trust
-      - towny.command.plot.group.*    
-    - Closes #4981, #4975, #3437.
+      - towny.command.plot.group.*
+        - towny.command.plot.group.trust
+        - towny.command.plot.group.perm
   - Remove Integrated FlagWar, courtesy of TheFlagCourier with PR #5081.
     - Completes the separation of FlagWar into a standalone .jar available here: https://github.com/TownyAdvanced/FlagWar
     - This new jar has already had a couple new features added which were not available in Towny's version of FlagWar.
@@ -6437,3 +6433,6 @@ v0.92.0.11:
   - API: DisplayedNationsListSortEvent added courtesy of Goosius with PR #5084.
     - Allows for a plugin to alter how nations are listed on /n list.
   - Bump Language Files to 0.113.
+  - Townyperms.yml now receives automatic updates (like the config and world files.) 
+    - This was last thing which sometimes required admin intervention.
+    - Enjoy even more drag-and-drop Towny updates.

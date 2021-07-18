@@ -111,5 +111,25 @@
         "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
       }
     ]
+  },
+  {
+    "version": "0.97.0.14",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "towns.default",
+        "value": "towny.command.town.reclaim"
+      },
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "nomad",
+        "value": "towny.command.plot.trust"
+      },
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "nomad",
+        "value": "towny.command.plot.group.*"
+      }
+    ]
   }
 ]

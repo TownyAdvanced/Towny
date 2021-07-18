@@ -75,6 +75,8 @@ public class TownyPerms {
 			perms = new CommentedConfiguration(file);
 			if (!perms.load())
 				throw new TownyException("Could not read Townyperms.yml");
+			
+			buildComments();
 		}
 		
 		/*
@@ -626,4 +628,54 @@ public class TownyPerms {
 
 	}
 
+	private static void buildComments() {
+		perms.addComment("nomad",
+				"#############################################################################################",
+				"# This file contains custom permission sets which will be assigned to your players",
+				"# depending on their current status.",
+				"#",
+				"# This is all managed by towny and pushed directly to CraftBukkits SuperPerms.",
+				"# These will be in addition to any you manually assign in your specific permission plugin.",
+				"#",
+				"# You may assign any Permission nodes here, including those from other plugins.",
+				"# You may also create any custom ranks you require.",
+				"#############################################################################################",
+				"",
+				"",
+				"# The 'nomad' permissions are given to all players in all Towny worlds, townless and players who are part of a town.");
+		
+		perms.addComment("towns", "", "# This section of permissions covers players who are members of a town.");
+		
+		perms.addComment("towns.default", "", "# 'default' is the permission set which is auto assigned to any normal town member.");
+		
+		perms.addComment("towns.mayor", "", "# Mayors get these permissions in addition to the default set.");
+		
+		perms.addComment("towns.ranks", 
+				"", 
+				"# Ranks contain additional permissions residents will be", 
+				"# granted if they are assigned that specific rank.");
+		
+		if (perms.getKeys(true).contains("towns.ranks.assistant"))
+			perms.addComment("towns.ranks.assistant", "", "# assistants are able to grant VIP and helper rank.");
+		
+		if (perms.getKeys(true).contains("towns.ranks.donator"))
+			perms.addComment("towns.ranks.donator", "", "# Currently only an example rank holder with no extra permissions.");
+		
+		if (perms.getKeys(true).contains("towns.ranks.vip"))
+			perms.addComment("towns.ranks.vip", "", "# Currently only an example rank holder with no extra permissions.");
+		
+		if (perms.getKeys(true).contains("towns.ranks.sheriff"))
+			perms.addComment("towns.ranks.sheriff", "", "# Sheriff rank is able to jail other town members.");
+		
+		perms.addComment("nations", "", "# This section of permissions covers players who are members of any town in a nation.");
+		
+		perms.addComment("nations.default", "", "# All nation members get these permissions.");
+		
+		perms.addComment("nations.king", "", "# Kings get these permissions in addition to the default set.");
+	}
+
+	public static CommentedConfiguration getTownyPermsFile() {
+		return perms;
+	}
+	
 }

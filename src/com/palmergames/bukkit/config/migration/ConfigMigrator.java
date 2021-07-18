@@ -9,8 +9,8 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.Version;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -28,11 +28,13 @@ public class ConfigMigrator {
 	private static final Gson GSON = new GsonBuilder()
 		.registerTypeAdapter(Version.class, new VersionDeserializer()).create();
 	private final CommentedConfiguration config;
+	private final CommentedConfiguration townyperms;
 	
 	public ConfigMigrator(CommentedConfiguration config, String filename) {
 		Objects.requireNonNull(config, filename);
 		this.migrationFilename = filename;
 		this.config = config;
+		this.townyperms = TownyPerms.getTownyPermsFile();
 	}
 
 	/**
@@ -41,6 +43,7 @@ public class ConfigMigrator {
 	public void migrate() {
 		// Use the last run version as a reference.
 		Version configVersion = Version.fromString(TownySettings.getLastRunVersion());
+		boolean saveTownyperms = false;
 		
 		// Go through each migration element.
 		for (Migration migration : readMigrator()) {
@@ -50,20 +53,26 @@ public class ConfigMigrator {
 				System.out.println("[Towny] Config: " + migration.version + " applying " + migration.changes.size() + " automatic update" + (migration.changes.size() == 1 ? "" : "s") + " ...");
 				for (Change change : migration.changes) {
 					performChange(change);
+					if (change.type == MigrationType.TOWNYPERMS_ADD)
+						saveTownyperms = true;
 				}
 			}
 		}
 		config.save();
+		if (saveTownyperms)
+			townyperms.save();
 	}
 	
 	private void performChange(Change change) {
 		switch (change.type) {
 			case OVERWRITE:
 				config.set(change.path, change.value);
+				TownyMessaging.sendDebugMsg("Reseting config.yml value at " + change.path + " to " + change.value + ".");
 				break;
 			case APPEND:
 				String base = config.getString(change.path);
 				config.set(change.path, base + change.value);
+				TownyMessaging.sendDebugMsg("Adding " + change.value + " to config.yml value at " + change.path + ".");
 				break;
 			case TOWN_LEVEL_ADD:
 				addTownLevelProperty(change.key, change.value);
@@ -71,12 +80,13 @@ public class ConfigMigrator {
 			case NATION_LEVEL_ADD:
 				addNationLevelProperty(change.key, change.value);
 				break;
+			case TOWNYPERMS_ADD:
+				addPermissions(change.path, change.value);
+				TownyMessaging.sendDebugMsg("Updating townyperms.yml, adding " + change.value + " to " + change.path + " group.");
+				break;
 			default:
 				throw new UnsupportedOperationException("Unsupported Change type: " + change);
 		}
-
-		if (change.path != null)
-			TownyMessaging.sendDebugMsg("Updating config at " + change.path + "...");
 
 		// Address any changes to the world files.
 		if (change.worldAction != null) {
@@ -88,6 +98,15 @@ public class ConfigMigrator {
 		}
 	}
 	
+	private void addPermissions(String key, String value) {
+		@SuppressWarnings("unchecked")
+		List<String> group = (List<String>) townyperms.getList(key);
+		if (group.contains(key))
+			return;
+		group.add(value);
+		townyperms.set(key, group);
+	}
+
 	private List<Migration> readMigrator() {
 		InputStream file = Towny.getPlugin().getResource(migrationFilename);
 		
