@@ -954,6 +954,11 @@ public enum ConfigNodes {
 			"",
 			"# This setting determines the list of allowed nation map colors.",
 			"# The color codes are in hex format."),
+	GNATION_SETTINGS_MAX_ALLIES(
+			"global_nation_settings.max_allies",
+			"-1",
+			"",
+			"# The maximum amount of allies that a nation can have, set to -1 to have no limit."),
 
 	PLUGIN(
 			"plugin",
