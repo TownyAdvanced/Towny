@@ -6436,3 +6436,8 @@ v0.92.0.11:
   - Townyperms.yml now receives automatic updates (like the config and world files.) 
     - This was last thing which sometimes required admin intervention.
     - Enjoy even more drag-and-drop Towny updates.
+  - Add config option for limiting ally amounts, courtesy of Warriorrrr with PR #5082.
+    - Closes #5064.
+  - New Config Option: global_nation_settings.max_allies
+    - Default: -1
+    - The maximum amount of allies that a nation can have, set to -1 to have no limit.
