@@ -36,6 +36,7 @@ public class TownyWorld extends TownyObject {
 	private boolean isUsingPlotManagementWildEntityRevert = TownySettings.isUsingPlotManagementWildEntityRegen();	
 	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
 	private List<String> entityExplosionProtection = null;
+	private List<String> plotManagementWildRevertBlockWhitelist = null;
 	
 	private boolean isUsingPlotManagementWildBlockRevert = TownySettings.isUsingPlotManagementWildBlockRegen();
 	private List<String> blockExplosionProtection = null;
@@ -477,6 +478,33 @@ public class TownyWorld extends TownyObject {
 
 		return (entityExplosionProtection.contains(entity.getType().getEntityClass().getSimpleName().toLowerCase()));
 
+	}
+
+	public void setPlotManagementWildRevertBlockWhitelist(List<String> mats) {
+
+		plotManagementWildRevertBlockWhitelist = new ArrayList<>();
+
+		for (String mat : mats)
+			if (!mat.equals("")) {
+				plotManagementWildRevertBlockWhitelist.add(mat);
+			}
+
+	}
+
+	public List<String> getPlotManagementWildRevertBlockWhitelist() {
+
+		if (plotManagementWildRevertBlockWhitelist == null)
+			setPlotManagementWildRevertBlockWhitelist(TownySettings.getWildExplosionRevertBlockWhitelist());
+
+		return plotManagementWildRevertBlockWhitelist;
+	}
+
+	public boolean isPlotManagementWildRevertProtectingBlock(Material mat) {
+
+		if (plotManagementWildRevertBlockWhitelist == null)
+			setPlotManagementWildRevertBlockWhitelist(TownySettings.getWildExplosionRevertBlockWhitelist());
+
+		return plotManagementWildRevertBlockWhitelist.isEmpty() || plotManagementWildRevertBlockWhitelist.contains(mat.name());
 	}
 
 	public void setPlotManagementWildRevertMaterials(List<String> mats) {
