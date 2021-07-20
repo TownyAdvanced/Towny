@@ -193,6 +193,21 @@ public enum HelpMenu {
 		}
 	},
 	
+	TA_TOWNYPERMS {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin townyperms")
+				.add("listgroups", "List groups.")
+				.add("group [group]", "Show permissions in group.")
+				.add("group [group] addperm [node]", "Add a node to a group.")
+				.add("group [group] removeperm [node]", "Remove a node from a group.")
+				.add("townrank add [rank]", "Adds a townrank to the townyperms file.")
+				.add("townrank remove [rank]", "Removes a townrank from the townyperms file.")
+				.add("nationrank add [rank]", "Adds a naitonrank to the townyperms file.")
+				.add("nationrank remove [rank]", "Removes a nationrank from the townyperms file.");
+		}
+	},
+	
 	TA_SET {
 		@Override
 		protected MenuBuilder load() {
