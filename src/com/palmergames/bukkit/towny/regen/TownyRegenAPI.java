@@ -530,7 +530,7 @@ public class TownyRegenAPI {
 	}
 	
 	private static boolean isBlacklistedBlock(TownyWorld world, Material type) {
-		if(world.getPlotManagementWildRevertBlockWhitelist().isEmpty())
+		if (world.getPlotManagementWildRevertBlockWhitelist().isEmpty())
 			return world.isPlotManagementIgnoreIds(type);
 		else
 			return !world.isPlotManagementWildRevertWhitelistedBlock(type);
