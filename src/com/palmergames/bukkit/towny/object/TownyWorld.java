@@ -507,6 +507,13 @@ public class TownyWorld extends TownyObject {
 		return plotManagementWildRevertBlockWhitelist.isEmpty() || plotManagementWildRevertBlockWhitelist.contains(mat.name());
 	}
 
+	public boolean isBlockAllowedToRevert(Material mat) {
+		if (getPlotManagementWildRevertBlockWhitelist().isEmpty())
+			return !isPlotManagementIgnoreIds(mat);
+		else
+			return isPlotManagementWildRevertWhitelistedBlock(mat);
+	}
+
 	public void setPlotManagementWildRevertMaterials(List<String> mats) {
 
 		blockExplosionProtection = new ArrayList<>();

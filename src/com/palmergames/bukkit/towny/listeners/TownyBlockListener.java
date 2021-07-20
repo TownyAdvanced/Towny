@@ -284,6 +284,9 @@ public class TownyBlockListener implements Listener {
 				// Only regenerate in the wilderness.
 				if (!TownyAPI.getInstance().isWilderness(block))
 					continue;
+				// Check the white/blacklist
+				if (!townyWorld.isBlockAllowedToRevert(block.getType()))
+					continue;
 				count++;
 				// Cancel the event outright if this will cause a revert to start on an already operating revert.
 				event.setCancelled(!event.isCancelled() && !TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event));
