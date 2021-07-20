@@ -859,6 +859,12 @@ public enum ConfigNodes {
 			"",
 			"# When enabled, town names will automatically be capitalised upon creation."
 	),
+	
+	GTOWN_TOWN_AUDIT_HISTORY_FORMAT(
+		"global_town_settings.town_audit_history_format",
+		"{time}\n\n{type} of {amount} {to-from} {name}\n\nReason: {reason}\n\nBalance: {amount}"
+	),
+	
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",
