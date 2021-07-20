@@ -2057,7 +2057,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Using PlotManagement Wild Block Regen
 		list.add("usingPlotManagementWildRegenBlocks=" + world.isUsingPlotManagementWildBlockRevert());
 
-		list.add("# The list of entities whose explosions would be reverted.");
+		list.add("# The list of blocks whose explosions would be reverted.");
 		// Wilderness Explosion Protection blocks
 		if (world.getPlotManagementWildRevertBlocks() != null)
 			list.add("PlotManagementWildRegenBlocks=" + StringMgmt.join(world.getPlotManagementWildRevertBlocks(), ","));
