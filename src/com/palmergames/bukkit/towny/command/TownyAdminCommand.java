@@ -685,18 +685,20 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					break;
 				case "group":
 					parseAdminTownypermsGroupCommand(StringMgmt.remFirstArg(args));
+					break;
 				case "townrank":
 				case "nationrank":
-					parseAdminTownypermsRankCommand(args);	
+					parseAdminTownypermsRankCommand(args);
+					break;
 				}
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(sender, e.getMessage());
 		}
-
-		
 	}
 
 	private void parseAdminTownypermsGroupCommand(String[] args) throws TownyException {
+		//ta townyperms group GROUPNAME add|remove NODE
+		//                    ^ args[0]
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_TOWNYPERMS.send(sender);
 			return;
@@ -704,21 +706,23 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (!TownyPerms.getGroupList().contains(args[0].toLowerCase()))
 			throw new TownyException("Group not found.");
 		
-		if ((!args[1].equalsIgnoreCase("add") && !args[1].equalsIgnoreCase("remove")) || 
+		if ((!args[1].equalsIgnoreCase("addperm") && !args[1].equalsIgnoreCase("removeperm")) || 
 			args.length != 3)
 			throw new TownyException("Expected /ta townyperms group add|remove node");
 		
 		String group = args[0];
 		String node = args[2];
+		boolean add = false;
 		List<String> groupNodes = TownyPerms.getPermsOfGroup(group);
 		boolean changed = false;
 		switch (args[1].toLowerCase()) {
-		case "add":
+		case "addperm":
 			if (TownyPerms.getPermsOfGroup(group).contains(node))
 				throw new TownyException(String.format("The group %s already has the node %s.", group, node));
 			changed = groupNodes.add(node);
+			add = true;
 			break;
-		case "remove":
+		case "removeperm":
 			if (!TownyPerms.getPermsOfGroup(group).contains(node))
 				throw new TownyException(String.format("The group %s does not have the node %s.", group, node));
 			changed = groupNodes.remove(node);
@@ -727,17 +731,82 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		
 		if (!changed)
 			return;
+		
 		TownyPerms.getTownyPermsFile().set(group, groupNodes);
 		TownyPerms.getTownyPermsFile().save();
+		if (add)
+			TownyMessaging.sendMsg(sender, String.format("Successfully added %s to %s.", node, group));
+		else 
+			TownyMessaging.sendMsg(sender, String.format("Successfully removed %s from %s.", node, group));
 		reloadPerms();
 	}
 	
-	private void parseAdminTownypermsRankCommand(String[] args) {
+	private void parseAdminTownypermsRankCommand(String[] args) throws TownyException {
+		//ta townyperms townrank|nationrank add|remove RANKNAME
+		//              ^ args[0]
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_TOWNYPERMS.send(sender);
 			return;
 		}
 		
+		boolean town = args[0].equalsIgnoreCase("townrank");
+		
+		if ((!args[1].equalsIgnoreCase("add") && !args[1].equalsIgnoreCase("remove")) || 
+			args.length != 3)
+			throw new TownyException("Expected /ta townyperms townrank|nationrank add|remove [rank]");
+		
+		String rank = args[2];
+		boolean changed = false;
+		boolean add = true;
+		switch (args[1].toLowerCase()) {
+		case "add":
+			// Changing town ranks.
+			if (town) {
+				if (TownyPerms.getTownRanks().contains(rank))
+					throw new TownyException(String.format("There is already a %s named %s.", args[0], rank));
+				
+				TownyPerms.getTownyPermsFile().createSection("towns.ranks." + rank);
+				changed = true;
+				
+			// Changing nation ranks.
+			} else {
+				if (TownyPerms.getNationRanks().contains(rank))
+					throw new TownyException(String.format("There is already a %s named %s.", args[0], rank));
+				
+				TownyPerms.getTownyPermsFile().createSection("nations.ranks." + rank);
+				changed = true;
+			}
+			break;
+		case "remove":
+			add = false;
+			// Changing town ranks.
+			if (town) {
+				if (!TownyPerms.getTownRanks().contains(rank))
+					throw new TownyException(String.format("There is no %s named %s.", args[0], rank));
+				
+				TownyPerms.getTownyPermsFile().set("towns.ranks." + rank, null);				
+				changed = true;
+				
+			// Changing nation ranks.
+			} else {
+				if (!TownyPerms.getNationRanks().contains(rank))
+					throw new TownyException(String.format("There is no %s named %s.", args[0], rank));
+				
+				TownyPerms.getTownyPermsFile().set("nations.ranks." + rank, null);
+				changed = true;
+			}
+			break;		
+		}
+		
+		if (!changed)
+			return;
+		
+		TownyPerms.getTownyPermsFile().save();
+		if (add)
+			TownyMessaging.sendMsg(sender, String.format("Successfully added %s to the %s.", rank, args[0]));
+		else 
+			TownyMessaging.sendMsg(sender, String.format("Successfully removed %s from the %s.", rank, args[0]));
+		reloadPerms();
 	}
 
 	private void parseAdminDatabaseCommand(String[] split) {
