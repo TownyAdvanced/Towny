@@ -6442,3 +6442,5 @@ v0.92.0.11:
     - Default: -1
     - The maximum amount of allies that a nation can have, set to -1 to have no limit.
   - Fix /town unclaim throwing Index out of bounds error, courtesy of Silverwolfg11 with PR #5088.
+0.97.0.15:
+  - Fix new townyperms ConfigMigrator using key where it should use value.

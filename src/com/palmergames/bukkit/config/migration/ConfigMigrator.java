@@ -101,7 +101,7 @@ public class ConfigMigrator {
 	private void addPermissions(String key, String value) {
 		@SuppressWarnings("unchecked")
 		List<String> group = (List<String>) townyperms.getList(key);
-		if (group.contains(key))
+		if (group.contains(value))
 			return;
 		group.add(value);
 		townyperms.set(key, group);
