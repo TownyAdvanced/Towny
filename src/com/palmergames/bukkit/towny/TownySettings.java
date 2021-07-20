@@ -3129,7 +3129,7 @@ public class TownySettings {
 	}
 	
 	public static String getBankHistoryBookFormat() {
-		return getString(ConfigNodes.GTOWN_TOWN_BANKHISTORY_BOOK);
+		return getString(ConfigNodes.BANKHISTORY_BOOK);
 	}
 }
 
