@@ -621,11 +621,9 @@ public class TownyEntityListener implements Listener {
 				// Only regenerate in the wilderness.
 				if (!TownyAPI.getInstance().isWilderness(block))
 					continue;
-				if(!townyWorld.isPlotManagementWildRevertProtectingBlock(block.getBlockData().getMaterial()))
-					continue;
 				count++;
 				// Cancel the event outright if this will cause a revert to start on an already operating revert.
-				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event));
+				event.setCancelled(!event.isCancelled() && !TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event));
 			}
 		}
 	}

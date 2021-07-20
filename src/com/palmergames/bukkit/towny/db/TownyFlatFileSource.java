@@ -1330,7 +1330,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								} catch (NumberFormatException ignored) {
 								}
 						world.setPlotManagementWildRevertBlockWhitelist(mats);
-						System.out.println(mats.toString());
 					} catch (Exception ignored) {
 					}
 				
