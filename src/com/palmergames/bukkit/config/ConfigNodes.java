@@ -860,9 +860,11 @@ public enum ConfigNodes {
 			"# When enabled, town names will automatically be capitalised upon creation."
 	),
 	
-	GTOWN_TOWN_AUDIT_HISTORY_FORMAT(
-		"global_town_settings.town_audit_history_format",
-		"{time}\n\n{type} of {amount} {to-from} {name}\n\nReason: {reason}\n\nBalance: {amount}"
+	GTOWN_TOWN_BANKHISTORY_BOOK(
+		"global_town_settings.town_bankhistory_book",
+		"{time}\n\n{type} of {amount} {to-from} {name}\n\nReason: {reason}\n\nBalance: {amount}",
+		"",
+		"# This allows you to modify the style displayed via /t bankhistory."
 	),
 	
 	GNATION_SETTINGS(

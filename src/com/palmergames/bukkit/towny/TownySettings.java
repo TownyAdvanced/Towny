@@ -3128,8 +3128,8 @@ public class TownySettings {
 		return getInt(ConfigNodes.GNATION_SETTINGS_MAX_ALLIES);
 	}
 	
-	public static String getAuditHistoryFormat() {
-		return getString(ConfigNodes.GTOWN_TOWN_AUDIT_HISTORY_FORMAT);
+	public static String getBankHistoryBookFormat() {
+		return getString(ConfigNodes.GTOWN_TOWN_BANKHISTORY_BOOK);
 	}
 }
 

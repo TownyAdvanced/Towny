@@ -30,7 +30,7 @@ public class GovernmentAccountAuditor implements AccountAuditor {
 		List<String> history = new ArrayList<>(transactions.size());
 		
 		for (final BankTransaction transaction : transactions) {
-			history.add(Colors.translateColorCodes(TownySettings.getAuditHistoryFormat()
+			history.add(Colors.translateColorCodes(TownySettings.getBankHistoryBookFormat()
 				.replace("{time}", transaction.getTime())
 				.replace("{type}", transaction.getType().getName())
 				.replace("{amount}", ChatColor.stripColor(TownyEconomyHandler.getFormattedBalance(transaction.getAmount())))
