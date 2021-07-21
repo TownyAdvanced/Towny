@@ -580,6 +580,7 @@ permissions:
             towny.command.townyadmin.town.*: true
             towny.command.townyadmin.town.spawn: true
             towny.command.townyadmin.town.spawn.freecharge: true
+            towny.command.townyadmin.townyperms: true
             towny.command.townyadmin.unclaim: true
             towny.command.townyadmin.plot.*: true
             towny.command.townyadmin.resident.*: true
