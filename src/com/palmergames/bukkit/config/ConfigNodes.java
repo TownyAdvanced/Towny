@@ -859,6 +859,7 @@ public enum ConfigNodes {
 			"",
 			"# When enabled, town names will automatically be capitalised upon creation."
 	),
+	
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",
@@ -2196,6 +2197,25 @@ public enum ConfigNodes {
 //	ECO_PLOT_TYPE_COSTS_OUTPOST("economy.plot_type_costs.set_outpost",
 //			"0.0",
 //			"# Cost to use /plot set outpost to change a normal plot to a outpost plot."),
+
+	BANKHISTORY(
+		"bank_history",
+		"",
+		"",
+		"",
+		"  ############################################################",
+		"  # +------------------------------------------------------+ #",
+		"  # |                 Bank History settings                | #",
+		"  # +------------------------------------------------------+ #",
+		"  ############################################################",
+		""),
+
+	BANKHISTORY_BOOK(
+		"bank_history.book",
+		"{time}\n\n{type} of {amount} {to-from} {name}\n\nReason: {reason}\n\nBalance: {amount}",
+		"",
+		"# This allows you to modify the style displayed via bankhistory commands."
+	),
 	
 	JAIL(
 			"jail",

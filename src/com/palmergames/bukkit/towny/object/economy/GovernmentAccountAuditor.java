@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.object.economy;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.util.Colors;
 import org.bukkit.ChatColor;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -26,15 +28,17 @@ public class GovernmentAccountAuditor implements AccountAuditor {
 	public List<String> getAuditHistory() {
 		
 		List<String> history = new ArrayList<>(transactions.size());
-		String line;
 		
-		for (BankTransaction transaction : transactions) {
-			line = transaction.getTime() + "\n\n";
-			line += transaction.getType().getName() + " of " + ChatColor.stripColor(TownyEconomyHandler.getFormattedBalance(transaction.getAmount()));
-			line += (transaction.getType() == TransactionType.DEPOSIT ? " to " : " from ") + transaction.getAccount().getName() + "\n\n";
-			line += "Reason: " + transaction.getReason() + "\n\n";
-			line += "Balance: " + ChatColor.stripColor(TownyEconomyHandler.getFormattedBalance(transaction.getBalance()));
-			history.add(line);
+		for (final BankTransaction transaction : transactions) {
+			history.add(Colors.translateColorCodes(TownySettings.getBankHistoryBookFormat()
+				.replace("{time}", transaction.getTime())
+				.replace("{type}", transaction.getType().getName())
+				.replace("{amount}", ChatColor.stripColor(TownyEconomyHandler.getFormattedBalance(transaction.getAmount())))
+				.replace("{to-from}", (transaction.getType() == TransactionType.DEPOSIT ? " to " : " from "))
+				.replace("{name}", transaction.getAccount().getName())
+				.replace("{reason}", transaction.getReason())
+				.replace("{amount}", ChatColor.stripColor(TownyEconomyHandler.getFormattedBalance(transaction.getBalance())))
+			));
 		}
 		
 		return history;

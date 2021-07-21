@@ -3127,5 +3127,9 @@ public class TownySettings {
 	public static int getMaxNationAllies() {
 		return getInt(ConfigNodes.GNATION_SETTINGS_MAX_ALLIES);
 	}
+	
+	public static String getBankHistoryBookFormat() {
+		return getString(ConfigNodes.BANKHISTORY_BOOK);
+	}
 }
 
