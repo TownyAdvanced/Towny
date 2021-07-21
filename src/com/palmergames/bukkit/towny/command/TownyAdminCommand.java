@@ -701,15 +701,22 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		if (!TownyPerms.getGroupList().contains(args[0].toLowerCase()))
 			throw new TownyException(Translation.of("msg_err_group_not_found", args[0]));
+
+		String group = args[0];
+		List<String> groupNodes = TownyPerms.getPermsOfGroup(group);
+
+		// /ta townyperms group GROUPNAME: display nodes held by group.
+		if (args.length == 1) {
+			displayNodesHelpByGroup(group, groupNodes);
+			return;
+		}
 		
 		if ((!args[1].equalsIgnoreCase("addperm") && !args[1].equalsIgnoreCase("removeperm")) || 
 			args.length != 3)
 			throw new TownyException(Translation.of("msg_err_expected_command_format", "/ta townyperms group add|remove node"));
 		
-		String group = args[0];
 		boolean add = args[1].equalsIgnoreCase("addperm");
 		String node = args[2];
-		List<String> groupNodes = TownyPerms.getPermsOfGroup(group);
 		boolean changed = false;
 		switch (args[1].toLowerCase()) {
 		case "addperm":
@@ -736,6 +743,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		reloadPerms();
 	}
 	
+	private void displayNodesHelpByGroup(String group, List<String> groupNodes) {
+		if (groupNodes.size() > 0) {
+			TownyMessaging.sendMessage(sender, ChatTools.formatTitle(Translation.of("msg_title_group_permissions", StringMgmt.capitalize(group))));
+			for (String node : groupNodes)
+				TownyMessaging.sendMessage(sender, " - " + node);
+
+		} else {
+			TownyMessaging.sendErrorMsg(Translation.of("msg_err_group_has_no_nodes", group));
+		}
+	}
+
 	private void parseAdminTownypermsRankCommand(String[] args) throws TownyException {
 		//ta townyperms townrank|nationrank add|remove RANKNAME
 		//              ^ args[0]

@@ -196,15 +196,15 @@ public enum HelpMenu {
 	TA_TOWNYPERMS {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("townyadmin townyperms")
-				.add("listgroups", "List groups.")
-				.add("group [group]", "Show permissions in group.")
-				.add("group [group] addperm [node]", "Add a node to a group.")
-				.add("group [group] removeperm [node]", "Remove a node from a group.")
-				.add("townrank addrank [rank]", "Adds a townrank to the townyperms file.")
-				.add("townrank removerank [rank]", "Removes a townrank from the townyperms file.")
-				.add("nationrank addrank [rank]", "Adds a naitonrank to the townyperms file.")
-				.add("nationrank removerank [rank]", "Removes a nationrank from the townyperms file.");
+			return new MenuBuilder("ta townyperms")
+				.add("listgroups", Translation.of("help_ta_perms_listgroups"))
+				.add("group [group]", Translation.of("help_ta_perms_group"))
+				.add("group [group] addperm [node]", Translation.of("help_ta_perms_groupaddpermnode"))
+				.add("group [group] removeperm [node]", Translation.of("help_ta_perms_groupremovepermnode"))
+				.add("townrank addrank [rank]", Translation.of("help_ta_perms_townrankadd"))
+				.add("townrank removerank [rank]", Translation.of("help_ta_perms_townrankremove"))
+				.add("nationrank addrank [rank]", Translation.of("help_ta_perms_nationrankadd"))
+				.add("nationrank removerank [rank]", Translation.of("help_ta_perms_nationrankremove"));
 		}
 	},
 	
