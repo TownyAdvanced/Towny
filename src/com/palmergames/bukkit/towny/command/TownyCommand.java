@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
@@ -221,6 +222,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 		try {
 
+			TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+			if (world == null && split[0].equalsIgnoreCase("wildsblocks") || split[0].equalsIgnoreCase("plotclearblocks"))
+				throw new TownyException(Translation.of("msg_err_usingtowny_disabled"));
+				
 			if (split[0].equalsIgnoreCase("map")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -264,10 +269,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				ResidentUtil.openGUIInventory(resident, TownySettings.getFarmPlotBlocks(), Translation.of("gui_title_towny_farmblocks"));
 			} else if (split[0].equalsIgnoreCase("wildsblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getUnclaimedZoneIgnoreMaterials(), Translation.of("gui_title_towny_wildsblocks"));
+				ResidentUtil.openGUIInventory(resident, world.getUnclaimedZoneIgnoreMaterials(), Translation.of("gui_title_towny_wildsblocks"));
 			} else if (split[0].equalsIgnoreCase("plotclearblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getPlotManagementMayorDelete(), Translation.of("gui_title_towny_plotclear"));
+				ResidentUtil.openGUIInventory(resident, world.getPlotManagementMayorDelete(), Translation.of("gui_title_towny_plotclear"));
 			} else if (split[0].equalsIgnoreCase("top")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));

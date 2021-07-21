@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.ChunkNotification;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -169,11 +170,7 @@ public class TownyCustomListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL) 
 	public void onBedExplodeEvent(BedExplodeEvent event) {
-		TownyWorld world = null;
-		try {
-			world = TownyUniverse.getInstance().getDataSource().getWorld(event.getLocation().getWorld().getName());
-		} catch (NotRegisteredException ignored) {}
-		
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(event.getLocation().getWorld().getName());
 		world.addBedExplosionAtBlock(event.getLocation(), event.getMaterial());
 		if (event.getLocation2() != null);
 			world.addBedExplosionAtBlock(event.getLocation2(), event.getMaterial());

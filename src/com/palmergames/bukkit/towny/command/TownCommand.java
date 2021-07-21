@@ -2681,11 +2681,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (resident.hasTown())
 				throw new TownyException(Translation.of("msg_err_already_res", resident.getName()));
 
-			TownyWorld world = dataSource.getWorld(player.getWorld().getName());
-
-			if (!world.isUsingTowny())
+			if (!TownyAPI.getInstance().isTownyWorld(player.getWorld()))
 				throw new TownyException(Translation.of("msg_set_use_towny_off"));
 
+			TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+			
 			if (!world.isClaimable())
 				throw new TownyException(Translation.of("msg_not_claimable"));
 
@@ -3598,7 +3598,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (town.isBankrupt() && town.getTownBlocks().size() != 0)
 					throw new TownyException(Translation.of("msg_err_bankrupt_town_cannot_claim"));
 
-				world = TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName());
+				world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
 
 				if (!world.isUsingTowny())
 					throw new TownyException(Translation.of("msg_set_use_towny_off"));
@@ -3753,7 +3753,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				resident = getResidentOrThrow(player.getUniqueId());
 				town = resident.getTown();
-				world = TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName());
+				world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
 
 				TownPreUnclaimCmdEvent event = new TownPreUnclaimCmdEvent(town, resident, world);
 				Bukkit.getPluginManager().callEvent(event);
@@ -3941,7 +3941,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
 		for (int i = 0; i < 4; i++)
 			try {
-				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
+				TownBlock edgeTownBlock = worldCoord.getTownyWorldOrNull().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
 				if (edgeTownBlock.isOwner(owner)) {
 					TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = True.");
 					return true;

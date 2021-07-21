@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.permissions;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -121,19 +122,13 @@ public class TownyPerms {
 			return;
 		}
 
-		TownyWorld World;
-
-		try {
-			World = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName());
-		} catch (NotRegisteredException e) {
-			// World not registered with Towny.
-			e.printStackTrace();
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+		if (world == null)
 			return;
-		}
 
-		if (attachments.containsKey(resident.getName())) {
+		if (attachments.containsKey(resident.getName()))
 			playersAttachment = attachments.get(resident.getName());
-		} else {
+		else
 			// DungeonsXL sometimes moves players which aren't online out of dungeon worlds causing an error in the log to appear.
 			try {
 				playersAttachment = BukkitTools.getPlayer(resident.getName()).addAttachment(plugin);
@@ -141,7 +136,6 @@ public class TownyPerms {
 				return;
 			}
 
-		}
 		/*
 		 * Set all our Towny default permissions using reflection else bukkit
 		 * will perform a recalculation of perms for each addition.
@@ -157,7 +151,7 @@ public class TownyPerms {
 				 */
 				orig.clear();
 
-				if (World.isUsingTowny()) {
+				if (world.isUsingTowny()) {
 					/*
 					 * Fill with the fresh perm nodes
 					 */

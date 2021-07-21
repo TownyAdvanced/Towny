@@ -1914,7 +1914,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				
-				TownyWorld world = townyUniverse.getDataSource().getWorld(player.getWorld().getName());
+				TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
 				Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
 				List<WorldCoord> selection;
 				if (split.length == 2)

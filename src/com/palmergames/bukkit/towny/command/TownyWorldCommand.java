@@ -1,13 +1,13 @@
 package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -152,9 +152,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		else if (split[0].equalsIgnoreCase("regen") || split[0].equalsIgnoreCase("undo") || split[0].equalsIgnoreCase("toggle")) {
 			HelpMenu.TOWNYWORLD_HELP_CONSOLE.send(sender);
 		} else {
-			try {
-				Globalworld = TownyUniverse.getInstance().getDataSource().getWorld(split[0].toLowerCase());
-			} catch (NotRegisteredException e) {
+			Globalworld = TownyAPI.getInstance().getTownyWorld(split[0].toLowerCase());
+			if (Globalworld == null) {
 				TownyMessaging.sendErrorMsg(sender, Translation.of("msg_area_not_recog"));
 				return;
 			}
@@ -169,14 +168,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			player = (Player) sender;
-			try {
-				if (Globalworld == null)
-					Globalworld = TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName());
-			} catch (NotRegisteredException e) {
+			if (Globalworld == null)
+				Globalworld = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+			if (Globalworld == null) {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_area_not_recog"));
 				return;
 			}
-			
 		}
 
 		if (split.length == 0) {

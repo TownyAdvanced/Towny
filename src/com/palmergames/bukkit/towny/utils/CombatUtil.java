@@ -58,50 +58,42 @@ public class CombatUtil {
 	 */
 	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender, DamageCause cause) {
 
-		try {
-			TownyWorld world = TownyUniverse.getInstance().getDataSource().getWorld(defender.getWorld().getName());
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(defender.getWorld().getName());
 
-			// World using Towny
-			if (!world.isUsingTowny())
-				return false;
+		// World using Towny
+		if (!world.isUsingTowny())
+			return false;
 
-			Player a = null;
-			Player b = null;
+		Player a = null;
+		Player b = null;
 
-			/*
-			 * Find the shooter if this is a projectile.
-			 */
-			if (attacker instanceof Projectile) {
-				
-				Projectile projectile = (Projectile) attacker;
-				Object source = projectile.getShooter();
-				
-				if (source instanceof Entity) {
-					attacker = (Entity) source;
-				} else if (source != null) {
-					if (CombatUtil.preventDispenserDamage(((BlockProjectileSource) source).getBlock(), defender, cause))
-						return true;
-				}
-
+		/*
+		 * Find the shooter if this is a projectile.
+		 */
+		if (attacker instanceof Projectile) {
+			
+			Projectile projectile = (Projectile) attacker;
+			Object source = projectile.getShooter();
+			
+			if (source instanceof Entity) {
+				attacker = (Entity) source;
+			} else if (source != null) {
+				if (CombatUtil.preventDispenserDamage(((BlockProjectileSource) source).getBlock(), defender, cause))
+					return true;
 			}
 
-			if (attacker instanceof Player)
-				a = (Player) attacker;
-			if (defender instanceof Player)
-				b = (Player) defender;
-
-			// Allow players to injure themselves
-			if (a == b && a != null && b != null)
-				return false;
-
-			return preventDamageCall(plugin, world, attacker, defender, a, b, cause);
-
-		} catch (Exception e) {
-			// Failed to fetch world
 		}
 
-		return false;
+		if (attacker instanceof Player)
+			a = (Player) attacker;
+		if (defender instanceof Player)
+			b = (Player) defender;
 
+		// Allow players to injure themselves
+		if (a == b && a != null && b != null)
+			return false;
+
+		return preventDamageCall(plugin, world, attacker, defender, a, b, cause);
 	}
 
 	/**
@@ -120,7 +112,7 @@ public class CombatUtil {
 	 * @return true if we should cancel.
 	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
-	private static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer, DamageCause cause) throws NotRegisteredException {
+	private static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer, DamageCause cause) {
 
 		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation());
 		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attackingEntity.getLocation());
@@ -383,11 +375,7 @@ public class CombatUtil {
 	 */
 	@Deprecated
 	public static boolean preventFriendlyFire(Player attacker, Player defender) {
-		TownyWorld world = null;
-		try {
-			world = TownyUniverse.getInstance().getDataSource().getWorld(attacker.getLocation().getWorld().getName());
-		} catch (NotRegisteredException ignored) {}
-		return preventFriendlyFire(attacker, defender, world);
+		return preventFriendlyFire(attacker, defender, TownyAPI.getInstance().getTownyWorld(attacker.getWorld().getName()));
 	}
 	
 	/**

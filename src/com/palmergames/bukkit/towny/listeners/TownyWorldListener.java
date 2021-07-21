@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,28 +53,20 @@ public class TownyWorldListener implements Listener {
 
 	private void newWorld(String worldName) {
 		
-		boolean dungeonWorld = false;
-		
 		// Don't create a new world for temporary DungeonsXL instanced worlds.
-		if (Bukkit.getServer().getPluginManager().getPlugin("DungeonsXL") != null)
-			if (worldName.startsWith("DXL_")) {
-				dungeonWorld = true;
-			}
-				
-
-		//String worldName = event.getWorld().getName();
+		boolean dungeonWorld = Bukkit.getServer().getPluginManager().getPlugin("DungeonsXL") != null && worldName.startsWith("DXL_");
+		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		try {
-			townyUniverse.getDataSource().newWorld(worldName);
-			TownyWorld world = townyUniverse.getDataSource().getWorld(worldName);
-			if (dungeonWorld)
-				world.setUsingTowny(false);
-			
+			TownyUniverse.getInstance().getDataSource().newWorld(worldName);
+			TownyWorld world = TownyAPI.getInstance().getTownyWorld(worldName);
 			if (world == null)
 				TownyMessaging.sendErrorMsg("Could not create data for " + worldName);
 			else {
-				if (!dungeonWorld)
+				if (dungeonWorld)
+					world.setUsingTowny(false);
+				else 
 					if (!townyUniverse.getDataSource().loadWorld(world)) {
 						// First time world has been noticed
 						world.save();
@@ -83,9 +74,6 @@ public class TownyWorldListener implements Listener {
 			}
 		} catch (AlreadyRegisteredException e) {
 			// Allready loaded			
-		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg("Could not create data for " + worldName);
-			e.printStackTrace();
 		}
 	}
 

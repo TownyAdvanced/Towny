@@ -617,16 +617,18 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 		if (WorldCoord.cellChanged(from, to)) {
-			try {
-				TownyWorld fromWorld = townyUniverse.getDataSource().getWorld(from.getWorld().getName());
-				WorldCoord fromCoord = new WorldCoord(fromWorld.getName(), Coord.parseCoord(from));
-				TownyWorld toWorld = townyUniverse.getDataSource().getWorld(to.getWorld().getName());
-				WorldCoord toCoord = new WorldCoord(toWorld.getName(), Coord.parseCoord(to));
-				
-				onPlayerMoveChunk(player, fromCoord, toCoord, from, to, event);
-			} catch (NotRegisteredException e) {
-				TownyMessaging.sendErrorMsg(player, e.getMessage());
+
+			TownyWorld fromWorld = TownyAPI.getInstance().getTownyWorld(from.getWorld().getName());				
+			TownyWorld toWorld = TownyAPI.getInstance().getTownyWorld(to.getWorld().getName());
+			if (fromWorld == null || toWorld == null) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("not_registered"));
+				cache.setLastLocation(to);
+				return;
 			}
+			WorldCoord fromCoord = new WorldCoord(fromWorld.getName(), Coord.parseCoord(from));
+			WorldCoord toCoord = new WorldCoord(toWorld.getName(), Coord.parseCoord(to));
+			
+			onPlayerMoveChunk(player, fromCoord, toCoord, from, to, event);
 		}
 
 		// Update the cached players current location
@@ -732,10 +734,7 @@ public class TownyPlayerListener implements Listener {
 			
 			// Caught players are tested for pvp at the location of the catch.
 			if (caught.getType().equals(EntityType.PLAYER)) {
-				TownyWorld world = null;
-				try {
-					world = TownyUniverse.getInstance().getDataSource().getWorld(event.getCaught().getWorld().getName());
-				} catch (NotRegisteredException ignored) {}
+				TownyWorld world = TownyAPI.getInstance().getTownyWorld(event.getCaught().getWorld().getName());
 				assert world != null;
 				TownBlock tb = TownyAPI.getInstance().getTownBlock(event.getCaught().getLocation());
 				test = !CombatUtil.preventPvP(world, tb);

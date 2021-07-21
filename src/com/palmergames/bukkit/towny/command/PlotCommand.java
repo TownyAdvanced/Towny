@@ -157,21 +157,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				return false;
 			}
 			Player player = (Player) sender;
-			try {
-				if (!TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).isUsingTowny()) {
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_set_use_towny_off"));
-					return false;
-				}
-			} catch (NotRegisteredException e) {
-				// World not registered				
+			if (!TownyAPI.getInstance().isTownyWorld(player.getWorld())) {
+				TownyMessaging.sendErrorMsg(player, Translation.of("msg_set_use_towny_off"));
+				return false;
 			}
 
-			if (args == null) {
+			if (args == null)
 				HelpMenu.PLOT_HELP.send(player);
-
-			} else {
+			else
 				return parsePlotCommand(player, args);
-			}
 
 		} else
 			// Console
@@ -787,7 +781,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 							
 
-						for (String material : TownyUniverse.getInstance().getDataSource().getWorld(world).getPlotManagementMayorDelete())
+						for (String material : TownyAPI.getInstance().getTownyWorld(world).getPlotManagementMayorDelete())
 							if (Material.matchMaterial(material) != null) {
 								TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material));
 								TownyMessaging.sendMessage(player, Translation.of("msg_clear_plot_material", material));
@@ -2183,7 +2177,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 	
-	public void sendPlotInfo(Player player, String[] args) throws NotRegisteredException {
+	public void sendPlotInfo(Player player, String[] args) {
 		WorldCoord coord = WorldCoord.parseWorldCoord(player);
 		String world = player.getWorld().getName();
 
@@ -2193,8 +2187,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (TownyAPI.getInstance().isWilderness(coord))
-			TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyUniverse.getInstance().getDataSource().getWorld(world)));
+			TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyAPI.getInstance().getTownyWorld(world)));
 		else
-			TownyMessaging.sendMessage(player, TownyFormatter.getStatus(coord.getTownBlock()));
+			TownyMessaging.sendMessage(player, TownyFormatter.getStatus(coord.getTownBlockOrNull()));
 	}
 }
