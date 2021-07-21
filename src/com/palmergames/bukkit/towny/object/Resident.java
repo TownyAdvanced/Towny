@@ -566,7 +566,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return Collections.unmodifiableList(townRanks);
 	}
 	
-	public boolean removeTownRank(String rank) throws NotRegisteredException {
+	public boolean removeTownRank(String rank) {
 
 		if (hasTownRank(rank)) {
 			townRanks.remove(rank);
@@ -577,7 +577,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			return true;
 		}
 
-		throw new NotRegisteredException();
+		return false;
 	}
 
 	public boolean addNationRank(String rank) throws AlreadyRegisteredException {
@@ -618,7 +618,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return Collections.unmodifiableList(nationRanks);
 	}
 
-	public boolean removeNationRank(String rank) throws NotRegisteredException {
+	public boolean removeNationRank(String rank){
 
 		if (hasNationRank(rank)) {
 			nationRanks.remove(rank);
@@ -627,7 +627,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			return true;
 		}
 
-		throw new NotRegisteredException();
+		return false;
 
 	}
 

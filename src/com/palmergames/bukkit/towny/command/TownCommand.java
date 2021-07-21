@@ -1098,7 +1098,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					// Kick outlaws from town if they are residents.
 					if (targetTown != null && targetTown.getUUID().equals(town.getUUID())) {
-						townRemoveResident(town, target);
+						resident.removeTown();
 						String outlawer = (admin ? Translation.of("admin_sing") : sender.getName());
 						TownyMessaging.sendMsg(target, Translation.of("msg_kicked_by", outlawer));
 						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_kicked", outlawer, target.getName()));
@@ -1907,16 +1907,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
-				try {
-					if (target.removeTownRank(rank)) {
-						if (BukkitTools.isOnline(target.getName())) {
-							TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Town", rank));
-							plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
-						}
-						TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Town", rank, target.getName()));
+
+				if (target.removeTownRank(rank)) {
+					if (BukkitTools.isOnline(target.getName())) {
+						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Town", rank));
+						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}
-				} catch (NotRegisteredException e) {
-					// Must already have this rank
+					TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Town", rank, target.getName()));
+				} else {
+					// Doesn't have this rank
 					TownyMessaging.sendMsg(player, Translation.of("msg_resident_doesnt_have_rank", target.getName(), "Town"));
 					return;
 				}
@@ -2859,9 +2858,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (resident.isJailed() && resident.getJailTown().getUUID().equals(town.getUUID()))
 					JailUtil.unJailResident(resident, UnJailReason.LEFT_TOWN);
 
-				try {
-					townRemoveResident(town, resident);
-				} catch (NotRegisteredException ignored) {}
+				if (town.hasResident(resident))
+					resident.removeTown();
 
 				// Reset everyones cache permissions as this player leaving could affect
 				// multiple areas
@@ -3127,14 +3125,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public static void townRemoveResident(Town town, Resident resident) throws NotRegisteredException {
-
-		if (!town.hasResident(resident))
-			throw new NotRegisteredException();
-		resident.removeTown();
-
-	}
-	
 	/**
 	 * Method for kicking residents from a town.
 	 * 

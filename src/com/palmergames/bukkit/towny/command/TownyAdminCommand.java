@@ -1075,7 +1075,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (!NameValidation.isBlacklistName(split[2])) {
 					townyUniverse.getDataSource().renamePlayer(resident, split[2]);
 				} else
-					TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_invalid_name"));
+					throw new TownyException(Translation.of("msg_invalid_name"));
 				
 			} else if(split[1].equalsIgnoreCase("friend"))	{
 				
@@ -1095,9 +1095,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				else 
 					throw new TownyException(Translation.of("msg_err_player_is_not_jailed"));
 			}
-
-		} catch (NotRegisteredException e) {
-			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 		}
@@ -1371,13 +1368,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else if (split[0].equalsIgnoreCase("remove")) {
-			try {
-				if (target.removeTownRank(rank)) {
-					TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Town", rank));
-					TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Town", rank, target.getName()));
-				}
-			} catch (NotRegisteredException e) {
-				// Must already have this rank
+			if (target.removeTownRank(rank)) {
+				TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Town", rank));
+				TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Town", rank, target.getName()));
+			} else {
+				// Doesn't have this rank
 				TownyMessaging.sendMsg(player, Translation.of("msg_resident_doesnt_have_rank", target.getName(), "Town"));
 				return;
 			}
@@ -1601,16 +1596,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						}
 						return;
 					case "remove":
-						try {
-							if (target.removeNationRank(rank)) {
-								if (BukkitTools.isOnline(target.getName())) {
-									TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Nation", rank));
-									plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
-								}
-								TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Nation", rank, target.getName()));
-								target.save();
+						if (target.removeNationRank(rank)) {
+							if (BukkitTools.isOnline(target.getName())) {
+								TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Nation", rank));
+								plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 							}
-						} catch (NotRegisteredException e) {
+							TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Nation", rank, target.getName()));
+							target.save();
+							return;
+						} else {
+							// Doesn't have the rank.
 							TownyMessaging.sendMsg(player, String.format("msg_resident_doesnt_have_rank", target.getName(), "Nation"));
 							return;
 						}

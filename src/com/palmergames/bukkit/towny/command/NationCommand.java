@@ -940,17 +940,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, nationRankRemoveEvent.getCancelMessage());
 					return;
 				}
-				
-				try {
-					if (target.removeNationRank(rank)) {
-						if (BukkitTools.isOnline(target.getName())) {
-							TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Nation", rank));
-							plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
-						}
-						TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Nation", rank, target.getName()));
+
+				if (target.removeNationRank(rank)) {
+					if (BukkitTools.isOnline(target.getName())) {
+						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Nation", rank));
+						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}
-				} catch (NotRegisteredException e) {
-					// Must already have this rank
+					TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Nation", rank, target.getName()));
+				} else {
+					// Doesn't have this rank
 					TownyMessaging.sendMsg(player, String.format("msg_resident_doesnt_have_rank", target.getName(), "Nation"));
 					return;
 				}

@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleFireEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleMobsEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotTogglePvpEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -745,8 +744,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								townBlock.setType(townBlockType, resident);
 								TownyMessaging.sendMsg(player, Translation.of("msg_plot_set_type", plotTypeName));
 							}
-						} catch (NotRegisteredException nre) {
-							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_part_town"));
 						} catch (TownyException te){
 							TownyMessaging.sendErrorMsg(player, te.getMessage());
 						}
