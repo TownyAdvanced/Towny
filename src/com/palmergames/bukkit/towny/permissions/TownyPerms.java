@@ -38,6 +38,7 @@ public class TownyPerms {
 
 	protected static LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<>();
 	protected static HashMap<String, PermissionAttachment> attachments = new HashMap<>();
+	private static HashMap<String, List<String>> groupPermsMap = new HashMap<>();
 	private static CommentedConfiguration perms;
 	private static Towny plugin;
 	
@@ -76,6 +77,8 @@ public class TownyPerms {
 			if (!perms.load())
 				throw new TownyException("Could not read Townyperms.yml");
 			
+			groupPermsMap.clear();
+			buildGroupPermsMap();
 			buildComments();
 		}
 		
@@ -626,6 +629,26 @@ public class TownyPerms {
 
 		return perm.getChildren();
 
+	}
+
+	public static List<String> getGroupList() {
+		return new ArrayList<String>(groupPermsMap.keySet());
+	}
+	
+	public static boolean mapHasGroup(String group) {
+		return groupPermsMap.containsKey(group);
+	}
+	
+	public static List<String> getPermsOfGroup(String group) {
+		return mapHasGroup(group) ? (groupPermsMap.get(group) != null ? groupPermsMap.get(group): new ArrayList<String>()): new ArrayList<String>(); 
+	}
+	
+	private static void buildGroupPermsMap() {
+		for (String key : perms.getKeys(true)) {
+			@SuppressWarnings("unchecked")
+			List<String> nodes = (List<String>) perms.getList(key); 
+			groupPermsMap.put(key, nodes);
+		}
 	}
 
 	private static void buildComments() {

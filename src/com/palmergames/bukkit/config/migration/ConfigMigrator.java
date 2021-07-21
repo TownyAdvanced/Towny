@@ -99,12 +99,11 @@ public class ConfigMigrator {
 	}
 	
 	private void addPermissions(String key, String value) {
-		@SuppressWarnings("unchecked")
-		List<String> group = (List<String>) townyperms.getList(key);
-		if (group.contains(value))
+		List<String> groupNodes = TownyPerms.getPermsOfGroup(key);
+		if (groupNodes.contains(value))
 			return;
-		group.add(value);
-		townyperms.set(key, group);
+		groupNodes.add(value);
+		townyperms.set(key, groupNodes);
 	}
 
 	private List<Migration> readMigrator() {
