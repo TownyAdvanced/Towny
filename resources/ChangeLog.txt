@@ -6448,3 +6448,15 @@ v0.92.0.11:
   - New Config Option: bank_history.book
     - {time}\n\n{type} of {amount} {to-from} {name}\n\nReason: {reason}\n\nBalance: {amount} 
     - This allows you to modify the style displayed via bankhistory commands. 
+  - Added /ta townyperms command.
+    - Edit the townyperms file from in game.
+  - New Permission Node: towny.command.townyadmin.townyperms
+    - Child node of towny.command.townyadmin.*
+    - No required townyperms.yml change.
+  - New Commands:
+    - /ta townyperms grouplist : Lists all of the groups in the townyperms.yml.
+    - /ta townyperms group [groupname] : lists the nodes held by a group.
+    - /ta townyperms group [groupname] addperm|removeperm [node] : adds or removes a node to/from a group.
+    - /ta townyperms townrank addrank|removerank [rank] : adds or removes a town rank.
+    - /ta townyperms nationrank addrank|removerank [rank] : adds or removes a nation rank.
+  - Bump Language Files to 0.114.
