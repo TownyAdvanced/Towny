@@ -53,7 +53,6 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -197,7 +196,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"surname",
 		"plot"
 	);
-
+	
 	private static final List<String> adminTownyPermsCompletes = Arrays.asList(
 		"listgroups",
 		"group",

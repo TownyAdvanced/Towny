@@ -8,12 +8,9 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.Version;
-
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -62,13 +59,8 @@ public class ConfigMigrator {
 			}
 		}
 		config.save();
-		if (saveTownyperms) {
+		if (saveTownyperms)
 			townyperms.save();
-			try {
-				TownyPerms.loadPerms(Towny.getPlugin().getDataFolder() + File.separator + "settings", "townyperms.yml");
-			} catch (TownyException e) {}
-			TownyPerms.updateOnlinePerms();
-		}
 	}
 	
 	private void performChange(Change change) {
