@@ -678,14 +678,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(sender, ChatTools.list(TownyPerms.getGroupList().stream().sorted().collect(Collectors.toList())));
 					break;
 				case "group":
+					// Alter a groups permission nodes.
 					parseAdminTownypermsGroupCommand(StringMgmt.remFirstArg(args));
 					break;
 				case "townrank":
 				case "nationrank":
+					// Create and remove town and nation ranks.
 					parseAdminTownypermsRankCommand(args);
 					break;
 				}
 		} catch (TownyException e) {
+			// This will send back any errors to the sender.
 			TownyMessaging.sendErrorMsg(sender, e.getMessage());
 		}
 	}
@@ -705,19 +708,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translation.of("msg_err_expected_command_format", "/ta townyperms group add|remove node"));
 		
 		String group = args[0];
+		boolean add = args[1].equalsIgnoreCase("addperm");
 		String node = args[2];
-		boolean add = false;
 		List<String> groupNodes = TownyPerms.getPermsOfGroup(group);
 		boolean changed = false;
 		switch (args[1].toLowerCase()) {
 		case "addperm":
-			if (TownyPerms.getPermsOfGroup(group).contains(node))
+			if (groupNodes.contains(node))
 				throw new TownyException(Translation.of("msg_err_group_already_has_node", group, node));
 			changed = groupNodes.add(node);
-			add = true;
 			break;
 		case "removeperm":
-			if (!TownyPerms.getPermsOfGroup(group).contains(node))
+			if (!groupNodes.contains(node))
 				throw new TownyException(Translation.of("msg_err_group_doesnt_have_node", group, node));
 			changed = groupNodes.remove(node);
 			break;
@@ -743,15 +745,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
-		boolean town = args[0].equalsIgnoreCase("townrank");
-		
 		if ((!args[1].equalsIgnoreCase("addrank") && !args[1].equalsIgnoreCase("removerank")) || 
 			args.length != 3)
 			throw new TownyException(Translation.of("msg_err_expected_command_format", "/ta townyperms townrank|nationrank add|remove [rank]"));
 		
+		boolean town = args[0].equalsIgnoreCase("townrank");		
+		boolean add = args[1].equalsIgnoreCase("addrank");
 		String rank = args[2];
 		boolean changed = false;
-		boolean add = true;
 		switch (args[1].toLowerCase()) {
 		case "addrank":
 			// Changing town ranks.
@@ -772,7 +773,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 			break;
 		case "removerank":
-			add = false;
 			// Changing town ranks.
 			if (town) {
 				if (!TownyPerms.getTownRanks().contains(rank))
