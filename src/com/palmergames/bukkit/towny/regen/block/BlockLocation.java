@@ -4,6 +4,8 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.Objects;
+
 /**
  * A class to hold basic block location data
  * 
@@ -60,6 +62,25 @@ public class BlockLocation {
 			return true;
 
 		return false;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		BlockLocation that = (BlockLocation) o;
+		return x == that.x && z == that.z && y == that.y && Objects.equals(chunk, that.chunk) && Objects.equals(world, that.world);
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 31 * hash + x;
+		hash = 31 * hash + y;
+		hash = 31 * hash + z;
+		hash = hash * 31 + (chunk != null ? chunk.hashCode() : 0);
+		hash = hash * 31 + (world != null ? world.hashCode() : 0);
+		return hash;
 	}
 
 //	public boolean isLocation(BlockLocation blockLocation) {

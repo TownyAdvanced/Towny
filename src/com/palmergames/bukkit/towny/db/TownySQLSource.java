@@ -1581,6 +1581,21 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				} catch (Exception ignored) {
 				}
 
+			line = rs.getString("plotManagementWildRegenBlockWhitelist");
+			if (line != null)
+				try {
+					List<String> materials = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							try {
+								materials.add(split.trim());
+							} catch (NumberFormatException ignored) {
+							}
+					world.setPlotManagementWildRevertBlockWhitelist(materials);
+				} catch (Exception ignored) {
+				}
+
 			resultLong = rs.getLong("plotManagementWildRegenSpeed");
 			try {
 				world.setPlotManagementWildRevertDelay(resultLong);
@@ -2268,6 +2283,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (world.getPlotManagementWildRevertEntities() != null)
 				nat_hm.put("PlotManagementWildRegenEntities",
 						StringMgmt.join(world.getPlotManagementWildRevertEntities(), "#"));
+
+			// Wilderness Explosion Protection Block Whitelist
+			if (world.getPlotManagementWildRevertBlockWhitelist() != null)
+				nat_hm.put("PlotManagementWildRegenBlockWhitelist",
+						StringMgmt.join(world.getPlotManagementWildRevertBlockWhitelist(), "#"));
 
 			// Using PlotManagement Wild Regen Delay
 			nat_hm.put("plotManagementWildRegenSpeed", world.getPlotManagementWildRevertDelay());

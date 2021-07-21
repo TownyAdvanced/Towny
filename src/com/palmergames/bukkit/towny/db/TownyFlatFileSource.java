@@ -1319,6 +1319,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("PlotManagementWildRegenBlockWhitelist");
+				if (line != null)
+					try {
+						List<String> mats = new ArrayList<>();
+						for (String s : line.split(","))
+							if (!s.isEmpty())
+								try {
+									mats.add(s.trim());
+								} catch (NumberFormatException ignored) {
+								}
+						world.setPlotManagementWildRevertBlockWhitelist(mats);
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("usingPlotManagementWildRegenDelay");
 				if (line != null)
 					try {
@@ -2061,6 +2075,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Wilderness Explosion Protection blocks
 		if (world.getPlotManagementWildRevertBlocks() != null)
 			list.add("PlotManagementWildRegenBlocks=" + StringMgmt.join(world.getPlotManagementWildRevertBlocks(), ","));
+
+		list.add("# The list of blocks to regenerate. (if empty all blocks will regenerate)");
+		// Wilderness Explosion Protection entities
+		if (world.getPlotManagementWildRevertBlockWhitelist() != null)
+			list.add("PlotManagementWildRegenBlockWhitelist=" + StringMgmt.join(world.getPlotManagementWildRevertBlockWhitelist(), ","));
 
 		list.add("# The delay after which the explosion reverts will begin.");
 		// Using PlotManagement Wild Regen Delay

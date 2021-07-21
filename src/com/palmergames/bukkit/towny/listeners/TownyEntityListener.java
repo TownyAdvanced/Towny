@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
@@ -602,11 +603,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		TownyWorld townyWorld = null;
-		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getLocation().getWorld().getName());
-		} catch (NotRegisteredException ignored) {}
-
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld().getName());
 		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), null, event.getEntity(), event);
 		event.blockList().clear();
 		event.blockList().addAll(blocks);
@@ -621,9 +618,14 @@ public class TownyEntityListener implements Listener {
 				// Only regenerate in the wilderness.
 				if (!TownyAPI.getInstance().isWilderness(block))
 					continue;
+				// Check the white/blacklist
+				if (!townyWorld.isBlockAllowedToRevert(block.getType()))
+					continue;
+				// Don't start a revert on a block that is going to be reverted.
+				if (TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation())))
+					continue;
 				count++;
-				// Cancel the event outright if this will cause a revert to start on an already operating revert.
-				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event));
+				TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event);
 			}
 		}
 	}

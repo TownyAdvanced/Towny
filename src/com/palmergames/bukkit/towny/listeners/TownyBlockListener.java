@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.util.BlockUtil;
 import com.palmergames.bukkit.util.ItemLists;
@@ -256,11 +257,7 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 		
-		TownyWorld townyWorld = null;
-		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getBlock().getLocation().getWorld().getName());			
-		} catch (NotRegisteredException ignored) {}
-
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName());
 		Material material = event.getBlock().getType();
 		/*
 		 * event.getBlock() doesn't return the bed when a bed or respawn anchor is the cause of the explosion, so we use this workaround.
@@ -284,9 +281,14 @@ public class TownyBlockListener implements Listener {
 				// Only regenerate in the wilderness.
 				if (!TownyAPI.getInstance().isWilderness(block))
 					continue;
+				// Check the white/blacklist
+				if (!townyWorld.isBlockAllowedToRevert(block.getType()))
+					continue;
+				// Don't start a revert on a block that is going to be reverted.
+				if (TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation())))
+					continue;
 				count++;
-				// Cancel the event outright if this will cause a revert to start on an already operating revert.
-				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event));
+				TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event);
 			}
 		}
 	}

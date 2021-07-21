@@ -1243,6 +1243,13 @@ public class TownySettings {
 			System.out.println("[Towny] Debug: Wilderness explosion protection entities. ");
 		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST);
 	}
+
+	public static List<String> getWildExplosionRevertBlockWhitelist() {
+
+		if (getDebug())
+			System.out.println("[Towny] Debug: Wilderness explosion protection block whitelist. ");
+		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_REVERT_BLOCK_WHITELIST);
+	}
 	
 	public static List<String> getWildExplosionProtectionBlocks() {
 
