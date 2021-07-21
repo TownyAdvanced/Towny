@@ -6444,3 +6444,7 @@ v0.92.0.11:
   - Fix /town unclaim throwing Index out of bounds error, courtesy of Silverwolfg11 with PR #5088.
 0.97.0.15:
   - Fix new townyperms ConfigMigrator using key where it should use value.
+  - Implemented basic configuration format for audit history, courtesy of Glare with PR #5095.
+  - New Config Option: bank_history.book
+    - {time}\n\n{type} of {amount} {to-from} {name}\n\nReason: {reason}\n\nBalance: {amount} 
+    - This allows you to modify the style displayed via bankhistory commands. 
