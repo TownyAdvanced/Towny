@@ -3,14 +3,13 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.mobs.MobSpawnRemovalEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
@@ -59,6 +58,8 @@ import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.BlockProjectileSource;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -120,9 +121,7 @@ public class TownyEntityListener implements Listener {
 			 * aren't projectiles based on whether the location has PVP enabled.
 			 */
 			if (defender instanceof Player && EntityTypeUtil.isPVPExplosive(attacker.getType()))
-				try {
-					cancelExplosiveDamage = CombatUtil.preventPvP(TownyUniverse.getInstance().getDataSource().getWorld(defender.getWorld().getName()), TownyAPI.getInstance().getTownBlock(defender.getLocation()));
-				} catch (NotRegisteredException ignored) {}
+				cancelExplosiveDamage = CombatUtil.preventPvP(TownyAPI.getInstance().getTownyWorld(defender.getWorld().getName()), TownyAPI.getInstance().getTownBlock(defender.getLocation()));
 			
 			/*
 			 * Cancel explosion damage accordingly.
@@ -241,13 +240,7 @@ public class TownyEntityListener implements Listener {
 		if (!(event.getEntity().getSource() instanceof Player) || !(event.getEntity().getSource() instanceof DragonFireball))
 			return;
 
-		TownyWorld townyWorld = null;
-		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getEntity().getWorld().getName());
-		} catch (NotRegisteredException e) {
-			// Failed to fetch a world
-			return;
-		}
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld().getName());
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation());
 		if (CombatUtil.preventPvP(townyWorld, townBlock)) {
 			event.setCancelled(true);
@@ -269,20 +262,12 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || TownyAPI.getInstance().isWarTime())
 			return;
 		
 		ThrownPotion potion = event.getEntity();
 		Location loc = potion.getLocation();		
-		TownyWorld townyWorld = null;
-		
-		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
-		} catch (NotRegisteredException e) {
-			// Failed to fetch a world
-			return;
-		}
-		
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
 		float radius = event.getAreaEffectCloud().getRadius();
 		List<Block> blocks = new ArrayList<>();
 		
@@ -312,22 +297,15 @@ public class TownyEntityListener implements Listener {
 			}
 		}
 
-		Object source = potion.getShooter();
-
-		if (!(source instanceof Entity))
-			return;	// TODO: prevent damage from dispensers
-
 		for (Block block : blocks) {
 						
 			if (!TownyAPI.getInstance().isWilderness(block.getLocation())) {
 			
 				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(block.getLocation());				
-				// Not Wartime
-				if (!TownyAPI.getInstance().isWarTime())
-					if (CombatUtil.preventPvP(townyWorld, townBlock) && detrimental) {
-						event.setCancelled(true);
-						break;
-					}				
+				if (CombatUtil.preventPvP(townyWorld, townBlock) && detrimental) {
+					event.setCancelled(true);
+					break;
+				}				
 			}			
 		}	
 	}	
@@ -345,12 +323,12 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || TownyAPI.getInstance().isWarTime())
 			return;
 		
 		List<LivingEntity> affectedEntities = (List<LivingEntity>) event.getAffectedEntities();
 		ThrownPotion potion = event.getPotion();
-		Entity attacker;
+		Entity attacker = null;
 
 		List<PotionEffect> effects = (List<PotionEffect>) potion.getEffects();
 		boolean detrimental = false;
@@ -374,31 +352,28 @@ public class TownyEntityListener implements Listener {
 		}
 
 		Object source = potion.getShooter();
+		Block dispenser = null;
 
-		if (!(source instanceof Entity)) {
-
-			return;	// TODO: prevent damage from dispensers
-
+		if (source instanceof BlockProjectileSource) {
+			dispenser = ((BlockProjectileSource) source).getBlock();
 		} else {
-
 			attacker = (Entity) source;
-
 		}
-
-		// Not Wartime
-		if (!TownyAPI.getInstance().isWarTime())
-			for (LivingEntity defender : affectedEntities) {
-				/*
-				 * Don't block potion use on ourselves
-				 * yet allow the use of beneficial potions on all.
-				 */
-				if (attacker != defender)
-					if (CombatUtil.preventDamageCall(plugin, attacker, defender, DamageCause.MAGIC) && detrimental) {
-
-						event.setIntensity(defender, -1.0);
-					}
-			}
-
+		
+		for (LivingEntity defender : affectedEntities) {
+			if (dispenser != null) {
+				if (CombatUtil.preventDispenserDamage(dispenser, defender, DamageCause.MAGIC) && detrimental)
+					event.setIntensity(defender, -1.0);
+			} else 
+			/*
+			 * Don't block potion use on ourselves
+			 * yet allow the use of beneficial potions on all.
+			 */
+			if (attacker != defender)
+				if (CombatUtil.preventDamageCall(plugin, attacker, defender, DamageCause.MAGIC) && detrimental) {
+					event.setIntensity(defender, -1.0);
+				}
+		}
 	}
 
 	/**
@@ -406,10 +381,9 @@ public class TownyEntityListener implements Listener {
 	 * world-removal and town-removal lists.
 	 * 
 	 * @param event - CreatureSpawnEvent
-	 * @throws NotRegisteredException - If failed to fetch a world or not
 	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onCreatureSpawn(CreatureSpawnEvent event) throws NotRegisteredException {
+	public void onCreatureSpawn(CreatureSpawnEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
@@ -427,21 +401,14 @@ public class TownyEntityListener implements Listener {
 			if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(livingEntity))
 				return;
 			
-			Location loc = event.getLocation();
-			TownyWorld townyWorld = null;
-
-			try {
-				townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(loc.getWorld().getName());
-			} catch (NotRegisteredException e) {
-				// Failed to fetch a world
-				return;
-			}
-
 			MobSpawnRemovalEvent mobSpawnRemovalEvent;
 			mobSpawnRemovalEvent = new MobSpawnRemovalEvent(event.getEntity());
 			plugin.getServer().getPluginManager().callEvent(mobSpawnRemovalEvent);
 			if(mobSpawnRemovalEvent.isCancelled()) return;
 
+			Location loc = event.getLocation();
+			TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
+			
 			// remove from world if set to remove mobs globally
 			if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
 					event.setCancelled(true);
@@ -539,11 +506,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 
-		TownyWorld townyWorld = null;
-		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getBlock().getWorld().getName());
-		} catch (NotRegisteredException ignored) {
-		}
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName());
 		
 		// Crop trampling protection done here.
 		if (event.getBlock().getType().equals(Material.FARMLAND)) {
@@ -610,11 +573,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		TownyWorld townyWorld = null;
-		try {
-			townyWorld = TownyUniverse.getInstance().getDataSource().getWorld(event.getLocation().getWorld().getName());
-		} catch (NotRegisteredException ignored) {}
-
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld().getName());
 		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), null, event.getEntity(), event);
 		event.blockList().clear();
 		event.blockList().addAll(blocks);
@@ -629,9 +588,14 @@ public class TownyEntityListener implements Listener {
 				// Only regenerate in the wilderness.
 				if (!TownyAPI.getInstance().isWilderness(block))
 					continue;
+				// Check the white/blacklist
+				if (!townyWorld.isBlockAllowedToRevert(block.getType()))
+					continue;
+				// Don't start a revert on a block that is going to be reverted.
+				if (TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation())))
+					continue;
 				count++;
-				// Cancel the event outright if this will cause a revert to start on an already operating revert.
-				event.setCancelled(!TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event));
+				TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event);
 			}
 		}
 	}
@@ -642,10 +606,9 @@ public class TownyEntityListener implements Listener {
 	 * Can also prevent tnt from destroying armorstands
 	 * 
 	 * @param event - EntityCombustByEntityEvent
-	 * @throws NotRegisteredException - Generic NotRegisteredException
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onEntityCombustByEntityEvent(EntityCombustByEntityEvent event) throws NotRegisteredException {
+	public void onEntityCombustByEntityEvent(EntityCombustByEntityEvent event) {
 
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -657,13 +620,17 @@ public class TownyEntityListener implements Listener {
 
 		Entity combuster = event.getCombuster();
 		Entity defender = event.getEntity();
-		LivingEntity attacker;
+		LivingEntity attacker = null;
 		if (combuster instanceof Projectile) {
 			
 			Object source = ((Projectile) combuster).getShooter();
 			
-			if (!(source instanceof LivingEntity)) {
-				return; // TODO: prevent damage from dispensers
+			if (source instanceof BlockProjectileSource) {
+				if (CombatUtil.preventDispenserDamage(((BlockProjectileSource) source).getBlock(), defender, DamageCause.PROJECTILE)) {
+					combuster.remove();
+					event.setCancelled(true);
+					return;
+				}
 			} else {
 				attacker = (LivingEntity) source;
 			}
@@ -837,7 +804,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		if (!!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), DamageCause.LIGHTNING))
+		if (!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), DamageCause.LIGHTNING))
 			event.setCancelled(true);
 	}
 	

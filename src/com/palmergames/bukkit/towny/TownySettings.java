@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
-import com.palmergames.bukkit.towny.war.flagwar.FlagWarConfig;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.FileMgmt;
@@ -43,7 +42,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-@SuppressWarnings("deprecation")
 public class TownySettings {
 
 	// Town Level
@@ -359,11 +357,6 @@ public class TownySettings {
 	}
 	
 	private static void loadWarMaterialsLists() {
-		// Cell War material types.
-		FlagWarConfig.setFlagBaseMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_FLAG_BASE_BLOCK)));
-		FlagWarConfig.setFlagLightMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_FLAG_LIGHT_BLOCK)));
-		FlagWarConfig.setBeaconWireFrameMaterial(Material.matchMaterial(getString(ConfigNodes.WAR_ENEMY_BEACON_WIREFRAME_BLOCK)));
-
 		// Load allowed blocks in warzone.
 		WarZoneConfig.setEditableMaterialsInWarZone(getAllowedMaterials(ConfigNodes.WAR_WARZONE_EDITABLE_MATERIALS));
 	}
@@ -979,10 +972,7 @@ public class TownySettings {
 		int townOutposts = (Integer) getTownLevel(town).get(TownySettings.TownLevel.OUTPOST_LIMIT);
 		int nationOutposts = 0;
 		if (town.hasNation())
-			try {
-				nationOutposts = (Integer) getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
-			} catch (NotRegisteredException e) {
-			}
+			nationOutposts = (Integer) getNationLevel(town.getNationOrNull()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
 		int n = townOutposts + nationOutposts;
 		return n;
 	}
@@ -1002,11 +992,7 @@ public class TownySettings {
 	public static int getNationBonusBlocks(Town town) {
 
 		if (town.hasNation())
-			try {
-				return getNationBonusBlocks(town.getNation());
-			} catch (NotRegisteredException e) {
-			}
-
+			return getNationBonusBlocks(town.getNationOrNull());
 		return 0;
 	}
 
@@ -1249,6 +1235,13 @@ public class TownySettings {
 		if (getDebug())
 			System.out.println("[Towny] Debug: Wilderness explosion protection entities. ");
 		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST);
+	}
+
+	public static List<String> getWildExplosionRevertBlockWhitelist() {
+
+		if (getDebug())
+			System.out.println("[Towny] Debug: Wilderness explosion protection block whitelist. ");
+		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_REVERT_BLOCK_WHITELIST);
 	}
 	
 	public static List<String> getWildExplosionProtectionBlocks() {
@@ -1847,8 +1840,8 @@ public class TownySettings {
 		if (town.hasNation()) {
 			double nationMultiplier = 1.0;
 			try {
-				nationMultiplier = Double.parseDouble(getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
-			} catch (NumberFormatException|NotRegisteredException e) {
+				nationMultiplier = Double.parseDouble(getNationLevel(town.getNationOrNull()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
+			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			}
 			if (isUpkeepByPlot()) {
@@ -2966,18 +2959,6 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_WAR_ALLOWED);
 	}
 	
-	public static int timeToWaitAfterFlag() {
-		return getInt(ConfigNodes.WAR_ENEMY_TIME_TO_WAIT_AFTER_FLAGGED);
-	}
-	
-	public static boolean isFlaggedInteractionTown() {
-		return getBoolean(ConfigNodes.WAR_ENEMY_PREVENT_INTERACTION_WHILE_FLAGGED);
-	}
-	
-	public static boolean isFlaggedInteractionNation() {
-		return getBoolean(ConfigNodes.WAR_ENEMY_PREVENT_NATION_INTERACTION_WHILE_FLAGGED);
-	}
-	
 	public static boolean isNotificationsTownNamesVerbose() {
 		return getBoolean(ConfigNodes.NOTIFICATION_TOWN_NAMES_ARE_VERBOSE);
 	}
@@ -3133,6 +3114,22 @@ public class TownySettings {
 	
 	public static boolean isContextsEnabled() {
 		return getBoolean(ConfigNodes.PLUGINS_LUCKPERMS_CONTEXTS);
+	}
+	
+	public static boolean isShowingUpdateNotifications() {
+		return getBoolean(ConfigNodes.PLUGIN_UPDATE_NOTIFICATIONS_ALERTS);
+	}
+	
+	public static boolean isUpdateNotificationsMajorOnly() {
+		return getBoolean(ConfigNodes.PLUGIN_UPDATE_NOTIFICATIONS_MAJOR_ONLY);
+	}
+	
+	public static int getMaxNationAllies() {
+		return getInt(ConfigNodes.GNATION_SETTINGS_MAX_ALLIES);
+	}
+	
+	public static String getBankHistoryBookFormat() {
+		return getString(ConfigNodes.BANKHISTORY_BOOK);
 	}
 }
 

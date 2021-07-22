@@ -43,7 +43,7 @@ public enum HelpMenu {
 				.add("war", "'/towny war' for more info");
 		}
 	},
-
+	
 	TA_HELP {
 		@Override
 		protected MenuBuilder load() {
@@ -66,7 +66,7 @@ public enum HelpMenu {
 				.add("delete [] .. []", "delete a residents data files.");
 		}
 	},
-
+	
 	TA_TOWN {
 		@Override
 		protected MenuBuilder load() {
@@ -89,6 +89,22 @@ public enum HelpMenu {
 				.add("[town] leavenation", "");
 		}
 	},
+
+	TA_TOWN_TOGGLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("ta town {townname} toggle")
+				.add("pvp", "")
+				.add("forcepvp", "")
+				.add("public", "")
+				.add("explosion", "")
+				.add("fire", "")
+				.add("mobs", "")
+				.add("taxpercent", "")
+				.add("open", "");
+		}
+	},
+
 	
 	TA_NATION {
 		@Override
@@ -108,6 +124,15 @@ public enum HelpMenu {
 				.add("[nation] bankhistory", "")
 				.add("[oldnation] merge [newnation]", "")
 				.add("rank [add/remove] [resident] [rank]", "");
+		}
+	},
+	
+	TA_NATION_RANK {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("ta nation [nation] rank")
+				.add("add [resident] [rank]", "")
+				.add("remove [resident] [rank]", "");
 		}
 	},
 
@@ -151,6 +176,16 @@ public enum HelpMenu {
 				.add("[resident] friend... |list|clear]", "");
 		}
 	},
+
+	TA_RESIDENT_FRIEND {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin resident [resident] friend")
+				.add("[add|remove] [resident]", "")
+				.add("list", "")
+				.add("clear", "");
+		}
+	},
 	
 	TA_TOGGLE {
 		@Override
@@ -166,7 +201,114 @@ public enum HelpMenu {
 				.add("[resident]", "");
 		}
 	},
+	
+	TA_TOWNYPERMS {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("ta townyperms")
+				.add("listgroups", Translation.of("help_ta_perms_listgroups"))
+				.add("group [group]", Translation.of("help_ta_perms_group"))
+				.add("group [group] addperm [node]", Translation.of("help_ta_perms_groupaddpermnode"))
+				.add("group [group] removeperm [node]", Translation.of("help_ta_perms_groupremovepermnode"))
+				.add("townrank addrank [rank]", Translation.of("help_ta_perms_townrankadd"))
+				.add("townrank removerank [rank]", Translation.of("help_ta_perms_townrankremove"))
+				.add("nationrank addrank [rank]", Translation.of("help_ta_perms_nationrankadd"))
+				.add("nationrank removerank [rank]", Translation.of("help_ta_perms_nationrankremove"));
+		}
+	},
+	
+	TA_SET {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin set")
+				.add("mayor [town] " + Translation.of("town_help_2"), "")
+				.add("mayor [town] npc", "")
+				.add("capital [town] [nation]", "")
+				.add("title [resident] [title]", "")
+				.add("surname [resident] [surname]", "")
+				.add("plot [town]", "");
+		}
+	},
+	
+	TA_SET_MAYOR {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin set mayor")
+				.add("[town] " + Translation.of("town_help_2"), "")
+				.add("[town] npc", "");
+		}
+	},
 
+	TA_SET_CAPITAL {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin set capital")
+				.add("capital [town] [nation]", "");
+		}
+	},
+
+	TA_SET_PLOT {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin set plot")
+				.add("[town]",  Translation.of("msg_admin_set_plot_help_1"))
+				.add("[town name] {rect|circle} {radius}", Translation.of("msg_admin_set_plot_help_2"))
+				.add("[town name] {rect|circle} auto", Translation.of("msg_admin_set_plot_help_2"));
+		}
+	},
+	
+	TA_PURGE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin purge")
+				.add("[number of days] {townless}", "")
+				.add("", "Removes offline residents not seen for this duration.")
+				.add("", "Optional {townless} flag limits purge to only people that have no town.");
+		}
+	},
+	
+	TA_TOWN_META {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin town [townname] meta")
+				.add("", "View the metadata stored in a town.")
+				.add("set [key] [value]", "Set the key to the value.")
+				.add("add [key]", "Add a key of a registered data field.")
+				.add("remove [key]", "Remove a key from the town.");
+		}
+	},
+
+	TA_PLOT_META {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin plot meta")
+				.add("", "View the metadata stored in the plot you are stood in.")
+				.add("set [key] [value]", "Set the key to the value.")
+				.add("add [key]", "Add a key of a registered data field.")
+				.add("remove [key]", "Remove a key from the plot.");
+		}
+	},
+	
+	TA_RELOAD {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin reload")
+				.add("database", "Reloads database")
+				.add("config", "Reloads config")
+				.add("lang", "Reloads language file.")
+				.add("perms", "Reloads Towny permissions.")
+				.add("all", "Reloads all components of towny.");
+		}
+	},
+	
+	TA_DEPOSITALL {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin depositall")
+				.add("[amount]", "Deposit the given amount into all town and nation banks.");
+		}
+	},
+	
 	TOWNYWORLD_HELP {
 		@Override
 		protected MenuBuilder load(MenuBuilder builder) {
@@ -209,7 +351,45 @@ public enum HelpMenu {
 			return TOWNYWORLD_SET.load(new MenuBuilder("townyworld set {world}"));
 		}
 	},
+	
+	TOWNYWORLD_TOGGLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyworld toggle")
+				.add("claimable", "")
+				.add("usingtowny", "")
+				.add("warallowed", "")
+				.add("pvp/forcepvp", "")
+				.add("friendlyfire", "")
+				.add("explosion/forceexplosion", "")
+				.add("fire/forcefire", "")
+				.add("townmobs/wildernessmobs/worldmobs", "")
+				.add("revertunclaim", "")
+				.add("revertentityexpl/revertblockexpl", "")
+				.add("plotcleardelete", "")
+				.add("unclaimblockdelete", "");
+		}
+	},
 
+	TOWNYWORLD_TOGGLE_CONSOLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyworld toggle {worldname}")
+				.add("claimable", "")
+				.add("usingtowny", "")
+				.add("warallowed", "")
+				.add("pvp/forcepvp", "")
+				.add("friendlyfire", "")
+				.add("explosion/forceexplosion", "")
+				.add("fire/forcefire", "")
+				.add("townmobs/wildernessmobs/worldmobs", "")
+				.add("revertunclaim", "")
+				.add("revertentityexpl/revertblockexpl", "")
+				.add("plotcleardelete", "")
+				.add("unclaimblockdelete", "");
+		}
+	},
+	
 	TOWN_HELP {
 		@Override
 		protected MenuBuilder load() {
@@ -220,10 +400,11 @@ public enum HelpMenu {
 				.add("list", "")
 				.add("online", Translation.of("town_help_10"))
 				.add("leave", "")
-				.add("reslist", "")
-				.add("ranklist", "")
-				.add("outlawlist", "")
-				.add("plots", "")
+				.add("reslist (town)", "")
+				.add("ranklist (town)", "")
+				.add("outlawlist (town)", "")
+				.add("plotgrouplist (town) (page)", "")
+				.add("plots (town)", "")
 				.add("outlaw add/remove [name]", "")
 				.add("say", "[message]")
 				.add("spawn", Translation.of("town_help_5"))
@@ -434,13 +615,15 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("plot group")
-				.add("add | new | create", "[name]", "Ex: /plot group new ExpensivePlots")
-				.add("remove", "", "Removes a plot from the specified group.")
-				.add("rename", "[newName]", "Renames the group you are standing in.")
-				.add("set", "...", "Ex: /plot group set perm resident on.")
-				.add("toggle", "...", "Ex: /plot group toggle [pvp|fire|mobs]")
-				.add("forsale | fs", "[price]", "Ex: /plot group forsale 50")
-				.add("notforsale | nfs", "", "Ex: /plot group notforsale");
+				.add("add|new|create [name]", "Ex: /plot group new ExpensivePlots")
+				.add("remove", "Removes a plot from the specified group.")
+				.add("delete", "Deletes a plotgroup completely.")
+				.add("rename [newName]", "Renames the group you are standing in.")
+				.add("set ...", "Ex: /plot group set perm resident on.")
+				.add("toggle ...", "Ex: /plot group toggle [pvp|fire|mobs]")
+				.add("forsale|fs [price]", "Ex: /plot group forsale 50")
+				.add("notforsale|nfs", "Ex: /plot group notforsale")
+				.add("trust [add/remove] [resident", "Adds or removes a resident as trusted.");
 		}
 	},
 	
@@ -641,6 +824,54 @@ public enum HelpMenu {
 			return new MenuBuilder("plot jailcell")
 				.add("", "/plot jailcell", "add", "Adds a JailCell where you stand.")
 				.add("", "/plot jailcell", "remove", "Removes a JailCell where you stand.");
+		}
+	},
+	
+	PLOT_PERM_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot perm")
+				.add("hud", "Opens the permissions hud.")
+				.add("remove [resident]", "Removes permission overrides for a player.")
+				.add("add [resident]", "Adds default permission overrides for a player.")
+				.add("gui", "Opens the permission editor gui.");
+		}
+	},
+	
+	PLOT_TRUST_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot trust")
+				.add("add [resident]", "")
+				.add("remove [resident]", "");
+		}
+	},
+	
+	TOWN_TRUST_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town trust")
+				.add("add [resident]", "")
+				.add("remove [resident]", "");
+		}
+	},
+	
+	PLOT_GROUP_TRUST_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot group trust")
+				.add("add [resident]", "")
+				.add("remove [resident]", "");
+		}
+	},
+	
+	PLOT_GROUP_PERM_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot group perm")
+				.add("gui", "")
+				.add("add [player]", "")
+				.add("remove [player]", "");
 		}
 	};
 

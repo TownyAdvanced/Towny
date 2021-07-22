@@ -1,5 +1,5 @@
 name: Towny
-version: 0.110
+version: 0.114
 language: russian
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -349,16 +349,6 @@ msg_war_cannot_do: '&cВы не можете сделать это, пока г�
 msg_war_started: '&eНачат отсчет до войны.'
 msg_war_ended: '&eВоенное время закончилось.'
 
-msg_enemy_war_area_under_attack: '&6[Война]&b %s (%s) находится под атакой %s!'
-msg_enemy_war_area_won: '&6[Война]&b %s (%s) победил (%s)!'
-msg_enemy_war_area_defended: '&6[Война]&b %s защитил (%s)!'
-msg_err_enemy_war_must_be_placed_above_ground: '&6[Война]&c Нужно установить флаг над землей.'
-msg_err_enemy_war_not_part_of_nation: '&6[Война]&c Этот участок не принадлежит нации.'
-msg_err_enemy_war_is_peaceful: '&6[Война]&c %s ведет мирное сосуществование.'
-msg_err_enemy_war_require_online: '&6[Война]&c Необходимо хотя бы %d человек в сети %s чтобы атаковать.'
-msg_err_enemy_war_not_on_edge_of_town: '&6[Война]&c Разрешено атаковать только границы города.'
-msg_err_enemy_war_cell_already_under_attack: '&6[Война]&c Этот участок уже под атакой %s.'
-msg_err_enemy_war_reached_max_active_flags: '&6[Война]&c Нельзя атаковать больше чем %d участков сразу.'
 
 msg_cache_block_error: '&cВы не были зарегистрированы в Towny. Пожалуйста, перезайдите.'
 msg_cache_block_error_wild: '&cЗапрещено %s в Диких Землях.'
@@ -432,18 +422,10 @@ msg_err_cannot_perform_action: '&cНе можете выполнить это д
 msg_npc_flag: '&bNPC флаг сейчас %s для %s.'
 
 # Война
-msg_enemy_war_purchased_warflag: '&6[Война]&c Вы заплатили %s для атаки.'
-msg_enemy_war_area_won_pillage: '&6[Война]&c %s разграблены %s от %s.'
-msg_enemy_war_area_won_rebuilding: '&6[Война]&c %s платит %s -> %s для восстановления.'
-msg_enemy_war_area_won_rebuilding_err: 'У вас недостаточно средств %s %s для оказания помощи в восстановлении.'
-msg_enemy_war_area_won_rebuilding_err_global: '%s не мог заплатить %s. Атака на %s была отменена.'
 msg_err_insuficient_funds_warflag: 'Вам потребуется %s для того, чтобы разместить флаг войны.'
 msg_err_insuficient_funds_future: 'Вам потребуется %s в случае, если вы должны заплатить за %s.'
 name_defended_attack: 'защитники нападают'
 name_rebuilding: 'восстановление в порядке'
-msg_enemy_war_area_defended_attacker: '&6[Война]&c Вы были вынуждены заплатить %s %s за вашу неудачную атаку.'
-msg_enemy_war_area_defended_defender: '&6[Война]&c %s платит вам %s за неудачную атаку.'
-msg_enemy_war_area_defended_greater_forces: '&6[Война]&c Ваша неудачная атака стоила вам %s.'
 
 msg_warning_delete: '&4*** ПРЕДУПРЕЖДЕНИЕ! %s будет удален завтра из за нехватки средств! ***'
 
@@ -775,7 +757,6 @@ status_res_plottax: '&2Всего земельных налогов: &a'
 status_res_totaltax: '&2Всего налогов для оплаты: &a'
 
 # Added in 0.45
-msg_err_enemy_war_your_town_has_no_claims: 'Ты не можешь нападать, пока у твоего города 0 чанков.'
 msg_err_unable_to_use_bank_outside_nation_capital: 'Вы не можете пользоваться своим национальным банком вне столицы нации.'
 msg_err_unable_to_use_bank_outside_your_town: 'Вы не можете пользоваться своим городским банком за пределами своего города.'
 msg_time_until_a_new_day: 'Время до нового дня: '
@@ -1007,9 +988,6 @@ msg_war_participants_header: '&6[Война] &eИмя нации &f(&bГород
 msg_war_participants: '&6[Война] &e%s &f(&b%s&f)'
 
 # Added in 0.61
-msg_war_flag_deny_town_under_attack: 'Вы не можете сделать это, пока вас атакуют!'
-msg_war_flag_deny_nation_under_attack: 'Вы не можете сделать это, пока город в в вашей нации находится под атакой!'
-msg_war_flag_deny_recently_attacked: 'Вы не можете этого сделать! На вас слишком недавно напали!'
 
 # Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Вы не можете переключить PVP, %s секунд осталось.'
@@ -1438,3 +1416,69 @@ msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: 'You can only clai
 msg_err_not_close_enough_to_your_town_nearest_plot: 'Unable to claim outpost, you are %s townblocks from your nearest claim. Max allowed distance: %s townblocks.'
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'You have moved your homeblock too recently! Wait another %s.'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'You cannot move your homeblock by this many townblocks, limit is %s, this space is %s townblocks away.'
+
+#Added in 0.111
+msg_plot_group_already_exists_did_you_want_to_transfer: 'This townblock is already a part of the %s plotgroup. Are you certain you want to transfer it to the %s plotgroup.'
+msg_townblock_transferred_from_x_to_x_group: 'Townblock transferred from %s to %s plot group.'
+msg_plotgroup_deleted: 'The plotgroup %s has been deleted.'
+msg_plotgroup_empty_deleted: 'The plotgroup %s had no townblocks and has been deleted.'
+plotgroup_plu: 'Plot Groups'
+msg_err_this_town_has_no_plot_groups: 'The specified town has no plot groups.'
+msg_err_this_plot_is_already_part_of_the_plot_group_x: 'This townblock is already part of the plot group: %s'
+map_hover_plot_group: 'Plot Group: '
+map_hover_plot_group_size: ' Size: '
+map_hover_plots: '%s plots'
+
+#Added in 0.112
+msg_checking_for_updates: 'Checking for updates...'
+msg_no_new_updates: 'No new updates found.'
+msg_new_update_available: '&bNew update available: %s | Current version: %s'
+msg_download_here: 'Download it here: %s'
+msg_click_to_download: '&bClick here to download it.'
+msg_latest_version: '&2Towny version: &a%s &2| Latest version: &a%s'
+msg_up_to_date: '&aYou are up to date.'
+msg_click_purchase: 'Click to purchase'
+msg_you_must_join_this_town_to_claim_this_plot: 'You must join this town: %s, in order to claim this plot. Would you like to join the town and continue claiming?'
+
+#Added in 0.113
+status_trustedlist: '&2Trusted'
+msg_click_to_edit: '&6Click to edit.'
+permission_gui_header: 'Towny Permission GUI'
+msg_last_edited: '&7&oLast changed at %s by %s.'
+msg_trusted_added: '&bAdded %s as trusted in this %s.' # Last %s is either town or townblock
+msg_already_trusted: '&b%s is already trusted in this %s.'
+msg_trusted_added_2: '&b%s has trusted you in a %s: %s.' # Last %s is the town name or worldcoord.
+msg_not_trusted: '&b%s is not trusted in this %s.'
+msg_trusted_removed: '&bRemoved %s as trusted in this %s.'
+msg_trusted_removed_2: '&b%s has removed you as trusted in a %s: %s.'
+msg_overrides_removed: '&bRemoved permission overrides for %s.'
+msg_overrides_added: '&bAdded default permission overrides for %s.'
+msg_no_overrides_set: '&b%s does not have any overrides set for this %s.'
+msg_overrides_already_set: '&b%s already has overrides set for this %s.'
+msg_cache_block_err: '&cYou are not allowed to %s here.'
+msg_err_plot_belongs_to_group: '&cPlot belongs to a group, use %s.'
+plotgroup_sing: 'Plot Group'
+msg_err_ally_limit_reached: 'Your nation has reached the ally limit, unable to accept.'
+
+#Added in 0.114
+msg_err_group_not_found: 'Group %s not found.'
+msg_err_expected_command_format: 'Incorrect syntax, expected: %s'
+msg_err_group_already_has_node: 'The group %s already has the node %s.'
+msg_err_group_doesnt_have_node: 'The group %s does not have the node %s.'
+msg_successfully_added_node_to_group: 'Successfully added %s to %s.'
+msg_successfully_removed_node_from_group: 'Successfully removed %s from %s.'
+msg_err_there_is_already_a_town_or_nationrank_called_x: 'There is already a %s named %s.'
+msg_err_there_is_no_town_or_nationrank_called_x: 'There is no %s named %s.'
+msg_successfully_add_rank_to_the_town_or_nation_rank: 'Successfully added %s to the %s.'
+msg_successfully_removed_rank_from_the_town_or_nation_rank: 'Successfully removed %s from the %s.'
+msg_err_group_has_no_nodes: 'The group %s has no permission nodes assigned.'
+msg_title_group_permissions: '%s Permissions'
+help_ta_perms_listgroups: 'List groups.'
+help_ta_perms_group: 'Show permission nodes in group'
+help_ta_perms_groupaddpermnode: 'Add a node to a group.'
+help_ta_perms_groupremovepermnode: 'Remove a node from a group.'
+help_ta_perms_townrankadd: 'Adds a townrank to the townyperms file.'
+help_ta_perms_townrankremove: 'Removes a townrank from the townyperms file.'
+help_ta_perms_nationrankadd: 'Adds a nationrank to the townyperms file.'
+help_ta_perms_nationrankremove: 'Removes a nationrank from the townyperms file.'
+msg_err_that_resident_doesnt_belong_to_that_nation: 'That resident doesn''t belong to that nation.'

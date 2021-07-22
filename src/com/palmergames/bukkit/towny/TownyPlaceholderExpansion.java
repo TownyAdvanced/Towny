@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -125,23 +126,29 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 	 * We specify the value identifier in this method. <br>
 	 * Since version 2.9.1 can you use OfflinePlayers in your requests.
 	 *
-	 * @param player     A {@link org.bukkit.entity.Player Player}.
+	 * @param player     A OfflinePlayer.
 	 * @param identifier A String containing the identifier/value.
 	 *
 	 * @return possibly-null String of the requested identifier.
 	 */
 	@Override
-	public String onPlaceholderRequest(Player player, String identifier) {
+	public String onRequest(OfflinePlayer player, String identifier) {
 
 		if (player == null) {
 			return "";
 		}
+		
+		/*
+		 * This is a location-based placeholder request, use the onPlaceholderRequest to fulfill it.
+		 */
+		if (player.isOnline() && identifier.startsWith("player_"))
+			return onPlaceholderRequest((Player) player, identifier);
+		
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		
 		if (resident == null)
 			return null;
 
-		TownBlock townblock = TownyAPI.getInstance().getTownBlock(player.getLocation());
 		String town = "";
 		String nation = "";
 		String balance = "";
@@ -584,25 +591,6 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			}
 		case "player_jailed": // %townyadvanced_player_jailed%
 			return String.valueOf(resident.isJailed());
-		case "player_plot_type": // %townyadvanced_player_plot_type%
-			return townblock != null ? townblock.getType().toString() : "";
-		case "player_plot_owner": // %townyadvanced_player_plot_owner%
-			return townblock != null ? String.valueOf(townblock.isOwner(resident)) : "false";
-			
-		case "player_location_town_or_wildname": // %townyadvanced_player_location_town_or_wildname%
-			return townblock != null ? townblock.getTownOrNull().getName() : TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).getUnclaimedZoneName();
-		case "player_location_formattedtown_or_wildname": // %townyadvanced_player_location_formattedtown_or_wildname%
-			return townblock != null ? townblock.getTownOrNull().getFormattedName() : TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).getUnclaimedZoneName();
-		case "player_location_plot_name": // %townyadvanced_player_location_plot_name%
-			return townblock != null ? townblock.getName() : "";
-		case "player_location_town_prefix": // %townyadvanced_player_location_town_prefix%
-			return townblock != null ? townblock.getTownOrNull().getPrefix(): "";
-		case "player_location_town_postfix": // %townyadvanced_player_location_town_postfix%
-			return townblock != null ? townblock.getTownOrNull().getPostfix(): "";
-		case "player_location_pvp": // %townyadvanced_player_location_pvp%
-			try {
-				return townblock != null ? (townblock.getPermissions().pvp ? Translation.of("status_title_pvp"):"") : (TownyAPI.getInstance().getDataSource().getWorld(player.getWorld().getName()).isPVP() ? Translation.of("status_title_pvp"):"");
-			} catch (NotRegisteredException ignored) {}
 		case "is_nation_peaceful": // %townyadvanced_is_nation_peaceful%	
 			try {
 				return resident.hasNation() ? (resident.getTown().getNation().isNeutral() ? Translation.of("status_town_title_peaceful"): "") : "";
@@ -615,6 +603,44 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		
 		default:
 			return null;
+		}
+	}
+	
+	@Override
+	public String onPlaceholderRequest(Player player, String identifier) {
+
+		if (player == null) {
+			return "";
+		}
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+
+		if (resident == null)
+			return null;
+
+		TownBlock townblock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+
+		switch (identifier) {
+
+			case "player_plot_type": // %townyadvanced_player_plot_type%
+				return townblock != null ? townblock.getType().toString() : "";
+			case "player_plot_owner": // %townyadvanced_player_plot_owner%
+				return townblock != null ? String.valueOf(townblock.isOwner(resident)) : "false";
+			case "player_location_town_or_wildname": // %townyadvanced_player_location_town_or_wildname%
+				return townblock != null ? townblock.getTownOrNull().getName() : TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).getUnclaimedZoneName();
+			case "player_location_formattedtown_or_wildname": // %townyadvanced_player_location_formattedtown_or_wildname%
+				return townblock != null ? townblock.getTownOrNull().getFormattedName() : TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).getUnclaimedZoneName();
+			case "player_location_plot_name": // %townyadvanced_player_location_plot_name%
+				return townblock != null ? townblock.getName() : "";
+			case "player_location_plot_owner_name": // %townyadvanced_player_location_plot_owner_name%
+				return (townblock != null && townblock.hasResident()) ? townblock.getResidentOrNull().getName() : ""; 
+			case "player_location_town_prefix": // %townyadvanced_player_location_town_prefix%
+				return townblock != null ? townblock.getTownOrNull().getPrefix(): "";
+			case "player_location_town_postfix": // %townyadvanced_player_location_town_postfix%
+				return townblock != null ? townblock.getTownOrNull().getPostfix(): "";
+			case "player_location_pvp": // %townyadvanced_player_location_pvp%
+				return townblock != null ? (townblock.getPermissions().pvp ? Translation.of("status_title_pvp"):"") : (TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).isPVP() ? Translation.of("status_title_pvp"):"");
+			default:
+				return null;
 		}
 	}
 }

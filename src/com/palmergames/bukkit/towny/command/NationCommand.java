@@ -913,19 +913,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				
-				try {
-					if (target.addNationRank(rank)) {
-						if (BukkitTools.isOnline(target.getName())) {
-							TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_given_rank", "Nation", rank));
-							plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
-						}
-						TownyMessaging.sendMsg(player, Translation.of("msg_you_have_given_rank", "Nation", rank, target.getName()));
-					} else {
-						// Not in a nation or Rank doesn't exist
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_resident_not_part_of_any_town"));
-						return;
+				if (target.addNationRank(rank)) {
+					if (BukkitTools.isOnline(target.getName())) {
+						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_given_rank", "Nation", rank));
+						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}
-				} catch (AlreadyRegisteredException e) {
+					TownyMessaging.sendMsg(player, Translation.of("msg_you_have_given_rank", "Nation", rank, target.getName()));
+				} else {
 					// Must already have this rank
 					TownyMessaging.sendMsg(player, Translation.of("msg_resident_already_has_rank", target.getName(), "Nation"));
 					return;
@@ -940,17 +934,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, nationRankRemoveEvent.getCancelMessage());
 					return;
 				}
-				
-				try {
-					if (target.removeNationRank(rank)) {
-						if (BukkitTools.isOnline(target.getName())) {
-							TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Nation", rank));
-							plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
-						}
-						TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Nation", rank, target.getName()));
+
+				if (target.removeNationRank(rank)) {
+					if (BukkitTools.isOnline(target.getName())) {
+						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_had_rank_taken", "Nation", rank));
+						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}
-				} catch (NotRegisteredException e) {
-					// Must already have this rank
+					TownyMessaging.sendMsg(player, Translation.of("msg_you_have_taken_rank_from", "Nation", rank, target.getName()));
+				} else {
+					// Doesn't have this rank
 					TownyMessaging.sendMsg(player, String.format("msg_resident_doesnt_have_rank", target.getName(), "Nation"));
 					return;
 				}
@@ -1750,6 +1742,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 				if (toAccept != null) {
+					
+					// Nation has reached the max amount of allies
+					if (TownySettings.getMaxNationAllies() >= 0 && nation.getAllies().size() >= TownySettings.getMaxNationAllies()) {
+						toAccept.getReceiver().deleteReceivedInvite(toAccept);
+						toAccept.getSender().deleteSentInvite(toAccept);
+						TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_ally_limit_reached"));
+						return;
+					}
+					
 					try {
 						NationAcceptAllyRequestEvent acceptAllyRequestEvent = new NationAcceptAllyRequestEvent((Nation)toAccept.getSender(), (Nation) toAccept.getReceiver());
 						Bukkit.getPluginManager().callEvent(acceptAllyRequestEvent);

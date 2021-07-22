@@ -1,6 +1,10 @@
 package com.palmergames.bukkit.towny.huds;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.asciimap.WildernessMapEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -10,7 +14,12 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.map.TownyMapData;
 import com.palmergames.bukkit.util.Colors;
+
+import net.kyori.adventure.text.TextComponent;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -19,7 +28,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 public class MapHUD {
-	private static int lineWidth = 20, lineHeight = 10;
+	private static int lineWidth = 19, lineHeight = 10;
+	private static final int townBlockSize = TownySettings.getTownBlockSize();
 	
 	public static void toggleOn(Player player) {
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -115,7 +125,7 @@ public class MapHUD {
 					}
 
 					// Registered town block
-					if (townblock.getPlotPrice() != -1) {
+					if (townblock.getPlotPrice() != -1 || townblock.hasPlotObjectGroup() && townblock.getPlotObjectGroup().getPrice() != -1) {
 						// override the colour if it's a shop plot for sale
 						if (townblock.getType().equals(TownBlockType.COMMERCIAL))
 							map[y][x] = Colors.Blue;
@@ -125,13 +135,46 @@ public class MapHUD {
 					else
 						map[y][x] += townblock.getType().getAsciiMapKey();
 				} catch (TownyException e) {
+					// Unregistered town block
+					
 					if (x == halfLineHeight && y == halfLineWidth)
 						map[y][x] = Colors.Gold;
 					else
 						map[y][x] = Colors.Gray;
 
-					// Unregistered town block
-					map[y][x] += "-";
+					WorldCoord worldcoord = WorldCoord.parseWorldCoord(world.getName(), tby * townBlockSize , tbx* townBlockSize);
+					String symbol;
+					TextComponent hoverText; 
+					String clickCommand;
+					// Cached TownyMapData is present and not old.
+					if (getWildernessMapDataMap().containsKey(worldcoord) && !getWildernessMapDataMap().get(worldcoord).isOld()) {
+						TownyMapData mapData = getWildernessMapDataMap().get(worldcoord);
+						symbol = mapData.getSymbol();
+						hoverText = mapData.getHoverText();
+						clickCommand = mapData.getClickCommand();
+					// Cached TownyMapData is either not present or was considered old.
+					} else {
+						if (getWildernessMapDataMap().containsKey(worldcoord))
+							getWildernessMapDataMap().remove(worldcoord);
+						WildernessMapEvent wildMapEvent = new WildernessMapEvent(worldcoord);
+						Bukkit.getPluginManager().callEvent(wildMapEvent);
+						symbol = wildMapEvent.getMapSymbol();
+						hoverText = wildMapEvent.getHoverText();
+						clickCommand = wildMapEvent.getClickCommand();
+						getWildernessMapDataMap().put(worldcoord, new TownyMapData(worldcoord, symbol, hoverText, clickCommand));
+						
+						Bukkit.getScheduler().runTaskLater(Towny.getPlugin(), ()-> {
+							if (getWildernessMapDataMap().containsKey(worldcoord) && getWildernessMapDataMap().get(worldcoord).isOld())
+								getWildernessMapDataMap().remove(worldcoord);
+						}, 20 * 35);
+					}
+
+					/* 
+					 * We are only using symbol here but we have generated hovertext and clickcommands because the same
+					 * TownyMapData cache is used for the ascii map seen in the /towny map commands. We would not want
+					 * to fill only a part of that cache.
+					 */
+					map[y][x] += symbol;
 				}
 				x++;
 			}
@@ -149,5 +192,9 @@ public class MapHUD {
 		TownBlock tb = wc.getTownBlockOrNull();
 		board.getTeam("townTeam").setSuffix(ChatColor.GREEN + (tb != null && tb.hasTown() ? tb.getTownOrNull().getName() : Translation.of("status_no_town")));
 		board.getTeam("ownerTeam").setSuffix(ChatColor.GREEN + (tb != null && tb.hasResident() ? tb.getResidentOrNull().getName() : Translation.of("status_no_town")));
+	}
+	
+	private static Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {
+		return TownyUniverse.getInstance().getWildernessMapDataMap();
 	}
 }

@@ -2,12 +2,17 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Suneet Tipirneni (Siris)
@@ -19,6 +24,8 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 	private double price = -1;
 	private Town town;
 	private TownyPermission permissions;
+	private Set<Resident> trustedResidents = new HashSet<>();
+	private Map<Resident, PermissionData> permissionOverrides = new HashMap<>();
 
 	/**
 	 * @param id   A unique identifier for the group id.
@@ -86,9 +93,8 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 			this.resident = resident;
 	}
 
-	public Resident getResident() throws NotRegisteredException {
-		if (!hasResident())
-			throw new NotRegisteredException("The Group " + this.toString() + "is not registered to a resident.");
+	@Nullable
+	public Resident getResident() {
 		return resident;
 	}
 
@@ -112,6 +118,10 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 
 	public Collection<TownBlock> getTownBlocks() {
 		return Collections.unmodifiableCollection(townBlocks);
+	}
+	
+	public boolean hasTownBlocks() {
+		return townBlocks != null && !townBlocks.isEmpty();
 	}
 
 	@Override
@@ -137,6 +147,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 		this.permissions.load(line);
 	}
 
+	@Override
 	public TownyPermission getPermissions() {
 		return permissions;
 	}
@@ -148,5 +159,73 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().savePlotGroup(this);
+	}
+
+	public void setTrustedResidents(Set<Resident> trustedResidents) {
+		this.trustedResidents = new HashSet<>(trustedResidents);
+	}
+
+	public Set<Resident> getTrustedResidents() {
+		return trustedResidents;
+	}
+	
+	public void setPermissionOverrides(Map<Resident, PermissionData> permissionOverrides) {
+		this.permissionOverrides = new HashMap<>(permissionOverrides);
+	}
+
+	public Map<Resident, PermissionData> getPermissionOverrides() {
+		return permissionOverrides;
+	}
+	
+	public boolean hasTrustedResident(Resident resident) {
+		return trustedResidents.contains(resident);
+	}
+	
+	public void addTrustedResident(Resident resident) {
+		for (TownBlock townBlock : townBlocks) {
+			if (!townBlock.hasTrustedResident(resident)) {
+				townBlock.addTrustedResident(resident);
+				townBlock.save();
+			}
+		}
+
+		trustedResidents.add(resident);
+	}
+	
+	public void removeTrustedResident(Resident resident) {
+		if (!hasTrustedResident(resident))
+			return;
+
+		trustedResidents.remove(resident);
+
+		for (TownBlock townBlock : townBlocks) {
+			if (townBlock.hasTrustedResident(resident)) {
+				townBlock.removeTrustedResident(resident);
+				townBlock.save();
+			}
+		}
+	}
+	
+	public void putPermissionOverride(Resident resident, PermissionData permissionData) {
+		permissionOverrides.put(resident, permissionData);
+		
+		for (TownBlock townBlock : townBlocks) {
+			townBlock.getPermissionOverrides().put(resident, permissionData);
+			townBlock.save();
+		}
+	}
+	
+	public void removePermissionOverride(Resident resident) {
+		if (!permissionOverrides.containsKey(resident))
+			return;
+		
+		permissionOverrides.remove(resident);
+			
+		for (TownBlock townBlock : townBlocks) {
+			if (townBlock.getPermissionOverrides().containsKey(resident)) {
+				townBlock.getPermissionOverrides().remove(resident);
+				townBlock.save();
+			}
+		}
 	}
 }

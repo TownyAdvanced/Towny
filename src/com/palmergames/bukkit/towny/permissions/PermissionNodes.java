@@ -10,6 +10,7 @@ public enum PermissionNodes {
 	TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS("towny.admin.outlaw.teleport_bypass"),
 	TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS("towny.admin.town_commands.blacklist_bypass"),
 	TOWNY_ADMIN_TOURIST_COMMAND_LIMITATION_BYPASS("towny.globally_welcome"),
+	TOWNY_ADMIN_UPDATEALERTS("towny.admin.updatealerts"),
 	
 	/*
 	 * Nation command permissions
@@ -119,6 +120,8 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_JAIL("towny.command.town.jail"),
 		TOWNY_COMMAND_TOWN_JAIL_LIST("towny.command.town.jail.list"),
 		TOWNY_COMMAND_TOWN_UNJAIL("towny.command.town.unjail"),
+		TOWNY_COMMAND_TOWN_PLOTGROUPLIST("towny.command.town.plotgrouplist"),
+		TOWNY_COMMAND_TOWN_TRUST("towny.command.town.trust"),
 		
 		// Covers all assignable ranks
 		TOWNY_COMMAND_TOWN_RANK("towny.command.town.rank.*"),
@@ -186,8 +189,13 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_PLOT_NOTFORSALE("towny.command.plot.notforsale"),
 		TOWNY_COMMAND_PLOT_FORSALE("towny.command.plot.forsale"),
 		TOWNY_COMMAND_PLOT_JAILCELL("towny.command.plot.jailcell"),
-		TOWNY_COMMAND_PLOT_PERM("towny.command.plot.perm"),
-		TOWNY_COMMAND_PLOT_PERM_HUD("towny.command.plot.perm.hud"),
+		TOWNY_COMMAND_PLOT_TRUST("towny.command.plot.trust"),
+		TOWNY_COMMAND_PLOT_PERM("towny.command.plot.perm.*"),
+			TOWNY_COMMAND_PLOT_PERM_INFO("towny.command.plot.perm"),
+			TOWNY_COMMAND_PLOT_PERM_HUD("towny.command.plot.perm.hud"),
+			TOWNY_COMMAND_PLOT_PERM_GUI("towny.command.plot.perm.gui"),
+			TOWNY_COMMAND_PLOT_PERM_ADD("towny.command.plot.perm.add"),
+			TOWNY_COMMAND_PLOT_PERM_REMOVE("towny.command.plot.perm.remove"),
 		
 		TOWNY_COMMAND_PLOT_TOGGLE("towny.command.plot.toggle.*"),
 			TOWNY_COMMAND_PLOT_TOGGLE_PVP("towny.command.plot.toggle.pvp"),
@@ -210,11 +218,14 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_PLOT_GROUP("towny.command.plot.group.*"),
 		    TOWNY_COMMAND_PLOT_GROUP_ADD("towny.command.plot.group.add"),
 		    TOWNY_COMMAND_PLOT_GROUP_REMOVE("towny.command.plot.group.remove"),
+		    TOWNY_COMMAND_PLOT_GROUP_DELETE("towny.command.plot.group.delete"),
 		    TOWNY_COMMAND_PLOT_GROUP_RENAME("towny.command.plot.group.rename"),
 		    TOWNY_COMMAND_PLOT_GROUP_SET("towny.command.plot.group.set"),
 		    TOWNY_COMMAND_PLOT_GROUP_TOGGLE("towny.command.plot.group.toggle"),
 		    TOWNY_COMMAND_PLOT_GROUP_FORSALE("towny.command.plot.group.forsale"),
 		    TOWNY_COMMAND_PLOT_GROUP_NOTFORSALE("towny.command.plot.group.notforsale"),
+			TOWNY_COMMAND_PLOT_GROUP_TRUST("towny.command.plot.group.trust"),
+			TOWNY_COMMAND_PLOT_GROUP_PERM("towny.command.plot.group.perm"),
 		
 		TOWNY_COMMAND_PLOT_CLEAR("towny.command.plot.clear"),
 	
@@ -254,6 +265,7 @@ public enum PermissionNodes {
     	TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIM("towny.command.townyadmin.plot.claim"),
 		TOWNY_COMMAND_TOWNYADMIN_PLOT_META("towny.command.townyadmin.plot.meta"),
 		TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIMEDAT("towny.command.townyadmin.plot.claimedat"),
+		TOWNY_COMMAND_TOWNYADMIN_PLOT_TRUST("towny.command.townyadmin.plot.trust"),
 	
 	TOWNY_COMMAND_TOWNYADMIN_RESIDENT("towny.command.townyadmin.resident.*"),
 		TOWNY_COMMMAND_TOWNYADMIN_RESIDENT_RENAME("towny.command.townyadmin.resident.rename"),
@@ -271,6 +283,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE("towny.command.townyadmin.town.spawn.freecharge"),
 	    TOWNY_COMMAND_TOWNYADMIN_TOWN_META("towny.command.townyadmin.town.meta"),
 	    TOWNY_COMMAND_TOWNYADMIN_TOWN_BANKHISTORY("towny.command.townyadmin.town.bankhistory"),
+		TOWNY_COMMAND_TOWNYADMIN_TOWN_TRUST("towny.command.townyadmin.town.trust"),
 	
 	TOWNY_COMMAND_TOWNYADMIN_NATION("towny.command.townyadmin.nation.*"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_NEW("towny.command.townyadmin.nation.new"),
@@ -304,6 +317,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWNYADMIN_UNCLAIM("towny.command.townyadmin.unclaim"),
 	TOWNY_COMMAND_TOWNYADMIN_RESIDNET_DELETE("towny.command.townyadmin.resident.delete"),
 	TOWNY_COMMAND_TOWNYADMIN_DEPOSITALL("towny.command.townyadmin.depositall"),
+	TOWNY_COMMAND_TOWNYADMIN_TOWNYPERMS("towny.command.townyadmin.townyperms"),
 	
 	/*
 	 * Towny command permissions

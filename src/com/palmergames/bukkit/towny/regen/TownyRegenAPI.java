@@ -498,7 +498,8 @@ public class TownyRegenAPI {
 	 * @return true if the protectiontask was begun successfully. 
 	 */
 	public static boolean beginProtectionRegenTask(Block block, int count, TownyWorld world, Event event) {
-		if (!hasProtectionRegenTask(new BlockLocation(block.getLocation())) && !isBlacklistedBlock(world, block.getType())) {
+		// Don't interfere with an existing regen task
+		if (!hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
 			// Piston extensions which are broken by explosions ahead of the base block
 			// cause baseblocks to drop as items and no base block to be regenerated.
 			if (block.getType().equals(Material.PISTON_HEAD)) {
@@ -523,10 +524,6 @@ public class TownyRegenAPI {
 			return true;
 		}
 		return false;
-	}
-	
-	private static boolean isBlacklistedBlock(TownyWorld world, Material type) {
-		return world.isPlotManagementIgnoreIds(type);
 	}
 
 	/**

@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.db;
 
+import com.google.gson.Gson;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -10,6 +12,7 @@ import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -35,6 +38,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
@@ -57,11 +61,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "worlds" + File.separator + "deleted",
 			dataFolderPath + File.separator + "townblocks",
 			dataFolderPath + File.separator + "plotgroups",
+			dataFolderPath + File.separator + "plotgroups" + File.separator + "deleted",
 			dataFolderPath + File.separator + "jails",
 			dataFolderPath + File.separator + "jails" + File.separator + "deleted"
 		) || !FileMgmt.checkOrCreateFiles(
-			dataFolderPath + File.separator + "worlds.txt",
-			dataFolderPath + File.separator + "plotgroups.txt"
+			dataFolderPath + File.separator + "worlds.txt"
 		)) {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_cannot_create_defaults"));
 		}
@@ -170,30 +174,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadPlotGroupList() {
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_group_list"));
-		String line = null;
-
-		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "plotgroups.txt"), StandardCharsets.UTF_8))) {
-
-			while ((line = fin.readLine()) != null) {
-				if (!line.equals("")) {
-					String[] tokens = line.split(",");
-					String townName = tokens[0];
-					UUID groupID = UUID.fromString(tokens[1]);
-					String groupName = tokens[2];
-					Town town = universe.getTown(townName);
-					
-					if (town != null)
-						universe.newGroup(town, groupName, groupID);
-				}
-			}
-			
-			return true;
-			
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(Translation.of("msg_err_loading_group_list_at_line", line));
-			e.printStackTrace();
-			return false;
-		}
+		File[] plotGroupFiles = receiveObjectFiles("plotgroups", ".data");
+		
+		if (plotGroupFiles == null)
+			return true; 
+		
+		for (File plotGroup : plotGroupFiles)
+			TownyUniverse.getInstance().newPlotGroupInternal(plotGroup.getName().replace(".data", ""));
+		
+		return true;
 	}
 	
 	@Override
@@ -201,7 +190,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_resident_list"));
 		List<String> residents = receiveListFromLegacyFile("residents.txt");
-		File[] residentFiles = receiveObjectFiles("residents");
+		File[] residentFiles = receiveObjectFiles("residents", ".txt");
 		assert residentFiles != null;
 
 		for (File resident : residentFiles) {
@@ -237,7 +226,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_town_list"));
 		List<String> towns = receiveListFromLegacyFile("towns.txt");
-		File[] townFiles = receiveObjectFiles("towns");
+		File[] townFiles = receiveObjectFiles("towns", ".txt");
 		assert townFiles != null;
 		
 		for (File town : townFiles) {
@@ -273,7 +262,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_nation_list"));
 		List<String> nations = receiveListFromLegacyFile("nations.txt");
-		File[] nationFiles = receiveObjectFiles("nations");
+		File[] nationFiles = receiveObjectFiles("nations", ".txt");
 		assert nationFiles != null;
 		for (File nation : nationFiles) {
 			String name = nation.getName().replace(".txt", "");
@@ -346,7 +335,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	public boolean loadJailList() {
 		TownyMessaging.sendDebugMsg("Loading Jail List");
-		File[] jailFiles = receiveObjectFiles("jails");
+		File[] jailFiles = receiveObjectFiles("jails", ".txt");
 		if (jailFiles == null)
 			return true;
 		
@@ -383,10 +372,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 * Util method for gathering towny object .txt files from their parent folder.
 	 * ex: "residents" 
 	 * @param folder - Towny object folder
+	 * @param extension - Extension of the filetype to receive objects from.
 	 * @return files - Files from inside the residents\towns\nations folder.
 	 */
-	private File[] receiveObjectFiles(String folder) {
-		return new File(dataFolderPath + File.separator + folder).listFiles(file -> file.getName().toLowerCase().endsWith(".txt"));
+	private File[] receiveObjectFiles(String folder, String extension) {
+		return new File(dataFolderPath + File.separator + folder).listFiles(file -> file.getName().toLowerCase().endsWith(extension));
 	}
 	
 	/*
@@ -578,8 +568,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 
-				line = "townBoard";
-				town.setBoard(keys.get("townBoard"));
+				line = keys.get("townBoard");
+				if (line != null)
+					town.setBoard(line);
 
 				line = keys.get("tag");
 				if (line != null)
@@ -902,6 +893,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					UUID uuid = UUID.fromString(line);
 					if (TownyUniverse.getInstance().hasJail(uuid))
 						town.setPrimaryJail(TownyUniverse.getInstance().getJail(uuid));
+				}
+				
+				line = keys.get("trustedResidents");
+				if (line != null && !line.isEmpty()) {
+					for (Resident resident : getResidents(toUUIDArray(line.split(","))))
+						town.addTrustedResident(resident);
 				}
 
 			} catch (Exception e) {
@@ -1322,6 +1319,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("PlotManagementWildRegenBlockWhitelist");
+				if (line != null)
+					try {
+						List<String> mats = new ArrayList<>();
+						for (String s : line.split(","))
+							if (!s.isEmpty())
+								try {
+									mats.add(s.trim());
+								} catch (NumberFormatException ignored) {
+								}
+						world.setPlotManagementWildRevertBlockWhitelist(mats);
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("usingPlotManagementWildRegenDelay");
 				if (line != null)
 					try {
@@ -1381,59 +1392,46 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 	}
 	
-	@Override
-	public boolean loadPlotGroups() {
+	public boolean loadPlotGroup(PlotGroup group) {
 		String line = "";
-		String path;
-		
-		for (PlotGroup group : getAllPlotGroups()) {
-			path = getPlotGroupFilename(group);
-			
-			File groupFile = new File(path);
-			if (groupFile.exists() && groupFile.isFile()) {
-				try {
-					HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(groupFile);
+		String path = getPlotGroupFilename(group);
 
-					line = keys.get("groupName");
-					if (line != null)
-						group.setName(line.trim());
-					
-					line = keys.get("groupID");
-					if (line != null)
-						group.setID(UUID.fromString(line.trim()));
-					
-					line = keys.get("town");
-					if (line != null && !line.isEmpty()) {
-						Town town = universe.getTown(line.trim());
-						if (town != null) {
-							group.setTown(town);	
-						}
-						else {
-							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_group_file_missing_town_delete", path));
-							deletePlotGroup(group);
-							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_group_entry", path));
-							continue;
-						}
+		File groupFile = new File(path);
+		if (groupFile.exists() && groupFile.isFile()) {
+			try {
+				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(groupFile);
+				
+				line = keys.get("groupName");
+				if (line != null)
+					group.setName(line.trim());
+				
+				line = keys.get("town");
+				if (line != null && !line.isEmpty()) {
+					Town town = universe.getTown(line.trim());
+					if (town != null) {
+						group.setTown(town);
+					} else {
+						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_group_file_missing_town_delete", path));
+						deletePlotGroup(group); 
+						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_group_entry", path));
+						return true;
 					}
-					else {
-						TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_could_not_add_to_town"));
-						deletePlotGroup(group);
-					}
-					
-					line = keys.get("groupPrice");
-					if (line != null && !line.isEmpty())
-						group.setPrice(Double.parseDouble(line.trim()));
-
-				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_group_file_at_line", path, line));
-					return false;
+				} else {
+					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_could_not_add_to_town"));
+					deletePlotGroup(group);
 				}
-			} else {
-				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_groups_entry", path));
+				
+				line = keys.get("groupPrice");
+				if (line != null && !line.isEmpty())
+					group.setPrice(Double.parseDouble(line.trim()));
+
+			} catch (Exception e) {
+				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_group_file_at_line", path, line));
+				return false;
 			}
+		} else {
+			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_groups_entry", path));
 		}
-		
-		savePlotGroupList();
 		
 		return true;
 	}
@@ -1564,8 +1562,47 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 					
 					if (groupID != null) {
-						PlotGroup group = getPlotObjectGroup(townBlock.getTownOrNull().toString(), groupID);
-						townBlock.setPlotObjectGroup(group);
+						PlotGroup group = getPlotObjectGroup(groupID);
+						if (group != null) {
+							townBlock.setPlotObjectGroup(group);
+							if (group.getPermissions() == null && townBlock.getPermissions() != null) 
+								group.setPermissions(townBlock.getPermissions());
+							if (townBlock.hasResident())
+								group.setResident(townBlock.getResidentOrNull());
+						} else {
+							townBlock.removePlotObjectGroup();
+						}
+					}
+
+					line = keys.get("trustedResidents");
+					if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
+						for (Resident resident : getResidents(toUUIDArray(line.split(","))))
+							townBlock.addTrustedResident(resident);
+						
+						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.getTrustedResidents().size() > 0)
+							townBlock.getPlotObjectGroup().setTrustedResidents(townBlock.getTrustedResidents());
+					}
+					
+					line = keys.get("customPermissionData");
+					if (line != null && !line.isEmpty() && townBlock.getPermissionOverrides().isEmpty()) {
+						Map<String, String> map = new Gson().fromJson(line, Map.class);
+						
+						for (Map.Entry<String, String> entry : map.entrySet()) {
+							Resident resident;
+							try {
+								resident = TownyAPI.getInstance().getResident(UUID.fromString(entry.getKey()));
+							} catch (IllegalArgumentException e) {
+								continue;
+							}
+							
+							if (resident == null)
+								continue;
+							
+							townBlock.getPermissionOverrides().put(resident, new PermissionData(entry.getValue()));
+						}
+						
+						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPermissionOverrides().isEmpty() && townBlock.getPermissionOverrides().size() > 0)
+							townBlock.getPlotObjectGroup().setPermissionOverrides(townBlock.getPermissionOverrides());
 					}
 
 				} catch (Exception e) {
@@ -1646,19 +1683,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	/*
 	 * Save keys
 	 */
-
-	@Override
-	public boolean savePlotGroupList() {
-		List<String> list = new ArrayList<>();
-		
-		for (PlotGroup group : getAllPlotGroups()) {
-			list.add(group.getTown().getName() + "," + group.getID() + "," + group.getName());
-		}
-		
-		this.queryQueue.add(new FlatFileSaveTask(list, dataFolderPath + File.separator + "plotgroups.txt"));
-		
-		return true;
-	}
 
 	@Override
 	public boolean saveWorldList() {
@@ -1854,6 +1878,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Primary Jail
 		if (town.getPrimaryJail() != null)
 			list.add("primaryJail=" + town.getPrimaryJail().getUUID());
+		
+		list.add("trustedResidents=" + StringMgmt.join(toUUIDList(town.getTrustedResidents()), ","));
+		
 		/*
 		 *  Make sure we only save in async
 		 */
@@ -1867,9 +1894,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean savePlotGroup(PlotGroup group) {
 		
 		List<String> list = new ArrayList<>();
-		
-		// Group ID
-		list.add("groupID=" + group.getID().toString());
 		
 		// Group Name
 		list.add("groupName=" + group.getName());
@@ -2047,10 +2071,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Using PlotManagement Wild Block Regen
 		list.add("usingPlotManagementWildRegenBlocks=" + world.isUsingPlotManagementWildBlockRevert());
 
-		list.add("# The list of entities whose explosions would be reverted.");
+		list.add("# The list of blocks whose explosions would be reverted.");
 		// Wilderness Explosion Protection blocks
 		if (world.getPlotManagementWildRevertBlocks() != null)
 			list.add("PlotManagementWildRegenBlocks=" + StringMgmt.join(world.getPlotManagementWildRevertBlocks(), ","));
+
+		list.add("# The list of blocks to regenerate. (if empty all blocks will regenerate)");
+		// Wilderness Explosion Protection entities
+		if (world.getPlotManagementWildRevertBlockWhitelist() != null)
+			list.add("PlotManagementWildRegenBlockWhitelist=" + StringMgmt.join(world.getPlotManagementWildRevertBlockWhitelist(), ","));
 
 		list.add("# The delay after which the explosion reverts will begin.");
 		// Using PlotManagement Wild Regen Delay
@@ -2134,8 +2163,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			groupID.append(townBlock.getPlotObjectGroup().getID());
 		}
 		
-		list.add("groupID=" + groupID.toString());
+		list.add("groupID=" + groupID);
 		
+		list.add("trustedResidents=" + StringMgmt.join(toUUIDList(townBlock.getTrustedResidents()), ","));
+		
+		Map<String, String> stringMap = new HashMap<>();
+		for (Map.Entry<Resident, PermissionData> entry : townBlock.getPermissionOverrides().entrySet()) {
+			stringMap.put(entry.getKey().getUUID().toString(), entry.getValue().toString());
+		}
+		
+		list.add("customPermissionData=" + new Gson().toJson(stringMap));
 		
 		/*
 		 *  Make sure we only save in async

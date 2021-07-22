@@ -2,8 +2,8 @@ package com.palmergames.bukkit.towny.permissions;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -38,6 +38,7 @@ public class TownyPerms {
 
 	protected static LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<>();
 	protected static HashMap<String, PermissionAttachment> attachments = new HashMap<>();
+	private static HashMap<String, List<String>> groupPermsMap = new HashMap<>();
 	private static CommentedConfiguration perms;
 	private static Towny plugin;
 	
@@ -75,6 +76,10 @@ public class TownyPerms {
 			perms = new CommentedConfiguration(file);
 			if (!perms.load())
 				throw new TownyException("Could not read Townyperms.yml");
+			
+			groupPermsMap.clear();
+			buildGroupPermsMap();
+			buildComments();
 		}
 		
 		/*
@@ -116,19 +121,13 @@ public class TownyPerms {
 			return;
 		}
 
-		TownyWorld World;
-
-		try {
-			World = townyUniverse.getDataSource().getWorld(player.getLocation().getWorld().getName());
-		} catch (NotRegisteredException e) {
-			// World not registered with Towny.
-			e.printStackTrace();
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+		if (world == null)
 			return;
-		}
 
-		if (attachments.containsKey(resident.getName())) {
+		if (attachments.containsKey(resident.getName()))
 			playersAttachment = attachments.get(resident.getName());
-		} else {
+		else
 			// DungeonsXL sometimes moves players which aren't online out of dungeon worlds causing an error in the log to appear.
 			try {
 				playersAttachment = BukkitTools.getPlayer(resident.getName()).addAttachment(plugin);
@@ -136,7 +135,6 @@ public class TownyPerms {
 				return;
 			}
 
-		}
 		/*
 		 * Set all our Towny default permissions using reflection else bukkit
 		 * will perform a recalculation of perms for each addition.
@@ -152,7 +150,7 @@ public class TownyPerms {
 				 */
 				orig.clear();
 
-				if (World.isUsingTowny()) {
+				if (world.isUsingTowny()) {
 					/*
 					 * Fill with the fresh perm nodes
 					 */
@@ -251,11 +249,8 @@ public class TownyPerms {
 		
 		//Check for town membership
 		if (resident.hasTown()) {
-			try {
-				permList.addAll(getTownDefault(resident.getTown()));
-			} catch (NotRegisteredException e) {
-				// Not Possible!
-			}
+			permList.addAll(getTownDefault(resident.getTownOrNull()));
+			
 			// Is Mayor?
 			if (resident.isMayor()) permList.addAll(getTownMayor());
 				
@@ -283,19 +278,15 @@ public class TownyPerms {
 		Boolean value = false;
 		for (String permission : playerPermArray) {			
 			if (permission.contains("{townname}")) {
-				if (resident.hasTown())
-					try {
-						String placeholderPerm = permission.replace("{townname}", resident.getTown().getName().toLowerCase());
-						newPerms.put(placeholderPerm, true);
-					} catch (NotRegisteredException e) {
-					}
+				if (resident.hasTown()) {
+					String placeholderPerm = permission.replace("{townname}", resident.getTownOrNull().getName().toLowerCase());
+					newPerms.put(placeholderPerm, true);
+				}
 			} else if (permission.contains("{nationname}")) {
-				if (resident.hasNation())
-					try {
-						String placeholderPerm = permission.replace("{nationname}", resident.getTown().getNation().getName().toLowerCase());
-						newPerms.put(placeholderPerm, true);
-					} catch (NotRegisteredException e) {
-					}
+				if (resident.hasNation()) {
+					String placeholderPerm = permission.replace("{nationname}", resident.getTownOrNull().getNationOrNull().getName().toLowerCase());
+					newPerms.put(placeholderPerm, true);
+				}
 			} else {
 				value = (!permission.startsWith("-"));
 				newPerms.put((value ? permission : permission.substring(1)), value);
@@ -626,4 +617,74 @@ public class TownyPerms {
 
 	}
 
+	public static List<String> getGroupList() {
+		return new ArrayList<String>(groupPermsMap.keySet());
+	}
+	
+	public static boolean mapHasGroup(String group) {
+		return groupPermsMap.containsKey(group);
+	}
+	
+	public static List<String> getPermsOfGroup(String group) {
+		return mapHasGroup(group) ? (groupPermsMap.get(group) != null ? groupPermsMap.get(group): new ArrayList<String>()): new ArrayList<String>(); 
+	}
+	
+	private static void buildGroupPermsMap() {
+		for (String key : perms.getKeys(true)) {
+			@SuppressWarnings("unchecked")
+			List<String> nodes = (List<String>) perms.getList(key); 
+			groupPermsMap.put(key, nodes);
+		}
+	}
+
+	private static void buildComments() {
+		perms.addComment("nomad",
+				"#############################################################################################",
+				"# This file contains custom permission sets which will be assigned to your players",
+				"# depending on their current status.",
+				"#",
+				"# This is all managed by towny and pushed directly to CraftBukkits SuperPerms.",
+				"# These will be in addition to any you manually assign in your specific permission plugin.",
+				"#",
+				"# You may assign any Permission nodes here, including those from other plugins.",
+				"# You may also create any custom ranks you require.",
+				"#############################################################################################",
+				"",
+				"",
+				"# The 'nomad' permissions are given to all players in all Towny worlds, townless and players who are part of a town.");
+		
+		perms.addComment("towns", "", "# This section of permissions covers players who are members of a town.");
+		
+		perms.addComment("towns.default", "", "# 'default' is the permission set which is auto assigned to any normal town member.");
+		
+		perms.addComment("towns.mayor", "", "# Mayors get these permissions in addition to the default set.");
+		
+		perms.addComment("towns.ranks", 
+				"", 
+				"# Ranks contain additional permissions residents will be", 
+				"# granted if they are assigned that specific rank.");
+		
+		if (perms.getKeys(true).contains("towns.ranks.assistant"))
+			perms.addComment("towns.ranks.assistant", "", "# assistants are able to grant VIP and helper rank.");
+		
+		if (perms.getKeys(true).contains("towns.ranks.donator"))
+			perms.addComment("towns.ranks.donator", "", "# Currently only an example rank holder with no extra permissions.");
+		
+		if (perms.getKeys(true).contains("towns.ranks.vip"))
+			perms.addComment("towns.ranks.vip", "", "# Currently only an example rank holder with no extra permissions.");
+		
+		if (perms.getKeys(true).contains("towns.ranks.sheriff"))
+			perms.addComment("towns.ranks.sheriff", "", "# Sheriff rank is able to jail other town members.");
+		
+		perms.addComment("nations", "", "# This section of permissions covers players who are members of any town in a nation.");
+		
+		perms.addComment("nations.default", "", "# All nation members get these permissions.");
+		
+		perms.addComment("nations.king", "", "# Kings get these permissions in addition to the default set.");
+	}
+
+	public static CommentedConfiguration getTownyPermsFile() {
+		return perms;
+	}
+	
 }

@@ -528,11 +528,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return BukkitTools.getPlayer(getName());
 	}
 
-	public boolean addTownRank(String rank) throws AlreadyRegisteredException {
-		if (this.hasTown()) {
-			if (hasTownRank(rank))
-				throw new AlreadyRegisteredException();
-
+	public boolean addTownRank(String rank) {
+		if (!hasTownRank(rank)) {
 			townRanks.add(rank);
 			if (BukkitTools.isOnline(this.getName()))
 				TownyPerms.assignPermissions(this, null);
@@ -566,7 +563,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return Collections.unmodifiableList(townRanks);
 	}
 	
-	public boolean removeTownRank(String rank) throws NotRegisteredException {
+	public boolean removeTownRank(String rank) {
 
 		if (hasTownRank(rank)) {
 			townRanks.remove(rank);
@@ -577,15 +574,12 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			return true;
 		}
 
-		throw new NotRegisteredException();
+		return false;
 	}
 
-	public boolean addNationRank(String rank) throws AlreadyRegisteredException {
+	public boolean addNationRank(String rank) {
 
-		if (this.hasNation()) {
-			if (hasNationRank(rank))
-				throw new AlreadyRegisteredException();
-	
+		if (!hasNationRank(rank)) {
 			nationRanks.add(rank);
 			if (BukkitTools.isOnline(this.getName()))
 				TownyPerms.assignPermissions(this, null);
@@ -618,7 +612,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return Collections.unmodifiableList(nationRanks);
 	}
 
-	public boolean removeNationRank(String rank) throws NotRegisteredException {
+	public boolean removeNationRank(String rank){
 
 		if (hasNationRank(rank)) {
 			nationRanks.remove(rank);
@@ -627,7 +621,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			return true;
 		}
 
-		throw new NotRegisteredException();
+		return false;
 
 	}
 

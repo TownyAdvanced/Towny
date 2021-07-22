@@ -33,7 +33,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -44,6 +46,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	private final List<Resident> residents = new ArrayList<>();
 	private final List<Resident> outlaws = new ArrayList<>();
+	private final Set<Resident> trustedResidents = new HashSet<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Jail> jails = null;
 	private HashMap<String, PlotGroup> plotGroups = null;
@@ -1186,18 +1189,6 @@ public class Town extends Government implements TownBlockOwner {
 		return primaryJail;
 	}
 	
-	public List<TownBlock> getTownBlocksForPlotGroup(PlotGroup group) {
-		ArrayList<TownBlock> retVal = new ArrayList<>();
-		TownyMessaging.sendErrorMsg(group.toString());
-		
-		for (TownBlock townBlock : getTownBlocks()) {
-			if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().equals(group))
-				retVal.add(townBlock);
-		}
-		
-		return retVal;
-	}
-	
 	public void renamePlotGroup(String oldName, PlotGroup group) {
 		plotGroups.remove(oldName);
 		plotGroups.put(group.getName(), group);
@@ -1213,9 +1204,10 @@ public class Town extends Government implements TownBlockOwner {
 	
 	public void removePlotGroup(PlotGroup plotGroup) {
 		if (hasPlotGroups() && plotGroups.remove(plotGroup.getName()) != null) {
-			for (TownBlock tb : getTownBlocks()) {
-				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().equals(plotGroup)) {
-					tb.getPlotObjectGroup().setID(null);
+			for (TownBlock tb : new ArrayList<>(plotGroup.getTownBlocks())) {
+				if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().getID().equals(plotGroup.getID())) {
+					plotGroup.removeTownBlock(tb);
+					tb.removePlotObjectGroup();
 					tb.save();
 				}
 			}
@@ -1231,6 +1223,10 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	// Method is inefficient compared to getting the group from name.
+	/**
+	 * @deprecated since 0.97.0.11 for being unused.
+	 */
+	@Deprecated
 	public PlotGroup getObjectGroupFromID(UUID ID) {
 		if (hasPlotGroups()) {
 			for (PlotGroup pg : getPlotGroups()) {
@@ -1246,26 +1242,15 @@ public class Town extends Government implements TownBlockOwner {
 		return plotGroups != null;
 	}
 
-	// Override default method for efficient access
 	public boolean hasPlotGroupName(String name) {
 		return hasPlotGroups() && plotGroups.containsKey(name);
 	}
 
+	@Nullable
 	public PlotGroup getPlotObjectGroupFromName(String name) {
-		if (hasPlotGroups()) {
+		if (hasPlotGroups() && hasPlotGroupName(name))
 			return plotGroups.get(name);
-		}
-		
 		return null;
-	}
-	
-	// Wraps other functions to provide a better naming scheme for the end developer.
-	public PlotGroup getPlotObjectGroupFromID(UUID ID) {
-		return getObjectGroupFromID(ID);
-	}
-	
-	public Collection<PlotGroup> getPlotObjectGroups() {
-		return getPlotGroups();
 	}
 
 	@Override
@@ -1428,5 +1413,21 @@ public class Town extends Government implements TownBlockOwner {
 		residents.clear();
 		residents.addAll(sortedResidents);
 		residentsSorted = true;
+	}
+
+	public Set<Resident> getTrustedResidents() {
+		return trustedResidents;
+	}
+	
+	public boolean hasTrustedResident(Resident resident) {
+		return trustedResidents.contains(resident);
+	}
+	
+	public void addTrustedResident(Resident resident) {
+		trustedResidents.add(resident);
+	}
+	
+	public void removeTrustedResident(Resident resident) {
+		trustedResidents.remove(resident);
 	}
 }

@@ -443,6 +443,10 @@ public enum ConfigNodes {
 			"new_world_settings.plot_management.wild_revert_on_block_explosion.blocks",
 			"WHITE_BED,ORANGE_BED,MAGENTA_BED,LIGHT_BLUE_BED,YELLOW_BED,LIME_BED,PINK_BED,GRAY_BED,LIGHT_GRAY_BED,CYAN_BED,PURPLE_BED,BLUE_BED,BROWN_BED,GREEN_BED,RED_BED,BLACK_BED",
 			"# The list of blocks whose explosions should be reverted."),
+	NWS_PLOT_MANAGEMENT_WILD_REVERT_BLOCK_WHITELIST(
+		"new_world_settings.plot_management.wild_revert_on_explosion_block_whitelist",
+		"",
+		"# The list of blocks to regenerate. (if empty all blocks will regenerate)"),
 		
 
 	GTOWN_SETTINGS(
@@ -859,6 +863,7 @@ public enum ConfigNodes {
 			"",
 			"# When enabled, town names will automatically be capitalised upon creation."
 	),
+	
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",
@@ -954,6 +959,11 @@ public enum ConfigNodes {
 			"",
 			"# This setting determines the list of allowed nation map colors.",
 			"# The color codes are in hex format."),
+	GNATION_SETTINGS_MAX_ALLIES(
+			"global_nation_settings.max_allies",
+			"-1",
+			"",
+			"# The maximum amount of allies that a nation can have, set to -1 to have no limit."),
 
 	PLUGIN(
 			"plugin",
@@ -1127,6 +1137,17 @@ public enum ConfigNodes {
 		"# A blacklist used for validating town/nation names.",
 		"# Names must be seperated by a comma: name1,name2"
 	),
+	PLUGIN_UPDATE_NOTIFICATIONS_ALERTS(
+		"plugin.update_notifications.alerts",
+		"true",
+		"",
+		"# If enabled, players with the towny.admin.updatealerts permission will receive an update notification upon logging in."),
+	PLUGIN_UPDATE_NOTIFICATIONS_MAJOR_ONLY(
+		"plugin.update_notifications.major_only",
+		"true",
+		"",
+		"# If enabled, only full releases will trigger notifications if you are running a full release.",
+		"# This is ignored if the server is currently using a pre-release version."),
 	FILTERS_COLOUR_CHAT(
 			"filters_colour_chat",
 			"",
@@ -2180,6 +2201,25 @@ public enum ConfigNodes {
 //	ECO_PLOT_TYPE_COSTS_OUTPOST("economy.plot_type_costs.set_outpost",
 //			"0.0",
 //			"# Cost to use /plot set outpost to change a normal plot to a outpost plot."),
+
+	BANKHISTORY(
+		"bank_history",
+		"",
+		"",
+		"",
+		"  ############################################################",
+		"  # +------------------------------------------------------+ #",
+		"  # |                 Bank History settings                | #",
+		"  # +------------------------------------------------------+ #",
+		"  ############################################################",
+		""),
+
+	BANKHISTORY_BOOK(
+		"bank_history.book",
+		"{time}\n\n{type} of {amount} {to-from} {name}\n\nReason: {reason}\n\nBalance: {amount}",
+		"",
+		"# This allows you to modify the style displayed via bankhistory commands."
+	),
 	
 	JAIL(
 			"jail",
@@ -2495,108 +2535,6 @@ public enum ConfigNodes {
 			"60",
 			"",
 			"# The minimum height at which a player must stand to count as an attacker."),
-	WAR_ENEMY(
-			"war.enemy",
-			"",
-			"",
-			"",
-			"############################################################",
-			"# +------------------------------------------------------+ #",
-			"# |                   Flag War Settings                  | #",
-			"# |                                                      | #",
-			"# |               [Separate from Event War]              | #",
-			"# |           --------------------------------           | #",
-			"# |        DEPRECATED: Minimally Supported Through       | #",
-		    "# |             3rd Party Contributions Only             | #",
-			"# +------------------------------------------------------+ #",
-			"############################################################",
-			""),
-	WAR_ENEMY_ALLOW_ATTACKS(
-			"war.enemy.allow_attacks",
-			"false",
-			"",
-			"# If false, players won't be able to place war flags, effectively disabling warzones."),
-	WAR_ENEMY_ONLY_ATTACK_BORDER(
-			"war.enemy.only_attack_borders",
-			"true",
-			"",
-			"# If true, enemy's can only attack the edge plots of a town with war flags."),
-	WAR_ENEMY_MIN_PLAYERS_ONLINE_IN_TOWN(
-			"war.enemy.min_players_online_in_town",
-			"2",
-			"",
-			"# This many people must be online in target town in order to place a war flag in their domain."),
-	WAR_ENEMY_MIN_PLAYERS_ONLINE_IN_NATION(
-			"war.enemy.min_players_online_in_nation",
-			"3",
-			"",
-			"# This many people must be online in target nation in order to place a war flag in their domain."),
-	WAR_ENEMY_MAX_ACTIVE_FLAGS_PER_PLAYER(
-			"war.enemy.max_active_flags_per_player",
-			"1",
-			""),
-	WAR_ENEMY_FLAG("war.enemy.flag", "", ""),
-	WAR_ENEMY_FLAG_WAITING_TIME("war.enemy.flag.waiting_time", 
-			"1m",
-			"", 
-			"# This setting modifies the time between a war flag's Material shift. Accepts `s`(seconds) and `m`(minutes).",
-			"# Currently, you would multiply this times 10 to get the total time a flag should be in play.",
-			"# (It can also be set to `h` and `d` - but ain't nobody got time fo' that.)"),
-	WAR_ENEMY_FLAG_BASE_BLOCK(
-			"war.enemy.flag.base_block",
-			"oak_fence",
-			"",
-			"# This is the block a player must place to trigger the attack event."),
-	WAR_ENEMY_FLAG_LIGHT_BLOCK(
-			"war.enemy.flag.light_block",
-			"torch",
-			"",
-			"# This is the block a player must place to trigger the attack event."),
-	WAR_ENEMY_BEACON("war.enemy.beacon", "", ""),
-	WAR_ENEMY_BEACON_RADIUS(
-			"war.enemy.beacon.radius",
-			"3",
-			"",
-			"# Must be smaller than half the size of town_block_size."),
-	WAR_ENEMY_BEACON_HEIGHT_ABOVE_FLAG(
-			"war.enemy.beacon.height_above_flag",
-			"",
-			"# The range the beacon will be drawn in. It's flexibility is in case the flag is close to the height limit.",
-			"# If a flag is too close to the height limit (lower than the minimum), it will not be drawn."),
-	WAR_ENEMY_BEACON_HEIGHT_ABOVE_FLAG_MIN(
-			"war.enemy.beacon.height_above_flag.min",
-			"3"),
-	WAR_ENEMY_BEACON_HEIGHT_ABOVE_FLAG_MAX(
-			"war.enemy.beacon.height_above_flag.max",
-			"64"),
-	WAR_ENEMY_BEACON_DRAW("war.enemy.beacon.draw", "true"),
-	WAR_ENEMY_BEACON_WIREFRAME_BLOCK(
-			"war.enemy.beacon.wireframe_block",
-			"glowstone"),
-	WAR_ENEMY_PREVENT_INTERACTION_WHILE_FLAGGED(
-		"war.enemy.prevent_interaction_while_flagged",
-		"true",
-		"",
-		"# While true, prevent players from performing certain actions while their town",
-		"# has an active enemy war flag placed."),
-	WAR_ENEMY_PREVENT_NATION_INTERACTION_WHILE_FLAGGED(
-		"war.enemy.prevent_nation_interaction_while_flagged",
-		"true",
-		"",
-		"# While true, prevent players from performing certain actions while a town in their nation",
-		"# has an active enemy war flag placed."),
-	WAR_ENEMY_TIME_TO_WAIT_AFTER_FLAGGED(
-		"war.enemy.time_to_wait_after_flagged",
-		"600000",
-		"",
-		"# This is how much time that must pass after a town in a nation has been flagged",
-		"# before certain actions can be performed, measured in milliseconds."),
-	WAR_ENEMY_FLAG_TAKES_OWNERSHIP_OF_TOWNBLOCKS(
-		"war.enemy.flag_takes_ownership_of_townblocks",
-		"true",
-		"",
-		"# If set to true, when a war flag finishes it's countdown successfully, the attacking town takes full control of the townblock.",
-		"# Setting this to 'False' will result only in monetary exchanges."),
 	WAR_WARZONE(
 			"war.warzone",
 			"",
@@ -2606,7 +2544,7 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"# |              Warzone Block Permissions               | #",
 			"# |                                                      | #",
-			"# |              Used in Flag & Event Wars               | #",
+			"# |                  Used in Event Wars                  | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),

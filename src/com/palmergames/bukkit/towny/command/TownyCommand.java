@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
+import com.palmergames.bukkit.towny.TownyUpdateChecker;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -21,6 +22,7 @@ import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
@@ -141,9 +143,16 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				}
 			} else if (args[0].equalsIgnoreCase("time")) {
 				TownyMessaging.sendMsg(Translation.of("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
-			} else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v"))
-				TownyMessaging.sendMessage(sender, Colors.strip(towny_version));
-			else if (args[0].equalsIgnoreCase("war")) {
+			} else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v")) {
+				if (TownyUpdateChecker.shouldShowNotification()) {
+					TownyMessaging.sendMessage(sender, Colors.strip(Translation.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion())));
+				} else {
+					TownyMessaging.sendMsg(sender, towny_version);
+					
+					if (TownyUpdateChecker.hasCheckedSuccessfully())
+						TownyMessaging.sendMsg(sender, Translation.of("msg_up_to_date"));
+				}
+			} else if (args[0].equalsIgnoreCase("war")) {
 				boolean war = TownyWar(StringMgmt.remFirstArg(args), null);
 				if (war)
 					for (String line : towny_war)
@@ -213,6 +222,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 		try {
 
+			TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+			if (world == null && split[0].equalsIgnoreCase("wildsblocks") || split[0].equalsIgnoreCase("plotclearblocks"))
+				throw new TownyException(Translation.of("msg_err_usingtowny_disabled"));
+				
 			if (split[0].equalsIgnoreCase("map")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -256,10 +269,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				ResidentUtil.openGUIInventory(resident, TownySettings.getFarmPlotBlocks(), Translation.of("gui_title_towny_farmblocks"));
 			} else if (split[0].equalsIgnoreCase("wildsblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getUnclaimedZoneIgnoreMaterials(), Translation.of("gui_title_towny_wildsblocks"));
+				ResidentUtil.openGUIInventory(resident, world.getUnclaimedZoneIgnoreMaterials(), Translation.of("gui_title_towny_wildsblocks"));
 			} else if (split[0].equalsIgnoreCase("plotclearblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()).getPlotManagementMayorDelete(), Translation.of("gui_title_towny_plotclear"));
+				ResidentUtil.openGUIInventory(resident, world.getPlotManagementMayorDelete(), Translation.of("gui_title_towny_plotclear"));
 			} else if (split[0].equalsIgnoreCase("top")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
@@ -280,7 +293,15 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("version") || split[0].equalsIgnoreCase("v")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));
-				TownyMessaging.sendMessage(player, towny_version);
+
+				if (TownyUpdateChecker.shouldShowNotification()) {
+					TownyMessaging.sendMsg(player, Colors.strip(Translation.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion())));
+				} else {
+					TownyMessaging.sendMsg(player, towny_version);
+					
+					if (TownyUpdateChecker.hasCheckedSuccessfully())
+						TownyMessaging.sendMsg(player, Translation.of("msg_up_to_date"));
+				}
 			} else if (split[0].equalsIgnoreCase("war")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translation.of("msg_err_command_disable"));

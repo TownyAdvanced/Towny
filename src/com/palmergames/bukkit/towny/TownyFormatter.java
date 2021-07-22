@@ -120,7 +120,7 @@ public class TownyFormatter {
 		else
 			owner = town;
 
-		out.add(ChatTools.formatTitle(owner.getFormattedName() + ((BukkitTools.isOnline(owner.getName())) ? Translation.of("online") : "")));
+		out.add(ChatTools.formatTitle("(" + townBlock.getCoord().toString() + ") " + owner.getFormattedName() + ((BukkitTools.isOnline(owner.getName())) ? Translation.of("online") : "")));
 		if (!townBlock.getType().equals(TownBlockType.RESIDENTIAL))
 			out.add(Translation.of("status_plot_type") + townBlock.getType().toString());
 		out.add(Translation.of("status_perm") + ((owner instanceof Resident) ? townBlock.getPermissions().getColourString().replace("n", "t") : townBlock.getPermissions().getColourString().replace("f", "r")));
@@ -134,6 +134,10 @@ public class TownyFormatter {
 			out.add(Translation.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
 		if (townBlock.getClaimedAt() > 0)
 			out.add(Translation.of("msg_plot_perm_claimed_at", registeredFormat.format(townBlock.getClaimedAt())));
+		
+		if (townBlock.getTrustedResidents().size() > 0) {
+			out.addAll(getFormattedResidents(Translation.of("status_trustedlist"), new ArrayList<>(townBlock.getTrustedResidents())));
+		}
 		
 		out.addAll(getExtraFields(townBlock));
 		out = formatStatusScreens(out);
@@ -286,6 +290,9 @@ public class TownyFormatter {
 			ranklist.addAll(getFormattedResidents(StringMgmt.capitalize(rank), residentWithRank));
 			residentWithRank.clear();
 		}
+		
+		if (town.getTrustedResidents().size() > 0)
+			ranklist.addAll(getFormattedResidents(Translation.of("status_trustedlist"), new ArrayList<>(town.getTrustedResidents())));
 	}
 
 	/**

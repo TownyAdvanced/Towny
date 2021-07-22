@@ -65,9 +65,11 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
@@ -255,10 +257,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(name));
 	}
 
-	public void newPlotGroup(PlotGroup group) {
-		universe.getGroups().add(group);
-	}
-
 	/*
 	 * Are these objects in the TownyUniverse maps?
 	 */
@@ -376,6 +374,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				matches.add(matchRes);
 		}
 		return matches;
+	}
+	
+	@Override
+	public List<Resident> getResidents(UUID[] uuids) {
+		return Arrays.stream(uuids).filter(Objects::nonNull).map(universe::getResident).filter(Objects::nonNull).collect(Collectors.toList());
 	}
 
 	/**
@@ -606,8 +609,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * getPlotGroups methods.
 	 */
 
-	public PlotGroup getPlotObjectGroup(String townName, UUID groupID) {
-		return universe.getGroup(townName, groupID);
+	public PlotGroup getPlotObjectGroup(UUID groupID) {
+		return universe.getGroup(groupID);
 	}
 
 	public List<PlotGroup> getAllPlotGroups() {
@@ -928,6 +931,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		deleteJail(jail);
 	}
+
+	@Override
+	public void removePlotGroup(PlotGroup group) {
+		TownyUniverse.getInstance().unregisterGroup(group);
+		deletePlotGroup(group);
+	}
 	
 	/*
 	 * Rename Object Methods
@@ -951,8 +960,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			if (TownyUniverse.getInstance().hasTown(filteredName))
 				throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
-
-			// TODO: Delete/rename any invites.
 
 			List<Resident> toSave = new ArrayList<>(town.getResidents());
 			boolean isCapital = false;
@@ -1028,13 +1035,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			
 			if (town.hasPlotGroups())
-				for (PlotGroup pg : town.getPlotObjectGroups()) {
+				for (PlotGroup pg : town.getPlotGroups()) {
 					pg.setTown(town);
 					savePlotGroup(pg);
 				}
 
 			saveTown(town);
-			savePlotGroupList();
 			saveWorld(town.getHomeblockWorld());
 
 			if (nation != null) {
@@ -1068,8 +1074,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			if (universe.hasNation(filteredName))
 				throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
-
-			// TODO: Delete/rename any invites.
 
 			List<Town> toSave = new ArrayList<>(nation.getTowns());
 			double nationBalance = 0.0;
@@ -1147,10 +1151,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		// Save
 		savePlotGroup(group);
-		savePlotGroupList();
-
-		// Delete the old group file.
-		deletePlotGroup(group);
 	}
 
 	@Override
@@ -1660,5 +1660,21 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		mergeInto.save();
 		TownyMessaging.sendGlobalMessage(Translation.of("msg_town_merge_success", mergeFrom.getName(), mayorName, mergeInto.getName()));
+	}
+	
+	public List<UUID> toUUIDList(Collection<Resident> residents) {
+		return residents.stream().filter(Resident::hasUUID).map(Resident::getUUID).collect(Collectors.toList());
+	}
+	
+	public UUID[] toUUIDArray(String[] uuidArray) {
+		UUID[] uuids = new UUID[uuidArray.length];
+		
+		for (int i = 0; i < uuidArray.length; i++) {
+			try {
+				uuids[i] = UUID.fromString(uuidArray[i]);
+			} catch (IllegalArgumentException ignored) {}
+		}
+		
+		return uuids;
 	}
 }

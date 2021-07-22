@@ -6316,3 +6316,158 @@ v0.92.0.11:
     - When set above 0, the furthest number of townblocks a homeblock can be moved by.
     - Example: setting it to 3 would mean the player can only move their homeblock over by 3 townblocks at a time.
     - Useful when used with the above homeblock_movement_cooldown_hours setting.
+  - Handle dispenser damage correctly, courtesy of Warriorrrr with PR #5039.
+    - Finishes some ancient TODOs that meant Dispensers weren't really tested against PVP.
+  - API: TownyDispenserDamageEntityEvent a TownyDamageEvent.
+  - Send a warning if /tw toggle is used when usingtowny is false, courtesy of Warriorrrr with PR #5040.
+  - es-419.yml update, courtesy of EuGNosii with PR #5042.
+0.97.0.10:
+  - Fix force-explosion world setting not forcing explosions in towns.
+  - API: Add WildernessMapEvent
+    - Event which allows third-party plugins to change what is show on the ASCII map, in the wilderness.
+  - Fix /tw toggle plotcleardelete toggling the wrong feature.
+  - New Command: /tw toggle unclaimblockdelete {on|off} 
+    - Turns on/off the delete-blocks-on-unclaim feature in the world.
+  - Fix Tamed Wolfs being attackable where PVP is off.
+  - Fix SQL code loading new Jails.
+  - Prevent commas being used in plot group names.
+    - Closes #5049.
+  - Creates a cache of sorts for the wilderness coords on the Towny ASCII map.
+0.97.0.11:
+  - Add WildernessMapEvent awareness to the /towny map hud.
+    - Other plugins like TownyCamps, TownyHistories now appear on the /towny map hud.
+  - Fix footer of the /town jail list output.
+  - Alter non-player vs non-player combat:
+    - In the wilderness it is allowed.
+    - If it is a tamed wolf, and the owner is online, and the owner can destroy in the plot where the defender non-player is, and the non-player is a protected entity, the wolf murdering other non-players is allowed.
+    - Closes #5059.
+  - Make applicable placeholders available when a player is offline, courtesy of BlakeStevenson with PR #4962.
+    - All except for player_plot_* and player_location_* placeholders should function for offline players.
+  - Update Spanish file and fix type in English file, courtesy of ElMoha943 with PR #5070. (First-Time Contributor!)
+  - Fix ChunkNotifications not correctly handling not-for-sale plotgroups.
+    - Closes #5069.
+  - Fix ChunkNotifications creating an error when a forsale plot is entered into where the economy is not active.
+  - Plot Group Overhaul
+    - Adds ability to transfer a townblock from one group to another using /plot group add NAME.
+      - Closes #5050.
+    - Removes the plotgroups.txt file.
+     - All files in the plotgroups folder will be loaded.
+    - Plot Groups now keep a uniform perm line.
+    - PlotGroups which are for sale will show a $ symbol on the ascii and hud maps.
+    - PlotGroups now have their own hovertext when viewed in the /towny map.
+    - Fix empty plotgroups not being deleted.  
+    - Rewrite of the SQL saving/loading for plotgroups is done as well.
+      - Fixes delete code which would never work.
+      - Removes a redundant SQLSource method loadJail(Jail).
+    - Properly PlotGroup.setResident(Resident) where it was not.
+  - New Command: /plot group delete
+    - Deletes a plot group entirely, requested in #5050.
+  - New Command: /town plotgrouplist (townname) (page)
+    - Lists a town's plotgroups with forsale and price indicated.
+    - Closes #4431. 
+  - New Permission Node: towny.command.plot.group.delete
+    - Child node of towny.command.plot.group.*
+    - Not needed to be added to townyperms.yml.
+  - New Permission Node: towny.command.town.plotgrouplist
+      - Child node of towny.command.town.*
+      - Not needed to be added to townyperms.yml.
+0.97.0.12:
+  - Fix placeholders starting with %townyadvanced_player_ not working. 
+  - Version checker, courtesy of Warriorrrr with PR #5016.
+    - Automatically checks for updates on startup, and notifies players with the update notifications permission node when logging in (if enabled).
+    - Servers can choose to be notified of Release versions.
+    - If a server is using a pre-release version, and they have the checker enabled, they will be notified of new pre-releases (ignoring the release-versions-only option.)
+    - Presents a download link.
+  - New permission node: towny.admin.updatealerts
+    - Child node of towny.admin.
+  - New config node: plugin.update_notifications.alerts
+    - Default: true
+    - If enabled, players with the towny.admin.updatealerts permission will receive an update notification upon logging in.
+  - New config node: plugin.update_notifications.major_only
+    - Default: true
+    - If enabled, only full releases will trigger notifications if you are running a full release, unless you're using a pre-release version.
+  - New Placeholder: %townyadvanced_player_location_plot_owner_name%
+    - Displays the name of the resident who owns the plot, or blank if no one personally owns it.
+    - Closes #4916.
+  - Allow for plots to be claimed by clicking the $ on the ascii map.
+    - Closes #4020.
+  - Add ability for a nomad to be prompted to a join a town when they /plot claim, if the town is open and the townblock is not an embassy plot.
+    - Closes #4019.
+0.97.0.13:
+  - Fix /town claim throwing Index 0 out of bounds for length 0 error.
+0.97.0.14:
+  - Add Trusted to TownBlocks and Towns, PermOverrides to TownBlocks, courtesy of Warriorrrr with PR #5085.
+    - Use /town trust add|remove NAME or /plot trust add|remove NAME to give people full build/destroy/switch/itemuse permissions in the given town or plot.
+    - Use /plot perm add|remove NAME to add a player to a plot's permission overrides.
+    - Use /plot perm GUI to open the plot permission editor.
+      - Hover over the player's head who you've added to the plot to see their BDSI settings.
+      - Click their head to edit the individual build/destroy/switch/itemuse settings.
+    - PlotGroups also have the same ability to have trusted|permission overrides applied to players for the entire plotgroup.
+      - Use the same /plot group trust|perm commands.
+    - New Commands:
+      - /town trust add|remove NAME
+      - /plot trust add|remove NAME
+      - /plot perm add|remove NAME
+      - /plot perm gui
+      - /plot group trust add|remove NAME
+      - /plot group perm add|remove NAME
+      - /plot group perm gui
+    - New Permission Nodes:
+      - These are all child nodes of towny.command.plot.perm (which is already in townyperms.yml) no editing required. 
+      - towny.command.plot.perm.*
+      - towny.command.plot.perm.gui
+      - towny.command.plot.perm.add
+      - towny.command.plot.perm.remove
+      - Mayors are already given this via towny.command.town.*
+      - towny.command.town.trust
+    - New Permission Nodes which will automatically be given to the nomad rank:      
+      - towny.command.plot.trust
+      - towny.command.plot.group.*
+        - towny.command.plot.group.trust
+        - towny.command.plot.group.perm
+  - Remove Integrated FlagWar, courtesy of TheFlagCourier with PR #5081.
+    - Completes the separation of FlagWar into a standalone .jar available here: https://github.com/TownyAdvanced/FlagWar
+    - This new jar has already had a couple new features added which were not available in Towny's version of FlagWar.
+    - There could be some bugs still in the standalone version so if you see something, say something.
+      - Bugs can be reported on the issue tracker: https://github.com/TownyAdvanced/FlagWar/issues
+  - API: DisplayedNationsListSortEvent added courtesy of Goosius with PR #5084.
+    - Allows for a plugin to alter how nations are listed on /n list.
+  - Bump Language Files to 0.113.
+  - Townyperms.yml now receives automatic updates (like the config and world files.) 
+    - This was last thing which sometimes required admin intervention.
+    - Enjoy even more drag-and-drop Towny updates.
+  - Add config option for limiting ally amounts, courtesy of Warriorrrr with PR #5082.
+    - Closes #5064.
+  - New Config Option: global_nation_settings.max_allies
+    - Default: -1
+    - The maximum amount of allies that a nation can have, set to -1 to have no limit.
+  - Fix /town unclaim throwing Index out of bounds error, courtesy of Silverwolfg11 with PR #5088.
+0.97.0.15:
+  - Fix new townyperms ConfigMigrator using key where it should use value.
+  - Implemented basic configuration format for audit history, courtesy of Glare with PR #5095.
+  - New Config Option: bank_history.book
+    - {time}\n\n{type} of {amount} {to-from} {name}\n\nReason: {reason}\n\nBalance: {amount} 
+    - This allows you to modify the style displayed via bankhistory commands. 
+  - Added /ta townyperms command.
+    - Edit the townyperms file from in game.
+  - New Permission Node: towny.command.townyadmin.townyperms
+    - Child node of towny.command.townyadmin.*
+    - No required townyperms.yml change.
+  - New Commands:
+    - /ta townyperms grouplist : Lists all of the groups in the townyperms.yml.
+    - /ta townyperms group [groupname] : lists the nodes held by a group.
+    - /ta townyperms group [groupname] addperm|removeperm [node] : adds or removes a node to/from a group.
+    - /ta townyperms townrank addrank|removerank [rank] : adds or removes a town rank.
+    - /ta townyperms nationrank addrank|removerank [rank] : adds or removes a nation rank.
+  - Bump Language Files to 0.114.
+  - Add a block whitelist to wilderness explosion regeneration, courtesy of NigelTicknor with PR #5091.
+    - World files have: PlotManagementWildRegenBlockWhitelist="";
+    - Config contains the default which will be applied to new worlds only: new_world_settings.plot_management.wild_revert_on_explosion_block_whitelist
+    - When these are empty the whitelist is not used, and instead the older way is done: everything reverts except the plotManagementIgnoreIds list.
+    - When the list is not empty, only the blocks in the list will regenerate. 
+    - Pull Request also fixed a couple bugs that were spotted in testing.
+  - New Config Option: new_world_settings.plot_management.wild_revert_on_explosion_block_whitelist
+    - Default: ''
+    - New worlds will use the list to populate their PlotManagementWildRegenBlockWhitelist lists.
+  - Fix /ta nation [nation] rank command being able to give nation ranks to a non-nation-having-resident.
+  - Remove a ton of possible NotRegisteredExceptions that could be thrown using methods added since 0.97.0.0.

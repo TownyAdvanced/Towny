@@ -57,6 +57,7 @@ public class SQL_Schema {
 		columns.add("`plotManagementIgnoreIds` mediumtext NOT NULL");
 		columns.add("`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementWildRegenEntities` mediumtext NOT NULL");
+		columns.add("`plotManagementWildRegenBlockWhitelist` mediumtext NOT NULL");
 		columns.add("`plotManagementWildRegenSpeed` long NOT NULL");
 		columns.add("`usingPlotManagementWildRegenBlocks` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementWildRegenBlocks` mediumtext NOT NULL");		
@@ -174,6 +175,7 @@ public class SQL_Schema {
 		columns.add("`joinedNationAt` BIGINT NOT NULL");
 		columns.add("`primaryJail` VARCHAR(36) DEFAULT NULL");
 		columns.add("`movedHomeBlockAt` BIGINT NOT NULL");
+		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
 		return columns;
 	}
 
@@ -230,6 +232,8 @@ public class SQL_Schema {
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`groupID` VARCHAR(36) DEFAULT NULL");
 		columns.add("`claimedAt` BIGINT NOT NULL");
+		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
+		columns.add("`customPermissionData` mediumtext DEFAULT NULL");
 		return columns;
 	}
 
