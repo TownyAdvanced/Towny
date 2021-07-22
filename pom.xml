@@ -206,7 +206,7 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <plugin>
+<!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.2.0</version>
@@ -221,7 +221,7 @@
                 <configuration>
                     <source>${java.version}</source>
                 </configuration>
-            </plugin>
+            </plugin>-->
             <plugin>  <!-- Create sources.jar -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>

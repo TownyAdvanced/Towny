@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.hooks;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.context.ContextCalculator;
@@ -25,8 +26,12 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 	private static final String INSIDETOWN_CONTEXT = "towny:insidetown";
 	private static final String INSIDEOWNTOWN_CONTEXT = "towny:insideowntown";
 	private static final String INSIDEOWNPLOT_CONTEXT = "towny:insideownplot";
+	private static final String TOWN_RANK_CONTEXT = "towny:townrank";
+	private static final String NATION_RANK_CONTEXT = "towny:nationrank";
 	
 	private static final List<String> booleanContexts = Arrays.asList(RESIDENT_CONTEXT, MAYOR_CONTEXT, KING_CONTEXT, INSIDETOWN_CONTEXT, INSIDEOWNTOWN_CONTEXT, INSIDEOWNPLOT_CONTEXT);
+	private static final String nationRankContext = NATION_RANK_CONTEXT;
+	private static final String TownRankContext = TOWN_RANK_CONTEXT;
 	
 	private static LuckPerms luckPerms;
 
@@ -43,6 +48,9 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 		Resident resident = TownyAPI.getInstance().getResident(player.getName());
 		if (resident == null)
 			return;
+			
+		for (String townrank : resident.getTownRanks()) contextConsumer.accept(TOWN_RANK_CONTEXT, townrank);
+		for (String nationrank : resident.getNationRanks()) contextConsumer.accept(NATION_RANK_CONTEXT, nationrank);
 		
 		contextConsumer.accept(RESIDENT_CONTEXT, Boolean.toString(resident.hasTown()));
 		contextConsumer.accept(MAYOR_CONTEXT, Boolean.toString(resident.isMayor()));
@@ -68,6 +76,9 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 			builder.add(context, "true");
 			builder.add(context, "false");
 		}
+		for (String nationrank : TownyPerms.getNationRanks()) builder.add(nationRankContext, nationrank);
+		for (String townrank : TownyPerms.getTownRanks()) builder.add(TownRankContext, townrank);
+		
 		return builder.build();
 	}
 }
