@@ -4,7 +4,6 @@ import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.util.Colors;
 
@@ -18,7 +17,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 
 public class TownyLoginListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerLogin(PlayerLoginEvent event) throws NotRegisteredException {
+    public void onPlayerLogin(PlayerLoginEvent event) {
 		String npcPrefix = TownySettings.getNPCPrefix();
 		String warChest = "towny-war-chest";
 	    String serverAccount = TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);		

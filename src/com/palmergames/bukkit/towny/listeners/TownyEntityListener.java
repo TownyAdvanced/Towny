@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.mobs.MobSpawnRemovalEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -382,10 +381,9 @@ public class TownyEntityListener implements Listener {
 	 * world-removal and town-removal lists.
 	 * 
 	 * @param event - CreatureSpawnEvent
-	 * @throws NotRegisteredException - If failed to fetch a world or not
 	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onCreatureSpawn(CreatureSpawnEvent event) throws NotRegisteredException {
+	public void onCreatureSpawn(CreatureSpawnEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;

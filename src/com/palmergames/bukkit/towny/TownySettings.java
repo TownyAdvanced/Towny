@@ -972,10 +972,7 @@ public class TownySettings {
 		int townOutposts = (Integer) getTownLevel(town).get(TownySettings.TownLevel.OUTPOST_LIMIT);
 		int nationOutposts = 0;
 		if (town.hasNation())
-			try {
-				nationOutposts = (Integer) getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
-			} catch (NotRegisteredException e) {
-			}
+			nationOutposts = (Integer) getNationLevel(town.getNationOrNull()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
 		int n = townOutposts + nationOutposts;
 		return n;
 	}
@@ -995,11 +992,7 @@ public class TownySettings {
 	public static int getNationBonusBlocks(Town town) {
 
 		if (town.hasNation())
-			try {
-				return getNationBonusBlocks(town.getNation());
-			} catch (NotRegisteredException e) {
-			}
-
+			return getNationBonusBlocks(town.getNationOrNull());
 		return 0;
 	}
 
@@ -1847,8 +1840,8 @@ public class TownySettings {
 		if (town.hasNation()) {
 			double nationMultiplier = 1.0;
 			try {
-				nationMultiplier = Double.parseDouble(getNationLevel(town.getNation()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
-			} catch (NumberFormatException|NotRegisteredException e) {
+				nationMultiplier = Double.parseDouble(getNationLevel(town.getNationOrNull()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
+			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			}
 			if (isUpkeepByPlot()) {
