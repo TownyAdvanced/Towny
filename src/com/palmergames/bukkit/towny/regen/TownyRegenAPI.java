@@ -73,7 +73,6 @@ public class TownyRegenAPI {
 	 * @return list - List<WorldCoord> matched to above world.
 	 */
 	private static List<WorldCoord> getWorldCoords(TownyWorld world) {
-		
 		List<WorldCoord> list = new ArrayList<>();
 		for (WorldCoord wc : worldCoords)
 			if (wc.getTownyWorldOrNull().equals(world))
@@ -494,11 +493,7 @@ public class TownyRegenAPI {
 	 * @param block - {@link Block} which is being exploded.
 	 * @param count - int for setting the delay to do one block at a time.
 	 * @param world - {@link TownyWorld} for where the regen is being triggered.
-<<<<<<< Upstream, based on origin/master
 	 * @param event - The Bukkit Event causing this explosion.
-=======
-	 * @param event - Bukkit event which caused the explosion.
->>>>>>> c90b123 Removes many NotRegisteredExceptions that aren't needed any more,
 	 * 
 	 * @return true if the protectiontask was begun successfully. 
 	 */
