@@ -6460,7 +6460,7 @@ v0.92.0.11:
     - /ta townyperms townrank addrank|removerank [rank] : adds or removes a town rank.
     - /ta townyperms nationrank addrank|removerank [rank] : adds or removes a nation rank.
   - Bump Language Files to 0.114.
-  - Add a block whitelist to wilderness explosion regeneration, courtesy of NigelTicknor with PR #5091.
+  - Add a block whitelist to wilderness explosion regeneration, courtesy of NigelTicknor with PR #5091. (First-Time Contributor!)
     - World files have: PlotManagementWildRegenBlockWhitelist="";
     - Config contains the default which will be applied to new worlds only: new_world_settings.plot_management.wild_revert_on_explosion_block_whitelist
     - When these are empty the whitelist is not used, and instead the older way is done: everything reverts except the plotManagementIgnoreIds list.
@@ -6471,3 +6471,6 @@ v0.92.0.11:
     - New worlds will use the list to populate their PlotManagementWildRegenBlockWhitelist lists.
   - Fix /ta nation [nation] rank command being able to give nation ranks to a non-nation-having-resident.
   - Remove a ton of possible NotRegisteredExceptions that could be thrown using methods added since 0.97.0.0.
+0.97.0.16: 
+  - es-419 translation update, courtesy of EuGNosii with PR #5101.
+    - Updates from 0.111 to 0.114.
