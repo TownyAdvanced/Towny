@@ -272,7 +272,7 @@ public class WarZoneListener implements Listener {
 		}
 		
 		//Cancel because one of the two player's nations is neutral.
-		if ((attackerTown.hasNation() && TownyAPI.getInstance().getTownNationOrNull(attackerTown).isNeutral()) || (defenderTown.hasNation() && TownyAPI.getInstance().getTownNationOrNull(defenderTown).isNeutral())) {
+		if ((attackerTown.hasNation() && attackerTown.getNationOrNull().isNeutral()) || (defenderTown.hasNation() && defenderTown.getNationOrNull().isNeutral())) {
 			event.setMessage(Translation.of("msg_war_a_player_has_a_neutral_nation"));
 			event.setCancelled(true);
 			return;

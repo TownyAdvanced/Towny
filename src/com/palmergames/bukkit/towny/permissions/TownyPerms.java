@@ -249,7 +249,7 @@ public class TownyPerms {
 		
 		//Check for town membership
 		if (resident.hasTown()) {
-			permList.addAll(getTownDefault(TownyAPI.getInstance().getResidentTownOrNull(resident)));
+			permList.addAll(getTownDefault(resident.getTownOrNull()));
 			
 			// Is Mayor?
 			if (resident.isMayor()) permList.addAll(getTownMayor());
@@ -279,12 +279,12 @@ public class TownyPerms {
 		for (String permission : playerPermArray) {			
 			if (permission.contains("{townname}")) {
 				if (resident.hasTown()) {
-					String placeholderPerm = permission.replace("{townname}", TownyAPI.getInstance().getResidentTownOrNull(resident).getName().toLowerCase());
+					String placeholderPerm = permission.replace("{townname}", resident.getTownOrNull().getName().toLowerCase());
 					newPerms.put(placeholderPerm, true);
 				}
 			} else if (permission.contains("{nationname}")) {
 				if (resident.hasNation()) {
-					String placeholderPerm = permission.replace("{nationname}", TownyAPI.getInstance().getResidentNationOrNull(resident).getName().toLowerCase());
+					String placeholderPerm = permission.replace("{nationname}", resident.getTownOrNull().getNationOrNull().getName().toLowerCase());
 					newPerms.put(placeholderPerm, true);
 				}
 			} else {
