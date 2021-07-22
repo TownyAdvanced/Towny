@@ -6469,4 +6469,4 @@ v0.92.0.11:
   - New Config Option: new_world_settings.plot_management.wild_revert_on_explosion_block_whitelist
     - Default: ''
     - New worlds will use the list to populate their PlotManagementWildRegenBlockWhitelist lists.
-    
+  - Fix /ta nation [nation] rank command being able to give nation ranks to a non-nation-having-resident.

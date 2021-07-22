@@ -126,6 +126,15 @@ public enum HelpMenu {
 				.add("rank [add/remove] [resident] [rank]", "");
 		}
 	},
+	
+	TA_NATION_RANK {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("ta nation [nation] rank")
+				.add("add [resident] [rank]", "")
+				.add("remove [resident] [rank]", "");
+		}
+	},
 
 	TA_UNCLAIM {
 		@Override

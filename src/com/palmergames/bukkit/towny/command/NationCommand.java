@@ -913,19 +913,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				
-				try {
-					if (target.addNationRank(rank)) {
-						if (BukkitTools.isOnline(target.getName())) {
-							TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_given_rank", "Nation", rank));
-							plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
-						}
-						TownyMessaging.sendMsg(player, Translation.of("msg_you_have_given_rank", "Nation", rank, target.getName()));
-					} else {
-						// Not in a nation or Rank doesn't exist
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_resident_not_part_of_any_town"));
-						return;
+				if (target.addNationRank(rank)) {
+					if (BukkitTools.isOnline(target.getName())) {
+						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_given_rank", "Nation", rank));
+						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}
-				} catch (AlreadyRegisteredException e) {
+					TownyMessaging.sendMsg(player, Translation.of("msg_you_have_given_rank", "Nation", rank, target.getName()));
+				} else {
 					// Must already have this rank
 					TownyMessaging.sendMsg(player, Translation.of("msg_resident_already_has_rank", target.getName(), "Nation"));
 					return;

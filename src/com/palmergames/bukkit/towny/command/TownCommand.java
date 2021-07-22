@@ -1888,19 +1888,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translation.of("msg_no_permission_to_give_rank"));
 
 			if (split[0].equalsIgnoreCase("add")) {
-				try {
-					if (target.addTownRank(rank)) {
-						if (BukkitTools.isOnline(target.getName())) {
-							TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_given_rank", "Town", rank));
-							plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
-						}
-						TownyMessaging.sendMsg(player, Translation.of("msg_you_have_given_rank", "Town", rank, target.getName()));
-					} else {
-						// Not in a town or Rank doesn't exist
-						TownyMessaging.sendErrorMsg(player, Translation.of("msg_resident_not_your_town"));
-						return;
+
+				if (target.addTownRank(rank)) {
+					if (BukkitTools.isOnline(target.getName())) {
+						TownyMessaging.sendMsg(target, Translation.of("msg_you_have_been_given_rank", "Town", rank));
+						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}
-				} catch (AlreadyRegisteredException e) {
+					TownyMessaging.sendMsg(player, Translation.of("msg_you_have_given_rank", "Town", rank, target.getName()));
+				} else {
 					// Must already have this rank
 					TownyMessaging.sendMsg(player, Translation.of("msg_resident_already_has_rank", target.getName(), "Town"));
 					return;
