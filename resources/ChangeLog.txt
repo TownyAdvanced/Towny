@@ -6474,3 +6474,5 @@ v0.92.0.11:
 0.97.0.16: 
   - es-419 translation update, courtesy of EuGNosii with PR #5101.
     - Updates from 0.111 to 0.114.
+  - Protect weatherable blocks from having their oxidation scraped off with an axe.
+    - Considered a destroy test.
