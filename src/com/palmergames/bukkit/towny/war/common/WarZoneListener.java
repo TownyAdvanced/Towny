@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -254,50 +253,44 @@ public class WarZoneListener implements Listener {
 	public void onPlayerDamagePlayer(TownyPlayerDamagePlayerEvent event) {
 		if (!TownyAPI.getInstance().isWarTime())
 			return;
+			
+		Town attackerTown = event.getAttackerTown();
+		Town defenderTown = event.getVictimTown();
 		
-		try {
-			
-			Town attackerTown = event.getAttackerTown();
-			Town defenderTown = event.getVictimTown();
-			
-			//Cancel because one of two players has no town and should not be interfering during war.
-			if (TownySettings.isWarTimeTownsNeutral() && (event.getAttackerTown() == null || event.getVictimTown() == null)){
-				event.setMessage(Translation.of("msg_war_a_player_has_no_town"));
-				event.setCancelled(true);
-				return;
-			}
+		//Cancel because one of two players has no town and should not be interfering during war.
+		if (TownySettings.isWarTimeTownsNeutral() && (event.getAttackerTown() == null || event.getVictimTown() == null)){
+			event.setMessage(Translation.of("msg_war_a_player_has_no_town"));
+			event.setCancelled(true);
+			return;
+		}
 
-			//Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
-			if (TownySettings.isWarTimeTownsNeutral() && (!attackerTown.hasNation() || !defenderTown.hasNation())) {
-				event.setMessage(Translation.of("msg_war_a_player_has_no_nation"));
-				event.setCancelled(true);
-				return;
-			}
-			
-			//Cancel because one of the two player's nations is neutral.
-			if ((attackerTown.hasNation() && attackerTown.getNation().isNeutral()) || (defenderTown.hasNation() && defenderTown.getNation().isNeutral())) {
-				event.setMessage(Translation.of("msg_war_a_player_has_a_neutral_nation"));
-				event.setCancelled(true);
-				return;
-			}
-			
-			//Cancel because one of the two players are no longer involved in the war.
-			if (!War.isWarringTown(defenderTown) || !War.isWarringTown(attackerTown)) {
-				event.setMessage(Translation.of("msg_war_a_player_has_been_removed_from_war"));
-				event.setCancelled(true);
-				return;
-			}
-			
-			//Cancel because one of the two players considers the other an ally.
-			if (CombatUtil.isAlly(attackerTown, defenderTown)){
-				event.setMessage(Translation.of("msg_war_a_player_is_an_ally"));
-				event.setCancelled(true);
-				return;
-			}
-		} catch (NotRegisteredException e) {
-			e.printStackTrace();
+		//Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
+		if (TownySettings.isWarTimeTownsNeutral() && (!attackerTown.hasNation() || !defenderTown.hasNation())) {
+			event.setMessage(Translation.of("msg_war_a_player_has_no_nation"));
+			event.setCancelled(true);
+			return;
 		}
 		
+		//Cancel because one of the two player's nations is neutral.
+		if ((attackerTown.hasNation() && attackerTown.getNationOrNull().isNeutral()) || (defenderTown.hasNation() && defenderTown.getNationOrNull().isNeutral())) {
+			event.setMessage(Translation.of("msg_war_a_player_has_a_neutral_nation"));
+			event.setCancelled(true);
+			return;
+		}
+		
+		//Cancel because one of the two players are no longer involved in the war.
+		if (!War.isWarringTown(defenderTown) || !War.isWarringTown(attackerTown)) {
+			event.setMessage(Translation.of("msg_war_a_player_has_been_removed_from_war"));
+			event.setCancelled(true);
+			return;
+		}
+		
+		//Cancel because one of the two players considers the other an ally.
+		if (CombatUtil.isAlly(attackerTown, defenderTown)){
+			event.setMessage(Translation.of("msg_war_a_player_is_an_ally"));
+			event.setCancelled(true);
+			return;
+		}
 	}
 	
 	@EventHandler
