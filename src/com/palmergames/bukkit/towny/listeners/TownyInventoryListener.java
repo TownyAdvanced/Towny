@@ -36,36 +36,33 @@ public class TownyInventoryListener implements Listener {
 		Player player = (Player) event.getWhoClicked();
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
-		if (resident == null)
+		if (resident == null || (event.getClickedInventory() != null && !(event.getClickedInventory().getHolder() instanceof TownyInventory)))
 			return;
 
 		if (event.getInventory().getHolder() instanceof EditGUI) {
 			
-			ItemMeta meta;
+			ItemMeta meta = event.getCurrentItem().getItemMeta();
 			switch (event.getCurrentItem().getType()) {
 				case LIME_WOOL:
-					meta = event.getCurrentItem().getItemMeta();
 					if (meta.getDisplayName().equals(Colors.LightGreen + ChatColor.BOLD + "Save")) {
 						((EditGUI) event.getInventory().getHolder()).saveChanges();
 					} else {
-						meta.setDisplayName(Colors.Red + Colors.strip(meta.getDisplayName()));
+						meta.setDisplayName(Colors.Red + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
 						event.getCurrentItem().setType(Material.RED_WOOL);
 					}
 					break;
 				case RED_WOOL:
-					meta = event.getCurrentItem().getItemMeta();
 					if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Back")) {
 						((EditGUI) event.getInventory().getHolder()).exitScreen();
 					} else if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Delete")) {
 						((EditGUI) event.getInventory().getHolder()).deleteResident();
 					} else {
-						meta.setDisplayName(Colors.Gray + Colors.strip(meta.getDisplayName()));
+						meta.setDisplayName(Colors.Gray + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
 						event.getCurrentItem().setType(Material.GRAY_WOOL);
 					}
 					break;
 				case GRAY_WOOL:
-					meta = event.getCurrentItem().getItemMeta();
-					meta.setDisplayName(Colors.LightGreen + Colors.strip(meta.getDisplayName()));
+					meta.setDisplayName(Colors.LightGreen + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
 					event.getCurrentItem().setType(Material.LIME_WOOL);
 					break;
 				default:
@@ -80,6 +77,8 @@ public class TownyInventoryListener implements Listener {
 			if (event.getCurrentItem().getType() == Material.PLAYER_HEAD && permissionGUI.canEdit()) {
 				PermissionGUIUtil.openPermissionEditorGUI(resident, permissionGUI.getTownBlock(), event.getCurrentItem());
 				Towny.getAdventure().player(player).playSound(clickSound);
+			} else if (event.getCurrentItem().getType() == Material.WRITTEN_BOOK) {
+				player.openBook(PermissionGUIUtil.createTutorialBook());
 			} else {
 				int currentPage = resident.getGUIPageNum();
 
