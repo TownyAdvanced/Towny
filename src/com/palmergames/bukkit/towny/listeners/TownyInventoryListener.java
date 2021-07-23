@@ -28,7 +28,7 @@ public class TownyInventoryListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onClick(InventoryClickEvent event) {
-		if (!(event.getInventory().getHolder() instanceof TownyInventory) || event.getCurrentItem() == null || (event.getClickedInventory() != null && !(event.getClickedInventory().getHolder() instanceof TownyInventory)))
+		if (!(event.getInventory().getHolder() instanceof TownyInventory) || event.getCurrentItem() == null)
 			return;
 
 		event.setCancelled(true);
@@ -36,7 +36,7 @@ public class TownyInventoryListener implements Listener {
 		Player player = (Player) event.getWhoClicked();
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
-		if (resident == null)
+		if (resident == null || (event.getClickedInventory() != null && !(event.getClickedInventory().getHolder() instanceof TownyInventory)))
 			return;
 
 		if (event.getInventory().getHolder() instanceof EditGUI) {
