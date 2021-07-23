@@ -343,10 +343,10 @@ permissions:
             towny.command.town.trust: true
 
     towny.command.town.list:
-        description: Users are able to use all the various methods of sorting the town list.
+        description: Users are able to use the default method of sorting the town list.
         default: false
         children:
-            towny.command.town.list.*: true
+            towny.command.town.list.residents: true
 
     towny.command.town.list.*:
         description: Users are able to use all the various methods of sorting the nation list.
