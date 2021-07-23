@@ -18,11 +18,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -70,7 +72,6 @@ public class PermissionGUIUtil {
 			SkullMeta meta = (SkullMeta) skull.getItemMeta();
 			
 			if (!entry.getKey().hasUUID())
-				//noinspection deprecation
 				meta.setOwningPlayer(BukkitTools.getOfflinePlayer(entry.getKey().getName())); 
 			else
 				meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.getKey().getUUID()));
@@ -99,6 +100,8 @@ public class PermissionGUIUtil {
 
 			page.addItem(skull);
 		}
+		
+		page.setItem(52, createTutorialBook());
 		
 		pages.add(page);
 		resident.setGUIPages(pages);
@@ -152,5 +155,23 @@ public class PermissionGUIUtil {
 
 	public static int[] getWoolSlots() {
 		return woolSlots;
+	}
+	
+	public static ItemStack createTutorialBook() {
+		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+		BookMeta meta = (BookMeta) book.getItemMeta();
+
+		List<String> pages = new ArrayList<>();
+		pages.add("    §lPlot Perm GUI§r\n\nUsing the GUI, you can give or remove permissions from individual players in your plots.\n\n§l  Getting Started§r\n\nTo start, you will need to add players to the GUI. You can do this using /plot perm add.");
+		pages.add("After a player has been added, you can now start editing their permissions.\n\n§l    Permissions§r\n\nAfter you've clicked on a player head, you will be able to edit their permissions.§a Green§0 means that this player has this permission.");
+		pages.add("§cRed§0 means that this player does not have this permission.\n\n§7Gray§0 means that normal plot permissions apply.\n\nWhen starting out, all permissions will be gray. Note that denying permissions will not work for plot owners or mayors.");
+
+		meta.setTitle("GUI Tutorial");
+		meta.setGeneration(BookMeta.Generation.ORIGINAL);
+		meta.setPages(pages);
+		meta.setAuthor("Warriorrr");
+
+		book.setItemMeta(meta);
+		return book;
 	}
 }
