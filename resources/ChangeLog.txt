@@ -6476,3 +6476,10 @@ v0.92.0.11:
     - Updates from 0.111 to 0.114.
   - Protect weatherable blocks from having their oxidation scraped off with an axe.
     - Considered a destroy test.
+  - Fix canBlockMove always allowing wilderness, courtesy of Warriorrrr with PR #5105.
+    - Closes #5104.
+  - Add a tutorial book for the plot perm GUI, courtesy of Warriorrrr with PR #5103.
+  - Add town&nation rank luckperms contexts, courtesy of illumeleet with PR #5102.
+  - Remove "/t list"`s root permission granting access to all listing options, courtesy of 0xBit-MC with PR #5099.
+    - towny.command.town.list used to have the childnode towny.command.town.list.*.
+    - Now it only has towny.command.town.list.resident, making it possible to allow the usage of the /t list command, without giving out all of the nodes.
