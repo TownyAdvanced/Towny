@@ -6495,3 +6495,5 @@ v0.92.0.11:
     - towny.command.nation.list.founded
     - Both are child nodes of their respective parent nodes, no townyperms.yml change required.
   - Language files bumped to 0.115.
+  - Remove unneeded permission check, courtesy of Warriorrrr with PR #5111.
+  - Prevent zombies breaking doors in claimed areas, courtesy of Warriorrrr with PR #5107.  
