@@ -164,6 +164,17 @@ public class TownyAPI {
     public Resident getResident(UUID uuid) {
     	return TownyUniverse.getInstance().getResident(uuid);
     }  
+    
+    /**
+     * Gets the resident from the given Player.
+     * 
+     * @param player Player to get the resident from.
+     * @return resident or null if it doesn't exist.
+     */
+    @Nullable
+    public Resident getResident(Player player) {
+    	return getResident(player.getUniqueId());
+    }
 
     /**
      * Gets the nation from the given name.
@@ -193,7 +204,7 @@ public class TownyAPI {
     @Nullable
     public Resident getResident(String name) {
     	return TownyUniverse.getInstance().getResident(name);
-    }    
+    }
     
     /**
      * Find the the matching {@link Player} of the specified {@link Resident}.
@@ -360,6 +371,16 @@ public class TownyAPI {
     	return null;
     }
     
+    /**
+     * Returns {@link TownyWorld} unless it is null.
+     * 
+     * @param world - the world to get.
+     * @return TownyWorld or {@code null}.
+     */
+    @Nullable
+    public TownyWorld getTownyWorld(World world) {
+    	return getTownyWorld(world.getName());
+    }
     
     /**
      * Get the {@link Town} at a specific {@link Location}.
