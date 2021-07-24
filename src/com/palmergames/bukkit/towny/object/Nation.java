@@ -235,9 +235,8 @@ public class Nation extends Government {
 
 	@Override
 	public Location getSpawn() throws TownyException {
-		if(nationSpawn == null){
+		if (!hasSpawn())
 			throw new TownyException(Translation.of("msg_err_nation_has_not_set_a_spawn_location"));
-		}
 
 		return nationSpawn;
 	}
@@ -245,6 +244,10 @@ public class Nation extends Government {
 	@Nullable
 	public Location getSpawnOrNull() {
 		return nationSpawn;
+	}
+	
+	public boolean hasSpawn() {
+		return nationSpawn != null;
 	}
 
 	@Override
