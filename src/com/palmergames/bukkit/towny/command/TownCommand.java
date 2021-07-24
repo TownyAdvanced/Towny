@@ -562,9 +562,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("list")) {
 
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST.getNode()))
-					throw new TownyException(Translation.of("msg_err_command_disable"));
-
 				listTowns(player, split);
 
 			} else if (split[0].equalsIgnoreCase("new") || split[0].equalsIgnoreCase("create")) {
