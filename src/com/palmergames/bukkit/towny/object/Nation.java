@@ -246,9 +246,6 @@ public class Nation extends Government {
 		return nationSpawn;
 	}
 	
-	public boolean hasSpawn() {
-		return nationSpawn != null;
-	}
 
 	@Override
 	public void setSpawn(Location spawn) {
