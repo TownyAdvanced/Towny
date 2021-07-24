@@ -3975,7 +3975,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					MoneyUtil.townWithdraw(player, resident, resident.getTown(), amount);
 				else {
 					double townMinDeposit = TownySettings.getTownMinDeposit();
-					if (amount < townMinDeposit) throw new TownyException(Translation.of("msg_err_deposit_must_be_higher_than", townMinDeposit));
+					if (amount < townMinDeposit) throw new TownyException(Translation.of("msg_err_deposit_must_be_higher_than", TownyEconomyHandler.getFormattedBalance(townMinDeposit)));
 					MoneyUtil.townDeposit(player, resident, resident.getTown(), null, amount);
 				}
 				
