@@ -6476,3 +6476,29 @@ v0.92.0.11:
     - Updates from 0.111 to 0.114.
   - Protect weatherable blocks from having their oxidation scraped off with an axe.
     - Considered a destroy test.
+  - Fix canBlockMove always allowing wilderness, courtesy of Warriorrrr with PR #5105.
+    - Closes #5104.
+  - Add a tutorial book for the plot perm GUI, courtesy of Warriorrrr with PR #5103.
+  - Add town&nation rank luckperms contexts, courtesy of illumeleet with PR #5102.
+  - Remove "/t list"`s root permission granting access to all listing options, courtesy of 0xBit-MC with PR #5099.
+    - towny.command.town.list used to have the childnode towny.command.town.list.*.
+    - Now it only has towny.command.town.list.resident, making it possible to allow the usage of the /t list command, without giving out all of the nodes.
+0.97.0.17:
+  - Add comparator type: Founded.
+    - Compare nations and towns by who were founded the earliest.
+  - New Commands:
+    - /t list by founded
+    - /n list by founded
+    - Closes #5110.
+  - New Permission Nodes:
+    - towny.command.town.list.founded
+    - towny.command.nation.list.founded
+    - Both are child nodes of their respective parent nodes, no townyperms.yml change required.
+  - Language files bumped to 0.115.
+  - Remove unneeded permission check, courtesy of Warriorrrr with PR #5111.
+  - Prevent zombies breaking doors in claimed areas, courtesy of Warriorrrr with PR #5107.  
+  - API: Add TeleportOutlawEvent.
+    - Allows for a plugin to cancel an outlaw being teleported out of a town.
+    - Closes #5109.
+  - API: Add TownyAPI.getResident(Player) and TownyAPI.getTownyWorld(World).
+  - Spanish.yml updated courtesy of ElMoha943 with PR #5108.

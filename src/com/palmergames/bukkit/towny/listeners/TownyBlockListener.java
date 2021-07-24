@@ -180,7 +180,10 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		if (!canBlockMove(event.getBlock(), event.isSticky() ? event.getBlock().getRelative(event.getDirection().getOppositeFace()) : event.getBlock().getRelative(event.getDirection())))
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
+
+		if (!canBlockMove(event.getBlock(), event.isSticky() ? event.getBlock().getRelative(event.getDirection().getOppositeFace()) : event.getBlock().getRelative(event.getDirection()), false))
 			event.setCancelled(true);
 
 		List<Block> blocks = event.getBlocks();
@@ -188,7 +191,7 @@ public class TownyBlockListener implements Listener {
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (!canBlockMove(block, block.getRelative(event.getDirection())))
+				if (!canBlockMove(block, block.getRelative(event.getDirection()), false))
 					event.setCancelled(true);
 			}
 		}
@@ -202,7 +205,13 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 		
-		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(event.getDirection())))
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
+		
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName());
+		boolean allowWild = world != null && world.getUnclaimedZoneBuild();
+
+		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(event.getDirection()), allowWild))
 			event.setCancelled(true);
 		
 		List<Block> blocks = event.getBlocks();
@@ -210,7 +219,7 @@ public class TownyBlockListener implements Listener {
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (!canBlockMove(block, block.getRelative(event.getDirection())))
+				if (!canBlockMove(block, block.getRelative(event.getDirection()), allowWild))
 					event.setCancelled(true);
 			}
 		}
@@ -221,14 +230,15 @@ public class TownyBlockListener implements Listener {
 	 * 
 	 * @param block - block that is being moved.
 	 * @param blockTo - block that is being moved to.
+	 * @param allowWild - Whether the block should be allowed to move into the wilderness.
 	 * 
 	 * @return true if block the block can move.
 	 */
-	private boolean canBlockMove(Block block, Block blockTo) {
+	private boolean canBlockMove(Block block, Block blockTo, boolean allowWild) {
 		WorldCoord from = WorldCoord.parseWorldCoord(block);
 		WorldCoord to = WorldCoord.parseWorldCoord(blockTo);
 
-		if (from.equals(to) || TownyAPI.getInstance().isWilderness(to))
+		if (from.equals(to) || (allowWild && TownyAPI.getInstance().isWilderness(to)))
 			return true;
 
 		try {
@@ -326,7 +336,7 @@ public class TownyBlockListener implements Listener {
 		if (!TownySettings.getPreventFluidGriefingEnabled() || event.getBlock().getType() == Material.DRAGON_EGG)
 			return;
 		
-		if (!canBlockMove(event.getBlock(), event.getToBlock()))
+		if (!canBlockMove(event.getBlock(), event.getToBlock(), true))
 			event.setCancelled(true);
 	}
 
@@ -351,7 +361,7 @@ public class TownyBlockListener implements Listener {
 		if (!ItemLists.BUCKETS.contains(mat.name()) && mat != Material.BONE_MEAL && mat != Material.HONEYCOMB)
 			return;
 		
-		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getBlockData()).getFacing())))
+		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getBlockData()).getFacing()), true))
 			event.setCancelled(true);
 	}
 

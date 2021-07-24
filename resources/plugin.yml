@@ -205,6 +205,7 @@ permissions:
             towny.command.nation.list.public: true
             towny.command.nation.list.balance: true
             towny.command.nation.list.name: true
+            towny.command.nation.list.founded: true
             towny.command.nation.list.townblocks: true
             towny.command.nation.list.online: true
 
@@ -343,10 +344,10 @@ permissions:
             towny.command.town.trust: true
 
     towny.command.town.list:
-        description: Users are able to use all the various methods of sorting the town list.
+        description: Users are able to use the default method of sorting the town list.
         default: false
         children:
-            towny.command.town.list.*: true
+            towny.command.town.list.residents: true
 
     towny.command.town.list.*:
         description: Users are able to use all the various methods of sorting the nation list.
@@ -359,6 +360,7 @@ permissions:
             towny.command.town.list.name: true
             towny.command.town.list.townblocks: true
             towny.command.town.list.online: true
+            towny.command.town.list.founded: true
             towny.command.town.list.ruined: true
             towny.command.town.list.bankrupt: true
 

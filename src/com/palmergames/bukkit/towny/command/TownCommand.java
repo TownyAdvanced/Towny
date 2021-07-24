@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
+import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.town.TownKickEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
@@ -193,6 +194,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"residents",
 		"balance",
 		"bankrupt",
+		"founded",
 		"name",		
 		"online",
 		"open",
@@ -560,9 +562,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				townStatusScreen(player, TownyAPI.getInstance().getTown(player.getLocation()));
 
 			} else if (split[0].equalsIgnoreCase("list")) {
-
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST.getNode()))
-					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				listTowns(player, split);
 
@@ -1119,6 +1118,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						if (TownySettings.areNewOutlawsTeleportedAway() 
 							&& TownyAPI.getInstance().getTownBlock(loc) != null
 							&& TownyAPI.getInstance().getTown(loc) == town) {
+							
+							OutlawTeleportEvent event = new OutlawTeleportEvent(target, town, target.getPlayer().getLocation());
+							Bukkit.getPluginManager().callEvent(event);
+							if (event.isCancelled())
+								return;
 							
 							if (TownySettings.getOutlawTeleportWarmup() > 0)
 								TownyMessaging.sendMsg(target, Translation.of("msg_outlaw_kick_cooldown", town, TimeMgmt.formatCountdownTime(TownySettings.getOutlawTeleportWarmup())));
