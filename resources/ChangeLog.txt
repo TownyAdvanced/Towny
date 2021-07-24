@@ -6501,3 +6501,4 @@ v0.92.0.11:
     - Allows for a plugin to cancel an outlaw being teleported out of a town.
     - Closes #5109.
   - API: Add TownyAPI.getResident(Player) and TownyAPI.getTownyWorld(World).
+  - Spanish.yml updated courtesy of ElMoha943 with PR #5108.
