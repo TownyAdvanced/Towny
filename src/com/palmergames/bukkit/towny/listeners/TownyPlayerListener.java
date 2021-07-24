@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
+import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
@@ -823,6 +824,12 @@ public class TownyPlayerListener implements Listener {
 		Town town = event.getEnteredtown();
 		
 		if (town.hasOutlaw(outlaw)) {
+			// Throw a cancellable event so other plugins can prevent the outlaw being moved (in siegewar for instance.)
+			OutlawTeleportEvent outlawEvent = new OutlawTeleportEvent(outlaw, town, event.getPlayer().getLocation());
+			Bukkit.getPluginManager().callEvent(outlawEvent);
+			if (outlawEvent.isCancelled())
+				return;
+			
 			// Admins are omitted so towns won't be informed an admin might be spying on them.
 			if (TownySettings.doTownsGetWarnedOnOutlaw() && !hasBypassNode) {
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_outlaw_town_notify", outlaw.getFormattedName()));

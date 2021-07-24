@@ -6497,3 +6497,6 @@ v0.92.0.11:
   - Language files bumped to 0.115.
   - Remove unneeded permission check, courtesy of Warriorrrr with PR #5111.
   - Prevent zombies breaking doors in claimed areas, courtesy of Warriorrrr with PR #5107.  
+  - API: Add TeleportOutlawEvent.
+    - Allows for a plugin to cancel an outlaw being teleported out of a town.
+    - Closes #5109.
