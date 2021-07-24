@@ -193,6 +193,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"residents",
 		"balance",
 		"bankrupt",
+		"founded",
 		"name",		
 		"online",
 		"open",
@@ -560,9 +561,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				townStatusScreen(player, TownyAPI.getInstance().getTown(player.getLocation()));
 
 			} else if (split[0].equalsIgnoreCase("list")) {
-
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST.getNode()))
-					throw new TownyException(Translation.of("msg_err_command_disable"));
 
 				listTowns(player, split);
 

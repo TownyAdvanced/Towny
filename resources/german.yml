@@ -1,5 +1,5 @@
 name: Towny
-version: 0.114
+version: 0.115
 language: german
 author: 'ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih'
 website: 'http://townyadvanced.github.io/'
@@ -1485,3 +1485,6 @@ help_ta_perms_townrankremove: 'Removes a townrank from the townyperms file.'
 help_ta_perms_nationrankadd: 'Adds a nationrank to the townyperms file.'
 help_ta_perms_nationrankremove: 'Removes a nationrank from the townyperms file.'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'That resident doesn''t belong to that nation.'
+
+#Added in 0.115
+msg_comptype_founded: 'Founded Date'.'

@@ -205,6 +205,7 @@ permissions:
             towny.command.nation.list.public: true
             towny.command.nation.list.balance: true
             towny.command.nation.list.name: true
+            towny.command.nation.list.founded: true
             towny.command.nation.list.townblocks: true
             towny.command.nation.list.online: true
 
@@ -359,6 +360,7 @@ permissions:
             towny.command.town.list.name: true
             towny.command.town.list.townblocks: true
             towny.command.town.list.online: true
+            towny.command.town.list.founded: true
             towny.command.town.list.ruined: true
             towny.command.town.list.bankrupt: true
 

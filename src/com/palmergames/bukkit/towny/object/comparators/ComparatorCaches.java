@@ -14,6 +14,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.nation.DisplayedNationsListSortEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumOnlinePlayersCalculationEvent;
@@ -95,6 +96,10 @@ public class ComparatorCaches {
 			case ONLINE:
 				slug = Colors.LightBlue + "(" + TownyAPI.getInstance().getOnlinePlayersInTown(town).size() + ")";
 				break;
+			case FOUNDED:
+				if (town.getRegistered() != 0)
+					slug = Colors.LightBlue + "(" + TownyFormatter.registeredFormat.format(town.getRegistered()) + ")";
+				break;
 			default:
 				slug = Colors.LightBlue + "(" + town.getResidents().size() + ")";
 				break;
@@ -151,6 +156,10 @@ public class ComparatorCaches {
 				NationListDisplayedNumOnlinePlayersCalculationEvent opEvent = new NationListDisplayedNumOnlinePlayersCalculationEvent(nation, rawNumOnlinePlayers);
 				Bukkit.getPluginManager().callEvent(opEvent);
 				slug = opEvent.getDisplayedValue() + "";
+				break;
+			case FOUNDED:
+				if (nation.getRegistered() != 0)
+					slug = TownyFormatter.registeredFormat.format(nation.getRegistered());
 				break;
 			default:
 				int rawNumResidents = nation.getResidents().size();
