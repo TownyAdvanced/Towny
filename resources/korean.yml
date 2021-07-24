@@ -1,5 +1,5 @@
 name: Towny
-version: 0.115
+version: 0.116
 language: 한국어
 author: 'Daybreak 새벽'
 website: 'http://townyadvanced.github.io/'
@@ -1397,4 +1397,7 @@ help_ta_perms_nationrankremove: 'Removes a nationrank from the townyperms file.'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'That resident doesn''t belong to that nation.'
 
 #Added in 0.115
-msg_comptype_founded: 'Founded Date'.'
+msg_comptype_founded: 'Founded Date'
+
+#Added in 0.116
+msg_err_deposit_must_be_higher_than: 'Deposit amount must be higher than %s'

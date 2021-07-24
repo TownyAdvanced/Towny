@@ -2681,8 +2681,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (args.length == 2) {
 				if (withdraw)
 					MoneyUtil.nationWithdraw(player, resident, resident.getTown().getNation(), amount);
-				else 
+				else {
+					double nationMinDeposit = TownySettings.getNationMinDeposit();
+					if (amount < nationMinDeposit) throw new TownyException(Translation.of("msg_err_deposit_must_be_higher_than", nationMinDeposit));
 					MoneyUtil.nationDeposit(player, resident, resident.getTown().getNation(), amount);
+				}
 				return;
 			}
 			

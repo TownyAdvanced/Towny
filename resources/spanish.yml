@@ -1,5 +1,5 @@
 name: Towny
-version: 0.115
+version: 0.116
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu, ElMoha943, Ngzhiwei
 website: 'http://townyadvanced.github.io/'
@@ -1485,4 +1485,7 @@ help_ta_perms_nationrankremove: 'Remueve un rango de nacion del archivo de permi
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Ese ciudadano no pertenece a esa razon.'
 
 #Added in 0.115
-msg_comptype_founded: 'Se encontro la fecha'.'
+msg_comptype_founded: 'Se encontro la fecha'
+
+#Added in 0.116
+msg_err_deposit_must_be_higher_than: 'Deposit amount must be higher than %s'
