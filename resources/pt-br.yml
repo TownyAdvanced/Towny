@@ -1,5 +1,5 @@
 name: Towny
-version: 0.116
+version: 0.115
 language: português (Brasil)
 author: BannerGames, Plugner
 website: 'http://townyadvanced.github.io/'
@@ -1489,6 +1489,4 @@ msg_err_that_resident_doesnt_belong_to_that_nation: 'That resident doesn''t belo
 
 #Added in 0.115
 msg_comptype_founded: 'Founded Date'
-
-#Added in 0.116
 msg_err_deposit_must_be_higher_than: 'Deposit amount must be higher than %s'
