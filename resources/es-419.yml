@@ -1,5 +1,5 @@
 name: Towny
-version: 0.114
+version: 0.115
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -1501,3 +1501,6 @@ help_ta_perms_townrankremove: 'Elimina un rango de ciudad del archivo townyperms
 help_ta_perms_nationrankadd: 'Añade un rango de nación al archivo townyperms.'
 help_ta_perms_nationrankremove: 'Elimina un rango de nación del archivo townyperms.'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Ese residente no pertenece a esa nación.'
+
+#Added in 0.115
+msg_comptype_founded: 'Founded Date'
