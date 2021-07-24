@@ -42,6 +42,7 @@ public class CommentedConfiguration extends YamlConfiguration {
 			this.load(file);
 		} catch (InvalidConfigurationException | IOException e) {
 			Towny.getPlugin().getLogger().warning(Translation.of("err_invalid_yaml", file.getPath()));
+			Towny.getPlugin().getLogger().warning("https://yaml-online-parser.appspot.com/");
 			Towny.getPlugin().getLogger().warning(e.getMessage());
 			loaded = false;
 		}
