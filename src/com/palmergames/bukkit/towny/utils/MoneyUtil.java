@@ -52,7 +52,7 @@ public class MoneyUtil {
 			BukkitTools.getPluginManager().callEvent(preEvent);
 			if (preEvent.isCancelled())
 				throw new TownyException(preEvent.getCancelMessage());
-
+			
 			// Withdraw from bank.
 			town.withdrawFromBank(resident, amount);
 
@@ -76,7 +76,7 @@ public class MoneyUtil {
 			BukkitTools.getPluginManager().callEvent(preEvent);
 			if (preEvent.isCancelled())
 				throw new TownyException(preEvent.getCancelMessage());
-
+			
 			if (nation == null) {
 				// Deposit into town from a town resident.
 				town.depositToBank(resident, amount);				
@@ -169,7 +169,7 @@ public class MoneyUtil {
 		
 		if (withdraw && ((nation && !TownySettings.getNationBankAllowWithdrawls()) || (!nation && !TownySettings.getTownBankAllowWithdrawls())))
 			throw new TownyException(Translation.of("msg_err_withdraw_disabled"));
-
+		
 		if (!withdraw && (TownySettings.getTownBankCap() > 0 || TownySettings.getNationBankCap() > 0)) {
 			double bankcap = 0;
 			double balance = 0;
@@ -193,34 +193,15 @@ public class MoneyUtil {
 			else
 				throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_your_town"));
 		}
-
-		if (withdraw) {
-			if (!nation) {
-				// Check if withdraw amount is higher than config value
-				int townMinWithdraw = TownySettings.getTownMinWithdraw();
-				if (amount < townMinWithdraw)
-					throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(townMinWithdraw)));
-			} else {
-				// Check if withdraw amount is higher than config value
-				int nationMinWithdraw = TownySettings.getNationMinWithdraw();
-				if (amount < nationMinWithdraw)
-					throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(nationMinWithdraw)));
-			}
-		} else {
-			if (!nation) {
-				// Check if deposit amount is higher than config value
-				int townMinDeposit = TownySettings.getTownMinDeposit();
-				if (amount < townMinDeposit)
-					throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(townMinDeposit)));
-			} else {
-				// Check if deposit amount is higher than config value
-				int nationMinDeposit = TownySettings.getNationMinDeposit();
-				if (amount < nationMinDeposit)
-					throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(nationMinDeposit)));
-			}
-		} 
-			
 		
+		int minAmount = 0;
+		if (withdraw)
+			minAmount = nation ? TownySettings.getNationMinWithdraw() : TownySettings.getTownMinWithdraw();
+		else
+			minAmount = nation ? TownySettings.getNationMinDeposit() : TownySettings.getTownMinDeposit();
+		if (amount < minAmount)
+			throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(minAmount)));
+			
 	}
 
 	private static boolean isNotInBankPlot(Town town, Location loc) {
