@@ -557,8 +557,8 @@ public class CombatUtil {
 		if (isSameNation(residentA, residentB))
 			return false;
 
-		Nation nationA = TownyAPI.getInstance().getResidentNationOrNull(residentA);
-		Nation nationB = TownyAPI.getInstance().getResidentNationOrNull(residentB);
+		Nation nationA = residentA.getNationOrNull();
+		Nation nationB = residentB.getNationOrNull();
 		if (nationA.isNeutral() || nationB.isNeutral())
 			return false;
 		if (nationA.hasEnemy(nationB))

@@ -460,7 +460,7 @@ public class PlayerCacheUtil {
 						// If the player has a Nation then they could be able to use this NationZone. 
 						if (res.hasNation()) {
 							// Player is a member of this NationZone's nation.
-							if (TownyAPI.getInstance().getResidentNationOrNull(res).getUUID().equals(nearestNation.getUUID())){
+							if (res.getNationOrNull().getUUID().equals(nearestNation.getUUID())){
 								// Players are still required to be able to use the Wilderness in their NationZones.
 								if (townyUniverse.getPermissionSource().hasWildOverride(townyWorld, player, material, action)) {
 									return true;

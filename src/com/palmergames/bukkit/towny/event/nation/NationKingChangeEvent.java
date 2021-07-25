@@ -35,7 +35,7 @@ public class NationKingChangeEvent extends Event implements Cancellable {
     }
 
     public Nation getNation() {
-        return TownyAPI.getInstance().getResidentNationOrNull(newKing);
+        return newKing.getNationOrNull();
     }
 
     public boolean isCapitalChange() {

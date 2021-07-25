@@ -6502,3 +6502,8 @@ v0.92.0.11:
     - Closes #5109.
   - API: Add TownyAPI.getResident(Player) and TownyAPI.getTownyWorld(World).
   - Spanish.yml updated courtesy of ElMoha943 with PR #5108.
+  - API: Add some new getOrNull methods, courtesy of Warriorrrr with PR #5114.
+    - Nation.getSpawnOrNull()
+    - Town.getHomeBlockOrNull()
+    - Resident.getNation()
+    - Resident.getNationOrNull()
