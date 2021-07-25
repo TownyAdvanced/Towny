@@ -52,7 +52,12 @@ public class MoneyUtil {
 			BukkitTools.getPluginManager().callEvent(preEvent);
 			if (preEvent.isCancelled())
 				throw new TownyException(preEvent.getCancelMessage());
-			
+
+			// Check if withdraw amount is higher than config value
+			double townMinWithdraw = TownySettings.getTownMinWithdraw();
+			if (amount < townMinWithdraw)
+				throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(townMinWithdraw)));
+
 			// Withdraw from bank.
 			town.withdrawFromBank(resident, amount);
 
@@ -77,6 +82,11 @@ public class MoneyUtil {
 			if (preEvent.isCancelled())
 				throw new TownyException(preEvent.getCancelMessage());
 			
+			// Check if deposit amount is higher than config value
+			double townMinDeposit = TownySettings.getTownMinDeposit();
+			if (amount < townMinDeposit) 
+				throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(townMinDeposit)));
+
 			if (nation == null) {
 				// Deposit into town from a town resident.
 				town.depositToBank(resident, amount);				
@@ -108,6 +118,11 @@ public class MoneyUtil {
 			if (preEvent.isCancelled())
 				throw new TownyException(preEvent.getCancelMessage());
 
+			// Check if withdraw amount is higher than config value
+			double nationMinWithdraw = TownySettings.getNationMinWithdraw();
+			if (amount < nationMinWithdraw)
+				throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(nationMinWithdraw)));
+
 			// Withdraw from bank.
 			nation.withdrawFromBank(resident, amount);
 			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_withdrew_xx", resident.getName(), amount, Translation.of("nation_sing")));
@@ -131,7 +146,12 @@ public class MoneyUtil {
 			if (preEvent.isCancelled())
 				throw new TownyException(preEvent.getCancelMessage());
 			
-			// Deposit into town.
+			// Check if deposit amount is higher than config value
+			double nationMinDeposit = TownySettings.getNationMinDeposit();
+			if (amount < nationMinDeposit)
+				throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(nationMinDeposit)));
+
+			// Deposit into nation.
 			nation.depositToBank(resident, amount);
 			
 			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("nation_sing")));
