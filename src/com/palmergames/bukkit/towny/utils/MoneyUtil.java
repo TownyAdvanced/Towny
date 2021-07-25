@@ -131,7 +131,7 @@ public class MoneyUtil {
 			if (preEvent.isCancelled())
 				throw new TownyException(preEvent.getCancelMessage());
 			
-			// Deposit into town.
+			// Deposit into nation.
 			nation.depositToBank(resident, amount);
 			
 			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("nation_sing")));
@@ -193,6 +193,14 @@ public class MoneyUtil {
 			else
 				throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_your_town"));
 		}
+		
+		int minAmount = 0;
+		if (withdraw)
+			minAmount = nation ? TownySettings.getNationMinWithdraw() : TownySettings.getTownMinWithdraw();
+		else
+			minAmount = nation ? TownySettings.getNationMinDeposit() : TownySettings.getTownMinDeposit();
+		if (amount < minAmount)
+			throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(minAmount)));
 			
 	}
 

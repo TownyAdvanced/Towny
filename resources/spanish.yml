@@ -1485,4 +1485,5 @@ help_ta_perms_nationrankremove: 'Remueve un rango de nacion del archivo de permi
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Ese ciudadano no pertenece a esa razon.'
 
 #Added in 0.115
-msg_comptype_founded: 'Se encontro la fecha'.'
+msg_comptype_founded: 'Se encontro la fecha'
+msg_err_must_be_greater_than_or_equal_to: 'Amount must be greater than or equal to %s'
