@@ -6507,3 +6507,16 @@ v0.92.0.11:
     - Town.getHomeBlockOrNull()
     - Resident.getNation()
     - Resident.getNationOrNull()
+  - Add minimum allowed amounts used in depositing and withdrawing from town and nation banks, courtesy of illumeleet with PR #5112.
+  - New Config Option: economy.banks.town_min_deposit
+    - default: 0
+    - Minimum amount of money players are allowed to deposit in town bank at a time.
+  - New Config Option: economy.banks.town_min_withdraw
+    - default: 0
+    - Minimum amount of money players are allowed to withdraw from town bank at a time.
+  - New Config Option: economy.banks.nation_min_deposit
+    - default: 0
+    - Minimum amount of money players are allowed to deposit in nation bank at a time.
+  - New Config Option: economy.banks.nation_min_withdraw
+    - default: 0
+    - Minimum amount of money players are allowed to withdraw from nation bank at a time.
