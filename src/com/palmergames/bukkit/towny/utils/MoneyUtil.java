@@ -193,34 +193,33 @@ public class MoneyUtil {
 			else
 				throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_your_town"));
 		}
-		
-		if (!withdraw) {
-			if (!nation) {
-				// Check if deposit amount is higher than config value
-				double townMinDeposit = TownySettings.getTownMinDeposit();
-				if (amount < townMinDeposit)
-					throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(townMinDeposit)));
-			} else {
-				// Check if deposit amount is higher than config value
-				double nationMinDeposit = TownySettings.getNationMinDeposit();
-				if (amount < nationMinDeposit)
-					throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(nationMinDeposit)));
-			}
-		}
 
 		if (withdraw) {
 			if (!nation) {
 				// Check if withdraw amount is higher than config value
-				double townMinWithdraw = TownySettings.getTownMinWithdraw();
+				int townMinWithdraw = TownySettings.getTownMinWithdraw();
 				if (amount < townMinWithdraw)
 					throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(townMinWithdraw)));
 			} else {
 				// Check if withdraw amount is higher than config value
-				double nationMinWithdraw = TownySettings.getNationMinWithdraw();
+				int nationMinWithdraw = TownySettings.getNationMinWithdraw();
 				if (amount < nationMinWithdraw)
 					throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(nationMinWithdraw)));
 			}
-		}
+		} else {
+			if (!nation) {
+				// Check if deposit amount is higher than config value
+				int townMinDeposit = TownySettings.getTownMinDeposit();
+				if (amount < townMinDeposit)
+					throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(townMinDeposit)));
+			} else {
+				// Check if deposit amount is higher than config value
+				int nationMinDeposit = TownySettings.getNationMinDeposit();
+				if (amount < nationMinDeposit)
+					throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(nationMinDeposit)));
+			}
+		} 
+			
 		
 	}
 

@@ -2668,14 +2668,14 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_BANK_CAP_TOWN);
 	}
 
-	public static double getTownMinDeposit() {
+	public static int getTownMinDeposit() {
 
-		return getDouble(ConfigNodes.ECO_MIN_DEPOSIT_TOWN);
+		return getInt(ConfigNodes.ECO_MIN_DEPOSIT_TOWN);
 	}
 
-	public static double getTownMinWithdraw() {
+	public static int getTownMinWithdraw() {
 
-		return getDouble(ConfigNodes.ECO_MIN_WITHDRAW_TOWN);
+		return getInt(ConfigNodes.ECO_MIN_WITHDRAW_TOWN);
 	}
 
 	public static double getNationBankCap() {
@@ -2698,14 +2698,14 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWALS);
 	}
 
-	public static double getNationMinDeposit() {
+	public static int getNationMinDeposit() {
 
-		return getDouble(ConfigNodes.ECO_MIN_DEPOSIT_NATION);
+		return getInt(ConfigNodes.ECO_MIN_DEPOSIT_NATION);
 	}
 
-	public static double getNationMinWithdraw() {
+	public static int getNationMinWithdraw() {
 
-		return getDouble(ConfigNodes.ECO_MIN_WITHDRAW_NATION);
+		return getInt(ConfigNodes.ECO_MIN_WITHDRAW_NATION);
 	}
 	
 	public static boolean isBankActionDisallowedOutsideTown() {

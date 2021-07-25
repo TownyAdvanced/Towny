@@ -1966,12 +1966,12 @@ public enum ConfigNodes {
 			"# Set to true to allow withdrawals from town banks"),
 	ECO_MIN_DEPOSIT_TOWN(
 			"economy.banks.town_min_deposit",
-			"0.0",
+			"0",
 			"",
 			"# Minimum amount of money players are allowed to deposit in town bank"),
 	ECO_MIN_WITHDRAW_TOWN(
 			"economy.banks.town_min_withdraw",
-			"0.0",
+			"0",
 			"",
 			"# Minimum amount of money players are allowed to witdrhaw from town bank"),
 	ECO_BANK_CAP_NATION(
@@ -1987,12 +1987,12 @@ public enum ConfigNodes {
 			"# Set to true to allow withdrawals from nation banks"),
 	ECO_MIN_DEPOSIT_NATION(
 			"economy.banks.nation_min_deposit",
-			"0.0",
+			"0",
 			"",
 			"# Minimum amount of money players are allowed to deposit in nation bank"),
 	ECO_MIN_WITHDRAW_NATION(
 			"economy.banks.nation_min_withdraw",
-			"0.0",
+			"0",
 			"",
 			"# Minimum amount of money players are allowed to witdraw from nation bank"),
 	ECO_BANK_DISALLOW_BANK_ACTIONS_OUTSIDE_TOWN(
