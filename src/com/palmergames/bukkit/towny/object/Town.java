@@ -644,6 +644,11 @@ public class Town extends Government implements TownBlockOwner {
 		else
 			throw new TownyException(this.getName() + " has not set a home block.");
 	}
+	
+	@Nullable
+	public TownBlock getHomeBlockOrNull() {
+		return homeBlock;
+	}
 
 	/**
 	 * Sets the world this town homeblock belongs to. If it's a world change it will

@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.InviteReceiver;
@@ -818,6 +819,18 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	public void setJoinedTownAt(long joinedTownAt) {
 		this.joinedTownAt = joinedTownAt;
+	}
+	
+	public Nation getNation() throws TownyException {
+		return getTown().getNation();
+	}
+	
+	@Nullable
+	public Nation getNationOrNull() {
+		if (hasNation())
+			return getTownOrNull().getNationOrNull();
+		else
+			return null;
 	}
 
 	/**

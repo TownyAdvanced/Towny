@@ -19,6 +19,7 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -234,12 +235,17 @@ public class Nation extends Government {
 
 	@Override
 	public Location getSpawn() throws TownyException {
-		if(nationSpawn == null){
+		if (!hasSpawn())
 			throw new TownyException(Translation.of("msg_err_nation_has_not_set_a_spawn_location"));
-		}
 
 		return nationSpawn;
 	}
+	
+	@Nullable
+	public Location getSpawnOrNull() {
+		return nationSpawn;
+	}
+	
 
 	@Override
 	public void setSpawn(Location spawn) {
