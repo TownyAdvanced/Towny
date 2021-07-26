@@ -6521,3 +6521,4 @@ v0.92.0.11:
     - default: 0
     - Minimum amount of money players are allowed to withdraw from nation bank at a time.
   - Print yaml exception message if a file breaks formatting, courtesy of Warriorrrr with PR #5113.
+  - Fix players who've had their town removed not resetting their playercache.

@@ -2860,10 +2860,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (town.hasResident(resident))
 					resident.removeTown();
 
-				// Reset everyones cache permissions as this player leaving could affect
-				// multiple areas
-				plugin.resetCache();
-
 				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_left_town", resident.getName()));
 				TownyMessaging.sendMsg(player, Translation.of("msg_left_town", resident.getName()));
 

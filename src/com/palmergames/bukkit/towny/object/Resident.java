@@ -307,6 +307,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		}
 		
 		this.save();
+		
+		// Reset everyones cache permissions as this player losing their could affect multiple areas
+		Towny.getPlugin().resetCache();
 	}
 
 	public void setFriends(List<Resident> newFriends) {
