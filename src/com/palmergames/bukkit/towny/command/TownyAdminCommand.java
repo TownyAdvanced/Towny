@@ -1830,8 +1830,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			resident.save();
 
 			if (resident.hasTitle()) {
-				TownyMessaging.sendMessage(sender, Translation.of("msg_set_title", resident.getName(), resident.getTitle()));
-				TownyMessaging.sendMessage(resident, Translation.of("msg_set_title", resident.getName(), resident.getTitle()));
+				TownyMessaging.sendMessage(sender, Translation.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
+				TownyMessaging.sendMessage(resident, Translation.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
 			} else {
 				TownyMessaging.sendMessage(sender, Translation.of("msg_clear_title_surname", "Title", resident.getName()));
 				TownyMessaging.sendMessage(resident, Translation.of("msg_clear_title_surname", "Title", resident.getName()));
@@ -1859,8 +1859,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			resident.save();
 
 			if (resident.hasSurname()) {
-				TownyMessaging.sendMessage(sender, Translation.of("msg_set_surname", resident.getName(), resident.getSurname()));
-				TownyMessaging.sendMessage(resident, Translation.of("msg_set_surname", resident.getName(), resident.getSurname()));
+				TownyMessaging.sendMessage(sender, Translation.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
+				TownyMessaging.sendMessage(resident, Translation.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
 			} else {
 				TownyMessaging.sendMessage(sender, Translation.of("msg_clear_title_surname", "Surname", resident.getName()));
 				TownyMessaging.sendMessage(resident, Translation.of("msg_clear_title_surname", "Surname", resident.getName()));

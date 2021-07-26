@@ -2372,7 +2372,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				resident.save();
 
 				if (resident.hasTitle())
-					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_title", resident.getName(), resident.getTitle()));
+					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
 				else
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_clear_title_surname", "Title", resident.getName()));
 
@@ -2402,7 +2402,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				resident.save();
 
 				if (resident.hasSurname())
-					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_surname", resident.getName(), resident.getSurname()));
+					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
 				else
 					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_clear_title_surname", "Surname", resident.getName()));
 

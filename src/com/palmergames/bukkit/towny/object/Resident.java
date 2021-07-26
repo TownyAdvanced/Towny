@@ -700,14 +700,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	@Override
 	public String getFormattedName() {
 		if (isKing()) {
-			return Colors.translateColorCodes(hasTitle() ? getTitle() + " " : TownySettings.getKingPrefix(this)) + getName() + (hasSurname() ? " " + getSurname() : TownySettings.getKingPostfix(this));
+			return Colors.translateColorCodes(hasTitle() ? getTitle() + " " : TownySettings.getKingPrefix(this)) + getName() + Colors.translateColorCodes(hasSurname() ? " " + getSurname() : TownySettings.getKingPostfix(this));
 		}
 			
 		if (isMayor()) {
-			return Colors.translateColorCodes(hasTitle() ? getTitle() + " " : TownySettings.getMayorPrefix(this)) + getName() + (hasSurname() ? " " + getSurname() : TownySettings.getMayorPostfix(this));
+			return Colors.translateColorCodes(hasTitle() ? getTitle() + " " : TownySettings.getMayorPrefix(this)) + getName() + Colors.translateColorCodes(hasSurname() ? " " + getSurname() : TownySettings.getMayorPostfix(this));
 		}
 			
-		return Colors.translateColorCodes(hasTitle() ? getTitle() + " " : "") + getName() + (hasSurname() ? " " + getSurname() : "");
+		return Colors.translateColorCodes(hasTitle() ? getTitle() + " " : "") + getName() + Colors.translateColorCodes(hasSurname() ? " " + getSurname() : "");
 	}
 
 	/**
