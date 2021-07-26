@@ -6522,3 +6522,8 @@ v0.92.0.11:
     - Minimum amount of money players are allowed to withdraw from nation bank at a time.
   - Print yaml exception message if a file breaks formatting, courtesy of Warriorrrr with PR #5113.
   - Fix players who've had their town removed not resetting their playercache.
+  - Fix NPE when a town ruins, courtesy of Warriorrrr with PR #5119.
+    - Closes #5118.
+  - Add missing color code translations to resident surnames, courtesy of illumeleet with PR #5120.
+    - Translates colour codes used in surnames the same way we already did resident titles.
+    - Shows colouring properly in /nation|town set title|surname command feedback when coloured titles/surnames are set. 
