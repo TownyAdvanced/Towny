@@ -278,8 +278,8 @@ msg_err_deposit_capped: 'Det går inte att sätta in mer pengar. Denna bank är 
 msg_set_town_home: '&bLyckades ändra stadens hemblock till %s'
 msg_set_town_spawn: '&bLyckades ändra stadens resmål.'
 msg_set_outpost_spawn: '&bLyckades byta kolonins resmål.'
-msg_set_title: '&b%s fick titeln ''%s''.'
-msg_set_surname: '&b%s fick efternamnet ''%s''.'
+msg_set_title: '&b%s fick titeln ''%s&b''.'
+msg_set_surname: '&b%s fick efternamnet ''%s&b''.'
 msg_clear_title_surname: '&b%s togs bort från ''%s''.'
 
 msg_clear_plot_material: '&bDen här marken rensades från alla %s.'

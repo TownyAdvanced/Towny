@@ -281,8 +281,8 @@ msg_err_deposit_capped: 'Ude af stand til at deponere penge. Denne bank er begr�
 msg_set_town_home: '&bÆndrede succesfuldt byens hjemblok til %s'
 msg_set_town_spawn: '&bÆndrede succesfuldt byens spawn.'
 msg_set_outpost_spawn: '&bÆndrede succesfuldt forpostens spawn.'
-msg_set_title: '&b%s blev tildelt titlen ''%s''.'
-msg_set_surname: '&b%s blev tildelt efternavnet ''%s''.'
+msg_set_title: '&b%s blev tildelt titlen ''%s&b''.'
+msg_set_surname: '&b%s blev tildelt efternavnet ''%s&b''.'
 msg_clear_title_surname: '&b%s for ''%s'' blev ryddet.'
 
 msg_clear_plot_material: '&bPlottet blev ryddet for alle %s''s.'

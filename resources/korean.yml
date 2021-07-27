@@ -277,8 +277,8 @@ msg_err_deposit_capped: '돈을 입금할 수 없습니다. 이 금고에는 %s�
 msg_set_town_home: '&b마을의 홈 블록을 %s(으)로 설정하였습니다.'
 msg_set_town_spawn: '&b마을의 스폰 지점을 변경하였습니다.'
 msg_set_outpost_spawn: '&b전초기지의 스폰 지점을 변경하였습니다.'
-msg_set_title: '&b%s님이 %s칭호를 하사받았습니다.'
-msg_set_surname: '&b%s님이 %s별칭을 하사받았습니다.'
+msg_set_title: '&b%s님이 %s&b칭호를 하사받았습니다.'
+msg_set_surname: '&b%s님이 %s&b별칭을 하사받았습니다.'
 msg_clear_title_surname: '&b %s은(는) 더이상 %s(이)라고 불리지 않습니다.'
 
 msg_clear_plot_material: '&b이 토지의 %s이(가) 모두 사라졌습니다.'

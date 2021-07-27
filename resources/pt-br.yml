@@ -285,8 +285,8 @@ msg_err_deposit_capped: 'Não foi possível depositar dinheiro. A capacidade des
 msg_set_town_home: '&bTerreno inicial da cidade foi definido para %s'
 msg_set_town_spawn: '&bO spawn da cidade foi alterado.'
 msg_set_outpost_spawn: '&bO spawn do posto avançado foi alterado.'
-msg_set_title: 'A &b%s foi concedido o título de ''%s''.'
-msg_set_surname: 'A &b%s foi concedido o apelido de ''%s''.'
+msg_set_title: 'A &b%s foi concedido o título de ''%s&b''.'
+msg_set_surname: 'A &b%s foi concedido o apelido de ''%s&b''.'
 msg_clear_title_surname: '&bO %s de ''%s'' foi limpo.'
 
 msg_clear_plot_material: '&bO terreno foi limpo de todos os %s.'

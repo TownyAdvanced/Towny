@@ -282,8 +282,8 @@ msg_err_deposit_capped: "Impossible de déposer de l'argent. Cette banque est pl
 msg_set_town_home: "&bZone principale de la ville changée avec succès à %s."
 msg_set_town_spawn: "&bSpawn de la ville changé avec succès."
 msg_set_outpost_spawn: "&bSpawn de l'avant-poste changé avec succès."
-msg_set_title: "&b%s a été promu au titre de '%s'."
-msg_set_surname: "&b%s a été promu au titre de '%s'."
+msg_set_title: "&b%s a été promu au titre de '%s&b'."
+msg_set_surname: "&b%s a été promu au titre de '%s&b'."
 msg_clear_title_surname: "&bLe %s pour '%s' a été retiré."
 
 msg_clear_plot_material: "&bLa parcelle a été retiré de tout %s's."

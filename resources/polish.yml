@@ -281,8 +281,8 @@ msg_err_deposit_capped: 'Nie można zdepozytować pieniedzy. Ten bank jest ogran
 msg_set_town_home: '&bPomyślnie zmieniono koordynaty chunku macierzystego na %s (/towny map)'
 msg_set_town_spawn: '&bPomyslnie zmieniono spawn miasta.'
 msg_set_outpost_spawn: '&bPomyślnie zmieniono spawn wartowni.'
-msg_set_title: '&b%s otrzymał przydomek ''%s''.'
-msg_set_surname: '&b%s otrzymał przydomek ''%s''.'
+msg_set_title: '&b%s otrzymał przydomek ''%s&b''.'
+msg_set_surname: '&b%s otrzymał przydomek ''%s&b''.'
 msg_clear_title_surname: '&bPrzydomek %s dla ''%s'' został wyczyszcony.'
 
 msg_clear_plot_material: '&bWszystkie działki %s zostały wyczyszczone.'

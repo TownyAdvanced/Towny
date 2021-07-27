@@ -281,8 +281,8 @@ msg_err_deposit_capped: 'Impossibile depositare soldi. La banca è limitata a %s
 msg_set_town_home: '&bCambiato con successo il lotto base della città a %s'
 msg_set_town_spawn: '&bSpawn della città cambiato con successo.'
 msg_set_outpost_spawn: '&bSpawn dell''avamposto cambiato con successo.'
-msg_set_title: '&bA %s è stato assegnato il titolo di ''%s''.'
-msg_set_surname: '&bA %s è stato assegnato il cognome di ''%s''.'
+msg_set_title: '&bA %s è stato assegnato il titolo di ''%s&b''.'
+msg_set_surname: '&bA %s è stato assegnato il cognome di ''%s&b''.'
 msg_clear_title_surname: '&bIl %s per ''%s'' è stato rimosso.'
 
 msg_clear_plot_material: '&bIl lotto è stato liberato da tutti i %s.'

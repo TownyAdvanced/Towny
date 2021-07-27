@@ -292,8 +292,8 @@ msg_err_deposit_capped: '¡Este banco está lleno! La capacidad máxima de este 
 msg_set_town_home: '&bHomeblock de la ciudad cambiado exitosamente a %s'
 msg_set_town_spawn: '&bSpawn de la ciudad cambiado exitosamente.'
 msg_set_outpost_spawn: '&bSpawn del outpost cambiado exitosamente.'
-msg_set_title: '&bA &b%s se le fue otorgado el título de ''%s''.'
-msg_set_surname: '&bA %s se le fue otorgado el apellido de ''%s''.'
+msg_set_title: '&bA &b%s se le fue otorgado el título de ''%s&b''.'
+msg_set_surname: '&bA %s se le fue otorgado el apellido de ''%s&b''.'
 msg_clear_title_surname: '&bEl %s de ''%s'' fue borrado.'
 
 msg_clear_plot_material: '&bSe limpió todo el %s de este terreno.'

@@ -280,8 +280,8 @@ msg_err_deposit_capped: 'Incapaz de depositar el dinero, la ciudad llegó al top
 msg_set_town_home: '&bSHome block de la ciudad cambiado exitosamente a %s'
 msg_set_town_spawn: '&bSpawn de la ciudad cambiado exitosamente.'
 msg_set_outpost_spawn: '&bOutpost del spawn cambiado exitosamente.'
-msg_set_title: '&b%s le fue otorgado el título de ''%s''.'
-msg_set_surname: '&b%s le fue otorgado el apellido de ''%s''.'
+msg_set_title: '&b%s le fue otorgado el título de ''%s&b''.'
+msg_set_surname: '&b%s le fue otorgado el apellido de ''%s&b''.'
 msg_clear_title_surname: '&bEl %s de ''%s'' fue borrado.'
 
 msg_clear_plot_material: '&bLa parcela fue limpiada de %s'

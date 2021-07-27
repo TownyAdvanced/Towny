@@ -281,8 +281,8 @@ msg_err_deposit_capped: 'Du kannst kein Geld mehr einzahlen. Die Bank enthält d
 msg_set_town_home: '&bStadtplatz wurde erfolgreich nach %s verschoben'
 msg_set_town_spawn: '&bDer Stadtspawn wurde erfolgreich geändert.'
 msg_set_outpost_spawn: '&bDer Spawn des Vorpostens wurde erfolgreich geändert.'
-msg_set_title: '&b%s wurde der Titel ''%s'' verliehen.'
-msg_set_surname: '&b%s wurde der Nachname ''%s'' verliehen.'
+msg_set_title: '&b%s wurde der Titel ''%s&b'' verliehen.'
+msg_set_surname: '&b%s wurde der Nachname ''%s&b'' verliehen.'
 msg_clear_title_surname: '&bDas %s für ''%s'' wurde gelöscht.'
 
 msg_clear_plot_material: '&bDas Grundstück wurde von %s bereinigt.'

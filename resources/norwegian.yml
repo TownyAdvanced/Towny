@@ -281,8 +281,8 @@ msg_err_deposit_capped: 'Kan ikke sette inn penger. Denne banken har en grense p
 msg_set_town_home: '&bVellykket endret byens boligblokk til %s'
 msg_set_town_spawn: '&bVellykket byttet byens spawn.'
 msg_set_outpost_spawn: '&bVellykket endret utpostens spawn.'
-msg_set_title: '&b%s ble gitt tittelen ''%s''.'
-msg_set_surname: '&b%s fikk etternavnet ''%s''.'
+msg_set_title: '&b%s ble gitt tittelen ''%s&b''.'
+msg_set_surname: '&b%s fikk etternavnet ''%s&b''.'
 msg_clear_title_surname: '&b %s for ''%s'' var fjernet.'
 
 msg_clear_plot_material: '&bTomten ble ryddet for all %s''.'
