@@ -531,17 +531,18 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			} catch (NotRegisteredException ignored) {
 			}
 			return tag;
-		case "nation_map_color_hex": // %townyadvanced_nation_map_color_hex%
+		case "town_map_color_hex": // %townyadvanced_town_map_color_hex%
 			if (resident.hasTown()){
-				try {
-					if (resident.getTown().hasNation()){
-						hex = resident.getTown().getNation().getMapColorHexCode();
-						if (!hex.isEmpty()){
-							hex = "#"+hex;
-						}
-					}
-				} catch (NotRegisteredException ignored) {
-				}
+				hex = resident.getTownOrNull().getMapColorHexCode();
+				if (!hex.isEmpty())
+					hex = "#"+hex;
+			}
+			return hex;				
+		case "nation_map_color_hex": // %townyadvanced_nation_map_color_hex%
+			if (resident.hasNation()){
+				hex = resident.getNationOrNull().getMapColorHexCode();
+				if (!hex.isEmpty())
+					hex = "#"+hex;
 			}
 			return hex;	
 		case "town_ranks": // %townyadvanced_town_ranks%

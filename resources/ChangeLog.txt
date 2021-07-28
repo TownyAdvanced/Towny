@@ -6527,3 +6527,13 @@ v0.92.0.11:
   - Add missing color code translations to resident surnames, courtesy of illumeleet with PR #5120.
     - Translates colour codes used in surnames the same way we already did resident titles.
     - Shows colouring properly in /nation|town set title|surname command feedback when coloured titles/surnames are set. 
+0.97.0.18:
+  - Towns can now set their mapcolor, like nations do.
+    - Requires a forthcoming update to Dynmap-Towny before you will see this in effect on your Dynmap.
+  - New Command: /town set mapcolor {color}
+    - Required for #5093.
+  - New Permission Node: towny.command.town.set.mapcolor.
+    - Mayors already get this via towny.command.town.*, no change required in townyperms.yml.
+  - New Placeholder: %townyadvanced_town_map_color_hex%
+    - Returns the colour set by the town.
+  - Language files bumped to 0.116.

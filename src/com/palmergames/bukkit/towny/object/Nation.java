@@ -37,7 +37,6 @@ public class Nation extends Government {
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
-	private String mapColorHexCode = "";
 	private Location nationSpawn;
 	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
 
@@ -582,14 +581,6 @@ public class Nation extends Government {
 	 */
 	public boolean isAlliedWith(Nation nation) {
 		return allies.contains(nation);
-	}
-
-	public String getMapColorHexCode() {
-		return mapColorHexCode;
-	}
-
-	public void setMapColorHexCode(String mapColorHexCode) {
-		this.mapColorHexCode = mapColorHexCode;
 	}
 	
 	@Override

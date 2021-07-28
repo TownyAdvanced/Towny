@@ -415,6 +415,7 @@ permissions:
             towny.command.town.set.board: true
             towny.command.town.set.homeblock: true
             towny.command.town.set.jail: true
+            towny.command.town.set.mapcolor: true
             towny.command.town.set.mayor: true
             towny.command.town.set.name: true
             towny.command.town.set.outpost: true

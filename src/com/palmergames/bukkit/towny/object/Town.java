@@ -1341,8 +1341,13 @@ public class Town extends Government implements TownBlockOwner {
 		return ruinedTime;
 	}
 
+	/**
+	 * Used by Dynmap-Towny to allow SiegeWar to set an occupying nation's colour.
+	 * 
+	 * @return String value of hex code or null.
+	 */
 	@Nullable 
-	public String getMapColorHexCode() {
+	public String getNationMapColorHexCode() {
 		String rawMapColorHexCode = hasNation() ? nation.getMapColorHexCode() : null;
 		TownMapColourCalculationEvent event = new TownMapColourCalculationEvent(this, rawMapColorHexCode);
 		Bukkit.getPluginManager().callEvent(event);

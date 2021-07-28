@@ -1147,6 +1147,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				for (Resident resident : getResidents(toUUIDArray(line.split(search))))
 					town.addTrustedResident(resident);
 			}
+			
+			line = rs.getString("mapColorHexCode");
+			if (line != null)
+				town.setMapColorHexCode(line);
+			else
+				town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
 
 			return true;
 		} catch (SQLException e) {
@@ -2087,6 +2093,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
 			twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
 			twn_hm.put("joinedNationAt", town.getJoinedNationAt());
+			twn_hm.put("mapColorHexCode", town.getMapColorHexCode());
 			twn_hm.put("movedHomeBlockAt", town.getMovedHomeBlockAt());
 			if (town.hasMeta())
 				twn_hm.put("metadata", serializeMetadata(town));

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.115
+version: 0.116
 language: italian
 author: Leonardo_DGS
 website: 'https://townyadvanced.github.io/'
@@ -1489,3 +1489,6 @@ msg_err_that_resident_doesnt_belong_to_that_nation: 'That resident doesn''t belo
 msg_comptype_founded: 'Founded Date'
 msg_err_must_be_greater_than_or_equal_to: 'Amount must be greater than or equal to %s'
 err_invalid_yaml: 'Loading error: Failed to load file %s (does it pass a yaml parser?).'
+
+#Added in 0.116
+msg_town_map_color_changed: '&bThe town map color was changed to %s.'

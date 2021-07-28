@@ -46,6 +46,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	private long registered;
 	private double spawnCost = TownySettings.getSpawnTravelCost();
 	protected double taxes;
+	protected String mapColorHexCode = "";
 	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 	
 	protected Government(String name) {
@@ -311,6 +312,14 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	@Override
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
+	}
+	
+	public String getMapColorHexCode() {
+		return mapColorHexCode;
+	}
+
+	public void setMapColorHexCode(String mapColorHexCode) {
+		this.mapColorHexCode = mapColorHexCode;
 	}
 
 	public abstract Collection<TownBlock> getTownBlocks();

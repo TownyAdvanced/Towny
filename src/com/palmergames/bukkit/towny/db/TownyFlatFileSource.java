@@ -900,6 +900,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					for (Resident resident : getResidents(toUUIDArray(line.split(","))))
 						town.addTrustedResident(resident);
 				}
+				
+				line = keys.get("mapColorHexCode");
+				if (line != null) {
+					try {
+						town.setMapColorHexCode(line);
+					} catch (Exception e) {
+						town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
+					}
+				} else {
+					town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
+				}
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_town_file_at_line", town.getName(), line, town.getName()));
@@ -1880,6 +1891,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("primaryJail=" + town.getPrimaryJail().getUUID());
 		
 		list.add("trustedResidents=" + StringMgmt.join(toUUIDList(town.getTrustedResidents()), ","));
+		
+		list.add("mapColorHexCode=" + town.getMapColorHexCode());
+
 		
 		/*
 		 *  Make sure we only save in async

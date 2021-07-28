@@ -165,6 +165,7 @@ public class SQL_Schema {
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
 		columns.add("`registered` BIGINT DEFAULT NULL");
 		columns.add("`spawnCost` float NOT NULL");
+		columns.add("`mapColorHexCode` mediumtext DEFAULT NULL");
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`conqueredDays` mediumint");
 		columns.add("`conquered` bool NOT NULL DEFAULT '0'");

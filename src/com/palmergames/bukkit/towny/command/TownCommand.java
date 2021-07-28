@@ -79,6 +79,7 @@ import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
+import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
@@ -174,6 +175,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"homeblock",
 		"spawn",
 		"spawncost",
+		"mapcolor",
 		"name",
 		"outpost",
 		"perm",
@@ -2398,6 +2400,24 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					
 					setPrimaryJail(player, town);
 					
+				} else if (split[0].equalsIgnoreCase("mapcolor")) {
+
+					if (split.length < 2) {
+						TownyMessaging.sendErrorMsg(player, "Eg: /town set mapcolor brown.");
+						return;
+					} else {
+						String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+
+						if (!TownySettings.getTownColorsMap().containsKey(line.toLowerCase())) {
+							String allowedColorsListAsString = TownySettings.getTownColorsMap().keySet().toString();
+							TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_nation_map_color", allowedColorsListAsString));
+							return;
+						}
+
+						town.setMapColorHexCode(TownySettings.getTownColorsMap().get(line.toLowerCase()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_map_color_changed", line.toLowerCase()));
+					}					
+					
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_SET, split[0])) {
 					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_SET, split[0]).execute(player, "town", split);
 				} else {
@@ -2756,6 +2776,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(String.format("Error fetching new town from name '%s'", name));
 
 		town.setRegistered(System.currentTimeMillis());
+		town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
 		resident.setTown(town);
 		town.setMayor(resident);
 		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);

@@ -2993,6 +2993,17 @@ public class TownySettings {
 		}
 		return nationColorsMap;
 	}
+	
+	public static Map<String,String> getTownColorsMap() {
+		List<String> townColorsList = getStrArr(ConfigNodes.GTOWN_SETTINGS_ALLOWED_TOWN_COLORS);
+		Map<String,String> townColorsMap = new HashMap<>();
+		String[] keyValuePair;
+		for(String nationColor: townColorsList) {
+			keyValuePair = nationColor.trim().split(":");
+			townColorsMap.put(keyValuePair[0], keyValuePair[1]);
+		}
+		return townColorsMap;
+	}
 
 	public static String getUUIDPercent() {
 		double fraction = (double) uuidCount / TownyUniverse.getInstance().getNumResidents();
