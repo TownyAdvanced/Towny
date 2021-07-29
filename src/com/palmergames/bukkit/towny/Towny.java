@@ -322,6 +322,21 @@ public class Towny extends JavaPlugin {
 			addons.add(String.format("%s v%s", "TownyFlight", test.getDescription().getVersion()));			
 		}
 		
+		test = getServer().getPluginManager().getPlugin("TownyHistories");
+		if (test != null) {
+			addons.add(String.format("%s v%s", "TownyHistories", test.getDescription().getVersion()));
+		}
+		
+		test = getServer().getPluginManager().getPlugin("SiegeWar");
+		if (test != null) {
+			addons.add(String.format("%s v%s", "SiegeWar", test.getDescription().getVersion()));
+		}
+		
+		test = getServer().getPluginManager().getPlugin("FlagWar");
+		if (test != null) {
+			addons.add(String.format("%s v%s", "FlagWar", test.getDescription().getVersion()));
+		}
+		
 		test = getServer().getPluginManager().getPlugin("Essentials");
 		if (test == null) {
 			TownySettings.setUsingEssentials(false);
