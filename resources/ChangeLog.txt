@@ -6537,3 +6537,4 @@ v0.92.0.11:
   - New Placeholder: %townyadvanced_town_map_color_hex%
     - Returns the colour set by the town.
   - Language files bumped to 0.116.
+  - Fix removing a null jail.

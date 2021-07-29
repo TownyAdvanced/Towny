@@ -704,7 +704,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			return;
 		}
 		
-		if (townBlock.isJail())
+		if (townBlock.isJail() && townBlock.getJail() != null)
 			removeJail(townBlock.getJail());
 
 		TownyUniverse.getInstance().removeTownBlock(townBlock);
