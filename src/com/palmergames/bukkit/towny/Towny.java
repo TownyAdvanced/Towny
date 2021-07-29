@@ -475,7 +475,7 @@ public class Towny extends JavaPlugin {
 					display = true;
 				}
 				if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
-					plugin.getLogger().info(line);
+					Bukkit.getLogger().info(line);
 				}
 			}
 			plugin.getLogger().info("------------------------------------");
