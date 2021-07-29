@@ -289,7 +289,7 @@ public class PlayerCacheUtil {
 					return TownBlockStatus.NOT_REGISTERED;
 			} else {
 				// If not an NPC then there is likely some sort of problem that should be logged.
-				System.out.print("[Towny] Failed to fetch resident: " + player.getName());
+				plugin.getLogger().warning("Failed to fetch resident: " + player.getName());
 				return TownBlockStatus.NOT_REGISTERED;
 			}
 		}

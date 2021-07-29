@@ -16,7 +16,7 @@ public class BackupTask implements Runnable {
 			dataSource.backup();
 
 		} catch (IOException e) {
-			System.out.println("[Towny] Error: Could not create backup.");
+			Towny.getPlugin().getLogger().info("Error: Could not create backup.");
 			e.printStackTrace();
 			return;
 		}

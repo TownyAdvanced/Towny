@@ -163,7 +163,7 @@ public abstract class TownyDataSource {
 		
 		for (Resident resident : universe.getResidents()) {
 			if (!loadResident(resident)) {
-				System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
+				plugin.getLogger().warning("Loading Error: Could not read resident data '" + resident.getName() + "'.");
 				return false;
 			}
 
@@ -180,7 +180,7 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading Towns");
 		for (Town town : getTowns())
 			if (!loadTown(town)) {
-				System.out.println("[Towny] Loading Error: Could not read town data '" + town.getName() + "'.");
+				plugin.getLogger().warning("Loading Error: Could not read town data '" + town.getName() + "'.");
 				return false;
 			}
 		return true;
@@ -191,7 +191,7 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading Nations");
 		for (Nation nation : universe.getNations())
 			if (!loadNation(nation)) {
-				System.out.println("[Towny] Loading Error: Could not read nation data '" + nation.getName() + "'.");
+				plugin.getLogger().warning("Loading Error: Could not read nation data '" + nation.getName() + "'.");
 				return false;
 			}
 		return true;
@@ -202,10 +202,8 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading Worlds");
 		for (TownyWorld world : getWorlds())
 			if (!loadWorld(world)) {
-				System.out.println("[Towny] Loading Error: Could not read world data '" + world.getName() + "'.");
+				plugin.getLogger().warning("Loading Error: Could not read world data '" + world.getName() + "'.");
 				return false;
-			} else {
-				// Push all Towns belonging to this world
 			}
 		return true;
 	}
@@ -214,7 +212,7 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading Jails");
 		for (Jail jail : getAllJails()) {
 			if (!loadJail(jail)) {
-				System.out.println("[Towny] Loading Error: Could not read jail data '" + jail.getUUID() + "'.");
+				plugin.getLogger().warning("Loading Error: Could not read jail data '" + jail.getUUID() + "'.");
 				return false;
 			}
 		}
@@ -225,7 +223,7 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading PlotGroups");
 		for (PlotGroup group : getAllPlotGroups()) {
 			if (!loadPlotGroup(group)) {
-				System.out.println("[Towny] Loading Error: Could not read PlotGroup data: '" + group.getID() + "'.");
+				plugin.getLogger().warning("Loading Error: Could not read PlotGroup data: '" + group.getID() + "'.");
 				return false;
 			}
 		}

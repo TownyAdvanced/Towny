@@ -32,7 +32,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 		try {
 			plugin.getServer().getPluginManager().registerEvents(new GMCustomEventListener(), plugin);
 		} catch (IllegalPluginAccessException e) {
-			System.out.print("Your Version of GroupManager is out of date. Please update.");
+			plugin.getLogger().warning("Your Version of GroupManager is out of date. Please update.");
 		}
 
 	}

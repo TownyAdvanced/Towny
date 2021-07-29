@@ -124,7 +124,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").getDeclaredConstructor().newInstance();
 			DriverManager.registerDriver(driver);
 		} catch (Exception e) {
-			System.out.println("[Towny] Driver error: " + e);
+			plugin.getLogger().warning("Driver error: " + e);
 		}
 
 		/*
@@ -132,7 +132,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		 */
 		if (getContext()) {
 
-			TownyMessaging.sendDebugMsg("[Towny] Connected to Database");
+			TownyMessaging.sendDebugMsg("Connected to Database");
 
 		} else {
 
@@ -671,7 +671,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				try {
 					residentName = rs.getString("name");
 				} catch (SQLException ex) {
-					System.out.println("[Towny] Loading Error: Error fetching a resident name from SQL Database. Skipping loading resident..");
+					plugin.getLogger().warning("Loading Error: Error fetching a resident name from SQL Database. Skipping loading resident..");
 					ex.printStackTrace();
 					continue;
 				}
@@ -679,12 +679,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				Resident resident = universe.getResident(residentName);
 				
 				if (resident == null) {
-					System.out.println(String.format("[Towny] Loading Error: Could not fetch resident '%s' from Towny universe while loading from SQL DB.", residentName));
+					plugin.getLogger().warning(String.format("Loading Error: Could not fetch resident '%s' from Towny universe while loading from SQL DB.", residentName));
 					continue;
 				}
 
 				if (!loadResident(resident, rs)) {
-					System.out.println("[Towny] Loading Error: Could not read resident data '" + resident.getName() + "'.");
+					plugin.getLogger().warning("Loading Error: Could not read resident data '" + resident.getName() + "'.");
 					return false;
 				}
 				
@@ -878,7 +878,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNS ")) {
 			while (rs.next()) {
 				if (!loadTown(rs)) {
-					System.out.println("[Towny] Loading Error: Could not read town data properly.");
+					plugin.getLogger().warning("Loading Error: Could not read town data properly.");
 					return false;
 				}
 			}
@@ -1083,10 +1083,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						if (resident != null)
 							town.addOutlaw(resident);
 						else {
-							System.out.println(String.format(
-								"[Towny] Loading Error: Cannot load outlaw with name '%s' for town '%s'! Skipping adding outlaw to town...",
-								token, town.getName()
-							));
+							plugin.getLogger().warning(String.format("Loading Error: Cannot load outlaw with name '%s' for town '%s'! Skipping adding outlaw to town...", token, town.getName()));
 						}
 					}
 				}
@@ -1174,7 +1171,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "NATIONS")) {
 			while (rs.next()) {
 				if (!loadNation(rs)) {
-					System.out.println("[Towny] Loading Error: Could not properly read nation data.");
+					plugin.getLogger().warning("Loading Error: Could not properly read nation data.");
 					return false;
 				}
 			}
@@ -1205,7 +1202,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			// Could not find nation in universe maps
 			if (nation == null) {
-				System.out.println(String.format("[Towny] Error: The nation with the name '%s' was not registered and cannot be loaded!", rs.getString("name")));
+				plugin.getLogger().warning(String.format("Error: The nation with the name '%s' was not registered and cannot be loaded!", rs.getString("name")));
 				return false;
 			}
 			
@@ -1218,7 +1215,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				try {
 					nation.forceSetCapital(town);
 				} catch (EmptyNationException e1) {
-					System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
+					plugin.getLogger().warning("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
 					removeNation(nation);
 					return true;
 				}
@@ -1226,7 +1223,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			else {
 				TownyMessaging.sendDebugMsg("Nation " + name + " could not set capital to " + rs.getString("capital") + ", selecting a new capital...");
 				if (!nation.findNewCapital()) {
-					System.out.println("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
+					plugin.getLogger().warning("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
 					removeNation(nation);
 					return true;
 				}
@@ -1338,7 +1335,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			while (rs.next()) {
 				if (!loadWorld(rs)) {
-					System.out.println("[Towny] Loading Error: Could not read properly world data.");
+					plugin.getLogger().warning("Loading Error: Could not read properly world data.");
 					return false;
 				}
 			}
@@ -1852,7 +1849,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "PLOTGROUPS ")) {
 			while (rs.next()) {
 				if (!loadPlotGroup(rs)) {
-					System.out.println("[Towny] Loading Error: Could not read plotgroup data properly.");
+					plugin.getLogger().warning("Loading Error: Could not read plotgroup data properly.");
 					return false;
 				}
 			}
@@ -1925,7 +1922,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "JAILS ")) {
 			while (rs.next()) {
 				if (!loadJail(rs)) {
-					System.out.println("[Towny] Loading Error: Could not read jail data properly.");
+					plugin.getLogger().warning("Loading Error: Could not read jail data properly.");
 					return false;
 				}
 			}

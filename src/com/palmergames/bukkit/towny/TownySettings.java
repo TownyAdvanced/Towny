@@ -137,8 +137,8 @@ public class TownySettings {
 						Double.parseDouble(level.get("debtCapModifier").toString())
 						);
 			} catch (NullPointerException e) {
-				System.out.println("Your Towny config.yml's town_level section is out of date.");
-				System.out.println("This can be fixed automatically by deleting the town_level section and letting Towny remake it on the next startup.");
+				Towny.getPlugin().getLogger().warning("Your Towny config.yml's town_level section is out of date.");
+				Towny.getPlugin().getLogger().warning("This can be fixed automatically by deleting the town_level section and letting Towny remake it on the next startup.");
 				throw new IOException("Config.yml town_levels incomplete.");
 			}
 
@@ -186,8 +186,8 @@ public class TownySettings {
 						Integer.parseInt(level.get("nationBonusOutpostLimit").toString())
 						);
 			} catch (Exception e) {
-				System.out.println("Your Towny config.yml's nation_level section is out of date.");
-				System.out.println("This can be fixed automatically by deleting the nation_level section and letting Towny remake it on the next startup.");
+				Towny.getPlugin().getLogger().warning("Your Towny config.yml's nation_level section is out of date.");
+				Towny.getPlugin().getLogger().warning("This can be fixed automatically by deleting the nation_level section and letting Towny remake it on the next startup.");
 				throw new IOException("Config.yml nation_levels incomplete.");
 			}
 
@@ -290,7 +290,7 @@ public class TownySettings {
 			// read the config.yml into memory
 			config = new CommentedConfiguration(file);
 			if (!config.load()) {
-				System.out.print("Failed to load Config!");
+				Towny.getPlugin().getLogger().warning("Failed to load Config!");
 			}
 
 			setDefaults(version, file);
@@ -351,7 +351,7 @@ public class TownySettings {
 			
 			playermap = new CommentedConfiguration(file);
 			if (!playermap.load()) {
-				System.out.println("Failed to load playermap!");
+				Towny.getPlugin().getLogger().warning("Failed to load playermap!");
 			}
 		}
 	}
@@ -363,7 +363,7 @@ public class TownySettings {
 
 	public static void sendError(String msg) {
 
-		System.out.println("[Towny] Error could not read " + msg);
+		Towny.getPlugin().getLogger().warning("Error could not read " + msg);
 	}
 	
 	public static SpawnLevel getSpawnLevel(ConfigNodes node)
@@ -1186,23 +1186,14 @@ public class TownySettings {
 	}
 
 	public static List<String> getWorldMobRemovalEntities() {
-
-		if (getDebug())
-			System.out.println("[Towny] Debug: Reading World Mob removal entities. ");
 		return getStrArr(ConfigNodes.PROT_MOB_REMOVE_WORLD);
 	}
 
 	public static List<String> getWildernessMobRemovalEntities() {
-
-		if (getDebug())
-			System.out.println("[Towny] Debug: Reading World Mob removal entities. ");
 		return getStrArr(ConfigNodes.PROT_MOB_REMOVE_WILDERNESS);
 	}
 
 	public static List<String> getTownMobRemovalEntities() {
-
-		if (getDebug())
-			System.out.println("[Towny] Debug: Reading Town Mob removal entities. ");
 		return getStrArr(ConfigNodes.PROT_MOB_REMOVE_TOWN);
 	}
 
@@ -1231,23 +1222,14 @@ public class TownySettings {
 	}
 
 	public static List<String> getWildExplosionProtectionEntities() {
-
-		if (getDebug())
-			System.out.println("[Towny] Debug: Wilderness explosion protection entities. ");
 		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST);
 	}
 
 	public static List<String> getWildExplosionRevertBlockWhitelist() {
-
-		if (getDebug())
-			System.out.println("[Towny] Debug: Wilderness explosion protection block whitelist. ");
 		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_REVERT_BLOCK_WHITELIST);
 	}
 	
 	public static List<String> getWildExplosionProtectionBlocks() {
-
-		if (getDebug())
-			System.out.println("[Towny] Debug: Wilderness explosion protection blocks. ");
 		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_LIST);
 	}
 
@@ -1590,9 +1572,6 @@ public class TownySettings {
 	}
 
 	public static List<String> getDisallowedTownSpawnZones() {
-
-		if (getDebug())
-			System.out.println("[Towny] Debug: Reading disallowed town spawn zones. ");
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_PREVENT_TOWN_SPAWN_IN);
 	}
 	

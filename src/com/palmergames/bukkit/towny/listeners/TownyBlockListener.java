@@ -124,7 +124,6 @@ public class TownyBlockListener implements Listener {
 				continue;
 
 			if (BlockUtil.sameOwnerOrHasMayorOverride(block, testBlock, player)) { // If the blocks have a same-owner relationship, continue.
-				System.out.println("new safe WC " + wc.toString());
 				safeWorldCoords.add(wc);
 				continue;
 			}
