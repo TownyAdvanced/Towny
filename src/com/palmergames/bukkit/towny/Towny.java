@@ -312,14 +312,41 @@ public class Towny extends JavaPlugin {
 		/*
 		 * Check add-ons and third-party plugins we use.
 		 */
+		// LlmDl Sponsor exclusive
+		test = getServer().getPluginManager().getPlugin("TownyCamps");
+		if (test != null) {
+			addons.add(String.format("%s v%s", "TownyCamps", test.getDescription().getVersion()));
+		}
+		
 		test = getServer().getPluginManager().getPlugin("TownyChat");
 		if (test != null) {
 			addons.add(String.format("%s v%s", "TownyChat", test.getDescription().getVersion()));			
+		}
+		
+		test = getServer().getPluginManager().getPlugin("TownyCultures");
+		if (test != null) {
+			addons.add(String.format("%s v%s", "TownyCultures", test.getDescription().getVersion()));
 		}
 
 		test = getServer().getPluginManager().getPlugin("TownyFlight");
 		if (test != null) {
 			addons.add(String.format("%s v%s", "TownyFlight", test.getDescription().getVersion()));			
+		}
+
+		// LlmDl Sponsor exclusive
+		test = getServer().getPluginManager().getPlugin("TownyHistories");
+		if (test != null) {
+			addons.add(String.format("%s v%s", "TownyHistories", test.getDescription().getVersion()));
+		}
+		
+		test = getServer().getPluginManager().getPlugin("SiegeWar");
+		if (test != null) {
+			addons.add(String.format("%s v%s", "SiegeWar", test.getDescription().getVersion()));
+		}
+		
+		test = getServer().getPluginManager().getPlugin("FlagWar");
+		if (test != null) {
+			addons.add(String.format("%s v%s", "FlagWar", test.getDescription().getVersion()));
 		}
 		
 		test = getServer().getPluginManager().getPlugin("Essentials");

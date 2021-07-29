@@ -504,15 +504,47 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		int plugins = 0;
 		String townyPlugins = Colors.Gold + "[";
 		
+		// LlmDl Sponsor exclusive
+		Plugin tCamps = Bukkit.getServer().getPluginManager().getPlugin("TownyCamps");
+		if (tCamps != null) {
+			townyPlugins += Colors.Yellow + "TownyCamps " + Colors.Green + tCamps.getDescription().getVersion() + " ";
+			plugins++;
+		}
+		
 		Plugin townyChat = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
 		if (townyChat != null){
 			townyPlugins += Colors.Yellow + "TownyChat " + Colors.Green + townyChat.getDescription().getVersion() + " ";
 			plugins++;
 		}
 		
-		Plugin townyF = Bukkit.getServer().getPluginManager().getPlugin("TownyFlight");
-		if (townyF != null) {
-			townyPlugins += Colors.Yellow + "TownyFlight " + Colors.Green + townyF.getDescription().getVersion() + " ";
+		Plugin tCult = Bukkit.getServer().getPluginManager().getPlugin("TownyCultures");
+		if (tCult != null) {
+			townyPlugins += Colors.Yellow + "TownyCultures " + Colors.Green + tCult.getDescription().getVersion() + " ";
+			plugins++;
+		}
+		
+		Plugin tFlight = Bukkit.getServer().getPluginManager().getPlugin("TownyFlight");
+		if (tFlight != null) {
+			townyPlugins += Colors.Yellow + "TownyFlight " + Colors.Green + tFlight.getDescription().getVersion() + " ";
+			plugins++;
+		}
+
+		// LlmDl Sponsor exclusive
+		Plugin tHist = Bukkit.getServer().getPluginManager().getPlugin("TownyHistories");
+		if (tHist != null) {
+			townyPlugins += Colors.Yellow + "TownyHistories " + Colors.Green + tHist.getDescription().getVersion() + " ";
+			plugins++;
+		}
+		
+		Plugin flagWar = Bukkit.getServer().getPluginManager().getPlugin("FlagWar");
+		if (flagWar != null) {
+			townyPlugins += Colors.Yellow + "FlagWar " + Colors.Green + flagWar.getDescription().getVersion() + " ";
+			plugins++;
+		}
+		
+		Plugin siegeWar = Bukkit.getServer().getPluginManager().getPlugin("SiegeWar");
+		if (siegeWar != null) {
+			townyPlugins += Colors.Yellow + "SiegeWar " + Colors.Green + siegeWar.getDescription().getVersion() + " ";
 			plugins++;
 		}
 
