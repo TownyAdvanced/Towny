@@ -143,6 +143,14 @@ public class WorldCoord extends Coord {
 	}
 
 	/**
+	 * Identical to !{@link WorldCoord#hasTownBlock()}, but is better readable.
+	 * @return Whether this townblock is not claimed.
+	 */
+	public boolean isWilderness() {
+		return !hasTownBlock();
+	}
+
+	/**
 	 * Relatively safe to use if {@link #hasTownBlock()} has already been used.
 	 * @return Town at this WorldCoord or null;
 	 */

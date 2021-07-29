@@ -238,7 +238,7 @@ public class TownyBlockListener implements Listener {
 		WorldCoord from = WorldCoord.parseWorldCoord(block);
 		WorldCoord to = WorldCoord.parseWorldCoord(blockTo);
 
-		if (from.equals(to) || (allowWild && TownyAPI.getInstance().isWilderness(to)))
+		if (from.equals(to) || (allowWild && to.isWilderness()) || (to.isWilderness() && from.isWilderness()))
 			return true;
 
 		try {
