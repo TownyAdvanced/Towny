@@ -2530,16 +2530,6 @@ public class TownySettings {
 		}
 	}
 
-	public static boolean isLogging() {
-
-		return getBoolean(ConfigNodes.PLUGIN_LOGGING);
-	}
-
-	//public static boolean isUsingQuestioner() {
-	//
-	//	return getBoolean(ConfigNodes.PLUGIN_USING_QUESTIONER_ENABLE);
-	//}
-
 	public static String getAcceptCommand(){
 		return getString(ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND);
 	}

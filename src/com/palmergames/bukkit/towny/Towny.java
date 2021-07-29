@@ -56,7 +56,6 @@ import org.apache.commons.lang.WordUtils;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -716,13 +715,6 @@ public class Towny extends JavaPlugin {
 	public Object getSetting(String root) {
 
 		return TownySettings.getProperty(root);
-	}
-
-	public void log(String msg) {
-
-		if (TownySettings.isLogging()) {
-			plugin.getLogger().info(ChatColor.stripColor(msg));
-		}
 	}
 
 	/**
