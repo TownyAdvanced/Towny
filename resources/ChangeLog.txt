@@ -6538,3 +6538,4 @@ v0.92.0.11:
     - Returns the colour set by the town.
   - Language files bumped to 0.116.
   - Fix removing a null jail.
+  - Fix missing townless tab complete on /ta purge command.

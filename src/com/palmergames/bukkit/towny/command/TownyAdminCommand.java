@@ -243,6 +243,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			case "reload":
 				if (args.length > 1)
 					return NameUtil.filterByStart(Arrays.asList("database", "db", "config", "perms", "permissions", "language", "lang", "townyperms", "all"), args[1]);
+			case "purge":
+				if (args.length == 3)
+					return NameUtil.filterByStart(Collections.singletonList("townless"), args[2]);
+				break;
 			case "set":
 				if (args.length > 1) {
 					switch (args[1].toLowerCase()) {
