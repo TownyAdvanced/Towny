@@ -416,8 +416,8 @@ public class TownBlock extends TownyObject {
 		return jail;
 	}
 
-	public void setJail(Jail jail) {
-		this.jail = jail;
+	public void setJail(Jail _jail) {
+		jail = _jail;
 	}
 
 	@Override
