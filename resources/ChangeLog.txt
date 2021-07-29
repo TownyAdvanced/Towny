@@ -6539,3 +6539,6 @@ v0.92.0.11:
   - Language files bumped to 0.116.
   - Fix removing a null jail.
   - Fix missing townless tab complete on /ta purge command.
+  - Allow moving of blocks between wilderness plot borders, courtesy of Warriorrrr with PR #5128.
+    - Closes #5127.
+  - Expand checkPlugin() and /towny universe output, courtesy of TheFlagCourier with PR #5129.
