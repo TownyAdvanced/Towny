@@ -122,7 +122,7 @@ public class Towny extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		
+
 		Bukkit.getLogger().info("====================      Towny      ========================");
 
 		townyUniverse = TownyUniverse.getInstance();
