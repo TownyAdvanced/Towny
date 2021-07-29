@@ -290,7 +290,7 @@ public class TownySettings {
 			// read the config.yml into memory
 			config = new CommentedConfiguration(file);
 			if (!config.load()) {
-				Towny.getPlugin().getLogger().warning("Failed to load Config!");
+				Towny.getPlugin().getLogger().severe("Failed to load Config!");
 			}
 
 			setDefaults(version, file);

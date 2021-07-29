@@ -223,7 +223,7 @@ public class TownyUniverse {
         // Try loading the database.
         long startTime = System.currentTimeMillis();
         if (!loadDatabase(loadDbType)) {
-            towny.getLogger().warning("Error: Failed to load!");
+            towny.getLogger().severe("Error: Failed to load!");
             return false;
         } else {
         	Bukkit.getPluginManager().callEvent(new TownyLoadedDatabaseEvent());
@@ -235,7 +235,7 @@ public class TownyUniverse {
 
         // Try saving the database.
         if (!saveDatabase(saveDbType)) {
-        	towny.getLogger().warning("Error: Unsupported save format!");
+	        	towny.getLogger().severe("Error: Unsupported save format!");
         	return false;
         }
 		return true;

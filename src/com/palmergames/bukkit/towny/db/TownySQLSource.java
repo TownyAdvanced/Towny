@@ -124,7 +124,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").getDeclaredConstructor().newInstance();
 			DriverManager.registerDriver(driver);
 		} catch (Exception e) {
-			plugin.getLogger().warning("Driver error: " + e);
+			plugin.getLogger().severe("Driver error: " + e);
 		}
 
 		/*
@@ -671,7 +671,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				try {
 					residentName = rs.getString("name");
 				} catch (SQLException ex) {
-					plugin.getLogger().warning("Loading Error: Error fetching a resident name from SQL Database. Skipping loading resident..");
+					plugin.getLogger().severe("Loading Error: Error fetching a resident name from SQL Database. Skipping loading resident..");
 					ex.printStackTrace();
 					continue;
 				}
@@ -679,12 +679,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				Resident resident = universe.getResident(residentName);
 				
 				if (resident == null) {
-					plugin.getLogger().warning(String.format("Loading Error: Could not fetch resident '%s' from Towny universe while loading from SQL DB.", residentName));
+					plugin.getLogger().severe(String.format("Loading Error: Could not fetch resident '%s' from Towny universe while loading from SQL DB.", residentName));
 					continue;
 				}
 
 				if (!loadResident(resident, rs)) {
-					plugin.getLogger().warning("Loading Error: Could not read resident data '" + resident.getName() + "'.");
+					plugin.getLogger().severe("Loading Error: Could not read resident data '" + resident.getName() + "'.");
 					return false;
 				}
 				
