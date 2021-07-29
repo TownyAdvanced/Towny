@@ -171,7 +171,7 @@ public class Towny extends JavaPlugin {
 
 		Bukkit.getLogger().info("=============================================================");
 		if (isError()) {
-			plugin.getLogger().warning("- ***** SAFE MODE ***** " + version);
+			plugin.getLogger().warning("[WARNING] - ***** SAFE MODE ***** " + version);
 		} else {
 			plugin.getLogger().info("Version: " + version + " - Plugin Enabled");
 		}
