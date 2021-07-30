@@ -79,8 +79,8 @@ public class TownyCustomListener implements Listener {
 						msg = chunkNotifier.getNotificationString(resident);
 					}
 				} catch (NullPointerException e) {
-					System.out.println("Towny ChunkNotifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful:");
-					System.out.println("  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ());
+					plugin.getLogger().info("ChunkNotifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful:");
+					plugin.getLogger().info("  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ());
 					e.printStackTrace();
 				}
 				if (msg != null) {

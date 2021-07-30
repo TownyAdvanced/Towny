@@ -53,12 +53,9 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.milkbowl.vault.permission.Permission;
 
 import org.apache.commons.lang.WordUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -87,7 +84,6 @@ import java.util.Map;
  * @author Shade, ElgarL, LlmDl
  */
 public class Towny extends JavaPlugin {
-	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private static final Version NETHER_VER = Version.fromString("1.16.1");
 	private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
 	private final String version = this.getDescription().getVersion();
@@ -126,7 +122,7 @@ public class Towny extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
-		System.out.println("====================      Towny      ========================");
+		Bukkit.getLogger().info("====================      Towny      ========================");
 
 		townyUniverse = TownyUniverse.getInstance();
 		
@@ -172,13 +168,13 @@ public class Towny extends JavaPlugin {
 
 		registerEvents();
 
-		System.out.println("=============================================================");
+		Bukkit.getLogger().info("=============================================================");
 		if (isError()) {
-			System.out.println("[WARNING] - ***** SAFE MODE ***** " + version);
+			plugin.getLogger().warning("[WARNING] - ***** SAFE MODE ***** " + version);
 		} else {
-			System.out.println("[Towny] Version: " + version + " - Plugin Enabled");
+			plugin.getLogger().info("Version: " + version + " - Plugin Enabled");
 		}
-		System.out.println("=============================================================");
+		Bukkit.getLogger().info("=============================================================");
 
 		if (!isError()) {
 			// Re login anyone online. (In case of plugin reloading)
@@ -202,7 +198,7 @@ public class Towny extends JavaPlugin {
 	@Override
 	public void onDisable() {
 
-		System.out.println("==============================================================");
+		Bukkit.getLogger().info("==============================================================");
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (townyUniverse.getDataSource() != null && !error) {
 			townyUniverse.getDataSource().saveQueues();
@@ -221,7 +217,7 @@ public class Towny extends JavaPlugin {
 		
 		try {
 			// Shut down our saving task.
-			System.out.println("[Towny] Finishing File IO Tasks...");
+			plugin.getLogger().info("Finishing File IO Tasks...");
 			townyUniverse.getDataSource().finishTasks();
 			townyUniverse.finishTasks();
 		} catch (NullPointerException ignored) {
@@ -235,8 +231,8 @@ public class Towny extends JavaPlugin {
 
 		this.townyUniverse = null;
 
-		System.out.println("[Towny] Version: " + version + " - Plugin Disabled");
-		System.out.println("=============================================================");
+		plugin.getLogger().info("Version: " + version + " - Plugin Disabled");
+		Bukkit.getLogger().info("=============================================================");
 	}
 
 	/**
@@ -283,7 +279,7 @@ public class Towny extends JavaPlugin {
 	
 	private void checkPlugins() {
 
-		System.out.println("[Towny] Searching for third-party plugins...");
+		plugin.getLogger().info("Searching for third-party plugins...");
 		String ecowarn = "";
 		List<String> addons = new ArrayList<>();
 		Plugin test;
@@ -377,11 +373,11 @@ public class Towny extends JavaPlugin {
 		/*
 		 * Output discovered plugins and warnings.
 		 */
-		System.out.println("[Towny] Plugins found: " + output);
+		plugin.getLogger().info("Plugins found: " + output);
 		if (!addons.isEmpty())
-			System.out.println("  Add-ons: " + WordUtils.wrap(StringMgmt.join(addons, ", "), 52, System.lineSeparator() + "           ", true));
+			Bukkit.getLogger().info("  Add-ons: " + WordUtils.wrap(StringMgmt.join(addons, ", "), 52, System.lineSeparator() + "           ", true));
 		if (!ecowarn.isEmpty())
-			System.out.println("[Towny] " + WordUtils.wrap(ecowarn, 55, System.lineSeparator() + "        ", true));
+			plugin.getLogger().info(WordUtils.wrap(ecowarn, 55, System.lineSeparator() + "        ", true));
 
 		//Add our chat handler to TheNewChat via the API.
 		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
@@ -391,8 +387,8 @@ public class Towny extends JavaPlugin {
 		//Legacy check to see if questioner.jar is still present.
 		test = getServer().getPluginManager().getPlugin("Questioner");
 		if (test != null) {
-			String questioner= "Warning: Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder.";
-			System.out.println("[Towny] " + WordUtils.wrap(questioner, 55, System.lineSeparator() + "        ", true));
+			String questioner = "Warning: Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder.";
+			plugin.getLogger().info(WordUtils.wrap(questioner, 55, System.lineSeparator() + "        ", true));
 		}
 	}
 	
@@ -496,8 +492,8 @@ public class Towny extends JavaPlugin {
 		try {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
 			boolean display = false;
-			System.out.println("------------------------------------");
-			System.out.println("[Towny] ChangeLog up until v" + getVersion());
+			plugin.getLogger().info("------------------------------------");
+			plugin.getLogger().info("ChangeLog up until v" + getVersion());
 			String lastVersion = Version.fromString(TownySettings.getLastRunVersion()).toString(); // Parse out any trailing text after the *.*.*.* version, ie "-for-1.12.2".
 			for (String line : changeLog) { // TODO: crawl from the bottom, then
 											// past from that index.
@@ -505,10 +501,10 @@ public class Towny extends JavaPlugin {
 					display = true;
 				}
 				if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
-					System.out.println(line);
+					Bukkit.getLogger().info(line);
 				}
 			}
-			System.out.println("------------------------------------");
+			plugin.getLogger().info("------------------------------------");
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg("Could not read ChangeLog.txt");
 		}
@@ -746,13 +742,6 @@ public class Towny extends JavaPlugin {
 	public Object getSetting(String root) {
 
 		return TownySettings.getProperty(root);
-	}
-
-	public void log(String msg) {
-
-		if (TownySettings.isLogging()) {
-			LOGGER.info(ChatColor.stripColor(msg));
-		}
 	}
 
 	/**

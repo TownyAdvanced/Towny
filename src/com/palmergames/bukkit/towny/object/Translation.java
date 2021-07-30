@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.HelpMenu;
@@ -38,8 +39,8 @@ public final class Translation {
 		try {
 			newLanguage.loadFromString(FileMgmt.convertStreamToString("/" + res));
 		} catch (IOException e) {
-			System.out.println("[Towny] Lang: Custom language file detected, not updating.");
-			System.out.println("[Towny] Lang: " + res + " v" + Translation.of("version") + " loaded.");
+			Towny.getPlugin().getLogger().info("Lang: Custom language file detected, not updating.");
+			Towny.getPlugin().getLogger().info("Lang: " + res + " v" + Translation.of("version") + " loaded.");
 			return;
 		} catch (InvalidConfigurationException e) {
 			TownyMessaging.sendMsg("Invalid Configuration in language file detected.");
@@ -50,10 +51,10 @@ public final class Translation {
 
 		if (!langVersion.equalsIgnoreCase(resVersion)) {
 			language = newLanguage;
-			System.out.println("[Towny] Lang: Language file replaced with updated version.");
+			Towny.getPlugin().getLogger().info("Lang: Language file replaced with updated version.");
 			FileMgmt.stringToFile(FileMgmt.convertStreamToString("/" + res), file);
 		}
-		System.out.println("[Towny] Lang: " + res + " v" + Translation.of("version") + " loaded.");
+		Towny.getPlugin().getLogger().info("Lang: " + res + " v" + Translation.of("version") + " loaded.");
 	}
 
 	private static String parseSingleLineString(String str) {

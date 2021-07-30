@@ -1,5 +1,6 @@
 package com.palmergames.util;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -154,7 +155,7 @@ public final class FileMgmt {
 					out.close();
 				} catch (IOException ex) {
 					// failed to access file.
-					System.out.println("Error: Could not access: " + sourceLocation);
+					Towny.getPlugin().getLogger().warning("Error: Could not access: " + sourceLocation);
 				}
 				out.close();
 			}
@@ -486,11 +487,11 @@ public final class FileMgmt {
 				children = file.listFiles();
 				if (children == null || children.length == 0) {
 					if (!file.delete())
-						System.out.println("Error: Could not delete folder: " + file.getPath());
+						Towny.getPlugin().getLogger().warning("Error: Could not delete folder: " + file.getPath());
 				}
 			} else if (file.isFile()) {
 				if (!file.delete())
-					System.out.println("Error: Could not delete file: " + file.getPath());
+					Towny.getPlugin().getLogger().warning("Error: Could not delete file: " + file.getPath());
 			}
 		} finally {
 			writeLock.unlock();
@@ -538,7 +539,7 @@ public final class FileMgmt {
 			}
 
 			if (deleted.size() > 0) {
-				System.out.println(String.format("[Towny] Deleting %d Old Backups (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
+				Towny.getPlugin().getLogger().info(String.format("Deleting %d Old Backups (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
 			}
 		} finally {
 			writeLock.unlock();

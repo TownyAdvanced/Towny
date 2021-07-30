@@ -17,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Queue;
 
 /**
@@ -69,8 +68,8 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				teleportQueue.remove(resident);
 			teleportQueue.add(resident);
 		} catch (NullPointerException e) {
-			System.out.println("[Towny] Error: Null returned from teleport queue.");
-			System.out.println(Arrays.toString(e.getStackTrace()));
+			Towny.getPlugin().getLogger().severe("Error: Null returned from teleport queue.");
+			e.printStackTrace();
 		}
 	}
 

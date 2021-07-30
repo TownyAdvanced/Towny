@@ -67,8 +67,7 @@ public class MetadataLoader {
 			fields = DataFieldIO.deserializeMeta(serializedMetadata);
 		} catch (IOException e) {
 			// Unsure if logger is loaded at this point
-			System.out.println("[Towny] Error loading metadata for towny object " + object.getClass().getName()
-				+ object.getName() + "!");
+			Towny.getPlugin().getLogger().warning("Error loading metadata for towny object " + object.getClass().getName() + object.getName() + "!");
 			e.printStackTrace();
 		}
 		

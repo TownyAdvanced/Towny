@@ -219,23 +219,23 @@ public class TownyUniverse {
      * @return true when the databse will load and save.
      */
     private boolean loadAndSaveDatabase(String loadDbType, String saveDbType) {
-    	System.out.println("[Towny] Database: [Load] " + loadDbType + " [Save] " + saveDbType);
+    	towny.getLogger().info("Database: [Load] " + loadDbType + " [Save] " + saveDbType);
         // Try loading the database.
         long startTime = System.currentTimeMillis();
         if (!loadDatabase(loadDbType)) {
-            System.out.println("[Towny] Error: Failed to load!");
+            towny.getLogger().severe("Error: Failed to load!");
             return false;
         } else {
         	Bukkit.getPluginManager().callEvent(new TownyLoadedDatabaseEvent());
         }
         
         long time = System.currentTimeMillis() - startTime;
-        System.out.println("[Towny] Database: Loaded in " + time + "ms.");
-        System.out.println("[Towny] Database: " + TownySettings.getUUIDPercent() + " of residents have stored UUIDs."); // TODO: remove this when we're using UUIDs directly in the database.
+        towny.getLogger().info("Database: Loaded in " + time + "ms.");
+        towny.getLogger().info("Database: " + TownySettings.getUUIDPercent() + " of residents have stored UUIDs."); // TODO: remove this when we're using UUIDs directly in the database.
 
         // Try saving the database.
         if (!saveDatabase(saveDbType)) {
-        	System.out.println("[Towny] Error: Unsupported save format!");
+	        	towny.getLogger().severe("Error: Unsupported save format!");
         	return false;
         }
 		return true;
