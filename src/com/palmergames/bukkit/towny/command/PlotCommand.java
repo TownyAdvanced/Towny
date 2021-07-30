@@ -733,6 +733,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										
 									} catch (TownyException e) {
 										TownyMessaging.sendErrorMsg(resident, e.getMessage());
+										return;
 									}
 									TownyMessaging.sendMsg(player, Translation.of("msg_plot_set_type", townBlockType));
 								})
@@ -1949,6 +1950,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			plotTestOwner(TownyAPI.getInstance().getResident(player.getName()), townBlock);
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
+			return;
 		}
 
 		if (townBlock.hasPlotObjectGroup()) {
