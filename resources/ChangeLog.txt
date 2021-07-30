@@ -6542,3 +6542,5 @@ v0.92.0.11:
   - Allow moving of blocks between wilderness plot borders, courtesy of Warriorrrr with PR #5128.
     - Closes #5127.
   - Expand checkPlugin() and /towny universe output, courtesy of TheFlagCourier with PR #5129.
+  - Fix some fall-throughs in PlotCommand, courtesy of silverwolfg11 with PR #5131
+  - Replace all sysouts, courtesy of Warriorrrr with PR #5126
