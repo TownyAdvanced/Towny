@@ -1,9 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -16,7 +13,7 @@ public class SpawnPoint {
 	private final SpawnPointType type;
 	private final SpawnPointLocation spawnLocation;
 	
-	private static final Map<Double, Double> RING_PATTERN = createRing();
+	private static final ArrayList<RingCoord> RING_PATTERN = createRing();
 	
 	public SpawnPoint(Location loc, SpawnPointType type) {
 		this.location = loc;
@@ -45,8 +42,8 @@ public class SpawnPoint {
 		Location origin = centreLocation(location);
 		int i = 0;
 
-		for (Entry<Double, Double> ringPosition : RING_PATTERN.entrySet()) {
-		    Location point = origin.clone().add(ringPosition.getKey(), 0.0d, ringPosition.getValue());
+		for (RingCoord ringPosition : RING_PATTERN) {
+		    Location point = origin.clone().add(ringPosition.getX(), 0.0d, ringPosition.getZ());
 		    Bukkit.getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), ()-> Bukkit.getWorld(location.getWorld().getName()).spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0), i*4);		    
 		    i++;
 		}
@@ -59,20 +56,20 @@ public class SpawnPoint {
 		return loc;
 	}
 	
-	private static Map<Double, Double> createRing() {
-		Map<Double, Double> ring = new LinkedHashMap<Double, Double>();
-		ring.put(0.0, 0.45);
-		ring.put(0.225, 0.3897);
-		ring.put(0.3897, 0.225);
-		ring.put(0.45, 0.00);
-		ring.put(0.3897, -0.225);
-		ring.put(0.225, -0.3897);
-		ring.put(0.00, -0.45);
-		ring.put(-0.225, -0.3897);
-		ring.put(-0.3897, -0.225);
-		ring.put(-0.45, 0.0);
-		ring.put(-0.3897, 0.225);
-		ring.put(-0.225, 0.3897);
+	private static ArrayList<RingCoord> createRing() {
+		ArrayList<RingCoord> ring = new ArrayList<>();
+		ring.add(RingCoord.of(0.0, 0.45));
+		ring.add(RingCoord.of(0.225, 0.3897));
+		ring.add(RingCoord.of(0.3897, 0.225));
+		ring.add(RingCoord.of(0.45, 0.00));
+		ring.add(RingCoord.of(0.3897, -0.225));
+		ring.add(RingCoord.of(0.225, -0.3897));
+		ring.add(RingCoord.of(0.00, -0.45));
+		ring.add(RingCoord.of(-0.225, -0.3897));
+		ring.add(RingCoord.of(-0.3897, -0.225));
+		ring.add(RingCoord.of(-0.45, 0.0));
+		ring.add(RingCoord.of(-0.3897, 0.225));
+		ring.add(RingCoord.of(-0.225, 0.3897));
 		return ring;		
 	}
 	
@@ -81,5 +78,27 @@ public class SpawnPoint {
 		NATION_SPAWN,
 		OUTPOST_SPAWN,
 		JAIL_SPAWN
+	}
+	
+	private static class RingCoord {
+		private double x;
+		private double z;
+		
+		private RingCoord(double x, double z) {
+			this.x = x;
+			this.z = z;
+		}
+		
+		private double getX() {
+			return this.x;
+		}
+		
+		private double getZ() {
+			return this.z;
+		}
+		
+		private static RingCoord of(double a, double b) {
+			return new RingCoord(a, b);
+		}
 	}
 }

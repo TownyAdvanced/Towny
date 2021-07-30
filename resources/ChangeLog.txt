@@ -6544,3 +6544,5 @@ v0.92.0.11:
   - Expand checkPlugin() and /towny universe output, courtesy of TheFlagCourier with PR #5129.
   - Fix some fall-throughs in PlotCommand, courtesy of silverwolfg11 with PR #5131
   - Replace all sysouts, courtesy of Warriorrrr with PR #5126
+0.97.0.19:
+  - Fix SpawnLocation particles skipping particles.
