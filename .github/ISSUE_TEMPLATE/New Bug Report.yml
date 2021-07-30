@@ -8,13 +8,13 @@ body:
       Thanks for taking the time to report an EssentialsX bug! Fill out the form below to provide us with info to help fix the bug.
       Only use this if you're 100% sure you've found a bug and can reproduce it. If you're looking for general help with EssentialsX, try the Q&A forum or MOSS Discord server.
 
-- type: textarea
+- type: input
   attributes:
     label: "`/towny version` output"
     description: Run `/towny version` in the console, then copy and paste the full output of the command into this box.
   validations:
     required: true
-- type: textarea
+- type: input
   attributes:
     label: "`/version` output"
     description: Run `/version` in the console, then copy and paste the full output of the command into this box.
