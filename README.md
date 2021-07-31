@@ -14,13 +14,13 @@ It is the second-oldest land protection plugin to become popular for Minecraft, 
 ___
 
 ### Current Recommended Versions
-* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.14.* & 1.15.* & 1.16.*.
+* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.14.* & 1.15.* & 1.16.* & 1.17.*.
 * [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.14.* & 1.15.* & 1.16.* & 1.17.*.
 
 <table>
 <tr><th> Minecraft Version</th><th>Towny Version</th></tr>
-<tr align=center><td> MC 1.17.* </td><td> Use the above Latest Pre-Release </td>
-<tr align=center><td> MC 1.16.* </td><td rowspan=3> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.97.0.0>0.97.0.0</a> or the above Latest Pre-Release. </td>
+<tr align=center><td> MC 1.17.* </td><td rowspan=4> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.97.1.0>0.97.1.0</a> or the above Latest Pre-Release. </td>
+<tr align=center><td> MC 1.16.* </td>
 <tr align=center><td> MC 1.15.* </td>
 <tr align=center><td> MC 1.14.* </td>
 <tr align=center><td> MC 1.13.2 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0for1.13.2>0.96.2.0 for 1.13.2</a> </td>
