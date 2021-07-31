@@ -2463,7 +2463,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public void deleteHibernatedResident(UUID uuid) {
 		HashMap<String, Object> res_hm = new HashMap<>();
 		res_hm.put("uuid", uuid);
-		DeleteDB("RESIDENTS", res_hm);
+		DeleteDB("HIBERNATEDRESIDENTS", res_hm);
 	}
 	
 	@Override
