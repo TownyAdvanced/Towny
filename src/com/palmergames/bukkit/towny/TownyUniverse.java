@@ -210,6 +210,7 @@ public class TownyUniverse {
         jailUUIDMap.clear();
         plotGroupUUIDMap.clear();
         wildernessMapDataMap.clear();
+        hibernatedResidentMap.clear();
     }
     
     /**
