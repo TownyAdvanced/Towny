@@ -519,6 +519,33 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean loadHibernatedResidents() {
+		TownyMessaging.sendDebugMsg("Loading Hibernated Resident List");
+		if (!getContext())
+			return false;
+		try {
+			try (Statement s = cntx.createStatement()) {
+				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "HIBERNATEDRESIDENTS");
+				
+				while (rs.next()) {
+					UUID uuid = null;
+					long registered = 0;
+					if (rs.getString("uuid") != null && !rs.getString("uuid").isEmpty())
+						uuid = UUID.fromString(rs.getString("uuid"));
+					if (rs.getString("registered") != null && !rs.getString("registered").isEmpty())
+						registered = Long.parseLong(rs.getString("registered"));
+					if (uuid != null && registered > 0)
+						universe.registerHibernatedResident(uuid, registered);
+				}
+			}
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 
 	@Override
 	public boolean loadTownList() {
@@ -2055,6 +2082,23 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		}
 		return false;
 	}
+	
+	@Override
+	public synchronized boolean saveHibernatedResident(UUID uuid) {
+		TownyMessaging.sendDebugMsg("Saving Hibernated Resident " + uuid);
+		try {
+			HashMap<String, Object> res_hm = new HashMap<>();
+			res_hm.put("uuid", uuid);
+			res_hm.put("registered", universe.getHibernatedResidentRegistered(uuid));
+
+			UpdateDB("HIBERNATEDRESIDENTS", res_hm, Collections.singletonList("uuid"));
+			return true;
+
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save Hibernated Resident unknown error " + e.getMessage());
+		}
+		return false;
+	}
 
 	@Override
 	public synchronized boolean saveTown(Town town) {
@@ -2415,6 +2459,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		DeleteDB("RESIDENTS", res_hm);
 	}
 
+	@Override 
+	public void deleteHibernatedResident(UUID uuid) {
+		HashMap<String, Object> res_hm = new HashMap<>();
+		res_hm.put("uuid", uuid);
+		DeleteDB("RESIDENTS", res_hm);
+	}
+	
 	@Override
 	public void deleteTown(Town town) {
 

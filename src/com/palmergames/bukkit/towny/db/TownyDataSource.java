@@ -53,12 +53,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadSnapshotList() && loadHibernatedResidents();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorldList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList();
+		return saveWorldList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList() && saveHibernatedResidents();
 	}
 
 	public boolean saveAllWorlds() {
@@ -76,6 +76,8 @@ public abstract class TownyDataSource {
 	abstract public boolean loadTownBlockList();
 
 	abstract public boolean loadResidentList();
+	
+	abstract public boolean loadHibernatedResidents();
 
 	abstract public boolean loadTownList();
 
@@ -113,6 +115,8 @@ public abstract class TownyDataSource {
 
 	abstract public boolean saveResident(Resident resident);
 
+	abstract public boolean saveHibernatedResident(UUID uuid);
+	
 	abstract public boolean saveTown(Town town);
 	
 	abstract public boolean savePlotGroup(PlotGroup group);
@@ -135,6 +139,8 @@ public abstract class TownyDataSource {
 
 	abstract public void deleteResident(Resident resident);
 
+	abstract public void deleteHibernatedResident(UUID uuid);
+	
 	abstract public void deleteTown(Town town);
 
 	abstract public void deleteNation(Nation nation);
@@ -239,6 +245,12 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Saving Residents");
 		for (Resident resident : universe.getResidents())
 			saveResident(resident);
+		return true;
+	}
+	
+	public boolean saveHibernatedResidents() { 
+		for (UUID uuid : universe.getHibernatedResidents())
+			saveHibernatedResident(uuid);
 		return true;
 	}
 	
@@ -374,6 +386,8 @@ public abstract class TownyDataSource {
 
 	abstract public void removeResident(Resident resident);
 
+	abstract public void removeHibernatedResident(UUID uuid);
+	
 	abstract public void removeTownBlock(TownBlock townBlock);
 
 	abstract public void removeTownBlocks(Town town);

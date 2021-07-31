@@ -94,7 +94,17 @@ public class OnPlayerLogin implements Runnable {
 					
 					if (TownySettings.isShowingRegistrationMessage())				
 						TownyMessaging.sendMessage(player, Translation.of("msg_registration", player.getName()));
-					resident.setRegistered(System.currentTimeMillis());
+					long registered = System.currentTimeMillis();
+					if (universe.hasHibernatedResdient(player.getUniqueId())) {
+						/*
+						 * This player has played before, but was deleted.
+						 * Get the original registered time from the hibernated resident entry. 
+						 */
+						registered = universe.getHibernatedResidentRegistered(player.getUniqueId());
+						universe.getDataSource().removeHibernatedResident(player.getUniqueId());
+					}
+						 
+					resident.setRegistered(registered);
 					resident.setLastOnline(System.currentTimeMillis());
 					if (!TownySettings.getDefaultTownName().equals("")) {
 						Town town = TownyUniverse.getInstance().getTown(TownySettings.getDefaultTownName());

@@ -104,7 +104,21 @@ public class SQL_Schema {
 		
 		return columns;
 	}
+	
+    private static String getHIBERNATEDRESIDENTS() {
+		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "HIBERNATEDRESIDENTS ("
+			+ "`uuid` VARCHAR(36) NOT NULL,"
+			+ "PRIMARY KEY (`uuid`)"
+			+ ")";
+	}
 
+	private static List<String> getHibernatedResidentsColumns() {
+    	List<String> columns = new ArrayList<>();
+    	columns.add("`registered` BIGINT DEFAULT NULL");
+		
+		return columns;
+	}
+    
     private static List<String> getNationColumns(){
     	List<String> columns = new ArrayList<>();
 		columns.add("`capital` mediumtext NOT NULL");
@@ -499,6 +513,43 @@ public class SQL_Schema {
 		}
 		TownyMessaging.sendDebugMsg("Table JAILS is updated!");
         
+		/*
+         *  Fetch HIBERNATEDRESIDENTS Table schema.
+		 */
+        String hibres_create = SQL_Schema.getHIBERNATEDRESIDENTS();
+
+        try {
+
+            Statement s = cntx.createStatement();
+            s.executeUpdate(hibres_create);
+
+            TownyMessaging.sendDebugMsg("Table JAILS is ok!");
+
+        } catch (SQLException ee) {
+            TownyMessaging.sendErrorMsg("Creating table JAILS :" + ee.getMessage());
+        }
+		/*
+		 * Update the table structures for older databases.
+		 *
+		 * Update HIBERNATEDRESIDENTS. ( Add columns)
+		 */
+		String hibres_update;
+		List<String> hibresColumns = getHibernatedResidentsColumns();
+		for (String column : hibresColumns) {
+			try {
+				hibres_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "HIBERNATEDRESIDENTS` "
+						+ "ADD COLUMN " + column;
+
+				PreparedStatement ps = cntx.prepareStatement(hibres_update);
+				ps.executeUpdate();
+
+			} catch (SQLException ee) {
+				if (ee.getErrorCode() != 1060)
+					TownyMessaging.sendErrorMsg("Error updating table HIBERNATEDRESIDENTS :" + ee.getMessage());
+			}
+		}
+		TownyMessaging.sendDebugMsg("Table HIBERNATEDRESIDENTS is updated!");
+		
     }
     
     /**
