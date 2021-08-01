@@ -6546,3 +6546,7 @@ v0.92.0.11:
   - Replace all sysouts, courtesy of Warriorrrr with PR #5126
 0.97.0.19:
   - Fix SpawnLocation particles skipping particles.
+  - New Feature: Hibernated Residents
+    - Residents that are deleted by Towny will become hibernated residents.
+    - Towny will remember their true registered date if the player ever rejoins the server.
+    - Closes #5135.
