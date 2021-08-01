@@ -6550,3 +6550,5 @@ v0.92.0.11:
     - Residents that are deleted by Towny will become hibernated residents.
     - Towny will remember their true registered date if the player ever rejoins the server.
     - Closes #5135.
+0.97.0.20: 
+  - Fix pagination footer for /t plotgrouplist and /t jail list.
