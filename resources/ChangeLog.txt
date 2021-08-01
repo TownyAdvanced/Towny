@@ -6554,3 +6554,6 @@ v0.92.0.11:
   - Fix pagination footer for /t plotgrouplist and /t jail list.
   - Fix missing message feedback for `/ta nation [nation] set` commands.
     - Closes #5144. 
+  - Prevent adding a townblock to a plot group if it doesn't match the groups' townblock type.
+    - Closes #5141.
+  - Bump language files to 0.117.

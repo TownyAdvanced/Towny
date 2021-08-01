@@ -1440,6 +1440,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				String plotGroupName = NameValidation.filterName(split[1]);
 				plotGroupName = NameValidation.filterCommas(plotGroupName);
 				
+				if (town.hasPlotGroupName(plotGroupName)) {
+					TownBlockType groupType = town.getPlotObjectGroupFromName(plotGroupName).getTownBlockType();
+					if (townBlock.getType() != groupType)
+						throw new TownyException(Translation.of("msg_err_this_townblock_doesnt_match_the_groups_type", groupType.getName()));
+				}
+				
 				if (townBlock.hasPlotObjectGroup()) {
 					
 					// Already has a PlotGroup and it is the same name being used to re-add.

@@ -155,6 +155,10 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 	public void setPermissions(TownyPermission permissions) {
 		this.permissions = permissions;
 	}
+	
+	public TownBlockType getTownBlockType() {
+		return townBlocks.get(0).getType();
+	}
 
 	@Override
 	public void save() {

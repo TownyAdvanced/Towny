@@ -1,5 +1,5 @@
 name: Towny
-version: 0.116
+version: 0.117
 language: russian
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -1490,3 +1490,6 @@ err_invalid_yaml: 'Loading error: Failed to load file %s (does it pass a yaml pa
 
 #Added in 0.116
 msg_town_map_color_changed: '&bThe town map color was changed to %s.'
+
+#Added in 0.117
+msg_err_this_townblock_doesnt_match_the_groups_type: 'This townblock cannot be added to the group because it is not of type: %s'
