@@ -6552,3 +6552,5 @@ v0.92.0.11:
     - Closes #5135.
 0.97.0.20: 
   - Fix pagination footer for /t plotgrouplist and /t jail list.
+  - Fix missing message feedback for `/ta nation [nation] set` commands.
+    - Closes #5144. 
