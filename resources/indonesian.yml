@@ -1,7 +1,7 @@
 name: Towny
-version: 0.74
+version: 0.77
 language: indonesian
-author: ElgarL
+author: Pobab
 website: 'http://townyadvanced.github.io/'
 description: >
     Language file for all game messages.  Do not alter this file.
@@ -1085,3 +1085,13 @@ msg_err_you_aren't currently jailed: 'Kamu tidak sedang dipenjarakan.'
 
 # Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Kamu tidak bisa membuat portal lain di lokasi ini.'
+
+# Added in 0.75
+msg_already_ally: 'Negara mu sudah bersekutu dengan negara %s.'
+
+# Added in 0.76
+msg_you: 'Kamu'
+
+# Added in 0.77
+msg_click_spawn: '&aKlik untuk teleport: &e%s'
+msg_spawn_cost: '&aBiaya teleport = &e%s'
