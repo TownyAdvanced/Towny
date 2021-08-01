@@ -53,6 +53,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath,
 			dataFolderPath + File.separator + "residents",
 			dataFolderPath + File.separator + "residents" + File.separator + "deleted",
+			dataFolderPath + File.separator + "residents" + File.separator + "hibernated",
 			dataFolderPath + File.separator + "towns",
 			dataFolderPath + File.separator + "towns" + File.separator + "deleted",
 			dataFolderPath + File.separator + "nations",
@@ -87,6 +88,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public String getResidentFilename(Resident resident) {
 
 		return dataFolderPath + File.separator + "residents" + File.separator + resident.getName() + ".txt";
+	}
+	
+	public String getHibernatedResidentFilename(UUID uuid) {
+
+		return dataFolderPath + File.separator + "residents" + File.separator + "hibernated" + File.separator + uuid + ".txt";
 	}
 
 	public String getTownFilename(Town town) {
@@ -221,6 +227,25 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			
 	}
 	
+	@Override 
+	public boolean loadHibernatedResidents() {
+		TownyMessaging.sendDebugMsg("Loading hibernated residents.");
+		File[] residentFiles = receiveObjectFiles("residents" + File.separator + "hibernated", ".txt");
+		assert residentFiles != null;
+		for (File resident : residentFiles) {
+			UUID uuid = UUID.fromString(resident.getName().replace(".txt", ""));
+			HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(resident);
+			long registered = 0;
+			String line = keys.get("registered");
+			if (line != null)
+				registered = Long.parseLong(line);
+			if (registered > 0)
+				TownyUniverse.getInstance().registerHibernatedResident(uuid, registered);
+		}
+		
+		return true;
+	}
+
 	@Override
 	public boolean loadTownList() {
 		
@@ -1777,6 +1802,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 
 	}
+	
+	@Override
+	public boolean saveHibernatedResident(UUID uuid) {
+		List<String> list = new ArrayList<>();
+		list.add("registered=" + universe.getHibernatedResidentRegistered(uuid));
+		this.queryQueue.add(new FlatFileSaveTask(list, getHibernatedResidentFilename(uuid)));
+		return true;
+	}
 
 	@Override
 	public boolean saveTown(Town town) {
@@ -2227,6 +2260,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		queryQueue.add(new DeleteFileTask(file, false));
 	}
 
+	@Override 
+	public void deleteHibernatedResident(UUID uuid) {
+		File file = new File(getHibernatedResidentFilename(uuid));
+		queryQueue.add(new DeleteFileTask(file, true));
+	}
+	
 	@Override
 	public void deleteTown(Town town) {
 		File file = new File(getTownFilename(town));

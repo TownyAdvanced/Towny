@@ -670,6 +670,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		}
 
+		if (resident.hasUUID()) {
+			UUID uuid = resident.getUUID();
+			long registered = resident.getRegistered();
+			universe.registerHibernatedResident(uuid, registered);
+			saveHibernatedResident(uuid);
+		}
+
 		// Delete the residents file.
 		deleteResident(resident);
 		// Remove the residents record from memory.
@@ -938,6 +945,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		deletePlotGroup(group);
 	}
 	
+	@Override
+	public void removeHibernatedResident(UUID uuid) {
+		universe.unregisterHibernatedResident(uuid);
+		deleteHibernatedResident(uuid);
+	}
+
 	/*
 	 * Rename Object Methods
 	 */
