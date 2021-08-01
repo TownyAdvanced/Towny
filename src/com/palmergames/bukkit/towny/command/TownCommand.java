@@ -2551,8 +2551,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translation.of("msg_err_spawn_not_within_homeblock"));
 
 			// Throw unset event, for SpawnPoint particles.
-			if (town.getSpawn() != null)
-				TownyUniverse.getInstance().removeSpawnPoint(town.getSpawn());
+			if (town.getSpawnOrNull() != null)
+				TownyUniverse.getInstance().removeSpawnPoint(town.getSpawnOrNull());
 			
 			// Set the spawn point and send feedback message.
 			town.setSpawn(player.getLocation());

@@ -6557,3 +6557,6 @@ v0.92.0.11:
   - Prevent adding a townblock to a plot group if it doesn't match the groups' townblock type.
     - Closes #5141.
   - Bump language files to 0.117.
+  - Fix /ta town NAME set spawn not working when the spawn isn't already set.
+    - Closes #5150.
+  - API: Add Town.getSpawnOrNull().

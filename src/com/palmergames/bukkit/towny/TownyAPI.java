@@ -62,13 +62,8 @@ public class TownyAPI {
     	if (resident == null)
     		return null;
     	
-        try {
-            if (resident.hasTown()) {
-				Town town = resident.getTown();
-				return town.getSpawn();
-			}
-        } catch (TownyException ignore) {
-        }
+        if (resident.hasTown())
+			return resident.getTownOrNull().getSpawnOrNull();
 
 		return null;
     }

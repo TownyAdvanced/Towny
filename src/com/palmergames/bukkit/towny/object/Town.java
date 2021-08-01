@@ -794,6 +794,11 @@ public class Town extends Government implements TownBlockOwner {
 		}
 	}
 
+	@Nullable
+	public Location getSpawnOrNull() {
+		return spawn;
+	}
+
 	public boolean hasHomeBlock() {
 		return homeBlock != null;
 	}
