@@ -1,3 +1,3 @@
 files:
-  - source: /Towny/resources/lang/en-US.yml
-    translation: /Towny/resources/lang/%locale%.yml
+  - source: /resources/lang/en-US.yml
+    translation: /resources/lang/%locale%.yml
