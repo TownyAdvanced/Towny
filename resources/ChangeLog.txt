@@ -6564,3 +6564,5 @@ v0.92.0.11:
   - Language files into resources/lang subfolder.
   - Townyperms.yml now saves itself on load in order to build the comments on new installs.
   - Update onPlayerLogin task to not use methods which can throw NREs.
+  - Rename language files to proper country-coded names.
+    - Your existing language file will be renamed.
