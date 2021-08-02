@@ -1,48 +1,34 @@
+---
 name: Towny
 version: 0.117
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu, ElMoha943, Ngzhiwei
 website: 'http://townyadvanced.github.io/'
 description: >
-    Archivo con todos los mensajes del juego, no modificar.
-    Si aun asi deseas modificarlo, haz una copia de seguridad antes.
-    También puedes crear un archivo de lenguaje habilitando la entrada de
-    [language] en el archivo config.yml
-#
-#
-#         DEBES mantener los espacios en los textos.
-#  Si un texto empieza o termina con un espacio, debe permanecer así.
-#
-#
-#       %s = datos suministrados por el plugin.
-
-# Colores de texto
-# --------------
-# Negro = &0, Azul Marino = &1, Verde = &2, Azul = &3, Rojo = &4
-# Morado = &5, Dorado = &6, Gris Claro = &7, Gris = &8
-# Morado Oscuro = &9, Verde Claro = &a, Azul Claro = &b
-# Rojo Claro = &c, Rosa = &d, Amarillo = &e, Blanco = &f
-
-
+  Archivo con todos los mensajes del juego, no modificar. Si aun asi deseas modificarlo, haz una copia de seguridad antes. También puedes crear un archivo de lenguaje habilitando la entrada de [language] en el archivo config.yml
+#You MUST retain spacing in the texts.
+#If a text begins or ends with a space, it must remain that way.
+#%s = data to be supplied by the plugin.
+#Text colouring
+#--------------
+#Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
+#Purple = &5, Gold = &6, LightGray = &7, Gray = &8
+#DarkPurple = &9, LightGreen = &a, LightBlue = &b
+#Rose = &c, LightPurple = &d, Yellow = &e, White = &f
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
-
 unclaimed_plot_name: 'Sin propietario'
 unclaimed_zone_name: 'Campo'
-
 ############################################################
-# +------------------------------------------------------+ #
-# |                  Mensajes de Ayuda                   | #
-# +------------------------------------------------------+ #
+#+------------------------------------------------------+ #
+#|help messages                                         | #
+#+------------------------------------------------------+ #
 ############################################################
-
-
 help_0: 'Ayuda General de Towny'
 help_1: 'Pruebe los siguientes comandos para saber mas sobre Towny.'
 help_2: 'Chat de ciudad'
 help_3: 'Chat de país'
-
 town_help_1: 'Estado de tu ciudad'
 town_help_2: '[alcalde]'
 town_help_3: 'Estado de la ciudad seleccionada'
@@ -53,14 +39,12 @@ town_help_7: 'Crear una ciudad con otro usuario como alcalde'
 town_help_8: 'Lista de comandos para alcaldes'
 town_help_9: 'Hoy es el dia!'
 town_help_10: 'Lista de los habitantes conectados'
-
 mayor_help_3: 'Claimear area externa'
 mayor_help_4: 'Claimear area de un radio X'
 mayor_help_5: 'Claimear el máximo radio posible'
 mayor_help_6: 'Unclaimear esta tierra'
 mayor_help_7: 'Unclaimear a tu alrededor'
 mayor_help_8: 'Unclaimear todas las tierras'
-
 nation_help_1: 'Estado de tu país'
 nation_help_2: '[pais]'
 nation_help_3: 'Estado del país seleccionado'
@@ -70,11 +54,9 @@ nation_help_6: 'Crear un nuevo país'
 nation_help_7: 'Lista de los comandos del rey'
 nation_help_8: 'Crear nuevo país'
 nation_help_9: 'Lista de los habitantes conectados del país'
-
 king_help_1: 'Ayuda del rey del país'
 king_help_2: 'Elige tus aliados.'
 king_help_3: 'Elige tus enemigos.'
-
 res_1: 'Tu estado'
 res_2: '[habitante]'
 res_3: 'Estado del habitante seleccionado'
@@ -82,17 +64,14 @@ res_4: 'Lista de todos los jugadores activos'
 res_5: 'para ayuda'
 res_6: 'En línea'
 res_7: 'Nombre exacto'
-
 mode_1: 'Muestra el mapa entre cada townblock'
 mode_2: 'Tratar de claimear al caminar'
 mode_3: 'Tratar de unclaimear al caminar'
 mode_4: 'Chat de la ciudad por defecto'
 mode_5: 'Chat del país por defecto'
 mode_6: 'Puede colocar %s en las fronteras enemigas para hacer zonas de guerra.'
-
 plot_perms: 'Usa %s en vez de %s para permisos de parcela.'
 plot_perms_1: 'Las parcelas de habitantes no pueden usar permisos de fuera.'
-
 res_list: 'Habitantes'
 res_sing: 'Habitante'
 mayor_sing: 'Alcalde'
@@ -104,7 +83,6 @@ king_sing: 'Rey'
 town_plu: 'Ciudades'
 world_plu: 'Mundos'
 world_sing: 'Mundo'
-
 world_help_1: 'Estado de este mundo'
 world_help_2: '[mundo]'
 world_help_3: 'Estado del mundo seleccionado'
@@ -112,7 +90,6 @@ world_help_4: 'Listar todos los mundos'
 world_help_5: 'Regenerar este chunk'
 townyadmin_help_1: 'Unclaimear esta parcela'
 townyadmin_help_2: 'Unclaimear a tu alrededor'
-
 ta_panel_1: 'Panel de Admin de Towny'
 ta_panel_2: 'Tiempo de guerra: '
 ta_panel_3: 'Regeneración: '
@@ -125,22 +102,18 @@ ta_panel_8: 'Servidor'
 ta_panel_9: 'Memoria: '
 ta_panel_10: 'Hilos: '
 ta_panel_11: 'Hora: '
-
 admin_panel_1: 'Panel de Admin'
 admin_panel_2: 'Recargar Towny'
 admin_panel_3: 'Pasar al día siguiente'
-
 msg_block_claim: 'Claimear esta tierra'
 msg_plot_nfs: 'Quitar esta parcela de la venta'
 msg_nfs_abr: '&e''fs'' and ''nfs'' son abreviaciones aceptadas para ''forsale'' y ''notforsale''.'
 msg_plot_fs: 'Poner esta parcela a la venta.'
-
 ############################################################
-# +------------------------------------------------------+ #
-# |                     Mensajes                         | #
-# +------------------------------------------------------+ #
+#+------------------------------------------------------+ #
+#|   Messages                                           | #
+#+------------------------------------------------------+ #
 ############################################################
-
 msg_buy: '&bCompró %d %s por %s.'
 msg_buy_resident_plot: '&b%s le compro parcelas a %s por %s!'
 msg_couldnt_pay_taxes: '&b%s no pudo pagar los impuestos y fue echado de %s.'
@@ -154,7 +127,7 @@ msg_nation_not_peaceful: '&bEl país no puede pagar su por su estado pacífico.'
 msg_nation_cant_peaceful: '&bEl país no podia darse el lujo de convertirse en un país pacífico.'
 msg_peaceful_disabled: '&bLa paz nacional esta desactivada globalmente.'
 msg_you_paid: '&bPagaste %s para convertirte en un país pacífico.'
-msg_nation_set_peaceful: '&bCambió exitosamente la paz del país.'
+msg_nation_set_peace: '&bSuccessfully changed nation''s state.'
 msg_nation_allow_peaceful: '&bLos permisos de país para permanecer en pacífico son ahora: %s'
 msg_mobremoval_world: '&bBloqueo de spawneo de mobs en el mundo: %s'
 msg_mobremoval_town: '&bPermiso de spawneo de mobs en el mundo: %s'
@@ -162,7 +135,6 @@ msg_nation_peaceful: '&bTu país ahora es pacífico.'
 msg_tax_exempt: '&bEl staff de la ciudad esta exento de pagar impuestos.'
 msg_del_nation: '&bEl país %s se derrumbó!'
 msg_del_resident: '&b%s perdió todos sus datos en Towny!'
-msg_del_town: '&bLa ciudad de %s cayó en ruina!'
 msg_join_nation: '&bLa ciudad de %s se unió a la nación!'
 msg_join_town: '&b%s se unió a la ciudad!'
 msg_friend_add: '&b%s te agregó como amigo.'
@@ -195,7 +167,6 @@ msg_deny_invite: '&b%s rechazó tu invitación.'
 msg_invited: '&bFuiste invitado a unirte a %s.'
 msg_town_online: 'Conectados en la ciudad'
 msg_nation_online: 'Conectados en el país'
-
 msg_allied_nations: '&b%s se alió con el país %s.'
 msg_enemy_nations: '&b%s desarrollo un odio contra el país %s.'
 msg_enemy_to_neutral: '&b%s ha cambiado su estado a pacífico contra %s.'
@@ -210,7 +181,6 @@ msg_ally_req_sent: '&bLa solicitud de alianza ha sido enviada a la nación %s'
 msg_ally_request: '&bA %s le gustaría formar una alianza.'
 msg_unable_ally_offline: "&cNo se puede pedir una alianza porque el alcalde de la nación de destino no está en línea."
 msg_unable_ally_npc: "&cNo se puede pedir una alianza porque el alcalde de la nación de destino es un NPC."
-
 msg_claimed: '&2Claimeado exitosamente'
 msg_unclaimed: '&2Unclaimeado exitosamente'
 msg_not_claimable: '&cEste mundo no es claimeable.'
@@ -247,7 +217,6 @@ msg_town_spawn_warmup: '&bEsperando para teletransportar...'
 msg_town_rename_disabled: '&bTEl cambio de nombre de ciudades esta desactivado.'
 msg_town_set_name: '&b%s renombró la ciudad a %s.'
 msg_nation_set_name: '&b%s renombró el país a %s.'
-
 msg_changed_pvp: '&cEl PvP de %s está: %s.'
 msg_changed_public: '&cEl estado de la ciudad está: %s.'
 msg_changed_expl: '&cLas explosiones en %s estan: %s.'
@@ -256,17 +225,13 @@ msg_changed_mobs: '&cLa aparición de monstruos en %s está: %s.'
 msg_changed_taxpercent: '&cEl porcentaje de impuestos es ahora de %s.'
 msg_changed_open: '&cLas invitaciones a unirse estan %s.'
 msg_toggle_open_on_warning: 'Atención: Permisos de las ciudades deberían desactivarse si la ciudad es abierta. Escribe ''/town set perm off'' seguido de ''/town set perm reset''.'
-
 msg_changed_world_setting: '&c%s para %s es: %s.'
-
 msg_world_pvp: '&cEste mundo es solo PvP.'
 msg_world_mobs: '&cEste mundo tiene forzado el spawneo de monstruos.'
 msg_world_expl: '&cEste mundo tiene forzadas las explosiones.'
 msg_world_fire: '&cEste mundo tiene forzada la propagacion de fuego.'
-
 msg_plot_pvp: '&cEl PVP no se puede cambiar en una parcela de Arena..'
 msg_plot_regen_wrong_size: '&cLa regeneración solo puede hacerse en plots de 16x16.'
-
 msg_reloaded: '&2Opciones de Towny recargadas.'
 msg_undo_complete: '&2Deshacer finalizado.'
 msg_give_total: '&bDió %s bonus. (Total: %s)'
@@ -276,20 +241,16 @@ msg_xx_deposited_xx: '&b%s depositó %s en el banco de la %s.'
 msg_insuf_funds: '&cNo tienes tanto dinero.'
 msg_err_withdraw_disabled: 'Esta desactivado retirar fondos del banco de la ciudad!'
 msg_err_deposit_capped: 'Incapaz de depositar el dinero, la ciudad llegó al tope de dinero en el banco (%s)'
-
 msg_set_town_home: '&bSHome block de la ciudad cambiado exitosamente a %s'
 msg_set_town_spawn: '&bSpawn de la ciudad cambiado exitosamente.'
 msg_set_outpost_spawn: '&bOutpost del spawn cambiado exitosamente.'
 msg_set_title: '&b%s le fue otorgado el título de ''%s&b''.'
 msg_set_surname: '&b%s le fue otorgado el apellido de ''%s&b''.'
 msg_clear_title_surname: '&bEl %s de ''%s'' fue borrado.'
-
 msg_clear_plot_material: '&bLa parcela fue limpiada de %s'
-
 msg_set_perms: '&bPermisos cambiados exitosamente a:'
 msg_set_claim: '&bCambiado exitosamente %s''s demandado por %s'
 msg_set_perms_reset: '&bReiniciados exitosamente los permisos en todas las parcelas %s.'
-
 msg_usedefault: '&bEste mundo (%s) esta ahora usando la configuración global por defecto.'
 msg_set_wild_perms: '&bCambiados exitosamente %s permisos de campo %s'
 msg_set_wild_ignore: '&bCambiados exitosamente %s''s ignorar bloques de campo de %s'
@@ -297,7 +258,6 @@ msg_set_wild_name: '&bCambiado exitosamente %s nombre de campo a %s'
 msg_set_wild_regen: '&bCambiado exitosamente %s''s regeneración del campo a ''%s'''
 msg_set_use_towny_on: '&bEste mundo ahora sigue las reglas del Towny.'
 msg_set_use_towny_off: '&cEste mundo está exento de todas las interacciones del Towny.'
-
 msg_error_must_be_int: '&bLa cantidad debe ser entera.'
 msg_error_must_be_num: '&bLa cantidad debe ser un número.'
 msg_must_specify_amnt: '&bDebes especificar la cantidad. Ej: %s 54'
@@ -307,12 +267,10 @@ msg_town_set_plotprice: '&b%s estableció el precio de parcelas en %s'
 msg_town_set_alttax: '&b%s estableció el impuesto diario de los %s en %s'
 msg_town_set_altprice: '&b%s estableció el precio de los %s en %s'
 msg_town_set_nation_tax: '&b%s estableció el impuesto del país en %s'
-
 msg_set_nation_tag: '&b%s estableció el tag del país a [%s]'
 msg_set_town_tag: '&b%s estableció el tag de la ciudad a [%s]'
 msg_reset_nation_tag: '&b%s ha borrado el tag del país.'
 msg_reset_town_tag: '&b%s ha borrado el tag de la ciudad.'
-
 msg_mayor_abandon: '&bAbandonarías a tu gente? Elije otro alcalde con ''/t set mayor [nombre]'' si estás seguro.'
 msg_new_day_tax: '&bUn nuevo día ha llegado! Los impuestos fueron cobrados.'
 msg_new_day: '&bUn nuevo día ha llegado!'
@@ -347,8 +305,6 @@ msg_war_winning_town_spoils: '&6[Guerra]&b Mayor puntuación: %s ganó %s con la
 msg_war_cannot_do: '&cNo puedes hacer esto cuando el mundo esta en guerra.'
 msg_war_started: '&eEmpezó la cuenta regresiva para la guerra.'
 msg_war_ended: '&eFinalizó la guerra.'
-
-
 msg_cache_block_error: '&cNo fuiste registrado en Towny. Prueba a entrar nuevamente.'
 msg_cache_block_error_wild: '&cEn salvaje no tenes permiso para: %s'
 msg_cache_block_error_plot: '&cLos propietarios no tienen permitido %s a %s aquí'
@@ -356,7 +312,6 @@ msg_cache_block_error_locked: '&cEsta parcela está bloqueada!'
 msg_cache_block_error_town_resident: '&cLos habitantes de esta ciudad no tienen permiso para %s aquí'
 msg_cache_block_error_town_allies: '&cLos aliados de esta ciudad no tienen permiso para %s aquí'
 msg_cache_block_error_town_outsider: '&cLos que no pertenecen a esta ciudad no tienen permiso para %s aquí'
-
 msg_err_cant_afford_tp_town: '&cNo tienes dinero suficiente para teletransportarte al spawn de %s.'
 msg_err_not_public: '&cEsta ciudad no es pública.'
 msg_err_not_open: '&cLa ciudad %s no tiene las puertas abiertas al público. Pregunta al alcalde o a un asistente para entrar.'
@@ -367,7 +322,6 @@ msg_err_public_spawn_forbidden: '&cEl viaje público entre spawns de ciudades es
 msg_err_public_spawn_enemy: '&cEl viaje público entre spawns de ciudades está prohibido para enemigos.'
 msg_err_town_spawn_disallowed_from: '&cEl viaje al spawn de la ciudad no está permitido para %s.'
 msg_err_outpost_spawn: '&cNo hay outpost spawns establecidos para esta ciudad.'
-
 msg_err_cant_afford_tp: '&bNo tienes dinero suficiente para teletransportarte al spawn de tu ciudad.'
 msg_err_plot_nfs: '&cEsta parcela no está a la venta.'
 msg_err_not_part_town: '&cEl area seleccionada no es parte de tu ciudad.'
@@ -419,44 +373,34 @@ msg_err_warzone_cannot_use_switches: '&cNo puede cambiar esto en una zona de gue
 msg_err_warzone_cannot_use_item: '&cNo puede usar este item en una zona de guerra.'
 msg_err_cannot_perform_action: '&cNo puedes realizar esta acción en el %s.'
 msg_npc_flag: '&bLas propiedades del NPC son ahora %s para %s.'
-
-# Economía Guerras
+#WarFlag Economy
 msg_err_insuficient_funds_warflag: 'Tu necesitas %s en orden para poner una bandera.'
 msg_err_insuficient_funds_future: 'Necesitas %s en el evento pagar por %s.'
 name_defended_attack: 'Ataque defendido'
 name_rebuilding: 'Impuesto de reconstrucción'
-
 msg_warning_delete: '&4*** ATENCION, %s VA A SER BORRADO EL PROXIMO DIA POR LA FALTA DE FONDOS ***'
-
-# Estos mensajes sólo se utilizan si la creación de una ciudad / país lo establece sólo la administración
-
+#these messages are only used if town/nation creation is set to admins only
 msg_admin_only_create_nation: '&cSolo los admins pueden crear paises.'
 msg_admin_only_create_town: '&cSolo los admins pueden crear ciudades.'
-
-# Residentes necesarias para formar parte de una nación
-msg_err_not_enough_residents_new_nation: "&cSu ciudad no tiene suficientes residentes para crear una nación."
+#Required residents to be part of a nation
+msg_err_not_enough_residents_new_nation: '&cSu ciudad no tiene suficientes residentes para crear una nación.'
 msg_err_not_enough_residents_join_nation: '&bLa ciudad %s no tiene suficientes residentes para unirse a una nación.'
 msg_not_enough_residents_no_longer_capital: '&bAntigua capital del país, ya no tiene suficientes residentes para ser la capital de la nación. La nueva capital de la nación es %s.'
 msg_town_not_enough_residents_left_nation: '&bLa ciudad %s no tiene suficientes residentes que ser miembro de una nación, y se ha eliminado de la nación.'
 msg_nation_disbanded_town_not_enough_residents: '&bLa ciudad %s no tiene suficientes residentes para ser ciudad y ha obligado a la nación a disolverse.'
 msg_not_enough_residents_refunded: '&bSe le ha reembolsado $%s para que se disuelva su país debido a no tener suficientes residentes.'
 msg_not_enough_residents_capital: '&bLa ciudad %s no tiene suficientes residentes para ser la capital de la nación.'
-
 list_page: '&bPágina %s de %s'
 list_err_not_enough_pages: '&cSolamente hay %s páginas disponibles'
-
-# Añadido en 0.30
+#Added in 0.30
 msg_war_a_player_has_no_town: '&6[Guerra]&f Uno de los jugadores en combate no tiene ciudad y no puede interferir en la guerra.'
 msg_war_a_player_has_no_nation: '&6[Guerra]&f Uno de los jugadores en combate está en una ciudad sin nación y no puede interferir durante la guerra.'
 msg_war_a_player_has_a_neutral_nation: '&6[Guerra]&f Uno de los jugadores en combate es parte de una nación neutral y no puede interferir en durante guerra.'
 msg_war_a_player_has_been_removed_from_war: '&6[Guerra]&f Uno de los jugadores en combate es parte de una ciudad la cual no puede interferir en la guerra.'
 msg_war_a_player_is_an_ally: '&6[Guerra]&f Uno de los jugadores en combate considera al otro como aliado.'
-
 msg_war_player_cant_be_jailed_plot_fallen: '&6[Guerra]&f El jugador no puede ser puesto en la cárcel, la parcela de la carcel tiene 0 de vida.'
-
-# Añadido en 0.31
+#Added in 0.31
 msg_err_tax_minimum_not_met: 'Los impuestos de tu ciudad no pueden ser inferiores a %s.'
-
 msg_unknown_rank_available_ranks: 'No existe el rango %s. Rangos permitidos %s.'
 msg_no_permission_to_give_rank: 'No tienes permisos para asignar este rango.'
 msg_you_have_been_given_rank: 'Te han asignado el rango %2$2s.'
@@ -466,7 +410,6 @@ msg_resident_already_has_rank: '%s ya tenía este rango.'
 msg_you_have_had_rank_taken: 'Has sido destituido del rango %2$2s.'
 msg_you_have_taken_rank_from: 'Destituiste a %3$2s de %2$2s.'
 msg_resident_doesnt_have_rank: '%s no tiene el rango %s.'
-
 msg_town_has_no_jails: 'La ciudad aún no tiene ninguna cárcel establecida.'
 msg_no_permission_to_jail_your_residents: 'No tienes permisos para enviar a tus residentes a la cárcel.'
 msg_resident_not_part_of_any_town: 'Este jugador no es parte de ninguna ciudad.'
@@ -478,18 +421,14 @@ msg_set_jail_spawn: 'Esta parcela fue establecida como cárcel correctamente.'
 msg_killed_attempting_to_escape_jail: '&4%s fue asesinado por intentar escapar de la cárcel.'
 msg_err_jailed_players_no_teleport: '&4Jugadores que están encarcelados no pueden teletransportarse!'
 msg_player_escaped_jail_into_wilderness: '&4%s escapó de la carcel corriendo en %s'
-
 msg_err_invalid_string_board_not_set: 'Mensaje inválido, el board de la ciudad no se ha establecido.'
-
 msg_plot_name_removed: 'Nombre de la parcela eliminado.'
 msg_plot_name_set_to: 'Nombre de la parcela establecido a [%s].'
 msg_plot_price_too_expensive: 'El valor de la parcela es demasiado caro.'
-
 msg_you_robbed_player: 'Robaste %s de %s.'
 msg_player_robbed_you: '%s te robó %s.'
 msg_you_lost_money: 'Has perdido %s por morir.'
 msg_player_couldnt_pay_player_town_bank_paying_instead: 'El monedero de %s no puede pagar %s. %s fueron tomados del banco de la ciudad.'
-
 msg_err_wartime_could_not_take_deathfunds: 'No se puede quitar dinero por muerte en tiempos de guerra.'
 msg_err_could_not_take_deathfunds: 'No se puede tomar el dinero por muerte.'
 msg_you_lost_money_dying: 'Has perdido %s.'
@@ -499,11 +438,9 @@ msg_err_couldnt_take_deathfunds: 'No se puede tomar el dinero por muerte.'
 msg_err_couldnt_take_town_deathfunds: 'No se puede tomar el dinero por muerte a la ciudad.'
 msg_err_couldnt_take_nation_deathfunds: 'No se puede tomar el dinero por muerte a la nación.'
 msg_you_gained_money_for_killing: 'Has ganado %s por asesinar a %s.'
-
 msg_err_ender_pearls_disabled: '&4Las perlas de ender están desactivadas!'
 msg_err_no_sleep_in_enemy_inn: '&4No puedes dormir en tierras enemigas.'
 msg_err_cant_use_bed: '&4No eres dueño de las tierras en las que está la cama y tampoco es la posada de un aliado.'
-
 msg_war_seeding_spoils_with: '&6[Guerra]&f Agregando %s al cofre de guerra'
 msg_war_total_seeding_spoils: '&6[Guerra]&f Fondos en juego por esta guerra: %s'
 msg_war_activate_war_hud_tip: '&6[Guerra]&f Usa ''/towny war hud'' para activar el scoreboard de guerra.'
@@ -519,12 +456,10 @@ msg_war_jailbreak: '&6[Guerra]&f Hubo una fuga en %s, el(los) prisionero(s) %s e
 msg_war_town_removed_from_war_titlemsg: 'Tu ciudad fue eliminada de la guerra'
 msg_war_nation_removed_from_war_titlemsg: 'Tu nación fue eliminada de la guerra'
 msg_war_append_townblocks_fallen: ' claims de ciudad caídos)'
-
 msg_town_plots_revenue_disclaimer: '&aIngresos estimados y si el propietario de la parcela puede pagar son factores.'
 msg_town_set_perm_syntax_error: 'Combinación de palabras inválidas para este comando. Usa ''/town set perm ?'' para ver la sintaxis correcta.'
 msg_plot_set_perm_syntax_error: 'Combinación de palabras inválidas para este comando. Usa ''/plot set perm ?'' para ver la sintaxis correcta.'
-
-# Añadido en 0.32
+#Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'Ese residente no pertenece a esa ciudad.'
 msg_err_resident_already_an_outlaw: 'Este jugador ya es considerado como un bandido por tu ciudad.'
 msg_err_not_outlaw_in_your_town: 'No puedes marcar a un miembro de tu ciudad como un bandido.'
@@ -537,29 +472,22 @@ msg_err_outlaw_in_open_town: 'No puedes entrar a una ciudad abierta que te ha de
 msg_you_are_an_outlaw_in_this_town: '&4Se cuidadoso %s te considera un bandido, morir aquí te enviará a la carcel.'
 msg_err_town_not_close_enough_to_nation: 'El spawn de %s no está lo suficientemente cerca del spawn de tu capital para unirse a tu país.'
 msg_nation_town_moved_their_homeblock_too_far: 'El spawn de %s fue movido demasiado lejos del spawn te tu capital y fue eliminado de tu nación.'
-
-# Añadido en 0.33
+#Added in 0.33
 msg_err_invalid_radius_number: '&cRadio inválido. Usa un %s o menos.'
-
-# Añadido en 0.34
+#Added in 0.34
 msg_err_max_residents_per_town_reached: '&cEl número máximo de residentes (%s) ha sido alcanzado.'
-
-# Añadido en 0.35
+#Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '&c%s aún no lleva en el servidor el tiempo necesario para invitarlo a una ciudad.'
 msg_cant_toggle_pvp_outsider_in_town: 'Hay un intruso en tu ciudad, no puedes cambiar el estado del PvP.'
 msg_err_unclaim_not_outpost: 'No se puede unclaimear, este plot no es un outpost'
 outpost_plu: 'Outposts'
-
-# Added in 0.36
+#Added in 0.36
 msg_err_not_enough_residents: 'No hay suficientes residentes en la ciudad para hacer eso.'
-
-# Añadido en 0.37
+#Added in 0.37
 msg_err_friendly_fire_disable: 'Fuego amigo desactivado.'
-
-# Añadido en 0.38
+#Added in 0.38
 msg_claim_error: '&cOtro plugin está interfiriendo en el claimeo de (%s)/(%s), no se puede completar la operación.'
-
-# Added in 0.39
+#Added in 0.39
 msg_err_town_spawn_forbidden_war: '&cViajar al spawn de tu ciudad sólo está permitido durante la guerra.'
 msg_err_town_spawn_forbidden_peace: '&cViajar al spawn de tu ciudad está prohibido durante la guerra.'
 msg_err_town_spawn_nation_forbidden_war: '&cViajar al spawn de otras ciudades de tu nación sólo está permitido durante la guerra.'
@@ -568,11 +496,9 @@ msg_err_town_spawn_ally_forbidden_war: '&cViajar al spawn de ciudades aliadas co
 msg_err_town_spawn_ally_forbidden_false: '&cViajar al spawn de ciudades aliadas con tu nación está prohibido durante la guerra.'
 msg_err_public_spawn_forbidden_war: '&cViajar al spawn público de otras ciudades sólo está permitido durante la guerra.'
 msg_err_public_spawn_forbidden_peace: '&cViajar al spawn público de otras ciudades está prohibido durante la guerra.'
-
-# Añadido en 0.40
+#Added in 0.40
 mayor_help_9: 'Unclaimear Outpost'
-
-# Añadido en 0.41 (Actualización de Invitaciones)
+#Added in 0.41 (Invite-Update)
 invite_plu: 'Invitaciones'
 invite_sent_by: 'Invitación enviada por'
 invite_help_1: 'Aceptar invitación para unirte a una ciudad'
@@ -633,20 +559,17 @@ you_have_been_requested_to_ally: 'Te han pedido una alianza'
 this_message_will_expire: 'Este mensaje caducará automáticamente en 20 segundos'
 player_sing: 'Jugador'
 nation_zone_this_area_under_protection_of: 'Esta parte de %s está bajo la protección de %s'
-
-# Añadido en 42
+#Added in 0.42
 you_have_been_invited_to_join2: 'Has sido invitado a unirte a %s'
 you_have_been_requested_to_ally2: 'Te han invitado a formar alianza con %s'
-
-# Añadido en 0.43
+#Added in 0.43
 town_help_11: 'Crea una nueva Ciudad, usa ''_'', no uses espacios.'
 changed_plot_town: '&bHas cambiado correctamente el plot de la ciudad a %s!'
 not_standing_in_plot: 'No estás dentro de un plot válido!'
 msg_err_homeblock_has_not_been_set: 'El bloque principal no ha sido asignado aún, usa ''/town set homeblock'' primero.'
 msg_err_spawn_not_within_homeblock: 'El spawn no está en el bloque principal, usa ''/town set homeblock'' primero.'
-
-# Añadido en 0.44
-# String del lenguaje de TownyChat
+#Added in 0.44
+#TownyChat language strings
 tc_err_invalid_command: 'Error: Comando inválido!'
 tc_settings_reloaded: '[TownyChat] Configuración recargada!'
 tc_err_unrecognized_command_format: 'Error: Comando inválido!'
@@ -677,22 +600,19 @@ tc_you_joined_channel: '[TownyChat] Has entrado en &f%s'
 tc_err_you_are_already_talking_in_default_channel_help: 'Ya estás hablando en el canal por defecto. Para cambiar de canal usa el comando de canal.'
 tc_err_unable_to_talk_essentials_mute: 'No puedes hablar... estás muteado!'
 tc_err_unable_to_talk_you_are_spamming: 'No puedes hablar... estás haciendo spam!'
-
 msg_admin_set_plot_help_1: 'En una ciudad.'
 msg_admin_set_plot_help_2: 'En salvaje.'
 msg_err_not_enough_outposts_free_to_claim: 'No hay outposts libres para claimear %s/%s'
 msg_err_over_outposts_limit: 'No te puedes teletransportar a tu outpost, estás en tu límite %s/%s'
-
-
-# Elementos de las pantallas de (/res, /town, /nation, /tw, /plot perm)
-# Estos se traducen porque podemos (o no) poner palabras más largas de una manera inteligente.
-# Si eres un traductor, no dudes en omitir esta sección, ya que puede parecer no muy agradable
-# en el juego. Sería mejor ver cómo se ven los cambios en el juego antes de enviarlo a Github.
-outlaws: '&2Fugitivos: &f'                    # Usado en /t outlawlist
+#Status Screen elements (/res, /town, /nation, /tw, /plot perm)
+#These are translated because we may (or may not) be handling longer words in a smart way.
+#If you are a translator feel free to skip over this section, as it may or may not appear very nice
+#in game. It would be best to see what the changes look like in game before you PR it to github.
+outlaws: '&2Fugitivos: &f' #Used on /t outlawlist
 online: '&a (En línea)'
 registered_last_online: '&2Registrado: &a%s &8| &2U.Conexión: &a%s'
-status_perm: '&2Perm: '                     # Usado en/plot perm, /res
-status_permissions: '&2Permisos: '       # Usado en /town
+status_perm: '&2Perm: ' #Used on /plot perm, /res
+status_permissions: '&2Permisos: ' #Used on /town
 status_on: '&4ON'
 status_off: '&aOFF'
 status_on_good: '&aON'
@@ -700,8 +620,8 @@ status_off_bad: '&4OFF'
 status_forced: '&cForzado'
 status_adjustable: '&aAjustable'
 status_pvp: '&2PVP: '
-explosions: '  &2Explosiones: '              # Usado en /plot perm, /res
-explosions2: '&2Explosiones: '               # Usado en /town and /tw
+explosions: '  &2Explosiones: ' #Used on /plot perm, /res
+explosions2: '&2Explosiones: ' #Used on /town and /tw
 firespread: '  &2P. Fuego: '
 mobspawns: '  &2Mob Spawns: '
 owner_of_x_plots: '&2Dueño de &a%s plots'
@@ -754,8 +674,7 @@ status_res_taxexempt: '&2El Staff está exento de impuestos.'
 status_res_tax: '&2Tasa Ciudad: &a'
 status_res_plottax: '&2Tasas totales: &a'
 status_res_totaltax: '&2Tasa tot. a pagar: &a'
-
-# Anadido en 0.45
+#Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'No puedes usar el banco de la nación fuera de la capital.'
 msg_err_unable_to_use_bank_outside_your_town: 'No puedes usar el banco de la ciudad fuera de ella.'
 msg_time_until_a_new_day: 'Tiempo hasta nuevo día: '
@@ -763,11 +682,9 @@ msg_hours: ' horas'
 msg_minutes: ' minutos'
 msg_seconds: ' segundos'
 msg_err_invalid_string_nationboard_not_set: 'Texto inválido, Tablón de la nación no establecido.'
-
 msg_plot_evict: 'Plot desahuciada con éxito.'
 msg_no_one_to_evict: 'Nadie para desalojar en esta parcela.'
-
-# Added in 0.46
+#Added in 0.46
 nation_help_10: 'Teletransportarte al spawn de la nación.'
 msg_nation_spawn_warmup: '&bEsperando a teletransportarse...'
 msg_set_nation_spawn: '&bEl spawn de la nación fue cambiado exitosamente.'
@@ -795,8 +712,7 @@ msg_err_cannot_set_spawn_cost_more_than: '&cNo puedes fijar el costo del spawn m
 msg_err_ally_isnt_public: '&cTu aliado, %s, no tiene el habilitado el spawn público. Teletransporte denegado.'
 msg_nation_changed_public: '&cEl estado público de la nación ahora es %s.'
 status_public2: '&2Público'
-
-# Added in 0.47:
+#Added in 0.47:
 status_plot_type: '&2Parcela tipo: &a'
 msg_no_self_jailing: 'No puedes encarcelarte.'
 online2: ' &a(Online)'
@@ -817,8 +733,7 @@ enabled: 'Habilitado'
 disabled: 'Deshabilitado'
 forced: 'Forzado'
 adjustable: 'Ajustable'
-
-# Added in 0.48:
+#Added in 0.48:
 msg_no_funds_new_town2: '&c%s no puede permitirse asentar una nueva ciudad aquí, la cual cuesta %s.'
 msg_no_funds_new_nation2: '&cLa ciudad no puede empezar una nueva nacion, ya que cuesta %s.'
 msg_no_funds_claim2: '&cLa ciudad no puede claimear %s bloques de ciudad, ya que cuestan %s. Agregue %s al banco de la ciudad usando /t deposit %s'
@@ -826,20 +741,17 @@ msg_err_cant_afford_blocks2: '&cLa ciudad no puede claimear %s bloques de ciudad
 msg_err_not_enough_variables: '&cFaltan variables: '
 nation_rechecked_by_admin: '&bNation %s town distances have been successfully rechecked.'
 msg_err_nation_over_town_limit: '&cTu nacion alcanzó el número máximo de ciudades por nacion: %s.'
-
-
-# Added in 0.49
+#Added in 0.49
 msg_process_claim: 'Procesando el claimeo de la parcela...'
 msg_process_unclaim: 'Procesando el unclaimeo de la parcela...'
 msg_total_townblocks: 'Total de bloques de ciudad: '
-
-# Added in 0.50
+#Added in 0.50
 friend_list: 'Lista de amigos'
-                         # The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
-                         # nationranks lists on the /nation screen; and probably more lists of residents.
-res_format_list_1: '&2'  #First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
-res_format_list_2: '&a'  #Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
-res_format_list_3: '&f'  #Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
+#The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
+#nationranks lists on the /nation screen; and probably more lists of residents.
+res_format_list_1: '&2' #First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
+res_format_list_2: '&a' #Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
+res_format_list_3: '&f' #Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
 res_friend_added: 'Agregado '
 townboard_message_colour_1: '&6'
 townboard_message_colour_2: '&e'
@@ -864,8 +776,7 @@ msg_couldnt_pay_plot_taxes_multiple: '&bLos siguientes ciudadanos no pagaron el 
 msg_bankrupt_town2: '&b%s no pudo mantenerse como ciudad.'
 msg_bankrupt_nation2: '&b%s no pudo mantenerse como nacion.'
 status_embassy_town: '&2Embajadas en'
-
-# Added in 0.51:
+#Added in 0.51:
 msg_error_invalid_comparator_nation: '&bComparador invalido. Prueba con ciudadano, balance, ciudades, nombres, bloques de ciudad, en linea.'
 msg_error_invalid_comparator_town: '&bComparador invalido. Prueba con ciudadano, balance, ciudades, nombres, bloques de ciudad, en linea, abierto.'
 msg_err_merging_for_kings_only: '&bSolo el Rey puede unir.'
@@ -873,8 +784,7 @@ msg_err_king_of_that_nation_is_not_online: '&bEl Rey de %s, %s, no esta en linea
 nation1_has_merged_with_nation2: '&6La nacion %s acepto la union con la nacion de %s.'
 msg_would_you_merge_your_nation_into_other_nation: '&6Aceptas disolver tu nacion %s en la nacion de %s? Esto va a transferir todas las ciudades y el dinero del banco a %s.'
 no_open_towns: 'No hay ciudades abiertas.'
-
-# Added in 0.52:
+#Added in 0.52:
 msg_error_nation_has_no_allies: 'La nacion no tiene aliados.'
 msg_error_nation_has_no_enemies: 'La nacion no tiene enemigos.'
 msg_error_ta_plot_claim: 'Falta nombre del jugador, ejemplo: /ta plot claim NombreDelJugador'
@@ -886,11 +796,9 @@ msg_err_already_in_a_nation: 'Tu ciudad ya esta en una nacion.'
 msg_err_nation_not_open: '&cLa nacion %s no tiene las puertas abiertas para todos. Pregunta al Rey o a un asistente para unirte.'
 msg_err_nation_homeblock_in_another_world: '&cEl bloque del spawn de tu ciudad no está en el mismo mundo que el bloque del spawn de la capital de la nacion.'
 status_bank_town_penalty_upkeep: ' &7| &2Mantenimiento de sobreclaimeo: &4%s'
-
-# Added in 0.53:
+#Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'No puedes spawnear en %s, estas marcado como un fugitivo en ese lugar.'
-
-# Added in 0.54:
+#Added in 0.54:
 war_hud_homeblock: 'BLOQUE DE SPAWN'
 war_hud_wilderness: 'Campo'
 war_hud_true: 'Verdadero'
@@ -911,21 +819,17 @@ war_stats_towns: '  Ciudades: '
 war_stats_warzone: '  Zona de Guerra: '
 war_stats_spoils_of_war: '  Botin de guerra: '
 war_starts_in_x: 'La guerra empieza en %s'
-
-# Added in 0.55:
+#Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '&4No puedes usar ese comando mientras estas encarcelado.'
-
-# Added in 0.56:
+#Added in 0.56:
 msg_cache_block_error_town_nation: '&cLos miembros de la nacion no estan permitidos hacer %s.'
-
-# Added in 0.57:
+#Added in 0.57:
 msg_err_already_res2: '&c%s ya pertenece a la nacion.'
 msg_err_cannot_afford_plot_set_type_cost: '&cNo puedes hacer que una parcela sea de tipo %s, ya que cuesta %s'
 msg_plot_set_cost: '&bTe ha costado %s poner la parcela como tipo: %s'
 msg_err_townspawn_has_not_been_set: '&cEl spawn de la ciudad no se ha elegido.'
 msg_err_player_too_far_from_town_spawn: '&c%s es muy lejos del spawn de tu ciudad como para recibir una invitacion a la ciudad. Maxima distancia: %s bloques.'
-
-# Added in 0.58:
+#Added in 0.58:
 msg_resident_bail_amount: 'Costo de la fianza del residente: '
 msg_mayor_bail_amount: 'Costo de la fianza del alcalde: '
 msg_king_bail_amount: 'Costo de la fianza del Rey: '
@@ -934,12 +838,8 @@ msg_err_unable_to_pay_bail: 'No puedes pagar la fianza.'
 msg_err_bail_not_enabled: 'No esta habilidada el pago de la fianza.'
 msg_you_have_been_freed_from_jail: 'Te has liberado de la carcel.'
 msg_player_has_been_freed_from_jail_number: '%s es libre de la carcel numero %s.'
-msg_you_have_been_sent_to_jail: 'Te han enviado a la carcel.'
 msg_player_has_been_sent_to_jail_number: '%s ha sido enviado a la carcel numero %s.'
 msg_player_is_not_online: '%s no esta en lineae.'
-msg_err_days_must_be_greater_than_zero: '&c"Dias" tiene que ser mayor a cero.'
-msg_you've_been_jailed_for_x_days: 'Has sido encarcelado por %s dias.'
-msg_jailed_for_x_days: ' &2por %s dias.'
 msg_mysql_dump_success: 'MySQL database dump complete.'
 msg_err_mysql_not_being_used: 'Your config is not set to save & load mysql.'
 msg_save_success: 'Database guardada.'
@@ -950,8 +850,7 @@ homeblock: 'bloque de spawn'
 townblock: 'bloque de ciudad'
 outpost: 'outpost'
 msg_err_not_same_town: '&b%s no pertenece a tu ciudad.'
-
-# Added in 0.59:
+#Added in 0.59:
 msg_modes_set: 'Modo: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: 'Esta parcela no tiene ninguna metadata asociada.'
 msg_err_the_metadata_for_key_is_not_registered: 'La metadata para ''%s'' no esta registrada!'
@@ -978,8 +877,7 @@ msg_err_tag_too_long: 'El tag es muy largo.'
 msg_err_nation_has_not_set_a_spawn_location: 'La nacion no tiene una ubicacion de spawn.'
 msg_err_resident_doesnt_belong_to_any_town: 'Resident doesn''t belong to any town'
 msg_err_could_not_set_default_modes_for: 'No se pueden poner los modos por defecto para '
-
-# Added in 0.60
+#Added in 0.60
 msg_set_war_allowed_on: 'La guerra va a estar habilitada en este mundo.'
 msg_set_war_allowed_off: 'La guerra no va a afectar este mundo.'
 msg_war_not_enough_nations: '&6[War]&f Menos de 2 naciones preparadas para la guerra, la guerra ha sido cancelada.'
@@ -987,36 +885,28 @@ msg_war_no_enemies_for_war: '&6[War]&f No hay enemigos presentes para la guerra,
 msg_war_prefix: '&6[War]&f '
 msg_war_participants_header: '&6[War] &eNombre de la nacion &f(&bTowns&f)'
 msg_war_participants: '&6[War] &e%s &f(&b%s&f)'
-
-# Added in 0.61
-
-# Added in 0.62
+#Added in 0.61
+#Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'No puedes cambiar el PVP, faltan %s segundos.'
 msg_err_cannot_spawn_x_seconds_remaining: 'No puedes spawnear por %s segundos.'
-
-# Added in 0.63
+#Added in 0.63
 msg_plot_set_to_nfs: 'La parcela ya no esta en venta.'
 msg_err_x_spawn_disallowed_from_x: '&cEl spawn %s no esta habilitado desde %s.'
 msg_the_wilderness: 'el Campo'
 msg_enemy_areas: 'Areas enemigas'
 msg_neutral_towns: 'Ciudad neutral'
-
-# Added in 0.64
+#Added in 0.64
 msg_err_no_nation_with_that_name: 'No existe existe nacion con el nombre %s'
 msg_err_cannot_unclaim_homeblock: 'No puedes unclaimear tu bloque de spawn, use ''/town set homeblock'' para mover tu bloque de spawn.'
-
-# Added in 0.65
+#Added in 0.65
 msg_err_rename_cancelled: 'El renombrar fue cancelado por otro plugin.'
-
-# Added in 0.66
+#Added in 0.66
 msg_war_defender_keeps_claims: 'El capturar esta deshabilitado. Defender la ciudad va a mantener sus claimeos.'
-
-# Added in 0.67
+#Added in 0.67
 msg_war_town_has_been_conquered_by_nation_x_for_x_days: 'La ciudad %s fue conquistada y se ha unido a la nacion %s por %s dias.'
 msg_conquered: '[Conquistada]'
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'La ciudad no puede salir de esta nacion porque esta conquistada.'
-
-# Added in 0.68
+#Added in 0.68
 msg_plot_group_claim_confirmation: 'Esta parcela es parte de un grupo de %s parcela/s, si confirmas el claimeo vas a comprar todas las parcelas.'
 msg_plot_group_unclaim_confirmation: 'Esta parcela es parte de un grupo de %s parcelas/s, si confirmas vas a unclaimear todas las parcelas.'
 msg_plot_group_toggle_confirmation: 'Esta parcela es parte de un grupo de %s parcela/s, si confimas vas a cambiar la propiedad de todas las parcelas.'
@@ -1038,41 +928,31 @@ msg_set_group_type_to_x: 'Se ha cambiado el tipo del grupo de parcelas a %s'
 msg_player_successfully_bought_group_x: '%s exitosamente compro el grupo de parcelas %s'
 status_plot_group_name_and_size: '&2El bloque de ciudad es parte del grupo: %s. El grupo tiene %s bloques de ciudad en total.'
 msg_player_made_group_not_for_sale: '%s hizo que el grupo %s no este mas a la venta.'
-
-# Added in 0.69
+#Added in 0.69
 msg_err_cannot_set_group_to_jail: 'El grupo de parcelas no puede ser elegido como prision.'
-
-# Added in 0.70
+#Added in 0.70
 msg_err_plot_group_name_required: 'Debes especificar el nombre de un grupo de parcelas, ej: /plot group add {nombre}'
 msg_confirmation_spigot_click_accept: 'Click %s o tipo %s'
 msg_confirmation_spigot_click_cancel: 'Click %s o tipo %s'
 msg_you_cannot_kick_yourself: 'No puedes echarte a ti mismo.'
 msg_you_cannot_kick_this_resident: 'No puedes echar a %s, ya que es un alcalde o asistente.'
-
-# Added in 0.71
+#Added in 0.71
 msg_err_plot_belongs_to_group_plot_fs2: 'La parcela: %s pertenece a un grupo, use /plot group fs [cantidad]'
 msg_err_plot_belongs_to_group_plot_nfs: 'La parcela: %s pertenece a un grupo, use /plot group nfs'
-
-# Added in 0.72
+#Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Las configuraciones controladas por el admin %s evitan que cambies el pvp a %s.'
-
-# Added in 0.73
-msg_err_you_aren't_currently_jailed: 'No estas en prision actualmente.'
-
-# Added in 0.74
+#Added in 0.73
+msg_err_you_aren't currently jailed: 'You are not currently jailed.'
+#Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'No tienes permitido crear el otro lado de este portal en esta ubicacion.'
-
-# Added in 0.75
+#Added in 0.75
 msg_already_ally: 'Tu nacion ya es aliada de %s.'
-
-# Added in 0.76
+#Added in 0.76
 msg_you: 'Tu'
-
-# Added in 0.77
+#Added in 0.77
 msg_click_spawn: '&aClick para spawnear en: &e%s'
 msg_spawn_cost: '&aCosto del spawn = &e%s'
-
-# Added in 0.78
+#Added in 0.78
 msg_reload_error: 'Ha habido un error recargando Towny.'
 msg_reloaded_config: '&2Configuracion exitosamente recargada.'
 msg_reloaded_perms: '&2Permisos exitosamente recargados.'
@@ -1080,8 +960,7 @@ msg_reloaded_db: '&2La base de datos ha sido exitosamente recargada.'
 msg_reloaded_lang: '&2El archivo de lenguaje ha sido exitosamente recargado.'
 msg_reset_config: '&2Config ha sido reiniciada.'
 msg_err_teleport_cancelled: 'Moverte ha cancelado tu teletransporte.'
-
-# Added in 0.79
+#Added in 0.79
 msg_cache_block_error_plot_friends: 'amigos'
 msg_cache_block_error_plot_allies: 'aliados'
 msg_cache_block_error_plot_outsiders: 'forasteros'
@@ -1095,38 +974,31 @@ msg_confirm_purchase: 'Hacer esto va a costar %s. Continuar?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Las siguientes ciudades fueron eliminadas de tu nacion: %s. Deseas continuar?'
 msg_ta_deposit_all_success: 'Se ha depositado exitosamente %s a todas los bancos de las ciudades y naciones.'
 bonus_townblocks: 'bonus bloques de ciudad'
-
-# Added in 0.80
+#Added in 0.80
 nomad_sing: 'Nomada'
 msg_new_town_advice: 'Felicitaciones en crear tu ciudad! Tu ciudad pagara una tarifa diaria que actualmente es de: %s. Puedes depositar dineron al banco de tu ciudad usando ''/t deposit #''. Si tu ciudad no tiene dinero para pagar la tarifa, sera eliminada. Puedes ver tus costos usando /towny prices. La proxima tarifa va a ser en %s.'
-
-# Added in 0.81
+#Added in 0.81
 msg_err_teleport_cancelled_damage: 'Recibir dano ha cancelado la teletransportacion.'
-
-# Added in 0.82
+#Added in 0.82
 invitation_prefix: "&8[&7Invitacionn&8] &9"
 confirmation_prefix: "&8[&7Confirmacion&8] &9"
 this_message_will_expire2: '&9Esto va a auto-expirar en 20 segundos'
 msg_hover_next_page: 'Siguiente pagina'
 msg_hover_previous_page: 'Pagina anterior'
-
-# Added in 0.83
+#Added in 0.83
 msg_max_tax_amount_only_for_percent: "La cantidad de impuestos maxima solo puede ser puesta en ciudades con porcentaje de impuestos."
 msg_town_set_tax_max_percent_amount: "%s ha puesto la maxima cantidad de porcentaje de impuestos a %s."
-
-# Added in 0.84
+#Added in 0.84
 msg_err_plot_belongs_to_group_toggle: 'La parcela pertenece a un grupo, use /plot group toggle'
-
-# Added in 0.85
+#Added in 0.85
 msg_set_perms_reset_single: '&bSe han reiniciado exitosamente los permisos de esta parcela.'
-
 #Added in 0.86
 status_bank_bankrupt: '&2Banco: &a%s &c(BANCARROTA)'
 msg_warning_bankrupt: '&4*** CUIDADO, %s VA A TERMINAR EN BANCARROTA EL DIA PROXIMO POR FALTA DE FONDOS ***'
 msg_town_bankrupt_by_upkeep: '&b%s no pudo pagar su tarifa y termino en bancarrotat.'
 msg_town_bankrupt_by_upkeep_multiple: '&bLas siguientes ciudades no pudieron pagar su tarifa y han terminado en bancarrota: '
 msg_town_bankrupt_by_nation_tax: '&b%s no pudo pagar el impuesto %s y ha terminado en bancarrota.'
-msg_town_bankrupt_by_nation_tax_multiple:  '&bTLas siguientes ciudades no pudieron pagar las el impuesto de la nacion y han terminado en bancarrota: '
+msg_town_bankrupt_by_nation_tax_multiple: '&bTLas siguientes ciudades no pudieron pagar las el impuesto de la nacion y han terminado en bancarrota: '
 msg_town_debts_cleared: '%s ha pagado todas sus deudas y ya no esta en bancarrota.'
 msg_err_bankrupt_town_cannot_claim: 'No esta permitido claimear parcelas para una ciudad en bancarrota.'
 msg_err_bankrupt_town_cannot_build: 'No esta permitido construir en una ciudad en bancarrota.'
@@ -1138,7 +1010,6 @@ msg_your_town_payed_upkeep: '&bTu ciudad ha pagado la tarifa diaria de %s.'
 msg_your_nation_payed_upkeep: '&bTu nacion ha pagado la tarifa diaria de %s.'
 msg_your_town_couldnt_pay_upkeep: '&bTu ciudad no pudo pagar la tarifa diaria de %s y ha sido disuelta.'
 msg_your_nation_couldnt_pay_upkeep: '&bTu nacion no pudo pagar la tarifa diaria de %s y ha sido disuelta.'
-
 #Added in 0.87
 msg_town_reached_debtcap_and_is_disbanded: '&b%s no pudo pagar su tarifa y ha llegado al limite de deuda, por lo tanto, ha sido disuelta.'
 msg_town_reached_debtcap_and_is_disbanded_multiple: '&bLas siguientes ciudades no pudieron pagar sus tarifas y han llegado a su limite de deuda, por lo tanto, han sido disueltas: '
@@ -1147,11 +1018,9 @@ msg_unable_to_withdraw_x: 'No se ha podido retirar %s del banco de la ciudad.'
 status_debtcap: '&2Limite de deuda: &a%s'
 status_world_explrevert_entity: '&2Revertir explosiones de entidades: '
 status_world_explrevert_block: '&2Revertir explosiones de bloques: '
-
 #Added in 0.88
 msg_nation_already_peaceful: '&cLa nacion ya es pacifica.'
 msg_nation_already_not_peaceful: '&cLa nacion ya no es pacifica.'
-
 #Added in 0.89
 status_world_friendlyfire: '&2FuegoAmigo: '
 status_world_wildernessmobs: '&2Mobs del Campo: '
@@ -1160,17 +1029,14 @@ msg_outlaw_kicked: '&4No eres bienvenido a %s. Has sido teletransportado lejos.'
 msg_outlaw_town_notify: '&cUn fugitivo, %s, ha entrado al territorio de tu ciudad.'
 msg_your_town_payed_upkeep_with_debt: '&cTu ciudad ha pagado la tarifa diaria de %s con deuda.'
 msg_payed_nation_tax_with_debt: '&cTu nacion ha pagado el impuesto de la nacion de %s con deuda.'
-
 #Added in 0.90
 status_plot_clear_deletion: '&2PlotClearBlockDelete: '
 msg_err_plot_clear_disabled_in_this_world: 'El comando /plot clear esta deshabilitado en este mundo.'
-
 #Added in 0.91
 msg_universe_attribution: 'Autores: '
 msg_universe_contributors: ' Y a contribuidores como tu. '
 msg_universe_heart: '<3'
 townblock_plu: 'Bloques de ciudad'
-
 #Added in 0.92
 #Town Ruins
 admin_panel_4: 'Corre el nuevo codigo horario'
@@ -1187,11 +1053,9 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cTu ciudad esta en ruinas po
 msg_time_remaining_before_full_removal: '&cTiempo disponible antes de la eliminacion: %d horas.'
 msg_time_until_reclaim_available: '&cTiempo hasta que se pueda reclamar: %d horas.'
 msg_reclaim_available: '&aReclamo disponible.'
-
 #Added in 0.93
 msg_changed_peaceful: '&cLa neutralidad/pacifismo de la ciudad ahora es %s.'
 msg_err_town_unclaim_canceled: '&cUnclaimeo cancelado. No puedes unclaimear este area ahora mismo.'
-
 #Added in 0.94
 msg_comptype_residents: 'Numero de residentes'
 msg_comptype_townblocks: 'Number de bloques de ciudad claimeados'
@@ -1205,7 +1069,6 @@ npc_created: '&2Creado: &a%s'
 msg_no_funds_claim_plot: '&cNo puedes pagar el claimeo de esta parcela, ya que cuesta %s.'
 msg_no_funds_claim_plot_group: '&cNo puedes pagar el claimeo de %s parcelas, ya que cuestan %s.'
 status_town_title_peaceful: '&b(Pacifica)'
-
 #Added in 0.95
 status_public: '&b(Publica)'
 msg_days: ' dias'
@@ -1235,19 +1098,16 @@ towny_prices_plots_jail: '&c                        &2Prision: &a%s &8| &2Granja
 towny_prices_plots_bank: '&c                        &2Banco: &a%s'
 towny_prices_nationname: '&cNacion: &6%s'
 towny_prices_nation_tax: '&c    [Impuestos] &2Ciudad: &a%s &8| &2Paz: &a%s'
-
 #Added in 0.96
 msg_town_destroyed_by_nation_tax: '&bLa ciudad conquistada %s no pudo pagar el impuesto de la nacion y ha caido.'
 msg_town_destroyed_by_nation_tax_multiple: '&bLas siguientes ciudades conquistadas no pudieron pagar el impuesto de la nacion y han caido: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bTu ciudad no tiene que pagar el impuesto de la nacion.'
-
 #Added in 0.97
-status_perm_line_format: '&a%s = &7' # The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s = &7' #The Build = ---- Destroy = ---- seen in the status screen.
 msg_comptype_ruined: 'En ruinas'
 msg_comptype_bankrupt: 'En bancarrota'
 msg_ruined: '&c(En ruinas)'
 msg_bankrupt: '&c(Bancarrota)'
-
 #Added in 0.98
 msg_del_town2: '&bLa ciudad de %s fue borrada!'
 msg_ruin_town: '&bLa ciudad de %s cayo en ruinas!'
@@ -1256,10 +1116,9 @@ gui_title_towny_wildsblocks: 'Lista de Bloques de Campo'
 gui_title_towny_itemuse: 'Lista de Uso de Items'
 gui_title_towny_switch: 'Lista de Cambios'
 gui_title_towny_plotclear: 'Lista de Limpiezas de Parcela'
-
 #Added in 0.99 - FlatFile L10N
-# NOTICE
-# While these strings can be translated, we caution you to keep them in English.
+#NOTICE
+#While these strings can be translated, we caution you to keep them in English.
 flatfile_dbg_cannot_set_capital_try_next: 'Nation %s could not set capital to %s, selecting a new capital...'
 flatfile_dbg_deleting_duplicate: 'Deleting: %s which is a duplicate of %s'
 flatfile_dbg_folders_found: 'Folders found %s'
@@ -1309,9 +1168,7 @@ flatfile_err_townblock_file_contains_unregistered_town_delete: 'TownBlock file c
 flatfile_err_townblock_file_missing_town_delete: 'TownBlock file missing Town, deleting %s'
 flatfile_err_townblock_file_unknown_err: 'TownBlock file contains unknown error, deleting %s.'
 msg_ta_removed_all_titles_and_surnames_removed: 'se removiieron los titulos y apellidos de todos los ciudadanos.'
-
 msg_err_homeblock_already_set_here: 'Este ya es el homeblock de tu ciudad.'
-
 #Added in 0.100
 msg_town_merge_err_mayor_only: '&cSolo el alcalde puede unir.'
 msg_town_merge_err_not_close: '&cLa ciudad de %s esta demaciado lejos de la tuya. Su homeblock tiene que estar a %d bloques del tuyo.'
@@ -1333,44 +1190,35 @@ msg_town_merge_success: '&bLa ciudad de %s, gobernada por %s, se unio exitosamen
 #Reasons for withdrawing/depositing for the bankhistory book.
 msg_town_merge_cost_withdraw: 'La union de ciudad cuesta'
 msg_town_merge_transaction_reason: 'Union de ciudad'
-
 towny_prices_town_merge: '&e[Uniendo] &2Costo Base: &a%s &8| &2Por plot: &a%s'
-
 #Added in 0.101
 msg_err_nation_not_allied_with: '&cTu nacion no es aliada de %s.'
 msg_err_nation_not_enemies_with: '&cTu nacion no es enemiga de %s.'
 msg_err_nation_already_enemies_with: '&ctu nacion y es enemia de %s.'
 msg_err_ally_already_requested: '&cYa solicitaste una alianza con %s.'
-
 msg_err_nation_not_allied_with_2: '&c%s no es aliada de %s.'
 msg_err_nation_not_enemies_with_2: '&c%s no es enemiga de %s.'
 msg_err_nation_already_allied_with_2: '&c%s ya esta aliada con %s.'
 msg_err_nation_already_enemies_with_2: '&c%s ya es enemiga de %s.'
 msg_ta_allies_enemies_updated: '&bAliados/Enemigos actualizados para %s.'
-
 #Added in 0.102
 towny_map_detailed_information: '&2Click para ver informacion detallada de la parcela.'
 msg_err_nation_capital_too_many_residents: '&cLa capital actual tiene demasiados miembros para ser reemplazada por %s.'
 msg_deleting_nation_will_result_in_losing_residents: '&cAdvertencia: Remover tu nacion implicaria sobrepasar el limite de ciudadanos por %d, lo que resultaria en remover %d ciudadanos.'
-
-# Added in 0.103
+#Added in 0.103
 msg_command_blocked_inside_towns: '&cNo puedes usar ese comando dentro de una ciudad.'
 msg_command_limited: 'Solo puedes usar ese comando dentro de tus pacerlas.'
-
 #Added in 0.104
 msg_plot_perm_claimed_at: '&2Reclamado en: &a%s'
-
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Uso en el campo %s en todos los mundos.'
 msg_regenerations_use_x_in_all_worlds: 'Regeneracion %s en todos los mundos.'
-
 #Added in 0.106
 msg_command_outsider_blocked: 'No puedes usar este comando porque no vives en %s.'
-
 #Added in 0.107
 msg_jailed_for_x_hours: ' &2durante %s horas.'
 msg_err_this_jail_has_no_cells: 'Esta carcel no tiene celdas.'
-msg_err_no_cell_found_at_this_location : 'No se encontraron celdas aqui.'
+msg_err_no_cell_found_at_this_location: 'No se encontraron celdas aqui.'
 msg_jail_cell_set: 'Celda establecida.'
 msg_jail_cell_removed: 'Celda removida.'
 msg_err_resident_is_already_jailed: '%s ya esta encarcelado'
@@ -1393,7 +1241,6 @@ jail_plu: 'Carceles'
 jail_sing: 'Carcel'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s fue enviado a la %s a la celda %s durante %s horas por %s.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s no jugo lo suficiente como para encarcelarle, espera otros %s'
-
 #Added in 0.108
 msg_town_not_peaceful: '&bLa nacion no pudo pagar ser pacifico.'
 msg_town_already_peaceful: '&bLa ciudad ya es pacifica.'
@@ -1402,13 +1249,13 @@ msg_town_cant_peaceful: '&bLa ciudad no puede pagar ser pacifica.'
 msg_town_paid_for_neutral_status: '&bTu ciudad pago %s para mantener su estado pacifico.'
 msg_nation_paid_for_neutral_status: '&btu nacion pago %s para mantener su estado pacifico.'
 your_town_has_been_invited_to_join_nation: 'Tu ciudad fue invitada a la nacion: %s'
-
 #Added in 0.109
 msg_err_no_one_to_purge: '&bNo hay miembros inactivos para purgar.'
 msg_purging_will_remove_the_following_residents: '&bPor favor confirma que quieres purgar los siguientes ciudadanos: %s'
 msg_purge_complete_x_removed: '&bPurga completada, %s ciudadanos removidos.'
 msg_err_days_must_be_greater_than_0: 'Dias tiene que ser mayor a zero.'
-
+msg_err_outlawed_players_no_teleport: '&4You are outlawed in the town you are currently in and cannot teleport!'
+msg_err_you_cannot_use_command_while_in_outlaw_town: '&4You cannot use that command while in a town you are outlawed in.'
 #Added in 0.110
 msg_safe_mode_base: '[Error] Towny esta bloqueado en modo seguro debido a un error! '
 msg_safe_mode_player: 'Dile a un administrador que mire la consola.'
@@ -1417,7 +1264,7 @@ msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: 'Solo puedes tener
 msg_err_not_close_enough_to_your_town_nearest_plot: 'No puedes claimear el puesto de avanzada, estas a %s bloques de tu ciudad. Distancia maxima permitida: %s bloques.'
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Moviste tu homeblock demasiado pronto! Espera otros %s.'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'No puedes mover tu homeblock tantos bloques lejos, el limite es %s, este espacio esta a %s bloques de distancia.'
-
+msg_err_usingtowny_disabled: 'This world is exempt of all Towny interactions. Use /townyworld toggle usingtowny first.'
 #Added in 0.111
 msg_plot_group_already_exists_did_you_want_to_transfer: 'Este bloque de town ya es parte del grupod de parcelas %s . Estas seguro de que quieres moverlo al grupo %s ?'
 msg_townblock_transferred_from_x_to_x_group: 'Bloque transferido del grupo %s al %s.'
@@ -1429,7 +1276,6 @@ msg_err_this_plot_is_already_part_of_the_plot_group_x: 'Este bloque de town ya e
 map_hover_plot_group: 'Grupo de parcelas: '
 map_hover_plot_group_size: ' Tamaño: '
 map_hover_plots: '%s parcelas'
-
 #Added in 0.112
 msg_checking_for_updates: 'Buscando actualizaciones...'
 msg_no_new_updates: 'No se encontraron nuevas actualizaciones.'
@@ -1440,15 +1286,14 @@ msg_latest_version: '&2Version de towny: &a%s &2| Ultima version: &a%s'
 msg_up_to_date: '&aEstas al dia.'
 msg_click_purchase: 'Click para comprar'
 msg_you_must_join_this_town_to_claim_this_plot: 'Debes unirte a esta ciudad: %s, para reclamar esta parcela. Te gustaria entrar a la ciudad y continuar?'
-
 #Added in 0.113
 status_trustedlist: '&2Confiado'
 msg_click_to_edit: '&6Click para editar.'
 permission_gui_header: 'GUI de Permisos de Towny'
 msg_last_edited: '&7&oUltimo cambio en %s por %s.'
-msg_trusted_added: '&bAñadido %s como confiable a %s.' # Last %s is either town or townblock
+msg_trusted_added: '&bAñadido %s como confiable a %s.' #Last %s is either town or townblock
 msg_already_trusted: '&b%s ya esta confiado en %s.'
-msg_trusted_added_2: '&b%s te a confiado en una %s: %s.' # Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s te a confiado en una %s: %s.' #Last %s is the town name or worldcoord.
 msg_not_trusted: '&b%s no esta confiado en %s.'
 msg_trusted_removed: '&bRemovido %s como confiado en %s.'
 msg_trusted_removed_2: '&b%s te removio como confiado en una %s: %s.'
@@ -1460,7 +1305,6 @@ msg_cache_block_err: '&cNo tienes permitido %s aqui.'
 msg_err_plot_belongs_to_group: '&cLa parcela pertenece a un grupo, usa %s.'
 plotgroup_sing: 'Grupo de Parcelas'
 msg_err_ally_limit_reached: 'Tu nacion alcanso el maximo de aliados, no se pudo aceptar.'
-
 #Added in 0.114
 msg_err_group_not_found: 'Grupo %s no encontrado.'
 msg_err_expected_command_format: 'Syntaxis incorrecta, se espera: %s'
@@ -1483,14 +1327,11 @@ help_ta_perms_townrankremove: 'Remueve un rango de ciudad del archivo de permiso
 help_ta_perms_nationrankadd: 'Añade un rango de nacion del archivo de permisos..'
 help_ta_perms_nationrankremove: 'Remueve un rango de nacion del archivo de permisos.'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Ese ciudadano no pertenece a esa razon.'
-
 #Added in 0.115
 msg_comptype_founded: 'Se encontro la fecha'
 msg_err_must_be_greater_than_or_equal_to: 'Amount must be greater than or equal to %s'
 err_invalid_yaml: 'Loading error: Failed to load file %s (does it pass a yaml parser?).'
-
 #Added in 0.116
 msg_town_map_color_changed: '&bThe town map color was changed to %s.'
-
 #Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'This townblock cannot be added to the group because it is not of type: %s'
