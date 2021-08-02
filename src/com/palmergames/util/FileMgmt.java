@@ -170,7 +170,7 @@ public final class FileMgmt {
 			// open a handle to yml file
 			File file = new File(filePath);
 
-			if ((file.exists())/* && (!filePath.contains(FileMgmt.fileSeparator() + defaultRes))*/)
+			if (file.exists())
 				return file;
 
 			String resString;

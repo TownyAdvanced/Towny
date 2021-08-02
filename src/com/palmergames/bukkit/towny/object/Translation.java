@@ -28,7 +28,7 @@ public final class Translation {
 
 		String res = TownySettings.getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
 		String fullPath = filepath + File.separator + res;
-		File file = FileMgmt.unpackResourceFile(fullPath, res, defaultRes);
+		File file = FileMgmt.unpackResourceFile(fullPath, "lang/" + res, defaultRes);
 
 		// read the (language).yml into memory
 		language = new CommentedConfiguration(file);
@@ -37,7 +37,7 @@ public final class Translation {
 		CommentedConfiguration newLanguage = new CommentedConfiguration(file);
 		
 		try {
-			newLanguage.loadFromString(FileMgmt.convertStreamToString("/" + res));
+			newLanguage.loadFromString(FileMgmt.convertStreamToString("/lang/" + res));
 		} catch (IOException e) {
 			Towny.getPlugin().getLogger().info("Lang: Custom language file detected, not updating.");
 			Towny.getPlugin().getLogger().info("Lang: " + res + " v" + Translation.of("version") + " loaded.");
@@ -52,7 +52,7 @@ public final class Translation {
 		if (!langVersion.equalsIgnoreCase(resVersion)) {
 			language = newLanguage;
 			Towny.getPlugin().getLogger().info("Lang: Language file replaced with updated version.");
-			FileMgmt.stringToFile(FileMgmt.convertStreamToString("/" + res), file);
+			FileMgmt.stringToFile(FileMgmt.convertStreamToString("/lang/" + res), file);
 		}
 		Towny.getPlugin().getLogger().info("Lang: " + res + " v" + Translation.of("version") + " loaded.");
 	}

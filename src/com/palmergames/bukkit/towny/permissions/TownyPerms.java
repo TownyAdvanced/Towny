@@ -80,6 +80,7 @@ public class TownyPerms {
 			groupPermsMap.clear();
 			buildGroupPermsMap();
 			buildComments();
+			perms.save();
 		}
 		
 		/*

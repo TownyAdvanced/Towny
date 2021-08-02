@@ -149,15 +149,10 @@ public class OnPlayerLogin implements Runnable {
 			TownyPerms.assignPermissions(resident, player);
 				
 			if (resident.hasTown()) {
-				Town town = null;
-				Nation nation = null;
-				try {
-					town = resident.getTown();
-					if (town.hasNation())
-						nation = town.getNation();
-				} catch (NotRegisteredException ignored) {}
+				Town town = resident.getTownOrNull();
+				Nation nation = resident.getNationOrNull();
 				
-				if (TownySettings.getShowTownBoardOnLogin() &&  !town.getBoard().isEmpty())
+				if (TownySettings.getShowTownBoardOnLogin() && !town.getBoard().isEmpty())
 					TownyMessaging.sendTownBoard(player, town);
 
 				if (TownySettings.getShowNationBoardOnLogin() && nation != null && !nation.getBoard().isEmpty())
@@ -168,7 +163,7 @@ public class OnPlayerLogin implements Runnable {
 					warningMessage(resident, town, nation);
 				
 				// Send a message warning of ruined status and time until deletion.
-				if (town != null && town.isRuined())
+				if (town.isRuined())
 					TownyMessaging.sendMsg(resident, Translation.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
 			}
 
