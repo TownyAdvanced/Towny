@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.FileMgmt;
-import com.palmergames.util.StringMgmt;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.File;
@@ -61,13 +60,9 @@ public final class Translation {
 		}
 		Towny.getPlugin().getLogger().info("Lang: " + res + " v" + Translation.of("version") + " loaded.");
 	}
-
-	private static String parseSingleLineString(String str) {
-		return Colors.translateColorCodes(str);
-	}
 	
 	/**
-	 * Translates give key into its respective language. 
+	 * Translates given key into its respective language. 
 	 * 
 	 * @param key The language key.
 	 * @return The localized string.
@@ -79,11 +74,11 @@ public final class Translation {
 			TownySettings.sendError(key.toLowerCase() + " from " + TownySettings.getString(ConfigNodes.LANGUAGE));
 			return "";
 		}
-		return StringMgmt.translateHexColors(parseSingleLineString(data));
+		return Colors.translateColorCodes(data);
 	}
 
 	/**
-	 * Translates give key into its respective language. 
+	 * Translates given key into its respective language. 
 	 *
 	 * @param key The language key.
 	 * @param args The arguments to format the localized string.   
@@ -117,18 +112,18 @@ public final class Translation {
 
 	private static Map<String, String> createLegacyLangMap() {
 		Map<String, String> oldLangFileNames = new HashMap<String, String>();
-        oldLangFileNames.put("danish.yml", "da-DK.yml");
-        oldLangFileNames.put("german.yml", "de-DE.yml");
-        oldLangFileNames.put("english.yml", "en-US.yml");
-        oldLangFileNames.put("spanish.yml", "es-ES.yml");
-	    oldLangFileNames.put("french.yml", "fr-FR.yml");
-	    oldLangFileNames.put("italian.yml", "it-IT.yml");
-	    oldLangFileNames.put("korean.yml", "ko-KR.yml");
-	    oldLangFileNames.put("norwegian.yml", "no-NO.yml");
-	    oldLangFileNames.put("polish.yml", "pl-PL.yml");
-	    oldLangFileNames.put("pt-br.yml", "pt-BR.yml");
-	    oldLangFileNames.put("russian.yml", "ru-RU.yml");
-	    oldLangFileNames.put("chinese.yml", "zh-CN.yml");
-	    return oldLangFileNames;
+		oldLangFileNames.put("danish.yml", "da-DK.yml");
+		oldLangFileNames.put("german.yml", "de-DE.yml");
+		oldLangFileNames.put("english.yml", "en-US.yml");
+		oldLangFileNames.put("spanish.yml", "es-ES.yml");
+		oldLangFileNames.put("french.yml", "fr-FR.yml");
+		oldLangFileNames.put("italian.yml", "it-IT.yml");
+		oldLangFileNames.put("korean.yml", "ko-KR.yml");
+		oldLangFileNames.put("norwegian.yml", "no-NO.yml");
+		oldLangFileNames.put("polish.yml", "pl-PL.yml");
+		oldLangFileNames.put("pt-br.yml", "pt-BR.yml");
+		oldLangFileNames.put("russian.yml", "ru-RU.yml");
+		oldLangFileNames.put("chinese.yml", "zh-CN.yml");
+		return oldLangFileNames;
 	}
 }
