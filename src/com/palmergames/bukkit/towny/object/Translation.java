@@ -70,9 +70,10 @@ public final class Translation {
 		File oldFile = new File(path + lang);
 		File newFile = new File(path + oldLangFileNames.get(lang));
 		boolean rename = oldFile.renameTo(newFile);
-		if (rename)
+		if (rename) {
 			Towny.getPlugin().getLogger().info("Language file name updated.");
-		else 
+			TownySettings.setLanguage(oldLangFileNames.get(lang));
+		} else 
 			Towny.getPlugin().getLogger().warning("Language file was not updated.");
 	}
 

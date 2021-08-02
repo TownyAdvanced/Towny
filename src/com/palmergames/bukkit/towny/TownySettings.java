@@ -1471,6 +1471,11 @@ public class TownySettings {
 		}
 		newConfig.set(root.toLowerCase(), value.toString());
 	}
+	
+	public static void setLanguage(String lang) {
+		config.set(ConfigNodes.LANGUAGE.getRoot(), lang);
+		config.save();
+	}
 
 	public static Object getProperty(String root) {
 
