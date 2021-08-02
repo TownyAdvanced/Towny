@@ -12,10 +12,11 @@ public enum ConfigNodes {
 			"# This is for showing the changelog on updates.  Please do not edit."),
 	LANGUAGE(
 			"language",
-			"english.yml",
+			"en-US.yml",
 			"# The language file you wish to use",
-			"# Available languages: chinese, danish, english, es-419, french, german, italian, korean,",
-			"# norwegian, polish, pt-br, russian, se-SV, spanish, zh-TW"),
+			"# Available languages: da-DK.yml, en-US.yml, es-419.yml, es-ES.yml, fr-FR.yml,",
+			"# de-DE.yml, it-IT.yml, ko-KR.yml, no-NO.yml, pl-PL.yml, pr-BR.yml, ru-RU.yml,",
+			"# se-SV, zh-CN.yml, zh-TW.yml"),
 	PERMS(
 			"permissions",
 			"",
