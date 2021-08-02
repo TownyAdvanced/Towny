@@ -29,8 +29,7 @@ public final class Translation {
 	// if the file is not found it will load the default from resource
 	public static void loadLanguage(String filepath, String defaultRes) throws IOException {
 
-		// Attempt to rename old languages files (ie: english.yml to en-US.yml.)
-		updateLangEntry(TownySettings.getString(ConfigNodes.LANGUAGE));
+		updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
 		
 		String res = TownySettings.getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
 		String fullPath = filepath + File.separator + res;
@@ -61,20 +60,6 @@ public final class Translation {
 			FileMgmt.stringToFile(FileMgmt.convertStreamToString("/lang/" + res), file);
 		}
 		Towny.getPlugin().getLogger().info("Lang: " + res + " v" + Translation.of("version") + " loaded.");
-	}
-
-	private static void updateLangEntry(String lang) {
-		if (!oldLangFileNames.containsKey(lang))
-			return;
-		String path = Towny.getPlugin().getDataFolder().getPath() + File.separator + "settings" + File.separator ;
-		File oldFile = new File(path + lang);
-		File newFile = new File(path + oldLangFileNames.get(lang));
-		boolean rename = oldFile.renameTo(newFile);
-		if (rename) {
-			Towny.getPlugin().getLogger().info("Language file name updated.");
-			TownySettings.setLanguage(oldLangFileNames.get(lang));
-		} else 
-			Towny.getPlugin().getLogger().warning("Language file was not updated.");
 	}
 
 	private static String parseSingleLineString(String str) {
@@ -110,20 +95,40 @@ public final class Translation {
 
 	private Translation() {}
 
+	/**
+	 * Attempt to rename old languages files (ie: english.yml to en-US.yml.)
+	 * 
+	 * @param lang String name of the language file in the config's language setting.
+	 * @since 0.97.0.21
+	 */
+	private static void updateLegacyLangFileName(String lang) {
+		if (!oldLangFileNames.containsKey(lang))
+			return;
+		String path = Towny.getPlugin().getDataFolder().getPath() + File.separator + "settings" + File.separator ;
+		File oldFile = new File(path + lang);
+		File newFile = new File(path + oldLangFileNames.get(lang));
+		boolean rename = oldFile.renameTo(newFile);
+		if (rename) {
+			Towny.getPlugin().getLogger().info("Language file name updated.");
+			TownySettings.setLanguage(oldLangFileNames.get(lang));
+		} else 
+			Towny.getPlugin().getLogger().warning("Language file was not updated.");
+	}
+
 	private static Map<String, String> createLegacyLangMap() {
 		Map<String, String> oldLangFileNames = new HashMap<String, String>();
-	        oldLangFileNames.put("english.yml", "en-US.yml");
-	        oldLangFileNames.put("chinese.yml", "zh-CN.yml");
-	        oldLangFileNames.put("danish.yml", "da-DK.yml");
-	        oldLangFileNames.put("french.yml", "fr-FR.yml");
-	        oldLangFileNames.put("german.yml", "de-DE.yml");
-	        oldLangFileNames.put("italian.yml", "it-IT.yml");
-	        oldLangFileNames.put("korean.yml", "ko-KR.yml");
-	        oldLangFileNames.put("norwegian.yml", "no-NO.yml");
-	        oldLangFileNames.put("polish.yml", "pl-PL.yml");
-	        oldLangFileNames.put("pt-br.yml", "pt-BR.yml");
-	        oldLangFileNames.put("russian.yml", "ru-RU.yml");
-	        oldLangFileNames.put("spanish.yml", "es-ES.yml");
+        oldLangFileNames.put("danish.yml", "da-DK.yml");
+        oldLangFileNames.put("german.yml", "de-DE.yml");
+        oldLangFileNames.put("english.yml", "en-US.yml");
+        oldLangFileNames.put("spanish.yml", "es-ES.yml");
+	    oldLangFileNames.put("french.yml", "fr-FR.yml");
+	    oldLangFileNames.put("italian.yml", "it-IT.yml");
+	    oldLangFileNames.put("korean.yml", "ko-KR.yml");
+	    oldLangFileNames.put("norwegian.yml", "no-NO.yml");
+	    oldLangFileNames.put("polish.yml", "pl-PL.yml");
+	    oldLangFileNames.put("pt-br.yml", "pt-BR.yml");
+	    oldLangFileNames.put("russian.yml", "ru-RU.yml");
+	    oldLangFileNames.put("chinese.yml", "zh-CN.yml");
 	    return oldLangFileNames;
 	}
 }
