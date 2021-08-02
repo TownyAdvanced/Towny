@@ -78,6 +78,13 @@ If you'd like to contribute to the Towny code, see the [Contributing.md](https:/
 
 ___
 
+### Translations
+If you'd like to help translating Towny into the available languages or add entirely new languages, [we're on Crowdin!](https://crowdin.com/project/townyadvanced)
+
+[![Crowdin](https://badges.crowdin.net/townyadvanced/localized.svg)](https://crowdin.com/project/townyadvanced) 
+
+___
+
 ### Licensing
 Towny is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported (CC BY-NC-ND 3.0) License ](http://creativecommons.org/licenses/by-nc-nd/3.0/)
 
