@@ -6561,7 +6561,7 @@ v0.92.0.11:
     - Closes #5150.
   - API: Add Town.getSpawnOrNull().
 0.97.0.21:
-  - Language files into resources/lang subfolder.
+  - Language files moved into resources/lang subfolder inside the jar.
   - Townyperms.yml now saves itself on load in order to build the comments on new installs.
   - Update onPlayerLogin task to not use methods which can throw NREs.
   - Rename language files to proper country-coded names.
