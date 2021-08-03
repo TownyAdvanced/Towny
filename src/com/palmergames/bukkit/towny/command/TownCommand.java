@@ -2308,16 +2308,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(player, "Eg: /town set name BillyBobTown");
 						return;
 					}
+
+					String name = split[1];
 					
-					if(NameValidation.isBlacklistName(split[1]))
+					if(NameValidation.isBlacklistName(name))
 						throw new TownyException(Translation.of("msg_invalid_name"));
 
+        			if (TownySettings.getTownAutomaticCapitalisationEnabled())
+        				name = capitalizeString(name);
+					
                     if(TownyEconomyHandler.isActive() && TownySettings.getTownRenameCost() > 0) {
                 		if (!town.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost()))							
 							throw new TownyException(Translation.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
-
+                		
                     	final Town finalTown = town;
-                    	final String name = split[1];
+                    	final String finalName = name;
                     	Confirmation confirmation = Confirmation.runOnAccept(() -> {
 							// Check if town can still pay rename cost
 							if (!finalTown.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost())) {
@@ -2325,9 +2330,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							
-							finalTown.getAccount().withdraw(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", name));
+							finalTown.getAccount().withdraw(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", finalName));
 
-							townRename(player, finalTown, name);
+							townRename(player, finalTown, finalName);
 						})
 						.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())))
 						.build();
@@ -2335,7 +2340,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
                     	ConfirmationHandler.sendConfirmation(player, confirmation);
                     	
                     } else {
-                    	townRename(player, town, split[1]);
+                    	townRename(player, town, name);
                     }
 				} else if (split[0].equalsIgnoreCase("tag")) {
 

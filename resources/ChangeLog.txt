@@ -6569,3 +6569,5 @@ v0.92.0.11:
   - New Translations: 
     - Indonesian courtesy of pobab.
     - Dutch courtesy of Warrior & pesie.
+0.97.0.22:
+  - Fix renamed towns not following the capitalization rule.
