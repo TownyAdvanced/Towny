@@ -36,6 +36,7 @@ import com.palmergames.util.KeyValue;
 import com.palmergames.util.KeyValueTable;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -322,7 +323,9 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNY, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, split[0]).execute(player, "towny", split);
 			} else
-				sendErrorMsg(player, "Invalid sub command.");
+				//TODO: remove this when done with testing
+				Towny.getAdventure().player(player).sendMessage(Component.translatable(split[0]));
+				//sendErrorMsg(player, "Invalid sub command.");
 
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
