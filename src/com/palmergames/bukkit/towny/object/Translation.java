@@ -123,6 +123,7 @@ public final class Translation {
 		oldLangFileNames.put("polish.yml", "pl-PL.yml");
 		oldLangFileNames.put("pt-br.yml", "pt-BR.yml");
 		oldLangFileNames.put("russian.yml", "ru-RU.yml");
+		oldLangFileNames.put("sv-SE.yml", "sv-SE.yml");
 		oldLangFileNames.put("chinese.yml", "zh-CN.yml");
 		return oldLangFileNames;
 	}
