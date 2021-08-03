@@ -6566,3 +6566,6 @@ v0.92.0.11:
   - Update onPlayerLogin task to not use methods which can throw NREs.
   - Rename language files to proper country-coded names.
     - Your existing language file will be renamed.
+  - New Translations: 
+    - Indonesian courtesy of pobab.
+    - Dutch courtesy of Warrior & pesie.
