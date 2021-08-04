@@ -11,6 +11,7 @@ import com.palmergames.util.FileMgmt;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
+import org.apache.commons.compress.utils.FileNameUtils;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
@@ -18,8 +19,12 @@ import org.yaml.snakeyaml.constructor.SafeConstructor;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -33,7 +38,7 @@ public final class Translation {
 	
 	public static CommentedConfiguration language;
 	private static final Map<String, String> oldLangFileNames = createLegacyLangMap();
-	private static final Set<String> langFiles = new HashSet<>(Arrays.asList("da-DK", "de-DE", "en-US", "es-419", "es-ES", "fr-FR", "id-ID", "it-IT", "ko-KR", "nl-NL", "no-NO", "pl-PL", "pt-BR", "ru-RU", "sv-SE", "tr-TR", "zh-CN", "zh-TW"));
+	private static final Set<String> langFiles = createValidLang();
 	private static TranslationRegistry registry;
 	
 	public static void loadTranslationRegistry() {
@@ -42,7 +47,7 @@ public final class Translation {
 		
 		registry = TranslationRegistry.create(Key.key("towny", "main"));		
 		registry.defaultLocale(toLocale(TownySettings.getString(ConfigNodes.LANGUAGE)));
-		
+
 		for (String lang : langFiles) {
 			try (InputStream is = Translation.class.getResourceAsStream("/lang/" + lang + ".yml")) {
 				Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
@@ -67,6 +72,21 @@ public final class Translation {
 		//TODO: allow languages to be added/overridden
 		
 		GlobalTranslator.get().addSource(registry);
+	}
+	
+	public static Set<String> createValidLang() {
+		final Map<String, String> env = new HashMap<>();
+		final Set<String> lang = new HashSet<>();
+		final URI uri;
+		try {
+			uri = Towny.class.getResource("").toURI();
+			final FileSystem fs = FileSystems.newFileSystem(uri, env);
+			Files.list(fs.getRootDirectories().iterator().next().resolve("/lang")).forEach(p -> lang.add(FileNameUtils.getBaseName(p.toString())));
+			fs.close();
+		} catch (URISyntaxException | IOException e) {
+			e.printStackTrace();
+		}
+		return lang;
 	}
 
 	// This will read the language entry in the config.yml to attempt to load
