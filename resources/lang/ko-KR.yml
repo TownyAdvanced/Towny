@@ -692,7 +692,7 @@ msg_err_cant_afford_tp_nation: '&c%s(으)로 이동하기 위해 필요한 돈�
 msg_err_nationspawn_has_not_been_set: '&c국가 스폰이 설정되지 않았습니다.'
 msg_err_spawn_not_within_nationtowns: '&c국가 스폰은 국가에 속한 마을에 있어야 합니다.'
 msg_err_spawn_not_within_capital: '&c국가 스폰은 국가 수도에 있어야 합니다.'
-msg_err_nation_spawn_war: '&c전쟁 중에는 국가 스폰이 순탄하지 않습니다.'
+msg_err_nation_spawn_war: '&cNation spawns are not allowed during war time.'
 msg_err_nation_not_public: '&c그 국가는 공용이 아닙니다.'
 msg_nation_toggle_public: '&a성공적으로 국가 공용 설정을 토글하였습니다.'
 status_yes: '&a예'
