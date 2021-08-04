@@ -6571,3 +6571,5 @@ v0.92.0.11:
     - Dutch courtesy of Warrior & pesie.
 0.97.0.22:
   - Fix renamed towns not following the capitalization rule.
+  - New Translation:
+    - Romanian courtesy of DevinMart.
