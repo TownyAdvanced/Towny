@@ -19,7 +19,7 @@ default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
 unclaimed_plot_name: 'Ничейное'
-unclaimed_zone_name: 'Mup'
+unclaimed_zone_name: 'Мир'
 ############################################################
 #+------------------------------------------------------+ #
 #|help messages                                         | #
@@ -420,7 +420,7 @@ msg_player_escaped_jail_by_leaving_town: '%s сбежал из тюрьмы ст
 msg_set_jail_spawn: 'Успешно установлена точка тюрьмы.'
 msg_killed_attempting_to_escape_jail: '&4%s был убит при попытке бегства из тюрьмы.'
 msg_err_jailed_players_no_teleport: '&4Вы не можете телепортироваться находясь в заточении!'
-msg_player_escaped_jail_into_wilderness: '&4%s сбежал из тюрьмы, сейчас он направляется в %s'
+msg_player_escaped_jail_into_wilderness: '&4%s сбежал из тюрьмы путем побега в %s'
 msg_err_invalid_string_board_not_set: 'Недопустимая строка, пограничное сообщение не установлено.'
 msg_plot_name_removed: 'Название участка удалено.'
 msg_plot_name_set_to: 'Название участка установлено [%s].'
@@ -692,7 +692,7 @@ msg_err_cant_afford_tp_nation: '&cНе удается телепортирова
 msg_err_nationspawn_has_not_been_set: '&cСпавн Нации еще не установлен.'
 msg_err_spawn_not_within_nationtowns: '&cСпавн нации должен быть в городе, который является частью нации.'
 msg_err_spawn_not_within_capital: '&cСпавн Нации должен быть в столице.'
-msg_err_nation_spawn_war: '&cNation spawns are not allowed during war time.'
+msg_err_nation_spawn_war: '&cВы не можете использовать /n spawn во время войны.'
 msg_err_nation_not_public: '&cНация не публичная.'
 msg_nation_toggle_public: '&aУспешно переключен режим публичности нации.'
 status_yes: '&aДА'
@@ -1023,7 +1023,7 @@ msg_nation_already_peaceful: '&cНация уже является мирной.
 msg_nation_already_not_peaceful: '&cНация уже не является мирной.'
 #Added in 0.89
 status_world_friendlyfire: '&2Огонь по своим: '
-status_world_wildernessmobs: '&2Wilderness Mobs: '
+status_world_wildernessmobs: '&2Мобы диких земель: '
 msg_outlaw_kick_cooldown: '&cВы объявлены вне закона в %s. У вас осталось %s, чтобы покинуть город, иначе вы будете телепортированы на свою точку возрождения.'
 msg_outlaw_kicked: '&4Вас не ждут в %s. Вы были телепортированы прочь.'
 msg_outlaw_town_notify: '&c%s, объявленный вне закона, зашёл на вашу территорию.'
@@ -1211,7 +1211,7 @@ msg_command_limited: '&cВы можете использовать эту ком
 #Added in 0.104
 msg_plot_perm_claimed_at: '&2Запривачено на: &a%s'
 #Added in 0.105
-msg_wilderness_use_x_in_all_worlds: 'Использование дикой природы %s во всех мирах.'
+msg_wilderness_use_x_in_all_worlds: 'Флаг use в диких землях %s во всех мирах.'
 msg_regenerations_use_x_in_all_worlds: 'Регенерация %s во всех мирах.'
 #Added in 0.106
 msg_command_outsider_blocked: 'Вы не можете использовать эту команду, поскольку вы не живёте в %s.'
@@ -1227,7 +1227,7 @@ msg_err_that_jail_plot_does_not_have_that_many_cells: 'В этой тюрьме 
 msg_primary_jail_set_for_town: 'Установлена главная тюрьма в вашем городе.'
 msg_x_has_been_freed_from_x: '%s был освобождён из тюрьмы %s'
 msg_you_have_been_jailed: 'Вы были заключены в тюрьму.'
-msg_run_to_the_wilderness_or_wait_for_a_jailbreak: 'Бегите до мира или отсидите срок.'
+msg_run_to_the_wilderness_or_wait_for_a_jailbreak: 'Бегите до диких земель или ждите джейлбрейка.'
 msg_err_player_is_not_jailed: 'Этот игрок не заключен в тюрьму.'
 msg_you_have_paid_bail: 'Вы заплатили тюремный залог.'
 msg_you_have_been_freed_via_jailbreak: 'There''s been a jailbreak, you are free!'
