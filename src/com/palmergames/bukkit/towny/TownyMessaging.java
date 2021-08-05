@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
@@ -856,6 +857,14 @@ public class TownyMessaging {
 		// Page navigation
 		TextComponent pageFooter = getPageNavigationFooter("towny:town plotgrouplist" + town.getName(), page, "", total);
 		audience.sendMessage(pageFooter);
+	}
+	
+	public static void sendMsg(CommandSender sender, Translatable... translatables) {
+		sendMsg(sender, Translation.translateTranslatables(sender, translatables));
+	}
+	
+	public static void sendErrorMsg(CommandSender sender, Translatable... translatables) {
+		sendErrorMsg(sender, Translation.translateTranslatables(sender, translatables));
 	}
 	
 	/**
