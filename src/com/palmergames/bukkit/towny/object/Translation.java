@@ -8,11 +8,10 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.FileMgmt;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.translation.GlobalTranslator;
-import net.kyori.adventure.translation.TranslationRegistry;
 import org.apache.commons.compress.utils.FileNameUtils;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 
@@ -24,45 +23,40 @@ import java.net.URISyntaxException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A convenience object to facilitate translation. 
  */
 public final class Translation {
 	
+	private Translation() {}
+
 	public static CommentedConfiguration language;
 	private static final Map<String, String> oldLangFileNames = createLegacyLangMap();
 	private static final Set<String> langFiles = createValidLang();
-	private static TranslationRegistry registry;
+	private static final Map<String, Map<String, String>> translations = new HashMap<>();
+	private static Locale defaultLocale;
 	
 	public static void loadTranslationRegistry() {
-		if (registry != null)
-			GlobalTranslator.get().removeSource(registry);
-		
-		registry = TranslationRegistry.create(Key.key("towny", "main"));		
-		registry.defaultLocale(toLocale(TownySettings.getString(ConfigNodes.LANGUAGE)));
+		translations.clear();
+		defaultLocale = toLocale(TownySettings.getString(ConfigNodes.LANGUAGE));
 
 		for (String lang : langFiles) {
 			try (InputStream is = Translation.class.getResourceAsStream("/lang/" + lang + ".yml")) {
 				Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
-				Locale locale = toLocale(lang);
+				lang = lang.replace("-", "_");
+				translations.put(lang, new HashMap<>());
 				
-				for (Map.Entry<String, Object> entry : values.entrySet()) {
-					if (!(entry.getValue() instanceof String))
-						continue;
-					
-					try {
-						registry.register(entry.getKey(), locale, new MessageFormat((String) entry.getValue()));
-					} catch (IllegalArgumentException e) {
-						Towny.getPlugin().getLogger().warning("The string '" + entry.getValue() + "' is not a valid MessageFormat. Key: " + entry.getKey() + " | Locale: " + locale);
-					}
-				}
+				for (Map.Entry<String, Object> entry : values.entrySet())
+					translations.get(lang).put(entry.getKey(), String.valueOf(entry.getValue()));
 			} catch (Exception e) {
 				// An IO exception occured, or the file had invalid yaml
 				e.printStackTrace();
@@ -70,17 +64,14 @@ public final class Translation {
 		}
 		
 		//TODO: allow languages to be added/overridden
-		
-		GlobalTranslator.get().addSource(registry);
 	}
 	
 	public static Set<String> createValidLang() {
-		final Map<String, String> env = new HashMap<>();
 		final Set<String> lang = new HashSet<>();
 		final URI uri;
 		try {
 			uri = Towny.class.getResource("").toURI();
-			final FileSystem fs = FileSystems.newFileSystem(uri, env);
+			final FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap());
 			Files.list(fs.getRootDirectories().iterator().next().resolve("/lang")).forEach(p -> lang.add(FileNameUtils.getBaseName(p.toString())));
 			fs.close();
 		} catch (URISyntaxException | IOException e) {
@@ -134,7 +125,7 @@ public final class Translation {
 	 * @return The localized string.
 	 */
 	public static String of(String key) {
-		String data = language.getString(key.toLowerCase());
+		String data = translations.get(defaultLocale.toString()).get(key);
 
 		if (data == null) {
 			TownySettings.sendError(key.toLowerCase() + " from " + TownySettings.getString(ConfigNodes.LANGUAGE));
@@ -154,7 +145,20 @@ public final class Translation {
 		return String.format(of(key), args);
 	}
 
-	private Translation() {}
+	public static String of(String key, Locale locale) {
+		String data = translations.get(validateLocale(locale.toString())).get(key);
+
+		if (data == null) {
+			TownySettings.sendError(key.toLowerCase() + " from " + TownySettings.getString(ConfigNodes.LANGUAGE));
+			return "";
+		}
+
+		return Colors.translateColorCodes(data);
+	}
+	
+	public static String of(String key, Locale locale, Object... args) {
+		return String.format(of(key, locale), args);
+	}
 
 	/**
 	 * Attempt to rename old languages files (ie: english.yml to en-US.yml.)
@@ -194,13 +198,30 @@ public final class Translation {
 		return oldLangFileNames;
 	}
 	
-	private static Locale toLocale(String fileName) {
+	public static Locale toLocale(String fileName) {
 		int lastIndex = fileName.lastIndexOf(".") == -1 ? fileName.length() : fileName.lastIndexOf(".");
 		try {
-			String[] locale = fileName.substring(0, lastIndex).split("-");
+			String[] locale = fileName.substring(0, lastIndex).split("[-_]");
 			return new Locale(locale[0], locale[1]);
 		} catch (Exception e) {
 			return Locale.ENGLISH;
 		}
+	}
+	
+	public static Locale getDefaultLocale() {
+		return defaultLocale;
+	}
+	
+	private static String validateLocale(String locale) {
+		return translations.containsKey(locale) ? locale : defaultLocale.toString();
+	}
+	
+	public static String translateTranslatables(CommandSender sender, Translatable... translatables) {
+		Locale locale = getLocale(sender);
+		return Arrays.stream(translatables).map(translatable -> translatable.translate(locale)).collect(Collectors.joining(" "));
+	}
+	
+	public static Locale getLocale(CommandSender sender) {
+		return sender instanceof Player ? Translation.toLocale(((Player) sender).getLocale()) : defaultLocale;
 	}
 }

@@ -50,6 +50,7 @@ import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -4183,19 +4184,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			town = TownyAPI.getInstance().getResident(player.getName()).getTownOrNull();
 		
 		if (town == null) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_resident_doesnt_belong_to_any_town"));
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_resident_doesnt_belong_to_any_town"));
 			return;
 		}
 		
 		Resident resident = TownyAPI.getInstance().getResident(args[1]);
 		if (resident == null || resident.isNPC()) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", args[1]));
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", args[1]));
 			return;
 		}
 		
 		if (args[0].equalsIgnoreCase("add")) {
 			if (town.hasTrustedResident(resident)) {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_already_trusted", resident.getName(), Translation.of("town_sing")));
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_already_trusted", resident.getName(), Translatable.of("town_sing")));
 				return;
 			}
 
@@ -4210,12 +4211,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			town.addTrustedResident(resident);
 			plugin.deleteCache(resident.getName());
 			
-			TownyMessaging.sendMsg(player, Translation.of("msg_trusted_added", resident.getName(), Translation.of("town_sing")));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_added", resident.getName(), Translatable.of("town_sing")));
 			if (BukkitTools.isOnline(resident.getName()))
-				TownyMessaging.sendMsg(resident, Translation.of("msg_trusted_added_2", player.getName(), Translation.of("town_sing"), town.getName()));
+				TownyMessaging.sendMsg(resident.getPlayer(), Translatable.of("msg_trusted_added_2", player.getName(), Translatable.of("town_sing"), town.getName()));
 		} else if (args[0].equalsIgnoreCase("remove")) {
 			if (!town.hasTrustedResident(resident)) {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_not_trusted", resident.getName(), Translation.of("town_sing")));
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_not_trusted", resident.getName(), Translatable.of("town_sing")));
 				return;
 			}
 
@@ -4230,11 +4231,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			town.removeTrustedResident(resident);
 			plugin.deleteCache(resident.getName());
 			
-			TownyMessaging.sendMsg(player, Translation.of("msg_trusted_removed", resident.getName(), Translation.of("town_sing")));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_removed", resident.getName(), Translatable.of("town_sing")));
 			if (BukkitTools.isOnline(resident.getName()))
-				TownyMessaging.sendMsg(resident, Translation.of("msg_trusted_removed_2", player.getName(), Translation.of("town_sing"), town.getName()));
+				TownyMessaging.sendMsg(resident.getPlayer(), Translatable.of("msg_trusted_removed_2", player.getName(), Translatable.of("town_sing"), town.getName()));
 		} else {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_invalid_property", args[0]));
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", args[0]));
 			return;
 		}
 		
