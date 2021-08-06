@@ -692,7 +692,7 @@ msg_err_cant_afford_tp_nation: '&cNo puedes pagar el teletransporte a %s.'
 msg_err_nationspawn_has_not_been_set: '&cEl spawn de la nación no se ha fijado.'
 msg_err_spawn_not_within_nationtowns: '&cEl spawn de la nación debe estar en una ciudad que es parte de la nación.'
 msg_err_spawn_not_within_capital: '&cEl spawn de la nación debe estar en la capital.'
-msg_err_nation_spawn_war: '&cNation spawns are not allowed during war time.'
+msg_err_nation_spawn_war: '&cLas apariciones de nación no están permitidas durante el tiempo de la guerra.'
 msg_err_nation_not_public: '&cEsa nación no es pública.'
 msg_nation_toggle_public: '&aLa nación se hizo pública exitosamente.'
 status_yes: '&aSÍ'
@@ -1264,7 +1264,7 @@ msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: 'Solo puedes tener
 msg_err_not_close_enough_to_your_town_nearest_plot: 'No puedes claimear el puesto de avanzada, estas a %s bloques de tu ciudad. Distancia maxima permitida: %s bloques.'
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Moviste tu homeblock demasiado pronto! Espera otros %s.'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'No puedes mover tu homeblock tantos bloques lejos, el limite es %s, este espacio esta a %s bloques de distancia.'
-msg_err_usingtowny_disabled: 'This world is exempt of all Towny interactions. Use /townyworld toggle usingtowny first.'
+msg_err_usingtowny_disabled: 'Este mundo está exento de todas las interacciones de Towny. Usa /townyworld para alternar usingtowny primero.'
 #Added in 0.111
 msg_plot_group_already_exists_did_you_want_to_transfer: 'Este bloque de town ya es parte del grupod de parcelas %s . Estas seguro de que quieres moverlo al grupo %s ?'
 msg_townblock_transferred_from_x_to_x_group: 'Bloque transferido del grupo %s al %s.'
@@ -1329,9 +1329,9 @@ help_ta_perms_nationrankremove: 'Remueve un rango de nacion del archivo de permi
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Ese ciudadano no pertenece a esa razon.'
 #Added in 0.115
 msg_comptype_founded: 'Se encontro la fecha'
-msg_err_must_be_greater_than_or_equal_to: 'Amount must be greater than or equal to %s'
-err_invalid_yaml: 'Loading error: Failed to load file %s (does it pass a yaml parser?).'
+msg_err_must_be_greater_than_or_equal_to: 'La cantidad debe ser mayor o igual que %s'
+err_invalid_yaml: 'Error al cargar: No se pudo cargar el archivo %s (¿pasa un analizador de yaml?).'
 #Added in 0.116
-msg_town_map_color_changed: '&bThe town map color was changed to %s.'
+msg_town_map_color_changed: '&bEl color del mapa de la nacion fue cambiado a %s.'
 #Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Este bloque no puede ser añadido al grupo porque no es del tipo: %s'
