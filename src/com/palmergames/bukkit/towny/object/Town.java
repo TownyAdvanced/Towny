@@ -1348,7 +1348,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	/**
-	 * Used by Dynmap-Towny to get the local town map-colour.
+	 * Used by Dynmap-Towny to get the town's *local* map-colour.
 	 * 
 	 * @return String value of hex code or null.
 	 */
@@ -1361,7 +1361,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	/**
-	 * Used by Dynmap-Towny to get the national town map-colour.
+	 * Used by Dynmap-Towny to get the town's *national* map colour.
 	 *
 	 * @return String value of hex code or null.
 	 */

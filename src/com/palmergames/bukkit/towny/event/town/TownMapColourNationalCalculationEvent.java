@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Event called whenever the national town map-colour is being retrieved.
+ * Event called whenever the town's *national* map-colour is being retrieved.
  */
 public class TownMapColourNationalCalculationEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
