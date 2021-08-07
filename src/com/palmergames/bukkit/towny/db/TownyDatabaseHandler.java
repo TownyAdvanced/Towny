@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.DataFieldIO;
@@ -355,7 +356,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		for (String name : names) {
 			Resident target = universe.getResident(name);
 			if (target == null) {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered_1", name));
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", name));
 			}
 			else {
 				invited.add(target);
@@ -822,7 +823,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town, mayor.getUUID()));
 		
-		TownyMessaging.sendGlobalMessage(Translation.of("msg_del_town2", town.getName()));
+		TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_town2", town.getName()));
 	}
 
 	@Override
@@ -1673,7 +1674,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		removeTown(mergeFrom, false);
 
 		mergeInto.save();
-		TownyMessaging.sendGlobalMessage(Translation.of("msg_town_merge_success", mergeFrom.getName(), mayorName, mergeInto.getName()));
+		TownyMessaging.sendGlobalMessage(Translatable.of("msg_town_merge_success", mergeFrom.getName(), mayorName, mergeInto.getName()));
 	}
 	
 	public List<UUID> toUUIDList(Collection<Resident> residents) {

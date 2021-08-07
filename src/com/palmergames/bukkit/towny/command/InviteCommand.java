@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.ChatTools;
@@ -110,13 +111,13 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		Optional<Resident> resOpt = TownyUniverse.getInstance().getResidentOpt(player.getUniqueId());
 		
 		if (!resOpt.isPresent()) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered"));
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered"));
 			return;
 		}
 		
 		Resident resident = resOpt.get();
 
-		String received = Translation.of("player_received_invites")
+		String received = Translation.of("player_received_invites", player)
 				.replace("%a", Integer.toString(resident.getReceivedInvites().size())
 				)
 				.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident)));
@@ -135,10 +136,10 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMessage(player, received);
 
 			} else {
-				throw new TownyException(Translation.of("msg_err_player_no_invites"));
+				throw new TownyException(Translatable.of("msg_err_player_no_invites"));
 			}
 		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage());
+			TownyMessaging.sendErrorMsg(player, x.getMessage(player));
 		}
 
 	}
@@ -148,7 +149,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		Optional<Resident> resOpt = townyUniverse.getResidentOpt(player.getUniqueId());
 		
 		if (!resOpt.isPresent()) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered"));
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered"));
 			return;
 		}
 		
@@ -156,7 +157,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		List<Invite> invites = resident.getReceivedInvites();
 
 		if (invites.size() == 0) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_player_no_invites"));
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_player_no_invites"));
 			return;
 		}
 		
@@ -168,14 +169,14 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			town = townyUniverse.getTown(args[0]);
 			
 			if (town == null) {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
 				return;
 			}
 		} else {
 			if (invites.size() == 1) { // Only 1 Invite.
 				town = (Town) invites.get(0).getSender();
 			} else {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_player_has_multiple_invites"));
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_player_has_multiple_invites"));
 				parseInviteList(player, null);
 				return;
 			}
@@ -196,7 +197,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				e.printStackTrace();
 			}
 		} else
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_name"));			
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_name"));			
 
 
 	}
@@ -206,14 +207,14 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		Optional<Resident> resOpt = townyUniverse.getResidentOpt(player.getUniqueId());
 
 		if (!resOpt.isPresent()) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_not_registered"));
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered"));
 			return;
 		}
 
 		Resident resident = resOpt.get();
 		List<Invite> invites = resident.getReceivedInvites();
 		if (invites.size() == 0) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_player_no_invites"));
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_player_no_invites"));
 			return;
 		}
 
@@ -222,14 +223,14 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			town = townyUniverse.getTown(args[0]);
 			
 			if (town == null) {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_invalid_name"));
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
 				return;
 			}
 		} else {
 			if (invites.size() == 1) {
 				town = (Town) invites.get(0).getSender();
 			} else {
-				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_player_has_multiple_invites"));
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_player_has_multiple_invites"));
 				parseInviteList(player, null);
 				return;
 			}
@@ -248,7 +249,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		if (toAccept != null) {
 			try {
 				if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town)) {
-					TownyMessaging.sendMessage(player, Translation.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
+					TownyMessaging.sendMsg(player, Translatable.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
 					return;
 				} else
 					InviteHandler.acceptInvite(toAccept);
@@ -256,7 +257,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				e.printStackTrace();
 			}
 		} else
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_specify_name"));
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_name"));
 
 
 	}
@@ -264,10 +265,10 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 	public static void sendInviteList(Player player, List<Invite> list, int page, boolean fromSender) {
 
 		if (page < 0) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_negative"));
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_negative"));
 			return;
 		} else if (page == 0) {
-			TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_int"));
 			return;
 		}
 		int total = (int) Math.ceil(((double) list.size()) / ((double) 10));
@@ -289,31 +290,31 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			if (fromSender) {
 				output = Colors.Blue + invite.getReceiver().getName() + Colors.Gray + " - " + Colors.Green + name;
 				if (invite.getSender() instanceof Town) { // If it's sent by a town to a resident
-					object = Translation.of("player_sing");
+					object = Translation.of("player_sing", player);
 				}
 				if (invite.getSender() instanceof Nation) {
 					if (invite.getReceiver() instanceof Town) {
-						object = Translation.of("town_sing");
+						object = Translation.of("town_sing", player);
 					}
 					if (invite.getReceiver() instanceof Nation) {
-						object = Translation.of("nation_sing");
+						object = Translation.of("nation_sing", player);
 					}
 				}
 			} else { // So it's not from the sender, then it's from the receiver so
 				output = Colors.Blue + invite.getSender().getName() + Colors.Gray + " - " + Colors.Green + name;
 				if (invite.getReceiver() instanceof Resident) {
-					object = Translation.of("town_sing");
+					object = Translation.of("town_sing", player);
 				}
 				if (invite.getReceiver() instanceof Town || invite.getReceiver() instanceof Nation) {
-					object = Translation.of("nation_sing");
+					object = Translation.of("nation_sing", player);
 				}
 			}
 			invitesFormatted.add(output);
 		}
 
-		TownyMessaging.sendMessage(player, ChatTools.formatList(Translation.of("invite_plu"),
-				Colors.Blue + object + Colors.Gray + " - " + Colors.LightBlue + Translation.of("invite_sent_by"),
-				invitesFormatted, Translation.of("LIST_PAGE", page, total)
+		TownyMessaging.sendMessage(player, ChatTools.formatList(Translation.of("invite_plu", player),
+				Colors.Blue + object + Colors.Gray + " - " + Colors.LightBlue + Translation.of("invite_sent_by", player),
+				invitesFormatted, Translation.of("LIST_PAGE", player, page, total)
 		));
 	}
 }

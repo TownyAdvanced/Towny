@@ -19,6 +19,7 @@ import com.palmergames.util.StringMgmt;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -865,6 +866,68 @@ public class TownyMessaging {
 	
 	public static void sendErrorMsg(CommandSender sender, Translatable... translatables) {
 		sendErrorMsg(sender, Translation.translateTranslatables(sender, translatables));
+	}
+	
+	public static void sendGlobalMessage(Translatable translatable) {
+		LOGGER.info(ChatTools.stripColour("[Global Message] " + translatable.translate()));
+		for (Player player : Bukkit.getOnlinePlayers())
+			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
+				sendMsg(player, translatable);
+	}
+	
+	public static void sendMessage(Object sender, Translatable message) {
+		if (sender instanceof Player) {
+			((Player) sender).sendMessage(message.translate(Translation.getLocale((Player) sender)));
+		} else if (sender instanceof CommandSender) {
+			((CommandSender) sender).sendMessage(message.stripColors(true).translate(Translation.getLocale((CommandSender) sender)));
+		} else if (sender instanceof Resident) {
+			Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
+			if (p != null)
+				p.sendMessage(message.stripColors(true).translate(Translation.getLocale(p)));
+		}
+	}
+	
+	public static void sendPrefixedNationMessage(Nation nation, Translatable message) {
+		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
+		
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
+			player.sendMessage(Translation.translateTranslatables(player, "", Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())), message));
+	}
+	
+	public static void sendPrefixedTownMessage(Town town, Translatable message) {
+		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + message.translate()));
+		
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
+			player.sendMessage(Translation.translateTranslatables(player, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), message));
+	}
+	
+	public static void sendNationMessagePrefixed(Nation nation, Translatable message) {
+		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
+		
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
+			sendMsg(player, message);
+	}
+	
+	public static void sendResidentMessage(Resident resident, Translatable message) throws TownyException {
+		LOGGER.info(ChatTools.stripColour("[Resident Msg] " + resident.getName() + ": " + message.translate()));
+		Player player = TownyAPI.getInstance().getPlayer(resident);
+		if (player == null)
+			throw new TownyException("Player could not be found!");
+		
+		sendMsg(player, message);
+	}
+	
+	public static void sendMsg(Resident resident, Translatable message) {
+		if (BukkitTools.isOnline(resident.getName()))
+			sendMsg(resident.getPlayer(), message);
+	}
+	
+	public static void sendMsg(Translatable message) {
+		LOGGER.info("[Towny] " + message.stripColors(true).translate());
+	}
+	
+	public static void sendErrorMsg(Translatable message) {
+		LOGGER.warn("[Towny] Error: " + message.stripColors(true).translate());
 	}
 	
 	/**

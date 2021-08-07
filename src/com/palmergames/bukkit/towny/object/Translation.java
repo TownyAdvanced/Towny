@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.command.HelpMenu;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.FileMgmt;
 import org.apache.commons.compress.utils.FileNameUtils;
@@ -56,7 +57,7 @@ public final class Translation {
 				translations.put(lang, new HashMap<>());
 				
 				for (Map.Entry<String, Object> entry : values.entrySet())
-					translations.get(lang).put(entry.getKey(), String.valueOf(entry.getValue()));
+					translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
 			} catch (Exception e) {
 				// An IO exception occured, or the file had invalid yaml
 				e.printStackTrace();
@@ -125,11 +126,11 @@ public final class Translation {
 	 * @return The localized string.
 	 */
 	public static String of(String key) {
-		String data = translations.get(defaultLocale.toString()).get(key);
+		String data = translations.get(defaultLocale.toString()).get(key.toLowerCase(Locale.ROOT));
 
 		if (data == null) {
 			TownySettings.sendError(key.toLowerCase() + " from " + TownySettings.getString(ConfigNodes.LANGUAGE));
-			return "";
+			return key;
 		}
 		return Colors.translateColorCodes(data);
 	}
@@ -146,11 +147,11 @@ public final class Translation {
 	}
 
 	public static String of(String key, Locale locale) {
-		String data = translations.get(validateLocale(locale.toString())).get(key);
+		String data = translations.get(validateLocale(locale.toString())).get(key.toLowerCase(Locale.ROOT));
 
 		if (data == null) {
 			TownySettings.sendError(key.toLowerCase() + " from " + TownySettings.getString(ConfigNodes.LANGUAGE));
-			return "";
+			return key;
 		}
 
 		return Colors.translateColorCodes(data);
@@ -158,6 +159,22 @@ public final class Translation {
 	
 	public static String of(String key, Locale locale, Object... args) {
 		return String.format(of(key, locale), args);
+	}
+	
+	public static String of(String key, CommandSender sender) {
+		return of(key, getLocale(sender));
+	}
+	
+	public static String of(String key, CommandSender sender, Object... args) {
+		return String.format(of(key, getLocale(sender)), args);
+	}
+	
+	public static String of(String key, Resident resident) {
+		return of(key, getLocale(resident));
+	}
+	
+	public static String of(String key, Resident resident, Object... args) {
+		return String.format(of(key, getLocale(resident)), args);
 	}
 
 	/**
@@ -217,11 +234,19 @@ public final class Translation {
 	}
 	
 	public static String translateTranslatables(CommandSender sender, Translatable... translatables) {
+		return translateTranslatables(sender, " ", translatables);
+	}
+	
+	public static String translateTranslatables(CommandSender sender, String delimiter, Translatable... translatables) {
 		Locale locale = getLocale(sender);
-		return Arrays.stream(translatables).map(translatable -> translatable.translate(locale)).collect(Collectors.joining(" "));
+		return Arrays.stream(translatables).map(translatable -> translatable.translate(locale)).collect(Collectors.joining(delimiter));
 	}
 	
 	public static Locale getLocale(CommandSender sender) {
 		return sender instanceof Player ? Translation.toLocale(((Player) sender).getLocale()) : defaultLocale;
+	}
+	
+	public static Locale getLocale(Resident resident) {
+		return BukkitTools.isOnline(resident.getName()) ? getLocale(resident.getPlayer()) : defaultLocale;
 	}
 }

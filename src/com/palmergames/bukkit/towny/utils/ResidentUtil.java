@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 
+import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -64,7 +66,7 @@ public class ResidentUtil {
 	 * @param names - Names to be converted.
 	 * @return - List of residents to be used later.
 	 */
-	public static List<Resident> getValidatedResidents(Object sender, String[] names) {
+	public static List<Resident> getValidatedResidents(CommandSender sender, String[] names) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Resident> residents = new ArrayList<>();
 		for (String name : names) {
@@ -81,7 +83,7 @@ public class ResidentUtil {
 					residents.add(target);
 				}
 				else {
-					TownyMessaging.sendErrorMsg(sender, Translation.of("msg_err_not_registered_1", targetName));
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", targetName));
 				}
 			}
 		}
