@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -164,7 +165,7 @@ public class OnPlayerLogin implements Runnable {
 				
 				// Send a message warning of ruined status and time until deletion.
 				if (town.isRuined())
-					TownyMessaging.sendMsg(resident, Translation.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+					TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
 			}
 
 			if (TownyAPI.getInstance().isWarTime())
@@ -178,8 +179,8 @@ public class OnPlayerLogin implements Runnable {
 				Audience audience = Towny.getAdventure().player(player);
 				ClickEvent clickEvent = ClickEvent.openUrl(TownyUpdateChecker.getUpdateURL());
 				
-				audience.sendMessage(Component.text(Translation.of("default_towny_prefix") + Translation.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion())).clickEvent(clickEvent));
-				audience.sendMessage(Component.text(Translation.of("default_towny_prefix") + Translation.of("msg_click_to_download")).clickEvent(clickEvent));
+				audience.sendMessage(Component.text(Translation.of("default_towny_prefix", player) + Translation.of("msg_new_update_available", player, TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion())).clickEvent(clickEvent));
+				audience.sendMessage(Component.text(Translation.of("default_towny_prefix", player) + Translation.of("msg_click_to_download", player)).clickEvent(clickEvent));
 			}
 		}
 	}
@@ -229,9 +230,9 @@ public class OnPlayerLogin implements Runnable {
 				 */
 				if(TownySettings.isTownBankruptcyEnabled()) {
 					if (!town.isBankrupt()) //Is town already bankrupt?
-						TownyMessaging.sendMsg(resident, Translation.of("msg_warning_bankrupt", town.getName()));
+						TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_bankrupt", town.getName()));
 				} else {
-					TownyMessaging.sendMsg(resident, Translation.of("msg_warning_delete", town.getName()));
+					TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_delete", town.getName()));
 				}
 			}
 		}
@@ -242,7 +243,7 @@ public class OnPlayerLogin implements Runnable {
 				/*
 				 *  Warn that the nation is due to be deleted.
 				 */
-				TownyMessaging.sendMsg(resident, Translation.of("msg_warning_delete", nation.getName()));
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_delete", nation.getName()));
 			}
 		}
 	}

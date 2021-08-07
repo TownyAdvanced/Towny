@@ -31,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Towny's class for external API Methods
@@ -255,16 +256,7 @@ public class TownyAPI {
      * @return {@link List} of all online {@link Player}s in the specified {@link ResidentList}.
      */
     public List<Player> getOnlinePlayers(ResidentList owner) {
-        ArrayList<Player> players = new ArrayList<>();
-        
-        for (Player player : BukkitTools.getOnlinePlayers()) {
-            if (player != null) {
-                if (owner.hasResident(player.getName())) {
-                    players.add(player);
-                }
-            }
-        }
-        return players;
+        return Bukkit.getOnlinePlayers().stream().filter(player -> owner.hasResident(player.getName())).collect(Collectors.toList());
     }
     
     /**

@@ -56,7 +56,7 @@ public class WarZoneListener implements Listener {
 		if ((TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) {
 			if (!WarZoneConfig.isEditableMaterialInWarZone(mat)) {
 				event.setCancelled(true);
-				event.setMessage(Translation.of("msg_err_warzone_cannot_edit_material", "destroy", mat.toString().toLowerCase()));
+				event.setMessage(Translation.of("msg_err_warzone_cannot_edit_material", player, "destroy", mat.toString().toLowerCase()));
 				return;
 			}
 			event.setCancelled(false);
@@ -78,7 +78,7 @@ public class WarZoneListener implements Listener {
 		if (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) { // Event War
 			if (!WarZoneConfig.isEditableMaterialInWarZone(mat)) {
 				event.setCancelled(true);
-				event.setMessage(Translation.of("msg_err_warzone_cannot_edit_material", "build", mat.toString().toLowerCase()));
+				event.setMessage(Translation.of("msg_err_warzone_cannot_edit_material", player, "build", mat.toString().toLowerCase()));
 				return;
 			}
 			event.setCancelled(false);
@@ -99,7 +99,7 @@ public class WarZoneListener implements Listener {
 		if (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) { // Event War
 			if (!WarZoneConfig.isAllowingItemUseInWarZone()) {				
 				event.setCancelled(true);
-				event.setMessage(Translation.of("msg_err_warzone_cannot_use_item"));
+				event.setMessage(Translation.of("msg_err_warzone_cannot_use_item", player));
 				return;
 			}
 			event.setCancelled(false);
@@ -120,7 +120,7 @@ public class WarZoneListener implements Listener {
 		if (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) { // Event War
 			if (!WarZoneConfig.isAllowingSwitchesInWarZone()) {
 				event.setCancelled(true);
-				event.setMessage(Translation.of("msg_err_warzone_cannot_use_switches"));
+				event.setMessage(Translation.of("msg_err_warzone_cannot_use_switches", player));
 				return;
 			}
 			event.setCancelled(false);
@@ -244,7 +244,7 @@ public class WarZoneListener implements Listener {
 	public void onNationToggleNeutral(NationToggleNeutralEvent event) {
 		if (!TownySettings.isDeclaringNeutral() && event.getFutureState()) {
 			event.setCancelled(true);
-			event.setCancelMessage(Translation.of("msg_err_fight_like_king"));
+			event.setCancelMessage(Translation.of("msg_err_fight_like_king", event.getPlayer()));
 		}
 
 	}
@@ -259,35 +259,35 @@ public class WarZoneListener implements Listener {
 		
 		//Cancel because one of two players has no town and should not be interfering during war.
 		if (TownySettings.isWarTimeTownsNeutral() && (event.getAttackerTown() == null || event.getVictimTown() == null)){
-			event.setMessage(Translation.of("msg_war_a_player_has_no_town"));
+			event.setMessage(Translation.of("msg_war_a_player_has_no_town", event.getAttackingPlayer()));
 			event.setCancelled(true);
 			return;
 		}
 
 		//Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
 		if (TownySettings.isWarTimeTownsNeutral() && (!attackerTown.hasNation() || !defenderTown.hasNation())) {
-			event.setMessage(Translation.of("msg_war_a_player_has_no_nation"));
+			event.setMessage(Translation.of("msg_war_a_player_has_no_nation", event.getAttackingPlayer()));
 			event.setCancelled(true);
 			return;
 		}
 		
 		//Cancel because one of the two player's nations is neutral.
 		if ((attackerTown.hasNation() && attackerTown.getNationOrNull().isNeutral()) || (defenderTown.hasNation() && defenderTown.getNationOrNull().isNeutral())) {
-			event.setMessage(Translation.of("msg_war_a_player_has_a_neutral_nation"));
+			event.setMessage(Translation.of("msg_war_a_player_has_a_neutral_nation", event.getAttackingPlayer()));
 			event.setCancelled(true);
 			return;
 		}
 		
 		//Cancel because one of the two players are no longer involved in the war.
 		if (!War.isWarringTown(defenderTown) || !War.isWarringTown(attackerTown)) {
-			event.setMessage(Translation.of("msg_war_a_player_has_been_removed_from_war"));
+			event.setMessage(Translation.of("msg_war_a_player_has_been_removed_from_war", event.getAttackingPlayer()));
 			event.setCancelled(true);
 			return;
 		}
 		
 		//Cancel because one of the two players considers the other an ally.
 		if (CombatUtil.isAlly(attackerTown, defenderTown)){
-			event.setMessage(Translation.of("msg_war_a_player_is_an_ally"));
+			event.setMessage(Translation.of("msg_war_a_player_is_an_ally", event.getAttackingPlayer()));
 			event.setCancelled(true);
 			return;
 		}

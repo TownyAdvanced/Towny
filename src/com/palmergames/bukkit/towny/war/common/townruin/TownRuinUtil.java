@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.util.TimeTools;
@@ -123,7 +124,7 @@ public class TownRuinUtil {
 		town.save();
 		plugin.resetCache();
 		
-		TownyMessaging.sendGlobalMessage(Translation.of("msg_ruin_town", town.getName()));
+		TownyMessaging.sendGlobalMessage(Translatable.of("msg_ruin_town", town.getName()));
 	}
 
 	/**
@@ -138,38 +139,38 @@ public class TownRuinUtil {
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
 			if (resident == null || !resident.hasTown())
-				throw new TownyException(Translation.of("msg_err_dont_belong_town"));
+				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
 
 			//Ensure town is ruined
 			town = resident.getTown();
 			if (!town.isRuined())
-				throw new TownyException(Translation.of("msg_err_cannot_reclaim_town_unless_ruined"));
+				throw new TownyException(Translatable.of("msg_err_cannot_reclaim_town_unless_ruined"));
 
 			//Validate if player can pay
 			double townReclaimCost = TownRuinSettings.getEcoPriceReclaimTown();
 			if (TownyEconomyHandler.isActive() && !resident.getAccount().canPayFromHoldings(townReclaimCost))
-				throw new TownyException(Translation.of("msg_insuf_funds"));
+				throw new TownyException(Translatable.of("msg_insuf_funds"));
 
 			//Validate if player can remove at this time
 			if (TownRuinSettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town) > 0)
-				throw new TownyException(Translation.of("msg_err_cannot_reclaim_town_yet", TownRuinSettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town)));
+				throw new TownyException(Translatable.of("msg_err_cannot_reclaim_town_yet", TownRuinSettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town)));
 
 			if (TownyEconomyHandler.isActive() && townReclaimCost > 0) { 
 				Confirmation.runOnAccept(() -> {
 					if (!resident.getAccount().canPayFromHoldings(townReclaimCost)) {
-						TownyMessaging.sendErrorMsg(resident, Translation.of("msg_insuf_funds"));
+						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_insuf_funds"));
 						return;
 					}
 					resident.getAccount().withdraw(townReclaimCost, "Cost of town reclaim.");
 					reclaimTown(resident, town);
 				})
-				.setTitle(Translation.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(townReclaimCost)))
+				.setTitle(Translation.of("msg_confirm_purchase", player, TownyEconomyHandler.getFormattedBalance(townReclaimCost)))
 				.sendTo(player);
 			} else {
 				reclaimTown(resident, town);
 			}
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player,e.getMessage());
+			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}
 	}
 
@@ -195,7 +196,7 @@ public class TownRuinUtil {
 		TownReclaimedEvent event = new TownReclaimedEvent(town, resident);
 		Bukkit.getPluginManager().callEvent(event);
 
-		TownyMessaging.sendGlobalMessage(Translation.of("msg_town_reclaimed", resident.getName(), town.getName()));
+		TownyMessaging.sendGlobalMessage(Translatable.of("msg_town_reclaimed", resident.getName(), town.getName()));
 		
 	}
 
@@ -209,7 +210,7 @@ public class TownRuinUtil {
 			// set upkeep again
 			town.setHasUpkeep(true);
 		}
-		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_new_mayor", newMayor.getName()));
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", newMayor.getName()));
 	}
 
 	/**
