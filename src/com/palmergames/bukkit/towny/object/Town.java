@@ -1362,10 +1362,10 @@ public class Town extends Government implements TownBlockOwner {
 
 	/**
 	 * Used by Dynmap-Towny to get the national town colour.
-	 * 
+	 *
 	 * @return String value of hex code or null.
 	 */
-	@Nullable 
+	@Nullable
 	public String getNationMapColorHexCode() {
 		String rawMapColorHexCode = hasNation() ? nation.getMapColorHexCode() : null;
 		TownColourNationalCalculationEvent event = new TownColourNationalCalculationEvent(this, rawMapColorHexCode);
