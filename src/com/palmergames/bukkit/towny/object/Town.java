@@ -7,8 +7,8 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
-import com.palmergames.bukkit.towny.event.town.TownColourLocalCalculationEvent;
-import com.palmergames.bukkit.towny.event.town.TownColourNationalCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownMapColourNationalCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -1348,27 +1348,27 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	/**
-	 * Used by Dynmap-Towny to get the local town colour.
+	 * Used by Dynmap-Towny to get the local town map-colour.
 	 * 
 	 * @return String value of hex code or null.
 	 */
 	@Nullable 
 	public String getMapColorHexCode() {
 		String rawMapColorHexCode = super.getMapColorHexCode();
-		TownColourLocalCalculationEvent event = new TownColourLocalCalculationEvent(this, rawMapColorHexCode);
+		TownMapColourLocalCalculationEvent event = new TownMapColourLocalCalculationEvent(this, rawMapColorHexCode);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getMapColorHexCode();
 	}
 
 	/**
-	 * Used by Dynmap-Towny to get the national town colour.
+	 * Used by Dynmap-Towny to get the national town map-colour.
 	 *
 	 * @return String value of hex code or null.
 	 */
 	@Nullable
 	public String getNationMapColorHexCode() {
 		String rawMapColorHexCode = hasNation() ? nation.getMapColorHexCode() : null;
-		TownColourNationalCalculationEvent event = new TownColourNationalCalculationEvent(this, rawMapColorHexCode);
+		TownMapColourNationalCalculationEvent event = new TownMapColourNationalCalculationEvent(this, rawMapColorHexCode);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getMapColorHexCode();
 	}

@@ -7,15 +7,15 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Event called whenever the local town colour is being retrieved.
+ * Event called whenever the national town map-colour is being retrieved.
  */
-public class TownColourLocalCalculationEvent extends Event {
+public class TownMapColourNationalCalculationEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 
 	private final Town town;
 	private String mapColorHexCode;
 
-	public TownColourLocalCalculationEvent(Town town, String mapColorHexCode) {
+	public TownMapColourNationalCalculationEvent(Town town, String mapColorHexCode) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.mapColorHexCode = mapColorHexCode;
