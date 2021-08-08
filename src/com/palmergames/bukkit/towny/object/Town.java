@@ -1352,7 +1352,8 @@ public class Town extends Government implements TownBlockOwner {
 	 * 
 	 * @return String value of hex code or null.
 	 */
-	@Nullable 
+	@Override
+	@Nullable
 	public String getMapColorHexCode() {
 		String rawMapColorHexCode = super.getMapColorHexCode();
 		TownMapColourLocalCalculationEvent event = new TownMapColourLocalCalculationEvent(this, rawMapColorHexCode);
