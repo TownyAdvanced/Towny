@@ -58,7 +58,7 @@ Some important pages to look over:
 - [Installing Towny](https://github.com/TownyAdvanced/Towny/wiki/Installation)
 - [How Towny Works](https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works)
 
-Here on github's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) you can file [bug reports](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=bug_report.md&title=), [feature requests](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=feature_request.md&title=Suggestion%3A+), or just ask [general questions.](https://github.com/TownyAdvanced/Towny/discussions/new?category=Q-A)
+Here on GitHub's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) you can file [bug reports](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=bug_report.md&title=), [feature requests](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=feature_request.md&title=Suggestion%3A+), or just ask [general questions.](https://github.com/TownyAdvanced/Towny/discussions/new?category=Q-A)
 
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/TownyAdvanced/Towny.svg)](http://isitmaintained.com/project/TownyAdvanced/Towny "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/TownyAdvanced/Towny.svg)](http://isitmaintained.com/project/TownyAdvanced/Towny "Percentage of issues still open")
 
@@ -74,7 +74,7 @@ Courtesy of Major_Graft, we have a new series of Tutorial Videos [available on t
 ___
 
 ### Contributing
-If you'd like to contribute to the Towny code, see the [Contributing.md](https://github.com/LlmDl/Towny/blob/master/.github/CONTRIBUTING.MD).
+If you'd like to contribute to the Towny code, see the [CONTRIBUTING.md](https://github.com/LlmDl/Towny/blob/master/.github/CONTRIBUTING.MD).
 
 ___
 
@@ -96,7 +96,7 @@ ___
 ### Importing Towny for API use
 [![](https://jitpack.io/v/TownyAdvanced/Towny.svg)](https://jitpack.io/#TownyAdvanced/Towny)
 
-Developers who wish to use the Towny API in their plugins may read [the following instructions on adding Towny via a maven pom.xml.](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI#getting-started-with-towny-and-your-ide)
+Developers who wish to use the Towny API in their plugins may read [the following instructions on adding Towny via a Maven pom.xml.](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI#getting-started-with-towny-and-your-ide)
 
 ___
 
