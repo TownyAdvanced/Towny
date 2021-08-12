@@ -285,14 +285,14 @@ public class Towny extends JavaPlugin {
 		Plugin test;
 
 	 	//Check for permission source.
-		String output = returnPermissionsProviders();
-
+		String permissions = returnPermissionsProviders();
+		String economy = "";
 		/*
 		 * Check for economy source.
 		 */
 		if (TownySettings.isUsingEconomy()) {			
 			if (TownyEconomyHandler.setupEconomy()) {
-				output += System.lineSeparator() + "  Economy: " + TownyEconomyHandler.getVersion();				
+				economy = "  Economy: " + TownyEconomyHandler.getVersion();				
 				if (TownyEconomyHandler.getVersion().startsWith("Essentials Economy"))
 					ecowarn = "Warning: This version of Essentials Economy has been known to reset town and nation bank accounts to their default amount. Update your EssentialsX to version 2.19.0 or newer: https://essentialsx.net/downloads.html";
 				
@@ -373,11 +373,14 @@ public class Towny extends JavaPlugin {
 		/*
 		 * Output discovered plugins and warnings.
 		 */
-		plugin.getLogger().info("Plugins found: " + output);
+		plugin.getLogger().info("Plugins found: ");
+		plugin.getLogger().info(permissions);
+		if (!economy.isEmpty())
+			plugin.getLogger().info(economy);
 		if (!addons.isEmpty())
-			Bukkit.getLogger().info("  Add-ons: " + WordUtils.wrap(StringMgmt.join(addons, ", "), 52, System.lineSeparator() + "           ", true));
+			plugin.getLogger().info("  Add-ons: " + WordUtils.wrap(StringMgmt.join(addons, ", "), 52, System.lineSeparator() + "                           ", true));
 		if (!ecowarn.isEmpty())
-			plugin.getLogger().info(WordUtils.wrap(ecowarn, 55, System.lineSeparator() + "        ", true));
+			plugin.getLogger().info(WordUtils.wrap(ecowarn, 55, System.lineSeparator() + "                           ", true));
 
 		//Add our chat handler to TheNewChat via the API.
 		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
@@ -388,13 +391,13 @@ public class Towny extends JavaPlugin {
 		test = getServer().getPluginManager().getPlugin("Questioner");
 		if (test != null) {
 			String questioner = "Warning: Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder.";
-			plugin.getLogger().info(WordUtils.wrap(questioner, 55, System.lineSeparator() + "        ", true));
+			plugin.getLogger().info(WordUtils.wrap(questioner, 55, System.lineSeparator() + "                           ", true));
 		}
 	}
 	
 	private String returnPermissionsProviders() {
 		// TownyPerms is always present.
-		String output = System.lineSeparator() + "  Permissions: TownyPerms, ";
+		String output = "  Permissions: TownyPerms, ";
 		
 		// Test for GroupManager being present.
 		Plugin test = getServer().getPluginManager().getPlugin("GroupManager");
