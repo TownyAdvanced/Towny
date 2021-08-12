@@ -619,7 +619,7 @@ status_on_good: '&a켜짐'
 status_off_bad: '&4꺼짐'
 status_forced: '&c강제'
 status_adjustable: '&a변경 가능'
-status_pvp: 'PVP:'
+status_pvp: '&2PVP: '
 explosions: '  &2폭발: ' #Used on /plot perm, /res
 explosions2: '&2폭발: ' #Used on /town and /tw
 firespread: '  &2불번짐: '
@@ -1071,7 +1071,7 @@ msg_no_funds_claim_plot_group: '&cYou cannot afford to claim the %s plots costin
 status_town_title_peaceful: '&b(Peacful)'
 #Added in 0.95
 status_public: '&b(Public)'
-msg_days: '일'
+msg_days: ' 일'
 msg_comptype_public: '공개 상태'
 towny_prices_title: '값'
 towny_prices_town_nation: '&e[신규] &2마을: &a%s &8| &2국가: &a%s'
