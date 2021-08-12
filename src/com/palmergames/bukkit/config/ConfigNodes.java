@@ -989,41 +989,12 @@ public enum ConfigNodes {
 	PLUGIN_DATABASE(
 			"plugin.database",
 			"",
-			"",
-			"# Valid load and save types are: flatfile and mysql."),
-	PLUGIN_DATABASE_LOAD("plugin.database.database_load", "flatfile"),
-	PLUGIN_DATABASE_SAVE("plugin.database.database_save", "flatfile"),
-	
+			"# See database.yml file for flatfile/mysql settings."),
 	PLUGIN_DATABASE_GATHER_RESIDENT_UUIDS("plugin.database.gather_resident_uuids",
 			"true",
 			"",
 			"# When true Towny will use a background task to gather UUIDs for residents who do not have UUIDs.",
 			"# This process will greatly improve your database's ability to convert from playernames to UUIDs in the future."),
-
-	PLUGIN_DATABASE_SQL_HEADER(
-			"plugin.database.sql",
-			"",
-			"",
-			"# SQL database connection details (IF set to use SQL)."),
-	PLUGIN_DATABASE_HOSTNAME("plugin.database.sql.hostname", "localhost"),
-	PLUGIN_DATABASE_PORT("plugin.database.sql.port", "3306"),
-	PLUGIN_DATABASE_DBNAME("plugin.database.sql.dbname", "towny"),
-	PLUGIN_DATABASE_TABLEPREFIX("plugin.database.sql.table_prefix", "towny_"),
-	PLUGIN_DATABASE_USERNAME("plugin.database.sql.username", "root"),
-	PLUGIN_DATABASE_PASSWORD("plugin.database.sql.password", ""),
-	PLUGIN_DATABASE_FLAGS("plugin.database.sql.flags", "?verifyServerCertificate=false&useSSL=false&useUnicode=true&characterEncoding=utf-8"),
-
-	PLUGIN_DATABASE_POOLING_HEADER(
-		"plugin.database.sql.pooling",
-		"",
-		"",
-		"# Modifiable settings to control the connection pooling.",
-		"# Unless you actually know what you're doing and how Towny uses its mysql connection,",
-		"# it is strongly recommended you do not change these settings."),
-	PLUGIN_DATABASE_POOLING_MAX_POOL_SIZE("plugin.database.sql.pooling.max_pool_size", "5"),
-	PLUGIN_DATABASE_POOLING_MAX_LIFETIME("plugin.database.sql.pooling.max_lifetime", "180000"),
-	PLUGIN_DATABASE_POOLING_CONNECTION_TIMEOUT("plugin.database.sql.pooling.connection_timeout", "5000"),
-
 	PLUGIN_DAILY_BACKUPS_HEADER(
 			"plugin.database.daily_backups",
 			"",

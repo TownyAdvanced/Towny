@@ -1,0 +1,81 @@
+package com.palmergames.bukkit.towny.db;
+
+public enum DatabaseConfig {
+	DATABASE(
+			"database",
+			"",
+			"",
+			"# Valid load and save types are: flatfile and mysql."),
+	DATABASE_LOAD("database.database_load", "flatfile"),
+	DATABASE_SAVE("database.database_save", "flatfile"),
+	DATABASE_SQL_HEADER(
+			"database.sql",
+			"",
+			"",
+			"# SQL database connection details (IF set to use mysql)."),
+	DATABASE_HOSTNAME("database.sql.hostname", "localhost"),
+	DATABASE_PORT("database.sql.port", "3306"),
+	DATABASE_DBNAME("database.sql.dbname", "towny"),
+	DATABASE_TABLEPREFIX("database.sql.table_prefix", "towny_"),
+	DATABASE_USERNAME("database.sql.username", "root"),
+	DATABASE_PASSWORD("database.sql.password", ""),
+	DATABASE_FLAGS("database.sql.flags", "?verifyServerCertificate=false&useSSL=false&useUnicode=true&characterEncoding=utf-8"),
+
+	DATABASE_POOLING_HEADER(
+		"database.sql.pooling",
+		"",
+		"",
+		"# Modifiable settings to control the connection pooling.",
+		"# Unless you actually know what you're doing and how Towny uses its mysql connection,",
+		"# it is strongly recommended you do not change these settings."),
+	DATABASE_POOLING_MAX_POOL_SIZE("database.sql.pooling.max_pool_size", "5"),
+	DATABASE_POOLING_MAX_LIFETIME("database.sql.pooling.max_lifetime", "180000"),
+	DATABASE_POOLING_CONNECTION_TIMEOUT("database.sql.pooling.connection_timeout", "5000");
+
+	private final String Root;
+	private final String Default;
+	private String[] comments;
+
+	DatabaseConfig(String root, String def, String... comments) {
+
+		this.Root = root;
+		this.Default = def;
+		this.comments = comments;
+	}
+
+	/**
+	 * Retrieves the root for a config option
+	 *
+	 * @return The root for a config option
+	 */
+	public String getRoot() {
+
+		return Root;
+	}
+
+	/**
+	 * Retrieves the default value for a config path
+	 *
+	 * @return The default value for a config path
+	 */
+	public String getDefault() {
+
+		return Default;
+	}
+
+	/**
+	 * Retrieves the comment for a config path
+	 *
+	 * @return The comments for a config path
+	 */
+	public String[] getComments() {
+
+		if (comments != null) {
+			return comments;
+		}
+
+		String[] comments = new String[1];
+		comments[0] = "";
+		return comments;
+	}
+}
