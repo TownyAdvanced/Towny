@@ -603,11 +603,11 @@ public class TownyPlayerListener implements Listener {
 		Resident resident = townyUniverse.getResident(player.getUniqueId());
 		
 		if (resident != null
-				&& TownyTimerHandler.isTeleportWarmupRunning()				 
-				&& TownySettings.getTeleportWarmupTime() > 0 
-				&& TownySettings.isMovementCancellingSpawnWarmup() 
-				&& !townyUniverse.getPermissionSource().isTownyAdmin(player) 
-				&& resident.getTeleportRequestTime() > 0) {
+				&& TownyTimerHandler.isTeleportWarmupRunning()	 
+				&& TownySettings.getTeleportWarmupTime() > 0
+				&& TownySettings.isMovementCancellingSpawnWarmup()
+				&& resident.getTeleportRequestTime() > 0
+				&& !townyUniverse.getPermissionSource().isTownyAdmin(player)) {
 			TeleportWarmupTimerTask.abortTeleportRequest(resident);
 			TownyMessaging.sendMsg(resident, ChatColor.RED + Translation.of("msg_err_teleport_cancelled"));
 		}
