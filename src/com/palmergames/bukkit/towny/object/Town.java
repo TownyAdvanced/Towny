@@ -7,7 +7,8 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
-import com.palmergames.bukkit.towny.event.town.TownMapColourCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownMapColourNationalCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -1347,14 +1348,28 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	/**
-	 * Used by Dynmap-Towny to allow SiegeWar to set an occupying nation's colour.
+	 * Used by Dynmap-Towny to get the town's *local* map-colour.
 	 * 
 	 * @return String value of hex code or null.
 	 */
-	@Nullable 
+	@Override
+	@Nullable
+	public String getMapColorHexCode() {
+		String rawMapColorHexCode = super.getMapColorHexCode();
+		TownMapColourLocalCalculationEvent event = new TownMapColourLocalCalculationEvent(this, rawMapColorHexCode);
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getMapColorHexCode();
+	}
+
+	/**
+	 * Used by Dynmap-Towny to get the town's *national* map colour.
+	 *
+	 * @return String value of hex code or null.
+	 */
+	@Nullable
 	public String getNationMapColorHexCode() {
 		String rawMapColorHexCode = hasNation() ? nation.getMapColorHexCode() : null;
-		TownMapColourCalculationEvent event = new TownMapColourCalculationEvent(this, rawMapColorHexCode);
+		TownMapColourNationalCalculationEvent event = new TownMapColourNationalCalculationEvent(this, rawMapColorHexCode);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getMapColorHexCode();
 	}
