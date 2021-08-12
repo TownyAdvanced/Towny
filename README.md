@@ -3,12 +3,13 @@
 ___
 
 <p><img align=right src="https://user-images.githubusercontent.com/879756/65964696-19d6b300-e423-11e9-9cb0-d193225ee40f.png">
-I took over from ElgarL after MC 1.8 was released. Past developers have included: Shadeness, FuzzieWuzzie, ElgarL. 
-With help coming from other developers from time to time including dumptruckman, ole8pie, SwearWord, gravypod, andrewyunt and more.
+I'm LlmDl, the third lead developer of Towny. I have been managing the Towny project since 2014 and the release of Minecraft 1.8. Prior to me there was the original creator: Shadeness (active 2010-2011,) and the second developer: ElgarL (active 2011-2014.)
 
-Towny is one of the oldest still-in-development plugins for Minecraft. It was created by Shadeness for the now-defunct server platform called hMod.
+I am helped out by the TownyAdvanced team: ArcticDive, FlagCourier, Warrior and a few other private members. Being open-source Towny has a large list of [Contributors](https://github.com/TownyAdvanced/Towny/graphs/contributors) who have helped improve the code base over the years as well.
 
-It is the second-oldest land protection plugin to become popular for Minecraft, having been beaten by WorldGuard by just a couple months, Towny is now over 10 years old! Go check out some of the [features](https://github.com/TownyAdvanced/Towny/wiki#features) Towny has and see why it's still popular for yourself.
+Towny is one of the oldest still-in-development plugins for Minecraft. Shadeness created Towny for the now-defunct server platform called hMod. Shadeness ported Towny to Bukkit and left the project shortly afterwards, returning later to add EnemyWar or as it became known: [FlagWar](https://github.com/TownyAdvanced/FlagWar). Towny is now over 10 years old! 
+
+**Go check out some of the [features](https://github.com/TownyAdvanced/Towny/wiki#features) Towny has and see why it's still popular for yourself.**
 </p>
 
 ___
@@ -35,18 +36,14 @@ ___
 <tr align=center><td> MC 1.2.5 </td><td> <a href=https://www.dropbox.com/s/xstn1vdexxc1k5q/Towny_Advanced%200.82.0.0%20for%201.2.5.zip?dl=0>0.82.0.0</a> </td>
 </table>
 
-> Note: The bundled implementation of _FlagWar_ has been deprecated and is marked for removal
-> in a future Towny release. Operators are encouraged to install the
-> [standalone implementation](https://github.com/TownyAdvanced/FlagWar).
-
 ___
 
 ### Staying up to date
 <p><img align=right src="https://user-images.githubusercontent.com/879756/65964779-3a067200-e423-11e9-9928-938b976af2c2.gif" height="155">
     
-Now that all Release builds and Development builds are being made available here on github's [Releases](https://github.com/TownyAdvanced/Towny/releases) tab I am recommending that server admins "watch" Towny on github. Just click the watch button in the upper right and select "Releases Only".
+Now that all Release builds and Development builds are being made available here on github's [Releases](https://github.com/TownyAdvanced/Towny/releases) tab I am recommending that server admins "watch" Towny on github. Just click the watch button in the upper right and select "Custom > Releases".
     
-Alternatively, if you [watch the resource](https://www.spigotmc.org/resources/towny-advanced.72694/watch) on Spigot you will be notified on that website when a new build is out.
+Alternatively, if you [watch the resource](https://www.spigotmc.org/resources/towny-advanced.72694/watch) on Spigot you will be notified on that website when a new Release version is out.
 </p>
 
 ___
@@ -69,7 +66,7 @@ If you want to support the developer consider [becoming a Sponsor](https://githu
 ___
 
 ### Video Tutorials
-Courtesy of Major_Graft, we have a new series of Tutorial Videos [available on the Towny website.](https://townyadvanced.github.io/tutorials.html)
+Courtesy of [Major_Graft](https://www.youtube.com/c/MajorGraft), we have a new series of Tutorial Videos available on the [Towny website](https://townyadvanced.github.io/tutorials.html) and [YouTube](https://www.youtube.com/playlist?list=PLvzvmyk0uI0WsLf4iyJZRhD_T2e-ANCmE).
 
 ___
 
