@@ -660,12 +660,12 @@ public class TownyMessaging {
 	public static TextComponent getPageNavigationFooter(String prefix, int page, String arg, int total) {
 		TextComponent backButton = Component.text("<<<")
 			.color(NamedTextColor.GOLD)
-			.clickEvent(ClickEvent.runCommand("/" + prefix + (arg.isEmpty() ? "" : arg + " ") + (page - 1)))
+			.clickEvent(ClickEvent.runCommand("/" + prefix + " " + (arg.isEmpty() ? "" : arg + " ") + (page - 1)))
 			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_hover_previous_page"))));
 		
 		TextComponent forwardButton = Component.text(">>>")
 			.color(NamedTextColor.GOLD)
-			.clickEvent(ClickEvent.runCommand("/" + prefix + (arg.isEmpty() ? "" : arg + " ") + (page + 1)))
+			.clickEvent(ClickEvent.runCommand("/" + prefix + " " +  (arg.isEmpty() ? "" : arg + " ") + (page + 1)))
 			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_hover_next_page"))));
 		
 		TextComponent pageText = Component.text("   " + Translation.of("LIST_PAGE", page, total) + "   ");
@@ -854,7 +854,7 @@ public class TownyMessaging {
 		}
 		
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("towny:town plotgrouplist " + town.getName(), page, "", total);
+		TextComponent pageFooter = getPageNavigationFooter("towny:town plotgrouplist" + town.getName(), page, "", total);
 		audience.sendMessage(pageFooter);
 	}
 	
