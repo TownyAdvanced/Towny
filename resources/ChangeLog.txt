@@ -6574,3 +6574,9 @@ v0.92.0.11:
   - New Translation:
     - Romanian courtesy of DevinMart.
   - Fix SQL saving residents trying to find a jail column and failing.
+0.97.0.23:
+  - Move permissions check down in onPlayerMove, courtesy of Warriorrrr with PR #5176.
+  - Fix typos in the readme, courtesy of fredster33 with PR #5179. (First-Time Contributor!)
+  - Added New town map-colour event, courtesy of Goosius with PR #5172.
+  - API: New event added: TownMapColourLocalCalculationEvent ... for recalculation of the local town colour by plugins
+  - API: Existing Event renamed: TownMapColourNationalCalculationEvent ... for recalculation of the national town colour by plugins
