@@ -841,7 +841,7 @@ msg_player_has_been_freed_from_jail_number: '%s został zwolniony z więzienia n
 msg_player_has_been_sent_to_jail_number: '%s został wyslany do więzienia numer %s.'
 msg_player_is_not_online: '%s nie jest online.'
 msg_mysql_dump_success: 'Zrzut do bazy danych MySQL został ukończony.'
-msg_err_mysql_not_being_used: 'Your config is not set to save & load mysql.'
+msg_err_mysql_not_being_used: 'Twoja konfiguracja nie jest ustawiona, aby zapisywać i ładować mysql.'
 msg_save_success: 'Dane zapisane.'
 msg_load_success: 'Dane wczytane.'
 msg_err_cannot_afford_to_set_outpost: 'Twoje miasto nie ma wystarczajacych środków, aby ustawić ten chunk na wartę.'
@@ -940,7 +940,7 @@ msg_you_cannot_kick_this_resident: 'Nie możesz wyrzucić %s, jest on burmistrze
 msg_err_plot_belongs_to_group_plot_fs2: 'Teren: %s należy do grupy, użyj /plot group fs [cena]'
 msg_err_plot_belongs_to_group_plot_nfs: 'Teren: %s należy do grupy, użyj "/plot group nfs"'
 #Added in 0.72
-msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'The Admin-controlled %s setting prevents you from toggling pvp to %s.'
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Serwer nie zezwala na przełączanie pvp, przez ustawienie "%s".'
 #Added in 0.73
 msg_err_you_aren't currently jailed: 'Nie jesteś więziony.'
 #Added in 0.74
@@ -1203,7 +1203,7 @@ msg_err_nation_already_enemies_with_2: '&c%s jest już wrogiem nacji %s.'
 msg_ta_allies_enemies_updated: '&bSojusznicy/Wrogowie nacji %s zostali zaktualizowani.'
 #Added in 0.102
 towny_map_detailed_information: '&2Kliknij, aby zobaczyć szczegółowe informacje o działce.'
-msg_err_nation_capital_too_many_residents: '&cThe current capital city has too many residents to be replaced by %s.'
+msg_err_nation_capital_too_many_residents: '&cBieżąca stolica ma zbyt wielu mieszkańców, aby mogła być zastąpiona na %s.'
 msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your nation will mean your town is over the population limit of %d, resulting in the removal of %d residents.'
 #Added in 0.103
 msg_command_blocked_inside_towns: '&cNie możesz używać tej komendy wewnątrz miast.'
@@ -1223,9 +1223,9 @@ msg_jail_cell_set: 'Cela więzienna została ustawiona.'
 msg_jail_cell_removed: 'Usunięto celę więzienną.'
 msg_err_resident_is_already_jailed: '%s jest już więziony'
 msg_err_the_town_does_not_have_that_many_jails: 'The town does not have that many jails.'
-msg_err_that_jail_plot_does_not_have_that_many_cells: 'That jail plot does not have that many cells.'
+msg_err_that_jail_plot_does_not_have_that_many_cells: 'Ta działka więzienna nie ma aż tylu cel.'
 msg_primary_jail_set_for_town: 'Your town''s primary jail has been set.'
-msg_x_has_been_freed_from_x: '%s has been freed from jail %s'
+msg_x_has_been_freed_from_x: '%s został wypuszczony z więzienia %s'
 msg_you_have_been_jailed: 'Zostałeś uwięziony.'
 msg_run_to_the_wilderness_or_wait_for_a_jailbreak: 'Ucieknij w głąb dziczy, lub poczekaj na koniec odsiadki.'
 msg_err_player_is_not_jailed: 'Ten gracz nie jest więziony.'

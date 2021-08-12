@@ -615,11 +615,11 @@ status_perm: '&2Perm: ' #Used on /plot perm, /res
 status_permissions: '&2Permessi: ' #Used on /town
 status_on: 'stato_acceso'
 status_off: 'stato_spento'
-status_on_good: 'stato_acceso_bene'
-status_off_bad: 'stato_spento_male'
+status_on_good: 'stato_acceso'
+status_off_bad: 'stato_spento'
 status_forced: '&cForzato'
 status_adjustable: '&aRegolabile'
-status_pvp: 'stato_gcg":": '
+status_pvp: '&2PVP: '
 explosions: '  &2Esplosioni: ' #Used on /plot perm, /res
 explosions2: '&2Esplosioni: ' #Used on /town and /tw
 firespread: '  &2Propagazione Fuoco: '
@@ -737,7 +737,7 @@ adjustable: 'Regolabile'
 msg_no_funds_new_town2: '&c%s non puoi permetterti di stabilire una nuova citta qui, perche costa %s.'
 msg_no_funds_new_nation2: '&cLa citta non puo permettersi di iniziare una nuova nazione, perche costa %s.'
 msg_no_funds_claim2: '&cLa citta non puo permettersi di reclamare %s isolati di citta costare %s. Aggiungi %s alla banca della citta usando /c depositare %s'
-msg_err_cant_afford_blocks2: '&cTown cannot afford to claim %s town blocks costing %s. Add %s to the town bank using /t deposit %s'
+msg_err_cant_afford_blocks2: '&cLa citta non puo permettersi di reclamare %s isolati di citta costare %s. Aggiungi %s alla banca della citta usando /t deposit %s'
 msg_err_not_enough_variables: '&cNon ci sono abbastanza variabili: '
 nation_rechecked_by_admin: '&bNazione %s distanze citta sono stato ricontrollato con successo.'
 msg_err_nation_over_town_limit: '&cLa tua nazione ha raggiunto il numero massimo di citta per nazione consentite: %s.'
