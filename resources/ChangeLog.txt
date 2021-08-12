@@ -6581,3 +6581,6 @@ v0.92.0.11:
   - API: New event added: TownMapColourLocalCalculationEvent ... for recalculation of the local town colour by plugins
   - API: Existing Event renamed: TownMapColourNationalCalculationEvent ... for recalculation of the national town colour by plugins
   - Fix list page footers missing a space in their click commands. 
+0.97.0.24:
+  - Fix banners not regenerating properly when exploded.
+    - Closes #5178.

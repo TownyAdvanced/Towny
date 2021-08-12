@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
+import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
@@ -95,6 +96,14 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			}
 			
 			// update blocks.
+			state.update();
+		}
+		
+		if (state instanceof Banner) {
+			Banner banner = (Banner) state;
+			
+			((Banner) state).setPatterns(banner.getPatterns());
+			
 			state.update();
 		}
 	}
