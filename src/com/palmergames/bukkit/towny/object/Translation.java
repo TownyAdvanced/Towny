@@ -73,11 +73,6 @@ public final class Translation {
 				
 				for (Map.Entry<String, Object> entry : values.entrySet())
 					translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
-				
-				//Can be null if no overrides have been added
-				if (globalOverrides != null)
-					for (Map.Entry<String, Object> entry : globalOverrides.entrySet())
-						translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
 			} catch (Exception e) {
 				// An IO exception occured, or the file had invalid yaml
 				e.printStackTrace();
@@ -102,6 +97,12 @@ public final class Translation {
 				}
 			}
 		}
+
+		//Can be null if no overrides have been added
+		if (globalOverrides != null)
+			for (Map.Entry<String, Object> entry : globalOverrides.entrySet())
+				for (String lang : translations.keySet())
+					translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
 		
 		Towny.getPlugin().getLogger().info(String.format("Successfully loaded translations for %d languages.", translations.keySet().size()));
 		HelpMenu.loadMenus();
