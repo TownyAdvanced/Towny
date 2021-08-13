@@ -727,7 +727,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			String nationName;
 
 			if (args.length < 1)
-				throw new TownyException(String.format("Usage: /nation join [nation]"));
+				throw new TownyException("Usage: /nation join [nation]");
 
 			nationName = args[0];
 			

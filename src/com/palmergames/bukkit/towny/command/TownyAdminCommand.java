@@ -1926,16 +1926,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void reloadLangs() {
-		String rootFolder = TownyUniverse.getInstance().getRootFolder();
-		try {
-			Translation.loadTranslationRegistry();
-			Translation.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
-		} catch (IOException e) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_reload_error"));
-			e.printStackTrace();
-			return;
-		}
-		
+		Translation.loadTranslationRegistry();
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_reloaded_lang"));
 	}
 	
@@ -1977,7 +1968,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", plugin.getVersion());
 			TownySettings.loadTownLevelConfig();   // TownLevel and NationLevels are not loaded in the config,
 			TownySettings.loadNationLevelConfig(); // but later so the config-migrator can do it's work on them if needed.
-			Translation.loadLanguage(rootFolder + File.separator + "settings", "english.yml");
+			Translation.loadTranslationRegistry();
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_reload_error"));
 			e.printStackTrace();

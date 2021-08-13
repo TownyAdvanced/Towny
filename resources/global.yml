@@ -1,0 +1,6 @@
+# Global language file override file.
+# Here you can add your own messages, and they will be applied to each language.
+# To add messages for specific languages, copy the file from the reference folder to this one, and alter the messages.
+
+# Messages can be added like so: (hint: remove the # to uncomment it)
+#default_towny_prefix: '&6[Towny] &b'

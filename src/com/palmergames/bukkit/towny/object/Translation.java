@@ -1,22 +1,22 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.FileMgmt;
 import org.apache.commons.compress.utils.FileNameUtils;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -40,31 +40,88 @@ public final class Translation {
 	
 	private Translation() {}
 
-	public static CommentedConfiguration language;
 	private static final Map<String, String> oldLangFileNames = createLegacyLangMap();
 	private static final Set<String> langFiles = createValidLang();
 	private static final Map<String, Map<String, String>> translations = new HashMap<>();
 	private static Locale defaultLocale;
-	
+	private static final String langFolder = TownyUniverse.getInstance().getRootFolder() + File.separator + "settings" + File.separator + "lang";
+
 	public static void loadTranslationRegistry() {
 		translations.clear();
 		defaultLocale = toLocale(TownySettings.getString(ConfigNodes.LANGUAGE));
+		updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
 
+		// Load global override file
+		Map<String, Object> globalOverrides = new HashMap<>();
+		File globalFile = FileMgmt.unpackResourceFile(langFolder + File.separator + "override" + File.separator + "global.yml", "global.yml", "global.yml");
+		
+		try (InputStream is = new FileInputStream(globalFile)) {
+			globalOverrides = new Yaml(new SafeConstructor()).load(is);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// Load bundled language files
 		for (String lang : langFiles) {
 			try (InputStream is = Translation.class.getResourceAsStream("/lang/" + lang + ".yml")) {
 				Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
-				lang = lang.replace("-", "_");
+				
+				saveReferenceFile(values.get("version"), lang);
+				
+				lang = lang.replace("-", "_"); // Locale#toString uses underscores instead of dashes
 				translations.put(lang, new HashMap<>());
 				
 				for (Map.Entry<String, Object> entry : values.entrySet())
 					translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
+				
+				//Can be null if no overrides have been added
+				if (globalOverrides != null)
+					for (Map.Entry<String, Object> entry : globalOverrides.entrySet())
+						translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
 			} catch (Exception e) {
 				// An IO exception occured, or the file had invalid yaml
 				e.printStackTrace();
 			}
 		}
 		
-		//TODO: allow languages to be added/overridden
+		// Load optional override files.
+		File[] overrideFiles = new File(langFolder + File.separator + "override").listFiles();
+		if (overrideFiles != null) {
+			for (File file : overrideFiles) {
+				if (file.isFile() && FileNameUtils.getExtension(file.getName()).equalsIgnoreCase("yml") && !file.getName().equalsIgnoreCase("global.yml")) {
+					try (FileInputStream is = new FileInputStream(file)) {
+						Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
+						String lang = FileNameUtils.getBaseName(file.getName());
+
+						if (values != null)
+							for (Map.Entry<String, Object> entry : values.entrySet())
+								translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+		Towny.getPlugin().getLogger().info(String.format("Successfully loaded translations for %d languages.", translations.keySet().size()));
+		HelpMenu.loadMenus();
+	}
+	
+	private static void saveReferenceFile(@Nullable Object currentVersion, String lang) {
+		if (currentVersion == null)
+			return;
+		
+		String res = "lang/" + lang + ".yml";
+		File file = FileMgmt.unpackResourceFile(langFolder + File.separator + "reference" + File.separator + lang + ".yml", res, res);
+		
+		try (InputStream is = new FileInputStream(file)) {
+			Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
+			
+			if (values == null || (double) currentVersion != (double) values.get("version"))
+				FileMgmt.stringToFile(FileMgmt.convertStreamToString("/lang/" + lang + ".yml"), file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static Set<String> createValidLang() {
@@ -79,44 +136,6 @@ public final class Translation {
 			e.printStackTrace();
 		}
 		return lang;
-	}
-
-	// This will read the language entry in the config.yml to attempt to load
-	// custom languages
-	// if the file is not found it will load the default from resource
-	public static void loadLanguage(String filepath, String defaultRes) throws IOException {
-
-		updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
-		
-		String res = TownySettings.getString(ConfigNodes.LANGUAGE.getRoot(), defaultRes);
-		String fullPath = filepath + File.separator + res;
-		File file = FileMgmt.unpackResourceFile(fullPath, "lang/" + res, defaultRes);
-
-		// read the (language).yml into memory
-		language = new CommentedConfiguration(file);
-		language.load();
-		HelpMenu.loadMenus();
-		CommentedConfiguration newLanguage = new CommentedConfiguration(file);
-		
-		try {
-			newLanguage.loadFromString(FileMgmt.convertStreamToString("/lang/" + res));
-		} catch (IOException e) {
-			Towny.getPlugin().getLogger().info("Lang: Custom language file detected, not updating.");
-			Towny.getPlugin().getLogger().info("Lang: " + res + " v" + Translation.of("version") + " loaded.");
-			return;
-		} catch (InvalidConfigurationException e) {
-			TownyMessaging.sendMsg("Invalid Configuration in language file detected.");
-		}
-		
-		String resVersion = newLanguage.getString("version");
-		String langVersion = Translation.of("version");
-
-		if (!langVersion.equalsIgnoreCase(resVersion)) {
-			language = newLanguage;
-			Towny.getPlugin().getLogger().info("Lang: Language file replaced with updated version.");
-			FileMgmt.stringToFile(FileMgmt.convertStreamToString("/lang/" + res), file);
-		}
-		Towny.getPlugin().getLogger().info("Lang: " + res + " v" + Translation.of("version") + " loaded.");
 	}
 	
 	/**
