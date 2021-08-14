@@ -6587,3 +6587,6 @@ v0.92.0.11:
   - Fix mayors being unable to evict townless players who own embassy plots in the mayors land.
   - API: Added TownBlock#getTownBlockOwner
     - Returns a TownBlockOwner object, either the resident who personally owns the townblock, or the town if there's no resident.
+  - New Translation:
+    - Turkish courtesy of Sanic.
+  - Update "Updating Language Files" section of Contributing.md, courtesy of EuGNosii with PR #5188.
