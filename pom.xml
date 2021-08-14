@@ -177,11 +177,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.30</version>
-        </dependency>
-        <dependency>
             <groupId>net.luckperms</groupId>
             <artifactId>api</artifactId>
             <version>5.3</version>
@@ -262,7 +257,6 @@
                             <include>org.apache.commons:commons-compress</include>
                             <include>org.bstats:bstats-bukkit</include>
                             <include>org.bstats:bstats-base</include>
-                            <include>org.slf4j:slf4j-api</include>
                             <include>org.json:json</include>
                         </includes>
                     </artifactSet>
@@ -290,10 +284,6 @@
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>com.palmergames.bukkit.metrics</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.slf4j</pattern>
-                            <shadedPattern>com.palmergames.slf4j</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>
