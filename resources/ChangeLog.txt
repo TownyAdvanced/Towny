@@ -6584,3 +6584,6 @@ v0.92.0.11:
 0.97.0.24:
   - Fix banners not regenerating properly when exploded.
     - Closes #5178.
+  - Fix mayors being unable to evict townless players who own embassy plots in the mayors land.
+  - API: Added TownBlock#getTownBlockOwner
+    - Returns a TownBlockOwner object, either the resident who personally owns the townblock, or the town if there's no resident.

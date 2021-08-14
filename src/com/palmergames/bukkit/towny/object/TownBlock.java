@@ -499,4 +499,17 @@ public class TownBlock extends TownyObject {
 	public void setPermissionOverrides(Map<Resident, PermissionData> permissionOverrides) {
 		this.permissionOverrides = new HashMap<>(permissionOverrides);
 	}
+
+	/**
+	 * Returns the TownBlockOwner: a resident (if the plot is personally-owned,)
+	 * or the Town that owns the townblock.
+	 * @return TownBlockOwner or null (highly unlikely.)
+	 */
+	@Nullable
+	public TownBlockOwner getTownBlockOwner() {
+		if (hasResident())
+			return getResidentOrNull();
+		else 
+			return getTownOrNull();
+	}
 }

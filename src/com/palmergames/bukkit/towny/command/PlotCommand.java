@@ -354,7 +354,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(player, Translation.of("msg_no_one_to_evict"));						
 
 					} else {
-						plotTestOwner(resident, townBlock); // This will throw an exception if the player doesn't count as the mayor of this townblock.
+						// Test we are allowed to work on this plot
+						// If this fails it will trigger a TownyException.
+						plotTestOwner(resident, townBlock);
 
 						if (townBlock.hasPlotObjectGroup()) {
 							townBlock.getPlotObjectGroup().getTownBlocks().stream().forEach(tb -> {
@@ -363,7 +365,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									tb.setType(townBlock.getType()); // Re-set the plot permissions while maintaining plot type. 
 									tb.save();                       // Save townblock.
 							});
-							TownyMessaging.sendMessage(player, Translation.of("msg_plot_evict_group", townBlock.getPlotObjectGroup().getName()));
+							TownyMessaging.sendMsg(player, Translation.of("msg_plot_evict_group", townBlock.getPlotObjectGroup().getName()));
 							return true;
 						}
 						
@@ -372,7 +374,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						townBlock.setType(townBlock.getType()); // Re-set the plot permissions while maintaining plot type.
 						townBlock.save(); // Save townblock.
 						
-						TownyMessaging.sendMessage(player, Translation.of("msg_plot_evict"));
+						TownyMessaging.sendMsg(player, Translation.of("msg_plot_evict"));
 					}
 
 				} else if (split[0].equalsIgnoreCase("unclaim")) {
@@ -601,9 +603,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Mayor/Assistant of the town.
 							
 							// Test we are allowed to work on this plot
-							TownBlockOwner owner = plotTestOwner(resident, townBlock);
+							plotTestOwner(resident, townBlock);
 
-							setTownBlockPermissions(player, owner, townBlock, StringMgmt.remFirstArg(split));
+							setTownBlockPermissions(player, townBlock.getTownBlockOwner(), townBlock, StringMgmt.remFirstArg(split));
 
 							return true;
 
@@ -842,8 +844,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (townBlock == null || !townBlock.isJail())
 				throw new TownyException("msg_err_location_is_not_within_a_jail_plot");
 
-			// Test that the player is an owner or considered a mayor and is
-			plotTestOwner(resident, townBlock); // allowed to set a jail spawn.
+			// Test we are allowed to work on this plot, and able to set a jail spawn.
+			// If this fails it will trigger a TownyException.
+			plotTestOwner(resident, townBlock);
 
 			Jail jail = townBlock.getJail();
 			
@@ -1049,7 +1052,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (townBlock == null || !townBlock.hasTown())
 			throw new TownyException(Translation.of("msg_err_not_part_town"));
 			
-		plotTestOwner(resident, townBlock); // This will throw and exception if they aren't mayor or otherwise able to use this plot.
+		// Test we are allowed to work on this plot
+		// If this fails it will trigger a TownyException.
+		plotTestOwner(resident, townBlock);
 		townBlock.setPlotPrice(Math.min(TownySettings.getMaxPlotPrice(), forSale));
 
 		if (forSale != -1) {
@@ -1361,25 +1366,20 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * 
 	 * @param resident Resident Object.
 	 * @param townBlock TownBlock Object.
-	 * @return TownBlockOwner owner of plot.
-	 * @throws TownyException Exception.
+	 * @throws TownyException Exception thrown to trigger failures in the methods using this method.
 	 */
-	public static TownBlockOwner plotTestOwner(Resident resident, TownBlock townBlock) throws TownyException {
+	public static void plotTestOwner(Resident resident, TownBlock townBlock) throws TownyException {
 
 		Player player = BukkitTools.getPlayer(resident.getName());
 		boolean isAdmin = TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player);
+		boolean isMayor = player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
 
 		if (townBlock.hasResident()) {
+			boolean isMayorInTheirOwnTown = isMayor && resident.hasTown() && resident.getTownOrNull() == townBlock.getTownOrNull();
 
-			Resident owner = townBlock.getResidentOrNull();
-			boolean isSameTown = (resident.hasTown()) && resident.getTown() == owner.getTown() && townBlock.getTown() == resident.getTown();  //Last test makes it so mayors cannot alter embassy plots owned by their residents in towns they are not mayor of.
-
-			if ((resident == owner)
-					|| ((isSameTown) && (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())))
-					|| ((townBlock.getTown() == resident.getTown())) && (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()))
-					|| isAdmin) {
-
-				return owner;
+			if (isAdmin || isMayorInTheirOwnTown || townBlock.hasResident(resident)) {
+				// Resident is either an admin, or the mayor (or equivalent) of the townblock, or the townblock's actual owner.
+				return;
 			}
 
 			// Not the plot owner or the towns mayor or an admin.
@@ -1387,18 +1387,17 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		} else {
 
-			Town owner = townBlock.getTown();
-			boolean isSameTown = (resident.hasTown()) && resident.getTown() == owner;
+			boolean isSameTown = townBlock.getTownOrNull().hasResident(resident);
 
-			if (isSameTown && !BukkitTools.getPlayer(resident.getName()).hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()))
+			if (isSameTown && !isMayor)
 				throw new TownyException(Translation.of("msg_not_mayor_ass"));
 
 			if (!isSameTown && !isAdmin)
 				throw new TownyException(Translation.of("msg_err_not_part_town"));
 
-			return owner;
+			// Nothing to complain about, this resident is the owner of the townblock's town or an admin.
+			return;
 		}
-
 	}
 	
 	private boolean handlePlotGroupCommand(String[] split, Player player) throws TownyException {
@@ -1414,6 +1413,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translation.of("msg_not_claimed_1"));
 		
 		// Test we are allowed to work on this plot
+		// If this fails it will trigger a TownyException.
 		plotTestOwner(resident, townBlock);
 
 		if (split.length <= 0 || split[0].equalsIgnoreCase("?")) {
@@ -1621,7 +1621,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_plot_not_associated_with_a_group"));
 				return false;
 			}
-			TownBlockOwner townBlockOwner = plotTestOwner(resident, townBlock);
+			TownBlockOwner townBlockOwner = townBlock.getTownBlockOwner();
 			
 			if (split.length < 2) {
 				TownyMessaging.sendMessage(player, ChatTools.formatTitle("/plot group set"));
@@ -1953,6 +1953,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		try {
+			// Test we are allowed to work on this plot
+			// If this fails it will trigger a TownyException.
 			plotTestOwner(TownyAPI.getInstance().getResident(player.getName()), townBlock);
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
