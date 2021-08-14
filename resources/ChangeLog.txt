@@ -6590,3 +6590,5 @@ v0.92.0.11:
   - New Translation:
     - Turkish courtesy of Sanic.
   - Update "Updating Language Files" section of Contributing.md, courtesy of EuGNosii with PR #5188.
+0.97.1.0:
+  - Bump version for release.
