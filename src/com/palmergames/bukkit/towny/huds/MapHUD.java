@@ -28,7 +28,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 public class MapHUD {
-	private static int lineWidth = 19, lineHeight = 10;
+	private static int lineWidth = 20, lineHeight = 10;
 	private static final int townBlockSize = TownySettings.getTownBlockSize();
 	
 	public static void toggleOn(Player player) {
