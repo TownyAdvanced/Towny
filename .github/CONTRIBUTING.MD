@@ -41,10 +41,20 @@ include a dependency or 3rd-party library.
    - All dependencies should have their source open and auditable.
 
 ## Updating Language Files
-The language files are stored in the resources section of the project. (`resources/"language".yml`)    
-To update / change an existing language file, fork this repo and then edit the "language".yml in your fork.    
+> As of August 2021, translation for the Towny project is being done on [Crowdin](https://crowdin.com/project/townyadvanced).
+
+The language files are stored in the resources section of the project. (`resources/lang/"language".yml`).
+If you want to create a new language file, contact us on [Discord](https://discord.gg/gnpVs5m).
+
+If you find that a line has multiple variables which would be in a different order in your language, you can change them to `%Variable number$s` to change their order. 
+An example of this: `%4$s` will **always use the 4th variable**, no matter where it is placed on the line.
+
+You can read more about this on [Java Platform SE's Javadocs regarding the Formatter](https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html).
+
+<!--Pre-Crowdin language file tutorial-->
+<!--To update / change an existing language file, fork this repo and then edit the "language".yml in your fork.    
 Pull-Request your updated version. Please try to keep the title simple and include the version number:    
 e.g "German Translation v0.42"    
 If you are creating a new language file, feel-free to use either the english translation e.g "norwegian.yml" or the global placeholder e.g "es-mx"    
 If you are editing a language which contains the '(apostrophe) character such as French, please make sure you run it all through a YAML Parser,    
-You have to double up the '' when you want one ' to appear. It may help to do this anyways, as other characters may also require an escape sequence.    
+You have to double up the '' when you want one ' to appear. It may help to do this anyways, as other characters may also require an escape sequence.-->
