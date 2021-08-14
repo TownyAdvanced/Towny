@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.annotations.Unmodifiable;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.migration.ConfigMigrator;
+import com.palmergames.bukkit.towny.db.DatabaseConfig;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
@@ -170,8 +171,8 @@ public class TownyUniverse {
      * loadSettings() functions.
      */
 
-	/**
-    * Performs CleanupTask and BackupTask in async,
+    /**
+     * Performs CleanupTask and BackupTask in async,
      */
     public void performCleanupAndBackup() {
 		backupFuture = CompletableFuture
@@ -186,9 +187,9 @@ public class TownyUniverse {
      */
     private boolean loadFiles() {
         try {
-        	if (!checkForLegacyDatabaseConfig())
-        		return false;
-        	TownySettings.loadDatabaseConfig(rootFolder + File.separator + "settings" + File.separator + "database.yml");
+            if (!checkForLegacyDatabaseConfig())
+                return false;
+            DatabaseConfig.loadDatabaseConfig(rootFolder + File.separator + "settings" + File.separator + "database.yml");
             TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", towny.getVersion());
             Translation.loadLanguage(rootFolder + File.separator + "settings", "en-US.yml");
             TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
@@ -227,7 +228,6 @@ public class TownyUniverse {
      */
     private boolean loadAndSaveDatabase(String loadDbType, String saveDbType) {
     	towny.getLogger().info("Database: [Load] " + loadDbType + " [Save] " + saveDbType);
-        
         // Try loading the database.
         long startTime = System.currentTimeMillis();
         if (!loadDatabase(loadDbType)) {
@@ -310,7 +310,7 @@ public class TownyUniverse {
         }
     }
 
-    /**
+    /** 
      * Converts the older config.yml's database settings into the database.yml file.
      * @return true if successful
      * @since 0.97.0.24

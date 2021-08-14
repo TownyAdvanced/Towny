@@ -1,5 +1,11 @@
 package com.palmergames.bukkit.towny.db;
 
+import java.io.File;
+
+import com.palmergames.bukkit.config.CommentedConfiguration;
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.util.FileMgmt;
+
 public enum DatabaseConfig {
 	DATABASE(
 			"database",
@@ -42,6 +48,9 @@ public enum DatabaseConfig {
 		this.Default = def;
 		this.comments = comments;
 	}
+	
+	private static CommentedConfiguration databaseConfig, newDatabaseConfig;
+
 
 	/**
 	 * Retrieves the root for a config option
@@ -78,4 +87,54 @@ public enum DatabaseConfig {
 		comments[0] = "";
 		return comments;
 	}
+	
+	public static void loadDatabaseConfig(String filepath) {
+		if (FileMgmt.checkOrCreateFile(filepath)) {
+			File file = new File(filepath);
+
+			// read the config.yml into memory
+			databaseConfig = new CommentedConfiguration(file);
+			if (!databaseConfig.load()) {
+				Towny.getPlugin().getLogger().severe("Failed to load database.yml!");
+			}
+
+			setDatabaseDefaults(file);
+
+			databaseConfig.save();
+		}
+	}
+	
+	/**
+	 * Builds a new database.yml reading old database.yml data.
+	 */
+	public static void setDatabaseDefaults(File file) {
+
+		newDatabaseConfig = new CommentedConfiguration(file);
+		newDatabaseConfig.load();
+
+		for (DatabaseConfig root : DatabaseConfig.values())
+			if (root.getComments().length > 0)
+				newDatabaseConfig.addComment(root.getRoot(), root.getComments());
+			else
+				newDatabaseConfig.set(root.getRoot(), (databaseConfig.get(root.getRoot().toLowerCase()) != null) ? databaseConfig.get(root.getRoot().toLowerCase()) : root.getDefault());
+
+		databaseConfig = newDatabaseConfig;
+		newDatabaseConfig = null;
+	}
+	
+	public static String getString(DatabaseConfig node) {
+
+		return databaseConfig.getString(node.getRoot().toLowerCase(), node.getDefault());
+	}
+	
+	public static int getInt(DatabaseConfig node) {
+
+		try {
+			return Integer.parseInt(databaseConfig.getString(node.getRoot().toLowerCase(), node.getDefault()).trim());
+		} catch (NumberFormatException e) {
+			Towny.getPlugin().getLogger().severe(node.getRoot().toLowerCase() + " from database.yml");
+			return 0;
+		}
+	}
+
 }

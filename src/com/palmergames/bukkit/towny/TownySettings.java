@@ -56,7 +56,7 @@ public class TownySettings {
 	}
 
 	// private static Pattern namePattern = null;
-	private static CommentedConfiguration config, newConfig, playermap, databaseConfig, newDatabaseConfig;
+	private static CommentedConfiguration config, newConfig;
 	private static int uuidCount;
 
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
@@ -305,22 +305,6 @@ public class TownySettings {
 		}
 	}
 	
-	public static void loadDatabaseConfig(String filepath) {
-		if (FileMgmt.checkOrCreateFile(filepath)) {
-			File file = new File(filepath);
-
-			// read the config.yml into memory
-			databaseConfig = new CommentedConfiguration(file);
-			if (!databaseConfig.load()) {
-				Towny.getPlugin().getLogger().severe("Failed to load database.yml!");
-			}
-
-			setDatabaseDefaults(file);
-
-			databaseConfig.save();
-		}
-	}
-	
 	private static void loadProtectedMobsList() {
 		protectedMobs.clear();
 		protectedMobs.addAll(EntityTypeUtil.parseLivingEntityClassNames(getStrArr(ConfigNodes.PROT_MOB_TYPES), "TownMobPVM:"));
@@ -358,17 +342,6 @@ public class TownySettings {
 				ItemUseMaterials.addAll(group);
 			} else {
 				ItemUseMaterials.add(matName);
-			}
-		}
-	}
-
-	public static void loadPlayerMap(String filepath) {
-		if (FileMgmt.checkOrCreateFile(filepath)) {
-			File file = new File(filepath);
-			
-			playermap = new CommentedConfiguration(file);
-			if (!playermap.load()) {
-				Towny.getPlugin().getLogger().warning("Failed to load playermap!");
 			}
 		}
 	}
@@ -422,21 +395,6 @@ public class TownySettings {
 			return Integer.parseInt(config.getString(node.getRoot().toLowerCase(), node.getDefault()).trim());
 		} catch (NumberFormatException e) {
 			sendError(node.getRoot().toLowerCase() + " from config.yml");
-			return 0;
-		}
-	}
-
-	public static String getString(DatabaseConfig node) {
-
-		return databaseConfig.getString(node.getRoot().toLowerCase(), node.getDefault());
-	}
-	
-	public static int getInt(DatabaseConfig node) {
-
-		try {
-			return Integer.parseInt(databaseConfig.getString(node.getRoot().toLowerCase(), node.getDefault()).trim());
-		} catch (NumberFormatException e) {
-			sendError(node.getRoot().toLowerCase() + " from database.yml");
 			return 0;
 		}
 	}
@@ -569,24 +527,6 @@ public class TownySettings {
 		newConfig = null;
 	}
 
-	/**
-	 * Builds a new database.yml reading old database.yml data.
-	 */
-	private static void setDatabaseDefaults(File file) {
-
-		newDatabaseConfig = new CommentedConfiguration(file);
-		newDatabaseConfig.load();
-
-		for (DatabaseConfig root : DatabaseConfig.values())
-			if (root.getComments().length > 0)
-				newDatabaseConfig.addComment(root.getRoot(), root.getComments());
-			else
-				newDatabaseConfig.set(root.getRoot(), (databaseConfig.get(root.getRoot().toLowerCase()) != null) ? databaseConfig.get(root.getRoot().toLowerCase()) : root.getDefault());
-
-		databaseConfig = newDatabaseConfig;
-		newDatabaseConfig = null;
-	}
-	
 	private static void setDefaultLevels() {
 
 		addComment(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), "# default Town levels.");
@@ -927,12 +867,12 @@ public class TownySettings {
 
 	public static String getLoadDatabase() {
 
-		return getString(DatabaseConfig.DATABASE_LOAD);
+		return DatabaseConfig.getString(DatabaseConfig.DATABASE_LOAD);
 	}
 
 	public static String getSaveDatabase() {
 
-		return getString(DatabaseConfig.DATABASE_SAVE);
+		return DatabaseConfig.getString(DatabaseConfig.DATABASE_SAVE);
 	}
 
 	public static boolean isGatheringResidentUUIDS() {
@@ -943,49 +883,49 @@ public class TownySettings {
 	// SQL
 	public static String getSQLHostName() {
 
-		return getString(DatabaseConfig.DATABASE_HOSTNAME);
+		return DatabaseConfig.getString(DatabaseConfig.DATABASE_HOSTNAME);
 	}
 
 	public static String getSQLPort() {
 
-		return getString(DatabaseConfig.DATABASE_PORT);
+		return DatabaseConfig.getString(DatabaseConfig.DATABASE_PORT);
 	}
 
 	public static String getSQLDBName() {
 
-		return getString(DatabaseConfig.DATABASE_DBNAME);
+		return DatabaseConfig.getString(DatabaseConfig.DATABASE_DBNAME);
 	}
 
 	public static String getSQLTablePrefix() {
 
-		return getString(DatabaseConfig.DATABASE_TABLEPREFIX);
+		return DatabaseConfig.getString(DatabaseConfig.DATABASE_TABLEPREFIX);
 	}
 
 	public static String getSQLUsername() {
 
-		return getString(DatabaseConfig.DATABASE_USERNAME);
+		return DatabaseConfig.getString(DatabaseConfig.DATABASE_USERNAME);
 	}
 
 	public static String getSQLPassword() {
 
-		return getString(DatabaseConfig.DATABASE_PASSWORD);
+		return DatabaseConfig.getString(DatabaseConfig.DATABASE_PASSWORD);
 	}
 	
 	public static String getSQLFlags() {
 		
-		return getString(DatabaseConfig.DATABASE_FLAGS);
+		return DatabaseConfig.getString(DatabaseConfig.DATABASE_FLAGS);
 	}
 
 	public static int getMaxPoolSize() {
-		return getInt(DatabaseConfig.DATABASE_POOLING_MAX_POOL_SIZE);
+		return DatabaseConfig.getInt(DatabaseConfig.DATABASE_POOLING_MAX_POOL_SIZE);
 	}
 
 	public static int getMaxLifetime() {
-		return getInt(DatabaseConfig.DATABASE_POOLING_MAX_LIFETIME);
+		return DatabaseConfig.getInt(DatabaseConfig.DATABASE_POOLING_MAX_LIFETIME);
 	}
 
 	public static int getConnectionTimeout() {
-		return getInt(DatabaseConfig.DATABASE_POOLING_CONNECTION_TIMEOUT);
+		return DatabaseConfig.getInt(DatabaseConfig.DATABASE_POOLING_CONNECTION_TIMEOUT);
 	}
 
 	public static int getMaxTownBlocks(Town town) {
