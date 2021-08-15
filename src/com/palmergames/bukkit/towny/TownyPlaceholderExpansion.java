@@ -140,8 +140,9 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		
 		/*
 		 * This is a location-based placeholder request, use the onPlaceholderRequest to fulfill it.
+		 * %townyadvanced_player_status% is a special case and should probably be renamed to %townyadvanced_resident_status%.
 		 */
-		if (player.isOnline() && identifier.startsWith("player_"))
+		if (player.isOnline() && (identifier.startsWith("player_") && !identifier.equals("player_status")))
 			return onPlaceholderRequest((Player) player, identifier);
 		
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());

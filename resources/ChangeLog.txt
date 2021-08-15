@@ -6592,3 +6592,5 @@ v0.92.0.11:
   - Update "Updating Language Files" section of Contributing.md, courtesy of EuGNosii with PR #5188.
 0.97.1.0:
   - Bump version for release.
+0.97.1.1:
+  - Fix %townyadvanced_player_status% placeholder.
