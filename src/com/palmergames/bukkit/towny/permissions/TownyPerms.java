@@ -649,6 +649,7 @@ public class TownyPerms {
 				"#",
 				"# You may assign any Permission nodes here, including those from other plugins.",
 				"# You may also create any custom ranks you require.",
+				"# You may change the names of any of the ranks except: nomad, default, mayor, king.",
 				"#############################################################################################",
 				"",
 				"",
