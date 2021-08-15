@@ -6594,3 +6594,6 @@ v0.92.0.11:
   - Bump version for release.
 0.97.1.1:
   - Fix %townyadvanced_player_status% placeholder.
+  - New Command: /ta purge [days] {townname}
+    - Deletes the players from the given town, who haven't logged in in the given days.
+    - Closes #5125.

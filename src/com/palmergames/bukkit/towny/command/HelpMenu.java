@@ -261,9 +261,10 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin purge")
-				.add("[number of days] {townless}", "")
+				.add("[number of days] {townless|townname}", "")
 				.add("", "Removes offline residents not seen for this duration.")
-				.add("", "Optional {townless} flag limits purge to only people that have no town.");
+				.add("", "Optional {townless} flag limits purge to only people that have no town.")
+				.add("", "Optional {townname} flag limits purge to only people in the given town.");
 		}
 	},
 	

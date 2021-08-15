@@ -245,7 +245,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return NameUtil.filterByStart(Arrays.asList("database", "db", "config", "perms", "permissions", "language", "lang", "townyperms", "all"), args[1]);
 			case "purge":
 				if (args.length == 3)
-					return NameUtil.filterByStart(Collections.singletonList("townless"), args[2]);
+					return filterByStartOrGetTownyStartingWith(Collections.singletonList("townless"), args[2], "+t");
 				break;
 			case "set":
 				if (args.length > 1) {
@@ -2016,69 +2016,44 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.TA_PURGE.send(sender);
 			return;
 		}
-		String days = "";
-		if (split.length == 2 && split[1].equalsIgnoreCase("townless")) {
-			days += "townless";
-		}
-
+		
+		boolean townless = false;
+		Town town = null;
+		int days = 0;
 		try {
-			days += String.valueOf(split[0]);
+			days = Integer.parseInt(split[0]);
 		} catch (NumberFormatException e) {
 			TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_error_must_be_int"));
 			return;
 		}
 
+		if (split.length == 2 && split[1].equalsIgnoreCase("townless")) {
+			townless = true;
+		}
+		
+		if (!townless && split.length == 2) {
+			town = TownyUniverse.getInstance().getTown(split[1]);
+			if (town == null) {
+				TownyMessaging.sendErrorMsg(getSender(), Translation.of("msg_err_not_registered_1", split[1]));
+				return;
+			}
+		}
+
+		final int numDays = days;
+		final boolean finalTownless = townless;
+		final Town finalTown = town;
 		if (!isConsole) {
-
-			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
-				try {
-					throw new TownyException(Translation.of("msg_err_admin_only"));
-				} catch (TownyException e) {
-					TownyMessaging.sendErrorMsg(player, e.getMessage());
-				}
-			}
-
-			final String finalDays = days;
-
-			Runnable purgeHandler = () -> {
-				Player player = (Player) sender;
-				if (player == null) {
-					try {
-						throw new TownyException("Player could not be found!");
-					} catch (TownyException e) {
-						e.printStackTrace();
-					}
-				}
-
-				int numDays;
-				boolean townless = false;
-				if (finalDays.startsWith("townless")) {
-					townless = true;
-					numDays = Integer.parseInt(finalDays.substring(8));
-				} else {
-					numDays = Integer.parseInt(finalDays);
-				}
-
-				new ResidentPurge(plugin, player, TimeTools.getMillis(numDays + "d"), townless).start();
-			};
-			
-			if (sender != null) {
-				Confirmation.runOnAccept(purgeHandler)
-				.sendTo(sender);
-			}
-		} else { // isConsole
-			final String finalDays = days;
 			Confirmation.runOnAccept(() -> {
-				int numDays;
-				boolean townless = false;
-				if (finalDays.startsWith("townless")) {
-					townless = true;
-					numDays = Integer.parseInt(finalDays.substring(8));
-				} else {
-					numDays = Integer.parseInt(finalDays);
+				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
+					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_admin_only"));
+					return;
 				}
-
-				new ResidentPurge(plugin, null, TimeTools.getMillis(numDays + "d"), townless).start();
+				new ResidentPurge(plugin, player, TimeTools.getMillis(numDays + "d"), finalTownless, finalTown).start();
+			})
+			.sendTo(player);
+		} else { // isConsole
+			Confirmation.runOnAccept(() -> {
+				new ResidentPurge(plugin, null, TimeTools.getMillis(numDays + "d"), finalTownless, finalTown).start();
 			})
 			.sendTo(sender);
 		}
