@@ -6597,3 +6597,4 @@ v0.92.0.11:
   - New Command: /ta purge [days] {townname}
     - Deletes the players from the given town, who haven't logged in in the given days.
     - Closes #5125.
+  - Fix /n set capital not checking the correct number for max-residents-per-town.
