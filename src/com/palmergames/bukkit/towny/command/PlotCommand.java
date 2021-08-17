@@ -67,7 +67,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -367,7 +366,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									tb.setType(townBlock.getType()); // Re-set the plot permissions while maintaining plot type. 
 									tb.save();                       // Save townblock.
 							});
-							TownyMessaging.sendMessage(player, Translatable.of("msg_plot_evict_group", townBlock.getPlotObjectGroup().getName()));
+							TownyMessaging.sendMsg(player, Translatable.of("msg_plot_evict_group", townBlock.getPlotObjectGroup().getName()));
 							return true;
 						}
 						
@@ -376,7 +375,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						townBlock.setType(townBlock.getType()); // Re-set the plot permissions while maintaining plot type.
 						townBlock.save(); // Save townblock.
 						
-						TownyMessaging.sendMessage(player, Translatable.of("msg_plot_evict"));
+						TownyMessaging.sendMsg(player, Translatable.of("msg_plot_evict"));
 					}
 
 				} else if (split[0].equalsIgnoreCase("unclaim")) {
