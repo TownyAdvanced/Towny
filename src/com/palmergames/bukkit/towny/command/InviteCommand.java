@@ -280,7 +280,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		if ((page * 10) > list.size()) {
 			iMax = list.size();
 		}
-		String object = null;
+		Translatable object = null;
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Invite invite = list.get(i);
 			String name = invite.getDirectSender().getName();
@@ -290,30 +290,30 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			if (fromSender) {
 				output = Colors.Blue + invite.getReceiver().getName() + Colors.Gray + " - " + Colors.Green + name;
 				if (invite.getSender() instanceof Town) { // If it's sent by a town to a resident
-					object = Translation.of("player_sing", player);
+					object = Translatable.of("player_sing");
 				}
 				if (invite.getSender() instanceof Nation) {
 					if (invite.getReceiver() instanceof Town) {
-						object = Translation.of("town_sing", player);
+						object = Translatable.of("town_sing");
 					}
 					if (invite.getReceiver() instanceof Nation) {
-						object = Translation.of("nation_sing", player);
+						object = Translatable.of("nation_sing");
 					}
 				}
 			} else { // So it's not from the sender, then it's from the receiver so
 				output = Colors.Blue + invite.getSender().getName() + Colors.Gray + " - " + Colors.Green + name;
 				if (invite.getReceiver() instanceof Resident) {
-					object = Translation.of("town_sing", player);
+					object = Translatable.of("town_sing");
 				}
 				if (invite.getReceiver() instanceof Town || invite.getReceiver() instanceof Nation) {
-					object = Translation.of("nation_sing", player);
+					object = Translatable.of("nation_sing");
 				}
 			}
 			invitesFormatted.add(output);
 		}
 
 		TownyMessaging.sendMessage(player, ChatTools.formatList(Translation.of("invite_plu", player),
-				Colors.Blue + object + Colors.Gray + " - " + Colors.LightBlue + Translation.of("invite_sent_by", player),
+				Colors.Blue + object.translate(Translation.getLocale(player)) + Colors.Gray + " - " + Colors.LightBlue + Translation.of("invite_sent_by", player),
 				invitesFormatted, Translation.of("LIST_PAGE", player, page, total)
 		));
 	}
