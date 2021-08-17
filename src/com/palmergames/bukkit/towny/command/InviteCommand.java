@@ -12,7 +12,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -117,7 +116,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		
 		Resident resident = resOpt.get();
 
-		String received = Translation.of("player_received_invites", player)
+		String received = Translatable.of("player_received_invites").forLocale(player)
 				.replace("%a", Integer.toString(resident.getReceivedInvites().size())
 				)
 				.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident)));
@@ -312,9 +311,9 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			invitesFormatted.add(output);
 		}
 
-		TownyMessaging.sendMessage(player, ChatTools.formatList(Translation.of("invite_plu", player),
-				Colors.Blue + object.translate(Translation.getLocale(player)) + Colors.Gray + " - " + Colors.LightBlue + Translation.of("invite_sent_by", player),
-				invitesFormatted, Translation.of("LIST_PAGE", player, page, total)
+		TownyMessaging.sendMessage(player, ChatTools.formatList(Translatable.of("invite_plu").forLocale(player),
+				Colors.Blue + object.forLocale(player) + Colors.Gray + " - " + Colors.LightBlue + Translatable.of("invite_sent_by").forLocale(player),
+				invitesFormatted, Translatable.of("LIST_PAGE", page, total).forLocale(player)
 		));
 	}
 }
