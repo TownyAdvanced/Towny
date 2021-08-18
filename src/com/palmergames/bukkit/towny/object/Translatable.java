@@ -4,6 +4,8 @@ import com.palmergames.bukkit.util.Colors;
 
 import java.util.Locale;
 
+import org.bukkit.entity.Player;
+
 public class Translatable {
 	private String key;
 	private Object[] args;
@@ -79,6 +81,14 @@ public class Translatable {
 		return stripColors ? Colors.strip(translated) : translated;
 	}
 	
+	public String forLocale(Resident resident) {
+		return translate(Translation.getLocale(resident));
+	}
+	
+	public String forLocale(Player player) {
+		return translate(Translation.getLocale(player));
+	}
+
 	private void checkArgs() {
 		if (args == null)
 			return;
