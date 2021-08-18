@@ -6601,3 +6601,9 @@ v0.92.0.11:
   - Fix towns and nations being able to use the economy prefixes as town and nation names.
     - Closes #5196.
   - Update list of banned names to include new /town subcommands.
+  - Create database.yml file.
+    - Your Towny database settings will be migrated to a new database.yml file.
+    - This allows us to be shown the config file without mysql servers having to go to the trouble of removing their passwords.
+  - Automatic town and nation name renaming for FlatFile database.
+    - If a town or nation would be loaded with an invalid name, which would cause Towny to enter into safemode, Towny will rename that town or nation.
+    - Solves for the most common sort of SafeMode in modern Towny.
