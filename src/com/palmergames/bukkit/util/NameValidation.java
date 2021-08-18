@@ -24,7 +24,8 @@ public class NameValidation {
 		bannedNames = new HashSet<>(
 			Arrays.asList("here","leave","list","online","new","plots","add","kick","claim","unclaim","withdraw","delete",
 					"outlawlist","deposit","outlaw","outpost","ranklist","rank","reclaim","reslist","say","set","toggle","join",
-					"invite","buy","mayor","bankhistory","enemy","ally","townlist","allylist","enemylist","king","merge"));
+					"invite","buy","mayor","bankhistory","enemy","ally","townlist","allylist","enemylist","king","merge","jail",
+					"plotgrouplist","trust","purge"));
 	}
 
 	/**
@@ -91,17 +92,20 @@ public class NameValidation {
 		// Max name length
 		if (name.length() > TownySettings.getMaxNameLength())
 			return true;
-		/*
-		  A list of all banned names (notably all sub commands like 'spawn'
-		  used in '/town spawn')
-		 */
-		// Banned names
-		if (bannedNames.contains(name.toLowerCase()))
+		
+		// Economy prefixes 
+		if (name.equalsIgnoreCase(TownySettings.getNationAccountPrefix()) || name.equalsIgnoreCase(TownySettings.getTownAccountPrefix()))
 			return true;
 		
+		// A list of all banned names (notably all sub commands like 'spawn' used in '/town spawn')
+		if (bannedNames.contains(name.toLowerCase()))
+			return true;
+
+		// Config's name blacklist.
 		if (TownySettings.getBlacklistedNames().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(name.toLowerCase()))
 			return true;
 
+		// Finally, send it over to pass the regex test.
 		return !isValidName(name);
 	}
 	
@@ -113,10 +117,10 @@ public class NameValidation {
 	 */
 	public static boolean isValidName(String name) {
 
-		if (name.contains("'") || name.contains("`")) {
+		// Characters that mysql might not like.
+		if (name.contains("'") || name.contains("`"))
 			return false;
-		}
-	
+		
 		try {
 			if (namePattern == null)
 				namePattern = Pattern.compile(TownySettings.getNameCheckRegex(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);

@@ -6598,3 +6598,6 @@ v0.92.0.11:
     - Deletes the players from the given town, who haven't logged in in the given days.
     - Closes #5125.
   - Fix /n set capital not checking the correct number for max-residents-per-town.
+  - Fix towns and nations being able to use the economy prefixes as town and nation names.
+    - Closes #5196.
+  - Update list of banned names to include new /town subcommands.
