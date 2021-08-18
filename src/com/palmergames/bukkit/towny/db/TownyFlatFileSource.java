@@ -266,12 +266,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			
 			try {
 				TownyUniverse.getInstance().newTownInternal(name);
-			} catch (AlreadyRegisteredException e) {
-				// Should not be possible in flatfile.
-			} catch (InvalidNameException e) {
+			} catch (AlreadyRegisteredException | InvalidNameException e) {
 				// Thrown if the town name does not pass the filters.
-				e.printStackTrace();
-				return false;
+				String newName = generateReplacementName(true);
+				TownyUniverse.getInstance().getReplacementNameMap().put(name, newName);
+				TownyMessaging.sendErrorMsg(String.format("The town %s tried to load an invalid name, attempting to rename it to %s.", name, newName));
+				try {
+					TownyUniverse.getInstance().newTownInternal(newName);
+				} catch (AlreadyRegisteredException | InvalidNameException e1) {
+					// We really hope this doesn't fail again.
+					e1.printStackTrace();
+					return false;
+				}
+				File newFile = new File(town.getParent(), newName + ".txt");
+				town.renameTo(newFile);
 			}
 		}
 		
@@ -301,12 +309,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 			try {
 				newNation(name);
-			} catch (AlreadyRegisteredException e) {
-				// Should not be possible in flatfile.
-			} catch (NotRegisteredException e) {
+			} catch (AlreadyRegisteredException | NotRegisteredException e) {
 				// Thrown if the town name does not pass the filters.
-				e.printStackTrace();
-				return false;
+				String newName = generateReplacementName(false);
+				TownyUniverse.getInstance().getReplacementNameMap().put(name, newName);
+				TownyMessaging.sendErrorMsg(String.format("The nation %s tried to load an invalid name, attempting to rename it to %s.", name, newName));
+				try {
+					newNation(newName);
+				} catch (AlreadyRegisteredException | NotRegisteredException e1) {
+					// we really hope this doesn't fail a second time.
+					e1.printStackTrace();
+					return false;
+				}
+				
+				File newFile = new File(nation.getParent(), newName + ".txt");
+				nation.renameTo(newFile);
 			}
 		}
 		
@@ -497,12 +514,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 				line = keys.get("town");
 				if (line != null) {
-					Town town = universe.getTown(line);
-					
-					if (town == null) {
+					Town town = null;
+					if (universe.hasTown(line)) {
+						town = universe.getTown(line);
+					} else if (universe.getReplacementNameMap().containsKey(line)) {
+						town = universe.getTown(universe.getReplacementNameMap().get(line));
+					} else {
 						TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_resident_tried_load_invalid_town", resident.getName(), line));
 					}
-					else {
+					
+					if (town != null) {
 						resident.setTown(town, false);
 						
 						line = keys.get("title");
@@ -524,11 +545,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							if (line != null)
 								resident.setNationRanks(Arrays.asList((line.split(","))));
 						} catch (Exception e) {}
+
+						line = keys.get("joinedTownAt");
+						if (line != null) {
+							resident.setJoinedTownAt(Long.parseLong(line));
+						}
 					}
-				}
-				line = keys.get("joinedTownAt");
-				if (line != null) {
-					resident.setJoinedTownAt(Long.parseLong(line));
 				}
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_resident_at_line", resident.getName(), line, resident.getName()));
@@ -879,7 +901,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("nation");
 				if (line != null && !line.isEmpty()) {
-					Nation nation = universe.getNation(line);
+					Nation nation = null;
+					if (universe.hasNation(line))
+						nation = universe.getNation(line);
+					else if (universe.getReplacementNameMap().containsKey(line))
+						nation = universe.getNation(universe.getReplacementNameMap().get(line));
+
 					// Only set the nation if it exists
 					if (nation != null)
 						town.setNation(nation, false);
@@ -1496,7 +1523,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							deleteTownBlock(townBlock);
 							continue;
 						}
-						Town town = universe.getTown(line.trim());
+						Town town = null;
+						if (universe.hasTown(line.trim()))
+							town = universe.getTown(line.trim());
+						else if (universe.getReplacementNameMap().containsKey(line.trim()))
+							town = universe.getTown(universe.getReplacementNameMap().get(line).trim());
 						
 						if (town == null) {
 							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_townblock_file_contains_unregistered_town_delete", line, path));
