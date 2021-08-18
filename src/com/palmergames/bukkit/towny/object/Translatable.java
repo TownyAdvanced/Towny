@@ -82,7 +82,7 @@ public class Translatable {
 	}
 	
 	public String forLocale(Resident resident) {
-		return forLocale(resident.getPlayer());
+		return translate(Translation.getLocale(resident));
 	}
 	
 	public String forLocale(Player player) {
