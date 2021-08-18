@@ -87,7 +87,7 @@ public class TownyUniverse {
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final Map<UUID, Jail> jailUUIDMap = new ConcurrentHashMap<>();
     private final Map<UUID, Long> hibernatedResidentMap = new ConcurrentHashMap<>();
-    
+    private final Map<String, String> replacementNamesMap = new ConcurrentHashMap<>();
     private final Map<UUID, PlotGroup> plotGroupUUIDMap = new ConcurrentHashMap<>();
     
     private final Map<WorldCoord, TownyMapData> wildernessMapDataMap = new ConcurrentHashMap<WorldCoord, TownyMapData>();
@@ -211,6 +211,7 @@ public class TownyUniverse {
         plotGroupUUIDMap.clear();
         wildernessMapDataMap.clear();
         hibernatedResidentMap.clear();
+        replacementNamesMap.clear();
     }
     
     /**
@@ -1266,6 +1267,10 @@ public class TownyUniverse {
 
 	public Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {
 		return wildernessMapDataMap;
+	}
+	
+	public Map<String,String> getReplacementNameMap() {
+		return replacementNamesMap;
 	}
 
     /*

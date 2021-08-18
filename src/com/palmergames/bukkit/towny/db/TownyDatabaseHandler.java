@@ -71,6 +71,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -1689,5 +1690,41 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		
 		return uuids;
+	}
+
+	/**
+	 * Generates a town or nation replacementname.
+	 * i.e.: Town1 or Nation2
+	 * 
+	 * @param town Boolean for whether it's a town or a nation we're creating a name for.
+	 * @return replacementName String.
+	 */
+	public String generateReplacementName(boolean town) {
+		Random r = new Random();
+		String replacementName = "replacementname" + r.nextInt(99) + 1;
+		try {
+			replacementName = getNextName(town);
+		} catch (TownyException e) {
+			e.printStackTrace();
+		}
+		return replacementName;
+	}
+	
+	
+	private String getNextName(boolean town) throws TownyException  {
+		String name = town ? "Town" : "Nation";
+		
+		int i = 0;
+		do {
+			name = name + ++i;
+			if (town)
+				if (!TownyUniverse.getInstance().hasTown(name))
+					return name;
+			else
+				if (!TownyUniverse.getInstance().hasNation(name))
+					return name;
+			if (i > 100000)
+				throw new TownyException("Too many replacement names.");
+		} while (true);
 	}
 }
