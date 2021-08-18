@@ -350,7 +350,7 @@ public class TownyUniverse {
     		if (FileMgmt.checkOrCreateFile(databaseFilePath)) {
     			CommentedConfiguration databaseConfig = new CommentedConfiguration(new File(databaseFilePath));
     			databaseConfig.set("database.database_load", dbload);
-    			databaseConfig.set("database.database_load", dbsave);
+    			databaseConfig.set("database.database_save", dbsave);
     			databaseConfig.set("database.sql.hostname", hostname);
     			databaseConfig.set("database.sql.port", port);
     			databaseConfig.set("database.sql.dbname", dbname);
