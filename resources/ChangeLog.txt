@@ -6607,3 +6607,5 @@ v0.92.0.11:
   - Automatic town and nation name renaming for FlatFile database.
     - If a town or nation would be loaded with an invalid name, which would cause Towny to enter into safemode, Towny will rename that town or nation.
     - Solves for the most common sort of SafeMode in modern Towny.
+0.97.1.2:
+  - Fix database.yml not being converted to the correct loading setting.
