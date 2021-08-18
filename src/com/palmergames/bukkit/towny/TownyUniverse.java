@@ -1,7 +1,9 @@
 package com.palmergames.bukkit.towny;
 
 import com.palmergames.annotations.Unmodifiable;
+import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.migration.ConfigMigrator;
+import com.palmergames.bukkit.towny.db.DatabaseConfig;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
@@ -32,6 +34,7 @@ import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
+import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -169,7 +172,7 @@ public class TownyUniverse {
      */
 
     /**
-    * Performs CleanupTask and BackupTask in async,
+     * Performs CleanupTask and BackupTask in async,
      */
     public void performCleanupAndBackup() {
 		backupFuture = CompletableFuture
@@ -184,6 +187,9 @@ public class TownyUniverse {
      */
     private boolean loadFiles() {
         try {
+            if (!checkForLegacyDatabaseConfig())
+                return false;
+            DatabaseConfig.loadDatabaseConfig(rootFolder + File.separator + "settings" + File.separator + "database.yml");
             TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", towny.getVersion());
             Translation.loadLanguage(rootFolder + File.separator + "settings", "en-US.yml");
             TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
@@ -305,6 +311,67 @@ public class TownyUniverse {
         }
     }
 
+    /** 
+     * Converts the older config.yml's database settings into the database.yml file.
+     * @return true if successful
+     * @since 0.97.0.24
+     */
+    private boolean checkForLegacyDatabaseConfig() {
+    	File file = new File(rootFolder + File.separator + "settings" + File.separator + "config.yml");
+    	// Bail if the config doesn't exist at all yet.
+    	if (!file.exists())
+    		return true;
+
+    	CommentedConfiguration config = new CommentedConfiguration(file);
+    	// return false if the config cannot be loaded.
+    	if (!config.load())
+    		return false;
+    	if (config.contains("plugin.database.sql.database_load")) {
+    		/*
+    		 * Get old settings from config.
+    		 */
+    		String dbload = config.getString("plugin.database.sql.database_load");
+    		String dbsave = config.getString("plugin.database.sql.database_save");
+    		String hostname = config.getString("plugin.database.sql.hostname");
+    		String port = config.getString("plugin.database.sql.port");
+    		String dbname = config.getString("plugin.database.sql.dbname");
+    		String tableprefix = config.getString("plugin.database.sql.table_prefix");
+    		String username = config.getString("plugin.database.sql.username");
+    		String password = config.getString("plugin.database.sql.password");
+    		String flags = config.getString("plugin.database.sql.flags");
+    		String max_pool = config.getString("plugin.database.sql.pooling.max_pool_size");
+    		String max_lifetime = config.getString("plugin.database.sql.pooling.max_lifetime");
+    		String connection_timeout = config.getString("plugin.database.sql.pooling.connection_timeout");
+
+    		/*
+    		 * Create database.yml if it doesn't exist yet, with new settings.
+    		 */
+    		String databaseFilePath = rootFolder + File.separator + "settings" + File.separator + "database.yml";
+    		if (FileMgmt.checkOrCreateFile(databaseFilePath)) {
+    			CommentedConfiguration databaseConfig = new CommentedConfiguration(new File(databaseFilePath));
+    			databaseConfig.set("database.database_load", dbload);
+    			databaseConfig.set("database.databaes_load", dbsave);
+    			databaseConfig.set("database.sql.hostname", hostname);
+    			databaseConfig.set("database.sql.port", port);
+    			databaseConfig.set("database.sql.dbname", dbname);
+    			databaseConfig.set("database.sql.table_prefix", tableprefix);
+    			databaseConfig.set("database.sql.username", username);
+    			databaseConfig.set("database.sql.password", password);
+    			databaseConfig.set("database.sql.flags", flags);
+    			databaseConfig.set("database.sql.pooling.max_pool_size", max_pool);
+    			databaseConfig.set("database.sql.pooling.max_lifetime", max_lifetime);
+    			databaseConfig.set("database.sql.pooling.connection_timeout", connection_timeout);
+    			databaseConfig.save();
+    			towny.getLogger().info("Database settings migrated to towny\\data\\settings\\database.yml");
+    		} else {
+    			towny.getLogger().severe("Unable to migrate old database settings to towny\\data\\settings\\database.yml");
+    			return false;
+    		}
+    	}
+    	return true;
+	}
+
+    
     /**
      * Loads the Town and Nation Levels from the config.yml
      * 
