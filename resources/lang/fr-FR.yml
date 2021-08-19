@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.117
+version: 0.118
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious,PainOchoco
 website: 'http://townyadvanced.github.io/'
@@ -1335,3 +1335,5 @@ err_invalid_yaml: 'Erreur de chargement : Impossible de charger le fichier %s (p
 msg_town_map_color_changed: '&bLa couleur de la carte de la ville a été changée en %s.'
 #Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Ce bloc de ville ne peut pas être ajouté au groupe car il n''est pas de type : %s'
+#Added in 0.118
+status_title_nopvp: '&a(No PVP)'
