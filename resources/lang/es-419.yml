@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.117
+version: 0.118
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -1335,3 +1335,5 @@ err_invalid_yaml: 'Error de carga: No se pudo cargar el archivo %s (¿pasa corre
 msg_town_map_color_changed: '&bEl color del mapa de la ciudad se cambió a %s.'
 #Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Este terreno no se puede agregar al grupo porque no es de tipo %s'
+#Added in 0.118
+status_title_nopvp: '&a(No PVP)'
