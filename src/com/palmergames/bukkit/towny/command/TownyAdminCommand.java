@@ -750,7 +750,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	
 	private void displayNodesHelpByGroup(String group, List<String> groupNodes) {
 		if (groupNodes.size() > 0) {
-			TownyMessaging.sendMessage(sender, ChatTools.formatTitle(Translation.of("msg_title_group_permissions", sender, StringMgmt.capitalize(group))));
+			TownyMessaging.sendMessage(sender, ChatTools.formatTitle(Translatable.of("msg_title_group_permissions", StringMgmt.capitalize(group)).forLocale(sender)));
 			for (String node : groupNodes)
 				TownyMessaging.sendMessage(sender, " - " + node);
 
@@ -850,7 +850,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private void parseAdminDatabaseRemoveCommand(String[] split) {
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/townyadmin database remove"));
-			TownyMessaging.sendMessage(sender, ChatTools.formatCommand(Translation.of("admin_sing", sender), "/townyadmin database remove", "titles", "Removes all titles and surnames from every resident."));
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand(Translatable.of("admin_sing").forLocale(sender), "/townyadmin database remove", "titles", "Removes all titles and surnames from every resident."));
 			return;
 		}
 		
@@ -1004,8 +1004,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		ta_panel.clear();
 		Runtime run = Runtime.getRuntime();
-		ta_panel.add(ChatTools.formatTitle(Translation.of("ta_panel_1", sender)));
-		ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "Towny" + Colors.Blue + "] " + Colors.Green + Translation.of("ta_panel_2", sender) + Colors.LightGreen + TownyAPI.getInstance().isWarTime() + Colors.Gray + " | " + Colors.Green + Translation.of("ta_panel_3", sender) + (TownyTimerHandler.isHealthRegenRunning() ? Colors.LightGreen + "On" : Colors.Rose + "Off") + Colors.Gray + " | " + (Colors.Green + Translation.of("ta_panel_5", sender) + (TownyTimerHandler.isDailyTimerRunning() ? Colors.LightGreen + "On" : Colors.Rose + "Off")));
+		ta_panel.add(ChatTools.formatTitle(Translatable.of("ta_panel_1").forLocale(sender)));
+		ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "Towny" + Colors.Blue + "] " + Colors.Green + Translatable.of("ta_panel_2").forLocale(sender) + Colors.LightGreen + TownyAPI.getInstance().isWarTime() + Colors.Gray + " | " + Colors.Green + Translatable.of("ta_panel_3").forLocale(sender) + (TownyTimerHandler.isHealthRegenRunning() ? Colors.LightGreen + "On" : Colors.Rose + "Off") + Colors.Gray + " | " + (Colors.Green + Translatable.of("ta_panel_5").forLocale(sender) + (TownyTimerHandler.isDailyTimerRunning() ? Colors.LightGreen + "On" : Colors.Rose + "Off")));
 		/*
 		 * ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "Towny" +
 		 * Colors.Blue + "] " + Colors.Green +
@@ -1024,7 +1024,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		 * Translation.of("ta_panel_7") + Colors.LightGreen +
 		 * getNumBankAccounts()); } catch (Exception e) { }
 		 */
-		ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + Translation.of("ta_panel_8", sender) + Colors.Blue + "] " + Colors.Green + Translation.of("ta_panel_9", sender) + Colors.LightGreen + MemMgmt.getMemSize(run.totalMemory()) + Colors.Gray + " | " + Colors.Green + Translation.of("ta_panel_10", sender) + Colors.LightGreen + Thread.getAllStackTraces().keySet().size() + Colors.Gray + " | " + Colors.Green + Translation.of("ta_panel_11", sender) + Colors.LightGreen + TownyFormatter.getTime());
+		ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + Translatable.of("ta_panel_8").forLocale(sender) + Colors.Blue + "] " + Colors.Green + Translatable.of("ta_panel_9").forLocale(sender) + Colors.LightGreen + MemMgmt.getMemSize(run.totalMemory()) + Colors.Gray + " | " + Colors.Green + Translatable.of("ta_panel_10").forLocale(sender) + Colors.LightGreen + Thread.getAllStackTraces().keySet().size() + Colors.Gray + " | " + Colors.Green + Translatable.of("ta_panel_11").forLocale(sender) + Colors.LightGreen + TownyFormatter.getTime());
 		ta_panel.add(Colors.Yellow + MemMgmt.getMemoryBar(50, run));
 
 	}
@@ -2038,7 +2038,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (!isConsole) {
 			Confirmation.runOnAccept(() -> {
 				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
-					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_admin_only"));
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_admin_only"));
 					return;
 				}
 				new ResidentPurge(plugin, player, TimeTools.getMillis(numDays + "d"), finalTownless, finalTown).start();

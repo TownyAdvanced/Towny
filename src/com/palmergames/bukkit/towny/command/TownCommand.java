@@ -888,7 +888,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			kickList.forEach(Resident::removeTown);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_purge_complete_x_removed", kickList.size()));
 		})
-		.setTitle(Translation.of("msg_purging_will_remove_the_following_residents", player, StringMgmt.join(kickList, ", ")))
+		.setTitle(Translatable.of("msg_purging_will_remove_the_following_residents", StringMgmt.join(kickList, ", ")))
 		.sendTo(player);
 	}
 
@@ -898,11 +898,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Resident resident = getResidentOrThrow(player.getUniqueId());
 
-		String received = Translation.of("town_received_invites", player)
+		String received = Translatable.of("town_received_invites").forLocale(player)
 				.replace("%a", Integer.toString(resident.getTown().getReceivedInvites().size())
 				)
 				.replace("%m", Integer.toString(InviteHandler.getReceivedInvitesMaxAmount(resident.getTown())));
-		String sent = Translation.of("town_sent_invites", player)
+		String sent = Translatable.of("town_sent_invites").forLocale(player)
 				.replace("%a", Integer.toString(resident.getTown().getSentInvites().size())
 				)
 				.replace("%m", Integer.toString(InviteHandler.getSentInvitesMaxAmount(resident.getTown())));
@@ -1269,7 +1269,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		out.add(Colors.Green + "Residential: " + Colors.LightGreen + residentOwned + " / " + residentOwnedFS + " / " + resident + " / " + (residentOwned * town.getPlotTax()));
 		out.add(Colors.Green + "Embassies : " + Colors.LightGreen + embassyRO + " / " + embassyFS + " / " + embassy + " / " + (embassyRO * town.getEmbassyPlotTax()));
 		out.add(Colors.Green + "Shops      : " + Colors.LightGreen + shopRO + " / " + shopFS + " / " + shop + " / " + (shop * town.getCommercialPlotTax()));
-		out.add(Translation.of("msg_town_plots_revenue_disclaimer", sender));
+		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
 		TownyMessaging.sendMessage(sender, out);
 
 	}
@@ -1285,15 +1285,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, town);
 			if (onlineResidents.size() > 0) {
-				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translation.of("msg_town_online", player), town, player));
+				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
 			} else {
-				TownyMessaging.sendMsg(player, Colors.White + "0 " + Translation.of("res_list", player) + " " + (Translation.of("msg_town_online", player) + ": " + town));
+				TownyMessaging.sendMsg(player, Colors.White + "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_town_online").forLocale(player) + ": " + town));
 			}
 		} else {
 			try {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				Town town = resident.getTown();
-				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translation.of("msg_town_online", player), town, player));
+				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
 			} catch (NotRegisteredException x) {
 				TownyMessaging.sendMsg(player, Translatable.of("msg_err_dont_belong_town"));
 			}
@@ -1409,13 +1409,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					townName = townName.append(Component.text(Colors.Gray + " - " + Colors.LightBlue + "(" + town.getResidents().size() + ")"));
 
 					if (town.isOpen())
-						townName = townName.append(Component.text(" " + Colors.LightBlue + Translation.of("status_title_open", sender)));
+						townName = townName.append(Component.text(" " + Colors.LightBlue + Translatable.of("status_title_open").forLocale(sender)));
 					
 					String spawnCost = "Free";
 					if (TownyEconomyHandler.isActive())
-						spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", sender, TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+						spawnCost = ChatColor.RESET + Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost())).forLocale(sender);
 
-					townName = townName.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_click_spawn", sender, town) + "\n" + spawnCost).color(NamedTextColor.GOLD)));
+					townName = townName.hoverEvent(HoverEvent.showText(Component.text(Translatable.of("msg_click_spawn", town).forLocale(sender) + "\n" + spawnCost).color(NamedTextColor.GOLD)));
 					output.add(townName);
 				}
 				TownyMessaging.sendTownList(sender, output, finalType, pageNumber, totalNumber);
@@ -1977,7 +1977,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 
 				if (split.length < 2) {
-					TownyMessaging.sendErrorMsg(player, "Eg: /town set board " + Translation.of("town_help_9", player));
+					TownyMessaging.sendErrorMsg(player, "Eg: /town set board " + Translatable.of("town_help_9").forLocale(player));
 					return;
 				} else {
 					String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
@@ -2345,7 +2345,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 							townRename(player, finalTown, finalName);
 						})
-						.setTitle(Translation.of("msg_confirm_purchase", player, TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())))
+						.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())))
 						.build();
                     	
                     	ConfirmationHandler.sendConfirmation(player, confirmation);
@@ -2530,7 +2530,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 							return;
 						}
-					}).setTitle(Translation.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", player, StringMgmt.join(removedTowns, ", ")))
+					}).setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
 					  .sendTo(player);
 
 				// Phew, the nation won't lose any towns, let's do this.
@@ -2665,7 +2665,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(player, Translatable.of("msg_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 			town.save();
 		})
-			.setTitle(Translation.of("msg_confirm_purchase", player, TownyEconomyHandler.getFormattedBalance(cost)))
+			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 			.build();
 		ConfirmationHandler.sendConfirmation(player, confirmation);
 	}
@@ -2766,7 +2766,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 					TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
 				})
-					.setTitle(Translation.of("msg_confirm_purchase", player, TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())))
+					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())))
 					.sendTo(player);
 
 			// Or, if the town doesn't cost money to create, just make the Town.
@@ -2944,7 +2944,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			town = resident.getTown();
-			notAffordMSG = Translation.of("msg_err_cant_afford_tp", player);
+			notAffordMSG = Translatable.of("msg_err_cant_afford_tp").forLocale(player);
 
 		} else {
 			// split.length > 1
@@ -2953,7 +2953,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (town == null)
 				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[0]));
 			
-			notAffordMSG = Translation.of("msg_err_cant_afford_tp_town", player, town.getName());
+			notAffordMSG = Translatable.of("msg_err_cant_afford_tp_town", town.getName()).forLocale(player);
 		}
 			
 		SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, ignoreWarning, SpawnType.TOWN);

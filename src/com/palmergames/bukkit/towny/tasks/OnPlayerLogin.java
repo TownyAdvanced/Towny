@@ -94,7 +94,7 @@ public class OnPlayerLogin implements Runnable {
 					resident = universe.getResident(player.getUniqueId());
 					
 					if (TownySettings.isShowingRegistrationMessage())				
-						TownyMessaging.sendMessage(player, Translation.of("msg_registration", player.getName()));
+						TownyMessaging.sendMessage(player, Translatable.of("msg_registration", player.getName()));
 					long registered = System.currentTimeMillis();
 					if (universe.hasHibernatedResdient(player.getUniqueId())) {
 						/*
@@ -179,8 +179,8 @@ public class OnPlayerLogin implements Runnable {
 				Audience audience = Towny.getAdventure().player(player);
 				ClickEvent clickEvent = ClickEvent.openUrl(TownyUpdateChecker.getUpdateURL());
 				
-				audience.sendMessage(Component.text(Translation.of("default_towny_prefix", player) + Translation.of("msg_new_update_available", player, TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion())).clickEvent(clickEvent));
-				audience.sendMessage(Component.text(Translation.of("default_towny_prefix", player) + Translation.of("msg_click_to_download", player)).clickEvent(clickEvent));
+				audience.sendMessage(Component.text(Translatable.of("default_towny_prefix").forLocale(player) + Translatable.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion()).forLocale(player)).clickEvent(clickEvent));
+				audience.sendMessage(Component.text(Translatable.of("default_towny_prefix").forLocale(player) + Translatable.of("msg_click_to_download").forLocale(player)).clickEvent(clickEvent));
 			}
 		}
 	}

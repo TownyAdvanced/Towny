@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -96,7 +95,7 @@ public class TownClaim extends Thread {
 					} else {
 						// Unclaim
 						this.town = worldCoord.getTownBlock().getTown();
-						townUnclaim(town, worldCoord, forced, player);
+						townUnclaim(town, worldCoord, forced);
 					}
 
 					// Mark this town as modified for saving.
@@ -172,7 +171,7 @@ public class TownClaim extends Thread {
 	private void townClaim(Town town, WorldCoord worldCoord, boolean isOutpost, Player player) throws TownyException {
 
 		if (TownyUniverse.getInstance().hasTownBlock(worldCoord))
-				throw new AlreadyRegisteredException(Translation.of("msg_already_claimed", player, "some town"));
+				throw new AlreadyRegisteredException(Translatable.of("msg_already_claimed", "some town").forLocale(player));
 		else {
 			TownBlock townBlock = new TownBlock(worldCoord.getX(), worldCoord.getZ(), worldCoord.getTownyWorld());
 			townBlock.setTown(town);
@@ -204,13 +203,13 @@ public class TownClaim extends Thread {
 	}
 
 	// Unclaim event comes later in removeTownBlock().
-	private void townUnclaim(final Town town, final WorldCoord worldCoord, boolean force, Player player) throws TownyException {
+	private void townUnclaim(final Town town, final WorldCoord worldCoord, boolean force) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		try {
 			final TownBlock townBlock = worldCoord.getTownBlock();
 			if (town != townBlock.getTown() && !force) {
-				throw new TownyException(Translation.of("msg_area_not_own", player));
+				throw new TownyException(Translatable.of("msg_area_not_own"));
 			}
 			if (!townBlock.isOutpost() && townBlock.hasTown()) { // TODO: Find out if we actually have to be doing this on every unclaim. How poorly are we not saving townblocks' outpost status?
 				if (AreaSelectionUtil.isTownBlockLocContainedInTownOutposts(townBlock.getTown().getAllOutpostSpawns(), townBlock)) {
@@ -227,7 +226,7 @@ public class TownClaim extends Thread {
 			
 
 		} catch (NotRegisteredException e) {
-			throw new TownyException(Translation.of("msg_not_claimed_1", player));
+			throw new TownyException(Translatable.of("msg_not_claimed_1"));
 		}
 	}
 

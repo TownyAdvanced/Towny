@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
@@ -741,7 +742,7 @@ public class TownyFormatter {
 
 		out.add(ChatTools.formatTitle(resident.getFormattedName() + ((BukkitTools.isOnline(resident.getName())) ? Colors.LightGreen + " (Online)" : "")));
 
-		out.add(Translation.of("owner_of_x_plots", resident.getTownBlocks().size()));
+		out.add(Translatable.of("owner_of_x_plots", resident.getTownBlocks().size()).forLocale(resident));
 
 		/*
 		 * Calculate what the player will be paying their town for tax.

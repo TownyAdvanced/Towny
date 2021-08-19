@@ -699,8 +699,8 @@ public class TownyMessaging {
 			nationsformatted[i % 10] = nations.get(i);
 		}
 
-		sender.sendMessage(ChatTools.formatTitle(Translation.of("nation_plu")));
-		sender.sendMessage(Colors.Blue + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + Translation.of(compType.getName()));
+		sender.sendMessage(ChatTools.formatTitle(Translatable.of("nation_plu").forLocale(sender)));
+		sender.sendMessage(Colors.Blue + Translatable.of("nation_name").forLocale(sender) + Colors.Gray + " - " + Colors.LightBlue + Translatable.of(compType.getName()).forLocale(sender));
 		Audience audience = Towny.getAdventure().sender(sender);
 		for (TextComponent textComponent : nationsformatted) {
 			audience.sendMessage(textComponent);
@@ -755,7 +755,7 @@ public class TownyMessaging {
 		}
 		
 		Audience audience = Towny.getAdventure().player(player);
-		player.sendMessage(ChatTools.formatTitle(Translation.of("outpost_plu")));
+		player.sendMessage(ChatTools.formatTitle(Translatable.of("outpost_plu").forLocale(player)));
 		for (TextComponent textComponent : outpostsFormatted) {
 			audience.sendMessage(textComponent);
 		}
@@ -805,7 +805,7 @@ public class TownyMessaging {
 			jailsFormatted[i % 10] = line;
 		}
 		Audience audience = Towny.getAdventure().player(player);
-		player.sendMessage(ChatTools.formatTitle(Translation.of("jail_plu")));
+		player.sendMessage(ChatTools.formatTitle(Translatable.of("jail_plu").forLocale(player)));
 		player.sendMessage(headerMsg);
 		for (TextComponent textComponent : jailsFormatted) {
 			audience.sendMessage(textComponent);
@@ -844,12 +844,12 @@ public class TownyMessaging {
 			line = line.append(dash).append(name).append(dash).append(size);
 			
 			if (TownyEconomyHandler.isActive() && group.getPrice() != -1)
-				line = line.append(dash).append(Component.text("(" + Translation.of("towny_map_forsale") + ": " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ")").color(NamedTextColor.BLUE));
+				line = line.append(dash).append(Component.text("(" + Translatable.of("towny_map_forsale").forLocale(sender) + ": " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ")").color(NamedTextColor.BLUE));
 
 			groupsFormatted[i % 10] = line;
 		}
 		Audience audience = Towny.getAdventure().sender(sender);
-		sender.sendMessage(ChatTools.formatTitle(town.getName() + " " + Translation.of("plotgroup_plu")));
+		sender.sendMessage(ChatTools.formatTitle(town.getName() + " " + Translatable.of("plotgroup_plu").forLocale(sender)));
 		sender.sendMessage(headerMsg);
 		for (TextComponent textComponent : groupsFormatted) {
 			audience.sendMessage(textComponent);
@@ -905,6 +905,13 @@ public class TownyMessaging {
 		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
 		
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
+			sendMsg(player, message);
+	}
+	
+	public static void sendTownMessagePrefixed(Town town, Translatable message) {
+		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName())) + ": " + message.translate());
+		
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
 			sendMsg(player, message);
 	}
 	

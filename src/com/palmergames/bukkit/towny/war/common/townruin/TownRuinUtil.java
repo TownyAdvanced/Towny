@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.util.TimeTools;
 
@@ -164,7 +163,7 @@ public class TownRuinUtil {
 					resident.getAccount().withdraw(townReclaimCost, "Cost of town reclaim.");
 					reclaimTown(resident, town);
 				})
-				.setTitle(Translation.of("msg_confirm_purchase", player, TownyEconomyHandler.getFormattedBalance(townReclaimCost)))
+				.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(townReclaimCost)))
 				.sendTo(player);
 			} else {
 				reclaimTown(resident, town);

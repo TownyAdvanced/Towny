@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 
@@ -140,7 +141,7 @@ public class TownyWorldListener implements Listener {
 		for (BlockState block : event.getBlocks()) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canBuild((Player) event.getEntity(), block.getLocation(), Material.NETHER_PORTAL)) {
-				TownyMessaging.sendErrorMsg(event.getEntity(), Translation.of("msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal"));
+				TownyMessaging.sendErrorMsg(event.getEntity(), Translatable.of("msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal"));
 				event.setCancelled(true);
 				break;
 			}

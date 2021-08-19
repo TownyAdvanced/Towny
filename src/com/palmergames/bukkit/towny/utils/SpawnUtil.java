@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.event.teleport.ResidentSpawnEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
@@ -327,7 +326,7 @@ public class SpawnUtil {
 				}
 			} else {
 			// Sending the confirmation.
-				String title = Translation.of("msg_spawn_warn", player, TownyEconomyHandler.getFormattedBalance(travelCost));
+				String title = Translatable.of("msg_spawn_warn", TownyEconomyHandler.getFormattedBalance(travelCost)).forLocale(player);
 				Confirmation.runOnAccept(() -> {		
 					if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
 						TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));

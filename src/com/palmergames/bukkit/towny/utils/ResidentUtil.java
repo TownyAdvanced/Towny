@@ -185,7 +185,7 @@ public class ResidentUtil {
 			if (!TownyUniverse.getInstance().hasResident(name))
 				return name;
 			if (i > 100000)
-				throw new TownyException(Translation.of("msg_err_too_many_npc"));
+				throw new TownyException(Translatable.of("msg_err_too_many_npc"));
 		} while (true);
 	}
 	

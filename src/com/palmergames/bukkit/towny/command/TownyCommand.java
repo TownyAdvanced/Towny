@@ -263,19 +263,19 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(player, line);
 			} else if (split[0].equalsIgnoreCase("switches")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getSwitchMaterials(), Translation.of("gui_title_towny_switch", player));
+				ResidentUtil.openGUIInventory(resident, TownySettings.getSwitchMaterials(), Translatable.of("gui_title_towny_switch").forLocale(player));
 			} else if (split[0].equalsIgnoreCase("itemuse")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getItemUseMaterials(), Translation.of("gui_title_towny_itemuse", player));
+				ResidentUtil.openGUIInventory(resident, TownySettings.getItemUseMaterials(), Translatable.of("gui_title_towny_itemuse").forLocale(player));
 			} else if (split[0].equalsIgnoreCase("farmblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getFarmPlotBlocks(), Translation.of("gui_title_towny_farmblocks", player));
+				ResidentUtil.openGUIInventory(resident, TownySettings.getFarmPlotBlocks(), Translatable.of("gui_title_towny_farmblocks").forLocale(player));
 			} else if (split[0].equalsIgnoreCase("wildsblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, world.getUnclaimedZoneIgnoreMaterials(), Translation.of("gui_title_towny_wildsblocks", player));
+				ResidentUtil.openGUIInventory(resident, world.getUnclaimedZoneIgnoreMaterials(), Translatable.of("gui_title_towny_wildsblocks").forLocale(player));
 			} else if (split[0].equalsIgnoreCase("plotclearblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, world.getPlotManagementMayorDelete(), Translation.of("gui_title_towny_plotclear", player));
+				ResidentUtil.openGUIInventory(resident, world.getPlotManagementMayorDelete(), Translatable.of("gui_title_towny_plotclear").forLocale(player));
 			} else if (split[0].equalsIgnoreCase("top")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
@@ -418,7 +418,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		}
 		TownyMessaging.sendMessage(player, ChatTools.formatList("War Participants",
 				Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.Blue + "Town Names",
-				warparticipantsformatted, Translation.of("LIST_PAGE", player, page, total)
+				warparticipantsformatted, Translatable.of("LIST_PAGE", page, total).forLocale(player)
 				)
 		);
 		output.clear();

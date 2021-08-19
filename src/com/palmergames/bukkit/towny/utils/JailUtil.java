@@ -24,7 +24,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
@@ -76,7 +75,7 @@ public class JailUtil {
 			break;
 		case OUTLAW_DEATH:
 		case PRISONER_OF_WAR:
-			TownyMessaging.sendTitleMessageToResident(resident, Translation.of("msg_you_have_been_jailed", resident), Translation.of("msg_run_to_the_wilderness_or_wait_for_a_jailbreak", resident));
+			TownyMessaging.sendTitleMessageToResident(resident, Translatable.of("msg_you_have_been_jailed").forLocale(resident), Translatable.of("msg_run_to_the_wilderness_or_wait_for_a_jailbreak").forLocale(resident));
 			break;
 		}
 		

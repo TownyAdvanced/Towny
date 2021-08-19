@@ -134,16 +134,14 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseWorldFromConsole(CommandSender sender, String[] split) {
-
-		Player player = null;
-
+		
 		if ((split.length == 0) || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 			HelpMenu.TOWNYWORLD_HELP_CONSOLE.send(sender);
 			return;
 		}
 		
 		if (split[0].equalsIgnoreCase("list")){
-			listWorlds(player, sender);
+			listWorlds(sender);
 			return;
 		}		
 
@@ -198,7 +196,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_LIST.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-				listWorlds(player, sender);
+				listWorlds(sender);
 
 			} else if (split[0].equalsIgnoreCase("set")) {
 
@@ -265,12 +263,9 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public void listWorlds(Player player, CommandSender sender) {
-
-		if (player == null) {
-			TownyMessaging.sendMessage(sender, ChatTools.formatTitle(Translation.of("world_plu", sender)));
-		} else
-			TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translation.of("world_plu", player)));
+	public void listWorlds(CommandSender sender) {
+		
+		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(Translatable.of("world_plu").forLocale(sender)));
 
 		ArrayList<String> formatedList = new ArrayList<>();
 		HashMap<String, Integer> playersPerWorld = BukkitTools.getPlayersPerWorld();
@@ -279,15 +274,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			formatedList.add(Colors.LightBlue + world.getName() + Colors.Blue + " [" + numPlayers + "]" + Colors.White);
 		}
 
-		if (player == null) {
-			for (String line : ChatTools.list(formatedList)) {
-				TownyMessaging.sendMessage(sender, line);
-			}
-		} else {
-			for (String line : ChatTools.list(formatedList)) {
-				TownyMessaging.sendMessage(player, line);
-			}
-		}
+		for (String line : ChatTools.list(formatedList))
+			TownyMessaging.sendMessage(sender, line);
 	}
 
 	public void worldToggle(Player player, CommandSender sender, String[] split) throws TownyException {

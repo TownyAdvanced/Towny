@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.MathUtil;
@@ -71,7 +72,7 @@ public class AreaSelectionUtil {
 					// "/plot claim world x# z#" was run by clicking on the towny map.
 					out.add(new WorldCoord(args[0], Integer.parseInt(args[1].replace("x","")), Integer.parseInt(args[2].replace("z",""))));
 				} else {
-					throw new TownyException(Translation.of("msg_err_invalid_property", StringMgmt.join(args, " ")));
+					throw new TownyException(Translatable.of("msg_err_invalid_property", StringMgmt.join(args, " ")));
 				}
 			} else if (args[0].equalsIgnoreCase("auto")) { // Is /{command} {claim|unclaim} {auto}
 				out = selectWorldCoordAreaRect(available, pos, args);
@@ -81,7 +82,7 @@ public class AreaSelectionUtil {
 					// Treat as rect to serve for backwards capability.
 					out = selectWorldCoordAreaRect(available, pos, args);
 				} catch (NumberFormatException e) {
-					throw new TownyException(Translation.of("msg_err_invalid_property", args[0]));
+					throw new TownyException(Translatable.of("msg_err_invalid_property", args[0]));
 				}
 			}
 		}
@@ -128,10 +129,10 @@ public class AreaSelectionUtil {
 				try {
 					r = Integer.parseInt(args[0]);
 				} catch (NumberFormatException e) {
-					throw new TownyException(Translation.of("msg_err_invalid_radius"));
+					throw new TownyException(Translatable.of("msg_err_invalid_radius"));
 				}
 				if (TownySettings.getMaxClaimRadiusValue() > 0 && r > TownySettings.getMaxClaimRadiusValue())
-					throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
+					throw new TownyException(Translatable.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
 
 				/*
 				 * Calculate how many townblocks will be needed to claim the desired radius,
@@ -167,7 +168,7 @@ public class AreaSelectionUtil {
 			}
 
 		} else {
-			throw new TownyException(Translation.of("msg_err_invalid_radius"));
+			throw new TownyException(Translatable.of("msg_err_invalid_radius"));
 		}
 		
 		// We remove the first pos as it will always be the coord the player is standing in.
@@ -219,11 +220,11 @@ public class AreaSelectionUtil {
 				try {
 					r = Integer.parseInt(args[0]);
 				} catch (NumberFormatException e) {
-					throw new TownyException(Translation.of("msg_err_invalid_radius"));
+					throw new TownyException(Translatable.of("msg_err_invalid_radius"));
 				}
 				
 				if (TownySettings.getMaxClaimRadiusValue() > 0 && r > TownySettings.getMaxClaimRadiusValue())
-					throw new TownyException(Translation.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
+					throw new TownyException(Translatable.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
 				
 				int radius = 0;
 				if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
@@ -258,7 +259,7 @@ public class AreaSelectionUtil {
 			}
 
 		} else {
-			throw new TownyException(Translation.of("msg_err_invalid_radius"));
+			throw new TownyException(Translatable.of("msg_err_invalid_radius"));
 		}
 
 		return out;

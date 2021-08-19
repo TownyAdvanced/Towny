@@ -1,5 +1,9 @@
 package com.palmergames.bukkit.towny.confirmations;
 
+import com.palmergames.bukkit.towny.object.Translatable;
+
+import java.util.Locale;
+
 /**
  * An object which stores information about confirmations. While this 
  * object itself is immutable and threadsafe, async operations within
@@ -11,7 +15,7 @@ public class Confirmation {
 	
 	private final Runnable acceptHandler;
 	private final Runnable cancelHandler;
-	private final String title;
+	private final Object title;
 	private final int duration;
 	private final boolean isAsync;
 
@@ -80,7 +84,17 @@ public class Confirmation {
 	 * @return The title of the confirmation message.
 	 */
 	public String getTitle() {
-		return title;
+		if (title instanceof Translatable)
+			return ((Translatable) title).translate();
+		else
+			return (String) title;
+	}
+	
+	public String getTitle(Locale locale) {
+		if (title instanceof Translatable)
+			return ((Translatable) title).translate(locale);
+		else
+			return (String) title;
 	}
 	
 

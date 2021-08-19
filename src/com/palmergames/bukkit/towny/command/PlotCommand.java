@@ -333,7 +333,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 									}
 								})
-									.setTitle(Translation.of("msg_you_must_join_this_town_to_claim_this_plot", player, town.getName()))
+									.setTitle(Translatable.of("msg_you_must_join_this_town_to_claim_this_plot", town.getName()))
 									.sendTo(player);
 								return true;
 							}
@@ -416,7 +416,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								Confirmation.runOnAccept(() -> {
 									new PlotClaim(Towny.getPlugin(), player, resident, groupSelection, false, false, false).start();
 								})
-								.setTitle(Translation.of("msg_plot_group_unclaim_confirmation", player, block.getPlotObjectGroup().getTownBlocks().size()) + " " + Translation.of("are_you_sure_you_want_to_continue", player))
+								.setTitle(Translatable.of("msg_plot_group_unclaim_confirmation", block.getPlotObjectGroup().getTownBlocks().size()) + " " + Translatable.of("are_you_sure_you_want_to_continue").forLocale(player))
 								.sendTo(player);
 								
 								return true;
@@ -668,9 +668,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 										// Set the outpost spawn and display feedback.
 										town.addOutpostSpawn(player.getLocation());
-										TownyMessaging.sendMessage(player, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translation.of("outpost", player)));
+										TownyMessaging.sendMessage(player, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translatable.of("outpost")));
 									})
-									.setTitle(Translation.of("msg_confirm_purchase", player, TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())))
+									.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())))
 									.sendTo(player);
 								}
 							}
@@ -740,7 +740,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									}
 									TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_type", townBlockType));
 								})
-									.setTitle(Translation.of("msg_confirm_purchase", player, TownyEconomyHandler.getFormattedBalance(cost)))
+									.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 									.sendTo(BukkitTools.getPlayerExact(resident.getName()));
 							
 							// No cost or economy so no confirmation.
@@ -1210,7 +1210,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			try {
 				// We need to keep an ending string to show the message only after the transaction is over,
 				// to prevent chat log spam.
-				String endingMessage = "";
+				Translatable endingMessage = null;
 				
 				Optional<Boolean> choice = Optional.empty();
 				if (split.length == 2) {
@@ -1250,7 +1250,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Add a cooldown timer for this plot.
 						if (TownySettings.getPVPCoolDownTime() > 0)
 							CooldownTimerTask.addCooldownTimer(groupBlock.getWorldCoord().toString(), CooldownType.PVP);
-						endingMessage = Translation.of("msg_changed_pvp", player, "Plot Group", groupBlock.getPermissions().pvp ? Translation.of("enabled", player) : Translation.of("disabled", player));
+						
+						endingMessage = Translatable.of("msg_changed_pvp", "Plot Group", groupBlock.getPermissions().pvp ? Translatable.of("enabled") : Translatable.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("explosion")) {
 						// Make sure we are allowed to set these permissions.
@@ -1264,7 +1265,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						groupBlock.getPermissions().explosion = choice.orElse(!groupBlock.getPermissions().explosion);
-						endingMessage = Translation.of("msg_changed_expl", player, "the Plot Group", groupBlock.getPermissions().explosion ? Translation.of("enabled", player) : Translation.of("disabled", player));
+						endingMessage = Translatable.of("msg_changed_expl", "the Plot Group", groupBlock.getPermissions().explosion ? Translatable.of("enabled") : Translatable.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("fire")) {
 						// Make sure we are allowed to set these permissions.
@@ -1278,7 +1279,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 						
 						groupBlock.getPermissions().fire = choice.orElse(!groupBlock.getPermissions().fire);
-						endingMessage =  Translation.of("msg_changed_fire", player, "the Plot Group", groupBlock.getPermissions().fire ? Translation.of("enabled", player) : Translation.of("disabled", player));
+						endingMessage = Translatable.of("msg_changed_fire", "the Plot Group", groupBlock.getPermissions().fire ? Translatable.of("enabled") : Translatable.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("mobs")) {
 						// Make sure we are allowed to set these permissions.
@@ -1292,7 +1293,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						groupBlock.getPermissions().mobs = choice.orElse(!groupBlock.getPermissions().mobs);
-						endingMessage =  Translation.of("msg_changed_mobs", player, "the Plot Group", groupBlock.getPermissions().mobs ? Translation.of("enabled", player) : Translation.of("disabled", player));
+						endingMessage = Translatable.of("msg_changed_mobs", player, "the Plot Group", groupBlock.getPermissions().mobs ? Translatable.of("enabled") : Translatable.of("disabled"));
 
 					} else {
 						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", "plot"));
@@ -1310,7 +1311,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				// Finally send the message.
-				TownyMessaging.sendMessage(player, endingMessage);
+				if (endingMessage != null)
+					TownyMessaging.sendMessage(player, endingMessage);
 				
 
 			} catch (TownyException e) {
@@ -1466,7 +1468,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						createOrAddOnToPlotGroup(townBlock, town, name);
 						TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_transferred_from_x_to_x_group", oldGroup.getName(), townBlock.getPlotObjectGroup().getName()));
 					})
-					.setTitle(Translation.of("msg_plot_group_already_exists_did_you_want_to_transfer", player, townBlock.getPlotObjectGroup().getName(), split[1]))
+					.setTitle(Translatable.of("msg_plot_group_already_exists_did_you_want_to_transfer", townBlock.getPlotObjectGroup().getName(), split[1]))
 					.sendTo(player);
 				} else {
 					// Create a brand new plot group.
@@ -1606,7 +1608,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			// Create confirmation.
 			PlotGroup plotGroup = townBlock.getPlotObjectGroup();
-			String title = Translation.of("msg_plot_group_toggle_confirmation", player, townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + Translation.of("are_you_sure_you_want_to_continue", player);
+			String title = Translatable.of("msg_plot_group_toggle_confirmation", player, townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + Translatable.of("are_you_sure_you_want_to_continue").forLocale(player);
 			Confirmation.runOnAccept(() -> {
 				// Perform the toggle.
 				new PlotCommand(Towny.getPlugin()).plotGroupToggle(player, plotGroup, StringMgmt.remArgs(split, 1));
@@ -1677,7 +1679,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 				};
 
-				String title = Translation.of("msg_plot_group_set_perm_confirmation", player, townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + Translation.of("are_you_sure_you_want_to_continue", player);
+				String title = Translatable.of("msg_plot_group_set_perm_confirmation", townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + Translatable.of("are_you_sure_you_want_to_continue").forLocale(player);
 				// Create confirmation.
 				Confirmation.runOnAccept(permHandler)
 					.setTitle(title)
@@ -1758,7 +1760,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendMsg(player, Translatable.of("msg_set_group_type_to_x", type));
 						
 					})
-						.setTitle(Translation.of("msg_confirm_purchase", player, TownyEconomyHandler.getFormattedBalance(cost)))
+						.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 						.sendTo(BukkitTools.getPlayerExact(resident.getName()));
 				
 				// No cost or economy so no confirmation.
@@ -2056,7 +2058,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Execute the plot claim.
 						new PlotClaim(Towny.getPlugin(), player, resident, coords, true, false, true).start();
 					})
-					.setTitle(Translation.of("msg_plot_group_claim_confirmation", player, group.getTownBlocks().size()) + " " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ". " + Translation.of("are_you_sure_you_want_to_continue", player))
+					.setTitle(Translatable.of("msg_plot_group_claim_confirmation", group.getTownBlocks().size()).forLocale(player) + " " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ". " + Translatable.of("are_you_sure_you_want_to_continue").forLocale(player))
 					.sendTo(player);
 					
 					return;
@@ -2087,7 +2089,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_no_funds_claim_plot", TownyEconomyHandler.getFormattedBalance(cost)));
 
 		if (cost != 0) {
-			String title = Translation.of("msg_confirm_purchase", player, TownyEconomyHandler.getFormattedBalance(cost));
+			String title = Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)).forLocale(player);
 			final List<WorldCoord> finalSelection = selection;
 			Confirmation.runOnAccept(() ->  {	
 				// Start the claim task
