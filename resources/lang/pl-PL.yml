@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.117
+version: 0.118
 language: polish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1335,3 +1335,5 @@ err_invalid_yaml: 'Błąd ładowania: Nie udało się załadować pliku %s (spra
 msg_town_map_color_changed: '&bKolor mapy miasta został zmieniony na %s.'
 #Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Ten blok miejski nie może zostać dodany do grupy, ponieważ nie jest typu %s'
+#Added in 0.118
+status_title_nopvp: '&a(No PVP)'
