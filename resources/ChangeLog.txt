@@ -6619,3 +6619,5 @@ v0.92.0.11:
     - If there is a town present where the player stands, it will return the name of the nation, if the town has one.
   - Language file bumped to 0.118
   - Fix DailyTimerTasks not checking if some lists are empty.
+  - Solve potential NPE when residents' jail cells are loaded.
+  - Replace deprecated mysql driver.  

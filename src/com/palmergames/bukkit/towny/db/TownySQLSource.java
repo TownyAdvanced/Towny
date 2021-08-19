@@ -121,7 +121,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		 * Register the driver (if possible)
 		 */
 		try {
-			Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").getDeclaredConstructor().newInstance();
+			Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
 			DriverManager.registerDriver(driver);
 		} catch (Exception e) {
 			plugin.getLogger().severe("Driver error: " + e);
@@ -803,17 +803,19 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					resident.setJail(TownyUniverse.getInstance().getJail(uuid));
 				}
 			}
-			try {
-				if (rs.getString("jailCell") != null && !rs.getString("jailCell").isEmpty())
-					resident.setJailCell(rs.getInt("jailCell"));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				if (rs.getString("jailHours") != null && !rs.getString("jailHours").isEmpty())
-					resident.setJailHours(rs.getInt("jailHours"));
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (resident.isJailed()) {
+				try {
+					if (rs.getString("jailCell") != null && !rs.getString("jailCell").isEmpty())
+						resident.setJailCell(rs.getInt("jailCell"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					if (rs.getString("jailHours") != null && !rs.getString("jailHours").isEmpty())
+						resident.setJailHours(rs.getInt("jailHours"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 			String line;

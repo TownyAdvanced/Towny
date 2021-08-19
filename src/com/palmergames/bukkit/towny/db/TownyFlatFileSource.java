@@ -486,13 +486,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && universe.hasJail(UUID.fromString(line)))
 					resident.setJail(universe.getJail(UUID.fromString(line)));
 				
-				line = keys.get("jailCell");
-				if (line != null)
-					resident.setJailCell(Integer.parseInt(line));
-				
-				line = keys.get("jailHours");
-				if (line != null)
-					resident.setJailHours(Integer.parseInt(line));
+				if (resident.isJailed()) {
+					line = keys.get("jailCell");
+					if (line != null)
+						resident.setJailCell(Integer.parseInt(line));
+					
+					line = keys.get("jailHours");
+					if (line != null)
+						resident.setJailHours(Integer.parseInt(line));
+				}
 				
 				line = keys.get("friends");
 				if (line != null) {
