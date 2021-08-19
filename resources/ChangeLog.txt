@@ -6609,3 +6609,12 @@ v0.92.0.11:
     - Solves for the most common sort of SafeMode in modern Towny.
 0.97.1.2:
   - Fix database.yml not being converted to the correct loading setting.
+0.97.1.3:
+  - Placeholder change: %townyadvanced_player_location_pvp% now shows (No PVP) where PVP is disabled.
+  - New Placeholder: %townyadvanced_player_location_town_resident_count%
+    - If there is a town present where the player stands, it will return the number representing the number of residents that town has.
+  - New Placeholder: %townyadvanced_player_location_town_mayor_name%
+    - If there is a town present where the player stands, it will return the name of that town's mayor.
+  - New Placeholder: %townyadvanced_player_location_town_nation_name%
+    - If there is a town present where the player stands, it will return the name of the nation, if the town has one.
+  - Language file bumped to 0.118
