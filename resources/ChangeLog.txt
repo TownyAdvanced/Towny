@@ -6618,3 +6618,4 @@ v0.92.0.11:
   - New Placeholder: %townyadvanced_player_location_town_nation_name%
     - If there is a town present where the player stands, it will return the name of the nation, if the town has one.
   - Language file bumped to 0.118
+  - Fix DailyTimerTasks not checking if some lists are empty.
