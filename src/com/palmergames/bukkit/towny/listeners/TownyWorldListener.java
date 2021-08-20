@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 
 import org.bukkit.Bukkit;

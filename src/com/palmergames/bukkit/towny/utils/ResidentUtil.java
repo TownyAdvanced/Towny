@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.palmergames.bukkit.towny.object.Translatable;
 
-import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
