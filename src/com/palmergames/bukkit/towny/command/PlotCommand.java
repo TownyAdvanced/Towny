@@ -1608,7 +1608,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			// Create confirmation.
 			PlotGroup plotGroup = townBlock.getPlotObjectGroup();
-			String title = Translatable.of("msg_plot_group_toggle_confirmation", player, townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + Translatable.of("are_you_sure_you_want_to_continue").forLocale(player);
+			String title = Translatable.of("msg_plot_group_toggle_confirmation", townBlock.getPlotObjectGroup().getTownBlocks().size()).forLocale(player) + " " + Translatable.of("are_you_sure_you_want_to_continue").forLocale(player);
 			Confirmation.runOnAccept(() -> {
 				// Perform the toggle.
 				new PlotCommand(Towny.getPlugin()).plotGroupToggle(player, plotGroup, StringMgmt.remArgs(split, 1));
