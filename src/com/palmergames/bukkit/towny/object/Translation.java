@@ -5,10 +5,12 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.HelpMenu;
+import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.FileMgmt;
 import org.apache.commons.compress.utils.FileNameUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
@@ -77,6 +79,17 @@ public final class Translation {
 				// An IO exception occured, or the file had invalid yaml
 				e.printStackTrace();
 			}
+		}
+
+		TranslationLoadEvent translationLoadEvent = new TranslationLoadEvent();
+		Bukkit.getPluginManager().callEvent(translationLoadEvent);
+		
+		Map<String, Map<String, String>> addedTranslations = translationLoadEvent.getAddedTranslations();
+		if (addedTranslations != null && !addedTranslations.isEmpty()) {
+			for (String lang : addedTranslations.keySet())
+				if (addedTranslations.get(lang) != null && !addedTranslations.get(lang).isEmpty())
+					for (Map.Entry<String, String> entry : addedTranslations.get(lang).entrySet())
+						translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
 		}
 		
 		// Load optional override files.
