@@ -118,7 +118,7 @@ public class TownyPlayerListener implements Listener {
 			String tipMsg = Translation.of("msg_safe_mode_player");
 
 			// Operator or an admin.
-			if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player))
+			if (player.isOp() || player.hasPermission("towny.admin"))
 				tipMsg = Translation.of("msg_safe_mode_admin");
 
 			TownyMessaging.sendErrorMsg(player, Translation.of("msg_safe_mode_base") + tipMsg);

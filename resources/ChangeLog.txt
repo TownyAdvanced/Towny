@@ -6621,3 +6621,4 @@ v0.92.0.11:
   - Fix DailyTimerTasks not checking if some lists are empty.
   - Solve potential NPE when residents' jail cells are loaded.
   - Replace deprecated mysql driver.  
+  - Fix sending correct helpmessage to ops/admins who log in while safemode is active.
