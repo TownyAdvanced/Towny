@@ -671,7 +671,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_cannot_use_command_because_town_ruined"));
 
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && !town.hasResident(player.getName()))
-						throw new TownyException(Translatable.of("msg_err_command_disable", player));
+						throw new TownyException(Translatable.of("msg_err_command_disable"));
 					
 					townStatusScreen(player, town);
 					return;
@@ -1285,7 +1285,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, town);
 			if (onlineResidents.size() > 0) {
-				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
+				TownyMessaging.sendMsg(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
 			} else {
 				TownyMessaging.sendMsg(player, Colors.White + "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_town_online").forLocale(player) + ": " + town));
 			}
@@ -1295,7 +1295,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				Town town = resident.getTown();
 				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
 			} catch (NotRegisteredException x) {
-				TownyMessaging.sendMsg(player, Translatable.of("msg_err_dont_belong_town"));
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_dont_belong_town"));
 			}
 		}
 	}
@@ -3807,7 +3807,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 
 					if (selection.get(0).getTownBlock().isHomeBlock())
-						throw new TownyException(Translatable.of("msg_err_cannot_unclaim_homeblock", player));
+						throw new TownyException(Translatable.of("msg_err_cannot_unclaim_homeblock"));
 					
 					if (AreaSelectionUtil.filterHomeBlock(town, selection)) {
 						// Do not stop the entire unclaim, just warn that the homeblock cannot be unclaimed
