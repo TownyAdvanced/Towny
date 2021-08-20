@@ -247,7 +247,7 @@ public class TownyFormatter {
 		
 		out.addAll(getExtraFields(resident));
 		
-		ResidentStatusScreenEvent event = new ResidentStatusScreenEvent(resident);
+		ResidentStatusScreenEvent event = new ResidentStatusScreenEvent(resident, out);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines())
 			out.addAll(event.getAdditionalLines());
@@ -460,7 +460,7 @@ public class TownyFormatter {
 
 		out.addAll(getExtraFields(town));
 		
-		TownStatusScreenEvent event = new TownStatusScreenEvent(town);
+		TownStatusScreenEvent event = new TownStatusScreenEvent(town, out);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines())
 			out.addAll(event.getAdditionalLines());
@@ -585,7 +585,7 @@ public class TownyFormatter {
 
 		out.addAll(getExtraFields(nation));
 		
-		NationStatusScreenEvent event = new NationStatusScreenEvent(nation);
+		NationStatusScreenEvent event = new NationStatusScreenEvent(nation, out);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines())
 			out.addAll(event.getAdditionalLines());

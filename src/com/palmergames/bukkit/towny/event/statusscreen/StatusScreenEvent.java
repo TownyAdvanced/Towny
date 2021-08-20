@@ -10,10 +10,13 @@ import org.bukkit.event.HandlerList;
 public class StatusScreenEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
+	private List<String> originalLines;
 	private List<String> addedLines = new ArrayList<>();
 	
-	public StatusScreenEvent() {
+	public StatusScreenEvent(List<String> originalLines) {
 		super(!Bukkit.getServer().isPrimaryThread());
+		
+		this.originalLines = originalLines;
 	}
 	
 	@Override
@@ -24,6 +27,8 @@ public class StatusScreenEvent extends Event {
 	public static HandlerList getHandlerList() {
 		return handlers;
 	}
+	
+	public List<String> getOriginalLines() { return originalLines; }
 
  	public boolean hasAdditionalLines() {
  		return !addedLines.isEmpty();
