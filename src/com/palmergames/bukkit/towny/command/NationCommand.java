@@ -547,11 +547,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				
 				if (split.length == 1)
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_nation_name", player));
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_nation_name").forLocale(player));
 				else if (split.length == 2) {
 					Resident resident = getResidentOrThrow(player.getUniqueId());
 					if (!resident.isKing())
-						throw new TownyException(Translatable.of("msg_err_merging_for_kings_only", player));
+						throw new TownyException(Translatable.of("msg_err_merging_for_kings_only").forLocale(player));
 					mergeNation(player, split[1]);
 				}
 				
