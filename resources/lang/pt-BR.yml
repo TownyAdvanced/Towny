@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.117
+version: 0.118
 language: português (Brasil)
 author: BannerGames, Plugner
 website: 'http://townyadvanced.github.io/'
@@ -1335,3 +1335,5 @@ err_invalid_yaml: 'Loading error: Failed to load file %s (does it pass a yaml pa
 msg_town_map_color_changed: '&bThe town map color was changed to %s.'
 #Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'This townblock cannot be added to the group because it is not of type: %s'
+#Added in 0.118
+status_title_nopvp: '&a(No PVP)'

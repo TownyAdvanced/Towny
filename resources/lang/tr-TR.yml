@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.117
+version: 0.118
 language: Turkish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1335,3 +1335,5 @@ err_invalid_yaml: 'Yükleme hatası: %s dosyası yüklenemedi (yaml ayrıştır�
 msg_town_map_color_changed: '&bŞehir haritası rengi %s olarak değiştirildi.'
 #Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Bu claim bloğu,  %s türden olmadığı için gruba eklenemez.'
+#Added in 0.118
+status_title_nopvp: '&a(No PVP)'
