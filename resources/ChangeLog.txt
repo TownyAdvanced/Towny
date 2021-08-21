@@ -6622,3 +6622,4 @@ v0.92.0.11:
   - Solve potential NPE when residents' jail cells are loaded.
   - Replace deprecated mysql driver.  
   - Fix sending correct helpmessage to ops/admins who log in while safemode is active.
+  - Actually fix database.yml not being converted to correctly for servers using mysql. 

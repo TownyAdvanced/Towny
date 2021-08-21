@@ -326,12 +326,12 @@ public class TownyUniverse {
     	// return false if the config cannot be loaded.
     	if (!config.load())
     		return false;
-    	if (config.contains("plugin.database.sql.database_load")) {
+    	if (config.contains("plugin.database.database_load")) {
     		/*
     		 * Get old settings from config.
     		 */
-    		String dbload = config.getString("plugin.database.sql.database_load");
-    		String dbsave = config.getString("plugin.database.sql.database_save");
+    		String dbload = config.getString("plugin.database.database_load");
+    		String dbsave = config.getString("plugin.database.database_save");
     		String hostname = config.getString("plugin.database.sql.hostname");
     		String port = config.getString("plugin.database.sql.port");
     		String dbname = config.getString("plugin.database.sql.dbname");
