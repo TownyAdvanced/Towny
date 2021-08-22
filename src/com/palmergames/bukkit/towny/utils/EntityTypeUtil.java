@@ -81,6 +81,23 @@ public class EntityTypeUtil {
 		Material material = null;
 		
 		switch(entityType) {
+
+		case COD:
+			material = Material.COD;
+			break;
+
+		case SALMON:
+			material = Material.SALMON;
+			break;
+
+		case PUFFERFISH:
+			material = Material.PUFFERFISH;
+			break;
+
+		case TROPICAL_FISH:
+			material = Material.TROPICAL_FISH;
+			break;
+
 		case ITEM_FRAME:
 			material = Material.ITEM_FRAME;
 			break;

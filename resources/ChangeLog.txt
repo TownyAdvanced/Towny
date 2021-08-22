@@ -6629,3 +6629,5 @@ v0.92.0.11:
     - Closes #5216.
   - Automatic config update: global_town_settings.prevent_town_spawn_in will have ",outlaw" added to it.
     - Outlaws will be kept from using (and paying for) /t spawn and /n spawn much earlier than before.
+  - Fix fishing being able to be bucketed.
+    - Closes #5213.
