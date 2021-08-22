@@ -28,7 +28,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 public class MapHUD {
-	private static int lineWidth = 20, lineHeight = 10;
+	private static int lineWidth = 19, lineHeight = 10;
 	private static final int townBlockSize = TownySettings.getTownBlockSize();
 	
 	public static void toggleOn(Player player) {
@@ -93,7 +93,7 @@ public class MapHUD {
 			for (int tbx = wc.getZ() - halfLineHeight; tbx <= wc.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
 				map[y][x] = Colors.White;
 				try {
-					TownBlock townblock = world.getTownBlock(tby+1, tbx);
+					TownBlock townblock = world.getTownBlock(tby, tbx);
 					if (!townblock.hasTown())
 						throw new TownyException();
 					if (x == halfLineHeight && y == halfLineWidth)
