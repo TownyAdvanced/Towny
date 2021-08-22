@@ -6623,3 +6623,9 @@ v0.92.0.11:
   - Replace deprecated mysql driver.  
   - Fix sending correct helpmessage to ops/admins who log in while safemode is active.
   - Actually fix database.yml not being converted to correctly for servers using mysql. 
+0.97.1.4:
+  - Bump language file to 0.119.
+  - Fix mayors being able to jail their residents in order to get around /t spawn restrictions for enemies and outlaws.
+    - Closes #5216.
+  - Automatic config update: global_town_settings.prevent_town_spawn_in will have ",outlaw" added to it.
+    - Outlaws will be kept from using (and paying for) /t spawn and /n spawn much earlier than before.

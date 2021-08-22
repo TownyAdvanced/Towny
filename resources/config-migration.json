@@ -131,5 +131,15 @@
         "value": "towny.command.plot.group.*"
       }
     ]
+  },
+  {
+    "version": "0.97.1.4",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "global_town_settings.prevent_town_spawn_in",
+        "value": ",outlaw"
+      }
+    ]
   }
 ]

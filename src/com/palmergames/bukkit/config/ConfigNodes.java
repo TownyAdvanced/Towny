@@ -577,10 +577,10 @@ public enum ConfigNodes {
 			"# Town respawn only happens when the player dies in the same world as the town's spawn point."),
 	GTOWN_SETTINGS_PREVENT_TOWN_SPAWN_IN(
 			"global_town_settings.prevent_town_spawn_in",
-			"enemy",
+			"enemy,outlaw",
 			"",
 			"# Prevent players from using /town spawn while within unclaimed areas and/or enemy/neutral towns.",
-			"# Allowed options: unclaimed,enemy,neutral"),
+			"# Allowed options: unclaimed,enemy,neutral,outlaw"),
 	GTOWN_RESPAWN_ANCHOR_HIGHER_PRECEDENCE(
 			"global_town_settings.respawn_anchor_higher_precendence",
 			"true",

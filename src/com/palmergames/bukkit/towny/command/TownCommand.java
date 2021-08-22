@@ -1742,6 +1742,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				if (!admin && jailedPlayer.getUniqueId().equals(((Player) sender).getUniqueId()))
 					throw new TownyException(Translation.of("msg_no_self_jailing"));
+				
+				// Test if a player is located where they are outlawed/enemied and unable to teleport.
+				if (!TownyAPI.getInstance().isWilderness(jailedPlayer.getLocation())) {
+					Town jaileeLocTown = TownyAPI.getInstance().getTown(jailedPlayer.getLocation());
+					if (!TownySettings.canOutlawsTeleportOutOfTowns() && jaileeLocTown.hasOutlaw(jailedResident))
+						throw new TownyException("msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there");
+					
+					if (jaileeLocTown.hasNation() && 
+						jailedResident.hasNation() &&
+						TownySettings.getDisallowedTownSpawnZones().contains("enemy") &&
+						jaileeLocTown.getNationOrNull().hasEnemy(jailedResident.getNationOrNull()))
+							throw new TownyException("msg_err_resident_cannot_be_jailed_because_they_are_enemied_there");
+				}
 
 				if (split.length > 1) {
 					try {

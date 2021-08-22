@@ -1052,10 +1052,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public boolean hasOutlaw (String name) {
-		for (Resident outlaw : outlaws)
-			if (outlaw.getName().equalsIgnoreCase(name))
-				return true;
-		return false;		
+		return outlaws.stream().anyMatch(outlaw -> outlaw.getName().equalsIgnoreCase(name));
 	}
 	
 	public boolean hasOutlaw(Resident outlaw) {
