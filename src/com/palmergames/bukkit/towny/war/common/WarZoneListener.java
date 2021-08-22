@@ -201,6 +201,14 @@ public class WarZoneListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+		
+		/*
+		 * Stops explosions from damaging entities protected from explosions during war.
+		 */
+		if (WarZoneConfig.getExplosionsIgnoreList().contains(event.getEntity().getType().name())) {
+			event.setCancelled(true);
+			return;
+		}
 
 		/*
 		 * Explosions must be allowed, so un-cancel the event.

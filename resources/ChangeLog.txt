@@ -6631,3 +6631,6 @@ v0.92.0.11:
     - Outlaws will be kept from using (and paying for) /t spawn and /n spawn much earlier than before.
   - Fix fishing being able to be bucketed.
     - Closes #5213.
+  - Fix /t outlaw add command kicking the command sender from their town.
+  - Fix entities not being able to be added to the EventWar explosions_ignore_list.
+    - Closes #4791.

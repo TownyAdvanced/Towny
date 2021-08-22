@@ -115,6 +115,11 @@ public interface ItemLists {
 	 */
 	public static List<String> ITEM_FRAMES = new ArrayList<>(Arrays.asList("ITEM_FRAME","GLOW_ITEM_FRAME"));
 	
+	/** 
+	 * List of Hanging entities
+	 */
+	public static List<String> HANGING_ENTITIES = new ArrayList<>(Arrays.asList("ITEM_FRAME","GLOW_ITEM_FRAME","PAINTING"));
+	
 	/**
 	 * Returns a pre-configured list from the GROUPS.
 	 * 

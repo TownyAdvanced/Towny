@@ -655,7 +655,7 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event - HangingBreakEvent
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onHangingBreak(HangingBreakEvent event) {
 
 		if (plugin.isError()) {
@@ -668,12 +668,20 @@ public class TownyEntityListener implements Listener {
 		
 		Entity hanging = event.getEntity();		
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(hanging.getWorld().getName());
+
+		// Prevent an item_frame or painting from breaking if it is attached to something which will be regenerated.
+		if (event.getCause().equals(RemoveCause.PHYSICS) && ItemLists.HANGING_ENTITIES.contains(hanging.getType().name())) {
+			Location loc = hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection());
+			if (TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(loc))) {
+				event.setCancelled(true);
+				return;
+			}
+		}
 		
 		// TODO: Keep an eye on https://hub.spigotmc.org/jira/browse/SPIGOT-3999 to be completed.
 		// This workaround prevent boats from destroying item_frames.
 		if (event.getCause().equals(RemoveCause.PHYSICS) && ItemLists.ITEM_FRAMES.contains(hanging.getType().name())) {
-			Location loc = hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection());
-			Block block = loc.getBlock();
+			Block block = hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection()).getBlock();
 			if (block.isLiquid() || block.isEmpty())
 				return;
 			
@@ -876,4 +884,5 @@ public class TownyEntityListener implements Listener {
 		if (TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()) && !TownyAPI.getInstance().isWilderness(event.getBlock().getLocation()))
 			event.setCancelled(true);
 	}
+
 }

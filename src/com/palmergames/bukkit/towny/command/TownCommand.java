@@ -1099,7 +1099,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					// Kick outlaws from town if they are residents.
 					if (targetTown != null && targetTown.getUUID().equals(town.getUUID())) {
-						resident.removeTown();
+						target.removeTown();
 						String outlawer = (admin ? Translation.of("admin_sing") : sender.getName());
 						TownyMessaging.sendMsg(target, Translation.of("msg_kicked_by", outlawer));
 						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_kicked", outlawer, target.getName()));
