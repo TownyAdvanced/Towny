@@ -88,8 +88,10 @@ public final class Translation {
 		if (addedTranslations != null && !addedTranslations.isEmpty()) {
 			for (String lang : addedTranslations.keySet())
 				if (addedTranslations.get(lang) != null && !addedTranslations.get(lang).isEmpty())
-					for (Map.Entry<String, String> entry : addedTranslations.get(lang).entrySet())
+					for (Map.Entry<String, String> entry : addedTranslations.get(lang).entrySet()) {
+						translations.computeIfAbsent(lang, k -> new HashMap<>());
 						translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
+					}
 		}
 		
 		// Load optional override files.
@@ -101,9 +103,11 @@ public final class Translation {
 						Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
 						String lang = FileNameUtils.getBaseName(file.getName());
 
-						if (values != null)
+						if (values != null) {
+							translations.computeIfAbsent(lang, k -> new HashMap<>());
 							for (Map.Entry<String, Object> entry : values.entrySet())
 								translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
