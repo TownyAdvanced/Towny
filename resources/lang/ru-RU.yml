@@ -1336,4 +1336,4 @@ msg_town_map_color_changed: '&bЦвет города на карте был из
 #Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Этот участок не может быть добавлен в группу, поскольку он не типа %s'
 #Added in 0.118
-status_title_nopvp: '&a(No PVP)'
+status_title_nopvp: '&a(Без PVP)'
