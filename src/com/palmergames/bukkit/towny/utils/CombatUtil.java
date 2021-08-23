@@ -406,10 +406,10 @@ public class CombatUtil {
 			TownyFriendlyFireTestEvent event = new TownyFriendlyFireTestEvent(attacker, defender, world, relationship);
 			Bukkit.getPluginManager().callEvent(event);
 			
-			if(event.isPvp())
+			if(!event.isPvp())
 				TownyMessaging.sendErrorMsg(attacker, Translation.of("msg_err_friendly_fire_disable"));
 			
-			return event.isPvp();
+			return !event.isPvp();
 		}
 		return false;
 	}
