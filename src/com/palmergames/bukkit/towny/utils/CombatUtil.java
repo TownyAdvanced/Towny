@@ -5,10 +5,8 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
-import com.palmergames.bukkit.towny.event.damage.TownyDispenserDamageEntityEvent;
-import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
-import com.palmergames.bukkit.towny.event.damage.WildernessPVPTestEvent;
+import com.palmergames.bukkit.towny.event.damage.*;
+import com.palmergames.bukkit.towny.event.damage.TownyFriendlyFireTestEvent.Relationship;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -392,14 +390,27 @@ public class CombatUtil {
 		if (attacker == defender)
 			return false;
 
-		if ((attacker != null) && (defender != null))
-			if (!world.isFriendlyFireEnabled() && CombatUtil.isAlly(attacker.getName(), defender.getName())) {
-				if (isArenaPlot(attacker, defender))
-					return false;
-				
+		if ((attacker != null) && (defender != null)) {
+			TownyUniverse townyUniverse = TownyUniverse.getInstance();
+			Relationship relationship = Relationship.NEUTRAL;
+			if(isSameTown(townyUniverse.getResident(attacker.getUniqueId()), townyUniverse.getResident(defender.getUniqueId()))) {
+				relationship = Relationship.TOWN;
+			} else if(isSameNation(townyUniverse.getResident(attacker.getUniqueId()), townyUniverse.getResident(defender.getUniqueId()))) {
+				relationship = Relationship.NATION;
+			} else if(isAlly(attacker.getName(), defender.getName())) {
+				relationship = Relationship.ALLY;
+			} else if(isEnemy(attacker.getName(), defender.getName())) {
+				relationship = Relationship.ENEMY;
+			}
+			
+			TownyFriendlyFireTestEvent event = new TownyFriendlyFireTestEvent(attacker, defender, world, relationship);
+			Bukkit.getPluginManager().callEvent(event);
+			
+			if(event.isPvp())
 				TownyMessaging.sendErrorMsg(attacker, Translation.of("msg_err_friendly_fire_disable"));
-				return true;
-			}		
+			
+			return event.isPvp();
+		}
 		return false;
 	}
 
