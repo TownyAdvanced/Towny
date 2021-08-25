@@ -6647,3 +6647,5 @@ v0.92.0.11:
       - Meaning you do not have to change (for example) the towny prefix in each file, just the global.yml.
     - The console/logs will use the language set in your config.yml.
     - Closes #4926. 
+  - Respect the skip named option in onCreatureSpawn, courtesy of Warriorrrr with PR #5227.
+    - Closes #5226, Closes #5225.
