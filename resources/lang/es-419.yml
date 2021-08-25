@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.118
+version: 0.119
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -1336,4 +1336,7 @@ msg_town_map_color_changed: '&bEl color del mapa de la ciudad se cambió a %s.'
 #Added in 0.117
 msg_err_this_townblock_doesnt_match_the_groups_type: 'Este terreno no se puede agregar al grupo porque no es de tipo %s'
 #Added in 0.118
-status_title_nopvp: '&a(No PVP)'
+status_title_nopvp: '&a(Sin PVP)'
+#Added in 0.119
+msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'No puede encarcelar a su residente porque se encuentra en un lugar donde está prohibido.'
+msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'No puede encarcelar a su residente porque se encuentra en un lugar donde se considera un enemigo.'

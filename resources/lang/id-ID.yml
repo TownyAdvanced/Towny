@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.118
+version: 0.119
 language: Indonesian
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1337,3 +1337,6 @@ msg_town_map_color_changed: '&bThe town map color was changed to %s.'
 msg_err_this_townblock_doesnt_match_the_groups_type: 'This townblock cannot be added to the group because it is not of type: %s'
 #Added in 0.118
 status_title_nopvp: '&a(No PVP)'
+#Added in 0.119
+msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'You cannot jail your resident because they are in a location where they are outlawed.'
+msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'You cannot jail your resident because they are in a location where they are considered an enemy.'
