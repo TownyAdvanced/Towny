@@ -294,7 +294,7 @@ public final class Translation {
 		
 		if (!translations.containsKey(stringLocale)) {
 			locale = new Locale("en", "US");
-			Towny.getPlugin().getLogger().warning(String.format("Unknown locale '%s', falling back to en_US. (Is it being loaded correctly?)", stringLocale));
+			Towny.getPlugin().getLogger().warning(String.format("The locale '%s' is currently not loaded, falling back to en_US. (Is it being loaded correctly?)", stringLocale));
 		}
 		
 		return locale;
