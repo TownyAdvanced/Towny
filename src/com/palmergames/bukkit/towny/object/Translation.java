@@ -258,7 +258,7 @@ public final class Translation {
 			String[] locale = fileName.substring(0, lastIndex).split("[-_]");
 			return new Locale(locale[0], locale[1]);
 		} catch (Exception e) {
-			return Locale.ENGLISH;
+			return new Locale("en", "US");
 		}
 	}
 	
