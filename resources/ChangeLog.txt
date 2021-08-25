@@ -6639,3 +6639,11 @@ v0.92.0.11:
   - Fix saving of jailed residents in mysql. 
   - Fix /t claim auto|rect not claiming the last townblock in the radius.
     - Closes #5224.
+  - Automatic locale detection/Multi-language support, courtesy of Warriorrrr with PR #5167.
+    - Your server will now display all towny messages to your players according to their client's locale, if that language is available.
+      - There are currently 20 languages available, seen in the config.yml.
+      - If your language is not present it can be requested and added to the crowdin website: https://crowdin.com/project/townyadvanced
+    - A global.yml language file will be present to allow you to override a language string for all languages.
+      - Meaning you do not have to change (for example) the towny prefix in each file, just the global.yml.
+    - The console/logs will use the language set in your config.yml.
+    - Closes #4926. 
