@@ -3672,6 +3672,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					
 					if ((selection.size() > 1) && (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode())))
 						throw new TownyException(Translation.of("msg_err_command_disable"));
+					
+					// TODO: deny using selection claiming from unclaimed land.
+//					if (selection.size() > 1 && TownyAPI.getInstance().isWilderness(player.getLocation()))
+//						throw new TownyException();
 				}
 
 				// Not enough available claims.
