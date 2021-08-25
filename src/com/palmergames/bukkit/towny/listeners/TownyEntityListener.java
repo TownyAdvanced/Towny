@@ -402,6 +402,9 @@ public class TownyEntityListener implements Listener {
 			if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(livingEntity))
 				return;
 			
+			if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)
+				return;
+
 			MobSpawnRemovalEvent mobSpawnRemovalEvent;
 			mobSpawnRemovalEvent = new MobSpawnRemovalEvent(event.getEntity());
 			plugin.getServer().getPluginManager().callEvent(mobSpawnRemovalEvent);
