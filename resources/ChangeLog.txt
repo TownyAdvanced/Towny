@@ -6649,3 +6649,7 @@ v0.92.0.11:
     - Closes #4926. 
   - Respect the skip named option in onCreatureSpawn, courtesy of Warriorrrr with PR #5227.
     - Closes #5226, Closes #5225.
+0.97.1.5:
+  - Fix lang file fallback, courtesy of Warriorrrr with PR #5230.
+    - Custom language files that pre-date multi language support, which do not conform to a locale code (ie: en_CA, pt_BR) will not generate an NPE.
+    - en_US will be loaded instead.
