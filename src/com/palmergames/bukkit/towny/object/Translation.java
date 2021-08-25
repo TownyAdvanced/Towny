@@ -50,7 +50,6 @@ public final class Translation {
 
 	public static void loadTranslationRegistry() {
 		translations.clear();
-		defaultLocale = toLocale(TownySettings.getString(ConfigNodes.LANGUAGE));
 		updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
 
 		// Load global override file
@@ -121,6 +120,7 @@ public final class Translation {
 				for (String lang : translations.keySet())
 					translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
 		
+		defaultLocale = loadDefaultLocale();		
 		Towny.getPlugin().getLogger().info(String.format("Successfully loaded translations for %d languages.", translations.keySet().size()));
 		HelpMenu.loadMenus();
 	}
@@ -258,7 +258,8 @@ public final class Translation {
 			String[] locale = fileName.substring(0, lastIndex).split("[-_]");
 			return new Locale(locale[0], locale[1]);
 		} catch (Exception e) {
-			return Locale.ENGLISH;
+			Towny.getPlugin().getLogger().warning(String.format("Could not convert '%s' into a locale, falling back to en_US.", fileName));
+			return new Locale("en", "US");
 		}
 	}
 	
@@ -285,5 +286,17 @@ public final class Translation {
 	
 	public static Locale getLocale(Resident resident) {
 		return BukkitTools.isOnline(resident.getName()) ? getLocale(resident.getPlayer()) : defaultLocale;
+	}
+	
+	private static Locale loadDefaultLocale() {
+		Locale locale = toLocale(TownySettings.getString(ConfigNodes.LANGUAGE));
+		String stringLocale = locale.toString();
+		
+		if (!translations.containsKey(stringLocale)) {
+			locale = new Locale("en", "US");
+			Towny.getPlugin().getLogger().warning(String.format("The locale '%s' is currently not loaded, falling back to en_US. (Is it being loaded correctly?)", stringLocale));
+		}
+		
+		return locale;
 	}
 }
