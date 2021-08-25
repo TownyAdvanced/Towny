@@ -152,9 +152,7 @@ public class AreaSelectionUtil {
 			 */
 			int halfSideLength = ((r * 2) + 1) / 2;
 			int x = 0, z = 0, dx = 0, dz = -1;
-			for (int i = 0; i <= available - 1; i++) {
-				//TODO: This code doesn't work properly all of the time when /t claim auto is used.
-				//My suspicion is that halfSideLength isn't the correct value in some situations. 
+			for (int i = 0; i <= available; i++) {
 				if ((-halfSideLength <= x) && (x <= halfSideLength) && (-halfSideLength <= z) && (z <= halfSideLength)) {
 					out.add(pos.add(x,z));
 				}
@@ -171,6 +169,9 @@ public class AreaSelectionUtil {
 		} else {
 			throw new TownyException(Translation.of("msg_err_invalid_radius"));
 		}
+		
+		// We remove the first pos as it will always be the coord the player is standing in.
+		out.remove(0);
 
 		return out;
 	}

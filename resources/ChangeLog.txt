@@ -6637,3 +6637,5 @@ v0.92.0.11:
   - Fix map hud being off by one townblock in some instances.
   - Fix jailed residents not saving their object immediately.
   - Fix saving of jailed residents in mysql. 
+  - Fix /t claim auto|rect not claiming the last townblock in the radius.
+    - Closes #5224.
