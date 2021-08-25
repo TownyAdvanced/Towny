@@ -2058,11 +2058,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("registered", resident.getRegistered());
 			res_hm.put("joinedTownAt", resident.getJoinedTownAt());
 			res_hm.put("isNPC", resident.isNPC());
-			if (resident.isJailed()) {
-				res_hm.put("jailUUID", resident.getJail().getUUID());
-				res_hm.put("jailCell", resident.getJailCell());
-				res_hm.put("jailHours", resident.getJailHours());
-			}
+			res_hm.put("jailUUID", resident.isJailed() ? resident.getJail().getUUID() : "");
+			res_hm.put("jailCell", resident.getJailCell());
+			res_hm.put("jailHours", resident.getJailHours());
 			res_hm.put("title", resident.getTitle());
 			res_hm.put("surname", resident.getSurname());
 			res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");

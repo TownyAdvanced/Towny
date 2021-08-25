@@ -130,9 +130,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	
 	public void setJailCell(int i) {
 		if (jail.hasJailCell(i))
-			this.jailCell = i;
+			jailCell = i;
 		else
-			this.jailCell = 0;
+			jailCell = 0;
 	}
 	
 	public Town getJailTown() {
@@ -148,11 +148,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public void setJailHours(Integer hours) {
-		this.jailHours = hours;
+		jailHours = hours;
 	}
 	
 	public boolean hasJailTime() {
-		return this.jailHours > 0;
+		return jailHours > 0;
 	}
 	
 	public Location getJailSpawn() {

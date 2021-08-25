@@ -83,6 +83,7 @@ public class JailUtil {
 		resident.setJail(jail);
 		resident.setJailCell(cell);
 		resident.setJailHours(hours);
+		resident.save();
 		TownyUniverse.getInstance().getJailedResidentMap().add(resident);
 		
 		// Tell the resident how long they've been jailed for.
@@ -151,6 +152,8 @@ public class JailUtil {
 		}
 
 		TownyUniverse.getInstance().getJailedResidentMap().remove(resident);
+		resident.setJailCell(0);
+		resident.setJailHours(0);
 		resident.setJail(null);
 		resident.save();
 		
