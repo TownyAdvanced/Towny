@@ -12,7 +12,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.map.TownyMapData;
 import com.palmergames.bukkit.util.Colors;
@@ -44,8 +44,8 @@ public class MapHUD {
 			score--;
 		}
 		
-		String townEntry = ChatColor.DARK_GREEN + Translation.of("town_sing") + ": ";
-		String ownerEntry = ChatColor.DARK_GREEN + Translation.of("owner_status") + ": ";
+		String townEntry = ChatColor.DARK_GREEN + Translatable.of("town_sing").forLocale(player) + ": ";
+		String ownerEntry = ChatColor.DARK_GREEN + Translatable.of("owner_status").forLocale(player) + ": ";
 		
 		board.registerNewTeam("townTeam").addEntry(townEntry);
 		objective.getScore(townEntry).setScore(2);
@@ -190,8 +190,8 @@ public class MapHUD {
 		}
 		
 		TownBlock tb = wc.getTownBlockOrNull();
-		board.getTeam("townTeam").setSuffix(ChatColor.GREEN + (tb != null && tb.hasTown() ? tb.getTownOrNull().getName() : Translation.of("status_no_town")));
-		board.getTeam("ownerTeam").setSuffix(ChatColor.GREEN + (tb != null && tb.hasResident() ? tb.getResidentOrNull().getName() : Translation.of("status_no_town")));
+		board.getTeam("townTeam").setSuffix(ChatColor.GREEN + (tb != null && tb.hasTown() ? tb.getTownOrNull().getName() : Translatable.of("status_no_town").forLocale(player)));
+		board.getTeam("ownerTeam").setSuffix(ChatColor.GREEN + (tb != null && tb.hasResident() ? tb.getResidentOrNull().getName() : Translatable.of("status_no_town").forLocale(player)));
 	}
 	
 	private static Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {

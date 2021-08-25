@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.confirmations;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -47,7 +48,7 @@ public class ConfirmationHandler {
 			confirmation.getCancelHandler().run();
 		}
 		
-		TownyMessaging.sendMsg(sender, Translation.of("successful_cancel"));
+		TownyMessaging.sendMsg(sender, Translatable.of("successful_cancel"));
 	}
 
 	/**
@@ -65,7 +66,7 @@ public class ConfirmationHandler {
 		}
 		
 		// Send the confirmation message.
-		String title = confirmation.getTitle();
+		String title = confirmation.getTitle(Translation.getLocale(sender));
 		TownyMessaging.sendConfirmationMessage(sender, title, null, null, null);
 		
 		int duration = confirmation.getDuration();

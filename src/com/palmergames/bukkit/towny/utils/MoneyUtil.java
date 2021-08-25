@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -22,7 +23,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.util.BukkitTools;
 
 public class MoneyUtil {
@@ -56,11 +56,11 @@ public class MoneyUtil {
 			// Withdraw from bank.
 			town.withdrawFromBank(resident, amount);
 
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_withdrew_xx", resident.getName(), amount, Translation.of("town_sing")));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_xx_withdrew_xx", resident.getName(), amount, Translatable.of("town_sing")));
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 			
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage());
+			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}
 
 	}
@@ -80,17 +80,17 @@ public class MoneyUtil {
 			if (nation == null) {
 				// Deposit into town from a town resident.
 				town.depositToBank(resident, amount);				
-				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("town_sing")));
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_xx_deposited_xx", resident.getName(), amount, Translatable.of("town_sing")));
 			} else {
 				// Deposit into town from a nation member.
 				resident.getAccount().payTo(amount, town, "Town Deposit from Nation member");
-				TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, town + " " + Translation.of("town_sing")));
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_deposited_xx", resident.getName(), amount, town + " " + Translatable.of("town_sing")));
 			}
 			
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 			
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage());
+			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}
 
 	}
@@ -110,11 +110,11 @@ public class MoneyUtil {
 
 			// Withdraw from bank.
 			nation.withdrawFromBank(resident, amount);
-			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_withdrew_xx", resident.getName(), amount, Translation.of("nation_sing")));
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_withdrew_xx", resident.getName(), amount, Translatable.of("nation_sing")));
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 			
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage());
+			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}
 		
 	}
@@ -134,11 +134,11 @@ public class MoneyUtil {
 			// Deposit into nation.
 			nation.depositToBank(resident, amount);
 			
-			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_xx_deposited_xx", resident.getName(), amount, Translation.of("nation_sing")));
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_deposited_xx", resident.getName(), amount, Translatable.of("nation_sing")));
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 			
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage());
+			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}
 	}
 	
@@ -156,19 +156,19 @@ public class MoneyUtil {
 	private static void commonTests(int amount, Resident resident, Town town, Location loc, boolean nation, boolean withdraw) throws TownyException {
 		
 		if (!TownyEconomyHandler.isActive())
-			throw new TownyException(Translation.of("msg_err_no_economy"));
+			throw new TownyException(Translatable.of("msg_err_no_economy"));
 		
 		if (amount < 0)
-			throw new TownyException(Translation.of("msg_err_negative_money"));
+			throw new TownyException(Translatable.of("msg_err_negative_money"));
 		
 		if (!withdraw && !resident.getAccount().canPayFromHoldings(amount))
-			throw new TownyException(Translation.of("msg_insuf_funds"));
+			throw new TownyException(Translatable.of("msg_insuf_funds"));
 		
 		if (!nation && town.isRuined())
-			throw new TownyException(Translation.of("msg_err_cannot_use_command_because_town_ruined"));
+			throw new TownyException(Translatable.of("msg_err_cannot_use_command_because_town_ruined"));
 		
 		if (withdraw && ((nation && !TownySettings.getNationBankAllowWithdrawls()) || (!nation && !TownySettings.getTownBankAllowWithdrawls())))
-			throw new TownyException(Translation.of("msg_err_withdraw_disabled"));
+			throw new TownyException(Translatable.of("msg_err_withdraw_disabled"));
 		
 		if (!withdraw && (TownySettings.getTownBankCap() > 0 || TownySettings.getNationBankCap() > 0)) {
 			double bankcap = 0;
@@ -181,17 +181,17 @@ public class MoneyUtil {
 				balance = town.getNation().getAccount().getHoldingBalance();
 			}
 			if (bankcap > 0 && amount + balance > bankcap)
-				throw new TownyException(Translation.of("msg_err_deposit_capped", bankcap));
+				throw new TownyException(Translatable.of("msg_err_deposit_capped", bankcap));
 		}
 		
 		if (TownySettings.isBankActionLimitedToBankPlots() && isNotInBankPlot(town, loc))
-			throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_bank_plot"));
+			throw new TownyException(Translatable.of("msg_err_unable_to_use_bank_outside_bank_plot"));
 		
 		if (TownySettings.isBankActionDisallowedOutsideTown() && isNotInOwnTown(town, loc)) {
 			if (nation)
-				throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_nation_capital"));
+				throw new TownyException(Translatable.of("msg_err_unable_to_use_bank_outside_nation_capital"));
 			else
-				throw new TownyException(Translation.of("msg_err_unable_to_use_bank_outside_your_town"));
+				throw new TownyException(Translatable.of("msg_err_unable_to_use_bank_outside_your_town"));
 		}
 		
 		int minAmount = 0;
@@ -200,7 +200,7 @@ public class MoneyUtil {
 		else
 			minAmount = nation ? TownySettings.getNationMinDeposit() : TownySettings.getTownMinDeposit();
 		if (amount < minAmount)
-			throw new TownyException(Translation.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(minAmount)));
+			throw new TownyException(Translatable.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(minAmount)));
 			
 	}
 

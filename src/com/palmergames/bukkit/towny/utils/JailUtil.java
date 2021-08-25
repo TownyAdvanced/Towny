@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -23,7 +24,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
@@ -68,14 +68,14 @@ public class JailUtil {
 		// Send feedback messages. 
 		switch(reason) {
 		case MAYOR:
-			String jailName = jail.hasName() ? jail.getName() : Translation.of("jail_sing");
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x", resident.getName(), jailName, cell+1, hours, senderName));
+			Object jailName = jail.hasName() ? jail.getName() : Translatable.of("jail_sing");
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x", resident.getName(), jailName, cell+1, hours, senderName));
 			if (TownySettings.doesJailingPreventLoggingOut())
 				addJailedPlayerToLogOutMap(resident);
 			break;
 		case OUTLAW_DEATH:
 		case PRISONER_OF_WAR:
-			TownyMessaging.sendTitleMessageToResident(resident, Translation.of("msg_you_have_been_jailed"), Translation.of("msg_run_to_the_wilderness_or_wait_for_a_jailbreak"));
+			TownyMessaging.sendTitleMessageToResident(resident, Translatable.of("msg_you_have_been_jailed").forLocale(resident), Translatable.of("msg_run_to_the_wilderness_or_wait_for_a_jailbreak").forLocale(resident));
 			break;
 		}
 		
@@ -87,7 +87,7 @@ public class JailUtil {
 		TownyUniverse.getInstance().getJailedResidentMap().add(resident);
 		
 		// Tell the resident how long they've been jailed for.
-		TownyMessaging.sendMsg(resident, Translation.of("msg_you've_been_jailed_for_x_hours", hours));
+		TownyMessaging.sendMsg(resident, Translatable.of("msg_you've_been_jailed_for_x_hours", hours));
 
 		// Teleport them (if possible.)
 		teleportToJail(resident);
@@ -114,40 +114,40 @@ public class JailUtil {
 			
 			// First show a message to the resident, either by broadcasting to the resident's town or just the resident (if they have no town.)
 			if (town != null)
-				TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_escaped_jail_into_wilderness", resident.getName(), jail.getWildName()));
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_player_escaped_jail_into_wilderness", resident.getName(), jail.getWildName()));
 			else 
-				TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_freed_from_jail"));
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_been_freed_from_jail"));
 			
 			// Second, show a message to the town which has just had a prisoner escape.
 			if (town != null && !town.getUUID().equals(jail.getTown().getUUID()))
-				TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_player_escaped_jail_into_wilderness", resident.getName(), jail.getWildName()));
+				TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_player_escaped_jail_into_wilderness", resident.getName(), jail.getWildName()));
 			break;
 
 		case BAIL:
 			teleportAwayFromJail(resident);
-			TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_paid_bail"));
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), resident.getName() + Translation.of("msg_has_paid_bail"));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_paid_bail"));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), resident.getName() + Translatable.of("msg_has_paid_bail"));
 
 			break;
 		case SENTENCE_SERVED:
 			teleportAwayFromJail(resident);
-			TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_served_your_sentence_and_are_free"));
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_x_has_served_their_sentence_and_is_free", resident.getName()));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_served_your_sentence_and_are_free"));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_x_has_served_their_sentence_and_is_free", resident.getName()));
 			break;
 		case LEFT_TOWN:
 			town = resident.getTownOrNull();
-			TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_freed_from_jail"));
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_player_escaped_jail_by_leaving_town", resident.getName()));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_been_freed_from_jail"));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_player_escaped_jail_by_leaving_town", resident.getName()));
 			break;
 		case PARDONED:
 		case JAIL_DELETED:
 		case ADMIN:
 			teleportAwayFromJail(resident);
-			TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_freed_from_jail"));
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translation.of("msg_x_has_been_freed_from_x", resident.getName(), jailName));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_been_freed_from_jail"));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_x_has_been_freed_from_x", resident.getName(), jailName));
 			break;
 		case JAILBREAK:
-			TownyMessaging.sendMsg(resident, Translation.of("msg_you_have_been_freed_via_jailbreak"));			
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_been_freed_via_jailbreak"));			
 			break;
 		}
 
@@ -226,21 +226,21 @@ public class JailUtil {
 		} catch (TownyException e) {}
 
 		// Use teleport warmup
-		TownyMessaging.sendMsg(resident, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
+		TownyMessaging.sendMsg(resident, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 		TownyAPI.getInstance().jailTeleport(resident.getPlayer(), loc);
 
 	}
 	
 	private static void teleportToJail(Resident resident) {
 		// Send a player to their jail cell.
-		TownyMessaging.sendMsg(resident, Translation.of("msg_you_are_being_sent_to_jail"));
-		TownyMessaging.sendMsg(resident, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
+		TownyMessaging.sendMsg(resident, Translatable.of("msg_you_are_being_sent_to_jail"));
+		TownyMessaging.sendMsg(resident, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 		TownyAPI.getInstance().jailTeleport(resident.getPlayer(), resident.getJailSpawn());
 	}
 
 	private static void addJailedPlayerToLogOutMap(Resident resident) {
 		queuedJailedResidents.add(resident);
-		TownyMessaging.sendMsg(resident, Translation.of("msg_do_not_log_out_while_waiting_to_be_teleported"));
+		TownyMessaging.sendMsg(resident, Translatable.of("msg_do_not_log_out_while_waiting_to_be_teleported"));
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), () -> queuedJailedResidents.remove(resident), TownySettings.getTeleportWarmupTime() + 20);
 		
 	}

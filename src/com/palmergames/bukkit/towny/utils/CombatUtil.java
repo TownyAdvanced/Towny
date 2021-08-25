@@ -16,7 +16,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -397,7 +397,7 @@ public class CombatUtil {
 				if (isArenaPlot(attacker, defender))
 					return false;
 				
-				TownyMessaging.sendErrorMsg(attacker, Translation.of("msg_err_friendly_fire_disable"));
+				TownyMessaging.sendErrorMsg(attacker, Translatable.of("msg_err_friendly_fire_disable"));
 				return true;
 			}		
 		return false;

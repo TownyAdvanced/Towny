@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.entity.Player;
 
@@ -172,7 +173,7 @@ public class ChunkNotification {
 					if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE)) {
 						Town nearestTown = null; 
 						nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
-						return String.format(areaWildernessNotificationFormat, Translation.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNationOrNull().getName()));
+						return String.format(areaWildernessNotificationFormat, Translatable.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNationOrNull().getName()).forLocale(resident));
 					}
 				}
 				
@@ -190,7 +191,7 @@ public class ChunkNotification {
 				if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.UNCLAIMED_ZONE)) {
 					Town nearestTown = null; 
 					nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
-					return String.format(areaWildernessNotificationFormat, Translation.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNationOrNull().getName()));
+					return String.format(areaWildernessNotificationFormat, Translatable.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNationOrNull().getName()).forLocale(resident));
 				} else if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.UNCLAIMED_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.NATION_ZONE)) {
 					return String.format(areaWildernessNotificationFormat, to.getTownyWorldOrNull().getUnclaimedZoneName());
 				}

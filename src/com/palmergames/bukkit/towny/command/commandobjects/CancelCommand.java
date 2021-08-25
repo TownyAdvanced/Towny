@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.command.commandobjects;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 
@@ -16,7 +16,7 @@ public class CancelCommand extends BukkitCommand {
 	@Override
 	public boolean execute(CommandSender commandSender, String s, String[] strings) {
 		if (!ConfirmationHandler.hasConfirmation(commandSender)) {
-			TownyMessaging.sendErrorMsg(commandSender, Translation.of("no_confirmations_open"));
+			TownyMessaging.sendErrorMsg(commandSender, Translatable.of("no_confirmations_open"));
 			return true;
 		}
 		

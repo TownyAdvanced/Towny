@@ -191,7 +191,7 @@ public class TownyUniverse {
                 return false;
             DatabaseConfig.loadDatabaseConfig(rootFolder + File.separator + "settings" + File.separator + "database.yml");
             TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", towny.getVersion());
-            Translation.loadLanguage(rootFolder + File.separator + "settings", "en-US.yml");
+			Translation.loadTranslationRegistry();
             TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
         } catch (IOException | TownyException e) {
             e.printStackTrace();

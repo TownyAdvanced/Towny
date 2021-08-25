@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.confirmations;
 
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.command.CommandSender;
 
 import com.palmergames.bukkit.towny.TownySettings;
@@ -10,7 +11,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 public class ConfirmationBuilder {
 	Runnable acceptHandler;
 	Runnable cancelHandler;
-	String title;
+	Object title;
 	int duration = TownySettings.getConfirmationTimeoutSeconds();
 	boolean runAsync;
 
@@ -32,6 +33,11 @@ public class ConfirmationBuilder {
 	 * @return A builder reference of this object.
 	 */
 	public ConfirmationBuilder setTitle(String title) {
+		this.title = title;
+		return this;
+	}
+	
+	public ConfirmationBuilder setTitle(Translatable title) {
 		this.title = title;
 		return this;
 	}

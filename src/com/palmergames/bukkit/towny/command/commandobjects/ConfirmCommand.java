@@ -3,7 +3,7 @@ package com.palmergames.bukkit.towny.command.commandobjects;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 
@@ -19,7 +19,7 @@ public class ConfirmCommand extends BukkitCommand {
 		
 		// Check if confirmation is available.
 		if (!ConfirmationHandler.hasConfirmation(commandSender)) {
-			TownyMessaging.sendMsg(commandSender, Translation.of("no_confirmations_open"));
+			TownyMessaging.sendMsg(commandSender, Translatable.of("no_confirmations_open"));
 			return true;
 		}
 		

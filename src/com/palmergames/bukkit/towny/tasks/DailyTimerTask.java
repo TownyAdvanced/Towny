@@ -14,10 +14,11 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
-import com.palmergames.bukkit.util.ChatTools;
+import com.palmergames.util.StringMgmt;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -54,7 +55,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * If enabled, collect taxes and then server upkeep costs.
 		 */		
 		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
-			TownyMessaging.sendGlobalMessage(Translation.of("msg_new_day_tax"));
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_day_tax"));
 			TownyMessaging.sendDebugMsg("Collecting Town Taxes");
 			collectTownTaxes();
 			TownyMessaging.sendDebugMsg("Collecting Nation Taxes");
@@ -66,7 +67,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			
 			Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(bankruptedTowns, removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
 		} else
-			TownyMessaging.sendGlobalMessage(Translation.of("msg_new_day"));
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_day"));
 
 		/*
 		 * If enabled, remove old residents who haven't logged in for the configured number of days.
@@ -91,7 +92,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				}
 			}
 			if (!deletedTowns.isEmpty())
-				TownyMessaging.sendGlobalMessage(Translation.of("msg_the_following_towns_were_deleted_for_having_0_claims", String.join(", ", deletedTowns)));
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_the_following_towns_were_deleted_for_having_0_claims", String.join(", ", deletedTowns)));
 		}
 		
 		/*
@@ -193,7 +194,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (town.getAccount().canPayFromHoldings(taxAmount)) {
 					// Town is able to pay the nation's tax.
 						town.getAccount().payTo(taxAmount, nation, "Nation Tax to " + nation.getName());
-						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_payed_nation_tax", TownyEconomyHandler.getFormattedBalance(taxAmount)));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_payed_nation_tax", TownyEconomyHandler.getFormattedBalance(taxAmount)));
 					} else {
 					// Town is unable to pay the nation's tax.
 						if (!TownySettings.isTownBankruptcyEnabled() || !TownySettings.doBankruptTownsPayNationTax()) {
@@ -208,7 +209,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							
 							localNewlyDelinquentTowns.add(town.getName());		
 							town.removeNation();
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_couldnt_pay_the_nation_tax_of", TownyEconomyHandler.getFormattedBalance(taxAmount)));
+							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_the_nation_tax_of", TownyEconomyHandler.getFormattedBalance(taxAmount)));
 							continue;
 						}
 
@@ -225,7 +226,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							// can no longer pay the full nation tax with their allowed debt. 
 								localNewlyDelinquentTowns.add(town.getName());		
 								town.removeNation();
-								TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_couldnt_pay_the_nation_tax_of", TownyEconomyHandler.getFormattedBalance(nation.getTaxes())));
+								TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_the_nation_tax_of", TownyEconomyHandler.getFormattedBalance(nation.getTaxes())));
 								continue;
 							}
 							
@@ -235,7 +236,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						// Pay the nation tax with at least some amount of debt.
 						town.getAccount().withdraw(taxAmount, "Nation Tax to " + nation.getName()); // .withdraw() is used because other economy methods do not allow a town to go into debt.
 						nation.getAccount().deposit(taxAmount, "Nation Tax from " + town.getName());
-						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_payed_nation_tax_with_debt", TownyEconomyHandler.getFormattedBalance(taxAmount)));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_payed_nation_tax_with_debt", TownyEconomyHandler.getFormattedBalance(taxAmount)));
 
 						// Check if the town was newly bankrupted and punish them for it.
 						if (!townWasBankrupt) {
@@ -255,15 +256,15 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 			if (localNewlyDelinquentTowns != null && !localNewlyDelinquentTowns.isEmpty())
 				if (localNewlyDelinquentTowns.size() == 1)
-					TownyMessaging.sendPrefixedNationMessage(nation, Translation.of(msg1, localNewlyDelinquentTowns.get(0), Translation.of("nation_sing")));
+					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of(msg1, localNewlyDelinquentTowns.get(0), Translatable.of("nation_sing")));
 				else
-					TownyMessaging.sendPrefixedNationMessage(nation, ChatTools.list(localNewlyDelinquentTowns, msg2));
+					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of(msg2).append(StringMgmt.join(localNewlyDelinquentTowns, ", ")));
 			
 			if (localTownsDestroyed != null && !localTownsDestroyed.isEmpty())
 				if (localTownsDestroyed.size() == 1)
-					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_town_destroyed_by_nation_tax", ChatTools.list(localTownsDestroyed)));
+					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_destroyed_by_nation_tax", localTownsDestroyed.get(0)));
 				else
-					TownyMessaging.sendNationMessagePrefixed(nation, ChatTools.list(localTownsDestroyed, Translation.of("msg_town_destroyed_by_nation_tax_multiple")));
+					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_destroyed_by_nation_tax_multiple").append(StringMgmt.join(localTownsDestroyed, ", ")));
 			
 		}
 
@@ -316,7 +317,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 					if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC() || resident.isMayor()) {
 						try {
-							TownyMessaging.sendResidentMessage(resident, Translation.of("MSG_TAX_EXEMPT"));
+							TownyMessaging.sendResidentMessage(resident, Translatable.of("msg_tax_exempt"));
 						} catch (TownyException e) {
 							// Player is not online
 						}
@@ -355,9 +356,9 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 			if (removedResidents != null && !removedResidents.isEmpty()) {
 				if (removedResidents.size() == 1) 
-					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_couldnt_pay_tax", removedResidents.get(0), "town"));
+					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_couldnt_pay_tax", removedResidents.get(0), Translatable.of("town_sing")));
 				else
-					TownyMessaging.sendPrefixedTownMessage(town, ChatTools.list(removedResidents, Translation.of("msg_couldnt_pay_town_tax_multiple")));
+					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_couldnt_pay_town_tax_multiple").append(StringMgmt.join(removedResidents, ", ")));
 			}
 		}
 
@@ -419,9 +420,9 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 			if (lostPlots != null && !lostPlots.isEmpty()) {
 				if (lostPlots.size() == 1) 
-					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_couldnt_pay_plot_taxes", lostPlots.get(0)));
+					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_couldnt_pay_plot_taxes", lostPlots.get(0)));
 				else
-					TownyMessaging.sendPrefixedTownMessage(town, ChatTools.list(lostPlots, Translation.of("msg_couldnt_pay_plot_taxes_multiple")));
+					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_couldnt_pay_plot_taxes_multiple").append(StringMgmt.join(lostPlots, ", ")));
 			}
 		}
 	}
@@ -455,12 +456,12 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (town.getAccount().canPayFromHoldings(upkeep)) {
 					// Town is able to pay the upkeep.
 						town.getAccount().withdraw(upkeep, "Town Upkeep");
-						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_payed_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_payed_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
 					} else {
 					// Town is unable to pay the upkeep.
 						if (!TownySettings.isTownBankruptcyEnabled()) {
 						// Bankruptcy is disabled, remove the town for not paying upkeep.
-							TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
+							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
 							universe.getDataSource().removeTown(town);
 							removedTowns.add(town.getName());
 							continue;
@@ -477,7 +478,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							if (TownySettings.isUpkeepDeletingTownsThatReachDebtCap()) {
 							// Alternatively, if configured, towns will not be allowed to exceed
 							// their debt and be deleted from the server for non-payment finally.
-								TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
+								TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
 								universe.getDataSource().removeTown(town);
 								removedTowns.add(town.getName());
 								continue;
@@ -487,7 +488,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						
 						// Finally pay the upkeep or the modified upkeep up to the debtcap. 
 						town.getAccount().withdraw(upkeep, "Town Upkeep");
-						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_your_town_payed_upkeep_with_debt", TownyEconomyHandler.getFormattedBalance(upkeep)));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_payed_upkeep_with_debt", TownyEconomyHandler.getFormattedBalance(upkeep)));
 						
 						// Check if the town was newly bankrupted and punish them for it.
 						if(!townWasBankrupt) {
@@ -533,32 +534,32 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (!town.getAccount().withdraw(neutralityCost, "Town Peace Upkeep")) {
 						town.setNeutral(false);
 						town.save();
-						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_not_peaceful"));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_not_peaceful"));
 					} else {
-						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_paid_for_neutral_status", TownyEconomyHandler.getFormattedBalance(neutralityCost)));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_paid_for_neutral_status", TownyEconomyHandler.getFormattedBalance(neutralityCost)));
 					}
 				}
 			}			
 		}
 
-		String msg1 = Translation.of("msg_bankrupt_town2");
-		String msg2 = Translation.of("msg_bankrupt_town_multiple");
+		String msg1 = "msg_bankrupt_town2";
+		String msg2 = "msg_bankrupt_town_multiple";
 		if(TownySettings.isTownBankruptcyEnabled() && TownySettings.isUpkeepDeletingTownsThatReachDebtCap()) {
 				plugin.resetCache(); //Allow perms change to take effect immediately
-				msg1 = Translation.of("msg_town_reached_debtcap_and_is_disbanded");
-				msg2 = Translation.of("msg_town_reached_debtcap_and_is_disbanded_multiple");
+				msg1 = "msg_town_reached_debtcap_and_is_disbanded";
+				msg2 = "msg_town_reached_debtcap_and_is_disbanded_multiple";
 		}
 		
 		if (bankruptedTowns != null && !bankruptedTowns.isEmpty())
 			if (bankruptedTowns.size() == 1)
-				TownyMessaging.sendGlobalMessage(String.format(Translation.of("msg_town_bankrupt_by_upkeep"), bankruptedTowns.get(0)));
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_town_bankrupt_by_upkeep", bankruptedTowns.get(0)));
 			else
-				TownyMessaging.sendGlobalMessage(ChatTools.list(bankruptedTowns, Translation.of("msg_town_bankrupt_by_upkeep_multiple")));
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_town_bankrupt_by_upkeep_multiple").append(StringMgmt.join(bankruptedTowns, ", ")));
 		if (removedTowns != null && !removedTowns.isEmpty())
 			if (removedTowns.size() == 1)
-				TownyMessaging.sendGlobalMessage(String.format(msg1, removedTowns.get(0)));
+				TownyMessaging.sendGlobalMessage(Translatable.of(msg1, removedTowns.get(0)));
 			else
-				TownyMessaging.sendGlobalMessage(ChatTools.list(removedTowns, msg2));
+				TownyMessaging.sendGlobalMessage(Translatable.of(msg2).append(StringMgmt.join(removedTowns, ", ")));
 	}
 
 	/**
@@ -588,9 +589,9 @@ public class DailyTimerTask extends TownyTimerTask {
 					
 					if (nation.getAccount().canPayFromHoldings(upkeep)) {
 						nation.getAccount().withdraw(upkeep, "Nation Upkeep");
-						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_your_nation_payed_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));						
+						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_payed_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));						
 					} else {
-						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_your_nation_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
+						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
 						universe.getDataSource().removeNation(nation);
 						removedNations.add(nation.getName());
 					}
@@ -603,18 +604,18 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (!nation.getAccount().withdraw(neutralityCost, "Nation Peace Upkeep")) {
 						nation.setNeutral(false);
 						nation.save();
-						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_not_peaceful"));
+						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_not_peaceful"));
 					} else {
-						TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_nation_paid_for_neutral_status", TownyEconomyHandler.getFormattedBalance(neutralityCost)));
+						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_paid_for_neutral_status", TownyEconomyHandler.getFormattedBalance(neutralityCost)));
 					}
 				}
 			}
 		}
 		if (removedNations != null && !removedNations.isEmpty()) {
 			if (removedNations.size() == 1)
-				TownyMessaging.sendGlobalMessage(Translation.of("msg_bankrupt_nation2", removedNations.get(0)));
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_bankrupt_nation2", removedNations.get(0)));
 			else
-				TownyMessaging.sendGlobalMessage(ChatTools.list(removedNations, Translation.of("msg_bankrupt_nation_multiple")));
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_bankrupt_nation_multiple").append(StringMgmt.join(removedNations, ", ")));
 		}
 	}
 }

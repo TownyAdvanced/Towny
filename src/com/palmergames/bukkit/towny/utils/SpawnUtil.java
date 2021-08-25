@@ -7,7 +7,7 @@ import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.event.teleport.ResidentSpawnEvent;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
@@ -67,17 +67,16 @@ public class SpawnUtil {
 		Resident resident = townyUniverse.getResident(player.getUniqueId());
 		
 		if (resident == null)
-			throw new TownyException(Translation.of("msg_err_not_registered_1", player.getName()));
+			throw new TownyException(Translatable.of("msg_err_not_registered_1", player.getName()));
 			
 		// Test if the resident is in a teleport cooldown.
 		if (TownySettings.getSpawnCooldownTime() > 0
 				&& CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.TELEPORT))
-			throw new TownyException(
-					Translation.of("msg_err_cannot_spawn_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.TELEPORT)));
+			throw new TownyException(Translatable.of("msg_err_cannot_spawn_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.TELEPORT)));
 
 		// Disallow jailed players from teleporting.
 		if (resident.isJailed())
-			throw new TownyException(Translation.of("msg_cannot_spawn_while_jailed"));
+			throw new TownyException(Translatable.of("msg_cannot_spawn_while_jailed"));
 
 		Town town = null;
 		Nation nation = null;
@@ -110,7 +109,7 @@ public class SpawnUtil {
 			town = (Town) townyObject;
 			if (outpost) {
 				if (!town.hasOutpostSpawn())
-					throw new TownyException(Translation.of("msg_err_outpost_spawn"));
+					throw new TownyException(Translatable.of("msg_err_outpost_spawn"));
 
 				Integer index = null;
 				try {
@@ -156,7 +155,7 @@ public class SpawnUtil {
 
 				if (TownySettings.isOutpostLimitStoppingTeleports() && TownySettings.isOutpostsLimitedByLevels()
 						&& town.isOverOutpostLimit() && (Math.max(1, index) > town.getOutpostLimit())) {
-					throw new TownyException(Translation.of("msg_err_over_outposts_limit", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
+					throw new TownyException(Translatable.of("msg_err_over_outposts_limit", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 				}
 
 				spawnLoc = town.getOutpostSpawn(Math.max(1, index));
@@ -180,17 +179,15 @@ public class SpawnUtil {
 
 					if (playerNation == targetNation) {
 						if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
-							throw new TownyException(
-									Translation.of("msg_err_ally_isnt_public", town));
+							throw new TownyException(Translatable.of("msg_err_ally_isnt_public", town));
 						else
 							townSpawnPermission = TownSpawnLevel.PART_OF_NATION;
 					} else if (targetNation.hasEnemy(playerNation)) {
 						// Prevent enemies from using spawn travel.
-						throw new TownyException(Translation.of("msg_err_public_spawn_enemy"));
+						throw new TownyException(Translatable.of("msg_err_public_spawn_enemy"));
 					} else if (targetNation.hasAlly(playerNation)) {
 						if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
-							throw new TownyException(
-									Translation.of("msg_err_ally_isnt_public", town));
+							throw new TownyException(Translatable.of("msg_err_ally_isnt_public", town));
 						else
 							townSpawnPermission = TownSpawnLevel.NATION_ALLY;
 					} else {
@@ -207,11 +204,11 @@ public class SpawnUtil {
 			// Check the permissions
 			if (!(isTownyAdmin || ((townSpawnPermission == TownSpawnLevel.UNAFFILIATED) ? town.isPublic()
 					: townSpawnPermission.hasPermissionNode(plugin, player, town))))
-				throw new TownyException(Translation.of("msg_err_not_public"));
+				throw new TownyException(Translatable.of("msg_err_not_public"));
 
 			// Prevent outlaws from spawning into towns they're considered an outlaw in.
 			if (!isTownyAdmin && town.hasOutlaw(resident))
-					throw new TownyException(Translation.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", town));
+					throw new TownyException(Translatable.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", town));
 
 			break;
 		case NATION:
@@ -234,7 +231,7 @@ public class SpawnUtil {
 						nationSpawnPermission = NationSpawnLevel.PART_OF_NATION;
 					} else if (nation.hasEnemy(playerNation)) {
 						// Prevent enemies from using spawn travel.
-						throw new TownyException(Translation.of("msg_err_public_spawn_enemy"));
+						throw new TownyException(Translatable.of("msg_err_public_spawn_enemy"));
 					} else if (nation.hasAlly(playerNation)) {
 						nationSpawnPermission = NationSpawnLevel.NATION_ALLY;
 					} else {
@@ -249,7 +246,7 @@ public class SpawnUtil {
 			// Check the permissions
 			if (!(isTownyAdmin || ((nationSpawnPermission == NationSpawnLevel.UNAFFILIATED) ? nation.isPublic()
 					: nationSpawnPermission.hasPermissionNode(plugin, player, nation))))
-				throw new TownyException(Translation.of("msg_err_nation_not_public"));
+				throw new TownyException(Translatable.of("msg_err_nation_not_public"));
 
 			break;
 		}
@@ -262,17 +259,17 @@ public class SpawnUtil {
 				Town townAtPlayerLoc = TownyAPI.getInstance().getTown(player.getLocation());
 				
 				if (townAtPlayerLoc == null && disallowedZones.contains("unclaimed"))
-					throw new TownyException(Translation.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translation.of("msg_the_wilderness")));
+					throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translatable.of("msg_the_wilderness")));
 				if (townAtPlayerLoc != null) {
 					if (townAtPlayerLoc.hasOutlaw(player.getName()) && disallowedZones.contains("outlaw"))
-						throw new TownyException(Translation.of("msg_err_outlawed_players_no_teleport"));
+						throw new TownyException(Translatable.of("msg_err_outlawed_players_no_teleport"));
 					if (resident.hasNation() && townAtPlayerLoc.hasNation()) {
 						if (CombatUtil.isEnemy(resident.getTownOrNull(), townAtPlayerLoc) && disallowedZones.contains("enemy"))
-							throw new TownyException(Translation.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translation.of("msg_enemy_areas")));
+							throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translatable.of("msg_enemy_areas")));
 						Nation townLocNation = townAtPlayerLoc.getNationOrNull();
 						Nation resNation = resident.getNationOrNull();
 						if (!townLocNation.hasAlly(resNation) && !townLocNation.hasEnemy(resNation) && disallowedZones.contains("neutral"))
-							throw new TownyException(Translation.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translation.of("msg_neutral_towns")));
+							throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translatable.of("msg_neutral_towns")));
 					}
 				}
 			}
@@ -324,15 +321,15 @@ public class SpawnUtil {
 			// Skipping the confirmation.
 			if (ignoreWarn || !TownySettings.isSpawnWarnConfirmationUsed()) {
 				if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
-					TownyMessaging.sendMsg(player, Translation.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
+					TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
 					initiateSpawn(player, finalLoc);
 				}
 			} else {
 			// Sending the confirmation.
-				String title = Translation.of("msg_spawn_warn", TownyEconomyHandler.getFormattedBalance(travelCost));
+				String title = Translatable.of("msg_spawn_warn", TownyEconomyHandler.getFormattedBalance(travelCost)).forLocale(player);
 				Confirmation.runOnAccept(() -> {		
 					if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
-						TownyMessaging.sendMsg(player, Translation.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
+						TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
 						initiateSpawn(player, finalLoc);
 					}
 				})
@@ -392,7 +389,7 @@ public class SpawnUtil {
 
 		if (TownyTimerHandler.isTeleportWarmupRunning() && !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP.getNode())) {
 			// Use teleport warmup
-			TownyMessaging.sendMsg(player, Translation.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 			TownyAPI.getInstance().requestTeleport(player, spawnLoc);
 		} else {
 			// Don't use teleport warmup
@@ -421,7 +418,7 @@ public class SpawnUtil {
 			spawnLocation = outlawedPlayer.getBedSpawnLocation();
 		if (outlaw.hasTown() && TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer) != null)
 			spawnLocation = TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer);
-		TownyMessaging.sendMsg(outlaw, Translation.of("msg_outlaw_kicked", town));
+		TownyMessaging.sendMsg(outlaw, Translatable.of("msg_outlaw_kicked", town));
 		PaperLib.teleportAsync(outlaw.getPlayer(), spawnLocation, TeleportCause.PLUGIN);
 	}
 }

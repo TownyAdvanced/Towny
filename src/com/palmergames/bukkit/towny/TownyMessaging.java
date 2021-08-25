@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
@@ -18,6 +19,7 @@ import com.palmergames.util.StringMgmt;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -697,8 +699,8 @@ public class TownyMessaging {
 			nationsformatted[i % 10] = nations.get(i);
 		}
 
-		sender.sendMessage(ChatTools.formatTitle(Translation.of("nation_plu")));
-		sender.sendMessage(Colors.Blue + Translation.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + Translation.of(compType.getName()));
+		sender.sendMessage(ChatTools.formatTitle(Translatable.of("nation_plu").forLocale(sender)));
+		sender.sendMessage(Colors.Blue + Translatable.of("nation_name").forLocale(sender) + Colors.Gray + " - " + Colors.LightBlue + Translatable.of(compType.getName()).forLocale(sender));
 		Audience audience = Towny.getAdventure().sender(sender);
 		for (TextComponent textComponent : nationsformatted) {
 			audience.sendMessage(textComponent);
@@ -753,7 +755,7 @@ public class TownyMessaging {
 		}
 		
 		Audience audience = Towny.getAdventure().player(player);
-		player.sendMessage(ChatTools.formatTitle(Translation.of("outpost_plu")));
+		player.sendMessage(ChatTools.formatTitle(Translatable.of("outpost_plu").forLocale(player)));
 		for (TextComponent textComponent : outpostsFormatted) {
 			audience.sendMessage(textComponent);
 		}
@@ -803,7 +805,7 @@ public class TownyMessaging {
 			jailsFormatted[i % 10] = line;
 		}
 		Audience audience = Towny.getAdventure().player(player);
-		player.sendMessage(ChatTools.formatTitle(Translation.of("jail_plu")));
+		player.sendMessage(ChatTools.formatTitle(Translatable.of("jail_plu").forLocale(player)));
 		player.sendMessage(headerMsg);
 		for (TextComponent textComponent : jailsFormatted) {
 			audience.sendMessage(textComponent);
@@ -842,12 +844,12 @@ public class TownyMessaging {
 			line = line.append(dash).append(name).append(dash).append(size);
 			
 			if (TownyEconomyHandler.isActive() && group.getPrice() != -1)
-				line = line.append(dash).append(Component.text("(" + Translation.of("towny_map_forsale") + ": " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ")").color(NamedTextColor.BLUE));
+				line = line.append(dash).append(Component.text("(" + Translatable.of("towny_map_forsale").forLocale(sender) + ": " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ")").color(NamedTextColor.BLUE));
 
 			groupsFormatted[i % 10] = line;
 		}
 		Audience audience = Towny.getAdventure().sender(sender);
-		sender.sendMessage(ChatTools.formatTitle(town.getName() + " " + Translation.of("plotgroup_plu")));
+		sender.sendMessage(ChatTools.formatTitle(town.getName() + " " + Translatable.of("plotgroup_plu").forLocale(sender)));
 		sender.sendMessage(headerMsg);
 		for (TextComponent textComponent : groupsFormatted) {
 			audience.sendMessage(textComponent);
@@ -856,6 +858,83 @@ public class TownyMessaging {
 		// Page navigation
 		TextComponent pageFooter = getPageNavigationFooter("towny:town plotgrouplist" + town.getName(), page, "", total);
 		audience.sendMessage(pageFooter);
+	}
+	
+	public static void sendMsg(CommandSender sender, Translatable... translatables) {
+		sendMsg(sender, Translation.translateTranslatables(sender, translatables));
+	}
+	
+	public static void sendErrorMsg(CommandSender sender, Translatable... translatables) {
+		sendErrorMsg(sender, Translation.translateTranslatables(sender, translatables));
+	}
+	
+	public static void sendGlobalMessage(Translatable translatable) {
+		LOGGER.info(ChatTools.stripColour("[Global Message] " + translatable.translate()));
+		for (Player player : Bukkit.getOnlinePlayers())
+			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
+				sendMsg(player, translatable);
+	}
+	
+	public static void sendMessage(Object sender, Translatable message) {
+		if (sender instanceof Player) {
+			((Player) sender).sendMessage(message.translate(Translation.getLocale((Player) sender)));
+		} else if (sender instanceof CommandSender) {
+			((CommandSender) sender).sendMessage(message.stripColors(true).translate(Translation.getLocale((CommandSender) sender)));
+		} else if (sender instanceof Resident) {
+			Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
+			if (p != null)
+				p.sendMessage(message.stripColors(true).translate(Translation.getLocale(p)));
+		}
+	}
+	
+	public static void sendPrefixedNationMessage(Nation nation, Translatable message) {
+		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
+		
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
+			player.sendMessage(Translation.translateTranslatables(player, "", Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())), message));
+	}
+	
+	public static void sendPrefixedTownMessage(Town town, Translatable message) {
+		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + message.translate()));
+		
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
+			player.sendMessage(Translation.translateTranslatables(player, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), message));
+	}
+	
+	public static void sendNationMessagePrefixed(Nation nation, Translatable message) {
+		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
+		
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
+			sendMsg(player, message);
+	}
+	
+	public static void sendTownMessagePrefixed(Town town, Translatable message) {
+		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName())) + ": " + message.translate());
+		
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
+			sendMsg(player, message);
+	}
+	
+	public static void sendResidentMessage(Resident resident, Translatable message) throws TownyException {
+		LOGGER.info(ChatTools.stripColour("[Resident Msg] " + resident.getName() + ": " + message.translate()));
+		Player player = TownyAPI.getInstance().getPlayer(resident);
+		if (player == null)
+			throw new TownyException("Player could not be found!");
+		
+		sendMsg(player, message);
+	}
+	
+	public static void sendMsg(Resident resident, Translatable message) {
+		if (BukkitTools.isOnline(resident.getName()))
+			sendMsg(resident.getPlayer(), message);
+	}
+	
+	public static void sendMsg(Translatable message) {
+		LOGGER.info("[Towny] " + message.stripColors(true).translate());
+	}
+	
+	public static void sendErrorMsg(Translatable message) {
+		LOGGER.warn("[Towny] Error: " + message.stripColors(true).translate());
 	}
 	
 	/**

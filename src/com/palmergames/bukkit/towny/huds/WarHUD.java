@@ -7,7 +7,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import org.bukkit.Bukkit;
@@ -30,10 +30,13 @@ public class WarHUD {
 		try {
 			town_loc = at.getTownBlock().getTown().getName();
 			if (at.getTownBlock().isHomeBlock())
-				homeblock = Translation.of("war_hud_homeblock");
+				homeblock = Translatable.of("war_hud_homeblock").forLocale(p);
 			else
 				homeblock = "";
-		} catch (NotRegisteredException e) {town_loc = Translation.of("war_hud_wilderness"); homeblock = "";}
+		} catch (NotRegisteredException e) {
+			town_loc = Translatable.of("war_hud_wilderness").forLocale(p);
+			homeblock = "";
+		}
 		try {
 			nation_loc = at.getTownBlock().getTown().getNation().getName();
 		} catch (NotRegisteredException e) {nation_loc = "";}
@@ -47,9 +50,9 @@ public class WarHUD {
 			return;
 		String onEdge;
 		if (isOnEdgeOfTown(at, war))
-			onEdge = Translation.of("war_hud_true");
+			onEdge = Translatable.of("war_hud_true").forLocale(p);
 		else
-			onEdge = Translation.of("war_hud_false");
+			onEdge = Translatable.of("war_hud_false").forLocale(p);
 		p.getScoreboard().getTeam("edge").setSuffix(HUDManager.check(onEdge));
 	}
 
@@ -62,13 +65,13 @@ public class WarHUD {
 			} else {
 				isTown = true;
 				if (at.getTownBlock().getTown().getNation().isNeutral())
-					health = Translation.of("war_hud_peaceful");
+					health = Translatable.of("war_hud_peaceful").forLocale(p);
 				else
-					health = Translation.of("war_hud_fallen");
+					health = Translatable.of("war_hud_fallen").forLocale(p);
 			}
 		} catch (NotRegisteredException e) {
 			if (isTown)
-				health = Translation.of("war_hud_peaceful");
+				health = Translatable.of("war_hud_peaceful").forLocale(p);
 			else
 				health = "";
 		}
@@ -79,7 +82,7 @@ public class WarHUD {
 		if (health > 0) 
 			p.getScoreboard().getTeam("health").setSuffix(health + "" + ChatColor.AQUA + "/" + (home ? home_health : town_health));
 		else {
-			p.getScoreboard().getTeam("health").setSuffix(Translation.of("war_hud_fallen"));
+			p.getScoreboard().getTeam("health").setSuffix(Translatable.of("war_hud_fallen").forLocale(p));
 			if (TownySettings.getOnlyAttackEdgesInWar())
 				p.getScoreboard().getTeam("edge").setSuffix("war_hud_false");
 		}
@@ -89,7 +92,7 @@ public class WarHUD {
 		Resident res = TownyUniverse.getInstance().getResident(p.getUniqueId());
 		String homeTown;
 		if (res == null || !res.hasTown())
-			homeTown = Translation.of("war_hud_townless");
+			homeTown = Translatable.of("war_hud_townless").forLocale(p);
 		else {
 			try {
 				homeTown = res.getTown().getName();
@@ -137,19 +140,19 @@ public class WarHUD {
 
 	public static void toggleOn (Player p, War war) {
 		boolean edges = TownySettings.getOnlyAttackEdgesInWar();
-		String WAR_HUD_TITLE = ChatColor.GOLD + "" + ChatColor.BOLD + Translation.of("war_hud_war");
+		String WAR_HUD_TITLE = ChatColor.GOLD + "" + ChatColor.BOLD + Translatable.of("war_hud_war").forLocale(p);
 		String space1_entry = ChatColor.DARK_PURPLE.toString();
 		String town_title_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE;
-		String town_score_entry = ChatColor.WHITE + Translation.of("war_hud_score") + ChatColor.RED;
+		String town_score_entry = ChatColor.WHITE + Translatable.of("war_hud_score").forLocale(p) + ChatColor.RED;
 		String space2_entry = ChatColor.DARK_BLUE.toString();
-		String location_title_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + Translation.of("war_hud_location");
-		String nation_entry = ChatColor.WHITE + Translation.of("war_hud_nation") + ChatColor.GOLD;
-		String town_entry = ChatColor.WHITE + Translation.of("war_hud_town") + ChatColor.DARK_AQUA;
-		String edge_entry = ChatColor.WHITE + Translation.of("war_hud_attackable") + ChatColor.RED;
-		String health_entry = ChatColor.WHITE + Translation.of("war_hud_health") + ChatColor.RED;
+		String location_title_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + Translatable.of("war_hud_location").forLocale(p);
+		String nation_entry = ChatColor.WHITE + Translatable.of("war_hud_nation").forLocale(p) + ChatColor.GOLD;
+		String town_entry = ChatColor.WHITE + Translatable.of("war_hud_town").forLocale(p) + ChatColor.DARK_AQUA;
+		String edge_entry = ChatColor.WHITE + Translatable.of("war_hud_attackable").forLocale(p) + ChatColor.RED;
+		String health_entry = ChatColor.WHITE + Translatable.of("war_hud_health").forLocale(p) + ChatColor.RED;
 		String home_entry = ChatColor.RED + "";
 		String space3_entry = ChatColor.DARK_GREEN.toString();
-		String top_title_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + Translation.of("war_hud_top_towns");
+		String top_title_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + Translatable.of("war_hud_top_towns");
 		String first_entry = ChatColor.DARK_GREEN + "" + ChatColor.DARK_AQUA + "";
 		String second_entry = ChatColor.BLACK + "" + ChatColor.DARK_AQUA + "";
 		String third_entry = ChatColor.YELLOW + "" + ChatColor.DARK_AQUA + "";

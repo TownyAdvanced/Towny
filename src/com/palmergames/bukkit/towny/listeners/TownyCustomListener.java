@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
@@ -155,7 +156,7 @@ public class TownyCustomListener implements Listener {
 		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily() && upkeep > 0) {
 			String cost = TownyEconomyHandler.getFormattedBalance(upkeep);
 			String time = TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime());
-			TownyMessaging.sendTownMessagePrefixed(town, Translation.of("msg_new_town_advice", cost, time));
+			TownyMessaging.sendTownMessagePrefixed(town, Translatable.of("msg_new_town_advice", cost, time));
 		}
 		//TODO: at some point it might be nice to have a written_book given to mayors 
 		// which could contain the above advice about depositing money, or containing
