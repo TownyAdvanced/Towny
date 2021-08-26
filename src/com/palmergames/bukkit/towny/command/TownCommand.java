@@ -2081,7 +2081,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				/*
 				 * Test we have permission to use this command.
 				 */
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET.getNode(split[0].toLowerCase())))
+				if (!admin && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 
 				if (split[0].equalsIgnoreCase("mayor")) {

@@ -6653,3 +6653,4 @@ v0.92.0.11:
   - Fix lang file fallback, courtesy of Warriorrrr with PR #5230.
     - Custom language files that pre-date multi language support, which do not conform to a locale code (ie: en_CA, pt_BR) will not generate an NPE.
     - en_US will be loaded instead.
+  - Fix some of the /ta town {townname} set commands being locked behind a permission test.
