@@ -150,6 +150,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"outlawlist",
 		"deposit",
 		"outlaw",
+		"ban",
 		"outpost",
 		"purge",
 		"plotgrouplist",
@@ -325,6 +326,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return Collections.singletonList("list");
 					break;
 				case "outlaw":
+				case "ban":
 					switch (args.length) {
 						case 2:
 							return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
@@ -777,7 +779,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
 					TownyMessaging.sendPrefixedTownMessage(resident.getTown(), StringMgmt.join(newSplit));
 					
-				} else if (split[0].equalsIgnoreCase("outlaw")) {
+				} else if (split[0].equalsIgnoreCase("outlaw") || split[0].equalsIgnoreCase("ban")) {
 
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTLAW.getNode()))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
