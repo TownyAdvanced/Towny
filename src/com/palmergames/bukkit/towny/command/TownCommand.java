@@ -2093,7 +2093,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 					} else
 						try {
-							if (!resident.isMayor())
+							if (!admin && !resident.isMayor()) // We already know the resident is a mayor if admin if true, prevents an NPE in rare cases of resident being null.
 								throw new TownyException(Translatable.of("msg_not_mayor"));
 
 							Resident oldMayor = town.getMayor();
@@ -2118,8 +2118,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							}
 							
 							town.setMayor(newMayor);
-							TownyPerms.assignPermissions(oldMayor, null);
-							plugin.deleteCache(oldMayor.getName());
+							
+							if (oldMayor != null) {
+								TownyPerms.assignPermissions(oldMayor, null);
+								plugin.deleteCache(oldMayor.getName());
+							}
+
 							plugin.deleteCache(newMayor.getName());
 							if (admin)
 								TownyMessaging.sendMessage(player, Translatable.of("msg_new_mayor", newMayor.getName()));
