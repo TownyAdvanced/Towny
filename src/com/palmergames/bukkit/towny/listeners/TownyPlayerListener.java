@@ -1246,7 +1246,7 @@ public class TownyPlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onEggLand(PlayerEggThrowEvent event) {
-		if (!TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getEgg().getLocation(), Material.EGG))
+		if (TownySettings.isItemUseMaterial(Material.EGG.name()) && !TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getEgg().getLocation(), Material.EGG))
 			event.setHatching(false);
 	}
 }

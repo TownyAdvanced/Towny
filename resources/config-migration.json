@@ -141,5 +141,15 @@
         "value": ",outlaw"
       }
     ]
+  },
+  {
+    "version": "0.97.1.5",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.item_use_ids",
+        "value": ",EGG"
+      }
+    ]
   }
 ]
