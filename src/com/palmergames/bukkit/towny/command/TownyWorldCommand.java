@@ -176,13 +176,10 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (split.length == 0) {
-			if (player == null) {
-				for (String line : TownyFormatter.getStatus(Globalworld)) {
-					TownyMessaging.sendMessage(sender, Colors.strip(line));
-				}
-			} else {
-				TownyMessaging.sendMessage(player, TownyFormatter.getStatus(Globalworld, Translation.getLocale(player)));
-			}
+			if (player == null)
+				TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(Globalworld, Translation.getLocale(sender)));
+			else
+				TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(Globalworld, Translation.getLocale(player)));
 
 			return;
 		}

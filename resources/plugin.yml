@@ -188,6 +188,7 @@ permissions:
             towny.command.nation.allylist: true
             towny.command.nation.enemylist: true
             towny.command.nation.join: true
+            towny.command.nation.ranklist: true
 
     towny.command.nation.list:
         description: Users are able to use all the various methods of sorting the nation list.

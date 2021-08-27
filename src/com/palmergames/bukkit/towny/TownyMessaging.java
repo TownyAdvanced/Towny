@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
+import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -946,5 +947,13 @@ public class TownyMessaging {
 	@Deprecated
 	public static void sendMsg(Object object, String message) {
 		sendMsg((CommandSender) object, message);
+	}
+
+
+	
+	public static void sendStatusScreen(CommandSender sender, StatusScreen screen) {
+		Audience audience = Towny.getAdventure().sender(sender);
+		for (TextComponent string : screen.getFormattedStatusScreen())
+			audience.sendMessage(string);
 	}
 }

@@ -158,6 +158,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			switch (args[0].toLowerCase()) {
+				case "tax":
+					if (args.length == 2)
+						return getTownyStartingWith(args[1], "r");
+					break;
 				case "toggle":
 					if (args.length == 2) {
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_TOGGLE, residentToggleTabCompletes), args[1]);
@@ -223,15 +227,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		} else {
 			final Optional<Resident> resOpt = Optional.ofNullable(TownyUniverse.getInstance().getResident(split[0]));
-			if (resOpt.isPresent()) {
-				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-					Player player = null;
-					TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(resOpt.get(), player));
-				});
-			}
-			else {
+			if (resOpt.isPresent())
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(resOpt.get(), null, Translation.getDefaultLocale())));
+			else
 				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[0]));
-			}
 		}
 		
 	}
@@ -244,7 +243,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			if (split.length == 0) {
 				Resident res = getResidentOrThrow(player.getUniqueId());
 
-				TownyMessaging.sendMessage(player, TownyFormatter.getStatus(res, player, Translation.getLocale(player)));
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(res, player, Translation.getLocale(player))));
 			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 				
 				HelpMenu.RESIDENT_HELP.send(player);
@@ -264,7 +263,11 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				if (!TownyEconomyHandler.isActive())
 					throw new TownyException(Translatable.of("msg_err_no_economy"));
 				
-				Resident res = getResidentOrThrow(player.getUniqueId());
+				Resident res;
+				if (split.length > 1)
+					res = getResidentOrThrow(split[1]);
+				else
+					res = getResidentOrThrow(player.getUniqueId());
 				
 				TownyMessaging.sendMessage(player, TownyFormatter.getTaxStatus(res, Translation.getLocale(player)));
 
@@ -373,7 +376,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				}
 				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(),
-					() -> TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player, Translation.getLocale(player)))
+					() -> TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(resident, player, Translation.getLocale(player)))
 				);
 			}
 
