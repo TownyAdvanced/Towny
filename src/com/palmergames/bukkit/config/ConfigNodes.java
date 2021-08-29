@@ -1034,7 +1034,7 @@ public enum ConfigNodes {
 	
 	PLUGINS_LUCKPERMS_CONTEXTS(
 			"plugin.interfacing.luckperms_contexts",
-			"true",
+			"false",
 			"",
 			"# If enabled, Towny contexts will be available in LuckPerms.",
 			"# https://luckperms.net/wiki/Context"),

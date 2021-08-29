@@ -45,7 +45,7 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 	
 	@Override
 	public void calculate(@NotNull Player player, @NotNull ContextConsumer contextConsumer) {
-		Resident resident = TownyAPI.getInstance().getResident(player.getName());
+		Resident resident = TownyAPI.getInstance().getResident(player);
 		if (resident == null)
 			return;
 			
