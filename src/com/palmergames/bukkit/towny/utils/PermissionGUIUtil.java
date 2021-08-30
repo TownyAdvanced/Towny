@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.utils;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.PlotCommand;
 import com.palmergames.bukkit.towny.conversation.ResidentConversation;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -15,6 +16,7 @@ import com.palmergames.bukkit.towny.object.gui.PermissionGUI;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import org.bukkit.Bukkit;
@@ -193,6 +195,11 @@ public class PermissionGUIUtil {
 		}
 		
 		new ResidentConversation(player).runOnResponse((res) -> {
+			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_ADD.getNode())) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_command_disable"));
+				return;
+			}
+			
 			Resident resident = (Resident) res;
 			if (startingTownBlock.hasPlotObjectGroup()) {
 				PlotGroup group = startingTownBlock.getPlotObjectGroup();
