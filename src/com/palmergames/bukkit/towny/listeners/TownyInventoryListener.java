@@ -79,6 +79,9 @@ public class TownyInventoryListener implements Listener {
 				Towny.getAdventure().player(player).playSound(clickSound);
 			} else if (event.getCurrentItem().getType() == Material.WRITTEN_BOOK) {
 				player.openBook(PermissionGUIUtil.createTutorialBook());
+			} else if (event.getCurrentItem().getType() == Material.NAME_TAG) {
+				PermissionGUIUtil.handleConversation(player);
+				event.getWhoClicked().closeInventory();
 			} else {
 				int currentPage = resident.getGUIPageNum();
 
