@@ -2,20 +2,27 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyFormatter;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.PlotCommand;
+import com.palmergames.bukkit.towny.conversation.ResidentConversation;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.PermissionData;
+import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.gui.EditGUI;
 import com.palmergames.bukkit.towny.object.gui.PermissionGUI;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -97,6 +104,15 @@ public class PermissionGUIUtil {
 			page.addItem(skull);
 		}
 		
+		if (canEdit) {
+			ItemStack addButton = new ItemStack(Material.NAME_TAG);
+			ItemMeta addButtonMeta = addButton.getItemMeta();
+			addButtonMeta.setDisplayName(Colors.Gold + "Add Player");
+			addButton.setItemMeta(addButtonMeta);
+
+			page.setItem(46, addButton);
+		}
+		
 		page.setItem(52, createTutorialBook());
 		
 		pages.add(page);
@@ -169,5 +185,43 @@ public class PermissionGUIUtil {
 
 		book.setItemMeta(meta);
 		return book;
+	}
+	
+	public static void handleConversation(Player player) {
+		TownBlock startingTownBlock = WorldCoord.parseWorldCoord(player).getTownBlockOrNull();
+		if (startingTownBlock == null) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_not_claimed_1"));
+			return;
+		}
+		
+		new ResidentConversation(player).runOnResponse((res) -> {
+			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_ADD.getNode())) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_command_disable"));
+				return;
+			}
+			
+			Resident resident = (Resident) res;
+			if (startingTownBlock.hasPlotObjectGroup()) {
+				PlotGroup group = startingTownBlock.getPlotObjectGroup();
+					
+				if (group.getPermissionOverrides().containsKey(resident)) {
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_overrides_already_set", resident.getName(), Translatable.of("plotgroup_sing")));
+					return;
+				}
+
+				group.putPermissionOverride(resident, new PermissionData(PermissionGUIUtil.getDefaultTypes(), player.getName()));
+			} else {
+				if (startingTownBlock.getPermissionOverrides().containsKey(resident)) {
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_overrides_already_set", resident.getName(), Translatable.of("townblock")));
+					return;
+				}
+
+				startingTownBlock.getPermissionOverrides().put(resident, new PermissionData(PermissionGUIUtil.getDefaultTypes(), player.getName()));
+				startingTownBlock.save();
+			}
+			
+			TownyMessaging.sendMsg(player, Translatable.of("msg_overrides_added", resident.getName()));
+			PermissionGUIUtil.openPermissionGUI(TownyAPI.getInstance().getResident(player), startingTownBlock);
+		});
 	}
 }
