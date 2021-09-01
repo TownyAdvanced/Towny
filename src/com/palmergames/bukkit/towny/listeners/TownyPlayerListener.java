@@ -65,6 +65,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -1243,5 +1244,9 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 	
-	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onEggLand(PlayerEggThrowEvent event) {
+		if (TownySettings.isItemUseMaterial(Material.EGG.name()) && !TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getEgg().getLocation(), Material.EGG))
+			event.setHatching(false);
+	}
 }
