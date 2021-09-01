@@ -6665,3 +6665,4 @@ v0.92.0.11:
   - API: add TownyFriendlyFireTestEvent, courtesy of LudwigHornslied with PR #5246.
   - Allow the notification.town_names_are_verbose setting to affect the {townname} placeholder usable in the titles/substitles notifications.
   - Fix Axolotl thieving.
+  - Bump language files to 0.120.
