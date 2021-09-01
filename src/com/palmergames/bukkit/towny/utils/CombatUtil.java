@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyDispenserDamageEntityEvent;
+import com.palmergames.bukkit.towny.event.damage.TownyFriendlyFireTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.damage.WildernessPVPTestEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
@@ -16,7 +17,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -396,10 +396,15 @@ public class CombatUtil {
 			if (!world.isFriendlyFireEnabled() && CombatUtil.isAlly(attacker.getName(), defender.getName())) {
 				if (isArenaPlot(attacker, defender))
 					return false;
-				
-				TownyMessaging.sendErrorMsg(attacker, Translatable.of("msg_err_friendly_fire_disable"));
-				return true;
-			}		
+
+				TownyFriendlyFireTestEvent event = new TownyFriendlyFireTestEvent(attacker, defender, world);
+				Bukkit.getPluginManager().callEvent(event);
+	
+				if (!event.isPVP() && !event.getCancelledMessage().isEmpty())
+					TownyMessaging.sendErrorMsg(attacker, event.getCancelledMessage());
+	
+				return !event.isPVP();
+			}
 		return false;
 	}
 
