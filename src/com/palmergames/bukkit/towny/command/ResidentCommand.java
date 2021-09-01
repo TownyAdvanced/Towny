@@ -727,8 +727,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		List<Resident> toKick = new ArrayList<>(kicking);
 
 		for (Resident friend : toKick) {
-			resident.removeFriend(friend);
-			plugin.deleteCache(friend.getName());
+			if (!resident.hasFriend(friend))
+				remove.add(friend);
+			else {
+				resident.removeFriend(friend);
+				plugin.deleteCache(friend.getName());
+			}
 		}
 		// remove invalid names so we don't try to send them messages
 		if (remove.size() > 0)
