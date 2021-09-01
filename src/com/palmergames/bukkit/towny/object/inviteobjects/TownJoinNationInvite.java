@@ -23,7 +23,11 @@ public class TownJoinNationInvite extends AbstractInvite<Nation, Town> {
 		List<Town> towns = new ArrayList<>();
 		towns.add(town);
 		Nation nation = getSender();
-		NationCommand.nationAdd(nation, towns);
+		if(!town.hasNation()){
+			NationCommand.nationAdd(nation, towns);
+		} else {
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_err_already_nation", town.getName()));
+		}
 		// Message handled in nationAdd()
 		town.deleteReceivedInvite(this);
 		nation.deleteSentInvite(this);

@@ -19,9 +19,12 @@ public class PlayerJoinTownInvite extends AbstractInvite<Town, Resident> {
 		Resident resident = getReceiver();
 		Town town = getSender();
 		
-		TownCommand.townAddResident(town, resident);
-		TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_join_town", resident.getName()));
-		
+		if(!resident.hasTown()){
+			TownCommand.townAddResident(town, resident);
+			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_join_town", resident.getName()));
+		} else {
+			TownyMessaging.sendMsg(resident, Translation.of("msg_err_already_res"));
+		}
 		resident.deleteReceivedInvite(this);
 		town.deleteSentInvite(this);
 	}
