@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.119
+version: 0.120
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1340,3 +1340,6 @@ status_title_nopvp: '&a(No PVP)'
 #Added in 0.119
 msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'You cannot jail your resident because they are in a location where they are outlawed.'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'You cannot jail your resident because they are in a location where they are considered an enemy.'
+#Added in 0.120
+msg_resident_prompt: 'Enter the name of the player in chat, or q to exit. This will automatically time out in 30 seconds.'
+msg_prompt_cancel: 'Prompt cancelled or timed out.'
