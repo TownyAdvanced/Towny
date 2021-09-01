@@ -81,6 +81,10 @@ public class EntityTypeUtil {
 		Material material = null;
 		
 		switch(entityType) {
+		
+		case AXOLOTL:
+			material = Material.AXOLOTL_SPAWN_EGG;
+			break;
 
 		case COD:
 			material = Material.COD;

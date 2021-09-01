@@ -437,7 +437,6 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 
-	
 	/*
 	* Handles protection of Armor Stands.
 	*/	
