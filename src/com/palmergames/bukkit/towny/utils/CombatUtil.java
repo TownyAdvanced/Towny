@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -386,31 +385,26 @@ public class CombatUtil {
 	 * @return true if we should cancel damage.
 	 */
 	public static boolean preventFriendlyFire(Player attacker, Player defender, TownyWorld world) {
-		
+
 		/*
 		 * Don't block potion use (self damaging) on ourselves.
 		 */
 		if (attacker == defender)
 			return false;
 
-		if ((attacker != null) && (defender != null)) {
-			boolean pvp = true;
-
+		if ((attacker != null) && (defender != null))
 			if (!world.isFriendlyFireEnabled() && CombatUtil.isAlly(attacker.getName(), defender.getName())) {
 				if (isArenaPlot(attacker, defender))
-					pvp = true;
-				else
-					pvp = false;
+					return false;
+
+				TownyFriendlyFireTestEvent event = new TownyFriendlyFireTestEvent(attacker, defender, world);
+				Bukkit.getPluginManager().callEvent(event);
+	
+				if (!event.isPVP() && !event.getCancelledMessage().isEmpty())
+					TownyMessaging.sendErrorMsg(attacker, event.getCancelledMessage());
+	
+				return !event.isPVP();
 			}
-
-			TownyFriendlyFireTestEvent event = new TownyFriendlyFireTestEvent(attacker, defender, world, pvp);
-			Bukkit.getPluginManager().callEvent(event);
-
-			if (!event.isPvp())
-				TownyMessaging.sendErrorMsg(attacker, Translatable.of("msg_err_friendly_fire_disable"));
-
-			return !event.isPvp();
-		}
 		return false;
 	}
 
