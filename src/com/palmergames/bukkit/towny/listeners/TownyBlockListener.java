@@ -313,9 +313,9 @@ public class TownyBlockListener implements Listener {
 			return;
 
 		// Snowmen making snow will also throw this event. 
-		if (event.getEntity() instanceof Player) {
+		if (event.getEntity() instanceof Player player) {
 			//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
-			event.setCancelled(!TownyActionEventExecutor.canBuild((Player) event.getEntity(), event.getBlock().getLocation(), event.getBlock().getType()));
+			event.setCancelled(!TownyActionEventExecutor.canBuild(player, event.getBlock().getLocation(), event.getBlock().getType()));
 		}
 	}
 	

@@ -72,8 +72,7 @@ public class TownyInventoryListener implements Listener {
 			event.getCurrentItem().setItemMeta(meta);			
 			Towny.getAdventure().player(player).playSound(clickSound);
 
-		} else if (event.getInventory().getHolder() instanceof PermissionGUI) {
-			PermissionGUI permissionGUI = (PermissionGUI) event.getInventory().getHolder();
+		} else if (event.getInventory().getHolder() instanceof PermissionGUI permissionGUI) {
 			if (event.getCurrentItem().getType() == Material.PLAYER_HEAD && permissionGUI.canEdit()) {
 				PermissionGUIUtil.openPermissionEditorGUI(resident, permissionGUI.getTownBlock(), event.getCurrentItem());
 				Towny.getAdventure().player(player).playSound(clickSound);

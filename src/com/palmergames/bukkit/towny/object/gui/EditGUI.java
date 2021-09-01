@@ -26,14 +26,9 @@ public class EditGUI extends PermissionGUI {
 		SetPermissionType[] newTypes = new SetPermissionType[4];
 		for (int i = 0; i < 4; i++) {
 			switch (getInventory().getItem(PermissionGUIUtil.getWoolSlots()[i]).getType()) {
-				case LIME_WOOL:
-					newTypes[i] = SetPermissionType.SET;
-					break;
-				case RED_WOOL:
-					newTypes[i] = SetPermissionType.NEGATED;
-					break;
-				default:
-					newTypes[i] = SetPermissionType.UNSET;
+				case LIME_WOOL -> newTypes[i] = SetPermissionType.SET;
+				case RED_WOOL -> newTypes[i] = SetPermissionType.NEGATED;
+				default -> newTypes[i] = SetPermissionType.UNSET;
 			}
 		}
 
