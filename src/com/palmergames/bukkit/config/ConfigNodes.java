@@ -1468,7 +1468,8 @@ public enum ConfigNodes {
 			"# {townname} - Name of the town.",
 			"# {town_motd} - Shows the townboard message.",
 			"# {town_residents} - Shows the number of residents in the town.",
-			"# {town_residents_online} - Shows the number of residents online currently."),
+			"# {town_residents_online} - Shows the number of residents online currently.",
+			"# The notification.town_names_are_verbose setting will affect the {townname} placeholder."),
 	NOTIFICATION_TITLES_TOWN_TITLE(
 			"notification.titles.town_title",
 			"",

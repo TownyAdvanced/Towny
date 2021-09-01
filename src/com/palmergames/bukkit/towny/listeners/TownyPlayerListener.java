@@ -927,7 +927,7 @@ public class TownyPlayerListener implements Listener {
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
 			
 			HashMap<String, Object> placeholders = new HashMap<>();
-			placeholders.put("{townname}", StringMgmt.remUnderscore(town.getName()));
+			placeholders.put("{townname}", StringMgmt.remUnderscore(TownySettings.isNotificationsTownNamesVerbose() ? town.getFormattedName() : town.getName()));
 			placeholders.put("{town_motd}", town.getBoard());
 			placeholders.put("{town_residents}", town.getNumResidents());
 			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(town).size());

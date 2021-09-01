@@ -6663,3 +6663,4 @@ v0.92.0.11:
     - An egg that lands in a plot will test if the egg-thrower can item_use in that location, when eggs are in the item_use list.
     - Eggs will automatically be added to the config.yml's item_use list with this update.
   - API: add TownyFriendlyFireTestEvent, courtesy of LudwigHornslied with PR #5246.
+  - Allow the notification.town_names_are_verbose setting to affect the {townname} placeholder usable in the titles/substitles notifications.
