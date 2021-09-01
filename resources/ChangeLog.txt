@@ -6654,3 +6654,11 @@ v0.92.0.11:
     - Custom language files that pre-date multi language support, which do not conform to a locale code (ie: en_CA, pt_BR) will not generate an NPE.
     - en_US will be loaded instead.
   - Fix some of the /ta town {townname} set commands being locked behind a permission test.
+  - Fix NPE preventing null mayors from being replaced when /ta set mayor is used, courtesy of Warriorrrr with PR #5235.
+  - Make context calculation faster, courtesy of Warriorrrr with PR #5244.
+  - Check if resident is friended before sending removal message, courtesy of Warriorrrr with PR #5253.
+  - Fix AlreadyRegisteredException when accepting two invites or more, courtesy of 0xBit-MC #5254.
+  - Add prompts for Add Player to PermissionGUI, courtesy of Warriorrrr with PR #5248.
+  - Prevent chickens being spawned without permission, courtesy of Warriorrrr with PR #5237.
+    - An egg that lands in a plot will test if the egg-thrower can item_use in that location, when eggs are in the item_use list.
+    - Eggs will automatically be added to the config.yml's item_use list with this update.
