@@ -18,7 +18,7 @@ import com.palmergames.bukkit.towny.object.Translation;
  */
 
 public class ChatTools {
-	final static int MAX_FONT_WIDTH = 323;
+	final static int MAX_FONT_WIDTH = 321; // Two pixels less than the actual max width.
 	final static int SPACE_WIDTH = 4;
 	final static int UNDERSCORE_WIDTH = 6;
 	final static int WIDGET_WIDTH = 22;

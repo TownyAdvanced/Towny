@@ -41,7 +41,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -79,7 +78,7 @@ public class TownyFormatter {
 	 */
 	public static StatusScreen getStatus(TownBlock townBlock, Player player, Locale locale) {
 
-		StatusScreen screen = new StatusScreen(new LinkedHashMap<>());
+		StatusScreen screen = new StatusScreen();
 		final Translator translator = Translator.locale(locale);
 		
 		TownyObject owner;
@@ -131,7 +130,7 @@ public class TownyFormatter {
 	 */
 	public static StatusScreen getStatus(Resident resident, Player player, Locale locale) {
 
-		StatusScreen screen = new StatusScreen(new LinkedHashMap<>());
+		StatusScreen screen = new StatusScreen();
 		final Translator translator = Translator.locale(locale);
 
 		// ___[ King Harlus ]___
@@ -264,7 +263,7 @@ public class TownyFormatter {
 	public static StatusScreen getStatus(Town town, Locale locale) {
 
 		final Translator translator = Translator.locale(locale);
-		StatusScreen screen = new StatusScreen(new LinkedHashMap<>());
+		StatusScreen screen = new StatusScreen();
 		TownyWorld world = town.getHomeblockWorld();
 
 		// ___[ Raccoon City ]___
@@ -408,7 +407,7 @@ public class TownyFormatter {
 	 */
 	public static StatusScreen getStatus(Nation nation, Locale locale) {
 
-		StatusScreen screen = new StatusScreen(new LinkedHashMap<>());
+		StatusScreen screen = new StatusScreen();
 		final Translator translator = Translator.locale(locale);
 
 		// ___[ Azur Empire (Open)]___
@@ -522,7 +521,7 @@ public class TownyFormatter {
 	 */
 	public static StatusScreen getStatus(TownyWorld world, Locale locale) {
 
-		StatusScreen screen = new StatusScreen(new LinkedHashMap<>());
+		StatusScreen screen = new StatusScreen();
 		final Translator translator = Translator.locale(locale);
 
 		// ___[ World (PvP) ]___
