@@ -1,5 +1,5 @@
 name: Towny
-version: 0.120
+version: 0.121
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1493,6 +1493,7 @@ msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'You cannot ja
 msg_resident_prompt: 'Enter the name of the player in chat, or q to exit. This will automatically time out in 30 seconds.'
 msg_prompt_cancel: 'Prompt cancelled or timed out.'
 
+#Added in 0.121
 status_title_primary_colour: '&6'           # Used to colour the majority of the title bar.
 status_title_secondary_colour: '&e'         # Used to colour the words in the title bar.
 status_format_list_1: '&2'                  # First colour applied to status screen lists, ex: on /res, the friend list's Friends section.
@@ -1506,7 +1507,6 @@ status_format_hover_bracket_colour: '&7'    # Colour applied to the brackets of 
 status_format_key_important: '&c'           # Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| '                    # Used in status screens where a splitter is used between values.
 status_home_element: ' &7[Home: %s]'
-
 status_registered: 'Registered:'
 status_lastonline: 'Last Online:'
 status_fractions: '%s/%s'

@@ -6668,3 +6668,4 @@ v0.92.0.11:
   - Bump language files to 0.120.
 0.97.1.6:
   - Add bypass for campfires being unable to be lit.
+  - Bump language files to 0.121.
