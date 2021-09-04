@@ -6669,3 +6669,22 @@ v0.92.0.11:
 0.97.1.6:
   - Add bypass for campfires being unable to be lit.
   - Bump language files to 0.121.
+  - Add missing owner test, courtesy of Warriorrrr.
+  - StatusScreen overhaul!
+    - StatusScreens for townblocks, residents, towns, nations and worlds have had a facelift.
+    - Screens now include hoverable and clickable componenents to them.
+    - Screen components will word-wrap efficiently.
+    - StatusScreens are now colourable using only 12 language strings found in the towny\settings\lang\override\global.yml file.
+    - You can even re-colour the title bar.
+    - StatusScreenEvents now have the ability to remove components and add components.
+      - API-Usage:
+        - The existing StatusScreenEvents thrown by Towny will now include their getStatusScreen() method, from which the StatusScreen is accessible and modifiable.
+        - ex: event.getStatusScreen().removeStatusComponent(String name); - To remove a StatusComponent from the StatusScreen.
+        - ex: event.getStatusScreen().addComponentOf(String name, String text, HoverEvent hover, ClickEvent click); - To add a new StatusComponent to the StatusScreen.
+        - ex: event.getStatusScreen().replaceComponent(String name, TextComponent component); - To replace an already existing component with something else.
+  - New Command: /n ranklist {nationname}
+    - View the ranklist of another nation.
+  - New Command: /t ranklist {townname}
+    - View the ranklist of another town.
+  - New Command: /res tax {resname}
+    - View the tax requirements of another resident.    
