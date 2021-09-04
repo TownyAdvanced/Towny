@@ -1,26 +1,25 @@
 package com.palmergames.bukkit.towny.regen;
 
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.regen.block.BlockObject;
 import com.palmergames.bukkit.util.BukkitTools;
-
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+
 import java.util.ArrayList;
 import java.util.List;
-
+@SuppressWarnings("deprecation")
 public class PlotBlockData {
 
-	private int defaultVersion = 4;
+	private int defaultVersion = 2;
 
 	private String worldName;
 	private TownBlock townBlock;
 	private int x, z, size, height, version;
 
-	private List<String> blockList = new ArrayList<>(); // Stores the original plot blocks
+	private List<Integer> blockList = new ArrayList<Integer>(); // Stores the original plot blocks
 	private int blockListRestored; // counter for the next block to test
 
 	public PlotBlockData(TownBlock townBlock) {
@@ -37,7 +36,7 @@ public class PlotBlockData {
 
 	public void initialize() {
 
-		List<String> blocks = getBlockArr();
+		List<Integer> blocks = getBlockArr();
 		if (blocks != null) {
 			setBlockList(blocks); //fill array
 			resetBlockListRestored();
@@ -49,9 +48,9 @@ public class PlotBlockData {
 	 * 
 	 * @return
 	 */
-	private List<String> getBlockArr() {
+	private List<Integer> getBlockArr() {
 
-		List<String> list = new ArrayList<>();
+		List<Integer> list = new ArrayList<Integer>();
 		Block block = null;
 
 		World world = this.townBlock.getWorldCoord().getBukkitWorld();
@@ -69,15 +68,16 @@ public class PlotBlockData {
 
 					case 1:
 					case 2:
-					case 3:
-					case 4:
-						list.add(block.getBlockData().getAsString(true));
+						list.add(BukkitTools.getTypeId(block));
+						list.add((int) BukkitTools.getData(block));
 						break;
-					default:
-						list.add(block.getType().getKey().toString());
 
-					}					
+					default:
+						list.add(BukkitTools.getTypeId(block));
+					}
+
 				}
+
 		return list;
 	}
 
@@ -89,85 +89,79 @@ public class PlotBlockData {
 	public boolean restoreNextBlock() {
 
 		Block block = null;
-		int x, y, z, reverse, scale;
+		int x, y, z, blockId, reverse, scale;
 		int worldx = getX() * size, worldz = getZ() * size;
-		Material blockMat, mat;
 		BlockObject storedData;
 		World world = this.townBlock.getWorldCoord().getBukkitWorld();
 
 		if (!world.isChunkLoaded(BukkitTools.calcChunk(getX()), BukkitTools.calcChunk(getZ())))
 			return true;
-
-
+		
 		//Scale for the number of elements
 		switch (version) {
 
-			case 1:
-			case 2:
-			case 3:
-				scale = 2;
-				break;	
-			case 4:
-				scale = 1;
-				break;	
-			default:
-				scale = 1;
+		case 1:
+		case 2:
+			scale = 2;
+			break;
+
+		default:
+			scale = 1;
 		}
 
 		reverse = (blockList.size() - blockListRestored) / scale;
-		
+
 		while (reverse > 0) {
+
 			reverse--; //regen bottom up to stand a better chance of restoring tree's and plants.
 			y = height - (reverse % height);
-			x = (reverse / height) % size;
-			z = (reverse / height / size) % size;
-	
+			x = (int) (reverse / height) % size;
+			z = ((int) (reverse / height) / size) % size;
+
 			block = world.getBlockAt(worldx + x, y, worldz + z);
-			blockMat = block.getType();
-			try {
-				storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);
-			} catch (IllegalArgumentException e1) {
-				TownyMessaging.sendDebugMsg("Towny's revert-on-unclaim feature encountered a block which will not load on the current version of MC. Ignoring and skipping to next block.");
-				continue;
-			}
-			
-			switch (version) {
-		
-				case 1:
-				case 2:				
-				case 3:
-				case 4:
-					blockListRestored += scale;
-					
-					mat = storedData.getMaterial();
-					if (mat == null) {
-						TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - Material Null, skipping block.");
-					} else if (blockMat != mat) {
-						if (!this.townBlock.getWorld().isPlotManagementIgnoreIds(mat)) {
-							try {								
-								block.setType(mat, false);
-								block.setBlockData(storedData.getBlockData());
-								return true;
-							} catch (Exception e) {
-								TownyMessaging.sendErrorMsg("Exception in PlotBlockData.java");
-								break;
-							}
-			
-						} else {					
-							block.setType(Material.AIR);
-							return true;
+			blockId = BukkitTools.getTypeId(block);
+			storedData = getStoredBlockData((blockList.size() - 1) - blockListRestored);
+
+			// Increment based upon number of elements
+			blockListRestored += scale;
+
+			// If this block isn't correct, replace
+			// and return as done.
+			if ((blockId != storedData.getTypeId()) || (BukkitTools.getData(block) != storedData.getData())) {
+
+				Material mat = BukkitTools.getMaterial(storedData.getTypeId());
+
+				if ((mat == null) || ((mat != null) && !this.townBlock.getWorld().isPlotManagementIgnoreIds(mat.name(), storedData.getData()))) {
+
+					//System.out.print("regen x: " + x + " y: " + y + " z: " + z + " ID: " + blockId); 
+
+					try {
+						//restore based upon version
+						switch (version) {
+
+						case 1:
+						case 2:
+							BukkitTools.setTypeIdAndData(block, storedData.getTypeId(), storedData.getData(), false);
+
+							break;
+						default:
+							BukkitTools.setTypeId(block, storedData.getTypeId(), false);
 						}
-			
+						
+					} catch (Exception e) {
+
 					}
-					//TownyMessaging.sendDebugMsg("PlotBlockData:restoreNextBlock() - Blocks match, no replacing needed.");
-					break;
+
+				} else {
 					
-				default:
-					TownyMessaging.sendErrorMsg("PlotBlockData:restoreNextBlock() - You should not be seeing this message.");					
+					BukkitTools.setTypeId(block, 0, false);
 					
+				}
+
+				return true;
 			}
-			
 		}
+
 		// reset as we are finished with the regeneration
 		resetBlockListRestored();
 		return false;
@@ -180,11 +174,10 @@ public class PlotBlockData {
 
 		case 1:
 		case 2:
-		case 3:
-		case 4:
-			return new BlockObject(blockList.get(index));
+			return new BlockObject(blockList.get(index - 1), (byte) (blockList.get(index) & 0xff));
+
 		default:
-			return new BlockObject(blockList.get(index));
+			return new BlockObject(blockList.get(index), (byte) 0);
 		}
 
 	}
@@ -253,7 +246,7 @@ public class PlotBlockData {
 	/**
 	 * @return the blockList
 	 */
-	public List<String> getBlockList() {
+	public List<Integer> getBlockList() {
 
 		return blockList;
 	}
@@ -261,9 +254,9 @@ public class PlotBlockData {
 	/**
 	 * fills the BlockList
 	 * 
-	 * @param blockList - BlockList (List&lt;String&gt;)
+	 * @param blockList
 	 */
-	public void setBlockList(List<String> blockList) {
+	public void setBlockList(List<Integer> blockList) {
 
 		this.blockList = blockList;
 	}

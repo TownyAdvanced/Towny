@@ -155,7 +155,7 @@ public class WarHUD {
 		String third_entry = ChatColor.YELLOW + "" + ChatColor.DARK_AQUA + "";
 		//init objective
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-		Objective obj = board.registerNewObjective("WAR_HUD_OBJ", "dummy", WAR_HUD_TITLE);
+		Objective obj = board.registerNewObjective("WAR_HUD_OBJ", WAR_HUD_TITLE);
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName(WAR_HUD_TITLE);
 		//register teams

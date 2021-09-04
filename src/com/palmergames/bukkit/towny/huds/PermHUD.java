@@ -141,7 +141,7 @@ public class PermHUD {
 
 		//init objective
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-		Objective obj = board.registerNewObjective("PERM_HUD_OBJ", "dummy", PERM_HUD_TITLE);
+		Objective obj = board.registerNewObjective("PERM_HUD_OBJ", PERM_HUD_TITLE);
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName(PERM_HUD_TITLE);
 		//register teams

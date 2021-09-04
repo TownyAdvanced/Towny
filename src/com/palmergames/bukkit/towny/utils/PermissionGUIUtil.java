@@ -67,7 +67,7 @@ public class PermissionGUIUtil {
 		ArrayList<ItemStack> playerSkulls = new ArrayList<>();
 
 		for (Entry<Resident, PermissionData> entry : townBlock.getPermissionOverrides().entrySet()) {
-			ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+			ItemStack skull = new ItemStack(Material.SKULL);
 			SkullMeta meta = (SkullMeta) skull.getItemMeta();
 			
 			if (!entry.getKey().hasUUID())

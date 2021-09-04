@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -12,7 +11,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
-import com.palmergames.bukkit.util.BlockUtil;
 import com.palmergames.bukkit.util.ItemLists;
 
 import org.bukkit.Material;
@@ -20,8 +18,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.type.Chest;
-import org.bukkit.block.data.type.Chest.Type;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,7 +33,6 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TownyBlockListener implements Listener {
@@ -89,58 +84,58 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 		}
 		
-		if (!event.isCancelled() && block.getType() == Material.CHEST && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer()))
-			testDoubleChest(event.getPlayer(), event.getBlock(), event);
+//		if (!event.isCancelled() && block.getType() == Material.CHEST && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer()))
+//			testDoubleChest(event.getPlayer(), event.getBlock(), event);
 	}
 
-	private void testDoubleChest(Player player, Block block, BlockPlaceEvent event) {
-		List<Block> blocksToUpdate = new ArrayList<>(); // To avoid glitchy-looking chests, we need to update the blocks later on.
-		List<WorldCoord> safeWorldCoords = new ArrayList<>(); // Some worldcoords will be concidered safe;
-
-		for (BlockFace face : BlockUtil.CARDINAL_BLOCKFACES) {
-			Block testBlock = block.getRelative(face); // The block which we do not want to combine with.
-
-			if (BlockUtil.sameWorldCoord(block, testBlock)) // Same worldCoord, continue;
-				continue;
-
-			if (testBlock.getType() != Material.CHEST) // Not a chest, continue.
-				continue;
-
-			WorldCoord wc = WorldCoord.parseWorldCoord(testBlock);
-			if (safeWorldCoords.contains(wc)) {
-				continue;
-			}
-			Chest data = (Chest) block.getBlockData();            // We are only going to glitch out chests which are facing
-			Chest testData = (Chest) testBlock.getBlockData();    // the same direction as our newly-placed chest.  
-			if (!data.getFacing().equals(testData.getFacing())) 
-				continue;
-
-			if ((data.getFacing().equals(BlockFace.SOUTH) || data.getFacing().equals(BlockFace.NORTH))
-					&& block.getZ() != testBlock.getZ()) // The two chests are not on the axis, although they face the same direction.
-				continue;
-			
-			if ((data.getFacing().equals(BlockFace.EAST) || data.getFacing().equals(BlockFace.WEST)) 
-					&& block.getX() != testBlock.getX()) // The two chests are not on the axis, although they face the same direction.
-				continue;
-
-			if (BlockUtil.sameOwnerOrHasMayorOverride(block, testBlock, player)) { // If the blocks have a same-owner relationship, continue.
-				safeWorldCoords.add(wc);
-				continue;
-			}
-			
-			blocksToUpdate.add(testBlock); // This chest could potentially snap to the given Block based on proximity and facing.
-			
-			data.setType(Type.SINGLE);  // Set the chest just-placed to a single chest.
-			block.setBlockData(data);
-			
-			testData.setType(Type.SINGLE); // Set the existing chest to a single chest.
-			testBlock.setBlockData(testData);
-		}
-		
-		if (!blocksToUpdate.isEmpty())  // Update the player with the new chest appearances.
-			for (Block b : blocksToUpdate)
-				player.sendBlockChange(b.getLocation(), b.getBlockData());
-	}
+//	private void testDoubleChest(Player player, Block block, BlockPlaceEvent event) {
+//		List<Block> blocksToUpdate = new ArrayList<>(); // To avoid glitchy-looking chests, we need to update the blocks later on.
+//		List<WorldCoord> safeWorldCoords = new ArrayList<>(); // Some worldcoords will be concidered safe;
+//
+//		for (BlockFace face : BlockUtil.CARDINAL_BLOCKFACES) {
+//			Block testBlock = block.getRelative(face); // The block which we do not want to combine with.
+//
+//			if (BlockUtil.sameWorldCoord(block, testBlock)) // Same worldCoord, continue;
+//				continue;
+//
+//			if (testBlock.getType() != Material.CHEST) // Not a chest, continue.
+//				continue;
+//
+//			WorldCoord wc = WorldCoord.parseWorldCoord(testBlock);
+//			if (safeWorldCoords.contains(wc)) {
+//				continue;
+//			}
+//			Chest data = (Chest) block.getBlockData();            // We are only going to glitch out chests which are facing
+//			Chest testData = (Chest) testBlock.getBlockData();    // the same direction as our newly-placed chest.  
+//			if (!data.getFacing().equals(testData.getFacing())) 
+//				continue;
+//
+//			if ((data.getFacing().equals(BlockFace.SOUTH) || data.getFacing().equals(BlockFace.NORTH))
+//					&& block.getZ() != testBlock.getZ()) // The two chests are not on the axis, although they face the same direction.
+//				continue;
+//			
+//			if ((data.getFacing().equals(BlockFace.EAST) || data.getFacing().equals(BlockFace.WEST)) 
+//					&& block.getX() != testBlock.getX()) // The two chests are not on the axis, although they face the same direction.
+//				continue;
+//
+//			if (BlockUtil.sameOwnerOrHasMayorOverride(block, testBlock, player)) { // If the blocks have a same-owner relationship, continue.
+//				safeWorldCoords.add(wc);
+//				continue;
+//			}
+//			
+//			blocksToUpdate.add(testBlock); // This chest could potentially snap to the given Block based on proximity and facing.
+//			
+//			data.setType(Type.SINGLE);  // Set the chest just-placed to a single chest.
+//			block.setBlockData(data);
+//			
+//			testData.setType(Type.SINGLE); // Set the existing chest to a single chest.
+//			testBlock.setBlockData(testData);
+//		}
+//		
+//		if (!blocksToUpdate.isEmpty())  // Update the player with the new chest appearances.
+//			for (Block b : blocksToUpdate)
+//				player.sendBlockChange(b.getLocation(), b.getBlockData());
+//	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -357,10 +352,10 @@ public class TownyBlockListener implements Listener {
 		if (ItemLists.BUCKETS.contains(mat.name()) && !TownySettings.getPreventFluidGriefingEnabled())
 			return;
 		
-		if (!ItemLists.BUCKETS.contains(mat.name()) && mat != Material.BONE_MEAL && mat != Material.HONEYCOMB)
+		if (!ItemLists.BUCKETS.contains(mat.name()))
 			return;
 		
-		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getBlockData()).getFacing()), true))
+		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getState().getData()).getFacing()), true))
 			event.setCancelled(true);
 	}
 

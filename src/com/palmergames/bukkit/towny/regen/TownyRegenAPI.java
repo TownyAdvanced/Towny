@@ -13,6 +13,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -502,10 +503,16 @@ public class TownyRegenAPI {
 		if (!hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
 			// Piston extensions which are broken by explosions ahead of the base block
 			// cause baseblocks to drop as items and no base block to be regenerated.
-			if (block.getType().equals(Material.PISTON_HEAD)) {
-				org.bukkit.block.data.type.PistonHead blockData = (org.bukkit.block.data.type.PistonHead) block.getBlockData(); 
-				Block baseBlock = block.getRelative(blockData.getFacing().getOppositeFace());
+			if (block.getType().equals(Material.PISTON_EXTENSION)) {
+				BlockState blockState = block.getState();
+				org.bukkit.material.PistonExtensionMaterial blockData = (org.bukkit.material.PistonExtensionMaterial) blockState.getData(); 
+				Block baseBlock = block.getRelative(blockData.getAttachedFace());
+				BlockState baseState = baseBlock.getState();
+				org.bukkit.material.PistonBaseMaterial baseData = (org.bukkit.material.PistonBaseMaterial) baseState.getData();
 				block = baseBlock;
+				baseData.setPowered(false);
+				baseState.setData(baseData);
+				baseState.update();
 			}
 			ProtectionRegenTask task = new ProtectionRegenTask(Towny.getPlugin(), block);
 			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, (TownySettings.getPlotManagementWildRegenDelay() + count) * 20));

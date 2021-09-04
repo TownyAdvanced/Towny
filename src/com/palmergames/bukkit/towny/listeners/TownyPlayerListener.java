@@ -45,12 +45,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.type.Sign;
-import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -72,10 +68,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.material.Bed;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
@@ -169,10 +165,10 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
-		// If respawn anchors have higher precedence than town spawns, use them instead.
-		if (Towny.is116Plus() && event.isAnchorSpawn() && TownySettings.isRespawnAnchorHigherPrecedence()) {
-			return;
-		}
+//		// If respawn anchors have higher precedence than town spawns, use them instead.
+//		if (Towny.is116Plus() && event.isAnchorSpawn() && TownySettings.isRespawnAnchorHigherPrecedence()) {
+//			return;
+//		}
 		
 		Location respawn;
 		respawn = TownyAPI.getInstance().getTownSpawnLocation(player);
@@ -289,12 +285,9 @@ public class TownyPlayerListener implements Listener {
 				 * 
 				 * Treat interaction as a Destroy test.
 				 */
-				if ((ItemLists.AXES.contains(item.name()) && Tag.LOGS.isTagged(clickedMat)) || // This will also catched already stripped logs but it is cleaner than anything else.
-					(ItemLists.AXES.contains(item.name()) && ItemLists.WAXED_BLOCKS.contains(clickedMat.name())) ||  // Prevents players scraping wax off of copper blocks.
-					(ItemLists.AXES.contains(item.name()) && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat.name())) || // Prevents players scraping oxidation off of copper blocks.
-					(ItemLists.DYES.contains(item.name()) && Tag.SIGNS.isTagged(clickedMat)) ||
+				if (
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
-					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
+					((item == Material.SHEARS) && (clickedMat == Material.PUMPKIN))) { 
 
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, loc, clickedMat));
 				}
@@ -302,20 +295,20 @@ public class TownyPlayerListener implements Listener {
 				/*
 				 * Test bonemeal usage. Treat interaction as a Build test.
 				 */
-				if (item == Material.BONE_MEAL) 
+				if (item == Material.INK_SACK) 
 					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
 				
-				/*
-				 * Test putting candles on cakes. Treat interaction as a Build test.
-				 */
-				if (ItemLists.CANDLES.contains(item.name()) && clickedMat == Material.CAKE) 
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
-				
-				/*
-				 * Test wax usage. Treat interaction as a Build test.
-				 */
-				if (item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat.name()))
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
+//				/*
+//				 * Test putting candles on cakes. Treat interaction as a Build test.
+//				 */
+//				if (ItemLists.CANDLES.contains(item.name()) && clickedMat == Material.CAKE) 
+//					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
+//				
+//				/*
+//				 * Test wax usage. Treat interaction as a Build test.
+//				 */
+//				if (item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat.name()))
+//					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
 
 				/*
 				 * Test if we're about to spawn either entity. Uses build test.
@@ -349,9 +342,9 @@ public class TownyPlayerListener implements Listener {
 			 */
 			if (ItemLists.POTTED_PLANTS.contains(clickedMat.name()) ||                          
 				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat.name()) ||
-				ItemLists.CANDLES.contains(clickedMat.name()) ||
+//				ItemLists.CANDLES.contains(clickedMat.name()) ||
 				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
-				clickedMat == Material.COMMAND_BLOCK || clickedMat == Material.SWEET_BERRY_BUSH){
+				clickedMat == Material.COMMAND){
 				
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
@@ -378,21 +371,21 @@ public class TownyPlayerListener implements Listener {
 
 		Block block = event.getClickedBlock();
 		if (event.hasBlock()) {
-			/*
-			 * Catches respawn anchors blowing up and allows us to track their explosions.
-			 */
-			if (block.getType().name().equals("RESPAWN_ANCHOR")) {
-				org.bukkit.block.data.type.RespawnAnchor anchor = ((org.bukkit.block.data.type.RespawnAnchor) block.getBlockData());
-				if (anchor.getCharges() == 4)
-					BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), null, block.getType()));
-				return;
-			}
+//			/*
+//			 * Catches respawn anchors blowing up and allows us to track their explosions.
+//			 */
+//			if (block.getType().name().equals("RESPAWN_ANCHOR")) {
+//				org.bukkit.block.data.type.RespawnAnchor anchor = ((org.bukkit.block.data.type.RespawnAnchor) block.getBlockData());
+//				if (anchor.getCharges() == 4)
+//					BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), null, block.getType()));
+//				return;
+//			}
 			
 			/*
 			 * Catches beds blowing up and allows us to track their explosions.
 			 */
-			if (Tag.BEDS.isTagged(block.getType()) && event.getPlayer().getWorld().getEnvironment().equals(Environment.NETHER)) {
-				org.bukkit.block.data.type.Bed bed = ((org.bukkit.block.data.type.Bed) block.getBlockData());
+			if (block.getType().equals(Material.BED_BLOCK) && event.getPlayer().getWorld().getEnvironment().equals(Environment.NETHER)) {
+				Bed bed = ((Bed) block.getState().getData());
 				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), block.getRelative(bed.getFacing()).getLocation(), block.getType()));
 				return;
 			}
@@ -401,7 +394,7 @@ public class TownyPlayerListener implements Listener {
 			 * Prevents setting the spawn point of the player using beds, 
 			 * except in allowed plots (personally-owned and Inns)
 			 */
-			if (Tag.BEDS.isTagged(block.getType()) && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			if (block.getType().equals(Material.BED_BLOCK) && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 				if (!TownySettings.getBedUse())
 					return;
 
@@ -490,7 +483,7 @@ public class TownyPlayerListener implements Listener {
 				 * First are tested with a Destroy perm check.
 				 */
 				case ITEM_FRAME:
-				case GLOW_ITEM_FRAME:
+//				case GLOW_ITEM_FRAME:
 				case PAINTING:
 				case LEASH_HITCH:
 				case MINECART_COMMAND:
@@ -968,24 +961,24 @@ public class TownyPlayerListener implements Listener {
 			JailUtil.unJailResident(resident, UnJailReason.ESCAPE);
 	}
 	
-	/**
-	 * Any player that can break the lectern will be able to get the book anyways.
-	 * @param event - PlayerTakeLecternBookEvent
-	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPlayerTakeLecternBookEvent(PlayerTakeLecternBookEvent event) {
-		
-		if (plugin.isError()) {
-			event.setCancelled(true);
-			return;
-		}
-
-		if (!TownyAPI.getInstance().isTownyWorld(event.getLectern().getWorld()))
-			return;
-		
-		//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-		event.setCancelled(!TownyActionEventExecutor.canDestroy(event.getPlayer(), event.getLectern().getLocation(), Material.LECTERN));
-	}
+//	/**
+//	 * Any player that can break the lectern will be able to get the book anyways.
+//	 * @param event - PlayerTakeLecternBookEvent
+//	 */
+//	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+//	public void onPlayerTakeLecternBookEvent(PlayerTakeLecternBookEvent event) {
+//		
+//		if (plugin.isError()) {
+//			event.setCancelled(true);
+//			return;
+//		}
+//
+//		if (!TownyAPI.getInstance().isTownyWorld(event.getLectern().getWorld()))
+//			return;
+//		
+//		//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+//		event.setCancelled(!TownyActionEventExecutor.canDestroy(event.getPlayer(), event.getLectern().getLocation(), Material.LECTERN));
+//	}
 
 	/**
 	 * Blocks jailed players using blacklisted commands.
@@ -1172,37 +1165,37 @@ public class TownyPlayerListener implements Listener {
 					Player player = event.getPlayer();
 					Block block = event.getClickedBlock();
 					
-					if (Tag.SIGNS.isTagged(block.getType())) {
-						BlockFace facing = null;
-						if (block.getBlockData() instanceof Sign) {
-							org.bukkit.block.data.type.Sign sign = (org.bukkit.block.data.type.Sign) block.getBlockData();
-							facing = sign.getRotation();
-						}
-						if (block.getBlockData() instanceof WallSign)  { 
-							org.bukkit.block.data.type.WallSign sign = (org.bukkit.block.data.type.WallSign) block.getBlockData();
-							facing = sign.getFacing();	
-						}
-						TownyMessaging.sendMessage(player, Arrays.asList(
-								ChatTools.formatTitle("Sign Info"),
-								ChatTools.formatCommand("", "Sign Type", "", block.getType().name()),
-								ChatTools.formatCommand("", "Facing", "", facing.toString())
-								));
-					} else if (Tag.DOORS.isTagged(block.getType())) {
-						org.bukkit.block.data.type.Door door = (org.bukkit.block.data.type.Door) block.getBlockData();
-						TownyMessaging.sendMessage(player, Arrays.asList(
-								ChatTools.formatTitle("Door Info"),
-								ChatTools.formatCommand("", "Door Type", "", block.getType().name()),
-								ChatTools.formatCommand("", "hinged on ", "", String.valueOf(door.getHinge())),
-								ChatTools.formatCommand("", "isOpen", "", String.valueOf(door.isOpen())),
-								ChatTools.formatCommand("", "getFacing", "", door.getFacing().name())
-								));
-					} else {
+//					if (Tag.SIGNS.isTagged(block.getType())) {
+//						BlockFace facing = null;
+//						if (block.getBlockData() instanceof Sign) {
+//							org.bukkit.block.data.type.Sign sign = (org.bukkit.block.data.type.Sign) block.getBlockData();
+//							facing = sign.getRotation();
+//						}
+//						if (block.getBlockData() instanceof WallSign)  { 
+//							org.bukkit.block.data.type.WallSign sign = (org.bukkit.block.data.type.WallSign) block.getBlockData();
+//							facing = sign.getFacing();	
+//						}
+//						TownyMessaging.sendMessage(player, Arrays.asList(
+//								ChatTools.formatTitle("Sign Info"),
+//								ChatTools.formatCommand("", "Sign Type", "", block.getType().name()),
+//								ChatTools.formatCommand("", "Facing", "", facing.toString())
+//								));
+//					} else if (Tag.DOORS.isTagged(block.getType())) {
+//						org.bukkit.block.data.type.Door door = (org.bukkit.block.data.type.Door) block.getBlockData();
+//						TownyMessaging.sendMessage(player, Arrays.asList(
+//								ChatTools.formatTitle("Door Info"),
+//								ChatTools.formatCommand("", "Door Type", "", block.getType().name()),
+//								ChatTools.formatCommand("", "hinged on ", "", String.valueOf(door.getHinge())),
+//								ChatTools.formatCommand("", "isOpen", "", String.valueOf(door.isOpen())),
+//								ChatTools.formatCommand("", "getFacing", "", door.getFacing().name())
+//								));
+//					} else {
 						TownyMessaging.sendMessage(player, Arrays.asList(
 								ChatTools.formatTitle("Block Info"),
 								ChatTools.formatCommand("", "Material", "", block.getType().name()),								      
-								ChatTools.formatCommand("", "MaterialData", "", block.getBlockData().getAsString())
+								ChatTools.formatCommand("", "MaterialData", "", block.getType().getData().toString())
 								));
-					}
+//					}
 					event.setUseInteractedBlock(Event.Result.DENY);
 					event.setCancelled(true);
 		}

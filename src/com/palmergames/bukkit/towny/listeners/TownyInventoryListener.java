@@ -74,11 +74,11 @@ public class TownyInventoryListener implements Listener {
 
 		} else if (event.getInventory().getHolder() instanceof PermissionGUI) {
 			PermissionGUI permissionGUI = (PermissionGUI) event.getInventory().getHolder();
-			if (event.getCurrentItem().getType() == Material.PLAYER_HEAD && permissionGUI.canEdit()) {
+			if (event.getCurrentItem().getType() == Material.SKULL && permissionGUI.canEdit()) {
 				PermissionGUIUtil.openPermissionEditorGUI(resident, permissionGUI.getTownBlock(), event.getCurrentItem());
 				Towny.getAdventure().player(player).playSound(clickSound);
-			} else if (event.getCurrentItem().getType() == Material.WRITTEN_BOOK) {
-				player.openBook(PermissionGUIUtil.createTutorialBook());
+//			} else if (event.getCurrentItem().getType() == Material.WRITTEN_BOOK) {
+//				player.openBook(PermissionGUIUtil.createTutorialBook());
 			} else {
 				int currentPage = resident.getGUIPageNum();
 

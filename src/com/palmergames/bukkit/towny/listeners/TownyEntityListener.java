@@ -13,18 +13,17 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Hanging;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -32,7 +31,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.Villager;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -52,7 +50,6 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
@@ -140,7 +137,7 @@ public class TownyEntityListener implements Listener {
 		if (CombatUtil.preventDamageCall(plugin, attacker, defender, event.getCause())) {
 			// Remove the projectile here so no
 			// other events can fire to cause damage
-			if (attacker instanceof Projectile && !attacker.getType().equals(EntityType.TRIDENT))
+			if (attacker instanceof Projectile)
 				attacker.remove();
 
 			event.setCancelled(true);
@@ -228,7 +225,6 @@ public class TownyEntityListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onDragonFireBallCloudDamage(AreaEffectCloudApplyEvent event) {
 		if (plugin.isError()) {
-			event.setCancelled(true);
 			return;
 		}
 		
@@ -244,7 +240,6 @@ public class TownyEntityListener implements Listener {
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld().getName());
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation());
 		if (CombatUtil.preventPvP(townyWorld, townBlock)) {
-			event.setCancelled(true);
 			event.getEntity().remove();
 		}
 
@@ -479,7 +474,7 @@ public class TownyEntityListener implements Listener {
 
 		// Prevent creatures triggering stone pressure plates
 		if (TownySettings.isCreatureTriggeringPressurePlateDisabled()) {
-			if (block.getType() == Material.STONE_PRESSURE_PLATE) {
+			if (block.getType() == Material.STONE_PLATE) {
 				if (entity instanceof Creature) {
 					event.setCancelled(true);
 					return;
@@ -510,7 +505,7 @@ public class TownyEntityListener implements Listener {
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName());
 		
 		// Crop trampling protection done here.
-		if (event.getBlock().getType().equals(Material.FARMLAND)) {
+		if (event.getBlock().getType().equals(Material.SOIL)) {
 			// Handle creature trampling crops if disabled in the world.
 			if (!event.getEntityType().equals(EntityType.PLAYER) && townyWorld.isDisableCreatureTrample()) {
 				event.setCancelled(true);
@@ -531,24 +526,24 @@ public class TownyEntityListener implements Listener {
 					event.setCancelled(true);
 				break;
 				
-			case RAVAGER:
-				
-				if (townyWorld.isDisableCreatureTrample())
-					event.setCancelled(true);
-				break;
-		
+//			case RAVAGER:
+//				
+//				if (townyWorld.isDisableCreatureTrample())
+//					event.setCancelled(true);
+//				break;
+//		
 			case WITHER:
 				List<Block> allowed = TownyActionEventExecutor.filterExplodableBlocks(new ArrayList<>(Collections.singleton(event.getBlock())), event.getBlock().getType(), event.getEntity(), event);
 				event.setCancelled(allowed.isEmpty());
 				break;
-			/*
-			 * Protect campfires from SplashWaterBottles. Uses a destroy test.
-			 */
-			case SPLASH_POTION:			
-				if (event.getBlock().getType() != Material.CAMPFIRE && ((ThrownPotion) event.getEntity()).getShooter() instanceof Player)
-					return;
-				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) ((ThrownPotion) event.getEntity()).getShooter(), event.getBlock().getLocation(), Material.CAMPFIRE));
-				break;
+//			/*
+//			 * Protect campfires from SplashWaterBottles. Uses a destroy test.
+//			 */
+//			case SPLASH_POTION:			
+//				if (event.getBlock().getType() != Material.CAMPFIRE && ((ThrownPotion) event.getEntity()).getShooter() instanceof Player)
+//					return;
+//				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) ((ThrownPotion) event.getEntity()).getShooter(), event.getBlock().getLocation(), Material.CAMPFIRE));
+//				break;
 			default:
 		}
 	}
@@ -672,8 +667,8 @@ public class TownyEntityListener implements Listener {
 		// TODO: Keep an eye on https://hub.spigotmc.org/jira/browse/SPIGOT-3999 to be completed.
 		// This workaround prevent boats from destroying item_frames.
 		if (event.getCause().equals(RemoveCause.PHYSICS) && ItemLists.ITEM_FRAMES.contains(hanging.getType().name())) {
-			Location loc = hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection());
-			Block block = loc.getBlock();
+			Hanging itemframe = (Hanging) hanging;
+			Block block = hanging.getLocation().getBlock().getRelative(itemframe.getAttachedFace());
 			if (block.isLiquid() || block.isEmpty())
 				return;
 			
@@ -706,11 +701,11 @@ public class TownyEntityListener implements Listener {
 					case PAINTING:
 					case LEASH_HITCH:
 					case ITEM_FRAME:
-					case GLOW_ITEM_FRAME:
+//					case GLOW_ITEM_FRAME:
 						mat = EntityTypeUtil.parseEntityToMaterial(event.getEntity().getType());
 						break;
 					default:
-						mat = Material.GRASS_BLOCK;
+						mat = Material.GRASS;
 				}
 
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
@@ -779,11 +774,11 @@ public class TownyEntityListener implements Listener {
 			case PAINTING:
 			case LEASH_HITCH:
 			case ITEM_FRAME:
-			case GLOW_ITEM_FRAME:				
+//			case GLOW_ITEM_FRAME:				
 				mat = EntityTypeUtil.parseEntityToMaterial(event.getEntity().getType());
 				break;
 			default:
-				mat = Material.GRASS_BLOCK;
+				mat = Material.GRASS;
 		}
 
 		//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
@@ -809,67 +804,67 @@ public class TownyEntityListener implements Listener {
 			event.setCancelled(true);
 	}
 	
-	/**
-	 * Allows us to treat the hitting of wooden plates and buttons by arrows as cancellable events.
-	 * 
-	 * @param event ProjectileHitEvent
-	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onProjectileHitEventButtonOrPlate(ProjectileHitEvent event) {
-		/*
-		 * Bypass any occasion where there is no block being hit and the shooter isn't a player.
-		 */
-		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
-			return;
-		
-		Block block = event.getHitBlock().getRelative(event.getHitBlockFace());
-		Material material = block.getType();
-		if (ItemLists.PROJECTILE_TRIGGERED_REDSTONE.contains(material.name()) && TownySettings.isSwitchMaterial(material.name())) {
-			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), block.getLocation(), material)) {
-				/*
-				 * Since we are unable to cancel a ProjectileHitEvent on buttons & 
-				 * pressure plates even using MC 1.17 we must set the block to air
-				 * then set it back to its original form. 
-				 */
-				BlockData data = block.getBlockData();
-				block.setType(Material.AIR);
-				BukkitTools.getScheduler().runTask(plugin, () -> block.setBlockData(data));
-			}
-		}
-	}
+//	/**
+//	 * Allows us to treat the hitting of wooden plates and buttons by arrows as cancellable events.
+//	 * 
+//	 * @param event ProjectileHitEvent
+//	 */
+//	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+//	public void onProjectileHitEventButtonOrPlate(ProjectileHitEvent event) {
+//		/*
+//		 * Bypass any occasion where there is no block being hit and the shooter isn't a player.
+//		 */
+//		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
+//			return;
+//		
+//		Block block = event.getHitBlock().getRelative(event.getHitBlockFace());
+//		Material material = block.getType();
+//		if (ItemLists.PROJECTILE_TRIGGERED_REDSTONE.contains(material.name()) && TownySettings.isSwitchMaterial(material.name())) {
+//			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+//			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), block.getLocation(), material)) {
+//				/*
+//				 * Since we are unable to cancel a ProjectileHitEvent on buttons & 
+//				 * pressure plates even using MC 1.17 we must set the block to air
+//				 * then set it back to its original form. 
+//				 */
+//				BlockData data = block.getBlockData();
+//				block.setType(Material.AIR);
+//				BukkitTools.getScheduler().runTask(plugin, () -> block.setBlockData(data));
+//			}
+//		}
+//	}
 	
-	/**
-	 * Allows us to treat the hitting of Target blocks by arrows as cancellable events.
-	 * 
-	 * @param event ProjectileHitEvent
-	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onProjectileHitEventTarget(ProjectileHitEvent event) {
-		/*
-		 * Bypass any occasion where there is no block being hit and the shooter isn't a player.
-		 */
-		if (plugin.isError() || !Towny.is116Plus() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
-			return;
-
-		if (event.getHitBlock().getType() == Material.TARGET && TownySettings.isSwitchMaterial(Material.TARGET.name())) {
-			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), event.getHitBlock().getLocation(), Material.TARGET)) {
-				
-				if (event instanceof Cancellable) { //TODO: When support is dropped for pre-1.17 MC versions the else can be removed.
-					event.setCancelled(true);
-				} else {
-					/*
-					 * Since we are unable to cancel a ProjectileHitEvent before MC 1.17 we must
-					 * set the block to air then set it back to its original form. 
-					 */
-					BlockData data = event.getHitBlock().getBlockData();
-					event.getHitBlock().setType(Material.AIR);
-					BukkitTools.getScheduler().runTask(plugin, () -> event.getHitBlock().setBlockData(data));
-				}
-			}
-		}
-	}
+//	/**
+//	 * Allows us to treat the hitting of Target blocks by arrows as cancellable events.
+//	 * 
+//	 * @param event ProjectileHitEvent
+//	 */
+//	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+//	public void onProjectileHitEventTarget(ProjectileHitEvent event) {
+//		/*
+//		 * Bypass any occasion where there is no block being hit and the shooter isn't a player.
+//		 */
+//		if (plugin.isError() || !Towny.is116Plus() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
+//			return;
+//
+//		if (event.getHitBlock().getType() == Material.TARGET && TownySettings.isSwitchMaterial(Material.TARGET.name())) {
+//			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+//			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), event.getHitBlock().getLocation(), Material.TARGET)) {
+//				
+//				if (event instanceof Cancellable) { //TODO: When support is dropped for pre-1.17 MC versions the else can be removed.
+//					event.setCancelled(true);
+//				} else {
+//					/*
+//					 * Since we are unable to cancel a ProjectileHitEvent before MC 1.17 we must
+//					 * set the block to air then set it back to its original form. 
+//					 */
+//					BlockData data = event.getHitBlock().getBlockData();
+//					event.getHitBlock().setType(Material.AIR);
+//					BukkitTools.getScheduler().runTask(plugin, () -> event.getHitBlock().setBlockData(data));
+//				}
+//			}
+//		}
+//	}
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onDoorBreak(EntityBreakDoorEvent event) {

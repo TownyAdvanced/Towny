@@ -145,7 +145,7 @@ public class TownyVehicleListener implements Listener {
 					vehicle = EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType());
 					break;
 				case HORSE:
-				case STRIDER:
+//				case STRIDER:
 				case PIG:
 				case DONKEY:
 				case MULE:

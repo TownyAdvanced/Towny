@@ -593,8 +593,9 @@ public final class FileMgmt {
 				// Write the plot height (who knows Mojang might change it a second time.
 				fout.writeInt(data.getHeight());
 				// Write the actual blocks with their BlockData included.
-				for (String block : new ArrayList<>(data.getBlockList()))
-					fout.writeUTF(block);
+				for (int block : new ArrayList<>(data.getBlockList())) 
+					fout.writeInt(block);
+
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();

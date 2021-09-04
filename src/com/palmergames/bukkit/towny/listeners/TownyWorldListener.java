@@ -77,29 +77,29 @@ public class TownyWorldListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onLightningStrike(LightningStrikeEvent event) {
-
-		if (plugin.isError()) {
-			event.setCancelled(true);
-			return;
-		}
-
-		if (!TownyAPI.getInstance().isTownyWorld(event.getWorld()))
-			return;
-
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getWorld().getName());
-
-		/*
-		 * Add trident-caused lightning strikes to a map temporarily. 
-		 */
-		if (event.getCause().equals(LightningStrikeEvent.Cause.TRIDENT)) {
-			townyWorld.addTridentStrike(event.getLightning().getEntityId());
-			
-			final TownyWorld finalWorld = townyWorld;
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> finalWorld.removeTridentStrike(event.getLightning().getEntityId()), 20L);
-		}
-	}
+//	@EventHandler(priority = EventPriority.NORMAL)
+//	public void onLightningStrike(LightningStrikeEvent event) {
+//
+//		if (plugin.isError()) {
+//			event.setCancelled(true);
+//			return;
+//		}
+//
+//		if (!TownyAPI.getInstance().isTownyWorld(event.getWorld()))
+//			return;
+//
+//		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getWorld().getName());
+//
+//		/*
+//		 * Add trident-caused lightning strikes to a map temporarily. 
+//		 */
+//		if (event.getCause().equals(LightningStrikeEvent.Cause.TRIDENT)) {
+//			townyWorld.addTridentStrike(event.getLightning().getEntityId());
+//			
+//			final TownyWorld finalWorld = townyWorld;
+//			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> finalWorld.removeTridentStrike(event.getLightning().getEntityId()), 20L);
+//		}
+//	}
 	
 	/**
 	 * Protect trees and mushroom growth transforming neighbouring plots which do not share the same owner. 
@@ -124,27 +124,27 @@ public class TownyWorldListener implements Listener {
 			event.getBlocks().removeAll(disallowed);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
-	public void onPortalCreate(PortalCreateEvent event) {
-		if (!(event.getReason() == PortalCreateEvent.CreateReason.NETHER_PAIR)) {
-			return;
-		}
-		
-		if (!TownyAPI.getInstance().isTownyWorld(event.getWorld()))
-			return;
-
-		if (!event.getEntity().getType().equals(EntityType.PLAYER)) {
-			return;
-		}
-		
-		for (BlockState block : event.getBlocks()) {
-			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canBuild((Player) event.getEntity(), block.getLocation(), Material.NETHER_PORTAL)) {
-				TownyMessaging.sendErrorMsg(event.getEntity(), Translation.of("msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal"));
-				event.setCancelled(true);
-				break;
-			}
-		}
-	}
+//	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+//	public void onPortalCreate(PortalCreateEvent event) {
+//		if (!(event.getReason() == PortalCreateEvent.CreateReason.NETHER_PAIR)) {
+//			return;
+//		}
+//		
+//		if (!TownyAPI.getInstance().isTownyWorld(event.getWorld()))
+//			return;
+//
+//		if (!event.getEntity().getType().equals(EntityType.PLAYER)) {
+//			return;
+//		}
+//		
+//		for (BlockState block : event.getBlocks()) {
+//			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+//			if (!TownyActionEventExecutor.canBuild((Player) event.getEntity(), block.getLocation(), Material.NETHER_PORTAL)) {
+//				TownyMessaging.sendErrorMsg(event.getEntity(), Translation.of("msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal"));
+//				event.setCancelled(true);
+//				break;
+//			}
+//		}
+//	}
 
 }
