@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.120
+version: 0.121
 language: Indonesian
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -608,72 +608,63 @@ msg_err_over_outposts_limit: 'Tidak bisa teleportasi ke outpost, kamu sudah mela
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: '&2Penjahat: &f' #Used on /t outlawlist
+outlaws: 'Outlaws:' #Used on /t outlawlist
 online: '&a(Sedang aktif)'
-registered_last_online: '&2Terdaftar: &a%s &8| &2Terakhir online:&a%s'
-status_perm: '&7Perm&l: &r' #Used on /plot perm, /res
-status_permissions: '&2Izin: ' #Used on /town
+registered_last_online: '&2Terdaftar: &a%s &8| &2Terakhir online:&a%s' #Used in mayor hover text in /town status screen.
+status_perm: 'Perm:' #Used on /plot perm, /res
 status_on: '&4NYALA'
 status_off: '&aMATI'
 status_on_good: '&aNYALA'
 status_off_bad: '&4MATI'
 status_forced: '&cDipaksa'
 status_adjustable: '&aDapat disesuaikan'
-status_pvp: '&2PVP: '
-explosions: '  &2Ledakan: ' #Used on /plot perm, /res
-explosions2: '&7Explosions&l:&r ' #Used on /town and /tw
-firespread: '  &7Firespread&l:&r '
-mobspawns: '  &7Mob Spawns&l:&r '
-owner_of_x_plots: '&2Pemilik dari &a%s lahan'
-status_bank: '&7Bank&l: &a%s'
-status_town: '&2Kota: &a'
+status_pvp: 'PVP:'
+explosions: 'Explosions:'
+firespread: 'Firespread:'
+mobspawns: 'Mob Spawns:'
+owner_of_x_plots: 'Owner of %s plots.'
+status_bank: 'Bank:'
+status_town: 'Town:'
 status_no_town: 'Kosong'
-status_town_ranks: '&2Peringkat Kota: &a'
-status_nation_ranks: '&2Peringkat Nasional: &a'
-jailed_in_town: '&2Dipenjara:&aYa &2di Kota: &a%s'
+status_town_ranks: 'Town Ranks:'
+status_nation_ranks: 'Nation Ranks:'
+jailed_in_town: ' in Town: %s'
 status_friends: 'Teman-teman'
-rank_list_title: ' &3Daftar Peringkat'
-rank_list_mayor: '&7Lurah&l: &6%s'
+rank_list_title: '%s Rank List'
+rank_list_mayor: 'Mayor:'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Open)'
-status_town_board: '&7Papan&l: &a%s'
-status_founded: '&7Didirikan&l: &f%s'
-status_town_size_part_1: '&7Town Size&l: &a%s &7/&c %s'
-status_town_size_part_2: ' &b[Dibeli: %s/%s]'
-status_town_size_part_3: ' &7[&a+%s&7]'
-status_town_size_part_4: ' &b[Bonus Negara: %s]'
-status_town_size_part_5: ' &7[Chunk spawn&l:&7 '
-status_town_outposts: '&7Outposts&l: &a%s &7/ &c%s'
-status_town_outposts2: ' &b[Bonus Negara: %s]'
-status_town_outposts3: '&7Outposts&l: &a0 / %s'
-status_town_outposts4: '&7Outposts&l: &a%s'
-status_bank_town2: ' &7| Perawatan desa&l: &c$%s'
-status_bank_town3: ' &7| Pajak desa&l: &c$%s'
-status_town_nation: '&7Nation&l: &b%s'
+status_town_board: 'Board:'
+status_founded: 'Founded:'
+status_town_size: 'Town Size:'
+status_town_size_bought: 'Bought:'
+status_town_size_bonus: 'Bonus:'
+status_town_size_nationbonus: 'NationBonus:'
+status_town_outposts: 'Outposts:'
+status_bank_town2: 'Daily upkeep:'
+status_bank_town3: 'Tax:'
+status_town_nation: 'Nation:'
 status_town_reslist_overlength: 'dan lainnya...'
-status_town_reslist: '&7Penduduk [&e%s&7]&l: &f'
-status_nation_peaceful: '&7Tenang'
-status_nation_king: '&2Raja: &a%s'
-status_nation_tax: '  &2Pajak Negara: &4%s'
-status_nation_assistants: '&7Assistants&l: &e'
-status_nation_towns: '&2Kota &a[%s]&2: &f'
-status_nation_allies: '&2Sekutu &a[%s]&2: &f'
-status_nation_enemies: '&2Musuh &a[%s]&2: &f'
-status_world_claimable: ' &aDapat diambil'
-status_world_noclaims: ' &cTidak Ada Klaim'
-status_world_forcepvp: '&2ForcePVP: '
-status_world_fire: '&2Fire: '
-status_world_forcefire: '&2Force Fire: '
-status_world_forceexplosion: '&2Force Explosion: '
-status_world_worldmobs: '&2World Mobs: '
-status_world_forcetownmobs: '&2Force TownMobs: '
-status_world_unclaimrevert: '&2Unclaim Revert: '
-status_world_explrevert: '&2Explosion Revert: '
-status_world_ignoredblocks: '&2Ignored Blocks:'
-status_res_taxexempt: '&2Staff dibebaskan dari pembayaran pajak kota.'
-status_res_tax: '&2Town Tax: &a'
-status_res_plottax: '&2Total Plot Taxes: &a'
-status_res_totaltax: '&2Total Tax to pay: &a'
+status_nation_king: 'King:'
+status_nation_tax: 'NationTax:'
+status_nation_towns: 'Towns'
+status_nation_allies: 'Allies'
+status_nation_enemies: 'Enemies'
+status_world_claimable: '&aClaimable'
+status_world_noclaims: '&cNoClaims'
+status_world_forcepvp: 'ForcePVP:'
+status_world_fire: 'Fire:'
+status_world_forcefire: 'Force Fire:'
+status_world_forceexplosion: 'Force Explosion:'
+status_world_worldmobs: 'World Mobs:'
+status_world_forcetownmobs: 'Force TownMobs:'
+status_world_unclaimrevert: 'Unclaim Revert:'
+status_world_explrevert: 'Explosion Revert:'
+status_world_ignoredblocks: 'Ignored Blocks:'
+status_res_taxexempt: 'Staff are exempt from paying town taxes.'
+status_res_tax: 'Town Tax:'
+status_res_plottax: 'Total Plot Taxes:'
+status_res_totaltax: 'Total Tax to pay:'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Kamu tidak dapat menggunakan bank negara diluar dari ibukota.'
 msg_err_unable_to_use_bank_outside_your_town: 'Kamu tidak dapat menggunakan bank kota diluar kota.'
@@ -711,9 +702,8 @@ msg_spawn_cost_set_to: '&b%s telah merubah harga spawn /%s menjadi %s'
 msg_err_cannot_set_spawn_cost_more_than: '&cKamu tidak dapat merubah harga spawn lebih dari %s'
 msg_err_ally_isnt_public: '&cSekutu mu, %s, tidak mengaktifkan publik spawn. Teleportasi ditolak.'
 msg_nation_changed_public: '&cStatus publik negara menjadi %s.'
-status_public2: '&2Publik'
 #Added in 0.47:
-status_plot_type: '&2Tipe Lahan: &a'
+status_plot_type: 'Plot Type:'
 msg_no_self_jailing: 'Tidak dapat mempenjarakan diri sendiri.'
 online2: ' &a(Sedang aktif)'
 build: 'Membangun'
@@ -775,7 +765,7 @@ msg_couldnt_pay_town_tax_multiple: '&bPenduduk beribuk tidak dapat membayar paja
 msg_couldnt_pay_plot_taxes_multiple: '&bPenduduk berikut tidak dapat membayar pajak lahannya sebagian atau semua: '
 msg_bankrupt_town2: '&b%s Tidak dapat membiayai kotanya lagi.'
 msg_bankrupt_nation2: '&b%s Tidak dapat membiayai negaranya lagi.'
-status_embassy_town: '&2Kedutaan'
+status_embassy_town: 'Embassies in'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&bPembanding tidak benar. Coba resident, balance, towns, name, townblocks, online.'
 msg_error_invalid_comparator_town: '&bPembanding tidak benar. Coba resident, balance, name, townblocks, online, open.'
@@ -795,7 +785,7 @@ msg_nation_changed_open: '&cStatus terbuka negara sekarang menjadi %s.'
 msg_err_already_in_a_nation: 'Kota mu sudah menjadi bagian dari suatu negara.'
 msg_err_nation_not_open: '&cNegara %s tidak dibuka untuk publik. Tanyakan raja atau asisten untuk bergabung.'
 msg_err_nation_homeblock_in_another_world: '&cHomeblock kota mu tidak berada di dunia yang sama dengan homeblock negara mu.'
-status_bank_town_penalty_upkeep: ' &7| &2Overclaim perawatan kota: &4%s'
+status_bank_town_penalty_upkeep: 'Overclaim upkeep:'
 #Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Kamu tidak bisa spawn ke %s, kamu ditandai sebagai orang yang di usir.'
 #Added in 0.54:
@@ -926,7 +916,7 @@ msg_player_put_group_up_for_sale: '%s menjadikan wilayah %s untuk dijual %s'
 msg_err_could_not_set_group_type: 'Tidak dapat merubah tipe grup wilayah - '
 msg_set_group_type_to_x: 'Merubah grup lahan menjadi %s'
 msg_player_successfully_bought_group_x: '%s berhasil membeli grup wilayah %s'
-status_plot_group_name_and_size: '&2Townblock bagian dari grup: %s. Grup memiliki %s total townblocks.'
+status_plot_group_name_and_size: 'Townblock is part of group: %s. Group has %s Townblocks total.'
 msg_player_made_group_not_for_sale: '%s menjadikan grup %s tidak untuk dijual.'
 #Added in 0.69
 msg_err_cannot_set_group_to_jail: 'grup wilayah tidak dapat dijadikan penjara.'
@@ -993,7 +983,7 @@ msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group 
 #Added in 0.85
 msg_set_perms_reset_single: '&bSuccessfully reset permissions on this plot.'
 #Added in 0.86
-status_bank_bankrupt: '&2Bank: &a%s &c(BANKRUPT)'
+status_bank_bankrupt: '(BANKRUPT)'
 msg_warning_bankrupt: '&4*** PERINGATAN!, %s AKAN BANGKRUT PADA HARI BERIKUTNYA KARENA KURANGNYA DANA BANK UNTUK MEMBAYAR PERAWATAN ***'
 msg_town_bankrupt_by_upkeep: '&b%s could not afford its upkeep and has gone bankrupt.'
 msg_town_bankrupt_by_upkeep_multiple: '&bThe following towns could not afford their upkeep and have gone bankrupt: '
@@ -1015,22 +1005,22 @@ msg_town_reached_debtcap_and_is_disbanded: '&b%s could not pay their upkeep, rea
 msg_town_reached_debtcap_and_is_disbanded_multiple: '&bThe following towns could not pay their upkeep, reached their debtcap, and have disbanded: '
 msg_unable_to_deposit_x: 'Unable to deposit %s into that town''s bank.'
 msg_unable_to_withdraw_x: 'Unable to withdraw %s from that town''s bank.'
-status_debtcap: '&2Debt Cap: &a%s'
-status_world_explrevert_entity: '&2Entity Explosion Revert: '
-status_world_explrevert_block: '&2Block Explosion Revert: '
+status_debtcap: 'Debt Cap:'
+status_world_explrevert_entity: 'Entity Explosion Revert:'
+status_world_explrevert_block: 'Block Explosion Revert:'
 #Added in 0.88
 msg_nation_already_peaceful: '&cNation is already peaceful.'
 msg_nation_already_not_peaceful: '&cNation is already not peaceful.'
 #Added in 0.89
-status_world_friendlyfire: '&2FriendlyFire: '
-status_world_wildernessmobs: '&2Wilderness Mobs: '
+status_world_friendlyfire: 'FriendlyFire:'
+status_world_wildernessmobs: 'Wilderness Mobs:'
 msg_outlaw_kick_cooldown: '&cYou''re considered an outlaw in %s. You have %s remaining for you to leave the town, otherwise, you will get teleported back to your spawnpoint.'
 msg_outlaw_kicked: '&4You are not welcome in %s. You were teleported away.'
 msg_outlaw_town_notify: '&cAn outlaw, %s, has entered your town''s territory.'
 msg_your_town_payed_upkeep_with_debt: '&cYour town paid the daily upkeep of %s with debt.'
 msg_payed_nation_tax_with_debt: '&cYour town paid the nation tax of %s with debt.'
 #Added in 0.90
-status_plot_clear_deletion: '&2PlotClearBlockDelete: '
+status_plot_clear_deletion: 'PlotClearBlockDelete:'
 msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'
 #Added in 0.91
 msg_universe_attribution: 'Authors: '
@@ -1050,9 +1040,9 @@ msg_town_reclaimed: '&b%s has reclaimed the town of %s.'
 msg_err_cannot_attack_ruined_town: '&6[War]&c You cannot attack a ruined town.'
 msg_err_cannot_use_command_because_town_ruined: "&cYou cannot use this command because your town is ruined. To resume normal command usage, either reclaim the town using ''/town reclaim'', or leave the town using ''/town leave''."
 msg_warning_your_town_is_ruined_for_x_more_hours: '&cKota mu dalam keadaan krisis selama %d jam lagi. Gunakan ''/town reclaim'' untuk menyelamatkan kota dan menjadi walikota.'
-msg_time_remaining_before_full_removal: '&cWaktu yang tersisa sebelum penghapusan: %d jam.'
-msg_time_until_reclaim_available: '&cWaktu yang tersisa untuk mengambil ulang wilayah: %d hours.'
-msg_reclaim_available: '&aPengambilan ualng wilayah telah tersedia.'
+msg_time_remaining_before_full_removal: 'Time remaining before full removal: %d hours.'
+msg_time_until_reclaim_available: 'Time until reclaim available: %d hours.'
+msg_reclaim_available: 'Reclaim available.'
 #Added in 0.93
 msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
 msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'
@@ -1065,7 +1055,7 @@ msg_comptype_towns: 'Number of Towns'
 msg_comptype_name: 'Alphabetical Order'
 msg_comptype_open: 'Open Status'
 msg_status_npc: '&c%s is not a real player, and is limited to Towny only.'
-npc_created: '&2Created: &a%s'
+npc_created: 'Created:'
 msg_no_funds_claim_plot: '&cYou cannot afford to claim the plot costing %s.'
 msg_no_funds_claim_plot_group: '&cYou cannot afford to claim the %s plots costing %s.'
 status_town_title_peaceful: '&b(Peaceful)'
@@ -1103,7 +1093,7 @@ msg_town_destroyed_by_nation_tax: '&bKota yang ditaklukkan %s tidak dapat membay
 msg_town_destroyed_by_nation_tax_multiple: '&bKota-kota berikut yang tidak mampu membayar pajak negara: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bKota mu telah dibebaskan dari pajak negara.'
 #Added in 0.97
-status_perm_line_format: '&a%s = &7' #The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
 msg_comptype_ruined: 'Ruined Status'
 msg_comptype_bankrupt: 'Bankrupt Status'
 msg_ruined: '&c(Ruined)'
@@ -1209,14 +1199,14 @@ msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your n
 msg_command_blocked_inside_towns: '&cYou cannot use that command inside towns.'
 msg_command_limited: 'Kamu hanya dapat menggunakan command tersebut di dalam plot milik mu.'
 #Added in 0.104
-msg_plot_perm_claimed_at: '&2Claimed at: &a%s'
+msg_plot_perm_claimed_at: 'Claimed at:'
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Wilderness use turned %s in all worlds.'
 msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
 #Added in 0.106
 msg_command_outsider_blocked: 'You cannot run that command because you don''t live in %s.'
 #Added in 0.107
-msg_jailed_for_x_hours: ' &2for %s hours.'
+msg_jailed_for_x_hours: ' for %s hours.'
 msg_err_this_jail_has_no_cells: 'This jail has no cells.'
 msg_err_no_cell_found_at_this_location: 'No jail cell found at this location.'
 msg_jail_cell_set: 'Jail cell set.'
@@ -1287,7 +1277,7 @@ msg_up_to_date: '&aYou are up to date.'
 msg_click_purchase: 'Click to purchase'
 msg_you_must_join_this_town_to_claim_this_plot: 'You must join this town: %s, in order to claim this plot. Would you like to join the town and continue claiming?'
 #Added in 0.113
-status_trustedlist: '&2Trusted'
+status_trustedlist: 'Trusted'
 msg_click_to_edit: '&6Click to edit.'
 permission_gui_header: 'Towny Permission GUI'
 msg_last_edited: '&7&oLast changed at %s by %s.'
@@ -1343,3 +1333,26 @@ msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'You cannot ja
 #Added in 0.120
 msg_resident_prompt: 'Enter the name of the player in chat, or q to exit. This will automatically time out in 30 seconds.'
 msg_prompt_cancel: 'Prompt cancelled or timed out.'
+#Added in 0.121
+status_title_primary_colour: '&6' #Used to colour the majority of the title bar.
+status_title_secondary_colour: '&e' #Used to colour the words in the title bar.
+status_format_list_1: '&2' #First colour applied to status screen lists, ex: on /res, the friend list's Friends section.
+status_format_list_2: '&a' #Second colour applied to status screen lists, ex: on /res, the friend list's [1] section.
+status_format_list_3: '&f' #Third colour applied to status screen lists, ex: on /res, the friend list's list of friends' names section.
+status_format_key_value_key: '&2' #Colour applied to a status screen element which is just a line of text, or the key in a key/value element.
+status_format_key_value_value: '&a' #Colour applied to the value in a status screen element which has two parts, ex: Registered: SomeDate. (SomeDate is the value.)
+status_format_bracket_element: '&b' #Colour applied to a status element within a bracket, ex: [Bonus: #].
+status_format_hover_key: '&a' #Colour applied to a status screen element which is a hover-able key, ex: [Rank List]
+status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a hover-able status screen element.
+status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
+status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
+status_home_element: ' &7[Home: %s]'
+status_registered: 'Registered:'
+status_lastonline: 'Last Online:'
+status_fractions: '%s/%s'
+status_rank_list: 'Rank List'
+status_hover_click_for_more: 'Click for more information.'
+status_jailed: 'Jailed:'
+status_bad_yes: '&cYES'
+status_good_no: '&aNO'
+status_resident_tax_title: '%s''s Tax'
