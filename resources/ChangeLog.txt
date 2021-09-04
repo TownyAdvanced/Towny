@@ -6687,4 +6687,4 @@ v0.92.0.11:
   - New Command: /t ranklist {townname}
     - View the ranklist of another town.
   - New Command: /res tax {resname}
-    - View the tax requirements of another resident.    
+    - View the tax requirements of another resident.

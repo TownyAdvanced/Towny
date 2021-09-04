@@ -867,7 +867,7 @@ public class TownyFormatter {
 	/**
 	 * Used to prefix, count and list the given strings.
 	 * @param prefix String applied to beginning of the list.
-	 * @param objectlist List of Strings to list.
+	 * @param list List of Strings to list.
 	 * @return Formatted, prefixed list of Strings.
 	 */
 	public static String getFormattedStrings(String prefix, List<String> list) {
