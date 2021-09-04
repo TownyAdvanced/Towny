@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.120
+version: 0.121
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -608,72 +608,63 @@ msg_err_over_outposts_limit: '你无法传送到城镇前哨, 已经超过你的
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: '&2放逐者: &f' #Used on /t outlawlist
+outlaws: 'Outlaws:' #Used on /t outlawlist
 online: '&a(在线)'
-registered_last_online: '&2注册时间: &a%s &8| &2最后在线: &a%s'
-status_perm: '&2权限: ' #Used on /plot perm, /res
-status_permissions: '&2权限: ' #Used on /town
+registered_last_online: '&2注册时间: &a%s &8| &2最后在线: &a%s' #Used in mayor hover text in /town status screen.
+status_perm: 'Perm:' #Used on /plot perm, /res
 status_on: '&4开'
 status_off: '&a关'
 status_on_good: '&a开'
 status_off_bad: '&4关'
 status_forced: '&c强制'
 status_adjustable: '&a可调整'
-status_pvp: '&2PvP: '
-explosions: '  &2允许爆炸: ' #Used on /plot perm, /res
-explosions2: '&2允许爆炸: ' #Used on /town and /tw
-firespread: '  &2火势蔓延: '
-mobspawns: '  &2生物生成: '
-owner_of_x_plots: '&2拥有&a%s片土地'
-status_bank: '&2银行: &a%s'
-status_town: '&2城镇: &a'
+status_pvp: 'PVP:'
+explosions: 'Explosions:'
+firespread: 'Firespread:'
+mobspawns: 'Mob Spawns:'
+owner_of_x_plots: 'Owner of %s plots.'
+status_bank: 'Bank:'
+status_town: 'Town:'
 status_no_town: '无'
-status_town_ranks: '&2城镇等级: &a'
-status_nation_ranks: '&2国家等级: &a'
-jailed_in_town: '&2监禁: &a是 &2位于城镇: &a%s'
+status_town_ranks: 'Town Ranks:'
+status_nation_ranks: 'Nation Ranks:'
+jailed_in_town: ' in Town: %s'
 status_friends: '好友'
-rank_list_title: ' &3头衔列表'
-rank_list_mayor: '&2城主: &a%s'
+rank_list_title: '%s Rank List'
+rank_list_mayor: 'Mayor:'
 status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(开放)'
-status_town_board: '&2公告栏: &a%s'
-status_founded: '&2成立: &7%s'
-status_town_size_part_1: '&2城镇规模: &a%s / %s'
-status_town_size_part_2: ' &b[购买区块: %s/%s]'
-status_town_size_part_3: ' &b[奖金: %s]'
-status_town_size_part_4: ' &b[国家区块奖励: %s]'
-status_town_size_part_5: ' &7[城镇之家: '
-status_town_outposts: '&2城镇前哨: &a%s / %s'
-status_town_outposts2: ' &b[国家区块奖励: %s]'
-status_town_outposts3: '&2城镇前哨: &a0 / %s'
-status_town_outposts4: '&2城镇前哨: &a%s'
-status_bank_town2: ' &7| &2日常维护: &4%s'
-status_bank_town3: ' &7| &2税额: &4%s'
-status_town_nation: '&2国家: &a%s'
+status_town_board: 'Board:'
+status_founded: 'Founded:'
+status_town_size: 'Town Size:'
+status_town_size_bought: 'Bought:'
+status_town_size_bonus: 'Bonus:'
+status_town_size_nationbonus: 'NationBonus:'
+status_town_outposts: 'Outposts:'
+status_bank_town2: 'Daily upkeep:'
+status_bank_town3: 'Tax:'
+status_town_nation: 'Nation:'
 status_town_reslist_overlength: '和更多...'
-status_town_reslist: '&2居民 &a[%s]&2: &f'
-status_nation_peaceful: '&7和平'
-status_nation_king: '&2国王: &a%s'
-status_nation_tax: '  &2国税: &4%s'
-status_nation_assistants: '&2助理: &f'
-status_nation_towns: '&2城镇 &a[%s]&2: &f'
-status_nation_allies: '&2盟国 &a[%s]&2: &f'
-status_nation_enemies: '&2仇敌 &a[%s]&2: &f'
-status_world_claimable: ' &a可声明'
-status_world_noclaims: ' &c不可声明'
-status_world_forcepvp: '&2强制PvP: '
-status_world_fire: '&2火势蔓延: '
-status_world_forcefire: '&2强制 火势蔓延: '
-status_world_forceexplosion: '&2强制 爆炸: '
-status_world_worldmobs: '&2世界 怪物: '
-status_world_forcetownmobs: '&2强制城镇刷怪: '
-status_world_unclaimrevert: '&2荒野回溯: '
-status_world_explrevert: '&2爆炸恢复: '
-status_world_ignoredblocks: '&2忽略方块:'
-status_res_taxexempt: '&2城镇管理无需缴纳税款.'
-status_res_tax: '&2城镇税额: &a'
-status_res_plottax: '&2总土地税: &a'
-status_res_totaltax: '&2支出总税额: &a'
+status_nation_king: 'King:'
+status_nation_tax: 'NationTax:'
+status_nation_towns: 'Towns'
+status_nation_allies: 'Allies'
+status_nation_enemies: 'Enemies'
+status_world_claimable: '&aClaimable'
+status_world_noclaims: '&cNoClaims'
+status_world_forcepvp: 'ForcePVP:'
+status_world_fire: 'Fire:'
+status_world_forcefire: 'Force Fire:'
+status_world_forceexplosion: 'Force Explosion:'
+status_world_worldmobs: 'World Mobs:'
+status_world_forcetownmobs: 'Force TownMobs:'
+status_world_unclaimrevert: 'Unclaim Revert:'
+status_world_explrevert: 'Explosion Revert:'
+status_world_ignoredblocks: 'Ignored Blocks:'
+status_res_taxexempt: 'Staff are exempt from paying town taxes.'
+status_res_tax: 'Town Tax:'
+status_res_plottax: 'Total Plot Taxes:'
+status_res_totaltax: 'Total Tax to pay:'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '你不能在国都外使用国家银行.'
 msg_err_unable_to_use_bank_outside_your_town: '你不能在城镇外使用城镇银行.'
@@ -711,9 +702,8 @@ msg_spawn_cost_set_to: '&b%s 设定了使用价格 /%s spawn to %s'
 msg_err_cannot_set_spawn_cost_more_than: '&c你不能将生产成本高于 %s'
 msg_err_ally_isnt_public: '&c你的盟国, %s, 没有启用公共传送点. 传送已被取消.'
 msg_nation_changed_public: '&c国家公开状态变更为 %s.'
-status_public2: '&2公开'
 #Added in 0.47:
-status_plot_type: '&2土地类型: &a'
+status_plot_type: 'Plot Type:'
 msg_no_self_jailing: '你不能监禁自己.'
 online2: ' &a(在线)'
 build: '建筑'
@@ -775,7 +765,7 @@ msg_couldnt_pay_town_tax_multiple: '&b以下居民因支付不起城镇税而被
 msg_couldnt_pay_plot_taxes_multiple: '&b以下居民因支付不起土地税而失去了土地所有权: '
 msg_bankrupt_town2: '&b%s 城镇因资金不足而倒闭.'
 msg_bankrupt_nation2: '&b%s 因国库已空而灭亡.'
-status_embassy_town: '&2拥有大使馆'
+status_embassy_town: 'Embassies in'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&b无效的比较器. 请尝试输入resident, balance, towns, name, townblocks, online.'
 msg_error_invalid_comparator_town: '&b无效的比较器. 请尝试输入resident, balance, name, townblocks, online.'
@@ -795,7 +785,7 @@ msg_nation_changed_open: '&c国家的公开状态为 %s.'
 msg_err_already_in_a_nation: '你的城镇已经加入了一个国家.'
 msg_err_nation_not_open: '&c国家 %s 的大门不向每一个人开放.请询问国王或助理来加入该国家.'
 msg_err_nation_homeblock_in_another_world: '&c你的城镇之家与国都不在同一个世界.'
-status_bank_town_penalty_upkeep: ' &7| &2额外土地维护费: &4%s'
+status_bank_town_penalty_upkeep: 'Overclaim upkeep:'
 #Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: '你无法传送到 %s, 你被该城镇视为了放逐者.'
 #Added in 0.54:
@@ -926,7 +916,7 @@ msg_player_put_group_up_for_sale: '%s 将土地组 %s 以 %s 的价格出售'
 msg_err_could_not_set_group_type: '无法设置土地组类型 - '
 msg_set_group_type_to_x: '已将土地组类型更改为 %s'
 msg_player_successfully_bought_group_x: '%s 成功购买了土地组 %s'
-status_plot_group_name_and_size: '&2组内有城镇区块: %s. 组内共有 %s 个城镇区块.'
+status_plot_group_name_and_size: 'Townblock is part of group: %s. Group has %s Townblocks total.'
 msg_player_made_group_not_for_sale: '%s 停止出售 %s .'
 #Added in 0.69
 msg_err_cannot_set_group_to_jail: '土地组无法设置为监狱.'
@@ -993,7 +983,7 @@ msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group 
 #Added in 0.85
 msg_set_perms_reset_single: '&bSuccessfully reset permissions on this plot.'
 #Added in 0.86
-status_bank_bankrupt: '&2Bank: &a%s &c(BANKRUPT)'
+status_bank_bankrupt: '(BANKRUPT)'
 msg_warning_bankrupt: '&4*** WARNING, %s WILL GO BANKRUPT AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
 msg_town_bankrupt_by_upkeep: '&b%s could not afford its upkeep and has gone bankrupt.'
 msg_town_bankrupt_by_upkeep_multiple: '&bThe following towns could not afford their upkeep and have gone bankrupt: '
@@ -1015,22 +1005,22 @@ msg_town_reached_debtcap_and_is_disbanded: '&b%s could not pay their upkeep, rea
 msg_town_reached_debtcap_and_is_disbanded_multiple: '&bThe following towns could not pay their upkeep, reached their debtcap, and have disbanded: '
 msg_unable_to_deposit_x: 'Unable to deposit %s into that town''s bank.'
 msg_unable_to_withdraw_x: 'Unable to withdraw %s from that town''s bank.'
-status_debtcap: '&2Debt Cap: &a%s'
-status_world_explrevert_entity: '&2Entity Explosion Revert: '
-status_world_explrevert_block: '&2Block Explosion Revert: '
+status_debtcap: 'Debt Cap:'
+status_world_explrevert_entity: 'Entity Explosion Revert:'
+status_world_explrevert_block: 'Block Explosion Revert:'
 #Added in 0.88
 msg_nation_already_peaceful: '&cNation is already peaceful.'
 msg_nation_already_not_peaceful: '&cNation is already not peaceful.'
 #Added in 0.89
-status_world_friendlyfire: '&2FriendlyFire: '
-status_world_wildernessmobs: '&2Wilderness Mobs: '
+status_world_friendlyfire: 'FriendlyFire:'
+status_world_wildernessmobs: 'Wilderness Mobs:'
 msg_outlaw_kick_cooldown: '&cYou''re considered an outlaw in %s. You have %s remaining for you to leave the town, otherwise, you will get teleported back to your spawnpoint.'
 msg_outlaw_kicked: '&4You are not welcome in %s. You were teleported away.'
 msg_outlaw_town_notify: '&cAn outlaw, %s, has entered your town''s territory.'
 msg_your_town_payed_upkeep_with_debt: '&cYour town paid the daily upkeep of %s with debt.'
 msg_payed_nation_tax_with_debt: '&cYour town paid the nation tax of %s with debt.'
 #Added in 0.90
-status_plot_clear_deletion: '&2PlotClearBlockDelete: '
+status_plot_clear_deletion: 'PlotClearBlockDelete:'
 msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'
 #Added in 0.91
 msg_universe_attribution: 'Authors: '
@@ -1050,9 +1040,9 @@ msg_town_reclaimed: '&b%s has reclaimed the town of %s.'
 msg_err_cannot_attack_ruined_town: '&6[War]&c You cannot attack a ruined town.'
 msg_err_cannot_use_command_because_town_ruined: "&cYou cannot use this command because your town is ruined. To resume normal command usage, either reclaim the town using ''/town reclaim'', or leave the town using ''/town leave''."
 msg_warning_your_town_is_ruined_for_x_more_hours: '&cYour town lies in a ruined state for %d more hours. Use ''/town reclaim'' to save the town and become mayor.'
-msg_time_remaining_before_full_removal: '&cTime remaining before full removal: %d hours.'
-msg_time_until_reclaim_available: '&cTime until reclaim available: %d hours.'
-msg_reclaim_available: '&aReclaim available.'
+msg_time_remaining_before_full_removal: 'Time remaining before full removal: %d hours.'
+msg_time_until_reclaim_available: 'Time until reclaim available: %d hours.'
+msg_reclaim_available: 'Reclaim available.'
 #Added in 0.93
 msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
 msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'
@@ -1065,7 +1055,7 @@ msg_comptype_towns: 'Number of Towns'
 msg_comptype_name: 'Alphabetical Order'
 msg_comptype_open: 'Open Status'
 msg_status_npc: '&c%s is not an real player, and is limited to Towny only.'
-npc_created: '&2Created: &a%s'
+npc_created: 'Created:'
 msg_no_funds_claim_plot: '&cYou cannot afford to claim the plot costing %s.'
 msg_no_funds_claim_plot_group: '&cYou cannot afford to claim the %s plots costing %s.'
 status_town_title_peaceful: '&b(Peacful)'
@@ -1103,7 +1093,7 @@ msg_town_destroyed_by_nation_tax: '&bThe conquered town %s couldn''t pay the nat
 msg_town_destroyed_by_nation_tax_multiple: '&bThe following conquered towns could not afford the nation tax and have fallen: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bYour town was exempt from the nation tax.'
 #Added in 0.97
-status_perm_line_format: '&a%s = &7' #The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
 msg_comptype_ruined: 'Ruined Status'
 msg_comptype_bankrupt: 'Bankrupt Status'
 msg_ruined: '&c(Ruined)'
@@ -1209,14 +1199,14 @@ msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your n
 msg_command_blocked_inside_towns: '&cYou cannot use that command inside towns.'
 msg_command_limited: 'You can only use that command inside your own plots.'
 #Added in 0.104
-msg_plot_perm_claimed_at: '&2Claimed at: &a%s'
+msg_plot_perm_claimed_at: 'Claimed at:'
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Wilderness use turned %s in all worlds.'
 msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
 #Added in 0.106
 msg_command_outsider_blocked: 'You cannot run that command because you don''t live in %s.'
 #Added in 0.107
-msg_jailed_for_x_hours: ' &2for %s hours.'
+msg_jailed_for_x_hours: ' for %s hours.'
 msg_err_this_jail_has_no_cells: 'This jail has no cells.'
 msg_err_no_cell_found_at_this_location: 'No jail cell found at this location.'
 msg_jail_cell_set: 'Jail cell set.'
@@ -1287,7 +1277,7 @@ msg_up_to_date: '&aYou are up to date.'
 msg_click_purchase: 'Click to purchase'
 msg_you_must_join_this_town_to_claim_this_plot: 'You must join this town: %s, in order to claim this plot. Would you like to join the town and continue claiming?'
 #Added in 0.113
-status_trustedlist: '&2Trusted'
+status_trustedlist: 'Trusted'
 msg_click_to_edit: '&6Click to edit.'
 permission_gui_header: 'Towny Permission GUI'
 msg_last_edited: '&7&oLast changed at %s by %s.'
@@ -1343,3 +1333,26 @@ msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'You cannot ja
 #Added in 0.120
 msg_resident_prompt: 'Enter the name of the player in chat, or q to exit. This will automatically time out in 30 seconds.'
 msg_prompt_cancel: 'Prompt cancelled or timed out.'
+#Added in 0.121
+status_title_primary_colour: '&6' #Used to colour the majority of the title bar.
+status_title_secondary_colour: '&e' #Used to colour the words in the title bar.
+status_format_list_1: '&2' #First colour applied to status screen lists, ex: on /res, the friend list's Friends section.
+status_format_list_2: '&a' #Second colour applied to status screen lists, ex: on /res, the friend list's [1] section.
+status_format_list_3: '&f' #Third colour applied to status screen lists, ex: on /res, the friend list's list of friends' names section.
+status_format_key_value_key: '&2' #Colour applied to a status screen element which is just a line of text, or the key in a key/value element.
+status_format_key_value_value: '&a' #Colour applied to the value in a status screen element which has two parts, ex: Registered: SomeDate. (SomeDate is the value.)
+status_format_bracket_element: '&b' #Colour applied to a status element within a bracket, ex: [Bonus: #].
+status_format_hover_key: '&a' #Colour applied to a status screen element which is a hover-able key, ex: [Rank List]
+status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a hover-able status screen element.
+status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
+status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
+status_home_element: ' &7[Home: %s]'
+status_registered: 'Registered:'
+status_lastonline: 'Last Online:'
+status_fractions: '%s/%s'
+status_rank_list: 'Rank List'
+status_hover_click_for_more: 'Click for more information.'
+status_jailed: 'Jailed:'
+status_bad_yes: '&cYES'
+status_good_no: '&aNO'
+status_resident_tax_title: '%s''s Tax'
