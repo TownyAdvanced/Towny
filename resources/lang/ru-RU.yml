@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.120
+version: 0.121
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -608,72 +608,63 @@ msg_err_over_outposts_limit: 'Вы не можете телепортирова�
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: '&2Разбойники: &f' #Used on /t outlawlist
+outlaws: 'Outlaws:' #Used on /t outlawlist
 online: '&a(Онлайн)'
-registered_last_online: '&2Зарегистрирован: &a%s &8| &2Последний онлайн: &a%s'
-status_perm: '&2Права: ' #Used on /plot perm, /res
-status_permissions: '&2Разрешения: ' #Used on /town
+registered_last_online: '&2Зарегистрирован: &a%s &8| &2Последний онлайн: &a%s' #Used in mayor hover text in /town status screen.
+status_perm: 'Perm:' #Used on /plot perm, /res
 status_on: '&4ВКЛ'
 status_off: '&aВЫКЛ'
 status_on_good: '&aВКЛ'
 status_off_bad: '&4ВЫКЛ'
 status_forced: '&cФиксир.'
 status_adjustable: '&aРегулир.'
-status_pvp: '&2ПВП: '
-explosions: '  &2Взрывы: ' #Used on /plot perm, /res
-explosions2: '&2Взрывы: ' #Used on /town and /tw
-firespread: '  &2Распространение огня: '
-mobspawns: '  &2Спавн Мобов: '
-owner_of_x_plots: '&2Владеет &a%s участками'
-status_bank: '&2Банк: &a%s'
-status_town: '&2Город: &a'
+status_pvp: 'PVP:'
+explosions: 'Explosions:'
+firespread: 'Firespread:'
+mobspawns: 'Mob Spawns:'
+owner_of_x_plots: 'Owner of %s plots.'
+status_bank: 'Bank:'
+status_town: 'Town:'
 status_no_town: 'Нет'
-status_town_ranks: '&2Ранги Города: &a'
-status_nation_ranks: '&2Ранги Нации: &a'
-jailed_in_town: '&2Заключенные: &aДа &2в Городе: &a%s'
+status_town_ranks: 'Town Ranks:'
+status_nation_ranks: 'Nation Ranks:'
+jailed_in_town: ' in Town: %s'
 status_friends: 'Друзья'
-rank_list_title: ' &3Лист Рангов'
-rank_list_mayor: '&2Мэр: &a%s'
+rank_list_title: '%s Rank List'
+rank_list_mayor: 'Mayor:'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Откр.)'
-status_town_board: '&2Сообщение границы: &a%s'
-status_founded: '&2Основан: &7%s'
-status_town_size_part_1: '&2Размер города: &a%s / %s'
-status_town_size_part_2: ' &b[Куплено: %s/%s]'
-status_town_size_part_3: ' &b[Бонус: %s]'
-status_town_size_part_4: ' &b[Бонус Нации: %s]'
-status_town_size_part_5: ' &7[Дом: '
-status_town_outposts: '&2Аванпосты: &a%s / %s'
-status_town_outposts2: ' &b[БонусНации: %s]'
-status_town_outposts3: '&2Аванпосты: &a0 / %s'
-status_town_outposts4: '&2Аванпосты: &a%s'
-status_bank_town2: ' &7| &2Ежедн. содерж.: &4%s'
-status_bank_town3: ' &7| &2Налог с жителей: &4%s'
-status_town_nation: '&2Нация: &a%s'
+status_town_board: 'Board:'
+status_founded: 'Founded:'
+status_town_size: 'Town Size:'
+status_town_size_bought: 'Bought:'
+status_town_size_bonus: 'Bonus:'
+status_town_size_nationbonus: 'NationBonus:'
+status_town_outposts: 'Outposts:'
+status_bank_town2: 'Daily upkeep:'
+status_bank_town3: 'Tax:'
+status_town_nation: 'Nation:'
 status_town_reslist_overlength: 'и далее...'
-status_town_reslist: '&2Резиденты &a[%s]&2: &f'
-status_nation_peaceful: '&7Мирный'
-status_nation_king: '&2Король: &a%s'
-status_nation_tax: '  &2Налог Нации: &4%s'
-status_nation_assistants: '&2Заместители: &f'
-status_nation_towns: '&2Города &a[%s]&2: &f'
-status_nation_allies: '&2Альянсы &a[%s]&2: &f'
-status_nation_enemies: '&2Враги &a[%s]&2: &f'
-status_world_claimable: ' &aПривачиваемое'
-status_world_noclaims: ' &cНеПривачиваемое'
-status_world_forcepvp: '&2Принуд.PVP: '
-status_world_fire: '&2Огонь: '
-status_world_forcefire: '&2Принуд.Огонь: '
-status_world_forceexplosion: '&2Принуд.Взрывы: '
-status_world_worldmobs: '&2Мобы в Мире: '
-status_world_forcetownmobs: '&2Принуд.Город.Мобы: '
-status_world_unclaimrevert: '&2Отдача от распривата: '
-status_world_explrevert: '&2Отдача от Взрыва: '
-status_world_ignoredblocks: '&2Игнор.Блоки:'
-status_res_taxexempt: '&2SПерсонал освобождается от уплаты городских налогов.'
-status_res_tax: '&2Городской налог: &a'
-status_res_plottax: '&2Всего земельных налогов: &a'
-status_res_totaltax: '&2Всего налогов для оплаты: &a'
+status_nation_king: 'King:'
+status_nation_tax: 'NationTax:'
+status_nation_towns: 'Towns'
+status_nation_allies: 'Allies'
+status_nation_enemies: 'Enemies'
+status_world_claimable: '&aClaimable'
+status_world_noclaims: '&cNoClaims'
+status_world_forcepvp: 'ForcePVP:'
+status_world_fire: 'Fire:'
+status_world_forcefire: 'Force Fire:'
+status_world_forceexplosion: 'Force Explosion:'
+status_world_worldmobs: 'World Mobs:'
+status_world_forcetownmobs: 'Force TownMobs:'
+status_world_unclaimrevert: 'Unclaim Revert:'
+status_world_explrevert: 'Explosion Revert:'
+status_world_ignoredblocks: 'Ignored Blocks:'
+status_res_taxexempt: 'Staff are exempt from paying town taxes.'
+status_res_tax: 'Town Tax:'
+status_res_plottax: 'Total Plot Taxes:'
+status_res_totaltax: 'Total Tax to pay:'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Вы не можете пользоваться своим национальным банком вне столицы нации.'
 msg_err_unable_to_use_bank_outside_your_town: 'Вы не можете пользоваться своим городским банком за пределами своего города.'
@@ -711,9 +702,8 @@ msg_spawn_cost_set_to: '&b%s установил стоимость исполь�
 msg_err_cannot_set_spawn_cost_more_than: '&cВы не можете установить стоимость спана выше, чем %s'
 msg_err_ally_isnt_public: '&cВаш союзник, %s, не имеет публичной точки спавна. Телепорт запрещен.'
 msg_nation_changed_public: '&cПубличный статус нации теперь %s.'
-status_public2: '&2Публичный'
 #Added in 0.47:
-status_plot_type: '&2Тип участка: &a'
+status_plot_type: 'Plot Type:'
 msg_no_self_jailing: 'Вы не можете посадить самого себя.'
 online2: ' &a(Онлайн)'
 build: 'Строить'
@@ -775,7 +765,7 @@ msg_couldnt_pay_town_tax_multiple: '&bСледующие жители не см�
 msg_couldnt_pay_plot_taxes_multiple: '&bСледующие резиденты не смогли позволить себе заплатить земельный налог на некоторые или на все свои участки: '
 msg_bankrupt_town2: '&b%s не смог позволить себе остаться городом.'
 msg_bankrupt_nation2: '&b%s не смогла позволить себе остаться нацией.'
-status_embassy_town: '&2Посольство в'
+status_embassy_town: 'Embassies in'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&bНеверный сравнитель. Попробуйте жителей, счёт, города, название, участки, онлайн.'
 msg_error_invalid_comparator_town: '&bНеверный сравнитель. Попробуйте жителей, счёт, имя, участки, онлайн, открытость.'
@@ -795,7 +785,7 @@ msg_nation_changed_open: '&cОткрытый статус Нации сейча�
 msg_err_already_in_a_nation: 'Ваш город уже в нации.'
 msg_err_nation_not_open: '&cУ нации %s нет открытых для всех дверей. Попросите Короля или заместителя присоединиться.'
 msg_err_nation_homeblock_in_another_world: '&cДомашний блок вашего города не в том же мире, что и домашний блок столицы нации.'
-status_bank_town_penalty_upkeep: ' &7| &2Налог на сверх-приваты: &4%s'
+status_bank_town_penalty_upkeep: 'Overclaim upkeep:'
 #Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Вы не можете заспавниться в %s. Там вы помечены как преступник.'
 #Added in 0.54:
@@ -926,7 +916,7 @@ msg_player_put_group_up_for_sale: '%s переместил группу %s на 
 msg_err_could_not_set_group_type: 'Не удалось установить тип группы - '
 msg_set_group_type_to_x: 'Изменен тип группы участков на %s'
 msg_player_successfully_bought_group_x: '%s успешно приобрел группу участков %s'
-status_plot_group_name_and_size: '&2Участок является частью группы %s. Всего в группе %s участков.'
+status_plot_group_name_and_size: 'Townblock is part of group: %s. Group has %s Townblocks total.'
 msg_player_made_group_not_for_sale: '%s создал группу %s не для продажи.'
 #Added in 0.69
 msg_err_cannot_set_group_to_jail: 'Группы участков не могут быть настроены на тюремный тип.'
@@ -993,7 +983,7 @@ msg_err_plot_belongs_to_group_toggle: 'Участок принадлежит к 
 #Added in 0.85
 msg_set_perms_reset_single: '&bПрава на участке успешно сброшены.'
 #Added in 0.86
-status_bank_bankrupt: '&2Банк: &a%s &c(БАНКРОТ)'
+status_bank_bankrupt: '(BANKRUPT)'
 msg_warning_bankrupt: '&4*** ПРЕДУПРЕЖДЕНИЕ! %s ОБАНКРОТИТСЯ ЗАВТРА ИЗ-ЗА НЕХВАТКИ СРЕДСТВ! ***'
 msg_town_bankrupt_by_upkeep: '&b%s не смог позволить себе своё содержание и обанкротился.'
 msg_town_bankrupt_by_upkeep_multiple: '&bСледующие города не смогли позволить себе своё содержание и обанкротились: '
@@ -1015,22 +1005,22 @@ msg_town_reached_debtcap_and_is_disbanded: '&b%s не смог заплатит�
 msg_town_reached_debtcap_and_is_disbanded_multiple: '&bСледующие города не смогли заплатить налоги, достигли лимита задолженности и распустились: '
 msg_unable_to_deposit_x: 'Внести %s на баланс города не получилось.'
 msg_unable_to_withdraw_x: 'Вывести %s с баланса города не получилось.'
-status_debtcap: '&2Лимит задолженности: &a%s'
-status_world_explrevert_entity: '&2Восстановление существ после взрыва: '
-status_world_explrevert_block: '&2Восстановление блоков после взрыва: '
+status_debtcap: 'Debt Cap:'
+status_world_explrevert_entity: 'Entity Explosion Revert:'
+status_world_explrevert_block: 'Block Explosion Revert:'
 #Added in 0.88
 msg_nation_already_peaceful: '&cНация уже является мирной.'
 msg_nation_already_not_peaceful: '&cНация уже не является мирной.'
 #Added in 0.89
-status_world_friendlyfire: '&2Огонь по своим: '
-status_world_wildernessmobs: '&2Мобы диких земель: '
+status_world_friendlyfire: 'FriendlyFire:'
+status_world_wildernessmobs: 'Wilderness Mobs:'
 msg_outlaw_kick_cooldown: '&cВы объявлены вне закона в %s. У вас осталось %s, чтобы покинуть город, иначе вы будете телепортированы на свою точку возрождения.'
 msg_outlaw_kicked: '&4Вас не ждут в %s. Вы были телепортированы прочь.'
 msg_outlaw_town_notify: '&c%s, объявленный вне закона, зашёл на вашу территорию.'
 msg_your_town_payed_upkeep_with_debt: '&cВаш город заплатил ежедневный налог в %s с долгами.'
 msg_payed_nation_tax_with_debt: '&cВаш город заплатил налог нации в %s с долгами.'
 #Added in 0.90
-status_plot_clear_deletion: '&2Удаление блоков после /plot clear: '
+status_plot_clear_deletion: 'PlotClearBlockDelete:'
 msg_err_plot_clear_disabled_in_this_world: 'Команда /plot clear отключена в этом мире.'
 #Added in 0.91
 msg_universe_attribution: 'Авторы: '
@@ -1050,9 +1040,9 @@ msg_town_reclaimed: '&b%s восстановил город %s.'
 msg_err_cannot_attack_ruined_town: '&6[War]&c Вы не можете атаковать разрушенный город.'
 msg_err_cannot_use_command_because_town_ruined: "&cВы не можете использовать эту команду, поскольку ваш город разрушен. Чтобы продолжить обычное использование команды, либо восстановите свой город, используя ''/town reclaim'', либо покиньте город, используя ''/town leave''."
 msg_warning_your_town_is_ruined_for_x_more_hours: '&cВаш город находится в разрушенном состоянии в течение ещё %d часов. Используйте ''/town reclaim'', чтобы сохранить город и стать мэром.'
-msg_time_remaining_before_full_removal: '&cВремя до полного удаления: %d часов.'
-msg_time_until_reclaim_available: '&cВремя до того, как будет доступно восстановление: %d часов.'
-msg_reclaim_available: '&aВосстановление доступно.'
+msg_time_remaining_before_full_removal: 'Time remaining before full removal: %d hours.'
+msg_time_until_reclaim_available: 'Time until reclaim available: %d hours.'
+msg_reclaim_available: 'Reclaim available.'
 #Added in 0.93
 msg_changed_peaceful: '&cНейтралитет/мирность города теперь %s.'
 msg_err_town_unclaim_canceled: '&cРасприват отменён. Вы не можете расприватить этот участок в данный момент.'
@@ -1065,7 +1055,7 @@ msg_comptype_towns: 'Количество городов'
 msg_comptype_name: 'В алфавитном порядке'
 msg_comptype_open: 'Открытый статус'
 msg_status_npc: '&c%s is not an real player, and is limited to Towny only.'
-npc_created: '&2Создан: &a%s'
+npc_created: 'Created:'
 msg_no_funds_claim_plot: '&cВы не можете позволить себе занять участок стоимостью %s.'
 msg_no_funds_claim_plot_group: '&cВы не можете позволить себе заприватить эти %s участков стоимостью %s.'
 status_town_title_peaceful: '&b(Мирный)'
@@ -1103,7 +1093,7 @@ msg_town_destroyed_by_nation_tax: '&bПокорённый город %s не с�
 msg_town_destroyed_by_nation_tax_multiple: '&bСледующие покорённые города не смогли уплатить налог нации и превратились в руины: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bВаш город был освобожден от налогов нации.'
 #Added in 0.97
-status_perm_line_format: '&a%s = &7' #The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
 msg_comptype_ruined: 'Разрушенное состояние'
 msg_comptype_bankrupt: 'Состояние банкрота'
 msg_ruined: '&c(Руины)'
@@ -1209,14 +1199,14 @@ msg_deleting_nation_will_result_in_losing_residents: '&cПредупрежден
 msg_command_blocked_inside_towns: '&cВы не можете использовать эту команду в городах.'
 msg_command_limited: '&cВы можете использовать эту команду только на своих участках.'
 #Added in 0.104
-msg_plot_perm_claimed_at: '&2Запривачено на: &a%s'
+msg_plot_perm_claimed_at: 'Claimed at:'
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Флаг use в диких землях %s во всех мирах.'
 msg_regenerations_use_x_in_all_worlds: 'Регенерация %s во всех мирах.'
 #Added in 0.106
 msg_command_outsider_blocked: 'Вы не можете использовать эту команду, поскольку вы не живёте в %s.'
 #Added in 0.107
-msg_jailed_for_x_hours: ' &2на %s часов.'
+msg_jailed_for_x_hours: ' for %s hours.'
 msg_err_this_jail_has_no_cells: 'В этой тюрьме нет камер.'
 msg_err_no_cell_found_at_this_location: 'На этой локации нет тюремных камер.'
 msg_jail_cell_set: 'Тюремная камера создана.'
@@ -1287,7 +1277,7 @@ msg_up_to_date: 'Обновлений не требуется.'
 msg_click_purchase: 'Нажмите, чтобы купить'
 msg_you_must_join_this_town_to_claim_this_plot: 'Вы должны вступить в город %s чтобы получить этот участок. Хотите продолжить?'
 #Added in 0.113
-status_trustedlist: '&2Доверенные'
+status_trustedlist: 'Trusted'
 msg_click_to_edit: '&6Нажмите, чтобы изменить.'
 permission_gui_header: 'Интерфейс прав Towny'
 msg_last_edited: '&7&oВ последний раз изменено %s %s.'
@@ -1343,3 +1333,26 @@ msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Вы не м�
 #Added in 0.120
 msg_resident_prompt: 'Enter the name of the player in chat, or q to exit. This will automatically time out in 30 seconds.'
 msg_prompt_cancel: 'Prompt cancelled or timed out.'
+#Added in 0.121
+status_title_primary_colour: '&6' #Used to colour the majority of the title bar.
+status_title_secondary_colour: '&e' #Used to colour the words in the title bar.
+status_format_list_1: '&2' #First colour applied to status screen lists, ex: on /res, the friend list's Friends section.
+status_format_list_2: '&a' #Second colour applied to status screen lists, ex: on /res, the friend list's [1] section.
+status_format_list_3: '&f' #Third colour applied to status screen lists, ex: on /res, the friend list's list of friends' names section.
+status_format_key_value_key: '&2' #Colour applied to a status screen element which is just a line of text, or the key in a key/value element.
+status_format_key_value_value: '&a' #Colour applied to the value in a status screen element which has two parts, ex: Registered: SomeDate. (SomeDate is the value.)
+status_format_bracket_element: '&b' #Colour applied to a status element within a bracket, ex: [Bonus: #].
+status_format_hover_key: '&a' #Colour applied to a status screen element which is a hover-able key, ex: [Rank List]
+status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a hover-able status screen element.
+status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
+status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
+status_home_element: ' &7[Home: %s]'
+status_registered: 'Registered:'
+status_lastonline: 'Last Online:'
+status_fractions: '%s/%s'
+status_rank_list: 'Rank List'
+status_hover_click_for_more: 'Click for more information.'
+status_jailed: 'Jailed:'
+status_bad_yes: '&cYES'
+status_good_no: '&aNO'
+status_resident_tax_title: '%s''s Tax'
