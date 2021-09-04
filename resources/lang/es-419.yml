@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.120
+version: 0.121
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -608,72 +608,63 @@ msg_err_over_outposts_limit: 'No puedes teletransportarte a tu outpost. Ya super
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: '&2Bandidos: &f' #Used on /t outlawlist
+outlaws: 'Outlaws:' #Used on /t outlawlist
 online: '&a(Conectado/a)'
-registered_last_online: '&2Registrado: &a%s &8| &2Última conexión: &a%s'
-status_perm: '&2Permiso: ' #Used on /plot perm, /res
-status_permissions: '&2Permisos: ' #Used on /town
+registered_last_online: '&2Registrado: &a%s &8| &2Última conexión: &a%s' #Used in mayor hover text in /town status screen.
+status_perm: 'Perm:' #Used on /plot perm, /res
 status_on: '&4Activado/a'
 status_off: '&aDesactivado/a'
 status_on_good: '&aActivado/a'
 status_off_bad: '&4Desactivado/a'
 status_forced: '&cForzado'
 status_adjustable: '&aAjustable'
-status_pvp: '&2Combate: '
-explosions: '  &2Explosiones: ' #Used on /plot perm, /res
-explosions2: '&2Explosiones: ' #Used on /town and /tw
-firespread: '  &2Incendios: '
-mobspawns: '  &2Aparición de mobs: '
-owner_of_x_plots: '&2Dueño/a de &a%s &2propiedades'
-status_bank: '&2Banco: &a%s'
-status_town: '&2Ciudad: &a'
+status_pvp: 'PVP:'
+explosions: 'Explosions:'
+firespread: 'Firespread:'
+mobspawns: 'Mob Spawns:'
+owner_of_x_plots: 'Owner of %s plots.'
+status_bank: 'Bank:'
+status_town: 'Town:'
 status_no_town: 'Ninguna'
-status_town_ranks: '&2Rangos comunales: &a'
-status_nation_ranks: '&2Rangos nacionales: &a'
-jailed_in_town: '&2Encarcelado en &a%s'
+status_town_ranks: 'Town Ranks:'
+status_nation_ranks: 'Nation Ranks:'
+jailed_in_town: ' in Town: %s'
 status_friends: 'Amigos'
-rank_list_title: ' &3Lista de rangos'
-rank_list_mayor: '&2Alcalde: &a%s'
+rank_list_title: '%s Rank List'
+rank_list_mayor: 'Mayor:'
 status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(Abierta)'
-status_town_board: '&2Tablero: &a%s'
-status_founded: '&2Fundada: &7%s'
-status_town_size_part_1: '&2Tamaño: &a%s / %s'
-status_town_size_part_2: ' &b[Comprados: %s/%s]'
-status_town_size_part_3: ' &b[Bonus: %s]'
-status_town_size_part_4: ' &b[Bonus Nacional: %s]'
-status_town_size_part_5: ' &7[Principal: '
-status_town_outposts: '&2Outposts: &a%s / %s'
-status_town_outposts2: ' &b[Bonus Nacional: %s]'
-status_town_outposts3: '&2Outposts: &a0 / %s'
-status_town_outposts4: '&2Outposts: &a%s'
-status_bank_town2: ' &7| &2Mantención diaria: &4%s'
-status_bank_town3: ' &7| &2Impuesto: &4%s'
-status_town_nation: '&2Nación: &a%s'
+status_town_board: 'Board:'
+status_founded: 'Founded:'
+status_town_size: 'Town Size:'
+status_town_size_bought: 'Bought:'
+status_town_size_bonus: 'Bonus:'
+status_town_size_nationbonus: 'NationBonus:'
+status_town_outposts: 'Outposts:'
+status_bank_town2: 'Daily upkeep:'
+status_bank_town3: 'Tax:'
+status_town_nation: 'Nation:'
 status_town_reslist_overlength: 'y más...'
-status_town_reslist: '&2Residentes &a[%s]&2: &f'
-status_nation_peaceful: '&7Pacífica'
-status_nation_king: '&2Rey: &a%s'
-status_nation_tax: '  &2Impuestos nacionales: &4%s'
-status_nation_assistants: '&2Asistentes: &f'
-status_nation_towns: '&2Ciudades &a[%s]&2: &f'
-status_nation_allies: '&2Aliados &a[%s]&2: &f'
-status_nation_enemies: '&2Enemigos &a[%s]&2: &f'
-status_world_claimable: ' &aReclamable'
-status_world_noclaims: ' &cProtegido'
-status_world_forcepvp: '&2Combate forzado: '
-status_world_fire: '&2Incendios: '
-status_world_forcefire: '&2Incendios forzados: '
-status_world_forceexplosion: '&2Explosiones forzadas: '
-status_world_worldmobs: '&2Mobs: '
-status_world_forcetownmobs: '&2Mobs forzados: '
-status_world_unclaimrevert: '&2Revertir abandonos: '
-status_world_explrevert: '&2Revertir explosiones: '
-status_world_ignoredblocks: '&2Bloques ignorados:'
-status_res_taxexempt: '&2El staff está exento de pagar impuestos.'
-status_res_tax: '&2Impuesto de ciudad: &a'
-status_res_plottax: '&2Impuestos de terreno: &a'
-status_res_totaltax: '&2Impuestos totales: &a'
+status_nation_king: 'King:'
+status_nation_tax: 'NationTax:'
+status_nation_towns: 'Towns'
+status_nation_allies: 'Allies'
+status_nation_enemies: 'Enemies'
+status_world_claimable: '&aClaimable'
+status_world_noclaims: '&cNoClaims'
+status_world_forcepvp: 'ForcePVP:'
+status_world_fire: 'Fire:'
+status_world_forcefire: 'Force Fire:'
+status_world_forceexplosion: 'Force Explosion:'
+status_world_worldmobs: 'World Mobs:'
+status_world_forcetownmobs: 'Force TownMobs:'
+status_world_unclaimrevert: 'Unclaim Revert:'
+status_world_explrevert: 'Explosion Revert:'
+status_world_ignoredblocks: 'Ignored Blocks:'
+status_res_taxexempt: 'Staff are exempt from paying town taxes.'
+status_res_tax: 'Town Tax:'
+status_res_plottax: 'Total Plot Taxes:'
+status_res_totaltax: 'Total Tax to pay:'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'No puedes interactuar con el banco de la nación fuera de la capital.'
 msg_err_unable_to_use_bank_outside_your_town: 'No puedes interactuar con el banco de tu ciudad fuera de esta.'
@@ -711,9 +702,8 @@ msg_spawn_cost_set_to: '&b%s ha establecido el precio del comando /%s spawn en %
 msg_err_cannot_set_spawn_cost_more_than: '&cNo puedes subir el costo de las visitas a más de %s'
 msg_err_ally_isnt_public: '&cTu aliado, %s, no tiene habilitadas las visitas.'
 msg_nation_changed_public: '&cLas visitas a la nación ahora están %s.'
-status_public2: '&2Pública'
 #Added in 0.47:
-status_plot_type: '&2Tipo de terreno: &a'
+status_plot_type: 'Plot Type:'
 msg_no_self_jailing: 'No puedes encarcelarte a ti mismo.'
 online2: ' &a(Conectado/a)'
 build: 'Construcción'
@@ -775,7 +765,7 @@ msg_couldnt_pay_town_tax_multiple: '&bLos siguientes residentes no pudieron paga
 msg_couldnt_pay_plot_taxes_multiple: '&bLos siguientes residentes no pudieron pagar los impuestos de mantención de un o varios terreno(s): '
 msg_bankrupt_town2: '&b%s no pudo seguir manteniendo una ciudad.'
 msg_bankrupt_nation2: '&b%s no pudo seguir manteniendo una nación.'
-status_embassy_town: '&2Embajadas en'
+status_embassy_town: 'Embassies in'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&bComparador inválido. Intenta con resident (residente), balance (dinero), towns (ciudades), name (nombre), townblocks (terrenos) o online (conectados).'
 msg_error_invalid_comparator_town: '&bComparador inválido. Intenta con resident (residente), balance (dinero), name (nombre), townblocks (terrenos), online (conectados) o open (abierta).'
@@ -795,7 +785,7 @@ msg_nation_changed_open: '&cLa membresía sin invitación en la nación ahora es
 msg_err_already_in_a_nation: 'Tu ciudad ya es miembro de una nación.'
 msg_err_nation_not_open: '&cLa nación de %s no tiene sus puertas abiertas a todo el mundo. Pidele al rey o a un asistente que te invite.'
 msg_err_nation_homeblock_in_another_world: '&cEl homeblock de tu ciudad no está en el mismo mundo que el homeblock de la capital.'
-status_bank_town_penalty_upkeep: ' &7| &2Mantención de excesos: &4%s'
+status_bank_town_penalty_upkeep: 'Overclaim upkeep:'
 #Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'No puedes ir al spawn de la ciudad de %s, eres considerado un bandido ahí.'
 #Added in 0.54:
@@ -926,7 +916,7 @@ msg_player_put_group_up_for_sale: '%s ha puesto el grupo %s a la venta por %s'
 msg_err_could_not_set_group_type: 'No se pudo establecer el tipo del grupo - '
 msg_set_group_type_to_x: 'Se ha cambiado el tipo del grupo a %s'
 msg_player_successfully_bought_group_x: '%s compró el grupo de terrenos %s'
-status_plot_group_name_and_size: '&2El terreno es parte del grupo %s. El grupo tiene %s terrenos en total.'
+status_plot_group_name_and_size: 'Townblock is part of group: %s. Group has %s Townblocks total.'
 msg_player_made_group_not_for_sale: '%s ha sacado al grupo %s de la venta.'
 #Added in 0.69
 msg_err_cannot_set_group_to_jail: 'Los grupos de parcelas no se pueden establecer como una penitenciaria.'
@@ -993,7 +983,7 @@ msg_err_plot_belongs_to_group_toggle: 'El terreno pertenece a un grupo, usa /plo
 #Added in 0.85
 msg_set_perms_reset_single: '&bSe han reestablecido los permisos del terreno.'
 #Added in 0.86
-status_bank_bankrupt: '&2Banco: &a%s &c(QUEBRADO)'
+status_bank_bankrupt: '(BANKRUPT)'
 msg_warning_bankrupt: '&4*** ¡ADVERTENCIA! %s quebrará debido a que no hay fondos suficientes en el banco. ***'
 msg_town_bankrupt_by_upkeep: '&b%s no pudó mantenerse y cayó en la bancarrota.'
 msg_town_bankrupt_by_upkeep_multiple: '&bLas siguientes ciudades no pudieron mantenerse y han caído en la bancarrota: '
@@ -1015,22 +1005,22 @@ msg_town_reached_debtcap_and_is_disbanded: '&b%s no pudo pagar el costo de mante
 msg_town_reached_debtcap_and_is_disbanded_multiple: '&bLas siguientes ciudades no pudieron pagar el costo de mantención diaria, llegaron al límite de deudas y han caído en la ruina: '
 msg_unable_to_deposit_x: 'No se pudieron depositar %s en el banco de la ciudad.'
 msg_unable_to_withdraw_x: 'No se pudieron retirar %s del banco de la ciudad.'
-status_debtcap: '&2Límite de deudas: &a%s'
-status_world_explrevert_entity: '&2Revertir Explosiones por Entidades: '
-status_world_explrevert_block: '&2Revertir Explosiones por Bloques: '
+status_debtcap: 'Debt Cap:'
+status_world_explrevert_entity: 'Entity Explosion Revert:'
+status_world_explrevert_block: 'Block Explosion Revert:'
 #Added in 0.88
 msg_nation_already_peaceful: '&cLa nación ya es pacífica.'
 msg_nation_already_not_peaceful: '&cLa nación no es pacífica.'
 #Added in 0.89
-status_world_friendlyfire: '&2Fuego Amigable: '
-status_world_wildernessmobs: '&2Mobs en el Exterior: '
+status_world_friendlyfire: 'FriendlyFire:'
+status_world_wildernessmobs: 'Wilderness Mobs:'
 msg_outlaw_kick_cooldown: '&cEres considerado un bandido en %s. Tienes %s restantes para volver a tu ciudad, o serás teletransportado lejos.'
 msg_outlaw_kicked: '&4No eres bienvenido/a en %s. Fuiste teletransportado/a lejos.'
 msg_outlaw_town_notify: '&cUn bandido, %s, entró al territorio de la ciudad.'
 msg_your_town_payed_upkeep_with_debt: '&cTu ciudad pagó la mantención diaria, con un costo de %s usando su deuda.'
 msg_payed_nation_tax_with_debt: '&cTu ciudad pagó los impuestos nacionales, con un costo de %s usando su deuda.'
 #Added in 0.90
-status_plot_clear_deletion: '&2LimpiarParcelas: '
+status_plot_clear_deletion: 'PlotClearBlockDelete:'
 msg_err_plot_clear_disabled_in_this_world: 'El comando /plot clear está deshabilitado en este mundo.'
 #Added in 0.91
 msg_universe_attribution: 'Autores: '
@@ -1050,9 +1040,9 @@ msg_town_reclaimed: '&b%s ha reclamado la ciudad de %s.'
 msg_err_cannot_attack_ruined_town: '&6[Guerra]&c No puedes atacar una ciudad que ha caído en la ruina.'
 msg_err_cannot_use_command_because_town_ruined: "&cNo puedes usar este comando si tu ciudad está en la ruina. Para seguir usando normalmente los comandos reclama la ciudad con ''/town reclaim'', o abandonala con ''/town leave''."
 msg_warning_your_town_is_ruined_for_x_more_hours: '&cTu ciudad será considerada como "en ruina" por %d horas más. Puedes salvarla usando ''/town reclaim'' y convertirte en el alcalde.'
-msg_time_remaining_before_full_removal: '&cTiempo hasta que sea eliminado completamente: %d horas.'
-msg_time_until_reclaim_available: '&cTiempo hasta que se pueda volver a reclamar: %d horas.'
-msg_reclaim_available: '&aReclamo disponible.'
+msg_time_remaining_before_full_removal: 'Time remaining before full removal: %d hours.'
+msg_time_until_reclaim_available: 'Time until reclaim available: %d hours.'
+msg_reclaim_available: 'Reclaim available.'
 #Added in 0.93
 msg_changed_peaceful: '&cLa neutralidad de la ciudad ahora está %s.'
 msg_err_town_unclaim_canceled: '&cAbandono cancelado. No puedes realizar esta operación ahora mismo.'
@@ -1065,7 +1055,7 @@ msg_comptype_towns: 'Número de Ciudades'
 msg_comptype_name: 'Orden alfabético'
 msg_comptype_open: 'Abrir estado'
 msg_status_npc: '&c%s no es un jugador real, y solo existe en Towny.'
-npc_created: '&2Creado: &a%s'
+npc_created: 'Created:'
 msg_no_funds_claim_plot: '&cNo tienes los fondos necesarios para reclamar este terreno. Necesitas %s.'
 msg_no_funds_claim_plot_group: '&cNo tienes los fondos necesarios para reclamar los terrenos %s. Necesitas %s.'
 status_town_title_peaceful: '&b(Pacífica)'
@@ -1103,7 +1093,7 @@ msg_town_destroyed_by_nation_tax: '&bLa ciudad conquistada de %s no pudo pagar e
 msg_town_destroyed_by_nation_tax_multiple: '&bLas siguientes ciudades conquistadas no pudieron pagar el impuesto nacional y han caído: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bTu ciudad esta excluida de los impuestos nacionales.'
 #Added in 0.97
-status_perm_line_format: '&a%s = &7' #The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
 msg_comptype_ruined: 'Estado de Ruina'
 msg_comptype_bankrupt: 'Estado de Bancarrota'
 msg_ruined: '&c(Ruina)'
@@ -1209,14 +1199,14 @@ msg_deleting_nation_will_result_in_losing_residents: '&cAdvertencia: Eliminar tu
 msg_command_blocked_inside_towns: '&cNo puedes usar ese comando dentro de una ciudad.'
 msg_command_limited: 'Solo puedes usar ese comando en tus propios terrenos.'
 #Added in 0.104
-msg_plot_perm_claimed_at: '&2Reclamado el: &a%s'
+msg_plot_perm_claimed_at: 'Claimed at:'
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Uso del Exterior cambiado a %s en todos los mundos.'
 msg_regenerations_use_x_in_all_worlds: 'Regeneración cambiada a %s en todos los mundos.'
 #Added in 0.106
 msg_command_outsider_blocked: 'No puedes ejecutar ese comando porque no vives en %s.'
 #Added in 0.107
-msg_jailed_for_x_hours: ' &2por %s horas.'
+msg_jailed_for_x_hours: ' for %s hours.'
 msg_err_this_jail_has_no_cells: 'Esta cárcel no tiene celdas.'
 msg_err_no_cell_found_at_this_location: 'No se encontro una cárcel en esta ubicación.'
 msg_jail_cell_set: 'Celda establecida.'
@@ -1287,7 +1277,7 @@ msg_up_to_date: '&aEstás usando la versión más reciente.'
 msg_click_purchase: 'Clic para comprar'
 msg_you_must_join_this_town_to_claim_this_plot: 'Debes unirte a %s, para reclamar este terreno. ¿Te gustaría unirte y seguir reclamando terrenos?'
 #Added in 0.113
-status_trustedlist: '&2Confianza'
+status_trustedlist: 'Trusted'
 msg_click_to_edit: '&6Clic para editar.'
 permission_gui_header: 'Interfaz de Permisos de Towny'
 msg_last_edited: '&7&oFecha de modificación: %s (por %s)'
@@ -1343,3 +1333,26 @@ msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'No puede enca
 #Added in 0.120
 msg_resident_prompt: 'Introduce el nombre del jugador en el chat, o Q para salir. Esto expirará automáticamente en 30 segundos.'
 msg_prompt_cancel: 'Acción cancelada o tiempo agotado.'
+#Added in 0.121
+status_title_primary_colour: '&6' #Used to colour the majority of the title bar.
+status_title_secondary_colour: '&e' #Used to colour the words in the title bar.
+status_format_list_1: '&2' #First colour applied to status screen lists, ex: on /res, the friend list's Friends section.
+status_format_list_2: '&a' #Second colour applied to status screen lists, ex: on /res, the friend list's [1] section.
+status_format_list_3: '&f' #Third colour applied to status screen lists, ex: on /res, the friend list's list of friends' names section.
+status_format_key_value_key: '&2' #Colour applied to a status screen element which is just a line of text, or the key in a key/value element.
+status_format_key_value_value: '&a' #Colour applied to the value in a status screen element which has two parts, ex: Registered: SomeDate. (SomeDate is the value.)
+status_format_bracket_element: '&b' #Colour applied to a status element within a bracket, ex: [Bonus: #].
+status_format_hover_key: '&a' #Colour applied to a status screen element which is a hover-able key, ex: [Rank List]
+status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a hover-able status screen element.
+status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
+status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
+status_home_element: ' &7[Home: %s]'
+status_registered: 'Registered:'
+status_lastonline: 'Last Online:'
+status_fractions: '%s/%s'
+status_rank_list: 'Rank List'
+status_hover_click_for_more: 'Click for more information.'
+status_jailed: 'Jailed:'
+status_bad_yes: '&cYES'
+status_good_no: '&aNO'
+status_resident_tax_title: '%s''s Tax'
