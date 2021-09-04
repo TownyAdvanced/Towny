@@ -1341,5 +1341,5 @@ status_title_nopvp: '&a(Sin PVP)'
 msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'No puede encarcelar a su residente porque se encuentra en un lugar donde está prohibido.'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'No puede encarcelar a su residente porque se encuentra en un lugar donde se considera un enemigo.'
 #Added in 0.120
-msg_resident_prompt: 'Enter the name of the player in chat, or q to exit. This will automatically time out in 30 seconds.'
-msg_prompt_cancel: 'Prompt cancelled or timed out.'
+msg_resident_prompt: 'Introduce el nombre del jugador en el chat, o Q para salir. Esto expirará automáticamente en 30 segundos.'
+msg_prompt_cancel: 'Acción cancelada o tiempo agotado.'
