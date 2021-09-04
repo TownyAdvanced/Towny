@@ -1068,7 +1068,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			Resident resident = getResidentOrThrow(split[0]);
 
 			if (split.length == 1) {
-				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(resident, player));
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(resident, player, Translation.getLocale(sender))));
 				return;
 			}
 						
@@ -1145,7 +1145,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			
 			if (split.length == 1) {
-				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(town));
+				/*
+				 * This is run async because it will ping the economy plugin for the town bank value.
+				 */
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(town, Translation.getLocale(sender))));
 				return;
 			}
 
@@ -1421,7 +1424,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			if (split.length == 1) {
-				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(nation));
+				TownyMessaging.sendStatusScreen(getSender(), TownyFormatter.getStatus(nation, Translation.getLocale(sender)));
 				return;
 			}
 

@@ -7,13 +7,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
+
 public class StatusScreenEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	private List<String> addedLines = new ArrayList<>();
+	private StatusScreen screen;
 	
-	public StatusScreenEvent() {
+	public StatusScreenEvent(StatusScreen screen) {
 		super(!Bukkit.getServer().isPrimaryThread());
+		this.screen = screen;
 	}
 	
 	@Override
@@ -23,6 +27,10 @@ public class StatusScreenEvent extends Event {
 
 	public static HandlerList getHandlerList() {
 		return handlers;
+	}
+	
+	public StatusScreen getStatusScreen() {
+		return screen;
 	}
 
  	public boolean hasAdditionalLines() {

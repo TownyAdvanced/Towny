@@ -1022,10 +1022,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townBlock.setChanged(true);
 			townBlock.save();
 			if (!townBlock.hasPlotObjectGroup()) {
-				TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-				TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
-				TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+				TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms").forLocale(player));
+				TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
+				TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+												   Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+												   Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+												   Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 			}
 
 
@@ -1672,10 +1674,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						plugin.resetCache();
 						
 						TownyPermission perm = plotGroup.getPermissions();
-						TownyMessaging.sendMessage(player, Translatable.of("msg_set_perms"));
-						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-						TownyMessaging.sendMessage(player, (Colors.Green + " Perm: " + ((townBlockOwner instanceof Resident) ? perm.getColourString2().replace("n", "t") : perm.getColourString2().replace("f", "r"))));
-						TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + (!(CombatUtil.preventPvP(townBlock.getWorld(), townBlock)) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+						TownyMessaging.sendMessage(player, Translatable.of("msg_set_perms").forLocale(player));
+						TownyMessaging.sendMessage(player, (Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+						TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + (!(CombatUtil.preventPvP(townBlock.getWorld(), townBlock)) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+															Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+															Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+															Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 					}
 				};
 
@@ -2199,8 +2203,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (TownyAPI.getInstance().isWilderness(coord))
-			TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyAPI.getInstance().getTownyWorld(world), Translation.getLocale(player)));
+			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(TownyAPI.getInstance().getTownyWorld(world), Translation.getLocale(player)));
 		else
-			TownyMessaging.sendMessage(player, TownyFormatter.getStatus(coord.getTownBlockOrNull(), Translation.getLocale(player)));
+			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownBlockOrNull(), player, Translation.getLocale(player)));
 	}
 }

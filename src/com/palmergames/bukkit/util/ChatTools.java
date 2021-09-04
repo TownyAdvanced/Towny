@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.map.MinecraftFont;
+
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.object.Translation;
 
 /**
  * Useful function for use with the Minecraft Server chatbox.
@@ -15,6 +18,14 @@ import com.palmergames.bukkit.towny.object.TownyObject;
  */
 
 public class ChatTools {
+	final static int MAX_FONT_WIDTH = 321; // Two pixels less than the actual max width.
+	final static int SPACE_WIDTH = 4;
+	final static int UNDERSCORE_WIDTH = 6;
+	final static int WIDGET_WIDTH = 22;
+	final static String WIDGET = ".oOo.";
+	final static int SUBWIDGET_WIDTH = 22;
+	final static String SUBWIDGET = " .]|[. ";
+	
 	public static List<String> listArr(String[] args, String prefix) {
 
 		return list(Arrays.asList(args), prefix);
@@ -66,27 +77,40 @@ public class ChatTools {
 	}
 	
 	public static String formatTitle(String title) {
-
-		String line = ".oOo.__________________________________________________.oOo.";
-		int pivot = line.length() / 2;
-		String center = ".[ " + Colors.Yellow + title + Colors.Gold + " ].";
-		String out = Colors.Gold + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
-		out += center + line.substring(pivot + center.length() / 2);
-		return out;
-	}
-	/*
-	 * TODO: Get these ^ v methods using the ChatPaginator to manage the width more reliably.
-	 */
-	public static String formatSubTitle(String title) {
-
-		String line = " .]|[.                                                                     .]|[.";
-		int pivot = line.length() / 2;
-		String center = title + Colors.Gold;
-		String out = Colors.Gold + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
-		out += center + line.substring(pivot + center.length() / 2);
-		return out;
+		final MinecraftFont font = new MinecraftFont();
+		title = ".[ " + Translation.of("status_title_secondary_colour") + title + Translation.of("status_title_primary_colour") + " ].";
+		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
+		int remainder = MAX_FONT_WIDTH - (WIDGET_WIDTH * 2) - font.getWidth(Colors.strip(title)) - 2;
+		if (remainder < 14)
+			return Translation.of("status_title_primary_colour") + WIDGET + title + WIDGET;
+		if (remainder < 1)
+			return Translation.of("status_title_primary_colour") + title;
+		
+		int times = remainder / (UNDERSCORE_WIDTH * 2);
+		return Translation.of("status_title_primary_colour") + WIDGET + repeatChar(times, "_") + title + repeatChar(times, "_") + WIDGET;
 	}
 
+
+	public static String formatSubTitle(String subtitle) {
+		final MinecraftFont font = new MinecraftFont();
+		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
+		int remainder = MAX_FONT_WIDTH - (SUBWIDGET_WIDTH * 2) - font.getWidth(Colors.strip(subtitle)) - 2;
+		if (remainder < 10)
+			return Translation.of("status_title_primary_colour") + SUBWIDGET + subtitle + Translation.of("status_title_primary_colour") + SUBWIDGET;
+		if (remainder < 1)
+			return Translation.of("status_title_primary_colour") + subtitle;
+
+		int times = remainder / (SPACE_WIDTH * 2);
+		return Translation.of("status_title_primary_colour") + SUBWIDGET + repeatChar(times, " ") + subtitle + repeatChar(times, " ") + Translation.of("status_title_primary_colour")  + SUBWIDGET;
+	}
+
+	private static String repeatChar(int num, String character) {
+		String output = "";
+		for (int i = 0; i < num; i++)
+			output += character;
+		return output;
+	}
+	
 	public static String formatCommand(String command, String subCommand, String help) {
 		return formatCommand("", command, subCommand, help);
 	}
