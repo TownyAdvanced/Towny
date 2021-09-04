@@ -121,6 +121,11 @@ public interface ItemLists {
 	public static List<String> HANGING_ENTITIES = new ArrayList<>(Arrays.asList("ITEM_FRAME","GLOW_ITEM_FRAME","PAINTING"));
 	
 	/**
+	 * List of Campfires
+	 */
+	public static List<String> CAMPFIRES = new ArrayList<>(Arrays.asList("CAMPFIRE","SOUL_CAMPFIRE"));
+	
+	/**
 	 * Returns a pre-configured list from the GROUPS.
 	 * 
 	 * @param groupName - String value of one of the {@link ItemLists#GROUPS}

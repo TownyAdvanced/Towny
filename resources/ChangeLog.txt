@@ -6666,3 +6666,5 @@ v0.92.0.11:
   - Allow the notification.town_names_are_verbose setting to affect the {townname} placeholder usable in the titles/substitles notifications.
   - Fix Axolotl thieving.
   - Bump language files to 0.120.
+0.97.1.6:
+  - Add bypass for campfires being unable to be lit.
