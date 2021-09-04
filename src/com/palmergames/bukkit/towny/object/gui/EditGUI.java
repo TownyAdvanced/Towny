@@ -26,10 +26,10 @@ public class EditGUI extends PermissionGUI {
 		SetPermissionType[] newTypes = new SetPermissionType[4];
 		for (int i = 0; i < 4; i++) {
 			switch (getInventory().getItem(PermissionGUIUtil.getWoolSlots()[i]).getType()) {
-				case LIME_WOOL:
+				case SLIME_BLOCK:
 					newTypes[i] = SetPermissionType.SET;
 					break;
-				case RED_WOOL:
+				case BRICK:
 					newTypes[i] = SetPermissionType.NEGATED;
 					break;
 				default:

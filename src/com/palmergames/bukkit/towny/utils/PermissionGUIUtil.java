@@ -33,9 +33,9 @@ public class PermissionGUIUtil {
 	private static final int[] woolSlots = new int[]{21, 23, 30, 32};
 	
 	public enum SetPermissionType {
-		UNSET(Colors.Gray, Material.GRAY_WOOL),
-		SET(Colors.Green, Material.LIME_WOOL),
-		NEGATED(Colors.Red, Material.RED_WOOL);
+		UNSET(Colors.Gray, Material.STONE),
+		SET(Colors.Green, Material.SLIME_BLOCK),
+		NEGATED(Colors.Red, Material.BRICK);
 		
 		private String color;
 		private Material woolColour;
@@ -127,17 +127,17 @@ public class PermissionGUIUtil {
 			inventory.setItem(woolSlots[actionType.getIndex()], wool);
 		}
 		
-		ItemStack saveButton = new ItemStack(Material.LIME_WOOL);
+		ItemStack saveButton = new ItemStack(Material.SLIME_BLOCK);
 		ItemMeta saveButtonMeta = saveButton.getItemMeta();
 		saveButtonMeta.setDisplayName(Colors.LightGreen + ChatColor.BOLD + "Save");
 		saveButton.setItemMeta(saveButtonMeta);
 		
-		ItemStack backButton = new ItemStack(Material.RED_WOOL);
+		ItemStack backButton = new ItemStack(Material.BRICK);
 		ItemMeta backButtonMeta = saveButton.getItemMeta();
 		backButtonMeta.setDisplayName(Colors.Red + ChatColor.BOLD + "Back");
 		backButton.setItemMeta(backButtonMeta);
 		
-		ItemStack deleteButton = new ItemStack(Material.RED_WOOL);
+		ItemStack deleteButton = new ItemStack(Material.BRICK);
 		backButtonMeta.setDisplayName(Colors.Red + ChatColor.BOLD + "Delete");
 		deleteButton.setItemMeta(backButtonMeta);
 		

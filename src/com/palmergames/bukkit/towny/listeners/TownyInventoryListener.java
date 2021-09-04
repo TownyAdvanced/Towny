@@ -43,27 +43,27 @@ public class TownyInventoryListener implements Listener {
 			
 			ItemMeta meta = event.getCurrentItem().getItemMeta();
 			switch (event.getCurrentItem().getType()) {
-				case LIME_WOOL:
+				case SLIME_BLOCK:
 					if (meta.getDisplayName().equals(Colors.LightGreen + ChatColor.BOLD + "Save")) {
 						((EditGUI) event.getInventory().getHolder()).saveChanges();
 					} else {
 						meta.setDisplayName(Colors.Red + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
-						event.getCurrentItem().setType(Material.RED_WOOL);
+						event.getCurrentItem().setType(Material.BRICK);
 					}
 					break;
-				case RED_WOOL:
+				case BRICK:
 					if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Back")) {
 						((EditGUI) event.getInventory().getHolder()).exitScreen();
 					} else if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Delete")) {
 						((EditGUI) event.getInventory().getHolder()).deleteResident();
 					} else {
 						meta.setDisplayName(Colors.Gray + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
-						event.getCurrentItem().setType(Material.GRAY_WOOL);
+						event.getCurrentItem().setType(Material.STONE);
 					}
 					break;
-				case GRAY_WOOL:
+				case STONE:
 					meta.setDisplayName(Colors.LightGreen + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
-					event.getCurrentItem().setType(Material.LIME_WOOL);
+					event.getCurrentItem().setType(Material.SLIME_BLOCK);
 					break;
 				default:
 					return;
