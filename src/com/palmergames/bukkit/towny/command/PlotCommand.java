@@ -2138,6 +2138,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					HelpMenu.PLOT_PERM_HELP.send(player);
 					return;
 				}
+				
+				try {
+					plotTestOwner(getResidentOrThrow(player.getUniqueId()), townBlock);
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+					return;
+				}
 
 				if (townBlock.hasPlotObjectGroup()) {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_plot_belongs_to_group", "/plot group perm remove"));
@@ -2162,6 +2169,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("add")) {
 				if (args.length < 2) {
 					HelpMenu.PLOT_PERM_HELP.send(player);
+					return;
+				}
+
+				try {
+					plotTestOwner(getResidentOrThrow(player.getUniqueId()), townBlock);
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 					return;
 				}
 
