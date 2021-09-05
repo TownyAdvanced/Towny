@@ -74,8 +74,8 @@ public class CombatUtil {
 			Projectile projectile = (Projectile) attacker;
 			Object source = projectile.getShooter();
 			
-			if (source instanceof Entity) {
-				attacker = (Entity) source;
+			if (source instanceof Entity entity) {
+				attacker = entity;
 			} else if (source != null) {
 				if (CombatUtil.preventDispenserDamage(((BlockProjectileSource) source).getBlock(), defender, cause))
 					return true;
@@ -83,10 +83,10 @@ public class CombatUtil {
 
 		}
 
-		if (attacker instanceof Player)
-			a = (Player) attacker;
-		if (defender instanceof Player)
-			b = (Player) defender;
+		if (attacker instanceof Player player)
+			a = player;
+		if (defender instanceof Player player)
+			b = player;
 
 		// Allow players to injure themselves
 		if (a == b && a != null && b != null)
@@ -266,8 +266,7 @@ public class CombatUtil {
 				/*
 				* Allow wolves to attack unprotected entites (such as skeletons), but not protected ones.
 				*/
-				if (attackingEntity instanceof Wolf && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
-					Wolf wolf = (Wolf) attackingEntity;
+				if (attackingEntity instanceof Wolf wolf && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
 					if (isATamedWolfWithAOnlinePlayer(wolf)) {
 						Player owner = BukkitTools.getPlayer(wolf.getOwner().getName());
 						return !PlayerCacheUtil.getCachePermission(owner, defendingEntity.getLocation(), Material.AIR, ActionType.DESTROY);

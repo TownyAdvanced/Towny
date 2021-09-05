@@ -24,7 +24,7 @@
     </organization>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>16</java.version>
         <project.bukkitAPIVersion>1.14</project.bukkitAPIVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -187,6 +187,12 @@
             <artifactId>json</artifactId>
             <version>20210307</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.bsideup.jabel</groupId>
+            <artifactId>jabel-javac-plugin</artifactId>
+            <version>0.4.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -197,8 +203,12 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
+                    <release>8</release>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <compilerArgs>
+                        <arg>-Xplugin:jabel</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -333,17 +343,40 @@
                 </plugins>
             </build>
         </profile>
+        <!--
         <profile>
-            <!-- Enforces JDK 9+ to generate safe bytecode when targeting Java 8. -->
-            <!-- See: https://stackoverflow.com/questions/64868952/how-should-javac-11-link-methods-overridden-in-later-versions-with-a-java-8-targ -->
+             Enforces JDK 9+ to generate safe bytecode when targeting Java 8.
+             See: https://stackoverflow.com/questions/64868952/how-should-javac-11-link-methods-overridden-in-later-versions-with-a-java-8-targ
             <id>enforce-java-8-bytecode</id>
             <activation>
-                <!-- Activate automatically for JDK 9+. No manual call needed. -->
+                Activate automatically for JDK 9+. No manual call needed.
                 <jdk>[9,)</jdk>
             </activation>
             <properties>
                 <maven.compiler.release>8</maven.compiler.release>
             </properties>
+        </profile> -->
+        <profile>
+            <id>intellij-idea-only</id>
+            <activation>
+                <property>
+                    <name>idea.maven.embedder.version</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <release>${java.version}</release>
+                            <compilerArgs>
+                                <arg>--enable-preview</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>

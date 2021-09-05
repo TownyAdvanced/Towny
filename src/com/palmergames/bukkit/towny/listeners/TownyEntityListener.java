@@ -182,7 +182,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		if (event.getTarget() instanceof Player) {
+		if (event.getTarget() instanceof Player player) {
 			if (event.getReason().equals(EntityTargetEvent.TargetReason.TEMPT)) {
 				Location loc = event.getEntity().getLocation();
 				if (TownyAPI.getInstance().isWilderness(loc))
@@ -192,7 +192,7 @@ public class TownyEntityListener implements Listener {
 					return;	
 
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) event.getTarget(), loc, Material.DIRT));
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, loc, Material.DIRT));
 			}
 		}
 	}
@@ -355,8 +355,8 @@ public class TownyEntityListener implements Listener {
 		Object source = potion.getShooter();
 		Block dispenser = null;
 
-		if (source instanceof BlockProjectileSource) {
-			dispenser = ((BlockProjectileSource) source).getBlock();
+		if (source instanceof BlockProjectileSource blockProjectileSource) {
+			dispenser = blockProjectileSource.getBlock();
 		} else {
 			attacker = (Entity) source;
 		}
@@ -418,7 +418,7 @@ public class TownyEntityListener implements Listener {
 					event.setCancelled(true);
 			}
 			// handle villager baby removal in wilderness
-			if (livingEntity instanceof Villager && !((Villager) livingEntity).isAdult() && (TownySettings.isRemovingVillagerBabiesWorld())) {
+			if (livingEntity instanceof Villager villager && !villager.isAdult() && (TownySettings.isRemovingVillagerBabiesWorld())) {
 				event.setCancelled(true);
 			}
 			// Handle mob removal in wilderness
@@ -437,7 +437,7 @@ public class TownyEntityListener implements Listener {
 			}
 			
 			// handle villager baby removal in towns
-			if (livingEntity instanceof Villager && !((Villager) livingEntity).isAdult() && TownySettings.isRemovingVillagerBabiesTown()) {
+			if (livingEntity instanceof Villager villager && !villager.isAdult() && TownySettings.isRemovingVillagerBabiesTown()) {
 				event.setCancelled(true);
 			}
 		}
@@ -625,9 +625,9 @@ public class TownyEntityListener implements Listener {
 		Entity combuster = event.getCombuster();
 		Entity defender = event.getEntity();
 		LivingEntity attacker = null;
-		if (combuster instanceof Projectile) {
+		if (combuster instanceof Projectile projectile) {
 			
-			Object source = ((Projectile) combuster).getShooter();
+			Object source = projectile.getShooter();
 			
 			if (source instanceof BlockProjectileSource) {
 				if (CombatUtil.preventDispenserDamage(((BlockProjectileSource) source).getBlock(), defender, DamageCause.PROJECTILE)) {
@@ -699,8 +699,7 @@ public class TownyEntityListener implements Listener {
 		/*
 		 * It's a player or an entity (probably an explosion)
 		 */
-		if (event instanceof HangingBreakByEntityEvent) {
-			HangingBreakByEntityEvent evt = (HangingBreakByEntityEvent) event;
+		if (event instanceof HangingBreakByEntityEvent evt) {
 			Object remover = evt.getRemover();
 			
 			/*
