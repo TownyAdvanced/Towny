@@ -6690,3 +6690,5 @@ v0.92.0.11:
     - View the tax requirements of another resident.
 0.97.1.7:
   - Fix ChatTools formatTitle not handling some languages properly on startup.
+0.97.1.8:
+  - Raise language level to 16 using jabel, courtesy of Warriorrrr with PR #5259.
