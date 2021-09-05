@@ -79,6 +79,9 @@ public class ChatTools {
 	public static String formatTitle(String title) {
 		final MinecraftFont font = new MinecraftFont();
 		title = ".[ " + Translation.of("status_title_secondary_colour") + title + Translation.of("status_title_primary_colour") + " ].";
+		// Some language characters do not like being measured with the mojang font.
+		if (!font.isValid(title))
+			return legacyFormatTitle(title);
 		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
 		int remainder = MAX_FONT_WIDTH - (WIDGET_WIDTH * 2) - font.getWidth(Colors.strip(title)) - 2;
 		if (remainder < 14)
@@ -91,8 +94,20 @@ public class ChatTools {
 	}
 
 
+	private static String legacyFormatTitle(String title) {
+		String line = ".oOo.__________________________________________________.oOo.";
+		int pivot = line.length() / 2;
+		String center = title;
+		String out = Translation.of("status_title_primary_colour") + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
+		out += center + line.substring(pivot + center.length() / 2);
+		return out;
+	}
+
 	public static String formatSubTitle(String subtitle) {
 		final MinecraftFont font = new MinecraftFont();
+		// Some language characters do not like being measured with the mojang font.
+		if (!font.isValid(subtitle))
+			return legacyFormatSubtitle(subtitle);
 		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
 		int remainder = MAX_FONT_WIDTH - (SUBWIDGET_WIDTH * 2) - font.getWidth(Colors.strip(subtitle)) - 2;
 		if (remainder < 10)
@@ -104,6 +119,15 @@ public class ChatTools {
 		return Translation.of("status_title_primary_colour") + SUBWIDGET + repeatChar(times, " ") + subtitle + repeatChar(times, " ") + Translation.of("status_title_primary_colour")  + SUBWIDGET;
 	}
 
+	private static String legacyFormatSubtitle(String subtitle) {
+		String line = " .]|[.                                                                     .]|[.";
+		int pivot = line.length() / 2;
+		String center = subtitle + Translation.of("status_title_primary_colour");
+		String out = Translation.of("status_title_primary_colour") + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
+		out += center + line.substring(pivot + center.length() / 2);
+		return out;	
+	}
+	
 	private static String repeatChar(int num, String character) {
 		String output = "";
 		for (int i = 0; i < num; i++)
