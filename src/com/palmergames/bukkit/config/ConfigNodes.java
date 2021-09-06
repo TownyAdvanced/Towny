@@ -2214,7 +2214,7 @@ public enum ConfigNodes {
 
 	BANKHISTORY_BOOK(
 		"bank_history.book",
-		"{time}\n\n{type} of {amount} {to-from} {name}\n\nReason: {reason}\n\nBalance: {amount}",
+		"{time}\n\n{type} of {amount} {to-from} {name}\n\nReason: {reason}\n\nBalance: {balance}",
 		"",
 		"# This allows you to modify the style displayed via bankhistory commands."
 	),

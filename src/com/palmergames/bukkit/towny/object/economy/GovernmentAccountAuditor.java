@@ -37,7 +37,7 @@ public class GovernmentAccountAuditor implements AccountAuditor {
 				.replace("{to-from}", (transaction.getType() == TransactionType.DEPOSIT ? " to " : " from "))
 				.replace("{name}", transaction.getAccount().getName())
 				.replace("{reason}", transaction.getReason())
-				.replace("{amount}", ChatColor.stripColor(TownyEconomyHandler.getFormattedBalance(transaction.getBalance())))
+				.replace("{balance}", ChatColor.stripColor(TownyEconomyHandler.getFormattedBalance(transaction.getBalance())))
 			));
 		}
 		
