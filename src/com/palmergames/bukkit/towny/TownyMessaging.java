@@ -114,18 +114,15 @@ public class TownyMessaging {
 	 * @param msg the message being sent
 	 */
 	public static void sendMsg(CommandSender sender, String msg) {
-		if (sender == null) {
-			sendErrorMsg("Sender cannot be null!");
+		if (sender == null || msg.isEmpty())
 			return;
-		}
 		
-		if (sender instanceof Player) {
-			Player p = (Player)sender;
-			p.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
+		if (sender instanceof Player p) {
+			p.sendMessage(Translatable.of("default_towny_prefix").forLocale(p) + ChatColor.GREEN + msg);
 		} else if (sender instanceof ConsoleCommandSender) {
 			sender.sendMessage(ChatColor.stripColor(msg));
 		} else {
-			sender.sendMessage(Translation.of("default_towny_prefix") + ChatColor.GREEN + msg);
+			sender.sendMessage(Translatable.of("default_towny_prefix").forLocale(sender) + ChatColor.GREEN + msg);
 		}
 		
 		sendDevMsg(msg);
@@ -182,10 +179,8 @@ public class TownyMessaging {
 	public static void sendDevMsg(String msg) {
 		if (TownySettings.isDevMode()) {
 			Player townyDev = BukkitTools.getPlayer(TownySettings.getDevName());
-			if (townyDev == null) {
-				return;
-			}
-			townyDev.sendMessage(Translation.of("default_towny_prefix") + " DevMode: " + ChatColor.RED + msg);
+			if (townyDev != null)
+				townyDev.sendMessage(Translatable.of("default_towny_prefix").forLocale(townyDev) + " DevMode: " + ChatColor.RED + msg);
 		}
 	}
 
@@ -233,16 +228,17 @@ public class TownyMessaging {
 	 * @param line the String to send
 	 */
 	public static void sendMessage(Object sender, String line) {
-		if ((sender instanceof Player)) {
-			((Player) sender).sendMessage(line);
-		} else if (sender instanceof CommandSender) {
-			((CommandSender) sender).sendMessage(Colors.strip(line));
-		} else if (sender instanceof Resident) {
-			Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
-			if (p == null) {
-				return;
-			}
-			p.sendMessage(Colors.strip(line));
+		if (line.isEmpty())
+			return;
+		
+		if (sender instanceof Player player) {
+			player.sendMessage(line);
+		} else if (sender instanceof CommandSender commandSender) {
+			commandSender.sendMessage(Colors.strip(line));
+		} else if (sender instanceof Resident resident) {
+			Player p = TownyAPI.getInstance().getPlayer(resident);
+			if (p != null)
+				p.sendMessage(Colors.strip(line));
 		}
 	}
 
@@ -870,36 +866,41 @@ public class TownyMessaging {
 	}
 	
 	public static void sendGlobalMessage(Translatable translatable) {
-		LOGGER.info(ChatTools.stripColour("[Global Message] " + translatable.translate()));
+		LOGGER.info("[Global Message] " + translatable.stripColors(true).translate());
 		for (Player player : Bukkit.getOnlinePlayers())
 			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
 				sendMsg(player, translatable);
 	}
 	
 	public static void sendMessage(Object sender, Translatable message) {
-		if (sender instanceof Player) {
-			((Player) sender).sendMessage(message.translate(Translation.getLocale((Player) sender)));
-		} else if (sender instanceof CommandSender) {
-			((CommandSender) sender).sendMessage(message.stripColors(true).translate(Translation.getLocale((CommandSender) sender)));
-		} else if (sender instanceof Resident) {
-			Player p = TownyAPI.getInstance().getPlayer((Resident) sender);
+		if (sender instanceof Player player) {
+			sendTranslatedMessage(player, message.translate(Translation.getLocale(player)));
+		} else if (sender instanceof CommandSender commandSender) {
+			sendTranslatedMessage(commandSender, message.stripColors(true).translate(Translation.getLocale(commandSender)));
+		} else if (sender instanceof Resident resident) {
+			Player p = TownyAPI.getInstance().getPlayer(resident);
 			if (p != null)
-				p.sendMessage(message.stripColors(true).translate(Translation.getLocale(p)));
+				sendTranslatedMessage(p, message.stripColors(true).translate(Translation.getLocale(p)));
 		}
+	}
+	
+	private static void sendTranslatedMessage(CommandSender sender, String message) {
+		if (!message.isEmpty())
+			sender.sendMessage(message);
 	}
 	
 	public static void sendPrefixedNationMessage(Nation nation, Translatable message) {
 		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
 		
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendMessage(Translation.translateTranslatables(player, "", Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())), message));
+			sendMessage(player, Translation.translateTranslatables(player, "", Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())), message));
 	}
 	
 	public static void sendPrefixedTownMessage(Town town, Translatable message) {
 		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + message.translate()));
 		
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendMessage(Translation.translateTranslatables(player, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), message));
+			sendMessage(player, Translation.translateTranslatables(player, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), message));
 	}
 	
 	public static void sendNationMessagePrefixed(Nation nation, Translatable message) {
