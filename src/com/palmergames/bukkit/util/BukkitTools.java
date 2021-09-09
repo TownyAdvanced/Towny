@@ -120,15 +120,11 @@ public class BukkitTools {
 	/**
 	 * Tests if this player is online.
 	 * 
-	 * @param playerId the UUID or name of the player.
+	 * @param name the name of the player.
 	 * @return a true value if online
 	 */
-	public static boolean isOnline(String playerId) {
-		for (Player players : getOnlinePlayers()) {
-			if (players.getName().equals(playerId))
-				return true;
-		}
-		return false; 
+	public static boolean isOnline(String name) {
+		return Bukkit.getPlayer(name) != null;
 	}
 	
 	public static List<World> getWorlds() {
