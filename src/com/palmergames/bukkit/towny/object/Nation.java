@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -25,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -357,59 +357,41 @@ public class Nation extends Government {
 	 * nation capital homeblock. Results in towns whose homeblocks are no 
 	 * longer close enough to the capital homeblock being removed from 
 	 * the nation.
-	 * 
-	 * @throws TownyException - Generic TownyException
 	 */
-	public void recheckTownDistance() throws TownyException {
-		if(capital != null) {
-			if (TownySettings.getNationRequiresProximity() > 0) {
-				final Coord capitalCoord = capital.getHomeBlock().getCoord();
-				Iterator<Town> it = towns.iterator();
-				while(it.hasNext()) {
-					Town town = it.next();
-					Coord townCoord = town.getHomeBlock().getCoord();
-					if (!capital.getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
-						it.remove();
-						continue;
-					}
-
-					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - (double)townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - (double)townCoord.getZ(), 2));
-					if (distance > TownySettings.getNationRequiresProximity()) {
-						TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", this.getName()));
-						TownyMessaging.sendPrefixedNationMessage(this, Translation.of("msg_nation_town_left", town.getName()));
-						this.remove(town);
-						it.remove();
-					}
-				}
-			}
+	public void removeOutOfRangeTowns() {
+		if(capital != null && TownySettings.getNationRequiresProximity() > 0) {
+			List<Town> toRemove = gatherOutOfRangeTowns(new ArrayList<>(getTowns()), capital);
+			if (!toRemove.isEmpty())
+				toRemove.stream().forEach(town -> {
+					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", this.getName()));
+					TownyMessaging.sendPrefixedNationMessage(this, Translation.of("msg_nation_town_left", town.getName()));
+					remove(town);
+				});
 		}
 	}
 	
 	/**
-	 * A dry-run method for rechecking town distances to a new nation capital/
-	 * moved nation capital homeblock.
+	 * A method which returns a list of Towns too far from the given capital town.
 	 * 
 	 * @param towns - The list of towns to check.
-	 * @param newCapital - The capital city from which to check the distance.
-	 * @throws TownyException - Generic TownyException
-	 * @return removedTowns - A list of Towns which would be removed under a real recheckTownDistance().
+	 * @param capital - The Town from which to check the distance.
+	 * @return removedTowns - A list of Towns which would be removed by removeOutOfRangeTowns().
 	 */
-	public List<Town> recheckTownDistanceDryRun(List<Town> towns, Town newCapital) throws TownyException {
+	public List<Town> gatherOutOfRangeTowns(List<Town> towns, Town capital) {
 		List<Town> removedTowns = new ArrayList<>();
-		if(newCapital != null) {
-			if (TownySettings.getNationRequiresProximity() > 0) {
-				final Coord capitalCoord = newCapital.getHomeBlock().getCoord();
-				
-				for (Town town : towns) {
-					Coord townCoord = town.getHomeBlock().getCoord();
-					if (!newCapital.getHomeblockWorld().equals(town.getHomeblockWorld())) {
-						continue;
-					}
-					final double distance = Math.sqrt(Math.pow(capitalCoord.getX() - (double)townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - (double)townCoord.getZ(), 2));
-					if (distance > TownySettings.getNationRequiresProximity()) {
-						removedTowns.add(town);
-					}
-				}
+		if (capital != null && capital.hasHomeBlock() && TownySettings.getNationRequiresProximity() > 0) {
+			final Coord capitalCoord = capital.getHomeBlockOrNull().getCoord();
+			
+			for (Town town : towns) {
+				if (!town.hasHomeBlock())
+					continue;
+				Coord townCoord = town.getHomeBlockOrNull().getCoord();
+				if (!capital.getHomeblockWorld().equals(town.getHomeblockWorld()))
+					continue;
+
+				final double distance = MathUtil.distance(capitalCoord.getX(), townCoord.getX(), capitalCoord.getZ(), townCoord.getZ());
+				if (distance > TownySettings.getNationRequiresProximity())
+					removedTowns.add(town);
 			}
 		}
 		return removedTowns;
