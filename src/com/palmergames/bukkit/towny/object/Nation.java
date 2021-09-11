@@ -365,7 +365,8 @@ public class Nation extends Government {
 				toRemove.stream().forEach(town -> {
 					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", this.getName()));
 					TownyMessaging.sendPrefixedNationMessage(this, Translation.of("msg_nation_town_left", town.getName()));
-					remove(town);
+					town.removeNation();
+					town.save();
 				});
 		}
 	}
