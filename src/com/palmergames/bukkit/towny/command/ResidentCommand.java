@@ -162,6 +162,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "r");
 					break;
+				case "jail":
+					if (args.length == 2)
+						return Collections.singletonList("paybail");
+					break;
 				case "toggle":
 					if (args.length == 2) {
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_TOGGLE, residentToggleTabCompletes), args[1]);

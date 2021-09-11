@@ -6695,3 +6695,4 @@ v0.92.0.11:
   - Fix bankhistory books not showing correct final balance.
     - Closes #5269.
   - Fix typos in TownyFormatter, courtesy of LudwigHornslied with PR #5270.
+  - Fix missing tabcomplete for /res jail paybail.
