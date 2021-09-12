@@ -6701,3 +6701,4 @@ v0.92.0.11:
   - Prevent empty messages from being sent, courtesy of Warriorrrr with PR #5272.
   - Bump language files to 0.122.
   - New Language added to Crowdin: Vietnamese.
+  - Update maven-shade-plugin to a version which supports Java 16.
