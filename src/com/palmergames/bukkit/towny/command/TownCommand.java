@@ -2525,8 +2525,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			// Test whether towns will be removed from the nation
 			if (nation != null && TownySettings.getNationRequiresProximity() > 0 && town.isCapital()) {
-				// Do a dry-run of the proximity test.
-				List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns(), town);
+				// Determine if some of the nation's towns' homeblocks will be out of range.
+				List<Town> removedTowns = nation.gatherOutOfRangeTowns(nation.getTowns(), town);
 				
 				// Oh no, some the nation will lose at least one town, better make a confirmation.
 				if (!removedTowns.isEmpty()) {
@@ -2535,17 +2535,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					final Nation finalNation = nation;
 					final Location playerLocation = player.getLocation();
 					Confirmation.runOnAccept(() -> {
-						try {
-							// Set town homeblock and run the recheckTownDistance for real.
-							finalTown.setHomeBlock(finalTB);
-							finalTown.setSpawn(playerLocation);
-							town.setMovedHomeBlockAt(System.currentTimeMillis());
-							finalNation.recheckTownDistance();
-							TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_home", coord.toString()));
-						} catch (TownyException e) {
-							TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-							return;
-						}
+						// Set town homeblock and remove the out of range towns.
+						finalTown.setHomeBlock(finalTB);
+						finalTown.setSpawn(playerLocation);
+						town.setMovedHomeBlockAt(System.currentTimeMillis());
+						finalNation.removeOutOfRangeTowns();
+						TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_home", coord.toString()));
 					}).setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
 					  .sendTo(player);
 

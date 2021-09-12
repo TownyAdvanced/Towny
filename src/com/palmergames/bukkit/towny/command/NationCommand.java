@@ -541,7 +541,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					Resident resident = getResidentOrThrow(player.getUniqueId());
 					if (!resident.isKing())
 						throw new TownyException(Translatable.of("msg_err_merging_for_kings_only").forLocale(player));
-					mergeNation(player, split[1]);
+					mergeNation(player, resident.getNationOrNull(), split[1]);
 				}
 				
 			} else if (split[0].equalsIgnoreCase("withdraw")) {
@@ -1169,16 +1169,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		return nation;
 	}
 
-	public void mergeNation(Player player, String name) throws TownyException {
+	public void mergeNation(Player player, Nation remainingNation, String name) throws TownyException {
 		
 		Nation nation = TownyUniverse.getInstance().getNation(name);
-		Nation remainingNation;
-		
-		try {
-			remainingNation = getResidentOrThrow(player.getUniqueId()).getTownOrNull().getNationOrNull();
-		} catch (NotRegisteredException e) {
-			throw new TownyException(Translatable.of("msg_err_invalid_name", name));
-		}
 		if (nation == null || remainingNation.getName().equalsIgnoreCase(name))
 			throw new TownyException(Translatable.of("msg_err_invalid_name", name));
 
@@ -1189,12 +1182,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		TownyMessaging.sendMessage(BukkitTools.getPlayer(king.getName()), Translatable.of("msg_would_you_merge_your_nation_into_other_nation", nation, remainingNation, remainingNation));
 		if (TownySettings.getNationRequiresProximity() > 0) {
-			List<Town> towns = nation.getTowns();
+			List<Town> towns = new ArrayList<>(nation.getTowns());
 			towns.addAll(remainingNation.getTowns());
-			List<Town> removedTowns = remainingNation.recheckTownDistanceDryRun(towns, remainingNation.getCapital());
+			List<Town> removedTowns = remainingNation.gatherOutOfRangeTowns(towns, remainingNation.getCapital());
 			if (!removedTowns.isEmpty()) {
 				TownyMessaging.sendMessage(nation.getKing(), Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")));
-				TownyMessaging.sendMessage(remainingNation.getKing(), Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")));
+				TownyMessaging.sendMessage(remainingNation.getKing(), Translatable.of("msg_warn_the_following_towns_will_be_removed_from_the_merged_nation", StringMgmt.join(removedTowns, ", ")));
 			}
 		}
 		Confirmation.runOnAccept(() -> {
@@ -1210,6 +1203,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				BukkitTools.getPluginManager().callEvent(new NationMergeEvent(nation, remainingNation));
 				TownyUniverse.getInstance().getDataSource().mergeNation(nation, remainingNation);
 				TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
+				if (TownySettings.getNationRequiresProximity() > 0)
+					remainingNation.removeOutOfRangeTowns();
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 			}
@@ -1253,9 +1248,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_town_left", StringMgmt.remUnderscore(finalTown.getName())));
 				TownyMessaging.sendPrefixedTownMessage(finalTown, Translatable.of("msg_town_left_nation", StringMgmt.remUnderscore(nation.getName())));
 
-				try {
-					nation.recheckTownDistance();
-				} catch (TownyException e) {}
+				nation.removeOutOfRangeTowns();
 			}).sendTo(player);
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage(player));
@@ -2208,23 +2201,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 						// Do proximity tests.
 						if (TownySettings.getNationRequiresProximity() > 0 ) {
-							List<Town> removedTowns = nation.recheckTownDistanceDryRun(nation.getTowns(), newCapital);
+							List<Town> removedTowns = nation.gatherOutOfRangeTowns(nation.getTowns(), newCapital);
 							
 							// There are going to be some towns removed from the nation, so we'll do a Confirmation.
 							if (!removedTowns.isEmpty()) {
 								String title = Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")).forLocale(player);
 								final Nation finalNation = nation;
 								Confirmation.runOnAccept(() -> {
-									
-									try {
-										finalNation.setCapital(newCapital);										
-										finalNation.recheckTownDistance();
-										plugin.resetCache();
-										TownyMessaging.sendPrefixedNationMessage(finalNation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
-										
-									} catch (TownyException e) {
-										TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-									}
+									finalNation.setCapital(newCapital);										
+									finalNation.removeOutOfRangeTowns();
+									plugin.resetCache();
+									TownyMessaging.sendPrefixedNationMessage(finalNation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
 								})
 								.setTitle(title)
 								.sendTo(player);
