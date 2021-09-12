@@ -535,7 +535,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public boolean addTownRank(String rank) {
 		if (!hasTownRank(rank)) {
 			townRanks.add(rank);
-			if (BukkitTools.isOnline(this.getName()))
+			if (isOnline())
 				TownyPerms.assignPermissions(this, null);
 			BukkitTools.getPluginManager().callEvent(new TownAddResidentRankEvent(this, rank, town));
 			return true;
@@ -571,7 +571,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		if (hasTownRank(rank)) {
 			townRanks.remove(rank);
-			if (BukkitTools.isOnline(this.getName()))
+			if (isOnline())
 				TownyPerms.assignPermissions(this, null);
 
 			BukkitTools.getPluginManager().callEvent(new TownRemoveResidentRankEvent(this, rank, town));
@@ -585,7 +585,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		if (!hasNationRank(rank)) {
 			nationRanks.add(rank);
-			if (BukkitTools.isOnline(this.getName()))
+			if (isOnline())
 				TownyPerms.assignPermissions(this, null);
 			return true;
 		}
@@ -834,6 +834,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			return getTownOrNull().getNationOrNull();
 		else
 			return null;
+	}
+	
+	public boolean isOnline() {
+		return BukkitTools.isOnline(getName());
 	}
 
 	/**
