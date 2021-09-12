@@ -155,13 +155,13 @@ public class TownyRegenAPI {
 	 */
 	public static void removePlotChunksForWorld(TownyWorld world, boolean save) {
 		Hashtable<String, PlotBlockData> plotChunks = new Hashtable<>();
-		for (String key : getPlotChunks().keySet()) {
+		// Rebuild the list of plotChunks, skipping the ones belonging to the given world.
+		for (String key : getPlotChunks().keySet())
 			if (!getPlotChunks().get(key).getWorldName().equals(world.getName()))
 				plotChunks.put(key, getPlotChunks().get(key));
-		}
-		
-		if (!plotChunks.isEmpty())
-			setPlotChunks(plotChunks);
+
+		// Set the new plotchunks.
+		setPlotChunks(plotChunks);
 		
 		if (save)
 			TownyUniverse.getInstance().getDataSource().saveRegenList();

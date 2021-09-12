@@ -6708,3 +6708,4 @@ v0.92.0.11:
   - Remove physical-player-interactions from automatically being treated as switch actions.
     - Pressure plates are already included in the switch_id list by default and should cause no issue to existing servers.
     - Closes #5140.
+  - Fix /tw toggle revertunclaim not stopping reverts in progress.
