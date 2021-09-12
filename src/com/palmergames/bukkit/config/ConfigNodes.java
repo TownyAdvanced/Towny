@@ -16,8 +16,8 @@ public enum ConfigNodes {
 			"# The language file you wish to use",
 			"# Available languages: da-DK.yml, en-US.yml, es-419.yml, es-ES.yml, fr-FR.yml,",
 			"# de-DE.yml, he-IL.yml, id-ID.yml, it-IT.yml, ko-KR.yml, nl-NL.yml, no-NO.yml,",
-			"# pl-PL.yml, pt-BR.yml, ro-RO.yml, ru-RU.yml, sv-SE.yml, tr-TR.yml, zh-CN.yml,",
-			"# zh-TW.yml"),
+			"# pl-PL.yml, pt-BR.yml, ro-RO.yml, ru-RU.yml, sv-SE.yml, tr-TR.yml, vi-VN.yml,",
+			"# zh-CN.yml, zh-TW.yml"),
 	PERMS(
 			"permissions",
 			"",
