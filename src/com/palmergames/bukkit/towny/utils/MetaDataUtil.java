@@ -13,9 +13,9 @@ import com.palmergames.bukkit.towny.object.metadata.StringDataField;
  * @author LlmDl
  *
  */
-class MetaDataUtil {
+public class MetaDataUtil {
 
-	static String getString(TownyObject townyObject, StringDataField sdf) {
+	public static String getString(TownyObject townyObject, StringDataField sdf) {
 		CustomDataField<?> cdf = townyObject.getMetadata(sdf.getKey());
 		if (cdf instanceof StringDataField) {
 			return ((StringDataField) cdf).getValue();
@@ -23,35 +23,35 @@ class MetaDataUtil {
 		return "";
 	}
 
-	static boolean getBoolean(TownyObject townyObject, BooleanDataField bdf) {
+	public static boolean getBoolean(TownyObject townyObject, BooleanDataField bdf) {
 		CustomDataField<?> cdf = townyObject.getMetadata(bdf.getKey());
 		if (cdf instanceof BooleanDataField)
 			return ((BooleanDataField) cdf).getValue();
 		return false;
 	}
 
-	static long getLong(TownyObject townyObject, LongDataField ldf) {
+	public static long getLong(TownyObject townyObject, LongDataField ldf) {
 		CustomDataField<?> cdf = townyObject.getMetadata(ldf.getKey());
 		if (cdf instanceof LongDataField)
 			return ((LongDataField) cdf).getValue();
 		return 0l;
 	}
 	
-	static int getInt(TownyObject townyObject, IntegerDataField idf) {
+	public static int getInt(TownyObject townyObject, IntegerDataField idf) {
 		CustomDataField<?> cdf = townyObject.getMetadata(idf.getKey());
 		if (cdf instanceof IntegerDataField) 
 			return ((IntegerDataField) cdf).getValue();
 		return 0;				
 	}
 	
-	static double getDouble(TownyObject townyObject, DecimalDataField ddf) {
+	public static double getDouble(TownyObject townyObject, DecimalDataField ddf) {
 		CustomDataField<?> cdf = townyObject.getMetadata(ddf.getKey());
 		if (cdf instanceof DecimalDataField)
 			return ((DecimalDataField) cdf).getValue();
 		return 0.0;
 	}
 
-	static void setString(TownyObject townyObject, StringDataField sdf, String string) {
+	public static void setString(TownyObject townyObject, StringDataField sdf, String string) {
 		CustomDataField<?> cdf = townyObject.getMetadata(sdf.getKey());
 		if (cdf instanceof StringDataField) {
 			StringDataField value = (StringDataField) cdf;
@@ -60,7 +60,7 @@ class MetaDataUtil {
 		}
 	}
 
-	static void setBoolean(TownyObject townyObject, BooleanDataField bdf, boolean bool) {
+	public static void setBoolean(TownyObject townyObject, BooleanDataField bdf, boolean bool) {
 		CustomDataField<?> cdf = townyObject.getMetadata(bdf.getKey());
 		if (cdf instanceof BooleanDataField) {
 			BooleanDataField value = (BooleanDataField) cdf;
@@ -69,7 +69,7 @@ class MetaDataUtil {
 		}
 	}
 
-	static void setLong(TownyObject townyObject, LongDataField ldf, long num) {
+	public static void setLong(TownyObject townyObject, LongDataField ldf, long num) {
 		CustomDataField<?> cdf = townyObject.getMetadata(ldf.getKey());
 		if (cdf instanceof LongDataField) {
 			LongDataField value = (LongDataField) cdf;
@@ -78,7 +78,7 @@ class MetaDataUtil {
 		}
 	}
 
-	static void setInt(TownyObject townyObject, IntegerDataField idf, int num) {
+	public static void setInt(TownyObject townyObject, IntegerDataField idf, int num) {
 		CustomDataField<?> cdf = townyObject.getMetadata(idf.getKey());
 		if (cdf instanceof IntegerDataField) {
 			IntegerDataField value = (IntegerDataField) cdf;
@@ -87,7 +87,7 @@ class MetaDataUtil {
 		}
 	}
 	
-	static void setDouble(TownyObject townyObject, DecimalDataField ddf, double num) {
+	public static void setDouble(TownyObject townyObject, DecimalDataField ddf, double num) {
 		CustomDataField<?> cdf = townyObject.getMetadata(ddf.getKey());
 		if (cdf instanceof DecimalDataField) {
 			DecimalDataField value = (DecimalDataField) cdf;
