@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.121
+version: 0.122
 language: swedish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -961,7 +961,7 @@ msg_err_unable_to_add_more_residents_without_nation: 'Din stad kan inte bjuda in
 msg_the_following_towns_were_deleted_for_having_0_claims: 'Följande städer raderades för att ha någon mark: %s'
 msg_spawn_warn: 'Kostnad för spawn: %s. Fortsätt? Tips: lägg till -ignore för att skippa denna fråga nästa gång.'
 msg_confirm_purchase: 'Att göra detta kostar %s. Fortsätt?'
-msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Följande städer kommer att tas bort från din nation: %s. Vill du fortsätta?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Because they will not be close enough to the new capital, the following towns will be removed from your nation: %s. Do you wish to continue?'
 msg_ta_deposit_all_success: 'Lyckades deponera %s till alla nationers och städers banker.'
 bonus_townblocks: 'bonus stadsblock'
 #Added in 0.80
@@ -1356,3 +1356,5 @@ status_jailed: 'Jailed:'
 status_bad_yes: '&cYES'
 status_good_no: '&aNO'
 status_resident_tax_title: '%s''s Tax'
+#Added in 0.122
+msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because they will not be close enough to your nation capital, the following towns will be removed if the merge is completed: %s.'
