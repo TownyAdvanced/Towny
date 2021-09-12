@@ -40,7 +40,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
-import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
+import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -811,7 +811,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		if (TownyEconomyHandler.isActive())
 			try {
-				town.getAccount().payTo(town.getAccount().getHoldingBalance(), new WarSpoils(), "Remove Town");
+//				town.getAccount().payTo(town.getAccount().getHoldingBalance(), new WarSpoils(), "Remove Town");
 				town.getAccount().removeAccount();
 			} catch (Exception ignored) {
 			}
@@ -881,7 +881,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// Transfer any money to the warchest.
 		if (TownyEconomyHandler.isActive())
 			try {
-				nation.getAccount().payTo(nation.getAccount().getHoldingBalance(), new WarSpoils(), "Remove Nation");
+//				nation.getAccount().payTo(nation.getAccount().getHoldingBalance(), new WarSpoils(), "Remove Nation");
 				nation.getAccount().removeAccount();
 			} catch (Exception ignored) {
 			}
@@ -952,6 +952,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		TownyUniverse.getInstance().unregisterJail(jail);
 		
 		deleteJail(jail);
+	}
+	
+	@Override
+	public void removeWar(War war) {
+		// Unregister the war from the Universe.
+		TownyUniverse.getInstance().removeWar(war);
+		deleteWar(war);
 	}
 
 	@Override

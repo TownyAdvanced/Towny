@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.war.eventwar;
+package com.palmergames.bukkit.towny.war.eventwar.instance;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -15,6 +15,9 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
+import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
+import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 
@@ -173,6 +176,8 @@ public class WarParticipants {
 				war.getWarZoneManager().addWarZone(townBlock.getWorldCoord(), TownySettings.getWarzoneHomeBlockHealth());
 			else
 				war.getWarZoneManager().addWarZone(townBlock.getWorldCoord(), TownySettings.getWarzoneTownBlockHealth());
+			
+			WarMetaDataController.setWarUUID(townBlock, war.getWarUUID());
 		}
 		
 		/*
@@ -180,21 +185,34 @@ public class WarParticipants {
 		 */
 		if (numTownBlocks < 1) {
 			TownyMessaging.sendErrorMsg("The town " + town.getName() + " does not have any land to fight over. They will not take part in the war.");
+			
+			for (TownBlock townBlock : town.getTownBlocks()) {
+				war.getWarZoneManager().remove(townBlock.getWorldCoord());
+				WarDataBase.cleanTownBlockMetaData(townBlock);
+			}
 			return false;
 		}	
 
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_war_join", town.getName()));
 		TownyMessaging.sendPrefixedTownMessage(town, "You have joined a war of type: " + war.getWarType().getName());
+
+		// Put the war UUID onto the town metadata.
+		WarMetaDataController.setWarUUID(town, war.getWarUUID());
 		
 		warringResidents.addAll(town.getResidents());
 		
+		war.getScoreManager().addTown(town);
+		
 		/*
-		 * Give the players their lives.
-		 * TODO: Make mayors/kings have the ability to receive a different amount.
+		 * Give the players their lives, metadata.
 		 */
-		for (Resident resident : town.getResidents()) 
-			residentLives.put(resident, !resident.isMayor() ? war.getWarType().residentLives : war.getWarType().mayorLives);
-
+		for (Resident resident : town.getResidents()) {
+			int lives = !resident.isMayor() ? war.getWarType().residentLives : war.getWarType().mayorLives;
+			residentLives.put(resident, lives);
+			WarMetaDataController.setResidentLives(resident, lives);
+			WarMetaDataController.setWarUUID(resident, war.getWarUUID());
+		}
+			
 		return true;
 	}
 	
@@ -353,15 +371,7 @@ public class WarParticipants {
 			}
 			break;
 		}
-		for (Nation nation : warringNations) {
-			int towns = 0;
-			for (Town town : nation.getTowns())
-				if (warringTowns.contains(town))
-					towns++;
-			warParticipants.add(Translation.of("msg_war_participants", nation.getName(), towns));			
-		}
 		TownyMessaging.sendPlainGlobalMessage(ChatTools.formatTitle(name + " Participants"));
-
 		for (String string : warParticipants)
 			TownyMessaging.sendPlainGlobalMessage(string);
 		TownyMessaging.sendPlainGlobalMessage(ChatTools.formatTitle("----------------"));
@@ -403,20 +413,22 @@ public class WarParticipants {
 		
 		// remove Residents still in the war.
 		for (Resident resident : town.getResidents()) {
-			if (warringResidents.contains(resident))
+			if (warringResidents.contains(resident)) 
 				remove(resident);
 		}
 		
 		// Remove TownBlocks still in the war & count them for the eliminated message.
 		int fallenTownBlocks = 0;
-		for (TownBlock townBlock : town.getTownBlocks())
+		for (TownBlock townBlock : town.getTownBlocks()) {
 			if (war.getWarZoneManager().isWarZone(townBlock.getWorldCoord())){
 				fallenTownBlocks++;
 				war.getWarZoneManager().remove(townBlock.getWorldCoord());
 			}
-		
+			WarDataBase.cleanTownBlockMetaData(townBlock);
+		}
 		// Disable activewar flag on Town so they can take part in another war.
 		town.setActiveWar(false);
+		WarDataBase.cleanTownMetaData(town);
 		
 		// Send title message to town and elimination message globally.		
 		TownyMessaging.sendTitleMessageToTown(town, Translation.of("msg_war_town_removed_from_war_titlemsg"), "");
@@ -432,6 +444,7 @@ public class WarParticipants {
 	 */
 	public void remove(Resident resident) {
 		warringResidents.remove(resident);
+		WarDataBase.cleanResidentMetaData(resident);
 	}
 
 	public int getLives(Resident resident) {
@@ -445,6 +458,7 @@ public class WarParticipants {
 	 */
 	public void takeLife(Resident resident) {
 		residentLives.put(resident, residentLives.get(resident) - 1);
+		WarMetaDataController.decrementResidentLives(resident);
 	}
 
 	private void sendEliminateMessage(String name) {
@@ -472,6 +486,4 @@ public class WarParticipants {
 		TownyMessaging.sendGlobalMessage(Translatable.of("MSG_WAR_FORFEITED", town.getName()));
 		war.checkEnd();
 	}
-
-
 }

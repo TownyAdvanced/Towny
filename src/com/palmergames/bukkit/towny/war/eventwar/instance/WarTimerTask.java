@@ -1,6 +1,7 @@
-package com.palmergames.bukkit.towny.war.eventwar;
+package com.palmergames.bukkit.towny.war.eventwar.instance;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -11,6 +12,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.war.eventwar.WarType;
 
 import org.bukkit.entity.Player;
 
@@ -26,7 +28,6 @@ public class WarTimerTask extends TownyTimerTask {
 		this.warEvent = warEvent;
 	}
 
-	@SuppressWarnings("static-access")
 	@Override
 	public void run() {
 
@@ -46,75 +47,59 @@ public class WarTimerTask extends TownyTimerTask {
 				this.warEvent.getWarParticipants().removeOnlineWarrior(player);
 				continue;
 			}
-			numPlayers += 1;
+			if (TownyAPI.getInstance().isWilderness(player.getLocation()) || player.getLocation().getBlockY() < TownySettings.getMinWarHeight())
+				continue;
+
+			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+			if (!warEvent.getWarZoneManager().isWarZone(townBlock.getWorldCoord()))
+				continue;
+			
+			numPlayers++;
 			TownyMessaging.sendDebugMsg("[War] " + player.getName() + ": ");
-			try {
-				Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-				if (resident == null || !resident.hasTown() || !warEvent.getWarParticipants().has(resident.getTown()))
-					continue;
+			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+			if (resident == null || !resident.hasTown() || !warEvent.getWarParticipants().has(resident) || resident.isJailed())
+				continue;
 
-				WorldCoord worldCoord = plugin.getCache(player).getLastTownBlock();
-				if (!warEvent.getWarZoneManager().isWarZone(worldCoord))
-					continue;
-				TownyMessaging.sendDebugMsg("[War]   warZone");
-				if (player.getLocation().getBlockY() < TownySettings.getMinWarHeight())
-					continue;
-				TownyMessaging.sendDebugMsg("[War]   aboveMinHeight");
-				TownBlock townBlock = worldCoord.getTownBlock(); //universe.getWorld(player.getWorld().getName()).getTownBlock(worldCoord);
-				boolean healablePlots = TownySettings.getPlotsHealableInWar();
-				if (healablePlots && (CombatUtil.isAlly(resident.getTown(), townBlock.getTown()))) {
-					if (plotList.containsKey(townBlock))
-						plotList.get(townBlock).addDefender(player);
-					else {
-						WarZoneData wzd = new WarZoneData();
-						wzd.addDefender(player);
-						plotList.put(townBlock, wzd);
-					}
-					TownyMessaging.sendDebugMsg("[War]   healed");
-					continue;
-				}
-				// This might not be needed at all anymore, if the plot isn't being healed they are likely an enemy (now that we aren't parsing over every online player.)
-				if (!resident.getTown().getNation().hasEnemy(townBlock.getTown().getNation())) //TODO: Add town-town enemy 
-					continue;
-				TownyMessaging.sendDebugMsg("[War]   notAlly");
-				//Enemy nation
-				
-				if (resident.isJailed())
-					continue;
-
-				boolean edgesOnly = TownySettings.getOnlyAttackEdgesInWar();
-				if (edgesOnly && !isOnEdgeOfTown(townBlock, worldCoord, warEvent))
-					continue;
-				if (edgesOnly)
-					TownyMessaging.sendDebugMsg("[War]   onEdge");
-
-				//warEvent.damage(player, townBlock);
+			if (TownySettings.getPlotsHealableInWar() && (CombatUtil.isAlly(resident.getTownOrNull(), townBlock.getTownOrNull()))) {
 				if (plotList.containsKey(townBlock))
-					plotList.get(townBlock).addAttacker(player);
+					plotList.get(townBlock).addDefender(player);
 				else {
 					WarZoneData wzd = new WarZoneData();
-					wzd.addAttacker(player);
+					wzd.addDefender(player);
 					plotList.put(townBlock, wzd);
 				}
-				TownyMessaging.sendDebugMsg("[War]   damaged");
-
-			} catch (NotRegisteredException ignored) {
+				TownyMessaging.sendDebugMsg("[War]   healed");
+				continue;
 			}
+
+			if ((this.warEvent.getWarType().equals(WarType.WORLDWAR) || this.warEvent.getWarType().equals(WarType.NATIONWAR)) 
+			&& !CombatUtil.isEnemy(resident.getTownOrNull(), townBlock.getTownOrNull())) 
+				continue;
+			
+			if (CombatUtil.isAlly(resident.getTownOrNull(), townBlock.getTownOrNull()) && !this.warEvent.getWarType().equals(WarType.CIVILWAR))
+				continue;
+			TownyMessaging.sendDebugMsg("[War]   notAlly");
+
+			if (TownySettings.getOnlyAttackEdgesInWar() && !isOnEdgeOfTown(townBlock, townBlock.getWorldCoord(), warEvent))
+				continue;
+
+			if (plotList.containsKey(townBlock))
+				plotList.get(townBlock).addAttacker(player);
+			else {
+				WarZoneData wzd = new WarZoneData();
+				wzd.addAttacker(player);
+				plotList.put(townBlock, wzd);
+			}
+			TownyMessaging.sendDebugMsg("[War]   damaged");
 		}
 
 		//Send health updates
-		for (TownBlock tb : plotList.keySet()) {
-			try {
-				warEvent.getWarZoneManager().updateWarZone(tb, plotList.get(tb));
-			} catch (NotRegisteredException e) {
-				TownyMessaging.sendDebugMsg("[War]   WarZone Update Failed");
-			}
-		}
+		for (TownBlock tb : plotList.keySet())
+			warEvent.getWarZoneManager().updateWarZone(tb, plotList.get(tb));
 
 		TownyMessaging.sendDebugMsg("[War] # Players: " + numPlayers);
 	}	
 
-	@SuppressWarnings("static-access")
 	public static boolean isOnEdgeOfTown(TownBlock townBlock, WorldCoord worldCoord, War warEvent) {
 
 		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };

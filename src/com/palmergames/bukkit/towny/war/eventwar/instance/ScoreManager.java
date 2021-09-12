@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.war.eventwar;
+package com.palmergames.bukkit.towny.war.eventwar.instance;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -57,6 +57,10 @@ public class ScoreManager {
 			townScored(defender, attacker, loc);			
 			break;
 		}
+	}
+	
+	public void addTown(Town town) {
+		townScores.put(town, 0);
 	}
 
 	/**
@@ -221,7 +225,7 @@ public class ScoreManager {
 		}		
 		if (war.getWarType().hasTownBlockHP)
 			output.add(Colors.Green + Translation.of("war_stats_warzone") + Colors.LightGreen + war.getWarZoneManager().getWarZone().size() + " Town blocks");
-		output.add(Colors.Green + Translation.of("war_stats_spoils_of_war") + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(war.warSpoils.getHoldingBalance()));
+		output.add(Colors.Green + Translation.of("war_stats_spoils_of_war") + Colors.LightGreen + TownyEconomyHandler.getFormattedBalance(war.getWarSpoils()));
 		return output;
 	}
 	

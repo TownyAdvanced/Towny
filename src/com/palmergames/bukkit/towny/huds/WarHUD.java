@@ -9,7 +9,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.eventwar.instance.War;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

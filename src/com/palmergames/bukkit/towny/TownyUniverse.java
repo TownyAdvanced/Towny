@@ -24,7 +24,8 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
-import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
+import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
@@ -88,7 +89,7 @@ public class TownyUniverse {
     private final String rootFolder;
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
-    private List<War> wars = new ArrayList<>();
+    private Map<UUID, War> wars = new ConcurrentHashMap<UUID, War>();
 
     private TownyUniverse() {
         towny = Towny.getPlugin();
@@ -1083,19 +1084,52 @@ public class TownyUniverse {
 	 * War Stuff
 	 */
 
+    
+    /**
+     * Used in loading only.
+     * 
+     * @param uuid UUID of the given war, taken from the War filename.
+     */
+    public void newWarInternal(String uuid) {
+    	War war = new War(Towny.getPlugin(), UUID.fromString(uuid));
+    	addWar(war);
+    }
+	
+	@Nullable
+	public War getWarEvent(UUID uuid) {
+		return wars.get(uuid);
+	}
+	
 	@Nullable
     public War getWarEvent(Player player) {
     	Resident resident = getResident(player.getUniqueId());
 		if (resident != null)
-	        for (War war : getWars()) {
-	        	if (war.getWarParticipants().has(resident))
-	        		return war;
-	        }
+			return getWarEvent(resident);
+        return null;
+    }
+	
+	@Nullable
+    public War getWarEvent(Resident resident) {
+		String warUUID = WarMetaDataController.getWarUUID(resident);  
+		if (warUUID != null)
+			return getWarEvent(UUID.fromString(warUUID));
+		
+        for (War war : getWars()) {
+        	if (war.getWarParticipants().has(resident))
+        		return war;
+        }
         return null;
     }
     
 	@Nullable
     public War getWarEvent(TownBlock townBlock) {
+		if (townBlock == null)
+			return null;
+		
+		String warUUID = WarMetaDataController.getWarUUID(townBlock);
+		if (warUUID != null)
+			return getWarEvent(UUID.fromString(warUUID));
+		
     	for (War war : getWars()) {
     		if (war.getWarZoneManager().isWarZone(townBlock.getWorldCoord()))
     			return war;
@@ -1113,36 +1147,26 @@ public class TownyUniverse {
     }
 
     public boolean hasWarEvent(TownBlock townBlock) {
-    	for (War war : getWars()) {
-    		if (war.getWarZoneManager().isWarZone(townBlock.getWorldCoord()))
-    			return true;
-    	}
-    	return false;
+		String warUUID = WarMetaDataController.getWarUUID(townBlock);
+		return warUUID != null;
     }
     
     public boolean hasWarEvent(Town town) {
-    	for (War war : getWars()) {
-    		if (war.getWarParticipants().has(town))
-    			return true;
-    	}
-    	return false;
+		String warUUID = WarMetaDataController.getWarUUID(town);
+		return warUUID != null;
     }
     
     public boolean hasWarEvent(Resident resident) {
-     	for (War war : getWars()) {
-     		if (war.getWarParticipants().has(resident))
-				return true;
-     	}
-     	return false;
+		String warUUID = WarMetaDataController.getWarUUID(resident);
+		return warUUID != null;
     }
 
 	public boolean isWarTime() {	
-
 		return !wars.isEmpty();
 	}
     
-    public List<War> getWars() {
-    	return wars;
+    public Collection<War> getWars() {
+    	return Collections.unmodifiableCollection(wars.values());
     }
     
     public List<String> getWarNames() {
@@ -1154,12 +1178,14 @@ public class TownyUniverse {
     }
     
     public void addWar(War war) {
-    	wars.add(war);
+    	if (war.getWarUUID() == null)
+    		return;
+    	wars.put(war.getWarUUID(), war);
     }
     
     public void removeWar(War war) {
+    	wars.remove(war.getWarUUID());
     	war = null;
-    	wars.remove(war);
     }
 
 	public Map<Block, SpawnPoint> getSpawnPoints() {

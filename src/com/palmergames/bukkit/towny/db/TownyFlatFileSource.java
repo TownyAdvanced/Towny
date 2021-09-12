@@ -24,6 +24,8 @@ import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
+import com.palmergames.bukkit.towny.war.eventwar.WarType;
+import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
@@ -65,7 +67,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "plotgroups",
 			dataFolderPath + File.separator + "plotgroups" + File.separator + "deleted",
 			dataFolderPath + File.separator + "jails",
-			dataFolderPath + File.separator + "jails" + File.separator + "deleted"
+			dataFolderPath + File.separator + "jails" + File.separator + "deleted",
+			dataFolderPath + File.separator + "wars",
+			dataFolderPath + File.separator + "wars" + File.separator + "deleted"
 		) || !FileMgmt.checkOrCreateFiles(
 			dataFolderPath + File.separator + "worlds.txt"
 		)) {
@@ -122,6 +126,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	public String getJailFilename(Jail jail) {
 		return dataFolderPath + File.separator + "jails" + File.separator + jail.getUUID() + ".txt";
+	}
+	
+	public String getWarFilename(War war) {
+		return dataFolderPath + File.separator + "wars" + File.separator + war.getWarUUID() + ".txt";
 	}
 	
 	/*
@@ -400,6 +408,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		for (File jail : jailFiles) {
 			String uuid = jail.getName().replace(".txt", "");
 			TownyUniverse.getInstance().newJailInternal(uuid);
+		}
+		
+		return true;
+	}
+	
+	public boolean loadWarList() {
+		TownyMessaging.sendDebugMsg("Loading War List");
+		File[] warFiles = receiveObjectFiles("wars", ".txt");
+		if (warFiles == null)
+			return true;
+		
+		for (File war : warFiles) {
+			String uuid = war.getName().replace(".txt", "");
+			TownyUniverse.getInstance().newWarInternal(uuid);
 		}
 		
 		return true;
@@ -1792,6 +1814,29 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 	}
 	
+	public boolean loadWar(War war) {
+		String line = "";
+		String path = getWarFilename(war);
+		File warFile = new File(path);
+		if (warFile.exists() && warFile.isFile()) {
+			HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(warFile);
+			
+			line = keys.get("name");
+			if (line != null)
+				war.setWarName(line);
+			
+			line = keys.get("type");
+			if (line != null)
+				war.setWarType(WarType.valueOf(line));
+			
+			line = keys.get("spoils");
+			if (line != null)
+				war.setWarSpoils(Double.valueOf(line));
+		}
+		
+		return true;
+	}
+	
 	/*
 	 * Save keys
 	 */
@@ -2329,6 +2374,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 	}
 	
+	public boolean saveWar(War war) {
+		
+		List<String> list = new ArrayList<>();
+		
+		list.add("name=" + war.getWarName());
+		list.add("type=" + war.getWarType().toString());
+		list.add("spoils=" + war.getWarSpoils());
+		
+		this.queryQueue.add(new FlatFileSaveTask(list, getWarFilename(war)));
+		return true;
+	}
+	
 	/*
 	 * Delete objects
 	 */
@@ -2399,4 +2456,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		queryQueue.add(new DeleteFileTask(file, false));
 	}
 	
+	@Override
+	public void deleteWar(War war) {
+		File file = new File(getWarFilename(war));
+		queryQueue.add(new DeleteFileTask(file, false));
+	}
 }

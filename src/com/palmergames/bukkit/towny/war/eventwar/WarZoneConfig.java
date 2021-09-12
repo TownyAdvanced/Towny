@@ -1,7 +1,7 @@
 /**
  * WarZone Configuration Checks
  */
-package com.palmergames.bukkit.towny.war.common;
+package com.palmergames.bukkit.towny.war.eventwar;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;

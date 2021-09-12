@@ -24,7 +24,6 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
-import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import net.citizensnpcs.api.CitizensAPI;
@@ -204,10 +203,7 @@ public class TownyEntityMonitorListener implements Listener {
 			if (!ppdpe.isCancelled()) {
 				price = ppdpe.getAmount();
 
-				if (!TownySettings.isEcoClosedEconomyEnabled())
-					defenderResident.getAccount().payTo(price, new WarSpoils(), "Death Payment");
-				else 
-					defenderResident.getAccount().withdraw(price, "Death Payment");
+				defenderResident.getAccount().withdraw(price, "Death Payment");
 				
 				TownyMessaging.sendMsg(defenderPlayer, Translatable.of("msg_you_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
 			}
@@ -230,10 +226,7 @@ public class TownyEntityMonitorListener implements Listener {
 			if (!tpdpe.isCancelled()) {
 				price = tpdpe.getAmount();
 
-				if (!TownySettings.isEcoClosedEconomyEnabled())
-					town.getAccount().payTo(price, new WarSpoils(), "Death Payment Town");
-				else 
-					town.getAccount().withdraw(price, "Death Payment Town");
+				town.getAccount().withdraw(price, "Death Payment Town");
 
 				TownyMessaging.sendTownMessagePrefixed(town, Translatable.of("msg_your_town_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
 			}
@@ -256,10 +249,7 @@ public class TownyEntityMonitorListener implements Listener {
 			if (!npdpe.isCancelled()) {
 				price = npdpe.getAmount();
 
-				if (!TownySettings.isEcoClosedEconomyEnabled())
-					nation.getAccount().payTo(price, new WarSpoils(), "Death Payment Nation");
-				else 
-					nation.getAccount().withdraw(price, "Death Payment Nation");
+				nation.getAccount().withdraw(price, "Death Payment Nation");
 
 				TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_your_nation_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
 			}

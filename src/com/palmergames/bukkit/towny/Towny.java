@@ -50,8 +50,10 @@ import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.war.common.WarZoneListener;
-import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
+import com.palmergames.bukkit.towny.war.eventwar.instance.War;
+import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarListener;
+import com.palmergames.bukkit.towny.war.eventwar.listeners.WarZoneListener;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.Version;
@@ -113,6 +115,7 @@ public class Towny extends JavaPlugin {
 	private final TownyWorldListener worldListener = new TownyWorldListener(this);
 	private final TownyInventoryListener inventoryListener = new TownyInventoryListener();
 	private final WarZoneListener warzoneListener = new WarZoneListener(this);
+	private final EventWarListener eventWarListener = new EventWarListener();
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
 
@@ -149,6 +152,7 @@ public class Towny extends JavaPlugin {
 		PlayerCacheUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
+		WarDataBase.initialize(this);
 
 		try {
 			// Load the foundation of Towny, containing config, locales, database.
@@ -199,6 +203,9 @@ public class Towny extends JavaPlugin {
 		if (!isError(TownyInitException.TownyError.MAIN_CONFIG) && !isError(TownyInitException.TownyError.PERMISSIONS)) {
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
+			
+			// TODO: Remove this when EventWar is its own plugin.
+			WarDataBase.loadAll();
 		}
 
 		registerEvents();
@@ -646,6 +653,7 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(worldListener, this);
 			pluginManager.registerEvents(loginListener, this);
 			pluginManager.registerEvents(warzoneListener, this);
+			pluginManager.registerEvents(eventWarListener, this);
 		}
 
 		// Always register these events.

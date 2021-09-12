@@ -10,7 +10,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -19,26 +18,22 @@ import com.palmergames.bukkit.util.BukkitTools;
 public class WarUtil {
 	
 	/** 
-	 * Allows War Event to piggy back off of Flag War editable materials, while accounting for neutral nations.
+	 * Allows War Event to handle editable materials, while accounting for neutral or jailed players.
 	 * 
 	 * @param player - Player who is being tested for neutrality.
 	 * @return Whether a player is considered neutral. 
 	 */
 	public static boolean isPlayerNeutral(Player player) {
 		if (TownyAPI.getInstance().isWarTime()) {
-			try {
-				Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-				if (resident != null) {
-					if (resident.isJailed())
-						return true;
-					if (resident.hasTown())
-						if (!TownyUniverse.getInstance().hasWarEvent(resident.getTown()))
-							return true;
-				}
-			} catch (NotRegisteredException e) {
-			}			
-		}		
-		return false;
+			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+			if (resident != null) {
+				if (resident.isJailed())
+					return true;
+				if (TownyUniverse.getInstance().hasWarEvent(resident))
+					return false;
+			}
+		}
+		return true;
 	}
 	
 	/**

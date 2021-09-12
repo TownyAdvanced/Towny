@@ -51,8 +51,9 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
-import com.palmergames.bukkit.towny.war.eventwar.War;
+import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
+import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -121,7 +122,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"civilwar",
 		"nationwar",
 		"worldwar",
-		"list"
+		"list",
+		"purge"
 	);
 	
 	private static final List<String> adminTownTabCompletes = Arrays.asList(
@@ -2520,6 +2522,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				for (War war : TownyUniverse.getInstance().getWars()) {
 					sender.sendMessage(ChatTools.formatCommand("War Name: " + war.getWarName(), "Type: " + war.getWarType().getName(), ""));
 				}
+			} else if (split[0].equalsIgnoreCase("purge")) {
+				Confirmation.runOnAccept(()-> WarDataBase.removeAllWars()).sendTo(sender);
 			} else {
 				showWarHelp();
 			}
@@ -2584,6 +2588,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "NATIONWAR [nation] [nation]", ""));
 		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "WORLDWAR", ""));
 		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "list", ""));
+		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "purge", ""));
 	}
 
 }

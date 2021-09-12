@@ -1,7 +1,8 @@
-package com.palmergames.bukkit.towny.war.common;
+package com.palmergames.bukkit.towny.war.eventwar.listeners;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.Material;
@@ -13,7 +14,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
@@ -21,7 +24,9 @@ import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
-import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
+import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
+import com.palmergames.bukkit.towny.event.statusscreen.TownBlockStatusScreenEvent;
+import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
@@ -30,8 +35,15 @@ import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
+import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarZoneConfig;
+import com.palmergames.bukkit.towny.war.eventwar.instance.War;
+import com.palmergames.bukkit.util.Colors;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
 
 public class WarZoneListener implements Listener {
 	
@@ -42,19 +54,89 @@ public class WarZoneListener implements Listener {
 		plugin = instance;
 	}
 	
+    @EventHandler
+    public void onTownyDatabaseLoad(TownyLoadedDatabaseEvent event) {
+    	WarDataBase.loadAll();
+    }
+    
+    @EventHandler
+    public void onTownStatus(TownStatusScreenEvent event) {
+    	Town town = event.getTown();
+    	if (!town.hasActiveWar())
+	    	return;
+    	String meta = WarMetaDataController.getWarUUID(town);
+    	if (meta == null)
+    		return;
+    	UUID warUUID = UUID.fromString(meta);
+    	try {
+			War war = TownyUniverse.getInstance().getWarEvent(warUUID);
+			event.getStatusScreen().addComponentOf("eventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
+					HoverEvent.showText(Component.text(war.getWarType().name()).append(Component.newline())
+							.append(Component.text("Spoils: " + TownyEconomyHandler.getFormattedBalance(war.getWarSpoils())))
+							.append(Component.newline())
+							.append(Component.text("Delinquents: " + war.getWarParticipants().getTowns()))
+							.append(Component.newline())
+							.append(Component.text("ID: " + war.getWarUUID()))
+							));
+		} catch (Exception e) {
+			return;
+		}
+    }
+    
+    @EventHandler
+    public void onTBStatus(TownBlockStatusScreenEvent event) {
+    	String meta = WarMetaDataController.getWarUUID(event.getTownBlock());
+    	if (meta == null)
+    		return;
+    	UUID warUUID = UUID.fromString(meta);
+    	try {
+			War war = TownyUniverse.getInstance().getWarEvent(warUUID);
+			event.getStatusScreen().addComponentOf("eventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
+					HoverEvent.showText(Component.text(war.getWarType().name()).append(Component.newline())
+							.append(Component.text("Spoils: " + TownyEconomyHandler.getFormattedBalance(war.getWarSpoils())))
+							.append(Component.newline())
+							.append(Component.text("Delinquents: " + war.getWarParticipants().getTowns()))
+							.append(Component.newline())
+							.append(Component.text("ID: " + war.getWarUUID()))
+							));
+		} catch (Exception e) {
+			return;
+		}
+    }
+    
+    @EventHandler
+    public void onResidentStatus(ResidentStatusScreenEvent event) {
+    	String meta = WarMetaDataController.getWarUUID(event.getResident());
+    	if (meta == null)
+    		return;
+    	UUID warUUID = UUID.fromString(meta);
+    	try {
+			War war = TownyUniverse.getInstance().getWarEvent(warUUID);
+			event.getStatusScreen().addComponentOf("eventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
+					HoverEvent.showText(Component.text(war.getWarType().name()).append(Component.newline())
+							.append(Component.text("Spoils: " + TownyEconomyHandler.getFormattedBalance(war.getWarSpoils())))
+							.append(Component.newline())
+							.append(Component.text("Delinquents: " + war.getWarParticipants().getTowns()))
+							.append(Component.newline())
+							.append(Component.text("ID: " + war.getWarUUID()))
+							));
+		} catch (Exception e) {
+			return;
+		}
+    }
+
 	@EventHandler
 	public void onDestroy(TownyDestroyEvent event) {
-		if (event.isInWilderness())
+		if (!TownyAPI.getInstance().isWarTime() || event.isInWilderness())
 			return;
-		
 		Player player = event.getPlayer();
 		if (!plugin.hasCache(player))
 			plugin.newCache(player);
-		Material mat = event.getMaterial();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 
-		// Allow destroy for Event War if material is an EditableMaterial, FlagWar also handled here
-		if ((TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player))) {
+		// Allow build for Event War if material is an EditableMaterial
+		if (status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) {
+			Material mat = event.getMaterial();
 			if (!WarZoneConfig.isEditableMaterialInWarZone(mat)) {
 				event.setCancelled(true);
 				event.setMessage(Translatable.of("msg_err_warzone_cannot_edit_material", "destroy", mat.toString().toLowerCase()).forLocale(player));
@@ -66,17 +148,16 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onBuild(TownyBuildEvent event) {
-		if (event.isInWilderness())
+		if (!TownyAPI.getInstance().isWarTime() || event.isInWilderness())
 			return;
-		
 		Player player = event.getPlayer();
 		if (!plugin.hasCache(player))
 			plugin.newCache(player);
-		Material mat = event.getMaterial();
 		TownBlockStatus status = plugin.getCache(player).getStatus();
-		
-		// Allow build for Event War if material is an EditableMaterial, FlagWar also handled here
-		if (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) { // Event War
+
+		// Allow destroy for Event War if material is an EditableMaterial
+		if (status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) {
+			Material mat = event.getMaterial();
 			if (!WarZoneConfig.isEditableMaterialInWarZone(mat)) {
 				event.setCancelled(true);
 				event.setMessage(Translatable.of("msg_err_warzone_cannot_edit_material", "build", mat.toString().toLowerCase()).forLocale(player));
@@ -88,16 +169,15 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onItemUse(TownyItemuseEvent event) {
-		if (event.isInWilderness())
+		if (!TownyAPI.getInstance().isWarTime() || event.isInWilderness())
 			return;
-		
 		Player player = event.getPlayer();
 		if (!plugin.hasCache(player))
 			plugin.newCache(player);
-		TownBlockStatus status = plugin.getCache(event.getPlayer()).getStatus();
-		
-		// Allow item_use for Event War if isAllowingItemUseInWarZone is true, FlagWar also handled here
-		if (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) { // Event War
+		TownBlockStatus status = plugin.getCache(player).getStatus();
+
+		// Allow ItemUse for Event War if configured.
+		if (status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) {
 			if (!WarZoneConfig.isAllowingItemUseInWarZone()) {				
 				event.setCancelled(true);
 				event.setMessage(Translatable.of("msg_err_warzone_cannot_use_item").forLocale(player));
@@ -109,16 +189,15 @@ public class WarZoneListener implements Listener {
 	
 	@EventHandler
 	public void onSwitchUse(TownySwitchEvent event) {
-		if (event.isInWilderness())
+		if (!TownyAPI.getInstance().isWarTime() || event.isInWilderness())
 			return;
-		
 		Player player = event.getPlayer();
 		if (!plugin.hasCache(player))
 			plugin.newCache(player);
 		TownBlockStatus status = plugin.getCache(player).getStatus();
 
-		// Allow switch for Event War if isAllowingSwitchesInWarZone is true, FlagWar also handled here
-		if (TownyAPI.getInstance().isWarTime() && status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) { // Event War
+		// Allow Switch for Event War if configured.
+		if (status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) {
 			if (!WarZoneConfig.isAllowingSwitchesInWarZone()) {
 				event.setCancelled(true);
 				event.setMessage(Translatable.of("msg_err_warzone_cannot_use_switches").forLocale(player));
@@ -226,10 +305,12 @@ public class WarZoneListener implements Listener {
 			return;
 
 		/*
-		 * Is this in a Town with an Event War?
+		 * Event War fire control settings.
 		 */
 		if (TownyAPI.getInstance().isWarTime() && TownyUniverse.getInstance().hasWarEvent(event.getTownBlock())) {
-			if (TownySettings.isAllowWarBlockGriefing() || WarZoneConfig.isAllowingFireInWarZone()) {
+			if (WarZoneConfig.isAllowingFireInWarZone()) {           // Allow ignition using normal fire-during-war rule.
+				event.setCancelled(false);
+			} else if (TownySettings.isAllowWarBlockGriefing()) {    // Allow ignition using exceptionally-griefy-war rule for Event War.
 				event.setCancelled(false);
 			} else {
 				event.setCancelled(true);
@@ -297,25 +378,5 @@ public class WarZoneListener implements Listener {
 		
 		if (TownyUniverse.getInstance().hasWarEvent(event.getTownBlock()))
 			event.setPvp(true);
-	}
-	
-	/**
-	 * Prevent outlaws from being teleported away when 
-	 * they enter the town they are outlawed in.
-	 * 
-	 * @param event OutlawTeleportEvent thrown by Towny.
-	 */
-	@EventHandler
-	public void onOutlawTeleport(OutlawTeleportEvent event) {
-		if (!TownyAPI.getInstance().isWarTime())
-			return;
-		
-		if (event.getOutlaw().hasNation() 
-			&& event.getTown().hasNation()
-			&& !event.getTown().getNationOrNull().isNeutral()
-			&& CombatUtil.isEnemy(event.getOutlaw().getTownOrNull(), event.getTown())) {
-			event.setCancelled(true);
-		}
-			
 	}
 }

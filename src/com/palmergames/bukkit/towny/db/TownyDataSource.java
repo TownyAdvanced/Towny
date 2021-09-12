@@ -14,6 +14,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import com.palmergames.bukkit.towny.war.eventwar.instance.War;
+
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
@@ -51,12 +53,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadSnapshotList() && loadHibernatedResidents();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWarList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadSnapshotList() && loadHibernatedResidents() && loadWars();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorldList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList() && saveHibernatedResidents();
+		return saveWorldList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList() && saveHibernatedResidents() && saveWars();
 	}
 
 	public boolean saveAllWorlds() {
@@ -91,6 +93,8 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadJailList();
 	
+	abstract public boolean loadWarList();
+	
 	abstract public boolean loadResident(Resident resident);
 
 	abstract public boolean loadTown(Town town);
@@ -100,6 +104,8 @@ public abstract class TownyDataSource {
 	abstract public boolean loadWorld(TownyWorld world);
 	
 	abstract public boolean loadJail(Jail jail);
+	
+	abstract public boolean loadWar(War war);
 
 	abstract public boolean loadPlotGroupList();
 
@@ -120,6 +126,8 @@ public abstract class TownyDataSource {
 	abstract public boolean savePlotGroup(PlotGroup group);
 	
 	abstract public boolean saveJail(Jail jail);
+	
+	abstract public boolean saveWar(War war);
 
 	abstract public boolean saveNation(Nation nation);
 
@@ -152,6 +160,8 @@ public abstract class TownyDataSource {
 	abstract public void deletePlotGroup(PlotGroup group);
 	
 	abstract public void deleteJail(Jail jail);
+	
+	abstract public void deleteWar(War war);
 
 	public boolean cleanup() {
 
@@ -231,6 +241,17 @@ public abstract class TownyDataSource {
 		}
 		return true;
 	}
+	
+	public boolean loadWars() {
+		TownyMessaging.sendDebugMsg("Loading Wars");
+		for (War war : TownyUniverse.getInstance().getWars()) {
+			if (!loadWar(war)) {
+				plugin.getLogger().severe("Loading Error: Could not read war data: '" + war.getWarUUID() + "'.");
+				return false;
+			}
+		}
+		return true;
+	}
 
 	/*
 	 * Save all of category
@@ -267,6 +288,13 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Saving Jails");
 		for (Jail jail : getAllJails())
 			saveJail(jail);
+		return true;
+	}
+	
+	public boolean saveWars() {
+		TownyMessaging.sendDebugMsg("Saving Wars");
+		for (War war : TownyUniverse.getInstance().getWars())
+			saveWar(war);
 		return true;
 	}
 	
@@ -311,7 +339,7 @@ public abstract class TownyDataSource {
 	abstract public List<PlotGroup> getAllPlotGroups();
 	
 	abstract public List<Jail> getAllJails();
-
+	
 	abstract public List<Resident> getResidents(String[] names);
 	
 	abstract public List<Resident> getResidents(UUID[] uuids);
@@ -411,6 +439,8 @@ public abstract class TownyDataSource {
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
 
 	abstract public void removeJail(Jail jail);
+	
+	abstract public void removeWar(War war);
 	
 	abstract public void removePlotGroup(PlotGroup group);
 

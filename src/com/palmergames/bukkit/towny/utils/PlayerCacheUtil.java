@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.player.PlayerCacheGetTownBlockStatusEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -24,10 +23,14 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
+import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
+import com.palmergames.bukkit.towny.war.eventwar.WarType;
 
 import net.citizensnpcs.api.CitizensAPI;
 
 import org.bukkit.Bukkit;
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -301,19 +304,18 @@ public class PlayerCacheUtil {
 			}
 		}
 
+		boolean residentHasWar = TownyUniverse.getInstance().hasWarEvent(resident);
+		boolean warTownBlockWithResident = residentHasWar && townBlock.isWarZone() && TownyUniverse.getInstance().getWarEvent(townBlock).getWarUUID().equals(UUID.fromString(WarMetaDataController.getWarUUID(resident)));
+		
 		try {
-			// War Time switch rights
+			// War Time
 			if (TownyAPI.getInstance().isWarTime()) {
-				if (TownySettings.isAllowWarBlockGriefing()) {
-					try {
-						if (!resident.getTown().getNation().isNeutral() && !town.getNation().isNeutral() && worldCoord.getTownyWorld().isWarAllowed())
-							return TownBlockStatus.WARZONE;
-					} catch (NotRegisteredException e) {
+				//The grief-everything config option is set to true and the player and townblock are the same war. 
+				if (TownySettings.isAllowWarBlockGriefing() && warTownBlockWithResident)
+					return TownBlockStatus.WARZONE;
 
-					}
-				}
-				//If this town is not in a nation and we are set to non peaceful/neutral status during war.
-				if (!TownySettings.isWarTimeTownsNeutral() && !town.hasNation() && worldCoord.getTownyWorld().isWarAllowed())
+				//The player is in a World War, in a war-allowed world, and towns are not allowed to be neutral.
+				if (residentHasWar && !TownySettings.isWarTimeTownsNeutral() && worldCoord.getTownyWorldOrNull().isWarAllowed() && TownyUniverse.getInstance().getWarEvent(player).getWarType().equals(WarType.WORLDWAR))
 					return TownBlockStatus.WARZONE;
 			}
 
@@ -342,12 +344,8 @@ public class PlayerCacheUtil {
 			}
 
 			// Resident with no town.
-			if (!resident.hasTown()) {
-				if (TownyAPI.getInstance().isWarTime() && !TownySettings.isWarTimeTownsNeutral())
-					return TownBlockStatus.WARZONE;
-				else
-					return TownBlockStatus.OUTSIDER;
-			}
+			if (!resident.hasTown())				
+				return TownBlockStatus.OUTSIDER;
 			
 			// Town has this resident, who isn't the mayor.
 			if (town.hasResident(resident))
@@ -363,11 +361,15 @@ public class PlayerCacheUtil {
 			
 			// Enemy or WarZone.
 			if (CombatUtil.isEnemy(resident.getTown(), town)) {
-				if (TownyAPI.getInstance().isWarTime() && townBlock.isWarZone())
+				if (warTownBlockWithResident)
 					return TownBlockStatus.WARZONE;
 				else
 					return TownBlockStatus.ENEMY;
-			}
+			} 
+
+			// WarZone.
+			if (warTownBlockWithResident)
+				return TownBlockStatus.WARZONE;
 
 			// Nothing left but Outsider.
 			return TownBlockStatus.OUTSIDER;

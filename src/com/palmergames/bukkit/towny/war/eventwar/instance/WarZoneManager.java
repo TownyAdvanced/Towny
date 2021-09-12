@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.war.eventwar;
+package com.palmergames.bukkit.towny.war.eventwar.instance;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -25,6 +24,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.utils.JailUtil;
+import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.events.PlotAttackedEvent;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.KeyValueTable;
@@ -68,9 +68,8 @@ public class WarZoneManager {
 	 * Update a plot given the WarZoneData on the TownBlock
 	 * @param townBlock - {@link TownBlock}
 	 * @param wzd - {@link WarZoneData}
-	 * @throws NotRegisteredException - Generic
 	 */
-	public void updateWarZone (TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
+	public void updateWarZone (TownBlock townBlock, WarZoneData wzd) {
 		if (!wzd.hasAttackers()) 
 			healPlot(townBlock, wzd);
 		else
@@ -81,9 +80,8 @@ public class WarZoneManager {
 	 * Heals a plot. Only occurs when the plot has no attackers.
 	 * @param townBlock - The {@link TownBlock} to be healed.
 	 * @param wzd - {@link WarZoneData}
-	 * @throws NotRegisteredException - Generic
 	 */
-	private void healPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
+	private void healPlot(TownBlock townBlock, WarZoneData wzd) {
 		WorldCoord worldCoord = townBlock.getWorldCoord();
 		int healthChange = wzd.getHealthChange();
 		int oldHP = warZone.get(worldCoord);
@@ -92,9 +90,9 @@ public class WarZoneManager {
 			return;
 		warZone.put(worldCoord, hp);
 		String healString =  Colors.Gray + "[Heal](" + townBlock.getCoord().toString() + ") HP: " + hp + " (" + Colors.LightGreen + "+" + healthChange + Colors.Gray + ")";
-		TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), healString);
+		TownyMessaging.sendPrefixedTownMessage(townBlock.getTownOrNull(), healString);
 		for (Player p : wzd.getDefenders()) {
-			if (com.palmergames.bukkit.towny.TownyUniverse.getInstance().getResident(p.getName()).getTown() != townBlock.getTown())
+			if (com.palmergames.bukkit.towny.TownyUniverse.getInstance().getResident(p.getName()).getTownOrNull() != townBlock.getTownOrNull())
 				TownyMessaging.sendMessage(p, healString);
 		}
 		WarUtil.launchFireworkAtPlot (townBlock, wzd.getRandomDefender(), Type.BALL, Color.LIME);
@@ -126,13 +124,14 @@ public class WarZoneManager {
 	 * There are attackers on the plot, update the health.
 	 * @param townBlock - The {@link TownBlock} being attacked
 	 * @param wzd - {@link WarZoneData}
-	 * @throws NotRegisteredException - Generic
 	 */
-	private void attackPlot(TownBlock townBlock, WarZoneData wzd) throws NotRegisteredException {
+	private void attackPlot(TownBlock townBlock, WarZoneData wzd) {
 
 		Player attackerPlayer = wzd.getRandomAttacker();
 		Resident attackerResident = com.palmergames.bukkit.towny.TownyUniverse.getInstance().getResident(attackerPlayer.getName());
-		Town attacker = attackerResident.getTown();
+		Town attacker = attackerResident.getTownOrNull();
+		Town townBlockTown = townBlock.getTownOrNull();
+		boolean hasNation = townBlockTown.hasNation();
 
 		//Health, messaging, fireworks..
 		WorldCoord worldCoord = townBlock.getWorldCoord();
@@ -155,35 +154,37 @@ public class WarZoneManager {
 				healthChangeStringAtk = "(+0)";
 			}
 			if (!townBlock.isHomeBlock()){
-				TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), Colors.Gray + Translation.of("msg_war_town_under_attack") + " (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+				TownyMessaging.sendPrefixedTownMessage(townBlockTown, Colors.Gray + Translation.of("msg_war_town_under_attack") + " (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
 				if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
 					WarUtil.launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL_LARGE, fwc);
-					for (Town town: townBlock.getTown().getNation().getTowns())
-						if (town != townBlock.getTown())
-							TownyMessaging.sendPrefixedTownMessage(town, Colors.Gray + Translation.of("msg_war_nation_under_attack") + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
-					for (Nation nation: townBlock.getTown().getNation().getAllies())
-						if (nation != townBlock.getTown().getNation())
-							TownyMessaging.sendPrefixedNationMessage(nation , Colors.Gray + Translation.of("msg_war_nations_ally_under_attack", townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+					if (hasNation) {
+						for (Town town: townBlockTown.getNationOrNull().getTowns())
+							if (town != townBlockTown)
+								TownyMessaging.sendPrefixedTownMessage(town, Colors.Gray + Translation.of("msg_war_nation_under_attack") + " [" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+					for (Nation nation: townBlockTown.getNationOrNull().getAllies())
+						TownyMessaging.sendPrefixedNationMessage(nation , Colors.Gray + Translation.of("msg_war_nations_ally_under_attack", townBlockTown.getName()) + " [" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+					}
 				}
 				else
 					WarUtil.launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
 				for (Town attackingTown : wzd.getAttackerTowns())
-					TownyMessaging.sendPrefixedTownMessage(attackingTown, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringAtk);
+					TownyMessaging.sendPrefixedTownMessage(attackingTown, Colors.Gray + "[" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringAtk);
 			} else {
-				TownyMessaging.sendPrefixedTownMessage(townBlock.getTown(), Colors.Gray + Translation.of("msg_war_homeblock_under_attack")+" (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+				TownyMessaging.sendPrefixedTownMessage(townBlockTown, Colors.Gray + Translation.of("msg_war_homeblock_under_attack")+" (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
 				if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
 					WarUtil.launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL_LARGE, fwc);
-					for (Town town: townBlock.getTown().getNation().getTowns())
-						if (town != townBlock.getTown())
-							TownyMessaging.sendPrefixedTownMessage(town, Colors.Gray + Translation.of("msg_war_nation_member_homeblock_under_attack", townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
-					for (Nation nation: townBlock.getTown().getNation().getAllies())
-						if (nation != townBlock.getTown().getNation())
-							TownyMessaging.sendPrefixedNationMessage(nation , Colors.Gray + Translation.of("msg_war_nation_ally_homeblock_under_attack", townBlock.getTown().getName()) + " [" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+					if (hasNation) {
+						for (Town town: townBlockTown.getNationOrNull().getTowns())
+							if (town != townBlockTown)
+								TownyMessaging.sendPrefixedTownMessage(town, Colors.Gray + Translation.of("msg_war_nation_member_homeblock_under_attack", townBlockTown.getName()) + " [" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+						for (Nation nation: townBlockTown.getNationOrNull().getAllies())
+							TownyMessaging.sendPrefixedNationMessage(nation , Colors.Gray + Translation.of("msg_war_nation_ally_homeblock_under_attack", townBlockTown.getName()) + " [" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+					}
 				}
 				else
 					WarUtil.launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
 				for (Town attackingTown : wzd.getAttackerTowns())
-					TownyMessaging.sendPrefixedTownMessage(attackingTown, Colors.Gray + "[" + townBlock.getTown().getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringAtk);
+					TownyMessaging.sendPrefixedTownMessage(attackingTown, Colors.Gray + "[" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringAtk);
 			}
 		} else {
 			WarUtil.launchFireworkAtPlot (townBlock, attackerPlayer, Type.CREEPER, fwc);
@@ -216,12 +217,10 @@ public class WarZoneManager {
 	 * or if the townblock is the homeblock of the Town.
 	 * @param townBlock townBlock which fell.
 	 * @param attacker Town which had the most attackers when the townblock was felled.
-	 * 
-	 * @throws NotRegisteredException - When a Towny Object does not exist.
 	 */
-	private void remove(TownBlock townBlock, Town attacker) throws NotRegisteredException {
+	private void remove(TownBlock townBlock, Town attacker) {
 
-		Town defenderTown = townBlock.getTown();
+		Town defenderTown = townBlock.getTownOrNull();
 
 		/*
 		 * Handle bonus townblocks.
@@ -279,17 +278,9 @@ public class WarZoneManager {
 	 * Can result in removing a Nation if the WarType is NationWar or WorldWar.
 	 * @param town Town which is being removed from the war.
 	 * @param attacker Town which attacked.
-	 * 
-	 * @throws NotRegisteredException - When a Towny Object does not exist.
 	 */
-	public void remove(Town town, Town attacker) throws NotRegisteredException {
+	public void remove(Town town, Town attacker) {
  		boolean isCapital = town.isCapital();
-
- 		/*
- 		 * Process the scoring of points including townblocks that haven't 
- 		 * and the town itself.
- 		 */
- 		war.getScoreManager().processScoreOnFallenTown(town, attacker);
 
 		/*
 		 * Free any players jailed in this Town.
@@ -309,18 +300,22 @@ public class WarZoneManager {
 			 * If we're dealing with either NationWar or WorldWar, losing a capital city means the whole nation is out.
 			 * TODO: Potentially have this end a civil war as well. (Leaning towards no.)
 			 */
-
+			Nation nation = town.getNationOrNull();
+			Nation attackerNation = attacker.getNationOrNull();
+			// Should not be possible.
+			if (nation == null || attackerNation == null)
+				break;
+			
 			/*
 			 * Handle conquering.
 			 */
 			if (TownySettings.getWarEventWinnerTakesOwnershipOfTown()) {
 				// It is a capital.
 				if (isCapital) {
-					List<Town> towns = new ArrayList<>();
-					towns = town.getNation().getTowns();
+					List<Town> towns = new ArrayList<>(nation.getTowns());
 					// Based on config, do not conquer the capital.
 					if (TownySettings.getWarEventWinnerTakesOwnershipOfTownsExcludesCapitals()) 
-						towns.remove(town.getNation().getCapital());
+						towns.remove(nation.getCapital());
 
 					for (Town fallenTown : towns) {
 				 		/*
@@ -331,16 +326,14 @@ public class WarZoneManager {
 					}
 					
 					// Conquer all of the towns (sometimes including the capital.)
-					conquer(towns, attacker.getNation());
+					conquer(towns, attackerNation);
 
 					// Remove the capital directly, if it wasn't already removed in the conquering.
 					if (war.getWarParticipants().getTowns().contains(town))
 						war.getWarParticipants().remove(town);
 					
 					// Remove the rest of the towns.
-					remove(town.getNation(), attacker);
-
-					return;
+					remove(nation, attacker);
 
 				// Not a capital, so conquer a single town.
 				} else {
@@ -355,55 +348,44 @@ public class WarZoneManager {
 					war.getWarParticipants().remove(town);
 					
 					// Conquer the single town.
-					conquer(town, attacker.getNation());
-					
-					return;
+					conquer(town, attackerNation);
 				}
 				
 			/*
 			 * No Conquering Involved.
 			 */
 			} else {
-				// It is a capital.
-				if (isCapital) {
-					
-			 		/*
-			 		 * Process the scoring of points including townblocks that haven't 
-			 		 * and the town itself.
-			 		 */
-			 		war.getScoreManager().processScoreOnFallenTown(town, attacker);
 
-					// Remove the capital directly.
-					war.getWarParticipants().remove(town);
-					
+		 		/*
+		 		 * Process the scoring of points including townblocks that haven't 
+		 		 * and the town itself.
+		 		 */
+		 		war.getScoreManager().processScoreOnFallenTown(town, attacker);
+
+				// Remove the town directly.
+				war.getWarParticipants().remove(town);
+				
+				if (isCapital)
 					// Remove the rest of the towns.
-					remove(town.getNation(), attacker);
-					
-					return;
-					
-				// Not a capital, so remove a single town.
-				} else {
-			 		/*
-			 		 * Process the scoring of points including townblocks that haven't 
-			 		 * and the town itself.
-			 		 */
-			 		war.getScoreManager().processScoreOnFallenTown(town, attacker);
-
-					// Remove the town directly.
-					war.getWarParticipants().remove(town);
-					
-					return;
-				}
+					remove(nation, attacker);
 			}
+			break;
 
 		case CIVILWAR:
 		case TOWNWAR:
-			
+	 		/*
+	 		 * Process the scoring of points including townblocks that haven't 
+	 		 * and the town itself.
+	 		 */
+	 		war.getScoreManager().processScoreOnFallenTown(town, attacker);
+
+			// Remove the town directly.
+			war.getWarParticipants().remove(town);
 			
 			break;
 		}
 		
-
+		war.checkEnd();
 	}
 
 	/** 
@@ -416,10 +398,8 @@ public class WarZoneManager {
 	 *    the remove(attacker, Town) and a capital has fallen. (In which case the capital is already removed from the WarParticipants.
 	 * @param nation Nation being removed from the war.
 	 * @param attacker Town which attacked the Nation.
-	 * 
-	 * @throws NotRegisteredException - When a Towny Object does not exist.
 	 */
-	public void remove(Nation nation, Town attacker) throws NotRegisteredException {
+	public void remove(Nation nation, Town attacker) {
 
 		/*
 		 * Award points to the attacking Town for felling a nation.

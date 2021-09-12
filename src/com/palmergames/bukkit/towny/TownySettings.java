@@ -20,7 +20,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
-import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
+import com.palmergames.bukkit.towny.war.eventwar.WarZoneConfig;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.FileMgmt;

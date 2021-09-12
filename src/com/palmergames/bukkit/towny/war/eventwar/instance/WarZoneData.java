@@ -1,10 +1,8 @@
-package com.palmergames.bukkit.towny.war.eventwar;
+package com.palmergames.bukkit.towny.war.eventwar.instance;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -28,19 +26,17 @@ public class WarZoneData {
 		return defenders.size() - attackers.size();
 	}
 	
-	public void addAttacker (Player p) throws NotRegisteredException {
+	public void addAttacker(Player p) {
 		if (!p.isDead()){
 			Resident resident = TownyUniverse.getInstance().getResident(p.getUniqueId());
-			if (resident == null) 
-				throw new NotRegisteredException(Translation.of("msg_not_registered_1", p.getName()));
 			
-			attackerTowns.add(resident.getTown());
+			attackerTowns.add(resident.getTownOrNull());
 			allPlayers.add(p);
 			attackers.add(p);
 		}
 	}
 	
-	public void addDefender (Player p) {
+	public void addDefender(Player p) {
 		if (!p.isDead()){
 			allPlayers.add(p);
 			defenders.add(p);

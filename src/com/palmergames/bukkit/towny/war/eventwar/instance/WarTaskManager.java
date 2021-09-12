@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.war.eventwar;
+package com.palmergames.bukkit.towny.war.eventwar.instance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,6 @@ import org.bukkit.scheduler.BukkitScheduler;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.war.eventwar.tasks.WarTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ServerBroadCastTimerTask;

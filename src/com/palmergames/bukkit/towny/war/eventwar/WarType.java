@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.war.eventwar;
 
-import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
-
 public enum WarType {
 	// TODO: Make all these settings configurable.
 	RIOT("Riot", false, WarZoneConfig.riotsMayorDeathEnabled(), false, false, WarZoneConfig.riotResidentLives(), WarZoneConfig.riotMayorLives(), WarZoneConfig.riotBaseSpoils(), WarZoneConfig.riotPointsPerKill()),
