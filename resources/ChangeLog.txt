@@ -6709,3 +6709,5 @@ v0.92.0.11:
     - Pressure plates are already included in the switch_id list by default and should cause no issue to existing servers.
     - Closes #5140.
   - Fix /tw toggle revertunclaim not stopping reverts in progress.
+0.97.1.9:
+  - API: Add new MetaDataUtil, to ease getting and setting metadata on TownyObjects.
