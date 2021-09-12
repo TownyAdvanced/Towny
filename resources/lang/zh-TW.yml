@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.121
+version: 0.122
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -961,7 +961,7 @@ msg_err_unable_to_add_more_residents_without_nation: '如果不首先加入或�
 msg_the_following_towns_were_deleted_for_having_0_claims: '下列城鎮已被删除, 因為它們有0個索賠: %s'
 msg_spawn_warn: '生成成本為%s。是否繼續？提示: 加入 -ignore 跳過這些確認。'
 msg_confirm_purchase: '這樣做將花費%s。是否繼續？'
-msg_warn_the_following_towns_will_be_removed_from_your_nation: '下列城鎮將從您的國家中删除: %s。是否繼續？'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Because they will not be close enough to the new capital, the following towns will be removed from your nation: %s. Do you wish to continue?'
 msg_ta_deposit_all_success: '已成功將%s存入所有國家''和城鎮''的銀行。'
 bonus_townblocks: '獎勵城鎮街區'
 #Added in 0.80
@@ -1356,3 +1356,5 @@ status_jailed: 'Jailed:'
 status_bad_yes: '&cYES'
 status_good_no: '&aNO'
 status_resident_tax_title: '%s''s Tax'
+#Added in 0.122
+msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because they will not be close enough to your nation capital, the following towns will be removed if the merge is completed: %s.'
