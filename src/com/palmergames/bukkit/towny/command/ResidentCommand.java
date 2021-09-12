@@ -304,7 +304,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_no_economy"));
 
 					// Get Town the player is jailed in.
-					final Town jailTown = resident.getJailTown();				
+					final Town jailTown = resident.getJailTown();
 
 					// Set cost of bail.
 					double cost = TownySettings.getBailAmount();
@@ -313,7 +313,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					if (resident.isKing())
 						cost = TownySettings.getBailAmountKing();
 					
-					if (cost > 0) {			
+					if (cost > 0) {
 						if (resident.getAccount().canPayFromHoldings(cost)) {
 							final double finalCost = cost;
 							Confirmation.runOnAccept(() -> {
@@ -323,7 +323,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 								} else {
 									TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_unable_to_pay_bail"));
 								}
-							});
+							})
+							.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(finalCost)))
+							.sendTo(player);
 						} else {
 							throw new TownyException(Translatable.of("msg_err_unable_to_pay_bail"));
 						}					

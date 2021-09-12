@@ -1986,7 +1986,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				tokens = line.split("#");
 				TownBlock tb = null;
 				try {
-					tb = TownyUniverse.getInstance().getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+					tb = TownyUniverse.getInstance().getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
 					jail.setTownBlock(tb);
 					jail.setTown(tb.getTown());
 					tb.setJail(jail);

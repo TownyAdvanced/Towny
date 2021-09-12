@@ -6702,3 +6702,6 @@ v0.92.0.11:
   - Bump language files to 0.122.
   - New Language added to Crowdin: Vietnamese.
   - Update maven-shade-plugin to a version which supports Java 16.
+  - Fix /res jail paybail command not sending confirmation when bail costs are more than 0.
+    - Closes #5265.
+  - Fix jails not loading correctly.
