@@ -6705,3 +6705,6 @@ v0.92.0.11:
   - Fix /res jail paybail command not sending confirmation when bail costs are more than 0.
     - Closes #5265.
   - Fix jails not loading correctly.
+  - Remove physical-player-interactions from automatically being treated as switch actions.
+    - Pressure plates are already included in the switch_id list by default and should cause no issue to existing servers.
+    - Closes #5140.
