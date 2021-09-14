@@ -115,6 +115,10 @@ public class StatusScreen {
 		// The loop is done, if anything was left in currentLine dump it into lines.
 		if (!currentLine.content().isEmpty())
 			lines.add(currentLine);
+		// A component with children will return empty above, we must dump any last component that consists of children.
+		else if (!currentLine.children().isEmpty())
+			for (Component child : currentLine.children())
+				lines.add(Component.empty().append(child));
 		
 		return lines;
 	}
