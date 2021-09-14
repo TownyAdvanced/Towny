@@ -1232,7 +1232,7 @@ jail_sing: 'Тюрьма'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%5$s отправил %1$s в %2$s в камеру №%3$s на %4$s часов.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s должны наиграть ещё %s, чтобы их можно было поместить в тюрьму'
 #Added in 0.108
-msg_town_not_peaceful: '&bНация не смогла себе позволить быть мирной.'
+msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
 msg_town_already_peaceful: '&Town is already peaceful.'
 msg_town_already_not_peaceful: '&Town is already not peaceful.'
 msg_town_cant_peaceful: '&bГород не смог себе позволить стать мирным.'
