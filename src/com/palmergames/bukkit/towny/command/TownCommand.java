@@ -1631,7 +1631,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				else if (!town.isNeutral() && !peacefulState) throw new TownyException(Translatable.of("msg_town_already_not_peaceful"));
 
 				if (peacefulState && TownyEconomyHandler.isActive() && !town.getAccount().canPayFromHoldings(cost))
-					throw new TownyException(Translatable.of("msg_nation_cant_peaceful"));
+					throw new TownyException(Translatable.of("msg_town_cant_peaceful"));
 				
 				// Fire cancellable event directly before setting the toggle.
 				TownToggleNeutralEvent preEvent = new TownToggleNeutralEvent(sender, town, admin, choice.orElse(!town.isNeutral()));

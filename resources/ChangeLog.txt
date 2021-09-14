@@ -6712,3 +6712,6 @@ v0.92.0.11:
 0.97.1.9:
   - API: Add new MetaDataUtil, to ease getting and setting metadata on TownyObjects.
   - Fix elements added via the StatusScreenEvents additionalLines not appearing on the status screens in some situations.
+0.97.1.10:
+  - Fix incorrect messages being shown to towns when their peaceful status is disallowed.
+    - Closes #5286.
