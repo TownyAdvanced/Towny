@@ -6715,3 +6715,5 @@ v0.92.0.11:
 0.97.1.10:
   - Fix incorrect messages being shown to towns when their peaceful status is disallowed.
     - Closes #5286.
+  - Make (PvP), (No PvP) in the chunk notifications use the language string.
+  - Make the remainder of the chunk notifications messages use the players' locale.

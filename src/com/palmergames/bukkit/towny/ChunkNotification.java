@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.config.ConfigNodes;
@@ -137,19 +136,19 @@ public class ChunkNotification {
 			out.add(output);
 		
 		// Only adds this if entering the wilderness
-		output = getAreaPvPNotification();
+		output = getAreaPvPNotification(resident);
 		if (output != null && output.length() > 0)
 			out.add(output);
 		
 		// Only show the owner of individual plots if they do not have this mode applied		
 		if (!resident.hasMode("ignoreplots")) {
-			output = getOwnerOrPlotNameNotification();
+			output = getOwnerOrPlotNameNotification(resident);
 			if (output != null && output.length() > 0)
 				out.add(output);
 		}
 	
 		// Only adds this IF in town.
-		output = getTownPVPNotification();
+		output = getTownPVPNotification(resident);
 		if (output != null && output.length() > 0)
 			out.add(output);
 
@@ -199,16 +198,16 @@ public class ChunkNotification {
 		return null;
 	}
 	
-	public String getAreaPvPNotification() {
+	public String getAreaPvPNotification(Resident resident) {
 
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
 			if (toWild)
-				return String.format(areaWildernessPvPNotificationFormat, ((to.getTownyWorldOrNull().isPVP() && testWorldPVP()) ? Colors.Red + " (PvP)" : ""));
+				return String.format(areaWildernessPvPNotificationFormat, ((to.getTownyWorldOrNull().isPVP() && testWorldPVP()) ? " " + Translatable.of("status_title_pvp").forLocale(resident) : ""));
 		}
 		return null;
 	}
 
-	public String getOwnerOrPlotNameNotification() {
+	public String getOwnerOrPlotNameNotification(Resident resident) {
 
 		if (toWild) return null;
 		
@@ -220,16 +219,16 @@ public class ChunkNotification {
 				String resName = (TownySettings.isNotificationOwnerShowingNationTitles() ? toResident.getFormattedTitleName() : toResident.getFormattedName());
 				return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? resName : toTownBlock.getName());
 			} else
-				return  String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? Translation.of("UNCLAIMED_PLOT_NAME") : toTownBlock.getName());
+				return  String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? Translatable.of("UNCLAIMED_PLOT_NAME").forLocale(resident) : toTownBlock.getName());
 
 		}
 		return null;
 	}
 
-	public String getTownPVPNotification() {
+	public String getTownPVPNotification(Resident resident) {
 
 		if (!toWild && ((fromWild) || (toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp))) {
-			return String.format(areaTownPvPNotificationFormat, ( !CombatUtil.preventPvP(to.getTownyWorldOrNull(), toTownBlock) ? Colors.Red + "(PvP)" : Colors.Green + "(No PVP)"));
+			return String.format(areaTownPvPNotificationFormat, ( !CombatUtil.preventPvP(to.getTownyWorldOrNull(), toTownBlock) ? Translatable.of("status_title_pvp").forLocale(resident) : Translatable.of("status_title_nopvp").forLocale(resident)));
 		}
 		return null;
 	}
