@@ -1232,7 +1232,7 @@ jail_sing: 'Gevangenis'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s is verzonden naar %s naar cel nummer %s gedurende %s uur door %s.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s heeft niet lang genoeg gespeeld om gevangen te worden gezet, wacht een andere %s'
 #Added in 0.108
-msg_town_not_peaceful: '&bNatie kon zijn vreedzame staat niet betalen.'
+msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
 msg_town_already_peaceful: '&bStad is al vreedzaam.'
 msg_town_already_not_peaceful: '&bStad is al niet vreedzaam.'
 msg_town_cant_peaceful: '&bStad kon het niet betalen om een vreedzame stad te worden.'
