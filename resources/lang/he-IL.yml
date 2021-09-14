@@ -1232,7 +1232,7 @@ jail_sing: 'כלא'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: 'השחקן %1$s נשלח ל - %2$s לתא מספר %3$s למשך %4$s שעות על ידי %5$s.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s לא שיחק מספיק זמן בשביל שיישלח לכלא, חכה עוד %s'
 #Added in 0.108
-msg_town_not_peaceful: '&bהאומה לא יכלה להרשות לעצמה לשמור על מצב שוחר שלום.'
+msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
 msg_town_already_peaceful: '&cהעיר כבר שוחרת שלום.'
 msg_town_already_not_peaceful: '&bהעיר הייתה לא שוחרת שלום עוד לפני כן.'
 msg_town_cant_peaceful: '&bלעיר שלך אין מספיק כסף בשביל להפוך לשוחרת שלום.'
