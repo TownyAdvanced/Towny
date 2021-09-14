@@ -1232,7 +1232,7 @@ jail_sing: 'Hapis'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s, %s tarafından %s saat boyunca %s hücre numarasına %s için gönderildi.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s hapse atılacak kadar uzun oynamadı, %s daha bekleyin'
 #Added in 0.108
-msg_town_not_peaceful: '&bUlus, barışçıl bir devleti göze alamazdı.'
+msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
 msg_town_already_peaceful: '&Şehir zaten barışçıl.'
 msg_town_already_not_peaceful: '&Kasaba zaten barışçıl değil.'
 msg_town_cant_peaceful: '&bKasaba, barışçıl bir kasaba olmayı göze alamazdı.'
