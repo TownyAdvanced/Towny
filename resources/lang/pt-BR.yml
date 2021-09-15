@@ -608,7 +608,7 @@ msg_err_over_outposts_limit: 'Você não pode se teleportar para o seu posto ava
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Outlaws:' #Used on /t outlawlist
+outlaws: 'Fora-da-Lei:' #Used on /t outlawlist
 online: '&a(Online)'
 registered_last_online: '&2Registrado: &a%s &8| &2Última vez online: &a%s' #Used in mayor hover text in /town status screen.
 status_perm: 'Perm:' #Used on /plot perm, /res
