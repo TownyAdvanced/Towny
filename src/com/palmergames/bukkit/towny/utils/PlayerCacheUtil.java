@@ -284,10 +284,13 @@ public class PlayerCacheUtil {
 		
 		if (resident == null) {
 			// Check if entity is a Citizens NPC
-			if (plugin.isCitizens2()) {
-				if (CitizensAPI.getNPCRegistry().isNPC(player))
-					return TownBlockStatus.NOT_REGISTERED;
-			} else {
+			if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(player))
+				return TownBlockStatus.NOT_REGISTERED;
+ 
+			// Retry getting a resident with the ability to get a fake player resident.
+			resident = TownyUniverse.getInstance().getResident(player.getName());
+			
+			if (resident == null) {
 				// If not an NPC then there is likely some sort of problem that should be logged.
 				plugin.getLogger().warning("Failed to fetch resident: " + player.getName());
 				return TownBlockStatus.NOT_REGISTERED;
