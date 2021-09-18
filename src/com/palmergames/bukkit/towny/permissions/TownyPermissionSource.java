@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.permissions;
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -171,21 +172,21 @@ public abstract class TownyPermissionSource {
 		return has(player, blockPerm);
 	}	
 
-	public boolean isTownyAdmin(Player player) {
+	public boolean isTownyAdmin(Permissible permissible) {
 
-		return (player == null) || player.isOp() || strictHas(player, PermissionNodes.TOWNY_ADMIN.getNode());
+		return (permissible == null) || permissible.isOp() || strictHas(permissible, PermissionNodes.TOWNY_ADMIN.getNode());
 
 	}
 
 	/**
 	 * Primary test for a permission node, used throughout Towny.
 	 * 
-	 * @param player Player to check.
+	 * @param permissible Permissible to check.
 	 * @param perm Permission node to check for.
 	 * @return true if the player has the permission node or is considered an admin.
 	 */
-	public boolean testPermission(Player player, String perm) {
-		return isTownyAdmin(player) || strictHas(player, perm);
+	public boolean testPermission(Permissible permissible, String perm) {
+		return isTownyAdmin(permissible) || strictHas(permissible, perm);
 	}
 
 	/**
@@ -208,17 +209,17 @@ public abstract class TownyPermissionSource {
 	 *
 	 * Should be used in place of {@link #has(Player, String)} if {@link Player#isOp()} has already been called.
 	 *
-	 * @param player Player to check
+	 * @param permissible Permissible to check
 	 * @param node Permission node to check for
 	 * @return true if the player has this permission node.
 	 */
-	private boolean strictHas(Player player, String node) {
+	private boolean strictHas(Permissible permissible, String node) {
 
 		/*
 		 * Node has been set or negated so return the actual value
 		 */
-		if (player.isPermissionSet(node))
-			return player.hasPermission(node);
+		if (permissible.isPermissionSet(node))
+			return permissible.hasPermission(node);
 
 		/*
 		 * Check for a parent with a wildcard
@@ -227,10 +228,10 @@ public abstract class TownyPermissionSource {
 		final StringBuilder builder = new StringBuilder(node.length());
 		for (String part : parts) {
 			builder.append('*');
-			if (player.hasPermission("-" + builder.toString())) {
+			if (permissible.hasPermission("-" + builder.toString())) {
 				return false;
 			}
-			if (player.hasPermission(builder.toString())) {
+			if (permissible.hasPermission(builder.toString())) {
 				return true;
 			}
 			builder.deleteCharAt(builder.length() - 1);
