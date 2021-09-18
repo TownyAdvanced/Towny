@@ -17,8 +17,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
-import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
+import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -164,7 +163,7 @@ public class OnPlayerLogin implements Runnable {
 				
 				// Send a message warning of ruined status and time until deletion.
 				if (town.isRuined())
-					TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+					TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownySettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
 			}
 
 			if (TownyAPI.getInstance().isWarTime())

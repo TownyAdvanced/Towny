@@ -11,8 +11,7 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.utils.JailUtil;
-import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
-import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
+import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 
 /**
  * This class represents the hourly timer task
@@ -29,7 +28,7 @@ public class HourlyTimerTask extends TownyTimerTask {
 
 	@Override
 	public void run() {
-		if (TownRuinSettings.getTownRuinsEnabled()) {
+		if (TownySettings.getTownRuinsEnabled()) {
 			TownRuinUtil.evaluateRuinedTownRemovals();
 		}
 		

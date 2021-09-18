@@ -86,9 +86,8 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.towny.utils.TownUtil;
-import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
-import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -590,7 +589,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_RECLAIM.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				
-				if(!TownRuinSettings.getTownRuinsReclaimEnabled())
+				if(!TownySettings.getTownRuinsReclaimEnabled())
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				
 				TownRuinUtil.processRuinedTownReclaimRequest(player, plugin);
@@ -2980,10 +2979,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 
-				if (TownRuinSettings.getTownRuinsEnabled()) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted", TownRuinSettings.getTownRuinsMaxDurationHours()));
-					if (TownRuinSettings.getTownRuinsReclaimEnabled())
-						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted2", TownRuinSettings.getTownRuinsMinDurationHours()));
+				if (TownySettings.getTownRuinsEnabled()) {
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted", TownySettings.getTownRuinsMaxDurationHours()));
+					if (TownySettings.getTownRuinsReclaimEnabled())
+						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted2", TownySettings.getTownRuinsMinDurationHours()));
 				}
 				town = resident.getTown();
 				Confirmation.runOnAccept(() -> {

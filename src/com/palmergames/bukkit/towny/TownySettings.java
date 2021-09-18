@@ -3126,5 +3126,30 @@ public class TownySettings {
 	public static String getBankHistoryBookFormat() {
 		return getString(ConfigNodes.BANKHISTORY_BOOK);
 	}
+	
+	public static boolean getTownRuinsEnabled() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_RUINS_ENABLED);
+	}
+
+	public static int getTownRuinsMaxDurationHours() {
+		return Math.min(getInt(ConfigNodes.TOWN_RUINING_TOWN_RUINS_MAX_DURATION_HOURS), 8760);
+	}
+
+	public static int getTownRuinsMinDurationHours() {
+		return getInt(ConfigNodes.TOWN_RUINING_TOWN_RUINS_MIN_DURATION_HOURS);
+	}
+
+	public static boolean getTownRuinsReclaimEnabled() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_RUINS_RECLAIM_ENABLED);
+	}
+
+	public static double getEcoPriceReclaimTown() {
+		return getDouble(ConfigNodes.ECO_PRICE_RECLAIM_RUINED_TOWN);
+	}
+	
+	public static boolean areRuinsMadePublic() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_TOWNS_BECOME_PUBLIC);
+	}
+
 }
 

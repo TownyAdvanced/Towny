@@ -6720,3 +6720,5 @@ v0.92.0.11:
   - Disable citizens compatability if citizens gets disabled, courtesy of Warriorrrr with PR #5289.
   - API: Added TownBlockStatusScreenEvent.
     - Adds ability to add lines and components to the TownBlock status screen (seen via /plot perm|info.)
+  - Remove TownRuinSettings class, moving methods to TownySettings.
+  - Move TownRuinUtil to utils package.

@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.war.common.townruin;
+package com.palmergames.bukkit.towny.utils;
 
 
 import com.palmergames.bukkit.towny.Towny;
@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.util.TimeTools;
 
 import org.bukkit.Bukkit;
@@ -95,7 +94,7 @@ public class TownRuinUtil {
 		// Set Town settings.
 		town.setRuined(true);
 		town.setRuinedTime(System.currentTimeMillis());
-		town.setPublic(TownRuinSettings.areRuinsMadePublic());
+		town.setPublic(TownySettings.areRuinsMadePublic());
 		town.setOpen(false);
 		town.getPermissions().setAll(true);
 
@@ -146,13 +145,13 @@ public class TownRuinUtil {
 				throw new TownyException(Translatable.of("msg_err_cannot_reclaim_town_unless_ruined"));
 
 			//Validate if player can pay
-			double townReclaimCost = TownRuinSettings.getEcoPriceReclaimTown();
+			double townReclaimCost = TownySettings.getEcoPriceReclaimTown();
 			if (TownyEconomyHandler.isActive() && !resident.getAccount().canPayFromHoldings(townReclaimCost))
 				throw new TownyException(Translatable.of("msg_insuf_funds"));
 
 			//Validate if player can remove at this time
-			if (TownRuinSettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town) > 0)
-				throw new TownyException(Translatable.of("msg_err_cannot_reclaim_town_yet", TownRuinSettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town)));
+			if (TownySettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town) > 0)
+				throw new TownyException(Translatable.of("msg_err_cannot_reclaim_town_yet", TownySettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town)));
 
 			if (TownyEconomyHandler.isActive() && townReclaimCost > 0) { 
 				Confirmation.runOnAccept(() -> {
@@ -231,7 +230,7 @@ public class TownRuinUtil {
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
 			if (townyUniverse.getDataSource().hasTown(town.getName()) && town.isRuined()
-					&& town.getRuinedTime() != 0 && getTimeSinceRuining(town) > TownRuinSettings
+					&& town.getRuinedTime() != 0 && getTimeSinceRuining(town) > TownySettings
 					.getTownRuinsMaxDurationHours()) {
 				//Ruin found & recently ruined end time reached. Delete town now.
 				townyUniverse.getDataSource().removeTown(town, false);

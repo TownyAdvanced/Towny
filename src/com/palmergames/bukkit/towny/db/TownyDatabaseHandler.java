@@ -40,8 +40,7 @@ import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.utils.JailUtil;
-import com.palmergames.bukkit.towny.war.common.townruin.TownRuinSettings;
-import com.palmergames.bukkit.towny.war.common.townruin.TownRuinUtil;
+import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
@@ -748,7 +747,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		 * If Town Ruining is enabled set the town into a ruined state
 		 * rather than deleting.
 		 */
-		removeTown(town, TownRuinSettings.getTownRuinsEnabled() && !town.isRuined());
+		removeTown(town, TownySettings.getTownRuinsEnabled() && !town.isRuined());
 	}
 
 	@Override
