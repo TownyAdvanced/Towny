@@ -163,6 +163,11 @@ public final class Translation {
 	 * @return The localized string.
 	 */
 	public static String of(String key) {
+		if (defaultLocale == null) {
+			Towny.getPlugin().getLogger().warning("Error: Tried to translate before a locale could be loaded!");
+			return key;
+		}
+		
 		String data = translations.get(defaultLocale.toString()).get(key.toLowerCase(Locale.ROOT));
 
 		if (data == null) {
