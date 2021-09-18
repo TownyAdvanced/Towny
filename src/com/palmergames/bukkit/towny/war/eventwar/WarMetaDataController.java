@@ -26,7 +26,7 @@ public class WarMetaDataController {
 	public static void setWarUUID(TownyObject obj, UUID uuid) {
 		StringDataField sdf = (StringDataField) warUUID.clone();
 		if (obj.hasMeta(sdf.getKey()))
-			MetaDataUtil.setString(obj, sdf, uuid.toString());
+			MetaDataUtil.setString(obj, sdf, uuid.toString(), true);
 		else
 			obj.addMetaData(new StringDataField("eventwar_warUUID", uuid.toString()), true);
 	}
@@ -48,7 +48,7 @@ public class WarMetaDataController {
 	public static void setResidentLives(Resident res, int lives) {
 		IntegerDataField idf = (IntegerDataField) residentLives.clone();
 		if (res.hasMeta(idf.getKey()))
-			MetaDataUtil.setInt(res, idf, lives);
+			MetaDataUtil.setInt(res, idf, lives, true);
 		else
 			res.addMetaData(new IntegerDataField("eventwar_residentLives", lives, "War Lives Remaining"), true);
 	}
@@ -56,7 +56,7 @@ public class WarMetaDataController {
 	public static void decrementResidentLives(Resident res) {
 		IntegerDataField idf = (IntegerDataField) residentLives.clone();
 		if (res.hasMeta(idf.getKey()))
-			MetaDataUtil.setInt(res, idf, getResidentLives(res) - 1);
+			MetaDataUtil.setInt(res, idf, getResidentLives(res) - 1, true);
 		res.save();
 	}
 	

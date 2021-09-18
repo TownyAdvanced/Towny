@@ -118,7 +118,7 @@ public class WarDataBase {
 				addWarUuidForTown(warUUID, town);
 				if (!wardatas.containsKey(warUUID))
 					wardatas.put(warUUID, WarData.of(warUUID));
-			// Else, this UUID is not backed by any data, delete teh metadata.
+			// Else, this UUID is not backed by any data, delete the metadata.
 			} else {
 				plugin.getLogger().info(town.getName() + " tried to load an invalid war, this War UUID " + warUUID + " will be purged from any further metadata discovered.");
 				cleanTownMetaData(town);

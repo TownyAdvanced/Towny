@@ -263,7 +263,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || TownyAPI.getInstance().isWarTime())
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
 		ThrownPotion potion = event.getEntity();
@@ -322,7 +322,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || TownyAPI.getInstance().isWarTime())
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
 		List<LivingEntity> affectedEntities = (List<LivingEntity>) event.getAffectedEntities();

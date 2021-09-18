@@ -339,7 +339,7 @@ public abstract class TownyDataSource {
 	abstract public List<PlotGroup> getAllPlotGroups();
 	
 	abstract public List<Jail> getAllJails();
-	
+
 	abstract public List<Resident> getResidents(String[] names);
 	
 	abstract public List<Resident> getResidents(UUID[] uuids);

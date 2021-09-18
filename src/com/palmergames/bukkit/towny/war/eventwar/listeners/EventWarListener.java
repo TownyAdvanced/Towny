@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
+import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 
 public class EventWarListener implements Listener {
@@ -55,13 +56,9 @@ public class EventWarListener implements Listener {
 	private void onPlayerKillsPlayer(PlayerKilledPlayerEvent event) {
 		Resident killerRes = event.getKillerRes();
 		Resident victimRes = event.getVictimRes();
-		War war = TownyUniverse.getInstance().getWarEvent(event.getKiller());
-		War victimWar = TownyUniverse.getInstance().getWarEvent(event.getVictim());
-
-		if (war == null || victimWar == null)
-			return; // One of the players is not in a war.
-		if (!war.getWarUUID().equals(victimWar.getWarUUID()))
-			return; // The wars are not the same war.
+		War war = TownyUniverse.getInstance().getWarEvent(killerRes);
+		if (!WarUtil.hasSameWar(killerRes, victimRes))
+			return;
 		if (CombatUtil.isAlly(killerRes.getName(), victimRes.getName()) && war.getWarType() != WarType.RIOT)
 			return; // They are allies and this was a friendly fire kill.
 		
@@ -232,8 +229,8 @@ public class EventWarListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onNewTown(PreNewTownEvent event) { // TODO: Make this configurable based on whether there is a world-war or not.
-		if (TownyAPI.getInstance().isWarTime()) {
+	public void onNewTown(PreNewTownEvent event) {
+		if (WarUtil.hasWorldWar(TownyAPI.getInstance().getTownyWorld(event.getPlayer().getWorld().getName()))) {
 			event.setCancelled(true);
 			event.setCancelMessage(Translation.of("msg_war_cannot_do"));
 		}

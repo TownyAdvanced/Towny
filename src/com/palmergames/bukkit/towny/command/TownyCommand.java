@@ -335,7 +335,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	private boolean TownyWar(String[] args, Player p) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-//		if (TownyAPI.getInstance().isWarTime() && args.length > 0) {
 		if (args.length > 0) {
 			towny_war.clear();
 			if (args[0].equalsIgnoreCase("stats"))

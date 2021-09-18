@@ -130,6 +130,7 @@ public class TownyUniverse {
         wildernessMapDataMap.clear();
         hibernatedResidentMap.clear();
         replacementNamesMap.clear();
+        wars.clear();
     }
     
     /**
@@ -1084,109 +1085,110 @@ public class TownyUniverse {
 	 * War Stuff
 	 */
 
-    
-    /**
-     * Used in loading only.
-     * 
-     * @param uuid UUID of the given war, taken from the War filename.
-     */
-    public void newWarInternal(String uuid) {
-    	War war = new War(Towny.getPlugin(), UUID.fromString(uuid));
-    	addWar(war);
-    }
-	
+	/**
+	 * Used in loading only.
+	 * 
+	 * @param uuid UUID of the given war, taken from the War filename.
+	 */
+	public void newWarInternal(String uuid) {
+		War war = new War(Towny.getPlugin(), UUID.fromString(uuid));
+		addWar(war);
+	}
+
 	@Nullable
 	public War getWarEvent(UUID uuid) {
 		return wars.get(uuid);
 	}
-	
+
 	@Nullable
-    public War getWarEvent(Player player) {
-    	Resident resident = getResident(player.getUniqueId());
+	public War getWarEvent(Player player) {
+		Resident resident = getResident(player.getUniqueId());
 		if (resident != null)
 			return getWarEvent(resident);
-        return null;
-    }
+		return null;
+	}
+
+	@Nullable
+	public War getWarEvent(Town town) {
+		String warUUID = WarMetaDataController.getWarUUID(town);
+		if (warUUID != null)
+			return getWarEvent(UUID.fromString(warUUID));
+		return null;
+	}
 	
 	@Nullable
-    public War getWarEvent(Resident resident) {
-		String warUUID = WarMetaDataController.getWarUUID(resident);  
+	public War getWarEvent(Resident resident) {
+		String warUUID = WarMetaDataController.getWarUUID(resident);
 		if (warUUID != null)
 			return getWarEvent(UUID.fromString(warUUID));
-		
-        for (War war : getWars()) {
-        	if (war.getWarParticipants().has(resident))
-        		return war;
-        }
-        return null;
-    }
-    
+		return null;
+	}
+
 	@Nullable
-    public War getWarEvent(TownBlock townBlock) {
+	public War getWarEvent(TownBlock townBlock) {
 		if (townBlock == null)
 			return null;
-		
+
 		String warUUID = WarMetaDataController.getWarUUID(townBlock);
 		if (warUUID != null)
 			return getWarEvent(UUID.fromString(warUUID));
-		
-    	for (War war : getWars()) {
-    		if (war.getWarZoneManager().isWarZone(townBlock.getWorldCoord()))
-    			return war;
-    	}
-    	return null;
-    }
-    
-	@Nullable
-    public War getWarEvent(String warName) {
-    	for (War war : getWars()) {
-    		if (war.getWarName().equalsIgnoreCase(warName))
-    			return war;
-    	}
-    	return null;
-    }
+		return null;
+	}
 
-    public boolean hasWarEvent(TownBlock townBlock) {
+	@Nullable
+	public War getWarEvent(String warName) {
+		for (War war : getWars()) {
+			if (war.getWarName().equalsIgnoreCase(warName))
+				return war;
+		}
+		return null;
+	}
+
+	public boolean hasWarEvent(TownBlock townBlock) {
 		String warUUID = WarMetaDataController.getWarUUID(townBlock);
 		return warUUID != null;
-    }
-    
-    public boolean hasWarEvent(Town town) {
+	}
+
+	public boolean hasWarEvent(Town town) {
 		String warUUID = WarMetaDataController.getWarUUID(town);
 		return warUUID != null;
-    }
-    
-    public boolean hasWarEvent(Resident resident) {
+	}
+
+	public boolean hasWarEvent(Resident resident) {
 		String warUUID = WarMetaDataController.getWarUUID(resident);
 		return warUUID != null;
-    }
+	}
 
-	public boolean isWarTime() {	
+	public boolean isWarTime() {
 		return !wars.isEmpty();
 	}
-    
-    public Collection<War> getWars() {
-    	return Collections.unmodifiableCollection(wars.values());
-    }
-    
-    public List<String> getWarNames() {
-    	List<String> names = new ArrayList<String>(wars.size());
-    	for (War war : getWars())
-    		names.add(war.getWarName());
-    	
-    	return names;
-    }
-    
-    public void addWar(War war) {
-    	if (war.getWarUUID() == null)
-    		return;
-    	wars.put(war.getWarUUID(), war);
-    }
-    
-    public void removeWar(War war) {
-    	wars.remove(war.getWarUUID());
-    	war = null;
-    }
+
+	public Collection<War> getWars() {
+		return Collections.unmodifiableCollection(wars.values());
+	}
+
+	public List<String> getWarNames() {
+		List<String> names = new ArrayList<String>(wars.size());
+		for (War war : getWars())
+			names.add(war.getWarName());
+
+		return names;
+	}
+
+	public void addWar(War war) {
+		if (war.getWarUUID() == null)
+			return;
+		wars.put(war.getWarUUID(), war);
+	}
+
+	public void removeWar(War war) {
+		wars.remove(war.getWarUUID());
+		war = null;
+	}
+	
+	/*
+	 * SpawnPoint Stuff
+	 */
 
 	public Map<Block, SpawnPoint> getSpawnPoints() {
 		return spawnPoints;

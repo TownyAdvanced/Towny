@@ -12,16 +12,20 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.util.BukkitTools;
 
 public class WarUtil {
-	
-	/** 
-	 * Allows War Event to handle editable materials, while accounting for neutral or jailed players.
+
+	/**
+	 * Allows War Event to handle editable materials, while accounting for neutral
+	 * or jailed players.
 	 * 
 	 * @param player - Player who is being tested for neutrality.
-	 * @return Whether a player is considered neutral. 
+	 * @return Whether a player is considered neutral.
 	 */
 	public static boolean isPlayerNeutral(Player player) {
 		if (TownyAPI.getInstance().isWarTime()) {
@@ -35,7 +39,7 @@ public class WarUtil {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Launch a {@link Firework} at a given plot
 	 * @param townblock - The {@link TownBlock} to fire in
@@ -43,8 +47,7 @@ public class WarUtil {
 	 * @param type - The {@link FireworkEffect} type
 	 * @param c - The Firework {@link Color}
 	 */
-	public static void launchFireworkAtPlot(final TownBlock townblock, final Player atPlayer, final FireworkEffect.Type type, final Color c)
-	{
+	public static void launchFireworkAtPlot(final TownBlock townblock, final Player atPlayer, final FireworkEffect.Type type, final Color c) {
 		// Check the config. If false, do not launch a firework.
 		if (!TownySettings.getPlotsFireworkOnAttacked()) {
 			return;
@@ -60,5 +63,40 @@ public class WarUtil {
 			firework.setFireworkMeta(data);
 			firework.detonate();
 		}, 0);
+	}
+
+	public static boolean sameWar(War war1, War war2) {
+		if (war1 == null || war2 == null)
+			return false;
+		return war1.getWarUUID().equals(war2.getWarUUID());
+	}
+	public static boolean hasSameWar(Town town1, Town town2) {
+		War war1 = TownyUniverse.getInstance().getWarEvent(town1);
+		War war2 = TownyUniverse.getInstance().getWarEvent(town2);
+		return sameWar(war1, war2);
+	}
+	
+	public static boolean hasSameWar(Resident res1, Resident res2) {
+		War war1 = TownyUniverse.getInstance().getWarEvent(res1);
+		War war2 = TownyUniverse.getInstance().getWarEvent(res2);
+		return sameWar(war1, war2);
+	}
+	
+	public static boolean hasSameWar(Resident res, Town town) {
+		War war1 = TownyUniverse.getInstance().getWarEvent(res);
+		War war2 = TownyUniverse.getInstance().getWarEvent(town);
+		return sameWar(war1, war2);
+	}
+	
+	public static boolean hasSameWar(Resident res, TownBlock tb) {
+		War war1 = TownyUniverse.getInstance().getWarEvent(res);
+		War war2 = TownyUniverse.getInstance().getWarEvent(tb);
+		return sameWar(war1, war2);
+	}
+	
+	public static boolean hasWorldWar(TownyWorld world) {
+		if (!world.isWarAllowed())
+			return false;
+		return TownyUniverse.getInstance().getWars().stream().anyMatch(war -> war.getWarType().equals(WarType.WORLDWAR));
 	}
 }

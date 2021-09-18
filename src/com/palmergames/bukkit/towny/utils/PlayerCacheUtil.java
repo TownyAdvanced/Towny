@@ -23,14 +23,12 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
-import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
+import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 
 import net.citizensnpcs.api.CitizensAPI;
 
 import org.bukkit.Bukkit;
-import java.util.UUID;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -305,17 +303,17 @@ public class PlayerCacheUtil {
 		}
 
 		boolean residentHasWar = TownyUniverse.getInstance().hasWarEvent(resident);
-		boolean warTownBlockWithResident = residentHasWar && townBlock.isWarZone() && TownyUniverse.getInstance().getWarEvent(townBlock).getWarUUID().equals(UUID.fromString(WarMetaDataController.getWarUUID(resident)));
+		boolean townblockAndResidentSameWar = WarUtil.hasSameWar(resident, townBlock);
 		
 		try {
 			// War Time
-			if (TownyAPI.getInstance().isWarTime()) {
+			if (residentHasWar) {
 				//The grief-everything config option is set to true and the player and townblock are the same war. 
-				if (TownySettings.isAllowWarBlockGriefing() && warTownBlockWithResident)
+				if (TownySettings.isAllowWarBlockGriefing() && townblockAndResidentSameWar)
 					return TownBlockStatus.WARZONE;
 
 				//The player is in a World War, in a war-allowed world, and towns are not allowed to be neutral.
-				if (residentHasWar && !TownySettings.isWarTimeTownsNeutral() && worldCoord.getTownyWorldOrNull().isWarAllowed() && TownyUniverse.getInstance().getWarEvent(player).getWarType().equals(WarType.WORLDWAR))
+				if (!TownySettings.isWarTimeTownsNeutral() && worldCoord.getTownyWorldOrNull().isWarAllowed() && TownyUniverse.getInstance().getWarEvent(player).getWarType().equals(WarType.WORLDWAR))
 					return TownBlockStatus.WARZONE;
 			}
 
@@ -361,14 +359,14 @@ public class PlayerCacheUtil {
 			
 			// Enemy or WarZone.
 			if (CombatUtil.isEnemy(resident.getTown(), town)) {
-				if (warTownBlockWithResident)
+				if (townblockAndResidentSameWar)
 					return TownBlockStatus.WARZONE;
 				else
 					return TownBlockStatus.ENEMY;
 			} 
 
 			// WarZone.
-			if (warTownBlockWithResident)
+			if (townblockAndResidentSameWar)
 				return TownBlockStatus.WARZONE;
 
 			// Nothing left but Outsider.

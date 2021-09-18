@@ -2,8 +2,6 @@ package com.palmergames.bukkit.towny.war.eventwar.listeners;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
 import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -36,7 +34,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
-import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
@@ -61,15 +58,10 @@ public class WarZoneListener implements Listener {
     
     @EventHandler
     public void onTownStatus(TownStatusScreenEvent event) {
-    	Town town = event.getTown();
-    	if (!town.hasActiveWar())
-	    	return;
-    	String meta = WarMetaDataController.getWarUUID(town);
-    	if (meta == null)
-    		return;
-    	UUID warUUID = UUID.fromString(meta);
     	try {
-			War war = TownyUniverse.getInstance().getWarEvent(warUUID);
+			War war = TownyUniverse.getInstance().getWarEvent(event.getTown());
+			if (war == null)
+				return;
 			event.getStatusScreen().addComponentOf("eventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
 					HoverEvent.showText(Component.text(war.getWarType().name()).append(Component.newline())
 							.append(Component.text("Spoils: " + TownyEconomyHandler.getFormattedBalance(war.getWarSpoils())))
@@ -85,12 +77,10 @@ public class WarZoneListener implements Listener {
     
     @EventHandler
     public void onTBStatus(TownBlockStatusScreenEvent event) {
-    	String meta = WarMetaDataController.getWarUUID(event.getTownBlock());
-    	if (meta == null)
-    		return;
-    	UUID warUUID = UUID.fromString(meta);
     	try {
-			War war = TownyUniverse.getInstance().getWarEvent(warUUID);
+			War war = TownyUniverse.getInstance().getWarEvent(event.getTownBlock());
+			if (war == null)
+				return;
 			event.getStatusScreen().addComponentOf("eventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
 					HoverEvent.showText(Component.text(war.getWarType().name()).append(Component.newline())
 							.append(Component.text("Spoils: " + TownyEconomyHandler.getFormattedBalance(war.getWarSpoils())))
@@ -106,12 +96,10 @@ public class WarZoneListener implements Listener {
     
     @EventHandler
     public void onResidentStatus(ResidentStatusScreenEvent event) {
-    	String meta = WarMetaDataController.getWarUUID(event.getResident());
-    	if (meta == null)
-    		return;
-    	UUID warUUID = UUID.fromString(meta);
     	try {
-			War war = TownyUniverse.getInstance().getWarEvent(warUUID);
+			War war = TownyUniverse.getInstance().getWarEvent(event.getResident());
+			if (war == null)
+				return;
 			event.getStatusScreen().addComponentOf("eventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
 					HoverEvent.showText(Component.text(war.getWarType().name()).append(Component.newline())
 							.append(Component.text("Spoils: " + TownyEconomyHandler.getFormattedBalance(war.getWarSpoils())))
@@ -271,7 +259,7 @@ public class WarZoneListener implements Listener {
 		 */
 		
 		// Not in a war zone, do not modify the outcome of the event.
-		if (!TownyUniverse.getInstance().hasWarEvent(TownyAPI.getInstance().getTownBlock(event.getLocation())))
+		if (!TownyUniverse.getInstance().hasWarEvent(event.getTownBlock()))
 			return;
 			
 		/*

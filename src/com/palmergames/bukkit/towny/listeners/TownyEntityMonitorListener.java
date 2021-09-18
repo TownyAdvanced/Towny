@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
+import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import net.citizensnpcs.api.CitizensAPI;
@@ -275,10 +276,7 @@ public class TownyEntityMonitorListener implements Listener {
 			return;
 
 		if (attackerPlayer != null 
-				&& TownyAPI.getInstance().isWarTime()
-				&& TownyUniverse.getInstance().hasWarEvent(defenderResident)
-				&& TownyUniverse.getInstance().hasWarEvent(attackerResident)
-				&& TownyUniverse.getInstance().getWarEvent(attackerPlayer).equals(TownyUniverse.getInstance().getWarEvent(defenderPlayer)) 
+				&& WarUtil.hasSameWar(defenderResident, attackerResident)
 				&& TownySettings.getWartimeDeathPrice() > 0 ) {
 			// This will be handled in the EventWarListener.
 			return;
@@ -401,7 +399,7 @@ public class TownyEntityMonitorListener implements Listener {
 				return;
 
 			// Try outlaw jailing first
-			if (!TownyAPI.getInstance().isWarTime() && TownySettings.isJailingAttackingOutlaws() && attackerTown.hasOutlaw(defenderResident)) {
+			if (!WarUtil.hasSameWar(defenderResident, attackerTown) && TownySettings.isJailingAttackingOutlaws() && attackerTown.hasOutlaw(defenderResident)) {
 				// Not if they don't have the jailer node.
 				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(attackerPlayer, PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
 					return;
@@ -411,7 +409,7 @@ public class TownyEntityMonitorListener implements Listener {
 				return;
 
 			// Try enemy jailing second
-			} else if (TownyAPI.getInstance().isWarTime() && TownySettings.isJailingAttackingEnemies()){
+			} else if (WarUtil.hasSameWar(defenderResident, attackerTown) && TownySettings.isJailingAttackingEnemies()){
 				
 				// Not if the victim has no Town.
 				if (!defenderResident.hasTown())
