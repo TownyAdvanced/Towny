@@ -6723,3 +6723,4 @@ v0.92.0.11:
   - Remove TownRuinSettings class, moving methods to TownySettings.
   - Move TownRuinUtil to utils package.
   - Update yaml parser url and fix using a translatable (which could happen before we load language.)
+  - Fix plugin disabling if something is translated before fully loading translations, courtesy of Warriorrrr with PR #5291.
