@@ -1232,7 +1232,7 @@ jail_sing: 'Prison'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s a été envoyé à %s dans la cellule %s pendant %s heures par %s.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s n''a pas joué assez longtemps pour être emprisonné, attendez encore %s'
 #Added in 0.108
-msg_town_not_peaceful: '&bLa nation n''a pas pu payer le tribut pour la paix.'
+msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
 msg_town_already_peaceful: '&Town is already peaceful.'
 msg_town_already_not_peaceful: '&Town is already not peaceful.'
 msg_town_cant_peaceful: '&bLa ville n''a pas pu se permettre de devenir une ville pacifique.'

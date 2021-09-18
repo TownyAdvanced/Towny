@@ -1232,7 +1232,7 @@ jail_sing: 'Fängelse'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s har skickats till %s till cell nummer %s i %s timmar av %s.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s har inte spelat tillräckligt länge för att fängslas, vänta ytterligare %s'
 #Added in 0.108
-msg_town_not_peaceful: '&bNationen hade inte råd att fortsätta vara fredliga.'
+msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
 msg_town_already_peaceful: '&Town is already peaceful.'
 msg_town_already_not_peaceful: '&Town is already not peaceful.'
 msg_town_cant_peaceful: '&bStaden hade inte råd att bli fredlig.'

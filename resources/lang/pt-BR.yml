@@ -608,7 +608,7 @@ msg_err_over_outposts_limit: 'Você não pode se teleportar para o seu posto ava
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Outlaws:' #Used on /t outlawlist
+outlaws: 'Fora-da-Lei:' #Used on /t outlawlist
 online: '&a(Online)'
 registered_last_online: '&2Registrado: &a%s &8| &2Última vez online: &a%s' #Used in mayor hover text in /town status screen.
 status_perm: 'Perm:' #Used on /plot perm, /res
@@ -619,7 +619,7 @@ status_off_bad: '&4DESATIVADO'
 status_forced: '&cForçado'
 status_adjustable: '&aAjustável'
 status_pvp: 'PVP:'
-explosions: 'Explosions:'
+explosions: 'Explosões:'
 firespread: 'Firespread:'
 mobspawns: 'Mob Spawns:'
 owner_of_x_plots: 'Owner of %s plots.'
@@ -1232,7 +1232,7 @@ jail_sing: 'Jail'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s has been sent to %s into cell number %s for %s hours by %s.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s hasn''t played long enough to be jailed, wait another %s'
 #Added in 0.108
-msg_town_not_peaceful: '&bNation couldn''t afford it''s peaceful state.'
+msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
 msg_town_already_peaceful: '&Town is already peaceful.'
 msg_town_already_not_peaceful: '&Town is already not peaceful.'
 msg_town_cant_peaceful: '&bTown couldn''t afford to become a peaceful town.'

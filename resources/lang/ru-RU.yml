@@ -961,7 +961,7 @@ msg_err_unable_to_add_more_residents_without_nation: 'Ваш город не м�
 msg_the_following_towns_were_deleted_for_having_0_claims: 'Следующие города были удалены из-за отсутствия земель: %s'
 msg_spawn_warn: 'Спавн стоит %s. Продолжить? Подсказка: добавьте -ignore, чтобы пропустить это поддтверждение.'
 msg_confirm_purchase: 'Сделать это будет стоить %s. Продолжить?'
-msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Because they will not be close enough to the new capital, the following towns will be removed from your nation: %s. Do you wish to continue?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Города %s покинут вашу нацию, так как они не будут достаточно близки к новой столице. Вы хотите продолжить?'
 msg_ta_deposit_all_success: 'Успешно переведено %s на счета всех Городов и Наций.'
 bonus_townblocks: 'бонусные участки'
 #Added in 0.80
@@ -1357,4 +1357,4 @@ status_bad_yes: '&cДА'
 status_good_no: '&aНЕТ'
 status_resident_tax_title: 'Налог %s'
 #Added in 0.122
-msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because they will not be close enough to your nation capital, the following towns will be removed if the merge is completed: %s.'
+msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Города %s покинут вашу нацию, так как после слияния они не будут достаточно близки к новой столице.'
