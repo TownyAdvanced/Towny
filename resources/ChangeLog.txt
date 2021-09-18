@@ -6722,3 +6722,4 @@ v0.92.0.11:
     - Adds ability to add lines and components to the TownBlock status screen (seen via /plot perm|info.)
   - Remove TownRuinSettings class, moving methods to TownySettings.
   - Move TownRuinUtil to utils package.
+  - Update yaml parser url and fix using a translatable (which could happen before we load language.)

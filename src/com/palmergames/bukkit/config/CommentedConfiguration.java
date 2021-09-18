@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.config;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.util.FileMgmt;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -41,8 +40,8 @@ public class CommentedConfiguration extends YamlConfiguration {
 		try {
 			this.load(file);
 		} catch (InvalidConfigurationException | IOException e) {
-			Towny.getPlugin().getLogger().warning(Translation.of("err_invalid_yaml", file.getPath()));
-			Towny.getPlugin().getLogger().warning("https://yaml-online-parser.appspot.com/");
+			Towny.getPlugin().getLogger().warning(String.format("Loading error: Failed to load file %s (does it pass a yaml parser?).", file.getPath()));
+			Towny.getPlugin().getLogger().warning("https://jsonformatter.org/yaml-parser");
 			Towny.getPlugin().getLogger().warning(e.getMessage());
 			loaded = false;
 		}
