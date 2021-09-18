@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.event.statusscreen.NationStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
+import com.palmergames.bukkit.towny.event.statusscreen.TownBlockStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Government;
@@ -115,6 +116,15 @@ public class TownyFormatter {
 			for (int i = 0; i < fields.size(); i++) 
 				comp = comp.append(Component.text(fields.get(i)));
 			screen.addComponentOf("extraFields", comp);
+		}
+		
+		TownBlockStatusScreenEvent event = new TownBlockStatusScreenEvent(screen, townBlock);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.hasAdditionalLines()) {
+			TextComponent comp = Component.empty();
+			for (int i = 0; i < event.getAdditionalLines().size(); i++)
+				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
+				screen.addComponentOf("eventAddedLines", comp);
 		}
 		
 		return screen;

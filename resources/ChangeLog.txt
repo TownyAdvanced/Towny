@@ -6718,3 +6718,5 @@ v0.92.0.11:
   - Make (PvP), (No PvP) in the chunk notifications use the language string.
   - Make the remainder of the chunk notifications messages use the players' locale.
   - Disable citizens compatability if citizens gets disabled, courtesy of Warriorrrr with PR #5289.
+  - API: Added TownBlockStatusScreenEvent.
+    - Adds ability to add lines and components to the TownBlock status screen (seen via /plot perm|info.)
