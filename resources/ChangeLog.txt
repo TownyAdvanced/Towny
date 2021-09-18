@@ -6717,3 +6717,4 @@ v0.92.0.11:
     - Closes #5286.
   - Make (PvP), (No PvP) in the chunk notifications use the language string.
   - Make the remainder of the chunk notifications messages use the players' locale.
+  - Disable citizens compatability if citizens gets disabled, courtesy of Warriorrrr with PR #5289.
