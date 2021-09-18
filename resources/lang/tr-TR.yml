@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.122
+version: 0.123
 language: Turkish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1358,3 +1358,7 @@ status_good_no: '&aNO'
 status_resident_tax_title: '%s''s Tax'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because they will not be close enough to your nation capital, the following towns will be removed if the merge is completed: %s.'
+#Added in 0.123
+msg_err_invalid_townyworld: "'%s' is not a valid towny world."
+msg_err_enter_world_name_first: 'Please enter the name of the world first.'
+msg_wilderness_use_set_to: '&bWilderness use has been set to %s in %s.'
