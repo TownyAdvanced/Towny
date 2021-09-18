@@ -117,7 +117,9 @@ public class BaseCommand implements TabCompleter{
 	 */
 	static List<String> filterByStartOrGetTownyStartingWith(List<String> filters, String arg, String type) {
 		List<String> filtered = NameUtil.filterByStart(filters, arg);
-		if (type.contains("+")) {
+		if (type.isEmpty())
+			return filtered;
+		else if (type.contains("+")) {
 			filtered.addAll(getTownyStartingWith(arg, type));
 			return filtered;
 		} else {

@@ -88,6 +88,10 @@ public class Translatable {
 	public String forLocale(CommandSender sender) {
 		return translate(Translation.getLocale(sender));
 	}
+	
+	public String defaultLocale() {
+		return translate(Translation.getDefaultLocale());
+	}
 
 	private void checkArgs() {
 		if (args == null)

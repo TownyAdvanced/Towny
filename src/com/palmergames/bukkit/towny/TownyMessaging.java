@@ -69,7 +69,7 @@ public class TownyMessaging {
 		if (sender != null) {
 			CommandSender toSend = (CommandSender) sender;
 			if (toSend instanceof ConsoleCommandSender) {
-				toSend.sendMessage(ChatColor.stripColor(msg));
+				toSend.sendMessage(Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + ChatColor.stripColor(msg));
 			} else {
 				toSend.sendMessage(Translation.of("default_towny_prefix") + ChatColor.RED + msg);
 			}
@@ -120,7 +120,7 @@ public class TownyMessaging {
 		if (sender instanceof Player p) {
 			p.sendMessage(Translatable.of("default_towny_prefix").forLocale(p) + ChatColor.GREEN + msg);
 		} else if (sender instanceof ConsoleCommandSender) {
-			sender.sendMessage(ChatColor.stripColor(msg));
+			sender.sendMessage(Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + ChatColor.stripColor(msg));
 		} else {
 			sender.sendMessage(Translatable.of("default_towny_prefix").forLocale(sender) + ChatColor.GREEN + msg);
 		}

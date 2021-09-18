@@ -352,10 +352,10 @@ public class TownyAPI {
     @Nullable
     public TownyWorld getTownyWorld(String worldName) {
     	try {
-    		TownyWorld townyWorld = townyUniverse.getDataSource().getWorld(worldName);
-    		return townyWorld;
-    	} catch (NotRegisteredException ignored) {}
-    	return null;
+			return townyUniverse.getDataSource().getWorld(worldName);
+    	} catch (NotRegisteredException ignored) {
+    		return null;
+		}
     }
     
     /**

@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * A class of functions related to Bukkit in general.
@@ -246,5 +247,13 @@ public class BukkitTools {
 	
 	public static String convertCoordtoXYZ(Location loc) {
 		return loc.getWorld().getName() + " " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
+	}
+	
+	public static List<String> getWorldNames() {
+		return getWorlds().stream().map(World::getName).collect(Collectors.toList());
+	}
+	
+	public static List<String> getWorldNames(boolean lowercased) {
+		return lowercased ? getWorlds().stream().map(world -> world.getName().toLowerCase()).collect(Collectors.toList()) : getWorldNames();
 	}
 }
