@@ -121,7 +121,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		 * Register the driver (if possible)
 		 */
 		try {
-			Driver driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+			Driver driver;
+			try {
+				driver = (Driver) Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+			} catch (ClassNotFoundException e) {
+				// The non deprecated driver was not found, fall back to the deprecated one.
+				driver = (Driver) Class.forName("com.mysql.jdbc.Driver").getDeclaredConstructor().newInstance();
+			}
+			
 			DriverManager.registerDriver(driver);
 		} catch (Exception e) {
 			plugin.getLogger().severe("Driver error: " + e);
