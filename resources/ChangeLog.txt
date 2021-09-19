@@ -6725,3 +6725,4 @@ v0.92.0.11:
   - Update yaml parser url and fix using a translatable (which could happen before we load language.)
   - Fix plugin disabling if something is translated before fully loading translations, courtesy of Warriorrrr with PR #5291.
   - Modernise /townyworld, courtesy of Warriorrrr with PR #5292.
+  - Blank king prefixes/postfixes wont override mayor prefixes in the towny_prefix/postfix placeholders.

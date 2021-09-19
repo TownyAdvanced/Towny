@@ -319,13 +319,13 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		case "towny_name_prefix": // %townyadvanced_towny_name_prefix%
 			if (resident.isMayor())
 				title = TownySettings.getMayorPrefix(resident);
-			if (resident.isKing())
+			if (resident.isKing() && !TownySettings.getKingPrefix(resident).isEmpty())
 				title = TownySettings.getKingPrefix(resident);
 			return title;
 		case "towny_name_postfix": // %townyadvanced_towny_name_postfix%
 			if (resident.isMayor())
 				title = TownySettings.getMayorPostfix(resident);
-			if (resident.isKing())
+			if (resident.isKing() && !TownySettings.getKingPostfix(resident).isEmpty())
 				title = TownySettings.getKingPostfix(resident);
 			return title;
 		case "towny_prefix": // %townyadvanced_towny_prefix%
@@ -334,7 +334,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			else {
 				if (resident.isMayor())
 					title = TownySettings.getMayorPrefix(resident);
-				if (resident.isKing())
+				if (resident.isKing() && !TownySettings.getKingPrefix(resident).isEmpty())
 					title = TownySettings.getKingPrefix(resident);
 			}
 			return title;
@@ -344,7 +344,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			else {
 				if (resident.isMayor())
 					title = TownySettings.getMayorPostfix(resident);
-				if (resident.isKing())
+				if (resident.isKing() && !TownySettings.getKingPostfix(resident).isEmpty())
 					title = TownySettings.getKingPostfix(resident);
 			}
 			return title;
