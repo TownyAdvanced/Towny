@@ -1,7 +1,9 @@
 package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
+import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.config.migration.ConfigMigrator;
 import com.palmergames.bukkit.towny.chat.TNCRegister;
 import com.palmergames.bukkit.towny.command.InviteCommand;
 import com.palmergames.bukkit.towny.command.NationCommand;
@@ -15,8 +17,10 @@ import com.palmergames.bukkit.towny.command.commandobjects.AcceptCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
+import com.palmergames.bukkit.towny.db.DatabaseConfig;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.hooks.LuckPermsContexts;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
@@ -33,7 +37,9 @@ import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -46,12 +52,11 @@ import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneListener;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Version;
+import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
-
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.milkbowl.vault.permission.Permission;
-
 import org.apache.commons.lang.WordUtils;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
@@ -66,6 +71,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +81,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * Towny Plugin for Bukkit
@@ -107,8 +114,8 @@ public class Towny extends JavaPlugin {
 
 	private Essentials essentials = null;
 	private boolean citizens2 = false;
-
-	private boolean error = false;
+	
+	private final List<TownyInitException.TownyError> errors = new ArrayList<>();
 	
 	private static Towny plugin;
 
@@ -126,8 +133,7 @@ public class Towny extends JavaPlugin {
 
 		townyUniverse = TownyUniverse.getInstance();
 		
-
-		// Setup classes
+		// Setup static classes
 		BukkitTools.initialize(this);
 		TownyTimerHandler.initialize(this);
 		TownyEconomyHandler.initialize(this);
@@ -135,36 +141,50 @@ public class Towny extends JavaPlugin {
 		PlayerCacheUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
+		TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 
-		
-		if (load()) {
-			// Initialize SpawnUtil only after the Translation class has figured out a language,
-			// to avoid ExceptionInInitializerError exceptions from SpawnType.
+		try {
+			// Load the foundation of Towny, containing config, locales, database.
+			loadFoundation(false);
+
+			// Check for plugins that we use or we develop.
+			// N.B. Includes the hook for TownyChat
+			checkPlugins();
+			// Make sure the timers are stopped for a reset, then started.
+			cycleTimers();
+			// Reset the player cache.
+			resetCache();
+			// Check for plugin updates
+			TownyUpdateChecker.checkForUpdates(this);
+			// Initialize SpawnUtil only after the Translation class has figured out a language.
+			// N.B. Important that localization loaded correctly for this step.
 			SpawnUtil.initialize(this);
-			
 			// Setup bukkit command interfaces
 			registerSpecialCommands();
 			registerCommands();
-
 			// Add custom metrics charts.
 			addMetricsCharts();
-
-			adventure = BukkitAudiences.create(this);
-
-			if (TownySettings.isTownyUpdating(getVersion())) {
-				
-				printChangelogToConsole();
-				// Update config with new version.
-				TownySettings.setLastRunVersion(getVersion());
-				// Save database.
-				townyUniverse.getDataSource().saveAll();
-				// cleanup() updates SQL schema for any changes.
-				townyUniverse.getDataSource().cleanup();
-			}
-
-			// Register all child permissions for ranks
-			TownyPerms.registerPermissionNodes();
+		} catch (TownyInitException tie) {
+			addError(tie.getError());
+			getLogger().log(Level.SEVERE, "Failed to load Towny.", tie.getStackTrace());
+			return;
 		}
+
+		adventure = BukkitAudiences.create(this);
+
+		if (TownySettings.isTownyUpdating(getVersion())) {
+
+			printChangelogToConsole();
+			// Update config with new version.
+			TownySettings.setLastRunVersion(getVersion());
+			// Save database.
+			townyUniverse.getDataSource().saveAll();
+			// cleanup() updates SQL schema for any changes.
+			townyUniverse.getDataSource().cleanup();
+		}
+
+		// Register all child permissions for ranks
+		TownyPerms.registerPermissionNodes();
 
 		registerEvents();
 
@@ -195,12 +215,159 @@ public class Towny extends JavaPlugin {
 		}
 	}
 
+	public void loadFoundation(boolean reload) {
+		// Before anything can continue we must load the config files, database and set the foundation for Towny.
+		loadConfig(reload);
+		// Then load the language files.
+		loadLocalization(reload);
+		// Then load the database.
+		loadDatabaseConfig(reload);
+		// Then load permissions
+		loadPermissions(reload);
+
+		// Initialize the special log4j hook logger.
+		TownyLogger.getInstance();
+
+		// Clear all objects from the TownyUniverse class.
+		townyUniverse.clearAllObjects();
+
+		// Try to load and save the database.
+		townyUniverse.loadAndSaveDatabase(TownySettings.getLoadDatabase(), TownySettings.getSaveDatabase());
+
+		// Schedule metadata to be loaded
+		MetadataLoader.getInstance().scheduleDeserialization();
+
+		// Try migrating the config and world files if the version has changed.
+		if (!TownySettings.getLastRunVersion().equals(getVersion())) {
+			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
+			migrator.migrate();
+		}
+
+		// Loads Town and Nation Levels after migration has occured.
+		townyUniverse.loadTownAndNationLevels();
+
+		// Run both the cleanup and backup async.
+		townyUniverse.performCleanupAndBackup();
+	}
+
+	void loadConfig(boolean reload) {
+		// TODO: Rewrite CommentedConfiguration to take java.nio.Path instead of File.
+		// There is probably a lot of performance improvements possible for the CommentedConfiguration - Articdive.
+		try {
+			TownySettings.loadConfig(getDataFolder().toPath().resolve("settings").resolve("config.yml").toString(), getVersion());
+		} catch (IOException e) {
+			throw new TownyInitException("Failed to load the the Towny configuration.", TownyInitException.TownyError.MAIN_CONFIG, e);
+		}
+		if (reload) {
+			// If Towny is in Safe Mode (for the main config) turn off Safe Mode.
+			if (isError(TownyInitException.TownyError.MAIN_CONFIG)) {
+				removeError(TownyInitException.TownyError.MAIN_CONFIG);
+			}
+		}
+	}
+	
+	void loadLocalization(boolean reload) {
+		Translation.loadTranslationRegistry();
+		if (reload) {
+			// If Towny is in Safe Mode (because of localization) turn off Safe Mode.
+			if (isError(TownyInitException.TownyError.LOCALIZATION)) {
+				removeError(TownyInitException.TownyError.LOCALIZATION);
+			}
+		}
+	}
+
+	void loadDatabaseConfig(boolean reload) {
+		if (!checkForLegacyDatabaseConfig()) {
+			throw new TownyInitException("Failed to load the Towny configuration.", TownyInitException.TownyError.DATABASE_CONFIG);
+		}
+		DatabaseConfig.loadDatabaseConfig(getDataFolder().toPath().resolve("settings").resolve("database.yml").toString());
+		if (reload) {
+			// If Towny is in Safe Mode (because of localization) turn off Safe Mode.
+			if (isError(TownyInitException.TownyError.DATABASE_CONFIG)) {
+				removeError(TownyInitException.TownyError.DATABASE_CONFIG);
+			}
+		}
+	}
+	
+	public void loadPermissions(boolean reload) {
+		TownyPerms.loadPerms(getDataFolder().toPath().resolve("settings").toString(), "townyperms.yml");
+		// This will only run if permissions is fine.
+		if (reload) {
+			// If Towny is in Safe Mode (for Permissions) turn off Safe Mode.
+			if (isError(TownyInitException.TownyError.PERMISSIONS)) {
+				removeError(TownyInitException.TownyError.PERMISSIONS);
+			}
+			// Update everyone who is online with the changes made.
+			TownyPerms.updateOnlinePerms();
+		}
+	}
+
+	/**
+	 * Converts the older config.yml's database settings into the database.yml file.
+	 * @return true if successful
+	 * @since 0.97.0.24
+	 */
+	private boolean checkForLegacyDatabaseConfig() {
+		File file = getDataFolder().toPath().resolve("settings").resolve("config.yml").toFile();
+		// Bail if the config doesn't exist at all yet.
+		if (!file.exists())
+			return true;
+
+		CommentedConfiguration config = new CommentedConfiguration(file);
+		// return false if the config cannot be loaded.
+		if (!config.load())
+			return false;
+		if (config.contains("plugin.database.database_load")) {
+			/*
+			 * Get old settings from config.
+			 */
+			String dbload = config.getString("plugin.database.database_load");
+			String dbsave = config.getString("plugin.database.database_save");
+			String hostname = config.getString("plugin.database.sql.hostname");
+			String port = config.getString("plugin.database.sql.port");
+			String dbname = config.getString("plugin.database.sql.dbname");
+			String tableprefix = config.getString("plugin.database.sql.table_prefix");
+			String username = config.getString("plugin.database.sql.username");
+			String password = config.getString("plugin.database.sql.password");
+			String flags = config.getString("plugin.database.sql.flags");
+			String max_pool = config.getString("plugin.database.sql.pooling.max_pool_size");
+			String max_lifetime = config.getString("plugin.database.sql.pooling.max_lifetime");
+			String connection_timeout = config.getString("plugin.database.sql.pooling.connection_timeout");
+
+			/*
+			 * Create database.yml if it doesn't exist yet, with new settings.
+			 */
+			String databaseFilePath = getDataFolder().toPath().resolve("settings").resolve("database.yml").toString();
+			if (FileMgmt.checkOrCreateFile(databaseFilePath)) {
+				CommentedConfiguration databaseConfig = new CommentedConfiguration(new File(databaseFilePath));
+				databaseConfig.set("database.database_load", dbload);
+				databaseConfig.set("database.database_save", dbsave);
+				databaseConfig.set("database.sql.hostname", hostname);
+				databaseConfig.set("database.sql.port", port);
+				databaseConfig.set("database.sql.dbname", dbname);
+				databaseConfig.set("database.sql.table_prefix", tableprefix);
+				databaseConfig.set("database.sql.username", username);
+				databaseConfig.set("database.sql.password", password);
+				databaseConfig.set("database.sql.flags", flags);
+				databaseConfig.set("database.sql.pooling.max_pool_size", max_pool);
+				databaseConfig.set("database.sql.pooling.max_lifetime", max_lifetime);
+				databaseConfig.set("database.sql.pooling.connection_timeout", connection_timeout);
+				databaseConfig.save();
+				getLogger().info("Database settings migrated to towny\\data\\settings\\database.yml");
+			} else {
+				getLogger().severe("Unable to migrate old database settings to towny\\data\\settings\\database.yml");
+				return false;
+			}
+		}
+		return true;
+	}
+
 	@Override
 	public void onDisable() {
 
 		Bukkit.getLogger().info("==============================================================");
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (townyUniverse.getDataSource() != null && !error) {
+		if (townyUniverse.getDataSource() != null && !isError()) {
 			townyUniverse.getDataSource().saveQueues();
 		}
 
@@ -235,39 +402,6 @@ public class Towny extends JavaPlugin {
 		Bukkit.getLogger().info("=============================================================");
 	}
 
-	/**
-	 * Attempts to load language, config and database files.
-	 * Checks for plugins, ends and begins timers, resets player cache. 
-	 * 
-	 * @return true if things have loaded without error.
-	 */
-	public boolean load() {
-
-		// Things which have to be done first.
-		checkCitizens();
-		TownyTimerHandler.toggleGatherResidentUUIDTask(false);
-		
-		// Load Config, Language Files, Database.
-		if (!townyUniverse.loadSettings()) {
-			setError(true);
-			return false;
-		}
-
-		// Check for plugins that we use, we develop.
-		checkPlugins();
-
-		// Make sure the timers are stopped for a reset, then started.
-		cycleTimers();
-		
-		// Reset player cache.
-		resetCache();
-		
-		//Check for plugin updates
-		TownyUpdateChecker.checkForUpdates(this);
-
-		return true;
-	}
-
 	public void checkCitizens() {
 		/*
 		 * Test for Citizens2 so we can avoid removing their NPC's
@@ -276,7 +410,8 @@ public class Towny extends JavaPlugin {
 	}
 	
 	private void checkPlugins() {
-
+		
+		checkCitizens();
 		plugin.getLogger().info("Searching for third-party plugins...");
 		String ecowarn = "";
 		List<String> addons = new ArrayList<>();
@@ -520,16 +655,24 @@ public class Towny extends JavaPlugin {
 	 * @return the error
 	 */
 	public boolean isError() {
-
-		return error;
+		return !errors.isEmpty();
+	}
+	
+	private boolean isError(@NotNull TownyInitException.TownyError error) {
+		return errors.contains(error);
+	}
+	
+	public void addError(@NotNull TownyInitException.TownyError error) {
+		errors.add(error);
+	}
+	
+	private void removeError(@NotNull TownyInitException.TownyError error) {
+		errors.remove(error);
 	}
 
-	/**
-	 * @param error the error to set
-	 */
-	public void setError(boolean error) {
-
-		this.error = error;
+	@NotNull
+	public List<TownyInitException.TownyError> getErrors() {
+		return errors;
 	}
 
 	// is Essentials active
@@ -822,7 +965,7 @@ public class Towny extends JavaPlugin {
 
 			commandMap.registerAll("towny", commands);
 		} catch (NoSuchFieldException | IllegalAccessException e) {
-			e.printStackTrace();
+			throw new TownyInitException("An issue has occured while registering custom commands.", TownyInitException.TownyError.OTHER, e);
 		}
 	}
 	
@@ -888,4 +1031,5 @@ public class Towny extends JavaPlugin {
 		}
 
 	}
+
 }

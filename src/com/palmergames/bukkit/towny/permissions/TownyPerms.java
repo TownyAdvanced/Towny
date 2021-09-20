@@ -4,7 +4,7 @@ import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -64,25 +65,24 @@ public class TownyPerms {
 	 * 
 	 * @param filepath - Path to townyperms.yml
 	 * @param defaultRes - Default townyperms.yml within the jar.
-	 * @throws TownyException - When permission file cannot be loaded.
+	 * @throws TownyInitException - When permission file cannot be loaded.
 	 */
-	public static void loadPerms(String filepath, String defaultRes) throws TownyException {
+	public static void loadPerms(@NotNull String filepath, @NotNull String defaultRes) {
 
 		String fullPath = filepath + File.separator + defaultRes;
 
 		File file = FileMgmt.unpackResourceFile(fullPath, defaultRes, defaultRes);
-		if (file != null) {
-			// read the (language).yml into memory
-			perms = new CommentedConfiguration(file);
-			if (!perms.load())
-				throw new TownyException("Could not read Townyperms.yml");
-			
-			groupPermsMap.clear();
-			buildGroupPermsMap();
-			buildComments();
-			perms.save();
+		// read the townyperms.yml into memory
+		perms = new CommentedConfiguration(file);
+		if (!perms.load()) {
+			throw new TownyInitException("Could not read townyperms.yml", TownyInitException.TownyError.PERMISSIONS);
 		}
-		
+
+		groupPermsMap.clear();
+		buildGroupPermsMap();
+		buildComments();
+		perms.save();
+
 		/*
 		 * Only do this once as we are really only interested in Towny perms.
 		 */

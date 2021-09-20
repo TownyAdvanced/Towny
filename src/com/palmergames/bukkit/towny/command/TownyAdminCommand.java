@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -1934,22 +1935,15 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	public void reloadPerms() {
-		String rootFolder = TownyUniverse.getInstance().getRootFolder();
 		try {
-			TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
-		} catch (TownyException e) {
-			// Place Towny in Safe Mode while the townyperms.yml is unreadable.
-			plugin.setError(true);
+			plugin.loadPermissions(true);
+		} catch (TownyInitException tie) {
 			TownyMessaging.sendErrorMsg(sender, "Error Loading townyperms.yml!");
+			TownyMessaging.sendErrorMsg(tie.getMessage());
+			// Place Towny in Safe Mode while the townyperms.yml is unreadable.
+			plugin.addError(tie.getError());
 			return;
 		}
-		// If Towny is in Safe Mode (hopefully because of townyperms only) turn off Safe Mode.
-		// TODO: Potentially do a full towny reload via the normal TownyUniverse.loadSettings() so that we would know if there would be a reason to have safe mode remain on. 
-		if (plugin.isError())
-			plugin.setError(false);
-		
-		// Update everyone who is online with the changes made.
-		TownyPerms.updateOnlinePerms();
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_reloaded_perms"));
 		
 	}
@@ -1987,16 +1981,19 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public void reloadDatabase() {
 		TownyUniverse.getInstance().getDataSource().finishTasks();
-		if (plugin.load()) {
-
-			// Register all child permissions for ranks
-			TownyPerms.registerPermissionNodes();
-
-			// Update permissions for all online players
-			TownyPerms.updateOnlinePerms();
-
+		try {
+			plugin.loadFoundation(true);
+		} catch (TownyInitException tie) {
+			TownyMessaging.sendErrorMsg(tie.getMessage());
+			
+			plugin.addError(tie.getError());
+			return;
 		}
+		// Register all child permissions for ranks
+		TownyPerms.registerPermissionNodes();
 
+		// Update permissions for all online players
+		TownyPerms.updateOnlinePerms();
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_reloaded_db"));
 	}
 

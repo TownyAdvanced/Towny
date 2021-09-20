@@ -1,11 +1,7 @@
 package com.palmergames.bukkit.towny;
 
 import com.palmergames.annotations.Unmodifiable;
-import com.palmergames.bukkit.config.CommentedConfiguration;
-import com.palmergames.bukkit.config.migration.ConfigMigrator;
-import com.palmergames.bukkit.towny.db.DatabaseConfig;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
-import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
@@ -13,7 +9,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -21,20 +17,16 @@ import com.palmergames.bukkit.towny.object.SpawnPoint;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.map.TownyMapData;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
-import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
-import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.towny.war.eventwar.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
-import com.palmergames.util.FileMgmt;
 import com.palmergames.util.Trie;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -44,7 +36,6 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -112,66 +103,6 @@ public class TownyUniverse {
     }
 
     /**
-     * Loads Towny's files/database en masse. Will end up in safemode if things do not go well. 
-     * 
-     * Loads config/language/townyperms files.
-     * Initiates the logger.
-     * Flushes object maps.
-     * Saves and loads the database.
-     * Will migrate the config if needed.
-     * Loads the town and nation levels.
-     * Legacy outpost test.
-     * Schedule cleanup and backup.
-     * 
-     * @return true if things go well.
-     */
-    boolean loadSettings() {
-        
-    	// Load config, language and townyperms files.
-    	if (!loadFiles())
-    		return false;
-
-    	// Init logger
-		TownyLogger.getInstance();
-
-        // Clears the object maps from memory.
-        clearAllObjects();
-                
-        // Try to load and save the database.
-        if (!loadAndSaveDatabase(TownySettings.getLoadDatabase(), TownySettings.getSaveDatabase()))
-        	return false;
-        
-        // Schedule metadata to be loaded
-		MetadataLoader.getInstance().scheduleDeserialization();
-
-        // Try migrating the config and world files if the version has changed.
-        if (!TownySettings.getLastRunVersion().equals(towny.getVersion())) {
-			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
-			migrator.migrate();
-		}
-        
-        // Loads Town and Nation Levels after migration has occured.
-        if (!loadTownAndNationLevels())
-        	return false;
-
-        File f = new File(rootFolder, "outpostschecked.txt");                                        // Old towny didn't keep as good track of outpost spawn points,
-        if (!f.exists()) {                                                                           // some of them ending up outside of claimed plots. If the file 
-            for (Town town : dataSource.getTowns()) TownyDatabaseHandler.validateTownOutposts(town); // does not exist we will test all outpostspawns and create the
-            towny.saveResource("outpostschecked.txt", false);                                        // file. Sometimes still useful on servers who've manually
-        }                                                                                            // altered data manually and want to re-check.
-
-		// Run both the cleanup and backup async.
-		performCleanupAndBackup();
-
-		// Things would appear to have gone well.
-        return true;
-    }
- 
-    /*
-     * loadSettings() functions.
-     */
-
-    /**
      * Performs CleanupTask and BackupTask in async,
      */
     public void performCleanupAndBackup() {
@@ -179,26 +110,6 @@ public class TownyUniverse {
 			.runAsync(new CleanupTask())
 			.thenRunAsync(new BackupTask());
 	}
-    
-    /**
-     * Load config, language and townyperms files.
-     * 
-     * @return true if no exceptions are found.
-     */
-    private boolean loadFiles() {
-        try {
-            if (!checkForLegacyDatabaseConfig())
-                return false;
-            DatabaseConfig.loadDatabaseConfig(rootFolder + File.separator + "settings" + File.separator + "database.yml");
-            TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", towny.getVersion());
-			Translation.loadTranslationRegistry();
-            TownyPerms.loadPerms(rootFolder + File.separator + "settings", "townyperms.yml");
-        } catch (IOException | TownyException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
     
     /**
      * Clears the object maps.
@@ -227,13 +138,12 @@ public class TownyUniverse {
      * @param saveDbType - save setting from the config.
      * @return true when the databse will load and save.
      */
-    private boolean loadAndSaveDatabase(String loadDbType, String saveDbType) {
+	void loadAndSaveDatabase(String loadDbType, String saveDbType) {
     	towny.getLogger().info("Database: [Load] " + loadDbType + " [Save] " + saveDbType);
         // Try loading the database.
         long startTime = System.currentTimeMillis();
         if (!loadDatabase(loadDbType)) {
-            towny.getLogger().severe("Error: Failed to load!");
-            return false;
+			throw new TownyInitException("Failed to load database.", TownyInitException.TownyError.DATABASE);
         } else {
         	Bukkit.getPluginManager().callEvent(new TownyLoadedDatabaseEvent());
         }
@@ -244,10 +154,8 @@ public class TownyUniverse {
 
         // Try saving the database.
         if (!saveDatabase(saveDbType)) {
-	        	towny.getLogger().severe("Error: Unsupported save format!");
-        	return false;
+			throw new TownyInitException("Unsupported save format!", TownyInitException.TownyError.DATABASE);
         }
-		return true;
     }
     
     /**
@@ -311,80 +219,23 @@ public class TownyUniverse {
         }
     }
 
-    /** 
-     * Converts the older config.yml's database settings into the database.yml file.
-     * @return true if successful
-     * @since 0.97.0.24
-     */
-    private boolean checkForLegacyDatabaseConfig() {
-    	File file = new File(rootFolder + File.separator + "settings" + File.separator + "config.yml");
-    	// Bail if the config doesn't exist at all yet.
-    	if (!file.exists())
-    		return true;
-
-    	CommentedConfiguration config = new CommentedConfiguration(file);
-    	// return false if the config cannot be loaded.
-    	if (!config.load())
-    		return false;
-    	if (config.contains("plugin.database.database_load")) {
-    		/*
-    		 * Get old settings from config.
-    		 */
-    		String dbload = config.getString("plugin.database.database_load");
-    		String dbsave = config.getString("plugin.database.database_save");
-    		String hostname = config.getString("plugin.database.sql.hostname");
-    		String port = config.getString("plugin.database.sql.port");
-    		String dbname = config.getString("plugin.database.sql.dbname");
-    		String tableprefix = config.getString("plugin.database.sql.table_prefix");
-    		String username = config.getString("plugin.database.sql.username");
-    		String password = config.getString("plugin.database.sql.password");
-    		String flags = config.getString("plugin.database.sql.flags");
-    		String max_pool = config.getString("plugin.database.sql.pooling.max_pool_size");
-    		String max_lifetime = config.getString("plugin.database.sql.pooling.max_lifetime");
-    		String connection_timeout = config.getString("plugin.database.sql.pooling.connection_timeout");
-
-    		/*
-    		 * Create database.yml if it doesn't exist yet, with new settings.
-    		 */
-    		String databaseFilePath = rootFolder + File.separator + "settings" + File.separator + "database.yml";
-    		if (FileMgmt.checkOrCreateFile(databaseFilePath)) {
-    			CommentedConfiguration databaseConfig = new CommentedConfiguration(new File(databaseFilePath));
-    			databaseConfig.set("database.database_load", dbload);
-    			databaseConfig.set("database.database_save", dbsave);
-    			databaseConfig.set("database.sql.hostname", hostname);
-    			databaseConfig.set("database.sql.port", port);
-    			databaseConfig.set("database.sql.dbname", dbname);
-    			databaseConfig.set("database.sql.table_prefix", tableprefix);
-    			databaseConfig.set("database.sql.username", username);
-    			databaseConfig.set("database.sql.password", password);
-    			databaseConfig.set("database.sql.flags", flags);
-    			databaseConfig.set("database.sql.pooling.max_pool_size", max_pool);
-    			databaseConfig.set("database.sql.pooling.max_lifetime", max_lifetime);
-    			databaseConfig.set("database.sql.pooling.connection_timeout", connection_timeout);
-    			databaseConfig.save();
-    			towny.getLogger().info("Database settings migrated to towny\\data\\settings\\database.yml");
-    		} else {
-    			towny.getLogger().severe("Unable to migrate old database settings to towny\\data\\settings\\database.yml");
-    			return false;
-    		}
-    	}
-    	return true;
-	}
-
     
     /**
      * Loads the Town and Nation Levels from the config.yml
      * 
      * @return true if they have the required elements.
      */
-    private boolean loadTownAndNationLevels() {
+	void loadTownAndNationLevels() {
 		// Load Nation & Town level data into maps.
 		try {
 			TownySettings.loadTownLevelConfig();
-			TownySettings.loadNationLevelConfig();
-			return true;
 		} catch (IOException e) {
-			return false;
+			throw new TownyInitException("Failed to load town levek config", TownyInitException.TownyError.MAIN_CONFIG);
+		}
+		try {
+			TownySettings.loadNationLevelConfig();
+		} catch (IOException e) {
+			throw new TownyInitException("Failed to load nation level config", TownyInitException.TownyError.MAIN_CONFIG);
 		}
     }
 
