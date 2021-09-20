@@ -6731,3 +6731,4 @@ v0.92.0.11:
   - Bump language files to 0.123.
 0.97.1.11:
   - Restore TownRuinSettings/TownRuinUtil skeletons to make SiegeWar and Dynmap-Towny happy.
+  - Fix NoSuchMethodError thrown by add-on plugins using TownyPermissionSource methods using 0.97.1.10.

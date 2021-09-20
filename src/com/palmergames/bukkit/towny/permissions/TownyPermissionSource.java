@@ -170,7 +170,11 @@ public abstract class TownyPermissionSource {
 		 * the player has the block permission and the data node isn't registered
 		 */
 		return has(player, blockPerm);
-	}	
+	}
+	
+	public boolean isTownyAdmin(Player player) {
+		return isTownyAdmin(player);
+	}
 
 	public boolean isTownyAdmin(Permissible permissible) {
 
@@ -178,6 +182,10 @@ public abstract class TownyPermissionSource {
 
 	}
 
+	public boolean testPermission(Player player, String perm) {
+		return testPermission(player, perm);
+	}
+	
 	/**
 	 * Primary test for a permission node, used throughout Towny.
 	 * 
