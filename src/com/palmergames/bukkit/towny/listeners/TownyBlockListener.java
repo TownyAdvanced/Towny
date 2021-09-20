@@ -28,6 +28,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockCanBuildEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFertilizeEvent;
@@ -90,10 +91,24 @@ public class TownyBlockListener implements Listener {
 		}
 		
 		if (!event.isCancelled() && block.getType() == Material.CHEST && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer()))
-			testDoubleChest(event.getPlayer(), event.getBlock(), event);
+			testDoubleChest(event.getPlayer(), event.getBlock());
+	}
+	
+	@EventHandler
+	public void onBlockCanBuild(BlockCanBuildEvent event) {
+		//Temporary workaround for grass remaining snowy when powdered snow is placed on top of it.
+		if (event.getMaterial().name().equals("POWDER_SNOW")) {
+			
+			Block block = event.getBlock();
+			if (!TownyAPI.getInstance().isTownyWorld(block.getWorld()))
+				return;
+
+			if (!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getBlock().getLocation(), event.getBlock().getType()))
+				event.setBuildable(false);
+		}
 	}
 
-	private void testDoubleChest(Player player, Block block, BlockPlaceEvent event) {
+	private void testDoubleChest(Player player, Block block) {
 		List<Block> blocksToUpdate = new ArrayList<>(); // To avoid glitchy-looking chests, we need to update the blocks later on.
 		List<WorldCoord> safeWorldCoords = new ArrayList<>(); // Some worldcoords will be concidered safe;
 
