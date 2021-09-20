@@ -36,7 +36,6 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -217,26 +216,6 @@ public class TownyUniverse {
         } catch (UnsupportedOperationException e) {
             return false;
         }
-    }
-
-    
-    /**
-     * Loads the Town and Nation Levels from the config.yml
-     * 
-     * @return true if they have the required elements.
-     */
-	void loadTownAndNationLevels() {
-		// Load Nation & Town level data into maps.
-		try {
-			TownySettings.loadTownLevelConfig();
-		} catch (IOException e) {
-			throw new TownyInitException("Failed to load town levek config", TownyInitException.TownyError.MAIN_CONFIG);
-		}
-		try {
-			TownySettings.loadNationLevelConfig();
-		} catch (IOException e) {
-			throw new TownyInitException("Failed to load nation level config", TownyInitException.TownyError.MAIN_CONFIG);
-		}
     }
 
     /**

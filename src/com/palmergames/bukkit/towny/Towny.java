@@ -244,13 +244,13 @@ public class Towny extends JavaPlugin {
 		}
 
 		// Loads Town and Nation Levels after migration has occured.
-		townyUniverse.loadTownAndNationLevels();
+		loadTownAndNationLevels();
 
 		// Run both the cleanup and backup async.
 		townyUniverse.performCleanupAndBackup();
 	}
 
-	void loadConfig(boolean reload) {
+	private void loadConfig(boolean reload) {
 		// TODO: Rewrite CommentedConfiguration to take java.nio.Path instead of File.
 		// There is probably a lot of performance improvements possible for the CommentedConfiguration - Articdive.
 		try {
@@ -266,7 +266,7 @@ public class Towny extends JavaPlugin {
 		}
 	}
 	
-	void loadLocalization(boolean reload) {
+	private void loadLocalization(boolean reload) {
 		Translation.loadTranslationRegistry();
 		if (reload) {
 			// If Towny is in Safe Mode (because of localization) turn off Safe Mode.
@@ -276,7 +276,7 @@ public class Towny extends JavaPlugin {
 		}
 	}
 
-	void loadDatabaseConfig(boolean reload) {
+	private void loadDatabaseConfig(boolean reload) {
 		if (!checkForLegacyDatabaseConfig()) {
 			throw new TownyInitException("Failed to load the Towny configuration.", TownyInitException.TownyError.DATABASE_CONFIG);
 		}
@@ -299,6 +299,25 @@ public class Towny extends JavaPlugin {
 			}
 			// Update everyone who is online with the changes made.
 			TownyPerms.updateOnlinePerms();
+		}
+	}
+
+	/**
+	 * Loads the Town and Nation Levels from the config.yml
+	 *
+	 * @return true if they have the required elements.
+	 */
+	private void loadTownAndNationLevels() {
+		// Load Nation & Town level data into maps.
+		try {
+			TownySettings.loadTownLevelConfig();
+		} catch (IOException e) {
+			throw new TownyInitException("Failed to load town levek config", TownyInitException.TownyError.MAIN_CONFIG);
+		}
+		try {
+			TownySettings.loadNationLevelConfig();
+		} catch (IOException e) {
+			throw new TownyInitException("Failed to load nation level config", TownyInitException.TownyError.MAIN_CONFIG);
 		}
 	}
 
