@@ -173,7 +173,7 @@ public abstract class TownyPermissionSource {
 	}
 	
 	public boolean isTownyAdmin(Player player) {
-		return isTownyAdmin(player);
+		return isTownyAdmin((Permissible) player);
 	}
 
 	public boolean isTownyAdmin(Permissible permissible) {
@@ -183,7 +183,7 @@ public abstract class TownyPermissionSource {
 	}
 
 	public boolean testPermission(Player player, String perm) {
-		return testPermission(player, perm);
+		return testPermission((Permissible) player, perm);
 	}
 	
 	/**
