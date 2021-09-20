@@ -6728,3 +6728,4 @@ v0.92.0.11:
   - Blank king prefixes/postfixes wont override mayor prefixes in the towny_prefix/postfix placeholders.
   - Use deprecated mysql driver if required, courtesy of Warriorrrr with PR #5294.
     - Closes #5245.
+  - Bump language files to 0.123.
