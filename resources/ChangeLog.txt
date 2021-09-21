@@ -6729,3 +6729,7 @@ v0.92.0.11:
   - Use deprecated mysql driver if required, courtesy of Warriorrrr with PR #5294.
     - Closes #5245.
   - Bump language files to 0.123.
+0.97.1.11:
+  - Restore TownRuinSettings/TownRuinUtil skeletons to make SiegeWar and Dynmap-Towny happy.
+  - Fix NoSuchMethodError thrown by add-on plugins using TownyPermissionSource methods using 0.97.1.10.
+  - Temporary fix for grass remaining snowy, courtesy of Warriorrrr with PR #5298.
