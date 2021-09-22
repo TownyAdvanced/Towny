@@ -10,13 +10,13 @@ import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.DeletePlayerEvent;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
-import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteTownEvent;
 import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
 import com.palmergames.bukkit.towny.event.RenameTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent;
 import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
+import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -32,9 +32,9 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.metadata.DataFieldIO;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
-import com.palmergames.bukkit.towny.object.metadata.DataFieldIO;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
@@ -44,6 +44,14 @@ import com.palmergames.bukkit.towny.war.eventwar.WarSpoils;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.EOFException;
@@ -68,12 +76,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author ElgarL
