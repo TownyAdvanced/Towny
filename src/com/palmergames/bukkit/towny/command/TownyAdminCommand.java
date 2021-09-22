@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.command;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
@@ -12,6 +13,7 @@ import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.conversation.SetupConversation;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
@@ -53,12 +55,15 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -102,7 +107,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"tpplot",
 		"database",
 		"townyperms",
-		"depositall"
+		"depositall",
+		"install"
 	);
 
 	private static final List<String> adminTownTabCompletes = Arrays.asList(
@@ -648,6 +654,25 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_err_no_economy"));
 				
 				parseAdminDepositAllCommand(StringMgmt.remFirstArg(split));
+			} else if (split[0].equalsIgnoreCase("install")) {
+				Towny.getAdventure().sender(getSender()).sendMessage(Component.text(Translatable.of("msg_setup_full_guide_link").forLocale(getSender())).clickEvent(ClickEvent.openUrl("https://github.com/TownyAdvanced/Towny/wiki/Installation")));
+				
+				new SetupConversation(getSender()).runOnResponse(response -> {
+					ConversationContext context = (ConversationContext) response;
+					
+					toggleWildernessUsage(parseBoolean(context.getSessionData(0)));
+					toggleRevertUnclaim(parseBoolean(context.getSessionData(1)));
+					TownySettings.setProperty(ConfigNodes.TOWN_TOWN_BLOCK_RATIO.getRoot(), Integer.parseInt((String) context.getSessionData(2)));
+					
+					if (TownyEconomyHandler.isActive()) {
+						TownySettings.setProperty(ConfigNodes.ECO_PRICE_NEW_TOWN.getRoot(), Integer.parseInt((String) context.getSessionData(3)));
+						TownySettings.setProperty(ConfigNodes.ECO_PRICE_NEW_NATION.getRoot(), Integer.parseInt((String) context.getSessionData(4)));
+						TownySettings.setProperty(ConfigNodes.ECO_PRICE_CLAIM_TOWNBLOCK.getRoot(), Integer.parseInt((String) context.getSessionData(5)));
+					}
+					
+					TownySettings.saveConfig();
+					TownyMessaging.sendMsg(getSender(), Translatable.of("msg_setup_success"));
+				});
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).execute(getSender(), "townyadmin", split);
 			}  else {
@@ -657,6 +682,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		return true;
+	}
+	
+	private boolean parseBoolean(Object object) {
+		if (!(object instanceof String string))
+			return false;
+
+		return switch (string.toLowerCase()) {
+			case "y", "yes", "true" -> true;
+			default -> false;
+		};
 	}
 
 	private void parseAdminTownyPermsCommand(String[] args) {
@@ -2158,6 +2193,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			world.setUsingPlotManagementRevert(choice);
 			world.setUsingPlotManagementWildBlockRevert(choice);
 			world.setUsingPlotManagementWildEntityRevert(choice);
+			world.save();
+		}
+	}
+	
+	private void toggleRevertUnclaim(boolean choice) {
+		for (TownyWorld world : new ArrayList<>(TownyUniverse.getInstance().getWorldMap().values())) {
+			world.setUsingPlotManagementRevert(choice);
 			world.save();
 		}
 	}

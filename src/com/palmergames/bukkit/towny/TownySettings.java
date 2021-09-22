@@ -1448,7 +1448,7 @@ public class TownySettings {
 		return getStrArr(ConfigNodes.PROT_POTION_TYPES);
 	}
 
-	private static void setProperty(String root, Object value) {
+	public static void setProperty(String root, Object value) {
 
 		config.set(root.toLowerCase(), value.toString());
 	}
@@ -3151,5 +3151,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.TOWN_RUINING_TOWNS_BECOME_PUBLIC);
 	}
 
+	public static void saveConfig() {
+		config.save();
+	}
 }
 

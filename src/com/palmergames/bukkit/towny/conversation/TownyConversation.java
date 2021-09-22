@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.conversation;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.Translatable;
+import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.conversations.ConversationAbandonedListener;
 import org.bukkit.conversations.ConversationContext;
@@ -18,11 +19,15 @@ public class TownyConversation implements ConversationPrefix, ConversationAbando
 	@NotNull
 	@Override
 	public String getPrefix(@NotNull ConversationContext context) {
-		return Translatable.of("default_towny_prefix").forLocale(getPlayer(context));
+		return Translatable.of("default_towny_prefix").forLocale(getSender(context));
 	}
 	
 	public Player getPlayer(@NotNull ConversationContext context) {
 		return (Player) context.getForWhom();
+	}
+	
+	public CommandSender getSender(@NotNull ConversationContext context) {
+		return (CommandSender) context.getForWhom();
 	}
 
 	public void runOnResponse(Consumer<Object> consumer) {
@@ -32,6 +37,6 @@ public class TownyConversation implements ConversationPrefix, ConversationAbando
 	@Override
 	public void conversationAbandoned(@NotNull ConversationAbandonedEvent event) {
 		if (!event.gracefulExit())
-			TownyMessaging.sendMsg(getPlayer(event.getContext()), Translatable.of("msg_prompt_cancel"));
+			TownyMessaging.sendMsg(getSender(event.getContext()), Translatable.of("msg_prompt_cancel"));
 	}
 }
