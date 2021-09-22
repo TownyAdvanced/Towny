@@ -1,5 +1,9 @@
 name: Maven Compile
-on: [push, pull_request]
+on:
+    push:
+        branches-ignore: [l10n_master]
+    pull_request:
+        branches-ignore: [l10n_master]
 jobs:
     build:
         runs-on: ubuntu-latest
