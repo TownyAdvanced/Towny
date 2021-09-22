@@ -6733,3 +6733,6 @@ v0.92.0.11:
   - Restore TownRuinSettings/TownRuinUtil skeletons to make SiegeWar and Dynmap-Towny happy.
   - Fix NoSuchMethodError thrown by add-on plugins using TownyPermissionSource methods using 0.97.1.10.
   - Temporary fix for grass remaining snowy, courtesy of Warriorrrr with PR #5298.
+0.97.1.12:
+  - Remove the ancient and often-mistaken /ta output.
+  - Remove the MemMgmt util.

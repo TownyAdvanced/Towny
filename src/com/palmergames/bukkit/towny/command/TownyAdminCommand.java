@@ -51,7 +51,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
-import com.palmergames.util.MemMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 import org.bukkit.Bukkit;
@@ -81,7 +80,6 @@ import java.util.stream.Collectors;
 public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
-	private static final List<String> ta_panel = new ArrayList<>();
 	
 	private static final List<String> adminTabCompletes = Arrays.asList(
 		"delete",
@@ -511,15 +509,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (getSender()==player && !townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SCREEN.getNode()))
 			throw new TownyException(Translatable.of("msg_err_command_disable"));
-		if (split.length == 0) {
-			buildTAPanel();
-			for (String line : ta_panel) {
-				TownyMessaging.sendMessage(sender, line);
-			}
-
-		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
+		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help"))
 			HelpMenu.TA_HELP.send(sender);
-		} else {
+		else {
 
 			if (split[0].equalsIgnoreCase("set")) {
 
@@ -997,35 +989,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMessage(town, "If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.");
 		}
 		town.save();
-
-	}
-
-	private void buildTAPanel() {
-
-		ta_panel.clear();
-		Runtime run = Runtime.getRuntime();
-		ta_panel.add(ChatTools.formatTitle(Translatable.of("ta_panel_1").forLocale(sender)));
-		ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "Towny" + Colors.Blue + "] " + Colors.Green + Translatable.of("ta_panel_2").forLocale(sender) + Colors.LightGreen + TownyAPI.getInstance().isWarTime() + Colors.Gray + " | " + Colors.Green + Translatable.of("ta_panel_3").forLocale(sender) + (TownyTimerHandler.isHealthRegenRunning() ? Colors.LightGreen + "On" : Colors.Rose + "Off") + Colors.Gray + " | " + (Colors.Green + Translatable.of("ta_panel_5").forLocale(sender) + (TownyTimerHandler.isDailyTimerRunning() ? Colors.LightGreen + "On" : Colors.Rose + "Off")));
-		/*
-		 * ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + "Towny" +
-		 * Colors.Blue + "] " + Colors.Green +
-		 * Translation.of("ta_panel_4") +
-		 * (TownySettings.isRemovingWorldMobs() ? Colors.LightGreen + "On" :
-		 * Colors.Rose + "Off") + Colors.Gray + " | " + Colors.Green +
-		 * Translation.of("ta_panel_4_1") +
-		 * (TownySettings.isRemovingTownMobs() ? Colors.LightGreen + "On" :
-		 * Colors.Rose + "Off"));
-		 *
-		 * try { TownyEconomyObject.checkEconomy(); ta_panel.add(Colors.Blue +
-		 * "[" + Colors.LightBlue + "Economy" + Colors.Blue + "] " +
-		 * Colors.Green + Translation.of("ta_panel_6") +
-		 * Colors.LightGreen + TownyFormatter.formatMoney(getTotalEconomy()) +
-		 * Colors.Gray + " | " + Colors.Green +
-		 * Translation.of("ta_panel_7") + Colors.LightGreen +
-		 * getNumBankAccounts()); } catch (Exception e) { }
-		 */
-		ta_panel.add(Colors.Blue + "[" + Colors.LightBlue + Translatable.of("ta_panel_8").forLocale(sender) + Colors.Blue + "] " + Colors.Green + Translatable.of("ta_panel_9").forLocale(sender) + Colors.LightGreen + MemMgmt.getMemSize(run.totalMemory()) + Colors.Gray + " | " + Colors.Green + Translatable.of("ta_panel_10").forLocale(sender) + Colors.LightGreen + Thread.getAllStackTraces().keySet().size() + Colors.Gray + " | " + Colors.Green + Translatable.of("ta_panel_11").forLocale(sender) + Colors.LightGreen + TownyFormatter.getTime());
-		ta_panel.add(Colors.Yellow + MemMgmt.getMemoryBar(50, run));
 
 	}
 
