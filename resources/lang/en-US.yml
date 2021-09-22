@@ -114,7 +114,6 @@ world_help_5: 'Regenerate this chunk'
 townyadmin_help_1: 'Unclaim this town block'
 townyadmin_help_2: 'Attempt to unclaim around you.'
 
-admin_panel_1: 'Admin panel'
 admin_panel_2: 'reload Towny'
 admin_panel_3: 'Run the new day code'
 
