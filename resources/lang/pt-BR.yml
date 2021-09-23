@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.123
+version: 0.124
 language: português (Brasil)
 author: BannerGames, Plugner
 website: 'http://townyadvanced.github.io/'
@@ -90,7 +90,6 @@ world_help_4: 'Lista de todos os mundos'
 world_help_5: 'Regenerar este chunk'
 townyadmin_help_1: 'Abandonar este terreno da cidade'
 townyadmin_help_2: 'Tentar abandonar terreno ao seu redor.'
-admin_panel_1: 'Painel de Admin.'
 admin_panel_2: 'recarregar o Towny'
 admin_panel_3: 'Executar o código do novo dia'
 msg_block_claim: 'Reivindicar este terreno da cidade'
@@ -1350,3 +1349,13 @@ msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because th
 msg_err_invalid_townyworld: "'%s' is not a valid towny world."
 msg_err_enter_world_name_first: 'Please enter the name of the world first.'
 msg_wilderness_use_set_to: '&bWilderness use has been set to %s in %s.'
+#Added in 0.124
+msg_err_invalid_response: 'Invalid response! Enter q to exit or back to go back to the previous question.'
+msg_setup_full_guide_link: '&bFor a link to the full install guide, click here.'
+msg_setup_wildernessuse: 'Would you like to enable wilderness use? This will allow players to break/build in the wilderness.'
+msg_setup_revertunclaim: 'Would you like to use revert on unclaim? This will make townblocks slowly regenerate when they are unclaimed.'
+msg_setup_town_block_ratio: 'What would you like to set your town block ratio at? The default is 8 townblocks per resident. Higher amounts will allow towns to claim more for each resident they have. Setting this to 0 will make it use values from the town_levels.'
+msg_setup_town_cost: 'How much should the cost to create a new town be? The default is 250.'
+msg_setup_nation_cost: 'How much should the cost to create a new nation be? The default is 1000.'
+msg_setup_townblock_cost: 'How much should it cost to claim a townblock? The default is 25. A townblock is the same size as a chunk (default settings)'
+msg_setup_success: 'Successfully changed config values to your new values.'
