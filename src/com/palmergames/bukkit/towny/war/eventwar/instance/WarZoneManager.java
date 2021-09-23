@@ -291,9 +291,7 @@ public class WarZoneManager {
 		 * Finally, deal with the various WarTypes' town-falling conditions.
 		 */
 		switch (war.getWarType()) {
-		
-		case RIOT:
-			break;
+
 		case NATIONWAR:
 		case WORLDWAR: 
 			/*
@@ -383,6 +381,8 @@ public class WarZoneManager {
 			war.getWarParticipants().remove(town);
 			
 			break;
+		case RIOT:
+			war.getWarParticipants().remove(town);
 		}
 		
 		war.checkEnd();
@@ -415,7 +415,7 @@ public class WarZoneManager {
 			if (war.getWarParticipants().getTowns().contains(town))
 				remove(town, attacker);
 
-		TownyMessaging.sendGlobalMessage(Translation.of("msg_war_eliminated", nation));
+		war.getMessenger().sendGlobalMessage(Translation.of("msg_war_eliminated", nation));
 		war.getWarParticipants().remove(nation);
 		war.checkEnd();
 	}
@@ -444,7 +444,7 @@ public class WarZoneManager {
 				jailedResidents.add(resident);
 		
 		freeFromJail(jailedResidents);
-		TownyMessaging.sendGlobalMessage(Translation.of("msg_war_jailbreak", defenderTown, jailedResidents.size()));
+		war.getMessenger().sendGlobalMessage(Translation.of("msg_war_jailbreak", defenderTown, jailedResidents.size()));
 	}
 	
 	/**
@@ -457,7 +457,7 @@ public class WarZoneManager {
 		if (jailedResidents.isEmpty())
 			return;
 		freeFromJail(jailedResidents);
-		TownyMessaging.sendGlobalMessage(Translation.of("msg_war_jailbreak", town, jailedResidents.size()));
+		war.getMessenger().sendGlobalMessage(Translation.of("msg_war_jailbreak", town, jailedResidents.size()));
 	}
 	
 	/**
@@ -511,7 +511,7 @@ public class WarZoneManager {
 		} catch (AlreadyRegisteredException e) {
 		}
 		town.save();
-		TownyMessaging.sendGlobalMessage(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), nation.getName(), TownySettings.getWarEventConquerTime()));
+		war.getMessenger().sendGlobalMessage(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), nation.getName(), TownySettings.getWarEventConquerTime()));
 		war.getWarParticipants().remove(town);
 	}
 }

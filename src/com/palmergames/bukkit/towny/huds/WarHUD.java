@@ -226,16 +226,12 @@ public class WarHUD {
 
 	public static boolean isOnEdgeOfTown(WorldCoord worldCoord, War war) {
 
-		Town currentTown;
-		
-		//Checks to make sure the worldCoord is actually in war
-		try {
-			currentTown = worldCoord.getTownBlock().getTown();
-			if (!war.getWarZoneManager().isWarZone(worldCoord))
-				return false;
-		} catch (NotRegisteredException e) {
+		Town currentTown = worldCoord.getTownOrNull();
+		if (currentTown == null)
 			return false;
-		}
+		
+		if (!war.getWarZoneManager().isWarZone(worldCoord))
+			return false;
 		
 		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
 		for (int i = 0; i < 4; i++)

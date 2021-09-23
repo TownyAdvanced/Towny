@@ -1,18 +1,22 @@
 package com.palmergames.bukkit.towny.war.eventwar;
 
 import java.text.SimpleDateFormat;
-
+import java.util.ArrayList;
+import java.util.List;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
+import com.palmergames.util.StringMgmt;
 
 public class WarBooks {
 
 	private static String newline = "\n";
-	private static final SimpleDateFormat warDateFormat = new SimpleDateFormat("MMM d yyyy '@' HH:mm");
+	private static String newParagraph = "\n\n";
+	private static final SimpleDateFormat warDateFormat = new SimpleDateFormat("MMM d YY '@' HH:mm");
 
 	/**
 	 * Creates the first book given to players in the war.
@@ -90,7 +94,7 @@ public class WarBooks {
 		 * Add scoring types and winnings at stake.
 		 */
 		text += newline;
-		text += "-------------------" + newline;
+		text += "-------------------" + newParagraph;
 		text += "War Rules:" + newline;
 		if (warType.hasTownBlockHP) {
 			text += "Town blocks will have an HP stat. " + newline;
@@ -119,12 +123,16 @@ public class WarBooks {
 			case WORLDWAR:
 				text += "The towns which are defeated by the opposing nation will change sides and join the victorious nation. ";
 				break;
+			case RIOT:
+			default:
+				break;
+			
 			}
 			if (TownySettings.getWarEventConquerTime() > 0)
 				text += "These towns will be conquered for " + TownySettings.getWarEventConquerTime() + " days. ";
 		}
 	
-		text += newline;
+		text += newParagraph;
 		if (warType.hasMayorDeath)
 			text += newline + "If your mayor runs out of lives your nation or town will be removed from the war! ";
 
@@ -138,10 +146,98 @@ public class WarBooks {
 		else
 			text += newline + "Mayors have unlimited lives. ";		
 
-		text += newline;
+		text += newParagraph;
 		text += "WarSpoils up for grabs at the end of this war: " + TownyEconomyHandler.getFormattedBalance(war.warSpoilsAtStart);
 		
 		return text;
 	}
 
+
+	/**
+	 * Creates a book to be given to players mid-war.
+	 * 
+	 * @param war War instance.
+	 * @return String containing the raw text of what will become a book.
+	 */
+	public static String warUpdateBook(War war) {
+		WarType warType = war.getWarType();
+		/*
+		 * Flashy Header.
+		 */
+		String text = "oOo Extra Extra! oOo" + newline;
+		text += "-" + warDateFormat.format(System.currentTimeMillis()) + "-" + newline;
+		text += "-------------------" + newline;
+		
+		text += "The " + war.getWarName() + " continues on." + newParagraph;
+		
+		
+		/*
+		 * Add who is involved.
+		 */
+		switch(warType) {
+		case WORLDWAR:
+			
+			text += "The fighting rages on in these nations: " + newline;
+			for (Nation nation : war.getWarParticipants().getNations())
+				text+= "* " + nation.getName() + newline;
+			text += newline;
+			break;
+			
+		case NATIONWAR:
+			
+			for (Nation nation : war.getWarParticipants().getNations()) {
+				text+= nation.getFormattedName() + " has the following towns still in play:" + newline; 
+				for (Town town : nation.getTowns()) {
+					if (war.getWarParticipants().getTowns().contains(town))
+						text += "* " + town.getName() + newline; 
+				}
+				text += newline;
+			}
+			break;
+			
+		case CIVILWAR:
+
+			text += "The following towns battle for the fate of their nation:" + newline;
+			text += "On the side of the nation's capital " + war.getWarParticipants().getNations().get(0).getName() + ":" + newline;
+			for (TownyObject town : war.getWarParticipants().getGovSide())
+				text+= "* " + ((Town)town).getName() + newline;
+			text += newline;
+			text += "And continuing in their rebelion against the capital:" + newline;
+			for (TownyObject town : war.getWarParticipants().getRebSide())
+				text+= "* " + ((Town)town).getName() + newline;
+			text += newline;
+			break;
+			
+		case TOWNWAR:
+			for (Town town : war.getWarParticipants().getTowns()) {
+				text+= town.getName() + " fights on with the following soldiers:" + newline;
+				List<String> fighters = new ArrayList<>();
+				for (Resident resident : town.getResidents())					
+					if (war.getWarParticipants().getResidents().contains(resident))
+						fighters.add(resident.getName());
+				text += StringMgmt.join(fighters, ", ") + ".";
+				text += newParagraph;
+			}
+			break;
+			
+		case RIOT:
+			text+= "The following residents remain in the fray:" + newline;
+			text += "Aligned with the mayor and the city:" + newline;
+			for (TownyObject res : war.getWarParticipants().getGovSide())
+				text+= "* " + ((Resident)res).getName() + newline;
+			text += newline;
+			text += "And continuing to sew unrest:" + newline;
+			for (TownyObject res : war.getWarParticipants().getRebSide())
+				text+= "* " + ((Resident)res).getName() + newline;
+			text += newline;
+			break;
+		}
+		
+		text += "Current Scores:" + newParagraph;
+		List<String> scores = war.getScoreManager().getScores(-1, false);
+		for (String line : scores)
+			text += line + newline;
+		
+		return text;
+	}
 }

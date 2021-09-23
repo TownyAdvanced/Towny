@@ -20,44 +20,34 @@ import java.util.Hashtable;
 
 public class WarTimerTask extends TownyTimerTask {
 
-	private War warEvent;
+	private War war;
 
 	public WarTimerTask(Towny plugin, War warEvent) {
 
 		super(plugin);
-		this.warEvent = warEvent;
+		this.war = warEvent;
 	}
 
 	@Override
 	public void run() {
-
-//		//TODO: check if war has ended and end gracefully
-//		if (!warEvent.isWarTime()) {
-//			warEvent.end();
-//			TownyAPI.getInstance().clearWarEvent();
-//			plugin.resetCache();
-//			TownyMessaging.sendDebugMsg("War ended.");
-//			return;
-//		}
-
 		int numPlayers = 0;
 		Hashtable<TownBlock, WarZoneData> plotList = new Hashtable<>();
-		for (Player player : this.warEvent.getWarParticipants().getOnlineWarriors()) {
+		for (Player player : war.getWarParticipants().getOnlineWarriors()) {
 			if (player == null || player.isFlying()) {
-				this.warEvent.getWarParticipants().removeOnlineWarrior(player);
+				war.getWarParticipants().removeOnlineWarrior(player);
 				continue;
 			}
 			if (TownyAPI.getInstance().isWilderness(player.getLocation()) || player.getLocation().getBlockY() < TownySettings.getMinWarHeight())
 				continue;
 
 			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
-			if (!warEvent.getWarZoneManager().isWarZone(townBlock.getWorldCoord()))
+			if (!war.getWarZoneManager().isWarZone(townBlock.getWorldCoord()))
 				continue;
 			
 			numPlayers++;
 			TownyMessaging.sendDebugMsg("[War] " + player.getName() + ": ");
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-			if (resident == null || !resident.hasTown() || !warEvent.getWarParticipants().has(resident) || resident.isJailed())
+			if (resident == null || !resident.hasTown() || !war.getWarParticipants().has(resident) || resident.isJailed())
 				continue;
 
 			if (TownySettings.getPlotsHealableInWar() && (CombatUtil.isAlly(resident.getTownOrNull(), townBlock.getTownOrNull()))) {
@@ -72,15 +62,15 @@ public class WarTimerTask extends TownyTimerTask {
 				continue;
 			}
 
-			if ((this.warEvent.getWarType().equals(WarType.WORLDWAR) || this.warEvent.getWarType().equals(WarType.NATIONWAR)) 
+			if ((war.getWarType().equals(WarType.WORLDWAR) || war.getWarType().equals(WarType.NATIONWAR)) 
 			&& !CombatUtil.isEnemy(resident.getTownOrNull(), townBlock.getTownOrNull())) 
 				continue;
 			
-			if (CombatUtil.isAlly(resident.getTownOrNull(), townBlock.getTownOrNull()) && !this.warEvent.getWarType().equals(WarType.CIVILWAR))
+			if (CombatUtil.isAlly(resident.getTownOrNull(), townBlock.getTownOrNull()) && !war.getWarType().equals(WarType.CIVILWAR))
 				continue;
 			TownyMessaging.sendDebugMsg("[War]   notAlly");
 
-			if (TownySettings.getOnlyAttackEdgesInWar() && !isOnEdgeOfTown(townBlock, townBlock.getWorldCoord(), warEvent))
+			if (TownySettings.getOnlyAttackEdgesInWar() && !isOnEdgeOfTown(townBlock, townBlock.getWorldCoord(), war))
 				continue;
 
 			if (plotList.containsKey(townBlock))
@@ -95,7 +85,7 @@ public class WarTimerTask extends TownyTimerTask {
 
 		//Send health updates
 		for (TownBlock tb : plotList.keySet())
-			warEvent.getWarZoneManager().updateWarZone(tb, plotList.get(tb));
+			war.getWarZoneManager().updateWarZone(tb, plotList.get(tb));
 
 		TownyMessaging.sendDebugMsg("[War] # Players: " + numPlayers);
 	}	

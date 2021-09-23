@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -19,6 +18,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.events.TownScoredEvent;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -60,7 +60,7 @@ public class ScoreManager {
 	}
 	
 	public void addTown(Town town) {
-		townScores.put(town, 0);
+		townScores.put(town, WarMetaDataController.getScore(town));
 	}
 
 	/**
@@ -91,8 +91,9 @@ public class ScoreManager {
 			pointMessage = Translation.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), defender.getName(), points, attackerTown.getName());
 
 		townScores.put(attackerTown, townScores.get(attackerTown) + points);
-		TownyMessaging.sendGlobalMessage(pointMessage);
-
+		WarMetaDataController.setScore(attackerTown, townScores.get(attackerTown));
+		
+		war.getMessenger().sendGlobalMessage(pointMessage);
 		TownScoredEvent event = new TownScoredEvent(attackerTown, townScores.get(attackerTown), war);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
@@ -120,8 +121,9 @@ public class ScoreManager {
 		}
 
 		townScores.put(town, townScores.get(town) + n);
-		TownyMessaging.sendGlobalMessage(pointMessage);
+		WarMetaDataController.setScore(town, townScores.get(town));
 
+		war.getMessenger().sendGlobalMessage(pointMessage);
 		TownScoredEvent event = new TownScoredEvent(town, townScores.get(town), war);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
@@ -152,7 +154,7 @@ public class ScoreManager {
 
 	public void sendScores(Player player, int maxListing) {
 
-		for (String line : getScores(maxListing))
+		for (String line : getScores(maxListing, true))
 			player.sendMessage(line);
 	}
 	
@@ -161,10 +163,11 @@ public class ScoreManager {
 	 * @param maxListing Maximum lines to return. Value of -1 return all.
 	 * @return A list of the current scores per town sorted in descending order.
 	 */
-	public List<String> getScores(int maxListing) {
+	public List<String> getScores(int maxListing, boolean title) {
 
 		List<String> output = new ArrayList<>();
-		output.add(ChatTools.formatTitle("War - Top Scores"));
+		if (title)
+			output.add(ChatTools.formatTitle("War - Top Scores"));
 		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<>(townScores);
 		kvTable.sortByValue();
 		kvTable.reverse();

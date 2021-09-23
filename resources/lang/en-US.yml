@@ -1647,3 +1647,13 @@ msg_jailed_author: 'Towny Jailco.'
 msg_error_town_has_no_allies: 'Town has no allies to list.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Town has no enemies to list.'
+#Message shown when there are no allies to list in /town allylist.
+msg_error_town_has_no_allies: 'Town has no allies to list.'
+#Message shown when there are no enemies to list in /town enemylist.
+msg_error_town_has_no_enemies: 'Town has no enemies to list.'
+#Message show when a town survives a CivilWar or TownWar
+msg_war_surviving_town_spoils: '&6[War]&b Surviving Town: %s won %s.'
+#Message show when a nation survives a WorldWar or NationWar
+msg_war_surviving_nation_spoils: '&6[War]&b Surviving Nation: %s won %s.'
+#Message show when paying the highest scorer in a Riot war.
+msg_war_riot_highest_score: '&6[War]&b Riot Winner: %s won %s with a score of %s.'

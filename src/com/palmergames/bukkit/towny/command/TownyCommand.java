@@ -340,7 +340,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (args[0].equalsIgnoreCase("stats"))
 				towny_war.addAll(townyUniverse.getWarEvent(p).getScoreManager().getStats());
 			else if (args[0].equalsIgnoreCase("scores"))
-				towny_war.addAll(townyUniverse.getWarEvent(p).getScoreManager().getScores(-1));
+				towny_war.addAll(townyUniverse.getWarEvent(p).getScoreManager().getScores(-1, true));
 			else if (args[0].equalsIgnoreCase("participants")) {
 				parseWarParticipants(p, args);
 				return true;

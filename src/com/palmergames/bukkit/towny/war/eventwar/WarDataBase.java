@@ -197,6 +197,9 @@ public class WarDataBase {
 		for (War war : new ArrayList<>(TownyUniverse.getInstance().getWars()))
 			TownyUniverse.getInstance().getDataSource().removeWar(war);
 		
+		for (Nation nation : TownyUniverse.getInstance().getNations()) 
+			nation.setActiveWar(false);
+		
 		for (Town town : TownyUniverse.getInstance().getTowns()) {
 			town.setActiveWar(false);
 			cleanTownMetaData(town);
@@ -212,6 +215,9 @@ public class WarDataBase {
 	public static void removeWar(War war) {
 		TownyUniverse.getInstance().getDataSource().removeWar(war);
 		
+		for (Nation nation : war.getWarParticipants().getNations())
+			nation.setActiveWar(false);
+		
 		for (Town town : war.getWarParticipants().getTowns()) { 
 			cleanTownMetaData(town);
 			town.setActiveWar(false);
@@ -225,11 +231,15 @@ public class WarDataBase {
 	
 	public static void cleanTownMetaData(Town town) {
 		WarMetaDataController.removeWarUUID(town);
+		WarMetaDataController.removeWarSide(town);
+		WarMetaDataController.removeScore(town);
 	}
 	
 	public static void cleanResidentMetaData(Resident resident) {
 		WarMetaDataController.removeWarUUID(resident);
 		WarMetaDataController.removeResidentLivesMeta(resident);
+		WarMetaDataController.removeWarSide(resident);
+		WarMetaDataController.removeScore(resident);
 	}
 
 	public static void cleanTownBlockMetaData(TownBlock tb) {

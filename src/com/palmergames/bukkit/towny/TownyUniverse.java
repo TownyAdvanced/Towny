@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnPoint;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.Jail;
@@ -1095,6 +1096,17 @@ public class TownyUniverse {
 		addWar(war);
 	}
 
+	public void addWar(War war) {
+		if (war.getWarUUID() == null)
+			return;
+		wars.put(war.getWarUUID(), war);
+	}
+
+	public void removeWar(War war) {
+		wars.remove(war.getWarUUID());
+		war = null;
+	}
+	
 	@Nullable
 	public War getWarEvent(UUID uuid) {
 		return wars.get(uuid);
@@ -1109,27 +1121,11 @@ public class TownyUniverse {
 	}
 
 	@Nullable
-	public War getWarEvent(Town town) {
-		String warUUID = WarMetaDataController.getWarUUID(town);
-		if (warUUID != null)
-			return getWarEvent(UUID.fromString(warUUID));
-		return null;
-	}
-	
-	@Nullable
-	public War getWarEvent(Resident resident) {
-		String warUUID = WarMetaDataController.getWarUUID(resident);
-		if (warUUID != null)
-			return getWarEvent(UUID.fromString(warUUID));
-		return null;
-	}
-
-	@Nullable
-	public War getWarEvent(TownBlock townBlock) {
-		if (townBlock == null)
-			return null;
-
-		String warUUID = WarMetaDataController.getWarUUID(townBlock);
+	public War getWarEvent(TownyObject obj) {
+		if (obj instanceof Nation nation)
+			obj = nation.getCapital();
+		
+		String warUUID = WarMetaDataController.getWarUUID(obj);
 		if (warUUID != null)
 			return getWarEvent(UUID.fromString(warUUID));
 		return null;
@@ -1144,18 +1140,11 @@ public class TownyUniverse {
 		return null;
 	}
 
-	public boolean hasWarEvent(TownBlock townBlock) {
-		String warUUID = WarMetaDataController.getWarUUID(townBlock);
-		return warUUID != null;
-	}
+	public boolean hasWarEvent(TownyObject obj) {
+		if (obj instanceof Nation nation)
+			obj = nation.getCapital();
 
-	public boolean hasWarEvent(Town town) {
-		String warUUID = WarMetaDataController.getWarUUID(town);
-		return warUUID != null;
-	}
-
-	public boolean hasWarEvent(Resident resident) {
-		String warUUID = WarMetaDataController.getWarUUID(resident);
+		String warUUID = WarMetaDataController.getWarUUID(obj);
 		return warUUID != null;
 	}
 
@@ -1173,17 +1162,6 @@ public class TownyUniverse {
 			names.add(war.getWarName());
 
 		return names;
-	}
-
-	public void addWar(War war) {
-		if (war.getWarUUID() == null)
-			return;
-		wars.put(war.getWarUUID(), war);
-	}
-
-	public void removeWar(War war) {
-		wars.remove(war.getWarUUID());
-		war = null;
 	}
 	
 	/*

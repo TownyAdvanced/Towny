@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.NameGenerator;
 import com.palmergames.bukkit.towny.war.eventwar.WarBooks;
 import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
+import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.events.EventWarEndEvent;
 import com.palmergames.bukkit.towny.war.eventwar.events.EventWarPreStartEvent;
@@ -25,6 +26,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.KeyValue;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +39,7 @@ public class War {
 	private WarParticipants warParticipants = new WarParticipants(this);
 	private ScoreManager scoreManager = new ScoreManager(this);
 	private WarTaskManager taskManager = new WarTaskManager(this);
+	private WarMessenger messenger = new WarMessenger(this);
 	
 	private WarType warType;
 	private String warName;	
@@ -91,9 +94,9 @@ public class War {
 		/*
 		 * Seed the war spoils.
 		 */
-		TownyMessaging.sendGlobalMessage(Translatable.of("msg_war_seeding_spoils_with", TownySettings.getBaseSpoilsOfWar()));			
-		TownyMessaging.sendGlobalMessage(Translatable.of("msg_war_total_seeding_spoils", TownyEconomyHandler.getFormattedBalance(warSpoils)));
-		TownyMessaging.sendGlobalMessage(Translatable.of("msg_war_activate_war_hud_tip"));
+		getMessenger().sendGlobalMessage(Translatable.of("msg_war_seeding_spoils_with", TownySettings.getBaseSpoilsOfWar()));			
+		getMessenger().sendGlobalMessage(Translatable.of("msg_war_total_seeding_spoils", TownyEconomyHandler.getFormattedBalance(warSpoils)));
+		getMessenger().sendGlobalMessage(Translatable.of("msg_war_activate_war_hud_tip"));
 		
 		EventWarStartEvent event = new EventWarStartEvent(warParticipants.getTowns(), warParticipants.getNations(), warSpoilsAtStart);
 		Bukkit.getServer().getPluginManager().callEvent(event);
@@ -147,11 +150,13 @@ public class War {
 		// Start the WarTimerTask if the war type allows for using townblock HP system.
 		if (warType.hasTownBlockHP)
 			taskManager.scheduleWarTimerTask(this.plugin);
+
+		ItemStack book = BookFactory.makeBook(warName, "War Declared", WarBooks.warStartBook(this));
 		
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			if (resident != null && warParticipants.has(resident)) {
-				player.getInventory().addItem(BookFactory.makeBook(warName, "War Declared", WarBooks.warStartBook(this)));
+				player.getInventory().addItem(book);
 				warParticipants.addOnlineWarrior(player);
 			}
 		}
@@ -176,6 +181,8 @@ public class War {
 		case CIVILWAR:
 			if (warParticipants.getTowns().size() <= 1)
 				end(true);
+			if (warParticipants.getGovSide().isEmpty() || warParticipants.getRebSide().isEmpty())
+				end(true);
 			break;
 		case TOWNWAR:
 			if (warParticipants.getTowns().size() <= 1)
@@ -185,7 +192,7 @@ public class War {
 		case RIOT:
 			if (warParticipants.getResidents().size() <= 1)
 				end(true);
-			else if (CombatUtil.areAllFriends(warParticipants.getResidents()))
+			if (warParticipants.getGovSide().isEmpty() || warParticipants.getRebSide().isEmpty())
 				end(true);
 			break;
 		}
@@ -202,10 +209,7 @@ public class War {
 		/*
 		 * Print out stats to players
 		 */
-		for (Player player : BukkitTools.getOnlinePlayers()) {
-			if (player != null)
-				TownyMessaging.sendMessage(player, getScoreManager().getStats());
-		}
+		getMessenger().sendGlobalMessage(getScoreManager().getStats());
 		
 		/*
 		 * End the WarTimerTask
@@ -256,6 +260,10 @@ public class War {
 	
 	public ScoreManager getScoreManager() {
 		return scoreManager;
+	}
+
+	public WarMessenger getMessenger() {
+		return messenger;
 	}
 
 	public double getWarSpoils() {
@@ -332,29 +340,80 @@ public class War {
 	 * Pay out the money to the winner(s).
 	 */
 	private void awardSpoils() {
-		double halfWinnings;
-		double nationWinnings = 0;
-		// Compute war spoils
-		halfWinnings = getWarSpoils() / 2.0;
-		try {
-			nationWinnings = halfWinnings / getWarParticipants().getNations().size(); // Again, might leave residue.
-			for (Nation winningNation : getWarParticipants().getNations()) {
-				winningNation.getAccount().deposit(nationWinnings, "War - Nation Winnings");
-				TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_WINNING_NATION_SPOILS", winningNation.getName(), TownyEconomyHandler.getFormattedBalance(nationWinnings)));
+		double halfWinnings = getWarSpoils() / 2.0;
+		switch (warType) {
+		case WORLDWAR:
+		case NATIONWAR:
+			double nationWinnings = 0;
+			try {
+				nationWinnings = halfWinnings / getWarParticipants().getNations().size(); // Again, might leave residue.
+				String amount = TownyEconomyHandler.getFormattedBalance(nationWinnings);
+				for (Nation winningNation : getWarParticipants().getNations()) {
+					winningNation.getAccount().deposit(nationWinnings, "War - Surviving Nation Winnings");
+					getMessenger().sendGlobalMessage(Translation.of("msg_war_surviving_nation_spoils", winningNation.getName(), amount));
+				}
+			} catch (ArithmeticException e) {
+				TownyMessaging.sendDebugMsg("[War]   War ended with 0 nations.");
 			}
-		} catch (ArithmeticException e) {
-			TownyMessaging.sendDebugMsg("[War]   War ended with 0 nations.");
-		}
 
-		// Pay money to winning town and print message
-		try {
-			KeyValue<Town, Integer> winningTownScore = getScoreManager().getWinningTownScore();
-			winningTownScore.key.getAccount().deposit(halfWinnings, "War - Town Winnings");
-			TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_WINNING_TOWN_SPOILS", winningTownScore.key.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  winningTownScore.value));
+			// Pay money to winning town and print message
+			try {
+				KeyValue<Town, Integer> winningTownScore = getScoreManager().getWinningTownScore();
+				winningTownScore.key.getAccount().deposit(halfWinnings, "War - Town Winnings");
+				getMessenger().sendGlobalMessage(Translation.of("MSG_WAR_WINNING_TOWN_SPOILS", winningTownScore.key.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  winningTownScore.value));
+				
+				EventWarEndEvent event = new EventWarEndEvent(getWarParticipants().getTowns(), winningTownScore.key, halfWinnings, getWarParticipants().getNations(), nationWinnings);
+				Bukkit.getServer().getPluginManager().callEvent(event);
+			} catch (TownyException e) {
+			}
+		case CIVILWAR:
+		case TOWNWAR:
+			double townWinnings = 0;
+			// Compute war spoils
+			try {
+				townWinnings = halfWinnings / getWarParticipants().getTowns().size(); // Again, might leave residue.
+				String amount = TownyEconomyHandler.getFormattedBalance(townWinnings);
+				for (Town winningTown : getWarParticipants().getTowns()) {
+					winningTown.getAccount().deposit(townWinnings, "War - Surviving Town Winnings");
+					getMessenger().sendGlobalMessage(Translation.of("msg_war_surviving_town_spoils", winningTown.getName(), amount));
+				}
+			} catch (ArithmeticException e) {
+				TownyMessaging.sendDebugMsg("[War]   War ended with 0 nations.");
+			}
+
+			// Pay money to winning town and print message
+			try {
+				KeyValue<Town, Integer> winningTownScore = getScoreManager().getWinningTownScore();
+				winningTownScore.key.getAccount().deposit(halfWinnings, "War - Town Winnings");
+				getMessenger().sendGlobalMessage(Translation.of("MSG_WAR_WINNING_TOWN_SPOILS", winningTownScore.key.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  winningTownScore.value));
+				
+				EventWarEndEvent event = new EventWarEndEvent(getWarParticipants().getTowns(), winningTownScore.key, halfWinnings, null, townWinnings);
+				Bukkit.getServer().getPluginManager().callEvent(event);
+			} catch (TownyException e) {
+			}
+		case RIOT:
+			double residentWinnings = halfWinnings / getWarParticipants().getResidents().size();
+			String amount = TownyEconomyHandler.getFormattedBalance(residentWinnings);
+			Resident highScore = null;
+			for (Resident survivor : getWarParticipants().getResidents()) {
+				survivor.getAccount().deposit(residentWinnings, "War - Riot Survivor Winnings");
+				getMessenger().sendGlobalMessage("Riot survivor " + survivor.getName() + " wins " + amount);
+				
+				if (highScore == null) {
+					highScore = survivor;
+					continue;
+				}
+				
+				if (WarMetaDataController.getScore(survivor) > WarMetaDataController.getScore(highScore))
+					highScore = survivor;
+			}
+			// Pay out the other half to the highest scorer.
+			highScore.getAccount().deposit(halfWinnings, "War - Riot High Score Winnings");
+			getMessenger().sendGlobalMessage(Translation.of("msg_war_riot_highest_score", highScore.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  WarMetaDataController.getScore(highScore)));
 			
-			EventWarEndEvent event = new EventWarEndEvent(getWarParticipants().getTowns(), winningTownScore.key, halfWinnings, getWarParticipants().getNations(), nationWinnings);
+			EventWarEndEvent event = new EventWarEndEvent(null, highScore.getTownOrNull(), halfWinnings, null, residentWinnings);
 			Bukkit.getServer().getPluginManager().callEvent(event);
-		} catch (TownyException e) {
+		default:
 		}
 	}
 

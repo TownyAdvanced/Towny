@@ -4,6 +4,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -14,19 +15,20 @@ import com.palmergames.bukkit.towny.event.PreNewTownEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
+import com.palmergames.bukkit.towny.event.time.NewHourEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
+import com.palmergames.bukkit.towny.war.eventwar.WarBooks;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
+import com.palmergames.bukkit.util.BookFactory;
 
 public class EventWarListener implements Listener {
 
@@ -53,13 +55,22 @@ public class EventWarListener implements Listener {
 	}
 	
 	@EventHandler
+	public void onNewHourEvent(NewHourEvent event) {
+		for (War war : TownyUniverse.getInstance().getWars()) {
+			ItemStack book = BookFactory.makeBook(war.getWarName(), "War Continues", WarBooks.warUpdateBook(war));
+			war.getWarParticipants().getOnlineWarriors().stream()
+				.forEach(res -> res.getPlayer().getInventory().addItem(book));
+		}
+	}
+	
+	@EventHandler
 	private void onPlayerKillsPlayer(PlayerKilledPlayerEvent event) {
 		Resident killerRes = event.getKillerRes();
 		Resident victimRes = event.getVictimRes();
 		War war = TownyUniverse.getInstance().getWarEvent(killerRes);
 		if (!WarUtil.hasSameWar(killerRes, victimRes))
 			return;
-		if (CombatUtil.isAlly(killerRes.getName(), victimRes.getName()) && war.getWarType() != WarType.RIOT)
+		if (CombatUtil.isAlly(killerRes.getName(), victimRes.getName()) && (war.getWarType() != WarType.RIOT || war.getWarType() != WarType.CIVILWAR))
 			return; // They are allies and this was a friendly fire kill.
 		
 		/*
@@ -90,21 +101,24 @@ public class EventWarListener implements Listener {
 			}
 		}
 
+		Town victimTown = victimRes.getTownOrNull();
+		Town killerTown = killerRes.getTownOrNull();
 		// Resident doesn't have enough funds.
-		if (townPrice > 0 && victimRes.hasTown()) {
-			Town town = TownyAPI.getInstance().getResidentTownOrNull(victimRes);
-			if (!town.getAccount().canPayFromHoldings(townPrice)) {
+		if (townPrice > 0) {
+			if (!victimTown.getAccount().canPayFromHoldings(townPrice)) {
 				// Town doesn't have enough funds.
-				townPrice = town.getAccount().getHoldingBalance();
-				try {
-					war.getWarZoneManager().remove(town, killerRes.getTown());
-				} catch (NotRegisteredException ignored) {}
+				townPrice = victimTown.getAccount().getHoldingBalance();
+				TownyMessaging.sendPrefixedTownMessage(victimTown, Translatable.of("msg_player_couldnt_pay_player_town_bank_paying_instead", victimRes.getName(), killerRes.getName(), townPrice));
+				TownyMessaging.sendPrefixedTownMessage(killerTown, String.format("Town could not pay death costs, removing %s from the war.", victimTown.getName()));
+				TownyMessaging.sendPrefixedTownMessage(victimTown, String.format("Town could not pay death costs, removing %s from the war.", victimTown.getName()));
+				victimTown.getAccount().payTo(townPrice, killerRes, String.format("Death Payment (War) (%s couldn't pay)", victimRes.getName()));
+				war.getWarZoneManager().remove(victimTown, killerTown);
 			} else if (!TownySettings.isEcoClosedEconomyEnabled()){
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_player_couldnt_pay_player_town_bank_paying_instead", victimRes.getName(), killerRes.getName(), townPrice));
-				town.getAccount().payTo(townPrice, killerRes, String.format("Death Payment (War) (%s couldn't pay)", victimRes.getName()));
+				TownyMessaging.sendPrefixedTownMessage(victimTown, Translatable.of("msg_player_couldnt_pay_player_town_bank_paying_instead", victimRes.getName(), killerRes.getName(), townPrice));
+				victimTown.getAccount().payTo(townPrice, killerRes, String.format("Death Payment (War) (%s couldn't pay)", victimRes.getName()));
 			} else {
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_player_couldnt_pay_player_town_bank_paying_instead", victimRes.getName(), killerRes.getName(), townPrice));
-				town.getAccount().withdraw(townPrice, String.format("Death Payment (War) (%s couldn't pay)", victimRes.getName()));
+				TownyMessaging.sendPrefixedTownMessage(victimTown, Translatable.of("msg_player_couldnt_pay_player_town_bank_paying_instead", victimRes.getName(), killerRes.getName(), townPrice));
+				victimTown.getAccount().withdraw(townPrice, String.format("Death Payment (War) (%s couldn't pay)", victimRes.getName()));
 			}
 		}
 	}
@@ -122,7 +136,7 @@ public class EventWarListener implements Listener {
 		 * Someone is being removed from the war.
 		 */
 		if (victimLives == 0)
-			residentLostLastLife(victimRes, killerRes, war);
+			residentLostLastLife(victimRes, killerRes.getTownOrNull(), war);
 	
 		/*
 		 * Give the killer some points. 
@@ -131,91 +145,88 @@ public class EventWarListener implements Listener {
 			war.getScoreManager().residentScoredKillPoints(victimRes, killerRes, event.getLocation());
 	}
 	
-	private void residentLostLastLife(Resident victimRes, Resident killerRes, War war) {
-
+	private void residentLostLastLife(Resident victimRes, Town killerTown, War war) {
+		Town victimTown = victimRes.getTownOrNull();
 		/*
 		 * Remove the resident from the war, handling kings and mayors if monarchdeath is enabled.
 		 */
 		switch (war.getWarType()) {
 		
 			case RIOT:
-				try {
-					TownyMessaging.sendPrefixedTownMessage(killerRes.getTown(), victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
-				} catch (NotRegisteredException ignored) {}
+			TownyMessaging.sendPrefixedTownMessage(killerTown, victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
 				war.getWarParticipants().remove(victimRes);
+				war.checkEnd();
 				break;
 			case NATIONWAR:
 			case WORLDWAR:
 				/*
 				 * Look to see if the king's death would remove a nation from the war.
 				 */
-				if (war.getWarType().hasMayorDeath && victimRes.hasNation() && victimRes.isKing() && killerRes.hasTown()) {
+				if (war.getWarType().hasMayorDeath && victimRes.isKing()) {
 					TownyMessaging.sendGlobalMessage(Translatable.of("MSG_WAR_KING_KILLED", victimRes.getNationOrNull().getName()));
 					/*
 					 * Remove the king's nation from the war. Where-in the king will be removed with the rest of the residents.
 					 */
-					war.getWarZoneManager().remove(victimRes.getNationOrNull(), killerRes.getTownOrNull());
+					war.getWarZoneManager().remove(victimRes.getNationOrNull(), killerTown);
 	
 				/*
 				 * Look to see if the mayor's death would remove a town from the war.
 				 */
-				} else if (war.getWarType().hasMayorDeath && victimRes.hasTown() && victimRes.isMayor() && killerRes.hasTown()) {
-					TownyMessaging.sendGlobalMessage(Translatable.of("MSG_WAR_MAYOR_KILLED", victimRes.getTownOrNull().getName()));
+				} else if (war.getWarType().hasMayorDeath && victimRes.isMayor()) {
+					TownyMessaging.sendGlobalMessage(Translatable.of("MSG_WAR_MAYOR_KILLED", victimTown.getName()));
 					/*
 					 * Remove the mayor's town from the war. Where-in the mayor will be removed with the rest of the residents.
 					 */
-					war.getWarZoneManager().remove(victimRes.getTownOrNull(), killerRes.getTownOrNull());
+					war.getWarZoneManager().remove(victimTown, killerTown);
 					
 				/*
 				 * Handle regular resident removal when they've run out of lives.	
 				 */
 				} else {
-					TownyMessaging.sendPrefixedTownMessage(victimRes.getTownOrNull(), victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
-					TownyMessaging.sendPrefixedTownMessage(killerRes.getTownOrNull(), victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
+					TownyMessaging.sendPrefixedTownMessage(victimTown, victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
+					TownyMessaging.sendPrefixedTownMessage(killerTown, victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
 					war.getWarParticipants().remove(victimRes);
 					
 					// Test if this was the last resident of the town to have any lives left.
 					int residentsWithLives = 0;
-					for (Resident res : victimRes.getTownOrNull().getResidents()) {
-						if (WarMetaDataController.getResidentLives(res) > 0)
+					for (Resident res : victimTown.getResidents()) {
+						if (war.getWarParticipants().getResidents().contains(res))
 							residentsWithLives++;
 					}
 					if (residentsWithLives == 0)
-						war.getWarZoneManager().remove(victimRes.getTownOrNull(), killerRes.getTownOrNull());
+						war.getWarZoneManager().remove(victimTown, killerTown);
 					
 				}
 				break;
 			case CIVILWAR:
 			case TOWNWAR:
-				try {
+				/*
+				 * Look to see if the mayor's death would remove a town from the war.
+				 */
+				if (war.getWarType().hasMayorDeath && victimRes.isMayor()) {
+					TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_MAYOR_KILLED", victimTown.getName()));
 					/*
-					 * Look to see if the mayor's death would remove a town from the war.
+					 * Remove the mayor's town from the war. Where-in the mayor will be removed with the rest of the residents.
 					 */
-					if (war.getWarType().hasMayorDeath && victimRes.hasTown() && victimRes.isMayor()) {
-						TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_MAYOR_KILLED", victimRes.getTown().getName()));
-						/*
-						 * Remove the mayor's town from the war. Where-in the mayor will be removed with the rest of the residents.
-						 */
-						war.getWarZoneManager().remove(victimRes.getTown(), killerRes.getTown());
-
-					/*
-					 * Handle regular resident removal when they've run out of lives.	
-					 */
-					} else {
-						TownyMessaging.sendPrefixedTownMessage(victimRes.getTown(), victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
-						TownyMessaging.sendPrefixedTownMessage(killerRes.getTown(), victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
-						war.getWarParticipants().remove(victimRes);
-						
-						// Test if this was the last resident of the town to have any lives left.
-						int residentsWithLives = 0;
-						for (Resident res : victimRes.getTownOrNull().getResidents()) {
-							if (WarMetaDataController.getResidentLives(res) > 0)
-								residentsWithLives++;
-						}
-						if (residentsWithLives == 0)
-							war.getWarZoneManager().remove(victimRes.getTownOrNull(), killerRes.getTownOrNull());
+					war.getWarZoneManager().remove(victimTown, killerTown);
+	
+				/*
+				 * Handle regular resident removal when they've run out of lives.	
+				 */
+				} else {
+					TownyMessaging.sendPrefixedTownMessage(victimTown, victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
+					TownyMessaging.sendPrefixedTownMessage(killerTown, victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
+					war.getWarParticipants().remove(victimRes);
+					
+					// Test if this was the last resident of the town to have any lives left.
+					int residentsWithLives = 0;
+					for (Resident res : victimTown.getResidents()) {
+						if (war.getWarParticipants().getResidents().contains(res))
+							residentsWithLives++;
 					}
-				} catch (NotRegisteredException ignored) {}
+					if (residentsWithLives == 0)
+						war.getWarZoneManager().remove(victimTown, killerTown);
+				}
 				break;
 		}
 	}
