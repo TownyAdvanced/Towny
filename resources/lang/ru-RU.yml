@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.123
+version: 0.124
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -90,7 +90,6 @@ world_help_4: 'Список миров'
 world_help_5: 'Регенерировать этот чанк'
 townyadmin_help_1: 'Расприватить участок города'
 townyadmin_help_2: 'Попытаться расприватить участок вокруг вас.'
-admin_panel_1: 'Панель админа'
 admin_panel_2: 'Перезагрузить плагин'
 admin_panel_3: 'Начать новый день'
 msg_block_claim: 'Заприватить этот участок'
@@ -1348,5 +1347,15 @@ status_resident_tax_title: 'Налог %s'
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Города %s покинут вашу нацию, так как после слияния они не будут достаточно близки к новой столице.'
 #Added in 0.123
 msg_err_invalid_townyworld: "'%s' is not a valid towny world."
-msg_err_enter_world_name_first: 'Please enter the name of the world first.'
-msg_wilderness_use_set_to: '&bWilderness use has been set to %s in %s.'
+msg_err_enter_world_name_first: 'Пожалуйста, введите сначала название мира.'
+msg_wilderness_use_set_to: '&bФлаг use в диких землях теперь %s в %s.'
+#Added in 0.124
+msg_err_invalid_response: 'Неверный ответ! Введите q, чтобы выйти, или back, чтобы вернуться к предыдущему вопросу.'
+msg_setup_full_guide_link: '&bНажмите сюда для перехода к инструкции по установке.'
+msg_setup_wildernessuse: 'Хотели-бы вы включить use в диких землях? Это действие позволит игрокам строить/разрушать блоки в диких землях.'
+msg_setup_revertunclaim: 'Хотели-бы вы включить восстановление участков при распривате? Это действие заставит участки медленно восстанавливаться после распривата.'
+msg_setup_town_block_ratio: 'What would you like to set your town block ratio at? The default is 8 townblocks per resident. Higher amounts will allow towns to claim more for each resident they have. Setting this to 0 will make it use values from the town_levels.'
+msg_setup_town_cost: 'How much should the cost to create a new town be? The default is 250.'
+msg_setup_nation_cost: 'How much should the cost to create a new nation be? The default is 1000.'
+msg_setup_townblock_cost: 'How much should it cost to claim a townblock? The default is 25. A townblock is the same size as a chunk (default settings)'
+msg_setup_success: 'Successfully changed config values to your new values.'
