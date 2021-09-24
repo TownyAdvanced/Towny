@@ -169,8 +169,10 @@ public class Towny extends JavaPlugin {
 		} catch (TownyInitException tie) {
 			addError(tie.getError());
 			getLogger().log(Level.SEVERE, "Failed to load Towny.", tie.getStackTrace());
-			return;
 		}
+		
+		// NOTE: Runs regardless if Towny errors out!
+		// Important for safe mode.
 
 		adventure = BukkitAudiences.create(this);
 
@@ -184,9 +186,14 @@ public class Towny extends JavaPlugin {
 			// cleanup() updates SQL schema for any changes.
 			townyUniverse.getDataSource().cleanup();
 		}
-
-		// Register all child permissions for ranks
-		TownyPerms.registerPermissionNodes();
+		
+		// It is probably a good idea to always handle permissions
+		// However, this would spit out an ugly Exception if perms or the config are bugged.
+		// Hence, these if checks.
+		if (!isError(TownyInitException.TownyError.MAIN_CONFIG) && !isError(TownyInitException.TownyError.PERMISSIONS)) {
+			// Register all child permissions for ranks
+			TownyPerms.registerPermissionNodes();
+		}
 
 		registerEvents();
 
@@ -255,11 +262,7 @@ public class Towny extends JavaPlugin {
 	private void loadConfig(boolean reload) {
 		// TODO: Rewrite CommentedConfiguration to take java.nio.Path instead of File.
 		// There is probably a lot of performance improvements possible for the CommentedConfiguration - Articdive.
-		try {
-			TownySettings.loadConfig(getDataFolder().toPath().resolve("settings").resolve("config.yml").toString(), getVersion());
-		} catch (IOException e) {
-			throw new TownyInitException("Failed to load the the Towny configuration.", TownyInitException.TownyError.MAIN_CONFIG, e);
-		}
+		TownySettings.loadConfig(getDataFolder().toPath().resolve("settings").resolve("config.yml").toString(), getVersion());
 		if (reload) {
 			// If Towny is in Safe Mode (for the main config) turn off Safe Mode.
 			if (isError(TownyInitException.TownyError.MAIN_CONFIG)) {
@@ -280,7 +283,7 @@ public class Towny extends JavaPlugin {
 
 	private void loadDatabaseConfig(boolean reload) {
 		if (!checkForLegacyDatabaseConfig()) {
-			throw new TownyInitException("Failed to load the Towny configuration.", TownyInitException.TownyError.DATABASE_CONFIG);
+			throw new TownyInitException("Unable to migrate old database settings to Towny\\\\data\\\\settings\\\\database.yml", TownyInitException.TownyError.DATABASE_CONFIG);
 		}
 		DatabaseConfig.loadDatabaseConfig(getDataFolder().toPath().resolve("settings").resolve("database.yml").toString());
 		if (reload) {
