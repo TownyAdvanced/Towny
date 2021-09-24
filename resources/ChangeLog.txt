@@ -6738,3 +6738,6 @@ v0.92.0.11:
   - Remove the MemMgmt util.
   - Make github actions not build commits from the crowdin branch, courtesy of Warriorrrr with PR #5304.
   - Add a /ta install command, courtesy of Warriorrrr with PR #5303.
+  - New Config Option: economy.daily_taxes.town_plotbased_upkeep_maximum_amount
+    - Default: 0.0
+    - If set to any amount over zero, if a town's plot-based upkeep totals more than this value, the town will pay the maximum instead.

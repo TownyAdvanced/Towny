@@ -2069,6 +2069,11 @@ public enum ConfigNodes {
 			"0.0",
 			"",
 			"# If set to any amount over zero, if a town's plot-based upkeep totals less than this value, the town will pay the minimum instead."),
+	ECO_PRICE_TOWN_UPKEEP_PLOTBASED_MAXIMUM_AMOUNT(
+			"economy.daily_taxes.town_plotbased_upkeep_maximum_amount",
+			"0.0",
+			"",
+			"# If set to any amount over zero, if a town's plot-based upkeep totals more than this value, the town will pay the maximum instead."),
 	ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY(
 			"economy.daily_taxes.price_town_overclaimed_upkeep_penalty",
 			"0.0",

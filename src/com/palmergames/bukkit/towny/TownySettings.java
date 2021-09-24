@@ -1824,8 +1824,10 @@ public class TownySettings {
 					amount = (((getTownUpkeep() * multiplier) * Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier);
 				else
 					amount = (getTownUpkeep() * multiplier) * nationMultiplier;
-				if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
-					amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
+				if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0)
+					amount = Math.max(amount, TownySettings.getPlotBasedUpkeepMinimumAmount());
+				if (TownySettings.getPlotBasedUpkeepMaximumAmount() > 0.0) 
+					amount = Math.min(amount, TownySettings.getPlotBasedUpkeepMaximumAmount());
 				return amount;
 			}
 			return (getTownUpkeep() * multiplier) * nationMultiplier;
@@ -1836,8 +1838,10 @@ public class TownySettings {
 					amount = (getTownUpkeep() * multiplier) * Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
 				else
 					amount = getTownUpkeep() * multiplier;
-				if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0 && amount < TownySettings.getPlotBasedUpkeepMinimumAmount())
-					amount = TownySettings.getPlotBasedUpkeepMinimumAmount();
+				if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0)
+					amount = Math.max(amount, TownySettings.getPlotBasedUpkeepMinimumAmount());
+				if (TownySettings.getPlotBasedUpkeepMaximumAmount() > 0.0) 
+					amount = Math.min(amount, TownySettings.getPlotBasedUpkeepMaximumAmount());
 				return amount;
 			}
 			return getTownUpkeep() * multiplier;
@@ -1859,6 +1863,13 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED_MINIMUM_AMOUNT);
 		
 	}
+
+	public static double getPlotBasedUpkeepMaximumAmount () {
+		
+		return getDouble(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED_MAXIMUM_AMOUNT);
+		
+	}
+
 	public static boolean isTownLevelModifiersAffectingPlotBasedUpkeep() {
 		
 		return getBoolean(ConfigNodes.ECO_PRICE_TOWN_UPKEEP_PLOTBASED_TOWNLEVEL_MODIFIER);
