@@ -589,6 +589,7 @@ permissions:
             towny.command.townyadmin.plot.*: true
             towny.command.townyadmin.resident.*: true
             towny.command.townyadmin.depositall: true
+            towny.command.townyadmin.install: true
 
     towny.command.townyadmin.resident.*:
         description: User can access admin resident commands

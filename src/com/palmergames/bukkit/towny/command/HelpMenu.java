@@ -47,7 +47,7 @@ public enum HelpMenu {
 	TA_HELP {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("townyadmin", Translation.of("admin_panel_1"))
+			return new MenuBuilder("townyadmin")
 				.add("set [] .. []", "")
 				.add("unclaim [radius]", "")
 				.add("plot", "")
