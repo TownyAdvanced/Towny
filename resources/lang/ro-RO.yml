@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.123
+version: 0.124
 language: Romanian
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -90,19 +90,6 @@ world_help_4: 'Listează toate lumile'
 world_help_5: 'Regenerează acest chunk'
 townyadmin_help_1: 'Abandonează acest block town'
 townyadmin_help_2: 'Incearcă sa abandonezi în jurul tău.'
-ta_panel_1: 'Panou Administrator Towny'
-ta_panel_2: 'TimpRăzboi: '
-ta_panel_3: 'Regenerare Viață: '
-ta_panel_4: 'Eliminarea Mobiilor Universală: '
-ta_panel_4_1: 'Eliminarea Mobiilor Orașului: '
-ta_panel_5: 'Cronometru Zilnic: '
-ta_panel_6: 'Economia: '
-ta_panel_7: 'Conturi Bancare: '
-ta_panel_8: 'Server'
-ta_panel_9: 'Memorie: '
-ta_panel_10: 'Subiecte: '
-ta_panel_11: 'Ora: '
-admin_panel_1: 'Panou administrator'
 admin_panel_2: 'reîncarcă Towny'
 admin_panel_3: 'Execută codul zilei noi'
 msg_block_claim: 'Cucereşte acest block town'
@@ -156,7 +143,7 @@ msg_kicked: '&b%s l-a dat afară pe %s din oraș.'
 msg_nation_kicked_by: '&bOrașul tău a fost dat afară din națiune de către %s.'
 msg_town_left_nation: '&bOrașul tău a părăsit națiunea %s.'
 msg_nation_town_left: '&bOrașul %s a părăsit națiunea ta.'
-msg_nation_kicked: '&b%s kicked %s from the nation.'
+msg_nation_kicked: '&b%s a dat afară oraşul %s din națiune.'
 msg_raised_ass: '&b%s l-a ridicat pe %s la asistent %s.'
 msg_lowered_to_res_by: '&bAi fost retrogradat la rezident obișnuit de %s.'
 msg_lowered_to_res: '&b%s l-a retrogradat pe %s la rezident obișnuit.'
@@ -1362,3 +1349,13 @@ msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because th
 msg_err_invalid_townyworld: "'%s' is not a valid towny world."
 msg_err_enter_world_name_first: 'Please enter the name of the world first.'
 msg_wilderness_use_set_to: '&bWilderness use has been set to %s in %s.'
+#Added in 0.124
+msg_err_invalid_response: 'Invalid response! Enter q to exit or back to go back to the previous question.'
+msg_setup_full_guide_link: '&bFor a link to the full install guide, click here.'
+msg_setup_wildernessuse: 'Would you like to enable wilderness use? This will allow players to break/build in the wilderness.'
+msg_setup_revertunclaim: 'Would you like to use revert on unclaim? This will make townblocks slowly regenerate when they are unclaimed.'
+msg_setup_town_block_ratio: 'What would you like to set your town block ratio at? The default is 8 townblocks per resident. Higher amounts will allow towns to claim more for each resident they have. Setting this to 0 will make it use values from the town_levels.'
+msg_setup_town_cost: 'How much should the cost to create a new town be? The default is 250.'
+msg_setup_nation_cost: 'How much should the cost to create a new nation be? The default is 1000.'
+msg_setup_townblock_cost: 'How much should it cost to claim a townblock? The default is 25. A townblock is the same size as a chunk (default settings)'
+msg_setup_success: 'Successfully changed config values to your new values.'
