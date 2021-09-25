@@ -20,10 +20,10 @@ import me.clip.placeholderapi.expansion.Relational;
  */
 public class TownyPlaceholderExpansion extends PlaceholderExpansion implements Relational {
 
-	final String nomad = Translation.of("nomad_sing");
-	final String res = Translation.of("res_sing");
-	final String mayor = Translation.of("mayor_sing");
-	final String king = Translation.of("king_sing");
+	final String nomad = TownySettings.getPAPIFormattingNomad() + Translation.of("nomad_sing");
+	final String res = TownySettings.getPAPIFormattingResident() + Translation.of("res_sing");
+	final String mayor = TownySettings.getPAPIFormattingMayor() + Translation.of("mayor_sing");
+	final String king = TownySettings.getPAPIFormattingKing() + Translation.of("king_sing");
 	
 	private final Towny plugin;
 

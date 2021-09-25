@@ -6741,3 +6741,4 @@ v0.92.0.11:
   - New Config Option: economy.daily_taxes.town_plotbased_upkeep_maximum_amount
     - Default: 0.0
     - If set to any amount over zero, if a town's plot-based upkeep totals more than this value, the town will pay the maximum instead.
+  - Fix %townyadvanced_player_status% placeholder not using the placeholder colouring settings. 
