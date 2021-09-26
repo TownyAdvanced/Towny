@@ -649,7 +649,7 @@ status_world_unclaimrevert: '점유 해체 취소'
 status_world_explrevert: '폭발 취소:'
 status_world_ignoredblocks: '예외 블록:'
 status_res_taxexempt: 'Staff are exempt from paying town taxes.'
-status_res_tax: 'Town Tax:'
+status_res_tax: '마을 세금:'
 status_res_plottax: 'Total Plot Taxes:'
 status_res_totaltax: 'Total Tax to pay:'
 #Added in 0.45
