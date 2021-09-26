@@ -379,21 +379,29 @@ public class PlayerCacheUtil {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (townyUniverse.getPermissionSource().isTownyAdmin(player))
 			return true;
+		
+		Town targetTown = pos.getTownOrNull();
 
 		//If town is bankrupt (but not ruined), nobody can build
-		Town targetTown = pos.getTownOrNull();
-			
-		if(targetTown != null && TownySettings.isTownBankruptcyEnabled() && action == ActionType.BUILD) {
-			if(targetTown.isBankrupt() && !targetTown.isRuined())  {
+		if(targetTown != null 
+			&& TownySettings.isTownBankruptcyEnabled() 
+			&& action == ActionType.BUILD
+			&& targetTown.isBankrupt() 
+			&& !targetTown.isRuined()) {
 				cacheBlockErrMsg(player, Translatable.of("msg_err_bankrupt_town_cannot_build").forLocale(player));
 				return false;
-			}
 		}
 
-		if (status == TownBlockStatus.OFF_WORLD || status == TownBlockStatus.PLOT_OWNER || status == TownBlockStatus.TOWN_OWNER) // || plugin.isTownyAdmin(player)) // status == TownBlockStatus.ADMIN ||
+		if (status == TownBlockStatus.OFF_WORLD || status == TownBlockStatus.PLOT_OWNER || status == TownBlockStatus.TOWN_OWNER)
 			return true;
 		
-		if (status == TownBlockStatus.WARZONE && TownySettings.isAllowWarBlockGriefing())
+		Resident res = townyUniverse.getResident(player.getUniqueId());
+		if (res == null) {
+			cacheBlockErrMsg(player, Translatable.of("msg_err_not_registered").forLocale(player));
+			return false;
+		}
+		
+		if (!res.isJailed() && status == TownBlockStatus.WARZONE && TownySettings.isAllowWarBlockGriefing())
 			return true;
 
 		if (status == TownBlockStatus.NOT_REGISTERED) {
@@ -406,85 +414,46 @@ public class PlayerCacheUtil {
 			return false;
 		}
 
-		Town playersTown = null;
-		Resident res = townyUniverse.getResident(player.getUniqueId());
-		if (res != null && res.hasTown())
-			playersTown = TownyAPI.getInstance().getResidentTownOrNull(res);
-
 		/*
 		 * Handle the wilderness. 
 		 */
 		if (TownyAPI.getInstance().isWilderness(pos)) {
 			
 			/*
-			 * Get the TownyWorld.
-			 */
-			TownyWorld townyWorld = null;
-			try {
-				townyWorld = pos.getTownyWorld();
-			} catch (NotRegisteredException e) {
-				// Should not be possible to get here.
-				TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
-				return false;
-			}
-			
-			/*
 			 * Handle the Wilderness.
 			 */
+			boolean hasWildOverride = townyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorldOrNull(), player, material, action);
+
 			if (status == TownBlockStatus.UNCLAIMED_ZONE) {
-				if (townyUniverse.getPermissionSource().hasWildOverride(townyWorld, player, material, action)) {
+				if (hasWildOverride)
 					return true;
-				} else {
-					// Don't have permission to build/destroy/switch/item_use here
-					cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_wild", Translatable.of(action.toString())).forLocale(player));
-					return false;
-				}
+
+				// Don't have permission to build/destroy/switch/item_use here
+				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_wild", Translatable.of(action.toString())).forLocale(player));
+				return false;
 			}
 			
 			/*
 			 * Handle the possiblity that NationZones are enabled the 
 			 * TownBlockStatus is NATION_ZONE instead of UNCLAIMED_ZONE.
+			 * In all situations the player still has to hasWildOverride.
 			 */
-			if (TownySettings.getNationZonesEnabled()) {
-				// Nation_Zone wilderness type Permissions 
-				if (status == TownBlockStatus.NATION_ZONE) {
-					// Admins that also have wilderness permission can bypass the nation zone.
-					if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()) && townyUniverse.getPermissionSource().hasWildOverride(townyWorld, player, material, action)) {
-						return true;
-					} else {
-						// Get the nearest Town that has a Nation. 
-						Town nearestTown = townyWorld.getClosestTownWithNationFromCoord(pos.getCoord(), null);
-						// We know that the nearest Town will have a nation.
-						Nation nearestNation = TownyAPI.getInstance().getTownNationOrNull(nearestTown);
-		
-						// If the player has a Nation then they could be able to use this NationZone. 
-						if (res.hasNation()) {
-							// Player is a member of this NationZone's nation.
-							if (res.getNationOrNull().getUUID().equals(nearestNation.getUUID())){
-								// Players are still required to be able to use the Wilderness in their NationZones.
-								if (townyUniverse.getPermissionSource().hasWildOverride(townyWorld, player, material, action)) {
-									return true;
-								} else {
-									// Don't have permission to build/destroy/switch/item_use here
-									cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_wild", Translatable.of(action.toString())).forLocale(player));
-									return false;
-								}
-							// Player is not a member of this NationZone's nation.
-							} else {
-								cacheBlockErrMsg(player, Translatable.of("nation_zone_this_area_under_protection_of", townyWorld.getUnclaimedZoneName(), nearestNation.getName()).forLocale(player));
-								return false;
-							}
+			if (TownySettings.getNationZonesEnabled() && status == TownBlockStatus.NATION_ZONE && hasWildOverride) {
+				// Admins that also have wilderness permission can bypass the nation zone.
+				if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()))
+					return true;
 
-						// Without a nation we know this player cannot use the NationZone.
-						} else {
-							cacheBlockErrMsg(player, Translatable.of("nation_zone_this_area_under_protection_of", townyWorld.getUnclaimedZoneName(), nearestNation.getName()).forLocale(player));
-							return false;
-						}
+				// We know that the nearest Town will have a nation because the TownBlockStatus.
+				Nation nearestNation = TownyAPI.getInstance().getTownNationOrNull(pos.getTownyWorldOrNull().getClosestTownWithNationFromCoord(pos.getCoord(), null));
 
-					}
-				}
+				// If the player has a Nation and is a member of this NationZone's nation.
+				if (res.hasNation() && res.getNationOrNull().getUUID().equals(nearestNation.getUUID()))
+					return true;
+
+				// The player is not a nation member of this NationZone.
+				cacheBlockErrMsg(player, Translatable.of("nation_zone_this_area_under_protection_of", pos.getTownyWorldOrNull().getUnclaimedZoneName(), nearestNation.getName()).forLocale(player));
+				return false;
 			}
-
 		}
 		
 		/*
@@ -493,8 +462,19 @@ public class PlayerCacheUtil {
 		TownBlock townBlock = pos.getTownBlockOrNull();
 		
 		/*
+		 * Check all-towns overrides before testing any plot permissions.
+		 */
+		if (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action))
+			return true;
+		
+		/*
+		 * Check town overrides before testing plot permissions
+		 */
+		if (targetTown.equals(TownyAPI.getInstance().getResidentTownOrNull(res)) && townyUniverse.getPermissionSource().hasOwnTownOverride(player, material, action))
+			return true;
+		
+		/*
 		 * Player has a permission override set.
-		 * 
 		 */
 		if (townBlock.getPermissionOverrides().containsKey(res) && townBlock.getPermissionOverrides().get(res).getPermissionTypes()[action.getIndex()] != SetPermissionType.UNSET) {
 			SetPermissionType type = townBlock.getPermissionOverrides().get(res).getPermissionTypes()[action.getIndex()];
@@ -504,271 +484,120 @@ public class PlayerCacheUtil {
 			return type.equals(SetPermissionType.SET);				
 		}
 		
+		/*
+		 * Player has Trusted status here.
+		 */
 		if (status == TownBlockStatus.PLOT_TRUSTED || status == TownBlockStatus.TOWN_TRUSTED)
 			return true;
-
+		
 		/*
-		 * Handle Personally owned plots first.
+		 * Handle personally-owned plots' friend and town permissions.
 		 */
-		if (townBlock.hasResident()) {
-			/*
-			 * Check town overrides before testing plot permissions
-			 */
-			if (targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasOwnTownOverride(player, material, action))) {
+		if (status == TownBlockStatus.PLOT_FRIEND) {
+			
+			// Plot allows Friends perms and we aren't stopped by Wilds or Farm Plot overrides.
+			if (townBlock.getPermissions().getResidentPerm(action) && testSpecialPlots(pos.getTownyWorldOrNull(), townBlock.getType(), material, action))
 				return true;
 
-			} else if (!targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action))) {
+			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_friends"), Translatable.of(action.toString())).forLocale(player));
+			return false;
+		} 
+		
+		if (status == TownBlockStatus.PLOT_TOWN) {
+
+			// Plot allows Town perms and we aren't stopped by Wilds or Farm Plot overrides.
+			if (townBlock.getPermissions().getNationPerm(action) && testSpecialPlots(pos.getTownyWorldOrNull(), townBlock.getType(), material, action))
 				return true;
-
-			} else if (status == TownBlockStatus.PLOT_FRIEND) {
-				if (townBlock.getPermissions().getResidentPerm(action)) {
-
-					if (townBlock.getType() == TownBlockType.WILDS) {
-
-						try {
-							if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
-								return true;
-						} catch (NotRegisteredException e) {
-						}
-
-					} else if (townBlock.getType() == TownBlockType.FARM && (action.equals(ActionType.BUILD) || action.equals(ActionType.DESTROY))) {		
-						
-						if (TownySettings.getFarmPlotBlocks().contains(material.toString()))
-							return true;
-						
-					} else {
-						return true;
-					}
-
-				}
-
-				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_friends"), Translatable.of(action.toString())).forLocale(player));
-				return false;
-
-			} else if (status == TownBlockStatus.PLOT_TOWN) {
-				if (townBlock.getPermissions().getNationPerm(action)) {
-
-					if (townBlock.getType() == TownBlockType.WILDS) {
-
-						try {
-							if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
-								return true;
-						} catch (NotRegisteredException e) {
-						}
-
-					} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
-						
-						if (TownySettings.getFarmPlotBlocks().contains(material.toString()))
-							return true;
-						
-					} else {
-						return true;
-					}
-
-				}
-				
-				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_town_members"), Translatable.of(action.toString())).forLocale(player));
-				return false;
-
-			} else if (status == TownBlockStatus.PLOT_ALLY) {
-				if (townBlock.getPermissions().getAllyPerm(action)) {
-
-					if (townBlock.getType() == TownBlockType.WILDS) {
-
-						try {
-							if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
-								return true;
-						} catch (NotRegisteredException e) {
-						}
-
-					} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
-						
-						if (TownySettings.getFarmPlotBlocks().contains(material.toString()))
-							return true;
-						
-					} else {
-						return true;
-					}
-
-				}
-				
-				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_allies"), Translatable.of(action.toString())).forLocale(player));
-				return false;
-
-			} else {
-
-				if (townBlock.getPermissions().getOutsiderPerm(action)) {
-
-					if (townBlock.getType() == TownBlockType.WILDS) {
-
-						try {
-							if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
-								return true;
-						} catch (NotRegisteredException e) {
-						}
-
-					} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
-						
-						if (TownySettings.getFarmPlotBlocks().contains(material.toString()))
-							return true;
-						
-					} else {
-						return true;
-					}
-
-				}
-
-				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_outsiders"), Translatable.of(action.toString())).forLocale(player));
-				return false;
-
-			}
+			
+			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_town_members"), Translatable.of(action.toString())).forLocale(player));
+			return false;
 		}
 
-
 		/*
-		 * Handle town-owned plots last.
+		 * Handle town-owned plots' resident and nation permissions.
 		 */
 		if (status == TownBlockStatus.TOWN_RESIDENT) {
-
-			/*
-			 * Check town overrides before testing town permissions
-			 */
-			if (targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasTownOwnedOverride(player, material, action))) {
+			
+			// Plot allows Resident perms and we aren't stopped by Wilds or Farm Plot overrides.
+			if (townBlock.getPermissions().getResidentPerm(action) && testSpecialPlots(pos.getTownyWorldOrNull(), townBlock.getType(), material, action))
 				return true;
-
-			} else if (!targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action))) {
-				return true;
-
-			} else if (townBlock.getPermissions().getResidentPerm(action)) {
-
-				if (townBlock.getType() == TownBlockType.WILDS) {
-
-					try {
-						if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
-							return true;
-					} catch (NotRegisteredException e) {
-					}
-
-				} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
-					
-					if (TownySettings.getFarmPlotBlocks().contains(material.toString()))
-						return true;
-					
-				} else {
-					return true;
-				}
-
-			}
 
 			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_resident", Translatable.of(action.toString())).forLocale(player));
 			return false;
-		} else if (status == TownBlockStatus.TOWN_NATION) {
-			/*
-			 * Check town overrides before testing town permissions
-			 */
-			if (targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasOwnTownOverride(player, material, action))) {
+		} 
+		
+		if (status == TownBlockStatus.TOWN_NATION) {
+
+			// Plot allows Nation perms and we aren't stopped by Wilds or Farm Plot overrides.
+			if (townBlock.getPermissions().getNationPerm(action) && testSpecialPlots(pos.getTownyWorldOrNull(), townBlock.getType(), material, action))
 				return true;
-
-			} else if (!targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action))) {
-				return true;
-
-			} else if (townBlock.getPermissions().getNationPerm(action)) {
-
-				if (townBlock.getType() == TownBlockType.WILDS) {
-
-					try {
-						if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
-							return true;
-					} catch (NotRegisteredException e) {
-					}
-
-				} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
-					
-					if (TownySettings.getFarmPlotBlocks().contains(material.toString()))
-						return true;
-					
-				} else {
-					return true;
-				}
-
-			}
 
 			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_nation", Translatable.of(action.toString())).forLocale(player));
 			return false;
-
-		} else if (status == TownBlockStatus.TOWN_ALLY) {
-
-			/*
-			 * Check town overrides before testing town permissions
-			 */
-			if (targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasOwnTownOverride(player, material, action))) {
-				return true;
-
-			} else if (!targetTown.equals(playersTown) && (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action))) {
-				return true;
-
-			} else if (townBlock.getPermissions().getAllyPerm(action)) {
-
-				if (townBlock.getType() == TownBlockType.WILDS) {
-
-					try {
-						if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
-							return true;
-					} catch (NotRegisteredException e) {
-					}
-
-				} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {		
-					
-					if (TownySettings.getFarmPlotBlocks().contains(material.toString()))
-						return true;
-					
-				} else {
-					return true;
-				}
-
-			}
-
-			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_allies", Translatable.of(action.toString())).forLocale(player));
-			return false;
-
-		} else if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY) {
-
-			/*
-			 * Check town overrides before testing town permissions
-			 */
-			if (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action)) {
-				return true;
-
-			} else if (townBlock.getPermissions().getOutsiderPerm(action)) {
-
-				if (townBlock.getType() == TownBlockType.WILDS) {
-
-					try {
-						if (townyUniverse.getPermissionSource().unclaimedZoneAction(pos.getTownyWorld(), material, action))
-							return true;
-					} catch (NotRegisteredException ignored) {
-					}
-
-				} else if (townBlock.getType() == TownBlockType.FARM && (action == ActionType.BUILD || action == ActionType.DESTROY)) {
-					
-					if (TownySettings.getFarmPlotBlocks().contains(material.toString()))
-						return true;
-					
-				} else {
-					return true;
-				}
-
-			}
-			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_outsider", Translatable.of(action.toString())).forLocale(player));
-			return false;
-		} else if (status == TownBlockStatus.WARZONE) {
-			
-			/*
-			 * Towny will determine what to do in Warzones in other places.
-			 */
-			return true;
 		}
+		
+		/*
+		 * Handle both personally-owned and town-owned Ally permissions.
+		 */
+		if (status == TownBlockStatus.PLOT_ALLY || status == TownBlockStatus.TOWN_ALLY) {
+
+			// Plot allows Ally perms and we aren't stopped by Wilds or Farm Plot overrides.
+			if (townBlock.getPermissions().getAllyPerm(action) && testSpecialPlots(pos.getTownyWorldOrNull(), townBlock.getType(), material, action))
+				return true;
+
+			// Choose which error message will be shown.
+			if (status == TownBlockStatus.PLOT_ALLY) 
+				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_allies"), Translatable.of(action.toString())).forLocale(player));
+			else 
+				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_allies", Translatable.of(action.toString())).forLocale(player));
+			return false;
+		}
+		
+		/*
+		 * Handle both personally-owned and town-owned Outsider and Enemy statuses.
+		 */
+		if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY) {
+			
+			// Plot allows Outsider perms and we aren't stopped by Wilds or Farm Plot overrides.
+			if (townBlock.getPermissions().getOutsiderPerm(action) && testSpecialPlots(pos.getTownyWorldOrNull(), townBlock.getType(), material, action))
+				return true;
+
+			// Choose which error message will be shown.
+			if (townBlock.hasResident())
+				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_outsiders"), Translatable.of(action.toString())).forLocale(player));
+			else 
+				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_outsider", Translatable.of(action.toString())).forLocale(player));
+			return false;
+		}
+
 		TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
+		return false;
+	}
+
+	/**
+	 * Wilds and Farm plots have special overrides over the normal plot permissions, 
+	 * limiting interaction to only specific blocks.
+	 *  
+	 * @param world TownyWorld where the action is occuring.
+	 * @param type TownBlockType of the TownBlock.
+	 * @param material Material being actioned upon.
+	 * @param action ActionType being done on the material.
+	 * @return False if the player is in a Wilds or Farm plot and trying to interact outside the allowed materials & actions.
+	 */
+	private static boolean testSpecialPlots(TownyWorld world, TownBlockType type, Material material, ActionType action) {
+		if (type == TownBlockType.WILDS)
+			if (TownyUniverse.getInstance().getPermissionSource().unclaimedZoneAction(world, material, action))
+				return true;
+
+		else if (type == TownBlockType.FARM && (action.equals(ActionType.BUILD) || action.equals(ActionType.DESTROY)))		
+			if (TownySettings.getFarmPlotBlocks().contains(material.toString()))
+				return true;
+			
+		else
+			// This isn't a Wilds or Farm plot with special overrides, the Plot has permissions on, return true.
+			return true;
+		
+		// This is a Wilds or Farm plot and the player's actions or materials are not allowed under Wilds or Farm plot rules.
 		return false;
 	}
 }
