@@ -439,7 +439,7 @@ public class TownyFormatter {
 			String bankline = colourKeyValue(translator.of("status_bank"), nation.getAccount().getHoldingFormattedBalance());
 
 			if (TownySettings.getNationUpkeepCost(nation) > 0)
-				bankline += colourKey(translator.of("status_bank_town2") + " " + colourKeyImportant(formatMoney(TownySettings.getNationUpkeepCost(nation))));
+				bankline += translator.of("status_splitter") + colourKey(translator.of("status_bank_town2") + " " + colourKeyImportant(formatMoney(TownySettings.getNationUpkeepCost(nation))));
 			
 			bankline += translator.of("status_splitter") + colourKey(translator.of("status_nation_tax")) + " " + colourKeyImportant(formatMoney(nation.getTaxes()));
 			screen.addComponentOf("bankLine", bankline);

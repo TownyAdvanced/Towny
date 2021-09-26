@@ -6747,3 +6747,4 @@ v0.92.0.11:
   - Bump version for release.
 0.97.2.1:
   - Tidy up PlayerCacheUtil.
+  - Fix missing splitter between Nation bank and upkeep on the nation status screen.
