@@ -1346,7 +1346,7 @@ status_resident_tax_title: 'Налог %s'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Города %s покинут вашу нацию, так как после слияния они не будут достаточно близки к новой столице.'
 #Added in 0.123
-msg_err_invalid_townyworld: "'%s' не является верным Towny-миром."
+msg_err_invalid_townyworld: "'%s' не является Towny-миром."
 msg_err_enter_world_name_first: 'Пожалуйста, введите сначала название мира.'
 msg_wilderness_use_set_to: '&bФлаг use в диких землях теперь %s в %s.'
 #Added in 0.124
