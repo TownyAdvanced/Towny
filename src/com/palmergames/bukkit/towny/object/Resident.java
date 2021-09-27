@@ -26,6 +26,8 @@ import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -71,6 +73,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	private ArrayList<Inventory> guiPages;
 	private int guiPageNum = 0;
+	private int spawnProtectionTaskID = 0;
 
 	public Resident(String name) {
 		super(name);
@@ -839,6 +842,21 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public boolean isOnline() {
 		return BukkitTools.isOnline(getName());
 	}
+
+	public int getSpawnProtectionTaskID() {
+		return spawnProtectionTaskID;
+	}
+
+	public void setSpawnProtectionTaskID(int spawnProtectionTaskID) {
+		this.spawnProtectionTaskID = spawnProtectionTaskID;
+	}
+	
+	public void removeSpawnProtection() {
+		Bukkit.getScheduler().cancelTask(getSpawnProtectionTaskID());
+		setSpawnProtectionTaskID(0);
+		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_invulnerability").forLocale(this));
+	}
+
 
 	/**
 	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.

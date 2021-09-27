@@ -3165,5 +3165,9 @@ public class TownySettings {
 	public static void saveConfig() {
 		config.save();
 	}
+
+	public static long getSpawnProtection() {
+		return TimeTools.getTicks(getString(ConfigNodes.GTOWN_SETTINGS_RESPAWN_PROTECTION));
+	}
 }
 

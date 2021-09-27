@@ -569,7 +569,14 @@ public enum ConfigNodes {
 			"global_town_settings.town_respawn",
 			"false",
 			"",
-			"# Respawn the player at his town spawn point when he/she dies"),
+			"# When true Towny will handle respawning, with town or resident spawns."),
+	GTOWN_SETTINGS_RESPAWN_PROTECTION(
+			"global_town_settings.respawn_protection",
+			"10s",
+			"",
+			"# When greater than 0s, the amount of time a player who has respawned is considered invulnerable.",
+			"# Invulnerable players who attacker other players will lose their invulnerability.",
+			"# Invulnerable players who teleport after respawn will also lose their invulnerability."),
 	GTOWN_SETTINGS_TOWN_RESPAWN_SAME_WORLD_ONLY(
 			"global_town_settings.town_respawn_same_world_only",
 			"false",
