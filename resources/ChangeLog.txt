@@ -6748,3 +6748,11 @@ v0.92.0.11:
 0.97.2.1:
   - Tidy up PlayerCacheUtil.
   - Fix missing splitter between Nation bank and upkeep on the nation status screen.
+  - New Placholder: %townyadvanced_town_board%
+    - Displays a player's town's board message.
+  - New Placeholder: %townyadvanced_nation_board%
+    - Displays a player's nation's board message.
+  - New Placeholder: %townyadvanced_player_location_town_board%
+    - Displays the board message of the town where the player is stood.
+  - New Placeholder: %townyadvanced_player_location_nation_board%
+    - Displays the board message of the nation where the player is stood.

@@ -572,36 +572,24 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			}
 			return tag;
 		case "town_prefix": // %townyadvanced_town_prefix%
-			try {
-				return resident.hasTown() ? TownySettings.getTownPrefix(resident.getTown()) : "";
-			} catch (NotRegisteredException ignored) {
-			}
+			return resident.hasTown() ? TownySettings.getTownPrefix(resident.getTownOrNull()) : "";
 		case "town_postfix": // %townyadvanced_town_postfix%
-			try {
-				return resident.hasTown() ? TownySettings.getTownPostfix(resident.getTown()) : "";
-			} catch (NotRegisteredException ignored) {
-			}
+			return resident.hasTown() ? TownySettings.getTownPostfix(resident.getTownOrNull()) : "";
 		case "nation_prefix": // %townyadvanced_nation_prefix%
-			try {
-				return resident.hasNation() ? TownySettings.getNationPrefix(resident.getTown().getNation()) : "";
-			} catch (NotRegisteredException ignored) {
-			}
+			return resident.hasNation() ? TownySettings.getNationPrefix(resident.getNationOrNull()) : "";
 		case "nation_postfix": // %townyadvanced_nation_postfix%
-			try {
-				return resident.hasNation() ? TownySettings.getNationPostfix(resident.getTown().getNation()) : "";
-			} catch (NotRegisteredException ignored) {
-			}
+			return resident.hasNation() ? TownySettings.getNationPostfix(resident.getNationOrNull()) : "";
 		case "player_jailed": // %townyadvanced_player_jailed%
 			return String.valueOf(resident.isJailed());
 		case "is_nation_peaceful": // %townyadvanced_is_nation_peaceful%	
-			try {
-				return resident.hasNation() ? (resident.getTown().getNation().isNeutral() ? Translation.of("status_town_title_peaceful"): "") : "";
-			} catch (NotRegisteredException ignored) {}
+			return resident.hasNation() ? (resident.getNationOrNull().isNeutral() ? Translation.of("status_town_title_peaceful"): "") : "";
 		case "is_town_peaceful": // %townyadvanced_is_town_peaceful%	
-			try {
-				return resident.hasTown() ? (resident.getTown().isNeutral() ? Translation.of("status_town_title_peaceful"): "") : "";
-			} catch (NotRegisteredException ignored) {}
-			
+			return resident.hasTown() ? (resident.getTownOrNull().isNeutral() ? Translation.of("status_town_title_peaceful"): "") : "";
+		case "town_board": // %townyadvanced_town_board%
+			return resident.hasTown() ? resident.getTownOrNull().getBoard() : "";
+		case "nation_board": // %townyadvanced_nation_board%
+			return resident.hasTown() ? (resident.hasNation() ? resident.getNationOrNull().getBoard() : "") : "";
+
 		
 		default:
 			return null;
@@ -647,6 +635,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				return townblock != null ? townblock.getTownOrNull().getMayor().getName() : "";
 			case "player_location_town_nation_name": // %townyadvanced_player_location_town_nation_name%
 				return townblock != null ? (townblock.getTownOrNull().hasNation() ? townblock.getTownOrNull().getNationOrNull().getFormattedName() : "") : "";
+			case "player_location_town_board": // %townyadvanced_player_location_town_board%
+				return townblock != null ? townblock.getTownOrNull().getBoard() : "";
+			case "player_location_nation_board": // %townyadvanced_player_location_nation_board%
+				return townblock != null ? (townblock.getTownOrNull().hasNation() ? townblock.getTownOrNull().getNationOrNull().getBoard() : "") : "";
 			default:
 				return null;
 		}
