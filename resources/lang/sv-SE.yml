@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.124
+version: 0.125
 language: swedish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1359,3 +1359,8 @@ msg_setup_town_cost: 'Hur mycket ska kostnaden för att skapa en ny stad vara? S
 msg_setup_nation_cost: 'Hur mycket ska kostnaden för att skapa en ny nation vara? Standardvärdet är 1000.'
 msg_setup_townblock_cost: 'Hur mycket ska det kosta att göra anspråk på en stadsdel? Standard är 25. Ett stadsdel är samma storlek som en chunk (standardinställningar)'
 msg_setup_success: 'Ändrade konfigurationsvärdena till dina nya värden.'
+#Added in 0.125
+#Player has recently died and respawned and is invulnerable.
+msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
+#Player was invulnerable after respawning and has lost their invulnerability.
+msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'
