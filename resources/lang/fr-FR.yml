@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.124
+version: 0.125
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious,PainOchoco
 website: 'http://townyadvanced.github.io/'
@@ -1359,3 +1359,8 @@ msg_setup_town_cost: 'Combien coûte la création d''une nouvelle ville ? La val
 msg_setup_nation_cost: 'Combien devrait coûter la création d''une nouvelle nation ? La valeur par défaut est de 1000.'
 msg_setup_townblock_cost: 'Combien cela devrait-il coûter pour réclamer un bloc de ville ? La valeur par défaut est 25. Un bloc de ville a la même taille qu''un chunk (paramètres par défaut)'
 msg_setup_success: 'Les valeurs de configuration ont été modifiées avec succès.'
+#Added in 0.125
+#Player has recently died and respawned and is invulnerable.
+msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
+#Player was invulnerable after respawning and has lost their invulnerability.
+msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'
