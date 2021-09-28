@@ -284,7 +284,7 @@ public class Towny extends JavaPlugin {
 
 	private void loadDatabaseConfig(boolean reload) {
 		if (!checkForLegacyDatabaseConfig()) {
-			throw new TownyInitException("Unable to migrate old database settings to Towny\\\\data\\\\settings\\\\database.yml", TownyInitException.TownyError.DATABASE_CONFIG);
+			throw new TownyInitException("Unable to migrate old database settings to Towny\\data\\settings\\database.yml", TownyInitException.TownyError.DATABASE_CONFIG);
 		}
 		DatabaseConfig.loadDatabaseConfig(getDataFolder().toPath().resolve("settings").resolve("database.yml").toString());
 		if (reload) {
