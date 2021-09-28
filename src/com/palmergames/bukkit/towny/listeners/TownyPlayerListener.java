@@ -38,7 +38,6 @@ import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
 
 import com.palmergames.util.TimeMgmt;
-
 import net.citizensnpcs.api.CitizensAPI;
 
 import org.bukkit.Bukkit;
@@ -190,6 +189,14 @@ public class TownyPlayerListener implements Listener {
 			event.setRespawnLocation(player.getBedSpawnLocation());
 		} else {
 			event.setRespawnLocation(respawn);
+		}
+
+		// Handle Spawn protection
+		long protectionTime = TownySettings.getSpawnProtection();
+		if (protectionTime > 0l) {
+			Resident res = TownyAPI.getInstance().getResident(player);
+			int taskID = Bukkit.getScheduler().runTaskLater(plugin, ()-> res.removeSpawnProtection(), protectionTime).getTaskId();
+			res.setSpawnProtectionTaskID(taskID);
 		}
 	}
 	
@@ -713,6 +720,13 @@ public class TownyPlayerListener implements Listener {
 				return;
 			}
 		}
+		
+		/*
+		 * Remove spawn protection if the player is teleporting since spawning.
+		 */
+		if (resident.getSpawnProtectionTaskID() != 0)
+			resident.removeSpawnProtection();
+		
 		onPlayerMove(event);
 	}
 

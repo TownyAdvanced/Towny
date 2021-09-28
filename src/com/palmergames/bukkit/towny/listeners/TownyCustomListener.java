@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.CellBorder;
@@ -190,6 +191,20 @@ public class TownyCustomListener implements Listener {
 		if (event.getTown().isConquered()) {
 			event.setCancelMessage(Translation.of("msg_err_your_conquered_town_cannot_leave_the_nation_yet"));
 			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true) 
+	public void onPlayerDamagePlayerEvent(TownyPlayerDamagePlayerEvent event) {
+		Resident victim = event.getVictimResident();
+		Resident attacker = event.getAttackingResident();
+		if (victim.getSpawnProtectionTaskID() != 0) {			
+			event.setCancelled(true);
+			event.setMessage(Translatable.of("msg_err_player_cannot_be_harmed", victim.getName()).forLocale(attacker));
+		}
+		if (attacker.getSpawnProtectionTaskID() != 0) {
+			event.setCancelled(true);
+			attacker.removeSpawnProtection();
 		}
 	}
 }
