@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.util.FileMgmt;
 
 public enum DatabaseConfig {
@@ -94,9 +95,8 @@ public enum DatabaseConfig {
 
 			// read the config.yml into memory
 			databaseConfig = new CommentedConfiguration(file);
-			if (!databaseConfig.load()) {
-				Towny.getPlugin().getLogger().severe("Failed to load database.yml!");
-			}
+			if (!databaseConfig.load())
+				throw new TownyInitException("Database: Failed to load database.yml!", TownyInitException.TownyError.DATABASE_CONFIG);
 
 			setDatabaseDefaults(file);
 

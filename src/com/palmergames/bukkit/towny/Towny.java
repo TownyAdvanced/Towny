@@ -168,7 +168,7 @@ public class Towny extends JavaPlugin {
 			addMetricsCharts();
 		} catch (TownyInitException tie) {
 			addError(tie.getError());
-			getLogger().log(Level.SEVERE, "Failed to load Towny.", tie.getStackTrace());
+			getLogger().log(Level.SEVERE, tie.getMessage(), tie.getStackTrace());
 		}
 		
 		// NOTE: Runs regardless if Towny errors out!
@@ -176,7 +176,8 @@ public class Towny extends JavaPlugin {
 
 		adventure = BukkitAudiences.create(this);
 
-		if (TownySettings.isTownyUpdating(getVersion())) {
+		// If we aren't going to enter safe mode, do the following:
+		if (!isError() &&TownySettings.isTownyUpdating(getVersion())) {
 
 			printChangelogToConsole();
 			// Update config with new version.
@@ -317,7 +318,7 @@ public class Towny extends JavaPlugin {
 		try {
 			TownySettings.loadTownLevelConfig();
 		} catch (IOException e) {
-			throw new TownyInitException("Failed to load town levek config", TownyInitException.TownyError.MAIN_CONFIG);
+			throw new TownyInitException("Failed to load town level config", TownyInitException.TownyError.MAIN_CONFIG);
 		}
 		try {
 			TownySettings.loadNationLevelConfig();

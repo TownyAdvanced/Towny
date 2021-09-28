@@ -135,26 +135,22 @@ public class TownyUniverse {
      * 
      * @param loadDbType - load setting from the config.
      * @param saveDbType - save setting from the config.
-     * @return true when the databse will load and save.
      */
 	void loadAndSaveDatabase(String loadDbType, String saveDbType) {
     	towny.getLogger().info("Database: [Load] " + loadDbType + " [Save] " + saveDbType);
-        // Try loading the database.
-        long startTime = System.currentTimeMillis();
-        if (!loadDatabase(loadDbType)) {
-			throw new TownyInitException("Failed to load database.", TownyInitException.TownyError.DATABASE);
-        } else {
-        	Bukkit.getPluginManager().callEvent(new TownyLoadedDatabaseEvent());
-        }
+		try {
+			// Try loading the database.
+			loadDatabase(loadDbType);
+		} catch (TownyInitException e) {
+			throw new TownyInitException(e.getMessage(), e.getError());
+		}
         
-        long time = System.currentTimeMillis() - startTime;
-        towny.getLogger().info("Database: Loaded in " + time + "ms.");
-        towny.getLogger().info("Database: " + TownySettings.getUUIDPercent() + " of residents have stored UUIDs."); // TODO: remove this when we're using UUIDs directly in the database.
-
-        // Try saving the database.
-        if (!saveDatabase(saveDbType)) {
-			throw new TownyInitException("Unsupported save format!", TownyInitException.TownyError.DATABASE);
-        }
+        try {
+            // Try saving the database.
+        	saveDatabase(saveDbType);
+		} catch (TownyInitException e) {
+			throw new TownyInitException(e.getMessage(), e.getError());
+		}        	
     }
     
     /**
@@ -165,6 +161,11 @@ public class TownyUniverse {
      */
     private boolean loadDatabase(String loadDbType) {
         
+        long startTime = System.currentTimeMillis();
+
+        /*
+         * Select the datasource.
+         */
         switch (loadDbType.toLowerCase()) {
             case "ff":
             case "flatfile": {
@@ -176,11 +177,25 @@ public class TownyUniverse {
                 break;
             }
             default: {
-                return false;
+            	throw new TownyInitException("Database: Database.yml unsupported load format: " + loadDbType, TownyInitException.TownyError.DATABASE_CONFIG);
             }
         }
         
-        return dataSource.loadAll();
+        /*
+         * Load the actual database.
+         */
+        if (!dataSource.loadAll())
+        	throw new TownyInitException("Database: Failed to load database.", TownyInitException.TownyError.DATABASE);
+
+        long time = System.currentTimeMillis() - startTime;
+        towny.getLogger().info("Database: Loaded in " + time + "ms.");
+        towny.getLogger().info("Database: " + TownySettings.getUUIDPercent() + " of residents have stored UUIDs."); // TODO: remove this when we're using UUIDs directly in the database.
+
+        // Throw Event.
+        Bukkit.getPluginManager().callEvent(new TownyLoadedDatabaseEvent());
+        
+        // Congratulations the Database loaded.
+       	return true;
     }
     
     /**
@@ -202,7 +217,9 @@ public class TownyUniverse {
                     this.dataSource = new TownySQLSource(towny, this);
                     break;
                 }
-                default: {}
+                default: {
+                	throw new TownyInitException("Database.yml contains unsupported save format: " + saveDbType, TownyInitException.TownyError.DATABASE);
+                }
             }
 
             if (TownySettings.getLoadDatabase().equalsIgnoreCase(saveDbType)) {
@@ -214,7 +231,7 @@ public class TownyUniverse {
             }
             return true;
         } catch (UnsupportedOperationException e) {
-            return false;
+        	throw new TownyInitException("Database: Failed to save database!", TownyInitException.TownyError.DATABASE);
         }
     }
 
