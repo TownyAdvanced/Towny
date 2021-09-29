@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.NationSpawnLevel.NSpawnLevel;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -284,14 +285,14 @@ public class TownySettings {
 		return 0;
 	}
 
-	public static void loadConfig(String filepath, String version) throws IOException {
+	public static void loadConfig(String filepath, String version) {
 		if (FileMgmt.checkOrCreateFile(filepath)) {
 			File file = new File(filepath);
 
 			// read the config.yml into memory
 			config = new CommentedConfiguration(file);
 			if (!config.load()) {
-				Towny.getPlugin().getLogger().severe("Failed to load Config!");
+				throw new TownyInitException("Failed to load Towny's config.yml.", TownyInitException.TownyError.MAIN_CONFIG);
 			}
 
 			setDefaults(version, file);

@@ -35,18 +35,16 @@ public class CommentedConfiguration extends YamlConfiguration {
 
 	public boolean load() {
 
-		boolean loaded = true;
-
 		try {
 			this.load(file);
 		} catch (InvalidConfigurationException | IOException e) {
 			Towny.getPlugin().getLogger().warning(String.format("Loading error: Failed to load file %s (does it pass a yaml parser?).", file.getPath()));
 			Towny.getPlugin().getLogger().warning("https://jsonformatter.org/yaml-parser");
 			Towny.getPlugin().getLogger().warning(e.getMessage());
-			loaded = false;
+			return false;
 		}
 
-		return loaded;
+		return true;
 	}
 
 	public void save() {

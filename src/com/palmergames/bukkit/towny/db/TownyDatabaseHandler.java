@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -1552,24 +1551,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void deleteFile(String fileName) {
 		File file = new File(fileName);
 		queryQueue.add(new DeleteFileTask(file, true));
-	}
-
-	/**
-	 * @param town - Town to validate outpost spawns of
-	 * @author - Articdive | Author note is only for people to know who wrote it and
-	 *         who to ask, not to creditize
-	 */
-	public static void validateTownOutposts(Town town) {
-		List<Location> validoutpostspawns = new ArrayList<>();
-		if (town != null && town.hasOutpostSpawn()) {
-			for (Location outpostSpawn : town.getAllOutpostSpawns()) {
-				TownBlock outpostSpawnTB = TownyAPI.getInstance().getTownBlock(outpostSpawn);
-				if (outpostSpawnTB != null) {
-					validoutpostspawns.add(outpostSpawn);
-				}
-			}
-			town.setOutpostSpawns(validoutpostspawns);
-		}
 	}
 
 	/** 
