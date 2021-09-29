@@ -6763,3 +6763,5 @@ v0.92.0.11:
     - Invulnerable players who attacker other players will lose their invulnerability.
     - Invulnerable players who teleport after respawn will also lose their invulnerability.
   - Bump language files to 0.125.
+  - Prevent spam if a player's locale is invalid, courtesy of Warriorrrr with PR #5314.
+  - Improve startup logging/initialization, courtesy of ArticDive & LlmDl with PR #5299.
