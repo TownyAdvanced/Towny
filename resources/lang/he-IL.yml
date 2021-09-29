@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.124
+version: 0.125
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -184,20 +184,20 @@ msg_max_plot_own: '&cאתה לא יכול להיות בעלים של יותר מ
 msg_max_outposts_own: '&cאתה לא יכול להיות בעלים של יותר מ - %sמוצבי-חוץ.'
 msg_wait_locked: '&2בבקשה תהיה סבלני, החלקות יהיו זמינות בקרוב.'
 msg_no_funds_new_nation: '&cThe town can''t afford to start a new nation.'
-msg_already_claimed: '&cThis area has already been claimed by: %s'
+msg_already_claimed: 'c&איזור זה כבר נלקח על ידי: %s'
 msg_already_claimed_1: '&cאיזור זה (%s) כבר שייך למישהו.'
 msg_already_claimed_2: '&cלאיזור זה כבר יש בעלים.'
 msg_too_close: '&cאיזור זה קרוב מדי לעיר אחרת.'
 msg_too_far: '&cאיזור זה רחוק מדי מערים אחרות.'
 msg_not_claimed: '&bאיזור זה (%s) ללא בעלים.'
 msg_not_claimed_1: '&bלאיזור זה אין בעלים.'
-msg_not_own_area: '&cYou do not own the selected area.'
-msg_not_own_place: '&bThis place is not owned by anyone.'
-msg_area_not_own: '&cThis area does not belong to you.'
-msg_area_not_recog: '&cThis area isn''t recognized by Towny.'
+msg_not_own_area: 'c&אתה לא בעל המיקום הנבחר.'
+msg_not_own_place: 'b&איזור זה לא בבעלות של אף אחד.'
+msg_area_not_own: 'c&איזור זה לא בבעלותך.'
+msg_area_not_recog: 'c&איזור זה לא מזוהה.'
 msg_specify_name: '&bאנא ציין שם עיר'
-msg_specify_nation_name: '&bSpecify nation name'
-msg_peasant_right: '&bA peasant hasn''t the right to force his leaders into the throne.'
+msg_specify_nation_name: 'b&פרט את שם המדינה'
+msg_peasant_right: 'b&לאיכר אין את הרשות לגרום למנהיגים שלו להיכנס לכיסא המלכות.'
 msg_cost_spawn: '&bYou were charged %s to teleport to the town''s spawn.'
 msg_cost_spawn_refund: '&bYou were refunded the charge for using town spawn.'
 msg_town_spawn_warmup: '&bמחכה להשתגר...'
@@ -1359,3 +1359,8 @@ msg_setup_town_cost: 'How much should the cost to create a new town be? The defa
 msg_setup_nation_cost: 'How much should the cost to create a new nation be? The default is 1000.'
 msg_setup_townblock_cost: 'How much should it cost to claim a townblock? The default is 25. A townblock is the same size as a chunk (default settings)'
 msg_setup_success: 'Successfully changed config values to your new values.'
+#Added in 0.125
+#Player has recently died and respawned and is invulnerable.
+msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
+#Player was invulnerable after respawning and has lost their invulnerability.
+msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'

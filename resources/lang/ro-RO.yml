@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.124
+version: 0.125
 language: Romanian
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -198,13 +198,13 @@ msg_area_not_recog: '&cAceastă aree nu este recunoscută de Towny.'
 msg_specify_name: '&bSpecifică numele orașului'
 msg_specify_nation_name: '&Specifică numele națiunii'
 msg_peasant_right: '&bUn țăran nu are dreptul să-și forța liderii pe tron.'
-msg_cost_spawn: '&bYou were charged %s to teleport to the town''s spawn.'
-msg_cost_spawn_refund: '&bYou were refunded the charge for using town spawn.'
-msg_town_spawn_warmup: '&bWaiting to teleport...'
+msg_cost_spawn: '&b Ai fost taxat %s ca să te teleportezi la spawnul orașului'
+msg_cost_spawn_refund: '&b Ai fost rambursat taxa pentru utilizarea spawnul orasului'
+msg_town_spawn_warmup: '&b Se așteaptă pentru teleportare'
 msg_town_rename_disabled: '&bTown Renaming Disabled'
-msg_town_set_name: '&b%s renamed town to %s.'
-msg_nation_set_name: '&b%s renamed nation to %s.'
-msg_changed_pvp: '&c%s PVP has been %s.'
+msg_town_set_name: '&b%s a redenumit orasul in %s'
+msg_nation_set_name: '&b %s a redenumit națiunea in %s '
+msg_changed_pvp: '&c %s PVP a fost %s'
 msg_changed_public: '&cThe Town''s public status is now %s.'
 msg_changed_expl: '&cExplosions in %s are now %s.'
 msg_changed_fire: '&cFirespread in %s is now %s.'
@@ -266,13 +266,13 @@ msg_err_new_king_notmayor: '&cNew King is not a mayor.'
 msg_err_king_not_in_nation: '&cNew King doesn''t belong to this nation.'
 msg_err_fight_like_king: '&cPeace is not an option! Fight like a King!'
 msg_no_access_nation_bank: '&cYou don''t have access to the nation''s bank.'
-msg_err_no_money: '&cThere is not enough money in the bank.'
-msg_new_mayor: '&b%s is now the mayor!'
+msg_err_no_money: '&cNu sunt destui bani in banca.'
+msg_new_mayor: '&b%s este acum primar!'
 msg_new_nation: '&b%s created a new nation called %s'
-msg_new_town: '&b%s created a new town called %s'
-msg_plot_for_sale: '&b%s put the plot (%s) up for sale!'
+msg_new_town: '&b%s a creeat un now oras numit %s'
+msg_plot_for_sale: '&b%s a pus parcela (%s) la vanzare!'
 msg_plot_set_type: '&bPlot type set to %s'
-msg_registration: '&eWelcome %s to the server!'
+msg_registration: '&eBun venit %s pe acest server!'
 msg_war_eliminated: '&6[War]&b %s was eliminated from the war.'
 msg_war_forfeited: '&6[War]&b %s forfeited.'
 msg_war_join: '&6[War] &b%s joined the fight!'
@@ -1359,3 +1359,8 @@ msg_setup_town_cost: 'How much should the cost to create a new town be? The defa
 msg_setup_nation_cost: 'How much should the cost to create a new nation be? The default is 1000.'
 msg_setup_townblock_cost: 'How much should it cost to claim a townblock? The default is 25. A townblock is the same size as a chunk (default settings)'
 msg_setup_success: 'Successfully changed config values to your new values.'
+#Added in 0.125
+#Player has recently died and respawned and is invulnerable.
+msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
+#Player was invulnerable after respawning and has lost their invulnerability.
+msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'

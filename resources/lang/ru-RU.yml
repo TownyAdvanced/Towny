@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.124
+version: 0.125
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -1346,7 +1346,7 @@ status_resident_tax_title: 'Налог %s'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Города %s покинут вашу нацию, так как после слияния они не будут достаточно близки к новой столице.'
 #Added in 0.123
-msg_err_invalid_townyworld: "'%s' is not a valid towny world."
+msg_err_invalid_townyworld: "'%s' не является Towny-миром."
 msg_err_enter_world_name_first: 'Пожалуйста, введите сначала название мира.'
 msg_wilderness_use_set_to: '&bФлаг use в диких землях теперь %s в %s.'
 #Added in 0.124
@@ -1354,8 +1354,13 @@ msg_err_invalid_response: 'Неверный ответ! Введите q, что
 msg_setup_full_guide_link: '&bНажмите сюда для перехода к инструкции по установке.'
 msg_setup_wildernessuse: 'Хотели-бы вы включить use в диких землях? Это действие позволит игрокам строить/разрушать блоки в диких землях.'
 msg_setup_revertunclaim: 'Хотели-бы вы включить восстановление участков при распривате? Это действие заставит участки медленно восстанавливаться после распривата.'
-msg_setup_town_block_ratio: 'What would you like to set your town block ratio at? The default is 8 townblocks per resident. Higher amounts will allow towns to claim more for each resident they have. Setting this to 0 will make it use values from the town_levels.'
-msg_setup_town_cost: 'How much should the cost to create a new town be? The default is 250.'
-msg_setup_nation_cost: 'How much should the cost to create a new nation be? The default is 1000.'
-msg_setup_townblock_cost: 'How much should it cost to claim a townblock? The default is 25. A townblock is the same size as a chunk (default settings)'
-msg_setup_success: 'Successfully changed config values to your new values.'
+msg_setup_town_block_ratio: 'Каким должно быть прибавление участков? По умолчанию - 8 доступных участков за горожанина. Значения выше будут давать городам больше участков за каждого горожанина. При значении 0 будут использованы значения из town_levels.'
+msg_setup_town_cost: 'Сколько должно стоить основание города? Цена по умолчанию - 250.'
+msg_setup_nation_cost: 'Сколько должно стоить образование нации? Цена по умолчанию - 1000.'
+msg_setup_townblock_cost: 'Сколько должен стоить приват одного участка? Цена по умолчанию - 25. Стандартный размер участка - один чанк'
+msg_setup_success: 'Параметры конфигурации успешно обновлены.'
+#Added in 0.125
+#Player has recently died and respawned and is invulnerable.
+msg_err_player_cannot_be_harmed: '%s появился недавно и ему не может быть причинен урон.'
+#Player was invulnerable after respawning and has lost their invulnerability.
+msg_you_have_lost_your_invulnerability: 'Вы потеряли вашу неуязвимость.'
