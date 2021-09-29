@@ -257,13 +257,15 @@ public final class Translation {
 		return oldLangFileNames;
 	}
 	
-	public static Locale toLocale(String fileName) {
+	public static Locale toLocale(String fileName, boolean shouldWarn) {
 		int lastIndex = fileName.lastIndexOf(".") == -1 ? fileName.length() : fileName.lastIndexOf(".");
 		try {
 			String[] locale = fileName.substring(0, lastIndex).split("[-_]");
 			return new Locale(locale[0], locale[1]);
 		} catch (Exception e) {
-			Towny.getPlugin().getLogger().warning(String.format("Could not convert '%s' into a locale, falling back to en_US.", fileName));
+			if (shouldWarn)
+				Towny.getPlugin().getLogger().warning(String.format("Could not convert '%s' into a locale, falling back to en_US.", fileName));
+			
 			return new Locale("en", "US");
 		}
 	}
@@ -286,7 +288,7 @@ public final class Translation {
 	}
 	
 	public static Locale getLocale(CommandSender sender) {
-		return sender instanceof Player ? Translation.toLocale(((Player) sender).getLocale()) : defaultLocale;
+		return sender instanceof Player ? Translation.toLocale(((Player) sender).getLocale(), false) : defaultLocale;
 	}
 	
 	public static Locale getLocale(Resident resident) {
@@ -294,7 +296,7 @@ public final class Translation {
 	}
 	
 	private static Locale loadDefaultLocale() {
-		Locale locale = toLocale(TownySettings.getString(ConfigNodes.LANGUAGE));
+		Locale locale = toLocale(TownySettings.getString(ConfigNodes.LANGUAGE), true);
 		String stringLocale = locale.toString();
 		
 		if (!translations.containsKey(stringLocale)) {
