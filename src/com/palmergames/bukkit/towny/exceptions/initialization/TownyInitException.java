@@ -7,15 +7,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TownyInitException extends RuntimeException {
 	private static final long serialVersionUID = -1943705202251722549L;
-	private TownyError error = TownyError.OTHER;
-
-	public TownyInitException(@NotNull String message) {
-		super(message);
-	}
-
-	public TownyInitException(@NotNull String message, @NotNull Throwable t) {
-		super(message, t);
-	}
+	private final TownyError error;
 
 	public TownyInitException(@NotNull String message, @NotNull TownyError error) {
 		super(message);

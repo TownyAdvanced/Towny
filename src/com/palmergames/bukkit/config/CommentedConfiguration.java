@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.config;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.util.FileMgmt;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.file.YamlConstructor;
@@ -10,35 +9,38 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.representer.Representer;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author dumptruckman
  * @author Lukas Mansour (Articdive)
  */
 public class CommentedConfiguration extends YamlConfiguration {
-	private final HashMap<String, String> comments;
-	private final File file;
+	private final HashMap<String, String> comments = new HashMap<>();
+	private final Path path;
 
 	private final DumperOptions yamlOptions = new DumperOptions();
 	private final Representer yamlRepresenter = new YamlRepresenter();
 	private final Yaml yaml = new Yaml(new YamlConstructor(), yamlRepresenter, yamlOptions);
 
-	public CommentedConfiguration(File file) {
-
+	public CommentedConfiguration(Path path) {
 		super();
-		comments = new HashMap<>();
-		this.file = file;
+		this.path = path;
 	}
 
 	public boolean load() {
 
 		try {
-			this.load(file);
+			this.load(path.toFile());
 		} catch (InvalidConfigurationException | IOException e) {
-			Towny.getPlugin().getLogger().warning(String.format("Loading error: Failed to load file %s (does it pass a yaml parser?).", file.getPath()));
+			Towny.getPlugin().getLogger().warning(String.format("Loading error: Failed to load file %s (does it pass a yaml parser?).", path));
 			Towny.getPlugin().getLogger().warning("https://jsonformatter.org/yaml-parser");
 			Towny.getPlugin().getLogger().warning(e.getMessage());
 			return false;
@@ -53,7 +55,7 @@ public class CommentedConfiguration extends YamlConfiguration {
 
 		// Save the config just like normal
 		try {
-			this.save(file);
+			this.save(path.toFile());
 
 		} catch (Exception e) {
 			saved = false;
@@ -61,8 +63,6 @@ public class CommentedConfiguration extends YamlConfiguration {
 
 		// if there's comments to add and it saved fine, we need to add comments
 		if (!comments.isEmpty() && saved) {
-			// String array of each line in the config file
-			String[] yamlContents = FileMgmt.convertFileToString(file).split("[" + System.getProperty("line.separator") + "]");
 
 			// This will hold the newly formatted line
 			StringBuilder newContents = new StringBuilder();
@@ -72,6 +72,19 @@ public class CommentedConfiguration extends YamlConfiguration {
 			boolean node;
 			// The depth of the path. (number of words separated by periods - 1)
 			int depth = 0;
+
+			// String list of each line in the config file
+			List<String> yamlContents;
+			try {
+				yamlContents = Files.readAllLines(path, StandardCharsets.UTF_8);
+			} catch (IOException e) {
+				Towny.getPlugin().getLogger().warning(String.format("Saving error: Failed to save file %s.", path));
+				Towny.getPlugin().getLogger().warning(e.getMessage());
+				// This is how Towny would have handled such an error in the past
+				// It would return an empty String and the for loop would basically not run.
+				// We can not return here since it still has to rewrite.
+				yamlContents = new ArrayList<>();
+			}
 
 			// Loop through the config lines
 			for (String line : yamlContents) {
@@ -174,7 +187,16 @@ public class CommentedConfiguration extends YamlConfiguration {
 			while (newContents.toString().startsWith(" " + System.getProperty("line.separator"))) {
 				newContents = new StringBuilder(newContents.toString().replaceFirst(" " + System.getProperty("line.separator"), ""));
 			}
-			FileMgmt.stringToFile(newContents.toString(), file);
+			
+			// Write to file
+			try {
+				// Whatever IntelliJ tells you, Jabel doesn't have the writeString method for whatever reason.
+				// Keep this the way it is.
+				Files.write(path, newContents.toString().getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE);
+			} catch (IOException e) {
+				Towny.getPlugin().getLogger().warning(String.format("Saving error: Failed to write to file %s.", path));
+				Towny.getPlugin().getLogger().warning(e.getMessage());
+			}
 		}
 	}
 

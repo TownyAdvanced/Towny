@@ -1,11 +1,11 @@
 package com.palmergames.bukkit.towny.db;
 
-import java.io.File;
-
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.util.FileMgmt;
+
+import java.nio.file.Path;
 
 public enum DatabaseConfig {
 	DATABASE(
@@ -89,27 +89,25 @@ public enum DatabaseConfig {
 		return comments;
 	}
 	
-	public static void loadDatabaseConfig(String filepath) {
-		if (FileMgmt.checkOrCreateFile(filepath)) {
-			File file = new File(filepath);
-
-			// read the config.yml into memory
-			databaseConfig = new CommentedConfiguration(file);
-			if (!databaseConfig.load())
-				throw new TownyInitException("Database: Failed to load database.yml!", TownyInitException.TownyError.DATABASE_CONFIG);
-
-			setDatabaseDefaults(file);
-
-			databaseConfig.save();
+	public static void loadDatabaseConfig(Path databaseConfigPath) {
+		if (!FileMgmt.checkOrCreateFile(databaseConfigPath.toString())) {
+			throw new TownyInitException("Failed to touch '" + databaseConfigPath + "'.", TownyInitException.TownyError.DATABASE_CONFIG);
 		}
+		// read the config.yml into memory
+		databaseConfig = new CommentedConfiguration(databaseConfigPath);
+		if (!databaseConfig.load())
+			throw new TownyInitException("Database: Failed to load database.yml!", TownyInitException.TownyError.DATABASE_CONFIG);
+
+		setDatabaseDefaults(databaseConfigPath);
+
+		databaseConfig.save();
 	}
 	
 	/**
 	 * Builds a new database.yml reading old database.yml data.
 	 */
-	public static void setDatabaseDefaults(File file) {
-
-		newDatabaseConfig = new CommentedConfiguration(file);
+	public static void setDatabaseDefaults(Path databaseConfigPath) {
+		newDatabaseConfig = new CommentedConfiguration(databaseConfigPath);
 		newDatabaseConfig.load();
 
 		for (DatabaseConfig root : DatabaseConfig.values())

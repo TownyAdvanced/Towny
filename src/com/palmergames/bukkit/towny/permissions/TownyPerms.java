@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.FileMgmt;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -19,8 +18,13 @@ import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.net.URL;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,17 +67,23 @@ public class TownyPerms {
 	 * Load the townyperms.yml file.
 	 * If it doesn't exist create it from the resource file in the jar.
 	 * 
-	 * @param filepath - Path to townyperms.yml
-	 * @param defaultRes - Default townyperms.yml within the jar.
-	 * @throws TownyInitException - When permission file cannot be loaded.
+	 * @param permsYMLPath - Path to townyperms.yml in the data directory.
+	 * @throws TownyInitException - Thrown when if we fail to copy or load townyperms.yml.
 	 */
-	public static void loadPerms(@NotNull String filepath, @NotNull String defaultRes) {
-
-		String fullPath = filepath + File.separator + defaultRes;
-
-		File file = FileMgmt.unpackResourceFile(fullPath, defaultRes, defaultRes);
+	public static void loadPerms(@NotNull Path permsYMLPath) {
+		try {
+			InputStream resource = Towny.class.getResourceAsStream("/townyperms.yml");
+			if (resource == null) {
+				throw new TownyInitException("Could not find 'townyperms.yml' in the JAR.", TownyInitException.TownyError.PERMISSIONS);
+			}
+			Files.copy(resource, permsYMLPath);
+		} catch (FileAlreadyExistsException ignored) {
+			// Expected behaviour
+		} catch (IOException e) {
+			throw new TownyInitException("Could not copy townyperms.yml from JAR to '" + permsYMLPath + "'.",TownyInitException.TownyError.PERMISSIONS, e);
+		}
 		// read the townyperms.yml into memory
-		perms = new CommentedConfiguration(file);
+		perms = new CommentedConfiguration(permsYMLPath);
 		if (!perms.load()) {
 			throw new TownyInitException("Could not read townyperms.yml", TownyInitException.TownyError.PERMISSIONS);
 		}

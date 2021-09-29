@@ -26,12 +26,12 @@ import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import java.io.File;
+
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -285,25 +285,25 @@ public class TownySettings {
 		return 0;
 	}
 
-	public static void loadConfig(String filepath, String version) {
-		if (FileMgmt.checkOrCreateFile(filepath)) {
-			File file = new File(filepath);
-
-			// read the config.yml into memory
-			config = new CommentedConfiguration(file);
-			if (!config.load()) {
-				throw new TownyInitException("Failed to load Towny's config.yml.", TownyInitException.TownyError.MAIN_CONFIG);
-			}
-
-			setDefaults(version, file);
-
-			config.save();
-			
-			loadWarMaterialsLists(); // TODO: move this to be with the other war stuff.
-			loadSwitchAndItemUseMaterialsLists();
-			loadProtectedMobsList();
-			ChunkNotification.loadFormatStrings();
+	public static void loadConfig(Path configPath, String version) {
+		if (!FileMgmt.checkOrCreateFile(configPath.toString())) {
+			throw new TownyInitException("Failed to touch '" + configPath + "'.", TownyInitException.TownyError.MAIN_CONFIG);
 		}
+
+		// read the config.yml into memory
+		config = new CommentedConfiguration(configPath);
+		if (!config.load()) {
+			throw new TownyInitException("Failed to load Towny's config.yml.", TownyInitException.TownyError.MAIN_CONFIG);
+		}
+
+		setDefaults(version, configPath);
+
+		config.save();
+
+		loadWarMaterialsLists(); // TODO: move this to be with the other war stuff.
+		loadSwitchAndItemUseMaterialsLists();
+		loadProtectedMobsList();
+		ChunkNotification.loadFormatStrings();
 	}
 	
 	private static void loadProtectedMobsList() {
@@ -496,9 +496,9 @@ public class TownySettings {
 	/**
 	 * Builds a new config reading old config data.
 	 */
-	private static void setDefaults(String version, File file) {
+	private static void setDefaults(String version, Path configPath) {
 
-		newConfig = new CommentedConfiguration(file);
+		newConfig = new CommentedConfiguration(configPath);
 		newConfig.load();
 
 		for (ConfigNodes root : ConfigNodes.values()) {
