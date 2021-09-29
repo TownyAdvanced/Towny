@@ -1335,25 +1335,25 @@ status_format_key_important: '&c' #Colour applied to an important status screen 
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[Accueil: %s]'
 status_registered: 'Enregistré le:'
-status_lastonline: 'Last Online:'
+status_lastonline: 'Dernier en ligne:'
 status_fractions: '%s/%s'
-status_rank_list: 'Rank List'
-status_hover_click_for_more: 'Click for more information.'
-status_jailed: 'Jailed:'
-status_bad_yes: '&cYES'
-status_good_no: '&aNO'
-status_resident_tax_title: '%s''s Tax'
+status_rank_list: 'Liste de rang'
+status_hover_click_for_more: 'Cliquez pour plus d''informations.'
+status_jailed: 'Emprisonné:'
+status_bad_yes: '&cOUI'
+status_good_no: '&aNON'
+status_resident_tax_title: 'Taxe de %s'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Vu qu''elles ne seront pas assez proches de votre capitale nationale, les villes suivantes seront supprimées si la fusion est faite: %s.'
 #Added in 0.123
-msg_err_invalid_townyworld: "'%s' is not a valid towny world."
-msg_err_enter_world_name_first: 'Please enter the name of the world first.'
+msg_err_invalid_townyworld: "'%s' n'est pas un monde valide de towny."
+msg_err_enter_world_name_first: 'Veuillez d''abord entrer le nom du monde.'
 msg_wilderness_use_set_to: '&bL''utilisation de la nature sauvage a été réglée à %s dans %s.'
 #Added in 0.124
 msg_err_invalid_response: 'Réponse invalide ! Entrez q pour quitter ou retour en arrière pour revenir à la question précédente.'
-msg_setup_full_guide_link: '&bFor a link to the full install guide, click here.'
+msg_setup_full_guide_link: '&bPour un lien vers le guide d''installation complet, cliquez ici.'
 msg_setup_wildernessuse: 'Voulez-vous activer l''utilisation de la nature sauvage ? Cela permettra aux joueurs de se casser/construire dans la nature.'
-msg_setup_revertunclaim: 'Would you like to use revert on unclaim? This will make townblocks slowly regenerate when they are unclaimed.'
+msg_setup_revertunclaim: 'Voulez-vous utiliser la restauration en cas d''annulation de réclamation ? Cela fera que les blocs de ville se régénèreront lentement lorsqu''ils ne sont pas réclamés.'
 msg_setup_town_block_ratio: 'À quelle valeur souhaitez-vous définir le ratio de blocs de ville ? La valeur par défaut est de 8 blocs de ville par résident. Des montants plus élevés permettront aux villes de réclamer plus pour chaque résident qu''elles possèdent. Si vous définissez cette valeur à 0, elle utilisera les valeurs des niveaux_villes.'
 msg_setup_town_cost: 'Combien coûte la création d''une nouvelle ville ? La valeur par défaut est de 250.'
 msg_setup_nation_cost: 'Combien devrait coûter la création d''une nouvelle nation ? La valeur par défaut est de 1000.'
@@ -1361,6 +1361,6 @@ msg_setup_townblock_cost: 'Combien cela devrait-il coûter pour réclamer un blo
 msg_setup_success: 'Les valeurs de configuration ont été modifiées avec succès.'
 #Added in 0.125
 #Player has recently died and respawned and is invulnerable.
-msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
+msg_err_player_cannot_be_harmed: '%s est réapparus récemment et est invulnérable.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'
+msg_you_have_lost_your_invulnerability: 'Vous avez perdu votre invulnérabilité.'
