@@ -1361,6 +1361,6 @@ msg_setup_townblock_cost: '你想要将城镇扩张一个城镇区块（默认�
 msg_setup_success: '配置修改成功。'
 #Added in 0.125
 #Player has recently died and respawned and is invulnerable.
-msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
+msg_err_player_cannot_be_harmed: '%s处于重生保护中，无法伤害。'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'
+msg_you_have_lost_your_invulnerability: '你失去了你的重生保护。'
