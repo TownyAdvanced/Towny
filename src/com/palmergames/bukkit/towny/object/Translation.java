@@ -82,7 +82,13 @@ public final class Translation {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
+		// There is no need to touch langPath, Files.copy takes care of that.
+		try {
+			Files.createDirectories(langFolder.resolve("reference"));
+		} catch (IOException e) {
+			throw new TownyInitException("Failed to create language reference folder.", TownyInitException.TownyError.LOCALIZATION, e);
+		}
 		// Load bundled language files
 		for (String lang : langFiles) {
 			try (InputStream is = Translation.class.getResourceAsStream("/lang/" + lang + ".yml")) {
@@ -155,15 +161,14 @@ public final class Translation {
 
 		// Resolves langfolder/reference/whatever_language.yml
 		Path langPath = langFolder.resolve("reference").resolve(lang + ".yml");
-		if (!FileMgmt.checkOrCreateFile(langPath.toString())) {
-			throw new TownyInitException("Failed to touch '" + langPath + "'.", TownyInitException.TownyError.LOCALIZATION);
-		}
+		// Files.copy takes care of the creation of lang.yml AS LONG AS the parent directory exists
+		// Which we take care of right before the languages are looped through.
 		
 		try {
 			// Get the resource
 			InputStream resource = Towny.class.getResourceAsStream("/lang/" + lang + ".yml");
 			if (resource == null) {
-				throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR", TownyInitException.TownyError.LOCALIZATION);
+				throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR.", TownyInitException.TownyError.LOCALIZATION);
 			}
 
 			try {
