@@ -2,6 +2,10 @@ package com.palmergames.util;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.apache.commons.compress.utils.IOUtils;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -27,10 +31,6 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
-import org.apache.commons.compress.utils.IOUtils;
 
 public final class FileMgmt {
 	
