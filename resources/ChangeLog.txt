@@ -6765,3 +6765,5 @@ v0.92.0.11:
   - Bump language files to 0.125.
   - Prevent spam if a player's locale is invalid, courtesy of Warriorrrr with PR #5314.
   - Improve startup logging/initialization, courtesy of ArticDive & LlmDl with PR #5299.
+0.97.2.2:
+  - Fix Citizens NPCs causing error on PlayerTeleportEvent, courtesy of ArticDive with PR #5319.

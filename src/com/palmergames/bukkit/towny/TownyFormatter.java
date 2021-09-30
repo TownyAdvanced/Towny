@@ -325,7 +325,7 @@ public class TownyFormatter {
 		screen.addComponentOf("firespread", colourKeyValue(translator.of("firespread"), (town.isFire() || world.isForceFire()) ? translator.of("status_on"): translator.of("status_off"))); 
 		screen.addComponentOf("mobspawns", colourKeyValue(translator.of("mobspawns"), (town.hasMobs() || world.isForceTownMobs()) ? translator.of("status_on"): translator.of("status_off")));
 
-		if (town.isRuined()) {
+		if (TownySettings.getTownRuinsEnabled() && town.isRuined()) {
 			screen.addComponentOf("ruinedTime", colourKey(translator.of("msg_time_remaining_before_full_removal", TownySettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town))));
 			if (TownySettings.getTownRuinsReclaimEnabled()) {
 				if (TownRuinUtil.getTimeSinceRuining(town) < TownySettings.getTownRuinsMinDurationHours())
