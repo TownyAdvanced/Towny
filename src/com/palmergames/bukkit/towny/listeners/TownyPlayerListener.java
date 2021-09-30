@@ -598,6 +598,10 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+		// Let's ignore Citizens NPCs
+		if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getPlayer())) {
+			return;
+		}
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		/*
@@ -650,13 +654,17 @@ public class TownyPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
-
 		if (plugin.isError()) {
 			// Citizens stores their NPCs at the world spawn and when players load chunks the NPC is teleported there. 
 			// Towny was preventing them being teleported and causing NPCs to be at a world spawn, even after the Safe Mode was cleaned up. 
 			if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getPlayer()))
 				return;
 			event.setCancelled(true);
+			return;
+		}
+		
+		// Let's ignore Citizens NPCs
+		if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getPlayer())) {
 			return;
 		}
 
@@ -724,8 +732,9 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Remove spawn protection if the player is teleporting since spawning.
 		 */
-		if (resident.getSpawnProtectionTaskID() != 0)
+		if (resident != null && resident.getSpawnProtectionTaskID() != 0) {
 			resident.removeSpawnProtection();
+		}
 		
 		onPlayerMove(event);
 	}
