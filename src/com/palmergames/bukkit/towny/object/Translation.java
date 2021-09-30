@@ -148,11 +148,10 @@ public final class Translation {
 		Towny.getPlugin().getLogger().info(String.format("Successfully loaded translations for %d languages.", translations.keySet().size()));
 		HelpMenu.loadMenus();
 	}
-
+	
 	private static void saveReferenceFile(@Nullable Object currentVersion, String lang) {
-		if (currentVersion == null) {
+		if (currentVersion == null)
 			return;
-		}
 
 		// Resolves langfolder/reference/whatever_language.yml
 		Path langPath = langFolder.resolve("reference").resolve(lang + ".yml");

@@ -335,15 +335,13 @@ public class Towny extends JavaPlugin {
 	private boolean checkForLegacyDatabaseConfig() {
 		Path configYMLPath = getDataFolder().toPath().resolve("settings").resolve("config.yml");
 		// Bail if the config doesn't exist at all yet.
-		if (Files.exists(configYMLPath)) {
+		if (Files.exists(configYMLPath))
 			return true;
-		}
 
 		CommentedConfiguration config = new CommentedConfiguration(configYMLPath);
 		// return false if the config cannot be loaded.
-		if (!config.load()) {
+		if (!config.load())
 			return false;
-		}
 		if (config.contains("plugin.database.database_load")) {
 			/*
 			 * Get old settings from config.
