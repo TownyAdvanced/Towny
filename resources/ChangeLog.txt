@@ -6773,3 +6773,5 @@ v0.92.0.11:
   - Fix missing command feedback on many /tw toggle commands.
 0.97.2.4:
   - Fix Global messages stripping their colour.
+  - Remove old Outpost checking code and references to Articdive which were not spelled correct, courtesy of Articdive with PR #5324.
+  - Add a size limit for the town_block_ratio option, courtesy of Warriorrrr with PR #5326.
