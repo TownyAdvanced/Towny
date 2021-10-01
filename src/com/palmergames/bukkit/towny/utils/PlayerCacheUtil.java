@@ -589,18 +589,12 @@ public class PlayerCacheUtil {
 	 */
 	private static boolean testSpecialPlots(TownyWorld world, TownBlockType type, Material material, ActionType action) {
 		if (type == TownBlockType.WILDS)
-			if (TownyUniverse.getInstance().getPermissionSource().unclaimedZoneAction(world, material, action))
-				return true;
+			return TownyUniverse.getInstance().getPermissionSource().unclaimedZoneAction(world, material, action);
 
-		else if (type == TownBlockType.FARM && (action.equals(ActionType.BUILD) || action.equals(ActionType.DESTROY)))		
-			if (TownySettings.getFarmPlotBlocks().contains(material.toString()))
-				return true;
-			
-		else
-			// This isn't a Wilds or Farm plot with special overrides, the Plot has permissions on, return true.
-			return true;
-		
-		// This is a Wilds or Farm plot and the player's actions or materials are not allowed under Wilds or Farm plot rules.
-		return false;
+		if (type == TownBlockType.FARM && (action.equals(ActionType.BUILD) || action.equals(ActionType.DESTROY)))		
+			return TownySettings.getFarmPlotBlocks().contains(material.toString());
+
+		// This isn't a Wilds or Farm plot with special overrides, the Plot has permissions on, return true.
+		return true;
 	}
 }

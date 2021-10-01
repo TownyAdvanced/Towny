@@ -6768,3 +6768,4 @@ v0.92.0.11:
 0.97.2.2:
   - Fix Citizens NPCs causing error on PlayerTeleportEvent, courtesy of ArticDive with PR #5319.
   - Change PlayerCacheUtil to once again check for a fakeplayer resident.
+  - Fix PlayerCacheUtil preventing plot permissions from working properly. 
