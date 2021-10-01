@@ -16,7 +16,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author Lukas Mansour (Articdive)
+ * @author Articdive
  */
 public class TownyLogger {
 	private static final TownyLogger instance = new TownyLogger();
