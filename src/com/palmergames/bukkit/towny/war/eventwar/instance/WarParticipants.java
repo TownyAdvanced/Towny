@@ -29,6 +29,7 @@ public class WarParticipants {
 	private List<Town> warringTowns = new ArrayList<>();
 	private List<Nation> warringNations = new ArrayList<>();
 	private List<Resident> warringResidents = new ArrayList<>();
+	private List<Resident> potentialResidents = new ArrayList<>();
 	private List<Player> onlineWarriors = new ArrayList<>();
 	private List<TownyObject> govSide = new ArrayList<>();
 	private List<TownyObject> rebSide = new ArrayList<>();
@@ -113,6 +114,15 @@ public class WarParticipants {
 	 * @return false if conditions are not met.
 	 */
 	boolean add(Nation nation) {
+		
+		/*
+		 * With the instanced war system, Naitons can only have one on-going war.
+		 */
+		if (nation.hasActiveWar()) {
+			TownyMessaging.sendErrorMsg("The nation " + nation.getName() + " is already involved in a war. They will not take part in the war.");
+			return false;
+		}
+		
 		if (nation.getEnemies().size() < 1)
 			return false;
 		int enemies = 0;
@@ -133,7 +143,7 @@ public class WarParticipants {
 		}
 		// The nation capital must be one of the valid towns for a nation to go to war.
 		if (numTowns > 0 && warringTowns.contains(nation.getCapital())) {
-			TownyMessaging.sendPrefixedNationMessage(nation, "You have joined a war of type: " + war.getWarType().getName());
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_you_have_joined_a_war_of_type", war.getWarType().getName()));
 			warringNations.add(nation);
 			return true;
 		} else {
@@ -212,16 +222,10 @@ public class WarParticipants {
 		}	
 
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_war_join", town.getName()));
-		TownyMessaging.sendPrefixedTownMessage(town, "You have joined a war of type: " + war.getWarType().getName());
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_you_have_joined_a_war_of_type", war.getWarType().getName()));
 
 		// Put the war UUID onto the town metadata.
 		WarMetaDataController.setWarUUID(town, war.getWarUUID());
-		
-		warringResidents.addAll(town.getResidents());
-		
-		town.getResidents().stream()
-			.filter(res -> res.isOnline())
-			.forEach(res -> addOnlineWarrior(res.getPlayer()));
 		
 		war.getScoreManager().addTown(town);
 		
@@ -229,12 +233,22 @@ public class WarParticipants {
 		 * Give the players their lives, metadata.
 		 */
 		for (Resident resident : town.getResidents()) {
-//			if (WarMetaDataController.hasResidentLives(resident))
-//				continue;
+			
+			// The resident is not considered a potential resident (probably lost all their lives.)
+			if (!potentialResidents.contains(resident))
+				continue;
+			
 			int lives = !resident.isMayor() ? war.getWarType().residentLives : war.getWarType().mayorLives;
+			// This is a resident being re-loaded into this same war, use their already existing lives. 
+			if (WarMetaDataController.hasResidentLives(resident))
+				lives = WarMetaDataController.getResidentLives(resident);
+			
 			residentLives.put(resident, lives);
 			WarMetaDataController.setResidentLives(resident, lives);
 			WarMetaDataController.setWarUUID(resident, war.getWarUUID());
+			if (resident.isOnline())
+				addOnlineWarrior(resident.getPlayer());
+			warringResidents.add(resident);
 		}
 			
 		return true;
@@ -257,6 +271,8 @@ public class WarParticipants {
 	 * @return true if there are enough participants on opposing sides to have a war.
 	 */
 	public boolean gatherParticipantsForWar(List<Nation> nations, List<Town> towns, List<Resident> residents) {
+		
+		potentialResidents = residents;
 		/*
 		 * Takes the given lists and add them to War lists, if they 
 		 * meet the requires set out in add(Town) and add(Nation),
@@ -332,7 +348,7 @@ public class WarParticipants {
 		 * for the give WarType.
 		 */
 		if (!verifyTwoEnemies()) {
-			TownyMessaging.sendGlobalMessage("Failed to get the correct number of teams for war to happen! Good-bye!");
+			TownyMessaging.sendErrorMsg("Failed to get the correct number of teams for war to happen! Good-bye!");
 			return false;
 		}
 		
@@ -374,12 +390,12 @@ public class WarParticipants {
 			break;
 		case CIVILWAR:
 			if (warringNations.size() > 1) {
-				TownyMessaging.sendGlobalMessage("Too many nations for a civil war!");
+				TownyMessaging.sendErrorMsg("Too many nations for a civil war!");
 				return false;
 			}
 			
 			if (warringTowns.size() == 1) {
-				TownyMessaging.sendGlobalMessage("Not enough towns for a civil war!");
+				TownyMessaging.sendErrorMsg("Not enough towns for a civil war!");
 				return false;
 			}
 
@@ -403,7 +419,7 @@ public class WarParticipants {
 			}
 			
 			if (rebSide.isEmpty()) {
-				TownyMessaging.sendGlobalMessage("No rebels found for a civil war.");
+				TownyMessaging.sendErrorMsg("No rebels found for a civil war.");
 				return false;
 			}
 			
@@ -422,7 +438,7 @@ public class WarParticipants {
 			break;
 		case TOWNWAR:
 			if (warringTowns.size() < 2) {
-				TownyMessaging.sendGlobalMessage("Not enough Towns for town vs town war!");
+				TownyMessaging.sendErrorMsg("Not enough Towns for town vs town war!");
 				return false;
 			}
 			warringTowns.get(0).addEnemy(warringTowns.get(1));
@@ -431,12 +447,12 @@ public class WarParticipants {
 			break;
 		case RIOT:
 			if (warringTowns.size() > 1 ) {
-				TownyMessaging.sendGlobalMessage("Too many towns gathered for a riot war!");
+				TownyMessaging.sendErrorMsg("Too many towns gathered for a riot war!");
 				return false;
 			}
 			Town town = warringTowns.get(0);
 			if (town.getResidents().size() == 1) {
-				TownyMessaging.sendGlobalMessage("Not enough residents for a riot war!");
+				TownyMessaging.sendErrorMsg("Not enough residents for a riot war!");
 				return false;
 			}
 			
@@ -459,7 +475,7 @@ public class WarParticipants {
 			}
 			
 			if (rebSide.isEmpty()) {
-				TownyMessaging.sendGlobalMessage("No rioters gathered.");
+				TownyMessaging.sendErrorMsg("No rioters gathered.");
 				return false;
 			}
 			
@@ -575,9 +591,6 @@ public class WarParticipants {
 			}
 			WarDataBase.cleanTownBlockMetaData(townBlock);
 		}
-		// Disable activewar flag on Town so they can take part in another war.
-		town.setActiveWar(false);
-		WarDataBase.cleanTownMetaData(town);
 
 		if (war.getWarType().equals(WarType.CIVILWAR)) {
 			if (govSide.contains(town))
@@ -585,6 +598,24 @@ public class WarParticipants {
 			if (rebSide.contains(town))
 				rebSide.remove(town);
 		}
+		
+		for (Town enemy : town.getEnemies()) {
+			town.removeEnemy(enemy);
+			enemy.removeEnemy(town);
+			enemy.save();
+		}
+		
+		for (Town ally : town.getAllies()) {
+			town.removeAlly(town);
+			ally.removeAlly(town);
+			ally.save();
+		}
+		town.save();
+
+		// Disable activewar flag on Town so they can take part in another war.
+		town.setActiveWar(false);
+		WarDataBase.cleanTownMetaData(town);
+
 		
 		// Send title message to town and elimination message globally.		
 		TownyMessaging.sendTitleMessageToTown(town, Translation.of("msg_war_town_removed_from_war_titlemsg"), "");

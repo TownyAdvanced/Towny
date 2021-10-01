@@ -20,7 +20,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.utils.JailUtil;
@@ -89,12 +89,9 @@ public class WarZoneManager {
 		if (oldHP == hp)
 			return;
 		warZone.put(worldCoord, hp);
-		String healString =  Colors.Gray + "[Heal](" + townBlock.getCoord().toString() + ") HP: " + hp + " (" + Colors.LightGreen + "+" + healthChange + Colors.Gray + ")";
-		TownyMessaging.sendPrefixedTownMessage(townBlock.getTownOrNull(), healString);
-		for (Player p : wzd.getDefenders()) {
-			if (com.palmergames.bukkit.towny.TownyUniverse.getInstance().getResident(p.getName()).getTownOrNull() != townBlock.getTownOrNull())
-				TownyMessaging.sendMessage(p, healString);
-		}
+		for (Player p : wzd.getDefenders())
+			TownyMessaging.sendMessage(p, Translatable.of("msg_war_townblock_healed", townBlock.getCoord().toString(), hp, healthChange));
+
 		WarUtil.launchFireworkAtPlot (townBlock, wzd.getRandomDefender(), Type.BALL, Color.LIME);
 
 		//Call PlotAttackedEvent to update scoreboard users
@@ -154,37 +151,37 @@ public class WarZoneManager {
 				healthChangeStringAtk = "(+0)";
 			}
 			if (!townBlock.isHomeBlock()){
-				TownyMessaging.sendPrefixedTownMessage(townBlockTown, Colors.Gray + Translation.of("msg_war_town_under_attack") + " (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+				TownyMessaging.sendPrefixedTownMessage(townBlockTown, Translatable.of("msg_war_town_under_attack").append(" (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef));
 				if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
 					WarUtil.launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL_LARGE, fwc);
 					if (hasNation) {
 						for (Town town: townBlockTown.getNationOrNull().getTowns())
 							if (town != townBlockTown)
-								TownyMessaging.sendPrefixedTownMessage(town, Colors.Gray + Translation.of("msg_war_nation_under_attack") + " [" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+								TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_war_nation_under_attack").append(" [" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef));
 					for (Nation nation: townBlockTown.getNationOrNull().getAllies())
-						TownyMessaging.sendPrefixedNationMessage(nation , Colors.Gray + Translation.of("msg_war_nations_ally_under_attack", townBlockTown.getName()) + " [" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+						TownyMessaging.sendPrefixedNationMessage(nation , Translatable.of("msg_war_nations_ally_under_attack", townBlockTown.getName()).append(" [" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef));
 					}
 				}
 				else
 					WarUtil.launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
 				for (Town attackingTown : wzd.getAttackerTowns())
-					TownyMessaging.sendPrefixedTownMessage(attackingTown, Colors.Gray + "[" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringAtk);
+					TownyMessaging.sendPrefixedTownMessage(attackingTown, Translatable.of("msg_war_townblock_hp" , townBlockTown.getName(), townBlock.getCoord().toString(), hp, healthChangeStringAtk));
 			} else {
-				TownyMessaging.sendPrefixedTownMessage(townBlockTown, Colors.Gray + Translation.of("msg_war_homeblock_under_attack")+" (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+				TownyMessaging.sendPrefixedTownMessage(townBlockTown, Translatable.of("msg_war_homeblock_under_attack").append(" (" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef));
 				if ((hp >= 10 && hp % 10 == 0) || hp <= 5){
 					WarUtil.launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL_LARGE, fwc);
 					if (hasNation) {
 						for (Town town: townBlockTown.getNationOrNull().getTowns())
 							if (town != townBlockTown)
-								TownyMessaging.sendPrefixedTownMessage(town, Colors.Gray + Translation.of("msg_war_nation_member_homeblock_under_attack", townBlockTown.getName()) + " [" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+								TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_war_nation_member_homeblock_under_attack", townBlockTown.getName()).append(" [" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef));
 						for (Nation nation: townBlockTown.getNationOrNull().getAllies())
-							TownyMessaging.sendPrefixedNationMessage(nation , Colors.Gray + Translation.of("msg_war_nation_ally_homeblock_under_attack", townBlockTown.getName()) + " [" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef);
+							TownyMessaging.sendPrefixedNationMessage(nation , Translatable.of("msg_war_nation_ally_homeblock_under_attack", townBlockTown.getName()).append(" [" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringDef));
 					}
 				}
 				else
 					WarUtil.launchFireworkAtPlot (townBlock, attackerPlayer, Type.BALL, fwc);
 				for (Town attackingTown : wzd.getAttackerTowns())
-					TownyMessaging.sendPrefixedTownMessage(attackingTown, Colors.Gray + "[" + townBlockTown.getName() + "](" + townBlock.getCoord().toString() + ") HP: " + hp + " " + healthChangeStringAtk);
+					TownyMessaging.sendPrefixedTownMessage(attackingTown, Translatable.of("msg_war_townblock_hp", townBlockTown.getName(), townBlock.getCoord().toString(), hp, healthChangeStringAtk));
 			}
 		} else {
 			WarUtil.launchFireworkAtPlot (townBlock, attackerPlayer, Type.CREEPER, fwc);
@@ -243,12 +240,12 @@ public class WarZoneManager {
 		 */
 		// Check for money loss in the defending town
 		if (TownySettings.isUsingEconomy() && !defenderTown.getAccount().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
-			TownyMessaging.sendPrefixedTownMessage(defenderTown, Translation.of("msg_war_town_ran_out_of_money"));
+			TownyMessaging.sendPrefixedTownMessage(defenderTown, Translatable.of("msg_war_town_ran_out_of_money"));
 			// Remove the town from the war. If this is a NationWar or WorldWar it will take down the Nation.
 			remove(attacker, defenderTown);
 			return;
 		} else
-			TownyMessaging.sendPrefixedTownMessage(defenderTown, Translation.of("msg_war_town_lost_money_townblock", TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
+			TownyMessaging.sendPrefixedTownMessage(defenderTown, Translatable.of("msg_war_town_lost_money_townblock", TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
 		
 		/*
 		 * Handle homeblocks & regular townblocks & regular townblocks with jails on them.
@@ -415,7 +412,7 @@ public class WarZoneManager {
 			if (war.getWarParticipants().getTowns().contains(town))
 				remove(town, attacker);
 
-		war.getMessenger().sendGlobalMessage(Translation.of("msg_war_eliminated", nation));
+		war.getMessenger().sendGlobalMessage(Translatable.of("msg_war_eliminated", nation));
 		war.getWarParticipants().remove(nation);
 		war.checkEnd();
 	}
@@ -444,7 +441,7 @@ public class WarZoneManager {
 				jailedResidents.add(resident);
 		
 		freeFromJail(jailedResidents);
-		war.getMessenger().sendGlobalMessage(Translation.of("msg_war_jailbreak", defenderTown, jailedResidents.size()));
+		war.getMessenger().sendGlobalMessage(Translatable.of("msg_war_jailbreak", defenderTown, jailedResidents.size()));
 	}
 	
 	/**
@@ -457,7 +454,7 @@ public class WarZoneManager {
 		if (jailedResidents.isEmpty())
 			return;
 		freeFromJail(jailedResidents);
-		war.getMessenger().sendGlobalMessage(Translation.of("msg_war_jailbreak", town, jailedResidents.size()));
+		war.getMessenger().sendGlobalMessage(Translatable.of("msg_war_jailbreak", town, jailedResidents.size()));
 	}
 	
 	/**
@@ -511,7 +508,7 @@ public class WarZoneManager {
 		} catch (AlreadyRegisteredException e) {
 		}
 		town.save();
-		war.getMessenger().sendGlobalMessage(Translation.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), nation.getName(), TownySettings.getWarEventConquerTime()));
+		war.getMessenger().sendGlobalMessage(Translatable.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), nation.getName(), TownySettings.getWarEventConquerTime()));
 		war.getWarParticipants().remove(town);
 	}
 }

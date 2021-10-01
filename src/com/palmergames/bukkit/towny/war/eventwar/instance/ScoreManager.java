@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.events.TownScoredEvent;
@@ -79,16 +80,16 @@ public class ScoreManager {
 			defenderTown = defender.getTown();
 		} catch (NotRegisteredException ignored) {}
 		
-		String pointMessage;
+		Translatable pointMessage;
 		TownBlock deathLoc = TownyAPI.getInstance().getTownBlock(loc);
 		if (deathLoc == null)
-			pointMessage = Translation.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), defender.getName(), points, attackerTown.getName());
+			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), defender.getName(), points, attackerTown.getName());
 		else if (war.getWarZoneManager().isWarZone(deathLoc.getWorldCoord()) && attackerTown.getTownBlocks().contains(deathLoc))
-			pointMessage = Translation.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING", attacker.getName(), defender.getName(), attacker.getName(), points, attackerTown.getName());
+			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING", attacker.getName(), defender.getName(), attacker.getName(), points, attackerTown.getName());
 		else if (war.getWarZoneManager().isWarZone(deathLoc.getWorldCoord()) && defenderTown.getTownBlocks().contains(deathLoc))
-			pointMessage = Translation.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING", attacker.getName(), defender.getName(), defender.getName(), points, attackerTown.getName());
+			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING", attacker.getName(), defender.getName(), defender.getName(), points, attackerTown.getName());
 		else
-			pointMessage = Translation.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), defender.getName(), points, attackerTown.getName());
+			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), defender.getName(), points, attackerTown.getName());
 
 		townScores.put(attackerTown, townScores.get(attackerTown) + points);
 		WarMetaDataController.setScore(attackerTown, townScores.get(attackerTown));
@@ -107,17 +108,17 @@ public class ScoreManager {
 	 */
 	void townScored(Town town, int n, Object fallenObject, int townBlocksFallen) {
 
-		String pointMessage = "";
+		Translatable pointMessage = null;
 		if (fallenObject instanceof Nation)
-			pointMessage = Translation.of("MSG_WAR_SCORE_NATION_ELIM", town.getName(), n, ((Nation)fallenObject).getName());
+			pointMessage = Translatable.of("MSG_WAR_SCORE_NATION_ELIM", town.getName(), n, ((Nation)fallenObject).getName());
 		else if (fallenObject instanceof Town)
-			pointMessage = Translation.of("MSG_WAR_SCORE_TOWN_ELIM", town.getName(), n, ((Town)fallenObject).getName(), townBlocksFallen);
+			pointMessage = Translatable.of("MSG_WAR_SCORE_TOWN_ELIM", town.getName(), n, ((Town)fallenObject).getName(), townBlocksFallen);
 		else if (fallenObject instanceof TownBlock){
 			String townBlockName = "";
 			try {
 				townBlockName = "[" + ((TownBlock)fallenObject).getTown().getName() + "](" + ((TownBlock)fallenObject).getCoord().toString() + ")";
 			} catch (NotRegisteredException ignored) {}
-				pointMessage = Translation.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM", town.getName(), n, townBlockName);
+				pointMessage = Translatable.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM", town.getName(), n, townBlockName);
 		}
 
 		townScores.put(town, townScores.get(town) + n);

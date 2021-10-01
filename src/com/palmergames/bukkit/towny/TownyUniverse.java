@@ -1122,6 +1122,8 @@ public class TownyUniverse {
 
 	@Nullable
 	public War getWarEvent(TownyObject obj) {
+		if (obj instanceof TownyWorld)
+			return null;
 		if (obj instanceof Nation nation)
 			obj = nation.getCapital();
 		
@@ -1131,16 +1133,9 @@ public class TownyUniverse {
 		return null;
 	}
 
-	@Nullable
-	public War getWarEvent(String warName) {
-		for (War war : getWars()) {
-			if (war.getWarName().equalsIgnoreCase(warName))
-				return war;
-		}
-		return null;
-	}
-
 	public boolean hasWarEvent(TownyObject obj) {
+		if (obj instanceof TownyWorld)
+			return false;
 		if (obj instanceof Nation nation)
 			obj = nation.getCapital();
 

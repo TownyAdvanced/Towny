@@ -329,8 +329,6 @@ msg_war_winning_nation_spoils: '&6[War]&b Winning Nation: %s won %s.'
 msg_war_winning_town_spoils: '&6[War]&b Highest Score: %s won %s with the score %d.'
 msg_war_cannot_do: '&cYou cannot do this when the world is at war.'
 msg_war_started: '&eStarted the war countdown.'
-msg_war_ended: '&eEnded the current war.'
-
 
 msg_cache_block_error: '&cYou have not been registered with Towny. Try relogging.'
 msg_cache_block_error_wild: '&cNot allowed to %s in the wild.'
@@ -490,12 +488,12 @@ msg_err_cant_use_bed: '&4You do not own the land this bed occupies and it is not
 msg_war_seeding_spoils_with: '&6[War]&f Seeding spoils of war with %s'
 msg_war_total_seeding_spoils: '&6[War]&f Total spoils of war at play for this war: %s'
 msg_war_activate_war_hud_tip: '&6[War]&f Use ''/towny war hud'' to activate the War hud.'
-msg_war_town_under_attack: 'Your town is under attack!'
-msg_war_nation_under_attack: 'Your nation is under attack!'
-msg_war_nations_ally_under_attack: 'Your nation''s ally %s, is under attack!'
-msg_war_homeblock_under_attack: 'Your town''s homeblock is under attack!'
-msg_war_nation_member_homeblock_under_attack: 'Your nation member %s''s townblock is under attack!'
-msg_war_nation_ally_homeblock_under_attack: 'Your nation''s ally %s''s homeblock is under attack!'
+msg_war_town_under_attack: '&8Your town is under attack!'
+msg_war_nation_under_attack: '&8Your nation is under attack!'
+msg_war_nations_ally_under_attack: '&8Your nation''s ally %s, is under attack!'
+msg_war_homeblock_under_attack: '&8Your town''s homeblock is under attack!'
+msg_war_nation_member_homeblock_under_attack: '&8Your nation member %s''s townblock is under attack!'
+msg_war_nation_ally_homeblock_under_attack: '&8Your nation''s ally %s''s homeblock is under attack!'
 msg_war_town_ran_out_of_money: 'Your town ran out of funds to support itself in war.'
 msg_war_town_lost_money_townblock: 'Your town lost %s.'
 msg_war_jailbreak: '&6[War]&f There has been a jailbreak in %s, freeing %s prisioner(s)!'
@@ -1647,13 +1645,24 @@ msg_jailed_author: 'Towny Jailco.'
 msg_error_town_has_no_allies: 'Town has no allies to list.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Town has no enemies to list.'
-#Message shown when there are no allies to list in /town allylist.
-msg_error_town_has_no_allies: 'Town has no allies to list.'
-#Message shown when there are no enemies to list in /town enemylist.
-msg_error_town_has_no_enemies: 'Town has no enemies to list.'
+
 #Message show when a town survives a CivilWar or TownWar
 msg_war_surviving_town_spoils: '&6[War]&b Surviving Town: %s won %s.'
 #Message show when a nation survives a WorldWar or NationWar
 msg_war_surviving_nation_spoils: '&6[War]&b Surviving Nation: %s won %s.'
 #Message show when paying the highest scorer in a Riot war.
 msg_war_riot_highest_score: '&6[War]&b Riot Winner: %s won %s with a score of %s.'
+#Message shown when an admin does /ta toggle war {WARNAME} to end a war.
+msg_war_name_ended: '&6[War]&b %s ended via admin command.'
+#Messages shown when a war does not exist with the given name.
+msg_err_unknown_war: 'No war is known by the name: %s'
+#Message shown when a town is joined into a war.
+msg_you_have_joined_a_war_of_type: 'YOu have joined a war of type: %s.'
+#The message shown to attackers when a townblock is being attacked.
+msg_war_townblock_hp: '&8[%s] (%s) HP: %s %s'
+#The message shown when a townblock is being healed.
+msg_war_townblock_healed: '&8[Heal](%s) HP: %s (&a+%s&8)'
+#Message shown when a town is removed from the war for not being able to pay death costs.
+msg_town_could_not_pay_death_costs_removing_from_war: 'Town could not pay death costs, removing %s from the war.'
+#Message shown when a player has run out of lives and is removed from the war
+msg_resident_has_run_out_of_lives_and_is_eliminated_from_the_war: '%s has run out of lives and is eliminated from the %s'

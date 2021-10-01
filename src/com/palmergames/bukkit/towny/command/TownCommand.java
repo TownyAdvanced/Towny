@@ -2790,8 +2790,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		try {
-			if (TownySettings.hasTownLimit() && TownyUniverse.getInstance().getDataSource().getTowns().size() >= TownySettings.getTownLimit())
-				throw new TownyException(Translation.of("msg_err_universe_limit"));
+			if (TownySettings.hasTownLimit() && dataSource.getTowns().size() >= TownySettings.getTownLimit())
+				throw new TownyException(Translatable.of("msg_err_universe_limit"));
 
 			if (TownySettings.getTownAutomaticCapitalisationEnabled())
 				name = StringMgmt.capitalizeStrings(name);

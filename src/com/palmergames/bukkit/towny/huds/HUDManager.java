@@ -8,10 +8,10 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.events.PlotAttackedEvent;
 import com.palmergames.bukkit.towny.war.eventwar.events.TownScoredEvent;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
-import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -66,7 +66,7 @@ public class HUDManager implements Listener{
 
 	public void toggleAllWarHUD (War war) {
 		for (Player p : warUsers)
-			if (TownyUniverse.getInstance().getWarEvent(p).equals(war)) {
+			if (WarUtil.sameWar(TownyUniverse.getInstance().getWarEvent(p), war)) {
 				toggleOff(p);
 				warUsers.remove(p);
 			}
@@ -99,9 +99,10 @@ public class HUDManager implements Listener{
 			if (!isWarHUDActive(p))
 				warUsers.remove(p);
 			else {
+				War war = TownyUniverse.getInstance().getWarEvent(p);
 				WarHUD.updateLocation(p, event.getTo());
-				WarHUD.updateAttackable(p, event.getTo(), TownyUniverse.getInstance().getWarEvent(p));
-				WarHUD.updateHealth(p, event.getTo(), TownyUniverse.getInstance().getWarEvent(p));
+				WarHUD.updateAttackable(p, event.getTo(), war);
+				WarHUD.updateHealth(p, event.getTo(), war);
 			}
 		} else if (permUsers.contains(p)) {
 			if (!isPermHUDActive(p))
@@ -139,16 +140,20 @@ public class HUDManager implements Listener{
 	public void onTownScored (TownScoredEvent event) {
 		//Update town score
 		War war = event.getWar();
-		for (Resident r : event.getTown().getResidents())
-		{
-			Player player = BukkitTools.getPlayer(r.getName());
+		for (Resident r : event.getTown().getResidents()) {
+			if (!r.isOnline())
+				continue;
+			Player player = r.getPlayer();
 			if (player != null && warUsers.contains(player))
 				WarHUD.updateScore(player, event.getScore());
 		}
 		//Update top scores for all HUD users
 		String[] top = war.getScoreManager().getTopThree();
-		for (Player p : warUsers)
+		for (Player p : war.getWarParticipants().getOnlineWarriors()) {
+			if (!warUsers.contains(p))
+				continue;
 			WarHUD.updateTopScores(p, top);
+		}
 	}
 
 	//Perm Specific

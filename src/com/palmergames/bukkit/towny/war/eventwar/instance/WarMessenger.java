@@ -34,6 +34,11 @@ public class WarMessenger {
 			player.sendMessage(msg);
 	}
 	
+	public void sendPlainGlobalMessage(Translatable translatable) {
+		for (Player player : getPlayers())
+			TownyMessaging.sendMessage(player, translatable);
+	}
+	
 	public void sendGlobalMessage(Translatable translatable) {
 		for (Player player : getPlayers())
 			TownyMessaging.sendMsg(player, translatable);

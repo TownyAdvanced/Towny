@@ -206,7 +206,6 @@ public class TownyMessaging {
 			sendMessage(sender, line);
 	}
 
-	// TODO: Replace with WarMessenger - 15 - All in EventWar
 	/**
 	 * Send a message to All online players and the log.
 	 * Uses default_towny_prefix
@@ -221,7 +220,6 @@ public class TownyMessaging {
 		}
 	}
 	
-	// TODO: Replace with WarMessenger - 4 - All in EventWar
 	/**
 	 * Send a message to All online players and the log.
 	 * Does not use the default_towny_prefix.
@@ -242,7 +240,6 @@ public class TownyMessaging {
 	 * Used primarily for /n say and /t say.
 	 */
 	
-	// TODO: Replace usage in War.
 	/**
 	 * Send a message to All online residents of a town and log
 	 * preceded by the [Townname]
@@ -256,7 +253,6 @@ public class TownyMessaging {
 			player.sendMessage(Translation.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())) + line);
 	}
 
-	// TODO: Replace usage in War.
 	/**
 	 * Send a message to All online residents of a nation and log
 	 * with the [nationname] prefixed to the beginning

@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent
 import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownBlockStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
+import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
@@ -210,7 +211,7 @@ public class WarZoneListener implements Listener {
 				continue;
 			
 			// Non-warzone, skip it.
-			if (!TownyUniverse.getInstance().hasWarEvent(TownyAPI.getInstance().getTownBlock(block.getLocation())))
+			if (!TownyAPI.getInstance().getTownBlock(block.getLocation()).isWarZone())
 				continue;
 			
 			// A war that doesn't allow any kind of explosions.
@@ -259,7 +260,7 @@ public class WarZoneListener implements Listener {
 		 */
 		
 		// Not in a war zone, do not modify the outcome of the event.
-		if (!TownyUniverse.getInstance().hasWarEvent(event.getTownBlock()))
+		if (!event.getTownBlock().isWarZone())
 			return;
 			
 		/*
@@ -295,10 +296,8 @@ public class WarZoneListener implements Listener {
 		/*
 		 * Event War fire control settings.
 		 */
-		if (TownyAPI.getInstance().isWarTime() && TownyUniverse.getInstance().hasWarEvent(event.getTownBlock())) {
-			if (WarZoneConfig.isAllowingFireInWarZone()) {           // Allow ignition using normal fire-during-war rule.
-				event.setCancelled(false);
-			} else if (TownySettings.isAllowWarBlockGriefing()) {    // Allow ignition using exceptionally-griefy-war rule for Event War.
+		if (TownyAPI.getInstance().isWarTime() && event.getTownBlock().isWarZone()) {
+			if (TownySettings.isAllowWarBlockGriefing() || WarZoneConfig.isAllowingFireInWarZone()) {
 				event.setCancelled(false);
 			} else {
 				event.setCancelled(true);
@@ -323,12 +322,20 @@ public class WarZoneListener implements Listener {
 		Town attackerTown = event.getAttackerTown();
 		Town defenderTown = event.getVictimTown();
 		
-		//Cancel because one of two players has no town and should not be interfering during war.
-		if (TownySettings.isWarTimeTownsNeutral() && (event.getAttackerTown() == null || event.getVictimTown() == null)){
-			event.setMessage(Translatable.of("msg_war_a_player_has_no_town").forLocale(event.getAttackingPlayer()));
-			event.setCancelled(true);
+		// Neither Town has anything going on for war.
+		if (!attackerTown.hasActiveWar() && !defenderTown.hasActiveWar())
 			return;
-		}
+		
+		// They might be at war, but is it the same war?
+		if (!WarUtil.hasSameWar(event.getAttackingResident(), event.getVictimResident()))
+			return;
+		
+//		//Cancel because one of two players has no town and should not be interfering during war.
+//		if (TownySettings.isWarTimeTownsNeutral() && (event.getAttackerTown() == null || event.getVictimTown() == null)){
+//			event.setMessage(Translatable.of("msg_war_a_player_has_no_town").forLocale(event.getAttackingPlayer()));
+//			event.setCancelled(true);
+//			return;
+//		}
 
 //		//Cancel because one of the two players' town has no nation and should not be interfering during war.  AND towns_are_neutral is true in the config.
 //		if (TownySettings.isWarTimeTownsNeutral() && (!attackerTown.hasNation() || !defenderTown.hasNation())) {
@@ -337,19 +344,19 @@ public class WarZoneListener implements Listener {
 //			return;
 //		}
 		
-		//Cancel because one of the two player's nations is neutral.
-		if ((attackerTown.hasNation() && attackerTown.getNationOrNull().isNeutral()) || (defenderTown.hasNation() && defenderTown.getNationOrNull().isNeutral())) {
-			event.setMessage(Translatable.of("msg_war_a_player_has_a_neutral_nation").forLocale(event.getAttackingPlayer()));
-			event.setCancelled(true);
-			return;
-		}
-		
-		//Cancel because one of the two players are no longer involved in the war.
-		if (!TownyUniverse.getInstance().hasWarEvent(defenderTown) || !TownyUniverse.getInstance().hasWarEvent(attackerTown)) {
-			event.setMessage(Translatable.of("msg_war_a_player_has_been_removed_from_war").forLocale(event.getAttackingPlayer()));
-			event.setCancelled(true);
-			return;
-		}
+//		//Cancel because one of the two player's nations is neutral.
+//		if ((attackerTown.hasNation() && attackerTown.getNationOrNull().isNeutral()) || (defenderTown.hasNation() && defenderTown.getNationOrNull().isNeutral())) {
+//			event.setMessage(Translatable.of("msg_war_a_player_has_a_neutral_nation").forLocale(event.getAttackingPlayer()));
+//			event.setCancelled(true);
+//			return;
+//		}
+//		
+//		//Cancel because one of the two players are no longer involved in the war.
+//		if (!TownyUniverse.getInstance().hasWarEvent(defenderTown) || !TownyUniverse.getInstance().hasWarEvent(attackerTown)) {
+//			event.setMessage(Translatable.of("msg_war_a_player_has_been_removed_from_war").forLocale(event.getAttackingPlayer()));
+//			event.setCancelled(true);
+//			return;
+//		}
 		
 		//Cancel because one of the two players considers the other an ally.
 		if (CombatUtil.isAlly(attackerTown, defenderTown)){
@@ -364,7 +371,24 @@ public class WarZoneListener implements Listener {
 		if (!TownyAPI.getInstance().isWarTime())
 			return;
 		
-		if (TownyUniverse.getInstance().hasWarEvent(event.getTownBlock()))
+		if (event.getTownBlock().isWarZone())
 			event.setPvp(true);
+	}
+	
+	/**
+	 * Prevent outlaws from being teleported away when 
+	 * they enter the town they are outlawed in.
+	 * 
+	 * @param event OutlawTeleportEvent thrown by Towny.
+	 */
+	@EventHandler
+	public void onOutlawTeleport(OutlawTeleportEvent event) {
+		if (!TownyAPI.getInstance().isWarTime())
+			return;
+		
+		if (event.getTown().hasActiveWar()
+			&& event.getOutlaw().hasTown()
+			&& event.getOutlaw().getTownOrNull().hasActiveWar())
+			event.setCancelled(true);
 	}
 }

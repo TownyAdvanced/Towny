@@ -150,7 +150,6 @@ public class TownyEntityMonitorListener implements Listener {
 
 				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
 				isJailingAttackers(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
-
 				
 			/*
 			 * Player has died from an entity but not a player & death price is not PVP only.

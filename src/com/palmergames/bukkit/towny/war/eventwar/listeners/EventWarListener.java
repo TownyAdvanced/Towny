@@ -109,8 +109,8 @@ public class EventWarListener implements Listener {
 				// Town doesn't have enough funds.
 				townPrice = victimTown.getAccount().getHoldingBalance();
 				TownyMessaging.sendPrefixedTownMessage(victimTown, Translatable.of("msg_player_couldnt_pay_player_town_bank_paying_instead", victimRes.getName(), killerRes.getName(), townPrice));
-				TownyMessaging.sendPrefixedTownMessage(killerTown, String.format("Town could not pay death costs, removing %s from the war.", victimTown.getName()));
-				TownyMessaging.sendPrefixedTownMessage(victimTown, String.format("Town could not pay death costs, removing %s from the war.", victimTown.getName()));
+				TownyMessaging.sendPrefixedTownMessage(killerTown, Translatable.of("msg_town_could_not_pay_death_costs_removing_from_war", victimTown.getName()));
+				TownyMessaging.sendPrefixedTownMessage(victimTown, Translatable.of("msg_town_could_not_pay_death_costs_removing_from_war", victimTown.getName()));
 				victimTown.getAccount().payTo(townPrice, killerRes, String.format("Death Payment (War) (%s couldn't pay)", victimRes.getName()));
 				war.getWarZoneManager().remove(victimTown, killerTown);
 			} else if (!TownySettings.isEcoClosedEconomyEnabled()){
@@ -153,7 +153,7 @@ public class EventWarListener implements Listener {
 		switch (war.getWarType()) {
 		
 			case RIOT:
-			TownyMessaging.sendPrefixedTownMessage(killerTown, victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
+			TownyMessaging.sendPrefixedTownMessage(killerTown, Translatable.of("msg_resident_has_run_out_of_lives_and_is_eliminated_from_the_war", victimRes.getName(), war.getWarName()));
 				war.getWarParticipants().remove(victimRes);
 				war.checkEnd();
 				break;
@@ -183,8 +183,8 @@ public class EventWarListener implements Listener {
 				 * Handle regular resident removal when they've run out of lives.	
 				 */
 				} else {
-					TownyMessaging.sendPrefixedTownMessage(victimTown, victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
-					TownyMessaging.sendPrefixedTownMessage(killerTown, victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
+					TownyMessaging.sendPrefixedTownMessage(victimTown, Translatable.of("msg_resident_has_run_out_of_lives_and_is_eliminated_from_the_war", victimRes.getName(), war.getWarName()));
+					TownyMessaging.sendPrefixedTownMessage(killerTown, Translatable.of("msg_resident_has_run_out_of_lives_and_is_eliminated_from_the_war", victimRes.getName(), war.getWarName()));
 					war.getWarParticipants().remove(victimRes);
 					
 					// Test if this was the last resident of the town to have any lives left.
@@ -204,7 +204,7 @@ public class EventWarListener implements Listener {
 				 * Look to see if the mayor's death would remove a town from the war.
 				 */
 				if (war.getWarType().hasMayorDeath && victimRes.isMayor()) {
-					TownyMessaging.sendGlobalMessage(Translation.of("MSG_WAR_MAYOR_KILLED", victimTown.getName()));
+					war.getMessenger().sendGlobalMessage(Translatable.of("MSG_WAR_MAYOR_KILLED", victimTown.getName()));
 					/*
 					 * Remove the mayor's town from the war. Where-in the mayor will be removed with the rest of the residents.
 					 */
@@ -214,8 +214,8 @@ public class EventWarListener implements Listener {
 				 * Handle regular resident removal when they've run out of lives.	
 				 */
 				} else {
-					TownyMessaging.sendPrefixedTownMessage(victimTown, victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
-					TownyMessaging.sendPrefixedTownMessage(killerTown, victimRes.getName() + " has run out of lives and is eliminated from the " + war.getWarName());
+					TownyMessaging.sendPrefixedTownMessage(victimTown, Translatable.of("msg_resident_has_run_out_of_lives_and_is_eliminated_from_the_war", victimRes.getName(), war.getWarName()));
+					TownyMessaging.sendPrefixedTownMessage(killerTown, Translatable.of("msg_resident_has_run_out_of_lives_and_is_eliminated_from_the_war", victimRes.getName(), war.getWarName()));
 					war.getWarParticipants().remove(victimRes);
 					
 					// Test if this was the last resident of the town to have any lives left.
