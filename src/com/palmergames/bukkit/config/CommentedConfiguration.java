@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 /**
  * @author dumptruckman
- * @author Lukas Mansour (Articdive)
+ * @author Articdive
  */
 public class CommentedConfiguration extends YamlConfiguration {
 	private final HashMap<String, String> comments;

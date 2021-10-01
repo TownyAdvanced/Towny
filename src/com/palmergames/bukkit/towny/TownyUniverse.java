@@ -53,7 +53,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * If you don't want to change the dataSource, war, permissions or similiar behavior
  * and only for example want to get Resident objects you should use {@link TownyAPI}
  *
- * @author Lukas Mansour (Articdive)
+ * @author Articdive
  */
 public class TownyUniverse {
     private static TownyUniverse instance;

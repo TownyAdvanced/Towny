@@ -2701,7 +2701,7 @@ v0.92.0.3:
     - Fix for slabs and wooden slabs not regenerating properly when exploded.
 v0.92.0.4:
     - Spanish.yml updated to 0.38 by SeDark.
-    - Updated command: /t outpost {#|name|name:Name}, by ArticDive.
+    - Updated command: /t outpost {#|name|name:Name}, by Articdive.
       - Command now accepts the {name} which would be a plot name set on an outpost.
       - Names can be seen using the '/t outpost list' command.
       - In the case that a plot begins with a number you may use the {name:NameHere} option.
@@ -2719,11 +2719,11 @@ v0.92.0.4:
         - This would allow players to only use /town spawn when there is a war or when there is not.
       - No change is required to be made in your config, simply change the true/false value to war/peace if you would like to use this feature.
     - Language files bumped to 0.39.
-    - New Config Option: global_town_settings.keep_inventory_on_death_in_town courtesy of ArticDive
+    - New Config Option: global_town_settings.keep_inventory_on_death_in_town courtesy of Articdive
       - Default: false
       - When set to true players should keep their inventories upon death in any town.
       - Not guaranteed to work on servers that already use a keep inventory plugin.
-    - New Config Option: global_town_settings.keep_inventory_on_death_in_town courtesy of ArticDive
+    - New Config Option: global_town_settings.keep_inventory_on_death_in_town courtesy of Articdive
       - Default: false
       - When set to true players should keep their experience level upon death in any town.
       - Not guaranteed to work on servers that already use a keep experience plugin.
@@ -2909,7 +2909,7 @@ v0.92.0.11:
     - French.yml updated to 0.44 by TheCalypso.
     - German.yml updated to 0.44 by Wolf2323.
     - Reserve support updated by CreatorFromHell.
-    - Database code overhaul by ArticDive.
+    - Database code overhaul by Articdive.
       - Easier new additions can be made to the database.
       - May have better performance/loading.
     - Added confirmation message to /ta rename.
@@ -3144,7 +3144,7 @@ v0.92.0.11:
         - "Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse"
       - protection.world_mob_removal_entities should be changed to:
         - "Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse"
-    - Towny events now support more helpful values for API users, courtesy of ArticDive.
+    - Towny events now support more helpful values for API users, courtesy of Articdive.
     - Fix players being able to join open towns over their pop cap, courtesy of KarlOfDuty.
     - Fix typo, courtesy of KarlOfDuty.
     - New Command: /ta nation {nationname} recheck, courtesy of KarlOfDuty.
@@ -3218,10 +3218,10 @@ v0.92.0.11:
       - Some functionality may still work through the Vault fallback methods.
     - Fix for lack of feedback for admins when using /ta town {townname} kick {residents}
     - Make Netherrack ignitable in towns where firespread is turned off.
-    - Fixed Smoke border particles appearing to be on the wrong. Courtesy of ArticDive.
+    - Fixed Smoke border particles appearing to be on the wrong. Courtesy of Articdive.
     - Make FARM plottypes follow plot perms to determine who can slaughter animals in them. Previously it only allowed town members to kill the animals.
     - Fix for two more async/1.14 tasks. Solves plot claiming exception. 
-    - Fix permissions HUD from throwing an exception, courtesy of ArticDive.
+    - Fix permissions HUD from throwing an exception, courtesy of Articdive.
     - Bump language files to 0.49
     - More strings have been made translatable, courtesy of TheFlagCourier
       - 'Total TownBlocks: '
@@ -3261,7 +3261,7 @@ v0.92.0.11:
     - Bump version number for release build.
 0.94.0.1:
     - Switch to Bukkit 1.14.3 for development.
-    - Major Database overhaul, courtesy of ArticDive.
+    - Major Database overhaul, courtesy of Articdive.
       - Make TownySQLSource implement TownyDatabaseHandler directly
       - Make TownyUniverse a singleton, since there is only ever 1 instance of the class.
       - Take TownyUniverse out of the objects package and put it on root, (rename to TownyAPI?? or take out API methods into a new class called TownyAPI, also a singleton.), Deprecate the old version and make it forward to the new TownyUniverse.
@@ -3721,7 +3721,7 @@ v0.92.0.11:
 0.95.0.5:
   - Fix above name_remove_regex change for default configs.
   - Bump language files to 0.59.
-  - Fix toggling debug mode off stopping all MC logging, courtesy of ArticDive in PR #3485
+  - Fix toggling debug mode off stopping all MC logging, courtesy of Articdive in PR #3485
     - Closes ticket #3468
   - Make /res screen display title and surname if they are present, falling back to the king/mayor prefix/postfix.
   - New Config Option: global_town_settings.display_town_list_randomly
@@ -4103,7 +4103,7 @@ v0.92.0.11:
   - Github Actions workflow adjustment courtesy of TheFlagCourier with PR #3654.
   - Fix /ta rename not passing on NPC status to residents.
   - Fix /plot set perm showing the opposite PVP setting in its final output.
-  - Update logger, courtesy of ArticDive/Siris with PR #3664.
+  - Update logger, courtesy of Articdive/Siris with PR #3664.
   - Fix /ta town {townname} {command} not showing anything helpful when the {command} used is not a valid command.
     - Closes #3667.
   - Fix ranks not being capitalized on /res, /town and /nation screens.
@@ -6764,9 +6764,9 @@ v0.92.0.11:
     - Invulnerable players who teleport after respawn will also lose their invulnerability.
   - Bump language files to 0.125.
   - Prevent spam if a player's locale is invalid, courtesy of Warriorrrr with PR #5314.
-  - Improve startup logging/initialization, courtesy of ArticDive & LlmDl with PR #5299.
+  - Improve startup logging/initialization, courtesy of Articdive & LlmDl with PR #5299.
 0.97.2.2:
-  - Fix Citizens NPCs causing error on PlayerTeleportEvent, courtesy of ArticDive with PR #5319.
+  - Fix Citizens NPCs causing error on PlayerTeleportEvent, courtesy of Articdive with PR #5319.
 0.97.2.3:
   - Change PlayerCacheUtil to once again check for a fakeplayer resident.
   - Fix PlayerCacheUtil preventing plot permissions from working properly. 
