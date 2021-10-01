@@ -6771,3 +6771,5 @@ v0.92.0.11:
   - Change PlayerCacheUtil to once again check for a fakeplayer resident.
   - Fix PlayerCacheUtil preventing plot permissions from working properly. 
   - Fix missing command feedback on many /tw toggle commands.
+0.97.2.4:
+  - Fix Global messages stripping their colour.

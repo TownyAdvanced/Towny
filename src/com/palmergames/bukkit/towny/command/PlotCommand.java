@@ -1022,7 +1022,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townBlock.setChanged(true);
 			townBlock.save();
 			if (!townBlock.hasPlotObjectGroup()) {
-				TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms").forLocale(player));
+				TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
 				TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
 				TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
 												   Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
