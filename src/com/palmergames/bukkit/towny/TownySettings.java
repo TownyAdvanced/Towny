@@ -941,6 +941,10 @@ public class TownySettings {
 			n += town.getNumResidents() * ratio;
 
 		n += getNationBonusBlocks(town);
+		
+		int ratioSizeLimit = getInt(ConfigNodes.TOWN_TOWN_BLOCK_LIMIT);
+		if (ratio != 0 && ratioSizeLimit > 0)
+			n = Math.min(ratioSizeLimit, n);
 
 		return n;
 	}

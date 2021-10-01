@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * For more dynamic/controlled changing of Towny's behavior, for example Database, War, Permissions
  * The {@link TownyUniverse} class should be used. It contains the map of all objects
  * aswell as serving as an internal API, that Towny uses.
- * @author Lukas Mansour (Articdive)
+ * @author Articdive
  */
 public class TownyAPI {
     private static TownyAPI instance;

@@ -5,7 +5,7 @@ ___
 <p><img align=right src="https://user-images.githubusercontent.com/879756/65964696-19d6b300-e423-11e9-9cb0-d193225ee40f.png">
 I'm LlmDl, the third lead developer of Towny. I have been managing the Towny project since 2014 and the release of Minecraft 1.8. Prior to me there was the original creator: Shadeness (active 2010-2011,) and the second developer: ElgarL (active 2011-2014.)
 
-I am helped out by the TownyAdvanced team: ArcticDive, FlagCourier, Warrior and a few other private members. Being open-source Towny has a large list of [Contributors](https://github.com/TownyAdvanced/Towny/graphs/contributors) who have helped improve the code base over the years as well.
+I am helped out by the TownyAdvanced team: Articdive, FlagCourier, Warrior and a few other private members. Being open-source Towny has a large list of [Contributors](https://github.com/TownyAdvanced/Towny/graphs/contributors) who have helped improve the code base over the years as well.
 
 Towny is one of the oldest still-in-development plugins for Minecraft. Shadeness created Towny for the now-defunct server platform called hMod. Shadeness ported Towny to Bukkit and left the project shortly afterwards, returning later to add EnemyWar or as it became known: [FlagWar](https://github.com/TownyAdvanced/FlagWar). Towny is now over 10 years old! 
 

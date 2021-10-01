@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * A class that handles the processing confirmations sent in Towny.
  * 
- * @author Lukas Mansour (ArticDive)
+ * @author Articdive
  * @author Suneet Tipirneni (Siris)
  */
 public class ConfirmationHandler {

@@ -526,24 +526,4 @@ public class AreaSelectionUtil {
 			}
 		return false;
 	}
-	
-    /**
-     * Pretty much this method checks if a townblock is contained within a list of locations.
-     *
-     * @param minecraftcoordinates - List of minecraft coordinates you should probably parse town.getAllOutpostSpawns()
-     * @param tb                   - TownBlock to check if its contained..
-     * @return true if the TownBlock is considered an outpost by it's Town.
-     * @author Lukas Mansour (Articdive)
-     */
-    public static boolean isTownBlockLocContainedInTownOutposts(List<Location> minecraftcoordinates, TownBlock tb) {
-        if (minecraftcoordinates != null && tb != null) {
-            for (Location minecraftcoordinate : minecraftcoordinates) {
-                if (Coord.parseCoord(minecraftcoordinate).equals(tb.getCoord())) {
-                    return true; // Yes the TownBlock is considered an outpost by the Town
-                }
-            }
-        }
-        return false;
-    }
-
 }
