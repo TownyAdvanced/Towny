@@ -210,6 +210,12 @@ public enum ConfigNodes {
 			"",
 			"# The maximum townblocks available to a town is (numResidents * ratio).",
 			"# Setting this value to 0 will instead use the level based jump values determined in the town level config."),
+	TOWN_TOWN_BLOCK_LIMIT(
+			"town.town_block_limit",
+			"0",
+			"",
+			"# The maximimum amount of townblocks a town can have, if town_block_ratio is 0 the max size will be decided by the town_levels.",
+			"# Set to 0 to have no size limit."),
 	TOWN_TOWN_BLOCK_SIZE(
 			"town.town_block_size",
 			"16",
