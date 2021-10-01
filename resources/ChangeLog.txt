@@ -6767,6 +6767,7 @@ v0.92.0.11:
   - Improve startup logging/initialization, courtesy of ArticDive & LlmDl with PR #5299.
 0.97.2.2:
   - Fix Citizens NPCs causing error on PlayerTeleportEvent, courtesy of ArticDive with PR #5319.
+0.97.2.3:
   - Change PlayerCacheUtil to once again check for a fakeplayer resident.
   - Fix PlayerCacheUtil preventing plot permissions from working properly. 
   - Fix missing command feedback on many /tw toggle commands.
