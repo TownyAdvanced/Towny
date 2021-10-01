@@ -7,7 +7,7 @@ I'm LlmDl, the third lead developer of Towny. I have been managing the Towny pro
 
 I am helped out by the TownyAdvanced team: Articdive, FlagCourier, Warrior and a few other private members. Being open-source Towny has a large list of [Contributors](https://github.com/TownyAdvanced/Towny/graphs/contributors) who have helped improve the code base over the years as well.
 
-Towny is one of the oldest still-in-development plugins for Minecraft. Shadeness created Towny for the now-defunct server platform called hMod. Shadeness ported Towny to Bukkit and left the project shortly afterwards, returning later to add EnemyWar or as it became known: [FlagWar](https://github.com/TownyAdvanced/FlagWar). Towny is now over 10 years old!
+Towny is one of the oldest still-in-development plugins for Minecraft. Shadeness created Towny for the now-defunct server platform called hMod. Shadeness ported Towny to Bukkit and left the project shortly afterwards, returning later to add EnemyWar or as it became known: [FlagWar](https://github.com/TownyAdvanced/FlagWar). Towny is now over 10 years old! 
 
 **Go check out some of the [features](https://github.com/TownyAdvanced/Towny/wiki#features) Towny has and see why it's still popular for yourself.**
 </p>
@@ -40,9 +40,9 @@ ___
 
 ### Staying up to date
 <p><img align=right src="https://user-images.githubusercontent.com/879756/65964779-3a067200-e423-11e9-9928-938b976af2c2.gif" height="155">
-
+    
 Now that all Release builds and Development builds are being made available here on github's [Releases](https://github.com/TownyAdvanced/Towny/releases) tab I am recommending that server admins "watch" Towny on github. Just click the watch button in the upper right and select "Custom > Releases".
-
+    
 Alternatively, if you [watch the resource](https://www.spigotmc.org/resources/towny-advanced.72694/watch) on Spigot you will be notified on that website when a new Release version is out.
 </p>
 
@@ -78,7 +78,7 @@ ___
 ### Translations
 If you'd like to help translating Towny into the available languages or add entirely new languages, [we're on Crowdin!](https://crowdin.com/project/townyadvanced)
 
-[![Crowdin](https://badges.crowdin.net/townyadvanced/localized.svg)](https://crowdin.com/project/townyadvanced)
+[![Crowdin](https://badges.crowdin.net/townyadvanced/localized.svg)](https://crowdin.com/project/townyadvanced) 
 
 ___
 
@@ -104,7 +104,7 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
 
 - **Maven**
 
-    - Run `mvn clean package` to generate the plugin in the `target` directory, within the Towny folder.
+    - Run `mvn clean package` to generate the plugin in the `target` directory, within the Towny folder. 
 
 
 - **Ant** (_Deprecated_)
