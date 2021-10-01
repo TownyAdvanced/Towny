@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import org.bukkit.Location;
-
 public class AreaSelectionUtil {
 	
 	private final static int MAX_RECT_RADIUS = 15; // A maximum radius of 15 will garner 961 townblocks. Capped to prevent servers from dying.

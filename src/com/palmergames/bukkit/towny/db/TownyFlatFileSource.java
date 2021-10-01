@@ -253,6 +253,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> towns = receiveListFromLegacyFile("towns.txt");
 		File[] townFiles = receiveObjectFiles("towns", ".txt");
 		assert townFiles != null;
+		List<File> rejectedTowns = new ArrayList<>();
 		
 		for (File town : townFiles) {
 			String name = town.getName().replace(".txt", "");
@@ -268,23 +269,30 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				TownyUniverse.getInstance().newTownInternal(name);
 			} catch (AlreadyRegisteredException | InvalidNameException e) {
 				// Thrown if the town name does not pass the filters.
-				String newName = generateReplacementName(true);
-				TownyUniverse.getInstance().getReplacementNameMap().put(name, newName);
-				TownyMessaging.sendErrorMsg(String.format("The town %s tried to load an invalid name, attempting to rename it to %s.", name, newName));
-				try {
-					TownyUniverse.getInstance().newTownInternal(newName);
-				} catch (AlreadyRegisteredException | InvalidNameException e1) {
-					// We really hope this doesn't fail again.
-					e1.printStackTrace();
-					return false;
-				}
-				File newFile = new File(town.getParent(), newName + ".txt");
-				town.renameTo(newFile);
+				rejectedTowns.add(town);
 			}
 		}
 		
+		// Delete legacy file towns.txt if it was present.
 		if (!towns.isEmpty())
 			deleteFile(dataFolderPath + File.separator + "towns.txt");
+
+		// Handle rejected town names after all the rest are loaded.
+		for (File town : rejectedTowns) {
+			String name = town.getName().replace(".txt", "");
+			String newName = generateReplacementName(true);
+			TownyUniverse.getInstance().getReplacementNameMap().put(name, newName);
+			TownyMessaging.sendErrorMsg(String.format("The town %s tried to load an invalid name, attempting to rename it to %s.", name, newName));
+			try {
+				TownyUniverse.getInstance().newTownInternal(newName);
+			} catch (AlreadyRegisteredException | InvalidNameException e1) {
+				// We really hope this doesn't fail again.
+				e1.printStackTrace();
+				return false;
+			}
+			File newFile = new File(town.getParent(), newName + ".txt");
+			town.renameTo(newFile);
+		}
 
 		return true;
 
@@ -297,6 +305,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> nations = receiveListFromLegacyFile("nations.txt");
 		File[] nationFiles = receiveObjectFiles("nations", ".txt");
 		assert nationFiles != null;
+		List<File> rejectedNations = new ArrayList<>();
+		
 		for (File nation : nationFiles) {
 			String name = nation.getName().replace(".txt", "");
 
@@ -311,25 +321,30 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				newNation(name);
 			} catch (AlreadyRegisteredException | NotRegisteredException e) {
 				// Thrown if the town name does not pass the filters.
-				String newName = generateReplacementName(false);
-				TownyUniverse.getInstance().getReplacementNameMap().put(name, newName);
-				TownyMessaging.sendErrorMsg(String.format("The nation %s tried to load an invalid name, attempting to rename it to %s.", name, newName));
-				try {
-					newNation(newName);
-				} catch (AlreadyRegisteredException | NotRegisteredException e1) {
-					// we really hope this doesn't fail a second time.
-					e1.printStackTrace();
-					return false;
-				}
-				
-				File newFile = new File(nation.getParent(), newName + ".txt");
-				nation.renameTo(newFile);
+				rejectedNations.add(nation);
 			}
 		}
 		
+		// Delete legacy file towns.txt if it was present.
 		if (!nations.isEmpty())
 			deleteFile(dataFolderPath + File.separator + "nations.txt");
 			
+		// Handle rejected nation names after all the rest are loaded.
+		for (File nation : rejectedNations) {
+			String name = nation.getName().replace(".txt", "");
+			String newName = generateReplacementName(false);
+			TownyUniverse.getInstance().getReplacementNameMap().put(name, newName);
+			TownyMessaging.sendErrorMsg(String.format("The nation %s tried to load an invalid name, attempting to rename it to %s.", name, newName));
+			try {
+				newNation(newName);
+			} catch (AlreadyRegisteredException | NotRegisteredException e1) {
+				// we really hope this doesn't fail a second time.
+				e1.printStackTrace();
+				return false;
+			}
+			File newFile = new File(nation.getParent(), newName + ".txt");
+			nation.renameTo(newFile);
+		}
 		return true;
 
 	}

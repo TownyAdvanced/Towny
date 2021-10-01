@@ -1697,13 +1697,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		int i = 0;
 		do {
-			name = name + ++i;
-			if (town)
-				if (!TownyUniverse.getInstance().hasTown(name))
-					return name;
-			else
-				if (!TownyUniverse.getInstance().hasNation(name))
-					return name;
+			String newName = name + ++i;
+			if (town) {
+				if (!TownyUniverse.getInstance().hasTown(newName))
+					return newName;
+		    } else { 
+				if (!TownyUniverse.getInstance().hasNation(newName))
+					return newName;
+		    }
 			if (i > 100000)
 				throw new TownyException("Too many replacement names.");
 		} while (true);

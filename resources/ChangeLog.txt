@@ -6779,3 +6779,4 @@ v0.92.0.11:
     - Default: 0
     - The maximimum amount of townblocks a town can have, if town_block_ratio is 0 the max size will be decided by the town_levels. 
     - Set to 0 to have no size limit.
+  - Fix automatic renaming of invalid and duplicate town and nation names failing some of the time.
