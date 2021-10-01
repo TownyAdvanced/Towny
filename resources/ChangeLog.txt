@@ -6775,3 +6775,7 @@ v0.92.0.11:
   - Fix Global messages stripping their colour.
   - Remove old Outpost checking code and references to Articdive which were not spelled correct, courtesy of Articdive with PR #5324.
   - Add a size limit for the town_block_ratio option, courtesy of Warriorrrr with PR #5326.
+  - New Config Option: town.town_block_limit
+    - Default: 0
+    - The maximimum amount of townblocks a town can have, if town_block_ratio is 0 the max size will be decided by the town_levels. 
+    - Set to 0 to have no size limit.
