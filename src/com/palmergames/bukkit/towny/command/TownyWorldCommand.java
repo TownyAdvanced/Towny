@@ -234,7 +234,6 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			if (!globalWorld.isUsingTowny() && !split[0].equalsIgnoreCase("usingtowny"))
 				throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 
-			Translatable msg;
 			Optional<Boolean> choice = Optional.empty();
 			if (split.length == 2) {
 				choice = parseToggleChoice(split[1]);
@@ -265,13 +264,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("forcepvp")) {
 
 				globalWorld.setForcePVP(choice.orElse(!globalWorld.isForcePVP()));
-				TownyMessaging.sendMsg(Translatable.of("msg_changed_world_setting", "Force town PVP", globalWorld.getName(), formatBool(globalWorld.isForcePVP(), "forced", "adjustable")));
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Force town PVP", globalWorld.getName(), formatBool(globalWorld.isForcePVP(), "forced", "adjustable")));
 
 			} else if (split[0].equalsIgnoreCase("friendlyfire")) {
 
 				globalWorld.setFriendlyFire(choice.orElse(!globalWorld.isFriendlyFireEnabled()));
-				msg = Translatable.of("msg_changed_world_setting", "Friendly Fire", globalWorld.getName(), formatBool(globalWorld.isFriendlyFireEnabled()));
-				TownyMessaging.sendMsg(msg);
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Friendly Fire", globalWorld.getName(), formatBool(globalWorld.isFriendlyFireEnabled())));
 
 			} else if (split[0].equalsIgnoreCase("explosion")) {
 
@@ -281,32 +279,27 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("forceexplosion")) {
 
 				globalWorld.setForceExpl(choice.orElse(!globalWorld.isForceExpl()));
-				msg = Translatable.of("msg_changed_world_setting", "Force town Explosions", globalWorld.getName(), formatBool(globalWorld.isForceExpl(), "forced", "adjustable"));
-				TownyMessaging.sendMsg(msg);
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Force town Explosions", globalWorld.getName(), formatBool(globalWorld.isForceExpl(), "forced", "adjustable")));
 
 			} else if (split[0].equalsIgnoreCase("fire")) {
 
 				globalWorld.setFire(choice.orElse(!globalWorld.isFire()));
-				msg = Translatable.of("msg_changed_world_setting", "Fire Spread", globalWorld.getName(), formatBool(globalWorld.isFire()));
-				TownyMessaging.sendMsg(msg);
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Fire Spread", globalWorld.getName(), formatBool(globalWorld.isFire())));
 
 			} else if (split[0].equalsIgnoreCase("forcefire")) {
 
 				globalWorld.setForceFire(choice.orElse(!globalWorld.isForceFire()));
-				msg = Translatable.of("msg_changed_world_setting", "Force town Fire Spread", globalWorld.getName(), formatBool(globalWorld.isForceFire(), "forced", "adjustable"));
-				TownyMessaging.sendMsg(msg);
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Force town Fire Spread", globalWorld.getName(), formatBool(globalWorld.isForceFire(), "forced", "adjustable")));
 
 			} else if (split[0].equalsIgnoreCase("townmobs")) {
 
 				globalWorld.setForceTownMobs(choice.orElse(!globalWorld.isForceTownMobs()));
-				msg = Translatable.of("msg_changed_world_setting", "Town Mob spawns", globalWorld.getName(), formatBool(globalWorld.isForceTownMobs(), "forced", "adjustable"));
-				TownyMessaging.sendMsg(msg);
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Town Mob spawns", globalWorld.getName(), formatBool(globalWorld.isForceTownMobs(), "forced", "adjustable")));
 
 			} else if (split[0].equalsIgnoreCase("worldmobs")) {
 
 				globalWorld.setWorldMobs(choice.orElse(!globalWorld.hasWorldMobs()));
-				msg = Translatable.of("msg_changed_world_setting", "World Mob spawns", globalWorld.getName(), formatBool(globalWorld.hasWorldMobs()));
-				TownyMessaging.sendMsg(msg);
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "World Mob spawns", globalWorld.getName(), formatBool(globalWorld.hasWorldMobs())));
 
 			} else if (split[0].equalsIgnoreCase("wildernessmobs")) {
 				
