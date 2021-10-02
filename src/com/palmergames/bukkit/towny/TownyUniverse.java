@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.map.TownyMapData;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.typeapi.CustomTownBlockType;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
@@ -84,6 +85,7 @@ public class TownyUniverse {
     private final Map<UUID, PlotGroup> plotGroupUUIDMap = new ConcurrentHashMap<>();
     
     private final Map<WorldCoord, TownyMapData> wildernessMapDataMap = new ConcurrentHashMap<WorldCoord, TownyMapData>();
+	private final Map<String, CustomTownBlockType> customTownBlockTypeMap = new ConcurrentHashMap<>();
     private final String rootFolder;
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
@@ -1185,6 +1187,11 @@ public class TownyUniverse {
 	
 	public Map<String,String> getReplacementNameMap() {
 		return replacementNamesMap;
+	}
+	
+	public void registerCustomTownBlockType(CustomTownBlockType ctb) {
+		customTownBlockTypeMap.put(ctb.getInternalId(), ctb);
+		TownyMessaging.sendDebugMsg("Registered CustomTownBlockType ID " + ctb.getInternalId());
 	}
 
     /*

@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.typeapi.CustomTownBlockType;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
@@ -32,6 +33,8 @@ public class TownBlock extends TownyObject {
 	private Town town = null;
 	private Resident resident = null;
 	private TownBlockType type = TownBlockType.RESIDENTIAL;
+	private CustomTownBlockType customTownBlockType = null;
+	private boolean hasCustomTownBlockType = false;
 	private int x, z;
 	private double plotPrice = -1;
 	private boolean locked = false;
@@ -511,5 +514,13 @@ public class TownBlock extends TownyObject {
 			return getResidentOrNull();
 		else 
 			return getTownOrNull();
+	}
+	
+	public boolean hasCustomTownBlockType() {
+		return hasCustomTownBlockType;
+	}
+	
+	public CustomTownBlockType getCustomTownBlockType() {
+		return customTownBlockType;
 	}
 }
