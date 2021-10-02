@@ -318,7 +318,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							final Town town = townBlock.getTownOrNull();
 							if (town == null ||
 								(TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() >= TownySettings.getMaxNumResidentsWithoutNation()) ||
-								(TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town))) {
+								(TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town)) ||
+								town.hasOutlaw(resident) ||
+								(resident.isOnline() && !resident.getPlayer().hasPermission(PermissionNodes.TOWNY_COMMAND_TOWN_JOIN.getNode()))) {
 								// Town is null (unlikely) or it would have too many residents, we won't be adding 
 								// them to the town, continue as per usual (it could be an embassy plot.)
 							} else {
