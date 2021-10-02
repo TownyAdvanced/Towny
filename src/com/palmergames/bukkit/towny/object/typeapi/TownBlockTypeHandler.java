@@ -11,5 +11,4 @@ public abstract class TownBlockTypeHandler {
 	public abstract boolean onTownyBurn(TownyBurnEvent event);
 	public abstract boolean onTownyExplosion(TownyExplodingBlocksEvent event);
 	public abstract boolean onTownyDamage(TownyDamageEvent event);
-	
 }
