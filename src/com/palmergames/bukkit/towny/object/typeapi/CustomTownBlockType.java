@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 public abstract class CustomTownBlockType {
 	TownBlockTypeHandler handler;
 	String internalId;
-	String displayName = "";
+	String displayName;
 
 	/**
 	 * Create a new town block type.

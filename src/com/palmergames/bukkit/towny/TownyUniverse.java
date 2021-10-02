@@ -1193,7 +1193,18 @@ public class TownyUniverse {
 		customTownBlockTypeMap.put(ctb.getInternalId(), ctb);
 		TownyMessaging.sendDebugMsg("Registered CustomTownBlockType ID " + ctb.getInternalId());
 	}
+	
+	public boolean hasCustomTownBlockType(String internalId) {
+		return customTownBlockTypeMap.containsKey(internalId);
+	}
 
+	public CustomTownBlockType getCustomTownBlockType(String internalId) {
+		if (hasCustomTownBlockType(internalId))
+			return customTownBlockTypeMap.get(internalId);
+		else
+			return null;
+	}
+	
     /*
      * Deprecated Stuff
      */

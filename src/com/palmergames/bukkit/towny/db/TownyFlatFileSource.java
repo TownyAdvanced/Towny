@@ -1601,6 +1601,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						} catch (Exception ignored) {
 						}
 					
+					line = keys.get("customtypeid");
+						if (line != null)
+							try {
+								TownyUniverse.getInstance().getCustomTownBlockType(line);
+							} catch(Exception ignored) {}
+						
 					line = keys.get("outpost");
 					if (line != null)
 						try {
@@ -2231,6 +2237,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// type
 		list.add("type=" + townBlock.getType().getId());
 
+		// custom type
+		if (townBlock.hasCustomTownBlockType())
+			list.add("customtypeid=" + townBlock.getCustomTownBlockType().getInternalId());
+		
 		// outpost
 		list.add("outpost=" + townBlock.isOutpost());
 
