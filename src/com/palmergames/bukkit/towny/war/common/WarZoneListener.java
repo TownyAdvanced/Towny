@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
+import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
@@ -308,5 +309,25 @@ public class WarZoneListener implements Listener {
 		
 		if (War.isWarZone(event.getTownBlock().getWorldCoord()))
 			event.setPvp(true);
+	}
+	
+	/**
+	 * Prevent outlaws from being teleported away when 
+	 * they enter the town they are outlawed in.
+	 * 
+	 * @param event OutlawTeleportEvent thrown by Towny.
+	 */
+	@EventHandler
+	public void onOutlawTeleport(OutlawTeleportEvent event) {
+		if (!TownyAPI.getInstance().isWarTime())
+			return;
+		
+		if (event.getOutlaw().hasNation() 
+			&& event.getTown().hasNation()
+			&& !event.getTown().getNationOrNull().isNeutral()
+			&& CombatUtil.isEnemy(event.getOutlaw().getTownOrNull(), event.getTown())) {
+			event.setCancelled(true);
+		}
+			
 	}
 }
