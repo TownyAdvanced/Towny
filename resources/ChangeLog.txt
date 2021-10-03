@@ -6781,3 +6781,5 @@ v0.92.0.11:
     - Set to 0 to have no size limit.
   - Fix automatic renaming of invalid and duplicate town and nation names failing some of the time.
   - Fix EventWar not handling the OutlawTeleportEvent.
+  - Fix resident/town counts being shown on the status screens when "and more..." was being used on long lists.
+    - Closes #5331. 
