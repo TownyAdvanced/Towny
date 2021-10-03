@@ -457,6 +457,9 @@ public class TownyFormatter {
 						.append(Component.text(translator.of("status_hover_click_for_more")))),
 					ClickEvent.runCommand("/towny:resident " + king.getName())
 					);
+
+			// Capital: Big City
+			screen.addComponentOf("capital", colourKeyValue(translator.of("status_capital"), nation.getCapital().getFormattedName()));
 		}
 		
 		screen.addComponentOf("newline", Component.newline());

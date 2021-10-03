@@ -6787,3 +6787,5 @@ v0.92.0.11:
     - Closes #5332. 
   - Fix Status Screen components' hovering bleeding over into blank spaces further along the line.
     - Closes #5332.
+0.97.2.5:
+  - Add nation's capital to the nation status screen.
