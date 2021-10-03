@@ -89,11 +89,15 @@ public enum DatabaseConfig {
 		return comments;
 	}
 	
+	/**
+	 * Loads the database.yml file into memory.
+	 * @param databaseConfigPath Path to database.yml.
+	 */
 	public static void loadDatabaseConfig(Path databaseConfigPath) {
 		if (!FileMgmt.checkOrCreateFile(databaseConfigPath.toString())) {
 			throw new TownyInitException("Failed to touch '" + databaseConfigPath + "'.", TownyInitException.TownyError.DATABASE_CONFIG);
 		}
-		// read the config.yml into memory
+		// read the database.yml into memory
 		databaseConfig = new CommentedConfiguration(databaseConfigPath);
 		if (!databaseConfig.load())
 			throw new TownyInitException("Database: Failed to load database.yml!", TownyInitException.TownyError.DATABASE_CONFIG);
