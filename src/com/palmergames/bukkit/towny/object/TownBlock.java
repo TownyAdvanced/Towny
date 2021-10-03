@@ -7,12 +7,12 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.InvalidTownBlockTypeException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.object.typeapi.CustomTownBlockType;
+import com.palmergames.bukkit.towny.object.typeapi.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
@@ -523,5 +523,9 @@ public class TownBlock extends TownyObject {
 	
 	public CustomTownBlockType getCustomTownBlockType() {
 		return customTownBlockType;
+	}
+
+	public TownBlockTypeHandler getCustomTypeHandler() {
+		return getCustomTownBlockType().getHandler();
 	}
 }

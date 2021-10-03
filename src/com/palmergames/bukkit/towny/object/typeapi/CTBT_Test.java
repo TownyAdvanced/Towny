@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.event.damage.TownyDamageEvent;
 
 /**
  * Test class
+ * To be deleted
  */
 public class CTBT_Test extends CustomTownBlockType {
 	public CTBT_Test() {

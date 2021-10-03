@@ -17,9 +17,17 @@ public abstract class CustomTownBlockType {
 		this.displayName = displayName;
 		TownyUniverse.getInstance().registerCustomTownBlockType(this);
 	}
-	
+
+	/**
+	 * Set the town block type handler.
+	 * @param tbHandler TownBlockTypeHandler
+	 */
 	public void setHandler(TownBlockTypeHandler tbHandler) {
 		handler = tbHandler;
+	}
+	
+	public TownBlockTypeHandler getHandler() {
+		return handler;
 	}
 	
 	public String getInternalId() {
