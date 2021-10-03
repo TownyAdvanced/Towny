@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.125
+version: 0.126
 language: swedish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1364,3 +1364,6 @@ msg_setup_success: 'Ändrade konfigurationsvärdena till dina nya värden.'
 msg_err_player_cannot_be_harmed: '%s spawnade nyligen och kan ej skadas.'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_invulnerability: 'Du har förlorat din osårbarhet.'
+#Added in 0.126
+#Used in the nation screen:
+status_capital: 'Capital:'
