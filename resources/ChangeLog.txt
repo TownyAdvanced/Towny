@@ -6791,3 +6791,4 @@ v0.92.0.11:
   - Add nation's capital to the nation status screen.
   - Add protection for glow berries being harvest off cave vines.
     - Treated as a destroy test.
+  - Prevent outlaws from being able to join towns, courtesy of Warriorrrr with PR #5329.
