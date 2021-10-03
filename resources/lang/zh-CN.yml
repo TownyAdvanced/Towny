@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.125
+version: 0.126
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1364,3 +1364,6 @@ msg_setup_success: '配置修改成功。'
 msg_err_player_cannot_be_harmed: '%s处于重生保护中，无法伤害。'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_invulnerability: '你失去了你的重生保护。'
+#Added in 0.126
+#Used in the nation screen:
+status_capital: 'Capital:'

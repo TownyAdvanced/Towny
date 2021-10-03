@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.125
+version: 0.126
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -1364,3 +1364,6 @@ msg_setup_success: 'Successfully changed config values to your new values.'
 msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'
+#Added in 0.126
+#Used in the nation screen:
+status_capital: 'Capital:'
