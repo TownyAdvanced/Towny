@@ -20,7 +20,7 @@ public abstract class CustomTownBlockType {
 
 	/**
 	 * Set the town block type handler.
-	 * @param tbHandler TownBlockTypeHandler
+	 * @param tbHandler Handler for Towny events
 	 */
 	public void setHandler(TownBlockTypeHandler tbHandler) {
 		handler = tbHandler;
