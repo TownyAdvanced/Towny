@@ -6783,3 +6783,7 @@ v0.92.0.11:
   - Fix EventWar not handling the OutlawTeleportEvent.
   - Fix resident/town counts being shown on the status screens when "and more..." was being used on long lists.
     - Closes #5331. 
+  - Lists of TownyObjects (resident lists, town lists, nation lists) will no longer use their longer formatted names if the list is over 19.
+    - Closes #5332. 
+  - Fix Status Screen components' hovering bleeding over into blank spaces further along the line.
+    - Closes #5332.

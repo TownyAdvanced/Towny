@@ -902,14 +902,15 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * Returns a list of names, using their Formatted (long) names, with ColourCodes translated.
+	 * Returns a list of names, with ColourCodes translated.
+	 * If the list is under 20 long, it will use the formatted names.
 	 * @param objs List of TownyObjects of which to make a list of names.
-	 * @return List of Names, formatted and coloured.
+	 * @return List of Names coloured, and potentially formatted.
 	 */
 	public static List<String> getFormattedTownyNames(List<TownyObject> objs) {
 		List<String> names = new ArrayList<>();
 		for (TownyObject obj : objs) {
-			names.add(Colors.translateColorCodes(obj.getFormattedName()) + Colors.White);
+			names.add(Colors.translateColorCodes(objs.size() < 20 ? obj.getFormattedName() : obj.getName()) + Colors.White);
 		}
 		
 		return names;
