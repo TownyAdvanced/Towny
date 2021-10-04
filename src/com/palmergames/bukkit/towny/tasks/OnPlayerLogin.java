@@ -92,7 +92,7 @@ public class OnPlayerLogin implements Runnable {
 					resident = universe.getResident(player.getUniqueId());
 					
 					if (TownySettings.isShowingRegistrationMessage())				
-						TownyMessaging.sendMessage(player, Translatable.of("msg_registration", player.getName()));
+						TownyMessaging.sendGlobalMessage(Translatable.of("msg_registration", player.getName()));
 					long registered = System.currentTimeMillis();
 					if (universe.hasHibernatedResdient(player.getUniqueId())) {
 						/*
