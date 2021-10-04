@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.typeapi.CustomTownBlockType;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.config.ConfigNodes;
@@ -312,9 +313,12 @@ public class ChunkNotification {
 	}
 
 	public String getPlotTypeNotification() {
-
+		if (toPlotType == TownBlockType.CUSTOM) {
+			CustomTownBlockType ctb = toTownBlock.getCustomTownBlockType();
+			return String.format(plotTypeNotificationFormat, ((ctb.getDisplayName() != null) ? ctb.getDisplayName() : ctb.getInternalId()));
+		}
 		if (fromPlotType != toPlotType && toPlotType != null && toPlotType != TownBlockType.RESIDENTIAL)
-			return String.format(plotTypeNotificationFormat, toPlotType.toString());
+			return String.format(plotTypeNotificationFormat, (toPlotType));
 		return null;
 	}
 }

@@ -1138,6 +1138,13 @@ public enum ConfigNodes {
 		"",
 		"# If enabled, only full releases will trigger notifications if you are running a full release.",
 		"# This is ignored if the server is currently using a pre-release version."),
+	PLUGIN_ALLOW_EXTERNAL_PLOT_TYPES(
+		"plugin.allow_external_plot_types",
+		"true",
+		"",
+		"# If enabled, other plugins will be allowed to register new plot types and handle events inside these plots.",
+		"# If you have an issue with plot types, try disabling this first."
+	),
 	FILTERS_COLOUR_CHAT(
 			"filters_colour_chat",
 			"",

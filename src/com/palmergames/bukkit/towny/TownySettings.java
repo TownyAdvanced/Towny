@@ -3174,5 +3174,9 @@ public class TownySettings {
 	public static long getSpawnProtection() {
 		return TimeTools.getTicks(getString(ConfigNodes.GTOWN_SETTINGS_RESPAWN_PROTECTION));
 	}
+	
+	public static boolean areCustomTypesAllowed() {
+		return getBoolean(ConfigNodes.PLUGIN_ALLOW_EXTERNAL_PLOT_TYPES);
+	}
 }
 

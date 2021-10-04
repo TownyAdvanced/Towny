@@ -24,16 +24,7 @@ import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException
 import com.palmergames.bukkit.towny.hooks.LuckPermsContexts;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.listeners.TownyBlockListener;
-import com.palmergames.bukkit.towny.listeners.TownyCustomListener;
-import com.palmergames.bukkit.towny.listeners.TownyEntityListener;
-import com.palmergames.bukkit.towny.listeners.TownyEntityMonitorListener;
-import com.palmergames.bukkit.towny.listeners.TownyInventoryListener;
-import com.palmergames.bukkit.towny.listeners.TownyLoginListener;
-import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
-import com.palmergames.bukkit.towny.listeners.TownyServerListener;
-import com.palmergames.bukkit.towny.listeners.TownyVehicleListener;
-import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
+import com.palmergames.bukkit.towny.listeners.*;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -108,6 +99,7 @@ public class Towny extends JavaPlugin {
 	private final TownyInventoryListener inventoryListener = new TownyInventoryListener();
 	private final WarZoneListener warzoneListener = new WarZoneListener(this);
 	private final TownyLoginListener loginListener = new TownyLoginListener();
+	private final TownyTypeListener typeListener = new TownyTypeListener();
 	private final HUDManager HUDManager = new HUDManager(this);
 
 	private TownyUniverse townyUniverse;
@@ -645,6 +637,7 @@ public class Towny extends JavaPlugin {
 		pluginManager.registerEvents(blockListener, this);
 		pluginManager.registerEvents(entityListener, this);
 		pluginManager.registerEvents(inventoryListener, this);
+		pluginManager.registerEvents(typeListener, this);
 
 	}
 

@@ -1,14 +1,54 @@
 package com.palmergames.bukkit.towny.object.typeapi;
 
-import com.palmergames.bukkit.towny.event.actions.*;
-import com.palmergames.bukkit.towny.event.damage.TownyDamageEvent;
+import com.palmergames.bukkit.towny.object.TownBlock;
 
 public abstract class TownBlockTypeHandler {
-	public abstract boolean onTownyBuild(TownyBuildEvent event);
-	public abstract boolean onTownyDestroy(TownyDestroyEvent event);
-	public abstract boolean onTownyItemUse(TownyItemuseEvent event);
-	public abstract boolean onTownySwitch(TownySwitchEvent event);
-	public abstract boolean onTownyBurn(TownyBurnEvent event);
-	public abstract boolean onTownyExplosion(TownyExplodingBlocksEvent event);
-	public abstract boolean onTownyDamage(TownyDamageEvent event);
+	/**
+	 * Method executed on TownyBuildEvent
+	 * @param townBlock Town Block affected to this event
+	 * @return true if the event should be allowed to happen or false if it should be cancelled
+	 */
+	public abstract boolean onTownyBuild(TownBlock townBlock);
+
+	/**
+	 * Method executed on TownyDestroyEvent
+	 * @param townBlock Town Block affected to this event
+	 * @return true if the event should be allowed to happen or false if it should be cancelled
+	 */
+	public abstract boolean onTownyDestroy(TownBlock townBlock);
+
+	/**
+	 * Method executed on TownyItemUseEvent
+	 * @param townBlock Town Block affected to this event
+	 * @return true if the event should be allowed to happen or false if it should be cancelled
+	 */
+	public abstract boolean onTownyItemUse(TownBlock townBlock);
+
+	/**
+	 * Method executed on TownySwitchEvent
+	 * @param townBlock Town Block affected to this event
+	 * @return true if the event should be allowed to happen or false if it should be cancelled
+	 */
+	public abstract boolean onTownySwitch(TownBlock townBlock);
+
+	/**
+	 * Method executed on TownyBurnEvent
+	 * @param townBlock Town Block affected to this event
+	 * @return true if the event should be allowed to happen or false if it should be cancelled
+	 */
+	public abstract boolean onTownyBurn(TownBlock townBlock);
+
+	/**
+	 * Method executed on TownyExplodingBlocksEvent
+	 * @param townBlock Town Block affected to this event
+	 * @return true if the event should be allowed to happen or false if it should be cancelled
+	 */
+	public abstract boolean onTownyExplosion(TownBlock townBlock);
+
+	/**
+	 * Method executed on ???
+	 * @param townBlock Town Block affected to this event
+	 * @return true if the event should be allowed to happen or false if it should be cancelled
+	 */
+	public abstract boolean onTownyDamage(TownBlock townBlock);
 }

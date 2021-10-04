@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object.typeapi;
 
 import com.palmergames.bukkit.towny.event.actions.*;
 import com.palmergames.bukkit.towny.event.damage.TownyDamageEvent;
+import com.palmergames.bukkit.towny.object.TownBlock;
 
 /**
  * Test class
@@ -9,41 +10,41 @@ import com.palmergames.bukkit.towny.event.damage.TownyDamageEvent;
  */
 public class CTBT_Test extends CustomTownBlockType {
 	public CTBT_Test() {
-		super("test_hospital", "Hospital");
+		super("towny_hospital", "Hospital");
 		setHandler(new TownBlockTypeHandler() {
 
 			@Override
-			public boolean onTownyBuild(TownyBuildEvent event) {
+			public boolean onTownyBuild(TownBlock townBlock) {
 				return false;
 			}
 
 			@Override
-			public boolean onTownyDestroy(TownyDestroyEvent event) {
+			public boolean onTownyDestroy(TownBlock townBlock) {
 				return false;
 			}
 
 			@Override
-			public boolean onTownyItemUse(TownyItemuseEvent event) {
+			public boolean onTownyItemUse(TownBlock townBlock) {
 				return false;
 			}
 
 			@Override
-			public boolean onTownySwitch(TownySwitchEvent event) {
+			public boolean onTownySwitch(TownBlock townBlock) {
 				return false;
 			}
 
 			@Override
-			public boolean onTownyBurn(TownyBurnEvent event) {
+			public boolean onTownyBurn(TownBlock townBlock) {
 				return false;
 			}
 
 			@Override
-			public boolean onTownyExplosion(TownyExplodingBlocksEvent event) {
+			public boolean onTownyExplosion(TownBlock townBlock) {
 				return false;
 			}
 
 			@Override
-			public boolean onTownyDamage(TownyDamageEvent event) {
+			public boolean onTownyDamage(TownBlock townBlock) {
 				return false;
 			}
 		});
