@@ -1538,3 +1538,7 @@ status_joined_town: 'Joined town:'
 status_joined_nation: 'Joined nation:'
 #Shown in status screen elements where a value is not known.
 status_unknown: 'unknown'
+#Feedback given for the /ta set nationzoneoverride [townname] [size] command.
+msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
+#Feedback given for the /ta set nationzoneoverride [townname] 0 command.
+msg_nationzone_override_removed: '%s has had their nationzone override removed.'

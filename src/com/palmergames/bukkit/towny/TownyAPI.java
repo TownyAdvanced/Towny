@@ -607,11 +607,13 @@ public class TownyAPI {
 		}
 
 		try {
-			int nationZoneRadius = Integer.parseInt(TownySettings.getNationLevel(TownyAPI.getInstance().getTownNationOrNull(nearestTown)).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
+			int nationZoneRadius = Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNationOrNull()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
 			
-			if (nearestTown.isCapital()) {
+			if (nearestTown.isCapital())
 				nationZoneRadius += TownySettings.getNationZonesCapitalBonusSize();
-			}
+
+			if (nearestTown.hasNationZoneOverride())
+				nationZoneRadius = nearestTown.getNationZoneOverride();
 
 			if (distance <= nationZoneRadius) {
 				NationZoneTownBlockStatusEvent event = new NationZoneTownBlockStatusEvent(nearestTown);

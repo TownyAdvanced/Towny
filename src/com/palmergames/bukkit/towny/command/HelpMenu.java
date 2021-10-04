@@ -224,6 +224,7 @@ public enum HelpMenu {
 				.add("mayor [town] " + Translation.of("town_help_2"), "")
 				.add("mayor [town] npc", "")
 				.add("capital [town] [nation]", "")
+				.add("nationzoneoverride [town name] [size]", "")
 				.add("title [resident] [title]", "")
 				.add("surname [resident] [surname]", "")
 				.add("plot [town]", "");
@@ -254,6 +255,15 @@ public enum HelpMenu {
 				.add("[town]",  Translation.of("msg_admin_set_plot_help_1"))
 				.add("[town name] {rect|circle} {radius}", Translation.of("msg_admin_set_plot_help_2"))
 				.add("[town name] {rect|circle} auto", Translation.of("msg_admin_set_plot_help_2"));
+		}
+	},
+	
+	TA_SET_NATIONZONE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin set nationzoneoverride")
+				.add("[town name] [size]", "")
+				.add("[town name] 0", "Removes the NationZone override.");
 		}
 	},
 	
