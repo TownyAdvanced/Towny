@@ -68,8 +68,8 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1990,8 +1990,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		try {
-			String rootFolder = TownyUniverse.getInstance().getRootFolder();
-			TownySettings.loadConfig(rootFolder + File.separator + "settings" + File.separator + "config.yml", plugin.getVersion());
+			TownySettings.loadConfig(Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("config.yml"), plugin.getVersion());
 			TownySettings.loadTownLevelConfig();   // TownLevel and NationLevels are not loaded in the config,
 			TownySettings.loadNationLevelConfig(); // but later so the config-migrator can do it's work on them if needed.
 			Translation.loadTranslationRegistry();

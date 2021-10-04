@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
+import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.FileMgmt;
@@ -23,9 +24,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,6 +38,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -46,7 +52,7 @@ public final class Translation {
 	private static final Set<String> langFiles = createValidLang();
 	private static final Map<String, Map<String, String>> translations = new HashMap<>();
 	private static Locale defaultLocale;
-	private static final String langFolder = TownyUniverse.getInstance().getRootFolder() + File.separator + "settings" + File.separator + "lang";
+	private static final Path langFolder = Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("lang");
 
 	public static void loadTranslationRegistry() {
 		translations.clear();
@@ -54,17 +60,41 @@ public final class Translation {
 
 		// Load global override file
 		Map<String, Object> globalOverrides = new HashMap<>();
-		File globalFile = FileMgmt.unpackResourceFile(langFolder + File.separator + "override" + File.separator + "global.yml", "global.yml", "global.yml");
+		Path globalYMLPath = langFolder.resolve("global.yml");
 		
-		try (InputStream is = new FileInputStream(globalFile)) {
+		if (!FileMgmt.checkOrCreateFile(globalYMLPath.toString())) {
+			throw new TownyInitException("Failed to touch '" + globalYMLPath + "'.", TownyInitException.TownyError.LOCALIZATION);
+		}
+		try {
+			InputStream resource = Towny.class.getResourceAsStream("/global.yml");
+			if (resource == null) {
+				throw new TownyInitException("Could not find global.yml in the JAR", TownyInitException.TownyError.LOCALIZATION);
+			}
+			Files.copy(resource, globalYMLPath);
+		} catch (FileAlreadyExistsException ignored) {
+			// Expected behaviour
+		} catch (IOException e) {
+			throw new TownyInitException("Failed to copy global.yml from the JAR to '" + globalYMLPath + "'", TownyInitException.TownyError.LOCALIZATION, e);
+		}
+		
+		try (InputStream is = Files.newInputStream(globalYMLPath)) {
 			globalOverrides = new Yaml(new SafeConstructor()).load(is);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
+		// There is no need to touch langPath, Files.copy takes care of that.
+		try {
+			Files.createDirectories(langFolder.resolve("reference"));
+		} catch (IOException e) {
+			throw new TownyInitException("Failed to create language reference folder.", TownyInitException.TownyError.LOCALIZATION, e);
+		}
 		// Load bundled language files
 		for (String lang : langFiles) {
 			try (InputStream is = Translation.class.getResourceAsStream("/lang/" + lang + ".yml")) {
+				if (is == null) {
+					throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR", TownyInitException.TownyError.LOCALIZATION);
+				}
 				Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
 				
 				saveReferenceFile(values.get("version"), lang);
@@ -76,7 +106,7 @@ public final class Translation {
 					translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
 			} catch (Exception e) {
 				// An IO exception occured, or the file had invalid yaml
-				e.printStackTrace();
+				Towny.getPlugin().getLogger().log(Level.WARNING, "Failed to load/save '" + lang + ".yml'.", e);
 			}
 		}
 
@@ -128,17 +158,38 @@ public final class Translation {
 	private static void saveReferenceFile(@Nullable Object currentVersion, String lang) {
 		if (currentVersion == null)
 			return;
+
+		// Resolves langfolder/reference/whatever_language.yml
+		Path langPath = langFolder.resolve("reference").resolve(lang + ".yml");
+		// Files.copy takes care of the creation of lang.yml AS LONG AS the parent directory exists
+		// Which we take care of right before the languages are looped through.
 		
-		String res = "lang/" + lang + ".yml";
-		File file = FileMgmt.unpackResourceFile(langFolder + File.separator + "reference" + File.separator + lang + ".yml", res, res);
-		
-		try (InputStream is = new FileInputStream(file)) {
-			Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
-			
-			if (values == null || (double) currentVersion != (double) values.get("version"))
-				FileMgmt.stringToFile(FileMgmt.convertStreamToString("/lang/" + lang + ".yml"), file);
+		try {
+			// Get the resource
+			InputStream resource = Towny.class.getResourceAsStream("/lang/" + lang + ".yml");
+			if (resource == null) {
+				throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR.", TownyInitException.TownyError.LOCALIZATION);
+			}
+
+			try {
+				// Copy resource to location
+				// If this fails see the outer catches
+				// This will throw FileAlreadyExists only if the file already exists.
+				Files.copy(resource, langPath);
+			} catch (FileAlreadyExistsException e) {
+				// Ensure that the language file is updated.
+				try (InputStream is = Files.newInputStream(langPath)) {
+					Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
+
+					if (values == null || (double) currentVersion != (double) values.get("version")) {
+						Files.copy(resource, langPath, StandardCopyOption.REPLACE_EXISTING);
+					}
+				} catch (IOException e2) {
+					throw new TownyInitException("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath + " during a langauge file update.'", TownyInitException.TownyError.LOCALIZATION, e2);
+				}
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new TownyInitException("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath + "'", TownyInitException.TownyError.LOCALIZATION, e);
 		}
 	}
 	

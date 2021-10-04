@@ -78,6 +78,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -168,7 +170,7 @@ public class Towny extends JavaPlugin {
 			addMetricsCharts();
 		} catch (TownyInitException tie) {
 			addError(tie.getError());
-			getLogger().log(Level.SEVERE, tie.getMessage(), tie.getStackTrace());
+			getLogger().log(Level.SEVERE, tie.getMessage(), tie);
 		}
 		
 		// NOTE: Runs regardless if Towny errors out!
@@ -261,9 +263,7 @@ public class Towny extends JavaPlugin {
 	}
 
 	private void loadConfig(boolean reload) {
-		// TODO: Rewrite CommentedConfiguration to take java.nio.Path instead of File.
-		// There is probably a lot of performance improvements possible for the CommentedConfiguration - Articdive.
-		TownySettings.loadConfig(getDataFolder().toPath().resolve("settings").resolve("config.yml").toString(), getVersion());
+		TownySettings.loadConfig(getDataFolder().toPath().resolve("settings").resolve("config.yml"), getVersion());
 		if (reload) {
 			// If Towny is in Safe Mode (for the main config) turn off Safe Mode.
 			if (isError(TownyInitException.TownyError.MAIN_CONFIG)) {
@@ -286,7 +286,7 @@ public class Towny extends JavaPlugin {
 		if (!checkForLegacyDatabaseConfig()) {
 			throw new TownyInitException("Unable to migrate old database settings to Towny\\data\\settings\\database.yml", TownyInitException.TownyError.DATABASE_CONFIG);
 		}
-		DatabaseConfig.loadDatabaseConfig(getDataFolder().toPath().resolve("settings").resolve("database.yml").toString());
+		DatabaseConfig.loadDatabaseConfig(getDataFolder().toPath().resolve("settings").resolve("database.yml"));
 		if (reload) {
 			// If Towny is in Safe Mode (because of localization) turn off Safe Mode.
 			if (isError(TownyInitException.TownyError.DATABASE_CONFIG)) {
@@ -296,7 +296,7 @@ public class Towny extends JavaPlugin {
 	}
 	
 	public void loadPermissions(boolean reload) {
-		TownyPerms.loadPerms(getDataFolder().toPath().resolve("settings").toString(), "townyperms.yml");
+		TownyPerms.loadPerms(getDataFolder().toPath().resolve("settings").resolve("townyperms.yml"));
 		// This will only run if permissions is fine.
 		if (reload) {
 			// If Towny is in Safe Mode (for Permissions) turn off Safe Mode.
@@ -333,12 +333,12 @@ public class Towny extends JavaPlugin {
 	 * @since 0.97.0.24
 	 */
 	private boolean checkForLegacyDatabaseConfig() {
-		File file = getDataFolder().toPath().resolve("settings").resolve("config.yml").toFile();
+		Path configYMLPath = getDataFolder().toPath().resolve("settings").resolve("config.yml");
 		// Bail if the config doesn't exist at all yet.
-		if (!file.exists())
+		if (!Files.exists(configYMLPath))
 			return true;
 
-		CommentedConfiguration config = new CommentedConfiguration(file);
+		CommentedConfiguration config = new CommentedConfiguration(configYMLPath);
 		// return false if the config cannot be loaded.
 		if (!config.load())
 			return false;
@@ -362,9 +362,9 @@ public class Towny extends JavaPlugin {
 			/*
 			 * Create database.yml if it doesn't exist yet, with new settings.
 			 */
-			String databaseFilePath = getDataFolder().toPath().resolve("settings").resolve("database.yml").toString();
-			if (FileMgmt.checkOrCreateFile(databaseFilePath)) {
-				CommentedConfiguration databaseConfig = new CommentedConfiguration(new File(databaseFilePath));
+			Path databaseYMLPath = getDataFolder().toPath().resolve("settings").resolve("database.yml");
+			if (FileMgmt.checkOrCreateFile(databaseYMLPath.toString())) {
+				CommentedConfiguration databaseConfig = new CommentedConfiguration(databaseYMLPath);
 				databaseConfig.set("database.database_load", dbload);
 				databaseConfig.set("database.database_save", dbsave);
 				databaseConfig.set("database.sql.hostname", hostname);

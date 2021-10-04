@@ -6,7 +6,6 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.compress.utils.IOUtils;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -18,9 +17,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
@@ -158,147 +154,6 @@ public final class FileMgmt {
 					Towny.getPlugin().getLogger().warning("Error: Could not access: " + sourceLocation);
 				}
 				out.close();
-			}
-		} finally {
-			writeLock.unlock();
-		}
-	}
-
-	public static File unpackResourceFile(String filePath, String resource, String defaultRes) {
-		try {
-			writeLock.lock();
-			// open a handle to yml file
-			File file = new File(filePath);
-
-			if (file.exists())
-				return file;
-
-			String resString;
-
-			/*
-			 * create the file as it doesn't exist,
-			 * or it's the default file
-			 * so refresh just in case.
-			 */
-			checkOrCreateFile(filePath);
-
-			// Populate a new file
-			try {
-				resString = convertStreamToString("/" + resource);
-				FileMgmt.stringToFile(resString, filePath);
-
-			} catch (IOException e) {
-				// No resource file found
-				try {
-					resString = convertStreamToString("/" + defaultRes);
-					FileMgmt.stringToFile(resString, filePath);
-				} catch (IOException e1) {
-					// Default resource not found
-					e1.printStackTrace();
-				}
-			}
-
-			return file;
-			
-		} finally {
-			writeLock.unlock();
-		}
-	}
-
-	// pass a resource name and it will return it's contents as a string
-	public static String convertStreamToString(String name) throws IOException {
-		
-		try {
-			readLock.lock();
-			if (name != null) {
-				Writer writer = new StringWriter();
-				InputStream is = FileMgmt.class.getResourceAsStream(name);
-
-				char[] buffer = new char[1024];
-				try {
-					Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-					int n;
-					while ((n = reader.read(buffer)) != -1) {
-						writer.write(buffer, 0, n);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					try {
-						is.close();
-					} catch (NullPointerException e) {
-						//Failed to open a stream
-						throw new IOException();
-					}
-				}
-				return writer.toString();
-			} else {
-				return "";
-			}
-		} finally {
-			readLock.unlock();
-		}
-	}
-
-	/**
-	 * Pass a file and it will return it's contents as a string.
-	 *
-	 * @param file File to read.
-	 *
-	 * @return Contents of file. String will be empty in case of any errors.
-	 */
-	public static String convertFileToString(File file) {
-		try {
-			readLock.lock();
-			if (file != null && file.exists() && file.canRead() && !file.isDirectory()) {
-				Writer writer = new StringWriter();
-
-				char[] buffer = new char[1024];
-				try (InputStream is = new FileInputStream(file)) {
-					Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-					int n;
-					while ((n = reader.read(buffer)) != -1) {
-						writer.write(buffer, 0, n);
-					}
-					reader.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				return writer.toString();
-			} else {
-				return "";
-			}
-		} finally {
-			readLock.unlock();
-		}
-	}
-
-	//writes a string to a file making all newline codes platform specific
-	public static void stringToFile(String source, String FileName) {
-
-		if (source != null) {
-			// Save the string to file (*.yml)
-			stringToFile(source, new File(FileName));
-		}
-
-	}
-
-	/**
-	 * Writes the contents of a string to a file.
-	 *
-	 * @param source String to write.
-	 * @param file   File to write to.
-	 */
-	public static void stringToFile(String source, File file) {
-		try {
-			writeLock.lock();
-			try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-				 BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
-
-				bufferedWriter.write(source);
-
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		} finally {
 			writeLock.unlock();
