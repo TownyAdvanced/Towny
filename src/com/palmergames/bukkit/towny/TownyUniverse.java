@@ -5,10 +5,7 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
-import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
@@ -1188,8 +1185,17 @@ public class TownyUniverse {
 	public Map<String,String> getReplacementNameMap() {
 		return replacementNamesMap;
 	}
-	
-	public void registerCustomTownBlockType(CustomTownBlockType ctb) {
+
+	/**
+	 * Register a new custom town block type
+	 * @param ctb Town block type
+	 * @throws TownyException Thrown if the feature is disabled
+	 */
+	public void registerCustomTownBlockType(CustomTownBlockType ctb) throws TownyException {
+		// Feature is not enabled in config
+		if (TownySettings.areCustomTypesAllowed())
+			throw new TownyException("Custom plot types are disabled.");
+		
 		customTownBlockTypeMap.put(ctb.getInternalId(), ctb);
 		TownyMessaging.sendMsg("An external plugin registered the custom plot type with ID " + ctb.getInternalId());
 	}

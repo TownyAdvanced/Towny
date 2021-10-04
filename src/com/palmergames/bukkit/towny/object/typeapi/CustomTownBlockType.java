@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object.typeapi;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 
 public abstract class CustomTownBlockType {
 	TownBlockTypeHandler handler;
@@ -12,7 +13,7 @@ public abstract class CustomTownBlockType {
 	 * @param internalId Used for internally saving the town block type. You should ideally name it after your plugin.
 	 * @param displayName Name displayed on the front-end (seen by players)
 	 */
-	public CustomTownBlockType(String internalId, String displayName) {
+	public CustomTownBlockType(String internalId, String displayName) throws TownyException {
 		this.internalId = internalId;
 		this.displayName = displayName;
 		TownyUniverse.getInstance().registerCustomTownBlockType(this);
