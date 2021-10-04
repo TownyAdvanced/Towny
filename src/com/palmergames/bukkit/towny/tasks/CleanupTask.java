@@ -28,7 +28,7 @@ public class CleanupTask implements Runnable {
         long deleteAfter = TownySettings.getBackupLifeLength();
         if (deleteAfter >= 0) {
         	Towny.getPlugin().getLogger().info("Cleaning up old backups...");
-        	FileMgmt.deleteOldBackups(new File(dataFolderPath + "backup"), deleteAfter);
+        	FileMgmt.deleteOldBackups(new File(TownyUniverse.getInstance().getRootFolder() + File.separator + "backup"), deleteAfter);
         	Towny.getPlugin().getLogger().info("Successfully cleaned backups.");
         }
 	}
