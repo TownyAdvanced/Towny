@@ -6772,7 +6772,7 @@ v0.92.0.11:
   - Fix PlayerCacheUtil preventing plot permissions from working properly. 
   - Fix missing command feedback on many /tw toggle commands.
 0.97.2.4:
-  - Fix Global messages stripping their colour.
+  - Fix Global messages stripping their colour. 
   - Remove old Outpost checking code and references to Articdive which were not spelled correct, courtesy of Articdive with PR #5324.
   - Add a size limit for the town_block_ratio option, courtesy of Warriorrrr with PR #5326.
   - New Config Option: town.town_block_limit
@@ -6797,3 +6797,11 @@ v0.92.0.11:
   - Bump language files to 0.126.
   - Add nation join date to a town's status screen in the nation hover section.
   - Fix welcome message only being seen by the newly joined player.
+  - Add  ability to override a town's NationZone.
+    - Closes #4915.
+  - New Command: /ta set nationzoneoverride [town] [size]
+    - Sets a town's nationzone override.
+  - New Permission Node: towny.command.townyadmin.set.nationzoneoverride
+    - Child node of towny.command.townyadmin.set.*
+  - Fix backup cleaning not working, courtesy of Warriorrrr with PR #5337.
+  - Use Java NIO instead of File, courtesy of Articdive with PR #5316.
