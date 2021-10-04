@@ -71,6 +71,7 @@ public class Town extends Government implements TownBlockOwner {
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private boolean isConquered = false;
 	private int conqueredDays;
+	private int nationZoneOverride = 0;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined = false;
@@ -1374,6 +1375,18 @@ public class Town extends Government implements TownBlockOwner {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
+	}
+
+	public int getNationZoneOverride() {
+		return nationZoneOverride;
+	}
+	
+	public void setNationZoneOverride(int size) {
+		this.nationZoneOverride = size;
+	}
+	
+	public boolean hasNationZoneOverride() {
+		return nationZoneOverride > 0;
 	}
 	
 	/**

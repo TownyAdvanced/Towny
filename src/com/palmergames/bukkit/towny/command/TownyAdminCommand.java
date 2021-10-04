@@ -200,6 +200,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"capital",
 		"title",
 		"surname",
+		"nationzoneoverride",
 		"plot"
 	);
 	
@@ -264,6 +265,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 									return filterByStartOrGetTownyStartingWith(Collections.singletonList("npc"), args[3], "+r");
 							}
 						case "capital":
+						case "nationzoneoverride":
 						case "plot":
 							if (args.length == 3)
 								return getTownyStartingWith(args[2], "t");
@@ -1872,7 +1874,36 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMessage(sender, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
 				TownyMessaging.sendMessage(resident, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
 			}
+		} else if (split[0].equalsIgnoreCase("nationzoneoverride")) {
+			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_NATIONZONE.getNode(split[0].toLowerCase())))
+				throw new TownyException(Translatable.of("msg_err_command_disable"));
+			
+			if (split.length < 2) {
+				HelpMenu.TA_SET_NATIONZONE.send(sender);
+				return;
+			}
+			
+			Town town = townyUniverse.getTown(split[1]);
+			if (town == null)
+				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[1]));
 
+			int size;
+			try {
+				size = Integer.parseInt(split[2]);
+			} catch (NumberFormatException e) {
+				throw new TownyException(Translatable.of("msg_error_must_be_int"));
+			}
+			
+			if (size < 0)
+				throw new TownyException(Translatable.of("msg_err_negative"));
+			
+			town.setNationZoneOverride(size);
+			town.save();
+			if (size == 0)
+				TownyMessaging.sendMessage(sender, Translatable.of("msg_nationzone_override_removed", town.getName()));
+			else 
+				TownyMessaging.sendMessage(sender, Translatable.of("msg_nationzone_override_set_to", town.getName(), size));
+			
 		} else if (split[0].equalsIgnoreCase("plot")) {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_PLOT.getNode(split[0].toLowerCase())))
 				throw new TownyException(Translatable.of("msg_err_command_disable"));
