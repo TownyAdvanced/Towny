@@ -1191,7 +1191,7 @@ public class TownyUniverse {
 	
 	public void registerCustomTownBlockType(CustomTownBlockType ctb) {
 		customTownBlockTypeMap.put(ctb.getInternalId(), ctb);
-		TownyMessaging.sendDebugMsg("Registered CustomTownBlockType ID " + ctb.getInternalId());
+		TownyMessaging.sendMsg("An external plugin registered the custom plot type with ID " + ctb.getInternalId());
 	}
 	
 	public boolean hasCustomTownBlockType(String internalId) {
