@@ -504,8 +504,9 @@ public final class FileMgmt {
 	 * 
 	 * @param backupsDir - {@link File} path to backupsDir
 	 * @param deleteAfter - Maximum age of files, in milliseconds
+	 * @return Whether old backups were successfully deleted.   
 	 */
-	public static void deleteOldBackups(File backupsDir, long deleteAfter) {
+	public static boolean deleteOldBackups(File backupsDir, long deleteAfter) {
 		try {
 			writeLock.lock();
 
@@ -536,11 +537,14 @@ public final class FileMgmt {
 						}
 					}
 				}
-			}
+			} else
+				return false;
 
 			if (deleted.size() > 0) {
 				Towny.getPlugin().getLogger().info(String.format("Deleting %d Old Backups (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
 			}
+
+			return true;
 		} finally {
 			writeLock.unlock();
 		}
