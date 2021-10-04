@@ -6792,3 +6792,6 @@ v0.92.0.11:
   - Add protection for glow berries being harvest off cave vines.
     - Treated as a destroy test.
   - Prevent outlaws from being able to join towns, courtesy of Warriorrrr with PR #5329.
+  - Add town join date to a resident's status screen in the town hover section.
+    - Closes #5282.
+  - Bump language files to 0.126.

@@ -164,6 +164,8 @@ public class TownyFormatter {
 			screen.addComponentOf("town", townLine,
 				HoverEvent.showText(Component.text(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingTown(), town.getFormattedName())))
 					.append(Component.newline())
+					.append(Component.text(getResidentJoinedTownDate(resident, translator)))
+					.append(Component.newline())
 					.append(Component.text(colourKeyValue(translator.of("rank_list_mayor"), town.getMayor().getFormattedName())))
 					.append(Component.newline())
 					.append(Component.text(colourKeyValue(translator.of("res_list"), StringMgmt.join(residents, ", "))))
@@ -636,6 +638,10 @@ public class TownyFormatter {
 	 */
 	private static String getResidentLastOnline(Resident resident, Translator translator) {
 		return (sameYear(resident) ? colourKeyValue(translator.of("status_lastonline"), lastOnlineFormat.format(resident.getLastOnline())) : colourKeyValue(translator.of("status_lastonline"), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
+	}
+	
+	private static String getResidentJoinedTownDate(Resident resident, Translator translator) {
+		return colourKeyValue(translator.of("status_joined_town"), resident.getJoinedTownAt() > 0 ? lastOnlineFormatIncludeYear.format(resident.getJoinedTownAt()) : "unknown");
 	}
 	
 	private static boolean sameYear(Resident resident) {
