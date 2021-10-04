@@ -358,6 +358,8 @@ public class TownyFormatter {
 				screen.addComponentOf("nation", colourKeyValue(translator.of("status_town_nation"), town.getNationOrNull().getName() + formatPopulationBrackets(town.getNationOrNull().getTowns().size())), 
 						HoverEvent.showText(Component.text(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), town.getNationOrNull().getFormattedName())))
 								.append(Component.newline())
+								.append(Component.text(getTownJoinedNationDate(town, translator)))
+								.append(Component.newline())
 								.append(Component.text(colourKeyValue(translator.of("status_nation_king"), town.getNationOrNull().getCapital().getMayor().getFormattedName())))
 								.append(Component.newline())
 								.append(Component.text(colourKeyValue(translator.of("town_plu"), StringMgmt.join(towns, ", "))))
@@ -641,7 +643,11 @@ public class TownyFormatter {
 	}
 	
 	private static String getResidentJoinedTownDate(Resident resident, Translator translator) {
-		return colourKeyValue(translator.of("status_joined_town"), resident.getJoinedTownAt() > 0 ? lastOnlineFormatIncludeYear.format(resident.getJoinedTownAt()) : "unknown");
+		return colourKeyValue(translator.of("status_joined_town"), resident.getJoinedTownAt() > 0 ? lastOnlineFormatIncludeYear.format(resident.getJoinedTownAt()) : translator.of("status_unknown"));
+	}
+	
+	private static String getTownJoinedNationDate(Town town, Translator translator) {
+		return colourKeyValue(translator.of("status_joined_nation"), town.getJoinedNationAt() > 0 ? lastOnlineFormatIncludeYear.format(town.getJoinedNationAt()) : translator.of("status_unknown"));
 	}
 	
 	private static boolean sameYear(Resident resident) {

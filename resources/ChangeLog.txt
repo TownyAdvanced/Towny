@@ -6795,3 +6795,4 @@ v0.92.0.11:
   - Add town join date to a resident's status screen in the town hover section.
     - Closes #5282.
   - Bump language files to 0.126.
+  - Add nation join date to a town's status screen in the nation hover section.

@@ -1534,3 +1534,7 @@ msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'
 status_capital: 'Capital:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
 status_joined_town: 'Joined town:'
+#Used in the town screen's nation hover, to denote when a town joined a nation.
+status_joined_nation: 'Joined nation:'
+#Shown in status screen elements where a value is not known.
+status_unknown: 'unknown'
