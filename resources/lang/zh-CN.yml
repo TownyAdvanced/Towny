@@ -609,7 +609,7 @@ status_pvp: 'PVP：'
 explosions: '爆炸：'
 firespread: '火焰蔓延：'
 mobspawns: '生物生成：'
-owner_of_x_plots: '%s个领地的拥有者。'
+owner_of_x_plots: '%s片土地的拥有者。'
 status_bank: '银行：'
 status_town: '城镇：'
 status_no_town: '无'
@@ -1333,7 +1333,7 @@ status_format_hover_key: '&a' #Colour applied to a status screen element which i
 status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a hover-able status screen element.
 status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
-status_home_element: ' &7[家区块：%s]'
+status_home_element: ' &7[中心区块：%s]'
 status_registered: '注册于：'
 status_lastonline: '最后在线时间：'
 status_fractions: '%s/%s'
@@ -1366,4 +1366,10 @@ msg_err_player_cannot_be_harmed: '%s处于重生保护中，无法伤害。'
 msg_you_have_lost_your_invulnerability: '你失去了你的重生保护。'
 #Added in 0.126
 #Used in the nation screen:
-status_capital: 'Capital:'
+status_capital: '首都：'
+#Used in the resident screen's town hover, to denote when a player joined a town.
+status_joined_town: 'Joined town:'
+#Used in the town screen's nation hover, to denote when a town joined a nation.
+status_joined_nation: 'Joined nation:'
+#Shown in status screen elements where a value is not known.
+status_unknown: 'unknown'
