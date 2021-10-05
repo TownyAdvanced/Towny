@@ -585,45 +585,31 @@ public class TownyAPI {
      */
     public TownBlockStatus hasNationZone(WorldCoord worldCoord) {
     	
-		int distance;
 		final TownBlock nearestTownblock = TownyAPI.getInstance().getTownyWorld(worldCoord.getWorldName()).getClosestTownblockWithNationFromCoord(worldCoord);
 		
-		if (nearestTownblock == null) {
+		if (nearestTownblock == null)
 			return TownBlockStatus.UNCLAIMED_ZONE;
-		}
 		
 		Town nearestTown = nearestTownblock.getTownOrNull();
 		
 		// Safety validation, both these cases should never occur.
-		if (nearestTown == null || !nearestTown.hasNation()) {
+		if (nearestTown == null || !nearestTown.hasNation())
 			return TownBlockStatus.UNCLAIMED_ZONE;
-		}
-		
-		distance = (int) MathUtil.distance(worldCoord.getX(), nearestTownblock.getX(), worldCoord.getZ(), nearestTownblock.getZ());
 
 		// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
-		if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly()) {
+		if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly())
 			return TownBlockStatus.UNCLAIMED_ZONE;
-		}
+		
+		int distance = (int) MathUtil.distance(worldCoord.getX(), nearestTownblock.getX(), worldCoord.getZ(), nearestTownblock.getZ());
+		int nationZoneRadius = nearestTown.getNationZoneSize();
 
-		try {
-			int nationZoneRadius = Integer.parseInt(TownySettings.getNationLevel(nearestTown.getNationOrNull()).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
+		if (distance <= nationZoneRadius) {
+			NationZoneTownBlockStatusEvent event = new NationZoneTownBlockStatusEvent(nearestTown);
+			Bukkit.getPluginManager().callEvent(event);
+			if (event.isCancelled())
+				return TownBlockStatus.UNCLAIMED_ZONE;
 			
-			if (nearestTown.isCapital())
-				nationZoneRadius += TownySettings.getNationZonesCapitalBonusSize();
-
-			if (nearestTown.hasNationZoneOverride())
-				nationZoneRadius = nearestTown.getNationZoneOverride();
-
-			if (distance <= nationZoneRadius) {
-				NationZoneTownBlockStatusEvent event = new NationZoneTownBlockStatusEvent(nearestTown);
-				Bukkit.getPluginManager().callEvent(event);
-				if (event.isCancelled())
-					return TownBlockStatus.UNCLAIMED_ZONE;
-				
-				return TownBlockStatus.NATION_ZONE;
-			}
-		} catch (NumberFormatException ignored) {
+			return TownBlockStatus.NATION_ZONE;
 		}
 		
 		return TownBlockStatus.UNCLAIMED_ZONE;

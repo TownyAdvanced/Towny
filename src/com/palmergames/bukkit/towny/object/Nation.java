@@ -571,6 +571,13 @@ public class Nation extends Government {
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
 	
+	@Override
+	public int getNationZoneSize() {
+		if (!TownySettings.getNationZonesEnabled())
+			return 0;
+		return Integer.parseInt(TownySettings.getNationLevel(this).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
+	}
+	
 	/**
 	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.
 	 *

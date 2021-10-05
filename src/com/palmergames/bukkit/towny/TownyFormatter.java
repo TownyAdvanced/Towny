@@ -355,16 +355,21 @@ public class TownyFormatter {
 				if (towns.length > 10)
 					towns = shortenOverlengthArray(towns, 11, translator);
 
+				TextComponent hover = Component.text(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), town.getNationOrNull().getFormattedName())))
+						.append(Component.newline())
+						.append(Component.text(getTownJoinedNationDate(town, translator)))
+						.append(Component.newline())
+						.append(Component.text(colourKeyValue(translator.of("status_nation_king"), town.getNationOrNull().getCapital().getMayor().getFormattedName())))
+						.append(Component.newline())
+						.append(Component.text(colourKeyValue(translator.of("town_plu"), StringMgmt.join(towns, ", "))));
+				int nationZoneSize = town.getNationZoneSize();
+				if (nationZoneSize > 0)
+					hover = hover.append(Component.newline().append(Component.text(colourKeyValue(translator.of("status_nation_zone_size"), String.valueOf(nationZoneSize)))));
+				hover = hover.append(Component.newline())
+						.append(Component.text(translator.of("status_hover_click_for_more")));
+				
 				screen.addComponentOf("nation", colourKeyValue(translator.of("status_town_nation"), town.getNationOrNull().getName() + formatPopulationBrackets(town.getNationOrNull().getTowns().size())), 
-						HoverEvent.showText(Component.text(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), town.getNationOrNull().getFormattedName())))
-								.append(Component.newline())
-								.append(Component.text(getTownJoinedNationDate(town, translator)))
-								.append(Component.newline())
-								.append(Component.text(colourKeyValue(translator.of("status_nation_king"), town.getNationOrNull().getCapital().getMayor().getFormattedName())))
-								.append(Component.newline())
-								.append(Component.text(colourKeyValue(translator.of("town_plu"), StringMgmt.join(towns, ", "))))
-								.append(Component.newline())
-								.append(Component.text(translator.of("status_hover_click_for_more")))),
+						hover.asHoverEvent(),
 						ClickEvent.runCommand("/towny:nation " + town.getNationOrNull().getName())
 						);
 			}
@@ -463,7 +468,24 @@ public class TownyFormatter {
 					);
 
 			// Capital: Big City
-			screen.addComponentOf("capital", colourKeyValue(translator.of("status_capital"), nation.getCapital().getFormattedName()));
+			Town capital = nation.getCapital();
+			String[] residents = getFormattedNames(capital.getResidents().toArray(new Resident[0]));
+			if (residents.length > 34)
+				residents = shortenOverlengthArray(residents, 35, translator);
+			screen.addComponentOf("capital", colourKeyValue(translator.of("status_capital"), nation.getCapital().getFormattedName()),
+				HoverEvent.showText(Component.text(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingTown(), capital.getFormattedName())))
+					.append(Component.newline())
+					.append(Component.text(colourKeyValue(translator.of("rank_list_mayor"), king.getFormattedName())))
+					.append(Component.newline())
+					.append(Component.text(colourKeyValue(translator.of("res_list"), StringMgmt.join(residents, ", "))))
+					.append(Component.newline())
+					.append(Component.text(translator.of("status_hover_click_for_more")))),
+				ClickEvent.runCommand("/towny:town " + capital.getName())
+			);
+			
+			// Nation Zone Size: 3
+			if (TownySettings.getNationZonesEnabled())
+				screen.addComponentOf("nationzone", colourKeyValue(translator.of("status_nation_zone_size"), String.valueOf(nation.getNationZoneSize())));
 		}
 		
 		screen.addComponentOf("newline", Component.newline());

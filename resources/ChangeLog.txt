@@ -6807,3 +6807,6 @@ v0.92.0.11:
   - Use Java NIO instead of File, courtesy of Articdive with PR #5316.
 0.97.2.6:
   - Fix global messages that lost their Towny prefix.
+  - Bump language file to 0.127.
+  - Add nation zone size to nation and town status screens.
+  - Add hover to the capital on the nation status screen.

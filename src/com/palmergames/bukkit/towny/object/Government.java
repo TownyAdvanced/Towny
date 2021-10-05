@@ -324,6 +324,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 
 	public abstract Collection<TownBlock> getTownBlocks();
 	
+	public abstract int getNationZoneSize();
+	
 	/**
 	 * Opens a book gui of bank transactions for the player to browse.
 	 * 

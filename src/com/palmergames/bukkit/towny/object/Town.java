@@ -1470,4 +1470,19 @@ public class Town extends Government implements TownBlockOwner {
 	public void removeTrustedResident(Resident resident) {
 		trustedResidents.remove(resident);
 	}
+
+	@Override
+	public int getNationZoneSize() {
+		if (!TownySettings.getNationZonesEnabled() || !hasNation())
+			return 0;
+		
+		if (!isCapital() && TownySettings.getNationZonesCapitalsOnly())
+			return 0;
+		
+		if (hasNationZoneOverride())
+			return getNationZoneOverride();
+		
+		return nation.getNationZoneSize() + (isCapital() ? TownySettings.getNationZonesCapitalBonusSize() : 0);
+		
+	}
 }
