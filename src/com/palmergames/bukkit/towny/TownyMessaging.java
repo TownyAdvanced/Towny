@@ -238,7 +238,7 @@ public class TownyMessaging {
 		} else if (sender instanceof Resident resident) {
 			Player p = TownyAPI.getInstance().getPlayer(resident);
 			if (p != null)
-				p.sendMessage(Colors.strip(line));
+				p.sendMessage(line);
 		}
 	}
 
@@ -869,7 +869,7 @@ public class TownyMessaging {
 		LOGGER.info("[Global Message] " + translatable.stripColors(true).translate());
 		for (Player player : Bukkit.getOnlinePlayers())
 			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
-				sendMessage(player, translatable);
+				sendMessage(player, Translatable.of("default_towny_prefix").forLocale(player) + translatable);
 	}
 	
 	public static void sendMessage(Object sender, Translatable message) {

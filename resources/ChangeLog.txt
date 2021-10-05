@@ -6805,3 +6805,5 @@ v0.92.0.11:
     - Child node of towny.command.townyadmin.set.*
   - Fix backup cleaning not working, courtesy of Warriorrrr with PR #5337.
   - Use Java NIO instead of File, courtesy of Articdive with PR #5316.
+0.97.2.6:
+  - Fix global messages that lost their Towny prefix.
