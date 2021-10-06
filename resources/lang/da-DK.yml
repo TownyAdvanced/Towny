@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.126
+version: 0.127
 language: dansk
 author: LifeOnEarth
 website: 'http://townyadvanced.github.io/'
@@ -1377,3 +1377,6 @@ status_unknown: 'unknown'
 msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+#Added in 0.127
+#Used in status screen:
+status_nation_zone_size: 'Nation Zone Size:'
