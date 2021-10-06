@@ -363,8 +363,8 @@ public class Nation extends Government {
 			List<Town> toRemove = gatherOutOfRangeTowns(new ArrayList<>(getTowns()), capital);
 			if (!toRemove.isEmpty())
 				toRemove.stream().forEach(town -> {
-					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", this.getName()));
-					TownyMessaging.sendPrefixedNationMessage(this, Translation.of("msg_nation_town_left", town.getName()));
+					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_left_nation", this.getName()));
+					TownyMessaging.sendPrefixedNationMessage(this, Translatable.of("msg_nation_town_left", town.getName()));
 					town.removeNation();
 					town.save();
 				});

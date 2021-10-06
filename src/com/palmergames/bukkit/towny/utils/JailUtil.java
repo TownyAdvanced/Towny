@@ -126,7 +126,7 @@ public class JailUtil {
 		case BAIL:
 			teleportAwayFromJail(resident);
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_paid_bail"));
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), resident.getName() + Translatable.of("msg_has_paid_bail"));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_has_paid_bail", resident.getName()));
 
 			break;
 		case SENTENCE_SERVED:

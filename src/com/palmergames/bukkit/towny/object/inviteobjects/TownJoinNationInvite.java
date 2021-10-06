@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class TownJoinNationInvite extends AbstractInvite<Nation, Town> {
 		if(!town.hasNation()){
 			NationCommand.nationAdd(nation, towns);
 		} else {
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_err_already_nation", town.getName()));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_err_already_nation", town.getName()));
 		}
 		// Message handled in nationAdd()
 		town.deleteReceivedInvite(this);
@@ -40,9 +40,9 @@ public class TownJoinNationInvite extends AbstractInvite<Nation, Town> {
 		town.deleteReceivedInvite(this);
 		nation.deleteSentInvite(this);
 		if (!fromSender) {
-			TownyMessaging.sendPrefixedNationMessage(nation, Translation.of("msg_deny_invite", town.getName()));
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_deny_invite", town.getName()));
 		} else {
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("nation_revoke_invite", nation.getName()));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("nation_revoke_invite", nation.getName()));
 		}
 	}
 }

@@ -359,7 +359,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
-				TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
 				return false;
 			}
 			Player player = (Player) sender;
@@ -2057,7 +2057,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							nationlegacyAlly(resident, targetNation, Collections.singletonList(nation), false);
 						
 					} else {
-						TownyMessaging.sendMsg(TownyAPI.getInstance().getPlayer(resident), npaee.getCancelMessage());
+						TownyMessaging.sendErrorMsg(resident, npaee.getCancelMessage());
 						remove.add(targetNation);
 					}
 
@@ -2072,7 +2072,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						
 						TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_enemy", nation.getName()));
 					} else {
-						TownyMessaging.sendMsg(TownyAPI.getInstance().getPlayer(resident), npree.getCancelMessage());
+						TownyMessaging.sendErrorMsg(resident, npree.getCancelMessage());
 						remove.add(targetNation);
 					}
 				}

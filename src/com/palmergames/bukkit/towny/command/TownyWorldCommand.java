@@ -90,7 +90,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		
 		if (plugin.isError() && sender instanceof Player) {
-			TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
+			TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
 			return true;
 		}
 		
@@ -394,13 +394,13 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 						plugin.resetCache();
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_perms", globalWorld.getName(), perms.toString()));
 					} catch (Exception e) {
-						TownyMessaging.sendMessage(sender, "Eg: /townyworld set wildperm build destroy <world>");
+						TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildperm build destroy <world>");
 					}
 
 			} else if (split[0].equalsIgnoreCase("wildignore")) {
 
 				if (split.length < 2)
-					TownyMessaging.sendMessage(sender, "Eg: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE <world>");
+					TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE <world>");
 				else
 					try {
 						List<String> mats = new ArrayList<>();
@@ -419,7 +419,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("wildregen")) {
 
 				if (split.length < 2)
-					TownyMessaging.sendMessage(sender, "Eg: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart <world>");
+					TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart <world>");
 				else {
 
 					List<String> entities = new ArrayList<>(Arrays.asList(StringMgmt.remFirstArg(split)));

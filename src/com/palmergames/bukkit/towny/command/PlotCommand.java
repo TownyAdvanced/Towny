@@ -153,7 +153,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
-				TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
 				return false;
 			}
 			Player player = (Player) sender;
@@ -712,7 +712,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							BukkitTools.getPluginManager().callEvent(preEvent);
 
 							if (preEvent.isCancelled()) {
-								TownyMessaging.sendMessage(player, preEvent.getCancelMessage());
+								TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 								return false;
 							}
 								
@@ -779,7 +779,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						BukkitTools.getPluginManager().callEvent(preEvent);
 						
 						if (preEvent.isCancelled()) {
-							TownyMessaging.sendMessage(player, preEvent.getCancelMessage());
+							TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 							return false;
 						}
 							
@@ -1246,7 +1246,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(town, player, choice.orElse(!groupBlock.getPermissions().pvp));
 						Bukkit.getPluginManager().callEvent(plotTogglePvpEvent);
 						if (plotTogglePvpEvent.isCancelled()) {
-							TownyMessaging.sendMessage(player, plotTogglePvpEvent.getCancellationMsg());
+							TownyMessaging.sendErrorMsg(player, plotTogglePvpEvent.getCancellationMsg());
 							return;
 						}
 
@@ -1264,7 +1264,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(town, player, choice.orElse(!groupBlock.getPermissions().explosion));
 						Bukkit.getPluginManager().callEvent(plotToggleExplosionEvent);
 						if (plotToggleExplosionEvent.isCancelled()) {
-							TownyMessaging.sendMessage(player, plotToggleExplosionEvent.getCancellationMsg());
+							TownyMessaging.sendErrorMsg(player, plotToggleExplosionEvent.getCancellationMsg());
 							return;
 						}
 
@@ -1278,7 +1278,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(town, player, choice.orElse(!groupBlock.getPermissions().fire));
 						Bukkit.getPluginManager().callEvent(plotToggleFireEvent);
 						if (plotToggleFireEvent.isCancelled()) {
-							TownyMessaging.sendMessage(player, plotToggleFireEvent.getCancellationMsg());
+							TownyMessaging.sendErrorMsg(player, plotToggleFireEvent.getCancellationMsg());
 							return;
 						}
 						
@@ -1292,7 +1292,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						PlotToggleMobsEvent plotToggleMobsEvent = new PlotToggleMobsEvent(town, player, choice.orElse(!groupBlock.getPermissions().mobs));
 						Bukkit.getPluginManager().callEvent(plotToggleMobsEvent);
 						if (plotToggleMobsEvent.isCancelled()) {
-							TownyMessaging.sendMessage(player, plotToggleMobsEvent.getCancellationMsg());
+							TownyMessaging.sendErrorMsg(player, plotToggleMobsEvent.getCancellationMsg());
 							return;
 						}
 
@@ -1732,7 +1732,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				
 				// If any one of the townblocks is not allowed to be set, cancel setting all of them.
 				if (preEvent.isCancelled()) {
-					TownyMessaging.sendMessage(player, preEvent.getCancelMessage());
+					TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 					return false;
 				}
 			}

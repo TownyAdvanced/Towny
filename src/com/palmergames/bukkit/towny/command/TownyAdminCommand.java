@@ -899,7 +899,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private void parseAdminPlotCommand(String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (isConsole) {
-			TownyMessaging.sendMessage(sender, "[Towny] InputError: This command was designed for use in game only.");
+			TownyMessaging.sendErrorMsg(sender, "This command was designed for use in game only.");
 			return;
 		}
 
@@ -961,9 +961,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		String node = split[1];
 		if (player.hasPermission(node))
-			TownyMessaging.sendMessage(sender, "Permission true");
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_perm_true"));
 		else
-			TownyMessaging.sendErrorMsg(sender, "Permission false");
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_perm_false"));
 	}
 
 	private void parseAdminTpPlotCommand(String[] split) throws TownyException {
@@ -993,6 +993,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private void giveBonus(String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Town town;
+		Resident target = null;
 		boolean isTown = false;
 
 		if (split.length != 2)
@@ -1001,7 +1002,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if ((town = townyUniverse.getTown(split[0])) != null) {
 			isTown = true;
 		} else {
-			Resident target = getResidentOrThrow(split[0]);
+			target = getResidentOrThrow(split[0]);
 
 			if (!target.hasTown())
 				throw new TownyException(Translatable.of("msg_err_resident_doesnt_belong_to_any_town"));
@@ -1020,11 +1021,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		town.setBonusBlocks(town.getBonusBlocks() + extraBlocks);
 		TownyMessaging.sendMsg(getSender(), Translatable.of("msg_give_total", town.getName(), split[1], town.getBonusBlocks()));
 		if (!isConsole || isTown)
-			TownyMessaging.sendTownMessagePrefixed(town, "You have been given " + extraBlocks + " bonus townblocks.");
+			TownyMessaging.sendTownMessagePrefixed(town, Translatable.of("msg_you_have_been_given_bonus_blocks", extraBlocks)); 
 		if (isConsole && !isTown) {
-			TownyMessaging.sendMessage(town, "You have been given " + extraBlocks + " bonus townblocks.");
-			TownyMessaging.sendMessage(town, "If you have paid any real-life money for these townblocks please understand: the creators of Towny do not condone this transaction, the server you play on breaks the Minecraft EULA and, worse, is selling a part of Towny which the developers did not intend to be sold.");
-			TownyMessaging.sendMessage(town, "If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.");
+			TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_bonus_blocks", extraBlocks)); 
+			TownyMessaging.sendMessage(target, "If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.");
+			TownyMessaging.sendMessage(target, "The Towny team never intended for townblocks to be purchaseable with real money.");
+			TownyMessaging.sendMessage(target, "If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.");
 		}
 		town.save();
 
@@ -2074,7 +2076,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			.sendTo(player);
 		} else { // isConsole
 			Confirmation.runOnAccept(() -> {
-				new ResidentPurge(plugin, null, TimeTools.getMillis(numDays + "d"), finalTownless, finalTown).start();
+				new ResidentPurge(plugin, sender, TimeTools.getMillis(numDays + "d"), finalTownless, finalTown).start();
 			})
 			.sendTo(sender);
 		}
@@ -2163,7 +2165,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("devmode")) {
 			try {
 				TownySettings.setDevMode(choice.orElse(!TownySettings.isDevMode()));
-				TownyMessaging.sendMsg(getSender(), "Dev Mode " + (TownySettings.isDevMode() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled")));
+				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_devmode", (TownySettings.isDevMode() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_choice"));
 			}
@@ -2171,21 +2173,21 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				TownySettings.setDebug(choice.orElse(!TownySettings.getDebug()));
 				TownyLogger.getInstance().refreshDebugLogger();
-				TownyMessaging.sendMsg(getSender(), "Debug Mode " + (TownySettings.getDebug() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled")));
+				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_debugmode", (TownySettings.getDebug() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_choice"));
 			}
 		} else if (split[0].equalsIgnoreCase("townwithdraw")) {
 			try {
 				TownySettings.SetTownBankAllowWithdrawls(choice.orElse(!TownySettings.getTownBankAllowWithdrawls()));
-				TownyMessaging.sendMsg(getSender(), "Town Withdrawls " + (TownySettings.getTownBankAllowWithdrawls() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled")));
+				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_townwithdraw", (TownySettings.getTownBankAllowWithdrawls() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_choice"));
 			}
 		} else if (split[0].equalsIgnoreCase("nationwithdraw")) {
 			try {
 				TownySettings.SetNationBankAllowWithdrawls(choice.orElse(!TownySettings.getNationBankAllowWithdrawls()));
-				TownyMessaging.sendMsg(getSender(), "Nation Withdrawls " + (TownySettings.getNationBankAllowWithdrawls() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled")));
+				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_nationwithdraw", (TownySettings.getNationBankAllowWithdrawls() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_choice"));
 			}

@@ -495,7 +495,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
-				TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
 				return false;
 			}
 				
@@ -1296,9 +1296,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, town);
 			if (onlineResidents.size() > 0) {
-				TownyMessaging.sendMsg(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
+				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
 			} else {
-				TownyMessaging.sendMsg(player, Colors.White + "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_town_online").forLocale(player) + ": " + town));
+				TownyMessaging.sendMessage(player, Colors.White + "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_town_online").forLocale(player) + ": " + town));
 			}
 		} else {
 			try {
@@ -1705,7 +1705,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		JailUtil.unJailResident(jailedResident, UnJailReason.PARDONED);
 		if (admin)
-			TownyMessaging.sendMsg(sender, "Resident has been unjailed");
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_resident_unjailed", jailedResident));
 	}
 
 	private static void parseJailCommand(CommandSender sender, Town town, String[] split, boolean admin) throws TownyException {
@@ -2047,7 +2047,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				if (split.length < 2) {
-					TownyMessaging.sendErrorMsg("Eg. /town set taxMax 10000");
+					TownyMessaging.sendErrorMsg(player, "Eg. /town set taxMax 10000");
 					return;
 				}
 				
@@ -3602,7 +3602,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 			}
 
-			TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms").forLocale(player));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
 			TownyMessaging.sendMessage(player, (Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
 			TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
 											   Colors.Green + Translatable.of("explosion").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 

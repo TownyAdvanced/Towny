@@ -242,7 +242,9 @@ public class TownyAsciiMap {
 		}
 
 		TownBlock townblock = TownyAPI.getInstance().getTownBlock(plugin.getCache(player).getLastLocation());
-		TownyMessaging.sendMsg(player, (Translatable.of("town_sing").forLocale(player) + ": " + (townblock != null && townblock.hasTown() ? townblock.getTownOrNull().getName() : Translatable.of("status_no_town").forLocale(player)) + " : " + Translatable.of("owner_status").forLocale(player) + ": " + (townblock != null && townblock.hasResident() ? townblock.getResidentOrNull().getName() : Translatable.of("status_no_town").forLocale(player))));
+		TownyMessaging.sendMsg(player, Translatable.of("status_towny_map_town_line", 
+				(townblock != null && townblock.hasTown() ? townblock.getTownOrNull() : Translatable.of("status_no_town").forLocale(player)), 
+				(townblock != null && townblock.hasResident() ? townblock.getResidentOrNull() : Translatable.of("status_no_town").forLocale(player))));
 	}
 	
 	private static Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {

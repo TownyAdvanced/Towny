@@ -1,12 +1,12 @@
 package com.palmergames.bukkit.towny.listeners;
 
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.util.Colors;
-
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,13 +48,11 @@ public class TownyLoginListener implements Listener {
 		}
 		
 		if (disallowed) {
-			String ip = event.getAddress().toString();
-			ip = ip.substring(1);
-			String msg = "A player using the IP address " + Colors.Red + ip + Colors.Green + " tried to log in using an account name (" + event.getPlayer().getName() + ") which could damage your server's economy, but was prevented by Towny. Consider banning this IP address!";
-			TownyMessaging.sendMsg(msg);
+			String ip = event.getAddress().toString().substring(1);
+			Towny.getPlugin().getLogger().warning("A player using the IP address " + ip + " tried to log in using an account name (" + event.getPlayer().getName() + ") which could damage your server's economy, but was prevented by Towny. Consider banning this IP address!");
 			for (Player ops : Bukkit.getOnlinePlayers()) {     	 
         		if (ops.isOp() || ops.hasPermission("towny.admin"))
-        			TownyMessaging.sendMsg(ops, msg);        		
+        			TownyMessaging.sendMsg(ops, Translatable.of("msg_admin_blocked_login", ip, event.getPlayer().getName()));        		
         	}
 		}
 	}
