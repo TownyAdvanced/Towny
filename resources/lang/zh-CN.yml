@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.126
+version: 0.127
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -637,21 +637,21 @@ status_nation_tax: '国税：'
 status_nation_towns: '城镇'
 status_nation_allies: '盟友'
 status_nation_enemies: '敌人'
-status_world_claimable: '&a可申明'
-status_world_noclaims: '&a不可申明'
+status_world_claimable: '&a可宣称'
+status_world_noclaims: '&a不可宣称'
 status_world_forcepvp: '强制PVP：'
 status_world_fire: '火焰蔓延：'
 status_world_forcefire: '强制火焰蔓延：'
 status_world_forceexplosion: '强制启用爆炸：'
 status_world_worldmobs: '世界生物生成：'
 status_world_forcetownmobs: '城镇强制生成生物：'
-status_world_unclaimrevert: '荒野回溯：'
+status_world_unclaimrevert: '废墟重新宣称：'
 status_world_explrevert: '爆炸回溯：'
 status_world_ignoredblocks: '忽略的方块：'
 status_res_taxexempt: '管理者免交市政税。'
 status_res_tax: '市政税：'
 status_res_plottax: '地税总计：'
-status_res_totaltax: '需要缴纳税费：'
+status_res_totaltax: '总计缴纳税费：'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '你不能在国都外使用国家银行.'
 msg_err_unable_to_use_bank_outside_your_town: '你不能在城镇外使用城镇银行.'
@@ -1377,3 +1377,6 @@ status_unknown: '未知'
 msg_nationzone_override_set_to: '%s的国域被设置成了%s。'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s的国域被取消了。'
+#Added in 0.127
+#Used in status screen:
+status_nation_zone_size: '国域大小：'
