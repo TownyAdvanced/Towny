@@ -448,7 +448,7 @@ public class TownBlock extends TownyObject {
 			setTrustedResidents(group.getTrustedResidents());
 			setPermissionOverrides(group.getPermissionOverrides());
 		} catch (NullPointerException e) {
-			TownyMessaging.sendErrorMsg("Townblock failed to setPlotObjectGroup(group), group is null. " + group);
+			TownyMessaging.sendErrorMsg("Townblock failed to setPlotObjectGroup(group), group is null. ");
 		}
 	}
 

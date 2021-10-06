@@ -319,7 +319,7 @@ public class TownyMessaging {
 			player.sendMessage(Translation.of("default_towny_prefix") + line);
 	}
 
-	// 11
+	// 11 - Once in /t say, Once in an cancelled-event-message, 9 times in War.
 	/**
 	 * Send a message to All online residents of a town and log
 	 * preceded by the [Townname]
@@ -367,7 +367,7 @@ public class TownyMessaging {
 	 * PREFIXED NATION MESSAGES
 	 */
 
-	// 11
+	// 5 - Once in /n say and the rest are in War.
 	/**
 	 * Send a message to All online residents of a nation and log
 	 * with the [nationname] prefixed to the beginning

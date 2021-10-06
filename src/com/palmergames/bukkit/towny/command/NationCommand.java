@@ -677,8 +677,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
 					Nation nation = getResidentOrThrow(player.getUniqueId()).getTown().getNation();
-					String message = StringMgmt.join(newSplit);
-					TownyMessaging.sendPrefixedNationMessage(nation, message);
+					TownyMessaging.sendPrefixedNationMessage(nation, StringMgmt.join(newSplit));
 
 				} else if (split[0].equalsIgnoreCase("bankhistory")) {
 					
@@ -2567,8 +2566,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				nation.setNeutral(peacefulState);
 
 				// Send message feedback to the whole nation.
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_peaceful") + (nation.isNeutral
-						() ? Colors.Green : Colors.Red + " not") + " peaceful.");
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_peaceful").append(nation.isNeutral() ? Colors.Green : Colors.Red + " not").append(" peaceful."));
 
 			} else if(split[0].equalsIgnoreCase("public")){
 

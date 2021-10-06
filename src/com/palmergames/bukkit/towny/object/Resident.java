@@ -491,7 +491,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		}
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ","))));
+			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
 	}
 	
 	public void setModes(String[] modes, boolean notify) {
@@ -500,7 +500,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.toggleMode(modes, false);
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ","))));
+			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
 
 
 	}
@@ -527,7 +527,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			this.toggleMode(modes, false);
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ","))));
+			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
 	}
 	
 	@Nullable
