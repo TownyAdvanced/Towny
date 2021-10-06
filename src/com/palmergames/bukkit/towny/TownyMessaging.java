@@ -48,7 +48,7 @@ public class TownyMessaging {
 	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private static final Logger LOGGER_DEBUG = LogManager.getLogger("com.palmergames.bukkit.towny.debug");
 
-	// 149
+	// 148
 	/**
 	 * Sends an error message to the log
 	 *
@@ -58,7 +58,7 @@ public class TownyMessaging {
 		LOGGER.warn(ChatTools.stripColour("[Towny] Error: " + msg));
 	}
 
-	// 171
+	// 191
 	/**
 	 * Sends an Error message (red) to the Player or console
 	 * and to the named Dev if DevMode is enabled.
@@ -177,8 +177,6 @@ public class TownyMessaging {
 		sendDevMsg(msg);
 	}
 
-	/////////////////
-
 	// 10
 	/**
 	 * Send a message to a player
@@ -190,7 +188,7 @@ public class TownyMessaging {
 		sendMessage(sender, lines.toArray(new String[0]));
 	}
 
-	// 135
+	// 136
 	/**
 	 * Send a message to a player
 	 *
@@ -369,7 +367,7 @@ public class TownyMessaging {
 	 * PREFIXED NATION MESSAGES
 	 */
 
-	// 13
+	// 11
 	/**
 	 * Send a message to All online residents of a nation and log
 	 * with the [nationname] prefixed to the beginning
@@ -414,7 +412,7 @@ public class TownyMessaging {
 		}
 	}
 	
-	// 2
+	// 0
 	/**
 	 * Send a message to All online residents of a nation and log
 	 * Uses default_towny_prefix
@@ -891,12 +889,12 @@ public class TownyMessaging {
 	 * TRANSLATABLES FOLLOW
 	 */
 	
-	// 243
+	// 251
 	public static void sendMsg(CommandSender sender, Translatable... translatables) {
 		sendMsg(sender, Translation.translateTranslatables(sender, translatables));
 	}
 	
-	//369
+	//371
 	public static void sendErrorMsg(CommandSender sender, Translatable... translatables) {
 		sendErrorMsg(sender, Translation.translateTranslatables(sender, translatables));
 	}
@@ -909,7 +907,7 @@ public class TownyMessaging {
 				sendMessage(player, Translatable.of("default_towny_prefix").forLocale(player) + translatable);
 	}
 
-	// 58
+	// 60
 	public static void sendPrefixedNationMessage(Nation nation, Translatable message) {
 		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
 		
@@ -917,7 +915,7 @@ public class TownyMessaging {
 			sendMessage(player, Translation.translateTranslatables(player, "", Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())), message));
 	}
 	
-	// 79
+	// 87
 	public static void sendPrefixedTownMessage(Town town, Translatable message) {
 		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + message.translate()));
 		
@@ -925,7 +923,7 @@ public class TownyMessaging {
 			sendMessage(player, Translation.translateTranslatables(player, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), message));
 	}
 	
-	// 3
+	// 5
 	/**
 	 * Send a message to All online residents of a nation and log, 
 	 * preceded by the default_towny_prefix
@@ -940,7 +938,7 @@ public class TownyMessaging {
 			sendMsg(player, message);
 	}
 	
-	// 3
+	// 4
 	/**
 	 * Send a message to All online residents of a town and log, 
 	 * preceded by the default_towny_prefix
@@ -955,7 +953,7 @@ public class TownyMessaging {
 			sendMsg(player, message);
 	}
 	
-	//46
+	//61
 	public static void sendMsg(Resident resident, Translatable message) {
 		if (BukkitTools.isOnline(resident.getName()))
 			sendMsg(resident.getPlayer(), message);

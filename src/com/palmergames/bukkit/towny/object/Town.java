@@ -604,13 +604,13 @@ public class Town extends Government implements TownBlockOwner {
 				} catch (TownyException ignored) {}
 				
 				if (!nation.getCapital().getHomeblockWorld().equals(getHomeblockWorld())) {
-					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
 					removeNation();
 				}
 
 				double distance = MathUtil.distance(capitalCoord.getX(), townCoord.getX(), capitalCoord.getZ(), townCoord.getZ());
 				if (distance > TownySettings.getNationRequiresProximity()) {
-					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
 					removeNation();
 				}	
 			}
