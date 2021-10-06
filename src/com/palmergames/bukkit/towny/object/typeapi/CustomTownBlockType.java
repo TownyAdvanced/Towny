@@ -1,30 +1,19 @@
 package com.palmergames.bukkit.towny.object.typeapi;
 
-import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-
+/**
+ * A class that represents custom town block types
+ * It is meant to be extended by external classes
+ * @author gnosii
+ */
 public abstract class CustomTownBlockType {
 	TownBlockTypeHandler handler;
 	String internalId;
 	String displayName;
-
-	/**
-	 * Create a new town block type.
-	 * @param internalId Used for internally saving the town block type. You should ideally name it after your plugin.
-	 * @param displayName Name displayed on the front-end (seen by players)
-	 */
-	public CustomTownBlockType(String internalId, String displayName) throws TownyException {
+	
+	public CustomTownBlockType(String internalId, String displayName, TownBlockTypeHandler handler) {
 		this.internalId = internalId;
 		this.displayName = displayName;
-		TownyUniverse.getInstance().registerCustomTownBlockType(this);
-	}
-
-	/**
-	 * Set the town block type handler.
-	 * @param tbHandler Handler for Towny events
-	 */
-	public void setHandler(TownBlockTypeHandler tbHandler) {
-		handler = tbHandler;
+		this.handler = handler;
 	}
 	
 	public TownBlockTypeHandler getHandler() {
