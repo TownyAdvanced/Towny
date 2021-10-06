@@ -179,7 +179,7 @@ public class TownyMessaging {
 
 	// 10
 	/**
-	 * Send a message to a player
+	 * Send a message to a player with no Towny prefix.
 	 *
 	 * @param sender the Object sending the message
 	 * @param lines List of strings to send
@@ -190,7 +190,7 @@ public class TownyMessaging {
 
 	// 136
 	/**
-	 * Send a message to a player
+	 * Send a message to a player with no Towny prefix.
 	 *
 	 * @param sender the Object sending the message
 	 * @param line the String to send
@@ -212,7 +212,7 @@ public class TownyMessaging {
 
 	// 3
 	/**
-	 * Send a message to a player
+	 * Send a message to a player with no Towny prefix.
 	 *
 	 * @param sender the Object sending the message
 	 * @param lines String array to send as message.
