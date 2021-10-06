@@ -15,14 +15,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PermissionData;
-import com.palmergames.bukkit.towny.object.PlotGroup;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
@@ -1278,7 +1271,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
 
 			nation.setTag(rs.getString("tag"));
-
+			
 			line = rs.getString("allies");
 			if (line != null) {
 				search = (line.contains("#")) ? "#" : ",";
@@ -1775,6 +1768,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						townBlock.setType(Integer.parseInt(line));
 					} catch (Exception ignored) {
 					}
+
+				line = rs.getString("customtypeid");
+					if (line != null)
+						if (townBlock.getType() != TownBlockType.CUSTOM)
+							try {
+								TownyUniverse.getInstance().getCustomTownBlockType(line);
+							} catch (Exception ignored) {}
+						else
+							// Debug message
+							TownyMessaging.sendErrorMsg("CustomTypeID exists, but the TownBlockType is not custom!");
 
 				boolean outpost = rs.getBoolean("outpost");
 				if (line != null && !line.isEmpty())
@@ -2391,6 +2394,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			tb_hm.put("town", townBlock.getTown().getName());
 			tb_hm.put("resident", (townBlock.hasResident()) ? townBlock.getResidentOrNull().getName() : "");
 			tb_hm.put("type", townBlock.getType().getId());
+			if (townBlock.hasCustomTownBlockType())
+				tb_hm.put("customtypeid", townBlock.getCustomTownBlockType().getInternalId());
+			else
+				tb_hm.put("customtypeid", "");
 			tb_hm.put("outpost", townBlock.isOutpost());
 			tb_hm.put("permissions",
 					(townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
