@@ -1180,14 +1180,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_king_of_that_nation_is_not_online", name, king.getName()));
 		}
 
-		TownyMessaging.sendMessage(BukkitTools.getPlayer(king.getName()), Translatable.of("msg_would_you_merge_your_nation_into_other_nation", nation, remainingNation, remainingNation));
+		TownyMessaging.sendMsg(BukkitTools.getPlayer(king.getName()), Translatable.of("msg_would_you_merge_your_nation_into_other_nation", nation, remainingNation, remainingNation));
 		if (TownySettings.getNationRequiresProximity() > 0) {
 			List<Town> towns = new ArrayList<>(nation.getTowns());
 			towns.addAll(remainingNation.getTowns());
 			List<Town> removedTowns = remainingNation.gatherOutOfRangeTowns(towns, remainingNation.getCapital());
 			if (!removedTowns.isEmpty()) {
-				TownyMessaging.sendMessage(nation.getKing(), Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")));
-				TownyMessaging.sendMessage(remainingNation.getKing(), Translatable.of("msg_warn_the_following_towns_will_be_removed_from_the_merged_nation", StringMgmt.join(removedTowns, ", ")));
+				TownyMessaging.sendMsg(nation.getKing(), Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")));
+				TownyMessaging.sendMsg(remainingNation.getKing(), Translatable.of("msg_warn_the_following_towns_will_be_removed_from_the_merged_nation", StringMgmt.join(removedTowns, ", ")));
 			}
 		}
 		Confirmation.runOnAccept(() -> {
@@ -1358,7 +1358,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		names = newtownlist.toArray(new String[0]);
 		String[] namestoremove = removeinvites.toArray(new String[0]);
 		if (namestoremove.length >= 1) {
-			nationRevokeInviteTown(player,nation, dataSource.getTowns(namestoremove));
+			nationRevokeInviteTown(player, nation, dataSource.getTowns(namestoremove));
 		}
 
 		if (names.length >= 1) {
@@ -1366,7 +1366,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static void nationRevokeInviteTown(Object sender,Nation nation, List<Town> towns) {
+	private static void nationRevokeInviteTown(CommandSender sender, Nation nation, List<Town> towns) {
 
 		for (Town town : towns) {
 			if (InviteHandler.inviteIsActive(nation, town)) {
@@ -1374,7 +1374,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (invite.getSender().equals(nation)) {
 						try {
 							InviteHandler.declineInvite(invite, true);
-							TownyMessaging.sendMessage(sender, Translatable.of("nation_revoke_invite_successful"));
+							TownyMessaging.sendMsg(sender, Translatable.of("nation_revoke_invite_successful"));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
@@ -1812,7 +1812,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							return;
 						}
 						InviteHandler.declineInvite(toDecline, false);
-						TownyMessaging.sendMessage(player, Translatable.of("successful_deny_request"));
+						TownyMessaging.sendMsg(player, Translatable.of("successful_deny_request"));
 					} catch (InvalidObjectException e) {
 						e.printStackTrace(); // Shouldn't happen, however like i said a fallback
 					}
@@ -1825,14 +1825,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private void nationRemoveAllyRequest(Object sender,Nation nation, ArrayList<Nation> remlist) {
+	private void nationRemoveAllyRequest(CommandSender sender, Nation nation, ArrayList<Nation> remlist) {
 		for (Nation invited : remlist) {
 			if (InviteHandler.inviteIsActive(nation, invited)) {
 				for (Invite invite : invited.getReceivedInvites()) {
 					if (invite.getSender().equals(nation)) {
 						try {
 							InviteHandler.declineInvite(invite, true);
-							TownyMessaging.sendMessage(sender, Translatable.of("nation_revoke_ally_successful"));
+							TownyMessaging.sendMsg(sender, Translatable.of("nation_revoke_ally_successful"));
 							break;
 						} catch (InvalidObjectException e) {
 							e.printStackTrace();
@@ -1892,7 +1892,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					nation.removeAlly(targetNation);
 
 					TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_ally", nation.getName()));
-					TownyMessaging.sendMessage(player, Translatable.of("msg_ally_removed_successfully"));
+					TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
 					// Remove any mirrored allies settings from the target nation
 					if (targetNation.hasAlly(nation))
 						nationlegacyAlly(resident, targetNation, Collections.singletonList(nation), false);
@@ -1953,7 +1953,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						}
 						nation.removeAlly(targetNation);
 						TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_ally", nation.getName()));
-						TownyMessaging.sendMessage(player, Translatable.of("msg_ally_removed_successfully"));
+						TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
 					} catch (NotRegisteredException e) {
 						remove.add(targetNation);
 					}
@@ -2260,7 +2260,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						nation.setTaxes(amount);
 						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_nation_tax", player.getName(), split[1]));
 						if (admin)
-							TownyMessaging.sendMessage(player, Translatable.of("msg_town_set_nation_tax", player.getName(), split[1]));
+							TownyMessaging.sendMsg(player, Translatable.of("msg_town_set_nation_tax", player.getName(), split[1]));
 					} catch (NumberFormatException e) {
 						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_int"));
 					}
@@ -2287,7 +2287,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						nation.setSpawnCost(amount);
 						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_spawn_cost_set_to", player.getName(), Translatable.of("nation_sing"), split[1]));
 						if (admin)
-							TownyMessaging.sendMessage(player, Translatable.of("msg_spawn_cost_set_to", player.getName(), Translatable.of("nation_sing"), split[1]));
+							TownyMessaging.sendMsg(player, Translatable.of("msg_spawn_cost_set_to", player.getName(), Translatable.of("nation_sing"), split[1]));
 					} catch (NumberFormatException e) {
 						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_num"));
 						return;
@@ -2351,7 +2351,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					nation.setTag(NameValidation.checkAndFilterName(split[1]));
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_set_nation_tag", player.getName(), nation.getTag()));
 					if (admin)
-						TownyMessaging.sendMessage(player, Translatable.of("msg_set_nation_tag", player.getName(), nation.getTag()));
+						TownyMessaging.sendMsg(player, Translatable.of("msg_set_nation_tag", player.getName(), nation.getTag()));
 				}
 			} else if (split[0].equalsIgnoreCase("title")) {
 
@@ -2381,11 +2381,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (resident.hasTitle()) {
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
 					if (admin)
-						TownyMessaging.sendMessage(player, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
+						TownyMessaging.sendMsg(player, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
 				} else {
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
 					if (admin)
-						TownyMessaging.sendMessage(player, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
+						TownyMessaging.sendMsg(player, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
 				}
 
 			} else if (split[0].equalsIgnoreCase("surname")) {
@@ -2416,11 +2416,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (resident.hasSurname()) {
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
 					if (admin)
-						TownyMessaging.sendMessage(player, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
+						TownyMessaging.sendMsg(player, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
 				} else {
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
 					if (admin)
-						TownyMessaging.sendMessage(player, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
+						TownyMessaging.sendMsg(player, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
 				}
 
 			} else if (split[0].equalsIgnoreCase("board")) {
@@ -2468,7 +2468,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					nation.setMapColorHexCode(TownySettings.getNationColorsMap().get(line.toLowerCase()));
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_map_color_changed", line.toLowerCase()));
 					if (admin)
-						TownyMessaging.sendMessage(player, Translatable.of("msg_nation_map_color_changed", line.toLowerCase()));
+						TownyMessaging.sendMsg(player, Translatable.of("msg_nation_map_color_changed", line.toLowerCase()));
 				}
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, split[0]).execute(player, "nation", split);

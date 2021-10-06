@@ -132,7 +132,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 				sendInviteList(player, resident.getReceivedInvites(), page, false);
-				TownyMessaging.sendMessage(player, received);
+				TownyMessaging.sendMsg(player, received);
 
 			} else {
 				throw new TownyException(Translatable.of("msg_err_player_no_invites"));
