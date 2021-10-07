@@ -586,7 +586,7 @@ public class CombatUtil {
 
 		if (!a.hasNation() || !b.hasNation())
 			return false;
-		if (isSameTown(a, b) || isSameTown(a, b))
+		if (isSameTown(a, b) || isSameNation(a, b))
 			return false;
 		if (a.getNationOrNull().hasEnemy(b.getNationOrNull()))
 			return true;
