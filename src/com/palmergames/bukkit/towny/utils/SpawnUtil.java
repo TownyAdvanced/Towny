@@ -383,7 +383,6 @@ public class SpawnUtil {
 	 * 
 	 * @param player - Player being spawned. 
 	 * @param spawnLoc - Location being spawned to.
-	 * @param admin - True if player has admin spawn nodes.
 	 */
 	private static void initiateSpawn(Player player, Location spawnLoc) {
 
@@ -420,5 +419,39 @@ public class SpawnUtil {
 			spawnLocation = TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer);
 		TownyMessaging.sendMsg(outlaw, Translatable.of("msg_outlaw_kicked", town));
 		PaperLib.teleportAsync(outlaw.getPlayer(), spawnLocation, TeleportCause.PLUGIN);
+	}
+	
+	public static void jailAwayTeleport(Resident jailed) {
+		initiatePluginTeleport(jailed, getIdealLocation(jailed));
+	}
+	
+	public static void jailTeleport(Resident jailed) {
+		initiatePluginTeleport(jailed, jailed.getJailSpawn());
+	}
+
+	/**
+	 * Get the best location an resident can be teleported to
+	 * @param resident
+	 * @return bed spawn OR town spawn OR last world spawn
+	 */
+	private static Location getIdealLocation(Resident resident) {
+		Town town = resident.getTownOrNull();
+		Location loc = resident.getPlayer().getWorld().getSpawnLocation();
+
+		if (town != null)
+			if (town.hasSpawn()) {
+				try {
+					loc = town.getSpawn();
+				} catch (Exception ignored) {}
+			}
+		
+		if (resident.getPlayer().getBedSpawnLocation() != null)
+			loc = resident.getPlayer().getBedSpawnLocation();
+		
+		return loc;
+	}
+	
+	private static void initiatePluginTeleport(Resident resident, Location loc) {
+		PaperLib.teleportAsync(resident.getPlayer(), loc, TeleportCause.PLUGIN);
 	}
 }
