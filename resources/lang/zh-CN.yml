@@ -1090,8 +1090,8 @@ msg_del_town2: '&b城镇%s已删除！'
 msg_ruin_town: '&b城镇%s倒闭了！'
 gui_title_towny_farmblocks: '城镇农场区块列表'
 gui_title_towny_wildsblocks: '城镇荒地区块列表'
-gui_title_towny_itemuse: 'Towny物品清单'
-gui_title_towny_switch: 'Towny切换列表'
+gui_title_towny_itemuse: 'Towny物品使用权限列表'
+gui_title_towny_switch: 'Towny交互权限列表'
 gui_title_towny_plotclear: 'Towny土地清除列表'
 #Added in 0.99 - FlatFile L10N
 #NOTICE
