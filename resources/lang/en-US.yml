@@ -1603,7 +1603,7 @@ msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave yo
 #Jail handbook messages
 msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
 #Jail handbook messages
-msg_jailed_handbook_bail_2: 'Bail will cost %s\n\n'
+msg_jailed_handbook_bail_2: 'Bail will cost %s.\n\n'
 #Jail handbook messages
 msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
 #Jail handbook messages
