@@ -1197,7 +1197,7 @@ public class TownyUniverse {
 	 */
 	public void registerCustomTownBlockType(CustomTownBlockType ctb) throws TownyException {
 		// Feature is not enabled in config
-		if (TownySettings.areCustomTypesAllowed())
+		if (TownySettings.areCustomTownBlockTypesAllowed())
 			throw new TownyException("Custom plot types are disabled.");
 		
 		customTownBlockTypeMap.put(ctb.getInternalId(), ctb);
