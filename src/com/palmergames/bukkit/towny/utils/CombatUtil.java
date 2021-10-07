@@ -353,26 +353,7 @@ public class CombatUtil {
 	 * @return true if the world is PvP
 	 */
 	public static boolean isWorldPvP(TownyWorld world) {
-
-		// Universe is only PvP
-		if (world.isForcePVP() || world.isPVP())
-			return true;
-
-		return false;
-	}
-
-	/**
-	 * @deprecated as of 0.96.2.20 use {@link CombatUtil#preventFriendlyFire(Player, Player, TownyWorld) instead}
-	 * Should we be preventing friendly fire?
-	 * 
-	 * @param attacker - Attacking Player
-	 * @param defender - Defending Player (receiving damage)
-	 * 
-	 * @return true if we should cancel damage.
-	 */
-	@Deprecated
-	public static boolean preventFriendlyFire(Player attacker, Player defender) {
-		return preventFriendlyFire(attacker, defender, TownyAPI.getInstance().getTownyWorld(attacker.getWorld().getName()));
+		return (world.isForcePVP() || world.isPVP());
 	}
 	
 	/**
@@ -431,20 +412,6 @@ public class CombatUtil {
 		if (defenderTB != null && attackerTB != null && defenderTB.getType() == TownBlockType.ARENA && attackerTB.getType() == TownBlockType.ARENA)
 			return true;
 		return false;
-	}
-	
-	/**
-	 * @deprecated as of 0.96.7.1. Use {@link CombatUtil#isArenaPlot(Player, Player)}.
-	 * Return true if both attacker and defender are in Arena Plots.
-	 * 
-	 * @param attacker - Attacking Player
-	 * @param defender - Defending Player (receiving damage)
-	 * @return true if both players in an Arena plot.
-	 */
-	@Deprecated
-	public static boolean isPvPPlot(Player attacker, Player defender) {
-
-		return isArenaPlot(attacker, defender);
 	}
 
 	/**
@@ -619,9 +586,7 @@ public class CombatUtil {
 
 		if (!a.hasNation() || !b.hasNation())
 			return false;
-		if (isSameTown(a, b))
-			return false;
-		if (isSameNation(a, b))
+		if (isSameTown(a, b) || isSameTown(a, b))
 			return false;
 		if (a.getNationOrNull().hasEnemy(b.getNationOrNull()))
 			return true;
