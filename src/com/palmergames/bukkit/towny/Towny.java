@@ -34,7 +34,7 @@ import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
 import com.palmergames.bukkit.towny.listeners.TownyServerListener;
 import com.palmergames.bukkit.towny.listeners.TownyVehicleListener;
 import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
-import com.palmergames.bukkit.towny.listeners.TownyTypeListener;
+import com.palmergames.bukkit.towny.listeners.TownyTownBlockTypeListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -109,7 +109,7 @@ public class Towny extends JavaPlugin {
 	private final TownyInventoryListener inventoryListener = new TownyInventoryListener();
 	private final WarZoneListener warzoneListener = new WarZoneListener(this);
 	private final TownyLoginListener loginListener = new TownyLoginListener();
-	private final TownyTypeListener typeListener = new TownyTypeListener();
+	private final TownyTownBlockTypeListener typeListener = new TownyTownBlockTypeListener();
 	private final HUDManager HUDManager = new HUDManager(this);
 
 	private TownyUniverse townyUniverse;

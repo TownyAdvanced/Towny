@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
  *
  * @author gnosii
  */
-public class TownyTypeListener implements Listener {
+public class TownyTownBlockTypeListener implements Listener {
 
 	@EventHandler
 	public void onTownyBuild(TownyBuildEvent event) {
