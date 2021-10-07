@@ -19,7 +19,7 @@ public class TownyTownBlockTypeListener implements Listener {
 	public void onTownyBuild(TownyBuildEvent event) {
 		if (!event.isInWilderness()) {
 			TownBlock tb = event.getTownBlock();
-			if (tb != null && !tb.hasCustomTownBlockType())
+			if (tb != null && tb.hasCustomTownBlockType())
 				event.setCancelled(!tb.getCustomTypeHandler().onTownyBuild(tb));
 		}
 	}
