@@ -2,6 +2,7 @@ package com.palmergames.bukkit.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.bukkit.map.MinecraftFont;
@@ -26,26 +27,23 @@ public class ChatTools {
 	final static int SUBWIDGET_WIDTH = 22;
 	final static String SUBWIDGET = " .]|[. ";
 	
-	public static List<String> listArr(String[] args, String prefix) {
+	public static String listArr(String[] args, String prefix) {
 
 		return list(Arrays.asList(args), prefix);
 	}
 
-	public static List<String> list(List<String> args) {
+	public static String list(Collection<String> args) {
 
 		return list(args, "");
 	}
 
-	public static List<String> list(List<String> args, String prefix) {
-		if (args.size() > 0) {
-			List<String> out = new ArrayList<>();
-			out.add(prefix + String.join(", ", args));
-			return out;
-		} else {
-			return new ArrayList<>();
-		}
+	public static String list(Collection<String> args, String prefix) {
+		if (args.isEmpty())
+			return "";
 
-	}	
+		return prefix + String.join(", ", args);
+	}
+
 	public static String stripColour(String s) {
 
 		StringBuilder out = new StringBuilder();

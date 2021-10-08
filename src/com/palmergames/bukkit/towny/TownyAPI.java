@@ -455,31 +455,6 @@ public class TownyAPI {
     }
     
     /**
-     * Get a list of active {@link Resident}s.
-     *
-     * @return {@link List} of active {@link Resident}s.
-     */
-    public List<Resident> getActiveResidents() {
-        List<Resident> activeResidents = new ArrayList<>();
-        for (Resident resident : townyUniverse.getResidents()) {
-            if (isActiveResident(resident)) {
-                activeResidents.add(resident);
-            }
-        }
-        return activeResidents;
-    }
-    
-    /**
-     * Check if the specified {@link Resident} is an active Resident.
-     *
-     * @param resident {@link Resident} to test for activity.
-     * @return true if the player is active, false otherwise.
-     */
-    public boolean isActiveResident(Resident resident) {
-        return ((System.currentTimeMillis() - resident.getLastOnline() < (20 * TownySettings.getInactiveAfter())) || (BukkitTools.isOnline(resident.getName())));
-    }
-    
-    /**
      * Gets Towny's saving Database
      *
      * @return the {@link TownyDataSource}

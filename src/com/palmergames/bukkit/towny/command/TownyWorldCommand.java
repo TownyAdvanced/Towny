@@ -208,15 +208,14 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		
 		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(Translatable.of("world_plu").forLocale(sender)));
 
-		ArrayList<String> formatedList = new ArrayList<>();
+		ArrayList<String> formattedList = new ArrayList<>();
 		HashMap<String, Integer> playersPerWorld = BukkitTools.getPlayersPerWorld();
 		for (TownyWorld world : TownyUniverse.getInstance().getDataSource().getWorlds()) {
 			int numPlayers = playersPerWorld.getOrDefault(world.getName(), 0);
-			formatedList.add(Colors.LightBlue + world.getName() + Colors.Blue + " [" + numPlayers + "]" + Colors.White);
+			formattedList.add(Colors.LightBlue + world.getName() + Colors.Blue + " [" + numPlayers + "]" + Colors.White);
 		}
 
-		for (String line : ChatTools.list(formatedList))
-			TownyMessaging.sendMessage(sender, line);
+		TownyMessaging.sendMessage(sender, ChatTools.list(formattedList));
 	}
 
 	public void worldToggle(CommandSender sender, String[] split) throws TownyException {
