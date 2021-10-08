@@ -130,6 +130,8 @@ public class TownyAsciiMap {
 						townyMap[y][x] = townyMap[y][x].content("$");
 					} else if (townblock.isHomeBlock())
 						townyMap[y][x] = townyMap[y][x].content("H");
+					else if (townblock.getType().equals(TownBlockType.CUSTOM))
+						townyMap[y][x] = townyMap[y][x].content(townblock.getCustomTownBlockType().getAsciiMapKey());
 					else
 						townyMap[y][x] = townyMap[y][x].content(townblock.getType().getAsciiMapKey());
 					

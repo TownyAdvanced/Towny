@@ -46,7 +46,7 @@ public abstract class TownBlockTypeHandler {
 	public abstract boolean onTownyExplosion(TownBlock townBlock);
 
 	/**
-	 * Method executed on ???
+	 * Method executed on 
 	 * @param townBlock Town Block affected to this event
 	 * @return true if the event should be allowed to happen or false if it should be cancelled
 	 */

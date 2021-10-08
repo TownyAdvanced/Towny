@@ -45,7 +45,7 @@ public enum TownBlockType {
 	},
 	BANK(9, "Bank", "B", TownySettings.getPlotSetBankCost()) { // Enables depositing into town and nation banks, if that has been enabled in the config.		
 	},
-	CUSTOM(10, "Custom", "", 0.0) { // Handled by an external plugin
+	CUSTOM(10, "Custom", "", 0) { // Handled by an external plugin
 	}
 
 	// These are subject to change, and may not necessarily be added:
