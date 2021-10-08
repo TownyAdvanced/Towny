@@ -654,15 +654,20 @@ public class Towny extends JavaPlugin {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
 			int startingIndex = 0;
 			int linesDisplayed = 0;
+			boolean attach = false;
 			plugin.getLogger().info("------------------------------------");
 			plugin.getLogger().info("ChangeLog up until v" + getVersion());
 			String lastVersion = Version.fromString(TownySettings.getLastRunVersion()).toString(); // Parse out any trailing text after the *.*.*.* version, ie "-for-1.12.2".
 			
 			for (int i = changeLog.size() - 1; i >= 0; i--) {
-				if (changeLog.get(i).startsWith(lastVersion)) {
+				String line = changeLog.get(i);
+				if (attach && !line.trim().startsWith("-")) {
 					startingIndex = i;
 					break;
 				}
+
+				if (line.startsWith(lastVersion))
+					attach = true;
 			}
 			
 			if (startingIndex != 0) {
