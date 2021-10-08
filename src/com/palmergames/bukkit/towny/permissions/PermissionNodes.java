@@ -273,9 +273,10 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_PLOT_TRUST("towny.command.townyadmin.plot.trust"),
 	
 	TOWNY_COMMAND_TOWNYADMIN_RESIDENT("towny.command.townyadmin.resident.*"),
-		TOWNY_COMMMAND_TOWNYADMIN_RESIDENT_RENAME("towny.command.townyadmin.resident.rename"),
-		TOWNY_COMMMAND_TOWNYADMIN_RESIDENT_FRIEND("towny.command.townyadmin.resident.friend"),
-		TOWNY_COMMMAND_TOWNYADMIN_RESIDENT_UNJAIL("towny.command.townyadmin.resident.unjail"),
+		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_RENAME("towny.command.townyadmin.resident.rename"),
+		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_FRIEND("towny.command.townyadmin.resident.friend"),
+		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_UNJAIL("towny.command.townyadmin.resident.unjail"),
+		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_DELETE("towny.command.townyadmin.resident.delete"),
 		
 	TOWNY_COMMAND_TOWNYADMIN_TOWN("towny.command.townyadmin.town.*"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_NEW("towny.command.townyadmin.town.new"),
