@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.126
+version: 0.127
 language: german
 author: ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih
 website: 'http://townyadvanced.github.io/'
@@ -126,9 +126,6 @@ msg_join_nation: '&bDie Stadt %s ist der Nation beigetreten!'
 msg_join_town: '&b%s ist der Stadt beigetreten!'
 msg_friend_add: '&b%s hat dich als Freund hinzugefügt.'
 msg_friend_remove: '&b%s hat dich als Freund entfernt.'
-msg_removed: '&bEntfernt '
-msg_from_list: ' wurde aus deiner Freundschaftsliste entfernt.'
-msg_to_list: ' wurde zu deiner Freundschaftsliste hinzugefügt.'
 msg_left_town: '&b%s hat die Stadt verlassen'
 msg_you_left: '&bDu hast %s verlassen.'
 msg_not_mayor: '&bDu bist nicht der Bürgermeister.'
@@ -729,7 +726,6 @@ friend_list: 'Freundschaftsliste'
 res_format_list_1: '&2' #First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
 res_format_list_2: '&a' #Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
 res_format_list_3: '&f' #Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
-res_friend_added: 'Hinzugefügt '
 townboard_message_colour_1: '&6'
 townboard_message_colour_2: '&e'
 nationboard_message_colour_1: '&6'
@@ -810,7 +806,7 @@ msg_err_player_too_far_from_town_spawn: '&c%s ist zu weit von deinem Stadtspawn 
 msg_resident_bail_amount: 'Kautionskosten für Einwohner: '
 msg_mayor_bail_amount: 'Kautionskosten für Bürgermeister: '
 msg_king_bail_amount: 'Kautionskosten für Könige: '
-msg_has_paid_bail: ' hat die Kaution bezahlt. Er kann wieder in Freiheit leben!'
+msg_has_paid_bail: '%s has paid bail and is free.'
 msg_err_unable_to_pay_bail: 'Das Geld reicht nicht für die Kaution aus.'
 msg_err_bail_not_enabled: 'Kautionen sind nicht aktiv.'
 msg_you_have_been_freed_from_jail: 'Du wurdest aus dem Gefängnis befreit.'
@@ -1377,3 +1373,45 @@ status_unknown: 'unknown'
 msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+#Added in 0.127
+#Used in status screen:
+status_nation_zone_size: 'Nation Zone Size:'
+#Shown when a player adds people to their friends list.
+msg_res_friend_added_to_list: 'Added %s to your friend list.'
+#Shown when a player removes people from their friends list.
+msg_res_friend_removed_from_list: 'Removed % from your friend list.'
+#Generic resident freed from jail message.
+msg_resident_unjailed: '%s has been unjailed.'
+#Shown when an admin uses /ta toggle devmode.
+msg_admin_toggle_devmode: 'Dev Mode: %s'
+#Shown when an admin uses /ta toggle debug.
+msg_admin_toggle_debugmode: 'Debug Mode: %s'
+#Shown when an admin uses /ta toggle townwithdraw
+msg_admin_toggle_townwithdraw: 'Town Withdrawls: %s'
+#Shown when an admin uses /ta toggle nationwithdraw
+msg_admin_toggle_nationwithdraw: 'Nation Withdrawls: %s'
+#Shown when claiming a town block for the town.
+msg_process_town_claim: 'Processing Town Claim...'
+#Shown when unclaiming a town block for the town.
+msg_process_town_unclaim: 'Processing Town Unclaim...'
+#Shown when there is nothing to unclaim.
+msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
+#Given as feedback when /ta checkperm is used.
+msg_perm_true: 'Permission True.'
+#Given as feedback when /ta checkperm is used.
+msg_err_perm_false: 'Permission False.'
+#Shown at the bottom of the /towny map
+#First variable is townname or None, 2nd variable is plot owner's name or None.
+status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+#Shown on /towny version
+msg_towny_version: '&2Towny Version: &a%s'
+#Shown to admins and ops when a player has been blocked from logging into the server.
+msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
+#Shown during resident purge
+msg_scanning_for_old_residents: 'Scanning for old residents...'
+#Shown during resident purge
+msg_deleting_resident: 'Deleting resident: %s.'
+#Shown during resident purge
+msg_purge_complete: 'Resident purge complete: %s deleted.'
+#Message to the Town, shown when a town is given bonus blocks.
+msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
