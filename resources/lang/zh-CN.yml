@@ -1376,7 +1376,6 @@ msg_nationzone_override_removed: '%s的国域被取消了。'
 #Added in 0.127
 #Used in status screen:
 status_nation_zone_size: '国域大小：'
-#Added in TownyMessaging Cleanup PR
 #Shown when a player adds people to their friends list.
 msg_res_friend_added_to_list: 'Added %s to your friend list.'
 #Shown when a player removes people from their friends list.
