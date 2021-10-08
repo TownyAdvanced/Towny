@@ -652,19 +652,38 @@ public class Towny extends JavaPlugin {
 
 		try {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
-			boolean display = false;
+			int startingIndex = 0;
+			int linesDisplayed = 0;
 			plugin.getLogger().info("------------------------------------");
 			plugin.getLogger().info("ChangeLog up until v" + getVersion());
 			String lastVersion = Version.fromString(TownySettings.getLastRunVersion()).toString(); // Parse out any trailing text after the *.*.*.* version, ie "-for-1.12.2".
-			for (String line : changeLog) { // TODO: crawl from the bottom, then
-											// past from that index.
-				if (line.startsWith(lastVersion)) {
-					display = true;
-				}
-				if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
-					Bukkit.getLogger().info(line);
+			
+			for (int i = changeLog.size() - 1; i >= 0; i--) {
+				if (changeLog.get(i).startsWith(lastVersion)) {
+					startingIndex = i;
+					break;
 				}
 			}
+			
+			if (startingIndex != 0) {
+				for (int i = startingIndex; i < changeLog.size(); i++) {
+					String line = changeLog.get(i);
+
+					if (linesDisplayed <= 100 && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
+						Bukkit.getLogger().info(line);
+						++linesDisplayed;
+					} else if (linesDisplayed > 100) {
+						plugin.getLogger().info("");
+						plugin.getLogger().info("And " + (changeLog.size() - startingIndex + 1) + " other changes...");
+						break;
+					}
+				}
+			} else {
+				plugin.getLogger().warning("Could not find starting index for the changelog.");	
+			}
+
+			plugin.getLogger().info("------------------------------------");
+			plugin.getLogger().info("To read the full changelog, go to https://github.com/TownyAdvanced/Towny/blob/" + getVersion() + "/resources/ChangeLog.txt" + (startingIndex != 0 ? "#L" + ++startingIndex : ""));
 			plugin.getLogger().info("------------------------------------");
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg("Could not read ChangeLog.txt");
