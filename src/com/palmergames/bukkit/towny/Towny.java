@@ -51,6 +51,7 @@ import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneListener;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
@@ -654,44 +655,44 @@ public class Towny extends JavaPlugin {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
 			int startingIndex = 0;
 			int linesDisplayed = 0;
-			boolean attach = false;
-			plugin.getLogger().info("------------------------------------");
-			plugin.getLogger().info("ChangeLog up until v" + getVersion());
 			String lastVersion = Version.fromString(TownySettings.getLastRunVersion()).toString(); // Parse out any trailing text after the *.*.*.* version, ie "-for-1.12.2".
+			plugin.getLogger().info("------------------------------------");
+			plugin.getLogger().info("ChangeLog since v" + lastVersion + ":");
 			
+			// Go backwards through the changelog to get to the last run version.
 			for (int i = changeLog.size() - 1; i >= 0; i--) {
-				String line = changeLog.get(i);
-				if (attach && !line.trim().startsWith("-")) {
-					startingIndex = i;
+				if (changeLog.get(i).startsWith(lastVersion)) {
+					// Go forwards through the changelog to find the next version after the last run version.
+					for (int j = i + 1; j < changeLog.size(); j++) {
+						if (!changeLog.get(j).trim().startsWith("-")) {
+							startingIndex = j;
+							break;
+						}
+					}
 					break;
 				}
-
-				if (line.startsWith(lastVersion))
-					attach = true;
 			}
 			
 			if (startingIndex != 0) {
 				for (int i = startingIndex; i < changeLog.size(); i++) {
-					String line = changeLog.get(i);
-
 					if (linesDisplayed > 100) {
-						plugin.getLogger().info("");
-						plugin.getLogger().info("And " + (changeLog.size() - startingIndex + 1) + " other changes...");
+						plugin.getLogger().info(Colors.Yellow + "<snip>");
+						plugin.getLogger().info(Colors.Yellow + "Changelog continues for another " + (changeLog.size() - (startingIndex + 99)) + " lines.");
+						plugin.getLogger().info(Colors.Yellow + "To read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/resources/ChangeLog.txt#L" + ++startingIndex);
 						break;
-					} else if (line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
-						Bukkit.getLogger().info(line);
+					} 
+					String line = changeLog.get(i);
+					if (line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
+						Bukkit.getLogger().info(line.trim().startsWith("-") ? line : Colors.Yellow + line);
 						++linesDisplayed;
 					}
 				}
 			} else {
 				plugin.getLogger().warning("Could not find starting index for the changelog.");	
 			}
-
-			plugin.getLogger().info("------------------------------------");
-			plugin.getLogger().info("To read the full changelog, go to https://github.com/TownyAdvanced/Towny/blob/" + getVersion() + "/resources/ChangeLog.txt" + (startingIndex != 0 ? "#L" + ++startingIndex : ""));
 			plugin.getLogger().info("------------------------------------");
 		} catch (IOException e) {
-			TownyMessaging.sendErrorMsg("Could not read ChangeLog.txt");
+			plugin.getLogger().warning("Could not read ChangeLog.txt");
 		}
 	}
 
