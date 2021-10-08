@@ -6812,4 +6812,6 @@ v0.92.0.11:
   - Add hover to the capital on the nation status screen.
   - Clean up TownyMessaging class.
   - Use server provided gson instead of shading our own, courtesy of Warriorrrr with PR #5347.
-  
+  - Tidy & rename /ta delete, courtesy of Warriorrrr with PR #5351.
+  - Removed command: /ta delete {residentname}
+  - New Command: /ta resident {residentname} delete. 
