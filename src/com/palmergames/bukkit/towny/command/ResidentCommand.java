@@ -26,7 +26,6 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -485,43 +484,31 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 
 	}
-
-	public void listResidents(Player player) {
-
-		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translatable.of("res_list").forLocale(player)));
-		String colour;
-		ArrayList<String> formatedList = new ArrayList<>();
-		for (Resident resident : TownyAPI.getInstance().getActiveResidents()) {
-			if (player.canSee(BukkitTools.getPlayerExact(resident.getName()))) {
-				if (resident.isKing())
-					colour = Colors.Gold;
-				else if (resident.isMayor())
-					colour = Colors.LightBlue;
-				else
-					colour = Colors.White;
-				formatedList.add(colour + resident.getName() + Colors.White);
-			}
-		}
-		for (String line : ChatTools.list(formatedList))
-			TownyMessaging.sendMessage(player, line);
-	}
 	
 	public void listResidents(CommandSender sender) {
 
 		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(Translatable.of("res_list").forLocale(sender)));
 		String colour;
-		ArrayList<String> formatedList = new ArrayList<>();
-		for (Resident resident : TownyAPI.getInstance().getActiveResidents()) {
+		List<String> formattedList = new ArrayList<>();
+		
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			Resident resident = TownyAPI.getInstance().getResident(player);
+			if (resident == null) {
+				formattedList.add(Colors.White + player.getName() + Colors.White);
+				continue;
+			}
+			
 			if (resident.isKing())
 				colour = Colors.Gold;
 			else if (resident.isMayor())
 				colour = Colors.LightBlue;
 			else
 				colour = Colors.White;
-			formatedList.add(colour + resident.getName() + Colors.White);
+
+			formattedList.add(colour + resident.getName() + Colors.White);
 		}
-		for (String line : ChatTools.list(formatedList))
-			TownyMessaging.sendMessage(sender, line);
+		
+		TownyMessaging.sendMessage(sender, ChatTools.list(formattedList));
 	}
 
 	/**
@@ -668,8 +655,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				colour = Colors.White;
 			formatedList.add(colour + friends.getName() + Colors.White);
 		}
-		for (String line : ChatTools.list(formatedList))
-			TownyMessaging.sendMessage(player, line);
+		
+		TownyMessaging.sendMessage(player, ChatTools.list(formatedList));
 	}
 
 	public static void residentFriendAdd(Player player, Resident resident, List<Resident> invited) {

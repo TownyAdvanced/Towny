@@ -857,11 +857,6 @@ public class TownySettings {
 		return getString(ConfigNodes.FILTERS_NPC_PREFIX.getRoot(), ConfigNodes.FILTERS_NPC_PREFIX.getDefault());
 	}
 
-	public static long getInactiveAfter() {
-
-		return getSeconds(ConfigNodes.RES_SETTING_INACTIVE_AFTER_TIME);
-	}
-
 	public static boolean getBedUse() {
 
 		return getBoolean(ConfigNodes.RES_SETTING_DENY_BED_USE);

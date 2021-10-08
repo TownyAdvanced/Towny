@@ -453,31 +453,29 @@ public class TownyAPI {
     public TownBlock getTownBlock(WorldCoord wc) {
     	return wc.getTownBlockOrNull();
     }
-    
-    /**
-     * Get a list of active {@link Resident}s.
-     *
-     * @return {@link List} of active {@link Resident}s.
-     */
-    public List<Resident> getActiveResidents() {
-        List<Resident> activeResidents = new ArrayList<>();
-        for (Resident resident : townyUniverse.getResidents()) {
-            if (isActiveResident(resident)) {
-                activeResidents.add(resident);
-            }
-        }
-        return activeResidents;
-    }
-    
-    /**
-     * Check if the specified {@link Resident} is an active Resident.
-     *
-     * @param resident {@link Resident} to test for activity.
-     * @return true if the player is active, false otherwise.
-     */
-    public boolean isActiveResident(Resident resident) {
-        return ((System.currentTimeMillis() - resident.getLastOnline() < (20 * TownySettings.getInactiveAfter())) || (BukkitTools.isOnline(resident.getName())));
-    }
+
+	/**
+	 * Get a list of active {@link Resident}s.
+	 *
+	 * @return {@link List} of active {@link Resident}s.
+	 * @deprecated This is deprecated as of 0.97.2.6, and will be removed in a future release.
+	 */
+	@Deprecated
+	public List<Resident> getActiveResidents() {
+		return new ArrayList<>(townyUniverse.getResidents());
+	}
+
+	/**
+	 * Check if the specified {@link Resident} is an active Resident.
+	 *
+	 * @param resident {@link Resident} to test for activity.
+	 * @return true if the player is active, false otherwise.
+	 * @deprecated This is deprecated as of 0.97.2.6, and will be removed in a future release.
+	 */
+	@Deprecated
+	public boolean isActiveResident(Resident resident) {
+		return resident.isOnline();
+	}
     
     /**
      * Gets Towny's saving Database

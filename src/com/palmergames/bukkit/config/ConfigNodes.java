@@ -1728,11 +1728,6 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
-	RES_SETTING_INACTIVE_AFTER_TIME(
-			"resident_settings.inactive_after_time",
-			"1h",
-			"",
-			"# player is flagged as inactive after 1 hour (default)"),
 	RES_SETTING_DELETE_OLD_RESIDENTS(
 			"resident_settings.delete_old_residents",
 			"",
