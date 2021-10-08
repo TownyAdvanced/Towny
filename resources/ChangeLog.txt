@@ -6810,3 +6810,6 @@ v0.92.0.11:
   - Bump language file to 0.127.
   - Add nation zone size to nation and town status screens.
   - Add hover to the capital on the nation status screen.
+  - Clean up TownyMessaging class.
+  - Use server provided gson instead of shading our own, courtesy of Warriorrrr with PR #5347.
+  

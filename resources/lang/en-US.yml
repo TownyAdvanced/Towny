@@ -1543,9 +1543,6 @@ msg_nationzone_override_removed: '%s has had their nationzone override removed.'
 
 # Used in status screen:
 status_nation_zone_size: 'Nation Zone Size:'
-
-# Added in TownyMessaging Cleanup PR
-
 #Shown when a player adds people to their friends list.
 msg_res_friend_added_to_list: 'Added %s to your friend list.'
 #Shown when a player removes people from their friends list.
