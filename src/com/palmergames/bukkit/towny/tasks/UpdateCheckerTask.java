@@ -1,13 +1,11 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import com.google.gson.JsonParser;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyUpdateChecker;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.util.Version;
 import net.md_5.bungee.api.ChatColor;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,8 +32,7 @@ public class UpdateCheckerTask extends Thread {
 			
 			try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
 				try {
-					JSONArray results = new JSONArray(new JSONTokener(reader));
-					Version latestVersion = Version.fromString(results.getJSONObject(0).getString("tag_name"));
+					Version latestVersion = Version.fromString(new JsonParser().parse(reader).getAsJsonArray().get(0).getAsJsonObject().get("tag_name").getAsString());
 					boolean upToDate = Version.fromString(towny.getVersion()).compareTo(latestVersion) >= 0;
 					
 					if (!upToDate) {
@@ -48,7 +45,7 @@ public class UpdateCheckerTask extends Thread {
 						towny.getLogger().info(Translation.of("msg_no_new_updates"));
 						TownyUpdateChecker.setCheckedSuccessfully(true);
 					}
-				} catch (JSONException ignored) {}
+				} catch (Exception ignored) {}
 			}
 		} catch (IOException e) {
 			towny.getLogger().info(Translation.of("msg_no_new_updates"));
