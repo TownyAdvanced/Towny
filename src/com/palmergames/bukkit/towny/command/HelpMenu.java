@@ -62,8 +62,7 @@ public enum HelpMenu {
 				.add("mysqldump", "")
 				.add("database [save/load]", "")
 				.add("newday", Translation.of("admin_panel_3"))
-				.add("purge [number of days]", "")
-				.add("delete [] .. []", "delete a residents data files.");
+				.add("purge [number of days]", "");
 		}
 	},
 	
@@ -173,7 +172,8 @@ public enum HelpMenu {
 				.add("[resident]", "")
 				.add("[resident] rename [newname]", "")
 				.add("[resident] friend... [add|remove] [resident]", "")
-				.add("[resident] friend... |list|clear]", "");
+				.add("[resident] friend... [list|clear]", "")
+				.add("[resident] delete", "Delete this resident's Towny data.");
 		}
 	},
 

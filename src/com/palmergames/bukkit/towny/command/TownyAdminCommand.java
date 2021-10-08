@@ -41,6 +41,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
+import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
@@ -88,7 +89,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private static Towny plugin;
 	
 	private static final List<String> adminTabCompletes = Arrays.asList(
-		"delete",
 		"plot",
 		"resident",
 		"town",
@@ -185,7 +185,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> adminResidentTabCompletes = Arrays.asList(
 		"rename",
 		"friend",
-		"unjail"
+		"unjail",
+		"delete"
 	);
 	
 	private static final List<String> adminResidentFriendTabCompletes = Arrays.asList(
@@ -325,10 +326,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 				break;
 			case "checkperm":
-			case "delete":
-				if (args.length == 2)
-					return getTownyStartingWith(args[1], "r");
-				break;
 			case "database":
 				if (args.length == 2)
 					return NameUtil.filterByStart(adminDatabaseTabCompletes, args[1]);
@@ -627,10 +624,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("purge")) {
 
 				purge(StringMgmt.remFirstArg(split));
-
-			} else if (split[0].equalsIgnoreCase("delete")) {
-				String[] newSplit = StringMgmt.remFirstArg(split);
-				residentDelete(player, newSplit);
 			} else if (split[0].equalsIgnoreCase("unclaim")) {
 
 				parseAdminUnclaimCommand(StringMgmt.remFirstArg(split));
@@ -1102,9 +1095,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					JailUtil.unJailResident(resident, UnJailReason.ADMIN);
 				else 
 					throw new TownyException(Translatable.of("msg_err_player_is_not_jailed"));
+			} else if (split[1].equalsIgnoreCase("delete")) {
+				residentDelete(sender, split[0]);
 			}
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
+			TownyMessaging.sendErrorMsg(getSender(), e.getMessage(getSender()));
 		}
 	}
 	
@@ -2086,36 +2081,25 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	 * Delete a resident and it's data file (if not online) Available Only to
 	 * players with the 'towny.admin' permission node.
 	 * 
-	 * @param player - Player.
-	 * @param split - Current command arguments.
+	 * @param sender - Sender who ran the command.
+	 * @param name - Name of the resident to delete.
 	 */
-	public void residentDelete(Player player, String[] split) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+	public void residentDelete(CommandSender sender, String name) {
 
-		if (split.length == 0)
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
-		else
-			try {
-				if (!townyUniverse.getPermissionSource().isTownyAdmin(player))
-					throw new TownyException(Translatable.of("msg_err_admin_only_delete"));
+		Resident resident = TownyUniverse.getInstance().getResident(name);
+		if (resident != null) {
+			Player player = null;
+			if (resident.isOnline())
+				player = resident.getPlayer();
 
-				for (String name : split) {
-					Resident resident = townyUniverse.getResident(name);
-					if (resident != null) {
-						if (!resident.isNPC() && !BukkitTools.isOnline(resident.getName())) {
-							townyUniverse.getDataSource().removeResident(resident);
-							TownyMessaging.sendGlobalMessage(Translatable.of("MSG_DEL_RESIDENT", resident.getName()));
-						} else
-							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_online_or_npc", name));
-					}
-					else {
-						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_name", name));
-					}
-				}
-			} catch (TownyException x) {
-				// Admin only escape
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
-			}
+			TownyUniverse.getInstance().getDataSource().removeResident(resident);
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_del_resident", resident.getName()));
+			
+			if (player != null)
+				Bukkit.getScheduler().runTask(plugin, new OnPlayerLogin(plugin, player));
+		} else {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_name", name));
+		}
 	}
 
 	public void parseToggleCommand(String[] split) throws TownyException {
