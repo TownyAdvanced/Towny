@@ -2085,20 +2085,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	 * @param name - Name of the resident to delete.
 	 */
 	public void residentDelete(CommandSender sender, String name) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		if (!townyUniverse.getPermissionSource().isTownyAdmin(sender)) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_admin_only_delete"));
-			return;
-		}
-
-		Resident resident = townyUniverse.getResident(name);
+		Resident resident = TownyUniverse.getInstance().getResident(name);
 		if (resident != null) {
 			Player player = null;
 			if (resident.isOnline())
 				player = resident.getPlayer();
-			
-			townyUniverse.getDataSource().removeResident(resident);
+
+			TownyUniverse.getInstance().getDataSource().removeResident(resident);
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_del_resident", resident.getName()));
 			
 			if (player != null)
