@@ -669,13 +669,13 @@ public class Towny extends JavaPlugin {
 				for (int i = startingIndex; i < changeLog.size(); i++) {
 					String line = changeLog.get(i);
 
-					if (linesDisplayed <= 100 && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
-						Bukkit.getLogger().info(line);
-						++linesDisplayed;
-					} else if (linesDisplayed > 100) {
+					if (linesDisplayed > 100) {
 						plugin.getLogger().info("");
 						plugin.getLogger().info("And " + (changeLog.size() - startingIndex + 1) + " other changes...");
 						break;
+					} else if (line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
+						Bukkit.getLogger().info(line);
+						++linesDisplayed;
 					}
 				}
 			} else {
