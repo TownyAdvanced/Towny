@@ -76,7 +76,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
-				TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
 				return false;
 			}
 			Player player = (Player) sender;

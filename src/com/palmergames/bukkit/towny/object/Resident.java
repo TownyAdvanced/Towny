@@ -491,7 +491,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		}
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
 	}
 	
 	public void setModes(String[] modes, boolean notify) {
@@ -500,7 +500,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.toggleMode(modes, false);
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
 
 
 	}
@@ -508,7 +508,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void clearModes() {
 
 		this.modes.clear();
-		TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set")));
+		TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set")));
 
 		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(this.getName(), true), 1) == -1)
 			TownyMessaging.sendErrorMsg(Translation.of("msg_err_could_not_set_default_modes_for") + getName() + ".");
@@ -527,7 +527,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			this.toggleMode(modes, false);
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
 	}
 	
 	@Nullable
@@ -854,7 +854,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void removeSpawnProtection() {
 		Bukkit.getScheduler().cancelTask(getSpawnProtectionTaskID());
 		setSpawnProtectionTaskID(0);
-		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_invulnerability").forLocale(this));
+		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_invulnerability"));
 	}
 
 

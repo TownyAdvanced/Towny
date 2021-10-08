@@ -90,7 +90,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		
 		if (plugin.isError() && sender instanceof Player) {
-			TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
+			TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
 			return true;
 		}
 		
@@ -375,14 +375,14 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 				globalWorld.setUsingDefault();
 				plugin.resetCache();
-				TownyMessaging.sendMessage(sender, Translatable.of("msg_usedefault", globalWorld.getName()));
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_usedefault", globalWorld.getName()));
 
 			} else if (split[0].equalsIgnoreCase("wildperm")) {
 
 				if (split.length < 2) {
 					// set default wildperm settings (/tw set wildperm)
 					globalWorld.setUsingDefault();
-					TownyMessaging.sendMessage(sender, Translatable.of("msg_usedefault", globalWorld.getName()));
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_usedefault", globalWorld.getName()));
 				} else
 					try {
 						List<String> perms = Arrays.asList(StringMgmt.remFirstArg(split));
@@ -392,15 +392,15 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 						globalWorld.setUnclaimedZoneItemUse(perms.contains("itemuse"));
 
 						plugin.resetCache();
-						TownyMessaging.sendMessage(sender, Translatable.of("msg_set_wild_perms", globalWorld.getName(), perms.toString()));
+						TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_perms", globalWorld.getName(), perms.toString()));
 					} catch (Exception e) {
-						TownyMessaging.sendMessage(sender, "Eg: /townyworld set wildperm build destroy <world>");
+						TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildperm build destroy <world>");
 					}
 
 			} else if (split[0].equalsIgnoreCase("wildignore")) {
 
 				if (split.length < 2)
-					TownyMessaging.sendMessage(sender, "Eg: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE <world>");
+					TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE <world>");
 				else
 					try {
 						List<String> mats = new ArrayList<>();
@@ -410,7 +410,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 						globalWorld.setUnclaimedZoneIgnore(mats);
 
 						plugin.resetCache();
-						TownyMessaging.sendMessage(sender, Translatable.of("msg_set_wild_ignore", globalWorld.getName(), globalWorld.getUnclaimedZoneIgnoreMaterials()));
+						TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_ignore", globalWorld.getName(), globalWorld.getUnclaimedZoneIgnoreMaterials()));
 
 					} catch (Exception e) {
 						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", " on/off."));
@@ -419,14 +419,14 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("wildregen")) {
 
 				if (split.length < 2)
-					TownyMessaging.sendMessage(sender, "Eg: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart <world>");
+					TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart <world>");
 				else {
 
 					List<String> entities = new ArrayList<>(Arrays.asList(StringMgmt.remFirstArg(split)));
 
 					globalWorld.setPlotManagementWildRevertEntities(entities);
 
-					TownyMessaging.sendMessage(sender, Translatable.of("msg_set_wild_regen", globalWorld.getName(), globalWorld.getPlotManagementWildRevertEntities()));
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_regen", globalWorld.getName(), globalWorld.getPlotManagementWildRevertEntities()));
 				}
 
 			} else if (split[0].equalsIgnoreCase("wildname")) {
@@ -435,7 +435,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildname Wildy");
 				} else
 					globalWorld.setUnclaimedZoneName(split[1]);
-					TownyMessaging.sendMessage(sender, Translatable.of("msg_set_wild_name", globalWorld.getName(), split[1]));
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_name", globalWorld.getName(), split[1]));
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD_SET, split[0])) {
 				try {
 					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_SET, split[0]).execute(sender, "townyworld", split);

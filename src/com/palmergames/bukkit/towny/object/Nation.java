@@ -363,8 +363,8 @@ public class Nation extends Government {
 			List<Town> toRemove = gatherOutOfRangeTowns(new ArrayList<>(getTowns()), capital);
 			if (!toRemove.isEmpty())
 				toRemove.stream().forEach(town -> {
-					TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_town_left_nation", this.getName()));
-					TownyMessaging.sendPrefixedNationMessage(this, Translation.of("msg_nation_town_left", town.getName()));
+					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_left_nation", this.getName()));
+					TownyMessaging.sendPrefixedNationMessage(this, Translatable.of("msg_nation_town_left", town.getName()));
 					town.removeNation();
 					town.save();
 				});
@@ -422,7 +422,7 @@ public class Nation extends Government {
 			double bankcap = TownySettings.getNationBankCap();
 			if (bankcap > 0) {
 				if (amount + this.getAccount().getHoldingBalance() > bankcap) {
-					TownyMessaging.sendPrefixedNationMessage(this, Translation.of("msg_err_deposit_capped", bankcap));
+					TownyMessaging.sendPrefixedNationMessage(this, Translatable.of("msg_err_deposit_capped", bankcap));
 					return;
 				}
 			}

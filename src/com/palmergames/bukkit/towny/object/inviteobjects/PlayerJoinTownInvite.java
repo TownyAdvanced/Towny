@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.command.CommandSender;
 
 public class PlayerJoinTownInvite extends AbstractInvite<Town, Resident> {
@@ -21,9 +21,9 @@ public class PlayerJoinTownInvite extends AbstractInvite<Town, Resident> {
 		
 		if(!resident.hasTown()){
 			TownCommand.townAddResident(town, resident);
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_join_town", resident.getName()));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_join_town", resident.getName()));
 		} else {
-			TownyMessaging.sendMsg(resident, Translation.of("msg_err_already_res"));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_err_already_res"));
 		}
 		resident.deleteReceivedInvite(this);
 		town.deleteSentInvite(this);
@@ -38,10 +38,10 @@ public class PlayerJoinTownInvite extends AbstractInvite<Town, Resident> {
 		town.deleteSentInvite(this);
 		
 		if (!fromSender) {
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_deny_invite", resident.getName()));
-			TownyMessaging.sendMsg(getReceiver(), Translation.of("successful_deny"));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_deny_invite", resident.getName()));
+			TownyMessaging.sendMsg(getReceiver(), Translatable.of("successful_deny"));
 		} else {
-			TownyMessaging.sendMsg(resident, Translation.of("town_revoke_invite", town.getName()));
+			TownyMessaging.sendMsg(resident, Translatable.of("town_revoke_invite", town.getName()));
 		}
 	}
 }

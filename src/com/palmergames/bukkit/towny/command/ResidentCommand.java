@@ -132,7 +132,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
-				TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
 				return false;
 			}
 			Player player = (Player) sender;
@@ -702,32 +702,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		 * If we added any friends format the confirmation message.
 		 */
 		if (invited.size() > 0) {
-
-			StringBuilder msg = new StringBuilder(Translatable.of("res_friend_added").forLocale(player));
-
-			for (Resident newFriend : invited) {
-
-				msg.append(newFriend.getName()).append(", ");
-				Player p = BukkitTools.getPlayer(newFriend.getName());
-
-				if (p != null) {
-
-					TownyMessaging.sendMsg(p, Translatable.of("msg_friend_add", player.getName()));
-
-				}
-
-			}
-
-			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
-			msg.append(Translatable.of("msg_to_list").forLocale(player));
-			TownyMessaging.sendMsg(player, msg.toString());
+			for (Resident newFriend : invited)
+				TownyMessaging.sendMsg(newFriend, Translatable.of("msg_friend_add", player.getName()));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_res_friend_added_to_list", StringMgmt.join(invited, ", ")));
 			resident.save();
-
-		} else {
-
+		} else
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
-
-		}
 	}
 
 	public static void residentFriendRemove(Player player, Resident resident, List<Resident> kicking) {
@@ -749,20 +729,11 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				toKick.remove(friend);
 
 		if (toKick.size() > 0) {
-			StringBuilder msg = new StringBuilder(Translatable.of("msg_removed").forLocale(player));
-			Player p;
-			for (Resident member : toKick) {
-				msg.append(member.getName()).append(", ");
-				p = BukkitTools.getPlayer(member.getName());
-				if (p != null)
-					TownyMessaging.sendMsg(p, Translatable.of("msg_friend_remove", player.getName()));
-			}
-			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
-			msg.append(Translatable.of("msg_from_list").forLocale(player));
-			TownyMessaging.sendMsg(player, msg.toString());
+			for (Resident member : toKick)
+				TownyMessaging.sendMsg(member, Translatable.of("msg_friend_remove", player.getName()));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_res_friend_removed_from_list", StringMgmt.join(toKick, ", ")));
 			resident.save();
 		} else
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
-
 	}
 }

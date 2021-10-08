@@ -59,7 +59,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	private static List<String> towny_top = new ArrayList<>();
 	private static List<String> towny_war = new ArrayList<>();
-	private static String towny_version;
 	private static final List<String> townyTabCompletes = Arrays.asList(
 		"map",
 		"prices",
@@ -120,8 +119,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
-		towny_version = Colors.Green + "Towny version: " + Colors.LightGreen + plugin.getVersion();
-
 		towny_war.add(ChatTools.formatTitle("/towny war"));
 		towny_war.add(ChatTools.formatCommand("", "/towny war", "stats", ""));
 		towny_war.add(ChatTools.formatCommand("", "/towny war", "scores", ""));
@@ -130,7 +127,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
-				TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
 				return false;
 			}
 			Player player = (Player) sender;
@@ -144,15 +141,15 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(sender, line);
 				}
 			} else if (args[0].equalsIgnoreCase("time")) {
-				TownyMessaging.sendMsg(Translation.of("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
+				TownyMessaging.sendMsg(Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime())));
 			} else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v")) {
 				if (TownyUpdateChecker.shouldShowNotification()) {
 					TownyMessaging.sendMessage(sender, Colors.strip(Translation.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion())));
 				} else {
-					TownyMessaging.sendMsg(sender, towny_version);
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_towny_version", plugin.getVersion()));
 					
 					if (TownyUpdateChecker.hasCheckedSuccessfully())
-						TownyMessaging.sendMsg(sender, Translation.of("msg_up_to_date"));
+						TownyMessaging.sendMsg(sender, Translatable.of("msg_up_to_date"));
 				}
 			} else if (args[0].equalsIgnoreCase("war")) {
 				boolean war = TownyWar(StringMgmt.remFirstArg(args), null);
@@ -286,7 +283,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("time")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
-				TownyMessaging.sendMsg(player, Translatable.of("msg_time_until_a_new_day") + TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime()));
+				TownyMessaging.sendMsg(player, Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime())));
 			} else if (split[0].equalsIgnoreCase("universe")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
@@ -299,7 +296,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				if (TownyUpdateChecker.shouldShowNotification()) {
 					TownyMessaging.sendMsg(player, Translatable.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion()).stripColors(true));
 				} else {
-					TownyMessaging.sendMsg(player, towny_version);
+					TownyMessaging.sendMsg(player, Translatable.of("msg_towny_version", plugin.getVersion()));
 					
 					if (TownyUpdateChecker.hasCheckedSuccessfully())
 						TownyMessaging.sendMsg(player, Translatable.of("msg_up_to_date"));
@@ -689,10 +686,5 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	public void consoleUseOnly(Player player) {
 
 		TownyMessaging.sendErrorMsg(player, "This command was designed for use in the console only.");
-	}
-
-	public void inGameUseOnly(CommandSender sender) {
-
-		TownyMessaging.sendMessage(sender, "[Towny] InputError: This command was designed for use in game only.");
 	}
 }

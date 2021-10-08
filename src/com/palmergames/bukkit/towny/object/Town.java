@@ -211,7 +211,7 @@ public class Town extends Government implements TownBlockOwner {
 			nation.removeTown(this);
 		} catch (EmptyNationException e) {
 			TownyUniverse.getInstance().getDataSource().removeNation(nation);
-			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", e.getNation().getName()));
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", e.getNation().getName()));
 		}
 		
 		try {
@@ -604,13 +604,13 @@ public class Town extends Government implements TownBlockOwner {
 				} catch (TownyException ignored) {}
 				
 				if (!nation.getCapital().getHomeblockWorld().equals(getHomeblockWorld())) {
-					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
 					removeNation();
 				}
 
 				double distance = MathUtil.distance(capitalCoord.getX(), townCoord.getX(), capitalCoord.getZ(), townCoord.getZ());
 				if (distance > TownySettings.getNationRequiresProximity()) {
-					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
 					removeNation();
 				}	
 			}
@@ -1012,7 +1012,7 @@ public class Town extends Government implements TownBlockOwner {
 			double bankcap = TownySettings.getTownBankCap();
 			if (bankcap > 0) {
 				if (amount + getAccount().getHoldingBalance() > bankcap) {
-					TownyMessaging.sendPrefixedTownMessage(this, Translation.of("msg_err_deposit_capped", bankcap));
+					TownyMessaging.sendPrefixedTownMessage(this, Translatable.of("msg_err_deposit_capped", bankcap));
 					return;
 				}
 			}

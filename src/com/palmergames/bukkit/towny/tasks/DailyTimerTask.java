@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.PreTownPaysNationTaxEvent;
 import com.palmergames.bukkit.towny.event.town.TownUnconquerEvent;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -316,11 +315,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				if (universe.hasResident(resident.getName())) {
 
 					if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC() || resident.isMayor()) {
-						try {
-							TownyMessaging.sendResidentMessage(resident, Translatable.of("msg_tax_exempt"));
-						} catch (TownyException e) {
-							// Player is not online
-						}
+						TownyMessaging.sendMsg(resident, Translatable.of("msg_tax_exempt"));
 						continue;
 					} else if (town.isTaxPercentage()) {
 						tax = resident.getAccount().getHoldingBalance() * tax / 100;

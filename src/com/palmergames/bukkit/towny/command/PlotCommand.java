@@ -153,7 +153,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
-				TownyMessaging.sendMessage(sender, Colors.Rose + "[Towny Error] Locked in Safe mode!");
+				TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
 				return false;
 			}
 			Player player = (Player) sender;
@@ -343,7 +343,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						continuePlotClaimProcess(selection, resident, player);
 
 					} else {
-						TownyMessaging.sendMessage(player, Translatable.of("msg_err_empty_area_selection"));
+						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_empty_area_selection"));
 					}
 				} else if (split[0].equalsIgnoreCase("evict")) {
 
@@ -425,7 +425,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							}
 
 						} else {
-							TownyMessaging.sendMessage(player, Translatable.of("msg_err_empty_area_selection"));
+							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_empty_area_selection"));
 						}
 					}
 
@@ -521,7 +521,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									return true;
 								}
 							} catch (NumberFormatException e) {
-								TownyMessaging.sendMessage(resident, Translatable.of("msg_error_must_be_num"));
+								TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_num"));
 								return true;
 							}
 						}
@@ -670,7 +670,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 										// Set the outpost spawn and display feedback.
 										town.addOutpostSpawn(player.getLocation());
-										TownyMessaging.sendMessage(player, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translatable.of("outpost")));
+										TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translatable.of("outpost")));
 									})
 									.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())))
 									.sendTo(player);
@@ -712,7 +712,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							BukkitTools.getPluginManager().callEvent(preEvent);
 
 							if (preEvent.isCancelled()) {
-								TownyMessaging.sendMessage(player, preEvent.getCancelMessage());
+								TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 								return false;
 							}
 								
@@ -731,7 +731,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										return;
 									}
 
-									TownyMessaging.sendMessage(resident, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), townBlockType));
+									TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), townBlockType));
 
 									try {
 										townBlock.setType(townBlockType, resident);
@@ -779,7 +779,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						BukkitTools.getPluginManager().callEvent(preEvent);
 						
 						if (preEvent.isCancelled()) {
-							TownyMessaging.sendMessage(player, preEvent.getCancelMessage());
+							TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 							return false;
 						}
 							
@@ -787,7 +787,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						for (String material : TownyAPI.getInstance().getTownyWorld(world).getPlotManagementMayorDelete())
 							if (Material.matchMaterial(material) != null) {
 								TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material));
-								TownyMessaging.sendMessage(player, Translatable.of("msg_clear_plot_material", material));
+								TownyMessaging.sendMsg(player, Translatable.of("msg_clear_plot_material", material));
 							} else
 								throw new TownyException(Translatable.of("msg_err_invalid_property", material));
 
@@ -797,7 +797,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					} else {
 						// Shouldn't ever reach here as a null townBlock should
 						// be caught already in WorldCoord.
-						TownyMessaging.sendMessage(player, Translatable.of("msg_err_empty_area_selection"));
+						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_empty_area_selection"));
 					}
 
 				} else if (split[0].equalsIgnoreCase("group")) {
@@ -1137,7 +1137,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// Add a cooldown timer for this plot.
 					if (TownySettings.getPVPCoolDownTime() > 0 && !permSource.testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
 						CooldownTimerTask.addCooldownTimer(townBlock.getWorldCoord().toString(), CooldownType.PVP);
-					TownyMessaging.sendMessage(player, Translatable.of("msg_changed_pvp", "Plot", townBlock.getPermissions().pvp ? Translatable.of("enabled") : Translatable.of("disabled")));
+					TownyMessaging.sendMsg(player, Translatable.of("msg_changed_pvp", "Plot", townBlock.getPermissions().pvp ? Translatable.of("enabled") : Translatable.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("explosion")) {
 					// Make sure we are allowed to set these permissions.
@@ -1149,7 +1149,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(plotToggleExplosionEvent.getCancellationMsg());
 
 					townBlock.getPermissions().explosion = choice.orElse(!townBlock.getPermissions().explosion);
-					TownyMessaging.sendMessage(player, Translatable.of("msg_changed_expl", "the Plot", townBlock.getPermissions().explosion ? Translatable.of("enabled") : Translatable.of("disabled")));
+					TownyMessaging.sendMsg(player, Translatable.of("msg_changed_expl", "the Plot", townBlock.getPermissions().explosion ? Translatable.of("enabled") : Translatable.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("fire")) {
 					// Make sure we are allowed to set these permissions.
@@ -1161,7 +1161,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(plotToggleFireEvent.getCancellationMsg());
 
 					townBlock.getPermissions().fire = choice.orElse(!townBlock.getPermissions().fire);
-					TownyMessaging.sendMessage(player, Translatable.of("msg_changed_fire", "the Plot", townBlock.getPermissions().fire ? Translatable.of("enabled") : Translatable.of("disabled")));
+					TownyMessaging.sendMsg(player, Translatable.of("msg_changed_fire", "the Plot", townBlock.getPermissions().fire ? Translatable.of("enabled") : Translatable.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("mobs")) {
 					// Make sure we are allowed to set these permissions.
@@ -1174,7 +1174,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					townBlock.getPermissions().mobs = choice.orElse(!townBlock.getPermissions().mobs);
 					
-					TownyMessaging.sendMessage(player, Translatable.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translatable.of("enabled") : Translatable.of("disabled")));
+					TownyMessaging.sendMsg(player, Translatable.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translatable.of("enabled") : Translatable.of("disabled")));
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_TOGGLE, split[0])) {
 					TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_TOGGLE, split[0]).execute(player, "plot", split);
 				} else {
@@ -1246,7 +1246,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(town, player, choice.orElse(!groupBlock.getPermissions().pvp));
 						Bukkit.getPluginManager().callEvent(plotTogglePvpEvent);
 						if (plotTogglePvpEvent.isCancelled()) {
-							TownyMessaging.sendMessage(player, plotTogglePvpEvent.getCancellationMsg());
+							TownyMessaging.sendErrorMsg(player, plotTogglePvpEvent.getCancellationMsg());
 							return;
 						}
 
@@ -1264,7 +1264,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(town, player, choice.orElse(!groupBlock.getPermissions().explosion));
 						Bukkit.getPluginManager().callEvent(plotToggleExplosionEvent);
 						if (plotToggleExplosionEvent.isCancelled()) {
-							TownyMessaging.sendMessage(player, plotToggleExplosionEvent.getCancellationMsg());
+							TownyMessaging.sendErrorMsg(player, plotToggleExplosionEvent.getCancellationMsg());
 							return;
 						}
 
@@ -1278,7 +1278,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(town, player, choice.orElse(!groupBlock.getPermissions().fire));
 						Bukkit.getPluginManager().callEvent(plotToggleFireEvent);
 						if (plotToggleFireEvent.isCancelled()) {
-							TownyMessaging.sendMessage(player, plotToggleFireEvent.getCancellationMsg());
+							TownyMessaging.sendErrorMsg(player, plotToggleFireEvent.getCancellationMsg());
 							return;
 						}
 						
@@ -1292,7 +1292,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						PlotToggleMobsEvent plotToggleMobsEvent = new PlotToggleMobsEvent(town, player, choice.orElse(!groupBlock.getPermissions().mobs));
 						Bukkit.getPluginManager().callEvent(plotToggleMobsEvent);
 						if (plotToggleMobsEvent.isCancelled()) {
-							TownyMessaging.sendMessage(player, plotToggleMobsEvent.getCancellationMsg());
+							TownyMessaging.sendErrorMsg(player, plotToggleMobsEvent.getCancellationMsg());
 							return;
 						}
 
@@ -1316,7 +1316,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				
 				// Finally send the message.
 				if (endingMessage != null)
-					TownyMessaging.sendMessage(player, endingMessage);
+					TownyMessaging.sendMsg(player, endingMessage);
 				
 
 			} catch (TownyException e) {
@@ -1732,7 +1732,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				
 				// If any one of the townblocks is not allowed to be set, cancel setting all of them.
 				if (preEvent.isCancelled()) {
-					TownyMessaging.sendMessage(player, preEvent.getCancelMessage());
+					TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 					return false;
 				}
 			}
@@ -1754,7 +1754,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							return;
 						}					
 
-						TownyMessaging.sendMessage(resident, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), type));
+						TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), type));
 
 						for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
 							try {
@@ -1911,7 +1911,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.PLOT_GROUP_HELP.send(player);
 
 			if (townBlock.hasPlotObjectGroup())
-				TownyMessaging.sendMessage(player, Translatable.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
+				TownyMessaging.sendMsg(player, Translatable.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size()));
 			
 			return true;
 		}
