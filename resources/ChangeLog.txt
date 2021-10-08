@@ -6816,3 +6816,4 @@ v0.92.0.11:
   - Removed command: /ta delete {residentname}
   - New Command: /ta resident {residentname} delete. 
   - Enhance the /res list command, courtesy of Warriorrrr with PR #5350.
+  - Fix updating reference lang files, an issue on select operating systems.

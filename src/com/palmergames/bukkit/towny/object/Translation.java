@@ -30,7 +30,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -164,32 +163,27 @@ public final class Translation {
 		// Files.copy takes care of the creation of lang.yml AS LONG AS the parent directory exists
 		// Which we take care of right before the languages are looped through.
 		
-		try {
-			// Get the resource
-			InputStream resource = Towny.class.getResourceAsStream("/lang/" + lang + ".yml");
+		// Get the resource
+		try (InputStream resource = Towny.class.getResourceAsStream("/lang/" + lang + ".yml")) {
+
 			if (resource == null) {
 				throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR.", TownyInitException.TownyError.LOCALIZATION);
 			}
 
-			try {
-				// Copy resource to location
-				// If this fails see the outer catches
-				// This will throw FileAlreadyExists only if the file already exists.
-				Files.copy(resource, langPath);
-			} catch (FileAlreadyExistsException e) {
-				// Ensure that the language file is updated.
-				try (InputStream is = Files.newInputStream(langPath)) {
-					Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
-
-					if (values == null || (double) currentVersion != (double) values.get("version")) {
-						Files.copy(resource, langPath, StandardCopyOption.REPLACE_EXISTING);
-					}
-				} catch (IOException e2) {
-					throw new TownyInitException("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath + " during a langauge file update.'", TownyInitException.TownyError.LOCALIZATION, e2);
+			// Check the existing lang file for the version, and if necessary, replace it.
+			try (InputStream is = Files.newInputStream(langPath)) {
+				Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
+				if (values == null || (double) currentVersion != (double) values.get("version")) {
+					is.close();
+					// Remove the old reference file.
+					langPath.toFile().delete();
+					// Copy resource to location.
+					Files.copy(resource, langPath);
 				}
 			}
+			resource.close();
 		} catch (IOException e) {
-			throw new TownyInitException("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath + "'", TownyInitException.TownyError.LOCALIZATION, e);
+			throw new TownyInitException("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath + " during a langauge file update.'", TownyInitException.TownyError.LOCALIZATION, e);
 		}
 	}
 	
