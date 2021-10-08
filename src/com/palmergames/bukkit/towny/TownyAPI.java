@@ -460,7 +460,7 @@ public class TownyAPI {
 	 * @return {@link List} of active {@link Resident}s.
 	 * @deprecated This is deprecated as of 0.97.2.6, and will be removed in a future release.
 	 */
-	@Deprecated(forRemoval = true)
+	@Deprecated
 	public List<Resident> getActiveResidents() {
 		return new ArrayList<>(townyUniverse.getResidents());
 	}
@@ -472,7 +472,7 @@ public class TownyAPI {
 	 * @return true if the player is active, false otherwise.
 	 * @deprecated This is deprecated as of 0.97.2.6, and will be removed in a future release.
 	 */
-	@Deprecated(forRemoval = true)
+	@Deprecated
 	public boolean isActiveResident(Resident resident) {
 		return resident.isOnline();
 	}
