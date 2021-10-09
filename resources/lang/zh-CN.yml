@@ -806,7 +806,7 @@ msg_err_player_too_far_from_town_spawn: '&c%s 离你的城镇太远了，收不�
 msg_resident_bail_amount: '居民保释金: '
 msg_mayor_bail_amount: '城主保释金: '
 msg_king_bail_amount: '国王保释金: '
-msg_has_paid_bail: '%s has paid bail and is free.'
+msg_has_paid_bail: '%s缴纳了保释金并被释放了。'
 msg_err_unable_to_pay_bail: '无法支付保释金.'
 msg_err_bail_not_enabled: '保释金功能未开启.'
 msg_you_have_been_freed_from_jail: '你被释放了.'
@@ -1377,41 +1377,41 @@ msg_nationzone_override_removed: '%s的国域被取消了。'
 #Used in status screen:
 status_nation_zone_size: '国域大小：'
 #Shown when a player adds people to their friends list.
-msg_res_friend_added_to_list: 'Added %s to your friend list.'
+msg_res_friend_added_to_list: '已将%s加为你的好友。'
 #Shown when a player removes people from their friends list.
-msg_res_friend_removed_from_list: 'Removed % from your friend list.'
+msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
 #Generic resident freed from jail message.
-msg_resident_unjailed: '%s has been unjailed.'
+msg_resident_unjailed: '%s被解除监禁。'
 #Shown when an admin uses /ta toggle devmode.
-msg_admin_toggle_devmode: 'Dev Mode: %s'
+msg_admin_toggle_devmode: '开发者模式：%s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: 'Debug Mode: %s'
+msg_admin_toggle_debugmode: '调试模式：%s'
 #Shown when an admin uses /ta toggle townwithdraw
-msg_admin_toggle_townwithdraw: 'Town Withdrawls: %s'
+msg_admin_toggle_townwithdraw: '城镇银行提款：%s'
 #Shown when an admin uses /ta toggle nationwithdraw
-msg_admin_toggle_nationwithdraw: 'Nation Withdrawls: %s'
+msg_admin_toggle_nationwithdraw: '国家银行提款：%s'
 #Shown when claiming a town block for the town.
-msg_process_town_claim: 'Processing Town Claim...'
+msg_process_town_claim: '城镇圈地中......'
 #Shown when unclaiming a town block for the town.
-msg_process_town_unclaim: 'Processing Town Unclaim...'
+msg_process_town_unclaim: '城镇取消圈地中......'
 #Shown when there is nothing to unclaim.
-msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
+msg_err_nothing_to_unclaim: '没有可以取消圈地的地方。'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: 'Permission True.'
+msg_perm_true: '权限为真。'
 #Given as feedback when /ta checkperm is used.
-msg_err_perm_false: 'Permission False.'
+msg_err_perm_false: '权限为假。'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+status_towny_map_town_line: '&2城镇：&a%s &7| &2地主：&a%s'
 #Shown on /towny version
-msg_towny_version: '&2Towny Version: &a%s'
+msg_towny_version: '&2Towny版本：&a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
+msg_admin_blocked_login: '&2有玩家试图从IP：&c%s&2使用玩家名%s登录，这可能会破坏服务器的经济系统。 此次登录已被Towny阻止。建议封禁此IP！'
 #Shown during resident purge
-msg_scanning_for_old_residents: 'Scanning for old residents...'
+msg_scanning_for_old_residents: '寻找旧居民中......'
 #Shown during resident purge
-msg_deleting_resident: 'Deleting resident: %s.'
+msg_deleting_resident: '正在删除居民%s。'
 #Shown during resident purge
-msg_purge_complete: 'Resident purge complete: %s deleted.'
+msg_purge_complete: '清理完成，共删除了%s个居民。'
 #Message to the Town, shown when a town is given bonus blocks.
-msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
+msg_you_have_been_given_bonus_blocks: '你被给予了%s个额外的城镇区块上限。'

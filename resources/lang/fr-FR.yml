@@ -1379,7 +1379,7 @@ status_nation_zone_size: 'Nation Zone Size:'
 #Shown when a player adds people to their friends list.
 msg_res_friend_added_to_list: 'Added %s to your friend list.'
 #Shown when a player removes people from their friends list.
-msg_res_friend_removed_from_list: 'Removed % from your friend list.'
+msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
 #Generic resident freed from jail message.
 msg_resident_unjailed: '%s has been unjailed.'
 #Shown when an admin uses /ta toggle devmode.
