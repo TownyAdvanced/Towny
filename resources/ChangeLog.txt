@@ -6821,3 +6821,4 @@ v0.92.0.11:
   - Blank king prefixes and postfixes will no longer override a mayor's normal prefix and postfix.
   - Fix no feedback message when a town tries to purchase more bonus blocks, when they are already at max.
     - Closes #5354.
+  - Limit the amount of changelog lines printed to 100, courtesy of Warriorrrr with PR #5352.
