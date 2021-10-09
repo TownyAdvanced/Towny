@@ -2660,11 +2660,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (n == 0)
-			return;
-			double cost = town.getBonusBlockCostN(n);
-			// Test if the town can pay and throw economy exception if not.
-			if (!town.getAccount().canPayFromHoldings(cost))
-				throw new TownyException(Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+			throw new TownyException(Translatable.of("msg_err_you_cannot_purchase_any_more_bonus_blocks"));
+
+		double cost = town.getBonusBlockCostN(n);
+		// Test if the town can pay and throw economy exception if not.
+		if (!town.getAccount().canPayFromHoldings(cost))
+			throw new TownyException(Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 		
 		Confirmation confirmation = Confirmation.runOnAccept(() -> {
 			if (!town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n))) {

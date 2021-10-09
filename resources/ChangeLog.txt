@@ -6819,3 +6819,5 @@ v0.92.0.11:
   - Fix updating reference lang files, an issue on select operating systems.
   - Blank capital prefixes and postfixes will no longer override a town's normal prefix and postfix.
   - Blank king prefixes and postfixes will no longer override a mayor's normal prefix and postfix.
+  - Fix no feedback message when a town tries to purchase more bonus blocks, when they are already at max.
+    - Closes #5354.
