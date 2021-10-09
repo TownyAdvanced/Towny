@@ -1279,11 +1279,9 @@ public class Town extends Government implements TownBlockOwner {
 
 	@Override
 	public String getFormattedName() {
-		if (this.isCapital()) {
-			return TownySettings.getCapitalPrefix(this) + this.getName().replaceAll("_", " ") + TownySettings.getCapitalPostfix(this);
-		}
-		
-		return TownySettings.getTownPrefix(this) + this.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(this);
+		String prefix = (this.isCapital() && !TownySettings.getCapitalPrefix(this).isEmpty()) ? TownySettings.getCapitalPrefix(this) : TownySettings.getTownPrefix(this);
+		String postfix = (this.isCapital() && !TownySettings.getCapitalPostfix(this).isEmpty()) ? TownySettings.getCapitalPostfix(this) : TownySettings.getTownPostfix(this);
+		return prefix + this.getName().replaceAll("_", " ") + postfix;
 	}
 	
 	public String getPrefix() {

@@ -6817,3 +6817,4 @@ v0.92.0.11:
   - New Command: /ta resident {residentname} delete. 
   - Enhance the /res list command, courtesy of Warriorrrr with PR #5350.
   - Fix updating reference lang files, an issue on select operating systems.
+  - Blank capital prefixes and postfixes will no longer override a town's normal prefix and postfix.
