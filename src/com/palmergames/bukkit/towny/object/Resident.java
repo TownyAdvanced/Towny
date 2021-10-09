@@ -192,10 +192,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	public boolean isKing() {
 
-		try {
-			return hasNation() && town.getNation().isKing(this);
-		} catch (NotRegisteredException ignored) {}
-		return false;
+		return hasNation() && town.getNationOrNull().isKing(this);
 	}
 
 	public boolean isMayor() {
@@ -702,15 +699,15 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	@Override
 	public String getFormattedName() {
-		if (isKing()) {
-			return Colors.translateColorCodes(hasTitle() ? getTitle() + " " : TownySettings.getKingPrefix(this)) + getName() + Colors.translateColorCodes(hasSurname() ? " " + getSurname() : TownySettings.getKingPostfix(this));
-		}
-			
-		if (isMayor()) {
-			return Colors.translateColorCodes(hasTitle() ? getTitle() + " " : TownySettings.getMayorPrefix(this)) + getName() + Colors.translateColorCodes(hasSurname() ? " " + getSurname() : TownySettings.getMayorPostfix(this));
-		}
-			
-		return Colors.translateColorCodes(hasTitle() ? getTitle() + " " : "") + getName() + Colors.translateColorCodes(hasSurname() ? " " + getSurname() : "");
+		
+		String prefix = Colors.translateColorCodes(hasTitle() ? getTitle() + " " : 
+			(isKing() && !TownySettings.getKingPrefix(this).isEmpty()) ? TownySettings.getKingPrefix(this) : 
+				(isMayor() && !TownySettings.getMayorPrefix(this).isEmpty()) ? TownySettings.getMayorPrefix(this) : "");
+		
+		String postfix = Colors.translateColorCodes(hasSurname() ? getSurname() + " " : 
+			(isKing() && !TownySettings.getKingPostfix(this).isEmpty()) ? TownySettings.getKingPostfix(this) : 
+				(isMayor() && !TownySettings.getMayorPostfix(this).isEmpty()) ? TownySettings.getMayorPostfix(this) : "");
+		return prefix + getName() + postfix;
 	}
 
 	/**
