@@ -519,12 +519,12 @@ public class TownyAPI {
      *
      * @param player   {@link Player} to be teleported to jail.
      * @param location {@link Location} of the jail to be teleported to.
-	 * @deprecated Use {@link com.palmergames.bukkit.towny.utils.SpawnUtil#jailTeleport(Resident)} or {@link com.palmergames.bukkit.towny.utils.SpawnUtil#jailAwayTeleport(Resident)} instead.
+     * @deprecated Use {@link com.palmergames.bukkit.towny.utils.SpawnUtil#jailTeleport(Resident)} or {@link com.palmergames.bukkit.towny.utils.SpawnUtil#jailAwayTeleport(Resident)} instead.
      */
-	@Deprecated
+    @Deprecated
     public void jailTeleport(final Player player, final Location location) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(towny, () -> PaperLib.teleportAsync(player, location, PlayerTeleportEvent.TeleportCause.PLUGIN),
-			(long) TownySettings.getTeleportWarmupTime() * 20);
+            (long) TownySettings.getTeleportWarmupTime() * 20);
     }
     
     public void clearWarEvent() {
