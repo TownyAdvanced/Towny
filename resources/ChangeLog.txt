@@ -6822,3 +6822,5 @@ v0.92.0.11:
   - Fix no feedback message when a town tries to purchase more bonus blocks, when they are already at max.
     - Closes #5354.
   - Limit the amount of changelog lines printed to 100, courtesy of Warriorrrr with PR #5352.
+  - Fix TownAddResidentEvent firing on database loads.
+    - Closes #5356.

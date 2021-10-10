@@ -859,7 +859,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				Town town = universe.getTown(line);
 				if (town == null) {
 					TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " tried to load the town " + line + " which is invalid, removing town from the resident.");
-					resident.setTown(null);
+					resident.setTown(null, false);
 				}
 				else {
 					resident.setTown(town, false);

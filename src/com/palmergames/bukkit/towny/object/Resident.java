@@ -255,10 +255,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		updatePerms();
 		town.addResident(this);
 
-		if (updateJoinedAt)
+		if (updateJoinedAt) {
 			setJoinedTownAt(System.currentTimeMillis());
-		
-		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
+			BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
+		}
 	}
 	
 	public void removeTown() {
