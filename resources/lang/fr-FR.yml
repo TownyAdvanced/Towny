@@ -1415,3 +1415,5 @@ msg_deleting_resident: 'Deleting resident: %s.'
 msg_purge_complete: 'Resident purge complete: %s deleted.'
 #Message to the Town, shown when a town is given bonus blocks.
 msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
+#Message shown when a town cannot purchase any more bonus blocks.
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
