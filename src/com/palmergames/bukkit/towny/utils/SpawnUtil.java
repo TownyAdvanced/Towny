@@ -413,8 +413,9 @@ public class SpawnUtil {
 			spawnLocation = Objects.requireNonNull(Bukkit.getWorld(TownySettings.getOutlawTeleportWorld())).getSpawnLocation();
 		}
 		// sets tp location to their bedspawn only if it isn't in the town they're being teleported from.
-		if ((outlawedPlayer.getBedSpawnLocation() != null) && (TownyAPI.getInstance().getTown(outlawedPlayer.getBedSpawnLocation()) != town))
-			spawnLocation = outlawedPlayer.getBedSpawnLocation();
+		Location bed = outlawedPlayer.getBedSpawnLocation();
+		if ((bed != null) && (TownyAPI.getInstance().getTown(bed) != town))
+			spawnLocation = bed;
 		if (outlaw.hasTown() && TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer) != null)
 			spawnLocation = TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer);
 		TownyMessaging.sendMsg(outlaw, Translatable.of("msg_outlaw_kicked", town));
@@ -438,17 +439,11 @@ public class SpawnUtil {
 		Town town = resident.getTownOrNull();
 		Location loc = resident.getPlayer().getWorld().getSpawnLocation();
 
-		if (town != null)
-			if (town.hasSpawn()) {
-				try {
-					loc = town.getSpawn();
-				} catch (Exception ignored) {}
-			}
-		
-		if (resident.getPlayer().getBedSpawnLocation() != null)
-			loc = resident.getPlayer().getBedSpawnLocation();
-		
-		return loc;
+		if (town != null && town.hasSpawn())
+			loc = town.getSpawnOrNull();
+
+		Location bed = resident.getPlayer().getBedSpawnLocation();
+		return bed != null ? bed : loc;
 	}
 	
 	private static void initiatePluginTeleport(Resident resident, Location loc) {
