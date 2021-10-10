@@ -1593,17 +1593,17 @@ msg_jailed_war: 'Prisoner of War.'
 #Jail handbook messages
 msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
 #Jail handbook messages
-msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.\n\n'
+msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.\n\n'
+msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
 #Jail handbook messages
-msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.\n'
+msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
 #Jail handbook messages
 msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
 #Jail handbook messages
-msg_jailed_handbook_bail_2: 'Bail will cost %s.\n\n'
+msg_jailed_handbook_bail_2: 'Bail will cost %s.'
 #Jail handbook messages
 msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
 #Jail handbook messages

@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -166,36 +167,37 @@ public class JailUtil {
 	 * @param reason JailReason the player is in jail for.
 	 */
 	private static void sendJailedBookToResident(Player player, JailReason reason) {
+		final Translator translator = Translator.locale(Translation.getLocale(player));
 		
 		/*
 		 * A nice little book for the not so nice person in jail.
 		 */
-		String pages = Translation.of("msg_jailed_handbook_1", reason.getCause());
-		pages += Translation.of("msg_jailed_handbook_2");
-		pages += Translation.of("msg_jailed_handbook_3", reason.getHours());
-		pages += TownySettings.JailDeniesTownLeave() ? Translation.of("msg_jailed_handbook_4_cant") : Translation.of("msg_jailed_handbook_4_can");
+		String pages = translator.of("msg_jailed_handbook_1", translator.of(reason.getCause()));
+		pages += translator.of("msg_jailed_handbook_2") + "\n\n";
+		pages += translator.of("msg_jailed_handbook_3", reason.getHours()) + "\n\n";
+		pages += TownySettings.JailDeniesTownLeave() ? translator.of("msg_jailed_handbook_4_cant") : translator.of("msg_jailed_handbook_4_can") + "\n";
 		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive()) {
-			pages += Translation.of("msg_jailed_handbook_bail_1");
+			pages += translator.of("msg_jailed_handbook_bail_1");
 			double cost = TownySettings.getBailAmount();
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			if (resident.isMayor())
 				cost = TownySettings.getBailAmountMayor();
 			if (resident.isKing())
 				cost = TownySettings.getBailAmountKing();
-			pages += Translation.of("msg_jailed_handbook_bail_2", TownyEconomyHandler.getFormattedBalance(cost));
+			pages += translator.of("msg_jailed_handbook_bail_2", TownyEconomyHandler.getFormattedBalance(cost)) + "\n\n";
 		}
-		pages += Translation.of("msg_jailed_handbook_5");
-		pages += Translation.of("msg_jailed_handbook_6");
+		pages += translator.of("msg_jailed_handbook_5");
+		pages += translator.of("msg_jailed_handbook_6");
 		if (TownySettings.JailAllowsTeleportItems())
-			pages += Translation.of("msg_jailed_teleport");
+			pages += translator.of("msg_jailed_teleport");
 		pages += "\n\n";
 		if (reason.equals(JailReason.PRISONER_OF_WAR))
-			pages += Translation.of("msg_jailed_war_prisoner");
+			pages += translator.of("msg_jailed_war_prisoner");
 		
 		/*
 		 * Send the book off to the BookFactory to be made.
 		 */
-		player.getInventory().addItem(new ItemStack(BookFactory.makeBook(Translation.of("msg_jailed_title"), Translation.of("msg_jailed_author"), pages)));
+		player.getInventory().addItem(new ItemStack(BookFactory.makeBook(translator.of("msg_jailed_title"), translator.of("msg_jailed_author"), pages)));
 	}
 
 	public static void createJailPlot(TownBlock townBlock, Town town, Location location) throws TownyException {
