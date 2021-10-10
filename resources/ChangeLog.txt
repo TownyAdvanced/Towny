@@ -6824,3 +6824,5 @@ v0.92.0.11:
   - Limit the amount of changelog lines printed to 100, courtesy of Warriorrrr with PR #5352.
   - Fix TownAddResidentEvent firing on database loads.
     - Closes #5356.
+0.97.2.7:
+  - Fix appearance of the overclaimed upkeep line in the town status screen.
