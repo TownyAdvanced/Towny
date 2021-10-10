@@ -28,6 +28,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -180,6 +181,9 @@ public final class Translation {
 					// Copy resource to location.
 					Files.copy(resource, langPath);
 				}
+			} catch (NoSuchFileException e) {
+				// We haven't got this file in the reference folder yet.
+				Files.copy(resource, langPath);
 			}
 			resource.close();
 		} catch (IOException e) {
