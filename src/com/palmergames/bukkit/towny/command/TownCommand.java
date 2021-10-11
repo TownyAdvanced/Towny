@@ -1626,6 +1626,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				boolean peacefulState = choice.orElse(!town.isNeutral());
 				double cost = TownySettings.getTownNeutralityCost();
 				
+				if (TownySettings.nationCapitalsCantBeNeutral() && town.isCapital())
+					throw new TownyException(Translatable.of("msg_err_capital_cannot_be_peaceful"));
+				
 				if (town.isNeutral() && peacefulState) throw new TownyException(Translatable.of("msg_town_already_peaceful"));
 				else if (!town.isNeutral() && !peacefulState) throw new TownyException(Translatable.of("msg_town_already_not_peaceful"));
 

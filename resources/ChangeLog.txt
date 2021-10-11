@@ -6831,3 +6831,4 @@ v0.92.0.11:
   - New Config Option: global_nation_settings.capitals_cannot_be_neutral
     - Default: false
     - If true the capital city of nation cannot be neutral/peaceful.
+  - Bump language file to 0.128.
