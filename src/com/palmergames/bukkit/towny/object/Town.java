@@ -1483,4 +1483,17 @@ public class Town extends Government implements TownBlockOwner {
 		return nation.getNationZoneSize() + (isCapital() ? TownySettings.getNationZonesCapitalBonusSize() : 0);
 		
 	}
+	
+	/**
+	 * Is the Town Neutral or Peaceful?
+	 * 
+	 * Tests against a config option that prevents a capital city from being neutral.
+	 * 
+	 * @since 0.96.5.4
+	 * @return true if the object is Neutral or Peaceful.
+	 */
+	@Override
+	public boolean isNeutral() {
+		return TownySettings.nationCapitalsCantBeNeutral() && isCapital() ? false : isNeutral;
+	}
 }

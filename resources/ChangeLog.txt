@@ -6826,3 +6826,8 @@ v0.92.0.11:
     - Closes #5356.
 0.97.2.7:
   - Fix appearance of the overclaimed upkeep line in the town status screen.
+  - Add option to prevent a nation's capital city from being neutral.
+    - Closes #5360.
+  - New Config Option: global_nation_settings.capitals_cannot_be_neutral
+    - Default: false
+    - If true the capital city of nation cannot be neutral/peaceful.
