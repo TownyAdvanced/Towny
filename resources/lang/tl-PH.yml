@@ -18,8 +18,8 @@ description: >
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
-unclaimed_plot_name: 'Unowned'
-unclaimed_zone_name: 'Wilderness'
+unclaimed_plot_name: 'Walang may-ari'
+unclaimed_zone_name: 'Kaparangan'
 ############################################################
 #+------------------------------------------------------+ #
 #|help messages                                         | #
@@ -37,7 +37,7 @@ town_help_5: 'Teleport to town''s spawn.'
 town_help_6: 'New town with you as mayor.'
 town_help_7: 'New town with target mayor.'
 town_help_8: 'List commands for mayors.'
-town_help_9: 'Today''s the day!'
+town_help_9: 'Ngayon na!'
 town_help_10: 'List all online residents in town'
 mayor_help_3: 'Claim area not attached to town'
 mayor_help_4: 'Claim around you to a radius of X'
