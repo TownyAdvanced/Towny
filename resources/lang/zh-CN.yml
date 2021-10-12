@@ -1379,7 +1379,7 @@ status_nation_zone_size: '国域大小：'
 #Shown when a player adds people to their friends list.
 msg_res_friend_added_to_list: '已将%s加为你的好友。'
 #Shown when a player removes people from their friends list.
-msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
+msg_res_friend_removed_from_list: '%s不再是你的好友了。'
 #Generic resident freed from jail message.
 msg_resident_unjailed: '%s被解除监禁。'
 #Shown when an admin uses /ta toggle devmode.
@@ -1415,3 +1415,5 @@ msg_deleting_resident: '正在删除居民%s。'
 msg_purge_complete: '清理完成，共删除了%s个居民。'
 #Message to the Town, shown when a town is given bonus blocks.
 msg_you_have_been_given_bonus_blocks: '你被给予了%s个额外的城镇区块上限。'
+#Message shown when a town cannot purchase any more bonus blocks.
+msg_err_you_cannot_purchase_any_more_bonus_blocks: '你城镇的额外城镇区块上限已达到最大值，不能再购买了。'

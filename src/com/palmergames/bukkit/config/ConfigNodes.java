@@ -941,6 +941,11 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# If Towny should show players the nationboard when they login."),
+	GNATION_SETTINGS_CAPITAL_CANNOT_BE_NEUTRAL(
+			"global_nation_settings.capitals_cannot_be_neutral",
+			"false",
+			"",
+			"# If true the capital city of nation cannot be neutral/peaceful."),
 	GNATION_SETTINGS_CAPITAL_SPAWN(
 			"global_nation_settings.capital_spawn",
 			"true",

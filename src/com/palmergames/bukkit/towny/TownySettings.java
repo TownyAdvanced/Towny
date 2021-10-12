@@ -1085,6 +1085,10 @@ public class TownySettings {
 		
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN);
 	}
+	
+	public static boolean nationCapitalsCantBeNeutral() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_CANNOT_BE_NEUTRAL);
+	}
 
 	public static String getUnclaimedZoneName() {
 
