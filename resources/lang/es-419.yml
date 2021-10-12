@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.127
+version: 0.128
 language: es-419
 author: VreyaViress, EuGNosii
 website: 'http://townyadvanced.github.io/'
@@ -1417,3 +1417,6 @@ msg_purge_complete: 'Resident purge complete: %s deleted.'
 msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
+#Added in 0.128
+#Message shown to a capital city which is being denied the ability to toggle peaceful on.
+msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
