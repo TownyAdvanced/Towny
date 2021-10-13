@@ -1182,6 +1182,7 @@ msg_deleting_nation_will_result_in_losing_residents: '&cUyarı: Ülkenizi silmek
 msg_command_blocked_inside_towns: '&cBu komutu kasaba içinde kullanamazsınız..'
 msg_command_limited: 'Bu komutu sadece kendi arsalarınızda kullanabilirsiniz..'
 #Added in 0.104
+#Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Şurada alındı:'
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Vahşi doğa kullanımı tüm dünyalarda %s oldu.'
