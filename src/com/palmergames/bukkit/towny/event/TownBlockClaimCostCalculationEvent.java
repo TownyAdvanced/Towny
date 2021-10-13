@@ -13,14 +13,12 @@ public class TownBlockClaimCostCalculationEvent extends Event {
 	private double price;
 	private final Town town;
 	private final int plotAmount;
-	private final boolean isBonus;
 
-	public TownBlockClaimCostCalculationEvent(Town town, double price,int plotAmount, boolean isBonus) {
+	public TownBlockClaimCostCalculationEvent(Town town, double price,int plotAmount) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.price = price;
 		this.plotAmount = plotAmount;
-		this.isBonus = isBonus;
 	}
 
 	/**
@@ -53,14 +51,6 @@ public class TownBlockClaimCostCalculationEvent extends Event {
 	 */
 	public int getPlotAmount() {
 		return this.plotAmount;
-	}
-	
-	/**
-	 * Returns true if claimed blocks are Bonus Blocks.
-	 * @return true if claimed blocks are Bonus Blocks
-	 */
-	public boolean isBonus() {
-		return this.isBonus;
 	}
 
 	@Override
