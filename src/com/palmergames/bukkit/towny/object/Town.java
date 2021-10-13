@@ -479,7 +479,7 @@ public class Town extends Government implements TownBlockOwner {
 	public double getBonusBlockCost() {
 		double price = (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
 		double maxprice = TownySettings.getPurchasedBonusBlocksMaxPrice();
-		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this,(maxprice == -1 ? price : Math.min(price, maxprice)),1,true);
+		BonusBlockClaimCostCalculationEvent event = new BonusBlockClaimCostCalculationEvent(this,(maxprice == -1 ? price : Math.min(price, maxprice)),1);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getPrice();
 	}
@@ -487,7 +487,7 @@ public class Town extends Government implements TownBlockOwner {
 	public double getTownBlockCost() {
 		double price = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
 		double maxprice = TownySettings.getMaxClaimPrice();
-		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this,(maxprice == -1 ? price : Math.min(price, maxprice)),1,false);
+		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this,(maxprice == -1 ? price : Math.min(price, maxprice)),1);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getPrice();
 	}
@@ -516,7 +516,7 @@ public class Town extends Government implements TownBlockOwner {
 			cost += nextprice;
 			i++;
 		}
-		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this,Math.round(cost),inputN,false);
+		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this,Math.round(cost),inputN);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getPrice();
 	}
@@ -553,7 +553,7 @@ public class Town extends Government implements TownBlockOwner {
 			cost += nextprice;
 			i++;
 		}
-		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this,Math.round(cost),inputN,true);
+		BonusBlockClaimCostCalculationEvent event = new BonusBlockClaimCostCalculationEvent(this,Math.round(cost),inputN);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getPrice();
 	}
