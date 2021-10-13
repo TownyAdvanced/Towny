@@ -682,7 +682,7 @@ public class TownyWorld extends TownyObject {
 					// If the townblock either: the town is the same as homeTown OR
 					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
 					if (homeTown.getUUID().equals(town.getUUID())
-						|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNation().equals(homeTown.getNation()))
+						|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNationOrNull().equals(homeTown.getNationOrNull()))
 						|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
 						continue;
 				
@@ -721,28 +721,25 @@ public class TownyWorld extends TownyObject {
 		
 		double minSqr = -1;
 		for (Town town : getTowns().values()) {
-			try {
-				if (homeTown != null)
-					// If the townblock either: the town is the same as homeTown OR 
-					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
-					if (homeTown.getUUID().equals(town.getUUID())
-						|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNation().equals(homeTown.getNation()))
-						|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
-						continue;
-				for (TownBlock b : town.getTownBlocks()) {
-					if (!b.getWorld().equals(this)) continue;
+			if (homeTown != null)
+				// If the townblock either: the town is the same as homeTown OR 
+				// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
+				if (homeTown.getUUID().equals(town.getUUID())
+					|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNationOrNull().equals(homeTown.getNationOrNull()))
+					|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
+					continue;
+			for (TownBlock b : town.getTownBlocks()) {
+				if (!b.getWorld().equals(this)) continue;
 
-					final int tbX = b.getX();
-					final int tbZ = b.getZ();
-					
-					if (keyX == tbX && keyZ == tbZ)
-						continue;
-					
-					final double distSqr = MathUtil.distanceSquared((double) tbX - keyX, (double) tbZ - keyZ);
-					if (minSqr == -1 || distSqr < minSqr)
-						minSqr = distSqr;
-				}
-			} catch (TownyException e) {
+				final int tbX = b.getX();
+				final int tbZ = b.getZ();
+				
+				if (keyX == tbX && keyZ == tbZ)
+					continue;
+				
+				final double distSqr = MathUtil.distanceSquared((double) tbX - keyX, (double) tbZ - keyZ);
+				if (minSqr == -1 || distSqr < minSqr)
+					minSqr = distSqr;
 			}
 		}
 		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
