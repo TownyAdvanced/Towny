@@ -62,24 +62,25 @@ public class TownyCustomListener implements Listener {
 		Player player = event.getPlayer();
 		WorldCoord from = event.getFrom();
 		WorldCoord to = event.getTo();
+		
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		if (resident == null)
+			return;
 
-		if (plugin.hasPlayerMode(player, "townclaim"))
+		if (resident.hasMode("townclaim"))
 			TownCommand.parseTownClaimCommand(player, new String[] {});
-		if (plugin.hasPlayerMode(player, "townunclaim"))
+		if (resident.hasMode("townunclaim"))
 			TownCommand.parseTownUnclaimCommand(player, new String[] {});
-		if (plugin.hasPlayerMode(player, "map"))
+		if (resident.hasMode("map"))
 			TownyCommand.showMap(player);
 
 		// Check if player has entered a new town/wilderness
 		try {
 			if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
-				Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 				String msg = null;
 				try {
-					if (resident != null) {
-						ChunkNotification chunkNotifier = new ChunkNotification(from, to);
-						msg = chunkNotifier.getNotificationString(resident);
-					}
+					ChunkNotification chunkNotifier = new ChunkNotification(from, to);
+					msg = chunkNotifier.getNotificationString(resident);
 				} catch (NullPointerException e) {
 					plugin.getLogger().info("ChunkNotifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful:");
 					plugin.getLogger().info("  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ());
@@ -144,7 +145,7 @@ public class TownyCustomListener implements Listener {
 			// likely Citizens' NPC
 		}
 
-		if (plugin.hasPlayerMode(player, "plotborder")) {
+		if (resident.hasMode("plotborder")) {
 			CellBorder cellBorder = BorderUtil.getPlotBorder(to);
 			cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.sendToPlayer(player));
 		}
