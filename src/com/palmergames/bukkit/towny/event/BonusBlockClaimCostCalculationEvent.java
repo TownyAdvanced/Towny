@@ -8,13 +8,13 @@ import org.bukkit.event.HandlerList;
 /**
  * Overriding this event you can use custom formulas to set bonus block claim price
  */
-public class BonusBlockClaimCostCalculationEvent extends Event {
+public class BonusBlockPurchaseCostCalculationEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private double price;
 	private final Town town;
 	private final int plotAmount;
 
-	public BonusBlockClaimCostCalculationEvent(Town town, double price,int plotAmount) {
+	public BonusBlockPurchaseCostCalculationEvent(Town town, double price,int plotAmount) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.price = price;
