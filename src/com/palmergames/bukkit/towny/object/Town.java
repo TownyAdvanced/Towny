@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
+import com.palmergames.bukkit.towny.event.TownBlockClaimCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourNationalCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -478,13 +479,17 @@ public class Town extends Government implements TownBlockOwner {
 	public double getBonusBlockCost() {
 		double price = (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
 		double maxprice = TownySettings.getPurchasedBonusBlocksMaxPrice();
-		return (maxprice == -1 ? price : Math.min(price, maxprice));
+		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(town,(maxprice == -1 ? price : Math.min(price, maxprice)),1,true);
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getPrice();
 	}
 	
 	public double getTownBlockCost() {
 		double price = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
 		double maxprice = TownySettings.getMaxClaimPrice();
-		return (maxprice == -1 ? price : Math.min(price, maxprice));
+		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(town,(maxprice == -1 ? price : Math.min(price, maxprice)),1,false);
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getPrice();
 	}
 
 	public double getTownBlockCostN(int inputN) throws TownyException {
@@ -511,8 +516,9 @@ public class Town extends Government implements TownBlockOwner {
 			cost += nextprice;
 			i++;
 		}
-		cost = Math.round(cost);
-		return cost;
+		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(town,Math.round(cost),inputN,false);
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getPrice();
 	}
 	
 	public double getBonusBlockCostN(int inputN) throws TownyException {
@@ -547,8 +553,9 @@ public class Town extends Government implements TownBlockOwner {
 			cost += nextprice;
 			i++;
 		}
-		cost = Math.round(cost);
-		return cost;
+		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(town,Math.round(cost),inputN,true);
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getPrice();
 	}
 
 	public void addBonusBlocks(int bonusBlocks) {
