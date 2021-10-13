@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.127
+version: 0.128
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious,PainOchoco
 website: 'http://townyadvanced.github.io/'
@@ -642,7 +642,7 @@ status_world_forcefire: 'Possibilité d''incendie:'
 status_world_forceexplosion: 'Possibilité d''explosion:'
 status_world_worldmobs: 'Mobs du monde :'
 status_world_forcetownmobs: 'Apparition de monstres dans la ville:'
-status_world_unclaimrevert: 'Revenir à l''annulation :'
+status_world_unclaimrevert: 'Désannexion annulée :'
 status_world_explrevert: 'Revenir à l''explosion :'
 status_world_ignoredblocks: 'Blocs ignorés :'
 status_res_taxexempt: 'Le staff est exempté de payer les taxes de ville.'
@@ -768,7 +768,7 @@ msg_nation_changed_open: '&cL''accès à la nation est maintenant %s.'
 msg_err_already_in_a_nation: 'Votre ville est déjà dans une nation.'
 msg_err_nation_not_open: '&cLa nation %s n''a pas ses portes ouvertes à tout le monde. Demandez au roi ou à l''assistant de la rejoindre.'
 msg_err_nation_homeblock_in_another_world: '&cVotre bloc de ville n''est pas dans le même monde que le bloc de capitale de la nation.'
-status_bank_town_penalty_upkeep: 'Overclaim upkeep:'
+status_bank_town_penalty_upkeep: 'Pénalité de surexpansion :'
 #Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Tu ne peux pas aller à %s, Tu es un hors-la-lois là-bas.'
 #Added in 0.54:
@@ -806,7 +806,7 @@ msg_err_player_too_far_from_town_spawn: '&c%s est trop loin du spawn de votre vi
 msg_resident_bail_amount: 'La caution de résident coûte: '
 msg_mayor_bail_amount: 'La caution de maire coûte: '
 msg_king_bail_amount: 'la caution de roi coûte: '
-msg_has_paid_bail: '%s has paid bail and is free.'
+msg_has_paid_bail: '%s a payé sa caution et est libre.'
 msg_err_unable_to_pay_bail: 'Impossible de payer la caution.'
 msg_err_bail_not_enabled: 'Les cautions ne sont pas activées.'
 msg_you_have_been_freed_from_jail: 'Vous avez été libéré de prison.'
@@ -1362,58 +1362,61 @@ msg_err_player_cannot_be_harmed: '%s est réapparus récemment et est invulnéra
 msg_you_have_lost_your_invulnerability: 'Vous avez perdu votre invulnérabilité.'
 #Added in 0.126
 #Used in the nation screen:
-status_capital: 'Capital:'
+status_capital: 'Capitale :'
 #Used in the resident screen's town hover, to denote when a player joined a town.
-status_joined_town: 'Joined town:'
+status_joined_town: 'A rejoint la ville :'
 #Used in the town screen's nation hover, to denote when a town joined a nation.
-status_joined_nation: 'Joined nation:'
+status_joined_nation: 'A rejoint la nation :'
 #Shown in status screen elements where a value is not known.
-status_unknown: 'unknown'
+status_unknown: 'inconnu(e)'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
 msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s has had their nationzone override removed.'
 #Added in 0.127
 #Used in status screen:
-status_nation_zone_size: 'Nation Zone Size:'
+status_nation_zone_size: 'Taille de la Zone Nationale :'
 #Shown when a player adds people to their friends list.
-msg_res_friend_added_to_list: 'Added %s to your friend list.'
+msg_res_friend_added_to_list: '%s a été ajouté à votre liste d''amis.'
 #Shown when a player removes people from their friends list.
-msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
+msg_res_friend_removed_from_list: '%s a été supprimé de votre liste d''amis.'
 #Generic resident freed from jail message.
-msg_resident_unjailed: '%s has been unjailed.'
+msg_resident_unjailed: '%s a été libéré(e).'
 #Shown when an admin uses /ta toggle devmode.
-msg_admin_toggle_devmode: 'Dev Mode: %s'
+msg_admin_toggle_devmode: 'Mode Dev : %s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: 'Debug Mode: %s'
+msg_admin_toggle_debugmode: 'Mode Debug : %s'
 #Shown when an admin uses /ta toggle townwithdraw
-msg_admin_toggle_townwithdraw: 'Town Withdrawls: %s'
+msg_admin_toggle_townwithdraw: 'Retraits de la ville : %s'
 #Shown when an admin uses /ta toggle nationwithdraw
-msg_admin_toggle_nationwithdraw: 'Nation Withdrawls: %s'
+msg_admin_toggle_nationwithdraw: 'Retraits de la Nation : %s'
 #Shown when claiming a town block for the town.
-msg_process_town_claim: 'Processing Town Claim...'
+msg_process_town_claim: 'Annexion du village en cours ...'
 #Shown when unclaiming a town block for the town.
-msg_process_town_unclaim: 'Processing Town Unclaim...'
+msg_process_town_unclaim: 'Désannexion en cours ...'
 #Shown when there is nothing to unclaim.
 msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: 'Permission True.'
+msg_perm_true: 'Permission Vraie.'
 #Given as feedback when /ta checkperm is used.
-msg_err_perm_false: 'Permission False.'
+msg_err_perm_false: 'Permission Fausse.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+status_towny_map_town_line: '&2Ville : &a%s &7| &2Propriétaire : &a%s'
 #Shown on /towny version
-msg_towny_version: '&2Towny Version: &a%s'
+msg_towny_version: '&2Version de Towny : &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
+msg_admin_blocked_login: '&2Un joueur a essayer de se connecter en utilisant l''adresse IP &c%s &2 avec le compte %s ce qui pourrait endommager l''économie de votre serveur, mais Towny l''a empêché. Considérer la possibilité de bannir cette adresse IP !'
 #Shown during resident purge
-msg_scanning_for_old_residents: 'Scanning for old residents...'
+msg_scanning_for_old_residents: 'Scan des anciens résidents ...'
 #Shown during resident purge
-msg_deleting_resident: 'Deleting resident: %s.'
+msg_deleting_resident: 'Suppression du résident : %s.'
 #Shown during resident purge
-msg_purge_complete: 'Resident purge complete: %s deleted.'
+msg_purge_complete: 'Purge des résidents complétée : %s supprimés.'
 #Message to the Town, shown when a town is given bonus blocks.
-msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
+msg_you_have_been_given_bonus_blocks: 'Vous avez reçu %s territoires bonus.'
 #Message shown when a town cannot purchase any more bonus blocks.
-msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Votre ville ne peut pas acheter plus de territoire bonus. Limite maximum atteinte.'
+#Added in 0.128
+#Message shown to a capital city which is being denied the ability to toggle peaceful on.
+msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
