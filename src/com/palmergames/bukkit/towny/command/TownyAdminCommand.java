@@ -934,7 +934,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (!wc.hasTownBlock() || wc.getTownBlock().getClaimedAt() == 0)
 				throw new NotRegisteredException();
 			
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_plot_perm_claimed_at", TownyFormatter.fullDateFormat.format(wc.getTownBlock().getClaimedAt())));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_plot_perm_claimed_at").append(" " + TownyFormatter.fullDateFormat.format(wc.getTownBlock().getClaimedAt())));
 		} else if (split[0].equalsIgnoreCase("trust")) {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_TRUST.getNode()))
 				throw new TownyException(Translatable.of("msg_err_command_disable"));
