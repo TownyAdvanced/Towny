@@ -7,8 +7,8 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
+import com.palmergames.bukkit.towny.event.BonusBlockPurchaseCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownBlockClaimCostCalculationEvent;
-import com.palmergames.bukkit.towny.event.BonusBlockClaimCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourNationalCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -480,7 +480,7 @@ public class Town extends Government implements TownBlockOwner {
 	public double getBonusBlockCost() {
 		double price = (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
 		double maxprice = TownySettings.getPurchasedBonusBlocksMaxPrice();
-		BonusBlockClaimCostCalculationEvent event = new BonusBlockClaimCostCalculationEvent(this,(maxprice == -1 ? price : Math.min(price, maxprice)),1);
+		BonusBlockPurchaseCostCalculationEvent event = new BonusBlockPurchaseCostCalculationEvent(this,(maxprice == -1 ? price : Math.min(price, maxprice)),1);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getPrice();
 	}
@@ -554,7 +554,7 @@ public class Town extends Government implements TownBlockOwner {
 			cost += nextprice;
 			i++;
 		}
-		BonusBlockClaimCostCalculationEvent event = new BonusBlockClaimCostCalculationEvent(this,Math.round(cost),inputN);
+		BonusBlockPurchaseCostCalculationEvent event = new BonusBlockPurchaseCostCalculationEvent(this,Math.round(cost),inputN);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getPrice();
 	}
