@@ -6833,3 +6833,4 @@ v0.92.0.11:
     - If true the capital city of nation cannot be neutral/peaceful.
   - Bump language file to 0.128.
   - Fix the /ta plot claimedat command, courtesy of Warriorrrr with PR #5361.
+  - Expand MetaDataUtil methods to include hasMeta and addNewMeta methods.
