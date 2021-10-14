@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * Overriding this event you can use custom formulas to set bonus block claim price
+ * Overriding this event you can use custom formulas to set bonus block purchase price
  */
 public class BonusBlockPurchaseCostCalculationEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
@@ -22,7 +22,7 @@ public class BonusBlockPurchaseCostCalculationEvent extends Event {
 	}
 
 	/**
-	 * Returns target Town.
+	 * Returns the target Town.
 	 * @return target Town
 	 */
 	public Town getTown() {
@@ -38,19 +38,27 @@ public class BonusBlockPurchaseCostCalculationEvent extends Event {
 	}
 
 	/**
-	 * Returns the price to claim bonus blocks.
-	 * @return the price to claim bonus blocks
+	 * Returns the price to purchase bonus blocks.
+	 * @return price to purchase bonus blocks
 	 */
 	public double getPrice() {
 		return price;
 	}
 	
 	/**
-	 * Returns the amount of bonus blocks to be claimed.
-	 * @return the amount of bonus blocks to be claimed
+	 * Returns the amount of bonus blocks to be purchased.
+	 * @return the amount of bonus blocks to be purchased
 	 */
-	public int getPlotAmount() {
+	public int getAmountOfPurchasingBlocksRequest() {
 		return this.plotAmount;
+	}
+	
+	/**
+	 * Returns the amount of bonus blocks the town has already purchased.
+	 * @return amount of blocks already bought by the town, prior to this event.
+	 */ 
+	public int getAlreadyPurchasedBlocksAmount() { 
+		return town.getPurchasedBlocks(); 
 	}
 
 	@Override
