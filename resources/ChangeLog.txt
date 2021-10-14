@@ -6834,3 +6834,4 @@ v0.92.0.11:
   - Bump language file to 0.128.
   - Fix the /ta plot claimedat command, courtesy of Warriorrrr with PR #5361.
   - Expand MetaDataUtil methods to include hasMeta and addNewMeta methods.
+  - Make the plot change listener more efficient, courtesy of Warriorrrr with PR #5365.
