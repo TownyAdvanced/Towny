@@ -86,6 +86,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -919,7 +920,13 @@ public class Towny extends JavaPlugin {
 	 */
 	public boolean hasPlayerMode(Player player, String mode) {
 
-		return hasPlayerMode(player.getName(), mode);
+		return hasPlayerMode(player.getUniqueId(), mode);
+	}
+	
+	public boolean hasPlayerMode(UUID uuid, String mode) {
+		Resident resident = TownyUniverse.getInstance().getResident(uuid);
+		
+		return resident != null && resident.hasMode(mode);
 	}
 
 	public boolean hasPlayerMode(String name, String mode) {
