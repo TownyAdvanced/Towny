@@ -1182,6 +1182,7 @@ msg_deleting_nation_will_result_in_losing_residents: '&cAdvertencia: Remover tu 
 msg_command_blocked_inside_towns: '&cNo puedes usar ese comando dentro de una ciudad.'
 msg_command_limited: 'Solo puedes usar ese comando dentro de tus pacerlas.'
 #Added in 0.104
+#Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Claimed at:'
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Uso en el campo %s en todos los mundos.'
