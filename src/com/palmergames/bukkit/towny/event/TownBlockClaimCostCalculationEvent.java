@@ -22,7 +22,7 @@ public class TownBlockClaimCostCalculationEvent extends Event {
 	}
 
 	/**
-	 * Returns target Town.
+	 * Returns the target Town.
 	 * @return target Town
 	 */
 	public Town getTown() {
@@ -39,7 +39,7 @@ public class TownBlockClaimCostCalculationEvent extends Event {
 
 	/**
 	 * Returns the price to claim town blocks.
-	 * @return the price to claim town blocks
+	 * @return price to claim town blocks
 	 */
 	public double getPrice() {
 		return price;
@@ -47,10 +47,18 @@ public class TownBlockClaimCostCalculationEvent extends Event {
 	
 	/**
 	 * Returns the amount of town blocks to be claimed.
-	 * @return the amount of town blocks to be claimed
+	 * @return amount of town blocks to be claimed
 	 */
-	public int getPlotAmount() {
-		return this.plotAmount;
+	public int getAmountOfRequestedTownBlocks() {
+		return plotAmount;
+	}
+	
+	/** 
+	 * Returns the amount of TownBlocks the town has already.
+	 * @return amount of townblocks already claimed by the town, prior to this event.
+	 */
+	public int getNumberOfAlreadyClaimedTownBlocks() { 
+		return town.getTownBlocks().size(); 
 	}
 
 	@Override
