@@ -598,6 +598,11 @@ public class TownyAPI {
 		if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly())
 			return TownBlockStatus.UNCLAIMED_ZONE;
 		
+		// Even after checking for having a nation, and whether it might need to be a capital,
+		// towns can disable their nation zone manually.
+		if (!nearestTown.isNationZoneEnabled())
+			return TownBlockStatus.UNCLAIMED_ZONE;
+		
 		int distance = (int) MathUtil.distance(worldCoord.getX(), nearestTownblock.getX(), worldCoord.getZ(), nearestTownblock.getZ());
 		int nationZoneRadius = nearestTown.getNationZoneSize();
 
