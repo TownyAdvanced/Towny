@@ -153,7 +153,7 @@ public class TownyFormatter {
 			screen.addComponentOf("lastonline", getResidentLastOnline(resident, translator));
 		
 		// Town: Camelot
-		String townLine = colourKeyValue(translator.of("status_town"), (!resident.hasTown() ? translator.of("status_no_town") : resident.getTownOrNull().getFormattedName()));
+		String townLine = colourKeyValue(translator.of("status_town"), (!resident.hasTown() ? translator.of("status_no_town") : resident.getTownOrNull().getFormattedName() + formatPopulationBrackets(resident.getTownOrNull().getResidents().size()) ));
 		if (!resident.hasTown())
 			screen.addComponentOf("town", townLine);
 		else {
@@ -163,6 +163,8 @@ public class TownyFormatter {
 				residents = shortenOverlengthArray(residents, 35, translator);
 			screen.addComponentOf("town", townLine,
 				HoverEvent.showText(Component.text(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingTown(), town.getFormattedName())))
+					.append(Component.newline())
+					.append(Component.text(getResidentJoinedTownDate(resident, translator)))
 					.append(Component.newline())
 					.append(Component.text(colourKeyValue(translator.of("rank_list_mayor"), town.getMayor().getFormattedName())))
 					.append(Component.newline())
@@ -181,7 +183,7 @@ public class TownyFormatter {
 			if (towns.length > 10)
 				towns = shortenOverlengthArray(towns, 11, translator);
 
-			screen.addComponentOf("nation", colourKeyValue(translator.of("status_town_nation"), nation.getName()), 
+			screen.addComponentOf("nation", colourKeyValue(translator.of("status_town_nation"), nation.getName() + formatPopulationBrackets(nation.getTowns().size())), 
 					HoverEvent.showText(Component.text(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), nation.getFormattedName())))
 							.append(Component.newline())
 							.append(Component.text(colourKeyValue(translator.of("status_nation_king"), nation.getCapital().getMayor().getFormattedName())))
@@ -353,14 +355,21 @@ public class TownyFormatter {
 				if (towns.length > 10)
 					towns = shortenOverlengthArray(towns, 11, translator);
 
-				screen.addComponentOf("nation", colourKeyValue(translator.of("status_town_nation"), town.getNationOrNull().getName()), 
-						HoverEvent.showText(Component.text(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), town.getNationOrNull().getFormattedName())))
-								.append(Component.newline())
-								.append(Component.text(colourKeyValue(translator.of("status_nation_king"), town.getNationOrNull().getCapital().getMayor().getFormattedName())))
-								.append(Component.newline())
-								.append(Component.text(colourKeyValue(translator.of("town_plu"), StringMgmt.join(towns, ", "))))
-								.append(Component.newline())
-								.append(Component.text(translator.of("status_hover_click_for_more")))),
+				TextComponent hover = Component.text(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), town.getNationOrNull().getFormattedName())))
+						.append(Component.newline())
+						.append(Component.text(getTownJoinedNationDate(town, translator)))
+						.append(Component.newline())
+						.append(Component.text(colourKeyValue(translator.of("status_nation_king"), town.getNationOrNull().getCapital().getMayor().getFormattedName())))
+						.append(Component.newline())
+						.append(Component.text(colourKeyValue(translator.of("town_plu"), StringMgmt.join(towns, ", "))));
+				int nationZoneSize = town.getNationZoneSize();
+				if (nationZoneSize > 0)
+					hover = hover.append(Component.newline().append(Component.text(colourKeyValue(translator.of("status_nation_zone_size"), String.valueOf(nationZoneSize)))));
+				hover = hover.append(Component.newline())
+						.append(Component.text(translator.of("status_hover_click_for_more")));
+				
+				screen.addComponentOf("nation", colourKeyValue(translator.of("status_town_nation"), town.getNationOrNull().getName() + formatPopulationBrackets(town.getNationOrNull().getTowns().size())), 
+						hover.asHoverEvent(),
 						ClickEvent.runCommand("/towny:nation " + town.getNationOrNull().getName())
 						);
 			}
@@ -380,7 +389,7 @@ public class TownyFormatter {
 			if (residents.length > 34)
 				residents = shortenOverlengthArray(residents, 35, translator);
 			screen.addComponentOf("residents", colourHoverKey(translator.of("res_list")),
-				HoverEvent.showText(Component.text(getFormattedStrings(translator.of("res_list"), Arrays.stream(residents).collect(Collectors.toList())))
+				HoverEvent.showText(Component.text(getFormattedStrings(translator.of("res_list"), Arrays.stream(residents).collect(Collectors.toList()), town.getResidents().size()))
 					.append(Component.newline())
 					.append(Component.text(translator.of("status_hover_click_for_more")))),
 				ClickEvent.runCommand("/towny:town reslist "+ town.getName()));
@@ -457,6 +466,26 @@ public class TownyFormatter {
 						.append(Component.text(translator.of("status_hover_click_for_more")))),
 					ClickEvent.runCommand("/towny:resident " + king.getName())
 					);
+
+			// Capital: Big City
+			Town capital = nation.getCapital();
+			String[] residents = getFormattedNames(capital.getResidents().toArray(new Resident[0]));
+			if (residents.length > 34)
+				residents = shortenOverlengthArray(residents, 35, translator);
+			screen.addComponentOf("capital", colourKeyValue(translator.of("status_capital"), nation.getCapital().getFormattedName()),
+				HoverEvent.showText(Component.text(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingTown(), capital.getFormattedName())))
+					.append(Component.newline())
+					.append(Component.text(colourKeyValue(translator.of("rank_list_mayor"), king.getFormattedName())))
+					.append(Component.newline())
+					.append(Component.text(colourKeyValue(translator.of("res_list"), StringMgmt.join(residents, ", "))))
+					.append(Component.newline())
+					.append(Component.text(translator.of("status_hover_click_for_more")))),
+				ClickEvent.runCommand("/towny:town " + capital.getName())
+			);
+			
+			// Nation Zone Size: 3
+			if (TownySettings.getNationZonesEnabled())
+				screen.addComponentOf("nationzone", colourKeyValue(translator.of("status_nation_zone_size"), String.valueOf(nation.getNationZoneSize())));
 		}
 		
 		screen.addComponentOf("newline", Component.newline());
@@ -474,7 +503,7 @@ public class TownyFormatter {
 		if (towns.length > 10)
 			towns = shortenOverlengthArray(towns, 11, translator);
 		screen.addComponentOf("towns", colourHoverKey(translator.of("status_nation_towns")),
-			HoverEvent.showText(Component.text(getFormattedStrings(translator.of("status_nation_towns"), Arrays.stream(towns).collect(Collectors.toList())))
+			HoverEvent.showText(Component.text(getFormattedStrings(translator.of("status_nation_towns"), Arrays.stream(towns).collect(Collectors.toList()), nation.getTowns().size()))
 					.append(Component.newline())
 					.append(Component.text(translator.of("status_hover_click_for_more")))),
 			ClickEvent.runCommand("/towny:nation townlist " + nation.getName()));
@@ -485,7 +514,7 @@ public class TownyFormatter {
 			allies = shortenOverlengthArray(allies, 11, translator);
 		if (allies.length > 0)
 			screen.addComponentOf("allies", colourHoverKey(translator.of("status_nation_allies")),
-				HoverEvent.showText(Component.text(getFormattedStrings(translator.of("status_nation_allies"), Arrays.stream(allies).collect(Collectors.toList())))
+				HoverEvent.showText(Component.text(getFormattedStrings(translator.of("status_nation_allies"), Arrays.stream(allies).collect(Collectors.toList()), nation.getAllies().size()))
 						.append(Component.newline())
 						.append(Component.text(translator.of("status_hover_click_for_more")))),
 				ClickEvent.runCommand("/towny:nation allylist " + nation.getName()));
@@ -496,7 +525,7 @@ public class TownyFormatter {
 			enemies = shortenOverlengthArray(enemies, 11, translator);
 		if (enemies.length > 0)
 			screen.addComponentOf("enemies", colourHoverKey(translator.of("status_nation_enemies")),
-				HoverEvent.showText(Component.text(getFormattedStrings(translator.of("status_nation_enemies"), Arrays.stream(enemies).collect(Collectors.toList())))
+				HoverEvent.showText(Component.text(getFormattedStrings(translator.of("status_nation_enemies"), Arrays.stream(enemies).collect(Collectors.toList()), nation.getEnemies().size()))
 						.append(Component.newline())
 						.append(Component.text(translator.of("status_hover_click_for_more")))),
 				ClickEvent.runCommand("/towny:nation enemylist " + nation.getName()));
@@ -611,6 +640,10 @@ public class TownyFormatter {
 		return String.format(hoverFormat, Translation.of("status_format_hover_bracket_colour"), Translation.of("status_format_hover_key"), key, Translation.of("status_format_hover_bracket_colour"));
 	}
 	
+	private static String formatPopulationBrackets(int size) {
+		return String.format(" %s[%s]", Translation.of("status_format_list_2"), size);
+	}
+	
 	/**
 	 * Gets the registered line for the Resident StatusScreen.
 	 * @param resident Resident who's status we are getting.
@@ -629,6 +662,14 @@ public class TownyFormatter {
 	 */
 	private static String getResidentLastOnline(Resident resident, Translator translator) {
 		return (sameYear(resident) ? colourKeyValue(translator.of("status_lastonline"), lastOnlineFormat.format(resident.getLastOnline())) : colourKeyValue(translator.of("status_lastonline"), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
+	}
+	
+	private static String getResidentJoinedTownDate(Resident resident, Translator translator) {
+		return colourKeyValue(translator.of("status_joined_town"), resident.getJoinedTownAt() > 0 ? lastOnlineFormatIncludeYear.format(resident.getJoinedTownAt()) : translator.of("status_unknown"));
+	}
+	
+	private static String getTownJoinedNationDate(Town town, Translator translator) {
+		return colourKeyValue(translator.of("status_joined_nation"), town.getJoinedNationAt() > 0 ? lastOnlineFormatIncludeYear.format(town.getJoinedNationAt()) : translator.of("status_unknown"));
 	}
 	
 	private static boolean sameYear(Resident resident) {
@@ -740,7 +781,7 @@ public class TownyFormatter {
 		if (town.hasUpkeep())
 			bankString += translator.of("status_splitter") + colourKey(translator.of("status_bank_town2")) + " " + colourKeyImportant(formatMoney(BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue()));
 		if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
-			bankString += translator.of("status_bank_town_penalty_upkeep", TownySettings.getTownPenaltyUpkeepCost(town));
+			bankString += translator.of("status_splitter") + colourKey(translator.of("status_bank_town_penalty_upkeep")) + " " + colourKeyImportant(formatMoney(TownySettings.getTownPenaltyUpkeepCost(town)));
 		bankString += translator.of("status_splitter") + colourKey(translator.of("status_bank_town3")) + " " + colourKeyImportant(town.isTaxPercentage() ? town.getTaxes() + "%" : formatMoney(town.getTaxes()));
 		return bankString;
 	}
@@ -882,16 +923,27 @@ public class TownyFormatter {
 	public static String getFormattedStrings(String prefix, List<String> list) {
 		return String.format(listPrefixFormat, prefix, list.size(), Translation.of("status_format_list_1"), Translation.of("status_format_list_2"), Translation.of("status_format_list_3")) + StringMgmt.join(list, ", "); 
 	}
+	
+	/**
+	 * Used to prefix, count and list the given strings.
+	 * @param prefix String applied to beginning of the list.
+	 * @param list List of Strings to list.
+	 * @return Formatted, prefixed list of Strings.
+	 */
+	public static String getFormattedStrings(String prefix, List<String> list, int size) {
+		return String.format(listPrefixFormat, prefix, size, Translation.of("status_format_list_1"), Translation.of("status_format_list_2"), Translation.of("status_format_list_3")) + StringMgmt.join(list, ", "); 
+	}
 
 	/**
-	 * Returns a list of names, using their Formatted (long) names, with ColourCodes translated.
+	 * Returns a list of names, with ColourCodes translated.
+	 * If the list is under 20 long, it will use the formatted names.
 	 * @param objs List of TownyObjects of which to make a list of names.
-	 * @return List of Names, formatted and coloured.
+	 * @return List of Names coloured, and potentially formatted.
 	 */
 	public static List<String> getFormattedTownyNames(List<TownyObject> objs) {
 		List<String> names = new ArrayList<>();
 		for (TownyObject obj : objs) {
-			names.add(Colors.translateColorCodes(obj.getFormattedName()) + Colors.White);
+			names.add(Colors.translateColorCodes(objs.size() < 20 ? obj.getFormattedName() : obj.getName()) + Colors.White);
 		}
 		
 		return names;

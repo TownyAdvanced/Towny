@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
@@ -370,7 +371,7 @@ public class War {
 				warZone.put(townBlock.getWorldCoord(), TownySettings.getWarzoneTownBlockHealth());
 		}
 		if (numTownBlocks > 0) {
-			TownyMessaging.sendPrefixedTownMessage(town, Translation.of("msg_war_join", town.getName()));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_war_join", town.getName()));
 			townScores.put(town, 0);
 			warringTowns.add(town);
 		}			

@@ -413,8 +413,9 @@ public class SpawnUtil {
 			spawnLocation = Objects.requireNonNull(Bukkit.getWorld(TownySettings.getOutlawTeleportWorld())).getSpawnLocation();
 		}
 		// sets tp location to their bedspawn only if it isn't in the town they're being teleported from.
-		if ((outlawedPlayer.getBedSpawnLocation() != null) && (TownyAPI.getInstance().getTown(outlawedPlayer.getBedSpawnLocation()) != town))
-			spawnLocation = outlawedPlayer.getBedSpawnLocation();
+		Location bed = outlawedPlayer.getBedSpawnLocation();
+		if ((bed != null) && (TownyAPI.getInstance().getTown(bed) != town))
+			spawnLocation = bed;
 		if (outlaw.hasTown() && TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer) != null)
 			spawnLocation = TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer);
 		TownyMessaging.sendMsg(outlaw, Translatable.of("msg_outlaw_kicked", town));

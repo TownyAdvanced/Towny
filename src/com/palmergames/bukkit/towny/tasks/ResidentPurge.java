@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +47,7 @@ public class ResidentPurge extends Thread {
 
 		int count = 0;
 
-		message("Scanning for old residents...");
+		message(Translatable.of("msg_scanning_for_old_residents"));
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Resident> residentList;
 		if (town != null) {
@@ -60,16 +61,16 @@ public class ResidentPurge extends Thread {
 					continue;
 				}
 				count++;
-				message("Deleting resident: " + resident.getName());
+				message(Translatable.of("msg_deleting_resident", resident.getName()));
 				townyUniverse.getDataSource().removeResident(resident);
 			}
 		}
 
-		message("Resident purge complete: " + count + " deleted.");
+		message(Translatable.of("msg_purge_complete", count));
 
 	}
 
-	private void message(String msg) {
+	private void message(Translatable msg) {
 
 		if (this.sender != null)
 			TownyMessaging.sendMsg(this.sender, msg);

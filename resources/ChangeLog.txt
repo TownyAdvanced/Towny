@@ -6772,7 +6772,7 @@ v0.92.0.11:
   - Fix PlayerCacheUtil preventing plot permissions from working properly. 
   - Fix missing command feedback on many /tw toggle commands.
 0.97.2.4:
-  - Fix Global messages stripping their colour.
+  - Fix Global messages stripping their colour. 
   - Remove old Outpost checking code and references to Articdive which were not spelled correct, courtesy of Articdive with PR #5324.
   - Add a size limit for the town_block_ratio option, courtesy of Warriorrrr with PR #5326.
   - New Config Option: town.town_block_limit
@@ -6780,3 +6780,55 @@ v0.92.0.11:
     - The maximimum amount of townblocks a town can have, if town_block_ratio is 0 the max size will be decided by the town_levels. 
     - Set to 0 to have no size limit.
   - Fix automatic renaming of invalid and duplicate town and nation names failing some of the time.
+  - Fix EventWar not handling the OutlawTeleportEvent.
+  - Fix resident/town counts being shown on the status screens when "and more..." was being used on long lists.
+    - Closes #5331. 
+  - Lists of TownyObjects (resident lists, town lists, nation lists) will no longer use their longer formatted names if the list is over 19.
+    - Closes #5332. 
+  - Fix Status Screen components' hovering bleeding over into blank spaces further along the line.
+    - Closes #5332.
+0.97.2.5:
+  - Add nation's capital to the nation status screen.
+  - Add protection for glow berries being harvest off cave vines.
+    - Treated as a destroy test.
+  - Prevent outlaws from being able to join towns, courtesy of Warriorrrr with PR #5329.
+  - Add town join date to a resident's status screen in the town hover section.
+    - Closes #5282.
+  - Bump language files to 0.126.
+  - Add nation join date to a town's status screen in the nation hover section.
+  - Fix welcome message only being seen by the newly joined player.
+  - Add  ability to override a town's NationZone.
+    - Closes #4915.
+  - New Command: /ta set nationzoneoverride [town] [size]
+    - Sets a town's nationzone override.
+  - New Permission Node: towny.command.townyadmin.set.nationzoneoverride
+    - Child node of towny.command.townyadmin.set.*
+  - Fix backup cleaning not working, courtesy of Warriorrrr with PR #5337.
+  - Use Java NIO instead of File, courtesy of Articdive with PR #5316.
+0.97.2.6:
+  - Fix global messages that lost their Towny prefix.
+  - Bump language file to 0.127.
+  - Add nation zone size to nation and town status screens.
+  - Add hover to the capital on the nation status screen.
+  - Clean up TownyMessaging class.
+  - Use server provided gson instead of shading our own, courtesy of Warriorrrr with PR #5347.
+  - Tidy & rename /ta delete, courtesy of Warriorrrr with PR #5351.
+  - Removed command: /ta delete {residentname}
+  - New Command: /ta resident {residentname} delete. 
+  - Enhance the /res list command, courtesy of Warriorrrr with PR #5350.
+  - Fix updating reference lang files, an issue on select operating systems.
+  - Blank capital prefixes and postfixes will no longer override a town's normal prefix and postfix.
+  - Blank king prefixes and postfixes will no longer override a mayor's normal prefix and postfix.
+  - Fix no feedback message when a town tries to purchase more bonus blocks, when they are already at max.
+    - Closes #5354.
+  - Limit the amount of changelog lines printed to 100, courtesy of Warriorrrr with PR #5352.
+  - Fix TownAddResidentEvent firing on database loads.
+    - Closes #5356.
+0.97.2.7:
+  - Fix appearance of the overclaimed upkeep line in the town status screen.
+  - Add option to prevent a nation's capital city from being neutral.
+    - Closes #5360.
+  - New Config Option: global_nation_settings.capitals_cannot_be_neutral
+    - Default: false
+    - If true the capital city of nation cannot be neutral/peaceful.
+  - Bump language file to 0.128.

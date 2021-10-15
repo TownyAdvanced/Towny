@@ -980,6 +980,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				} else {
 					town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
 				}
+				
+				line = keys.get("nationZoneOverride");
+				if (line != null)
+					try {
+						town.setNationZoneOverride(Integer.parseInt(line));
+					} catch (Exception ignored) {
+					}
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_town_file_at_line", town.getName(), line, town.getName()));
@@ -1974,7 +1981,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("trustedResidents=" + StringMgmt.join(toUUIDList(town.getTrustedResidents()), ","));
 		
 		list.add("mapColorHexCode=" + town.getMapColorHexCode());
-
+		list.add("nationZoneOverride=" + town.getNationZoneOverride());
 		
 		/*
 		 *  Make sure we only save in async

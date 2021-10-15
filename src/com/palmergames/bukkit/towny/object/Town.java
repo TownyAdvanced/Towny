@@ -71,6 +71,7 @@ public class Town extends Government implements TownBlockOwner {
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private boolean isConquered = false;
 	private int conqueredDays;
+	private int nationZoneOverride = 0;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined = false;
@@ -210,7 +211,7 @@ public class Town extends Government implements TownBlockOwner {
 			nation.removeTown(this);
 		} catch (EmptyNationException e) {
 			TownyUniverse.getInstance().getDataSource().removeNation(nation);
-			TownyMessaging.sendGlobalMessage(Translation.of("msg_del_nation", e.getNation().getName()));
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", e.getNation().getName()));
 		}
 		
 		try {
@@ -603,13 +604,13 @@ public class Town extends Government implements TownBlockOwner {
 				} catch (TownyException ignored) {}
 				
 				if (!nation.getCapital().getHomeblockWorld().equals(getHomeblockWorld())) {
-					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
 					removeNation();
 				}
 
 				double distance = MathUtil.distance(capitalCoord.getX(), townCoord.getX(), capitalCoord.getZ(), townCoord.getZ());
 				if (distance > TownySettings.getNationRequiresProximity()) {
-					TownyMessaging.sendNationMessagePrefixed(nation, Translation.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
+					TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
 					removeNation();
 				}	
 			}
@@ -1011,7 +1012,7 @@ public class Town extends Government implements TownBlockOwner {
 			double bankcap = TownySettings.getTownBankCap();
 			if (bankcap > 0) {
 				if (amount + getAccount().getHoldingBalance() > bankcap) {
-					TownyMessaging.sendPrefixedTownMessage(this, Translation.of("msg_err_deposit_capped", bankcap));
+					TownyMessaging.sendPrefixedTownMessage(this, Translatable.of("msg_err_deposit_capped", bankcap));
 					return;
 				}
 			}
@@ -1278,11 +1279,9 @@ public class Town extends Government implements TownBlockOwner {
 
 	@Override
 	public String getFormattedName() {
-		if (this.isCapital()) {
-			return TownySettings.getCapitalPrefix(this) + this.getName().replaceAll("_", " ") + TownySettings.getCapitalPostfix(this);
-		}
-		
-		return TownySettings.getTownPrefix(this) + this.getName().replaceAll("_", " ") + TownySettings.getTownPostfix(this);
+		String prefix = (this.isCapital() && !TownySettings.getCapitalPrefix(this).isEmpty()) ? TownySettings.getCapitalPrefix(this) : TownySettings.getTownPrefix(this);
+		String postfix = (this.isCapital() && !TownySettings.getCapitalPostfix(this).isEmpty()) ? TownySettings.getCapitalPostfix(this) : TownySettings.getTownPostfix(this);
+		return prefix + this.getName().replaceAll("_", " ") + postfix;
 	}
 	
 	public String getPrefix() {
@@ -1375,6 +1374,18 @@ public class Town extends Government implements TownBlockOwner {
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
+
+	public int getNationZoneOverride() {
+		return nationZoneOverride;
+	}
+	
+	public void setNationZoneOverride(int size) {
+		this.nationZoneOverride = size;
+	}
+	
+	public boolean hasNationZoneOverride() {
+		return nationZoneOverride > 0;
+	}
 	
 	/**
 	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.
@@ -1456,5 +1467,33 @@ public class Town extends Government implements TownBlockOwner {
 	
 	public void removeTrustedResident(Resident resident) {
 		trustedResidents.remove(resident);
+	}
+
+	@Override
+	public int getNationZoneSize() {
+		if (!TownySettings.getNationZonesEnabled() || !hasNation())
+			return 0;
+		
+		if (!isCapital() && TownySettings.getNationZonesCapitalsOnly())
+			return 0;
+		
+		if (hasNationZoneOverride())
+			return getNationZoneOverride();
+		
+		return nation.getNationZoneSize() + (isCapital() ? TownySettings.getNationZonesCapitalBonusSize() : 0);
+		
+	}
+	
+	/**
+	 * Is the Town Neutral or Peaceful?
+	 * 
+	 * Tests against a config option that prevents a capital city from being neutral.
+	 * 
+	 * @since 0.96.5.4
+	 * @return true if the object is Neutral or Peaceful.
+	 */
+	@Override
+	public boolean isNeutral() {
+		return TownySettings.nationCapitalsCantBeNeutral() && isCapital() ? false : isNeutral;
 	}
 }

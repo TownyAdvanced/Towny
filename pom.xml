@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.97.2.4</version>
+    <version>0.97.2.7</version>
 
     <licenses>
         <license>
@@ -181,11 +181,6 @@
             <artifactId>api</artifactId>
             <version>5.3</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20210307</version>
         </dependency>
         <dependency>
             <groupId>com.github.bsideup.jabel</groupId>

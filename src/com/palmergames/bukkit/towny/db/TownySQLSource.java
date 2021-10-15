@@ -859,7 +859,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				Town town = universe.getTown(line);
 				if (town == null) {
 					TownyMessaging.sendErrorMsg("Loading Error: " + resident.getName() + " tried to load the town " + line + " which is invalid, removing town from the resident.");
-					resident.setTown(null);
+					resident.setTown(null, false);
 				}
 				else {
 					resident.setTown(town, false);
@@ -996,6 +996,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setMovedHomeBlockAt(rs.getLong("movedHomeBlockAt"));
 
 			town.setPurchasedBlocks(rs.getInt("purchased"));
+			town.setNationZoneOverride(rs.getInt("nationZoneOverride"));
 			
 			line = rs.getString("maxPercentTaxAmount");
 			if (line != null)
@@ -2123,6 +2124,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("protectionStatus", town.getPermissions().toString().replaceAll(",", "#"));
 			twn_hm.put("bonus", town.getBonusBlocks());
 			twn_hm.put("purchased", town.getPurchasedBlocks());
+			twn_hm.put("nationZoneOverride", town.getNationZoneOverride());
 			twn_hm.put("commercialPlotPrice", town.getCommercialPlotPrice());
 			twn_hm.put("commercialPlotTax", town.getCommercialPlotTax());
 			twn_hm.put("embassyPlotPrice", town.getEmbassyPlotPrice());

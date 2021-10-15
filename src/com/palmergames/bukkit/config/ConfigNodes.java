@@ -941,6 +941,11 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# If Towny should show players the nationboard when they login."),
+	GNATION_SETTINGS_CAPITAL_CANNOT_BE_NEUTRAL(
+			"global_nation_settings.capitals_cannot_be_neutral",
+			"false",
+			"",
+			"# If true the capital city of nation cannot be neutral/peaceful."),
 	GNATION_SETTINGS_CAPITAL_SPAWN(
 			"global_nation_settings.capital_spawn",
 			"true",
@@ -1728,11 +1733,6 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
-	RES_SETTING_INACTIVE_AFTER_TIME(
-			"resident_settings.inactive_after_time",
-			"1h",
-			"",
-			"# player is flagged as inactive after 1 hour (default)"),
 	RES_SETTING_DELETE_OLD_RESIDENTS(
 			"resident_settings.delete_old_residents",
 			"",

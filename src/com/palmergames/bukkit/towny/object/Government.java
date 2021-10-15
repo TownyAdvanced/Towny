@@ -42,7 +42,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	private final transient List<Invite> sentInvites = new ArrayList<>();
 	private boolean isPublic = false;
 	private boolean isOpen = false;
-	private boolean isNeutral = false;
+	protected boolean isNeutral = false;
 	private long registered;
 	private double spawnCost = TownySettings.getSpawnTravelCost();
 	protected double taxes;
@@ -165,7 +165,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * @since 0.96.5.4
 	 * @return true if the object is Neutral or Peaceful.
 	 */
-	public final boolean isNeutral() {
+	public boolean isNeutral() {
 		return isNeutral;
 	}
 	
@@ -323,6 +323,8 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	public abstract Collection<TownBlock> getTownBlocks();
+	
+	public abstract int getNationZoneSize();
 	
 	/**
 	 * Opens a book gui of bank transactions for the player to browse.

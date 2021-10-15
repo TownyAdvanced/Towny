@@ -192,10 +192,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	public boolean isKing() {
 
-		try {
-			return hasNation() && town.getNation().isKing(this);
-		} catch (NotRegisteredException ignored) {}
-		return false;
+		return hasNation() && town.getNationOrNull().isKing(this);
 	}
 
 	public boolean isMayor() {
@@ -258,10 +255,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		updatePerms();
 		town.addResident(this);
 
-		if (updateJoinedAt)
+		if (updateJoinedAt) {
 			setJoinedTownAt(System.currentTimeMillis());
-		
-		BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
+			BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
+		}
 	}
 	
 	public void removeTown() {
@@ -491,7 +488,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		}
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
 	}
 	
 	public void setModes(String[] modes, boolean notify) {
@@ -500,7 +497,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.toggleMode(modes, false);
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
 
 
 	}
@@ -508,7 +505,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void clearModes() {
 
 		this.modes.clear();
-		TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set")));
+		TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set")));
 
 		if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(this.getName(), true), 1) == -1)
 			TownyMessaging.sendErrorMsg(Translation.of("msg_err_could_not_set_default_modes_for") + getName() + ".");
@@ -527,7 +524,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			this.toggleMode(modes, false);
 
 		if (notify)
-			TownyMessaging.sendMsg(this, (Translation.of("msg_modes_set") + StringMgmt.join(getModes(), ",")));
+			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
 	}
 	
 	@Nullable
@@ -702,15 +699,15 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	@Override
 	public String getFormattedName() {
-		if (isKing()) {
-			return Colors.translateColorCodes(hasTitle() ? getTitle() + " " : TownySettings.getKingPrefix(this)) + getName() + Colors.translateColorCodes(hasSurname() ? " " + getSurname() : TownySettings.getKingPostfix(this));
-		}
-			
-		if (isMayor()) {
-			return Colors.translateColorCodes(hasTitle() ? getTitle() + " " : TownySettings.getMayorPrefix(this)) + getName() + Colors.translateColorCodes(hasSurname() ? " " + getSurname() : TownySettings.getMayorPostfix(this));
-		}
-			
-		return Colors.translateColorCodes(hasTitle() ? getTitle() + " " : "") + getName() + Colors.translateColorCodes(hasSurname() ? " " + getSurname() : "");
+		
+		String prefix = Colors.translateColorCodes(hasTitle() ? getTitle() + " " : 
+			(isKing() && !TownySettings.getKingPrefix(this).isEmpty()) ? TownySettings.getKingPrefix(this) : 
+				(isMayor() && !TownySettings.getMayorPrefix(this).isEmpty()) ? TownySettings.getMayorPrefix(this) : "");
+		
+		String postfix = Colors.translateColorCodes(hasSurname() ? getSurname() + " " : 
+			(isKing() && !TownySettings.getKingPostfix(this).isEmpty()) ? TownySettings.getKingPostfix(this) : 
+				(isMayor() && !TownySettings.getMayorPostfix(this).isEmpty()) ? TownySettings.getMayorPostfix(this) : "");
+		return prefix + getName() + postfix;
 	}
 
 	/**
@@ -854,7 +851,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void removeSpawnProtection() {
 		Bukkit.getScheduler().cancelTask(getSpawnProtectionTaskID());
 		setSpawnProtectionTaskID(0);
-		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_invulnerability").forLocale(this));
+		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_invulnerability"));
 	}
 
 

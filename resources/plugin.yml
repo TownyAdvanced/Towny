@@ -613,6 +613,7 @@ permissions:
         children:
             towny.command.townyadmin.set.capital: true
             towny.command.townyadmin.set.mayor: true
+            towny.command.townyadmin.set.nationzoneoverride: true
             towny.command.townyadmin.set.plot: true
             towny.command.townyadmin.set.surname: true
             towny.command.townyadmin.set.title: true

@@ -48,6 +48,15 @@ public class TownyMessaging {
 	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
 	private static final Logger LOGGER_DEBUG = LogManager.getLogger("com.palmergames.bukkit.towny.debug");
 
+	/*
+	 * NON-TRANSLATABLE MESSAGING METHODS
+	 * 
+	 * Use these methods for sending messages, error 
+	 * messages and debug/dev messages. Many other 
+	 * messaging methods will end up using these to 
+	 * send directly to the player/console. 
+	 */
+	
 	/**
 	 * Sends an error message to the log
 	 *
@@ -81,20 +90,6 @@ public class TownyMessaging {
 	}
 
 	/**
-	 * Sends an Error message (red) to the Player or console
-	 * and to the named Dev if DevMode is enabled.
-	 * Uses default_towny_prefix
-	 *
-	 * @param sender the Object sending the message
-	 * @param msg the message array being sent.
-	 */
-	public static void sendErrorMsg(Object sender, String[] msg) {
-		for (String line : msg) {
-			sendErrorMsg(sender, line);
-		}
-	}
-
-	/**
 	 * Sends a message to console only
 	 * prefixed by [Towny]
 	 *
@@ -106,6 +101,8 @@ public class TownyMessaging {
 	}
 
 	/**
+	 * Towny's main endpoint for Towny-Prefixed messages.
+	 * 
 	 * Sends a message (green) to the Player or console
 	 * and to the named Dev if DevMode is enabled.
 	 * Uses default_towny_prefix
@@ -128,48 +125,6 @@ public class TownyMessaging {
 		sendDevMsg(msg);
 	}
 	
-	/**
-	 * Sends a message (green) to the resident
-	 * and to the named Dev if DevMode is enabled.
-	 * Uses default_towny_prefix
-	 *
-	 * @param resident to receive the msg
-	 * @param msg the message being sent
-	 */
-	public static void sendMsg(Resident resident, String msg) {
-		if (BukkitTools.isOnline(resident.getName()))
-			sendMsg(resident.getPlayer(), msg);
-	}
-
-	// todo: these two can probably be consolidated
-	/**
-	 * Sends a message (green) to the Player or console
-	 * and to the named Dev if DevMode is enabled.
-	 * Uses default_towny_prefix
-	 *
-	 * @param player the player to receive the message
-	 * @param msg the message to be sent
-	 */
-	public static void sendMsg(Player player, String[] msg) {
-		for (String line : msg) {
-			sendMsg(player, line);
-		}
-	}
-	
-	/**
-	 * Sends a message (green) to the Player or console
-	 * and to the named Dev if DevMode is enabled.
-	 * Uses default_towny_prefix
-	 *
-	 * @param player the player to receive the message
-	 * @param msg the message to be sent
-	 */
-	public static void sendMsg(Player player, List<String> msg) {
-		for (String line : msg) {
-			sendMsg(player, line);
-		}
-	}
-
 	/**
 	 * Sends a message (red) to the named Dev (if DevMode is enabled)
 	 * Uses default_towny_prefix
@@ -209,10 +164,8 @@ public class TownyMessaging {
 		sendDevMsg(msg);
 	}
 
-	/////////////////
-
 	/**
-	 * Send a message to a player
+	 * Send a message to a player with no Towny prefix.
 	 *
 	 * @param sender the Object sending the message
 	 * @param lines List of strings to send
@@ -222,7 +175,7 @@ public class TownyMessaging {
 	}
 
 	/**
-	 * Send a message to a player
+	 * Send a message to a player with no Towny prefix.
 	 *
 	 * @param sender the Object sending the message
 	 * @param line the String to send
@@ -238,12 +191,12 @@ public class TownyMessaging {
 		} else if (sender instanceof Resident resident) {
 			Player p = TownyAPI.getInstance().getPlayer(resident);
 			if (p != null)
-				p.sendMessage(Colors.strip(line));
+				p.sendMessage(line);
 		}
 	}
 
 	/**
-	 * Send a message to a player
+	 * Send a message to a player with no Towny prefix.
 	 *
 	 * @param sender the Object sending the message
 	 * @param lines String array to send as message.
@@ -253,35 +206,7 @@ public class TownyMessaging {
 			sendMessage(sender, line);
 	}
 
-	/**
-	 * Send a message to ALL online players and the log.
-	 * Uses default_towny_prefix
-	 *
-	 * @param lines String list to send as a message
-	 */
-	public static void sendGlobalMessage(List<String> lines) {
-		sendGlobalMessage(lines.toArray(new String[0]));
-	}
-
-	/**
-	 * Send a message to ALL online players and the log.
-	 * Uses default_towny_prefix
-	 *
-	 * @param lines String array to send as a message
-	 */
-	public static void sendGlobalMessage(String[] lines) {
-		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Global Msg] " + line));
-		}
-		for (Player player : BukkitTools.getOnlinePlayers()) {
-			if (player != null) {
-				for (String line : lines) {
-					player.sendMessage(Translation.of("default_towny_prefix") + line);
-				}
-			}
-		}
-	}
-
+	// TODO: Replace with WarMessenger - 15 - All in EventWar
 	/**
 	 * Send a message to All online players and the log.
 	 * Uses default_towny_prefix
@@ -296,6 +221,7 @@ public class TownyMessaging {
 		}
 	}
 	
+	// TODO: Replace with WarMessenger - 4 - All in EventWar
 	/**
 	 * Send a message to All online players and the log.
 	 * Does not use the default_towny_prefix.
@@ -310,36 +236,13 @@ public class TownyMessaging {
 		}		
 	}
 
-	/**
-	 * Send a message to a specific resident
-	 * preceded by the default_towny_prefix
-	 *
-	 * @param resident the resident to receive the message
-	 * @param line message String to send
-	 * @throws TownyException if the player is null
+	/*
+	 * PREFIXED TOWN AND NATION MESSAGES
+	 * 
+	 * Used primarily for /n say and /t say.
 	 */
-	public static void sendResidentMessage(Resident resident, String line) throws TownyException {
-		LOGGER.info(ChatTools.stripColour("[Resident Msg] " + resident.getName() + ": " + line));
-		Player player = TownyAPI.getInstance().getPlayer(resident);
-		if (player == null) {
-			throw new TownyException("Player could not be found!");
-		}
-		player.sendMessage(Translation.of("default_towny_prefix") + line);
-	}
-
-	/**
-	 * Send a message to All online residents of a town and log, 
-	 * preceded by the default_towny_prefix
-	 *
-	 * @param town town to receive the message
-	 * @param line the message
-	 */
-	public static void sendTownMessagePrefixed(Town town, String line) {
-		LOGGER.info(ChatTools.stripColour(line));
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendMessage(Translation.of("default_towny_prefix") + line);
-	}
-
+	
+	// TODO: Replace usage in War.
 	/**
 	 * Send a message to All online residents of a town and log
 	 * preceded by the [Townname]
@@ -353,34 +256,7 @@ public class TownyMessaging {
 			player.sendMessage(Translation.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())) + line);
 	}
 
-	/**
-	 * Send a multi-line message to All online residents of a town and log, 
-	 * preceded by the [Townname]
-	 *
-	 * @param town town to receive the message
-	 * @param lines Array of Strings constituting the message.
-	 */
-	public static void sendPrefixedTownMessage(Town town, String[] lines) {
-		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour(line));
-		}
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			for (String line : lines) {
-				player.sendMessage(Translation.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())) + line);
-			}
-	}
-	
-	/**
-	 * Send a multi-line message to All online residents of a town and log, 
-	 * preceded by the [Townname]
-	 *
-	 * @param town town to receive the message
-	 * @param lines List of Strings constituting the message.
-	 */
-	public static void sendPrefixedTownMessage(Town town, List<String> lines) {
-		sendPrefixedTownMessage(town, lines.toArray(new String[0]));
-	}
-	
+	// TODO: Replace usage in War.
 	/**
 	 * Send a message to All online residents of a nation and log
 	 * with the [nationname] prefixed to the beginning
@@ -394,64 +270,9 @@ public class TownyMessaging {
 			player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())) + line);
 	}
 
-	/**
-	 * Send a multi-line message to All online residents of a nation and log
-	 * with the [nationname] prefixed to the beginning
-	 *
-	 * @param nation the nation to send to
-	 * @param lines list of Strings containing the message
+	/*
+	 * TOWN AND NATION BOARD MESSAGES
 	 */
-	public static void sendPrefixedNationMessage(Nation nation, List<String> lines) {
-		sendPrefixedNationMessage(nation, lines.toArray(new String[0]));
-	}
-
-	/**
-	 * Send a multi-line message to All online residents of a nation and log
-	 * with the [nationname] prefixed to the beginning
-	 *
-	 * @param nation the nation to send to
-	 * @param lines array of Strings containing the message
-	 */
-	public static void sendPrefixedNationMessage(Nation nation, String[] lines) {
-		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
-		}
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation)) {
-			for (String line : lines) {
-				player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())) + line);
-			}
-		}
-	}
-	
-	/**
-	 * Send a message to All online residents of a nation and log
-	 * Uses default_towny_prefix
-	 *
-	 * @param nation the nation to send message to
-	 * @param line the message
-	 */
-	public static void sendNationMessagePrefixed(Nation nation, String line) {
-		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendMessage(Translation.of("default_towny_prefix") + line);
-	}
-	
-	/**
-	 * Send a multi-line message to All online residents of a nation and log
-	 * Uses default_towny_prefix
-	 *
-	 * @param nation the nation to send message to
-	 * @param lines the list of lines of the message
-	 */
-	public static void sendNationMessagePrefixed(Nation nation, List<String> lines) {
-		for (String line : lines) {
-			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
-		}
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			for (String line : lines) {
-				player.sendMessage(Translation.of("default_towny_prefix") + line);
-			}
-	}
 
 	/**
 	 * Send the town board to a player (in yellow)
@@ -479,49 +300,9 @@ public class TownyMessaging {
 		player.sendMessage(nbColor1 + "[" + StringMgmt.remUnderscore(nation.getName()) + "] " + nbColor2 + nation.getBoard());
 	}
 	
-	/**
-	 * Send a message to all residents in the list with the required mode
-	 *
-	 * @param residents List of residents to show the message to
-	 * @param msg the message to send
-	 * @param modeRequired a resident mode required for the resident to receive the message.
+	/*
+	 * TITLE/SUBTITLE MESSAGES
 	 */
-	public static void sendMessageToMode(ResidentList residents, String msg, String modeRequired) {
-
-		for (Resident resident : TownyAPI.getInstance().getOnlineResidents(residents))
-			if (resident.hasMode(modeRequired))
-				sendMessage(resident, msg);
-	}
-	
-	/**
-	 * Send a message to all residents in the town with the required mode
-	 * no prefix used
-	 * 
-	 * @param town the town to send message to
-	 * @param msg the message to send
-	 * @param modeRequired mode a resident must have to receive message
-	 */
-	public static void sendMessageToMode(Town town, String msg, String modeRequired) {
-
-		for (Resident resident : town.getResidents())
-			if (BukkitTools.isOnline(resident.getName()))
-				sendMessage(resident,msg);
-	}
-	
-	/**
-	 * Send a message to all residents in the nation with the required mode
-	 * no prefix used
-	 * 
-	 * @param nation the nation to receive the message
-	 * @param msg the message to send
-	 * @param modeRequired mode a resident must have to receive message
-	 */
-	public static void sendMessageToMode(Nation nation, String msg, String modeRequired) {
-
-		for (Resident resident : nation.getResidents())
-			if (BukkitTools.isOnline(resident.getName()))
-				sendMessage(resident,msg);
-	}
 	
 	/**
 	 * Send a Title and Subtitle to a resident
@@ -562,6 +343,10 @@ public class TownyMessaging {
 			player.sendTitle(title, subtitle, 10, 70, 10);
 	}
 
+	/*
+	 * REQUESTS/CONFIRMATION
+	 */
+	
 	public static void sendRequestMessage(CommandSender player, Invite invite) {
 		if (invite.getSender() instanceof Town) { // Town invited Resident
 			String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
@@ -629,6 +414,10 @@ public class TownyMessaging {
 		);
 	}
 
+	/*
+	 * PAGINATED LIST METHODS
+	 */
+	
 	public static void sendTownList(CommandSender sender, List<TextComponent> towns, ComparatorType compType, int page, int total) {
 		int iMax = Math.min(page * 10, towns.size());
 
@@ -857,38 +646,64 @@ public class TownyMessaging {
 		audience.sendMessage(pageFooter);
 	}
 	
+	/*
+	 * TRANSLATABLES FOLLOW
+	 */
+	
+	/**
+	 * Sends a message in green, prefixed by the default_towny_prefix to the sender,
+	 * translated to the end-user's locale.
+	 *  
+	 * @param sender CommandSender who will see the message. 
+	 * @param translatables Translatble... object(s) which will be translated.
+	 */
 	public static void sendMsg(CommandSender sender, Translatable... translatables) {
 		sendMsg(sender, Translation.translateTranslatables(sender, translatables));
 	}
+
+	/**
+	 * Sends a message translated to the end-user's locale, with no prefix.
+	 *  
+	 * @param sender CommandSender who will see the message. 
+	 * @param translatables Translatble... object(s) which will be translated.
+	 */
+	public static void sendMessage(CommandSender sender, Translatable... translatables) {
+		sendMessage(sender, Translation.translateTranslatables(sender, translatables));
+	}
 	
+	/**
+	 * Sends an Error message (red) to the sender
+	 * and to the named Dev if DevMode is enabled.
+	 * Uses default_towny_prefix.
+	 * Translates to the end-user's locale.
+	 * 
+	 * @param sender CommandSender who will receive the error message.
+	 * @param translatables Translatable... object(s) to be translated using the locale of the end-user.
+	 */
 	public static void sendErrorMsg(CommandSender sender, Translatable... translatables) {
 		sendErrorMsg(sender, Translation.translateTranslatables(sender, translatables));
 	}
 	
+	/**
+	 * Send a message to All online players and the log.
+	 * Uses default_towny_prefix. Message is translated for the end-user.
+	 *
+	 * @param translatable Translatable object to be messaged to the player using their locale.
+	 */
 	public static void sendGlobalMessage(Translatable translatable) {
 		LOGGER.info("[Global Message] " + translatable.stripColors(true).translate());
 		for (Player player : Bukkit.getOnlinePlayers())
 			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
-				sendMessage(player, translatable);
+				sendMessage(player, Translatable.of("default_towny_prefix").forLocale(player) + translatable);
 	}
-	
-	public static void sendMessage(Object sender, Translatable message) {
-		if (sender instanceof Player player) {
-			sendTranslatedMessage(player, message.stripColors(false).translate(Translation.getLocale(player)));
-		} else if (sender instanceof CommandSender commandSender) {
-			sendTranslatedMessage(commandSender, message.stripColors(true).translate(Translation.getLocale(commandSender)));
-		} else if (sender instanceof Resident resident) {
-			Player p = TownyAPI.getInstance().getPlayer(resident);
-			if (p != null)
-				sendTranslatedMessage(p, message.stripColors(false).translate(Translation.getLocale(p)));
-		}
-	}
-	
-	private static void sendTranslatedMessage(CommandSender sender, String message) {
-		if (!message.isEmpty())
-			sender.sendMessage(message);
-	}
-	
+
+	/**
+	 * Send a message to All online residents of a nation and log
+	 * preceded by the [NationName], translated for the end-user.
+	 * 
+	 * @param nation Nation to pass the message to, prefix message with.
+	 * @param message Translatable object to be messaged to the player using their locale.
+	 */
 	public static void sendPrefixedNationMessage(Nation nation, Translatable message) {
 		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
 		
@@ -896,6 +711,13 @@ public class TownyMessaging {
 			sendMessage(player, Translation.translateTranslatables(player, "", Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())), message));
 	}
 	
+	/**
+	 * Send a message to All online residents of a town and log
+	 * preceded by the [Townname], translated for the end-user.
+	 *
+	 * @param town Town to pass the message to, and prefix message with.
+	 * @param message Translatable object to be messaged to the player using their locale.
+	 */
 	public static void sendPrefixedTownMessage(Town town, Translatable message) {
 		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + message.translate()));
 		
@@ -903,6 +725,13 @@ public class TownyMessaging {
 			sendMessage(player, Translation.translateTranslatables(player, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), message));
 	}
 	
+	/**
+	 * Send a message to All online residents of a nation and log, 
+	 * preceded by the default_towny_prefix
+	 * 
+	 * @param nation Nation which will receive the message.
+	 * @param message Translatable message to be shown to the town.
+	 */
 	public static void sendNationMessagePrefixed(Nation nation, Translatable message) {
 		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
 		
@@ -910,6 +739,13 @@ public class TownyMessaging {
 			sendMsg(player, message);
 	}
 	
+	/**
+	 * Send a message to All online residents of a town and log, 
+	 * preceded by the default_towny_prefix
+	 * 
+	 * @param town Town which will receive the message.
+	 * @param message Translatable message to be shown to the town.
+	 */
 	public static void sendTownMessagePrefixed(Town town, Translatable message) {
 		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName())) + ": " + message.translate());
 		
@@ -917,27 +753,51 @@ public class TownyMessaging {
 			sendMsg(player, message);
 	}
 	
-	public static void sendResidentMessage(Resident resident, Translatable message) throws TownyException {
-		LOGGER.info(ChatTools.stripColour("[Resident Msg] " + resident.getName() + ": " + message.translate()));
-		Player player = TownyAPI.getInstance().getPlayer(resident);
-		if (player == null)
-			throw new TownyException("Player could not be found!");
-		
-		sendMsg(player, message);
-	}
-	
+	/**
+	 * Send a translatable message to a resident if they are online,
+	 * prefixed by the default_towny_prefix.
+	 * 
+	 * @param resident Resident to receive the message.
+	 * @param message Translatable message for the resident.
+	 */
 	public static void sendMsg(Resident resident, Translatable message) {
 		if (BukkitTools.isOnline(resident.getName()))
 			sendMsg(resident.getPlayer(), message);
 	}
 	
+	/**
+	 * Sends a translatable message to the console, prefixed
+	 * by the default_towny_prefix.
+	 * 
+	 * @param message Translatable message to show the console.
+	 */
 	public static void sendMsg(Translatable message) {
 		LOGGER.info("[Towny] " + message.stripColors(true).translate());
 	}
 	
+	/**
+	 * Sends a translatable error message to the console, 
+	 * prefixed by [Towny] Error:
+	 * 
+	 * @param message Translatable error message to show the console.
+	 */
 	public static void sendErrorMsg(Translatable message) {
 		LOGGER.warn("[Towny] Error: " + message.stripColors(true).translate());
 	}
+
+	/*
+	 * TOWN/RESIDENT/NATION/TOWNBLCOK STATUS SCREENS
+	 */
+	
+	public static void sendStatusScreen(CommandSender sender, StatusScreen screen) {
+		Audience audience = Towny.getAdventure().sender(sender);
+		for (TextComponent string : screen.getFormattedStatusScreen())
+			audience.sendMessage(string);
+	}
+
+	/*
+	 * DEPRECATED METHODS
+	 */
 	
 	/**
 	 * @param object - One receiving the message.
@@ -950,11 +810,294 @@ public class TownyMessaging {
 		sendMsg((CommandSender) object, message);
 	}
 
-
-	
-	public static void sendStatusScreen(CommandSender sender, StatusScreen screen) {
-		Audience audience = Towny.getAdventure().sender(sender);
-		for (TextComponent string : screen.getFormattedStatusScreen())
-			audience.sendMessage(string);
+	/**
+	 * Sends a message (green) to the resident
+	 * and to the named Dev if DevMode is enabled.
+	 * Uses default_towny_prefix
+	 *
+	 * @param resident to receive the msg
+	 * @param msg the message being sent
+	 * 
+	 * @deprecated Deprecated as of 0.97.3.0 use {@link #sendMsg(Resident, Translatable)} instead.
+	 */
+	@Deprecated
+	public static void sendMsg(Resident resident, String msg) {
+		if (BukkitTools.isOnline(resident.getName()))
+			sendMsg(resident.getPlayer(), msg);
 	}
+
+	/**
+	 * Sends a message (green) to the Player or console
+	 * and to the named Dev if DevMode is enabled.
+	 * Uses default_towny_prefix
+	 *
+	 * @param player the player to receive the message
+	 * @param msg the message to be sent
+	 * 
+	 * @deprecated Deprecated as of 0.97.3.0.
+	 */
+	@Deprecated
+	public static void sendMsg(Player player, String[] msg) {
+		for (String line : msg) {
+			sendMsg(player, line);
+		}
+	}
+	
+	/**
+	 * Sends a message (green) to the Player or console
+	 * and to the named Dev if DevMode is enabled.
+	 * Uses default_towny_prefix
+	 *
+	 * @param player the player to receive the message
+	 * @param msg the message to be sent
+	 * 
+	 * @deprecated Deprecated as of 0.97.3.0.
+	 */
+	@Deprecated
+	public static void sendMsg(Player player, List<String> msg) {
+		for (String line : msg) {
+			sendMsg(player, line);
+		}
+	}
+
+	/**
+	 * Send a message to ALL online players and the log.
+	 * Uses default_towny_prefix
+	 *
+	 * @param lines String list to send as a message
+	 * @deprecated since 0.97.3.0 use {@link #sendGlobalMessage(Translatable)}
+	 */
+	@Deprecated
+	public static void sendGlobalMessage(List<String> lines) {
+		sendGlobalMessage(lines.toArray(new String[0]));
+	}
+
+	/**
+	 * Send a message to ALL online players and the log.
+	 * Uses default_towny_prefix
+	 *
+	 * @param lines String array to send as a message
+	 * 
+	 * @deprecated since 0.97.3.0 use {@link #sendGlobalMessage(Translatable)}
+	 */
+	@Deprecated
+	public static void sendGlobalMessage(String[] lines) {
+		for (String line : lines) {
+			LOGGER.info(ChatTools.stripColour("[Global Msg] " + line));
+		}
+		for (Player player : BukkitTools.getOnlinePlayers()) {
+			if (player != null) {
+				for (String line : lines) {
+					player.sendMessage(Translation.of("default_towny_prefix") + line);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Sends an Error message (red) to the Player or console
+	 * and to the named Dev if DevMode is enabled.
+	 * Uses default_towny_prefix
+	 *
+	 * @param sender the Object sending the message
+	 * @param msg the message array being sent.
+	 * 
+	 * @deprecated since 0.97.3.0 use {@link #sendErrorMsg(CommandSender, Translatable...)}
+	 */
+	@Deprecated 
+	public static void sendErrorMsg(Object sender, String[] msg) {
+		for (String line : msg) {
+			sendErrorMsg(sender, line);
+		}
+	}
+
+	/**
+	 * Send a message to all residents in the list with the required mode
+	 *
+	 * @param residents List of residents to show the message to
+	 * @param msg the message to send
+	 * @param modeRequired a resident mode required for the resident to receive the message.
+	 * @deprecated since 0.97.3.0
+	 */
+	@Deprecated
+	public static void sendMessageToMode(ResidentList residents, String msg, String modeRequired) {
+
+		for (Resident resident : TownyAPI.getInstance().getOnlineResidents(residents))
+			if (resident.hasMode(modeRequired))
+				sendMessage(resident, msg);
+	}
+	
+	/**
+	 * Send a message to all residents in the town with the required mode
+	 * no prefix used
+	 * 
+	 * @param town the town to send message to
+	 * @param msg the message to send
+	 * @param modeRequired mode a resident must have to receive message
+	 * @deprecated since 0.97.3.0
+	 */
+	@Deprecated
+	public static void sendMessageToMode(Town town, String msg, String modeRequired) {
+
+		for (Resident resident : town.getResidents())
+			if (BukkitTools.isOnline(resident.getName()))
+				sendMessage(resident,msg);
+	}
+	
+	/**
+	 * Send a message to all residents in the nation with the required mode
+	 * no prefix used
+	 * 
+	 * @param nation the nation to receive the message
+	 * @param msg the message to send
+	 * @param modeRequired mode a resident must have to receive message
+	 * @deprecated since 0.97.3.0
+	 */
+	@Deprecated
+	public static void sendMessageToMode(Nation nation, String msg, String modeRequired) {
+
+		for (Resident resident : nation.getResidents())
+			if (BukkitTools.isOnline(resident.getName()))
+				sendMessage(resident,msg);
+	}
+
+	/**
+	 * Send a message to All online residents of a town and log, 
+	 * preceded by the default_towny_prefix
+	 *
+	 * @param town town to receive the message
+	 * @param line the message
+	 * 
+	 * @deprecated since 0.97.3.0 use {@link #sendTownMessagePrefixed(Town, Translatable)}
+	 */
+	@Deprecated
+	public static void sendTownMessagePrefixed(Town town, String line) {
+		LOGGER.info(ChatTools.stripColour(line));
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
+			player.sendMessage(Translation.of("default_towny_prefix") + line);
+	}
+
+	/**
+	 * Send a multi-line message to All online residents of a town and log, 
+	 * preceded by the [Townname]
+	 *
+	 * @param town town to receive the message
+	 * @param lines Array of Strings constituting the message.
+	 * 
+	 * @deprecated since 0.97.3.0 use {@link #sendPrefixedTownMessage(Town, Translatable)}
+	 */
+	@Deprecated
+	public static void sendPrefixedTownMessage(Town town, String[] lines) {
+		for (String line : lines) {
+			LOGGER.info(ChatTools.stripColour(line));
+		}
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
+			for (String line : lines) {
+				player.sendMessage(Translation.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())) + line);
+			}
+	}
+	
+	/**
+	 * Send a multi-line message to All online residents of a town and log, 
+	 * preceded by the [Townname]
+	 *
+	 * @param town town to receive the message
+	 * @param lines List of Strings constituting the message.
+	 * @deprecated since 0.97.3.0 use {@link #sendPrefixedTownMessage(Town, Translatable)}
+	 */
+	@Deprecated
+	public static void sendPrefixedTownMessage(Town town, List<String> lines) {
+		sendPrefixedTownMessage(town, lines.toArray(new String[0]));
+	}
+	
+	/**
+	 * Send a multi-line message to All online residents of a nation and log
+	 * with the [nationname] prefixed to the beginning
+	 *
+	 * @param nation the nation to send to
+	 * @param lines list of Strings containing the message
+	 * 
+	 * @deprecated since 0.97.3.0 use {@link #sendPrefixedNationMessage(Nation, Translatable)}
+	 */
+	public static void sendPrefixedNationMessage(Nation nation, List<String> lines) {
+		sendPrefixedNationMessage(nation, lines.toArray(new String[0]));
+	}
+
+	/**
+	 * Send a multi-line message to All online residents of a nation and log
+	 * with the [nationname] prefixed to the beginning
+	 *
+	 * @param nation the nation to send to
+	 * @param lines array of Strings containing the message
+	 * 
+	 * @deprecated since 0.97.3.0 use {@link #sendPrefixedNationMessage(Nation, Translatable)}
+	 */
+	@Deprecated
+	public static void sendPrefixedNationMessage(Nation nation, String[] lines) {
+		for (String line : lines) {
+			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
+		}
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation)) {
+			for (String line : lines) {
+				player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())) + line);
+			}
+		}
+	}
+	
+	/**
+	 * Send a message to All online residents of a nation and log
+	 * Uses default_towny_prefix
+	 *
+	 * @param nation the nation to send message to
+	 * @param line the message
+	 * 
+	 * @deprecated since 0.97.3.0 use {@link #sendNationMessagePrefixed(Nation, Translatable)}
+	 */
+	@Deprecated
+	public static void sendNationMessagePrefixed(Nation nation, String line) {
+		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
+			player.sendMessage(Translation.of("default_towny_prefix") + line);
+	}
+	
+	/**
+	 * Send a multi-line message to All online residents of a nation and log
+	 * Uses default_towny_prefix
+	 *
+	 * @param nation the nation to send message to
+	 * @param lines the list of lines of the message
+	 * 
+	 * @deprecated since 0.97.3.0 use {@link #sendNationMessagePrefixed(Nation, Translatable)}
+	 */
+	@Deprecated
+	public static void sendNationMessagePrefixed(Nation nation, List<String> lines) {
+		for (String line : lines) {
+			LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
+		}
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
+			for (String line : lines) {
+				player.sendMessage(Translation.of("default_towny_prefix") + line);
+			}
+	}
+
+	/**
+	 * Send a message to a specific resident
+	 * preceded by the default_towny_prefix
+	 *
+	 * @param resident the resident to receive the message
+	 * @param line message String to send
+	 * @throws TownyException if the player is null
+	 * 
+	 * @deprecated since 0.97.3.0 use {@link #sendMsg(Resident, Translatable)}
+	 */
+	@Deprecated
+	public static void sendResidentMessage(Resident resident, String line) throws TownyException {
+		LOGGER.info(ChatTools.stripColour("[Resident Msg] " + resident.getName() + ": " + line));
+		Player player = TownyAPI.getInstance().getPlayer(resident);
+		if (player == null) {
+			throw new TownyException("Player could not be found!");
+		}
+		player.sendMessage(Translation.of("default_towny_prefix") + line);
+	}
+
 }

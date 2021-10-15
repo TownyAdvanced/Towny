@@ -51,6 +51,7 @@ import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.common.WarZoneListener;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
@@ -78,6 +79,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -168,7 +171,7 @@ public class Towny extends JavaPlugin {
 			addMetricsCharts();
 		} catch (TownyInitException tie) {
 			addError(tie.getError());
-			getLogger().log(Level.SEVERE, tie.getMessage(), tie.getStackTrace());
+			getLogger().log(Level.SEVERE, tie.getMessage(), tie);
 		}
 		
 		// NOTE: Runs regardless if Towny errors out!
@@ -261,9 +264,7 @@ public class Towny extends JavaPlugin {
 	}
 
 	private void loadConfig(boolean reload) {
-		// TODO: Rewrite CommentedConfiguration to take java.nio.Path instead of File.
-		// There is probably a lot of performance improvements possible for the CommentedConfiguration - Articdive.
-		TownySettings.loadConfig(getDataFolder().toPath().resolve("settings").resolve("config.yml").toString(), getVersion());
+		TownySettings.loadConfig(getDataFolder().toPath().resolve("settings").resolve("config.yml"), getVersion());
 		if (reload) {
 			// If Towny is in Safe Mode (for the main config) turn off Safe Mode.
 			if (isError(TownyInitException.TownyError.MAIN_CONFIG)) {
@@ -286,7 +287,7 @@ public class Towny extends JavaPlugin {
 		if (!checkForLegacyDatabaseConfig()) {
 			throw new TownyInitException("Unable to migrate old database settings to Towny\\data\\settings\\database.yml", TownyInitException.TownyError.DATABASE_CONFIG);
 		}
-		DatabaseConfig.loadDatabaseConfig(getDataFolder().toPath().resolve("settings").resolve("database.yml").toString());
+		DatabaseConfig.loadDatabaseConfig(getDataFolder().toPath().resolve("settings").resolve("database.yml"));
 		if (reload) {
 			// If Towny is in Safe Mode (because of localization) turn off Safe Mode.
 			if (isError(TownyInitException.TownyError.DATABASE_CONFIG)) {
@@ -296,7 +297,7 @@ public class Towny extends JavaPlugin {
 	}
 	
 	public void loadPermissions(boolean reload) {
-		TownyPerms.loadPerms(getDataFolder().toPath().resolve("settings").toString(), "townyperms.yml");
+		TownyPerms.loadPerms(getDataFolder().toPath().resolve("settings").resolve("townyperms.yml"));
 		// This will only run if permissions is fine.
 		if (reload) {
 			// If Towny is in Safe Mode (for Permissions) turn off Safe Mode.
@@ -333,12 +334,12 @@ public class Towny extends JavaPlugin {
 	 * @since 0.97.0.24
 	 */
 	private boolean checkForLegacyDatabaseConfig() {
-		File file = getDataFolder().toPath().resolve("settings").resolve("config.yml").toFile();
+		Path configYMLPath = getDataFolder().toPath().resolve("settings").resolve("config.yml");
 		// Bail if the config doesn't exist at all yet.
-		if (!file.exists())
+		if (!Files.exists(configYMLPath))
 			return true;
 
-		CommentedConfiguration config = new CommentedConfiguration(file);
+		CommentedConfiguration config = new CommentedConfiguration(configYMLPath);
 		// return false if the config cannot be loaded.
 		if (!config.load())
 			return false;
@@ -362,9 +363,9 @@ public class Towny extends JavaPlugin {
 			/*
 			 * Create database.yml if it doesn't exist yet, with new settings.
 			 */
-			String databaseFilePath = getDataFolder().toPath().resolve("settings").resolve("database.yml").toString();
-			if (FileMgmt.checkOrCreateFile(databaseFilePath)) {
-				CommentedConfiguration databaseConfig = new CommentedConfiguration(new File(databaseFilePath));
+			Path databaseYMLPath = getDataFolder().toPath().resolve("settings").resolve("database.yml");
+			if (FileMgmt.checkOrCreateFile(databaseYMLPath.toString())) {
+				CommentedConfiguration databaseConfig = new CommentedConfiguration(databaseYMLPath);
 				databaseConfig.set("database.database_load", dbload);
 				databaseConfig.set("database.database_save", dbsave);
 				databaseConfig.set("database.sql.hostname", hostname);
@@ -652,22 +653,46 @@ public class Towny extends JavaPlugin {
 
 		try {
 			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
-			boolean display = false;
-			plugin.getLogger().info("------------------------------------");
-			plugin.getLogger().info("ChangeLog up until v" + getVersion());
+			int startingIndex = 0;
+			int linesDisplayed = 0;
 			String lastVersion = Version.fromString(TownySettings.getLastRunVersion()).toString(); // Parse out any trailing text after the *.*.*.* version, ie "-for-1.12.2".
-			for (String line : changeLog) { // TODO: crawl from the bottom, then
-											// past from that index.
-				if (line.startsWith(lastVersion)) {
-					display = true;
+			plugin.getLogger().info("------------------------------------");
+			plugin.getLogger().info("ChangeLog since v" + lastVersion + ":");
+			
+			// Go backwards through the changelog to get to the last run version.
+			for (int i = changeLog.size() - 1; i >= 0; i--) {
+				if (changeLog.get(i).startsWith(lastVersion)) {
+					// Go forwards through the changelog to find the next version after the last run version.
+					for (int j = i + 1; j < changeLog.size(); j++) {
+						if (!changeLog.get(j).trim().startsWith("-")) {
+							startingIndex = j;
+							break;
+						}
+					}
+					break;
 				}
-				if (display && line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
-					Bukkit.getLogger().info(line);
+			}
+			
+			if (startingIndex != 0) {
+				for (int i = startingIndex; i < changeLog.size(); i++) {
+					if (linesDisplayed > 100) {
+						plugin.getLogger().info(Colors.Yellow + "<snip>");
+						plugin.getLogger().info(Colors.Yellow + "Changelog continues for another " + (changeLog.size() - (startingIndex + 99)) + " lines.");
+						plugin.getLogger().info(Colors.Yellow + "To read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/resources/ChangeLog.txt#L" + ++startingIndex);
+						break;
+					} 
+					String line = changeLog.get(i);
+					if (line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
+						Bukkit.getLogger().info(line.trim().startsWith("-") ? line : Colors.Yellow + line);
+						++linesDisplayed;
+					}
 				}
+			} else {
+				plugin.getLogger().warning("Could not find starting index for the changelog.");	
 			}
 			plugin.getLogger().info("------------------------------------");
 		} catch (IOException e) {
-			TownyMessaging.sendErrorMsg("Could not read ChangeLog.txt");
+			plugin.getLogger().warning("Could not read ChangeLog.txt");
 		}
 	}
 

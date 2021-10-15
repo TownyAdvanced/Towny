@@ -23,7 +23,7 @@ public class StatusScreen {
 
 	Map<String, TextComponent> components = new LinkedHashMap<>();
 	final static int MAX_WIDTH = ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH;
-	final TextComponent space = Component.text(" ").color(NamedTextColor.WHITE);
+	final TextComponent space = Component.space().color(NamedTextColor.WHITE).hoverEvent(HoverEvent.showText(Component.empty()));
 
 	public void addComponentOf(String name, String text) {
 		components.put(name, Component.text(text));

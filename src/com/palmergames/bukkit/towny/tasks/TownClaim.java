@@ -74,8 +74,12 @@ public class TownClaim extends Thread {
 		List<TownyWorld> worlds = new ArrayList<>();
 		List<Town> towns = new ArrayList<>();
 		TownyWorld world = null;
-		if (player != null)
-			TownyMessaging.sendMsg(player, "Processing " + ((claim) ? "Town Claim..." : "Town unclaim..."));
+		if (player != null) {
+			if (claim)
+				TownyMessaging.sendMsg(player, Translatable.of("msg_process_town_claim"));
+			else 
+				TownyMessaging.sendMsg(player, Translatable.of("msg_process_town_unclaim"));
+		}
 
 		if (selection != null) {
 
@@ -119,7 +123,7 @@ public class TownClaim extends Thread {
 		} else if (!claim) {
 
 			if (town == null) {
-				TownyMessaging.sendMsg(player, "Nothing to unclaim!");
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_nothing_to_unclaim"));
 				return;
 			}
 

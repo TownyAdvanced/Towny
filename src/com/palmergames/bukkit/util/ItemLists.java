@@ -126,6 +126,12 @@ public interface ItemLists {
 	public static List<String> CAMPFIRES = new ArrayList<>(Arrays.asList("CAMPFIRE","SOUL_CAMPFIRE"));
 	
 	/**
+	 * List of harvestable berries
+	 */
+	public static List<String> HARVESTABLE_BERRIES = new ArrayList<>(Arrays.asList("CAVE_VINES_PLANT","SWEET_BERRY_BUSH"));
+	
+	
+	/**
 	 * Returns a pre-configured list from the GROUPS.
 	 * 
 	 * @param groupName - String value of one of the {@link ItemLists#GROUPS}

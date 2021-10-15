@@ -355,11 +355,12 @@ public class TownyPlayerListener implements Listener {
 			 * 
 			 * Test interaction as a Destroy test. (These used to be switches pre-0.96.3.1)
 			 */
-			if (ItemLists.POTTED_PLANTS.contains(clickedMat.name()) ||                          
+			if (ItemLists.POTTED_PLANTS.contains(clickedMat.name()) ||
+				ItemLists.HARVESTABLE_BERRIES.contains(clickedMat.name()) ||
 				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat.name()) ||
 				ItemLists.CANDLES.contains(clickedMat.name()) ||
 				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
-				clickedMat == Material.COMMAND_BLOCK || clickedMat == Material.SWEET_BERRY_BUSH){
+				clickedMat == Material.COMMAND_BLOCK){
 				
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
