@@ -6835,3 +6835,5 @@ v0.92.0.11:
   - Fix the /ta plot claimedat command, courtesy of Warriorrrr with PR #5361.
   - Expand MetaDataUtil methods to include hasMeta and addNewMeta methods.
   - Make the plot change listener more efficient, courtesy of Warriorrrr with PR #5365.
+0.97.2.8:
+  - Make it so that turning Towny off in a world will shut down any active revert-on-unclaim actions. 
