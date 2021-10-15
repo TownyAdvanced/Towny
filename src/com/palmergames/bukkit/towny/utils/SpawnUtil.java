@@ -422,11 +422,11 @@ public class SpawnUtil {
 	}
 	
 	public static void jailAwayTeleport(Resident jailed) {
-		initiatePluginTeleport(jailed, getIdealLocation(jailed));
+		initiatePluginTeleport(jailed, getIdealLocation(jailed), false);
 	}
 	
 	public static void jailTeleport(Resident jailed) {
-		initiatePluginTeleport(jailed, jailed.getJailSpawn());
+		initiatePluginTeleport(jailed, jailed.getJailSpawn(), false);
 	}
 
 	/**
@@ -451,7 +451,8 @@ public class SpawnUtil {
 		return loc;
 	}
 	
-	private static void initiatePluginTeleport(Resident resident, Location loc) {
-		PaperLib.teleportAsync(resident.getPlayer(), loc, TeleportCause.PLUGIN);
+	private static void initiatePluginTeleport(Resident resident, Location loc, boolean ignoreWarmup) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> PaperLib.teleportAsync(resident.getPlayer(), loc, TeleportCause.PLUGIN),
+			(long) TownySettings.getTeleportWarmupTime() * 20);
 	}
 }

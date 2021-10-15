@@ -212,11 +212,14 @@ public class JailUtil {
 	private static void teleportAwayFromJail(Resident resident) {
 		// Don't teleport a player who isn't online.
 		if (!resident.isOnline()) return;
+		TownyMessaging.sendMsg(resident, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 		SpawnUtil.jailAwayTeleport(resident);
 	}
 	
 	private static void teleportToJail(Resident resident) {
 		TownyMessaging.sendMsg(resident, Translatable.of("msg_you_are_being_sent_to_jail"));
+		
+		TownyMessaging.sendMsg(resident, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 		SpawnUtil.jailTeleport(resident);
 	}
 
