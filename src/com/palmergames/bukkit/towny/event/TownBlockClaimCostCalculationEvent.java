@@ -47,7 +47,7 @@ public class TownBlockClaimCostCalculationEvent extends Event {
 	
 	/**
 	 * Returns the amount of town blocks to be claimed.
-	 * @return amount of town blocks to be claimed
+	 * @return plotAmount The amount of town blocks to be claimed
 	 */
 	public int getAmountOfRequestedTownBlocks() {
 		return plotAmount;
