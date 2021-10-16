@@ -554,7 +554,7 @@ public class Town extends Government implements TownBlockOwner {
 			cost += nextprice;
 			i++;
 		}
-		BonusBlockPurchaseCostCalculationEvent event = new BonusBlockPurchaseCostCalculationEvent(this,Math.round(cost),inputN);
+		BonusBlockPurchaseCostCalculationEvent event = new BonusBlockPurchaseCostCalculationEvent(this, Math.round(cost), inputN);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getPrice();
 	}
