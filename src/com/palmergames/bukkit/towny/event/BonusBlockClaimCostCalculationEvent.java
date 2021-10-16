@@ -47,10 +47,10 @@ public class BonusBlockPurchaseCostCalculationEvent extends Event {
 	
 	/**
 	 * Returns the amount of bonus blocks to be purchased.
-	 * @return the amount of bonus blocks to be purchased
+	 * @return plotAmount The amount of bonus blocks to be purchased
 	 */
 	public int getAmountOfPurchasingBlocksRequest() {
-		return this.plotAmount;
+		return plotAmount;
 	}
 	
 	/**
