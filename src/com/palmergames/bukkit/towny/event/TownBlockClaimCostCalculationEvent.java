@@ -23,7 +23,7 @@ public class TownBlockClaimCostCalculationEvent extends Event {
 
 	/**
 	 * Returns the target Town.
-	 * @return target Town
+	 * @return town Town
 	 */
 	public Town getTown() {
 		return town;
