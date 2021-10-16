@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Seu teleporte foi cancelado ao tomar dano.'
 #Added in 0.82
 invitation_prefix: "&8[&7Convite&8] &9"
 confirmation_prefix: "&8[&7Confirmação&8] &9"
-this_message_will_expire2: '&9Irá espirar automaticamente em 20 segundos'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Próxima página'
 msg_hover_previous_page: 'Página anterior'
 #Added in 0.83
