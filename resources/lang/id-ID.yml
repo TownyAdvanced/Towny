@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Teleportasi mu dibatalkan karena ter-damage.
 #Added in 0.82
 invitation_prefix: "&8[&7Undangan&8] &9"
 confirmation_prefix: "&8[&7Konfirmasi&8] &9"
-this_message_will_expire2: '&9Hal ini akan otomatis kedaluwarsa dalam 20 detik'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Halaman berikutnya'
 msg_hover_previous_page: 'Halaman sebelumnya'
 #Added in 0.83
