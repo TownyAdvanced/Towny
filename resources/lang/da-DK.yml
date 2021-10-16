@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Skade har annulleret din teleport.'
 #Added in 0.82
 invitation_prefix: "&8[&7Invitation&8] &9"
 confirmation_prefix: "&8[&7Bekræftelse&8] &9"
-this_message_will_expire2: '&9Denne vil automatisk udløbe om 20 sekunder'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Næste side'
 msg_hover_previous_page: 'Forrige side'
 #Added in 0.83
