@@ -23,7 +23,7 @@ public class BonusBlockPurchaseCostCalculationEvent extends Event {
 
 	/**
 	 * Returns the target Town.
-	 * @return target Town
+	 * @return town Town
 	 */
 	public Town getTown() {
 		return town;
