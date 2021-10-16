@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Hai subito danno. Teletrasporto annullato.'
 #Added in 0.82
 invitation_prefix: "&8[&7Invito&8] &9"
 confirmation_prefix: "&8[&7Conferma &8] &9"
-this_message_will_expire2: '&Questo scadrà automaticamente tra 20 secondi'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Pagina successiva'
 msg_hover_previous_page: 'Pagina precedente'
 #Added in 0.83
