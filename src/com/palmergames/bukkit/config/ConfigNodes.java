@@ -2561,6 +2561,11 @@ public enum ConfigNodes {
 			"",
 			"# Does a riot war end if the mayor is killed to the point they have no lives left?"
 			),
+	WAR_WAR_TYPES_RIOT_WINNER_TAKES_OVER_TOWN(
+			"war.war_types.riot.winner_takes_over_town",
+			"false",
+			"",
+			"# Does the highest score of the riot take over the town (if they were on the rebel side.)"),
 	WAR_WAR_TYPES_RIOT_BASE_SPOILS(
 			"war.war_types.riot.base_spoils",
 			"10.0",
@@ -2653,7 +2658,7 @@ public enum ConfigNodes {
 			"war.war_types.civil_war.winner_takes_over_nation",
 			"true",
 			"",
-			"# Does the winning town take over as capital of the nation?"),
+			"# Does the winning town take over as capital of the nation? The winning town has to have been on the side of the rebels."),
 	WAR_WAR_TYPES_CIVIL_WAR_BASE_SPOILS(
 			"war.war_types.civil_war.base_spoils",
 			"500.0",

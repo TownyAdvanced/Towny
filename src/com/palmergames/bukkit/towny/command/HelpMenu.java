@@ -321,6 +321,18 @@ public enum HelpMenu {
 		}
 	},
 	
+	TOWNY_WAR {
+		@Override
+		public MenuBuilder load() {
+			return new MenuBuilder("towny war")
+				.add("stats", "")
+				.add("scores", "")
+				.add("participants", "")
+				.add("hud", "")
+				.add("types", "");
+		}
+	},
+	
 	TOWNYWORLD_HELP {
 		@Override
 		protected MenuBuilder load(MenuBuilder builder) {

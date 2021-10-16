@@ -230,7 +230,8 @@ public class WarZoneManager {
 		/*
 		 * Handle take-over of individual TownBlocks in war. (Not used when entire Towns are conquered by Nations) TODO: Handle non-Nation war outcomes.
 		 */
-		if (!TownySettings.getWarEventWinnerTakesOwnershipOfTown() && TownySettings.getWarEventWinnerTakesOwnershipOfTownblocks()) {
+//		if (!TownySettings.getWarEventWinnerTakesOwnershipOfTown() && TownySettings.getWarEventWinnerTakesOwnershipOfTownblocks()) {
+		if (war.getWarType().hasTownBlocksSwitchTowns) {
 			townBlock.setTown(attacker);
 			townBlock.save();
 		}		
@@ -264,7 +265,7 @@ public class WarZoneManager {
 				freeFromJail(townBlock, defenderTown);
 			
 			// Update the score. 
-			war.getScoreManager().townScored(attacker, TownySettings.getWarPointsForTownBlock(), townBlock, 0);
+			war.getScoreManager().townScored(attacker, TownySettings.getWarPointsForTownBlock(), townBlock, 1);
 		}
 		
 	}
@@ -304,7 +305,7 @@ public class WarZoneManager {
 			/*
 			 * Handle conquering.
 			 */
-			if (TownySettings.getWarEventWinnerTakesOwnershipOfTown()) {
+			if (war.getWarType().hasTownConquering) {
 				// It is a capital.
 				if (isCapital) {
 					List<Town> towns = new ArrayList<>(nation.getTowns());

@@ -28,9 +28,11 @@ import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyExplosionDamagesEntityEvent;
+import com.palmergames.bukkit.towny.event.damage.TownyFriendlyFireTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
@@ -322,8 +324,8 @@ public class WarZoneListener implements Listener {
 		Town attackerTown = event.getAttackerTown();
 		Town defenderTown = event.getVictimTown();
 		
-		// Neither Town has anything going on for war.
-		if (!attackerTown.hasActiveWar() && !defenderTown.hasActiveWar())
+		// One Town has no war.
+		if (!attackerTown.hasActiveWar() || !defenderTown.hasActiveWar())
 			return;
 		
 		// They might be at war, but is it the same war?
@@ -357,12 +359,52 @@ public class WarZoneListener implements Listener {
 //			event.setCancelled(true);
 //			return;
 //		}
-		
-		//Cancel because one of the two players considers the other an ally.
-		if (CombatUtil.isAlly(attackerTown, defenderTown)){
-			event.setMessage(Translatable.of("msg_war_a_player_is_an_ally").forLocale(event.getAttackingPlayer()));
-			event.setCancelled(true);
+//		
+//		//Cancel because one of the two players considers the other an ally.
+//		if (CombatUtil.isAlly(attackerTown, defenderTown)){
+//			event.setMessage(Translatable.of("msg_war_a_player_is_an_ally").forLocale(event.getAttackingPlayer()));
+//			event.setCancelled(true);
+//			return;
+//		}
+	}
+	
+	@EventHandler
+	public void onFriendlyFire(TownyFriendlyFireTestEvent event) {
+		if (!TownyAPI.getInstance().isWarTime())
 			return;
+		
+		Resident attacker = TownyAPI.getInstance().getResident(event.getAttacker());
+		Resident defender = TownyAPI.getInstance().getResident(event.getDefender());
+		
+		if (!attacker.hasTown() || !defender.hasTown())
+			return;
+		
+		if (!attacker.getTownOrNull().hasActiveWar() || !defender.getTownOrNull().hasActiveWar())
+			return;
+		
+		if (!WarUtil.hasSameWar(attacker, defender))
+			return;
+		
+		War war = TownyUniverse.getInstance().getWarEvent(attacker);
+		
+		switch (war.getWarType()) {
+			case RIOT:
+			case CIVILWAR:
+				if (war.getWarParticipants().getGovSide().contains(attacker) && war.getWarParticipants().getGovSide().contains(defender)) {
+					event.setPVP(false);
+					return;
+				}
+				if (war.getWarParticipants().getRebSide().contains(attacker) && war.getWarParticipants().getRebSide().contains(defender)) { 
+					event.setPVP(false);
+					return;
+				}
+				event.setPVP(true);
+				break;
+			case TOWNWAR:
+			case NATIONWAR:
+			case WORLDWAR:
+				event.setPVP(CombatUtil.isEnemy(attacker.getTownOrNull(), defender.getTownOrNull()));
+				break;
 		}
 	}
 	

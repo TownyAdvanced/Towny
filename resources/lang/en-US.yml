@@ -1657,7 +1657,7 @@ msg_war_name_ended: '&6[War]&b %s ended via admin command.'
 #Messages shown when a war does not exist with the given name.
 msg_err_unknown_war: 'No war is known by the name: %s'
 #Message shown when a town is joined into a war.
-msg_you_have_joined_a_war_of_type: 'YOu have joined a war of type: %s.'
+msg_you_have_joined_a_war_of_type: 'You have joined a war of type: %s.'
 #The message shown to attackers when a townblock is being attacked.
 msg_war_townblock_hp: '&8[%s] (%s) HP: %s %s'
 #The message shown when a townblock is being healed.
@@ -1666,3 +1666,7 @@ msg_war_townblock_healed: '&8[Heal](%s) HP: %s (&a+%s&8)'
 msg_town_could_not_pay_death_costs_removing_from_war: 'Town could not pay death costs, removing %s from the war.'
 #Message shown when a player has run out of lives and is removed from the war
 msg_resident_has_run_out_of_lives_and_is_eliminated_from_the_war: '%s has run out of lives and is eliminated from the %s'
+#Message shown when a player chooses to fight for the rebels in war.
+msg_you_have_sided_with_the_rebels: 'You have sided with the rebels.'
+#Message shown when a player chooses to fight for the government in war.
+msg_you_have_sided_with_the_government: 'You have sided with the government.'

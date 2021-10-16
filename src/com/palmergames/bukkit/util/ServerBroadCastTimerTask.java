@@ -2,27 +2,23 @@ package com.palmergames.bukkit.util;
 
 import java.util.TimerTask;
 
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 
 public class ServerBroadCastTimerTask extends TimerTask {
 
-	private JavaPlugin plugin;
 	private String msg;
+	private War war;
 
-	public ServerBroadCastTimerTask(JavaPlugin plugin, String msg) {
+	public ServerBroadCastTimerTask(War war, String msg) {
 
-		this.plugin = plugin;
 		this.msg = msg;
+		this.war = war;
 	}
 
 	@Override
 	public void run() {
 
-		for (Player player : plugin.getServer().getOnlinePlayers())
-			TownyMessaging.sendMessage(player, msg);
+		war.getMessenger().sendGlobalMessage(msg);
 	}
 
 }

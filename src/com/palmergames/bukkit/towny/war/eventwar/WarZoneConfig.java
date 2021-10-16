@@ -66,6 +66,10 @@ public class WarZoneConfig {
 		return TownySettings.getBoolean(ConfigNodes.WAR_WAR_TYPES_RIOT_MAYOR_DEATH);
 	}
 	
+	public static boolean riotsWinnerTakesOverTown() {
+		return TownySettings.getBoolean(ConfigNodes.WAR_WAR_TYPES_RIOT_WINNER_TAKES_OVER_TOWN);
+	}
+	
 	public static int riotResidentLives() {
 		return TownySettings.getInt(ConfigNodes.WAR_WAR_TYPES_RIOT_RESIDENT_LIVES);
 	}

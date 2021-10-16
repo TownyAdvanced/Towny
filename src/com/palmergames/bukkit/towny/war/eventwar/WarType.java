@@ -2,11 +2,56 @@ package com.palmergames.bukkit.towny.war.eventwar;
 
 public enum WarType {
 	// TODO: Make all these settings configurable.
-	RIOT("Riot", false, WarZoneConfig.riotsMayorDeathEnabled(), false, false, WarZoneConfig.riotResidentLives(), WarZoneConfig.riotMayorLives(), WarZoneConfig.riotBaseSpoils(), WarZoneConfig.riotPointsPerKill()),
-	TOWNWAR("Town vs Town War", WarZoneConfig.townWarTownBlockHPEnabled(), WarZoneConfig.townWarMayorDeathEnabled(), false, WarZoneConfig.townWarWinnerTakesOverTown(), WarZoneConfig.townWarResidentLives(), WarZoneConfig.townWarMayorLives(), WarZoneConfig.townWarBaseSpoils(), WarZoneConfig.townWarPointsPerKill()),
-	CIVILWAR("National Civil War", WarZoneConfig.civilWarTownBlockHPEnabled(), WarZoneConfig.civilWarMayorDeathEnabled(), false, WarZoneConfig.civilWarWinnerTakesOverNation(), WarZoneConfig.civilWarResidentLives(), WarZoneConfig.civilWarMayorLives(), WarZoneConfig.civilWarBaseSpoils(), WarZoneConfig.civilWarPointsPerKill()),
-	NATIONWAR("Nation vs Nation War", WarZoneConfig.nationWarTownBlockHPEnabled(), WarZoneConfig.nationWarMayorDeathEnabled(), false, WarZoneConfig.nationWarWinnerConquersTowns(), WarZoneConfig.nationWarResidentLives(), WarZoneConfig.nationWarMayorLives(), WarZoneConfig.nationWarBaseSpoils(), WarZoneConfig.nationWarPointsPerKill()),
-	WORLDWAR("World War", WarZoneConfig.worldWarTownBlockHPEnabled(), WarZoneConfig.worldWarMayorDeathEnabled(), false, WarZoneConfig.worldWarWinnerConquersTowns(), WarZoneConfig.worldWarResidentLives(), WarZoneConfig.worldWarMayorLives(), WarZoneConfig.worldWarBaseSpoils(), WarZoneConfig.worldWarPointsPerKill());
+	RIOT(
+		"Riot", 
+		false, 
+		WarZoneConfig.riotsMayorDeathEnabled(), 
+		false, 
+		WarZoneConfig.riotsWinnerTakesOverTown(), 
+		WarZoneConfig.riotResidentLives(), 
+		WarZoneConfig.riotMayorLives(), 
+		WarZoneConfig.riotBaseSpoils(), 
+		WarZoneConfig.riotPointsPerKill()),
+	TOWNWAR(
+		"Town vs Town War", 
+		WarZoneConfig.townWarTownBlockHPEnabled(), 
+		WarZoneConfig.townWarMayorDeathEnabled(), 
+		false, 
+		WarZoneConfig.townWarWinnerTakesOverTown(), 
+		WarZoneConfig.townWarResidentLives(), 
+		WarZoneConfig.townWarMayorLives(), 
+		WarZoneConfig.townWarBaseSpoils(), 
+		WarZoneConfig.townWarPointsPerKill()),
+	CIVILWAR(
+		"National Civil War",
+		WarZoneConfig.civilWarTownBlockHPEnabled(), 
+		WarZoneConfig.civilWarMayorDeathEnabled(), 
+		false, 
+		WarZoneConfig.civilWarWinnerTakesOverNation(), 
+		WarZoneConfig.civilWarResidentLives(), 
+		WarZoneConfig.civilWarMayorLives(), 
+		WarZoneConfig.civilWarBaseSpoils(), 
+		WarZoneConfig.civilWarPointsPerKill()),
+	NATIONWAR(
+		"Nation vs Nation War", 
+		WarZoneConfig.nationWarTownBlockHPEnabled(), 
+		WarZoneConfig.nationWarMayorDeathEnabled(), 
+		false, 
+		WarZoneConfig.nationWarWinnerConquersTowns(), 
+		WarZoneConfig.nationWarResidentLives(), 
+		WarZoneConfig.nationWarMayorLives(), 
+		WarZoneConfig.nationWarBaseSpoils(), 
+		WarZoneConfig.nationWarPointsPerKill()),
+	WORLDWAR(
+		"World War", 
+		WarZoneConfig.worldWarTownBlockHPEnabled(), 
+		WarZoneConfig.worldWarMayorDeathEnabled(), 
+		false, 
+		WarZoneConfig.worldWarWinnerConquersTowns(), 
+		WarZoneConfig.worldWarResidentLives(), 
+		WarZoneConfig.worldWarMayorLives(), 
+		WarZoneConfig.worldWarBaseSpoils(), 
+		WarZoneConfig.worldWarPointsPerKill());
 	
 	String name;
 	public boolean hasTownBlockHP;

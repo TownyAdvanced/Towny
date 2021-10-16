@@ -48,7 +48,6 @@ import org.bukkit.plugin.Plugin;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -60,7 +59,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	private static Towny plugin;
 
 	private static List<String> towny_top = new ArrayList<>();
-	private static List<String> towny_war = new ArrayList<>();
 	private static final List<String> townyTabCompletes = Arrays.asList(
 		"map",
 		"prices",
@@ -121,12 +119,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
-		towny_war.add(ChatTools.formatTitle("/towny war"));
-		towny_war.add(ChatTools.formatCommand("", "/towny war", "stats", ""));
-		towny_war.add(ChatTools.formatCommand("", "/towny war", "scores", ""));
-		towny_war.add(ChatTools.formatCommand("", "/towny war", "participants [page #]", ""));
-		towny_war.add(ChatTools.formatCommand("", "/towny war", "hud", ""));
-
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
 				TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
@@ -154,12 +146,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_up_to_date"));
 				}
 			} else if (args[0].equalsIgnoreCase("war")) {
-				boolean war = TownyWar(StringMgmt.remFirstArg(args), null);
-				if (war)
-					for (String line : towny_war)
-						TownyMessaging.sendMessage(sender, Colors.strip(line));
-				else
-					TownyMessaging.sendMessage(sender, "The world isn't currently at war.");
+				if (args.length == 1)
+					HelpMenu.TOWNY_WAR.send(sender);
+				else 
+					parseTownyWarCommand(StringMgmt.remFirstArg(args), null);
 				
 			} else if (args[0].equalsIgnoreCase("universe")) {
 				for (String line : getUniverseStats(Translation.getDefaultLocale()))
@@ -169,7 +159,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		}
-		towny_war.clear();
 		return true;
 	}
 
@@ -308,14 +297,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("war")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR.getNode(split[0].toLowerCase())))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
-				boolean war = TownyWar(StringMgmt.remFirstArg(split), player);
-				if (war)
-					for (String line : towny_war)
-						TownyMessaging.sendMessage(player, line);
-				else
-					TownyMessaging.sendErrorMsg(player, "The world isn't currently at war.");
+				if (split.length == 1) 
+					HelpMenu.TOWNY_WAR.send(player);
+				else 
+					parseTownyWarCommand(StringMgmt.remFirstArg(split), player);
 
-				towny_war.clear();
 			} else if (split[0].equalsIgnoreCase("spy")) {
 				if (permSource.testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
 					Resident resident = getResidentOrThrow(player.getUniqueId());
@@ -333,36 +319,29 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private boolean TownyWar(String[] args, Player p) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+	private void parseTownyWarCommand(String[] args, Player p) {
 		if (args.length > 0) {
-			towny_war.clear();
-			if (args[0].equalsIgnoreCase("stats"))
-				towny_war.addAll(townyUniverse.getWarEvent(p).getScoreManager().getStats());
-			else if (args[0].equalsIgnoreCase("scores"))
-				towny_war.addAll(townyUniverse.getWarEvent(p).getScoreManager().getScores(-1, true));
-			else if (args[0].equalsIgnoreCase("participants")) {
-				parseWarParticipants(p, args);
-				return true;
-			}
-			else if (args[0].equalsIgnoreCase("hud") && p == null)
-				towny_war.add("No hud for console!");
-			else if (args[0].equalsIgnoreCase("hud") && p != null) {
-				if (townyUniverse.getPermissionSource().testPermission(p, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR_HUD.getNode())) {
+			if (args[0].equalsIgnoreCase("stats")) {
+				parseWarStats(p);
+			} else if (args[0].equalsIgnoreCase("scores")) {
+				parseWarScores(p);
+			} else if (args[0].equalsIgnoreCase("participants")) {
+				parseWarParticipants(p);
+			} else if (args[0].equalsIgnoreCase("hud") && p == null) {
+				TownyMessaging.sendMsg("No hud for console!");
+			} else if (args[0].equalsIgnoreCase("hud") && p != null) {
+				if (TownyUniverse.getInstance().getPermissionSource().testPermission(p, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR_HUD.getNode())) {
 					HUDManager.toggleWarHUD(p);
 				} else {
 					TownyMessaging.sendErrorMsg(p, Translatable.of("msg_err_command_disable"));
 				}
 			} else if (args[0].equalsIgnoreCase("types")) {
-				towny_war.addAll(getWarTypes());
-				return true;
+				TownyMessaging.sendMessage(p, getWarTypes());
 			}
 		}
-
-		return TownyAPI.getInstance().isWarTime();
 	}
 
-	private Collection<? extends String> getWarTypes() {
+	private List<String> getWarTypes() {
 		List<String> lines = new ArrayList<>();
 		lines.add(ChatTools.formatTitle("War Types"));
 		WarType type = WarType.RIOT;
@@ -414,73 +393,23 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return lines;
 	}
 
-	private void parseWarParticipants(Player player, String[] split) {
-
-//		Resident resident = getResidentOrThrow(player.getUniqueId());
-//		List<Town> townsToSort = War.warringTowns;
-//		List<Nation> nationsToSort = War.warringNations;
-//		int page = 1;
-//		List<String> output = new ArrayList<>();
-//		String nationLine;
-//		String townLine;
-//		for (Nation nations : nationsToSort) {
-//			nationLine = Colors.Gold + "-" + nations.getName();
-//			if (resident.hasNation())
-//				if (resident.getTown().getNation().hasEnemy(nations))
-//					nationLine += Colors.Red + " (Enemy)";
-//				else if (resident.getTown().getNation().hasAlly(nations))
-//					nationLine += Colors.Green + " (Ally)";
-//			output.add(nationLine);
-//			for (Town towns : townsToSort) {
-//				if (towns.getNation().equals(nations)) {
-//					townLine = Colors.Blue + "  -" + towns.getName();
-//					if (towns.isCapital())
-//						townLine += Colors.LightBlue + " (Capital)";
-//					output.add(townLine);
-//				}
-//			}
-//		}
-//		int total = (int) Math.ceil((output.size()) / (double) 10);
-//		if (split.length > 1) {
-//			try {
-//				page = Integer.parseInt(split[1]);
-//				if (page < 0) {
-//					TownyMessaging.sendErrorMsg(player, Translation.of("msg_err_negative"));
-//					return;
-//				} else if (page == 0) {
-//					TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
-//					return;
-//				}
-//			} catch (NumberFormatException e) {
-//				TownyMessaging.sendErrorMsg(player, Translation.of("msg_error_must_be_int"));
-//				return;
-//			}
-//		}
-//		if (page > total) {
-//			TownyMessaging.sendErrorMsg(player, Translation.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
-//			return;
-//		}
-//
-//		int iMax = page * 10;
-//		if ((page * 10) > output.size()) {
-//			iMax = output.size();
-//		}
-//		List<String> warparticipantsformatted = new ArrayList<>();
-//		for (int i = (page - 1) * 10; i < iMax; i++) {
-//			String line = output.get(i);
-//			warparticipantsformatted.add(line);
-//		}
-//		player.sendMessage(ChatTools.formatList("War Participants",
-//				Colors.Gold + "Nation Name" + Colors.Gray + " - " + Colors.Blue + "Town Names",
-//				warparticipantsformatted, Translation.of("LIST_PAGE", page, total)
-//				)
-//		);
-//		output.clear();
-		
+	private void parseWarParticipants(Player player) {
 		for (War war : TownyUniverse.getInstance().getWars()) {
 			war.getWarParticipants().outputParticipants(war.getWarType(), war.getWarName());
 		}
 	}	
+	
+	private void parseWarStats(Player player) {
+		War war = TownyUniverse.getInstance().getWarEvent(player); 
+		if (war != null)
+			war.getScoreManager().sendStats(player);
+	}
+	
+	private void parseWarScores(Player player) {
+		War war = TownyUniverse.getInstance().getWarEvent(player); 
+		if (war != null)
+			war.getScoreManager().sendScores(player, -1);
+	}
 	
 	private void TopCommand(Player player, String[] args) {
 		TownyUniverse universe = TownyUniverse.getInstance();

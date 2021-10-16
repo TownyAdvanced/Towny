@@ -8,13 +8,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.util.BukkitTools;
 
@@ -98,5 +101,45 @@ public class WarUtil {
 		if (!world.isWarAllowed())
 			return false;
 		return TownyUniverse.getInstance().getWars().stream().anyMatch(war -> war.getWarType().equals(WarType.WORLDWAR));
+	}
+	
+	public static void confirmPlayerSide(War war, Player player) {
+		Confirmation.runOnAccept(() -> {
+			switch (war.getWarType()) {
+				case RIOT: 
+					war.getWarParticipants().addGovSide(TownyAPI.getInstance().getResident(player.getUniqueId()));
+					break;
+				case CIVILWAR:
+					war.getWarParticipants().addGovSide(TownyAPI.getInstance().getResident(player.getUniqueId()).getTownOrNull());
+					break;
+				case NATIONWAR:
+				case TOWNWAR:
+				case WORLDWAR:
+				default:
+					break;
+			}
+			TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_sided_with_the_government"));
+			
+		}).runOnCancel(() -> {
+			switch (war.getWarType()) {
+				case RIOT: 
+					war.getWarParticipants().addRebSide(TownyAPI.getInstance().getResident(player.getUniqueId()));
+					break;
+				case CIVILWAR:
+					war.getWarParticipants().addRebSide(TownyAPI.getInstance().getResident(player.getUniqueId()).getTownOrNull());
+					break;
+				case NATIONWAR:
+				case TOWNWAR:
+				case WORLDWAR:
+				default:
+					break;
+			}
+			TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_sided_with_the_rebels"));
+		})
+		.setTitle(Translatable.of("Which side will be choose?"))
+		.setDuration(120)
+		.setConfirmText("/state")
+		.setCancelText("/rebel")
+		.sendTo(player);
 	}
 }

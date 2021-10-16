@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
@@ -109,7 +110,7 @@ public class WarHUD {
 	public static void updateScore(Player p, War war) {
 		String score = "";
 		Resident res = TownyUniverse.getInstance().getResident(p.getUniqueId());
-		Hashtable<Town, Integer> scores = war.getScoreManager().getTownScores();
+		Hashtable<TownyObject, Integer> scores = war.getScoreManager().getScores();
 		try {
 			if (res != null && res.hasTown() && scores.containsKey(res.getTown())) {
 				score = String.valueOf(scores.get(res.getTown()));

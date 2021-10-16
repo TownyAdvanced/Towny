@@ -17,6 +17,8 @@ import com.palmergames.bukkit.towny.command.commandobjects.AcceptCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
+import com.palmergames.bukkit.towny.command.commandobjects.RebelCommand;
+import com.palmergames.bukkit.towny.command.commandobjects.StateCommand;
 import com.palmergames.bukkit.towny.db.DatabaseConfig;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -1021,6 +1023,8 @@ public class Towny extends JavaPlugin {
 		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
 		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
 		commands.add(new CancelCommand(TownySettings.getCancelCommand()));
+		commands.add(new StateCommand("state"));
+		commands.add(new RebelCommand("rebel"));
 		try {
 			final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 

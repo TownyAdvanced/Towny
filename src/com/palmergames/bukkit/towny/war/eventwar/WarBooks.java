@@ -61,9 +61,13 @@ public class WarBooks {
 				
 				text += String.format("Civil war has broken out in the nation of %s!",war.getWarParticipants().getNations().get(0).getName()) + newline ;
 				text += newline;
-				text += "The following towns have joined the battle: " + newline;
-				for (Town town : war.getWarParticipants().getTowns())
-					text+= "* " + town.getName() + newline;
+				text += "On the side of the nation's capital " + war.getWarParticipants().getNations().get(0).getName() + ":" + newline;
+				for (TownyObject town : war.getWarParticipants().getGovSide())
+					text+= "* " + ((Town)town).getName() + newline;
+				text += newline;
+				text += "And taking up arms in rebelion against the capital:" + newline;
+				for (TownyObject town : war.getWarParticipants().getRebSide())
+					text+= "* " + ((Town)town).getName() + newline;
 				text += newline;
 				text += "May the victor bring peace to their nation!";
 				break;
@@ -81,9 +85,13 @@ public class WarBooks {
 				
 				text += String.format("A riot has broken out in the town of %s!", war.getWarParticipants().getTowns().get(0).getName()) + newline;
 				text += newline;
-				text += "The following residents have taken up arms: " + newline;
-				for (Resident resident: war.getWarParticipants().getTowns().get(0).getResidents())
-					text+= "* " + resident.getName() + newline;
+				text += "Aligned with the mayor and the city:" + newline;
+				for (TownyObject res : war.getWarParticipants().getGovSide())
+					text+= "* " + ((Resident)res).getName() + newline;
+				text += newline;
+				text += "Amongst the unruly mob:" + newline;
+				for (TownyObject res : war.getWarParticipants().getRebSide())
+					text+= "* " + ((Resident)res).getName() + newline;
 
 				text += newline;
 				text += "The last man standing will be the leader, but what will remain?!";
@@ -106,11 +114,12 @@ public class WarBooks {
 			if (TownySettings.getOnlyAttackEdgesInWar())
 				text += "Only edge plots will be attackable at first, so protect your borders and at all costs. ";
 			text += "Do not let the enemy drop your homeblock to 0 hp! ";
+			if (warType.hasTownBlocksSwitchTowns)
+				text += "Townblocks which drop to 0 hp will be taken over by the attacker permanently! ";
+			else
+				text += "Townblocks which drop to 0 hp will not change ownership after the war. ";
 		}
-		if (warType.hasTownBlocksSwitchTowns)
-			text += "Townblocks which drop to 0 hp will be taken over by the attacker permanently! ";
-		else
-			text += "Townblocks which drop to 0 hp will not change ownership after the war. ";
+
 		if (warType.hasTownConquering) {
 			switch(warType) {
 			case TOWNWAR:
@@ -122,18 +131,20 @@ public class WarBooks {
 			case NATIONWAR:
 			case WORLDWAR:
 				text += "The towns which are defeated by the opposing nation will change sides and join the victorious nation. ";
+				if (TownySettings.getWarEventConquerTime() > 0)
+					text += "These towns will be conquered for " + TownySettings.getWarEventConquerTime() + " days. ";
 				break;
 			case RIOT:
+				text += "The player who survives with the highest score will become the new town mayor. ";
+				break;
 			default:
 				break;
 			
 			}
-			if (TownySettings.getWarEventConquerTime() > 0)
-				text += "These towns will be conquered for " + TownySettings.getWarEventConquerTime() + " days. ";
 		}
 	
 		text += newParagraph;
-		if (warType.hasMayorDeath)
+		if (!warType.equals(WarType.RIOT) && warType.hasMayorDeath)
 			text += newline + "If your mayor runs out of lives your nation or town will be removed from the war! ";
 
 		if (warType.residentLives > 0)

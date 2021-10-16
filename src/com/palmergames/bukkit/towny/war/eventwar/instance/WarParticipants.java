@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -21,6 +20,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
 import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
+import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 
@@ -71,6 +71,16 @@ public class WarParticipants {
 	public List<TownyObject> getRebSide() {
 		return Collections.unmodifiableList(rebSide);
 	}
+	
+	public void addGovSide(TownyObject obj) {
+		if (!govSide.contains(obj))
+			govSide.add(obj);
+	}
+	
+	public void addRebSide(TownyObject obj) {
+		if (!rebSide.contains(obj))
+			rebSide.add(obj);
+	}
 
 	public int getNationsAtStart() {
 		return totalNationsAtStart;
@@ -119,7 +129,7 @@ public class WarParticipants {
 		 * With the instanced war system, Naitons can only have one on-going war.
 		 */
 		if (nation.hasActiveWar()) {
-			TownyMessaging.sendErrorMsg("The nation " + nation.getName() + " is already involved in a war. They will not take part in the war.");
+			war.addErrorMsg("The nation " + nation.getName() + " is already involved in a war. They will not take part in the war.");
 			return false;
 		}
 		
@@ -137,7 +147,7 @@ public class WarParticipants {
 		for (Town town : nation.getTowns()) {
 			if (add(town)) {
 				warringTowns.add(town);
-				war.getScoreManager().getTownScores().put(town, 0);
+				war.getScoreManager().getScores().put(town, 0);
 				numTowns++;
 			}
 		}
@@ -150,7 +160,7 @@ public class WarParticipants {
 			for (Town town : nation.getTowns()) {
 				if (warringTowns.contains(town)) {
 					warringTowns.remove(town);
-					war.getScoreManager().getTownScores().remove(town);
+					war.getScoreManager().getScores().remove(town);
 				}
 			}
 			return false;
@@ -170,7 +180,7 @@ public class WarParticipants {
 		 * With the instanced war system, Towns can only have one on-going war.
 		 */
 		if (town.hasActiveWar()) {
-			TownyMessaging.sendErrorMsg("The town " + town.getName() + " is already involved in a war. They will not take part in the war.");
+			war.addErrorMsg("The town " + town.getName() + " is already involved in a war. They will not take part in the war.");
 			return false;
 		}
 
@@ -178,7 +188,7 @@ public class WarParticipants {
 		 * Homeblocks are absolutely required for a war.
 		 */
 		if (!town.hasHomeBlock()) {
-			TownyMessaging.sendErrorMsg("The town " + town.getName() + " does not have a homeblock. They will not take part in the war.");
+			war.addErrorMsg("The town " + town.getName() + " does not have a homeblock. They will not take part in the war.");
 			return false;
 		}
 		
@@ -187,7 +197,7 @@ public class WarParticipants {
 		 */
 		try {
 			if (!town.getHomeBlock().getWorld().isWarAllowed()) {
-				TownyMessaging.sendErrorMsg("The town " + town.getName() + " exists in a world with war disabled. They will not take part in the war.");
+				war.addErrorMsg("The town " + town.getName() + " exists in a world with war disabled. They will not take part in the war.");
 				return false;
 			}
 		} catch (TownyException ignored) {}
@@ -212,7 +222,7 @@ public class WarParticipants {
 		 * This should probably not happen because of the homeblock test above.
 		 */
 		if (numTownBlocks < 1) {
-			TownyMessaging.sendErrorMsg("The town " + town.getName() + " does not have any land to fight over. They will not take part in the war.");
+			war.addErrorMsg("The town " + town.getName() + " does not have any land to fight over. They will not take part in the war.");
 			
 			for (TownBlock townBlock : town.getTownBlocks()) {
 				war.getWarZoneManager().remove(townBlock.getWorldCoord());
@@ -227,7 +237,9 @@ public class WarParticipants {
 		// Put the war UUID onto the town metadata.
 		WarMetaDataController.setWarUUID(town, war.getWarUUID());
 		
-		war.getScoreManager().addTown(town);
+		// Load in any previous score for the town if this isn't a RIOT war.
+		if (!war.getWarType().equals(WarType.RIOT))
+			war.getScoreManager().addTown(town);
 		
 		/*
 		 * Give the players their lives, metadata.
@@ -242,6 +254,10 @@ public class WarParticipants {
 			// This is a resident being re-loaded into this same war, use their already existing lives. 
 			if (WarMetaDataController.hasResidentLives(resident))
 				lives = WarMetaDataController.getResidentLives(resident);
+
+			// Load in any previous score for the resident if this is a RIOT war.
+			if (war.getWarType().equals(WarType.RIOT))
+				war.getScoreManager().addResident(resident);
 			
 			residentLives.put(resident, lives);
 			WarMetaDataController.setResidentLives(resident, lives);
@@ -255,7 +271,8 @@ public class WarParticipants {
 	}
 	
 	public void addOnlineWarrior(Player player) {
-		onlineWarriors.add(player);
+		if (!onlineWarriors.contains(player))
+			onlineWarriors.add(player);
 	}
 
 	public void removeOnlineWarrior(Player player) {
@@ -268,9 +285,8 @@ public class WarParticipants {
 	 * @param nations - List&lt;Nation&gt; which will be tested and added to war.
 	 * @param towns - List&lt;Town&gt; which will be tested and added to war.
 	 * @param residents - List&lt;Resident&gt; which will be tested and added to war.
-	 * @return true if there are enough participants on opposing sides to have a war.
 	 */
-	public boolean gatherParticipantsForWar(List<Nation> nations, List<Town> towns, List<Resident> residents) {
+	public void gatherParticipantsForWar(List<Nation> nations, List<Town> towns, List<Resident> residents) {
 		
 		potentialResidents = residents;
 		/*
@@ -303,20 +319,31 @@ public class WarParticipants {
 				break;
 		}
 		
-		// Attempt to load sides for civil war and riot, from non-new war.
+		// Attempt to settle sides for civil war and riot.
 		switch(war.getWarType()) {
 			case CIVILWAR:
 				for (Town town : towns) {
 					String sideString = WarMetaDataController.getWarSide(town);
+					// Not a new war.
 					if (sideString != null) {
 						WarSide side = WarSide.valueOf(sideString);
 						switch (side) {
 							case GOVERNMENT:
-								govSide.add(town);
+								addGovSide(town);
 								break;
 							case ANTIGOVERNMENT:
-								rebSide.add(town);
+								addRebSide(town);
 								break;
+						}
+					// A new war where sides haven't been chosen.
+					} else {
+						// Capital doesn't get the option to rebel.
+						if (town.isCapital()) {
+							addGovSide(town);
+							continue;
+						}
+						if (town.getMayor().isOnline()) {
+							WarUtil.confirmPlayerSide(war, town.getMayor().getPlayer());
 						}
 					}
 				}
@@ -324,14 +351,25 @@ public class WarParticipants {
 			case RIOT:
 				for (Resident res : residents) {
 					String sideString = WarMetaDataController.getWarSide(res);
+					// Not a new war.
 					if (sideString != null) {
 						WarSide side = WarSide.valueOf(sideString);
 						switch (side) {
 							case GOVERNMENT:
-								govSide.add(res);
+								addGovSide(res);
 								break;
 							case ANTIGOVERNMENT:
-								rebSide.add(res);
+								addRebSide(res);
+						}
+					// A new war where sides haven't been chosen.
+					} else {
+						// Mayor doesn't get the option to rebel.
+						if (res.isMayor()) {
+							addGovSide(res);
+							continue;
+						}
+						if (res.isOnline()) {
+							WarUtil.confirmPlayerSide(war, res.getPlayer());
 						}
 					}
 				}
@@ -343,27 +381,13 @@ public class WarParticipants {
 				break;
 		}
 
-		/*
-		 * Make sure that we have enough people/towns/nations involved
-		 * for the give WarType.
-		 */
-		if (!verifyTwoEnemies()) {
-			TownyMessaging.sendErrorMsg("Failed to get the correct number of teams for war to happen! Good-bye!");
-			return false;
-		}
-		
-		setNationsAtStart(warringNations.size());
-		setTownsAtStart(warringTowns.size());
-		setResidentsAtStart(warringResidents.size());
-
-		return true;
 	}
 	
 	/**
 	 * Verifies that for the WarType there are enough residents/towns/nations involved to have at least 2 sides.
 	 * @return
 	 */
-	private boolean verifyTwoEnemies() {
+	public boolean verifyTwoEnemies() {
 		switch(war.getWarType()) {
 		case WORLDWAR:
 		case NATIONWAR:
@@ -390,36 +414,26 @@ public class WarParticipants {
 			break;
 		case CIVILWAR:
 			if (warringNations.size() > 1) {
-				TownyMessaging.sendErrorMsg("Too many nations for a civil war!");
+				war.addErrorMsg("Too many nations for a civil war!");
 				return false;
 			}
 			
 			if (warringTowns.size() == 1) {
-				TownyMessaging.sendErrorMsg("Not enough towns for a civil war!");
+				war.addErrorMsg("Not enough towns for a civil war!");
 				return false;
 			}
 
-			// Only query towns for the allegiance if we haven't pre-loaded gov/reb sides. 
-			if (govSide.isEmpty()) {
-				Nation nation = warringNations.get(0);
-				for (Town town : warringTowns) {
-					govSide.add(town);
-					if (nation.getCapital().equals(town)) continue;
-					if (!town.getMayor().isOnline()) continue;
-					Player player = town.getMayor().getPlayer();
-					
-					// TODO: Make this a conversation so it will actually work.
-					Confirmation.runOnAccept(()-> {
-						govSide.remove(town);
-						rebSide.add(town);
-					})
-					.setTitle("Will you join in rebellion against the capital of your nation?")
-					.sendTo(player);
+			// Re-evaluate sides again, because some people may have missed their chance to rebel, and will be placed on the government side.
+			for (Town town : warringTowns)
+				if (!rebSide.contains(town)) {
+					addGovSide(town);
+					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_you_have_sided_with_the_government"));
+				} else { 
+					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_you_have_sided_with_the_rebels"));
 				}
-			}
 			
 			if (rebSide.isEmpty()) {
-				TownyMessaging.sendErrorMsg("No rebels found for a civil war.");
+				war.addErrorMsg("No rebels found for a civil war.");
 				return false;
 			}
 			
@@ -434,11 +448,10 @@ public class WarParticipants {
 					((Town) town).addEnemy(((Town) gov));
 			}
 			
-			
 			break;
 		case TOWNWAR:
 			if (warringTowns.size() < 2) {
-				TownyMessaging.sendErrorMsg("Not enough Towns for town vs town war!");
+				war.addErrorMsg("Not enough Towns for town vs town war!");
 				return false;
 			}
 			warringTowns.get(0).addEnemy(warringTowns.get(1));
@@ -447,35 +460,26 @@ public class WarParticipants {
 			break;
 		case RIOT:
 			if (warringTowns.size() > 1 ) {
-				TownyMessaging.sendErrorMsg("Too many towns gathered for a riot war!");
+				war.addErrorMsg("Too many towns gathered for a riot war!");
 				return false;
 			}
 			Town town = warringTowns.get(0);
 			if (town.getResidents().size() == 1) {
-				TownyMessaging.sendErrorMsg("Not enough residents for a riot war!");
+				war.addErrorMsg("Not enough residents for a riot war!");
 				return false;
 			}
 			
-			// Only query residents for the allegiance if we haven't pre-loaded gov/reb sides. 
-			if (govSide.isEmpty()) {
-				for (Resident res : town.getResidents()) {
-					govSide.add(res);
-					if (res.isMayor()) continue;
-					if (!res.isOnline()) continue;
-					Player player = res.getPlayer();
-					
-					// TODO: Make this a conversation so it will actually work.
-					Confirmation.runOnAccept(()-> {
-						govSide.remove(res);
-						rebSide.add(res);
-					})
-					.setTitle("Will you riot against the mayor of your city?")
-					.sendTo(player);
+			// Re-evaluate sides again, because some people may have missed their chance to rebel, and will be placed on the government side.
+			for (Resident res : town.getResidents())
+				if (!rebSide.contains(res)) {
+					addGovSide(res);
+					TownyMessaging.sendMsg(res, Translatable.of("msg_you_have_sided_with_the_government"));
+				} else {
+					TownyMessaging.sendMsg(res, Translatable.of("msg_you_have_sided_with_the_rebels"));
 				}
-			}
 			
 			if (rebSide.isEmpty()) {
-				TownyMessaging.sendErrorMsg("No rioters gathered.");
+				war.addErrorMsg("No rioters gathered.");
 				return false;
 			}
 			
@@ -494,6 +498,9 @@ public class WarParticipants {
 		for (Nation nation : warringNations)
 			nation.setActiveWar(true);
 
+		setNationsAtStart(warringNations.size());
+		setTownsAtStart(warringTowns.size());
+		setResidentsAtStart(warringResidents.size());	
 		return true;
 	}
 	
@@ -533,8 +540,7 @@ public class WarParticipants {
 			break;
 		}
 		war.getMessenger().sendPlainGlobalMessage(ChatTools.formatTitle(name + " Participants"));
-		for (String string : warParticipants)
-			war.getMessenger().sendPlainGlobalMessage(string);
+		war.getMessenger().sendPlainGlobalMessage(warParticipants);
 		war.getMessenger().sendPlainGlobalMessage(ChatTools.formatTitle("----------------"));
 	}
 	
@@ -684,4 +690,6 @@ public class WarParticipants {
 		war.getMessenger().sendGlobalMessage(Translatable.of("MSG_WAR_FORFEITED", town.getName()));
 		war.checkEnd();
 	}
+
+
 }

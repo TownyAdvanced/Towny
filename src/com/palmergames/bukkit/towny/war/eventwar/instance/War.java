@@ -10,15 +10,14 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.NameGenerator;
 import com.palmergames.bukkit.towny.war.eventwar.WarBooks;
 import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
-import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.events.EventWarEndEvent;
-import com.palmergames.bukkit.towny.war.eventwar.events.EventWarPreStartEvent;
 import com.palmergames.bukkit.towny.war.eventwar.events.EventWarStartEvent;
 import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -27,6 +26,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +40,7 @@ public class War {
 	private ScoreManager scoreManager = new ScoreManager(this);
 	private WarTaskManager taskManager = new WarTaskManager(this);
 	private WarMessenger messenger = new WarMessenger(this);
+	private List<String> errorMsgs = new ArrayList<>();
 	
 	private WarType warType;
 	private String warName;	
@@ -61,60 +63,92 @@ public class War {
 
 		
 		if (!TownySettings.isUsingEconomy()) {
-			TownyMessaging.sendErrorMsg("War Event cannot function while using_economy: false in the config.yml. Economy Required.");
+			addErrorMsg("War Event cannot function while using_economy: false in the config.yml. Economy Required.");
+			end(false);
         	return;
 		}
 
 		this.plugin = plugin;
 		this.warType = warType;
-		
-		/*
-		 * Currently only used to add money to the war spoils.
-		 */
-		EventWarPreStartEvent preEvent = new EventWarPreStartEvent();
-		Bukkit.getServer().getPluginManager().callEvent(preEvent);
-		if (preEvent.getWarSpoils() != 0.0)
-			warSpoils = preEvent.getWarSpoils();
-		
+
 		/*
 		 * Attempts to gather the given lists of nations/towns/residents into a War
 		 * with at least one pair of opposing teams.
 		 */
-		if (!warParticipants.gatherParticipantsForWar(nations, towns, residents)) {
-			end(false);
-			return;
-		}	
+		warParticipants.gatherParticipantsForWar(nations, towns, residents);
+		
+		/*
+		 * A warmup period is used for civil war and riots, so sides are settled.
+		 * 
+		 */
+		int warmup;
+		switch (warType) {
+			case RIOT:
+			case CIVILWAR:
+				warmup = 120;
+				getMessenger().sendGlobalMessage("There are 120 seconds to choose between the government and anti-government sides.");
+				break;
+			case NATIONWAR:
+			case TOWNWAR:
+			case WORLDWAR:
+			default:
+				warmup = 0;
+		}
+		
+		Bukkit.getScheduler().runTaskLater(getPlugin(), () -> {
+			/*
+			 * Make sure that we have enough people/towns/nations involved
+			 * for the give WarType.
+			 */
+			if (!warParticipants.verifyTwoEnemies()) {
 
-		/*
-		 * Get a name for the war.
-		 */
-		setWarName();
-		
-		/*
-		 * Seed the war spoils.
-		 */
-		getMessenger().sendGlobalMessage(Translatable.of("msg_war_seeding_spoils_with", TownySettings.getBaseSpoilsOfWar()));			
-		getMessenger().sendGlobalMessage(Translatable.of("msg_war_total_seeding_spoils", TownyEconomyHandler.getFormattedBalance(warSpoils)));
-		getMessenger().sendGlobalMessage(Translatable.of("msg_war_activate_war_hud_tip"));
-		
-		EventWarStartEvent event = new EventWarStartEvent(warParticipants.getTowns(), warParticipants.getNations(), warSpoilsAtStart);
-		Bukkit.getServer().getPluginManager().callEvent(event);
-		
-		/*
-		 * If things have gotten this far it is reasonable to think we can start the war.
-		 */
-		taskManager.setupDelay(startDelay);
-		
-		saveWar();
+				addErrorMsg("Failed to get the correct number of teams for war to happen! Good-bye!");
+				end(false);
+
+			} else {
+				
+				/*
+				 * Some minor errors could have been recorded, report them to the people who did enter the war.
+				 */
+				if (!errorMsgs.isEmpty())
+					WarMessenger.reportMinorErrors();
+				
+				/*
+				 * Get a name for the war.
+				 */
+				setWarName();
+				
+				/*
+				 * Seed the war spoils.
+				 */
+				warSpoils = warType.baseSpoils;
+				getMessenger().sendGlobalMessage(Translatable.of("msg_war_seeding_spoils_with", TownyEconomyHandler.getFormattedBalance(warSpoils)));			
+				getMessenger().sendGlobalMessage(Translatable.of("msg_war_activate_war_hud_tip"));
+				
+				EventWarStartEvent event = new EventWarStartEvent(warParticipants.getTowns(), warParticipants.getNations(), warSpoilsAtStart);
+				Bukkit.getServer().getPluginManager().callEvent(event);
+				
+				/*
+				 * If things have gotten this far it is reasonable to think we can start the war.
+				 */
+				taskManager.setupDelay(startDelay);
+				
+				saveWar();
+			}
+		}, warmup * 20);
 	}
-	
+
 	public War(Towny plugin, UUID uuid) {
 		this.plugin = plugin;
 		this.warUUID = uuid;
 	}
 	
 	public void loadWar(List<Nation> nations, List<Town> towns, List<Resident> residents, List<TownBlock> townblocks) {
-		if (!warParticipants.gatherParticipantsForWar(nations, towns, residents)) {
+
+		warParticipants.gatherParticipantsForWar(nations, towns, residents);
+
+		if (!warParticipants.verifyTwoEnemies()) {
+			addErrorMsg("Failed to get the correct number of teams for war to happen! Good-bye!");
 			end(false);
 			return;
 		}
@@ -150,14 +184,14 @@ public class War {
 		if (warType.hasTownBlockHP)
 			taskManager.scheduleWarTimerTask(this.plugin);
 
+		// Give the entire server a War Declared book,
+		// Add war participants to the onlineWarriors (if they aren't already.)
 		ItemStack book = BookFactory.makeBook(warName, "War Declared", WarBooks.warStartBook(this));
-		
 		for (Player player : Bukkit.getOnlinePlayers()) {
+			player.getInventory().addItem(book);
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-			if (resident != null && warParticipants.has(resident)) {
-				player.getInventory().addItem(book);
+			if (resident != null && warParticipants.has(resident))
 				warParticipants.addOnlineWarrior(player);
-			}
 		}
 		
 		checkEnd();
@@ -180,7 +214,7 @@ public class War {
 		case CIVILWAR:
 			if (warParticipants.getTowns().size() <= 1)
 				end(true);
-			if (warParticipants.getGovSide().isEmpty() || warParticipants.getRebSide().isEmpty())
+			else if (warParticipants.getGovSide().isEmpty() || warParticipants.getRebSide().isEmpty())
 				end(true);
 			break;
 		case TOWNWAR:
@@ -191,7 +225,7 @@ public class War {
 		case RIOT:
 			if (warParticipants.getResidents().size() <= 1)
 				end(true);
-			if (warParticipants.getGovSide().isEmpty() || warParticipants.getRebSide().isEmpty())
+			else if (warParticipants.getGovSide().isEmpty() || warParticipants.getRebSide().isEmpty())
 				end(true);
 			break;
 		}
@@ -204,11 +238,28 @@ public class War {
 	 * @param endedSuccessful - False if something has caused the war to finish before it should have.
 	 */
 	public void end(boolean endedSuccessful) {
-		
-		/*
-		 * Print out stats to players
-		 */
-		getMessenger().sendGlobalMessage(getScoreManager().getStats());
+	
+		if (endedSuccessful) {
+			/*
+			 * Print out stats to players
+			 */
+			getMessenger().sendPlainGlobalMessage(getScoreManager().getStats());
+			
+			/*
+			 * Pay out the money.
+			 */
+			awardSpoils();
+			
+			/*
+			 * Consider takeovers.
+			 */
+			handleAftermath();
+			
+		} else {
+			// War ended suddenly, send any available errors.
+			if (!errorMsgs.isEmpty()) 
+				WarMessenger.reportErrors();
+		}
 		
 		/*
 		 * End the WarTimerTask
@@ -219,17 +270,12 @@ public class War {
 		 * Kill the war huds.
 		 */
 		removeWarHuds(this);
-		
-		/*
-		 * Pay out the money.
-		 */
-		if (endedSuccessful)
-			awardSpoils();
-
+					
 		/*
 		 * Remove this war.
 		 */
 		WarDataBase.removeWar(this);
+		TownyUniverse.getInstance().removeWar(this);
 		
 	}
 
@@ -288,6 +334,14 @@ public class War {
 	
 	public void setUUID(UUID uuid) {
 		this.warUUID = uuid;
+	}
+	
+	public void addErrorMsg(String string) {
+		errorMsgs.add(string);
+	}
+	
+	public List<String> getErrorMsgs() {
+		return errorMsgs;
 	}
 
 	/**
@@ -357,11 +411,12 @@ public class War {
 
 			// Pay money to winning town and print message
 			try {
-				KeyValue<Town, Integer> winningTownScore = getScoreManager().getWinningTownScore();
-				winningTownScore.key.getAccount().deposit(halfWinnings, "War - Town Winnings");
-				getMessenger().sendGlobalMessage(Translatable.of("MSG_WAR_WINNING_TOWN_SPOILS", winningTownScore.key.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  winningTownScore.value));
+				KeyValue<TownyObject, Integer> winningTownScore = getScoreManager().getWinningScore();
+				Town winningTown = ((Town)winningTownScore.key);
+				winningTown.getAccount().deposit(halfWinnings, "War - Town Winnings");
+				getMessenger().sendGlobalMessage(Translatable.of("MSG_WAR_WINNING_TOWN_SPOILS", winningTown.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  winningTownScore.value));
 				
-				EventWarEndEvent event = new EventWarEndEvent(getWarParticipants().getTowns(), winningTownScore.key, halfWinnings, getWarParticipants().getNations(), nationWinnings);
+				EventWarEndEvent event = new EventWarEndEvent(getWarParticipants().getTowns(), winningTown, halfWinnings, getWarParticipants().getNations(), nationWinnings);
 				Bukkit.getServer().getPluginManager().callEvent(event);
 			} catch (TownyException e) {
 			}
@@ -377,43 +432,100 @@ public class War {
 					getMessenger().sendGlobalMessage(Translatable.of("msg_war_surviving_town_spoils", winningTown.getName(), amount));
 				}
 			} catch (ArithmeticException e) {
-				TownyMessaging.sendDebugMsg("[War]   War ended with 0 nations.");
+				TownyMessaging.sendDebugMsg("[War]   War ended with 0 towns.");
 			}
 
 			// Pay money to winning town and print message
 			try {
-				KeyValue<Town, Integer> winningTownScore = getScoreManager().getWinningTownScore();
-				winningTownScore.key.getAccount().deposit(halfWinnings, "War - Town Winnings");
-				getMessenger().sendGlobalMessage(Translatable.of("MSG_WAR_WINNING_TOWN_SPOILS", winningTownScore.key.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  winningTownScore.value));
+				KeyValue<TownyObject, Integer> winningTownScore = getScoreManager().getWinningScore();
+				Town winningTown = ((Town)winningTownScore.key);
+				winningTown.getAccount().deposit(halfWinnings, "War - Town Winnings");
+				getMessenger().sendGlobalMessage(Translatable.of("MSG_WAR_WINNING_TOWN_SPOILS", winningTown.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  winningTownScore.value));
 				
-				EventWarEndEvent event = new EventWarEndEvent(getWarParticipants().getTowns(), winningTownScore.key, halfWinnings, null, townWinnings);
+				EventWarEndEvent event = new EventWarEndEvent(getWarParticipants().getTowns(), winningTown, halfWinnings, null, townWinnings);
 				Bukkit.getServer().getPluginManager().callEvent(event);
 			} catch (TownyException e) {
 			}
 		case RIOT:
 			double residentWinnings = halfWinnings / getWarParticipants().getResidents().size();
 			String amount = TownyEconomyHandler.getFormattedBalance(residentWinnings);
-			Resident highScore = null;
 			for (Resident survivor : getWarParticipants().getResidents()) {
 				survivor.getAccount().deposit(residentWinnings, "War - Riot Survivor Winnings");
 				getMessenger().sendGlobalMessage("Riot survivor " + survivor.getName() + " wins " + amount);
-				
-				if (highScore == null) {
-					highScore = survivor;
-					continue;
-				}
-				
-				if (WarMetaDataController.getScore(survivor) > WarMetaDataController.getScore(highScore))
-					highScore = survivor;
 			}
-			// Pay out the other half to the highest scorer.
-			highScore.getAccount().deposit(halfWinnings, "War - Riot High Score Winnings");
-			getMessenger().sendGlobalMessage(Translatable.of("msg_war_riot_highest_score", highScore.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  WarMetaDataController.getScore(highScore)));
-			
-			EventWarEndEvent event = new EventWarEndEvent(null, highScore.getTownOrNull(), halfWinnings, null, residentWinnings);
-			Bukkit.getServer().getPluginManager().callEvent(event);
+			try {
+				KeyValue<TownyObject, Integer> winningResidentScore = getScoreManager().getWinningScore();
+				Resident winningResident = ((Resident)winningResidentScore.key);
+				// Pay out the other half to the highest scorer.
+				winningResident.getAccount().deposit(halfWinnings, "War - Riot High Score Winnings");
+				getMessenger().sendGlobalMessage(Translatable.of("msg_war_riot_highest_score", winningResident.getName(), TownyEconomyHandler.getFormattedBalance(halfWinnings),  winningResidentScore.value));
+				
+				EventWarEndEvent event = new EventWarEndEvent(null, winningResident.getTownOrNull(), halfWinnings, null, residentWinnings);
+				Bukkit.getServer().getPluginManager().callEvent(event);
+			} catch (TownyException e) {
+			}
 		default:
 		}
+	}
+
+
+	/**
+	 * Handles the Town Conquering.
+	 */
+	private void handleAftermath() {
+		if (warType.hasTownConquering) {
+			switch (warType) {
+			case RIOT:
+				Resident newMayor = null;
+				try {
+					newMayor = ((Resident) getScoreManager().getWinningScore().key);
+				} catch (TownyException ignored) {}
+				if (newMayor.isMayor() || warParticipants.getGovSide().contains(newMayor)) {
+					TownyMessaging.sendTownMessagePrefixed(newMayor.getTownOrNull(), Translatable.of("msg_mayor_retains_control_of_the_city", newMayor, newMayor.getTownOrNull()));
+				} else {
+					Town town = newMayor.getTownOrNull();
+					town.setMayor(newMayor);
+					town.save();
+					TownyMessaging.sendTownMessagePrefixed(town, Translatable.of("msg_new_mayor_has_become_the_new_mayor_of", newMayor, town));
+				}
+				break;
+			case CIVILWAR:
+				Town newCapital = null;
+				try {
+					newCapital = ((Town) getScoreManager().getWinningScore().key);
+				} catch (TownyException ignored) {}
+				if (newCapital.isCapital() || warParticipants.getGovSide().contains(newCapital)) {
+					TownyMessaging.sendNationMessagePrefixed(newCapital.getNationOrNull(), Translatable.of("msg_king_retains_control_of_the_nation", newCapital.getMayor(), newCapital.getNationOrNull()));
+				} else {
+					Nation nation = newCapital.getNationOrNull();
+					nation.setCapital(newCapital);
+					nation.save();
+					TownyMessaging.sendNationMessagePrefixed(newCapital.getNationOrNull(), Translatable.of("msg_new_king_has_become_the_new_king_of", newCapital.getMayor(), newCapital.getNationOrNull()));
+				}
+				break;
+			case TOWNWAR:
+				Town remainingTown = null;
+				try {
+					remainingTown = ((Town) getScoreManager().getWinningScore().key);
+				} catch (TownyException ignored) {}
+				
+				for (Town town : warParticipants.getTowns()) {
+					if (town.equals(remainingTown))
+						continue;
+					TownyMessaging.sendTownMessagePrefixed(remainingTown, Translatable.of("msg_town_has_fallen_and_is_being_absorbed_by_the_winning_town", town, remainingTown));
+					TownyUniverse.getInstance().getDataSource().mergeTown(remainingTown, town);
+				}
+				break;
+
+			// nation war and world war handle conquering mid-war in WarZoneManager.
+			case NATIONWAR:
+			case WORLDWAR:
+			default:
+				break;
+			}
+		}
+
+		
 	}
 
 }

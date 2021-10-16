@@ -23,9 +23,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarBooks;
-import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.util.BookFactory;
@@ -70,8 +68,8 @@ public class EventWarListener implements Listener {
 		War war = TownyUniverse.getInstance().getWarEvent(killerRes);
 		if (!WarUtil.hasSameWar(killerRes, victimRes))
 			return;
-		if (CombatUtil.isAlly(killerRes.getName(), victimRes.getName()) && (war.getWarType() != WarType.RIOT || war.getWarType() != WarType.CIVILWAR))
-			return; // They are allies and this was a friendly fire kill.
+//		if (CombatUtil.isAlly(killerRes.getName(), victimRes.getName()) && (war.getWarType() != WarType.RIOT || war.getWarType() != WarType.CIVILWAR))
+//			return; // They are allies and this was a friendly fire kill.
 		
 		/*
 		 * Handle lives being lost, for wars without unlimited lives.

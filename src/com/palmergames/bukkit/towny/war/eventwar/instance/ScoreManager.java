@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
@@ -29,14 +30,14 @@ import com.palmergames.util.KeyValueTable;
 public class ScoreManager {
 
 	private War war;
-	private Hashtable<Town, Integer> townScores = new Hashtable<>();
+	private Hashtable<TownyObject, Integer> scores = new Hashtable<>();
 	
 	public ScoreManager(War war) {
 		this.war = war;
 	}
 
-	public Hashtable<Town, Integer> getTownScores() {
-		return townScores;
+	public Hashtable<TownyObject, Integer> getScores() {
+		return scores;
 	}
 	
 	/*
@@ -52,7 +53,7 @@ public class ScoreManager {
 	public void residentScoredKillPoints(Resident defender,  Resident attacker, Location loc) {
 		switch(war.getWarType()) {
 		case RIOT:
-			// TODO: Handle riot scoring.
+			residentScored(defender, attacker);
 			break;
 		default:
 			townScored(defender, attacker, loc);			
@@ -61,9 +62,22 @@ public class ScoreManager {
 	}
 	
 	public void addTown(Town town) {
-		townScores.put(town, WarMetaDataController.getScore(town));
+		scores.put(town, WarMetaDataController.getScore(town));
+	}
+	
+	public void addResident(Resident resident) {
+		scores.put(resident, WarMetaDataController.getScore(resident));
 	}
 
+	private void residentScored(Resident defender, Resident attacker) {
+		int points = war.getWarType().pointsPerKill;
+		
+		scores.put(attacker, scores.get(attacker) + points);
+		WarMetaDataController.setScore(attacker, points);
+
+		war.getMessenger().sendGlobalMessage(Translatable.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), defender.getName(), points, attacker.getName()));
+	}
+	
 	/**
 	 * A town has scored a kill point.
 	 * 
@@ -91,11 +105,11 @@ public class ScoreManager {
 		else
 			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), defender.getName(), points, attackerTown.getName());
 
-		townScores.put(attackerTown, townScores.get(attackerTown) + points);
-		WarMetaDataController.setScore(attackerTown, townScores.get(attackerTown));
+		scores.put(attackerTown, scores.get(attackerTown) + points);
+		WarMetaDataController.setScore(attackerTown, scores.get(attackerTown));
 		
 		war.getMessenger().sendGlobalMessage(pointMessage);
-		TownScoredEvent event = new TownScoredEvent(attackerTown, townScores.get(attackerTown), war);
+		TownScoredEvent event = new TownScoredEvent(attackerTown, scores.get(attackerTown), war);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 	
@@ -121,11 +135,11 @@ public class ScoreManager {
 				pointMessage = Translatable.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM", town.getName(), n, townBlockName);
 		}
 
-		townScores.put(town, townScores.get(town) + n);
-		WarMetaDataController.setScore(town, townScores.get(town));
+		scores.put(town, scores.get(town) + n);
+		WarMetaDataController.setScore(town, scores.get(town));
 
 		war.getMessenger().sendGlobalMessage(pointMessage);
-		TownScoredEvent event = new TownScoredEvent(town, townScores.get(town), war);
+		TownScoredEvent event = new TownScoredEvent(town, scores.get(town), war);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
@@ -169,24 +183,24 @@ public class ScoreManager {
 		List<String> output = new ArrayList<>();
 		if (title)
 			output.add(ChatTools.formatTitle("War - Top Scores"));
-		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<>(townScores);
+		KeyValueTable<TownyObject, Integer> kvTable = new KeyValueTable<>(scores);
 		kvTable.sortByValue();
 		kvTable.reverse();
 		int n = 0;
-		for (KeyValue<Town, Integer> kv : kvTable.getKeyValues()) {
+		for (KeyValue<TownyObject, Integer> kv : kvTable.getKeyValues()) {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
-			Town town = kv.key;
+			TownyObject townyObject = kv.key;
 			int score = kv.value;
 			if (score > 0)
-				output.add(String.format(Colors.Blue + "%40s " + Colors.Gold + "|" + Colors.LightGray + " %4d", town.getFormattedName(), score));
+				output.add(String.format(Colors.Blue + "%40s " + Colors.Gold + "|" + Colors.LightGray + " %4d", townyObject.getFormattedName(), score));
 		}
 		return output;
 	}
 
 	public String[] getTopThree() {
-		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<>(townScores);
+		KeyValueTable<TownyObject, Integer> kvTable = new KeyValueTable<>(scores);
 		kvTable.sortByValue();
 		kvTable.reverse();
 		String[] top = new String[3];
@@ -196,9 +210,9 @@ public class ScoreManager {
 		return top;
 	}
 
-	public KeyValue<Town, Integer> getWinningTownScore() throws TownyException {
+	public KeyValue<TownyObject, Integer> getWinningScore() throws TownyException {
 
-		KeyValueTable<Town, Integer> kvTable = new KeyValueTable<>(townScores);
+		KeyValueTable<TownyObject, Integer> kvTable = new KeyValueTable<>(scores);
 		kvTable.sortByValue();
 		kvTable.reverse();
 		if (kvTable.getKeyValues().size() > 0)
