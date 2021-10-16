@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Schade heeft uw teleport geannuleerd.'
 #Added in 0.82
 invitation_prefix: "&8[&7Uitnodiging&8] &9"
 confirmation_prefix: "&8[&7Bevestiging&8] &9"
-this_message_will_expire2: '&9Dit vervalt automatisch over 20 seconden'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Volgende Pagina'
 msg_hover_previous_page: 'Vorige Pagina'
 #Added in 0.83
