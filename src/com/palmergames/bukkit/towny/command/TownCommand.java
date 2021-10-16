@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
@@ -2352,7 +2351,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
                 		
                     	final Town finalTown = town;
                     	final String finalName = name;
-                    	Confirmation confirmation = Confirmation.runOnAccept(() -> {
+                    	Confirmation.runOnAccept(() -> {
 							// Check if town can still pay rename cost
 							if (!finalTown.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost())) {
 								TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
@@ -2364,9 +2363,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							townRename(player, finalTown, finalName);
 						})
 						.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())))
-						.build();
-                    	
-                    	ConfirmationHandler.sendConfirmation(player, confirmation);
+						.sendTo(player);
                     	
                     } else {
                     	townRename(player, town, name);
@@ -2670,7 +2667,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!town.getAccount().canPayFromHoldings(cost))
 			throw new TownyException(Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 		
-		Confirmation confirmation = Confirmation.runOnAccept(() -> {
+		Confirmation.runOnAccept(() -> {
 			if (!town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n))) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 				return;
@@ -2680,8 +2677,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			town.save();
 		})
 			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
-			.build();
-		ConfirmationHandler.sendConfirmation(player, confirmation);
+			.sendTo(player); 
 	}
 
 	/**
