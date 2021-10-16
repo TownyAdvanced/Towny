@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: '突發狀況已取消您的傳送。'
 #Added in 0.82
 invitation_prefix: "&8[&7邀請&8] &9"
 confirmation_prefix: "&8[&7確認&8] &9"
-this_message_will_expire2: '&amp;9這將在20秒後自動過期'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: '下一頁'
 msg_hover_previous_page: '上一頁'
 #Added in 0.83
