@@ -390,11 +390,7 @@ public class TownyMessaging {
 			cancelline = "/" + TownySettings.getCancelCommand();
 		}
 		
-		TextComponent lastLineComponent;
-		if (lastline == null) {
-			lastLineComponent = Component.newline().append(Component.text(Translation.of("this_message_will_expire2")));
-		} else
-			lastLineComponent = Component.newline().append(Component.text(lastline));
+		TextComponent lastLineComponent = Component.newline().append(Component.text(lastline));
 
 		// Create confirm button based on given params.
 		TextComponent confirmComponent = Component.text(confirmline.replace("/", "[/").concat("]"))
