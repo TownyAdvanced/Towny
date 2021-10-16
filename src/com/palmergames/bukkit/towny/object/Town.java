@@ -488,7 +488,7 @@ public class Town extends Government implements TownBlockOwner {
 	public double getTownBlockCost() {
 		double price = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
 		double maxprice = TownySettings.getMaxClaimPrice();
-		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this,(maxprice == -1 ? price : Math.min(price, maxprice)),1);
+		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this, (maxprice == -1 ? price : Math.min(price, maxprice)), 1);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getPrice();
 	}
