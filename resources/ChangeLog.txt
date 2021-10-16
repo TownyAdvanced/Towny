@@ -6841,3 +6841,5 @@ v0.92.0.11:
   - Make Cancelled confirmations only show the default cancel message when there's no onCancel runnable.
   - Fix plot groups causing an NPE when putting a town into a ruined state.
     - Closes #5372.
+  - Fix name changes charging money for names which won't pass a later test.
+  - Make nation's names behave according the Capitalize Names config setting which only affect towns.

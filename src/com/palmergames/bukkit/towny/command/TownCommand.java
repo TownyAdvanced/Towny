@@ -121,7 +121,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Send a list of all town help commands to player Command: /town
@@ -2339,11 +2338,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					String name = split[1];
 					
-					if(NameValidation.isBlacklistName(name))
+					if (NameValidation.isBlacklistName(name) 
+						|| TownyUniverse.getInstance().hasTown(name))
 						throw new TownyException(Translatable.of("msg_invalid_name"));
 
         			if (TownySettings.getTownAutomaticCapitalisationEnabled())
-        				name = capitalizeString(name);
+        				name = StringMgmt.capitalizeStrings(name);
 					
                     if(TownyEconomyHandler.isActive() && TownySettings.getTownRenameCost() > 0) {
                 		if (!town.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost()))
@@ -2707,7 +2707,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_universe_limit"));
 
 			if (TownySettings.getTownAutomaticCapitalisationEnabled())
-				name = capitalizeString(name);
+				name = StringMgmt.capitalizeStrings(name);
 			
 			// Check the name is valid and doesn't already exist.
 			String filteredName;
@@ -4259,7 +4259,4 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static String capitalizeString(String string) {
-		return Stream.of(string.split("_")).map(str -> str.substring(0, 1).toUpperCase() + str.substring(1)).collect(Collectors.joining("_"));
-	}
 }

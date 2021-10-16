@@ -876,7 +876,7 @@ public enum ConfigNodes {
 			"global_town_settings.automatic_capitalisation",
 			"false",
 			"",
-			"# When enabled, town names will automatically be capitalised upon creation."
+			"# When enabled, town (and nation) names will automatically be capitalised upon creation."
 	),
 	
 	GTOWN_SETTINGS_ALLOWED_TOWN_COLORS(

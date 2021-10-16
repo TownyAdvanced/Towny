@@ -1083,6 +1083,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		try {
 			if (capitalTown.hasNation())
 				throw new TownyException(Translatable.of("msg_err_already_nation"));
+			
+			if (TownySettings.getTownAutomaticCapitalisationEnabled())
+				name = StringMgmt.capitalizeStrings(name);
 
 			// Check the name is valid and doesn't already exist.
 			String filteredName;
@@ -1093,9 +1096,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if ((filteredName == null) || TownyUniverse.getInstance().hasNation(filteredName))
-				throw new TownyException(Translatable.of("msg_err_invalid_name", name));
+				throw new TownyException(Translatable.of("msg_err_invalid_name", filteredName));
 
-			PreNewNationEvent preEvent = new PreNewNationEvent(capitalTown, name);
+			PreNewNationEvent preEvent = new PreNewNationEvent(capitalTown, filteredName);
 			Bukkit.getPluginManager().callEvent(preEvent);
 
 			if (preEvent.isCancelled()) {
@@ -1109,6 +1112,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!capitalTown.getAccount().canPayFromHoldings(TownySettings.getNewNationPrice()))			
 					throw new TownyException(Translatable.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
 
+				final String finalName = filteredName;
 				Confirmation.runOnAccept(() -> {				
 					// Town pays for nation here.
 					if (!capitalTown.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost")) {
@@ -1117,11 +1121,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					try {
 						// Actually make nation.
-						newNation(name, capitalTown);
+						newNation(finalName, capitalTown);
 					} catch (AlreadyRegisteredException | NotRegisteredException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 					}
-					TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", player.getName(), StringMgmt.remUnderscore(name)));
+					TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", player.getName(), StringMgmt.remUnderscore(finalName)));
 
 				})
 					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())))
@@ -1129,8 +1133,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				
 			// Or, it is free, so just make the nation.
 			} else {
-				newNation(name, capitalTown);
-				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", player.getName(), StringMgmt.remUnderscore(name)));
+				newNation(filteredName, capitalTown);
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", player.getName(), StringMgmt.remUnderscore(filteredName)));
 			}
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage(player));
@@ -2305,15 +2309,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, "Eg: /nation set name Plutoria");				
 				else {
 					
-					if(NameValidation.isBlacklistName(split[1]))
+					String name = split[1];
+					
+					if (NameValidation.isBlacklistName(name)
+						|| TownyUniverse.getInstance().hasNation(name))
 						throw new TownyException(Translatable.of("msg_invalid_name"));
+					
+					if (TownySettings.getTownAutomaticCapitalisationEnabled())
+        				name = StringMgmt.capitalizeStrings(name);
 					
 				    if(TownyEconomyHandler.isActive() && TownySettings.getNationRenameCost() > 0) {
 						if (!nation.getAccount().canPayFromHoldings(TownySettings.getNationRenameCost()))
 							throw new TownyException(Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
 
 						final Nation finalNation = nation;
-                    	final String name = split[1];
+                    	final String finalName = name;
 				    	Confirmation.runOnAccept(() -> {
 							//Check if nation can still pay rename costs.
 							if (!finalNation.getAccount().canPayFromHoldings(TownySettings.getNationRenameCost())) {
@@ -2321,15 +2331,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 							
-							finalNation.getAccount().withdraw(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", name));
+							finalNation.getAccount().withdraw(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", finalName));
 								
-							nationRename(player, finalNation, name);
+							nationRename(player, finalNation, finalName);
 				    	})
 				    	.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())))
 						.sendTo(player);
 				    	
                     } else {
-                    	nationRename(player, nation, split[1]);
+                    	nationRename(player, nation, name);
                     }
 				}
 
