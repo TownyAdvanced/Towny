@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: '伤害取消了你的传送.'
 #Added in 0.82
 invitation_prefix: "&8[&7邀请&8] &9"
 confirmation_prefix: "&8[&7确认&8] &9"
-this_message_will_expire2: '&9邀请将在20秒后过期'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: '下一页'
 msg_hover_previous_page: '上一页'
 #Added in 0.83
