@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Recibir dano ha cancelado la teletransportac
 #Added in 0.82
 invitation_prefix: "&8[&7Invitacionn&8] &9"
 confirmation_prefix: "&8[&7Confirmacion&8] &9"
-this_message_will_expire2: '&9Esto va a auto-expirar en 20 segundos'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Siguiente pagina'
 msg_hover_previous_page: 'Pagina anterior'
 #Added in 0.83
