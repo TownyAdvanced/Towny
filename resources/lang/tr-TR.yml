@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Hasar aldınız ışınlanmanız iptal edild
 #Added in 0.82
 invitation_prefix: "&8[&7Davetiye&8] &9"
 confirmation_prefix: "&8[&7Onayla&8] &9"
-this_message_will_expire2: '&9Bu, 20 saniye içinde otomatik olarak sona erecek'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Sonraki Sayfa'
 msg_hover_previous_page: 'Önceki sayfa'
 #Added in 0.83
