@@ -6837,3 +6837,5 @@ v0.92.0.11:
   - Make the plot change listener more efficient, courtesy of Warriorrrr with PR #5365.
 0.97.2.8:
   - Make it so that turning Towny off in a world will shut down any active revert-on-unclaim actions. 
+  - Make Confirmations show the correct timeout time.
+  - Make Cancelled confirmations only show the default cancel message when there's no onCancel runnable.
