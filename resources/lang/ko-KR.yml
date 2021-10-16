@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: '공격을 받아서 이동이 취소되었�
 #Added in 0.82
 invitation_prefix: "&8[&7초대&8] &9"
 confirmation_prefix: "&8[&7확인&8] &9"
-this_message_will_expire2: '&9이 메세지는 20초뒤 만료됩니다.'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: '다음 페이지'
 msg_hover_previous_page: '이전 페이지'
 #Added in 0.83
