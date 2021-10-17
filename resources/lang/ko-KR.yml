@@ -921,7 +921,7 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'You are no
 #Added in 0.75
 msg_already_ally: '국가는 이미 %s와 동맹 상태입니다.'
 #Added in 0.76
-msg_you: 'You'
+msg_you: '나'
 #Added in 0.77
 msg_click_spawn: '&a클릭하여 다음 마을로 이동합니다: &e%s'
 msg_spawn_cost: '&a마을 이동 비용 = &e%s'
@@ -995,8 +995,8 @@ status_world_explrevert_block: 'Block Explosion Revert:'
 msg_nation_already_peaceful: '&cNation is already peaceful.'
 msg_nation_already_not_peaceful: '&cNation is already not peaceful.'
 #Added in 0.89
-status_world_friendlyfire: 'FriendlyFire:'
-status_world_wildernessmobs: 'Wilderness Mobs:'
+status_world_friendlyfire: '아군 공격:'
+status_world_wildernessmobs: '야생 몹:'
 msg_outlaw_kick_cooldown: '당신은 %s에서 법외추방자로 지정되었습니다. 당신은 이 도시에서 %s초 이내에 떠나지 않을 경우, 자동으로 지정된 스폰으로 TP 됩니다.'
 msg_outlaw_kicked: '&4You are not welcome in %s. You were teleported away.'
 msg_outlaw_town_notify: '법외추방자인 %s가 영토에 진입하였습니다.'
@@ -1421,3 +1421,7 @@ msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase an
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
+#Message shown as feedback for /t toggle nationzone command.
+msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
+#Error message shown when a town tries to toggle their nationzone which doesn't exist.
+msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
