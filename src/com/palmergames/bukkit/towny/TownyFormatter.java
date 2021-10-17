@@ -364,7 +364,7 @@ public class TownyFormatter {
 						.append(Component.text(colourKeyValue(translator.of("town_plu"), StringMgmt.join(towns, ", "))));
 				int nationZoneSize = town.getNationZoneSize();
 				if (nationZoneSize > 0)
-					hover = hover.append(Component.newline().append(Component.text(colourKeyValue(translator.of("status_nation_zone_size"), String.valueOf(nationZoneSize)))));
+					hover = hover.append(Component.newline().append(Component.text(colourKeyValue(translator.of("status_nation_zone_size"), town.isNationZoneEnabled() ? String.valueOf(nationZoneSize) : translator.of("status_off_bad")))));
 				hover = hover.append(Component.newline())
 						.append(Component.text(translator.of("status_hover_click_for_more")));
 				

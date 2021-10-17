@@ -1661,7 +1661,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				// Towns don't always have nationzones.
 				if (town.getNationZoneSize() < 1)
-					throw new TownyException("msg_err_your_town_has_no_nationzone_to_toggle");
+					throw new TownyException(Translatable.of("msg_err_your_town_has_no_nationzone_to_toggle"));
 				
 				// Fire cancellable event directly before setting the toggle.
 				TownToggleNationZoneEvent preEvent = new TownToggleNationZoneEvent(sender, town, admin, choice.orElse(!town.isNationZoneEnabled()));
