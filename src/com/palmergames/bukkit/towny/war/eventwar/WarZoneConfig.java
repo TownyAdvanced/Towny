@@ -5,6 +5,8 @@ package com.palmergames.bukkit.towny.war.eventwar;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.util.TimeTools;
+
 import org.bukkit.Material;
 
 import java.util.List;
@@ -58,8 +60,20 @@ public class WarZoneConfig {
 		return TownySettings.getStrArr(ConfigNodes.WAR_WARZONE_EXPLOSIONS_IGNORE_LIST);
 	}
 	
+	public static int teamSelectionSeconds() {
+		return TownySettings.getInt(ConfigNodes.WAR_EVENT_TEAM_SELECTION_DELAY);
+	}
+	
 	public static boolean riotsEnabled() {
 		return TownySettings.getBoolean(ConfigNodes.WAR_WAR_TYPES_RIOT_ENABLE);
+	}
+	
+	public static int riotDelay() {
+		return TownySettings.getInt(ConfigNodes.WAR_WAR_TYPES_RIOT_DELAY);
+	}
+	
+	public static long riotCooldown() {
+		return TimeTools.getMillis(TownySettings.getString(ConfigNodes.WAR_WAR_TYPES_RIOT_COOLDOWN));
 	}
 	
 	public static boolean riotsMayorDeathEnabled() {
@@ -88,6 +102,14 @@ public class WarZoneConfig {
 	
 	public static boolean townWarEnabled() {
 		return TownySettings.getBoolean(ConfigNodes.WAR_WAR_TYPES_TOWN_WAR_ENABLE);
+	}
+	
+	public static int townWarDelay() {
+		return TownySettings.getInt(ConfigNodes.WAR_WAR_TYPES_TOWN_WAR_DELAY);
+	}
+	
+	public static long townWarCooldown() {
+		return TimeTools.getMillis(TownySettings.getString(ConfigNodes.WAR_WAR_TYPES_TOWN_WAR_COOLDOWN));
 	}
 	
 	public static boolean townWarTownBlockHPEnabled() {
@@ -121,7 +143,15 @@ public class WarZoneConfig {
 	public static boolean civilWarEnabled() {
 		return TownySettings.getBoolean(ConfigNodes.WAR_WAR_TYPES_CIVIL_WAR_ENABLE);
 	}
+
+	public static int civilWarDelay() {
+		return TownySettings.getInt(ConfigNodes.WAR_WAR_TYPES_CIVIL_WAR_DELAY);
+	}
 	
+	public static long civilWarCooldown() {
+		return TimeTools.getMillis(TownySettings.getString(ConfigNodes.WAR_WAR_TYPES_CIVIL_WAR_COOLDOWN));
+	}
+		
 	public static boolean civilWarTownBlockHPEnabled() {
 		return TownySettings.getBoolean(ConfigNodes.WAR_WAR_TYPES_CIVIL_WAR_TOWNBLOCK_HP);
 	}
@@ -152,6 +182,14 @@ public class WarZoneConfig {
 	
 	public static boolean nationWarEnabled() {
 		return TownySettings.getBoolean(ConfigNodes.WAR_WAR_TYPES_NATION_WAR_ENABLE);
+	}
+
+	public static int nationWarDelay() {
+		return TownySettings.getInt(ConfigNodes.WAR_WAR_TYPES_NATION_WAR_DELAY);
+	}
+	
+	public static long nationWarCooldown() {
+		return TimeTools.getMillis(TownySettings.getString(ConfigNodes.WAR_WAR_TYPES_NATION_WAR_COOLDOWN));
 	}
 	
 	public static boolean nationWarTownBlockHPEnabled() {
@@ -184,6 +222,14 @@ public class WarZoneConfig {
 	
 	public static boolean worldWarEnabled() {
 		return TownySettings.getBoolean(ConfigNodes.WAR_WAR_TYPES_WORLD_WAR_ENABLE);
+	}
+	
+	public static int worldWarDelay() {
+		return TownySettings.getInt(ConfigNodes.WAR_WAR_TYPES_WORLD_WAR_DELAY);
+	}
+	
+	public static long worldWarCooldown() {
+		return TimeTools.getMillis(TownySettings.getString(ConfigNodes.WAR_WAR_TYPES_WORLD_WAR_COOLDOWN));
 	}
 	
 	public static boolean worldWarTownBlockHPEnabled() {

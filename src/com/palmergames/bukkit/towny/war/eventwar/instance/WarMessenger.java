@@ -7,6 +7,9 @@ import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 
@@ -66,5 +69,24 @@ public class WarMessenger {
 		for (Player player : getPlayers())
 			for (String line : war.getErrorMsgs())
 				TownyMessaging.sendErrorMsg(player, line);
+	}
+
+	public void announceWarBeginning() {
+		switch (war.getWarType()) {
+		case WORLDWAR:
+		case NATIONWAR:
+			for (Nation nation : war.getWarParticipants().getNations()) 
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_you_have_joined_a_war_of_type", war.getWarType().getName()));
+			break;
+		case CIVILWAR:
+		case TOWNWAR:
+			for (Town town : war.getWarParticipants().getTowns())
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_you_have_joined_a_war_of_type", war.getWarType().getName()));
+			break;
+		case RIOT:
+			for (Resident res : war.getWarParticipants().getResidents())
+				TownyMessaging.sendMsg(res, Translatable.of("msg_you_have_joined_a_war_of_type", war.getWarType().getName()));
+			break;
+		}
 	}
 }

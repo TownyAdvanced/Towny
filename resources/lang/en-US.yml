@@ -1663,10 +1663,14 @@ msg_war_townblock_hp: '&8[%s] (%s) HP: %s %s'
 #The message shown when a townblock is being healed.
 msg_war_townblock_healed: '&8[Heal](%s) HP: %s (&a+%s&8)'
 #Message shown when a town is removed from the war for not being able to pay death costs.
-msg_town_could_not_pay_death_costs_removing_from_war: 'Town could not pay death costs, removing %s from the war.'
+msg_town_could_not_pay_death_costs_removing_from_war: '%s could not pay death costs to %s, removing %s from the war.'
 #Message shown when a player has run out of lives and is removed from the war
 msg_resident_has_run_out_of_lives_and_is_eliminated_from_the_war: '%s has run out of lives and is eliminated from the %s'
 #Message shown when a player chooses to fight for the rebels in war.
 msg_you_have_sided_with_the_rebels: 'You have sided with the rebels.'
 #Message shown when a player chooses to fight for the government in war.
 msg_you_have_sided_with_the_government: 'You have sided with the government.'
+#Message shown when a player cannot pay the war death price during a RIOT war, and they are eliminated.
+msg_player_couldnt_pay_eliminated_riot: '%s''s wallet couldn''t satisfy %s. Removing them from the riot.'
+#Message shown announcing the delay for team selection for civilwar and riots.
+msg_team_selection_delay_seconds_remaining: '%s remain to choose between the government and anti-government sides.'

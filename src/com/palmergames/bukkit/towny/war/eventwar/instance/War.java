@@ -17,16 +17,14 @@ import com.palmergames.bukkit.towny.utils.NameGenerator;
 import com.palmergames.bukkit.towny.war.eventwar.WarBooks;
 import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
+import com.palmergames.bukkit.towny.war.eventwar.WarZoneConfig;
 import com.palmergames.bukkit.towny.war.eventwar.events.EventWarEndEvent;
 import com.palmergames.bukkit.towny.war.eventwar.events.EventWarStartEvent;
 import com.palmergames.bukkit.util.BookFactory;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.KeyValue;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -45,27 +43,24 @@ public class War {
 	private WarType warType;
 	private String warName;	
 	private UUID warUUID = UUID.randomUUID();
-	
-	public double warSpoilsAtStart = 0.0;
-	double warSpoils = 0.0;
+	private double warSpoilsAtStart = 0.0;
+	private double warSpoils = 0.0;
 
 	/**
 	 * Creates a new War instance.
 	 * 
 	 * @param plugin - Towny plugin.
-	 * @param startDelay - int startup delay in seconds.
 	 * @param nations - List&lt;Nation&gt; which will be tested and added to war.
 	 * @param towns - List&lt;Town&gt; which will be tested and added to war.
 	 * @param residents - List&lt;Resident&gt; which will be tested and added to war.
 	 * @param warType - WarType of the war being started.
 	 */
-	public War(Towny plugin, int startDelay, List<Nation> nations, List<Town> towns, List<Resident> residents, WarType warType) {
-
+	public War(Towny plugin, List<Nation> nations, List<Town> towns, List<Resident> residents, WarType warType) {
 		
 		if (!TownySettings.isUsingEconomy()) {
 			addErrorMsg("War Event cannot function while using_economy: false in the config.yml. Economy Required.");
 			end(false);
-        	return;
+			return;
 		}
 
 		this.plugin = plugin;
@@ -75,94 +70,51 @@ public class War {
 		 * Attempts to gather the given lists of nations/towns/residents into a War
 		 * with at least one pair of opposing teams.
 		 */
-		warParticipants.gatherParticipantsForWar(nations, towns, residents);
-		
+		warParticipants.gatherParticipantsForWar(nations, towns, residents, null);
+
 		/*
-		 * A warmup period is used for civil war and riots, so sides are settled.
+		 * A warmup period is used for civil war and riots, so a player can select their team.
 		 * 
 		 */
-		int warmup;
-		switch (warType) {
-			case RIOT:
-			case CIVILWAR:
-				warmup = 120;
-				getMessenger().sendGlobalMessage("There are 120 seconds to choose between the government and anti-government sides.");
-				break;
-			case NATIONWAR:
-			case TOWNWAR:
-			case WORLDWAR:
-			default:
-				warmup = 0;
-		}
-		
-		Bukkit.getScheduler().runTaskLater(getPlugin(), () -> {
-			/*
-			 * Make sure that we have enough people/towns/nations involved
-			 * for the give WarType.
-			 */
-			if (!warParticipants.verifyTwoEnemies()) {
-
-				addErrorMsg("Failed to get the correct number of teams for war to happen! Good-bye!");
-				end(false);
-
-			} else {
-				
-				/*
-				 * Some minor errors could have been recorded, report them to the people who did enter the war.
-				 */
-				if (!errorMsgs.isEmpty())
-					WarMessenger.reportMinorErrors();
-				
-				/*
-				 * Get a name for the war.
-				 */
-				setWarName();
-				
-				/*
-				 * Seed the war spoils.
-				 */
-				warSpoils = warType.baseSpoils;
-				getMessenger().sendGlobalMessage(Translatable.of("msg_war_seeding_spoils_with", TownyEconomyHandler.getFormattedBalance(warSpoils)));			
-				getMessenger().sendGlobalMessage(Translatable.of("msg_war_activate_war_hud_tip"));
-				
-				EventWarStartEvent event = new EventWarStartEvent(warParticipants.getTowns(), warParticipants.getNations(), warSpoilsAtStart);
-				Bukkit.getServer().getPluginManager().callEvent(event);
-				
-				/*
-				 * If things have gotten this far it is reasonable to think we can start the war.
-				 */
-				taskManager.setupDelay(startDelay);
-				
-				saveWar();
-			}
-		}, warmup * 20);
+		int warmup = (warType.equals(WarType.RIOT) || warType.equals(WarType.CIVILWAR)) ? WarZoneConfig.teamSelectionSeconds() : 0;
+		taskManager.teamSelectionDelay(warmup);
 	}
 
+	/**
+	 * Used internally in the loading process.
+	 */
 	public War(Towny plugin, UUID uuid) {
 		this.plugin = plugin;
 		this.warUUID = uuid;
 	}
 	
+	/*
+	 * Loading and Saving
+	 */
+	
+	/**
+	 * Loads a war from flatfile.
+	 * @param nations List&lt;Nation&gt; which will be tested and added to war.
+	 * @param towns List&lt;Town&gt; which will be tested and added to war.
+	 * @param residents List&lt;Resident&gt; which will be tested and added to war.
+	 * @param townblocks List&lt;TownBlock&gt; which will be tested and added to war.
+	 */
 	public void loadWar(List<Nation> nations, List<Town> towns, List<Resident> residents, List<TownBlock> townblocks) {
 
-		warParticipants.gatherParticipantsForWar(nations, towns, residents);
+		warParticipants.gatherParticipantsForWar(nations, towns, residents, townblocks);
 
-		if (!warParticipants.verifyTwoEnemies()) {
+		if (!warParticipants.verifyTwoEnemies(false)) {
 			addErrorMsg("Failed to get the correct number of teams for war to happen! Good-bye!");
 			end(false);
 			return;
 		}
 		
-		for (TownBlock tb : townblocks) {
-			if (tb.isHomeBlock())
-				warZoneManager.addWarZone(tb.getWorldCoord(), TownySettings.getWarzoneHomeBlockHealth());
-			else 
-				warZoneManager.addWarZone(tb.getWorldCoord(), TownySettings.getWarzoneTownBlockHealth());
-		}
-		
 		taskManager.setupDelay(0);
 	}
 	
+	/**
+	 * Saves a war's main file to flatfile database.
+	 */
 	public void saveWar() {
 		TownyUniverse.getInstance().getDataSource().saveWar(this);
 	}
@@ -172,13 +124,52 @@ public class War {
 	 */
 
 	/**
+	 * Test that we have enough people to launch a war, set the war name,
+	 * seed the spoils of war and run the final startup delay.
+	 */
+	public void preStart() {
+		/*
+		 * Make sure that we have enough people/towns/nations involved
+		 * for the give WarType.
+		 */
+		if (!warParticipants.verifyTwoEnemies(true)) {
+
+			addErrorMsg("Failed to get the correct number of teams for war to happen! Good-bye!");
+			end(false);
+
+		} else {
+			
+			// Some minor errors could have been recorded, report them to the people who did enter the war.
+			if (!errorMsgs.isEmpty())
+				WarMessenger.reportMinorErrors();
+			
+			// Get a name for the war.
+			setWarName();
+			
+			// Seed the war spoils.
+			seedWarSpoils();
+
+			// Fire the Bukkit event so other plugins know a war has begun.
+			Bukkit.getServer().getPluginManager().callEvent(new EventWarStartEvent(warParticipants.getTowns(), warParticipants.getNations(), warSpoilsAtStart));
+			
+			// Start the war's startup delay.
+			taskManager.setupDelay(warType.delay);
+			
+			// Save the main war file to the flatfile database.
+			saveWar();
+		}
+	}
+	
+	/**
 	 * Start the war.
 	 * 
-	 * Starts the timer taxks.
+	 * Gives out war start book.
+	 * Starts the townblockHP task.
+	 * Place war in TownyUniverse map.
 	 */
 	public void start() {
 		
-		warParticipants.outputParticipants(warType, warName);
+//		warParticipants.outputParticipants(warType, warName);
 
 		// Start the WarTimerTask if the war type allows for using townblock HP system.
 		if (warType.hasTownBlockHP)
@@ -194,6 +185,9 @@ public class War {
 				warParticipants.addOnlineWarrior(player);
 		}
 		
+		// Broadcast a message to the participants.
+		getMessenger().announceWarBeginning();
+		
 		checkEnd();
 		TownyUniverse.getInstance().addWar(this);
 	}
@@ -201,7 +195,7 @@ public class War {
 	/**
 	 * Checks if the end has been reached.
 	 */
-	public void checkEnd() {
+	public void checkEnd() { 
 
 		switch(warType) {
 		case WORLDWAR:
@@ -246,6 +240,13 @@ public class War {
 			getMessenger().sendPlainGlobalMessage(getScoreManager().getStats());
 			
 			/*
+			 * Give the entire server a War is Over book.
+			 */
+			ItemStack book = BookFactory.makeBook(warName, "War is Over", WarBooks.warEndBook(this));
+			for (Player player : Bukkit.getOnlinePlayers())
+				player.getInventory().addItem(book);
+			
+			/*
 			 * Pay out the money.
 			 */
 			awardSpoils();
@@ -264,12 +265,12 @@ public class War {
 		/*
 		 * End the WarTimerTask
 		 */
-		taskManager.cancelTasks(BukkitTools.getScheduler());
+		taskManager.cancelTasks(Bukkit.getScheduler());
 
 		/*
 		 * Kill the war huds.
 		 */
-		removeWarHuds(this);
+		Bukkit.getScheduler().runTask(plugin, () -> plugin.getHUDManager().toggleAllWarHUD(this));
 					
 		/*
 		 * Remove this war.
@@ -283,22 +284,10 @@ public class War {
 	 * Getters and Setters
 	 */
 
-	public Towny getPlugin() {
-		return plugin;
-	}
-
 	public WarZoneManager getWarZoneManager() {
 		return warZoneManager;
 	}
 	
-	public WarType getWarType() {
-		return warType;
-	}
-	
-	public void setWarType(WarType type) {
-		this.warType = type;
-	}
-
 	public WarParticipants getWarParticipants() {
 		return warParticipants;
 	}
@@ -311,6 +300,14 @@ public class War {
 		return messenger;
 	}
 
+	public WarType getWarType() {
+		return warType;
+	}
+	
+	public void setWarType(WarType type) {
+		this.warType = type;
+	}
+
 	public double getWarSpoils() {
 
 		return warSpoils;
@@ -318,6 +315,10 @@ public class War {
 	
 	public void setWarSpoils(double spoils) {
 		warSpoils = spoils;
+	}
+	
+	public double getWarSpoilsAtStart() {
+		return warSpoilsAtStart;
 	}
 	
 	public String getWarName() {
@@ -344,6 +345,10 @@ public class War {
 		return errorMsgs;
 	}
 
+	/*
+	 * Private Start of War Methods
+	 */
+
 	/**
 	 * Picks out a name (sometimes a randomly generated one,) for the war.
 	 */
@@ -369,25 +374,19 @@ public class War {
 		}
 		this.warName = warName;
 	}
-
+	
+	/**
+	 * Sets the initial warSpoils. Tells the warring players about it.
+	 */
+	private void seedWarSpoils() {
+		warSpoils = warType.baseSpoils;
+		warSpoilsAtStart = warType.baseSpoils;
+		getMessenger().sendGlobalMessage(Translatable.of("msg_war_seeding_spoils_with", TownyEconomyHandler.getFormattedBalance(warSpoils)));			
+	}
+	
 	/*
 	 * Private End of War Methods
 	 */
-	
-	/**
-	 * Remove all the war huds.
-	 * @param war
-	 */
-	private void removeWarHuds(War war) {
-		new BukkitRunnable() {
-
-			@Override
-			public void run() {
-				plugin.getHUDManager().toggleAllWarHUD(war);
-			}
-			
-		}.runTask(plugin);		
-	}
 	
 	/**
 	 * Pay out the money to the winner(s).
@@ -467,7 +466,6 @@ public class War {
 		default:
 		}
 	}
-
 
 	/**
 	 * Handles the Town Conquering.

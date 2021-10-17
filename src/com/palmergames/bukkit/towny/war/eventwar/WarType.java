@@ -1,22 +1,26 @@
 package com.palmergames.bukkit.towny.war.eventwar;
 
 public enum WarType {
-	// TODO: Make all these settings configurable.
+	// TODO: Make hasTownBlocksSwitchTowns configurable here.
 	RIOT(
-		"Riot", 
-		false, 
+		"Riot",
+		WarZoneConfig.riotDelay(),
+		WarZoneConfig.riotCooldown(),
+		false,                                     // No TownBlockHP
 		WarZoneConfig.riotsMayorDeathEnabled(), 
-		false, 
+		false,                                     // No hasTownBlocksSwitchTowns 
 		WarZoneConfig.riotsWinnerTakesOverTown(), 
 		WarZoneConfig.riotResidentLives(), 
 		WarZoneConfig.riotMayorLives(), 
 		WarZoneConfig.riotBaseSpoils(), 
 		WarZoneConfig.riotPointsPerKill()),
 	TOWNWAR(
-		"Town vs Town War", 
+		"Town vs Town War",
+		WarZoneConfig.townWarDelay(),
+		WarZoneConfig.townWarCooldown(),
 		WarZoneConfig.townWarTownBlockHPEnabled(), 
 		WarZoneConfig.townWarMayorDeathEnabled(), 
-		false, 
+		false,                                     // No hasTownBlocksSwitchTowns
 		WarZoneConfig.townWarWinnerTakesOverTown(), 
 		WarZoneConfig.townWarResidentLives(), 
 		WarZoneConfig.townWarMayorLives(), 
@@ -24,19 +28,23 @@ public enum WarType {
 		WarZoneConfig.townWarPointsPerKill()),
 	CIVILWAR(
 		"National Civil War",
+		WarZoneConfig.civilWarDelay(),
+		WarZoneConfig.civilWarCooldown(),
 		WarZoneConfig.civilWarTownBlockHPEnabled(), 
 		WarZoneConfig.civilWarMayorDeathEnabled(), 
-		false, 
+		false,                                     // No hasTownBlocksSwitchTowns
 		WarZoneConfig.civilWarWinnerTakesOverNation(), 
 		WarZoneConfig.civilWarResidentLives(), 
 		WarZoneConfig.civilWarMayorLives(), 
 		WarZoneConfig.civilWarBaseSpoils(), 
 		WarZoneConfig.civilWarPointsPerKill()),
 	NATIONWAR(
-		"Nation vs Nation War", 
+		"Nation vs Nation War",
+		WarZoneConfig.nationWarDelay(),
+		WarZoneConfig.nationWarCooldown(),
 		WarZoneConfig.nationWarTownBlockHPEnabled(), 
 		WarZoneConfig.nationWarMayorDeathEnabled(), 
-		false, 
+		false,                                     // No hasTownBlocksSwitchTowns
 		WarZoneConfig.nationWarWinnerConquersTowns(), 
 		WarZoneConfig.nationWarResidentLives(), 
 		WarZoneConfig.nationWarMayorLives(), 
@@ -44,9 +52,11 @@ public enum WarType {
 		WarZoneConfig.nationWarPointsPerKill()),
 	WORLDWAR(
 		"World War", 
+		WarZoneConfig.worldWarDelay(),
+		WarZoneConfig.worldWarCooldown(),
 		WarZoneConfig.worldWarTownBlockHPEnabled(), 
 		WarZoneConfig.worldWarMayorDeathEnabled(), 
-		false, 
+		false,                                     // No hasTownBlocksSwitchTowns
 		WarZoneConfig.worldWarWinnerConquersTowns(), 
 		WarZoneConfig.worldWarResidentLives(), 
 		WarZoneConfig.worldWarMayorLives(), 
@@ -54,6 +64,8 @@ public enum WarType {
 		WarZoneConfig.worldWarPointsPerKill());
 	
 	String name;
+	public int delay;
+	public long cooldown;
 	public boolean hasTownBlockHP;
 	public boolean hasMayorDeath;
 	public boolean hasTownBlocksSwitchTowns;
@@ -71,8 +83,10 @@ public enum WarType {
 	 * @param lives - How many lives each player gets before being removed from the war.
 	 * @param baseSpoils - How much money is added to the war.
 	 */
-	WarType(String name, boolean hasTownBlockHP, boolean hasMayorDeath, boolean hasTownBlocksSwitchTowns, boolean hasTownConquering, int residentLives, int mayorLives, double baseSpoils, int pointsPerKill) {
+	WarType(String name, int delay, long cooldown, boolean hasTownBlockHP, boolean hasMayorDeath, boolean hasTownBlocksSwitchTowns, boolean hasTownConquering, int residentLives, int mayorLives, double baseSpoils, int pointsPerKill) {
 		this.name = name;
+		this.delay = delay;
+		this.cooldown = cooldown;
 		this.hasTownBlockHP = hasTownBlockHP;
 		this.hasMayorDeath = hasMayorDeath;
 		this.hasTownBlocksSwitchTowns = hasTownBlocksSwitchTowns;
@@ -84,6 +98,11 @@ public enum WarType {
 	}
 	
 	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public String toString() {
 		return name;
 	}
 }

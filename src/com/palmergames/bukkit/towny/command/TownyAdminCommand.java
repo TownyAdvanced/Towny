@@ -2276,8 +2276,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		String warName = StringMgmt.join(args);	
 		War war = null;
 		for (War wars: TownyUniverse.getInstance().getWars())
-			if (wars.getWarName().equalsIgnoreCase(warName))
+			if (wars.getWarName().equalsIgnoreCase(warName)) {
 				war = wars;
+				break;
+			}
 		if (war != null) {
 			war.end(true);
 			TownyMessaging.sendMessage(getSender(), Translatable.of("msg_war_name_ended", warName));
@@ -2509,7 +2511,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						nations.add(nation);
 						residents.addAll(nation.getResidents());
 					}
-					new War(plugin,TownySettings.getWarTimeWarningDelay(), nations, null, residents, WarType.WORLDWAR);
+					new War(plugin, nations, null, residents, WarType.WORLDWAR);
 				} else if (split[0].equalsIgnoreCase("list")) {
 					sender.sendMessage(ChatTools.formatTitle("Ongoing Wars"));
 					if (!TownyAPI.getInstance().isWarTime()) {
@@ -2531,14 +2533,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_invalid_name").forLocale(sender));
 					towns.add(town);
 					residents.addAll(town.getResidents());
-					new War(plugin, 20, null, towns, residents, WarType.RIOT);
+					new War(plugin, null, towns, residents, WarType.RIOT);
 				} else if (split[0].equalsIgnoreCase("civilwar")) {
 					Nation nation = TownyAPI.getInstance().getNation(split[1]);
 					if (nation == null)
 						throw new TownyException(Translatable.of("msg_invalid_name").forLocale(sender));
 					nations.add(nation);
 					residents.addAll(nation.getResidents());
-					new War(plugin, 20, nations, null, residents, WarType.CIVILWAR);
+					new War(plugin, nations, null, residents, WarType.CIVILWAR);
 				} else {
 					showWarHelp();
 				}
@@ -2554,7 +2556,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_invalid_name").forLocale(sender));
 					towns.add(town);
 					residents.addAll(town.getResidents());
-					new War(plugin, 20, null, towns, residents, WarType.TOWNWAR);
+					new War(plugin, null, towns, residents, WarType.TOWNWAR);
 				} else if (split[0].equalsIgnoreCase("nationwar")) {
 					Nation nation = TownyAPI.getInstance().getNation(split[1]);
 					if (nation == null)
@@ -2566,7 +2568,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_invalid_name").forLocale(sender));
 					nations.add(nation);
 					residents.addAll(nation.getResidents());
-					new War(plugin, 20, nations, null, residents, WarType.NATIONWAR);
+					new War(plugin, nations, null, residents, WarType.NATIONWAR);
 				} else {
 					showWarHelp();
 				}

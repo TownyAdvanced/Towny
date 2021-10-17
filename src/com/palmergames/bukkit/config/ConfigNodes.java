@@ -2420,8 +2420,6 @@ public enum ConfigNodes {
 			"# The winning nations share half of the war spoils.",
 			"# The remaining half is paid to the town which took the most town blocks, and lost the least.",
 			""),
-	WAR_EVENT_WARNING_DELAY("war.event.warning_delay", "30",
-			""),
 	WAR_EVENT_TOWNS_NEUTRAL(
 			"war.event.towns_are_neutral",
 			"true",
@@ -2444,12 +2442,6 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# If true, fireworks will be launched at plots being attacked or healed in war every war tick."),
-	WAR_EVENT_REMOVE_ON_MONARCH_DEATH(
-			"war.event.remove_on_monarch_death",
-			"false",
-			"",
-			"# If true and the monarch/king dies the nation is removed from the war.",
-			"# Also removes a town from the war event when the mayor dies."),
 	WAR_EVENT_BLOCK_GRIEFING(
 			"war.event.allow_block_griefing",
 			"false",
@@ -2466,10 +2458,6 @@ public enum ConfigNodes {
 	WAR_EVENT_HOME_BLOCK_HP("war.event.block_hp.home_block_hp", "120"),
 
 	WAR_EVENT_ECO_HEADER("war.event.eco", "", ""),
-	WAR_EVENT_BASE_SPOILS(
-			"war.event.eco.base_spoils",
-			"100.0",
-			"# This amount is new money injected into the economy with a war event."),
 	WAR_EVENT_TOWN_BLOCK_LOSS_PRICE(
 			"war.event.eco.wartime_town_block_loss_price",
 			"100.0",
@@ -2509,7 +2497,12 @@ public enum ConfigNodes {
 			"war.event.conquer_time",
 			"7",
 			"",
-			"# Number of Towny new days until a conquered town loses its conquered status."),	
+			"# Number of Towny new days until a conquered town loses its conquered status."),
+	WAR_EVENT_TEAM_SELECTION_DELAY(
+			"war.event.team_selection_time",
+			"120",
+			"",
+			"# Number of seconds given to choose your team when a riot or civil war is being launched."),
 	WAR_EVENT_POINTS_HEADER("war.event.points", "", ""),
 	WAR_EVENT_POINTS_TOWNBLOCK("war.event.points.points_townblock", "1"),
 	WAR_EVENT_POINTS_TOWN("war.event.points.points_town", "10"),
@@ -2544,6 +2537,18 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Does the server allow riots?"
+			),
+	WAR_WAR_TYPES_RIOT_DELAY(
+			"war.war_types.riot.startup_delay",
+			"30",
+			"",
+			"# How many seconds of delay before a riot war begins?"
+			),
+	WAR_WAR_TYPES_RIOT_COOLDOWN(
+			"war.war_types.riot.cooldown",
+			"1d",
+			"",
+			"# How much time must pass between a town's last war (of any type) before a town can start a riot war?"
 			),
 	WAR_WAR_TYPES_RIOT_RESIDENT_LIVES(
 			"war.war_types.riot.resident_lives",
@@ -2587,6 +2592,18 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Does the server allow town wars?"),
+	WAR_WAR_TYPES_TOWN_WAR_DELAY(
+			"war.war_types.town_war.startup_delay",
+			"30",
+			"",
+			"# How many seconds of delay before a town war begins?"
+			),
+	WAR_WAR_TYPES_TOWN_WAR_COOLDOWN(
+			"war.war_types.town_war.cooldown",
+			"2d",
+			"",
+			"# How much time must pass between a town's last war (of any type) before a town can join a town war?"
+			),
 	WAR_WAR_TYPES_TOWN_WAR_TOWNBLOCK_HP(
 			"war.war_types.town_war.townblock_hp",
 			"false",
@@ -2623,7 +2640,6 @@ public enum ConfigNodes {
 			"",
 			"# How many points are awarded for killing an enemy."),
 	
-
 	WAR_WAR_TYPES_CIVIL_WAR(
 			"war.war_types.civil_war",
 			"",
@@ -2634,6 +2650,18 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Does the server allow civil wars?"),	
+	WAR_WAR_TYPES_CIVIL_WAR_DELAY(
+			"war.war_types.civil_war.startup_delay",
+			"30",
+			"",
+			"# How many seconds of delay before a civil war begins?"
+			),
+	WAR_WAR_TYPES_CIVIL_WAR_COOLDOWN(
+			"war.war_types.civil_war.cooldown",
+			"3d",
+			"",
+			"# How much time must pass between a town's last war (of any type) before a town can join a civil war?"
+			),
 	WAR_WAR_TYPES_CIVIL_WAR_TOWNBLOCK_HP(
 			"war.war_types.civil_war.townblock_hp",
 			"true",
@@ -2680,6 +2708,18 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Does the server allow nation wars?"),
+	WAR_WAR_TYPES_NATION_WAR_DELAY(
+			"war.war_types.nation_war.startup_delay",
+			"30",
+			"",
+			"# How many seconds of delay before a nation war begins?"
+			),
+	WAR_WAR_TYPES_NATION_WAR_COOLDOWN(
+			"war.war_types.nation_war.cooldown",
+			"5d",
+			"",
+			"# How much time must pass between a town's last war (of any type) before a town can join a nation war?"
+			),
 	WAR_WAR_TYPES_NATION_WAR_TOWNBLOCK_HP(
 			"war.war_types.nation_war.townblock_hp",
 			"true",
@@ -2727,6 +2767,18 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Does the server allow world wars?"),
+	WAR_WAR_TYPES_WORLD_WAR_DELAY(
+			"war.war_types.world_war.startup_delay",
+			"120",
+			"",
+			"# How many seconds of delay before a world war begins?"
+			),
+	WAR_WAR_TYPES_WORLD_WAR_COOLDOWN(
+			"war.war_types.world_war.cooldown",
+			"7d",
+			"",
+			"# How much time must pass between a town's last war (of any type) before a town can join a world war?"
+			),
 	WAR_WAR_TYPES_WORLD_WAR_TOWNBLOCK_HP(
 			"war.war_types.world_war.townblock_hp",
 			"true",

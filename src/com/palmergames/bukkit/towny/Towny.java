@@ -53,8 +53,12 @@ import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
-import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarListener;
-import com.palmergames.bukkit.towny.war.eventwar.listeners.WarZoneListener;
+import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarBukkitListener;
+import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarNationListener;
+import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarPVPListener;
+import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarTownListener;
+import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarTownyActionListener;
+import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarTownyListener;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.Version;
@@ -115,11 +119,20 @@ public class Towny extends JavaPlugin {
 	private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
 	private final TownyWorldListener worldListener = new TownyWorldListener(this);
 	private final TownyInventoryListener inventoryListener = new TownyInventoryListener();
-	private final WarZoneListener warzoneListener = new WarZoneListener(this);
-	private final EventWarListener eventWarListener = new EventWarListener();
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
 
+	// EventWar Listeners
+	private final EventWarBukkitListener warBukkitListener = new EventWarBukkitListener();
+	private final EventWarNationListener warNationListener = new EventWarNationListener();
+	private final EventWarPVPListener warPVPListener = new EventWarPVPListener();
+	private final EventWarTownListener warTownListener = new EventWarTownListener();
+	private final EventWarTownyActionListener warActionListener = new EventWarTownyActionListener(this);
+	private final EventWarTownyListener warTownyListener = new EventWarTownyListener();
+	
+	
+
+	
 	private TownyUniverse townyUniverse;
 
 	private final Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
@@ -647,8 +660,7 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(customListener, this);
 			pluginManager.registerEvents(worldListener, this);
 			pluginManager.registerEvents(loginListener, this);
-			pluginManager.registerEvents(warzoneListener, this);
-			pluginManager.registerEvents(eventWarListener, this);
+			registerEventWarListeners(pluginManager);
 		}
 
 		// Always register these events.
@@ -657,6 +669,16 @@ public class Towny extends JavaPlugin {
 		pluginManager.registerEvents(entityListener, this);
 		pluginManager.registerEvents(inventoryListener, this);
 
+	}
+
+	// Event War's Listeners registered here.
+	private void registerEventWarListeners(PluginManager pluginManager) {
+		pluginManager.registerEvents(warBukkitListener, this);
+		pluginManager.registerEvents(warNationListener, this);
+		pluginManager.registerEvents(warPVPListener, this);
+		pluginManager.registerEvents(warTownListener, this);
+		pluginManager.registerEvents(warTownyListener, this);
+		pluginManager.registerEvents(warActionListener, this);
 	}
 
 	private void printChangelogToConsole() {

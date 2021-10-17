@@ -1121,11 +1121,6 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.RES_SETTING_DELETE_OLD_RESIDENTS_ENABLE);
 	}
 
-	public static int getWarTimeWarningDelay() {
-
-		return getInt(ConfigNodes.WAR_EVENT_WARNING_DELAY);
-	}
-
 	public static boolean isWarTimeTownsNeutral() {
 
 		return getBoolean(ConfigNodes.WAR_EVENT_TOWNS_NEUTRAL);
@@ -1611,11 +1606,6 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.PLUGIN_DAILY_BACKUPS);
 	}
-
-	public static double getBaseSpoilsOfWar() {
-
-		return getDouble(ConfigNodes.WAR_EVENT_BASE_SPOILS);
-	}
 	
 	public static boolean getOnlyAttackEdgesInWar() {
 		
@@ -1793,11 +1783,6 @@ public class TownySettings {
 	public static void setDeclaringNeutral(boolean choice) {
 
 		setProperty(ConfigNodes.WARTIME_NATION_CAN_BE_NEUTRAL.getRoot(), choice);
-	}
-
-	public static boolean isRemovingOnMonarchDeath() {
-
-		return getBoolean(ConfigNodes.WAR_EVENT_REMOVE_ON_MONARCH_DEATH);
 	}
 
 	public static double getTownUpkeepCost(Town town) {

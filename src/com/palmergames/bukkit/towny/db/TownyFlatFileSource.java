@@ -1832,6 +1832,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			line = keys.get("spoils");
 			if (line != null)
 				war.setWarSpoils(Double.valueOf(line));
+			
+			line = keys.get("ignoredUUIDs");
+			if (line != null) {
+				String[] uuids = line.split(",");
+				List<UUID> list = new ArrayList<>();
+				for (String token : uuids)
+					list.add(UUID.fromString(token));
+				war.getWarParticipants().setIgnoredUUIDs(list);
+			}
 		}
 		
 		return true;
@@ -2381,6 +2390,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("name=" + war.getWarName());
 		list.add("type=" + war.getWarType().toString());
 		list.add("spoils=" + war.getWarSpoils());
+		list.add("ignoredUUIDs=" + StringMgmt.join(war.getWarParticipants().getUUIDsToIgnore(),","));
 		
 		this.queryQueue.add(new FlatFileSaveTask(list, getWarFilename(war)));
 		return true;

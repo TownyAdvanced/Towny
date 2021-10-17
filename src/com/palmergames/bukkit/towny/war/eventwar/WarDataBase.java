@@ -215,12 +215,18 @@ public class WarDataBase {
 	public static void removeWar(War war) {
 		TownyUniverse.getInstance().getDataSource().removeWar(war);
 		
-		for (Nation nation : war.getWarParticipants().getNations())
+		for (Nation nation : war.getWarParticipants().getNations()) {
 			nation.setActiveWar(false);
+			// Give the town a lastWarEndTime metadata
+			WarMetaDataController.setLastWarTime(nation, System.currentTimeMillis());
+		}
+
 		
 		for (Town town : war.getWarParticipants().getTowns()) { 
 			cleanTownMetaData(town);
 			town.setActiveWar(false);
+			// Give the town a lastWarEndTime metadata
+			WarMetaDataController.setLastWarTime(town, System.currentTimeMillis());
 			for (TownBlock tb : town.getTownBlocks())
 				cleanTownBlockMetaData(tb);
 		}

@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
+import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.events.TownScoredEvent;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -135,6 +136,18 @@ public class ScoreManager {
 				pointMessage = Translatable.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM", town.getName(), n, townBlockName);
 		}
 
+		// If this is a civil war and the fallen town is the capital and 
+		// town conquering is true: make sure the attacking town will 
+		// have the highest score, so they will take over the Nation.
+		if (war.getWarType().equals(WarType.CIVILWAR) 
+		&& war.getWarType().hasTownConquering 
+		&& war.getWarParticipants().getRebSide().contains(town)
+		&& ((Town) fallenObject).isCapital()
+		&& !getFirstPlace().getName().equals(town.getName())) {
+			try {
+				n = n + getWinningScore().value + 100;
+			} catch (TownyException ignored) {}
+		}
 		scores.put(town, scores.get(town) + n);
 		WarMetaDataController.setScore(town, scores.get(town));
 
@@ -208,6 +221,20 @@ public class ScoreManager {
 		top[1] = kvTable.getKeyValues().size() >= 2 ? kvTable.getKeyValues().get(1).value + "-" + kvTable.getKeyValues().get(1).key : "";
 		top[2] = kvTable.getKeyValues().size() >= 3 ? kvTable.getKeyValues().get(2).value + "-" + kvTable.getKeyValues().get(2).key : "";
 		return top;
+	}
+
+	public TownyObject getFirstPlace() {
+		KeyValueTable<TownyObject, Integer> kvTable = new KeyValueTable<>(scores);
+		kvTable.sortByValue();
+		kvTable.reverse();
+		return kvTable.getKeyValues().get(0).key;
+	}
+	
+	public TownyObject getSecondPlace() {
+		KeyValueTable<TownyObject, Integer> kvTable = new KeyValueTable<>(scores);
+		kvTable.sortByValue();
+		kvTable.reverse();
+		return kvTable.getKeyValues().get(1).key;
 	}
 
 	public KeyValue<TownyObject, Integer> getWinningScore() throws TownyException {

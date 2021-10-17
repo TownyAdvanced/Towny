@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
@@ -141,5 +142,13 @@ public class WarUtil {
 		.setConfirmText("/state")
 		.setCancelText("/rebel")
 		.sendTo(player);
+	}
+	
+	public static boolean eligibleForWar(WarType type, TownyObject obj) {
+		return !WarMetaDataController.hasLastWarTime(obj) || !tooSoonForWar(type, obj);
+	}
+
+	private static boolean tooSoonForWar(WarType type, TownyObject obj) {
+		return (WarMetaDataController.getLastWarTime(obj) + type.cooldown) > System.currentTimeMillis();
 	}
 }

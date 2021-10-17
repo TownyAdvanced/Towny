@@ -75,7 +75,7 @@ public class WarTaskManager {
 		else {
 			// Create a countdown timer
 			for (Long t : TimeMgmt.getCountdownDelays(delay, TimeMgmt.defaultCountdownDelays)) {
-				int id = BukkitTools.scheduleAsyncDelayedTask(new ServerBroadCastTimerTask(war, Colors.Red + Translation.of("war_starts_in_x", TimeMgmt.formatCountdownTime(t))), TimeTools.convertToTicks((delay - t)));
+				int id = BukkitTools.scheduleAsyncDelayedTask(new ServerBroadCastTimerTask(war, Colors.Red + Translation.of("war_starts_in_x", TimeMgmt.formatCountdownTime(t))), TimeTools.convertToTicks(delay - t));
 				if (id == -1) {
 					war.addErrorMsg("Could not schedule a countdown message for war event.");
 					war.end(false);
@@ -93,5 +93,25 @@ public class WarTaskManager {
 		}
 	}
 
+	public void teamSelectionDelay(int delay) {
+		if (delay <= 0)
+			war.preStart();
+		else {
+			// Create countdown.
+			for (Long t : TimeMgmt.getCountdownDelays(delay, TimeMgmt.defaultCountdownDelays)) {
+				int id = BukkitTools.scheduleAsyncDelayedTask(new ServerBroadCastTimerTask(war, Colors.Red + Translation.of("msg_team_selection_delay_seconds_remaining", TimeMgmt.formatCountdownTime(t))), TimeTools.convertToTicks(delay - t));
+				if (id != -1)
+					addTaskId(id);
+			}
+			// Set up delayed preStart.
+			int id = BukkitTools.scheduleAsyncDelayedTask(() -> war.preStart(), TimeTools.convertToTicks(delay));
+			if (id == -1) {
+				war.addErrorMsg("Could not schedule post-team-selection delay for war event.");
+				war.end(false);
+			} else {
+				addTaskId(id);
+			}
+		}
+	}
 
 }

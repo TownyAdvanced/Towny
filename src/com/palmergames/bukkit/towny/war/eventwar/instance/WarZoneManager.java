@@ -380,7 +380,7 @@ public class WarZoneManager {
 			
 			break;
 		case RIOT:
-			war.getWarParticipants().remove(town);
+			// Riot War never calls this method.
 		}
 		
 		war.checkEnd();
@@ -512,4 +512,5 @@ public class WarZoneManager {
 		war.getMessenger().sendGlobalMessage(Translatable.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), nation.getName(), TownySettings.getWarEventConquerTime()));
 		war.getWarParticipants().remove(town);
 	}
+
 }

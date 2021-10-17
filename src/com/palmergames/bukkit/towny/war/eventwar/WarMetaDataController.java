@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.utils.MetaDataUtil;
 import com.palmergames.bukkit.towny.object.metadata.IntegerDataField;
+import com.palmergames.bukkit.towny.object.metadata.LongDataField;
 import com.palmergames.bukkit.towny.object.metadata.StringDataField;
 
 public class WarMetaDataController {
@@ -16,6 +17,7 @@ public class WarMetaDataController {
 	private static IntegerDataField residentLives = new IntegerDataField("eventwar_residentLives", 0, "War Lives Remaining");
 	private static IntegerDataField score = new IntegerDataField("eventwar_score", 0);
 	private static StringDataField warSide = new StringDataField("eventwar_warSide", "");
+	private static LongDataField lastWarEndTime = new LongDataField("eventwar_lastWarEndTime", 0l);
 
 	@Nullable
 	public static String getWarUUID(TownyObject obj) {
@@ -118,6 +120,27 @@ public class WarMetaDataController {
 		IntegerDataField idf = (IntegerDataField) score.clone();
 		if (obj.hasMeta(idf.getKey()))
 			obj.removeMetaData(idf, true);
+	}
+	
+	public static long getLastWarTime(TownyObject obj) {
+		LongDataField ldf = (LongDataField) lastWarEndTime.clone();
+		if (obj.hasMeta(ldf.getKey()))
+			return MetaDataUtil.getLong(obj, ldf);
+		else
+			return 0l;
+	}
+	
+	public static boolean hasLastWarTime(TownyObject obj) {
+		LongDataField ldf = (LongDataField) lastWarEndTime.clone();
+		return obj.hasMeta(ldf.getKey());
+	}
+	
+	public static void setLastWarTime(TownyObject obj, long time) {
+		LongDataField ldf = (LongDataField) lastWarEndTime.clone();
+		if (obj.hasMeta(ldf.getKey()))
+			MetaDataUtil.setLong(obj, ldf, time, true);
+		else
+			obj.addMetaData(new LongDataField("eventwar_lastWarEndTime"), true);
 	}
 
 }
