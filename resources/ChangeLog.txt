@@ -6844,3 +6844,4 @@ v0.92.0.11:
   - Fix name changes charging money for names which won't pass a later test.
   - Make nation's names behave according the Capitalize Names config setting which only affect towns.
   - Make towns set their world when it is null, when we set the homeblock.
+  - Fix support for Reserve and an NPE when trying to deposit money into a town bank.
