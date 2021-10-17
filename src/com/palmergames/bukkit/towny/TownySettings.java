@@ -872,11 +872,6 @@ public class TownySettings {
 		return DatabaseConfig.getString(DatabaseConfig.DATABASE_SAVE);
 	}
 
-	public static boolean isGatheringResidentUUIDS() {
-		
-		return getBoolean(ConfigNodes.PLUGIN_DATABASE_GATHER_RESIDENT_UUIDS);
-	}
-
 	// SQL
 	public static String getSQLHostName() {
 
