@@ -147,7 +147,6 @@ public class Towny extends JavaPlugin {
 		PlayerCacheUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
-		TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 
 		try {
 			// Load the foundation of Towny, containing config, locales, database.
@@ -606,8 +605,6 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
 		TownyTimerHandler.toggleDrawSpointsTask(TownySettings.getVisualizedSpawnPointsEnabled());
-		if (!TownySettings.getUUIDPercent().equals("100%") && TownySettings.isGatheringResidentUUIDS())
-			TownyTimerHandler.toggleGatherResidentUUIDTask(true);
 	}
 	
 	private void toggleTimersOff() {

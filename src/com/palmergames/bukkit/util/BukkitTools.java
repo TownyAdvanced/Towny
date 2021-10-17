@@ -3,9 +3,6 @@ package com.palmergames.bukkit.util;
 import com.google.common.base.Charsets;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.MojangException;
-import com.palmergames.bukkit.towny.object.Resident;
-
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,9 +12,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.json.simple.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -88,22 +82,6 @@ public class BukkitTools {
 			return getOfflinePlayer(name).getUniqueId();
 		else
 			return null;
-	}
-	
-	/**
-	 * Given a resident, return the UUID using their name as of last login.
-	 * Uses mojang API call. Do not abuse.
-	 * 
-	 * @param resident - who to return a UUID for. 
-	 * @return uuid - UUID of resident using the name at last login or null.
-	 * @throws IOException when reader could not parse response.
-	 * @throws MojangException when Mojang returns HTTP Code 204.
-	 */
-	public static UUID getUUIDFromResident(Resident resident) throws IOException, MojangException {
-
-		JSONObject object = MojangAPI.send("https://api.mojang.com/users/profiles/minecraft/" + resident.getName() + "?at=" + Math.round(resident.getLastOnline()/1000));
-		
-		return (object != null && object.containsKey("id")) ? UUID.fromString(MojangAPI.dashUUID(object.get("id").toString())) : null;
 	}
 	
 	public static Player getPlayerExact(String name) {

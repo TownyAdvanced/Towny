@@ -1009,11 +1009,6 @@ public enum ConfigNodes {
 			"plugin.database",
 			"",
 			"# See database.yml file for flatfile/mysql settings."),
-	PLUGIN_DATABASE_GATHER_RESIDENT_UUIDS("plugin.database.gather_resident_uuids",
-			"true",
-			"",
-			"# When true Towny will use a background task to gather UUIDs for residents who do not have UUIDs.",
-			"# This process will greatly improve your database's ability to convert from playernames to UUIDs in the future."),
 	PLUGIN_DAILY_BACKUPS_HEADER(
 			"plugin.database.daily_backups",
 			"",

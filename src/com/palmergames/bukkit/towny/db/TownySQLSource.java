@@ -25,7 +25,6 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
-import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -724,8 +723,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				
 				if (resident.hasUUID())
 					TownySettings.incrementUUIDCount();
-				else
-					GatherResidentUUIDTask.addResident(resident);
+
 			}
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
