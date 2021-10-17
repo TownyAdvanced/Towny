@@ -161,6 +161,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_TOGGLE_TAXPERCENT("towny.command.town.toggle.taxpercent"),
 			TOWNY_COMMAND_TOWN_TOGGLE_OPEN("towny.command.town.toggle.open"),
 			TOWNY_COMMAND_TOWN_TOGGLE_NEUTRAL("towny.command.town.toggle.neutral"),
+			TOWNY_COMMAND_TOWN_TOGGLE_NATIONZONE("towny.command.town.toggle.nationzone"),
 		
 		
 		TOWNY_COMMAND_TOWN_MAYOR("towny.command.town.mayor"),

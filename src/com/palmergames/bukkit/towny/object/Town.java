@@ -74,6 +74,7 @@ public class Town extends Government implements TownBlockOwner {
 	private boolean isConquered = false;
 	private int conqueredDays;
 	private int nationZoneOverride = 0;
+	private boolean nationZoneEnabled = true;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined = false;
@@ -1490,6 +1491,14 @@ public class Town extends Government implements TownBlockOwner {
 		
 		return nation.getNationZoneSize() + (isCapital() ? TownySettings.getNationZonesCapitalBonusSize() : 0);
 		
+	}
+	
+	public boolean isNationZoneEnabled() {
+		return nationZoneEnabled;
+	}
+	
+	public void setNationZoneEnabled(boolean nationZoneEnabled) {
+		this.nationZoneEnabled = nationZoneEnabled;
 	}
 	
 	/**
