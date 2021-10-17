@@ -1,8 +1,7 @@
 package com.palmergames.bukkit.util;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.palmergames.bukkit.towny.exceptions.MojangException;
 
 import java.io.BufferedReader;
@@ -20,17 +19,15 @@ public class MojangAPI {
 
 	static final Pattern uuidCreator = Pattern.compile("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})");
 
-	static JSONObject send(String url) throws IOException, MojangException {
-		return (JSONObject) JSONValue.parse(sendGetRequest(url));
+	static JsonObject send(String url) throws IOException, MojangException {
+		return sendGetRequest(url);
 	}
 
 	static String dashUUID(String undashed) {
 		return undashed.replaceAll(uuidCreator.pattern(), "$1-$2-$3-$4-$5");
 	}
 
-	private static String sendGetRequest(String URL) throws IOException, MojangException {
-		StringBuilder builder = new StringBuilder();
-
+	private static JsonObject sendGetRequest(String URL) throws IOException, MojangException {
 		try {
 			HttpURLConnection connection = (HttpURLConnection) new URL(URL).openConnection();
 			connection.setRequestMethod("GET");
@@ -38,12 +35,9 @@ public class MojangAPI {
 			if (connection.getResponseCode() == 204)
 				throw new MojangException();
 		
-			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String response;
-			while ((response = reader.readLine()) != null) {
-				builder.append(response);
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+				return new JsonParser().parse(reader).getAsJsonObject();
 			}
-			reader.close();
 		} catch (MojangException e2) {
 			throw new MojangException();
 		} catch (IOException e1) {
@@ -51,6 +45,6 @@ public class MojangAPI {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return builder.toString();
+		return new JsonObject();
 	}
 }

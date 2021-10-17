@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.util;
 
 import com.google.common.base.Charsets;
+import com.google.gson.JsonObject;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.MojangException;
@@ -15,7 +16,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -101,9 +101,9 @@ public class BukkitTools {
 	 */
 	public static UUID getUUIDFromResident(Resident resident) throws IOException, MojangException {
 
-		JSONObject object = MojangAPI.send("https://api.mojang.com/users/profiles/minecraft/" + resident.getName() + "?at=" + Math.round(resident.getLastOnline()/1000));
+		JsonObject object = MojangAPI.send("https://api.mojang.com/users/profiles/minecraft/" + resident.getName() + "?at=" + Math.round(resident.getLastOnline()/1000));
 		
-		return (object != null && object.containsKey("id")) ? UUID.fromString(MojangAPI.dashUUID(object.get("id").toString())) : null;
+		return object.get("id") != null ? UUID.fromString(MojangAPI.dashUUID(object.get("id").getAsString())) : null;
 	}
 	
 	public static Player getPlayerExact(String name) {
