@@ -6850,3 +6850,12 @@ v0.92.0.11:
     - Used to modify what towns pay when using /t buy bonus.
   - API: TownBlockClaimCostCalculationEvent
     - Used to modify what towns pay when using /t claim. 
+  - Make nationzones toggle-able per town.
+    - Closes #5340.
+  - New Command: /town toggle nationzone
+    - Turns on and off the nationzone of a town (if they have one.)
+  - New Permission Node: towny.command.town.toggle.nationzone.
+    - Child node of towny.command.town.toggle.*
+    - No changes required in townyperms.yml.
+  - New API Event: TownToggleNationZoneEvent.
+    - Cancellable event.
