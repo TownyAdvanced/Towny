@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Tu teletransporte fue cancelado debido a que
 #Added in 0.82
 invitation_prefix: "&8[&7Invitación&8] &9"
 confirmation_prefix: "&8[&7Confirmación&8] &9"
-this_message_will_expire2: '&9Esto va a expirar de forma autómatica en 20 segundos.'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Siguiente'
 msg_hover_previous_page: 'Atrás'
 #Added in 0.83

@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Vous avez reçu ou infligé des dégâts, la
 #Added in 0.82
 invitation_prefix: "&8[&7Demande&8] &9"
 confirmation_prefix: "&8[&7Confirmation&8] &9"
-this_message_will_expire2: '&9Cela expirera automatiquement dans 20 secondes.'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Page Suivante'
 msg_hover_previous_page: 'Page Précédente'
 #Added in 0.83

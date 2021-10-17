@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Odniosłeś obrażenia. Teleportacja anulowa
 #Added in 0.82
 invitation_prefix: "&8[&7Zaproszenie&8] &9"
 confirmation_prefix: "&8[&7Potwierdzenie&8] &9"
-this_message_will_expire2: '&9Wygaśnie automatycznie za 20 sekund'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Nastepna strona'
 msg_hover_previous_page: 'Poprzednia strona'
 #Added in 0.83

@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Skador har avbrutit din teleportering.'
 #Added in 0.82
 invitation_prefix: "&8[&7Inbjudan&8] &9"
 confirmation_prefix: "&8[&7Bekräftelse&8] &9"
-this_message_will_expire2: '&9Detta upphör automatiskt om 20 sekunder.'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Nästa sida'
 msg_hover_previous_page: 'Föregående sida'
 #Added in 0.83

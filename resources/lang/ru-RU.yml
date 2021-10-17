@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Из-за урона телепортаци�
 #Added in 0.82
 invitation_prefix: "&8[&7Приглашение&8] &9"
 confirmation_prefix: "&8[&7Подтверждение&8] &9"
-this_message_will_expire2: '&9Срок действия истекает через 20 секунд'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'След. стр.'
 msg_hover_previous_page: 'Пред. стр.'
 #Added in 0.83

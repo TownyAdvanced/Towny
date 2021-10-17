@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'לקיחת נזק ביטלה את ההשתג
 #Added in 0.82
 invitation_prefix: "&8[&7הזמנה&8] &9"
 confirmation_prefix: "&8[&7אישור&8] &9"
-this_message_will_expire2: '&9התוקף של זה יפוג באופן אוטומטי בעוד 20 שניות'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'עמוד הבא'
 msg_hover_previous_page: 'עמוד קודם'
 #Added in 0.83
