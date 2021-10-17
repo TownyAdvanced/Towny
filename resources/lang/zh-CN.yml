@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: '伤害取消了你的传送.'
 #Added in 0.82
 invitation_prefix: "&8[&7邀请&8] &9"
 confirmation_prefix: "&8[&7确认&8] &9"
-this_message_will_expire2: '&9This will auto-expire in %s seconds'
+this_message_will_expire2: '&9这将会在%s秒后过期。'
 msg_hover_next_page: '下一页'
 msg_hover_previous_page: '上一页'
 #Added in 0.83
@@ -1421,3 +1421,7 @@ msg_err_you_cannot_purchase_any_more_bonus_blocks: '你城镇的额外城镇区�
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: '首都不能调为和平状态。'
+#Message shown as feedback for /t toggle nationzone command.
+msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
+#Error message shown when a town tries to toggle their nationzone which doesn't exist.
+msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
