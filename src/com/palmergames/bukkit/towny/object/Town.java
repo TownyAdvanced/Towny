@@ -583,8 +583,8 @@ public class Town extends Government implements TownBlockOwner {
 		if (homeBlock == null)
 			return;
 
-		// Set the world if it has changed.
-		if (!getHomeblockWorld().getName().equals(homeBlock.getWorld().getName()))
+		// Set the world if it has not been set yet, or if if has changed. 
+		if (world == null || !getHomeblockWorld().getName().equals(homeBlock.getWorld().getName()))
 			setWorld(homeBlock.getWorld());
 
 		// Unset the spawn if it is not inside of the new homeblock.
