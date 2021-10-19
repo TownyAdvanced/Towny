@@ -6862,3 +6862,5 @@ v0.92.0.11:
   - Remove the GatherResidentUUIDTask.
     - Closes #4611.
     - Closes #5375. 
+0.97.2.9:
+  - New languages: japanese, czech, tagalog, portuguese, thai.
