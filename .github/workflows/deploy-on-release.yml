@@ -9,11 +9,12 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - name: Set up OpenJDK 16
+            - name: Set up Eclipse Temurin
               uses: actions/setup-java@v2
               with:
-                  distribution: 'adopt'
-                  java-version: '16'
+                  distribution: 'temurin'
+                  java-version: '17'
+                  java-package: jdk
             - name: Deploy to GitHub Package Registry
               run: mvn -B deploy -P no-apidoc
               env:
