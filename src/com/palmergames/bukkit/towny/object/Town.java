@@ -963,24 +963,13 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public double getPlotTypePrice(TownBlockType type) {
-
-		double plotPrice;
-		switch (type.ordinal()) {
-		case 1:
-			plotPrice = getCommercialPlotPrice();
-			break;
-		case 3:
-			plotPrice = getEmbassyPlotPrice();
-			break;
-		default:
-			plotPrice = getPlotPrice();
-
-		}
-		// check price isn't negative
-		if (plotPrice < 0)
-			plotPrice = 0;
-
-		return plotPrice;
+		double plotPrice = switch (type) {
+			case COMMERCIAL -> getCommercialPlotPrice();
+			case EMBASSY -> getEmbassyPlotPrice();
+			default -> getPlotPrice();
+		};
+		
+		return Math.max(plotPrice, 0);
 	}
 
 	public void setCommercialPlotPrice(double commercialPlotPrice) {
