@@ -473,7 +473,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					Town town = townBlock.getTownOrNull();
 					if (town == null)
 						throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
-					double plotPrice = town.getPlotTypePrice(pos.getTownBlock().getType());
+					double plotPrice = town.getPlotTypePrice(townBlock.getType());
 
 					if (split.length > 1) {
 						/*
