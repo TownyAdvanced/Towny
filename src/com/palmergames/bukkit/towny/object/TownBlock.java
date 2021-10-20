@@ -313,7 +313,7 @@ public class TownBlock extends TownyObject {
 	/**
 	 * Sets the type of this townblock to the specified ID.
 	 * @param typeId The id of the type
-	 * @deprecated For compatibility with custom types, this is deprecated.
+	 * @deprecated As of 0.97.3.0, this is deprecated for compatibility with custom types.
 	 * @see #setType(String)
 	 */
 	@Deprecated
@@ -324,12 +324,24 @@ public class TownBlock extends TownyObject {
 	public void setType(TownBlockType type) {
 		setType(type.getName());
 	}
-	
+
+	/**
+	 * 
+	 * @param type The {@link TownBlockType} type set this plot to.
+	 * @param resident The resident who is trying to set the type.
+	 * @throws TownyException If this townblock has a pvp toggle cooldown.
+	 * @deprecated As of 0.97.3.0, this is deprecated for compatibility with custom types.
+	 */
 	@Deprecated
 	public void setType(TownBlockType type, Resident resident) throws TownyException {
 		setType(type.getName(), resident);
 	}
-	
+
+	/**
+	 * @param type The name of the type set this plot to.
+	 * @param resident The resident who is trying to set the type.
+	 * @throws TownyException If this townblock has a pvp toggle cooldown.
+	 */
 	public void setType(String type, Resident resident) throws TownyException {
 		
 		// Delete a jail if this is no longer going to be a jail.
