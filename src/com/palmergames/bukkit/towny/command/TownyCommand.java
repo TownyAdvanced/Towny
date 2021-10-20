@@ -232,7 +232,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 				for (String line : getTownyPrices(town, Translation.getLocale(player)))
 					TownyMessaging.sendMessage(player, line);
-			} else if (split[0].equalsIgnoreCase("switches")) {
+			/*} else if (split[0].equalsIgnoreCase("switches")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, TownySettings.getSwitchMaterials(), Translatable.of("gui_title_towny_switch").forLocale(player));
 			} else if (split[0].equalsIgnoreCase("itemuse")) {
@@ -244,7 +244,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("wildsblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, world.getUnclaimedZoneIgnoreMaterials(), Translatable.of("gui_title_towny_wildsblocks").forLocale(player));
-			} else if (split[0].equalsIgnoreCase("plotclearblocks")) {
+			*/} else if (split[0].equalsIgnoreCase("plotclearblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, world.getPlotManagementMayorDelete(), Translatable.of("gui_title_towny_plotclear").forLocale(player));
 			} else if (split[0].equalsIgnoreCase("top")) {
