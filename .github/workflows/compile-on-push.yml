@@ -1,7 +1,6 @@
 name: Maven Compile
 on:
     push:
-        branches-ignore: [l10n_master]
         branches: [master]
     pull_request:
         branches-ignore: [l10n_master]
