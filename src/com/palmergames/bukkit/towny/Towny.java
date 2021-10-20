@@ -37,6 +37,7 @@ import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
@@ -270,6 +271,7 @@ public class Towny extends JavaPlugin {
 			if (isError(TownyInitException.TownyError.MAIN_CONFIG)) {
 				removeError(TownyInitException.TownyError.MAIN_CONFIG);
 			}
+			TownyMessaging.sendMsg(Translatable.of("msg_reloaded_config"));
 		}
 	}
 	
@@ -280,6 +282,7 @@ public class Towny extends JavaPlugin {
 			if (isError(TownyInitException.TownyError.LOCALIZATION)) {
 				removeError(TownyInitException.TownyError.LOCALIZATION);
 			}
+			TownyMessaging.sendMsg(Translatable.of("msg_reloaded_lang"));
 		}
 	}
 

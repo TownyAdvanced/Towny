@@ -45,7 +45,7 @@ import java.util.List;
  */
 
 public class TownyMessaging {
-	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
+	private static final Logger LOGGER = LogManager.getLogger("Towny");
 	private static final Logger LOGGER_DEBUG = LogManager.getLogger("com.palmergames.bukkit.towny.debug");
 
 	/*
@@ -63,7 +63,7 @@ public class TownyMessaging {
 	 * @param msg message to send
 	 */
 	public static void sendErrorMsg(String msg) {
-		LOGGER.warn(ChatTools.stripColour("[Towny] Error: " + msg));
+		LOGGER.warn(ChatTools.stripColour("Error: " + msg));
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class TownyMessaging {
 	 */
 	public static void sendMsg(String msg) {
 		
-		LOGGER.info("[Towny] " + ChatTools.stripColour(msg));
+		LOGGER.info(ChatTools.stripColour(msg));
 	}
 
 	/**
@@ -768,7 +768,7 @@ public class TownyMessaging {
 	 * @param message Translatable message to show the console.
 	 */
 	public static void sendMsg(Translatable message) {
-		LOGGER.info("[Towny] " + message.stripColors(true).translate());
+		LOGGER.info(message.stripColors(true).translate());
 	}
 	
 	/**
@@ -778,7 +778,7 @@ public class TownyMessaging {
 	 * @param message Translatable error message to show the console.
 	 */
 	public static void sendErrorMsg(Translatable message) {
-		LOGGER.warn("[Towny] Error: " + message.stripColors(true).translate());
+		LOGGER.warn("Error: " + message.stripColors(true).translate());
 	}
 
 	/*
