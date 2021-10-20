@@ -565,7 +565,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							reloadDatabase();
 							break;
 						case "config":
-							reloadConfig(false);
+							reloadConfig(false, false);
 							break;
 						case "perms":
 						case "townyperms":
@@ -577,7 +577,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							reloadLangs();
 							break;
 						case "all":
-							reloadConfig(false);
+							reloadConfig(false, true);
 							reloadLangs();
 							reloadPerms();
 							reloadDatabase();
@@ -591,7 +591,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 			} else if (split[0].equalsIgnoreCase("reset")) {
 
-				reloadConfig(true);
+				reloadConfig(true, false);
 
 			} else if (split[0].equalsIgnoreCase("backup")) {
 
@@ -1978,8 +1978,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	 * Reloads only the config
 	 * 
 	 * @param reset Whether or not to reset the config.
+	 * @param all Whether /ta reload all was used.   
 	 */
-	public void reloadConfig(boolean reset) {
+	public void reloadConfig(boolean reset, boolean all) {
 
 		if (reset) {
 			TownyUniverse.getInstance().getDataSource().deleteFile(plugin.getConfigPath());
@@ -1987,10 +1988,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		try {
-			TownySettings.loadConfig(Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("config.yml"), plugin.getVersion());
-			TownySettings.loadTownLevelConfig();   // TownLevel and NationLevels are not loaded in the config,
-			TownySettings.loadNationLevelConfig(); // but later so the config-migrator can do it's work on them if needed.
-			Translation.loadTranslationRegistry();
+			if (!all) {
+				TownySettings.loadConfig(Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("config.yml"), plugin.getVersion());
+				TownySettings.loadTownLevelConfig();   // TownLevel and NationLevels are not loaded in the config,
+				TownySettings.loadNationLevelConfig(); // but later so the config-migrator can do it's work on them if needed.
+				Translation.loadTranslationRegistry();
+			}
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_reload_error"));
 			e.printStackTrace();
