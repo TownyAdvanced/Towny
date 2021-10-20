@@ -490,9 +490,6 @@ public class PlayerCacheUtil {
 		if (status == TownBlockStatus.PLOT_TRUSTED || status == TownBlockStatus.TOWN_TRUSTED)
 			return true;
 		
-		if (isAllowedMaterial(townBlock, material, action))
-			return true;
-		
 		/*
 		 * Handle personally-owned plots' friend and town permissions.
 		 */
@@ -508,8 +505,8 @@ public class PlayerCacheUtil {
 		
 		if (status == TownBlockStatus.PLOT_TOWN) {
 
-			// Plot allows Town perms and we aren't stopped by Wilds or Farm Plot overrides.
-			if (townBlock.getPermissions().getNationPerm(action))
+			// Plot allows Town perms
+			if (townBlock.getPermissions().getNationPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 			
 			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_town_members"), Translatable.of(action.toString())).forLocale(player));
@@ -522,7 +519,7 @@ public class PlayerCacheUtil {
 		if (status == TownBlockStatus.TOWN_RESIDENT) {
 			
 			// Plot allows Resident perms
-			if (townBlock.getPermissions().getResidentPerm(action))
+			if (townBlock.getPermissions().getResidentPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
 			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_resident", Translatable.of(action.toString())).forLocale(player));
@@ -532,7 +529,7 @@ public class PlayerCacheUtil {
 		if (status == TownBlockStatus.TOWN_NATION) {
 
 			// Plot allows Nation perms
-			if (townBlock.getPermissions().getNationPerm(action))
+			if (townBlock.getPermissions().getNationPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
 			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_nation", Translatable.of(action.toString())).forLocale(player));
@@ -545,7 +542,7 @@ public class PlayerCacheUtil {
 		if (status == TownBlockStatus.PLOT_ALLY || status == TownBlockStatus.TOWN_ALLY) {
 
 			// Plot allows Ally perms
-			if (townBlock.getPermissions().getAllyPerm(action))
+			if (townBlock.getPermissions().getAllyPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
 			// Choose which error message will be shown.
@@ -562,7 +559,7 @@ public class PlayerCacheUtil {
 		if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY) {
 			
 			// Plot allows Outsider perms
-			if (townBlock.getPermissions().getOutsiderPerm(action))
+			if (townBlock.getPermissions().getOutsiderPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
 			// Choose which error message will be shown.
@@ -584,10 +581,9 @@ public class PlayerCacheUtil {
 	 * @return True if this material is allowed in this townblock.
 	 */
 	private static boolean isAllowedMaterial(TownBlock townBlock, Material material, ActionType action) {
-		if (action.equals(ActionType.BUILD) || action.equals(ActionType.DESTROY)) {
+		if ((action == ActionType.BUILD || action == ActionType.DESTROY) && !townBlock.getData().getAllowedBlocks().isEmpty())
 			return townBlock.getData().getAllowedBlocks().contains(material);
-		}
 
-		return false;
+		return true;
 	}
 }
