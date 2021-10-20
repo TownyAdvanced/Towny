@@ -577,8 +577,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							reloadLangs();
 							break;
 						case "all":
-							reloadConfig(false);
-							reloadLangs();
+							// reloadDatabase() already reloads lang & config.
 							reloadPerms();
 							reloadDatabase();
 							break;
