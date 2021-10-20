@@ -37,6 +37,7 @@ import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -239,6 +240,9 @@ public class Towny extends JavaPlugin {
 		loadLocalization(reload);
 		// Then load permissions
 		loadPermissions(reload);
+
+		// Initialize the type handler after the config is loaded and before the database is.
+		TownBlockTypeHandler.initialize();
 
 		// Initialize the special log4j hook logger.
 		TownyLogger.getInstance();

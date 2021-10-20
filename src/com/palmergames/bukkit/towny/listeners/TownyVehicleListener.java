@@ -157,7 +157,7 @@ public class TownyVehicleListener implements Listener {
 
 			if (vehicle != null) {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				if (TownySettings.isSwitchMaterial(vehicle.name()))
+				if (TownySettings.isSwitchMaterial(vehicle, event.getVehicle().getLocation()))
 					event.setCancelled(!TownyActionEventExecutor.canSwitch(player, event.getVehicle().getLocation(), vehicle));
 			}
 		}	

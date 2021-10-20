@@ -385,7 +385,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
 							continue;
 					
-					double tax = townBlock.getType().getTax(town);
+					double tax = townBlock.getData().getTax(town);
 					if (tax < 1)
 						continue;
 
@@ -394,7 +394,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (TownySettings.getTownBankCap() != 0 && tax + town.getAccount().getHoldingBalance() > TownySettings.getTownBankCap())
 						tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
 					
-					if (!resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s)", townBlock.getType()))) {
+					if (!resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s)", townBlock.getTypeName()))) {
 						if (!lostPlots.contains(resident.getName()))
 							lostPlots.add(resident.getName());
 
@@ -402,14 +402,12 @@ public class DailyTimerTask extends TownyTimerTask {
 						
 						// Set the plot price.
 						if (TownySettings.doesPlotTaxNonPaymentSetPlotForSale())
-							townBlock.setPlotPrice(town.getPlotTypePrice(townBlock.getType()));
+							townBlock.setPlotPrice(townBlock.getData().getCost());
 						else 
 							townBlock.setPlotPrice(-1);								
 
 						// Set the plot permissions to mirror the towns.
-						townBlock.setType(townBlock.getType());
-						
-							
+						townBlock.setType(townBlock.getTypeName());							
 						
 						townBlock.save();
 					}

@@ -470,7 +470,7 @@ public class TownyEntityListener implements Listener {
 			for (Entity passenger : passengers) {
 				if (!passenger.getType().equals(EntityType.PLAYER)) 
 					return;
-				if (TownySettings.isSwitchMaterial(block.getType().name())) {
+				if (TownySettings.isSwitchMaterial(block.getType(), block.getLocation())) {
 					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					event.setCancelled(!TownyActionEventExecutor.canSwitch((Player) passenger, block.getLocation(), block.getType()));
 					return;
@@ -832,7 +832,7 @@ public class TownyEntityListener implements Listener {
 		
 		Block block = event.getHitBlock().getRelative(event.getHitBlockFace());
 		Material material = block.getType();
-		if (ItemLists.PROJECTILE_TRIGGERED_REDSTONE.contains(material.name()) && TownySettings.isSwitchMaterial(material.name())) {
+		if (ItemLists.PROJECTILE_TRIGGERED_REDSTONE.contains(material.name()) && TownySettings.isSwitchMaterial(material, block.getLocation())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), block.getLocation(), material)) {
 				/*
@@ -860,7 +860,7 @@ public class TownyEntityListener implements Listener {
 		if (plugin.isError() || !Towny.is116Plus() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
 			return;
 
-		if (event.getHitBlock().getType() == Material.TARGET && TownySettings.isSwitchMaterial(Material.TARGET.name())) {
+		if (event.getHitBlock().getType() == Material.TARGET && TownySettings.isSwitchMaterial(Material.TARGET, event.getHitBlock().getLocation())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), event.getHitBlock().getLocation(), Material.TARGET)) {
 				

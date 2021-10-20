@@ -281,7 +281,7 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Test item_use. 
 			 */
-			if (TownySettings.isItemUseMaterial(item.name()))
+			if (TownySettings.isItemUseMaterial(item, loc))
 				event.setCancelled(!TownyActionEventExecutor.canItemuse(player, loc, item));
 
 			/*
@@ -345,7 +345,7 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Test switch use.
 			 */
-			if (TownySettings.isSwitchMaterial(clickedMat.name())) {
+			if (TownySettings.isSwitchMaterial(clickedMat, clickedBlock.getLocation())) {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				event.setCancelled(!TownyActionEventExecutor.canSwitch(player, clickedBlock.getLocation(), clickedMat));
 				return;
@@ -553,7 +553,7 @@ public class TownyPlayerListener implements Listener {
 					return;
 				}
 				// Material has been supplied in place of an entity, run Switch Tests.
-				if (TownySettings.isSwitchMaterial(mat.name()) && actionType == ActionType.SWITCH) {
+				if (TownySettings.isSwitchMaterial(mat, event.getRightClicked().getLocation()) && actionType == ActionType.SWITCH) {
 					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					event.setCancelled(!TownyActionEventExecutor.canSwitch(player, event.getRightClicked().getLocation(), mat));
 					return;
@@ -586,7 +586,7 @@ public class TownyPlayerListener implements Listener {
 				/*
 				 * Item_use protection.
 				 */
-				if (TownySettings.isItemUseMaterial(item.name())) {
+				if (TownySettings.isItemUseMaterial(item, event.getRightClicked().getLocation())) {
 					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 					event.setCancelled(!TownyActionEventExecutor.canItemuse(player, event.getRightClicked().getLocation(), item));
 					return;
@@ -714,7 +714,7 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Test to see if CHORUS_FRUIT is in the item_use list.
 		 */
-		if (event.getCause() == TeleportCause.CHORUS_FRUIT && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT.name())) {
+		if (event.getCause() == TeleportCause.CHORUS_FRUIT && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT, event.getTo())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getTo(), Material.CHORUS_FRUIT)) {
 				event.setCancelled(true);
@@ -725,7 +725,7 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Test to see if Ender pearls are disabled.
 		 */		
-		if (event.getCause() == TeleportCause.ENDER_PEARL && TownySettings.isItemUseMaterial(Material.ENDER_PEARL.name())) {
+		if (event.getCause() == TeleportCause.ENDER_PEARL && TownySettings.isItemUseMaterial(Material.ENDER_PEARL, event.getTo())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getTo(), Material.ENDER_PEARL)) {
 				event.setCancelled(true);
@@ -1284,7 +1284,7 @@ public class TownyPlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onEggLand(PlayerEggThrowEvent event) {
-		if (TownySettings.isItemUseMaterial(Material.EGG.name()) && !TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getEgg().getLocation(), Material.EGG))
+		if (TownySettings.isItemUseMaterial(Material.EGG, event.getEgg().getLocation()) && !TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getEgg().getLocation(), Material.EGG))
 			event.setHatching(false);
 	}
 }
