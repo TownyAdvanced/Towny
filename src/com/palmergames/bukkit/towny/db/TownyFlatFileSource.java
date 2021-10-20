@@ -1625,7 +1625,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					
 					line = keys.get("type");
 					if (line != null)
-						townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
+						try {
+							townBlock.setType(Integer.parseInt(line));
+						} catch (Exception e) {
+							townBlock.setType(line);
+						}
 					
 					line = keys.get("outpost");
 					if (line != null)
@@ -2258,7 +2262,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("resident=" + townBlock.getResidentOrNull().getName());
 
 		// type
-		list.add("type=" + townBlock.getType().getId());
+		list.add("type=" + townBlock.getTypeName());
 
 		// outpost
 		list.add("outpost=" + townBlock.isOutpost());

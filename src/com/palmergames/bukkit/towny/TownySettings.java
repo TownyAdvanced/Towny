@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.NationSpawnLevel.NSpawnLevel;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
@@ -28,14 +29,20 @@ import com.palmergames.util.TimeTools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -59,8 +66,8 @@ public class TownySettings {
 	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
 	
-	private static final List<String> ItemUseMaterials = new ArrayList<>();
-	private static final List<String> SwitchUseMaterials = new ArrayList<>();
+	private static final Set<Material> itemUseMaterials = new HashSet<>();
+	private static final Set<Material> switchUseMaterials = new HashSet<>();
 	private static final List<Class<?>> protectedMobs = new ArrayList<>();
 	
 	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier) {
@@ -302,8 +309,8 @@ public class TownySettings {
 
 	private static void loadSwitchAndItemUseMaterialsLists() {
 
-		SwitchUseMaterials.clear();
-		ItemUseMaterials.clear();
+		switchUseMaterials.clear();
+		itemUseMaterials.clear();
 		
 		/*
 		 * Load switches from config value.
@@ -313,10 +320,11 @@ public class TownySettings {
 		List<String> switches = getStrArr(ConfigNodes.PROT_SWITCH_MAT);
 		for (String matName : switches) {
 			if (ItemLists.GROUPS.contains(matName)) {
-				List<String> group = ItemLists.getGrouping(matName);
-				SwitchUseMaterials.addAll(group);
+				switchUseMaterials.addAll(toMaterialSet(ItemLists.getGrouping(matName)));
 			} else {
-				SwitchUseMaterials.add(matName);
+				Material material = Material.matchMaterial(matName);
+				if (material != null)
+					itemUseMaterials.add(material);
 			}
 		}
 
@@ -328,12 +336,24 @@ public class TownySettings {
 		List<String> items = getStrArr(ConfigNodes.PROT_ITEM_USE_MAT);
 		for (String matName : items) {
 			if (ItemLists.GROUPS.contains(matName)) {
-				List<String> group = ItemLists.getGrouping(matName);
-				ItemUseMaterials.addAll(group);
+				itemUseMaterials.addAll(toMaterialSet(ItemLists.getGrouping(matName)));
 			} else {
-				ItemUseMaterials.add(matName);
+				Material material = Material.matchMaterial(matName);
+				if (material != null)
+					itemUseMaterials.add(material);
 			}
 		}
+	}
+
+	private static Set<Material> toMaterialSet(List<String> materialList) {
+		Set<Material> materials = new HashSet<>();
+		for (String materialName : materialList) {
+			Material material = Material.matchMaterial(materialName);
+			if (material != null)
+				materials.add(material);				
+		}
+		
+		return materials;
 	}
 	
 	public static void sendError(String msg) {
@@ -480,17 +500,13 @@ public class TownySettings {
 				
 				setDefaultLevels();
 				
-			} else if ( (root.getRoot().equals(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()))
-				|| (root.getRoot().equals(ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) ){
-				
-				// Do nothing here as setDefaultLevels configured town and
-				// nation levels.
-				
 			} else if (root.getRoot().equals(ConfigNodes.VERSION.getRoot())) {
 				setNewProperty(root.getRoot(), version);
 			} else if (root.getRoot().equals(ConfigNodes.LAST_RUN_VERSION.getRoot())) {
 				setNewProperty(root.getRoot(), getLastRunVersion(version));
-			} else
+			} else if (root.getRoot().equals(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot()))
+				setTownBlockTypes();
+			else	
 				setNewProperty(root.getRoot(), (config.get(root.getRoot().toLowerCase()) != null) ? config.get(root.getRoot().toLowerCase()) : root.getDefault());
 
 		}
@@ -710,6 +726,102 @@ public class TownySettings {
 			newConfig.set(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), levels);
 		} else
 			newConfig.set(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), config.get(ConfigNodes.LEVELS_NATION_LEVEL.getRoot()));
+	}
+	
+	private static void setTownBlockTypes() {
+		addComment(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot(),
+			"# Townblock types config",
+			"# If empty, itemUseIds & switchIds will use values defined in protection.item_use_ids and protection.switch_ids.",
+			"# Allowed blocks are blocks that will always be allowed to be placed and broken in a plot.",
+			"# If tax is set to 0, the towns' plot tax will be used instead."
+		);
+		
+		if (!config.contains(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot())) {
+			List<Map<String, Object>> types = new ArrayList<>();
+			Map<String, Object> type = new LinkedHashMap<>();
+			
+			type.put("name", "default");
+			type.put("cost", 0.0);
+			type.put("tax", 0.0);
+			type.put("mapKey", "+");
+			type.put("itemUseIds", "");
+			type.put("switchIds", "");
+			type.put("allowedBlocks", "");
+			types.add(new LinkedHashMap<>(type));
+			type.clear();
+
+			type.put("name", "shop");
+			type.put("cost", 0.0);
+			type.put("tax", 0.0);
+			type.put("mapKey", "C");
+			type.put("itemUseIds", "");
+			type.put("switchIds", "");
+			type.put("allowedBlocks", "");
+			types.add(new LinkedHashMap<>(type));
+			type.clear();
+
+			type.put("name", "arena");
+			type.put("cost", 0.0);
+			type.put("tax", 0.0);
+			type.put("mapKey", "A");
+			type.put("itemUseIds", "");
+			type.put("switchIds", "");
+			type.put("allowedBlocks", "");
+			types.add(new LinkedHashMap<>(type));
+			type.clear();
+
+			type.put("name", "wilds");
+			type.put("cost", 0.0);
+			type.put("tax", 0.0);
+			type.put("mapKey", "W");
+			type.put("itemUseIds", "");
+			type.put("switchIds", "");
+			type.put("allowedBlocks", "");
+			types.add(new LinkedHashMap<>(type));
+			type.clear();
+
+			type.put("name", "inn");
+			type.put("cost", 0.0);
+			type.put("tax", 0.0);
+			type.put("mapKey", "I");
+			type.put("itemUseIds", "");
+			type.put("switchIds", "");
+			type.put("allowedBlocks", "");
+			types.add(new LinkedHashMap<>(type));
+			type.clear();
+
+			type.put("name", "jail");
+			type.put("cost", 0.0);
+			type.put("tax", 0.0);
+			type.put("mapKey", "J");
+			type.put("itemUseIds", "");
+			type.put("switchIds", "");
+			type.put("allowedBlocks", "");
+			types.add(new LinkedHashMap<>(type));
+			type.clear();
+
+			type.put("name", "farm");
+			type.put("cost", 0.0);
+			type.put("tax", 0.0);
+			type.put("mapKey", "F");
+			type.put("itemUseIds", "");
+			type.put("switchIds", "");
+			type.put("allowedBlocks", "BAMBOO,BAMBOO_SAPLING,JUNGLE_LOG,JUNGLE_SAPLING,JUNGLE_LEAVES,OAK_LOG,OAK_SAPLING,OAK_LEAVES,BIRCH_LOG,BIRCH_SAPLING,BIRCH_LEAVES,ACACIA_LOG,ACACIA_SAPLING,ACACIA_LEAVES,DARK_OAK_LOG,DARK_OAK_SAPLING,DARK_OAK_LEAVES,SPRUCE_LOG,SPRUCE_SAPLING,SPRUCE_LEAVES,BEETROOTS,COCOA,CHORUS_PLANT,CHORUS_FLOWER,SWEET_BERRY_BUSH,KELP,SEAGRASS,TALL_SEAGRASS,GRASS,TALL_GRASS,FERN,LARGE_FERN,CARROTS,WHEAT,POTATOES,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,NETHER_WART,COCOA,VINE,MELON,MELON_STEM,ATTACHED_MELON_STEM,SUGAR_CANE,CACTUS,ALLIUM,AZURE_BLUET,BLUE_ORCHID,CORNFLOWER,DANDELION,LILAC,LILY_OF_THE_VALLEY,ORANGE_TULIP,OXEYE_DAISY,PEONY,PINK_TULIP,POPPY,RED_TULIP,ROSE_BUSH,SUNFLOWER,WHITE_TULIP,WITHER_ROSE,CRIMSON_FUNGUS,CRIMSON_STEM,CRIMSON_HYPHAE,CRIMSON_ROOTS,MUSHROOM_STEM,NETHER_WART_BLOCK,BROWN_MUSHROOM,BROWN_MUSHROOM_BLOCK,RED_MUSHROOM,RED_MUSHROOM_BLOCK,SHROOMLIGHT,WARPED_FUNGUS,WARPED_HYPHAE,WARPED_ROOTS,WARPED_STEM,WARPED_WART_BLOCK,WEEPING_VINES_PLANT,WEEPING_VINES,NETHER_SPROUTS,SHEARS");
+			types.add(new LinkedHashMap<>(type));
+			type.clear();
+
+			type.put("name", "bank");
+			type.put("cost", 0.0);
+			type.put("tax", 0.0);
+			type.put("mapKey", "B");
+			type.put("itemUseIds", "");
+			type.put("switchIds", "");
+			type.put("allowedBlocks", "");
+			types.add(new LinkedHashMap<>(type));
+			type.clear();
+			newConfig.set(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot(), types);
+		} else
+			newConfig.set(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot(), config.get(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot()));
 	}
 
 	public static String getKingPrefix(Resident resident) {
@@ -1316,24 +1428,52 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_OUTPOST);
 	}
 
-	public static List<String> getSwitchMaterials() {
+	public static Set<Material> getSwitchMaterials() {
 
-		return SwitchUseMaterials;
+		return switchUseMaterials;
 	}
 	
-	public static List<String> getItemUseMaterials() {
+	public static Set<Material> getItemUseMaterials() {
 
-		return ItemUseMaterials;
+		return itemUseMaterials;
 	}
 	
+	/**
+	 * For compatibility with custom plot types, this has been deprecated. Please use {@link #isSwitchMaterial(Material, Location)} instead.
+	 * @param mat The name of the material.
+	 * @return Whether this is a switch material or not.
+	 */
+	@Deprecated
 	public static boolean isSwitchMaterial(String mat) {
+		return switchUseMaterials.contains(Material.matchMaterial(mat));
+	}
+	
+	public static boolean isSwitchMaterial(Material material, Location location) {
+		if (!TownyAPI.getInstance().isWilderness(location)) {
 
-		return SwitchUseMaterials.contains(mat);
+			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
+			return townBlock.getData().getSwitchIds().contains(material);
+		} else
+			return switchUseMaterials.contains(material);
 	}
 
+	/**
+	 * For compatibility with custom plot types, this has been deprecated. Please use {@link #isItemUseMaterial(Material, Location)} instead.
+	 * @param mat The name of the material.
+	 * @return Whether this is an item use material or not.
+	 */
+	@Deprecated
 	public static boolean isItemUseMaterial(String mat) {
+		return itemUseMaterials.contains(Material.matchMaterial(mat));
+	}
+	
+	public static boolean isItemUseMaterial(Material material, Location location) {
+		if (!TownyAPI.getInstance().isWilderness(location)) {
 
-		return ItemUseMaterials.contains(mat);
+			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
+			return townBlock.getData().getItemUseIds().contains(material);
+		} else
+			return itemUseMaterials.contains(material);
 	}
 	
 	public static List<String> getFireSpreadBypassMaterials() {
@@ -2515,8 +2655,9 @@ public class TownySettings {
 		return getDouble(ConfigNodes.GTOWN_SETTINGS_NATION_REQUIRES_PROXIMITY);
 	}
 	
+	@Deprecated
 	public static List<String> getFarmPlotBlocks() {
-		return getStrArr(ConfigNodes.GTOWN_FARM_PLOT_ALLOW_BLOCKS);
+		return Collections.emptyList();
 	}
 	
 	public static List<String> getFarmAnimals() {

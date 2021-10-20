@@ -1405,6 +1405,18 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When set to true, players with the Frost Walker enchant will need to be able to build where they are attempting to freeze."),
+	TOWNBLOCKTYPES(
+		"townblocktypes",
+		"",
+		"",
+		"",
+		"############################################################",
+		"# +------------------------------------------------------+ #",
+		"# |                   Town Block Types                   | #",
+		"# +------------------------------------------------------+ #",
+		"############################################################",
+		""),
+	TOWNBLOCKTYPES_TYPES("townblocktypes.types", ""),
 	UNCLAIMED_ZONE(
 			"unclaimed",
 			"",
@@ -1448,7 +1460,7 @@ public enum ConfigNodes {
 	UNCLAIMED_ZONE_SWITCH("unclaimed.unclaimed_zone_switch",
 			"false",
 			"",
-			"# Can players interact with switch blocks listed in the above protectection.switch_ids in the wilderness without restriction?"),
+			"# Can players interact with switch blocks listed in the above protection.switch_ids in the wilderness without restriction?"),
 	UNCLAIMED_ZONE_IGNORE(
 			"unclaimed.unclaimed_zone_ignore",
 			"SAPLING,GOLD_ORE,IRON_ORE,COAL_ORE,LOG,LEAVES,LAPIS_ORE,LONG_GRASS,YELLOW_FLOWER,RED_ROSE,BROWN_MUSHROOM,RED_MUSHROOM,TORCH,DIAMOND_ORE,LADDER,RAILS,REDSTONE_ORE,GLOWING_REDSTONE_ORE,CACTUS,CLAY,SUGAR_CANE_BLOCK,PUMPKIN,GLOWSTONE,LOG_2,VINE,NETHER_WARTS,COCOA",

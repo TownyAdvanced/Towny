@@ -1791,7 +1791,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 				line = rs.getString("type");
 				if (line != null)
-					townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
+					try {
+						townBlock.setType(Integer.parseInt(line));
+					} catch (Exception e) {
+						townBlock.setType(line);
+					}
 
 				boolean outpost = rs.getBoolean("outpost");
 				if (line != null && !line.isEmpty())
@@ -2413,7 +2417,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			tb_hm.put("price", townBlock.getPlotPrice());
 			tb_hm.put("town", townBlock.getTown().getName());
 			tb_hm.put("resident", (townBlock.hasResident()) ? townBlock.getResidentOrNull().getName() : "");
-			tb_hm.put("type", townBlock.getType().getId());
+			tb_hm.put("type", townBlock.getTypeName());
 			tb_hm.put("outpost", townBlock.isOutpost());
 			tb_hm.put("permissions",
 					(townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");

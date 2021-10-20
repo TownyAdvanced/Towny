@@ -375,40 +375,44 @@ public class DailyTimerTask extends TownyTimerTask {
 
 			Resident resident = townBlock.getResidentOrNull();
 
-			/*
-			 * Only collect plot tax from this resident if it really
-			 * still exists. We are running in an Async thread so MUST
-			 * verify all objects.
-			 */
-			if (universe.hasResident(resident.getName())) {
-				if (resident.hasTown() && resident.getTownOrNull() == town)
-					if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
+				/*
+				 * Only collect plot tax from this resident if it really
+				 * still exists. We are running in an Async thread so MUST
+				 * verify all objects.
+				 */
+				if (universe.hasResident(resident.getName())) {
+					if (resident.hasTown() && resident.getTownOrNull() == town)
+						if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
+							continue;
+					
+					double tax = townBlock.getData().getTax(town);
+					if (tax < 1)
 						continue;
 
-				// If the tax would put the town over the bank cap we reduce what will be
-				// paid by the plot owner to what will be allowed.
-				if (TownySettings.getTownBankCap() != 0 && tax + town.getAccount().getHoldingBalance() > TownySettings.getTownBankCap())
-					tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
+					// If the tax would put the town over the bank cap we reduce what will be
+					// paid by the plot owner to what will be allowed.
+					if (TownySettings.getTownBankCap() != 0 && tax + town.getAccount().getHoldingBalance() > TownySettings.getTownBankCap())
+						tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
+					
+					if (!resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s)", townBlock.getTypeName()))) {
+						if (!lostPlots.contains(resident.getName()))
+							lostPlots.add(resident.getName());
 
-				if (!resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s)", townBlock.getType()))) {
-					if (!lostPlots.contains(resident.getName()))
-						lostPlots.add(resident.getName());
+						townBlock.setResident(null);
+						
+						// Set the plot price.
+						if (TownySettings.doesPlotTaxNonPaymentSetPlotForSale())
+							townBlock.setPlotPrice(townBlock.getData().getCost());
+						else 
+							townBlock.setPlotPrice(-1);								
 
-					townBlock.setResident(null);
-
-					// Set the plot price.
-					if (TownySettings.doesPlotTaxNonPaymentSetPlotForSale())
-						townBlock.setPlotPrice(town.getPlotTypePrice(townBlock.getType()));
-					else
-						townBlock.setPlotPrice(-1);
-
-					// Set the plot permissions to mirror the towns.
-					townBlock.setType(townBlock.getType());
-
-					townBlock.save();
+						// Set the plot permissions to mirror the towns.
+						townBlock.setType(townBlock.getTypeName());							
+						
+						townBlock.save();
+					}
 				}
 			}
-		}
 
 		if (lostPlots != null && !lostPlots.isEmpty()) {
 			if (lostPlots.size() == 1) 

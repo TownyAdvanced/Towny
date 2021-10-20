@@ -83,7 +83,7 @@ public class ItemLists {
 	/**
 	 * Config-useable material groups.
 	 */
-	public static List<String> GROUPS = new ArrayList<>(Arrays.asList("BOATS","MINECARTS","WOOD_DOORS","PRESSURE_PLATES","FENCE_GATES","TRAPDOORS","SHULKER_BOXES","BUTTONS"));
+	public static List<String> GROUPS = new ArrayList<>(Arrays.asList("BOATS","MINECARTS","WOOD_DOORS","PRESSURE_PLATES","FENCE_GATES","TRAPDOORS","SHULKER_BOXES","BUTTONS","CANDLES"));
 	
 	/**
 	 * List of Buckets.
