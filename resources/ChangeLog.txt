@@ -6864,3 +6864,4 @@ v0.92.0.11:
     - Closes #5375. 
 0.97.2.9:
   - New languages: japanese, czech, tagalog, portuguese, thai.
+  - Update Toolchain, Test multiple Java Versions, and Use SDKMAN for JitPack configuration, courtesy of TheFlagCourier with PR #5386.
