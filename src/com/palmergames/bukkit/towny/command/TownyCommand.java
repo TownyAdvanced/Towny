@@ -489,11 +489,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			output.add(translator.of("towny_prices_taxes_shop", getMoney(town.getCommercialPlotTax()), getMoney(town.getEmbassyPlotTax())));
 			output.add(translator.of("towny_prices_town_neutral_tax", getMoney(TownySettings.getTownNeutralityCost())));
 
-			output.add(translator.of("towny_prices_plots_shop", getMoney(TownySettings.getPlotSetCommercialCost()), getMoney(TownySettings.getPlotSetEmbassyCost())));
-			output.add(translator.of("towny_prices_plots_wilds", getMoney(TownySettings.getPlotSetWildsCost()), getMoney(TownySettings.getPlotSetInnCost())));
-			output.add(translator.of("towny_prices_plots_jail", getMoney(TownySettings.getPlotSetJailCost()), getMoney(TownySettings.getPlotSetFarmCost())));
-			output.add(translator.of("towny_prices_plots_bank", getMoney(TownySettings.getPlotSetBankCost())));
-			
 			if (nation != null) {
 				output.add(translator.of("towny_prices_nationname", nation.getFormattedName()));
 				output.add(translator.of("towny_prices_nation_tax", nation.getTaxes(), getMoney(TownySettings.getNationNeutralityCost())));
