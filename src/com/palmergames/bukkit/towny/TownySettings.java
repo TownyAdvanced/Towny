@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
@@ -300,6 +301,7 @@ public class TownySettings {
 		loadSwitchAndItemUseMaterialsLists();
 		loadProtectedMobsList();
 		ChunkNotification.loadFormatStrings();
+		TownBlockTypeHandler.Migrator.migrate();
 	}
 	
 	private static void loadProtectedMobsList() {
@@ -812,7 +814,7 @@ public class TownySettings {
 			type.put("mapKey", "F");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
-			type.put("allowedBlocks", "BAMBOO,BAMBOO_SAPLING,JUNGLE_LOG,JUNGLE_SAPLING,JUNGLE_LEAVES,OAK_LOG,OAK_SAPLING,OAK_LEAVES,BIRCH_LOG,BIRCH_SAPLING,BIRCH_LEAVES,ACACIA_LOG,ACACIA_SAPLING,ACACIA_LEAVES,DARK_OAK_LOG,DARK_OAK_SAPLING,DARK_OAK_LEAVES,SPRUCE_LOG,SPRUCE_SAPLING,SPRUCE_LEAVES,BEETROOTS,COCOA,CHORUS_PLANT,CHORUS_FLOWER,SWEET_BERRY_BUSH,KELP,SEAGRASS,TALL_SEAGRASS,GRASS,TALL_GRASS,FERN,LARGE_FERN,CARROTS,WHEAT,POTATOES,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,NETHER_WART,COCOA,VINE,MELON,MELON_STEM,ATTACHED_MELON_STEM,SUGAR_CANE,CACTUS,ALLIUM,AZURE_BLUET,BLUE_ORCHID,CORNFLOWER,DANDELION,LILAC,LILY_OF_THE_VALLEY,ORANGE_TULIP,OXEYE_DAISY,PEONY,PINK_TULIP,POPPY,RED_TULIP,ROSE_BUSH,SUNFLOWER,WHITE_TULIP,WITHER_ROSE,CRIMSON_FUNGUS,CRIMSON_STEM,CRIMSON_HYPHAE,CRIMSON_ROOTS,MUSHROOM_STEM,NETHER_WART_BLOCK,BROWN_MUSHROOM,BROWN_MUSHROOM_BLOCK,RED_MUSHROOM,RED_MUSHROOM_BLOCK,SHROOMLIGHT,WARPED_FUNGUS,WARPED_HYPHAE,WARPED_ROOTS,WARPED_STEM,WARPED_WART_BLOCK,WEEPING_VINES_PLANT,WEEPING_VINES,NETHER_SPROUTS,SHEARS");
+			type.put("allowedBlocks", getDefaultFarmblocks());
 			types.add(new LinkedHashMap<>(type));
 			type.clear();
 
@@ -828,6 +830,10 @@ public class TownySettings {
 			newConfig.set(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot(), types);
 		} else
 			newConfig.set(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot(), config.get(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot()));
+	}
+	
+	public static String getDefaultFarmblocks() {
+		return "BAMBOO,BAMBOO_SAPLING,JUNGLE_LOG,JUNGLE_SAPLING,JUNGLE_LEAVES,OAK_LOG,OAK_SAPLING,OAK_LEAVES,BIRCH_LOG,BIRCH_SAPLING,BIRCH_LEAVES,ACACIA_LOG,ACACIA_SAPLING,ACACIA_LEAVES,DARK_OAK_LOG,DARK_OAK_SAPLING,DARK_OAK_LEAVES,SPRUCE_LOG,SPRUCE_SAPLING,SPRUCE_LEAVES,BEETROOTS,COCOA,CHORUS_PLANT,CHORUS_FLOWER,SWEET_BERRY_BUSH,KELP,SEAGRASS,TALL_SEAGRASS,GRASS,TALL_GRASS,FERN,LARGE_FERN,CARROTS,WHEAT,POTATOES,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,NETHER_WART,COCOA,VINE,MELON,MELON_STEM,ATTACHED_MELON_STEM,SUGAR_CANE,CACTUS,ALLIUM,AZURE_BLUET,BLUE_ORCHID,CORNFLOWER,DANDELION,LILAC,LILY_OF_THE_VALLEY,ORANGE_TULIP,OXEYE_DAISY,PEONY,PINK_TULIP,POPPY,RED_TULIP,ROSE_BUSH,SUNFLOWER,WHITE_TULIP,WITHER_ROSE,CRIMSON_FUNGUS,CRIMSON_STEM,CRIMSON_HYPHAE,CRIMSON_ROOTS,MUSHROOM_STEM,NETHER_WART_BLOCK,BROWN_MUSHROOM,BROWN_MUSHROOM_BLOCK,RED_MUSHROOM,RED_MUSHROOM_BLOCK,SHROOMLIGHT,WARPED_FUNGUS,WARPED_HYPHAE,WARPED_ROOTS,WARPED_STEM,WARPED_WART_BLOCK,WEEPING_VINES_PLANT,WEEPING_VINES,NETHER_SPROUTS,SHEARS";
 	}
 
 	public static String getKingPrefix(Resident resident) {
@@ -2845,38 +2851,6 @@ public class TownySettings {
 	
 	public static String getPAPIRelationEnemy() {
 		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_ENEMY);
-	}
-
-	public static double getPlotSetCommercialCost() {
-		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_COMMERCIAL);
-	}
-	
-	public static double getPlotSetArenaCost() {
-		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_ARENA);
-	}
-	
-	public static double getPlotSetEmbassyCost() {
-		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_EMBASSY);
-	}
-	
-	public static double getPlotSetWildsCost() {
-		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_WILDS);
-	}
-	
-	public static double getPlotSetInnCost() {
-		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_INN);
-	}
-	
-	public static double getPlotSetJailCost() {
-		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_JAIL);
-	}
-	
-	public static double getPlotSetFarmCost() {
-		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_FARM);
-	}
-	
-	public static double getPlotSetBankCost() {
-		return getDouble(ConfigNodes.ECO_PLOT_TYPE_COSTS_BANK);
 	}
 	
 	public static int getMaxDistanceFromTownSpawnForInvite() {
