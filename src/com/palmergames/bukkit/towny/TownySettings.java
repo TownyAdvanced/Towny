@@ -740,7 +740,7 @@ public class TownySettings {
 		addComment(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot(),
 			"# Townblock types config",
 			"# If empty, itemUseIds & switchIds will use values defined in protection.item_use_ids and protection.switch_ids.",
-			"# Allowed blocks are blocks that will always be allowed to be placed and broken in a plot.",
+			"# Defining allowedBlocks will make it so players with build or destroy permissions are only able to affect those blocks, see the farm type for an example.",
 			"# If tax is set to 0, the towns' plot tax will be used instead."
 		);
 		
