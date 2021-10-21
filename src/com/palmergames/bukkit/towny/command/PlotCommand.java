@@ -32,7 +32,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnPointLocation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockData;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
@@ -181,7 +180,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			switch (args[0].toLowerCase()) {
 				case "set":
 					if (args.length == 2) {
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_SET, plotSetTabCompletes), args[1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_SET, getPlotSetCompletions()), args[1]);
 					}
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
 						return permTabComplete(StringMgmt.remArgs(args, 2));
@@ -2246,5 +2245,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownyWorldOrNull(), player));
 		else
 			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownBlockOrNull(), player));
+	}
+	
+	private List<String> getPlotSetCompletions() {
+		List<String> completions = new ArrayList<>(plotSetTabCompletes);
+
+		for (String townBlockType : TownBlockTypeHandler.getTypeNames())
+			if (!completions.contains(townBlockType))
+				completions.add(townBlockType);
+
+		return completions;
 	}
 }

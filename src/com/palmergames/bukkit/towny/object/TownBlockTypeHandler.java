@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -64,6 +65,10 @@ public final class TownBlockTypeHandler {
 	 */
 	public static Map<String, TownBlockType> getTypes() {
 		return Collections.unmodifiableMap(townBlockTypeMap);
+	}
+	
+	public static List<String> getTypeNames() {
+		return new ArrayList<>(townBlockTypeMap.keySet());
 	}
 
 	/**
