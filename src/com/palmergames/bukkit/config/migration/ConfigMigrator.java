@@ -85,9 +85,6 @@ public class ConfigMigrator {
 				addPermissions(change.path, change.value);
 				TownyMessaging.sendDebugMsg("Updating townyperms.yml, adding " + change.value + " to " + change.path + " group.");
 				break;
-			case TOWNBLOCKTYPE_ADD:
-				addTownBlockTypeProperty(change.path, change.key, change.value);
-				break;
 			default:
 				throw new UnsupportedOperationException("Unsupported Change type: " + change);
 		}
@@ -139,23 +136,6 @@ public class ConfigMigrator {
 		}
 
 		config.set("levels.nation_level", mapList);
-	}
-	
-	public void addTownBlockTypeProperty(String path, String key, String value) {
-		List<Map<?, ?>> mapList = config.getMapList("townblocktypes.types");
-		
-		Object object = value;
-		
-		if (config.contains(value))
-			object = config.get(value);
-
-		for (Map<?, ?> map : mapList) {
-			if (map.get("name").toString().equalsIgnoreCase(path)) {
-				((Map<String, Object>) map).put(key, object);
-			}
-		}
-
-		config.set("townblocktypes.types", mapList);
 	}
 
 	/**

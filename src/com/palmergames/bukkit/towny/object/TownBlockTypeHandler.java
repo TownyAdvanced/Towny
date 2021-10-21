@@ -1,5 +1,9 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.github.bsideup.jabel.Desugar;
+import com.google.common.primitives.Doubles;
+import com.palmergames.bukkit.config.CommentedConfiguration;
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.TownBlockTypeRegisterEvent;
@@ -10,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -128,4 +134,69 @@ public final class TownBlockTypeHandler {
 	}
 	
 	private TownBlockTypeHandler() {}
+	
+	public static class Migrator {
+		private static final Set<Migration> migrations = new HashSet<>();
+		
+		public static void checkForLegacyOptions() {
+			Path configPath = Towny.getPlugin().getDataFolder().toPath().resolve("settings").resolve("config.yml");
+			if (!Files.exists(configPath))
+				return;
+			
+			CommentedConfiguration config = new CommentedConfiguration(configPath);
+			if (!config.load() || config.contains(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot()))
+				return;
+			
+			double shopCost = parseDouble(config.getString("economy.plot_type_costs.set_commercial"));
+			double arenaCost = parseDouble(config.getString("economy.plot_type_costs.set_arena"));
+			double embassyCost = parseDouble(config.getString("economy.plot_type_costs.set_embassy"));
+			double wildsCost = parseDouble(config.getString("economy.plot_type_costs.set_wilds"));
+			double innCost = parseDouble(config.getString("economy.plot_type_costs.set_inn"));
+			double jailCost = parseDouble(config.getString("economy.plot_type_costs.set_jail"));
+			double farmCost = parseDouble(config.getString("economy.plot_type_costs.set_farm"));
+			double bankCost = parseDouble(config.getString("economy.plot_type_costs.set_bank"));
+			
+			String farmPlotBlocks = config.getString("global_town_settings.farm_plot_allow_blocks", TownySettings.getDefaultFarmblocks());
+			
+			migrations.add(new Migration("shop", "cost", shopCost));
+			migrations.add(new Migration("arena", "cost", arenaCost));
+			migrations.add(new Migration("embassy", "cost", embassyCost));
+			migrations.add(new Migration("wilds", "cost", wildsCost));
+			migrations.add(new Migration("inn", "cost", innCost));
+			migrations.add(new Migration("jail", "cost", jailCost));
+			migrations.add(new Migration("farm", "cost", farmCost));
+			migrations.add(new Migration("farm", "allowedBlocks", farmPlotBlocks));
+			migrations.add(new Migration("bank", "cost", bankCost));
+		}
+		
+		private static double parseDouble(String string) {
+			try {
+				return Double.parseDouble(string);
+			} catch (NumberFormatException e) {
+				return 0.0D;
+			}
+		}
+		
+		public static void migrate() {
+			if (migrations.isEmpty())
+				return;
+
+			List<Map<?, ?>> mapList = TownySettings.getConfig().getMapList("townblocktypes.types");
+						
+			for (Migration migration : migrations) {
+				for (Map<?, ?> map : mapList) {
+					if (map.get("name").toString().equalsIgnoreCase(migration.type())) {
+						((Map<String, Object>) map).put(migration.key(), migration.value());
+					}
+				}
+			}
+
+			TownySettings.getConfig().set("townblocktypes.types", mapList);
+			TownySettings.getConfig().save();
+			migrations.clear();
+		}
+		
+		@Desugar
+		private record Migration(String type, String key, Object value) {}
+	}
 }
