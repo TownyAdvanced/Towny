@@ -131,7 +131,7 @@ public class TownyAsciiMap {
 					} else if (townblock.isHomeBlock())
 						townyMap[y][x] = townyMap[y][x].content("H");
 					else
-						townyMap[y][x] = townyMap[y][x].content(townblock.getData().getMapKey());
+						townyMap[y][x] = townyMap[y][x].content(townblock.getType().getAsciiMapKey());
 					
 					TextComponent forSaleComponent = Component.empty();
 					TextComponent claimedAtComponent = Component.empty();
