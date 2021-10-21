@@ -7,22 +7,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TownBlockData {
-	private String type = "default";
-	private String mapKey = "";
+	private String mapKey = "+";
 	private double cost = 0.0;
 	private double tax = 0.0;
 	private Set<Material> itemUseIds = new HashSet<>(); // List of item names that will trigger an item use test.
 	private Set<Material> switchIds = new HashSet<>(); // List of item names that will trigger a switch test.
 	private Set<Material> allowedBlocks = new HashSet<>(); // List of item names that will always be allowed.
-	
-	public TownBlockData(String typeName) {
-		this.type = typeName.toLowerCase();
-		
-		TownBlockType type = TownBlockType.lookup(this.type);
-		if (type != null) {
-			mapKey = type.getAsciiMapKey();
-		}
-	}
 	
 	public String getMapKey() {
 		return mapKey;
@@ -83,9 +73,5 @@ public class TownBlockData {
 			return town.getPlotTax();
 		else
 			return tax;
-	}
-
-	public String getType() {
-		return type;
 	}
 }

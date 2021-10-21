@@ -61,7 +61,7 @@ public class PermHUD {
 			destroy = (tp.getResidentPerm(ActionType.DESTROY) ? v : "-") + (tp.getNationPerm(ActionType.DESTROY) ? u : "-") + (tp.getAllyPerm(ActionType.DESTROY) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.DESTROY) ? "o" : "-");
 			switching = (tp.getResidentPerm(ActionType.SWITCH) ? v : "-") + (tp.getNationPerm(ActionType.SWITCH) ? u : "-") + (tp.getAllyPerm(ActionType.SWITCH) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.SWITCH) ? "o" : "-");
 			item = (tp.getResidentPerm(ActionType.ITEM_USE) ? v : "-") + (tp.getNationPerm(ActionType.ITEM_USE) ? u : "-") + (tp.getAllyPerm(ActionType.ITEM_USE) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.ITEM_USE) ? "o" : "-");
-			type = (townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().name());
+			type = (townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().getName());
 			pvp = (!CombatUtil.preventPvP(worldCoord.getTownyWorld(), townBlock)) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			explosions = (world.isForceExpl() || townBlock.getPermissions().explosion) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
 			firespread = (town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
