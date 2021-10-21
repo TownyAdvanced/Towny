@@ -500,6 +500,12 @@ public class TownySettings {
 				
 				setDefaultLevels();
 				
+			} else if ( (root.getRoot().equals(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot()))
+				|| (root.getRoot().equals(ConfigNodes.LEVELS_NATION_LEVEL.getRoot()))){
+
+				// Do nothing here as setDefaultLevels configured town and
+				// nation levels.
+
 			} else if (root.getRoot().equals(ConfigNodes.VERSION.getRoot())) {
 				setNewProperty(root.getRoot(), version);
 			} else if (root.getRoot().equals(ConfigNodes.LAST_RUN_VERSION.getRoot())) {
