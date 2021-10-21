@@ -1,59 +1,38 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.palmergames.bukkit.towny.TownySettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author dumptruckman
  */
-public enum TownBlockType {
-	RESIDENTIAL(0, "Default", "+"), // The default Block Type.
-	COMMERCIAL(1, "Shop", "C") { // Just like residential but has additional tax
-
-		@Override
-		public double getTax(Town town) {
-
-			return town.getCommercialPlotTax() + town.getPlotTax();
-		}
-	},
-	ARENA(2, "Arena", "A"), //Always PVP enabled.
-	EMBASSY(3, "Embassy", "E") {  // For other towns to own a plot in your town.
-
-		@Override
-		public double getTax(Town town) {
-
-			return town.getEmbassyPlotTax() + town.getPlotTax();
-		}
-	},
-	WILDS(4, "Wilds", "W"), //Follows wilderness protection settings, but town owned.
-	INN(6, "Inn", "I"), //Allows use of beds outside your own plot.
-	JAIL(7, "Jail", "J"), //Enables setting the jail spawn.		
-	FARM(8, "Farm", "F"), //Follows wilderness protection settings, but town owned.
-	BANK(9, "Bank", "B"), // Enables depositing into town and nation banks, if that has been enabled in the config.
-	CUSTOM(10, "Custom", "C");
-
-	private final int id;
-	private final String name, asciiMapKey;
+public class TownBlockType {
+	public static final TownBlockType RESIDENTIAL = new TownBlockType("Default"); // The default Block Type.
+	public static final TownBlockType COMMERCIAL = new TownBlockType("Shop"); // Just like residential but has additional tax
+	public static final TownBlockType ARENA = new TownBlockType("Arena"); //Always PVP enabled.
+	public static final TownBlockType EMBASSY = new TownBlockType("Embassy"); // For other towns to own a plot in your town.
+	public static final TownBlockType WILDS = new TownBlockType("Wilds"); //Follows wilderness protection settings, but town owned.
+	public static final TownBlockType INN = new TownBlockType("Inn"); //Allows use of beds outside your own plot.
+	public static final TownBlockType JAIL = new TownBlockType("Jail"); //Enables setting the jail spawn.		
+	public static final TownBlockType FARM = new TownBlockType("Farm"); //Follows wilderness protection settings, but town owned.
+	public static final TownBlockType BANK = new TownBlockType("Bank"); // Enables depositing into town and nation banks, if that has been enabled in the config.
+	
+	private final String name;
+	private final TownBlockData data;
 	private static final Map<Integer, TownBlockType> idLookup = new HashMap<>();
 	private static final Map<String, TownBlockType> nameLookup = new HashMap<>();
 
-	TownBlockType(int id, String name, String asciiMapKey) {
-
-		this.id = id;
+	public TownBlockType(String name, TownBlockData data) {
 		this.name = name;
-		this.asciiMapKey = asciiMapKey;
+		this.data = data;
 	}
-
-	static {
-		for (TownBlockType s : EnumSet.allOf(TownBlockType.class)) {
-			idLookup.put(s.getId(), s);
-			nameLookup.put(s.toString().toLowerCase(), s);
-		}
+	
+	public TownBlockType(String name) {
+		this.name = name;
+		this.data = new TownBlockData();
 	}
 
 	@Override
@@ -70,20 +49,15 @@ public enum TownBlockType {
 
 	@Deprecated
 	public int getId() {
-
-		return id;
+		return 0;
 	}
 
 	public String getAsciiMapKey() {
-		TownBlockData data = TownBlockTypeHandler.getData(this.name);
-		
-		return data == null ? asciiMapKey : data.getMapKey();
+		return data.getMapKey();
 	}
 	
 	public double getCost() {
-		TownBlockData data = TownBlockTypeHandler.getData(this.name);
-
-		return data == null ? 0.0 : data.getCost();
+		return data.getCost();
 	}
 
 	public String getName() {
@@ -99,14 +73,19 @@ public enum TownBlockType {
 	@Nullable
 	public static TownBlockType lookup(@NotNull String name) {
 		TownBlockType type = nameLookup.get(name.toLowerCase());
-		
-		if (type == null && TownBlockTypeHandler.exists(name)) // Type exists but it's not one of ours.
-			type = TownBlockType.CUSTOM;
 
 		return type;
 	}
 	
-	public boolean equals(String type) {
-		return type != null && this == lookup(type);
+	public TownBlockData getData() {
+		return data;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof TownBlockType townBlockType))
+			return false;
+		
+		return townBlockType.getName().equalsIgnoreCase(this.name);
 	}
 }
