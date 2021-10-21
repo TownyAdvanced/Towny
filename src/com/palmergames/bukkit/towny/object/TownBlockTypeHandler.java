@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.github.bsideup.jabel.Desugar;
-import com.google.common.primitives.Doubles;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
@@ -17,7 +16,9 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -58,6 +59,14 @@ public final class TownBlockTypeHandler {
 	}
 
 	/**
+	 * Gets the currently registered townblock types.
+	 * @return An unmodifiable map containing the types.
+	 */
+	public static Map<String, TownBlockType> getTypes() {
+		return Collections.unmodifiableMap(townBlockTypeMap);
+	}
+
+	/**
 	 * Gets the townblock instance for the name.
 	 * @param townBlockType The name of the town block type.
 	 * @return The townblocktype instance, or {@code null} if none is registered.   
@@ -83,8 +92,8 @@ public final class TownBlockTypeHandler {
 			
 			try {
 				name = String.valueOf(type.get("name"));
-				double cost = Double.parseDouble(type.get("cost").toString());
-				double tax = Double.parseDouble(type.get("tax").toString());
+				double cost = parseDouble(type.get("cost").toString());
+				double tax = parseDouble(type.get("tax").toString());
 				String mapKey = String.valueOf(type.get("mapKey"));
 
 				Set<Material> itemUseIds = loadMaterialList(String.valueOf(type.get("itemUseIds")), name);
@@ -118,7 +127,7 @@ public final class TownBlockTypeHandler {
 	
 	private static Set<Material> loadMaterialList(String materialList, String typeName) {
 		if (!materialList.isEmpty()) {
-			Set<Material> set = new HashSet<>();
+			Set<Material> set = new LinkedHashSet<>();
 			for (String materialName : materialList.split(",")) {
 				Material material = Material.matchMaterial(materialName);
 
@@ -130,7 +139,15 @@ public final class TownBlockTypeHandler {
 			
 			return set;
 		} else
-			return new HashSet<>();
+			return new LinkedHashSet<>();
+	}
+
+	private static double parseDouble(String string) {
+		try {
+			return Double.parseDouble(string);
+		} catch (NumberFormatException e) {
+			return 0.0D;
+		}
 	}
 	
 	private TownBlockTypeHandler() {}
@@ -167,14 +184,6 @@ public final class TownBlockTypeHandler {
 			migrations.add(new Migration("farm", "cost", farmCost));
 			migrations.add(new Migration("farm", "allowedBlocks", farmPlotBlocks));
 			migrations.add(new Migration("bank", "cost", bankCost));
-		}
-		
-		private static double parseDouble(String string) {
-			try {
-				return Double.parseDouble(string);
-			} catch (NumberFormatException e) {
-				return 0.0D;
-			}
 		}
 		
 		public static void migrate() {

@@ -271,8 +271,8 @@ public class TownBlock extends TownyObject {
 		setType(TownBlockTypeHandler.getType(type));
 	}
 	
-	public void setType(@NotNull TownBlockType type) {
-		if (!TownBlockTypeHandler.exists(type.getName()))
+	public void setType(@Nullable TownBlockType type) {
+		if (type == null || !TownBlockTypeHandler.exists(type.getName()))
 			type = TownBlockType.RESIDENTIAL;
 		
 		if (!type.equals(this.type))

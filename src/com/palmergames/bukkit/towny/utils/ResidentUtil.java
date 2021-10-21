@@ -2,10 +2,14 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 
+import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -110,6 +114,46 @@ public class ResidentUtil {
 		createTownyGUI(resident, items, name);
 	}
 	
+	public static void openGUIInventory(Resident resident, Set<Material> set, String name) {
+		ArrayList<ItemStack> items = new ArrayList<>();
+		for (Material material : set)
+			items.add(new ItemStack(material));
+		
+		createTownyGUI(resident, items, name);
+	}
+	
+	public static void openSelectionGUI(Resident resident, SelectionGUI.SelectionType selectionType) {
+		String inventoryName = switch (selectionType) {
+			case ITEMUSE -> Translatable.of("gui_title_towny_itemuse").forLocale(resident);
+			case SWITCHES -> Translatable.of("gui_title_towny_switch").forLocale(resident);
+			case ALLOWEDBLOCKS -> Translatable.of("gui_title_towny_allowedblocks").forLocale(resident);
+		};
+		
+		Inventory page = getBlankPage(inventoryName);
+		ArrayList<Inventory> pages = new ArrayList<>();
+		
+		for (TownBlockType townBlockType : TownBlockTypeHandler.getTypes().values()) {
+			ItemStack item = new ItemStack(Material.GRASS_BLOCK);
+			
+			ItemMeta meta = item.getItemMeta();
+			meta.setDisplayName(Colors.Gold + townBlockType.getFormattedName());
+			item.setItemMeta(meta);
+
+			if (page.firstEmpty() == 46) {
+				pages.add(page);
+				page = getBlankPage(inventoryName);
+			}
+			
+			page.addItem(item);
+		}
+		
+		pages.add(page);
+		resident.setGUIPageNum(0);
+		resident.setGUIPages(pages);
+		
+		new SelectionGUI(resident, pages.get(0), inventoryName, selectionType);
+	}
+	
 	/*
 	 * Big credit goes to Hex_27 for the guidance following his ScrollerInventory
 	 * https://www.spigotmc.org/threads/infinite-inventory-with-pages.178964/
@@ -125,7 +169,6 @@ public class ResidentUtil {
 			if (page.firstEmpty() == 46) {
 				pages.add(page);
 				page = getBlankPage(name);
-				page.addItem(items.get(i));
 			} else {
 				//Add the item to the current page as per normal
 				page.addItem(items.get(i));
