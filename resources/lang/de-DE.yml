@@ -592,23 +592,23 @@ msg_err_over_outposts_limit: 'Du kannst dich nicht zu deinem Außenposten telepo
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Outlaws:' #Used on /t outlawlist
+outlaws: 'Banditen' #Used on /t outlawlist
 online: '&a (Online)'
 registered_last_online: '&2Registriert: &a%s &8| &2Zuletzt Online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Perm:' #Used on /plot perm, /res
+status_perm: 'Rechte:' #Used on /plot perm, /res
 status_on: '&4ON'
 status_off: '&aOFF'
 status_on_good: '&aON'
 status_off_bad: '&4OFF'
 status_forced: '&cFestgelegt'
 status_adjustable: '&aEinstellbar'
-status_pvp: 'PVP:'
-explosions: 'Explosions:'
-firespread: 'Firespread:'
-mobspawns: 'Mob Spawns:'
-owner_of_x_plots: 'Owner of %s plots.'
+status_pvp: 'PvP:'
+explosions: 'Explosionen:'
+firespread: 'Feuerausbreitung:'
+mobspawns: 'Kreaturen Spawns:'
+owner_of_x_plots: 'Besitzer von %s plots.'
 status_bank: 'Bank:'
-status_town: 'Town:'
+status_town: 'Stadt:'
 status_no_town: 'Keine'
 status_town_ranks: 'Stadtränge:'
 status_nation_ranks: 'Nationsränge:'
@@ -642,13 +642,13 @@ status_world_forcefire: 'Erzwinge Feuer:'
 status_world_forceexplosion: 'Erzwinge Explosionen:'
 status_world_worldmobs: 'Welt-Mobs:'
 status_world_forcetownmobs: 'Erzwinge Stadt-Mobs:'
-status_world_unclaimrevert: 'Unclaim Revert:'
-status_world_explrevert: 'Explosion Revert:'
+status_world_unclaimrevert: 'Rückgängig machen:'
+status_world_explrevert: 'Explosion Rückgängig machen:'
 status_world_ignoredblocks: 'Ignorierte Blöcke:'
-status_res_taxexempt: 'Staff are exempt from paying town taxes.'
+status_res_taxexempt: 'Das Personal ist von den Stadtsteuern befreit.'
 status_res_tax: 'Stadtsteuer:'
 status_res_plottax: 'Gesamte Plot-Steuern:'
-status_res_totaltax: 'Total Tax to pay:'
+status_res_totaltax: 'Gesamte Steuern:'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Du kannst die Nationalbank nicht nutzen, solange du außerhalb der Hauptstadt bist.'
 msg_err_unable_to_use_bank_outside_your_town: 'Du kannst die Stadtbank nicht außerhalb deiner Stadt nutzen.'
@@ -687,7 +687,7 @@ msg_err_cannot_set_spawn_cost_more_than: '&cDu kannst die Spawnkosten nicht höh
 msg_err_ally_isnt_public: '&cEure Alliierten, %s, haben Öffentliche Spawnreisen nicht aktiviert. Die Teleportation wurde verweigert.'
 msg_nation_changed_public: '&cDer Öffentlichkeitsstatus der Nation ist jetzt %s.'
 #Added in 0.47:
-status_plot_type: 'Plot Type:'
+status_plot_type: 'Grundstück Typ:'
 msg_no_self_jailing: 'Du kannst dich selber nicht gefangen nehmen.'
 online2: ' &A(Online)'
 build: 'Bauen'
@@ -748,7 +748,7 @@ msg_couldnt_pay_town_tax_multiple: '&bDie folgenden Stadtbewohner können die St
 msg_couldnt_pay_plot_taxes_multiple: '&bDie folgenden Stadtbewohner können die Plotsteuer von einigen Plots oder allen Plots nicht länger leisten:'
 msg_bankrupt_town2: '&b%s konnte es sich nicht leisten, weiterhin eine Stadt zu bleiben.'
 msg_bankrupt_nation2: '&b%s konnte es sich nicht leisten, weiterhin eine Nation zu bleiben.'
-status_embassy_town: 'Embassies in'
+status_embassy_town: 'Botschaften in'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&bUngültiger Vergleichswert. Versuch doch mal: resident, balance, towns, name, townblocks, online.'
 msg_error_invalid_comparator_town: '&bUngültiger Vergleichswert. Versuch doch mal: resident, balance, name, townblocks, online, open.'
@@ -768,7 +768,7 @@ msg_nation_changed_open: '&cDer Öffentlichkeitsstatus der Nation ist jetzt %s.'
 msg_err_already_in_a_nation: 'Deine Stadt befindet sich bereits in einer Nation.'
 msg_err_nation_not_open: '&cDie Tore des Landes %s ist nicht für jedermann geöffnet. Ersuche den Herrscher oder dessen Gehilfe für einen beitritt.'
 msg_err_nation_homeblock_in_another_world: '&cDer Homeblock deiner Stadt ist nicht in der gleichen Welt wie der Homeblock der Landeshauptstadt.'
-status_bank_town_penalty_upkeep: 'Overclaim upkeep:'
+status_bank_town_penalty_upkeep: 'Überbeanspruchungs kosten:'
 #Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Du kannst in %s nicht spawnen, da du dort als vogelfrei erklärt wurdest.'
 #Added in 0.54:
@@ -806,7 +806,7 @@ msg_err_player_too_far_from_town_spawn: '&c%s ist zu weit von deinem Stadtspawn 
 msg_resident_bail_amount: 'Kautionskosten für Einwohner: '
 msg_mayor_bail_amount: 'Kautionskosten für Bürgermeister: '
 msg_king_bail_amount: 'Kautionskosten für Könige: '
-msg_has_paid_bail: '%s has paid bail and is free.'
+msg_has_paid_bail: '%s hat Kaution bezahlt und ist wieder frei.'
 msg_err_unable_to_pay_bail: 'Das Geld reicht nicht für die Kaution aus.'
 msg_err_bail_not_enabled: 'Kautionen sind nicht aktiv.'
 msg_you_have_been_freed_from_jail: 'Du wurdest aus dem Gefängnis befreit.'
@@ -899,7 +899,7 @@ msg_player_put_group_up_for_sale: '%s hat die Gruppe %s zum Verkauf für %s ange
 msg_err_could_not_set_group_type: 'Gruppentyp konnte nicht festgelegt werden. - '
 msg_set_group_type_to_x: 'Den Typ der Gruppe wurde zu %s geändert.'
 msg_player_successfully_bought_group_x: '%s hat erfolgreich die Plotgruppe %s gekauft.'
-status_plot_group_name_and_size: 'Townblock is part of group: %s. Group has %s Townblocks total.'
+status_plot_group_name_and_size: 'Der Stadtblock ist der Gruppe: %s. Die Gruppe hat insgesamt %s Stadtblöcke.'
 msg_player_made_group_not_for_sale: '%s hat die Gruppe  %s als ''nicht zu verkaufen'' festgelegt.'
 #Added in 0.69
 msg_err_cannot_set_group_to_jail: 'Plotgruppen kannst zu nicht zum Jail-Typ ändern.'
@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Der Schaden hat deinen Teleport abgebrochen.
 #Added in 0.82
 invitation_prefix: "&8[&7Einladung&8] &9"
 confirmation_prefix: "&8[&7Bestätigung&8] &9"
-this_message_will_expire2: '&9This will auto-expire in %s seconds'
+this_message_will_expire2: '&9Dies läuft in %s Sekunden automatisch ab'
 msg_hover_next_page: 'Nächste Seite'
 msg_hover_previous_page: 'Vorherige Seite'
 #Added in 0.83
@@ -966,7 +966,7 @@ msg_err_plot_belongs_to_group_toggle: 'Der Plot gehört zu einer Gruppe. Verwend
 #Added in 0.85
 msg_set_perms_reset_single: '&bBerechtigungen auf diesem Plot wurden erfolgreich zurückgesetzt.'
 #Added in 0.86
-status_bank_bankrupt: '(BANKRUPT)'
+status_bank_bankrupt: '(Bankrupt)'
 msg_warning_bankrupt: '&4*** ACHTUNG!, DIE STADT %s WIRD AM NÄCHSTEN TAG GELÖSCHT, DA DIE STEUERN NICHT BEZAHLT WERDEN KÖNNEN ***'
 msg_town_bankrupt_by_upkeep: '&b%s konnte sich seinen Unterhalt nicht leisten und ist bankrott gegangen.'
 msg_town_bankrupt_by_upkeep_multiple: '&bDie folgenden Städte könnten ihren Unterhalt nicht leisten und sind bankrott geworden: '
@@ -1001,7 +1001,7 @@ msg_outlaw_kick_cooldown: '&cDu zählst als Geächteter in %s. Du hast %s übrig
 msg_outlaw_kicked: '&4Du heißt in %s nicht willkommen. Du wurdest wegteleportiert.'
 msg_outlaw_town_notify: '&cEin Geächteter, %s, hat deine Stadt betreten.'
 msg_your_town_payed_upkeep_with_debt: '&cDeine Stadt hat deine tägliche Instandhaltung von %s mit Schulden bezahlt.'
-msg_payed_nation_tax_with_debt: '&cYour town paid the nation tax of %s with debt.'
+msg_payed_nation_tax_with_debt: '&cDeine Stadt hat deine tägliche Instandhaltung von %s mit Schulden bezahlt.'
 #Added in 0.90
 status_plot_clear_deletion: 'PlotClearBlockDelete:'
 msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'

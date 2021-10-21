@@ -857,7 +857,7 @@ msg_war_not_enough_nations: '&6[War]&f Less than 2 nations gathered for war, war
 msg_war_no_enemies_for_war: '&6[War]&f No enemies presently gathered for war, war canceled.'
 msg_war_prefix: '&6［戦争］&f'
 msg_war_participants_header: '&6[War] &eNation Name &f(&bTowns&f)'
-msg_war_participants: '&6[War] &e%s &f(&b%s&f)'
+msg_war_participants: '&6［戦争］&e%s &f(&b%s&f)'
 #Added in 0.61
 #Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'You cannot toggle PVP, %s seconds remaining.'
