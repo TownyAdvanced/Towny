@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownBlockData;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
@@ -19,11 +20,11 @@ public class TownBlockTypeRegisterEvent extends Event {
 	/**
 	 * Registers a new type.
 	 * @param name - The name for this type.
-	 * @param data - The data for this type.
+	 * @param type - The type
 	 * @throws TownyException - If a type with this name is already registered.
 	 */
-	public static void registerType(@NotNull String name, @Nullable TownBlockData data) throws TownyException {
-		TownBlockTypeHandler.registerType(name, data);
+	public static void registerType(@NotNull String name, @NotNull TownBlockType type) throws TownyException {
+		TownBlockTypeHandler.registerType(name, type);
 	}
 
 	@Override

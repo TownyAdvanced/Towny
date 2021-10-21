@@ -9,6 +9,8 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -17,45 +19,50 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class TownBlockTypeHandler {
-	private static Map<String, TownBlockData> townBlockDataMap = new ConcurrentHashMap<>();
+	private static Map<String, TownBlockType> townBlockTypeMap = new ConcurrentHashMap<>();
 	
 	public static void initialize() {
-		Map<String, TownBlockData> newData = new ConcurrentHashMap<>();
-		for (TownBlockType type : TownBlockType.values()) {
-			String typeName = type.getName().toLowerCase(Locale.ROOT);
-			newData.put(typeName, new TownBlockData(typeName));
+		Map<String, TownBlockType> newData = new ConcurrentHashMap<>();
+		
+		for (Field field : TownBlockType.class.getFields()) {
+			String typeName = field.getName().toLowerCase();
+			
+			try {
+				TownBlockType type = (TownBlockType) field.get(null);
+				newData.put(typeName, type);
+			} catch (Exception ignored) {}
 		}
 		
 		applyConfigSettings(newData);
 		
 		Bukkit.getPluginManager().callEvent(new TownBlockTypeRegisterEvent());
 		
-		townBlockDataMap = newData;
+		Towny.getPlugin().getLogger().info(String.format("Loaded %d townblock types: %s", newData.size(), Arrays.toString(newData.keySet().toArray())));
+		
+		townBlockTypeMap = newData;
 	}
 
 	/**
 	 * Registers a new type. Should not be used at all outside of the TownBlockTypeRegisterEvent.
 	 * @param name - The name for this type.
-	 * @param data - The data for this type.
+	 * @param type - The type
 	 * @throws TownyException - If a type with this name is already registered.
 	 */
-	public static void registerType(@NotNull String name, @Nullable TownBlockData data) throws TownyException {
+	public static void registerType(@NotNull String name, @NotNull TownBlockType type) throws TownyException {
 		if (exists(name))
 			throw new TownyException(String.format("A type named '%s' is already registered!", name));
 		
-		if (data == null)
-			data = new TownBlockData(name);
-		
-		townBlockDataMap.put(name.toLowerCase(), data);
+		townBlockTypeMap.put(name.toLowerCase(), type);
 	}
 
 	/**
-	 * Gets the data for a townblock type.
+	 * Gets the townblock instance for the name.
 	 * @param townBlockType The name of the town block type.
+	 * @return The townblocktype instance, or {@code null} if none is registered.   
 	 */
 	@Nullable
-	public static TownBlockData getData(@NotNull String townBlockType) {
-		return townBlockDataMap.get(townBlockType.toLowerCase(Locale.ROOT));
+	public static TownBlockType getType(@NotNull String townBlockType) {
+		return townBlockTypeMap.get(townBlockType.toLowerCase());
 	}
 
 	/**
@@ -63,10 +70,10 @@ public final class TownBlockTypeHandler {
 	 * @return Whether a type with the specified name exists.
 	 */
 	public static boolean exists(@NotNull String typeName) {
-		return getData(typeName) != null;
+		return getType(typeName) != null;
 	}
 	
-	private static void applyConfigSettings(Map<String, TownBlockData> newData) {
+	private static void applyConfigSettings(Map<String, TownBlockType> newData) {
 
 		List<Map<?, ?>> types = TownySettings.getConfig().getMapList("townblocktypes.types");
 		for (Map<?, ?> type : types) {
@@ -82,7 +89,15 @@ public final class TownBlockTypeHandler {
 				Set<Material> switchIds = loadMaterialList(String.valueOf(type.get("switchIds")), name);
 				Set<Material> allowedBlocks = loadMaterialList(String.valueOf(type.get("allowedBlocks")), name);
 				
-				TownBlockData data = new TownBlockData(name);
+				TownBlockType townBlockType = newData.get(name.toLowerCase());
+				TownBlockData data;
+				
+				if (townBlockType == null) {
+					data = new TownBlockData();
+					townBlockType = new TownBlockType(name, data);
+				} else
+					data = townBlockType.getData();
+				
 				data.setCost(cost);
 				data.setTax(tax);
 				data.setMapKey(mapKey);
@@ -90,8 +105,7 @@ public final class TownBlockTypeHandler {
 				data.setSwitchIds(switchIds);
 				data.setAllowedBlocks(allowedBlocks);
 				
-				newData.put(name.toLowerCase(), data);
-				Towny.getPlugin().getLogger().info(String.format("Loaded a townblock type: %s", name));
+				newData.put(name.toLowerCase(), townBlockType);
 				
 			} catch (Exception e) {
 				Towny.getPlugin().getLogger().warning(String.format("Error while loading townblock type '%s', skipping...", name));

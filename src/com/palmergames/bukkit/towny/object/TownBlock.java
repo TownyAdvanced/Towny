@@ -43,7 +43,7 @@ public class TownBlock extends TownyObject {
 	private Jail jail;
 	private Map<Resident, PermissionData> permissionOverrides = new HashMap<>();
 	private Set<Resident> trustedResidents = new HashSet<>();
-	private String type = "default";
+	private TownBlockType type = TownBlockType.RESIDENTIAL;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -260,50 +260,51 @@ public class TownBlock extends TownyObject {
 	}
 
 	public TownBlockType getType() {
-		return getTypeInternal();
-	}
-	
-	public String getTypeName() {
 		return type;
 	}
 	
+	public String getTypeName() {
+		return type.getName();
+	}
+	
 	public void setType(@NotNull String type) {
-		if (!TownBlockTypeHandler.exists(type))
-			type = "default";
+		setType(TownBlockTypeHandler.getType(type));
+	}
+	
+	public void setType(@NotNull TownBlockType type) {
+		if (!TownBlockTypeHandler.exists(type.getName()))
+			type = TownBlockType.RESIDENTIAL;
 		
-		if (!type.equalsIgnoreCase(this.type))
+		if (!type.equals(this.type))
 			this.permissions.reset();		
 
-		this.type = type.toLowerCase();
-		TownBlockType townBlockType = TownBlockType.lookup(type);
+		this.type = type;
 		
-		if (townBlockType != null) {
-			Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(getTypeInternal(), townBlockType, this));
+		Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type, this));
 
-			switch (townBlockType) {
-				case RESIDENTIAL:
-				case COMMERCIAL:
-				case EMBASSY:
-				case BANK:
-				case INN:
-					if (this.hasResident()) {
-						setPermissions(this.resident.getPermissions().toString());
-					} else {
-						setPermissions(this.town.getPermissions().toString());
-					}
+		switch (type.getName().toLowerCase()) {
+			case "default":
+			case "shop":
+			case "embassy":
+			case "bank":
+			case "inn":
+				if (this.hasResident()) {
+					setPermissions(this.resident.getPermissions().toString());
+				} else {
+					setPermissions(this.town.getPermissions().toString());
+				}
 
-					break;
-				case ARENA:
-					setPermissions("pvp");
-					break;
-				case JAIL:
-					setPermissions("denyAll");
-					break;
-				case FARM:
-				case WILDS:
-					setPermissions("residentBuild,residentDestroy");
-					break;
-			}
+				break;
+			case "arena":
+				setPermissions("pvp");
+				break; 
+			case "jail":
+				setPermissions("denyAll");
+				break;
+			case "farm":
+			case "wilds":
+				setPermissions("residentBuild,residentDestroy");
+				break;
 		}
 		
 		// Set the changed status.
@@ -318,23 +319,7 @@ public class TownBlock extends TownyObject {
 	 */
 	@Deprecated
 	public void setType(int typeId) {
-		setType(TownBlockType.lookup(typeId).getName());
-	}
-	
-	public void setType(TownBlockType type) {
-		setType(type.getName());
-	}
-
-	/**
-	 * 
-	 * @param type The {@link TownBlockType} type set this plot to.
-	 * @param resident The resident who is trying to set the type.
-	 * @throws TownyException If this townblock has a pvp toggle cooldown.
-	 * @deprecated As of 0.97.3.0, this is deprecated for compatibility with custom types.
-	 */
-	@Deprecated
-	public void setType(TownBlockType type, Resident resident) throws TownyException {
-		setType(type.getName(), resident);
+		
 	}
 
 	/**
@@ -342,7 +327,7 @@ public class TownBlock extends TownyObject {
 	 * @param resident The resident who is trying to set the type.
 	 * @throws TownyException If this townblock has a pvp toggle cooldown.
 	 */
-	public void setType(String type, Resident resident) throws TownyException {
+	public void setType(TownBlockType type, Resident resident) throws TownyException {
 		
 		// Delete a jail if this is no longer going to be a jail.
 		if (this.isJail() && !TownBlockType.JAIL.equals(type)) {
@@ -570,12 +555,6 @@ public class TownBlock extends TownyObject {
 	}
 	
 	public TownBlockData getData() {
-		return TownBlockTypeHandler.getData(this.type);
-	}
-	
-	private TownBlockType getTypeInternal() {
-		TownBlockType type = TownBlockType.lookup(this.type);
-		
-		return type == null ? TownBlockType.CUSTOM : type;
+		return type.getData();
 	}
 }
