@@ -1,8 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.palmergames.util.StringMgmt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,9 +9,19 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TownBlockType {
 	public static final TownBlockType RESIDENTIAL = new TownBlockType("Default"); // The default Block Type.
-	public static final TownBlockType COMMERCIAL = new TownBlockType("Shop"); // Just like residential but has additional tax
+	public static final TownBlockType COMMERCIAL = new TownBlockType("Shop", new TownBlockData() {
+		@Override
+		public double getTax(Town town) {
+			return town.getCommercialPlotTax() + town.getPlotTax();
+		}
+	}); // Just like residential but has additional tax
 	public static final TownBlockType ARENA = new TownBlockType("Arena"); //Always PVP enabled.
-	public static final TownBlockType EMBASSY = new TownBlockType("Embassy"); // For other towns to own a plot in your town.
+	public static final TownBlockType EMBASSY = new TownBlockType("Embassy", new TownBlockData() {
+		@Override
+		public double getTax(Town town) {
+			return town.getEmbassyPlotTax() + town.getPlotTax();
+		}
+	}); // For other towns to own a plot in your town.
 	public static final TownBlockType WILDS = new TownBlockType("Wilds"); //Follows wilderness protection settings, but town owned.
 	public static final TownBlockType INN = new TownBlockType("Inn"); //Allows use of beds outside your own plot.
 	public static final TownBlockType JAIL = new TownBlockType("Jail"); //Enables setting the jail spawn.		
@@ -58,6 +66,10 @@ public class TownBlockType {
 	public String getName() {
 		return name;
 	}
+	
+	public String getFormattedName() {
+		return StringMgmt.capitalize(this.name);
+	}
 
 	/**
 	 * @deprecated As of 0.97.3.0
@@ -83,6 +95,9 @@ public class TownBlockType {
 
 	@Override
 	public boolean equals(Object other) {
+		if (this == other)
+			return true;
+		
 		if (!(other instanceof TownBlockType townBlockType))
 			return false;
 		
