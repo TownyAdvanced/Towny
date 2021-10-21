@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.utils.NameUtil;
@@ -67,7 +68,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		"v",
 		"switches",
 		"itemuse",
-		"farmblocks",
+		"allowedblocks",
 		"wildsblocks",
 		"plotclearblocks"
 	);
@@ -232,19 +233,19 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 				for (String line : getTownyPrices(town, Translation.getLocale(player)))
 					TownyMessaging.sendMessage(player, line);
-			/*} else if (split[0].equalsIgnoreCase("switches")) {
+			} else if (split[0].equalsIgnoreCase("switches")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getSwitchMaterials(), Translatable.of("gui_title_towny_switch").forLocale(player));
+				ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.SWITCHES);
 			} else if (split[0].equalsIgnoreCase("itemuse")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getItemUseMaterials(), Translatable.of("gui_title_towny_itemuse").forLocale(player));
-			} else if (split[0].equalsIgnoreCase("farmblocks")) {
+				ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ITEMUSE);
+			} else if (split[0].equalsIgnoreCase("allowedblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getFarmPlotBlocks(), Translatable.of("gui_title_towny_farmblocks").forLocale(player));
+				ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ALLOWEDBLOCKS);
 			} else if (split[0].equalsIgnoreCase("wildsblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, world.getUnclaimedZoneIgnoreMaterials(), Translatable.of("gui_title_towny_wildsblocks").forLocale(player));
-			*/} else if (split[0].equalsIgnoreCase("plotclearblocks")) {
+			} else if (split[0].equalsIgnoreCase("plotclearblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, world.getPlotManagementMayorDelete(), Translatable.of("gui_title_towny_plotclear").forLocale(player));
 			} else if (split[0].equalsIgnoreCase("top")) {
