@@ -230,12 +230,15 @@ public class Towny extends JavaPlugin {
 	}
 
 	public void loadFoundation(boolean reload) {
-		// Before anything can continue we must load the config files, database and set the foundation for Towny.
+		// Before anything can continue we must load the databaseconfig, config 
+		// file, language and permissions, setting the foundation for Towny.
+
+		// Load the database config first, so any conversion happens before the config is loaded.
+		loadDatabaseConfig(reload);
+		// Then load the config.
 		loadConfig(reload);
 		// Then load the language files.
 		loadLocalization(reload);
-		// Then load the database.
-		loadDatabaseConfig(reload);
 		// Then load permissions
 		loadPermissions(reload);
 

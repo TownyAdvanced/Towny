@@ -6867,3 +6867,4 @@ v0.92.0.11:
   - Update Toolchain, Test multiple Java Versions, and Use SDKMAN for JitPack configuration, courtesy of TheFlagCourier with PR #5386.
   - Fix /ta reload all reloading config/lang twice, courtesy of Warriorrrr with PR #5389.
   - Only compile pushes for master, courtesy of Warriorrrr with PR #5390.
+  - Fix loading order of databaseconfig and config, fixing the config's database section conversion.
