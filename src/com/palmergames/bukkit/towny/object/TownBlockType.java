@@ -22,8 +22,6 @@ public class TownBlockType {
 	
 	private final String name;
 	private final TownBlockData data;
-	private static final Map<Integer, TownBlockType> idLookup = new HashMap<>();
-	private static final Map<String, TownBlockType> nameLookup = new HashMap<>();
 
 	public TownBlockType(String name, TownBlockData data) {
 		this.name = name;
@@ -37,7 +35,6 @@ public class TownBlockType {
 
 	@Override
 	public String toString() {
-
 		return name;
 	}
 

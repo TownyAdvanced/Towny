@@ -13,7 +13,6 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,12 +23,10 @@ public final class TownBlockTypeHandler {
 	public static void initialize() {
 		Map<String, TownBlockType> newData = new ConcurrentHashMap<>();
 		
-		for (Field field : TownBlockType.class.getFields()) {
-			String typeName = field.getName().toLowerCase();
-			
+		for (Field field : TownBlockType.class.getFields()) {			
 			try {
 				TownBlockType type = (TownBlockType) field.get(null);
-				newData.put(typeName, type);
+				newData.put(type.getName().toLowerCase(), type);
 			} catch (Exception ignored) {}
 		}
 		
