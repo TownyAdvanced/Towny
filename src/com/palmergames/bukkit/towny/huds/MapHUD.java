@@ -133,7 +133,7 @@ public class MapHUD {
 					} else if (townblock.isHomeBlock())
 						map[y][x] += "H";
 					else
-						map[y][x] += townblock.getData().getMapKey();
+						map[y][x] += townblock.getType().getAsciiMapKey();
 				} catch (TownyException e) {
 					// Unregistered town block
 					

@@ -496,7 +496,7 @@ public class PlayerCacheUtil {
 		if (status == TownBlockStatus.PLOT_FRIEND) {
 			
 			// Plot allows Friends perms and we aren't stopped by Wilds or Farm Plot overrides.
-			if (townBlock.getPermissions().getResidentPerm(action))
+			if (townBlock.getPermissions().getResidentPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
 			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_friends"), Translatable.of(action.toString())).forLocale(player));

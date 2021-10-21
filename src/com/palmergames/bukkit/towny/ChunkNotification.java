@@ -72,7 +72,7 @@ public class ChunkNotification {
 	TownBlock fromTownBlock, toTownBlock = null;
 	Town fromTown = null, toTown = null;
 	Resident fromResident = null, toResident = null;
-	String fromPlotType = null, toPlotType = null;
+	TownBlockType fromPlotType = null, toPlotType = null;
 	PlotGroup fromPlotGroup = null, toPlotGroup = null;
 
 	public ChunkNotification(WorldCoord from, WorldCoord to) {
@@ -82,7 +82,7 @@ public class ChunkNotification {
 
 		if (from.hasTownBlock()) {
 			fromTownBlock = from.getTownBlockOrNull();
-			fromPlotType = StringMgmt.capitalize(fromTownBlock.getTypeName());
+			fromPlotType = fromTownBlock.getType();
 			fromForSale = fromTownBlock.getPlotPrice() != -1;
 			if (fromTownBlock.hasPlotObjectGroup()) {
 				fromPlotGroup = fromTownBlock.getPlotObjectGroup();
@@ -98,7 +98,7 @@ public class ChunkNotification {
 
 		if (to.hasTownBlock()) {
 			toTownBlock = to.getTownBlockOrNull();
-			toPlotType = StringMgmt.capitalize(toTownBlock.getTypeName());
+			toPlotType = toTownBlock.getType();
 			toTown = toTownBlock.getTownOrNull();
 			toResident = toTownBlock.getResidentOrNull();
 			toForSale = toTownBlock.getPlotPrice() != -1;
@@ -314,7 +314,7 @@ public class ChunkNotification {
 	public String getPlotTypeNotification() {
 
 		if (toPlotType != null && !toPlotType.equals(fromPlotType) && !TownBlockType.RESIDENTIAL.equals(toPlotType))
-			return String.format(plotTypeNotificationFormat, toPlotType);
+			return String.format(plotTypeNotificationFormat, StringMgmt.capitalize(toPlotType.getName()));
 		return null;
 	}
 }
