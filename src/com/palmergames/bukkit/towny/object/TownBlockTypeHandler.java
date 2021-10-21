@@ -44,15 +44,14 @@ public final class TownBlockTypeHandler {
 
 	/**
 	 * Registers a new type. Should not be used at all outside of the TownBlockTypeRegisterEvent.
-	 * @param name - The name for this type.
 	 * @param type - The type
 	 * @throws TownyException - If a type with this name is already registered.
 	 */
-	public static void registerType(@NotNull String name, @NotNull TownBlockType type) throws TownyException {
-		if (exists(name))
-			throw new TownyException(String.format("A type named '%s' is already registered!", name));
+	public static void registerType(@NotNull TownBlockType type) throws TownyException {
+		if (exists(type.getName()))
+			throw new TownyException(String.format("A type named '%s' is already registered!", type.getName()));
 		
-		townBlockTypeMap.put(name.toLowerCase(), type);
+		townBlockTypeMap.put(type.getName().toLowerCase(), type);
 	}
 
 	/**

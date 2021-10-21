@@ -34,6 +34,7 @@ public class TownBlock extends TownyObject {
 	private TownyWorld world;
 	private Town town = null;
 	private Resident resident = null;
+	private TownBlockType type = TownBlockType.RESIDENTIAL;
 	private int x, z;
 	private double plotPrice = -1;
 	private boolean locked = false;
@@ -43,7 +44,6 @@ public class TownBlock extends TownyObject {
 	private Jail jail;
 	private Map<Resident, PermissionData> permissionOverrides = new HashMap<>();
 	private Set<Resident> trustedResidents = new HashSet<>();
-	private TownBlockType type = TownBlockType.RESIDENTIAL;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();

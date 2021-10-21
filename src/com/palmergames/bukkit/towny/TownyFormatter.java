@@ -1049,7 +1049,7 @@ public class TownyFormatter {
 				if (town != null) {
 					if (taxExempt && town.hasResident(resident)) // Resident will not pay any tax for plots owned by their towns.
 						continue;
-					plotTax += townBlock.getData().getTax(town);
+					plotTax += townBlock.getType().getTax(town);
 				}
 			}
 

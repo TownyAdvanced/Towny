@@ -41,10 +41,8 @@ public class TownBlockType {
 		return name;
 	}
 
-	@Deprecated
 	public double getTax(Town town) {
-
-		return town.getPlotTax();
+		return data.getTax(town);
 	}
 
 	@Deprecated
@@ -64,17 +62,22 @@ public class TownBlockType {
 		return name;
 	}
 
+	/**
+	 * @deprecated As of 0.97.3.0
+	 */
 	@Nullable
 	@Deprecated
 	public static TownBlockType lookup(int id) {
-		return idLookup.get(id);
+		return null;
 	}
 
+	/**
+	 * @deprecated As of 0.97.3.0, please use {@link TownBlockTypeHandler#getType(String)} instead.
+	 */
 	@Nullable
+	@Deprecated
 	public static TownBlockType lookup(@NotNull String name) {
-		TownBlockType type = nameLookup.get(name.toLowerCase());
-
-		return type;
+		return TownBlockTypeHandler.getType(name);
 	}
 	
 	public TownBlockData getData() {

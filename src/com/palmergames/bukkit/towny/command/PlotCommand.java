@@ -708,7 +708,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								}
 							}
 							
-							PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(TownBlockType.lookup(plotTypeName), townBlock, resident);
+							PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(type, townBlock, resident);
 							BukkitTools.getPluginManager().callEvent(preEvent);
 
 							if (preEvent.isCancelled()) {
@@ -1720,7 +1720,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			// Handle type being reset
 			if (plotTypeName.equalsIgnoreCase("reset"))
 				plotTypeName = "default";
-			
+
 			TownBlockType type = TownBlockTypeHandler.getType(plotTypeName);
 
 			if (type == null)
@@ -1746,7 +1746,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				// Allow for PlotPreChangeTypeEvent to trigger
-				PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(TownBlockType.lookup(plotTypeName), tb, resident);
+				PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(type, tb, resident);
 				BukkitTools.getPluginManager().callEvent(preEvent);
 				
 				// If any one of the townblocks is not allowed to be set, cancel setting all of them.
@@ -1756,8 +1756,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 			
-			int amount = townBlock.getPlotObjectGroup().getTownBlocks().size();	
-			double cost = type.getData().getCost() * amount;
+			int amount = townBlock.getPlotObjectGroup().getTownBlocks().size();
+			double cost = type.getCost() * amount;
 			
 			try {
 				// Test if we can pay first to throw an exception.
