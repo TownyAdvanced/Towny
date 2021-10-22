@@ -20,7 +20,7 @@ public class TownBlockTypeRegisterEvent extends Event {
 	 * @param type - The type
 	 * @throws TownyException - If a type with this name is already registered.
 	 */
-	public static void registerType(@NotNull TownBlockType type) throws TownyException {
+	public void registerType(@NotNull TownBlockType type) throws TownyException {
 		TownBlockTypeHandler.registerType(type);
 	}
 
