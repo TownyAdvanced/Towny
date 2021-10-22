@@ -6869,3 +6869,8 @@ v0.92.0.11:
   - Only compile pushes for master, courtesy of Warriorrrr with PR #5390.
   - Fix loading order of databaseconfig and config, fixing the config's database section conversion.
   - Fix towny.claimed.townowned.* node not being tested for.
+  - New Config Option: economy.daily_taxes.nation_perplot_upkeep
+    - Default: false
+    - Uses the total number of plots which a nation has across all of its towns to determine upkeep instead of nation_pertown_upkeep and instead of nation level (number of residents.)
+    - Calculated by (price_nation_upkeep X number of plots owned by the nation's towns.)
+  - Bump language file to 0.129.

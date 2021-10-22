@@ -44,6 +44,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class TownySettings {
 
@@ -1927,7 +1928,13 @@ public class TownySettings {
 		double multiplier = 1.0;
 
 		if (nation != null) {
-			if (isNationUpkeepPerTown()) {
+			if (isNationUpkeepPerPlot()) {
+				int plotCount = nation.getTowns().stream().collect(Collectors.summingInt(town-> town.getTownBlocks().size()));
+				if (isNationLevelModifierAffectingNationUpkeepPerTown())
+					return (getNationUpkeep() * plotCount) * Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
+				else
+					return (getNationUpkeep() * plotCount);
+			} else if (isNationUpkeepPerTown()) {
 				if (isNationLevelModifierAffectingNationUpkeepPerTown())
 					return (getNationUpkeep() * nation.getTowns().size()) * Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
 				else
@@ -1943,8 +1950,12 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.ECO_PRICE_NATION_UPKEEP_PERTOWN_NATIONLEVEL_MODIFIER);
 	}
+	
+	public static boolean isNationUpkeepPerPlot() {
+		return getBoolean(ConfigNodes.ECO_PRICE_NATION_UPKEEP_PERPLOT);
+	}
 
-	private static boolean isNationUpkeepPerTown() {
+	public static boolean isNationUpkeepPerTown() {
 
 		return getBoolean(ConfigNodes.ECO_PRICE_NATION_UPKEEP_PERTOWN);
 	}
