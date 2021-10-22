@@ -6875,3 +6875,4 @@ v0.92.0.11:
     - Calculated by (price_nation_upkeep X number of plots owned by the nation's towns.)
   - Bump language file to 0.129.
   - Make /t reslist {townname} usable by the console.
+  - Make the plugin.name_blacklist apply to the town and nation titles and surnames.

@@ -2059,6 +2059,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_input_too_long"));
 					return;
 				}
+				
+				if (NameValidation.isConfigBlacklistedName(title)) {
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
+					return;
+				}
 
 				resident.setTitle(title);
 				resident.save();
@@ -2106,6 +2111,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(StringMgmt.remArgs(split, 2)));
 				if (surname.length() > TownySettings.getMaxTitleLength()) {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_input_too_long"));
+					return;
+				}
+				
+				if (NameValidation.isConfigBlacklistedName(surname)) {
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
 					return;
 				}
 				

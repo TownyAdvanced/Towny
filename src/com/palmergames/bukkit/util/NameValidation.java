@@ -102,11 +102,20 @@ public class NameValidation {
 			return true;
 
 		// Config's name blacklist.
-		if (TownySettings.getBlacklistedNames().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(name.toLowerCase()))
+		if (isConfigBlacklistedName(name))
 			return true;
 
 		// Finally, send it over to pass the regex test.
 		return !isValidName(name);
+	}
+	
+	/**
+	 * Does this name not pass the config blacklist at plugin.name_blacklist
+	 * @param name String name to check.
+	 * @return true if this is something that isn't allowed in the config's name blacklist.
+	 */
+	public static boolean isConfigBlacklistedName(String name ) {
+		return TownySettings.getBlacklistedNames().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(name.toLowerCase());
 	}
 	
 	/**
