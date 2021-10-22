@@ -6874,3 +6874,4 @@ v0.92.0.11:
     - Uses the total number of plots which a nation has across all of its towns to determine upkeep instead of nation_pertown_upkeep and instead of nation level (number of residents.)
     - Calculated by (price_nation_upkeep X number of plots owned by the nation's towns.)
   - Bump language file to 0.129.
+  - Make /t reslist {townname} usable by the console.
