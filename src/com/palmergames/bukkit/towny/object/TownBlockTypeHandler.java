@@ -40,11 +40,11 @@ public final class TownBlockTypeHandler {
 		
 		applyConfigSettings(newData);
 		
+		townBlockTypeMap = newData;
+		
 		Bukkit.getPluginManager().callEvent(new TownBlockTypeRegisterEvent());
 		
-		Towny.getPlugin().getLogger().info(String.format("Loaded %d townblock types: %s", newData.size(), Arrays.toString(newData.keySet().toArray())));
-		
-		townBlockTypeMap = newData;
+		Towny.getPlugin().getLogger().info(String.format("Loaded %d townblock types: %s", townBlockTypeMap.size(), Arrays.toString(townBlockTypeMap.keySet().toArray())));
 	}
 
 	/**
@@ -57,6 +57,7 @@ public final class TownBlockTypeHandler {
 			throw new TownyException(String.format("A type named '%s' is already registered!", type.getName()));
 		
 		townBlockTypeMap.put(type.getName().toLowerCase(), type);
+		Towny.getPlugin().getLogger().info(String.format("A new townblock type was registered: %s", type.getName()));
 	}
 
 	/**
