@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.127
+version: 0.129
 language: italian
 author: Leonardo_DGS
 website: 'https://townyadvanced.github.io/'
@@ -592,7 +592,7 @@ msg_err_over_outposts_limit: 'Non puoi teletrasportarti nel tuo avamposto, sei s
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Outlaws:' #Used on /t outlawlist
+outlaws: 'Fuorilegge:' #Used on /t outlawlist
 online: '&a(Online)'
 registered_last_online: '&2Registrato il: &a%s &8| &2Ultimo Accesso: &a%s' #Used in mayor hover text in /town status screen.
 status_perm: 'Perm:' #Used on /plot perm, /res
@@ -603,7 +603,7 @@ status_off_bad: 'stato_spento'
 status_forced: '&cForzato'
 status_adjustable: '&aRegolabile'
 status_pvp: 'PVP:'
-explosions: 'Explosions:'
+explosions: 'Esplosioni:'
 firespread: 'Firespread:'
 mobspawns: 'Mob Spawns:'
 owner_of_x_plots: 'Owner of %s plots.'
@@ -615,7 +615,7 @@ status_nation_ranks: 'Nation Ranks:'
 jailed_in_town: ' in Town: %s'
 status_friends: 'Amici'
 rank_list_title: '%s Rank List'
-rank_list_mayor: 'Mayor:'
+rank_list_mayor: 'Sindaco:'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Aperta)'
 status_town_board: 'Board:'
@@ -624,20 +624,20 @@ status_town_size: 'Town Size:'
 status_town_size_bought: 'Bought:'
 status_town_size_bonus: 'Bonus:'
 status_town_size_nationbonus: 'NationBonus:'
-status_town_outposts: 'Outposts:'
+status_town_outposts: 'Avamposti:'
 status_bank_town2: 'Daily upkeep:'
 status_bank_town3: 'Tax:'
-status_town_nation: 'Nation:'
+status_town_nation: 'Nazione:'
 status_town_reslist_overlength: 'e altri...'
-status_nation_king: 'King:'
+status_nation_king: 'Re:'
 status_nation_tax: 'NationTax:'
-status_nation_towns: 'Towns'
-status_nation_allies: 'Allies'
-status_nation_enemies: 'Enemies'
+status_nation_towns: 'Città'
+status_nation_allies: 'Alleati'
+status_nation_enemies: 'Nemici'
 status_world_claimable: '&aClaimable'
 status_world_noclaims: '&cNoClaims'
 status_world_forcepvp: 'ForcePVP:'
-status_world_fire: 'Fire:'
+status_world_fire: 'Fuoco:'
 status_world_forcefire: 'Force Fire:'
 status_world_forceexplosion: 'Force Explosion:'
 status_world_worldmobs: 'World Mobs:'
@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Hai subito danno. Teletrasporto annullato.'
 #Added in 0.82
 invitation_prefix: "&8[&7Invito&8] &9"
 confirmation_prefix: "&8[&7Conferma &8] &9"
-this_message_will_expire2: '&Questo scadrà automaticamente tra 20 secondi'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Pagina successiva'
 msg_hover_previous_page: 'Pagina precedente'
 #Added in 0.83
@@ -1182,6 +1182,7 @@ msg_deleting_nation_will_result_in_losing_residents: '&cAttenzione: L''eliminazi
 msg_command_blocked_inside_towns: '&cNon puoi usare questo comando all''interno delle città.'
 msg_command_limited: 'Puoi usare questo comando solo all''interno dei tuoi lotti.'
 #Added in 0.104
+#Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Claimed at:'
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'L''uso delle Terre Selvaggie ha trasformato %s in tutti i mondi.'
@@ -1189,7 +1190,7 @@ msg_regenerations_use_x_in_all_worlds: 'La rigenerazione è %s in tutti i mondi.
 #Added in 0.106
 msg_command_outsider_blocked: 'Non puoi eseguire questo comando perché non vivi in %s.'
 #Added in 0.107
-msg_jailed_for_x_hours: ' for %s hours.'
+msg_jailed_for_x_hours: ' per %s ore.'
 msg_err_this_jail_has_no_cells: 'Questa prigione non ha celle.'
 msg_err_no_cell_found_at_this_location: 'Nessuna cella trovata in questa posizione.'
 msg_jail_cell_set: 'Set di celle.'
@@ -1336,7 +1337,7 @@ status_fractions: '%s/%s'
 status_rank_list: 'Rank List'
 status_hover_click_for_more: 'Click for more information.'
 status_jailed: 'Jailed:'
-status_bad_yes: '&cYES'
+status_bad_yes: '&cSI'
 status_good_no: '&aNO'
 status_resident_tax_title: '%s''s Tax'
 #Added in 0.122
@@ -1359,10 +1360,10 @@ msg_setup_success: 'Successfully changed config values to your new values.'
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'
+msg_you_have_lost_your_invulnerability: 'Hai perso la tua invulnerabilità.'
 #Added in 0.126
 #Used in the nation screen:
-status_capital: 'Capital:'
+status_capital: 'Capitale:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
 status_joined_town: 'Joined town:'
 #Used in the town screen's nation hover, to denote when a town joined a nation.
@@ -1417,3 +1418,17 @@ msg_purge_complete: 'Resident purge complete: %s deleted.'
 msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
+#Added in 0.128
+#Message shown to a capital city which is being denied the ability to toggle peaceful on.
+msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
+#Message shown as feedback for /t toggle nationzone command.
+msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
+#Error message shown when a town tries to toggle their nationzone which doesn't exist.
+msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
+#Added in 0.129
+#Shown in /towny prices, describing what controls nation upkeep.
+towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
+#Shown in /towny prices, describing what controls nation upkeep when it is per town.
+towny_prices_upkeep_num_towns: 'number of towns.'
+#Shown in /towny prices, describing that controls nation upkeep when it is per resident.
+towny_prices_upkeep_nation_level: 'nation level (num residents.)'

@@ -7,6 +7,8 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
+import com.palmergames.bukkit.towny.event.BonusBlockPurchaseCostCalculationEvent;
+import com.palmergames.bukkit.towny.event.TownBlockClaimCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourNationalCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -72,6 +74,7 @@ public class Town extends Government implements TownBlockOwner {
 	private boolean isConquered = false;
 	private int conqueredDays;
 	private int nationZoneOverride = 0;
+	private boolean nationZoneEnabled = true;
 	private final ConcurrentHashMap<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined = false;
@@ -478,13 +481,17 @@ public class Town extends Government implements TownBlockOwner {
 	public double getBonusBlockCost() {
 		double price = (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
 		double maxprice = TownySettings.getPurchasedBonusBlocksMaxPrice();
-		return (maxprice == -1 ? price : Math.min(price, maxprice));
+		BonusBlockPurchaseCostCalculationEvent event = new BonusBlockPurchaseCostCalculationEvent(this, (maxprice == -1 ? price : Math.min(price, maxprice)), 1);
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getPrice();
 	}
 	
 	public double getTownBlockCost() {
 		double price = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
 		double maxprice = TownySettings.getMaxClaimPrice();
-		return (maxprice == -1 ? price : Math.min(price, maxprice));
+		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this, (maxprice == -1 ? price : Math.min(price, maxprice)), 1);
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getPrice();
 	}
 
 	public double getTownBlockCostN(int inputN) throws TownyException {
@@ -511,8 +518,9 @@ public class Town extends Government implements TownBlockOwner {
 			cost += nextprice;
 			i++;
 		}
-		cost = Math.round(cost);
-		return cost;
+		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this, Math.round(cost), inputN);
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getPrice();
 	}
 	
 	public double getBonusBlockCostN(int inputN) throws TownyException {
@@ -547,8 +555,9 @@ public class Town extends Government implements TownBlockOwner {
 			cost += nextprice;
 			i++;
 		}
-		cost = Math.round(cost);
-		return cost;
+		BonusBlockPurchaseCostCalculationEvent event = new BonusBlockPurchaseCostCalculationEvent(this, Math.round(cost), inputN);
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getPrice();
 	}
 
 	public void addBonusBlocks(int bonusBlocks) {
@@ -583,8 +592,8 @@ public class Town extends Government implements TownBlockOwner {
 		if (homeBlock == null)
 			return;
 
-		// Set the world if it has changed.
-		if (!getHomeblockWorld().getName().equals(homeBlock.getWorld().getName()))
+		// Set the world if it has not been set yet, or if if has changed. 
+		if (world == null || !getHomeblockWorld().getName().equals(homeBlock.getWorld().getName()))
 			setWorld(homeBlock.getWorld());
 
 		// Unset the spawn if it is not inside of the new homeblock.
@@ -1482,6 +1491,14 @@ public class Town extends Government implements TownBlockOwner {
 		
 		return nation.getNationZoneSize() + (isCapital() ? TownySettings.getNationZonesCapitalBonusSize() : 0);
 		
+	}
+	
+	public boolean isNationZoneEnabled() {
+		return nationZoneEnabled;
+	}
+	
+	public void setNationZoneEnabled(boolean nationZoneEnabled) {
+		this.nationZoneEnabled = nationZoneEnabled;
 	}
 	
 	/**

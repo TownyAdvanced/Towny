@@ -6832,3 +6832,49 @@ v0.92.0.11:
     - Default: false
     - If true the capital city of nation cannot be neutral/peaceful.
   - Bump language file to 0.128.
+  - Fix the /ta plot claimedat command, courtesy of Warriorrrr with PR #5361.
+  - Expand MetaDataUtil methods to include hasMeta and addNewMeta methods.
+  - Make the plot change listener more efficient, courtesy of Warriorrrr with PR #5365.
+0.97.2.8:
+  - Make it so that turning Towny off in a world will shut down any active revert-on-unclaim actions. 
+  - Make Confirmations show the correct timeout time.
+  - Make Cancelled confirmations only show the default cancel message when there's no onCancel runnable.
+  - Fix plot groups causing an NPE when putting a town into a ruined state.
+    - Closes #5372.
+  - Fix name changes charging money for names which won't pass a later test.
+  - Make nation's names behave according the Capitalize Names config setting which only affect towns.
+  - Make towns set their world when it is null, when we set the homeblock.
+  - Fix support for Reserve and an NPE when trying to deposit money into a town bank.
+  - New API events courtesy of emanondev with PR #5363. (First-Time Contributor!)
+  - API: BonusBlockPurchaseCostCalculationEvent
+    - Used to modify what towns pay when using /t buy bonus.
+  - API: TownBlockClaimCostCalculationEvent
+    - Used to modify what towns pay when using /t claim. 
+  - Make nationzones toggle-able per town.
+    - Closes #5340.
+  - New Command: /town toggle nationzone
+    - Turns on and off the nationzone of a town (if they have one.)
+  - New Permission Node: towny.command.town.toggle.nationzone.
+    - Child node of towny.command.town.toggle.*
+    - No changes required in townyperms.yml.
+  - New API Event: TownToggleNationZoneEvent.
+    - Cancellable event.
+  - Remove the GatherResidentUUIDTask.
+    - Closes #4611.
+    - Closes #5375. 
+0.97.2.9:
+  - New languages: japanese, czech, tagalog, portuguese, thai.
+  - Update Toolchain, Test multiple Java Versions, and Use SDKMAN for JitPack configuration, courtesy of TheFlagCourier with PR #5386.
+  - Fix /ta reload all reloading config/lang twice, courtesy of Warriorrrr with PR #5389.
+  - Only compile pushes for master, courtesy of Warriorrrr with PR #5390.
+  - Fix loading order of databaseconfig and config, fixing the config's database section conversion.
+  - Fix towny.claimed.townowned.* node not being tested for.
+  - New Config Option: economy.daily_taxes.nation_perplot_upkeep
+    - Default: false
+    - Uses the total number of plots which a nation has across all of its towns to determine upkeep instead of nation_pertown_upkeep and instead of nation level (number of residents.)
+    - Calculated by (price_nation_upkeep X number of plots owned by the nation's towns.)
+  - Bump language file to 0.129.
+  - Make /t reslist {townname} usable by the console.
+  - Make the plugin.name_blacklist apply to the town and nation titles and surnames.
+0.97.2.10:
+  - Cache builds & fix up labeler & update to Java 17, courtesy of Warriorrrr with PR #5394.

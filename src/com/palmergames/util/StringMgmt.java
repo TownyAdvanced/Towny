@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Useful functions related to strings, or arrays of them.
@@ -191,6 +193,15 @@ public class StringMgmt {
 			return str;
 		
 		return  str.substring(0, 1).toUpperCase() + str.substring(1);
+	}
+	
+	/**
+	 * Capitalizes the beginning of each word, accounting for underscores separating those words
+	 * @param string String to capitalize.
+	 * @return String with the beginning letter of each word capitalized.
+	 */
+	public static String capitalizeStrings(String string) {
+		return Stream.of(string.split("_")).map(str -> str.substring(0, 1).toUpperCase() + str.substring(1)).collect(Collectors.joining("_"));
 	}
 	
 	public static boolean parseOnOff(String s) throws Exception {

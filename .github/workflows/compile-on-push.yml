@@ -1,19 +1,25 @@
 name: Maven Compile
 on:
     push:
-        branches-ignore: [l10n_master]
+        branches: [master]
     pull_request:
         branches-ignore: [l10n_master]
 jobs:
     build:
         runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                java: ['17']
+        name: Java (Temurin) ${{ matrix.java }}
         steps:
             - uses: actions/checkout@v2
-            - name: Set up OpenJDK 16
+            - name: Set up Eclipse Temurin
               uses: actions/setup-java@v2
               with:
-                  distribution: 'adopt'
-                  java-version: '16'
+                  distribution: 'temurin'
+                  java-version: ${{ matrix.java }}
+                  java-package: jdk
+                  cache: 'maven'
             - name: Compile with Maven
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

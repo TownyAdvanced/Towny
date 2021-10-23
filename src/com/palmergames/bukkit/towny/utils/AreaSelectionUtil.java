@@ -279,7 +279,7 @@ public class AreaSelectionUtil {
 				if (worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord, town) >= TownySettings.getMinDistanceFromTownPlotblocks()) {
 					out.add(worldCoord);
 				} else {
-					TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town." );					
+					TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town." );
 				}
 			} catch (NotRegisteredException ignored) {
 			}
@@ -303,7 +303,7 @@ public class AreaSelectionUtil {
 				if (worldCoord.getTownyWorld().getMinDistanceFromOtherTowns(worldCoord, town) >= TownySettings.getMinDistanceFromTownHomeblocks()) {
 					out.add(worldCoord);
 				} else {
-					TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town's homeblock." );					
+					TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town's homeblock." );
 				}
 			} catch (NotRegisteredException ignored) {
 			}

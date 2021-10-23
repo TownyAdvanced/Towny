@@ -25,7 +25,6 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
-import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -724,8 +723,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				
 				if (resident.hasUUID())
 					TownySettings.incrementUUIDCount();
-				else
-					GatherResidentUUIDTask.addResident(resident);
+
 			}
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
@@ -997,6 +995,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			town.setPurchasedBlocks(rs.getInt("purchased"));
 			town.setNationZoneOverride(rs.getInt("nationZoneOverride"));
+			town.setNationZoneEnabled(rs.getBoolean("nationZoneEnabled"));
 			
 			line = rs.getString("maxPercentTaxAmount");
 			if (line != null)
@@ -2125,6 +2124,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("bonus", town.getBonusBlocks());
 			twn_hm.put("purchased", town.getPurchasedBlocks());
 			twn_hm.put("nationZoneOverride", town.getNationZoneOverride());
+			twn_hm.put("nationZoneEnabled", town.isNationZoneEnabled());
 			twn_hm.put("commercialPlotPrice", town.getCommercialPlotPrice());
 			twn_hm.put("commercialPlotTax", town.getCommercialPlotTax());
 			twn_hm.put("embassyPlotPrice", town.getEmbassyPlotPrice());

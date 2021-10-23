@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
@@ -36,6 +35,7 @@ import com.palmergames.bukkit.towny.event.town.toggle.TownToggleUnknownEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleFireEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleMobsEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNationZoneEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleOpenEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePVPEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePublicEvent;
@@ -122,7 +122,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Send a list of all town help commands to player Command: /town
@@ -209,6 +208,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"explosion",
 		"fire",
 		"mobs",
+		"nationzone",
 		"neutral",
 		"peaceful",
 		"public",
@@ -517,6 +517,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			try {
 				listTowns(sender, split);
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			}
+			
+		} else if (split[0].equalsIgnoreCase("reslist")) {
+
+			try {
+				townResList(sender, split);
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
 			}
@@ -1654,6 +1662,26 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_peaceful", town.isNeutral() ? Translatable.of("enabled") : Translatable.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_peaceful", town.isNeutral() ? Translatable.of("enabled") : Translatable.of("disabled")));
+
+			} else if (split[0].equalsIgnoreCase("nationzone")) {
+
+				// Towns don't always have nationzones.
+				if (town.getNationZoneSize() < 1)
+					throw new TownyException(Translatable.of("msg_err_your_town_has_no_nationzone_to_toggle"));
+				
+				// Fire cancellable event directly before setting the toggle.
+				TownToggleNationZoneEvent preEvent = new TownToggleNationZoneEvent(sender, town, admin, choice.orElse(!town.isNationZoneEnabled()));
+				Bukkit.getPluginManager().callEvent(preEvent);
+				if (preEvent.isCancelled())
+					throw new TownyException(preEvent.getCancellationMsg());
+				
+				// Set the toggle setting.
+				town.setNationZoneEnabled(preEvent.getFutureState());
+				
+				// Send message feedback.
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_nationzone", town.isNationZoneEnabled() ? Translatable.of("enabled") : Translatable.of("disabled")));
+				if (admin)
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_nationzone", town.isNationZoneEnabled() ? Translatable.of("enabled") : Translatable.of("disabled")));
 				
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_TOGGLE, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_TOGGLE, split[0]).execute(sender, "town", split);
@@ -2031,6 +2059,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_input_too_long"));
 					return;
 				}
+				
+				if (NameValidation.isConfigBlacklistedName(title)) {
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
+					return;
+				}
 
 				resident.setTitle(title);
 				resident.save();
@@ -2078,6 +2111,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				String surname = StringMgmt.join(NameValidation.checkAndFilterArray(StringMgmt.remArgs(split, 2)));
 				if (surname.length() > TownySettings.getMaxTitleLength()) {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_input_too_long"));
+					return;
+				}
+				
+				if (NameValidation.isConfigBlacklistedName(surname)) {
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
 					return;
 				}
 				
@@ -2340,11 +2378,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					String name = split[1];
 					
-					if(NameValidation.isBlacklistName(name))
+					if (NameValidation.isBlacklistName(name) 
+						|| TownyUniverse.getInstance().hasTown(name))
 						throw new TownyException(Translatable.of("msg_invalid_name"));
 
         			if (TownySettings.getTownAutomaticCapitalisationEnabled())
-        				name = capitalizeString(name);
+        				name = StringMgmt.capitalizeStrings(name);
 					
                     if(TownyEconomyHandler.isActive() && TownySettings.getTownRenameCost() > 0) {
                 		if (!town.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost()))
@@ -2352,7 +2391,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
                 		
                     	final Town finalTown = town;
                     	final String finalName = name;
-                    	Confirmation confirmation = Confirmation.runOnAccept(() -> {
+                    	Confirmation.runOnAccept(() -> {
 							// Check if town can still pay rename cost
 							if (!finalTown.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost())) {
 								TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
@@ -2364,9 +2403,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							townRename(player, finalTown, finalName);
 						})
 						.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())))
-						.build();
-                    	
-                    	ConfirmationHandler.sendConfirmation(player, confirmation);
+						.sendTo(player);
                     	
                     } else {
                     	townRename(player, town, name);
@@ -2670,7 +2707,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!town.getAccount().canPayFromHoldings(cost))
 			throw new TownyException(Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 		
-		Confirmation confirmation = Confirmation.runOnAccept(() -> {
+		Confirmation.runOnAccept(() -> {
 			if (!town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n))) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 				return;
@@ -2680,8 +2717,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			town.save();
 		})
 			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
-			.build();
-		ConfirmationHandler.sendConfirmation(player, confirmation);
+			.sendTo(player); 
 	}
 
 	/**
@@ -2711,7 +2747,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_universe_limit"));
 
 			if (TownySettings.getTownAutomaticCapitalisationEnabled())
-				name = capitalizeString(name);
+				name = StringMgmt.capitalizeStrings(name);
 			
 			// Check the name is valid and doesn't already exist.
 			String filteredName;
@@ -4112,12 +4148,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_cannot_use_command_because_town_ruined"));
 			
 			town = getResidentOrThrow(player.getUniqueId()).getTown();
-		} else {
+		} else if (args.length == 2){
 			town = TownyUniverse.getInstance().getTown(args[1]);
 		}
 		
 		if (town != null) {
-			TownyMessaging.sendMessage(player, ChatTools.formatTitle(town.getName() + " " + Translatable.of("res_list").forLocale(player)));
+			TownyMessaging.sendMessage(sender, ChatTools.formatTitle(town.getName() + " " + Translatable.of("res_list").forLocale(sender)));
 			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("res_list").forLocale(sender), new ArrayList<>(town.getResidents())));
 		} else 
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_specify_name"));
@@ -4263,7 +4299,4 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static String capitalizeString(String string) {
-		return Stream.of(string.split("_")).map(str -> str.substring(0, 1).toUpperCase() + str.substring(1)).collect(Collectors.joining("_"));
-	}
 }
