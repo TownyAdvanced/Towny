@@ -1,25 +1,22 @@
-towny-war:
+Label-War:
     - src/com/palmergames/bukkit/towny/war/*
 
-commands:
+Label-Commands:
     - src/com/palmergames/bukkit/towny/command/*
 
-towny-objects:
-    - src/com/palmergames/bukkit/towny/object/*
-
-database:
+Label-Database:
     - src/com/palmergames/bukkit/towny/db/*
 
-towny-chat:
+Label-Chat:
     - src/com/palmergames/bukkit/towny/chat/*
 
-economy:
+Label-Economy:
     - src/com/palmergames/bukkit/towny/object/EconomyAccount.java
     - src/com/palmergames/bukkit/towny/object/EconomyHandler.java
     - src/com/palmergames/bukkit/towny/TownyEconomyHandler.java
 
-events:
+Label-Events:
     - src/com/palmergames/bukkit/towny/event/*
 
-github:
+Label-CI/CD:
     - .github/*
