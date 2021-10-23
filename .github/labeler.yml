@@ -7,8 +7,8 @@ Label-Commands:
 Label-Database:
     - src/com/palmergames/bukkit/towny/db/*
 
-Label-Chat:
-    - src/com/palmergames/bukkit/towny/chat/*
+Label-Config:
+    - src/com/palmergames/bukkit/towny/config/*
 
 Label-Economy:
     - src/com/palmergames/bukkit/towny/object/EconomyAccount.java
