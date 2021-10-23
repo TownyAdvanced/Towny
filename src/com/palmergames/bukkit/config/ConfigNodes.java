@@ -14,10 +14,10 @@ public enum ConfigNodes {
 			"language",
 			"en-US.yml",
 			"# The language file you wish to use",
-			"# Available languages: da-DK.yml, en-US.yml, es-419.yml, es-ES.yml, fr-FR.yml,",
-			"# de-DE.yml, he-IL.yml, id-ID.yml, it-IT.yml, ko-KR.yml, nl-NL.yml, no-NO.yml,",
-			"# pl-PL.yml, pt-BR.yml, ro-RO.yml, ru-RU.yml, sv-SE.yml, tr-TR.yml, vi-VN.yml,",
-			"# zh-CN.yml, zh-TW.yml"),
+			"# Available languages: cz-CZ.yml, da-DK.yml, de-DE.yml, en-US.yml, es-419.yml,",
+			"# es-ES.yml, fr-FR.yml, he-IL.yml, id-ID.yml, it-IT.yml, ja-JO.yml, ko-KR.yml,",
+			"# nl-NL.yml, no-NO.yml, pl-PL.yml, pt-BR.yml, pt-PT.yml, ro-RO.yml, ru-RU.yml,",
+			"# sv-SE.yml, th-TH.yml, tl-PH.yml, tr-TR.yml, vi-VN.yml, zh-CN.yml, zh-TW.yml"),
 	PERMS(
 			"permissions",
 			"",
@@ -876,7 +876,7 @@ public enum ConfigNodes {
 			"global_town_settings.automatic_capitalisation",
 			"false",
 			"",
-			"# When enabled, town names will automatically be capitalised upon creation."
+			"# When enabled, town (and nation) names will automatically be capitalised upon creation."
 	),
 	
 	GTOWN_SETTINGS_ALLOWED_TOWN_COLORS(
@@ -1009,11 +1009,6 @@ public enum ConfigNodes {
 			"plugin.database",
 			"",
 			"# See database.yml file for flatfile/mysql settings."),
-	PLUGIN_DATABASE_GATHER_RESIDENT_UUIDS("plugin.database.gather_resident_uuids",
-			"true",
-			"",
-			"# When true Towny will use a background task to gather UUIDs for residents who do not have UUIDs.",
-			"# This process will greatly improve your database's ability to convert from playernames to UUIDs in the future."),
 	PLUGIN_DAILY_BACKUPS_HEADER(
 			"plugin.database.daily_backups",
 			"",
@@ -2049,6 +2044,13 @@ public enum ConfigNodes {
 			"",
 			"# The server's daily charge on each nation. If a nation fails to pay this upkeep",
 			"# all of it's member town are kicked and the Nation is removed."),
+	ECO_PRICE_NATION_UPKEEP_PERPLOT(
+			"economy.daily_taxes.nation_perplot_upkeep",
+			"false",
+			"",
+			"# Uses the total number of plots which a nation has across all of its towns to determine upkeep",
+			"# instead of nation_pertown_upkeep and instead of nation level (number of residents.)",
+			"# Calculated by (price_nation_upkeep X number of plots owned by the nation's towns.)"),
 	ECO_PRICE_NATION_UPKEEP_PERTOWN(
 			"economy.daily_taxes.nation_pertown_upkeep",
 			"false",

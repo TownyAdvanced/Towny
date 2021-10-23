@@ -14,8 +14,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
-import com.palmergames.bukkit.towny.tasks.GatherResidentUUIDTask;
-
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
@@ -175,8 +173,6 @@ public abstract class TownyDataSource {
 
 			if (resident.hasUUID())
 				TownySettings.incrementUUIDCount();
-			else
-				GatherResidentUUIDTask.addResident(resident);
 		}
 		return true;
 	}

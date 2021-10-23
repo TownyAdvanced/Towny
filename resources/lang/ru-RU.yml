@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.127
+version: 0.129
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Из-за урона телепортаци�
 #Added in 0.82
 invitation_prefix: "&8[&7Приглашение&8] &9"
 confirmation_prefix: "&8[&7Подтверждение&8] &9"
-this_message_will_expire2: '&9Срок действия истекает через 20 секунд'
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'След. стр.'
 msg_hover_previous_page: 'Пред. стр.'
 #Added in 0.83
@@ -1182,6 +1182,7 @@ msg_deleting_nation_will_result_in_losing_residents: '&cПредупрежден
 msg_command_blocked_inside_towns: '&cВы не можете использовать эту команду в городах.'
 msg_command_limited: '&cВы можете использовать эту команду только на своих участках.'
 #Added in 0.104
+#Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Запривачен на:'
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Флаг use в диких землях %s во всех мирах.'
@@ -1417,3 +1418,17 @@ msg_purge_complete: 'Resident purge complete: %s deleted.'
 msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
+#Added in 0.128
+#Message shown to a capital city which is being denied the ability to toggle peaceful on.
+msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
+#Message shown as feedback for /t toggle nationzone command.
+msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
+#Error message shown when a town tries to toggle their nationzone which doesn't exist.
+msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
+#Added in 0.129
+#Shown in /towny prices, describing what controls nation upkeep.
+towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
+#Shown in /towny prices, describing what controls nation upkeep when it is per town.
+towny_prices_upkeep_num_towns: 'number of towns.'
+#Shown in /towny prices, describing that controls nation upkeep when it is per resident.
+towny_prices_upkeep_nation_level: 'nation level (num residents.)'

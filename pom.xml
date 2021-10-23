@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>Towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.97.2.7</version>
+    <version>0.97.2.10</version>
 
     <licenses>
         <license>
@@ -24,7 +24,7 @@
     </organization>
 
     <properties>
-        <java.version>16</java.version>
+        <java.version>17</java.version>
         <project.bukkitAPIVersion>1.14</project.bukkitAPIVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -101,7 +101,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version>
+            <version>5.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -162,13 +162,13 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>21.0.1</version>
+            <version>22.0.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
@@ -185,7 +185,7 @@
         <dependency>
             <groupId>com.github.bsideup.jabel</groupId>
             <artifactId>jabel-javac-plugin</artifactId>
-            <version>0.4.1</version>
+            <version>0.4.2</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -194,7 +194,7 @@
             <id>apache.snapshots</id>
             <url>https://repository.apache.org/snapshots/</url>
         </pluginRepository>
-    </pluginRepositories>    
+    </pluginRepositories>
 
     <build>
         <defaultGoal>clean package</defaultGoal>
@@ -215,7 +215,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.3.1</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -304,6 +304,10 @@
                                 <exclude>META-INF/*.MF</exclude>
                             </excludes>
                         </filter>
+                        <filter>
+                            <artifact>net.kyori:*</artifact>
+                            <excludes>META-INF/versions/9/module-info.class</excludes>
+                        </filter>
                     </filters>
                     <minimizeJar>true</minimizeJar>
                 </configuration>
@@ -334,7 +338,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.2.0</version>
+                        <version>3.3.1</version>
                         <executions>
                             <execution>
                                 <phase>none</phase>

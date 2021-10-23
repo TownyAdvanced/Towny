@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.127
+version: 0.129
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -667,7 +667,7 @@ msg_err_cant_afford_tp_nation: '&c无法传送到 %s.'
 msg_err_nationspawn_has_not_been_set: '&c国家传送点尚未设置.'
 msg_err_spawn_not_within_nationtowns: '&c国家传送点必须设置在本国的一个城镇内.'
 msg_err_spawn_not_within_capital: '&c国家传送点必须设置在国都.'
-msg_err_nation_spawn_war: '&c战争期间不允许在国家主城间传送。'
+msg_err_nation_spawn_war: '&c战争期间不允许在国家首都间传送。'
 msg_err_nation_not_public: '&c这个国家不是公开的.'
 msg_nation_toggle_public: '&a成功开放国家.'
 status_yes: '&a是'
@@ -944,7 +944,7 @@ msg_err_unable_to_add_more_residents_without_nation: '你的城镇在第一次�
 msg_the_following_towns_were_deleted_for_having_0_claims: '以下城镇因没有声明任何土地而被删除: %s'
 msg_spawn_warn: '传送价格为%s. 你确认继续传送? 提示: 加上 -ignore 跳过确认传送.'
 msg_confirm_purchase: '这样做将消耗%s. 你确认?'
-msg_warn_the_following_towns_will_be_removed_from_your_nation: '这些城镇将因过于远离新主城而脱离你的国家：%s。你确定要继续吗？'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: '这些城镇将因过于远离新首都而脱离你的国家：%s。你确定要继续吗？'
 msg_ta_deposit_all_success: '成功卷轴%s到所有国家和城镇的银行内.'
 bonus_townblocks: '奖励城镇区块'
 #Added in 0.80
@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: '伤害取消了你的传送.'
 #Added in 0.82
 invitation_prefix: "&8[&7邀请&8] &9"
 confirmation_prefix: "&8[&7确认&8] &9"
-this_message_will_expire2: '&9邀请将在20秒后过期'
+this_message_will_expire2: '&9这将会在%s秒后过期。'
 msg_hover_next_page: '下一页'
 msg_hover_previous_page: '上一页'
 #Added in 0.83
@@ -1182,6 +1182,7 @@ msg_deleting_nation_will_result_in_losing_residents: '&c警告：删除你的国
 msg_command_blocked_inside_towns: '&c你不能在城镇中使用此命令。'
 msg_command_limited: '你只能在自己的土地中使用此命令。'
 #Added in 0.104
+#Don't add a space to the end please
 msg_plot_perm_claimed_at: '声明于：'
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: '所有世界的野地建设已调至%s。'
@@ -1417,3 +1418,17 @@ msg_purge_complete: '清理完成，共删除了%s个居民。'
 msg_you_have_been_given_bonus_blocks: '你被给予了%s个额外的城镇区块上限。'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: '你城镇的额外城镇区块上限已达到最大值，不能再购买了。'
+#Added in 0.128
+#Message shown to a capital city which is being denied the ability to toggle peaceful on.
+msg_err_capital_cannot_be_peaceful: '首都不能调为和平状态。'
+#Message shown as feedback for /t toggle nationzone command.
+msg_changed_nationzone: '城镇的国域现在是%s'
+#Error message shown when a town tries to toggle their nationzone which doesn't exist.
+msg_err_your_town_has_no_nationzone_to_toggle: '你的城镇没有国域可以设置！'
+#Added in 0.129
+#Shown in /towny prices, describing what controls nation upkeep.
+towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
+#Shown in /towny prices, describing what controls nation upkeep when it is per town.
+towny_prices_upkeep_num_towns: 'number of towns.'
+#Shown in /towny prices, describing that controls nation upkeep when it is per resident.
+towny_prices_upkeep_nation_level: 'nation level (num residents.)'

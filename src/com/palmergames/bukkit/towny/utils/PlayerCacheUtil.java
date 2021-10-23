@@ -471,10 +471,16 @@ public class PlayerCacheUtil {
 			return true;
 		
 		/*
-		 * Check town overrides before testing plot permissions
+		 * Check own-town & town-owned overrides before testing plot permissions, if the resident is in their own town.
 		 */
-		if (targetTown.equals(TownyAPI.getInstance().getResidentTownOrNull(res)) && townyUniverse.getPermissionSource().hasOwnTownOverride(player, material, action))
-			return true;
+		if (targetTown.equals(TownyAPI.getInstance().getResidentTownOrNull(res))) {
+			
+			if (townyUniverse.getPermissionSource().hasOwnTownOverride(player, material, action))
+				return true;
+		
+			if (!townBlock.hasResident() && townyUniverse.getPermissionSource().hasTownOwnedOverride(player, material, action))
+				return true;
+		}
 		
 		/*
 		 * Player has a permission override set.

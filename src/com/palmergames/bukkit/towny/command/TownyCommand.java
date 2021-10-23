@@ -586,6 +586,14 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		if (town != null) {
 			output.add(translator.of("towny_prices_upkeep", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)), TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation))));
 			output.add(translator.of("towny_prices_upkeep_based_on", (TownySettings.isUpkeepByPlot() ? translator.of("towny_prices_upkeep_num_plots") : translator.of("towny_prices_upkeep_town_level"))));
+			String upkeepformula;
+			if (TownySettings.isNationUpkeepPerPlot())
+				upkeepformula = translator.of("towny_prices_upkeep_num_plots");
+			else if (TownySettings.isNationUpkeepPerTown())
+				upkeepformula = translator.of("towny_prices_upkeep_num_towns");
+			else 
+				upkeepformula = translator.of("towny_prices_upkeep_nation_level");
+			output.add(Translation.of("towny_prices_nation_upkeep_based_on", upkeepformula));
 			if (town.isOverClaimed() && TownySettings.getUpkeepPenalty() > 0)
 				output.add(translator.of("towny_prices_overclaimed_upkeep", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownPenaltyUpkeepCost(town))));
 			if (TownySettings.getUpkeepPenalty() > 0 )

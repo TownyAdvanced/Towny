@@ -14,6 +14,56 @@ import com.palmergames.bukkit.towny.object.metadata.StringDataField;
  *
  */
 public class MetaDataUtil {
+	
+	/**
+	 * Does the TownyObject have the StringDataField meta?
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock. 
+	 * @param sdf StringDataField to check for on the TownyObject.
+	 * @return true if the TownyObject has the StringDataField meta.
+	 */
+	public static boolean hasMeta(TownyObject townyObject, StringDataField sdf) {
+		return townyObject.hasMeta(sdf.getKey());
+	}
+
+	/**
+	 * Does the TownyObject have the BooleanDataField meta?
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock. 
+	 * @param bdf BooleanDataField to check for on the TownyObject.
+	 * @return true if the TownyObject has the BooleanDataField meta.
+	 */
+	public static boolean hasMeta(TownyObject townyObject, BooleanDataField bdf) {
+		return townyObject.hasMeta(bdf.getKey());
+	}
+	
+	/**
+	 * Does the TownyObject have the LongDataField meta?
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock. 
+	 * @param ldf LongDataField to check for on the TownyObject.
+	 * @return true if the TownyObject has the LongDataField meta.
+	 */
+	public static boolean hasMeta(TownyObject townyObject, LongDataField ldf) {
+		return townyObject.hasMeta(ldf.getKey());
+	}
+	
+	/**
+	 * Does the TownyObject have the IntegerDataField meta?
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock. 
+	 * @param idf IntegerDataField to check for on the TownyObject.
+	 * @return true if the TownyObject has the IntegerDataField meta.
+	 */
+	public static boolean hasMeta(TownyObject townyObject, IntegerDataField idf) {
+		return townyObject.hasMeta(idf.getKey());
+	}
+	
+	/**
+	 * Does the TownyObject have the DecimalDataField meta?
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock. 
+	 * @param ddf DecimalDataField to check for on the TownyObject.
+	 * @return true if the TownyObject has the DecimalDataField meta.
+	 */
+	public static boolean hasMeta(TownyObject townyObject, DecimalDataField ddf) {
+		return townyObject.hasMeta(ddf.getKey());
+	}
 
 	/**
 	 * Get a string from a TownyObject's metadata.
@@ -85,7 +135,112 @@ public class MetaDataUtil {
 			return ((DecimalDataField) cdf).getValue();
 		return 0.0;
 	}
+	
+	/**
+	 * Adds a new StringDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param sdf StringDataField to apply to the TownyObject.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewMeta(TownyObject townyObject, StringDataField sdf, boolean save) {
+		townyObject.addMetaData(sdf, save);
+	}
+	
+	/**
+	 * Adds a new BooleanDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param bdf BooleanDataField to apply to the TownyObject.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewMeta(TownyObject townyObject, BooleanDataField bdf, boolean save) {
+		townyObject.addMetaData(bdf, save);
+	}
+	
+	/**
+	 * Adds a new LongDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param ldf LongDataField to apply to the TownyObject.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewMeta(TownyObject townyObject, LongDataField ldf, boolean save) {
+		townyObject.addMetaData(ldf, save);
+	}
+	
+	/**
+	 * Adds a new IntegerDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param idf IntegerDataField to apply to the TownyObject.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewMeta(TownyObject townyObject, IntegerDataField idf, boolean save) {
+		townyObject.addMetaData(idf, save);
+	}
+	
+	/**
+	 * Adds a new DecimalDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param ddf DecimalDataField to apply to the TownyObject.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewMeta(TownyObject townyObject, DecimalDataField ddf, boolean save) {
+		townyObject.addMetaData(ddf, save);
+	}
+	
+	/**
+	 * Creates and adds a new StringDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param key String name of the new StringDataField key. 
+	 * @param value String value of the StringDataField key.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewStringMeta(TownyObject townyObject, String key, String value, boolean save) {
+		addNewMeta(townyObject, new StringDataField(key, value), save);
+	}
 
+	/**
+	 * Creates and adds a new BooleanDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param key String name of the new BooleanDataField key. 
+	 * @param value boolean value of the BooleanDataField key.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewBooleanMeta(TownyObject townyObject, String key, boolean value, boolean save) {
+		addNewMeta(townyObject, new BooleanDataField(key, value), save);
+	}
+	
+	/**
+	 * Creates and adds a new LongDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param key String name of the new LongDataField key. 
+	 * @param value long value of the LongDataField key.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewLongMeta(TownyObject townyObject, String key, long value, boolean save) {
+		addNewMeta(townyObject, new LongDataField(key, value), save);
+	}
+	
+	/**
+	 * Creates and adds a new IntegerDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param key String name of the new IntegerDataField key. 
+	 * @param value long value of the IntegerDataField key.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewIntegerMeta(TownyObject townyObject, String key, int value, boolean save) {
+		addNewMeta(townyObject, new IntegerDataField(key, value), save);
+	}
+	
+	/**
+	 * Creates and adds a new DecimalDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param key String name of the new DecimalDataField key. 
+	 * @param value double value of the DecimalDataField key.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewDoubleMeta(TownyObject townyObject, String key, double value, boolean save) {
+		addNewMeta(townyObject, new DecimalDataField(key, value), save);
+	}
+	
 	/**
 	 * Sets a StringDataField metadata on a TownyObject.
 	 * 

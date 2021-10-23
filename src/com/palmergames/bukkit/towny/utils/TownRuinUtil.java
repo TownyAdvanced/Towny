@@ -112,7 +112,7 @@ public class TownRuinUtil {
 		
 		// Unregister the now empty plotgroups.
 		if (town.getPlotGroups() != null)
-			for (PlotGroup group : town.getPlotGroups())
+			for (PlotGroup group : new ArrayList<>(town.getPlotGroups()))
 				TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
 		
 		// Check if Town has more residents than it should be allowed (if it were the capital of a nation.)

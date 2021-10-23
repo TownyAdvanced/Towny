@@ -37,6 +37,7 @@ import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
@@ -86,6 +87,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -146,7 +148,6 @@ public class Towny extends JavaPlugin {
 		PlayerCacheUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
-		TownyTimerHandler.toggleGatherResidentUUIDTask(false);
 
 		try {
 			// Load the foundation of Towny, containing config, locales, database.
@@ -229,12 +230,15 @@ public class Towny extends JavaPlugin {
 	}
 
 	public void loadFoundation(boolean reload) {
-		// Before anything can continue we must load the config files, database and set the foundation for Towny.
+		// Before anything can continue we must load the databaseconfig, config 
+		// file, language and permissions, setting the foundation for Towny.
+
+		// Load the database config first, so any conversion happens before the config is loaded.
+		loadDatabaseConfig(reload);
+		// Then load the config.
 		loadConfig(reload);
 		// Then load the language files.
 		loadLocalization(reload);
-		// Then load the database.
-		loadDatabaseConfig(reload);
 		// Then load permissions
 		loadPermissions(reload);
 
@@ -270,6 +274,7 @@ public class Towny extends JavaPlugin {
 			if (isError(TownyInitException.TownyError.MAIN_CONFIG)) {
 				removeError(TownyInitException.TownyError.MAIN_CONFIG);
 			}
+			TownyMessaging.sendMsg(Translatable.of("msg_reloaded_config"));
 		}
 	}
 	
@@ -280,6 +285,7 @@ public class Towny extends JavaPlugin {
 			if (isError(TownyInitException.TownyError.LOCALIZATION)) {
 				removeError(TownyInitException.TownyError.LOCALIZATION);
 			}
+			TownyMessaging.sendMsg(Translatable.of("msg_reloaded_lang"));
 		}
 	}
 
@@ -605,8 +611,6 @@ public class Towny extends JavaPlugin {
 		TownyTimerHandler.toggleCooldownTimer(TownySettings.getPVPCoolDownTime() > 0 || TownySettings.getSpawnCooldownTime() > 0);
 		TownyTimerHandler.toggleDrawSmokeTask(true);
 		TownyTimerHandler.toggleDrawSpointsTask(TownySettings.getVisualizedSpawnPointsEnabled());
-		if (!TownySettings.getUUIDPercent().equals("100%") && TownySettings.isGatheringResidentUUIDS())
-			TownyTimerHandler.toggleGatherResidentUUIDTask(true);
 	}
 	
 	private void toggleTimersOff() {
@@ -919,7 +923,13 @@ public class Towny extends JavaPlugin {
 	 */
 	public boolean hasPlayerMode(Player player, String mode) {
 
-		return hasPlayerMode(player.getName(), mode);
+		return hasPlayerMode(player.getUniqueId(), mode);
+	}
+	
+	public boolean hasPlayerMode(UUID uuid, String mode) {
+		Resident resident = TownyUniverse.getInstance().getResident(uuid);
+		
+		return resident != null && resident.hasMode(mode);
 	}
 
 	public boolean hasPlayerMode(String name, String mode) {

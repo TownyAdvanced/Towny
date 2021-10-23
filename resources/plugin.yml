@@ -443,6 +443,7 @@ permissions:
             towny.command.town.toggle.explosion: true
             towny.command.town.toggle.fire: true
             towny.command.town.toggle.mobs: true
+            towny.command.town.toggle.nationzone: true
             towny.command.town.toggle.neutral: true
             towny.command.town.toggle.open: true
             towny.command.town.toggle.public: true
