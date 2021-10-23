@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.128
+version: 0.129
 language: Romanian
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1425,3 +1425,10 @@ msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful statu
 msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
+#Added in 0.129
+#Shown in /towny prices, describing what controls nation upkeep.
+towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
+#Shown in /towny prices, describing what controls nation upkeep when it is per town.
+towny_prices_upkeep_num_towns: 'number of towns.'
+#Shown in /towny prices, describing that controls nation upkeep when it is per resident.
+towny_prices_upkeep_nation_level: 'nation level (num residents.)'
