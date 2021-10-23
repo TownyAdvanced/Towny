@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object.jail;
 
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.object.Translation;
 
 public enum JailReason {
 
@@ -16,7 +15,7 @@ public enum JailReason {
 		this.hours = hours;
 	}
 	public String getCause() {
-		return Translation.of(cause);
+		return cause;
 	}
 	public int getHours() {
 		return hours;
