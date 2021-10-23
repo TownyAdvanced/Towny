@@ -9,7 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                java: ['16', '17']
+                java: ['17']
         name: Java (Temurin) ${{ matrix.java }}
         steps:
             - uses: actions/checkout@v2
@@ -19,6 +19,7 @@ jobs:
                   distribution: 'temurin'
                   java-version: ${{ matrix.java }}
                   java-package: jdk
+                  cache: 'maven'
             - name: Compile with Maven
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
