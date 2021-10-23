@@ -414,7 +414,7 @@ public class SpawnUtil {
 		}
 		// sets tp location to their bedspawn only if it isn't in the town they're being teleported from.
 		Location bed = outlawedPlayer.getBedSpawnLocation();
-		if ((bed != null) && (TownyAPI.getInstance().getTown(bed) != town))
+		if (bed != null && TownyAPI.getInstance().getTown(bed) != town)
 			spawnLocation = bed;
 		if (outlaw.hasTown() && TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer) != null)
 			spawnLocation = TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer);
@@ -439,15 +439,12 @@ public class SpawnUtil {
 		Town town = resident.getTownOrNull();
 		Location loc = resident.getPlayer().getWorld().getSpawnLocation();
 
-		if (town != null)
-			if (town.hasSpawn()) {
-				try {
-					loc = town.getSpawn();
-				} catch (Exception ignored) {}
-			}
-		
-		if (resident.getPlayer().getBedSpawnLocation() != null)
-			loc = resident.getPlayer().getBedSpawnLocation();
+		if (town != null && town.hasSpawn())
+			loc = town.getSpawnOrNull();
+
+		Location bed = resident.getPlayer().getBedSpawnLocation();
+		if (bed != null)
+			loc = bed;
 		
 		return loc;
 	}

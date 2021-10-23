@@ -427,11 +427,11 @@ public class CombatUtil {
 			return true;
 		return false;
 	}
-
+	
 	/**
 	 * @deprecated as of 0.96.7.1. Use {@link CombatUtil#isArenaPlot(Player, Player)}.
 	 * Return true if both attacker and defender are in Arena Plots.
-	 *
+	 * 
 	 * @param attacker - Attacking Player
 	 * @param defender - Defending Player (receiving damage)
 	 * @return true if both players in an Arena plot.
@@ -441,7 +441,6 @@ public class CombatUtil {
 
 		return isArenaPlot(attacker, defender);
 	}
-
 
 	/**
 	 * Is the defending resident an ally of the attacking resident?
