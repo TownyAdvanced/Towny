@@ -453,7 +453,9 @@ public class SpawnUtil {
 	}
 	
 	private static void initiatePluginTeleport(Resident resident, Location loc, boolean ignoreWarmup) {
+		long warmup = 0;
+		if (!ignoreWarmup) warmup = TownySettings.getTeleportWarmupTime() * 20;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> PaperLib.teleportAsync(resident.getPlayer(), loc, TeleportCause.PLUGIN),
-			(long) TownySettings.getTeleportWarmupTime() * 20);
+			warmup);
 	}
 }
