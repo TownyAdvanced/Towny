@@ -1,7 +1,7 @@
 Label-War:
     - src/com/palmergames/bukkit/towny/war/*
 
-Label-Commands:
+Label-Command:
     - src/com/palmergames/bukkit/towny/command/*
 
 Label-Data:
