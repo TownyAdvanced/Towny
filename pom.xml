@@ -24,7 +24,7 @@
     </organization>
 
     <properties>
-        <java.version>16</java.version>
+        <java.version>17</java.version>
         <project.bukkitAPIVersion>1.14</project.bukkitAPIVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -185,7 +185,7 @@
         <dependency>
             <groupId>com.github.bsideup.jabel</groupId>
             <artifactId>jabel-javac-plugin</artifactId>
-            <version>0.4.1</version>
+            <version>0.4.2</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
