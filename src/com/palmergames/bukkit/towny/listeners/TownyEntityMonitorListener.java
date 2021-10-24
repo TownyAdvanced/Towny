@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import net.citizensnpcs.api.CitizensAPI;
@@ -276,7 +277,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 		if (attackerPlayer != null 
 				&& WarUtil.hasSameWar(defenderResident, attackerResident)
-				&& TownySettings.getWartimeDeathPrice() > 0 ) {
+				&& EventWarSettings.getWartimeDeathPrice() > 0 ) {
 			// This will be handled in the EventWarListener.
 			return;
 			

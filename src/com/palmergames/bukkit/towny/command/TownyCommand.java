@@ -30,8 +30,6 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
-import com.palmergames.bukkit.towny.war.eventwar.WarType;
-import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.KeyValue;
@@ -67,7 +65,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		"spy",
 		"universe",
 		"v",
-		"war",
 		"switches",
 		"itemuse",
 		"farmblocks",
@@ -82,15 +79,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		"spy",
 		"universe",
 		"tree",
-		"v",
-		"war"
-	);
-
-	private static final List<String> townyWarTabCompletes = Arrays.asList(
-		"stats",
-		"scores",
-		"hud",
-		"participants"
+		"v"
 	);
 	
 	private static final List<String> townyTopTabCompletes = Arrays.asList(
@@ -145,12 +134,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (TownyUpdateChecker.hasCheckedSuccessfully())
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_up_to_date"));
 				}
-			} else if (args[0].equalsIgnoreCase("war")) {
-				if (args.length == 1)
-					HelpMenu.TOWNY_WAR.send(sender);
-				else 
-					parseTownyWarCommand(StringMgmt.remFirstArg(args), null);
-				
 			} else if (args[0].equalsIgnoreCase("universe")) {
 				for (String line : getUniverseStats(Translation.getDefaultLocale()))
 					TownyMessaging.sendMessage(sender, Colors.strip(line));
@@ -179,10 +162,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(townyTopLandTabCompletes, args[2]);
 						}
 				}
-				break;
-			case "war":
-				if (args.length == 2)
-					return NameUtil.filterByStart(townyWarTabCompletes, args[1]);
 				break;
 			case "map":
 				if (args.length == 2)
@@ -294,14 +273,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (TownyUpdateChecker.hasCheckedSuccessfully())
 						TownyMessaging.sendMsg(player, Translatable.of("msg_up_to_date"));
 				}
-			} else if (split[0].equalsIgnoreCase("war")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR.getNode(split[0].toLowerCase())))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
-				if (split.length == 1) 
-					HelpMenu.TOWNY_WAR.send(player);
-				else 
-					parseTownyWarCommand(StringMgmt.remFirstArg(split), player);
-
 			} else if (split[0].equalsIgnoreCase("spy")) {
 				if (permSource.testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
 					Resident resident = getResidentOrThrow(player.getUniqueId());
@@ -319,98 +290,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private void parseTownyWarCommand(String[] args, Player p) {
-		if (args.length > 0) {
-			if (args[0].equalsIgnoreCase("stats")) {
-				parseWarStats(p);
-			} else if (args[0].equalsIgnoreCase("scores")) {
-				parseWarScores(p);
-			} else if (args[0].equalsIgnoreCase("participants")) {
-				parseWarParticipants(p);
-			} else if (args[0].equalsIgnoreCase("hud") && p == null) {
-				TownyMessaging.sendMsg("No hud for console!");
-			} else if (args[0].equalsIgnoreCase("hud") && p != null) {
-				if (TownyUniverse.getInstance().getPermissionSource().testPermission(p, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR_HUD.getNode())) {
-					HUDManager.toggleWarHUD(p);
-				} else {
-					TownyMessaging.sendErrorMsg(p, Translatable.of("msg_err_command_disable"));
-				}
-			} else if (args[0].equalsIgnoreCase("types")) {
-				TownyMessaging.sendMessage(p, getWarTypes());
-			}
-		}
-	}
-
-	private List<String> getWarTypes() {
-		List<String> lines = new ArrayList<>();
-		lines.add(ChatTools.formatTitle("War Types"));
-		WarType type = WarType.RIOT;
-		lines.add(type.getName());
-		lines.add("   hasMayorDeath: " + type.hasMayorDeath);
-		lines.add("   residentLives: " + type.residentLives);
-		lines.add("      mayorLives: " + type.mayorLives);
-		lines.add("   pointsPerKill: " + type.pointsPerKill);
-		lines.add("      baseSpoils: " + type.baseSpoils);
-		lines.add("  hasTownBlockHP: " + type.hasTownBlockHP);
-		lines.add("   takesoverTown: " + type.hasTownConquering);
-		type = WarType.TOWNWAR;
-		lines.add(type.getName());
-		lines.add("   hasMayorDeath: " + type.hasMayorDeath);
-		lines.add("   residentLives: " + type.residentLives);
-		lines.add("      mayorLives: " + type.mayorLives);
-		lines.add("   pointsPerKill: " + type.pointsPerKill);
-		lines.add("      baseSpoils: " + type.baseSpoils);
-		lines.add("  hasTownBlockHP: " + type.hasTownBlockHP);
-		lines.add("   takesoverTown: " + type.hasTownConquering);
-		type = WarType.CIVILWAR;
-		lines.add(type.getName());
-		lines.add("   hasMayorDeath: " + type.hasMayorDeath);
-		lines.add("   residentLives: " + type.residentLives);
-		lines.add("      mayorLives: " + type.mayorLives);
-		lines.add("   pointsPerKill: " + type.pointsPerKill);
-		lines.add("      baseSpoils: " + type.baseSpoils);
-		lines.add("  hasTownBlockHP: " + type.hasTownBlockHP);
-		lines.add("   takesoverTown: " + type.hasTownConquering);
-		type = WarType.NATIONWAR;
-		lines.add(type.getName());
-		lines.add("   hasMayorDeath: " + type.hasMayorDeath);
-		lines.add("   residentLives: " + type.residentLives);
-		lines.add("      mayorLives: " + type.mayorLives);
-		lines.add("   pointsPerKill: " + type.pointsPerKill);
-		lines.add("      baseSpoils: " + type.baseSpoils);
-		lines.add("  hasTownBlockHP: " + type.hasTownBlockHP);
-		lines.add("   takesoverTown: " + type.hasTownConquering);
-		type = WarType.WORLDWAR;
-		lines.add(type.getName());
-		lines.add("   hasMayorDeath: " + type.hasMayorDeath);
-		lines.add("   residentLives: " + type.residentLives);
-		lines.add("      mayorLives: " + type.mayorLives);
-		lines.add("   pointsPerKill: " + type.pointsPerKill);
-		lines.add("      baseSpoils: " + type.baseSpoils);
-		lines.add("  hasTownBlockHP: " + type.hasTownBlockHP);
-		lines.add("   takesoverTown: " + type.hasTownConquering);
-		
-		return lines;
-	}
-
-	private void parseWarParticipants(Player player) {
-		for (War war : TownyUniverse.getInstance().getWars()) {
-			war.getWarParticipants().outputParticipants(war.getWarType(), war.getWarName());
-		}
-	}	
-	
-	private void parseWarStats(Player player) {
-		War war = TownyUniverse.getInstance().getWarEvent(player); 
-		if (war != null)
-			war.getScoreManager().sendStats(player);
-	}
-	
-	private void parseWarScores(Player player) {
-		War war = TownyUniverse.getInstance().getWarEvent(player); 
-		if (war != null)
-			war.getScoreManager().sendScores(player, -1);
-	}
-	
 	private void TopCommand(Player player, String[] args) {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {

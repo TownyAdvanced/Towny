@@ -130,9 +130,6 @@ public class Towny extends JavaPlugin {
 	private final EventWarTownyActionListener warActionListener = new EventWarTownyActionListener(this);
 	private final EventWarTownyListener warTownyListener = new EventWarTownyListener();
 	
-	
-
-	
 	private TownyUniverse townyUniverse;
 
 	private final Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());

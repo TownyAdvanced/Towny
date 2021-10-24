@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -26,6 +25,7 @@ import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.events.PlotAttackedEvent;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.KeyValueTable;
 
@@ -110,10 +110,10 @@ public class WarZoneManager {
 		WorldCoord worldCoord = townBlock.getWorldCoord();
 		int hp = warZone.get(worldCoord) + healthChange;
 		boolean isHomeBlock = townBlock.isHomeBlock();
-		if (isHomeBlock && hp > TownySettings.getWarzoneHomeBlockHealth())
-			return TownySettings.getWarzoneHomeBlockHealth();
-		else if (!isHomeBlock && hp > TownySettings.getWarzoneTownBlockHealth())
-			return TownySettings.getWarzoneTownBlockHealth();
+		if (isHomeBlock && hp > EventWarSettings.getWarzoneHomeBlockHealth())
+			return EventWarSettings.getWarzoneHomeBlockHealth();
+		else if (!isHomeBlock && hp > EventWarSettings.getWarzoneTownBlockHealth())
+			return EventWarSettings.getWarzoneTownBlockHealth();
 		return hp;
 	}
 	
@@ -222,7 +222,7 @@ public class WarZoneManager {
 		/*
 		 * Handle bonus townblocks.
 		 */
-		if (TownySettings.getWarEventCostsTownblocks() || TownySettings.getWarEventWinnerTakesOwnershipOfTownblocks()){		
+		if (EventWarSettings.getWarEventCostsTownblocks() || EventWarSettings.getWarEventWinnerTakesOwnershipOfTownblocks()){		
 			defenderTown.addBonusBlocks(-1);
 			attacker.addBonusBlocks(1);
 		}
@@ -236,18 +236,20 @@ public class WarZoneManager {
 			townBlock.save();
 		}		
 		
-		/*
-		 * Handle Money penalties for loser.
-		 */
-		// Check for money loss in the defending town
-		if (TownySettings.isUsingEconomy() && !defenderTown.getAccount().payTo(TownySettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
-			TownyMessaging.sendPrefixedTownMessage(defenderTown, Translatable.of("msg_war_town_ran_out_of_money"));
-			// Remove the town from the war. If this is a NationWar or WorldWar it will take down the Nation.
-			remove(attacker, defenderTown);
-			return;
-		} else
-			TownyMessaging.sendPrefixedTownMessage(defenderTown, Translatable.of("msg_war_town_lost_money_townblock", TownyEconomyHandler.getFormattedBalance(TownySettings.getWartimeTownBlockLossPrice())));
-		
+		if (EventWarSettings.isUsingEconomy()) {
+			/*
+			 * Handle Money penalties for loser.
+			 */
+			// Check for money loss in the defending town
+			if (!defenderTown.getAccount().payTo(EventWarSettings.getWartimeTownBlockLossPrice(), attacker, "War - TownBlock Loss")) {
+				TownyMessaging.sendPrefixedTownMessage(defenderTown, Translatable.of("msg_war_town_ran_out_of_money"));
+				// Remove the town from the war. If this is a NationWar or WorldWar it will take down the Nation.
+				remove(attacker, defenderTown);
+				return;
+			} else
+				TownyMessaging.sendPrefixedTownMessage(defenderTown, Translatable.of("msg_war_town_lost_money_townblock", TownyEconomyHandler.getFormattedBalance(EventWarSettings.getWartimeTownBlockLossPrice())));			
+		}
+
 		/*
 		 * Handle homeblocks & regular townblocks & regular townblocks with jails on them.
 		 */
@@ -265,7 +267,7 @@ public class WarZoneManager {
 				freeFromJail(townBlock, defenderTown);
 			
 			// Update the score. 
-			war.getScoreManager().townScored(attacker, TownySettings.getWarPointsForTownBlock(), townBlock, 1);
+			war.getScoreManager().townScored(attacker, EventWarSettings.getWarPointsForTownBlock(), townBlock, 1);
 		}
 		
 	}
@@ -310,7 +312,7 @@ public class WarZoneManager {
 				if (isCapital) {
 					List<Town> towns = new ArrayList<>(nation.getTowns());
 					// Based on config, do not conquer the capital.
-					if (TownySettings.getWarEventWinnerTakesOwnershipOfTownsExcludesCapitals()) 
+					if (EventWarSettings.getWarEventWinnerTakesOwnershipOfTownsExcludesCapitals()) 
 						towns.remove(nation.getCapital());
 
 					for (Town fallenTown : towns) {
@@ -402,7 +404,7 @@ public class WarZoneManager {
 		/*
 		 * Award points to the attacking Town for felling a nation.
 		 */
-		war.getScoreManager().townScored(attacker, TownySettings.getWarPointsForNation(), nation, 0);
+		war.getScoreManager().townScored(attacker, EventWarSettings.getWarPointsForNation(), nation, 0);
 		
 		/*
 		 * Award points for each Town in the Nation which wasn't already removed from the war.
@@ -502,14 +504,14 @@ public class WarZoneManager {
 	 */
 	private void conquer(Town town, Nation nation) {
 		town.setConquered(true);
-		town.setConqueredDays(TownySettings.getWarEventConquerTime());
+		town.setConqueredDays(EventWarSettings.getWarEventConquerTime());
 		town.removeNation();
 		try {
 			town.setNation(nation);
 		} catch (AlreadyRegisteredException e) {
 		}
 		town.save();
-		war.getMessenger().sendGlobalMessage(Translatable.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), nation.getName(), TownySettings.getWarEventConquerTime()));
+		war.getMessenger().sendGlobalMessage(Translatable.of("msg_war_town_has_been_conquered_by_nation_x_for_x_days", town.getName(), nation.getName(), EventWarSettings.getWarEventConquerTime()));
 		war.getWarParticipants().remove(town);
 	}
 

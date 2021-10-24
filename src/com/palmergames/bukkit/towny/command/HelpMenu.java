@@ -194,7 +194,6 @@ public enum HelpMenu {
 			return new MenuBuilder("townyadmin toggle")
 				.add("wildernessuse", "")
 				.add("regenerations", "")
-				.add("war", "")
 				.add("peaceful", "")
 				.add("devmode", "")
 				.add("debug", "")
@@ -318,18 +317,6 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin depositall")
 				.add("[amount]", "Deposit the given amount into all town and nation banks.");
-		}
-	},
-	
-	TOWNY_WAR {
-		@Override
-		public MenuBuilder load() {
-			return new MenuBuilder("towny war")
-				.add("stats", "")
-				.add("scores", "")
-				.add("participants", "")
-				.add("hud", "")
-				.add("types", "");
 		}
 	},
 	

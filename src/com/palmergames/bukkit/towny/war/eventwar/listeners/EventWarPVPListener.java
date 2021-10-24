@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyFriendlyFireTestEvent;
@@ -20,6 +19,7 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 
 public class EventWarPVPListener implements Listener {
 
@@ -50,6 +50,9 @@ public class EventWarPVPListener implements Listener {
 		if (war.getWarType().residentLives != -1) {
 			residentLosesALife(victimRes, killerRes, war, event.getLocation());
 		}
+
+		if (!EventWarSettings.isUsingEconomy())
+			return;
 		
 		/*
 		 * Handle death payments.
@@ -57,8 +60,8 @@ public class EventWarPVPListener implements Listener {
 		 * Money is paid by the player, if the player cannot pay the full 
 		 * amount the remaining balance is taken from the player's Town.
 		 */
-		double price = Math.min(victimRes.getAccount().getHoldingBalance(), TownySettings.getWartimeDeathPrice());
-		double townPrice = victimRes.getAccount().canPayFromHoldings(price) ? 0 : TownySettings.getWartimeDeathPrice() - victimRes.getAccount().getHoldingBalance(); 
+		double price = Math.min(victimRes.getAccount().getHoldingBalance(), EventWarSettings.getWartimeDeathPrice());
+		double townPrice = victimRes.getAccount().canPayFromHoldings(price) ? 0 : EventWarSettings.getWartimeDeathPrice() - victimRes.getAccount().getHoldingBalance(); 
 
 		if (price > 0) {
 			victimRes.getAccount().payTo(price, killerRes, "Death Payment (War)");

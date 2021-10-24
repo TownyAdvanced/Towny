@@ -12,7 +12,6 @@ import org.bukkit.event.Listener;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
@@ -24,7 +23,7 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
-import com.palmergames.bukkit.towny.war.eventwar.WarZoneConfig;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 
 public class EventWarTownyActionListener implements Listener {
 
@@ -45,7 +44,7 @@ public class EventWarTownyActionListener implements Listener {
 		// Allow build for Event War if material is an EditableMaterial
 		if (status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) {
 			Material mat = event.getMaterial();
-			if (!WarZoneConfig.isEditableMaterialInWarZone(mat)) {
+			if (!EventWarSettings.isEditableMaterialInWarZone(mat)) {
 				event.setCancelled(true);
 				event.setMessage(Translatable.of("msg_err_warzone_cannot_edit_material", "destroy", mat.toString().toLowerCase()).forLocale(player));
 				return;
@@ -66,7 +65,7 @@ public class EventWarTownyActionListener implements Listener {
 		// Allow destroy for Event War if material is an EditableMaterial
 		if (status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) {
 			Material mat = event.getMaterial();
-			if (!WarZoneConfig.isEditableMaterialInWarZone(mat)) {
+			if (!EventWarSettings.isEditableMaterialInWarZone(mat)) {
 				event.setCancelled(true);
 				event.setMessage(Translatable.of("msg_err_warzone_cannot_edit_material", "build", mat.toString().toLowerCase()).forLocale(player));
 				return;
@@ -86,7 +85,7 @@ public class EventWarTownyActionListener implements Listener {
 
 		// Allow ItemUse for Event War if configured.
 		if (status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) {
-			if (!WarZoneConfig.isAllowingItemUseInWarZone()) {				
+			if (!EventWarSettings.isAllowingItemUseInWarZone()) {				
 				event.setCancelled(true);
 				event.setMessage(Translatable.of("msg_err_warzone_cannot_use_item").forLocale(player));
 				return;
@@ -106,7 +105,7 @@ public class EventWarTownyActionListener implements Listener {
 
 		// Allow Switch for Event War if configured.
 		if (status == TownBlockStatus.WARZONE && !WarUtil.isPlayerNeutral(player)) {
-			if (!WarZoneConfig.isAllowingSwitchesInWarZone()) {
+			if (!EventWarSettings.isAllowingSwitchesInWarZone()) {
 				event.setCancelled(true);
 				event.setMessage(Translatable.of("msg_err_warzone_cannot_use_switches").forLocale(player));
 				return;
@@ -134,7 +133,7 @@ public class EventWarTownyActionListener implements Listener {
 				continue;
 			
 			// A war that doesn't allow any kind of explosions.
-			if (!WarZoneConfig.isAllowingExplosionsInWarZone()) {
+			if (!EventWarSettings.isAllowingExplosionsInWarZone()) {
 				// Remove from the alreadyAllowed list if it exists there.
 				if (alreadyAllowed.contains(block))
 					alreadyAllowed.remove(block);
@@ -142,9 +141,9 @@ public class EventWarTownyActionListener implements Listener {
 			}
 
 			// A war that does allow explosions and explosions regenerate.
-			if (WarZoneConfig.regenBlocksAfterExplosionInWarZone()) {
+			if (EventWarSettings.regenBlocksAfterExplosionInWarZone()) {
 				// Skip this block if it is in the ignore list. TODO: with the blockdata nowadays this might not even be necessary.
-				if (WarZoneConfig.getExplosionsIgnoreList().contains(block.getType().name()) || WarZoneConfig.getExplosionsIgnoreList().contains(block.getRelative(BlockFace.UP).getType().name())) {
+				if (EventWarSettings.getExplosionsIgnoreList().contains(block.getType().name()) || EventWarSettings.getExplosionsIgnoreList().contains(block.getRelative(BlockFace.UP).getType().name())) {
 					// Remove from the alreadyAllowed list if it exists there.
 					if (alreadyAllowed.contains(block))
 						alreadyAllowed.remove(block);
@@ -185,7 +184,7 @@ public class EventWarTownyActionListener implements Listener {
 		/*
 		 * Stops any type of exploding damage if wars are not allowing explosions.
 		 */
-		if (!WarZoneConfig.isAllowingExplosionsInWarZone()) {
+		if (!EventWarSettings.isAllowingExplosionsInWarZone()) {
 			event.setCancelled(true);
 			return;
 		}
@@ -193,7 +192,7 @@ public class EventWarTownyActionListener implements Listener {
 		/*
 		 * Stops explosions from damaging entities protected from explosions during war.
 		 */
-		if (WarZoneConfig.getExplosionsIgnoreList().contains(event.getEntity().getType().name())) {
+		if (EventWarSettings.getExplosionsIgnoreList().contains(event.getEntity().getType().name())) {
 			event.setCancelled(true);
 			return;
 		}
@@ -216,7 +215,7 @@ public class EventWarTownyActionListener implements Listener {
 		 * Event War fire control settings.
 		 */
 		if (TownyAPI.getInstance().isWarTime() && event.getTownBlock().isWarZone()) {
-			if (WarZoneConfig.isAllowingFireInWarZone() || TownySettings.isAllowWarBlockGriefing()) {
+			if (EventWarSettings.isAllowingFireInWarZone() || EventWarSettings.isAllowWarBlockGriefing()) {
 				event.setCancelled(false);
 			} else {
 				event.setCancelled(true);

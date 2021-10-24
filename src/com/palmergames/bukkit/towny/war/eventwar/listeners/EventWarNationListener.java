@@ -4,17 +4,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 
 public class EventWarNationListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onNationToggleNeutral(NationToggleNeutralEvent event) {
-		if (!TownySettings.isDeclaringNeutral() && event.getFutureState()) {
+		if (!EventWarSettings.isDeclaringNeutral() && event.getFutureState()) {
 			event.setCancelled(true);
 			event.setCancelMessage(Translatable.of("msg_err_fight_like_king").forLocale(event.getPlayer()));
 		}

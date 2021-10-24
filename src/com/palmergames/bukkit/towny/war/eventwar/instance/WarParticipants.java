@@ -6,10 +6,10 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
 import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 
@@ -30,15 +31,12 @@ public class WarParticipants {
 	private List<Nation> warringNations = new ArrayList<>();
 	private List<Resident> warringResidents = new ArrayList<>();
 	private List<Resident> potentialResidents = new ArrayList<>();
-	private List<TownBlock> potentialTownBlocks = new ArrayList<>();
+	private List<TownBlock> potentialTownBlocks = null;
 	private List<Player> onlineWarriors = new ArrayList<>();
 	private List<TownyObject> govSide = new ArrayList<>();
 	private List<TownyObject> rebSide = new ArrayList<>();
 	private Hashtable<Resident, Integer> residentLives = new Hashtable<>();
 	private List<UUID> uuidsToIgnore = new ArrayList<>();
-	private int totalResidentsAtStart = 0;
-	private int totalTownsAtStart = 0;
-	private int totalNationsAtStart = 0;
 	
 	public WarParticipants(War war) {
 		this.war = war;
@@ -84,30 +82,6 @@ public class WarParticipants {
 			rebSide.add(obj);
 	}
 
-	public int getNationsAtStart() {
-		return totalNationsAtStart;
-	}
-	
-	public int getTownsAtStart() {
-		return totalTownsAtStart;
-	}
-	
-	public int getResidentsAtStart() {
-		return totalResidentsAtStart;
-	}
-	
-	private void setNationsAtStart(int n) {
-		totalNationsAtStart = n;
-	}
-	
-	private void setTownsAtStart(int n) {
-		totalTownsAtStart = n;
-	}
-	
-	private void setResidentsAtStart(int n) {
-		totalResidentsAtStart = n;
-	}
-	
 	public List<UUID> getUUIDsToIgnore() {
 		return uuidsToIgnore;
 	}
@@ -172,7 +146,6 @@ public class WarParticipants {
 	 * @return false if conditions are not met.
 	 */
 	boolean add(Town town) {
-
 		/*
 		 * Do a bunch of early tests which can disqualify a town from a war.
 		 */
@@ -185,12 +158,16 @@ public class WarParticipants {
 		 */
 		int numTownBlocks = 0;
 		for (TownBlock tb : town.getTownBlocks()) {
-			if (!tb.getWorld().isWarAllowed())
+			if (!tb.getWorld().isWarAllowed()) {
+				System.out.println("no war in this world");
 				continue;
-			if (!potentialTownBlocks.contains(tb))
+			}
+			if (potentialTownBlocks != null && !potentialTownBlocks.contains(tb)) {
+				System.out.println("not a potential townblock");
 				continue;
+			}
 			numTownBlocks++;
-			war.getWarZoneManager().addWarZone(tb.getWorldCoord(), tb.isHomeBlock() ? TownySettings.getWarzoneHomeBlockHealth() : TownySettings.getWarzoneTownBlockHealth());
+			war.getWarZoneManager().addWarZone(tb.getWorldCoord(), tb.isHomeBlock() ? EventWarSettings.getWarzoneHomeBlockHealth() : EventWarSettings.getWarzoneTownBlockHealth());
 			WarMetaDataController.setWarUUID(tb, war.getWarUUID());
 		}
 		if (numTownBlocks == 0) {
@@ -279,7 +256,7 @@ public class WarParticipants {
 			for (Nation nation : nations) {
 				if (!nation.isNeutral() && add(nation)) {
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_war_join_nation", nation.getName()));
-				} else if (!TownySettings.isDeclaringNeutral()) {
+				} else if (!EventWarSettings.isDeclaringNeutral()) {
 					nation.setNeutral(false);
 					nation.save();
 					if (add(nation)) {
@@ -291,9 +268,10 @@ public class WarParticipants {
 		case TOWNWAR:
 		case RIOT:
 			for (Town town : towns) {
-				if (!town.isNeutral() && add(town))
+				if (!town.isNeutral() && add(town)) {
 					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_war_join", town));
 					warringTowns.add(town);
+				}
 			}
 			break;
 		}
@@ -458,6 +436,10 @@ public class WarParticipants {
 				war.addErrorMsg("Too many towns gathered for a riot war!");
 				return false;
 			}
+			if (warringTowns.isEmpty()) {
+				war.addErrorMsg("The town did not qualify for a riot!");
+				return false;
+			}
 			Town town = warringTowns.get(0);
 			if (town.getResidents().size() == 1) {
 				war.addErrorMsg("Not enough residents for a riot war!");
@@ -499,20 +481,21 @@ public class WarParticipants {
 		}
 
 		if (firstRun) {
-			setNationsAtStart(warringNations.size());
-			setTownsAtStart(warringTowns.size());
-			setResidentsAtStart(warringResidents.size());
+			war.setNationsAtStart(warringNations.size());
+			war.setTownsAtStart(warringTowns.size());
+			war.setResidentsAtStart(warringResidents.size());
 		}
 		return true;
 	}
 
 	/**
-	 * Used at war start and in the /towny war participants command.
-	 * 
+	 * Used for /towny war participants command.
+	 *
+	 * @param sender Player to send the message to.
 	 * @param warType WarType of the war.
-	 * @param name The formal name of the war.  
 	 */
-	public void outputParticipants(WarType warType, String name) {
+	public void outputParticipants(CommandSender sender, WarType warType) {
+		
 		List<String> warParticipants = new ArrayList<>();
 		
 		switch (warType) {
@@ -539,9 +522,9 @@ public class WarParticipants {
 				warParticipants.add(Translation.of("msg_war_participants", resident.getName(), getLives(resident)));
 			break;
 		}
-		war.getMessenger().sendPlainGlobalMessage(ChatTools.formatTitle(name + " Participants"));
-		war.getMessenger().sendPlainGlobalMessage(warParticipants);
-		war.getMessenger().sendPlainGlobalMessage(ChatTools.formatTitle("----------------"));
+		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(war.getWarName() + " Participants"));
+		TownyMessaging.sendMessage(sender, warParticipants);
+		TownyMessaging.sendMessage(sender, ChatTools.formatTitle("----------------"));
 	}
 	
 	/**

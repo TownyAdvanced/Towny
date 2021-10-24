@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 
 import net.citizensnpcs.api.CitizensAPI;
 
@@ -309,11 +310,11 @@ public class PlayerCacheUtil {
 			// War Time
 			if (residentHasWar) {
 				//The grief-everything config option is set to true and the player and townblock are the same war. 
-				if (TownySettings.isAllowWarBlockGriefing() && townblockAndResidentSameWar)
+				if (EventWarSettings.isAllowWarBlockGriefing() && townblockAndResidentSameWar)
 					return TownBlockStatus.WARZONE;
 
 				//The player is in a World War, in a war-allowed world, and towns are not allowed to be neutral.
-				if (!TownySettings.isWarTimeTownsNeutral() && worldCoord.getTownyWorldOrNull().isWarAllowed() && TownyUniverse.getInstance().getWarEvent(player).getWarType().equals(WarType.WORLDWAR))
+				if (!EventWarSettings.isWarTimeTownsNeutral() && worldCoord.getTownyWorldOrNull().isWarAllowed() && TownyUniverse.getInstance().getWarEvent(player).getWarType().equals(WarType.WORLDWAR))
 					return TownBlockStatus.WARZONE;
 			}
 
@@ -356,18 +357,14 @@ public class PlayerCacheUtil {
 			// Ally group.
 			if (CombatUtil.isAlly(town, resident.getTown()))
 				return TownBlockStatus.TOWN_ALLY;
-			
-			// Enemy or WarZone.
-			if (CombatUtil.isEnemy(resident.getTown(), town)) {
-				if (townblockAndResidentSameWar)
-					return TownBlockStatus.WARZONE;
-				else
-					return TownBlockStatus.ENEMY;
-			} 
 
 			// WarZone.
 			if (townblockAndResidentSameWar)
 				return TownBlockStatus.WARZONE;
+			
+			// Enemy.
+			if (CombatUtil.isEnemy(resident.getTown(), town))
+				return TownBlockStatus.ENEMY;
 
 			// Nothing left but Outsider.
 			return TownBlockStatus.OUTSIDER;
@@ -416,7 +413,7 @@ public class PlayerCacheUtil {
 			return false;
 		}
 		
-		if (!res.isJailed() && status == TownBlockStatus.WARZONE && TownySettings.isAllowWarBlockGriefing())
+		if (!res.isJailed() && status == TownBlockStatus.WARZONE && EventWarSettings.isAllowWarBlockGriefing())
 			return true;
 
 		if (status == TownBlockStatus.NOT_REGISTERED) {

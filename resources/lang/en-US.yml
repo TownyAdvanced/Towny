@@ -1674,3 +1674,7 @@ msg_you_have_sided_with_the_government: 'You have sided with the government.'
 msg_player_couldnt_pay_eliminated_riot: '%s''s wallet couldn''t satisfy %s. Removing them from the riot.'
 #Message shown announcing the delay for team selection for civilwar and riots.
 msg_team_selection_delay_seconds_remaining: '%s remain to choose between the government and anti-government sides.'
+#Message shown when players must choose between state or rebel in RIOT and CIVILWAR wars.
+msg_which_side_will_you_choose: 'You must side with the nation/city or the rebels. Which side will you choose?'
+#Message shown on a new day to a town or nation, awarding a war token.
+msg_war_token_received: 'Because of non-peaceful status, %s has received a war token.'

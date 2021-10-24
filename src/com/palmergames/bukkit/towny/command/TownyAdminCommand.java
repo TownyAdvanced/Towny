@@ -51,9 +51,6 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
-import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
-import com.palmergames.bukkit.towny.war.eventwar.WarType;
-import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -112,20 +109,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"database",
 		"townyperms",
 		"depositall",
-		"war",
 		"install"
 	);
 
-	private static final List<String> adminWarTabCompletes = Arrays.asList(
-		"riot",
-		"townwar",
-		"civilwar",
-		"nationwar",
-		"worldwar",
-		"list",
-		"purge"
-	);
-	
 	private static final List<String> adminTownTabCompletes = Arrays.asList(
 		"new",
 		"add",
@@ -168,7 +154,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> adminToggleTabCompletes = Arrays.asList(
 		"wildernessuse",
 		"regenerations",
-		"war",
 		"neutral",
 		"npc",
 		"debug",
@@ -327,38 +312,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					} else if (args.length == 4) {
 						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[3]);
 					}
-				} else if (args.length >= 3 && args[1].equalsIgnoreCase("war")) {
-					if (args.length == 3) {
-						return TownyUniverse.getInstance().getWarNames();
-					}
 				} else if (args.length == 3) {
 					return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 				}
 				break;
-			case "war":
-				if (args.length == 2) {
-					return NameUtil.filterByStart(adminWarTabCompletes, args[1]);
-				} else if (args.length >= 3) {
-					if (args.length == 3) {
-						switch (args[1].toLowerCase()) {
-							case "civilwar":
-								return getTownyStartingWith(args[2], "n");
-							case "riot":
-								return getTownyStartingWith(args[2], "t");
-							case "townwar":
-								return getTownyStartingWith(args[2], "t");
-							case "nationwar":
-								return getTownyStartingWith(args[2], "n");
-						}
-					} else if (args.length == 4) {
-						switch (args[1].toLowerCase()) {
-							case "townwar":
-								return getTownyStartingWith(args[3], "t");
-							case "nationwar":
-								return getTownyStartingWith(args[3], "n");
-						}
-					}
-				}
 			case "tpplot":
 				if (args.length == 2) {
 					return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getWorlds()
@@ -710,12 +667,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownySettings.saveConfig();
 					TownyMessaging.sendMsg(getSender(), Translatable.of("msg_setup_success"));
 				});
-			} else if (split[0].equalsIgnoreCase("war")) {
-				if (!TownySettings.isUsingEconomy())
-					throw new TownyException(Translatable.of("msg_err_no_economy"));
-				
-				parseAdminWarCommand(StringMgmt.remFirstArg(split));
-				
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).execute(getSender(), "townyadmin", split);
 			}  else {
@@ -2172,24 +2123,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("regenerations")) {
 			toggleRegenerations(choice.orElse(false));
 			TownyMessaging.sendMsg(getSender(), Translatable.of("msg_regenerations_use_x_in_all_worlds", choice.orElse(false)));
-		} else if (split[0].equalsIgnoreCase("war")) {
-			if (split.length == 1) {
-				player.sendMessage(ChatTools.formatTitle("/townyadmin toggle war "));
-				player.sendMessage(ChatTools.formatCommand("", "/townyadmin toggle war", "{warname}", "Used to end a war early."));
-				return;
-			}
-			endWar(StringMgmt.remFirstArg(split));
-
-		} else if (split[0].equalsIgnoreCase("peaceful") || split[0].equalsIgnoreCase("neutral")) {
-
-			try {
-				TownySettings.setDeclaringNeutral(choice.orElse(!TownySettings.isDeclaringNeutral()));
-				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_nation_allow_peaceful", TownySettings.isDeclaringNeutral() ? Translatable.of("enabled") : Translatable.of("disabled")));
-
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_choice"));
-			}
-
 		} else if (split[0].equalsIgnoreCase("devmode")) {
 			try {
 				TownySettings.setDevMode(choice.orElse(!TownySettings.isDevMode()));
@@ -2269,22 +2202,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			world.setUnclaimedZoneItemUse(choice);
 			world.save();
 		}
-	}
-
-	private void endWar(String[] args) {
-		
-		String warName = StringMgmt.join(args);	
-		War war = null;
-		for (War wars: TownyUniverse.getInstance().getWars())
-			if (wars.getWarName().equalsIgnoreCase(warName)) {
-				war = wars;
-				break;
-			}
-		if (war != null) {
-			war.end(true);
-			TownyMessaging.sendMessage(getSender(), Translatable.of("msg_war_name_ended", warName));
-		} else
-			TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_unknown_war", warName));
 	}
 
 	public static void handleTownMetaCommand(Player player, Town town, String[] split) throws TownyException {
@@ -2495,98 +2412,4 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_ta_deposit_all_success", TownyEconomyHandler.getFormattedBalance(amount)));
 	}
 	
-	private void parseAdminWarCommand(String[] split) {
-		List<Nation> nations = new ArrayList<>();
-		List<Town> towns = new ArrayList<>();
-		List<Resident> residents = new ArrayList<>();
-		
-		try {
-			if (split.length == 0 || split[0].equalsIgnoreCase("?"))
-				showWarHelp();
-			else if (split.length > 3)
-				showWarHelp();
-			else if (split.length == 1) {
-				if (split[0].equalsIgnoreCase("worldwar")) {
-					for (Nation nation : TownyUniverse.getInstance().getNations()) {
-						nations.add(nation);
-						residents.addAll(nation.getResidents());
-					}
-					new War(plugin, nations, null, residents, WarType.WORLDWAR);
-				} else if (split[0].equalsIgnoreCase("list")) {
-					sender.sendMessage(ChatTools.formatTitle("Ongoing Wars"));
-					if (!TownyAPI.getInstance().isWarTime()) {
-						sender.sendMessage(ChatTools.formatCommand("None", "", ""));
-						return;
-					}
-					for (War war : TownyUniverse.getInstance().getWars()) {
-						sender.sendMessage(ChatTools.formatCommand("War Name: " + war.getWarName(), "Type: " + war.getWarType().getName(), ""));
-					}
-				} else if (split[0].equalsIgnoreCase("purge")) {
-					Confirmation.runOnAccept(()-> WarDataBase.removeAllWars()).sendTo(sender);
-				} else {
-					showWarHelp();
-				}
-			} else if (split.length == 2) {
-				if (split[0].equalsIgnoreCase("riot")) {
-					Town town = TownyAPI.getInstance().getTown(split[1]);
-					if (town == null)
-						throw new TownyException(Translatable.of("msg_invalid_name").forLocale(sender));
-					towns.add(town);
-					residents.addAll(town.getResidents());
-					new War(plugin, null, towns, residents, WarType.RIOT);
-				} else if (split[0].equalsIgnoreCase("civilwar")) {
-					Nation nation = TownyAPI.getInstance().getNation(split[1]);
-					if (nation == null)
-						throw new TownyException(Translatable.of("msg_invalid_name").forLocale(sender));
-					nations.add(nation);
-					residents.addAll(nation.getResidents());
-					new War(plugin, nations, null, residents, WarType.CIVILWAR);
-				} else {
-					showWarHelp();
-				}
-			} else if (split.length == 3) {
-				if (split[0].equalsIgnoreCase("townwar")) {
-					Town town = TownyAPI.getInstance().getTown(split[1]);
-					if (town == null)
-						throw new TownyException(Translatable.of("msg_invalid_name").forLocale(sender));
-					towns.add(town);
-					residents.addAll(town.getResidents());
-					town = TownyAPI.getInstance().getTown(split[2]);
-					if (town == null)
-						throw new TownyException(Translatable.of("msg_invalid_name").forLocale(sender));
-					towns.add(town);
-					residents.addAll(town.getResidents());
-					new War(plugin, null, towns, residents, WarType.TOWNWAR);
-				} else if (split[0].equalsIgnoreCase("nationwar")) {
-					Nation nation = TownyAPI.getInstance().getNation(split[1]);
-					if (nation == null)
-						throw new TownyException(Translatable.of("msg_invalid_name").forLocale(sender));
-					nations.add(nation);
-					residents.addAll(nation.getResidents());
-					nation = TownyAPI.getInstance().getNation(split[2]);
-					if (nation == null)
-						throw new TownyException(Translatable.of("msg_invalid_name").forLocale(sender));
-					nations.add(nation);
-					residents.addAll(nation.getResidents());
-					new War(plugin, nations, null, residents, WarType.NATIONWAR);
-				} else {
-					showWarHelp();
-				}
-			}
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(sender, e.getMessage());
-		}
-	}
-
-	private void showWarHelp() {
-		sender.sendMessage(ChatTools.formatTitle("/townyadmin war"));
-		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "RIOT [town]", ""));		
-		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "TOWNWAR [town] [town]", ""));		
-		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "CIVILWAR [nation]", ""));
-		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "NATIONWAR [nation] [nation]", ""));
-		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "WORLDWAR", ""));
-		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "list", ""));
-		sender.sendMessage(ChatTools.formatCommand("", "/townyadmin war", "purge", ""));
-	}
-
 }

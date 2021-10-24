@@ -16,8 +16,13 @@ public class WarMetaDataController {
 	private static StringDataField warUUID = new StringDataField("eventwar_warUUID", "");
 	private static IntegerDataField residentLives = new IntegerDataField("eventwar_residentLives", 0, "War Lives Remaining");
 	private static IntegerDataField score = new IntegerDataField("eventwar_score", 0);
+	private static IntegerDataField tokens = new IntegerDataField("eventwar_tokens", 0, "War Tokens");
 	private static StringDataField warSide = new StringDataField("eventwar_warSide", "");
 	private static LongDataField lastWarEndTime = new LongDataField("eventwar_lastWarEndTime", 0l);
+
+	/*
+	 * War UUIDs 
+	 */
 
 	@Nullable
 	public static String getWarUUID(TownyObject obj) {
@@ -40,6 +45,10 @@ public class WarMetaDataController {
 		if (obj.hasMeta(sdf.getKey()))
 			obj.removeMetaData(sdf, true);
 	}
+	
+	/*
+	 * Resident Lives 
+	 */
 	
 	public static int getResidentLives(Resident res) {
 		IntegerDataField idf = (IntegerDataField) residentLives.clone();
@@ -74,6 +83,10 @@ public class WarMetaDataController {
 			res.removeMetaData(idf, true);
 	}
 	
+	/*
+	 * War Sides (For Riot and Civil Wars) 
+	 */
+	
 	@Nullable
 	public static String getWarSide(TownyObject obj) {
 		StringDataField sdf = (StringDataField) warSide.clone();
@@ -96,6 +109,10 @@ public class WarMetaDataController {
 			obj.removeMetaData(sdf, true);
 	}
 
+	/*
+	 * Scores 
+	 */
+	
 	public static int getScore(TownyObject obj) {
 		IntegerDataField idf = (IntegerDataField) score.clone();
 		if (obj.hasMeta(idf.getKey()))
@@ -122,6 +139,10 @@ public class WarMetaDataController {
 			obj.removeMetaData(idf, true);
 	}
 	
+	/*
+	 * Last War Times 
+	 */
+	
 	public static long getLastWarTime(TownyObject obj) {
 		LongDataField ldf = (LongDataField) lastWarEndTime.clone();
 		if (obj.hasMeta(ldf.getKey()))
@@ -141,6 +162,45 @@ public class WarMetaDataController {
 			MetaDataUtil.setLong(obj, ldf, time, true);
 		else
 			obj.addMetaData(new LongDataField("eventwar_lastWarEndTime"), true);
+	}
+
+	public static void removeEndTime(TownyObject obj) {
+		LongDataField ldf = (LongDataField) lastWarEndTime.clone();
+		if (obj.hasMeta(ldf.getKey()))
+			obj.removeMetaData(ldf, true);
+	}
+	
+	/*
+	 * War Tokens  
+	 */
+	
+	public static int getWarTokens(TownyObject obj) {
+		IntegerDataField idf = (IntegerDataField) tokens.clone();
+		if (obj.hasMeta(idf.getKey()))
+			return MetaDataUtil.getInt(obj, idf);
+		return 0;
+	}
+	
+	public static void setTokens(TownyObject obj, int num) {
+		IntegerDataField idf = (IntegerDataField) tokens.clone();
+		if (obj.hasMeta(idf.getKey()))
+			MetaDataUtil.setInt(obj, idf, num, true);
+		else
+			obj.addMetaData(new IntegerDataField("eventwar_tokens", num, "War Tokens"), true);
+	}
+	
+	public static void removeTokens(TownyObject obj) {
+		IntegerDataField idf = (IntegerDataField) tokens.clone();
+		if (obj.hasMeta(idf.getKey()))
+			obj.removeMetaData(idf, true);
+	}
+	
+	public static void incrementTokens(TownyObject obj) {
+		IntegerDataField idf = (IntegerDataField) tokens.clone();
+		if (obj.hasMeta(idf.getKey()))
+			MetaDataUtil.setInt(obj, idf, getWarTokens(obj) + 1, true);
+		else
+			obj.addMetaData(new IntegerDataField("eventwar_tokens", 1, "War Tokens"), true);
 	}
 
 }

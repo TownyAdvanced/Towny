@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.huds;
 
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -11,6 +10,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,8 +24,8 @@ import java.util.Hashtable;
 
 public class WarHUD {
 
-	final static int home_health = TownySettings.getWarzoneHomeBlockHealth();
-	final static int town_health = TownySettings.getWarzoneTownBlockHealth();
+	final static int home_health = EventWarSettings.getWarzoneHomeBlockHealth();
+	final static int town_health = EventWarSettings.getWarzoneTownBlockHealth();
 
 	public static void updateLocation(Player p, WorldCoord at) {
 		String nation_loc, town_loc, homeblock;
@@ -48,13 +48,8 @@ public class WarHUD {
 	}
 
 	public static void updateAttackable(Player p, WorldCoord at, War war) {
-		if (!TownySettings.getOnlyAttackEdgesInWar())
-			return;
-		String onEdge;
-		if (isOnEdgeOfTown(at, war))
-			onEdge = Translatable.of("war_hud_true").forLocale(p);
-		else
-			onEdge = Translatable.of("war_hud_false").forLocale(p);
+
+		String onEdge = isOnEdgeOfTown(at, war) ? Translatable.of("war_hud_true").forLocale(p) : Translatable.of("war_hud_false").forLocale(p);
 		p.getScoreboard().getTeam("edge").setSuffix(HUDManager.check(onEdge));
 	}
 
@@ -85,8 +80,7 @@ public class WarHUD {
 			p.getScoreboard().getTeam("health").setSuffix(health + "" + ChatColor.AQUA + "/" + (home ? home_health : town_health));
 		else {
 			p.getScoreboard().getTeam("health").setSuffix(Translatable.of("war_hud_fallen").forLocale(p));
-			if (TownySettings.getOnlyAttackEdgesInWar())
-				p.getScoreboard().getTeam("edge").setSuffix("war_hud_false");
+			p.getScoreboard().getTeam("edge").setSuffix("war_hud_false");
 		}
 	}
 
@@ -141,7 +135,6 @@ public class WarHUD {
 	}
 
 	public static void toggleOn (Player p, War war) {
-		boolean edges = TownySettings.getOnlyAttackEdgesInWar();
 		String WAR_HUD_TITLE = ChatColor.GOLD + "" + ChatColor.BOLD + Translatable.of("war_hud_war").forLocale(p);
 		String space1_entry = ChatColor.DARK_PURPLE.toString();
 		String town_title_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE;
@@ -171,6 +164,7 @@ public class WarHUD {
 		Team location_title = board.registerNewTeam("location_title");
 		Team nation = board.registerNewTeam("nation");
 		Team town = board.registerNewTeam("town");
+		Team edge = board.registerNewTeam("edge");
 		Team health = board.registerNewTeam("health");
 		Team home = board.registerNewTeam("home");
 		Team space3 = board.registerNewTeam("space3");
@@ -186,6 +180,7 @@ public class WarHUD {
 		location_title.addEntry(location_title_entry);
 		nation.addEntry(nation_entry);
 		town.addEntry(town_entry);
+		edge.addEntry(edge_entry);
 		health.addEntry(health_entry);
 		home.addEntry(home_entry);
 		space3.addEntry(space3_entry);
@@ -201,19 +196,14 @@ public class WarHUD {
 		obj.getScore(location_title_entry).setScore(10);
 		obj.getScore(nation_entry).setScore(9);
 		obj.getScore(town_entry).setScore(8);
-		obj.getScore(health_entry).setScore(edges ? 6 : 7);
-		obj.getScore(home_entry).setScore(edges ? 5 : 6);
-		obj.getScore(space3_entry).setScore(edges ? 4 : 5);
-		obj.getScore(top_title_entry).setScore(edges ? 3 : 4);
-		obj.getScore(first_entry).setScore(edges ? 2 : 3);
-		obj.getScore(second_entry).setScore(edges ? 1 : 2);
-		obj.getScore(third_entry).setScore(edges ? 0 : 1);
-
-		if (edges) {
-			Team edge = board.registerNewTeam("edge");
-			edge.addEntry(edge_entry);
-			obj.getScore(edge_entry).setScore(7);
-		}
+		obj.getScore(edge_entry).setScore(7);
+		obj.getScore(health_entry).setScore(6);
+		obj.getScore(home_entry).setScore(5);
+		obj.getScore(space3_entry).setScore(4);
+		obj.getScore(top_title_entry).setScore(3);
+		obj.getScore(first_entry).setScore(2);
+		obj.getScore(second_entry).setScore(1);
+		obj.getScore(third_entry).setScore(0);
 		//set the board
 		p.setScoreboard(board);
 		WorldCoord at = new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p));

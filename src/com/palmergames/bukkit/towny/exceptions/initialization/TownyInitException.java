@@ -30,5 +30,6 @@ public class TownyInitException extends RuntimeException {
 		DATABASE,
 		DATABASE_CONFIG,
 		PERMISSIONS,
+		WAR_CONFIG,
 	}
 }

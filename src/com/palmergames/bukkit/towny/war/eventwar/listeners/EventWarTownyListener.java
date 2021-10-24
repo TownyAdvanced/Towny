@@ -6,16 +6,21 @@ import org.bukkit.inventory.ItemStack;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownBlockStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.event.time.NewHourEvent;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.war.eventwar.WarBooks;
 import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
+import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.Colors;
 
@@ -36,7 +41,7 @@ public class EventWarTownyListener implements Listener {
 			War war = TownyUniverse.getInstance().getWarEvent(event.getTown());
 			if (war == null)
 				return;
-			event.getStatusScreen().addComponentOf("eventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
+			event.getStatusScreen().addComponentOf("activeEventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
 					HoverEvent.showText(Component.text(war.getWarType().name()).append(Component.newline())
 							.append(Component.text("Spoils: " + TownyEconomyHandler.getFormattedBalance(war.getWarSpoils())))
 							.append(Component.newline())
@@ -55,7 +60,7 @@ public class EventWarTownyListener implements Listener {
 			War war = TownyUniverse.getInstance().getWarEvent(event.getTownBlock());
 			if (war == null)
 				return;
-			event.getStatusScreen().addComponentOf("eventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
+			event.getStatusScreen().addComponentOf("activeEventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
 					HoverEvent.showText(Component.text(war.getWarType().name()).append(Component.newline())
 							.append(Component.text("Spoils: " + TownyEconomyHandler.getFormattedBalance(war.getWarSpoils())))
 							.append(Component.newline())
@@ -74,7 +79,7 @@ public class EventWarTownyListener implements Listener {
 			War war = TownyUniverse.getInstance().getWarEvent(event.getResident());
 			if (war == null)
 				return;
-			event.getStatusScreen().addComponentOf("eventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
+			event.getStatusScreen().addComponentOf("activeEventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
 					HoverEvent.showText(Component.text(war.getWarType().name()).append(Component.newline())
 							.append(Component.text("Spoils: " + TownyEconomyHandler.getFormattedBalance(war.getWarSpoils())))
 							.append(Component.newline())
@@ -94,6 +99,30 @@ public class EventWarTownyListener implements Listener {
 			war.getWarParticipants().getOnlineWarriors().stream()
 				.forEach(res -> res.getPlayer().getInventory().addItem(book));
 		}
+	}
+	
+	/**
+	 * On each new day, if the nation or town is not peaceful, they receive a WarToken.
+	 * @param event NewDayEvent.
+	 */
+	@EventHandler
+	public void onNewDayEvent(NewDayEvent event) {
+		if (!EventWarSettings.areWarTokensGivenOnNewDay())
+			return;
+		
+		TownyUniverse.getInstance().getTowns().stream()
+			.filter(town -> !town.isNeutral())
+			.forEach(town -> {
+				WarMetaDataController.incrementTokens(town);
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_war_token_received", town));
+			});
+
+		TownyUniverse.getInstance().getNations().stream()
+			.filter(nation -> !nation.isNeutral())
+			.forEach(nation -> {
+				WarMetaDataController.incrementTokens(nation);
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_war_token_received", nation));
+			});
 	}
 	
 	

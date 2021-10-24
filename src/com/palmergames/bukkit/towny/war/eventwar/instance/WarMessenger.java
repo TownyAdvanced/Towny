@@ -15,13 +15,13 @@ import com.palmergames.bukkit.towny.object.Translation;
 
 public class WarMessenger {
 
-	private static War war;
+	private War war;
 
 	public WarMessenger(War war) {
-		WarMessenger.war = war;
+		this.war = war;
 	}
 
-	private static List<Player> getPlayers() {
+	private List<Player> getPlayers() {
 		return war.getWarParticipants().getOnlineWarriors();
 	}
 
@@ -56,16 +56,16 @@ public class WarMessenger {
 			TownyMessaging.sendMsg(player, translatable);
 	}
 	
-	public static void reportErrors() {
+	public void reportErrors() {
 		for (Player player : Bukkit.getOnlinePlayers())
 			if (player.isOp() || TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
-				TownyMessaging.sendErrorMsg(player, "War Could not be started, this may be helpful:");
+				TownyMessaging.sendErrorMsg(player, "The war could not be started, this may be helpful:");
 				for (String line : war.getErrorMsgs())
 					TownyMessaging.sendErrorMsg(player, line);
 			}
 	}
 	
-	public static void reportMinorErrors() {
+	public void reportMinorErrors() {
 		for (Player player : getPlayers())
 			for (String line : war.getErrorMsgs())
 				TownyMessaging.sendErrorMsg(player, line);

@@ -1834,13 +1834,22 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				war.setWarSpoils(Double.valueOf(line));
 			
 			line = keys.get("ignoredUUIDs");
-			if (line != null) {
+			if (line != null && !line.isEmpty()) {
 				String[] uuids = line.split(",");
 				List<UUID> list = new ArrayList<>();
 				for (String token : uuids)
 					list.add(UUID.fromString(token));
 				war.getWarParticipants().setIgnoredUUIDs(list);
 			}
+			line = keys.get("nationsAtStart");
+			if (line != null)
+				war.setNationsAtStart(Integer.valueOf(line));
+			line = keys.get("townsAtStart");
+			if (line != null)
+				war.setTownsAtStart(Integer.valueOf(line));
+			line = keys.get("residentsAtStart");
+			if (line != null)
+				war.setResidentsAtStart(Integer.valueOf(line));
 		}
 		
 		return true;
@@ -2388,8 +2397,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> list = new ArrayList<>();
 		
 		list.add("name=" + war.getWarName());
-		list.add("type=" + war.getWarType().toString());
+		list.add("type=" + war.getWarType().name());
 		list.add("spoils=" + war.getWarSpoils());
+		list.add("nationsAtStart=" + war.getNationsAtStart());
+		list.add("townsAtStart=" + war.getTownsAtStart());
+		list.add("residentsAtStart=" + war.getResidentsAtStart());
 		list.add("ignoredUUIDs=" + StringMgmt.join(war.getWarParticipants().getUUIDsToIgnore(),","));
 		
 		this.queryQueue.add(new FlatFileSaveTask(list, getWarFilename(war)));

@@ -12,7 +12,11 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.war.eventwar.command.TownRedeemAddon;
+import com.palmergames.bukkit.towny.war.eventwar.command.TownyAdminWarAddon;
+import com.palmergames.bukkit.towny.war.eventwar.command.TownyWarAddon;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 
 public class WarDataBase {
 
@@ -27,6 +31,11 @@ public class WarDataBase {
 	}
 
 	public static boolean loadAll() {
+		
+		// TODO: get this out of the WarDataBase
+		registerCommands();
+		EventWarSettings.loadWarMaterialsLists();
+		
 		/*
 		 * Clear out the maps, because this might be a reload.
 		 */
@@ -55,13 +64,20 @@ public class WarDataBase {
 		return true;
 	}
 
+	private static void registerCommands() {
+		new TownyWarAddon();
+		new TownRedeemAddon();
+		new TownyAdminWarAddon(plugin);
+	}
+
+
 	/**
 	 * Finalize populating pre-loaded Wars with the scraped metadata.
 	 */
 	private static void finalizeWarData() {
 		// We could end up in a situation where a war still has a file but no metadata exists any more.
 		if (wardatas.isEmpty())
-			removeAllWars();
+			removeAllWars(false);
 
 		for (War war : new ArrayList<>(TownyUniverse.getInstance().getWars())) {
 			/*
@@ -193,40 +209,47 @@ public class WarDataBase {
 	/**
 	 * Something went wrong, we will be removing all traces of wars.
 	 */
-	public static void removeAllWars() {
+	public static void removeAllWars(boolean purgeEndTimes) {
 		for (War war : new ArrayList<>(TownyUniverse.getInstance().getWars()))
 			TownyUniverse.getInstance().getDataSource().removeWar(war);
 		
-		for (Nation nation : TownyUniverse.getInstance().getNations()) 
+		for (Nation nation : TownyUniverse.getInstance().getNations()) { 
 			nation.setActiveWar(false);
+			if (purgeEndTimes)
+				WarMetaDataController.removeEndTime(nation);
+		}
 		
 		for (Town town : TownyUniverse.getInstance().getTowns()) {
 			town.setActiveWar(false);
 			cleanTownMetaData(town);
+			if (purgeEndTimes)
+				WarMetaDataController.removeEndTime(town);
 		}
 		
 		for (Resident resident : TownyUniverse.getInstance().getResidents())
 			cleanResidentMetaData(resident);
-		
+			
 		for (TownBlock tb : TownyUniverse.getInstance().getTownBlocks().values())
 			cleanTownBlockMetaData(tb);
 	}
 	
-	public static void removeWar(War war) {
+	public static void removeWar(War war, boolean endedSuccessfully) {
 		TownyUniverse.getInstance().getDataSource().removeWar(war);
 		
 		for (Nation nation : war.getWarParticipants().getNations()) {
 			nation.setActiveWar(false);
-			// Give the town a lastWarEndTime metadata
-			WarMetaDataController.setLastWarTime(nation, System.currentTimeMillis());
+			if (endedSuccessfully)
+				// Give the nation a lastWarEndTime metadata
+				WarMetaDataController.setLastWarTime(nation, System.currentTimeMillis());
 		}
 
 		
 		for (Town town : war.getWarParticipants().getTowns()) { 
 			cleanTownMetaData(town);
 			town.setActiveWar(false);
-			// Give the town a lastWarEndTime metadata
-			WarMetaDataController.setLastWarTime(town, System.currentTimeMillis());
+			if (endedSuccessfully)
+				// Give the town a lastWarEndTime metadata
+				WarMetaDataController.setLastWarTime(town, System.currentTimeMillis());
 			for (TownBlock tb : town.getTownBlocks())
 				cleanTownBlockMetaData(tb);
 		}

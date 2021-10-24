@@ -10,9 +10,6 @@ import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -23,6 +20,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.events.TownScoredEvent;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.KeyValue;
@@ -76,7 +74,7 @@ public class ScoreManager {
 		scores.put(attacker, scores.get(attacker) + points);
 		WarMetaDataController.setScore(attacker, points);
 
-		war.getMessenger().sendGlobalMessage(Translatable.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), defender.getName(), points, attacker.getName()));
+		war.getMessenger().sendGlobalMessage(Translatable.of("MSG_WAR_SCORE_PLAYER_KILL", attacker, defender, points, attacker));
 	}
 	
 	/**
@@ -88,23 +86,21 @@ public class ScoreManager {
 	 */
 	private void townScored(Resident defender, Resident attacker, Location loc) {
 		int points = war.getWarType().pointsPerKill;
-		Town attackerTown = null;
-		Town defenderTown = null;
-		try {
-			attackerTown = attacker.getTown();
-			defenderTown = defender.getTown();
-		} catch (NotRegisteredException ignored) {}
-		
+		Town attackerTown = attacker.getTownOrNull();
+		Town defenderTown = defender.getTownOrNull();
+		if (attackerTown == null || defenderTown == null)
+			return;
+
 		Translatable pointMessage;
 		TownBlock deathLoc = TownyAPI.getInstance().getTownBlock(loc);
 		if (deathLoc == null)
-			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), defender.getName(), points, attackerTown.getName());
+			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL", attacker, defender, points, attackerTown);
 		else if (war.getWarZoneManager().isWarZone(deathLoc.getWorldCoord()) && attackerTown.getTownBlocks().contains(deathLoc))
-			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING", attacker.getName(), defender.getName(), attacker.getName(), points, attackerTown.getName());
+			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING", attacker, defender, attacker, points, attackerTown);
 		else if (war.getWarZoneManager().isWarZone(deathLoc.getWorldCoord()) && defenderTown.getTownBlocks().contains(deathLoc))
-			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING", attacker.getName(), defender.getName(), defender.getName(), points, attackerTown.getName());
+			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL_DEFENDING", attacker, defender, defender, points, attackerTown);
 		else
-			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL", attacker.getName(), defender.getName(), points, attackerTown.getName());
+			pointMessage = Translatable.of("MSG_WAR_SCORE_PLAYER_KILL", attacker, defender, points, attackerTown);
 
 		scores.put(attackerTown, scores.get(attackerTown) + points);
 		WarMetaDataController.setScore(attackerTown, scores.get(attackerTown));
@@ -121,34 +117,32 @@ public class ScoreManager {
 	 * @param fallenObject - the {@link Object} that fell
 	 * @param townBlocksFallen -  the number of fallen townblocks {@link TownBlock}s ({@link Integer})
 	 */
-	void townScored(Town town, int n, Object fallenObject, int townBlocksFallen) {
+	void townScored(Town town, int n, TownyObject fallenObject, int townBlocksFallen) {
 
 		Translatable pointMessage = null;
 		if (fallenObject instanceof Nation)
-			pointMessage = Translatable.of("MSG_WAR_SCORE_NATION_ELIM", town.getName(), n, ((Nation)fallenObject).getName());
+			pointMessage = Translatable.of("MSG_WAR_SCORE_NATION_ELIM", town, n, fallenObject.getName());
 		else if (fallenObject instanceof Town)
-			pointMessage = Translatable.of("MSG_WAR_SCORE_TOWN_ELIM", town.getName(), n, ((Town)fallenObject).getName(), townBlocksFallen);
+			pointMessage = Translatable.of("MSG_WAR_SCORE_TOWN_ELIM", town, n, fallenObject.getName(), townBlocksFallen);
 		else if (fallenObject instanceof TownBlock){
-			String townBlockName = "";
-			try {
-				townBlockName = "[" + ((TownBlock)fallenObject).getTown().getName() + "](" + ((TownBlock)fallenObject).getCoord().toString() + ")";
-			} catch (NotRegisteredException ignored) {}
-				pointMessage = Translatable.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM", town.getName(), n, townBlockName);
+			pointMessage = Translatable.of("MSG_WAR_SCORE_TOWNBLOCK_ELIM", town, n, formattedTownBlock((TownBlock)fallenObject));
+				
 		}
 
+		scores.put(town, scores.get(town) + n);
+		
 		// If this is a civil war and the fallen town is the capital and 
 		// town conquering is true: make sure the attacking town will 
 		// have the highest score, so they will take over the Nation.
 		if (war.getWarType().equals(WarType.CIVILWAR) 
 		&& war.getWarType().hasTownConquering 
 		&& war.getWarParticipants().getRebSide().contains(town)
+		&& fallenObject instanceof Town
 		&& ((Town) fallenObject).isCapital()
 		&& !getFirstPlace().getName().equals(town.getName())) {
-			try {
-				n = n + getWinningScore().value + 100;
-			} catch (TownyException ignored) {}
+			scores.put(town, getWinningScore().value + 100);
 		}
-		scores.put(town, scores.get(town) + n);
+		
 		WarMetaDataController.setScore(town, scores.get(town));
 
 		war.getMessenger().sendGlobalMessage(pointMessage);
@@ -171,7 +165,7 @@ public class ScoreManager {
 		/*
 		 * Award points for the captured town.
 		 */
-		townScored(attacker, TownySettings.getWarPointsForTown(), town, fallenTownBlocks);
+		townScored(attacker, EventWarSettings.getWarPointsForTown(), town, fallenTownBlocks);
 	}
 	
 
@@ -196,11 +190,12 @@ public class ScoreManager {
 		List<String> output = new ArrayList<>();
 		if (title)
 			output.add(ChatTools.formatTitle("War - Top Scores"));
-		KeyValueTable<TownyObject, Integer> kvTable = new KeyValueTable<>(scores);
-		kvTable.sortByValue();
-		kvTable.reverse();
+		if (!hasAnyoneScored()) {
+			output.add(ChatTools.formatCommand("None", "", ""));
+			return output;
+		}
 		int n = 0;
-		for (KeyValue<TownyObject, Integer> kv : kvTable.getKeyValues()) {
+		for (KeyValue<TownyObject, Integer> kv : getOrderedScores().getKeyValues()) {
 			n++;
 			if (maxListing != -1 && n > maxListing)
 				break;
@@ -213,9 +208,7 @@ public class ScoreManager {
 	}
 
 	public String[] getTopThree() {
-		KeyValueTable<TownyObject, Integer> kvTable = new KeyValueTable<>(scores);
-		kvTable.sortByValue();
-		kvTable.reverse();
+		KeyValueTable<TownyObject, Integer> kvTable = getOrderedScores();
 		String[] top = new String[3];
 		top[0] = kvTable.getKeyValues().size() >= 1 ? kvTable.getKeyValues().get(0).value + "-" + kvTable.getKeyValues().get(0).key : "";
 		top[1] = kvTable.getKeyValues().size() >= 2 ? kvTable.getKeyValues().get(1).value + "-" + kvTable.getKeyValues().get(1).key : "";
@@ -223,29 +216,20 @@ public class ScoreManager {
 		return top;
 	}
 
+	public boolean hasAnyoneScored() {
+		return getOrderedScores().getKeyValues().get(0).value > 0;
+	}
+	
 	public TownyObject getFirstPlace() {
-		KeyValueTable<TownyObject, Integer> kvTable = new KeyValueTable<>(scores);
-		kvTable.sortByValue();
-		kvTable.reverse();
-		return kvTable.getKeyValues().get(0).key;
+		return getOrderedScores().getKeyValues().get(0).key;
 	}
 	
 	public TownyObject getSecondPlace() {
-		KeyValueTable<TownyObject, Integer> kvTable = new KeyValueTable<>(scores);
-		kvTable.sortByValue();
-		kvTable.reverse();
-		return kvTable.getKeyValues().get(1).key;
+		return getOrderedScores().getKeyValues().get(1).key;
 	}
 
-	public KeyValue<TownyObject, Integer> getWinningScore() throws TownyException {
-
-		KeyValueTable<TownyObject, Integer> kvTable = new KeyValueTable<>(scores);
-		kvTable.sortByValue();
-		kvTable.reverse();
-		if (kvTable.getKeyValues().size() > 0)
-			return kvTable.getKeyValues().get(0);
-		else
-			throw new TownyException();
+	public KeyValue<TownyObject, Integer> getWinningScore() {
+		return getOrderedScores().getKeyValues().get(0);
 	}
 
 	/*
@@ -253,19 +237,20 @@ public class ScoreManager {
 	 */
 
 	public List<String> getStats() {
-
+		
 		List<String> output = new ArrayList<>();
+		WarParticipants participants = war.getWarParticipants();
 		output.add(ChatTools.formatTitle("War Stats"));
 		
 		switch (war.getWarType()) {
 			case WORLDWAR:
 			case NATIONWAR:
-				output.add(Colors.Green + Translation.of("war_stats_nations") + Colors.LightGreen + war.getWarParticipants().getNations().size() + " / " + war.getWarParticipants().getNationsAtStart());
+				output.add(Colors.Green + Translation.of("war_stats_nations") + Colors.LightGreen + participants.getNations().size() + " / " + war.getNationsAtStart());
 			case CIVILWAR:
 			case TOWNWAR:
-				output.add(Colors.Green + Translation.of("war_stats_towns") + Colors.LightGreen + war.getWarParticipants().getTowns().size() + " / " + war.getWarParticipants().getTownsAtStart());
+				output.add(Colors.Green + Translation.of("war_stats_towns") + Colors.LightGreen + participants.getTowns().size() + " / " + war.getTownsAtStart());
 			case RIOT:
-				output.add(Colors.Green + "  Residents: " + Colors.LightGreen + war.getWarParticipants().getResidents().size() + " / " + war.getWarParticipants().getResidentsAtStart());
+				output.add(Colors.Green + "  Residents: " + Colors.LightGreen + participants.getResidents().size() + " / " + war.getResidentsAtStart());
 				break;
 		}		
 		if (war.getWarType().hasTownBlockHP)
@@ -280,4 +265,14 @@ public class ScoreManager {
 			player.sendMessage(line);
 	}
 
+	private KeyValueTable<TownyObject, Integer> getOrderedScores() {
+		KeyValueTable<TownyObject, Integer> kvTable = new KeyValueTable<>(scores);
+		kvTable.sortByValue();
+		kvTable.reverse();
+		return kvTable;
+	}
+	
+	private String formattedTownBlock(TownBlock townBlock) {
+		return "[" + townBlock.getTownOrNull() + "](" + townBlock.getCoord().toString() + ")";
+	}
 }

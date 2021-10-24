@@ -4,12 +4,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.util.StringMgmt;
 
 public class WarBooks {
@@ -106,13 +106,12 @@ public class WarBooks {
 		text += "War Rules:" + newline;
 		if (warType.hasTownBlockHP) {
 			text += "Town blocks will have an HP stat. " + newline;
-			text += "Regular Townblocks have an HP of " + TownySettings.getWarzoneTownBlockHealth() + ". ";
-			text += "Homeblocks have an HP of " + TownySettings.getWarzoneHomeBlockHealth() + ". ";
-			text += "Townblocks lose HP when enemies stand anywhere inside of the plot above Y level " + TownySettings.getMinWarHeight() + ". ";
-			if (TownySettings.getPlotsHealableInWar())
+			text += "Regular Townblocks have an HP of " + EventWarSettings.getWarzoneTownBlockHealth() + ". ";
+			text += "Homeblocks have an HP of " + EventWarSettings.getWarzoneHomeBlockHealth() + ". ";
+			text += "Townblocks lose HP when enemies stand anywhere inside of the plot above Y level " + EventWarSettings.getMinWarHeight() + ". ";
+			if (EventWarSettings.getPlotsHealableInWar())
 				text += "Townblocks that have not dropped all the way to 0 hp are healable by town members and their allies. ";
-			if (TownySettings.getOnlyAttackEdgesInWar())
-				text += "Only edge plots will be attackable at first, so protect your borders and at all costs. ";
+			text += "Only edge plots will be attackable at first, so protect your borders and at all costs. ";
 			text += "Do not let the enemy drop your homeblock to 0 hp! ";
 			if (warType.hasTownBlocksSwitchTowns)
 				text += "Townblocks which drop to 0 hp will be taken over by the attacker permanently! ";
@@ -131,8 +130,8 @@ public class WarBooks {
 			case NATIONWAR:
 			case WORLDWAR:
 				text += "The towns which are defeated by the opposing nation will change sides and join the victorious nation. ";
-				if (TownySettings.getWarEventConquerTime() > 0)
-					text += "These towns will be conquered for " + TownySettings.getWarEventConquerTime() + " days. ";
+				if (EventWarSettings.getWarEventConquerTime() > 0)
+					text += "These towns will be conquered for " + EventWarSettings.getWarEventConquerTime() + " days. ";
 				break;
 			case RIOT:
 				text += "The player who survives with the highest score will become the new town mayor. ";
@@ -261,7 +260,7 @@ public class WarBooks {
 	 * @param war War instance.
 	 * @return String containing the raw text of what will become a book.
 	 */
-	public static String warEndBook(War war) {
+	public static String warEndBook(War war, boolean noOneScored) {
 		WarType warType = war.getWarType();
 		/*
 		 * Flashy Header.
@@ -271,96 +270,133 @@ public class WarBooks {
 		text += "-------------------" + newline;
 		
 		text += "The " + war.getWarName() + " has ended." + newParagraph;
-		switch(warType) {
-		case WORLDWAR:
-			
-			text += "The World War has finished with the following nation reigning victorious: " + newline;
-			for (Nation nation : war.getWarParticipants().getNations())
-				text+= "* " + nation.getName() + newline;
-			text += newline;
-			break;
-			
-		case NATIONWAR:
-			Nation nationWarWinner = war.getWarParticipants().getNations().get(0);
-			text+= nationWarWinner.getFormattedName() + " has won the " + war.getWarName() + ". The following towns survived undefeated:" + newline; 
-			for (Town town : nationWarWinner.getTowns()) {
-				if (war.getWarParticipants().getTowns().contains(town))
-					text += "* " + town.getName() + newline; 
-			}
-			text += newParagraph;
-			if (warType.hasTownConquering)
-				text += "The towns belonging to " + war.getScoreManager().getSecondPlace() + " have joined the nation of " + nationWarWinner + ".";
-			if (!TownySettings.getWarEventWinnerTakesOwnershipOfTownsExcludesCapitals())
-				text += "This includes the capital " + ((Nation)war.getScoreManager().getSecondPlace()).getCapital() + ".";
-			text += newline;
-			break;
-			
-		case CIVILWAR:
-			Nation nation = war.getWarParticipants().getNations().get(0);
-			String capital = war.getWarParticipants().getNations().get(0).getCapital().getName();
-			if (war.getWarParticipants().getGovSide().size() > war.getWarParticipants().getRebSide().size()) {
-				text += "The civil war has ended with the capital reigning victorious.";
-				text += "The nation's capital " + capital + " and the following towns remain undefeated:" + newline;
-				for (TownyObject town : war.getWarParticipants().getGovSide()) {
-					if (town.getName().equalsIgnoreCase(capital))
-						continue;
-					text+= "* " + town.getName() + newline;
-				}
-				text += "The capital remains intact.";
+		
+		if (!noOneScored) {
+			switch(warType) {
+			case WORLDWAR:
+				
+				text += "The World War has finished with the following nation reigning victorious: " + newline;
+				for (Nation nation : war.getWarParticipants().getNations())
+					text+= "* " + nation.getName() + newline;
 				text += newline;
-			} else {
-				text += "The civil war has been one by the rebels: ";
-				for (TownyObject town : war.getWarParticipants().getRebSide())
-					text+= "* " + town.getName() + newline;
+				break;
+				
+			case NATIONWAR:
+				Nation nationWarWinner = war.getWarParticipants().getNations().get(0);
+				text+= nationWarWinner.getFormattedName() + " has won the " + war.getWarName() + ". The following towns survived undefeated:" + newline; 
+				for (Town town : nationWarWinner.getTowns()) {
+					if (war.getWarParticipants().getTowns().contains(town))
+						text += "* " + town.getName() + newline; 
+				}
+				text += newParagraph;
 				if (warType.hasTownConquering)
-					text += "The new capital of " + nation + " is now " + war.getScoreManager().getFirstPlace() + "."; //TODO: Test that the highest score is actually the winner.
+					text += "The towns belonging to " + war.getScoreManager().getSecondPlace() + " have joined the nation of " + nationWarWinner + ".";
+				if (!EventWarSettings.getWarEventWinnerTakesOwnershipOfTownsExcludesCapitals())
+					text += "This includes the capital " + ((Nation)war.getScoreManager().getSecondPlace()).getCapital() + ".";
 				text += newline;
-			}
-			break;
-			
-		case TOWNWAR:
-			Town town = war.getWarParticipants().getTowns().get(0);
-			text += "The " + war.getWarName() + " has ended with " + town + " winning." + newline;
-			text += "Surviving the battle:" + newline;
-			List<String> fighters = new ArrayList<>();
-			for (Resident resident : town.getResidents())					
-				if (war.getWarParticipants().getResidents().contains(resident))
-					fighters.add(resident.getName());
-			text += StringMgmt.join(fighters, ", ") + "." + newline;
-			if (warType.hasTownConquering)
-				text += "The town of " + war.getScoreManager().getSecondPlace() + " did not survive the battle and has been absorbed into " + town + ".";
-			text += newParagraph;				
-			break;
-			
-		case RIOT:
-			text+= "The " + war.getWarName() + " has ended, the city is calm for now.";
-			Resident mayor = war.getWarParticipants().getTowns().get(0).getMayor();
-			if (war.getWarParticipants().getGovSide().size() > war.getWarParticipants().getRebSide().size()) {
-				text += "The mayor remains in power, supported by the following loyalists who kept their lives throughout the war: ";
-				for (TownyObject res : war.getWarParticipants().getGovSide()) {
-					if (((Resident)res).equals(mayor))
-						continue;
-					text+= "* " + res.getName() + newline;
+				break;
+				
+			case CIVILWAR:
+				Nation nation = war.getWarParticipants().getNations().get(0);
+				String capital = war.getWarParticipants().getNations().get(0).getCapital().getName();
+				if (war.getWarParticipants().getGovSide().size() > war.getWarParticipants().getRebSide().size()) {
+					text += "The civil war has ended with the capital reigning victorious.";
+					text += "The nation's capital " + capital + " and the following towns remain undefeated:" + newline;
+					for (TownyObject town : war.getWarParticipants().getGovSide()) {
+						if (town.getName().equalsIgnoreCase(capital))
+							continue;
+						text+= "* " + town.getName() + newline;
+					}
+					text += "The capital remains intact.";
+					text += newline;
+				} else {
+					text += "The civil war has been one by the rebels: ";
+					for (TownyObject town : war.getWarParticipants().getRebSide())
+						text+= "* " + town.getName() + newline;
+					if (warType.hasTownConquering)
+						text += "The new capital of " + nation + " is now " + war.getScoreManager().getFirstPlace() + "."; //TODO: Test that the highest score is actually the winner.
+					text += newline;
 				}
-			} else {
-				text += "The mayor is defeated tonight, succumbing to the rioters: ";
-				for (TownyObject res : war.getWarParticipants().getRebSide())
-					text+= "* " + ((Resident)res).getName() + newline;
+				break;
+				
+			case TOWNWAR:
+				Town town = war.getWarParticipants().getTowns().get(0);
+				text += "The " + war.getWarName() + " has ended with " + town + " winning." + newline;
+				text += "Surviving the battle:" + newline;
+				List<String> fighters = new ArrayList<>();
+				for (Resident resident : town.getResidents())					
+					if (war.getWarParticipants().getResidents().contains(resident))
+						fighters.add(resident.getName());
+				text += StringMgmt.join(fighters, ", ") + "." + newline;
+				if (warType.hasTownConquering)
+					text += "The town of " + war.getScoreManager().getSecondPlace() + " did not survive the battle and has been absorbed into " + town + ".";
+				text += newParagraph;				
+				break;
+				
+			case RIOT:
+				text+= "The " + war.getWarName() + " has ended, the city is calm for now.";
+				Resident mayor = war.getWarParticipants().getTowns().get(0).getMayor();
+				if (war.getWarParticipants().getGovSide().size() > war.getWarParticipants().getRebSide().size()) {
+					text += "The mayor remains in power, supported by the following loyalists who kept their lives throughout the war: ";
+					for (TownyObject res : war.getWarParticipants().getGovSide()) {
+						if (((Resident)res).equals(mayor))
+							continue;
+						text+= "* " + res.getName() + newline;
+					}
+				} else {
+					text += "The mayor is defeated tonight, succumbing to the rioters: ";
+					for (TownyObject res : war.getWarParticipants().getRebSide())
+						text+= "* " + ((Resident)res).getName() + newline;
+					text += newline;
+					if (warType.hasTownConquering) {
+						TownyObject winner = war.getScoreManager().getFirstPlace();
+						if (war.getWarParticipants().getRebSide().contains(winner))
+							text += "The city has been taken over by " + winner + " following a successful coup d'etat." + newline; 
+					}
+				}
 				text += newline;
-				if (warType.hasTownConquering) {
-					TownyObject winner = war.getScoreManager().getFirstPlace();
-					if (war.getWarParticipants().getRebSide().contains(winner))
-						text += "The city has been taken over by " + winner + " following a successful coup d'etat." + newline; 
-				}
+				break;
 			}
-			text += newline;
-			break;
+			
+			text += "Final Scores:" + newParagraph;
+			List<String> scores = war.getScoreManager().getScores(-1, false);
+			for (String line : scores)
+				text += line + newline;
+
+		} else {
+			/*
+			 * Nobody had scored any points when this war was ended.
+			 */
+			switch(warType) {
+			case WORLDWAR:
+				
+				text += "The World War has finished with no one scoring any points. The following nations took part:" + newline;
+				for (Nation nation : war.getWarParticipants().getNations())
+					text+= "* " + nation.getName() + newline;
+				text += newline;
+				break;
+				
+			case NATIONWAR:
+				text += war.getWarName() + " ended in a stalemate." + newline;
+				if (war.getWarParticipants().getNations().size() == 2)
+					text += war.getWarParticipants().getNations().get(0) + " and " + war.getWarParticipants().getNations().get(1) + " both survived without scoring any points.";
+				break;
+				
+			case CIVILWAR:
+				text += "No one scoring any points. It was fairly tame by most civil war standards.";
+				break;
+			case TOWNWAR:
+				text += "The " + war.getWarName() + " ended in a stalemate." + newline;
+				if (war.getWarParticipants().getTowns().size() == 2)
+					text += war.getWarParticipants().getTowns().get(0) + " and " + war.getWarParticipants().getTowns().get(1) + " both survived without scoring any points.";
+				break;
+				
+			case RIOT:
+				text += "The " + war.getWarName() + " ended with no one scoring any points at all.";
+				break;
+			}
 		}
 		
-		text += "Final Scores:" + newParagraph;
-		List<String> scores = war.getScoreManager().getScores(-1, false);
-		for (String line : scores)
-			text += line + newline;
 		
 		return text;
 	}

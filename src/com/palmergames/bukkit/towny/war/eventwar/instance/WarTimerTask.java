@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.war.eventwar.instance;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -13,6 +12,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.tasks.TownyTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 
 import org.bukkit.entity.Player;
 
@@ -37,7 +37,7 @@ public class WarTimerTask extends TownyTimerTask {
 				war.getWarParticipants().removeOnlineWarrior(player);
 				continue;
 			}
-			if (TownyAPI.getInstance().isWilderness(player.getLocation()) || player.getLocation().getBlockY() < TownySettings.getMinWarHeight())
+			if (TownyAPI.getInstance().isWilderness(player.getLocation()) || player.getLocation().getBlockY() < EventWarSettings.getMinWarHeight())
 				continue;
 
 			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
@@ -50,7 +50,7 @@ public class WarTimerTask extends TownyTimerTask {
 			if (resident == null || !resident.hasTown() || !war.getWarParticipants().has(resident) || resident.isJailed())
 				continue;
 
-			if (TownySettings.getPlotsHealableInWar() && (CombatUtil.isAlly(resident.getTownOrNull(), townBlock.getTownOrNull()))) {
+			if (EventWarSettings.getPlotsHealableInWar() && (CombatUtil.isAlly(resident.getTownOrNull(), townBlock.getTownOrNull()))) {
 				if (plotList.containsKey(townBlock))
 					plotList.get(townBlock).addDefender(player);
 				else {
@@ -70,7 +70,7 @@ public class WarTimerTask extends TownyTimerTask {
 				continue;
 			TownyMessaging.sendDebugMsg("[War]   notAlly");
 
-			if (TownySettings.getOnlyAttackEdgesInWar() && !isOnEdgeOfTown(townBlock, townBlock.getWorldCoord(), war))
+			if (!isOnEdgeOfTown(townBlock, townBlock.getWorldCoord(), war))
 				continue;
 
 			if (plotList.containsKey(townBlock))

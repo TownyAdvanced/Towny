@@ -9,7 +9,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -20,6 +19,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
+import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.bukkit.util.BukkitTools;
 
 public class WarUtil {
@@ -53,7 +53,7 @@ public class WarUtil {
 	 */
 	public static void launchFireworkAtPlot(final TownBlock townblock, final Player atPlayer, final FireworkEffect.Type type, final Color c) {
 		// Check the config. If false, do not launch a firework.
-		if (!TownySettings.getPlotsFireworkOnAttacked()) {
+		if (!EventWarSettings.getPlotsFireworkOnAttacked()) {
 			return;
 		}
 		
@@ -137,8 +137,8 @@ public class WarUtil {
 			}
 			TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_sided_with_the_rebels"));
 		})
-		.setTitle(Translatable.of("Which side will be choose?"))
-		.setDuration(120)
+		.setTitle(Translatable.of("msg_which_side_will_you_choose"))
+		.setDuration(EventWarSettings.teamSelectionSeconds())
 		.setConfirmText("/state")
 		.setCancelText("/rebel")
 		.sendTo(player);
