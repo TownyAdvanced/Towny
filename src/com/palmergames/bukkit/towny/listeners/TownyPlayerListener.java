@@ -173,24 +173,27 @@ public class TownyPlayerListener implements Listener {
 		if (Towny.is116Plus() && event.isAnchorSpawn() && TownySettings.isRespawnAnchorHigherPrecedence()) {
 			return;
 		}
-		
+
 		Location respawn;
 		respawn = TownyAPI.getInstance().getTownSpawnLocation(player);
-		if (respawn == null) {
-			// Town has not set respawn location. Using default.
-			return;
+
+		// Towny might be prioritizing bed spawns over town spawns.
+		if (TownySettings.getBedUse()) { 
+			Location bed = player.getBedSpawnLocation();
+			if (bed != null)
+				respawn = bed;
 		}
+
+		// Town spawn could be null and no bed was available.
+		if (respawn == null)
+			return;
+		
 		// Check if only respawning in the same world as the town's spawn.
 		if (TownySettings.isTownRespawningInOtherWorlds() && !player.getWorld().equals(respawn.getWorld()))
 			return;
 		
-		// Bed spawn or town.
-		if (TownySettings.getBedUse() && (player.getBedSpawnLocation() != null)) {
-			event.setRespawnLocation(player.getBedSpawnLocation());
-		} else {
-			event.setRespawnLocation(respawn);
-		}
-
+		event.setRespawnLocation(respawn);
+		
 		// Handle Spawn protection
 		long protectionTime = TownySettings.getSpawnProtection();
 		if (protectionTime > 0l) {
