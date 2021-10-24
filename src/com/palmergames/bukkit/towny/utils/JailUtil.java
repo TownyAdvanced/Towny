@@ -226,7 +226,7 @@ public class JailUtil {
 	private static void addJailedPlayerToLogOutMap(Resident resident) {
 		queuedJailedResidents.add(resident);
 		TownyMessaging.sendMsg(resident, Translatable.of("msg_do_not_log_out_while_waiting_to_be_teleported"));
-		Bukkit.getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), () -> queuedJailedResidents.remove(resident), TownySettings.getTeleportWarmupTime() + 20);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), () -> queuedJailedResidents.remove(resident), TownySettings.getTeleportWarmupTime() * 20);
 		
 	}
 
