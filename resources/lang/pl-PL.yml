@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.129
+version: 0.130
 language: polish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1432,3 +1432,37 @@ towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
 towny_prices_upkeep_num_towns: 'number of towns.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: 'nation level (num residents.)'
+#Added in 0.130
+#Jail causes
+msg_jailed_mayor: 'Jailed by mayor.'
+#Jail causes
+msg_jailed_outlaw: 'Killed as an outlaw.'
+#Jail causes
+msg_jailed_war: 'Prisoner of War.'
+#Jail handbook messages
+msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
+#Jail handbook messages
+msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
+#Jail handbook messages
+msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
+#Jail handbook messages
+msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
+#Jail handbook messages
+msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
+#Jail handbook messages
+msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
+#Jail handbook messages
+msg_jailed_handbook_bail_2: 'Bail will cost %s.'
+#Jail handbook messages
+msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
+#Jail handbook messages
+msg_jailed_handbook_6: 'But don''t die before you reach the wilderness or you''ll end up right back in jail.'
+#Jail handbook messages
+msg_jailed_teleport: 'Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you''ve just got to get a hold of some.'
+#Jail handbook messages
+msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your countrymen can reduce the jail plot''s HP to 0, or if the town you are jailed in is removed from the war.'
+#Jail handbook title
+msg_jailed_title: 'So you''ve been jailed :('
+#Jail handbook author
+msg_jailed_author: 'Towny Jailco.'
+
