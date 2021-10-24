@@ -353,12 +353,7 @@ public class CombatUtil {
 	 * @return true if the world is PvP
 	 */
 	public static boolean isWorldPvP(TownyWorld world) {
-
-		// Universe is only PvP
-		if (world.isForcePVP() || world.isPVP())
-			return true;
-
-		return false;
+		return (world.isForcePVP() || world.isPVP());
 	}
 
 	/**
@@ -619,9 +614,7 @@ public class CombatUtil {
 
 		if (!a.hasNation() || !b.hasNation())
 			return false;
-		if (isSameTown(a, b))
-			return false;
-		if (isSameNation(a, b))
+		if (isSameTown(a, b) || isSameNation(a, b))
 			return false;
 		if (a.getNationOrNull().hasEnemy(b.getNationOrNull()))
 			return true;

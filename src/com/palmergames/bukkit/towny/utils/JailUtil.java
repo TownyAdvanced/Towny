@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -12,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -24,6 +22,9 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
@@ -46,9 +47,7 @@ public class JailUtil {
 	public static void jailResident(Resident resident, Jail jail, int cell, int hours, JailReason reason, CommandSender jailer) {
 		
 		// Set senderName
-		String senderName = "Admin";
-		if (jailer instanceof Player)
-			senderName = ((Player) jailer).getName();
+		String senderName = jailer instanceof Player ? (jailer).getName() : "Admin";
 
 		// Stop mayors from setting incredibly high hours.
 		if (hours > 10000)
@@ -168,39 +167,37 @@ public class JailUtil {
 	 * @param reason JailReason the player is in jail for.
 	 */
 	private static void sendJailedBookToResident(Player player, JailReason reason) {
+		final Translator translator = Translator.locale(Translation.getLocale(player));
 		
 		/*
 		 * A nice little book for the not so nice person in jail.
 		 */
-		String pages = "Looks like you've been jailed, for the reason " + reason.getCause();
-		pages += "That's too bad huh. Well what can you do about it? Here's some helpful tips for you while you serve your sentence.\n\n";
-		pages += "You have been jailed for " + reason.getHours() + " hours. By serving your sentence you will become free.\n\n";
-		if (TownySettings.JailDeniesTownLeave())
-			pages += "While you're jailed you won't be able to leave your town to escape jail.\n";
-		else
-			pages += "You can escape from jail by leaving your town using '/town leave'.\n";
+		String pages = translator.of("msg_jailed_handbook_1", translator.of(reason.getCause()));
+		pages += translator.of("msg_jailed_handbook_2") + "\n\n";
+		pages += translator.of("msg_jailed_handbook_3", reason.getHours()) + "\n\n";
+		pages += TownySettings.JailDeniesTownLeave() ? translator.of("msg_jailed_handbook_4_cant") : translator.of("msg_jailed_handbook_4_can") + "\n";
 		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive()) {
-			pages += "You can be freed from jail by paying your bail using '/res jail paybail'.";
+			pages += translator.of("msg_jailed_handbook_bail_1");
 			double cost = TownySettings.getBailAmount();
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			if (resident.isMayor())
 				cost = TownySettings.getBailAmountMayor();
 			if (resident.isKing())
 				cost = TownySettings.getBailAmountKing();
-			pages += "Bail will cost: " + TownyEconomyHandler.getFormattedBalance(cost) + "\n\n";
+			pages += translator.of("msg_jailed_handbook_bail_2", TownyEconomyHandler.getFormattedBalance(cost)) + "\n\n";
 		}
-		pages += "If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.";
-		pages += "But don't die before you reach the wilderness or you'll end up right back in jail.";
+		pages += translator.of("msg_jailed_handbook_5");
+		pages += translator.of("msg_jailed_handbook_6");
 		if (TownySettings.JailAllowsTeleportItems())
-			pages += "Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you've just got to get a hold of some.";
-		pages +="\n\n";
+			pages += translator.of("msg_jailed_teleport");
+		pages += "\n\n";
 		if (reason.equals(JailReason.PRISONER_OF_WAR))
-			pages += "As a prisoner of war you will be freed if your countrymen can reduce the jail plot's HP to 0, or if the town you are jailed in is removed from the war.";
+			pages += translator.of("msg_jailed_war_prisoner");
 		
 		/*
 		 * Send the book off to the BookFactory to be made.
 		 */
-		player.getInventory().addItem(new ItemStack(BookFactory.makeBook("So you've been jailed :(", "Towny Jailco.", pages)));
+		player.getInventory().addItem(new ItemStack(BookFactory.makeBook(translator.of("msg_jailed_title"), translator.of("msg_jailed_author"), pages)));
 	}
 
 	public static void createJailPlot(TownBlock townBlock, Town town, Location location) throws TownyException {
@@ -216,32 +213,20 @@ public class JailUtil {
 	
 	private static void teleportAwayFromJail(Resident resident) {
 		// Don't teleport a player who isn't online.
-		if (resident.getPlayer() == null)
-			return;
-		
-		// Send a pardoned player to the world spawn, or their town's spawn if they have a town with a spawn.
-		Location loc = Bukkit.getWorld(resident.getPlayer().getWorld().getName()).getSpawnLocation();
-		try {
-			loc = resident.getTown().getSpawn();
-		} catch (TownyException e) {}
-
-		// Use teleport warmup
-		TownyMessaging.sendMsg(resident, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
-		TownyAPI.getInstance().jailTeleport(resident.getPlayer(), loc);
-
+		if (!resident.isOnline()) return;
+		SpawnUtil.jailAwayTeleport(resident);
 	}
 	
 	private static void teleportToJail(Resident resident) {
 		// Send a player to their jail cell.
 		TownyMessaging.sendMsg(resident, Translatable.of("msg_you_are_being_sent_to_jail"));
-		TownyMessaging.sendMsg(resident, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
-		TownyAPI.getInstance().jailTeleport(resident.getPlayer(), resident.getJailSpawn());
+		SpawnUtil.jailTeleport(resident);
 	}
 
 	private static void addJailedPlayerToLogOutMap(Resident resident) {
 		queuedJailedResidents.add(resident);
 		TownyMessaging.sendMsg(resident, Translatable.of("msg_do_not_log_out_while_waiting_to_be_teleported"));
-		Bukkit.getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), () -> queuedJailedResidents.remove(resident), TownySettings.getTeleportWarmupTime() + 20);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), () -> queuedJailedResidents.remove(resident), TownySettings.getTeleportWarmupTime() * 20);
 		
 	}
 

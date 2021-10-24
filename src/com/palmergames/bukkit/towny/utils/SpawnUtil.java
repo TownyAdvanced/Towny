@@ -383,7 +383,6 @@ public class SpawnUtil {
 	 * 
 	 * @param player - Player being spawned. 
 	 * @param spawnLoc - Location being spawned to.
-	 * @param admin - True if player has admin spawn nodes.
 	 */
 	private static void initiateSpawn(Player player, Location spawnLoc) {
 
@@ -414,11 +413,44 @@ public class SpawnUtil {
 			spawnLocation = Objects.requireNonNull(Bukkit.getWorld(TownySettings.getOutlawTeleportWorld())).getSpawnLocation();
 		}
 		// sets tp location to their bedspawn only if it isn't in the town they're being teleported from.
-		if ((outlawedPlayer.getBedSpawnLocation() != null) && (TownyAPI.getInstance().getTown(outlawedPlayer.getBedSpawnLocation()) != town))
-			spawnLocation = outlawedPlayer.getBedSpawnLocation();
+		Location bed = outlawedPlayer.getBedSpawnLocation();
+		if (bed != null && TownyAPI.getInstance().getTown(bed) != town)
+			spawnLocation = bed;
 		if (outlaw.hasTown() && TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer) != null)
 			spawnLocation = TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer);
 		TownyMessaging.sendMsg(outlaw, Translatable.of("msg_outlaw_kicked", town));
 		PaperLib.teleportAsync(outlaw.getPlayer(), spawnLocation, TeleportCause.PLUGIN);
+	}
+	
+	public static void jailAwayTeleport(Resident jailed) {
+		initiatePluginTeleport(jailed, getIdealLocation(jailed), false);
+	}
+	
+	public static void jailTeleport(Resident jailed) {
+		initiatePluginTeleport(jailed, jailed.getJailSpawn(), false);
+	}
+
+	/**
+	 * Get the best location an resident can be teleported to
+	 * @param resident
+	 * @return bed spawn OR town spawn OR last world spawn
+	 */
+	private static Location getIdealLocation(Resident resident) {
+		Town town = resident.getTownOrNull();
+		Location loc = resident.getPlayer().getWorld().getSpawnLocation();
+
+		if (town != null && town.hasSpawn())
+			loc = town.getSpawnOrNull();
+
+		Location bed = resident.getPlayer().getBedSpawnLocation();
+		if (bed != null)
+			loc = bed;
+		
+		return loc;
+	}
+	
+	private static void initiatePluginTeleport(Resident resident, Location loc, boolean ignoreWarmup) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> PaperLib.teleportAsync(resident.getPlayer(), loc, TeleportCause.PLUGIN),
+			ignoreWarmup ? 0 : TownySettings.getTeleportWarmupTime() * 20);
 	}
 }
