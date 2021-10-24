@@ -333,33 +333,41 @@ public class PlayerCacheUtil {
 					return TownBlockStatus.PLOT_TOWN;
 				else if (resident.hasTown() && CombatUtil.isAlly(owner.getTown(), resident.getTown()))
 					return TownBlockStatus.PLOT_ALLY;
+				else
+					return TownBlockStatus.OUTSIDER;
 			}
 
 			// Resident with no town.
-			if (!resident.hasTown()) {				
+			if (!resident.hasTown()) {
 				if (TownyAPI.getInstance().isWarTime() && townBlock.isWarZone() && !TownySettings.isWarTimeTownsNeutral())
 					return TownBlockStatus.WARZONE;
 				else
 					return TownBlockStatus.OUTSIDER;
-			}	
+			}
 			
-			if (resident.getTown() != town) {
-				// Allied destroy rights
-				if (CombatUtil.isSameNation(town, resident.getTown()))
-					return TownBlockStatus.TOWN_NATION;
-				if (CombatUtil.isAlly(town, resident.getTown()))
-					return TownBlockStatus.TOWN_ALLY;
-				else if (CombatUtil.isEnemy(resident.getTown(), town)) {
-					if (TownyAPI.getInstance().isWarTime() && townBlock.isWarZone() || War.isWarZone(townBlock.getWorldCoord()))
-						return TownBlockStatus.WARZONE;
-					else
-						return TownBlockStatus.ENEMY;
-				} else
-					return TownBlockStatus.OUTSIDER;
-			} else if (resident.isMayor()) // || resident.getTown().hasAssistant(resident))
-				return TownBlockStatus.TOWN_OWNER;
-			else
+			// Town has this resident, who isn't the mayor.
+			if (town.hasResident(resident))
 				return TownBlockStatus.TOWN_RESIDENT;
+			
+			// Nation group.
+			if (CombatUtil.isSameNation(town, resident.getTown()))
+				return TownBlockStatus.TOWN_NATION;
+			
+			// Ally group.
+			if (CombatUtil.isAlly(town, resident.getTown()))
+				return TownBlockStatus.TOWN_ALLY;
+			
+			// Enemy or WarZone.
+			if (CombatUtil.isEnemy(resident.getTown(), town)) {
+				if (TownyAPI.getInstance().isWarTime() && townBlock.isWarZone() || War.isWarZone(townBlock.getWorldCoord()))
+					return TownBlockStatus.WARZONE;
+				else
+					return TownBlockStatus.ENEMY;
+			}
+
+			// Nothing left but Outsider.
+			return TownBlockStatus.OUTSIDER;
+
 		} catch (TownyException e) {
 			// Outsider destroy rights
 			return TownBlockStatus.OUTSIDER;
