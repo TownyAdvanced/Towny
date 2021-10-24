@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.129
+version: 0.130
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -647,7 +647,7 @@ status_world_explrevert: '爆炸回溯：'
 status_world_ignoredblocks: '忽略的方块：'
 status_res_taxexempt: '管理者免交市政税。'
 status_res_tax: '市政税：'
-status_res_plottax: '地税总计：'
+status_res_plottax: '总计地税：'
 status_res_totaltax: '总计缴纳税费：'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '你不能在国都外使用国家银行.'
@@ -1427,8 +1427,42 @@ msg_changed_nationzone: '城镇的国域现在是%s'
 msg_err_your_town_has_no_nationzone_to_toggle: '你的城镇没有国域可以设置！'
 #Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
-towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
+towny_prices_nation_upkeep_based_on: '&7国家维持费用基于&a%s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
-towny_prices_upkeep_num_towns: 'number of towns.'
+towny_prices_upkeep_num_towns: '城镇数量。'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
-towny_prices_upkeep_nation_level: 'nation level (num residents.)'
+towny_prices_upkeep_nation_level: '国家等级（居民数量）。'
+#Added in 0.130
+#Jail causes
+msg_jailed_mayor: 'Jailed by mayor.'
+#Jail causes
+msg_jailed_outlaw: 'Killed as an outlaw.'
+#Jail causes
+msg_jailed_war: 'Prisoner of War.'
+#Jail handbook messages
+msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
+#Jail handbook messages
+msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
+#Jail handbook messages
+msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
+#Jail handbook messages
+msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
+#Jail handbook messages
+msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
+#Jail handbook messages
+msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
+#Jail handbook messages
+msg_jailed_handbook_bail_2: 'Bail will cost %s.'
+#Jail handbook messages
+msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
+#Jail handbook messages
+msg_jailed_handbook_6: 'But don''t die before you reach the wilderness or you''ll end up right back in jail.'
+#Jail handbook messages
+msg_jailed_teleport: 'Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you''ve just got to get a hold of some.'
+#Jail handbook messages
+msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your countrymen can reduce the jail plot''s HP to 0, or if the town you are jailed in is removed from the war.'
+#Jail handbook title
+msg_jailed_title: 'So you''ve been jailed :('
+#Jail handbook author
+msg_jailed_author: 'Towny Jailco.'
+
