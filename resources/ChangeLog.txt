@@ -6878,3 +6878,5 @@ v0.92.0.11:
   - Make the plugin.name_blacklist apply to the town and nation titles and surnames.
 0.97.2.10:
   - Cache builds & fix up labeler & update to Java 17, courtesy of Warriorrrr with PR #5394.
+  - Cleanup util classes, couresty of EuGNosii with PR #5348.
+  - Bump language file to 0.130.
