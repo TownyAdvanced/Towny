@@ -6884,3 +6884,4 @@ v0.92.0.11:
     - Closes #5395.
 0.97.2.11:
   - Fix ConcurrentModificationException in InviteHandler's expired invite search.
+  - Fix /towny command not working for console senders in the TownyCommandAddOn API.

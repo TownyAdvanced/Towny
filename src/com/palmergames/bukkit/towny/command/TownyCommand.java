@@ -162,6 +162,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("universe")) {
 				for (String line : getUniverseStats(Translation.getDefaultLocale()))
 					TownyMessaging.sendMessage(sender, Colors.strip(line));
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNY, args[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, args[0]).execute(sender, "towny", args);
 			}
 
 		}
