@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 
 import java.io.InvalidObjectException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -66,7 +67,7 @@ public class InviteHandler {
 	
 	public static void searchForExpiredInvites() {
 		final long time = TownySettings.getInviteExpirationTime() * 1000;
-		for (Invite activeInvite : getActiveInvites()) {
+		for (Invite activeInvite : new ArrayList<>(getActiveInvites())) {
 			if (getInviteTime(activeInvite) + time < System.currentTimeMillis()) {
 				activeInvite.getReceiver().deleteReceivedInvite(activeInvite);
 				activeInvite.getSender().deleteSentInvite(activeInvite);

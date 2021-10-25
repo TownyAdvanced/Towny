@@ -6882,3 +6882,5 @@ v0.92.0.11:
   - Bump language file to 0.130.
   - Fix PlayerCacheUtil not choosing an Outsider TownBlockStatus.
     - Closes #5395.
+0.97.2.11:
+  - Fix ConcurrentModificationException in InviteHandler's expired invite search.
