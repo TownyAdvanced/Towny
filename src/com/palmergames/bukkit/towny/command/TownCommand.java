@@ -372,7 +372,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					try {
 						Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 						if (res != null)
-							return townSetTabComplete(res.getTown(), args);
+							return townSetTabComplete(sender, res.getTown(), args);
 					} catch (TownyException e) {
 					}
 					return Collections.emptyList();
@@ -456,7 +456,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 1)
 						return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, townTabCompletes), args[0], "t");
 					else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWN, args[0]))
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, args[0]).getTabCompletion(args.length), args[args.length-1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, args[0]).getTabCompletion(sender, args), args[args.length-1]);
 			}
 		} else if (args.length == 1) {
 			return filterByStartOrGetTownyStartingWith(townConsoleTabCompletes, args[0], "t");
@@ -465,12 +465,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return Collections.emptyList();
 	}
 	
-	static List<String> townSetTabComplete(Town town, String[] args) {
+	static List<String> townSetTabComplete(CommandSender sender, Town town, String[] args) {
 		if (args.length == 2) {
 			return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_SET, townSetTabCompletes), args[1]);
 		} else if (args.length > 2) {
 			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_SET, args[1]))
-				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
+				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_SET, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 			
 			switch (args[1].toLowerCase()) {
 				case "mayor":

@@ -184,7 +184,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_SET, residentSetTabCompletes), args[1]);
 					if (args.length > 2) {
 						if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, args[1]))
-							return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
+							return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 
 						switch (args[1].toLowerCase()) {
 							case "mode":
@@ -212,7 +212,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 1)
 						return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT, residentTabCompletes), args[0], "r");
 					else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT, args[0]))
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT, args[0]).getTabCompletion(args.length), args[args.length-1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT, args[0]).getTabCompletion(sender, args), args[args.length-1]);
 			}
 		} else if (args.length == 1){
 				return filterByStartOrGetTownyStartingWith(residentConsoleTabCompletes, args[0], "r");

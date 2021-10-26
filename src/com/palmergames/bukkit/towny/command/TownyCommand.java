@@ -205,7 +205,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNY, townyConsoleTabCompletes), args[0]);
 					}
 				} else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNY, args[0]))
-					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, args[0]).getTabCompletion(args.length), args[args.length-1]);
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, args[0]).getTabCompletion(sender, args), args[args.length-1]);
 		}
 		
 		return Collections.emptyList();

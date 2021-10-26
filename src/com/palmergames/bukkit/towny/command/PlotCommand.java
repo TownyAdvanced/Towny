@@ -185,7 +185,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
 						return permTabComplete(StringMgmt.remArgs(args, 2));
 					} else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, args[1]))
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_SET, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 					break;
 				case "toggle":
 					if (args.length == 2)
@@ -251,7 +251,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 1)
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT, plotTabCompletes), args[0]);
 					else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.PLOT, args[0]))
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT, args[0]).getTabCompletion(args.length), args[args.length-1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT, args[0]).getTabCompletion(sender, args), args[args.length-1]);
 			}
 		}
 

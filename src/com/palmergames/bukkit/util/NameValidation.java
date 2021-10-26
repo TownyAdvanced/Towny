@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import java.util.stream.Collectors;
 
 /**
  * @author ElgarL
@@ -115,7 +114,7 @@ public class NameValidation {
 	 * @return true if this is something that isn't allowed in the config's name blacklist.
 	 */
 	public static boolean isConfigBlacklistedName(String name ) {
-		return TownySettings.getBlacklistedNames().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(name.toLowerCase());
+		return TownySettings.getBlacklistedNames().stream().anyMatch(name::equalsIgnoreCase);
 	}
 	
 	/**
