@@ -1092,6 +1092,7 @@ public class TownyUniverse {
         }
     }	
 
+    // Used by FlagWar
     public void addWarZone(WorldCoord worldCoord) {
         try {
         	if (worldCoord.getTownyWorld().isWarAllowed())
@@ -1101,7 +1102,8 @@ public class TownyUniverse {
         }
         towny.updateCache(worldCoord);
     }
-    
+
+    // Used by FlagWar
     public void removeWarZone(WorldCoord worldCoord) {
         try {
             worldCoord.getTownyWorld().removeWarZone(worldCoord);
