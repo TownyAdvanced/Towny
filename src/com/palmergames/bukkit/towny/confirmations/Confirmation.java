@@ -17,6 +17,8 @@ public class Confirmation {
 	private final Runnable cancelHandler;
 	private final Object title;
 	private final int duration;
+	private final String confirmCommand;
+	private final String cancelCommand;
 	private final boolean isAsync;
 
 	/**
@@ -56,6 +58,8 @@ public class Confirmation {
 		this.title = builder.title;
 		this.duration = builder.duration;
 		this.isAsync = builder.runAsync;
+		this.confirmCommand = builder.confirmCommand;
+		this.cancelCommand = builder.cancelCommand;
 	}
 	
 	/**
@@ -105,6 +109,14 @@ public class Confirmation {
 	 */
 	public int getDuration() {
 		return duration;
+	}
+	
+	public String getConfirmCommand() {
+		return confirmCommand;
+	}
+	
+	public String getCancelCommand() {
+		return cancelCommand;
 	}
 
 	/**

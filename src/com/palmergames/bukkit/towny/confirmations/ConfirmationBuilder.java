@@ -12,6 +12,8 @@ public class ConfirmationBuilder {
 	Runnable acceptHandler;
 	Runnable cancelHandler;
 	Object title;
+	String confirmCommand = null;
+	String cancelCommand = null;
 	int duration = TownySettings.getConfirmationTimeoutSeconds();
 	boolean runAsync;
 

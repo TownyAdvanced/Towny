@@ -69,7 +69,7 @@ public class ConfirmationHandler {
 		
 		// Send the confirmation message.
 		String title = confirmation.getTitle(Translation.getLocale(sender));
-		TownyMessaging.sendConfirmationMessage(sender, title, null, null, Translatable.of("this_message_will_expire2", confirmation.getDuration()).forLocale(sender));
+		TownyMessaging.sendConfirmationMessage(sender, title, confirmation.getConfirmCommand(), confirmation.getCancelCommand(), Translatable.of("this_message_will_expire2", confirmation.getDuration()).forLocale(sender));
 		
 		int duration = confirmation.getDuration();
 		
