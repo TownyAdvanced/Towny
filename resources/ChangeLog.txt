@@ -6886,3 +6886,4 @@ v0.92.0.11:
   - Fix ConcurrentModificationException in InviteHandler's expired invite search.
   - Fix /towny command not working for console senders in the TownyCommandAddOn API.
   - Add TabCompleter support for addon commands, courtesy of Warriorrrr with PR #5403.
+  - Fix /ta set capital, /ta set king, /ta nation NAME set commands not working properly.

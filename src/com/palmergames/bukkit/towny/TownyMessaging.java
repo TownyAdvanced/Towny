@@ -293,11 +293,11 @@ public class TownyMessaging {
 	 * @param player player to show to
 	 * @param nation the nation for which to show it's board
 	 */
-	public static void sendNationBoard(Player player, Nation nation) {
+	public static void sendNationBoard(CommandSender sender, Nation nation) {
 		String nbColor1 = Translation.of("nationboard_message_colour_1");
 		String nbColor2 = Translation.of("nationboard_message_colour_2");
 
-		player.sendMessage(nbColor1 + "[" + StringMgmt.remUnderscore(nation.getName()) + "] " + nbColor2 + nation.getBoard());
+		sender.sendMessage(nbColor1 + "[" + StringMgmt.remUnderscore(nation.getName()) + "] " + nbColor2 + nation.getBoard());
 	}
 	
 	/*
