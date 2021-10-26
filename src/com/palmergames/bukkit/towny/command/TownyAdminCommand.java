@@ -278,7 +278,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							if (args.length == 2)
 								return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN_SET, adminSetCompletes), args[1]);
 							else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_SET, args[1]))
-								return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 					}
 				}
 				break;
@@ -376,7 +376,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "set": {
 							final Town town = TownyUniverse.getInstance().getTown(args[1]);
 							if (town != null)
-								return TownCommand.townSetTabComplete(town, StringMgmt.remArgs(args, 2));
+								return TownCommand.townSetTabComplete(sender, town, StringMgmt.remArgs(args, 2));
 							break;
 						}
 						case "toggle":
@@ -439,7 +439,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "set": {
 							Nation nation = TownyUniverse.getInstance().getNation(args[1]);
 							if (nation != null) {
-								return NationCommand.nationSetTabComplete(nation, StringMgmt.remArgs(args, 2));
+								return NationCommand.nationSetTabComplete(sender, nation, StringMgmt.remArgs(args, 2));
 							}
 							else {
 								return Collections.emptyList();
@@ -501,7 +501,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (args.length == 1)
 					return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN, adminTabCompletes), args[0]);
 				else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, args[0]))
-					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, args[0]).getTabCompletion(args.length), args[args.length-1]);
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, args[0]).getTabCompletion(sender, args), args[args.length-1]);
 		}
 		
 		return Collections.emptyList();

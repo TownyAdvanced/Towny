@@ -297,7 +297,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					break;
 				case "set":
 					try {
-						return nationSetTabComplete(getResidentOrThrow(player.getUniqueId()).getTown().getNation(), args);
+						return nationSetTabComplete(sender, getResidentOrThrow(player.getUniqueId()).getTown().getNation(), args);
 					} catch (NotRegisteredException e) {
 						return Collections.emptyList();
 					}
@@ -317,7 +317,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							return getTownyStartingWith(args[0], "n");
 						}
 					} else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.NATION, args[0]))
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, args[0]).getTabCompletion(args.length), args[args.length-1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, args[0]).getTabCompletion(sender, args), args[args.length-1]);
 			}
 		} else if (args.length == 1) {
 			return filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
@@ -326,12 +326,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		return Collections.emptyList();
 	}
 	
-	static List<String> nationSetTabComplete(Nation nation, String[] args) {
+	static List<String> nationSetTabComplete(CommandSender sender, Nation nation, String[] args) {
 		if (args.length == 2) {
 			return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.NATION_SET, nationSetTabCompletes), args[1]);
 		} else if (args.length > 2){
 			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, args[1]))
-				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, args[1]).getTabCompletion(args.length-1), args[args.length-1]);
+				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 			
 			switch (args[1].toLowerCase()) {
 				case "king":

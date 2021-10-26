@@ -1,12 +1,14 @@
 package com.palmergames.bukkit.towny;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import com.palmergames.bukkit.towny.object.AddonCommand;
 
 import org.bukkit.command.CommandExecutor;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -14,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 0.97.0.1
  */
 public class TownyCommandAddonAPI {
-    private static List<AddonCommand> addedCommands = new ArrayList<AddonCommand>();
+    private static final Map<CommandType, Map<String, AddonCommand>> addedCommands = new HashMap<>();
 
     public enum CommandType {
         RESIDENT,
@@ -38,29 +40,32 @@ public class TownyCommandAddonAPI {
         TOWNYWORLD_TOGGLE
     }
 
-    public static boolean addSubCommand(CommandType commandType, String subCommandName, CommandExecutor commandExecutor) {
-        return addedCommands.add(new AddonCommand(commandType, subCommandName, commandExecutor));
+    public static boolean addSubCommand(@NotNull CommandType commandType, @NotNull String subCommandName, @NotNull CommandExecutor commandExecutor) {
+		return addSubCommand(new AddonCommand(commandType, subCommandName, commandExecutor));
     }
 
-    public static boolean addSubCommand(AddonCommand command) {
-        return addedCommands.add(command);
+    public static boolean addSubCommand(@NotNull AddonCommand command) {
+		if (addedCommands.computeIfAbsent(command.getCommandType(), k -> new HashMap<>()).containsKey(command.getName().toLowerCase()))
+			return false;
+		
+        addedCommands.get(command.getCommandType()).put(command.getName().toLowerCase(), command);
+		return true;
     }
 
-    public static boolean removeSubCommand(CommandType commandType, String name) {
-        return addedCommands.remove(getAddonCommand(commandType, name));
+    public static boolean removeSubCommand(@NotNull CommandType commandType, @NotNull String name) {
+		if (!addedCommands.computeIfAbsent(commandType, k -> new HashMap<>()).containsKey(name.toLowerCase()))
+			return false;
+		
+		addedCommands.get(commandType).remove(name.toLowerCase());
+		return true;
     }
 
-    public static boolean removeSubCommand(AddonCommand command) {
-        return addedCommands.remove(command);
+    public static boolean removeSubCommand(@NotNull AddonCommand command) {
+        return removeSubCommand(command.getCommandType(), command.getName());
     }
 
-    public static boolean hasCommand(CommandType commandType, String name) {
-        for (AddonCommand command : addedCommands) {
-            if (command.getCommandType() == commandType && command.getName().equalsIgnoreCase(name))
-                return true;
-        }
-
-        return false;
+    public static boolean hasCommand(@NotNull CommandType commandType, @NotNull String name) {
+        return addedCommands.computeIfAbsent(commandType, k -> new HashMap<>()).containsKey(name.toLowerCase());
     }
 
     /**
@@ -69,21 +74,17 @@ public class TownyCommandAddonAPI {
      * @return The command or null if it does not exist.
      */
     @Nullable
-    public static AddonCommand getAddonCommand(CommandType commandType, String name) {
-        for (AddonCommand command : addedCommands) {
-            if (command.getCommandType() == commandType && command.getName().equalsIgnoreCase(name))
-                return command;
-        }
-        return null;
+    public static AddonCommand getAddonCommand(@NotNull CommandType commandType, @NotNull String name) {
+        return addedCommands.computeIfAbsent(commandType, k -> new HashMap<>()).get(name.toLowerCase());
     }
 
-    public static List<String> getTabCompletes(CommandType commandType, List<String> addFrom) {
-        List<String> suggestions = addedCommands.stream().filter(command -> command.getCommandType() == commandType).map(AddonCommand::getName).collect(Collectors.toList());
+    public static List<String> getTabCompletes(@NotNull CommandType commandType, @NotNull List<String> addFrom) {
+        List<String> suggestions = new ArrayList<>(addedCommands.computeIfAbsent(commandType, k -> new HashMap<>()).keySet());
         suggestions.addAll(addFrom);
         return suggestions;
     }
 
-    public static List<AddonCommand> getAddedCommands() {
-        return addedCommands;
+    public static Map<CommandType, Map<String, AddonCommand>> getAddedCommands() {
+        return new HashMap<>(addedCommands);
     }
 }
