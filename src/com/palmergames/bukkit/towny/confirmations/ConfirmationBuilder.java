@@ -68,6 +68,26 @@ public class ConfirmationBuilder {
 	}
 	
 	/**
+	 * Sets the command which is displayed/run for the confirm command.
+	 * @param confirm String command name.
+	 * @return ConfirmationBuilder with an overridden confirm text.
+	 */
+	public ConfirmationBuilder setConfirmText(String confirm) {
+		this.confirmCommand = confirm;
+		return this;
+	}
+	
+	/**
+	 * Sets the command which is displayed/run for the cancel command.
+	 * @param cancel String command name.
+	 * @return ConfirmationBuilder with an overriden cancel text.
+	 */
+	public ConfirmationBuilder setCancelText(String cancel) {
+		this.cancelCommand = cancel;
+		return this;
+	}
+	
+	/**
 	 * Builds a new instance of {@link Confirmation} from 
 	 * this object's state.
 	 * 
