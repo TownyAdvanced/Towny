@@ -1434,35 +1434,35 @@ towny_prices_upkeep_num_towns: '城镇数量。'
 towny_prices_upkeep_nation_level: '国家等级（居民数量）。'
 #Added in 0.130
 #Jail causes
-msg_jailed_mayor: 'Jailed by mayor.'
+msg_jailed_mayor: '被市长监禁。'
 #Jail causes
-msg_jailed_outlaw: 'Killed as an outlaw.'
+msg_jailed_outlaw: '作为被放逐者杀死。'
 #Jail causes
-msg_jailed_war: 'Prisoner of War.'
+msg_jailed_war: '作为战俘监禁。'
 #Jail handbook messages
-msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
+msg_jailed_handbook_1: '看起来你因为%s而被监禁了。'
 #Jail handbook messages
-msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
+msg_jailed_handbook_2: '那真是糟糕。可是你又能做什么呢？这里有一些被监禁时有用的小贴士。'
 #Jail handbook messages
-msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
+msg_jailed_handbook_3: '你已经被监禁%s小时了，服刑后你将得到自由。'
 #Jail handbook messages
-msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
+msg_jailed_handbook_4_can: '你可以通过使用“/town leave”离开城镇来逃离监狱。'
 #Jail handbook messages
-msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
+msg_jailed_handbook_4_cant: '监禁期间你不能通过离开城镇来逃离城镇。'
 #Jail handbook messages
-msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
+msg_jailed_handbook_bail_1: '你可以使用“/res jail paybail”缴纳保释金来离开监狱。'
 #Jail handbook messages
-msg_jailed_handbook_bail_2: 'Bail will cost %s.'
+msg_jailed_handbook_bail_2: '保释费用为%s。'
 #Jail handbook messages
-msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
+msg_jailed_handbook_5: '如果你坚持逃离到了城镇外的野地，你将获得自由。'
 #Jail handbook messages
-msg_jailed_handbook_6: 'But don''t die before you reach the wilderness or you''ll end up right back in jail.'
+msg_jailed_handbook_6: '但是在到达野地之前不要死亡，否则你将被送回监狱。'
 #Jail handbook messages
-msg_jailed_teleport: 'Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you''ve just got to get a hold of some.'
+msg_jailed_teleport: '还好，末影珍珠和紫颂果可以在监狱里使用来帮助你越狱，如果你手上恰好有几个的话。'
 #Jail handbook messages
-msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your countrymen can reduce the jail plot''s HP to 0, or if the town you are jailed in is removed from the war.'
+msg_jailed_war_prisoner: '作为战俘，如果你的国家攻陷了监狱（HP降为0）或城镇退出了战争，你将获得自由。'
 #Jail handbook title
-msg_jailed_title: 'So you''ve been jailed :('
+msg_jailed_title: '所以你就这样被监禁了 :('
 #Jail handbook author
-msg_jailed_author: 'Towny Jailco.'
+msg_jailed_author: 'Towny Jailco。'
 
