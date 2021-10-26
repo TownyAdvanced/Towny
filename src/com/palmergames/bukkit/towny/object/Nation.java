@@ -121,7 +121,7 @@ public class Nation extends Government {
 				removeEnemy(enemy);
 				enemy.removeEnemy(this);
 			} catch (NotRegisteredException ignored) {}
-		return getAllies().size() == 0;
+		return getEnemies().size() == 0;
 	}
 
 	public boolean hasEnemy(Nation nation) {

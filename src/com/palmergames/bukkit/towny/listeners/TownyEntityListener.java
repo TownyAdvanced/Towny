@@ -300,13 +300,11 @@ public class TownyEntityListener implements Listener {
 
 		for (Block block : blocks) {
 						
-			if (!TownyAPI.getInstance().isWilderness(block.getLocation())) {
-			
-				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(block.getLocation());				
-				if (CombatUtil.preventPvP(townyWorld, townBlock) && detrimental) {
-					event.setCancelled(true);
-					break;
-				}				
+			if (!TownyAPI.getInstance().isWilderness(block.getLocation()) 
+					&& CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(block.getLocation())) 
+					&& detrimental) {
+				event.setCancelled(true);
+				break;
 			}			
 		}	
 	}	

@@ -247,25 +247,13 @@ public class PlayerCacheUtil {
 		if (!TownyAPI.getInstance().isTownyWorld(worldCoord.getBukkitWorld()))
 			return TownBlockStatus.OFF_WORLD;
 
-		if (!worldCoord.hasTownBlock()) {
-			// Has to be wilderness.
-
+		// Has to be wilderness.
+		if (!worldCoord.hasTownBlock())
 			// When nation zones are enabled we do extra tests to determine if this is near to a nation.
-			if (TownySettings.getNationZonesEnabled()) {
-				// This nation zone system can be disabled during wartime.
-				if (!(TownySettings.getNationZonesWarDisables() && TownyAPI.getInstance().isWarTime())) {
-					// Returns either UNCLAIMED_ZONE or NATION_ZONE.
-					return TownyAPI.getInstance().hasNationZone(worldCoord);
-				}				
-			}
-	
-			// Otherwise treat as normal wilderness. 
-			return TownBlockStatus.UNCLAIMED_ZONE;
-		}
+			// If NationZones are not enabled we return normal wilderness.
+			return TownySettings.getNationZonesEnabled() ? TownyAPI.getInstance().hasNationZone(worldCoord) : TownBlockStatus.UNCLAIMED_ZONE;  
 
-		
 		// Has to be in a town.
-		
 		TownBlock townBlock = worldCoord.getTownBlockOrNull();
 		Town town = worldCoord.getTownOrNull();
 		if (townBlock.isLocked()) {

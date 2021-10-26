@@ -17,6 +17,7 @@ public class TimeMgmt {
 			{ 10, 1 }, // <= 10s, Warn every 1s
 			{ 30, 5 }, // <= 30s, Warn every 5s
 			{ 60, 10 }, // <= minute, Warn every 10s
+			{ 120, 15 }, // <= 2 minutes, Warn every 15s
 			{ 5 * 60, 60 }, // <= 5 minutes, Warn every minute
 			{ 30 * 60, 5 * 60 }, // <= 30 minutes, Warn every 5 minutes
 			{ 60 * 60, 10 * 60 }, // <= 60 minutes, Warn every 10 minutes

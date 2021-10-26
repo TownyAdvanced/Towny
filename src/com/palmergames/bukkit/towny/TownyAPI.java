@@ -595,6 +595,10 @@ public class TownyAPI {
 		// Safety validation, both these cases should never occur.
 		if (nearestTown == null || !nearestTown.hasNation())
 			return TownBlockStatus.UNCLAIMED_ZONE;
+		
+		// This nation zone system can be disabled during wartime.
+		if (TownySettings.getNationZonesWarDisables() && isWarTime())
+			return TownBlockStatus.UNCLAIMED_ZONE;
 
 		// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.
 		if (!nearestTown.isCapital() && TownySettings.getNationZonesCapitalsOnly())
