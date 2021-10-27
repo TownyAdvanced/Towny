@@ -113,7 +113,10 @@ public class NameValidation {
 	 * @param name String name to check.
 	 * @return true if this is something that isn't allowed in the config's name blacklist.
 	 */
-	public static boolean isConfigBlacklistedName(String name ) {
+	public static boolean isConfigBlacklistedName(String name) {
+		if (name.isEmpty())
+			return false;
+		
 		return TownySettings.getBlacklistedNames().stream().anyMatch(name::equalsIgnoreCase);
 	}
 	
