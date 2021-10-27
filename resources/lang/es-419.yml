@@ -806,7 +806,7 @@ msg_err_player_too_far_from_town_spawn: '&c%s está muy lejos del spawn de la ci
 msg_resident_bail_amount: 'Costo de la fianza para residentes: '
 msg_mayor_bail_amount: 'Costo de la fianza para alcaldes: '
 msg_king_bail_amount: 'Costo de la fianza para reyes: '
-msg_has_paid_bail: '%s has paid bail and is free.'
+msg_has_paid_bail: '%s pagó la fianza y es libre.'
 msg_err_unable_to_pay_bail: 'No puedes pagar la fianza.'
 msg_err_bail_not_enabled: 'Las fianzas no están habilitadas.'
 msg_you_have_been_freed_from_jail: 'Fuiste liberado de la cárcel.'
@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Tu teletransporte fue cancelado debido a que
 #Added in 0.82
 invitation_prefix: "&8[&7Invitación&8] &9"
 confirmation_prefix: "&8[&7Confirmación&8] &9"
-this_message_will_expire2: '&9This will auto-expire in %s seconds'
+this_message_will_expire2: '&9Esto va a expirar de forma automática en %s segundos'
 msg_hover_next_page: 'Siguiente'
 msg_hover_previous_page: 'Atrás'
 #Added in 0.83
@@ -1349,38 +1349,38 @@ msg_wilderness_use_set_to: '&bUso del Exterior establecido a %s en %s.'
 #Added in 0.124
 msg_err_invalid_response: '¡Respuesta inválida! Usa q para salir o back para volver a la pregunta anterior.'
 msg_setup_full_guide_link: '&bPara un enlace a la guía de instalación, clic aquí.'
-msg_setup_wildernessuse: 'Would you like to enable wilderness use? This will allow players to break/build in the wilderness.'
-msg_setup_revertunclaim: 'Would you like to use revert on unclaim? This will make townblocks slowly regenerate when they are unclaimed.'
-msg_setup_town_block_ratio: 'What would you like to set your town block ratio at? The default is 8 townblocks per resident. Higher amounts will allow towns to claim more for each resident they have. Setting this to 0 will make it use values from the town_levels.'
-msg_setup_town_cost: 'How much should the cost to create a new town be? The default is 250.'
-msg_setup_nation_cost: 'How much should the cost to create a new nation be? The default is 1000.'
-msg_setup_townblock_cost: 'How much should it cost to claim a townblock? The default is 25. A townblock is the same size as a chunk (default settings)'
-msg_setup_success: 'Successfully changed config values to your new values.'
+msg_setup_wildernessuse: '¿Quieres habilitar el uso en el Exterior? Esto permitirá a los jugadores romper/construir en el exterior.'
+msg_setup_revertunclaim: '¿Te gustaría usar Revertir al Abandonar? Esto hará que los bloques en los terrenos se regeneren lentamente cuando son abandonados.'
+msg_setup_town_block_ratio: '¿Cuál quieres que sea el radio de los terrenos? El valor predeterminado es 8 terrenos por residente. Los valores más altos permitirán que las ciudades reclamen más terreno por cada residente. Establecerlo en 0 hará que use valores de los town_levels.'
+msg_setup_town_cost: '¿Cuánto debería costar crear una nueva ciudad? El valor predeterminado es de 250.'
+msg_setup_nation_cost: '¿Cuánto debería costar crear una nueva nación? El valor predeterminado es de 1000.'
+msg_setup_townblock_cost: '¿Cuánto debería costar reclamar un terreno. El valor por defecto es 25. Un terreno es del mismo tamaño que un chunk (configuración por defecto)'
+msg_setup_success: 'Se ajustaron los valores de configuración correctamente.'
 #Added in 0.125
 #Player has recently died and respawned and is invulnerable.
-msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
+msg_err_player_cannot_be_harmed: '%s reapareció recientemente y no puede recibir daño.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'
+msg_you_have_lost_your_invulnerability: 'Perdiste tu inmunidad.'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: 'Capital:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
-status_joined_town: 'Joined town:'
+status_joined_town: 'Fecha Mudanza:'
 #Used in the town screen's nation hover, to denote when a town joined a nation.
-status_joined_nation: 'Joined nation:'
+status_joined_nation: 'Fecha UniónNación:'
 #Shown in status screen elements where a value is not known.
-status_unknown: 'unknown'
+status_unknown: 'desconocido'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
-msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
+msg_nationzone_override_set_to: 'Se estableció la anulación de la zona nacional de %s en %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
-msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+msg_nationzone_override_removed: 'Se le quitó la anulación de la zona nacional a %s.'
 #Added in 0.127
 #Used in status screen:
-status_nation_zone_size: 'Nation Zone Size:'
+status_nation_zone_size: 'Tamaño de ZonaNación:'
 #Shown when a player adds people to their friends list.
-msg_res_friend_added_to_list: 'Added %s to your friend list.'
+msg_res_friend_added_to_list: 'Añadiste a %s a tu lista de amigos.'
 #Shown when a player removes people from their friends list.
-msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
+msg_res_friend_removed_from_list: 'Eliminaste a %s de tu lista de amigos.'
 #Generic resident freed from jail message.
 msg_resident_unjailed: '%s has been unjailed.'
 #Shown when an admin uses /ta toggle devmode.
@@ -1405,9 +1405,9 @@ msg_err_perm_false: 'Permission False.'
 #First variable is townname or None, 2nd variable is plot owner's name or None.
 status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
 #Shown on /towny version
-msg_towny_version: '&2Towny Version: &a%s'
+msg_towny_version: '&2Versión de Towny: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
+msg_admin_blocked_login: '&2Un jugador usando la dirección IP &c%s &2intentó unirse utilizando el nombre de usuario %s el que podría dañar la economía de tu servidor, pero fue prevenido por Towny. ¡Considere banear esta dirección IP!'
 #Shown during resident purge
 msg_scanning_for_old_residents: 'Scanning for old residents...'
 #Shown during resident purge
@@ -1438,11 +1438,11 @@ msg_jailed_mayor: 'Jailed by mayor.'
 #Jail causes
 msg_jailed_outlaw: 'Killed as an outlaw.'
 #Jail causes
-msg_jailed_war: 'Prisoner of War.'
+msg_jailed_war: 'Prisionero de Guerra.'
 #Jail handbook messages
-msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
+msg_jailed_handbook_1: 'Parece que fuiste encarcelado, por la razón %s'
 #Jail handbook messages
-msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
+msg_jailed_handbook_2: 'Eso es muy malo. ¿Bueno, que se le puede hacer? Aquí tienes algunos consejos para ti mientras cumples tu sentencia.'
 #Jail handbook messages
 msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
 #Jail handbook messages
@@ -1462,7 +1462,7 @@ msg_jailed_teleport: 'Luckily, enderpearls and chorus fruit are allowed to be us
 #Jail handbook messages
 msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your countrymen can reduce the jail plot''s HP to 0, or if the town you are jailed in is removed from the war.'
 #Jail handbook title
-msg_jailed_title: 'So you''ve been jailed :('
+msg_jailed_title: 'Te arrestaron :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
 
