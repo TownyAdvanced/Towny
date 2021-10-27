@@ -6888,3 +6888,4 @@ v0.92.0.11:
   - Add TabCompleter support for addon commands, courtesy of Warriorrrr with PR #5403.
   - Fix /ta set capital, /ta set king, /ta nation NAME set commands not working properly.
   - Make Confirmation commands configurable through the API.
+  - Regression: fix empty strings always being blacklisted, courtesy of Warriorrrr with PR #5406.
