@@ -29,7 +29,7 @@ public class EventWarPVPListener implements Listener {
 		if (!TownyAPI.getInstance().isWarTime())
 			return;
 		
-		if (event.getTownBlock().isWarZone())
+		if (TownyUniverse.getInstance().hasWarEvent(event.getTownBlock()))
 			event.setPvp(true);
 	}
 	
