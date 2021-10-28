@@ -6889,3 +6889,7 @@ v0.92.0.11:
   - Fix /ta set capital, /ta set king, /ta nation NAME set commands not working properly.
   - Make Confirmation commands configurable through the API.
   - Regression: fix empty strings always being blacklisted, courtesy of Warriorrrr with PR #5406.
+  - Remove one-way nation alliances.
+    - This setting pre-dated the Invite system added many years ago.
+    - Nations will no longer be able to ally another nation unless the other nation accepts their invite to ally.
+  - Remove Config Node: war.disallow_one_way_alliance
