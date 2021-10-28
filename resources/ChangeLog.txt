@@ -6895,3 +6895,8 @@ v0.92.0.11:
   - Remove Config Node: war.disallow_one_way_alliance
   - Remove TownBlock, TownyWorld and TownyUniverse warzone methods.
     - No longer used by FlagWar.
+  - API: DeathPriceEvents
+    - NationPaysDeathPriceEvent
+    - PlayerPaysDeathPriceEvent
+    - TownPaysDeathPriceEvent
+    - Make it possible for other plugins to manipulate the prices taken from players, towns and nations when someone dies.
