@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class EventWarSettings {
 	private static CommentedConfiguration config, newConfig;
@@ -97,8 +98,8 @@ public class EventWarSettings {
 	}
 	
 	private static List<String> getStrArr(EventWarConfigNodes node) {
-		String[] arr = getString(node).split(",");
-		return Arrays.stream(arr).toList();
+//		String[] arr = getString(node).split(",");
+		return Arrays.stream(getString(node).split(",")).collect(Collectors.toList());
 	}
 	
 	/*
