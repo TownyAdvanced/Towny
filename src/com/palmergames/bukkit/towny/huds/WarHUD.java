@@ -89,14 +89,8 @@ public class WarHUD {
 		String homeTown;
 		if (res == null || !res.hasTown())
 			homeTown = Translatable.of("war_hud_townless").forLocale(p);
-		else {
-			try {
-				homeTown = res.getTown().getName();
-			} catch (NotRegisteredException ignore) {
-				// Will never happen
-				homeTown = "";
-			}
-		}
+		else
+			homeTown = res.getTownOrNull().getName();
 		
 		p.getScoreboard().getTeam("town_title").setSuffix(HUDManager.check(homeTown));
 	}
@@ -105,12 +99,8 @@ public class WarHUD {
 		String score = "";
 		Resident res = TownyUniverse.getInstance().getResident(p.getUniqueId());
 		Hashtable<TownyObject, Integer> scores = war.getScoreManager().getScores();
-		try {
-			if (res != null && res.hasTown() && scores.containsKey(res.getTown())) {
-				score = String.valueOf(scores.get(res.getTown()));
-			}
-		} catch (NotRegisteredException ignore) {
-		}
+		if (res != null && res.hasTown() && scores.containsKey(res.getTownOrNull()))
+			score = String.valueOf(scores.get(res.getTownOrNull()));
 
 		p.getScoreboard().getTeam("town_score").setSuffix(HUDManager.check(score));
 	}
