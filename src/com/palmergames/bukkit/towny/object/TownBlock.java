@@ -319,7 +319,7 @@ public class TownBlock extends TownyObject {
 	 */
 	@Deprecated
 	public void setType(int typeId) {
-		
+		setType(TownBlockType.lookup(typeId));
 	}
 
 	/**

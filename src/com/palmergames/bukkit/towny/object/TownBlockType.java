@@ -4,6 +4,9 @@ import com.palmergames.util.StringMgmt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author dumptruckman
  */
@@ -70,14 +73,28 @@ public class TownBlockType {
 	public String getFormattedName() {
 		return StringMgmt.capitalize(this.name);
 	}
+	
+	private static final Map<Integer, String> legacyLookupMap = new HashMap<>();
+	
+	static {
+		legacyLookupMap.put(0, "default");
+		legacyLookupMap.put(1, "shop");
+		legacyLookupMap.put(2, "arena");
+		legacyLookupMap.put(3, "embassy");
+		legacyLookupMap.put(4, "wilds");
+		legacyLookupMap.put(6, "inn");
+		legacyLookupMap.put(7, "jail");
+		legacyLookupMap.put(8, "farm");
+		legacyLookupMap.put(9, "bank");
+	}
 
 	/**
-	 * @deprecated As of 0.97.3.0
+	 * @deprecated As of 0.97.3.0, please use {@link TownBlockTypeHandler#getType(String)} instead.
 	 */
 	@Nullable
 	@Deprecated
 	public static TownBlockType lookup(int id) {
-		return null;
+		return TownBlockTypeHandler.getType(legacyLookupMap.getOrDefault(id, "default"));
 	}
 
 	/**
