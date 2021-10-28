@@ -46,8 +46,7 @@ public class TownyWorld extends TownyObject {
 			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 
 	private String unclaimedZoneName = null;
-	private List<Coord> warZones = new ArrayList<>();
-	
+
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
 	private boolean isClaimable = true;
 	private boolean isWarAllowed = TownySettings.isWarAllowed();
@@ -840,22 +839,6 @@ public class TownyWorld extends TownyObject {
 		}
 		
 		return tb;
-	}
-
-	public void addWarZone(Coord coord) {
-
-		if (!isWarZone(coord))
-			warZones.add(coord);
-	}
-
-	public void removeWarZone(Coord coord) {
-
-		warZones.remove(coord);
-	}
-
-	public boolean isWarZone(Coord coord) {
-
-		return warZones.contains(coord);
 	}
 
 	@Override

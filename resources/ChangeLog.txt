@@ -6893,3 +6893,5 @@ v0.92.0.11:
     - This setting pre-dated the Invite system added many years ago.
     - Nations will no longer be able to ally another nation unless the other nation accepts their invite to ally.
   - Remove Config Node: war.disallow_one_way_alliance
+  - Remove TownBlock, TownyWorld and TownyUniverse warzone methods.
+    - No longer used by FlagWar.

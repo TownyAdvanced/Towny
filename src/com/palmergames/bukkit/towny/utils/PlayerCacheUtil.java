@@ -327,7 +327,7 @@ public class PlayerCacheUtil {
 
 			// Resident with no town.
 			if (!resident.hasTown()) {
-				if (TownyAPI.getInstance().isWarTime() && townBlock.isWarZone() && !TownySettings.isWarTimeTownsNeutral())
+				if (TownyAPI.getInstance().isWarTime() && !TownySettings.isWarTimeTownsNeutral())
 					return TownBlockStatus.WARZONE;
 				else
 					return TownBlockStatus.OUTSIDER;
@@ -347,7 +347,7 @@ public class PlayerCacheUtil {
 			
 			// Enemy or WarZone.
 			if (CombatUtil.isEnemy(resident.getTown(), town)) {
-				if (TownyAPI.getInstance().isWarTime() && townBlock.isWarZone() || War.isWarZone(townBlock.getWorldCoord()))
+				if (TownyAPI.getInstance().isWarTime() && War.isWarZone(townBlock.getWorldCoord()))
 					return TownBlockStatus.WARZONE;
 				else
 					return TownBlockStatus.ENEMY;

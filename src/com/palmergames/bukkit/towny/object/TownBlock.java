@@ -402,11 +402,6 @@ public class TownBlock extends TownyObject {
 		return getWorld().getName() + " (" + getCoord() + ")";
 	}
 
-	public boolean isWarZone() {
-
-		return getWorld().isWarZone(getCoord());
-	}
-
 	public boolean isJail() {
 
 		return this.getType() == TownBlockType.JAIL;

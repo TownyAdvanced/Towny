@@ -1092,27 +1092,6 @@ public class TownyUniverse {
         }
     }	
 
-    // Used by FlagWar
-    public void addWarZone(WorldCoord worldCoord) {
-        try {
-        	if (worldCoord.getTownyWorld().isWarAllowed())
-            	worldCoord.getTownyWorld().addWarZone(worldCoord);
-        } catch (NotRegisteredException e) {
-            // Not a registered world
-        }
-        towny.updateCache(worldCoord);
-    }
-
-    // Used by FlagWar
-    public void removeWarZone(WorldCoord worldCoord) {
-        try {
-            worldCoord.getTownyWorld().removeWarZone(worldCoord);
-        } catch (NotRegisteredException e) {
-            // Not a registered world
-        }
-        towny.updateCache(worldCoord);
-    }
-
     public War getWarEvent() {
         return warEvent;
     }

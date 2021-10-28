@@ -25,7 +25,6 @@ import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -226,22 +225,10 @@ public class WarZoneListener implements Listener {
 			return;
 
 		/*
-		 * Is this a Town with a flag war WarZone?
-		 */
-		boolean inFlagWarTown = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName()).isWarZone(Coord.parseCoord(event.getLocation()));
-
-		/*
 		 * Is this in a Town with an Event War?
 		 */
-		boolean inEventWarTown = TownyAPI.getInstance().isWarTime() && War.isWarringTown(TownyAPI.getInstance().getTown(event.getLocation()));
-
-		/*
-		 * Event War (inWarringTown) & Flag War (isWarZone(coord)) fire control settings.
-		 */
-		if (inFlagWarTown || inEventWarTown) {
-			if (WarZoneConfig.isAllowingFireInWarZone()) {                         // Allow ignition using normal fire-during-war rule.
-				event.setCancelled(false);
-			} else if (inEventWarTown && TownySettings.isAllowWarBlockGriefing()) { // Allow ignition using exceptionally-griefy-war rule for Event War.
+		if (TownyAPI.getInstance().isWarTime() && War.isWarringTown(TownyAPI.getInstance().getTown(event.getLocation()))) {
+			if (TownySettings.isAllowWarBlockGriefing() || WarZoneConfig.isAllowingFireInWarZone()) {
 				event.setCancelled(false);
 			} else {
 				event.setCancelled(true);
