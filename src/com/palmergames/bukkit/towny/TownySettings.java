@@ -2709,11 +2709,6 @@ public class TownySettings {
 		setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWALS.getRoot(), newSetting);
 	}
 
-	public static boolean isDisallowOneWayAlliance() {
-		
-		return getBoolean(ConfigNodes.WAR_DISALLOW_ONE_WAY_ALLIANCE);
-	}
-	
 	public static int getMaxNumResidentsWithoutNation() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION);
 	}

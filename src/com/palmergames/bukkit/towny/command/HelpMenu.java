@@ -765,20 +765,14 @@ public enum HelpMenu {
 	ALLIES_STRING {
 		@Override
 		protected MenuBuilder load() {
-			MenuBuilder builder = new MenuBuilder("nation ally")
-				.add("add [nation]", Translation.of("nation_ally_help_1"));
-
-			if (TownySettings.isDisallowOneWayAlliance()) {
-				builder.add("add -[nation]", Translation.of("nation_ally_help_7"));
-			}
-			builder.add("remove [nation]", Translation.of("nation_ally_help_2"));
-			if (TownySettings.isDisallowOneWayAlliance()) {
-				builder.add("sent", Translation.of("nation_ally_help_3"))
-					.add("received", Translation.of("nation_ally_help_4"))
-					.add("accept [nation]", Translation.of("nation_ally_help_5"))
-					.add("deny [nation]", Translation.of("nation_ally_help_6"));
-			}
-			return builder;
+			return new MenuBuilder("nation ally")
+				.add("add [nation]", Translation.of("nation_ally_help_1"))
+				.add("add -[nation]", Translation.of("nation_ally_help_7"))
+				.add("remove [nation]", Translation.of("nation_ally_help_2"))
+				.add("sent", Translation.of("nation_ally_help_3"))
+				.add("received", Translation.of("nation_ally_help_4"))
+				.add("accept [nation]", Translation.of("nation_ally_help_5"))
+				.add("deny [nation]", Translation.of("nation_ally_help_6"));
 		}
 	},
 
