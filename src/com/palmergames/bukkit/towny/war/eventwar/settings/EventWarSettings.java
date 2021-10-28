@@ -98,7 +98,6 @@ public class EventWarSettings {
 	}
 	
 	private static List<String> getStrArr(EventWarConfigNodes node) {
-//		String[] arr = getString(node).split(",");
 		return Arrays.stream(getString(node).split(",")).collect(Collectors.toList());
 	}
 	
@@ -181,10 +180,6 @@ public class EventWarSettings {
 		return getInt(EventWarConfigNodes.WAR_EVENT_POINTS_NATION);
 	}
 
-	public static int getWarPointsForKill() {
-		return getInt(EventWarConfigNodes.WAR_EVENT_POINTS_KILL);
-	}
-	
 	/*
 	 * TownBlock HP.
 	 */
