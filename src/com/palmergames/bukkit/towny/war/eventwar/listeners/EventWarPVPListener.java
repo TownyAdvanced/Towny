@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyFriendlyFireTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
+import com.palmergames.bukkit.towny.event.deathprice.DeathPriceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -273,6 +274,23 @@ public class EventWarPVPListener implements Listener {
 				event.setPVP(CombatUtil.isEnemy(attacker.getTownOrNull(), defender.getTownOrNull()));
 				break;
 		}
+	}
+
+	/**
+	 * EventWar cancels Towny charging for death when the players are involved in an EventWar together,
+	 * handling payments separately in the {@link #onPlayerKillsPlayer(PlayerKilledPlayerEvent)} method.
+	 * @param event {@link DeathPriceEvent}.
+	 */
+	@EventHandler
+	public void onDeathPriceEvent(DeathPriceEvent event) {
+		if (!event.isPVPDeath())
+			return;
+		Resident killer = TownyAPI.getInstance().getResident(event.getKiller());
+		if (killer == null || !WarUtil.hasSameWar(event.getDeadResident(), killer))
+			return;
+		
+		// Money losses for Event Wars are handled in the onPlayerKillsPlayer method.
+		event.setCancelled(true);
 	}
 	
 	private String formatMoney(double money) {
