@@ -1792,6 +1792,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				line = rs.getString("type");
 				if (line != null)
 					try {
+						//noinspection deprecation
 						townBlock.setType(Integer.parseInt(line));
 					} catch (Exception e) {
 						townBlock.setType(line);
