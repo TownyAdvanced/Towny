@@ -170,8 +170,8 @@ public class HUDManager implements Listener{
 		return string.length() > 64 ? string.substring(0, 64) : string;
 	}
 
-	public static boolean isUsingHUD(Player player) {
-		return permUsers.contains(player) || warUsers.contains(player);
+	public static boolean isUsingTownyHUD(Player player) {
+		return permUsers.contains(player) || mapUsers.contains(player) || warUsers.contains(player);
 	}
 
 	public static List<Player> getPermHUDUsers() {
