@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.utils.NameGenerator;
 import com.palmergames.bukkit.towny.war.eventwar.WarBooks;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
+import com.palmergames.bukkit.towny.war.eventwar.db.FlatfileDatabase;
 import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataLoader;
 import com.palmergames.bukkit.towny.war.eventwar.events.EventWarEndEvent;
 import com.palmergames.bukkit.towny.war.eventwar.events.EventWarStartEvent;
@@ -119,7 +120,7 @@ public class War {
 	 * Saves a war's main file to flatfile database.
 	 */
 	public void saveWar() {
-		WarUniverse.getInstance().saveWar(this);
+		FlatfileDatabase.saveWar(this);
 	}
 
 	/*
