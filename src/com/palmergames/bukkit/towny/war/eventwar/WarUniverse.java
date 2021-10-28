@@ -66,10 +66,10 @@ public class WarUniverse {
 	}
 	
 	public void load() {
+
 		FlatfileDatabase.createFolders();
 		FlatfileDatabase.loadWarList();
 		FlatfileDatabase.loadWars();
-		
 		
 		WarMetaDataLoader.initialize(Towny.getPlugin());
 
@@ -115,10 +115,6 @@ public class WarUniverse {
 			throw new TownyInitException("An issue has occured while registering war commands.", TownyInitException.TownyError.OTHER, e);
 		}
 	}
-	
-	/*
-	 * War Stuff
-	 */
 
 	/**
 	 * Used in loading only.
