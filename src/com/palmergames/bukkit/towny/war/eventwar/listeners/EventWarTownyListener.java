@@ -10,15 +10,18 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
+import com.palmergames.bukkit.towny.event.resident.ResidentPreJailEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownBlockStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.event.time.NewHourEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.war.eventwar.WarBooks;
 import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
 import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
+import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.bukkit.util.BookFactory;
@@ -142,6 +145,19 @@ public class EventWarTownyListener implements Listener {
 			&& event.getOutlaw().getTownOrNull().hasActiveWar())
 			event.setCancelled(true);
 	}
-	
 
+	/**
+	 * Prevent outlaw-jailing from happening when a player is killed at war.
+	 * @param event {@link ResidentPreJailEvent}.
+	 */
+	@EventHandler
+	public void onResidentGoingToJailAsOutlaw(ResidentPreJailEvent event) {
+		if (!TownyAPI.getInstance().isWarTime() 
+		|| !event.getReason().equals(JailReason.OUTLAW_DEATH)) {
+			return;
+		}
+	
+		if (WarUtil.hasSameWar(event.getResident(), event.getJailTown()))
+			event.setCancelled(true);
+	}
 }

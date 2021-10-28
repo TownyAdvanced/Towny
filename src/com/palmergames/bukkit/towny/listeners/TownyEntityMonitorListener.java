@@ -18,13 +18,11 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
-import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import net.citizensnpcs.api.CitizensAPI;
@@ -41,8 +39,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-
-//import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
  * @author Shade &amp; ElgarL
@@ -355,7 +351,7 @@ public class TownyEntityMonitorListener implements Listener {
 	}
 	
 	public void isJailingAttackers(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
-		if (TownySettings.isJailingAttackingEnemies() || TownySettings.isJailingAttackingOutlaws()) {
+		if (TownySettings.isJailingAttackingOutlaws()) {
 			Location loc = defenderPlayer.getLocation();
 
 			// Not a Towny World.
@@ -392,7 +388,7 @@ public class TownyEntityMonitorListener implements Listener {
 				return;
 
 			// Try outlaw jailing first
-			if (!WarUtil.hasSameWar(defenderResident, attackerTown) && TownySettings.isJailingAttackingOutlaws() && attackerTown.hasOutlaw(defenderResident)) {
+			if (attackerTown.hasOutlaw(defenderResident)) {
 				// Not if they don't have the jailer node.
 				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(attackerPlayer, PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
 					return;
@@ -400,36 +396,6 @@ public class TownyEntityMonitorListener implements Listener {
 				// Send to jail. Hours are set later on.
 				JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 0, JailReason.OUTLAW_DEATH.getHours(), JailReason.OUTLAW_DEATH, attackerResident.getPlayer());
 				return;
-
-			// Try enemy jailing second
-			} else if (WarUtil.hasSameWar(defenderResident, attackerTown) && TownySettings.isJailingAttackingEnemies()){
-				
-				// Not if the victim has no Town.
-				if (!defenderResident.hasTown())
-					return;
-				Town defenderTown = defenderResident.getTownOrNull();
-				
-				// Not if they aren't considered enemies.
-				if (!CombatUtil.isEnemy(attackerTown, defenderTown))
-					return;
-
-				// Attempt to send them to the Town's primary jail first if it is still in the war.
-				if (TownyUniverse.getInstance().hasWarEvent(attackerTown.getPrimaryJail().getTownBlock())) {
-					JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 0, JailReason.PRISONER_OF_WAR.getHours(), JailReason.PRISONER_OF_WAR, attackerResident.getPlayer());
-					return;
-					
- 				} else {
-				// Find a jail that hasn't had its HP dropped to 0.
-					for (Jail jail : attackerTown.getJails()) {
-						if (TownyUniverse.getInstance().hasWarEvent(jail.getTownBlock())) {
-							// Send to jail. Hours are set later on.
-							JailUtil.jailResident(defenderResident, jail, 0, JailReason.PRISONER_OF_WAR.getHours(), JailReason.PRISONER_OF_WAR, attackerResident.getPlayer());
-							return;
-						}
-					}
- 				}
-				// If we've gotten this far the player couldn't be jailed, send a message saying there was no jail.
-				TownyMessaging.sendPrefixedTownMessage(attackerTown, Translatable.of("msg_war_player_cant_be_jailed_plot_fallen"));
 			}
 		}
 	}

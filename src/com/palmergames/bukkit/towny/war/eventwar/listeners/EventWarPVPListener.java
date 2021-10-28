@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyFriendlyFireTestEvent;
@@ -16,7 +17,10 @@ import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.jail.Jail;
+import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
@@ -48,13 +52,47 @@ public class EventWarPVPListener implements Listener {
 		/*
 		 * Handle lives being lost, for wars without unlimited lives.
 		 */
-		if (war.getWarType().residentLives != -1) {
+		if (war.getWarType().residentLives != -1)
 			residentLosesALife(victimRes, killerRes, war, event.getLocation());
-		}
-
-		if (!EventWarSettings.isUsingEconomy())
-			return;
 		
+		if (EventWarSettings.isUsingEconomy())
+			handleDeathPayments(victimRes, killerRes, war);
+		
+		if (TownySettings.isJailingAttackingEnemies())
+			attemptJailingResident(victimRes, killerRes);
+	}
+	
+	private void attemptJailingResident(Resident defenderResident, Resident attackerResident) {
+		// Not if the victim or killer has no Town.
+		if (!defenderResident.hasTown() || !attackerResident.hasTown())
+			return;
+		Town defenderTown = defenderResident.getTownOrNull();
+		Town attackerTown = attackerResident.getTownOrNull();
+		
+		// Not if they aren't considered enemies.
+		if (!CombatUtil.isEnemy(attackerTown, defenderTown))
+			return;
+
+		// Attempt to send them to the Town's primary jail first if it is still in the war.
+		if (TownyUniverse.getInstance().hasWarEvent(attackerTown.getPrimaryJail().getTownBlock())) {
+			JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 0, JailReason.PRISONER_OF_WAR.getHours(), JailReason.PRISONER_OF_WAR, attackerResident.getPlayer());
+			return;
+			
+			} else {
+		// Find a jail that hasn't had its HP dropped to 0.
+			for (Jail jail : attackerTown.getJails()) {
+				if (TownyUniverse.getInstance().hasWarEvent(jail.getTownBlock())) {
+					// Send to jail. Hours are set later on.
+					JailUtil.jailResident(defenderResident, jail, 0, JailReason.PRISONER_OF_WAR.getHours(), JailReason.PRISONER_OF_WAR, attackerResident.getPlayer());
+					return;
+				}
+			}
+			}
+		// If we've gotten this far the player couldn't be jailed, send a message saying there was no jail.
+		TownyMessaging.sendPrefixedTownMessage(attackerTown, Translatable.of("msg_war_player_cant_be_jailed_plot_fallen"));
+	}
+
+	private void handleDeathPayments(Resident victimRes, Resident killerRes, War war) {
 		/*
 		 * Handle death payments.
 		 * 
@@ -108,7 +146,7 @@ public class EventWarPVPListener implements Listener {
 			}
 		}
 	}
-	
+
 	private void residentLosesALife(Resident victimRes, Resident killerRes, War war, Location loc) {
 	
 		int victimLives = war.getWarParticipants().getLives(victimRes); // Use a variable for this because it will be lost once takeLife(victimRes) is called.
