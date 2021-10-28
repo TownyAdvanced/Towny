@@ -19,7 +19,7 @@ public class TownBlockData {
 	}
 	
 	public void setMapKey(String mapKey) {
-		this.mapKey = mapKey;
+		this.mapKey = mapKey.substring(0, 1);
 	}
 	
 	public double getCost() {

@@ -31,7 +31,7 @@ public final class TownBlockTypeHandler {
 	public static void initialize() {
 		Map<String, TownBlockType> newData = new ConcurrentHashMap<>();
 		
-		for (Field field : TownBlockType.class.getFields()) {			
+		for (Field field : TownBlockType.class.getFields()) {
 			try {
 				TownBlockType type = (TownBlockType) field.get(null);
 				newData.put(type.getName().toLowerCase(), type);
