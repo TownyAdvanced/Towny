@@ -55,9 +55,16 @@ public class EventWarPVPListener implements Listener {
 		if (war.getWarType().residentLives != -1)
 			residentLosesALife(victimRes, killerRes, war, event.getLocation());
 		
+		/*
+		 * Handle war-related death payments. Normal death payments are canceled via
+		 * the DeathPriceEvent listener lower down.
+		 */
 		if (EventWarSettings.isUsingEconomy())
 			handleDeathPayments(victimRes, killerRes, war);
 		
+		/*
+		 * If we have jailing attackers enabled, jail those attackers.
+		 */
 		if (TownySettings.isJailingAttackingEnemies())
 			attemptJailingResident(victimRes, killerRes);
 	}
@@ -66,19 +73,17 @@ public class EventWarPVPListener implements Listener {
 		// Not if the victim or killer has no Town.
 		if (!defenderResident.hasTown() || !attackerResident.hasTown())
 			return;
-		Town defenderTown = defenderResident.getTownOrNull();
 		Town attackerTown = attackerResident.getTownOrNull();
 		
-		// Not if they aren't considered enemies.
-		if (!CombatUtil.isEnemy(attackerTown, defenderTown))
+		// Not if they aren't considered enemies. This should stop RIOT war jailing players. TODO: Make some sort of jail mechanic for RIOT wars.
+		if (!CombatUtil.isEnemy(attackerTown, defenderResident.getTownOrNull()))
 			return;
 
 		// Attempt to send them to the Town's primary jail first if it is still in the war.
 		if (TownyUniverse.getInstance().hasWarEvent(attackerTown.getPrimaryJail().getTownBlock())) {
 			JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 0, JailReason.PRISONER_OF_WAR.getHours(), JailReason.PRISONER_OF_WAR, attackerResident.getPlayer());
 			return;
-			
-			} else {
+		} else {
 		// Find a jail that hasn't had its HP dropped to 0.
 			for (Jail jail : attackerTown.getJails()) {
 				if (TownyUniverse.getInstance().hasWarEvent(jail.getTownBlock())) {
@@ -87,18 +92,22 @@ public class EventWarPVPListener implements Listener {
 					return;
 				}
 			}
-			}
+		}
 		// If we've gotten this far the player couldn't be jailed, send a message saying there was no jail.
 		TownyMessaging.sendPrefixedTownMessage(attackerTown, Translatable.of("msg_war_player_cant_be_jailed_plot_fallen"));
 	}
 
+	/**
+	 * Handle death payments.
+	 * 
+	 * Money is paid by the player, if the player cannot pay the full 
+	 * amount the remaining balance is taken from the player's Town.
+	 * @param victimRes Resident who will pay.
+	 * @param killerRes Resident who will rob the money.
+	 * @param war War instance.
+	 */
 	private void handleDeathPayments(Resident victimRes, Resident killerRes, War war) {
-		/*
-		 * Handle death payments.
-		 * 
-		 * Money is paid by the player, if the player cannot pay the full 
-		 * amount the remaining balance is taken from the player's Town.
-		 */
+
 		double price = Math.min(victimRes.getAccount().getHoldingBalance(), EventWarSettings.getWartimeDeathPrice());
 		double townPrice = victimRes.getAccount().canPayFromHoldings(price) ? 0 : EventWarSettings.getWartimeDeathPrice() - victimRes.getAccount().getHoldingBalance(); 
 
