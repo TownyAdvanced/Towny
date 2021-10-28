@@ -17,8 +17,6 @@ import com.palmergames.bukkit.towny.command.commandobjects.AcceptCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
-import com.palmergames.bukkit.towny.command.commandobjects.RebelCommand;
-import com.palmergames.bukkit.towny.command.commandobjects.StateCommand;
 import com.palmergames.bukkit.towny.db.DatabaseConfig;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -52,13 +50,7 @@ import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
-import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarBukkitListener;
-import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarNationListener;
-import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarPVPListener;
-import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarTownListener;
-import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarTownyActionListener;
-import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarTownyListener;
+import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.Version;
@@ -122,14 +114,6 @@ public class Towny extends JavaPlugin {
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
 
-	// EventWar Listeners
-	private final EventWarBukkitListener warBukkitListener = new EventWarBukkitListener();
-	private final EventWarNationListener warNationListener = new EventWarNationListener();
-	private final EventWarPVPListener warPVPListener = new EventWarPVPListener();
-	private final EventWarTownListener warTownListener = new EventWarTownListener();
-	private final EventWarTownyActionListener warActionListener = new EventWarTownyActionListener(this);
-	private final EventWarTownyListener warTownyListener = new EventWarTownyListener();
-	
 	private TownyUniverse townyUniverse;
 
 	private final Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
@@ -163,7 +147,6 @@ public class Towny extends JavaPlugin {
 		PlayerCacheUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
-		WarDataBase.initialize(this);
 
 		try {
 			// Load the foundation of Towny, containing config, locales, database.
@@ -214,12 +197,11 @@ public class Towny extends JavaPlugin {
 		if (!isError(TownyInitException.TownyError.MAIN_CONFIG) && !isError(TownyInitException.TownyError.PERMISSIONS)) {
 			// Register all child permissions for ranks
 			TownyPerms.registerPermissionNodes();
-			
-			// TODO: Remove this when EventWar is its own plugin.
-			WarDataBase.loadAll();
 		}
 
 		registerEvents();
+		
+		WarUniverse.getInstance().load();
 
 		Bukkit.getLogger().info("=============================================================");
 		if (isError()) {
@@ -657,7 +639,6 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(customListener, this);
 			pluginManager.registerEvents(worldListener, this);
 			pluginManager.registerEvents(loginListener, this);
-			registerEventWarListeners(pluginManager);
 		}
 
 		// Always register these events.
@@ -666,16 +647,6 @@ public class Towny extends JavaPlugin {
 		pluginManager.registerEvents(entityListener, this);
 		pluginManager.registerEvents(inventoryListener, this);
 
-	}
-
-	// Event War's Listeners registered here.
-	private void registerEventWarListeners(PluginManager pluginManager) {
-		pluginManager.registerEvents(warBukkitListener, this);
-		pluginManager.registerEvents(warNationListener, this);
-		pluginManager.registerEvents(warPVPListener, this);
-		pluginManager.registerEvents(warTownListener, this);
-		pluginManager.registerEvents(warTownyListener, this);
-		pluginManager.registerEvents(warActionListener, this);
 	}
 
 	private void printChangelogToConsole() {
@@ -1042,8 +1013,6 @@ public class Towny extends JavaPlugin {
 		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
 		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
 		commands.add(new CancelCommand(TownySettings.getCancelCommand()));
-		commands.add(new StateCommand("state"));
-		commands.add(new RebelCommand("rebel"));
 		try {
 			final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 

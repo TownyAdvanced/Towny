@@ -19,9 +19,10 @@ import com.palmergames.bukkit.towny.event.time.NewHourEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.war.eventwar.WarBooks;
-import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
-import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
+import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
+import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataController;
+import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataLoader;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.bukkit.util.BookFactory;
@@ -35,13 +36,13 @@ public class EventWarTownyListener implements Listener {
 	
     @EventHandler
     public void onTownyDatabaseLoad(TownyLoadedDatabaseEvent event) {
-    	WarDataBase.loadAll();
+    	WarMetaDataLoader.loadAll();
     }
     
     @EventHandler
     public void onTownStatus(TownStatusScreenEvent event) {
     	try {
-			War war = TownyUniverse.getInstance().getWarEvent(event.getTown());
+			War war = WarUniverse.getInstance().getWarEvent(event.getTown());
 			if (war == null)
 				return;
 			event.getStatusScreen().addComponentOf("activeEventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
@@ -60,7 +61,7 @@ public class EventWarTownyListener implements Listener {
     @EventHandler
     public void onTBStatus(TownBlockStatusScreenEvent event) {
     	try {
-			War war = TownyUniverse.getInstance().getWarEvent(event.getTownBlock());
+			War war = WarUniverse.getInstance().getWarEvent(event.getTownBlock());
 			if (war == null)
 				return;
 			event.getStatusScreen().addComponentOf("activeEventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
@@ -79,7 +80,7 @@ public class EventWarTownyListener implements Listener {
     @EventHandler
     public void onResidentStatus(ResidentStatusScreenEvent event) {
     	try {
-			War war = TownyUniverse.getInstance().getWarEvent(event.getResident());
+			War war = WarUniverse.getInstance().getWarEvent(event.getResident());
 			if (war == null)
 				return;
 			event.getStatusScreen().addComponentOf("activeEventwar", Colors.Green + "War: " + Colors.LightGreen + war.getWarName(),
@@ -97,7 +98,7 @@ public class EventWarTownyListener implements Listener {
 
 	@EventHandler
 	public void onNewHourEvent(NewHourEvent event) {
-		for (War war : TownyUniverse.getInstance().getWars()) {
+		for (War war : WarUniverse.getInstance().getWars()) {
 			ItemStack book = BookFactory.makeBook(war.getWarName(), "War Continues", WarBooks.warUpdateBook(war));
 			war.getWarParticipants().getOnlineWarriors().stream()
 				.forEach(res -> res.getPlayer().getInventory().addItem(book));

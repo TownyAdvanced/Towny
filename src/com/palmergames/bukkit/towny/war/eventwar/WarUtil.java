@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -37,7 +38,7 @@ public class WarUtil {
 			if (resident != null) {
 				if (resident.isJailed())
 					return true;
-				if (TownyUniverse.getInstance().hasWarEvent(resident))
+				if (WarUniverse.getInstance().hasWarEvent(resident))
 					return false;
 			}
 		}
@@ -75,33 +76,33 @@ public class WarUtil {
 		return war1.getWarUUID().equals(war2.getWarUUID());
 	}
 	public static boolean hasSameWar(Town town1, Town town2) {
-		War war1 = TownyUniverse.getInstance().getWarEvent(town1);
-		War war2 = TownyUniverse.getInstance().getWarEvent(town2);
+		War war1 = WarUniverse.getInstance().getWarEvent(town1);
+		War war2 = WarUniverse.getInstance().getWarEvent(town2);
 		return sameWar(war1, war2);
 	}
 	
 	public static boolean hasSameWar(Resident res1, Resident res2) {
-		War war1 = TownyUniverse.getInstance().getWarEvent(res1);
-		War war2 = TownyUniverse.getInstance().getWarEvent(res2);
+		War war1 = WarUniverse.getInstance().getWarEvent(res1);
+		War war2 = WarUniverse.getInstance().getWarEvent(res2);
 		return sameWar(war1, war2);
 	}
 	
 	public static boolean hasSameWar(Resident res, Town town) {
-		War war1 = TownyUniverse.getInstance().getWarEvent(res);
-		War war2 = TownyUniverse.getInstance().getWarEvent(town);
+		War war1 = WarUniverse.getInstance().getWarEvent(res);
+		War war2 = WarUniverse.getInstance().getWarEvent(town);
 		return sameWar(war1, war2);
 	}
 	
 	public static boolean hasSameWar(Resident res, TownBlock tb) {
-		War war1 = TownyUniverse.getInstance().getWarEvent(res);
-		War war2 = TownyUniverse.getInstance().getWarEvent(tb);
+		War war1 = WarUniverse.getInstance().getWarEvent(res);
+		War war2 = WarUniverse.getInstance().getWarEvent(tb);
 		return sameWar(war1, war2);
 	}
 	
 	public static boolean hasWorldWar(TownyWorld world) {
 		if (!world.isWarAllowed())
 			return false;
-		return TownyUniverse.getInstance().getWars().stream().anyMatch(war -> war.getWarType().equals(WarType.WORLDWAR));
+		return WarUniverse.getInstance().getWars().stream().anyMatch(war -> war.getWarType().equals(WarType.WORLDWAR));
 	}
 	
 	public static void confirmPlayerSide(War war, Player player) {

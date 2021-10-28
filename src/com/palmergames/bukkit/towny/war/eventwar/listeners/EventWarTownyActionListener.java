@@ -12,7 +12,6 @@ import org.bukkit.event.Listener;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
@@ -23,6 +22,7 @@ import com.palmergames.bukkit.towny.event.damage.TownyExplosionDamagesEntityEven
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 
@@ -130,7 +130,7 @@ public class EventWarTownyActionListener implements Listener {
 				continue;
 			
 			// Non-warzone, skip it.
-			if (!TownyUniverse.getInstance().hasWarEvent(TownyAPI.getInstance().getTownBlock(block.getLocation())))
+			if (!WarUniverse.getInstance().hasWarEvent(TownyAPI.getInstance().getTownBlock(block.getLocation())))
 				continue;
 			
 			// A war that doesn't allow any kind of explosions.
@@ -179,7 +179,7 @@ public class EventWarTownyActionListener implements Listener {
 		 */
 		
 		// Not in a war zone, do not modify the outcome of the event.
-		if (!TownyUniverse.getInstance().hasWarEvent(event.getTownBlock()))
+		if (!WarUniverse.getInstance().hasWarEvent(event.getTownBlock()))
 			return;
 			
 		/*
@@ -215,7 +215,7 @@ public class EventWarTownyActionListener implements Listener {
 		/*
 		 * Event War fire control settings.
 		 */
-		if (TownyAPI.getInstance().isWarTime() && TownyUniverse.getInstance().hasWarEvent(event.getTownBlock())) {
+		if (TownyAPI.getInstance().isWarTime() && WarUniverse.getInstance().hasWarEvent(event.getTownBlock())) {
 			if (EventWarSettings.isAllowingFireInWarZone() || EventWarSettings.isAllowWarBlockGriefing()) {
 				event.setCancelled(false);
 			} else {

@@ -40,7 +40,6 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
-import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
@@ -134,6 +133,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			operation.run();
 		}
 	}
+	
+	@Override
+	public boolean saveWar(List<String> list, String path) {
+		this.queryQueue.add(new FlatFileSaveTask(list, path));
+		return true;
+	}
+	
+	@Override
+	public void deleteWar(File file) {
+		queryQueue.add(new DeleteFileTask(file, false));
+	}
+
 	
 	@Override
 	public boolean backup() throws IOException {
@@ -952,13 +963,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		TownyUniverse.getInstance().unregisterJail(jail);
 		
 		deleteJail(jail);
-	}
-	
-	@Override
-	public void removeWar(War war) {
-		// Unregister the war from the Universe.
-		TownyUniverse.getInstance().removeWar(war);
-		deleteWar(war);
 	}
 
 	@Override

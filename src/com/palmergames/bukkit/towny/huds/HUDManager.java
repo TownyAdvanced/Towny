@@ -1,13 +1,13 @@
 package com.palmergames.bukkit.towny.huds;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.events.PlotAttackedEvent;
 import com.palmergames.bukkit.towny.war.eventwar.events.TownScoredEvent;
@@ -36,7 +36,7 @@ public class HUDManager implements Listener{
 	//**TOGGLES**//
 	public static void toggleWarHUD (Player p) {
 		if (!warUsers.contains(p)){
-			War war = TownyUniverse.getInstance().getWarEvent(p);
+			War war = WarUniverse.getInstance().getWarEvent(p);
 			if (war != null) {
 				toggleAllOff(p);
 				warUsers.add(p);
@@ -66,7 +66,7 @@ public class HUDManager implements Listener{
 
 	public void toggleAllWarHUD (War war) {
 		for (Player p : warUsers)
-			if (WarUtil.sameWar(TownyUniverse.getInstance().getWarEvent(p), war)) {
+			if (WarUtil.sameWar(WarUniverse.getInstance().getWarEvent(p), war)) {
 				toggleOff(p);
 				warUsers.remove(p);
 			}
@@ -99,7 +99,7 @@ public class HUDManager implements Listener{
 			if (!isWarHUDActive(p))
 				warUsers.remove(p);
 			else {
-				War war = TownyUniverse.getInstance().getWarEvent(p);
+				War war = WarUniverse.getInstance().getWarEvent(p);
 				WarHUD.updateLocation(p, event.getTo());
 				WarHUD.updateAttackable(p, event.getTo(), war);
 				WarHUD.updateHealth(p, event.getTo(), war);

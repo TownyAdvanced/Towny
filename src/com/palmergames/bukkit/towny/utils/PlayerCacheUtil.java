@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
+import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 
@@ -303,7 +304,7 @@ public class PlayerCacheUtil {
 			}
 		}
 
-		boolean residentHasWar = TownyUniverse.getInstance().hasWarEvent(resident);
+		boolean residentHasWar = WarUniverse.getInstance().hasWarEvent(resident);
 		boolean townblockAndResidentSameWar = WarUtil.hasSameWar(resident, townBlock);
 		
 		try {
@@ -314,7 +315,7 @@ public class PlayerCacheUtil {
 					return TownBlockStatus.WARZONE;
 
 				//The player is in a World War, in a war-allowed world, and towns are not allowed to be neutral.
-				if (!EventWarSettings.isWarTimeTownsNeutral() && worldCoord.getTownyWorldOrNull().isWarAllowed() && TownyUniverse.getInstance().getWarEvent(player).getWarType().equals(WarType.WORLDWAR))
+				if (!EventWarSettings.isWarTimeTownsNeutral() && worldCoord.getTownyWorldOrNull().isWarAllowed() && WarUniverse.getInstance().getWarEvent(player).getWarType().equals(WarType.WORLDWAR))
 					return TownBlockStatus.WARZONE;
 			}
 

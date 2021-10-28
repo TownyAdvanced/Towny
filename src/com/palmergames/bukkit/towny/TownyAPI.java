@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 
@@ -492,7 +493,7 @@ public class TownyAPI {
      * @return true if the server is in war-time.
      */
     public boolean isWarTime() {
-        return townyUniverse.isWarTime();
+        return WarUniverse.getInstance().isWarTime();
     }
     
     /**

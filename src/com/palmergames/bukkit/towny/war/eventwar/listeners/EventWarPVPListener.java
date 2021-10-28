@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyFriendlyFireTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
@@ -22,6 +21,7 @@ import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
+import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
@@ -33,7 +33,7 @@ public class EventWarPVPListener implements Listener {
 		if (!TownyAPI.getInstance().isWarTime())
 			return;
 		
-		if (TownyUniverse.getInstance().hasWarEvent(event.getTownBlock()))
+		if (WarUniverse.getInstance().hasWarEvent(event.getTownBlock()))
 			event.setPvp(true);
 	}
 	
@@ -47,7 +47,7 @@ public class EventWarPVPListener implements Listener {
 		if (!WarUtil.hasSameWar(killerRes, victimRes))
 			return;
 
-		War war = TownyUniverse.getInstance().getWarEvent(killerRes);
+		War war = WarUniverse.getInstance().getWarEvent(killerRes);
 		
 		/*
 		 * Handle lives being lost, for wars without unlimited lives.
@@ -80,13 +80,13 @@ public class EventWarPVPListener implements Listener {
 			return;
 
 		// Attempt to send them to the Town's primary jail first if it is still in the war.
-		if (TownyUniverse.getInstance().hasWarEvent(attackerTown.getPrimaryJail().getTownBlock())) {
+		if (WarUniverse.getInstance().hasWarEvent(attackerTown.getPrimaryJail().getTownBlock())) {
 			JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 0, JailReason.PRISONER_OF_WAR.getHours(), JailReason.PRISONER_OF_WAR, attackerResident.getPlayer());
 			return;
 		} else {
 		// Find a jail that hasn't had its HP dropped to 0.
 			for (Jail jail : attackerTown.getJails()) {
-				if (TownyUniverse.getInstance().hasWarEvent(jail.getTownBlock())) {
+				if (WarUniverse.getInstance().hasWarEvent(jail.getTownBlock())) {
 					// Send to jail. Hours are set later on.
 					JailUtil.jailResident(defenderResident, jail, 0, JailReason.PRISONER_OF_WAR.getHours(), JailReason.PRISONER_OF_WAR, attackerResident.getPlayer());
 					return;
@@ -303,7 +303,7 @@ public class EventWarPVPListener implements Listener {
 		if (!WarUtil.hasSameWar(attacker, defender))
 			return;
 		
-		War war = TownyUniverse.getInstance().getWarEvent(attacker);
+		War war = WarUniverse.getInstance().getWarEvent(attacker);
 		
 		switch (war.getWarType()) {
 			case RIOT:

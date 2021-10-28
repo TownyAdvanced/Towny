@@ -26,7 +26,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.utils.MapUtil;
-import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
@@ -2557,29 +2556,5 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	public HikariDataSource getHikariDataSource() {
 		return hikariDataSource;
-	}
-
-	@Override
-	public boolean loadWarList() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean loadWar(War war) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean saveWar(War war) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void deleteWar(War war) {
-		// TODO Auto-generated method stub
-		
 	}
 }

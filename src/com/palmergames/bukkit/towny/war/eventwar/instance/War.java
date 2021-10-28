@@ -14,8 +14,9 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.NameGenerator;
 import com.palmergames.bukkit.towny.war.eventwar.WarBooks;
-import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
+import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
+import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataLoader;
 import com.palmergames.bukkit.towny.war.eventwar.events.EventWarEndEvent;
 import com.palmergames.bukkit.towny.war.eventwar.events.EventWarStartEvent;
 import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
@@ -118,7 +119,7 @@ public class War {
 	 * Saves a war's main file to flatfile database.
 	 */
 	public void saveWar() {
-		TownyUniverse.getInstance().getDataSource().saveWar(this);
+		WarUniverse.getInstance().saveWar(this);
 	}
 
 	/*
@@ -191,7 +192,7 @@ public class War {
 		getMessenger().announceWarBeginning();
 		
 		checkEnd();
-		TownyUniverse.getInstance().addWar(this);
+		WarUniverse.getInstance().addWar(this);
 	}
 
 	/**
@@ -277,8 +278,8 @@ public class War {
 		/*
 		 * Remove this war.
 		 */
-		WarDataBase.removeWar(this, endedSuccessful);
-		TownyUniverse.getInstance().removeWar(this);
+		WarMetaDataLoader.removeWar(this, endedSuccessful);
+		WarUniverse.getInstance().removeWar(this);
 		
 	}
 

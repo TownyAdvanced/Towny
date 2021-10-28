@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.war.eventwar;
+package com.palmergames.bukkit.towny.war.eventwar.db;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +12,10 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.war.eventwar.command.TownRedeemAddon;
-import com.palmergames.bukkit.towny.war.eventwar.command.TownyAdminWarAddon;
-import com.palmergames.bukkit.towny.war.eventwar.command.TownyWarAddon;
+import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
-import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 
-public class WarDataBase {
+public class WarMetaDataLoader {
 
 	private static Towny plugin;
 	private static Map<UUID, List<Town>> warTownsMap = new ConcurrentHashMap<>();
@@ -32,17 +29,13 @@ public class WarDataBase {
 
 	public static boolean loadAll() {
 		
-		// TODO: get this out of the WarDataBase
-		registerCommands();
-		EventWarSettings.loadWarMaterialsLists();
-		
 		/*
 		 * Clear out the maps, because this might be a reload.
 		 */
 		clearAll();
 
 		plugin.getLogger().info("Loading EventWar Database");
-		plugin.getLogger().info("TownyUniverse pre-loaded with " + TownyUniverse.getInstance().getWars().size() + " wars.");
+		plugin.getLogger().info("TownyUniverse pre-loaded with " + WarUniverse.getInstance().getWars().size() + " wars.");
 		
 		/*
 		 * Scrape metadata for WarData.
@@ -64,13 +57,6 @@ public class WarDataBase {
 		return true;
 	}
 
-	private static void registerCommands() {
-		new TownyWarAddon();
-		new TownRedeemAddon();
-		new TownyAdminWarAddon(plugin);
-	}
-
-
 	/**
 	 * Finalize populating pre-loaded Wars with the scraped metadata.
 	 */
@@ -79,7 +65,7 @@ public class WarDataBase {
 		if (wardatas.isEmpty())
 			removeAllWars(false);
 
-		for (War war : new ArrayList<>(TownyUniverse.getInstance().getWars())) {
+		for (War war : new ArrayList<>(WarUniverse.getInstance().getWars())) {
 			/*
 			 * Get the relevant WarData for this UUID.
 			 */
@@ -90,7 +76,7 @@ public class WarDataBase {
 			 * After parsing the metadata, no Town had this war, remove it.
 			 */
 			if (data == null) {
-				TownyUniverse.getInstance().getDataSource().removeWar(war);
+				WarUniverse.getInstance().removeWar(war);
 				continue;
 			}
 
@@ -130,7 +116,7 @@ public class WarDataBase {
 			
 			// If this UUID is pre-registered in TownyUniverse (via the towny\data\wars\UUID.txt files) 
 			// then add the Town to the warTownsMap and create a WarData for this UUID. 
-			if (TownyUniverse.getInstance().getWarEvent(warUUID) != null) {
+			if (WarUniverse.getInstance().getWarEvent(warUUID) != null) {
 				addWarUuidForTown(warUUID, town);
 				if (!wardatas.containsKey(warUUID))
 					wardatas.put(warUUID, WarData.of(warUUID));
@@ -210,8 +196,8 @@ public class WarDataBase {
 	 * Something went wrong, we will be removing all traces of wars.
 	 */
 	public static void removeAllWars(boolean purgeEndTimes) {
-		for (War war : new ArrayList<>(TownyUniverse.getInstance().getWars()))
-			TownyUniverse.getInstance().getDataSource().removeWar(war);
+		for (War war : new ArrayList<>(WarUniverse.getInstance().getWars()))
+			WarUniverse.getInstance().removeWar(war);
 		
 		for (Nation nation : TownyUniverse.getInstance().getNations()) { 
 			nation.setActiveWar(false);
@@ -234,7 +220,7 @@ public class WarDataBase {
 	}
 	
 	public static void removeWar(War war, boolean endedSuccessfully) {
-		TownyUniverse.getInstance().getDataSource().removeWar(war);
+		WarUniverse.getInstance().removeWar(war);
 		
 		for (Nation nation : war.getWarParticipants().getNations()) {
 			nation.setActiveWar(false);

@@ -17,10 +17,10 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
-import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
+import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataController;
+import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataLoader;
 import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -579,7 +579,7 @@ public class WarParticipants {
 				fallenTownBlocks++;
 				war.getWarZoneManager().remove(townBlock.getWorldCoord());
 			}
-			WarDataBase.cleanTownBlockMetaData(townBlock);
+			WarMetaDataLoader.cleanTownBlockMetaData(townBlock);
 		}
 
 		if (war.getWarType().equals(WarType.CIVILWAR)) {
@@ -605,7 +605,7 @@ public class WarParticipants {
 		// Disable activewar flag on Town so they can take part in another war.
 		town.setActiveWar(false);
 		uuidsToIgnore.add(town.getUUID());
-		WarDataBase.cleanTownMetaData(town);
+		WarMetaDataLoader.cleanTownMetaData(town);
 		// Give the town a lastWarEndTime metadata
 		WarMetaDataController.setLastWarTime(town, System.currentTimeMillis());
 
@@ -624,7 +624,7 @@ public class WarParticipants {
 	public void remove(Resident resident) {
 		warringResidents.remove(resident);
 		uuidsToIgnore.add(resident.getUUID());
-		WarDataBase.cleanResidentMetaData(resident);
+		WarMetaDataLoader.cleanResidentMetaData(resident);
 		if (war.getWarType().equals(WarType.RIOT)) {
 			if (govSide.contains(resident))
 				govSide.remove(resident);

@@ -25,8 +25,9 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.NameUtil;
-import com.palmergames.bukkit.towny.war.eventwar.WarDataBase;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
+import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
+import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataLoader;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.bukkit.util.ChatTools;
@@ -92,7 +93,7 @@ public class TownyAdminWarAddon extends BaseCommand implements TabExecutor {
 					return Collections.emptyList();
 			case "endwar": 
 				if (args.length == 2)
-					return NameUtil.filterByStart(TownyUniverse.getInstance().getWarNames(), args[1]);
+					return NameUtil.filterByStart(WarUniverse.getInstance().getWarNames(), args[1]);
 				else
 					return Collections.emptyList();
 			case "toggle":
@@ -195,7 +196,7 @@ public class TownyAdminWarAddon extends BaseCommand implements TabExecutor {
 
 	private void parsePurgeCommand() {
 		Confirmation.runOnAccept(()-> {
-			WarDataBase.removeAllWars(true);
+			WarMetaDataLoader.removeAllWars(true);
 			TownyMessaging.sendMsg(sender, "Wars purged.");
 			}).sendTo(sender);
 	}
@@ -206,7 +207,7 @@ public class TownyAdminWarAddon extends BaseCommand implements TabExecutor {
 			sender.sendMessage(ChatTools.formatCommand("None", "", ""));
 			return;
 		}
-		for (War war : TownyUniverse.getInstance().getWars())
+		for (War war : WarUniverse.getInstance().getWars())
 			sender.sendMessage(ChatTools.formatCommand("War Name: " + war.getWarName(), "Type: " + war.getWarType().getName(), ""));
 	}
 
@@ -283,7 +284,7 @@ public class TownyAdminWarAddon extends BaseCommand implements TabExecutor {
 	private void endWar(CommandSender sender, String[] args) {
 		String warName = StringMgmt.join(args);	
 		War war = null;
-		for (War wars: TownyUniverse.getInstance().getWars())
+		for (War wars: WarUniverse.getInstance().getWars())
 			if (wars.getWarName().equalsIgnoreCase(warName)) {
 				war = wars;
 				break;

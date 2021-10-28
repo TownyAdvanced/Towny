@@ -14,10 +14,9 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
-import com.palmergames.bukkit.towny.war.eventwar.instance.War;
-
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -53,12 +52,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWarList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadSnapshotList() && loadHibernatedResidents() && loadWars();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadSnapshotList() && loadHibernatedResidents();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorldList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList() && saveHibernatedResidents() && saveWars();
+		return saveWorldList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList() && saveHibernatedResidents();
 	}
 
 	public boolean saveAllWorlds() {
@@ -93,8 +92,6 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadJailList();
 	
-	abstract public boolean loadWarList();
-	
 	abstract public boolean loadResident(Resident resident);
 
 	abstract public boolean loadTown(Town town);
@@ -104,8 +101,6 @@ public abstract class TownyDataSource {
 	abstract public boolean loadWorld(TownyWorld world);
 	
 	abstract public boolean loadJail(Jail jail);
-	
-	abstract public boolean loadWar(War war);
 
 	abstract public boolean loadPlotGroupList();
 
@@ -126,8 +121,6 @@ public abstract class TownyDataSource {
 	abstract public boolean savePlotGroup(PlotGroup group);
 	
 	abstract public boolean saveJail(Jail jail);
-	
-	abstract public boolean saveWar(War war);
 
 	abstract public boolean saveNation(Nation nation);
 
@@ -160,8 +153,6 @@ public abstract class TownyDataSource {
 	abstract public void deletePlotGroup(PlotGroup group);
 	
 	abstract public void deleteJail(Jail jail);
-	
-	abstract public void deleteWar(War war);
 
 	public boolean cleanup() {
 
@@ -241,17 +232,6 @@ public abstract class TownyDataSource {
 		}
 		return true;
 	}
-	
-	public boolean loadWars() {
-		TownyMessaging.sendDebugMsg("Loading Wars");
-		for (War war : TownyUniverse.getInstance().getWars()) {
-			if (!loadWar(war)) {
-				plugin.getLogger().severe("Loading Error: Could not read war data: '" + war.getWarUUID() + "'.");
-				return false;
-			}
-		}
-		return true;
-	}
 
 	/*
 	 * Save all of category
@@ -288,13 +268,6 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Saving Jails");
 		for (Jail jail : getAllJails())
 			saveJail(jail);
-		return true;
-	}
-	
-	public boolean saveWars() {
-		TownyMessaging.sendDebugMsg("Saving Wars");
-		for (War war : TownyUniverse.getInstance().getWars())
-			saveWar(war);
 		return true;
 	}
 	
@@ -440,8 +413,6 @@ public abstract class TownyDataSource {
 
 	abstract public void removeJail(Jail jail);
 	
-	abstract public void removeWar(War war);
-	
 	abstract public void removePlotGroup(PlotGroup group);
 
 	/**
@@ -483,4 +454,8 @@ public abstract class TownyDataSource {
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
+
+	abstract public boolean saveWar(List<String> list, String path);
+	abstract public void deleteWar(File file);
+
 }

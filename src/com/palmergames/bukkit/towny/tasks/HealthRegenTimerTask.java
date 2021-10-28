@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
 
 public class HealthRegenTimerTask extends TownyTimerTask {
 
@@ -41,7 +42,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 
 			if (resident != null 
 				&& resident.hasTown()
-				&& !TownyUniverse.getInstance().hasWarEvent(resident)
+				&& !WarUniverse.getInstance().hasWarEvent(resident)
 				&& CombatUtil.isAlly(townBlock.getTownOrNull(), TownyAPI.getInstance().getResidentTownOrNull(resident))
 				&& !townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
 				incHealth(player);

@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
+import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.util.ChatTools;
 
@@ -62,7 +63,7 @@ public class TownyWarAddon implements TabExecutor {
 				TownyMessaging.sendMsg("No hud for console!");
 			} else if (args[0].equalsIgnoreCase("hud") && player != null) {
 				if (TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_WAR_HUD.getNode()) 
-				&& TownyUniverse.getInstance().getWarEvent(player) != null) {
+				&& WarUniverse.getInstance().getWarEvent(player) != null) {
 					HUDManager.toggleWarHUD(player);
 				} else {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_command_disable"));
@@ -126,18 +127,18 @@ public class TownyWarAddon implements TabExecutor {
 	}
 
 	private void parseWarParticipants(CommandSender sender) {
-		if (!TownyUniverse.getInstance().isWarTime()) {
+		if (!WarUniverse.getInstance().isWarTime()) {
 			TownyMessaging.sendErrorMsg(sender, "There are no wars!");
 			return;
 		}
-		for (War war : TownyUniverse.getInstance().getWars()) {
+		for (War war : WarUniverse.getInstance().getWars()) {
 			war.getWarParticipants().outputParticipants(sender, war.getWarType());
 		}
 	}	
 	
 	private void parseWarStats(CommandSender sender) {
 		if (sender instanceof Player player) {
-			War war = TownyUniverse.getInstance().getWarEvent(player); 
+			War war = WarUniverse.getInstance().getWarEvent(player); 
 			if (war != null)
 				war.getScoreManager().sendStats(player);
 			else 
@@ -149,7 +150,7 @@ public class TownyWarAddon implements TabExecutor {
 	
 	private void parseWarScores(CommandSender sender) {
 		if (sender instanceof Player player) {
-			War war = TownyUniverse.getInstance().getWarEvent(player); 
+			War war = WarUniverse.getInstance().getWarEvent(player); 
 			if (war != null)
 				war.getScoreManager().sendScores(player, -1);
 			else 

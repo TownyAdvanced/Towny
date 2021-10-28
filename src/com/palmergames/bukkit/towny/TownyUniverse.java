@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnPoint;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.Jail;
@@ -25,8 +24,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
-import com.palmergames.bukkit.towny.war.eventwar.WarMetaDataController;
-import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
@@ -37,7 +34,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,7 +86,6 @@ public class TownyUniverse {
     private final String rootFolder;
     private TownyDataSource dataSource;
     private TownyPermissionSource permissionSource;
-    private Map<UUID, War> wars = new ConcurrentHashMap<UUID, War>();
 
     private TownyUniverse() {
         towny = Towny.getPlugin();
@@ -131,7 +126,6 @@ public class TownyUniverse {
         wildernessMapDataMap.clear();
         hibernatedResidentMap.clear();
         replacementNamesMap.clear();
-        wars.clear();
     }
     
     /**
@@ -1082,83 +1076,6 @@ public class TownyUniverse {
 		return townBlocks.remove(worldCoord) != null;
 	}
 
-	/*
-	 * War Stuff
-	 */
-
-	/**
-	 * Used in loading only.
-	 * 
-	 * @param uuid UUID of the given war, taken from the War filename.
-	 */
-	public void newWarInternal(String uuid) {
-		War war = new War(Towny.getPlugin(), UUID.fromString(uuid));
-		addWar(war);
-	}
-
-	public void addWar(War war) {
-		if (war.getWarUUID() == null)
-			return;
-		wars.put(war.getWarUUID(), war);
-	}
-
-	public void removeWar(War war) {
-		wars.remove(war.getWarUUID());
-		war = null;
-	}
-	
-	@Nullable
-	public War getWarEvent(UUID uuid) {
-		return wars.get(uuid);
-	}
-
-	@Nullable
-	public War getWarEvent(Player player) {
-		Resident resident = getResident(player.getUniqueId());
-		if (resident != null)
-			return getWarEvent(resident);
-		return null;
-	}
-
-	@Nullable
-	public War getWarEvent(TownyObject obj) {
-		if (obj instanceof TownyWorld)
-			return null;
-		if (obj instanceof Nation nation)
-			obj = nation.getCapital();
-		
-		String warUUID = WarMetaDataController.getWarUUID(obj);
-		if (warUUID != null)
-			return getWarEvent(UUID.fromString(warUUID));
-		return null;
-	}
-
-	public boolean hasWarEvent(TownyObject obj) {
-		if (obj instanceof TownyWorld)
-			return false;
-		if (obj instanceof Nation nation)
-			obj = nation.getCapital();
-
-		String warUUID = WarMetaDataController.getWarUUID(obj);
-		return warUUID != null;
-	}
-
-	public boolean isWarTime() {
-		return !wars.isEmpty();
-	}
-
-	public Collection<War> getWars() {
-		return Collections.unmodifiableCollection(wars.values());
-	}
-
-	public List<String> getWarNames() {
-		List<String> names = new ArrayList<String>(wars.size());
-		for (War war : getWars())
-			names.add(war.getWarName());
-
-		return names;
-	}
-	
 	/*
 	 * SpawnPoint Stuff
 	 */
