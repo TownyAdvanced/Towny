@@ -997,7 +997,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty()) {
 					List<UUID> uuids = Arrays.stream(line.split(","))
 							.map(uuid -> UUID.fromString(uuid))
-							.collect(Collectors.toCollection(ArrayList::new));
+							.collect(Collectors.toList());
 					town.setAlliesUUIDs(uuids);
 					List<Town> allies = getTowns(uuids);
 					for (Town ally : allies) {
@@ -1009,7 +1009,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty()) {
 					List<UUID> uuids = Arrays.stream(line.split(","))
 						.map(uuid -> UUID.fromString(uuid))
-						.collect(Collectors.toCollection(ArrayList::new));
+						.collect(Collectors.toList());
 					town.setEnemiesUUIDs(uuids);
 					List<Town> enemies = getTowns(uuids);
 					for (Town enemy : enemies) {

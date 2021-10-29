@@ -1193,7 +1193,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				search = (line.contains("#")) ? "#" : ",";
 				List<UUID> uuids = Arrays.stream(line.split(search))
 						.map(uuid -> UUID.fromString(uuid))
-						.collect(Collectors.toCollection(ArrayList::new));
+						.collect(Collectors.toList());
 				town.setAlliesUUIDs(uuids);
 				List<Town> allies = getTowns(uuids);
 				for (Town ally : allies)
@@ -1205,7 +1205,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				search = (line.contains("#")) ? "#" : ",";
 				List<UUID> uuids = Arrays.stream(line.split(search))
 						.map(uuid -> UUID.fromString(uuid))
-						.collect(Collectors.toCollection(ArrayList::new));
+						.collect(Collectors.toList());
 				town.setEnemiesUUIDs(uuids);
 				List<Town> enemies = getTowns(uuids);
 				for (Town enemy : enemies) 
