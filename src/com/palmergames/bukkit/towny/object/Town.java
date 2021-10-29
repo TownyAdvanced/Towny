@@ -1546,11 +1546,11 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public List<Town> getEnemies() {
-		return enemies.values().stream().collect(Collectors.toUnmodifiableList());
+		return Collections.unmodifiableList(enemies.values().stream().collect(Collectors.toList()));
 	}
 
 	public List<Town> getAllies() {
-		return allies.values().stream().collect(Collectors.toUnmodifiableList());
+		return Collections.unmodifiableList(allies.values().stream().collect(Collectors.toList()));
 	}
 	
 	public List<Town> getMutualAllies() {
@@ -1563,11 +1563,11 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public List<UUID> getAlliesUUIDs() {
-		return allies.keySet().stream().collect(Collectors.toUnmodifiableList());
+		return Collections.unmodifiableList(allies.keySet().stream().collect(Collectors.toList()));
 	}
 
 	public List<UUID> getEnemiesUUIDs() {
-		return enemies.keySet().stream().collect(Collectors.toUnmodifiableList());
+		return Collections.unmodifiableList(enemies.keySet().stream().collect(Collectors.toList()));
 	}
 	
 	public boolean isNationZoneEnabled() {
