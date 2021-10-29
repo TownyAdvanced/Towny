@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.war.eventwar.db.FlatfileDatabase;
 import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataLoader;
 import com.palmergames.bukkit.towny.war.eventwar.events.EventWarEndEvent;
 import com.palmergames.bukkit.towny.war.eventwar.events.EventWarStartEvent;
+import com.palmergames.bukkit.towny.war.eventwar.hud.HUDManager;
 import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
 import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.util.KeyValue;
@@ -274,7 +275,7 @@ public class War {
 		/*
 		 * Kill the war huds.
 		 */
-		Bukkit.getScheduler().runTask(plugin, () -> plugin.getHUDManager().toggleAllWarHUD(this));
+		Bukkit.getScheduler().runTask(plugin, () -> HUDManager.toggleAllWarHUD(this));
 					
 		/*
 		 * Remove this war.

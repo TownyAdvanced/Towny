@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.war.eventwar.command.TownyWarAddon;
 import com.palmergames.bukkit.towny.war.eventwar.db.FlatfileDatabase;
 import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataLoader;
+import com.palmergames.bukkit.towny.war.eventwar.hud.HUDManager;
 import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarBukkitListener;
 import com.palmergames.bukkit.towny.war.eventwar.listeners.EventWarNationListener;
@@ -52,13 +53,13 @@ public class WarUniverse {
 	private final EventWarTownListener warTownListener = new EventWarTownListener();
 	private final EventWarTownyActionListener warActionListener = new EventWarTownyActionListener(Towny.getPlugin());
 	private final EventWarTownyListener warTownyListener = new EventWarTownyListener();
-    
+	private final HUDManager hudManager = new HUDManager();
 	
 	public static WarUniverse getInstance() {
 		if (instance == null) {
-            instance = new WarUniverse();
-        }
-        return instance;
+			instance = new WarUniverse();
+		}
+		return instance;
 	}
 
 	public void clearAllObjects() {
@@ -92,6 +93,7 @@ public class WarUniverse {
 		pluginManager.registerEvents(warTownListener, Towny.getPlugin());
 		pluginManager.registerEvents(warTownyListener, Towny.getPlugin());
 		pluginManager.registerEvents(warActionListener, Towny.getPlugin());
+		pluginManager.registerEvents(hudManager, Towny.getPlugin());
 	}
 	
 	private static void registerCommands() {

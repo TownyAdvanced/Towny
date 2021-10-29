@@ -1,7 +1,8 @@
-package com.palmergames.bukkit.towny.huds;
+package com.palmergames.bukkit.towny.war.eventwar.hud;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;

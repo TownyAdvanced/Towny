@@ -5,13 +5,7 @@ import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
-import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
-import com.palmergames.bukkit.towny.war.eventwar.events.PlotAttackedEvent;
-import com.palmergames.bukkit.towny.war.eventwar.events.TownScoredEvent;
-import com.palmergames.bukkit.towny.war.eventwar.instance.War;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,29 +17,16 @@ import java.util.List;
 
 public class HUDManager implements Listener{
 
-	static List<Player> warUsers;
+	
 	static List<Player> permUsers;
 	static List<Player> mapUsers;
 
 	public HUDManager (Towny plugin) {
-		warUsers = new ArrayList<>();
 		permUsers = new ArrayList<>();
 		mapUsers = new ArrayList<>();
 	}
 
 	//**TOGGLES**//
-	public static void toggleWarHUD (Player p) {
-		if (!warUsers.contains(p)){
-			War war = WarUniverse.getInstance().getWarEvent(p);
-			if (war != null) {
-				toggleAllOff(p);
-				warUsers.add(p);
-				WarHUD.toggleOn(p, war);
-			}
-		} else 
-			toggleAllOff(p);
-	}
-
 	public static void togglePermHUD (Player p) {
 		if (!permUsers.contains(p)) {
 			toggleAllOff(p);
@@ -64,16 +45,7 @@ public class HUDManager implements Listener{
 			toggleAllOff(player);
 	}
 
-	public void toggleAllWarHUD (War war) {
-		for (Player p : warUsers)
-			if (WarUtil.sameWar(WarUniverse.getInstance().getWarEvent(p), war)) {
-				toggleOff(p);
-				warUsers.remove(p);
-			}
-	}
-
 	public static void toggleAllOff (Player p) {
-		warUsers.remove(p);
 		permUsers.remove(p);
 		mapUsers.remove(p);
 		if (p.isOnline())
@@ -87,7 +59,6 @@ public class HUDManager implements Listener{
 	//**EVENTS**//
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		warUsers.remove(event.getPlayer());
 		permUsers.remove(event.getPlayer());
 		mapUsers.remove(event.getPlayer());
 	}
@@ -95,16 +66,7 @@ public class HUDManager implements Listener{
 	@EventHandler
 	public void onPlayerMovePlotsEvent(PlayerChangePlotEvent event) throws NotRegisteredException {
 		Player p = event.getPlayer();
-		if (warUsers.contains(p)) {
-			if (!isWarHUDActive(p))
-				warUsers.remove(p);
-			else {
-				War war = WarUniverse.getInstance().getWarEvent(p);
-				WarHUD.updateLocation(p, event.getTo());
-				WarHUD.updateAttackable(p, event.getTo(), war);
-				WarHUD.updateHealth(p, event.getTo(), war);
-			}
-		} else if (permUsers.contains(p)) {
+		if (permUsers.contains(p)) {
 			if (!isPermHUDActive(p))
 				permUsers.remove(p);
 			else {
@@ -121,38 +83,6 @@ public class HUDManager implements Listener{
 					MapHUD.updateMap(p, event.getTo());
 				else
 					toggleAllOff(p);
-		}
-	}
-
-	//War specific//
-	
-	@EventHandler
-	public void onPlotAttacked(PlotAttackedEvent event) 
-	{
-		boolean home = event.getTownBlock().isHomeBlock();
-		for (Player p : event.getPlayers()){
-			if (warUsers.contains(p))
-				WarHUD.updateHealth(p, event.getHP(), home);
-		}
-	}
-
-	@EventHandler
-	public void onTownScored (TownScoredEvent event) {
-		//Update town score
-		War war = event.getWar();
-		for (Resident r : event.getTown().getResidents()) {
-			if (!r.isOnline())
-				continue;
-			Player player = r.getPlayer();
-			if (player != null && warUsers.contains(player))
-				WarHUD.updateScore(player, event.getScore());
-		}
-		//Update top scores for all HUD users
-		String[] top = war.getScoreManager().getTopThree();
-		for (Player p : war.getWarParticipants().getOnlineWarriors()) {
-			if (!warUsers.contains(p))
-				continue;
-			WarHUD.updateTopScores(p, top);
 		}
 	}
 
@@ -182,15 +112,11 @@ public class HUDManager implements Listener{
 	}
 
 	public static boolean isUsingTownyHUD(Player player) {
-		return permUsers.contains(player) || mapUsers.contains(player) || warUsers.contains(player);
+		return permUsers.contains(player) || mapUsers.contains(player);
 	}
 
 	public static List<Player> getPermHUDUsers() {
 		return permUsers;
-	}
-
-	public static List<Player> getWarHUDUsers() {
-		return warUsers;
 	}
 	
 	public static List<Player> getMapHUDUsers() {
@@ -199,12 +125,6 @@ public class HUDManager implements Listener{
 
 	public static void removePermHUDUser(Player player) {
 		if (permUsers.remove(player)) {
-			toggleOff(player);
-		}
-	}
-
-	public static void removeWarHUDUser(Player player) {
-		if (warUsers.remove(player)) {
 			toggleOff(player);
 		}
 	}
@@ -219,10 +139,6 @@ public class HUDManager implements Listener{
 		return player.getScoreboard().getTeam("plot") != null;
 	}
 
-	public static boolean isWarHUDActive(Player player) {
-		return player.getScoreboard().getTeam("space1") != null;
-	}
-	
 	public static boolean isMapHudActive(Player player) {
 		return player.getScoreboard().getTeam("mapTeam1") != null;
 	}
