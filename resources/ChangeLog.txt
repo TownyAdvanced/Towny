@@ -6900,3 +6900,4 @@ v0.92.0.11:
     - PlayerPaysDeathPriceEvent
     - TownPaysDeathPriceEvent
     - Make it possible for other plugins to manipulate the prices taken from players, towns and nations when someone dies.
+  - Fix nation zones generating an error if wildernessuse isn't enabled.

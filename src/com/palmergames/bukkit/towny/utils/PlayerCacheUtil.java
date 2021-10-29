@@ -437,10 +437,16 @@ public class PlayerCacheUtil {
 			 * TownBlockStatus is NATION_ZONE instead of UNCLAIMED_ZONE.
 			 * In all situations the player still has to hasWildOverride.
 			 */
-			if (TownySettings.getNationZonesEnabled() && status == TownBlockStatus.NATION_ZONE && hasWildOverride) {
+			if (TownySettings.getNationZonesEnabled() && status == TownBlockStatus.NATION_ZONE) {
 				// Admins that also have wilderness permission can bypass the nation zone.
 				if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()))
 					return true;
+
+				// Wasn't able to build in the wilderness, regardless.
+				if (!hasWildOverride) {
+					cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_wild", Translatable.of(action.toString())).forLocale(player));
+					return false;
+				}
 
 				// We know that the nearest Town will have a nation because the TownBlockStatus.
 				Nation nearestNation = TownyAPI.getInstance().getTownNationOrNull(pos.getTownyWorldOrNull().getClosestTownWithNationFromCoord(pos.getCoord(), null));
