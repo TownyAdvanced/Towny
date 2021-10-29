@@ -18,8 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.command.commandobjects.RebelCommand;
-import com.palmergames.bukkit.towny.command.commandobjects.StateCommand;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -28,6 +26,8 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.war.eventwar.command.TownRedeemAddon;
 import com.palmergames.bukkit.towny.war.eventwar.command.TownyAdminWarAddon;
 import com.palmergames.bukkit.towny.war.eventwar.command.TownyWarAddon;
+import com.palmergames.bukkit.towny.war.eventwar.command.commandobjects.RebelCommand;
+import com.palmergames.bukkit.towny.war.eventwar.command.commandobjects.StateCommand;
 import com.palmergames.bukkit.towny.war.eventwar.db.FlatfileDatabase;
 import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataController;
 import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataLoader;

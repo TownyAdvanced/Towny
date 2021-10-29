@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.command.commandobjects;
+package com.palmergames.bukkit.towny.war.eventwar.command.commandobjects;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
