@@ -17,7 +17,6 @@ import java.util.List;
 
 public class HUDManager implements Listener{
 
-	
 	static List<Player> permUsers;
 	static List<Player> mapUsers;
 
