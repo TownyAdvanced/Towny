@@ -440,6 +440,21 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		return matches;
 	}
+	
+	@Override
+	public List<Town> getTowns(List<UUID> uuids) {
+
+		List<Town> matches = new ArrayList<>();
+		for (UUID uuid : uuids) {
+			Town t = universe.getTown(uuid);
+			
+			if (t != null) {
+				matches.add(t);
+			}
+		}
+		
+		return matches;
+	}
 
 	/**
 	 * @deprecated as of 0.96.4.0, Use {@link TownyUniverse#getTowns()} instead.

@@ -49,6 +49,10 @@ public class Town extends Government implements TownBlockOwner {
 
 	private final List<Resident> residents = new ArrayList<>();
 	private final List<Resident> outlaws = new ArrayList<>();
+	private List<Town> allies = new ArrayList<>();
+	private List<UUID> alliesUUIDs = new ArrayList<>();
+	private List<Town> enemies = new ArrayList<>();
+	private List<UUID> enemiesUUIDs = new ArrayList<>();
 	private final Set<Resident> trustedResidents = new HashSet<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Jail> jails = null;
@@ -1490,7 +1494,110 @@ public class Town extends Government implements TownBlockOwner {
 			return getNationZoneOverride();
 		
 		return nation.getNationZoneSize() + (isCapital() ? TownySettings.getNationZonesCapitalBonusSize() : 0);
-		
+	}
+
+	public void addAlly(Town town) {
+
+		if (hasAlly(town))
+			return;
+		removeEnemy(town);
+		allies.add(town);
+		getAlliesUUIDs().add(town.getUUID());
+	}
+
+	public void removeAlly(Town town) {
+
+		if (!hasAlly(town))
+			return;
+
+		getAlliesUUIDs().remove(town.getUUID());
+		getAllies().remove(town);
+	}
+
+	public boolean removeAllAllies() {
+
+		for (Town ally : new ArrayList<>(getAllies())) {
+			removeAlly(ally);
+			ally.removeAlly(this);
+		}
+		return getAllies().size() == 0;
+	}
+
+	public boolean hasAlly(Town town) {
+
+		return getAlliesUUIDs().contains(town.getUUID());
+	}
+
+	public boolean hasMutualAlly(Town town) {
+
+		return hasAlly(town) && town.hasAlly(this);
+	}
+
+	public void addEnemy(Town town) {
+
+		if (hasEnemy(town))
+			return;
+		removeAlly(town);
+		enemies.add(town);
+		getEnemiesUUIDs().add(town.getUUID());
+	}
+
+	public void removeEnemy(Town town) {
+
+		if (!hasEnemy(town))
+			return;
+
+		getEnemiesUUIDs().remove(town.getUUID());
+		getEnemies().remove(town);
+	}
+
+	public boolean removeAllEnemies() {
+
+		for (Town enemy : new ArrayList<>(getEnemies())) {
+			removeEnemy(enemy);
+			enemy.removeEnemy(this);
+		}
+		return getEnemies().size() == 0;
+	}
+
+	public boolean hasEnemy(Town town) {
+
+		return getEnemiesUUIDs().contains(town.getUUID());
+	}
+
+	public List<Town> getEnemies() {
+
+		return Collections.unmodifiableList(enemies);
+	}
+
+	public List<Town> getAllies() {
+
+		return Collections.unmodifiableList(allies);
+	}
+	
+	public List<Town> getMutualAllies() {
+		List<Town> result = new ArrayList<>();
+		for(Town ally: getAllies()) {
+			if(ally.hasAlly(this))
+				result.add(ally);
+		}
+		return result;
+	}
+
+	public List<UUID> getAlliesUUIDs() {
+		return alliesUUIDs;
+	}
+
+	public void setAlliesUUIDs(List<UUID> alliesUUIDs) {
+		this.alliesUUIDs = alliesUUIDs;
+	}
+
+	public List<UUID> getEnemiesUUIDs() {
+		return enemiesUUIDs;
+	}
+
+	public void setEnemiesUUIDs(List<UUID> enemiesUUIDs) {
+		this.enemiesUUIDs = enemiesUUIDs;
 	}
 	
 	public boolean isNationZoneEnabled() {

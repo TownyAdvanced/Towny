@@ -542,27 +542,11 @@ public class CombatUtil {
 	 * @param a - Resident A in comparison
 	 * @param b - Resident B in comparison
 	 * @return true if they can attack.
+	 * @deprecated since 0.97.3.0 use {@link CombatUtil#isEnemy(String, String)} or {@link CombatUtil#isEnemy(Town, Town)}  
 	 */
+	@Deprecated
 	public static boolean canAttackEnemy(String a, String b) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		Resident residentA = townyUniverse.getResident(a);
-		Resident residentB = townyUniverse.getResident(b);
-		
-		// Fast-fail
-		if (residentA == null || residentB == null || !residentA.hasNation() || !residentB.hasNation())
-			return false;
-		if (isSameTown(residentA, residentB))
-			return false;
-		if (isSameNation(residentA, residentB))
-			return false;
-
-		Nation nationA = residentA.getNationOrNull();
-		Nation nationB = residentB.getNationOrNull();
-		if (nationA.isNeutral() || nationB.isNeutral())
-			return false;
-		if (nationA.hasEnemy(nationB))
-			return true;
-		return false;
+		return isEnemy(a, b);
 	}
 
 	/**
@@ -595,7 +579,7 @@ public class CombatUtil {
 		Resident residentB = TownyUniverse.getInstance().getResident(b);
 		
 		// Fast fail.
-		if (residentA == null || residentB == null || !residentA.hasNation() || !residentB.hasNation())
+		if (residentA == null || residentB == null || !residentA.hasTown() || !residentB.hasTown())
 			return false;
 
 		if (isEnemy(residentA.getTownOrNull(), residentB.getTownOrNull()))
@@ -612,6 +596,8 @@ public class CombatUtil {
 	 */
 	public static boolean isEnemy(Town a, Town b) {
 
+		if (a.hasEnemy(b))
+			return true;
 		if (!a.hasNation() || !b.hasNation())
 			return false;
 		if (isSameTown(a, b) || isSameNation(a, b))
