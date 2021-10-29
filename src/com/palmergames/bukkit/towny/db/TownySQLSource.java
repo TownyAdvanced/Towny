@@ -1194,7 +1194,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				List<UUID> uuids = Arrays.stream(line.split(search))
 						.map(uuid -> UUID.fromString(uuid))
 						.collect(Collectors.toList());
-				town.setAlliesUUIDs(uuids);
 				List<Town> allies = getTowns(uuids);
 				for (Town ally : allies)
 					town.addAlly(ally);
@@ -1206,7 +1205,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				List<UUID> uuids = Arrays.stream(line.split(search))
 						.map(uuid -> UUID.fromString(uuid))
 						.collect(Collectors.toList());
-				town.setEnemiesUUIDs(uuids);
 				List<Town> enemies = getTowns(uuids);
 				for (Town enemy : enemies) 
 					town.addEnemy(enemy);

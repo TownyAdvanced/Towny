@@ -38,6 +38,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,10 +50,12 @@ public class Town extends Government implements TownBlockOwner {
 
 	private final List<Resident> residents = new ArrayList<>();
 	private final List<Resident> outlaws = new ArrayList<>();
-	private List<Town> allies = new ArrayList<>();
-	private List<UUID> alliesUUIDs = new ArrayList<>();
-	private List<Town> enemies = new ArrayList<>();
-	private List<UUID> enemiesUUIDs = new ArrayList<>();
+	private Map<UUID, Town> allies = new ConcurrentHashMap<>();
+	private Map<UUID, Town> enemies = new ConcurrentHashMap<>();
+//	private List<Town> allies = new ArrayList<>();
+//	private List<UUID> alliesUUIDs = new ArrayList<>();
+//	private List<Town> enemies = new ArrayList<>();
+//	private List<UUID> enemiesUUIDs = new ArrayList<>();
 	private final Set<Resident> trustedResidents = new HashSet<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Jail> jails = null;
@@ -1497,25 +1500,15 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void addAlly(Town town) {
-
-		if (hasAlly(town))
-			return;
 		removeEnemy(town);
-		allies.add(town);
-		getAlliesUUIDs().add(town.getUUID());
+		allies.put(town.getUUID(), town);
 	}
 
 	public void removeAlly(Town town) {
-
-		if (!hasAlly(town))
-			return;
-
-		getAlliesUUIDs().remove(town.getUUID());
-		getAllies().remove(town);
+		allies.remove(town.getUUID());
 	}
 
 	public boolean removeAllAllies() {
-
 		for (Town ally : new ArrayList<>(getAllies())) {
 			removeAlly(ally);
 			ally.removeAlly(this);
@@ -1524,35 +1517,23 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean hasAlly(Town town) {
-
-		return getAlliesUUIDs().contains(town.getUUID());
+		return allies.containsKey(town.getUUID());
 	}
 
 	public boolean hasMutualAlly(Town town) {
-
 		return hasAlly(town) && town.hasAlly(this);
 	}
 
 	public void addEnemy(Town town) {
-
-		if (hasEnemy(town))
-			return;
 		removeAlly(town);
-		enemies.add(town);
-		getEnemiesUUIDs().add(town.getUUID());
+		enemies.put(town.getUUID(), town);
 	}
 
 	public void removeEnemy(Town town) {
-
-		if (!hasEnemy(town))
-			return;
-
-		getEnemiesUUIDs().remove(town.getUUID());
-		getEnemies().remove(town);
+		enemies.remove(town.getUUID());
 	}
 
 	public boolean removeAllEnemies() {
-
 		for (Town enemy : new ArrayList<>(getEnemies())) {
 			removeEnemy(enemy);
 			enemy.removeEnemy(this);
@@ -1561,18 +1542,15 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean hasEnemy(Town town) {
-
-		return getEnemiesUUIDs().contains(town.getUUID());
+		return enemies.containsKey(town.getUUID());
 	}
 
 	public List<Town> getEnemies() {
-
-		return Collections.unmodifiableList(enemies);
+		return enemies.values().stream().collect(Collectors.toUnmodifiableList());
 	}
 
 	public List<Town> getAllies() {
-
-		return Collections.unmodifiableList(allies);
+		return allies.values().stream().collect(Collectors.toUnmodifiableList());
 	}
 	
 	public List<Town> getMutualAllies() {
@@ -1585,19 +1563,11 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public List<UUID> getAlliesUUIDs() {
-		return alliesUUIDs;
-	}
-
-	public void setAlliesUUIDs(List<UUID> alliesUUIDs) {
-		this.alliesUUIDs = alliesUUIDs;
+		return allies.keySet().stream().collect(Collectors.toUnmodifiableList());
 	}
 
 	public List<UUID> getEnemiesUUIDs() {
-		return enemiesUUIDs;
-	}
-
-	public void setEnemiesUUIDs(List<UUID> enemiesUUIDs) {
-		this.enemiesUUIDs = enemiesUUIDs;
+		return enemies.keySet().stream().collect(Collectors.toUnmodifiableList());
 	}
 	
 	public boolean isNationZoneEnabled() {
