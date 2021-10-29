@@ -1641,3 +1641,7 @@ msg_jailed_title: 'So you''ve been jailed :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
 
+#Message shown when there are no allies to list in /town allylist.
+msg_error_town_has_no_allies: 'Town has no allies to list.'
+#Message shown when there are no enemies to list in /town enemylist.
+msg_error_town_has_no_enemies: 'Town has no enemies to list.'
