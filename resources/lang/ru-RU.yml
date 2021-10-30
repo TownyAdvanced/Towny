@@ -806,7 +806,7 @@ msg_err_player_too_far_from_town_spawn: '&c%s слишком далеко от �
 msg_resident_bail_amount: 'Расходы на залоги за горожан: '
 msg_mayor_bail_amount: 'Расходы на залог Мэра: '
 msg_king_bail_amount: 'KРасходы на залог Короля: '
-msg_has_paid_bail: '%s has paid bail and is free.'
+msg_has_paid_bail: '%s заплатил залог и был выпущен на свободу.'
 msg_err_unable_to_pay_bail: 'Нет возможности позволить себе залог.'
 msg_err_bail_not_enabled: 'Залог не включен.'
 msg_you_have_been_freed_from_jail: 'Вы были освобождены из тюрьмы.'
@@ -955,7 +955,7 @@ msg_err_teleport_cancelled_damage: 'Из-за урона телепортаци�
 #Added in 0.82
 invitation_prefix: "&8[&7Приглашение&8] &9"
 confirmation_prefix: "&8[&7Подтверждение&8] &9"
-this_message_will_expire2: '&9This will auto-expire in %s seconds'
+this_message_will_expire2: '&9Данный запрос истечёт через %s секунд'
 msg_hover_next_page: 'След. стр.'
 msg_hover_previous_page: 'Пред. стр.'
 #Added in 0.83
@@ -1363,40 +1363,40 @@ msg_err_player_cannot_be_harmed: '%s появился недавно и ему �
 msg_you_have_lost_your_invulnerability: 'Вы потеряли вашу неуязвимость.'
 #Added in 0.126
 #Used in the nation screen:
-status_capital: 'Capital:'
+status_capital: 'Столица:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
-status_joined_town: 'Joined town:'
+status_joined_town: 'Присоединился к городу:'
 #Used in the town screen's nation hover, to denote when a town joined a nation.
-status_joined_nation: 'Joined nation:'
+status_joined_nation: 'Присоединился к нации:'
 #Shown in status screen elements where a value is not known.
-status_unknown: 'unknown'
+status_unknown: 'неизвестно'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
-msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
+msg_nationzone_override_set_to: '%s установил nationzone на %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s has had their nationzone override removed.'
 #Added in 0.127
 #Used in status screen:
 status_nation_zone_size: 'Nation Zone Size:'
 #Shown when a player adds people to their friends list.
-msg_res_friend_added_to_list: 'Added %s to your friend list.'
+msg_res_friend_added_to_list: '%s добавлен в список друзей.'
 #Shown when a player removes people from their friends list.
-msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
+msg_res_friend_removed_from_list: '%s удалён из списка друзей.'
 #Generic resident freed from jail message.
-msg_resident_unjailed: '%s has been unjailed.'
+msg_resident_unjailed: '%s был выпущен на свободу.'
 #Shown when an admin uses /ta toggle devmode.
-msg_admin_toggle_devmode: 'Dev Mode: %s'
+msg_admin_toggle_devmode: 'Режим разработчика: %s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: 'Debug Mode: %s'
+msg_admin_toggle_debugmode: 'Режим debug: %s'
 #Shown when an admin uses /ta toggle townwithdraw
 msg_admin_toggle_townwithdraw: 'Town Withdrawls: %s'
 #Shown when an admin uses /ta toggle nationwithdraw
 msg_admin_toggle_nationwithdraw: 'Nation Withdrawls: %s'
 #Shown when claiming a town block for the town.
-msg_process_town_claim: 'Processing Town Claim...'
+msg_process_town_claim: 'Обработка привата...'
 #Shown when unclaiming a town block for the town.
-msg_process_town_unclaim: 'Processing Town Unclaim...'
+msg_process_town_unclaim: 'Обработка распривата...'
 #Shown when there is nothing to unclaim.
-msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
+msg_err_nothing_to_unclaim: 'Нечего распривачивать!'
 #Given as feedback when /ta checkperm is used.
 msg_perm_true: 'Permission True.'
 #Given as feedback when /ta checkperm is used.
@@ -1411,13 +1411,13 @@ msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in
 #Shown during resident purge
 msg_scanning_for_old_residents: 'Scanning for old residents...'
 #Shown during resident purge
-msg_deleting_resident: 'Deleting resident: %s.'
+msg_deleting_resident: 'Удаление игрока: %s.'
 #Shown during resident purge
-msg_purge_complete: 'Resident purge complete: %s deleted.'
+msg_purge_complete: 'Очистка игроков завершена: удалено %s.'
 #Message to the Town, shown when a town is given bonus blocks.
-msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
+msg_you_have_been_given_bonus_blocks: 'Вам было дано %s бонусных участков.'
 #Message shown when a town cannot purchase any more bonus blocks.
-msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Лимит участков достигнут. У вас нет доступных участков для покупки.'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
