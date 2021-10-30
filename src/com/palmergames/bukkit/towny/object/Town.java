@@ -41,6 +41,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -54,8 +55,8 @@ public class Town extends Government implements TownBlockOwner {
 
 	private final List<Resident> residents = new ArrayList<>();
 	private final List<Resident> outlaws = new ArrayList<>();
-	private Map<UUID, Town> allies = new ConcurrentHashMap<>();
-	private Map<UUID, Town> enemies = new ConcurrentHashMap<>();
+	private Map<UUID, Town> allies = new LinkedHashMap();
+	private Map<UUID, Town> enemies = new LinkedHashMap<>();
 	private final Set<Resident> trustedResidents = new HashSet<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Jail> jails = null;
