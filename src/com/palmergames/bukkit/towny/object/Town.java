@@ -56,10 +56,6 @@ public class Town extends Government implements TownBlockOwner {
 	private final List<Resident> outlaws = new ArrayList<>();
 	private Map<UUID, Town> allies = new ConcurrentHashMap<>();
 	private Map<UUID, Town> enemies = new ConcurrentHashMap<>();
-//	private List<Town> allies = new ArrayList<>();
-//	private List<UUID> alliesUUIDs = new ArrayList<>();
-//	private List<Town> enemies = new ArrayList<>();
-//	private List<UUID> enemiesUUIDs = new ArrayList<>();
 	private final Set<Resident> trustedResidents = new HashSet<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Jail> jails = null;
