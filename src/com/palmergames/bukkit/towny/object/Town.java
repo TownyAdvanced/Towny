@@ -9,8 +9,12 @@ import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.BonusBlockPurchaseCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownBlockClaimCostCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownAddAlliedTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownAddEnemiedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourNationalCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownRemoveAlliedTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownRemoveEnemiedTownEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -1499,12 +1503,33 @@ public class Town extends Government implements TownBlockOwner {
 		return nation.getNationZoneSize() + (isCapital() ? TownySettings.getNationZonesCapitalBonusSize() : 0);
 	}
 
+	/**
+	 * Only to be used when loading the database.
+	 * @param towns List&lt;Town&gt; which will be loaded in as allies.
+	 */
+	public void loadAllies(List<Town> towns) {
+		for (Town town : towns)
+			allies.put(town.getUUID(), town);
+	}
+	
 	public void addAlly(Town town) {
-		removeEnemy(town);
+		TownAddAlliedTownEvent taate = new TownAddAlliedTownEvent(this, town);
+		Bukkit.getPluginManager().callEvent(taate);
+		if (taate.isCancelled()) {
+			TownyMessaging.sendMsg(taate.getCancelMessage());
+			return;
+		}
+		enemies.remove(town.getUUID());
 		allies.put(town.getUUID(), town);
 	}
 
 	public void removeAlly(Town town) {
+		TownRemoveAlliedTownEvent trate = new TownRemoveAlliedTownEvent(this, town);
+		Bukkit.getPluginManager().callEvent(trate);
+		if (trate.isCancelled()) {
+			TownyMessaging.sendMsg(trate.getCancelMessage());
+			return;
+		}
 		allies.remove(town.getUUID());
 	}
 
@@ -1524,12 +1549,34 @@ public class Town extends Government implements TownBlockOwner {
 		return hasAlly(town) && town.hasAlly(this);
 	}
 
+	/**
+	 * Only to be used when loading the database.
+	 * @param towns List&lt;Town&gt; which will be loaded in as enemies.
+	 */
+	public void loadEnemies(List<Town> towns) {
+		for (Town town : towns)
+			enemies.put(town.getUUID(), town);
+	}
+
+	
 	public void addEnemy(Town town) {
-		removeAlly(town);
+		TownAddEnemiedTownEvent taete = new TownAddEnemiedTownEvent(this, town);
+		Bukkit.getPluginManager().callEvent(taete);
+		if (taete.isCancelled()) {
+			TownyMessaging.sendMsg(taete.getCancelMessage());
+			return;
+		}
+		allies.remove(town.getUUID());
 		enemies.put(town.getUUID(), town);
 	}
 
 	public void removeEnemy(Town town) {
+		TownRemoveEnemiedTownEvent trete = new TownRemoveEnemiedTownEvent(this, town);
+		Bukkit.getPluginManager().callEvent(trete);
+		if (trete.isCancelled()) {
+			TownyMessaging.sendMsg(trete.getCancelMessage());
+			return;
+		}
 		enemies.remove(town.getUUID());
 	}
 
