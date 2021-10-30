@@ -473,6 +473,8 @@ public class CombatUtil {
 
 		if (isSameTown(a, b))
 			return true;
+		if (a.hasAlly(b))
+			return true;
 		if (isSameNation(a, b))
 			return true;
 		if (a.hasNation() && b.hasNation() && a.getNationOrNull().hasAlly(b.getNationOrNull()))
