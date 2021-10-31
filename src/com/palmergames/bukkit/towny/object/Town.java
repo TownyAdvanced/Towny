@@ -1555,6 +1555,7 @@ public class Town extends Government implements TownBlockOwner {
 			enemies.put(town.getUUID(), town);
 	}
 
+	
 	public void addEnemy(Town town) {
 		TownAddEnemiedTownEvent taete = new TownAddEnemiedTownEvent(this, town);
 		Bukkit.getPluginManager().callEvent(taete);

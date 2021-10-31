@@ -615,6 +615,7 @@ public class CombatUtil {
 	 * @return true if b is an enemy.
 	 */
 	public static boolean isEnemy(Town a, Town b) {
+
 		if (a.hasEnemy(b))
 			return true;
 		if (!a.hasNation() || !b.hasNation())
