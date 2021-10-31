@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.object.Resident;
@@ -11,6 +12,7 @@ import com.palmergames.bukkit.towny.object.economy.Account;
 
 public abstract class DeathPriceEvent extends Event implements Cancellable {
 
+	private static final HandlerList handlers = new HandlerList();
 	protected boolean cancelled;
 	protected final Account payer;
 	protected double amount;
@@ -23,6 +25,14 @@ public abstract class DeathPriceEvent extends Event implements Cancellable {
 		this.amount = amount;
 		this.deadResident = deadResident;
 		this.killer = killer;
+	}
+
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
+
+	public HandlerList getHandlers() {
+		return handlers;
 	}
 
 	/**
