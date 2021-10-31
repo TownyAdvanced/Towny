@@ -6917,3 +6917,6 @@ v0.92.0.11:
     - TownRemoveEnemiedTownEvent
   - Bump language file to 0.131.
   - Fix DeathPriceEvent missing handlers.
+0.97.2.13:
+  - API: Add PlayerCacheGetTownBlockStatusEvent.
+    - An event which allows another plugin to dictate what TownBlockStatus will be applied to a player's cache.  
