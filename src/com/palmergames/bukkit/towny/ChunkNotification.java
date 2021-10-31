@@ -169,7 +169,7 @@ public class ChunkNotification {
 				if (TownySettings.getNationZonesEnabled() && TownySettings.getNationZonesShowNotifications()) {
 					Player player = BukkitTools.getPlayer(resident.getName());
 					TownyWorld toWorld = to.getTownyWorldOrNull();
-					if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE)) {
+					if (PlayerCacheUtil.fetchTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE)) {
 						Town nearestTown = null; 
 						nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
 						return String.format(areaWildernessNotificationFormat, Translatable.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNationOrNull().getName()).forLocale(resident));
@@ -187,11 +187,11 @@ public class ChunkNotification {
 			if (TownySettings.getNationZonesEnabled() && TownySettings.getNationZonesShowNotifications()) {
 				Player player = BukkitTools.getPlayer(resident.getName());
 				TownyWorld toWorld = this.to.getTownyWorldOrNull();
-				if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.UNCLAIMED_ZONE)) {
+				if (PlayerCacheUtil.fetchTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE) && PlayerCacheUtil.fetchTownBlockStatus(player, this.from).equals(TownBlockStatus.UNCLAIMED_ZONE)) {
 					Town nearestTown = null; 
 					nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
 					return String.format(areaWildernessNotificationFormat, Translatable.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNationOrNull().getName()).forLocale(resident));
-				} else if (PlayerCacheUtil.getTownBlockStatus(player, this.to).equals(TownBlockStatus.UNCLAIMED_ZONE) && PlayerCacheUtil.getTownBlockStatus(player, this.from).equals(TownBlockStatus.NATION_ZONE)) {
+				} else if (PlayerCacheUtil.fetchTownBlockStatus(player, this.to).equals(TownBlockStatus.UNCLAIMED_ZONE) && PlayerCacheUtil.fetchTownBlockStatus(player, this.from).equals(TownBlockStatus.NATION_ZONE)) {
 					return String.format(areaWildernessNotificationFormat, to.getTownyWorldOrNull().getUnclaimedZoneName());
 				}
 			}

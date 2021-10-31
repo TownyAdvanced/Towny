@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.player.PlayerCacheGetTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -27,6 +28,7 @@ import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
 
 import net.citizensnpcs.api.CitizensAPI;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -92,7 +94,7 @@ public class PlayerCacheUtil {
 			else 
 				worldCoord = new WorldCoord(location.getWorld().getName(), Coord.parseCoord(location));
 
-			TownBlockStatus status = cacheStatus(player, worldCoord, getTownBlockStatus(player, worldCoord));
+			TownBlockStatus status = cacheStatus(player, worldCoord, fetchTownBlockStatus(player, worldCoord));
 			triggerCacheCreate(player, location, worldCoord, status, material, action);
 
 			PlayerCache cache = plugin.getCache(player);
@@ -235,6 +237,21 @@ public class PlayerCacheUtil {
 		cache.setBlockErrMsg(msg);
 	}
 
+	/**
+	 * Wrapper for {@link #getTownBlockStatus(Player, WorldCoord)} which allows another plugin
+	 * to alter the pre-determined TownBlockStatus.
+	 * 
+	 * @param player {@link Player} who is getting a new TownBlockStatus for their PlayerCache.
+	 * @param worldCoord {@link WorldCoord} where the TownBlockStatus is being fetched for.
+	 * @return {@link TownBlockStatus} which will be used by Towny.
+	 */
+	public static TownBlockStatus fetchTownBlockStatus(Player player, WorldCoord worldCoord) {
+		TownBlockStatus status = getTownBlockStatus(player, worldCoord);
+		PlayerCacheGetTownBlockStatusEvent event = new PlayerCacheGetTownBlockStatusEvent(player, worldCoord, status);
+		Bukkit.getPluginManager().callEvent(event);
+		return event.getTownBlockStatus();
+	}
+	
 	/**
 	 * Fetch the TownBlockStatus type for this player at this WorldCoord.
 	 * 
