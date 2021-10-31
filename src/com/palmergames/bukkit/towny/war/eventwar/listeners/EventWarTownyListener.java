@@ -10,15 +10,20 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
+import com.palmergames.bukkit.towny.event.player.PlayerCacheGetTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.event.resident.ResidentPreJailEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownBlockStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.event.time.NewHourEvent;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.war.eventwar.WarBooks;
+import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
 import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
 import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataController;
@@ -103,6 +108,34 @@ public class EventWarTownyListener implements Listener {
 			war.getWarParticipants().getOnlineWarriors().stream()
 				.forEach(res -> res.getPlayer().getInventory().addItem(book));
 		}
+	}
+	
+	@EventHandler
+	public void onPlayerCacheTownBlockStatus(PlayerCacheGetTownBlockStatusEvent event) {
+		if (!TownyAPI.getInstance().isWarTime())
+			return;
+
+		if (TownyAPI.getInstance().isWilderness(event.getWorldCoord()))
+			return;
+
+		Resident resident = TownyAPI.getInstance().getResident(event.getPlayer());
+		if (resident == null || !WarUniverse.getInstance().hasWarEvent(resident))
+			return;
+
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(event.getWorldCoord());
+
+		// WarZone.
+		if (WarUtil.hasSameWar(resident, townBlock)) {
+			event.setTownBlockStatus(TownBlockStatus.WARZONE);
+			return;
+		}
+
+		//The player is in a World War, in a war-allowed world, and towns are not allowed to be neutral.
+		if (!EventWarSettings.isWarTimeTownsNeutral() && event.getWorldCoord().getTownyWorldOrNull().isWarAllowed() && WarUniverse.getInstance().getWarEvent(event.getPlayer()).getWarType().equals(WarType.WORLDWAR)) {
+			event.setTownBlockStatus(TownBlockStatus.WARZONE);
+			return;
+		}
+
 	}
 	
 	/**

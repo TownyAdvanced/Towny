@@ -64,14 +64,6 @@ public enum EventWarConfigNodes {
 			"",
 			"# If true, fireworks will be launched at plots being attacked or healed in war every war tick."),
 
-	WAR_EVENT_BLOCK_GRIEFING(
-			"war.event.allow_block_griefing",
-			"false",
-			"",
-			"# If enabled players will be able to break/place any blocks in enemy plots during a war.",
-			"# This setting SHOULD NOT BE USED unless you want the most chaotic war possible.",
-			"# The editable_materials list in the Warzone Block Permission section should be used instead."),
-
 	WAR_EVENT_BLOCK_HP_HEADER(
 			"war.event.block_hp",
 			"",

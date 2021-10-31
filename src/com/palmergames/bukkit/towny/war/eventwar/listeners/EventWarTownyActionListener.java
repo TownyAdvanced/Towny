@@ -216,7 +216,7 @@ public class EventWarTownyActionListener implements Listener {
 		 * Event War fire control settings.
 		 */
 		if (TownyAPI.getInstance().isWarTime() && WarUniverse.getInstance().hasWarEvent(event.getTownBlock())) {
-			if (EventWarSettings.isAllowingFireInWarZone() || EventWarSettings.isAllowWarBlockGriefing()) {
+			if (EventWarSettings.isAllowingFireInWarZone()) {
 				event.setCancelled(false);
 			} else {
 				event.setCancelled(true);

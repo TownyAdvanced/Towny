@@ -23,11 +23,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
-import com.palmergames.bukkit.towny.war.eventwar.WarType;
-import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;
-import com.palmergames.bukkit.towny.war.eventwar.WarUtil;
-import com.palmergames.bukkit.towny.war.eventwar.settings.EventWarSettings;
-
 import net.citizensnpcs.api.CitizensAPI;
 
 import org.bukkit.Bukkit;
@@ -261,7 +256,7 @@ public class PlayerCacheUtil {
 	 * @param worldCoord - WorldCoord
 	 * @return TownBlockStatus type.
 	 */
-	public static TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
+	private static TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
 
 		if (!TownyAPI.getInstance().isTownyWorld(worldCoord.getBukkitWorld()))
 			return TownBlockStatus.OFF_WORLD;
@@ -304,21 +299,7 @@ public class PlayerCacheUtil {
 			}
 		}
 
-		boolean residentHasWar = WarUniverse.getInstance().hasWarEvent(resident);
-		boolean townblockAndResidentSameWar = WarUtil.hasSameWar(resident, townBlock);
-		
 		try {
-			// War Time
-			if (residentHasWar) {
-				//The grief-everything config option is set to true and the player and townblock are the same war. 
-				if (EventWarSettings.isAllowWarBlockGriefing() && townblockAndResidentSameWar)
-					return TownBlockStatus.WARZONE;
-
-				//The player is in a World War, in a war-allowed world, and towns are not allowed to be neutral.
-				if (!EventWarSettings.isWarTimeTownsNeutral() && worldCoord.getTownyWorldOrNull().isWarAllowed() && WarUniverse.getInstance().getWarEvent(player).getWarType().equals(WarType.WORLDWAR))
-					return TownBlockStatus.WARZONE;
-			}
-
 			if (town.isMayor(resident))
 				return TownBlockStatus.TOWN_OWNER;
 			
@@ -358,10 +339,6 @@ public class PlayerCacheUtil {
 			// Ally group.
 			if (CombatUtil.isAlly(town, resident.getTown()))
 				return TownBlockStatus.TOWN_ALLY;
-
-			// WarZone.
-			if (townblockAndResidentSameWar)
-				return TownBlockStatus.WARZONE;
 			
 			// Enemy.
 			if (CombatUtil.isEnemy(resident.getTown(), town))
@@ -413,9 +390,6 @@ public class PlayerCacheUtil {
 			cacheBlockErrMsg(player, Translatable.of("msg_err_not_registered").forLocale(player));
 			return false;
 		}
-		
-		if (!res.isJailed() && status == TownBlockStatus.WARZONE && EventWarSettings.isAllowWarBlockGriefing())
-			return true;
 
 		if (status == TownBlockStatus.NOT_REGISTERED) {
 			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error").forLocale(player));

@@ -263,10 +263,6 @@ public class EventWarSettings {
 	public static boolean isWarTimeTownsNeutral() {
 		return getBoolean(EventWarConfigNodes.WAR_EVENT_TOWNS_NEUTRAL);
 	}
-
-	public static boolean isAllowWarBlockGriefing() {
-		return getBoolean(EventWarConfigNodes.WAR_EVENT_BLOCK_GRIEFING);
-	}
 	
 	/*
 	 * Riot War Settings
