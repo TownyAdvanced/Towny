@@ -256,7 +256,7 @@ public class PlayerCacheUtil {
 	 * @param worldCoord - WorldCoord
 	 * @return TownBlockStatus type.
 	 */
-	private static TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
+	public static TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
 
 		if (!TownyAPI.getInstance().isTownyWorld(worldCoord.getBukkitWorld()))
 			return TownBlockStatus.OFF_WORLD;
