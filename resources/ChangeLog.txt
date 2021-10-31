@@ -6915,3 +6915,4 @@ v0.92.0.11:
     - TownAddEnemiedTownEvent
     - TownRemoveAlliedTownEvent
     - TownRemoveEnemiedTownEvent
+  - Bump language file to 0.131.
