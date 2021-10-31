@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.130
+version: 0.131
 language: dansk
 author: LifeOnEarth
 website: 'http://townyadvanced.github.io/'
@@ -1465,4 +1465,8 @@ msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your country
 msg_jailed_title: 'So you''ve been jailed :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
-
+#Added in 0.130
+#Message shown when there are no allies to list in /town allylist.
+msg_error_town_has_no_allies: 'Town has no allies to list.'
+#Message shown when there are no enemies to list in /town enemylist.
+msg_error_town_has_no_enemies: 'Town has no enemies to list.'

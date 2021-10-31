@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.130
+version: 0.131
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1465,4 +1465,8 @@ msg_jailed_war_prisoner: '作为战俘，如果你的国家攻陷了监狱（HP�
 msg_jailed_title: '所以你就这样被监禁了 :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco。'
-
+#Added in 0.130
+#Message shown when there are no allies to list in /town allylist.
+msg_error_town_has_no_allies: 'Town has no allies to list.'
+#Message shown when there are no enemies to list in /town enemylist.
+msg_error_town_has_no_enemies: 'Town has no enemies to list.'
