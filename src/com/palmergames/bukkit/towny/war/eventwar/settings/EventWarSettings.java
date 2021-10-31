@@ -24,13 +24,13 @@ public class EventWarSettings {
 
 	public static void loadConfig(Path configPath, String version) {
 		if (!FileMgmt.checkOrCreateFile(configPath.toString())) {
-			throw new TownyInitException("Failed to touch '" + configPath + "'.", TownyInitException.TownyError.WAR_CONFIG);
+			throw new TownyInitException("Failed to touch '" + configPath + "'.", TownyInitException.TownyError.MAIN_CONFIG);
 		}
 
 		// read the config.yml into memory
 		config = new CommentedConfiguration(configPath);
 		if (!config.load()) {
-			throw new TownyInitException("Failed to load Towny's warconfig.yml.", TownyInitException.TownyError.WAR_CONFIG);
+			throw new TownyInitException("Failed to load Towny's warconfig.yml.", TownyInitException.TownyError.MAIN_CONFIG);
 		}
 
 		setDefaults(version, configPath);

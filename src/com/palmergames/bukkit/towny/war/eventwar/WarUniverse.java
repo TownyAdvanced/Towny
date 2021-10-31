@@ -72,6 +72,9 @@ public class WarUniverse {
 		FlatfileDatabase.loadWarList();
 		FlatfileDatabase.loadWars();
 		
+		// TODO: handle bad configs.
+		EventWarSettings.loadConfig(Towny.getPlugin().getDataFolder().toPath().resolve("settings").resolve("warconfig.yml"), getVersion());
+		
 		WarMetaDataLoader.initialize(Towny.getPlugin());
 
 		WarMetaDataLoader.loadAll();
@@ -83,6 +86,11 @@ public class WarUniverse {
 		registerSpecialCommands();
 		
 		EventWarSettings.loadWarMaterialsLists();
+	}
+
+	private String getVersion() {
+		// TODO: return plugin version post-separation.
+		return "1.0";
 	}
 
 	// Event War's Listeners registered here.
