@@ -6901,3 +6901,17 @@ v0.92.0.11:
     - TownPaysDeathPriceEvent
     - Make it possible for other plugins to manipulate the prices taken from players, towns and nations when someone dies.
   - Fix nation zones generating an error if wildernessuse isn't enabled.
+0.97.2.12:
+  - Add ally and enemy lists to Towns.
+    - Accessible via the API only. For plugins which want to make towns war against each other.
+    - Closes #3476.
+  - New Command: /t allylist {townname}
+    - Show allies of a town.
+  - New Command: /t enemylist {townname}
+    - Show enemies of a town.
+  - API: Town ally/enemy events.
+    - Cancellable events thrown when towns have allies or enemies added/removed.
+    - TownAddAlliedTownEvent
+    - TownAddEnemiedTownEvent
+    - TownRemoveAlliedTownEvent
+    - TownRemoveEnemiedTownEvent
