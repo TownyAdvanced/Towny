@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
@@ -991,7 +992,23 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("nationZoneEnabled");
 				if (line != null)
 					town.setNationZoneEnabled(Boolean.parseBoolean(line));
-
+				
+				line = keys.get("allies");
+				if (line != null && !line.isEmpty()) {
+					List<UUID> uuids = Arrays.stream(line.split(","))
+							.map(uuid -> UUID.fromString(uuid))
+							.collect(Collectors.toList());
+					town.loadAllies(getTowns(uuids));
+				}
+				
+				line = keys.get("enemies");
+				if (line != null && !line.isEmpty()) {
+					List<UUID> uuids = Arrays.stream(line.split(","))
+						.map(uuid -> UUID.fromString(uuid))
+						.collect(Collectors.toList());
+					town.loadEnemies(getTowns(uuids));
+				}
+				
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_town_file_at_line", town.getName(), line, town.getName()));
 				e.printStackTrace();
@@ -1987,6 +2004,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("mapColorHexCode=" + town.getMapColorHexCode());
 		list.add("nationZoneOverride=" + town.getNationZoneOverride());
 		list.add("nationZoneEnabled=" + town.isNationZoneEnabled());
+		list.add("allies=" + StringMgmt.join(town.getAlliesUUIDs(), ","));
+		list.add("enemies=" + StringMgmt.join(town.getEnemiesUUIDs(), ","));
 		
 		/*
 		 *  Make sure we only save in async

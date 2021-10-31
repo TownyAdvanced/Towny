@@ -9,8 +9,12 @@ import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.BonusBlockPurchaseCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownBlockClaimCostCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownAddAlliedTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownAddEnemiedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourNationalCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownRemoveAlliedTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownRemoveEnemiedTownEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -37,7 +41,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,6 +55,8 @@ public class Town extends Government implements TownBlockOwner {
 
 	private final List<Resident> residents = new ArrayList<>();
 	private final List<Resident> outlaws = new ArrayList<>();
+	private Map<UUID, Town> allies = new LinkedHashMap();
+	private Map<UUID, Town> enemies = new LinkedHashMap<>();
 	private final Set<Resident> trustedResidents = new HashSet<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Jail> jails = null;
@@ -1490,7 +1498,120 @@ public class Town extends Government implements TownBlockOwner {
 			return getNationZoneOverride();
 		
 		return nation.getNationZoneSize() + (isCapital() ? TownySettings.getNationZonesCapitalBonusSize() : 0);
-		
+	}
+
+	/**
+	 * Only to be used when loading the database.
+	 * @param towns List&lt;Town&gt; which will be loaded in as allies.
+	 */
+	public void loadAllies(List<Town> towns) {
+		for (Town town : towns)
+			allies.put(town.getUUID(), town);
+	}
+	
+	public void addAlly(Town town) {
+		TownAddAlliedTownEvent taate = new TownAddAlliedTownEvent(this, town);
+		Bukkit.getPluginManager().callEvent(taate);
+		if (taate.isCancelled()) {
+			TownyMessaging.sendMsg(taate.getCancelMessage());
+			return;
+		}
+		enemies.remove(town.getUUID());
+		allies.put(town.getUUID(), town);
+	}
+
+	public void removeAlly(Town town) {
+		TownRemoveAlliedTownEvent trate = new TownRemoveAlliedTownEvent(this, town);
+		Bukkit.getPluginManager().callEvent(trate);
+		if (trate.isCancelled()) {
+			TownyMessaging.sendMsg(trate.getCancelMessage());
+			return;
+		}
+		allies.remove(town.getUUID());
+	}
+
+	public boolean removeAllAllies() {
+		for (Town ally : new ArrayList<>(getAllies())) {
+			removeAlly(ally);
+			ally.removeAlly(this);
+		}
+		return getAllies().size() == 0;
+	}
+
+	public boolean hasAlly(Town town) {
+		return allies.containsKey(town.getUUID());
+	}
+
+	public boolean hasMutualAlly(Town town) {
+		return hasAlly(town) && town.hasAlly(this);
+	}
+
+	/**
+	 * Only to be used when loading the database.
+	 * @param towns List&lt;Town&gt; which will be loaded in as enemies.
+	 */
+	public void loadEnemies(List<Town> towns) {
+		for (Town town : towns)
+			enemies.put(town.getUUID(), town);
+	}
+
+	
+	public void addEnemy(Town town) {
+		TownAddEnemiedTownEvent taete = new TownAddEnemiedTownEvent(this, town);
+		Bukkit.getPluginManager().callEvent(taete);
+		if (taete.isCancelled()) {
+			TownyMessaging.sendMsg(taete.getCancelMessage());
+			return;
+		}
+		allies.remove(town.getUUID());
+		enemies.put(town.getUUID(), town);
+	}
+
+	public void removeEnemy(Town town) {
+		TownRemoveEnemiedTownEvent trete = new TownRemoveEnemiedTownEvent(this, town);
+		Bukkit.getPluginManager().callEvent(trete);
+		if (trete.isCancelled()) {
+			TownyMessaging.sendMsg(trete.getCancelMessage());
+			return;
+		}
+		enemies.remove(town.getUUID());
+	}
+
+	public boolean removeAllEnemies() {
+		for (Town enemy : new ArrayList<>(getEnemies())) {
+			removeEnemy(enemy);
+			enemy.removeEnemy(this);
+		}
+		return getEnemies().size() == 0;
+	}
+
+	public boolean hasEnemy(Town town) {
+		return enemies.containsKey(town.getUUID());
+	}
+
+	public List<Town> getEnemies() {
+		return Collections.unmodifiableList(enemies.values().stream().collect(Collectors.toList()));
+	}
+
+	public List<Town> getAllies() {
+		return Collections.unmodifiableList(allies.values().stream().collect(Collectors.toList()));
+	}
+	
+	public List<Town> getMutualAllies() {
+		List<Town> result = new ArrayList<>();
+		for(Town ally: getAllies()) {
+			if(ally.hasAlly(this))
+				result.add(ally);
+		}
+		return result;
+	}
+
+	public List<UUID> getAlliesUUIDs() {
+		return Collections.unmodifiableList(allies.keySet().stream().collect(Collectors.toList()));
+	}
+
+	public List<UUID> getEnemiesUUIDs() {
+		return Collections.unmodifiableList(enemies.keySet().stream().collect(Collectors.toList()));
 	}
 	
 	public boolean isNationZoneEnabled() {

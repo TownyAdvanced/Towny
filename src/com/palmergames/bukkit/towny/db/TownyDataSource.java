@@ -341,6 +341,8 @@ public abstract class TownyDataSource {
 
 	abstract public List<Town> getTowns(String[] names);
 
+	abstract public List<Town> getTowns(List<UUID> uuids);
+	
 	abstract public List<Town> getTowns();
 
 	abstract public Town getTown(String name) throws NotRegisteredException;

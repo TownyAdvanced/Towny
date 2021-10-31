@@ -167,7 +167,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"merge",
 		"jail",
 		"unjail",
-		"trust"
+		"trust",
+		"allylist",
+		"enemylist"
 		);
 	private static final List<String> townSetTabCompletes = Arrays.asList(
 		"board",
@@ -268,6 +270,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				case "join":
 				case "merge":
 				case "plotgrouplist":
+				case "allylist":
+				case "enemylist":
 				case "ranklist":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "t");
@@ -654,6 +658,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				townOutlawList(player, split);
 
+			} else if (split[0].equalsIgnoreCase("allylist")) {
+
+				townAllyList(player, split);
+
+			} else if (split[0].equalsIgnoreCase("enemylist")) {
+
+				townEnemyList(player, split);
+
 			} else if (split[0].equalsIgnoreCase("spawn")) {
 
 				/*
@@ -876,6 +888,47 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}
 
+	}
+
+	private void townEnemyList(Player player, String[] split) {
+		Town town = null;
+		try {
+			if (split.length == 1) {
+				town = getResidentOrThrow(player.getUniqueId()).getTown();
+			} else {
+				town = getTownOrThrow(split[1]);
+			}
+		} catch (NotRegisteredException e) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_name"));
+			return;
+		}
+		if (town.getEnemies().isEmpty())
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_town_has_no_enemies")); 
+		else {
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle(town.getName() + " " + Translatable.of("status_nation_enemies").forLocale(player)));
+			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_enemies").forLocale(player), new ArrayList<>(town.getEnemies())));
+		}
+	}
+
+	private void townAllyList(Player player, String[] split) {
+		Town town = null;
+		try {
+			if (split.length == 1) {
+				town = getResidentOrThrow(player.getUniqueId()).getTown();
+			} else {
+				town = getTownOrThrow(split[1]);
+			}
+		} catch (NotRegisteredException e) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_name"));
+			return;
+		}
+		
+		if (town.getAllies().isEmpty())
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_town_has_no_allies")); 
+		else {
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle(town.getName() + " " + Translatable.of("status_nation_allies").forLocale(player)));
+			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_allies").forLocale(player), new ArrayList<>(town.getAllies())));
+		}
 	}
 
 	private void parseTownPurgeCommand(Player player, String[] arg) throws TownyException {
@@ -4299,4 +4352,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
+	private static Town getTownOrThrow(String townName) throws NotRegisteredException {
+		Town town = TownyUniverse.getInstance().getTown(townName);
+
+		if (town == null)
+			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", townName));
+
+		return town;
+	}
 }

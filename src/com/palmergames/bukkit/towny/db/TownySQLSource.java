@@ -54,6 +54,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 public final class TownySQLSource extends TownyDatabaseHandler {
 
@@ -1187,6 +1188,24 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			else
 				town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
 
+			line = rs.getString("allies");
+			if (line != null && !line.isEmpty()) {
+				search = (line.contains("#")) ? "#" : ",";
+				List<UUID> uuids = Arrays.stream(line.split(search))
+						.map(uuid -> UUID.fromString(uuid))
+						.collect(Collectors.toList());
+				town.loadAllies(getTowns(uuids));
+			}
+
+			line = rs.getString("enemies");
+			if (line != null && !line.isEmpty()) {
+				search = (line.contains("#")) ? "#" : ",";
+				List<UUID> uuids = Arrays.stream(line.split(search))
+						.map(uuid -> UUID.fromString(uuid))
+						.collect(Collectors.toList());
+				town.loadEnemies(getTowns(uuids));
+			}
+			
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " sql Error - " + e.getMessage());
@@ -2187,6 +2206,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				twn_hm.put("primaryJail", town.getPrimaryJail().getUUID());
 			
 			twn_hm.put("trustedResidents", StringMgmt.join(toUUIDList(town.getTrustedResidents()), "#"));
+			
+			twn_hm.put("allies", StringMgmt.join(town.getAlliesUUIDs(), "#"));
+			
+			twn_hm.put("enemies", StringMgmt.join(town.getEnemiesUUIDs(), "#"));
 			
 			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;
