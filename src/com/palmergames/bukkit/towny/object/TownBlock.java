@@ -98,15 +98,21 @@ public class TownBlock extends TownyObject {
 	}
 
 	public void setResident(Resident resident) {
+		setResident(resident, true);
+	}
 		
-		PlotPreClaimEvent plotPreClaimEvent = new PlotPreClaimEvent(this.resident, resident, this);
-		Bukkit.getPluginManager().callEvent(plotPreClaimEvent);
+	public void setResident(Resident resident, boolean callEvent) {
 		
-		if (plotPreClaimEvent.isCancelled()) {
-			if (!plotPreClaimEvent.getCancelMessage().isEmpty() && resident != null)
-				TownyMessaging.sendErrorMsg(resident, plotPreClaimEvent.getCancelMessage());
-			
-			return;
+		if (callEvent) {
+			PlotPreClaimEvent plotPreClaimEvent = new PlotPreClaimEvent(this.resident, resident, this);
+			Bukkit.getPluginManager().callEvent(plotPreClaimEvent);
+
+			if (plotPreClaimEvent.isCancelled()) {
+				if (!plotPreClaimEvent.getCancelMessage().isEmpty() && resident != null)
+					TownyMessaging.sendErrorMsg(resident, plotPreClaimEvent.getCancelMessage());
+
+				return;
+			}
 		}
 		
 		boolean successful;
@@ -120,7 +126,7 @@ public class TownBlock extends TownyObject {
 			successful = false;
 		}
 		
-		if (successful)
+		if (successful && callEvent)
 			Bukkit.getPluginManager().callEvent(new PlotClaimEvent(this.resident, resident, this));
 		
 		this.resident = resident;
