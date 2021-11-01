@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.AddonCommand;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.db.WarMetaDataController;
@@ -97,14 +98,14 @@ public class TownRedeemAddon implements TabExecutor {
 			if (sender instanceof Player)
 				player = (Player) sender;
 			else 
-				throw new TownyException("Not for console!");
+				throw new TownyException(Translatable.of("msg_not_for_console"));
 			
 			Resident res = TownyAPI.getInstance().getResident(player.getUniqueId());
 			if (res == null)
-				throw new TownyException("Not registered.");
+				throw new TownyException(Translatable.of("msg_err_not_registered"));
 			
 			if (!res.hasTown())
-				throw new TownyException("You don't have a town.");
+				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
 			
 			if (args.length == 0) {
 				showHelp();
@@ -129,28 +130,28 @@ public class TownRedeemAddon implements TabExecutor {
 					type = WarType.WORLDWAR;
 					break;
 				default:
-					throw new TownyException("Invalid war type!");
+					throw new TownyException(Translatable.of("msg_invalid_war_type"));
 			}
 			Town town = res.getTownOrNull();
 			int cost = type.tokenCost;
 			Player finalPlayer = player;
 			WarType finalType = type;
 			if (WarMetaDataController.getWarTokens(town) < cost)
-				throw new TownyException("Not enough tokens to purchase that declaration of war! You require " + cost + " tokens.");
+				throw new TownyException(Translatable.of("msg_not_enough_tokens_to_purchase_war", cost));
 				
 			Confirmation.runOnAccept(()-> {
 				
 				if (WarMetaDataController.getWarTokens(town) < cost) {
-					TownyMessaging.sendErrorMsg(finalPlayer, "Not enough tokens to purchase that declaration of war! You require " + cost + " tokens.");
+					TownyMessaging.sendErrorMsg(finalPlayer, Translatable.of("msg_not_enough_tokens_to_purchase_war", cost));
 					return;
 				}
 				
 				int remainder = WarMetaDataController.getWarTokens(town) - cost;
 				WarMetaDataController.setTokens(town, remainder);
-				TownyMessaging.sendPrefixedTownMessage(town, town + " has purchased one Declaration of War of type: " + finalType.getName());
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_purchased_declaration_of_type", town, finalType.getName()));
 			}).sendTo(player);
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(sender, e.getMessage());
+			TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
 		}
 	}
 }

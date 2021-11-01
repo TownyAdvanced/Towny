@@ -197,8 +197,8 @@ public class TownyAdminWarAddon extends BaseCommand implements TabExecutor {
 	private void parsePurgeCommand() {
 		Confirmation.runOnAccept(()-> {
 			WarMetaDataLoader.removeAllWars(true);
-			TownyMessaging.sendMsg(sender, "Wars purged.");
-			}).sendTo(sender);
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_wars_purged"));
+		}).sendTo(sender);
 	}
 
 	private void parseListCommand() {

@@ -1678,3 +1678,13 @@ msg_team_selection_delay_seconds_remaining: '%s remain to choose between the gov
 msg_which_side_will_you_choose: 'You must side with the nation/city or the rebels. Which side will you choose?'
 #Message shown on a new day to a town or nation, awarding a war token.
 msg_war_token_received: 'Because of non-peaceful status, %s has received a war token.'
+#Message shown when a command is used from the console, which must be run by a player.
+msg_not_for_console: 'This command is not meant to be used from console.'
+#Message shown when a player tries to use a non-existant war name.
+msg_invalid_war_type: 'Invalid war type.'
+#Message shown when a player does not have enough war tokens to purchase a declaration.
+msg_not_enough_tokens_to_purchase_war: 'Not enough tokens to purchase that declaration of war! You require %s tokens.'
+#Message shown when a player has purchased a declaration of war.
+msg_town_purchased_declaration_of_type: '%s has purchased one Declaration of War of type: %s'
+#Message confirming wars are purged from database.
+msg_wars_purged: 'Wars have been purged.'
