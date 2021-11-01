@@ -681,7 +681,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public Account getAccount() {
 		if (account == null) {
 
-			String accountName = StringMgmt.trimMaxLength(getName(), 32);
 			World world;
 
 			Player player = getPlayer();
@@ -690,8 +689,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			} else {
 				world = BukkitTools.getWorlds().get(0);
 			}
-
-			account = new EconomyAccount(accountName, world);
+			account = new EconomyAccount(getUUID(), world);
 		}
 		
 		return account;
