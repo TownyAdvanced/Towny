@@ -6,6 +6,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * @deprecated As of 0.97.3.0, please use {@link com.palmergames.bukkit.towny.event.plot.PlotPreClaimEvent} or {@link com.palmergames.bukkit.towny.event.plot.PlotClaimEvent}
+ */
+@Deprecated
 public class PlotChangeOwnerEvent extends Event {
     public static final HandlerList handlers = new HandlerList();
     private final Resident oldowner;

@@ -4,8 +4,9 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.PlotChangeOwnerEvent;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
+import com.palmergames.bukkit.towny.event.plot.PlotClaimEvent;
+import com.palmergames.bukkit.towny.event.plot.PlotPreClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -97,6 +98,17 @@ public class TownBlock extends TownyObject {
 	}
 
 	public void setResident(Resident resident) {
+		
+		PlotPreClaimEvent plotPreClaimEvent = new PlotPreClaimEvent(this.resident, resident, this);
+		Bukkit.getPluginManager().callEvent(plotPreClaimEvent);
+		
+		if (plotPreClaimEvent.isCancelled()) {
+			if (!plotPreClaimEvent.getCancelMessage().isEmpty() && resident != null)
+				TownyMessaging.sendErrorMsg(resident, plotPreClaimEvent.getCancelMessage());
+			
+			return;
+		}
+		
 		boolean successful;
 		if (hasResident())
 			this.resident.removeTownBlock(this);
@@ -107,10 +119,10 @@ public class TownBlock extends TownyObject {
 		} catch (AlreadyRegisteredException | NullPointerException e) {
 			successful = false;
 		}
-		if (successful) { //Should not cause a NPE, is checkingg if resident is null and
-			// if "this.resident" returns null (Unclaimed / Wilderness) the PlotChangeOwnerEvent changes it to: "undefined"
-			Bukkit.getPluginManager().callEvent(new PlotChangeOwnerEvent(this.resident, resident, this));
-		}
+		
+		if (successful)
+			Bukkit.getPluginManager().callEvent(new PlotClaimEvent(this.resident, resident, this));
+		
 		this.resident = resident;
 		permissionOverrides.clear();
 	}
