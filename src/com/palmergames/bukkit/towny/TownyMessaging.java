@@ -290,7 +290,7 @@ public class TownyMessaging {
 	/**
 	 * Send the nation board to a player (in yellow)
 	 *
-	 * @param player player to show to
+	 * @param sender Sender to show to
 	 * @param nation the nation for which to show it's board
 	 */
 	public static void sendNationBoard(CommandSender sender, Nation nation) {
