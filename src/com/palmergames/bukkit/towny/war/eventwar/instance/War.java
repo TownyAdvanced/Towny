@@ -12,7 +12,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.towny.utils.NameGenerator;
+import com.palmergames.bukkit.towny.war.eventwar.NameGenerator;
 import com.palmergames.bukkit.towny.war.eventwar.WarBooks;
 import com.palmergames.bukkit.towny.war.eventwar.WarType;
 import com.palmergames.bukkit.towny.war.eventwar.WarUniverse;

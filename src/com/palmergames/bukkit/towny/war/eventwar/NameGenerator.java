@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.utils;
+package com.palmergames.bukkit.towny.war.eventwar;
 
 import java.util.ArrayList;
 import java.util.Arrays;

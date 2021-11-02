@@ -7,9 +7,9 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.war.eventwar.ServerBroadCastTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
-import com.palmergames.bukkit.util.ServerBroadCastTimerTask;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 

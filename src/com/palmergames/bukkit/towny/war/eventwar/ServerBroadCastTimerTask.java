@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.util;
+package com.palmergames.bukkit.towny.war.eventwar;
 
 import java.util.TimerTask;
 
