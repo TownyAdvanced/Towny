@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 
@@ -330,6 +331,16 @@ public class TownyAPI {
 		return true;
     }    
     
+	/**
+	 * Answers whether Towny considers PVP enabled at a location.
+	 * 
+	 * @param location Location to check for PVP.
+	 * @return true if PVP is enabled or this isn't a world with Towny enabled.
+	 */
+	public boolean isPVP(Location location) {
+		return !isTownyWorld(location.getWorld()) || CombatUtil.preventPvP(getTownyWorld(location.getWorld().getName()), getTownBlock(location));
+	}
+
     /**
      * Returns value of usingTowny for the given world.
      * 
