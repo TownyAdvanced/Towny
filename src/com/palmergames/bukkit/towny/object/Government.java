@@ -48,6 +48,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	protected double taxes;
 	protected String mapColorHexCode = "";
 	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
+	private boolean hasActiveWar = false;
 	
 	protected Government(String name) {
 		super(name);
@@ -323,6 +324,14 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	public abstract Collection<TownBlock> getTownBlocks();
+
+	public boolean hasActiveWar() {
+		return hasActiveWar;
+	}
+	
+	public void setActiveWar(boolean active) {
+		this.hasActiveWar = active;
+	}
 	
 	public abstract int getNationZoneSize();
 	
