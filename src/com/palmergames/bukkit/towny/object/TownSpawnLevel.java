@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import org.bukkit.entity.Player;
 
@@ -69,7 +70,7 @@ public enum TownSpawnLevel {
 	public void checkIfAllowed(Towny plugin, Player player, Town town) throws TownyException {
 
 		if (!(isAllowed(town) && hasPermissionNode(plugin, player, town))) {
-			boolean war = town.hasActiveWar();
+			boolean war = TownyAPI.getInstance().isWarTime();
 			SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
 			if(level == SpawnLevel.WAR && !war) {
 				throw new TownyException(Translation.of(notAllowedLangNodeWar));
@@ -93,7 +94,7 @@ public enum TownSpawnLevel {
 
 	private boolean isAllowedTown(Town town)
 	{
-		boolean war = town.hasActiveWar();
+		boolean war = TownyAPI.getInstance().isWarTime();
 		SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
 		return level == SpawnLevel.TRUE || (level != SpawnLevel.FALSE && ((level == SpawnLevel.WAR) == war));
 	}
