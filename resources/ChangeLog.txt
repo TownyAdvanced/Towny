@@ -6921,3 +6921,4 @@ v0.92.0.11:
   - API: Add PlayerCacheGetTownBlockStatusEvent.
     - An event which allows another plugin to dictate what TownBlockStatus will be applied to a player's cache.  
   - Fix variable name in javadoc, courtesy of Warriorrrr with PR #5419.
+  - Add Government#hasActiveWar.
