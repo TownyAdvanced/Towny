@@ -1467,6 +1467,6 @@ msg_jailed_title: '所以你就这样被监禁了 :('
 msg_jailed_author: 'Towny Jailco。'
 #Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
-msg_error_town_has_no_allies: 'Town has no allies to list.'
+msg_error_town_has_no_allies: '此城镇没有同盟。'
 #Message shown when there are no enemies to list in /town enemylist.
-msg_error_town_has_no_enemies: 'Town has no enemies to list.'
+msg_error_town_has_no_enemies: '此城镇没有敌人。'
