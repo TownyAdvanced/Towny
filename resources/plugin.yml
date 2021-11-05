@@ -72,6 +72,10 @@ permissions:
         description: Admin perm allowing player to bypass being teleported out of towns they are outlawed in.
         default: false
 
+    towny.townless:
+        description: Given to players which do not have a town.
+        default: false
+
     towny.town.resident:
         description: User is permitted to join towns.
         default: false

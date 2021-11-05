@@ -6926,3 +6926,5 @@ v0.92.0.11:
   - Add closed_economy_enabled bstats chart.
 0.97.2.14:
   - Add ability to add translation strings apart from the LoadTranslationEvent.
+  - New Permission Node: towny.townless
+    - Given to players who do not have a town.
