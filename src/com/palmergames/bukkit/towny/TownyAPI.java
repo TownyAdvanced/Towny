@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
@@ -27,10 +28,12 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -633,7 +636,12 @@ public class TownyAPI {
 		}
 		
 		return TownBlockStatus.UNCLAIMED_ZONE;
-    }
+	}
+
+	public static void addTranslations(Plugin plugin, Map<String, Map<String, String>> translations) {
+		Translation.addTranslations(translations);
+		Towny.getPlugin().getLogger().info("Loaded additional language files for plugin: " + plugin.getName());
+	}
     
     public static TownyAPI getInstance() {
         if (instance == null) {

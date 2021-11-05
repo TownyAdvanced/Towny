@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.FileMgmt;
+
 import org.apache.commons.compress.utils.FileNameUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -354,5 +355,14 @@ public final class Translation {
 		}
 		
 		return locale;
+	}
+	
+
+	public static void addTranslations(Map<String, Map<String, String>> addedTranslations) {
+		for (String language : addedTranslations.keySet())
+			for (Map.Entry<String, String> entry : addedTranslations.get(language).entrySet()) {
+				translations.computeIfAbsent(language, k -> new HashMap<>());
+				translations.get(language).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
+			}
 	}
 }
