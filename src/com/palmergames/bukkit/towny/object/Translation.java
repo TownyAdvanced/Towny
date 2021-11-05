@@ -112,16 +112,7 @@ public final class Translation {
 
 		TranslationLoadEvent translationLoadEvent = new TranslationLoadEvent();
 		Bukkit.getPluginManager().callEvent(translationLoadEvent);
-		
-		Map<String, Map<String, String>> addedTranslations = translationLoadEvent.getAddedTranslations();
-		if (addedTranslations != null && !addedTranslations.isEmpty()) {
-			for (String lang : addedTranslations.keySet())
-				if (addedTranslations.get(lang) != null && !addedTranslations.get(lang).isEmpty())
-					for (Map.Entry<String, String> entry : addedTranslations.get(lang).entrySet()) {
-						translations.computeIfAbsent(lang, k -> new HashMap<>());
-						translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
-					}
-		}
+		addTranslations(translationLoadEvent.getAddedTranslations());
 		
 		// Load optional override files.
 		File[] overrideFiles = new File(langFolder + File.separator + "override").listFiles();
@@ -356,12 +347,14 @@ public final class Translation {
 		return locale;
 	}
 	
-
 	public static void addTranslations(Map<String, Map<String, String>> addedTranslations) {
-		for (String language : addedTranslations.keySet())
-			for (Map.Entry<String, String> entry : addedTranslations.get(language).entrySet()) {
-				translations.computeIfAbsent(language, k -> new HashMap<>());
-				translations.get(language).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
-			}
+		if (addedTranslations != null && !addedTranslations.isEmpty()) {
+			for (String language : addedTranslations.keySet())
+				if (addedTranslations.get(language) != null && !addedTranslations.get(language).isEmpty())
+					for (Map.Entry<String, String> entry : addedTranslations.get(language).entrySet()) {
+						translations.computeIfAbsent(language, k -> new HashMap<>());
+						translations.get(language).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
+					}
+		}
 	}
 }
