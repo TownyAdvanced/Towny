@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.FileMgmt;
-
 import org.apache.commons.compress.utils.FileNameUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
