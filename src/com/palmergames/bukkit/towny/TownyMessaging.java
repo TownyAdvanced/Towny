@@ -687,10 +687,10 @@ public class TownyMessaging {
 	 * @param translatable Translatable object to be messaged to the player using their locale.
 	 */
 	public static void sendGlobalMessage(Translatable translatable) {
-		LOGGER.info("[Global Message] " + translatable.stripColors(true).translate());
 		for (Player player : Bukkit.getOnlinePlayers())
 			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
-				sendMessage(player, Translatable.of("default_towny_prefix").forLocale(player) + translatable);
+				sendMsg(player, translatable);
+		LOGGER.info("[Global Message] " + translatable.stripColors(true).translate());
 	}
 
 	/**

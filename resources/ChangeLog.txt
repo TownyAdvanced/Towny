@@ -6928,3 +6928,4 @@ v0.92.0.11:
   - Add ability to add translation strings apart from the LoadTranslationEvent.
   - New Permission Node: towny.townless
     - Given to players who do not have a town.
+  - Fix global messages being stripped of their colours.
