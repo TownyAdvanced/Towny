@@ -88,6 +88,7 @@ import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.towny.utils.TownUtil;
+import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -118,6 +119,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -169,7 +171,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"unjail",
 		"trust",
 		"allylist",
-		"enemylist"
+		"enemylist",
+		"baltop"
 		);
 	private static final List<String> townSetTabCompletes = Arrays.asList(
 		"board",
@@ -272,6 +275,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				case "plotgrouplist":
 				case "allylist":
 				case "enemylist":
+				case "baltop":
 				case "ranklist":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "t");
@@ -864,6 +868,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 					
 					parseTownTrustCommand(player, StringMgmt.remFirstArg(split), null);
+				} else if (split[0].equalsIgnoreCase("baltop")) {
+
+					Town town;
+					if (split.length > 1) {
+						town = TownyUniverse.getInstance().getDataSource().getTown(split[1]);
+						if (town == null)
+							throw new TownyException(Translatable.of("msg_err_invalid_name", split[1]));
+					} else {
+						Resident resident = getResidentOrThrow(player.getUniqueId());
+						if (!resident.hasTown())
+							throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
+						else
+							town = resident.getTownOrNull();
+					}
+					
+					parseTownBaltop(player, town);
 					
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN, split[0])) {
 					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, split[0]).execute(player, "town", split);
@@ -2652,6 +2672,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 			return;
 		}
+	}
+	
+	private static void parseTownBaltop(Player player, Town town) {
+		StringBuilder sb = new StringBuilder();
+		List<Resident> residents = new ArrayList<>(town.getResidents());
+		residents.sort(Comparator.<Resident>comparingDouble(res -> res.getAccount().getHoldingBalance()).reversed());
+
+		int i = 0;
+		for (Resident res : residents)
+			sb.append(Translatable.of("msg_baltop_book_format", ++i, res.getName(), TownyEconomyHandler.getFormattedBalance(res.getAccount().getCachedBalance())).forLocale(player) + "\n");
+
+		player.openBook(BookFactory.makeBook("Town Baltop", town.getName(), sb.toString()));
 	}
 	
 	private static void parseTownSetSpawn(Player player, Town town) {

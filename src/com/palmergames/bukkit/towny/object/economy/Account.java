@@ -1,12 +1,14 @@
 package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import java.util.ArrayList;
@@ -22,9 +24,11 @@ import java.util.List;
  * @see EconomyAccount
  */
 public abstract class Account implements Nameable {
+	private static final long CACHE_TIMEOUT = TownySettings.getCachedBankTimeout();
 	private static final AccountObserver GLOBAL_OBSERVER = new GlobalAccountObserver();
 	private final List<AccountObserver> observers = new ArrayList<>();
 	private AccountAuditor auditor;
+	private CachedBalance cachedBalance = null;
 	
 	String name;
 	World world;
@@ -32,6 +36,7 @@ public abstract class Account implements Nameable {
 	public Account(String name) {
 		this.name = name;
 		observers.add(GLOBAL_OBSERVER);
+		this.cachedBalance = new CachedBalance(getHoldingBalance());
 	}
 	
 	public Account(String name, World world) {
@@ -41,6 +46,7 @@ public abstract class Account implements Nameable {
 		// ALL account transactions will route auditing data through this
 		// central auditor.
 		observers.add(GLOBAL_OBSERVER);
+		this.cachedBalance = new CachedBalance(getHoldingBalance());
 	}
 	
 	// Template methods
@@ -289,5 +295,49 @@ public abstract class Account implements Nameable {
 	@Deprecated
 	public boolean pay(double amount, String reason) {
 		return withdraw(amount, reason);
+	}
+
+	private class CachedBalance {
+		private double balance = 0;
+		private long time;
+
+		private CachedBalance(double _balance) {
+			balance = _balance;
+			time = System.currentTimeMillis();
+		}
+
+		double getBalance() {
+			return balance;
+		}
+		private long getTime() {
+			return time;
+		}
+
+		void setBalance(double _balance) {
+			balance = _balance;
+			time = System.currentTimeMillis();
+		}
+
+		void updateCache() {
+			if (!TownySettings.isEconomyAsync()) // Some economy plugins don't handle things async, luckily we have a config option for this such case. 
+				setBalance(getHoldingBalance());
+			else
+				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> cachedBalance.setBalance(getHoldingBalance()));
+		}
+	}
+
+	/**
+	 * Returns a cached balance of a town or nation bank account,
+	 * the value of which can be brand new or up to 10 minutes old 
+	 * (time configurable in the config,) based on whether the 
+	 * cache has been checked recently.
+	 *
+	 * @return a cached balance of a town or nation bank account.
+	 */
+	public double getCachedBalance() {
+		if (System.currentTimeMillis() - cachedBalance.getTime() > CACHE_TIMEOUT)
+			cachedBalance.updateCache();
+
+		return cachedBalance.getBalance();
 	}
 }

@@ -65,6 +65,7 @@ import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -80,6 +81,7 @@ import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -113,7 +115,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"ally",
 		"spawn",
 		"king",
-		"bankhistory"
+		"bankhistory",
+		"baltop"
 	);
 
 	private static final List<String> nationSetTabCompletes = Arrays.asList(
@@ -196,6 +199,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "join":
 				case "delete":
 				case "merge":
+				case "baltop":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "n");
 					break;
@@ -693,6 +697,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						}
 
 					TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().getNation().generateBankHistoryBook(player, pages);
+				} else if (split[0].equalsIgnoreCase("baltop")) {
+					Nation nation;
+					if (split.length > 1) {
+						nation = TownyUniverse.getInstance().getDataSource().getNation(split[1]);
+						if (nation == null)
+							throw new TownyException(Translatable.of("msg_err_invalid_name", split[1]));
+					} else {
+						Resident resident = getResidentOrThrow(player.getUniqueId());
+						if (!resident.hasNation())
+							throw new TownyException(Translatable.of("msg_err_dont_belong_nation"));
+						else
+							nation = resident.getNationOrNull();
+					}
+
+					parseNationBaltop(player, nation);
 				} else if (TownyCommandAddonAPI.hasCommand(CommandType.NATION, split[0])) {
 					TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).execute(player, "nation", split);
 				} else {
@@ -2450,6 +2469,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}
 		
+	}
+
+	private static void parseNationBaltop(Player player, Nation nation) {
+		StringBuilder sb = new StringBuilder();
+		List<Resident> residents = new ArrayList<>(nation.getResidents());
+		residents.sort(Comparator.<Resident>comparingDouble(res -> res.getAccount().getHoldingBalance()).reversed());
+
+		int i = 0;
+		for (Resident res : residents)
+			sb.append(Translatable.of("msg_baltop_book_format", ++i, res.getName(), TownyEconomyHandler.getFormattedBalance(res.getAccount().getCachedBalance())).forLocale(player) + "\n");
+
+		player.openBook(BookFactory.makeBook("Town Baltop", nation.getName(), sb.toString()));
 	}
 
 	public static void nationToggle(CommandSender sender, String[] split, boolean admin, Nation nation) throws TownyException {
