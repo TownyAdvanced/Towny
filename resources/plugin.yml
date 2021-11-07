@@ -670,9 +670,7 @@ permissions:
             towny.command.townyadmin.toggle.devmode: true
             towny.command.townyadmin.toggle.debug: true
             towny.command.townyadmin.toggle.nationwithdraw: true
-            towny.command.townyadmin.toggle.neutral: true
             towny.command.townyadmin.toggle.townwithdraw: true
-            towny.command.townyadmin.toggle.war: true
 
     # Towny command permissions
     towny.command.towny.*:

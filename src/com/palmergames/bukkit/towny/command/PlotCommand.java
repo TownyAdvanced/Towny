@@ -288,9 +288,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLAIM.getNode()))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-					if (TownyAPI.getInstance().isWarTime())
-						throw new TownyException(Translatable.of("msg_war_cannot_do"));
-
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
 					
 					// Fast-fail if this is a single plot and it is already claimed.
@@ -350,9 +347,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode()))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-					if (TownyAPI.getInstance().isWarTime())
-						throw new TownyException(Translatable.of("msg_war_cannot_do"));
-
 					if (!townBlock.hasResident()) {
 						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_no_one_to_evict"));						
 
@@ -384,9 +378,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_UNCLAIM.getNode()))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
-
-					if (TownyAPI.getInstance().isWarTime())
-						throw new TownyException(Translatable.of("msg_war_cannot_do"));
 
 					if (split.length == 2 && split[1].equalsIgnoreCase("all")) {
 						// Start the unclaim task

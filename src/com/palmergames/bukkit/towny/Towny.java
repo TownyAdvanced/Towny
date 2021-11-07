@@ -50,7 +50,6 @@ import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.war.common.WarZoneListener;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.Version;
@@ -111,7 +110,6 @@ public class Towny extends JavaPlugin {
 	private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
 	private final TownyWorldListener worldListener = new TownyWorldListener(this);
 	private final TownyInventoryListener inventoryListener = new TownyInventoryListener();
-	private final WarZoneListener warzoneListener = new WarZoneListener(this);
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
 
@@ -403,10 +401,6 @@ public class Towny extends JavaPlugin {
 			townyUniverse.getDataSource().saveQueues();
 		}
 
-		if (TownyAPI.getInstance().isWarTime()) {
-			TownyUniverse.getInstance().getWarEvent().toggleEnd();
-		}
-
 		// Turn off timers.		
 		toggleTimersOff();
 
@@ -642,7 +636,6 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(customListener, this);
 			pluginManager.registerEvents(worldListener, this);
 			pluginManager.registerEvents(loginListener, this);
-			pluginManager.registerEvents(warzoneListener, this);
 		}
 
 		// Always register these events.

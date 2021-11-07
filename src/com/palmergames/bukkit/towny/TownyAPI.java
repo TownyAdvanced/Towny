@@ -501,15 +501,6 @@ public class TownyAPI {
     }
     
     /**
-     * Checks if server is currently in war-time.
-     *
-     * @return true if the server is in war-time.
-     */
-    public boolean isWarTime() {
-        return townyUniverse.getWarEvent() != null && townyUniverse.getWarEvent().isWarTime();
-    }
-    
-    /**
      * Check which {@link Resident}s are online in a {@link ResidentList}
      *
      * @param owner {@link ResidentList} to check for online {@link Resident}s.
@@ -541,11 +532,6 @@ public class TownyAPI {
 			(long) TownySettings.getTeleportWarmupTime() * 20);
     }
     
-    public void clearWarEvent() {
-        TownyUniverse townyUniverse = TownyUniverse.getInstance();
-        townyUniverse.getWarEvent().cancelTasks(BukkitTools.getScheduler());
-        townyUniverse.setWarEvent(null);
-    }
     public void requestTeleport(Player player, Location spawnLoc) {
     	Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
     	
@@ -611,7 +597,7 @@ public class TownyAPI {
 			return TownBlockStatus.UNCLAIMED_ZONE;
 		
 		// This nation zone system can be disabled during wartime.
-		if (TownySettings.getNationZonesWarDisables() && isWarTime())
+		if (TownySettings.getNationZonesWarDisables() && nearestTown.getNationOrNull().hasActiveWar())
 			return TownBlockStatus.UNCLAIMED_ZONE;
 
 		// It is possible to only have nation zones surrounding nation capitals. If this is true, we treat this like a normal wilderness.

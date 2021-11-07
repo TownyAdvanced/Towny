@@ -20,7 +20,6 @@ import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
-import com.palmergames.bukkit.towny.war.common.WarZoneConfig;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.FileMgmt;
@@ -29,18 +28,13 @@ import com.palmergames.util.TimeTools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -302,7 +296,6 @@ public class TownySettings {
 
 		config.save();
 
-		loadWarMaterialsLists(); // TODO: move this to be with the other war stuff.
 		loadSwitchAndItemUseMaterialsLists();
 		loadProtectedMobsList();
 		ChunkNotification.loadFormatStrings();
@@ -349,11 +342,6 @@ public class TownySettings {
 		}
 	}
 	
-	private static void loadWarMaterialsLists() {
-		// Load allowed blocks in warzone.
-		WarZoneConfig.setEditableMaterialsInWarZone(getAllowedMaterials(ConfigNodes.WAR_WARZONE_EDITABLE_MATERIALS));
-	}
-
 	public static void sendError(String msg) {
 
 		Towny.getPlugin().getLogger().warning("Error could not read " + msg);
@@ -473,21 +461,6 @@ public class TownySettings {
 			sendError(node.getRoot().toLowerCase() + " from config.yml");
 			return 1;
 		}
-	}
-
-	public static Set<Material> getAllowedMaterials(ConfigNodes node) {
-
-		Set<Material> allowedMaterials = new HashSet<Material>();
-		for (String material : getStrArr(node)) {
-			if (material.equals("*")) {
-				allowedMaterials.addAll(Arrays.asList(Material.values()));
-			} else if (material.startsWith("-")) {
-				allowedMaterials.remove(Material.matchMaterial(material));
-			} else {
-				allowedMaterials.add(Material.matchMaterial(material));
-			}
-		}
-		return allowedMaterials;
 	}
 
 	public static void addComment(String root, String... comments) {
@@ -1121,59 +1094,9 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.RES_SETTING_DELETE_OLD_RESIDENTS_ENABLE);
 	}
 
-	public static int getWarTimeWarningDelay() {
-
-		return getInt(ConfigNodes.WAR_EVENT_WARNING_DELAY);
-	}
-
-	public static boolean isWarTimeTownsNeutral() {
-
-		return getBoolean(ConfigNodes.WAR_EVENT_TOWNS_NEUTRAL);
-	}
-
-	public static boolean isAllowWarBlockGriefing() {
-
-		return getBoolean(ConfigNodes.WAR_EVENT_BLOCK_GRIEFING);
-	}
-
-	public static int getWarzoneTownBlockHealth() {
-
-		return getInt(ConfigNodes.WAR_EVENT_TOWN_BLOCK_HP);
-	}
-
-	public static int getWarzoneHomeBlockHealth() {
-
-		return getInt(ConfigNodes.WAR_EVENT_HOME_BLOCK_HP);
-	}
-
 	public static String getDefaultTownName() {
 
 		return getString(ConfigNodes.RES_SETTING_DEFAULT_TOWN_NAME);
-	}
-
-	public static int getWarPointsForTownBlock() {
-
-		return getInt(ConfigNodes.WAR_EVENT_POINTS_TOWNBLOCK);
-	}
-
-	public static int getWarPointsForTown() {
-
-		return getInt(ConfigNodes.WAR_EVENT_POINTS_TOWN);
-	}
-
-	public static int getWarPointsForNation() {
-
-		return getInt(ConfigNodes.WAR_EVENT_POINTS_NATION);
-	}
-
-	public static int getWarPointsForKill() {
-
-		return getInt(ConfigNodes.WAR_EVENT_POINTS_KILL);
-	}
-
-	public static int getMinWarHeight() {
-
-		return getInt(ConfigNodes.WAR_EVENT_MIN_HEIGHT);
 	}
 
 	public static List<String> getWorldMobRemovalEntities() {
@@ -1611,51 +1534,6 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.PLUGIN_DAILY_BACKUPS);
 	}
-
-	public static double getBaseSpoilsOfWar() {
-
-		return getDouble(ConfigNodes.WAR_EVENT_BASE_SPOILS);
-	}
-	
-	public static boolean getOnlyAttackEdgesInWar() {
-		
-		return getBoolean(ConfigNodes.WAR_EVENT_ENEMY_ONLY_ATTACK_BORDER);
-	}
-	
-	public static boolean getPlotsHealableInWar() {
-		
-		return getBoolean(ConfigNodes.WAR_EVENT_PLOTS_HEALABLE);
-	}
-	
-	public static boolean getPlotsFireworkOnAttacked() {
-		
-		return getBoolean(ConfigNodes.WAR_EVENT_PLOTS_FIREWORK_ON_ATTACKED);
-	}
-
-	public static double getWartimeDeathPrice() {
-
-		return getDouble(ConfigNodes.WAR_EVENT_PRICE_DEATH);
-	}
-	
-	public static boolean getWarEventCostsTownblocks() {
-		
-		return getBoolean(ConfigNodes.WAR_EVENT_COSTS_TOWNBLOCKS);
-	}
-
-	public static boolean getWarEventWinnerTakesOwnershipOfTownblocks() {
-		
-		return getBoolean(ConfigNodes.WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWNBLOCKS);
-	}
-	
-	public static boolean getWarEventWinnerTakesOwnershipOfTown() {
-		
-		return getBoolean(ConfigNodes.WAR_EVENT_WINNER_TAKES_OWNERSHIP_OF_TOWN);
-	}
-	
-	public static int getWarEventConquerTime() {
-		
-		return getInt(ConfigNodes.WAR_EVENT_CONQUER_TIME);
-	}
 	
 	public static boolean isChargingDeath() {
 		
@@ -1760,11 +1638,6 @@ public class TownySettings {
 		return TimeTools.getMillis(getString(ConfigNodes.JAIL_NEW_PLAYER_IMMUNITY));
 	}
 
-	public static double getWartimeTownBlockLossPrice() {
-
-		return getDouble(ConfigNodes.WAR_EVENT_TOWN_BLOCK_LOSS_PRICE);
-	}
-
 	public static boolean isDevMode() {
 
 		return getBoolean(ConfigNodes.PLUGIN_DEV_MODE_ENABLE);
@@ -1778,21 +1651,6 @@ public class TownySettings {
 	public static String getDevName() {
 
 		return getString(ConfigNodes.PLUGIN_DEV_MODE_DEV_NAME);
-	}
-
-	public static boolean isDeclaringNeutral() {
-
-		return getBoolean(ConfigNodes.WARTIME_NATION_CAN_BE_NEUTRAL);
-	}
-
-	public static void setDeclaringNeutral(boolean choice) {
-
-		setProperty(ConfigNodes.WARTIME_NATION_CAN_BE_NEUTRAL.getRoot(), choice);
-	}
-
-	public static boolean isRemovingOnMonarchDeath() {
-
-		return getBoolean(ConfigNodes.WAR_EVENT_REMOVE_ON_MONARCH_DEATH);
 	}
 
 	public static double getTownUpkeepCost(Town town) {
