@@ -21,6 +21,8 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -877,7 +879,20 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Nation toCheck : toSaveNation)
 			saveNation(toCheck);
-
+		
+		// Search and remove any ally invites sent to this nation.
+		for (Nation toCheck : new ArrayList<>(universe.getNations()))
+			for (Invite invite : new ArrayList<>(toCheck.getSentAllyInvites())) 
+				if (invite.getReceiver().getName().equalsIgnoreCase(nation.getName())) {
+					toCheck.deleteSentAllyInvite(invite);
+					InviteHandler.removeInvite(invite);
+				}
+		// Search and remove any sent ally invites sent by this nation.
+		for (Invite invite : new ArrayList<>(nation.getSentAllyInvites())) {
+			nation.deleteSentAllyInvite(invite);
+			InviteHandler.removeInvite(invite);
+		}
+		
 		// Transfer any money to the warchest.
 		if (TownyEconomyHandler.isActive())
 			try {

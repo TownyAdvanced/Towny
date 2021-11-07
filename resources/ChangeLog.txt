@@ -6929,3 +6929,4 @@ v0.92.0.11:
   - New Permission Node: towny.townless
     - Given to players who do not have a town.
   - Fix global messages being stripped of their colours.
+  - Fix deleted nations not removing sent/received invites. 
