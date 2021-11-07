@@ -683,7 +683,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendPrefixedNationMessage(nation, StringMgmt.join(newSplit));
 
 				} else if (split[0].equalsIgnoreCase("bankhistory")) {
-
+					
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_BANKHISTORY.getNode()))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 

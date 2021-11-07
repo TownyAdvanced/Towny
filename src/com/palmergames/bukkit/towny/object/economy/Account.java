@@ -29,7 +29,7 @@ public abstract class Account implements Nameable {
 	private final List<AccountObserver> observers = new ArrayList<>();
 	private AccountAuditor auditor;
 	private CachedBalance cachedBalance = null;
-
+	
 	String name;
 	World world;
 	

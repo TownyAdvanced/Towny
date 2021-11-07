@@ -17,7 +17,6 @@ public class BankAccount extends Account {
 	
 	private double balanceCap;
 	private double debtCap;
-	
 
 	public BankAccount(String name, World world, double balanceCap) {
 		super(name, world);
