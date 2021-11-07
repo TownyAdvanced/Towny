@@ -1,12 +1,10 @@
 package com.palmergames.bukkit.towny.object.economy;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,15 +15,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class BankAccount extends Account {
 	
-	private static final long CACHE_TIMEOUT = TownySettings.getCachedBankTimeout();
 	private double balanceCap;
 	private double debtCap;
-	private CachedBalance cachedBalance = null; 
+	
 
 	public BankAccount(String name, World world, double balanceCap) {
 		super(name, world);
 		this.balanceCap = balanceCap;
-		this.cachedBalance = new CachedBalance(getHoldingBalance());
 	}
 
 
@@ -193,50 +189,6 @@ public class BankAccount extends Account {
 	@Override
 	public void removeAccount() {
 		TownyEconomyHandler.removeAccount(getName());
-	}
-
-	private class CachedBalance {
-		private double balance = 0;
-		private long time;
-		
-		private CachedBalance(double _balance) {
-			balance = _balance;
-			time = System.currentTimeMillis();
-		}
-		
-		double getBalance() {
-			return balance;
-		}
-		private long getTime() {
-			return time;
-		}
-		
-		void setBalance(double _balance) {
-			balance = _balance;
-			time = System.currentTimeMillis();
-		}
-		
-		void updateCache() {
-			if (!TownySettings.isEconomyAsync()) // Some economy plugins don't handle things async, luckily we have a config option for this such case. 
-				setBalance(getHoldingBalance());
-			else 
-				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> cachedBalance.setBalance(getHoldingBalance()));			
-		}
-	}
-	
-	/**
-	 * Returns a cached balance of a town or nation bank account,
-	 * the value of which can be brand new or up to 10 minutes old 
-	 * (time configurable in the config,) based on whether the 
-	 * cache has been checked recently.
-	 * 
-	 * @return a cached balance of a town or nation bank account.
-	 */
-	public double getCachedBalance() {
-		if (System.currentTimeMillis() - cachedBalance.getTime() > CACHE_TIMEOUT)
-			cachedBalance.updateCache();
-
-		return cachedBalance.getBalance();
 	}
 
 	/**
