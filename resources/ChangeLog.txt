@@ -6930,3 +6930,5 @@ v0.92.0.11:
     - Given to players who do not have a town.
   - Fix global messages being stripped of their colours.
   - Fix deleted nations not removing sent/received invites. 
+0.97.2.15:
+  - Purge EventWar from Towny codebase.
