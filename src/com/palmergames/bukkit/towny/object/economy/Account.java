@@ -168,11 +168,14 @@ public abstract class Account implements Nameable {
 
 	/**
 	 * Gets the current balance of this account.
+	 * Updates the cached balance.
 	 * 
 	 * @return The amount in this account.
 	 */
 	public double getHoldingBalance() {
-		return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+		double balance = TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+		cachedBalance.setBalance(balance);
+		return balance;
 	}
 
 	/**
