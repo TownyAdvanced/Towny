@@ -6932,3 +6932,9 @@ v0.92.0.11:
   - Fix deleted nations not removing sent/received invites. 
 0.97.2.15:
   - Purge EventWar from Towny codebase.
+  - Implemented town and nation baltops, courtesy of Glare with #5428.
+    - Adds commands to see who is the richest players in a town or nation.
+    - Opens as a book for the player.
+  - New Commands:
+    - /town baltop {townname}
+    - /nation baltop {nationame}
