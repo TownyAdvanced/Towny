@@ -28,7 +28,7 @@ public abstract class Account implements Nameable {
 	private static final AccountObserver GLOBAL_OBSERVER = new GlobalAccountObserver();
 	private final List<AccountObserver> observers = new ArrayList<>();
 	private AccountAuditor auditor;
-	private CachedBalance cachedBalance = null;
+	protected CachedBalance cachedBalance = null;
 	
 	String name;
 	World world;
@@ -36,7 +36,7 @@ public abstract class Account implements Nameable {
 	public Account(String name) {
 		this.name = name;
 		observers.add(GLOBAL_OBSERVER);
-		this.cachedBalance = new CachedBalance(getHoldingBalance());
+		this.cachedBalance = new CachedBalance(getHoldingBalance(false));
 	}
 	
 	public Account(String name, World world) {
@@ -46,7 +46,7 @@ public abstract class Account implements Nameable {
 		// ALL account transactions will route auditing data through this
 		// central auditor.
 		observers.add(GLOBAL_OBSERVER);
-		this.cachedBalance = new CachedBalance(getHoldingBalance());
+		this.cachedBalance = new CachedBalance(getHoldingBalance(false));
 	}
 	
 	// Template methods
@@ -166,15 +166,20 @@ public abstract class Account implements Nameable {
 		}
 	}
 
+	public double getHoldingBalance() {
+		return getHoldingBalance(true);
+	}
+	
 	/**
 	 * Gets the current balance of this account.
-	 * Updates the cached balance.
 	 * 
+	 * @param setCache when True the account will have its cachedbalance set.
 	 * @return The amount in this account.
 	 */
-	public double getHoldingBalance() {
+	public double getHoldingBalance(boolean setCache) {
 		double balance = TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
-		cachedBalance.setBalance(balance);
+		if (setCache)
+			cachedBalance.setBalance(balance);
 		return balance;
 	}
 
@@ -300,11 +305,11 @@ public abstract class Account implements Nameable {
 		return withdraw(amount, reason);
 	}
 
-	private class CachedBalance {
+	class CachedBalance {
 		private double balance = 0;
 		private long time;
 
-		private CachedBalance(double _balance) {
+		CachedBalance(double _balance) {
 			balance = _balance;
 			time = System.currentTimeMillis();
 		}

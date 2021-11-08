@@ -170,11 +170,11 @@ public class BankAccount extends Account {
 	}
 
 	@Override
-	public double getHoldingBalance() {
-		if (isBankrupt()) {
-			return getTownDebt() * -1;
-		}
-		return TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+	public double getHoldingBalance(boolean setCache) {
+		double balance = isBankrupt() ? balance = getTownDebt() * -1 : TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+		if (setCache)
+			this.cachedBalance.setBalance(balance);
+		return balance;
 	}
 
 	@Override
