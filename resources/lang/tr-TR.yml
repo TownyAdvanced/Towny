@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.131
+version: 0.132
 language: Turkish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -270,25 +270,6 @@ msg_new_town: '&b%s isimli kişi &e%s &badında bir kasaba kurdu h.o'
 msg_plot_for_sale: '&b%s arsayı (%s) satışa sundu!'
 msg_plot_set_type: '&bArsa türü %s olarak ayarlandı'
 msg_registration: '&e%s &7Sunucuya ilk defa giriş yaptı!'
-msg_war_eliminated: '&6[Savaş]&b %s savaştan çıkarıldı.'
-msg_war_forfeited: '&6[Savaş]&b %s forfeited.'
-msg_war_join: '&6[Savaş] &b%s kavgaya katıldı!'
-msg_war_join_forced: '&6[Savaş]&b %s ülkesi, küresel ayarlar nedeniyle savaşa zorlandı!'
-msg_war_join_nation: '&6[Savaş]&b %s ulusu savaşa katıldı!'
-msg_war_lose_block: '&6[Savaş]&b %s grubuna ait (%s) düştü.'
-msg_war_score: '&6[Savaş]&b %s  %d puan aldı!'
-msg_war_score_nation_elim: '&6[Savaş]&b %s was awarded %d points for eliminating the nation %s!'
-msg_war_score_town_elim: '&6[Savaş]&b %s was awarded %d points for eliminating the town %s! (%d town blocks captured)'
-msg_war_score_townblock_elim: '&6[Savaş]&b %s was awarded %d points for eliminating the town block %s!'
-msg_war_score_player_kill: '&6[Savaş]&b %s killed %s. (%d points for %s)'
-msg_war_score_player_kill_defending: '&6[Savaş]&b %s killed %s while %s was defending. (%d points for %s)'
-msg_war_king_killed: '&6[Savaş]&b %s''s king was killed!'
-msg_war_mayor_killed: '&6[Savaş]&b %s''s mayor was killed!'
-msg_war_winning_nation_spoils: '&6[Savaş]&b Winning Nation: %s won %s.'
-msg_war_winning_town_spoils: '&6[Savaş]&b Highest Score: %s won %s with the score %d.'
-msg_war_cannot_do: "Dünya savaştayken bunu yapamazsınız.\n"
-msg_war_started: 'Savaş geri sayımı başlatıldı.'
-msg_war_ended: 'Mevcut savaş sona erdi.'
 msg_cache_block_error: '&cTowny ye kayıtlı değilsiniz. Yeniden günlüğe kaydetmeyi deneyin.'
 msg_cache_block_error_wild: '&cVahşi doğada %s izin verilmez.'
 msg_cache_block_error_plot: '&cBu kasabada %s''ın %s girişimine izin verilmiyor.'
@@ -352,16 +333,8 @@ msg_err_no_economy: '&cEkonomi açılmadı.'
 msg_err_not_block_type: '&cBu geçerli bir çizim türü değil!'
 msg_not_allowed_join: '&c%s nin bir şehire katılmasına izin verilmiyor.'
 msg_offline_no_join: '&c%s çevrimdışı, ancak izinleri kullanıyor, bu yüzden bir şehire katılamazsınız.'
-msg_err_warzone_cannot_edit_material: '&cSavaş bölgesinde%s ,%s olamaz.'
-msg_err_warzone_cannot_use_switches: '&cWarzone da anahtarlar kullanılamaz.'
-msg_err_warzone_cannot_use_item: '&cBu eşya savaş bölgelerinde kullanılamaz.'
 msg_err_cannot_perform_action: '&cBu eylem %s içinde gerçekleştirilemez.'
 msg_npc_flag: '&bNPC bayrağı artık %s için %s.'
-#WarFlag Economy
-msg_err_insuficient_funds_warflag: 'Savaş bayrağı yerleştirmek için %s gerekir.'
-msg_err_insuficient_funds_future: '%s için ödeme yapmanız gerektiğinde %s$ ücret gerekir.'
-name_defended_attack: 'Savunulan saldırı'
-name_rebuilding: 'rebuilding fine'
 msg_warning_delete: '&4*** UYARI, &e%s &4ALTIN EKSİKLİĞİ NEDENİYLE BİR SONRAKİ YENİ GÜNDE SİLİNECEK ***'
 #these messages are only used if town/nation creation is set to admins only
 msg_admin_only_create_nation: '&cYalnızca yöneticilerin ülke oluşturmasına izin verilir.'
@@ -377,12 +350,6 @@ msg_not_enough_residents_capital: '&b%s kasabasında ulusun başkenti olmaya yet
 list_page: '&bSayfa %s/%s'
 list_err_not_enough_pages: '&cYalnızca %s sayfa mevcut'
 #Added in 0.30
-msg_war_a_player_has_no_town: '&6[Savaş]&f One of the players in combat has no town and cannot interfere during the War Event.'
-msg_war_a_player_has_no_nation: '&6[Savaş]&f One of the players in combat has a town without a nation and cannot interfere during the War Event.'
-msg_war_a_player_has_a_neutral_nation: '&6[Savaş]&f One of the players in combat is part of a neutral nation and cannot interfere during the War Event.'
-msg_war_a_player_has_been_removed_from_war: '&6[Savaş]&f One of the players in combat is part of a town which cannot interfere with the War Event.'
-msg_war_a_player_is_an_ally: '&6[Savaş]&f One of the players in combat considers the other an ally.'
-msg_war_player_cant_be_jailed_plot_fallen: '&6[Savaş]&f The player could not be put in jail, the jail plot has 0 hp.'
 #Added in 0.31
 msg_err_tax_minimum_not_met: 'Şehir verginizi %s nin altına ayarlayamazsınız.'
 msg_unknown_rank_available_ranks: 'Bilinmeyen sıra %s. İzin verilen sıralamalar %s.'
@@ -413,7 +380,6 @@ msg_you_robbed_player: '%s adlı kişiyi soydunuz %s.'
 msg_player_robbed_you: '%s seni %s çaldı.'
 msg_you_lost_money: 'Öldüğün için %s kaybettin.'
 msg_player_couldnt_pay_player_town_bank_paying_instead: '%s in cüzdanı %s tatmin edemedi. %s şehir bankasından alındı.'
-msg_err_wartime_could_not_take_deathfunds: 'Savaş zamanı ölüm fonu alamadı.'
 msg_err_could_not_take_deathfunds: 'Ölüm fonu alamadı.'
 msg_you_lost_money_dying: '%s kaybettiniz.'
 msg_your_town_lost_money_dying: 'Kasabanız %s kaybetti.'
@@ -425,21 +391,6 @@ msg_you_gained_money_for_killing: '%s Altın kazandınız.'
 msg_err_ender_pearls_disabled: '&4Ender İncileri devre dışı bırakıldı!'
 msg_err_no_sleep_in_enemy_inn: '&4Düşmanın Hanında uyuyamazsın.'
 msg_err_cant_use_bed: '&4Bu yatağın kapladığı araziye sahip değilsiniz ve bu bir Han arsası değil.'
-msg_war_seeding_spoils_with: '&6[Savaş]&f Seeding spoils of war with %s'
-msg_war_total_seeding_spoils: '&6[Savaş]&f Total spoils of war at play for this war: %s'
-msg_war_activate_war_hud_tip: '&6[Savaş]&f Use ''/towny war hud'' to activate the War hud.'
-msg_war_town_under_attack: 'Kasabanız saldırı altında!'
-msg_war_nation_under_attack: 'Ulusunuz saldırı altında!'
-msg_war_nations_ally_under_attack: 'Ulusunuzun müttefiki %s saldırı altında!'
-msg_war_homeblock_under_attack: 'Kasabanızın ana binası saldırı altında!'''
-msg_war_nation_member_homeblock_under_attack: 'Ulus üyeniz olan  %s kasabasının şehir bloğu saldırı altında!'
-msg_war_nation_ally_homeblock_under_attack: 'Ulusunuzun müttefiki olan %s ulusunun ana bloğu saldırı altında!'
-msg_war_town_ran_out_of_money: 'Kasabanızın savaşta kendisini desteklemek için hazırladığı tüm varlığı tükendi.'
-msg_war_town_lost_money_townblock: 'Kasabanız %s$ kaybetti'
-msg_war_jailbreak: '&6[Savaş]&f There has been a jailbreak in %s, freeing %s prisioner(s)!'
-msg_war_town_removed_from_war_titlemsg: 'Kasabanız savaştan çıkarıldı.'
-msg_war_nation_removed_from_war_titlemsg: 'Ulusunuz savaştan çıkarıldı.'
-msg_war_append_townblocks_fallen: ' şehir blokları düştü)'
 msg_town_plots_revenue_disclaimer: '&aGösterilen gelir tahminidir ve arsa sahibinin ödeyip ödeyemeyeceği bir faktördür.'
 msg_town_set_perm_syntax_error: 'Bu komut için geçersiz kelime kombinasyonu. Kullanımı ''/town set perm ?'' For proper command syntax.'
 msg_plot_set_perm_syntax_error: 'Bu komut için geçersiz kelime kombinasyonu. Kullanımı ''/plot set perm ?'' For proper command syntax.'
@@ -771,27 +722,6 @@ msg_err_nation_homeblock_in_another_world: '&cKasabanızın ana bloğu, ulus ba�
 status_bank_town_penalty_upkeep: 'Overclaim upkeep:'
 #Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: '%s olarak doğamazsınız, orada kanun kaçağı olarak işaretlendiniz.'
-#Added in 0.54:
-war_hud_homeblock: 'ANA BLOK'
-war_hud_wilderness: 'El değmemiş doğa'
-war_hud_true: 'Doğru'
-war_hud_false: 'Yanlış'
-war_hud_peaceful: 'Barışçıl'
-war_hud_fallen: 'Düşmüş'
-war_hud_townless: 'Kasabasız!'
-war_hud_war: 'Savaş'
-war_hud_score: 'Puan: '
-war_hud_location: 'Lokasyon'
-war_hud_nation: 'Ulus: '
-war_hud_town: 'Kasaba: '
-war_hud_attackable: 'Saldırılabilir: '
-war_hud_health: 'Sağlık: '
-war_hud_top_towns: 'En İyi Şehirler'
-war_stats_nations: '  Milletler: '
-war_stats_towns: '  Kasabalar: '
-war_stats_warzone: '  Yedekte Savaş Bölgeleri: '
-war_stats_spoils_of_war: '  Savaş ganimetleri: '
-war_starts_in_x: 'Savaş başladı %s'
 #Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '&4Hapsedilmişken bu komutu kullanamazsınız..'
 #Added in 0.56:
@@ -853,11 +783,6 @@ msg_err_could_not_set_default_modes_for: 'İçin varsayılan modlar ayarlanamad�
 #Added in 0.60
 msg_set_war_allowed_on: 'Bu dünyada savaşa izin verilecek.'
 msg_set_war_allowed_off: 'Savaş bu dünyayı etkilemeyecek.'
-msg_war_not_enough_nations: '&6[Savaş]&f Savaş için 2 den az ülke toplandı, savaş iptal edildi.'
-msg_war_no_enemies_for_war: '&6[Savaş]&f Şu anda savaş için toplanan düşman yok, savaş iptal edildi.'
-msg_war_prefix: '&6[Savaş]&f '
-msg_war_participants_header: '&6[Savaş] &eUlus Adı &f(&bTowns&f)'
-msg_war_participants: '&6[Savaş] &e%s &f(&b%s&f)'
 #Added in 0.61
 #Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'PVP yi değiştiremezsiniz,%s saniye kaldı.'
@@ -874,11 +799,8 @@ msg_err_cannot_unclaim_homeblock: 'Ana bloğunuzu açamazsınız, ana bloğunuzu
 #Added in 0.65
 msg_err_rename_cancelled: 'Yeniden adlandırma başka bir eklenti tarafından iptal edildi.'
 #Added in 0.66
-msg_war_defender_keeps_claims: 'Yakalama devre dışı. Kasabayı savunmak, iddialarını koruyacaktır.'
 #Added in 0.67
-msg_war_town_has_been_conquered_by_nation_x_for_x_days: '%s kasabası fethedildi ve %s ülkesine %s gün boyunca katıldı.'
 msg_conquered: '[Fethedildi]'
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Kasabanız milleti terk edemez çünkü hala fethedilmiş durumda.'
 #Added in 0.68
 msg_plot_group_claim_confirmation: 'Bu arsa,%s arsa grubunun bir parçasıdır, talebinizi onaylayarak hepsini satın alacaksınız.'
 msg_plot_group_unclaim_confirmation: 'Bu arsa,%s arsa grubunun bir parçası olup, bunların hepsine hak iddia etmeyeceğinizi onaylarsınız.'
@@ -1020,7 +942,6 @@ msg_warning_town_ruined_if_deleted2: "Kasaba, %d saat sonra ''/t reclaim'' komut
 msg_err_cannot_reclaim_town_unless_ruined: '&cKasabanı geri alamazsın çünkü mahvolmadı.'
 msg_err_cannot_reclaim_town_yet: '&cKasabanızı %d saat daha geri alamazsınız.'
 msg_town_reclaimed: '&b%s, %s kasabasını geri aldı.'
-msg_err_cannot_attack_ruined_town: '&6[Savaş] &cYıkık bir şehre saldıramazsınız.'
 msg_err_cannot_use_command_because_town_ruined: "&cKasabanız mahvolduğu için bu komutu kullanamazsınız. Normal komut kullanımına devam etmek için ya ''/town reclaim'' komutunu kullanarak şehri geri alın veya ''/town allow '' komutunu kullanarak kasabayı terk edin."
 msg_warning_your_town_is_ruined_for_x_more_hours: '&cKasabanız %d saat daha harap durumda. Kasabayı kurtarmak için belediye başkanı olmalısınız! Eğer belediye başkanı iseniz ''/town reclaim'' komutunu kullanın.'
 msg_time_remaining_before_full_removal: 'Tam silinmeden önce kalan zaman: %d saat.'
@@ -1470,3 +1391,6 @@ msg_jailed_author: 'Towny Jailco.'
 msg_error_town_has_no_allies: 'Town has no allies to list.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Town has no enemies to list.'
+#Added in 0.132
+#Message shown in the lines of the baltop books
+msg_baltop_book_format: '%s. %s | %s'

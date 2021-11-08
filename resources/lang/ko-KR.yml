@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.131
+version: 0.132
 language: 한국어
 author: Daybreak 새벽
 website: 'http://townyadvanced.github.io/'
@@ -270,25 +270,6 @@ msg_new_town: '&b%s님이 %s(이)라는 마을을 만들었습니다.'
 msg_plot_for_sale: '&b%s님이 (%s) 만큼의 토지를 판매합니다.'
 msg_plot_set_type: '&b토지 유형이 %s(으)로 설정되었습니다.'
 msg_registration: '&e%s님이 서버에 처음 오셨습니다!'
-msg_war_eliminated: '&6[전쟁]&f %s은(는) 전쟁에서 졌습니다.'
-msg_war_forfeited: '&6[전쟁]&f %s은(는) 몰수당하였습니다.'
-msg_war_join: '&6[전쟁] &b%s(이)가 전투에 참가하였습니다!'
-msg_war_join_forced: '&6[전쟁]&f 국가 %s은(는) 전역 설정에 의해 전쟁에 참가되었습니다!'
-msg_war_join_nation: '&6[전쟁]&f 국가 %s(이)가 전쟁에 참가하였습니다!'
-msg_war_lose_block: '&6[전쟁]&f %s에 속한 %s은(는) 떨어져나갔습니다.'
-msg_war_score: '&6[전쟁]&f %s은(는) %d 점을 기록하였습니다!'
-msg_war_score_nation_elim: '&6[전쟁]&f %s은(는) &s 국가를 점령하고 %d점을 얻었습니다!'
-msg_war_score_town_elim: '&6[전쟁]&f %s은(는) &s 마을을 점령하고 %d점을 얻었습니다! (%d 마을블록 점령됨)'
-msg_war_score_townblock_elim: '&6[전쟁]&f %s은(는) &s 마을블록을 점령하고 %d점을 얻었습니다!'
-msg_war_score_player_kill: '&6[전쟁]&f %s님이 %s님을 죽였습니다. (%d점 지급: %s)'
-msg_war_score_player_kill_defending: '&6[전쟁]&f %s님이 %s님을 %s님이 마을을 방어하던 도중에 죽였습니다. (%d점 지급: %s)'
-msg_war_king_killed: '&6[전쟁]&f %s의 왕이 죽었습니다!'
-msg_war_mayor_killed: '&6[전쟁]&f %s의 촌장이 죽었습니다!'
-msg_war_winning_nation_spoils: '&6[전쟁]&f 승전국 %s이(가) %s을 얻었습니다.'
-msg_war_winning_town_spoils: '&6[전쟁]&f 가장 높은 점수를 기록한 %s이(가) %s을 얻었습니다. (%d점)'
-msg_war_cannot_do: '&c전쟁 중에는 할 수 없습니다.'
-msg_war_started: '&e전쟁 카운트다운이 시작되었습니다.'
-msg_war_ended: '&e전쟁이 종결되었습니다.'
 msg_cache_block_error: '&c귀하는 타우니에 등록되지 않았습니다. 다시 접속해보세요.'
 msg_cache_block_error_wild: '&c야생에서는 %s할 수 없습니다.'
 msg_cache_block_error_plot: '&c토지의 주인이 %s이(가) 이곳에서 %s하는 것을 허락하지 않았습니다.'
@@ -352,16 +333,8 @@ msg_err_no_economy: '&cEconomy 플러그인이 실행되지 않았습니다.'
 msg_err_not_block_type: '&c해당되는 토지 유형이 없습니다!'
 msg_not_allowed_join: '&c%s님이 마을에 가입하는 것이 허용되지 않았습니다.'
 msg_offline_no_join: '&c%s님은 오프라인 상태여서 마을에 가입할 수 없습니다.'
-msg_err_warzone_cannot_edit_material: '&c전쟁 지역에서 %s할 수 없습니다: %s'
-msg_err_warzone_cannot_use_switches: '&c전쟁 지역에서 스위치를 할 수 없습니다.'
-msg_err_warzone_cannot_use_item: '&c전쟁 지역에서 아이템을 사용할 수 없습니다.'
 msg_err_cannot_perform_action: '&이 %s 작업을 수행 할 수 없습니다.'
 msg_npc_flag: 'NPC &b의 설정이 이제 %s 에서 %s 로 변경됩니다.'
-#WarFlag Economy
-msg_err_insuficient_funds_warflag: '전쟁 깃발을 세우기 위해 %s이(가) 필요합니다.'
-msg_err_insuficient_funds_future: '만약 귀하가 %s를 지불해야한다면 귀하는 %s원을 내야합니다.'
-name_defended_attack: '공격을 저지하였습니다.'
-name_rebuilding: '재건축이 완료되었습니다.'
 msg_warning_delete: '&4[&c경고&4] &c%s의 자금이 부족해 새 날이 오면 삭제됩니다'
 #these messages are only used if town/nation creation is set to admins only
 msg_admin_only_create_nation: '&c관리자만 국가를 세울 수 있습니다!'
@@ -377,12 +350,6 @@ msg_not_enough_residents_capital: '&b마을 %s에는 국가의 수도가 될 만
 list_page: '&3페이지 &b%s / %s'
 list_err_not_enough_pages: '&c%s 페이지가 유효합니다.'
 #Added in 0.30
-msg_war_a_player_has_no_town: '&6[전쟁]&f 전쟁에 참가한 주민들 중 한 명은 마을이 없어 전쟁에 끼어들 수 없습니다.'
-msg_war_a_player_has_no_nation: '&6[전쟁]&f 전쟁에 참가한 주민들 중 한 명은 나라에 속하지 않은 마을에 속해 있어 전쟁에 끼어들 수 없습니다.'
-msg_war_a_player_has_a_neutral_nation: '&6[전쟁]&f 전쟁에 참가한 주민들 중 한 명은 중립 국가에 속해 있어 전쟁에 개입할 수 없습니다.'
-msg_war_a_player_has_been_removed_from_war: '&6[전쟁]&f  전쟁에 참가한 주민들 중 한 명은 전쟁에 개입할 수 없는 마을에 속해있습니다.'
-msg_war_a_player_is_an_ally: '&6[전쟁]&f 전쟁에 참가한 주민들 중 한 명은 상대방과 동맹 관계입니다.'
-msg_war_player_cant_be_jailed_plot_fallen: '&6[전쟁]&f 그 주민을 감옥에 가둘 수 없습니다. 감옥 토지의 체력이 0입니다.'
 #Added in 0.31
 msg_err_tax_minimum_not_met: '마을 세금을 %s 보다 적게 설정할 수 없습니다.'
 msg_unknown_rank_available_ranks: '&b%s&f은(는) 존재하지 않는 등급입니다. 하사 가능한 등급: %s.'
@@ -413,7 +380,6 @@ msg_you_robbed_player: '%s의 %s을(를) 약탈하였습니다.'
 msg_player_robbed_you: '%s에게 %s을(를) 약탈당하였습니다.'
 msg_you_lost_money: '죽어서 %s 을(를) 잃었습니다.'
 msg_player_couldnt_pay_player_town_bank_paying_instead: '%s의 잔고가 %s을(를) 만족시키지 못하였습니다. %s만큼이 마을 금고에서 차감됩니다.'
-msg_err_wartime_could_not_take_deathfunds: '전시 사망 비용을 가져올 수 없습니다.'
 msg_err_could_not_take_deathfunds: '사망 비용을 가져올 수 없습니다.'
 msg_you_lost_money_dying: '돈 %s 만큼을 잃었습니다.'
 msg_your_town_lost_money_dying: '귀하의 마을이 돈을 %s 만큼 잃었습니다.'
@@ -425,21 +391,6 @@ msg_you_gained_money_for_killing: '돈 %s 만큼을 %s을(를) 죽여 얻었습�
 msg_err_ender_pearls_disabled: '&4엔더 진주가 비활성화되었습니다!'
 msg_err_no_sleep_in_enemy_inn: '&4적의 여관에서 잠을 잘 수 없습니다.'
 msg_err_cant_use_bed: '&4이 침대를 사용할 수 없습니다.'
-msg_war_seeding_spoils_with: '&6[전쟁]&f 전쟁 참가비: %s￦'
-msg_war_total_seeding_spoils: '&6[전쟁]&f 이 전쟁의 전리품: %s￦'
-msg_war_activate_war_hud_tip: '&6[전쟁]&f 전쟁 HUD를 활성화하려면 /towny war hud 명령어를 사용하십시오.'
-msg_war_town_under_attack: '귀하의 마을이 공격받고 있습니다!'
-msg_war_nation_under_attack: '귀하의 국가가 공격받고 있습니다!'
-msg_war_nations_ally_under_attack: '귀하의 동맹 %s이(가) 공격받고 있습니다!'
-msg_war_homeblock_under_attack: '귀하의 마을의 홈블록이 공격받고 있습니다!'
-msg_war_nation_member_homeblock_under_attack: '귀하의 국가원 %s의 마을블록이 공격받고 있습니다!'
-msg_war_nation_ally_homeblock_under_attack: '귀하의 동맹국 %s의 홈블록이 공격받고 있습니다!'
-msg_war_town_ran_out_of_money: '귀하의 마을은 전쟁에 대비하기 위한 돈이 바닥났습니다.'
-msg_war_town_lost_money_townblock: '귀하의 마을이 돈을 %s 만큼 잃었습니다.'
-msg_war_jailbreak: '&f[&6전쟁&f]&c %s의 감옥에서 탈옥이 일어났습니다. %s의 죄수들이 탈옥하였습니다!'
-msg_war_town_removed_from_war_titlemsg: '귀하의 마을은 전쟁에서 제거되었습니다.'
-msg_war_nation_removed_from_war_titlemsg: '귀하의 국가는 전쟁에서 제거되었습니다.'
-msg_war_append_townblocks_fallen: ' 마을 블록 쓰러짐)'
 msg_town_plots_revenue_disclaimer: '&a표시된 매출액은 추정치이며, 해당 토지의 소유자가 지불할 수 있는지는 인수에 의해 결정됩니다.'
 msg_town_set_perm_syntax_error: '잘못된 명령어 조합입니다. /town set perm ? 을 참조하세요.'
 msg_plot_set_perm_syntax_error: '잘못된 명령어 조합입니다. /plot set perm ? 을 참조하세요.'
@@ -771,27 +722,6 @@ msg_err_nation_homeblock_in_another_world: '&c귀하의 마을의 홈블록이 �
 status_bank_town_penalty_upkeep: 'Overclaim upkeep:'
 #Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: '당신은 %s(으)로 소환될 수 없습니다, 당신은 해당 마을의 무법자입니다.'
-#Added in 0.54:
-war_hud_homeblock: '홈블록'
-war_hud_wilderness: '야생'
-war_hud_true: '참'
-war_hud_false: '거짓'
-war_hud_peaceful: '평화'
-war_hud_fallen: '전사함'
-war_hud_townless: '마을 잃음!'
-war_hud_war: '전쟁'
-war_hud_score: '점수: '
-war_hud_location: '위치'
-war_hud_nation: '국가: '
-war_hud_town: '마을: '
-war_hud_attackable: '공격 가능: '
-war_hud_health: '체력: '
-war_hud_top_towns: '상위 마을들'
-war_stats_nations: '  국가들: '
-war_stats_towns: '  마을들: '
-war_stats_warzone: '  전쟁터: '
-war_stats_spoils_of_war: '  전리품: '
-war_starts_in_x: '전쟁이 %s초 뒤에 시작됩니다'
 #Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '&4감옥에 갇힌 동안 해당 명령어를 사용할 수 없습니다.'
 #Added in 0.56:
@@ -853,11 +783,6 @@ msg_err_could_not_set_default_modes_for: '기본 모드를 다음과 같이 설�
 #Added in 0.60
 msg_set_war_allowed_on: '이 세계에서 전쟁이 허용되었습니다.'
 msg_set_war_allowed_off: '전쟁은 더 이상 이 세계에서 일어나지 않습니다.'
-msg_war_not_enough_nations: '&6[전쟁]&f 전쟁에 참가한 국가가 2개 미만이므로 전쟁이 취소됩니다.'
-msg_war_no_enemies_for_war: '&6[전쟁]&f 현재 전쟁을 위해 모인 적이 없어, 전쟁이 취소됩니다.'
-msg_war_prefix: '&6[전쟁]&f '
-msg_war_participants_header: '&6[전쟁] &e국가 이름 &f(&b마을&f)'
-msg_war_participants: '&6[전쟁] &e%s &f(&b%s&f)'
 #Added in 0.61
 #Added in 0.62
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'PVP를 모드를 변경할 수 없습니다, %s초 남음.'
@@ -874,11 +799,8 @@ msg_err_cannot_unclaim_homeblock: '홈블록을 점유 해제할 수 없습니�
 #Added in 0.65
 msg_err_rename_cancelled: '다른 플러그인에 의해 이름 바꾸기가 취소되었습니다.'
 #Added in 0.66
-msg_war_defender_keeps_claims: '점유 기능이 금지되었습니다. 방어중인 마을은 계속 토지를 점유하고 있을 것입니다.'
 #Added in 0.67
-msg_war_town_has_been_conquered_by_nation_x_for_x_days: '%s 마을은 정복되어 %s 국가로 %s일에 합병되었습니다.'
 msg_conquered: '[정복됨]'
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: '귀하의 마을은 여전히 정복 상태이므로 국가로부터 독립할 수 없습니다..'
 #Added in 0.68
 msg_plot_group_claim_confirmation: 'This plot is part a group of %s plot(s) by confirming your claim you will purchase them all.'
 msg_plot_group_unclaim_confirmation: 'This plot is part a group of %s plot(s) by confirming you will unclaim them all.'
@@ -1020,7 +942,6 @@ msg_warning_town_ruined_if_deleted2: "The town can be reclaimed by any town resi
 msg_err_cannot_reclaim_town_unless_ruined: '&cYou cannot reclaim your town because it is not ruined.'
 msg_err_cannot_reclaim_town_yet: '&cYou cannot reclaim your town for another %d hours.'
 msg_town_reclaimed: '&b%s has reclaimed the town of %s.'
-msg_err_cannot_attack_ruined_town: '&6[War]&c You cannot attack a ruined town.'
 msg_err_cannot_use_command_because_town_ruined: "&cYou cannot use this command because your town is ruined. To resume normal command usage, either reclaim the town using ''/town reclaim'', or leave the town using ''/town leave''."
 msg_warning_your_town_is_ruined_for_x_more_hours: '&cYour town lies in a ruined state for %d more hours. Use ''/town reclaim'' to save the town and become mayor.'
 msg_time_remaining_before_full_removal: 'Time remaining before full removal: %d hours.'
@@ -1470,3 +1391,6 @@ msg_jailed_author: 'Towny Jailco.'
 msg_error_town_has_no_allies: 'Town has no allies to list.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'Town has no enemies to list.'
+#Added in 0.132
+#Message shown in the lines of the baltop books
+msg_baltop_book_format: '%s. %s | %s'
