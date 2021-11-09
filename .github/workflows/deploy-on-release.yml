@@ -17,7 +17,8 @@ jobs:
                   distribution: 'temurin'
                   java-version: '17'
                   java-package: jdk
+                  settings-path: ${{ github.workspace }} # location for the settings.xml file
             - name: Deploy to GitHub Package Registry
+              run: mvn -B deploy -P no-apidoc -s $GITHUB_WORKSPACE/settings.xml
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: mvn -B deploy -P no-apidoc
+                  GITHUB_TOKEN: ${{ github.token }}
