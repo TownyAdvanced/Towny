@@ -2,7 +2,7 @@ name: Published Release / PreRelease
 
 on:
     release:
-        types: [released,prereleased]
+        types: [released, prereleased]
         branches: [master]
 jobs:
     build:
