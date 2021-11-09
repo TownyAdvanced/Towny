@@ -48,7 +48,7 @@ public enum PermissionNodes {
 	
 	TOWNY_COMMAND_NATION_SET("towny.command.nation.set.*"),
 		TOWNY_COMMAND_NATION_SET_KING("towny.command.nation.set.king"),
-		TOWNY_COMMAND_NATION_SET_CAPITOL("towny.command.nation.set.capitol"),
+		TOWNY_COMMAND_NATION_SET_CAPITAL("towny.command.nation.set.capital"),
 		TOWNY_COMMAND_NATION_SET_TAXES("towny.command.nation.set.taxes"),
 		TOWNY_COMMAND_NATION_SET_NAME("towny.command.nation.set.name"),
 		TOWNY_COMMAND_NATION_SET_TITLE("towny.command.nation.set.title"),
