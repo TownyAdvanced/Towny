@@ -1,12 +1,12 @@
 package com.palmergames.bukkit.towny.event.plot.toggle;
 
-import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.entity.Player;
 
 public class PlotToggleMobsEvent extends PlotToggleEvent{
 
-	public PlotToggleMobsEvent(Town town, Player player, boolean futureState) {
-		super(town, player, futureState);
+	public PlotToggleMobsEvent(TownBlock townBlock, Player player, boolean futureState) {
+		super(townBlock, player, futureState);
 	}
 	
 }
