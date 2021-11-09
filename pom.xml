@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.palmergames.bukkit.towny</groupId>
-    <artifactId>Towny</artifactId>
+    <artifactId>towny</artifactId>
     <packaging>jar</packaging>
     <version>0.97.2.16</version>
 
