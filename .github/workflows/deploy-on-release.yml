@@ -1,6 +1,8 @@
 name: Published Release / PreRelease
 
 on:
+    push:
+        branches: [master]
     release:
         types: [released, prereleased]
         branches: [master]
