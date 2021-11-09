@@ -28,6 +28,7 @@ import com.palmergames.bukkit.towny.event.town.TownPreInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreMergeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
+import com.palmergames.bukkit.towny.event.town.TownSetSpawnEvent;
 import com.palmergames.bukkit.towny.event.town.TownTrustAddEvent;
 import com.palmergames.bukkit.towny.event.town.TownTrustRemoveEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
@@ -2508,7 +2509,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					
 				} else if (split[0].equalsIgnoreCase("spawn")) {
 					
-					parseTownSetSpawn(player, town);
+					parseTownSetSpawn(player, town, admin);
 
 				} else if (split[0].equalsIgnoreCase("outpost")) {
 
@@ -2686,13 +2687,24 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		player.openBook(BookFactory.makeBook("Town Baltop", town.getName(), sb.toString()));
 	}
 	
-	private static void parseTownSetSpawn(Player player, Town town) {
+	private static void parseTownSetSpawn(Player player, Town town, boolean admin) {
 		try {
 			// Towns can only set their spawn if they have a homeblock.
 			if (!town.hasHomeBlock())
 				throw new TownyException(Translatable.of("msg_err_homeblock_has_not_been_set"));
 
-			TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
+			TownSetSpawnEvent event = new TownSetSpawnEvent(town, player, player.getLocation());
+			Bukkit.getPluginManager().callEvent(event);
+			if (event.isCancelled() && !admin) {
+				if (!event.getCancelMessage().isEmpty())
+					TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
+
+				return;
+			}
+			
+			Location newSpawn = admin ? player.getLocation() : event.getNewSpawn();
+
+			TownBlock tb = TownyAPI.getInstance().getTownBlock(newSpawn);
 			
 			// The townblock needs to exist, belong to the town and also be inside of the homeblock.
 			if (tb == null || !tb.hasTown() || !tb.getTownOrNull().equals(town) || !town.getHomeBlock().getWorldCoord().equals(tb.getWorldCoord()))
@@ -2703,7 +2715,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyUniverse.getInstance().removeSpawnPoint(town.getSpawnOrNull());
 			
 			// Set the spawn point and send feedback message.
-			town.setSpawn(player.getLocation());
+			town.setSpawn(newSpawn);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_spawn"));
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
