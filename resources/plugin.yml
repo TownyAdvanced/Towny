@@ -290,7 +290,7 @@ permissions:
         default: false
         children:
             towny.command.nation.set.board: true
-            towny.command.nation.set.capitol: true
+            towny.command.nation.set.capital: true
             towny.command.nation.set.king: true
             towny.command.nation.set.name: true
             towny.command.nation.set.spawn: true
