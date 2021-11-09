@@ -2,7 +2,7 @@ name: Published Release / PreRelease
 
 on:
     release:
-        types: [released]
+        types: [released,prereleased]
         branches: [master]
 jobs:
     build:
@@ -16,6 +16,6 @@ jobs:
                   java-version: '17'
                   java-package: jdk
             - name: Deploy to GitHub Package Registry
-              run: mvn -B deploy -P no-apidoc
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: mvn -B deploy -P no-apidoc
