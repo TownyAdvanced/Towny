@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
+import com.palmergames.bukkit.towny.event.nation.NationSetSpawnEvent;
 import com.palmergames.bukkit.towny.event.nation.NationTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
@@ -2199,7 +2200,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("spawn")){
 
 				if (sender instanceof Player player)
-					parseNationSetSpawnCommand(player, nation);
+					parseNationSetSpawnCommand(player, nation, admin);
 				else 
 					throw new TownyException("Not meant for console!");
 			}
@@ -2438,12 +2439,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static void parseNationSetSpawnCommand(Player player, Nation nation) {
-		try{
-			Location newSpawn = player.getLocation();
-			
-			if (TownyAPI.getInstance().isWilderness(newSpawn))
+	private static void parseNationSetSpawnCommand(Player player, Nation nation, boolean admin) {
+		try {
+			if (TownyAPI.getInstance().isWilderness(player.getLocation()))
 				throw new TownyException(Translatable.of("msg_cache_block_error_wild", "set spawn"));
+
+			NationSetSpawnEvent event = new NationSetSpawnEvent(nation, player, player.getLocation());
+			Bukkit.getPluginManager().callEvent(event);
+			if (event.isCancelled() && !admin) {
+				if (!event.getCancelMessage().isEmpty())
+					TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
+
+				return;
+			}
+
+			Location newSpawn = admin ? player.getLocation() : event.getNewSpawn();
 
 			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(newSpawn);
 			Town town = townBlock.getTownOrNull();
