@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.confirmations;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
@@ -68,22 +67,16 @@ public class ConfirmationHandler {
 		}
 		
 		// Send the confirmation message.
-		String title = confirmation.getTitle(Translation.getLocale(sender));
-		TownyMessaging.sendConfirmationMessage(sender, title, confirmation.getConfirmCommand(), confirmation.getCancelCommand(), Translatable.of("this_message_will_expire2", confirmation.getDuration()).forLocale(sender));
-		
-		int duration = confirmation.getDuration();
-		
-		Runnable handler = () -> {
-			// Show cancel messages only if the confirmation exists.
+		TownyMessaging.sendConfirmationMessage(sender, confirmation);
+
+		// Set up the task to show the timeout message after the expiration.
+		int taskID = Bukkit.getScheduler().runTaskLater(plugin, () -> {
+			// Show cancel messages only if the confirmation still exists.
 			if (hasConfirmation(sender)) {
 				confirmations.remove(sender);
-				TownyMessaging.sendErrorMsg(sender, "Confirmation Timed out.");
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_confirmation_timed_out"));
 			}
-		};
-		
-		int taskID;
-		long ticks = 20L * duration;
-		taskID = Bukkit.getScheduler().runTaskLater(plugin, handler, ticks).getTaskId();
+		}, (20L * confirmation.getDuration())).getTaskId();
 
 		// Cache the task.
 		confirmations.put(sender, new ConfirmationContext(confirmation, taskID));

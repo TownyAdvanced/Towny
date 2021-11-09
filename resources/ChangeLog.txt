@@ -6940,3 +6940,7 @@ v0.92.0.11:
     - /nation baltop {nationame}
   - Update Account CachedBalances when we're get the account holding balance.
   - Bump language file to 0.132.
+0.97.2.16: 
+  - Bump language file to 0.133.
+  - Made invites/confirmation messages translate to player locales in more places.
+  - API: Made Confirmations able to take on a custom plugin prefix, so that it can be used to run non-Towny commands.

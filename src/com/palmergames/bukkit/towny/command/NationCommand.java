@@ -2163,7 +2163,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						
 						// There are going to be some towns removed from the nation, so we'll do a Confirmation.
 						if (!removedTowns.isEmpty()) {
-							String title = Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")).forLocale(sender);
 							final Nation finalNation = nation;
 							Confirmation.runOnAccept(() -> {
 								finalNation.setCapital(newCapital);										
@@ -2173,7 +2172,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								if (admin)
 									TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
 							})
-							.setTitle(title)
+							.setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
 							.sendTo(sender);
 							
 						// No towns will be removed, skip the Confirmation.

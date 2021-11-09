@@ -2,8 +2,6 @@ package com.palmergames.bukkit.towny.confirmations;
 
 import com.palmergames.bukkit.towny.object.Translatable;
 
-import java.util.Locale;
-
 /**
  * An object which stores information about confirmations. While this 
  * object itself is immutable and threadsafe, async operations within
@@ -15,11 +13,12 @@ public class Confirmation {
 	
 	private final Runnable acceptHandler;
 	private final Runnable cancelHandler;
-	private final Object title;
+	private final Translatable title;
 	private final int duration;
 	private final String confirmCommand;
 	private final String cancelCommand;
 	private final boolean isAsync;
+	private String pluginPrefix;
 
 	/**
 	 * Creates a new {@link ConfirmationBuilder} with the supplied accept handler.
@@ -60,6 +59,7 @@ public class Confirmation {
 		this.isAsync = builder.runAsync;
 		this.confirmCommand = builder.confirmCommand;
 		this.cancelCommand = builder.cancelCommand;
+		this.pluginPrefix = builder.pluginPrefix;
 	}
 	
 	/**
@@ -87,21 +87,10 @@ public class Confirmation {
 	 * 
 	 * @return The title of the confirmation message.
 	 */
-	public String getTitle() {
-		if (title instanceof Translatable)
-			return ((Translatable) title).translate();
-		else
-			return (String) title;
+	public Translatable getTitle() {
+		return title;
 	}
 	
-	public String getTitle(Locale locale) {
-		if (title instanceof Translatable)
-			return ((Translatable) title).translate(locale);
-		else
-			return (String) title;
-	}
-	
-
 	/**
 	 * Gets the duration (in seconds) of this confirmation.
 	 * 
@@ -117,6 +106,10 @@ public class Confirmation {
 	
 	public String getCancelCommand() {
 		return cancelCommand;
+	}
+	
+	public String getPluginPrefix() {
+		return pluginPrefix;
 	}
 
 	/**

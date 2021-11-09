@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -10,6 +11,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
@@ -344,64 +346,80 @@ public class TownyMessaging {
 	 */
 	
 	public static void sendRequestMessage(CommandSender player, Invite invite) {
+		final Translator translator = Translator.locale(Translation.getLocale(player));
+		String senderName = invite.getSender().getName();
 		if (invite.getSender() instanceof Town) { // Town invited Resident
-			String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_invited_to_join2", invite.getSender().getName());
-			String secondline = "/" + TownySettings.getAcceptCommand() + " " + invite.getSender().getName();
-			String thirdline = "/" + TownySettings.getDenyCommand() + " " + invite.getSender().getName();
-			sendConfirmationMessage(player, firstline, secondline, thirdline, "");
+			String firstline = translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join2", senderName);
+			String confirmline = TownySettings.getAcceptCommand() + " " + senderName;
+			String cancelline = TownySettings.getDenyCommand() + " " + senderName;
+			sendInvitationMessage(player, firstline, confirmline, cancelline);
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = Translation.of("invitation_prefix") + Translation.of("your_town_has_been_invited_to_join_nation", invite.getSender().getName());
-				String secondline = "/t invite accept " + invite.getSender().getName();
-				String thirdline = "/t invite deny " + invite.getSender().getName();
-				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
+				String firstline = translator.of("invitation_prefix") + translator.of("your_town_has_been_invited_to_join_nation", senderName);
+				String confirmline = "t invite accept " + senderName;
+				String cancelline = "t invite deny " + senderName;
+				sendInvitationMessage(player, firstline, confirmline, cancelline);
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstline = Translation.of("invitation_prefix") + Translation.of("you_have_been_requested_to_ally2", invite.getSender().getName());
-				String secondline = "/n ally accept " + invite.getSender().getName();
-				String thirdline = "/n ally deny " + invite.getSender().getName();
-				sendConfirmationMessage(player, firstline, secondline, thirdline, "");
+				String firstline = translator.of("invitation_prefix") + translator.of("you_have_been_requested_to_ally2", senderName);
+				String confirmline = "n ally accept " + senderName;
+				String cancelline = "n ally deny " + senderName;
+				sendInvitationMessage(player, firstline, confirmline, cancelline);
 			}
 		}
 	}
 
 	/**
-	 * Sends a player click-able confirmation messages.
+	 * Sends a player click-able invitation messages.
 	 * @param player - The player (CommandSender) to send the confirmation
 	 * @param firstline - The question regarding the confirmation.
 	 * @param confirmline - Line for sending the confirmation.
 	 * @param cancelline - Line for sending the cancellation.
-	 * @param lastline - If null, announces that the message will expire. Otherwise, ignored.
 	 */
-	public static void sendConfirmationMessage(CommandSender player, String firstline, String confirmline, String cancelline, String lastline) {
-
-		if (firstline == null) {
-			firstline = Translation.of("are_you_sure_you_want_to_continue");
-		}
-		if (confirmline == null) {
-			confirmline = "/" + TownySettings.getConfirmCommand();
-		}
-		if (cancelline == null) {
-			cancelline = "/" + TownySettings.getCancelCommand();
-		}
-		
-		TextComponent lastLineComponent = Component.newline().append(Component.text(lastline));
-
+	public static void sendInvitationMessage(CommandSender player, String firstline, String confirmline, String cancelline) {
+		final Translator translator = Translator.locale(Translation.getLocale(player));
 		// Create confirm button based on given params.
-		TextComponent confirmComponent = Component.text(confirmline.replace("/", "[/").concat("]"))
+		TextComponent confirmComponent = Component.text("[/" + confirmline + "]")
 			.color(NamedTextColor.GREEN)
-			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_confirmation_spigot_click_accept", confirmline.replace("/", ""), confirmline))))
-			.clickEvent(ClickEvent.runCommand("/towny:" + confirmline.replace("/","")));
+			.hoverEvent(HoverEvent.showText(Component.text(translator.of("msg_confirmation_spigot_click_accept", confirmline, "/" + confirmline))))
+			.clickEvent(ClickEvent.runCommand("/towny:" + confirmline));
 
 		// Create cancel button based on given params.
-		TextComponent cancelComponent = Component.text(cancelline.replace("/", "[/").concat("]"))
+		TextComponent cancelComponent = Component.text("[/" + cancelline + "]")
 			.color(NamedTextColor.RED)
-			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_confirmation_spigot_click_cancel", cancelline.replace("/", ""), cancelline))))
-			.clickEvent(ClickEvent.runCommand("/towny:" + cancelline.replace("/","")));
+			.hoverEvent(HoverEvent.showText(Component.text(translator.of("msg_confirmation_spigot_click_cancel", cancelline, "/" + cancelline))))
+			.clickEvent(ClickEvent.runCommand("/towny:" + cancelline));
 		
-		Towny.getAdventure().sender(player).sendMessage(Component.text(Translation.of("confirmation_prefix") + firstline).append(Component.newline())
-			.append(confirmComponent).append(Component.text(" ")).append(cancelComponent)
+		Towny.getAdventure().sender(player).sendMessage(Component.text(firstline).append(Component.newline())
+			.append(confirmComponent).append(Component.space()).append(cancelComponent));
+	}
+	
+	/**
+	 * Sends a player click-able confirmation messages.
+	 * @param sender - The player (CommandSender) to send the confirmation
+	 * @param confirmation - Confirmation to send to the player.
+	 */
+	public static void sendConfirmationMessage(CommandSender sender, Confirmation confirmation) {
+		final Translator translator = Translator.locale(Translation.getLocale(sender));
+		TextComponent firstLineComponent = Component.text(translator.of("confirmation_prefix") + confirmation.getTitle().forLocale(sender));
+		TextComponent lastLineComponent = Component.text(translator.of("this_message_will_expire2", confirmation.getDuration()));
+
+		// Create confirm button based on given params.
+		TextComponent confirmComponent = Component.text("[/" + confirmation.getConfirmCommand() + "]")
+			.color(NamedTextColor.GREEN)
+			.hoverEvent(HoverEvent.showText(Component.text(translator.of("msg_confirmation_spigot_click_accept", confirmation.getConfirmCommand(), "/" + confirmation.getConfirmCommand()))))
+			.clickEvent(ClickEvent.runCommand("/" + confirmation.getPluginPrefix() + ":" + confirmation.getConfirmCommand()));
+
+		// Create cancel button based on given params.
+		TextComponent cancelComponent = Component.text("[/" + confirmation.getCancelCommand() + "]")
+			.color(NamedTextColor.RED)
+			.hoverEvent(HoverEvent.showText(Component.text(translator.of("msg_confirmation_spigot_click_cancel", confirmation.getCancelCommand(), "/" + confirmation.getCancelCommand()))))
+			.clickEvent(ClickEvent.runCommand("/" + confirmation.getPluginPrefix() + ":" + confirmation.getCancelCommand()));
+		
+		Towny.getAdventure().sender(sender).sendMessage(
+			firstLineComponent.append(Component.newline())
+			.append(confirmComponent).append(Component.space()).append(cancelComponent).append(Component.newline())
 			.append(lastLineComponent)
 		);
 	}

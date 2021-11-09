@@ -409,7 +409,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								Confirmation.runOnAccept(() -> {
 									new PlotClaim(Towny.getPlugin(), player, resident, groupSelection, false, false, false).start();
 								})
-								.setTitle(Translatable.of("msg_plot_group_unclaim_confirmation", block.getPlotObjectGroup().getTownBlocks().size()) + " " + Translatable.of("are_you_sure_you_want_to_continue").forLocale(player))
+								.setTitle(Translatable.of("msg_plot_group_unclaim_confirmation", block.getPlotObjectGroup().getTownBlocks().size()).append(" " + Translatable.of("are_you_sure_you_want_to_continue")))
 								.sendTo(player);
 								
 								return true;
@@ -1603,12 +1603,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			// Create confirmation.
 			PlotGroup plotGroup = townBlock.getPlotObjectGroup();
-			String title = Translatable.of("msg_plot_group_toggle_confirmation", townBlock.getPlotObjectGroup().getTownBlocks().size()).forLocale(player) + " " + Translatable.of("are_you_sure_you_want_to_continue").forLocale(player);
 			Confirmation.runOnAccept(() -> {
 				// Perform the toggle.
 				new PlotCommand(Towny.getPlugin()).plotGroupToggle(player, plotGroup, StringMgmt.remArgs(split, 1));
 			})
-			.setTitle(title)
+			.setTitle(Translatable.of("msg_plot_group_toggle_confirmation", townBlock.getPlotObjectGroup().getTownBlocks().size()).append(" " + Translatable.of("are_you_sure_you_want_to_continue")))
 			.sendTo(player);
 			
 			return true;
@@ -1676,10 +1675,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 				};
 
-				String title = Translatable.of("msg_plot_group_set_perm_confirmation", townBlock.getPlotObjectGroup().getTownBlocks().size()) + " " + Translatable.of("are_you_sure_you_want_to_continue").forLocale(player);
 				// Create confirmation.
 				Confirmation.runOnAccept(permHandler)
-					.setTitle(title)
+					.setTitle(Translatable.of("msg_plot_group_set_perm_confirmation", townBlock.getPlotObjectGroup().getTownBlocks().size()).append(" " + Translatable.of("are_you_sure_you_want_to_continue")))
 					.sendTo(player);
 				
 				return true;
@@ -2055,7 +2053,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Execute the plot claim.
 						new PlotClaim(Towny.getPlugin(), player, resident, coords, true, false, true).start();
 					})
-					.setTitle(Translatable.of("msg_plot_group_claim_confirmation", group.getTownBlocks().size()).forLocale(player) + " " + TownyEconomyHandler.getFormattedBalance(group.getPrice()) + ". " + Translatable.of("are_you_sure_you_want_to_continue").forLocale(player))
+					.setTitle(Translatable.of("msg_plot_group_claim_confirmation", group.getTownBlocks().size()).append(" " + TownyEconomyHandler.getFormattedBalance(group.getPrice())).append(". " + Translatable.of("are_you_sure_you_want_to_continue")))
 					.sendTo(player);
 					
 					return;
@@ -2086,13 +2084,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_no_funds_claim_plot", TownyEconomyHandler.getFormattedBalance(cost)));
 
 		if (cost != 0) {
-			String title = Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)).forLocale(player);
 			final List<WorldCoord> finalSelection = selection;
 			Confirmation.runOnAccept(() ->  {	
 				// Start the claim task
 				new PlotClaim(plugin, player, resident, finalSelection, true, false, false).start();
 			})
-			.setTitle(title)
+			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 			.sendTo(player);
 		} else {
 			// Start the claim task

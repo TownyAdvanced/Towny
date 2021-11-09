@@ -326,14 +326,13 @@ public class SpawnUtil {
 				}
 			} else {
 			// Sending the confirmation.
-				String title = Translatable.of("msg_spawn_warn", TownyEconomyHandler.getFormattedBalance(travelCost)).forLocale(player);
 				Confirmation.runOnAccept(() -> {		
 					if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
 						TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
 						initiateSpawn(player, finalLoc);
 					}
 				})
-				.setTitle(title)
+				.setTitle(Translatable.of("msg_spawn_warn", TownyEconomyHandler.getFormattedBalance(travelCost)))
 				.sendTo(player);
 			}
 		// No Cost so skip confirmation system.

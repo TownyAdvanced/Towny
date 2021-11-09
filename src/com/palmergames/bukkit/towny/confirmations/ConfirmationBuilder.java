@@ -11,9 +11,10 @@ import com.palmergames.bukkit.towny.TownySettings;
 public class ConfirmationBuilder {
 	Runnable acceptHandler;
 	Runnable cancelHandler;
-	Object title;
-	String confirmCommand = null;
-	String cancelCommand = null;
+	Translatable title = Translatable.of("are_you_sure_you_want_to_continue");
+	String confirmCommand = TownySettings.getConfirmCommand();
+	String cancelCommand = TownySettings.getCancelCommand();
+	String pluginPrefix = "towny";
 	int duration = TownySettings.getConfirmationTimeoutSeconds();
 	boolean runAsync;
 
@@ -33,9 +34,11 @@ public class ConfirmationBuilder {
 	 * 
 	 * @param title The title of the confirmation.
 	 * @return A builder reference of this object.
+	 * @deprecated since 0.97.3.0 - Use {@link#setTitle(Translatable)} instead.
 	 */
+	@Deprecated
 	public ConfirmationBuilder setTitle(String title) {
-		this.title = title;
+		this.title = Translatable.of(title);
 		return this;
 	}
 	
@@ -84,6 +87,17 @@ public class ConfirmationBuilder {
 	 */
 	public ConfirmationBuilder setCancelText(String cancel) {
 		this.cancelCommand = cancel;
+		return this;
+	}
+	
+	/**
+	 * Sets the base plugin command used when the cancel or confirm commands are run.
+	 * ie: towny in /"towny":town spawn 
+	 * @param prefix String plugin name sending this Confirmation.
+	 * @return ConfirmationBuilder with an overriden command prefix.
+	 */
+	public ConfirmationBuilder setPluginCommandPrefix(String prefix) {
+		this.pluginPrefix = prefix;
 		return this;
 	}
 	
