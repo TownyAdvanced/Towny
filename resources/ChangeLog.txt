@@ -6945,3 +6945,5 @@ v0.92.0.11:
   - Made invites/confirmation messages translate to player locales in more places.
   - API: Made Confirmations able to take on a custom plugin prefix, so that it can be used to run non-Towny commands.
   - API: Add events for when a town/nation spawn is set, courtesy of Warriorrrr with PR #5432.
+  - Fix typo in /n set capital node, courtesy of Warriorrrr with PR #5435.
+  - API: Add a TownBlock getter to PlotToggle events, courtesy of Warriorrrr with PR #5434.
