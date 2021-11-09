@@ -34,7 +34,7 @@
     <!-- https://help.github.com/en/articles/about-github-package-registry -->
     <distributionManagement>
         <repository>
-            <id>github-towny</id>
+            <id>github</id>
             <name>GitHub TownyAdvanced Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
         </repository>
