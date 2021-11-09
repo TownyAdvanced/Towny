@@ -6944,3 +6944,4 @@ v0.92.0.11:
   - Bump language file to 0.133.
   - Made invites/confirmation messages translate to player locales in more places.
   - API: Made Confirmations able to take on a custom plugin prefix, so that it can be used to run non-Towny commands.
+  - API: Add events for when a town/nation spawn is set, courtesy of Warriorrrr with PR #5432.
