@@ -638,6 +638,7 @@ public class TownyAPI {
     
     /**
      * @deprecated since 0.97.3.0 use {@link Town#hasActiveWar()} or {@link Nation#hasActiveWar()} instead.
+     * @return false.
      */
     @Deprecated
     public static boolean isWarTime() {

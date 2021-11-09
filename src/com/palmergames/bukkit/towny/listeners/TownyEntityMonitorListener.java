@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.event.deathprice.NationPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.deathprice.PlayerPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.deathprice.TownPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -80,9 +79,7 @@ public class TownyEntityMonitorListener implements Listener {
 	 * This handles PlayerDeathEvents on MONITOR in order to handle Towny features such as:
 	 * - DeathPayments,
 	 * - Jailing Players,
-	 * - Awarding WarTimeDeathPoints.
 	 * @param event The event.
-	 * @throws NotRegisteredException When a towny object is not found.
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerDeath(PlayerDeathEvent event) {

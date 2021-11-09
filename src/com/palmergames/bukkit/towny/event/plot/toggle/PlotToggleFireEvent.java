@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.event.plot.toggle;
 
-import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.entity.Player;
 

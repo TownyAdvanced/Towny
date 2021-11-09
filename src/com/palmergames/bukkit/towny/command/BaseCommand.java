@@ -75,7 +75,7 @@ public class BaseCommand implements TabCompleter{
 	}
 	
 	/**
-	 * Returns a List<String> containing strings of resident, town, and/or nation names that match with arg.
+	 * Returns a List&lt;String&gt; containing strings of resident, town, and/or nation names that match with arg.
 	 * Can check for multiple types, for example "rt" would check for residents and towns but not nations or worlds.
 	 *
 	 * @param arg the string to match with the chosen type

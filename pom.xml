@@ -225,7 +225,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <source>${java.version}</source>
+                    <source>16</source>
+                    <doclint>all,-missing</doclint>
                 </configuration>
             </plugin>
             <plugin>  <!-- Create sources.jar -->
