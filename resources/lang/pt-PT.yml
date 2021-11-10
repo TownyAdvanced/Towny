@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.132
+version: 0.133
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -482,7 +482,7 @@ nation_received_requests: '&bNation has received %a/%m ally requests.'
 nation_sent_invites: '&bNation has sent %a/%m invites.'
 nation_sent_ally_requests: '&bNation has sent %a/%m ally requests.'
 no_confirmations_open: '&cYou have nothing to confirm!'
-successful_cancel: '&cAction has been cancelled or has timed out!'
+successful_cancel: '&cAction cancelled!'
 successful_deny: '&bInvite has been denied successfully.'
 successful_deny_request: '&bAlly request has been denied successfully.'
 msg_ally_removed_successfully: '&bAlly has been removed successfully.'
@@ -1394,3 +1394,6 @@ msg_error_town_has_no_enemies: 'Town has no enemies to list.'
 #Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
+#Added in 0.133
+#Message shown when a confirmation times out.
+msg_confirmation_timed_out: 'Confirmation Timed Out.'
