@@ -276,7 +276,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			try {
 				
-				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
 				if (townBlock == null && !split[0].equalsIgnoreCase("perm") && !split[0].equalsIgnoreCase("claim"))
 					throw new TownyException(Translatable.of("msg_not_claimed_1"));
 				
@@ -797,7 +797,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				} else if (split[0].equalsIgnoreCase("jailcell")) {
 					
-					parsePlotJailCell(player, TownyAPI.getInstance().getTownBlock(player.getLocation()), StringMgmt.remFirstArg(split));
+					parsePlotJailCell(player, TownyAPI.getInstance().getTownBlock(player), StringMgmt.remFirstArg(split));
 					return true;
 					
 				} else if (split[0].equalsIgnoreCase("trust")) {
@@ -1405,7 +1405,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
 		Resident resident = getResidentOrThrow(player.getUniqueId());
-		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
 		if (townBlock == null)
 			throw new TownyException(Translatable.of("msg_not_claimed_1"));
 		Town town = townBlock.getTownOrNull();
@@ -2113,7 +2113,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			HUDManager.togglePermHUD(player);
 		} else {
 			// All other subcommands require the player to be in a claimed area
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
 			if (townBlock == null) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_not_claimed_1"));
 				return;

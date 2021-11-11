@@ -1217,7 +1217,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							&& TownyAPI.getInstance().getTownBlock(loc) != null
 							&& TownyAPI.getInstance().getTown(loc) == town) {
 							
-							OutlawTeleportEvent event = new OutlawTeleportEvent(target, town, target.getPlayer().getLocation());
+							OutlawTeleportEvent event = new OutlawTeleportEvent(target, town, loc);
 							Bukkit.getPluginManager().callEvent(event);
 							if (event.isCancelled())
 								return;
@@ -2514,7 +2514,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (split[0].equalsIgnoreCase("outpost")) {
 
 					try {
-						TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());						
+						TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);						
 						if (townBlock == null || !townBlock.hasTown() || !townBlock.isOutpost())
 							throw new TownyException(Translatable.of("msg_err_location_is_not_within_an_outpost_plot"));
 						
@@ -2581,7 +2581,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static void setPrimaryJail(Player player, Town town) {
 		
 		try {
-			TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
+			TownBlock tb = TownyAPI.getInstance().getTownBlock(player);
 			if (tb == null || !tb.isJail())
 				throw new TownyException(Translatable.of("msg_err_location_is_not_within_a_jail_plot"));
 			
@@ -2596,7 +2596,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	private static void parseTownSetHomeblock(Player player, Town town, @Nullable Nation nation) {
 		Coord coord = Coord.parseCoord(player);
-		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
 		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
 
 		try {

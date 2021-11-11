@@ -897,12 +897,12 @@ public class TownyPlayerListener implements Listener {
 		boolean keepInventory = event.getKeepInventory();
 		boolean keepLevel = event.getKeepLevel();
 		Player player = event.getEntity();
-		Location deathloc = player.getLocation();
-		TownBlock tb = TownyAPI.getInstance().getTownBlock(deathloc);
+		TownBlock tb = TownyAPI.getInstance().getTownBlock(player);
 		if (tb != null && tb.hasTown()) {
 			if (TownySettings.getKeepExperienceInTowns() && !keepLevel) {
 				event.setKeepLevel(true);
 				event.setDroppedExp(0);
+				keepLevel = true;
 			}
 
 			if (TownySettings.getKeepInventoryInTowns() && !keepInventory) {
@@ -911,7 +911,7 @@ public class TownyPlayerListener implements Listener {
 				keepInventory = true;
 			}
 
-			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+			Resident resident = TownyAPI.getInstance().getResident(player); 
 			if (resident != null && resident.hasTown() && !keepInventory) {
 				Town town = resident.getTownOrNull();
 				Town tbTown = tb.getTownOrNull();
@@ -926,11 +926,17 @@ public class TownyPlayerListener implements Listener {
 					keepInventory = true;
 				}
 			}
-
+			
 			if (TownySettings.getKeepInventoryInArenas() && !keepInventory && tb.getType() == TownBlockType.ARENA) {
 				event.setKeepInventory(true);
 				event.getDrops().clear();
 			}
+			
+			if (TownySettings.getKeepExperienceInArenas() && !keepLevel && tb.getType() == TownBlockType.ARENA) {
+				event.setKeepLevel(true);
+				event.setDroppedExp(0);
+			}
+
 		}
 	}
 
@@ -1056,7 +1062,7 @@ public class TownyPlayerListener implements Listener {
 		if (resident == null)
 			return;
 		
-		TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
+		TownBlock tb = TownyAPI.getInstance().getTownBlock(player);
 		if (tb != null && tb.hasTown()) {
 			Town town = tb.getTownOrNull();
 			
@@ -1141,7 +1147,7 @@ public class TownyPlayerListener implements Listener {
 				return;
 			}
 			
-			TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
+			TownBlock tb = TownyAPI.getInstance().getTownBlock(player);
 			Town town = TownyAPI.getInstance().getTown(player.getLocation());
 			if (tb == null || town == null)
 				return;

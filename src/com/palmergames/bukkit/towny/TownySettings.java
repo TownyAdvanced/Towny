@@ -2607,6 +2607,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ALLIED_TOWN);
 	}
 	
+	public static boolean getKeepExperienceInArenas() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_ARENA);
+	}
+	
 	public static boolean getKeepInventoryInArenas() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ARENA);
 	}

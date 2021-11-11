@@ -6947,3 +6947,8 @@ v0.92.0.11:
   - API: Add events for when a town/nation spawn is set, courtesy of Warriorrrr with PR #5432.
   - Fix typo in /n set capital node, courtesy of Warriorrrr with PR #5435.
   - API: Add a TownBlock getter to PlotToggle events, courtesy of Warriorrrr with PR #5434.
+0.97.2.17:
+  - API: add TownyAPI#getTownBlock(Player).
+  - New Config Option: global_town_settings.keep_inventory_on_death_in_arena
+    - Default: false
+    - If People should keep their inventories on death in an arena townblock. Is not guaranteed to work with other keep inventory plugins!

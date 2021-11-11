@@ -607,7 +607,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		if (resident == null)
 			return null;
 
-		TownBlock townblock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+		TownBlock townblock = TownyAPI.getInstance().getTownBlock(player);
 
 		switch (identifier) {
 

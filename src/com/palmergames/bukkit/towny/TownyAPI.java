@@ -29,6 +29,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -455,6 +456,17 @@ public class TownyAPI {
     public TownBlock getTownBlock(Location location) {
         WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
 		return worldCoord.getTownBlockOrNull();
+    }
+    
+    /**
+     * Get the {@link TownBlock} in which a {@link Player} is located.
+     *
+     * @param player {@link Player} to get {@link TownBlock} of.
+     * @return {@link TownBlock} at the location of this {@link Player}, or {@code null} when the player is in the wilderness.
+     */
+    @Nullable
+    public TownBlock getTownBlock(@NotNull Player player) {
+		return WorldCoord.parseWorldCoord(player.getLocation()).getTownBlockOrNull();
     }
     
     /** 

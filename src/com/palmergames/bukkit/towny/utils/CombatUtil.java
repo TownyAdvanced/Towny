@@ -291,8 +291,8 @@ public class CombatUtil {
 		if (TownySettings.doJailPlotsPreventPVP()) {
 			Resident defendingResident = TownyAPI.getInstance().getResident(defendingPlayer.getUniqueId());
 			Resident attackingResident = TownyAPI.getInstance().getResident(attackingPlayer.getUniqueId());
-			TownBlock defTB = TownyAPI.getInstance().getTownBlock(defendingPlayer.getLocation());
-			TownBlock atkTB = TownyAPI.getInstance().getTownBlock(attackingPlayer.getLocation());
+			TownBlock defTB = TownyAPI.getInstance().getTownBlock(defendingPlayer);
+			TownBlock atkTB = TownyAPI.getInstance().getTownBlock(attackingPlayer);
 			if (defendingResident == null || attackingResident == null)
 				return false;
 			if (defendingResident.isJailed() && defTB != null && defTB.isJail() || attackingResident.isJailed() && atkTB != null && atkTB.isJail())
@@ -409,8 +409,8 @@ public class CombatUtil {
 	 * @return true if both player in an Arena plot.
 	 */
 	public static boolean isArenaPlot(Player attacker, Player defender) {
-		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attacker.getLocation());
-		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defender.getLocation());
+		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attacker);
+		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defender);
 		return isArenaPlot(attackerTB, defenderTB);
 	}
 	

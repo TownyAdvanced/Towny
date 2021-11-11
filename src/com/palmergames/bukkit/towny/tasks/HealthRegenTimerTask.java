@@ -36,7 +36,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 			if (TownyAPI.getInstance().isWilderness(player.getLocation()))
 				continue;
 			
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
 			if (resident != null 

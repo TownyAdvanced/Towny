@@ -1900,7 +1900,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_PLOT.getNode(split[0].toLowerCase())))
 				throw new TownyException(Translatable.of("msg_err_command_disable"));
 			
-			TownBlock tb = TownyAPI.getInstance().getTownBlock(player.getLocation());
+			TownBlock tb = TownyAPI.getInstance().getTownBlock(player);
 			if (split.length < 2) {
 				HelpMenu.TA_SET_PLOT.send(sender);
 				return;

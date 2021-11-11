@@ -793,6 +793,13 @@ public enum ConfigNodes {
 			"# If People should keep their experience on death in a town.",
 			"# Is not guaranteed to work with other keep experience plugins!"
 	),
+	GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_ARENA(
+			"global_town_settings.keep_experience_on_death_in_arena",
+			"false",
+			"",
+			"# If People should keep their experience on death in an arena townblock.",
+			"# Is not guaranteed to work with other keep experience plugins!"
+	),
 	GTOWN_MAX_PLOT_PRICE_COST(
 			"global_town_settings.maximum_plot_price_cost",
 			"1000000.0",

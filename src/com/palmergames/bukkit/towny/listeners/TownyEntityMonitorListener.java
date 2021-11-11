@@ -166,7 +166,7 @@ public class TownyEntityMonitorListener implements Listener {
 		if (!TownyEconomyHandler.isActive())
 			return;
 		
-		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation());
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(defenderPlayer);
 		if (townBlock != null && (townBlock.getType().equals(TownBlockType.ARENA) || townBlock.getType().equals(TownBlockType.JAIL)))
 			return;
 		
@@ -260,7 +260,7 @@ public class TownyEntityMonitorListener implements Listener {
 		if (CombatUtil.isAlly(attackerResident.getName(), defenderResident.getName()))
 			return;
 
-		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation());
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(defenderPlayer);
 		if (townBlock != null && (townBlock.getType().equals(TownBlockType.ARENA) || townBlock.getType().equals(TownBlockType.JAIL)))
 			return;
 		
