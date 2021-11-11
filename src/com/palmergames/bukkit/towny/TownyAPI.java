@@ -653,7 +653,7 @@ public class TownyAPI {
      * @return false.
      */
     @Deprecated
-    public static boolean isWarTime() {
+    public boolean isWarTime() {
     	return false;
     }
 }
