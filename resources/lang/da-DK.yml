@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.132
+version: 0.133
 language: dansk
 author: LifeOnEarth
 website: 'http://townyadvanced.github.io/'
@@ -482,7 +482,7 @@ nation_received_requests: '&bNationen har modtaget %a/%m anmodninger om alliance
 nation_sent_invites: '&bNationen har sendt %a/%m invitationer.'
 nation_sent_ally_requests: '&bNationen har sendt %a/%m anmodninger om alliance.'
 no_confirmations_open: '&cDu har intet at bekræfte!'
-successful_cancel: '&cHandlingen er annulleret eller udløbet!'
+successful_cancel: '&cAction cancelled!'
 successful_deny: '&bInvitationen er blevet afslået succesfuldt.'
 successful_deny_request: '&bAnmodning om alliance er blevet afslået succesfuldt.'
 msg_ally_removed_successfully: '&bAllieret er blevet fjernet succesfuldt.'
@@ -1394,3 +1394,6 @@ msg_error_town_has_no_enemies: 'Town has no enemies to list.'
 #Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
+#Added in 0.133
+#Message shown when a confirmation times out.
+msg_confirmation_timed_out: 'Confirmation Timed Out.'

@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.132
+version: 0.133
 language: italian
 author: Leonardo_DGS
 website: 'https://townyadvanced.github.io/'
@@ -482,7 +482,7 @@ nation_received_requests: '&bLa Nazione ha ricevuto %a/%m richieste di Alleanza.
 nation_sent_invites: '&bLa Nazione ha inviato %a/%m inviti.'
 nation_sent_ally_requests: '&bLa Nazione ha inviato %a/%m richieste di Alleanza.'
 no_confirmations_open: '&cNon hai nulla da confermare!'
-successful_cancel: '&cQuesta azione è stata annullata o è scaduta!'
+successful_cancel: '&cAction cancelled!'
 successful_deny: '&bInvito rifiutato con successo.'
 successful_deny_request: '&bRichiesta di alleanza rifiutata con successo.'
 msg_ally_removed_successfully: '&bAlleato rimosso con successo.'
@@ -1394,3 +1394,6 @@ msg_error_town_has_no_enemies: 'Town has no enemies to list.'
 #Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
+#Added in 0.133
+#Message shown when a confirmation times out.
+msg_confirmation_timed_out: 'Confirmation Timed Out.'

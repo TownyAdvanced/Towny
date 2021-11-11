@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.132
+version: 0.133
 language: swedish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -482,7 +482,7 @@ nation_received_requests: '&bNationen har fått %a/%m förfrågningar om allians
 nation_sent_invites: '&bNationen har skickat %a/%m inbjudningar.'
 nation_sent_ally_requests: '&bNationen har skickat %a/%m förfrågningar om allians.'
 no_confirmations_open: '&cDu har inget att bekräfta!'
-successful_cancel: '&cÅtgärden har avbrutits eller har gått ut!'
+successful_cancel: '&cAction cancelled!'
 successful_deny: '&bInbjudan nekades framgångsrikt.'
 successful_deny_request: '&bBegäran om allians nekades framgångsrikt.'
 msg_ally_removed_successfully: '&bDen allierade har tagits bort framgångsrikt.'
@@ -736,7 +736,7 @@ msg_err_player_too_far_from_town_spawn: '&c%s är för långt bort från din sta
 msg_resident_bail_amount: 'Invånar-borgen kostar: '
 msg_mayor_bail_amount: 'Borgmästarens borgen kostar: '
 msg_king_bail_amount: 'Knugens borgen kostar: '
-msg_has_paid_bail: '%s has paid bail and is free.'
+msg_has_paid_bail: '%s har betalat borgen och är fri.'
 msg_err_unable_to_pay_bail: 'Det gick inte att betala borgen.'
 msg_err_bail_not_enabled: 'Borgen (bail) är inte aktiverat.'
 msg_you_have_been_freed_from_jail: 'Du har befriats från fängelset.'
@@ -877,7 +877,7 @@ msg_err_teleport_cancelled_damage: 'Skador har avbrutit din teleportering.'
 #Added in 0.82
 invitation_prefix: "&8[&7Inbjudan&8] &9"
 confirmation_prefix: "&8[&7Bekräftelse&8] &9"
-this_message_will_expire2: '&9This will auto-expire in %s seconds'
+this_message_will_expire2: '&9Det här upphör automatiskt om %s sekunder'
 msg_hover_next_page: 'Nästa sida'
 msg_hover_previous_page: 'Föregående sida'
 #Added in 0.83
@@ -1284,15 +1284,15 @@ msg_err_player_cannot_be_harmed: '%s spawnade nyligen och kan ej skadas.'
 msg_you_have_lost_your_invulnerability: 'Du har förlorat din osårbarhet.'
 #Added in 0.126
 #Used in the nation screen:
-status_capital: 'Capital:'
+status_capital: 'Huvudstad:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
-status_joined_town: 'Joined town:'
+status_joined_town: 'Gick med i staden:'
 #Used in the town screen's nation hover, to denote when a town joined a nation.
-status_joined_nation: 'Joined nation:'
+status_joined_nation: 'Gick med i nationen:'
 #Shown in status screen elements where a value is not known.
-status_unknown: 'unknown'
+status_unknown: 'okänt'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
-msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
+msg_nationzone_override_set_to: '%s fick sin nationszon satt till %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s has had their nationzone override removed.'
 #Added in 0.127
@@ -1394,3 +1394,6 @@ msg_error_town_has_no_enemies: 'Town has no enemies to list.'
 #Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
+#Added in 0.133
+#Message shown when a confirmation times out.
+msg_confirmation_timed_out: 'Confirmation Timed Out.'

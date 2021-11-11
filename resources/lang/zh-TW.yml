@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.132
+version: 0.133
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -482,7 +482,7 @@ nation_received_requests: '&b國家已經收到了 %a/%m 結盟請求.'
 nation_sent_invites: '&b國家已發出 %a/%m 邀請.'
 nation_sent_ally_requests: '&b國家已經派出 %a/%m 結盟請求.'
 no_confirmations_open: '&c您沒什麽可確認的!'
-successful_cancel: '&c行動已被取消或已過期!'
+successful_cancel: '&cAction cancelled!'
 successful_deny: '&b邀請已被拒絕.'
 successful_deny_request: '&b已拒絕結盟請求.'
 msg_ally_removed_successfully: '&b已成功刪除聯盟.'
@@ -1394,3 +1394,6 @@ msg_error_town_has_no_enemies: 'Town has no enemies to list.'
 #Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
+#Added in 0.133
+#Message shown when a confirmation times out.
+msg_confirmation_timed_out: 'Confirmation Timed Out.'

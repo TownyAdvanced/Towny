@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.132
+version: 0.133
 language: Turkish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -482,7 +482,7 @@ nation_received_requests: '&bÜlke %a/%m müttefik isteği aldı.'
 nation_sent_invites: '&bÜlke% a/%m davet gönderdi.'
 nation_sent_ally_requests: '&bÜlke %a/%m müttefik isteği gönderdi.'
 no_confirmations_open: '&cOnaylayacak hiçbir şeyin yok!'
-successful_cancel: '&cEylem iptal edildi veya zaman aşımına uğradı!'
+successful_cancel: 'İşlem iptal edildi!'
 successful_deny: '&bDavet başarıyla reddedildi.'
 successful_deny_request: '&bAlly isteği başarıyla reddedildi.'
 msg_ally_removed_successfully: '&bAlly başarıyla kaldırıldı.'
@@ -557,7 +557,7 @@ status_pvp: 'PVP:'
 explosions: 'Patlamalar:'
 firespread: 'Ateş_yayılması:'
 mobspawns: 'Yaratık_doğması:'
-owner_of_x_plots: 'X_arsanın_sahibi.'
+owner_of_x_plots: '%s Arsanın sahibi.'
 status_bank: 'Banka:'
 status_town: 'Kasaba:'
 status_no_town: 'Yok'
@@ -593,10 +593,10 @@ status_world_forcefire: 'Zorla Ateş:'
 status_world_forceexplosion: 'Zorla Patlama:'
 status_world_worldmobs: 'Dünya Mobları:'
 status_world_forcetownmobs: 'Zorla Kasaba Yaratıkları:'
-status_world_unclaimrevert: 'Unclaim Revert:'
-status_world_explrevert: 'Explosion Revert:'
+status_world_unclaimrevert: 'Geri alma işlemini iptal et:'
+status_world_explrevert: 'Patlama geri almasını iptal et:'
 status_world_ignoredblocks: 'Görmezden Gelinen Bloklar:'
-status_res_taxexempt: 'Yetkili_şehir_vergisi_ödemez.'
+status_res_taxexempt: 'Yetkili, şehir vergilerini ödemekten muaftır.'
 status_res_tax: 'Şehir_vergisi:'
 status_res_plottax: 'Toplam_arsa_vergileri:'
 status_res_totaltax: 'Ödenmesi_gereken_toplam_vergi:'
@@ -719,7 +719,7 @@ msg_nation_changed_open: '&cUlusun statüsü artık açk %s.'
 msg_err_already_in_a_nation: 'Kasabanız zaten bir ulusun içinde.'
 msg_err_nation_not_open: '&c%s ülkesinin kapıları herkese açık değil. Kralın veya bir asistanın katılmasını isteyin.'
 msg_err_nation_homeblock_in_another_world: '&cKasabanızın ana bloğu, ulus başkentinin ana bloğu ile aynı dünyada değil.'
-status_bank_town_penalty_upkeep: 'Overclaim upkeep:'
+status_bank_town_penalty_upkeep: 'Fazla vergi talep et:'
 #Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: '%s olarak doğamazsınız, orada kanun kaçağı olarak işaretlendiniz.'
 #Added in 0.55:
@@ -736,7 +736,7 @@ msg_err_player_too_far_from_town_spawn: '&c%s kasabaya davet almak için kasaban
 msg_resident_bail_amount: 'Yerleşik Kefalet masrafları: '
 msg_mayor_bail_amount: 'Belediye Başkanı Kefalet masrafları: '
 msg_king_bail_amount: 'Kral Kefalet masrafları: '
-msg_has_paid_bail: '%s has paid bail and is free.'
+msg_has_paid_bail: '%s kefalet bedelini ödedi ve serbest kaldı.'
 msg_err_unable_to_pay_bail: 'Kefaleti karşılayamıyor.'
 msg_err_bail_not_enabled: 'Kefalet etkinleştirilmedi.'
 msg_you_have_been_freed_from_jail: 'Hapisten salıverildin.'
@@ -821,7 +821,7 @@ msg_player_put_group_up_for_sale: '%s,%s grubunu %s için satışa sundu'
 msg_err_could_not_set_group_type: 'Grup türü ayarlanamadı - '
 msg_set_group_type_to_x: 'Çizim grubunun türü %s olarak değiştirildi'
 msg_player_successfully_bought_group_x: '%s,%s arsa grubunu başarıyla satın aldı'
-status_plot_group_name_and_size: 'Townblock is part of group: %s. Group has %s Townblocks total.'
+status_plot_group_name_and_size: 'Townblock şu grubun bir parçası: %s. Grupta toplam %s Townblock var.'
 msg_player_made_group_not_for_sale: '%s grubu satış için değil %s yaptı.'
 #Added in 0.69
 msg_err_cannot_set_group_to_jail: 'Çizim grupları hapishane türlerine ayarlanamaz.'
@@ -866,7 +866,7 @@ msg_err_unable_to_add_more_residents_without_nation: 'Kasabanız, önce bir ulus
 msg_the_following_towns_were_deleted_for_having_0_claims: '0 claim talebinde bulunan aşağıdaki şehirler silindi: %s'
 msg_spawn_warn: 'Spawnlanma maliyeti %s Altın. Kabul ediyormusun? İpucu: Bu onayları atlamak için -ignore ekleyin.'
 msg_confirm_purchase: 'Bunun fiyatı  %s Altın. Kabul ediyormusun?'
-msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Yeni_başkente_eyeterince_yakın_olmadıkları_için_bu_şehirler_ülkenizden_çıkarılacak: %s. Devam_etmek_istiyormusun?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Yeni başkente yeterince yakın olmayacakları için şu kasabalar ülkenizden silinecek: %s. Devam etmek istiyor musunuz?'
 msg_ta_deposit_all_success: 'Başarıyla tüm ülke ve kasaba bankalarına %s yatırıldı.'
 bonus_townblocks: 'bonus kasaba blokları'
 #Added in 0.80
@@ -877,7 +877,7 @@ msg_err_teleport_cancelled_damage: 'Hasar aldınız ışınlanmanız iptal edild
 #Added in 0.82
 invitation_prefix: "&8[&7Davetiye&8] &9"
 confirmation_prefix: "&8[&7Onayla&8] &9"
-this_message_will_expire2: '&9This will auto-expire in %s seconds'
+this_message_will_expire2: '&9Bu işlem, %s saniye içinde otomatik olarak sona erecek!'
 msg_hover_next_page: 'Sonraki Sayfa'
 msg_hover_previous_page: 'Önceki sayfa'
 #Added in 0.83
@@ -888,7 +888,7 @@ msg_err_plot_belongs_to_group_toggle: 'Arsa bir gruba ait, kullanımı /plot gro
 #Added in 0.85
 msg_set_perms_reset_single: '&bBu grafikteki izinler başarıyla sıfırlandı.'
 #Added in 0.86
-status_bank_bankrupt: '(BANKRUPT)'
+status_bank_bankrupt: '(İFLAS ETTİ)'
 msg_warning_bankrupt: '&4*** UYARI %s, ALTIN EKSİKLİĞİ NEDENİYLE BİR SONRAKİ YENİ GÜNDE BANKRUPA GİDECEK ***'
 msg_town_bankrupt_by_upkeep: '&b%s, bakım masraflarını karşılayamadı ve iflas etti.'
 msg_town_bankrupt_by_upkeep_multiple: '&bAşağıdaki kasabalar bakım masraflarını karşılayamadı ve iflas etti: '
@@ -910,15 +910,15 @@ msg_town_reached_debtcap_and_is_disbanded: '&b%s, bakım masraflarını ödeyeme
 msg_town_reached_debtcap_and_is_disbanded_multiple: '&bAşağıdaki kasabalar bakım masraflarını ödeyemediler, borçlarına ulaştılar ve dağıldılar: '
 msg_unable_to_deposit_x: 'O kasabanın bankasına %s Altın yatırılamıyor.'
 msg_unable_to_withdraw_x: 'O kasabanın bankasından %s Altın çekilemiyor.'
-status_debtcap: 'Debt Cap:'
-status_world_explrevert_entity: 'Entity Explosion Revert:'
-status_world_explrevert_block: 'Block Explosion Revert:'
+status_debtcap: 'Borç Üst Sınırı:'
+status_world_explrevert_entity: 'Varlık Patlaması Geri Döndürme:'
+status_world_explrevert_block: 'Patlamayı Geri Almayı Engelle:'
 #Added in 0.88
 msg_nation_already_peaceful: '&cUlus zaten barışçıl.'
 msg_nation_already_not_peaceful: '&cUlus zaten barışçıl değil.'
 #Added in 0.89
 status_world_friendlyfire: 'Dost_ateşi:'
-status_world_wildernessmobs: 'Wilderness Mobs:'
+status_world_wildernessmobs: 'Vahşi Doğa Mobları:'
 msg_outlaw_kick_cooldown: '&c%s ülkesinde kanun kaçağı sayılırsınız. Kasabayı terk etmek için %s hakkınız kaldı, aksi takdirde yeniden doğma noktanıza ışınlanacaksınız.'
 msg_outlaw_kicked: '&4%s içinde hoş karşılanmıyorsun. Işınlandın.'
 msg_outlaw_town_notify: '&cBir haydut, %s şehrinizin topraklarına girdi.'
@@ -946,7 +946,7 @@ msg_err_cannot_use_command_because_town_ruined: "&cKasabanız mahvolduğu için 
 msg_warning_your_town_is_ruined_for_x_more_hours: '&cKasabanız %d saat daha harap durumda. Kasabayı kurtarmak için belediye başkanı olmalısınız! Eğer belediye başkanı iseniz ''/town reclaim'' komutunu kullanın.'
 msg_time_remaining_before_full_removal: 'Tam silinmeden önce kalan zaman: %d saat.'
 msg_time_until_reclaim_available: 'Alınabilirlik süresi: %d saat.'
-msg_reclaim_available: 'Reclaim available.'
+msg_reclaim_available: 'Geri alma mevcut.'
 #Added in 0.93
 msg_changed_peaceful: '&cKasabanın tarafsızlığı / barışseverliği artık %s.'
 msg_err_town_unclaim_canceled: '&cHak talebi iptal edildi. Bu bölgeyi şu anda hak talebinde bulunamazsınız.'
@@ -1137,7 +1137,7 @@ jail_sing: 'Hapis'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s, %s tarafından %s saat boyunca %s hücre numarasına %s için gönderildi.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s hapse atılacak kadar uzun oynamadı, %s daha bekleyin'
 #Added in 0.108
-msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
+msg_town_not_peaceful: '&bTown barışçıl bir devleti karşılayamazdı.'
 msg_town_already_peaceful: '&Şehir zaten barışçıl.'
 msg_town_already_not_peaceful: '&Kasaba zaten barışçıl değil.'
 msg_town_cant_peaceful: '&bKasaba, barışçıl bir kasaba olmayı göze alamazdı.'
@@ -1233,11 +1233,11 @@ msg_err_this_townblock_doesnt_match_the_groups_type: 'Bu claim bloğu,  %s türd
 #Added in 0.118
 status_title_nopvp: '&a(PvP_kapalı)'
 #Added in 0.119
-msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Vatandaşını_hapse_atamazsın_çünkü_haydut_ilan_edildikleri_lokasyondalar.'
-msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'You cannot jail your resident because they are in a location where they are considered an enemy.'
+msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Yasadışı oldukları bir yerde vatandaşınızı hapse atamazsınız.'
+msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Düşman sayıldığı bir yerde olduğu için vatandaşınızı hapse atamazsınız.'
 #Added in 0.120
-msg_resident_prompt: 'Enter the name of the player in chat, or q to exit. This will automatically time out in 30 seconds.'
-msg_prompt_cancel: 'Prompt cancelled or timed out.'
+msg_resident_prompt: 'Sohbette oyuncunun adını girin veya çıkmak için Q tuşuna basın. Bu işlem, 30 saniye içinde otomatik olarak zaman aşımına uğrayacaktır.'
+msg_prompt_cancel: 'İstem iptal edildi veya zaman aşımına uğradı.'
 #Added in 0.121
 status_title_primary_colour: '&6' #Used to colour the majority of the title bar.
 status_title_secondary_colour: '&e' #Used to colour the words in the title bar.
@@ -1251,146 +1251,149 @@ status_format_hover_key: '&a' #Colour applied to a status screen element which i
 status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a hover-able status screen element.
 status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
-status_home_element: ' &7[Home: %s]'
-status_registered: 'Registered:'
+status_home_element: ' &7[Ana Arsa: %s]'
+status_registered: 'Kayıt:'
 status_lastonline: 'Son_aktifliği:'
 status_fractions: '%s/%s'
 status_rank_list: 'Yetki Listesi'
 status_hover_click_for_more: 'Daha fazla bilgi için tıklayın.'
-status_jailed: 'Jailed:'
+status_jailed: 'Hapis_Durumu:'
 status_bad_yes: '&cEVET'
 status_good_no: '&aHAYIR'
-status_resident_tax_title: '%s''s Tax'
+status_resident_tax_title: '%s Vergisi'
 #Added in 0.122
-msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because they will not be close enough to your nation capital, the following towns will be removed if the merge is completed: %s.'
+msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: "Ülke başkentinize yeterince yakın olmayacakları için, birleştirme tamamlandığında şu kasabalar kaldırılacak: %s.\n"
 #Added in 0.123
-msg_err_invalid_townyworld: "'%s' is not a valid towny world."
-msg_err_enter_world_name_first: 'Please enter the name of the world first.'
-msg_wilderness_use_set_to: '&bWilderness use has been set to %s in %s.'
+msg_err_invalid_townyworld: "'%s' geçerli bir towny dünyası değil."
+msg_err_enter_world_name_first: 'Lütfen önce dünyanın adını girin.'
+msg_wilderness_use_set_to: '&bVahşi doğa kullanımı %s içinde %s olarak ayarlandı.'
 #Added in 0.124
-msg_err_invalid_response: 'Invalid response! Enter q to exit or back to go back to the previous question.'
-msg_setup_full_guide_link: '&bFor a link to the full install guide, click here.'
-msg_setup_wildernessuse: 'Would you like to enable wilderness use? This will allow players to break/build in the wilderness.'
-msg_setup_revertunclaim: 'Would you like to use revert on unclaim? This will make townblocks slowly regenerate when they are unclaimed.'
-msg_setup_town_block_ratio: 'What would you like to set your town block ratio at? The default is 8 townblocks per resident. Higher amounts will allow towns to claim more for each resident they have. Setting this to 0 will make it use values from the town_levels.'
-msg_setup_town_cost: 'How much should the cost to create a new town be? The default is 250.'
+msg_err_invalid_response: 'Geçersiz cevap! Çıkmak için Q tuşuna basın veya önceki soruya geri dönün.'
+msg_setup_full_guide_link: '&bTam kurulum kılavuzunun bağlantısı için burayı tıklayın.'
+msg_setup_wildernessuse: 'Vahşi doğada kullanımı etkinleştirmek ister misiniz? Bu, oyuncuların vahşi doğada blok kırmasına/inşa etmesine izin verecektir.'
+msg_setup_revertunclaim: 'Claim talebinde bulunmama durumunda geri döndürmeyi kullanmak ister misiniz? Bu, sahiplenilmediklerinde kasaba bloklarının yavaş yavaş yenilenmesini sağlayacaktır.'
+msg_setup_town_block_ratio: 'Kasaba blok oranınızı neye ayarlamak istersiniz? Varsayılan, ikamet eden kişi başına 8 şehir bloğudur. Daha yüksek miktarlar, kasabaların sahip oldukları her sakin için daha fazla talep etmesine izin verecektir. Bunu 0 sayısına ayarlamak, town_levels değerlerini kullanmasını sağlayacaktır.'
+msg_setup_town_cost: 'Yeni bir kasaba yaratmanın maliyeti ne kadar olmalı? Varsayılan: 250'
 msg_setup_nation_cost: 'Sizce yeni bir ulus oluşturmanın bedeli ne olmalı? Varsayılan 1000.'
-msg_setup_townblock_cost: 'How much should it cost to claim a townblock? The default is 25. A townblock is the same size as a chunk (default settings)'
-msg_setup_success: 'Successfully changed config values to your new values.'
+msg_setup_townblock_cost: 'Bir şehir bloğunu talep etmenin maliyeti ne kadar olmalıdır? Varsayılan değer 25. Townblock, bir Chunk ile aynı boyuttadır (varsayılan ayarlar).'
+msg_setup_success: 'Yapılandırma değerleri başarıyla yeni değerlerinizle değiştirildi.'
 #Added in 0.125
 #Player has recently died and respawned and is invulnerable.
-msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
+msg_err_player_cannot_be_harmed: '%s yakın zamanda ortaya çıktı ve zarar veremez.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'
+msg_you_have_lost_your_invulnerability: 'Dokunulmazlığınızı kaybettiniz.'
 #Added in 0.126
 #Used in the nation screen:
-status_capital: 'Capital:'
+status_capital: 'Başkent:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
-status_joined_town: 'Joined town:'
+status_joined_town: 'Katıldığı şehir:'
 #Used in the town screen's nation hover, to denote when a town joined a nation.
-status_joined_nation: 'Joined nation:'
+status_joined_nation: 'Katılan ulus:'
 #Shown in status screen elements where a value is not known.
-status_unknown: 'unknown'
+status_unknown: 'bilinmeyen'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
-msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
+msg_nationzone_override_set_to: '%s, ulusal bölge geçersiz kılma ayarını %s olarak ayarladı.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
-msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+msg_nationzone_override_removed: '%s, ulusal bölge geçersiz kılma ayarını %s olarak ayarladı.'
 #Added in 0.127
 #Used in status screen:
-status_nation_zone_size: 'Nation Zone Size:'
+status_nation_zone_size: 'Ulus Bölge Boyutu:'
 #Shown when a player adds people to their friends list.
-msg_res_friend_added_to_list: 'Added %s to your friend list.'
+msg_res_friend_added_to_list: 'Arkadaş listenize %s isimli oyuncu eklendi.'
 #Shown when a player removes people from their friends list.
-msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
+msg_res_friend_removed_from_list: '%s, arkadaş listenizden kaldırıldı.'
 #Generic resident freed from jail message.
-msg_resident_unjailed: '%s has been unjailed.'
+msg_resident_unjailed: '%s hapisten çıkarıldı.'
 #Shown when an admin uses /ta toggle devmode.
-msg_admin_toggle_devmode: 'Dev Mode: %s'
+msg_admin_toggle_devmode: 'Geliştirici Modu: %s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: 'Debug Mode: %s'
+msg_admin_toggle_debugmode: 'Debug Modu: %s'
 #Shown when an admin uses /ta toggle townwithdraw
-msg_admin_toggle_townwithdraw: 'Town Withdrawls: %s'
+msg_admin_toggle_townwithdraw: 'Kasabadan Para Çekme: %s'
 #Shown when an admin uses /ta toggle nationwithdraw
-msg_admin_toggle_nationwithdraw: 'Nation Withdrawls: %s'
+msg_admin_toggle_nationwithdraw: 'Ulus Para Çekme: %s'
 #Shown when claiming a town block for the town.
-msg_process_town_claim: 'Processing Town Claim...'
+msg_process_town_claim: 'Kasabanın Claim Talebi İşleniyor...'
 #Shown when unclaiming a town block for the town.
-msg_process_town_unclaim: 'Processing Town Unclaim...'
+msg_process_town_unclaim: 'Kasabanın UnClaim Talebi İşleniyor...'
 #Shown when there is nothing to unclaim.
-msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
+msg_err_nothing_to_unclaim: 'Reddedilecek bir şey yok!'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: 'Permission True.'
+msg_perm_true: 'İzin Doğru.'
 #Given as feedback when /ta checkperm is used.
-msg_err_perm_false: 'Permission False.'
+msg_err_perm_false: 'İzin Yanlış.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+status_towny_map_town_line: '&2Kasaba: &a%s &7| &2Sahibi: &a%s'
 #Shown on /towny version
-msg_towny_version: '&2Towny Version: &a%s'
+msg_towny_version: '&2Towny Sürümü: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
+msg_admin_blocked_login: '&c%s &2IP adresini kullanan bir oyuncu, sunucunuzun ekonomisine zarar verebilecek bir hesap adı olan &c%s &2ile oturum açmaya çalıştı, ancak Towny tarafından engellendi. Bu IP adresini yasaklamanızı öneriyoruz!'
 #Shown during resident purge
-msg_scanning_for_old_residents: 'Scanning for old residents...'
+msg_scanning_for_old_residents: 'Eski sakinler taranıyor...'
 #Shown during resident purge
-msg_deleting_resident: 'Deleting resident: %s.'
+msg_deleting_resident: 'Üye siliniyor: %s.'
 #Shown during resident purge
-msg_purge_complete: 'Resident purge complete: %s deleted.'
+msg_purge_complete: 'Üye temizleme tamamlandı: %s silindi.'
 #Message to the Town, shown when a town is given bonus blocks.
-msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
+msg_you_have_been_given_bonus_blocks: 'Size %s bonus şehir bloğu verildi.'
 #Message shown when a town cannot purchase any more bonus blocks.
-msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Kasabanız daha fazla bonus blok satın alamaz. Maksimum miktara ulaşıldı.'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
-msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
+msg_err_capital_cannot_be_peaceful: 'Başkentler barışçıl statüyü değiştiremez.'
 #Message shown as feedback for /t toggle nationzone command.
-msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
+msg_changed_nationzone: 'Kasabayı çevreleyen Ulus Bölgesi artık %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
-msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
+msg_err_your_town_has_no_nationzone_to_toggle: 'Kasabanızda değiştirilecek bir Ulus Bölgesi yok!'
 #Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
-towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
+towny_prices_nation_upkeep_based_on: '&7Ulus bakımı &a%s&7''''ye dayalıdır.'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
-towny_prices_upkeep_num_towns: 'number of towns.'
+towny_prices_upkeep_num_towns: 'kasaba sayısı.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
-towny_prices_upkeep_nation_level: 'nation level (num residents.)'
+towny_prices_upkeep_nation_level: 'ulus düzeyi (sayı sakinleri.)'
 #Added in 0.130
 #Jail causes
-msg_jailed_mayor: 'Jailed by mayor.'
+msg_jailed_mayor: 'Belediye başkanı tarafından hapse atıldı.'
 #Jail causes
-msg_jailed_outlaw: 'Killed as an outlaw.'
+msg_jailed_outlaw: 'Bir kanun kaçağı olarak öldürüldü.'
 #Jail causes
-msg_jailed_war: 'Prisoner of War.'
+msg_jailed_war: 'Savaş Tutsağı.'
 #Jail handbook messages
-msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
+msg_jailed_handbook_1: '%s nedeniyle hapse atılmışsınız gibi görünüyor'
 #Jail handbook messages
-msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
+msg_jailed_handbook_2: 'Bu çok kötü ha. Peki bu konuda ne yapabilirsin? İşte cezanı çekerken sana yardımcı olacak bazı ipuçları.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
+msg_jailed_handbook_3: '%s saattir hapistesiniz. Cezanı çekerek özgür olacaksın.'
 #Jail handbook messages
-msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
+msg_jailed_handbook_4_can: '/town leave komutunu kullanarak şehrinizden ayrılıp, hapisten kaçabilirsiniz.'
 #Jail handbook messages
-msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
+msg_jailed_handbook_4_cant: 'Hapisteyken hapishaneden kaçmak için kasabanı terk edemeyeceksin.'
 #Jail handbook messages
-msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
+msg_jailed_handbook_bail_1: 'Kefaletinizi ''''/res jail paybail'''' komutunu kullanarak ödeyerek hapisten kurtulabilirsiniz.'
 #Jail handbook messages
-msg_jailed_handbook_bail_2: 'Bail will cost %s.'
+msg_jailed_handbook_bail_2: 'Kefalet bedeli %s Altına mâl olacak.'
 #Jail handbook messages
-msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
+msg_jailed_handbook_5: 'Direnmek ve kaçmak için çabalamak zorunda kalırsanız, vahşi doğaya ulaşırsanız, özgürlüğünüzü de kazanırsınız.'
 #Jail handbook messages
-msg_jailed_handbook_6: 'But don''t die before you reach the wilderness or you''ll end up right back in jail.'
+msg_jailed_handbook_6: 'Ama vahşi doğaya ulaşmadan ölme, yoksa hemen hapse geri dönersin.'
 #Jail handbook messages
-msg_jailed_teleport: 'Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you''ve just got to get a hold of some.'
+msg_jailed_teleport: 'Neyse ki, ender incilerin ve koro meyvesinin kaçmanıza yardımcı olması için kullanılmasına izin veriliyor, şimdi sadece bazılarını ele geçirmeniz gerekiyor.'
 #Jail handbook messages
-msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your countrymen can reduce the jail plot''s HP to 0, or if the town you are jailed in is removed from the war.'
+msg_jailed_war_prisoner: "Bir savaş tutsağı olarak, yurttaşlarınız hapishane planının Canını 0''a indirebilirse veya hapse attığınız kasaba savaştan çıkarılırsa serbest bırakılırsınız.\n"
 #Jail handbook title
-msg_jailed_title: 'So you''ve been jailed :('
+msg_jailed_title: 'Demek hapse atıldın :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
 #Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
-msg_error_town_has_no_allies: 'Town has no allies to list.'
+msg_error_town_has_no_allies: 'Kasabanın listelenecek müttefiki yok.'
 #Message shown when there are no enemies to list in /town enemylist.
-msg_error_town_has_no_enemies: 'Town has no enemies to list.'
+msg_error_town_has_no_enemies: 'Kasabanın listelenecek düşmanı yok.'
 #Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
+#Added in 0.133
+#Message shown when a confirmation times out.
+msg_confirmation_timed_out: 'Onay Zaman aşımına uğradı.'

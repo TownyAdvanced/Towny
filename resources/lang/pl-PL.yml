@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.132
+version: 0.133
 language: polish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -482,7 +482,7 @@ nation_received_requests: '&bNacja otrzymala %a/%m propozycję sojuszu.'
 nation_sent_invites: '&bNacja wysłała %a/%m zaproszenia.'
 nation_sent_ally_requests: '&bNacja wyslala %a/%m propozycję sojuszu.'
 no_confirmations_open: '&cNie masz nic do zatwierdzenia!'
-successful_cancel: '&cAkcja została odrzucona, lub czas minął!'
+successful_cancel: '&cAction cancelled!'
 successful_deny: '&bZaproszenie zostało odrzucone pomyślnie.'
 successful_deny_request: '&bProsba o sojusz została odrzucona pomyślnie.'
 msg_ally_removed_successfully: '&bSojusz został rozwiązany pomyślnie.'
@@ -1394,3 +1394,6 @@ msg_error_town_has_no_enemies: 'Town has no enemies to list.'
 #Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
+#Added in 0.133
+#Message shown when a confirmation times out.
+msg_confirmation_timed_out: 'Confirmation Timed Out.'
