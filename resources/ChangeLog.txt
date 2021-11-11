@@ -6952,3 +6952,5 @@ v0.92.0.11:
   - New Config Option: global_town_settings.keep_inventory_on_death_in_arena
     - Default: false
     - If People should keep their inventories on death in an arena townblock. Is not guaranteed to work with other keep inventory plugins!
+  - Make deprecated isWarTime() non-static.
+  - New language: Bulgarian.
