@@ -482,7 +482,7 @@ nation_received_requests: '&bLa nation a reçu %a/%m demandes d''alliés.'
 nation_sent_invites: '&bLa nation a envoyé %a/%m invitations.'
 nation_sent_ally_requests: '&bLa nation a envoyé %a/%m demandes d''alliés.'
 no_confirmations_open: '&cVous n''avez rien à confirmer !'
-successful_cancel: '&cAction cancelled!'
+successful_cancel: '&cAction annulée !'
 successful_deny: '&bL''invitation a été refusée avec succès.'
 successful_deny_request: '&bLa demande d''allié a été refusée avec succès.'
 msg_ally_removed_successfully: '&bAllié a été supprimée avec succès.'
@@ -877,7 +877,7 @@ msg_err_teleport_cancelled_damage: 'Vous avez reçu ou infligé des dégâts, la
 #Added in 0.82
 invitation_prefix: "&8[&7Demande&8] &9"
 confirmation_prefix: "&8[&7Confirmation&8] &9"
-this_message_will_expire2: '&9This will auto-expire in %s seconds'
+this_message_will_expire2: '&9Ceci expirera automatiquement dans %s secondes'
 msg_hover_next_page: 'Page Suivante'
 msg_hover_previous_page: 'Page Précédente'
 #Added in 0.83
@@ -925,7 +925,7 @@ msg_outlaw_town_notify: '&c%s un hors-la-loi est entré dans le territoire de vo
 msg_your_town_payed_upkeep_with_debt: '&cVotre ville a payé la taxe journalière de %s avec dette.'
 msg_payed_nation_tax_with_debt: '&cVotre ville a payé la taxe nationale de %s avec dette.'
 #Added in 0.90
-status_plot_clear_deletion: 'PlotClearBlockDelete:'
+status_plot_clear_deletion: 'Suppression du bloc de parcelle :'
 msg_err_plot_clear_disabled_in_this_world: 'La commande /plot clear est désactivée dans ce monde.'
 #Added in 0.91
 msg_universe_attribution: 'Auteurs : '
@@ -1292,9 +1292,9 @@ status_joined_nation: 'A rejoint la nation :'
 #Shown in status screen elements where a value is not known.
 status_unknown: 'inconnu(e)'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
-msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
+msg_nationzone_override_set_to: 'La zone nationale de %s a été remplacée par %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
-msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+msg_nationzone_override_removed: 'La zone nationale de %s a été supprimée.'
 #Added in 0.127
 #Used in status screen:
 status_nation_zone_size: 'Taille de la Zone Nationale :'
@@ -1317,7 +1317,7 @@ msg_process_town_claim: 'Annexion du village en cours ...'
 #Shown when unclaiming a town block for the town.
 msg_process_town_unclaim: 'Désannexion en cours ...'
 #Shown when there is nothing to unclaim.
-msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
+msg_err_nothing_to_unclaim: 'Rien à désannexé !'
 #Given as feedback when /ta checkperm is used.
 msg_perm_true: 'Permission Vraie.'
 #Given as feedback when /ta checkperm is used.
@@ -1341,59 +1341,59 @@ msg_you_have_been_given_bonus_blocks: 'Vous avez reçu %s territoires bonus.'
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Votre ville ne peut pas acheter plus de territoire bonus. Limite maximum atteinte.'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
-msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
+msg_err_capital_cannot_be_peaceful: 'Les capitales ne peuvent pas activer le statut pacifique.'
 #Message shown as feedback for /t toggle nationzone command.
-msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
+msg_changed_nationzone: 'La zone nationale entourant la ville est maintenant %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
-msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
+msg_err_your_town_has_no_nationzone_to_toggle: 'Votre ville n''a pas de zone nationale à activer !'
 #Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
-towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
+towny_prices_nation_upkeep_based_on: '&7La taxe journalière de la nation est basée sur &athe %s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
-towny_prices_upkeep_num_towns: 'number of towns.'
+towny_prices_upkeep_num_towns: 'nombre de villes.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
-towny_prices_upkeep_nation_level: 'nation level (num residents.)'
+towny_prices_upkeep_nation_level: 'niveau national (nombre de résidents.)'
 #Added in 0.130
 #Jail causes
-msg_jailed_mayor: 'Jailed by mayor.'
+msg_jailed_mayor: 'Emprisonné par le maire.'
 #Jail causes
-msg_jailed_outlaw: 'Killed as an outlaw.'
+msg_jailed_outlaw: 'Vous avez tué en tant que hors-la-loi.'
 #Jail causes
-msg_jailed_war: 'Prisoner of War.'
+msg_jailed_war: 'Prisonnier de Guerre.'
 #Jail handbook messages
-msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
+msg_jailed_handbook_1: 'Il semblerait que vous ayez été emprisonné, pour la raison %s'
 #Jail handbook messages
-msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
+msg_jailed_handbook_2: 'C''est dommage, hein. Eh bien que peux-tu y faire ? Voici quelques conseils utiles pour vous pendant que vous purgez votre peine.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
+msg_jailed_handbook_3: 'Vous avez été emprisonné pendant %s heures. En purgeant votre peine, vous deviendrez libre.'
 #Jail handbook messages
-msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
+msg_jailed_handbook_4_can: 'Vous pouvez vous échapper de la prison en quittant votre ville en utilisant ''/town leave''.'
 #Jail handbook messages
-msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
+msg_jailed_handbook_4_cant: 'Tant que vous serez en prison, vous ne pourrez pas quitter votre ville pour vous échapper.'
 #Jail handbook messages
-msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
+msg_jailed_handbook_bail_1: 'Vous pouvez être libéré de prison en payant votre caution en utilisant ''/res jail paybail''.'
 #Jail handbook messages
-msg_jailed_handbook_bail_2: 'Bail will cost %s.'
+msg_jailed_handbook_bail_2: 'La libération conditionnelle coûtera %s.'
 #Jail handbook messages
-msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
+msg_jailed_handbook_5: 'Si vous devez persister et faire des efforts pour vous échapper, vous gagnerez également votre liberté si vous parvenez à atteindre la région sauvage.'
 #Jail handbook messages
-msg_jailed_handbook_6: 'But don''t die before you reach the wilderness or you''ll end up right back in jail.'
+msg_jailed_handbook_6: 'Mais ne mourez pas avant d''atteindre la région sauvage ou vous vous retrouverez en prison.'
 #Jail handbook messages
-msg_jailed_teleport: 'Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you''ve just got to get a hold of some.'
+msg_jailed_teleport: 'Heureusement, les enderpearls et les fruits de chorus peuvent être utilisés pour vous aider à vous échapper, il ne vous reste plus qu''à vous en procurer.'
 #Jail handbook messages
-msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your countrymen can reduce the jail plot''s HP to 0, or if the town you are jailed in is removed from the war.'
+msg_jailed_war_prisoner: 'En tant que prisonnier de guerre, vous serez libéré si vos compatriotes parviennent à réduire les PV de la parcelle de prison à 0, ou si la ville dans laquelle vous êtes emprisonné est désengagée de la guerre.'
 #Jail handbook title
-msg_jailed_title: 'So you''ve been jailed :('
+msg_jailed_title: 'Vous avez été emprisonné :('
 #Jail handbook author
-msg_jailed_author: 'Towny Jailco.'
+msg_jailed_author: 'Prison de la ville.'
 #Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
-msg_error_town_has_no_allies: 'Town has no allies to list.'
+msg_error_town_has_no_allies: 'La ville n''a pas d''alliés à lister.'
 #Message shown when there are no enemies to list in /town enemylist.
-msg_error_town_has_no_enemies: 'Town has no enemies to list.'
+msg_error_town_has_no_enemies: 'La ville n''a pas d''ennemis à lister.'
 #Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
 #Added in 0.133
 #Message shown when a confirmation times out.
-msg_confirmation_timed_out: 'Confirmation Timed Out.'
+msg_confirmation_timed_out: 'Délai de confirmation expiré.'
