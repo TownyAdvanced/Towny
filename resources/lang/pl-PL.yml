@@ -1182,7 +1182,7 @@ msg_up_to_date: '&aJesteś na bieżąco.'
 msg_click_purchase: 'Kliknij, aby kupić'
 msg_you_must_join_this_town_to_claim_this_plot: 'Musisz przedtem dołączyć do miasta %s w celu zakupienia tej działki. Czy chcesz dołączyć do miasta, aby móc dokonać przejęcia?'
 #Added in 0.113
-status_trustedlist: 'Trusted'
+status_trustedlist: 'Zaufana'
 msg_click_to_edit: '&6Kliknij, aby edytować.'
 permission_gui_header: 'GUI Uprawnień Towny'
 msg_last_edited: '&7&oOstatnia zmiana %s dokonana przez %s.'
@@ -1330,7 +1330,7 @@ msg_towny_version: '&2Towny Version: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
 msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
 #Shown during resident purge
-msg_scanning_for_old_residents: 'Scanning for old residents...'
+msg_scanning_for_old_residents: 'Skanowanie w poszukiwaniu starych mieszkańców...'
 #Shown during resident purge
 msg_deleting_resident: 'Deleting resident: %s.'
 #Shown during resident purge
@@ -1359,7 +1359,7 @@ msg_jailed_mayor: 'Jailed by mayor.'
 #Jail causes
 msg_jailed_outlaw: 'Killed as an outlaw.'
 #Jail causes
-msg_jailed_war: 'Prisoner of War.'
+msg_jailed_war: 'Jeniec wojenny.'
 #Jail handbook messages
 msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
 #Jail handbook messages
