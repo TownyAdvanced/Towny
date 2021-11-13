@@ -2676,20 +2676,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	private static void parseTownBaltop(Player player, Town town) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				StringBuilder sb = new StringBuilder();
-				List<Resident> residents = new ArrayList<>(town.getResidents());
-				residents.sort(Comparator.<Resident>comparingDouble(res -> res.getAccount().getHoldingBalance()).reversed());
-
-				int i = 0;
-				for (Resident res : residents)
-					sb.append(Translatable.of("msg_baltop_book_format", ++i, res.getName(), TownyEconomyHandler.getFormattedBalance(res.getAccount().getCachedBalance())).forLocale(player) + "\n");
-
-				player.openBook(BookFactory.makeBook("Town Baltop", town.getName(), sb.toString()));
-			}
-		}.runTaskAsynchronously(Towny.getPlugin());
+		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+			StringBuilder sb = new StringBuilder();
+			List<Resident> residents = new ArrayList<>(town.getResidents());
+			residents.sort(Comparator.<Resident>comparingDouble(res -> res.getAccount().getHoldingBalance()).reversed());
+	
+			int i = 0;
+			for (Resident res : residents)
+				sb.append(Translatable.of("msg_baltop_book_format", ++i, res.getName(), TownyEconomyHandler.getFormattedBalance(res.getAccount().getCachedBalance())).forLocale(player) + "\n");
+	
+			player.openBook(BookFactory.makeBook("Town Baltop", town.getName(), sb.toString()));
+		});
 	}
 	
 	private static void parseTownSetSpawn(Player player, Town town, boolean admin) {
