@@ -9,7 +9,7 @@ public class PlotPreUnclaimEvent extends PlotChangeOwnerEvent implements Cancell
 	private String cancelMessage = "";
 	
 	public PlotPreUnclaimEvent(Resident oldResident, Resident newResident, TownBlock townBlock) {
-		super (oldResident, newResident, townBlock);
+		super(oldResident, newResident, townBlock);
 	}
 
 	@Override

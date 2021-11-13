@@ -12,7 +12,7 @@ public abstract class PlotChangeOwnerEvent extends Event {
 	private final Resident oldResident, newResident;
 	private final TownBlock townBlock;
 
-	public PlotChangeOwnerEvent(Resident oldResident, Resident newResident, TownBlock townBlock) {
+	public PlotChangeOwnerEvent(@Nullable Resident oldResident, @Nullable Resident newResident, @NotNull TownBlock townBlock) {
 		this.oldResident = oldResident;
 		this.newResident = newResident;
 		this.townBlock = townBlock;
@@ -28,6 +28,7 @@ public abstract class PlotChangeOwnerEvent extends Event {
 		return newResident;
 	}
 
+	@NotNull
 	public TownBlock getTownBlock() {
 		return townBlock;
 	}

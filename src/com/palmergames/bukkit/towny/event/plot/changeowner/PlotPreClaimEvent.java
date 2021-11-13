@@ -9,7 +9,7 @@ public class PlotPreClaimEvent extends PlotChangeOwnerEvent implements Cancellab
 	private String cancelMessage = "";
 	
 	public PlotPreClaimEvent(Resident oldResident, Resident newResident, TownBlock townBlock) {
-		super (oldResident, newResident, townBlock);
+		super(oldResident, newResident, townBlock);
 	}
 
 	@Override

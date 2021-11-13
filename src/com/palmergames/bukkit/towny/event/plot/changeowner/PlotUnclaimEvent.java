@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 public class PlotUnclaimEvent extends PlotChangeOwnerEvent {
 
 	public PlotUnclaimEvent(Resident oldResident, Resident newResident, TownBlock townBlock) {
-		super (oldResident, newResident, townBlock);
+		super(oldResident, newResident, townBlock);
 	}
-
 }
