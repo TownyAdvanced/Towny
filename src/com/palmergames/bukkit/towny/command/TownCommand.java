@@ -2968,7 +2968,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (TownySettings.isTownTagSetAutomatically())
-			town.setTag(name.substring(0, Math.min(name.length(), TownySettings.getMaxTagLength())));
+			town.setTag(name.substring(0, Math.min(name.length(), TownySettings.getMaxTagLength())).replace("_","").replace("-", ""));
 		
 		resident.save();
 		townBlock.save();

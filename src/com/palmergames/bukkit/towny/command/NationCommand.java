@@ -1181,7 +1181,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation.getAccount().setBalance(0, "New Nation Account");
 
 		if (TownySettings.isNationTagSetAutomatically())
-			nation.setTag(name.substring(0, Math.min(name.length(), TownySettings.getMaxTagLength())));
+			nation.setTag(name.substring(0, Math.min(name.length(), TownySettings.getMaxTagLength())).replace("_","").replace("-", ""));
 			
 		town.save();
 		nation.save();
