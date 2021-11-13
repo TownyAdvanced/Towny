@@ -5,8 +5,10 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
-import com.palmergames.bukkit.towny.event.plot.PlotClaimEvent;
-import com.palmergames.bukkit.towny.event.plot.PlotPreClaimEvent;
+import com.palmergames.bukkit.towny.event.plot.changeowner.PlotClaimEvent;
+import com.palmergames.bukkit.towny.event.plot.changeowner.PlotPreClaimEvent;
+import com.palmergames.bukkit.towny.event.plot.changeowner.PlotPreUnclaimEvent;
+import com.palmergames.bukkit.towny.event.plot.changeowner.PlotUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -104,20 +106,42 @@ public class TownBlock extends TownyObject {
 	public void setResident(Resident resident, boolean callEvent) {
 		
 		if (callEvent) {
-			PlotPreClaimEvent plotPreClaimEvent = new PlotPreClaimEvent(this.resident, resident, this);
-			Bukkit.getPluginManager().callEvent(plotPreClaimEvent);
-
-			if (plotPreClaimEvent.isCancelled()) {
-				if (!plotPreClaimEvent.getCancelMessage().isEmpty() && resident != null)
-					TownyMessaging.sendErrorMsg(resident, plotPreClaimEvent.getCancelMessage());
-
-				return;
+			
+			// There is a resident here already who is being replaced.
+			if (this.resident != null && !this.resident.equals(resident)) {
+				PlotPreUnclaimEvent plotPreUnclaimEvent = new PlotPreUnclaimEvent(this.resident, resident, this);
+				Bukkit.getPluginManager().callEvent(plotPreUnclaimEvent);
+				if (plotPreUnclaimEvent.isCancelled()) {
+					if (!plotPreUnclaimEvent.getCancelMessage().isEmpty()) { 
+						if (this.resident != null)
+							TownyMessaging.sendErrorMsg(this.resident, plotPreUnclaimEvent.getCancelMessage());
+						if (resident != null) 
+							TownyMessaging.sendErrorMsg(resident, plotPreUnclaimEvent.getCancelMessage());
+						}
+					return;
+				}
+			}
+			
+			// This is being claimed by a resident.
+			if (resident != null && !resident.equals(this.resident)) {
+				PlotPreClaimEvent plotPreClaimEvent = new PlotPreClaimEvent(this.resident, resident, this);
+				Bukkit.getPluginManager().callEvent(plotPreClaimEvent);
+	
+				if (plotPreClaimEvent.isCancelled()) {
+					if (!plotPreClaimEvent.getCancelMessage().isEmpty() && resident != null)
+						TownyMessaging.sendErrorMsg(resident, plotPreClaimEvent.getCancelMessage());
+	
+					return;
+				}
 			}
 		}
 		
 		boolean successful;
-		if (hasResident())
+		boolean unclaim = false;
+		if (hasResident()) {
 			this.resident.removeTownBlock(this);
+			unclaim = true;
+		}
 		this.resident = resident;
 		try {
 			resident.addTownBlock(this);
@@ -128,6 +152,9 @@ public class TownBlock extends TownyObject {
 		
 		if (successful && callEvent)
 			Bukkit.getPluginManager().callEvent(new PlotClaimEvent(this.resident, resident, this));
+		
+		if (unclaim && callEvent)
+			Bukkit.getPluginManager().callEvent(new PlotUnclaimEvent(this.resident, resident, this));
 		
 		this.resident = resident;
 		permissionOverrides.clear();

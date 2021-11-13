@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.event.plot;
+package com.palmergames.bukkit.towny.event.plot.changeowner;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -7,12 +7,12 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlotClaimEvent extends Event {
+public abstract class PlotChangeOwnerEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private final Resident oldResident, newResident;
 	private final TownBlock townBlock;
 
-	public PlotClaimEvent(Resident oldResident, Resident newResident, TownBlock townBlock) {
+	public PlotChangeOwnerEvent(Resident oldResident, Resident newResident, TownBlock townBlock) {
 		this.oldResident = oldResident;
 		this.newResident = newResident;
 		this.townBlock = townBlock;
