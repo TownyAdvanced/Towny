@@ -1615,7 +1615,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (line != null && !line.isEmpty()) {
 						Resident res = universe.getResident(line.trim());
 						if (res != null) {
-							townBlock.setResident(res);
+							townBlock.setResident(res, false);
 						}
 						else {
 							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_invalid_townblock_resident", townBlock.toString()));

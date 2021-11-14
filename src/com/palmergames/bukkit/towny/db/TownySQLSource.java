@@ -1779,7 +1779,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty()) {
 					Resident res = universe.getResident(line.trim());
 					if (res != null)
-						townBlock.setResident(res);
+						townBlock.setResident(res, false);
 					else {
 						TownyMessaging.sendErrorMsg(String.format(
 							"Error fetching resident '%s' for townblock '%s'!",
