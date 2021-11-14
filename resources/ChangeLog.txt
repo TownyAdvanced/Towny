@@ -6963,3 +6963,9 @@ v0.92.0.11:
   - Fix NationRemoveAllyEvent constructor.
   - Parse baltops asynchronously, courtesy of Gamer153 with PR #5444. (First-Time Contributor!)
   - Fix baltops not using cached balances.
+  - API: Add new PlotChangeOwnerEvents, courtesy of Warriorrr and LlmDl with PR #5418.
+    - PlotPreClaimEvent 
+    - PlotClaimEvent
+    - PlotPreUnclaimEvent
+    - PlotUnclaimEvent
+  - Bump language file to 0.133. 
