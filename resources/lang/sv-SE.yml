@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.133
+version: 0.134
 language: swedish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1397,3 +1397,6 @@ msg_baltop_book_format: '%s. %s | %s'
 #Added in 0.133
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: 'Confirmation Timed Out.'
+#Added in 0.134
+tc_player_channel_sound_muted: 'The channel sound has been muted'
+tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'

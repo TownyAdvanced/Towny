@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.133
+version: 0.134
 language: 한국어
 author: Daybreak 새벽
 website: 'http://townyadvanced.github.io/'
@@ -557,7 +557,7 @@ status_pvp: 'PVP:'
 explosions: '폭발:'
 firespread: '불 번짐:'
 mobspawns: '몹 생성:'
-owner_of_x_plots: '2토지: &a%s개의 토지를 소유.'
+owner_of_x_plots: '토지: &a%s개의 토지를 소유.'
 status_bank: '은행:'
 status_town: '마을:'
 status_no_town: '없음'
@@ -599,7 +599,7 @@ status_world_ignoredblocks: '예외 블록:'
 status_res_taxexempt: '마을 관리자는 세금이 면제됩니다.'
 status_res_tax: '마을 세금:'
 status_res_plottax: '납부할 토지 세금 합계: '
-status_res_totaltax: '납부해야하는 세금의 합계: '
+status_res_totaltax: '납부해야하는 세금의 합계:'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '국가 수도 밖에서 국가 금고를 이용할 수 없습니다.'
 msg_err_unable_to_use_bank_outside_your_town: '마을 밖에서 마을 금고를 이용할 수 없습니다.'
@@ -859,7 +859,7 @@ msg_err_teleport_cancelled: '움직임으로 인해 텔레포트가 취소되었
 msg_cache_block_error_plot_friends: '친구'
 msg_cache_block_error_plot_allies: '동맹'
 msg_cache_block_error_plot_outsiders: '외부인'
-msg_cache_block_error_plot_town_members: '마을 구성원'
+msg_cache_block_error_plot_town_members: '시민'
 msg_err_invalid_nation_map_color: '&c없는 맵 색상입니다. 사용할 수 있는 색상은 %s.'
 msg_nation_map_color_changed: '&b국가 맵 색상은 %s로 변경되었습니다.'
 msg_err_unable_to_add_more_residents_without_nation: '플레이어를 더 이상 초대할 수 없습니다. %s 마을원들을 추방하거나 혹은 국가를 만들어서 최대 수용인원을 늘리십시요.'
@@ -1397,3 +1397,6 @@ msg_baltop_book_format: '%s. %s | %s'
 #Added in 0.133
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: 'Confirmation Timed Out.'
+#Added in 0.134
+tc_player_channel_sound_muted: 'The channel sound has been muted'
+tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
