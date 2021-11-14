@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.133
+version: 0.134
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -482,7 +482,7 @@ nation_received_requests: '&b国家已经收到了 %a/%m 结盟请求.'
 nation_sent_invites: '&b国家已发出 %a/%m 邀请.'
 nation_sent_ally_requests: '&b国家已经派出 %a/%m 结盟请求.'
 no_confirmations_open: '&c你没什么可确认的!'
-successful_cancel: '&cAction cancelled!'
+successful_cancel: '&c操作已取消！'
 successful_deny: '&b邀请已被拒绝.'
 successful_deny_request: '&b已拒绝结盟请求.'
 msg_ally_removed_successfully: '&b已成功删除联盟.'
@@ -1396,4 +1396,7 @@ msg_error_town_has_no_enemies: '此城镇没有敌人。'
 msg_baltop_book_format: '%s. %s | %s'
 #Added in 0.133
 #Message shown when a confirmation times out.
-msg_confirmation_timed_out: 'Confirmation Timed Out.'
+msg_confirmation_timed_out: '请求确认已超时。'
+#Added in 0.134
+tc_player_channel_sound_muted: 'The channel sound has been muted'
+tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
