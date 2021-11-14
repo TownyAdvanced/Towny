@@ -78,9 +78,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
-
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -2493,7 +2490,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			for (Resident res : residents)
 				sb.append(Translatable.of("msg_baltop_book_format", ++i, res.getName(), TownyEconomyHandler.getFormattedBalance(res.getAccount().getCachedBalance())).forLocale(player) + "\n");
 
-			player.openBook(BookFactory.makeBook("Town Baltop", nation.getName(), sb.toString()));
+			player.openBook(BookFactory.makeBook("Nation Baltop", nation.getName(), sb.toString()));
 		});
 	}
 
