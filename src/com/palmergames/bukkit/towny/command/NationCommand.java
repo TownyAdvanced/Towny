@@ -1913,6 +1913,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					// We know the linked allies are enabled so:
 					if (targetNation.hasAlly(nation)) {
 						try {
+							NationRemoveAllyEvent removeAllyEvent = new NationRemoveAllyEvent(targetNation, nation);
+							Bukkit.getPluginManager().callEvent(removeAllyEvent);
+							if (removeAllyEvent.isCancelled()) {
+								TownyMessaging.sendErrorMsg(player, removeAllyEvent.getCancelMessage());
+								return;
+							}
 							targetNation.removeAlly(nation);
 						} catch (NotRegisteredException e) {
 							// This should genuinely not be possible since we "hasAlly it beforehand"

@@ -6959,3 +6959,4 @@ v0.92.0.11:
   - Add new API to CombatUtil, courtesy of galacticwarrior9 with PR #5446. (First-Time Contributor!)
     - CombatUtil#isAlly(Resident, Resident)
     - CombatUtil#isEnemy(Resident, Resident)
+  - Fix a nation removing an ally, and that causing the ally to remove the nation as an ally not throwing a NationRemoveAllyEvent.
