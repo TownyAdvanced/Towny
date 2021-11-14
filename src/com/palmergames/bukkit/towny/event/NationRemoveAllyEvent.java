@@ -15,7 +15,7 @@ public class NationRemoveAllyEvent extends Event implements Cancellable {
 
 	public NationRemoveAllyEvent(Nation nation, Nation removedNation) {
 		this.nation = nation;
-		this.removedNation = nation;
+		this.removedNation = removedNation;
 
 	}
 

@@ -6960,3 +6960,4 @@ v0.92.0.11:
     - CombatUtil#isAlly(Resident, Resident)
     - CombatUtil#isEnemy(Resident, Resident)
   - Fix a nation removing an ally, and that causing the ally to remove the nation as an ally not throwing a NationRemoveAllyEvent.
+  - Fix NationRemoveAllyEvent constructor.
