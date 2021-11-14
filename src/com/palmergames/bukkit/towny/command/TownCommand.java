@@ -2679,7 +2679,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 			StringBuilder sb = new StringBuilder();
 			List<Resident> residents = new ArrayList<>(town.getResidents());
-			residents.sort(Comparator.<Resident>comparingDouble(res -> res.getAccount().getHoldingBalance()).reversed());
+			residents.sort(Comparator.<Resident>comparingDouble(res -> res.getAccount().getCachedBalance()).reversed());
 	
 			int i = 0;
 			for (Resident res : residents)
