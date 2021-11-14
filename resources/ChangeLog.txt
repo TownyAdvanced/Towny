@@ -6969,3 +6969,4 @@ v0.92.0.11:
     - PlotPreUnclaimEvent
     - PlotUnclaimEvent
   - Bump language file to 0.134. 
+  - Fix exception when running /plot claim, courtesy of Warriorrrr with PR #5448.
