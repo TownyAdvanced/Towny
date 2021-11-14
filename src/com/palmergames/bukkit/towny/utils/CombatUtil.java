@@ -463,6 +463,21 @@ public class CombatUtil {
 	}
 
 	/**
+	 * Is the resident B an ally of resident A?
+	 *
+	 * @param a - Resident A in comparison
+	 * @param b - Resident B in comparison
+	 * @return true if they are allies.
+	 */
+	public static boolean isAlly(Resident a, Resident b) {
+		// Fast-fail
+		if (a == null || b == null || !a.hasTown() || !b.hasTown())
+			return false;
+
+		return isAlly(a.getTownOrNull(), b.getTownOrNull());
+	}
+
+	/**
 	 * Is town b an ally of town a?
 	 * 
 	 * @param a - Town A in comparison
@@ -605,6 +620,21 @@ public class CombatUtil {
 		if (isEnemy(residentA.getTownOrNull(), residentB.getTownOrNull()))
 			return true;
 		return false;
+	}
+
+	/**
+	 * Is the resident B an enemy of resident A?
+	 *
+	 * @param a - Resident A in comparison
+	 * @param b - Resident B in comparison
+	 * @return true if B is an enemy.
+	 */
+	public static boolean isEnemy(Resident a, Resident b) {
+		// Fast-fail
+		if (a == null || b == null || !a.hasTown() || !b.hasTown())
+			return false;
+
+		return isEnemy(a.getTownOrNull(), b.getTownOrNull());
 	}
 
 	/**
