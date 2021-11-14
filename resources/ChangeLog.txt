@@ -6956,3 +6956,6 @@ v0.92.0.11:
   - New language: Bulgarian.
 0.97.2.18:
   - Fix automatic tag setting picking up -'s and _'s.
+  - Add new API to CombatUtil, courtesy of galacticwarrior9 with PR #5446. (First-Time Contributor!)
+    - CombatUtil#isAlly(Resident, Resident)
+    - CombatUtil#isEnemy(Resident, Resident)
