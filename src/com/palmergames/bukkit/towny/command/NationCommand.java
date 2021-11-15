@@ -108,6 +108,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"say",
 		"set",
 		"toggle",
+		"invite",
 		"join",
 		"merge",
 		"townlist",
