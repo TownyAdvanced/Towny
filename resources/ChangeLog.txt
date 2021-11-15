@@ -6970,3 +6970,5 @@ v0.92.0.11:
     - PlotUnclaimEvent
   - Bump language file to 0.134. 
   - Fix exception when running /plot claim, courtesy of Warriorrrr with PR #5448.
+0.97.2.19:
+  - Fix Entity Listener paying attention to cancelled events, closes #5449.

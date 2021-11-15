@@ -656,7 +656,7 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event - HangingBreakEvent
 	 */
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onHangingBreak(HangingBreakEvent event) {
 
 		if (plugin.isError()) {
