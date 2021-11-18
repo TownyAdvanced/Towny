@@ -317,8 +317,9 @@ public abstract class Account implements Nameable {
 		double getBalance() {
 			return balance;
 		}
-		private long getTime() {
-			return time;
+		
+		boolean isStale() {
+			return System.currentTimeMillis() - time > CACHE_TIMEOUT;
 		}
 
 		void setBalance(double _balance) {
@@ -335,15 +336,14 @@ public abstract class Account implements Nameable {
 	}
 
 	/**
-	 * Returns a cached balance of a town or nation bank account,
-	 * the value of which can be brand new or up to 10 minutes old 
-	 * (time configurable in the config,) based on whether the 
-	 * cache has been checked recently.
+	 * Returns a cached balance of an {@link Account}, the value of which can be
+	 * brand new or up to 10 minutes old (time configurable in the config,) based on
+	 * whether the cache has been checked recently.
 	 *
-	 * @return a cached balance of a town or nation bank account.
+	 * @return balance {@link Double} which is from a {@link CachedBalance#balance}.
 	 */
 	public double getCachedBalance() {
-		if (System.currentTimeMillis() - cachedBalance.getTime() > CACHE_TIMEOUT)
+		if (cachedBalance.isStale())
 			cachedBalance.updateCache();
 
 		return cachedBalance.getBalance();

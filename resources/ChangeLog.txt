@@ -6973,3 +6973,4 @@ v0.92.0.11:
 0.97.2.19:
   - Fix Entity Listener paying attention to cancelled events, closes #5449.
   - Fix /n tabcompleter missing "invite".
+  - Make /towny top balance run things async, which should make it easier on servers when there's no cached bank balances to work off of.

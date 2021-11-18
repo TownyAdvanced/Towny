@@ -331,15 +331,15 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				list.addAll(universe.getTowns());
 				list.addAll(universe.getNations());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances"));
-				towny_top.addAll(getTopBankBalance(list));
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> towny_top.addAll(getTopBankBalance(list)));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				List<Government> list = new ArrayList<>(universe.getTowns());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Town"));
-				towny_top.addAll(getTopBankBalance(list));
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> towny_top.addAll(getTopBankBalance(list)));
 			} else if (args[1].equalsIgnoreCase("nation")) {
 				List<Government> list = new ArrayList<>(universe.getNations());
 				towny_top.add(ChatTools.formatTitle("Top Bank Balances by Nation"));
-				towny_top.addAll(getTopBankBalance(list));
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> towny_top.addAll(getTopBankBalance(list)));
 			} else {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_sub"));
 			}
