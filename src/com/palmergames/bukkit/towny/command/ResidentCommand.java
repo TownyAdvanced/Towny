@@ -231,7 +231,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			final Optional<Resident> resOpt = Optional.ofNullable(TownyUniverse.getInstance().getResident(split[0]));
 			if (resOpt.isPresent())
-				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(resOpt.get(), null, Translation.getDefaultLocale())));
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(resOpt.get(), sender, Translation.getDefaultLocale())));
 			else
 				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[0]));
 		}
