@@ -6974,3 +6974,6 @@ v0.92.0.11:
   - Fix Entity Listener paying attention to cancelled events, closes #5449.
   - Fix /n tabcompleter missing "invite".
   - Make /towny top balance run things async, which should make it easier on servers when there's no cached bank balances to work off of.
+  - Fix nation spawns not being cleared when a capital changes, courtesy of Warriorrrr with PR #5456.
+  - Make the outsiders prevent pvp toggle apply to plots, courtesy of Warriorrrr with PR #5455.
+  - Show online status for console when running /res, courtesy of Warriorrrr with PR #5457.
