@@ -254,7 +254,7 @@ public class Nation extends Government {
 	public void setSpawn(Location spawn) {
 		if (spawn != null)
 			TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.NATION_SPAWN));
-		else 
+		else if (this.nationSpawn != null)
 			TownyUniverse.getInstance().removeSpawnPoint(this.nationSpawn);
 		this.nationSpawn = spawn;
 	}
