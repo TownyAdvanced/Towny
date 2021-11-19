@@ -6977,3 +6977,4 @@ v0.92.0.11:
   - Fix nation spawns not being cleared when a capital changes, courtesy of Warriorrrr with PR #5456.
   - Make the outsiders prevent pvp toggle apply to plots, courtesy of Warriorrrr with PR #5455.
   - Show online status for console when running /res, courtesy of Warriorrrr with PR #5457.
+  - Set the nation spawn to the town's spawn on creation, courtesy of Warriorrrr with PR #5458.
