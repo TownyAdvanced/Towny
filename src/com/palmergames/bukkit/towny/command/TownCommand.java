@@ -1574,9 +1574,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					// Test to see if an outsider being inside of the Town would prevent toggling PVP.
 					if (TownySettings.getOutsidersPreventPVPToggle()) {
 						for (Player target : Bukkit.getOnlinePlayers()) {
-							if (!TownyAPI.getInstance().isWilderness(target.getLocation()) 
-									&& TownyAPI.getInstance().getTown(target.getLocation()).equals(town) 
-									&& !town.hasResident(target.getName()))
+							if (!town.hasResident(target) && town.equals(TownyAPI.getInstance().getTown(target.getLocation())))
 								throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_town"));
 						}
 					}
