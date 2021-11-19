@@ -196,6 +196,10 @@ public class Nation extends Government {
 
 		TownyMessaging.sendDebugMsg("Nation " + this.getName() + " has set a capital city of " + capital.getName());
 		this.capital = capital;
+		
+		if (this.nationSpawn != null && TownySettings.isNationSpawnOnlyAllowedInCapital() && !capital.isInsideTown(this.nationSpawn))
+			this.nationSpawn = null;
+
 		try {
 			TownyPerms.assignPermissions(capital.getMayor(), null);
 		} catch (Exception e) {
