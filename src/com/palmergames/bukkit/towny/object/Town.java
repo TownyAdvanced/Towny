@@ -1621,6 +1621,15 @@ public class Town extends Government implements TownBlockOwner {
 	public void setNationZoneEnabled(boolean nationZoneEnabled) {
 		this.nationZoneEnabled = nationZoneEnabled;
 	}
+
+	/**
+	 * Tests whether a location is inside this town's boundaries
+	 * @param location The location
+	 * @return Whether the location is inside this town.
+	 */
+	public boolean isInsideTown(@NotNull Location location) {
+		return this.equals(WorldCoord.parseWorldCoord(location).getTownOrNull());
+	}
 	
 	/**
 	 * Is the Town Neutral or Peaceful?
