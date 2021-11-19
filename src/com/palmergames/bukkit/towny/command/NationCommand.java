@@ -1177,6 +1177,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
 		town.setNation(nation);
 		nation.setCapital(town);
+		nation.setSpawn(town.getSpawnOrNull());
 
 		if (TownyEconomyHandler.isActive())
 			nation.getAccount().setBalance(0, "New Nation Account");
