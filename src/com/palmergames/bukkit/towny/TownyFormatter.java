@@ -32,6 +32,8 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.ChatPaginator;
 
@@ -133,17 +135,17 @@ public class TownyFormatter {
 	 *  Gets the status screen of a Resident
 	 *  
 	 * @param resident the resident to check the status of
-	 * @param player make sure the resident is an online player
+	 * @param sender The sender who executed the command.
 	 * @param locale Locale to use while translating   
 	 * @return StatusScreen containing the results.
 	 */
-	public static StatusScreen getStatus(Resident resident, Player player, Locale locale) {
+	public static StatusScreen getStatus(Resident resident, CommandSender sender, Locale locale) {
 
 		StatusScreen screen = new StatusScreen();
 		final Translator translator = Translator.locale(locale);
 
 		// ___[ King Harlus ]___
-		screen.addComponentOf("title", ChatTools.formatTitle(resident.getFormattedName() + (playerIsOnlineAndVisible(resident.getName(), player) ? translator.of("online2") : "")));
+		screen.addComponentOf("title", ChatTools.formatTitle(resident.getFormattedName() + (playerIsOnlineAndVisible(resident.getName(), sender) ? translator.of("online2") : "")));
 
 		// First used if last online is this year, 2nd used if last online is early than this year.
 		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
@@ -882,11 +884,16 @@ public class TownyFormatter {
 	/**
 	 * Determine whether the named player is vanished from the  
 	 * @param name the name of the player who is having /res NAME used upon them.
-	 * @param player Player who ran teh /res NAME command.
+	 * @param sender Sender who ran the /res NAME command.
 	 * @return true if the name is online and can be seen by the player. 
 	 */
-	private static boolean playerIsOnlineAndVisible(String name, Player player) {
-		return BukkitTools.isOnline(name) && player != null && player.canSee(BukkitTools.getPlayer(name));
+	private static boolean playerIsOnlineAndVisible(String name, CommandSender sender) {
+		if (sender instanceof Player player)
+			return BukkitTools.isOnline(name) && player.canSee(BukkitTools.getPlayer(name));
+		else if (sender instanceof ConsoleCommandSender)
+			return BukkitTools.isOnline(name);
+		else
+			return false;
 	}
 	
 	/*
