@@ -1118,6 +1118,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (town.isAdminEnabledPVP() && townBlock.getPermissions().pvp)
 						throw new TownyException(Translatable.of("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp", "adminEnabledPVP", "off"));
 
+					if (TownySettings.getOutsidersPreventPVPToggle()) {
+						for (Player target : Bukkit.getOnlinePlayers()) {
+							if (!town.hasResident(target) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+								throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
+						}
+					}
+
 					// Fire cancellable event directly before setting the toggle.
 					PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(townBlock, player, choice.orElse(!townBlock.getPermissions().pvp));
 					Bukkit.getPluginManager().callEvent(plotTogglePvpEvent);
@@ -1232,6 +1239,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Test to see if the pvp cooldown timer is active for this plot.
 							if (CooldownTimerTask.hasCooldown(groupBlock.getWorldCoord().toString(), CooldownType.PVP))
 								throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(groupBlock.getWorldCoord().toString(), CooldownType.PVP)));
+						}
+
+						if (TownySettings.getOutsidersPreventPVPToggle()) {
+							for (Player target : Bukkit.getOnlinePlayers()) {
+								if (!town.hasResident(target) && groupBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+									throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
+							}
 						}
 
 						PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(groupBlock, player, choice.orElse(!groupBlock.getPermissions().pvp));
