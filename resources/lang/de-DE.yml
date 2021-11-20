@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.134
+version: 0.135
 language: german
 author: ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih
 website: 'http://townyadvanced.github.io/'
@@ -1400,3 +1400,5 @@ msg_confirmation_timed_out: 'Confirmation Timed Out.'
 #Added in 0.134
 tc_player_channel_sound_muted: 'The channel sound has been muted'
 tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
+#Added in 0.135
+msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
