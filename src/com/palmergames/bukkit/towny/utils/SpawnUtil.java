@@ -215,6 +215,11 @@ public class SpawnUtil {
 			nation = (Nation) townyObject;
 			spawnLoc = nation.getSpawn();
 
+			// Prevent outlaws from spawning into towns they're considered an outlaw in.
+			Town toTown = TownyAPI.getInstance().getTown(nation.getSpawn());
+			if (toTown != null && !isTownyAdmin && toTown.hasOutlaw(resident))
+				throw new TownyException(Translatable.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", toTown.getName()));
+
 			// Determine conditions
 			if (isTownyAdmin) {
 				nationSpawnPermission = NationSpawnLevel.ADMIN;
