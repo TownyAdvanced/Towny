@@ -6979,4 +6979,6 @@ v0.92.0.11:
   - Show online status for console when running /res, courtesy of Warriorrrr with PR #5457.
   - Set the nation spawn to the town's spawn on creation, courtesy of Warriorrrr with PR #5458.
 0.97.3.0
-  - Bump version number for release. 
+  - Bump version number for release.
+0.97.3.1:
+  - Fix outlaws teleporting into towns they're outlawed in using /n spawn, courtesy of Warriorrrr with PR #5461. 
