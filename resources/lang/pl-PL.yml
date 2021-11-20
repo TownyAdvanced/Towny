@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.134
+version: 0.135
 language: polish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1400,3 +1400,5 @@ msg_confirmation_timed_out: 'Upłynął limit czasu potwierdzania.'
 #Added in 0.134
 tc_player_channel_sound_muted: 'Kanał Dzwięku został wyciszony'
 tc_player_channel_sound_unmuted: 'Kanał Dzwięku został odciszony'
+#Added in 0.135
+msg_cant_toggle_pvp_outsider_in_plot: 'Na działce znajduje się outsider, nie można zmienić statusu pvp!'
