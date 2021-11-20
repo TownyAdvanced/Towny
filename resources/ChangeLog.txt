@@ -6978,3 +6978,5 @@ v0.92.0.11:
   - Make the outsiders prevent pvp toggle apply to plots, courtesy of Warriorrrr with PR #5455.
   - Show online status for console when running /res, courtesy of Warriorrrr with PR #5457.
   - Set the nation spawn to the town's spawn on creation, courtesy of Warriorrrr with PR #5458.
+0.97.3.0
+  - Bump version number for release. 
