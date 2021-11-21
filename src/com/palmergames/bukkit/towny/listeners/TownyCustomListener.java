@@ -16,8 +16,6 @@ import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -28,7 +26,6 @@ import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import com.palmergames.util.TimeMgmt;
 
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -38,7 +35,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -63,6 +59,9 @@ public class TownyCustomListener implements Listener {
 		WorldCoord from = event.getFrom();
 		WorldCoord to = event.getTo();
 		
+		if (!TownyAPI.getInstance().isTownyWorld(to.getBukkitWorld()))
+			return;
+		
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		if (resident == null)
 			return;
@@ -73,84 +72,88 @@ public class TownyCustomListener implements Listener {
 			TownCommand.parseTownUnclaimCommand(player, new String[] {});
 		if (resident.hasMode("map"))
 			TownyCommand.showMap(player);
+		if (resident.hasMode("plotborder"))
+			BorderUtil.getPlotBorder(to).runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.sendToPlayer(player));
 
 		// Check if player has entered a new town/wilderness
-		try {
-			if (to.getTownyWorld().isUsingTowny() && TownySettings.getShowTownNotifications()) {
-				String msg = null;
-				try {
-					ChunkNotification chunkNotifier = new ChunkNotification(from, to);
-					msg = chunkNotifier.getNotificationString(resident);
-				} catch (NullPointerException e) {
-					plugin.getLogger().info("ChunkNotifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful:");
-					plugin.getLogger().info("  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ());
-					e.printStackTrace();
-				}
-				if (msg != null) {
-					TextComponent msgComponent = LegacyComponentSerializer.builder().build().deserialize(msg);
-					
-					Audience playerAudience = Towny.getAdventure().player(player);
-					if (TownySettings.isNotificationsAppearingInActionBar() && !TownySettings.isNotificationsAppearingOnBossbar()) {
-						int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION);
-						if (seconds > 3) {
-							// Vanilla action bar displays for 3 seconds, so we shouldn't bother with any scheduling.
-							// Cancel any older tasks running to prevent them from leaking over.
-							if (playerActionTasks.get(player) != null) {
-								Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
-								playerActionTasks.remove(player);
-							}
-					
-							final TextComponent messageComponent = msgComponent;
-							AtomicInteger remainingSeconds = new AtomicInteger(seconds);
-							int taskID = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-								playerAudience.sendActionBar(messageComponent);
-								remainingSeconds.getAndDecrement();
-								
-								if (remainingSeconds.get() == 0 && playerActionTasks.containsKey(player)) {
-									Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
-									playerActionTasks.remove(player);
-								}
-							}, 0, 20L).getTaskId();
-							
-							playerActionTasks.put(player, taskID);
-						} else {
-							playerAudience.sendActionBar(msgComponent);
-						}
-					} else if (TownySettings.isNotificationsAppearingOnBossbar()) {
-						int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION);
-						BossBar bossBar = BossBar.bossBar(msgComponent, 1, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS);
-
-						if (playerBossBarMap.containsKey(player)) {
-							Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
-							playerAudience.hideBossBar(playerBossBarMap.get(player));
-							playerActionTasks.remove(player);
-							playerBossBarMap.remove(player);
-						}
-
-						playerAudience.showBossBar(bossBar);
-						playerBossBarMap.put(player, bossBar);
-
-						int taskID = Bukkit.getScheduler().runTaskLater(plugin, () -> {
-							playerAudience.hideBossBar(bossBar);
-							playerActionTasks.remove(player);
-							playerBossBarMap.remove(player);
-						}, seconds*20).getTaskId();
-
-						playerActionTasks.put(player, taskID);						
-					} else
-						TownyMessaging.sendMessage(player, msg);
-				}
+		if (TownySettings.getShowTownNotifications()) {
+			String msg = null;
+			try {
+				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
+				msg = chunkNotifier.getNotificationString(resident);
+			} catch (NullPointerException e) {
+				plugin.getLogger().info("ChunkNotifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful:");
+				plugin.getLogger().info("  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ());
+				e.printStackTrace();
 			}
-		} catch (NotRegisteredException e) {
-			// likely Citizens' NPC
-		}
+			if (msg == null)
+				return;
 
-		if (resident.hasMode("plotborder")) {
-			CellBorder cellBorder = BorderUtil.getPlotBorder(to);
-			cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.sendToPlayer(player));
+			sendChunkNoticiation(player, msg);
 		}
 	}
 	
+	private void sendChunkNoticiation(Player player, String msg) {
+		if (TownySettings.isNotificationsAppearingInActionBar() && !TownySettings.isNotificationsAppearingOnBossbar())
+			sendActionBarChunkNotification(player, LegacyComponentSerializer.builder().build().deserialize(msg));
+		else if (TownySettings.isNotificationsAppearingOnBossbar())
+			sendBossBarChunkNotification(player, BossBar.bossBar(LegacyComponentSerializer.builder().build().deserialize(msg), 1, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS));
+		else
+			TownyMessaging.sendMessage(player, msg);
+	}
+	
+	private void sendActionBarChunkNotification(Player player, TextComponent msgComponent) {
+		int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION);
+		if (seconds > 3) {
+			// Towny is showing the actionbar message longer than vanilla MC allows, using a scheduled task.
+			// Cancel any older tasks running to prevent them from leaking over.
+			if (playerActionTasks.get(player) != null)
+				removePlayerActionTasks(player);
+	
+			AtomicInteger remainingSeconds = new AtomicInteger(seconds);
+			int taskID = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+				TownyMessaging.sendActionBarMessageToPlayer(player, msgComponent);
+				remainingSeconds.getAndDecrement();
+				
+				if (remainingSeconds.get() == 0 && playerActionTasks.containsKey(player)) 
+					removePlayerActionTasks(player);
+			}, 0, 20L).getTaskId();
+			
+			playerActionTasks.put(player, taskID);
+		} else {
+			// Vanilla action bar displays for 3 seconds, so we shouldn't bother with any scheduling.
+			TownyMessaging.sendActionBarMessageToPlayer(player, msgComponent);
+		}
+	}
+
+	private void sendBossBarChunkNotification(Player player, BossBar bossBar) {
+		int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION) * 20;
+		if (playerBossBarMap.containsKey(player)) {
+			removePlayerActionTasks(player);
+			removePlayerBossBar(player);
+		}
+
+		TownyMessaging.sendBossBarMessageToPlayer(player, bossBar);
+
+		int taskID = Bukkit.getScheduler().runTaskLater(plugin, () -> {
+			playerActionTasks.remove(player);
+			removePlayerBossBar(player);
+		}, seconds).getTaskId();
+
+		playerBossBarMap.put(player, bossBar);
+		playerActionTasks.put(player, taskID);
+	}
+	
+	private void removePlayerActionTasks(Player player) {
+		Bukkit.getScheduler().cancelTask(playerActionTasks.get(player));
+		playerActionTasks.remove(player);
+	}
+	
+	private void removePlayerBossBar(Player player) {
+		Towny.getAdventure().player(player).hideBossBar(playerBossBarMap.get(player));
+		playerBossBarMap.remove(player);
+	}
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerCreateTown(NewTownEvent event) {
 		Town town = event.getTown();

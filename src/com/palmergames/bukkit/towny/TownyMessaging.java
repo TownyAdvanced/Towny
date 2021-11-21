@@ -30,11 +30,15 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.bossbar.BossBar.Color;
+import net.kyori.adventure.bossbar.BossBar.Overlay;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -805,6 +809,49 @@ public class TownyMessaging {
 			audience.sendMessage(string);
 	}
 
+	/*
+	 * ACTIONBAR METHODS
+	 */
+	
+	/**
+	 * Send an ActionBar message to the given player.
+	 * @param player {@link Player} who will be shown the message.
+	 * @param message {@link String} message which will be made into a {@link TextComponent} and shown in the ActioBar.
+	 */
+	public static void sendActionBarMessageToPlayer(Player player, String message) {
+		TextComponent component = LegacyComponentSerializer.builder().build().deserialize(message);
+		sendActionBarMessageToPlayer(player, component);
+	}
+	
+	/**
+	 * Send an ActionBar message to the given player.
+	 * @param player {@link Player} who will be shown the message.
+	 * @param component {@link TextComponent} message which will be shown to the player.
+	 */
+	public static void sendActionBarMessageToPlayer(Player player, TextComponent component) {
+		Audience audience = Towny.getAdventure().player(player);
+		audience.sendActionBar(component); 
+	}
+	
+	/*
+	 * BOSSBAR METHODS
+	 */
+	
+	public static void sendBossBarMessageToPlayer(Player player, String message, float progress, Color color, Overlay overlay) {
+		TextComponent component = LegacyComponentSerializer.builder().build().deserialize(message);
+		sendBossBarMessageToPlayer(player, component, progress, color, overlay);
+	}
+	
+	public static void sendBossBarMessageToPlayer(Player player, TextComponent component, float progress, Color color, Overlay overlay) {
+		Audience audience = Towny.getAdventure().player(player);
+		audience.showBossBar(BossBar.bossBar(component, progress, color, overlay));
+	}
+	
+	public static void sendBossBarMessageToPlayer(Player player, BossBar bossBar) {
+		Audience audience = Towny.getAdventure().player(player);
+		audience.showBossBar(bossBar);
+	}
+	
 	/*
 	 * DEPRECATED METHODS
 	 */
