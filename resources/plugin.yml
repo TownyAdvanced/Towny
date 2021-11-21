@@ -20,20 +20,28 @@ softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWo
 commands:
     towny:
         aliases: []
+        description: Base Towny command, see /towny ?
     nation:
         aliases: [n, nat]
+        description: Towny's Nation command, see /nation ?
     plot:
         aliases: []
+        description: Towny's Plot command, see /plot ?
     resident:
         aliases: [res, p, player]
+        description: Towny's Resident command, see /res ?
     town:
         aliases: [t]
+        description: Towny's Town command, see /town ?
     townyadmin:
         aliases: [ta]
+        description: Towny's TownyAdmin command, see /ta ?
     townyworld:
         aliases: [tw]
+        description: Towny's TownyWorld command, see /tw ?
     invite:
         aliases: [invites]
+        description: Towny's Invite command, see /invite ?
 
 ############################################################
 # +------------------------------------------------------+ #
