@@ -704,7 +704,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			(isKing() && !TownySettings.getKingPrefix(this).isEmpty()) ? TownySettings.getKingPrefix(this) : 
 				(isMayor() && !TownySettings.getMayorPrefix(this).isEmpty()) ? TownySettings.getMayorPrefix(this) : "");
 		
-		String postfix = Colors.translateColorCodes(hasSurname() ? getSurname() + " " : 
+		String postfix = Colors.translateColorCodes(hasSurname() ? " " + getSurname() : 
 			(isKing() && !TownySettings.getKingPostfix(this).isEmpty()) ? TownySettings.getKingPostfix(this) : 
 				(isMayor() && !TownySettings.getMayorPostfix(this).isEmpty()) ? TownySettings.getMayorPostfix(this) : "");
 		return prefix + getName() + postfix;
