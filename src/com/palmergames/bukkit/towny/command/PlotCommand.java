@@ -698,6 +698,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 								return false;
 							}
+
+							if (TownBlockType.ARENA.equals(townBlockType) && TownySettings.getOutsidersPreventPVPToggle()) {
+								for (Player target : Bukkit.getOnlinePlayers()) {
+									if (!townBlock.getTownOrNull().hasResident(target) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+										throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
+								}
+							}
 							
 							PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(townBlockType, townBlock, resident);
 							BukkitTools.getPluginManager().callEvent(preEvent);
@@ -1727,6 +1734,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(resident, e.getMessage(player));
 					return false;
+				}
+
+				if (TownBlockType.ARENA.equals(type) && TownySettings.getOutsidersPreventPVPToggle()) {
+					for (Player target : Bukkit.getOnlinePlayers()) {
+						if (!town.hasResident(target) && tb.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+							throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
+					}
 				}
 				
 				// Allow for PlotPreChangeTypeEvent to trigger
