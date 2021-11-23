@@ -6985,3 +6985,6 @@ v0.92.0.11:
   - Populate bukkit's /help towny page.
   - Add actionbar and bossbar messaging to TownyMessaging.
   - Re-jigger the ChunkNotifications showing code.
+  - Fix surname formatting, courtesy of Warriorrrr with PR #5466.
+  - Make the outsiders prevent pvp option apply to arenas aswell, courtesy of Warriorrrr with PR #5465.
+  - Fix /nation set oobe, courtesy of Warriorrrr with PR #5464.
