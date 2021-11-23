@@ -701,7 +701,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 							if (TownBlockType.ARENA.equals(townBlockType) && TownySettings.getOutsidersPreventPVPToggle()) {
 								for (Player target : Bukkit.getOnlinePlayers()) {
-									if (!townBlock.getTownOrNull().hasResident(target) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+									if (!townBlock.getTownOrNull().hasResident(target) && !player.getName().equals(target.getName()) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
 										throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
 								}
 							}
@@ -1127,7 +1127,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					if (TownySettings.getOutsidersPreventPVPToggle()) {
 						for (Player target : Bukkit.getOnlinePlayers()) {
-							if (!town.hasResident(target) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+							if (!town.hasResident(target) && !player.getName().equals(target.getName()) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
 								throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
 						}
 					}
@@ -1250,7 +1250,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						if (TownySettings.getOutsidersPreventPVPToggle()) {
 							for (Player target : Bukkit.getOnlinePlayers()) {
-								if (!town.hasResident(target) && groupBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+								if (!town.hasResident(target) && !player.getName().equals(target.getName()) && groupBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
 									throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
 							}
 						}
@@ -1738,7 +1738,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				if (TownBlockType.ARENA.equals(type) && TownySettings.getOutsidersPreventPVPToggle()) {
 					for (Player target : Bukkit.getOnlinePlayers()) {
-						if (!town.hasResident(target) && tb.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
+						if (!town.hasResident(target) && !player.getName().equals(target.getName()) && tb.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
 							throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
 					}
 				}
