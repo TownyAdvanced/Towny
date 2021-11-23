@@ -482,7 +482,7 @@ nation_received_requests: '&bНация получила %a/%m запросов 
 nation_sent_invites: '&bНация отправила %a/%m приглашений.'
 nation_sent_ally_requests: '&bНация отправила %a/%m запросов на союз.'
 no_confirmations_open: '&cВам нечего подтверждать.!'
-successful_cancel: '&cAction cancelled!'
+successful_cancel: '&cДействие отменено!'
 successful_deny: '&bВ приглашении успешно отказано.'
 successful_deny_request: '&bЗапрос на союз был успешно отклонен.'
 msg_ally_removed_successfully: '&bСоюз успешно удален.'
