@@ -222,7 +222,7 @@ public class TownyTimerHandler{
 	public static Long townyTime() {
 		return NewDayScheduler.townyTime();
 	}
-	
+
 	public static Long getTimeUntilNextHourInSeconds() {
 		long timeSinceLastHourMillis = System.currentTimeMillis() % (1000 * 60 * 60);
 		long timeSinceLastHourSeconds = timeSinceLastHourMillis / 1000;
