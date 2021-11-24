@@ -12,6 +12,7 @@ Towny is one of the oldest still-in-development plugins for Minecraft. Shadeness
 **Go check out some of the [features](https://github.com/TownyAdvanced/Towny/wiki#features) Towny has and see why it's still popular for yourself.**
 </p>
 
+[![CodeFactor](https://www.codefactor.io/repository/github/townyadvanced/towny/badge)](https://www.codefactor.io/repository/github/townyadvanced/towny)
 ___
 
 ### Current Recommended Versions
