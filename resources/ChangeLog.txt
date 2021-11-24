@@ -6988,3 +6988,6 @@ v0.92.0.11:
   - Fix surname formatting, courtesy of Warriorrrr with PR #5466.
   - Make the outsiders prevent pvp option apply to arenas aswell, courtesy of Warriorrrr with PR #5465.
   - Fix /nation set oobe, courtesy of Warriorrrr with PR #5464.
+  - NewDay timer overhaul.
+    - NewDays are re-scheduled over the course of time between new days, in order to maintain accuracy on low TPS servers.
+    - day_intervals longer than 24 hours are no longer supported, but they didn't work well unless servers were run without shutting down. 
