@@ -11,6 +11,7 @@ nomad:
     - towny.command.town.new
     - towny.command.town.join
     - towny.command.town.list.*
+    - towny.command.town.ranklist
     - towny.command.town.reslist
     - towny.command.plot.group.*
     - towny.command.plot.perm
@@ -20,6 +21,7 @@ nomad:
     - towny.command.nation.townlist  
     - towny.command.nation.allylist
     - towny.command.nation.enemylist
+    - towny.command.nation.ranklist
     - towny.town.resident
     - towny.town.spawn.public
     - towny.chat.general

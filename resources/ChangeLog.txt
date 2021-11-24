@@ -6991,3 +6991,6 @@ v0.92.0.11:
   - NewDay timer overhaul.
     - NewDays are re-scheduled over the course of time between new days, in order to maintain accuracy on low TPS servers.
     - day_intervals longer than 24 hours are no longer supported, but they didn't work well unless servers were run without shutting down. 
+0.97.3.2:
+  - Automatic Townyperms.yml update:
+    - nomad group will have towny.command.town.ranklist and towny.command.nation.ranklist added to it.

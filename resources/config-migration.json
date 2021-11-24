@@ -151,5 +151,20 @@
         "value": ",EGG"
       }
     ]
+  },
+  {
+    "version": "0.97.3.2",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "nomad",
+        "value": "towny.command.town.ranklist"
+      },
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "nomad",
+        "value": "towny.command.nation.ranklist"
+      }
+    ]
   }
 ]
