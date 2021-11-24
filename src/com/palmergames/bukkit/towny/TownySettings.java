@@ -1426,15 +1426,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_WORLD_ENDERMAN);
 	}
 
-	public static String getUnclaimedPlotName() {
-
-		return Translation.of("UNCLAIMED_PLOT_NAME");
-	}
-
 	public static long getDayInterval() {
 
-		// return TimeTools.secondsFromDhms("24h");
-		return getSeconds(ConfigNodes.PLUGIN_DAY_INTERVAL);
+		// Returns the lesser over the day interval or 1 day. 
+		return Math.min(getSeconds(ConfigNodes.PLUGIN_DAY_INTERVAL), TimeTools.getSeconds("1d"));
 	}
 
 	public static long getNewDayTime() {

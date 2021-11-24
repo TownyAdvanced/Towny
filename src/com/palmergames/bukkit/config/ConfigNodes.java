@@ -1065,8 +1065,8 @@ public enum ConfigNodes {
 			"plugin.day_timer.day_interval",
 			"1d",
 			"",
-			"# The number of hours in each \"day\".",
-			"# You can configure for 10 hour days. Default is 24 hours."),
+			"# The time for each \"towny day\", used for tax and upkeep collection and other daily timers.",
+			"# Default is 24 hours. Cannot be set for greater than 1 day, but can be set lower."),
 	PLUGIN_NEWDAY_TIME(
 			"plugin.day_timer.new_day_time",
 			"12h",
