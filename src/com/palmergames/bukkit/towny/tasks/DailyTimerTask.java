@@ -133,6 +133,9 @@ public class DailyTimerTask extends TownyTimerTask {
 		TownyMessaging.sendDebugMsg(String.format("%8d Mb (free)", Runtime.getRuntime().freeMemory() / 1024 / 1024));
 		TownyMessaging.sendDebugMsg(String.format("%8d Mb (used=total-free)", (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024));
 		Towny.getPlugin().getLogger().info("Towny DailyTimerTask took " + (System.currentTimeMillis() - start) + "ms to process.");
+		
+		// Run the new day scheduler again one second later to begin scheduling the next New Day.
+		Bukkit.getScheduler().runTaskLater(plugin, new NewDayScheduler(plugin), 1 * 20);
 	}
 
 	/**

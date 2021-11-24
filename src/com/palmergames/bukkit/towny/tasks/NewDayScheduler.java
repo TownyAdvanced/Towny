@@ -22,31 +22,32 @@ public class NewDayScheduler extends TownyTimerTask {
 	
 	@Override
 	public void run() {
-		long timeTillNextDay = townyTime();
-		plugin.getLogger().info("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
+		long secondsUntilNextNewDay = townyTime();
+		plugin.getLogger().info("Time until a New Day: " + TimeMgmt.formatCountdownTime(secondsUntilNextNewDay));
 
-		// If the next new day is less than 5 minutes away, schedule the new day.
-		if (timeTillNextDay < TimeTools.secondsFromDhms("5m")) {
-			scheduleUpComingNewDay(timeTillNextDay);
-		// Else the new day scheduler will run again at half the timeTillNextDay, to check again.
+		// If the next new day is less than 2 minutes away, schedule the new day.
+		if (secondsUntilNextNewDay < TimeTools.secondsFromDhms("2m")) {
+			TownyMessaging.sendDebugMsg("New Day time finalized for: " + TimeMgmt.formatCountdownTime(secondsUntilNextNewDay) + " from now.");
+			scheduleUpComingNewDay(secondsUntilNextNewDay);
+		// Else the new day scheduler will run again at half the secondsUntilNextNewDay, to check again.
 		} else {
-			Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new NewDayScheduler(plugin), timeTillNextDay / 2);
-			plugin.getLogger().info("New Day scheduled for: " + TimeMgmt.formatCountdownTime(timeTillNextDay/2) + " from now.");
+			Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new NewDayScheduler(plugin), (secondsUntilNextNewDay / 2) * 20);
+			TownyMessaging.sendDebugMsg("Re-evaluation of New Day time scheduled for: " + TimeMgmt.formatCountdownTime(secondsUntilNextNewDay/2) + " from now.");
 		}
 	}
 
 	/**
 	 * Schedules the next occurence of the NewDayScheduler.
-	 * @param timeTillNextDay long seconds until the next task.
+	 * @param secondsUntilNextNewDay long seconds until the next task.
 	 */
-	private void scheduleUpComingNewDay(long timeTillNextDay) {
+	private void scheduleUpComingNewDay(long secondsUntilNextNewDay) {
 		if (TownySettings.isEconomyAsync())
-			scheduleTask = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new DailyTimerTask(plugin), timeTillNextDay).getTaskId();
+			scheduleTask = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new DailyTimerTask(plugin), secondsUntilNextNewDay * 20).getTaskId();
 		else
-			scheduleTask = Bukkit.getScheduler().runTaskLater(plugin, new DailyTimerTask(plugin), timeTillNextDay).getTaskId();
+			scheduleTask = Bukkit.getScheduler().runTaskLater(plugin, new DailyTimerTask(plugin), secondsUntilNextNewDay * 20).getTaskId();
 	
 		if (scheduleTask == -1)
-			TownyMessaging.sendErrorMsg("Could not schedule newdayscheduler task.");
+			TownyMessaging.sendErrorMsg("Could not schedule DailtTimerTask.");
 	}
 	
 	public static boolean isNewDaySchedulerRunning() {

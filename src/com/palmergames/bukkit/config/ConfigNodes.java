@@ -1072,7 +1072,8 @@ public enum ConfigNodes {
 			"12h",
 			"",
 			"# The time each \"day\", when taxes will be collected.",
-			"# MUST be less than day_interval. Default is 12h (midday)."),
+			"# Only used when less than day_interval. Default is 12h (midday).",
+			"# If day_interval is set to something like 20m, the new_day_time is not used, day_interval will be used instead."),
 	PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS(
 			"plugin.day_timer.delete_0_plot_towns",
 			"false",
