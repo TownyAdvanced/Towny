@@ -41,6 +41,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
+import com.palmergames.bukkit.towny.tasks.NewDayScheduler;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.ResidentPurge;
@@ -612,7 +613,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("newday")) {
 
-				TownyTimerHandler.newDay();
+				// Turn the daily timer scheduler on if it wasn't running already.
+				if (!NewDayScheduler.isNewDaySchedulerRunning())
+					TownyTimerHandler.toggleDailyTimer(true);
+				// Start a newday.
+				NewDayScheduler.newDay();
 
 			} else if (split[0].equalsIgnoreCase("newhour")) {
 

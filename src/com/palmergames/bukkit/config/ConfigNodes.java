@@ -1065,14 +1065,15 @@ public enum ConfigNodes {
 			"plugin.day_timer.day_interval",
 			"1d",
 			"",
-			"# The number of hours in each \"day\".",
-			"# You can configure for 10 hour days. Default is 24 hours."),
+			"# The time for each \"towny day\", used for tax and upkeep collection and other daily timers.",
+			"# Default is 24 hours. Cannot be set for greater than 1 day, but can be set lower."),
 	PLUGIN_NEWDAY_TIME(
 			"plugin.day_timer.new_day_time",
 			"12h",
 			"",
 			"# The time each \"day\", when taxes will be collected.",
-			"# MUST be less than day_interval. Default is 12h (midday)."),
+			"# Only used when less than day_interval. Default is 12h (midday).",
+			"# If day_interval is set to something like 20m, the new_day_time is not used, day_interval will be used instead."),
 	PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS(
 			"plugin.day_timer.delete_0_plot_towns",
 			"false",

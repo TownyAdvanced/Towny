@@ -1,21 +1,19 @@
 package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
-import com.palmergames.bukkit.towny.tasks.DailyTimerTask;
 import com.palmergames.bukkit.towny.tasks.DrawSmokeTask;
 import com.palmergames.bukkit.towny.tasks.DrawSpawnPointsTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.tasks.RepeatingTimerTask;
+import com.palmergames.bukkit.towny.tasks.NewDayScheduler;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.tasks.HourlyTimerTask;
 import com.palmergames.bukkit.towny.tasks.ShortTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 
-import java.util.Calendar;
-import java.util.TimeZone;
+import org.bukkit.Bukkit;
 
 
 /**
@@ -34,7 +32,6 @@ public class TownyTimerHandler{
 	}
 	
 	private static int townyRepeatingTask = -1;
-	private static int dailyTask = -1;
 	private static int hourlyTask = -1;
 	private static int shortTask = -1;
 	private static int mobRemoveTask = -1;
@@ -44,20 +41,6 @@ public class TownyTimerHandler{
 	private static int drawSmokeTask = -1;
 	private static int gatherResidentUUIDTask = -1;
 	private static int drawSpawnPointsTask = -1;
-
-	public static void newDay() {
-
-		if (!isDailyTimerRunning())
-			toggleDailyTimer(true);
-		//dailyTimer.schedule(new DailyTimerTask(this), 0);
-		if (TownySettings.isEconomyAsync()) {
-			if (BukkitTools.scheduleAsyncDelayedTask(new DailyTimerTask(plugin),0L) == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule newDay.");
-		} else {
-			if (BukkitTools.scheduleSyncDelayedTask(new DailyTimerTask(plugin),0L) == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule newDay.");
-		}
-	}
 
 	public static void newHour() {
 		if (!isHourlyTimerRunning())
@@ -93,27 +76,15 @@ public class TownyTimerHandler{
 
 	public static void toggleDailyTimer(boolean on) {
 
-		if (on && !isDailyTimerRunning()) {
-			long timeTillNextDay = townyTime();
-			plugin.getLogger().info("Time until a New Day: " + TimeMgmt.formatCountdownTime(timeTillNextDay));
-			
-			if (TownySettings.isEconomyAsync())
-				dailyTask = BukkitTools.scheduleAsyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
-			else
-				dailyTask = BukkitTools.scheduleSyncRepeatingTask(new DailyTimerTask(plugin), TimeTools.convertToTicks(timeTillNextDay), TimeTools.convertToTicks(TownySettings.getDayInterval()));
-			
-			if (dailyTask == -1)
-				TownyMessaging.sendErrorMsg("Could not schedule new day loop.");
-		} else if (!on && isDailyTimerRunning()) {
-			BukkitTools.getScheduler().cancelTask(dailyTask);
-			dailyTask = -1;
-		}
+		if (on && !NewDayScheduler.isNewDaySchedulerRunning())
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, new NewDayScheduler(plugin));
+		else if (!on && NewDayScheduler.isNewDaySchedulerRunning())
+			NewDayScheduler.cancelScheduledNewDay();
 	}
 
 	public static void toggleHourlyTimer(boolean on) {
 		if (on && !isHourlyTimerRunning()) {
-			long timeUntilNextHourInSections = getTimeUntilNextHourInSeconds();
-			hourlyTask = BukkitTools.scheduleAsyncRepeatingTask(new HourlyTimerTask(plugin), timeUntilNextHourInSections, TimeTools.convertToTicks(TownySettings.getHourInterval()));
+			hourlyTask = BukkitTools.scheduleAsyncRepeatingTask(new HourlyTimerTask(plugin), getTimeUntilNextHourInSeconds(), TimeTools.convertToTicks(TownySettings.getHourInterval()));
 
 			if (hourlyTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule hourly timer.");
@@ -133,7 +104,7 @@ public class TownyTimerHandler{
 			if (shortTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule short timer.");
 
-		} else if (!on && isDailyTimerRunning()) {
+		} else if (!on && isShortTimerRunning()) {
 			BukkitTools.getScheduler().cancelTask(shortTask);
 			shortTask = -1;
 		}
@@ -208,11 +179,6 @@ public class TownyTimerHandler{
 		return mobRemoveTask != -1;
 	}
 
-	public static boolean isDailyTimerRunning() {
-
-		return dailyTask != -1;
-	}
-
 	public static boolean isHourlyTimerRunning() {
 
 		return hourlyTask != -1;
@@ -252,30 +218,9 @@ public class TownyTimerHandler{
 		
 		return drawSpawnPointsTask != -1;
 	}
-	
-	/**
-	 * Calculates the time in seconds until the next new day event.
-	 * TimeZone specific, including daylight savings.
-	 * 
-	 * @return seconds until event
-	 */
+
 	public static Long townyTime() {
-
-		long secondsInDay = TownySettings.getDayInterval();
-
-		// Get Calendar instance
-		Calendar now = Calendar.getInstance();
-
-		// Get current TimeZone
-		TimeZone timeZone = now.getTimeZone();
-		
-		// Get current system time in milliseconds
-		long timeMilli = System.currentTimeMillis();
-		
-		// Calculate the TimeZone specific offset (including DST)
-		int timeOffset = timeZone.getOffset(timeMilli)/1000;
-
-		return (secondsInDay + (TownySettings.getNewDayTime() - ((timeMilli/1000) % secondsInDay) - timeOffset)) % secondsInDay;
+		return NewDayScheduler.townyTime();
 	}
 
 	public static Long getTimeUntilNextHourInSeconds() {
