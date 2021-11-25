@@ -482,7 +482,7 @@ nation_received_requests: '&bNationen har fått %a/%m förfrågningar om allians
 nation_sent_invites: '&bNationen har skickat %a/%m inbjudningar.'
 nation_sent_ally_requests: '&bNationen har skickat %a/%m förfrågningar om allians.'
 no_confirmations_open: '&cDu har inget att bekräfta!'
-successful_cancel: '&cAction cancelled!'
+successful_cancel: '&cÅtgärden avbruten!'
 successful_deny: '&bInbjudan nekades framgångsrikt.'
 successful_deny_request: '&bBegäran om allians nekades framgångsrikt.'
 msg_ally_removed_successfully: '&bDen allierade har tagits bort framgångsrikt.'
@@ -1294,24 +1294,24 @@ status_unknown: 'okänt'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
 msg_nationzone_override_set_to: '%s fick sin nationszon satt till %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
-msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+msg_nationzone_override_removed: '%s har fått sin nationszon åsidosätt borttagen.'
 #Added in 0.127
 #Used in status screen:
-status_nation_zone_size: 'Nation Zone Size:'
+status_nation_zone_size: 'Storlek på Nation Zon:'
 #Shown when a player adds people to their friends list.
-msg_res_friend_added_to_list: 'Added %s to your friend list.'
+msg_res_friend_added_to_list: 'Lade till %s i din vänlista.'
 #Shown when a player removes people from their friends list.
-msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
+msg_res_friend_removed_from_list: 'Tog bort %s från din vänlista.'
 #Generic resident freed from jail message.
 msg_resident_unjailed: '%s has been unjailed.'
 #Shown when an admin uses /ta toggle devmode.
-msg_admin_toggle_devmode: 'Dev Mode: %s'
+msg_admin_toggle_devmode: 'Utvecklarläge: %s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: 'Debug Mode: %s'
+msg_admin_toggle_debugmode: 'Felsökningsläge: %s'
 #Shown when an admin uses /ta toggle townwithdraw
-msg_admin_toggle_townwithdraw: 'Town Withdrawls: %s'
+msg_admin_toggle_townwithdraw: 'Stadens uttag: %s'
 #Shown when an admin uses /ta toggle nationwithdraw
-msg_admin_toggle_nationwithdraw: 'Nation Withdrawls: %s'
+msg_admin_toggle_nationwithdraw: 'Nation uttag: %s'
 #Shown when claiming a town block for the town.
 msg_process_town_claim: 'Processing Town Claim...'
 #Shown when unclaiming a town block for the town.
