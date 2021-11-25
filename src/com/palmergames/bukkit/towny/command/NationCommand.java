@@ -400,6 +400,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				if (!resident.hasNation())
 					throw new TownyException(Translatable.of("msg_err_dont_belong_nation"));
+				nation = resident.getNationOrNull();
 			} else
 				nation = getNationOrThrow(split[1]);
 		} catch (NotRegisteredException e) {
@@ -449,8 +450,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION.getNode(split[0].toLowerCase())))
 			throw new TownyException(Translatable.of("msg_err_command_disable"));
-
-		Nation nation;
 
 		switch (split[0].toLowerCase()) {
 		case "list":
@@ -525,15 +524,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			parseNationOnlineCommand(player, StringMgmt.remFirstArg(split));
 			break;
 		case "say":
-			nation = getResidentOrThrow(player.getUniqueId()).getTown().getNation();
-			TownyMessaging.sendPrefixedNationMessage(nation, StringMgmt.join(StringMgmt.remFirstArg(split)));
+			nationSay(getResidentOrThrow(player.getUniqueId()).getTown().getNation(), StringMgmt.remFirstArg(split));
 			break;
 		case "bankhistory":
 			nationBankHistory(player, split);
 			break;
 		case "baltop":
-			nation = getResidentNationOrNationFromArg(player, split);
-			parseNationBaltop(player, nation);
+			parseNationBaltop(player, getResidentNationOrNationFromArg(player, split));
 			break;
 		default:
 			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION, split[0])) {
@@ -543,7 +540,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			/*
 			 * We've gotten this far without a match, check if the argument is a nation name.
 			 */
-			nation = TownyUniverse.getInstance().getNation(split[0]);
+			Nation nation = TownyUniverse.getInstance().getNation(split[0]);
 			if (nation == null)
 				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[0]));
 
@@ -552,6 +549,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			nationStatusScreen(player, nation);
 		}
+	}
+
+	private void nationSay(Nation nation, String[] split) throws TownyException {
+		if (split.length == 0)
+			throw new TownyException("ex: /n say [message here]");
+		TownyMessaging.sendPrefixedNationMessage(nation, StringMgmt.join(split));
+
 	}
 
 	private void nationBankHistory(Player player, String[] split) throws TownyException {
