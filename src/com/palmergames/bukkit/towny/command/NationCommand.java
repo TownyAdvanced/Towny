@@ -2059,50 +2059,52 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(sender, x.getMessage(sender));
 			return;
 		}
-
-		if (split[0].equalsIgnoreCase("king")) {
-			
+		
+		switch (split[0]) {
+		case "king":
 			nationSetKing(sender, nation, split, admin);
-		} else if (split[0].equalsIgnoreCase("capital")) {
-			
+			break;
+		case "capital":
 			nationSetCapital(sender, nation, split, admin);
-		} else if (split[0].equalsIgnoreCase("spawn")){
-
+			break;
+		case "spawn":
 			if (sender instanceof Player player)
 				parseNationSetSpawnCommand(player, nation, admin);
 			else 
 				throw new TownyException("Not meant for console!");
-		} else if (split[0].equalsIgnoreCase("taxes")) {
-
+			break;
+		case "taxes":
 			nationSetTaxes(sender, nation, split, admin);
-		} else if (split[0].equalsIgnoreCase("spawncost")) {
-
+			break;
+		case "spawncost":
 			nationSetSpawnCost(sender, nation, split, admin);
-		} else if (split[0].equalsIgnoreCase("name")) {
-
+			break;
+		case "name":
 			nationSetName(sender, nation, split, admin);
-		} else if (split[0].equalsIgnoreCase("tag")) {
-
+			break;
+		case "tag":
 			nationSetTag(sender, nation, split, admin);
-		} else if (split[0].equalsIgnoreCase("title")) {
-
+			break;
+		case "title":
 			nationSetTitle(sender, nation, resident, split, admin);
-		} else if (split[0].equalsIgnoreCase("surname")) {
-
+			break;
+		case "surname":
 			nationSetSurname(sender, nation, resident, split, admin);
-		} else if (split[0].equalsIgnoreCase("board")) {
-
+			break;
+		case "board":
 			nationSetBoard(sender, nation, split);
-		} else if (split[0].equalsIgnoreCase("mapcolor")) {
-
+			break;
+		case "mapcolor":
 			nationSetMapColor(sender, nation, split, admin);
-		} else if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, split[0])) {
-			TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, split[0]).execute(sender, "nation", split);
-		} else {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", split[0]));
-			return;
+			break;
+		default:
+			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, split[0]).execute(sender, "nation", split);
+			} else {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", split[0]));
+				return;
+			}
 		}
-
 		nation.save();
 	}
 
