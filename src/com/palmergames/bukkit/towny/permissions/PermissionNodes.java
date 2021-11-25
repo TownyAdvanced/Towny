@@ -15,6 +15,8 @@ public enum PermissionNodes {
 	/*
 	 * Nation command permissions
 	 */
+	
+	TOWNY_COMMAND_NATION("towny.command.nation.*"),
 	TOWNY_COMMAND_NATION_LIST("towny.command.nation.list.*"),
 	    TOWNY_COMMAND_NATION_LIST_RESIDENTS("towny.command.nation.list.residents"),
 	    TOWNY_COMMAND_NATION_LIST_TOWNS("towny.command.nation.list.towns"),
