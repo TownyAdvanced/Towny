@@ -177,11 +177,13 @@ permissions:
         description: User can access all nation commands.
         default: false
         children:
+            towny.command.nation.ally: true
             towny.command.nation.ally.*: true
             towny.command.nation.bankhistory: true
             towny.command.nation.delete: true
             towny.command.nation.deposit: true
             towny.command.nation.enemy: true
+            towny.command.nation.invite: true
             towny.command.nation.invite.*: true
             towny.command.nation.kick: true
             towny.command.nation.king: true
@@ -191,10 +193,13 @@ permissions:
             towny.command.nation.online: true
             towny.command.nation.othernation: true
             towny.command.nation.withdraw: true
+            towny.command.nation.rank: true
             towny.command.nation.rank.*: true
             towny.command.nation.say: true
+            towny.command.nation.set: true
             towny.command.nation.set.*: true
             towny.command.nation.spawn: true
+            towny.command.nation.toggle: true
             towny.command.nation.toggle.*: true
             towny.command.nation.townlist: true
             towny.command.nation.allylist: true
