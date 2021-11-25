@@ -6994,3 +6994,4 @@ v0.92.0.11:
 0.97.3.2:
   - Automatic Townyperms.yml update:
     - nomad group will have towny.command.town.ranklist and towny.command.nation.ranklist added to it.
+  - Refactor a bunch of NationCommand code.
