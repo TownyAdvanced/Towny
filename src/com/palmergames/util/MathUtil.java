@@ -1,5 +1,7 @@
 package com.palmergames.util;
 
+import com.palmergames.bukkit.towny.object.Coord;
+
 public class MathUtil {
 
 	/**
@@ -50,4 +52,7 @@ public class MathUtil {
 		return distance(x1 - x2, y1 - y2);
 	}
 	
+	public static double distance(Coord coord1, Coord coord2) {
+		return distance(coord1.getX(), coord2.getX(), coord1.getZ(), coord2.getZ());
+	}
 }
