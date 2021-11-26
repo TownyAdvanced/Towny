@@ -6995,3 +6995,4 @@ v0.92.0.11:
   - Automatic Townyperms.yml update:
     - nomad group will have towny.command.town.ranklist and towny.command.nation.ranklist added to it.
   - Refactor a bunch of NationCommand code.
+  - Fix how StatusScreens handle Components with children.
