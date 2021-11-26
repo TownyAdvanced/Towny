@@ -1703,80 +1703,93 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public void nationAddOrRemoveAlly(Resident resident, final Nation nation, List<Nation> allies, boolean add) throws TownyException {
-		// This is where we add /remove those invites for nations to ally other nations.
-		Player player = BukkitTools.getPlayer(resident.getName());
-
-		ArrayList<Nation> remove = new ArrayList<>();
-		for (Nation targetNation : allies) {
-			if (add) { // If we are adding as an ally.
-				if (!targetNation.hasEnemy(nation)) {
-					if (!targetNation.getCapital().getMayor().isNPC()) {
-						for (Nation newAlly : allies) {
-							nationCreateAllyRequest(player, nation, targetNation);
-							TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_ally_req_sent", newAlly.getName()));
-						}
-					} else {
-						if (TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN.getNode())) {
-							try {
-								targetNation.addAlly(nation);
-								nation.addAlly(targetNation);
-							} catch (AlreadyRegisteredException e) {
-								e.printStackTrace();
-							}
-							TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_allied_nations", resident.getName(), targetNation.getName()));
-							TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_added_ally", nation.getName()));
-						} else
-							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_unable_ally_npc", nation.getName()));
-					}
+	public void nationAddOrRemoveAlly(Resident resident, final Nation nation, List<Nation> targetNations, boolean add) throws TownyException {
+		// This is where we add/remove those invites for nations to ally other nations.
+		List<Nation> remove = new ArrayList<>();
+		for (Nation targetNation : targetNations) {
+			if (add) { // If we are adding as an ally (sending an invite to ally.)
+				try {
+					nationAddAlly(resident, nation, targetNation);
+				} catch (TownyException e) {
+					// One of the Allies was not added because the nationCreateAllyRequest() method
+					// threw an exception or a non-admin player tried to ally an NPC-led nation, continue;
+					remove.add(targetNation);
+					continue;
 				}
+	
 			} else { // So we are removing an ally
-				if (nation.getAllies().contains(targetNation)) {
-					try {
-						NationRemoveAllyEvent removeAllyEvent = new NationRemoveAllyEvent(nation, targetNation);
-						Bukkit.getPluginManager().callEvent(removeAllyEvent);
-						if (removeAllyEvent.isCancelled()) {
-							TownyMessaging.sendErrorMsg(player, removeAllyEvent.getCancelMessage());
-							return;
-						}
-						nation.removeAlly(targetNation);
-						TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_ally", nation.getName()));
-						TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
-					} catch (NotRegisteredException e) {
-						remove.add(targetNation);
-					}
-					// Remove any mirrored allies settings from the target nation
-					// We know the linked allies are enabled so:
-					if (targetNation.hasAlly(nation)) {
-						try {
-							NationRemoveAllyEvent removeAllyEvent = new NationRemoveAllyEvent(targetNation, nation);
-							Bukkit.getPluginManager().callEvent(removeAllyEvent);
-							if (removeAllyEvent.isCancelled()) {
-								TownyMessaging.sendErrorMsg(player, removeAllyEvent.getCancelMessage());
-								return;
-							}
-							targetNation.removeAlly(nation);
-						} catch (NotRegisteredException e) {
-							// This should genuinely not be possible since we "hasAlly it beforehand"
-						}
-					}
+				try {
+					nationRemoveAlly(resident, nation, targetNation);
+				} catch (TownyException e) {
+					// One of the Allies was not removed because the NationRemoveAllyEvent was cancelled, continue;
+					remove.add(targetNation);
+					continue;
 				}
-
 			}
 		}
-		for (Nation newAlly : remove) {
-			allies.remove(newAlly);
-		}
-
-		if (allies.size() > 0) {
-			
+		for (Nation removedNation : remove)
+			targetNations.remove(removedNation);
+	
+		if (targetNations.size() > 0) {
 			TownyUniverse.getInstance().getDataSource().saveNations();
-
 			plugin.resetCache();
 		} else {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
+			throw new TownyException(Translatable.of("msg_invalid_name"));
 		}
+	
+	}
 
+	private void nationRemoveAlly(Resident resident, Nation nation, Nation targetNation) throws TownyException {
+		if (nation.hasAlly(targetNation)) {
+			NationRemoveAllyEvent removeAllyEvent = new NationRemoveAllyEvent(nation, targetNation);
+			Bukkit.getPluginManager().callEvent(removeAllyEvent);
+			if (removeAllyEvent.isCancelled())
+				throw new TownyException(removeAllyEvent.getCancelMessage());
+	
+			nation.removeAlly(targetNation);
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_removed_ally", targetNation));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_ally_removed_successfully"));
+	
+			// Remove the reciprocal ally relationship
+			if (targetNation.hasAlly(nation)) {
+				NationRemoveAllyEvent reciprocalRemoveAllyEvent = new NationRemoveAllyEvent(targetNation, nation);
+				Bukkit.getPluginManager().callEvent(reciprocalRemoveAllyEvent );
+				if (reciprocalRemoveAllyEvent.isCancelled())
+					throw new TownyException(reciprocalRemoveAllyEvent.getCancelMessage());
+	
+				targetNation.removeAlly(nation);
+				TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_ally", nation.getName()));
+			}
+		}
+	}
+
+	private void nationAddAlly(Resident resident, Nation nation, Nation targetNation) throws TownyException {
+		Player player = BukkitTools.getPlayer(resident.getName());
+		if (!targetNation.hasEnemy(nation)) {
+			if (!targetNation.getCapital().getMayor().isNPC()) {
+				nationCreateAllyRequest(player, nation, targetNation);
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_ally_req_sent", targetNation));
+			} else {
+				nationAddNPCNationAsAlly(player, resident, nation, targetNation);
+			}
+		} else {
+			throw new TownyException(Translatable.of("msg_unable_ally_enemy", targetNation));
+		}
+	}
+
+	private void nationAddNPCNationAsAlly(Player player, Resident resident, Nation nation, Nation targetNation) throws TownyException {
+		if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
+			try {
+				targetNation.addAlly(nation);
+				nation.addAlly(targetNation);
+			} catch (AlreadyRegisteredException e) {
+				e.printStackTrace();
+			}
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_allied_nations", resident, targetNation));
+			TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_added_ally", nation));
+		} else {
+			throw new TownyException(Translatable.of("msg_unable_ally_npc", nation.getName()));
+		}
 	}
 
 	public void nationEnemy(Player player, String[] split) throws TownyException {
