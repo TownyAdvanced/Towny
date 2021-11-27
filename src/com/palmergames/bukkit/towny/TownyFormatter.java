@@ -113,8 +113,8 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<String> fields = getExtraFields(townBlock);
 		if (!fields.isEmpty()) {
-			TextComponent comp = Component.text(fields.get(0));
-			for (int i = 1; i < fields.size() - 1; i++)
+			TextComponent comp = Component.empty();
+			for (int i = 0; i < fields.size(); i++) 
 				comp = comp.append(Component.text(fields.get(i)));
 			screen.addComponentOf("extraFields", comp);
 		}
@@ -122,9 +122,9 @@ public class TownyFormatter {
 		TownBlockStatusScreenEvent event = new TownBlockStatusScreenEvent(screen, townBlock);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines()) {
-			TextComponent comp = Component.text(event.getAdditionalLines().get(0));
-			for (int i = 1; i < event.getAdditionalLines().size() - 1; i++)
-				comp = comp.append(Component.text(event.getAdditionalLines().get(i)));
+			TextComponent comp = Component.empty();
+			for (int i = 0; i < event.getAdditionalLines().size(); i++)
+				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
 			screen.addComponentOf("eventAddedLines", comp);
 		}
 		
@@ -249,18 +249,18 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<String> fields = getExtraFields(resident);
 		if (!fields.isEmpty()) {
-			TextComponent comp = Component.text(fields.get(0));
-			for (int i = 1; i < fields.size() - 1; i++)
-				comp = comp.append(Component.text(fields.get(i)));
+			TextComponent comp = Component.empty();
+			for (int i = 0; i < fields.size(); i++) 
+				comp = comp.append(Component.newline()).append(Component.text(fields.get(i)));
 			screen.addComponentOf("extraFields", comp);
 		}
 			
 		ResidentStatusScreenEvent event = new ResidentStatusScreenEvent(screen, resident);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines()) {
-			TextComponent comp = Component.text(event.getAdditionalLines().get(0));
-			for (int i = 1; i < event.getAdditionalLines().size() - 1; i++)
-				comp = comp.append(Component.text(event.getAdditionalLines().get(i)));
+			TextComponent comp = Component.empty();
+			for (int i = 0; i < event.getAdditionalLines().size(); i++)
+				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
 			screen.addComponentOf("eventAddedLines", comp);
 		}
 		return screen;
@@ -401,8 +401,8 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<String> fields = getExtraFields(town);
 		if (!fields.isEmpty()) {
-			TextComponent comp = Component.text(fields.get(0));
-			for (int i = 1; i < fields.size() - 1; i++)
+			TextComponent comp = Component.empty();
+			for (int i = 0; i < fields.size(); i++) 
 				comp = comp.append(Component.text(fields.get(i)));
 			screen.addComponentOf("extraFields", comp);
 		}
@@ -410,9 +410,9 @@ public class TownyFormatter {
 		TownStatusScreenEvent event = new TownStatusScreenEvent(screen, town);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines()) {
-			TextComponent comp = Component.text(event.getAdditionalLines().get(0));
-			for (int i = 1; i < event.getAdditionalLines().size() - 1; i++)
-				comp = comp.append(Component.text(event.getAdditionalLines().get(i)));
+			TextComponent comp = Component.empty();
+			for (int i = 0; i < event.getAdditionalLines().size(); i++)
+				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
 			screen.addComponentOf("eventAddedLines", comp);
 		}
 		return screen;
@@ -535,8 +535,8 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<String> fields = getExtraFields(nation);
 		if (!fields.isEmpty()) {
-			TextComponent comp = Component.text(fields.get(0));
-			for (int i = 1; i < fields.size() - 1; i++)
+			TextComponent comp = Component.empty();
+			for (int i = 0; i < fields.size(); i++)
 				comp = comp.append(Component.text(fields.get(i)));
 			screen.addComponentOf("extraFields", comp);
 		}
@@ -544,9 +544,9 @@ public class TownyFormatter {
 		NationStatusScreenEvent event = new NationStatusScreenEvent(screen, nation);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines()) {
-			TextComponent comp = Component.text(event.getAdditionalLines().get(0));
-			for (int i = 1; i < event.getAdditionalLines().size() - 1; i++)
-				comp = comp.append(Component.text(event.getAdditionalLines().get(i)));
+			TextComponent comp = Component.empty();
+			for (int i = 0; i < event.getAdditionalLines().size(); i++)
+				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
 			screen.addComponentOf("eventAddedLines", comp);
 		}
 		return screen;
@@ -607,8 +607,8 @@ public class TownyFormatter {
 			// Add any metadata which opt to be visible.
 			List<String> fields = getExtraFields(world);
 			if (!fields.isEmpty()) {
-				TextComponent comp = Component.text(fields.get(0));
-				for (int i = 1; i < fields.size() - 1; i++)
+				TextComponent comp = Component.empty();
+				for (int i = 0; i < fields.size(); i++) 
 					comp = comp.append(Component.text(fields.get(i)));
 				screen.addComponentOf("extraFields", comp);
 			}

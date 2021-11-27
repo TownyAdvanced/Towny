@@ -24,6 +24,7 @@ public class StatusScreen {
 	Map<String, TextComponent> components = new LinkedHashMap<>();
 	final static int MAX_WIDTH = ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH;
 	final TextComponent space = Component.space().color(NamedTextColor.WHITE).hoverEvent(HoverEvent.showText(Component.empty()));
+	final TextComponent reset = Component.empty().hoverEvent(HoverEvent.showText(Component.empty()));
 
 	public void addComponentOf(String name, String text) {
 		components.put(name, Component.text(text));
@@ -81,14 +82,14 @@ public class StatusScreen {
 				continue;
 			}
 			if (nextComp.equals(Component.newline())) {
-				// We're dealing with a component which is just a new line, dump the current line and start a new one.
+				// We're dealing with a component which is just a new line, make a new line.
 				lines.add(currentLine);
 				currentLine = Component.empty();
 				string = "";
 				continue;
 			}
 			if (!nextComp.children().isEmpty()) {
-				// We're dealing with a component which has children, likely added via the StatusScreenEvents.
+				// We're dealing with a component made of children, probably the ExtraFields or AdditionalLines.
 				lines.add(currentLine);
 				currentLine = Component.empty();
 				string = "";
@@ -102,7 +103,7 @@ public class StatusScreen {
 						continue;
 					}
 					if (child.equals(Component.newline())) {
-						// We're dealing with a component which is just a new line, dump the current line and start a new one.
+						// We're dealing with a child component which is just a new line, make a new line.
 						lines.add(currentLine);
 						currentLine = Component.empty();
 						string = "";
@@ -113,10 +114,10 @@ public class StatusScreen {
 						// Dump currentLine into lines and start over with nextChild starting the new line.
 						lines.add(currentLine);
 						currentLine = nextChild;
-						string = nextChild.content();
+						string = currentLine.content();
 						continue;
 					}
-					// We have a child which will fit onto the current lien.
+					// We have a child which will fit onto the current line.
 					currentLine = currentLine.append(space).append(nextChild);
 					string += " " + nextChild.content();
 				}
@@ -140,20 +141,12 @@ public class StatusScreen {
 			// We have a component that will fit onto the current line.
 			currentLine = currentLine.append(space).append(nextComp);
 			string += " " + nextComp.content();
-
 		}
 		
 		// The loop is done, if anything was left in currentLine dump it into lines.
-		if (!currentLine.content().isEmpty()) {
+		if (!currentLine.content().isEmpty())
 			lines.add(currentLine);
-		}
-		// A component with children will return empty above, we must dump any last component that consists of children.
-		// This should probably never occur.
-		else if (!currentLine.children().isEmpty())
-			for (Component child : currentLine.children()) {
-				lines.add(Component.empty().append(child));
-			}
-		
+
 		return lines;
 	}
 }
