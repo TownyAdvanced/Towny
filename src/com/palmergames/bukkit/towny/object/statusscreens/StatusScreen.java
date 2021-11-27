@@ -75,38 +75,43 @@ public class StatusScreen {
 		// Cycle over all components in the status screen.
 		for (int i = 0; i < components.size(); i++) {
 			TextComponent nextComp = components.get(i);
-			if (currentLine.content().isEmpty() && currentLine.children().isEmpty()) {
-				// We're dealing with a new line, our component becomes the start of a line.
-				currentLine = nextComp;
-				string = currentLine.content();
-				continue;
-			}
-			if (nextComp.equals(Component.newline())) {
+			if (nextComp.content().equals("\n") && nextComp.children().isEmpty()) { 
 				// We're dealing with a component which is just a new line, make a new line.
 				lines.add(currentLine);
 				currentLine = Component.empty();
 				string = "";
 				continue;
 			}
+			if (currentLine.content().isEmpty() && nextComp.children().isEmpty()) {
+				// We're dealing with a new line and the nextComp has no children to process,
+				// nextComp becomes the start of a line.
+				currentLine = nextComp;
+				string = currentLine.content();
+				continue;
+			}
+
+			// We're dealing with a component made of children, probably the ExtraFields or AdditionalLines.
 			if (!nextComp.children().isEmpty()) {
-				// We're dealing with a component made of children, probably the ExtraFields or AdditionalLines.
-				lines.add(currentLine);
-				currentLine = Component.empty();
-				string = "";
+				// nextComp starts with a new line component with children to follow, start a new line.
+				if (nextComp.content().equals("\n")) {
+					lines.add(currentLine);
+					currentLine = Component.empty();
+					string = "";
+				}
 				// Cycle over all child components.
 				for (Component child : nextComp.children()) {
 					TextComponent nextChild = (TextComponent) child.asComponent();
-					if (currentLine.content().isEmpty() && currentLine.children().isEmpty()) {
-						// We're dealing with a new line, our child component becomes the start of a line.
-						currentLine = nextChild;
-						string = currentLine.content();
-						continue;
-					}
 					if (child.equals(Component.newline())) {
 						// We're dealing with a child component which is just a new line, make a new line.
 						lines.add(currentLine);
 						currentLine = Component.empty();
 						string = "";
+						continue;
+					}
+					if (currentLine.content().isEmpty() && currentLine.children().isEmpty()) {
+						// We're dealing with a new line, our child component becomes the start of a line.
+						currentLine = nextChild;
+						string = currentLine.content();
 						continue;
 					}
 					if ((Colors.strip(string).length() + nextChild.content().length() + 1) > MAX_WIDTH) {

@@ -113,7 +113,7 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<String> fields = getExtraFields(townBlock);
 		if (!fields.isEmpty()) {
-			TextComponent comp = Component.empty();
+			TextComponent comp = Component.newline();
 			for (int i = 0; i < fields.size(); i++) 
 				comp = comp.append(Component.text(fields.get(i)));
 			screen.addComponentOf("extraFields", comp);
@@ -249,7 +249,7 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<String> fields = getExtraFields(resident);
 		if (!fields.isEmpty()) {
-			TextComponent comp = Component.empty();
+			TextComponent comp = Component.newline();
 			for (int i = 0; i < fields.size(); i++) 
 				comp = comp.append(Component.newline()).append(Component.text(fields.get(i)));
 			screen.addComponentOf("extraFields", comp);
@@ -401,7 +401,7 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<String> fields = getExtraFields(town);
 		if (!fields.isEmpty()) {
-			TextComponent comp = Component.empty();
+			TextComponent comp = Component.newline();
 			for (int i = 0; i < fields.size(); i++) 
 				comp = comp.append(Component.text(fields.get(i)));
 			screen.addComponentOf("extraFields", comp);
@@ -535,7 +535,7 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<String> fields = getExtraFields(nation);
 		if (!fields.isEmpty()) {
-			TextComponent comp = Component.empty();
+			TextComponent comp = Component.newline();
 			for (int i = 0; i < fields.size(); i++)
 				comp = comp.append(Component.text(fields.get(i)));
 			screen.addComponentOf("extraFields", comp);
@@ -607,7 +607,7 @@ public class TownyFormatter {
 			// Add any metadata which opt to be visible.
 			List<String> fields = getExtraFields(world);
 			if (!fields.isEmpty()) {
-				TextComponent comp = Component.empty();
+				TextComponent comp = Component.newline();
 				for (int i = 0; i < fields.size(); i++) 
 					comp = comp.append(Component.text(fields.get(i)));
 				screen.addComponentOf("extraFields", comp);
