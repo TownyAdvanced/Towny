@@ -23,7 +23,7 @@ public class StatusScreen {
 
 	Map<String, TextComponent> components = new LinkedHashMap<>();
 	final static int MAX_WIDTH = ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH;
-	final TextComponent space = Component.space().color(NamedTextColor.WHITE).hoverEvent(HoverEvent.showText(Component.empty()));
+	final TextComponent space = Component.space().color(NamedTextColor.WHITE).hoverEvent(HoverEvent.showText(Component.empty())) ;
 	final TextComponent reset = Component.empty().hoverEvent(HoverEvent.showText(Component.empty()));
 
 	public void addComponentOf(String name, String text) {
@@ -123,7 +123,7 @@ public class StatusScreen {
 						continue;
 					}
 					// We have a child which will fit onto the current line.
-					currentLine = currentLine.append(space).append(nextChild);
+					currentLine = currentLine.append(space.append(nextChild));
 					string += " " + nextChild.content();
 				}
 				// The loop is done, if anything was left in the currentLine dump it into lines.
@@ -144,7 +144,7 @@ public class StatusScreen {
 				continue;
 			}
 			// We have a component that will fit onto the current line.
-			currentLine = currentLine.append(space).append(nextComp);
+			currentLine = currentLine.append(space.append(nextComp));
 			string += " " + nextComp.content();
 		}
 		
