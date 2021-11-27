@@ -27,7 +27,6 @@ import com.palmergames.bukkit.towny.event.nation.NationPreMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownKickEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
-import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleUnknownEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleOpenEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationTogglePublicEvent;
@@ -443,13 +442,29 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationStatusScreen(player, resident.getNationOrNull());
 			return;
 		} 
+
 		if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 			HelpMenu.NATION_HELP.send(player);
 			return;
 		}
+		
+		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION.getNode(split[0].toLowerCase()))) {
+			// Test if this is an addon command
+			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).execute(player, "nation", split);
+				return;
+			}
+			// Test if this is a nation status screen lookup.
+			Nation nation = TownyUniverse.getInstance().getNation(split[0]);
+			if (nation != null) {
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && !nation.hasResident(player.getName()))
+					throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION.getNode(split[0].toLowerCase())))
+				nationStatusScreen(player, nation);
+				return;
+			}
 			throw new TownyException(Translatable.of("msg_err_command_disable"));
+		}	
 
 		switch (split[0].toLowerCase()) {
 		case "list":
@@ -533,21 +548,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			parseNationBaltop(player, getResidentNationOrNationFromArg(player, split));
 			break;
 		default:
-			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).execute(player, "nation", split);
-				return;
-			} 
-			/*
-			 * We've gotten this far without a match, check if the argument is a nation name.
-			 */
-			Nation nation = TownyUniverse.getInstance().getNation(split[0]);
-			if (nation == null)
-				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[0]));
 
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && !nation.hasResident(player.getName()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
-
-			nationStatusScreen(player, nation);
 		}
 	}
 
@@ -1917,9 +1918,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		/*
 		 * Take care of permission nodes tests here.
 		 */
-		if (!admin && !TownyUniverse.getInstance().getPermissionSource().testPermission(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET.getNode(split[0].toLowerCase())))
+		if (!admin && !TownyUniverse.getInstance().getPermissionSource().testPermission(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET.getNode(split[0].toLowerCase()))) {
+			// Test if this is an add-on command.
+			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, split[0]).execute(sender, "nation", split);
+				return;
+			}
 			throw new TownyException(Translatable.of("msg_err_command_disable"));
-
+		}
 		Resident resident;
 		try {
 			if (!admin && sender instanceof Player player) {
@@ -1971,12 +1977,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationSetMapColor(sender, nation, split, admin);
 			break;
 		default:
-			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, split[0]).execute(sender, "nation", split);
-			} else {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", split[0]));
-				return;
-			}
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", split[0]));
+			return;
 		}
 		nation.save();
 	}
@@ -2385,9 +2387,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		} else // Treat any resident tests as though the king were doing it.
 			resident = nation.getKing();
 
-		if (!admin && !TownyUniverse.getInstance().getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE.getNode(split[0].toLowerCase())))
+		if (!admin && !TownyUniverse.getInstance().getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE.getNode(split[0].toLowerCase()))) {
+			// Check if this is an add-on command.
+			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_TOGGLE, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_TOGGLE, split[0]).execute(sender, "nation", split);
+				return;
+			} 
 			throw new TownyException(Translatable.of("msg_err_command_disable"));
-
+		}
 		Optional<Boolean> choice = Optional.empty();
 		if (split.length == 2)
 			choice = BaseCommand.parseToggleChoice(split[1]);
@@ -2404,22 +2411,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationToggleOpen(sender, nation, choice, admin);
 			break;
 		default:
-			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_TOGGLE, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_TOGGLE, split[0]).execute(sender, "nation", split);
-				break;
-			} 
-			/*
-			 * Fire of an event if we don't recognize the command being used. The event is
-			 * cancelled by default, leaving our standard error message to be shown to the
-			 * player, unless the user of the event does a) uncancel the event, or b) alters
-			 * the cancellation message.
-			 */
-			NationToggleUnknownEvent event = new NationToggleUnknownEvent(sender, nation, admin, split);
-			Bukkit.getPluginManager().callEvent(event);
-			if (event.isCancelled()) {
-				TownyMessaging.sendErrorMsg(sender, event.getCancelMessage());
-				return;
-			}
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", split[0]));
+			return;
 		}
 		nation.save();
 	}

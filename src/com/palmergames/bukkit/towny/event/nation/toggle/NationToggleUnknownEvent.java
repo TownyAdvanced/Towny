@@ -15,7 +15,9 @@ public class NationToggleUnknownEvent extends NationToggleEvent {
 	 * @param nation Nation being toggled.
 	 * @param args String[] Subcommands following the /nation toggle portion of the command. 
 	 * @param admin boolean whether this was sent by the console or someone with townyadmin priviledges
+	 * @deprecated since 0.97.3.2: Use the TownyCommandAddonAPI. This is no longer called.
 	 */
+	@Deprecated
 	public NationToggleUnknownEvent(CommandSender sender, Nation nation, boolean admin, String[] args) {
 		super(sender, nation, admin);
 		setCancelled(true);
