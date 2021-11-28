@@ -1,0 +1,45 @@
+name: Bug Report
+description: Create a report to help us improve.
+labels: [bug]
+body:
+    - type: textarea
+      attributes:
+          label: What steps will reproduce the problem?
+      validations:
+          required: true
+    - type: textarea
+      attributes:
+          label: What is the expected output?
+          description: What you expected to see.
+      validations:
+          required: true
+    - type: textarea
+      attributes:
+          label: Towny version
+          description: Do not say "latest".
+      validations:
+          required: true
+    - type: textarea
+      attributes:
+          label: Server version
+          description: The server version you are currently running. Do not say "latest".
+      validations:
+          required: true
+    - type: textarea
+      attributes:
+          label: Please use Pastebin.com to link the following files
+          description: Skipping these files is not an option. It is the easiest way to diagnose an issue ticket properly. If you do skip this step then your ticket will most likely be deleted and you will be asked to resubmit.
+          placeholder: |
+              1. Your full server startup from the logs\latest.log:
+              2. Your Towny config.yml:
+              3. Your townyperms.yml:
+              4. Your log's error:
+
+              (optional) If this is to do with permissions,
+              5. Your permissions file:
+
+              (optional) If this is to do with chat,
+              6. Your chatconfig.yml:
+              7. Your channels.yml:
+      validations:
+          required: true
