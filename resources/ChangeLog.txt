@@ -6998,3 +6998,4 @@ v0.92.0.11:
   - Fix how StatusScreens handle Components with children.
   - Fix NationCommand permission node test.
   - Deprecate the NationToggleUnknownEvent.
+  - Fix possible npe when checking bankrupt status, courtesy of Warriorrrr with PR #5474.
