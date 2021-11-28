@@ -1474,6 +1474,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void nationAllyAdd(Player player, Resident resident, Nation nation, String[] names) throws TownyException {
+		if (names.length == 0)
+			throw new TownyException("ex: /n ally add [names]");
+		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		ArrayList<Nation> list = new ArrayList<>();
 		ArrayList<Nation> remlist = new ArrayList<>();
@@ -1520,6 +1523,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void nationAllyRemove(Player player, Resident resident, Nation nation, String[] names) throws TownyException {
+		if (names.length == 0)
+			throw new TownyException("ex: /n ally add [names]");
+		
 		ArrayList<Nation> list = new ArrayList<>();
 		Nation ally;
 		for (String name : names) {
