@@ -5,6 +5,10 @@ body:
     - type: textarea
       attributes:
           label: What steps will reproduce the problem?
+          placeholder: |
+              1.
+              2.
+              3.
       validations:
           required: true
     - type: textarea
@@ -29,7 +33,7 @@ body:
       attributes:
           label: Please use Pastebin.com to link the following files
           description: Skipping these files is not an option. It is the easiest way to diagnose an issue ticket properly. If you do skip this step then your ticket will most likely be deleted and you will be asked to resubmit.
-          placeholder: |
+          value: |
               1. Your full server startup from the logs\latest.log:
               2. Your Towny config.yml:
               3. Your townyperms.yml:
