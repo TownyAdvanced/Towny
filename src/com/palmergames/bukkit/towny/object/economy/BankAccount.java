@@ -128,8 +128,11 @@ public class BankAccount extends Account {
 	 * @return true if in debt, false otherwise.
 	 */
 	public boolean isBankrupt() {
-		if (isTownAccount())
-			return getTown().isBankrupt();
+		if (isTownAccount()) {
+			Town town = getTown();
+			return town != null && town.isBankrupt();
+		}
+		
 		return false;
 	}
 	
