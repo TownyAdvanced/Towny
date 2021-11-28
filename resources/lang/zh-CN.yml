@@ -1398,7 +1398,7 @@ msg_baltop_book_format: '%s. %s | %s'
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: '请求确认已超时。'
 #Added in 0.134
-tc_player_channel_sound_muted: 'The channel sound has been muted'
-tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
+tc_player_channel_sound_muted: '频道已静音'
+tc_player_channel_sound_unmuted: '频道已解除静音'
 #Added in 0.135
-msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
+msg_cant_toggle_pvp_outsider_in_plot: '有外来者在你的领地上，你不能切换PVP状态！'

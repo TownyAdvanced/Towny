@@ -1297,7 +1297,7 @@ msg_nationzone_override_set_to: '%s установил nationzone на %s.'
 msg_nationzone_override_removed: '%s has had their nationzone override removed.'
 #Added in 0.127
 #Used in status screen:
-status_nation_zone_size: 'Nation Zone Size:'
+status_nation_zone_size: 'Размер зоны нации:'
 #Shown when a player adds people to their friends list.
 msg_res_friend_added_to_list: '%s добавлен в список друзей.'
 #Shown when a player removes people from their friends list.
