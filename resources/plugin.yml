@@ -226,15 +226,6 @@ permissions:
         default: false
         children:
             towny.command.nation.list: true
-            towny.command.nation.list.residents: true
-            towny.command.nation.list.towns: true
-            towny.command.nation.list.open: true
-            towny.command.nation.list.public: true
-            towny.command.nation.list.balance: true
-            towny.command.nation.list.name: true
-            towny.command.nation.list.founded: true
-            towny.command.nation.list.townblocks: true
-            towny.command.nation.list.online: true
 
     towny.command.nation.deposit.other:
         description: User can deposit money into the town bank of a nation member.

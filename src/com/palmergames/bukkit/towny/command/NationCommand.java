@@ -449,11 +449,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
 		if (split.length == 0) {
-			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-			if (resident == null || !resident.hasNation())
-				throw new TownyException(Translatable.of("msg_err_dont_belong_nation"));
-
-			nationStatusScreen(player, resident.getNationOrNull());
+			nationStatusScreen(player, getNationFromPlayerOrThrow(player));
 			return;
 		} 
 
@@ -461,8 +457,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.NATION_HELP.send(player);
 			return;
 		}
-		
-		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION.getNode(split[0].toLowerCase()))) {
+
+		if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION.getNode(split[0].toLowerCase()))) {
 			// Test if this is an addon command
 			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).execute(player, "nation", split);
@@ -478,7 +474,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			throw new TownyException(Translatable.of("msg_err_command_disable"));
-		}	
+		}
 
 		switch (split[0].toLowerCase()) {
 		case "list":
@@ -562,7 +558,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			parseNationBaltop(player, getResidentNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
 			break;
 		default:
+			// Test if this is an addon command
+			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).execute(player, "nation", split);
+				return;
+			}
+			// Test if this is a nation status screen lookup.
+			Nation nation = TownyUniverse.getInstance().getNation(split[0]);
+			if (nation != null) {
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && !nation.hasResident(player.getName()))
+					throw new TownyException(Translatable.of("msg_err_command_disable"));
 
+				nationStatusScreen(player, nation);
+				return;
+			}
 		}
 	}
 
@@ -1983,6 +1992,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationSetMapColor(sender, nation, split, admin);
 			break;
 		default:
+			// Test if this is an add-on command.
+			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, split[0]).execute(sender, "nation", split);
+				return;
+			}
+
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", split[0]));
 			return;
 		}
@@ -2417,6 +2432,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationToggleOpen(sender, nation, choice, admin);
 			break;
 		default:
+			// Check if this is an add-on command.
+			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_TOGGLE, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_TOGGLE, split[0]).execute(sender, "nation", split);
+				return;
+			}
+
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", split[0]));
 			return;
 		}
