@@ -739,7 +739,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		// Move the plot to be restored
 		if (townBlock.getWorld().isUsingPlotManagementRevert())
-			TownyRegenAPI.addToRegenList(townBlock.getWorldCoord());
+			TownyRegenAPI.addToRegenQueueList(townBlock.getWorldCoord(), true);
 
 		// Raise an event to signal the unclaim
 		BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord()));
@@ -1483,7 +1483,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				if (!line.equals("")) {
 					split = line.split(",");
 					WorldCoord wc = new WorldCoord(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-					TownyRegenAPI.addToRegenList(wc);
+					TownyRegenAPI.addToRegenQueueList(wc, false);
 				}
 			
 			return true;
@@ -1532,11 +1532,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public boolean saveRegenList() {
         queryQueue.add(() -> {
         	File file = new File(dataFolderPath + File.separator + "regen.txt");
-
 			Collection<String> lines = TownyRegenAPI.getRegenQueueList().stream()
 				.map(wc -> wc.getWorldName() + "," + wc.getX() + "," + wc.getZ())
 				.collect(Collectors.toList());
-
 			FileMgmt.listToFile(lines, file.getPath());
 		});
 

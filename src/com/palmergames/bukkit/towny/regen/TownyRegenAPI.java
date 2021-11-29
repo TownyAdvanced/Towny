@@ -46,7 +46,6 @@ public class TownyRegenAPI {
 	
 	// List of protection blocks placed to prevent blockPhysics.
 	private static  Set<Block> protectionPlaceholders = new HashSet<>();
-	
 
 	/*
 	 * Snapshots used in Revert-On-Unclaim feature
@@ -142,15 +141,15 @@ public class TownyRegenAPI {
 		return regenWorldCoordList;
 	}
 	
-	public static boolean regenQueueIsNotEmpty() {
-		return !regenWorldCoordList.isEmpty();
+	public static boolean regenQueueHasAvailable() {
+		return !regenWorldCoordList.isEmpty() && regenWorldCoordList.size() >= 20;
 	}
 	
 	private static void setRegenQueue(List<WorldCoord> list) {
 		regenWorldCoordList = list;
 	}
 	
-	public static void removeRegenListOfWorld(TownyWorld world, boolean save) {
+	public static void removeRegenQueueListOfWorld(TownyWorld world, boolean save) {
 		List<WorldCoord> list = new ArrayList<>();
 		for (WorldCoord wc : getRegenQueueList()) {
 			if (!wc.getTownyWorldOrNull().equals(world))
@@ -163,17 +162,18 @@ public class TownyRegenAPI {
 			TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
 	
-	public static void removeFromRegenList(WorldCoord wc) {
+	public static void removeFromRegenQueueList(WorldCoord wc) {
 		if (regenWorldCoordList.contains(wc)) { 
 			regenWorldCoordList.remove(wc);
 			TownyUniverse.getInstance().getDataSource().saveRegenList();
 		}
 	}
 	
-	public static void addToRegenList(WorldCoord wc) {
+	public static void addToRegenQueueList(WorldCoord wc, boolean save) {
 		if (!regenWorldCoordList.contains(wc)) {
 			regenWorldCoordList.add(wc);
-			TownyUniverse.getInstance().getDataSource().saveRegenList();
+			if (save)
+				TownyUniverse.getInstance().getDataSource().saveRegenList();
 		}
 	}
 

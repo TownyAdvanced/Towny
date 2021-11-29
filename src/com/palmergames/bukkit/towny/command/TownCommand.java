@@ -2960,7 +2960,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
 				plotChunk = null;
 				// Remove the WorldCoord from the regenqueue.
-				TownyRegenAPI.removeFromRegenList(townBlock.getWorldCoord());
+				TownyRegenAPI.removeFromRegenQueueList(townBlock.getWorldCoord());
 			}
 		}
 		if (TownyEconomyHandler.isActive()) {

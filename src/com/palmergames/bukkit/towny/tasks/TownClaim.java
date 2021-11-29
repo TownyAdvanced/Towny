@@ -196,7 +196,7 @@ public class TownClaim extends Thread {
 						TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
 						townBlock.setLocked(true);
 					}
-					TownyRegenAPI.removeFromRegenList(worldCoord);
+					TownyRegenAPI.removeFromRegenQueueList(worldCoord);
 				}
 			}
 			

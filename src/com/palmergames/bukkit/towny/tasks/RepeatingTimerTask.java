@@ -33,7 +33,7 @@ public class RepeatingTimerTask extends TownyTimerTask {
 				for (PlotBlockData plotChunk : new ArrayList<PlotBlockData>(TownyRegenAPI.getPlotChunks().values())) {
 					if (plotChunk != null && !plotChunk.restoreNextBlock()) {
 						TownyMessaging.sendDebugMsg("Revert on unclaim complete for " + plotChunk.getWorldName() + " " + plotChunk.getX() +"," + plotChunk.getZ());
-						TownyRegenAPI.removeFromRegenList(plotChunk.getWorldCoord());
+						TownyRegenAPI.removeFromRegenQueueList(plotChunk.getWorldCoord());
 						TownyRegenAPI.deletePlotChunk(plotChunk);
 						TownyRegenAPI.deletePlotChunkSnapshot(plotChunk);
 					}
@@ -43,9 +43,7 @@ public class RepeatingTimerTask extends TownyTimerTask {
 		}
 
 		// Check and see if we have any room in the PlotChunks regeneration, and more in the queue. 
-		if (TownyRegenAPI.getPlotChunks().size() < 20 
-			&& TownyRegenAPI.regenQueueIsNotEmpty() 
-			&& TownyRegenAPI.getRegenQueueList().size() >= 20) {
+		if (TownyRegenAPI.getPlotChunks().size() < 20 && TownyRegenAPI.regenQueueHasAvailable()) {
 			for (WorldCoord wc : new ArrayList<>(TownyRegenAPI.getRegenQueueList())) {
 				// We have enough plot chunks regenerating, break out of the loop.
 				if (TownyRegenAPI.getPlotChunks().size() >= 20)
@@ -58,7 +56,7 @@ public class RepeatingTimerTask extends TownyTimerTask {
 				if (plotData != null) {
 					TownyRegenAPI.addPlotChunk(plotData);
 				} else {
-					TownyRegenAPI.removeFromRegenList(wc);
+					TownyRegenAPI.removeFromRegenQueueList(wc);
 				}
 			}
 		}
