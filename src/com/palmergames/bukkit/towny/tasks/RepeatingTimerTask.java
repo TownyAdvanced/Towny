@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import org.apache.logging.log4j.LogManager;
@@ -32,11 +33,33 @@ public class RepeatingTimerTask extends TownyTimerTask {
 				for (PlotBlockData plotChunk : new ArrayList<PlotBlockData>(TownyRegenAPI.getPlotChunks().values())) {
 					if (plotChunk != null && !plotChunk.restoreNextBlock()) {
 						TownyMessaging.sendDebugMsg("Revert on unclaim complete for " + plotChunk.getWorldName() + " " + plotChunk.getX() +"," + plotChunk.getZ());
+						TownyRegenAPI.removeFromRegenList(plotChunk.getWorldCoord());
 						TownyRegenAPI.deletePlotChunk(plotChunk);
 						TownyRegenAPI.deletePlotChunkSnapshot(plotChunk);
 					}
 				}
 				timerCounter = 0L;
+			}
+		}
+
+		// Check and see if we have any room in the PlotChunks regeneration, and more in the queue. 
+		if (TownyRegenAPI.getPlotChunks().size() < 20 
+			&& TownyRegenAPI.regenQueueIsNotEmpty() 
+			&& TownyRegenAPI.getRegenQueueList().size() >= 20) {
+			for (WorldCoord wc : new ArrayList<>(TownyRegenAPI.getRegenQueueList())) {
+				// We have enough plot chunks regenerating, break out of the loop.
+				if (TownyRegenAPI.getPlotChunks().size() >= 20)
+					break;
+				// We have already got this worldcoord regenerating.
+				if (TownyRegenAPI.hasPlotChunk(wc))
+					continue;
+				// This worldCoord isn't actively regenerating, start the regeneration.
+				PlotBlockData plotData = TownyRegenAPI.getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorldOrNull()));  
+				if (plotData != null) {
+					TownyRegenAPI.addPlotChunk(plotData);
+				} else {
+					TownyRegenAPI.removeFromRegenList(wc);
+				}
 			}
 		}
 

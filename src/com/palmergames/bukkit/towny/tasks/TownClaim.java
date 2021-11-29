@@ -186,14 +186,17 @@ public class TownClaim extends Thread {
 			}
 
 			if (worldCoord.getTownyWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
-				PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
-				if (plotChunk != null) {
-					TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
-					townBlock.setLocked(false);
-				} else {
-
-					TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
-					townBlock.setLocked(true);
+				if (TownyRegenAPI.getRegenQueueList().contains(townBlock.getWorldCoord())) {
+					PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
+					if (plotChunk != null) {
+						TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
+						townBlock.setLocked(false);
+					} else {
+						// Queue to have a snapshot made. 
+						TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
+						townBlock.setLocked(true);
+					}
+					TownyRegenAPI.removeFromRegenList(worldCoord);
 				}
 			}
 			

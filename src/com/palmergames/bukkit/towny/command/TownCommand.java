@@ -2944,19 +2944,24 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		town.setSpawn(spawn);
 
 		if (world.isUsingPlotManagementRevert()) {
-			PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
-			if (plotChunk != null) {
+			if (TownyRegenAPI.getRegenQueueList().contains(townBlock.getWorldCoord())) {
+				// This plot is in the regeneration queue.
+				PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
+				if (plotChunk != null) {
 
-				TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
-
-			} else {
-
-				plotChunk = new PlotBlockData(townBlock); // Not regenerating so create a new snapshot.
-				plotChunk.initialize();
-
+					TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
+	
+				} else {
+	
+					plotChunk = new PlotBlockData(townBlock); // Not regenerating so create a new snapshot.
+					plotChunk.initialize();
+	
+				}
+				TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
+				plotChunk = null;
+				// Remove the WorldCoord from the regenqueue.
+				TownyRegenAPI.removeFromRegenList(townBlock.getWorldCoord());
 			}
-			TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
-			plotChunk = null;
 		}
 		if (TownyEconomyHandler.isActive()) {
 			TownyMessaging.sendDebugMsg("Creating new Town account: " + TownySettings.getTownAccountPrefix() + name);

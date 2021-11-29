@@ -738,12 +738,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyRegenAPI.addDeleteTownBlockIdQueue(townBlock.getWorldCoord());
 
 		// Move the plot to be restored
-		if (townBlock.getWorld().isUsingPlotManagementRevert()) {
-			PlotBlockData plotData = TownyRegenAPI.getPlotChunkSnapshot(townBlock);
-			if (plotData != null && !plotData.getBlockList().isEmpty()) {
-				TownyRegenAPI.addPlotChunk(plotData, true);
-			}
-		}
+		if (townBlock.getWorld().isUsingPlotManagementRevert())
+			TownyRegenAPI.addToRegenList(townBlock.getWorldCoord());
+
 		// Raise an event to signal the unclaim
 		BukkitTools.getPluginManager().callEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord()));
 	}
@@ -1480,16 +1477,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		String line = null;
 		
 		String[] split;
-		PlotBlockData plotData;
 		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "regen.txt"), StandardCharsets.UTF_8))) {
 			
 			while ((line = fin.readLine()) != null)
 				if (!line.equals("")) {
 					split = line.split(",");
-					plotData = loadPlotData(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-					if (plotData != null) {
-						TownyRegenAPI.addPlotChunk(plotData, false);
-					}
+					WorldCoord wc = new WorldCoord(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+					TownyRegenAPI.addToRegenList(wc);
 				}
 			
 			return true;
@@ -1538,11 +1532,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public boolean saveRegenList() {
         queryQueue.add(() -> {
         	File file = new File(dataFolderPath + File.separator + "regen.txt");
-        	
-			Collection<String> lines = TownyRegenAPI.getPlotChunks().values().stream()
-				.map(data -> data.getWorldName() + "," + data.getX() + "," + data.getZ())
+
+			Collection<String> lines = TownyRegenAPI.getRegenQueueList().stream()
+				.map(wc -> wc.getWorldName() + "," + wc.getX() + "," + wc.getZ())
 				.collect(Collectors.toList());
-			
+
 			FileMgmt.listToFile(lines, file.getPath());
 		});
 

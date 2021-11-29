@@ -29,6 +29,9 @@ import java.util.Set;
  */
 public class TownyRegenAPI {
 
+	// A list of worldCoords which are queued to be regenerated.
+	private static List<WorldCoord> regenWorldCoordList = new ArrayList<>();
+	
 	// table containing snapshot data of active reversions.
 	private static Hashtable<String, PlotBlockData> PlotChunks = new Hashtable<>();
 
@@ -43,6 +46,11 @@ public class TownyRegenAPI {
 	
 	// List of protection blocks placed to prevent blockPhysics.
 	private static  Set<Block> protectionPlaceholders = new HashSet<>();
+	
+
+	/*
+	 * Snapshots used in Revert-On-Unclaim feature
+	 */
 
 	/**
 	 * Add a TownBlocks WorldCoord for a snapshot to be taken.
@@ -123,6 +131,56 @@ public class TownyRegenAPI {
 		return null;
 	}
 
+	/*
+	 * Regeneration Queue.
+	 */
+
+	/**
+	 * @return the list of WorldCoords which are waiting to be regenerated.
+	 */
+	public static List<WorldCoord> getRegenQueueList() {
+		return regenWorldCoordList;
+	}
+	
+	public static boolean regenQueueIsNotEmpty() {
+		return !regenWorldCoordList.isEmpty();
+	}
+	
+	private static void setRegenQueue(List<WorldCoord> list) {
+		regenWorldCoordList = list;
+	}
+	
+	public static void removeRegenListOfWorld(TownyWorld world, boolean save) {
+		List<WorldCoord> list = new ArrayList<>();
+		for (WorldCoord wc : getRegenQueueList()) {
+			if (!wc.getTownyWorldOrNull().equals(world))
+				list.add(wc);
+		}
+		
+		setRegenQueue(list);
+		
+		if (save)
+			TownyUniverse.getInstance().getDataSource().saveRegenList();
+	}
+	
+	public static void removeFromRegenList(WorldCoord wc) {
+		if (regenWorldCoordList.contains(wc)) { 
+			regenWorldCoordList.remove(wc);
+			TownyUniverse.getInstance().getDataSource().saveRegenList();
+		}
+	}
+	
+	public static void addToRegenList(WorldCoord wc) {
+		if (!regenWorldCoordList.contains(wc)) {
+			regenWorldCoordList.add(wc);
+			TownyUniverse.getInstance().getDataSource().saveRegenList();
+		}
+	}
+
+	/*
+	 * PlotChunks. Active Revert-On-Unclaims.
+	 */
+
 	/**
 	 * @return the plotChunks which are being processed
 	 */
@@ -140,6 +198,14 @@ public class TownyRegenAPI {
 	}
 
 	/**
+	 * @param wc WorldCoord to check for.
+	 * @return true if this WorldCoord is actively being processed.
+	 */
+	public static boolean hasPlotChunk(WorldCoord wc) {
+		return PlotChunks.containsKey(getPlotKey(wc));
+	}
+	
+	/**
 	 * @param plotChunks the plotChunks to set
 	 */
 	public static void setPlotChunks(Hashtable<String, PlotBlockData> plotChunks) {
@@ -151,9 +217,8 @@ public class TownyRegenAPI {
 	 * Removes all plotchunks currently in regeneration list for one world.
 	 * 
 	 * @param world - TownyWorld to have regeneration stop in.
-	 * @param save - True to save regen list.
 	 */
-	public static void removePlotChunksForWorld(TownyWorld world, boolean save) {
+	public static void removePlotChunksForWorld(TownyWorld world) {
 		Hashtable<String, PlotBlockData> plotChunks = new Hashtable<>();
 		// Rebuild the list of plotChunks, skipping the ones belonging to the given world.
 		for (String key : getPlotChunks().keySet())
@@ -162,9 +227,6 @@ public class TownyRegenAPI {
 
 		// Set the new plotchunks.
 		setPlotChunks(plotChunks);
-		
-		if (save)
-			TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
 
 	/**
@@ -174,27 +236,26 @@ public class TownyRegenAPI {
 	 */
 	public static void deletePlotChunk(PlotBlockData plotChunk) {
 
-		if (PlotChunks.containsKey(getPlotKey(plotChunk))) {
+		if (PlotChunks.containsKey(getPlotKey(plotChunk)))
 			PlotChunks.remove(getPlotKey(plotChunk));
-			TownyUniverse.getInstance().getDataSource().saveRegenList();
-		}
 	}
 	
 	/**
 	 * Adds a Plot Chunk to the regeneration Hashtable
 	 * 
 	 * @param plotChunk - Chunk to add (PlotBlockData)
-	 * @param save - If Regen List should be saved
 	 */
-	public static void addPlotChunk(PlotBlockData plotChunk, boolean save) {
+	public static void addPlotChunk(PlotBlockData plotChunk) {
 
 		if (!PlotChunks.containsKey(getPlotKey(plotChunk))) {
 			//plotChunk.initialize();
 			PlotChunks.put(getPlotKey(plotChunk), plotChunk);
-			if (save)
-				TownyUniverse.getInstance().getDataSource().saveRegenList();
 		}
 	}
+
+	/*
+	 * PlotChunkSnapShot Methods. Creates PlotBlockDatas.
+	 */
 
 	/**
 	 * Saves a Plot Chunk snapshot to the datasource
@@ -253,6 +314,10 @@ public class TownyRegenAPI {
 	public static String getPlotKey(TownBlock townBlock) {
 
 		return "[" + townBlock.getWorld().getName() + "|" + townBlock.getX() + "|" + townBlock.getZ() + "]";
+	}
+	
+	public static String getPlotKey(WorldCoord wc) {
+		return "[" + wc.getWorldName() + "|" + wc.getX() + "|" + wc.getZ() + "]";
 	}
 
 	/**
@@ -392,6 +457,10 @@ public class TownyRegenAPI {
 //
 //	}
 
+	/*
+	 * TownBlock Material Deleting Queue.
+	 */
+	
 	/**
 	 * @return true if there are any chunks being processed.
 	 */
