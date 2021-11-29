@@ -403,23 +403,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	/**
-	 * Returns a nation from the String[] at split[0],  
-	 * @param player
-	 * @param split
-	 * @return
-	 * @throws TownyException
+	 * Returns a nation from the player if args is empty or from the name supplied at arg[0].  
+	 * @param player {@link Player} to try and get a nation from when args is empty.
+	 * @param args {@link String[]} from which to try and get a nation name from.
+	 * @return nation {@link Nation} from the Player or from the arg.
+	 * @throws TownyException thrown when the player has no nation, or no nation exists by the name supplied in arg[0].
 	 */
-	private static Nation getResidentNationOrNationFromArg(Player player, String[] split) throws TownyException {
-		Nation nation = null;
-		try {
-			if (split.length == 0) {
-				nation = getNationFromPlayerOrThrow(player);
-			} else
-				nation = getNationOrThrow(split[0]);
-		} catch (NotRegisteredException e) {
-			throw new TownyException(e.getMessage());
-		}
-		return nation;
+	private static Nation getPlayerNationOrNationFromArg(Player player, String[] args) throws TownyException {
+		return args.length == 0 ? getNationFromPlayerOrThrow(player) : getNationOrThrow(args[0]);  
 	}
 	
 	private void parseNationCommandForConsole(final CommandSender sender, String[] split) {
@@ -481,13 +472,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			listNations(player, split);
 			break;
 		case "townlist":
-			nationTownList(player, getResidentNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
+			nationTownList(player, getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
 			break;
 		case "allylist":
-			nationAllyList(player, getResidentNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
+			nationAllyList(player, getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
 			break;
 		case "enemylist":
-			nationEnemyList(player, getResidentNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
+			nationEnemyList(player, getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
 			break;
 		case "new":
 			newNation(player, split);
@@ -515,7 +506,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationRank(player, StringMgmt.remFirstArg(split));
 			break;
 		case "ranklist":
-			TownyMessaging.sendMessage(player, TownyFormatter.getRanksForNation(getResidentNationOrNationFromArg(player, StringMgmt.remFirstArg(split)), Translation.getLocale(player)));
+			TownyMessaging.sendMessage(player, TownyFormatter.getRanksForNation(getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)), Translation.getLocale(player)));
 			break;
 		case "king":
 			nationKing(player, StringMgmt.remFirstArg(split));
@@ -555,7 +546,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationBankHistory(player, split);
 			break;
 		case "baltop":
-			parseNationBaltop(player, getResidentNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
+			parseNationBaltop(player, getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
 			break;
 		default:
 			// Test if this is an addon command
@@ -2531,7 +2522,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public static void nationSpawn(Player player, String[] split, boolean ignoreWarning) throws TownyException {
 
-		Nation nation = getResidentNationOrNationFromArg(player, split);
+		Nation nation = getPlayerNationOrNationFromArg(player, split);
 		String notAffordMSG = split.length == 0 ? 
 			Translatable.of("msg_err_cant_afford_tp").forLocale(player) : 
 			Translatable.of("msg_err_cant_afford_tp_nation", nation.getName()).forLocale(player);
