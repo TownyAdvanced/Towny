@@ -838,11 +838,11 @@ public class TownyMessaging {
 	 */
 	
 	public static void sendBossBarMessageToPlayer(Player player, String message, float progress, Color color, Overlay overlay) {
-		TextComponent component = LegacyComponentSerializer.builder().build().deserialize(message);
+		Component component = LegacyComponentSerializer.builder().build().deserialize(message);
 		sendBossBarMessageToPlayer(player, component, progress, color, overlay);
 	}
 	
-	public static void sendBossBarMessageToPlayer(Player player, TextComponent component, float progress, Color color, Overlay overlay) {
+	public static void sendBossBarMessageToPlayer(Player player, Component component, float progress, Color color, Overlay overlay) {
 		Audience audience = Towny.getAdventure().player(player);
 		audience.showBossBar(BossBar.bossBar(component, progress, color, overlay));
 	}

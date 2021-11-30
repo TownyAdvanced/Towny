@@ -217,9 +217,9 @@ public class ChunkNotification {
 		{
 			if (toResident != null) {
 				String resName = (TownySettings.isNotificationOwnerShowingNationTitles() ? toResident.getFormattedTitleName() : toResident.getFormattedName());
-				return String.format(ownerNotificationFormat, (toTownBlock.getName().isEmpty()) ? resName : toTownBlock.getName());
+				return String.format(ownerNotificationFormat, Colors.translateColorCodes(toTownBlock.getName().isEmpty() ? resName : toTownBlock.getName()));
 			} else
-				return  String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? Translatable.of("UNCLAIMED_PLOT_NAME").forLocale(resident) : toTownBlock.getName());
+				return  String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? Translatable.of("UNCLAIMED_PLOT_NAME").forLocale(resident) : Colors.translateColorCodes(toTownBlock.getName()));
 
 		}
 		return null;

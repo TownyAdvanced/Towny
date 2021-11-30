@@ -6999,3 +6999,4 @@ v0.92.0.11:
   - Fix NationCommand permission node test.
   - Deprecate the NationToggleUnknownEvent.
   - Fix possible npe when checking bankrupt status, courtesy of Warriorrrr with PR #5474.
+  - Fix chunk notifications missing coloured plot names.
