@@ -211,12 +211,6 @@ permissions:
         description: Users are able to use all the various methods of sorting the nation list.
         default: false
         children:
-            towny.command.nation.list.*: true
-
-    towny.command.nation.list.*:
-        description: Users are able to use all the various methods of sorting the nation list.
-        default: false
-        children:
             towny.command.nation.list.residents: true
             towny.command.nation.list.towns: true
             towny.command.nation.list.open: true
@@ -226,6 +220,12 @@ permissions:
             towny.command.nation.list.founded: true
             towny.command.nation.list.townblocks: true
             towny.command.nation.list.online: true
+
+    towny.command.nation.list.*:
+        description: Users are able to use all the various methods of sorting the nation list.
+        default: false
+        children:
+            towny.command.nation.list: true
 
     towny.command.nation.deposit.other:
         description: User can deposit money into the town bank of a nation member.
