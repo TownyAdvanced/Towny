@@ -7000,3 +7000,4 @@ v0.92.0.11:
   - Deprecate the NationToggleUnknownEvent.
   - Fix possible npe when checking bankrupt status, courtesy of Warriorrrr with PR #5474.
   - Fix chunk notifications missing coloured plot names.
+    - Closes #5481.
