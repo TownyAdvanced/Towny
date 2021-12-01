@@ -38,6 +38,6 @@ class RawDataField extends CustomDataField<String> {
 
 	@Override
 	public RawDataField clone() {
-		return new RawDataField(typeID, getKey(), getValue(), getLabel());
+		return new RawDataField(typeID, getKey(), getValue(), this.label);
 	}
 }

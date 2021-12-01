@@ -47,6 +47,6 @@ public class DecimalDataField extends CustomDataField<Double> {
 
 	@Override
 	public CustomDataField<Double> clone() {
-		return new DecimalDataField(getKey(), getValue(), getLabel());
+		return new DecimalDataField(getKey(), getValue(), this.label);
 	}
 }
