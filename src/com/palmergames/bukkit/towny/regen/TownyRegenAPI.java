@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.regen;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
@@ -22,6 +23,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author ElgarL
@@ -29,7 +31,7 @@ import java.util.Set;
  */
 public class TownyRegenAPI {
 
-	// A list of worldCoords which are queued to be regenerated.
+	// A list of worldCoords which are to be regenerated.
 	private static List<WorldCoord> regenWorldCoordList = new ArrayList<>();
 	
 	// table containing snapshot data of active reversions.
@@ -47,6 +49,27 @@ public class TownyRegenAPI {
 	// List of protection blocks placed to prevent blockPhysics.
 	private static  Set<Block> protectionPlaceholders = new HashSet<>();
 
+	/**
+	 * Removes a TownyWorld from the various Revert-on-Unclaim feature Lists/Table.
+	 * @param world TownyWorld to remove.
+	 */
+	public static void turnOffRevertOnUnclaimForWorld(TownyWorld world) {
+		removeRegenQueueListOfWorld(world); // Remove any queued regenerations.
+		removeWorldCoords(world); // Stop any active snapshots being made.
+		removePlotChunksForWorld(world); // Stop any active reverts being done.
+	}
+	
+	/**
+	 * Called when a PlotBlockData's revert-on-unclaim has been finished. 
+	 * @param plotChunk PlotBlockData which finished up.
+	 */
+	public static void finishPlotBlockData(PlotBlockData plotChunk) {
+		TownyMessaging.sendDebugMsg("Revert on unclaim complete for " + plotChunk.getWorldName() + " " + plotChunk.getX() +"," + plotChunk.getZ());
+		removeFromRegenQueueList(plotChunk.getWorldCoord()); // Remove the WorldCoord from the queue.
+		removeFromActiveRegeneration(plotChunk); // Remove from the active HashTable.
+		deletePlotChunkSnapshot(plotChunk); // Remove from the database.
+	}
+	
 	/*
 	 * Snapshots used in Revert-On-Unclaim feature
 	 */
@@ -67,7 +90,7 @@ public class TownyRegenAPI {
 	 * 
 	 * @param worldCoord - WorldCoord of TownBlock to remove from snapshot list.
 	 */
-	private static void removeWorldCoord(WorldCoord worldCoord) {
+	public static void removeWorldCoord(WorldCoord worldCoord) {
 
 		if (worldCoords.contains(worldCoord))
 			worldCoords.remove(worldCoord);
@@ -93,7 +116,7 @@ public class TownyRegenAPI {
 	 * 
 	 * @param world - TownyWorld to stop having snapshots made in.
 	 */
-	public static void removeWorldCoords(TownyWorld world) {
+	private static void removeWorldCoords(TownyWorld world) {
 		for (WorldCoord wc : getWorldCoords(world))
 			removeWorldCoord(wc);
 	}
@@ -140,45 +163,52 @@ public class TownyRegenAPI {
 	public static List<WorldCoord> getRegenQueueList() {
 		return regenWorldCoordList;
 	}
-	
+
+	/**
+	 * @return whether the regenQueue is empty.
+	 */
 	public static boolean regenQueueHasAvailable() {
 		return !regenWorldCoordList.isEmpty();
 	}
-	
-	private static void setRegenQueue(List<WorldCoord> list) {
-		regenWorldCoordList = list;
+
+	/**
+	 * Used when a world has the revert on unclaim feature turned off, to purge
+	 * the list of queued regenerations of the world.
+	 * @param world TownyWorld to remove from the queue.
+	 */
+	private static void removeRegenQueueListOfWorld(TownyWorld world) {
+		regenWorldCoordList = getRegenQueueList().stream()
+			.filter(wc -> !wc.getTownyWorldOrNull().equals(world))
+			.collect(Collectors.toList());
+		TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
-	
-	public static void removeRegenQueueListOfWorld(TownyWorld world, boolean save) {
-		List<WorldCoord> list = new ArrayList<>();
-		for (WorldCoord wc : getRegenQueueList()) {
-			if (!wc.getTownyWorldOrNull().equals(world))
-				list.add(wc);
-		}
-		
-		setRegenQueue(list);
-		
+
+	/**
+	 * Adds a WorldCoord to the queue of the revert on unclaim feature.
+	 * @param wc WorldCoord to add to the queue.
+	 */
+	public static void removeFromRegenQueueList(WorldCoord wc) {
+		if (!regenWorldCoordList.contains(wc))
+			return;
+		regenWorldCoordList.remove(wc);
+		TownyUniverse.getInstance().getDataSource().saveRegenList();
+	}
+
+	/**
+	 * Removes a WorldCoord to the queue of the revert on unclaim feature.
+	 * @param wc WorldCoord to remove from thequeue.
+	 * @param save true to save the regenlist.
+	 */
+	public static void addToRegenQueueList(WorldCoord wc, boolean save) {
+		if (regenWorldCoordList.contains(wc))
+			return;
+		regenWorldCoordList.add(wc);
 		if (save)
 			TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
-	
-	public static void removeFromRegenQueueList(WorldCoord wc) {
-		if (regenWorldCoordList.contains(wc)) { 
-			regenWorldCoordList.remove(wc);
-			TownyUniverse.getInstance().getDataSource().saveRegenList();
-		}
-	}
-	
-	public static void addToRegenQueueList(WorldCoord wc, boolean save) {
-		if (!regenWorldCoordList.contains(wc)) {
-			regenWorldCoordList.add(wc);
-			if (save)
-				TownyUniverse.getInstance().getDataSource().saveRegenList();
-		}
-	}
 
 	/*
-	 * PlotChunks. Active Revert-On-Unclaims.
+	 * Active Revert-On-Unclaims.
 	 */
 
 	/**
@@ -189,10 +219,13 @@ public class TownyRegenAPI {
 		return PlotChunks;
 	}
 
+	public static List<PlotBlockData> getActivePlotBlockDatas() {
+		return new ArrayList<>(PlotChunks.values());
+	}
 	/**
 	 * @return true if there are any chunks being processed.
 	 */
-	public static boolean hasPlotChunks() {
+	public static boolean hasActiveRegenerations() {
 
 		return !PlotChunks.isEmpty();
 	}
@@ -201,24 +234,16 @@ public class TownyRegenAPI {
 	 * @param wc WorldCoord to check for.
 	 * @return true if this WorldCoord is actively being processed.
 	 */
-	public static boolean hasPlotChunk(WorldCoord wc) {
+	public static boolean hasActiveRegeneration(WorldCoord wc) {
 		return PlotChunks.containsKey(getPlotKey(wc));
 	}
-	
-	/**
-	 * @param plotChunks the plotChunks to set
-	 */
-	public static void setPlotChunks(Hashtable<String, PlotBlockData> plotChunks) {
 
-		PlotChunks = plotChunks;
-	}
-	
 	/**
 	 * Removes all plotchunks currently in regeneration list for one world.
 	 * 
 	 * @param world - TownyWorld to have regeneration stop in.
 	 */
-	public static void removePlotChunksForWorld(TownyWorld world) {
+	private static void removePlotChunksForWorld(TownyWorld world) {
 		Hashtable<String, PlotBlockData> plotChunks = new Hashtable<>();
 		// Rebuild the list of plotChunks, skipping the ones belonging to the given world.
 		for (String key : getPlotChunks().keySet())
@@ -226,7 +251,7 @@ public class TownyRegenAPI {
 				plotChunks.put(key, getPlotChunks().get(key));
 
 		// Set the new plotchunks.
-		setPlotChunks(plotChunks);
+		PlotChunks = plotChunks;
 	}
 
 	/**
@@ -234,7 +259,7 @@ public class TownyRegenAPI {
 	 * 
 	 * @param plotChunk - Chunk to remove (PlotBlockData)
 	 */
-	public static void deletePlotChunk(PlotBlockData plotChunk) {
+	public static void removeFromActiveRegeneration(PlotBlockData plotChunk) {
 
 		if (PlotChunks.containsKey(getPlotKey(plotChunk)))
 			PlotChunks.remove(getPlotKey(plotChunk));
@@ -245,7 +270,7 @@ public class TownyRegenAPI {
 	 * 
 	 * @param plotChunk - Chunk to add (PlotBlockData)
 	 */
-	public static void addPlotChunk(PlotBlockData plotChunk) {
+	public static void addToActiveRegeneration(PlotBlockData plotChunk) {
 
 		if (!PlotChunks.containsKey(getPlotKey(plotChunk))) {
 			//plotChunk.initialize();
@@ -274,7 +299,7 @@ public class TownyRegenAPI {
 	 * 
 	 * @param plotChunk - Chunk to delete snapshot (PlotBlockData)
 	 */
-	public static void deletePlotChunkSnapshot(PlotBlockData plotChunk) {
+	private static void deletePlotChunkSnapshot(PlotBlockData plotChunk) {
 		TownyUniverse.getInstance().getDataSource().deletePlotData(plotChunk);
 	}
 

@@ -189,7 +189,7 @@ public class TownClaim extends Thread {
 				if (TownyRegenAPI.getRegenQueueList().contains(townBlock.getWorldCoord())) {
 					PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
 					if (plotChunk != null) {
-						TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
+						TownyRegenAPI.removeFromActiveRegeneration(plotChunk); // just claimed so stop regeneration.
 						townBlock.setLocked(false);
 					}
 					TownyRegenAPI.removeFromRegenQueueList(worldCoord);

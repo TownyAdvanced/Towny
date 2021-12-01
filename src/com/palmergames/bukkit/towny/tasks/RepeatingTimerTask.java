@@ -3,19 +3,14 @@ package com.palmergames.bukkit.towny.tasks;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.ArrayList;
 
 public class RepeatingTimerTask extends TownyTimerTask {
-	private static final Logger LOGGER = LogManager.getLogger(Towny.class);
-	
+
 	public RepeatingTimerTask(Towny plugin) {
 
 		super(plugin);
@@ -27,73 +22,78 @@ public class RepeatingTimerTask extends TownyTimerTask {
 	public void run() {
 
 		// Perform a single block regen in each regen area, if any are left to do.
-		if (TownyRegenAPI.hasPlotChunks()) {
-			// only execute if the correct amount of time has passed.
-			if (Math.max(1L, TownySettings.getPlotManagementSpeed()) <= ++timerCounter) {
-				for (PlotBlockData plotChunk : new ArrayList<PlotBlockData>(TownyRegenAPI.getPlotChunks().values())) {
-					if (plotChunk != null && !plotChunk.restoreNextBlock()) {
-						TownyMessaging.sendDebugMsg("Revert on unclaim complete for " + plotChunk.getWorldName() + " " + plotChunk.getX() +"," + plotChunk.getZ());
-						TownyRegenAPI.removeFromRegenQueueList(plotChunk.getWorldCoord());
-						TownyRegenAPI.deletePlotChunk(plotChunk);
-						TownyRegenAPI.deletePlotChunkSnapshot(plotChunk);
-					}
-				}
-				timerCounter = 0L;
-			}
-		}
-
-		// Check and see if we have any room in the PlotChunks regeneration, and more in the queue. 
-		if (TownyRegenAPI.getPlotChunks().size() < 20 && TownyRegenAPI.regenQueueHasAvailable()) {
-			for (WorldCoord wc : new ArrayList<>(TownyRegenAPI.getRegenQueueList())) {
-				// We have enough plot chunks regenerating, break out of the loop.
-				if (TownyRegenAPI.getPlotChunks().size() >= 20)
-					break;
-				// We have already got this worldcoord regenerating.
-				if (TownyRegenAPI.hasPlotChunk(wc))
-					continue;
-				// This worldCoord isn't actively regenerating, start the regeneration.
-				PlotBlockData plotData = TownyRegenAPI.getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorldOrNull()));  
-				if (plotData != null) {
-					TownyRegenAPI.addPlotChunk(plotData);
-				} else {
-					TownyRegenAPI.removeFromRegenQueueList(wc);
-				}
-			}
+		if (TownyRegenAPI.hasActiveRegenerations()) {
+			revertAnotherBlockToWilderness();
 		}
 
 		/*
 		  The following actions should be performed every second.
 		 */
+
+		// Check and see if we have any room in the PlotChunks regeneration, and more in the queue. 
+		if (TownyRegenAPI.getPlotChunks().size() < 20 && TownyRegenAPI.regenQueueHasAvailable()) {
+			getWorldCoordFromQueueForRegeneration();
+		}
+
 		// Take a snapshot of the next townBlock and save.
 		if (TownyRegenAPI.hasWorldCoords()) {
-			try {
-				TownBlock townBlock = TownyRegenAPI.getWorldCoord().getTownBlock();
-				PlotBlockData plotChunk = new PlotBlockData(townBlock);
-				plotChunk.initialize(); // Create a new snapshot.
-
-				if (!plotChunk.getBlockList().isEmpty() && !(plotChunk.getBlockList() == null)) {
-					TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save the snapshot.
-				}
-				plotChunk = null;
-				
-				townBlock.setLocked(false);
-				townBlock.save();
-				plugin.updateCache(townBlock.getWorldCoord());
-
-				if (!TownyRegenAPI.hasWorldCoords()) {
-					LOGGER.info("Plot snapshots completed.");
-				}
-
-			} catch (NotRegisteredException e) {
-				// Not a townblock so ignore.
-			}
-
+			makeNextPlotSnapshot();
 		}
 
 		// Perform the next plot_management block_delete
 		if (TownyRegenAPI.hasDeleteTownBlockIdQueue()) {
 			TownyRegenAPI.doDeleteTownBlockIds(TownyRegenAPI.getDeleteTownBlockIdQueue());
 		}
+	}
+
+	private void revertAnotherBlockToWilderness() {
+		// only execute if the correct amount of time has passed.
+		if (Math.max(1L, TownySettings.getPlotManagementSpeed()) > ++timerCounter)
+			return;
+
+		for (PlotBlockData plotBlockData : TownyRegenAPI.getActivePlotBlockDatas())
+			if (plotBlockData != null && !plotBlockData.restoreNextBlock())
+				TownyRegenAPI.finishPlotBlockData(plotBlockData);
+
+		timerCounter = 0L;
+	}
+
+	private void getWorldCoordFromQueueForRegeneration() {
+		for (WorldCoord wc : new ArrayList<>(TownyRegenAPI.getRegenQueueList())) {
+			// We have enough plot chunks regenerating, break out of the loop.
+			if (TownyRegenAPI.getPlotChunks().size() >= 20)
+				break;
+			// We have already got this worldcoord regenerating.
+			if (TownyRegenAPI.hasActiveRegeneration(wc))
+				continue;
+			// This worldCoord isn't actively regenerating, start the regeneration.
+			PlotBlockData plotData = TownyRegenAPI.getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorldOrNull()));  
+			if (plotData != null) {
+				TownyRegenAPI.addToActiveRegeneration(plotData);
+				TownyMessaging.sendDebugMsg("Revert on unclaim beginning for " + plotData.getWorldName() + " " + plotData.getX() +"," + plotData.getZ());
+			} else {
+				TownyRegenAPI.removeFromRegenQueueList(wc);
+			}
+		}
+	}
+
+	private void makeNextPlotSnapshot() {
+		WorldCoord wc = TownyRegenAPI.getWorldCoord();
+		TownBlock townBlock = wc.getTownBlockOrNull();
+		if (townBlock == null)
+			return;
+		PlotBlockData plotChunk = new PlotBlockData(townBlock);
+		plotChunk.initialize(); // Create a new snapshot.
+		if (!plotChunk.getBlockList().isEmpty() && !(plotChunk.getBlockList() == null))
+			TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save the snapshot.
+		plotChunk = null;
+		
+		townBlock.setLocked(false);
+		townBlock.save();
+		plugin.updateCache(townBlock.getWorldCoord());
+
+		if (!TownyRegenAPI.hasWorldCoords())
+			TownyMessaging.sendDebugMsg("Plot snapshots completed.");
 	}
 
 }
