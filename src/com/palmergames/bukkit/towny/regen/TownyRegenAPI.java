@@ -142,7 +142,7 @@ public class TownyRegenAPI {
 	}
 	
 	public static boolean regenQueueHasAvailable() {
-		return !regenWorldCoordList.isEmpty() && regenWorldCoordList.size() >= 20;
+		return !regenWorldCoordList.isEmpty();
 	}
 	
 	private static void setRegenQueue(List<WorldCoord> list) {

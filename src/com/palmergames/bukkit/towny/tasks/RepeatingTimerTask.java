@@ -74,6 +74,7 @@ public class RepeatingTimerTask extends TownyTimerTask {
 				if (!plotChunk.getBlockList().isEmpty() && !(plotChunk.getBlockList() == null)) {
 					TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save the snapshot.
 				}
+				plotChunk = null;
 				
 				townBlock.setLocked(false);
 				townBlock.save();
