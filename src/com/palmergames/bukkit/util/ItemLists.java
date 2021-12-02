@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * 
  * @author LlmDl
  */
-public interface ItemLists {
+public class ItemLists {
 
 	/**
 	 * List of Axe items.
@@ -139,25 +139,17 @@ public interface ItemLists {
 	 */
 	@Nullable
 	public static List<String> getGrouping(String groupName) {
-		switch(groupName) {
-		case "BOATS":
-			return BOATS;			
-		case "MINECARTS":
-			return MINECARTS;
-		case "WOOD_DOORS":
-			return WOOD_DOORS;
-		case "PRESSURE_PLATES":
-			return PRESSURE_PLATES;
-		case "FENCE_GATES":
-			return FENCE_GATES;
-		case "TRAPDOORS":
-			return TRAPDOORS;
-		case "SHULKER_BOXES":
-			return SHULKER_BOXES;
-		case "BUTTONS":
-			return BUTTONS;
-		default:
-			return null;
-		}
+		return switch (groupName) {
+			case "BOATS" -> BOATS;
+			case "MINECARTS" -> MINECARTS;
+			case "WOOD_DOORS" -> WOOD_DOORS;
+			case "PRESSURE_PLATES" -> PRESSURE_PLATES;
+			case "FENCE_GATES" -> FENCE_GATES;
+			case "TRAPDOORS" -> TRAPDOORS;
+			case "SHULKER_BOXES" -> SHULKER_BOXES;
+			case "BUTTONS" -> BUTTONS;
+			case "CANDLES" -> CANDLES;
+			default -> null;
+		};
 	}
 }
