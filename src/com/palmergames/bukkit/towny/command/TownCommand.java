@@ -2945,10 +2945,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (world.isUsingPlotManagementRevert()) {
 			PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
-			if (plotChunk != null) {
-
-				TownyRegenAPI.deletePlotChunk(plotChunk); // just claimed so stop regeneration.
-
+			if (plotChunk != null && TownyRegenAPI.getRegenQueueList().contains(townBlock.getWorldCoord())) {
+				// This plot is in the regeneration queue.
+				TownyRegenAPI.removeFromActiveRegeneration(plotChunk); // just claimed so stop regeneration.
+				TownyRegenAPI.removeFromRegenQueueList(townBlock.getWorldCoord()); // Remove the WorldCoord from the regenqueue.
 			} else {
 
 				plotChunk = new PlotBlockData(townBlock); // Not regenerating so create a new snapshot.

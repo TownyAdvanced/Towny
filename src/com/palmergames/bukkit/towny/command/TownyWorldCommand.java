@@ -250,10 +250,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMsg(sender, globalWorld.isUsingTowny() ? Translatable.of("msg_set_use_towny_on") : Translatable.of("msg_set_use_towny_off"));
 				
 				// Towny might be getting shut off in a world in order to stop the revert-on-unclaim feature, here we stop any active reverts.
-				if (!globalWorld.isUsingTowny() && globalWorld.isUsingPlotManagementRevert()) {
-					TownyRegenAPI.removeWorldCoords(globalWorld); // Stop any active snapshots being made.
-					TownyRegenAPI.removePlotChunksForWorld(globalWorld, true); // Stop any active reverts being done.
-				}
+				if (!globalWorld.isUsingTowny() && globalWorld.isUsingPlotManagementRevert())
+					TownyRegenAPI.turnOffRevertOnUnclaimForWorld(globalWorld);
 			
 			} else if (split[0].equalsIgnoreCase("warallowed")) {
 
@@ -315,10 +313,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 				globalWorld.setUsingPlotManagementRevert(choice.orElse(!globalWorld.isUsingPlotManagementRevert()));
 
-				if (!globalWorld.isUsingPlotManagementRevert()) {
-					TownyRegenAPI.removeWorldCoords(globalWorld); // Stop any active snapshots being made.
-					TownyRegenAPI.removePlotChunksForWorld(globalWorld, true); // Stop any active reverts being done.
-				}
+				if (!globalWorld.isUsingPlotManagementRevert()) 
+					TownyRegenAPI.turnOffRevertOnUnclaimForWorld(globalWorld);
 				
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Unclaim Revert", globalWorld.getName(), formatBool(globalWorld.isUsingPlotManagementRevert())));
 
