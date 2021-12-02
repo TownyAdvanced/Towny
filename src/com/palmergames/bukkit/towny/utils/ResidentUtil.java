@@ -163,17 +163,17 @@ public class ResidentUtil {
 	private static void createTownyGUI(Resident resident, ArrayList<ItemStack> items, String name) {
 
 		Inventory page = getBlankPage(name);
-		ArrayList<Inventory> pages = new ArrayList<Inventory>();
+		ArrayList<Inventory> pages = new ArrayList<>();
 		
-		for (int i = 0; i < items.size(); i++) {
+		for (ItemStack item : items) {
 			if (page.firstEmpty() == 46) {
 				pages.add(page);
 				page = getBlankPage(name);
-			} else {
-				//Add the item to the current page as per normal
-				page.addItem(items.get(i));
 			}
+
+			page.addItem(item);
 		}
+
 		pages.add(page);
 		resident.setGUIPages(pages);
 		resident.setGUIPageNum(0);
