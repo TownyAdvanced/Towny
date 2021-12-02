@@ -105,13 +105,20 @@ public class TownyPerms {
 	/**
 	 * Check that all the vital groups Towny relies on are present in the townyperms.yml.
 	 * @throws TownyInitException - Thrown when a vital group is missing.
-
 	 */
 	private static void checkForVitalGroups() {
 		for (String group : vitalGroups) {
 			if (!groupPermsMap.containsKey(group))
-				throw new TownyInitException("Group missing from townyperms.yml: " + group, TownyInitException.TownyError.PERMISSIONS);
+				throw new TownyInitException(getErrorMessageForGroup(group), TownyInitException.TownyError.PERMISSIONS);
 		}
+	}
+
+	private static @NotNull String getErrorMessageForGroup(String group) {
+		if (!group.contains("."))
+			return "Your townyperms.yml is missing the " + group + " group. Maybe you renamed it?";
+		
+		String[] split = group.split(".");
+		return "Your townyperms.yml's " + split[0] + " section is missing the " + split[1] + " group. Maybe you renamed it?"; 
 	}
 
 	/**
