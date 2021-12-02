@@ -482,7 +482,7 @@ nation_received_requests: '&bLa nación ha recibido %a/%m solicitudes de alianza
 nation_sent_invites: '&bLa nación ha enviado %a/%m invitacionrs.'
 nation_sent_ally_requests: '&bLa nación ha enviado %a/%m solicitudes de alianza.'
 no_confirmations_open: '&c¡No tienes nada que confirmar!'
-successful_cancel: '&cAction cancelled!'
+successful_cancel: '&c¡Acción cancelada!'
 successful_deny: '&bInvitación rechazada.'
 successful_deny_request: '&bSolicitud de alianza rechazada.'
 msg_ally_removed_successfully: '&bLa alianza se ha roto.'
@@ -1303,42 +1303,42 @@ msg_res_friend_added_to_list: 'Añadiste a %s a tu lista de amigos.'
 #Shown when a player removes people from their friends list.
 msg_res_friend_removed_from_list: 'Eliminaste a %s de tu lista de amigos.'
 #Generic resident freed from jail message.
-msg_resident_unjailed: '%s has been unjailed.'
+msg_resident_unjailed: '%s ha sido liberado.'
 #Shown when an admin uses /ta toggle devmode.
-msg_admin_toggle_devmode: 'Dev Mode: %s'
+msg_admin_toggle_devmode: 'Modo de Desarrollador: %s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: 'Debug Mode: %s'
+msg_admin_toggle_debugmode: 'Modo de Depuración: %s'
 #Shown when an admin uses /ta toggle townwithdraw
-msg_admin_toggle_townwithdraw: 'Town Withdrawls: %s'
+msg_admin_toggle_townwithdraw: 'Retiros en ciudades: %s'
 #Shown when an admin uses /ta toggle nationwithdraw
-msg_admin_toggle_nationwithdraw: 'Nation Withdrawls: %s'
+msg_admin_toggle_nationwithdraw: 'Retiros en la nación: %s'
 #Shown when claiming a town block for the town.
-msg_process_town_claim: 'Processing Town Claim...'
+msg_process_town_claim: 'Procesando reclamación...'
 #Shown when unclaiming a town block for the town.
-msg_process_town_unclaim: 'Processing Town Unclaim...'
+msg_process_town_unclaim: 'Procesando abandono...'
 #Shown when there is nothing to unclaim.
-msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
+msg_err_nothing_to_unclaim: '¡Nada por abandonar!'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: 'Permission True.'
+msg_perm_true: 'Permiso Habilitado.'
 #Given as feedback when /ta checkperm is used.
-msg_err_perm_false: 'Permission False.'
+msg_err_perm_false: 'Permiso Deshabilitado.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+status_towny_map_town_line: '&Ciudad: &a%s &7| &Dueño: &a%s'
 #Shown on /towny version
 msg_towny_version: '&2Versión de Towny: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
 msg_admin_blocked_login: '&2Un jugador usando la dirección IP &c%s &2intentó unirse utilizando el nombre de usuario %s el que podría dañar la economía de tu servidor, pero fue prevenido por Towny. ¡Considere banear esta dirección IP!'
 #Shown during resident purge
-msg_scanning_for_old_residents: 'Scanning for old residents...'
+msg_scanning_for_old_residents: 'Escaneando residentes antiguos...'
 #Shown during resident purge
-msg_deleting_resident: 'Deleting resident: %s.'
+msg_deleting_resident: 'Eliminando al residente: %s.'
 #Shown during resident purge
-msg_purge_complete: 'Resident purge complete: %s deleted.'
+msg_purge_complete: 'Limpieza de los residentes completada: %s eliminados.'
 #Message to the Town, shown when a town is given bonus blocks.
-msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
+msg_you_have_been_given_bonus_blocks: 'Has recibido %s terrenos bonus.'
 #Message shown when a town cannot purchase any more bonus blocks.
-msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Tu ciudad no puede comprar más terrenos bonus. Cantidad máxima alcanzada.'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
