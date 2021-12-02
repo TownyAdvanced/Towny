@@ -7010,3 +7010,4 @@ v0.92.0.11:
     - Only 20 plots can be actively reverting at one time.
     - Plot snapshots are only loaded into memory when the queue calls for the revert to start.
     - Closes #5473. 
+  - Bump adventure-platform to 4.0.1 for 1.18 compatibility.
