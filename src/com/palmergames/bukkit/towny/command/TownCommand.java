@@ -113,6 +113,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InvalidObjectException;
@@ -3978,14 +3979,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 	}
+	
+	public static void parseTownMergeCommand(Player player, String[] args) throws TownyException {
+		parseTownMergeCommand(player, args, getTownFromPlayerOrThrow(player), false);
+	}
 
-	public static void parseTownMergeCommand(Player player, String[] args) {
-		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-		if (!resident.isMayor()) {
+	public static void parseTownMergeCommand(Player player, String[] args, @NotNull Town remainingTown, boolean admin) throws TownyException {
+		if (!getResidentOrThrow(player.getUniqueId()).isMayor() && !admin) {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_town_merge_err_mayor_only"));
 			return;
 		}
-		Town remainingTown = TownyAPI.getInstance().getResidentTownOrNull(resident); // The isMayor() test guarantees we get a town.		
 		Town succumbingTown = TownyUniverse.getInstance().getTown(args[0]);
 
 		// A lot of checks.
@@ -4037,7 +4040,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				
 				cost = baseCost + townblockCost + bankruptcyCost;
 
-				if (!remainingTown.getAccount().canPayFromHoldings(cost)) {
+				if (!remainingTown.getAccount().canPayFromHoldings(cost) && !admin) {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_town_merge_err_not_enough_money", TownyEconomyHandler.getFormattedBalance(remainingTown.getAccount().getHoldingBalance()), TownyEconomyHandler.getFormattedBalance(cost)));
 					return;
 				}
