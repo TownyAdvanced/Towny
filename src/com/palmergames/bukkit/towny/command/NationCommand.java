@@ -550,10 +550,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			parseNationOnlineCommand(player, StringMgmt.remFirstArg(split));
 			break;
 		case "say":
-			nationSay(getResidentOrThrow(player.getUniqueId()).getTown().getNation(), StringMgmt.remFirstArg(split));
+			nationSay(getNationFromPlayerOrThrow(player), StringMgmt.remFirstArg(split));
 			break;
 		case "bankhistory":
-			nationBankHistory(player, split);
+			nationBankHistory(player, StringMgmt.remFirstArg(split));
 			break;
 		case "baltop":
 			parseNationBaltop(player, getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
@@ -585,10 +585,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private void nationBankHistory(Player player, String[] split) throws TownyException {
 		int pages = 10;
-		String[] newSplit = StringMgmt.remFirstArg(split);
-		if (newSplit.length > 0)
+		if (split.length > 0)
 			try {
-				pages = Integer.parseInt(newSplit[0]);
+				pages = Integer.parseInt(split[0]);
 			} catch (NumberFormatException e) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_int"));
 				return;
