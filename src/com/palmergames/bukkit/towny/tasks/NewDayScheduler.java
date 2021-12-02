@@ -47,7 +47,7 @@ public class NewDayScheduler extends TownyTimerTask {
 			scheduleTask = Bukkit.getScheduler().runTaskLater(plugin, new DailyTimerTask(plugin), secondsUntilNextNewDay * 20).getTaskId();
 	
 		if (scheduleTask == -1)
-			TownyMessaging.sendErrorMsg("Could not schedule DailtTimerTask.");
+			TownyMessaging.sendErrorMsg("Could not schedule DailyTimerTask.");
 	}
 	
 	public static boolean isNewDaySchedulerRunning() {

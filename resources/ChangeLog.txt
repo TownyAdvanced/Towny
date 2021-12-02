@@ -7017,3 +7017,4 @@ v0.92.0.11:
   - Make the ItemLists class not an interface, courtesy of Warriorrrr with PR #5490.
   - Fix the delete town event causing an NPE in edge cases, courtesy of Warriorrrr with PR #5492.
   - Fix javadoc warning, courtesy of Warriorrrr with PR #5495.
+  - Schedule the next newday scheduler 1 minute after a new day happens instead of 1 second after. 
