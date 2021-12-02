@@ -828,7 +828,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		plugin.resetCache();
 		deleteTown(town);
 		
-		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town, mayor.getUUID()));
+		BukkitTools.getPluginManager().callEvent(new DeleteTownEvent(town, mayor));
 		
 		TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_town2", town.getName()));
 	}
