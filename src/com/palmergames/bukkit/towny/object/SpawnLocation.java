@@ -35,4 +35,12 @@ public interface SpawnLocation {
 	 * @throws TownyException If the spawn could not be set.
 	 */
 	void setSpawn(Location spawn) throws TownyException;
+	
+	default Location getSpawnOrNull() {
+		try {
+			return getSpawn();
+		} catch (TownyException e) {
+			return null;
+		}
+	}
 }

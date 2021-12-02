@@ -2982,7 +2982,7 @@ public class TownySettings {
 	}
 	
 	public static boolean isContextsEnabled() {
-		return getBoolean(ConfigNodes.PLUGINS_LUCKPERMS_CONTEXTS);
+		return getBoolean(ConfigNodes.PLUGIN_LUCKPERMS_CONTEXTS);
 	}
 	
 	public static boolean isShowingUpdateNotifications() {
@@ -3031,6 +3031,14 @@ public class TownySettings {
 
 	public static long getSpawnProtection() {
 		return TimeTools.getTicks(getString(ConfigNodes.GTOWN_SETTINGS_RESPAWN_PROTECTION));
+	}
+	
+	public static boolean isUsingWebMapStatusScreens() {
+		return getBoolean(ConfigNodes.PLUGIN_WEB_MAP_USING_STATUSSCREEN);
+	}
+	
+	public static String getWebMapUrl() {
+		return getString(ConfigNodes.PLUGIN_WEB_MAP_URL);
 	}
 }
 
