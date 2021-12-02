@@ -140,6 +140,7 @@ public class DataFieldIO {
 			case 4:
 				field = new LongDataField(key);
 				break;
+			default:
 		}
 
 		if (field.canParseFromString(tokens[2]))

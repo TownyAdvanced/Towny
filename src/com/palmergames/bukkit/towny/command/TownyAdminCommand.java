@@ -264,6 +264,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 									return getTownyStartingWith(args[2], "t");
 								case 4:
 									return filterByStartOrGetTownyStartingWith(Collections.singletonList("npc"), args[3], "+r");
+								default:
+									return Collections.emptyList();
 							}
 						case "capital":
 						case "nationzoneoverride":
@@ -297,6 +299,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[2]);
 							if (args.length == 4)
 								return getTownyStartingWith(args[3], "r");
+						default:
+							return Collections.emptyList();
 					}
 				}
 				break;
@@ -341,8 +345,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					case 4:
 						if (args[2].equalsIgnoreCase("friend"))
 							return NameUtil.filterByStart(adminResidentFriendTabCompletes, args[3]);
+					default:
+						return Collections.emptyList();
 				}
-				break;
 			case "town":
 				if (args.length == 2) {
 					return filterByStartOrGetTownyStartingWith(Collections.singletonList("new"), args[1], "+t");
@@ -370,9 +375,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 												return NameUtil.filterByStart(res.getTownRanks(), args[5]);
 											break;
 										}
+										default:
+											return Collections.emptyList();
 									}
+								default:
+									return Collections.emptyList();
 							}
-							break;
 						case "set": {
 							final Town town = TownyUniverse.getInstance().getTown(args[1]);
 							if (town != null)
@@ -400,7 +408,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 										
 										break;
 									}
+									default:
+										return Collections.emptyList();
 								}
+							default:
+								return Collections.emptyList();
 							}
 						case "invite":
 							if (args.length == 4)
@@ -494,6 +506,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 									return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[3]);
 							}
 							break;
+						default:
+							return Collections.emptyList();
 					}
 				}
 				break;
@@ -716,6 +730,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					// Create and remove town and nation ranks.
 					parseAdminTownypermsRankCommand(args);
 					break;
+				default:
 				}
 		} catch (TownyException e) {
 			// This will send back any errors to the sender.
@@ -760,6 +775,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_group_doesnt_have_node", group, node));
 			changed = groupNodes.remove(node);
 			break;
+		default:
 		}
 		
 		if (!changed)
@@ -837,7 +853,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyPerms.getTownyPermsFile().set("nations.ranks." + rank, null);
 				changed = true;
 			}
-			break;		
+			break;
+		default:
 		}
 		
 		if (!changed)

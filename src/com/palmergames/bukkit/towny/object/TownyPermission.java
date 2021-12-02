@@ -188,6 +188,7 @@ public class TownyPermission {
 			case "mobs":
 				mobs = b;
 				break;
+			default:
 		}
 	}
 

@@ -160,9 +160,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(townyTopTownNationCompletes, args[2]);
 							case "land":
 								return NameUtil.filterByStart(townyTopLandTabCompletes, args[2]);
+							default:
+								return Collections.emptyList();
 						}
+					default:
+						return Collections.emptyList();
 				}
-				break;
 			case "map":
 				if (args.length == 2)
 					return NameUtil.filterByStart(Arrays.asList("big", "hud"), args[1]);

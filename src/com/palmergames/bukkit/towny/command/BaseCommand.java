@@ -149,6 +149,8 @@ public class BaseCommand implements TabCompleter{
 				break;
 			case 3:
 				return NameUtil.filterByStart(setOnOffCompletes, args[2]);
+			default:
+				return Collections.emptyList();
 		}
 		
 		return Collections.emptyList();

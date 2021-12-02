@@ -191,6 +191,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);
 							case "perm":
 								return permTabComplete(StringMgmt.remArgs(args, 2));
+							default:
+								return Collections.emptyList();
 						}
 					}
 					break;
@@ -206,8 +208,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 							} else {
 								return getTownyStartingWith(args[2], "r");
 							}
+						default:
+							return Collections.emptyList();
 					}
-					break;
 				default:
 					if (args.length == 1)
 						return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT, residentTabCompletes), args[0], "r");

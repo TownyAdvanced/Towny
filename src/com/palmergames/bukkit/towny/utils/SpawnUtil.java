@@ -254,6 +254,7 @@ public class SpawnUtil {
 				throw new TownyException(Translatable.of("msg_err_nation_not_public"));
 
 			break;
+		default:
 		}
 
 		// Prevent spawn travel while in disallowed zones (if configured.)
@@ -305,6 +306,7 @@ public class SpawnUtil {
 				spawnPermission = String.format(spawnType.getTypeName() + " (%s)", nationSpawnPermission);
 				payee = nation.getAccount();
 				break;
+			default:
 			}
 			if (!TownySettings.isTownSpawnPaidToTown())	payee = EconomyAccount.SERVER_ACCOUNT;
 			
@@ -370,6 +372,7 @@ public class SpawnUtil {
 			case NATION:
 				spawnEvent = new NationSpawnEvent(player, player.getLocation(), spawnLoc);
 				break;
+			default:
 		}
 	
 		Bukkit.getPluginManager().callEvent(spawnEvent);

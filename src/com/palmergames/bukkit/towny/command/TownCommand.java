@@ -309,9 +309,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 									}
 									break;
 								}
+								default:
+									return Collections.emptyList();
 							}
+						default:
+							return Collections.emptyList();
 					}
-					break;
 				case "jail":
 					if (args.length == 2) {
 						List<String> residentOrList = getTownResidentNamesOfPlayerStartingWith(player, args[1]);
@@ -352,9 +355,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 										}
 									}
 								}
+								default:
+									return Collections.emptyList();
 							}
+						default:
+							return Collections.emptyList();
 					}
-					break;
 				case "claim":
 					switch (args.length) {
 						case 2:
@@ -363,8 +369,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							if (!args[1].equalsIgnoreCase("outpost")) {
 								return NameUtil.filterByStart(Collections.singletonList("auto"), args[2]);
 							}
+						default:
+							return Collections.emptyList();
 					}
-					break;
 				case "unclaim":
 					if (args.length == 2)
 						return NameUtil.filterByStart(townUnclaimTabCompletes, args[1]);
@@ -432,7 +439,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 									} catch (TownyException ignore) {
 									}
 								}
+								default:
+									return Collections.emptyList();
 							}
+						default:
+							return Collections.emptyList();
 					}
 				case "buy":
 					if (args.length == 2)
@@ -446,6 +457,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 						case 4:
 							return getTownResidentNamesOfPlayerStartingWith(player, args[3]);
+						default:
+							return Collections.emptyList();
 					}
 				case "list":
 					switch (args.length) {
@@ -453,6 +466,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							return Collections.singletonList("by");
 						case 3:
 							return NameUtil.filterByStart(townListTabCompletes, args[2]);
+						default:
+							return Collections.emptyList();
 					}
 				case "trust":
 					switch (args.length) {
@@ -460,6 +475,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[1]);
 						case 3:
 							return getTownyStartingWith(args[2], "r");
+						default:
+							return Collections.emptyList();
 					}
 				default:
 					if (args.length == 1)
@@ -493,6 +510,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				case "surname":
 					if (args.length == 3)
 						return NameUtil.filterByStart(NameUtil.getNames(town.getResidents()), args[2]);
+				default:
+					return Collections.emptyList();
 			}
 		}
 		

@@ -312,6 +312,7 @@ public class TownBlock extends TownyObject {
 				
 				setPermissions("residentBuild,residentDestroy");
 				break;
+			default:
 		}
 			
 		

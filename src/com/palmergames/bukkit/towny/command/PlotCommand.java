@@ -207,8 +207,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							return NameUtil.filterByStart(Collections.singletonList("within"), args[1]);
 						case 3:
 							return NameUtil.filterByStart(plotRectCircleCompletes, args[2]);
+						default:
+							return Collections.emptyList();
 					}
-					break;
 				case "group":
 					if (args.length == 2)
 						return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);

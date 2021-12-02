@@ -65,10 +65,12 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 							}
 						}
 					}
+					default:
+						return Collections.emptyList();
 				}
+			default:
+				return Collections.emptyList();
 		}
-		
-		return Collections.emptyList();
 	}
 	
 	@Override

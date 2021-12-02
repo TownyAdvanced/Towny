@@ -110,6 +110,7 @@ public class CellBorder extends WorldCoord {
 					case NW:
 						DrawUtil.runOnSurface(world, x, z + w, x, z + w, cornerHeight, runnable);
 						break;
+					default:
 					}
 				}
 			}

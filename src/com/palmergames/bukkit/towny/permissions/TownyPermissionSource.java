@@ -98,6 +98,7 @@ public abstract class TownyPermissionSource {
 				return world.getUnclaimedZoneSwitch() || world.isUnclaimedZoneIgnoreMaterial(material);
 			case ITEM_USE:
 				return world.getUnclaimedZoneItemUse() || world.isUnclaimedZoneIgnoreMaterial(material);
+			default:
 		}
 
 		return false;

@@ -156,8 +156,8 @@ public interface ItemLists {
 			return SHULKER_BOXES;
 		case "BUTTONS":
 			return BUTTONS;
-		
+		default:
+			return null;
 		}
-		return null;
 	}
 }

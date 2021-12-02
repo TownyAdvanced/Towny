@@ -76,6 +76,7 @@ public class JailUtil {
 		case PRISONER_OF_WAR:
 			TownyMessaging.sendTitleMessageToResident(resident, Translatable.of("msg_you_have_been_jailed").forLocale(resident), Translatable.of("msg_run_to_the_wilderness_or_wait_for_a_jailbreak").forLocale(resident));
 			break;
+		default:
 		}
 		
 		// Set the jail, cells, hours, and add resident to the Universe's jailed resident map.
@@ -148,6 +149,7 @@ public class JailUtil {
 		case JAILBREAK:
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_been_freed_via_jailbreak"));			
 			break;
+		default:
 		}
 
 		TownyUniverse.getInstance().getJailedResidentMap().remove(resident);

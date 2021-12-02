@@ -44,6 +44,7 @@ public enum CustomDataFieldType {
 			case 4:
 				type = LongField;
 				break;
+			default:
 		}
 		
 		return type;

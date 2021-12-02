@@ -357,6 +357,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "tag":
 					if (args.length == 3)
 						return NameUtil.filterByStart(Collections.singletonList("clear"), args[2]);
+				default:
+					return Collections.emptyList();
 			}
 		}
 		
