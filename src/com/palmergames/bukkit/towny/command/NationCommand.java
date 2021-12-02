@@ -461,19 +461,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION.getNode(split[0].toLowerCase()))) {
 			// Test if this is an addon command
-			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).execute(player, "nation", split);
+			if (tryNationAddonCommand(player, split))
 				return;
-			}
-			// Test if this is a nation status screen lookup.
-			Nation nation = TownyUniverse.getInstance().getNation(split[0]);
-			if (nation != null) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && !nation.hasResident(player.getName()))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
-
-				nationStatusScreen(player, nation);
+			// Test if this is a town status screen lookup.
+			if (tryNationStatusScreen(player, split))
 				return;
-			}
 			throw new TownyException(Translatable.of("msg_err_command_disable"));
 		}
 
@@ -560,21 +552,33 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			break;
 		default:
 			// Test if this is an addon command
-			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).execute(player, "nation", split);
+			if (tryNationAddonCommand(player, split))
 				return;
-			}
-			// Test if this is a nation status screen lookup.
-			Nation nation = TownyUniverse.getInstance().getNation(split[0]);
-			if (nation != null) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && !nation.hasResident(player.getName()))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
-
-				nationStatusScreen(player, nation);
+			// Test if this is a town status screen lookup.
+			if (tryNationStatusScreen(player, split))
 				return;
-			}
 		}
 	}
+	
+	private boolean tryNationStatusScreen(Player player, String[] split) throws TownyException {
+		Nation nation = TownyUniverse.getInstance().getNation(split[0]);
+		if (nation != null) {
+			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && !nation.hasResident(player.getName()))
+				throw new TownyException(Translatable.of("msg_err_command_disable"));
+
+			nationStatusScreen(player, nation);
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean tryNationAddonCommand(Player player, String[] split) {
+		if (TownyCommandAddonAPI.hasCommand(CommandType.NATION, split[0])) {
+			TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, split[0]).execute(player, "nation", split);
+			return true;
+		}
+		return false;
+}
 
 	private void nationSay(Nation nation, String[] split) throws TownyException {
 		if (split.length == 0)
