@@ -338,7 +338,7 @@ public class TownySettings {
 	}
 	
 	public static void sendError(String msg) {
-		Towny.getPlugin().getLogger().warning(() -> ("Error could not read %s").formatted(msg));
+		Towny.getPlugin().getLogger().warning(() -> String.format("Error could not read %s",msg));
 	}
 	
 	public static SpawnLevel getSpawnLevel(ConfigNodes node)

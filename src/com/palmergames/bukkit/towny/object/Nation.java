@@ -92,7 +92,7 @@ public class Nation extends Government {
 	 * Check if the targetNation is an Ally.
 	 * @param targetNation Any other nation than this one.
 	 * @return Whether the targetNation is an ally.
-	 * @deprecated Unused. Marked deprecated as of 0.97.3.3+ ; use {@link #isAlliedWith(Nation)}.
+	 * @deprecated Unused. Marked deprecated as of 0.97.4.1+. Use {@link #isAlliedWith(Nation)}.
 	 */
 	@Deprecated
 	public boolean IsAlliedWith(Nation targetNation) {
