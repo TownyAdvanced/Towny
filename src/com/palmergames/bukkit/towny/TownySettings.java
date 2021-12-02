@@ -38,7 +38,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 public class TownySettings {
 
@@ -52,12 +51,12 @@ public class TownySettings {
 		NAME_PREFIX, NAME_POSTFIX, CAPITAL_PREFIX, CAPITAL_POSTFIX, KING_PREFIX, KING_POSTFIX, TOWN_BLOCK_LIMIT_BONUS, UPKEEP_MULTIPLIER, NATION_TOWN_UPKEEP_MULTIPLIER, NATIONZONES_SIZE, NATION_BONUS_OUTPOST_LIMIT
 	}
 
-	// private static Pattern namePattern = null;
-	private static CommentedConfiguration config, newConfig;
+	private static CommentedConfiguration config;
+	private static CommentedConfiguration newConfig;
 	private static int uuidCount;
 
-	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.TownLevel, Object>>(Collections.reverseOrder()));
-	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<Integer, Map<TownySettings.NationLevel, Object>>(Collections.reverseOrder()));
+	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
+	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
 	
 	private static final List<String> ItemUseMaterials = new ArrayList<>();
 	private static final List<String> SwitchUseMaterials = new ArrayList<>();
@@ -65,7 +64,7 @@ public class TownySettings {
 	
 	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier) {
 
-		ConcurrentHashMap<TownySettings.TownLevel, Object> m = new ConcurrentHashMap<TownySettings.TownLevel, Object>();
+		ConcurrentHashMap<TownySettings.TownLevel, Object> m = new ConcurrentHashMap<>();
 		m.put(TownySettings.TownLevel.NAME_PREFIX, namePrefix);
 		m.put(TownySettings.TownLevel.NAME_POSTFIX, namePostfix);
 		m.put(TownySettings.TownLevel.MAYOR_PREFIX, mayorPrefix);
@@ -80,7 +79,7 @@ public class TownySettings {
 
 	public static void newNationLevel(int numResidents, String namePrefix, String namePostfix, String capitalPrefix, String capitalPostfix, String kingPrefix, String kingPostfix, int townBlockLimitBonus, double nationUpkeepMultiplier, double nationTownUpkeepMultiplier, int nationZonesSize, int nationBonusOutpostLimit) {
 
-		ConcurrentHashMap<TownySettings.NationLevel, Object> m = new ConcurrentHashMap<TownySettings.NationLevel, Object>();
+		ConcurrentHashMap<TownySettings.NationLevel, Object> m = new ConcurrentHashMap<>();
 		m.put(TownySettings.NationLevel.NAME_PREFIX, namePrefix);
 		m.put(TownySettings.NationLevel.NAME_POSTFIX, namePostfix);
 		m.put(TownySettings.NationLevel.CAPITAL_PREFIX, capitalPrefix);
@@ -120,20 +119,20 @@ public class TownySettings {
 				 * We parse everything as if it were a string because of the config-migrator, 
 				 * which will always write any double or integer as a string (ex: debtCaptModifier: '2.0')
 				 * Until the migrator is revamped to handle different types of primitives, or,
-				 * the nation/town levels are changed this might be least painful alternative.
+				 * the nation/town levels are changed this might be the least painful alternative.
 				 */
 				newTownLevel(
-						Integer.parseInt(level.get("numResidents").toString()),
-						String.valueOf(level.get("namePrefix")),
-						String.valueOf(level.get("namePostfix")),
-						String.valueOf(level.get("mayorPrefix")),
-						String.valueOf(level.get("mayorPostfix")),
-						Integer.parseInt(level.get("townBlockLimit").toString()),
-						Double.parseDouble(level.get("upkeepModifier").toString()),
-						Integer.parseInt(level.get("townOutpostLimit").toString()),
-						Integer.parseInt(level.get("townBlockBuyBonusLimit").toString()),
-						Double.parseDouble(level.get("debtCapModifier").toString())
-						);
+					Integer.parseInt(level.get("numResidents").toString()),
+					String.valueOf(level.get("namePrefix")),
+					String.valueOf(level.get("namePostfix")),
+					String.valueOf(level.get("mayorPrefix")),
+					String.valueOf(level.get("mayorPostfix")),
+					Integer.parseInt(level.get("townBlockLimit").toString()),
+					Double.parseDouble(level.get("upkeepModifier").toString()),
+					Integer.parseInt(level.get("townOutpostLimit").toString()),
+					Integer.parseInt(level.get("townBlockBuyBonusLimit").toString()),
+					Double.parseDouble(level.get("debtCapModifier").toString())
+				);
 			} catch (NullPointerException e) {
 				Towny.getPlugin().getLogger().warning("Your Towny config.yml's town_level section is out of date.");
 				Towny.getPlugin().getLogger().warning("This can be fixed automatically by deleting the town_level section and letting Towny remake it on the next startup.");
@@ -167,7 +166,7 @@ public class TownySettings {
 				 * We parse everything as if it were a string because of the config-migrator, 
 				 * which will always write any double or integer as a string (ex: debtCaptModifier: '2.0')
 				 * Until the migrator is revamped to handle different types of primitives, or,
-				 * the nation/town levels are changed this might be least painful alternative.
+				 * the nation/town levels are changed this might be the least painful alternative.
 				 */
 				newNationLevel( 
 						Integer.parseInt(level.get("numResidents").toString()), 
@@ -184,7 +183,7 @@ public class TownySettings {
 						Integer.parseInt(level.get("nationBonusOutpostLimit").toString())
 						);
 			} catch (Exception e) {
-				Towny.getPlugin().getLogger().warning("Your Towny config.yml's nation_level section is out of date.");
+				Towny.getPlugin().getLogger().warning("The nation_level section of your Towny config.yml is out of date.");
 				Towny.getPlugin().getLogger().warning("This can be fixed automatically by deleting the nation_level section and letting Towny remake it on the next startup.");
 				throw new IOException("Config.yml nation_levels incomplete.");
 			}
@@ -224,7 +223,7 @@ public class TownySettings {
 	 * Get the town level of a specific Town.
 	 * @param town Supplied Town to evaluate.
 	 * @return The Town's Level
-	 * @deprecated Use {@link Town#getLevel()}.
+	 * @deprecated Marked deprecated as of 0.97.4.1+. Use {@link Town#getLevel()}.
 	 */
 	@Deprecated
 	public static int calcTownLevel(Town town) {
@@ -240,7 +239,7 @@ public class TownySettings {
 	 * @param town Supplied Town to evaluate.
 	 * @param residents Number of residents to force the calculation.
 	 * @return The supposed Town Level. 0, if the town is ruined, or the method otherwise fails through.
-	 * @deprecated Use {@link Town#getLevel(int)}.
+	 * @deprecated Marked deprecated as of 0.97.4.1+. Use {@link Town#getLevel(int)}.
 	 */
 	@Deprecated
 	public static int calcTownLevel(Town town, int residents) {
@@ -257,7 +256,7 @@ public class TownySettings {
 	 *
 	 * @param town Town to test for.
 	 * @return id
-	 * @deprecated Use {@link Town#getLevelID()}.
+	 * @deprecated Marked deprecated as of 0.97.4.1+. Use {@link Town#getLevelID()}.
 	 */
 	@Deprecated
 	public static int calcTownLevelId(Town town) {
@@ -268,7 +267,7 @@ public class TownySettings {
 	 * Get the level of a specific Nation.
 	 * @param nation Supplied Nation to evaluate.
 	 * @return Nation Level of the given nation.
-	 * @deprecated Use {@link Nation#getLevel()}.
+	 * @deprecated Marked deprecated as of 0.97.4.1+. Use {@link Nation#getLevel()}.
 	 */
 	@Deprecated
 	public static int calcNationLevel(Nation nation) {
@@ -314,7 +313,8 @@ public class TownySettings {
 		for (String matName : switches) {
 			if (ItemLists.GROUPS.contains(matName)) {
 				List<String> group = ItemLists.getGrouping(matName);
-				SwitchUseMaterials.addAll(group);
+				if (group != null && !group.isEmpty())
+					SwitchUseMaterials.addAll(group);
 			} else {
 				SwitchUseMaterials.add(matName);
 			}
@@ -329,7 +329,8 @@ public class TownySettings {
 		for (String matName : items) {
 			if (ItemLists.GROUPS.contains(matName)) {
 				List<String> group = ItemLists.getGrouping(matName);
-				ItemUseMaterials.addAll(group);
+				if (group != null && !group.isEmpty())
+					ItemUseMaterials.addAll(group);
 			} else {
 				ItemUseMaterials.add(matName);
 			}
@@ -337,23 +338,27 @@ public class TownySettings {
 	}
 	
 	public static void sendError(String msg) {
-
-		Towny.getPlugin().getLogger().warning("Error could not read " + msg);
+		Towny.getPlugin().getLogger().warning(() -> ("Error could not read %s").formatted(msg));
 	}
 	
 	public static SpawnLevel getSpawnLevel(ConfigNodes node)
 	{
-		SpawnLevel level = SpawnLevel.valueOf(config.getString(node.getRoot()).toUpperCase());
-		if(level == null) {
-			level = SpawnLevel.valueOf(node.getDefault().toUpperCase());
+		String configString = config.getString(node.getRoot());
+		SpawnLevel spawnLevel;
+		if (configString != null) {
+			spawnLevel = SpawnLevel.valueOf(configString.toUpperCase());
+		} else {
+			spawnLevel = SpawnLevel.valueOf(node.getDefault().toUpperCase());
 		}
-		return level;
+		return spawnLevel;
 	}
 	
-	public static NSpawnLevel getNSpawnLevel(ConfigNodes node)
-	{
-		NSpawnLevel level = NSpawnLevel.valueOf(config.getString(node.getRoot()).toUpperCase());
-		if(level == null) {
+	public static NSpawnLevel getNSpawnLevel(ConfigNodes node) {
+		String configString = config.getString(node.getRoot());
+		NSpawnLevel level;
+		if (configString != null) {
+			level = NSpawnLevel.valueOf(configString.toUpperCase());
+		} else {
 			level = NSpawnLevel.valueOf(node.getDefault().toUpperCase());
 		}
 		return level;
@@ -422,16 +427,14 @@ public class TownySettings {
 
 		String[] strArray = getString(node.getRoot(), node.getDefault()).split(",");
 		List<Integer> list = new ArrayList<>();
-		if (strArray != null) {
-			for (String aStrArray : strArray)
-				if (aStrArray != null) {
-					try {
-						list.add(Integer.parseInt(aStrArray.trim()));
-					} catch (NumberFormatException e) {
-						sendError(node.getRoot().toLowerCase() + " from config.yml");
-					}
+		for (String aStrArray : strArray)
+			if (aStrArray != null) {
+				try {
+					list.add(Integer.parseInt(aStrArray.trim()));
+				} catch (NumberFormatException e) {
+					sendError(node.getRoot().toLowerCase() + " from config.yml");
 				}
-		}
+			}
 		return list;
 	}
 
@@ -439,7 +442,7 @@ public class TownySettings {
 
 		String[] strArray = getString(node.getRoot().toLowerCase(), node.getDefault()).split(",");
 		List<String> list = new ArrayList<>();
-		if (strArray != null) {
+		if (strArray.length > 0) {
 			for (String aStrArray : strArray)
 				if (aStrArray != null)
 					list.add(aStrArray.trim());
@@ -501,11 +504,6 @@ public class TownySettings {
 
 		addComment(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), "# default Town levels.");
 		if (!config.contains(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot())) {
-			// List<Map<String, Object>> townLevels =
-			// config.getMapList(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot());
-
-			// if (townLevels == null || townLevels.isEmpty() ||
-			// townLevels.size() == 0) {
 			List<Map<String, Object>> levels = new ArrayList<>();
 			Map<String, Object> level = new HashMap<>();
 			level.put("numResidents", 0);
@@ -624,11 +622,6 @@ public class TownySettings {
 		addComment(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), "# default Nation levels.");
 
 		if (!config.contains(ConfigNodes.LEVELS_NATION_LEVEL.getRoot())) {
-			// List<Map<String, Object>> nationLevels =
-			// config.getMapList(ConfigNodes.LEVELS_NATION_LEVEL.getRoot());
-
-			// if (nationLevels == null || nationLevels.isEmpty() ||
-			// nationLevels.size() == 0) {
 			List<Map<String, Object>> levels = new ArrayList<>();
 			Map<String, Object> level = new HashMap<>();
 			level.put("numResidents", 0);
@@ -925,10 +918,12 @@ public class TownySettings {
 		
 		int townOutposts = (Integer) getTownLevel(town).get(TownySettings.TownLevel.OUTPOST_LIMIT);
 		int nationOutposts = 0;
-		if (town.hasNation())
-			nationOutposts = (Integer) getNationLevel(town.getNationOrNull()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
-		int n = townOutposts + nationOutposts;
-		return n;
+		if (town.hasNation()) {
+			Nation nation = town.getNationOrNull();
+			if (nation != null)
+				nationOutposts = (Integer) getNationLevel(nation).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
+		}
+		return townOutposts + nationOutposts;
 	}
 	
 	public static int getMaxBonusBlocks(Town town) {
@@ -1374,7 +1369,7 @@ public class TownySettings {
 	private static void setNewProperty(String root, Object value) {
 
 		if (value == null) {
-			// System.out.print("value is null for " + root.toLowerCase());
+			TownyMessaging.sendDebugMsg("value is null for " + root.toLowerCase());
 			value = "";
 		}
 		newConfig.set(root.toLowerCase(), value.toString());
@@ -1659,12 +1654,11 @@ public class TownySettings {
 			}
 		}
 		
-		if (town.hasNation()) {
+		if (town != null && town.hasNation()) {
+			Nation nation = town.getNationOrNull();
 			double nationMultiplier = 1.0;
-			try {
-				nationMultiplier = Double.parseDouble(getNationLevel(town.getNationOrNull()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
+			if (nation != null) {
+				nationMultiplier = Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
 			}
 			if (isUpkeepByPlot()) {
 				double amount;
@@ -1682,7 +1676,7 @@ public class TownySettings {
 		} else {
 			if (isUpkeepByPlot()) {
 				double amount;
-				if (isTownLevelModifiersAffectingPlotBasedUpkeep())
+				if (isTownLevelModifiersAffectingPlotBasedUpkeep() && town != null)
 					amount = (getTownUpkeep() * multiplier) * Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
 				else
 					amount = getTownUpkeep() * multiplier;
@@ -1776,7 +1770,7 @@ public class TownySettings {
 
 		if (nation != null) {
 			if (isNationUpkeepPerPlot()) {
-				int plotCount = nation.getTowns().stream().collect(Collectors.summingInt(town-> town.getTownBlocks().size()));
+				int plotCount = nation.getTowns().stream().mapToInt(town -> town.getTownBlocks().size()).sum();
 				if (isNationLevelModifierAffectingNationUpkeepPerTown())
 					return (getNationUpkeep() * plotCount) * Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
 				else
@@ -2067,8 +2061,8 @@ public class TownySettings {
 
 	public static int getMaxResidentOutposts(Resident resident) {
 
-		int maxOutposts = TownyUniverse.getInstance().getPermissionSource().getGroupPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_MAX_OUTPOSTS.getNode());
-		return maxOutposts;
+		return TownyUniverse.getInstance().getPermissionSource()
+			.getGroupPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_MAX_OUTPOSTS.getNode());
 	}
 
 	public static boolean getPermFlag_Resident_Friend_Build() {
@@ -2253,31 +2247,19 @@ public class TownySettings {
 	public static boolean getDefaultResidentPermission(TownBlockOwner owner, ActionType type) {
 
 		if (owner instanceof Resident)
-			switch (type) {
-			case BUILD:
-				return getPermFlag_Resident_Friend_Build();
-			case DESTROY:
-				return getPermFlag_Resident_Friend_Destroy();
-			case SWITCH:
-				return getPermFlag_Resident_Friend_Switch();
-			case ITEM_USE:
-				return getPermFlag_Resident_Friend_ItemUse();
-			default:
-				throw new UnsupportedOperationException();
-			}
+			return switch (type) {
+				case BUILD -> getPermFlag_Resident_Friend_Build();
+				case DESTROY -> getPermFlag_Resident_Friend_Destroy();
+				case SWITCH -> getPermFlag_Resident_Friend_Switch();
+				case ITEM_USE -> getPermFlag_Resident_Friend_ItemUse();
+			};
 		else if (owner instanceof Town)
-			switch (type) {
-			case BUILD:
-				return getPermFlag_Town_Resident_Build();
-			case DESTROY:
-				return getPermFlag_Town_Resident_Destroy();
-			case SWITCH:
-				return getPermFlag_Town_Resident_Switch();
-			case ITEM_USE:
-				return getPermFlag_Town_Resident_ItemUse();
-			default:
-				throw new UnsupportedOperationException();
-			}
+			return switch (type) {
+				case BUILD -> getPermFlag_Town_Resident_Build();
+				case DESTROY -> getPermFlag_Town_Resident_Destroy();
+				case SWITCH -> getPermFlag_Town_Resident_Switch();
+				case ITEM_USE -> getPermFlag_Town_Resident_ItemUse();
+			};
 		else
 			throw new UnsupportedOperationException();
 	}
@@ -2285,31 +2267,19 @@ public class TownySettings {
 	public static boolean getDefaultNationPermission(TownBlockOwner owner, ActionType type) {
 
 		if (owner instanceof Resident)
-			switch (type) {
-			case BUILD:
-				return getPermFlag_Resident_Town_Build();
-			case DESTROY:
-				return getPermFlag_Resident_Town_Destroy();
-			case SWITCH:
-				return getPermFlag_Resident_Town_Switch();
-			case ITEM_USE:
-				return getPermFlag_Resident_Town_ItemUse();
-			default:
-				throw new UnsupportedOperationException();
-			}
+			return switch (type) {
+				case BUILD -> getPermFlag_Resident_Town_Build();
+				case DESTROY -> getPermFlag_Resident_Town_Destroy();
+				case SWITCH -> getPermFlag_Resident_Town_Switch();
+				case ITEM_USE -> getPermFlag_Resident_Town_ItemUse();
+			};
 		else if (owner instanceof Town)
-			switch (type) {
-			case BUILD:
-				return getPermFlag_Town_Nation_Build();
-			case DESTROY:
-				return getPermFlag_Town_Nation_Destroy();
-			case SWITCH:
-				return getPermFlag_Town_Nation_Switch();
-			case ITEM_USE:
-				return getPermFlag_Town_Nation_ItemUse();
-			default:
-				throw new UnsupportedOperationException();
-			}
+			return switch (type) {
+				case BUILD -> getPermFlag_Town_Nation_Build();
+				case DESTROY -> getPermFlag_Town_Nation_Destroy();
+				case SWITCH -> getPermFlag_Town_Nation_Switch();
+				case ITEM_USE -> getPermFlag_Town_Nation_ItemUse();
+			};
 		else
 			throw new UnsupportedOperationException();
 	}
@@ -2317,31 +2287,19 @@ public class TownySettings {
 	public static boolean getDefaultAllyPermission(TownBlockOwner owner, ActionType type) {
 
 		if (owner instanceof Resident)
-			switch (type) {
-			case BUILD:
-				return getPermFlag_Resident_Ally_Build();
-			case DESTROY:
-				return getPermFlag_Resident_Ally_Destroy();
-			case SWITCH:
-				return getPermFlag_Resident_Ally_Switch();
-			case ITEM_USE:
-				return getPermFlag_Resident_Ally_ItemUse();
-			default:
-				throw new UnsupportedOperationException();
-			}
+			return switch (type) {
+				case BUILD -> getPermFlag_Resident_Ally_Build();
+				case DESTROY -> getPermFlag_Resident_Ally_Destroy();
+				case SWITCH -> getPermFlag_Resident_Ally_Switch();
+				case ITEM_USE -> getPermFlag_Resident_Ally_ItemUse();
+			};
 		else if (owner instanceof Town)
-			switch (type) {
-			case BUILD:
-				return getPermFlag_Town_Ally_Build();
-			case DESTROY:
-				return getPermFlag_Town_Ally_Destroy();
-			case SWITCH:
-				return getPermFlag_Town_Ally_Switch();
-			case ITEM_USE:
-				return getPermFlag_Town_Ally_ItemUse();
-			default:
-				throw new UnsupportedOperationException();
-			}
+			return switch (type) {
+				case BUILD -> getPermFlag_Town_Ally_Build();
+				case DESTROY -> getPermFlag_Town_Ally_Destroy();
+				case SWITCH -> getPermFlag_Town_Ally_Switch();
+				case ITEM_USE -> getPermFlag_Town_Ally_ItemUse();
+			};
 		else
 			throw new UnsupportedOperationException();
 	}
@@ -2349,49 +2307,31 @@ public class TownySettings {
 	public static boolean getDefaultOutsiderPermission(TownBlockOwner owner, ActionType type) {
 
 		if (owner instanceof Resident)
-			switch (type) {
-			case BUILD:
-				return getPermFlag_Resident_Outsider_Build();
-			case DESTROY:
-				return getPermFlag_Resident_Outsider_Destroy();
-			case SWITCH:
-				return getPermFlag_Resident_Outsider_Switch();
-			case ITEM_USE:
-				return getPermFlag_Resident_Outsider_ItemUse();
-			default:
-				throw new UnsupportedOperationException();
-			}
+			return switch (type) {
+				case BUILD -> getPermFlag_Resident_Outsider_Build();
+				case DESTROY -> getPermFlag_Resident_Outsider_Destroy();
+				case SWITCH -> getPermFlag_Resident_Outsider_Switch();
+				case ITEM_USE -> getPermFlag_Resident_Outsider_ItemUse();
+			};
 		else if (owner instanceof Town)
-			switch (type) {
-			case BUILD:
-				return getPermFlag_Town_Outsider_Build();
-			case DESTROY:
-				return getPermFlag_Town_Outsider_Destroy();
-			case SWITCH:
-				return getPermFlag_Town_Outsider_Switch();
-			case ITEM_USE:
-				return getPermFlag_Town_Outsider_ItemUse();
-			default:
-				throw new UnsupportedOperationException();
-			}
+			return switch (type) {
+				case BUILD -> getPermFlag_Town_Outsider_Build();
+				case DESTROY -> getPermFlag_Town_Outsider_Destroy();
+				case SWITCH -> getPermFlag_Town_Outsider_Switch();
+				case ITEM_USE -> getPermFlag_Town_Outsider_ItemUse();
+			};
 		else
 			throw new UnsupportedOperationException();
 	}
 
 	public static boolean getDefaultPermission(TownBlockOwner owner, PermLevel level, ActionType type) {
 
-		switch (level) {
-		case RESIDENT:
-			return getDefaultResidentPermission(owner, type);
-		case NATION:
-			return getDefaultNationPermission(owner, type);
-		case ALLY:
-			return getDefaultAllyPermission(owner, type);
-		case OUTSIDER:
-			return getDefaultOutsiderPermission(owner, type);
-		default:
-			throw new UnsupportedOperationException();
-		}
+		return switch (level) {
+			case RESIDENT -> getDefaultResidentPermission(owner, type);
+			case NATION -> getDefaultNationPermission(owner, type);
+			case ALLY -> getDefaultAllyPermission(owner, type);
+			case OUTSIDER -> getDefaultOutsiderPermission(owner, type);
+		};
 	}
 
 	public static String getAcceptCommand(){

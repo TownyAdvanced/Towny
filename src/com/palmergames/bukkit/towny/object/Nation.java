@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Nation extends Government {
 
@@ -37,7 +38,7 @@ public class Nation extends Government {
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
-	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
+	private final List<Invite> sentAllyInvites = new ArrayList<>();
 
 	public Nation(String name) {
 		super(name);
@@ -74,7 +75,7 @@ public class Nation extends Government {
 				removeAlly(ally);
 				ally.removeAlly(this);
 			} catch (NotRegisteredException ignored) {}
-		return getAllies().size() == 0;
+		return getAllies().isEmpty();
 	}
 
 	public boolean hasAlly(Nation nation) {
@@ -87,9 +88,15 @@ public class Nation extends Government {
 		return getAllies().contains(nation) && nation.getAllies().contains(this);
 	}
 
-	public boolean IsAlliedWith(Nation nation) {
-
-		return getAllies().contains(nation);
+	/**
+	 * Check if the targetNation is an Ally.
+	 * @param targetNation Any other nation than this one.
+	 * @return Whether the targetNation is an ally.
+	 * @deprecated Unused. Marked deprecated as of 0.97.3.3+ ; use {@link #isAlliedWith(Nation)}.
+	 */
+	@Deprecated
+	public boolean IsAlliedWith(Nation targetNation) {
+		return isAlliedWith(targetNation);
 	}
 
 	public void addEnemy(Nation nation) throws AlreadyRegisteredException {
@@ -120,7 +127,7 @@ public class Nation extends Government {
 				removeEnemy(enemy);
 				enemy.removeEnemy(this);
 			} catch (NotRegisteredException ignored) {}
-		return getEnemies().size() == 0;
+		return getEnemies().isEmpty();
 	}
 
 	public boolean hasEnemy(Nation nation) {
@@ -207,7 +214,6 @@ public class Nation extends Government {
 	}
 
 	public Town getCapital() {
-
 		return capital;
 	}
 	
@@ -243,6 +249,7 @@ public class Nation extends Government {
 		return spawn;
 	}
 	
+	@Override
 	@Nullable
 	public Location getSpawnOrNull() {
 		return spawn;
@@ -260,14 +267,7 @@ public class Nation extends Government {
 
 	public List<Resident> getAssistants() {
 
-		List<Resident> assistants = new ArrayList<>();
-		
-		for (Town town: towns)
-		for (Resident assistant: town.getResidents()) {
-			if (assistant.hasNationRank("assistant"))
-				assistants.add(assistant);
-		}
-		return assistants;
+		return towns.stream().flatMap(town -> town.getResidents().stream()).filter(assistant -> assistant.hasNationRank("assistant")).collect(Collectors.toList());
 	}
 
 	public void setEnemies(List<Nation> enemies) {
@@ -383,19 +383,18 @@ public class Nation extends Government {
 	 */
 	public List<Town> gatherOutOfRangeTowns(List<Town> towns, Town capital) {
 		List<Town> removedTowns = new ArrayList<>();
-		if (capital != null && capital.hasHomeBlock() && TownySettings.getNationRequiresProximity() > 0) {
-			final Coord capitalCoord = capital.getHomeBlockOrNull().getCoord();
+		final TownBlock capitalHomeBlock = capital.getHomeBlockOrNull();
+		if (capital.hasHomeBlock() && TownySettings.getNationRequiresProximity() > 0 && capitalHomeBlock != null) {
+			final Coord capitalCoord = capitalHomeBlock.getCoord();
 			
 			for (Town town : towns) {
-				if (!town.hasHomeBlock())
-					continue;
-				Coord townCoord = town.getHomeBlockOrNull().getCoord();
-				if (!capital.getHomeblockWorld().equals(town.getHomeblockWorld()))
-					continue;
-
-				final double distance = MathUtil.distance(capitalCoord.getX(), townCoord.getX(), capitalCoord.getZ(), townCoord.getZ());
-				if (distance > TownySettings.getNationRequiresProximity())
-					removedTowns.add(town);
+				TownBlock townHomeBlock = town.getHomeBlockOrNull();
+				if (town.hasHomeBlock() && capital.getHomeblockWorld().equals(town.getHomeblockWorld()) && townHomeBlock != null) {
+					Coord townCoord = townHomeBlock.getCoord();
+					final double distance = MathUtil.distance(capitalCoord.getX(), townCoord.getX(), capitalCoord.getZ(), townCoord.getZ());
+					if (distance > TownySettings.getNationRequiresProximity())
+						removedTowns.add(town);
+				}
 			}
 		}
 		return removedTowns;
@@ -422,12 +421,10 @@ public class Nation extends Government {
 	public void collect(double amount) {
 		
 		if (TownyEconomyHandler.isActive()) {
-			double bankcap = TownySettings.getNationBankCap();
-			if (bankcap > 0) {
-				if (amount + this.getAccount().getHoldingBalance() > bankcap) {
-					TownyMessaging.sendPrefixedNationMessage(this, Translatable.of("msg_err_deposit_capped", bankcap));
-					return;
-				}
+			double bankCap = TownySettings.getNationBankCap();
+			if (bankCap > 0 && amount + this.getAccount().getHoldingBalance() > bankCap) {
+				TownyMessaging.sendPrefixedNationMessage(this, Translatable.of("msg_err_deposit_capped", bankCap));
+				return;
 			}
 			
 			this.getAccount().deposit(amount, null);
@@ -448,18 +445,24 @@ public class Nation extends Government {
 	public List<String> getTreeString(int depth) {
 
 		List<String> out = new ArrayList<>();
-		out.add(getTreeDepth(depth) + "Nation (" + getName() + ")");
-		out.add(getTreeDepth(depth + 1) + "Capital: " + getCapital().getName());
+		out.add(String.format("%sNation (%s)", getTreeDepth(depth), getName()));
+		out.add(String.format("%sCapital: %s", getTreeDepth(depth + 1), getCapital().getName()));
 		
 		List<Resident> assistants = getAssistants();
 		
-		if (assistants.size() > 0)
-			out.add(getTreeDepth(depth + 1) + "Assistants (" + assistants.size() + "): " + Arrays.toString(assistants.toArray(new Resident[0])));
-		if (getAllies().size() > 0)
-			out.add(getTreeDepth(depth + 1) + "Allies (" + getAllies().size() + "): " + Arrays.toString(getAllies().toArray(new Nation[0])));
-		if (getEnemies().size() > 0)
-			out.add(getTreeDepth(depth + 1) + "Enemies (" + getEnemies().size() + "): " + Arrays.toString(getEnemies().toArray(new Nation[0])));
-		out.add(getTreeDepth(depth + 1) + "Towns (" + getTowns().size() + "):");
+		if (!assistants.isEmpty())
+			out.add(String.format("%sAssistants (%s): %s", 
+				getTreeDepth(depth + 1), assistants.size(), Arrays.toString(assistants.toArray(new Resident[0]))));
+		
+		if (!getAllies().isEmpty())
+			out.add(String.format("%sAllies (%s): %s", 
+				getTreeDepth(depth + 1), getAllies().size(), Arrays.toString(getAllies().toArray(new Nation[0]))));
+		
+		if (!getEnemies().isEmpty())
+			out.add(String.format("%sEnemies (%s): %s", 
+				getTreeDepth(depth + 1), getEnemies().size(), Arrays.toString(getEnemies().toArray(new Nation[0]))));
+		
+		out.add(String.format("%sTowns (%s):", getTreeDepth(depth + 1), getTowns().size()));
 		for (Town town : getTowns())
 			out.addAll(town.getTreeString(depth + 2));
 		return out;
@@ -526,8 +529,7 @@ public class Nation extends Government {
 
 	@Override
 	public String getFormattedName() {
-		return TownySettings.getNationPrefix(this) + this.getName().replaceAll("_", " ")
-			+ TownySettings.getNationPostfix(this);
+		return TownySettings.getNationPrefix(this) + this.getName().replace("_", " ") + TownySettings.getNationPostfix(this);
 	}
 	
 	@Override
