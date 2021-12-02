@@ -37,7 +37,6 @@ public class Nation extends Government {
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
-	private Location nationSpawn;
 	private final transient List<Invite> sentAllyInvites = new ArrayList<>();
 
 	public Nation(String name) {
@@ -197,8 +196,8 @@ public class Nation extends Government {
 		TownyMessaging.sendDebugMsg("Nation " + this.getName() + " has set a capital city of " + capital.getName());
 		this.capital = capital;
 		
-		if (this.nationSpawn != null && TownySettings.isNationSpawnOnlyAllowedInCapital() && !capital.isInsideTown(this.nationSpawn))
-			this.nationSpawn = null;
+		if (this.spawn != null && TownySettings.isNationSpawnOnlyAllowedInCapital() && !capital.isInsideTown(this.spawn))
+			this.spawn = null;
 
 		try {
 			TownyPerms.assignPermissions(capital.getMayor(), null);
@@ -238,15 +237,15 @@ public class Nation extends Government {
 
 	@Override
 	public Location getSpawn() throws TownyException {
-		if (nationSpawn == null)
+		if (spawn == null)
 			throw new TownyException(Translation.of("msg_err_nation_has_not_set_a_spawn_location"));
 
-		return nationSpawn;
+		return spawn;
 	}
 	
 	@Nullable
 	public Location getSpawnOrNull() {
-		return nationSpawn;
+		return spawn;
 	}
 	
 
@@ -254,9 +253,9 @@ public class Nation extends Government {
 	public void setSpawn(Location spawn) {
 		if (spawn != null)
 			TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.NATION_SPAWN));
-		else if (this.nationSpawn != null)
-			TownyUniverse.getInstance().removeSpawnPoint(this.nationSpawn);
-		this.nationSpawn = spawn;
+		else if (this.spawn != null)
+			TownyUniverse.getInstance().removeSpawnPoint(this.spawn);
+		this.spawn = spawn;
 	}
 
 	public List<Resident> getAssistants() {
