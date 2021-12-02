@@ -203,7 +203,7 @@ public abstract class TownyPermissionSource {
 	 * 
 	 * Return true if a player has a certain permission node or is Op.
 	 *
-	 * If {@link Player#isOp()} has already been called, {@link #strictHas(Player, String)} should be used instead.
+	 * If {@link Player#isOp()} has already been called, {@link #strictHas(Permissible, String)} should be used instead.
 	 * 
 	 * @param player Player to check
 	 * @param node Permission node to check for
