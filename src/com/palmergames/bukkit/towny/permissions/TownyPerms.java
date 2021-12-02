@@ -25,6 +25,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -45,6 +46,7 @@ public class TownyPerms {
 	private static HashMap<String, List<String>> groupPermsMap = new HashMap<>();
 	private static CommentedConfiguration perms;
 	private static Towny plugin;
+	private static List<String> vitalGroups = new ArrayList<>(Arrays.asList("nomad","towns.default","towns.mayor","nations.default","nations.king"));
 	
 	public static void initialize(Towny plugin) {
 		TownyPerms.plugin = plugin;
@@ -89,6 +91,7 @@ public class TownyPerms {
 
 		groupPermsMap.clear();
 		buildGroupPermsMap();
+		checkForVitalGroups();
 		buildComments();
 		perms.save();
 
@@ -99,6 +102,18 @@ public class TownyPerms {
 		
 	}
 	
+	/**
+	 * Check that all the vital groups Towny relies on are present in the townyperms.yml.
+	 * @throws TownyInitException - Thrown when a vital group is missing.
+
+	 */
+	private static void checkForVitalGroups() {
+		for (String group : vitalGroups) {
+			if (!groupPermsMap.containsKey(group))
+				throw new TownyInitException("Group missing from townyperms.yml: " + group, TownyInitException.TownyError.PERMISSIONS);
+		}
+	}
+
 	/**
 	 * Register a specific residents permissions with Bukkit.
 	 * 
@@ -643,7 +658,6 @@ public class TownyPerms {
 	
 	private static void buildGroupPermsMap() {
 		for (String key : perms.getKeys(true)) {
-			@SuppressWarnings("unchecked")
 			List<String> nodes = (List<String>) perms.getList(key); 
 			groupPermsMap.put(key, nodes);
 		}

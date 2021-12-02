@@ -7003,3 +7003,4 @@ v0.92.0.11:
     - Closes #5481.
 0.97.3.3:
   - Fix DecimalDataField and RawDataField cloning returning a label when none is present.
+  - Prevent Towny from loading if the townyperms.yml is missing a vital group, ie: mayor, king, nomad, etc.
