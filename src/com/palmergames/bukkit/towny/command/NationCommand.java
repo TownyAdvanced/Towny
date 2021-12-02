@@ -264,6 +264,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 										.map(InviteSender::getName)
 										.collect(Collectors.toList()), args[args.length - 1]);
 								} catch (TownyException ignore) {}
+							default:
+								return Collections.emptyList();
 						}
 					}
 					break;
@@ -283,6 +285,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								} else if (args.length == 4) {
 									return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
 								}
+							default:
+								return Collections.emptyList();
 						}
 					}
 					break;
@@ -298,6 +302,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 								try {
 									return NameUtil.filterByStart(NameUtil.getNames(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getEnemies()), args[2]);
 								} catch (TownyException ignored) {}
+							default:
+								return Collections.emptyList();
 						}
 					}
 					break;
@@ -313,6 +319,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							return Collections.singletonList("by");
 						case 3:
 							return NameUtil.filterByStart(nationListTabCompletes, args[2]);
+						default:
+							return Collections.emptyList();
 					}
 				default:
 					if (args.length == 1) {
