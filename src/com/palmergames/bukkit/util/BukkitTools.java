@@ -187,4 +187,49 @@ public class BukkitTools {
 	public static List<String> getWorldNames(boolean lowercased) {
 		return lowercased ? Bukkit.getWorlds().stream().map(world -> world.getName().toLowerCase()).collect(Collectors.toList()) : getWorldNames();
 	}
+	
+	@Deprecated
+	public static java.util.Collection<? extends Player> getOnlinePlayers() {
+		return Bukkit.getOnlinePlayers();
+	}
+
+	@Deprecated
+	public static Player getPlayerExact(String name) {
+		return Bukkit.getPlayerExact(name);
+	}
+
+	@Deprecated
+	public static Player getPlayer(String playerId) {
+		return Bukkit.getPlayer(playerId);
+	}
+
+	@Deprecated
+	public static Player getPlayer(UUID playerUUID) {
+		return Bukkit.getPlayer(playerUUID);
+	}
+
+	@Deprecated
+	public static List<World> getWorlds() {
+		return Bukkit.getWorlds();
+	}
+
+	@Deprecated
+	public static World getWorld(String name) {
+		return Bukkit.getWorld(name);
+	}
+
+	@Deprecated
+	public static org.bukkit.Server getServer() {
+		return Bukkit.getServer();
+	}
+
+	@Deprecated
+	public static org.bukkit.plugin.PluginManager getPluginManager() {
+		return Bukkit.getPluginManager();
+	}
+
+	@Deprecated
+	public static org.bukkit.scheduler.BukkitScheduler getScheduler() {
+		return Bukkit.getScheduler();
+	}
 }
