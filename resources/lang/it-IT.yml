@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.135
+version: 0.136
 language: italian
 author: Leonardo_DGS
 website: 'https://townyadvanced.github.io/'
@@ -1402,3 +1402,5 @@ tc_player_channel_sound_muted: 'The channel sound has been muted'
 tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
+#Added in 0.136
+msg_view_on_web: 'Click to view on the web.'
