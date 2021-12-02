@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
+import com.palmergames.bukkit.towny.object.SpawnLocation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -299,11 +300,20 @@ public class TownyFormatter {
 		screen.addComponentOf("townblocks", colourKeyValue(translator.of("status_town_size"), translator.of("status_fractions", town.getTownBlocks().size(), TownySettings.getMaxTownBlocks(town))) +
 	            (TownySettings.isSellingBonusBlocks(town) ? colourBracketElement(translator.of("status_town_size_bought"), translator.of("status_fractions", town.getPurchasedBlocks(), TownySettings.getMaxPurchasedBlocks(town))) : "") + 
 	            (town.getBonusBlocks() > 0 ? colourBracketElement(translator.of("status_town_size_bonus"), String.valueOf(town.getBonusBlocks())) : "") + 
-	            (TownySettings.getNationBonusBlocks(town) > 0 ? colourBracketElement(translator.of("status_town_size_nationbonus"), String.valueOf(TownySettings.getNationBonusBlocks(town))) : "") + 
-	            (!town.isPublic() ? "" : (translator.of("status_home_element", (TownySettings.getTownDisplaysXYZ() ? 
-	            				(town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawnOrNull()) : translator.of("status_no_town")) : 
-	            				(town.hasHomeBlock() ? town.getHomeBlockOrNull().getCoord().toString() : translator.of("status_no_town"))
-	            				)))));
+	            (TownySettings.getNationBonusBlocks(town) > 0 ? colourBracketElement(translator.of("status_town_size_nationbonus"), String.valueOf(TownySettings.getNationBonusBlocks(town))) : ""));
+
+		if (town.isPublic()) {
+			Component homeComponent = Component.text(!town.isPublic() ? "" : (translator.of("status_home_element", (TownySettings.getTownDisplaysXYZ() ?
+				(town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawnOrNull()) : translator.of("status_no_town")) :
+				(town.hasHomeBlock() ? town.getHomeBlockOrNull().getCoord().toString() : translator.of("status_no_town"))
+			))));
+
+			String webUrl = formatWebUrl(town);
+			if (!webUrl.isEmpty())
+				homeComponent = homeComponent.clickEvent(ClickEvent.openUrl(webUrl));
+
+			screen.addComponentOf("home", homeComponent);
+		}
 
 		// Outposts: 3
 		if (TownySettings.isAllowingOutposts()) {
@@ -456,8 +466,15 @@ public class TownyFormatter {
 			screen.addComponentOf("bankLine", bankline);
 		}
 
-		if (nation.isPublic())
-			screen.addComponentOf("home", translator.of("status_home_element", (nation.hasSpawn() ? Coord.parseCoord(nation.getSpawnOrNull()).toString() : translator.of("status_no_town"))));
+		if (nation.isPublic()) {
+			Component homeComponent = Component.text(translator.of("status_home_element", (nation.hasSpawn() ? Coord.parseCoord(nation.getSpawnOrNull()).toString() : translator.of("status_no_town"))));
+			
+			String webUrl = formatWebUrl(nation);
+			if (!webUrl.isEmpty())
+				homeComponent = homeComponent.clickEvent(ClickEvent.openUrl(webUrl));
+
+			screen.addComponentOf("home", homeComponent);
+		}
 
 		// King: King Harlus
 		if (nation.getNumTowns() > 0 && nation.hasCapital() && nation.getCapital().hasMayor()) {
@@ -1067,6 +1084,17 @@ public class TownyFormatter {
 	public static String getTime() {
 		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
 		return sdf.format(System.currentTimeMillis());
+	}
+	
+	private static String formatWebUrl(SpawnLocation spawnLocation) {
+		String webUrl = "";
+		if (TownySettings.isUsingWebMapStatusScreens() && spawnLocation.hasSpawn() && !TownySettings.getWebMapUrl().isEmpty())
+			webUrl = TownySettings.getWebMapUrl()
+				.replaceAll("\\{world}", spawnLocation.getSpawnOrNull().getWorld().getName())
+				.replaceAll("\\{x}", "" + spawnLocation.getSpawnOrNull().getBlockX())
+				.replaceAll("\\{z}", "" + spawnLocation.getSpawnOrNull().getBlockZ());
+
+		return webUrl;
 	}
 	
 	/*

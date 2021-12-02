@@ -1053,12 +1053,27 @@ public enum ConfigNodes {
 			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
 			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
 	
-	PLUGINS_LUCKPERMS_CONTEXTS(
+	PLUGIN_LUCKPERMS_CONTEXTS(
 			"plugin.interfacing.luckperms_contexts",
 			"false",
 			"",
 			"# If enabled, Towny contexts will be available in LuckPerms.",
 			"# https://luckperms.net/wiki/Context"),
+	
+	PLUGIN_WEB_MAP_USING_STATUSSCREEN(
+			"plugin.interfacing.web_map.enabled",
+			"false",
+			"",
+			"# If enabled, players will be prompted to open a url when clicking on coordinates in towny status screens."
+	),
+	
+	PLUGIN_WEB_MAP_URL(
+			"plugin.interfacing.web_map.url",
+			"https://example.com/map/?worldname={world}&mapname=flat&zoom=5&x={x}&y=64&z={z}",
+			"",
+			"# The url that players will be prompted to open when clicking on a coordinate in a status screen.",
+			"# Valid placeholders are {world}, {x}, and {y}, for the world name, x, and y coordinates respectively."
+	),
 
 	PLUGIN_DAY_HEADER("plugin.day_timer", "", ""),
 	PLUGIN_DAY_INTERVAL(

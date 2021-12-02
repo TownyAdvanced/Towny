@@ -28,7 +28,7 @@ public class StatusScreen {
 		components.put(name, Component.text(text));
 	}
 
-	public void addComponentOf(String name, TextComponent component) {
+	public void addComponentOf(String name, Component component) {
 		components.put(name, component);
 	}
 	
