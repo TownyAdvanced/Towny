@@ -7016,3 +7016,4 @@ v0.92.0.11:
 0.97.4.1:
   - Make the ItemLists class not an interface, courtesy of Warriorrrr with PR #5490.
   - Fix the delete town event causing an NPE in edge cases, courtesy of Warriorrrr with PR #5492.
+  - Fix javadoc warning, courtesy of Warriorrrr with PR #5495.
