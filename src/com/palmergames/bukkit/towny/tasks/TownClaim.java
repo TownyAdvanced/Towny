@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -202,7 +201,7 @@ public class TownClaim extends Thread {
 			townBlock.save();
 			
 			// Raise an event for the claim
-			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock, player));
+			Bukkit.getPluginManager().callEvent(new TownClaimEvent(townBlock, player));
 				
 		}
 	}

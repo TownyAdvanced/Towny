@@ -24,7 +24,6 @@ import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
@@ -238,7 +237,7 @@ public class Town extends Government implements TownBlockOwner {
 		setJoinedNationAt(0);
 		
 		this.save();
-		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(this, nation));
+		Bukkit.getPluginManager().callEvent(new NationRemoveTownEvent(this, nation));
 	}
 	
 	public void setNation(Nation nation) throws AlreadyRegisteredException {
@@ -265,7 +264,7 @@ public class Town extends Government implements TownBlockOwner {
 			setJoinedNationAt(System.currentTimeMillis());
 
 		TownyPerms.updateTownPerms(this);
-		BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(this, nation));
+		Bukkit.getPluginManager().callEvent(new NationAddTownEvent(this, nation));
 	}
 
 	private boolean residentsSorted = false;
@@ -1285,8 +1284,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public World getWorld() {
-		return hasWorld() ? BukkitTools.getWorld(getHomeblockWorld().getName()) :
-			BukkitTools.getWorlds().get(0);
+		return hasWorld() ? Bukkit.getWorld(getHomeblockWorld().getName()) : Bukkit.getWorlds().get(0);
 	}
 
 	@Override
@@ -1412,9 +1410,9 @@ public class Town extends Government implements TownBlockOwner {
 	@Deprecated
 	public World getBukkitWorld() {
 		if (hasWorld()) {
-			return BukkitTools.getWorld(getHomeblockWorld().getName());
+			return Bukkit.getWorld(getHomeblockWorld().getName());
 		} else {
-			return BukkitTools.getWorlds().get(0);
+			return Bukkit.getWorlds().get(0);
 		}
 	}
 

@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 
 import io.papermc.lib.PaperLib;
@@ -221,11 +220,11 @@ public class TownyAPI {
     	Player player = null;
     	
     	if (resident.hasUUID())
-    		player = BukkitTools.getPlayer(resident.getUUID());
+    		player = Bukkit.getPlayer(resident.getUUID());
     	
     	// Some servers use cross-platform proxies / offline mode where UUIDs may not be accurate. 
     	if (player == null)
-    		player = BukkitTools.getPlayerExact(resident.getName());
+    		player = Bukkit.getPlayerExact(resident.getName());
     	
         return player;
     }
@@ -246,7 +245,7 @@ public class TownyAPI {
     	if (resident.hasUUID())
     		return resident.getUUID();
     	
-    	Player player = BukkitTools.getPlayerExact(resident.getName());
+    	Player player = Bukkit.getPlayerExact(resident.getName());
     	
     	if (player != null)
     		return player.getUniqueId();
@@ -521,7 +520,7 @@ public class TownyAPI {
     public List<Resident> getOnlineResidents(ResidentList owner) {
         
         List<Resident> onlineResidents = new ArrayList<>();
-        for (Player player : BukkitTools.getOnlinePlayers()) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
             if (player != null)
                 for (Resident resident : owner.getResidents()) {
                     if (resident.getName().equalsIgnoreCase(player.getName()))

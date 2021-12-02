@@ -2997,7 +2997,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
 
-		BukkitTools.getPluginManager().callEvent(new NewTownEvent(town));
+		Bukkit.getPluginManager().callEvent(new NewTownEvent(town));
 
 		return town;
 	}
@@ -3218,7 +3218,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 																				// online
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_offline_no_join", newMember.getName()));
 					invited.remove(newMember);
-				} else if (!TownyUniverse.getInstance().getPermissionSource().testPermission(BukkitTools.getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
+				} else if (!TownyUniverse.getInstance().getPermissionSource().testPermission(Bukkit.getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_allowed_join", newMember.getName()));
 					invited.remove(newMember);
 				} else if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town)){
@@ -3365,7 +3365,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			StringBuilder msg = new StringBuilder();
 			for (Resident member : kicking) {
 				msg.append(member.getName()).append(", ");
-				Player p = BukkitTools.getPlayer(member.getName());
+				Player p = Bukkit.getPlayer(member.getName());
 				if (p != null)
 					TownyMessaging.sendMsg(p, Translatable.of("msg_kicked_by", (player != null) ? player.getName() : "CONSOLE"));
 			}
@@ -3550,7 +3550,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			for (String nameForDistanceTest : names) {
 				
 				int maxDistance = TownySettings.getMaxDistanceFromTownSpawnForInvite();
-				Player player = BukkitTools.getPlayer(nameForDistanceTest);
+				Player player = Bukkit.getPlayer(nameForDistanceTest);
 				Location playerLoc = player.getLocation();
 				Double distance = spawnLoc.distance(playerLoc);
 				if (distance <= maxDistance)
@@ -3592,7 +3592,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Reset this players cached permissions
 		if (!name.equalsIgnoreCase("Console"))
-			plugin.resetCache(BukkitTools.getPlayerExact(name));
+			plugin.resetCache(Bukkit.getPlayerExact(name));
 	}
 
 	// wrapper function for non friend setting of perms
@@ -3874,7 +3874,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				for (WorldCoord coord : selection) {
 					//Use the user's current world
 					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player, outpost, isHomeblock);
-					BukkitTools.getPluginManager().callEvent(preClaimEvent);
+					Bukkit.getPluginManager().callEvent(preClaimEvent);
 					if(preClaimEvent.isCancelled()) {
 						blockedClaims++;
 						cancelMessage = preClaimEvent.getCancelMessage();
@@ -4100,7 +4100,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}).runOnCancel(() -> {
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_request_denied"));
 			TownyMessaging.sendMsg(succumbingTown.getMayor(), Translatable.of("msg_town_merge_cancelled"));
-		}).sendTo(BukkitTools.getPlayerExact(succumbingTown.getMayor().getName()));
+		}).sendTo(Bukkit.getPlayerExact(succumbingTown.getMayor().getName()));
 	}
 
 	public static boolean isEdgeBlock(TownBlockOwner owner, List<WorldCoord> worldCoords) {

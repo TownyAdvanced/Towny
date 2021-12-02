@@ -10,7 +10,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
-import com.palmergames.bukkit.util.BukkitTools;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -553,7 +553,7 @@ public class TownyRegenAPI {
 		//Block block = null;
 		int plotSize = TownySettings.getTownBlockSize();
 
-		World world = BukkitTools.getServer().getWorld(townBlock.getWorld().getName());
+		World world = Bukkit.getWorld(townBlock.getWorld().getName());
 
 		if (world != null) {
 			/*
@@ -674,7 +674,7 @@ public class TownyRegenAPI {
 	public static void cancelProtectionRegenTasks() {
 
 		for (ProtectionRegenTask task : protectionRegenTasks.values()) {
-			BukkitTools.getServer().getScheduler().cancelTask(task.getTaskId());
+			Bukkit.getScheduler().cancelTask(task.getTaskId());
 			task.replaceProtections();
 		}
 		protectionRegenTasks.clear();

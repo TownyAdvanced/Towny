@@ -13,10 +13,10 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 
 import net.citizensnpcs.api.CitizensAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -842,7 +842,7 @@ public class TownyEntityListener implements Listener {
 				 */
 				BlockData data = block.getBlockData();
 				block.setType(Material.AIR);
-				BukkitTools.getScheduler().runTask(plugin, () -> block.setBlockData(data));
+				Bukkit.getScheduler().runTask(plugin, () -> block.setBlockData(data));
 			}
 		}
 	}
@@ -873,7 +873,7 @@ public class TownyEntityListener implements Listener {
 					 */
 					BlockData data = event.getHitBlock().getBlockData();
 					event.getHitBlock().setType(Material.AIR);
-					BukkitTools.getScheduler().runTask(plugin, () -> event.getHitBlock().setBlockData(data));
+					Bukkit.getScheduler().runTask(plugin, () -> event.getHitBlock().setBlockData(data));
 				}
 			}
 		}

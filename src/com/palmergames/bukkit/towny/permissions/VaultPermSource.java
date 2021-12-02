@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.permissions;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 
 import net.milkbowl.vault.chat.Chat;
@@ -22,7 +21,7 @@ public class VaultPermSource extends TownyPermissionSource {
 
 	@Override
 	public String getPrefixSuffix(Resident resident, String node) {
-		Player player = BukkitTools.getPlayerExact(resident.getName());
+		Player player = Bukkit.getPlayerExact(resident.getName());
 		if (player != null) {
 			// Fetch primary group
 			String primaryGroup = getPlayerGroup(player);
@@ -81,7 +80,7 @@ public class VaultPermSource extends TownyPermissionSource {
 		
 		int iReturn = -1;
 		
-		Player player = BukkitTools.getPlayerExact(playerName);
+		Player player = Bukkit.getPlayerExact(playerName);
 		
 		if (player != null) {
 			String primaryGroup = getPlayerGroup(player);
@@ -102,14 +101,10 @@ public class VaultPermSource extends TownyPermissionSource {
 		
 		int iReturn = -1;
 		
-		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(BukkitTools.getPlayerExact(playerName).getUniqueId());
-		Player player = BukkitTools.getPlayer(playerName);
-		
-		if (player != null) {
-			
-				iReturn = chat.getPlayerInfoInteger(player.getWorld().getName(), offlinePlayer, node, -1);
-		}
-		
+		Player player = Bukkit.getPlayerExact(playerName);
+
+		if (player != null)
+			iReturn = chat.getPlayerInfoInteger(player.getWorld().getName(), player, node, -1);
 		
 		if (iReturn == -1)
 			iReturn = getEffectivePermIntNode(playerName, node);
@@ -126,11 +121,10 @@ public class VaultPermSource extends TownyPermissionSource {
 
 	@Override
 	public String getPlayerPermissionStringNode(String playerName, String node) {
-		Player player = BukkitTools.getPlayerExact(playerName);
+		Player player = Bukkit.getPlayerExact(playerName);
 		if (player != null) {
 			return chat.getPlayerInfoString(player, node, "");
 		}
 		return "";
 	}
-
 }

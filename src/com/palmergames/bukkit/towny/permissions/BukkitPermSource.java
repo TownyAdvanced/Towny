@@ -1,11 +1,11 @@
 package com.palmergames.bukkit.towny.permissions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.util.BukkitTools;
 
 public class BukkitPermSource extends TownyPermissionSource {
 
@@ -22,9 +22,7 @@ public class BukkitPermSource extends TownyPermissionSource {
 		 * so treat the same as bPerms
 		 */
 
-		Player player = BukkitTools.getPlayer(resident.getName());
-
-		for (PermissionAttachmentInfo test : player.getEffectivePermissions()) {
+		for (PermissionAttachmentInfo test : resident.getPlayer().getEffectivePermissions()) {
 			if (test.getPermission().startsWith(node + ".")) {
 				String[] split = test.getPermission().split("\\.");
 				return split[split.length - 1];
@@ -65,7 +63,7 @@ public class BukkitPermSource extends TownyPermissionSource {
 		 * so treat the same as bPerms
 		 */
 
-		Player player = BukkitTools.getPlayer(playerName);
+		Player player = Bukkit.getPlayer(playerName);
 
 		for (PermissionAttachmentInfo test : player.getEffectivePermissions()) {
 			if (test.getPermission().startsWith(node + ".")) {

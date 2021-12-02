@@ -708,7 +708,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							}
 							
 							PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(townBlockType, townBlock, resident);
-							BukkitTools.getPluginManager().callEvent(preEvent);
+							Bukkit.getPluginManager().callEvent(preEvent);
 
 							if (preEvent.isCancelled()) {
 								TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
@@ -742,7 +742,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_type", townBlockType));
 								})
 									.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
-									.sendTo(BukkitTools.getPlayerExact(resident.getName()));
+									.sendTo(Bukkit.getPlayerExact(resident.getName()));
 							
 							// No cost or economy so no confirmation.
 							} else {
@@ -775,7 +775,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						plotTestOwner(resident, townBlock);
 
 						PlotPreClearEvent preEvent = new PlotPreClearEvent(townBlock);
-						BukkitTools.getPluginManager().callEvent(preEvent);
+						Bukkit.getPluginManager().callEvent(preEvent);
 						
 						if (preEvent.isCancelled()) {
 							TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
@@ -791,7 +791,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								throw new TownyException(Translatable.of("msg_err_invalid_property", material));
 
 						// Raise an event for the claim
-						BukkitTools.getPluginManager().callEvent(new PlotClearEvent(townBlock));
+						Bukkit.getPluginManager().callEvent(new PlotClearEvent(townBlock));
 
 					} else {
 						// Shouldn't ever reach here as a null townBlock should
@@ -1392,7 +1392,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public static void plotTestOwner(Resident resident, TownBlock townBlock) throws TownyException {
 
-		Player player = BukkitTools.getPlayer(resident.getName());
+		Player player = Bukkit.getPlayer(resident.getName());
 		boolean isAdmin = TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player);
 		boolean isMayor = player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
 
@@ -1746,7 +1746,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				
 				// Allow for PlotPreChangeTypeEvent to trigger
 				PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(type, tb, resident);
-				BukkitTools.getPluginManager().callEvent(preEvent);
+				Bukkit.getPluginManager().callEvent(preEvent);
 				
 				// If any one of the townblocks is not allowed to be set, cancel setting all of them.
 				if (preEvent.isCancelled()) {
@@ -1785,7 +1785,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						
 					})
 						.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
-						.sendTo(BukkitTools.getPlayerExact(resident.getName()));
+						.sendTo(Bukkit.getPlayerExact(resident.getName()));
 				
 				// No cost or economy so no confirmation.
 				} else {

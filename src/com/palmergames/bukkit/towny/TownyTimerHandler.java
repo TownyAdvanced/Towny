@@ -57,7 +57,7 @@ public class TownyTimerHandler{
 			if (townyRepeatingTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule Towny Timer Task.");
 		} else if (!on && isTownyRepeatingTaskRunning()) {
-			BukkitTools.getScheduler().cancelTask(townyRepeatingTask);
+			Bukkit.getScheduler().cancelTask(townyRepeatingTask);
 			townyRepeatingTask = -1;
 		}
 	}
@@ -65,11 +65,11 @@ public class TownyTimerHandler{
 	public static void toggleMobRemoval(boolean on) {
 
 		if (on && !isMobRemovalRunning()) {
-			mobRemoveTask = BukkitTools.scheduleSyncRepeatingTask(new MobRemovalTimerTask(plugin, BukkitTools.getServer()), 0, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
+			mobRemoveTask = BukkitTools.scheduleSyncRepeatingTask(new MobRemovalTimerTask(plugin, Bukkit.getServer()), 0, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
 			if (mobRemoveTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule mob removal loop.");
 		} else if (!on && isMobRemovalRunning()) {
-			BukkitTools.getScheduler().cancelTask(mobRemoveTask);
+			Bukkit.getScheduler().cancelTask(mobRemoveTask);
 			mobRemoveTask = -1;
 		}
 	}
@@ -90,7 +90,7 @@ public class TownyTimerHandler{
 				TownyMessaging.sendErrorMsg("Could not schedule hourly timer.");
 
 		} else if (!on && isHourlyTimerRunning()) {
-			BukkitTools.getScheduler().cancelTask(hourlyTask);
+			Bukkit.getScheduler().cancelTask(hourlyTask);
 			hourlyTask = -1;
 		}
 	}
@@ -105,7 +105,7 @@ public class TownyTimerHandler{
 				TownyMessaging.sendErrorMsg("Could not schedule short timer.");
 
 		} else if (!on && isShortTimerRunning()) {
-			BukkitTools.getScheduler().cancelTask(shortTask);
+			Bukkit.getScheduler().cancelTask(shortTask);
 			shortTask = -1;
 		}
 	}
@@ -113,11 +113,11 @@ public class TownyTimerHandler{
 	public static void toggleHealthRegen(boolean on) {
 
 		if (on && !isHealthRegenRunning()) {
-			healthRegenTask = BukkitTools.scheduleSyncRepeatingTask(new HealthRegenTimerTask(plugin, BukkitTools.getServer()), 0, TimeTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
+			healthRegenTask = BukkitTools.scheduleSyncRepeatingTask(new HealthRegenTimerTask(plugin, Bukkit.getServer()), 0, TimeTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
 			if (healthRegenTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule health regen loop.");
 		} else if (!on && isHealthRegenRunning()) {
-			BukkitTools.getScheduler().cancelTask(healthRegenTask);
+			Bukkit.getScheduler().cancelTask(healthRegenTask);
 			healthRegenTask = -1;
 		}
 	}
@@ -129,7 +129,7 @@ public class TownyTimerHandler{
 			if (teleportWarmupTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule teleport warmup loop.");
 		} else if (!on && isTeleportWarmupRunning()) {
-			BukkitTools.getScheduler().cancelTask(teleportWarmupTask);
+			Bukkit.getScheduler().cancelTask(teleportWarmupTask);
 			teleportWarmupTask = -1;
 		}
 	}
@@ -141,7 +141,7 @@ public class TownyTimerHandler{
 			if (cooldownTimerTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule cooldown timer loop.");			
 		} else if (!on && isCooldownTimerRunning()) {
-			BukkitTools.getScheduler().cancelTask(cooldownTimerTask);
+			Bukkit.getScheduler().cancelTask(cooldownTimerTask);
 			cooldownTimerTask = -1;
 		}
 	}
@@ -152,7 +152,7 @@ public class TownyTimerHandler{
 			if (drawSmokeTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule draw smoke loop");			
 		} else if (!on && isDrawSmokeTaskRunning()) {
-			BukkitTools.getScheduler().cancelTask(drawSmokeTask);
+			Bukkit.getScheduler().cancelTask(drawSmokeTask);
 			drawSmokeTask = -1;
 		}
 	}
@@ -163,7 +163,7 @@ public class TownyTimerHandler{
 			if (drawSpawnPointsTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule draw spawn points loop");			
 		} else if (!on && isDrawSpawnPointsTaskRunning()) {
-			BukkitTools.getScheduler().cancelTask(drawSpawnPointsTask);
+			Bukkit.getScheduler().cancelTask(drawSpawnPointsTask);
 			drawSpawnPointsTask = -1;
 		}
 	}

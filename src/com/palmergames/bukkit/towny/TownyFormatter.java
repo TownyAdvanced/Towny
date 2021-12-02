@@ -66,8 +66,6 @@ public class TownyFormatter {
 	public static final String keyFormat = "%s%s";
 	public static final String hoverFormat = "%s[%s%s%s]";
 	public static final String bracketFormat = " %1$s[%2$s %3$s%1$s]";
-	
-	public static void initialize() {}
 
 	/*
 	 * TownyObject StatusScreen makers.
@@ -907,7 +905,7 @@ public class TownyFormatter {
 	 */
 	private static boolean playerIsOnlineAndVisible(String name, CommandSender sender) {
 		if (sender instanceof Player player)
-			return BukkitTools.isOnline(name) && player.canSee(BukkitTools.getPlayer(name));
+			return BukkitTools.isOnline(name) && player.canSee(Bukkit.getPlayer(name));
 		else if (sender instanceof ConsoleCommandSender)
 			return BukkitTools.isOnline(name);
 		else

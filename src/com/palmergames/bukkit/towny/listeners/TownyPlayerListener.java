@@ -396,7 +396,7 @@ public class TownyPlayerListener implements Listener {
 			if (block.getType().name().equals("RESPAWN_ANCHOR")) {
 				org.bukkit.block.data.type.RespawnAnchor anchor = ((org.bukkit.block.data.type.RespawnAnchor) block.getBlockData());
 				if (anchor.getCharges() == 4)
-					BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), null, block.getType()));
+					Bukkit.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), null, block.getType()));
 				return;
 			}
 			
@@ -405,7 +405,7 @@ public class TownyPlayerListener implements Listener {
 			 */
 			if (Tag.BEDS.isTagged(block.getType()) && event.getPlayer().getWorld().getEnvironment().equals(Environment.NETHER)) {
 				org.bukkit.block.data.type.Bed bed = ((org.bukkit.block.data.type.Bed) block.getBlockData());
-				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), block.getRelative(bed.getFacing()).getLocation(), block.getType()));
+				Bukkit.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), block.getRelative(bed.getFacing()).getLocation(), block.getType()));
 				return;
 			}
 			

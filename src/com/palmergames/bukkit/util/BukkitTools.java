@@ -7,13 +7,11 @@ import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.scheduler.BukkitScheduler;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -29,20 +27,9 @@ import java.util.stream.Collectors;
 public class BukkitTools {
 
 	private static Towny plugin = null;
-	private static Server server = null;
 	
 	public static void initialize(Towny plugin) {
 		BukkitTools.plugin = plugin;
-		BukkitTools.server = plugin.getServer();
-	}
-	
-	/**
-	 * Get an array of all online players
-	 * 
-	 * @return array of online players
-	 */
-	public static Collection<? extends Player> getOnlinePlayers() {
-		return getServer().getOnlinePlayers();
 	}
 	
 	public static List<Player> matchPlayer(String name) {
@@ -77,23 +64,12 @@ public class BukkitTools {
 	 * @param name - Resident/Player name to get a UUID for.
 	 * @return UUID of player or null if the player is not in the cache.
 	 */
+	@Nullable
 	public static UUID getUUIDSafely(String name) {
 		if (hasPlayedBefore(name))
 			return getOfflinePlayer(name).getUniqueId();
 		else
 			return null;
-	}
-	
-	public static Player getPlayerExact(String name) {
-		return getServer().getPlayerExact(name);
-	}
-	
-	public static Player getPlayer(String playerId) {
-		return getServer().getPlayer(playerId);
-	}
-	
-	public static Player getPlayer(UUID playerUUID) {
-		return server.getPlayer(playerUUID);
 	}
 	
 	/**
@@ -106,28 +82,6 @@ public class BukkitTools {
 		return Bukkit.getPlayer(name) != null;
 	}
 	
-	public static List<World> getWorlds() {
-		return  getServer().getWorlds();
-	}
-	
-	public static World getWorld(String name) {
-		return  getServer().getWorld(name);
-	}
-	
-	public static Server getServer() {
-		synchronized(server) {
-			return server;
-		}
-	}
-	
-	public static PluginManager getPluginManager() {
-		return getServer().getPluginManager();
-	}
-	
-	public static BukkitScheduler getScheduler() {
-		return getServer().getScheduler();
-	}
-	
 	/**
 	 * Accepts a Runnable object and a delay (-1 for no delay)
 	 * 
@@ -136,7 +90,7 @@ public class BukkitTools {
 	 * @return -1 if unable to schedule or an index to the task is successful.
 	 */
 	public static int scheduleSyncDelayedTask(Runnable task, long delay) {
-		return getScheduler().scheduleSyncDelayedTask(plugin, task, delay);
+		return Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, task, delay);
 	}
 	
 	/**
@@ -147,7 +101,7 @@ public class BukkitTools {
 	 * @return -1 if unable to schedule or an index to the task is successful.
 	 */
 	public static int scheduleAsyncDelayedTask(Runnable task, long delay) {
-		return getScheduler().runTaskLaterAsynchronously(plugin, task, delay).getTaskId();
+		return Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, task, delay).getTaskId();
 	}
 	
 	/**
@@ -159,7 +113,7 @@ public class BukkitTools {
 	 * @return -1 if unable to schedule or an index to the task is successful.
 	 */
 	public static int scheduleSyncRepeatingTask(Runnable task, long delay, long repeat) {
-		return getScheduler().scheduleSyncRepeatingTask(plugin, task, delay, repeat);
+		return Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, task, delay, repeat);
 	}
 	
 	/**
@@ -171,7 +125,7 @@ public class BukkitTools {
 	 * @return -1 if unable to schedule or an index to the task is successful.
 	 */
 	public static int scheduleAsyncRepeatingTask(Runnable task, long delay, long repeat) {
-		return getScheduler().runTaskTimerAsynchronously(plugin, task, delay, repeat).getTaskId();
+		return Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, task, delay, repeat).getTaskId();
 	}
 	
 	/**
@@ -182,9 +136,9 @@ public class BukkitTools {
 	public static HashMap<String, Integer> getPlayersPerWorld() {
 
 		HashMap<String, Integer> m = new HashMap<>();
-		for (World world : getServer().getWorlds())
+		for (World world : Bukkit.getServer().getWorlds())
 			m.put(world.getName(), 0);
-		for (Player player :  getServer().getOnlinePlayers())
+		for (Player player : Bukkit.getServer().getOnlinePlayers())
 			m.put(player.getWorld().getName(), m.get(player.getWorld().getName()) + 1);
 		return m;
 	}
@@ -203,7 +157,7 @@ public class BukkitTools {
 
 	@SuppressWarnings("deprecation")
 	public static boolean hasPlayedBefore(String name) {
-		return getServer().getOfflinePlayer(name).hasPlayedBefore();
+		return Bukkit.getServer().getOfflinePlayer(name).hasPlayedBefore();
 	}
 	
 	/**
@@ -219,7 +173,6 @@ public class BukkitTools {
 	}
 	
 	public static OfflinePlayer getOfflinePlayerForVault(String name) {
-
 		return Bukkit.getOfflinePlayer(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
 	}
 	
@@ -228,10 +181,10 @@ public class BukkitTools {
 	}
 	
 	public static List<String> getWorldNames() {
-		return getWorlds().stream().map(World::getName).collect(Collectors.toList());
+		return Bukkit.getWorlds().stream().map(World::getName).collect(Collectors.toList());
 	}
 	
 	public static List<String> getWorldNames(boolean lowercased) {
-		return lowercased ? getWorlds().stream().map(world -> world.getName().toLowerCase()).collect(Collectors.toList()) : getWorldNames();
+		return lowercased ? Bukkit.getWorlds().stream().map(world -> world.getName().toLowerCase()).collect(Collectors.toList()) : getWorldNames();
 	}
 }

@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
-import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -142,7 +141,7 @@ public class CombatUtil {
 				 * A player has attempted to damage a player. Throw a TownPlayerDamagePlayerEvent.
 				 */
 				TownyPlayerDamagePlayerEvent event = new TownyPlayerDamagePlayerEvent(defendingPlayer.getLocation(), defendingPlayer, cause, defenderTB, cancelled, attackingPlayer);
-				BukkitTools.getPluginManager().callEvent(event);
+				Bukkit.getPluginManager().callEvent(event);
 
 				// A cancelled event should contain a message.
 				if (event.isCancelled() && event.getMessage() != null)
@@ -268,8 +267,7 @@ public class CombatUtil {
 				*/
 				if (attackingEntity instanceof Wolf wolf && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
 					if (isATamedWolfWithAOnlinePlayer(wolf)) {
-						Player owner = BukkitTools.getPlayer(wolf.getOwner().getName());
-						return !PlayerCacheUtil.getCachePermission(owner, defendingEntity.getLocation(), Material.AIR, ActionType.DESTROY);
+						return !PlayerCacheUtil.getCachePermission((Player) wolf.getOwner(), defendingEntity.getLocation(), Material.AIR, ActionType.DESTROY);
 					} else {
 						wolf.setTarget(null);
 						wolf.setAngry(false);
@@ -682,7 +680,7 @@ public class CombatUtil {
 	}
 	
 	private static boolean isATamedWolfWithAOnlinePlayer(Wolf wolf) {
-		return wolf.isTamed() && wolf.getOwner().getName() != null && BukkitTools.isOnline(wolf.getOwner().getName());
+		return wolf.isTamed() && wolf.getOwner() instanceof Player player && player.isOnline();
 	}
 	
 	public static boolean preventDispenserDamage(Block dispenser, Entity entity, DamageCause cause) {

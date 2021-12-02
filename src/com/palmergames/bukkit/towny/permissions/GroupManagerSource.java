@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.permissions;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 
 import org.anjocaido.groupmanager.GroupManager;
@@ -12,6 +11,7 @@ import org.anjocaido.groupmanager.events.GMGroupEvent;
 import org.anjocaido.groupmanager.events.GMSystemEvent;
 import org.anjocaido.groupmanager.events.GMUserEvent;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -50,7 +50,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 	public String getPrefixSuffix(Resident resident, String node) {
 
 		String group = "", user = "";
-		Player player = BukkitTools.getPlayer(resident.getName());
+		Player player = Bukkit.getPlayerExact(resident.getName());
 
 		//sendDebugMsg("    GroupManager installed.");
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
@@ -98,7 +98,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 		int iReturn = -1;
 		
-		Player player = BukkitTools.getPlayer(playerName);
+		Player player = Bukkit.getPlayerExact(playerName);
 
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
 		iReturn  = handler.getPermissionInteger(playerName, node);
@@ -115,7 +115,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 		
 		int iReturn = -1;
 		
-		Player player = BukkitTools.getPlayer(playerName);
+		Player player = Bukkit.getPlayerExact(playerName);
 
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
 		iReturn  = handler.getPermissionInteger(playerName, node);
@@ -135,7 +135,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 	@Override
 	public String getPlayerPermissionStringNode(String playerName, String node) {
 
-		Player player = BukkitTools.getPlayer(playerName);
+		Player player = Bukkit.getPlayerExact(playerName);
 
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
 
@@ -174,7 +174,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 			Resident resident = TownyUniverse.getInstance().getResident(event.getUserName());
 			if (resident != null) {
-				Player player = BukkitTools.getPlayerExact(resident.getName());
+				Player player = Bukkit.getPlayerExact(resident.getName());
 
 				if (player != null) {
 					//setup default modes for this player.
@@ -193,7 +193,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 					Group group = event.getGroup();
 					// Update all players who are in this group.
-					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
+					for (Player toUpdate : Bukkit.getOnlinePlayers()) {
 						if (toUpdate != null) {
 							if (group.toString().equals(getPlayerGroup(toUpdate))) {
 								//setup default modes
@@ -216,7 +216,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 			try {
 				if (PermissionEventEnums.GMSystem_Action.valueOf(event.getAction().name()) != null) {
 					// Update all players.
-					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
+					for (Player toUpdate : Bukkit.getOnlinePlayers()) {
 						if (toUpdate != null) {
 							//setup default modes
 							String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");

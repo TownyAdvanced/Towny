@@ -24,7 +24,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
 import org.apache.commons.lang.Validate;
@@ -806,10 +805,10 @@ public class TownyUniverse {
         List<String> out = new ArrayList<>();
         out.add(getTreeDepth(depth) + "Universe (1)");
         if (towny != null) {
-            out.add(getTreeDepth(depth + 1) + "Server (" + BukkitTools.getServer().getName() + ")");
-            out.add(getTreeDepth(depth + 2) + "Version: " + BukkitTools.getServer().getVersion());
+            out.add(getTreeDepth(depth + 1) + "Server (" + Bukkit.getServer().getName() + ")");
+            out.add(getTreeDepth(depth + 2) + "Version: " + Bukkit.getServer().getVersion());
             //out.add(getTreeDepth(depth + 2) + "Players: " + BukkitTools.getOnlinePlayers().length + "/" + BukkitTools.getServer().getMaxPlayers());
-            out.add(getTreeDepth(depth + 2) + "Worlds (" + BukkitTools.getWorlds().size() + "): " + Arrays.toString(BukkitTools.getWorlds().toArray(new World[0])));
+            out.add(getTreeDepth(depth + 2) + "Worlds (" + Bukkit.getWorlds().size() + "): " + Arrays.toString(Bukkit.getWorlds().toArray(new World[0])));
         }
         out.add(getTreeDepth(depth + 1) + "Worlds (" + worlds.size() + "):");
         for (TownyWorld world : worlds.values()) {

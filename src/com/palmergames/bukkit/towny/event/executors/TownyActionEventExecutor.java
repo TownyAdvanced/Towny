@@ -29,7 +29,6 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.util.ArraySort;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 
 /**
@@ -72,7 +71,7 @@ public class TownyActionEventExecutor {
 		/*
 		 * Fire the event to let other plugins/Towny's internal war make changes.
 		 */
-		BukkitTools.getPluginManager().callEvent((Event) event);
+		Bukkit.getPluginManager().callEvent((Event) event);
 
 		/*
 		 * Send any feedback when the action is denied.
@@ -269,7 +268,7 @@ public class TownyActionEventExecutor {
 		 * and other plugins have a say in the results.
 		 */
 		TownyExplodingBlocksEvent event = new TownyExplodingBlocksEvent(blockList, filteredBlocks, mat, entity, bukkitExplodeEvent);
-		BukkitTools.getPluginManager().callEvent(event);
+		Bukkit.getPluginManager().callEvent(event);
 
 		/*
 		 * Finally, return the results of the TownyExplodingBlockEvent
@@ -306,7 +305,7 @@ public class TownyActionEventExecutor {
 		 * and other plugins have a say in the results.
 		 */
 		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, harmedEntity, cause, TownyAPI.getInstance().getTownBlock(loc), cancelled);
-		BukkitTools.getPluginManager().callEvent(event);
+		Bukkit.getPluginManager().callEvent(event);
 
 		/*
 		 * Finally return the results after Towny lets its own 
@@ -337,7 +336,7 @@ public class TownyActionEventExecutor {
 		 * and other plugins have a say in the results.
 		 */
 		TownyBurnEvent event = new TownyBurnEvent(block, block.getLocation(), TownyAPI.getInstance().getTownBlock(block.getLocation()), cancelled);
-		BukkitTools.getPluginManager().callEvent(event);
+		Bukkit.getPluginManager().callEvent(event);
 		
 		/*
 		 * Finally return the results after Towny lets its own 

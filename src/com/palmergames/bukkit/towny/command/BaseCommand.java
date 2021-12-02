@@ -6,8 +6,8 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.NameUtil;
-import com.palmergames.bukkit.util.BukkitTools;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -240,7 +240,7 @@ public class BaseCommand implements TabCompleter{
 	
 	private static List<Resident> getOnlinePlayersWithoutTown() {
 		List<Resident> townlessResidents = new ArrayList<>();
-		for (Player player : BukkitTools.getOnlinePlayers()) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			if (resident.hasTown())
 				continue;

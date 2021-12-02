@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
-import com.palmergames.bukkit.util.BukkitTools;
 
 public class MoneyUtil {
 
@@ -49,7 +48,7 @@ public class MoneyUtil {
 			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
 			
 			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
-			BukkitTools.getPluginManager().callEvent(preEvent);
+			Bukkit.getPluginManager().callEvent(preEvent);
 			if (preEvent.isCancelled())
 				throw new TownyException(preEvent.getCancelMessage());
 			
@@ -57,7 +56,7 @@ public class MoneyUtil {
 			town.withdrawFromBank(resident, amount);
 
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_xx_withdrew_xx", resident.getName(), amount, Translatable.of("town_sing")));
-			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
+			Bukkit.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 			
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
@@ -73,7 +72,7 @@ public class MoneyUtil {
 			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
 			
 			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
-			BukkitTools.getPluginManager().callEvent(preEvent);
+			Bukkit.getPluginManager().callEvent(preEvent);
 			if (preEvent.isCancelled())
 				throw new TownyException(preEvent.getCancelMessage());
 			
@@ -87,7 +86,7 @@ public class MoneyUtil {
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_deposited_xx", resident.getName(), amount, town + " " + Translatable.of("town_sing")));
 			}
 			
-			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
+			Bukkit.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 			
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
@@ -103,7 +102,7 @@ public class MoneyUtil {
 			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
 			
 			NationPreTransactionEvent preEvent = new NationPreTransactionEvent(nation, transaction);
-			BukkitTools.getPluginManager().callEvent(preEvent);
+			Bukkit.getPluginManager().callEvent(preEvent);
 			
 			if (preEvent.isCancelled())
 				throw new TownyException(preEvent.getCancelMessage());
@@ -111,7 +110,7 @@ public class MoneyUtil {
 			// Withdraw from bank.
 			nation.withdrawFromBank(resident, amount);
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_withdrew_xx", resident.getName(), amount, Translatable.of("nation_sing")));
-			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
+			Bukkit.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 			
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
@@ -127,7 +126,7 @@ public class MoneyUtil {
 			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
 			
 			NationPreTransactionEvent preEvent = new NationPreTransactionEvent(nation, transaction);
-			BukkitTools.getPluginManager().callEvent(preEvent);
+			Bukkit.getPluginManager().callEvent(preEvent);
 			if (preEvent.isCancelled())
 				throw new TownyException(preEvent.getCancelMessage());
 			
@@ -135,7 +134,7 @@ public class MoneyUtil {
 			nation.depositToBank(resident, amount);
 			
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_deposited_xx", resident.getName(), amount, Translatable.of("nation_sing")));
-			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
+			Bukkit.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 			
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));

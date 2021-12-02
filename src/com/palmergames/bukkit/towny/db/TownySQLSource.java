@@ -26,11 +26,11 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.utils.MapUtil;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
@@ -156,7 +156,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		/*
 		 * Start our Async queue for pushing data to the database.
 		 */
-		task = BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+		task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
 
 			while (!TownySQLSource.this.queryQueue.isEmpty()) {
 

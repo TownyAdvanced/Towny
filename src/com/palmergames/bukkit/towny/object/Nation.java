@@ -14,9 +14,9 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -543,9 +543,9 @@ public class Nation extends Government {
 	@Override
 	public World getWorld() {
 		if (hasCapital() && getCapital().hasWorld()) {
-			return BukkitTools.getWorld(getCapital().getHomeblockWorld().getName());
+			return getCapital().getWorld();
 		} else {
-			return BukkitTools.getWorlds().get(0);
+			return Bukkit.getWorlds().get(0);
 		}
 	}
 
@@ -589,9 +589,9 @@ public class Nation extends Government {
 	@Deprecated
 	public World getBukkitWorld() {
 		if (hasCapital() && getCapital().hasWorld()) {
-			return BukkitTools.getWorld(getCapital().getHomeblockWorld().getName());
+			return getCapital().getWorld();
 		} else {
-			return BukkitTools.getWorlds().get(0);
+			return Bukkit.getWorlds().get(0);
 		}
 	}
 

@@ -257,7 +257,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		if (updateJoinedAt) {
 			setJoinedTownAt(System.currentTimeMillis());
-			BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
+			Bukkit.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
 		}
 	}
 	
@@ -268,7 +268,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		Town town = this.town;
 		
-		BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(this, town));
+		Bukkit.getPluginManager().callEvent(new TownRemoveResidentEvent(this, town));
 		try {
 			
 			town.removeResident(this);
@@ -529,7 +529,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	
 	@Nullable
 	public Player getPlayer() {
-		return BukkitTools.getPlayer(getName());
+		return Bukkit.getPlayer(getName());
 	}
 
 	public boolean addTownRank(String rank) {
@@ -537,7 +537,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			townRanks.add(rank);
 			if (isOnline())
 				TownyPerms.assignPermissions(this, null);
-			BukkitTools.getPluginManager().callEvent(new TownAddResidentRankEvent(this, rank, town));
+			Bukkit.getPluginManager().callEvent(new TownAddResidentRankEvent(this, rank, town));
 			return true;
 		}
 
@@ -574,7 +574,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			if (isOnline())
 				TownyPerms.assignPermissions(this, null);
 
-			BukkitTools.getPluginManager().callEvent(new TownRemoveResidentRankEvent(this, rank, town));
+			Bukkit.getPluginManager().callEvent(new TownRemoveResidentRankEvent(this, rank, town));
 			return true;
 		}
 
@@ -688,7 +688,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			if (player != null) {
 				world = player.getWorld();
 			} else {
-				world = BukkitTools.getWorlds().get(0);
+				world = Bukkit.getWorlds().get(0);
 			}
 
 			account = new EconomyAccount(accountName, world);
@@ -866,7 +866,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		if (player != null) {
 			return player.getWorld();
 		} else {
-			return BukkitTools.getWorlds().get(0);
+			return Bukkit.getWorlds().get(0);
 		}
 	}
 }

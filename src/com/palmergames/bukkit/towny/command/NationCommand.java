@@ -797,7 +797,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("add")) {
 
 				NationRankAddEvent nationRankAddEvent = new NationRankAddEvent(town.getNation(), rank, target);
-				BukkitTools.getPluginManager().callEvent(nationRankAddEvent);
+				Bukkit.getPluginManager().callEvent(nationRankAddEvent);
 				
 				if (nationRankAddEvent.isCancelled()) {
 					TownyMessaging.sendErrorMsg(player, nationRankAddEvent.getCancelMessage());
@@ -805,7 +805,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				if (target.addNationRank(rank)) {
-					if (BukkitTools.isOnline(target.getName())) {
+					if (target.isOnline()) {
 						TownyMessaging.sendMsg(target.getPlayer(), Translatable.of("msg_you_have_been_given_rank", "Nation", rank));
 						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}
@@ -819,7 +819,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("remove")) {
 
 				NationRankRemoveEvent nationRankRemoveEvent = new NationRankRemoveEvent(town.getNation(), rank, target);
-				BukkitTools.getPluginManager().callEvent(nationRankRemoveEvent);
+				Bukkit.getPluginManager().callEvent(nationRankRemoveEvent);
 
 				if (nationRankRemoveEvent.isCancelled()) {
 					TownyMessaging.sendErrorMsg(player, nationRankRemoveEvent.getCancelMessage());
@@ -1067,7 +1067,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		town.save();
 		nation.save();
 
-		BukkitTools.getPluginManager().callEvent(new NewNationEvent(nation));
+		Bukkit.getPluginManager().callEvent(new NewNationEvent(nation));
 
 		return nation;
 	}
@@ -1088,11 +1088,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_invalid_name", name));
 
 		Resident king = nation.getKing();
-		if (!BukkitTools.isOnline(king.getName())) {
+		if (!king.isOnline())
 			throw new TownyException(Translatable.of("msg_err_king_of_that_nation_is_not_online", name, king.getName()));
-		}
 
-		TownyMessaging.sendMsg(BukkitTools.getPlayer(king.getName()), Translatable.of("msg_would_you_merge_your_nation_into_other_nation", nation, remainingNation, remainingNation));
+		TownyMessaging.sendMsg(king, Translatable.of("msg_would_you_merge_your_nation_into_other_nation", nation, remainingNation, remainingNation));
 		if (TownySettings.getNationRequiresProximity() > 0) {
 			List<Town> towns = new ArrayList<>(nation.getTowns());
 			towns.addAll(remainingNation.getTowns());
@@ -1112,7 +1111,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			try {
-				BukkitTools.getPluginManager().callEvent(new NationMergeEvent(nation, remainingNation));
+				Bukkit.getPluginManager().callEvent(new NationMergeEvent(nation, remainingNation));
 				TownyUniverse.getInstance().getDataSource().mergeNation(nation, remainingNation);
 				TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
 				if (TownySettings.getNationRequiresProximity() > 0)
@@ -1121,7 +1120,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 			}
 		})
-			.sendTo(BukkitTools.getPlayerExact(king.getName()));
+			.sendTo(Bukkit.getPlayerExact(king.getName()));
 	}
 	
 	public void nationLeave(Player player) {

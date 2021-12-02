@@ -22,7 +22,6 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
-import com.palmergames.bukkit.util.BukkitTools;
 
 import net.citizensnpcs.api.CitizensAPI;
 
@@ -139,7 +138,7 @@ public class TownyEntityMonitorListener implements Listener {
 			 */
 			if (attackerPlayer != null && attackerResident != null) {
 				PlayerKilledPlayerEvent deathEvent = new PlayerKilledPlayerEvent(attackerPlayer, defenderPlayer, attackerResident, defenderResident, defenderPlayer.getLocation(), event);
-				BukkitTools.getPluginManager().callEvent(deathEvent);
+				Bukkit.getPluginManager().callEvent(deathEvent);
 
 				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
 				isJailingAttackers(attackerPlayer, defenderPlayer, attackerResident, defenderResident);

@@ -139,7 +139,7 @@ public class TownyMessaging {
 	 */
 	public static void sendDevMsg(String msg) {
 		if (TownySettings.isDevMode()) {
-			Player townyDev = BukkitTools.getPlayer(TownySettings.getDevName());
+			Player townyDev = Bukkit.getPlayer(TownySettings.getDevName());
 			if (townyDev != null)
 				townyDev.sendMessage(Translatable.of("default_towny_prefix").forLocale(townyDev) + " DevMode: " + ChatColor.RED + msg);
 		}
@@ -220,7 +220,7 @@ public class TownyMessaging {
 	 */
 	public static void sendGlobalMessage(String line) {
 		LOGGER.info(ChatTools.stripColour("[Global Message] " + line));
-		for (Player player : BukkitTools.getOnlinePlayers()) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
 				player.sendMessage(Translation.of("default_towny_prefix") + line);
 		}
@@ -234,7 +234,7 @@ public class TownyMessaging {
 	 */
 	public static void sendPlainGlobalMessage(String line) {
 		LOGGER.info(ChatTools.stripColour("[Global Message] " + line));
-		for (Player player : BukkitTools.getOnlinePlayers()) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
 				player.sendMessage(line);
 		}		
@@ -942,7 +942,7 @@ public class TownyMessaging {
 		for (String line : lines) {
 			LOGGER.info(ChatTools.stripColour("[Global Msg] " + line));
 		}
-		for (Player player : BukkitTools.getOnlinePlayers()) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player != null) {
 				for (String line : lines) {
 					player.sendMessage(Translation.of("default_towny_prefix") + line);

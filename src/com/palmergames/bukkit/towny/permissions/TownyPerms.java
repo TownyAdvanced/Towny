@@ -9,7 +9,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.util.BukkitTools;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -140,7 +140,7 @@ public class TownyPerms {
 			if (resident == null)
 				return;
 		} else {
-			player = BukkitTools.getPlayer(resident.getName());
+			player = Bukkit.getPlayer(resident.getName());
 		}
 
 		/*
@@ -162,7 +162,7 @@ public class TownyPerms {
 		else
 			// DungeonsXL sometimes moves players which aren't online out of dungeon worlds causing an error in the log to appear.
 			try {
-				playersAttachment = BukkitTools.getPlayer(resident.getName()).addAttachment(plugin);
+				playersAttachment = Bukkit.getPlayer(resident.getName()).addAttachment(plugin);
 			} catch (Exception e) {
 				return;
 			}
@@ -223,7 +223,7 @@ public class TownyPerms {
 	 */
 	public static void updateOnlinePerms() {
 		
-		for (Player player : BukkitTools.getOnlinePlayers()) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
 			assignPermissions(null, player);
 		}
 		
@@ -525,7 +525,7 @@ public class TownyPerms {
 
 		registeredPermissions.clear();
 
-		for (Permission perm : BukkitTools.getPluginManager().getPermissions()) {
+		for (Permission perm : Bukkit.getPluginManager().getPermissions()) {
 			registeredPermissions.put(perm.getName().toLowerCase(), perm);
 		}
 
