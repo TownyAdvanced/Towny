@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.97.3.3</version>
+    <version>0.97.4.0</version>
 
     <licenses>
         <license>
