@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.135
+version: 0.136
 language: Dutch
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1402,3 +1402,5 @@ tc_player_channel_sound_muted: 'Het kanaal geluid is uitgeschakeld'
 tc_player_channel_sound_unmuted: 'Het kanaal geluid is ingeschakeld'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Er is een buitenstaander op je plot, Je kunt je pvp status niet aanpassen!'
+#Added in 0.136
+msg_view_on_web: 'Click to view on the web.'
