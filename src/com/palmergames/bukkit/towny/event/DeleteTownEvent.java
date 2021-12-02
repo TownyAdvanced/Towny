@@ -1,7 +1,9 @@
 package com.palmergames.bukkit.towny.event;
 
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -22,10 +24,13 @@ public class DeleteTownEvent extends TownyObjDeleteEvent  {
 	}
 
     private final UUID mayorUUID;
+	private final Resident mayor;
     
-    public DeleteTownEvent(Town town, UUID uuid) {
+    public DeleteTownEvent(Town town, @Nullable Resident mayor) {
     	super(town.getName(), town.getUUID(), town.getRegistered());
-    	mayorUUID = uuid;
+
+		this.mayor = mayor;
+    	this.mayorUUID = mayor == null ? null : mayor.getUUID();
     }
 
     /**
@@ -53,10 +58,18 @@ public class DeleteTownEvent extends TownyObjDeleteEvent  {
 	}
 
 	/**
-	 * @return the deleted town's mayor's UUID.
+	 * @return the deleted town's mayor's UUID, or {@code null}.
 	 */
+	@Nullable
 	public UUID getMayorUUID() {
 		return mayorUUID;
 	}
-    
+
+	/**
+	 * @return The deleted town's mayor, or {@code null}.
+	 */
+	@Nullable
+	public Resident getMayor() {
+		return mayor;
+	}
 }
