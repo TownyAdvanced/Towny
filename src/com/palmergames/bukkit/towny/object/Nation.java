@@ -659,4 +659,40 @@ public class Nation extends Government {
 		setUUID(uuid);
 	}
 
+	/**
+	 * Get the Nation's current Nation Level.
+	 * <p>
+	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
+	 *     and may be different from the default configuration.	 
+	 * </p>
+	 * @return Nation Level (int) for current population.
+	 */
+	public int getLevel() {
+		return getLevel(this.getNumResidents());
+	}
+
+	/**
+	 * Get the maximum level a Nation may achieve.
+	 * @return Size of TownySettings' configNationLevel SortedMap.
+	 */
+	public int getMaxLevel() {
+		return TownySettings.getConfigNationLevel().size();
+	}
+
+	/**
+	 * Get the Nation's Level for a supposed population size.
+	 * <p>
+	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
+	 *     and may be different from the default configuration.	 
+	 * </p>
+	 * @param populationSize Number of residents in the Nation, theoretical or real.
+	 * @return Nation Level (int) for the supplied populationSize.
+	 */
+	public int getLevel(int populationSize) {
+		for (Integer level : TownySettings.getConfigNationLevel().keySet())
+			if (populationSize >= level)
+				return level;
+		return 0;
+	}
+
 }

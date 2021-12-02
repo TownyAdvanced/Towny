@@ -204,44 +204,47 @@ public class TownySettings {
 
 	public static Map<TownySettings.TownLevel, Object> getTownLevel(Town town) {
 
-		return getTownLevel(calcTownLevel(town));
+		return getTownLevel(town.getLevel());
 	}
 
 	public static Map<TownySettings.TownLevel, Object> getTownLevel(Town town, int residents) {
-		return getTownLevel(calcTownLevel(town, residents));
+		return getTownLevel(town.getLevel(residents));
 	}
 
 	public static Map<TownySettings.NationLevel, Object> getNationLevel(Nation nation) {
 
-		return getNationLevel(calcNationLevel(nation));
+		return getNationLevel(nation.getLevel());
 	}
 
 	public static CommentedConfiguration getConfig() {
 		return config;
 	}
 
+	/**
+	 * Get the town level of a specific Town.
+	 * @param town Supplied Town to evaluate.
+	 * @return The Town's Level
+	 * @deprecated Use {@link Town#getLevel()}.
+	 */
+	@Deprecated
 	public static int calcTownLevel(Town town) {
-//Creatorfromhell's PR for replacing SortedMap town and nation levels.
-//		Integer level = configTownLevel.floorKey(town.getNumResidents());
-//
-//		if (level != null) return level;
-//		return 0;
-		if(town.isRuined())
-			return 0;
-		int n = town.getNumResidents();
-		for (Integer level : configTownLevel.keySet())
-			if (n >= level)
-				return level;
-		return 0;
+		return town.getLevel();
 	}
 
+	/**
+	 * Get the (theoretical) town level of a given Town, supplying the number of residents they would have.
+	 * <p>
+	 *     Note: Town levels are not hard-coded. They can be defined by the server administrator, and may be different from
+	 *     the default configuration.
+	 * </p>
+	 * @param town Supplied Town to evaluate.
+	 * @param residents Number of residents to force the calculation.
+	 * @return The supposed Town Level. 0, if the town is ruined, or the method otherwise fails through.
+	 * @deprecated Use {@link Town#getLevel(int)}.
+	 */
+	@Deprecated
 	public static int calcTownLevel(Town town, int residents) {
-		if (town.isRuined())
-			return 0;
-		for (int level : configTownLevel.keySet())
-			if (residents >= level)
-				return level;
-		return 0;
+		return town.getLevel(residents);
 	}
 
 	/**
@@ -254,31 +257,22 @@ public class TownySettings {
 	 *
 	 * @param town Town to test for.
 	 * @return id
+	 * @deprecated Use {@link Town#getLevelID()}.
 	 */
+	@Deprecated
 	public static int calcTownLevelId(Town town) {
-		if(town.isRuined())
-			return 0;
-
-		int townLevelId = -1;
-		int numResidents = town.getNumResidents();
-		for (Integer level : configTownLevel.keySet()) {
-			if (level <= numResidents)
-				townLevelId ++;
-		}
-		return townLevelId;
+		return town.getLevelID();
 	}
 
+	/**
+	 * Get the level of a specific Nation.
+	 * @param nation Supplied Nation to evaluate.
+	 * @return Nation Level of the given nation.
+	 * @deprecated Use {@link Nation#getLevel()}.
+	 */
+	@Deprecated
 	public static int calcNationLevel(Nation nation) {
-//Creatorfromhell's PR for replacing SortedMap town and nation levels.
-//		Integer level = configNationLevel.floorKey(nation.getNumResidents());
-//
-//		if (level != null) return level;
-//		return 0;
-		int n = nation.getNumResidents();
-		for (Integer level : configNationLevel.keySet())
-			if (n >= level)
-				return level;
-		return 0;
+		return nation.getLevel();
 	}
 
 	public static void loadConfig(Path configPath, String version) {
@@ -3039,6 +3033,14 @@ public class TownySettings {
 	
 	public static String getWebMapUrl() {
 		return getString(ConfigNodes.PLUGIN_WEB_MAP_URL);
+	}
+	
+	public static SortedMap<Integer, Map<TownLevel, Object>> getConfigTownLevel(){
+		return configTownLevel;
+	}
+	
+	public static SortedMap<Integer, Map<NationLevel, Object>> getConfigNationLevel() {
+		return configNationLevel;
 	}
 }
 

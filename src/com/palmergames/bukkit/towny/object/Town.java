@@ -1643,4 +1643,74 @@ public class Town extends Government implements TownBlockOwner {
 	public boolean isNeutral() {
 		return TownySettings.nationCapitalsCantBeNeutral() && isCapital() ? false : isNeutral;
 	}
+
+	/**
+	 * Get the Town's current level, based on its population.
+	 * <p>
+	 *     Note that Town Levels are not hard-coded. They can be defined by the server administrator,
+	 *     and may be different from the default configuration.
+	 * </p>
+	 * @return Current Town Level.
+	 */
+	public int getLevel() {
+		return getLevel(this.getNumResidents());
+	}
+
+	/**
+	 * Get the town level for a given population size.
+	 * <p>
+	 *     Great for debugging, or just to see what the town level is for a given amount of residents. 
+	 *     But for most cases you'll want to use {@link Town#getLevel()}, which uses the town's current population.
+	 *     <br />
+	 *     Note that Town Levels are not hard-coded. They can be defined by the server administrator,
+	 *     and may be different from the default configuration.
+	 * </p>
+	 * @param populationSize Number of residents used to calculate the level.
+	 * @return The calculated Town Level. 0, if the town is ruined, or the method otherwise fails through.
+	 */
+	public int getLevel(int populationSize) {
+		if (this.isRuined())
+			return 0;
+		for (int level : TownySettings.getConfigTownLevel().keySet())
+			if (populationSize >= level)
+				return level;
+		return 0;
+	}
+
+	/**
+	 * Get the maximum level a Town may achieve.
+	 * @return Size of TownySettings' configTownLevel SortedMap.
+	 */
+	public int getMaxLevel() {
+		return TownySettings.getConfigTownLevel().size();
+	}
+
+	/**
+	 * Returns the Town Level ID.
+	 * <p>
+	 *     Note, this is not the Town Level, but an associated classifier.
+	 *     If you need a Town's level, use {@link Town#getLevel()} or {@link Town#getLevel(int)}.
+	 *     Due to Town Levels being configurable by administrators, caution is advised when relying on this method.
+	 *     See <a href="https://github.com/TownyAdvanced/TownyResources">TownyResources</a>
+	 *     or <a href="https://github.com/TownyAdvanced/SiegeWar">SiegeWar</a> for example usages.
+	 *     <br />
+	 *     e.g.
+	 *     ruins = 0
+	 * 	   hamlet = 1
+	 * 	   village = 2
+	 * </p> 
+	 *
+	 * @return id
+	 */
+	public int getLevelID() {
+		if(this.isRuined())
+			return 0;
+
+		int townLevelId = -1;
+		for (Integer level : TownySettings.getConfigTownLevel().keySet()) {
+			if (level <= this.getNumResidents())
+				townLevelId ++;
+		}
+		return townLevelId;
+	}
 }
