@@ -700,7 +700,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								return false;
 							}
 
-							if (TownBlockType.ARENA.equals(townBlockType) && TownySettings.getOutsidersPreventPVPToggle()) {
+							if (TownBlockType.ARENA.equals(type) && TownySettings.getOutsidersPreventPVPToggle()) {
 								for (Player target : Bukkit.getOnlinePlayers()) {
 									if (!townBlock.getTownOrNull().hasResident(target) && !player.getName().equals(target.getName()) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
 										throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
