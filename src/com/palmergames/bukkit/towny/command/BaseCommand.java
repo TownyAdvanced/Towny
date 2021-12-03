@@ -2,8 +2,11 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -217,6 +220,18 @@ public class BaseCommand implements TabCompleter{
 	}
 
 	@NotNull
+	protected static Town getTownFromPlayerOrThrow(Player player) throws TownyException {
+		return getTownFromResidentOrThrow(getResidentOrThrow(player.getUniqueId()));
+	}
+
+	@NotNull
+	protected static Town getTownFromResidentOrThrow(@NotNull Resident resident) throws TownyException {
+		if (!resident.hasTown())
+			throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
+		return resident.getTownOrNull();
+	}
+
+	@NotNull
 	protected static Resident getResidentOrThrow(UUID playerUUID) throws NotRegisteredException {
 		Resident res = TownyUniverse.getInstance().getResident(playerUUID);
 
@@ -238,6 +253,28 @@ public class BaseCommand implements TabCompleter{
 		return res;
 	}
 	
+	@NotNull
+	protected static Nation getNationOrThrow(String nationName) throws NotRegisteredException {
+		Nation nation = TownyUniverse.getInstance().getNation(nationName);
+
+		if (nation == null)
+			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", nationName));
+
+		return nation;
+	}
+
+	@NotNull
+	protected static Nation getNationFromPlayerOrThrow(Player player) throws TownyException {
+		return getNationFromResidentOrThrow(getResidentOrThrow(player.getUniqueId()));
+	}
+
+	@NotNull
+	protected static Nation getNationFromResidentOrThrow(Resident resident) throws TownyException {
+		if (!resident.hasNation())
+			throw new TownyException(Translatable.of("msg_err_dont_belong_nation"));
+		return resident.getNationOrNull();
+	}
+
 	private static List<Resident> getOnlinePlayersWithoutTown() {
 		List<Resident> townlessResidents = new ArrayList<>();
 		for (Player player : BukkitTools.getOnlinePlayers()) {

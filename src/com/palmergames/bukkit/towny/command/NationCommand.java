@@ -393,25 +393,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 
-	private static Nation getNationOrThrow(String nationName) throws NotRegisteredException {
-		Nation nation = TownyUniverse.getInstance().getNation(nationName);
-
-		if (nation == null)
-			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", nationName));
-
-		return nation;
-	}
-
-	private static Nation getNationFromPlayerOrThrow(Player player) throws TownyException {
-		return getNationFromResidentOrThrow(getResidentOrThrow(player.getUniqueId()));
-	}
-	
-	private static Nation getNationFromResidentOrThrow(Resident resident) throws TownyException {
-		if (!resident.hasNation())
-			throw new TownyException(Translatable.of("msg_err_dont_belong_nation"));
-		return resident.getNationOrNull();
-	}
-
 	/**
 	 * Returns a nation from the player if args is empty or from the name supplied at arg[0].  
 	 * @param player {@link Player} to try and get a nation from when args is empty.
