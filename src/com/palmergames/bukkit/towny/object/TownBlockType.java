@@ -89,7 +89,7 @@ public class TownBlockType {
 	}
 
 	/**
-	 * @deprecated As of 0.97.3.0, please use {@link TownBlockTypeHandler#getType(String)} instead.
+	 * @deprecated As of 0.97.5.0, please use {@link TownBlockTypeHandler#getType(String)} instead.
 	 */
 	@Nullable
 	@Deprecated
@@ -98,7 +98,7 @@ public class TownBlockType {
 	}
 
 	/**
-	 * @deprecated As of 0.97.3.0, please use {@link TownBlockTypeHandler#getType(String)} instead.
+	 * @deprecated As of 0.97.5.0, please use {@link TownBlockTypeHandler#getType(String)} instead.
 	 */
 	@Nullable
 	@Deprecated
