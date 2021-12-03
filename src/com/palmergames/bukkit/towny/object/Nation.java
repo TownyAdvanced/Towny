@@ -267,7 +267,7 @@ public class Nation extends Government {
 
 	public List<Resident> getAssistants() {
 
-		return towns.stream().flatMap(town -> town.getResidents().stream()).filter(assistant -> assistant.hasNationRank("assistant")).collect(Collectors.toList());
+		return this.getResidents().stream().filter(assistant -> assistant.hasNationRank("assistant")).collect(Collectors.toList());
 	}
 
 	public void setEnemies(List<Nation> enemies) {
