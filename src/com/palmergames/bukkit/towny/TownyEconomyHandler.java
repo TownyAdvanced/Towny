@@ -20,8 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import java.util.UUID;
-
 /**
  * Economy handler to interface with Register or Vault directly.
  * 
@@ -122,58 +120,6 @@ public class TownyEconomyHandler {
 		/*
 		 * No compatible Economy system found.
 		 */
-		return false;
-	}
-
-	
-	// This was removed because:
-	// 1.) Only we should handle concrete account classes
-	// 2.) This was unused anyways.
-//	/**
-//	 * Returns the relevant player's economy account
-//	 * 
-//	 * @param accountName - Name of the player's account (usually playername)
-//	 * @return - The relevant player's economy account
-//	 */
-//	@SuppressWarnings("unused")
-//	private static Object getEconomyAccount(String accountName) {
-//
-//		switch (Type) {
-//
-//		case RESERVE:
-//			if(reserveEconomy instanceof ExtendedEconomyAPI)
-//				return ((ExtendedEconomyAPI)reserveEconomy).getAccount(accountName);
-//			break;
-//		
-//		default:
-//			break;
-//
-//		}
-//
-//		return null;
-//	}
-	
-	// We don't even use UUID's right now?
-	/**
-	 * Check if account exists
-	 * 
-	 * @param uniqueId the UUID of the account to check
-	 * @return true if the account exists
-	 */
-	public static boolean hasEconomyAccount(UUID uniqueId) {
-//		switch (Type) {
-//
-//		case RESERVE:
-//		    return reserveEconomy.hasAccountDetail(uniqueId).success();
-//			
-//		case VAULT:
-//			return vaultEconomy.hasAccount(Bukkit.getOfflinePlayer(uniqueId));
-//			
-//		default:
-//			break;
-//
-//		}
-//
 		return false;
 	}
 
@@ -323,16 +269,18 @@ public class TownyEconomyHandler {
 	private static void checkNewAccount(String accountName) {
 		// Check if the account exists, if not create one.
 		if (!economy.hasAccount(accountName)) {
+//			if (isEssentials()) {
+//				plugin.getLogger().info("Vault told Towny that the " + accountName + " economy account does not exist yet. Requesting a new account.");
+//			}
 			economy.newAccount(accountName);
 		}
-	}
-	
-	public static void newAccount(String accountName) {
-		economy.newAccount(accountName);
 	}
 	
 	public static boolean hasAccount(String accountName) {
 		return economy.hasAccount(accountName);
 	}
 
+	public static boolean isEssentials() {
+		return getVersion().startsWith("EssentialsX Economy") || getVersion().startsWith("Essentials Economy");
+	}
 }

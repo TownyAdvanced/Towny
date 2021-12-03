@@ -452,8 +452,8 @@ public class Towny extends JavaPlugin {
 		if (TownySettings.isUsingEconomy()) {			
 			if (TownyEconomyHandler.setupEconomy()) {
 				economy = "  Economy: " + TownyEconomyHandler.getVersion();				
-				if (TownyEconomyHandler.getVersion().startsWith("Essentials Economy"))
-					ecowarn = "Warning: This version of Essentials Economy has been known to reset town and nation bank accounts to their default amount. Update your EssentialsX to version 2.19.0 or newer: https://essentialsx.net/downloads.html";
+				if (TownyEconomyHandler.isEssentials())
+					ecowarn = "Warning: EssentialsX Economy has been known to reset town and nation bank accounts on rare occasions.";
 				
 		        File f = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");                   // For a short time Towny stored debt accounts in the server's
 		        if (!f.exists())                                                                                               // economy plugin. This practice had to end, being replaced 
