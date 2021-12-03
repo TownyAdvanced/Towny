@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -134,7 +135,7 @@ public class TownySettings {
 					Double.parseDouble(level.get("debtCapModifier").toString())
 				);
 			} catch (NullPointerException e) {
-				Towny.getPlugin().getLogger().warning("Your Towny config.yml's town_level section is out of date.");
+				Towny.getPlugin().getLogger().warning("The town_level section of you Towny config.yml is out of date.");
 				Towny.getPlugin().getLogger().warning("This can be fixed automatically by deleting the town_level section and letting Towny remake it on the next startup.");
 				throw new IOException("Config.yml town_levels incomplete.");
 			}
@@ -313,8 +314,7 @@ public class TownySettings {
 		for (String matName : switches) {
 			if (ItemLists.GROUPS.contains(matName)) {
 				List<String> group = ItemLists.getGrouping(matName);
-				if (group != null && !group.isEmpty())
-					SwitchUseMaterials.addAll(group);
+				SwitchUseMaterials.addAll(group);
 			} else {
 				SwitchUseMaterials.add(matName);
 			}
@@ -329,8 +329,7 @@ public class TownySettings {
 		for (String matName : items) {
 			if (ItemLists.GROUPS.contains(matName)) {
 				List<String> group = ItemLists.getGrouping(matName);
-				if (group != null && !group.isEmpty())
-					ItemUseMaterials.addAll(group);
+				ItemUseMaterials.addAll(group);
 			} else {
 				ItemUseMaterials.add(matName);
 			}
@@ -346,9 +345,9 @@ public class TownySettings {
 		String configString = config.getString(node.getRoot());
 		SpawnLevel spawnLevel;
 		if (configString != null) {
-			spawnLevel = SpawnLevel.valueOf(configString.toUpperCase());
+			spawnLevel = SpawnLevel.valueOf(configString.toUpperCase(Locale.ROOT));
 		} else {
-			spawnLevel = SpawnLevel.valueOf(node.getDefault().toUpperCase());
+			spawnLevel = SpawnLevel.valueOf(node.getDefault().toUpperCase(Locale.ROOT));
 		}
 		return spawnLevel;
 	}
@@ -357,9 +356,9 @@ public class TownySettings {
 		String configString = config.getString(node.getRoot());
 		NSpawnLevel level;
 		if (configString != null) {
-			level = NSpawnLevel.valueOf(configString.toUpperCase());
+			level = NSpawnLevel.valueOf(configString.toUpperCase(Locale.ROOT));
 		} else {
-			level = NSpawnLevel.valueOf(node.getDefault().toUpperCase());
+			level = NSpawnLevel.valueOf(node.getDefault().toUpperCase(Locale.ROOT));
 		}
 		return level;
 	}

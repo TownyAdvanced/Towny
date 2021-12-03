@@ -209,7 +209,7 @@ public class Town extends Government implements TownBlockOwner {
 		if (!hasNation())
 			return;
 		
-		Nation nulling = this.nation;
+		Nation oldNation = this.nation;
 				
 		for (Resident res : getResidents()) {
 			if (res.hasTitle() || res.hasSurname()) {
@@ -221,9 +221,9 @@ public class Town extends Government implements TownBlockOwner {
 		}
 
 		try {
-			nulling.removeTown(this);
+			oldNation.removeTown(this);
 		} catch (EmptyNationException e) {
-			TownyUniverse.getInstance().getDataSource().removeNation(nulling);
+			TownyUniverse.getInstance().getDataSource().removeNation(oldNation);
 			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", e.getNation().getName()));
 		}
 		
@@ -240,7 +240,7 @@ public class Town extends Government implements TownBlockOwner {
 		setJoinedNationAt(0);
 		
 		this.save();
-		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(this, nulling));
+		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(this, oldNation));
 	}
 	
 	public void setNation(Nation nation) throws AlreadyRegisteredException {
@@ -975,16 +975,23 @@ public class Town extends Government implements TownBlockOwner {
 
 	public double getPlotTypePrice(TownBlockType type) {
 
-		double plotTypePrice = switch (type.ordinal()) {
-			case 1 -> getCommercialPlotPrice();
-			case 3 -> getEmbassyPlotPrice();
-			default -> getPlotPrice();
-		};
-		// check price isn't negative
-		if (plotTypePrice < 0)
-			plotTypePrice = 0;
+		double plotPrice;
+		switch (type.ordinal()) {
+		case 1:
+			plotPrice = getCommercialPlotPrice();
+			break;
+		case 3:
+			plotPrice = getEmbassyPlotPrice();
+			break;
+		default:
+			plotPrice = getPlotPrice();
 
-		return plotTypePrice;
+		}
+		// check price isn't negative
+		if (plotPrice < 0)
+			plotPrice = 0;
+
+		return plotPrice;
 	}
 
 	public void setCommercialPlotPrice(double commercialPlotPrice) {
