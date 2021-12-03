@@ -7019,3 +7019,5 @@ v0.92.0.11:
   - Fix javadoc warning, courtesy of Warriorrrr with PR #5495.
   - Schedule the next newday scheduler 1 minute after a new day happens instead of 1 second after. 
   - Fix NewDay time code returning negative for some time zones. 
+0.97.5.0:
+  - Bump version number for hotfix release.
