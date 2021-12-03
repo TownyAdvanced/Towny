@@ -95,7 +95,7 @@ public class NewDayScheduler extends TownyTimerTask {
 		// Calculate the TimeZone specific offset (including DST)
 		int timeOffset = timeZone.getOffset(timeMilli)/1000;
 
-		return (secondsInDay + (TownySettings.getNewDayTime() - ((timeMilli/1000) % secondsInDay) - timeOffset)) % secondsInDay;
+		return Math.floorMod(secondsInDay + (TownySettings.getNewDayTime() - ((timeMilli/1000) % secondsInDay) - timeOffset), secondsInDay);
 	}
 
 }
