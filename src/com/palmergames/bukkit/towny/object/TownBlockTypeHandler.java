@@ -151,7 +151,7 @@ public final class TownBlockTypeHandler {
 	private static double parseDouble(String string) {
 		try {
 			return Double.parseDouble(string);
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException | NullPointerException e) {
 			return 0.0D;
 		}
 	}
