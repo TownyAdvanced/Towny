@@ -7023,3 +7023,4 @@ v0.92.0.11:
   - Bump version number for hotfix release.
 0.97.5.1:
   - Add helpful methods to BaseCommand.
+  - Fix regex used to split the townyperms.yml error message.

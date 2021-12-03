@@ -117,7 +117,7 @@ public class TownyPerms {
 		if (!group.contains("."))
 			return "Your townyperms.yml is missing the " + group + " group. Maybe you renamed it?";
 		
-		String[] split = group.split(".");
+		String[] split = group.split("\\.");
 		return "Your townyperms.yml's " + split[0] + " section is missing the " + split[1] + " group. Maybe you renamed it?"; 
 	}
 
