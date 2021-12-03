@@ -1403,4 +1403,4 @@ tc_player_channel_sound_unmuted: 'Kanał Dzwięku został odciszony'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Na działce znajduje się outsider, nie można zmienić statusu pvp!'
 #Added in 0.136
-msg_view_on_web: 'Click to view on the web.'
+msg_view_on_web: 'Kliknij, aby wyświetlić na stronie.'
