@@ -617,30 +617,19 @@ public class Town extends Government implements TownBlockOwner {
 			&& TownySettings.getNationRequiresProximity() > 0
 			&& townNation.getCapital().hasHomeBlock() && hasHomeBlock()) {
 			
-			WorldCoord capitalCoord = null;
-			WorldCoord townCoord = null;
-			try {
-				capitalCoord = townNation.getCapital().getHomeBlock().getWorldCoord();
-				townCoord = this.getHomeBlock().getWorldCoord();
-			} catch (TownyException ignored) {}
+			WorldCoord capitalCoord = townNation.getCapital().getHomeBlockOrNull().getWorldCoord();
+			WorldCoord townCoord = this.getHomeBlockOrNull().getWorldCoord();
 			
 			if (!townNation.getCapital().getHomeblockWorld().equals(getHomeblockWorld())) {
 				TownyMessaging.sendNationMessagePrefixed(townNation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
 				removeNation();
 			}
 			
-			double distance;
-			if (capitalCoord != null && townCoord != null) {
-				int x1 = capitalCoord.getX();
-				int x2 = townCoord.getX();
-				int y1 = capitalCoord.getZ();
-				int y2 = townCoord.getZ();
-				distance = MathUtil.distance(x1, x2, y1, y2);
-			} else {
-				distance = 0;
-				TownyMessaging.sendErrorMsg(String.format("(%s): Missing HomeBlock for either the Capitol or here!",
-					this.getName()));
-			}
+			int x1 = capitalCoord.getX();
+			int x2 = townCoord.getX();
+			int y1 = capitalCoord.getZ();
+			int y2 = townCoord.getZ();
+			double  distance = MathUtil.distance(x1, x2, y1, y2);
 			
 			if (distance > TownySettings.getNationRequiresProximity()) {
 				TownyMessaging.sendNationMessagePrefixed(townNation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
