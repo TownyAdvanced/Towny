@@ -7027,3 +7027,8 @@ v0.92.0.11:
   - API: Added StatusScreenEvent#getCommandSender()
     - It is now possible to learn who is going to view the StatusScreen being made.
   - Fix expired invite handler not accounting for sent nation ally invites.
+  - New /ta merging commands, courtesy of Gamer153 with PR #5491. (First-Time Contributor!)
+  - New Command: /ta town [townname] merge [townname] - Asks the 2nd town if they want to merge with the first.
+  - New Command: /ta town [townname] forcemerge [townname] - Forcefully merges the 2nd town into the first.
+  - New Command: /ta nation [nationname] merge [nationname] - Asks the 2nd nation if they want to merge with the first.
+  - New Command: /ta nation [townname] forcemerge [townname] - Forcefully merges the 2nd nation into the first.

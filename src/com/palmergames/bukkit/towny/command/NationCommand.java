@@ -1101,10 +1101,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
 			if (TownySettings.getNationRequiresProximity() > 0)
 				remainingNation.removeOutOfRangeTowns();
-			}).runOnCancel(() -> {
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_request_denied"));     // These messages don't use the word Town or Nation.
-				TownyMessaging.sendMsg(nation.getKing(), Translatable.of("msg_town_merge_cancelled"));
-			}).sendTo(BukkitTools.getPlayerExact(king.getName()));
+		}).runOnCancel(() -> {
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_request_denied"));     // These messages don't use the word Town or Nation.
+			TownyMessaging.sendMsg(nation.getKing(), Translatable.of("msg_town_merge_cancelled"));
+		}).sendTo(BukkitTools.getPlayerExact(king.getName()));
 	}
 	
 	public void nationLeave(Player player) {
