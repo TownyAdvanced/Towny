@@ -133,7 +133,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"leavenation",
 		"invite",
 		"unruin",
-		"trust"
+		"trust",
+		"merge",
+		"forcemerge"
 	);
 
 	private static final List<String> adminNationTabCompletes = Arrays.asList(
@@ -149,7 +151,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"bankhistory",
 		"rank",
 		"enemy",
-		"ally"
+		"ally",
+		"merge",
+		"forcemerge"
 	);
 
 	private static final List<String> adminToggleTabCompletes = Arrays.asList(
@@ -427,6 +431,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[3]);
 							if (args.length == 5)
 								return getTownyStartingWith(args[4], "r");
+						case "merge", "forcemerge":
+							if (args.length == 4)
+								return getTownyStartingWith(args[3], "t");
 						default:
 							if (args.length == 3)
 								return NameUtil.filterByStart(adminTownTabCompletes, args[2]);
@@ -457,7 +464,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return Collections.emptyList();
 							}
 						}
-						case "merge":
+						case "merge", "forcemerge":
 							if (args.length == 4)
 								return getTownyStartingWith(args[3], "n");
 						case "rank":
@@ -1342,6 +1349,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 			} else if (split[1].equalsIgnoreCase("trust")) {
 				TownCommand.parseTownTrustCommand(player, StringMgmt.remArgs(split, 2), town);
+			} else if (split[1].equalsIgnoreCase("merge")) {
+				TownCommand.parseTownMergeCommand(sender, StringMgmt.remArgs(split, 2), town, true);
+			} else if (split[1].equalsIgnoreCase("forcemerge")) {
+				Town remainingTown = townyUniverse.getTown(split[2]);
+
+				if (remainingTown == null || remainingTown.equals(town))
+					throw new TownyException(Translatable.of("msg_err_invalid_name", split[2]));
+				Confirmation.runOnAccept(() -> {
+					townyUniverse.getDataSource().mergeTown(town, remainingTown);
+					TownyMessaging.sendGlobalMessage(Translatable.of("town1_has_merged_with_town2", town, remainingTown));
+				}).sendTo(sender);
 			} else {
 				HelpMenu.TA_TOWN.send(sender);
 				return;
@@ -1491,13 +1509,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_invalid_name"));
 
 			} else if (split[1].equalsIgnoreCase("merge")) {
+				NationCommand.mergeNation(sender, StringMgmt.remArgs(split, 2), nation, true);
+			} else if (split[1].equalsIgnoreCase("forcemerge")) {
 				
 				Nation remainingNation = townyUniverse.getNation(split[2]);
 				
 				if (remainingNation == null || remainingNation.equals(nation))
 					throw new TownyException(Translatable.of("msg_err_invalid_name", split[2]));
-				townyUniverse.getDataSource().mergeNation(nation, remainingNation);
-				TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
+				Confirmation.runOnAccept(() -> {
+					townyUniverse.getDataSource().mergeNation(nation, remainingNation);
+					TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
+				}).sendTo(sender);
 
 			} else if(split[1].equalsIgnoreCase("set")) {
 				

@@ -1,5 +1,5 @@
 name: Towny
-version: 0.136
+version: 0.137
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1581,3 +1581,8 @@ msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you ca
 
 #Added in 0.136
 msg_view_on_web: 'Click to view on the web.'
+
+#Added ub 0.137
+
+#Shown globally when a town merges with another town.
+town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
