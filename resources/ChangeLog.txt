@@ -7032,3 +7032,4 @@ v0.92.0.11:
   - New Command: /ta town [townname] forcemerge [townname] - Forcefully merges the 2nd town into the first.
   - New Command: /ta nation [nationname] merge [nationname] - Asks the 2nd nation if they want to merge with the first.
   - New Command: /ta nation [townname] forcemerge [townname] - Forcefully merges the 2nd nation into the first.
+  - Make town neutrality cost appear on /towny prices for #5500.
