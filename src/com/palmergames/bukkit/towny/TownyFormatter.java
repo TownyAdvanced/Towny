@@ -352,7 +352,8 @@ public class TownyFormatter {
 		} else {
 			// | Bank: 534 coins
 			if (TownyEconomyHandler.isActive())
-				screen.addComponentOf("bankstring", getTownBankString(town, translator));
+				addTownMoneyComponents(town, translator, screen);
+//				screen.addComponentOf("bankstring", getTownBankString(town, translator, screen));
 			// Mayor: MrSand
 			screen.addComponentOf("mayor", colourKeyValue(translator.of("rank_list_mayor"), town.getMayor().getFormattedName()),
 					HoverEvent.showText(Component.text(translator.of("registered_last_online", registeredFormat.format(town.getMayor().getRegistered()), lastOnlineFormatIncludeYear.format(town.getMayor().getLastOnline())))
@@ -458,15 +459,8 @@ public class TownyFormatter {
 			screen.addComponentOf("registered", colourKeyValue(translator.of("status_founded"), registeredFormat.format(nation.getRegistered())));
 
 		// Bank: 534 coins
-		if (TownyEconomyHandler.isActive()) {
-			String bankline = colourKeyValue(translator.of("status_bank"), nation.getAccount().getHoldingFormattedBalance());
-
-			if (TownySettings.getNationUpkeepCost(nation) > 0)
-				bankline += translator.of("status_splitter") + colourKey(translator.of("status_bank_town2") + " " + colourKeyImportant(formatMoney(TownySettings.getNationUpkeepCost(nation))));
-			
-			bankline += translator.of("status_splitter") + colourKey(translator.of("status_nation_tax")) + " " + colourKeyImportant(formatMoney(nation.getTaxes()));
-			screen.addComponentOf("bankLine", bankline);
-		}
+		if (TownyEconomyHandler.isActive())
+			addNationMoneyComponentsToScreen(nation, translator, screen);
 
 		if (nation.isPublic()) {
 			Component homeComponent = Component.text(translator.of("status_home_element", (nation.hasSpawn() ? Coord.parseCoord(nation.getSpawnOrNull()).toString() : translator.of("status_no_town"))));
@@ -570,6 +564,7 @@ public class TownyFormatter {
 		}
 		return screen;
 	}
+
 
 	/**
 	 * Gets the status screen for a World.
@@ -786,27 +781,44 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * Returns the formatted bank line for the Town StatusScreen.
+	 * Populates the StatusScreen with the various bank and money components.
 	 * @param town Town of which to generate a bankstring.
 	 * @param translator Translator used in choosing language.
-	 * @return bankString used in the Town StatusScreen.
+	 * @param screen StatusScreen to add components to.
 	 */
-	private static String getTownBankString(Town town, Translator translator) {
-		String bankString = colourKeyValue(translator.of("status_bank"), town.getAccount().getHoldingFormattedBalance());
+	private static void addTownMoneyComponents(Town town, Translator translator, StatusScreen screen) {
+		screen.addComponentOf("moneynewline", Component.newline());
+		screen.addComponentOf("bankString", colourKeyValue(translator.of("status_bank"), town.getAccount().getHoldingFormattedBalance()));
 		if (town.isBankrupt()) {
-			bankString +=  " " + colourKeyImportant(translator.of("status_bank_bankrupt"));
 			if (town.getAccount().getDebtCap() == 0)
 				town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
-			bankString += " " + colourKeyValue(translator.of("status_debtcap"), "-" + formatMoney(town.getAccount().getDebtCap()));
+			screen.addComponentOf("bankrupt", translator.of("status_bank_bankrupt") + " " + colourKeyValue(translator.of("status_debtcap"), "-" + formatMoney(town.getAccount().getDebtCap())));
 		}
 		if (town.hasUpkeep())
-			bankString += translator.of("status_splitter") + colourKey(translator.of("status_bank_town2")) + " " + colourKeyImportant(formatMoney(BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue()));
+			screen.addComponentOf("upkeep", translator.of("status_splitter") + colourKey(translator.of("status_bank_town2")) + " " + colourKeyImportant(formatMoney(BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue())));
 		if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
-			bankString += translator.of("status_splitter") + colourKey(translator.of("status_bank_town_penalty_upkeep")) + " " + colourKeyImportant(formatMoney(TownySettings.getTownPenaltyUpkeepCost(town)));
-		bankString += translator.of("status_splitter") + colourKey(translator.of("status_bank_town3")) + " " + colourKeyImportant(town.isTaxPercentage() ? town.getTaxes() + "%" : formatMoney(town.getTaxes()));
-		return bankString;
+			screen.addComponentOf("upkeepPenalty", translator.of("status_splitter") + colourKey(translator.of("status_bank_town_penalty_upkeep")) + " " + colourKeyImportant(formatMoney(TownySettings.getTownPenaltyUpkeepCost(town))));
+		if (town.isNeutral() && TownySettings.getTownNeutralityCost() > 0)
+			screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(TownySettings.getTownNeutralityCost()))));
+		screen.addComponentOf("towntax", translator.of("status_splitter") + colourKey(translator.of("status_bank_town3")) + " " + colourKeyImportant(town.isTaxPercentage() ? town.getTaxes() + "%" : formatMoney(town.getTaxes())));
 	}
-	
+
+	/**
+	 * Populates the StatusScreen with the various bank and money components.
+	 * @param nation Nation of which to generate a bankstring.
+	 * @param translator Translator used in choosing language.
+	 * @param screen StatusScreen to add components to.
+	 */
+	private static void addNationMoneyComponentsToScreen(Nation nation, Translator translator, StatusScreen screen) {
+		screen.addComponentOf("moneynewline", Component.newline());
+		screen.addComponentOf("bankString", colourKeyValue(translator.of("status_bank"), nation.getAccount().getHoldingFormattedBalance()));
+		if (TownySettings.getNationUpkeepCost(nation) > 0)
+			screen.addComponentOf("nationupkeep", translator.of("status_splitter") + colourKey(translator.of("status_bank_town2") + " " + colourKeyImportant(formatMoney(TownySettings.getNationUpkeepCost(nation)))));
+		if (nation.isNeutral() && TownySettings.getNationNeutralityCost() > 0)
+			screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(TownySettings.getNationNeutralityCost()))));
+		screen.addComponentOf("nationtax", translator.of("status_splitter") + colourKey(translator.of("status_nation_tax")) + " " + colourKeyImportant(formatMoney(nation.getTaxes())));
+	}
+
 	private static String formatMoney(double money) {
 		return TownyEconomyHandler.getFormattedBalance(money);
 	}
