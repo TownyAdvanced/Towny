@@ -80,8 +80,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1057,17 +1055,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void mergeNation(Player player, String[] split) throws TownyException {
-		mergeNation(player, split, getNationFromPlayerOrThrow(player), false);
+		mergeNation(player, StringMgmt.remFirstArg(split), getNationFromPlayerOrThrow(player), false);
 
 	}
 
-	public static void mergeNation(Player player, String[] split, @NotNull Nation remainingNation, boolean admin) throws TownyException {
+	public static void mergeNation(CommandSender sender, String[] split, @NotNull Nation remainingNation, boolean admin) throws TownyException {
 
-		if (split.length <= 1) // /n merge
+		if (split.length <= 0) // /n merge
 			throw new TownyException(Translatable.of("msg_specify_nation_name"));
 
-		String name = split[1];
-		if (!getResidentOrThrow(player.getUniqueId()).isKing() && !admin)
+		String name = split[0];
+		if (!admin && sender instanceof Player player && !getResidentOrThrow(player.getUniqueId()).isKing())
 			throw new TownyException(Translatable.of("msg_err_merging_for_kings_only"));
 
 		Nation nation = TownyUniverse.getInstance().getNation(name);
@@ -1098,17 +1096,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
-			try {
-				BukkitTools.getPluginManager().callEvent(new NationMergeEvent(nation, remainingNation));
-				TownyUniverse.getInstance().getDataSource().mergeNation(nation, remainingNation);
-				TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
-				if (TownySettings.getNationRequiresProximity() > 0)
-					remainingNation.removeOutOfRangeTowns();
-			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-			}
-		})
-			.sendTo(BukkitTools.getPlayerExact(king.getName()));
+			BukkitTools.getPluginManager().callEvent(new NationMergeEvent(nation, remainingNation));
+			TownyUniverse.getInstance().getDataSource().mergeNation(nation, remainingNation);
+			TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
+			if (TownySettings.getNationRequiresProximity() > 0)
+				remainingNation.removeOutOfRangeTowns();
+			}).runOnCancel(() -> {
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_request_denied"));     // These messages don't use the word Town or Nation.
+				TownyMessaging.sendMsg(nation.getKing(), Translatable.of("msg_town_merge_cancelled"));
+			}).sendTo(BukkitTools.getPlayerExact(king.getName()));
 	}
 	
 	public void nationLeave(Player player) {

@@ -1350,15 +1350,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("trust")) {
 				TownCommand.parseTownTrustCommand(player, StringMgmt.remArgs(split, 2), town);
 			} else if (split[1].equalsIgnoreCase("merge")) {
-				TownCommand.parseTownMergeCommand(player, StringMgmt.remArgs(split, 2), town, true);
+				TownCommand.parseTownMergeCommand(sender, StringMgmt.remArgs(split, 2), town, true);
 			} else if (split[1].equalsIgnoreCase("forcemerge")) {
 				Town remainingTown = townyUniverse.getTown(split[2]);
 
 				if (remainingTown == null || remainingTown.equals(town))
 					throw new TownyException(Translatable.of("msg_err_invalid_name", split[2]));
-				Confirmation.runOnAccept(() -> townyUniverse.getDataSource().mergeTown(town, remainingTown)).sendTo(sender);
-				//TODO: Add language string after merge.
-
+				Confirmation.runOnAccept(() -> {
+					townyUniverse.getDataSource().mergeTown(town, remainingTown);
+					TownyMessaging.sendGlobalMessage(Translatable.of("town1_has_merged_with_town2", town, remainingTown));
+				}).sendTo(sender);
 			} else {
 				HelpMenu.TA_TOWN.send(sender);
 				return;
@@ -1508,7 +1509,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_invalid_name"));
 
 			} else if (split[1].equalsIgnoreCase("merge")) {
-				NationCommand.mergeNation(player, StringMgmt.remArgs(split, 1), nation, true);
+				NationCommand.mergeNation(sender, StringMgmt.remArgs(split, 2), nation, true);
 			} else if (split[1].equalsIgnoreCase("forcemerge")) {
 				
 				Nation remainingNation = townyUniverse.getNation(split[2]);
@@ -1516,11 +1517,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (remainingNation == null || remainingNation.equals(nation))
 					throw new TownyException(Translatable.of("msg_err_invalid_name", split[2]));
 				Confirmation.runOnAccept(() -> {
-					try {
-						townyUniverse.getDataSource().mergeNation(nation, remainingNation);
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-					}
+					townyUniverse.getDataSource().mergeNation(nation, remainingNation);
 					TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
 				}).sendTo(sender);
 
