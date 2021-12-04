@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -165,7 +164,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (split.length == 0) {
-			TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(globalWorld, Translation.getLocale(sender)));
+			TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(globalWorld, sender));
 			return;
 		}
 

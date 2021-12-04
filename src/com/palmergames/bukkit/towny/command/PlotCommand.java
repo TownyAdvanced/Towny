@@ -38,7 +38,6 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -2236,8 +2235,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (TownyAPI.getInstance().isWilderness(coord))
-			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(TownyAPI.getInstance().getTownyWorld(world), Translation.getLocale(player)));
+			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownyWorldOrNull(), player));
 		else
-			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownBlockOrNull(), player, Translation.getLocale(player)));
+			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownBlockOrNull(), player));
 	}
 }

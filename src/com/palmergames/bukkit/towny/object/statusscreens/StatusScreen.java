@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.bukkit.command.CommandSender;
 import org.bukkit.util.ChatPaginator;
 
 import com.palmergames.bukkit.util.Colors;
@@ -16,13 +18,19 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 
-
 public class StatusScreen {
-
-	public StatusScreen() {}
 
 	Map<String, Component> components = new LinkedHashMap<>();
 	final static int MAX_WIDTH = ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH;
+	private CommandSender sender;
+	
+	public StatusScreen(CommandSender sender) {
+		this.sender = sender;
+	}
+
+	public CommandSender getCommandSender() {
+		return sender;
+	}
 
 	public void addComponentOf(String name, String text) {
 		components.put(name, Component.text(text));

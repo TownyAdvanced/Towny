@@ -7024,3 +7024,5 @@ v0.92.0.11:
 0.97.5.1:
   - Add helpful methods to BaseCommand.
   - Fix regex used to split the townyperms.yml error message.
+  - API: Added StatusScreenEvent#getCommandSender()
+    - It is now possible to learn who is going to view the StatusScreen being made. 

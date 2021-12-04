@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -29,11 +30,21 @@ public class StatusScreenEvent extends Event {
 		return handlers;
 	}
 	
+	/**
+	 * @return {@link StatusScreen} object which will be shown to the CommandSender.
+	 */
 	public StatusScreen getStatusScreen() {
 		return screen;
 	}
 
- 	public boolean hasAdditionalLines() {
+ 	/**
+	 * @return the CommandSender who is going to see the StatusScreen
+	 */
+	public CommandSender getCommandSender(){
+		return screen.getCommandSender();
+	}
+
+	public boolean hasAdditionalLines() {
  		return !addedLines.isEmpty();
  	}
 	

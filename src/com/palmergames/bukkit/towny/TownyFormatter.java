@@ -77,13 +77,13 @@ public class TownyFormatter {
 	 * Gets the status screen of a TownBlock
 	 * 
 	 * @param townBlock the TownBlock to check
-	 * @param locale Locale to use while translating   
+	 * @param player Player who will be sent this status.   
 	 * @return StatusScreen containing the results.
 	 */
-	public static StatusScreen getStatus(TownBlock townBlock, Player player, Locale locale) {
+	public static StatusScreen getStatus(TownBlock townBlock, Player player) {
 
-		StatusScreen screen = new StatusScreen();
-		final Translator translator = Translator.locale(locale);
+		StatusScreen screen = new StatusScreen(player);
+		final Translator translator = Translator.locale(Translation.getLocale(player));
 		
 		TownyObject owner;
 		Town town = townBlock.getTownOrNull();
@@ -138,13 +138,12 @@ public class TownyFormatter {
 	 *  
 	 * @param resident the resident to check the status of
 	 * @param sender The sender who executed the command.
-	 * @param locale Locale to use while translating   
 	 * @return StatusScreen containing the results.
 	 */
-	public static StatusScreen getStatus(Resident resident, CommandSender sender, Locale locale) {
+	public static StatusScreen getStatus(Resident resident, CommandSender sender) {
 
-		StatusScreen screen = new StatusScreen();
-		final Translator translator = Translator.locale(locale);
+		StatusScreen screen = new StatusScreen(sender);
+		final Translator translator = Translator.locale(Translation.getLocale(sender));
 
 		// ___[ King Harlus ]___
 		screen.addComponentOf("title", ChatTools.formatTitle(resident.getFormattedName() + (playerIsOnlineAndVisible(resident.getName(), sender) ? translator.of("online2") : "")));
@@ -269,16 +268,17 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * Gets the status screen of a Town
+	 * Gets the status screen of a Town.
 	 * 
-	 * @param town the town in which to check
-	 * @param locale Locale to use while translating   
+	 * @param town the town in which to check.
+	 * @param sender CommandSender who will be sent the status.   
 	 * @return StatusScreen containing the results.
 	 */
-	public static StatusScreen getStatus(Town town, Locale locale) {
+	public static StatusScreen getStatus(Town town, CommandSender sender) {
 
+		final Locale locale = Translation.getLocale(sender);
 		final Translator translator = Translator.locale(locale);
-		StatusScreen screen = new StatusScreen();
+		StatusScreen screen = new StatusScreen(sender);
 		TownyWorld world = town.getHomeblockWorld();
 
 		// ___[ Raccoon City ]___
@@ -430,15 +430,16 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * Gets the status screen of a Nation
+	 * Gets the status screen of a Nation.
 	 * 
-	 * @param nation the nation to check against
-	 * @param locale The locale to use while translating   
+	 * @param nation the nation to check against.
+	 * @param sender CommandSender who will be sent the status.   
 	 * @return StatusScreen containing the results.
 	 */
-	public static StatusScreen getStatus(Nation nation, Locale locale) {
+	public static StatusScreen getStatus(Nation nation, CommandSender sender) {
 
-		StatusScreen screen = new StatusScreen();
+		StatusScreen screen = new StatusScreen(sender);
+		Locale locale = Translation.getLocale(sender);
 		final Translator translator = Translator.locale(locale);
 
 		// ___[ Azur Empire (Open)]___
@@ -571,16 +572,16 @@ public class TownyFormatter {
 	}
 
 	/**
-	 * Gets the status screen for a World
+	 * Gets the status screen for a World.
 	 * 
-	 * @param world the world to check
-	 * @param locale Locale to use while translating   
+	 * @param world the world to check.
+	 * @param sender CommandSender who will be sent the status.
 	 * @return StatusScreen containing the results.
 	 */
-	public static StatusScreen getStatus(TownyWorld world, Locale locale) {
+	public static StatusScreen getStatus(TownyWorld world, CommandSender sender) {
 
-		StatusScreen screen = new StatusScreen();
-		final Translator translator = Translator.locale(locale);
+		StatusScreen screen = new StatusScreen(sender);
+		final Translator translator = Translator.locale(Translation.getLocale(sender));
 
 		// ___[ World (PvP) ]___
 		screen.addComponentOf("townyworld_title", ChatTools.formatTitle(world.getFormattedName()));

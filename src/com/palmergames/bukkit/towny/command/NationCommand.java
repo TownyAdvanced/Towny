@@ -2573,7 +2573,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		/*
 		 * This is run async because it will ping the economy plugin for the nation bank value.
 		 */
-		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(nation, Translation.getLocale(sender))));
+		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(nation, sender)));
 	}
 	
 	/**
