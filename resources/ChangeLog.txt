@@ -7035,3 +7035,4 @@ v0.92.0.11:
   - Make town neutrality cost appear on /towny prices for #5500.
   - Add town and nation neutrality costs to their respective status screens.
     - Closes #5500.
+  - Reorganization and cleanup of Town, Nation, and TownySettings, courtesy of FlagCourier with PR #5493.
