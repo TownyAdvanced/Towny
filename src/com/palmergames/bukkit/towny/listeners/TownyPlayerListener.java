@@ -998,6 +998,12 @@ public class TownyPlayerListener implements Listener {
 			if (subtitle.contains("{wilderness}")) {
 				subtitle = subtitle.replace("{wilderness}", StringMgmt.remUnderscore(worldName));
 			}
+			if (title.contains("{townname}")) {
+				subtitle = subtitle.replace("{townname}", StringMgmt.remUnderscore(event.getFrom().getTownOrNull().getName()));
+			}
+			if (subtitle.contains("{townname}")) {
+				subtitle = subtitle.replace("{townname}", StringMgmt.remUnderscore(event.getFrom().getTownOrNull().getName()));
+			}
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);		
 		}
 

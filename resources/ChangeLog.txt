@@ -7036,3 +7036,4 @@ v0.92.0.11:
   - Add town and nation neutrality costs to their respective status screens.
     - Closes #5500.
   - Reorganization and cleanup of Town, Nation, and TownySettings, courtesy of FlagCourier with PR #5493.
+  - Made it possible for the {townname} placeholder to be used in the wilderness_title and wilderness_subtitle messages.
