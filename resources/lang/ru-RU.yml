@@ -986,6 +986,7 @@ towny_prices_price_plot: '&c    [Price] &2Участок: &a%s &8| &2Аванп�
 towny_prices_price_shop: '&c            &2Магазин: &a%s &8| &2Посольство: &a%s'
 towny_prices_taxes_plot: '&c    [Налоги]    &2Игрок: &a%s &8| &2Участок: &a%s'
 towny_prices_taxes_shop: '&c            &2Магазин: &a%s &8| &2Посольство: &a%s'
+towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
 towny_prices_plots_shop: '&c    [Изменение типа участка] &2Магазин: &a%s &8| &2Посольство: &a%s'
 towny_prices_plots_wilds: '&c                       &2Дебри: &a%s &8| &2Гостинная: &a%s'
 towny_prices_plots_jail: '&c                        &2Тюрьма: &a%s &8| &2Ферма: &a%s'
@@ -1404,3 +1405,8 @@ tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
 msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
 #Added in 0.136
 msg_view_on_web: 'Click to view on the web.'
+#Added in 0.137
+#Shown globally when a town merges with another town.
+town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
+#Shown in the town and nation status screens to inform about neutrality costs.
+status_neutrality_cost: 'Neutrality Cost:'

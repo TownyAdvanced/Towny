@@ -986,6 +986,7 @@ towny_prices_price_plot: '&c    [价格] &2土地：&a%s &8| &2前哨：&a%s'
 towny_prices_price_shop: '&c            &2商店：&a%s &8| &2大使馆：&a%s'
 towny_prices_taxes_plot: '&c    [税收]    &2居民：&a%s &8| &2土地：&a%s'
 towny_prices_taxes_shop: '&c            &2商店：&a%s &8| &2大使馆：&a%s'
+towny_prices_town_neutral_tax: '&c            &2和平：&a%s'
 towny_prices_plots_shop: '&c    [土地类型] &2商店：&a%s &8| &2大使馆：&a%s'
 towny_prices_plots_wilds: '&c                       &2荒地：&a%s &8| &2旅店：&a%s'
 towny_prices_plots_jail: '&c                        &2监狱：&a%s &8| &2农场：&a%s'
@@ -1403,4 +1404,9 @@ tc_player_channel_sound_unmuted: '频道已解除静音'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: '有外来者在你的领地上，你不能切换PVP状态！'
 #Added in 0.136
-msg_view_on_web: 'Click to view on the web.'
+msg_view_on_web: '点击转向网页查看。'
+#Added in 0.137
+#Shown globally when a town merges with another town.
+town1_has_merged_with_town2: '&6城镇%s同意与主城镇%s合并。'
+#Shown in the town and nation status screens to inform about neutrality costs.
+status_neutrality_cost: '中立成本：'
