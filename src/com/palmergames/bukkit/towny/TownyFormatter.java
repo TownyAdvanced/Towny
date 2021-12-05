@@ -353,7 +353,7 @@ public class TownyFormatter {
 			// | Bank: 534 coins
 			if (TownyEconomyHandler.isActive())
 				addTownMoneyComponents(town, translator, screen);
-//				screen.addComponentOf("bankstring", getTownBankString(town, translator, screen));
+
 			// Mayor: MrSand
 			screen.addComponentOf("mayor", colourKeyValue(translator.of("rank_list_mayor"), town.getMayor().getFormattedName()),
 					HoverEvent.showText(Component.text(translator.of("registered_last_online", registeredFormat.format(town.getMayor().getRegistered()), lastOnlineFormatIncludeYear.format(town.getMayor().getLastOnline())))
