@@ -279,7 +279,7 @@ public class BaseCommand implements TabCompleter{
 		List<Resident> townlessResidents = new ArrayList<>();
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-			if (resident.hasTown())
+			if (resident == null || resident.hasTown())
 				continue;
 			townlessResidents.add(resident);
 		}
