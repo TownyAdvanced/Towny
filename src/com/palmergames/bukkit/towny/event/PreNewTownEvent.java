@@ -1,10 +1,13 @@
 package com.palmergames.bukkit.towny.event;
 
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class PreNewTownEvent extends Event implements Cancellable {
 
@@ -32,7 +35,7 @@ public class PreNewTownEvent extends Event implements Cancellable {
 	}
 
 	@Override
-	public HandlerList getHandlers() {
+	public @NotNull HandlerList getHandlers() {
 		return handlers;
 	}
 
@@ -54,5 +57,13 @@ public class PreNewTownEvent extends Event implements Cancellable {
 
 	public String getTownName() {
 		return townName;
+	}
+	
+	public Location getTownLocation() {
+		return player.getLocation();
+	}
+	
+	public WorldCoord getTownWorldCoord() {
+		return WorldCoord.parseWorldCoord(player);
 	}
 }
