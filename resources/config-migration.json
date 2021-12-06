@@ -166,5 +166,15 @@
         "value": "towny.command.nation.ranklist"
       }
     ]
+  },
+    {
+      "version": "0.97.5.1",
+      "changes": [
+        {
+          "type": "TOWNYPERMS_ADD",
+          "path": "nations.default",
+          "value": "towny.command.nation.spawn"
+        }
+      ]
   }
 ]
