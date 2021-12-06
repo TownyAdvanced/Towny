@@ -84,7 +84,12 @@ public class TownPreClaimEvent extends Event implements Cancellable{
     }
     
     /**
-     *
+     * The TownBlock which is being claimed.
+     * 
+     * If {@link #isHomeblock} is true, then this could be the first TownBlock claimed by
+     * a town upon Town-creation. In this scenario the Town object has not finished 
+     * initializing and many methods in the TownBlock object could return errors when used.
+     * 
      * @return the new TownBlock.
      */
     public TownBlock getTownBlock() {

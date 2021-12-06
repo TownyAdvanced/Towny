@@ -2953,11 +2953,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(String.format("Error fetching new town from name '%s'", name));
 
 		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
+		townBlock.setTown(town);
 		TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, townBlock, player, false, true);
 		BukkitTools.getPluginManager().callEvent(preClaimEvent);
 		if(preClaimEvent.isCancelled()) {
+			TownyUniverse.getInstance().removeTownBlock(townBlock);
 			TownyUniverse.getInstance().unregisterTown(town);
 			town = null;
+			townBlock = null;
 			throw new TownyException(preClaimEvent.getCancelMessage());
 		}
 
@@ -2965,7 +2968,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
 		resident.setTown(town);
 		town.setMayor(resident);
-		townBlock.setTown(town);
 
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
