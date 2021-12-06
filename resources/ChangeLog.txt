@@ -7038,3 +7038,4 @@ v0.92.0.11:
   - Reorganization and cleanup of Town, Nation, and TownySettings, courtesy of FlagCourier with PR #5493.
   - Made it possible for the {townname} placeholder to be used in the wilderness_title and wilderness_subtitle messages.
   - Townyperms.yml nations' default rank will automatically be given towny.command.nation.spawn.
+  - Add 2 convenience methods to PreNewTownEvent, courtesy of Warriorrrr with PR #5504.
