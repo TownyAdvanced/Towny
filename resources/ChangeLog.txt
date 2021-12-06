@@ -7040,3 +7040,5 @@ v0.92.0.11:
   - Townyperms.yml nations' default rank will automatically be given towny.command.nation.spawn.
   - Add 2 convenience methods to PreNewTownEvent, courtesy of Warriorrrr with PR #5504.
   - Fix possible tab completion NPE, courtesy of Warriorrrr with PR #5506.
+  - Allow lava_cauldrons to kill minecarts.
+    - Closes #5503.
