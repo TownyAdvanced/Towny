@@ -69,9 +69,14 @@ public class TownPreClaimEvent extends Event implements Cancellable{
     
     /**
      * Whether the townblock being claimed will be a homeblock.
+     * 
+     * If this is being thrown because a town is about to be made, the Town object
+     * will be unfinished. Many parts of the Town object will throw errors if accessed.
+     * 
      * If there are multiple blocks being claimed using the larger selection commands,
      * this will return true for every block in the selection, only the first would become a homeblock. 
      * Cancelling the event will cause all claims to be cancelled.
+     * 
      * @return true if the townblock will become a homeblock, or if many townblocks are being claimed at once. 
      */
     public boolean isHomeBlock() {
@@ -87,6 +92,12 @@ public class TownPreClaimEvent extends Event implements Cancellable{
     }
 
     /**
+     * The town which is claiming this TownBlock
+     * 
+     * If {@link #isHomeblock} is true, then this could be the first TownBlock claimed by
+     * a town upon Town-creation. In this scenario the Town object has not finished 
+     * initializing and many methods in the Town object could return errors when used.
+     * 
      * @return the town
      * */
     public Town getTown() {
