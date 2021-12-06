@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+import com.palmergames.bukkit.util.ItemLists;
 
 /**
  * Handle events for all Vehicle related events
@@ -107,8 +108,7 @@ public class TownyVehicleListener implements Listener {
 		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getVehicle().getWorld()))
 			return;
 		
-		if (event.getVehicle() instanceof Minecart &&
-			event.getBlock().getType() == Material.CACTUS || event.getBlock().getType() == Material.LAVA_CAULDRON) {
+		if (event.getVehicle() instanceof Minecart && ItemLists.MINECART_KILLERS.contains(event.getBlock().getType().name())) {
 			event.getVehicle().remove();
 			event.getBlock().getWorld().dropItemNaturally(event.getVehicle().getLocation(), new ItemStack(EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType())));
 		}
