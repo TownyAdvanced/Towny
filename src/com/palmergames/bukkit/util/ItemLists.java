@@ -129,7 +129,11 @@ public class ItemLists {
 	 * List of harvestable berries
 	 */
 	public static List<String> HARVESTABLE_BERRIES = new ArrayList<>(Arrays.asList("CAVE_VINES_PLANT","SWEET_BERRY_BUSH"));
-	
+
+	/*
+	 * List of blocks which will be allowed to kill Minecarts.
+	 */
+	public static List<String> MINECART_KILLERS = new ArrayList<>(Arrays.asList("CACTUS","LAVA_CAULDRON"));
 	
 	/**
 	 * Returns a pre-configured list from the GROUPS.
