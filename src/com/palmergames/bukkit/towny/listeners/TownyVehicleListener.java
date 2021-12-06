@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
@@ -111,7 +110,7 @@ public class TownyVehicleListener implements Listener {
 		if (event.getVehicle() instanceof Minecart &&
 			event.getBlock().getType() == Material.CACTUS || event.getBlock().getType() == Material.LAVA_CAULDRON) {
 			event.getVehicle().remove();
-			Bukkit.getWorld(event.getBlock().getWorld().getName()).dropItemNaturally(event.getVehicle().getLocation(), new ItemStack(EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType())));
+			event.getBlock().getWorld().dropItemNaturally(event.getVehicle().getLocation(), new ItemStack(EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType())));
 		}
 	}
 
