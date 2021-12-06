@@ -108,7 +108,8 @@ public class TownyVehicleListener implements Listener {
 		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getVehicle().getWorld()))
 			return;
 		
-		if (event.getBlock().getType() == Material.CACTUS && event.getVehicle() instanceof Minecart) {
+		if (event.getVehicle() instanceof Minecart &&
+			event.getBlock().getType() == Material.CACTUS || event.getBlock().getType() == Material.LAVA_CAULDRON) {
 			event.getVehicle().remove();
 			Bukkit.getWorld(event.getBlock().getWorld().getName()).dropItemNaturally(event.getVehicle().getLocation(), new ItemStack(EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType())));
 		}
