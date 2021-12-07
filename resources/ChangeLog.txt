@@ -7031,7 +7031,7 @@ v0.92.0.11:
   - New Command: /ta town [townname] merge [townname] - Asks the 2nd town if they want to merge with the first.
   - New Command: /ta town [townname] forcemerge [townname] - Forcefully merges the 2nd town into the first.
   - New Command: /ta nation [nationname] merge [nationname] - Asks the 2nd nation if they want to merge with the first.
-  - New Command: /ta nation [townname] forcemerge [townname] - Forcefully merges the 2nd nation into the first.
+  - New Command: /ta nation [nationname] forcemerge [nationname] - Forcefully merges the 2nd nation into the first.
   - Make town neutrality cost appear on /towny prices for #5500.
   - Add town and nation neutrality costs to their respective status screens.
     - Closes #5500.
@@ -7042,3 +7042,4 @@ v0.92.0.11:
   - Fix possible tab completion NPE, courtesy of Warriorrrr with PR #5506.
   - Allow lava_cauldrons to kill minecarts.
     - Closes #5503.
+  - Call the pre new town event after any confirmations are confirmed, courtesy of Warriorrrr with PR #5508.
