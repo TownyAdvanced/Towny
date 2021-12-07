@@ -2845,14 +2845,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void newTown(Player player, String name, Resident resident, boolean noCharge) {
 		TownyDataSource dataSource = TownyUniverse.getInstance().getDataSource();
 
-		PreNewTownEvent preEvent = new PreNewTownEvent(player, name);
-		Bukkit.getPluginManager().callEvent(preEvent);
-		
-		if (preEvent.isCancelled()) {
-			TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
-			return;
-		}
-
 		try {
 			if (TownySettings.hasTownLimit() && dataSource.getTowns().size() >= TownySettings.getTownLimit())
 				throw new TownyException(Translatable.of("msg_err_universe_limit"));
@@ -2910,6 +2902,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				
 				final String finalName = name;
 				Confirmation.runOnAccept(() -> {
+					if (callPreNewTownEvent(player, finalName))
+						return;
 					
 					// Make the resident pay here.
 					if (!resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost")) {
@@ -2932,6 +2926,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// Or, if the town doesn't cost money to create, just make the Town.
 			} else {
+				if (callPreNewTownEvent(player, name))
+					return;
+
 				newTown(world, name, resident, key, spawnLocation, player);
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(name)));
 			}
@@ -3001,6 +2998,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		BukkitTools.getPluginManager().callEvent(new NewTownEvent(town));
 
 		return town;
+	}
+	
+	private static boolean callPreNewTownEvent(Player player, String townName) {
+		PreNewTownEvent preEvent = new PreNewTownEvent(player, townName);
+		Bukkit.getPluginManager().callEvent(preEvent);
+
+		if (preEvent.isCancelled()) {
+			TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
+			return true;
+		}
+		
+		return false;
 	}
 
 	public static void townRename(Player player, Town town, String newName) {
