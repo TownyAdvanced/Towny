@@ -224,6 +224,8 @@ public class Towny extends JavaPlugin {
 						TownyMessaging.sendErrorMsg("Could not schedule OnLogin.");
 					}
 				}
+			
+			if (Translation.hasBlockedOverrides()) TownyMessaging.sendErrorMsg("Detected blocked overrides. Skipped.");
 		}
 	}
 

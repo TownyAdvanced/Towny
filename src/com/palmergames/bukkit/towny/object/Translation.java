@@ -53,7 +53,8 @@ public final class Translation {
 	private static final Map<String, Map<String, String>> translations = new HashMap<>();
 	private static Locale defaultLocale;
 	private static final Path langFolder = Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("lang");
-
+	private static boolean hasBlockedOverrides = false;
+	
 	public static void loadTranslationRegistry() {
 		translations.clear();
 		updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
@@ -126,7 +127,10 @@ public final class Translation {
 						if (values != null) {
 							translations.computeIfAbsent(lang, k -> new HashMap<>());
 							for (Map.Entry<String, Object> entry : values.entrySet())
-								translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
+								if (entry.getKey().toLowerCase().startsWith("msg_ptw_message")) 
+									hasBlockedOverrides = true;
+								else
+									translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -139,7 +143,11 @@ public final class Translation {
 		if (globalOverrides != null)
 			for (Map.Entry<String, Object> entry : globalOverrides.entrySet())
 				for (String lang : translations.keySet())
-					translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
+		            // Messages blocked from being globally overriden.
+					if (entry.getKey().toLowerCase().startsWith("msg_ptw_warning")) 
+						hasBlockedOverrides = true;
+					else
+					    translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
 		
 		defaultLocale = loadDefaultLocale();		
 		Towny.getPlugin().getLogger().info(String.format("Successfully loaded translations for %d languages.", translations.keySet().size()));
@@ -356,5 +364,9 @@ public final class Translation {
 						translations.get(language).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
 					}
 		}
+	}
+	
+	public static boolean hasBlockedOverrides() {
+		return hasBlockedOverrides;
 	}
 }
