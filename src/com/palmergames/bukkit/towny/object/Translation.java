@@ -150,7 +150,7 @@ public final class Translation {
 						String msg = translations.get(defaultLocale.toString()).get(key);
 
 						// It's extremely possible the jar was edited and the string is missing/was modified.
-						if (!msg.contains("EULA") && !msg.contains("Towny")) {
+						if (!msg.contains("Towny")) {
 							switch (key) {
 								case "msg_ptw_warning_1": {
 									msg = "If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.";
