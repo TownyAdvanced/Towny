@@ -142,13 +142,37 @@ public final class Translation {
 		//Can be null if no overrides have been added
 		if (globalOverrides != null)
 			for (Map.Entry<String, Object> entry : globalOverrides.entrySet())
-				for (String lang : translations.keySet())
-		            // Messages blocked from being globally overriden.
-					if (entry.getKey().toLowerCase().startsWith("msg_ptw_warning")) 
+				for (String lang : translations.keySet()) {
+					String key = entry.getKey().toLowerCase(Locale.ROOT);
+					
+					// Messages blocked from being globally overriden.
+					if (entry.getKey().toLowerCase().startsWith("msg_ptw_warning")) {
+						String msg = translations.get(defaultLocale.toString()).get(key);
+
+						// It's extremely possible the jar was edited and the string is missing/was modified.
+						if (!msg.contains("EULA") && !msg.contains("Towny")) {
+							switch (key) {
+								case "msg_ptw_warning_1": {
+									msg = "If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.";
+									break;
+								}
+								case "msg_ptw_warning_2": {
+									msg = "The Towny team never intended for townblocks to be purchaseable with real money.";
+									break;
+								}
+								case "msg_ptw_warning_3": {
+									msg = "If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.";
+									break;
+								}
+							}
+						}
+						
+						translations.get(lang).put(key, msg);
 						hasBlockedOverrides = true;
-					else
-					    translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
-		
+					} else {
+						translations.get(lang).put(key, String.valueOf(entry.getValue()));
+					}
+				}
 		defaultLocale = loadDefaultLocale();		
 		Towny.getPlugin().getLogger().info(String.format("Successfully loaded translations for %d languages.", translations.keySet().size()));
 		HelpMenu.loadMenus();

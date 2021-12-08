@@ -225,7 +225,7 @@ public class Towny extends JavaPlugin {
 					}
 				}
 			
-			if (Translation.hasBlockedOverrides()) TownyMessaging.sendErrorMsg("Detected blocked overrides. Skipped.");
+			if (Translation.hasBlockedOverrides()) TownyMessaging.sendErrorMsg("Detected blocked language overrides (possibly some warning). Skipped.");
 		}
 	}
 
