@@ -85,7 +85,7 @@ public class BaseCommand implements TabCompleter{
 	 * @param type the type of Towny object to check for, can be r(esident), t(own), n(ation), w(orld), or any combination of those to check
 	 * @return Matches for the arg with the chosen type
 	 */
-	protected static List<String> getTownyStartingWith(String arg, String type) {
+	public static List<String> getTownyStartingWith(String arg, String type) {
 
 		List<String> matches = new ArrayList<>();
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -118,7 +118,7 @@ public class BaseCommand implements TabCompleter{
 	 * @param type the type of check to use, see {@link #getTownyStartingWith(String, String)} for possible types. Add "+" to check for both filters and {@link #getTownyStartingWith(String, String)}
 	 * @return Matches for the arg filtered by filters or checked with type
 	 */
-	static List<String> filterByStartOrGetTownyStartingWith(List<String> filters, String arg, String type) {
+	public static List<String> filterByStartOrGetTownyStartingWith(List<String> filters, String arg, String type) {
 		List<String> filtered = NameUtil.filterByStart(filters, arg);
 		if (type.isEmpty())
 			return filtered;
