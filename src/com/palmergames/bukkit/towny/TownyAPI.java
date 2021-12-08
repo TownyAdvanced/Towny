@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.townblockstatus.NationZoneTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
@@ -648,7 +649,75 @@ public class TownyAPI {
         return instance;
     }
     
-    /**
+	/**
+	 * Returns a List&lt;String&gt; containing strings of resident, town, and/or
+	 * nation names that match with arg. Can check for multiple types, for example
+	 * "rt" would check for residents and towns but not nations or worlds. Useful
+	 * for tab completion systems calling for Towny Objects.
+	 *
+	 * @param arg  the string to match with the chosen type
+	 * @param type the type of Towny object to check for, can be r(esident), t(own),
+	 *             n(ation), w(orld), or any combination of those to check.
+	 * @return Matches for the arg with the chosen type
+	 */
+	public static List<String> getTownyObjectStartingWith(String arg, String type) {
+		return BaseCommand.getTownyStartingWith(arg, type);
+	}
+
+	/**
+	 * Checks if arg starts with filters, if not returns matches from
+	 * {@link #getTownyObjectStartingWith(String, String)}. Add a "+" to the type to
+	 * return both cases. Useful for tab completion systems.
+	 *
+	 * @param filters the strings to filter arg with
+	 * @param arg     the string to check with filters and possibly match with Towny
+	 *                objects if no filters are found
+	 * @param type    the type of check to use, see
+	 *                {@link #getTownyObjectStartingWith(String, String)} for possible
+	 *                types. Add "+" to check for both filters and
+	 *                {@link #getTownyObjectStartingWith(String, String)}
+	 * @return Matches for the arg filtered by filters or checked with type
+	 */
+	public static List<String> filterByStartOrGetTownyObjectStartingWith(List<String> filters, String arg, String type) {
+		return BaseCommand.filterByStartOrGetTownyStartingWith(filters, arg, type);
+	}
+
+	/**
+	 * Returns the names a player's town's residents that start with a string.
+	 * Useful for tab completion systems.
+	 *
+	 * @param player the player to get the town's residents of
+	 * @param str the string to check if the town's residents start with
+	 * @return the resident names that match str
+	 */
+	public static List<String> getTownResidentNamesOfPlayerStartingWith(Player player, String str){
+		return BaseCommand.getTownResidentNamesOfPlayerStartingWith(player, str);
+	}
+
+	/**
+	 * Returns the names a town's residents that start with a string.
+	 * Useful for tab completion systems.
+	 *
+	 * @param townName the town to get the residents of
+	 * @param str the string to check if the town's residents start with
+	 * @return the resident names that match str
+	 */
+	public static List<String> getResidentsOfTownStartingWith(String townName, String str) {
+		return BaseCommand.getResidentsOfTownStartingWith(townName, str);
+	}
+	
+	/**
+	 * Returns a list of residents which are online and have no town.
+	 * Useful for tab completion systems.
+	 * 
+	 * @param str the string to check if the resident's name starts with.
+	 * @return the residents name or an empty list.
+	 */
+	public static List<String> getResidentsWithoutTownStartingWith(String str) {
+		return BaseCommand.getResidentsWithoutTownStartingWith(str);
+	}
+
+	/**
      * @deprecated since 0.97.3.0 use {@link Town#hasActiveWar()} or {@link Nation#hasActiveWar()} instead.
      * @return false.
      */

@@ -7043,3 +7043,4 @@ v0.92.0.11:
   - Allow lava_cauldrons to kill minecarts.
     - Closes #5503.
   - Call the pre new town event after any confirmations are confirmed, courtesy of Warriorrrr with PR #5508.
+  - API: Add tab-completion helper methods to TownyAPI.

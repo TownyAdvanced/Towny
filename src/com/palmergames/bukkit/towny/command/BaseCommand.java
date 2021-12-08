@@ -183,7 +183,6 @@ public class BaseCommand implements TabCompleter{
 	 * @param str the string to check if the town's residents start with
 	 * @return the resident names that match str
 	 */
-
 	public static List<String> getResidentsOfTownStartingWith(String townName, String str) {
 		Town town = TownyUniverse.getInstance().getTown(townName);
 		
