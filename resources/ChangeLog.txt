@@ -7044,3 +7044,5 @@ v0.92.0.11:
     - Closes #5503.
   - Call the pre new town event after any confirmations are confirmed, courtesy of Warriorrrr with PR #5508.
   - API: Add tab-completion helper methods to TownyAPI.
+0.97.5.2:
+  - Fix language strings added to Towny via the API throwing errors for players using un-translated locales. 

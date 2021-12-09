@@ -232,8 +232,8 @@ public final class Translation {
 		String data = translations.get(validateLocale(locale.toString())).get(key.toLowerCase(Locale.ROOT));
 
 		if (data == null) {
-			TownySettings.sendError(key.toLowerCase() + " from " + TownySettings.getString(ConfigNodes.LANGUAGE));
-			return key;
+			// The locale is missing the language string or the locale is invalid, try to use the default locale.
+			return of(key);
 		}
 
 		return Colors.translateColorCodes(data);
