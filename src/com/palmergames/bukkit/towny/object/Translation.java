@@ -364,29 +364,24 @@ public final class Translation {
 	}
 	
 	private static String getTranslationValue(Map.Entry<String, Object> entry) {
+		// Messages blocked from being overriden.
 		if (entry.getKey().toLowerCase().startsWith("msg_ptw_warning")) {
+			// Get the defaultLocale's translation of the PTW warnings.
 			String msg = translations.get(defaultLocale.toString()).get(entry.getKey());
-
-			// It's extremely possible the jar was edited and the string is missing/was modified.
-			if (!msg.contains("Towny")) {
-				switch (entry.getKey()) {
-					case "msg_ptw_warning_1": {
-						msg = "If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.";
-						break;
-					}
-					case "msg_ptw_warning_2": {
-						msg = "The Towny team never intended for townblocks to be purchaseable with real money.";
-						break;
-					}
-					case "msg_ptw_warning_3": {
-						msg = "If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.";
-						break;
-					}
-				}
-			}
 			hasBlockedOverrides = true;
+			// It's extremely possible the jar was edited and the string is missing/was modified.
+			if (!msg.contains("Towny"))
+				// Return a hard-coded message, the translation in the jar was likely tampered with.
+				return switch (entry.getKey()) {
+					case "msg_ptw_warning_1" -> "If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.";
+					case "msg_ptw_warning_2" -> "The Towny team never intended for townblocks to be purchaseable with real money.";
+					case "msg_ptw_warning_3" -> "If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.";
+					default -> throw new IllegalArgumentException("Unexpected value: " + entry.getKey());
+				};
+			// Return the defaultLocale's message, it appears to have been left alone.
 			return msg;
 		}
+		// Return the normal translation of the entry.
 		return String.valueOf(entry.getValue());
 	}
 }
