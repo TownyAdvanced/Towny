@@ -126,6 +126,7 @@ public enum HelpMenu {
 				.add("[nation] withdraw [amount]", "")
 				.add("[nation] bankhistory", "")
 				.add("[oldnation] merge [newnation]", "")
+				.add("[nation] transfer [townname]", "")
 				.add("rank [add/remove] [resident] [rank]", "");
 		}
 	},

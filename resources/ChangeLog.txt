@@ -7046,3 +7046,6 @@ v0.92.0.11:
   - API: Add tab-completion helper methods to TownyAPI.
 0.97.5.2:
   - Fix language strings added to Towny via the API throwing errors for players using un-translated locales. 
+  - New Command: /ta nation [nationname] transfer [townname]
+    - Places the given town into the given nation, removing any old nation if needed.
+    - Works toward closing #4906.
