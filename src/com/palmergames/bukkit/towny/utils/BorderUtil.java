@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.utils;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+
 import com.palmergames.bukkit.towny.object.WorldCoord;
 
 import java.util.ArrayList;
@@ -11,6 +13,8 @@ import java.util.stream.Collectors;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Chris H (Zren / Shade)
@@ -62,8 +66,22 @@ public class BorderUtil {
 	 * @return List&lt;BlockState&gt; which has been filtered to same-owner and wilderness.
 	 */
 	public static List<BlockState> allowedBlocks(List<BlockState> blocks, Block originBlock) {
+		return allowedBlocks(blocks, originBlock, null);
+	}
+	
+	/**
+	 * Will return a list of blocks which all either have the same town as an owner, 
+	 * or the same player as owner. Any block in the wilderness is considered allowed.
+	 * Takes the player involved into account.
+	 * 
+	 * @param blocks List&lt;BlockState&gt; which hasn't been filtered yet.
+	 * @param originBlock Block from which to test against.
+	 * @param player Player which is involved in the test.
+	 * @return List&lt;BlockState&gt; which has been filtered to same-owner and wilderness.
+	 */
+	public static List<BlockState> allowedBlocks(List<BlockState> blocks, Block originBlock, Player player) {
 		return blocks.stream()
-			.filter(blockState -> allowedMove(originBlock, blockState.getBlock()))
+			.filter(blockState -> allowedMove(originBlock, blockState.getBlock(), player))
 			.collect(Collectors.toList());
 	}
 	
@@ -76,9 +94,23 @@ public class BorderUtil {
 	 * @return List&lt;BlockState&gt; which has been filtered to same-owner and wilderness.
 	 */	
 	public static List<BlockState> disallowedBlocks(List<BlockState> blocks, Block originBlock) {
+		return disallowedBlocks(blocks, originBlock, null);
+	}
+
+	/**
+	 * Will return a list of blocks which all either do not have the same town as an owner, 
+	 * or do not have the same player as owner. Any block in the wilderness is considered allowed.
+	 * When Player is not null, player cache will be used to determine build rights. 
+	 * 
+	 * @param blocks List&lt;BlockState&gt; which hasn't been filtered yet.
+	 * @param originBlock Block from which to test against.
+	 * @param player Player the player involved in the move, when not null.
+	 * @return List&lt;BlockState&gt; which has been filtered to same-owner and wilderness.
+	 */	
+	public static List<BlockState> disallowedBlocks(List<BlockState> blocks, Block originBlock, Player player) {
 		return blocks.stream()
-			.filter(blockState -> !allowedMove(originBlock, blockState.getBlock()))
-			.collect(Collectors.toList());
+				.filter(blockState -> !allowedMove(originBlock, blockState.getBlock(), player))
+				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -90,6 +122,26 @@ public class BorderUtil {
 	 * @return true if the blocks are considered same-owner or wilderness.
 	 */
 	public static boolean allowedMove(Block block, Block blockTo) {
+		return allowedMove(block, blockTo, null); 
+	}
+	
+	/**
+	 * Decides whether a block is in a same-owner relation ship with the given block.
+	 * Wilderness blocks are considered allowed. When player isn't null, the player
+	 * cache is checked.
+	 * 	
+	 * @param block Block which is the original.
+	 * @param blockTo Block to test the relation to.
+	 * @param player Player involved in the move, when not null.
+	 * @return true if the blocks are considered same-owner or wilderness or allowed via player cache.
+	 */	
+	public static boolean allowedMove(Block block, Block blockTo, @Nullable Player player) {
+		// Player isn't null, lets test the player cache to see if they are able to build in both areas anyways.
+		if (player != null 
+			&& PlayerCacheUtil.getCachePermission(player, blockTo.getLocation(), block.getType(), ActionType.BUILD)
+			&& PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), ActionType.BUILD))
+			return true;
+
 		WorldCoord from = WorldCoord.parseWorldCoord(block);
 		WorldCoord to = WorldCoord.parseWorldCoord(blockTo);
 		if (from.equals(to) || TownyAPI.getInstance().isWilderness(to))

@@ -389,7 +389,7 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 		
-		List<BlockState> allowed = BorderUtil.allowedBlocks(event.getBlocks(), event.getBlock());
+		List<BlockState> allowed = BorderUtil.allowedBlocks(event.getBlocks(), event.getBlock(), event.getPlayer());
 		event.getBlocks().clear();
         event.getBlocks().addAll(allowed);
 	}

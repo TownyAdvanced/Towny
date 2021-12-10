@@ -7049,3 +7049,5 @@ v0.92.0.11:
   - New Command: /ta nation [nationname] transfer [townname]
     - Places the given town into the given nation, removing any old nation if needed.
     - Works toward closing #4906.
+  - Fix bonemealing trees and grass not being aware of the player involved, and their permissions.
+    - Closes #5517.

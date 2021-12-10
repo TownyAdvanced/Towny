@@ -118,7 +118,7 @@ public class TownyWorldListener implements Listener {
 		// The event Location is always one spot, and although 2x2 trees technically should have 4 locations, 
 		// we can trust that the saplings were all placed by one person, or group of people, who were allowed
 		// to place them.
-		List<BlockState> disallowed = BorderUtil.disallowedBlocks(event.getBlocks(), event.getLocation().getBlock());
+		List<BlockState> disallowed = BorderUtil.disallowedBlocks(event.getBlocks(), event.getLocation().getBlock(), event.getPlayer());
 		
 		if (!disallowed.isEmpty())
 			event.getBlocks().removeAll(disallowed);
