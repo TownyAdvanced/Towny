@@ -7051,3 +7051,4 @@ v0.92.0.11:
     - Works toward closing #4906.
   - Fix bonemealing trees and grass not being aware of the player involved, and their permissions.
     - Closes #5517.
+  - API: Add TownPreClaimEvent to initial TownBlock claimed during new Town code.
