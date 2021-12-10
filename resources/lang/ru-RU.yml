@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.136
+version: 0.137
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -986,7 +986,7 @@ towny_prices_price_plot: '&c    [Price] &2Участок: &a%s &8| &2Аванп�
 towny_prices_price_shop: '&c            &2Магазин: &a%s &8| &2Посольство: &a%s'
 towny_prices_taxes_plot: '&c    [Налоги]    &2Игрок: &a%s &8| &2Участок: &a%s'
 towny_prices_taxes_shop: '&c            &2Магазин: &a%s &8| &2Посольство: &a%s'
-towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
+towny_prices_town_neutral_tax: '&c            &2Нейтралитет: &a%s'
 towny_prices_plots_shop: '&c    [Изменение типа участка] &2Магазин: &a%s &8| &2Посольство: &a%s'
 towny_prices_plots_wilds: '&c                       &2Дебри: &a%s &8| &2Гостинная: &a%s'
 towny_prices_plots_jail: '&c                        &2Тюрьма: &a%s &8| &2Ферма: &a%s'
@@ -1325,13 +1325,13 @@ msg_perm_true: 'Permission True.'
 msg_err_perm_false: 'Permission False.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+status_towny_map_town_line: '&2Город: &a%s &7| &2Владелец: &a%s'
 #Shown on /towny version
-msg_towny_version: '&2Towny Version: &a%s'
+msg_towny_version: '&2Версия Towny: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
+msg_admin_blocked_login: '&2Игрок с IP-адресом &c%s &2пытался войти, используя имя аккаунта %s, что могло нанести урон системе экономики вашего сервера, но его вход был предотвращен Towny. Задумайтесь о блокировке этого IP-адреса!'
 #Shown during resident purge
-msg_scanning_for_old_residents: 'Scanning for old residents...'
+msg_scanning_for_old_residents: 'Поиск данных старых игроков...'
 #Shown during resident purge
 msg_deleting_resident: 'Удаление игрока: %s.'
 #Shown during resident purge
@@ -1342,7 +1342,7 @@ msg_you_have_been_given_bonus_blocks: 'Вам было дано %s бонусн�
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Лимит участков достигнут. У вас нет доступных участков для покупки.'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
-msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
+msg_err_capital_cannot_be_peaceful: 'Столицы наций не могут менять статус своего нейтралитета.'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
@@ -1351,9 +1351,9 @@ msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to t
 #Shown in /towny prices, describing what controls nation upkeep.
 towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
-towny_prices_upkeep_num_towns: 'number of towns.'
+towny_prices_upkeep_num_towns: 'количестве городов.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
-towny_prices_upkeep_nation_level: 'nation level (num residents.)'
+towny_prices_upkeep_nation_level: 'уровне нации (количестве участников.)'
 #Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Jailed by mayor.'
@@ -1397,16 +1397,16 @@ msg_error_town_has_no_enemies: 'Town has no enemies to list.'
 msg_baltop_book_format: '%s. %s | %s'
 #Added in 0.133
 #Message shown when a confirmation times out.
-msg_confirmation_timed_out: 'Confirmation Timed Out.'
+msg_confirmation_timed_out: 'Время ожидания подтверждения истекло.'
 #Added in 0.134
-tc_player_channel_sound_muted: 'The channel sound has been muted'
-tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
+tc_player_channel_sound_muted: 'Звук канала выключен'
+tc_player_channel_sound_unmuted: 'Звук канала включен'
 #Added in 0.135
-msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
+msg_cant_toggle_pvp_outsider_in_plot: 'В этом городском участке находится посторонний, вы не можете поменять статус PVP!'
 #Added in 0.136
-msg_view_on_web: 'Click to view on the web.'
+msg_view_on_web: 'Нажмите для просмотра в Интернете.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
-status_neutrality_cost: 'Neutrality Cost:'
+status_neutrality_cost: 'Стоимость нейтралитета:'
