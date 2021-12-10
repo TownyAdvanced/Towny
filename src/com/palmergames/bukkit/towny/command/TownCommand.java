@@ -2949,12 +2949,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (town == null)
 			throw new TownyException(String.format("Error fetching new town from name '%s'", name));
 
+		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
+		townBlock.setTown(town);
+		TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, townBlock, player, false, true);
+		BukkitTools.getPluginManager().callEvent(preClaimEvent);
+		if(preClaimEvent.isCancelled()) {
+			TownyUniverse.getInstance().removeTownBlock(townBlock);
+			TownyUniverse.getInstance().unregisterTown(town);
+			town = null;
+			townBlock = null;
+			throw new TownyException(preClaimEvent.getCancelMessage());
+		}
+
 		town.setRegistered(System.currentTimeMillis());
 		town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
 		resident.setTown(town);
 		town.setMayor(resident);
-		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
-		townBlock.setTown(town);
 
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
