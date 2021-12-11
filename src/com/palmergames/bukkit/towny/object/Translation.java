@@ -31,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -62,19 +63,21 @@ public final class Translation {
 		Map<String, Object> globalOverrides = new HashMap<>();
 		Path globalYMLPath = langFolder.resolve("global.yml");
 		
-		if (!FileMgmt.checkOrCreateFile(globalYMLPath.toString())) {
-			throw new TownyInitException("Failed to touch '" + globalYMLPath + "'.", TownyInitException.TownyError.LOCALIZATION);
-		}
-		try {
-			InputStream resource = Towny.class.getResourceAsStream("/global.yml");
-			if (resource == null) {
-				throw new TownyInitException("Could not find global.yml in the JAR", TownyInitException.TownyError.LOCALIZATION);
+		if (!globalYMLPath.toFile().exists()) {
+			if (!FileMgmt.checkOrCreateFile(globalYMLPath.toString())) {
+				throw new TownyInitException("Failed to touch '" + globalYMLPath + "'.", TownyInitException.TownyError.LOCALIZATION);
 			}
-			Files.copy(resource, globalYMLPath);
-		} catch (FileAlreadyExistsException ignored) {
-			// Expected behaviour
-		} catch (IOException e) {
-			throw new TownyInitException("Failed to copy global.yml from the JAR to '" + globalYMLPath + "'", TownyInitException.TownyError.LOCALIZATION, e);
+			try {
+				InputStream resource = Towny.class.getResourceAsStream("/global.yml");
+				if (resource == null) {
+					throw new TownyInitException("Could not find global.yml in the JAR", TownyInitException.TownyError.LOCALIZATION);
+				}
+				Files.copy(resource, globalYMLPath, StandardCopyOption.REPLACE_EXISTING);
+			} catch (FileAlreadyExistsException ignored) {
+				// Should not be possible.
+			} catch (IOException e) {
+				throw new TownyInitException("Failed to copy global.yml from the JAR to '" + globalYMLPath + "'", TownyInitException.TownyError.LOCALIZATION, e);
+			}
 		}
 		
 		try (InputStream is = Files.newInputStream(globalYMLPath)) {
