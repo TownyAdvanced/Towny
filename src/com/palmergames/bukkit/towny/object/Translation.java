@@ -53,7 +53,6 @@ public final class Translation {
 	private static final Map<String, Map<String, String>> translations = new HashMap<>();
 	private static Locale defaultLocale;
 	private static final Path langFolder = Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("lang");
-	private static boolean hasBlockedOverrides = false;
 	
 	public static void loadTranslationRegistry() {
 		translations.clear();
@@ -359,16 +358,12 @@ public final class Translation {
 		}
 	}
 	
-	public static boolean hasBlockedOverrides() {
-		return hasBlockedOverrides;
-	}
-	
 	private static String getTranslationValue(Map.Entry<String, Object> entry) {
 		// Messages blocked from being overriden.
 		if (entry.getKey().toLowerCase().startsWith("msg_ptw_warning")) {
 			// Get the defaultLocale's translation of the PTW warnings.
-			String msg = translations.get(defaultLocale.toString()).get(entry.getKey());
-			hasBlockedOverrides = true;
+			String msg = String.valueOf(translations.get(defaultLocale).get(entry.getKey()));
+			Towny.getPlugin().getLogger().warning("Attempted to override an protected string. Skipped " + entry.getKey());
 			// It's extremely possible the jar was edited and the string is missing/was modified.
 			if (!msg.contains("Towny"))
 				// Return a hard-coded message, the translation in the jar was likely tampered with.
