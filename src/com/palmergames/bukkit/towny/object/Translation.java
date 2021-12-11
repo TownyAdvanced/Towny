@@ -117,6 +117,12 @@ public final class Translation {
 		Bukkit.getPluginManager().callEvent(translationLoadEvent);
 		addTranslations(translationLoadEvent.getAddedTranslations());
 		
+		try {
+			Files.createDirectories(langFolder.resolve("override"));
+		} catch (IOException e) {
+			throw new TownyInitException("Failed to create language override folder.", TownyInitException.TownyError.LOCALIZATION, e);
+		}
+		
 		// Load optional override files.
 		File[] overrideFiles = new File(langFolder + File.separator + "override").listFiles();
 		if (overrideFiles != null) {

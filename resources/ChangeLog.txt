@@ -7053,3 +7053,4 @@ v0.92.0.11:
     - Closes #5517.
   - API: Add TownPreClaimEvent to initial TownBlock claimed during new Town code.
   - Fix lang\global.yml files generating empty on new installs.
+  - Fix lang\override\ folder not being made on new installs.
