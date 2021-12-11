@@ -362,7 +362,7 @@ public final class Translation {
 		// Messages blocked from being overriden.
 		if (entry.getKey().toLowerCase().startsWith("msg_ptw_warning")) {
 			// Get the defaultLocale's translation of the PTW warnings.
-			String msg = String.valueOf(translations.get(defaultLocale).get(entry.getKey()));
+			String msg = String.valueOf(entry.getValue());
 			Towny.getPlugin().getLogger().warning("Attempted to override an protected string. Skipped " + entry.getKey());
 			// It's extremely possible the jar was edited and the string is missing/was modified.
 			if (!msg.contains("Towny"))
