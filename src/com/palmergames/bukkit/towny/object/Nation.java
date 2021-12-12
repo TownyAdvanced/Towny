@@ -204,7 +204,7 @@ public class Nation extends Government {
 		this.capital = capital;
 		
 		if (this.spawn != null && TownySettings.isNationSpawnOnlyAllowedInCapital() && !capital.isInsideTown(this.spawn))
-			this.spawn = null;
+			this.spawn = capital.getSpawnOrNull();
 
 		try {
 			TownyPerms.assignPermissions(capital.getMayor(), null);
