@@ -7055,3 +7055,5 @@ v0.92.0.11:
   - Fix lang\global.yml files generating empty on new installs.
   - Fix lang\override\ folder not being made on new installs.
   - Fix nations that change kings setting a null spawn when the new capital has a town spawn.
+  - Replace underscores on override lang keys properly, courtesy of Warriorrrr with PR #5522.
+    - Closes #5521.
