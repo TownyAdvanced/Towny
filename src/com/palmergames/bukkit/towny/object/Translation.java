@@ -130,7 +130,7 @@ public final class Translation {
 				if (file.isFile() && FileNameUtils.getExtension(file.getName()).equalsIgnoreCase("yml") && !file.getName().equalsIgnoreCase("global.yml")) {
 					try (FileInputStream is = new FileInputStream(file)) {
 						Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
-						String lang = FileNameUtils.getBaseName(file.getName());
+						String lang = FileNameUtils.getBaseName(file.getName()).replaceAll("-", "_");
 
 						if (values != null) {
 							translations.computeIfAbsent(lang, k -> new HashMap<>());
@@ -359,11 +359,15 @@ public final class Translation {
 	public static void addTranslations(Map<String, Map<String, String>> addedTranslations) {
 		if (addedTranslations != null && !addedTranslations.isEmpty()) {
 			for (String language : addedTranslations.keySet())
-				if (addedTranslations.get(language) != null && !addedTranslations.get(language).isEmpty())
-					for (Map.Entry<String, String> entry : addedTranslations.get(language).entrySet()) {
+				if (addedTranslations.get(language) != null && !addedTranslations.get(language).isEmpty()) {
+					Map<String, String> newTranslations = addedTranslations.get(language);
+					language = language.replaceAll("-", "_");
+
+					for (Map.Entry<String, String> entry : newTranslations.entrySet()) {
 						translations.computeIfAbsent(language, k -> new HashMap<>());
 						translations.get(language).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
 					}
+				}
 		}
 	}
 }
