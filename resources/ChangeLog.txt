@@ -7059,3 +7059,4 @@ v0.92.0.11:
     - Closes #5521.
   - Fix aborted teleports not refunding the spawn travel cost.
     - Closes #5526.
+  - Add INK_SAC and GLOW_INK_SAC to ItemLists list of Dyes, to prevent them being used on Signs.
