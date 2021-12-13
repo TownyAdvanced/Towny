@@ -99,7 +99,6 @@ import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 
-import net.kyori.adventure.Adventure;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -178,6 +177,32 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"enemylist",
 		"baltop"
 		);
+	private static final List<String> townSoloArgumentsWithFurtherOptionalOrNoneArguments = Arrays.asList(
+		"online",
+		"reslist",
+		"outlawlist",
+		"plots",
+		"delete",
+		"join",
+		"merge",
+		"plotgrouplist",
+		"allylist",
+		"enemylist",
+		"baltop",
+		"ranklist",
+		"spawn",
+		"outpost",
+		"unclaim",
+		"claim",
+		"list",
+		"bankhistory",
+		"here",
+		"leave",
+		"major",
+		"reclaim",
+		"say"
+
+	);
 	private static final List<String> townSetTabCompletes = Arrays.asList(
 		"board",
 		"mayor",
@@ -269,7 +294,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			final Audience audience = Towny.getAdventure().player(player);
 
 			if (args.length == 1){
-				FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[What would you like to do?]", "...");
+				if(townSoloArgumentsWithFurtherOptionalOrNoneArguments.contains(args[0])){
+					FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[What would you like to do?]", "...(optional)");
+				}else{
+					FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[What would you like to do?]", "...");
+				}
 				if(args[0].startsWith("c")){
 					List<String> completes = new ArrayList<>(townTabCompletes);
 					completes.add("create");
@@ -397,7 +426,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					case "claim":
 						switch (args.length) {
 							case 2:
-								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Claim Mode]", "...(optional)");
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: Claim Mode)", "...(optional)");
 								return NameUtil.filterByStart(townClaimTabCompletes, args[1]);
 							case 3:
 								if (!args[1].equalsIgnoreCase("outpost")) {
@@ -550,9 +579,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					case "leave":
 					case "major":
 					case "reclaim":
-						if (args.length == 2){
-							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "", "");
-						}
+						//handled by townSoloArgumentsWithFurtherOptionalArguments;
 						break;
 					case "purge":
 						if (args.length == 2){
