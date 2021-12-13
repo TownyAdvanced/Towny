@@ -99,6 +99,8 @@ import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 
+import net.kyori.adventure.Adventure;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -263,10 +265,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
-		if (sender instanceof Player) {
-			Player player = (Player) sender;
-			
+		if (sender instanceof Player player) {
+			Audience audience = Towny.getAdventure().player(player);
+
 			switch (args[0].toLowerCase()) {
+				case "new":
+				case "create":
+					if(args.length >= 1){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "<Enter new town name>", "");
+					}
+					break;
 				case "online":
 				case "reslist":
 				case "outlawlist":
@@ -480,8 +488,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							return Collections.emptyList();
 					}
 				default:
-					if (args.length == 1)
-						return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, townTabCompletes), args[0], "t");
+					if (args.length == 1){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[What would you like to do?]", "...");
+						if(args[0].startsWith("c")){
+							List<String> completes = new ArrayList<>(townTabCompletes);
+							completes.add("create");
+							return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, completes), args[0], "t");
+						}else{
+							return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, townTabCompletes), args[0], "t");
+						}
+						
+					}
 					else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWN, args[0]))
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, args[0]).getTabCompletion(sender, args), args[args.length-1]);
 			}
@@ -522,13 +539,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		
-		if (sender instanceof Player) {
+		if (sender instanceof Player player) {
 			if (plugin.isError()) {
 				TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
 				return false;
 			}
 				
-			parseTownCommand((Player) sender, args);
+			parseTownCommand(player, args);
 		} else {
 			
 			parseTownCommandForConsole(sender, args);
