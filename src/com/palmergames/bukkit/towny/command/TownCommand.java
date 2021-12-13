@@ -2307,7 +2307,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				if (split.length < 2) {
-					TownyMessaging.sendErrorMsg(player, "Eg. /town set taxMax 10000");
+					TownyMessaging.sendErrorMsg(player, "Eg. /town set taxpercentcap 10000");
 					return;
 				}
 				
