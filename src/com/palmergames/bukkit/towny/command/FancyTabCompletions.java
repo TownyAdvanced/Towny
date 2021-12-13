@@ -80,6 +80,9 @@ public class FancyTabCompletions {
 
 
 	public static void sendFancyCommandCompletion(final String command, final Audience audience, final String[] args, final String hintCurrentArg, final String hintNextArgs) {
+		if (!TownySettings.isActionBarTabCompletions() && !TownySettings.isTitleTabCompletions()){
+			return;
+		}
 		final Component fancyTabCompletion = getFancyCommandTabCompletion(command, args, hintCurrentArg, hintNextArgs);
 		if (TownySettings.isActionBarTabCompletions()) {
 			audience.sendActionBar(fancyTabCompletion);
