@@ -1,12 +1,18 @@
 package com.palmergames.bukkit.towny.command;
 
 
+import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.TownySettings;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.BuildableComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
+import org.bukkit.Bukkit;
+
+import java.util.Locale;
 
 public class FancyTabCompletions {
 	private static final TextColor highlight = NamedTextColor.GREEN;
@@ -21,23 +27,19 @@ public class FancyTabCompletions {
 		final int initialCutoff = (args.length) - maxPreviousArgs;
 		int cutoff = (args.length) - maxPreviousArgs;
 
-
 		for (int i = -1; i < args.length - 1; i++) {
-
 			if (cutoff == 0) {
 				if (i == -1) {
 					argsTogether.append("/").append(command).append(" ");
 				} else {
 					argsTogether.append(args[i]).append(" ");
 				}
-
 			} else {
 				if (cutoff > 0) {
 					cutoff -= 1;
 				} else { //Just 1 arg
 					argsTogether.append("/").append(command).append(" ");
 				}
-
 			}
 		}
 
@@ -53,7 +55,7 @@ public class FancyTabCompletions {
 			currentCompletion = Component.text("" + args[args.length - 1], NamedTextColor.YELLOW, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false);
 		}
 
-		if (!hintNextArgs.isEmpty()){
+		if (!hintNextArgs.isEmpty() && !hintNextArgs.toLowerCase(Locale.ROOT).contains("optional")){
 			//Chop off if too long
 			if (hintNextArgs.length() > 15) {
 				hintNextArgs = hintNextArgs.substring(0, 14) + "...";
@@ -79,10 +81,10 @@ public class FancyTabCompletions {
 
 	public static void sendFancyCommandCompletion(final String command, final Audience audience, final String[] args, final String hintCurrentArg, final String hintNextArgs) {
 		final Component fancyTabCompletion = getFancyCommandTabCompletion(command, args, hintCurrentArg, hintNextArgs);
-		if (true) {
+		if (TownySettings.isActionBarTabCompletions()) {
 			audience.sendActionBar(fancyTabCompletion);
 		}
-		if (true) {
+		if (TownySettings.isTitleTabCompletions()) {
 			audience.showTitle(Title.title(Component.text(""), fancyTabCompletion));
 		}
 	

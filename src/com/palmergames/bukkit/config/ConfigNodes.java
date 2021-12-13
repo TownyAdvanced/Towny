@@ -19,6 +19,14 @@ public enum ConfigNodes {
 			"# ko-KR.yml, nl-NL.yml, no-NO.yml, pl-PL.yml, pt-BR.yml, pt-PT.yml, ro-RO.yml,",
 			"# ru-RU.yml, sv-SE.yml, th-TH.yml, tl-PH.yml, tr-TR.yml, vi-VN.yml, zh-CN.yml,",
 			"# zh-TW.yml"),
+	ACTIONBAR_TAB_COMPLETIONS(
+		"tab_completions.actionbar",
+		"false",
+		"# Determines if explanatory tab completions should show over the health bar"),
+	TITLE_TAB_COMPLETIONS(
+		"tab_completions.title",
+		"true",
+		"# Determines if explanatory tab completions should show as a title"),
 	PERMS(
 			"permissions",
 			"",

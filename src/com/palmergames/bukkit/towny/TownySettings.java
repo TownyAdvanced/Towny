@@ -2981,5 +2981,13 @@ public class TownySettings {
 	public static SortedMap<Integer, Map<NationLevel, Object>> getConfigNationLevel() {
 		return configNationLevel;
 	}
+
+	public static boolean isActionBarTabCompletions() {
+		return getBoolean(ConfigNodes.ACTIONBAR_TAB_COMPLETIONS);
+	}
+	
+	public static boolean isTitleTabCompletions() {
+		return getBoolean(ConfigNodes.TITLE_TAB_COMPLETIONS);
+	}
 }
 

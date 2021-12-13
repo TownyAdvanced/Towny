@@ -268,240 +268,249 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (sender instanceof Player player) {
 			Audience audience = Towny.getAdventure().player(player);
 
-			switch (args[0].toLowerCase()) {
-				case "new":
-				case "create":
-					if(args.length >= 1){
+			if (args.length == 1){
+				FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[What would you like to do?]", "...");
+				if(args[0].startsWith("c")){
+					List<String> completes = new ArrayList<>(townTabCompletes);
+					completes.add("create");
+					return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, completes), args[0], "t");
+				}else{
+					return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, townTabCompletes), args[0], "t");
+				}
+
+			}else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWN, args[0])){
+				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, args[0]).getTabCompletion(sender, args), args[args.length-1]);
+			}else{ //args length > 1
+				switch (args[0].toLowerCase()) {
+					case "new":
+					case "create":
 						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "<Enter new town name>", "");
-					}
-					break;
-				case "online":
-				case "reslist":
-				case "outlawlist":
-				case "plots":
-				case "delete":
-				case "join":
-				case "merge":
-				case "plotgrouplist":
-				case "allylist":
-				case "enemylist":
-				case "baltop":
-				case "ranklist":
-					if (args.length == 2)
-						return getTownyStartingWith(args[1], "t");
-					break;
-				case "spawn":
-					if (args.length == 2) {
-						List<String> townOrIgnore = getTownyStartingWith(args[1], "t");
-						townOrIgnore.add("-ignore");						
-						return NameUtil.filterByStart(townOrIgnore, args[1]);
-					}
-					if (args.length == 3) {
-						List<String> ignore = Collections.singletonList("-ignore");
-						return ignore;
-					}
-				case "rank":
-					switch (args.length) {
-						case 2:
-							return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
-						case 3:
-							return getTownResidentNamesOfPlayerStartingWith(player, args[2]);
-						case 4:
-							switch (args[1].toLowerCase()) {
-								case "add":
-									return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[3]);
-								case "remove": {
-									Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
-									
-									if (res != null) {
-										return NameUtil.filterByStart(res.getTownRanks(), args[3]);
+						break;
+					case "online":
+					case "reslist":
+					case "outlawlist":
+					case "plots":
+					case "delete":
+					case "join":
+					case "merge":
+					case "plotgrouplist":
+					case "allylist":
+					case "enemylist":
+					case "baltop":
+					case "ranklist":
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: Enter town name)", "");
+							return getTownyStartingWith(args[1], "t");
+						}
+						break;
+					case "spawn":
+						if (args.length == 2) {
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: Town name or '-ignore')", "(Optional: '-ignore')");
+
+							List<String> townOrIgnore = getTownyStartingWith(args[1], "t");
+							townOrIgnore.add("-ignore");
+							return NameUtil.filterByStart(townOrIgnore, args[1]);
+						}
+						if (args.length == 3) {
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: '-ignore')", "");
+							return Collections.singletonList("-ignore");
+						}
+					case "rank":
+						switch (args.length) {
+							case 2:
+								return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
+							case 3:
+								return getTownResidentNamesOfPlayerStartingWith(player, args[2]);
+							case 4:
+								switch (args[1].toLowerCase()) {
+									case "add":
+										return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[3]);
+									case "remove": {
+										Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+
+										if (res != null) {
+											return NameUtil.filterByStart(res.getTownRanks(), args[3]);
+										}
+										break;
 									}
-									break;
+									default:
+										return Collections.emptyList();
 								}
-								default:
-									return Collections.emptyList();
-							}
-						default:
-							return Collections.emptyList();
-					}
-				case "jail":
-					if (args.length == 2) {
-						List<String> residentOrList = getTownResidentNamesOfPlayerStartingWith(player, args[1]);
-						residentOrList.add("list");
-						return NameUtil.filterByStart(residentOrList, args[1]);
-					}
-				case "unjail":
-					if (args.length == 2) {
-						Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
-						if (res != null && res.hasTown()) {
-							Town town = res.getTownOrNull();
-							List<String> jailedResidents = new ArrayList<>();
-							TownyUniverse.getInstance().getJailedResidentMap().stream()
+							default:
+								return Collections.emptyList();
+						}
+					case "jail":
+						if (args.length == 2) {
+							List<String> residentOrList = getTownResidentNamesOfPlayerStartingWith(player, args[1]);
+							residentOrList.add("list");
+							return NameUtil.filterByStart(residentOrList, args[1]);
+						}
+					case "unjail":
+						if (args.length == 2) {
+							Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+							if (res != null && res.hasTown()) {
+								Town town = res.getTownOrNull();
+								List<String> jailedResidents = new ArrayList<>();
+								TownyUniverse.getInstance().getJailedResidentMap().stream()
 									.filter(jailee -> town.hasResident(jailee))
 									.forEach(jailee -> jailedResidents.add(jailee.getName()));
-							return NameUtil.filterByStart(jailedResidents, args[1]);
+								return NameUtil.filterByStart(jailedResidents, args[1]);
+							}
 						}
-					}
-				case "outpost":
-					if (args.length == 2)
-						return Collections.singletonList("list");
-					break;
-				case "outlaw":
-				case "ban":
-					switch (args.length) {
-						case 2:
-							return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
-						case 3:
-							switch (args[1].toLowerCase()) {
-								case "add":
-									return getTownyStartingWith(args[2], "r");
-								case "remove": {
-									Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-									if (resident != null) {
+					case "outpost":
+						if (args.length == 2)
+							return Collections.singletonList("list");
+						break;
+					case "outlaw":
+					case "ban":
+						switch (args.length) {
+							case 2:
+								return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
+							case 3:
+								switch (args[1].toLowerCase()) {
+									case "add":
+										return getTownyStartingWith(args[2], "r");
+									case "remove": {
+										Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+										if (resident != null) {
+											try {
+												return NameUtil.filterByStart(NameUtil.getNames(resident.getTown().getOutlaws()), args[2]);
+											} catch (TownyException ignore) {
+											}
+										}
+									}
+									default:
+										return Collections.emptyList();
+								}
+							default:
+								return Collections.emptyList();
+						}
+					case "claim":
+						switch (args.length) {
+							case 2:
+								return NameUtil.filterByStart(townClaimTabCompletes, args[1]);
+							case 3:
+								if (!args[1].equalsIgnoreCase("outpost")) {
+									return NameUtil.filterByStart(Collections.singletonList("auto"), args[2]);
+								}
+							default:
+								return Collections.emptyList();
+						}
+					case "unclaim":
+						if (args.length == 2)
+							return NameUtil.filterByStart(townUnclaimTabCompletes, args[1]);
+						break;
+					case "add":
+						if (args.length == 2)
+							return getResidentsWithoutTownStartingWith(args[1]);
+						break;
+					case "kick":
+						if (args.length == 2)
+							return getTownResidentNamesOfPlayerStartingWith(player, args[1]);
+						break;
+					case "set":
+						try {
+							Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+							if (res != null)
+								return townSetTabComplete(sender, res.getTown(), args);
+						} catch (TownyException e) {
+						}
+						return Collections.emptyList();
+					case "invite":
+						switch (args.length) {
+							case 2:
+								List<String> returnValue = NameUtil.filterByStart(townInviteTabCompletes, args[1]);
+								if (returnValue.size() > 0) {
+									return returnValue;
+								} else {
+									if (args[1].startsWith("-")) {
+										Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+
+										if (res == null)
+											return null;
+
 										try {
-											return NameUtil.filterByStart(NameUtil.getNames(resident.getTown().getOutlaws()), args[2]);
+											return NameUtil.filterByStart(res.getTown().getSentInvites()
+													// Get all sent invites
+													.stream()
+													.map(Invite::getReceiver)
+													.map(InviteReceiver::getName)
+													.collect(Collectors.toList()), args[1].substring(1))
+												// Add the hyphen back to the front
+												.stream()
+												.map(e -> "-" + e)
+												.collect(Collectors.toList());
+										} catch (TownyException ignore) {
+										}
+									} else {
+										return null;
+									}
+								}
+							case 3:
+								switch (args[1].toLowerCase()) {
+									case "accept":
+									case "deny": {
+										Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+										if (res == null)
+											return null;
+
+										try {
+											return NameUtil.filterByStart(res.getTown().getReceivedInvites()
+												// Get the names of all received invites
+												.stream()
+												.map(Invite::getSender)
+												.map(InviteSender::getName)
+												.collect(Collectors.toList()), args[2]);
 										} catch (TownyException ignore) {
 										}
 									}
+									default:
+										return Collections.emptyList();
 								}
-								default:
-									return Collections.emptyList();
-							}
-						default:
-							return Collections.emptyList();
-					}
-				case "claim":
-					switch (args.length) {
-						case 2:
-							return NameUtil.filterByStart(townClaimTabCompletes, args[1]);
-						case 3:
-							if (!args[1].equalsIgnoreCase("outpost")) {
-								return NameUtil.filterByStart(Collections.singletonList("auto"), args[2]);
-							}
-						default:
-							return Collections.emptyList();
-					}
-				case "unclaim":
-					if (args.length == 2)
-						return NameUtil.filterByStart(townUnclaimTabCompletes, args[1]);
-					break;
-				case "add":
-					if (args.length == 2)
-						return getResidentsWithoutTownStartingWith(args[1]);
-					break;
-				case "kick":
-					if (args.length == 2)
-						return getTownResidentNamesOfPlayerStartingWith(player, args[1]);
-					break;
-				case "set":
-					try {
-						Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
-						if (res != null)
-							return townSetTabComplete(sender, res.getTown(), args);
-					} catch (TownyException e) {
-					}
-					return Collections.emptyList();
-				case "invite":
-					switch (args.length) {
-						case 2:
-							List<String> returnValue = NameUtil.filterByStart(townInviteTabCompletes, args[1]);
-							if (returnValue.size() > 0) {
-								return returnValue;
-							} else {
-								if (args[1].startsWith("-")) {
-									Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
-									
-									if (res == null)
-										return null;
-									
-									try {
-										return NameUtil.filterByStart(res.getTown().getSentInvites()
-											// Get all sent invites
-											.stream()
-											.map(Invite::getReceiver)
-											.map(InviteReceiver::getName)
-											.collect(Collectors.toList()), args[1].substring(1))
-												// Add the hyphen back to the front
-												.stream()
-												.map(e -> "-"+e)
-												.collect(Collectors.toList());
-									} catch (TownyException ignore) {}
-								} else {
-									return null;
-								}
-							}
-						case 3:
-							switch (args[1].toLowerCase()) {
-								case "accept":
-								case "deny": {
-									Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
-									if (res == null)
-										return null;
-									
-									try {
-										return NameUtil.filterByStart(res.getTown().getReceivedInvites()
-											// Get the names of all received invites
-											.stream()
-											.map(Invite::getSender)
-											.map(InviteSender::getName)
-											.collect(Collectors.toList()),args[2]);
-									} catch (TownyException ignore) {
-									}
-								}
-								default:
-									return Collections.emptyList();
-							}
-						default:
-							return Collections.emptyList();
-					}
-				case "buy":
-					if (args.length == 2)
-						return NameUtil.filterByStart(Collections.singletonList("bonus"), args[1]);
-					break;
-				case "toggle":
-					switch (args.length) {
-						case 2:
-							return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_TOGGLE, townToggleTabCompletes), args[1]);
-						case 3:
-							return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
-						case 4:
-							return getTownResidentNamesOfPlayerStartingWith(player, args[3]);
-						default:
-							return Collections.emptyList();
-					}
-				case "list":
-					switch (args.length) {
-						case 2:
-							return Collections.singletonList("by");
-						case 3:
-							return NameUtil.filterByStart(townListTabCompletes, args[2]);
-						default:
-							return Collections.emptyList();
-					}
-				case "trust":
-					switch (args.length) {
-						case 2:
-							return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[1]);
-						case 3:
-							return getTownyStartingWith(args[2], "r");
-						default:
-							return Collections.emptyList();
-					}
-				default:
-					if (args.length == 1){
-						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[What would you like to do?]", "...");
-						if(args[0].startsWith("c")){
-							List<String> completes = new ArrayList<>(townTabCompletes);
-							completes.add("create");
-							return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, completes), args[0], "t");
-						}else{
-							return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, townTabCompletes), args[0], "t");
+							default:
+								return Collections.emptyList();
 						}
-						
-					}
-					else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWN, args[0]))
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, args[0]).getTabCompletion(sender, args), args[args.length-1]);
+					case "buy":
+						if (args.length == 2)
+							return NameUtil.filterByStart(Collections.singletonList("bonus"), args[1]);
+						break;
+					case "toggle":
+						switch (args.length) {
+							case 2:
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_TOGGLE, townToggleTabCompletes), args[1]);
+							case 3:
+								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
+							case 4:
+								return getTownResidentNamesOfPlayerStartingWith(player, args[3]);
+							default:
+								return Collections.emptyList();
+						}
+					case "list":
+						switch (args.length) {
+							case 2:
+								return Collections.singletonList("by");
+							case 3:
+								return NameUtil.filterByStart(townListTabCompletes, args[2]);
+							default:
+								return Collections.emptyList();
+						}
+					case "trust":
+						switch (args.length) {
+							case 2:
+								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[1]);
+							case 3:
+								return getTownyStartingWith(args[2], "r");
+							default:
+								return Collections.emptyList();
+						}
+					default:
+						//Not needed anymore
+				}
 			}
+				
+
+			
+			
 		} else if (args.length == 1) {
 			return filterByStartOrGetTownyStartingWith(townConsoleTabCompletes, args[0], "t");
 		}
