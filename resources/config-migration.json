@@ -167,14 +167,24 @@
       }
     ]
   },
-    {
-      "version": "0.97.5.1",
-      "changes": [
-        {
-          "type": "TOWNYPERMS_ADD",
-          "path": "nations.default",
-          "value": "towny.command.nation.spawn"
-        }
-      ]
+  {
+    "version": "0.97.5.1",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "nations.default",
+        "value": "towny.command.nation.spawn"
+      }
+    ]
+  },
+  {
+    "version": "0.97.5.2",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.item_use_ids",
+        "value": ",GLOW_INK_SAC"
+      }
+    ]
   }
 ]
