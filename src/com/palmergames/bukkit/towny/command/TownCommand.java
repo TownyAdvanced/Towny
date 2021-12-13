@@ -299,8 +299,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					case "baltop":
 					case "ranklist":
 						if (args.length == 2){
-							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: Enter town name)", "");
-							return getTownyStartingWith(args[1], "t");
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: Enter town name)", ""); //Todo: Doesn't seem to be optional/doesn't show the tick
+							return getTownyStartingWith(args[1], "t"); 
 						}
 						break;
 					case "spawn":
@@ -365,7 +365,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						}
 					case "outpost":
 						if (args.length == 2){
-							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Resident name]", "");
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: 'list')", "");
 							return Collections.singletonList("list");
 						}
 						break;
@@ -535,6 +535,35 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							default:
 								return Collections.emptyList();
 						}
+					case "bankhistory":
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: Page number)", "");
+						}
+						break;
+					case "deposit":
+					case "withdraw":
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Money amount (Example: 54)]", "");
+						}
+						break;
+					case "here":
+					case "leave":
+					case "major":
+					case "reclaim":
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "", "");
+						}
+						break;
+					case "purge":
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Amount of days]", "");
+						}
+						break;
+					case "say":
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "<Enter message which should be said for the town>", "");
+						}
+						break;
 					default:
 						//Not needed anymore
 				}
