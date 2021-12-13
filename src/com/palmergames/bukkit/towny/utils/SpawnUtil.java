@@ -329,6 +329,7 @@ public class SpawnUtil {
 			if (ignoreWarn || !TownySettings.isSpawnWarnConfirmationUsed()) {
 				if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
 					TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
+					resident.setTeleportCost(travelCost);
 					initiateSpawn(player, finalLoc);
 				}
 			} else {
@@ -336,6 +337,7 @@ public class SpawnUtil {
 				Confirmation.runOnAccept(() -> {		
 					if (resident.getAccount().payTo(finalCost, finalPayee, finalSpawnPerm)) {
 						TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(finalCost)));
+						resident.setTeleportCost(finalCost);
 						initiateSpawn(player, finalLoc);
 					}
 				})
