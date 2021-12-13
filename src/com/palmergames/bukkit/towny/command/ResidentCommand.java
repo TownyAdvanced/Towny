@@ -29,6 +29,7 @@ import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -155,7 +156,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-		if (sender instanceof Player) {
+		if (sender instanceof Player player) {
+			final Audience audience = Towny.getAdventure().player(player);
 			switch (args[0].toLowerCase()) {
 				case "tax":
 					if (args.length == 2)
@@ -190,7 +192,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 							case "mode":
 								return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);
 							case "perm":
-								return permTabComplete(StringMgmt.remArgs(args, 2));
+								return permTabComplete(StringMgmt.remArgs(args, 2), audience);
 							default:
 								return Collections.emptyList();
 						}

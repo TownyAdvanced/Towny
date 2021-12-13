@@ -58,6 +58,7 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
@@ -251,7 +252,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		
+		final Audience audience = Towny.getAdventure().player(player);
 		switch (args[0].toLowerCase()) {
 			case "reload":
 				if (args.length > 1)
@@ -389,7 +390,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "set": {
 							final Town town = TownyUniverse.getInstance().getTown(args[1]);
 							if (town != null)
-								return TownCommand.townSetTabComplete(sender, town, StringMgmt.remArgs(args, 2));
+								return TownCommand.townSetTabComplete(sender, audience, town, StringMgmt.remArgs(args, 2));
 							break;
 						}
 						case "toggle":

@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -140,18 +141,29 @@ public class BaseCommand implements TabCompleter{
 	 * @param args args, make sure to remove the first few irrelevant args
 	 * @return tab completes matching the proper arg
 	 */
-	static List<String> permTabComplete(String[] args) {
+	static List<String> permTabComplete(String[] args, Audience audience) {
 		switch (args.length) {
 			case 1:
+				FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Permission Name]", "[on / off / type]");
 				return NameUtil.filterByStart(setPermTabCompletes, args[0]);
 			case 2:
-				if (setTypeCompletes.contains(args[0].toLowerCase()))
+				if (setTypeCompletes.contains(args[0].toLowerCase())){
+					FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[on / off]", "");
 					return NameUtil.filterByStart(setOnOffCompletes, args[1]);
-				if (setLevelCompletes.contains(args[0].toLowerCase()))
+				}
+				if (setLevelCompletes.contains(args[0].toLowerCase())){
+					FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Toggle Type]", "...");
 					return NameUtil.filterByStart(toggleTypeOnOffCompletes, args[1]);
+				}
 				break;
 			case 3:
-				return NameUtil.filterByStart(setOnOffCompletes, args[2]);
+				if(!args[1].equalsIgnoreCase("on") && !args[1].equalsIgnoreCase("off")){
+					FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[on / off]", "");
+					return NameUtil.filterByStart(setOnOffCompletes, args[2]);
+				}else{
+					FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "", "");
+				}
+				break;
 			default:
 				return Collections.emptyList();
 		}

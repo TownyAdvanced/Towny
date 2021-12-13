@@ -56,6 +56,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -175,14 +176,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		if (sender instanceof Player) {
+		if (sender instanceof Player player) {
+			final Audience audience = Towny.getAdventure().player(player);
 			switch (args[0].toLowerCase()) {
 				case "set":
 					if (args.length == 2) {
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_SET, plotSetTabCompletes), args[1]);
 					}
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
-						return permTabComplete(StringMgmt.remArgs(args, 2));
+						return permTabComplete(StringMgmt.remArgs(args, 2), audience);
 					} else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, args[1]))
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_SET, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 					break;
@@ -228,7 +230,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							if (args.length == 4)
 								return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
 						default:
-							return permTabComplete(StringMgmt.remFirstArg(args));
+							return permTabComplete(StringMgmt.remFirstArg(args), audience);
 					}
 
 				case "jailcell":

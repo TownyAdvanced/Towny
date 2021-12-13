@@ -266,7 +266,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
 		if (sender instanceof Player player) {
-			Audience audience = Towny.getAdventure().player(player);
+			final Audience audience = Towny.getAdventure().player(player);
 
 			if (args.length == 1){
 				FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[What would you like to do?]", "...");
@@ -318,17 +318,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					case "rank":
 						switch (args.length) {
 							case 2:
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[add / remove]", "[Resident Player Name]");
 								return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
 							case 3:
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[add / remove]", "...");
 								return getTownResidentNamesOfPlayerStartingWith(player, args[2]);
 							case 4:
 								switch (args[1].toLowerCase()) {
 									case "add":
+										FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[New Town Rank]", "");
 										return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[3]);
 									case "remove": {
 										Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
 										if (res != null) {
+											FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Current Town Rank]", "");
 											return NameUtil.filterByStart(res.getTownRanks(), args[3]);
 										}
 										break;
@@ -341,6 +345,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						}
 					case "jail":
 						if (args.length == 2) {
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Resident name or 'list']", "");
 							List<String> residentOrList = getTownResidentNamesOfPlayerStartingWith(player, args[1]);
 							residentOrList.add("list");
 							return NameUtil.filterByStart(residentOrList, args[1]);
@@ -349,6 +354,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						if (args.length == 2) {
 							Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 							if (res != null && res.hasTown()) {
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Resident name]", "");
 								Town town = res.getTownOrNull();
 								List<String> jailedResidents = new ArrayList<>();
 								TownyUniverse.getInstance().getJailedResidentMap().stream()
@@ -358,13 +364,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							}
 						}
 					case "outpost":
-						if (args.length == 2)
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Resident name]", "");
 							return Collections.singletonList("list");
+						}
 						break;
 					case "outlaw":
 					case "ban":
 						switch (args.length) {
 							case 2:
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[add / remove]", "");
 								return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
 							case 3:
 								switch (args[1].toLowerCase()) {
@@ -388,32 +397,41 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					case "claim":
 						switch (args.length) {
 							case 2:
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Claim Mode]", "...(optional)");
 								return NameUtil.filterByStart(townClaimTabCompletes, args[1]);
 							case 3:
 								if (!args[1].equalsIgnoreCase("outpost")) {
+									FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: 'auto)", "");
 									return NameUtil.filterByStart(Collections.singletonList("auto"), args[2]);
 								}
 							default:
 								return Collections.emptyList();
 						}
 					case "unclaim":
-						if (args.length == 2)
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: Unclaim Mode)", "");
 							return NameUtil.filterByStart(townUnclaimTabCompletes, args[1]);
+						}
 						break;
 					case "add":
-						if (args.length == 2)
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Name of Player without a town]", "");
 							return getResidentsWithoutTownStartingWith(args[1]);
+						}
 						break;
 					case "kick":
-						if (args.length == 2)
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Resident]", "");
 							return getTownResidentNamesOfPlayerStartingWith(player, args[1]);
+						}
 						break;
 					case "set":
 						try {
 							Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
-							if (res != null)
-								return townSetTabComplete(sender, res.getTown(), args);
-						} catch (TownyException e) {
+							if (res != null){
+								return townSetTabComplete(sender, audience, res.getTown(), args);
+							}
+						} catch (TownyException ignored) {
 						}
 						return Collections.emptyList();
 					case "invite":
@@ -421,6 +439,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							case 2:
 								List<String> returnValue = NameUtil.filterByStart(townInviteTabCompletes, args[1]);
 								if (returnValue.size() > 0) {
+									FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Enter player name or select an option]", "...");
 									return returnValue;
 								} else {
 									if (args[1].startsWith("-")) {
@@ -430,6 +449,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 											return null;
 
 										try {
+											FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Enter player name you wish to un-invite]", "");
 											return NameUtil.filterByStart(res.getTown().getSentInvites()
 													// Get all sent invites
 													.stream()
@@ -455,6 +475,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 											return null;
 
 										try {
+											FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Invite you wish to accept / deny]", "");
 											return NameUtil.filterByStart(res.getTown().getReceivedInvites()
 												// Get the names of all received invites
 												.stream()
@@ -471,16 +492,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								return Collections.emptyList();
 						}
 					case "buy":
-						if (args.length == 2)
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[What to buy]", "[Amount]");
 							return NameUtil.filterByStart(Collections.singletonList("bonus"), args[1]);
+						}else if(args.length == 3){
+							FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Amount]", "");
+						}
 						break;
 					case "toggle":
 						switch (args.length) {
 							case 2:
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[What to toggle]", "(Optional: on / off)");
 								return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_TOGGLE, townToggleTabCompletes), args[1]);
 							case 3:
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: on / off)", "(Optional: Resident Name)");
 								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 							case 4:
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: Resident Name)", "");
 								return getTownResidentNamesOfPlayerStartingWith(player, args[3]);
 							default:
 								return Collections.emptyList();
@@ -488,8 +516,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					case "list":
 						switch (args.length) {
 							case 2:
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: 'by')", "[What to sort by]");
 								return Collections.singletonList("by");
 							case 3:
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[What to sort by]", "");
 								return NameUtil.filterByStart(townListTabCompletes, args[2]);
 							default:
 								return Collections.emptyList();
@@ -497,8 +527,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					case "trust":
 						switch (args.length) {
 							case 2:
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[add / remove]", "[Resident Name]");
 								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[1]);
 							case 3:
+								FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Resident Name]", "");
 								return getTownyStartingWith(args[2], "r");
 							default:
 								return Collections.emptyList();
@@ -518,8 +550,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return Collections.emptyList();
 	}
 	
-	static List<String> townSetTabComplete(CommandSender sender, Town town, String[] args) {
+	static List<String> townSetTabComplete(CommandSender sender, Audience audience, Town town, String[] args) {
 		if (args.length == 2) {
+			FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Choose your option]", "...");
 			return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_SET, townSetTabCompletes), args[1]);
 		} else if (args.length > 2) {
 			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_SET, args[1]))
@@ -527,16 +560,89 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			switch (args[1].toLowerCase()) {
 				case "mayor":
-					return NameUtil.filterByStart(NameUtil.getNames(town.getResidents()), args[2]);
+					if(args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Resident Name]", "");
+						return NameUtil.filterByStart(NameUtil.getNames(town.getResidents()), args[2]);
+					}
+					break;
 				case "perm":
-					return permTabComplete(StringMgmt.remArgs(args, 2));
+					return permTabComplete(StringMgmt.remArgs(args, 2), audience); 
 				case "tag":
-					if (args.length == 3)
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Tag Name / 'clear']", "");
 						return NameUtil.filterByStart(Collections.singletonList("clear"), args[2]);
+					}
 				case "title":
 				case "surname":
-					if (args.length == 3)
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: Resident Name)", "(Optional: New Title)");
 						return NameUtil.filterByStart(NameUtil.getNames(town.getResidents()), args[2]);
+					}else if (args.length == 4){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "(Optional: New Title)", "");
+					}
+				case "board": //This one and following arguments will only be handled here for fancy command completions
+					FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "<Board Text>", "");
+					break;
+				case "embassyprice":
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Price (Example: 50)]", "");
+					}
+					break;
+				case "embassytax":
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Tax (Example: 10)]", "");
+					}
+					break;
+				case "mapcolor":
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Color (Example: brown)]", "");
+					}
+					break;
+				case "name":
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Town Name (Example: BillyBobTown)]", "");
+					}
+					break;
+				case "outpost":
+				case "primaryjail":
+				case "spawn":
+					FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "", "");
+					break;
+				case "plotprice":
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Plot price (Example: 50)]", "");
+					}
+					break;
+				case "plottax":
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Plot tax (Example: 10)]", "");
+					}
+					break;
+				case "shopprice":
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Shop price (Example: 50)]", "");
+					}
+					break;
+				case "shoptax":
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Shop tax (Example: 10)]", "");
+					}
+					break;
+				case "spawncost":
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Spawn cost (Example: 50)]", "");
+					}
+					break;
+				case "taxes":
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Tax amount (Example: 7)]", "");
+					}
+					break;
+				case "taxpercentcap":
+					if (args.length == 3){
+						FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Maximum tax percentage (Example: 10000)]", "");
+					}
+					break;
 				default:
 					return Collections.emptyList();
 			}
