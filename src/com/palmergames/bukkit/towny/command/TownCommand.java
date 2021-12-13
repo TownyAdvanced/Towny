@@ -201,7 +201,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"major",
 		"reclaim",
 		"say"
-
 	);
 	private static final List<String> townSetTabCompletes = Arrays.asList(
 		"board",

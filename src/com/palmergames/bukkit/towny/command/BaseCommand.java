@@ -144,24 +144,24 @@ public class BaseCommand implements TabCompleter{
 	static List<String> permTabComplete(String[] args, Audience audience) {
 		switch (args.length) {
 			case 1:
-				FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Permission Name]", "[on / off / type]");
+				FancyTabCompletions.sendFancyCommandCompletion("...", audience, args, "[Permission Name]", "[on / off / type]");
 				return NameUtil.filterByStart(setPermTabCompletes, args[0]);
 			case 2:
 				if (setTypeCompletes.contains(args[0].toLowerCase())){
-					FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[on / off]", "");
+					FancyTabCompletions.sendFancyCommandCompletion("...", audience, args, "[on / off]", "");
 					return NameUtil.filterByStart(setOnOffCompletes, args[1]);
 				}
 				if (setLevelCompletes.contains(args[0].toLowerCase())){
-					FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[Toggle Type]", "...");
+					FancyTabCompletions.sendFancyCommandCompletion("...", audience, args, "[Toggle Type]", "...");
 					return NameUtil.filterByStart(toggleTypeOnOffCompletes, args[1]);
 				}
 				break;
 			case 3:
 				if(!args[1].equalsIgnoreCase("on") && !args[1].equalsIgnoreCase("off")){
-					FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "[on / off]", "");
+					FancyTabCompletions.sendFancyCommandCompletion("...", audience, args, "[on / off]", "");
 					return NameUtil.filterByStart(setOnOffCompletes, args[2]);
 				}else{
-					FancyTabCompletions.sendFancyCommandCompletion("town", audience, args, "", "");
+					FancyTabCompletions.sendFancyCommandCompletion("...", audience, args, "", "");
 				}
 				break;
 			default:

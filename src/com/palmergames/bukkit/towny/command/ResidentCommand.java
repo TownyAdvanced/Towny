@@ -112,6 +112,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"mobs",
 		"explosion"
 	);
+
+	private static final List<String> residentSoloArgumentsWithFurtherOptionalOrNoneArguments = Arrays.asList(
+		"list",
+		"spawn",
+		"tax"
+	);
 	
 	private static final List<String> residentToggleModes = new ArrayList<>(residentToggleTabCompletes).stream()
 		.filter(str -> !residentToggleChoices.contains(str))
@@ -130,12 +136,11 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		
-		if (sender instanceof Player) {
+		if (sender instanceof Player player) {
 			if (plugin.isError()) {
 				TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
 				return false;
 			}
-			Player player = (Player) sender;
 			if (args == null) {
 				HelpMenu.RESIDENT_HELP.send(player);
 				parseResidentCommand(player, args);
@@ -158,67 +163,92 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player player) {
 			final Audience audience = Towny.getAdventure().player(player);
-			switch (args[0].toLowerCase()) {
-				case "tax":
-					if (args.length == 2)
-						return getTownyStartingWith(args[1], "r");
-					break;
-				case "jail":
-					if (args.length == 2)
-						return Collections.singletonList("paybail");
-					break;
-				case "toggle":
-					if (args.length == 2) {
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_TOGGLE, residentToggleTabCompletes), args[1]);
-					} else if (args.length == 3 && residentToggleChoices.contains(args[1].toLowerCase())) {
-						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
-					} else if (args.length >= 3) {
-						String prevArg = args[args.length - 2].toLowerCase();
-						if (residentToggleModes.contains(prevArg)) {
-							return NameUtil.filterByStart(residentToggleModesUnionToggles, args[args.length - 1]);
-						} else if (BaseCommand.setOnOffCompletes.contains(prevArg)) {
-							return NameUtil.filterByStart(residentToggleModes, args[args.length - 1]);
-						}
-					}
-					break;
-				case "set":
-					if (args.length == 2)
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_SET, residentSetTabCompletes), args[1]);
-					if (args.length > 2) {
-						if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, args[1]))
-							return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 
-						switch (args[1].toLowerCase()) {
-							case "mode":
-								return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);
-							case "perm":
-								return permTabComplete(StringMgmt.remArgs(args, 2), audience);
+			if (args.length == 1){
+				if(residentSoloArgumentsWithFurtherOptionalOrNoneArguments.contains(args[0])){
+					FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "[What would you like to do?]", "...(optional)");
+				}else{
+					FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "[What would you like to do?]", "...");
+				}
+				return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT, residentTabCompletes), args[0], "r");
+			}else{
+				switch (args[0].toLowerCase()) {
+					case "tax":
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "(Optional: Resident Name)", "");
+							return getTownyStartingWith(args[1], "r");
+						}
+						break;
+					case "jail":
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "(Optional: 'paybail')", "");
+							return Collections.singletonList("paybail");
+						}
+						break;
+					case "toggle":
+						if (args.length == 2) {
+							FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "[What to toggle]", "(Optional: on / off)");
+							return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_TOGGLE, residentToggleTabCompletes), args[1]);
+						} else if (args.length == 3 && residentToggleChoices.contains(args[1].toLowerCase())) {
+							FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "(Optional: on / off)", "...");
+							return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
+						} else if (args.length >= 3) {
+							String prevArg = args[args.length - 2].toLowerCase();
+							if (residentToggleModes.contains(prevArg)) {
+								FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "(Optional: Toggle Mode / 'on' or 'off)", "");
+								return NameUtil.filterByStart(residentToggleModesUnionToggles, args[args.length - 1]);
+							} else if (BaseCommand.setOnOffCompletes.contains(prevArg)) {
+								FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "(Optional: Toggle Mode)", "");
+								return NameUtil.filterByStart(residentToggleModes, args[args.length - 1]);
+							}
+						}
+						break;
+					case "set":
+						if (args.length == 2){
+							FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "[mode / perm]", "...");
+							return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_SET, residentSetTabCompletes), args[1]);
+						}
+						if (args.length > 2) {
+							if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, args[1]))
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
+
+							switch (args[1].toLowerCase()) {
+								case "mode":
+									FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "[Mode]", "");
+									return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);
+								case "perm":
+									return permTabComplete(StringMgmt.remArgs(args, 2), audience);
+								default:
+									return Collections.emptyList();
+							}
+						}
+						break;
+					case "friend":
+						switch (args.length) {
+							case 2:
+								FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "[add / remove / list / clear]", "[Resident Name]");
+								return NameUtil.filterByStart(residentFriendTabCompletes, args[1]);
+							case 3:
+								if (args[1].equalsIgnoreCase("remove")) {
+									Resident res = TownyUniverse.getInstance().getResident(((Player) sender).getUniqueId());
+									if (res != null){
+										FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "[Friend Name]", "");
+										return NameUtil.filterByStart(NameUtil.getNames(res.getFriends()), args[2]);
+									}
+								} else if(args[1].equalsIgnoreCase("add")){
+									FancyTabCompletions.sendFancyCommandCompletion("resident", audience, args, "[Player Name]", "");
+									return getTownyStartingWith(args[2], "r");
+								}
 							default:
 								return Collections.emptyList();
 						}
-					}
-					break;
-				case "friend":
-					switch (args.length) {
-						case 2:
-							return NameUtil.filterByStart(residentFriendTabCompletes, args[1]);
-						case 3:
-							if (args[1].equalsIgnoreCase("remove")) {
-								Resident res = TownyUniverse.getInstance().getResident(((Player) sender).getUniqueId());
-								if (res != null)
-									return NameUtil.filterByStart(NameUtil.getNames(res.getFriends()), args[2]);
-							} else {
-								return getTownyStartingWith(args[2], "r");
-							}
-						default:
-							return Collections.emptyList();
-					}
-				default:
-					if (args.length == 1)
-						return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT, residentTabCompletes), args[0], "r");
-					else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT, args[0]))
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT, args[0]).getTabCompletion(sender, args), args[args.length-1]);
+					default:
+						if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT, args[0]))
+							return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT, args[0]).getTabCompletion(sender, args), args[args.length-1]);
+				}
 			}
+			
+			
 		} else if (args.length == 1){
 				return filterByStartOrGetTownyStartingWith(residentConsoleTabCompletes, args[0], "r");
 		}
