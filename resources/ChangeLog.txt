@@ -7060,3 +7060,7 @@ v0.92.0.11:
   - Fix aborted teleports not refunding the spawn travel cost.
     - Closes #5526.
   - Add INK_SAC and GLOW_INK_SAC to ItemLists list of Dyes, to prevent them being used on Signs.
+  - Automatic Config Update: 
+    - RESPAWN_ANCHOR will be added to new_world_settings.plot_management.wild_revert_on_block_explosion.blocks,
+    - Their explosions will be reverted in new worlds.
+    - Your world files will also have it added, meaning existing worlds with block explosion revert set to on will start reverting Respawn Anchor explosions.
