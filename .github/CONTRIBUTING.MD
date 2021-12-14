@@ -19,7 +19,7 @@ You can ask for any information/help on your idea/contribution in the [Towny Dis
 > With the inclusion of the Maven build system, Towny also makes use of a [EditorConfig](https://editorconfig.org) file. IDEs that support it should automatically follow parts of this section.
     
 1. You must use Tabs (Size 4 Spaces).    
-2. Keep your environment in Java 8,   
+2. Keep your environment in Java 16/17. The code will automatically be transpiled to Java 8 by the Maven plugin Jabel. Keep in mind that, while you will be able to use modern language features that way (like patterns), some standard library methods added after jdk 8 will not work and cause "cannot find symbol" errors when building (like String.isBlank),   
 3. Avoid using Wildcard imports (It's not preferred, but it's allowed.)   
 4. Don't run IDE Formatters over entire class files, unless it's a new class-file you're implementing.   
    - This is done to avoid us changing the lines everytime, each IDE is different so we don't have a constant here and there.
