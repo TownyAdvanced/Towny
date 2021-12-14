@@ -458,7 +458,7 @@ public enum ConfigNodes {
 			"# wilderness by exploding blocks like beds."),
 	NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_LIST(
 			"new_world_settings.plot_management.wild_revert_on_block_explosion.blocks",
-			"WHITE_BED,ORANGE_BED,MAGENTA_BED,LIGHT_BLUE_BED,YELLOW_BED,LIME_BED,PINK_BED,GRAY_BED,LIGHT_GRAY_BED,CYAN_BED,PURPLE_BED,BLUE_BED,BROWN_BED,GREEN_BED,RED_BED,BLACK_BED",
+			"WHITE_BED,ORANGE_BED,MAGENTA_BED,LIGHT_BLUE_BED,YELLOW_BED,LIME_BED,PINK_BED,GRAY_BED,LIGHT_GRAY_BED,CYAN_BED,PURPLE_BED,BLUE_BED,BROWN_BED,GREEN_BED,RED_BED,BLACK_BED,RESPAWN_ANCHOR",
 			"# The list of blocks whose explosions should be reverted."),
 	NWS_PLOT_MANAGEMENT_WILD_REVERT_BLOCK_WHITELIST(
 		"new_world_settings.plot_management.wild_revert_on_explosion_block_whitelist",

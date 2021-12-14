@@ -4607,13 +4607,4 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return Integer.MAX_VALUE;
 		}
 	}
-
-	private static Town getTownOrThrow(String townName) throws NotRegisteredException {
-		Town town = TownyUniverse.getInstance().getTown(townName);
-
-		if (town == null)
-			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", townName));
-
-		return town;
-	}
 }

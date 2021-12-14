@@ -167,14 +167,25 @@
       }
     ]
   },
-    {
-      "version": "0.97.5.1",
-      "changes": [
-        {
-          "type": "TOWNYPERMS_ADD",
-          "path": "nations.default",
-          "value": "towny.command.nation.spawn"
-        }
-      ]
+  {
+    "version": "0.97.5.1",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "nations.default",
+        "value": "towny.command.nation.spawn"
+      }
+    ]
+  },
+  {
+    "version": "0.97.5.2",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "new_world_settings.plot_management.wild_revert_on_block_explosion.blocks",
+        "value": ",RESPAWN_ANCHOR"
+        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_BLOCKS"
+      }
+    ]
   }
 ]

@@ -23,7 +23,7 @@ public class ItemLists {
 	/**
 	 * List of Dye items.
 	 */
-	public static List<String> DYES = new ArrayList<>(Arrays.asList("BLACK_DYE","BLUE_DYE","BROWN_DYE","CYAN_DYE","GRAY_DYE","GREEN_DYE","LIGHT_BLUE_DYE","LIGHT_GRAY_DYE","LIME_DYE","MAGENTA_DYE","ORANGE_DYE","PINK_DYE","PURPLE_DYE","RED_DYE","WHITE_DYE","YELLOW_DYE"));
+	public static List<String> DYES = new ArrayList<>(Arrays.asList("BLACK_DYE","BLUE_DYE","BROWN_DYE","CYAN_DYE","GRAY_DYE","GREEN_DYE","LIGHT_BLUE_DYE","LIGHT_GRAY_DYE","LIME_DYE","MAGENTA_DYE","ORANGE_DYE","PINK_DYE","PURPLE_DYE","RED_DYE","WHITE_DYE","YELLOW_DYE","INK_SAC","GLOW_INK_SAC"));
 	
 	/**
 	 * List of Redstone blocks that can be interacted with.

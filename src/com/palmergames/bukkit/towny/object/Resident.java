@@ -379,7 +379,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public void clearTeleportRequest() {
-
+		teleportCost = 0;
 		teleportRequestTime = -1;
 	}
 

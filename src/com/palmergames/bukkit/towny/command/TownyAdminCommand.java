@@ -1828,39 +1828,31 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				HelpMenu.TA_SET_MAYOR.send(sender);
 			} else
 				try {
-					Resident newMayor;
-					Town town = townyUniverse.getTown(split[1]);
+					Town town = getTownOrThrow(split[1]);
+					// Get the oldMayor if the town is already NPC-run.
+					Resident oldMayor = town.getMayor().isNPC() ? town.getMayor() : null;
 					
-					if (town == null) {
-						TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_not_registered_1", split[1]));
-						return;
-					}
+					// New mayor is either an NPC resident or a resident by name from split[2].
+					Resident newMayor = split[2].equalsIgnoreCase("npc") 
+							? ResidentUtil.createAndGetNPCResident()
+							: getResidentOrThrow(split[2]);
 
-					if (split[2].equalsIgnoreCase("npc")) {
-						newMayor = ResidentUtil.createAndGetNPCResident();
-						// set for no upkeep as an NPC mayor is assigned
-						town.setHasUpkeep(false);
-
-					} else {
-						newMayor = getResidentOrThrow(split[2]);
-					}
-
-					if (!town.hasResident(newMayor)) {
+					// Add the new Mayor to the town if need be.
+					if (!town.hasResident(newMayor))
 						TownCommand.townAddResident(town, newMayor);
-					}
-					// Delete the resident if the old mayor was an NPC.
-					Resident oldMayor = town.getMayor();
 
+					// Set the new mayor.
 					town.setMayor(newMayor);
 
-					if (oldMayor.isNPC()) {
-						oldMayor.removeTown();
+					// If the previous mayor was an NPC make sure they're removed from the database.
+					if (oldMayor != null)
 						townyUniverse.getDataSource().removeResident(oldMayor);
-						// set upkeep again
-						town.setHasUpkeep(true);
-					}
-					town.save();					
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", newMayor.getName()));
+
+					// NPC mayors set their towns to not pay any upkeep.
+					town.setHasUpkeep(newMayor.isNPC());
+
+					town.save();
+					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", newMayor));
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 				}
