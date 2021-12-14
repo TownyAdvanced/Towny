@@ -352,24 +352,29 @@ public class TownyMessaging {
 	public static void sendRequestMessage(CommandSender player, Invite invite) {
 		final Translator translator = Translator.locale(Translation.getLocale(player));
 		String senderName = invite.getSender().getName();
-		if (invite.getSender() instanceof Town) { // Town invited Resident
-			String firstline = translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join2", senderName);
-			String confirmline = TownySettings.getAcceptCommand() + " " + senderName;
-			String cancelline = TownySettings.getDenyCommand() + " " + senderName;
-			sendInvitationMessage(player, firstline, confirmline, cancelline);
+		if (invite.getSender() instanceof Town town) { // Town invited Resident
+			String firstLine;
+			if(TownySettings.isInvitationShowNationName() && town.getNationOrNull() != null){
+				firstLine = translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join3", senderName, town.getNationOrNull().getName());
+			}else{
+				firstLine = translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join2", senderName);
+			}
+			String confirmLine = TownySettings.getAcceptCommand() + " " + senderName;
+			String cancelLine = TownySettings.getDenyCommand() + " " + senderName;
+			sendInvitationMessage(player, firstLine, confirmLine, cancelLine);
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = translator.of("invitation_prefix") + translator.of("your_town_has_been_invited_to_join_nation", senderName);
-				String confirmline = "t invite accept " + senderName;
-				String cancelline = "t invite deny " + senderName;
-				sendInvitationMessage(player, firstline, confirmline, cancelline);
+				String firstLine = translator.of("invitation_prefix") + translator.of("your_town_has_been_invited_to_join_nation", senderName);
+				String confirmLine = "t invite accept " + senderName;
+				String cancelLine = "t invite deny " + senderName;
+				sendInvitationMessage(player, firstLine, confirmLine, cancelLine);
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstline = translator.of("invitation_prefix") + translator.of("you_have_been_requested_to_ally2", senderName);
-				String confirmline = "n ally accept " + senderName;
-				String cancelline = "n ally deny " + senderName;
-				sendInvitationMessage(player, firstline, confirmline, cancelline);
+				String firstLine = translator.of("invitation_prefix") + translator.of("you_have_been_requested_to_ally2", senderName);
+				String confirmLine = "n ally accept " + senderName;
+				String cancelLine = "n ally deny " + senderName;
+				sendInvitationMessage(player, firstLine, confirmLine, cancelLine);
 			}
 		}
 	}

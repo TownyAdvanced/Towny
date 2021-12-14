@@ -2332,7 +2332,10 @@ public class TownySettings {
 			case OUTSIDER -> getDefaultOutsiderPermission(owner, type);
 		};
 	}
-
+	public static boolean isInvitationShowNationName() {
+		return getBoolean(ConfigNodes.INVITE_SYSTEM_INVITATION_SHOW_NATION_NAME);
+	}
+	
 	public static String getAcceptCommand(){
 		return getString(ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND);
 	}
