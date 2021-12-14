@@ -7064,3 +7064,4 @@ v0.92.0.11:
     - RESPAWN_ANCHOR will be added to new_world_settings.plot_management.wild_revert_on_block_explosion.blocks,
     - Their explosions will be reverted in new worlds.
     - Your world files will also have it added, meaning existing worlds with block explosion revert set to on will start reverting Respawn Anchor explosions.
+  - Make /ta set mayor TOWNNAME NPC be more careful about setting the NPC-run towns to have no upkeep.
