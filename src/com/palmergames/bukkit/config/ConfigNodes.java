@@ -1506,7 +1506,7 @@ public enum ConfigNodes {
 			"# {town_motd} - Shows the townboard message.",
 			"# {town_residents} - Shows the number of residents in the town.",
 			"# {town_residents_online} - Shows the number of residents online currently.",
-			"# {nationname} - Shows the name of the nation the town is in. If the town is not in a nation, it will show '-' instead.",
+			"# {nationname} - Shows the name of the nation the town is in. If the town is not in a nation, it will show '-' instead (or whatever is defined in language string 'titles_nationname_placeholder_if_town_has_no_nation').",
 			"# The notification.town_names_are_verbose setting will affect the {townname} placeholder."),
 	NOTIFICATION_TITLES_TOWN_TITLE(
 			"notification.titles.town_title",
