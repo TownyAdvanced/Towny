@@ -1009,7 +1009,6 @@ public class TownyPlayerListener implements Listener {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
 				subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
 			}
-			
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);		
 		}
 
