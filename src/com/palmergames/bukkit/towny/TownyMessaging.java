@@ -365,8 +365,10 @@ public class TownyMessaging {
 	public static void sendRequestMessage(CommandSender player, Invite invite) {
 		final Translator translator = Translator.locale(Translation.getLocale(player));
 		String senderName = invite.getSender().getName();
-		if (invite.getSender() instanceof Town) { // Town invited Resident
-			String firstline = translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join2", senderName);
+		if (invite.getSender() instanceof Town town) { // Town invited Resident
+			String firstline = town.hasNation()
+			        ? translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join3", senderName, town.getNationOrNull())
+			        : translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join2", senderName);
 			String confirmline = TownySettings.getAcceptCommand() + " " + senderName;
 			String cancelline = TownySettings.getDenyCommand() + " " + senderName;
 			sendInvitationMessage(player, firstline, confirmline, cancelline);
