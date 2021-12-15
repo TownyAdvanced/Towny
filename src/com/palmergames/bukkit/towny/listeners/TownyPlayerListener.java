@@ -963,6 +963,7 @@ public class TownyPlayerListener implements Listener {
 			placeholders.put("{town_motd}", town.getBoard());
 			placeholders.put("{town_residents}", town.getNumResidents());
 			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(town).size());
+			placeholders.put("{nationname}", town.getNationOrNull() != null ? town.getNationOrNull().getName() : "-");
 
 			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
