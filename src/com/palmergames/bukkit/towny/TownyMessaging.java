@@ -318,7 +318,11 @@ public class TownyMessaging {
 		if (player == null) {
 			return;
 		}
-		player.sendTitle(title, subtitle, 10, 70, 10);
+		if(title.isEmpty()){ //If the title string is "", make it " ". Otherwise, the title just won't show for some reason.
+			player.sendTitle(" ", subtitle, 10, 70, 10);
+		}else{
+			player.sendTitle(title, subtitle, 10, 70, 10);
+		}
 	}
 	
 	/**
