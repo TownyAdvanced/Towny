@@ -955,20 +955,34 @@ public class TownyPlayerListener implements Listener {
 		Town town = event.getEnteredtown();
 		
 		if (resident != null && town != null && TownySettings.isNotificationUsingTitles()) {
-			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
-			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
+			String title = TownySettings.getNotificationTitlesTownTitle();
+			String subtitle = TownySettings.getNotificationTitlesTownSubtitle();
 			
 			HashMap<String, Object> placeholders = new HashMap<>();
-			placeholders.put("{townname}", StringMgmt.remUnderscore(TownySettings.isNotificationsTownNamesVerbose() ? town.getFormattedName() : town.getName()));
+			placeholders.put("{townname}", StringMgmt.remUnderscore(town.getName()));
+			placeholders.put("{townnameformatted}", StringMgmt.remUnderscore(town.getFormattedName()));
 			placeholders.put("{town_motd}", town.getBoard());
 			placeholders.put("{town_residents}", town.getNumResidents());
 			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(town).size());
-			placeholders.put("{nationname}", town.getNationOrNull() != null ? StringMgmt.remUnderscore(town.getNationOrNull().getName()) : Translatable.of("titles_nationname_placeholder_if_town_has_no_nation"));
+			if (town.hasNation()){
+				placeholders.put("{nationname}",
+					TownySettings.getNotificationTitlesPlaceholdersNationName().replace("%s", StringMgmt.remUnderscore(town.getNationOrNull().getName()))
+				);
+				placeholders.put("{nationnameformatted}",
+					TownySettings.getNotificationTitlesPlaceholdersNationName().replace("%s", StringMgmt.remUnderscore(town.getNationOrNull().getFormattedName()))
+				);
+			}else{
+				placeholders.put("{nationname}", "");
+				placeholders.put("{nationnameformatted}", "");
+			}
 
 			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
 				subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
 			}
+			title = ChatColor.translateAlternateColorCodes('&', title);
+			subtitle = ChatColor.translateAlternateColorCodes('&', subtitle);
+			
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
 		}
 	}
@@ -991,24 +1005,40 @@ public class TownyPlayerListener implements Listener {
 			return;
 		
 		if (TownySettings.isNotificationUsingTitles() && event.getTo().getTownBlockOrNull() == null) {
-			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle());
-			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
+			String title = TownySettings.getNotificationTitlesWildTitle();
+			String subtitle = TownySettings.getNotificationTitlesWildSubtitle();
 
 			HashMap<String, Object> placeholders = new HashMap<>();
 			placeholders.put("{wilderness}", StringMgmt.remUnderscore(worldName));
 			Town town = event.getLefttown();
 			if(town != null){
-				placeholders.put("{townname}", StringMgmt.remUnderscore(TownySettings.isNotificationsTownNamesVerbose() ? town.getFormattedName() : town.getName()));
+				placeholders.put("{townname}", StringMgmt.remUnderscore(town.getName()));
+				placeholders.put("{townnameformatted}", StringMgmt.remUnderscore(town.getFormattedName()));
 				placeholders.put("{town_motd}", town.getBoard());
 				placeholders.put("{town_residents}", town.getNumResidents());
 				placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(town).size());
-				placeholders.put("{nationname}", town.getNationOrNull() != null ? StringMgmt.remUnderscore(town.getNationOrNull().getName()) : Translatable.of("titles_nationname_placeholder_if_town_has_no_nation"));
+				if (town.hasNation()){
+					placeholders.put("{nationname}",
+						TownySettings.getNotificationTitlesPlaceholdersNationName().replace("%s", StringMgmt.remUnderscore(town.getNationOrNull().getName()))
+					);
+					placeholders.put("{nationnameformatted}",
+						TownySettings.getNotificationTitlesPlaceholdersNationName().replace("%s", StringMgmt.remUnderscore(town.getNationOrNull().getFormattedName()))
+					);
+				}else{
+					placeholders.put("{nationname}", "");
+					placeholders.put("{nationnameformatted}",
+						TownySettings.getNotificationTitlesPlaceholdersNationName().replace("%s", StringMgmt.remUnderscore(town.getNationOrNull().getFormattedName()))
+					);
+				}			
 			}
 		
 			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
 				subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
 			}
+			title = ChatColor.translateAlternateColorCodes('&', title);
+			subtitle = ChatColor.translateAlternateColorCodes('&', subtitle);
+			
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);		
 		}
 

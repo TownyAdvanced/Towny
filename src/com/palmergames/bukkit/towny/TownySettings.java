@@ -2631,6 +2631,10 @@ public class TownySettings {
 		return getString(ConfigNodes.NOTIFICATION_TITLES_WILDERNESS_SUBTITLE);
 	}
 
+	public static String getNotificationTitlesPlaceholdersNationName() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_PLACEHOLDERS_NATIONNAME);
+	}
+
 	public static double getTownRenameCost() {
 		return getDouble(ConfigNodes.ECO_TOWN_RENAME_COST);
 	}
