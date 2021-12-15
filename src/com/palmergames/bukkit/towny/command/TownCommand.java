@@ -396,32 +396,49 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				case "invite":
 					switch (args.length) {
 						case 2:
-							List<String> returnValue = NameUtil.filterByStart(townInviteTabCompletes, args[1]);
-							if (returnValue.size() > 0) {
-								return returnValue;
-							} else {
-								if (args[1].startsWith("-")) {
-									Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
-									
-									if (res == null)
-										return null;
-									
-									try {
-										return NameUtil.filterByStart(res.getTown().getSentInvites()
-											// Get all sent invites
-											.stream()
-											.map(Invite::getReceiver)
-											.map(InviteReceiver::getName)
-											.collect(Collectors.toList()), args[1].substring(1))
-												// Add the hyphen back to the front
-												.stream()
-												.map(e -> "-"+e)
-												.collect(Collectors.toList());
-									} catch (TownyException ignore) {}
-								} else {
+							List<String> returnValue = new ArrayList<>();
+							if (args[1].startsWith("-")) {
+								Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+								if (res == null){
 									return null;
 								}
+
+								try {
+									for(Invite invite : res.getTown().getSentInvites()){
+										returnValue.add("-"+invite.getReceiver().getName());
+									}
+								} catch (TownyException ignore) {}
+								
+								return NameUtil.filterByStart(returnValue, args[1]);
+
+							}else{
+								returnValue.addAll(townInviteTabCompletes);
+								Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+								if (res != null){
+									Town town = res.getTownOrNull();
+									if(town != null){
+										
+										//Filter out fitting & possible invites
+										for(String residentName : getTownyStartingWith(args[1], "r")) {
+											if(!town.hasResident(residentName)){
+												boolean alreadyInvited = false;
+												for(Invite invite : town.getSentInvites()){
+													if(invite.getReceiver().getName().equals(residentName)){
+														alreadyInvited = true;
+													}
+												}
+												if(!alreadyInvited){
+													returnValue.add(residentName);
+												}
+											}
+										}
+									}
+									
+								}
+								return NameUtil.filterByStart(returnValue, args[1]);
 							}
+
+
 						case 3:
 							switch (args[1].toLowerCase()) {
 								case "accept":
