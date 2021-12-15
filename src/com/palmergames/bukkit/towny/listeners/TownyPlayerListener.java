@@ -963,7 +963,7 @@ public class TownyPlayerListener implements Listener {
 			placeholders.put("{town_motd}", town.getBoard());
 			placeholders.put("{town_residents}", town.getNumResidents());
 			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(town).size());
-			placeholders.put("{nationname}", town.getNationOrNull() != null ? town.getNationOrNull().getName() : Translatable.of("titles_nationname_placeholder_if_town_has_no_nation"));
+			placeholders.put("{nationname}", town.getNationOrNull() != null ? StringMgmt.remUnderscore(town.getNationOrNull().getName()) : Translatable.of("titles_nationname_placeholder_if_town_has_no_nation"));
 
 			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
@@ -985,7 +985,6 @@ public class TownyPlayerListener implements Listener {
 	public void onPlayerLeaveTown(PlayerLeaveTownEvent event) {
 		Resident resident = TownyAPI.getInstance().getResident(event.getPlayer().getUniqueId());
 		String worldName = TownyAPI.getInstance().getTownyWorld(event.getPlayer().getWorld().getName()).getUnclaimedZoneName();
-
 		// Likely a Citizens NPC.
 		if (resident == null || worldName == null)
 			return;
@@ -993,18 +992,23 @@ public class TownyPlayerListener implements Listener {
 		if (TownySettings.isNotificationUsingTitles() && event.getTo().getTownBlockOrNull() == null) {
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
-			if (title.contains("{wilderness}")) {
-				title = title.replace("{wilderness}", StringMgmt.remUnderscore(worldName));
+
+			HashMap<String, Object> placeholders = new HashMap<>();
+			placeholders.put("{wilderness}", StringMgmt.remUnderscore(worldName));
+			Town town = event.getLefttown();
+			if(town != null){
+				placeholders.put("{townname}", StringMgmt.remUnderscore(TownySettings.isNotificationsTownNamesVerbose() ? town.getFormattedName() : town.getName()));
+				placeholders.put("{town_motd}", town.getBoard());
+				placeholders.put("{town_residents}", town.getNumResidents());
+				placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(town).size());
+				placeholders.put("{nationname}", town.getNationOrNull() != null ? StringMgmt.remUnderscore(town.getNationOrNull().getName()) : Translatable.of("titles_nationname_placeholder_if_town_has_no_nation"));
 			}
-			if (subtitle.contains("{wilderness}")) {
-				subtitle = subtitle.replace("{wilderness}", StringMgmt.remUnderscore(worldName));
+		
+			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
+				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
+				subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
 			}
-			if (title.contains("{townname}")) {
-				subtitle = subtitle.replace("{townname}", StringMgmt.remUnderscore(event.getFrom().getTownOrNull().getName()));
-			}
-			if (subtitle.contains("{townname}")) {
-				subtitle = subtitle.replace("{townname}", StringMgmt.remUnderscore(event.getFrom().getTownOrNull().getName()));
-			}
+			
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);		
 		}
 
