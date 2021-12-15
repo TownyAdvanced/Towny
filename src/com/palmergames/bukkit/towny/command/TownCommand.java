@@ -255,16 +255,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"deny"
 	);
 
+	private final List<String> tabCompletionReturnValue;
+
 	public TownCommand(Towny instance) {
 
 		plugin = instance;
+		tabCompletionReturnValue = new ArrayList<>();
 	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
-		if (sender instanceof Player) {
-			Player player = (Player) sender;
+		if (sender instanceof Player player) {
+			tabCompletionReturnValue.clear();
 			
 			switch (args[0].toLowerCase()) {
 				case "online":
@@ -390,13 +393,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 						if (res != null)
 							return townSetTabComplete(sender, res.getTown(), args);
-					} catch (TownyException e) {
+					} catch (TownyException ignore) {
 					}
 					return Collections.emptyList();
 				case "invite":
 					switch (args.length) {
 						case 2:
-							List<String> returnValue = new ArrayList<>();
 							if (args[1].startsWith("-")) {
 								Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 								if (res == null){
@@ -405,14 +407,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 								try {
 									for(Invite invite : res.getTown().getSentInvites()){
-										returnValue.add("-"+invite.getReceiver().getName());
+										tabCompletionReturnValue.add("-"+invite.getReceiver().getName());
 									}
 								} catch (TownyException ignore) {}
 								
-								return NameUtil.filterByStart(returnValue, args[1]);
+								return NameUtil.filterByStart(tabCompletionReturnValue, args[1]);
 
 							}else{
-								returnValue.addAll(townInviteTabCompletes);
+								tabCompletionReturnValue.addAll(townInviteTabCompletes);
 								Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 								if (res != null){
 									Town town = res.getTownOrNull();
@@ -428,14 +430,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 													}
 												}
 												if(!alreadyInvited){
-													returnValue.add(residentName);
+													tabCompletionReturnValue.add(residentName);
 												}
 											}
 										}
 									}
 									
 								}
-								return NameUtil.filterByStart(returnValue, args[1]);
+								return NameUtil.filterByStart(tabCompletionReturnValue, args[1]);
 							}
 
 
