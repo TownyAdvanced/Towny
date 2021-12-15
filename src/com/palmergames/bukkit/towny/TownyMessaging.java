@@ -359,7 +359,6 @@ public class TownyMessaging {
 			String confirmline = TownySettings.getAcceptCommand() + " " + senderName;
 			String cancelline = TownySettings.getDenyCommand() + " " + senderName;
 			sendInvitationMessage(player, firstline, confirmline, cancelline);
-
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town

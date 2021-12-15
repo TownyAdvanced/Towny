@@ -2332,7 +2332,7 @@ public class TownySettings {
 			case OUTSIDER -> getDefaultOutsiderPermission(owner, type);
 		};
 	}
-	
+
 	public static String getAcceptCommand(){
 		return getString(ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND);
 	}
