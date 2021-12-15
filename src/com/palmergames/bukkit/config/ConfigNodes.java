@@ -1648,11 +1648,6 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
-	INVITE_SYSTEM_INVITATION_SHOW_NATION_NAME(
-		"invite_system.invitation_show_nation_name",
-		"true",
-		"",
-		"# If you invite another player to your town, this will decide if it should show the nation name together with the town name, or just the town name."),
 	INVITE_SYSTEM_ACCEPT_COMMAND(
 			"invite_system.accept_command",
 			"accept",

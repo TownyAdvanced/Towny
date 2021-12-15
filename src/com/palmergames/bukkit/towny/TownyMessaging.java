@@ -363,16 +363,16 @@ public class TownyMessaging {
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstLine = translator.of("invitation_prefix") + translator.of("your_town_has_been_invited_to_join_nation", senderName);
-				String confirmLine = "t invite accept " + senderName;
-				String cancelLine = "t invite deny " + senderName;
-				sendInvitationMessage(player, firstLine, confirmLine, cancelLine);
+				String firstline = translator.of("invitation_prefix") + translator.of("your_town_has_been_invited_to_join_nation", senderName);
+				String confirmline = "t invite accept " + senderName;
+				String cancelline = "t invite deny " + senderName;
+				sendInvitationMessage(player, firstline, confirmline, cancelline);
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstLine = translator.of("invitation_prefix") + translator.of("you_have_been_requested_to_ally2", senderName);
-				String confirmLine = "n ally accept " + senderName;
-				String cancelLine = "n ally deny " + senderName;
-				sendInvitationMessage(player, firstLine, confirmLine, cancelLine);
+				String firstline = translator.of("invitation_prefix") + translator.of("you_have_been_requested_to_ally2", senderName);
+				String confirmline = "n ally accept " + senderName;
+				String cancelline = "n ally deny " + senderName;
+				sendInvitationMessage(player, firstline, confirmline, cancelline);
 			}
 		}
 	}
