@@ -353,15 +353,13 @@ public class TownyMessaging {
 		final Translator translator = Translator.locale(Translation.getLocale(player));
 		String senderName = invite.getSender().getName();
 		if (invite.getSender() instanceof Town town) { // Town invited Resident
-			String firstLine;
-			if(TownySettings.isInvitationShowNationName() && town.getNationOrNull() != null){
-				firstLine = translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join3", senderName, town.getNationOrNull().getName());
-			}else{
-				firstLine = translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join2", senderName);
-			}
-			String confirmLine = TownySettings.getAcceptCommand() + " " + senderName;
-			String cancelLine = TownySettings.getDenyCommand() + " " + senderName;
-			sendInvitationMessage(player, firstLine, confirmLine, cancelLine);
+			String firstline = town.hasNation()
+			        ? translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join3", senderName, town.getNationOrNull())
+			        : translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join2", senderName);
+			String confirmline = TownySettings.getAcceptCommand() + " " + senderName;
+			String cancelline = TownySettings.getDenyCommand() + " " + senderName;
+			sendInvitationMessage(player, firstline, confirmline, cancelline);
+
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
