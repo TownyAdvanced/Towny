@@ -54,7 +54,7 @@ public final class Translation {
 	private static final Map<String, Map<String, String>> translations = new HashMap<>();
 	private static Locale defaultLocale;
 	private static final Path langFolder = Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("lang");
-
+	
 	public static void loadTranslationRegistry() {
 		translations.clear();
 		updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
@@ -135,7 +135,7 @@ public final class Translation {
 						if (values != null) {
 							translations.computeIfAbsent(lang, k -> new HashMap<>());
 							for (Map.Entry<String, Object> entry : values.entrySet())
-								translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
+								translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -148,8 +148,8 @@ public final class Translation {
 		if (globalOverrides != null)
 			for (Map.Entry<String, Object> entry : globalOverrides.entrySet())
 				for (String lang : translations.keySet())
-					translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
-		
+					translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
+				
 		defaultLocale = loadDefaultLocale();		
 		Towny.getPlugin().getLogger().info(String.format("Successfully loaded translations for %d languages.", translations.keySet().size()));
 		HelpMenu.loadMenus();
@@ -369,5 +369,27 @@ public final class Translation {
 					}
 				}
 		}
+	}
+	
+	private static String getTranslationValue(Map.Entry<String, Object> entry) {
+		// Messages blocked from being overriden.
+		if (entry.getKey().toLowerCase().startsWith("msg_ptw_warning")) {
+			// Get the defaultLocale's translation of the PTW warnings.
+			String msg = String.valueOf(entry.getValue());
+			Towny.getPlugin().getLogger().warning("Attempted to override an protected string. Skipped " + entry.getKey());
+			// It's extremely possible the jar was edited and the string is missing/was modified.
+			if (!msg.contains("Towny"))
+				// Return a hard-coded message, the translation in the jar was likely tampered with.
+				return switch (entry.getKey()) {
+					case "msg_ptw_warning_1" -> "If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.";
+					case "msg_ptw_warning_2" -> "The Towny team never intended for townblocks to be purchaseable with real money.";
+					case "msg_ptw_warning_3" -> "If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.";
+					default -> throw new IllegalArgumentException("Unexpected value: " + entry.getKey());
+				};
+			// Return the defaultLocale's message, it appears to have been left alone.
+			return msg;
+		}
+		// Return the normal translation of the entry.
+		return String.valueOf(entry.getValue());
 	}
 }

@@ -212,7 +212,7 @@ public class Towny extends JavaPlugin {
 			// Re login anyone online. (In case of plugin reloading)
 			for (Player player : BukkitTools.getOnlinePlayers())
 				if (player != null) {
-					
+
 					// Test and kick any players with invalid names.
 					if (player.getName().contains(" ")) {
 						player.kickPlayer("Invalid name!");
