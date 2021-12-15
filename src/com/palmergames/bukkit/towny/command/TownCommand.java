@@ -410,16 +410,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 										tabCompletionReturnValue.add("-"+invite.getReceiver().getName());
 									}
 								} catch (TownyException ignore) {}
-								
-								return NameUtil.filterByStart(tabCompletionReturnValue, args[1]);
-
 							}else{
 								tabCompletionReturnValue.addAll(townInviteTabCompletes);
 								Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 								if (res != null){
 									Town town = res.getTownOrNull();
 									if(town != null){
-										
 										//Filter out fitting & possible invites
 										for(String residentName : getTownyStartingWith(args[1], "r")) {
 											if(!town.hasResident(residentName)){
@@ -437,10 +433,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 									}
 									
 								}
-								return NameUtil.filterByStart(tabCompletionReturnValue, args[1]);
 							}
-
-
+							return NameUtil.filterByStart(tabCompletionReturnValue, args[1]);
 						case 3:
 							switch (args[1].toLowerCase()) {
 								case "accept":
