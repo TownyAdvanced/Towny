@@ -985,6 +985,7 @@ public class TownyPlayerListener implements Listener {
 	public void onPlayerLeaveTown(PlayerLeaveTownEvent event) {
 		Resident resident = TownyAPI.getInstance().getResident(event.getPlayer().getUniqueId());
 		String worldName = TownyAPI.getInstance().getTownyWorld(event.getPlayer().getWorld().getName()).getUnclaimedZoneName();
+
 		// Likely a Citizens NPC.
 		if (resident == null || worldName == null)
 			return;
