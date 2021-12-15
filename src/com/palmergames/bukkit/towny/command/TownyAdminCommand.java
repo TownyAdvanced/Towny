@@ -1048,9 +1048,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendTownMessagePrefixed(town, Translatable.of("msg_you_have_been_given_bonus_blocks", extraBlocks)); 
 		if (isConsole && !isTown) {
 			TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_bonus_blocks", extraBlocks)); 
-			TownyMessaging.sendMessage(target, "If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.");
-			TownyMessaging.sendMessage(target, "The Towny team never intended for townblocks to be purchaseable with real money.");
-			TownyMessaging.sendMessage(target, "If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.");
+			TownyMessaging.sendMessage(target, Translatable.of("msg_ptw_warning_1").forLocale(target));
+			TownyMessaging.sendMessage(target, Translatable.of("msg_ptw_warning_2").forLocale(target));
+			TownyMessaging.sendMessage(target, Translatable.of("msg_ptw_warning_3").forLocale(target));
 		}
 		town.save();
 

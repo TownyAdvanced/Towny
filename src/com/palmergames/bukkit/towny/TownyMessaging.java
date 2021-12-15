@@ -314,11 +314,10 @@ public class TownyMessaging {
 	 * @param subtitle subtitle message to send
 	 */
 	public static void sendTitleMessageToResident(Resident resident, String title, String subtitle) {
-		Player player = TownyAPI.getInstance().getPlayer(resident);
-		if (player == null) {
+		Player player = resident.getPlayer();
+		if (player == null)
 			return;
-		}
-		player.sendTitle(title, subtitle, 10, 70, 10);
+		sendTitle(player, title, subtitle);
 	}
 	
 	/**
@@ -330,7 +329,7 @@ public class TownyMessaging {
 	 */
 	public static void sendTitleMessageToTown(Town town, String title, String subtitle) {
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendTitle(title, subtitle, 10, 70, 10);
+			sendTitle(player, title, subtitle);
 	}
 
 	/**
@@ -342,7 +341,21 @@ public class TownyMessaging {
 	 */
 	public static void sendTitleMessageToNation(Nation nation, String title, String subtitle) {
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendTitle(title, subtitle, 10, 70, 10);
+			sendTitle(player, title, subtitle);
+	}
+
+	/**
+	 * Send the player a Title message
+	 * 
+	 * As of MC 1.18 a null title will mean the message is never sent, so we are
+	 * changing empty Strings to " ".
+	 * 
+	 * @param player   Player being send the Title message.
+	 * @param title    String title message.
+	 * @param subtitle String subtitle message.
+	 */
+	public static void sendTitle(Player player, String title, String subtitle) {
+		player.sendTitle(title.isEmpty() ? " " : title, subtitle.isEmpty() ? " " : subtitle, 10, 70, 10);
 	}
 
 	/*
