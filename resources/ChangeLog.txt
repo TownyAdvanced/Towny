@@ -7067,3 +7067,5 @@ v0.92.0.11:
   - Make /ta set mayor TOWNNAME NPC be more careful about setting the NPC-run towns to have no upkeep.
   - Fix Title/Subtitles not showing when entering/exiting a town.
     - Closes #5532.
+  - Translate Console givebonus warning, courtesy of GNosii with PR #5514.
+  - Option to show what nation you're joining when you are invited to join a town, courtesy of AlessioGr with PR #5530. (First-Time Contributor!)

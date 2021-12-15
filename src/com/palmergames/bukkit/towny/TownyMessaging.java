@@ -367,21 +367,21 @@ public class TownyMessaging {
 		String senderName = invite.getSender().getName();
 		if (invite.getSender() instanceof Town town) { // Town invited Resident
 			String firstline = town.hasNation()
-			        ? translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join3", senderName, town.getNationOrNull())
-			        : translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join2", senderName);
+					? translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join3", Colors.colorTown(senderName), Colors.colorNation(town.getNationOrNull()))
+					: translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join2", Colors.colorTown(senderName));
 			String confirmline = TownySettings.getAcceptCommand() + " " + senderName;
 			String cancelline = TownySettings.getDenyCommand() + " " + senderName;
 			sendInvitationMessage(player, firstline, confirmline, cancelline);
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = translator.of("invitation_prefix") + translator.of("your_town_has_been_invited_to_join_nation", senderName);
+				String firstline = translator.of("invitation_prefix") + translator.of("your_town_has_been_invited_to_join_nation", Colors.colorNation(senderName));
 				String confirmline = "t invite accept " + senderName;
 				String cancelline = "t invite deny " + senderName;
 				sendInvitationMessage(player, firstline, confirmline, cancelline);
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstline = translator.of("invitation_prefix") + translator.of("you_have_been_requested_to_ally2", senderName);
+				String firstline = translator.of("invitation_prefix") + translator.of("you_have_been_requested_to_ally2", Colors.colorNation(senderName));
 				String confirmline = "n ally accept " + senderName;
 				String cancelline = "n ally deny " + senderName;
 				sendInvitationMessage(player, firstline, confirmline, cancelline);
