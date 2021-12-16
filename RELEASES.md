@@ -17,7 +17,7 @@ Get the latest pre-release [here](https://github.com/TownyAdvanced/Towny/release
     <tr>
         <th> Minecraft Version</th><th>Towny Version</th>
     </tr>
-    <tr align=center><td> MC 1.18.* </td><td rowspan=5> Use <a href="#release">latest release</a> or <a href="#pre-release">latest Pre-Release</a>.</td>
+    <tr align=center><td> MC 1.18.* </td><td rowspan=5> Use <a href="#release-">latest release</a> or <a href="#pre-release-">latest Pre-Release</a>.</td>
     <tr align=center><td> MC 1.17.* </td>
     <tr align=center><td> MC 1.16.* </td>
     <tr align=center><td> MC 1.15.* </td>
