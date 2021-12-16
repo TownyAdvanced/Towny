@@ -7069,3 +7069,8 @@ v0.92.0.11:
     - Closes #5532.
   - Translate Console givebonus warning, courtesy of GNosii with PR #5514.
   - Option to show what nation you're joining when you are invited to join a town, courtesy of AlessioGr with PR #5530. (First-Time Contributor!)
+0.97.5.3:
+  - New Permission Node: towny.command.nation.default
+    - A collection of nation sub commands which are given to everyone by default.
+      - Each node doesn't do anything as there are further subcommands with more permission tests.
+    - Fixes complicated townyperms setups not handling nation command refactor 0.97.3.2.

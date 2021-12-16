@@ -177,13 +177,11 @@ permissions:
         description: User can access all nation commands.
         default: false
         children:
-            towny.command.nation.ally: true
             towny.command.nation.ally.*: true
             towny.command.nation.bankhistory: true
             towny.command.nation.delete: true
             towny.command.nation.deposit: true
             towny.command.nation.enemy: true
-            towny.command.nation.invite: true
             towny.command.nation.invite.*: true
             towny.command.nation.kick: true
             towny.command.nation.king: true
@@ -193,19 +191,27 @@ permissions:
             towny.command.nation.online: true
             towny.command.nation.othernation: true
             towny.command.nation.withdraw: true
-            towny.command.nation.rank: true
             towny.command.nation.rank.*: true
             towny.command.nation.say: true
-            towny.command.nation.set: true
             towny.command.nation.set.*: true
             towny.command.nation.spawn: true
-            towny.command.nation.toggle: true
             towny.command.nation.toggle.*: true
             towny.command.nation.townlist: true
             towny.command.nation.allylist: true
             towny.command.nation.enemylist: true
             towny.command.nation.join: true
             towny.command.nation.ranklist: true
+
+    # Default: true Nation permissions
+    towny.command.nation.default:
+        description: These are given by default because all of the available subcommands are behind other permission tests.
+        default: true
+        children:
+            towny.command.nation.ally: true
+            towny.command.nation.invite: true
+            towny.command.nation.rank: true
+            towny.command.nation.set: true
+            towny.command.nation.toggle: true
 
     towny.command.nation.list:
         description: Users are able to use all the various methods of sorting the nation list.
