@@ -30,15 +30,6 @@ ___
 <tr align=center><td> MC 1.12.2 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.97.0.0for1.12.2>0.97.0.0 for 1.12.2</a> </td>
 <tr align=center><td>Looking for older releases?</td><td><a href="RELEASES.md#legacy">Go to RELEASES.md</a></td>
 </table>
-<!--<tr align=center><td> MC 1.11.2 </td><td> <a href=https://www.dropbox.com/s/cfpm4iy0sbzmti4/Towny_Advanced%200.93.1.0%20for%20MC%201.11.2.zip?dl=0>0.93.1.0 for 1.11.2</a> </td>
-<tr align=center><td> MC 1.10.2 </td><td> <a href=https://www.dropbox.com/s/x2i3wqaj8n6gdh1/Towny_Advanced%200.93.1.0%20for%20MC%201.10.2.rar?dl=0>0.93.1.0 for 1.10.2</a> </td>
-<tr align=center><td> MC 1.9.4 </td><td> <a href=https://www.dropbox.com/s/eh81i4618bfmvjm/Towny_Advanced%200.93.1.0%20for%20MC%201.9.4.zip?dl=0>0.93.1.0 for 1.9.4</a> </td>
-<tr align=center><td> MC 1.8.9 </td><td> <a href=https://www.dropbox.com/s/e83206cfed61hsw/Towny_Advanced%200.93.1.0a%20for%20MC%201.8.9.zip?dl=0>0.93.1.0a for 1.8.9</a> </td>
-<tr align=center><td> MC 1.7.10 </td><td> <a href=https://www.dropbox.com/s/vmf2g5bj7ab4coo/Towny_Advanced%200.92.0.0%20-%20MC%201.7.10.zip?dl=0>0.92.0.0 for 1.7.10</a> </td>
-<tr align=center><td> MC 1.6.4 </td><td> <a href=https://www.dropbox.com/s/5n9r60ivldh5i8f/Towny_Advanced%200.88.0.0%20%281.6.4%29.zip?dl=0>0.88.0.0 for 1.6.4</a> </td>
-<tr align=center><td> MC 1.5.2 </td><td> <a href=https://www.dropbox.com/s/euydq4qsljheoms/Towny_Advanced%200.88.0.0%20%281.5.2%29.zip?dl=0>0.88.0.0 for 1.5.2</a> </td>
-<tr align=center><td> MC 1.2.5 </td><td> <a href=https://www.dropbox.com/s/xstn1vdexxc1k5q/Towny_Advanced%200.82.0.0%20for%201.2.5.zip?dl=0>0.82.0.0</a> </td>-->
-</table>
 
 ___
 
@@ -113,4 +104,4 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
 
 - **Ant** ![](https://img.shields.io/badge/deprecated-red)
     - For older branches using the Ant build system, the main command to use would be: `ant clean jar`. This command will _exit_ the Towny directory, creating a lib folder alongside it. A `Towny.jar` file will be generated and placed within there.
-    - _Note: As Ant is being deprecated, older branches may eventually not be able to be built against without modification of the `build.xml` file. We leave no guarantee that the file repo providing the dependencies will stay up._
+    - Since Ant is being deprecated, you may need to modify the `build.xml` file. We leave no guarantee that the file repositories are still maintained, it is also possible they're no longer available.
