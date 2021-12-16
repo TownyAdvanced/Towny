@@ -183,7 +183,7 @@
       {
         "type": "APPEND",
         "path": "new_world_settings.plot_management.wild_revert_on_block_explosion.blocks",
-        "value": ",RESPAWN_ANCHOR"
+        "value": ",RESPAWN_ANCHOR",
         "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_BLOCKS"
       }
     ]
