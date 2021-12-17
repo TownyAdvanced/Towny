@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.138
+version: 0.139
 language: german
 author: ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih
 website: 'http://townyadvanced.github.io/'
@@ -690,7 +690,7 @@ number_of_residents: '(Anzahl an Einwohner)'
 number_of_towns: '(Anzahl an Städte)'
 town_name: 'Stadtname'
 nation_name: 'Nationname'
-refund_message: '&aEs wurde $%s für''s freigeben von %s Stadtblöcken erstattet.'
+refund_message: '&aRefunded %s for unclaiming %s townblocks.'
 msg_bankrupt_town_multiple: '&bDie folgenden Städte können ihren Unterhalt nicht mehr finanzieren und wurden deshalb aufgelöst: '
 msg_bankrupt_nation_multiple: '&bDie folgenden Nationen können ihren Unterhalt nicht mehr finanzieren und wurden deshalb aufgelöst: '
 msg_couldnt_pay_tax: '&b%s konnte die Steuer nicht bezahlen und wurde deshalb aus %s entfernt.'
@@ -1419,3 +1419,10 @@ msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchasea
 msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
