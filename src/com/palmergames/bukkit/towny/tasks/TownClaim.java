@@ -115,9 +115,17 @@ public class TownClaim extends Thread {
 
 			}
 		
-			if (!claim && TownySettings.getClaimRefundPrice() > 0.0) {
-				town.getAccount().deposit(TownySettings.getClaimRefundPrice()*selection.size(), "Town Unclaim Refund");
-				TownyMessaging.sendMsg(player, Translatable.of("refund_message", TownySettings.getClaimRefundPrice()*selection.size(), selection.size()));
+			double unclaimRefund = TownySettings.getClaimRefundPrice();
+			if (!claim && unclaimRefund != 0.0) {
+				double refund = Math.abs(unclaimRefund * selection.size());
+				if (unclaimRefund > 0) {
+					town.getAccount().deposit(refund, "Town Unclaim Refund");
+					TownyMessaging.sendMsg(player, Translatable.of("refund_message", TownyEconomyHandler.getFormattedBalance(refund), selection.size()));
+				}
+				if (unclaimRefund < 0) {
+					town.getAccount().withdraw(refund, "Town Unclaim Cost");
+					TownyMessaging.sendMsg(player, Translatable.of("msg_your_town_paid_x_to_unclaim", TownyEconomyHandler.getFormattedBalance(refund)));
+				}
 			}
 
 		} else if (!claim) {

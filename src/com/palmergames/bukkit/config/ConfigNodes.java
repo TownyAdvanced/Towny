@@ -1926,7 +1926,8 @@ public enum ConfigNodes {
 			"",
 			"# The amount refunded to a town when they unclaim a townblock.",
 			"# Warning: do not set this higher than the cost to claim a townblock.",
-			"# It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away."),
+			"# It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away.",
+			"# Optionally, set this to a negative amount if you want towns to pay money to unclaim their land."),
 	ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK(
 			"economy.new_expand.price_purchased_bonus_townblock",
 			"25.0",

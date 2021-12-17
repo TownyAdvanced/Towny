@@ -3986,6 +3986,26 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_unclaim_homeblock"));
 					}
 					
+					// Handle a negative unclaim refund (yes, where someone is being charged money to unclaim their land. It's a thing.)
+					if (TownySettings.getClaimRefundPrice() < 0) {
+						double cost = Math.abs(TownySettings.getClaimRefundPrice() * selection.size());
+						if (!town.getAccount().canPayFromHoldings(cost)) {
+							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", TownyEconomyHandler.getFormattedBalance(cost)));
+							return;
+						}
+						List<WorldCoord> finalSelection = selection;
+						Confirmation.runOnAccept(()-> {
+							if (!town.getAccount().canPayFromHoldings(cost)) {
+								TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", TownyEconomyHandler.getFormattedBalance(cost)));
+								return;
+							}
+							// Set the area to unclaim
+							new TownClaim(plugin, player, town, finalSelection, false, false, false).start();
+						})
+						.setTitle(Translatable.of("confirmation_unclaiming_costs", TownyEconomyHandler.getFormattedBalance(cost)))
+						.sendTo(player);
+						return;
+					}
 					// Set the area to unclaim
 					new TownClaim(plugin, player, town, selection, false, false, false).start();
 
