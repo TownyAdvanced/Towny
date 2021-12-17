@@ -7074,3 +7074,6 @@ v0.92.0.11:
     - A collection of nation sub commands which are given to everyone by default.
       - Each node doesn't do anything as there are further subcommands with more permission tests.
     - Fixes complicated townyperms setups not handling nation command refactor 0.97.3.2.
+  - New Placeholder: %townyadvanced_player_location_plotgroup_name%
+    - Shows the PlotGroup name if the player location has a PlotGroup.
+    - Closes #5539.
