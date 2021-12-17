@@ -7078,3 +7078,4 @@ v0.92.0.11:
     - Shows the PlotGroup name if the player location has a PlotGroup.
     - Closes #5539.
   - Fix the default public town setting not being used.
+  - Fix a typo in a lang key use, courtesy of Warriorrrr with PR #5540.
