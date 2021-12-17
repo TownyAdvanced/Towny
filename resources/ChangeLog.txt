@@ -7077,3 +7077,4 @@ v0.92.0.11:
   - New Placeholder: %townyadvanced_player_location_plotgroup_name%
     - Shows the PlotGroup name if the player location has a PlotGroup.
     - Closes #5539.
+  - Fix the default public town setting not being used.
