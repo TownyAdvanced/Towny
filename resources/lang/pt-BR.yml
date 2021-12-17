@@ -75,7 +75,7 @@ plot_perms_1: 'Os terrenos de habitantes não pode usar permissões de estrangei
 res_list: 'Habitantes'
 res_sing: 'Habitante'
 mayor_sing: 'Prefeito'
-admin_sing: 'Admin'
+admin_sing: 'Administrador'
 town_sing: 'Cidade'
 nation_sing: 'Nação'
 nation_plu: 'Nações'
