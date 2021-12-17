@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.138
+version: 0.139
 language: 한국어
 author: Daybreak 새벽
 website: 'http://townyadvanced.github.io/'
@@ -690,7 +690,7 @@ number_of_residents: '(주민 수)'
 number_of_towns: '(마을 수)'
 town_name: '마을 이름'
 nation_name: '국가 이름'
-refund_message: '&a%s 만큼의 돈을 %s 마을 토지를 점유 해제하여 환불받았습니다.'
+refund_message: '&aRefunded %s for unclaiming %s townblocks.'
 msg_bankrupt_town_multiple: '&b다음 마을들은 유지비를 감당할 수 없어 해산되었습니다: '
 msg_bankrupt_nation_multiple: '&b다음 국가들은 유지비를 감당할 수 없어 해산되었습니다: '
 msg_couldnt_pay_tax: '&b%s은(는) 세금을 감당할 수 없어 %s에서 추방되었습니다.'
@@ -1419,3 +1419,10 @@ msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchasea
 msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
