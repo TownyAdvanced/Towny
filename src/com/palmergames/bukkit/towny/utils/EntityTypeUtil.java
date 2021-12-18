@@ -83,7 +83,7 @@ public class EntityTypeUtil {
 		switch(entityType) {
 		
 		case AXOLOTL:
-			material = Material.AXOLOTL_SPAWN_EGG;
+			material = Material.AXOLOTL_BUCKET;
 			break;
 
 		case COD:
