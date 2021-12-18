@@ -305,6 +305,8 @@ public class TownBlock extends TownyObject {
 			case "wilds":
 				setPermissions("residentBuild,residentDestroy");
 				break;
+			default:
+				break;
 		}
 		
 		// Set the changed status.

@@ -76,6 +76,13 @@ public class TownBlockType {
 	
 	private static final Map<Integer, String> legacyLookupMap = new HashMap<>();
 	
+	/**
+	 * @return the legacylookupmap
+	 */
+	public static Map<Integer, String> getLegacylookupmap() {
+		return legacyLookupMap;
+	}
+
 	static {
 		legacyLookupMap.put(0, "default");
 		legacyLookupMap.put(1, "shop");
