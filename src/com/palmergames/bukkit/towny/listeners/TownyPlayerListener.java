@@ -511,6 +511,7 @@ public class TownyPlayerListener implements Listener {
 				case MINECART_COMMAND:
 				case MINECART_TNT:
 				case MINECART_MOB_SPAWNER:
+				case AXOLOTL:
 					mat = EntityTypeUtil.parseEntityToMaterial(event.getRightClicked().getType());
 					break;
 				/*
