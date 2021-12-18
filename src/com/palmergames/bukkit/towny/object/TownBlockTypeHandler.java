@@ -82,6 +82,15 @@ public final class TownBlockTypeHandler {
 		return townBlockTypeMap.get(townBlockType.toLowerCase());
 	}
 
+	public static TownBlockType getTypeInternal(@NotNull String input) {
+		try {
+			int id = Integer.parseInt(input);
+			return getType(TownBlockType.getLegacylookupmap().getOrDefault(id, "default"));
+		} catch (NumberFormatException e) {
+			return getType(input);
+		}
+	}
+
 	/**
 	 * @param typeName The name of the type to test for.
 	 * @return Whether a type with the specified name exists.
