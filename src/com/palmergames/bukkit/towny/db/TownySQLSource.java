@@ -1791,12 +1791,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 				line = rs.getString("type");
 				if (line != null)
-					try {
-						//noinspection deprecation
-						townBlock.setType(Integer.parseInt(line));
-					} catch (Exception e) {
-						townBlock.setType(line);
-					}
+					townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
 
 				boolean outpost = rs.getBoolean("outpost");
 				if (line != null && !line.isEmpty())
