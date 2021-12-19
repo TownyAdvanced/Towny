@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.Translatable;
@@ -580,9 +579,6 @@ public class PlayerCacheUtil {
 	 * @return True if this material is allowed in this townblock.
 	 */
 	private static boolean isAllowedMaterial(TownBlock townBlock, Material material, ActionType action) {
-		if (townBlock.getType() == TownBlockType.WILDS)
-			return TownyUniverse.getInstance().getPermissionSource().unclaimedZoneAction(townBlock.getWorld(), material, action);
-		
 		if ((action == ActionType.BUILD || action == ActionType.DESTROY) && !townBlock.getData().getAllowedBlocks().isEmpty())
 			return townBlock.getData().getAllowedBlocks().contains(material);
 
