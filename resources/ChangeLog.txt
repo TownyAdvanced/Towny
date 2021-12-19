@@ -7082,3 +7082,4 @@ v0.92.0.11:
   - Allow economy.new_expand.price_claim_townblock_refund to be negative, meaning towns will be charged money to unclaim land.
     - Closes #3650.
   - Prevent the theft of axolotls, courtesy of Warriorrrr with PR #5542.
+  - Fix minecart names in ItemLists, courtesy of Warriorrrr with PR #5546.
