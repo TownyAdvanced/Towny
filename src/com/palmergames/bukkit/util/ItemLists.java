@@ -43,7 +43,7 @@ public class ItemLists {
 	/**
 	 * List of Minecarts.
 	 */
-	public static List<String> MINECARTS = new ArrayList<>(Arrays.asList("MINECART","STORAGE_MINECART","POWERED_MINECART","COMMAND_MINECART","TNT_MINECART","HOPPER_MINECART"));
+	public static List<String> MINECARTS = new ArrayList<>(Arrays.asList("MINECART","CHEST_MINECART","COMMAND_BLOCK_MINECART","TNT_MINECART","HOPPER_MINECART"));
  	
 	/**
 	 * List of Wooden Doors.
