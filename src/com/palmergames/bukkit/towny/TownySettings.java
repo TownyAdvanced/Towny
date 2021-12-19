@@ -1465,7 +1465,7 @@ public class TownySettings {
 	 * For compatibility with custom plot types, this has been deprecated. Please use {@link #isSwitchMaterial(Material, Location)} instead.
 	 * @param mat The name of the material.
 	 * @return Whether this is a switch material or not.
-	 * @deprecated as of 0.97.3.0.
+	 * @deprecated as of 0.97.5.3.
 	 */
 	@Deprecated
 	public static boolean isSwitchMaterial(String mat) {
@@ -1485,7 +1485,7 @@ public class TownySettings {
 	 * For compatibility with custom plot types, this has been deprecated. Please use {@link #isItemUseMaterial(Material, Location)} instead.
 	 * @param mat The name of the material.
 	 * @return Whether this is an item use material or not.
-	 * @deprecated as of 0.97.3.0.
+	 * @deprecated as of 0.97.5.3.
 	 */
 	@Deprecated
 	public static boolean isItemUseMaterial(String mat) {
