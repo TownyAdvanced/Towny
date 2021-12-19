@@ -100,21 +100,24 @@ public final class TownBlockTypeHandler {
 		return getType(typeName) != null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private static void applyConfigSettings(Map<String, TownBlockType> newData) {
 
 		List<Map<?, ?>> types = TownySettings.getConfig().getMapList("townblocktypes.types");
-		for (Map<?, ?> type : types) {
+		for (Map<?, ?> genericType : types) {
 			String name = "unknown type";
 			
 			try {
-				name = String.valueOf(type.get("name"));
-				double cost = parseDouble(type.get("cost").toString());
-				double tax = parseDouble(type.get("tax").toString());
-				String mapKey = String.valueOf(type.get("mapKey"));
+				Map<String, Object> type = (Map<String, Object>) genericType;
 
-				Set<Material> itemUseIds = loadMaterialList("itemUseIds", String.valueOf(type.get("itemUseIds")), name);
-				Set<Material> switchIds = loadMaterialList("switchIds", String.valueOf(type.get("switchIds")), name);
-				Set<Material> allowedBlocks = loadMaterialList("allowedBlocks", String.valueOf(type.get("allowedBlocks")), name);
+				name = String.valueOf(type.get("name"));
+				double cost = parseDouble(type.getOrDefault("cost", 0.0).toString());
+				double tax = parseDouble(type.getOrDefault("tax", 0.0).toString());
+				String mapKey = String.valueOf(type.getOrDefault("mapKey", "+"));
+
+				Set<Material> itemUseIds = loadMaterialList("itemUseIds", String.valueOf(type.getOrDefault("itemUseIds", "")), name);
+				Set<Material> switchIds = loadMaterialList("switchIds", String.valueOf(type.getOrDefault("switchIds", "")), name);
+				Set<Material> allowedBlocks = loadMaterialList("allowedBlocks", String.valueOf(type.getOrDefault("allowedBlocks", "")), name);
 				
 				TownBlockType townBlockType = newData.get(name.toLowerCase());
 				TownBlockData data;
@@ -202,6 +205,7 @@ public final class TownBlockTypeHandler {
 			migrations.add(new Migration("bank", "cost", bankCost));
 		}
 		
+		@SuppressWarnings("unchecked")
 		public static void migrate() {
 			if (migrations.isEmpty())
 				return;
