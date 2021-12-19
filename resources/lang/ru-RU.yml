@@ -690,7 +690,7 @@ number_of_residents: '(Количество жителей)'
 number_of_towns: '(Количество городов)'
 town_name: 'Название города'
 nation_name: 'Имя нации'
-refund_message: '&aRefunded %s for unclaiming %s townblocks.'
+refund_message: '&aВозвращено $%s за расприват %s участков.'
 msg_bankrupt_town_multiple: '&bСледующие города не смогли позволить себе содержание и были расформированы: '
 msg_bankrupt_nation_multiple: '&bСледующие нации не смогли позволить себе содержание и были расформированы: '
 msg_couldnt_pay_tax: '&b%s не смог заплатить налоги и был выгнан из %s.'
@@ -1295,7 +1295,7 @@ status_unknown: 'неизвестно'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
 msg_nationzone_override_set_to: '%s установил nationzone на %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
-msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+msg_nationzone_override_removed: '%s отменил действие их национальной зоны.'
 #Added in 0.127
 #Used in status screen:
 status_nation_zone_size: 'Размер зоны нации:'
