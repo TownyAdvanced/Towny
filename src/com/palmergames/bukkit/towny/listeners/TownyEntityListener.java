@@ -879,6 +879,37 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 	
+	/**
+	 * Allows us to protect chorus flowers being broken by bows.
+	 * 
+	 * @param event ProjectileHitEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onProjectileHitEventChorusFlower(ProjectileHitEvent event) {
+		/*
+		 * Bypass any occasion where there is no block being hit and the shooter isn't a player.
+		 */
+		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
+			return;
+
+		if (event.getHitBlock().getType() == Material.CHORUS_FLOWER) {
+			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+			if (!TownyActionEventExecutor.canDestroy((Player) event.getEntity().getShooter(), event.getHitBlock().getLocation(), Material.CHORUS_FLOWER)) {
+				
+				if (event instanceof Cancellable) { //TODO: When support is dropped for pre-1.17 MC versions the else can be removed.
+					event.setCancelled(true);
+				} else {
+					/*
+					 * Since we are unable to cancel a ProjectileHitEvent before MC 1.17 we must
+					 * set the block to air then set it back to its original form. 
+					 */
+					BlockData data = event.getHitBlock().getBlockData();
+					event.getHitBlock().setType(Material.AIR);
+					BukkitTools.getScheduler().runTask(plugin, () -> event.getHitBlock().setBlockData(data));
+				}
+			}
+		}
+	}
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onDoorBreak(EntityBreakDoorEvent event) {
 		if (TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()) && !TownyAPI.getInstance().isWilderness(event.getBlock().getLocation()))

@@ -7083,3 +7083,4 @@ v0.92.0.11:
     - Closes #3650.
   - Prevent the theft of axolotls, courtesy of Warriorrrr with PR #5542.
   - Fix minecart names in ItemLists, courtesy of Warriorrrr with PR #5546.
+  - Fix ChorusFlowers not being protected from projectiles.
