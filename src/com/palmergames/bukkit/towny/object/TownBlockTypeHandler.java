@@ -4,6 +4,7 @@ import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.TownBlockTypeRegisterEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -111,9 +112,9 @@ public final class TownBlockTypeHandler {
 				double tax = parseDouble(type.get("tax").toString());
 				String mapKey = String.valueOf(type.get("mapKey"));
 
-				Set<Material> itemUseIds = loadMaterialList(String.valueOf(type.get("itemUseIds")), name);
-				Set<Material> switchIds = loadMaterialList(String.valueOf(type.get("switchIds")), name);
-				Set<Material> allowedBlocks = loadMaterialList(String.valueOf(type.get("allowedBlocks")), name);
+				Set<Material> itemUseIds = loadMaterialList("itemUseIds", String.valueOf(type.get("itemUseIds")), name);
+				Set<Material> switchIds = loadMaterialList("switchIds", String.valueOf(type.get("switchIds")), name);
+				Set<Material> allowedBlocks = loadMaterialList("allowedBlocks", String.valueOf(type.get("allowedBlocks")), name);
 				
 				TownBlockType townBlockType = newData.get(name.toLowerCase());
 				TownBlockData data;
@@ -140,14 +141,14 @@ public final class TownBlockTypeHandler {
 		}
 	}
 	
-	private static Set<Material> loadMaterialList(String materialList, String typeName) {
+	private static Set<Material> loadMaterialList(String listName, String materialList, String typeName) {
 		if (!materialList.isEmpty()) {
 			Set<Material> set = new LinkedHashSet<>();
 			for (String materialName : materialList.split(",")) {
 				Material material = Material.matchMaterial(materialName);
 
 				if (material == null)
-					Towny.getPlugin().getLogger().warning(String.format("Could not find a material named '%s' while loading the item use list for the %s type.", materialName, typeName));
+					TownyMessaging.sendDebugMsg(String.format("Could not find a material named '%s' while loading the " + listName + " list for the %s type.", materialName, typeName));
 				else
 					set.add(material);
 			}
