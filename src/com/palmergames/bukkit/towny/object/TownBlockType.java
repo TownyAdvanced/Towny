@@ -25,10 +25,10 @@ public class TownBlockType {
 			return town.getEmbassyPlotTax() + town.getPlotTax();
 		}
 	}); // For other towns to own a plot in your town.
-	public static final TownBlockType WILDS = new TownBlockType("Wilds"); //Follows wilderness protection settings, but town owned.
-	public static final TownBlockType INN = new TownBlockType("Inn"); //Allows use of beds outside your own plot.
+	public static final TownBlockType WILDS = new TownBlockType("Wilds"); //Limits build/destroy-able blocks to the world's unclaimedZoneIgnoreIDs.
+	public static final TownBlockType INN = new TownBlockType("Inn"); //Allows use of beds outside your own plot, when deny_bed_use is true.
 	public static final TownBlockType JAIL = new TownBlockType("Jail"); //Enables setting the jail spawn.		
-	public static final TownBlockType FARM = new TownBlockType("Farm"); //Follows wilderness protection settings, but town owned.
+	public static final TownBlockType FARM = new TownBlockType("Farm"); //Limits build/destroy-able blocks to the farm plot block list.
 	public static final TownBlockType BANK = new TownBlockType("Bank"); // Enables depositing into town and nation banks, if that has been enabled in the config.
 	
 	private final String name;
@@ -53,6 +53,10 @@ public class TownBlockType {
 		return data.getTax(town);
 	}
 
+	/**
+	 * @deprecated since 0.97.5.3.
+	 * @return 0.
+	 */
 	@Deprecated
 	public int getId() {
 		return 0;
@@ -96,7 +100,7 @@ public class TownBlockType {
 	}
 
 	/**
-	 * @deprecated As of 0.97.5.0, please use {@link TownBlockTypeHandler#getType(String)} instead.
+	 * @deprecated As of 0.97.5.3, please use {@link TownBlockTypeHandler#getType(String)} instead.
 	 */
 	@Nullable
 	@Deprecated
@@ -105,7 +109,7 @@ public class TownBlockType {
 	}
 
 	/**
-	 * @deprecated As of 0.97.5.0, please use {@link TownBlockTypeHandler#getType(String)} instead.
+	 * @deprecated As of 0.97.5.3, please use {@link TownBlockTypeHandler#getType(String)} instead.
 	 */
 	@Nullable
 	@Deprecated

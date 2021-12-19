@@ -232,7 +232,8 @@ public class Towny extends JavaPlugin {
 		// Before anything can continue we must load the databaseconfig, config 
 		// file, language and permissions, setting the foundation for Towny.
 		
-		TownBlockTypeHandler.Migrator.checkForLegacyOptions();
+		// Handle any legacy config settings.
+		handleLegacyConfigs();
 
 		// Load the database config first, so any conversion happens before the config is loaded.
 		loadDatabaseConfig(reload);
@@ -338,6 +339,15 @@ public class Towny extends JavaPlugin {
 		}
 	}
 
+	/**
+	 * Handle any legacy config settings before we load the config and database.
+	 */
+	private void handleLegacyConfigs() {
+		// Old configs stored various TownBlock settings throughout the config.
+		// This will migrate the old settings into the TownBlockType config section.
+		TownBlockTypeHandler.Migrator.checkForLegacyOptions();
+	}
+	
 	/**
 	 * Converts the older config.yml's database settings into the database.yml file.
 	 * @return true if successful

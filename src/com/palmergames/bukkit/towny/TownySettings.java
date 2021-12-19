@@ -2676,6 +2676,10 @@ public class TownySettings {
 		return getDouble(ConfigNodes.GTOWN_SETTINGS_NATION_REQUIRES_PROXIMITY);
 	}
 	
+	/**
+	 * @deprecated since 0.97.5.3
+	 * @return Collections.emptyList()
+	 */
 	@Deprecated
 	public static List<String> getFarmPlotBlocks() {
 		return Collections.emptyList();

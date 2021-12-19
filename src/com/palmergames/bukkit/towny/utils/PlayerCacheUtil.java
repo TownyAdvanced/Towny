@@ -494,7 +494,7 @@ public class PlayerCacheUtil {
 		 */
 		if (status == TownBlockStatus.PLOT_FRIEND) {
 			
-			// Plot allows Friends perms and we aren't stopped by Wilds or Farm Plot overrides.
+			// Plot allows Friends perms and we aren't stopped by a TownBlockType overriding the allowed material and action.
 			if (townBlock.getPermissions().getResidentPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
@@ -504,7 +504,7 @@ public class PlayerCacheUtil {
 		
 		if (status == TownBlockStatus.PLOT_TOWN) {
 
-			// Plot allows Town perms
+			// Plot allows Town perms and we aren't stopped by a TownBlockType overriding the allowed material and action.
 			if (townBlock.getPermissions().getNationPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 			
@@ -517,7 +517,7 @@ public class PlayerCacheUtil {
 		 */
 		if (status == TownBlockStatus.TOWN_RESIDENT) {
 			
-			// Plot allows Resident perms
+			// Plot allows Resident perms and we aren't stopped by a TownBlockType overriding the allowed material and action.
 			if (townBlock.getPermissions().getResidentPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
@@ -527,7 +527,7 @@ public class PlayerCacheUtil {
 		
 		if (status == TownBlockStatus.TOWN_NATION) {
 
-			// Plot allows Nation perms
+			// Plot allows Nation perms and we aren't stopped by a TownBlockType overriding the allowed material and action.
 			if (townBlock.getPermissions().getNationPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
@@ -540,7 +540,7 @@ public class PlayerCacheUtil {
 		 */
 		if (status == TownBlockStatus.PLOT_ALLY || status == TownBlockStatus.TOWN_ALLY) {
 
-			// Plot allows Ally perms
+			// Plot allows Ally perms and we aren't stopped by a TownBlockType overriding things.
 			if (townBlock.getPermissions().getAllyPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
@@ -557,7 +557,7 @@ public class PlayerCacheUtil {
 		 */
 		if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY) {
 			
-			// Plot allows Outsider perms
+			// Plot allows Outsider perms and we aren't stopped by a TownBlockType overriding the allowed material and action.
 			if (townBlock.getPermissions().getOutsiderPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
