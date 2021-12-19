@@ -685,9 +685,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							if (plotTypeName.equalsIgnoreCase("reset"))
 								plotTypeName = "default";
 
-							TownBlockType type = TownBlockTypeHandler.getType(plotTypeName);
+							TownBlockType townBlockType = TownBlockTypeHandler.getType(plotTypeName);
 							
-							if (type == null)
+							if (townBlockType == null)
 								throw new TownyException(Translatable.of("msg_err_not_block_type"));
 							
 							try {
@@ -700,14 +700,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								return false;
 							}
 
-							if (TownBlockType.ARENA.equals(type) && TownySettings.getOutsidersPreventPVPToggle()) {
+							if (TownBlockType.ARENA.equals(townBlockType) && TownySettings.getOutsidersPreventPVPToggle()) {
 								for (Player target : Bukkit.getOnlinePlayers()) {
 									if (!townBlock.getTownOrNull().hasResident(target) && !player.getName().equals(target.getName()) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
 										throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
 								}
 							}
 							
-							PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(type, townBlock, resident);
+							PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(townBlockType, townBlock, resident);
 							BukkitTools.getPluginManager().callEvent(preEvent);
 
 							if (preEvent.isCancelled()) {
@@ -715,38 +715,38 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								return false;
 							}
 
-							double cost = type.getData().getCost();
+							double cost = townBlockType.getData().getCost();
 							
 							// Test if we can pay first to throw an exception.
 							if (cost > 0 && TownyEconomyHandler.isActive() && !resident.getAccount().canPayFromHoldings(cost))
-								throw new TownyException(Translatable.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost)));
+								throw new TownyException(Translatable.of("msg_err_cannot_afford_plot_set_type_cost", townBlockType, TownyEconomyHandler.getFormattedBalance(cost)));
 
 							// Handle payment via a confirmation to avoid suprise costs.
 							if (cost > 0 && TownyEconomyHandler.isActive()) {
 								Confirmation.runOnAccept(() -> {
 							
-									if (!resident.getAccount().withdraw(cost, String.format("Plot set to %s", type))) {
-										TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost)));
+									if (!resident.getAccount().withdraw(cost, String.format("Plot set to %s", townBlockType))) {
+										TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_afford_plot_set_type_cost", townBlockType, TownyEconomyHandler.getFormattedBalance(cost)));
 										return;
 									}
 
-									TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), type));
+									TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), townBlockType));
 
 									try {
-										townBlock.setType(type, resident);
+										townBlock.setType(townBlockType, resident);
 										
 									} catch (TownyException e) {
 										TownyMessaging.sendErrorMsg(resident, e.getMessage(player));
 										return;
 									}
-									TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_type", type));
+									TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_type", townBlockType));
 								})
 									.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 									.sendTo(BukkitTools.getPlayerExact(resident.getName()));
 							
 							// No cost or economy so no confirmation.
 							} else {
-								townBlock.setType(type, resident);
+								townBlock.setType(townBlockType, resident);
 								TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_type", plotTypeName));
 							}
 						} catch (TownyException te){
