@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.138
+version: 0.139
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -690,7 +690,7 @@ number_of_residents: '(מספר תושבים)'
 number_of_towns: '(מספר ערים)'
 town_name: 'שם עיר'
 nation_name: 'שם אומה'
-refund_message: '&aהוחזר ₪%s עבור ביטול בעלות על %s חלקות.'
+refund_message: '&aRefunded %s for unclaiming %s townblocks.'
 msg_bankrupt_town_multiple: '&bהערים הבאות לא עמדו בעלויות התחזוקה ופורקו: '
 msg_bankrupt_nation_multiple: '&bהאומות הבאות לא עמדו בעלויות התחזוקה ופורקו: '
 msg_couldnt_pay_tax: '&b%s לא עמד בתשלום מיסים וגורש מה - %s.'
@@ -1419,3 +1419,10 @@ msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchasea
 msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
