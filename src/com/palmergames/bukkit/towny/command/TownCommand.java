@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
@@ -775,7 +774,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					Town town;
 					if (split.length > 1) {
-						town = TownyUniverse.getInstance().getDataSource().getTown(split[1]);
+						town = TownyUniverse.getInstance().getTown(split[1]);
 						if (town == null)
 							throw new TownyException(Translatable.of("msg_err_invalid_name", split[1]));
 					} else {
@@ -893,7 +892,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					Town town;
 					if (split.length > 1) {
-						town = TownyUniverse.getInstance().getDataSource().getTown(split[1]);
+						town = TownyUniverse.getInstance().getTown(split[1]);
 						if (town == null)
 							throw new TownyException(Translatable.of("msg_err_invalid_name", split[1]));
 					} else {
@@ -1444,7 +1443,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
-		List<Town> townsToSort = TownyUniverse.getInstance().getDataSource().getTowns();
+		List<Town> townsToSort = new ArrayList<>(TownyUniverse.getInstance().getTowns());
 		int page = 1;
 		boolean pageSet = false;
 		boolean comparatorSet = false;
@@ -1513,7 +1512,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else { 
 				// Make a randomly sorted output.
 				List<TextComponent> output = new ArrayList<>();
-				List<Town> towns = TownyUniverse.getInstance().getDataSource().getTowns();
+				List<Town> towns = new ArrayList<>(TownyUniverse.getInstance().getTowns());
 				Collections.shuffle(towns);
 				
 				for (Town town : towns) {
@@ -2843,10 +2842,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param noCharge - charging for creation - /ta town new NAME MAYOR has no charge.
 	 */
 	public static void newTown(Player player, String name, Resident resident, boolean noCharge) {
-		TownyDataSource dataSource = TownyUniverse.getInstance().getDataSource();
 
 		try {
-			if (TownySettings.hasTownLimit() && dataSource.getTowns().size() >= TownySettings.getTownLimit())
+			if (TownySettings.hasTownLimit() && TownyUniverse.getInstance().getTowns().size() >= TownySettings.getTownLimit())
 				throw new TownyException(Translatable.of("msg_err_universe_limit"));
 
 			if (TownySettings.getTownAutomaticCapitalisationEnabled())
@@ -2860,7 +2858,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				filteredName = null;
 			}
 
-			if ((filteredName == null) || dataSource.hasTown(filteredName))
+			if ((filteredName == null) || TownyUniverse.getInstance().hasTown(filteredName))
 				throw new TownyException(Translatable.of("msg_err_invalid_name", name));
 			
 			name = filteredName;

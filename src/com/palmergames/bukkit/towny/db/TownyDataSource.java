@@ -180,7 +180,7 @@ public abstract class TownyDataSource {
 	public boolean loadTowns() {
 
 		TownyMessaging.sendDebugMsg("Loading Towns");
-		for (Town town : getTowns())
+		for (Town town : universe.getTowns())
 			if (!loadTown(town)) {
 				plugin.getLogger().severe("Loading Error: Could not read town data '" + town.getName() + "'.");
 				return false;
@@ -273,7 +273,7 @@ public abstract class TownyDataSource {
 	public boolean saveTowns() {
 
 		TownyMessaging.sendDebugMsg("Saving Towns");
-		for (Town town : getTowns())
+		for (Town town : universe.getTowns())
 			saveTown(town);
 		return true;
 	}
@@ -296,7 +296,7 @@ public abstract class TownyDataSource {
 	
 	public boolean saveTownBlocks() {
 		TownyMessaging.sendDebugMsg("Saving Townblocks");
-		for (Town town : getTowns()) {
+		for (Town town : universe.getTowns()) {
 			for (TownBlock townBlock : town.getTownBlocks())
 				saveTownBlock(townBlock);
 		}
@@ -306,6 +306,13 @@ public abstract class TownyDataSource {
 	// Database functions
 	abstract public List<Resident> getResidents(Player player, String[] names);
 
+	/**
+	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getResidents()} instead.
+	 * 
+	 * Gets a list of all Towny residents.
+	 * @return list of all towny residents
+	 */
+	@Deprecated
 	abstract public List<Resident> getResidents();
 	
 	abstract public List<PlotGroup> getAllPlotGroups();
@@ -335,26 +342,99 @@ public abstract class TownyDataSource {
 	@Deprecated
 	abstract public boolean hasResident(String name);
 
+	/**
+	 * @deprecated as of 0.97.5.3, use {@link TownyUniverse#hasTown(String)} instead.
+	 * 
+	 * Checks if a town with the name exists.
+	 * 
+	 * @param name Name of the town to check.
+	 * @return whether the town exists.
+	 */
+	@Deprecated
 	abstract public boolean hasTown(String name);
 
+	/**
+	 * @deprecated as of 0.97.5.3, use {@link TownyUniverse#hasNation(String)} instead.
+	 * 
+	 * Check if a nation with the given name exists.
+	 * 
+	 * @param name Name of the nation to check.
+	 * @return whether the nation with the given name exists.
+	 */
+	@Deprecated
 	abstract public boolean hasNation(String name);
 
 	abstract public List<Town> getTowns(String[] names);
 
 	abstract public List<Town> getTowns(List<UUID> uuids);
 	
+	/**
+	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getTowns()} instead.
+	 * 
+	 * @return a list of all towns.
+	 */
+	@Deprecated
 	abstract public List<Town> getTowns();
 
+	/**
+	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getTown(String)} instead.
+	 * 
+	 * Gets a town from the passed-in name.
+	 * @param name Town Name
+	 * @return town associated with the name.
+	 * @throws NotRegisteredException Town does not exist.
+	 */
+	@Deprecated
 	abstract public Town getTown(String name) throws NotRegisteredException;
 
+	/**
+	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getTown(UUID)} instead.
+	 * 
+	 * Returns the associated town with the passed-in uuid.
+	 * 
+	 * @param uuid UUID of the town to fetch.
+	 *                
+	 * @return town associated with the uuid.
+	 * 
+	 * @throws NotRegisteredException Thrown if town doesn't exist.
+	 */
+	@Deprecated
 	abstract public Town getTown(UUID uuid) throws NotRegisteredException;
 
 	abstract public List<Nation> getNations(String[] names);
 
+	/**
+	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getNations()} instead.
+	 * 
+	 * Get all nations.
+	 * 
+	 * @return all nations.
+	 */
+	@Deprecated
 	abstract public List<Nation> getNations();
 
+	/**
+	 * @deprecated as of 0.97.5.3, Please use {@link TownyUniverse#getNation(String)} instead.
+	 * 
+	 * Get the nation matching the passed-in name.
+	 * 
+	 * @param name Name of the nation to get.
+	 * @return the nation that matches the name
+	 * @throws NotRegisteredException if no nation is found matching the given name.
+	 */
+	@Deprecated
 	abstract public Nation getNation(String name) throws NotRegisteredException;
 
+	/**
+	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getNation(UUID)} instead.
+	 * 
+	 * Get the nation matching the given UUID.
+	 * 
+	 * @param uuid UUID of nation to get.
+	 * @return the nation matching the given UUID.
+	 * @throws NotRegisteredException if no nation is found matching the given UUID.
+	 */
+	@Deprecated
 	abstract public Nation getNation(UUID uiid) throws NotRegisteredException;
 
 	abstract public TownyWorld getWorld(String name) throws NotRegisteredException;
@@ -396,6 +476,15 @@ public abstract class TownyDataSource {
 
 	abstract public void newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
 	
+	/**
+	 * @deprecated as of 0.97.5.3, use {@link TownyUniverse#newTown(String)} instead.
+	 * Create a new town from a name
+	 * 
+	 * @param name town name
+	 * @throws AlreadyRegisteredException thrown if town already exists.
+	 * @throws NotRegisteredException thrown if town has an invalid name.
+	 */
+	@Deprecated
 	abstract public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;

@@ -514,7 +514,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<Town> getTownsWithoutNation() {
 
 		List<Town> townFilter = new ArrayList<>();
-		for (Town town : getTowns())
+		for (Town town : universe.getTowns())
 			if (!town.hasNation())
 				townFilter.add(town);
 		return townFilter;

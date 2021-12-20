@@ -7086,3 +7086,5 @@ v0.92.0.11:
   - Fix ChorusFlowers not being protected from projectiles.
   - Fix transfering the last plot from a plotgroup into another leaving an empty plotgroup, vulnerable to errors.
   - New languages: es-MX, es-EC, es-CL, es-UY, es-VE.
+  - API: Deprecated a bunch of abstract TownyDataSource methods that have been pointing to long-deprecated methods.
+    - Older plugins might still be using these, instructions for updating are included in the javadocs.

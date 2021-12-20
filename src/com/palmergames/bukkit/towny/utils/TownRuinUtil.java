@@ -218,7 +218,7 @@ public class TownRuinUtil {
 	 */
     public static void evaluateRuinedTownRemovals() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		List<Town> towns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
+		List<Town> towns = new ArrayList<>(townyUniverse.getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
 		Town town;
 
@@ -229,7 +229,7 @@ public class TownRuinUtil {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (townyUniverse.getDataSource().hasTown(town.getName()) && town.isRuined()
+			if (townyUniverse.hasTown(town.getName()) && town.isRuined()
 					&& town.getRuinedTime() != 0 && getTimeSinceRuining(town) > TownySettings
 					.getTownRuinsMaxDurationHours()) {
 				//Ruin found & recently ruined end time reached. Delete town now.
