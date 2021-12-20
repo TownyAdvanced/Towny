@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyInventory;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.util.Colors;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -100,9 +101,17 @@ public class TownyInventoryListener implements Listener {
 				case ALLOWEDBLOCKS -> type.getData().getAllowedBlocks();
 				case SWITCHES -> type.getData().getSwitchIds();
 			};
+			
+			String title = materialSet.isEmpty()
+				? Translatable.of("gui_title_no_restrictions").forLocale(resident)
+				: switch (selectionGUI.getType()) {
+				case ALLOWEDBLOCKS -> Translatable.of("gui_title_towny_allowedblocks", type.getName()).forLocale(resident);
+				case SWITCHES -> Translatable.of("gui_title_towny_switch").forLocale(resident);
+				case ITEMUSE -> Translatable.of("gui_title_towny_itemuse").forLocale(resident);
+			};
 
 			selectionGUI.playClickSound(player);
-			ResidentUtil.openGUIInventory(resident, materialSet, event.getView().getTitle());
+			ResidentUtil.openGUIInventory(resident, materialSet, title);
 		} else {
 			/*
 			 * Not a PermissionGUI, EditGUI or SelectionGUI. Use normal pagination.
