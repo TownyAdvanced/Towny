@@ -1476,11 +1476,17 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 
 					final String name = plotGroupName;
-					// Already has a PlotGroup, ask if they want to transfer from one group to another.					
+					// Already has a PlotGroup, ask if they want to transfer from one group to another.
 					Confirmation.runOnAccept( ()-> {
 						PlotGroup oldGroup = townBlock.getPlotObjectGroup();
 						oldGroup.removeTownBlock(townBlock);
-						oldGroup.save();
+						if (oldGroup.getTownBlocks().isEmpty()) {
+							String oldName = oldGroup.getName();
+							town.removePlotGroup(oldGroup);
+							TownyUniverse.getInstance().getDataSource().removePlotGroup(oldGroup);
+							TownyMessaging.sendMsg(player, Translatable.of("msg_plotgroup_deleted", oldName));
+						} else 
+							oldGroup.save();
 						createOrAddOnToPlotGroup(townBlock, town, name);
 						TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_transferred_from_x_to_x_group", oldGroup.getName(), townBlock.getPlotObjectGroup().getName()));
 					})
