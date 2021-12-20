@@ -123,12 +123,7 @@ public class ResidentUtil {
 	}
 	
 	public static void openSelectionGUI(Resident resident, SelectionGUI.SelectionType selectionType) {
-		String inventoryName = switch (selectionType) {
-			case ITEMUSE -> Translatable.of("gui_title_towny_itemuse").forLocale(resident);
-			case SWITCHES -> Translatable.of("gui_title_towny_switch").forLocale(resident);
-			case ALLOWEDBLOCKS -> Translatable.of("gui_title_towny_allowedblocks").forLocale(resident);
-		};
-		
+		String inventoryName = Translatable.of("gui_title_select_plot_type").forLocale(resident);
 		Inventory page = getBlankPage(inventoryName);
 		ArrayList<Inventory> pages = new ArrayList<>();
 		
