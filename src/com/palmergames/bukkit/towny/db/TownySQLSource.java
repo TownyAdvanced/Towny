@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
@@ -1790,10 +1791,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 				line = rs.getString("type");
 				if (line != null)
-					try {
-						townBlock.setType(Integer.parseInt(line));
-					} catch (Exception ignored) {
-					}
+					townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
 
 				boolean outpost = rs.getBoolean("outpost");
 				if (line != null && !line.isEmpty())

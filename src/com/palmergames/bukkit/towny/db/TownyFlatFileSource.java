@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -1624,10 +1625,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					
 					line = keys.get("type");
 					if (line != null)
-						try {
-							townBlock.setType(Integer.parseInt(line));
-						} catch (Exception ignored) {
-						}
+						townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
 					
 					line = keys.get("outpost");
 					if (line != null)

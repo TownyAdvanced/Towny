@@ -7088,3 +7088,4 @@ v0.92.0.11:
   - New languages: es-MX, es-EC, es-CL, es-UY, es-VE.
   - API: Deprecated a bunch of abstract TownyDataSource methods that have been pointing to long-deprecated methods.
     - Older plugins might still be using these, instructions for updating are included in the javadocs.
+  - Add in forwards compatibilty for server which update to the forthcoming custom townblocks, but then downgrade.
