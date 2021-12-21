@@ -790,7 +790,7 @@ public class TownyMessaging {
 	 * @param message Translatable message for the resident.
 	 */
 	public static void sendMsg(Resident resident, Translatable message) {
-		if (BukkitTools.isOnline(resident.getName()))
+		if (resident.isOnline())
 			sendMsg(resident.getPlayer(), message);
 	}
 	
