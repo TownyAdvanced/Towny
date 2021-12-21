@@ -37,6 +37,7 @@ import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -230,6 +231,9 @@ public class Towny extends JavaPlugin {
 	public void loadFoundation(boolean reload) {
 		// Before anything can continue we must load the databaseconfig, config 
 		// file, language and permissions, setting the foundation for Towny.
+		
+		// Handle any legacy config settings.
+		handleLegacyConfigs();
 
 		// Load the database config first, so any conversion happens before the config is loaded.
 		loadDatabaseConfig(reload);
@@ -239,6 +243,9 @@ public class Towny extends JavaPlugin {
 		loadLocalization(reload);
 		// Then load permissions
 		loadPermissions(reload);
+
+		// Initialize the type handler after the config is loaded and before the database is.
+		TownBlockTypeHandler.initialize();
 
 		// Initialize the special log4j hook logger.
 		TownyLogger.getInstance();
@@ -332,6 +339,16 @@ public class Towny extends JavaPlugin {
 		}
 	}
 
+	/**
+	 * Handle any legacy config settings before we load the config and database.
+	 */
+	private void handleLegacyConfigs() {
+		// Old configs stored various TownBlock settings throughout the config.
+		// This will migrate the old settings into the TownBlockType config section.
+		// Since 0.97.5.4.
+		TownBlockTypeHandler.Migrator.checkForLegacyOptions();
+	}
+	
 	/**
 	 * Converts the older config.yml's database settings into the database.yml file.
 	 * @return true if successful

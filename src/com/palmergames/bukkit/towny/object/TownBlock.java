@@ -260,90 +260,92 @@ public class TownBlock extends TownyObject {
 	}
 
 	public TownBlockType getType() {
-
 		return type;
 	}
 	
-	public void setType(TownBlockType type) {
-		if (type != this.type)
-			this.permissions.reset();
-
-		if (type != null){
-			Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type, this));
-		}
-		this.type = type;
-
-		// Custom plot settings here
-		switch (type) {
+	public String getTypeName() {
+		return type.getName();
+	}
+	
+	public void setType(@NotNull String type) {
+		setType(TownBlockTypeHandler.getType(type));
+	}
+	
+	public void setType(@Nullable TownBlockType type) {
+		if (type == null || !TownBlockTypeHandler.exists(type.getName()))
+			type = TownBlockType.RESIDENTIAL;
 		
-			case RESIDENTIAL:
+		if (!type.equals(this.type))
+			this.permissions.reset();		
 
-			case COMMERCIAL:
+		this.type = type;
+		
+		Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type, this));
 
-			case EMBASSY:
-
-			case BANK:
-
-			case INN:
-
+		switch (type.getName().toLowerCase()) {
+			case "default":
+			case "shop":
+			case "embassy":
+			case "bank":
+			case "inn":
 				if (this.hasResident()) {
 					setPermissions(this.resident.getPermissions().toString());
 				} else {
 					setPermissions(this.town.getPermissions().toString());
 				}
-			
-				break;
 
-			case ARENA:
-			
+				break;
+			case "arena":
 				setPermissions("pvp");
-				break;
-
-			case SPLEEF:
-
-			case JAIL:
-
+				break; 
+			case "jail":
 				setPermissions("denyAll");
 				break;
-
-			case FARM:
-			
-			case WILDS:
-				
+			case "farm":
+			case "wilds":
 				setPermissions("residentBuild,residentDestroy");
 				break;
 			default:
+				break;
 		}
-			
 		
 		// Set the changed status.
 		this.setChanged(false);
-				
 	}
 
+	/**
+	 * Sets the type of this townblock to the specified ID.
+	 * @param typeId The id of the type
+	 * @deprecated As of 0.97.5.4, this is deprecated for compatibility with custom types.
+	 * @see #setType(String)
+	 */
+	@Deprecated
 	public void setType(int typeId) {
-
 		setType(TownBlockType.lookup(typeId));
 	}
-	
-	public void setType(TownBlockType type, Resident resident) throws TownyException {
 
+	/**
+	 * @param type The TownBlockType to set this plot to.
+	 * @param resident The Resident who is trying to set the type.
+	 * @throws TownyException If this townblock has a pvp toggle cooldown.
+	 */
+	public void setType(TownBlockType type, Resident resident) throws TownyException {
+		
 		// Delete a jail if this is no longer going to be a jail.
-		if (this.isJail() && !type.equals(TownBlockType.JAIL)) {			
+		if (this.isJail() && !TownBlockType.JAIL.equals(type)) {
 			TownyUniverse.getInstance().getDataSource().removeJail(getJail());
 			setJail(null);
 		}
 
-		if ((getType().equals(TownBlockType.ARENA) || type.equals(TownBlockType.ARENA))
-			&& TownySettings.getPVPCoolDownTime() > 0 
+		if (TownBlockType.ARENA.equals(this.type) || TownBlockType.ARENA.equals(type)
+			&& TownySettings.getPVPCoolDownTime() > 0
 			&& !TownyUniverse.getInstance().getPermissionSource().testPermission(resident.getPlayer(), PermissionNodes.TOWNY_ADMIN.getNode())) {
 			// Test to see if the pvp cooldown timer is active for this plot.
 			if (CooldownTimerTask.hasCooldown(getWorldCoord().toString(), CooldownType.PVP))
 				throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(getWorldCoord().toString(), CooldownType.PVP)));
-			
+
 			setType(type);
 			CooldownTimerTask.addCooldownTimer(getWorldCoord().toString(), CooldownType.PVP);
-
 		} else
 			setType(type);
 
@@ -552,5 +554,9 @@ public class TownBlock extends TownyObject {
 			return getResidentOrNull();
 		else 
 			return getTownOrNull();
+	}
+	
+	public TownBlockData getData() {
+		return type.getData();
 	}
 }

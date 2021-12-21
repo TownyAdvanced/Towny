@@ -2258,7 +2258,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("resident=" + townBlock.getResidentOrNull().getName());
 
 		// type
-		list.add("type=" + townBlock.getType().getId());
+		list.add("type=" + townBlock.getTypeName());
 
 		// outpost
 		list.add("outpost=" + townBlock.isOutpost());

@@ -11,7 +11,8 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.Version;
-import java.io.InputStream;
+
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * An object which manages the procces of migrating towny config versions to 
+ * An object which manages the process of migrating towny config versions to 
  * up-to-date ones.
  */
 public class ConfigMigrator {
@@ -107,15 +108,12 @@ public class ConfigMigrator {
 	}
 
 	private List<Migration> readMigrator() {
-		InputStream file = Towny.getPlugin().getResource(migrationFilename);
-		
-		if (file == null) {
-			throw new UnsupportedOperationException(migrationFilename + " was not found cannot upgrade config");
+		try (Reader reader = new InputStreamReader(Towny.getPlugin().getResource(migrationFilename))) {
+			
+			return GSON.fromJson(reader, new TypeToken<List<Migration>>(){}.getType());
+		} catch (IOException ignored) {
+			return null;
 		}
-		
-		Reader reader = new InputStreamReader(file);
-
-		return GSON.fromJson(reader, new TypeToken<List<Migration>>(){}.getType());
 	}
 	
 	public void addTownLevelProperty(String key, String value) {

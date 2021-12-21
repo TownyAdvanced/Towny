@@ -188,11 +188,11 @@ public class StringMgmt {
 		return str.replaceAll("_", " ");
 	}
 	
-	public static String capitalize (String str) {
+	public static String capitalize(String str) {
 		if (str == null || str.isEmpty())
 			return str;
 		
-		return  str.substring(0, 1).toUpperCase() + str.substring(1);
+		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
 	
 	/**

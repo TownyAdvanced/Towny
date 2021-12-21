@@ -34,6 +34,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -179,7 +180,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			switch (args[0].toLowerCase()) {
 				case "set":
 					if (args.length == 2) {
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_SET, plotSetTabCompletes), args[1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_SET, getPlotSetCompletions()), args[1]);
 					}
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
 						return permTabComplete(StringMgmt.remArgs(args, 2));
@@ -471,7 +472,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					Town town = townBlock.getTownOrNull();
 					if (town == null)
 						throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
-					double plotPrice = town.getPlotTypePrice(pos.getTownBlock().getType());
+					double plotPrice = town.getPlotTypePrice(townBlock.getType());
 
 					if (split.length > 1) {
 						/*
@@ -683,9 +684,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Handle type being reset
 							if (plotTypeName.equalsIgnoreCase("reset"))
 								plotTypeName = "default";
-							
-							TownBlockType townBlockType = TownBlockType.lookup(plotTypeName);
 
+							TownBlockType townBlockType = TownBlockTypeHandler.getType(plotTypeName);
+							
 							if (townBlockType == null)
 								throw new TownyException(Translatable.of("msg_err_not_block_type"));
 							
@@ -713,8 +714,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 								return false;
 							}
-								
-							double cost = townBlockType.getCost();
+
+							double cost = townBlockType.getData().getCost();
 							
 							// Test if we can pay first to throw an exception.
 							if (cost > 0 && TownyEconomyHandler.isActive() && !resident.getAccount().canPayFromHoldings(cost))
@@ -1725,7 +1726,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (plotTypeName.equalsIgnoreCase("reset"))
 				plotTypeName = "default";
 
-			TownBlockType type = TownBlockType.lookup(plotTypeName);
+			TownBlockType type = TownBlockTypeHandler.getType(plotTypeName);
 
 			if (type == null)
 				throw new TownyException(Translatable.of("msg_err_not_block_type"));
@@ -1760,7 +1761,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 			
-			int amount = townBlock.getPlotObjectGroup().getTownBlocks().size();			
+			int amount = townBlock.getPlotObjectGroup().getTownBlocks().size();
 			double cost = type.getCost() * amount;
 			
 			try {
@@ -2244,5 +2245,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownyWorldOrNull(), player));
 		else
 			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownBlockOrNull(), player));
+	}
+	
+	private List<String> getPlotSetCompletions() {
+		List<String> completions = new ArrayList<>(plotSetTabCompletes);
+
+		for (String townBlockType : TownBlockTypeHandler.getTypeNames())
+			if (!completions.contains(townBlockType))
+				completions.add(townBlockType);
+
+		return completions;
 	}
 }

@@ -32,6 +32,7 @@ import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -2055,6 +2056,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownySettings.loadTownLevelConfig();   // TownLevel and NationLevels are not loaded in the config,
 			TownySettings.loadNationLevelConfig(); // but later so the config-migrator can do it's work on them if needed.
 			Translation.loadTranslationRegistry();
+			TownBlockTypeHandler.initialize();
 		} catch (IOException e) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_reload_error"));
 			e.printStackTrace();

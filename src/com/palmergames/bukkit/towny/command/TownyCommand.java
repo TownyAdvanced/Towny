@@ -15,6 +15,8 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Government;
+import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
@@ -26,6 +28,7 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.utils.NameUtil;
@@ -67,7 +70,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		"v",
 		"switches",
 		"itemuse",
-		"farmblocks",
+		"allowedblocks",
 		"wildsblocks",
 		"plotclearblocks"
 	);
@@ -234,13 +237,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(player, line);
 			} else if (split[0].equalsIgnoreCase("switches")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getSwitchMaterials(), Translatable.of("gui_title_towny_switch").forLocale(player));
+				ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.SWITCHES);
 			} else if (split[0].equalsIgnoreCase("itemuse")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getItemUseMaterials(), Translatable.of("gui_title_towny_itemuse").forLocale(player));
-			} else if (split[0].equalsIgnoreCase("farmblocks")) {
+				ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ITEMUSE);
+			} else if (split[0].equalsIgnoreCase("allowedblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getFarmPlotBlocks(), Translatable.of("gui_title_towny_farmblocks").forLocale(player));
+				ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ALLOWEDBLOCKS);
 			} else if (split[0].equalsIgnoreCase("wildsblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, world.getUnclaimedZoneIgnoreMaterials(), Translatable.of("gui_title_towny_wildsblocks").forLocale(player));
@@ -488,12 +491,22 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			output.add(translator.of("towny_prices_taxes_plot", (town.isTaxPercentage()? town.getTaxes() + "%" : getMoney(town.getTaxes())), getMoney(town.getPlotTax())));
 			output.add(translator.of("towny_prices_taxes_shop", getMoney(town.getCommercialPlotTax()), getMoney(town.getEmbassyPlotTax())));
 			output.add(translator.of("towny_prices_town_neutral_tax", getMoney(TownySettings.getTownNeutralityCost())));
-
-			output.add(translator.of("towny_prices_plots_shop", getMoney(TownySettings.getPlotSetCommercialCost()), getMoney(TownySettings.getPlotSetEmbassyCost())));
-			output.add(translator.of("towny_prices_plots_wilds", getMoney(TownySettings.getPlotSetWildsCost()), getMoney(TownySettings.getPlotSetInnCost())));
-			output.add(translator.of("towny_prices_plots_jail", getMoney(TownySettings.getPlotSetJailCost()), getMoney(TownySettings.getPlotSetFarmCost())));
-			output.add(translator.of("towny_prices_plots_bank", getMoney(TownySettings.getPlotSetBankCost())));
 			
+			output.add(translator.of("towny_prices_plots"));
+			List<TownBlockType> townBlockTypes = new ArrayList<>(TownBlockTypeHandler.getTypes().values());
+			for (int i = 0; i < townBlockTypes.size(); i++) {
+				if (i == townBlockTypes.size() - 1)
+					output.add(translator.of("towny_prices_type_single", townBlockTypes.get(i).getFormattedName(), getMoney(townBlockTypes.get(i).getCost())));
+				else {
+					output.add(translator.of("towny_prices_type_double",
+						townBlockTypes.get(i).getFormattedName(), getMoney(townBlockTypes.get(i).getCost()),
+						townBlockTypes.get(i+1).getFormattedName(), getMoney(townBlockTypes.get(i+1).getCost())
+					));
+
+					i++;
+				}
+			}
+
 			if (nation != null) {
 				output.add(translator.of("towny_prices_nationname", nation.getFormattedName()));
 				output.add(translator.of("towny_prices_nation_tax", nation.getTaxes(), getMoney(TownySettings.getNationNeutralityCost())));
