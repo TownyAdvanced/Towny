@@ -264,7 +264,6 @@
                             <include>net.kyori:adventure-nbt</include>
                             <include>net.kyori:examination-api</include>
                             <include>net.kyori:examination-string</include>
-                            <include>com.zaxxer:HikariCP</include>
                             <include>io.papermc:paperlib</include>
                             <include>org.apache.commons:commons-compress</include>
                             <include>org.bstats:bstats-bukkit</include>
@@ -276,10 +275,6 @@
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
                             <shadedPattern>com.palmergames.paperlib</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.zaxxer.hikari</pattern>
-                            <shadedPattern>com.palmergames.hikaricp</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.apache.commons.compress</pattern>

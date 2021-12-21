@@ -7098,3 +7098,4 @@ v0.92.0.11:
     - Used to display what blocks are permitted to be used on TownBlockTypes.
   - Removed Command: /towny farmblocks
     - Replaced with /towny allowedblocks.
+  - Fix towns.ranks and nations.ranks missing from the Townyperms.yml's vital groups.

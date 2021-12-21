@@ -46,7 +46,7 @@ public class TownyPerms {
 	private static HashMap<String, List<String>> groupPermsMap = new HashMap<>();
 	private static CommentedConfiguration perms;
 	private static Towny plugin;
-	private static List<String> vitalGroups = new ArrayList<>(Arrays.asList("nomad","towns.default","towns.mayor","nations.default","nations.king"));
+	private static List<String> vitalGroups = new ArrayList<>(Arrays.asList("nomad","towns.default","towns.mayor","towns.ranks","nations.default","nations.king","nations.ranks"));
 	
 	public static void initialize(Towny plugin) {
 		TownyPerms.plugin = plugin;
@@ -681,7 +681,7 @@ public class TownyPerms {
 				"#",
 				"# You may assign any Permission nodes here, including those from other plugins.",
 				"# You may also create any custom ranks you require.",
-				"# You may change the names of any of the ranks except: nomad, default, mayor, king.",
+				"# You may change the names of any of the ranks except: nomad, default, mayor, king, ranks.",
 				"#",
 				"# If you want to, you can negate permissions nodes from nodes by doing the following:",
 				"# Ex:",
