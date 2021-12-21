@@ -345,6 +345,7 @@ public class Towny extends JavaPlugin {
 	private void handleLegacyConfigs() {
 		// Old configs stored various TownBlock settings throughout the config.
 		// This will migrate the old settings into the TownBlockType config section.
+		// Since 0.97.5.4.
 		TownBlockTypeHandler.Migrator.checkForLegacyOptions();
 	}
 	

@@ -54,7 +54,7 @@ public class TownBlockType {
 	}
 
 	/**
-	 * @deprecated since 0.97.5.3.
+	 * @deprecated since 0.97.5.4.
 	 * @return 0.
 	 */
 	@Deprecated
@@ -100,7 +100,7 @@ public class TownBlockType {
 	}
 
 	/**
-	 * @deprecated As of 0.97.5.3, please use {@link TownBlockTypeHandler#getType(String)} instead.
+	 * @deprecated As of 0.97.5.4, please use {@link TownBlockTypeHandler#getType(String)} instead.
 	 */
 	@Nullable
 	@Deprecated
@@ -109,7 +109,7 @@ public class TownBlockType {
 	}
 
 	/**
-	 * @deprecated As of 0.97.5.3, please use {@link TownBlockTypeHandler#getType(String)} instead.
+	 * @deprecated As of 0.97.5.4, please use {@link TownBlockTypeHandler#getType(String)} instead.
 	 */
 	@Nullable
 	@Deprecated
