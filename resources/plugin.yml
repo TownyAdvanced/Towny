@@ -10,8 +10,6 @@ description: >
     protection system. Including a war event.
 
 softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,Reserve,MultiWorld,TheNewChat,PlaceholderAPI,Essentials,Hyperverse,GroupManager,iConomy,LuckPerms]
-libraries:
-    - com.zaxxer:HikariCP:5.0.0
 
 ############################################################
 # +------------------------------------------------------+ #
