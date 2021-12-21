@@ -244,6 +244,7 @@ public class SQL_Schema {
 		columns.add("`town` mediumtext");
 		columns.add("`resident` mediumtext");
 		columns.add("`type` TINYINT NOT  NULL DEFAULT '0'");
+		columns.add("`typeName` mediumtext");
 		columns.add("`outpost` bool NOT NULL DEFAULT '0'");
 		columns.add("`permissions` mediumtext NOT NULL");
 		columns.add("`locked` bool NOT NULL DEFAULT '0'");
