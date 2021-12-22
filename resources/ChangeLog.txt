@@ -7099,3 +7099,4 @@ v0.92.0.11:
   - Removed Command: /towny farmblocks
     - Replaced with /towny allowedblocks.
   - Fix towns.ranks and nations.ranks missing from the Townyperms.yml's vital groups.
+  - Fix for SQL schema and new townblock type-saving.
