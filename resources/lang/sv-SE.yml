@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&cResor till nationens spawn är endast til
 msg_err_nation_spawn_forbidden_peace: '&cResor till stadens spawn är förbjudet vid krig.'
 msg_err_nation_spawn_ally_forbidden: '&cResor till spawn i allierade nationer är förbjudet.'
 msg_err_nation_spawn_nation_forbidden_war: '&cResor till spawn hos andra allierade nationer är endast tillåtet vid krig.'
-msg_err_nation_spawn_nation_forbidden_peace: '&cResor till spawn hos andra allierade nationer är förbjudet vid krig.'
+msg_err_nation_spawn_nation_forbidden_peace: '&cNation spawn travel to other allied nations is forbidden during war.'
 msg_err_public_nation_spawn_forbidden: '&cDet är förbjudet att resa till andra nationerns publika spawn.'
 msg_err_public_nation_spawn_forbidden_war: '&cOffentliga spawnresor till andra nationer är endast tillåtet under krig.'
 msg_err_public_nation_spawn_forbidden_peace: '&cOffentliga spawnresor till andra nationer är förbjudet under krig.'
