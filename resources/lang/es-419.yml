@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&cEl teletransporte al spawn de la nación 
 msg_err_nation_spawn_forbidden_peace: '&cEl teletransporte al spawn de la nación está prohibido durante la guerra.'
 msg_err_nation_spawn_ally_forbidden: '&cLas visitas a naciones aliadas están deshabilitadas.'
 msg_err_nation_spawn_nation_forbidden_war: '&cLas visitas a naciones aliadas están permitidas exclusivamente durante la guerra.'
-msg_err_nation_spawn_nation_forbidden_peace: '&cLas visitas a naciones aliadas están prohibidas durante la guerra.'
+msg_err_nation_spawn_nation_forbidden_peace: '&cNation spawn travel to other allied nations is forbidden during war.'
 msg_err_public_nation_spawn_forbidden: '&cLas visitas a otras naciones públicas están deshabilitadas.'
 msg_err_public_nation_spawn_forbidden_war: '&cLas visitas a otras naciones públicas están permitidas exclusivamente durante la guerra.'
 msg_err_public_nation_spawn_forbidden_peace: '&cLas visitas a otras naciones públicas están prohibidas durante la guerra.'
