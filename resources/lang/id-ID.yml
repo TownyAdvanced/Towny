@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&cMenggunakan spawn negara hanya diperboleh
 msg_err_nation_spawn_forbidden_peace: '&cMenggunakan spawn negara dilarang disaat perang.'
 msg_err_nation_spawn_ally_forbidden: '&cMenggunakan spawn negara ke negara sekutu lain dilarang disaat perang.'
 msg_err_nation_spawn_nation_forbidden_war: '&cMenggunakan spawn negara ke negara sekutu lain diperbolehkan hanya disaat perang.'
-msg_err_nation_spawn_nation_forbidden_peace: '&cNation spawn travel to other allied nations is forbidden during war.'
+msg_err_nation_spawn_nation_forbidden_peace: '&cMenggunakan spawn negara ke negara sekutu lain dilarang disaat perang.'
 msg_err_public_nation_spawn_forbidden: '&cPSpawn publik ke negara lain dilarang disaat perang.'
 msg_err_public_nation_spawn_forbidden_war: '&cSpawn publik ke negara lain hanya diperbolehkan disaat perang.'
 msg_err_public_nation_spawn_forbidden_peace: '&cSpawn publik ke negara lain dilarang disaat perang.'
