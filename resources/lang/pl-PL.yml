@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&cTeleportacja na spawn nacji jest dozwolon
 msg_err_nation_spawn_forbidden_peace: '&cSpawn nacji jest wyłączony podczas wojny.'
 msg_err_nation_spawn_ally_forbidden: '&cSpawn nacji sojuszniczej jest wyłączony.'
 msg_err_nation_spawn_nation_forbidden_war: '&cSpawn nacji sojuszniczej jest włączony tylko podczas wojny.'
-msg_err_nation_spawn_nation_forbidden_peace: '&cNation spawn travel to other allied nations is forbidden during war.'
+msg_err_nation_spawn_nation_forbidden_peace: '&cSpawn nacji sojuszniczej jest wyłaczony podczas wojny.'
 msg_err_public_nation_spawn_forbidden: '&cPubliczny spawn innych nacji jest wyłączony.'
 msg_err_public_nation_spawn_forbidden_war: '&cPubliczny spawn innych nacji jest dostępny tylko podczas wojny.'
 msg_err_public_nation_spawn_forbidden_peace: '&cPubliczny spawn innych nacji jest wyłączony podczas wojny.'
