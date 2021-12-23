@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&cIl teletrasporto allo spawn delle nazioni
 msg_err_nation_spawn_forbidden_peace: '&cIl teletrasporto allo spawn delle nazioni non è consentito durante la guerra.'
 msg_err_nation_spawn_ally_forbidden: '&cIl teletrasporto allo spawn di nazioni alleate non è consentito.'
 msg_err_nation_spawn_nation_forbidden_war: '&cIl teletrasporto allo spawn di altre nazioni alleate è consentito solo durante la guerra.'
-msg_err_nation_spawn_nation_forbidden_peace: '&cNation spawn travel to other allied nations is forbidden during war.'
+msg_err_nation_spawn_nation_forbidden_peace: '&cIl teletrasporto allo spawn di altre nazioni alleate non è consentito durante la guerra.'
 msg_err_public_nation_spawn_forbidden: '&cIl teletrasporto allo spawn pubblico di altre nazioni non è consentito.'
 msg_err_public_nation_spawn_forbidden_war: '&cIl teletrasporto allo spawn pubblico di altre nazioni è consentito solo durante la guerra.'
 msg_err_public_nation_spawn_forbidden_peace: '&cIl teletrasporto allo spawn pubblico di altre nazioni non è consentito durante la guerra.'
