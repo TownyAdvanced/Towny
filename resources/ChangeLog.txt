@@ -7102,3 +7102,4 @@ v0.92.0.11:
   - Fix for SQL schema and new townblock type-saving.
   - Fix support for spigot 1.18.1 enabling yaml comments by default.
     - Closes #5559.
+  - Only apply the outsiders prevent pvp toggle when enabling pvp, courtesy of Warriorrrr with PR #5560.
