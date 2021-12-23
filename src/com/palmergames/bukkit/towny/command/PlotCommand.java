@@ -1126,7 +1126,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (town.isAdminEnabledPVP() && townBlock.getPermissions().pvp)
 						throw new TownyException(Translatable.of("msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp", "adminEnabledPVP", "off"));
 
-					if (TownySettings.getOutsidersPreventPVPToggle()) {
+					if (TownySettings.getOutsidersPreventPVPToggle() && choice.orElse(!townBlock.getPermissions().pvp)) {
 						for (Player target : Bukkit.getOnlinePlayers()) {
 							if (!town.hasResident(target) && !player.getName().equals(target.getName()) && townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
 								throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
@@ -1249,7 +1249,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(groupBlock.getWorldCoord().toString(), CooldownType.PVP)));
 						}
 
-						if (TownySettings.getOutsidersPreventPVPToggle()) {
+						if (TownySettings.getOutsidersPreventPVPToggle() && choice.orElse(!groupBlock.getPermissions().pvp)) {
 							for (Player target : Bukkit.getOnlinePlayers()) {
 								if (!town.hasResident(target) && !player.getName().equals(target.getName()) && groupBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(target)))
 									throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_plot"));
