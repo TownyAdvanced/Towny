@@ -482,7 +482,7 @@ nation_received_requests: '&bLa nación ha recibido %a/%m solicitudes de aliados
 nation_sent_invites: '&bLa nación ha enviado %a/%m invitaciones.'
 nation_sent_ally_requests: '&bLa nación ha enviado %a/%m solicitudes de aliados.'
 no_confirmations_open: '&c¡No tienes nada que confirmar!'
-successful_cancel: '&cAction cancelled!'
+successful_cancel: '&cAcción cancelada!'
 successful_deny: '&bInvitación rechazada con éxito.'
 successful_deny_request: '&bSolicitud aliada rechazada con éxito.'
 msg_ally_removed_successfully: '&bAliado eliminado correctamente.'

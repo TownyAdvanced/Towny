@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&c국가 스폰 여행은 전쟁 중에만 
 msg_err_nation_spawn_forbidden_peace: '&c국가 스폰 여행은 전쟁 중에 금지됩니다.'
 msg_err_nation_spawn_ally_forbidden: '&c동맹국 스폰 여행이 금지되었습니다.'
 msg_err_nation_spawn_nation_forbidden_war: '&c동맹국 스폰 여행은 전쟁 중에만 허용됩니다.'
-msg_err_nation_spawn_nation_forbidden_peace: '&동맹국 스폰 여행은 전쟁 중에 금지됩니다.'
+msg_err_nation_spawn_nation_forbidden_peace: '&c동맹국 스폰 여행은 전쟁 중에 금지됩니다.'
 msg_err_public_nation_spawn_forbidden: '&c다른 국가로의 공용 스폰 여행은 금지되었습니다.'
 msg_err_public_nation_spawn_forbidden_war: '&c다른 국가로의 공용 스폰 여행은 전쟁 중에만 허용됩니다.'
 msg_err_public_nation_spawn_forbidden_peace: '&c다른 국가로의 공용 스폰 여행은 전쟁 중에 금지됩니다.'

@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&cUlus doğma yolculuğuna yalnızca savaş
 msg_err_nation_spawn_forbidden_peace: '&cSavaş sırasında ulus doğma yolculuğu yasaktır.'
 msg_err_nation_spawn_ally_forbidden: '&cUlusların müttefik ülkelere seyahat etmesi yasaktır.'
 msg_err_nation_spawn_nation_forbidden_war: '&cUlusların diğer müttefik ülkelere seyahatine yalnızca savaş sırasında izin verilir.'
-msg_err_nation_spawn_nation_forbidden_peace: '&Savaş sırasında ulusun diğer müttefik ülkelere seyahat etmesi yasaktır.'
+msg_err_nation_spawn_nation_forbidden_peace: '&cSavaş sırasında ulusun diğer müttefik ülkelere seyahat etmesi yasaktır.'
 msg_err_public_nation_spawn_forbidden: '&cDiğer uluslara halka açık seyahat etmek yasaktır.'
 msg_err_public_nation_spawn_forbidden_war: '&cDiğer uluslara halka açık seyahatlere yalnızca savaş sırasında izin verilir.'
 msg_err_public_nation_spawn_forbidden_peace: '&cSavaş sırasında diğer uluslara halka açık seyahat etmek yasaktır.'
