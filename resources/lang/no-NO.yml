@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&cNasjon spawn reise er bare tillatt under 
 msg_err_nation_spawn_forbidden_peace: '&cNasjon spawn reise er forbudt under krig.'
 msg_err_nation_spawn_ally_forbidden: '&cNasjon reise til allierte nasjoner er forbudt.'
 msg_err_nation_spawn_nation_forbidden_war: '&cNasjon reise til andre allierte nasjoner er bare tillatt under krig.'
-msg_err_nation_spawn_nation_forbidden_peace: '&cNation spawn travel to other allied nations is forbidden during war.'
+msg_err_nation_spawn_nation_forbidden_peace: '&cNasjon reise til andre allierte nasjoner er ikke tillatt under krig.'
 msg_err_public_nation_spawn_forbidden: '&cOffentlig reise til andre nasjoner er forbudt.'
 msg_err_public_nation_spawn_forbidden_war: '&cOffentlig reise til andre nasjoner er bare tillatt under krig.'
 msg_err_public_nation_spawn_forbidden_peace: '&cOffentlig reise til andre nasjoner er forbudt under krig.'
