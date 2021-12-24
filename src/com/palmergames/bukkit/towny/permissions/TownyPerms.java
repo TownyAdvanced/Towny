@@ -288,7 +288,7 @@ public class TownyPerms {
 				
 			//Add town ranks here
 			for (String rank: resident.getTownRanks()) {
-				permList.addAll(getTownRank(rank));
+				permList.addAll(getTownRankPermissions(rank));
 			}
 			
 			//Check for nation membership
@@ -299,7 +299,7 @@ public class TownyPerms {
 							
 				//Add nation ranks here
 				for (String rank: resident.getNationRanks()) {
-					permList.addAll(getNationRank(rank));
+					permList.addAll(getNationRankPermissions(rank));
 				}
 			}
 		} else {
@@ -430,8 +430,20 @@ public class TownyPerms {
 	 * 
 	 * @param rank - Rank to check permissions for
 	 * @return a List of permissions
+	 * @deprecated since 0.97.5.5 use {@link #getTownRankPermissions(String)}
 	 */
+	@Deprecated
 	public static List<String> getTownRank(String rank) {
+		return getTownRankPermissions(rank);
+	}
+	
+	/**
+	 * Get a specific ranks permissions
+	 * 
+	 * @param rank - Rank to check permissions for
+	 * @return a List of permissions
+	 */
+	public static List<String> getTownRankPermissions(String rank) {
 
 		List<String> permsList = getList("towns.ranks." + rank);//.toLowerCase());
 		return (permsList == null)? new ArrayList<String>() : permsList;
@@ -478,8 +490,20 @@ public class TownyPerms {
 	 * 
 	 * @param rank - Rank to get permissions of
 	 * @return a List of Permissions
+	 * @deprecated since 0.97.5.5 use {@link #getNationRankPermissions(String)}
 	 */
+	@Deprecated
 	public static List<String> getNationRank(String rank) {
+		return getNationRankPermissions(rank);
+	}
+	
+	/**
+	 * Get a specific ranks permissions
+	 * 
+	 * @param rank - Rank to get permissions of
+	 * @return a List of Permissions
+	 */
+	public static List<String> getNationRankPermissions(String rank) {
 
 		List<String> permsList = getList("nations.ranks." + rank);//.toLowerCase());
 		return (permsList == null)? new ArrayList<String>() : permsList;

@@ -7103,3 +7103,5 @@ v0.92.0.11:
   - Fix support for spigot 1.18.1 enabling yaml comments by default.
     - Closes #5559.
   - Only apply the outsiders prevent pvp toggle when enabling pvp, courtesy of Warriorrrr with PR #5560.
+0.97.5.5:
+  - Replace some methods in TownyPerms with clearer method names.
