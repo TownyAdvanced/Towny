@@ -8,6 +8,8 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.TownBlockTypeRegisterEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.util.ItemLists;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
@@ -148,17 +150,32 @@ public final class TownBlockTypeHandler {
 		if (!materialList.isEmpty()) {
 			Set<Material> set = new LinkedHashSet<>();
 			for (String materialName : materialList.split(",")) {
-				Material material = Material.matchMaterial(materialName);
-
-				if (material == null)
-					TownyMessaging.sendDebugMsg(String.format("Could not find a material named '%s' while loading the " + listName + " list for the %s type.", materialName, typeName));
-				else
+				if (ItemLists.GROUPS.contains(materialName)) {
+					for (String groupedItem : ItemLists.getGrouping(materialName)) {
+						Material material = matchMaterial(groupedItem, listName, typeName);
+						if (material != null)
+							set.add(material);
+					}
+					continue;
+				}
+				
+				Material material = matchMaterial(materialName, listName, typeName);
+				if (material != null)
 					set.add(material);
 			}
 			
 			return set;
 		} else
 			return new LinkedHashSet<>();
+	}
+
+	@Nullable
+	private static Material matchMaterial(String materialName, String listName, String typeName) {
+		Material material = Material.matchMaterial(materialName);
+		if (material == null)
+			TownyMessaging.sendDebugMsg(String.format("Could not find a material named '%s' while loading the " + listName + " list for the %s type.", materialName, typeName));
+		
+		return material;
 	}
 
 	private static double parseDouble(String string) {

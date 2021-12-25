@@ -7105,3 +7105,5 @@ v0.92.0.11:
   - Only apply the outsiders prevent pvp toggle when enabling pvp, courtesy of Warriorrrr with PR #5560.
 0.97.5.5:
   - Replace some methods in TownyPerms with clearer method names.
+  - Fix switch id lists not accepting item groups in the custom townblocks lists, and some switches not being added.
+    - Closes #5569.

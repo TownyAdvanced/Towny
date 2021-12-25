@@ -327,7 +327,7 @@ public class TownySettings {
 			} else {
 				Material material = Material.matchMaterial(matName);
 				if (material != null)
-					itemUseMaterials.add(material);
+					switchUseMaterials.add(material);
 			}
 		}
 
@@ -348,7 +348,7 @@ public class TownySettings {
 		}
 	}
 
-	private static Set<Material> toMaterialSet(List<String> materialList) {
+	public static Set<Material> toMaterialSet(List<String> materialList) {
 		Set<Material> materials = new HashSet<>();
 		for (String materialName : materialList) {
 			Material material = Material.matchMaterial(materialName);
