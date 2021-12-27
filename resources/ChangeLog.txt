@@ -7107,3 +7107,6 @@ v0.92.0.11:
   - Replace some methods in TownyPerms with clearer method names.
   - Fix switch id lists not accepting item groups in the custom townblocks lists, and some switches not being added.
     - Closes #5569.
+0.97.5.6:
+  - Overhaul of CommentedConfiguration, adding support for old and new versions of Bukkit servers.
+    - Servers not running up-to-date MC 1.18.1 implementations might see some multi-lining in their chatconfig.yml, which isn't an actual issue. 
