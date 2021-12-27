@@ -1,9 +1,12 @@
 package com.palmergames.bukkit.config;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.util.StringMgmt;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -17,18 +20,37 @@ import java.util.logging.Logger;
 /**
  * @author dumptruckman
  * @author Articdive
+ * @author LlmDl
  */
 public class CommentedConfiguration extends YamlConfiguration {
 	private final HashMap<String, String> comments = new HashMap<>();
 	private final Path path;
-	private final Logger logger = Towny.getPlugin().getLogger();
-	private final String separator = System.getProperty("line.separator");
+	private final Logger logger;
+	private final String newLine = System.getProperty("line.separator");
 	private int depth;
 
+	/**
+	 * Create a new CommentedConfiguration using the file at the given path, using
+	 * Towny's Logger for any error messages.
+	 */
 	public CommentedConfiguration(Path path) {
 		super();
 		this.path = path;
+		logger = Towny.getPlugin().getLogger();
+		setWidth();
 	}
+
+	/**
+	 * Create a new CommentedConfiguration using the file at the given path, for the
+	 * given plugin. Plugin's own Logger will be used for any error messages.
+	 */
+	public CommentedConfiguration(Path path, Plugin plugin) {
+		super();
+		this.path = path;
+		logger = plugin.getLogger();
+		setWidth();
+	}
+
 
 	/**
 	 * Load the yaml configuration file into memory.
@@ -55,36 +77,57 @@ public class CommentedConfiguration extends YamlConfiguration {
 	 */
 	public void save() {
 
-		// Save the config just like normal
+		// Save the config like normal.
 		boolean saved = saveFile();
 
-		// If there's comments to add and it saved fine, we need to add comments
+		// If there's comments to add and it saved fine, we need to add comments.
 		if (!comments.isEmpty() && saved) {
 
-			// String list of each line in the config file
-			List<String> yamlContents;
-			try {
-				yamlContents = Files.readAllLines(path, StandardCharsets.UTF_8);
-			} catch (IOException e) {
-				logger.warning(String.format("Failed to read file %s.", path));
-				logger.warning(e.getMessage());
-				yamlContents = new ArrayList<>();
-			}
+			// String list of each line in the config file.
+			List<String> yamlContents = readYaml();
 
 			// Generate new config strings, ignoring existing comments and parsing in our
 			// up-to-date comments from the ConfigNodes enum.
 			StringBuilder newContents = readConfigToString(yamlContents);
 
 			// Write newContents to file.
-			try {
-				Files.write(path, newContents.toString().getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE);
-			} catch (IOException e) {
-				logger.warning(String.format("Saving error: Failed to write to file %s.", path));
-				logger.warning(e.getMessage());
-			}
+			writeYaml(newContents);
 		}
 	}
 
+	/**
+	 * Read the file found at the path into a list of Strings.
+	 * @return yamlContents a List of Strings which represent the raw lines of the file at the given path.
+	 */
+	private List<String> readYaml() {
+
+		List<String> yamlContents = new ArrayList<>();
+		try {
+			yamlContents = Files.readAllLines(path, StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			logger.warning(String.format("Failed to read file %s.", path));
+			logger.warning(e.getMessage());
+		}
+		return yamlContents;
+	}
+
+	/**
+	 * Write the file to the given path, in valid yaml format, with the comments added in.
+	 */
+	private void writeYaml(StringBuilder newContents) {
+		try {
+			Files.write(path, newContents.toString().getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE);
+		} catch (IOException e) {
+			logger.warning(String.format("Saving error: Failed to write to file %s.", path));
+			logger.warning(e.getMessage());
+		}
+	}
+
+	/**
+	 * Attempts to save the file via YamlConfiguration's usual methods.
+	 * 
+	 * @return true if the file was able to be saved.
+	 */
 	private boolean saveFile() {
 		try {
 			this.save(path.toFile());
@@ -130,11 +173,11 @@ public class CommentedConfiguration extends YamlConfiguration {
 
 				// If there are comments, add them to the beginning of the current line.
 				if (comment != null)
-					line = comment + separator + line;
+					line = comment + newLine + line;
 			}
 
 			// Add the line to what will be written in the new config.
-			newContents.append(line).append(separator);
+			newContents.append(line).append(newLine);
 		}
 
 		return newContents;
@@ -237,7 +280,7 @@ public class CommentedConfiguration extends YamlConfiguration {
 	}
 
 	/**
-	 * Adds a comment just before the specified path. The comment can be
+	 * Stores a comment for the specified Configuration path. The comment can be
 	 * multiple lines. An empty string will indicate a blank line.
 	 *
 	 * @param path         Configuration path to add comment.
@@ -245,24 +288,30 @@ public class CommentedConfiguration extends YamlConfiguration {
 	 */
 	public void addComment(String path, String... commentLines) {
 
-		StringBuilder commentstring = new StringBuilder();
-		StringBuilder leadingSpaces = new StringBuilder();
-		for (int n = 0; n < path.length(); n++) {
-			if (path.charAt(n) == '.') {
-				leadingSpaces.append("  ");
-			}
+		StringBuilder commentBlock = new StringBuilder();
+		// Get the preceding spaces based on how many .'s are in the path.
+		String leadingSpaces = StringMgmt.repeat("  ", (int) path.chars().filter(ch -> ch == '.').count()); 
+		// Parse over all of the comment lines.
+		for (String commentLine : commentLines) {
+			// Add the leading spaces if commentLine isn't empty.
+			commentLine = !commentLine.isEmpty() ? leadingSpaces + commentLine : " "; 
+			// Add a new line if this comment block already has more than one line.
+			if (commentBlock.length() > 0)
+				commentBlock.append(newLine);
+			// Add the line to the commentBlock.
+			commentBlock.append(commentLine);
 		}
-		for (String line : commentLines) {
-			if (!line.isEmpty()) {
-				line = leadingSpaces + line;
-			} else {
-				line = " ";
-			}
-			if (commentstring.length() > 0) {
-				commentstring.append(separator);
-			}
-			commentstring.append(line);
-		}
-		comments.put(path, commentstring.toString());
+		// Put the comment block into the comments HashMap to be parsed into the config later.
+		comments.put(path, commentBlock.toString());
+	}
+
+	/**
+	 * Width became an option with MC 1.18.1. Setting it wider will allow
+	 * configurations to not break things into multi-lines.
+	 */
+	private void setWidth() {
+		try {
+			this.options().width(10000);
+		} catch (NoSuchMethodError ignored) {}
 	}
 }
