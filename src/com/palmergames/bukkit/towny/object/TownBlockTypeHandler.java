@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.TownBlockTypeRegisterEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.util.ItemLists;
+import com.palmergames.util.StringMgmt;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,7 +20,6 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -47,7 +47,7 @@ public final class TownBlockTypeHandler {
 		
 		Bukkit.getPluginManager().callEvent(new TownBlockTypeRegisterEvent());
 		
-		Towny.getPlugin().getLogger().info(String.format("Loaded %d townblock types: %s", townBlockTypeMap.size(), Arrays.toString(townBlockTypeMap.keySet().toArray())));
+		Towny.getPlugin().getLogger().info(String.format("Config: Loaded %d townblock types: %s.", townBlockTypeMap.size(), StringMgmt.join(townBlockTypeMap.keySet(), ", ")));
 	}
 
 	/**
@@ -57,10 +57,10 @@ public final class TownBlockTypeHandler {
 	 */
 	public static void registerType(@NotNull TownBlockType type) throws TownyException {
 		if (exists(type.getName()))
-			throw new TownyException(String.format("A type named '%s' is already registered!", type.getName()));
+			throw new TownyException(String.format("API: A type named '%s' is already registered!", type.getName()));
 		
 		townBlockTypeMap.put(type.getName().toLowerCase(), type);
-		Towny.getPlugin().getLogger().info(String.format("A new townblock type was registered: %s", type.getName()));
+		Towny.getPlugin().getLogger().info(String.format("API: A new townblock type was registered: %s", type.getName()));
 	}
 
 	/**
@@ -140,7 +140,7 @@ public final class TownBlockTypeHandler {
 				newData.put(name.toLowerCase(), townBlockType);
 				
 			} catch (Exception e) {
-				Towny.getPlugin().getLogger().warning(String.format("Error while loading townblock type '%s', skipping...", name));
+				Towny.getPlugin().getLogger().warning(String.format("Config: Error while loading townblock type '%s', skipping...", name));
 				e.printStackTrace();
 			}
 		}
