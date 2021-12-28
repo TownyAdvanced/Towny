@@ -6,40 +6,17 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
-import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
-import com.palmergames.util.FileMgmt;
-import org.apache.commons.compress.utils.FileNameUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.SafeConstructor;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -48,163 +25,56 @@ import java.util.stream.Collectors;
 public final class Translation {
 	
 	private Translation() {}
-
-	private static final Map<String, String> oldLangFileNames = createLegacyLangMap();
-	private static final Set<String> langFiles = createValidLang();
-	private static final Map<String, Map<String, String>> translations = new HashMap<>();
+	
+	private static Map<String, Map<String, String>> translations = new HashMap<>();
 	private static Locale defaultLocale;
 	private static final Path langFolder = Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("lang");
-	
+		
 	public static void loadTranslationRegistry() {
 		translations.clear();
-		updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
+		TranslationLoader loader = new TranslationLoader(langFolder, Towny.getPlugin(), Towny.class);
+		loader.updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
 
-		// Load global override file
-		Map<String, Object> globalOverrides = new HashMap<>();
+		// Create the global.yml file if it doesn't exist.
 		Path globalYMLPath = langFolder.resolve("global.yml");
-		
-		if (!globalYMLPath.toFile().exists()) {
-			if (!FileMgmt.checkOrCreateFile(globalYMLPath.toString())) {
-				throw new TownyInitException("Failed to touch '" + globalYMLPath + "'.", TownyInitException.TownyError.LOCALIZATION);
-			}
-			try {
-				InputStream resource = Towny.class.getResourceAsStream("/global.yml");
-				if (resource == null) {
-					throw new TownyInitException("Could not find global.yml in the JAR", TownyInitException.TownyError.LOCALIZATION);
-				}
-				Files.copy(resource, globalYMLPath, StandardCopyOption.REPLACE_EXISTING);
-			} catch (FileAlreadyExistsException ignored) {
-				// Should not be possible.
-			} catch (IOException e) {
-				throw new TownyInitException("Failed to copy global.yml from the JAR to '" + globalYMLPath + "'", TownyInitException.TownyError.LOCALIZATION, e);
-			}
-		}
-		
-		try (InputStream is = Files.newInputStream(globalYMLPath)) {
-			globalOverrides = new Yaml(new SafeConstructor()).load(is);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		if (!globalYMLPath.toFile().exists())
+			loader.createGlobalYML(globalYMLPath, Towny.class.getResourceAsStream("/global.yml"));
 
-		// There is no need to touch langPath, Files.copy takes care of that.
-		try {
-			Files.createDirectories(langFolder.resolve("reference"));
-		} catch (IOException e) {
-			throw new TownyInitException("Failed to create language reference folder.", TownyInitException.TownyError.LOCALIZATION, e);
-		}
-		// Load bundled language files
-		for (String lang : langFiles) {
-			try (InputStream is = Translation.class.getResourceAsStream("/lang/" + lang + ".yml")) {
-				if (is == null) {
-					throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR", TownyInitException.TownyError.LOCALIZATION);
-				}
-				Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
-				
-				saveReferenceFile(values.get("version"), lang);
-				
-				lang = lang.replace("-", "_"); // Locale#toString uses underscores instead of dashes
-				translations.put(lang, new HashMap<>());
-				
-				for (Map.Entry<String, Object> entry : values.entrySet())
-					translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
-			} catch (Exception e) {
-				// An IO exception occured, or the file had invalid yaml
-				Towny.getPlugin().getLogger().log(Level.WARNING, "Failed to load/save '" + lang + ".yml'.", e);
-			}
-		}
+		// Load global override file into memory.
+		Map<String, Object> globalOverrides = loader.loadGlobalFile(globalYMLPath);
+		
+		// Dump built-in language files into reference folder.
+		// These are for reading only, no changes to them will have an effect.
+		// Loads translations into memory.
+		loader.createReferenceFolderAndFilesAndLoadTranslationsIntoMemory(Towny.getPlugin(), Towny.class, langFolder);
 
+		translations = loader.getTranslations();
+		
+		// Fire the TranslationLoadEvent, allowing other plugins to add Translations.
 		TranslationLoadEvent translationLoadEvent = new TranslationLoadEvent();
 		Bukkit.getPluginManager().callEvent(translationLoadEvent);
 		addTranslations(translationLoadEvent.getAddedTranslations());
-		
-		try {
-			Files.createDirectories(langFolder.resolve("override"));
-		} catch (IOException e) {
-			throw new TownyInitException("Failed to create language override folder.", TownyInitException.TownyError.LOCALIZATION, e);
-		}
+
+		loader.setTranslations(translations);
 		
 		// Load optional override files.
-		File[] overrideFiles = new File(langFolder + File.separator + "override").listFiles();
-		if (overrideFiles != null) {
-			for (File file : overrideFiles) {
-				if (file.isFile() && FileNameUtils.getExtension(file.getName()).equalsIgnoreCase("yml") && !file.getName().equalsIgnoreCase("global.yml")) {
-					try (FileInputStream is = new FileInputStream(file)) {
-						Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
-						String lang = FileNameUtils.getBaseName(file.getName()).replaceAll("-", "_");
+		loader.loadOverrideFiles();
 
-						if (values != null) {
-							translations.computeIfAbsent(lang, k -> new HashMap<>());
-							for (Map.Entry<String, Object> entry : values.entrySet())
-								translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-
-		//Can be null if no overrides have been added
+		// Can be null if no overrides have been added
 		if (globalOverrides != null)
-			for (Map.Entry<String, Object> entry : globalOverrides.entrySet())
-				for (String lang : translations.keySet())
-					translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
-				
-		defaultLocale = loadDefaultLocale();		
-		Towny.getPlugin().getLogger().info(String.format("Successfully loaded translations for %d languages.", translations.keySet().size()));
+			loader.overwriteKeysWithGlobalOverrides(globalOverrides);
+
+		translations = loader.getTranslations();
+		// Set the defaultLocale.
+		setDefaultLocale();
+
+//		Towny.getPlugin().getLogger().info(String.format("Successfully loaded translations for %d languages.", translations.keySet().size()));
+
+		// Load HelpMenus only after translations have been set.
 		HelpMenu.loadMenus();
 	}
-	
-	private static void saveReferenceFile(@Nullable Object currentVersion, String lang) {
-		if (currentVersion == null)
-			return;
 
-		// Resolves langfolder/reference/whatever_language.yml
-		Path langPath = langFolder.resolve("reference").resolve(lang + ".yml");
-		// Files.copy takes care of the creation of lang.yml AS LONG AS the parent directory exists
-		// Which we take care of right before the languages are looped through.
-		
-		// Get the resource
-		try (InputStream resource = Towny.class.getResourceAsStream("/lang/" + lang + ".yml")) {
 
-			if (resource == null) {
-				throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR.", TownyInitException.TownyError.LOCALIZATION);
-			}
-
-			// Check the existing lang file for the version, and if necessary, replace it.
-			try (InputStream is = Files.newInputStream(langPath)) {
-				Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
-				if (values == null || (double) currentVersion != (double) values.get("version")) {
-					is.close();
-					// Remove the old reference file.
-					langPath.toFile().delete();
-					// Copy resource to location.
-					Files.copy(resource, langPath);
-				}
-			} catch (NoSuchFileException e) {
-				// We haven't got this file in the reference folder yet.
-				Files.copy(resource, langPath);
-			}
-			resource.close();
-		} catch (IOException e) {
-			throw new TownyInitException("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath + " during a langauge file update.'", TownyInitException.TownyError.LOCALIZATION, e);
-		}
-	}
-	
-	public static Set<String> createValidLang() {
-		final Set<String> lang = new HashSet<>();
-		final URI uri;
-		try {
-			uri = Towny.class.getResource("").toURI();
-			final FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap());
-			Files.list(fs.getRootDirectories().iterator().next().resolve("/lang")).forEach(p -> lang.add(FileNameUtils.getBaseName(p.toString())));
-			fs.close();
-		} catch (URISyntaxException | IOException e) {
-			e.printStackTrace();
-		}
-		return lang;
-	}
-	
 	/**
 	 * Translates given key into its respective language. 
 	 * 
@@ -268,44 +138,6 @@ public final class Translation {
 		return String.format(of(key, getLocale(resident)), args);
 	}
 
-	/**
-	 * Attempt to rename old languages files (ie: english.yml to en-US.yml.)
-	 * 
-	 * @param lang String name of the language file in the config's language setting.
-	 * @since 0.97.0.21
-	 */
-	private static void updateLegacyLangFileName(String lang) {
-		if (!oldLangFileNames.containsKey(lang))
-			return;
-		String path = Towny.getPlugin().getDataFolder().getPath() + File.separator + "settings" + File.separator ;
-		File oldFile = new File(path + lang);
-		File newFile = new File(path + oldLangFileNames.get(lang));
-		boolean rename = oldFile.renameTo(newFile);
-		if (rename) {
-			Towny.getPlugin().getLogger().info("Language file name updated.");
-			TownySettings.setLanguage(oldLangFileNames.get(lang));
-		} else 
-			Towny.getPlugin().getLogger().warning("Language file was not updated.");
-	}
-
-	private static Map<String, String> createLegacyLangMap() {
-		Map<String, String> oldLangFileNames = new HashMap<>();
-		oldLangFileNames.put("danish.yml", "da-DK.yml");
-		oldLangFileNames.put("german.yml", "de-DE.yml");
-		oldLangFileNames.put("english.yml", "en-US.yml");
-		oldLangFileNames.put("spanish.yml", "es-ES.yml");
-		oldLangFileNames.put("french.yml", "fr-FR.yml");
-		oldLangFileNames.put("italian.yml", "it-IT.yml");
-		oldLangFileNames.put("korean.yml", "ko-KR.yml");
-		oldLangFileNames.put("norwegian.yml", "no-NO.yml");
-		oldLangFileNames.put("polish.yml", "pl-PL.yml");
-		oldLangFileNames.put("pt-br.yml", "pt-BR.yml");
-		oldLangFileNames.put("russian.yml", "ru-RU.yml");
-		oldLangFileNames.put("sv-SE.yml", "sv-SE.yml");
-		oldLangFileNames.put("chinese.yml", "zh-CN.yml");
-		return oldLangFileNames;
-	}
-	
 	public static Locale toLocale(String fileName, boolean shouldWarn) {
 		int lastIndex = fileName.lastIndexOf(".") == -1 ? fileName.length() : fileName.lastIndexOf(".");
 		try {
@@ -317,6 +149,22 @@ public final class Translation {
 			
 			return new Locale("en", "US");
 		}
+	}
+	
+	protected static void setDefaultLocale() {
+		defaultLocale = loadDefaultLocale();
+	}
+	
+	private static Locale loadDefaultLocale() {
+		Locale locale = toLocale(TownySettings.getString(ConfigNodes.LANGUAGE), true);
+		String stringLocale = locale.toString();
+		
+		if (!translations.containsKey(stringLocale)) {
+			locale = new Locale("en", "US");
+			Towny.getPlugin().getLogger().warning(String.format("The locale '%s' is currently not loaded, falling back to en_US. (Is it being loaded correctly?)", stringLocale));
+		}
+		
+		return locale;
 	}
 	
 	public static Locale getDefaultLocale() {
@@ -344,16 +192,14 @@ public final class Translation {
 		return BukkitTools.isOnline(resident.getName()) ? getLocale(resident.getPlayer()) : defaultLocale;
 	}
 	
-	private static Locale loadDefaultLocale() {
-		Locale locale = toLocale(TownySettings.getString(ConfigNodes.LANGUAGE), true);
-		String stringLocale = locale.toString();
-		
-		if (!translations.containsKey(stringLocale)) {
-			locale = new Locale("en", "US");
-			Towny.getPlugin().getLogger().warning(String.format("The locale '%s' is currently not loaded, falling back to en_US. (Is it being loaded correctly?)", stringLocale));
-		}
-		
-		return locale;
+	static void addLocale(String lang) {
+		translations.put(lang, new HashMap<>());
+	}
+	
+	public static void addTranslations(String lang, Map<String, Object> values) {
+		translations.computeIfAbsent(lang, k -> new HashMap<>());
+		for (Map.Entry<String, Object> entry : values.entrySet())
+			translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), TranslationLoader.getTranslationValue(entry));
 	}
 	
 	public static void addTranslations(Map<String, Map<String, String>> addedTranslations) {
@@ -369,27 +215,5 @@ public final class Translation {
 					}
 				}
 		}
-	}
-	
-	private static String getTranslationValue(Map.Entry<String, Object> entry) {
-		// Messages blocked from being overriden.
-		if (entry.getKey().toLowerCase().startsWith("msg_ptw_warning")) {
-			// Get the defaultLocale's translation of the PTW warnings.
-			String msg = String.valueOf(entry.getValue());
-			Towny.getPlugin().getLogger().warning("Attempted to override an protected string. Skipped " + entry.getKey());
-			// It's extremely possible the jar was edited and the string is missing/was modified.
-			if (!msg.contains("Towny"))
-				// Return a hard-coded message, the translation in the jar was likely tampered with.
-				return switch (entry.getKey()) {
-					case "msg_ptw_warning_1" -> "If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.";
-					case "msg_ptw_warning_2" -> "The Towny team never intended for townblocks to be purchaseable with real money.";
-					case "msg_ptw_warning_3" -> "If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.";
-					default -> throw new IllegalArgumentException("Unexpected value: " + entry.getKey());
-				};
-			// Return the defaultLocale's message, it appears to have been left alone.
-			return msg;
-		}
-		// Return the normal translation of the entry.
-		return String.valueOf(entry.getValue());
 	}
 }
