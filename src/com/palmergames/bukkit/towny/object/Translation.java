@@ -73,8 +73,7 @@ public final class Translation {
 		// Load HelpMenus only after translations have been set.
 		HelpMenu.loadMenus();
 	}
-
-
+	
 	/**
 	 * Translates given key into its respective language. 
 	 * 

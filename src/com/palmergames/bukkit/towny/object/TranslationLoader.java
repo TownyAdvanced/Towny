@@ -115,6 +115,7 @@ public class TranslationLoader {
 		// Load bundled language files
 		for (String lang : createValidLang(clazz)) {
 			try (InputStream is = clazz.getResourceAsStream("/lang/" + lang + ".yml")) {
+				Towny.getPlugin().getLogger().info("lang " + lang);
 				if (is == null) {
 					throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR", TownyInitException.TownyError.LOCALIZATION);
 				}
