@@ -204,7 +204,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 				
 			if (split[0].equalsIgnoreCase("map")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				
 				if (split.length > 1 && split[1].equalsIgnoreCase("big"))
@@ -251,24 +251,22 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, world.getPlotManagementMayorDelete(), Translatable.of("gui_title_towny_plotclear").forLocale(player));
 			} else if (split[0].equalsIgnoreCase("top")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				TopCommand(player, StringMgmt.remFirstArg(split));
 			} else if (split[0].equalsIgnoreCase("tree")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				consoleUseOnly(player);
 			} else if (split[0].equalsIgnoreCase("time")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				TownyMessaging.sendMsg(player, Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime())));
 			} else if (split[0].equalsIgnoreCase("universe")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				for (String line : getUniverseStats(Translation.getLocale(player)))
 					TownyMessaging.sendMessage(player, line);
 			} else if (split[0].equalsIgnoreCase("version") || split[0].equalsIgnoreCase("v")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 
 				if (TownyUpdateChecker.shouldShowNotification()) {
@@ -296,14 +294,19 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private void TopCommand(Player player, String[] args) {
+	private void TopCommand(Player player, String[] args) throws TownyException {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
 			towny_top.add(ChatTools.formatTitle("/towny top"));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "residents [all/town/nation]", ""));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "balance [all/town/nation]", ""));
-		} else if (args[0].equalsIgnoreCase("residents"))
+		} 
+		
+		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(args[1].toLowerCase())))
+			throw new TownyException(Translatable.of("msg_err_command_disable"));
+		
+		if (args[0].equalsIgnoreCase("residents"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<ResidentList> list = new ArrayList<>(universe.getTowns());
 				list.addAll(universe.getNations());

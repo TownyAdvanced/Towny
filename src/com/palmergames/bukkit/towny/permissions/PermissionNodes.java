@@ -331,7 +331,10 @@ public enum PermissionNodes {
 	 */
 	TOWNY_COMMAND_TOWNY("towny.command.towny.*"),
 	TOWNY_COMMAND_TOWNY_MAP("towny.command.towny.map"),
-	TOWNY_COMMAND_TOWNY_TOP("towny.command.towny.top"),
+	TOWNY_COMMAND_TOWNY_TOP("towny.command.towny.top.*"),
+		TOWNY_COMMAND_TOWNY_TOP_RESIDENTS("towny.command.towny.top.residents"),
+		TOWNY_COMMAND_TOWNY_TOP_LAND("towny.command.towny.top.land"),
+		TOWNY_COMMAND_TOWNY_TOP_BALANCE("towny.command.towny.top.balance"),
 	TOWNY_COMMAND_TOWNY_TREE("towny.command.towny.tree"),
 	TOWNY_COMMAND_TOWNY_TIME("towny.command.towny.time"),
 	TOWNY_COMMAND_TOWNY_UNIVERSE("towny.command.towny.universe"),

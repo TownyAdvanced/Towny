@@ -707,6 +707,22 @@ permissions:
             towny.command.towny.war: true
             towny.command.towny.war.hud: true
 
+    # Towny top command permissions
+    towny.command.towny.top:
+        description: User has access to full top command.
+        default: false
+        children:
+            towny.command.towny.top.*: true
+
+    # Towny top.* command permissions
+    towny.command.towny.top.*:
+        description: User has access to full top command.
+        default: false
+        children:
+            towny.command.towny.top.residents: true
+            towny.command.towny.top.land: true
+            towny.command.towny.top.balance: true
+
     # TownyWorld command permissions
     towny.command.townyworld.*:
         description: User can access the admin toggle commands.

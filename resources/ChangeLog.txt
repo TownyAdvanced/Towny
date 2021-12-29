@@ -7110,3 +7110,14 @@ v0.92.0.11:
 0.97.5.6:
   - Overhaul of CommentedConfiguration, adding support for old and new versions of Bukkit servers.
     - Servers not running up-to-date MC 1.18.1 implementations might see some multi-lining in their chatconfig.yml, which isn't an actual issue. 
+0.97.5.7:
+  - Fix redundant permission node tests in Towny command.
+  - Add child nodes to towny.command.towny.top command.
+    - Closes #5580.
+  - New permission node: 
+    - towny.command.towny.top.*
+      - Child Node of towny.command.towny.top
+      - Children: - towny.command.towny.top.residents
+                  - towny.command.towny.top.land
+                  - towny.command.towny.top.balance
+  
