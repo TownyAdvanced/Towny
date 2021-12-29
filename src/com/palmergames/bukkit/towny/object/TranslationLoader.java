@@ -43,10 +43,9 @@ public class TranslationLoader {
 		this.langFolderPath = langFolderPath;
 		this.plugin = plugin;
 		this.clazz = clazz;
-		load();
 	}
 
-	private void load() {
+	public void load() {
 		tempTranslations.clear();
 		// Create the global.yml file if it doesn't exist.
 		Path globalYMLPath = langFolderPath.resolve("global.yml");
@@ -59,7 +58,7 @@ public class TranslationLoader {
 		// Dump built-in language files into reference folder.
 		// These are for reading only, no changes to them will have an effect.
 		// Loads translations into memory.
-		createReferenceFolderAndFilesAndLoadTranslationsIntoMemory(plugin, clazz, langFolderPath);
+		loadTranslationsIntoMemory(plugin, clazz, langFolderPath);
 
 		// Load optional override files.
 		loadOverrideFiles();
@@ -105,7 +104,7 @@ public class TranslationLoader {
 		return globalOverrides;
 	}
 	
-	void createReferenceFolderAndFilesAndLoadTranslationsIntoMemory(Plugin plugin, Class<?> clazz, Path langFolder) {
+	void loadTranslationsIntoMemory(Plugin plugin, Class<?> clazz, Path langFolder) {
 		// There is no need to touch langPath, Files.copy takes care of that.
 		try {
 			Files.createDirectories(langFolder.resolve("reference"));

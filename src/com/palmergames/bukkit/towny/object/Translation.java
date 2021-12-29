@@ -46,7 +46,7 @@ public final class Translation {
 		// Dump built-in language files into reference folder.
 		// These are for reading only, no changes to them will have an effect.
 		// Loads translations into memory.
-		loader.createReferenceFolderAndFilesAndLoadTranslationsIntoMemory(Towny.getPlugin(), Towny.class, langFolder);
+		loader.loadTranslationsIntoMemory(Towny.getPlugin(), Towny.class, langFolder);
 
 		translations = loader.getTranslations();
 		
@@ -68,7 +68,7 @@ public final class Translation {
 		// Set the defaultLocale.
 		setDefaultLocale();
 
-//		Towny.getPlugin().getLogger().info(String.format("Successfully loaded translations for %d languages.", translations.keySet().size()));
+		Towny.getPlugin().getLogger().info(String.format("Successfully loaded translations for %d languages.", translations.keySet().size()));
 
 		// Load HelpMenus only after translations have been set.
 		HelpMenu.loadMenus();
