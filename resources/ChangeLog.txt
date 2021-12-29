@@ -7120,4 +7120,4 @@ v0.92.0.11:
       - Children: - towny.command.towny.top.residents
                   - towny.command.towny.top.land
                   - towny.command.towny.top.balance
-  
+  - Undo change to TownyEconomyHandler which prevented CMI working.

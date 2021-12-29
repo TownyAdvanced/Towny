@@ -91,7 +91,7 @@ public class TownyEconomyHandler {
 		 */
 		try {
 			RegisteredServiceProvider<Economy> vaultEcoProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-			if (vaultEcoProvider != null && vaultEcoProvider.getProvider().isEnabled()) {
+			if (vaultEcoProvider != null) {
 				/*
 				 * Flag as using Vault hooks
 				 */
