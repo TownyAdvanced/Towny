@@ -3003,6 +3003,10 @@ public class TownySettings {
 	public static boolean doTownsGetWarnedOnOutlaw() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_WARN_TOWN_ON_OUTLAW);
 	}
+	
+	public static int getOutlawWarningMessageCooldown() {
+		return getInt(ConfigNodes.GTOWN_SETTING_WARN_TOWN_ON_OUTLAW_MESSAGE_COOLDOWN_TIME);
+	}
 
 	public static List<String> getOutlawBlacklistedCommands() {
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_OUTLAW_BLACKLISTED_COMMANDS);

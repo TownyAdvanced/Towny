@@ -659,6 +659,11 @@ public enum ConfigNodes {
 			"# Should towns be warned in case an outlaw roams the town?",
 			"# Warning: Outlaws can use this feature to spam residents with warnings!",
 			"# It is recommended to set this to true only if you're using outlaw teleporting with a warmup of 0 seconds."),
+	GTOWN_SETTING_WARN_TOWN_ON_OUTLAW_MESSAGE_COOLDOWN_TIME(
+			"global_town_settings.warn_town_on_outlaw_message_cooldown_in_seconds",
+			"30",
+			"",
+			"# How many seconds in between warning messages, to prevent spam."),
 	GTOWN_SETTINGS_OUTLAW_TELEPORT_ON_BECOMING_OUTLAWED(
 			"global_town_settings.outlaw_teleport_away_on_becoming_outlawed",
 			"false",

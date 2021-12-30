@@ -7121,3 +7121,9 @@ v0.92.0.11:
                   - towny.command.towny.top.land
                   - towny.command.towny.top.balance
   - Undo change to TownyEconomyHandler which prevented CMI working.
+  - New Config Node: global_town_settings.warn_town_on_outlaw_message_cooldown_in_seconds
+    - Default: "30",
+    - How many seconds in between warning messages, to prevent spam.
+  - Added outlawn message warning cooldown to prevent spam on servers where the outlaw warning message is turned on,
+    and the outlaw teleporting warmup is not set to 0.
+    - Closes #5582.

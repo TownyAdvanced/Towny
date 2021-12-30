@@ -7,12 +7,13 @@ import com.palmergames.bukkit.towny.TownySettings;
 
 public class CooldownTimerTask extends TownyTimerTask {
 	
-	private static ConcurrentHashMap<AbstractMap.SimpleEntry<String, CooldownType>, Long> cooldowns;	
+	private static ConcurrentHashMap<AbstractMap.SimpleEntry<String, CooldownType>, Long> cooldowns;
 
 
 	public enum CooldownType{
 		PVP(TownySettings.getPVPCoolDownTime()),
-		TELEPORT(TownySettings.getSpawnCooldownTime());
+		TELEPORT(TownySettings.getSpawnCooldownTime()),
+		OUTLAW_WARNING(TownySettings.getOutlawWarningMessageCooldown());
 		
 		private final int seconds;
 		
@@ -39,7 +40,7 @@ public class CooldownTimerTask extends TownyTimerTask {
 		while (!cooldowns.isEmpty()) {
 			for (AbstractMap.SimpleEntry<String, CooldownType> map : cooldowns.keySet()) {
 				long time = cooldowns.get(map);
-				if (time < currentTime)					
+				if (time < currentTime)
 					cooldowns.remove(map);
 			}
 			break;
@@ -47,13 +48,13 @@ public class CooldownTimerTask extends TownyTimerTask {
 	}
 	
 	public static void addCooldownTimer(String object, CooldownType type) {
-		AbstractMap.SimpleEntry<String, CooldownType> map = new AbstractMap.SimpleEntry<String, CooldownTimerTask.CooldownType>(object, type);		
+		AbstractMap.SimpleEntry<String, CooldownType> map = new AbstractMap.SimpleEntry<String, CooldownTimerTask.CooldownType>(object, type);
 		cooldowns.put(map, (System.currentTimeMillis() + (type.getSeconds() * 1000)));
 	}
 	
 	public static boolean hasCooldown(String object, CooldownType type) {
 		AbstractMap.SimpleEntry<String, CooldownType> map = new AbstractMap.SimpleEntry<String, CooldownTimerTask.CooldownType>(object, type);
-		if (cooldowns.containsKey(map))			
+		if (cooldowns.containsKey(map))
 			return true;
 		return false;
 	}
@@ -62,6 +63,6 @@ public class CooldownTimerTask extends TownyTimerTask {
 		AbstractMap.SimpleEntry<String, CooldownType> map = new AbstractMap.SimpleEntry<String, CooldownTimerTask.CooldownType>(object, type);
 		if (cooldowns.containsKey(map))
 			return (int) ((cooldowns.get(map) - System.currentTimeMillis())/1000);
-		return 0;		
+		return 0;
 	}
 }
