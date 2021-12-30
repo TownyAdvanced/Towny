@@ -7127,3 +7127,4 @@ v0.92.0.11:
   - Added outlawn message warning cooldown to prevent spam on servers where the outlaw warning message is turned on,
     and the outlaw teleporting warmup is not set to 0.
     - Closes #5582.
+  - Add the ability to make a CommentedConfiguration from a File again.

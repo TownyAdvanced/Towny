@@ -7,6 +7,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -51,7 +52,18 @@ public class CommentedConfiguration extends YamlConfiguration {
 		setWidth();
 	}
 
+	/**
+	 * Create a new CommentedConfiguration using the given file, using Towny's
+	 * Logger for any error messages.
+	 */
+	public CommentedConfiguration(File file) {
+		super();
+		this.path = file.toPath();
+		logger = Towny.getPlugin().getLogger();
+		setWidth();
+	}
 
+	
 	/**
 	 * Load the yaml configuration file into memory.
 	 * @return true if file is able to load.
