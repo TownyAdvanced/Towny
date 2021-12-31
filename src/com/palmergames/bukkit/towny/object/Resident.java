@@ -866,19 +866,4 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		Player player = getPlayer();
 		return player == null ? Audience.empty() : Towny.getAdventure().player(player);
 	}
-
-	/**
-	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.
-	 *
-	 * @return The world this resides in.
-	 */
-	@Deprecated
-	public World getBukkitWorld() {
-		Player player = getPlayer();
-		if (player != null) {
-			return player.getWorld();
-		} else {
-			return BukkitTools.getWorlds().get(0);
-		}
-	}
 }

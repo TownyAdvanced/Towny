@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
-import com.palmergames.util.StringMgmt;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -30,7 +29,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Nation extends Government {
@@ -584,84 +582,6 @@ public class Nation extends Government {
 		if (!TownySettings.getNationZonesEnabled())
 			return 0;
 		return Integer.parseInt(TownySettings.getNationLevel(this).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
-	}
-	
-	/**
-	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.
-	 *
-	 * @return The world this resides in.
-	 */
-	@Deprecated
-	public World getBukkitWorld() {
-		if (hasCapital() && getCapital().hasWorld()) {
-			return BukkitTools.getWorld(getCapital().getHomeblockWorld().getName());
-		} else {
-			return BukkitTools.getWorlds().get(0);
-		}
-	}
-
-	/**
-	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getName()} instead.
-	 *
-	 * @return The name of the economy account.
-	 */
-	@Deprecated
-	public String getEconomyName() {
-		return StringMgmt.trimMaxLength(Nation.ECONOMY_ACCOUNT_PREFIX + getName(), 32);
-	}
-	
-	/**
-	 * @deprecated As of 0.96.2.0, please use {@link #getSpawn()} instead.
-	 * 
-	 * @return getSpawn()
-	 * @throws TownyException When a nation spawn isn't available
-	 */
-	@Deprecated
-	public Location getNationSpawn() throws TownyException {
-		return getSpawn();
-	}
-	
-	/**
-	 * @deprecated As of 0.96.2.0, please use {@link #getBoard()} instead.
-	 *  
-	 * @return getBoard()
-	 */
-	@Deprecated
-	public String getNationBoard() {
-		return getBoard();
-	}
-
-	/**
-	 * @deprecated As of 0.96.5.0, please use {@link Government#setNeutral(boolean)} instead.
-	 * 
-	 * @param neutral The value which will be used to set Neutrality true or false.
-	 */
-	@Deprecated
-	public void toggleNeutral(boolean neutral) {
-		setNeutral(neutral);
-	}
-
-	/**
-	 * Gets the nation's UUID.
-	 * @return nation UUID
-	 * 
-	 * @deprecated as of 0.96.6.0, use {@link Government#getUUID()} instead.
-	 */
-	@Deprecated
-	public UUID getUuid() {
-		return getUUID();
-	}
-
-	/**
-	 * Set the nation's UUID. This should only be used internally! 
-	 * 
-	 * @param uuid UUID to set.
-	 *             
-	 * @deprecated as of 0.96.6.0, use {@link Government#setUUID(UUID)} instead.
-	 */
-	@Deprecated
-	public void setUuid(UUID uuid) {
-		setUUID(uuid);
 	}
 
 	/**

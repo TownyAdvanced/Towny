@@ -1,8 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.object.Nameable;
-import com.palmergames.bukkit.util.Colors;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,16 +47,5 @@ public class NameUtil {
 			return Collections.emptyList();
 		}
 		return list.stream().filter(name -> name.toLowerCase().startsWith(startingWith.toLowerCase())).collect(Collectors.toList());
-	}
-
-	/**
-	 * Legacy call for translating color codes.
-	 * @param str String to parse.
-	 * @return Passes the string to the new method in deprecation note.   
-	 * @deprecated as of 0.96.2.20. Use {@link Colors#translateColorCodes(String)} instead
-	 */
-	@Deprecated
-	public static String translateColorCodes(String str) {
-		return Colors.translateColorCodes(str);
 	}
 }

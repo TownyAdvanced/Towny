@@ -207,7 +207,6 @@ public class PlayerCache {
 		ENEMY,
 		TOWN_TRUSTED,
 		PLOT_TRUSTED,
-		@Deprecated UNKOWN,
 	}
 
 	private TownBlockStatus townBlockStatus = TownBlockStatus.UNKNOWN;
