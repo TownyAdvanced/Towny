@@ -301,6 +301,9 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "residents [all/town/nation]", ""));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "balance [all/town/nation]", ""));
+			for (String line : towny_top)
+				TownyMessaging.sendMessage(player, line);
+			return;
 		} 
 		
 		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(args[1].toLowerCase())))
