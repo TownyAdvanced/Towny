@@ -7128,3 +7128,5 @@ v0.92.0.11:
     and the outlaw teleporting warmup is not set to 0.
     - Closes #5582.
   - Add the ability to make a CommentedConfiguration from a File again.
+0.97.5.8:
+  - Suppress deprecated JSONReader stuff, fix javadoc building.

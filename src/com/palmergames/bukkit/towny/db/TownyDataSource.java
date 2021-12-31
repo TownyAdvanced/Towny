@@ -435,7 +435,7 @@ public abstract class TownyDataSource {
 	 * @throws NotRegisteredException if no nation is found matching the given UUID.
 	 */
 	@Deprecated
-	abstract public Nation getNation(UUID uiid) throws NotRegisteredException;
+	abstract public Nation getNation(UUID uuid) throws NotRegisteredException;
 
 	abstract public TownyWorld getWorld(String name) throws NotRegisteredException;
 
