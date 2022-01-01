@@ -28,42 +28,38 @@ public final class Translation {
 	
 	private static Map<String, Map<String, String>> translations = new HashMap<>();
 	private static Locale defaultLocale;
-	private static final Path langFolder = Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("lang");
-		
+	
 	public static void loadTranslationRegistry() {
 		translations.clear();
+		Path langFolder = Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("lang");
 		TranslationLoader loader = new TranslationLoader(langFolder, Towny.getPlugin(), Towny.class);
 		loader.updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
 
-		// Create the global.yml file if it doesn't exist.
-		Path globalYMLPath = langFolder.resolve("global.yml");
-		if (!globalYMLPath.toFile().exists())
-			loader.createGlobalYML(globalYMLPath, Towny.class.getResourceAsStream("/global.yml"));
+		// Load built-in translations into memory.
+		// Dumps built-in language files into reference folder. These are for reading
+		// only, no changes to them will have an effect.
+		loader.loadTranslationsIntoMemory();
 
-		// Load global override file into memory.
-		Map<String, Object> globalOverrides = loader.loadGlobalFile(globalYMLPath);
-		
-		// Dump built-in language files into reference folder.
-		// These are for reading only, no changes to them will have an effect.
-		// Loads translations into memory.
-		loader.loadTranslationsIntoMemory(Towny.getPlugin(), Towny.class, langFolder);
-
+		// Get the translations ahead of the TranslationLoadEvent.
 		translations = loader.getTranslations();
 		
 		// Fire the TranslationLoadEvent, allowing other plugins to add Translations.
 		TranslationLoadEvent translationLoadEvent = new TranslationLoadEvent();
 		Bukkit.getPluginManager().callEvent(translationLoadEvent);
-		addTranslations(translationLoadEvent.getAddedTranslations());
-
-		loader.setTranslations(translations);
+		// If another plugin added translations, add them to the transations hashmap.
+		if (!translationLoadEvent.getAddedTranslations().isEmpty()) {
+			addTranslations(translationLoadEvent.getAddedTranslations());
+			// Set the translations back into the loader.
+			loader.setTranslations(translations);
+		}
 		
 		// Load optional override files.
 		loader.loadOverrideFiles();
 
-		// Can be null if no overrides have been added
-		if (globalOverrides != null)
-			loader.overwriteKeysWithGlobalOverrides(globalOverrides);
-
+		// Load optional global file.
+		loader.loadGlobalFile();
+		
+		// Get the finalized translation back from the loader.
 		translations = loader.getTranslations();
 		// Set the defaultLocale.
 		setDefaultLocale();
@@ -75,7 +71,7 @@ public final class Translation {
 	}
 	
 	/**
-	 * Translates given key into its respective language. 
+	 * Translates given key into the default Locale.
 	 * 
 	 * @param key The language key.
 	 * @return The localized string.
@@ -96,16 +92,23 @@ public final class Translation {
 	}
 
 	/**
-	 * Translates given key into its respective language. 
+	 * Translates given key into the default Locale. 
 	 *
 	 * @param key The language key.
-	 * @param args The arguments to format the localized string.   
+	 * @param args The arguments to format the localized string.
 	 * @return The localized string.
 	 */
 	public static String of(String key, Object... args) {
 		return String.format(of(key), args);
 	}
 
+	/**
+	 * Translates given key into the given locale. 
+	 * 
+	 * @param key The language key.
+	 * @param locale Locale to translate to.
+	 * @return The localized string.
+	 */
 	public static String of(String key, Locale locale) {
 		String data = translations.get(validateLocale(locale.toString())).get(key.toLowerCase(Locale.ROOT));
 
@@ -117,6 +120,14 @@ public final class Translation {
 		return Colors.translateColorCodes(data);
 	}
 	
+	/**
+	 * Translates given key into the given locale. 
+	 * 
+	 * @param key The language key.
+	 * @param locale Locale to translate to.
+	 * @param args The arguments to format the localized string.
+	 * @return The localized string.
+	 */
 	public static String of(String key, Locale locale, Object... args) {
 		return String.format(of(key, locale), args);
 	}
@@ -191,27 +202,15 @@ public final class Translation {
 		return BukkitTools.isOnline(resident.getName()) ? getLocale(resident.getPlayer()) : defaultLocale;
 	}
 	
-	static void addLocale(String lang) {
-		translations.put(lang, new HashMap<>());
-	}
-	
-	public static void addTranslations(String lang, Map<String, Object> values) {
-		translations.computeIfAbsent(lang, k -> new HashMap<>());
-		for (Map.Entry<String, Object> entry : values.entrySet())
-			translations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), TranslationLoader.getTranslationValue(entry));
-	}
-	
 	public static void addTranslations(Map<String, Map<String, String>> addedTranslations) {
 		if (addedTranslations != null && !addedTranslations.isEmpty()) {
 			for (String language : addedTranslations.keySet())
 				if (addedTranslations.get(language) != null && !addedTranslations.get(language).isEmpty()) {
-					Map<String, String> newTranslations = addedTranslations.get(language);
 					language = language.replaceAll("-", "_");
-
-					for (Map.Entry<String, String> entry : newTranslations.entrySet()) {
-						translations.computeIfAbsent(language, k -> new HashMap<>());
+					Map<String, String> newTranslations = addedTranslations.get(language);
+					translations.computeIfAbsent(language, k -> new HashMap<>());
+					for (Map.Entry<String, String> entry : newTranslations.entrySet())
 						translations.get(language).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
-					}
 				}
 		}
 	}
