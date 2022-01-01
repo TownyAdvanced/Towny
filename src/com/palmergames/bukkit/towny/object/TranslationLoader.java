@@ -49,7 +49,7 @@ public class TranslationLoader {
 	 * valid Locale file names ie: en-US.yml, de-DE.yml. Locales which do not appear
 	 * in Minecraft will not be used.
 	 * 
-	 * You may opt to provide a global.yml file in your pugin's resources folder,
+	 * You may opt to provide a global.yml file in your plugin's resources folder,
 	 * which will allow an admin to globally override language strings for all
 	 * locales.
 	 * 
