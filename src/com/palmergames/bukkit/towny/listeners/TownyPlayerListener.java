@@ -82,6 +82,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -1051,7 +1052,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 				
 		String[] split = event.getMessage().substring(1).split(" ");
-		if (TownySettings.getJailBlacklistedCommands().contains(split[0])) {
+		if (listContainsCommand(TownySettings.getJailBlacklistedCommands(), split[0])) {
 			TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_you_cannot_use_that_command_while_jailed"));
 			event.setCancelled(true);
 		}
@@ -1079,7 +1080,7 @@ public class TownyPlayerListener implements Listener {
 			
 			if (town != null && town.hasOutlaw(resident)) {
 				String[] split = event.getMessage().substring(1).split(" ");
-				if (TownySettings.getOutlawBlacklistedCommands().contains(split[0])) {
+				if (listContainsCommand(TownySettings.getOutlawBlacklistedCommands(), split[0])) {
 					TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_you_cannot_use_command_while_in_outlaw_town"));
 					event.setCancelled(true);
 				}
@@ -1106,11 +1107,11 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Commands are sometimes blocked from being run by outsiders on an town.
 		 */
-		if (TownySettings.getTownBlacklistedCommands().contains(command) && TownySettings.getTouristBlockedCommands().contains(command)) {
+		if (listContainsCommand(TownySettings.getTownBlacklistedCommands(), command) && listContainsCommand(TownySettings.getTouristBlockedCommands(), command)) {
 			// Let admins and globally welcomed players run commands.
 			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode())
-					|| TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOURIST_COMMAND_LIMITATION_BYPASS.getNode()))
-							return;
+			|| TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOURIST_COMMAND_LIMITATION_BYPASS.getNode()))
+				return;
 			
 			Town town = TownyAPI.getInstance().getTown(player.getLocation());
 			if (town == null)
@@ -1133,7 +1134,7 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Commands are sometimes blocked from being run inside any town.
 		 */
-		if (TownySettings.getTownBlacklistedCommands().contains(command) && !TownyAPI.getInstance().isWilderness(player.getLocation())) {
+		if (listContainsCommand(TownySettings.getTownBlacklistedCommands(), command) && !TownyAPI.getInstance().isWilderness(player.getLocation())) {
 			// Let admins run commands.
 			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
 				return;
@@ -1146,7 +1147,7 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Commands are sometimes limited to only plots that players personally own.
 		 */
-		if (TownySettings.getPlayerOwnedPlotLimitedCommands().contains(command)) {
+		if (listContainsCommand(TownySettings.getPlayerOwnedPlotLimitedCommands(), command)) {
 			// Let admins run commands.
 			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
 				return;
@@ -1197,6 +1198,10 @@ public class TownyPlayerListener implements Listener {
 			}
 		}
 
+	}
+
+	private boolean listContainsCommand(List<String> list, String command) {
+		return list.stream().anyMatch(command::equalsIgnoreCase);
 	}
 	
 	/*

@@ -7131,3 +7131,5 @@ v0.92.0.11:
 0.97.5.8:
   - Suppress deprecated JSONReader stuff, fix javadoc building.
   - Fix ArrayIndexOutOfBoundException when using /towny top with no subcommand.
+  - Fix command blacklists not handling casing well.
+    - Closes #5586.
