@@ -745,8 +745,8 @@ msg_player_has_been_sent_to_jail_number: '%s has been sent to jail number %s.'
 msg_player_is_not_online: '%sはオンラインではありません。'
 msg_mysql_dump_success: 'MySQLのダンプが完了しました。'
 msg_err_mysql_not_being_used: 'Your config is not set to save & load mysql.'
-msg_save_success: 'Database saved.'
-msg_load_success: 'Database loaded.'
+msg_save_success: 'データベースが保存されました。'
+msg_load_success: 'データベースの読み込みが完了しました。'
 msg_err_cannot_afford_to_set_outpost: 'Your town does not have enough funds to set this townblock to an outpost.'
 msg_too_close2: 'This area is too close to another town''s %s.'
 homeblock: 'ホームブロック'
@@ -766,13 +766,13 @@ msg_err_key_cannot_be_deleted: 'キーが存在しません。'
 msg_err_this_town_doesnt_have_any_associated_metadata: 'この町に関連するメタデータはありません。'
 msg_err_key_x_is_not_part_of_this_town: 'Key %s is not part of this town, if possible please add it.'
 msg_custom_data_was_successfully_added_to_town: 'Custom data was successfully added to town!'
-msg_error_too_many_pages: 'Too many pages.'
+msg_error_too_many_pages: 'ページが多すぎます。'
 msg_err_location_is_not_within_a_town: 'Location is not within a town.'
 msg_err_location_is_not_within_a_jail_plot: 'Location is not within a Jail plot.'
-msg_err_town_has_no_jail_spawns_set: 'Town has no jail spawns set.'
+msg_err_town_has_no_jail_spawns_set: 'この町の牢屋はスポーン地点が設定されていません。'
 msg_err_town_has_no_outpost_spawns_set: 'Town has no outpost spawns set.'
 msg_err_location_is_not_within_an_outpost_plot: 'Location is not within an outpost plot.'
-msg_err_town_has_not_set_a_spawn_location: 'Town has not set a spawn location.'
+msg_err_town_has_not_set_a_spawn_location: '町のスポーン地点が設定されていません。'
 msg_err_town_has_no_claim_over_this_town_block: 'Town has no claim over this town block.'
 msg_err_town_doesnt_belong_to_any_nation: 'この町は国に所属していません。'
 msg_err_mayor_doesnt_belong_to_town: 'Mayor doesn''t belong to town.'
@@ -788,16 +788,16 @@ msg_set_war_allowed_off: 'このワールドでは戦争は許可されていま
 msg_err_cannot_toggle_pvp_x_seconds_remaining: 'You cannot toggle PVP, %s seconds remaining.'
 msg_err_cannot_spawn_x_seconds_remaining: 'You cannot spawn for another %s seconds.'
 #Added in 0.63
-msg_plot_set_to_nfs: 'Plot is no longer for sale.'
+msg_plot_set_to_nfs: 'この土地は販売されていません。'
 msg_err_x_spawn_disallowed_from_x: '&c%s spawn is not allowed from %s.'
 msg_the_wilderness: '荒野'
-msg_enemy_areas: 'Enemy areas'
-msg_neutral_towns: 'Neutral towns'
+msg_enemy_areas: '敵のエリア'
+msg_neutral_towns: '中立の町'
 #Added in 0.64
-msg_err_no_nation_with_that_name: 'No nation found with name %s'
+msg_err_no_nation_with_that_name: '%sという国はありません。'
 msg_err_cannot_unclaim_homeblock: 'You cannot unclaim your homeblock, use ''/town set homeblock'' to move your homeblock.'
 #Added in 0.65
-msg_err_rename_cancelled: 'Renaming was cancelled by another plugin.'
+msg_err_rename_cancelled: '他のプラグインの影響で名前の変更がキャンセルされました。'
 #Added in 0.66
 #Added in 0.67
 msg_conquered: '&4(Occupied)'
@@ -837,7 +837,7 @@ msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s belongs to a group, use /plot 
 #Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'The Admin-controlled %s setting prevents you from toggling pvp to %s.'
 #Added in 0.73
-msg_err_you_aren't currently jailed: 'You are not currently jailed.'
+msg_err_you_aren't currently jailed: 'あなたは、投獄されていません。'
 #Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'You are not allowed to create the other side of this portal in this location.'
 #Added in 0.75
@@ -848,12 +848,12 @@ msg_you: 'You'
 msg_click_spawn: '&aClick to spawn to: &e%s'
 msg_spawn_cost: '&aSpawn Cost = &e%s'
 #Added in 0.78
-msg_reload_error: 'There was an error reloading Towny.'
-msg_reloaded_config: '&2Configuration successfully reloaded.'
-msg_reloaded_perms: '&2Permissions successfully reloaded.'
-msg_reloaded_db: '&2Database successfully reloaded'
-msg_reloaded_lang: '&2Language file successfully reloaded'
-msg_reset_config: '&2Config has been reset'
+msg_reload_error: 'Townyの読み込み中にエラーが発生しました。'
+msg_reloaded_config: '&2コンフィグをリロードしました。'
+msg_reloaded_perms: '&2パーミッションをリロードしました。'
+msg_reloaded_db: '&2データベースをリロードしました。'
+msg_reloaded_lang: '&2言語ファイルをリロードしました。'
+msg_reset_config: '&2コンフィグをリセットしました。'
 msg_err_teleport_cancelled: 'Moving has cancelled your teleport.'
 #Added in 0.79
 msg_cache_block_error_plot_friends: 'friends'
@@ -867,19 +867,19 @@ msg_the_following_towns_were_deleted_for_having_0_claims: 'The following towns w
 msg_spawn_warn: 'Spawning costs %s. Continue? Hint: add -ignore to skip these confirmations.'
 msg_confirm_purchase: 'Doing this will cost %s. Continue?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Because they will not be close enough to the new capital, the following towns will be removed from your nation: %s. Do you wish to continue?'
-msg_ta_deposit_all_success: 'Successfully deposited %s to all nations'' and towns'' banks.'
+msg_ta_deposit_all_success: 'すべての国と町の銀行に%sを振り込みました。'
 bonus_townblocks: 'bonus townblocks'
 #Added in 0.80
-nomad_sing: 'Nomad'
+nomad_sing: '遊牧民'
 msg_new_town_advice: 'Congratulations on creating your town! Your town will pay a daily upkeep which is currently valued at %s. You can deposit money in your town''s bank using ''/t deposit #''. Without money to pay the upkeep your town will be deleted. You can see your costs anytime using /towny prices. Next daily upkeep taken in %s.'
 #Added in 0.81
-msg_err_teleport_cancelled_damage: 'Damage has cancelled your teleport.'
+msg_err_teleport_cancelled_damage: 'テレポートがキャンセルされました。'
 #Added in 0.82
-invitation_prefix: "&8[&7Invitation&8] &9"
-confirmation_prefix: "&8[&7Confirmation&8] &9"
-this_message_will_expire2: '&9This will auto-expire in %s seconds'
-msg_hover_next_page: 'Next Page'
-msg_hover_previous_page: 'Previous Page'
+invitation_prefix: "&8[&7招待&8] &9"
+confirmation_prefix: "&8[&7確認&8] &9"
+this_message_will_expire2: '&9%s秒後に自動で削除されます。'
+msg_hover_next_page: '次のページ'
+msg_hover_previous_page: '前のページ'
 #Added in 0.83
 msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns with tax percentages."
 msg_town_set_tax_max_percent_amount: "%s has set the max tax percent amount to %s."
