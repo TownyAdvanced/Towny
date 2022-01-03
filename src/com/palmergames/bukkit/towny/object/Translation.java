@@ -63,6 +63,9 @@ public final class Translation {
 		translations = loader.getTranslations();
 		// Set the defaultLocale.
 		setDefaultLocale();
+		
+		// Remove any disabled languages from the translations map.
+		translations.keySet().removeIf(lang -> !TownySettings.isLanguageEnabled(lang) && !lang.equalsIgnoreCase(defaultLocale.toString()));
 
 		Towny.getPlugin().getLogger().info(String.format("Successfully loaded translations for %d languages.", translations.keySet().size()));
 
@@ -204,7 +207,10 @@ public final class Translation {
 	
 	public static void addTranslations(Map<String, Map<String, String>> addedTranslations) {
 		if (addedTranslations != null && !addedTranslations.isEmpty()) {
-			for (String language : addedTranslations.keySet())
+			for (String language : addedTranslations.keySet()) {
+				if (!TownySettings.isLanguageEnabled(language))
+					continue;
+
 				if (addedTranslations.get(language) != null && !addedTranslations.get(language).isEmpty()) {
 					language = language.replaceAll("-", "_");
 					Map<String, String> newTranslations = addedTranslations.get(language);
@@ -212,6 +218,7 @@ public final class Translation {
 					for (Map.Entry<String, String> entry : newTranslations.entrySet())
 						translations.get(language).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
 				}
+			}
 		}
 	}
 }
