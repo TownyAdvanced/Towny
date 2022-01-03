@@ -413,7 +413,7 @@ public class TownyEntityListener implements Listener {
 			
 			// remove from world if set to remove mobs globally
 			if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
-					event.setCancelled(true);
+				event.setCancelled(true);
 			}
 			// handle villager baby removal in wilderness
 			if (livingEntity instanceof Villager villager && !villager.isAdult() && (TownySettings.isRemovingVillagerBabiesWorld())) {
@@ -468,11 +468,12 @@ public class TownyEntityListener implements Listener {
 		if (passengers != null) {
 
 			for (Entity passenger : passengers) {
-				if (!passenger.getType().equals(EntityType.PLAYER)) 
+				if (!(passenger instanceof Player player))
 					return;
+
 				if (TownySettings.isSwitchMaterial(block.getType(), block.getLocation())) {
 					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					event.setCancelled(!TownyActionEventExecutor.canSwitch((Player) passenger, block.getLocation(), block.getType()));
+					event.setCancelled(!TownyActionEventExecutor.canSwitch(player, block.getLocation(), block.getType()));
 					return;
 				}
 			}
@@ -494,6 +495,7 @@ public class TownyEntityListener implements Listener {
 	 * Handles:
 	 *  Enderman thieving protected blocks.
 	 *  Ravagers breaking protected blocks.
+	 *  Withers blowing up protected blocks.
 	 *  Water being used to put out campfires.
 	 *  Crop Trampling.
 	 * 
@@ -539,7 +541,7 @@ public class TownyEntityListener implements Listener {
 				break;
 		
 			case WITHER:
-				List<Block> allowed = TownyActionEventExecutor.filterExplodableBlocks(new ArrayList<>(Collections.singleton(event.getBlock())), event.getBlock().getType(), event.getEntity(), event);
+				List<Block> allowed = TownyActionEventExecutor.filterExplodableBlocks(Collections.singletonList(event.getBlock()), event.getBlock().getType(), event.getEntity(), event);
 				event.setCancelled(allowed.isEmpty());
 				break;
 			/*
@@ -703,23 +705,11 @@ public class TownyEntityListener implements Listener {
 			/*
 			 * Check if this has a shooter.
 			 */
-			if (remover instanceof Projectile) {
-				remover = ((Projectile) remover).getShooter();
-			}
+			if (remover instanceof Projectile projectile)
+				remover = projectile.getShooter();
 
-			if (remover instanceof Player) {
-				Player player = (Player) remover;
-				Material mat = null;
-				switch (event.getEntity().getType()) {
-					case PAINTING:
-					case LEASH_HITCH:
-					case ITEM_FRAME:
-					case GLOW_ITEM_FRAME:
-						mat = EntityTypeUtil.parseEntityToMaterial(event.getEntity().getType());
-						break;
-					default:
-						mat = Material.GRASS_BLOCK;
-				}
+			if (remover instanceof Player player) {
+				Material mat = EntityTypeUtil.parseEntityToMaterial(event.getEntity().getType(), Material.GRASS_BLOCK);
 
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), mat));
@@ -750,18 +740,10 @@ public class TownyEntityListener implements Listener {
 		 */
 		} else {
 
-			switch (event.getCause()) {
-
-			case EXPLOSION:
-
+			if (event.getCause() == RemoveCause.EXPLOSION) {
 				if (!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), DamageCause.BLOCK_EXPLOSION))
 					event.setCancelled(true);
-				break;
-
-			default:
-
 			}
-
 		}
 
 	}
@@ -782,17 +764,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		Material mat = null;
-		switch (event.getEntity().getType()) {
-			case PAINTING:
-			case LEASH_HITCH:
-			case ITEM_FRAME:
-			case GLOW_ITEM_FRAME:				
-				mat = EntityTypeUtil.parseEntityToMaterial(event.getEntity().getType());
-				break;
-			default:
-				mat = Material.GRASS_BLOCK;
-		}
+		Material mat = EntityTypeUtil.parseEntityToMaterial(event.getEntity().getType(), Material.GRASS_BLOCK);
 
 		//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 		event.setCancelled(!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getEntity().getLocation(), mat));
@@ -915,5 +887,4 @@ public class TownyEntityListener implements Listener {
 		if (TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()) && !TownyAPI.getInstance().isWilderness(event.getBlock().getLocation()))
 			event.setCancelled(true);
 	}
-
 }

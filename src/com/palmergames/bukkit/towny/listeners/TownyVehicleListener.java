@@ -58,16 +58,13 @@ public class TownyVehicleListener implements Listener {
 		/*
 		 * Note: Player-lit-TNT and Fireballs are considered Players by the API in this instance.
 		 */
-		if (event.getAttacker() instanceof Player) {
+		if (event.getAttacker() instanceof Player player) {
 			
-			Player player = (Player) event.getAttacker();
-			Material vehicle = null;
-
 			/*
 			 * Substitute a Material for the Entity so we can run a destroy test against it.
 			 * Any entity not in the switch statement will leave vehicle null and no test will occur.
 			 */
-			switch (event.getVehicle().getType()) {
+			Material vehicle = switch (event.getVehicle().getType()) {
 				case MINECART:
 				case MINECART_FURNACE:
 				case MINECART_HOPPER:
@@ -76,11 +73,10 @@ public class TownyVehicleListener implements Listener {
 				case MINECART_COMMAND:
 				case MINECART_TNT:
 				case BOAT:
-					vehicle = EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType());
-					break;
+					yield EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType());
 				default:
-					break;
-			}
+					yield null;
+			};
 
 			if (vehicle != null) {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
@@ -130,30 +126,25 @@ public class TownyVehicleListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getVehicle().getWorld()))
 			return;
 
-		if (event.getEntered() instanceof Player) {
-			
-			Player player = (Player) event.getEntered();
-			Material vehicle = null;
+		if (event.getEntered() instanceof Player player) {
 
 			/*
 			 * Substitute a Material for the Entity so we can run a switch test against it.
 			 * Any entity not in the switch statement will leave vehicle null and no test will occur.
 			 */
-			switch (event.getVehicle().getType()) {
+			Material vehicle = switch (event.getVehicle().getType()) {
 				case MINECART:
 				case BOAT:
-					vehicle = EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType());
-					break;
+					yield EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType());
 				case HORSE:
 				case STRIDER:
 				case PIG:
 				case DONKEY:
 				case MULE:
-					vehicle = Material.SADDLE;
-					break;
+					yield Material.SADDLE;
 				default:
-					break;
-			}
+					yield null;
+			};
 
 			if (vehicle != null) {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.

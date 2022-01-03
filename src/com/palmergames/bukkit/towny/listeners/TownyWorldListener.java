@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.object.Translatable;
@@ -16,7 +15,6 @@ import com.palmergames.bukkit.towny.utils.BorderUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,8 +33,6 @@ public class TownyWorldListener implements Listener {
 
 		plugin = instance;
 	}
-	
-	public static List<String> playersMap = new ArrayList<String>();
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onWorldLoad(WorldLoadEvent event) {
@@ -73,7 +69,7 @@ public class TownyWorldListener implements Listener {
 					}
 			}
 		} catch (AlreadyRegisteredException e) {
-			// Allready loaded			
+			// Already loaded			
 		}
 	}
 
@@ -126,20 +122,14 @@ public class TownyWorldListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPortalCreate(PortalCreateEvent event) {
-		if (!(event.getReason() == PortalCreateEvent.CreateReason.NETHER_PAIR)) {
+		if (!(event.getReason() == PortalCreateEvent.CreateReason.NETHER_PAIR) ||
+			!TownyAPI.getInstance().isTownyWorld(event.getWorld()) ||
+			!(event.getEntity() instanceof Player player))
 			return;
-		}
-		
-		if (!TownyAPI.getInstance().isTownyWorld(event.getWorld()))
-			return;
-
-		if (!event.getEntity().getType().equals(EntityType.PLAYER)) {
-			return;
-		}
 		
 		for (BlockState block : event.getBlocks()) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canBuild((Player) event.getEntity(), block.getLocation(), Material.NETHER_PORTAL)) {
+			if (!TownyActionEventExecutor.canBuild(player, block.getLocation(), Material.NETHER_PORTAL)) {
 				TownyMessaging.sendErrorMsg(event.getEntity(), Translatable.of("msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal"));
 				event.setCancelled(true);
 				break;
