@@ -7133,3 +7133,7 @@ v0.92.0.11:
   - Fix ArrayIndexOutOfBoundException when using /towny top with no subcommand.
   - Fix command blacklists not handling casing well.
     - Closes #5586.
+  - API: Add TranslationLoader.
+    - An easy to use object, accessible via the API which allows a plugin to inject a map of translations into Towny's translations map.
+    - This enables other plugins to use TownyMessaging, Confirmations and other Towny systems' Translatable language methods.
+    - Messages will display to the player in their locale if the language strings are available.
