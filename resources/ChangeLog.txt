@@ -7137,3 +7137,5 @@ v0.92.0.11:
     - An easy to use object, accessible via the API which allows a plugin to inject a map of translations into Towny's translations map.
     - This enables other plugins to use TownyMessaging, Confirmations and other Towny systems' Translatable language methods.
     - Messages will display to the player in their locale if the language strings are available.
+0.97.5.9:
+  - Refactor some listener code, courtesy of Warriorrrr with PR #5589.
