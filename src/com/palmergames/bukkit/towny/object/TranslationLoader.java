@@ -43,22 +43,22 @@ public class TranslationLoader {
 	 * An object which allows a plugin to load language files into Towny's
 	 * translations hashmap. Enabling the given plugin to use Towny's built-in
 	 * messaging and translating so that messages will display in the player's own
-	 * Locale (determined by the client's locale setting.)
+	 * Locale (determined by the client's locale setting.)<br><br>
 	 * 
 	 * Language files should be saved in your plugin's resources\lang\ folder, using
 	 * valid Locale file names ie: en-US.yml, de-DE.yml. Locales which do not appear
-	 * in Minecraft will not be used.
+	 * in Minecraft will not be used.<br><br>
 	 * 
 	 * You may opt to provide a global.yml file in your plugin's resources folder,
 	 * which will allow an admin to globally override language strings for all
-	 * locales.
+	 * locales.<br><br>
 	 * 
-	 * Example: 
-	 *     Plugin plugin = Towny.getPlugin(); 
-	 *     Path langFolderPath = Paths.get(plugin.getDataFolder().getPath()).resolve("lang");
-	 *     TranslationLoader loader = new TranslationLoader(langFolderPath, plugin, Towny.class);
-	 *     loader.load();
-	 *     TownyAPI.addTranslations(plugin, loader.getTranslations());
+	 * Example: <br>
+	 *     Plugin plugin = Towny.getPlugin(); <br> 
+	 *     Path langFolderPath = Paths.get(plugin.getDataFolder().getPath()).resolve("lang"); <br>
+	 *     TranslationLoader loader = new TranslationLoader(langFolderPath, plugin, Towny.class);<br>
+	 *     loader.load();<br> 
+	 *     TownyAPI.addTranslations(plugin, loader.getTranslations());<br>
 	 * 
 	 * @param langFolderPath Path to where the plugin stores their language files on
 	 *                       the server.
