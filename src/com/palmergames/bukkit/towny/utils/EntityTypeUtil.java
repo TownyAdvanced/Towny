@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -159,6 +160,18 @@ public class EntityTypeUtil {
 		}
 					
 		return material;
+	}
+
+	/**
+	 * Helper method for parsing an entity to a material, or a default material if none is found.
+	 * @param entityType Entity type to parse
+	 * @param defaultValue Material to use if none could be found.
+	 * @return The parsed material, or the fallback value.
+	 */
+	@NotNull
+	public static Material parseEntityToMaterial(EntityType entityType, @NotNull Material defaultValue) {
+		Material material = parseEntityToMaterial(entityType);
+		return material == null ? defaultValue : material;
 	}
 	
 	/**
