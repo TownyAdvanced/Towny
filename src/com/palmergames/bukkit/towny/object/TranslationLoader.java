@@ -340,7 +340,6 @@ public class TranslationLoader {
 	private void overwriteKeysWithGlobalOverrides(Map<String, Object> globalOverrides) {
 		for (Map.Entry<String, Object> entry : globalOverrides.entrySet())
 			for (String lang : newTranslations.keySet()) {
-				System.out.println("global override lang " + lang + " size " + newTranslations.get(lang).keySet().size());
 				newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
 			}
 	}
