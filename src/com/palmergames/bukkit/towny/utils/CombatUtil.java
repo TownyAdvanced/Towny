@@ -60,30 +60,30 @@ public class CombatUtil {
 		TownyWorld world = TownyAPI.getInstance().getTownyWorld(defender.getWorld().getName());
 
 		// World using Towny
-		if (!world.isUsingTowny())
+		if (world == null || !world.isUsingTowny())
 			return false;
 
 		Player a = null;
 		Player b = null;
+		
+		Entity directSource = attacker;
 
 		/*
 		 * Find the shooter if this is a projectile.
 		 */
-		if (attacker instanceof Projectile) {
+		if (attacker instanceof Projectile projectile) {
 			
-			Projectile projectile = (Projectile) attacker;
 			Object source = projectile.getShooter();
 			
-			if (source instanceof Entity entity) {
-				attacker = entity;
-			} else if (source != null) {
-				if (CombatUtil.preventDispenserDamage(((BlockProjectileSource) source).getBlock(), defender, cause))
+			if (source instanceof Entity entity)
+				directSource = entity;
+			else if (source instanceof BlockProjectileSource blockProjectileSource) {
+				if (CombatUtil.preventDispenserDamage(blockProjectileSource.getBlock(), defender, cause))
 					return true;
 			}
-
 		}
 
-		if (attacker instanceof Player player)
+		if (directSource instanceof Player player)
 			a = player;
 		if (defender instanceof Player player)
 			b = player;
@@ -112,6 +112,14 @@ public class CombatUtil {
 	 */
 	private static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer, DamageCause cause) {
 
+		Projectile projectileAttacker = null;
+		if (attackingEntity instanceof Projectile projectile) {
+			projectileAttacker = projectile;
+			
+			if (projectile.getShooter() instanceof Entity entity)
+				attackingEntity = entity;
+		}
+		
 		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation());
 		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attackingEntity.getLocation());
 		/*
@@ -183,9 +191,7 @@ public class CombatUtil {
 				 * Protect specific entity interactions (faked with Materials).
 				 * Requires destroy permissions in either the Wilderness or in Town-Claimed land.
 				 */
-				Material material = null;
-
-				switch (defendingEntity.getType()) {
+				Material material = switch (defendingEntity.getType()) {
 					/*
 					 * Below are the entities we specifically want to protect with this test.
 					 * Any other entity will mean that block is still null and will not be
@@ -201,12 +207,10 @@ public class CombatUtil {
 					case MINECART_FURNACE:
 					case MINECART_COMMAND:
 					case MINECART_HOPPER:
-						material = EntityTypeUtil.parseEntityToMaterial(defendingEntity.getType());
-						break;
-					
+						yield EntityTypeUtil.parseEntityToMaterial(defendingEntity.getType());
 					default:
-						break;
-				}
+						yield null;
+				};
 
 				if (material != null) {
 					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
@@ -259,7 +263,7 @@ public class CombatUtil {
 			     * Prevents projectiles fired by non-players harming non-player entities.
 			     * Could be a monster or it could be a dispenser.
 			     */
-				if (attackingEntity instanceof Projectile) {
+				if (projectileAttacker != null) {
 					return true;	
 				}
 
