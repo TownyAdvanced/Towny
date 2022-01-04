@@ -44,18 +44,25 @@ import java.util.List;
 public class CombatUtil {
 
 	/**
+	 * @deprecated As of 0.97.5.9, please use {@link #preventDamageCall(Entity, Entity, DamageCause)}
+	 */
+	@Deprecated
+	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender, DamageCause cause) {
+		return preventDamageCall(attacker, defender, cause);
+	}
+
+	/**
 	 * Tests the attacker against defender to see if we need to cancel
 	 * the damage event due to world PvP, Plot PvP or Friendly Fire settings.
 	 * Only allow a Wolves owner to cause it damage, and residents with destroy
 	 * permissions to damage passive animals and villagers while in a town.
 	 * 
-	 * @param plugin - Reference to Towny
 	 * @param attacker - Entity attacking the Defender
 	 * @param defender - Entity defending from the Attacker
 	 * @param cause - The DamageCause behind this DamageCall.
 	 * @return true if we should cancel.
 	 */
-	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender, DamageCause cause) {
+	public static boolean preventDamageCall(Entity attacker, Entity defender, DamageCause cause) {
 
 		TownyWorld world = TownyAPI.getInstance().getTownyWorld(defender.getWorld().getName());
 
@@ -92,7 +99,7 @@ public class CombatUtil {
 		if (a == b && a != null && b != null)
 			return false;
 
-		return preventDamageCall(plugin, world, attacker, defender, a, b, cause);
+		return preventDamageCall(world, attacker, defender, a, b, cause);
 	}
 
 	/**
@@ -101,7 +108,6 @@ public class CombatUtil {
 	 * Only allow a Wolves owner to cause it damage, and residents with destroy
 	 * permissions to damage passive animals and villagers while in a town.
 	 * 
-	 * @param plugin - Reference to Towny
 	 * @param world - World in which DamageCall was issued
 	 * @param attackingEntity - Entity attacking
 	 * @param defendingEntity - Entity defending
@@ -110,7 +116,7 @@ public class CombatUtil {
 	 * @param cause - The DamageCause behind this DamageCall.
 	 * @return true if we should cancel.
 	 */
-	private static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer, DamageCause cause) {
+	private static boolean preventDamageCall(TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer, DamageCause cause) {
 
 		Projectile projectileAttacker = null;
 		if (attackingEntity instanceof Projectile projectile) {
