@@ -2127,6 +2127,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						line = "";
 					
 					town.setBoard(line);
+					// Player is null when set via the /townyadmin command.
+					if (player == null)
+						return;
 					TownyMessaging.sendTownBoard(player, town);
 				}
 			} else if (split[0].equalsIgnoreCase("title")) {
