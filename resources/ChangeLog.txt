@@ -7141,3 +7141,4 @@ v0.92.0.11:
   - Refactor some listener code, courtesy of Warriorrrr with PR #5589.
   - Fix entities being able to steal items from item frames, courtesy of Warriorrrr with PR #5594.
   - Fix NPE on /ta town NAME set board.
+  - Deprecate unused parameter in CombatUtil#preventDamageCall(), courtesy of Warriorrrr with PR #5595.
