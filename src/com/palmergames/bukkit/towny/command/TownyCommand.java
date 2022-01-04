@@ -251,7 +251,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, world.getPlotManagementMayorDelete(), Translatable.of("gui_title_towny_plotclear").forLocale(player));
 			} else if (split[0].equalsIgnoreCase("top")) {
-				TopCommand(player, StringMgmt.remFirstArg(split));
+				topCommand(player, StringMgmt.remFirstArg(split));
 			} else if (split[0].equalsIgnoreCase("tree")) {
 				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
@@ -294,7 +294,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private void TopCommand(Player player, String[] args) throws TownyException {
+	private void topCommand(Player player, String[] args) throws TownyException {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
 			towny_top.add(ChatTools.formatTitle("/towny top"));
@@ -306,7 +306,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			return;
 		} 
 		
-		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(args[1].toLowerCase())))
+		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(args[0].toLowerCase())))
 			throw new TownyException(Translatable.of("msg_err_command_disable"));
 		
 		if (args[0].equalsIgnoreCase("residents"))
