@@ -418,7 +418,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 												.collect(Collectors.toList());
 									} catch (TownyException ignore) {}
 								} else {
-									return null;
+									return getResidentsWithoutTownStartingWith(args[1]);
 								}
 							}
 						case 3:
