@@ -3123,5 +3123,9 @@ public class TownySettings {
 	public static SortedMap<Integer, Map<NationLevel, Object>> getConfigNationLevel() {
 		return configNationLevel;
 	}
+
+	public static boolean isShowingLocaleMessage() {
+		return getBoolean(ConfigNodes.RES_SETTING_IS_SHOWING_LOCALE_MESSAGE);
+	}
 }
 

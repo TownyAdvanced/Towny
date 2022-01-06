@@ -1799,6 +1799,10 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# If true, players who join the server for the first time will cause the msg_registration message in the language files to be shown server-wide."),
+	RES_SETTING_IS_SHOWING_LOCALE_MESSAGE(
+			"resident_settings.is_showing_locale_message",
+			"true",
+			"# If true, players who join the server for the first time will be informed about their locale, and about Towny translatable system."),
 	ECO(
 			"economy",
 			"",
