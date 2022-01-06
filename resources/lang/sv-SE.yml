@@ -690,7 +690,7 @@ number_of_residents: '(Antal invånare)'
 number_of_towns: '(Antal städer)'
 town_name: 'Stadsnamn - (Invånare)'
 nation_name: 'Nationsnamn - (Invånare)'
-refund_message: '&aRefunded %s for unclaiming %s townblocks.'
+refund_message: '&aÅterbetalade $%s för att unclaima %s stadsblock.'
 msg_bankrupt_town_multiple: '&bFöljande städer hade inte råd med underhållet och har upplösts: '
 msg_bankrupt_nation_multiple: '&bFöljande nationer hade inte råd med sitt underhåll och har upplösts: '
 msg_couldnt_pay_tax: '&b%skunde inte betala skatt och blev sparkad från %s.'
@@ -986,8 +986,8 @@ towny_prices_price_plot: '&c    [Price] &2Plot: &a%s &8| &2Utpost: &a%s'
 towny_prices_price_shop: '&c            &2Butik: &a%s &8| &2Ambassad: &a%s'
 towny_prices_taxes_plot: '&c    [Taxes]    &2Invånare: &a%s &8| &2Plot: &a%s'
 towny_prices_taxes_shop: '&c            &2Butik: &a%s &8| &2Ambassad: &a%s'
-towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
-towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_town_neutral_tax: '&c &2Fred: &a%s'
+towny_prices_plots: '&c [Ställer in tomter]'
 towny_prices_type_single: '            &2%s: &a%s'
 towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cNation: &6%s'
@@ -1005,9 +1005,9 @@ msg_bankrupt: '&c(Bankrutt)'
 #Added in 0.98
 msg_del_town2: '&bStaden %s togs bort!'
 msg_ruin_town: '&bStaden %s glömdes bort!'
-gui_title_select_plot_type: 'Select PlotType'
-gui_title_no_restrictions: 'No restrictions for this plottype.'
-gui_title_towny_allowedblocks: '%s AllowedBlocks List'
+gui_title_select_plot_type: 'Välj tomttyp'
+gui_title_no_restrictions: 'Inga begränsningar för denna tomttyp.'
+gui_title_towny_allowedblocks: '%s Tillåtna Block-Lista'
 gui_title_towny_wildsblocks: 'Towny VildmarkBlocks Lista'
 gui_title_towny_itemuse: 'Towny ItemUse Lista'
 gui_title_towny_switch: 'Towny Switch List'
@@ -1305,7 +1305,7 @@ msg_res_friend_added_to_list: 'Lade till %s i din vänlista.'
 #Shown when a player removes people from their friends list.
 msg_res_friend_removed_from_list: 'Tog bort %s från din vänlista.'
 #Generic resident freed from jail message.
-msg_resident_unjailed: '%s has been unjailed.'
+msg_resident_unjailed: '%s har blivit frisläppt från fängelset.'
 #Shown when an admin uses /ta toggle devmode.
 msg_admin_toggle_devmode: 'Utvecklarläge: %s'
 #Shown when an admin uses /ta toggle debug.
@@ -1315,9 +1315,9 @@ msg_admin_toggle_townwithdraw: 'Stadens uttag: %s'
 #Shown when an admin uses /ta toggle nationwithdraw
 msg_admin_toggle_nationwithdraw: 'Nation uttag: %s'
 #Shown when claiming a town block for the town.
-msg_process_town_claim: 'Processing Town Claim...'
+msg_process_town_claim: 'Bearbetar stads-claim...'
 #Shown when unclaiming a town block for the town.
-msg_process_town_unclaim: 'Processing Town Unclaim...'
+msg_process_town_unclaim: 'Bearbetar stads-unclaim...'
 #Shown when there is nothing to unclaim.
 msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
 #Given as feedback when /ta checkperm is used.
