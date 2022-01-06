@@ -207,6 +207,29 @@ public class TownyRegenAPI {
 			TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
 
+	public static  void getWorldCoordFromQueueForRegeneration() {
+		for (WorldCoord wc : new ArrayList<>(TownyRegenAPI.getRegenQueueList())) {
+			// We have enough plot chunks regenerating, break out of the loop.
+			if (getPlotChunks().size() >= 20)
+				break;
+			// We have already got this worldcoord regenerating.
+			if (hasActiveRegeneration(wc))
+				continue;
+			// This worldcood is not loaded.
+			if (!wc.getBukkitWorld().isChunkLoaded(BukkitTools.calcChunk(wc.getX()), BukkitTools.calcChunk(wc.getZ())))
+				continue;
+			
+			// This worldCoord isn't actively regenerating, start the regeneration.
+			PlotBlockData plotData = getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorldOrNull()));  
+			if (plotData != null && plotData.getWorldCoord().isLoaded()) {
+				addToActiveRegeneration(plotData);
+				TownyMessaging.sendDebugMsg("Revert on unclaim beginning for " + plotData.getWorldName() + " " + plotData.getX() +"," + plotData.getZ());
+			} else {
+				removeFromRegenQueueList(wc);
+			}
+		}
+	}
+	
 	/*
 	 * Active Revert-On-Unclaims.
 	 */

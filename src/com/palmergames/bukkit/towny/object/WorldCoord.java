@@ -153,7 +153,7 @@ public class WorldCoord extends Coord {
 	}
 
 	/**
-	 * Is the WorldCoord's blocks currently loaded.
+	 * Are the WorldCoord's blocks currently loaded.
 	 * 
 	 * @return true if the server has this WorldCoord loaded.
 	 */
