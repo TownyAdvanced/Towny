@@ -184,7 +184,7 @@ public class TownyRegenAPI {
 	}
 
 	/**
-	 * Adds a WorldCoord to the queue of the revert on unclaim feature.
+	 * Removes a WorldCoord from the queue of the revert on unclaim feature.
 	 * @param wc WorldCoord to add to the queue.
 	 */
 	public static void removeFromRegenQueueList(WorldCoord wc) {
@@ -195,7 +195,7 @@ public class TownyRegenAPI {
 	}
 
 	/**
-	 * Removes a WorldCoord to the queue of the revert on unclaim feature.
+	 * Adds a WorldCoord to the queue of the revert on unclaim feature.
 	 * @param wc WorldCoord to remove from thequeue.
 	 * @param save true to save the regenlist.
 	 */

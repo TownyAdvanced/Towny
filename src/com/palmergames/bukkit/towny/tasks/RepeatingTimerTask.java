@@ -7,6 +7,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.util.BukkitTools;
+
 import java.util.ArrayList;
 
 public class RepeatingTimerTask extends TownyTimerTask {
@@ -51,10 +53,18 @@ public class RepeatingTimerTask extends TownyTimerTask {
 		if (Math.max(1L, TownySettings.getPlotManagementSpeed()) > ++timerCounter)
 			return;
 
-		for (PlotBlockData plotBlockData : TownyRegenAPI.getActivePlotBlockDatas())
-			if (plotBlockData != null && !plotBlockData.restoreNextBlock())
-				TownyRegenAPI.finishPlotBlockData(plotBlockData);
-
+		for (PlotBlockData plotBlockData : TownyRegenAPI.getActivePlotBlockDatas()) {
+			if (plotBlockData != null) {
+				if (!plotBlockData.getWorldCoord().isLoaded()) {
+					TownyRegenAPI.removeFromActiveRegeneration(plotBlockData);
+					TownyMessaging.sendDebugMsg(plotBlockData.getWorldName() + " " + plotBlockData.getX() +"," + plotBlockData.getZ() + " appears to be in an unloaded part of the server, removing from active regeneration.");
+					continue;
+				}
+				if (!plotBlockData.restoreNextBlock()) {
+					TownyRegenAPI.finishPlotBlockData(plotBlockData);
+				}
+			}
+		}
 		timerCounter = 0L;
 	}
 
@@ -66,9 +76,13 @@ public class RepeatingTimerTask extends TownyTimerTask {
 			// We have already got this worldcoord regenerating.
 			if (TownyRegenAPI.hasActiveRegeneration(wc))
 				continue;
+			// This worldcood is not loaded.
+			if (!wc.getBukkitWorld().isChunkLoaded(BukkitTools.calcChunk(wc.getX()), BukkitTools.calcChunk(wc.getZ())))
+				continue;
+			
 			// This worldCoord isn't actively regenerating, start the regeneration.
 			PlotBlockData plotData = TownyRegenAPI.getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorldOrNull()));  
-			if (plotData != null) {
+			if (plotData != null && plotData.getWorldCoord().isLoaded()) {
 				TownyRegenAPI.addToActiveRegeneration(plotData);
 				TownyMessaging.sendDebugMsg("Revert on unclaim beginning for " + plotData.getWorldName() + " " + plotData.getX() +"," + plotData.getZ());
 			} else {

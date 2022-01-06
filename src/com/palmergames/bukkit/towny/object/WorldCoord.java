@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.util.BukkitTools;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -148,6 +150,16 @@ public class WorldCoord extends Coord {
 	 */
 	public boolean isWilderness() {
 		return !hasTownBlock();
+	}
+
+	/**
+	 * Is the WorldCoord's blocks currently loaded.
+	 * 
+	 * @return true if the server has this WorldCoord loaded.
+	 */
+	public boolean isLoaded() {
+
+		return getBukkitWorld().isChunkLoaded(BukkitTools.calcChunk(getX()), BukkitTools.calcChunk(getZ()));
 	}
 
 	/**
