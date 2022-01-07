@@ -588,7 +588,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		case "is_town_public": // %townyadvanced_is_town_public%
 			return resident.hasTown() ? (resident.getTownOrNull().isPublic() ? Translation.of("status_public") : "") : "";
 		case "is_town_open": // %townyadvanced_is_town_open%
-			return resident.hasTown() ? (resident.getTownOrNull().isOpen() ? "YES" : "NO") : "";
+			return resident.hasTown() ? (resident.getTownOrNull().isOpen() ? Translation.of("status_title_open") : "") : "";
 		case "town_board": // %townyadvanced_town_board%
 			return resident.hasTown() ? resident.getTownOrNull().getBoard() : "";
 		case "nation_board": // %townyadvanced_nation_board%
