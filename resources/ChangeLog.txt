@@ -7145,3 +7145,14 @@ v0.92.0.11:
   - Fix OOBE in the towny top command, courtesy of Warriorrrr with PR #5597.
   - Fix /t invite tab completion not handling inviting residents.
     - Closes #5533.
+  - Added forsale placeholder, courtesy of Glare with PR #5603.
+    - Closes #5220.
+  - Add PAPI placeholder for town public/open status, courtesy of benlmyers with PR #5602. (First-Time Contributor!)
+  - New Placeholder: %townyadvanced_player_location_plot_forsale% - Shows For Sale lang string when a plot is for sale.
+  - New Placeholder: %townyadvanced_is_town_public% - Shows (Public) lang string when the player's town is public.
+  - New Placeholder: %townyadvanced_is_town_open% - Shows (Open) lang string when the player's town is open. 
+  - Add locale info message, courtesy of GNosii with PR #5599.
+  - New Config Option: resident_settings.is_showing_locale_message
+    - Default: true
+    - If true, players who join the server for the first time will be informed about their locale, and about Towny translatable system.
+  - Bump language files to 0.140.
