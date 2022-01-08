@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.139
+version: 0.140
 language: norwegian
 author: Nectuz, Walbern
 website: 'http://townyadvanced.github.io/'
@@ -1427,3 +1427,6 @@ msg_err_your_town_cannot_afford_unclaim: 'Byen din har ikke råd til å fjerne d
 msg_your_town_paid_x_to_unclaim: 'Din by betalte %s for å fjerne tomten.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Å fjerne denne tomten vil koste %s, vil du fortsette?'
+#Added in 0.140
+#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
+msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
