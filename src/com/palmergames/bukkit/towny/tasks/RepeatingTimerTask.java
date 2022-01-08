@@ -45,18 +45,10 @@ public class RepeatingTimerTask extends TownyTimerTask {
 		if (Math.max(1L, TownySettings.getPlotManagementSpeed()) > ++timerCounter)
 			return;
 
-		for (PlotBlockData plotBlockData : TownyRegenAPI.getActivePlotBlockDatas()) {
-			if (plotBlockData != null) {
-				if (!plotBlockData.getWorldCoord().isLoaded()) {
-					TownyRegenAPI.removeFromActiveRegeneration(plotBlockData);
-					TownyMessaging.sendDebugMsg(plotBlockData.getWorldName() + " " + plotBlockData.getX() +"," + plotBlockData.getZ() + " appears to be in an unloaded part of the server, removing from active regeneration.");
-					continue;
-				}
-				if (!plotBlockData.restoreNextBlock()) {
-					TownyRegenAPI.finishPlotBlockData(plotBlockData);
-				}
-			}
-		}
+		for (PlotBlockData plotBlockData : TownyRegenAPI.getActivePlotBlockDatas())
+			if (plotBlockData != null && !plotBlockData.restoreNextBlock())
+				TownyRegenAPI.finishPlotBlockData(plotBlockData);
+
 		timerCounter = 0L;
 	}
 

@@ -215,13 +215,15 @@ public class TownyRegenAPI {
 			// We have already got this worldcoord regenerating.
 			if (hasActiveRegeneration(wc))
 				continue;
-			// This worldcood is not loaded.
-			if (!wc.getBukkitWorld().isChunkLoaded(BukkitTools.calcChunk(wc.getX()), BukkitTools.calcChunk(wc.getZ())))
-				continue;
 			
 			// This worldCoord isn't actively regenerating, start the regeneration.
-			PlotBlockData plotData = getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorldOrNull()));  
-			if (plotData != null && plotData.getWorldCoord().isLoaded()) {
+			PlotBlockData plotData = getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorldOrNull()));
+			if (plotData != null) {
+				// Load the chunks if they are unloaded.
+				plotData.getWorldCoord().getChunks().stream()
+					.filter(chunk -> !chunk.isLoaded())
+					.forEach(chunk -> chunk.load());
+
 				addToActiveRegeneration(plotData);
 				TownyMessaging.sendDebugMsg("Revert on unclaim beginning for " + plotData.getWorldName() + " " + plotData.getX() +"," + plotData.getZ());
 			} else {

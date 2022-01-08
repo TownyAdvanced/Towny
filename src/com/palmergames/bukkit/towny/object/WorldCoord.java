@@ -3,15 +3,19 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.util.BukkitTools;
+
+import io.papermc.lib.PaperLib;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class WorldCoord extends Coord {
@@ -153,13 +157,37 @@ public class WorldCoord extends Coord {
 	}
 
 	/**
-	 * Are the WorldCoord's blocks currently loaded.
+	 * Returns a list of Chunks, in which the WorldCoord exists.
+	 * When the server town_block_size is less than or equal to 16 this list will be a single Chunk.
+	 * When the server town_block_size is greater than 16 the list will contain more than one Chunk.
 	 * 
-	 * @return true if the server has this WorldCoord loaded.
+	 * @return List of Chunks.
 	 */
-	public boolean isLoaded() {
-
-		return getBukkitWorld().isChunkLoaded(BukkitTools.calcChunk(getX()), BukkitTools.calcChunk(getZ()));
+	public List<Chunk> getChunks() {
+		List<Chunk> chunks = new ArrayList<>();
+		if (getCellSize() > 16) {
+			// Dealing with a townblocksize greater than 16, we will have multiple chunks per WorldCoord.
+			int side = Math.round(getCellSize() / 16);
+			for (int x = 0; x <= side; x++) {
+				for (int z = 0; z <= side; z++) {
+					PaperLib.getChunkAtAsync(getSubCorner(x, z)).thenAccept(chunk -> chunks.add(chunk));
+				}
+			}
+		} else {
+			PaperLib.getChunkAtAsync(getCorner()).thenAccept(chunk -> chunks.add(chunk));
+		}
+		return chunks;
+	}
+	
+	// Used to get a location at the corner of a WorldCoord.
+	private Location getCorner() {
+		Location loc = new Location(getBukkitWorld(), getX() * getCellSize(), 0, getZ() * getCellSize());
+		return loc;
+	}
+	
+	// Used to get a location representing sub coordinates of a WorldCoord, to ease the lookup of a corresponding Chunk. 
+	private Location getSubCorner(int x, int z) {
+		return getCorner().add(x * 16, 0, z * 16);
 	}
 
 	/**
