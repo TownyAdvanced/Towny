@@ -690,7 +690,7 @@ number_of_residents: '(Antal invånare)'
 number_of_towns: '(Antal städer)'
 town_name: 'Stadsnamn - (Invånare)'
 nation_name: 'Nationsnamn - (Invånare)'
-refund_message: '&aRefunded %s for unclaiming %s townblocks.'
+refund_message: '&aÅterbetalade $%s för att unclaima %s stadsblock.'
 msg_bankrupt_town_multiple: '&bFöljande städer hade inte råd med underhållet och har upplösts: '
 msg_bankrupt_nation_multiple: '&bFöljande nationer hade inte råd med sitt underhåll och har upplösts: '
 msg_couldnt_pay_tax: '&b%skunde inte betala skatt och blev sparkad från %s.'
@@ -986,8 +986,8 @@ towny_prices_price_plot: '&c    [Price] &2Plot: &a%s &8| &2Utpost: &a%s'
 towny_prices_price_shop: '&c            &2Butik: &a%s &8| &2Ambassad: &a%s'
 towny_prices_taxes_plot: '&c    [Taxes]    &2Invånare: &a%s &8| &2Plot: &a%s'
 towny_prices_taxes_shop: '&c            &2Butik: &a%s &8| &2Ambassad: &a%s'
-towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
-towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_town_neutral_tax: '&c &2Fred: &a%s'
+towny_prices_plots: '&c [Ställer in tomter]'
 towny_prices_type_single: '            &2%s: &a%s'
 towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cNation: &6%s'
@@ -1005,9 +1005,9 @@ msg_bankrupt: '&c(Bankrutt)'
 #Added in 0.98
 msg_del_town2: '&bStaden %s togs bort!'
 msg_ruin_town: '&bStaden %s glömdes bort!'
-gui_title_select_plot_type: 'Select PlotType'
-gui_title_no_restrictions: 'No restrictions for this plottype.'
-gui_title_towny_allowedblocks: '%s AllowedBlocks List'
+gui_title_select_plot_type: 'Välj tomttyp'
+gui_title_no_restrictions: 'Inga begränsningar för denna tomttyp.'
+gui_title_towny_allowedblocks: '%s Tillåtna Block-Lista'
 gui_title_towny_wildsblocks: 'Towny VildmarkBlocks Lista'
 gui_title_towny_itemuse: 'Towny ItemUse Lista'
 gui_title_towny_switch: 'Towny Switch List'
@@ -1305,7 +1305,7 @@ msg_res_friend_added_to_list: 'Lade till %s i din vänlista.'
 #Shown when a player removes people from their friends list.
 msg_res_friend_removed_from_list: 'Tog bort %s från din vänlista.'
 #Generic resident freed from jail message.
-msg_resident_unjailed: '%s has been unjailed.'
+msg_resident_unjailed: '%s har blivit frisläppt från fängelset.'
 #Shown when an admin uses /ta toggle devmode.
 msg_admin_toggle_devmode: 'Utvecklarläge: %s'
 #Shown when an admin uses /ta toggle debug.
@@ -1315,115 +1315,115 @@ msg_admin_toggle_townwithdraw: 'Stadens uttag: %s'
 #Shown when an admin uses /ta toggle nationwithdraw
 msg_admin_toggle_nationwithdraw: 'Nation uttag: %s'
 #Shown when claiming a town block for the town.
-msg_process_town_claim: 'Processing Town Claim...'
+msg_process_town_claim: 'Bearbetar stads-claim...'
 #Shown when unclaiming a town block for the town.
-msg_process_town_unclaim: 'Processing Town Unclaim...'
+msg_process_town_unclaim: 'Bearbetar stads-unclaim...'
 #Shown when there is nothing to unclaim.
-msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
+msg_err_nothing_to_unclaim: 'Inget att unclaima!'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: 'Permission True.'
+msg_perm_true: 'Behörighet Sant.'
 #Given as feedback when /ta checkperm is used.
-msg_err_perm_false: 'Permission False.'
+msg_err_perm_false: 'Behörighet Falsk.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+status_towny_map_town_line: '&2Stad: &a%s &7| &2Ägare: &a%s'
 #Shown on /towny version
 msg_towny_version: '&2Towny Version: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
+msg_admin_blocked_login: '&2En spelare som använder IP-adressen &c%s &2försökte logga in med ett kontonamn %s vilket kan skada din servers ekonomi, men förhindrades av Towny. Överväg att förbjuda denna IP-adress!'
 #Shown during resident purge
-msg_scanning_for_old_residents: 'Scanning for old residents...'
+msg_scanning_for_old_residents: 'Skannar efter gamla invånare...'
 #Shown during resident purge
-msg_deleting_resident: 'Deleting resident: %s.'
+msg_deleting_resident: 'Raderar invånare: %s.'
 #Shown during resident purge
-msg_purge_complete: 'Resident purge complete: %s deleted.'
+msg_purge_complete: 'Rensning av invånare klar: %s borttagna.'
 #Message to the Town, shown when a town is given bonus blocks.
-msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
+msg_you_have_been_given_bonus_blocks: 'Du har fått %s bonus stadsblock.'
 #Message shown when a town cannot purchase any more bonus blocks.
-msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Din stad kan inte köpa fler bonus block. Maximalt antal har uppnåtts.'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
-msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
+msg_err_capital_cannot_be_peaceful: 'Huvudstäder kan inte växla fredlig status.'
 #Message shown as feedback for /t toggle nationzone command.
-msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
+msg_changed_nationzone: 'Nationens zon omgivande staden är nu %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
-msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
+msg_err_your_town_has_no_nationzone_to_toggle: 'Din stad har ingen Nationzon att växla!'
 #Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
-towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
+towny_prices_nation_upkeep_based_on: '&7Daglig nationskostnad är baserad på&a %s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
-towny_prices_upkeep_num_towns: 'number of towns.'
+towny_prices_upkeep_num_towns: 'antal städer.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
-towny_prices_upkeep_nation_level: 'nation level (num residents.)'
+towny_prices_upkeep_nation_level: 'nationsnivå (antal invånare.)'
 #Added in 0.130
 #Jail causes
-msg_jailed_mayor: 'Jailed by mayor.'
+msg_jailed_mayor: 'Fängslad av borgmästare.'
 #Jail causes
-msg_jailed_outlaw: 'Killed as an outlaw.'
+msg_jailed_outlaw: 'Dödad som en laglös.'
 #Jail causes
-msg_jailed_war: 'Prisoner of War.'
+msg_jailed_war: 'Krigsfånge.'
 #Jail handbook messages
-msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
+msg_jailed_handbook_1: 'Ser ut som om du har blivit fängslad, av anledningen %s'
 #Jail handbook messages
-msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
+msg_jailed_handbook_2: 'Det var väl typiskt. Ja, vad kan du göra åt det? Här är några användbara tips för dig medan du sitter av ditt straff.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
+msg_jailed_handbook_3: 'Du har fängslats i %s timmar. Genom att avtjäna din dom blir du fri.'
 #Jail handbook messages
-msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
+msg_jailed_handbook_4_can: 'Du kan fly från fängelse genom att lämna din stad genom att använda /lämna staden''.'
 #Jail handbook messages
-msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
+msg_jailed_handbook_4_cant: 'Medan du är fängslad kommer du inte att kunna lämna din stad för att fly fängelse.'
 #Jail handbook messages
-msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
+msg_jailed_handbook_bail_1: 'Du kan befrias från fängelse genom att betala borgen med hjälp av ''/res jail paybail''.'
 #Jail handbook messages
-msg_jailed_handbook_bail_2: 'Bail will cost %s.'
+msg_jailed_handbook_bail_2: 'Borgen kommer att kosta %s.'
 #Jail handbook messages
-msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
+msg_jailed_handbook_5: 'Om du måste framhärda och göra ansträngningar för att fly, om du tar dig till vildmarken kommer du också att förtjäna din frihet.'
 #Jail handbook messages
-msg_jailed_handbook_6: 'But don''t die before you reach the wilderness or you''ll end up right back in jail.'
+msg_jailed_handbook_6: 'Men dö inte innan du når vildmarken eller så hamnar du direkt i fängelset igen.'
 #Jail handbook messages
-msg_jailed_teleport: 'Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you''ve just got to get a hold of some.'
+msg_jailed_teleport: 'Lyckligtvis är enderpärlor och körfrukt tillåtna för att hjälpa dig att fly, nu måste du bara få tag på några.'
 #Jail handbook messages
-msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your countrymen can reduce the jail plot''s HP to 0, or if the town you are jailed in is removed from the war.'
+msg_jailed_war_prisoner: 'Som krigsfånge kommer du att befrias om dina landsmän kan minska fängelset HP till 0, eller om staden du sitter fängslad i tas bort från kriget.'
 #Jail handbook title
-msg_jailed_title: 'So you''ve been jailed :('
+msg_jailed_title: 'Så du har blivit fängslad :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
 #Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
-msg_error_town_has_no_allies: 'Town has no allies to list.'
+msg_error_town_has_no_allies: 'Staden har inga allierade att lista.'
 #Message shown when there are no enemies to list in /town enemylist.
-msg_error_town_has_no_enemies: 'Town has no enemies to list.'
+msg_error_town_has_no_enemies: 'Staden har inga fiender att lista.'
 #Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
 #Added in 0.133
 #Message shown when a confirmation times out.
-msg_confirmation_timed_out: 'Confirmation Timed Out.'
+msg_confirmation_timed_out: 'Tidsgränsen för bekräftelsen löpte ut.'
 #Added in 0.134
-tc_player_channel_sound_muted: 'The channel sound has been muted'
-tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
+tc_player_channel_sound_muted: 'Kanalljudet har tystats'
+tc_player_channel_sound_unmuted: 'Kanalljudet har avtystats'
 #Added in 0.135
-msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
+msg_cant_toggle_pvp_outsider_in_plot: 'Det finns en utomstående i din stad, du kan inte ändra din pvp-status!'
 #Added in 0.136
-msg_view_on_web: 'Click to view on the web.'
+msg_view_on_web: 'Klicka för att visa på webben.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
-town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
+town1_has_merged_with_town2: '&6Staden %s har gått med på att slås samman med den segrande staden %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
-status_neutrality_cost: 'Neutrality Cost:'
+status_neutrality_cost: 'Neutralitet Kostnad:'
 #Added in 0.138
 #Line 1 of the givebonus warning.
-msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+msg_ptw_warning_1: 'Om du har betalat några riktiga pengar för dessa stadsblock var vänlig att förstå: servern du spelar på strider mot Minecraft EULA och Towny-licensen.'
 #Line 2 of the givebonus warning.
-msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchaseable with real money.'
+msg_ptw_warning_2: 'Towny-teamet hade aldrig för avsikt att stadsblock skulle köpas med riktiga pengar.'
 #Line 3 of the givebonus warning.
-msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
+msg_ptw_warning_3: 'Om du betalade riktiga pengar bör du överväga att spela på en Towny server som respekterar önskemålen från Towny Team.'
 #Message shown when a town invites a player to join, and that town has a nation.
-you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+you_have_been_invited_to_join3: 'Du har blivit inbjuden att gå med i %s&9 (Nation. %s&9)'
 #Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
-msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+msg_err_your_town_cannot_afford_unclaim: 'Din stad har inte råd med kostnaden för att unclaima denna mark. %s krävs.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
-msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+msg_your_town_paid_x_to_unclaim: 'Din stad betalade %s för att ta bort marken.'
 #Confirmation message shown when a player will unclaim land that costs money.
-confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+confirmation_unclaiming_costs: 'Att unclaima denna mark kommer kosta %s, vill du fortsätta?'
