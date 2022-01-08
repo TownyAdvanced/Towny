@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.139
+version: 0.140
 language: Romanian
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1427,3 +1427,6 @@ msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to u
 msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+#Added in 0.140
+#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
+msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
