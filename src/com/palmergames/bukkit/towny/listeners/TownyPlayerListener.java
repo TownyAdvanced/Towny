@@ -118,19 +118,28 @@ public class TownyPlayerListener implements Listener {
 
 		// Safe Mode Join Messages
 		if (plugin.isError()) {
-			Translatable tipMsg = Translatable.of("msg_safe_mode_player");
-
-			// Operator or an admin.
-			if (player.isOp() || player.hasPermission("towny.admin"))
-				tipMsg = Translatable.of("msg_safe_mode_admin");
-
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_safe_mode_base").append(tipMsg.forLocale(player)));
+			sendSafeModeMessage(player);
 			return;
 		}
 		
 		// Perform login code in it's own thread to update Towny data.
 		if (BukkitTools.scheduleSyncDelayedTask(new OnPlayerLogin(Towny.getPlugin(), player), 0L) == -1) {
 			TownyMessaging.sendErrorMsg("Could not schedule OnLogin.");
+		}
+	}
+
+	private void sendSafeModeMessage(Player player) {
+		try {
+			Translatable tipMsg = player.isOp() || player.hasPermission("towny.admin")
+				? Translatable.of("msg_safe_mode_admin")
+				: Translatable.of("msg_safe_mode_player");
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_safe_mode_base"), tipMsg);
+		} catch (Exception e) {
+			// Safemode is affecting Towny's ability to use Transltables.
+			String msg = player.isOp() || player.hasPermission("towny.admin") 
+				? "Check the server's console for more information."
+				: "Tell an admin to check the server's console.";
+			TownyMessaging.sendErrorMsg(player, "[Error] Towny is locked in Safe Mode due to an error! " + msg);
 		}
 	}
 
