@@ -132,8 +132,8 @@ public class AreaSelectionUtil {
 				 * Select everything possible in a rectangle shape.
 				 */
 
-				r = Math.min(r, TownySettings.getMaxClaimRadiusValue()); 
-					
+				if (TownySettings.getMaxClaimRadiusValue() > 0) 
+					r = Math.min(r, TownySettings.getMaxClaimRadiusValue());
 
 			} else {
 			
