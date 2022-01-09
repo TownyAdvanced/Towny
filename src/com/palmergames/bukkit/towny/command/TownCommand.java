@@ -3025,7 +3025,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static void townRename(Player player, Town town, String newName) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		
+
+		// Check if the player has to wait because of recently renaming their town.
+		String uuid = town.getUUID().toString();
+		if (CooldownTimerTask.hasCooldown(uuid, CooldownType.TOWN_RENAME)) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_you_must_wait_x_seconds_before_renaming_your_town", CooldownTimerTask.getCooldownRemaining(uuid, CooldownType.TOWN_RENAME)));
+			return;
+		}
+
+		// Fire a cancellable event.
 		TownPreRenameEvent event = new TownPreRenameEvent(town, newName);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
@@ -3033,6 +3041,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
+		// Put a cooldown on renaming the town. 
+		CooldownTimerTask.addCooldownTimer(uuid, CooldownType.TOWN_RENAME);
+
+		// Rename the town.
 		try {
 			townyUniverse.getDataSource().renameTown(town, newName);
 			town = townyUniverse.getTown(newName);

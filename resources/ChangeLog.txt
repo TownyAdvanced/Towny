@@ -7157,3 +7157,5 @@ v0.92.0.11:
     - If true, players who join the server for the first time will be informed about their locale, and about Towny translatable system.
   - Bump language files to 0.140.
   - Fix safe mode messages not appearing in game when the config is the reason for safe mode. 
+  - Add a cooldown on town renaming, to prevent townblocks getting out of sorts.
+    - Closes #5600.
