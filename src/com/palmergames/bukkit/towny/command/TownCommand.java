@@ -3827,7 +3827,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							throw new TownyException(Translatable.of("msg_already_claimed_1", key));
 
 						// Select a single WorldCoord using the AreaSelectionUtil.
-						selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0]);
+						selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0], true);
 						outpost = true;
 					} else
 						throw new TownyException(Translatable.of("msg_outpost_disable"));
@@ -3841,7 +3841,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
 					// Select the area, can be one or many.
-					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split);
+					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split, true);
 					
 					if ((selection.size() > 1) && (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode())))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));

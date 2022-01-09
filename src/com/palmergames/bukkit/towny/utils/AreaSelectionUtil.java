@@ -35,6 +35,21 @@ public class AreaSelectionUtil {
 	 * @throws TownyException - Thrown when invalid subcommands are given.
 	 */
 	public static List<WorldCoord> selectWorldCoordArea(TownBlockOwner owner, WorldCoord pos, String[] args) throws TownyException {
+		return selectWorldCoordArea(owner, pos, args, false);
+	}
+
+	/**
+	 * Method to select a List&lt;WorldCoord&gt; of coordinates. 
+	 * Area claims can be either circular or rectangular.
+	 * 
+	 * @param owner - {@link com.palmergames.bukkit.towny.object.TownBlockOwner} making the selection. 
+	 * @param pos - WorldCoord where the selection is being made from.
+	 * @param args - Subcommands like rect, circle, auto or #.
+	 * @param claim - This selection will result in claiming for a resident or town.
+	 * @return List&lt;WorldCoord&gt; of {@link com.palmergames.bukkit.towny.object.WorldCoord}.
+	 * @throws TownyException - Thrown when invalid subcommands are given.
+	 */
+	public static List<WorldCoord> selectWorldCoordArea(TownBlockOwner owner, WorldCoord pos, String[] args, boolean claim) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
 
@@ -47,24 +62,27 @@ public class AreaSelectionUtil {
 		} else {
 			
 			/*
-			 * First, determine what is available to be claimed.
+			 * First, determine what is available to be claimed, if this selection is for claiming land.
+			 * Besides claiming land this method is used to unclaim land, as well as to set plots forsale/notforsale. 
+			 * When this is not a claim we're supplying the largest amount possible to be selected.
+			 * When it is a claim, we're starting from 0 and using what the town or resident is able to claim.
 			 */
-			int available = 0;
-			if (owner instanceof Town) {
-				Town town = (Town) owner;
-				available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
-			} else if (owner instanceof Resident) {
-				available = TownySettings.getMaxResidentPlots((Resident) owner);
+			int available = claim ? 0 : 1009;
+			if (claim) {
+				if (owner instanceof Town town) {
+					available = TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size();
+				} else if (owner instanceof Resident resident) {
+					available = TownySettings.getMaxResidentPlots(resident) - resident.getTownBlocks().size();
+				}
 			}
-			
 			/*
 			 * Second, handle different subcommands for /{command} {claim|unclaim} {rect|circle|auto|#} {#}
 			 */
 			if (args.length > 1) { // Has to be /{command} {claim|unclaim} {rect|circle} {auto|#}
 				if (args[0].equalsIgnoreCase("rect")) {
-					out = selectWorldCoordAreaRect(available, pos, StringMgmt.remFirstArg(args));
+					out = selectWorldCoordAreaRect(available, pos, StringMgmt.remFirstArg(args), claim);
 				} else if (args[0].equalsIgnoreCase("circle")) {
-					out = selectWorldCoordAreaCircle(available, pos, StringMgmt.remFirstArg(args));
+					out = selectWorldCoordAreaCircle(available, pos, StringMgmt.remFirstArg(args), claim);
 				} else if (args.length == 3 && args[1].startsWith("x") && args[2].startsWith("z")) {
 					// "/plot claim world x# z#" was run by clicking on the towny map.
 					out.add(new WorldCoord(args[0], Integer.parseInt(args[1].replace("x","")), Integer.parseInt(args[2].replace("z",""))));
@@ -72,12 +90,12 @@ public class AreaSelectionUtil {
 					throw new TownyException(Translatable.of("msg_err_invalid_property", StringMgmt.join(args, " ")));
 				}
 			} else if (args[0].equalsIgnoreCase("auto")) { // Is /{command} {claim|unclaim} {auto}
-				out = selectWorldCoordAreaRect(available, pos, args);
+				out = selectWorldCoordAreaRect(available, pos, args, claim);
 			} else { // Is /{command} {claim|unclaim} #
 				try {
 					Integer.parseInt(args[0]);
 					// Treat as rect to serve for backwards capability.
-					out = selectWorldCoordAreaRect(available, pos, args);
+					out = selectWorldCoordAreaRect(available, pos, args, claim);
 				} catch (NumberFormatException e) {
 					throw new TownyException(Translatable.of("msg_err_invalid_property", args[0]));
 				}
@@ -93,10 +111,11 @@ public class AreaSelectionUtil {
 	 * @param available - How many TownBlocks the TownBlockOwner has available to claim.
 	 * @param pos - WorldCoord where the selection is centered at.
 	 * @param args - subcommand arguments like auto or a number.
+	 * @param claim - This selection will result in claiming for a resident or town.
 	 * @return List&lt;WorldCoord&gt; of {@link com.palmergames.bukkit.towny.object.WorldCoord}.
 	 * @throws TownyException - Thrown when invalid radii are given.
 	 */
-	private static List<WorldCoord> selectWorldCoordAreaRect(int available, WorldCoord pos, String[] args) throws TownyException {
+	private static List<WorldCoord> selectWorldCoordAreaRect(int available, WorldCoord pos, String[] args, boolean claim) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
 		if (args.length > 0) {
@@ -113,8 +132,8 @@ public class AreaSelectionUtil {
 				 * Select everything possible in a rectangle shape.
 				 */
 
-				if (TownySettings.getMaxClaimRadiusValue() > 0) 
-					r = Math.min(r, TownySettings.getMaxClaimRadiusValue());
+				r = Math.min(r, TownySettings.getMaxClaimRadiusValue()); 
+					
 
 			} else {
 			
@@ -143,6 +162,7 @@ public class AreaSelectionUtil {
 				}
 				// Claim Radius will always overshoot by 1
 				r = claimRadius - 1;
+				available = needed + 1;
 			}
 
 			/*
@@ -168,8 +188,9 @@ public class AreaSelectionUtil {
 			throw new TownyException(Translatable.of("msg_err_invalid_radius"));
 		}
 		
-		// We remove the first pos as it will always be the coord the player is standing in.
-		out.remove(0);
+		// We remove the first pos if this is a claim and it is not wilderness.
+		if (claim && !pos.isWilderness())
+			out.remove(0);
 
 		return out;
 	}
@@ -180,10 +201,11 @@ public class AreaSelectionUtil {
 	 * @param available - How many TownBlocks the TownBlockOwner has available to claim.
 	 * @param pos - WorldCoord where the selection is centered at.
 	 * @param args - subcommand arguments like auto or a number.
+	 * @param claim - This selection will result in claiming for a resident or town.
 	 * @return List&lt;WorldCoord&gt; of {@link com.palmergames.bukkit.towny.object.WorldCoord}.
 	 * @throws TownyException - Thrown when invalid radii are given.
 	 */
-	private static List<WorldCoord> selectWorldCoordAreaCircle(int available, WorldCoord pos, String[] args) throws TownyException {
+	private static List<WorldCoord> selectWorldCoordAreaCircle(int available, WorldCoord pos, String[] args, boolean claim) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
 		if (args.length > 0) {
@@ -258,6 +280,10 @@ public class AreaSelectionUtil {
 		} else {
 			throw new TownyException(Translatable.of("msg_err_invalid_radius"));
 		}
+		
+		// We remove the first pos if this is a claim and it is not wilderness.
+		if (claim && !pos.isWilderness())
+			out.remove(0);
 
 		return out;
 	}
