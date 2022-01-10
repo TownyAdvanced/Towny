@@ -192,8 +192,8 @@ msg_not_own_area: '&c選択した地域を所有していません。'
 msg_not_own_place: '&bこの場所は誰も所有していません。'
 msg_area_not_own: '&cこのエリアはあなたのものではありません。'
 msg_area_not_recog: '&cこのエリアは町では認識されていません。'
-msg_specify_name: '&b町名を指定'
-msg_specify_nation_name: '&b国名を指定'
+msg_specify_name: '&b町名を指定してください。'
+msg_specify_nation_name: '&b国名を指定してください。'
 msg_peasant_right: '&b農民は指導者を王位に就かせる権利がありません。'
 msg_cost_spawn: '&bあなたは町のスポーンにテレポートするために %s 請求されました。'
 msg_cost_spawn_refund: '&b町のスポーンのの使用料が返金されました。'
@@ -661,7 +661,7 @@ adjustable: 'Adjustable'
 #Added in 0.48:
 msg_no_funds_new_town2: '&c%s can''t afford to settle a new town here, which costs %s.'
 msg_no_funds_new_nation2: '&cこの町には、新しく国を作るためのお金がありません。国を作るたの費用は%sです。'
-msg_no_funds_claim2: '&cTown cannot afford to claim %s town blocks costing %s. Add %s to the town bank using /t deposit %s'
+msg_no_funds_claim2: '&cこの町には、%sのタウンブロックを購入するお金がありません。/t deposit %sを使用して町の銀行に%s追加してください。'
 msg_err_cant_afford_blocks2: '&cTown cannot afford to claim %s town blocks costing %s. Add %s to the town bank using /t deposit %s'
 msg_err_not_enough_variables: '&c変数が足りません: '
 nation_rechecked_by_admin: '&bNation %s town distances have been successfully rechecked.'
@@ -1108,7 +1108,7 @@ msg_command_limited: 'このコマンドは自分のプロット内でのみ使�
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Claimed at:'
 #Added in 0.105
-msg_wilderness_use_x_in_all_worlds: 'Wilderness use turned %s in all worlds.'
+msg_wilderness_use_x_in_all_worlds: 'Wildernessが%sになりました。'
 msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
 #Added in 0.106
 msg_command_outsider_blocked: '%sに住んでいないため、そのコマンドを実行することはできません。'
