@@ -7159,3 +7159,7 @@ v0.92.0.11:
   - Fix safe mode messages not appearing in game when the config is the reason for safe mode. 
   - Add a cooldown on town renaming, to prevent townblocks getting out of sorts.
     - Closes #5600.
+  - Fix AreaSelectionUtil treating every selection like it will be for claiming.
+    - Fixes resident claim limit not accounting for townblocks already claimed.
+    - Fixes /ta unclaim passing in a null TownBlockOwner meaning the available value was left at 0.
+    - Closes #5606.
