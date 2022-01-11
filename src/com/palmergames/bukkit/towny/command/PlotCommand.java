@@ -1268,7 +1268,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (TownySettings.getPVPCoolDownTime() > 0)
 							CooldownTimerTask.addCooldownTimer(groupBlock.getWorldCoord().toString(), CooldownType.PVP);
 						
-						endingMessage = Translatable.of("msg_changed_pvp", "Plot Group", groupBlock.getPermissions().pvp ? Translatable.of("enabled") : Translatable.of("disabled"));
+						endingMessage = Translatable.of("msg_changed_pvp", Translatable.of("msg_the_plot_group"), groupBlock.getPermissions().pvp ? Translatable.of("enabled") : Translatable.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("explosion")) {
 						// Make sure we are allowed to set these permissions.
@@ -1282,7 +1282,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						groupBlock.getPermissions().explosion = choice.orElse(!groupBlock.getPermissions().explosion);
-						endingMessage = Translatable.of("msg_changed_expl", "the Plot Group", groupBlock.getPermissions().explosion ? Translatable.of("enabled") : Translatable.of("disabled"));
+						endingMessage = Translatable.of("msg_changed_expl", Translatable.of("msg_the_plot_group"), groupBlock.getPermissions().explosion ? Translatable.of("enabled") : Translatable.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("fire")) {
 						// Make sure we are allowed to set these permissions.
@@ -1296,7 +1296,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 						
 						groupBlock.getPermissions().fire = choice.orElse(!groupBlock.getPermissions().fire);
-						endingMessage = Translatable.of("msg_changed_fire", "the Plot Group", groupBlock.getPermissions().fire ? Translatable.of("enabled") : Translatable.of("disabled"));
+						endingMessage = Translatable.of("msg_changed_fire", Translatable.of("msg_the_plot_group"), groupBlock.getPermissions().fire ? Translatable.of("enabled") : Translatable.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("mobs")) {
 						// Make sure we are allowed to set these permissions.
@@ -1310,7 +1310,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						groupBlock.getPermissions().mobs = choice.orElse(!groupBlock.getPermissions().mobs);
-						endingMessage = Translatable.of("msg_changed_mobs", player, "the Plot Group", groupBlock.getPermissions().mobs ? Translatable.of("enabled") : Translatable.of("disabled"));
+						endingMessage = Translatable.of("msg_changed_mobs", Translatable.of("msg_the_plot_group"), groupBlock.getPermissions().mobs ? Translatable.of("enabled") : Translatable.of("disabled"));
 
 					} else {
 						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", "plot"));
