@@ -713,7 +713,7 @@ public class TownyEntityListener implements Listener {
 
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), mat));
-			} else {
+			} else if (remover instanceof Entity) {
 				/*
 				 * Probably a skeleton, cancel the break if it is in a town.
 				 */
