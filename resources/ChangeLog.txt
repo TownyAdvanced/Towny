@@ -7165,3 +7165,4 @@ v0.92.0.11:
     - Closes #5606.
 0.97.5.10:
   - Fix /plot group toggle mobs message, courtesy of Warriorrrr with PR #5612.
+  - Remove global registration message, courtesy of Warriorrrr with PR #5614.
