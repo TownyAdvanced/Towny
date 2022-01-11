@@ -105,7 +105,7 @@ public class TranslationLoader {
 	
 	/**
 	 * Used internally by Towny after the TranslationLoadEvent.
-	 * @param _translations Map&ltString, Map&lt;String, String&gt;&gt; Translations to set.
+	 * @param translations Map&ltString, Map&lt;String, String&gt;&gt; Translations to set.
 	 */
 	void setTranslations(Map<String, Map<String, String>> translations) {
 		newTranslations = translations;

@@ -27,7 +27,7 @@ public final class Translation {
 	private Translation() {}
 	
 	private static Map<String, Map<String, String>> translations = new HashMap<>();
-	private static Locale defaultLocale;
+	private static Locale defaultLocale = new Locale("en", "US"); // en-US here by default, in case of safe mode happening before translations are loaded.
 	
 	public static void loadTranslationRegistry() {
 		translations.clear();
