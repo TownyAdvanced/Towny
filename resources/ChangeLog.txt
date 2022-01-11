@@ -7163,3 +7163,5 @@ v0.92.0.11:
     - Fixes resident claim limit not accounting for townblocks already claimed.
     - Fixes /ta unclaim passing in a null TownBlockOwner meaning the available value was left at 0.
     - Closes #5606.
+0.97.5.10:
+  - Fix /plot group toggle mobs message, courtesy of Warriorrrr with PR #5612.
