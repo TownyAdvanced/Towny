@@ -2768,10 +2768,6 @@ public class TownySettings {
 	public static boolean isNationSpawnOnlyAllowedInCapital() { 
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN);
 	}
-
-	public static boolean isShowingRegistrationMessage() {
-		return getBoolean(ConfigNodes.RES_SETTING_IS_SHOWING_WELCOME_MESSAGE);
-	}
 	
 	public static int getMaxTownsPerNation() {
 		return getInt(ConfigNodes.GNATION_SETTINGS_MAX_TOWNS_PER_NATION);
