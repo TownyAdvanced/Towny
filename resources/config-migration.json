@@ -187,5 +187,15 @@
         "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_BLOCKS"
       }
     ]
+  },
+  {
+    "version": "0.97.5.10",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.mob_types",
+        "value": ",Hanging"
+      }
+    ]
   }
 ]

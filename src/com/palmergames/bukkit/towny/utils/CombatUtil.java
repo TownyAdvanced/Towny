@@ -269,8 +269,8 @@ public class CombatUtil {
 			     * Prevents projectiles fired by non-players harming non-player entities.
 			     * Could be a monster or it could be a dispenser.
 			     */
-				if (projectileAttacker != null) {
-					return true;	
+				if (projectileAttacker != null && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
+					return true;
 				}
 
 				/*
