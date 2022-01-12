@@ -32,6 +32,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -3122,6 +3123,17 @@ public class TownySettings {
 
 	public static boolean isShowingLocaleMessage() {
 		return getBoolean(ConfigNodes.RES_SETTING_IS_SHOWING_LOCALE_MESSAGE);
+	}
+	
+	public static boolean isLanguageEnabled(@NotNull String locale) {
+		if (getString(ConfigNodes.ENABLED_LANGUAGES).equals("*"))
+			return true;
+
+		List<String> enabledLanguages = new ArrayList<>();
+		for (String string : getStrArr(ConfigNodes.ENABLED_LANGUAGES))
+			enabledLanguages.add(string.toLowerCase(Locale.ROOT).replaceAll("-", "_").replaceAll(".yml", ""));
+
+		return enabledLanguages.contains(locale.toLowerCase(Locale.ROOT));
 	}
 }
 

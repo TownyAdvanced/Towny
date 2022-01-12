@@ -5,16 +5,18 @@ public enum ConfigNodes {
 	VERSION(
 			"version.version",
 			"",
-			"# This is the current version of Towny.  Please do not edit."),
+			"# This is the current version of Towny. Please do not edit."),
 	LAST_RUN_VERSION(
 			"version.last_run_version",
 			"",
-			"# This is for showing the changelog on updates.  Please do not edit."),
+			"# This is for showing the changelog on updates. Please do not edit."),
+	LANGUAGE_ROOT(
+		"language",
+		"",
+		""),
 	LANGUAGE(
-			"language",
+			"language.language",
 			"en-US.yml",
-			"",
-			"",
 			"# The language file you wish to use for your default locale. Your default locale is what",
 			"# will be shown in your console and for any player who doesn't use one of the locales below.",
 			"# Available languages: bg-BG.yml, cz-CZ.yml, da-DK.yml, de-DE.yml, en-US.yml,",
@@ -32,6 +34,14 @@ public enum ConfigNodes {
 			"#",
 			"# Your players will select what locale that Towny shows them ",
 			"# by changing their Minecraft client's locale."),
+	
+	ENABLED_LANGUAGES(
+			"language.enabled_languages",
+			"*",
+			"",
+			"# The languages you wish to have enabled. Set to '*' to use all available languages.",
+			"# If you would like to only allow 4 languages use: en-US,ru-RU,es-ES,fr-FR",
+			"# If a player's locale isn't enabled or isn't available it will use the language above instead."),
 
 	PERMS(
 			"permissions",

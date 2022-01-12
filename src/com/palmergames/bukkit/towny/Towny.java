@@ -343,10 +343,23 @@ public class Towny extends JavaPlugin {
 	 * Handle any legacy config settings before we load the config and database.
 	 */
 	private void handleLegacyConfigs() {
+		Path configPath = Towny.getPlugin().getDataFolder().toPath().resolve("settings").resolve("config.yml");
+		if (!Files.exists(configPath))
+			return;
+
+		CommentedConfiguration config = new CommentedConfiguration(configPath);
+		if (!config.load())
+			return;
+
 		// Old configs stored various TownBlock settings throughout the config.
 		// This will migrate the old settings into the TownBlockType config section.
 		// Since 0.97.5.4.
-		TownBlockTypeHandler.Migrator.checkForLegacyOptions();
+		TownBlockTypeHandler.Migrator.checkForLegacyOptions(config);
+		
+		if (config.get("language") instanceof String language) {
+			config.set("language.language", language);
+			config.save();
+		}
 	}
 	
 	/**

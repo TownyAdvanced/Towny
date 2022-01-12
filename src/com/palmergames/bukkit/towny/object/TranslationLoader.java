@@ -105,7 +105,7 @@ public class TranslationLoader {
 	
 	/**
 	 * Used internally by Towny after the TranslationLoadEvent.
-	 * @param _translations Map&ltString, Map&lt;String, String&gt;&gt; Translations to set.
+	 * @param translations Map&ltString, Map&lt;String, String&gt;&gt; Translations to set.
 	 */
 	void setTranslations(Map<String, Map<String, String>> translations) {
 		newTranslations = translations;
@@ -154,7 +154,9 @@ public class TranslationLoader {
 		try {
 			uri = clazz.getResource("").toURI();
 			final FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap());
-			Files.list(fs.getRootDirectories().iterator().next().resolve("/lang")).forEach(p -> lang.add(FileNameUtils.getBaseName(p.toString())));
+			Files.list(fs.getRootDirectories().iterator().next().resolve("/lang"))
+				.filter(p -> TownySettings.isLanguageEnabled(FileNameUtils.getBaseName(p.toString().replace("-", "_"))))
+				.forEach(p -> lang.add(FileNameUtils.getBaseName(p.toString())));
 			fs.close();
 		} catch (URISyntaxException | IOException e) {
 			e.printStackTrace();
@@ -218,7 +220,8 @@ public class TranslationLoader {
 		File[] overrideFiles = new File(langFolderPath + File.separator + "override").listFiles();
 		if (overrideFiles != null) {
 			for (File file : overrideFiles) {
-				if (file.isFile() && FileNameUtils.getExtension(file.getName()).equalsIgnoreCase("yml") && !file.getName().equalsIgnoreCase("global.yml")) {
+				if (file.isFile() && FileNameUtils.getExtension(file.getName()).equalsIgnoreCase("yml") 
+					&& !file.getName().equalsIgnoreCase("global.yml") && TownySettings.isLanguageEnabled(FileNameUtils.getBaseName(file.getName()).replaceAll("-", "_"))) {
 					try (FileInputStream is = new FileInputStream(file)) {
 						Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
 						String lang = FileNameUtils.getBaseName(file.getName()).replaceAll("-", "_");

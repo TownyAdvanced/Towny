@@ -17,8 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -191,13 +189,9 @@ public final class TownBlockTypeHandler {
 	public static class Migrator {
 		private static final Set<Migration> migrations = new HashSet<>();
 		
-		public static void checkForLegacyOptions() {
-			Path configPath = Towny.getPlugin().getDataFolder().toPath().resolve("settings").resolve("config.yml");
-			if (!Files.exists(configPath))
-				return;
+		public static void checkForLegacyOptions(CommentedConfiguration config) {
 			
-			CommentedConfiguration config = new CommentedConfiguration(configPath);
-			if (!config.load() || config.contains(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot()))
+			if (!config.contains(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot()))
 				return;
 			
 			double shopCost = parseDouble(config.getString("economy.plot_type_costs.set_commercial"));
