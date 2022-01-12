@@ -861,7 +861,8 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("town trust")
 				.add("add [resident]", "")
-				.add("remove [resident]", "");
+				.add("remove [resident]", "")
+				.add("list", "");
 		}
 	},
 	

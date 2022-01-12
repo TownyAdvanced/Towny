@@ -472,9 +472,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				case "trust":
 					switch (args.length) {
 						case 2:
-							return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[1]);
+							return NameUtil.filterByStart(Arrays.asList("add", "remove", "list"), args[1]);
 						case 3:
-							return getTownyStartingWith(args[2], "r");
+							if (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))
+								return getTownyStartingWith(args[2], "r");
+							else 
+								return Collections.emptyList();
 						default:
 							return Collections.emptyList();
 					}
@@ -4379,7 +4382,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	public static void parseTownTrustCommand(Player player, String[] args, @Nullable Town town) {
-		if (args.length < 2) {
+//		if (args.length < 2 || args.length == 1 && !args[0].equalsIgnoreCase("list")) {
+//			HelpMenu.TOWN_TRUST_HELP.send(player);
+//			return;
+//		}
+		
+		if (args.length < 1
+			|| args.length < 2 && args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")
+			|| args.length == 1 && !args[0].equalsIgnoreCase("list")) {
 			HelpMenu.TOWN_TRUST_HELP.send(player);
 			return;
 		}
@@ -4389,6 +4399,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if (town == null) {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_resident_doesnt_belong_to_any_town"));
+			return;
+		}
+
+		if (args[0].equalsIgnoreCase("list")) {
+			List<String> output = town.getTrustedResidents().isEmpty()
+					? Collections.singletonList(Translatable.of("status_no_town").forLocale(player)) // String which is "None".
+					: town.getTrustedResidents().stream().map(res -> res.getName()).collect(Collectors.toList());
+			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedStrings(Translatable.of("status_trustedlist").forLocale(player), output));
 			return;
 		}
 		
@@ -4438,6 +4456,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_removed", resident.getName(), Translatable.of("town_sing")));
 			if (BukkitTools.isOnline(resident.getName()))
 				TownyMessaging.sendMsg(resident.getPlayer(), Translatable.of("msg_trusted_removed_2", player.getName(), Translatable.of("town_sing"), town.getName()));
+
 		} else {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", args[0]));
 			return;
