@@ -261,7 +261,7 @@ public class Towny extends JavaPlugin {
 
 		// Try migrating the config and world files if the version has changed.
 		if (!TownySettings.getLastRunVersion().equals(getVersion())) {
-			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
+			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json", false);
 			migrator.migrate();
 		}
 
@@ -348,7 +348,7 @@ public class Towny extends JavaPlugin {
 			return;
 
 		CommentedConfiguration config = new CommentedConfiguration(configPath);
-		if (!config.load())
+		if (!config.load() || config.getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), "0.0.0.0").equals(getVersion()))
 			return;
 
 		// Old configs stored various TownBlock settings throughout the config.
@@ -356,10 +356,8 @@ public class Towny extends JavaPlugin {
 		// Since 0.97.5.4.
 		TownBlockTypeHandler.Migrator.checkForLegacyOptions(config);
 		
-		if (config.get("language") instanceof String language) {
-			config.set("language.language", language);
-			config.save();
-		}
+		ConfigMigrator earlyMigrator = new ConfigMigrator(config, "config-migration.json", true);
+		earlyMigrator.migrate();
 	}
 	
 	/**

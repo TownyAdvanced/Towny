@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.palmergames.bukkit.config.CommentedConfiguration;
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -15,6 +16,7 @@ import com.palmergames.bukkit.util.Version;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -30,12 +32,14 @@ public class ConfigMigrator {
 		.registerTypeAdapter(Version.class, new VersionDeserializer()).create();
 	private final CommentedConfiguration config;
 	private final CommentedConfiguration townyperms;
+	private final boolean earlyRun;
 	
-	public ConfigMigrator(CommentedConfiguration config, String filename) {
+	public ConfigMigrator(CommentedConfiguration config, String filename, boolean earlyRun) {
 		Objects.requireNonNull(config, filename);
 		this.migrationFilename = filename;
 		this.config = config;
 		this.townyperms = TownyPerms.getTownyPermsFile();
+		this.earlyRun = earlyRun;
 	}
 
 	/**
@@ -43,7 +47,7 @@ public class ConfigMigrator {
 	 */
 	public void migrate() {
 		// Use the last run version as a reference.
-		Version configVersion = Version.fromString(TownySettings.getLastRunVersion());
+		Version configVersion = Version.fromString(config.getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), "0.0.0.0"));
 		boolean saveTownyperms = false;
 		
 		// Go through each migration element.
@@ -53,6 +57,9 @@ public class ConfigMigrator {
 				// Perform all desired changes.
 				Towny.getPlugin().getLogger().info("Config: " + migration.version + " applying " + migration.changes.size() + " automatic update" + (migration.changes.size() == 1 ? "" : "s") + " ...");
 				for (Change change : migration.changes) {
+					if (change.type.early != earlyRun)
+						continue;
+
 					performChange(change);
 					if (change.type == MigrationType.TOWNYPERMS_ADD)
 						saveTownyperms = true;
@@ -89,6 +96,10 @@ public class ConfigMigrator {
 				Object value = config.get(change.path);
 				if (value instanceof String string)
 					config.set(change.path, string.replaceAll(change.key, change.value));
+			case MOVE:
+				Object oldValue = config.get(change.path);
+				if (oldValue != null)
+					config.set(change.value, oldValue);
 				break;
 			default:
 				throw new UnsupportedOperationException("Unsupported Change type: " + change);
@@ -116,8 +127,8 @@ public class ConfigMigrator {
 		try (Reader reader = new InputStreamReader(Towny.getPlugin().getResource(migrationFilename))) {
 			
 			return GSON.fromJson(reader, new TypeToken<List<Migration>>(){}.getType());
-		} catch (IOException ignored) {
-			return null;
+		} catch (IOException e) {
+			return Collections.emptyList();
 		}
 	}
 	

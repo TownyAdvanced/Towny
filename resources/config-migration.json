@@ -202,6 +202,11 @@
         "key": "RAW_GOLD_ORE",
         "value": "RAW_GOLD_BLOCK",
         "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
+      },
+      {
+        "type": "MOVE",
+        "path": "language",
+        "value": "language.language"
       }
     ]
   }
