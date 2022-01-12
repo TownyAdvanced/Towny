@@ -177,8 +177,8 @@ public class CombatUtil {
 					/*
 					 * Protect tamed dogs in town land which are not owned by the attacking player.
 					 */
-					if (defendingEntity instanceof Wolf && isNotTheAttackersPetDog((Wolf) defendingEntity, attackingPlayer))
-						return !defenderTB.getPermissions().pvp;
+					if (defendingEntity instanceof Wolf wolf && isNotTheAttackersPetDog(wolf, attackingPlayer))
+						return !(defenderTB.getPermissions().pvp || TownyActionEventExecutor.canDestroy(attackingPlayer, wolf.getLocation(), Material.STONE));
 					
 					/*
 					 * Farm Animals - based on whether this is allowed using the PlayerCache and then a cancellable event.
