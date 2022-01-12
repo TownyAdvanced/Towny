@@ -3135,7 +3135,7 @@ public class TownySettings {
 
 		List<String> enabledLanguages = new ArrayList<>();
 		for (String string : getStrArr(ConfigNodes.ENABLED_LANGUAGES))
-			enabledLanguages.add(string.toLowerCase(Locale.ROOT).replaceAll("-", "_"));
+			enabledLanguages.add(string.toLowerCase(Locale.ROOT).replaceAll("-", "_").replaceAll(".yml", ""));
 
 		return enabledLanguages.contains(locale.toLowerCase(Locale.ROOT));
 	}
