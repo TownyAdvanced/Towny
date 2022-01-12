@@ -6,12 +6,10 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.util.JavaUtil;
 
 public class EntityTypeUtil {
 	private static List<EntityType> ExplosiveEntityTypes = new ArrayList<>(Arrays.asList(
