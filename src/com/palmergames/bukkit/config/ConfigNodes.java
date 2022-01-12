@@ -1307,7 +1307,7 @@ public enum ConfigNodes {
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
-			"MINECARTS,BOATS,ENDER_PEARL,FIREBALL,CHORUS_FRUIT,LEAD",
+			"MINECARTS,BOATS,ENDER_PEARL,FIREBALL,CHORUS_FRUIT,LEAD,EGG",
 			"",
 			"# Items that can be blocked within towns via town/plot flags.",
 			"# These items will be the ones restricted by a town/resident/plot's item_use setting.",
@@ -1391,13 +1391,13 @@ public enum ConfigNodes {
 			"# NEVER set below 1."),
 	PROT_MOB_TYPES(
 			"protection.mob_types",
-			"Animals,WaterMob,NPC,Snowman,ArmorStand,Villager",
+			"Animals,WaterMob,NPC,Snowman,ArmorStand,Villager,Hanging",
 			"",
 			"# permitted entities https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/package-summary.html",
 			"# Animals, Chicken, Cow, Creature, Creeper, Flying, Ghast, Giant, Monster, Pig, ",
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
 			"",
-			"# Protect living entities within a town's boundaries from being killed by players."),
+			"# Protect living entities within a town's boundaries from being killed by players or mobs."),
 	PROT_POTION_TYPES(
 			"protection.potion_types",
 			"BLINDNESS,CONFUSION,HARM,HUNGER,POISON,SLOW,SLOW_DIGGING,WEAKNESS,WITHER",
