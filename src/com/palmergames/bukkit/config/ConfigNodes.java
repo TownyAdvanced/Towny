@@ -10,11 +10,13 @@ public enum ConfigNodes {
 			"version.last_run_version",
 			"",
 			"# This is for showing the changelog on updates. Please do not edit."),
+	LANGUAGE_ROOT(
+		"language",
+		"",
+		""),
 	LANGUAGE(
-			"language",
+			"language.language",
 			"en-US.yml",
-			"",
-			"",
 			"# The language file you wish to use for your default locale. Your default locale is what",
 			"# will be shown in your console and for any player who doesn't use one of the locales below.",
 			"# Available languages: bg-BG.yml, cz-CZ.yml, da-DK.yml, de-DE.yml, en-US.yml,",
@@ -34,7 +36,7 @@ public enum ConfigNodes {
 			"# by changing their Minecraft client's locale."),
 	
 	ENABLED_LANGUAGES(
-			"enabled-languages",
+			"language.enabled_languages",
 			"*",
 			"",
 			"# The languages you wish to have enabled. Set to '*' to use all available languages.",
