@@ -1,9 +1,9 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-
 import io.papermc.lib.PaperLib;
 
 import org.bukkit.Bukkit;
@@ -14,9 +14,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public class WorldCoord extends Coord {
 
@@ -157,28 +156,49 @@ public class WorldCoord extends Coord {
 	}
 
 	/**
-	 * Returns a list of Chunks, in which the WorldCoord exists.
-	 * When the server town_block_size is less than or equal to 16 this list will be a single Chunk.
-	 * When the server town_block_size is greater than 16 the list will contain more than one Chunk.
+	 * Loads the chunks represented by a WorldCoord. Creates a PluginChunkTicket so
+	 * that the WorldCoord will remain loaded, even when no players are present.
 	 * 
-	 * @return List of Chunks.
+	 * Uses PaperLib's getChunkAtAsync when Paper is present.
 	 */
-	public List<Chunk> getChunks() {
-		List<Chunk> chunks = new ArrayList<>();
+	public void loadChunks() {
 		if (getCellSize() > 16) {
 			// Dealing with a townblocksize greater than 16, we will have multiple chunks per WorldCoord.
 			int side = Math.round(getCellSize() / 16);
 			for (int x = 0; x <= side; x++) {
 				for (int z = 0; z <= side; z++) {
-					PaperLib.getChunkAtAsync(getSubCorner(x, z)).thenAccept(chunk -> chunks.add(chunk));
+					CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getSubCorner(x, z));
+					futureChunk.thenAccept(chunk-> chunk.addPluginChunkTicket(Towny.getPlugin()));
 				}
 			}
 		} else {
-			PaperLib.getChunkAtAsync(getCorner()).thenAccept(chunk -> chunks.add(chunk));
+			CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getCorner());
+			futureChunk.thenAccept(chunk-> chunk.addPluginChunkTicket(Towny.getPlugin()));
 		}
-		return chunks;
 	}
 	
+	/**
+	 * Unloads the chunks presented by a WorldCoord. Removes a PluginChunkTicket so
+	 * that the WorldCoord will no longer remain loaded.
+	 * 
+	 * Uses PaperLib's getChunkAtAsync when Paper is present.
+	 */
+	public void unloadChunks() {
+		if (getCellSize() > 16) {
+			// Dealing with a townblocksize greater than 16, we will have multiple chunks per WorldCoord.
+			int side = Math.round(getCellSize() / 16);
+			for (int x = 0; x <= side; x++) {
+				for (int z = 0; z <= side; z++) {
+					CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getSubCorner(x, z));
+					futureChunk.thenAccept(chunk-> chunk.removePluginChunkTicket(Towny.getPlugin()));
+				}
+			}
+		} else {
+			CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getCorner());
+			futureChunk.thenAccept(chunk-> chunk.removePluginChunkTicket(Towny.getPlugin()));
+		}
+	}
+
 	// Used to get a location at the corner of a WorldCoord.
 	private Location getCorner() {
 		Location loc = new Location(getBukkitWorld(), getX() * getCellSize(), 0, getZ() * getCellSize());

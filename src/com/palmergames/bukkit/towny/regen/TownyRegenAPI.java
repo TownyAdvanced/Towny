@@ -68,6 +68,7 @@ public class TownyRegenAPI {
 		removeFromRegenQueueList(plotChunk.getWorldCoord()); // Remove the WorldCoord from the queue.
 		removeFromActiveRegeneration(plotChunk); // Remove from the active HashTable.
 		deletePlotChunkSnapshot(plotChunk); // Remove from the database.
+		plotChunk.getWorldCoord().unloadChunks(); // Remove the PluginChunkTickets keeping the plotChunk loaded.
 	}
 	
 	/*
@@ -219,11 +220,8 @@ public class TownyRegenAPI {
 			// This worldCoord isn't actively regenerating, start the regeneration.
 			PlotBlockData plotData = getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorldOrNull()));
 			if (plotData != null) {
-				// Load the chunks if they are unloaded.
-				plotData.getWorldCoord().getChunks().stream()
-					.filter(chunk -> !chunk.isLoaded())
-					.forEach(chunk -> chunk.load());
-
+				// Load the chunks.
+				plotData.getWorldCoord().loadChunks();
 				addToActiveRegeneration(plotData);
 				TownyMessaging.sendDebugMsg("Revert on unclaim beginning for " + plotData.getWorldName() + " " + plotData.getX() +"," + plotData.getZ());
 			} else {
