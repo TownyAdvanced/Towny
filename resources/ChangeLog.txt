@@ -7166,3 +7166,8 @@ v0.92.0.11:
 0.97.5.10:
   - Fix /plot group toggle mobs message, courtesy of Warriorrrr with PR #5612.
   - Remove global registration message, courtesy of Warriorrrr with PR #5614.
+  - Add config option to define what languages are enabled, courtesy of Warriorrrr with PR #5590.
+  - New Config Option: language.enabled_languages
+    - Default: *
+    - The languages you wish to have enabled. Set to '*' to use all available languages.
+    - If you would like to only allow 4 languages use: en-US,ru-RU,es-ES,fr-FR
