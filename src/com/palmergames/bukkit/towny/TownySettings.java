@@ -61,6 +61,7 @@ public class TownySettings {
 		NAME_PREFIX, NAME_POSTFIX, CAPITAL_PREFIX, CAPITAL_POSTFIX, KING_PREFIX, KING_POSTFIX, TOWN_BLOCK_LIMIT_BONUS, UPKEEP_MULTIPLIER, NATION_TOWN_UPKEEP_MULTIPLIER, NATIONZONES_SIZE, NATION_BONUS_OUTPOST_LIMIT
 	}
 
+	private static CommentedConfiguration oldConfig;
 	private static CommentedConfiguration config;
 	private static CommentedConfiguration newConfig;
 	private static int uuidCount;
@@ -288,12 +289,22 @@ public class TownySettings {
 		if (!FileMgmt.checkOrCreateFile(configPath.toString())) {
 			throw new TownyInitException("Failed to touch '" + configPath + "'.", TownyInitException.TownyError.MAIN_CONFIG);
 		}
+		
+		if (config != null)
+			oldConfig = config;
 
 		// read the config.yml into memory
 		config = new CommentedConfiguration(configPath);
 		if (!config.load()) {
-			throw new TownyInitException("Failed to load Towny's config.yml.", TownyInitException.TownyError.MAIN_CONFIG);
+			if (oldConfig != null) {
+				config = oldConfig;
+				oldConfig = null;
+				throw new TownyInitException("An error occurred while reloading the config, the old config file will be used until the issue is fixed.", TownyInitException.TownyError.MAIN_CONFIG, false);
+			} else
+				throw new TownyInitException("Failed to load Towny's config.yml.", TownyInitException.TownyError.MAIN_CONFIG);
 		}
+
+		oldConfig = null;
 
 		setDefaults(version, configPath);
 

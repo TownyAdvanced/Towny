@@ -44,6 +44,7 @@ public class TownyPerms {
 	protected static LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<>();
 	protected static HashMap<String, PermissionAttachment> attachments = new HashMap<>();
 	private static HashMap<String, List<String>> groupPermsMap = new HashMap<>();
+	private static CommentedConfiguration oldPerms;
 	private static CommentedConfiguration perms;
 	private static Towny plugin;
 	private static List<String> vitalGroups = new ArrayList<>(Arrays.asList("nomad","towns.default","towns.mayor","towns.ranks","nations.default","nations.king","nations.ranks"));
@@ -83,12 +84,22 @@ public class TownyPerms {
 		} catch (IOException e) {
 			throw new TownyInitException("Could not copy townyperms.yml from JAR to '" + permsYMLPath + "'.",TownyInitException.TownyError.PERMISSIONS, e);
 		}
+		
+		if (perms != null)
+			oldPerms = perms;
+		
 		// read the townyperms.yml into memory
 		perms = new CommentedConfiguration(permsYMLPath);
 		if (!perms.load()) {
-			throw new TownyInitException("Could not read townyperms.yml", TownyInitException.TownyError.PERMISSIONS);
+			if (oldPerms != null) {
+				perms = oldPerms;
+				oldPerms = null;
+				throw new TownyInitException("An error occurred while reloading townyperms.yml, the old townyperms file will be used until the issue is fixed.", TownyInitException.TownyError.PERMISSIONS, false);
+			} else
+				throw new TownyInitException("Could not read townyperms.yml", TownyInitException.TownyError.PERMISSIONS);
 		}
 
+		oldPerms = null;
 		groupPermsMap.clear();
 		buildGroupPermsMap();
 		checkForVitalGroups();

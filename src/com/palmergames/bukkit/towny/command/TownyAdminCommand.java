@@ -67,6 +67,7 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -2030,9 +2031,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			plugin.loadPermissions(true);
 		} catch (TownyInitException tie) {
 			TownyMessaging.sendErrorMsg(sender, "Error Loading townyperms.yml!");
-			TownyMessaging.sendErrorMsg(tie.getMessage());
+			TownyMessaging.sendErrorMsg(sender, tie.getMessage());
+
+			// Send a copy of the message to console
+			if (!(sender instanceof ConsoleCommandSender))
+				TownyMessaging.sendErrorMsg(tie.getMessage());
+
 			// Place Towny in Safe Mode while the townyperms.yml is unreadable.
-			plugin.addError(tie.getError());
+			if (tie.shouldSafeMode())
+				plugin.addError(tie.getError());
+
 			return;
 		}
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_reloaded_perms"));
@@ -2057,7 +2065,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownySettings.loadNationLevelConfig(); // but later so the config-migrator can do it's work on them if needed.
 			Translation.loadTranslationRegistry();
 			TownBlockTypeHandler.initialize();
-		} catch (IOException e) {
+		} catch (TownyInitException tie) {
+			TownyMessaging.sendErrorMsg(sender, tie.getMessage());
+			
+			// Send a copy of the message to console
+			if (!(sender instanceof ConsoleCommandSender))
+				TownyMessaging.sendErrorMsg(tie.getMessage());
+
+			if (tie.shouldSafeMode())
+				plugin.addError(tie.getError());
+
+			return;
+		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_reload_error"));
 			e.printStackTrace();
 			return;

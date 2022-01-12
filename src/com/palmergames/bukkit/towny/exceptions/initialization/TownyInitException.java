@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class TownyInitException extends RuntimeException {
 	private static final long serialVersionUID = -1943705202251722549L;
 	private final TownyError error;
+	private boolean safeMode = true;
 
 	public TownyInitException(@NotNull String message, @NotNull TownyError error) {
 		super(message);
@@ -19,8 +20,18 @@ public class TownyInitException extends RuntimeException {
 		this.error = error;
 	}
 
+	public TownyInitException(@NotNull String message, @NotNull TownyError error, boolean safeMode) {
+		super(message);
+		this.error = error;
+		this.safeMode = safeMode;
+	}
+
 	public TownyError getError() {
 		return error;
+	}
+	
+	public boolean shouldSafeMode() {
+		return safeMode;
 	}
 
 	public enum TownyError {
