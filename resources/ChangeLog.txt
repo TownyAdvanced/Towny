@@ -7171,3 +7171,4 @@ v0.92.0.11:
     - Default: *
     - The languages you wish to have enabled. Set to '*' to use all available languages.
     - If you would like to only allow 4 languages use: en-US,ru-RU,es-ES,fr-FR
+  - Fix skeletons not hurting mobs inside claimed areas, courtesy of Warriorrrr with PR #5613.
