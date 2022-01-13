@@ -7174,3 +7174,5 @@ v0.92.0.11:
   - Fix skeletons not hurting mobs inside claimed areas, courtesy of Warriorrrr with PR #5613.
   - Fix SQL db not always loading a townblock's outpost status properly.
     - Closes #5618.
+  - Fix typo in material name, add new migrationtype, courtesy of Warriorrrr with PR #5625.
+  - Fix regen queue blocking up with unloaded chunks.
