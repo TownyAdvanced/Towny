@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
+import com.palmergames.bukkit.towny.event.player.PlayerDeniedBedUseEvent;
 import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -401,6 +402,8 @@ public class TownyPlayerListener implements Listener {
 			return;
 
 		Block block = event.getClickedBlock();
+		Player player = event.getPlayer();
+		Location blockLoc = block.getLocation();
 		if (event.hasBlock()) {
 			/*
 			 * Catches respawn anchors blowing up and allows us to track their explosions.
@@ -408,16 +411,16 @@ public class TownyPlayerListener implements Listener {
 			if (block.getType().name().equals("RESPAWN_ANCHOR")) {
 				org.bukkit.block.data.type.RespawnAnchor anchor = ((org.bukkit.block.data.type.RespawnAnchor) block.getBlockData());
 				if (anchor.getCharges() == 4)
-					BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), null, block.getType()));
+					BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(player, blockLoc, null, block.getType()));
 				return;
 			}
 			
 			/*
 			 * Catches beds blowing up and allows us to track their explosions.
 			 */
-			if (Tag.BEDS.isTagged(block.getType()) && event.getPlayer().getWorld().getEnvironment().equals(Environment.NETHER)) {
+			if (Tag.BEDS.isTagged(block.getType()) && player.getWorld().getEnvironment().equals(Environment.NETHER)) {
 				org.bukkit.block.data.type.Bed bed = ((org.bukkit.block.data.type.Bed) block.getBlockData());
-				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(event.getPlayer(), block.getLocation(), block.getRelative(bed.getFacing()).getLocation(), block.getType()));
+				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(player, blockLoc, block.getRelative(bed.getFacing()).getLocation(), block.getType()));
 				return;
 			}
 			
@@ -431,11 +434,13 @@ public class TownyPlayerListener implements Listener {
 
 				boolean isOwner = false;
 				boolean isInnPlot = false;
+				boolean isEnemy = false;
+				Translatable denialMessage = Translatable.of("msg_err_cant_use_bed");
 
-				if (!TownyAPI.getInstance().isWilderness(block.getLocation())) {
+				if (!TownyAPI.getInstance().isWilderness(blockLoc)) {
 					
-					TownBlock townblock = TownyAPI.getInstance().getTownBlock(block.getLocation());
-					Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
+					TownBlock townblock = TownyAPI.getInstance().getTownBlock(blockLoc);
+					Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 					Town town = townblock.getTownOrNull();
 					if (resident == null || town == null)
 						return;
@@ -444,17 +449,22 @@ public class TownyPlayerListener implements Listener {
 					isInnPlot = townblock.getType() == TownBlockType.INN;
 					
 					//Prevent enemies and outlaws using the Inn plots.
-					if (CombatUtil.isEnemyTownBlock(event.getPlayer(), townblock.getWorldCoord()) || town.hasOutlaw(resident)) {
-						event.setCancelled(true);
-						TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_no_sleep_in_enemy_inn"));
-						return;
+					if (CombatUtil.isEnemyTownBlock(player, townblock.getWorldCoord()) || town.hasOutlaw(resident)) {
+						isEnemy = true;
+						denialMessage = Translatable.of("msg_err_no_sleep_in_enemy_inn");
 					}
 				}
-				if (!isOwner && !isInnPlot) {
 
-					event.setCancelled(true);
-					TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_cant_use_bed"));
-
+				if (isEnemy || !isOwner && !isInnPlot) {
+					// The player is not allowed to use the bed.
+					
+					// Fire a cancellable event prior to us denying bed use.
+					PlayerDeniedBedUseEvent pdbue = new PlayerDeniedBedUseEvent(player, blockLoc, isEnemy, denialMessage);
+					Bukkit.getPluginManager().callEvent(pdbue);
+					if (!pdbue.isCancelled()) {
+						event.setCancelled(true);
+						TownyMessaging.sendErrorMsg(player, pdbue.getDenialMessage());
+					}
 				}
 			}
 		}
