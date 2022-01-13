@@ -47,6 +47,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class TownyFormatter {
@@ -113,11 +114,12 @@ public class TownyFormatter {
 			screen.addComponentOf("trusted", getFormattedTownyObjects(translator.of("status_trustedlist"), new ArrayList<>(townBlock.getTrustedResidents())));
 		
 		// Add any metadata which opt to be visible.
-		List<String> fields = getExtraFields(townBlock);
+		List<Component> fields = getExtraFields(townBlock);
 		if (!fields.isEmpty()) {
 			TextComponent comp = Component.empty();
-			for (int i = 0; i < fields.size(); i++) 
-				comp = comp.append(Component.text(fields.get(i)));
+			for (Component fieldComp : fields) {
+				comp = comp.append(fieldComp);
+			}
 			screen.addComponentOf("extraFields", comp);
 		}
 		
@@ -216,11 +218,12 @@ public class TownyFormatter {
 		if (resident.isNPC()) {
 			screen.addComponentOf("npcstatus", translator.of("msg_status_npc", resident.getName()));
 			// Add any metadata which opt to be visible.
-			List<String> fields = getExtraFields(resident);
+			List<Component> fields = getExtraFields(resident);
 			if (!fields.isEmpty()) {
 				TextComponent comp = Component.empty();
-				for (int i = 0; i < fields.size(); i++) 
-					comp.append(Component.text(fields.get(i)));
+				for (Component fieldComp : fields) {
+					comp = comp.append(fieldComp);
+				}
 				screen.addComponentOf("extraFields", comp);
 			}
 			return screen;
@@ -248,11 +251,12 @@ public class TownyFormatter {
 			screen.addComponentOf("friendsLine", getFormattedTownyObjects(translator.of("status_friends"), new ArrayList<>(resident.getFriends())));
 		
 		// Add any metadata which opt to be visible.
-		List<String> fields = getExtraFields(resident);
+		List<Component> fields = getExtraFields(resident);
 		if (!fields.isEmpty()) {
 			TextComponent comp = Component.empty();
-			for (int i = 0; i < fields.size(); i++) 
-				comp = comp.append(Component.newline()).append(Component.text(fields.get(i)));
+			for (Component fieldComp : fields) {
+				comp = comp.append(fieldComp);
+			}
 			screen.addComponentOf("extraFields", comp);
 		}
 			
@@ -411,11 +415,12 @@ public class TownyFormatter {
 		}
 		
 		// Add any metadata which opt to be visible.
-		List<String> fields = getExtraFields(town);
+		List<Component> fields = getExtraFields(town);
 		if (!fields.isEmpty()) {
 			TextComponent comp = Component.empty();
-			for (int i = 0; i < fields.size(); i++) 
-				comp = comp.append(Component.text(fields.get(i)));
+			for (Component fieldComp : fields) {
+				comp = comp.append(fieldComp);
+			}
 			screen.addComponentOf("extraFields", comp);
 		}
 			
@@ -546,11 +551,12 @@ public class TownyFormatter {
 				ClickEvent.runCommand("/towny:nation enemylist " + nation.getName()));
 
 		// Add any metadata which opt to be visible.
-		List<String> fields = getExtraFields(nation);
+		List<Component> fields = getExtraFields(nation);
 		if (!fields.isEmpty()) {
 			TextComponent comp = Component.empty();
-			for (int i = 0; i < fields.size(); i++)
-				comp = comp.append(Component.text(fields.get(i)));
+			for (Component fieldComp : fields) {
+				comp = comp.append(fieldComp);
+			}
 			screen.addComponentOf("extraFields", comp);
 		}
 		
@@ -619,11 +625,12 @@ public class TownyFormatter {
 			screen.addComponentOf("perms2", "    " + colourKey(translator.of("status_world_ignoredblocks") + Colors.LightGreen + " see /towny wildsblocks"));
 
 			// Add any metadata which opt to be visible.
-			List<String> fields = getExtraFields(world);
+			List<Component> fields = getExtraFields(world);
 			if (!fields.isEmpty()) {
 				TextComponent comp = Component.empty();
-				for (int i = 0; i < fields.size(); i++) 
-					comp = comp.append(Component.text(fields.get(i)));
+				for (Component fieldComp : fields) {
+					comp = comp.append(fieldComp);
+				}
 				screen.addComponentOf("extraFields", comp);
 			}
 		}
@@ -879,36 +886,68 @@ public class TownyFormatter {
 		
 		return sub;
 	}
+
+	// Get length of the content that a component will display.
+	// Color symbols are filtered.
+	private static int getContentLength(Component comp) {
+		String combinedContent;
+		
+		if (comp.children().isEmpty())
+			combinedContent = ((TextComponent) comp).content();
+		else {
+			StringJoiner joiner = new StringJoiner(" ");
+			for (Component child : comp.children())
+				joiner.add(((TextComponent) child).content());
+
+			combinedContent = joiner.toString();
+		}
+
+		return Colors.strip(combinedContent).length();
+	}
 	
 	/**
 	 * Returns a list of MetaData used in the StatusScreens.
 	 * @param to TownyObject for which to gather the metadata of.
 	 * @return List of visible metadata.
 	 */
-	public static List<String> getExtraFields(TownyObject to) {
+	public static List<Component> getExtraFields(TownyObject to) {
 		if (!to.hasMeta())
 			return new ArrayList<>();
 		
-		String field = "";
-		List<String> extraFields = new ArrayList<>();
+		Component field = Component.empty();
+		int fieldLen = 0;
+		
+		List<Component> extraFields = new ArrayList<>();
 		for (CustomDataField<?> cdf : to.getMetadata()) {
-			String newAdd = "";
 			if (!cdf.shouldDisplayInStatus())
 				continue;
 			
-			newAdd = Translation.of("status_format_key_value_key") + cdf.getLabel() + ": ";
-			newAdd += cdf.displayFormattedValue();
-			newAdd += "  ";
-			if ((field + newAdd).length() > ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH) {
+			Component newAdd = cdf.getLabelAsComp();
+			
+			// Apply green color if component is just plain text
+			if (newAdd.style().color() == null) {
+				NamedTextColor kvColor = Colors.toNamedTextColor(Translation.of("status_format_key_value_key"));
+				newAdd = newAdd.color(kvColor);
+			}
+			
+			newAdd = newAdd.append(Component.text(": "))
+				.append(cdf.formatValueAsComp())
+				.append(Component.space());
+			
+			int newAddLen = getContentLength(newAdd);
+			if ((fieldLen + newAddLen) > ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH) {
 				extraFields.add(field);
 				field = newAdd;
+				fieldLen = newAddLen;
 			} else {
-				field += newAdd;
+				field = field.append(newAdd);
+				fieldLen += newAddLen;
 			}
 		}
-		if (!field.isEmpty())
-			extraFields.add(field);
 		
+		if (fieldLen > 0)
+			extraFields.add(field);
+
 		return extraFields;
 	}
 
