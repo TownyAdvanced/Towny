@@ -7177,3 +7177,6 @@ v0.92.0.11:
   - Fix typo in material name, add new migrationtype, courtesy of Warriorrrr with PR #5625.
   - Fix regen queue blocking up with unloaded chunks.
   - New migration type: Move, courtesy of Warriorrrr with PR #5620.
+  - API: add PlayerDeniedBedUseEvent.
+    - Cancellable Event thrown by Towny when Towny prevents someone from using a bed.
+  - Make wolves inside towns mortal again, courtesy of Warriorrrr with PR #5622.
