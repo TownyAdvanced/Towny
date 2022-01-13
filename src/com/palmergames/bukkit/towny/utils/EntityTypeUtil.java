@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.TownySettings;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,12 +40,16 @@ public class EntityTypeUtil {
 			EntityType.MINECART_TNT, 
 			EntityType.PRIMED_TNT));
 	
-	public static boolean isInstanceOfAny(List<Class<?>> classesOfWorldMobsToRemove2, Object obj) {
+	public static boolean isInstanceOfAny(List<Class<?>> classes, Object obj) {
 
-		for (Class<?> c : classesOfWorldMobsToRemove2)
+		for (Class<?> c : classes)
 			if (c.isInstance(obj))
 				return true;
 		return false;
+	}
+	
+	public static boolean isProtectedEntity(Entity entity) {
+		return isInstanceOfAny(TownySettings.getProtectedEntityTypes(), entity);
 	}
 
 	public static List<Class<?>> parseLivingEntityClassNames(List<String> mobClassNames, String errorPrefix) {

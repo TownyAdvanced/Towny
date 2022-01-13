@@ -26,6 +26,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -177,8 +178,13 @@ public class CombatUtil {
 					/*
 					 * Protect tamed dogs in town land which are not owned by the attacking player.
 					 */
-					if (defendingEntity instanceof Wolf wolf && isNotTheAttackersPetDog(wolf, attackingPlayer))
-						return !(defenderTB.getPermissions().pvp || TownyActionEventExecutor.canDestroy(attackingPlayer, wolf.getLocation(), Material.STONE));
+					if (defendingEntity instanceof Wolf wolf) {
+						if (!isOwner(wolf, attackingPlayer)) {
+							if (EntityTypeUtil.isProtectedEntity(defendingEntity))
+								return !(defenderTB.getPermissions().pvp || TownyActionEventExecutor.canDestroy(attackingPlayer, wolf.getLocation(), Material.STONE));
+						} else
+							return false;
+					}
 					
 					/*
 					 * Farm Animals - based on whether this is allowed using the PlayerCache and then a cancellable event.
@@ -189,7 +195,7 @@ public class CombatUtil {
 					/*
 					 * Config's protected entities: Animals,WaterMob,NPC,Snowman,ArmorStand,Villager
 					 */
-					if (EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) 						
+					if (EntityTypeUtil.isProtectedEntity(defendingEntity)) 						
 						return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT);
 				}
 				
@@ -685,14 +691,14 @@ public class CombatUtil {
 	 * 
 	 * @param wolf Wolf being attacked by a player.
 	 * @param attackingPlayer Player attacking the wolf.
-	 * @return true when a dog who is not owned by the attacker is injured inside of a town's plot.
+	 * @return true when the attackingPlayer is the owner
 	 */
-	private static boolean isNotTheAttackersPetDog(Wolf wolf, Player attackingPlayer) {
-		return wolf.isTamed() && !wolf.getOwner().equals(attackingPlayer);
+	private static boolean isOwner(Wolf wolf, Player attackingPlayer) {
+		return wolf.getOwner() instanceof HumanEntity owner && owner.getUniqueId().equals(attackingPlayer.getUniqueId());
 	}
 	
 	private static boolean isATamedWolfWithAOnlinePlayer(Wolf wolf) {
-		return wolf.isTamed() && wolf.getOwner().getName() != null && BukkitTools.isOnline(wolf.getOwner().getName());
+		return wolf.getOwner() instanceof HumanEntity owner && Bukkit.getPlayer(owner.getUniqueId()) != null;
 	}
 	
 	public static boolean preventDispenserDamage(Block dispenser, Entity entity, DamageCause cause) {
