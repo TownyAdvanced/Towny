@@ -7182,3 +7182,4 @@ v0.92.0.11:
   - Make wolves inside towns mortal again, courtesy of Warriorrrr with PR #5622.
 0.97.5.11:
   - Add component support to Metadata Labels and Values, courtesy of silverwolfg11 with PR #5628.
+  - Fix empty named towns being allowed to be made.
