@@ -570,7 +570,7 @@ rank_list_mayor: 'Mayor:'
 status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(Aberto)'
 status_town_board: 'Board:'
-status_founded: 'Founded:'
+status_founded: 'Fundada:'
 status_town_size: 'Town Size:'
 status_town_size_bought: 'Bought:'
 status_town_size_bonus: 'Bonus:'
@@ -596,7 +596,7 @@ status_world_forcetownmobs: 'Force TownMobs:'
 status_world_unclaimrevert: 'Unclaim Revert:'
 status_world_explrevert: 'Explosion Revert:'
 status_world_ignoredblocks: 'Ignored Blocks:'
-status_res_taxexempt: 'Staff are exempt from paying town taxes.'
+status_res_taxexempt: '2A staff está isenta de pagar impostos da cidade.'
 status_res_tax: 'Town Tax:'
 status_res_plottax: 'Total Plot Taxes:'
 status_res_totaltax: 'Total Tax to pay:'
@@ -618,7 +618,7 @@ msg_err_cant_afford_tp_nation: '&cVocê não tem dinheiro suficiente para se tel
 msg_err_nationspawn_has_not_been_set: '&cO spawn da nação ainda não foi definido.'
 msg_err_spawn_not_within_nationtowns: '&cO spawn da nação tem de estar numa cidade pertence à nação.'
 msg_err_spawn_not_within_capital: '&cO spawn da nação tem de ser na capital.'
-msg_err_nation_spawn_war: '&cNation spawns are not allowed during war time.'
+msg_err_nation_spawn_war: '&cOs spawns das nações não são permitidos durante a guerra.'
 msg_err_nation_not_public: '&cEssa nação não é pública.'
 msg_nation_toggle_public: '&aA configuração de entrada na nação foi alterada.'
 status_yes: '&aSIM'
@@ -1069,7 +1069,7 @@ msg_err_homeblock_already_set_here: 'This location is already your town''s homeb
 msg_town_merge_err_mayor_only: '&cMerging can only be done by a mayor.'
 msg_town_merge_err_not_close: '&cThe town of %s is too far away from your town. Their homeblock has to be within %d townblocks of your homeblock.'
 msg_town_merge_request_sent: '&bMerge request sent to the mayor of %s.'
-msg_town_merge_request_received: '&bThe mayor of %s, %s, has requested to merge with your town. This will transfer all townblocks, residents and town bank money to %s.'
+msg_town_merge_request_received: '&bO prefeito de %s, %s, pediu para mesclar com sua cidade. Isto irá transferir todos os moradores, moradores e dinheiro dos bancos da cidade para %s.'
 msg_town_merge_request_denied: '&cMerge request denied.'
 msg_town_merge_other_offline: '&cThe mayor of %s, %s, is currently offline. Merge failed.'
 msg_town_merge_err_too_many_residents: '&cMerge failed: New resident amount exceeds the limit (%d)'
@@ -1113,31 +1113,31 @@ msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
 #Added in 0.106
 msg_command_outsider_blocked: 'You cannot run that command because you don''t live in %s.'
 #Added in 0.107
-msg_jailed_for_x_hours: ' for %s hours.'
-msg_err_this_jail_has_no_cells: 'This jail has no cells.'
-msg_err_no_cell_found_at_this_location: 'No jail cell found at this location.'
-msg_jail_cell_set: 'Jail cell set.'
-msg_jail_cell_removed: 'Jail cell removed.'
-msg_err_resident_is_already_jailed: '%s is already jailed'
-msg_err_the_town_does_not_have_that_many_jails: 'The town does not have that many jails.'
-msg_err_that_jail_plot_does_not_have_that_many_cells: 'That jail plot does not have that many cells.'
-msg_primary_jail_set_for_town: 'Your town''s primary jail has been set.'
+msg_jailed_for_x_hours: ' por %s horas.'
+msg_err_this_jail_has_no_cells: 'Esta prisão não possui celas.'
+msg_err_no_cell_found_at_this_location: 'Nenhuma cela de prisão encontrada nesta localização.'
+msg_jail_cell_set: 'Cela da prisão definida.'
+msg_jail_cell_removed: 'Cela da prisão removida.'
+msg_err_resident_is_already_jailed: '%s já está preso'
+msg_err_the_town_does_not_have_that_many_jails: 'A cidade não tem tantas prisões assim.'
+msg_err_that_jail_plot_does_not_have_that_many_cells: 'Este terreno de prisão não possui tantas celas.'
+msg_primary_jail_set_for_town: 'A prisão primária da sua cidade foi definida.'
 msg_x_has_been_freed_from_x: '%s has been freed from jail %s'
-msg_you_have_been_jailed: 'You have been jailed.'
+msg_you_have_been_jailed: 'Você foi preso.'
 msg_run_to_the_wilderness_or_wait_for_a_jailbreak: 'Run to the wilderness or wait for a jailbreak.'
-msg_err_player_is_not_jailed: 'That player is not jailed.'
+msg_err_player_is_not_jailed: 'Esse jogador não está preso.'
 msg_you_have_paid_bail: 'You have paid bail.'
 msg_you_have_been_freed_via_jailbreak: 'There''s been a jailbreak, you are free!'
-msg_you_have_served_your_sentence_and_are_free: 'You have served your jail sentence and are free.'
+msg_you_have_served_your_sentence_and_are_free: 'Você cumpriu a sua sentença na prisão e agora está livre.'
 msg_x_has_served_their_sentence_and_is_free: '%s has served their jail sentence and is free.'
-msg_you've_been_jailed_for_x_hours: 'You''ve been jailed for %s hours.'
-msg_you_are_being_sent_to_jail: 'You are being sent to jail.'
+msg_you've_been_jailed_for_x_hours: 'Você foi preso for %s horas.'
+msg_you_are_being_sent_to_jail: 'Você está sendo mandado para a prisão.'
 msg_err_you_cannot_remove_the_last_cell: 'You cannot remove the last jail cell in this jail, until another cell is added'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Do not log out before being teleported to jail, it would be fatal.'
-jail_plu: 'Jails'
-jail_sing: 'Jail'
+jail_plu: 'Prisões'
+jail_sing: 'Prisão'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s has been sent to %s into cell number %s for %s hours by %s.'
-msg_resident_has_not_played_long_enough_to_be_jailed: '%s hasn''t played long enough to be jailed, wait another %s'
+msg_resident_has_not_played_long_enough_to_be_jailed: '%s não jogou tempo suficiente para ser preso, espere mais %s'
 #Added in 0.108
 msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
 msg_town_already_peaceful: '&Town is already peaceful.'
@@ -1225,7 +1225,7 @@ help_ta_perms_nationrankadd: 'Adds a nationrank to the townyperms file.'
 help_ta_perms_nationrankremove: 'Removes a nationrank from the townyperms file.'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'That resident doesn''t belong to that nation.'
 #Added in 0.115
-msg_comptype_founded: 'Founded Date'
+msg_comptype_founded: 'Data da Fundação'
 msg_err_must_be_greater_than_or_equal_to: 'Amount must be greater than or equal to %s'
 err_invalid_yaml: 'Loading error: Failed to load file %s (does it pass a yaml parser?).'
 #Added in 0.116
@@ -1236,7 +1236,7 @@ msg_err_this_townblock_doesnt_match_the_groups_type: 'This townblock cannot be a
 status_title_nopvp: '&a(No PVP)'
 #Added in 0.119
 msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'You cannot jail your resident because they are in a location where they are outlawed.'
-msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'You cannot jail your resident because they are in a location where they are considered an enemy.'
+msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Você não pode prender este residente porque ele está em um local onde ele é considerado um inimigo.'
 #Added in 0.120
 msg_resident_prompt: 'Enter the name of the player in chat, or q to exit. This will automatically time out in 30 seconds.'
 msg_prompt_cancel: 'Prompt cancelled or timed out.'
@@ -1259,7 +1259,7 @@ status_lastonline: 'Last Online:'
 status_fractions: '%s/%s'
 status_rank_list: 'Rank List'
 status_hover_click_for_more: 'Click for more information.'
-status_jailed: 'Jailed:'
+status_jailed: 'Preso:'
 status_bad_yes: '&cYES'
 status_good_no: '&aNO'
 status_resident_tax_title: '%s''s Tax'
@@ -1357,19 +1357,19 @@ towny_prices_upkeep_num_towns: 'number of towns.'
 towny_prices_upkeep_nation_level: 'nation level (num residents.)'
 #Added in 0.130
 #Jail causes
-msg_jailed_mayor: 'Jailed by mayor.'
+msg_jailed_mayor: 'Preso pelo prefeito.'
 #Jail causes
 msg_jailed_outlaw: 'Killed as an outlaw.'
 #Jail causes
-msg_jailed_war: 'Prisoner of War.'
+msg_jailed_war: 'Prisioneiro de Guerra.'
 #Jail handbook messages
-msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
+msg_jailed_handbook_1: 'Parece que você foi preso, pelo motivo %s'
 #Jail handbook messages
-msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
+msg_jailed_handbook_2: 'Isso é ruim né? Bem, o que você acha disso? Aqui estão algumas dicas úteis para você enquanto você cumpre sua sentença.'
 #Jail handbook messages
 msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
 #Jail handbook messages
-msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
+msg_jailed_handbook_4_can: 'Você pode escapar da prisão ao sair de sua cidade utilizando "/town leave".'
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
 #Jail handbook messages
@@ -1381,18 +1381,18 @@ msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you m
 #Jail handbook messages
 msg_jailed_handbook_6: 'But don''t die before you reach the wilderness or you''ll end up right back in jail.'
 #Jail handbook messages
-msg_jailed_teleport: 'Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you''ve just got to get a hold of some.'
+msg_jailed_teleport: 'Felizmente, as pérolas do ender e a fruta do coro podem ser usadas para ajudá-lo a escapar, agora você só precisa conseguir algumas.'
 #Jail handbook messages
 msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your countrymen can reduce the jail plot''s HP to 0, or if the town you are jailed in is removed from the war.'
 #Jail handbook title
-msg_jailed_title: 'So you''ve been jailed :('
+msg_jailed_title: 'Então, você foi preso :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
 #Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Town has no allies to list.'
 #Message shown when there are no enemies to list in /town enemylist.
-msg_error_town_has_no_enemies: 'Town has no enemies to list.'
+msg_error_town_has_no_enemies: 'A cidade não tem inimigos para listar.'
 #Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
@@ -1413,11 +1413,11 @@ town1_has_merged_with_town2: '&6The town %s has agreed to merge together with th
 status_neutrality_cost: 'Neutrality Cost:'
 #Added in 0.138
 #Line 1 of the givebonus warning.
-msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+msg_ptw_warning_1: 'Se você pagou dinheiro da vida real por estes blocos, por favor entenda o seguinte: o servidor em que você joga viola o EULA do Minecraft e a licença do Towny.'
 #Line 2 of the givebonus warning.
-msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchaseable with real money.'
+msg_ptw_warning_2: 'A equipe do Towny nunca pretendia que os blocos de cidade fossem compráveis com dinheiro de verdade.'
 #Line 3 of the givebonus warning.
-msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
+msg_ptw_warning_3: 'Se você pagou com dinheiro de verdade, você deveria considerar jogar em um servidor com que possua o Towny que respeite os desejos da Equipe do Towny.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
 #Added in 0.139
@@ -1426,7 +1426,7 @@ msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to u
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
 msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
 #Confirmation message shown when a player will unclaim land that costs money.
-confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+confirmation_unclaiming_costs: 'Reclamar esta terra irá custar %s, você deseja continuar?'
 #Added in 0.140
 #Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
 msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
