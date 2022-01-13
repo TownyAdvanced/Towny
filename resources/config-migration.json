@@ -107,7 +107,7 @@
       {
         "type": "APPEND",
         "path": "new_world_settings.plot_management.revert_on_unclaim.block_ignore",
-        "value": ",DEEPSLATE_IRON_ORE,DEEPSLATE_GOLD_ORE,DEEPSLATE_COAL_ORE,DEEPSLATE_REDSTONE_ORE,DEEPSLATE_DIAMOND_ORE,DEEPSLATE_EMERALD_ORE,DEEPSLATE_LAPIS_ORE,RAW_IRON_BLOCK,RAW_GOLD_ORE",
+        "value": ",DEEPSLATE_IRON_ORE,DEEPSLATE_GOLD_ORE,DEEPSLATE_COAL_ORE,DEEPSLATE_REDSTONE_ORE,DEEPSLATE_DIAMOND_ORE,DEEPSLATE_EMERALD_ORE,DEEPSLATE_LAPIS_ORE,RAW_IRON_BLOCK,RAW_GOLD_BLOCK",
         "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
       }
     ]
@@ -195,6 +195,13 @@
         "type": "APPEND",
         "path": "protection.mob_types",
         "value": ",Hanging"
+      },
+      {
+        "type": "REPLACE",
+        "path": "new_world_settings.plot_management.revert_on_unclaim.block_ignore",
+        "key": "RAW_GOLD_ORE",
+        "value": "RAW_GOLD_BLOCK",
+        "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
       }
     ]
   }

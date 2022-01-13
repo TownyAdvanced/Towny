@@ -85,6 +85,11 @@ public class ConfigMigrator {
 				addPermissions(change.path, change.value);
 				TownyMessaging.sendDebugMsg("Updating townyperms.yml, adding " + change.value + " to " + change.path + " group.");
 				break;
+			case REPLACE:
+				Object value = config.get(change.path);
+				if (value instanceof String string)
+					config.set(change.path, string.replaceAll(change.key, change.value));
+				break;
 			default:
 				throw new UnsupportedOperationException("Unsupported Change type: " + change);
 		}
@@ -93,7 +98,7 @@ public class ConfigMigrator {
 		if (change.worldAction != null) {
 			for (TownyWorld world : TownyUniverse.getInstance().getWorldMap().values()) {
 				TownyMessaging.sendDebugMsg("Updating " + world.getName() + " with " + change.value);
-				change.worldAction.getAction().accept(world, change.value);
+				change.worldAction.getAction().accept(world, change);
 				world.save();
 			}
 		}
