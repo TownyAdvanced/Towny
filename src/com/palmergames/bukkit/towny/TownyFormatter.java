@@ -47,7 +47,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class TownyFormatter {
@@ -118,7 +117,7 @@ public class TownyFormatter {
 		if (!fields.isEmpty()) {
 			TextComponent comp = Component.empty();
 			for (Component fieldComp : fields) {
-				comp = comp.append(fieldComp);
+				comp = comp.append(Component.newline()).append(fieldComp);
 			}
 			screen.addComponentOf("extraFields", comp);
 		}
@@ -222,7 +221,7 @@ public class TownyFormatter {
 			if (!fields.isEmpty()) {
 				TextComponent comp = Component.empty();
 				for (Component fieldComp : fields) {
-					comp = comp.append(fieldComp);
+					comp = comp.append(Component.newline()).append(fieldComp);
 				}
 				screen.addComponentOf("extraFields", comp);
 			}
@@ -255,7 +254,7 @@ public class TownyFormatter {
 		if (!fields.isEmpty()) {
 			TextComponent comp = Component.empty();
 			for (Component fieldComp : fields) {
-				comp = comp.append(fieldComp);
+				comp = comp.append(Component.newline()).append(fieldComp);
 			}
 			screen.addComponentOf("extraFields", comp);
 		}
@@ -419,7 +418,7 @@ public class TownyFormatter {
 		if (!fields.isEmpty()) {
 			TextComponent comp = Component.empty();
 			for (Component fieldComp : fields) {
-				comp = comp.append(fieldComp);
+				comp = comp.append(Component.newline()).append(fieldComp);
 			}
 			screen.addComponentOf("extraFields", comp);
 		}
@@ -555,7 +554,7 @@ public class TownyFormatter {
 		if (!fields.isEmpty()) {
 			TextComponent comp = Component.empty();
 			for (Component fieldComp : fields) {
-				comp = comp.append(fieldComp);
+				comp = comp.append(Component.newline()).append(fieldComp);
 			}
 			screen.addComponentOf("extraFields", comp);
 		}
@@ -629,7 +628,7 @@ public class TownyFormatter {
 			if (!fields.isEmpty()) {
 				TextComponent comp = Component.empty();
 				for (Component fieldComp : fields) {
-					comp = comp.append(fieldComp);
+					comp = comp.append(Component.newline()).append(fieldComp);
 				}
 				screen.addComponentOf("extraFields", comp);
 			}
@@ -886,24 +885,6 @@ public class TownyFormatter {
 		
 		return sub;
 	}
-
-	// Get length of the content that a component will display.
-	// Color symbols are filtered.
-	private static int getContentLength(Component comp) {
-		String combinedContent;
-		
-		if (comp.children().isEmpty())
-			combinedContent = ((TextComponent) comp).content();
-		else {
-			StringJoiner joiner = new StringJoiner(" ");
-			for (Component child : comp.children())
-				joiner.add(((TextComponent) child).content());
-
-			combinedContent = joiner.toString();
-		}
-
-		return Colors.strip(combinedContent).length();
-	}
 	
 	/**
 	 * Returns a list of MetaData used in the StatusScreens.
@@ -913,9 +894,6 @@ public class TownyFormatter {
 	public static List<Component> getExtraFields(TownyObject to) {
 		if (!to.hasMeta())
 			return new ArrayList<>();
-		
-		Component field = Component.empty();
-		int fieldLen = 0;
 		
 		List<Component> extraFields = new ArrayList<>();
 		for (CustomDataField<?> cdf : to.getMetadata()) {
@@ -930,23 +908,11 @@ public class TownyFormatter {
 				newAdd = newAdd.color(kvColor);
 			}
 			
-			newAdd = newAdd.append(Component.text(": "))
-				.append(cdf.formatValueAsComp())
-				.append(Component.space());
+			newAdd = newAdd.append(Component.text(": ").mergeStyle(newAdd))
+				.append(cdf.formatValueAsComp());
 			
-			int newAddLen = getContentLength(newAdd);
-			if ((fieldLen + newAddLen) > ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH) {
-				extraFields.add(field);
-				field = newAdd;
-				fieldLen = newAddLen;
-			} else {
-				field = field.append(newAdd);
-				fieldLen += newAddLen;
-			}
+			extraFields.add(newAdd);
 		}
-		
-		if (fieldLen > 0)
-			extraFields.add(field);
 
 		return extraFields;
 	}
