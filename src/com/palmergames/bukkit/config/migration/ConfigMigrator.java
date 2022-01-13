@@ -7,7 +7,6 @@ import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -49,28 +48,47 @@ public class ConfigMigrator {
 		// Use the last run version as a reference.
 		Version configVersion = Version.fromString(config.getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), "0.0.0.0"));
 		boolean saveTownyperms = false;
-		
+		int totalChangeCount = 0;
+
 		// Go through each migration element.
 		for (Migration migration : readMigrator()) {
 			// If a migration version is greater than our version, upgrade with it.
 			if (configVersion.compareTo(migration.version) < 0) {
-				// Perform all desired changes.
-				Towny.getPlugin().getLogger().info("Config: " + migration.version + " applying " + migration.changes.size() + " automatic update" + (migration.changes.size() == 1 ? "" : "s") + " ...");
+				// Check if there are any applicable changes based on the early/normal run-order.
+				int changeCount = getChangeCount(migration);
+				if (changeCount == 0)
+					continue;
+
+				Towny.getPlugin().getLogger().info("Config: " + migration.version + " applying " + changeCount + " automatic update" + (changeCount == 1 ? "" : "s") + " ...");
 				for (Change change : migration.changes) {
+					// Only perform earlyRun changes on earlyRun-typed Migrations and vice versa.
 					if (change.type.early != earlyRun)
 						continue;
 
 					performChange(change);
+					totalChangeCount++;
 					if (change.type == MigrationType.TOWNYPERMS_ADD)
 						saveTownyperms = true;
 				}
 			}
 		}
-		config.save();
-		if (saveTownyperms)
-			townyperms.save();
+		if (totalChangeCount > 0) {
+			config.save();
+			if (saveTownyperms)
+				townyperms.save();
+		}
 	}
 	
+	private int getChangeCount(Migration migration) {
+		int i = 0;
+		for (Change change : migration.changes) {
+			if (change.type.early != earlyRun)
+				continue;
+			i++;
+		}
+		return i;
+	}
+
 	private void performChange(Change change) {
 		switch (change.type) {
 			case OVERWRITE:
