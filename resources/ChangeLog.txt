@@ -7183,3 +7183,4 @@ v0.92.0.11:
 0.97.5.11:
   - Add component support to Metadata Labels and Values, courtesy of silverwolfg11 with PR #5628.
   - Fix empty named towns being allowed to be made.
+  - Fix new plot snapshots being made where there are existing plot snapshots.

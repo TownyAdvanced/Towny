@@ -1445,6 +1445,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		queryQueue.add(new DeleteFileTask(file, true));
 	}
 
+	@Override
+	public boolean hasPlotData(TownBlock townBlock) {
+		return isFile(getPlotFilename(townBlock));
+	}
+
 	private String getPlotFilename(PlotBlockData plotChunk) {
 
 		return dataFolderPath + File.separator + "plot-block-data" + File.separator + plotChunk.getWorldName() + File.separator + plotChunk.getX() + "_" + plotChunk.getZ() + "_" + plotChunk.getSize() + ".zip";

@@ -132,6 +132,8 @@ public abstract class TownyDataSource {
 	abstract public PlotBlockData loadPlotData(String worldName, int x, int z);
 
 	abstract public PlotBlockData loadPlotData(TownBlock townBlock);
+	
+	abstract public boolean hasPlotData(TownBlock townBlock);
 
 	abstract public void deletePlotData(PlotBlockData plotChunk);
 

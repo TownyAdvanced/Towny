@@ -194,6 +194,7 @@ public class TownClaim extends Thread {
 			}
 
 			if (worldCoord.getTownyWorld().isUsingPlotManagementRevert() && TownySettings.getPlotManagementSpeed() > 0) {
+				// Check if the townblock is actively being regenerated.
 				if (TownyRegenAPI.getRegenQueueList().contains(townBlock.getWorldCoord())) {
 					PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
 					if (plotChunk != null) {
@@ -202,9 +203,12 @@ public class TownClaim extends Thread {
 					}
 					TownyRegenAPI.removeFromRegenQueueList(worldCoord);
 				} 
-				// Queue to have a snapshot made. 
-				TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
-				townBlock.setLocked(true);
+				// Check if a plot snapshot exists for this townblock already (inactive, unqueued regeneration.)
+				if (!TownyUniverse.getInstance().getDataSource().hasPlotData(townBlock)) {
+					// Queue to have a snapshot made if there is not already an earlier snapshot.
+					TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
+					townBlock.setLocked(true);
+				}
 			}
 			
 			townBlock.save();
