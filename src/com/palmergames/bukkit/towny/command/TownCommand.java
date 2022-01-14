@@ -886,9 +886,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					
 					parseTownPurgeCommand(player, StringMgmt.remFirstArg(split));
 
-				} else if (split[0].equalsIgnoreCase("trust")) {	
-					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_TRUST.getNode()))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+				} else if (split[0].equalsIgnoreCase("trust")) {
 					
 					parseTownTrustCommand(player, StringMgmt.remFirstArg(split), null);
 				} else if (split[0].equalsIgnoreCase("baltop")) {
@@ -4382,10 +4380,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	public static void parseTownTrustCommand(Player player, String[] args, @Nullable Town town) {
-//		if (args.length < 2 || args.length == 1 && !args[0].equalsIgnoreCase("list")) {
-//			HelpMenu.TOWN_TRUST_HELP.send(player);
-//			return;
-//		}
 		
 		if (args.length < 1
 			|| args.length < 2 && args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")
@@ -4410,6 +4404,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
+		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_TRUST.getNode())) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_command_disable"));
+			return;
+		}
+
 		Resident resident = TownyAPI.getInstance().getResident(args[1]);
 		if (resident == null || resident.isNPC()) {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", args[1]));
