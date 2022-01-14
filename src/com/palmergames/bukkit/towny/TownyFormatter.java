@@ -763,8 +763,8 @@ public class TownyFormatter {
 				ranklist.add(getFormattedTownyObjects(StringMgmt.capitalize(rank), new ArrayList<>(residentWithRank)));
 			residentWithRank.clear();
 		}
-		if (gov instanceof Town && ((Town) gov).getTrustedResidents().size() > 0)
-			ranklist.add(getFormattedTownyObjects(Translation.of("status_trustedlist", locale), new ArrayList<>(((Town) gov).getTrustedResidents())));
+		if (gov instanceof Town town && town.getTrustedResidents().size() > 0)
+			ranklist.add(getFormattedTownyObjects(Translation.of("status_trustedlist", locale), new ArrayList<>(town.getTrustedResidents())));
 		
 		return ranklist;
 	}
