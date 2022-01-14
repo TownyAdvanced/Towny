@@ -567,6 +567,12 @@ public class PlayerCacheUtil {
 				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_outsider", Translatable.of(action.toString())).forLocale(player));
 			return false;
 		}
+		
+		/*
+		 * Towny doesn't set a WARZONE status itself, some other plugin has used the API. 
+		 */
+		if (status == TownBlockStatus.WARZONE)
+			return true;
 
 		TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
 		return false;
