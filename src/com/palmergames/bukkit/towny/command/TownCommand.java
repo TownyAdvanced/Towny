@@ -4455,7 +4455,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_removed", resident.getName(), Translatable.of("town_sing")));
 			if (BukkitTools.isOnline(resident.getName()))
 				TownyMessaging.sendMsg(resident.getPlayer(), Translatable.of("msg_trusted_removed_2", player.getName(), Translatable.of("town_sing"), town.getName()));
-
 		} else {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", args[0]));
 			return;
