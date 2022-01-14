@@ -987,7 +987,7 @@ towny_prices_price_shop: '&c            &2Tienda: &a%s &8| &2Embajada: &a%s'
 towny_prices_taxes_plot: '&c    [Impuestos]    &2Residente: &a%s &8| &2Parcela: &a%s'
 towny_prices_taxes_shop: '&c            &aTienda: &a%s &8| &2Embajada: &a%s'
 towny_prices_town_neutral_tax: '&c            &2Paz: &a%s'
-towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_plots: '&c     [Ajustes Terreno]'
 towny_prices_type_single: '            &2%s: &a%s'
 towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cNación: &6%s'
@@ -1422,13 +1422,13 @@ msg_ptw_warning_3: 'Si pagaste dinero real deberías considerar jugar en un serv
 you_have_been_invited_to_join3: 'Fuiste invitado a unirte a %s&9 (Nación: %s&9)'
 #Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
-msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+msg_err_your_town_cannot_afford_unclaim: 'Tu ciudad no puede permitirse el abandono de este terreno. Necesita %s.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
-msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+msg_your_town_paid_x_to_unclaim: 'Tu ciudad pagó %s para abandonar el terreno.'
 #Confirmation message shown when a player will unclaim land that costs money.
-confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+confirmation_unclaiming_costs: 'Abandonar este terreno costará %s, ¿quieres continuar?'
 #Added in 0.140
 #Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
-msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
+msg_your_locale: 'Towny usa la configuración del idioma de tu cliente (%s) para traducir el contenido. Debes tener en cuenta que algunas cadenas pueden faltar.'
 #Message shown when a player tries to rename their town too quickly.
-msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'Debes esperar %s segundos antes de volver a renombrar tu ciudad.'
