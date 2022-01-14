@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -268,7 +269,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		Town town = this.town;
 		
-		BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(this, town));
+		BukkitTools.getPluginManager().callEvent(new TownPreRemoveResidentEvent(this, town));
+		
 		try {
 			
 			town.removeResident(this);
@@ -277,6 +279,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			e1.printStackTrace();
 		} catch (EmptyTownException ignore) {
 		}
+
+		BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(this, town));
 
 		// Use an iterator to be able to keep track of element modifications.
 		Iterator<TownBlock> townBlockIterator = townBlocks.iterator();
