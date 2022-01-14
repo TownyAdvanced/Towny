@@ -7193,3 +7193,4 @@ v0.92.0.11:
   - New Command: /town trust list.
     - Closes #5615.
   - Fix Towny showing "Error updating {action} permission." messages when EventWar is used.
+  - Fix /ta set plot {townname} not saving the townblock correctly when the command is changing a townblock from one town to another.
