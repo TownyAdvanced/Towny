@@ -7190,3 +7190,5 @@ v0.92.0.11:
     - Fires before a resident is removed from a town.
   - API: TownRemoveResidentEvent changed to fire after a resident is removed from a town.
     - Closes #5630.
+  - New Command: /town trust list.
+    - Closes #5615.
