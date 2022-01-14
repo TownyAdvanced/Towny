@@ -114,6 +114,7 @@ public class ConfigMigrator {
 				Object value = config.get(change.path);
 				if (value instanceof String string)
 					config.set(change.path, string.replaceAll(change.key, change.value));
+				break;
 			case MOVE:
 				Object oldValue = config.get(change.path);
 				if (oldValue != null)
