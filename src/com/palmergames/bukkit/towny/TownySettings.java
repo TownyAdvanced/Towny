@@ -2005,11 +2005,6 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_FORCE_PVP_ON);
 	}
 
-	public static boolean isPlayerTramplingCropsDisabled() {
-
-		return getBoolean(ConfigNodes.NWS_DISABLE_PLAYER_CROP_TRAMPLING);
-	}
-
 	public static boolean isCreatureTramplingCropsDisabled() {
 
 		return getBoolean(ConfigNodes.NWS_DISABLE_CREATURE_CROP_TRAMPLING);

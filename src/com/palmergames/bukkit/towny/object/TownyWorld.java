@@ -62,7 +62,6 @@ public class TownyWorld extends TownyObject {
 	private boolean isForceExpl = TownySettings.isForcingExplosions();
 	private boolean isEndermanProtect = TownySettings.getEndermanProtect();
 	
-	private boolean isDisablePlayerTrample = TownySettings.isPlayerTramplingCropsDisabled();
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
 	
 	public Map<Location, Material> bedMap = new HashMap<>();
@@ -232,16 +231,6 @@ public class TownyWorld extends TownyObject {
 	public boolean isForceFire() {
 
 		return isForceFire;
-	}
-
-	public void setDisablePlayerTrample(boolean isDisablePlayerTrample) {
-
-		this.isDisablePlayerTrample = isDisablePlayerTrample;
-	}
-
-	public boolean isDisablePlayerTrample() {
-
-		return isDisablePlayerTrample;
 	}
 
 	public void setDisableCreatureTrample(boolean isDisableCreatureTrample) {
