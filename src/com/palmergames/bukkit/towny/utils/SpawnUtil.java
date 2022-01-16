@@ -103,7 +103,8 @@ public class SpawnUtil {
 			default:
 		}
 
-		// Prevent spawn travel while in the config's disallowed zones by throwing an exception.
+		// Prevent spawn travel while in the config's disallowed zones.
+		// Throws a TownyException if the player is disallowed.
 		if (!isTownyAdmin)
 			testDisallowedZones(player, resident, spawnType, TownySettings.getDisallowedTownSpawnZones());
 
@@ -116,35 +117,16 @@ public class SpawnUtil {
 		if (travelCost > 0 && !resident.getAccount().canPayFromHoldings(travelCost))
 			throw new TownyException(notAffordMSG);
 		
-		// Allow for a cancellable event right before a player would actually pay.
-		if (!sendSpawnEvent(player, spawnType, spawnLoc))
-			return;
+		// Fire a cancellable event right before a player would actually pay.
+		// Throws a TownyException if the event is cancelled.
+		sendSpawnEvent(player, spawnType, spawnLoc);
 		
 		// There is a cost to spawn, prompt with confirmation unless ignoreWarn is true.
-		if (TownyEconomyHandler.isActive() && travelCost > 0) {
-			// Skipping the confirmation.
-			if (ignoreWarn || !TownySettings.isSpawnWarnConfirmationUsed()) {
-				if (resident.getAccount().payTo(travelCost, payee, paymentMsg)) {
-					TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(travelCost)));
-					resident.setTeleportCost(travelCost);
-					initiateSpawn(player, spawnLoc);
-				}
-			} else {
-			// Sending the confirmation.
-				Confirmation.runOnAccept(() -> {
-					if (resident.getAccount().payTo(travelCost, payee, paymentMsg)) {
-						TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(travelCost)));
-						resident.setTeleportCost(travelCost);
-						initiateSpawn(player, spawnLoc);
-					}
-				})
-				.setTitle(Translatable.of("msg_spawn_warn", TownyEconomyHandler.getFormattedBalance(travelCost)))
-				.sendTo(player);
-			}
+		if (travelCost > 0)
+			initiateCostedSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, ignoreWarn);
 		// No Cost so skip confirmation system.
-		} else {
+		else
 			initiateSpawn(player, spawnLoc);
-		}
 	}
 
 	/**
@@ -539,31 +521,28 @@ public class SpawnUtil {
 	/**
 	 * Fires cancellable events before allowing someone to spawn.
 	 * 
-	 * @param player - Player being spawned to a Towny location.
-	 * @param type - SpawnType (RESIDENT, TOWN, NATION).
-	 * @param spawnLoc - Location being spawned to.
-	 * @return true if uncancelled.
+	 * @param player    Player being spawned to a Towny location.
+	 * @param spawnType SpawnType (RESIDENT, TOWN, NATION).
+	 * @param spawnLoc  Location being spawned to.
+	 * @throws TownyException when the event is cancelled.
 	 */
-	private static boolean sendSpawnEvent(Player player, SpawnType type, Location spawnLoc) {
-		SpawnEvent spawnEvent = getSpawnEvent(player, type, spawnLoc);
+	private static void sendSpawnEvent(Player player, SpawnType spawnType, Location spawnLoc) throws TownyException {
+		SpawnEvent spawnEvent = getSpawnEvent(player, spawnType, spawnLoc);
 		Bukkit.getPluginManager().callEvent(spawnEvent);
-		if (spawnEvent.isCancelled()) {
-			TownyMessaging.sendErrorMsg(player, spawnEvent.getCancelMessage());
-			return false;
-		}
-		return true;
+		if (spawnEvent.isCancelled())
+			throw new TownyException(spawnEvent.getCancelMessage());
 	}
 	
 	/**
 	 * Get a SpawnEvent.
 	 * 
-	 * @param player   Player spawning.
-	 * @param type     SpawnType.
-	 * @param spawnLoc Location that the player will spawn at.
+	 * @param player    Player spawning.
+	 * @param spawnType SpawnType.
+	 * @param spawnLoc  Location that the player will spawn at.
 	 * @return SpawnEvent to be called.
 	 */
-	private static SpawnEvent getSpawnEvent(Player player, SpawnType type, Location spawnLoc) {
-		return switch(type) {
+	private static SpawnEvent getSpawnEvent(Player player, SpawnType spawnType, Location spawnLoc) {
+		return switch(spawnType) {
 		case RESIDENT -> new ResidentSpawnEvent(player, player.getLocation(), spawnLoc);
 		case TOWN -> new TownSpawnEvent(player, player.getLocation(), spawnLoc);
 		case NATION -> new NationSpawnEvent(player, player.getLocation(), spawnLoc);
@@ -588,6 +567,48 @@ public class SpawnUtil {
 			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
 			if (TownySettings.getSpawnCooldownTime() > 0 && !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()))
 				CooldownTimerTask.addCooldownTimer(player.getName(), CooldownType.TELEPORT);
+		}
+	}
+
+	/**
+	 * Begin a costed teleportation.
+	 * 
+	 * @param player     Player being teleported.
+	 * @param resident   Resident of the Player being teleported.
+	 * @param spawnLoc   Location that the player is being teleported to.
+	 * @param travelCost double Cost which the player has to be able to pay.
+	 * @param payee      Account which will be paid.
+	 * @param paymentMsg Message being left in the Towny money.csv log.
+	 * @param ignoreWarn boolean which is true if the player opted to ignore the
+	 *                   cost confirmation.
+	 */
+	private static void initiateCostedSpawn(Player player, Resident resident, Location spawnLoc, double travelCost, Account payee, String paymentMsg, boolean ignoreWarn) {
+		if (ignoreWarn || !TownySettings.isSpawnWarnConfirmationUsed())
+			// Skipping the confirmation.
+			payAndThenSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg);
+		else
+			// Sending the confirmation.
+			Confirmation.runOnAccept(() -> payAndThenSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg))
+						.setTitle(Translatable.of("msg_spawn_warn", TownyEconomyHandler.getFormattedBalance(travelCost)))
+						.sendTo(player);
+	}
+
+	/**
+	 * If a player is able to pay the travel cost they will be teleported to the
+	 * spawn location.
+	 * 
+	 * @param player     Player being teleported.
+	 * @param resident   Resident of the Player being teleported.
+	 * @param spawnLoc   Location that the player is being teleported to.
+	 * @param travelCost double Cost which the player has to be able to pay.
+	 * @param payee      Account which will be paid.
+	 * @param paymentMsg Message being left in the Towny money.csv log.
+	 */
+	private static void payAndThenSpawn(Player player, Resident resident, Location spawnLoc, double travelCost, Account payee, String paymentMsg) {
+		if (resident.getAccount().payTo(travelCost, payee, paymentMsg)) {
+			TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(travelCost)));
+			resident.setTeleportCost(travelCost);
+			initiateSpawn(player, spawnLoc);
 		}
 	}
 
