@@ -281,17 +281,12 @@ public class SpawnUtil {
 			}
 		}
 
-		townSpawnLevel.checkIfAllowed(plugin, player, town);
-
-		// Check the permissions
-		if (!(townSpawnLevel == TownSpawnLevel.UNAFFILIATED 
-				? town.isPublic()
-				: townSpawnLevel.hasPermissionNode(plugin, player, town)))
+		if (townSpawnLevel == TownSpawnLevel.UNAFFILIATED && !town.isPublic())
 			throw new TownyException(Translatable.of("msg_err_not_public"));
-
-		// Prevent outlaws from spawning into towns they're considered an outlaw in.
-		if (town.hasOutlaw(resident))
-			throw new TownyException(Translatable.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", town));
+		
+		// Check if the player has the permission/config allows for this type of spawning.
+		// Throws exception if unallowed.
+		townSpawnLevel.checkIfAllowed(plugin, player, town);
 
 		return townSpawnLevel;
 	}
@@ -333,13 +328,14 @@ public class SpawnUtil {
 				nationSpawnLevel = NationSpawnLevel.UNAFFILIATED;
 			}
 		}
+
+		if (nationSpawnLevel == NationSpawnLevel.UNAFFILIATED && !nation.isPublic())
+			throw new TownyException(Translatable.of("msg_err_nation_not_public"));
+
+		// Check if the player has the permission/config allows for this type of spawning.
+		// Throws exception if unallowed.
 		nationSpawnLevel.checkIfAllowed(plugin, player, nation);
 
-		// Check the permissions
-		if (!(nationSpawnLevel == NationSpawnLevel.UNAFFILIATED 
-				? nation.isPublic()
-				: nationSpawnLevel.hasPermissionNode(plugin, player, nation)))
-			throw new TownyException(Translatable.of("msg_err_nation_not_public"));
 		return nationSpawnLevel;
 	}
 	
@@ -472,7 +468,7 @@ public class SpawnUtil {
 
 			if (townAtPlayerLoc != null) {
 				if (townAtPlayerLoc.hasOutlaw(player.getName()) && disallowedZones.contains("outlaw"))
-					throw new TownyException(Translatable.of("msg_err_outlawed_players_no_teleport"));
+					throw new TownyException(Translatable.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", townAtPlayerLoc));
 				if (resident.hasNation() && townAtPlayerLoc.hasNation()) {
 					if (CombatUtil.isEnemy(resident.getTownOrNull(), townAtPlayerLoc) && disallowedZones.contains("enemy"))
 						throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translatable.of("msg_enemy_areas")));
