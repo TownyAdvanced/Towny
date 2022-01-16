@@ -343,7 +343,7 @@ public class TownyAPI {
 	 * @return true if PVP is enabled or this isn't a world with Towny enabled.
 	 */
 	public boolean isPVP(Location location) {
-		return !isTownyWorld(location.getWorld()) || CombatUtil.preventPvP(getTownyWorld(location.getWorld().getName()), getTownBlock(location));
+		return !isTownyWorld(location.getWorld()) || !CombatUtil.preventPvP(getTownyWorld(location.getWorld().getName()), getTownBlock(location));
 	}
 
     /**
