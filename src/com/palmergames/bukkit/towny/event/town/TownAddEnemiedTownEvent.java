@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.town;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -15,6 +16,7 @@ public class TownAddEnemiedTownEvent extends Event implements Cancellable {
 	private String cancelMessage = "A town enemying another town was cancelled by another plugin.";
 	
 	public TownAddEnemiedTownEvent(Town town, Town newAlly) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.newEnemy = newAlly;
 	}
