@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object.spawnlevel;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import org.bukkit.entity.Player;
@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 
 public enum TownSpawnLevel {
@@ -99,12 +101,5 @@ public enum TownSpawnLevel {
 	public double getCost(Town town) {
 
 		return this == TownSpawnLevel.ADMIN ? 0 : town.getSpawnCost();
-	}
-	
-	public enum SpawnLevel {
-		TRUE,
-		FALSE,
-		WAR,
-		PEACE
 	}
 }

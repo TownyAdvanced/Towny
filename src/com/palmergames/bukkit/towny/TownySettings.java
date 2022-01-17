@@ -10,16 +10,15 @@ import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.NationSpawnLevel.NSpawnLevel;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
-import com.palmergames.bukkit.towny.object.TownSpawnLevel.SpawnLevel;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyPermission.PermLevel;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.spawnlevel.SpawnLevel;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.Colors;
@@ -374,17 +373,6 @@ public class TownySettings {
 			spawnLevel = SpawnLevel.valueOf(node.getDefault().toUpperCase(Locale.ROOT));
 		}
 		return spawnLevel;
-	}
-	
-	public static NSpawnLevel getNSpawnLevel(ConfigNodes node) {
-		String configString = config.getString(node.getRoot());
-		NSpawnLevel level;
-		if (configString != null) {
-			level = NSpawnLevel.valueOf(configString.toUpperCase(Locale.ROOT));
-		} else {
-			level = NSpawnLevel.valueOf(node.getDefault().toUpperCase(Locale.ROOT));
-		}
-		return level;
 	}
 
 	public static boolean getBoolean(ConfigNodes node) {
@@ -1627,16 +1615,6 @@ public class TownySettings {
 	public static SpawnLevel isAllowingPublicTownSpawnTravel() {
 
 		return getSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
-	}
-	
-	public static NSpawnLevel isAllowingNationSpawn() {
-
-		return getNSpawnLevel(ConfigNodes.GNATION_SETTINGS_ALLOW_NATION_SPAWN);
-	}
-
-	public static NSpawnLevel isAllowingPublicNationSpawnTravel() {
-
-		return getNSpawnLevel(ConfigNodes.GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL);
 	}
 
 	public static List<String> getDisallowedTownSpawnZones() {
