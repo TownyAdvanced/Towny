@@ -261,11 +261,11 @@ public class SpawnUtil {
 			} else {
 				townSpawnLevel = TownSpawnLevel.UNAFFILIATED;
 			}
+
+			if (townSpawnLevel == TownSpawnLevel.UNAFFILIATED && !town.isPublic())
+				throw new TownyException(Translatable.of("msg_err_not_public"));
 		}
 
-		if (townSpawnLevel == TownSpawnLevel.UNAFFILIATED && !town.isPublic())
-			throw new TownyException(Translatable.of("msg_err_not_public"));
-		
 		// Check if the player has the permission/config allows for this type of spawning.
 		// Throws exception if unallowed.
 		townSpawnLevel.checkIfAllowed(plugin, player, town);
@@ -309,10 +309,10 @@ public class SpawnUtil {
 			} else {
 				nationSpawnLevel = NationSpawnLevel.UNAFFILIATED;
 			}
-		}
 
-		if (nationSpawnLevel == NationSpawnLevel.UNAFFILIATED && !nation.isPublic())
-			throw new TownyException(Translatable.of("msg_err_nation_not_public"));
+			if (nationSpawnLevel == NationSpawnLevel.UNAFFILIATED && !nation.isPublic())
+				throw new TownyException(Translatable.of("msg_err_nation_not_public"));
+		}
 
 		// Check if the player has the permission/config allows for this type of spawning.
 		// Throws exception if unallowed.
@@ -354,11 +354,6 @@ public class SpawnUtil {
 			break;
 		case NATION:
 			spawnLoc = nation.getSpawn();
-
-			// Prevent outlaws from spawning into towns they're considered an outlaw in.
-			Town toTown = TownyAPI.getInstance().getTown(nation.getSpawn());
-			if (toTown != null && !isTownyAdmin(player) && toTown.hasOutlaw(resident))
-				throw new TownyException(Translatable.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", toTown.getName()));
 			break;
 		default:
 		}
