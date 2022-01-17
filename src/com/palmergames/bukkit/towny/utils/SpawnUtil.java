@@ -268,7 +268,7 @@ public class SpawnUtil {
 
 		// Check if the player has the permission/config allows for this type of spawning.
 		// Throws exception if unallowed.
-		townSpawnLevel.checkIfAllowed(plugin, player, town);
+		townSpawnLevel.checkIfAllowed(player, town);
 
 		return townSpawnLevel;
 	}
@@ -316,7 +316,7 @@ public class SpawnUtil {
 
 		// Check if the player has the permission/config allows for this type of spawning.
 		// Throws exception if unallowed.
-		nationSpawnLevel.checkIfAllowed(plugin, player, nation);
+		nationSpawnLevel.checkIfAllowed(player, nation);
 
 		return nationSpawnLevel;
 	}

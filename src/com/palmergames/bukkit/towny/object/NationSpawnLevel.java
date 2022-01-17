@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -56,9 +55,9 @@ public enum NationSpawnLevel {
 		this.permissionNode = permissionNode;
 	}
 
-	public void checkIfAllowed(Towny plugin, Player player, Nation nation) throws TownyException {
+	public void checkIfAllowed(Player player, Nation nation) throws TownyException {
 
-		if (!isAllowed(plugin, player, nation)) {
+		if (!isAllowed(player, nation)) {
 			boolean war = nation.hasActiveWar();
 			NSpawnLevel level = TownySettings.getNSpawnLevel(this.isAllowingConfigNode);
 			if(level == NSpawnLevel.WAR && !war) {
@@ -71,7 +70,7 @@ public enum NationSpawnLevel {
 		}
 	}
 
-	private boolean isAllowed(Towny plugin, Player player, Nation nation) {
+	private boolean isAllowed(Player player, Nation nation) {
 
 		return this == NationSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().testPermission(player, this.permissionNode)) && (isAllowedNation(nation));
 	}
