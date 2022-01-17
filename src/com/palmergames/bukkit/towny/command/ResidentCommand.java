@@ -670,7 +670,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			try {
 
 				resident.addFriend(newFriend);
-				plugin.deleteCache(newFriend.getName());
+				plugin.deleteCache(newFriend);
 
 			} catch (AlreadyRegisteredException e) {
 
@@ -710,7 +710,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				remove.add(friend);
 			else {
 				resident.removeFriend(friend);
-				plugin.deleteCache(friend.getName());
+				plugin.deleteCache(friend);
 			}
 		}
 		// remove invalid names so we don't try to send them messages

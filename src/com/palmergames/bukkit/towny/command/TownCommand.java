@@ -2266,10 +2266,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							
 							if (oldMayor != null) {
 								TownyPerms.assignPermissions(oldMayor, null);
-								plugin.deleteCache(oldMayor.getName());
+								plugin.deleteCache(oldMayor);
 							}
 
-							plugin.deleteCache(newMayor.getName());
+							plugin.deleteCache(newMayor);
 							if (admin)
 								TownyMessaging.sendMsg(player, Translatable.of("msg_new_mayor", newMayor.getName()));
 							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", newMayor.getName()));
@@ -3293,7 +3293,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			town.removeOutlaw(resident);
 
 		resident.setTown(town);
-		plugin.deleteCache(resident.getName());
+		plugin.deleteCache(resident);
 		resident.save();
 		town.save();
 	}
@@ -4430,7 +4430,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			town.addTrustedResident(resident);
-			plugin.deleteCache(resident.getName());
+			if (resident.isOnline())
+				plugin.deleteCache(resident.getPlayer());
 			
 			TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_added", resident.getName(), Translatable.of("town_sing")));
 			if (BukkitTools.isOnline(resident.getName()))
@@ -4450,7 +4451,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			town.removeTrustedResident(resident);
-			plugin.deleteCache(resident.getName());
+			plugin.deleteCache(resident);
 			
 			TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_removed", resident.getName(), Translatable.of("town_sing")));
 			if (BukkitTools.isOnline(resident.getName()))
