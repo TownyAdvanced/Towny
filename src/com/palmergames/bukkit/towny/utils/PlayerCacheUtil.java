@@ -242,6 +242,10 @@ public class PlayerCacheUtil {
 	 * @return {@link TownBlockStatus} which will be used by Towny.
 	 */
 	public static TownBlockStatus fetchTownBlockStatus(Player player, WorldCoord worldCoord) {
+		
+		if (TownySettings.isFakeResident(player.getName()))
+			return TownBlockStatus.ADMIN;
+		
 		TownBlockStatus status = getTownBlockStatus(player, worldCoord);
 		PlayerCacheGetTownBlockStatusEvent event = new PlayerCacheGetTownBlockStatusEvent(player, worldCoord, status);
 		Bukkit.getPluginManager().callEvent(event);

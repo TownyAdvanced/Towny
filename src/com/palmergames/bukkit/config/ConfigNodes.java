@@ -1055,7 +1055,9 @@ public enum ConfigNodes {
 	PLUGIN_MODS_FAKE_RESIDENTS(
 			"plugin.interfacing.tekkit.fake_residents",
 			"[IndustrialCraft],[BuildCraft],[Redpower],[Forestry],[Turtle]",
-			"# Add any fake players for client/server mods (aka Tekkit) here"),
+			"# Add any fake players for client/server mods (aka Tekkit) here.",
+			"# These players will be able to build and destroy anywhere like an admin would!",
+			"# Because of this, these machines will bypass Towny plot protections. You will have to self-moderate these machines."),
 	PLUGIN_USING_ESSENTIALS(
 			"plugin.interfacing.using_essentials",
 			"false",
