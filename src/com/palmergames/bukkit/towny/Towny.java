@@ -806,14 +806,14 @@ public class Towny extends JavaPlugin {
 			return;
 		deleteCache(resident.getPlayer());
 	}
-	
+
 	public void deleteCache(Player player) {
 
 		deleteCache(player.getUniqueId());
 	}
-	
+
 	public void deleteCache(UUID uuid) {
-		
+
 		playerCache.remove(uuid);
 	}
 

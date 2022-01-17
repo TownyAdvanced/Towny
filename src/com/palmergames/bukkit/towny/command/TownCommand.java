@@ -4430,8 +4430,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			town.addTrustedResident(resident);
-			if (resident.isOnline())
-				plugin.deleteCache(resident.getPlayer());
+			plugin.deleteCache(resident);
 			
 			TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_added", resident.getName(), Translatable.of("town_sing")));
 			if (BukkitTools.isOnline(resident.getName()))
