@@ -68,7 +68,7 @@ public enum TownSpawnLevel {
 
 	public void checkIfAllowed(Towny plugin, Player player, Town town) throws TownyException {
 
-		if (!(isAllowed(town) && hasPermissionNode(plugin, player, town))) {
+		if (!isAllowed(plugin, player, town)) {
 			boolean war = town.hasActiveWar();
 			SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
 			if(level == SpawnLevel.WAR && !war) {
@@ -81,18 +81,12 @@ public enum TownSpawnLevel {
 		}
 	}
 
-	public boolean isAllowed(Town town) {
-
-		return this == TownSpawnLevel.ADMIN || isAllowedTown(town);
-	}
-
-	public boolean hasPermissionNode(Towny plugin, Player player, Town town) {
+	private boolean isAllowed(Towny plugin, Player player, Town town) {
 
 		return this == TownSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().testPermission(player, this.permissionNode)) && (isAllowedTown(town));
 	}
 
-	private boolean isAllowedTown(Town town)
-	{
+	private boolean isAllowedTown(Town town) {
 		boolean war = town.hasActiveWar();
 		SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
 		return level == SpawnLevel.TRUE || (level != SpawnLevel.FALSE && ((level == SpawnLevel.WAR) == war));

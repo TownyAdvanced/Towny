@@ -58,7 +58,7 @@ public enum NationSpawnLevel {
 
 	public void checkIfAllowed(Towny plugin, Player player, Nation nation) throws TownyException {
 
-		if (!(isAllowed(nation) && hasPermissionNode(plugin, player, nation))) {
+		if (!isAllowed(plugin, player, nation)) {
 			boolean war = nation.hasActiveWar();
 			NSpawnLevel level = TownySettings.getNSpawnLevel(this.isAllowingConfigNode);
 			if(level == NSpawnLevel.WAR && !war) {
@@ -71,11 +71,7 @@ public enum NationSpawnLevel {
 		}
 	}
 
-	public boolean isAllowed(Nation nation) {
-		return this == NationSpawnLevel.ADMIN || isAllowedNation(nation);
-	}
-
-	public boolean hasPermissionNode(Towny plugin, Player player, Nation nation) {
+	private boolean isAllowed(Towny plugin, Player player, Nation nation) {
 
 		return this == NationSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().testPermission(player, this.permissionNode)) && (isAllowedNation(nation));
 	}
