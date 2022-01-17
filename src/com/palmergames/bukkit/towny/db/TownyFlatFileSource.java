@@ -1293,13 +1293,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
-				line = keys.get("disableplayertrample");
-				if (line != null)
-					try {
-						world.setDisablePlayerTrample(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-				
 				line = keys.get("disablecreaturetrample");
 				if (line != null)
 					try {
@@ -2117,8 +2110,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("forceexplosions=" + world.isForceExpl());
 		// Enderman block protection
 		list.add("endermanprotect=" + world.isEndermanProtect());
-		// PlayerTrample
-		list.add("disableplayertrample=" + world.isDisablePlayerTrample());
 		// CreatureTrample
 		list.add("disablecreaturetrample=" + world.isDisableCreatureTrample());
 

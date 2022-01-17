@@ -1505,12 +1505,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (Exception ignored) {
 			}
 
-			result = rs.getBoolean("disableplayertrample");
-			try {
-				world.setDisablePlayerTrample(result);
-			} catch (Exception ignored) {
-			}
-
 			result = rs.getBoolean("disablecreaturetrample");
 			try {
 				world.setDisableCreatureTrample(result);
@@ -2317,8 +2311,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("forceexplosions", world.isForceExpl());
 			// Enderman block protection
 			nat_hm.put("endermanprotect", world.isEndermanProtect());
-			// PlayerTrample
-			nat_hm.put("disableplayertrample", world.isDisablePlayerTrample());
 			// CreatureTrample
 			nat_hm.put("disablecreaturetrample", world.isDisableCreatureTrample());
 

@@ -41,7 +41,6 @@ public class SQL_Schema {
 		columns.add("`explosions` bool NOT NULL DEFAULT '0'");
 		columns.add("`forceexplosions` bool NOT NULL DEFAULT '0'");
 		columns.add("`endermanprotect` bool NOT NULL DEFAULT '0'");
-		columns.add("`disableplayertrample` bool NOT NULL DEFAULT '0'");
 		columns.add("`disablecreaturetrample` bool NOT NULL DEFAULT '0'");
 		columns.add("`unclaimedZoneBuild` bool NOT NULL DEFAULT '0'");
 		columns.add("`unclaimedZoneDestroy` bool NOT NULL DEFAULT '0'");
@@ -577,6 +576,7 @@ public class SQL_Schema {
     	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailDays"));
     	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailTown"));
     	cleanups.add(ColumnUpdate.of("TOWNS", "jailSpawns"));
+    	cleanups.add(ColumnUpdate.of("WORLDS", "disableplayertrample"));
 
     	for (ColumnUpdate update : cleanups)
     		dropColumn(cntx, db_name, update.getTable(), update.getColumn());

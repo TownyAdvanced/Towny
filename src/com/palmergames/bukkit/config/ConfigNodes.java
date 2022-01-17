@@ -369,11 +369,6 @@ public enum ConfigNodes {
 			"",
 			"# Do new worlds prevent Endermen from picking up and placing blocks, by default?"),
 
-	NWS_DISABLE_PLAYER_CROP_TRAMPLING(
-			"new_world_settings.disable_player_crop_trampling",
-			"true",
-			"",
-			"# Do new worlds disable players trampling crops, by default?"),
 	NWS_DISABLE_CREATURE_CROP_TRAMPLING(
 			"new_world_settings.disable_creature_crop_trampling",
 			"true",
