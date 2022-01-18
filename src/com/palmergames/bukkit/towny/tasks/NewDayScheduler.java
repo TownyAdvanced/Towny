@@ -52,7 +52,7 @@ public class NewDayScheduler extends TownyTimerTask {
 	}
 	
 	public static boolean isNewDaySchedulerRunning() {
-		return scheduleTask != -1;
+		return Bukkit.getScheduler().isCurrentlyRunning(scheduleTask) || Bukkit.getScheduler().isQueued(scheduleTask);
 	}
 	
 	public static void cancelScheduledNewDay() {
