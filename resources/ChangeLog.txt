@@ -7203,3 +7203,4 @@ v0.92.0.11:
   - Put town into ruined state when last resident is deleted, courtesy of Warriorrrr with PR #5645.
   - Change PlayerCache Map to use UUIDs instead of Names.
   - Fix potential NPE in PlayerInteractEvent listener.
+  - Fix NewDayEvent never firing when servers have daily_taxes disabled.

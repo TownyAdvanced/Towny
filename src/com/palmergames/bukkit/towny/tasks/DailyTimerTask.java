@@ -63,8 +63,6 @@ public class DailyTimerTask extends TownyTimerTask {
 			collectTownCosts();
 			TownyMessaging.sendDebugMsg("Collecting Nation Costs");
 			collectNationCosts();
-			
-			Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(bankruptedTowns, removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
 		} else
 			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_day"));
 
@@ -87,6 +85,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			for (Town town : universe.getTowns()) {
 				if (town.getTownBlocks().size() == 0) {
 					deletedTowns.add(town.getName());
+					removedTowns.add(town.getName());
 					universe.getDataSource().removeTown(town);
 				}
 			}
@@ -119,6 +118,9 @@ public class DailyTimerTask extends TownyTimerTask {
 			universe.performCleanupAndBackup();
 		}
 
+		// Fire the new-day event.
+		Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(bankruptedTowns, removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
+		
 		TownyMessaging.sendDebugMsg("Finished New Day Code");
 		TownyMessaging.sendDebugMsg("Universe Stats:");
 		TownyMessaging.sendDebugMsg("    Residents: " + universe.getNumResidents());
