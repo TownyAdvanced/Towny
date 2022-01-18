@@ -1843,7 +1843,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				group.addTrustedResident(trustedResident);
-				plugin.deleteCache(trustedResident.getName());
+				plugin.deleteCache(trustedResident);
 
 				TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_added", trustedResident.getName(), Translatable.of("plotgroup_sing")));
 				if (BukkitTools.isOnline(trustedResident.getName()) && !trustedResident.getName().equals(player.getName()))
@@ -1865,7 +1865,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				group.removeTrustedResident(trustedResident);
-				plugin.deleteCache(trustedResident.getName());
+				plugin.deleteCache(trustedResident);
 
 				TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_removed", trustedResident.getName(), Translatable.of("plotgroup_sing")));
 				if (BukkitTools.isOnline(trustedResident.getName()) && !trustedResident.getName().equals(player.getName()))
@@ -2022,7 +2022,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			townBlock.addTrustedResident(resident);
-			plugin.deleteCache(resident.getName());
+			plugin.deleteCache(resident);
 
 			TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_added", resident.getName(), Translatable.of("townblock")));
 			if (BukkitTools.isOnline(resident.getName()) && !resident.getName().equals(player.getName()))
@@ -2042,7 +2042,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			townBlock.removeTrustedResident(resident);
-			plugin.deleteCache(resident.getName());
+			plugin.deleteCache(resident);
 
 			TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_removed", resident.getName(), Translatable.of("townblock")));
 			if (BukkitTools.isOnline(resident.getName()) && !resident.getName().equals(player.getName()))

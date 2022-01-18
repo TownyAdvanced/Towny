@@ -116,7 +116,7 @@ public class Towny extends JavaPlugin {
 
 	private TownyUniverse townyUniverse;
 
-	private final Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
+	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
 
 	private Essentials essentials = null;
 	private boolean citizens2 = false;
@@ -785,14 +785,14 @@ public class Towny extends JavaPlugin {
 
 	public boolean hasCache(Player player) {
 
-		return playerCache.containsKey(player.getName().toLowerCase());
+		return playerCache.containsKey(player.getUniqueId());
 	}
 
 	public PlayerCache newCache(Player player) {
 
 		try {
 			PlayerCache cache = new PlayerCache(TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()), player);
-			playerCache.put(player.getName().toLowerCase(), cache);
+			playerCache.put(player.getUniqueId(), cache);
 			return cache;
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world (" + player.getWorld().getName() + ".");
@@ -801,14 +801,20 @@ public class Towny extends JavaPlugin {
 
 	}
 
-	public void deleteCache(Player player) {
-
-		deleteCache(player.getName());
+	public void deleteCache(Resident resident) {
+		if (!resident.isOnline())
+			return;
+		deleteCache(resident.getPlayer());
 	}
 
-	public void deleteCache(String name) {
+	public void deleteCache(Player player) {
 
-		playerCache.remove(name.toLowerCase());
+		deleteCache(player.getUniqueId());
+	}
+
+	public void deleteCache(UUID uuid) {
+
+		playerCache.remove(uuid);
 	}
 
 	/**
@@ -820,7 +826,7 @@ public class Towny extends JavaPlugin {
 	 */
 	public PlayerCache getCache(Player player) {
 
-		PlayerCache cache = playerCache.get(player.getName().toLowerCase());
+		PlayerCache cache = playerCache.get(player.getUniqueId());
 		
 		if (cache == null) {
 			cache = newCache(player);

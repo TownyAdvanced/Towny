@@ -239,7 +239,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		if (this.town == town)
 			return;
 
-		Towny.getPlugin().deleteCache(this.getName());
+		Towny.getPlugin().deleteCache(this);
 		setTitle("");
 		setSurname("");
 

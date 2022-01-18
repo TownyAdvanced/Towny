@@ -701,7 +701,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (TownySettings.isDeleteEcoAccount() && TownyEconomyHandler.isActive())
 			resident.getAccount().removeAccount();
 
-		plugin.deleteCache(resident.getName());
+		plugin.deleteCache(resident);
 		
 		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident));
 	}
