@@ -4382,7 +4382,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void parseTownTrustCommand(Player player, String[] args, @Nullable Town town) {
 		
 		if (args.length < 1
-			|| args.length < 2 && args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")
+			|| args.length < 2 && (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove"))
 			|| args.length == 1 && !args[0].equalsIgnoreCase("list")) {
 			HelpMenu.TOWN_TRUST_HELP.send(player);
 			return;
