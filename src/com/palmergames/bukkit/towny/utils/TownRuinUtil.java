@@ -65,10 +65,9 @@ public class TownRuinUtil {
 	 * 3. Enable all perms
 	 * 4. Now, the residents cannot run /plot commands, and some /t commands
 	 * 5. Town will later be deleted full, unless it is reclaimed
-	 * @param plugin Instance of {@link Towny}
 	 * @param town The town to put into a "ruined" state.
 	 */
-	public static void putTownIntoRuinedState(Town town, Towny plugin) {
+	public static void putTownIntoRuinedState(Town town) {
 
 		//Town already ruined.
 		if (town.isRuined())
@@ -120,7 +119,7 @@ public class TownRuinUtil {
 			ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
 		
 		town.save();
-		plugin.resetCache();
+		Towny.getPlugin().resetCache();
 		
 		TownyMessaging.sendGlobalMessage(Translatable.of("msg_ruin_town", town.getName()));
 	}
