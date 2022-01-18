@@ -403,8 +403,8 @@ public class TownyPlayerListener implements Listener {
 
 		Block block = event.getClickedBlock();
 		Player player = event.getPlayer();
-		Location blockLoc = block.getLocation();
 		if (event.hasBlock()) {
+			Location blockLoc = block.getLocation();
 			/*
 			 * Catches respawn anchors blowing up and allows us to track their explosions.
 			 */
