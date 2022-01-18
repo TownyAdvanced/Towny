@@ -7198,3 +7198,6 @@ v0.92.0.11:
 0.97.5.13:
   - Fix TownyAPI#isPVP(Location) return the opposite value in Towny-enabled Worlds.
   - Remove player crop trampling world setting, in favour of using plot permissions.
+  - Fix /t trust remove not working, courtesy of Warriorrrr with PR #5646.
+    - Closes #5643.
+  - Put town into ruined state when last resident is deleted, courtesy of Warriorrrr with PR #5645.
