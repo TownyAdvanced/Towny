@@ -72,13 +72,13 @@ public class NewDayScheduler extends TownyTimerTask {
 	 * Does not disturb any already scheduled new day timers.
 	 */
 	public static void newDay() {
-		if (TownySettings.isEconomyAsync()) {
-			if (BukkitTools.scheduleAsyncDelayedTask(new DailyTimerTask(Towny.getPlugin()),0L) == -1)
-				TownyMessaging.sendErrorMsg("Could not run newDay.");
-		} else {
-			if (BukkitTools.scheduleSyncDelayedTask(new DailyTimerTask(Towny.getPlugin()),0L) == -1)
-				TownyMessaging.sendErrorMsg("Could not run newDay.");
-		}
+		if (TownySettings.isEconomyAsync())
+			newDayTask = BukkitTools.scheduleAsyncDelayedTask(new DailyTimerTask(Towny.getPlugin()),0L);
+		else
+			newDayTask = BukkitTools.scheduleSyncDelayedTask(new DailyTimerTask(Towny.getPlugin()),0L);
+		
+		if (newDayTask == -1)
+			TownyMessaging.sendErrorMsg("Could not run newDay.");
 	}
 	
 	/**
