@@ -19,6 +19,7 @@ public class NewDayScheduler extends TownyTimerTask {
 	}
 
 	private static int scheduleTask = -1;
+	private static int newDayTask = -1;
 	
 	@Override
 	public void run() {
@@ -31,7 +32,7 @@ public class NewDayScheduler extends TownyTimerTask {
 			scheduleUpComingNewDay(secondsUntilNextNewDay);
 		// Else the new day scheduler will run again at half the secondsUntilNextNewDay, to check again.
 		} else {
-			Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new NewDayScheduler(plugin), (secondsUntilNextNewDay / 2) * 20);
+			scheduleTask = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new NewDayScheduler(plugin), (secondsUntilNextNewDay / 2) * 20).getTaskId();
 			TownyMessaging.sendDebugMsg("Re-evaluation of New Day time scheduled for: " + TimeMgmt.formatCountdownTime(secondsUntilNextNewDay/2) + " from now.");
 		}
 	}
@@ -42,11 +43,11 @@ public class NewDayScheduler extends TownyTimerTask {
 	 */
 	private void scheduleUpComingNewDay(long secondsUntilNextNewDay) {
 		if (TownySettings.isEconomyAsync())
-			scheduleTask = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new DailyTimerTask(plugin), secondsUntilNextNewDay * 20).getTaskId();
+			newDayTask = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new DailyTimerTask(plugin), secondsUntilNextNewDay * 20).getTaskId();
 		else
-			scheduleTask = Bukkit.getScheduler().runTaskLater(plugin, new DailyTimerTask(plugin), secondsUntilNextNewDay * 20).getTaskId();
+			newDayTask = Bukkit.getScheduler().runTaskLater(plugin, new DailyTimerTask(plugin), secondsUntilNextNewDay * 20).getTaskId();
 	
-		if (scheduleTask == -1)
+		if (newDayTask == -1)
 			TownyMessaging.sendErrorMsg("Could not schedule DailyTimerTask.");
 	}
 	
@@ -55,8 +56,15 @@ public class NewDayScheduler extends TownyTimerTask {
 	}
 	
 	public static void cancelScheduledNewDay() {
-		if (scheduleTask != -1)
+		if (scheduleTask != -1) {
 			Bukkit.getScheduler().cancelTask(scheduleTask);
+			scheduleTask = -1;
+		}
+		
+		if (newDayTask != -1) {
+			Bukkit.getScheduler().cancelTask(newDayTask);
+			newDayTask = -1;
+		}
 	}
 
 	/**
