@@ -3544,16 +3544,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public static void townAdd(CommandSender sender, Town specifiedTown, String[] names) throws TownyException {
 
-		String name;
-		if (sender instanceof Player) {
-			name = ((Player) sender).getName();
-		} else {
-			name = "Console";
-		}
+		String name = sender instanceof Player player ? player.getName() : "Console";
+		boolean console = !(sender instanceof Player);
+
 		Resident resident;
 		Town town;
 		try {
-			if (name.equalsIgnoreCase("Console")) {
+			if (console) {
 				town = specifiedTown;
 			} else {
 				resident = getResidentOrThrow(name);
@@ -3571,50 +3568,61 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (town.isBankrupt())
 			throw new TownyException(Translatable.of("msg_err_bankrupt_town_cannot_invite"));
 
-		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() != 0) {
+		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() > 0) {
 
 			if (!town.hasSpawn())
 				throw new TownyException(Translatable.of("msg_err_townspawn_has_not_been_set"));
 		
 			Location spawnLoc = town.getSpawn();
-			ArrayList<String> newNames = new ArrayList<String>();
+			ArrayList<String> newNames = new ArrayList<>();
 			for (String nameForDistanceTest : names) {
 				
 				int maxDistance = TownySettings.getMaxDistanceFromTownSpawnForInvite();
 				Player player = BukkitTools.getPlayer(nameForDistanceTest);
 				Location playerLoc = player.getLocation();
-				Double distance = spawnLoc.distance(playerLoc);
+				
+				double distance;
+				try {
+					distance = spawnLoc.distance(playerLoc);
+				} catch (Exception e) {
+					// Can throw an exception if the player is in another world
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_player_too_far_from_town_spawn", nameForDistanceTest, maxDistance));
+					continue;
+				}
+
 				if (distance <= maxDistance)
 					newNames.add(nameForDistanceTest);
 				else {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_player_too_far_from_town_spawn", nameForDistanceTest, maxDistance));
 				}
 			}
+
 			names = newNames.toArray(new String[0]);
 		}
-		List<String> reslist = new ArrayList<>(Arrays.asList(names));
+
+		List<String> resList = new ArrayList<>(Arrays.asList(names));
 		// Our Arraylist is above
-		List<String> newreslist = new ArrayList<>();
+		List<String> newResList = new ArrayList<>();
 		// The list of valid invites is above, there are currently none
-		List<String> removeinvites = new ArrayList<>();
+		List<String> removeInvites = new ArrayList<>();
 		// List of invites to be removed;
-		for (String resName : reslist) {
+		for (String resName : resList) {
 			if (resName.startsWith("-")) {
-				removeinvites.add(resName.substring(1));
+				removeInvites.add(resName.substring(1));
 				// Add to removing them, remove the "-"
 			} else {
 				if (!town.hasResident(resName))
-					newreslist.add(resName);// add to adding them,
+					newResList.add(resName);// add to adding them,
 				else 
-					removeinvites.add(resName);
+					removeInvites.add(resName);
 			}
 		}
-		names = newreslist.toArray(new String[0]);
-		String[] namestoremove = removeinvites.toArray(new String[0]);
-		if (namestoremove.length != 0) {
-			List<Resident> toRevoke = getValidatedResidentsForInviteRevoke(sender, namestoremove, town);
+		names = newResList.toArray(new String[0]);
+		String[] namesToRemove = removeInvites.toArray(new String[0]);
+		if (namesToRemove.length != 0) {
+			List<Resident> toRevoke = getValidatedResidentsForInviteRevoke(sender, namesToRemove, town);
 			if (!toRevoke.isEmpty())
-				townRevokeInviteResident(sender,town, toRevoke);
+				townRevokeInviteResident(sender, town, toRevoke);
 		}
 
 		if (names.length != 0) {
@@ -3622,7 +3630,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Reset this players cached permissions
-		if (!name.equalsIgnoreCase("Console"))
+		if (!console)
 			plugin.resetCache(BukkitTools.getPlayerExact(name));
 	}
 
