@@ -1,12 +1,13 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object.spawnlevel;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 
 public enum TownSpawnLevel {
@@ -66,9 +67,9 @@ public enum TownSpawnLevel {
 		this.permissionNode = permissionNode;
 	}
 
-	public void checkIfAllowed(Towny plugin, Player player, Town town) throws TownyException {
+	public void checkIfAllowed(Player player, Town town) throws TownyException {
 
-		if (!(isAllowed(town) && hasPermissionNode(plugin, player, town))) {
+		if (!isAllowed(player, town)) {
 			boolean war = town.hasActiveWar();
 			SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
 			if(level == SpawnLevel.WAR && !war) {
@@ -81,18 +82,12 @@ public enum TownSpawnLevel {
 		}
 	}
 
-	public boolean isAllowed(Town town) {
-
-		return this == TownSpawnLevel.ADMIN || isAllowedTown(town);
-	}
-
-	public boolean hasPermissionNode(Towny plugin, Player player, Town town) {
+	private boolean isAllowed(Player player, Town town) {
 
 		return this == TownSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().testPermission(player, this.permissionNode)) && (isAllowedTown(town));
 	}
 
-	private boolean isAllowedTown(Town town)
-	{
+	private boolean isAllowedTown(Town town) {
 		boolean war = town.hasActiveWar();
 		SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
 		return level == SpawnLevel.TRUE || (level != SpawnLevel.FALSE && ((level == SpawnLevel.WAR) == war));
@@ -106,12 +101,5 @@ public enum TownSpawnLevel {
 	public double getCost(Town town) {
 
 		return this == TownSpawnLevel.ADMIN ? 0 : town.getSpawnCost();
-	}
-	
-	public enum SpawnLevel {
-		TRUE,
-		FALSE,
-		WAR,
-		PEACE
 	}
 }
