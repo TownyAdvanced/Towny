@@ -28,6 +28,7 @@ public final class Translation {
 	
 	private static Map<String, Map<String, String>> translations = new HashMap<>();
 	private static Locale defaultLocale = new Locale("en", "US"); // en-US here by default, in case of safe mode happening before translations are loaded.
+	private static Locale englishLocale = new Locale("en", "US"); // Our last-ditch fall back locale.
 	
 	public static void loadTranslationRegistry() {
 		translations.clear();
@@ -85,8 +86,15 @@ public final class Translation {
 		String data = translations.get(defaultLocale.toString()).get(key.toLowerCase(Locale.ROOT));
 
 		if (data == null) {
-			TownySettings.sendError(key.toLowerCase() + " from " + TownySettings.getString(ConfigNodes.LANGUAGE));
-			return key;
+			// The default locale in the config is missing the language string, they are probably using a non-en_US locale.
+			data = of(key, englishLocale);
+			
+			if (data == null) {
+				// Even the en_US is missing this string, we're probably dealing with a typo.
+				// Log the error and return the un-translated key.
+				TownySettings.sendError(key.toLowerCase() + " from en_US");
+				return key;
+			}
 		}
 		return Colors.translateColorCodes(data);
 	}
