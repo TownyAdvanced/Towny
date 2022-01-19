@@ -7204,3 +7204,4 @@ v0.92.0.11:
   - Change PlayerCache Map to use UUIDs instead of Names.
   - Fix potential NPE in PlayerInteractEvent listener.
   - Fix NewDayEvent never firing when servers have daily_taxes disabled.
+  - Fix newday being scheduled again after running /ta newday, courtesy of Warriorrrr with PR #5647.
