@@ -1,5 +1,5 @@
 name: Towny
-version: 0.140
+version: 0.141
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1618,3 +1618,6 @@ confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want t
 msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+
+#Added in 1.141
+msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'

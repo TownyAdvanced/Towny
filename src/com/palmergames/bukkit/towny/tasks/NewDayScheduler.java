@@ -19,6 +19,7 @@ public class NewDayScheduler extends TownyTimerTask {
 	}
 
 	private static int scheduleTask = -1;
+	private static int newDayTask = -1;
 	
 	@Override
 	public void run() {
@@ -31,7 +32,7 @@ public class NewDayScheduler extends TownyTimerTask {
 			scheduleUpComingNewDay(secondsUntilNextNewDay);
 		// Else the new day scheduler will run again at half the secondsUntilNextNewDay, to check again.
 		} else {
-			Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new NewDayScheduler(plugin), (secondsUntilNextNewDay / 2) * 20);
+			scheduleTask = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new NewDayScheduler(plugin), (secondsUntilNextNewDay / 2) * 20).getTaskId();
 			TownyMessaging.sendDebugMsg("Re-evaluation of New Day time scheduled for: " + TimeMgmt.formatCountdownTime(secondsUntilNextNewDay/2) + " from now.");
 		}
 	}
@@ -42,21 +43,32 @@ public class NewDayScheduler extends TownyTimerTask {
 	 */
 	private void scheduleUpComingNewDay(long secondsUntilNextNewDay) {
 		if (TownySettings.isEconomyAsync())
-			scheduleTask = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new DailyTimerTask(plugin), secondsUntilNextNewDay * 20).getTaskId();
+			newDayTask = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new DailyTimerTask(plugin), secondsUntilNextNewDay * 20).getTaskId();
 		else
-			scheduleTask = Bukkit.getScheduler().runTaskLater(plugin, new DailyTimerTask(plugin), secondsUntilNextNewDay * 20).getTaskId();
+			newDayTask = Bukkit.getScheduler().runTaskLater(plugin, new DailyTimerTask(plugin), secondsUntilNextNewDay * 20).getTaskId();
 	
-		if (scheduleTask == -1)
+		if (newDayTask == -1)
 			TownyMessaging.sendErrorMsg("Could not schedule DailyTimerTask.");
 	}
 	
 	public static boolean isNewDaySchedulerRunning() {
-		return scheduleTask != -1;
+		return Bukkit.getScheduler().isCurrentlyRunning(scheduleTask) || Bukkit.getScheduler().isQueued(scheduleTask);
+	}
+	
+	public static boolean isNewDayScheduled() {
+		return Bukkit.getScheduler().isCurrentlyRunning(newDayTask) || Bukkit.getScheduler().isQueued(newDayTask);
 	}
 	
 	public static void cancelScheduledNewDay() {
-		if (scheduleTask != -1)
+		if (scheduleTask != -1) {
 			Bukkit.getScheduler().cancelTask(scheduleTask);
+			scheduleTask = -1;
+		}
+		
+		if (newDayTask != -1) {
+			Bukkit.getScheduler().cancelTask(newDayTask);
+			newDayTask = -1;
+		}
 	}
 
 	/**
@@ -64,13 +76,13 @@ public class NewDayScheduler extends TownyTimerTask {
 	 * Does not disturb any already scheduled new day timers.
 	 */
 	public static void newDay() {
-		if (TownySettings.isEconomyAsync()) {
-			if (BukkitTools.scheduleAsyncDelayedTask(new DailyTimerTask(Towny.getPlugin()),0L) == -1)
-				TownyMessaging.sendErrorMsg("Could not run newDay.");
-		} else {
-			if (BukkitTools.scheduleSyncDelayedTask(new DailyTimerTask(Towny.getPlugin()),0L) == -1)
-				TownyMessaging.sendErrorMsg("Could not run newDay.");
-		}
+		if (TownySettings.isEconomyAsync())
+			newDayTask = BukkitTools.scheduleAsyncDelayedTask(new DailyTimerTask(Towny.getPlugin()),0L);
+		else
+			newDayTask = BukkitTools.scheduleSyncDelayedTask(new DailyTimerTask(Towny.getPlugin()),0L);
+		
+		if (newDayTask == -1)
+			TownyMessaging.sendErrorMsg("Could not run newDay.");
 	}
 	
 	/**

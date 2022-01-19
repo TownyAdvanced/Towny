@@ -137,7 +137,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		Towny.getPlugin().getLogger().info("Towny DailyTimerTask took " + (System.currentTimeMillis() - start) + "ms to process.");
 		
 		// Run the new day scheduler again one minute later to begin scheduling the next New Day.
-		Bukkit.getScheduler().runTaskLater(plugin, new NewDayScheduler(plugin), 60 * 20);
+		if (!NewDayScheduler.isNewDaySchedulerRunning())
+			Bukkit.getScheduler().runTaskLater(plugin, new NewDayScheduler(plugin), 60 * 20);
 	}
 
 	/**
