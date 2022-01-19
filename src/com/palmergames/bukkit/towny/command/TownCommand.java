@@ -3396,22 +3396,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (kicking.size() > 0) {
-			StringBuilder msg = new StringBuilder();
-			for (Resident member : kicking) {
-				msg.append(member.getName()).append(", ");
-				Player p = BukkitTools.getPlayer(member.getName());
-				if (p != null)
-					TownyMessaging.sendMsg(p, Translatable.of("msg_kicked_by", (player != null) ? player.getName() : "CONSOLE"));
+			String message = kicking.stream().map(Resident::getName).collect(Collectors.joining(", "));
+			String kickerName = player != null ? player.getName() : "CONSOLE";
+
+			for (Resident member : kicking)
+				TownyMessaging.sendMsg(member, Translatable.of("msg_kicked_by", kickerName));
+
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_kicked", kickerName, message));
+
+			if (!(sender instanceof Player kickingPlayer) || !town.hasResident(kickingPlayer)) {
+				// For when the an admin uses /ta town {name} kick {residents}
+				TownyMessaging.sendMessage(sender, Translation.translateTranslatables(sender, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), Translatable.of("msg_kicked", kickerName, message)));
 			}
-			String message = msg.substring(0, msg.length() - 2);
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_kicked", (player != null) ? player.getName() : "CONSOLE", message));
-			try {
-				Resident playerRes = getResidentOrThrow(player.getUniqueId());
-				if (!(sender instanceof Player) || !playerRes.hasTown() || !playerRes.getTown().equals(town))
-					// For when the an admin uses /ta town {name} kick {residents}
-					TownyMessaging.sendMessage(sender, message);
-			} catch (NotRegisteredException e) {
-			}
+
 			town.save();
 		} else {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_invalid_name"));
