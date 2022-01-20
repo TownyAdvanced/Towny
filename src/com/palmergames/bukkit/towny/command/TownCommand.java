@@ -3408,7 +3408,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				// For when the an admin uses /ta town {name} kick {residents}
 				TownyMessaging.sendMessage(sender, Translation.translateTranslatables(sender, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), Translatable.of("msg_kicked", kickerName, message)));
 			}
-
 			town.save();
 		} else {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_invalid_name"));
@@ -3596,10 +3595,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_player_too_far_from_town_spawn", nameForDistanceTest, maxDistance));
 				}
 			}
-
 			names = newNames.toArray(new String[0]);
 		}
-
 		List<String> resList = new ArrayList<>(Arrays.asList(names));
 		// Our Arraylist is above
 		List<String> newResList = new ArrayList<>();

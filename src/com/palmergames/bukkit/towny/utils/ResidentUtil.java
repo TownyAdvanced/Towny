@@ -72,7 +72,6 @@ public class ResidentUtil {
 	 */
 	public static List<Resident> getValidatedResidents(CommandSender sender, String[] names) {
 		List<Resident> residents = new ArrayList<>();
-
 		for (String name : names) {
 			List<Player> matches = BukkitTools.matchPlayer(name);
 			if (matches.size() > 1) {
@@ -80,14 +79,12 @@ public class ResidentUtil {
 			} else {
 				String targetName = !matches.isEmpty() ? matches.get(0).getName() : name;
 				Resident target = TownyUniverse.getInstance().getResident(targetName);
-
 				if (target != null)
 					residents.add(target);
 				else
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", targetName));
 			}
 		}
-
 		return residents;
 	}
 	
