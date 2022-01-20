@@ -25,6 +25,6 @@ public class TownyServerListener implements Listener {
 	@EventHandler
 	public void onPluginDisable(PluginDisableEvent event) {
 		if (event.getPlugin().getName().equals("Citizens"))
-			plugin.checkCitizens();
+			plugin.setCitizens2(false);
 	}
 }
