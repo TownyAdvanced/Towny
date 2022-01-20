@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -50,10 +51,8 @@ public class BukkitTools {
 		
 		for (Player iterPlayer : Bukkit.getOnlinePlayers()) {
 			String iterPlayerName = iterPlayer.getName();
-			if (plugin.isCitizens2()) {
-				if (CitizensAPI.getNPCRegistry().isNPC(iterPlayer)) {
-					continue;
-				}
+			if (checkCitizens(iterPlayer)) {
+				continue;
 			}
 			if (name.equalsIgnoreCase(iterPlayerName)) {
 				// Exact match
@@ -233,5 +232,23 @@ public class BukkitTools {
 	
 	public static List<String> getWorldNames(boolean lowercased) {
 		return lowercased ? getWorlds().stream().map(world -> world.getName().toLowerCase()).collect(Collectors.toList()) : getWorldNames();
+	}
+	
+	/**
+	 * Check if the entity is a Citizens NPC.
+	 * 
+	 * Catches the NoClassDefFoundError thrown when Citizens is present 
+	 * but failed to start up correctly.
+	 * 
+	 * @param entity Entity to check.
+	 * @return true if the entity is an NPC.
+	 */
+	public static boolean checkCitizens(Entity entity) {
+		if (plugin.isCitizens2()) {
+			try {
+				return CitizensAPI.getNPCRegistry().isNPC(entity);
+			} catch (NoClassDefFoundError ignored) {}
+		}
+		return false;
 	}
 }

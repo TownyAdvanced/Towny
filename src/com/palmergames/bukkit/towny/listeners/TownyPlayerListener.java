@@ -41,8 +41,6 @@ import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
 
 import com.palmergames.util.TimeMgmt;
-import net.citizensnpcs.api.CitizensAPI;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -626,7 +624,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		// Let's ignore Citizens NPCs
-		if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getPlayer())) {
+		if (BukkitTools.checkCitizens(event.getPlayer())) {
 			return;
 		}
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -684,14 +682,14 @@ public class TownyPlayerListener implements Listener {
 		if (plugin.isError()) {
 			// Citizens stores their NPCs at the world spawn and when players load chunks the NPC is teleported there. 
 			// Towny was preventing them being teleported and causing NPCs to be at a world spawn, even after the Safe Mode was cleaned up. 
-			if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getPlayer()))
+			if (BukkitTools.checkCitizens(event.getPlayer()))
 				return;
 			event.setCancelled(true);
 			return;
 		}
 		
 		// Let's ignore Citizens NPCs
-		if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getPlayer())) {
+		if (BukkitTools.checkCitizens(event.getPlayer())) {
 			return;
 		}
 
