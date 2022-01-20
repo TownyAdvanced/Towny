@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.140
+version: 0.141
 language: norwegian
 author: Nectuz, Walbern
 website: 'http://townyadvanced.github.io/'
@@ -1432,3 +1432,5 @@ confirmation_unclaiming_costs: 'Å fjerne denne tomten vil koste %s, vil du fort
 msg_your_locale: 'Towny bruker språket til din klient (%s) for å oversette meldingene. Vær oppmerksom på at oversettelser kan mangle strenger.'
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Du må vente %s sekunder før du kan endre navnet på din by igjen.'
+#Added in 1.141
+msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'

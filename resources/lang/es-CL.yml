@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.140
+version: 0.141
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu, ElMoha943, Ngzhiwei
 website: 'http://townyadvanced.github.io/'
@@ -1432,3 +1432,5 @@ confirmation_unclaiming_costs: 'Abandonar este terreno costará %s, ¿quieres co
 msg_your_locale: 'Towny usa la configuración del idioma de tu cliente (%s) para traducir el contenido. Debes tener en cuenta que algunas cadenas pueden faltar.'
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Debes esperar %s segundos antes de volver a renombrar tu ciudad.'
+#Added in 1.141
+msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'
