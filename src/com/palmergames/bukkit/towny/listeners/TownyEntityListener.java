@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 
-import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -397,7 +396,7 @@ public class TownyEntityListener implements Listener {
 			LivingEntity livingEntity = event.getEntity();
 
 			// ignore Citizens NPCs
-			if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(livingEntity))
+			if (BukkitTools.checkCitizens(livingEntity))
 				return;
 			
 			if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)

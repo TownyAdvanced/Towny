@@ -21,8 +21,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
-
-import net.citizensnpcs.api.CitizensAPI;
+import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -285,7 +284,7 @@ public class PlayerCacheUtil {
 		
 		if (resident == null) {
 			// Check if entity is a Citizens NPC
-			if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(player))
+			if (BukkitTools.checkCitizens(player))
 				return TownBlockStatus.NOT_REGISTERED;
  
 			// Retry getting a resident with the ability to get a fake player resident.

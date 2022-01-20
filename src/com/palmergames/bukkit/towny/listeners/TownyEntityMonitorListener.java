@@ -24,8 +24,6 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
-import net.citizensnpcs.api.CitizensAPI;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -47,6 +45,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
  */
 public class TownyEntityMonitorListener implements Listener {
 
+	@SuppressWarnings("unused")
 	private final Towny plugin;
 
 	public TownyEntityMonitorListener(Towny instance) {
@@ -64,7 +63,7 @@ public class TownyEntityMonitorListener implements Listener {
 		if (!TownySettings.isDamageCancellingSpawnWarmup() 
 				|| !event.getEntityType().equals(EntityType.PLAYER) 
 				|| !TownyTimerHandler.isTeleportWarmupRunning() 
-				|| (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(event.getEntity())))
+				|| BukkitTools.checkCitizens(event.getEntity()))
 			return;
 
 		Resident resident = TownyUniverse.getInstance().getResident(event.getEntity().getUniqueId());

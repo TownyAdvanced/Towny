@@ -7,8 +7,7 @@ import com.palmergames.bukkit.towny.event.MobRemovalEvent;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
-
-import net.citizensnpcs.api.CitizensAPI;
+import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -75,10 +74,8 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					continue;
 
 				// Check if entity is a Citizens NPC
-				if (plugin.isCitizens2()) {
-					if (CitizensAPI.getNPCRegistry().isNPC(livingEntity))
-						continue;
-				}
+				if (BukkitTools.checkCitizens(livingEntity))
+					return;
 				
 				// Handles entities Globally.
 				if (!townyWorld.hasWorldMobs() && isRemovingWorldEntity(livingEntity)) {
