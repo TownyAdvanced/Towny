@@ -623,11 +623,10 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+
 		// Let's ignore Citizens NPCs
-		if (BukkitTools.checkCitizens(event.getPlayer())) {
+		if (BukkitTools.checkCitizens(event.getPlayer()))
 			return;
-		}
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		/*
 		 * Abort if we havn't really moved
@@ -636,6 +635,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Player player = event.getPlayer();
 		Location to = event.getTo();
 		Location from;
@@ -679,20 +679,17 @@ public class TownyPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
+		// Let's ignore Citizens NPCs. This must come before the safemode check, as Citizens stores their NPCs
+		// at the world spawn until a player loads a chunk, to which the NPC is then teleported. Towny would
+		// prevent them teleporting, leaving them at spawn even after Safe Mode is cleaned up.
+		if (BukkitTools.checkCitizens(event.getPlayer()))
+			return;
+		
 		if (plugin.isError()) {
-			// Citizens stores their NPCs at the world spawn and when players load chunks the NPC is teleported there. 
-			// Towny was preventing them being teleported and causing NPCs to be at a world spawn, even after the Safe Mode was cleaned up. 
-			if (BukkitTools.checkCitizens(event.getPlayer()))
-				return;
 			event.setCancelled(true);
 			return;
 		}
 		
-		// Let's ignore Citizens NPCs
-		if (BukkitTools.checkCitizens(event.getPlayer())) {
-			return;
-		}
-
 		Player player = event.getPlayer();
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		// Cancel teleport if Jailed by Towny.
