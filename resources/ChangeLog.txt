@@ -7207,3 +7207,4 @@ v0.92.0.11:
   - Fix newday being scheduled again after running /ta newday, courtesy of Warriorrrr with PR #5647.
   - Refactor the SpawnUtil to be more readable.
 0.97.5.14:
+  - Correctly fall back to the en_US when a server is using not-en_US and a plugin is calling for a string which was not translated to that locale.
