@@ -455,17 +455,9 @@ public class Towny extends JavaPlugin {
 		plugin.getLogger().info("Version: " + version + " - Plugin Disabled");
 		Bukkit.getLogger().info("=============================================================");
 	}
-
-	public void checkCitizens() {
-		/*
-		 * Test for Citizens2 so we can avoid removing their NPC's
-		 */
-		citizens2 = getServer().getPluginManager().isPluginEnabled("Citizens");
-	}
 	
 	private void checkPlugins() {
 		
-		checkCitizens();
 		plugin.getLogger().info("Searching for third-party plugins...");
 		String ecowarn = "";
 		List<String> addons = new ArrayList<>();
@@ -556,6 +548,11 @@ public class Towny extends JavaPlugin {
 		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
 			TNCRegister.initialize();
 		}
+		
+		/*
+		 * Test for Citizens2 so we can avoid removing their NPC's
+		 */
+		setCitizens2(getServer().getPluginManager().isPluginEnabled("Citizens"));
 
 		/*
 		 * Output discovered plugins and warnings.
@@ -760,6 +757,11 @@ public class Towny extends JavaPlugin {
 	public boolean isCitizens2() {
 
 		return citizens2;
+	}
+
+	public void setCitizens2(boolean b) {
+
+		citizens2 = b;
 	}
 
 	/**

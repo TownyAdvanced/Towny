@@ -247,7 +247,10 @@ public class BukkitTools {
 		if (plugin.isCitizens2()) {
 			try {
 				return CitizensAPI.getNPCRegistry().isNPC(entity);
-			} catch (NoClassDefFoundError ignored) {}
+			} catch (NoClassDefFoundError e) {
+				plugin.setCitizens2(false);
+			}
+			
 		}
 		return false;
 	}
