@@ -32,3 +32,6 @@ Thumbs.db
 .factorypath
 .settings
 .vscode
+
+# Maven Wrapper Jarfile - Downloaded dynamically from the location set in maven-wrapper.properties
+.mvn/wrapper/maven-wrapper.jar

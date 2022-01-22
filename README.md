@@ -91,6 +91,9 @@ Towny is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivs
 We don't object to you making your own forks and builds but we do object to people being selfish, which is why we specify No Derivative Works.
 If you want to modify the code to add some nice feature the least you can do is ask and submit a pull request to allow everyone to benefit from it.
 
+> Note: Files for the Maven Wrapper (`mvnw`, `mvnw.cmd`, and files in the `./.mvn/` directory) are licensed under the Apache License, version 2.0 (apache-2.0) - and are not governed by Towny's CC BY-NC-ND 3.0 license.
+> You can generate your own wrapper for your maven project following the instructions on the [Maven Wrapper page](https://maven.apache.org/wrapper/).
+
 ___
 
 ### Importing Towny for API use
@@ -107,8 +110,19 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
 
 - **Maven**
 
-    - Run `mvn clean package` to generate the plugin in the `target` directory, within the Towny folder. 
+  - As of Standard Release 0.97.6.0, you can use the provided Maven Wrappers without needing to install and set up Maven yourself.
+    - On Windows, via CommandPrompt or PowerShell, use `.\mvnw.cmd clean install`.  
+    - On Posix-based systems (Linux / Mac OS) use `.\mvnw clean install`.
+      - You may need to mark this as executable (`chmod +x mvnw`).
+    - The wrapper will install Maven to your user's '.m2' folder. (`%USERPROFILE%\.m2\wrapper\dists\`)
 
+  - For versions prior to the inclusion of the Maven Wrappers, you will need to install Maven and add it to your PATH. 
+    - Replace `.\mvnw` with `mvn` when running.
+    
+  - Tips:
+    - When using maven's `install` phase, Towny is built to the `.\target\` directory _**and**_ installed to your local maven repository. (`%USERPROFILE%\.m2\repository\com\palmergames\bukkit\towny\towny\`)
+    - You can save disk space by replacing `install` with `package`. This will save towny **only** to the `.\target\` directory.
+    - You can save some time / space by skipping Javadoc generation. To do this, add `-P no-apidoc` to the end of your Maven / Maven Wrapper command. 
 
 - **Ant** (_Deprecated_)
 

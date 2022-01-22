@@ -95,3 +95,18 @@ UNLESS OTHERWISE MUTUALLY AGREED BY THE PARTIES IN WRITING, LICENSOR OFFERS THE 
 >Except for the limited purpose of indicating to the public that the Work is licensed under the CCPL, Creative Commons does not authorize the use by either party of the trademark "Creative Commons" or any related trademark or logo of Creative Commons without the prior written consent of Creative Commons. Any permitted use will be in compliance with Creative Commons' then-current trademark usage guidelines, as may be published on its website or otherwise made available upon request from time to time. For the avoidance of doubt, this trademark restriction does not form part of this License.
 >
 > Creative Commons may be contacted at [https://creativecommons.org/](https://creativecommons.org/).
+ 
+> #### Maven Wrapper Notice 
+> The files listed below are licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.
+> <ul>
+> <li><code>mvnw</code></li>
+> <li><code>mvnw.cmd</code></li>
+> <li><code>.mvn/wrapper/maven-wrapper.jar</code></li>
+> <li><code>.mvn/wrapper/maven-wrapper.properties</code></li>
+> </ul>
+> 
+> The ASF licenses these files to you under the Apache License, Version 2.0 (the "ALv2"); you may not use these files except in compliance with the ALv2.
+> You may obtain a copy of the ALv2 at <http://www.apache.org/licenses/LICENSE-2.0>
+>
+> Unless required by applicable law or agreed to in writing, software distributed under the ALv2 is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the ALv2 for the specific language governing permissions and limitations under the ALv2.
+
