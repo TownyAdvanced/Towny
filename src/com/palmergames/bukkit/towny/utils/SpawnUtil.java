@@ -109,10 +109,8 @@ public class SpawnUtil {
 		if (!isTownyAdmin)
 			testDisallowedZones(player, resident, spawnType, TownySettings.getDisallowedTownSpawnZones());
 
-		// Get costs, paymentMsg for the money.csv and the Account being paid.
+		// Get cost required to spawn.
 		final double travelCost = getTravelCost(player, town, nation, townSpawnLevel, nationSpawnLevel, spawnType);
-		final String paymentMsg = getPaymentMsg(townSpawnLevel, nationSpawnLevel, spawnType);
-		final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : EconomyAccount.SERVER_ACCOUNT;
 
 		// Don't allow if they cannot pay.
 		if (travelCost > 0 && !resident.getAccount().canPayFromHoldings(travelCost))
@@ -123,10 +121,13 @@ public class SpawnUtil {
 		sendSpawnEvent(player, spawnType, spawnLoc);
 		
 		// There is a cost to spawn, prompt with confirmation unless ignoreWarn is true.
-		if (travelCost > 0)
+		if (travelCost > 0) {
+			// Get paymentMsg for the money.csv and the Account being paid.
+			final String paymentMsg = getPaymentMsg(townSpawnLevel, nationSpawnLevel, spawnType);
+			final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : EconomyAccount.SERVER_ACCOUNT;
 			initiateCostedSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, ignoreWarn);
 		// No Cost so skip confirmation system.
-		else
+		} else
 			initiateSpawn(player, spawnLoc);
 	}
 

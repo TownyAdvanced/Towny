@@ -7213,3 +7213,4 @@ v0.92.0.11:
   - Make /ta town NAME set mayor NAME set hasUpkeep correctly when a mayor is replacing an npc mayor.  
   - Fix Towny throwing errors when checking for spawn protection on NPC entities.
     - Closes #5656.
+  - Fix regression in SpawnUtil throwing NPE when using_economy is false.
