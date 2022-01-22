@@ -7211,3 +7211,5 @@ v0.92.0.11:
   - Improve /ta town townname kick name feedback, courtesy of Warriorrrr with PR #5648.
   - Do a better job of catching when Citizens API is unavailable to us, preventing many Towny operations from completing successfully.
   - Make /ta town NAME set mayor NAME set hasUpkeep correctly when a mayor is replacing an npc mayor.  
+  - Fix Towny throwing errors when checking for spawn protection on NPC entities.
+    - Closes #5656.
