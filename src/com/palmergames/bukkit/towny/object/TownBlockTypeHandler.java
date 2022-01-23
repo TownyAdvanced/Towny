@@ -19,8 +19,8 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -115,9 +115,9 @@ public final class TownBlockTypeHandler {
 				double tax = parseDouble(type.getOrDefault("tax", 0.0).toString());
 				String mapKey = String.valueOf(type.getOrDefault("mapKey", "+"));
 
-				Set<Material> itemUseIds = loadMaterialList("itemUseIds", String.valueOf(type.getOrDefault("itemUseIds", "")), name);
-				Set<Material> switchIds = loadMaterialList("switchIds", String.valueOf(type.getOrDefault("switchIds", "")), name);
-				Set<Material> allowedBlocks = loadMaterialList("allowedBlocks", String.valueOf(type.getOrDefault("allowedBlocks", "")), name);
+				EnumSet<Material> itemUseIds = loadMaterialList("itemUseIds", String.valueOf(type.getOrDefault("itemUseIds", "")), name);
+				EnumSet<Material> switchIds = loadMaterialList("switchIds", String.valueOf(type.getOrDefault("switchIds", "")), name);
+				EnumSet<Material> allowedBlocks = loadMaterialList("allowedBlocks", String.valueOf(type.getOrDefault("allowedBlocks", "")), name);
 				
 				TownBlockType townBlockType = newData.get(name.toLowerCase());
 				TownBlockData data;
@@ -144,9 +144,9 @@ public final class TownBlockTypeHandler {
 		}
 	}
 	
-	private static Set<Material> loadMaterialList(String listName, String materialList, String typeName) {
+	private static EnumSet<Material> loadMaterialList(String listName, String materialList, String typeName) {
 		if (!materialList.isEmpty()) {
-			Set<Material> set = new LinkedHashSet<>();
+			EnumSet<Material> set = EnumSet.noneOf(Material.class);
 			for (String materialName : materialList.split(",")) {
 				if (ItemLists.GROUPS.contains(materialName)) {
 					for (String groupedItem : ItemLists.getGrouping(materialName)) {
@@ -164,7 +164,7 @@ public final class TownBlockTypeHandler {
 			
 			return set;
 		} else
-			return new LinkedHashSet<>();
+			return EnumSet.noneOf(Material.class);
 	}
 
 	@Nullable
