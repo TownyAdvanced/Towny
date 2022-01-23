@@ -8,11 +8,13 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -294,5 +296,25 @@ public class BaseCommand implements TabCompleter{
 			townlessResidents.add(resident);
 		}
 		return townlessResidents;
+	}
+	
+	public static void catchPlayer(CommandSender sender) throws TownyException {
+		if (sender instanceof Player)
+			throw new TownyException(Translatable.of("msg_err_console_only"));
+	}
+	
+	public static void catchConsole(CommandSender sender) throws TownyException {
+		if (sender instanceof ConsoleCommandSender)
+			throw new TownyException(Translatable.of("msg_err_player_only"));
+	}
+	
+	public static void testPermission(CommandSender sender, PermissionNodes node) throws TownyException {
+		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(sender, node.getNode()))
+			throw new TownyException(Translatable.of("msg_err_command_disable"));
+	}
+	
+	public static void testPermission(CommandSender sender, String node) throws TownyException {
+		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(sender, node))
+			throw new TownyException(Translatable.of("msg_err_command_disable"));
 	}
 }
