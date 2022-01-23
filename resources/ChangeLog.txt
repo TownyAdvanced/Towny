@@ -7214,3 +7214,7 @@ v0.92.0.11:
   - Fix Towny throwing errors when checking for spawn protection on NPC entities.
     - Closes #5656.
   - Fix regression in SpawnUtil throwing NPE when using_economy is false.
+  - Re-add overriding player crop trampling option.
+  - New Config Option: protection.prevent_player_crop_trample
+    - Default: true
+    - When set to true, players will never trample crops. When false, players will still have to be able to break the crop by hand in order to be able to trample crops.

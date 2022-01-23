@@ -1408,6 +1408,12 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When set to true, players with the Frost Walker enchant will need to be able to build where they are attempting to freeze."),
+	PROT_CROP_TRAMPLE(
+			"protection.prevent_player_crop_trample",
+			"true",
+			"",
+			"# When set to true, players will never trample crops. When false, players will still",
+			"# have to be able to break the crop by hand in order to be able to trample crops."),
 	UNCLAIMED_ZONE(
 			"unclaimed",
 			"",

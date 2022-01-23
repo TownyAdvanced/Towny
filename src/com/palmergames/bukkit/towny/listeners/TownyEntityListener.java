@@ -520,7 +520,7 @@ public class TownyEntityListener implements Listener {
 			}
 			// Handle player trampling crops if disabled in the world.
 			if (event.getEntity() instanceof Player player) {
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock().getLocation(), Material.FARMLAND));
+				event.setCancelled(TownySettings.isPlayerCropTramplePrevented() || !TownyActionEventExecutor.canDestroy(player, event.getBlock().getLocation(), Material.FARMLAND));
 				return;
 			}
 		}
