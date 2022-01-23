@@ -66,6 +66,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -783,12 +784,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 							
 
-						for (String material : TownyAPI.getInstance().getTownyWorld(world).getPlotManagementMayorDelete())
-							if (Material.matchMaterial(material) != null) {
-								TownyRegenAPI.deleteTownBlockMaterial(townBlock, Material.getMaterial(material));
-								TownyMessaging.sendMsg(player, Translatable.of("msg_clear_plot_material", material));
-							} else
-								throw new TownyException(Translatable.of("msg_err_invalid_property", material));
+						EnumSet<Material> materialsToDelete = TownyAPI.getInstance().getTownyWorld(world).getPlotManagementMayorDelete();
+						if (!materialsToDelete.isEmpty()) {
+							TownyRegenAPI.deleteMaterialsFromTownBlock(townBlock, materialsToDelete);
+							TownyMessaging.sendMsg(player, Translatable.of("msg_clear_plot_material", StringMgmt.join(materialsToDelete, ", ")));
+						}
 
 						// Raise an event for the claim
 						BukkitTools.getPluginManager().callEvent(new PlotClearEvent(townBlock));

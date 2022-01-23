@@ -31,6 +31,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -346,6 +347,27 @@ public class TownySettings {
 					itemUseMaterials.add(material);
 			}
 		}
+	}
+
+	public static EnumSet<EntityType> toEntityTypeEnumSet(List<String> entityList) {
+		EnumSet<EntityType> entities = EnumSet.noneOf(EntityType.class);
+		for (String entityName : entityList) {
+			EntityType type = EntityType.valueOf(entityName);
+			if (type != null)
+				entities.add(type);
+		}
+		return entities;
+	}
+
+	public static EnumSet<Material> toMaterialEnumSet(List<String> materialList) {
+		EnumSet<Material> materials = EnumSet.noneOf(Material.class);
+		for (String materialName : materialList) {
+			Material material = Material.matchMaterial(materialName);
+			if (material != null)
+				materials.add(material);
+		}
+		
+		return materials;
 	}
 
 	public static Set<Material> toMaterialSet(List<String> materialList) {
@@ -1500,9 +1522,9 @@ public class TownySettings {
 		return getFireSpreadBypassMaterials().contains(mat);
 	}
 	
-	public static List<String> getUnclaimedZoneIgnoreMaterials() {
+	public static EnumSet<Material> getUnclaimedZoneIgnoreMaterials() {
 
-		return getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE);
+		return toMaterialEnumSet(getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE));
 	}
 	
 	public static List<Class<?>> getProtectedEntityTypes() {
@@ -2027,9 +2049,9 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE_ENABLE);
 	}
 
-	public static List<String> getPlotManagementDeleteIds() {
+	public static EnumSet<Material> getPlotManagementDeleteIds() {
 
-		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE);
+		return toMaterialEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE));
 	}
 
 	public static boolean isUsingPlotManagementMayorDelete() {
@@ -2037,9 +2059,9 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_MAYOR_DELETE_ENABLE);
 	}
 
-	public static List<String> getPlotManagementMayorDelete() {
+	public static EnumSet<Material> getPlotManagementMayorDelete() {
 
-		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_MAYOR_DELETE);
+		return toMaterialEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_MAYOR_DELETE));
 	}
 
 	public static boolean isUsingPlotManagementRevert() {
@@ -2067,9 +2089,9 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_ENABLE);
 	}
 
-	public static List<String> getPlotManagementIgnoreIds() {
+	public static EnumSet<Material> getPlotManagementIgnoreIds() {
 
-		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE);
+		return toMaterialEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE));
 	}
 
 	public static boolean isTownRespawning() {
