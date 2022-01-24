@@ -120,9 +120,7 @@ public class TownyMessaging {
 			else
 				Towny.getAdventure().sender(sender).sendMessage(Translatable.of("default_towny_prefix").append(message).component());
 		} else if (sendTo instanceof Resident resident) {
-			Player player = resident.getPlayer();
-			if (player != null)
-				Towny.getAdventure().player(player).sendMessage(Translatable.of("default_towny_prefix").append(message).component());
+			resident.audience().sendMessage(Translatable.of("default_towny_prefix").append(message).component());
 		}
 		
 		sendDevMsg(message);
@@ -395,9 +393,7 @@ public class TownyMessaging {
 	 * @param title The title to send.
 	 */
 	public static void sendTitleMessageToResident(Resident resident, Title title) {
-		Player player = resident.getPlayer();
-		if (player != null)
-			Towny.getAdventure().player(player).showTitle(title);
+		resident.audience().showTitle(title);
 	}
 	
 	/**
