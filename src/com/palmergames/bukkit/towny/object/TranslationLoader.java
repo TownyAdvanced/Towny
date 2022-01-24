@@ -281,9 +281,15 @@ public class TranslationLoader {
 			if (resourceAsStream == null)
 				return;
 
-			// Create the global.yml file if it doesn't exist.
 			Path globalYMLPath = langFolderPath.resolve("override").resolve("global.yml");
-			if (!globalYMLPath.toFile().exists())
+			Path glitchedGlobalPath = langFolderPath.resolve("global.yml");
+
+			// Move any old global.yml files that are in the wrong location.
+			if (Files.exists(glitchedGlobalPath))
+				Files.move(glitchedGlobalPath, globalYMLPath, StandardCopyOption.REPLACE_EXISTING);
+
+			// Create the global.yml file if it doesn't exist.
+			if (!Files.exists(globalYMLPath))
 				createGlobalYML(globalYMLPath, resourceAsStream);
 
 			// Load global override file into memory.
