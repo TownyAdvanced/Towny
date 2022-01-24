@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -16,11 +17,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * A convenience object to facilitate translation. 
@@ -196,13 +195,22 @@ public final class Translation {
 		return translations.containsKey(locale) ? locale : defaultLocale.toString();
 	}
 	
-	public static String translateTranslatables(CommandSender sender, Translatable... translatables) {
+	public static Component translateTranslatables(CommandSender sender, Translatable... translatables) {
 		return translateTranslatables(sender, " ", translatables);
 	}
 	
-	public static String translateTranslatables(CommandSender sender, String delimiter, Translatable... translatables) {
+	public static Component translateTranslatables(CommandSender sender, String delimiter, Translatable... translatables) {
 		Locale locale = getLocale(sender);
-		return Arrays.stream(translatables).map(translatable -> translatable.translate(locale)).collect(Collectors.joining(delimiter));
+		
+		Component component = Component.empty();
+		for (int i = 0; i < translatables.length; i++) {
+			component = component.append(translatables[i].component(locale));
+
+			if (i != translatables.length - 1)
+				component = component.append(Component.text(delimiter));
+		}
+
+		return component;
 	}
 	
 	public static Locale getLocale(CommandSender sender) {

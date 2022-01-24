@@ -1,16 +1,22 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.Colors;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.Nullable;
 
 public class Translatable {
 	private String key;
 	private Object[] args;
 	private boolean stripColors;
-	private String appended = "";
+	private List<Object> appended;
+	private Locale locale;
 	
 	private Translatable(String key) {
 		this.key = key;
@@ -41,10 +47,6 @@ public class Translatable {
 		return stripColors;
 	}
 	
-	public String appended() {
-		return appended;
-	}
-	
 	public Translatable key(String key) {
 		this.key = key;
 		return this;
@@ -61,22 +63,55 @@ public class Translatable {
 	}
 	
 	public Translatable append(String append) {
-		appended += append;
+		appendInternal(append);
 		return this;
 	}
 	
-	public String translate(Locale locale) {
+	public Translatable append(Component append) {
+		appendInternal(append);
+		return this;
+	}
+	
+	private void appendInternal(Object toAppend) {
+		if (appended == null)
+			appended = new ArrayList<>();
+		
+		appended.add(toAppend);
+	}
+	
+	public Translatable locale(Locale locale) {
+		this.locale = locale;
+		return this;
+	}
+	
+	public Translatable locale(Resident resident) {
+		this.locale = Translation.getLocale(resident);
+		return this;
+	}
+	
+	public Translatable locale(CommandSender commandSender) {
+		this.locale = Translation.getLocale(commandSender);
+		return this;
+	}
+	
+	public String translate(@Nullable Locale locale) {
+		if (locale == null)
+			return translate();
+
 		checkArgs(locale);
 		String translated = args == null ? Translation.of(key, locale) : Translation.of(key, locale, args);
-		translated += appended;
+		translated += getAppendString();
 		
 		return stripColors ? Colors.strip(translated) : translated;
 	}
 	
 	public String translate() {
-		checkArgs();
+		if (this.locale != null)
+			return translate(this.locale);
+
+		checkArgs(null);
 		String translated = args == null ? Translation.of(key) : Translation.of(key, args);
-		translated += appended;
+		translated += getAppendString();
 		
 		return stripColors ? Colors.strip(translated) : translated;
 	}
@@ -92,23 +127,75 @@ public class Translatable {
 	public String defaultLocale() {
 		return translate(Translation.getDefaultLocale());
 	}
+	
+	public Component component(@Nullable Locale locale) {
+		if (locale == null)
+			return component();
 
-	private void checkArgs() {
-		if (args == null)
-			return;
+		checkArgsComponent(locale);
+		Component parsed = TownyComponents.miniMessage(translate(locale));
+		parsed.append(getAppendedComponent());
 		
-		for (int i = 0; i < args.length; i++)
-			if (args[i] instanceof Translatable)
-				args[i] = ((Translatable) args[i]).translate();
+		return stripColors ? Colors.strip(parsed) : parsed;
 	}
 	
-	private void checkArgs(Locale locale) {
+	public Component component() {
+		if (this.locale != null)
+			return component(locale);
+
+		checkArgsComponent(null);
+		Component parsed = TownyComponents.miniMessage(translate());
+		parsed.append(getAppendedComponent());
+
+		return stripColors ? Colors.strip(parsed) : parsed;
+	}
+
+	private void checkArgs(@Nullable Locale locale) {
 		if (args == null)
 			return;
 		
 		for (int i = 0; i < args.length; i++)
 			if (args[i] instanceof Translatable)
 				args[i] = ((Translatable) args[i]).translate(locale);
+	}
+	
+	private void checkArgsComponent(@Nullable Locale locale) {
+		if (args == null)
+			return;
+		
+		for (int i = 0; i < args.length; i++)
+			if (args[i] instanceof Translatable)
+				args[i] = ((Translatable) args[i]).component(locale);
+	}
+	
+	private String getAppendString() {
+		if (appended == null || appended.isEmpty())
+			return "";
+		
+		StringBuilder appendedString = new StringBuilder();
+		for (Object object : appended) {
+			if (object instanceof String string)
+				appendedString.append(string);
+			else if (object instanceof Component component)
+				appendedString.append(TownyComponents.toLegacy(component));
+		}
+		
+		return appendedString.toString();
+	}
+	
+	private Component getAppendedComponent() {
+		if (appended == null || appended.isEmpty())
+			return Component.empty();
+		
+		Component appendedComponent = Component.empty();
+		for (Object object : appended) {
+			if (object instanceof String string)
+				appendedComponent.append(TownyComponents.miniMessage(string));
+			else if (object instanceof Component component)
+				appendedComponent.append(component);				
+		}
+		
+		return appendedComponent;
 	}
 	
 	@Override
