@@ -217,6 +217,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"townrank",
 		"nationrank"
 	);
+	
+	private static final List<String> adminReloadTabCompletes = Arrays.asList(
+		"database",
+		"db",
+		"config",
+		"perms",
+		"permissions",
+		"language",
+		"lang",
+		"townyperms",
+		"all"
+	);
 
 	private boolean isConsole;
 	private Player player;
@@ -256,7 +268,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		switch (args[0].toLowerCase()) {
 			case "reload":
 				if (args.length > 1)
-					return NameUtil.filterByStart(Arrays.asList("database", "db", "config", "perms", "permissions", "language", "lang", "townyperms", "all"), args[1]);
+					return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN_RELOAD, adminReloadTabCompletes), args[1]);
 			case "purge":
 				if (args.length == 3)
 					return filterByStartOrGetTownyStartingWith(Collections.singletonList("townless"), args[2], "+t");
@@ -526,7 +538,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			default:
 				if (args.length == 1)
 					return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN, adminTabCompletes), args[0]);
-				else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, args[0]))
+				else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, args[0]))
 					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, args[0]).getTabCompletion(sender, args), args[args.length-1]);
 		}
 		
@@ -608,7 +620,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							reloadDatabase();
 							break;
 						default:
-							HelpMenu.TA_RELOAD.send(sender);
+							if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_RELOAD, split[1]))
+								TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_RELOAD, split[1]).execute(sender, split);
+							else
+								HelpMenu.TA_RELOAD.send(sender);
 					}
 				} else {
 					HelpMenu.TA_RELOAD.send(sender);

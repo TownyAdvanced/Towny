@@ -35,6 +35,7 @@ public class TownyCommandAddonAPI {
         TOWNYADMIN,
         TOWNYADMIN_SET,
         TOWNYADMIN_TOGGLE,
+		TOWNYADMIN_RELOAD,
         TOWNYWORLD,
         TOWNYWORLD_SET,
         TOWNYWORLD_TOGGLE
