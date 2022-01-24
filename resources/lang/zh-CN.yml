@@ -206,7 +206,7 @@ msg_changed_public: '&c城镇的公开状态变更为 %s.'
 msg_changed_expl: '&c%s 中的允许爆炸变更为 %s.'
 msg_changed_fire: '&c%s 中的火势蔓延变更为 %s.'
 msg_changed_mobs: '&c%s 中的怪物生成变更为 %s.'
-msg_the_plot_group: 'the Plot Group'
+msg_the_plot_group: '地皮组'
 msg_changed_taxpercent: '&c按比例收税模式变更为 %s.'
 msg_changed_open: '&c城镇邀请加入变更为 %s.'
 msg_toggle_open_on_warning: '警告: 如果城镇设为开放那么城镇权限最好关闭. 输入 /town set perm off 关闭,  /town set perm reset重置.'
@@ -1429,8 +1429,8 @@ msg_your_town_paid_x_to_unclaim: '你的城镇已支付 %s 来取消对土地的
 confirmation_unclaiming_costs: '取消这片土地将消耗 %s，你想要继续吗？'
 #Added in 0.140
 #Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
-msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
+msg_your_locale: 'Towny根据你本地的语言设置（%s）来翻译文字。注意一些翻译可能会缺少对应文本。'
 #Message shown when a player tries to rename their town too quickly.
-msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+msg_you_must_wait_x_seconds_before_renaming_your_town: '你必须再等待%s秒才能重命名你的城镇。'
 #Added in 1.141
-msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'
+msg_newday_already_scheduled_soon: '一个新的一天的任务已经被安排在之后执行。'
