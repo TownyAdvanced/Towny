@@ -7220,3 +7220,5 @@ v0.92.0.11:
     - When set to true, players will never trample crops. When false, players will still have to be able to break the crop by hand in order to be able to trample crops.
 0.97.5.15:
   - Use EnumSet for switch and itemuse materials, courtesy of Warriorrrr with PR #5664.
+  - Add TOWNYADMIN_RELOAD commandtype, courtesy of Warriorrrr with PR #5669.
+    - Closes #5668.
