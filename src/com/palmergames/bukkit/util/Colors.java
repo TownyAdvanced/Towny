@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.util;
 
+import com.palmergames.bukkit.towny.utils.TownyComponents;
+import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,6 +33,10 @@ public class Colors {
 
 	public static String strip(String line) {
 		return ChatColor.stripColor(line);
+	}
+	
+	public static Component strip(Component component) {
+		return Component.text(TownyComponents.plain(component));
 	}
 
 	public static String translateColorCodes(String str) {
