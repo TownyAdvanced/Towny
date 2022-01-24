@@ -14,7 +14,7 @@ public final class TownyComponents {
 	}
 	
 	public static Component miniMessage(String input) {
-		return MiniMessage.miniMessage().parse(input);
+		return MiniMessage.miniMessage().deserialize(input);
 	}
 	
 	public static Component fromLegacy(String input) {
