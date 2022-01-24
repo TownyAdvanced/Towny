@@ -30,10 +30,12 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -53,6 +55,15 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	// protected static TownyUniverse universe;
 	private static Towny plugin;
+	private final Component[] heart = new Component[] {
+		Component.text("-", NamedTextColor.BLACK).append(Component.text("###", NamedTextColor.DARK_RED)).append(Component.text("---", NamedTextColor.BLACK)).append(Component.text("###", NamedTextColor.DARK_RED)).append(Component.text("-   ", NamedTextColor.BLACK)),
+		Component.text("#", NamedTextColor.DARK_RED).append(Component.text("###", NamedTextColor.RED)).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("-", NamedTextColor.BLACK)).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("###", NamedTextColor.RED)).append(Component.text("#   ", NamedTextColor.DARK_RED)),
+		Component.text("#", NamedTextColor.DARK_RED).append(Component.text("####", NamedTextColor.RED)).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("####", NamedTextColor.RED)).append(Component.text("#   ", NamedTextColor.DARK_RED)),
+		Component.text("-", NamedTextColor.BLACK).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("#######", NamedTextColor.RED)).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("-   ", NamedTextColor.BLACK)),
+		Component.text("--", NamedTextColor.BLACK).append(Component.text("##", NamedTextColor.DARK_RED)).append(Component.text("###", NamedTextColor.RED)).append(Component.text("##", NamedTextColor.DARK_RED)).append(Component.text("--   ", NamedTextColor.BLACK)),
+		Component.text("----", NamedTextColor.BLACK).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("#", NamedTextColor.RED)).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("----   ", NamedTextColor.BLACK)),
+		Component.text("-----", NamedTextColor.BLACK).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("-----   ", NamedTextColor.BLACK))
+	};
 
 	private static final List<String> townyTabCompletes = Arrays.asList(
 		"map",
@@ -189,8 +200,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 							town = resident.getTownOrNull();
 					}
 
-					for (String line : getTownyPrices(town, Translator.locale(sender)))
-						TownyMessaging.sendMessage(sender, line);
+					TownyMessaging.sendMessage(sender, getTownyPrices(town, Translator.locale(sender)));
+
 					break;
 				}
 				case "switches": {
@@ -262,8 +273,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-					for (String line : getUniverseStats(Translator.locale(sender)))
-						TownyMessaging.sendMessage(sender, line);
+					TownyMessaging.sendMessage(sender, getUniverseStats(Translator.locale(sender)));
 					break;
 				}
 				case "version":
@@ -299,13 +309,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			TownyMessaging.sendErrorMsg(sender, e.message(sender));
 		}
 
 	}
 
 	private void parseTopCommand(CommandSender sender, String[] args) throws TownyException {
-		List<String> townyTop = new ArrayList<>();
+		List<Component> townyTop = new ArrayList<>();
 		TownyUniverse universe = TownyUniverse.getInstance();
 
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
@@ -313,8 +323,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			townyTop.add(ChatTools.formatCommand("", "/towny top", "residents [all/town/nation]", ""));
 			townyTop.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
 			townyTop.add(ChatTools.formatCommand("", "/towny top", "balance [all/town/nation]", ""));
-			for (String line : townyTop)
-				TownyMessaging.sendMessage(sender, line);
+			TownyMessaging.sendMessage(sender, townyTop);
 			return;
 		} 
 		
@@ -368,95 +377,94 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				} else {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
 				}
-				for (String line : townyTop)
-					TownyMessaging.sendMessage(sender, line);
+				TownyMessaging.sendMessage(sender, townyTop);
 			});
 			return;
 		}
 		else
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
 
-		for (String line : townyTop)
-			TownyMessaging.sendMessage(sender, line);
+		TownyMessaging.sendMessage(sender, townyTop);
 	}
 
-	public List<String> getUniverseStats(Translator translator) {
+	public List<Component> getUniverseStats(Translator translator) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		List<String> output = new ArrayList<>();
+		List<Component> output = new ArrayList<>();
 		
-		output.add(""); // Intentionally left blank
-		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   " + Colors.Gold + "[" + Colors.Yellow + "Towny " + Colors.Green + plugin.getVersion() + Colors.Gold + "]");
-		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   " + Colors.Blue + translator.of("msg_universe_attribution") + Colors.LightBlue + "Chris H (Shade), ElgarL, LlmDl");
-		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   " + Colors.LightBlue + translator.of("msg_universe_contributors") + Colors.Rose + translator.of("msg_universe_heart"));
-		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
-		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + Colors.Blue + translator.of("res_list")+ ": " + Colors.LightBlue + townyUniverse.getNumResidents() + Colors.Gray + " | " + Colors.Blue + translator.of("town_plu") + ": " + Colors.LightBlue + townyUniverse.getTowns().size() + Colors.Gray + " | " + Colors.Blue + translator.of("nation_plu") + ": " + Colors.LightBlue + townyUniverse.getNumNations());
-		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + Colors.Blue + translator.of("world_plu") + ": " + Colors.LightBlue + townyUniverse.getTownyWorlds().size() + Colors.Gray + " | " + Colors.Blue + translator.of("townblock_plu") + ": " + Colors.LightBlue + townyUniverse.getTownBlocks().size());
-		output.add("\u00A70-----\u00A74#\u00A70-----   " + Colors.LightGreen + "https://TownyAdvanced.github.io/");
-		output.add(""); // Intentionally left blank
+		output.add(Component.empty()); // Intentionally left blank
+		output.add(heart[0].append(Component.text("[", NamedTextColor.GOLD)).append(Component.text("Towny ", NamedTextColor.YELLOW)).append(Component.text(plugin.getVersion(), NamedTextColor.DARK_GREEN)).append(Component.text("]", NamedTextColor.GOLD)));
+		output.add(heart[1].append(translator.comp("msg_universe_attribution").color(NamedTextColor.DARK_AQUA)).append(Component.text("Chris H (Shade), ElgarL, LlmDl", NamedTextColor.AQUA)));
+		output.add(heart[2].append(translator.comp("msg_universe_contributors").color(NamedTextColor.AQUA)).append(translator.comp("msg_universe_heart").color(NamedTextColor.RED)));
+		output.add(heart[3]);
+		output.add(heart[4].append(Component.text(translator.of("res_list") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getNumResidents(), NamedTextColor.AQUA)).append(Component.text(" | ", NamedTextColor.DARK_GRAY)).append(Component.text(translator.of("town_plu") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getTowns().size(), NamedTextColor.AQUA)).append(Component.text(" | ", NamedTextColor.DARK_GRAY)).append(Component.text(translator.of("nation_plu") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getNumNations(), NamedTextColor.AQUA)));
+		output.add(heart[5].append(Component.text(translator.of("world_plu") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getTownyWorlds().size(), NamedTextColor.AQUA)).append(Component.text(" | ", NamedTextColor.DARK_GRAY)).append(Component.text(translator.of("townblock_plu") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getTownBlocks().size(), NamedTextColor.AQUA)));
+		output.add(heart[6].append(Component.text("https://TownyAdvanced.github.io/", NamedTextColor.GREEN)));
+		output.add(Component.empty()); // Intentionally left blank
 		
 
 		// Other TownyAdvanced plugins to report versions
 		int plugins = 0;
-		String townyPlugins = Colors.Gold + "[";
+		Component townyPlugins = Component.text("[", NamedTextColor.GOLD);
 		
 		// LlmDl Sponsor exclusive
 		Plugin tCamps = Bukkit.getServer().getPluginManager().getPlugin("TownyCamps");
 		if (tCamps != null) {
-			townyPlugins += Colors.Yellow + "TownyCamps " + Colors.Green + tCamps.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("TownyCamps ", NamedTextColor.YELLOW)).append(Component.text(tCamps.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 		
 		Plugin townyChat = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
 		if (townyChat != null){
-			townyPlugins += Colors.Yellow + "TownyChat " + Colors.Green + townyChat.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("TownyChat ", NamedTextColor.YELLOW)).append(Component.text(townyChat.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 		
 		Plugin tCult = Bukkit.getServer().getPluginManager().getPlugin("TownyCultures");
 		if (tCult != null) {
-			townyPlugins += Colors.Yellow + "TownyCultures " + Colors.Green + tCult.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("TownyCultures ", NamedTextColor.YELLOW)).append(Component.text(tCult.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 		
 		Plugin tFlight = Bukkit.getServer().getPluginManager().getPlugin("TownyFlight");
 		if (tFlight != null) {
-			townyPlugins += Colors.Yellow + "TownyFlight " + Colors.Green + tFlight.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("TownyFlight ", NamedTextColor.YELLOW)).append(Component.text(tFlight.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 
 		// LlmDl Sponsor exclusive
 		Plugin tHist = Bukkit.getServer().getPluginManager().getPlugin("TownyHistories");
 		if (tHist != null) {
-			townyPlugins += Colors.Yellow + "TownyHistories " + Colors.Green + tHist.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("TownyHistories ", NamedTextColor.YELLOW)).append(Component.text(tHist.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 		
 		Plugin flagWar = Bukkit.getServer().getPluginManager().getPlugin("FlagWar");
 		if (flagWar != null) {
-			townyPlugins += Colors.Yellow + "FlagWar " + Colors.Green + flagWar.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("FlagWar ", NamedTextColor.YELLOW)).append(Component.text(flagWar.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 		
 		Plugin siegeWar = Bukkit.getServer().getPluginManager().getPlugin("SiegeWar");
 		if (siegeWar != null) {
-			townyPlugins += Colors.Yellow + "SiegeWar " + Colors.Green + siegeWar.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("SiegeWar ", NamedTextColor.YELLOW)).append(Component.text(siegeWar.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 
 		Plugin eventWar = Bukkit.getServer().getPluginManager().getPlugin("EventWar");
 		if (eventWar != null) {
-			townyPlugins += Colors.Yellow + "EventWar " + Colors.Green + eventWar.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("EventWar ", NamedTextColor.YELLOW)).append(Component.text(eventWar.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 
 		Plugin townyRTP = Bukkit.getServer().getPluginManager().getPlugin("TownyRTP");
 		if (townyRTP != null) {
-			townyPlugins += Colors.Yellow + "TownyRTP " + Colors.Green + townyRTP.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("TownyRTP ", NamedTextColor.YELLOW)).append(Component.text(townyRTP.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 
 		if (plugins > 0)
-			output.add(townyPlugins + Colors.Gold + "]");
+			output.add(townyPlugins.append(Component.text("]", NamedTextColor.GOLD)));
+
 		return output;
 	}
 
@@ -477,9 +485,9 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	 * @param translator - The Translator to use.
 	 * @return - Prices screen for a town.
 	 */
-	public List<String> getTownyPrices(Town town, Translator translator) {
+	public List<Component> getTownyPrices(Town town, Translator translator) {
 
-		List<String> output = new ArrayList<>();
+		List<Component> output = new ArrayList<>();
 		Nation nation = null;
 
 		if (town != null)
@@ -487,11 +495,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				nation = town.getNationOrNull();
 
 		output.add(ChatTools.formatTitle(translator.of("towny_prices_title")));
-		output.add(translator.of("towny_prices_town_nation", getMoney(TownySettings.getNewTownPrice()), getMoney(TownySettings.getNewNationPrice())));
-		output.add(translator.of("towny_prices_reclaim", getMoney(TownySettings.getEcoPriceReclaimTown())));
+		output.add(translator.comp("towny_prices_town_nation", getMoney(TownySettings.getNewTownPrice()), getMoney(TownySettings.getNewNationPrice())));
+		output.add(translator.comp("towny_prices_reclaim", getMoney(TownySettings.getEcoPriceReclaimTown())));
 		if (town != null) {
-			output.add(translator.of("towny_prices_upkeep", getMoney(TownySettings.getTownUpkeepCost(town)), getMoney(TownySettings.getNationUpkeepCost(nation))));
-			output.add(translator.of("towny_prices_upkeep_based_on", (TownySettings.isUpkeepByPlot() ? translator.of("towny_prices_upkeep_num_plots") : translator.of("towny_prices_upkeep_town_level"))));
+			output.add(translator.comp("towny_prices_upkeep", getMoney(TownySettings.getTownUpkeepCost(town)), getMoney(TownySettings.getNationUpkeepCost(nation))));
+			output.add(translator.comp("towny_prices_upkeep_based_on", (TownySettings.isUpkeepByPlot() ? translator.of("towny_prices_upkeep_num_plots") : translator.of("towny_prices_upkeep_town_level"))));
 			String upkeepformula;
 			if (TownySettings.isNationUpkeepPerPlot())
 				upkeepformula = translator.of("towny_prices_upkeep_num_plots");
@@ -499,36 +507,36 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				upkeepformula = translator.of("towny_prices_upkeep_num_towns");
 			else 
 				upkeepformula = translator.of("towny_prices_upkeep_nation_level");
-			output.add(translator.of("towny_prices_nation_upkeep_based_on", upkeepformula));
+			output.add(translator.comp("towny_prices_nation_upkeep_based_on", upkeepformula));
 			if (town.isOverClaimed() && TownySettings.getUpkeepPenalty() > 0)
-				output.add(translator.of("towny_prices_overclaimed_upkeep", getMoney(TownySettings.getTownPenaltyUpkeepCost(town))));
+				output.add(translator.comp("towny_prices_overclaimed_upkeep", getMoney(TownySettings.getTownPenaltyUpkeepCost(town))));
 			if (TownySettings.getUpkeepPenalty() > 0 )
-				output.add(translator.of("towny_prices_overclaimed_based_on", (TownySettings.isUpkeepPenaltyByPlot() ? translator.of("towny_prices_overclaimed_num_plots") : translator.of("towny_prices_overclaimed_flat_cost")), TownySettings.getUpkeepPenalty()));
+				output.add(translator.comp("towny_prices_overclaimed_based_on", (TownySettings.isUpkeepPenaltyByPlot() ? translator.of("towny_prices_overclaimed_num_plots") : translator.of("towny_prices_overclaimed_flat_cost")), TownySettings.getUpkeepPenalty()));
 
-			output.add(translator.of("towny_prices_town_merge", getMoney(TownySettings.getBaseCostForTownMerge()), getMoney(town.getTownBlockCost()/2)));
-			output.add(translator.of("towny_prices_claiming_townblock", getMoney(town.getTownBlockCost()) +  
+			output.add(translator.comp("towny_prices_town_merge", getMoney(TownySettings.getBaseCostForTownMerge()), getMoney(town.getTownBlockCost()/2)));
+			output.add(translator.comp("towny_prices_claiming_townblock", getMoney(town.getTownBlockCost()) +  
 					(Double.valueOf(TownySettings.getClaimPriceIncreaseValue()).equals(1.0) ? "" : translator.of("towny_prices_claiming_townblock_increase", new DecimalFormat("##.##%").format(TownySettings.getClaimPriceIncreaseValue()-1)))));
-			output.add(translator.of("towny_prices_claiming_outposts", getMoney(TownySettings.getOutpostCost())));
+			output.add(translator.comp("towny_prices_claiming_outposts", getMoney(TownySettings.getOutpostCost())));
 		}
 		if (town == null)
-			output.add(translator.of("towny_prices_upkeep", getMoney(TownySettings.getTownUpkeep()), getMoney(TownySettings.getNationUpkeep())));
+			output.add(translator.comp("towny_prices_upkeep", getMoney(TownySettings.getTownUpkeep()), getMoney(TownySettings.getNationUpkeep())));
 
 		if (town != null) {
-			output.add(translator.of("towny_prices_townname", town.getFormattedName()));
-			output.add(translator.of("towny_prices_price_plot", getMoney(town.getPlotPrice()),getMoney(TownySettings.getOutpostCost())));
-			output.add(translator.of("towny_prices_price_shop", getMoney(town.getCommercialPlotPrice()), getMoney(town.getEmbassyPlotPrice())));
+			output.add(translator.comp("towny_prices_townname", town.getFormattedName()));
+			output.add(translator.comp("towny_prices_price_plot", getMoney(town.getPlotPrice()),getMoney(TownySettings.getOutpostCost())));
+			output.add(translator.comp("towny_prices_price_shop", getMoney(town.getCommercialPlotPrice()), getMoney(town.getEmbassyPlotPrice())));
 
-			output.add(translator.of("towny_prices_taxes_plot", (town.isTaxPercentage()? town.getTaxes() + "%" : getMoney(town.getTaxes())), getMoney(town.getPlotTax())));
-			output.add(translator.of("towny_prices_taxes_shop", getMoney(town.getCommercialPlotTax()), getMoney(town.getEmbassyPlotTax())));
-			output.add(translator.of("towny_prices_town_neutral_tax", getMoney(TownySettings.getTownNeutralityCost())));
+			output.add(translator.comp("towny_prices_taxes_plot", (town.isTaxPercentage()? town.getTaxes() + "%" : getMoney(town.getTaxes())), getMoney(town.getPlotTax())));
+			output.add(translator.comp("towny_prices_taxes_shop", getMoney(town.getCommercialPlotTax()), getMoney(town.getEmbassyPlotTax())));
+			output.add(translator.comp("towny_prices_town_neutral_tax", getMoney(TownySettings.getTownNeutralityCost())));
 			
-			output.add(translator.of("towny_prices_plots"));
+			output.add(translator.comp("towny_prices_plots"));
 			List<TownBlockType> townBlockTypes = new ArrayList<>(TownBlockTypeHandler.getTypes().values());
 			for (int i = 0; i < townBlockTypes.size(); i++) {
 				if (i == townBlockTypes.size() - 1)
-					output.add(translator.of("towny_prices_type_single", townBlockTypes.get(i).getFormattedName(), getMoney(townBlockTypes.get(i).getCost())));
+					output.add(translator.comp("towny_prices_type_single", townBlockTypes.get(i).getFormattedName(), getMoney(townBlockTypes.get(i).getCost())));
 				else {
-					output.add(translator.of("towny_prices_type_double",
+					output.add(translator.comp("towny_prices_type_double",
 						townBlockTypes.get(i).getFormattedName(), getMoney(townBlockTypes.get(i).getCost()),
 						townBlockTypes.get(i+1).getFormattedName(), getMoney(townBlockTypes.get(i+1).getCost())
 					));
@@ -538,8 +546,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (nation != null) {
-				output.add(translator.of("towny_prices_nationname", nation.getFormattedName()));
-				output.add(translator.of("towny_prices_nation_tax", nation.getTaxes(), getMoney(TownySettings.getNationNeutralityCost())));
+				output.add(translator.comp("towny_prices_nationname", nation.getFormattedName()));
+				output.add(translator.comp("towny_prices_nation_tax", nation.getTaxes(), getMoney(TownySettings.getNationNeutralityCost())));
 			}
 		}
 		return output;
@@ -549,9 +557,9 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return TownyEconomyHandler.getFormattedBalance(cost);
 	}
 	
-	public List<String> getTopBankBalance(final List<Government> governments) {
+	public List<Component> getTopBankBalance(final List<Government> governments) {
 		final int maxListing = TownySettings.getTownyTopSize();
-		final List<String> output = new ArrayList<>();
+		final List<Component> output = new ArrayList<>();
 
 		// Sort by their bank balance first
 		governments.sort(GovernmentComparators.BY_BANK_BALANCE);
@@ -563,15 +571,15 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && index > maxListing) {
 				break;
 			}
-			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", gov.getFormattedName(), getMoney(gov.getAccount().getCachedBalance())));
+			output.add(TownyComponents.miniMessage(String.format("<gray>%-20s <gold>| <dark_aqua>%s", gov.getFormattedName(), getMoney(gov.getAccount().getCachedBalance()))));
 		}
 		return output;
 	}
 
-	public List<String> getMostResidents(List<ResidentList> list) {
+	public List<Component> getMostResidents(List<ResidentList> list) {
 		final int maxListing = TownySettings.getTownyTopSize();
 
-		List<String> output = new ArrayList<>();
+		List<Component> output = new ArrayList<>();
 		list.sort(Comparator.comparingInt(residentList -> residentList.getResidents().size()));
 		Collections.reverse(list);
 
@@ -581,16 +589,16 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && n > maxListing)
 				break;
 
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", ((TownyObject) residentList).getFormattedName(), residentList.getResidents().size()));
+			output.add(TownyComponents.miniMessage(String.format("<dark_aqua>%30s <gold>| <gray>%10d", ((TownyObject) residentList).getFormattedName(), residentList.getResidents().size())));
 		}
 
 		return output;
 	}
 
-	public List<String> getMostLand(List<TownBlockOwner> list) {
+	public List<Component> getMostLand(List<TownBlockOwner> list) {
 		final int maxListing = TownySettings.getTownyTopSize();
 
-		List<String> output = new ArrayList<>();
+		List<Component> output = new ArrayList<>();
 		list.sort(Comparator.comparingInt(owner -> owner.getTownBlocks().size()));
 		Collections.reverse(list);
 
@@ -600,7 +608,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && n > maxListing)
 				break;
 
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", owner.getFormattedName(), owner.getTownBlocks().size()));
+			output.add(TownyComponents.miniMessage(String.format("<dark_aqua>%30s <gold>| <gray>%10d", owner.getFormattedName(), owner.getTownBlocks().size())));
 		}
 
 		return output;

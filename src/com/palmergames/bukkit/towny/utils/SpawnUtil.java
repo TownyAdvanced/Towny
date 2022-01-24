@@ -108,7 +108,7 @@ public class SpawnUtil {
 			try {
 				sendSpawnEvent(player, spawnType, spawnLoc);
 			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				TownyMessaging.sendErrorMsg(player, e.message(player));
 				return;
 			}
 

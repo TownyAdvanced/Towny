@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
@@ -39,7 +40,7 @@ public class SetupConversation extends TownyConversation {
 		@NotNull
 		@Override
 		public String getPromptText(@NotNull ConversationContext conversationContext) {
-			return setupQuestions.get(questionCount).message().forLocale(getSender(conversationContext));
+			return TownyComponents.toLegacy(setupQuestions.get(questionCount).message().componentFor(getSender(conversationContext)));
 		}
 
 		@Nullable

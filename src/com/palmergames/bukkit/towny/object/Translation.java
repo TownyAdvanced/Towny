@@ -7,11 +7,11 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -32,12 +32,13 @@ public final class Translation {
 	
 	private static Map<String, Map<String, String>> translations = new HashMap<>();
 	private static Locale defaultLocale = new Locale("en", "US"); // en-US here by default, in case of safe mode happening before translations are loaded.
-	private static Locale englishLocale = new Locale("en", "US"); // Our last-ditch fall back locale.
+	private static final Locale englishLocale = new Locale("en", "US"); // Our last-ditch fall back locale.
 	
 	public static void loadTranslationRegistry() {
 		translations.clear();
 		Path langFolder = Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("lang");
 		TranslationLoader loader = new TranslationLoader(langFolder, Towny.getPlugin(), Towny.class);
+		loader.setConvertLegacyCodes(true);
 		loader.updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
 
 		// Load built-in translations into memory.
@@ -100,7 +101,7 @@ public final class Translation {
 				return key;
 			}
 		}
-		return Colors.translateColorCodes(data);
+		return data;
 	}
 
 	/**
@@ -129,7 +130,7 @@ public final class Translation {
 			return of(key);
 		}
 
-		return Colors.translateColorCodes(data);
+		return data;
 	}
 	
 	/**
@@ -197,10 +198,20 @@ public final class Translation {
 		return translations.containsKey(locale) ? locale : defaultLocale.toString();
 	}
 	
+	/**
+	 * @deprecated Deprecated as of 0.98.3.1.
+	 */
+	@Deprecated
+	@ApiStatus.ScheduledForRemoval
 	public static String translateTranslatables(CommandSender sender, Translatable... translatables) {
 		return translateTranslatables(sender, " ", translatables);
 	}
 	
+	/**
+	 * @deprecated Deprecated as of 0.98.3.1.
+	 */
+	@Deprecated
+	@ApiStatus.ScheduledForRemoval
 	public static String translateTranslatables(CommandSender sender, String delimiter, Translatable... translatables) {
 		Locale locale = getLocale(sender);
 		return Arrays.stream(translatables).map(translatable -> translatable.translate(locale)).collect(Collectors.joining(delimiter));

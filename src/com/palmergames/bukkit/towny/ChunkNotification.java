@@ -26,22 +26,22 @@ public class ChunkNotification {
 	// Example:
 	// ~ Wak Town - Lord Jebus - [Home] [For Sale: 50 Beli] [Shop]
 
-	public static String notificationFormat = Colors.Gold + " ~ %s";
-	public static String notificationSplitter = Colors.LightGray + " - ";
-	public static String areaWildernessNotificationFormat = Colors.Green + "%s";
-	public static String areaWildernessPvPNotificationFormat = Colors.Green + "%s";
-	public static String areaTownNotificationFormat = Colors.Green + "%s";
-	public static String areaTownPvPNotificationFormat = Colors.Green + "%s";
-	public static String ownerNotificationFormat = Colors.LightGreen + "%s";
-	public static String noOwnerNotificationFormat = Colors.LightGreen + "%s";
+	public static String notificationFormat = "<gold> ~ %s";
+	public static String notificationSplitter = "<gray> - ";
+	public static String areaWildernessNotificationFormat = "<dark_green>%s";
+	public static String areaWildernessPvPNotificationFormat = "<dark_green>%s";
+	public static String areaTownNotificationFormat = "<dark_green>%s";
+	public static String areaTownPvPNotificationFormat = "<dark_green>%s";
+	public static String ownerNotificationFormat = "<green>%s";
+	public static String noOwnerNotificationFormat = "<green>%s";
 	public static String plotNotificationSplitter = " ";
 	public static String plotNotificationFormat = "%s";
-	public static String homeBlockNotification = Colors.LightBlue + "[Home]";
-	public static String outpostBlockNotification = Colors.LightBlue + "[Outpost]";
-	public static String forSaleNotificationFormat = Colors.Yellow + "[For Sale: %s]";
-	public static String notForSaleNotificationFormat = Colors.Yellow + "[Not For Sale]";
-	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";	
-	public static String groupNotificationFormat = Colors.White + "[%s]";
+	public static String homeBlockNotification = "<aqua>[Home]";
+	public static String outpostBlockNotification = "<aqua>[Outpost]";
+	public static String forSaleNotificationFormat = "<yellow>[For Sale: %s]";
+	public static String notForSaleNotificationFormat = "<yellow>[Not For Sale]";
+	public static String plotTypeNotificationFormat = "<gold>[%s]";	
+	public static String groupNotificationFormat = "<white>[%s]";
 
 	/**
 	 * Called on Config load.

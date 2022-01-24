@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
@@ -38,7 +39,7 @@ public class ResidentConversation extends TownyConversation {
 		@NotNull
 		@Override
 		public String getPromptText(@NotNull ConversationContext context) {
-			return Translatable.of("msg_resident_prompt").forLocale(getPlayer(context));
+			return TownyComponents.toLegacy(Translatable.of("msg_resident_prompt").componentFor(getPlayer(context)));
 		}
 
 		@Nullable

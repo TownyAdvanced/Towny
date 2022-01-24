@@ -1,8 +1,10 @@
 package com.palmergames.bukkit.towny.exceptions;
 
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.ApiStatus;
 
 public class TownyException extends Exception {
 
@@ -25,16 +27,29 @@ public class TownyException extends Exception {
 	
 	@Override
 	public String getMessage() {
-		if (message instanceof Translatable)
-			return ((Translatable) message).translate();
+		if (message instanceof Translatable translatable)
+			return translatable.translate();
 		else
 			return (String) message;
 	}
 	
+	/**
+	 * @deprecated Deprecated as of 0.98.3.1, use {@link #message(CommandSender)} instead.
+	 */
+	@Deprecated
+	@ApiStatus.ScheduledForRemoval
 	public String getMessage(CommandSender sender) {
-		if (message instanceof Translatable)
-			return ((Translatable) message).translate(Translation.getLocale(sender));
+		if (message instanceof Translatable translatable)
+			return translatable.locale(sender).forLocale(sender);
 		else
-			return (String) message;
+			// dumb legacy
+			return TownyComponents.toLegacy(TownyComponents.miniMessage((String) message));
+	}
+	
+	public Component message(CommandSender sender) {
+		if (message instanceof Translatable translatable)
+			return translatable.locale(sender).component();
+		else
+			return TownyComponents.miniMessage((String) message);
 	}
 }

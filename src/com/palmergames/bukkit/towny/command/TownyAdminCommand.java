@@ -267,7 +267,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		try {
 			return parseTownyAdminCommand(args);
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			TownyMessaging.sendErrorMsg(sender, e.message(sender));
 		}
 
 		return true;
@@ -1197,7 +1197,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				residentDelete(sender, split[0]);
 			}
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(getSender(), e.getMessage(getSender()));
+			TownyMessaging.sendErrorMsg(getSender(), e.message(getSender()));
 		}
 	}
 	
@@ -1216,7 +1216,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				 * Moved from TownCommand as of 0.92.0.13
 				 */
 				if (split.length != 3)
-					throw new TownyException(Translatable.of("msg_err_not_enough_variables") + "/ta town new [name] [mayor]");
+					throw new TownyException(Translatable.of("msg_err_not_enough_variables").append("/ta town new [name] [mayor]"));
 
 				if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_NEW.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
@@ -2287,7 +2287,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("devmode")) {
 			try {
 				TownySettings.setDevMode(choice.orElse(!TownySettings.isDevMode()));
-				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_devmode", (TownySettings.isDevMode() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
+				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_devmode", (TownySettings.isDevMode() ? Translatable.of("enabled") : Translatable.of("disabled"))));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_choice"));
 			}
@@ -2295,21 +2295,21 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			try {
 				TownySettings.setDebug(choice.orElse(!TownySettings.getDebug()));
 				TownyLogger.getInstance().refreshDebugLogger();
-				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_debugmode", (TownySettings.getDebug() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
+				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_debugmode", (TownySettings.getDebug() ? Translatable.of("enabled") : Translatable.of("disabled"))));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_choice"));
 			}
 		} else if (split[0].equalsIgnoreCase("townwithdraw")) {
 			try {
 				TownySettings.SetTownBankAllowWithdrawls(choice.orElse(!TownySettings.getTownBankAllowWithdrawls()));
-				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_townwithdraw", (TownySettings.getTownBankAllowWithdrawls() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
+				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_townwithdraw", (TownySettings.getTownBankAllowWithdrawls() ? Translatable.of("enabled") : Translatable.of("disabled"))));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_choice"));
 			}
 		} else if (split[0].equalsIgnoreCase("nationwithdraw")) {
 			try {
 				TownySettings.SetNationBankAllowWithdrawls(choice.orElse(!TownySettings.getNationBankAllowWithdrawls()));
-				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_nationwithdraw", (TownySettings.getNationBankAllowWithdrawls() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
+				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_nationwithdraw", (TownySettings.getNationBankAllowWithdrawls() ? Translatable.of("enabled") : Translatable.of("disabled"))));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_choice"));
 			}

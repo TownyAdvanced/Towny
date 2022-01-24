@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
-import com.palmergames.bukkit.util.Colors;
-
 public class IntegerDataField extends CustomDataField<Integer> {
     
     // Initializes default value to zero.
@@ -45,7 +43,7 @@ public class IntegerDataField extends CustomDataField<Integer> {
 	@Override
 	public String displayFormattedValue() {
 		int val = getValue();
-		return (val <= 0 ? Colors.Red : Colors.LightGreen) + val;
+		return (val <= 0 ? "<dark_red>" : "<green>") + val;
 	}
 
 	@Override

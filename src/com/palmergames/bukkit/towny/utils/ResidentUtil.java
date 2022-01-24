@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -38,7 +39,6 @@ import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.TimeMgmt;
 
 public class ResidentUtil {
@@ -146,7 +146,7 @@ public class ResidentUtil {
 			ItemStack item = new ItemStack(Material.GRASS_BLOCK);
 			
 			ItemMeta meta = item.getItemMeta();
-			meta.setDisplayName(Colors.Gold + townBlockType.getFormattedName());
+			meta.setDisplayName(ChatColor.GOLD + townBlockType.getFormattedName());
 			item.setItemMeta(meta);
 
 			if (page.firstEmpty() == 46) {
@@ -196,12 +196,12 @@ public class ResidentUtil {
 
 		ItemStack nextpage = new ItemStack(Material.ARROW);
 		ItemMeta meta = nextpage.getItemMeta();
-		meta.setDisplayName(Colors.Gold + "Next");
+		meta.setDisplayName(ChatColor.GOLD + "Next");
 		nextpage.setItemMeta(meta);
 
 		ItemStack prevpage = new ItemStack(Material.ARROW);
 		meta = prevpage.getItemMeta();
-		meta.setDisplayName(Colors.Gold + "Back");
+		meta.setDisplayName(ChatColor.GOLD + "Back");
 		prevpage.setItemMeta(meta);
 
 		page.setItem(53, nextpage);

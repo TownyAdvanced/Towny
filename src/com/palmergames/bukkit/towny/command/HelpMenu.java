@@ -3,8 +3,10 @@ package com.palmergames.bukkit.towny.command;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,13 +20,13 @@ public enum HelpMenu {
 			return new MenuBuilder()
 				.addTitle(Translation.of("help_0"))
 				.add(Translation.of("help_1"))
-				.add(ChatTools.formatCommand("/resident", "?", "") + ", "
-					+ ChatTools.formatCommand("/town", "?", "") + ", "
-					+ ChatTools.formatCommand("/nation", "?", "") + ", "
-					+ ChatTools.formatCommand("/plot", "?", "") + ", "
-					+ ChatTools.formatCommand("/towny", "?", ""))
-				.add(ChatTools.formatCommand("/tc", "[msg]", Translation.of("help_2")) + ", "
-					+ ChatTools.formatCommand("/nc", "[msg]", Translation.of("help_3")).trim())
+				.add(ChatTools.formatCommand("/resident", "?", "").append(Component.text(", "))
+					.append(ChatTools.formatCommand("/town", "?", "").append(Component.text(", ")))
+					.append(ChatTools.formatCommand("/nation", "?", "").append(Component.text(", ")))
+					.append(ChatTools.formatCommand("/plot", "?", "").append(Component.text(", ")))
+					.append(ChatTools.formatCommand("/towny", "?", "")))
+				.add(ChatTools.formatCommand("/tc", "[msg]", Translation.of("help_2")).append(Component.text(", "))
+					.append(ChatTools.formatCommand("/nc", "[msg]", Translation.of("help_3"))))
 				.add(Translation.of("admin_sing"), "/townyadmin", "?", "");
 		}
 	},
@@ -599,9 +601,9 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("resident jail", "")
 				.add("", "/resident jail", "paybail", "Pays the bail cost to get out of jail.")
-				.add(Colors.LightBlue + Translation.of("msg_resident_bail_amount") + Colors.Green + "$" + TownySettings.getBailAmount())
-				.add(Colors.LightBlue + Translation.of("msg_mayor_bail_amount") + Colors.Green + "$" + TownySettings.getBailAmountMayor())
-				.add(Colors.LightBlue + Translation.of("msg_king_bail_amount") + Colors.Green + "$" + TownySettings.getBailAmountKing());
+				.add(Component.text(Translation.of("msg_resident_bail_amount"), NamedTextColor.AQUA).append(Component.text("$" + TownySettings.getBailAmount(), NamedTextColor.GREEN)))
+				.add(Component.text(Translation.of("msg_mayor_bail_amount"), NamedTextColor.AQUA).append(Component.text("$" + TownySettings.getBailAmountMayor(), NamedTextColor.GREEN)))
+				.add(Component.text(Translation.of("msg_king_bail_amount"), NamedTextColor.AQUA).append(Component.text("$" + TownySettings.getBailAmountKing(), NamedTextColor.GREEN)));
 		}
 	},
 
@@ -886,7 +888,7 @@ public enum HelpMenu {
 	};
 
 
-	HelpMenu(String... lines) {
+	HelpMenu(Component... lines) {
 		Collections.addAll(this.lines, lines);
 	}
 
@@ -895,7 +897,7 @@ public enum HelpMenu {
 		lines.addAll(load().lines);
 	}
 
-	private final List<String> lines = new ArrayList<>();
+	private final List<Component> lines = new ArrayList<>();
 
 	protected MenuBuilder load(MenuBuilder builder) {
 		return load();
@@ -909,7 +911,7 @@ public enum HelpMenu {
 		}
 	}
 	
-	public List<String> getLines() {
+	public List<Component> getLines() {
 		return Collections.unmodifiableList(lines);
 	}
 
@@ -919,8 +921,8 @@ public enum HelpMenu {
 
 	// Class to ease making menus
 	private static class MenuBuilder {
-		final List<String> lines = new ArrayList<>();
-		private String command;
+		final List<Component> lines = new ArrayList<>();
+		private final String command;
 		String requirement = "";
 
 		MenuBuilder(String cmd, boolean cmdTitle) {
@@ -965,7 +967,12 @@ public enum HelpMenu {
 		}
 
 		MenuBuilder add(String line) {
-			this.lines.add(line);
+			this.lines.add(TownyComponents.miniMessage(line));
+			return this;
+		}
+		
+		MenuBuilder add(Component component) {
+			this.lines.add(component);
 			return this;
 		}
 

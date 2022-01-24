@@ -130,7 +130,7 @@ public class PlotClaim extends Thread {
 						}
 					}
 				} catch (TownyException e) {
-					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+					TownyMessaging.sendErrorMsg(player, e.message(player));
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage());
 				}
@@ -156,7 +156,7 @@ public class PlotClaim extends Thread {
 						residentUnclaim(worldCoord);
 					}
 				} catch (TownyException x) {
-					TownyMessaging.sendErrorMsg(player, x.getMessage(player));
+					TownyMessaging.sendErrorMsg(player, x.message(player));
 				}
 
 			}
@@ -416,7 +416,7 @@ public class PlotClaim extends Thread {
 			try {
 				residentUnclaim(townBlock.getWorldCoord());
 			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				TownyMessaging.sendErrorMsg(player, e.message(player));
 			}
 
 		}

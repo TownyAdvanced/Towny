@@ -5,10 +5,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.bukkit.map.MinecraftFont;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
+import net.kyori.adventure.text.Component;
 
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
+import org.bukkit.map.MinecraftFont;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Useful function for use with the Minecraft Server chatbox.
@@ -19,13 +22,16 @@ import com.palmergames.bukkit.towny.object.Translation;
  */
 
 public class ChatTools {
-	final static int MAX_FONT_WIDTH = 321; // Two pixels less than the actual max width.
-	final static int SPACE_WIDTH = 4;
-	final static int UNDERSCORE_WIDTH = 6;
-	final static int WIDGET_WIDTH = 22;
-	final static String WIDGET = ".oOo.";
-	final static int SUBWIDGET_WIDTH = 22;
-	final static String SUBWIDGET = " .]|[. ";
+	private static final MinecraftFont font = new MinecraftFont();
+	private static final int DEFAULT_CHAT_WIDTH = 320;
+	private static final int SPACE_WIDTH = 4;
+	private static final int UNDERSCORE_WIDTH = 6;
+	// Padding used for the main title formatting
+	private static final String WIDGET = ".oOo.";
+	private static final int WIDGET_WIDTH = 22;
+	
+	// Padding used for subtitle formatting
+	private static final String SUBWIDGET = " .]|[. ";
 	
 	public static String listArr(String[] args, String prefix) {
 
@@ -44,17 +50,13 @@ public class ChatTools {
 		return prefix + String.join(", ", args);
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.98.3.1, use {@link Colors#strip(String)} instead.
+	 */
+	@Deprecated
+	@ApiStatus.ScheduledForRemoval
 	public static String stripColour(String s) {
-
-		StringBuilder out = new StringBuilder();
-		for (int i = 0; i < s.length(); i++) {
-			String c = s.substring(i, i + 1);
-			if (c.equals("\u00A7"))
-				i += 1;
-			else
-				out.append(c);
-		}
-		return out.toString();
+		return Colors.strip(s);
 	}
 
 	/**
@@ -63,7 +65,7 @@ public class ChatTools {
 	 * @param object TownyObject (town or nation)
 	 * @return a title bar which won't exceed the allowed length.
 	 */
-	public static String formatTitle(TownyObject object) {
+	public static Component formatTitle(TownyObject object) {
 		
 		String title = object.getFormattedName();
 		if (title.length() > 51)
@@ -74,82 +76,74 @@ public class ChatTools {
 		return formatTitle(title);
 	}
 	
-	public static String formatTitle(String title) {
-		final MinecraftFont font = new MinecraftFont();
-		title = ".[ " + Translation.of("status_title_secondary_colour") + title + Translation.of("status_title_primary_colour") + " ].";
-		// Some language characters do not like being measured with the mojang font.
-		if (!font.isValid(title))
-			return legacyFormatTitle(title);
-		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
-		int remainder = MAX_FONT_WIDTH - (WIDGET_WIDTH * 2) - font.getWidth(Colors.strip(title)) - 2;
-		if (remainder < 1)
-			return Translation.of("status_title_primary_colour") + title;
-		if (remainder < 14)
-			return Translation.of("status_title_primary_colour") + WIDGET + title + WIDGET;
+	public static Component formatTitle(String title) {
+		return formatTitle(TownyComponents.miniMessage(title));
+	}
+
+	public static Component formatTitle(Component title) {
+		title = TownyComponents.miniMessage(".[ " + Translation.of("status_title_secondary_colour")
+			+ TownyComponents.unMiniMessage(title)
+			+ Translation.of("status_title_primary_colour") + " ]."
+		);
 		
-		int times = remainder / (UNDERSCORE_WIDTH * 2);
-		return Translation.of("status_title_primary_colour") + WIDGET + repeatChar(times, "_") + title + repeatChar(times, "_") + WIDGET;
+		return centerComponent(title, WIDGET, '_', UNDERSCORE_WIDTH);
 	}
 
+	public static Component formatSubTitle(Component subTitle) {
+		return centerComponent(subTitle, SUBWIDGET, ' ', SPACE_WIDTH);
+	}
+	
+	public static Component centerComponent(Component title, String sidePadding, char paddingChar, float paddingWidth) {
+		if (!font.isValid(TownyComponents.plain(title)))
+			return legacyFormatTitle(title);
+		
+		float widthToPad = (DEFAULT_CHAT_WIDTH - (WIDGET_WIDTH * 2) - (float) font.getWidth(TownyComponents.plain(title))) / 2;
 
-	private static String legacyFormatTitle(String title) {
+		if (paddingWidth * 2 > widthToPad)
+			return TownyComponents.prependMiniMessage(title, Translation.of("status_title_primary_colour"));
+
+		StringBuilder paddingBuilder = new StringBuilder();
+		for (float i = paddingWidth; i < widthToPad; i += paddingWidth)
+			paddingBuilder.append(paddingChar);
+
+		String padding = paddingBuilder.toString();
+		String primaryColour = Translation.of("status_title_primary_colour");
+		
+		return TownyComponents.miniMessage(primaryColour + sidePadding  + padding + TownyComponents.unMiniMessage(title) + primaryColour + padding + sidePadding);
+	}
+
+	private static Component legacyFormatTitle(Component title) {
 		String line = ".oOo.__________________________________________________.oOo.";
-		if (title.length() > line.length())
-			title = title.substring(0, line.length());
+		
+		String legacy = TownyComponents.toLegacy(title);
+		if (legacy.length() > line.length())
+			legacy = legacy.substring(0, line.length());
+		
 		int pivot = line.length() / 2;
-		String center = title;
-		String out = Translation.of("status_title_primary_colour") + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
+		String center = legacy;
+		// minimessage -> component -> legacy feels wrong
+		String out = TownyComponents.toLegacy(TownyComponents.miniMessage(Translation.of("status_title_primary_colour"))) + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
+		
 		out += center + line.substring(pivot + center.length() / 2);
-		return out;
-	}
-
-	public static String formatSubTitle(String subtitle) {
-		final MinecraftFont font = new MinecraftFont();
-		// Some language characters do not like being measured with the mojang font.
-		if (!font.isValid(subtitle))
-			return legacyFormatSubtitle(subtitle);
-		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
-		int remainder = MAX_FONT_WIDTH - (SUBWIDGET_WIDTH * 2) - font.getWidth(Colors.strip(subtitle)) - 2;
-		if (remainder < 1)
-			return Translation.of("status_title_primary_colour") + subtitle;
-		if (remainder < 10)
-			return Translation.of("status_title_primary_colour") + SUBWIDGET+ subtitle + Translation.of("status_title_primary_colour") + SUBWIDGET;
-
-		int times = remainder / (SPACE_WIDTH * 2);
-		return Translation.of("status_title_primary_colour") + SUBWIDGET + repeatChar(times, " ") + subtitle + repeatChar(times, " ") + Translation.of("status_title_primary_colour")  + SUBWIDGET;
-	}
-
-	private static String legacyFormatSubtitle(String subtitle) {
-		String line = " .]|[.                                                                     .]|[.";
-		int pivot = line.length() / 2;
-		String center = subtitle + Translation.of("status_title_primary_colour");
-		String out = Translation.of("status_title_primary_colour") + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
-		out += center + line.substring(pivot + center.length() / 2);
-		return out;	
+		return TownyComponents.fromLegacy(out);
 	}
 	
-	private static String repeatChar(int num, String character) {
-		String output = "";
-		for (int i = 0; i < num; i++)
-			output += character;
-		return output;
-	}
-	
-	public static String formatCommand(String command, String subCommand, String help) {
+	public static Component formatCommand(String command, String subCommand, String help) {
 		return formatCommand("", command, subCommand, help);
 	}
 
-	public static String formatCommand(String requirement, String command, String subCommand, String help) {
+	public static Component formatCommand(String requirement, String command, String subCommand, String help) {
 
 		String out = "  ";
 		if (requirement.length() > 0)
-			out += Colors.Rose + requirement + ": ";
-		out += Colors.Blue + command;
+			out += "<red>" + requirement + ": ";
+		out += "<dark_aqua>" + command;
 		if (subCommand.length() > 0)
-			out += " " + Colors.LightBlue + subCommand;
+			out += " " + "<aqua>" + subCommand;
 		if (help.length() > 0)
-			out += " " + Colors.LightGray + " : " + help;
-		return out;
+			out += " <gray> : " + help;
+
+		return TownyComponents.miniMessage(out);
 	}
 
 	/**
@@ -160,12 +154,12 @@ public class ChatTools {
 	 * @return - Fully formatted output which should be sent to the player.
 	 * @author - Articdive
 	 */
-	public static String[] formatList(String title, String subject, List<String> list, String page) {
-		List<String> output = new ArrayList<>();
-		output.add(0, formatTitle(title));
-		output.add(1, subject);
+	public static List<Component> formatList(Component title, Component subject, List<Component> list, Component page) {
+		List<Component> output = new ArrayList<>();
+		output.add(formatTitle(title));
+		output.add(subject);
 		output.addAll(list);
 		output.add(page);
-		return output.toArray(new String[0]);
+		return output;
 	}
 }

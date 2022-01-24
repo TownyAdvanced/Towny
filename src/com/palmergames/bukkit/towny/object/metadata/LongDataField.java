@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
-import com.palmergames.bukkit.util.Colors;
-
 public class LongDataField extends CustomDataField<Long> {
 
 	public LongDataField(String key, Long value) {
@@ -44,7 +42,7 @@ public class LongDataField extends CustomDataField<Long> {
 	@Override
 	public String displayFormattedValue() {
 		long lval = getValue();
-		return (lval <= 0 ? Colors.Red : Colors.LightGreen) + lval;
+		return (lval <= 0 ? "<dark_red>" : "<green>") + lval;
 	}
 
 	@Override
