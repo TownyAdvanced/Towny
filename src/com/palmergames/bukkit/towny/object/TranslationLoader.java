@@ -276,22 +276,22 @@ public class TranslationLoader {
 	 * Creates and loads a global.yml if one is present in the plugin's jar.
 	 */
 	void loadGlobalFile() {
-		InputStream resourceAsStream = clazz.getResourceAsStream("/global.yml");
-		// A plugin might be using this without also making use of the global.yml.
-		if (resourceAsStream == null)
-			return;
+		try (InputStream resourceAsStream = clazz.getResourceAsStream("/global.yml")) {
+			// A plugin might be using this without also making use of the global.yml.
+			if (resourceAsStream == null)
+				return;
 
-		// Create the global.yml file if it doesn't exist.
-		Path globalYMLPath = langFolderPath.resolve("global.yml");
-		if (!globalYMLPath.toFile().exists())
-			createGlobalYML(globalYMLPath, resourceAsStream);
+			// Create the global.yml file if it doesn't exist.
+			Path globalYMLPath = langFolderPath.resolve("override").resolve("global.yml");
+			if (!globalYMLPath.toFile().exists())
+				createGlobalYML(globalYMLPath, resourceAsStream);
 
-		// Load global override file into memory.
-		Map<String, Object> globalOverrides = loadGlobalFile(globalYMLPath);
-		// Can be null if no overrides have been added
-		if (globalOverrides != null)
-			overwriteKeysWithGlobalOverrides(globalOverrides);
-		
+			// Load global override file into memory.
+			Map<String, Object> globalOverrides = loadGlobalFile(globalYMLPath);
+			// Can be null if no overrides have been added
+			if (globalOverrides != null)
+				overwriteKeysWithGlobalOverrides(globalOverrides);
+		} catch (IOException ignored) {}
 	}
 	
 	/**
