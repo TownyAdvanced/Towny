@@ -1058,6 +1058,12 @@ public enum ConfigNodes {
 			"# Add any fake players for client/server mods (aka Tekkit) here.",
 			"# These players will be able to build and destroy anywhere like an admin would!",
 			"# Because of this, these machines will bypass Towny plot protections. You will have to self-moderate these machines."),
+	PLUGIN_MODS_FAKE_RESIDENTS_UUIDS(
+			"plugin.interfacing.tekkit.fake_residents_uuids",
+			"",
+			"# If your mod uses a UUID instead of a name (ie: not made in 2011) add it here. These machines will be given permission",
+			"# to do their business with little regard to Towny plot permissions. These players will be able to build and destroy",
+			"# anywhere like an admin would! You will have to self-moderate these machines."),
 	PLUGIN_USING_ESSENTIALS(
 			"plugin.interfacing.using_essentials",
 			"false",

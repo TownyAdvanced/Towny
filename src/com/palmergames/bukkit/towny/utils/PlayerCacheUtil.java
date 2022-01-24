@@ -243,13 +243,24 @@ public class PlayerCacheUtil {
 	 */
 	public static TownBlockStatus fetchTownBlockStatus(Player player, WorldCoord worldCoord) {
 		
-		if (TownySettings.isFakeResident(player.getName()))
+		if (isFakePlayer(player))
 			return TownBlockStatus.ADMIN;
 		
 		TownBlockStatus status = getTownBlockStatus(player, worldCoord);
 		PlayerCacheGetTownBlockStatusEvent event = new PlayerCacheGetTownBlockStatusEvent(player, worldCoord, status);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getTownBlockStatus();
+	}
+
+	/**
+	 * Is the player considered a fake-player by Towny, worthy of admin abilities
+	 * when it comes to plot permissions?
+	 * 
+	 * @param player Player object being tested.
+	 * @return true if the Player name or UUID is identified in the config.
+	 */
+	private static boolean isFakePlayer(Player player) {
+		return TownySettings.isFakeResident(player.getName()) || TownySettings.isFakeResident(player.getUniqueId());
 	}
 	
 	/**

@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TownySettings {
@@ -1103,6 +1104,11 @@ public class TownySettings {
 	public static boolean isFakeResident(String name) {
 
 		return StringMgmt.containsIgnoreCase(getStrArr(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS), name);
+	}
+	
+	public static boolean isFakeResident(UUID uuid) {
+
+		return getStrArr(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS_UUIDS).contains(uuid.toString());
 	}
 
 	public static boolean isUsingEssentials() {
