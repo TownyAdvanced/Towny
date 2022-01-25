@@ -7222,3 +7222,5 @@ v0.92.0.11:
   - Use EnumSet for switch and itemuse materials, courtesy of Warriorrrr with PR #5664.
   - Add TOWNYADMIN_RELOAD commandtype, courtesy of Warriorrrr with PR #5669.
     - Closes #5668.
+  - Improve border around townyperms header, courtesy of Warriorrrr with PR #5671.
+  - Fix mob removal task malfunctioning when using citizens, courtesy of Warriorrrr with PR #5674.
