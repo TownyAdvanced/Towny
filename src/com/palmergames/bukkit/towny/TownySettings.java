@@ -351,11 +351,11 @@ public class TownySettings {
 
 	public static EnumSet<EntityType> toEntityTypeEnumSet(List<String> entityList) {
 		EnumSet<EntityType> entities = EnumSet.noneOf(EntityType.class);
-		for (String entityName : entityList) {
-			EntityType type = EntityType.valueOf(entityName);
-			if (type != null)
+		for (String entityName : entityList) 
+			try {
+				EntityType type = EntityType.valueOf(entityName);
 				entities.add(type);
-		}
+			} catch (IllegalArgumentException ignored) {}
 		return entities;
 	}
 
