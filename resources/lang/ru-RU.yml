@@ -1005,8 +1005,8 @@ msg_bankrupt: '&c(Банкрот)'
 #Added in 0.98
 msg_del_town2: '&bГород %s был удалён!'
 msg_ruin_town: '&bГород %s превратился в руины!'
-gui_title_select_plot_type: 'Select PlotType'
-gui_title_no_restrictions: 'No restrictions for this plottype.'
+gui_title_select_plot_type: 'Выберите тип участка'
+gui_title_no_restrictions: 'Для этого типа участка нет ограничений.'
 gui_title_towny_allowedblocks: '%s AllowedBlocks List'
 gui_title_towny_wildsblocks: 'Список блоков дебрей Towny'
 gui_title_towny_itemuse: 'Список вещей, подвластных флагу ItemUse'
@@ -1321,9 +1321,9 @@ msg_process_town_unclaim: 'Обработка распривата...'
 #Shown when there is nothing to unclaim.
 msg_err_nothing_to_unclaim: 'Нечего распривачивать!'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: 'Permission True.'
+msg_perm_true: "Верно.\n"
 #Given as feedback when /ta checkperm is used.
-msg_err_perm_false: 'Permission False.'
+msg_err_perm_false: 'Неверно.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
 status_towny_map_town_line: '&2Город: &a%s &7| &2Владелец: &a%s'
@@ -1350,30 +1350,30 @@ msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
 msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
 #Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
-towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
+towny_prices_nation_upkeep_based_on: '&7Цена содержания нации основана на &a%s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'количестве городов.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: 'уровне нации (количестве участников.)'
 #Added in 0.130
 #Jail causes
-msg_jailed_mayor: 'Jailed by mayor.'
+msg_jailed_mayor: 'Заключены в тюрьму мэром.'
 #Jail causes
-msg_jailed_outlaw: 'Killed as an outlaw.'
+msg_jailed_outlaw: 'Убит обьявленным вне закона.'
 #Jail causes
-msg_jailed_war: 'Prisoner of War.'
+msg_jailed_war: 'Узник войны.'
 #Jail handbook messages
-msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
+msg_jailed_handbook_1: 'Похоже, вас заключили в тюрьму, причина: %s'
 #Jail handbook messages
-msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
+msg_jailed_handbook_2: 'Нехорошо, правда? Что-ж поделать. Вот несколько полезных советов для тебя, пока ты отбываешь своё наказание.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
+msg_jailed_handbook_3: 'Вы заключены в тюрьму на %s часов. Отбыв своё наказание, вы выйдете на свободу.'
 #Jail handbook messages
-msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
+msg_jailed_handbook_4_can: 'Вы можете избежать тюрьмы, покинув свой город с помощью ''/town leave''.'
 #Jail handbook messages
-msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
+msg_jailed_handbook_4_cant: 'Вы не можете покинуть свой город, сидя в тюрьме.'
 #Jail handbook messages
-msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
+msg_jailed_handbook_bail_1: 'Вы можете освободиться из тюрьмы, заплатив залог с помощью ''/res jail paybail''.'
 #Jail handbook messages
 msg_jailed_handbook_bail_2: 'Bail will cost %s.'
 #Jail handbook messages
