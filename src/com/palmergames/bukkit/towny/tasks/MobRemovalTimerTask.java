@@ -75,7 +75,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 
 				// Check if entity is a Citizens NPC
 				if (BukkitTools.checkCitizens(livingEntity))
-					return;
+					continue;
 				
 				// Handles entities Globally.
 				if (!townyWorld.hasWorldMobs() && isRemovingWorldEntity(livingEntity)) {
