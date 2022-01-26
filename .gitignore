@@ -32,3 +32,18 @@ Thumbs.db
 .factorypath
 .settings
 .vscode
+
+
+## https://github.com/github/gitignore/blob/7f56496393d1975d38ac1c23755d1547923273b8/Gradle.gitignore
+.gradle/
+**/build/
+!src/**/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
