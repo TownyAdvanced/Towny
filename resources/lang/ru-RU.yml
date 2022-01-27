@@ -1383,11 +1383,11 @@ msg_jailed_handbook_6: 'But don''t die before you reach the wilderness or you''l
 #Jail handbook messages
 msg_jailed_teleport: 'Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you''ve just got to get a hold of some.'
 #Jail handbook messages
-msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your countrymen can reduce the jail plot''s HP to 0, or if the town you are jailed in is removed from the war.'
+msg_jailed_war_prisoner: 'Будучи пленником войны, вы будете освобождены, если ваши союзники смогут снизить здоровье участка тюрьмы до 0, или если город, в котором находится ваша тюрьма, выйдет из войны.'
 #Jail handbook title
 msg_jailed_title: 'Что-ж, тебя заключили в тюрьму :('
 #Jail handbook author
-msg_jailed_author: 'Towny Jailco.'
+msg_jailed_author: 'Тюрьма Towny'
 #Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Town has no allies to list.'
