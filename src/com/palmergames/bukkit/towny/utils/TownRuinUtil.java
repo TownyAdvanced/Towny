@@ -65,10 +65,9 @@ public class TownRuinUtil {
 	 * 3. Enable all perms
 	 * 4. Now, the residents cannot run /plot commands, and some /t commands
 	 * 5. Town will later be deleted full, unless it is reclaimed
-	 * @param plugin Instance of {@link Towny}
 	 * @param town The town to put into a "ruined" state.
 	 */
-	public static void putTownIntoRuinedState(Town town, Towny plugin) {
+	public static void putTownIntoRuinedState(Town town) {
 
 		//Town already ruined.
 		if (town.isRuined())
@@ -102,7 +101,7 @@ public class TownRuinUtil {
 		for(TownBlock townBlock: town.getTownBlocks()) {
 			if (townBlock.hasResident())
 				townBlock.setResident(null);     		// Removes any personal ownership.
-			townBlock.setType(0);                		// Sets the townblock's perm line to the Town's perm line set above.
+			townBlock.setType("default");        		// Sets the townblock's perm line to the Town's perm line set above.
 			townBlock.setPlotPrice(-1);          		// Makes the plot not for sale.
 			townBlock.removePlotObjectGroup();   		// Removes plotgroup if it were present.
 			townBlock.getPermissionOverrides().clear(); // Removes all permission overrides from the plot.
@@ -120,7 +119,7 @@ public class TownRuinUtil {
 			ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
 		
 		town.save();
-		plugin.resetCache();
+		Towny.getPlugin().resetCache();
 		
 		TownyMessaging.sendGlobalMessage(Translatable.of("msg_ruin_town", town.getName()));
 	}
@@ -218,7 +217,7 @@ public class TownRuinUtil {
 	 */
     public static void evaluateRuinedTownRemovals() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		List<Town> towns = new ArrayList<>(townyUniverse.getDataSource().getTowns());
+		List<Town> towns = new ArrayList<>(townyUniverse.getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
 		Town town;
 
@@ -229,7 +228,7 @@ public class TownRuinUtil {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (townyUniverse.getDataSource().hasTown(town.getName()) && town.isRuined()
+			if (townyUniverse.hasTown(town.getName()) && town.isRuined()
 					&& town.getRuinedTime() != 0 && getTimeSinceRuining(town) > TownySettings
 					.getTownRuinsMaxDurationHours()) {
 				//Ruin found & recently ruined end time reached. Delete town now.

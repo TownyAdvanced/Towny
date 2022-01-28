@@ -102,6 +102,7 @@ public class Town extends Government implements TownBlockOwner {
 		setOpen(TownySettings.getTownDefaultOpen());
 		setBoard(TownySettings.getTownDefaultBoard());
 		setNeutral(TownySettings.getTownDefaultNeutral());
+		setPublic(TownySettings.getTownDefaultPublic());
 	}
 	
 	public Town(String name, UUID uuid) {
@@ -963,24 +964,13 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public double getPlotTypePrice(TownBlockType type) {
-
-		double plotPrice;
-		switch (type.ordinal()) {
-		case 1:
-			plotPrice = getCommercialPlotPrice();
-			break;
-		case 3:
-			plotPrice = getEmbassyPlotPrice();
-			break;
-		default:
-			plotPrice = getPlotPrice();
-
-		}
-		// check price isn't negative
-		if (plotPrice < 0)
-			plotPrice = 0;
-
-		return plotPrice;
+		double plotPrice = switch (type.getName().toLowerCase()) {
+			case "shop" -> getCommercialPlotPrice();
+			case "embassy" -> getEmbassyPlotPrice();
+			default -> getPlotPrice();
+		};
+		
+		return Math.max(plotPrice, 0);
 	}
 
 	public void setCommercialPlotPrice(double commercialPlotPrice) {

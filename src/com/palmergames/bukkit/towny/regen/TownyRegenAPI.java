@@ -68,6 +68,7 @@ public class TownyRegenAPI {
 		removeFromRegenQueueList(plotChunk.getWorldCoord()); // Remove the WorldCoord from the queue.
 		removeFromActiveRegeneration(plotChunk); // Remove from the active HashTable.
 		deletePlotChunkSnapshot(plotChunk); // Remove from the database.
+		plotChunk.getWorldCoord().unloadChunks(); // Remove the PluginChunkTickets keeping the plotChunk loaded.
 	}
 	
 	/*
@@ -184,7 +185,7 @@ public class TownyRegenAPI {
 	}
 
 	/**
-	 * Adds a WorldCoord to the queue of the revert on unclaim feature.
+	 * Removes a WorldCoord from the queue of the revert on unclaim feature.
 	 * @param wc WorldCoord to add to the queue.
 	 */
 	public static void removeFromRegenQueueList(WorldCoord wc) {
@@ -195,7 +196,7 @@ public class TownyRegenAPI {
 	}
 
 	/**
-	 * Removes a WorldCoord to the queue of the revert on unclaim feature.
+	 * Adds a WorldCoord to the queue of the revert on unclaim feature.
 	 * @param wc WorldCoord to remove from thequeue.
 	 * @param save true to save the regenlist.
 	 */
@@ -207,6 +208,28 @@ public class TownyRegenAPI {
 			TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
 
+	public static  void getWorldCoordFromQueueForRegeneration() {
+		for (WorldCoord wc : new ArrayList<>(TownyRegenAPI.getRegenQueueList())) {
+			// We have enough plot chunks regenerating, break out of the loop.
+			if (getPlotChunks().size() >= 20)
+				break;
+			// We have already got this worldcoord regenerating.
+			if (hasActiveRegeneration(wc))
+				continue;
+			
+			// This worldCoord isn't actively regenerating, start the regeneration.
+			PlotBlockData plotData = getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorldOrNull()));
+			if (plotData != null) {
+				// Load the chunks.
+				plotData.getWorldCoord().loadChunks();
+				addToActiveRegeneration(plotData);
+				TownyMessaging.sendDebugMsg("Revert on unclaim beginning for " + plotData.getWorldName() + " " + plotData.getX() +"," + plotData.getZ());
+			} else {
+				removeFromRegenQueueList(wc);
+			}
+		}
+	}
+	
 	/*
 	 * Active Revert-On-Unclaims.
 	 */

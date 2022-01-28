@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.137
+version: 0.141
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -206,6 +206,7 @@ msg_changed_public: '&cПубличный статус города: %s.'
 msg_changed_expl: '&cВзрывы в %s теперь %s.'
 msg_changed_fire: '&cОгонь в %s теперь %s.'
 msg_changed_mobs: '&cСпавн монстров в %s теперь %s.'
+msg_the_plot_group: 'the Plot Group'
 msg_changed_taxpercent: '&cНалог в виде процентной ставки: %s.'
 msg_changed_open: '&cВход без приглашения: %s.'
 msg_toggle_open_on_warning: 'Предупреждение: Заявки в город должны быть выключены, если город открыт. Введите "/town set perm off", для возврата: "/town set perm reset".'
@@ -269,7 +270,6 @@ msg_new_nation: '&b%s создал нацию %s'
 msg_new_town: '&b%s создал новый город %s'
 msg_plot_for_sale: '&b%s выставил участок (%s) на продажу!'
 msg_plot_set_type: '&bТип участка теперь %s'
-msg_registration: '&eДобро пожаловать на сервер, %s!'
 msg_cache_block_error: '&cВы не были зарегистрированы в Towny. Пожалуйста, перезайдите.'
 msg_cache_block_error_wild: '&cЗапрещено %s в Диких Землях.'
 msg_cache_block_error_plot: '&cВладелец не разрешил %s %s здесь.'
@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&cСпавн нации допускает�
 msg_err_nation_spawn_forbidden_peace: '&cСпавн нации запрещен во время войны.'
 msg_err_nation_spawn_ally_forbidden: '&cСпавн нации к союзникам запрещен во время войны.'
 msg_err_nation_spawn_nation_forbidden_war: '&cСпавн в другие союзные нации разрешены только во время войны.'
-msg_err_nation_spawn_nation_forbidden_peace: '&Спавн в другие союзные нации запрещен во время войны.'
+msg_err_nation_spawn_nation_forbidden_peace: '&cСпавн в другие союзные нации запрещен во время войны.'
 msg_err_public_nation_spawn_forbidden: '&cПубличный спавн в другие нации запрещены.'
 msg_err_public_nation_spawn_forbidden_war: '&cПубличный спавн в другие нации разрешено только во время войны.'
 msg_err_public_nation_spawn_forbidden_peace: '&cПубличный спавн в другие нации запрещен во время войны.'
@@ -987,10 +987,9 @@ towny_prices_price_shop: '&c            &2Магазин: &a%s &8| &2Посол�
 towny_prices_taxes_plot: '&c    [Налоги]    &2Игрок: &a%s &8| &2Участок: &a%s'
 towny_prices_taxes_shop: '&c            &2Магазин: &a%s &8| &2Посольство: &a%s'
 towny_prices_town_neutral_tax: '&c            &2Нейтралитет: &a%s'
-towny_prices_plots_shop: '&c    [Изменение типа участка] &2Магазин: &a%s &8| &2Посольство: &a%s'
-towny_prices_plots_wilds: '&c                       &2Дебри: &a%s &8| &2Гостинная: &a%s'
-towny_prices_plots_jail: '&c                        &2Тюрьма: &a%s &8| &2Ферма: &a%s'
-towny_prices_plots_bank: '&c                        &2Банк: &a%s'
+towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_type_single: '            &2%s: &a%s'
+towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&сНация: &6%s'
 towny_prices_nation_tax: '&c   [Налоги] &2Городской: &a%s &8| &2В мирное время &a%s'
 #Added in 0.96
@@ -1006,7 +1005,9 @@ msg_bankrupt: '&c(Банкрот)'
 #Added in 0.98
 msg_del_town2: '&bГород %s был удалён!'
 msg_ruin_town: '&bГород %s превратился в руины!'
-gui_title_towny_farmblocks: 'Список фермерских блоков Towny'
+gui_title_select_plot_type: 'Select PlotType'
+gui_title_no_restrictions: 'No restrictions for this plottype.'
+gui_title_towny_allowedblocks: '%s AllowedBlocks List'
 gui_title_towny_wildsblocks: 'Список блоков дебрей Towny'
 gui_title_towny_itemuse: 'Список вещей, подвластных флагу ItemUse'
 gui_title_towny_switch: 'Список вещей, подвластных флагу Switch'
@@ -1295,7 +1296,7 @@ status_unknown: 'неизвестно'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
 msg_nationzone_override_set_to: '%s установил nationzone на %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
-msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+msg_nationzone_override_removed: '%s отменил действие их национальной зоны.'
 #Added in 0.127
 #Used in status screen:
 status_nation_zone_size: 'Размер зоны нации:'
@@ -1410,3 +1411,26 @@ msg_view_on_web: 'Нажмите для просмотра в Интернете
 town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Стоимость нейтралитета:'
+#Added in 0.138
+#Line 1 of the givebonus warning.
+msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+#Line 2 of the givebonus warning.
+msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchaseable with real money.'
+#Line 3 of the givebonus warning.
+msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
+#Message shown when a town invites a player to join, and that town has a nation.
+you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+#Added in 0.140
+#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
+msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
+#Message shown when a player tries to rename their town too quickly.
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+#Added in 1.141
+msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'

@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.TownySettings;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.util.JavaUtil;
 
 public class EntityTypeUtil {
 	private static List<EntityType> ExplosiveEntityTypes = new ArrayList<>(Arrays.asList(
@@ -39,27 +40,28 @@ public class EntityTypeUtil {
 			EntityType.MINECART_TNT, 
 			EntityType.PRIMED_TNT));
 	
-	public static boolean isInstanceOfAny(List<Class<?>> classesOfWorldMobsToRemove2, Object obj) {
+	public static boolean isInstanceOfAny(List<Class<?>> classes, Object obj) {
 
-		for (Class<?> c : classesOfWorldMobsToRemove2)
+		for (Class<?> c : classes)
 			if (c.isInstance(obj))
 				return true;
 		return false;
 	}
+	
+	public static boolean isProtectedEntity(Entity entity) {
+		return isInstanceOfAny(TownySettings.getProtectedEntityTypes(), entity);
+	}
 
 	public static List<Class<?>> parseLivingEntityClassNames(List<String> mobClassNames, String errorPrefix) {
 
-		List<Class<?>> livingEntityClasses = new ArrayList<Class<?>>();
+		List<Class<?>> livingEntityClasses = new ArrayList<>();
 		for (String mobClassName : mobClassNames) {
 			if (mobClassName.isEmpty())
 				continue;
 
 			try {
 				Class<?> c = Class.forName("org.bukkit.entity." + mobClassName);
-				if (JavaUtil.isSubInterface(LivingEntity.class, c))
-					livingEntityClasses.add(c);
-				else
-					throw new Exception();
+				livingEntityClasses.add(c);
 			} catch (ClassNotFoundException e) {
 				TownyMessaging.sendErrorMsg(String.format("%s%s is not an acceptable class.", errorPrefix, mobClassName));
 			} catch (Exception e) {
@@ -78,87 +80,39 @@ public class EntityTypeUtil {
 	 */
 	@Nullable
 	public static Material parseEntityToMaterial(EntityType entityType) {
-		Material material = null;
-		
-		switch(entityType) {
-		
-		case AXOLOTL:
-			material = Material.AXOLOTL_SPAWN_EGG;
-			break;
+		return switch (entityType) {
+			case AXOLOTL -> Material.AXOLOTL_BUCKET;
+			case COD -> Material.COD;
+			case SALMON -> Material.SALMON;
+			case PUFFERFISH -> Material.PUFFERFISH;
+			case TROPICAL_FISH -> Material.TROPICAL_FISH;
+			case ITEM_FRAME -> Material.ITEM_FRAME;
+			case GLOW_ITEM_FRAME -> Material.GLOW_ITEM_FRAME;
+			case PAINTING -> Material.PAINTING;
+			case ARMOR_STAND -> Material.ARMOR_STAND;
+			case LEASH_HITCH -> Material.LEAD;
+			case ENDER_CRYSTAL -> Material.END_CRYSTAL;
+			case MINECART, MINECART_MOB_SPAWNER -> Material.MINECART;
+			case MINECART_CHEST -> Material.CHEST_MINECART;
+			case MINECART_FURNACE -> Material.FURNACE_MINECART;
+			case MINECART_COMMAND -> Material.COMMAND_BLOCK_MINECART;
+			case MINECART_HOPPER -> Material.HOPPER_MINECART;
+			case MINECART_TNT -> Material.TNT_MINECART;
+			case BOAT -> Material.OAK_BOAT;
+			default -> null;
+		};
+	}
 
-		case COD:
-			material = Material.COD;
-			break;
-
-		case SALMON:
-			material = Material.SALMON;
-			break;
-
-		case PUFFERFISH:
-			material = Material.PUFFERFISH;
-			break;
-
-		case TROPICAL_FISH:
-			material = Material.TROPICAL_FISH;
-			break;
-
-		case ITEM_FRAME:
-			material = Material.ITEM_FRAME;
-			break;
-			
-		case GLOW_ITEM_FRAME:
-			material = Material.GLOW_ITEM_FRAME;
-			break;
-
-		case PAINTING:
-			material = Material.PAINTING;
-			break;
-			
-		case ARMOR_STAND:
-			material = Material.ARMOR_STAND;
-			break;
-			
-		case LEASH_HITCH:
-			material = Material.LEAD;
-			break;
-
-		case ENDER_CRYSTAL:
-			material = Material.END_CRYSTAL;
-			break;
-
-		case MINECART:
-		case MINECART_MOB_SPAWNER:
-			material = Material.MINECART;
-			break;
-			
-		case MINECART_CHEST:
-			material = Material.CHEST_MINECART;
-			break;
-		
-		case MINECART_FURNACE:
-			material = Material.FURNACE_MINECART;
-			break;
-
-		case MINECART_COMMAND:
-			material = Material.COMMAND_BLOCK_MINECART;
-			break;
-
-		case MINECART_HOPPER:
-			material = Material.HOPPER_MINECART;
-			break;
-			
-		case MINECART_TNT:
-			material = Material.TNT_MINECART;
-			break;
-		
-		case BOAT:
-			material = Material.OAK_BOAT;
-			break;
-		default:
-			break;
-		}
-					
-		return material;
+	/**
+	 * Helper method for parsing an entity to a material, or a default material if none is found.
+	 * @param entityType Entity type to parse
+	 * @param defaultValue Material to use if none could be found.
+	 * @return The parsed material, or the fallback value.
+	 */
+	@NotNull
+	public static Material parseEntityToMaterial(EntityType entityType, @NotNull Material defaultValue) {
+		Material material = parseEntityToMaterial(entityType);
+		return material == null ? defaultValue : material;
 	}
 	
 	/**

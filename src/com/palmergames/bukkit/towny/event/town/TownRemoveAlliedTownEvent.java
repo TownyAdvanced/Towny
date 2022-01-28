@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.town;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -15,6 +16,7 @@ public class TownRemoveAlliedTownEvent extends Event implements Cancellable {
 	private String cancelMessage = "The disolution of a town alliance was cancelled by another plugin.";
 	
 	public TownRemoveAlliedTownEvent(Town town, Town newAlly) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.removedAlly = newAlly;
 	}

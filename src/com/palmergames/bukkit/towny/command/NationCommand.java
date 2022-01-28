@@ -2318,8 +2318,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				nation.setKing(newKing);
-				plugin.deleteCache(oldKing.getName());
-				plugin.deleteCache(newKing.getName());
+				plugin.deleteCache(oldKing);
+				plugin.deleteCache(newKing);
 				TownyPerms.assignPermissions(oldKing, null); // remove permissions from old King.
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_new_king", newKing.getName(), nation.getName()));
 				if (admin)

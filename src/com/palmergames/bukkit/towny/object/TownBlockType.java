@@ -1,122 +1,134 @@
 package com.palmergames.bukkit.towny.object;
 
-import java.util.EnumSet;
+import com.palmergames.util.StringMgmt;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.palmergames.bukkit.towny.TownySettings;
 
 /**
  * @author dumptruckman
  */
-public enum TownBlockType {
-	RESIDENTIAL(0, "Default", "+", 0.0) {  // The default Block Type.
-	},
-
-	COMMERCIAL(1, "Shop", "C", TownySettings.getPlotSetCommercialCost()) {  // Just like residential but has additional tax
-
+public class TownBlockType {
+	public static final TownBlockType RESIDENTIAL = new TownBlockType("Default"); // The default Block Type.
+	public static final TownBlockType COMMERCIAL = new TownBlockType("Shop", new TownBlockData() {
 		@Override
 		public double getTax(Town town) {
-
 			return town.getCommercialPlotTax() + town.getPlotTax();
 		}
-	},
-
-	ARENA(2, "Arena", "A", TownySettings.getPlotSetArenaCost()) {	//Always PVP enabled.
-	},
-
-	EMBASSY(3, "Embassy", "E", TownySettings.getPlotSetEmbassyCost()) {  // For other towns to own a plot in your town.
-
+	}); // Just like residential but has additional tax
+	public static final TownBlockType ARENA = new TownBlockType("Arena"); //Always PVP enabled.
+	public static final TownBlockType EMBASSY = new TownBlockType("Embassy", new TownBlockData() {
 		@Override
 		public double getTax(Town town) {
-
 			return town.getEmbassyPlotTax() + town.getPlotTax();
 		}
-	},
-	WILDS(4, "Wilds", "W", TownySettings.getPlotSetWildsCost()) {	//Follows wilderness protection settings, but town owned.
-	},
-	SPLEEF(5, "Spleef", "+", 0.0) {	//Follows wilderness protection settings, but town owned.
-	},
-	INN(6, "Inn", "I", TownySettings.getPlotSetInnCost()) {	//Allows use of beds outside your own plot.
-	},
-	JAIL(7, "Jail", "J", TownySettings.getPlotSetInnCost()) {	//Enables setting the jail spawn.		
-	},
-	FARM(8, "Farm", "F", TownySettings.getPlotSetInnCost()) {	//Follows wilderness protection settings, but town owned.
-	},
-	BANK(9, "Bank", "B", TownySettings.getPlotSetBankCost()) { // Enables depositing into town and nation banks, if that has been enabled in the config.		
-	}
+	}); // For other towns to own a plot in your town.
+	public static final TownBlockType WILDS = new TownBlockType("Wilds"); //Limits build/destroy-able blocks to the world's unclaimedZoneIgnoreIDs.
+	public static final TownBlockType INN = new TownBlockType("Inn"); //Allows use of beds outside your own plot, when deny_bed_use is true.
+	public static final TownBlockType JAIL = new TownBlockType("Jail"); //Enables setting the jail spawn.		
+	public static final TownBlockType FARM = new TownBlockType("Farm"); //Limits build/destroy-able blocks to the farm plot block list.
+	public static final TownBlockType BANK = new TownBlockType("Bank"); // Enables depositing into town and nation banks, if that has been enabled in the config.
+	
+	private final String name;
+	private final TownBlockData data;
 
-	// These are subject to change, and may not necessarily be added:
-/*
- * PUBLIC(10, "") { // Will have it's own permission set
- * },
- * 
- * MINE(11, "") { // Will have it's own permission set within a y range
- * },
- * 
- * HOTEL(12, "") { // Will stack multiple y-ranges and function like a micro town
- * },
- */
-	;
-
-	private int id;
-	private String name, asciiMapKey;
-	private double cost;
-	private static final Map<Integer, TownBlockType> idLookup = new HashMap<Integer, TownBlockType>();
-	private static final Map<String, TownBlockType> nameLookup = new HashMap<String, TownBlockType>();
-
-	TownBlockType(int id, String name, String asciiMapKey, double cost) {
-
-		this.id = id;
+	public TownBlockType(String name, TownBlockData data) {
 		this.name = name;
-		this.asciiMapKey = asciiMapKey;
-		this.cost = cost;
+		this.data = data;
 	}
-
-	static {
-		for (TownBlockType s : EnumSet.allOf(TownBlockType.class)) {
-			idLookup.put(s.getId(), s);
-			nameLookup.put(s.toString().toLowerCase(), s);
-		}
+	
+	public TownBlockType(String name) {
+		this.name = name;
+		this.data = new TownBlockData();
 	}
 
 	@Override
 	public String toString() {
-
 		return name;
 	}
 
 	public double getTax(Town town) {
-
-		return town.getPlotTax();
+		return data.getTax(town);
 	}
 
+	/**
+	 * @deprecated since 0.97.5.4.
+	 * @return 0.
+	 */
+	@Deprecated
 	public int getId() {
-
-		return id;
+		return 0;
 	}
 
 	public String getAsciiMapKey() {
-
-		return asciiMapKey;
+		return data.getMapKey();
 	}
 	
 	public double getCost() {
-		
-		return cost;
+		return data.getCost();
 	}
 
 	public String getName() {
 		return name;
 	}
-
-	public static TownBlockType lookup(int id) {
-
-		return idLookup.get(id);
+	
+	public String getFormattedName() {
+		return StringMgmt.capitalize(this.name);
+	}
+	
+	private static final Map<Integer, String> legacyLookupMap = new HashMap<>();
+	
+	/**
+	 * @return the legacylookupmap
+	 */
+	public static Map<Integer, String> getLegacylookupmap() {
+		return legacyLookupMap;
 	}
 
-	public static TownBlockType lookup(String name) {
+	static {
+		legacyLookupMap.put(0, "default");
+		legacyLookupMap.put(1, "shop");
+		legacyLookupMap.put(2, "arena");
+		legacyLookupMap.put(3, "embassy");
+		legacyLookupMap.put(4, "wilds");
+		legacyLookupMap.put(6, "inn");
+		legacyLookupMap.put(7, "jail");
+		legacyLookupMap.put(8, "farm");
+		legacyLookupMap.put(9, "bank");
+	}
 
-		return nameLookup.get(name.toLowerCase());
+	/**
+	 * @deprecated As of 0.97.5.4, please use {@link TownBlockTypeHandler#getType(String)} instead.
+	 */
+	@Nullable
+	@Deprecated
+	public static TownBlockType lookup(int id) {
+		return TownBlockTypeHandler.getType(legacyLookupMap.getOrDefault(id, "default"));
+	}
+
+	/**
+	 * @deprecated As of 0.97.5.4, please use {@link TownBlockTypeHandler#getType(String)} instead.
+	 */
+	@Nullable
+	@Deprecated
+	public static TownBlockType lookup(@NotNull String name) {
+		return TownBlockTypeHandler.getType(name);
+	}
+	
+	public TownBlockData getData() {
+		return data;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (this == other)
+			return true;
+		
+		if (!(other instanceof TownBlockType townBlockType))
+			return false;
+		
+		return townBlockType.getName().equalsIgnoreCase(this.name);
 	}
 }

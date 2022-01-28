@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.136
+version: 0.141
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -206,6 +206,7 @@ msg_changed_public: '&cO estado da cidade está: %s.'
 msg_changed_expl: '&cAs explosões em %s estão: %s.'
 msg_changed_fire: '&cA propagação de fogo em %s está: %s.'
 msg_changed_mobs: '&cO spawn de mobs em %s está: %s.'
+msg_the_plot_group: 'the Plot Group'
 msg_changed_taxpercent: '&cA percentagem de impostos é agora de %s.'
 msg_changed_open: '&cOs pedidos de convite estão %s.'
 msg_toggle_open_on_warning: 'Atenção: Permissões das cidades deveriam desativar-se se a cidade é aberta. Escreve ''/town set perm off'' seguido de ''/town set perm reset''.'
@@ -269,7 +270,6 @@ msg_new_nation: '&b%s criou um novo país chamado %s'
 msg_new_town: '&b%s criou uma nova cidade chamada %s'
 msg_plot_for_sale: '&b%s colocou a parcela (%s) a venda!'
 msg_plot_set_type: '&bTipo de parcela alterado a %s'
-msg_registration: '&eBem-vindo %s ao servidor!'
 msg_cache_block_error: '&cNão foste registado no Towny. Tenta entrar novamente.'
 msg_cache_block_error_wild: '&cEm forasteiro não tens permissão para: %s'
 msg_cache_block_error_plot: '&cOs proprietarios não teem permissão %s a %s aquí'
@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&cO teleporte para o spawn de uma nação �
 msg_err_nation_spawn_forbidden_peace: '&cO teleporte para o spawn de uma nação não é permitido durante a guerra.'
 msg_err_nation_spawn_ally_forbidden: '&cO teleporte para o spawn de uma nação aliada não é permitido.'
 msg_err_nation_spawn_nation_forbidden_war: '&cO teleporte para o spawn de uma nação aliada é apenas permitido durante a guerra.'
-msg_err_nation_spawn_nation_forbidden_peace: '&O teleporte para o spawn de uma nação aliada não é permitido durante a guerra.'
+msg_err_nation_spawn_nation_forbidden_peace: '&cO teleporte para o spawn de uma nação aliada não é permitido durante a guerra.'
 msg_err_public_nation_spawn_forbidden: '&cO teleporte para o spawn público para outras nações não é permitido.'
 msg_err_public_nation_spawn_forbidden_war: '&cO teleporte para o spawn público para outras nações apenas é permitido durante a guerra.'
 msg_err_public_nation_spawn_forbidden_peace: '&cO teleporte para o spawn público para outras nações não é permitido durante a guerra.'
@@ -690,7 +690,7 @@ number_of_residents: '(Número de Habitantes)'
 number_of_towns: '(Número de Cidades)'
 town_name: 'Nome da Cidade'
 nation_name: 'Nome da Nação'
-refund_message: '&aReembolsado $%s por abandonar %s terrneos.'
+refund_message: '&aRefunded %s for unclaiming %s townblocks.'
 msg_bankrupt_town_multiple: '&bAs cidades seguintes não podiam pagar a sua manunteção e foram desfeitas: '
 msg_bankrupt_nation_multiple: '&bAs nações seguintes não podiam pagar a sua manunteção e foram desfeitas: '
 msg_couldnt_pay_tax: '&b%s não consegui pagar os impostos e foi expulso de %s.'
@@ -837,7 +837,7 @@ msg_err_plot_belongs_to_group_plot_nfs: 'Terreno: %s pertence a um grupo, use /p
 #Added in 0.72
 msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'A configuração %s controlada pelo administrador impede de que alteres o pvp para %s.'
 #Added in 0.73
-msg_err_you_aren't currently jailed: 'You are not currently jailed.'
+msg_err_you_aren't currently jailed: 'Você não está preso atualmente.'
 #Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Não tens permissão para criar o outro lado deste portal neste local.'
 #Added in 0.75
@@ -987,10 +987,9 @@ towny_prices_price_shop: '&c            &2Shop: &a%s &8| &2Embaixada: &a%s'
 towny_prices_taxes_plot: '&c    [Taxas]    &2Residente: &a%s &8| &2Plot: &a%s'
 towny_prices_taxes_shop: '&c            &2Loja: &a%s &8| &2Embaixada: &a%s'
 towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
-towny_prices_plots_shop: '&c    [Plots selecionados] &2Loja: &a%s &8| &2Embaixada: &a%s'
-towny_prices_plots_wilds: '&c                       &2Selvagens: &a%s &8| &2Pousada: &a%s'
-towny_prices_plots_jail: '&c                        &2Prisão: &a%s &8| &2Farm: &a%s'
-towny_prices_plots_bank: '&c                        &2Banco: &a%s'
+towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_type_single: '            &2%s: &a%s'
+towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cNação: &6%s'
 towny_prices_nation_tax: '&c    [Taxas] &2Cidade: &a%s &8| &2Paz: &a%s'
 #Added in 0.96
@@ -1006,7 +1005,9 @@ msg_bankrupt: '&c(Banco falido)'
 #Added in 0.98
 msg_del_town2: '&bA cidade de %s foi excluída!'
 msg_ruin_town: '&bA cidade de %s caiu em ruínas!'
-gui_title_towny_farmblocks: 'Lista de FarmBlocks da Cidade'
+gui_title_select_plot_type: 'Select PlotType'
+gui_title_no_restrictions: 'Não há restrições para este tipo de terreno.'
+gui_title_towny_allowedblocks: '%s AllowedBlocks List'
 gui_title_towny_wildsblocks: 'Lista de Blocos selvagens da Cidade'
 gui_title_towny_itemuse: 'Lista de uso de itens da Cidade'
 gui_title_towny_switch: 'Lista de troca da Cidade'
@@ -1280,18 +1281,18 @@ msg_setup_townblock_cost: 'Quanto deveria custar para reivindicar um bloco urban
 msg_setup_success: 'Valores de configuração alterados com sucesso para seus novos valores.'
 #Added in 0.125
 #Player has recently died and respawned and is invulnerable.
-msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
+msg_err_player_cannot_be_harmed: '%s spawnou recentemente e não pode ser ferido.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'
+msg_you_have_lost_your_invulnerability: 'Você perdeu a sua invulnerabilidade.'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: 'Capital:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
-status_joined_town: 'Joined town:'
+status_joined_town: 'Juntou-se a cidade:'
 #Used in the town screen's nation hover, to denote when a town joined a nation.
-status_joined_nation: 'Joined nation:'
+status_joined_nation: 'Juntou-se a Nação:'
 #Shown in status screen elements where a value is not known.
-status_unknown: 'unknown'
+status_unknown: 'desconhecido'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
 msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
@@ -1300,9 +1301,9 @@ msg_nationzone_override_removed: '%s has had their nationzone override removed.'
 #Used in status screen:
 status_nation_zone_size: 'Nation Zone Size:'
 #Shown when a player adds people to their friends list.
-msg_res_friend_added_to_list: 'Added %s to your friend list.'
+msg_res_friend_added_to_list: 'Adicionou %s à sua lista de amigos.'
 #Shown when a player removes people from their friends list.
-msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
+msg_res_friend_removed_from_list: 'Removeu %s de sua lista de amigos.'
 #Generic resident freed from jail message.
 msg_resident_unjailed: '%s has been unjailed.'
 #Shown when an admin uses /ta toggle devmode.
@@ -1320,9 +1321,9 @@ msg_process_town_unclaim: 'Processing Town Unclaim...'
 #Shown when there is nothing to unclaim.
 msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: 'Permission True.'
+msg_perm_true: 'Permissão Adquirida.'
 #Given as feedback when /ta checkperm is used.
-msg_err_perm_false: 'Permission False.'
+msg_err_perm_false: 'Permissão Removida.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
 status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
@@ -1410,3 +1411,26 @@ msg_view_on_web: 'Click to view on the web.'
 town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Neutrality Cost:'
+#Added in 0.138
+#Line 1 of the givebonus warning.
+msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+#Line 2 of the givebonus warning.
+msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchaseable with real money.'
+#Line 3 of the givebonus warning.
+msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
+#Message shown when a town invites a player to join, and that town has a nation.
+you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+#Added in 0.140
+#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
+msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
+#Message shown when a player tries to rename their town too quickly.
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+#Added in 1.141
+msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'

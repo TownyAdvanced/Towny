@@ -1,9 +1,16 @@
 package com.palmergames.bukkit.config.migration;
 
 public enum MigrationType {
-	OVERWRITE,
-	APPEND,
-	NATION_LEVEL_ADD,
-	TOWN_LEVEL_ADD,
-	TOWNYPERMS_ADD
+	OVERWRITE(false),
+	APPEND(false),
+	NATION_LEVEL_ADD(false),
+	TOWN_LEVEL_ADD(false),
+	TOWNYPERMS_ADD(false),
+	REPLACE(false),
+	MOVE(true);
+	
+	public boolean early;
+	MigrationType(boolean early) {
+		this.early = early;
+	}
 }

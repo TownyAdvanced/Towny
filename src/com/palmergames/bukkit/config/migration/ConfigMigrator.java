@@ -4,22 +4,24 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.palmergames.bukkit.config.CommentedConfiguration;
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.Version;
-import java.io.InputStream;
+
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 /**
- * An object which manages the procces of migrating towny config versions to 
+ * An object which manages the process of migrating towny config versions to 
  * up-to-date ones.
  */
 public class ConfigMigrator {
@@ -29,12 +31,14 @@ public class ConfigMigrator {
 		.registerTypeAdapter(Version.class, new VersionDeserializer()).create();
 	private final CommentedConfiguration config;
 	private final CommentedConfiguration townyperms;
+	private final boolean earlyRun;
 	
-	public ConfigMigrator(CommentedConfiguration config, String filename) {
+	public ConfigMigrator(CommentedConfiguration config, String filename, boolean earlyRun) {
 		Objects.requireNonNull(config, filename);
 		this.migrationFilename = filename;
 		this.config = config;
 		this.townyperms = TownyPerms.getTownyPermsFile();
+		this.earlyRun = earlyRun;
 	}
 
 	/**
@@ -42,27 +46,49 @@ public class ConfigMigrator {
 	 */
 	public void migrate() {
 		// Use the last run version as a reference.
-		Version configVersion = Version.fromString(TownySettings.getLastRunVersion());
+		Version configVersion = Version.fromString(config.getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), "0.0.0.0"));
 		boolean saveTownyperms = false;
-		
+		int totalChangeCount = 0;
+
 		// Go through each migration element.
 		for (Migration migration : readMigrator()) {
 			// If a migration version is greater than our version, upgrade with it.
 			if (configVersion.compareTo(migration.version) < 0) {
-				// Perform all desired changes.
-				Towny.getPlugin().getLogger().info("Config: " + migration.version + " applying " + migration.changes.size() + " automatic update" + (migration.changes.size() == 1 ? "" : "s") + " ...");
+				// Check if there are any applicable changes based on the early/normal run-order.
+				int changeCount = getChangeCount(migration);
+				if (changeCount == 0)
+					continue;
+
+				Towny.getPlugin().getLogger().info("Config: " + migration.version + " applying " + changeCount + " automatic update" + (changeCount == 1 ? "" : "s") + " ...");
 				for (Change change : migration.changes) {
+					// Only perform earlyRun changes on earlyRun-typed Migrations and vice versa.
+					if (change.type.early != earlyRun)
+						continue;
+
 					performChange(change);
+					totalChangeCount++;
 					if (change.type == MigrationType.TOWNYPERMS_ADD)
 						saveTownyperms = true;
 				}
 			}
 		}
-		config.save();
-		if (saveTownyperms)
-			townyperms.save();
+		if (totalChangeCount > 0) {
+			config.save();
+			if (saveTownyperms)
+				townyperms.save();
+		}
 	}
 	
+	private int getChangeCount(Migration migration) {
+		int i = 0;
+		for (Change change : migration.changes) {
+			if (change.type.early != earlyRun)
+				continue;
+			i++;
+		}
+		return i;
+	}
+
 	private void performChange(Change change) {
 		switch (change.type) {
 			case OVERWRITE:
@@ -84,6 +110,16 @@ public class ConfigMigrator {
 				addPermissions(change.path, change.value);
 				TownyMessaging.sendDebugMsg("Updating townyperms.yml, adding " + change.value + " to " + change.path + " group.");
 				break;
+			case REPLACE:
+				Object value = config.get(change.path);
+				if (value instanceof String string)
+					config.set(change.path, string.replaceAll(change.key, change.value));
+				break;
+			case MOVE:
+				Object oldValue = config.get(change.path);
+				if (oldValue != null)
+					config.set(change.value, oldValue);
+				break;
 			default:
 				throw new UnsupportedOperationException("Unsupported Change type: " + change);
 		}
@@ -92,7 +128,7 @@ public class ConfigMigrator {
 		if (change.worldAction != null) {
 			for (TownyWorld world : TownyUniverse.getInstance().getWorldMap().values()) {
 				TownyMessaging.sendDebugMsg("Updating " + world.getName() + " with " + change.value);
-				change.worldAction.getAction().accept(world, change.value);
+				change.worldAction.getAction().accept(world, change);
 				world.save();
 			}
 		}
@@ -107,15 +143,12 @@ public class ConfigMigrator {
 	}
 
 	private List<Migration> readMigrator() {
-		InputStream file = Towny.getPlugin().getResource(migrationFilename);
-		
-		if (file == null) {
-			throw new UnsupportedOperationException(migrationFilename + " was not found cannot upgrade config");
+		try (Reader reader = new InputStreamReader(Towny.getPlugin().getResource(migrationFilename))) {
+			
+			return GSON.fromJson(reader, new TypeToken<List<Migration>>(){}.getType());
+		} catch (IOException e) {
+			return Collections.emptyList();
 		}
-		
-		Reader reader = new InputStreamReader(file);
-
-		return GSON.fromJson(reader, new TypeToken<List<Migration>>(){}.getType());
 	}
 	
 	public void addTownLevelProperty(String key, String value) {

@@ -313,8 +313,8 @@ public class ChunkNotification {
 
 	public String getPlotTypeNotification() {
 
-		if (fromPlotType != toPlotType && toPlotType != null && toPlotType != TownBlockType.RESIDENTIAL)
-			return String.format(plotTypeNotificationFormat, toPlotType.toString());
+		if (toPlotType != null && !toPlotType.equals(fromPlotType) && !TownBlockType.RESIDENTIAL.equals(toPlotType))
+			return String.format(plotTypeNotificationFormat, StringMgmt.capitalize(toPlotType.getName()));
 		return null;
 	}
 }

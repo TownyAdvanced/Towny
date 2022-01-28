@@ -15,6 +15,8 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Government;
+import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
@@ -26,6 +28,7 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.utils.NameUtil;
@@ -67,7 +70,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		"v",
 		"switches",
 		"itemuse",
-		"farmblocks",
+		"allowedblocks",
 		"wildsblocks",
 		"plotclearblocks"
 	);
@@ -201,7 +204,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 				
 			if (split[0].equalsIgnoreCase("map")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				
 				if (split.length > 1 && split[1].equalsIgnoreCase("big"))
@@ -234,13 +237,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMessage(player, line);
 			} else if (split[0].equalsIgnoreCase("switches")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getSwitchMaterials(), Translatable.of("gui_title_towny_switch").forLocale(player));
+				ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.SWITCHES);
 			} else if (split[0].equalsIgnoreCase("itemuse")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getItemUseMaterials(), Translatable.of("gui_title_towny_itemuse").forLocale(player));
-			} else if (split[0].equalsIgnoreCase("farmblocks")) {
+				ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ITEMUSE);
+			} else if (split[0].equalsIgnoreCase("allowedblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
-				ResidentUtil.openGUIInventory(resident, TownySettings.getFarmPlotBlocks(), Translatable.of("gui_title_towny_farmblocks").forLocale(player));
+				ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ALLOWEDBLOCKS);
 			} else if (split[0].equalsIgnoreCase("wildsblocks")) {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, world.getUnclaimedZoneIgnoreMaterials(), Translatable.of("gui_title_towny_wildsblocks").forLocale(player));
@@ -248,24 +251,22 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				ResidentUtil.openGUIInventory(resident, world.getPlotManagementMayorDelete(), Translatable.of("gui_title_towny_plotclear").forLocale(player));
 			} else if (split[0].equalsIgnoreCase("top")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(split[0].toLowerCase())))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
-				TopCommand(player, StringMgmt.remFirstArg(split));
+				topCommand(player, StringMgmt.remFirstArg(split));
 			} else if (split[0].equalsIgnoreCase("tree")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				consoleUseOnly(player);
 			} else if (split[0].equalsIgnoreCase("time")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				TownyMessaging.sendMsg(player, Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime())));
 			} else if (split[0].equalsIgnoreCase("universe")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				for (String line : getUniverseStats(Translation.getLocale(player)))
 					TownyMessaging.sendMessage(player, line);
 			} else if (split[0].equalsIgnoreCase("version") || split[0].equalsIgnoreCase("v")) {
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode(split[0].toLowerCase())))
+				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode()))
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 
 				if (TownyUpdateChecker.shouldShowNotification()) {
@@ -293,22 +294,30 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private void TopCommand(Player player, String[] args) {
+	private void topCommand(Player player, String[] args) throws TownyException {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
 			towny_top.add(ChatTools.formatTitle("/towny top"));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "residents [all/town/nation]", ""));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
 			towny_top.add(ChatTools.formatCommand("", "/towny top", "balance [all/town/nation]", ""));
-		} else if (args[0].equalsIgnoreCase("residents"))
+			for (String line : towny_top)
+				TownyMessaging.sendMessage(player, line);
+			return;
+		} 
+		
+		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(args[0].toLowerCase())))
+			throw new TownyException(Translatable.of("msg_err_command_disable"));
+		
+		if (args[0].equalsIgnoreCase("residents"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<ResidentList> list = new ArrayList<>(universe.getDataSource().getTowns());
+				List<ResidentList> list = new ArrayList<>(universe.getTowns());
 				list.addAll(universe.getNations());
 				towny_top.add(ChatTools.formatTitle("Most Residents"));
 				towny_top.addAll(getMostResidents(list));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				towny_top.add(ChatTools.formatTitle("Most Residents in a Town"));
-				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getDataSource().getTowns())));
+				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getTowns())));
 			} else if (args[1].equalsIgnoreCase("nation")) {
 				towny_top.add(ChatTools.formatTitle("Most Residents in a Nation"));
 				towny_top.addAll(getMostResidents(new ArrayList<>(universe.getNations())));
@@ -317,7 +326,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		else if (args[0].equalsIgnoreCase("land"))
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<TownBlockOwner> list = new ArrayList<>(universe.getResidents());
-				list.addAll(universe.getDataSource().getTowns());
+				list.addAll(universe.getTowns());
 				towny_top.add(ChatTools.formatTitle("Most Land Owned"));
 				towny_top.addAll(getMostLand(list));
 			} else if (args[1].equalsIgnoreCase("resident")) {
@@ -325,7 +334,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				towny_top.addAll(getMostLand(new ArrayList<>(universe.getResidents())));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				towny_top.add(ChatTools.formatTitle("Most Land Owned by Town"));
-				towny_top.addAll(getMostLand(new ArrayList<>(universe.getDataSource().getTowns())));
+				towny_top.addAll(getMostLand(new ArrayList<>(universe.getTowns())));
 			} else
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_sub"));
 		else if (args[0].equalsIgnoreCase("balance")) {
@@ -368,7 +377,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   " + Colors.Blue + translator.of("msg_universe_attribution") + Colors.LightBlue + "Chris H (Shade), ElgarL, LlmDl");
 		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   " + Colors.LightBlue + translator.of("msg_universe_contributors") + Colors.Rose + translator.of("msg_universe_heart"));
 		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
-		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + Colors.Blue + translator.of("res_list")+ ": " + Colors.LightBlue + townyUniverse.getNumResidents() + Colors.Gray + " | " + Colors.Blue + translator.of("town_plu") + ": " + Colors.LightBlue + townyDS.getTowns().size() + Colors.Gray + " | " + Colors.Blue + translator.of("nation_plu") + ": " + Colors.LightBlue + townyUniverse.getNumNations());
+		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + Colors.Blue + translator.of("res_list")+ ": " + Colors.LightBlue + townyUniverse.getNumResidents() + Colors.Gray + " | " + Colors.Blue + translator.of("town_plu") + ": " + Colors.LightBlue + townyUniverse.getTowns().size() + Colors.Gray + " | " + Colors.Blue + translator.of("nation_plu") + ": " + Colors.LightBlue + townyUniverse.getNumNations());
 		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + Colors.Blue + translator.of("world_plu") + ": " + Colors.LightBlue + townyDS.getWorlds().size() + Colors.Gray + " | " + Colors.Blue + translator.of("townblock_plu") + ": " + Colors.LightBlue + townyUniverse.getTownBlocks().size());
 		output.add("\u00A70-----\u00A74#\u00A70-----   " + Colors.LightGreen + "https://TownyAdvanced.github.io/");
 		output.add(""); // Intentionally left blank
@@ -488,12 +497,22 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			output.add(translator.of("towny_prices_taxes_plot", (town.isTaxPercentage()? town.getTaxes() + "%" : getMoney(town.getTaxes())), getMoney(town.getPlotTax())));
 			output.add(translator.of("towny_prices_taxes_shop", getMoney(town.getCommercialPlotTax()), getMoney(town.getEmbassyPlotTax())));
 			output.add(translator.of("towny_prices_town_neutral_tax", getMoney(TownySettings.getTownNeutralityCost())));
-
-			output.add(translator.of("towny_prices_plots_shop", getMoney(TownySettings.getPlotSetCommercialCost()), getMoney(TownySettings.getPlotSetEmbassyCost())));
-			output.add(translator.of("towny_prices_plots_wilds", getMoney(TownySettings.getPlotSetWildsCost()), getMoney(TownySettings.getPlotSetInnCost())));
-			output.add(translator.of("towny_prices_plots_jail", getMoney(TownySettings.getPlotSetJailCost()), getMoney(TownySettings.getPlotSetFarmCost())));
-			output.add(translator.of("towny_prices_plots_bank", getMoney(TownySettings.getPlotSetBankCost())));
 			
+			output.add(translator.of("towny_prices_plots"));
+			List<TownBlockType> townBlockTypes = new ArrayList<>(TownBlockTypeHandler.getTypes().values());
+			for (int i = 0; i < townBlockTypes.size(); i++) {
+				if (i == townBlockTypes.size() - 1)
+					output.add(translator.of("towny_prices_type_single", townBlockTypes.get(i).getFormattedName(), getMoney(townBlockTypes.get(i).getCost())));
+				else {
+					output.add(translator.of("towny_prices_type_double",
+						townBlockTypes.get(i).getFormattedName(), getMoney(townBlockTypes.get(i).getCost()),
+						townBlockTypes.get(i+1).getFormattedName(), getMoney(townBlockTypes.get(i+1).getCost())
+					));
+
+					i++;
+				}
+			}
+
 			if (nation != null) {
 				output.add(translator.of("towny_prices_nationname", nation.getFormattedName()));
 				output.add(translator.of("towny_prices_nation_tax", nation.getTaxes(), getMoney(TownySettings.getNationNeutralityCost())));

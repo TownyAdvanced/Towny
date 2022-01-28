@@ -314,11 +314,10 @@ public class TownyMessaging {
 	 * @param subtitle subtitle message to send
 	 */
 	public static void sendTitleMessageToResident(Resident resident, String title, String subtitle) {
-		Player player = TownyAPI.getInstance().getPlayer(resident);
-		if (player == null) {
+		Player player = resident.getPlayer();
+		if (player == null)
 			return;
-		}
-		player.sendTitle(title, subtitle, 10, 70, 10);
+		sendTitle(player, title, subtitle);
 	}
 	
 	/**
@@ -330,7 +329,7 @@ public class TownyMessaging {
 	 */
 	public static void sendTitleMessageToTown(Town town, String title, String subtitle) {
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendTitle(title, subtitle, 10, 70, 10);
+			sendTitle(player, title, subtitle);
 	}
 
 	/**
@@ -342,7 +341,21 @@ public class TownyMessaging {
 	 */
 	public static void sendTitleMessageToNation(Nation nation, String title, String subtitle) {
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendTitle(title, subtitle, 10, 70, 10);
+			sendTitle(player, title, subtitle);
+	}
+
+	/**
+	 * Send the player a Title message
+	 * 
+	 * As of MC 1.18 a null title will mean the message is never sent, so we are
+	 * changing empty Strings to " ".
+	 * 
+	 * @param player   Player being send the Title message.
+	 * @param title    String title message.
+	 * @param subtitle String subtitle message.
+	 */
+	public static void sendTitle(Player player, String title, String subtitle) {
+		player.sendTitle(title.isEmpty() ? " " : title, subtitle.isEmpty() ? " " : subtitle, 10, 70, 10);
 	}
 
 	/*
@@ -352,21 +365,23 @@ public class TownyMessaging {
 	public static void sendRequestMessage(CommandSender player, Invite invite) {
 		final Translator translator = Translator.locale(Translation.getLocale(player));
 		String senderName = invite.getSender().getName();
-		if (invite.getSender() instanceof Town) { // Town invited Resident
-			String firstline = translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join2", senderName);
+		if (invite.getSender() instanceof Town town) { // Town invited Resident
+			String firstline = town.hasNation()
+					? translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join3", Colors.colorTown(senderName), Colors.colorNation(town.getNationOrNull()))
+					: translator.of("invitation_prefix") + translator.of("you_have_been_invited_to_join2", Colors.colorTown(senderName));
 			String confirmline = TownySettings.getAcceptCommand() + " " + senderName;
 			String cancelline = TownySettings.getDenyCommand() + " " + senderName;
 			sendInvitationMessage(player, firstline, confirmline, cancelline);
 		}
 		if (invite.getSender() instanceof Nation) {
 			if (invite.getReceiver() instanceof Town) { // Nation invited Town
-				String firstline = translator.of("invitation_prefix") + translator.of("your_town_has_been_invited_to_join_nation", senderName);
+				String firstline = translator.of("invitation_prefix") + translator.of("your_town_has_been_invited_to_join_nation", Colors.colorNation(senderName));
 				String confirmline = "t invite accept " + senderName;
 				String cancelline = "t invite deny " + senderName;
 				sendInvitationMessage(player, firstline, confirmline, cancelline);
 			}
 			if (invite.getReceiver() instanceof Nation) { // Nation allied Nation
-				String firstline = translator.of("invitation_prefix") + translator.of("you_have_been_requested_to_ally2", senderName);
+				String firstline = translator.of("invitation_prefix") + translator.of("you_have_been_requested_to_ally2", Colors.colorNation(senderName));
 				String confirmline = "n ally accept " + senderName;
 				String cancelline = "n ally deny " + senderName;
 				sendInvitationMessage(player, firstline, confirmline, cancelline);
@@ -775,7 +790,7 @@ public class TownyMessaging {
 	 * @param message Translatable message for the resident.
 	 */
 	public static void sendMsg(Resident resident, Translatable message) {
-		if (BukkitTools.isOnline(resident.getName()))
+		if (resident.isOnline())
 			sendMsg(resident.getPlayer(), message);
 	}
 	

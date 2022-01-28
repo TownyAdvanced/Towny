@@ -57,6 +57,8 @@ public class DataFieldIO {
 	
 	private static JsonArray convertToArray(String metadata) throws IOException {
 		try {
+			// TODO: Replace this when support for MC 1.16.* is dropped.
+			@SuppressWarnings("deprecation")
 			JsonElement element = new JsonParser().parse(metadata);
 
 			if (!element.isJsonArray())

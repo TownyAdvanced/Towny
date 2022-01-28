@@ -343,7 +343,7 @@ public class TownyAPI {
 	 * @return true if PVP is enabled or this isn't a world with Towny enabled.
 	 */
 	public boolean isPVP(Location location) {
-		return !isTownyWorld(location.getWorld()) || CombatUtil.preventPvP(getTownyWorld(location.getWorld().getName()), getTownBlock(location));
+		return !isTownyWorld(location.getWorld()) || !CombatUtil.preventPvP(getTownyWorld(location.getWorld().getName()), getTownBlock(location));
 	}
 
     /**
@@ -637,7 +637,17 @@ public class TownyAPI {
 		return TownBlockStatus.UNCLAIMED_ZONE;
 	}
 
-	public static void addTranslations(Plugin plugin, Map<String, Map<String, String>> translations) {
+	/**
+	 * See TranslationLoader for an easy-to-use way of creating the Map needed for
+	 * this method.
+	 * 
+	 * @param plugin       Plugin your plugin.
+	 * @param translations Map&lt;String, Map&lt;String, String&gt;&gt; A hashmap
+	 *                     keyed by the locale name, with a value of secondary
+	 *                     hashmap of the locale's language string keys and their
+	 *                     corresponding values.
+	 */
+	public void addTranslations(Plugin plugin, Map<String, Map<String, String>> translations) {
 		Translation.addTranslations(translations);
 		Towny.getPlugin().getLogger().info("Loaded additional language files for plugin: " + plugin.getName());
 	}

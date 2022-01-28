@@ -7065,3 +7065,163 @@ v0.92.0.11:
     - Their explosions will be reverted in new worlds.
     - Your world files will also have it added, meaning existing worlds with block explosion revert set to on will start reverting Respawn Anchor explosions.
   - Make /ta set mayor TOWNNAME NPC be more careful about setting the NPC-run towns to have no upkeep.
+  - Fix Title/Subtitles not showing when entering/exiting a town.
+    - Closes #5532.
+  - Translate Console givebonus warning, courtesy of GNosii with PR #5514.
+  - Option to show what nation you're joining when you are invited to join a town, courtesy of AlessioGr with PR #5530. (First-Time Contributor!)
+0.97.5.3:
+  - New Permission Node: towny.command.nation.default
+    - A collection of nation sub commands which are given to everyone by default.
+      - Each node doesn't do anything as there are further subcommands with more permission tests.
+    - Fixes complicated townyperms setups not handling nation command refactor 0.97.3.2.
+  - New Placeholder: %townyadvanced_player_location_plotgroup_name%
+    - Shows the PlotGroup name if the player location has a PlotGroup.
+    - Closes #5539.
+  - Fix the default public town setting not being used.
+  - Fix a typo in a lang key use, courtesy of Warriorrrr with PR #5540.
+  - Allow economy.new_expand.price_claim_townblock_refund to be negative, meaning towns will be charged money to unclaim land.
+    - Closes #3650.
+  - Prevent the theft of axolotls, courtesy of Warriorrrr with PR #5542.
+  - Fix minecart names in ItemLists, courtesy of Warriorrrr with PR #5546.
+  - Fix ChorusFlowers not being protected from projectiles.
+  - Fix transfering the last plot from a plotgroup into another leaving an empty plotgroup, vulnerable to errors.
+  - New languages: es-MX, es-EC, es-CL, es-UY, es-VE.
+  - API: Deprecated a bunch of abstract TownyDataSource methods that have been pointing to long-deprecated methods.
+    - Older plugins might still be using these, instructions for updating are included in the javadocs.
+  - Add in forwards compatibilty for server which update to the forthcoming custom townblocks, but then downgrade.
+0.97.5.4:
+  - Added Custom TownBlockTypes, courtesy of Warriorrrr with PR #5388.
+    - TownBlocks are now able to be created in the config and also via other plugins that use our API.
+    - All of the previous townblocktypes will be imported to the new config section.
+    - Each TownBlockType has a name, cost, tax, map character, itemuse list, switch list, and allowed blocks list.
+  - New Command: /towny allowedblocks 
+    - Used to display what blocks are permitted to be used on TownBlockTypes.
+  - Removed Command: /towny farmblocks
+    - Replaced with /towny allowedblocks.
+  - Fix towns.ranks and nations.ranks missing from the Townyperms.yml's vital groups.
+  - Fix for SQL schema and new townblock type-saving.
+  - Fix support for spigot 1.18.1 enabling yaml comments by default.
+    - Closes #5559.
+  - Only apply the outsiders prevent pvp toggle when enabling pvp, courtesy of Warriorrrr with PR #5560.
+0.97.5.5:
+  - Replace some methods in TownyPerms with clearer method names.
+  - Fix switch id lists not accepting item groups in the custom townblocks lists, and some switches not being added.
+    - Closes #5569.
+0.97.5.6:
+  - Overhaul of CommentedConfiguration, adding support for old and new versions of Bukkit servers.
+    - Servers not running up-to-date MC 1.18.1 implementations might see some multi-lining in their chatconfig.yml, which isn't an actual issue. 
+0.97.5.7:
+  - Fix redundant permission node tests in Towny command.
+  - Add child nodes to towny.command.towny.top command.
+    - Closes #5580.
+  - New permission node: 
+    - towny.command.towny.top.*
+      - Child Node of towny.command.towny.top
+      - Children: - towny.command.towny.top.residents
+                  - towny.command.towny.top.land
+                  - towny.command.towny.top.balance
+  - Undo change to TownyEconomyHandler which prevented CMI working.
+  - New Config Node: global_town_settings.warn_town_on_outlaw_message_cooldown_in_seconds
+    - Default: "30",
+    - How many seconds in between warning messages, to prevent spam.
+  - Added outlawn message warning cooldown to prevent spam on servers where the outlaw warning message is turned on,
+    and the outlaw teleporting warmup is not set to 0.
+    - Closes #5582.
+  - Add the ability to make a CommentedConfiguration from a File again.
+0.97.5.8:
+  - Suppress deprecated JSONReader stuff, fix javadoc building.
+  - Fix ArrayIndexOutOfBoundException when using /towny top with no subcommand.
+  - Fix command blacklists not handling casing well.
+    - Closes #5586.
+  - API: Add TranslationLoader.
+    - An easy to use object, accessible via the API which allows a plugin to inject a map of translations into Towny's translations map.
+    - This enables other plugins to use TownyMessaging, Confirmations and other Towny systems' Translatable language methods.
+    - Messages will display to the player in their locale if the language strings are available.
+0.97.5.9:
+  - Refactor some listener code, courtesy of Warriorrrr with PR #5589.
+  - Fix entities being able to steal items from item frames, courtesy of Warriorrrr with PR #5594.
+  - Fix NPE on /ta town NAME set board.
+  - Deprecate unused parameter in CombatUtil#preventDamageCall(), courtesy of Warriorrrr with PR #5595.
+  - Fix OOBE in the towny top command, courtesy of Warriorrrr with PR #5597.
+  - Fix /t invite tab completion not handling inviting residents.
+    - Closes #5533.
+  - Added forsale placeholder, courtesy of Glare with PR #5603.
+    - Closes #5220.
+  - Add PAPI placeholder for town public/open status, courtesy of benlmyers with PR #5602. (First-Time Contributor!)
+  - New Placeholder: %townyadvanced_player_location_plot_forsale% - Shows For Sale lang string when a plot is for sale.
+  - New Placeholder: %townyadvanced_is_town_public% - Shows (Public) lang string when the player's town is public.
+  - New Placeholder: %townyadvanced_is_town_open% - Shows (Open) lang string when the player's town is open. 
+  - Add locale info message, courtesy of GNosii with PR #5599.
+  - New Config Option: resident_settings.is_showing_locale_message
+    - Default: true
+    - If true, players who join the server for the first time will be informed about their locale, and about Towny translatable system.
+  - Bump language files to 0.140.
+  - Fix safe mode messages not appearing in game when the config is the reason for safe mode. 
+  - Add a cooldown on town renaming, to prevent townblocks getting out of sorts.
+    - Closes #5600.
+  - Fix AreaSelectionUtil treating every selection like it will be for claiming.
+    - Fixes resident claim limit not accounting for townblocks already claimed.
+    - Fixes /ta unclaim passing in a null TownBlockOwner meaning the available value was left at 0.
+    - Closes #5606.
+0.97.5.10:
+  - Fix /plot group toggle mobs message, courtesy of Warriorrrr with PR #5612.
+  - Remove global registration message, courtesy of Warriorrrr with PR #5614.
+  - Add config option to define what languages are enabled, courtesy of Warriorrrr with PR #5590.
+  - New Config Option: language.enabled_languages
+    - Default: *
+    - The languages you wish to have enabled. Set to '*' to use all available languages.
+    - If you would like to only allow 4 languages use: en-US,ru-RU,es-ES,fr-FR
+  - Fix skeletons not hurting mobs inside claimed areas, courtesy of Warriorrrr with PR #5613.
+  - Fix SQL db not always loading a townblock's outpost status properly.
+    - Closes #5618.
+  - Fix typo in material name, add new migrationtype, courtesy of Warriorrrr with PR #5625.
+  - Fix regen queue blocking up with unloaded chunks.
+  - New migration type: Move, courtesy of Warriorrrr with PR #5620.
+  - API: add PlayerDeniedBedUseEvent.
+    - Cancellable Event thrown by Towny when Towny prevents someone from using a bed.
+  - Make wolves inside towns mortal again, courtesy of Warriorrrr with PR #5622.
+0.97.5.11:
+  - Add component support to Metadata Labels and Values, courtesy of silverwolfg11 with PR #5628.
+  - Fix empty named towns being allowed to be made.
+  - Fix new plot snapshots being made where there are existing plot snapshots.
+  - Fix ConfigMigrator REPLACE type.
+0.97.5.12:
+  - API: Add TownPreRemoveResidentEvent.
+    - Fires before a resident is removed from a town.
+  - API: TownRemoveResidentEvent changed to fire after a resident is removed from a town.
+    - Closes #5630.
+  - New Command: /town trust list.
+    - Closes #5615.
+  - Fix Towny showing "Error updating {action} permission." messages when EventWar is used.
+  - Fix /ta set plot {townname} not saving the townblock correctly when the command is changing a townblock from one town to another.
+  - Fix Town add/remove enemy/ally events being able to be thrown async.
+0.97.5.13:
+  - Fix TownyAPI#isPVP(Location) return the opposite value in Towny-enabled Worlds.
+  - Remove player crop trampling world setting, in favour of using plot permissions.
+  - Fix /t trust remove not working, courtesy of Warriorrrr with PR #5646.
+    - Closes #5643.
+  - Put town into ruined state when last resident is deleted, courtesy of Warriorrrr with PR #5645.
+  - Change PlayerCache Map to use UUIDs instead of Names.
+  - Fix potential NPE in PlayerInteractEvent listener.
+  - Fix NewDayEvent never firing when servers have daily_taxes disabled.
+  - Fix newday being scheduled again after running /ta newday, courtesy of Warriorrrr with PR #5647.
+  - Refactor the SpawnUtil to be more readable.
+0.97.5.14:
+  - Correctly fall back to the en_US when a server is using not-en_US and a plugin is calling for a string which was not translated to that locale.
+  - Improve /ta town townname kick name feedback, courtesy of Warriorrrr with PR #5648.
+  - Do a better job of catching when Citizens API is unavailable to us, preventing many Towny operations from completing successfully.
+  - Make /ta town NAME set mayor NAME set hasUpkeep correctly when a mayor is replacing an npc mayor.  
+  - Fix Towny throwing errors when checking for spawn protection on NPC entities.
+    - Closes #5656.
+  - Fix regression in SpawnUtil throwing NPE when using_economy is false.
+  - Re-add overriding player crop trampling option.
+  - New Config Option: protection.prevent_player_crop_trample
+    - Default: true
+    - When set to true, players will never trample crops. When false, players will still have to be able to break the crop by hand in order to be able to trample crops.
+0.97.5.15:
+  - Use EnumSet for switch and itemuse materials, courtesy of Warriorrrr with PR #5664.
+  - Add TOWNYADMIN_RELOAD commandtype, courtesy of Warriorrrr with PR #5669.
+    - Closes #5668.
+  - Improve border around townyperms header, courtesy of Warriorrrr with PR #5671.
+  - Fix mob removal task malfunctioning when using citizens, courtesy of Warriorrrr with PR #5674.
+  - Fix translation loader loading global from the wrong location, courtesy of Warriorrrr with PR #5673.

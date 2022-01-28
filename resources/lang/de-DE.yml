@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.136
+version: 0.141
 language: german
 author: ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih
 website: 'http://townyadvanced.github.io/'
@@ -206,6 +206,7 @@ msg_changed_public: '&cDer öffentliche Status der Stadt ist nun %s.'
 msg_changed_expl: '&cExplosionen in %s sind nun %s.'
 msg_changed_fire: '&cFeuerausbreitung in %s ist nun %s.'
 msg_changed_mobs: '&cMonster-Spawns in %s sind nun %s.'
+msg_the_plot_group: 'the Plot Group'
 msg_changed_taxpercent: '&cDer Steuersatz liegt nun bei %s Prozent.'
 msg_changed_open: '&cBeitreten ohne Einladung ist nun %s.'
 msg_toggle_open_on_warning: 'Achtung: Das Rechtesystem der Stadt sollte ausgeschaltet sein. Nutze ''/town set perm off'' gefolgt von ''/town set perm reset''.'
@@ -269,7 +270,6 @@ msg_new_nation: '&b%s hat die Nation %s gegründet.'
 msg_new_town: '&b%s hat die Stadt %s gegründet.'
 msg_plot_for_sale: '&b%s gab das Grundstück (%s) zum Verkauf frei!'
 msg_plot_set_type: '&bGrundstücksttyp wurde auf %s gesetzt.'
-msg_registration: '&eWillkommen auf dem Server %s !'
 msg_cache_block_error: '&cDu wirst von Towny nicht erkannt. Versuche dich neu einzuloggen.'
 msg_cache_block_error_wild: '&c %s ist in der Wildnis nicht erlaubt.'
 msg_cache_block_error_plot: '&c Der Besitzer erlaubt %s nicht auf disem Platz %s zu tun.'
@@ -482,7 +482,7 @@ nation_received_requests: '&bDie Nation hat %a/%m Bündnisanfragen.'
 nation_sent_invites: '&bDie Nation hat %a/%m Einladungen.'
 nation_sent_ally_requests: '&bDie Nation hat %a/%m ally Anfragen.'
 no_confirmations_open: '&cDu hast nichts zu bestätigen!'
-successful_cancel: '&cAction cancelled!'
+successful_cancel: '§cAktion abgebrochen!'
 successful_deny: '&bEinladung wurde erfolgreich abgelehnt.'
 successful_deny_request: '&bBündnisanfrage wurde erfolgreich abgelehnt.'
 msg_ally_removed_successfully: '&bVerbündeter wurde erfolgreich entfernt.'
@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&cSpawnreisen zu Nationen sind nur während
 msg_err_nation_spawn_forbidden_peace: '&cSpawnreisen zu Nationen sind während des Krieges verboten.'
 msg_err_nation_spawn_ally_forbidden: '&cSpawnreisen zu verbündeten Nationen sind verboten.'
 msg_err_nation_spawn_nation_forbidden_war: '&cSpawnreisen zu verbündeten Nationen sind nur während des Krieges erlaubt.'
-msg_err_nation_spawn_nation_forbidden_peace: '&cSpawnreisen zu verbündeten Nationen sind während des Krieges verboten.'
+msg_err_nation_spawn_nation_forbidden_peace: '&cNation spawn travel to other allied nations is forbidden during war.'
 msg_err_public_nation_spawn_forbidden: '&cÖffentliche Spawnreisen zu anderen Nationen sind verboten.'
 msg_err_public_nation_spawn_forbidden_war: '&cÖffentliche Spawnreisen sind nur während des Krieges erlaubt.'
 msg_err_public_nation_spawn_forbidden_peace: '&cÖffentliche Spawnreisen sind während des Krieges verboten.'
@@ -690,7 +690,7 @@ number_of_residents: '(Anzahl an Einwohner)'
 number_of_towns: '(Anzahl an Städte)'
 town_name: 'Stadtname'
 nation_name: 'Nationname'
-refund_message: '&aEs wurde $%s für''s freigeben von %s Stadtblöcken erstattet.'
+refund_message: '&aRefunded %s for unclaiming %s townblocks.'
 msg_bankrupt_town_multiple: '&bDie folgenden Städte können ihren Unterhalt nicht mehr finanzieren und wurden deshalb aufgelöst: '
 msg_bankrupt_nation_multiple: '&bDie folgenden Nationen können ihren Unterhalt nicht mehr finanzieren und wurden deshalb aufgelöst: '
 msg_couldnt_pay_tax: '&b%s konnte die Steuer nicht bezahlen und wurde deshalb aus %s entfernt.'
@@ -925,7 +925,7 @@ msg_outlaw_town_notify: '&cEin Geächteter, %s, hat deine Stadt betreten.'
 msg_your_town_payed_upkeep_with_debt: '&cDeine Stadt hat deine tägliche Instandhaltung von %s mit Schulden bezahlt.'
 msg_payed_nation_tax_with_debt: '&cDeine Stadt hat deine tägliche Instandhaltung von %s mit Schulden bezahlt.'
 #Added in 0.90
-status_plot_clear_deletion: 'PlotClearBlockDelete:'
+status_plot_clear_deletion: 'Hinzugefügt in 0.90:'
 msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'
 #Added in 0.91
 msg_universe_attribution: 'Authors: '
@@ -987,10 +987,9 @@ towny_prices_price_shop: '&c            &2Shop: &a%s &8| &2Embassy: &a%s'
 towny_prices_taxes_plot: '&c    [Taxes]    &2Resident: &a%s &8| &2Plot: &a%s'
 towny_prices_taxes_shop: '&c            &2Shop: &a%s &8| &2Embassy: &a%s'
 towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
-towny_prices_plots_shop: '&c    [Setting Plots] &2Shop: &a%s &8| &2Embassy: &a%s'
-towny_prices_plots_wilds: '&c                       &2Wilds: &a%s &8| &2Inn: &a%s'
-towny_prices_plots_jail: '&c                        &2Jail: &a%s &8| &2Farm: &a%s'
-towny_prices_plots_bank: '&c                        &2Bank: &a%s'
+towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_type_single: '            &2%s: &a%s'
+towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cNation: &6%s'
 towny_prices_nation_tax: '&c    [Taxes] &2Town: &a%s &8| &2Peace: &a%s'
 #Added in 0.96
@@ -1006,7 +1005,9 @@ msg_bankrupt: '&c(Bankrott)'
 #Added in 0.98
 msg_del_town2: '&bDie Stadt %s wurde aufgelöst!'
 msg_ruin_town: '&bDie Stadt %s ist ruiniert worden!'
-gui_title_towny_farmblocks: 'Towny FarmBlocks List'
+gui_title_select_plot_type: 'Select PlotType'
+gui_title_no_restrictions: 'No restrictions for this plottype.'
+gui_title_towny_allowedblocks: '%s AllowedBlocks List'
 gui_title_towny_wildsblocks: 'Towny WildsBlocks List'
 gui_title_towny_itemuse: 'Towny ItemUse List'
 gui_title_towny_switch: 'Towny Switch List'
@@ -1410,3 +1411,26 @@ msg_view_on_web: 'Click to view on the web.'
 town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Neutrality Cost:'
+#Added in 0.138
+#Line 1 of the givebonus warning.
+msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+#Line 2 of the givebonus warning.
+msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchaseable with real money.'
+#Line 3 of the givebonus warning.
+msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
+#Message shown when a town invites a player to join, and that town has a nation.
+you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+#Added in 0.140
+#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
+msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
+#Message shown when a player tries to rename their town too quickly.
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+#Added in 1.141
+msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'

@@ -2,10 +2,15 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 
+import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -66,24 +71,18 @@ public class ResidentUtil {
 	 * @return - List of residents to be used later.
 	 */
 	public static List<Resident> getValidatedResidents(CommandSender sender, String[] names) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<Resident> residents = new ArrayList<>();
 		for (String name : names) {
 			List<Player> matches = BukkitTools.matchPlayer(name);
 			if (matches.size() > 1) {
-				StringBuilder line = new StringBuilder("Multiple players selected: ");
-				for (Player p : matches)
-					line.append(", ").append(p.getName());
-				TownyMessaging.sendErrorMsg(sender, line.toString());
+				TownyMessaging.sendErrorMsg(sender, "Multiple players selected: " + matches.stream().map(Player::getName).collect(Collectors.joining(", ")));
 			} else {
 				String targetName = !matches.isEmpty() ? matches.get(0).getName() : name;
-				Resident target = townyUniverse.getResident(targetName);
-				if (target != null) {
+				Resident target = TownyUniverse.getInstance().getResident(targetName);
+				if (target != null)
 					residents.add(target);
-				}
-				else {
+				else
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", targetName));
-				}
 			}
 		}
 		return residents;
@@ -110,6 +109,41 @@ public class ResidentUtil {
 		createTownyGUI(resident, items, name);
 	}
 	
+	public static void openGUIInventory(Resident resident, Set<Material> set, String name) {
+		ArrayList<ItemStack> items = new ArrayList<>();
+		for (Material material : set)
+			items.add(new ItemStack(material));
+		
+		createTownyGUI(resident, items, name);
+	}
+	
+	public static void openSelectionGUI(Resident resident, SelectionGUI.SelectionType selectionType) {
+		String inventoryName = Translatable.of("gui_title_select_plot_type").forLocale(resident);
+		Inventory page = getBlankPage(inventoryName);
+		ArrayList<Inventory> pages = new ArrayList<>();
+		
+		for (TownBlockType townBlockType : TownBlockTypeHandler.getTypes().values()) {
+			ItemStack item = new ItemStack(Material.GRASS_BLOCK);
+			
+			ItemMeta meta = item.getItemMeta();
+			meta.setDisplayName(Colors.Gold + townBlockType.getFormattedName());
+			item.setItemMeta(meta);
+
+			if (page.firstEmpty() == 46) {
+				pages.add(page);
+				page = getBlankPage(inventoryName);
+			}
+			
+			page.addItem(item);
+		}
+		
+		pages.add(page);
+		resident.setGUIPageNum(0);
+		resident.setGUIPages(pages);
+		
+		new SelectionGUI(resident, pages.get(0), inventoryName, selectionType);
+	}
+	
 	/*
 	 * Big credit goes to Hex_27 for the guidance following his ScrollerInventory
 	 * https://www.spigotmc.org/threads/infinite-inventory-with-pages.178964/
@@ -119,18 +153,17 @@ public class ResidentUtil {
 	private static void createTownyGUI(Resident resident, ArrayList<ItemStack> items, String name) {
 
 		Inventory page = getBlankPage(name);
-		ArrayList<Inventory> pages = new ArrayList<Inventory>();
+		ArrayList<Inventory> pages = new ArrayList<>();
 		
-		for (int i = 0; i < items.size(); i++) {
+		for (ItemStack item : items) {
 			if (page.firstEmpty() == 46) {
 				pages.add(page);
 				page = getBlankPage(name);
-				page.addItem(items.get(i));
-			} else {
-				//Add the item to the current page as per normal
-				page.addItem(items.get(i));
 			}
+
+			page.addItem(item);
 		}
+
 		pages.add(page);
 		resident.setGUIPages(pages);
 		resident.setGUIPageNum(0);

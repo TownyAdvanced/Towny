@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
@@ -1504,12 +1505,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (Exception ignored) {
 			}
 
-			result = rs.getBoolean("disableplayertrample");
-			try {
-				world.setDisablePlayerTrample(result);
-			} catch (Exception ignored) {
-			}
-
 			result = rs.getBoolean("disablecreaturetrample");
 			try {
 				world.setDisableCreatureTrample(result);
@@ -1790,17 +1785,17 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 				line = rs.getString("type");
 				if (line != null)
-					try {
-						townBlock.setType(Integer.parseInt(line));
-					} catch (Exception ignored) {
-					}
+					townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
+
+				line = rs.getString("typeName");
+				if (line != null) 
+					townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
 
 				boolean outpost = rs.getBoolean("outpost");
-				if (line != null && !line.isEmpty())
-					try {
-						townBlock.setOutpost(outpost);
-					} catch (Exception ignored) {
-					}
+				try {
+					townBlock.setOutpost(outpost);
+				} catch (Exception ignored) {
+				}
 
 				line = rs.getString("permissions");
 				if ((line != null) && !line.isEmpty())
@@ -2316,8 +2311,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("forceexplosions", world.isForceExpl());
 			// Enderman block protection
 			nat_hm.put("endermanprotect", world.isEndermanProtect());
-			// PlayerTrample
-			nat_hm.put("disableplayertrample", world.isDisablePlayerTrample());
 			// CreatureTrample
 			nat_hm.put("disablecreaturetrample", world.isDisableCreatureTrample());
 
@@ -2415,7 +2408,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			tb_hm.put("price", townBlock.getPlotPrice());
 			tb_hm.put("town", townBlock.getTown().getName());
 			tb_hm.put("resident", (townBlock.hasResident()) ? townBlock.getResidentOrNull().getName() : "");
-			tb_hm.put("type", townBlock.getType().getId());
+			tb_hm.put("typeName", townBlock.getTypeName());
 			tb_hm.put("outpost", townBlock.isOutpost());
 			tb_hm.put("permissions",
 					(townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");

@@ -1,12 +1,13 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object.spawnlevel;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 
 public enum NationSpawnLevel {
@@ -56,34 +57,30 @@ public enum NationSpawnLevel {
 		this.permissionNode = permissionNode;
 	}
 
-	public void checkIfAllowed(Towny plugin, Player player, Nation nation) throws TownyException {
+	public void checkIfAllowed(Player player, Nation nation) throws TownyException {
 
-		if (!(isAllowed(nation) && hasPermissionNode(plugin, player, nation))) {
+		if (!isAllowed(player, nation)) {
 			boolean war = nation.hasActiveWar();
-			NSpawnLevel level = TownySettings.getNSpawnLevel(this.isAllowingConfigNode);
-			if(level == NSpawnLevel.WAR && !war) {
+			SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
+			if(level == SpawnLevel.WAR && !war) {
 				throw new TownyException(Translation.of(notAllowedLangNodeWar));
 			}
-			else if(level == NSpawnLevel.PEACE && war) {
+			else if(level == SpawnLevel.PEACE && war) {
 				throw new TownyException(Translation.of(notAllowedLangNodePeace));
 			}
 			throw new TownyException(Translation.of(notAllowedLangNode));
 		}
 	}
 
-	public boolean isAllowed(Nation nation) {
-		return this == NationSpawnLevel.ADMIN || isAllowedNation(nation);
-	}
-
-	public boolean hasPermissionNode(Towny plugin, Player player, Nation nation) {
+	private boolean isAllowed(Player player, Nation nation) {
 
 		return this == NationSpawnLevel.ADMIN || (TownyUniverse.getInstance().getPermissionSource().testPermission(player, this.permissionNode)) && (isAllowedNation(nation));
 	}
 	
 	private boolean isAllowedNation(Nation nation) {
 		boolean war = nation.hasActiveWar();
-		NSpawnLevel level = TownySettings.getNSpawnLevel(this.isAllowingConfigNode);
-		return level == NSpawnLevel.TRUE || (level != NSpawnLevel.FALSE && ((level == NSpawnLevel.WAR) == war));
+		SpawnLevel level = TownySettings.getSpawnLevel(this.isAllowingConfigNode);
+		return level == SpawnLevel.TRUE || (level != SpawnLevel.FALSE && ((level == SpawnLevel.WAR) == war));
 	}
 
 	public double getCost() {
@@ -94,12 +91,5 @@ public enum NationSpawnLevel {
 	public double getCost(Nation nation) {
 
 		return this == NationSpawnLevel.ADMIN ? 0 : nation.getSpawnCost();
-	}
-	
-	public enum NSpawnLevel {
-		TRUE,
-		FALSE,
-		WAR,
-		PEACE
 	}
 }

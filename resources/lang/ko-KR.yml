@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.136
+version: 0.141
 language: 한국어
 author: Daybreak 새벽
 website: 'http://townyadvanced.github.io/'
@@ -206,6 +206,7 @@ msg_changed_public: '&c마을 공개 설정 : %s.'
 msg_changed_expl: '&c%s 폭발 설정 : %s.'
 msg_changed_fire: '&c%s 불번짐 설정 : %s.'
 msg_changed_mobs: '&c%s 몹스폰 설정 : %s.'
+msg_the_plot_group: '토지 그룹'
 msg_changed_taxpercent: '&c세금 부과 기준 : %s.'
 msg_changed_open: '&c마을 개방 : %s.'
 msg_toggle_open_on_warning: '주의: 마을을 개방하면 많은 위험이 뒤따릅니다. 마을의 권한 설정을 다시 한번 정비하시길 바랍니다.'
@@ -269,7 +270,6 @@ msg_new_nation: '&b%s님이 %s(이)라는 국가를 세웠습니다.'
 msg_new_town: '&b%s님이 %s(이)라는 마을을 만들었습니다.'
 msg_plot_for_sale: '&b%s님이 (%s) 만큼의 토지를 판매합니다.'
 msg_plot_set_type: '&b토지 유형이 %s(으)로 설정되었습니다.'
-msg_registration: '&e%s님이 서버에 처음 오셨습니다!'
 msg_cache_block_error: '&c귀하는 타우니에 등록되지 않았습니다. 다시 접속해보세요.'
 msg_cache_block_error_wild: '&c야생에서는 %s할 수 없습니다.'
 msg_cache_block_error_plot: '&c토지의 주인이 %s이(가) 이곳에서 %s하는 것을 허락하지 않았습니다.'
@@ -482,7 +482,7 @@ nation_received_requests: '&b국가가 %a/%m 동맹국 요청을 수신하였습
 nation_sent_invites: '&b국가가 %a/%m 초대를 전송하였습니다.'
 nation_sent_ally_requests: '&b국가가 %a/%m 동맹 요청을 전송하였습니다.'
 no_confirmations_open: '&c확인할 것이 아무것도 없습니다!'
-successful_cancel: '&cAction cancelled!'
+successful_cancel: '&c액션이 취소되었습니다!'
 successful_deny: '&b초대가 성공적으로 거부되었습니다.'
 successful_deny_request: '&b동맹 요청이 성공적으로 거부되었습니다.'
 msg_ally_removed_successfully: '&b동맹이 성공적으로 파기되었습니다.'
@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&c국가 스폰 여행은 전쟁 중에만 
 msg_err_nation_spawn_forbidden_peace: '&c국가 스폰 여행은 전쟁 중에 금지됩니다.'
 msg_err_nation_spawn_ally_forbidden: '&c동맹국 스폰 여행이 금지되었습니다.'
 msg_err_nation_spawn_nation_forbidden_war: '&c동맹국 스폰 여행은 전쟁 중에만 허용됩니다.'
-msg_err_nation_spawn_nation_forbidden_peace: '&동맹국 스폰 여행은 전쟁 중에 금지됩니다.'
+msg_err_nation_spawn_nation_forbidden_peace: '&c동맹국 스폰 여행은 전쟁 중에 금지됩니다.'
 msg_err_public_nation_spawn_forbidden: '&c다른 국가로의 공용 스폰 여행은 금지되었습니다.'
 msg_err_public_nation_spawn_forbidden_war: '&c다른 국가로의 공용 스폰 여행은 전쟁 중에만 허용됩니다.'
 msg_err_public_nation_spawn_forbidden_peace: '&c다른 국가로의 공용 스폰 여행은 전쟁 중에 금지됩니다.'
@@ -690,7 +690,7 @@ number_of_residents: '(주민 수)'
 number_of_towns: '(마을 수)'
 town_name: '마을 이름'
 nation_name: '국가 이름'
-refund_message: '&a%s 만큼의 돈을 %s 마을 토지를 점유 해제하여 환불받았습니다.'
+refund_message: '&aRefunded %s for unclaiming %s townblocks.'
 msg_bankrupt_town_multiple: '&b다음 마을들은 유지비를 감당할 수 없어 해산되었습니다: '
 msg_bankrupt_nation_multiple: '&b다음 국가들은 유지비를 감당할 수 없어 해산되었습니다: '
 msg_couldnt_pay_tax: '&b%s은(는) 세금을 감당할 수 없어 %s에서 추방되었습니다.'
@@ -987,10 +987,9 @@ towny_prices_price_shop: '&c            &2상점: &a%s &8| &2대사관: &a%s'
 towny_prices_taxes_plot: '&c    [세금]    &2Resident: &a%s &8| &2Plot: &a%s'
 towny_prices_taxes_shop: '&c            &2상점: &a%s &8| &2대사관: &a%s'
 towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
-towny_prices_plots_shop: '&c    [토지 설정] &2Shop: &a%s &8| &2Embassy: &a%s'
-towny_prices_plots_wilds: '&c                       &2야생s: &a%s &8| &2여관/호탤: &a%s'
-towny_prices_plots_jail: '&c                        &2감옥: &a%s &8| &2농장: &a%s'
-towny_prices_plots_bank: '&c                        &2은행: &a%s'
+towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_type_single: '            &2%s: &a%s'
+towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&c국가: &6%s'
 towny_prices_nation_tax: '&c    [세금] &2Town: &a%s &8| &2Peace: &a%s'
 #Added in 0.96
@@ -1006,7 +1005,9 @@ msg_bankrupt: '&c(파산)'
 #Added in 0.98
 msg_del_town2: '&b%s 마을이 삭제 되었습니다!'
 msg_ruin_town: '&b%s 마을이 폐허 상태가 되었습니다!'
-gui_title_towny_farmblocks: 'Towny FarmBlocks List'
+gui_title_select_plot_type: 'Select PlotType'
+gui_title_no_restrictions: 'No restrictions for this plottype.'
+gui_title_towny_allowedblocks: '%s AllowedBlocks List'
 gui_title_towny_wildsblocks: 'Towny WildsBlocks List'
 gui_title_towny_itemuse: 'Towny ItemUse List'
 gui_title_towny_switch: 'Towny Switch List'
@@ -1410,3 +1411,26 @@ msg_view_on_web: 'Click to view on the web.'
 town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Neutrality Cost:'
+#Added in 0.138
+#Line 1 of the givebonus warning.
+msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+#Line 2 of the givebonus warning.
+msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchaseable with real money.'
+#Line 3 of the givebonus warning.
+msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
+#Message shown when a town invites a player to join, and that town has a nation.
+you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+#Added in 0.140
+#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
+msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
+#Message shown when a player tries to rename their town too quickly.
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+#Added in 1.141
+msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'

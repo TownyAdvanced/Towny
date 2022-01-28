@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.136
+version: 0.141
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -206,6 +206,7 @@ msg_changed_public: '&c城镇的公开状态变更为 %s.'
 msg_changed_expl: '&c%s 中的允许爆炸变更为 %s.'
 msg_changed_fire: '&c%s 中的火势蔓延变更为 %s.'
 msg_changed_mobs: '&c%s 中的怪物生成变更为 %s.'
+msg_the_plot_group: '地皮组'
 msg_changed_taxpercent: '&c按比例收税模式变更为 %s.'
 msg_changed_open: '&c城镇邀请加入变更为 %s.'
 msg_toggle_open_on_warning: '警告: 如果城镇设为开放那么城镇权限最好关闭. 输入 /town set perm off 关闭,  /town set perm reset重置.'
@@ -269,7 +270,6 @@ msg_new_nation: '&b%s 建立了一个名为 %s 的国家'
 msg_new_town: '&b%s 建立了一个名为 %s 的城镇'
 msg_plot_for_sale: '&b%s 将 (%s) 区块挂出出售!'
 msg_plot_set_type: '&b设置土地类型为 %s'
-msg_registration: '&e欢迎 %s 加入服务器!'
 msg_cache_block_error: '&c城镇没有你的信息. 请尝试重新登录.'
 msg_cache_block_error_wild: '&c你不能在荒野中 %s .'
 msg_cache_block_error_plot: '&c地主不允许 %s  %s .'
@@ -987,10 +987,9 @@ towny_prices_price_shop: '&c            &2商店：&a%s &8| &2大使馆：&a%s'
 towny_prices_taxes_plot: '&c    [税收]    &2居民：&a%s &8| &2土地：&a%s'
 towny_prices_taxes_shop: '&c            &2商店：&a%s &8| &2大使馆：&a%s'
 towny_prices_town_neutral_tax: '&c            &2和平：&a%s'
-towny_prices_plots_shop: '&c    [土地类型] &2商店：&a%s &8| &2大使馆：&a%s'
-towny_prices_plots_wilds: '&c                       &2荒地：&a%s &8| &2旅店：&a%s'
-towny_prices_plots_jail: '&c                        &2监狱：&a%s &8| &2农场：&a%s'
-towny_prices_plots_bank: '&c                        &2银行：&a%s'
+towny_prices_plots: '&c    [设置地皮]'
+towny_prices_type_single: '            &2%s: &a%s'
+towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&c国家：&6%s'
 towny_prices_nation_tax: '&c    [Taxes] &2城镇：&a%s &8| &2和平：&a%s'
 #Added in 0.96
@@ -1006,7 +1005,9 @@ msg_bankrupt: '&c（已破产）'
 #Added in 0.98
 msg_del_town2: '&b城镇%s已删除！'
 msg_ruin_town: '&b城镇%s倒闭了！'
-gui_title_towny_farmblocks: '城镇农场区块列表'
+gui_title_select_plot_type: '选择绘图类型'
+gui_title_no_restrictions: '此绘图没有限制。'
+gui_title_towny_allowedblocks: '%s 允许方块列表'
 gui_title_towny_wildsblocks: '城镇荒地区块列表'
 gui_title_towny_itemuse: 'Towny物品使用权限列表'
 gui_title_towny_switch: 'Towny交互权限列表'
@@ -1410,3 +1411,26 @@ msg_view_on_web: '点击转向网页查看。'
 town1_has_merged_with_town2: '&6城镇%s同意与主城镇%s合并。'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: '中立成本：'
+#Added in 0.138
+#Line 1 of the givebonus warning.
+msg_ptw_warning_1: '如果您已经为这些城镇区块支付了任何实际生活费用，请了解：您正在玩的服务器违反了MinecraftEULA和城镇许可证。'
+#Line 2 of the givebonus warning.
+msg_ptw_warning_2: '城镇团队从未打算用真钱购买城镇区块。'
+#Line 3 of the givebonus warning.
+msg_ptw_warning_3: '如果您确实支付了真正的钱，您应该考虑在一个尊重城镇团队愿望的城镇服务器上玩游戏。'
+#Message shown when a town invites a player to join, and that town has a nation.
+you_have_been_invited_to_join3: '您已被邀请加入 %s&9 (Nation: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: '你的城镇没有钱来取消这块土地。 %s 需要这样的资金。'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: '你的城镇已支付 %s 来取消对土地的所有权。'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: '取消这片土地将消耗 %s，你想要继续吗？'
+#Added in 0.140
+#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
+msg_your_locale: 'Towny根据你本地的语言设置（%s）来翻译文字。注意一些翻译可能会缺少对应文本。'
+#Message shown when a player tries to rename their town too quickly.
+msg_you_must_wait_x_seconds_before_renaming_your_town: '你必须再等待%s秒才能重命名你的城镇。'
+#Added in 1.141
+msg_newday_already_scheduled_soon: '一个新的一天的任务已经被安排在之后执行。'

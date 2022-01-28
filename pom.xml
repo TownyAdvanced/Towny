@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.97.5.2</version>
+    <version>0.97.5.15</version>
 
     <licenses>
         <license>
@@ -33,10 +33,16 @@
     <!-- Requires repo write access, and proper local maven configuration -->
     <!-- https://help.github.com/en/articles/about-github-package-registry -->
     <distributionManagement>
+        <!-- This only needs to be un-commented for Release versions, when we want to upload to the cursed Github packages.
         <repository>
             <id>github</id>
             <name>GitHub TownyAdvanced Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
+        </repository> -->
+        <repository>
+            <id>nexus</id>
+            <name>Towny</name>
+            <url>https://repo.glaremasters.me/repository/towny/</url>
         </repository>
     </distributionManagement>
 
@@ -89,7 +95,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.17-R0.1-SNAPSHOT</version>
+            <version>1.18.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -144,7 +150,7 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.16.0</version>
+            <version>2.17.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -225,7 +231,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <source>${java.version}</source>
+                    <source>16</source>
                     <doclint>all,-missing</doclint>
                 </configuration>
             </plugin>

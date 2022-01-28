@@ -72,7 +72,7 @@ public class ComparatorCaches {
 	@SuppressWarnings("unchecked")
 	private static List<TextComponent> gatherTownLines(ComparatorType compType) {
 		List<TextComponent> output = new ArrayList<>();
-		List<Town> towns = TownyUniverse.getInstance().getDataSource().getTowns();
+		List<Town> towns = new ArrayList<>(TownyUniverse.getInstance().getTowns());
 		towns.sort((Comparator<? super Town>) compType.getComparator());
 		
 		for (Town town : towns) {
@@ -122,7 +122,7 @@ public class ComparatorCaches {
 	@SuppressWarnings("unchecked")
 	private static List<TextComponent> gatherNationLines(ComparatorType compType) {
 		List<TextComponent> output = new ArrayList<>();
-		List<Nation> nations = TownyUniverse.getInstance().getDataSource().getNations();
+		List<Nation> nations = new ArrayList<>(TownyUniverse.getInstance().getNations());
 
 		//Sort nations
 		nations.sort((Comparator<? super Nation>) compType.getComparator());
