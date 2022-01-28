@@ -1433,4 +1433,4 @@ msg_your_locale: 'Towny bruker språket til din klient (%s) for å oversette mel
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Du må vente %s sekunder før du kan endre navnet på din by igjen.'
 #Added in 1.141
-msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'
+msg_newday_already_scheduled_soon: 'En ny dagsoppgave er allerede planlagt å skje snart.'
