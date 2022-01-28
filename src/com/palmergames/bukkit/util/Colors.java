@@ -4,6 +4,9 @@ import org.bukkit.ChatColor;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.util.StringMgmt;
 
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -83,5 +86,29 @@ public class Colors {
 			default:
 				return null;
 		}
+	}
+
+	public static String colorTown(String townName) {
+		return translateColorCodes(getTownColor() + townName);
+	}
+
+	public static String colorTown(Town town) {
+		return translateColorCodes(getTownColor() + town);
+	}
+
+	public static String colorNation(String nationName) {
+		return translateColorCodes(getNationColor() + nationName);
+	}
+
+	public static String colorNation(Nation nation) {
+		return translateColorCodes(getNationColor() + nation);
+	}
+
+	public static String getTownColor() {
+		return TownySettings.getPAPIFormattingMayor();
+	}
+
+	public static String getNationColor() {
+		return TownySettings.getPAPIFormattingKing();
 	}
 }

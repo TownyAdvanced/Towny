@@ -514,7 +514,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public List<Town> getTownsWithoutNation() {
 
 		List<Town> townFilter = new ArrayList<>();
-		for (Town town : getTowns())
+		for (Town town : universe.getTowns())
 			if (!town.hasNation())
 				townFilter.add(town);
 		return townFilter;
@@ -668,21 +668,16 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		for (Resident toCheck : toSave)
 			saveResident(toCheck);
 		
-		Town town = null;
+		if (resident.hasTown()) {
+			Town town = resident.getTownOrNull();
 
-		if (resident.hasTown())
-			try {
-				town = resident.getTown();
-			} catch (NotRegisteredException e1) {
-				e1.printStackTrace();
-			}
+			if (town != null) {
+				// Delete the town if there are no more residents
+				if (town.getNumResidents() <= 1) {
+					TownyUniverse.getInstance().getDataSource().removeTown(town);
+				}
 
-		if (town != null) {
-			resident.removeTown();
-			
-			// Delete the town if there are no more residents
-			if (town.getNumResidents() == 0) {
-				TownyUniverse.getInstance().getDataSource().removeTown(town);
+				resident.removeTown();
 			}
 		}
 
@@ -706,7 +701,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (TownySettings.isDeleteEcoAccount() && TownyEconomyHandler.isActive())
 			resident.getAccount().removeAccount();
 
-		plugin.deleteCache(resident.getName());
+		plugin.deleteCache(resident);
 		
 		BukkitTools.getPluginManager().callEvent(new DeletePlayerEvent(resident));
 	}
@@ -768,7 +763,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			/*
 			 * When Town ruining is active, send the Town into a ruined state, prior to real removal.
 			 */
-			TownRuinUtil.putTownIntoRuinedState(town, plugin);
+			TownRuinUtil.putTownIntoRuinedState(town);
 			return;
 		}
 
@@ -1443,6 +1438,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void deletePlotData(PlotBlockData plotChunk) {
 		File file = new File(getPlotFilename(plotChunk));
 		queryQueue.add(new DeleteFileTask(file, true));
+	}
+
+	@Override
+	public boolean hasPlotData(TownBlock townBlock) {
+		return isFile(getPlotFilename(townBlock));
 	}
 
 	private String getPlotFilename(PlotBlockData plotChunk) {

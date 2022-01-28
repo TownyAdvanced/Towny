@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.136
+version: 0.141
 language: italian
 author: Leonardo_DGS
 website: 'https://townyadvanced.github.io/'
@@ -206,6 +206,7 @@ msg_changed_public: '&cLo stato pubblico della città è ora %s.'
 msg_changed_expl: '&cLo stato delle esplosioni in %s è ora %s.'
 msg_changed_fire: '&cLo stato della propagazione del fuoco in %s è ora %s.'
 msg_changed_mobs: '&cLo spawn dei mob in %s è ora %s.'
+msg_the_plot_group: 'il Gruppo di Trama'
 msg_changed_taxpercent: '&cLe tasse basate sulla percentuale sono ora %s.'
 msg_changed_open: '&cLo stato dell''adesione senza invito è ora %s.'
 msg_toggle_open_on_warning: 'Attenzione: I permessi della città dovrebbero essere disattivati se la città è aperta. Digita ''/town set perm off'' seguito da ''/town set perm reset''.'
@@ -269,7 +270,6 @@ msg_new_nation: '&b%s ha creato una nuova nazione chiamata %s'
 msg_new_town: '&b%s ha creato una nuova città chiamata %s'
 msg_plot_for_sale: '&b%s ha messo il lotto (%s) in vendita!'
 msg_plot_set_type: '&bTipo di lotto impostato a %s'
-msg_registration: '&eBenvenuto %s nel server!'
 msg_cache_block_error: '&cNon sei stato registrato dal Towny. Prova a riconnetterti.'
 msg_cache_block_error_wild: '&cNon puoi %s nella natura.'
 msg_cache_block_error_plot: '&cIl proprietario non consente %s a %s qui.'
@@ -592,12 +592,12 @@ status_world_fire: 'Fuoco:'
 status_world_forcefire: 'Forza Il Fuoco:'
 status_world_forceexplosion: 'Forza Esplosioni:'
 status_world_worldmobs: 'World Mobs:'
-status_world_forcetownmobs: 'Force TownMobs:'
-status_world_unclaimrevert: 'Unclaim Revert:'
-status_world_explrevert: 'Explosion Revert:'
-status_world_ignoredblocks: 'Ignored Blocks:'
-status_res_taxexempt: 'Staff are exempt from paying town taxes.'
-status_res_tax: 'Town Tax:'
+status_world_forcetownmobs: 'Forza Cellulare:'
+status_world_unclaimrevert: 'Ripristino Di Non Richiamo:'
+status_world_explrevert: 'Ripristino Esplosioni:'
+status_world_ignoredblocks: '2Blocchi Ignorati:'
+status_res_taxexempt: '2Lo staff è esonerato dal pagare le tasse della città.'
+status_res_tax: 'Tassa Di Città:'
 status_res_plottax: 'Total Plot Taxes:'
 status_res_totaltax: 'Total Tax to pay:'
 #Added in 0.45
@@ -690,7 +690,7 @@ number_of_residents: '(Numero di residenti)'
 number_of_towns: '(Numero di città)'
 town_name: 'Nome della città'
 nation_name: 'Nome della nazione'
-refund_message: '&aRimborsato $%s per non rivendicare %s blocchiurbani.'
+refund_message: '&aRefunded %s for unclaiming %s townblocks.'
 msg_bankrupt_town_multiple: '&bLe seguenti citta non potevano permettersi il mantenimento e sono state sciolte: '
 msg_bankrupt_nation_multiple: '&bLe seguenti nazioni non potevano permettersi il mantenimento e sono state sciolte: '
 msg_couldnt_pay_tax: '&b%s non poteva pagare le tasse ed è stato cacciato dalla %s.'
@@ -987,10 +987,9 @@ towny_prices_price_shop: '&c &2Shop: &a%s &8|  &2Ambasciata: &a%s'
 towny_prices_taxes_plot: '&c    [Taxes]    &2Resident: &a%s &8| &2Lotti: &a%s'
 towny_prices_taxes_shop: '&c &2Shop: &a%s &8| &2Ambasciata: &a%s'
 towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
-towny_prices_plots_shop: '&c [Impostazione lotti] &2Shop: &a%s &8| &2Ambasciata: &a%s'
-towny_prices_plots_wilds: '&c                        &2Wilds: &a%s &8| &2Inn: &a%s'
-towny_prices_plots_jail: '&c                        &2Prigione: &a%s &8| &2Farm: &a%s'
-towny_prices_plots_bank: '&c                        &2Banca: &a%s'
+towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_type_single: '            &2%s: &a%s'
+towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cNazione: &6%s'
 towny_prices_nation_tax: '&c    [Taxes] &2Città: &a%s &8| &2Pace: &a%s'
 #Added in 0.96
@@ -1006,7 +1005,9 @@ msg_bankrupt: '&c(Bancarotta)'
 #Added in 0.98
 msg_del_town2: '&bLa città di %s è stata eliminata!'
 msg_ruin_town: '&bLa città di %s è caduta in rovina!'
-gui_title_towny_farmblocks: 'Elenco Dei Blocchi Farm'
+gui_title_select_plot_type: 'Select PlotType'
+gui_title_no_restrictions: 'No restrictions for this plottype.'
+gui_title_towny_allowedblocks: '%s AllowedBlocks List'
 gui_title_towny_wildsblocks: 'Lista Di Towny WildsBlock'
 gui_title_towny_itemuse: 'Elenco di utilizzo degli oggetti di Towny'
 gui_title_towny_switch: 'Lista Switch Città'
@@ -1410,3 +1411,26 @@ msg_view_on_web: 'Click to view on the web.'
 town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Neutrality Cost:'
+#Added in 0.138
+#Line 1 of the givebonus warning.
+msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+#Line 2 of the givebonus warning.
+msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchaseable with real money.'
+#Line 3 of the givebonus warning.
+msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
+#Message shown when a town invites a player to join, and that town has a nation.
+you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+#Added in 0.140
+#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
+msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
+#Message shown when a player tries to rename their town too quickly.
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+#Added in 1.141
+msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'

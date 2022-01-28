@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -1292,13 +1293,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
-				line = keys.get("disableplayertrample");
-				if (line != null)
-					try {
-						world.setDisablePlayerTrample(Boolean.parseBoolean(line));
-					} catch (Exception ignored) {
-					}
-				
 				line = keys.get("disablecreaturetrample");
 				if (line != null)
 					try {
@@ -1624,10 +1618,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					
 					line = keys.get("type");
 					if (line != null)
-						try {
-							townBlock.setType(Integer.parseInt(line));
-						} catch (Exception ignored) {
-						}
+						townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
 					
 					line = keys.get("outpost");
 					if (line != null)
@@ -2119,8 +2110,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("forceexplosions=" + world.isForceExpl());
 		// Enderman block protection
 		list.add("endermanprotect=" + world.isEndermanProtect());
-		// PlayerTrample
-		list.add("disableplayertrample=" + world.isDisablePlayerTrample());
 		// CreatureTrample
 		list.add("disablecreaturetrample=" + world.isDisableCreatureTrample());
 
@@ -2260,7 +2249,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("resident=" + townBlock.getResidentOrNull().getName());
 
 		// type
-		list.add("type=" + townBlock.getType().getId());
+		list.add("type=" + townBlock.getTypeName());
 
 		// outpost
 		list.add("outpost=" + townBlock.isOutpost());

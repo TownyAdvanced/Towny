@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Useful functions related to strings, or arrays of them.
  * 
@@ -95,6 +97,11 @@ public class StringMgmt {
 		return sb.toString();
 	}
 
+	public static String repeat(String sequence, int repetitions) {
+
+		return StringUtils.repeat(sequence, repetitions);
+	}
+	
 	public static String[] remFirstArg(String[] arr) {
 
 		return remArgs(arr, 1);
@@ -188,11 +195,11 @@ public class StringMgmt {
 		return str.replaceAll("_", " ");
 	}
 	
-	public static String capitalize (String str) {
+	public static String capitalize(String str) {
 		if (str == null || str.isEmpty())
 			return str;
 		
-		return  str.substring(0, 1).toUpperCase() + str.substring(1);
+		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
 	
 	/**

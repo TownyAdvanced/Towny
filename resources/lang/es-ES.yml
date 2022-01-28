@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.136
+version: 0.141
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu, ElMoha943, Ngzhiwei
 website: 'http://townyadvanced.github.io/'
@@ -206,6 +206,7 @@ msg_changed_public: '&cEl estado de la ciudad está: %s.'
 msg_changed_expl: '&cLas explosiones en %s estan: %s.'
 msg_changed_fire: '&cLa propagación de fuego en %s está: %s.'
 msg_changed_mobs: '&cLa aparición de monstruos en %s está: %s.'
+msg_the_plot_group: 'the Plot Group'
 msg_changed_taxpercent: '&cEl porcentaje de impuestos es ahora de %s.'
 msg_changed_open: '&cLas invitaciones a unirse estan %s.'
 msg_toggle_open_on_warning: 'Atención: Permisos de las ciudades deberían desactivarse si la ciudad es abierta. Escribe ''/town set perm off'' seguido de ''/town set perm reset''.'
@@ -269,7 +270,6 @@ msg_new_nation: '&b%s creó un nuevo país llamado %s'
 msg_new_town: '&b%s creó una nueva ciudad llamada %s'
 msg_plot_for_sale: '&b%s puso la parcela (%s) a la venta!'
 msg_plot_set_type: '&bTipo de parcela cambiado a %s'
-msg_registration: '&eBienvenido %s al servidor!'
 msg_cache_block_error: '&cNo fuiste registrado en Towny. Prueba a entrar nuevamente.'
 msg_cache_block_error_wild: '&cEn salvaje no tenes permiso para: %s'
 msg_cache_block_error_plot: '&cLos propietarios no tienen permitido %s a %s aquí'
@@ -482,7 +482,7 @@ nation_received_requests: '&bLa nación ha recibido %a/%m solicitudes de aliados
 nation_sent_invites: '&bLa nación ha enviado %a/%m invitaciones.'
 nation_sent_ally_requests: '&bLa nación ha enviado %a/%m solicitudes de aliados.'
 no_confirmations_open: '&c¡No tienes nada que confirmar!'
-successful_cancel: '&cAction cancelled!'
+successful_cancel: '&cAcción cancelada!'
 successful_deny: '&bInvitación rechazada con éxito.'
 successful_deny_request: '&bSolicitud aliada rechazada con éxito.'
 msg_ally_removed_successfully: '&bAliado eliminado correctamente.'
@@ -690,7 +690,7 @@ number_of_residents: '(Numero de residentes)'
 number_of_towns: '(Numero de ciudades'
 town_name: 'Nombre de la ciudad'
 nation_name: 'Nombre de la nacion'
-refund_message: '&aReembolsado $%s por unclaimear %s bloques de ciudad.'
+refund_message: '&aRefunded %s for unclaiming %s townblocks.'
 msg_bankrupt_town_multiple: '&bLas siguientes ciudades no pudieron pagar y fueron disueltas: '
 msg_bankrupt_nation_multiple: '&bLas siguientes naciones no pudieron pagar y fueron disueltas: '
 msg_couldnt_pay_tax: '&b%s no pudo pagar los impuestos y fue echado de %s.'
@@ -987,10 +987,9 @@ towny_prices_price_shop: '&c            &2Tienda: &a%s &8| &2Embajada: &a%s'
 towny_prices_taxes_plot: '&c    [Impuestos]    &2Residente: &a%s &8| &2Parcela: &a%s'
 towny_prices_taxes_shop: '&c            &2Tienda: &a%s &8| &2Embajada: &a%s'
 towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
-towny_prices_plots_shop: '&c    [Poner parcelas] &2Tienda: &a%s &8| &2Embajada: &a%s'
-towny_prices_plots_wilds: '&c                       &2Campo: &a%s &8| &2Taberna: &a%s'
-towny_prices_plots_jail: '&c                        &2Prision: &a%s &8| &2Granja: &a%s'
-towny_prices_plots_bank: '&c                        &2Banco: &a%s'
+towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_type_single: '            &2%s: &a%s'
+towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cNacion: &6%s'
 towny_prices_nation_tax: '&c    [Impuestos] &2Ciudad: &a%s &8| &2Paz: &a%s'
 #Added in 0.96
@@ -1006,7 +1005,9 @@ msg_bankrupt: '&c(Bancarrota)'
 #Added in 0.98
 msg_del_town2: '&bLa ciudad de %s fue borrada!'
 msg_ruin_town: '&bLa ciudad de %s cayo en ruinas!'
-gui_title_towny_farmblocks: 'Lista de Bloques de Granja'
+gui_title_select_plot_type: 'Select PlotType'
+gui_title_no_restrictions: 'No restrictions for this plottype.'
+gui_title_towny_allowedblocks: '%s AllowedBlocks List'
 gui_title_towny_wildsblocks: 'Lista de Bloques de Campo'
 gui_title_towny_itemuse: 'Lista de Uso de Items'
 gui_title_towny_switch: 'Lista de Cambios'
@@ -1410,3 +1411,26 @@ msg_view_on_web: 'Click to view on the web.'
 town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Neutrality Cost:'
+#Added in 0.138
+#Line 1 of the givebonus warning.
+msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+#Line 2 of the givebonus warning.
+msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchaseable with real money.'
+#Line 3 of the givebonus warning.
+msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
+#Message shown when a town invites a player to join, and that town has a nation.
+you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+#Added in 0.140
+#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
+msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
+#Message shown when a player tries to rename their town too quickly.
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+#Added in 1.141
+msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'

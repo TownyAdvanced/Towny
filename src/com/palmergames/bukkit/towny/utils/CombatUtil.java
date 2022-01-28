@@ -26,6 +26,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -44,55 +45,11 @@ import java.util.List;
 public class CombatUtil {
 
 	/**
-	 * Tests the attacker against defender to see if we need to cancel
-	 * the damage event due to world PvP, Plot PvP or Friendly Fire settings.
-	 * Only allow a Wolves owner to cause it damage, and residents with destroy
-	 * permissions to damage passive animals and villagers while in a town.
-	 * 
-	 * @param plugin - Reference to Towny
-	 * @param attacker - Entity attacking the Defender
-	 * @param defender - Entity defending from the Attacker
-	 * @param cause - The DamageCause behind this DamageCall.
-	 * @return true if we should cancel.
+	 * @deprecated As of 0.97.5.9, please use {@link #preventDamageCall(Entity, Entity, DamageCause)}
 	 */
+	@Deprecated
 	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender, DamageCause cause) {
-
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(defender.getWorld().getName());
-
-		// World using Towny
-		if (!world.isUsingTowny())
-			return false;
-
-		Player a = null;
-		Player b = null;
-
-		/*
-		 * Find the shooter if this is a projectile.
-		 */
-		if (attacker instanceof Projectile) {
-			
-			Projectile projectile = (Projectile) attacker;
-			Object source = projectile.getShooter();
-			
-			if (source instanceof Entity entity) {
-				attacker = entity;
-			} else if (source != null) {
-				if (CombatUtil.preventDispenserDamage(((BlockProjectileSource) source).getBlock(), defender, cause))
-					return true;
-			}
-
-		}
-
-		if (attacker instanceof Player player)
-			a = player;
-		if (defender instanceof Player player)
-			b = player;
-
-		// Allow players to injure themselves
-		if (a == b && a != null && b != null)
-			return false;
-
-		return preventDamageCall(plugin, world, attacker, defender, a, b, cause);
+		return preventDamageCall(attacker, defender, cause);
 	}
 
 	/**
@@ -101,7 +58,57 @@ public class CombatUtil {
 	 * Only allow a Wolves owner to cause it damage, and residents with destroy
 	 * permissions to damage passive animals and villagers while in a town.
 	 * 
-	 * @param plugin - Reference to Towny
+	 * @param attacker - Entity attacking the Defender
+	 * @param defender - Entity defending from the Attacker
+	 * @param cause - The DamageCause behind this DamageCall.
+	 * @return true if we should cancel.
+	 */
+	public static boolean preventDamageCall(Entity attacker, Entity defender, DamageCause cause) {
+
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(defender.getWorld().getName());
+
+		// World using Towny
+		if (world == null || !world.isUsingTowny())
+			return false;
+
+		Player a = null;
+		Player b = null;
+		
+		Entity directSource = attacker;
+
+		/*
+		 * Find the shooter if this is a projectile.
+		 */
+		if (attacker instanceof Projectile projectile) {
+			
+			Object source = projectile.getShooter();
+			
+			if (source instanceof Entity entity)
+				directSource = entity;
+			else if (source instanceof BlockProjectileSource blockProjectileSource) {
+				if (CombatUtil.preventDispenserDamage(blockProjectileSource.getBlock(), defender, cause))
+					return true;
+			}
+		}
+
+		if (directSource instanceof Player player)
+			a = player;
+		if (defender instanceof Player player)
+			b = player;
+
+		// Allow players to injure themselves
+		if (a == b && a != null && b != null)
+			return false;
+
+		return preventDamageCall(world, attacker, defender, a, b, cause);
+	}
+
+	/**
+	 * Tests the attacker against defender to see if we need to cancel
+	 * the damage event due to world PvP, Plot PvP or Friendly Fire settings.
+	 * Only allow a Wolves owner to cause it damage, and residents with destroy
+	 * permissions to damage passive animals and villagers while in a town.
+	 * 
 	 * @param world - World in which DamageCall was issued
 	 * @param attackingEntity - Entity attacking
 	 * @param defendingEntity - Entity defending
@@ -110,8 +117,16 @@ public class CombatUtil {
 	 * @param cause - The DamageCause behind this DamageCall.
 	 * @return true if we should cancel.
 	 */
-	private static boolean preventDamageCall(Towny plugin, TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer, DamageCause cause) {
+	private static boolean preventDamageCall(TownyWorld world, Entity attackingEntity, Entity defendingEntity, Player attackingPlayer, Player defendingPlayer, DamageCause cause) {
 
+		Projectile projectileAttacker = null;
+		if (attackingEntity instanceof Projectile projectile) {
+			projectileAttacker = projectile;
+			
+			if (projectile.getShooter() instanceof Entity entity)
+				attackingEntity = entity;
+		}
+		
 		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation());
 		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attackingEntity.getLocation());
 		/*
@@ -163,8 +178,13 @@ public class CombatUtil {
 					/*
 					 * Protect tamed dogs in town land which are not owned by the attacking player.
 					 */
-					if (defendingEntity instanceof Wolf && isNotTheAttackersPetDog((Wolf) defendingEntity, attackingPlayer))
-						return !defenderTB.getPermissions().pvp;
+					if (defendingEntity instanceof Wolf wolf) {
+						if (!isOwner(wolf, attackingPlayer)) {
+							if (EntityTypeUtil.isProtectedEntity(defendingEntity))
+								return !(defenderTB.getPermissions().pvp || TownyActionEventExecutor.canDestroy(attackingPlayer, wolf.getLocation(), Material.STONE));
+						} else
+							return false;
+					}
 					
 					/*
 					 * Farm Animals - based on whether this is allowed using the PlayerCache and then a cancellable event.
@@ -175,7 +195,7 @@ public class CombatUtil {
 					/*
 					 * Config's protected entities: Animals,WaterMob,NPC,Snowman,ArmorStand,Villager
 					 */
-					if (EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) 						
+					if (EntityTypeUtil.isProtectedEntity(defendingEntity)) 						
 						return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT);
 				}
 				
@@ -183,9 +203,7 @@ public class CombatUtil {
 				 * Protect specific entity interactions (faked with Materials).
 				 * Requires destroy permissions in either the Wilderness or in Town-Claimed land.
 				 */
-				Material material = null;
-
-				switch (defendingEntity.getType()) {
+				Material material = switch (defendingEntity.getType()) {
 					/*
 					 * Below are the entities we specifically want to protect with this test.
 					 * Any other entity will mean that block is still null and will not be
@@ -201,12 +219,10 @@ public class CombatUtil {
 					case MINECART_FURNACE:
 					case MINECART_COMMAND:
 					case MINECART_HOPPER:
-						material = EntityTypeUtil.parseEntityToMaterial(defendingEntity.getType());
-						break;
-					
+						yield EntityTypeUtil.parseEntityToMaterial(defendingEntity.getType());
 					default:
-						break;
-				}
+						yield null;
+				};
 
 				if (material != null) {
 					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
@@ -259,8 +275,8 @@ public class CombatUtil {
 			     * Prevents projectiles fired by non-players harming non-player entities.
 			     * Could be a monster or it could be a dispenser.
 			     */
-				if (attackingEntity instanceof Projectile) {
-					return true;	
+				if (projectileAttacker != null && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
+					return true;
 				}
 
 				/*
@@ -675,14 +691,14 @@ public class CombatUtil {
 	 * 
 	 * @param wolf Wolf being attacked by a player.
 	 * @param attackingPlayer Player attacking the wolf.
-	 * @return true when a dog who is not owned by the attacker is injured inside of a town's plot.
+	 * @return true when the attackingPlayer is the owner
 	 */
-	private static boolean isNotTheAttackersPetDog(Wolf wolf, Player attackingPlayer) {
-		return wolf.isTamed() && !wolf.getOwner().equals(attackingPlayer);
+	private static boolean isOwner(Wolf wolf, Player attackingPlayer) {
+		return wolf.getOwner() instanceof HumanEntity owner && owner.getUniqueId().equals(attackingPlayer.getUniqueId());
 	}
 	
 	private static boolean isATamedWolfWithAOnlinePlayer(Wolf wolf) {
-		return wolf.isTamed() && wolf.getOwner().getName() != null && BukkitTools.isOnline(wolf.getOwner().getName());
+		return wolf.getOwner() instanceof HumanEntity owner && Bukkit.getPlayer(owner.getUniqueId()) != null;
 	}
 	
 	public static boolean preventDispenserDamage(Block dispenser, Entity entity, DamageCause cause) {

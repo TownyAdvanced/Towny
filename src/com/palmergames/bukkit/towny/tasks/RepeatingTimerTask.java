@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import java.util.ArrayList;
 
 public class RepeatingTimerTask extends TownyTimerTask {
 
@@ -30,11 +29,6 @@ public class RepeatingTimerTask extends TownyTimerTask {
 		  The following actions should be performed every second.
 		 */
 
-		// Check and see if we have any room in the PlotChunks regeneration, and more in the queue. 
-		if (TownyRegenAPI.getPlotChunks().size() < 20 && TownyRegenAPI.regenQueueHasAvailable()) {
-			getWorldCoordFromQueueForRegeneration();
-		}
-
 		// Take a snapshot of the next townBlock and save.
 		if (TownyRegenAPI.hasWorldCoords()) {
 			makeNextPlotSnapshot();
@@ -56,25 +50,6 @@ public class RepeatingTimerTask extends TownyTimerTask {
 				TownyRegenAPI.finishPlotBlockData(plotBlockData);
 
 		timerCounter = 0L;
-	}
-
-	private void getWorldCoordFromQueueForRegeneration() {
-		for (WorldCoord wc : new ArrayList<>(TownyRegenAPI.getRegenQueueList())) {
-			// We have enough plot chunks regenerating, break out of the loop.
-			if (TownyRegenAPI.getPlotChunks().size() >= 20)
-				break;
-			// We have already got this worldcoord regenerating.
-			if (TownyRegenAPI.hasActiveRegeneration(wc))
-				continue;
-			// This worldCoord isn't actively regenerating, start the regeneration.
-			PlotBlockData plotData = TownyRegenAPI.getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorldOrNull()));  
-			if (plotData != null) {
-				TownyRegenAPI.addToActiveRegeneration(plotData);
-				TownyMessaging.sendDebugMsg("Revert on unclaim beginning for " + plotData.getWorldName() + " " + plotData.getX() +"," + plotData.getZ());
-			} else {
-				TownyRegenAPI.removeFromRegenQueueList(wc);
-			}
-		}
 	}
 
 	private void makeNextPlotSnapshot() {

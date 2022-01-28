@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.event.time.NewShortTimeEvent;
+import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 
 /**
  * This class represents the short timer task
@@ -21,6 +22,11 @@ public class ShortTimerTask extends TownyTimerTask {
 
 	@Override
 	public void run() {
+		
+		// Check and see if we have any room in the PlotChunks regeneration, and more in the queue.
+		if (TownyRegenAPI.getPlotChunks().size() < 20 && TownyRegenAPI.regenQueueHasAvailable()) {
+			TownyRegenAPI.getWorldCoordFromQueueForRegeneration();
+		}
 		
 		/*
 		 * Fire an event other plugins can use.

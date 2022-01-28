@@ -37,6 +37,8 @@ public class NameValidation {
 	public static String checkAndFilterName(String name) throws InvalidNameException {
 
 		String out = filterName(name);
+		if (out.isEmpty())
+			throw new InvalidNameException(name + " is an invalid name.");
 
 		if (isBlacklistName(out))
 			throw new InvalidNameException(out + " is an invalid name.");

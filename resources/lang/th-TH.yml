@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.136
+version: 0.141
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -206,6 +206,7 @@ msg_changed_public: '&cStatus สาธารณะของ Town คือ %s.'
 msg_changed_expl: '&cการระเบิดใน %s คือ %s.'
 msg_changed_fire: '&cไฟลุกลามใน %s คือ %s.'
 msg_changed_mobs: '&cมอนสเตอร์เกิดใน %s คือ %s.'
+msg_the_plot_group: 'the Plot Group'
 msg_changed_taxpercent: '&cภาษีตามเปอร์เซ็นต์ตอนนี้คือ %s'
 msg_changed_open: '&cการเข้าร่วมแบบไม่เชิญตอนนี้คือ %s'
 msg_toggle_open_on_warning: 'คำเตือน: ควรปิด Townperms หากเมืองเปิดอยู่ พิมพ์ /town set perm off ตามด้วย /town set perm reset'
@@ -269,7 +270,6 @@ msg_new_nation: '&b%s สร้าง Nation ใหม่ชื่อ %s'
 msg_new_town: '&b%s สร้าง Town ใหม่ชื่อ %s'
 msg_plot_for_sale: '&b%s ลง Plot (%s) ขึ้นเพื่อขาย!'
 msg_plot_set_type: '&bตั้งค่าประเภท Plot เป็น %s'
-msg_registration: '&eยินดีต้อนรับ %s เข้าสู่เซิร์ฟเวอร์!'
 msg_cache_block_error: '&cคุณยังไม่ได้ลงทะเบียนกับ Towny. ลองใหม่.'
 msg_cache_block_error_wild: '&cไม่อนุญาตให้ %s อยู่ในป่า. '
 msg_cache_block_error_plot: '&cOwner ไม่อนุญาตให้ %s มายัง %s ที่นี่'
@@ -629,7 +629,7 @@ msg_err_nation_spawn_forbidden_war: '&cNation spawn travel อนุญาตเ
 msg_err_nation_spawn_forbidden_peace: '&cNation spawn travel ต้องห้ามในระหว่างสงคราม.'
 msg_err_nation_spawn_ally_forbidden: '&cNation วาปไปยัง Nation พันธมิตรเป็นสิ่งต้องห้าม.'
 msg_err_nation_spawn_nation_forbidden_war: '&cNation spawn สามารถเดินทางไปยัง Nation พันธมิตรอื่น ๆ ได้ในช่วง War เท่านั้น'
-msg_err_nation_spawn_nation_forbidden_peace: '&Nation วาปไปยัง Nation พันธมิตรอื่น ๆ ถูกห้ามในระหว่าง War.'
+msg_err_nation_spawn_nation_forbidden_peace: '&cNation วาปไปยัง Nation พันธมิตรอื่น ๆ ถูกห้ามในระหว่าง War.'
 msg_err_public_nation_spawn_forbidden: '&cไม่อนุญาตให้วาปในที่สาธารณะไปยังประเทศอื่น'
 msg_err_public_nation_spawn_forbidden_war: '&cการวาป ในที่สาธารณะสามารถวาปไปยัง Nation อื่นได้ในช่วง War เท่านั้น.'
 msg_err_public_nation_spawn_forbidden_peace: '&cการวาป ในที่สาธารณะ ห้ามเดินทางไปยัง Nationอื่นในระหว่าง War.'
@@ -690,7 +690,7 @@ number_of_residents: '(Number of Residents)'
 number_of_towns: '(Number of Towns)'
 town_name: 'ชื่อ Town'
 nation_name: 'ชื่อ Nation'
-refund_message: '&aคืนเงิน $%s สำหรับการยกเลิกการ Claim %s townblocks.'
+refund_message: '&aRefunded %s for unclaiming %s townblocks.'
 msg_bankrupt_town_multiple: '&bTown ต่อไปนี้ไม่สามารถจ่ายค่าบำรุงรักษาและจะถูกยุบ: '
 msg_bankrupt_nation_multiple: '&bNation ต่อไปนี้ไม่สามารถจ่ายค่าบำรุงรักษาและจะถูกยุบ: '
 msg_couldnt_pay_tax: '&b%s ไม่สามารถจ่ายภาษีได้และถูกไล่ออกจาก %s'
@@ -987,10 +987,9 @@ towny_prices_price_shop: '&c            &2ร้านค้า: &a%s &8| &2ส�
 towny_prices_taxes_plot: '&c    [ภาษี]    &2ผู้อยู่อาศัย: &a%s &8| &2พล็อต: &a%s'
 towny_prices_taxes_shop: '&c            &2ร้านค้า: &a%s &8| &2สถานทูต: &a%s'
 towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
-towny_prices_plots_shop: '&c    [ตั้งค่าพล็อต] &2ร้านค่า: &a%s &8| &2สถานทูต: &a%s'
-towny_prices_plots_wilds: '&c                       &2ผืนป่า: &a%s &8| &2โรงแรม: &a%s'
-towny_prices_plots_jail: '&c                        &2คุก: &a%s &8| &2ฟาร์ม: &a%s'
-towny_prices_plots_bank: '&c                        &2ธนาคาร: &a%s'
+towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_type_single: '            &2%s: &a%s'
+towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cประเทศ: &6%s'
 towny_prices_nation_tax: '&c    [ภาษี] &2ทาวน์: &a%s &8| &2สันติภาพ: &a%s'
 #Added in 0.96
@@ -1006,7 +1005,9 @@ msg_bankrupt: '&c(Bankrupt)'
 #Added in 0.98
 msg_del_town2: '&bเมือง %s ถูกลบไปแล้ว!'
 msg_ruin_town: '&bเมือง %s พังทลายลง!'
-gui_title_towny_farmblocks: 'รายการ Towny FarmBlocks'
+gui_title_select_plot_type: 'Select PlotType'
+gui_title_no_restrictions: 'No restrictions for this plottype.'
+gui_title_towny_allowedblocks: '%s AllowedBlocks List'
 gui_title_towny_wildsblocks: 'รายการ Towny WildsBlocks'
 gui_title_towny_itemuse: 'รายการ Towny ItemUse'
 gui_title_towny_switch: 'รายการ Towny Switch'
@@ -1410,3 +1411,26 @@ msg_view_on_web: 'Click to view on the web.'
 town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Neutrality Cost:'
+#Added in 0.138
+#Line 1 of the givebonus warning.
+msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+#Line 2 of the givebonus warning.
+msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchaseable with real money.'
+#Line 3 of the givebonus warning.
+msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
+#Message shown when a town invites a player to join, and that town has a nation.
+you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+#Added in 0.140
+#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
+msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
+#Message shown when a player tries to rename their town too quickly.
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+#Added in 1.141
+msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'

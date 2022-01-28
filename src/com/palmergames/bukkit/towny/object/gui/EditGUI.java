@@ -39,7 +39,7 @@ public class EditGUI extends PermissionGUI {
 			getTownBlock().save();
 		}
 
-		Towny.getPlugin().deleteCache(selectedResident.getName());
+		Towny.getPlugin().deleteCache(selectedResident);
 
 		exitScreen();
 	}
@@ -56,7 +56,7 @@ public class EditGUI extends PermissionGUI {
 			getTownBlock().save();
 		}
 		
-		Towny.getPlugin().deleteCache(selectedResident.getName());
+		Towny.getPlugin().deleteCache(selectedResident);
 
 		exitScreen();
 	}

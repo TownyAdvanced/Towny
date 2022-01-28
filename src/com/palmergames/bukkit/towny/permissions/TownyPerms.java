@@ -46,7 +46,7 @@ public class TownyPerms {
 	private static HashMap<String, List<String>> groupPermsMap = new HashMap<>();
 	private static CommentedConfiguration perms;
 	private static Towny plugin;
-	private static List<String> vitalGroups = new ArrayList<>(Arrays.asList("nomad","towns.default","towns.mayor","nations.default","nations.king"));
+	private static List<String> vitalGroups = new ArrayList<>(Arrays.asList("nomad","towns.default","towns.mayor","towns.ranks","nations.default","nations.king","nations.ranks"));
 	
 	public static void initialize(Towny plugin) {
 		TownyPerms.plugin = plugin;
@@ -288,7 +288,7 @@ public class TownyPerms {
 				
 			//Add town ranks here
 			for (String rank: resident.getTownRanks()) {
-				permList.addAll(getTownRank(rank));
+				permList.addAll(getTownRankPermissions(rank));
 			}
 			
 			//Check for nation membership
@@ -299,7 +299,7 @@ public class TownyPerms {
 							
 				//Add nation ranks here
 				for (String rank: resident.getNationRanks()) {
-					permList.addAll(getNationRank(rank));
+					permList.addAll(getNationRankPermissions(rank));
 				}
 			}
 		} else {
@@ -430,8 +430,20 @@ public class TownyPerms {
 	 * 
 	 * @param rank - Rank to check permissions for
 	 * @return a List of permissions
+	 * @deprecated since 0.97.5.5 use {@link #getTownRankPermissions(String)}
 	 */
+	@Deprecated
 	public static List<String> getTownRank(String rank) {
+		return getTownRankPermissions(rank);
+	}
+	
+	/**
+	 * Get a specific ranks permissions
+	 * 
+	 * @param rank - Rank to check permissions for
+	 * @return a List of permissions
+	 */
+	public static List<String> getTownRankPermissions(String rank) {
 
 		List<String> permsList = getList("towns.ranks." + rank);//.toLowerCase());
 		return (permsList == null)? new ArrayList<String>() : permsList;
@@ -478,8 +490,20 @@ public class TownyPerms {
 	 * 
 	 * @param rank - Rank to get permissions of
 	 * @return a List of Permissions
+	 * @deprecated since 0.97.5.5 use {@link #getNationRankPermissions(String)}
 	 */
+	@Deprecated
 	public static List<String> getNationRank(String rank) {
+		return getNationRankPermissions(rank);
+	}
+	
+	/**
+	 * Get a specific ranks permissions
+	 * 
+	 * @param rank - Rank to get permissions of
+	 * @return a List of Permissions
+	 */
+	public static List<String> getNationRankPermissions(String rank) {
 
 		List<String> permsList = getList("nations.ranks." + rank);//.toLowerCase());
 		return (permsList == null)? new ArrayList<String>() : permsList;
@@ -673,15 +697,22 @@ public class TownyPerms {
 	private static void buildComments() {
 		perms.addComment("nomad",
 				"#############################################################################################",
-				"# This file contains custom permission sets which will be assigned to your players",
-				"# depending on their current status.",
-				"#",
-				"# This is all managed by towny and pushed directly to CraftBukkits SuperPerms.",
-				"# These will be in addition to any you manually assign in your specific permission plugin.",
-				"#",
-				"# You may assign any Permission nodes here, including those from other plugins.",
-				"# You may also create any custom ranks you require.",
-				"# You may change the names of any of the ranks except: nomad, default, mayor, king.",
+				"# This file contains custom permission sets which will be assigned to your players          #",
+				"# depending on their current status.                                                        #",
+				"#                                                                                           #",
+				"# This is all managed by towny and pushed directly to CraftBukkits SuperPerms.              #",
+				"# These will be in addition to any you manually assign in your specific permission plugin.  #",
+				"#                                                                                           #",
+				"# You may assign any Permission nodes here, including those from other plugins.             #",
+				"# You may also create any custom ranks you require.                                         #",
+				"# You may change the names of any of the ranks except: nomad, default, mayor, king, ranks.  #",
+				"#                                                                                           #",
+				"# If you want to, you can negate permissions nodes from nodes by doing the following:       #",
+				"# Ex:                                                                                       #",
+				"#    - towny.command.plot.*                                                                 #",
+				"#    - -towny.command.plot.set.jail                                                         #",
+				"# In this example the user is given full rights to all of the /plot command nodes,          #",
+				"# but has had their ability to set a plot to a Jail plot type.                              #",
 				"#############################################################################################",
 				"",
 				"",

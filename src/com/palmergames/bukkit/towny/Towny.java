@@ -37,6 +37,7 @@ import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -115,7 +116,7 @@ public class Towny extends JavaPlugin {
 
 	private TownyUniverse townyUniverse;
 
-	private final Map<String, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
+	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
 
 	private Essentials essentials = null;
 	private boolean citizens2 = false;
@@ -212,7 +213,7 @@ public class Towny extends JavaPlugin {
 			// Re login anyone online. (In case of plugin reloading)
 			for (Player player : BukkitTools.getOnlinePlayers())
 				if (player != null) {
-					
+
 					// Test and kick any players with invalid names.
 					if (player.getName().contains(" ")) {
 						player.kickPlayer("Invalid name!");
@@ -230,6 +231,9 @@ public class Towny extends JavaPlugin {
 	public void loadFoundation(boolean reload) {
 		// Before anything can continue we must load the databaseconfig, config 
 		// file, language and permissions, setting the foundation for Towny.
+		
+		// Handle any legacy config settings.
+		handleLegacyConfigs();
 
 		// Load the database config first, so any conversion happens before the config is loaded.
 		loadDatabaseConfig(reload);
@@ -239,6 +243,9 @@ public class Towny extends JavaPlugin {
 		loadLocalization(reload);
 		// Then load permissions
 		loadPermissions(reload);
+
+		// Initialize the type handler after the config is loaded and before the database is.
+		TownBlockTypeHandler.initialize();
 
 		// Initialize the special log4j hook logger.
 		TownyLogger.getInstance();
@@ -254,7 +261,7 @@ public class Towny extends JavaPlugin {
 
 		// Try migrating the config and world files if the version has changed.
 		if (!TownySettings.getLastRunVersion().equals(getVersion())) {
-			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json");
+			ConfigMigrator migrator = new ConfigMigrator(TownySettings.getConfig(), "config-migration.json", false);
 			migrator.migrate();
 		}
 
@@ -332,6 +339,27 @@ public class Towny extends JavaPlugin {
 		}
 	}
 
+	/**
+	 * Handle any legacy config settings before we load the config and database.
+	 */
+	private void handleLegacyConfigs() {
+		Path configPath = Towny.getPlugin().getDataFolder().toPath().resolve("settings").resolve("config.yml");
+		if (!Files.exists(configPath))
+			return;
+
+		CommentedConfiguration config = new CommentedConfiguration(configPath);
+		if (!config.load() || config.getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), "0.0.0.0").equals(getVersion()))
+			return;
+
+		// Old configs stored various TownBlock settings throughout the config.
+		// This will migrate the old settings into the TownBlockType config section.
+		// Since 0.97.5.4.
+		TownBlockTypeHandler.Migrator.checkForLegacyOptions(config);
+		
+		ConfigMigrator earlyMigrator = new ConfigMigrator(config, "config-migration.json", true);
+		earlyMigrator.migrate();
+	}
+	
 	/**
 	 * Converts the older config.yml's database settings into the database.yml file.
 	 * @return true if successful
@@ -427,17 +455,9 @@ public class Towny extends JavaPlugin {
 		plugin.getLogger().info("Version: " + version + " - Plugin Disabled");
 		Bukkit.getLogger().info("=============================================================");
 	}
-
-	public void checkCitizens() {
-		/*
-		 * Test for Citizens2 so we can avoid removing their NPC's
-		 */
-		citizens2 = getServer().getPluginManager().isPluginEnabled("Citizens");
-	}
 	
 	private void checkPlugins() {
 		
-		checkCitizens();
 		plugin.getLogger().info("Searching for third-party plugins...");
 		String ecowarn = "";
 		List<String> addons = new ArrayList<>();
@@ -528,6 +548,11 @@ public class Towny extends JavaPlugin {
 		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
 			TNCRegister.initialize();
 		}
+		
+		/*
+		 * Test for Citizens2 so we can avoid removing their NPC's
+		 */
+		setCitizens2(getServer().getPluginManager().isPluginEnabled("Citizens"));
 
 		/*
 		 * Output discovered plugins and warnings.
@@ -734,6 +759,11 @@ public class Towny extends JavaPlugin {
 		return citizens2;
 	}
 
+	public void setCitizens2(boolean b) {
+
+		citizens2 = b;
+	}
+
 	/**
 	 * @return Essentials object
 	 * @throws TownyException - If Towny can't find Essentials.
@@ -757,14 +787,14 @@ public class Towny extends JavaPlugin {
 
 	public boolean hasCache(Player player) {
 
-		return playerCache.containsKey(player.getName().toLowerCase());
+		return playerCache.containsKey(player.getUniqueId());
 	}
 
 	public PlayerCache newCache(Player player) {
 
 		try {
 			PlayerCache cache = new PlayerCache(TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()), player);
-			playerCache.put(player.getName().toLowerCase(), cache);
+			playerCache.put(player.getUniqueId(), cache);
 			return cache;
 		} catch (NotRegisteredException e) {
 			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world (" + player.getWorld().getName() + ".");
@@ -773,14 +803,20 @@ public class Towny extends JavaPlugin {
 
 	}
 
-	public void deleteCache(Player player) {
-
-		deleteCache(player.getName());
+	public void deleteCache(Resident resident) {
+		if (!resident.isOnline())
+			return;
+		deleteCache(resident.getPlayer());
 	}
 
-	public void deleteCache(String name) {
+	public void deleteCache(Player player) {
 
-		playerCache.remove(name.toLowerCase());
+		deleteCache(player.getUniqueId());
+	}
+
+	public void deleteCache(UUID uuid) {
+
+		playerCache.remove(uuid);
 	}
 
 	/**
@@ -792,7 +828,7 @@ public class Towny extends JavaPlugin {
 	 */
 	public PlayerCache getCache(Player player) {
 
-		PlayerCache cache = playerCache.get(player.getName().toLowerCase());
+		PlayerCache cache = playerCache.get(player.getUniqueId());
 		
 		if (cache == null) {
 			cache = newCache(player);

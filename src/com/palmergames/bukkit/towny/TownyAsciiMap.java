@@ -133,44 +133,56 @@ public class TownyAsciiMap {
 					else
 						townyMap[y][x] = townyMap[y][x].content(townblock.getType().getAsciiMapKey());
 					
+					TextComponent residentComponent = Component.empty();
 					TextComponent forSaleComponent = Component.empty();
 					TextComponent claimedAtComponent = Component.empty();
 					TextComponent groupComponent = Component.empty();
 					
 					if (TownyEconomyHandler.isActive()) {
-						double cost;
-						if (townblock.hasPlotObjectGroup())
-							cost = townblock.getPlotObjectGroup().getPrice();
-						else 
-							cost = townblock.getPlotPrice();
-						
+						double cost = townblock.hasPlotObjectGroup() 
+							? townblock.getPlotObjectGroup().getPrice()
+							: townblock.getPlotPrice();
 						if (cost > -1)
 							forSaleComponent = Component.text(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(cost)).replaceAll("[\\[\\]]", "") + " " + Translatable.of("msg_click_purchase").forLocale(player)).color(NamedTextColor.YELLOW).append(Component.newline());
 					}
 					
 					if (townblock.getClaimedAt() > 0)
-						claimedAtComponent = Component.text(Translatable.of("msg_plot_perm_claimed_at", TownyFormatter.registeredFormat.format(townblock.getClaimedAt())).forLocale(player)).append(Component.newline());
-
-					if (townblock.hasPlotObjectGroup()) {
+						claimedAtComponent = Component.text(Translatable.of("msg_plot_perm_claimed_at").forLocale(player)).color(NamedTextColor.DARK_GREEN)
+							.append(Component.space())
+							.append(Component.text(TownyFormatter.registeredFormat.format(townblock.getClaimedAt())).color(NamedTextColor.GREEN))
+							.append(Component.newline());
+					
+					if (townblock.hasPlotObjectGroup())
 						groupComponent = Component.text(Translatable.of("map_hover_plot_group").forLocale(player)).color(NamedTextColor.DARK_GREEN)
 							.append(Component.text(townblock.getPlotObjectGroup().getFormattedName()).color(NamedTextColor.GREEN)
 							.append(Component.text(Translatable.of("map_hover_plot_group_size").forLocale(player)).color(NamedTextColor.DARK_GREEN)
 							.append(Component.text(Translatable.of("map_hover_plots", townblock.getPlotObjectGroup().getTownBlocks().size()).forLocale(player)).color(NamedTextColor.GREEN)
 							.append(Component.newline()))));
-					}
-
 					
-					TextComponent hoverComponent = Component.text(Translatable.of("status_town").forLocale(player) + town.getName() + (townblock.hasResident() ? " (" + townblock.getResidentOrNull().getName() + ")" : "")).color(NamedTextColor.GREEN).append(Component.text(" (" + tby + ", " + tbx + ")").color(NamedTextColor.WHITE)).append(Component.newline())
-						.append(Component.text(Translatable.of("status_plot_type").forLocale(player)).color(NamedTextColor.DARK_GREEN).append(Component.text(townblock.getType().getName()).color(NamedTextColor.GREEN).append(Component.newline())
+					if (townblock.hasResident())
+						residentComponent = Component.text(" (" + townblock.getResidentOrNull().getName() + ")");
+					
+					TextComponent townComponent = Component.text(Translatable.of("status_town").forLocale(player)).color(NamedTextColor.DARK_GREEN)
+						.append(Component.space())
+						.append(Component.text(town.getName()).color(NamedTextColor.GREEN))
+						.append(residentComponent.color(NamedTextColor.GREEN))
+						.append(Component.text(" (" + tby + ", " + tbx + ")").color(NamedTextColor.WHITE)).append(Component.newline()); 
+					
+					TextComponent plotTypeComponent = Component.text(Translatable.of("status_plot_type").forLocale(player)).color(NamedTextColor.DARK_GREEN)
+						.append(Component.space())
+						.append(Component.text(townblock.getType().getName()).color(NamedTextColor.GREEN).append(Component.newline()));
+					
+					TextComponent hoverComponent = townComponent
+						.append(plotTypeComponent)
 						.append(groupComponent)
 						.append(forSaleComponent)
 						.append(claimedAtComponent)
-						.append(Component.text(Translatable.of("towny_map_detailed_information").forLocale(player)).color(NamedTextColor.DARK_GREEN))));
+						.append(Component.text(Translatable.of("towny_map_detailed_information").forLocale(player)).color(NamedTextColor.DARK_GREEN));
 					
-					ClickEvent clickEvent = ClickEvent.runCommand("/towny:plot info " + tby + " " + tbx);
-					if (!forSaleComponent.equals(Component.empty()))
-						clickEvent = ClickEvent.runCommand("/towny:plot claim " + world.getName() + " x" + tby + " z" + tbx);
-
+					ClickEvent clickEvent = forSaleComponent.equals(Component.empty()) 
+						? ClickEvent.runCommand("/towny:plot info " + tby + " " + tbx)
+						: ClickEvent.runCommand("/towny:plot claim " + world.getName() + " x" + tby + " z" + tbx);
+					
 					townyMap[y][x] = townyMap[y][x].hoverEvent(HoverEvent.showText(hoverComponent)).clickEvent(clickEvent);
 				} catch (TownyException e) {
 					// Unregistered town block (Wilderness)

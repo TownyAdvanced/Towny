@@ -14,17 +14,14 @@ import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
-
-import net.citizensnpcs.api.CitizensAPI;
+import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -287,7 +284,7 @@ public class PlayerCacheUtil {
 		
 		if (resident == null) {
 			// Check if entity is a Citizens NPC
-			if (plugin.isCitizens2() && CitizensAPI.getNPCRegistry().isNPC(player))
+			if (BukkitTools.checkCitizens(player))
 				return TownBlockStatus.NOT_REGISTERED;
  
 			// Retry getting a resident with the ability to get a fake player resident.
@@ -495,8 +492,8 @@ public class PlayerCacheUtil {
 		 */
 		if (status == TownBlockStatus.PLOT_FRIEND) {
 			
-			// Plot allows Friends perms and we aren't stopped by Wilds or Farm Plot overrides.
-			if (townBlock.getPermissions().getResidentPerm(action) && testSpecialPlots(pos.getTownyWorldOrNull(), townBlock.getType(), material, action))
+			// Plot allows Friends perms and we aren't stopped by a TownBlockType overriding the allowed material and action.
+			if (townBlock.getPermissions().getResidentPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
 			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_friends"), Translatable.of(action.toString())).forLocale(player));
@@ -505,8 +502,8 @@ public class PlayerCacheUtil {
 		
 		if (status == TownBlockStatus.PLOT_TOWN) {
 
-			// Plot allows Town perms and we aren't stopped by Wilds or Farm Plot overrides.
-			if (townBlock.getPermissions().getNationPerm(action) && testSpecialPlots(pos.getTownyWorldOrNull(), townBlock.getType(), material, action))
+			// Plot allows Town perms and we aren't stopped by a TownBlockType overriding the allowed material and action.
+			if (townBlock.getPermissions().getNationPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 			
 			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_plot", Translatable.of("msg_cache_block_error_plot_town_members"), Translatable.of(action.toString())).forLocale(player));
@@ -518,8 +515,8 @@ public class PlayerCacheUtil {
 		 */
 		if (status == TownBlockStatus.TOWN_RESIDENT) {
 			
-			// Plot allows Resident perms and we aren't stopped by Wilds or Farm Plot overrides.
-			if (townBlock.getPermissions().getResidentPerm(action) && testSpecialPlots(pos.getTownyWorldOrNull(), townBlock.getType(), material, action))
+			// Plot allows Resident perms and we aren't stopped by a TownBlockType overriding the allowed material and action.
+			if (townBlock.getPermissions().getResidentPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
 			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_resident", Translatable.of(action.toString())).forLocale(player));
@@ -528,8 +525,8 @@ public class PlayerCacheUtil {
 		
 		if (status == TownBlockStatus.TOWN_NATION) {
 
-			// Plot allows Nation perms and we aren't stopped by Wilds or Farm Plot overrides.
-			if (townBlock.getPermissions().getNationPerm(action) && testSpecialPlots(pos.getTownyWorldOrNull(), townBlock.getType(), material, action))
+			// Plot allows Nation perms and we aren't stopped by a TownBlockType overriding the allowed material and action.
+			if (townBlock.getPermissions().getNationPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
 			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_nation", Translatable.of(action.toString())).forLocale(player));
@@ -541,8 +538,8 @@ public class PlayerCacheUtil {
 		 */
 		if (status == TownBlockStatus.PLOT_ALLY || status == TownBlockStatus.TOWN_ALLY) {
 
-			// Plot allows Ally perms and we aren't stopped by Wilds or Farm Plot overrides.
-			if (townBlock.getPermissions().getAllyPerm(action) && testSpecialPlots(pos.getTownyWorldOrNull(), townBlock.getType(), material, action))
+			// Plot allows Ally perms and we aren't stopped by a TownBlockType overriding things.
+			if (townBlock.getPermissions().getAllyPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
 			// Choose which error message will be shown.
@@ -558,8 +555,8 @@ public class PlayerCacheUtil {
 		 */
 		if (status == TownBlockStatus.OUTSIDER || status == TownBlockStatus.ENEMY) {
 			
-			// Plot allows Outsider perms and we aren't stopped by Wilds or Farm Plot overrides.
-			if (townBlock.getPermissions().getOutsiderPerm(action) && testSpecialPlots(pos.getTownyWorldOrNull(), townBlock.getType(), material, action))
+			// Plot allows Outsider perms and we aren't stopped by a TownBlockType overriding the allowed material and action.
+			if (townBlock.getPermissions().getOutsiderPerm(action) && isAllowedMaterial(townBlock, material, action))
 				return true;
 
 			// Choose which error message will be shown.
@@ -569,29 +566,27 @@ public class PlayerCacheUtil {
 				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_town_outsider", Translatable.of(action.toString())).forLocale(player));
 			return false;
 		}
+		
+		/*
+		 * Towny doesn't set a WARZONE status itself, some other plugin has used the API. 
+		 */
+		if (status == TownBlockStatus.WARZONE)
+			return true;
 
 		TownyMessaging.sendErrorMsg(player, "Error updating " + action.toString() + " permission.");
 		return false;
 	}
 
-	/**
-	 * Wilds and Farm plots have special overrides over the normal plot permissions, 
-	 * limiting interaction to only specific blocks.
-	 *  
-	 * @param world TownyWorld where the action is occuring.
-	 * @param type TownBlockType of the TownBlock.
+	/**  
+	 * @param townBlock The townblock.
 	 * @param material Material being actioned upon.
 	 * @param action ActionType being done on the material.
-	 * @return False if the player is in a Wilds or Farm plot and trying to interact outside the allowed materials & actions.
+	 * @return True if this material is allowed in this townblock.
 	 */
-	private static boolean testSpecialPlots(TownyWorld world, TownBlockType type, Material material, ActionType action) {
-		if (type == TownBlockType.WILDS)
-			return TownyUniverse.getInstance().getPermissionSource().unclaimedZoneAction(world, material, action);
+	private static boolean isAllowedMaterial(TownBlock townBlock, Material material, ActionType action) {
+		if ((action == ActionType.BUILD || action == ActionType.DESTROY) && !townBlock.getData().getAllowedBlocks().isEmpty())
+			return townBlock.getData().getAllowedBlocks().contains(material);
 
-		if (type == TownBlockType.FARM && (action.equals(ActionType.BUILD) || action.equals(ActionType.DESTROY)))		
-			return TownySettings.getFarmPlotBlocks().contains(material.toString());
-
-		// This isn't a Wilds or Farm plot with special overrides, the Plot has permissions on, return true.
 		return true;
 	}
 }

@@ -1,9 +1,13 @@
 package com.palmergames.bukkit.towny.listeners;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.gui.EditGUI;
 import com.palmergames.bukkit.towny.object.gui.PermissionGUI;
+import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil;
+import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.ChatColor;
@@ -15,8 +19,11 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyInventory;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.util.Colors;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.Set;
 
 public class TownyInventoryListener implements Listener {
 	
@@ -28,7 +35,7 @@ public class TownyInventoryListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onClick(InventoryClickEvent event) {
-		if (!(event.getInventory().getHolder() instanceof TownyInventory) || event.getCurrentItem() == null)
+		if (!(event.getInventory().getHolder() instanceof TownyInventory townyInventory) || event.getCurrentItem() == null)
 			return;
 
 		event.setCancelled(true);
@@ -39,13 +46,13 @@ public class TownyInventoryListener implements Listener {
 		if (resident == null || (event.getClickedInventory() != null && !(event.getClickedInventory().getHolder() instanceof TownyInventory)))
 			return;
 
-		if (event.getInventory().getHolder() instanceof EditGUI) {
+		if (event.getInventory().getHolder() instanceof EditGUI editGUI) {
 			
 			ItemMeta meta = event.getCurrentItem().getItemMeta();
 			switch (event.getCurrentItem().getType()) {
 				case LIME_WOOL:
 					if (meta.getDisplayName().equals(Colors.LightGreen + ChatColor.BOLD + "Save")) {
-						((EditGUI) event.getInventory().getHolder()).saveChanges();
+						editGUI.saveChanges();
 					} else {
 						meta.setDisplayName(Colors.Red + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
 						event.getCurrentItem().setType(Material.RED_WOOL);
@@ -53,9 +60,9 @@ public class TownyInventoryListener implements Listener {
 					break;
 				case RED_WOOL:
 					if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Back")) {
-						((EditGUI) event.getInventory().getHolder()).exitScreen();
+						editGUI.exitScreen();
 					} else if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Delete")) {
-						((EditGUI) event.getInventory().getHolder()).deleteResident();
+						editGUI.deleteResident();
 					} else {
 						meta.setDisplayName(Colors.Gray + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
 						event.getCurrentItem().setType(Material.GRAY_WOOL);
@@ -70,7 +77,7 @@ public class TownyInventoryListener implements Listener {
 			}
 			
 			event.getCurrentItem().setItemMeta(meta);			
-			Towny.getAdventure().player(player).playSound(clickSound);
+			editGUI.playClickSound(player);
 
 		} else if (event.getInventory().getHolder() instanceof PermissionGUI permissionGUI) {
 			if (event.getCurrentItem().getType() == Material.PLAYER_HEAD && permissionGUI.canEdit()) {
@@ -82,58 +89,34 @@ public class TownyInventoryListener implements Listener {
 				PermissionGUIUtil.handleConversation(player);
 				event.getWhoClicked().closeInventory();
 			} else {
-				int currentPage = resident.getGUIPageNum();
-
-				try {
-					// If the pressed item was a nextpage button
-					if (event.getCurrentItem().getItemMeta().getDisplayName().equals(Colors.Gold + "Next")) {
-						if (resident.getGUIPageNum() <= resident.getGUIPages().size() - 1) {
-							// Next page exists, flip the page
-							resident.setGUIPageNum(++currentPage);
-							new PermissionGUI(resident, resident.getGUIPage(), event.getView().getTitle(), permissionGUI.getTownBlock(), permissionGUI.canEdit());
-							Towny.getAdventure().player(player).playSound(clickSound);
-						}
-						// if the pressed item was a previous page button
-					} else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(Colors.Gold + "Back")) {
-						// If the page number is more than 0 (So a previous page exists)
-						if (resident.getGUIPageNum() > 0) {
-							// Flip to previous page
-							resident.setGUIPageNum(--currentPage);
-							new PermissionGUI(resident, resident.getGUIPage(), event.getView().getTitle(), permissionGUI.getTownBlock(), permissionGUI.canEdit());
-							Towny.getAdventure().player(player).playSound(clickSound);
-						}
-					}
-				} catch (Exception ignored) {}
+				permissionGUI.tryPaginate(event.getCurrentItem(), player, resident, event.getView());
 			}
+		} else if (event.getInventory().getHolder() instanceof SelectionGUI selectionGUI) {
+			TownBlockType type = TownBlockTypeHandler.getType(Colors.strip(event.getCurrentItem().getItemMeta().getDisplayName()));
+			if (type == null)
+				player.closeInventory();
+
+			Set<Material> materialSet = switch (selectionGUI.getType()) {
+				case ITEMUSE -> type.getData().getItemUseIds();
+				case ALLOWEDBLOCKS -> type.getData().getAllowedBlocks();
+				case SWITCHES -> type.getData().getSwitchIds();
+			};
+			
+			String title = materialSet.isEmpty()
+				? Translatable.of("gui_title_no_restrictions").forLocale(resident)
+				: switch (selectionGUI.getType()) {
+				case ALLOWEDBLOCKS -> Translatable.of("gui_title_towny_allowedblocks", type.getName()).forLocale(resident);
+				case SWITCHES -> Translatable.of("gui_title_towny_switch").forLocale(resident);
+				case ITEMUSE -> Translatable.of("gui_title_towny_itemuse").forLocale(resident);
+			};
+
+			selectionGUI.playClickSound(player);
+			ResidentUtil.openGUIInventory(resident, materialSet, title);
 		} else {
 			/*
-			 * Not a PermissionGUI or EditGUI, use normal pagination
+			 * Not a PermissionGUI, EditGUI or SelectionGUI. Use normal pagination.
 			 */
-			int currentPage = resident.getGUIPageNum();
-
-			try {
-				// If the pressed item was a nextpage button
-				if (event.getCurrentItem().getItemMeta().getDisplayName().equals(Colors.Gold + "Next")) {
-					// If there is no next page, don't do anything
-					if (resident.getGUIPageNum() >= resident.getGUIPages().size() - 1) {
-						return;
-					} else {
-						// Next page exists, flip the page
-						resident.setGUIPageNum(++currentPage);
-						new TownyInventory(resident, resident.getGUIPage(), event.getView().getTitle());
-						Towny.getAdventure().player(player).playSound(clickSound);
-					}
-					// if the pressed item was a previous page button
-				} else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(Colors.Gold + "Back")) {
-					// If the page number is more than 0 (So a previous page exists)
-					if (resident.getGUIPageNum() > 0) {
-						// Flip to previous page
-						resident.setGUIPageNum(--currentPage);
-						new TownyInventory(resident, resident.getGUIPage(), event.getView().getTitle());
-						Towny.getAdventure().player(player).playSound(clickSound);
-					}
-				}
-			} catch (Exception ignored) {}
+			townyInventory.tryPaginate(event.getCurrentItem(), player, resident, event.getView());
 		}
 	}
 }
