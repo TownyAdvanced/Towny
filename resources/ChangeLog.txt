@@ -7225,5 +7225,6 @@ v0.92.0.11:
   - Improve border around townyperms header, courtesy of Warriorrrr with PR #5671.
   - Fix mob removal task malfunctioning when using citizens, courtesy of Warriorrrr with PR #5674.
   - Fix translation loader loading global from the wrong location, courtesy of Warriorrrr with PR #5673.
+0.97.5.16:
   - Add Azaleas and Flowering Azaleas to Potted Plants list, to provide protection.
     - Towards #5685.
