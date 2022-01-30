@@ -82,10 +82,10 @@ public class ChatTools {
 			return legacyFormatTitle(title);
 		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
 		int remainder = MAX_FONT_WIDTH - (WIDGET_WIDTH * 2) - font.getWidth(Colors.strip(title)) - 2;
-		if (remainder < 14)
-			return Translation.of("status_title_primary_colour") + WIDGET + title + WIDGET;
 		if (remainder < 1)
 			return Translation.of("status_title_primary_colour") + title;
+		if (remainder < 14)
+			return Translation.of("status_title_primary_colour") + WIDGET + title + WIDGET;
 		
 		int times = remainder / (UNDERSCORE_WIDTH * 2);
 		return Translation.of("status_title_primary_colour") + WIDGET + repeatChar(times, "_") + title + repeatChar(times, "_") + WIDGET;
@@ -108,10 +108,10 @@ public class ChatTools {
 			return legacyFormatSubtitle(subtitle);
 		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
 		int remainder = MAX_FONT_WIDTH - (SUBWIDGET_WIDTH * 2) - font.getWidth(Colors.strip(subtitle)) - 2;
-		if (remainder < 10)
-			return Translation.of("status_title_primary_colour") + SUBWIDGET + subtitle + Translation.of("status_title_primary_colour") + SUBWIDGET;
 		if (remainder < 1)
 			return Translation.of("status_title_primary_colour") + subtitle;
+		if (remainder < 10)
+			return Translation.of("status_title_primary_colour") + SUBWIDGET+ subtitle + Translation.of("status_title_primary_colour") + SUBWIDGET;
 
 		int times = remainder / (SPACE_WIDTH * 2);
 		return Translation.of("status_title_primary_colour") + SUBWIDGET + repeatChar(times, " ") + subtitle + repeatChar(times, " ") + Translation.of("status_title_primary_colour")  + SUBWIDGET;
