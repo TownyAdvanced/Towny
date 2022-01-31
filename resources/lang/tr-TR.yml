@@ -206,7 +206,7 @@ msg_changed_public: '&cKasabanın genel durumu artık %s.'
 msg_changed_expl: '&c%s içindeki patlamalar artık %s.'
 msg_changed_fire: '&c%s içindeki yangın yayılması artık %s.'
 msg_changed_mobs: '&c%s içinde ortaya çıkan canavarlar artık %s.'
-msg_the_plot_group: 'the Plot Group'
+msg_the_plot_group: 'Arsa Grubu'
 msg_changed_taxpercent: '&cYüzdeye dayalı vergiler artık %s.'
 msg_changed_open: '&cDavetsiz katılım artık %s.'
 msg_toggle_open_on_warning: 'Uyarı: Kasaba açıksa, kasaba izinleri kapatılmalıdır. Tür ''/town set perm off'' followed by ''/town set perm reset''.'
@@ -553,7 +553,7 @@ status_on_good: '&aAÇIK'
 status_off_bad: '&4KAPALI'
 status_forced: '&cZorla'
 status_adjustable: '&aAyarlanabilir'
-status_pvp: 'PVP:'
+status_pvp: 'PvP:'
 explosions: 'Patlamalar:'
 firespread: 'Ateş_yayılması:'
 mobspawns: 'Yaratık_doğması:'
@@ -581,7 +581,7 @@ status_bank_town3: 'Vergi:'
 status_town_nation: 'Ülke:'
 status_town_reslist_overlength: 've dahası...'
 status_nation_king: 'Kral:'
-status_nation_tax: 'Ülke_vergisi:'
+status_nation_tax: 'Ulus_vergisi:'
 status_nation_towns: 'Kasabalar'
 status_nation_allies: 'Müttefikler'
 status_nation_enemies: 'Düşmanlar'
@@ -690,7 +690,7 @@ number_of_residents: '(Sakin Sayısı)'
 number_of_towns: '(İlçe Sayısı)'
 town_name: 'Kasaba Adı'
 nation_name: 'Ulus Adı'
-refund_message: '&aRefunded %s for unclaiming %s townblocks.'
+refund_message: '&aKasaba bloğu hakkınızdan vazgeçtiğiniz için %s kadar ödeme aldınız(İade edilen Kasaba bloğu:%s).'
 msg_bankrupt_town_multiple: '&bAşağıdaki kasabalar bakım masraflarını karşılayamadılar ve dağıldılar: '
 msg_bankrupt_nation_multiple: '&bAşağıdaki ülkeler bakım masraflarını karşılayamadılar ve dağıldılar: '
 msg_couldnt_pay_tax: '&b%s vergi ödeyemedi ve atıldı %s.'
@@ -986,8 +986,8 @@ towny_prices_price_plot: '&c    [Fiyat] &2Arsa: &a%s &8| &2Karakol: &a%s'
 towny_prices_price_shop: '&c            &2Market: &a%s &8| &2Elçilik: &a%s'
 towny_prices_taxes_plot: '&c    [Vergiler]    &2Yerleşik: &a%s &8| &2Arsa: &a%s'
 towny_prices_taxes_shop: '&c            &2Market: &a%s &8| &2Elçilik: &a%s'
-towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
-towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_town_neutral_tax: '&c            &2Barış durumu: &a%s'
+towny_prices_plots: '&c    [Arsa Ayarları]'
 towny_prices_type_single: '            &2%s: &a%s'
 towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cUlus: &6%s'
@@ -1005,9 +1005,9 @@ msg_bankrupt: '&c(İflas)'
 #Added in 0.98
 msg_del_town2: '&b%s kasabası silindi!'
 msg_ruin_town: '&b%s kasabası harabeye döndü!'
-gui_title_select_plot_type: 'Select PlotType'
-gui_title_no_restrictions: 'No restrictions for this plottype.'
-gui_title_towny_allowedblocks: '%s AllowedBlocks List'
+gui_title_select_plot_type: 'Arsa Tipi Seç'
+gui_title_no_restrictions: 'Bu arsa türü için herhangi bir kısıtlama yoktur.'
+gui_title_towny_allowedblocks: '%s İzin Verilen Blok Listesi'
 gui_title_towny_wildsblocks: 'Towny Vahşi Doğa Blokları Listesi'
 gui_title_towny_itemuse: 'Towny ItemUse Listesi'
 gui_title_towny_switch: 'Towny Switch Listesi'
@@ -1239,7 +1239,7 @@ msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Yasadışı 
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Düşman sayıldığı bir yerde olduğu için vatandaşınızı hapse atamazsınız.'
 #Added in 0.120
 msg_resident_prompt: 'Sohbette oyuncunun adını girin veya çıkmak için Q tuşuna basın. Bu işlem, 30 saniye içinde otomatik olarak zaman aşımına uğrayacaktır.'
-msg_prompt_cancel: 'İstem iptal edildi veya zaman aşımına uğradı.'
+msg_prompt_cancel: 'İştem iptal edildi veya zaman aşımına uğradı.'
 #Added in 0.121
 status_title_primary_colour: '&6' #Used to colour the majority of the title bar.
 status_title_secondary_colour: '&e' #Used to colour the words in the title bar.
@@ -1400,37 +1400,37 @@ msg_baltop_book_format: '%s. %s | %s'
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: 'Onay Zaman aşımına uğradı.'
 #Added in 0.134
-tc_player_channel_sound_muted: 'The channel sound has been muted'
-tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
+tc_player_channel_sound_muted: 'Kanaldan susturuldu'
+tc_player_channel_sound_unmuted: 'Kanal susturulması kalktı'
 #Added in 0.135
-msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
+msg_cant_toggle_pvp_outsider_in_plot: 'Arsanızda bir yabancı var, pvp durumunuzu değiştiremezsiniz!'
 #Added in 0.136
-msg_view_on_web: 'Click to view on the web.'
+msg_view_on_web: 'Web üzerinde görüntülemek için tıklayın.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
-town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
+town1_has_merged_with_town2: '&6%s Kasabası, %s Kasabası ile birleşmeyi kabul etti.'
 #Shown in the town and nation status screens to inform about neutrality costs.
-status_neutrality_cost: 'Neutrality Cost:'
+status_neutrality_cost: 'Tarafsızlık Ücreti:'
 #Added in 0.138
 #Line 1 of the givebonus warning.
-msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+msg_ptw_warning_1: 'Bu şehir blokları için gerçek hayatta herhangi bir para ödediyseniz lütfen anlayın: Oynadığınız sunucu Minecraft EULA ve Towny lisansını ihlal ediyor.'
 #Line 2 of the givebonus warning.
-msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchaseable with real money.'
+msg_ptw_warning_2: 'Towny ekibi, şehir bloklarının gerçek parayla satın alınabilmesini asla amaçlamadı.'
 #Line 3 of the givebonus warning.
-msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
+msg_ptw_warning_3: 'Gerçek para ödediyseniz, Towny Takımının isteklerine saygı duyan bir Towny sunucusunda oynamayı düşünmelisiniz.'
 #Message shown when a town invites a player to join, and that town has a nation.
-you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+you_have_been_invited_to_join3: '%s Kasabasına davet edildiniz!&9 (Kasaba Ulusu: %s&9)'
 #Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
-msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+msg_err_your_town_cannot_afford_unclaim: 'Kasabanızın bu araziden vazgeçmek için yeterli parası bulunmamakta. Bankaya %s kadar altın atmalısınız.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
-msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+msg_your_town_paid_x_to_unclaim: 'Kasabanız bir arsayı bünyesinden çıkarmak için %s altın ödedi.'
 #Confirmation message shown when a player will unclaim land that costs money.
-confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+confirmation_unclaiming_costs: 'Arsa hakkından vazgeçmek size %s altına mâl olucaktır. Devam etmek istiyormusunuz?'
 #Added in 0.140
 #Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
-msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
+msg_your_locale: 'Towny, mesajlarını çevirmek için oyuncu bilgisayarının yerel ayarını (%s) kullanır. Çevirilerde eksik dizeler olabileceğini unutmayın.'
 #Message shown when a player tries to rename their town too quickly.
-msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'Kasabanı yeniden adlandırmak için %s saniye beklemelisin.'
 #Added in 1.141
-msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'
+msg_newday_already_scheduled_soon: 'Yeni bir günlük görevin yakında gerçekleşmesi planlandı.'
