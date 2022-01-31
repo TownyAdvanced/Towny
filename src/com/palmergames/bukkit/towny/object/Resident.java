@@ -28,6 +28,8 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -45,7 +47,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable {
+public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable, ForwardingAudience {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private UUID uuid = null;
@@ -858,6 +860,17 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_invulnerability"));
 	}
 
+	@NotNull
+	public Audience audience() {
+		Player player = getPlayer();
+		return player == null ? Audience.empty() : Towny.getAdventure().player(player);
+	}
+
+	// Only implemented for ease of use, i.e. Resident.audience().sendMessasge can be shortened to Resident.sendMessage.
+	@Override
+	public @NotNull Iterable<? extends Audience> audiences() {
+		return Collections.singleton(audience());
+	}
 
 	/**
 	 * @deprecated As of 0.96.0.0+ please use {@link EconomyAccount#getWorld()} instead.
