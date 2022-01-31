@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable, ForwardingAudience {
+public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable, ForwardingAudience.Single {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private UUID uuid = null;
@@ -861,15 +861,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	@NotNull
+	@Override
 	public Audience audience() {
 		Player player = getPlayer();
 		return player == null ? Audience.empty() : Towny.getAdventure().player(player);
-	}
-
-	// Only implemented for ease of use, i.e. Resident.audience().sendMessasge can be shortened to Resident.sendMessage.
-	@Override
-	public @NotNull Iterable<? extends Audience> audiences() {
-		return Collections.singleton(audience());
 	}
 
 	/**
