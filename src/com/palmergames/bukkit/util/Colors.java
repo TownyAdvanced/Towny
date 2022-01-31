@@ -31,10 +31,7 @@ public class Colors {
 	public static final String White = "\u00A7f";
 
 	public static String strip(String line) {
-
-		for (ChatColor cc : ChatColor.values())
-			line = line.replaceAll(cc.toString(), "");
-		return line;
+		return ChatColor.stripColor(line);
 	}
 
 	public static String translateColorCodes(String str) {
