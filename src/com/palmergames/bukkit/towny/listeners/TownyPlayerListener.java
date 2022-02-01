@@ -255,6 +255,10 @@ public class TownyPlayerListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
+		// Bail if we're filling air, usually a milked cow.
+		if (event.getBlockClicked().getType().equals(Material.AIR))
+			return;
+		
 		// Test whether we can fill the bucket by testing if they would be able to destroy the liquid it is picking up.
 		event.setCancelled(!TownyActionEventExecutor.canDestroy(event.getPlayer(), event.getBlockClicked().getLocation(), event.getBlockClicked().getType()));
 

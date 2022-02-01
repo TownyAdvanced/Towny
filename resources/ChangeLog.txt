@@ -7230,3 +7230,5 @@ v0.92.0.11:
     - Closes #5685.
   - Switch over to ChatColor's colour-stripping.
     - Closes #5680.
+  - Fix Cow Milking requiring the ability to break air blocks.
+    - Closes #5691.
