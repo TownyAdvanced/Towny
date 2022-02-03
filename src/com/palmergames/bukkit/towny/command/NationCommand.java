@@ -539,6 +539,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			// Test if this is a town status screen lookup.
 			if (tryNationStatusScreen(player, split))
 				return;
+			
+			// Alert the player that the subcommand doesn't exist.
+			throw new TownyException(Translatable.of("msg_err_invalid_sub"));
 		}
 	}
 	

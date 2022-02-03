@@ -912,14 +912,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					/*
 					 * We've gotten this far without a match, check if the argument is a town name.
 					 */
-					Town town = TownyUniverse.getInstance().getTown(split[0]);					
-					if (town == null)
-						throw new TownyException(Translatable.of("msg_err_not_registered_1", split[0]));
-
-					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && !town.hasResident(player.getName()))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
-					
-					townStatusScreen(player, town);
+					Town town = TownyUniverse.getInstance().getTown(split[0]);
+					if (town != null) {
+						if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode()) && !town.hasResident(player.getName()))
+							throw new TownyException(Translatable.of("msg_err_command_disable"));
+						townStatusScreen(player, town);
+						return;
+					}
+					throw new TownyException(Translatable.of("msg_err_invalid_sub"));
 				}
 			}
 

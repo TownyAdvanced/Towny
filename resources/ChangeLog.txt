@@ -7232,3 +7232,4 @@ v0.92.0.11:
     - Closes #5680.
   - Fix Cow Milking requiring the ability to break air blocks.
     - Closes #5691.
+  - Make /town and /nation return the invalid subcommand message when an invalid subcommand is used. 
