@@ -1874,7 +1874,7 @@ public class TownySettings {
 
 	private static double getTownPenaltyUpkeepCostRaw(Town town) {
 
-		if (getUpkeepPenalty() > 0) {
+		if (getUpkeepPenalty() > 0 && getTownBlockRatio() > -1) {
 			
 			int overClaimed = town.getTownBlocks().size() - getMaxTownBlocks(town);
 			

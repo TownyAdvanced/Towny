@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.util.StringMgmt;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -402,18 +403,15 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return amount;
 		case "town_townblocks_maximum": // %townyadvanced_town_townblocks_maximum%
 			if (resident.hasTown()) {
-				try {
-					amount = String.valueOf(TownySettings.getMaxTownBlocks(resident.getTown()));
-				} catch (NotRegisteredException ignored) {
-				}
+				amount = resident.getTownOrNull().getMaxTownBlocksAsAString();
 			}
 			return amount;
 		case "town_townblocks_natural_maximum": // %townyadvanced_town_townblocks_natural_maximum%
 			if (resident.hasTown()) {
-				try {
-					amount = String.valueOf(TownySettings.getMaxTownBlocks(resident.getTown()) - resident.getTown().getBonusBlocks() - resident.getTown().getPurchasedBlocks());
-				} catch (NotRegisteredException ignored) {
-				}
+				Town restown = resident.getTownOrNull();
+				amount = TownySettings.getTownBlockRatio() > -1 
+					? String.valueOf(restown.getMaxTownBlocks() - restown.getBonusBlocks() - restown.getPurchasedBlocks())
+					: restown.getMaxTownBlocksAsAString();
 			}
 			return amount;
 		case "town_mayor": // %townyadvanced_town_mayor%

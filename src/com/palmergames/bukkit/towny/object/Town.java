@@ -481,7 +481,14 @@ public class Town extends Government implements TownBlockOwner {
 		this.bonusBlocks = bonusBlocks;
 	}
 
-	public int getTotalBlocks() {
+	public String getMaxTownBlocksAsAString() {
+		if (TownySettings.getTownBlockRatio() == -1)
+			return "∞";
+		else
+			return String.valueOf(getMaxTownBlocks());
+	}
+	
+	public int getMaxTownBlocks() {
 
 		return TownySettings.getMaxTownBlocks(this);
 	}
@@ -1133,7 +1140,16 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public boolean isOverClaimed() {
-		return (getTownBlocks().size() > TownySettings.getMaxTownBlocks(this));
+		return TownySettings.getTownBlockRatio() > -1 && getTownBlocks().size() > getMaxTownBlocks();
+	}
+	
+	/**
+	 * Only use this if TownySettings.getTownBlockRatio() is greater than -1.
+	 * 
+	 * @return the number of TownBlocks a town is able to claim.
+	 */
+	public int availableTownBlocks() {
+		return getMaxTownBlocks() - getTownBlocks().size();
 	}
 	
     @Override

@@ -234,7 +234,8 @@ public enum ConfigNodes {
 			"8",
 			"",
 			"# The maximum townblocks available to a town is (numResidents * ratio).",
-			"# Setting this value to 0 will instead use the level based jump values determined in the town level config."),
+			"# Setting this value to 0 will instead use the level based jump values determined in the town level config.",
+			"# Setting this to -1 will result in every town having unlimited claims."),
 	TOWN_TOWN_BLOCK_LIMIT(
 			"town.town_block_limit",
 			"0",
