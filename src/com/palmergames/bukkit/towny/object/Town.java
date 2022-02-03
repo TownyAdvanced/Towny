@@ -482,7 +482,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public String getMaxTownBlocksAsAString() {
-		if (TownySettings.getTownBlockRatio() == -1)
+		if (TownySettings.areTownBlocksUnlimited())
 			return "∞";
 		else
 			return String.valueOf(getMaxTownBlocks());

@@ -1372,7 +1372,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		out.add(ChatTools.formatTitle(town + " Town Plots"));
 		out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + town.getMaxTownBlocksAsAString() 
-			+ (TownySettings.getTownBlockRatio() > -1 
+			+ (!TownySettings.areTownBlocksUnlimited() 
 				? (TownySettings.isSellingBonusBlocks(town) 
 						? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchasedBlocks(town) + "]" 
 						: "") 

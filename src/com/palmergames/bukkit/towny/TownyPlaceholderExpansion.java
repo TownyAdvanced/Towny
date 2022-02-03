@@ -409,9 +409,9 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		case "town_townblocks_natural_maximum": // %townyadvanced_town_townblocks_natural_maximum%
 			if (resident.hasTown()) {
 				Town restown = resident.getTownOrNull();
-				amount = TownySettings.getTownBlockRatio() > -1 
-					? String.valueOf(restown.getMaxTownBlocks() - restown.getBonusBlocks() - restown.getPurchasedBlocks())
-					: restown.getMaxTownBlocksAsAString();
+				amount = TownySettings.areTownBlocksUnlimited() 
+					? restown.getMaxTownBlocksAsAString()
+					: String.valueOf(restown.getMaxTownBlocks() - restown.getBonusBlocks() - restown.getPurchasedBlocks());
 			}
 			return amount;
 		case "town_mayor": // %townyadvanced_town_mayor%

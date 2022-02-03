@@ -1068,6 +1068,10 @@ public class TownySettings {
 		return 0;
 	}
 
+	public static boolean areTownBlocksUnlimited() {
+		return getTownBlockRatio() < 0;
+	}
+	
 	public static int getTownBlockRatio() {
 
 		return getInt(ConfigNodes.TOWN_TOWN_BLOCK_RATIO);
@@ -1874,7 +1878,7 @@ public class TownySettings {
 
 	private static double getTownPenaltyUpkeepCostRaw(Town town) {
 
-		if (getUpkeepPenalty() > 0 && getTownBlockRatio() > -1) {
+		if (getUpkeepPenalty() > 0 && !areTownBlocksUnlimited()) {
 			
 			int overClaimed = town.getTownBlocks().size() - getMaxTownBlocks(town);
 			
