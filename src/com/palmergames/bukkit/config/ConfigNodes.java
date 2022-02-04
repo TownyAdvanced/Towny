@@ -2086,6 +2086,13 @@ public enum ConfigNodes {
 			"",
 			"# The maximum amount of money that can be taken from a balance when using a percent tax, this is the default for all new towns."
 			),
+	ECO_DAILY_TAXES_DO_CAPITALS_PAY_NATION_TAX(
+			"economy.daily_taxes.do_nation_capitals_pay_nation_tax",
+			"false",
+			"",
+			"# When true, a nation's capital will pay the nation tax from the capital's town bank.",
+			"# This feature is a bit redundant because the king can withdraw from both banks anyways,",
+			"# but it might keep nation's from being deleted for not paying their upkeep."),
 	ECO_PRICE_NATION_UPKEEP(
 			"economy.daily_taxes.price_nation_upkeep",
 			"100.0",

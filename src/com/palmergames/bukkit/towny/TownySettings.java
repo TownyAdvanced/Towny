@@ -3112,5 +3112,9 @@ public class TownySettings {
 
 		return enabledLanguages.contains(locale.toLowerCase(Locale.ROOT));
 	}
+	
+	public static boolean doCapitalsPayNationTax() {
+		return getBoolean(ConfigNodes.ECO_DAILY_TAXES_DO_CAPITALS_PAY_NATION_TAX);
+	}
 }
 

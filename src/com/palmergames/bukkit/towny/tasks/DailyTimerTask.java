@@ -185,7 +185,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				 * We are running in an Async thread so MUST verify all objects.
 				 */
 				if (universe.hasTown(town.getName())) {
-					if (town.isCapital() || !town.hasUpkeep() || town.isRuined())
+					if ((town.isCapital() && !TownySettings.doCapitalsPayNationTax()) || !town.hasUpkeep() || town.isRuined())
 						continue;
 					
 					PreTownPaysNationTaxEvent event = new PreTownPaysNationTaxEvent(town, nation, taxAmount);
