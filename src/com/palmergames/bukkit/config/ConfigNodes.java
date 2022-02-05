@@ -200,13 +200,15 @@ public enum ConfigNodes {
 			"5",
 			"",
 			"# Minimum number of plots any towns plot must be from the next town's own plots.",
+			"# Put in other words: the buffer area around every claim that no other town can claim into.",
 			"# Does not affect towns which are in the same nation.",
 			"# This will prevent town encasement to a certain degree."),
 	TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK(
 			"town.min_distance_from_town_homeblock",
 			"5",
 			"",
-			"# Minimum number of plots any towns home plot must be from the next town's homeblock.",
+			"# Minimum number of plots any towns home plot must be from the next town.",
+			"# Put in other words: the buffer area around every homeblock that no other town can claim into.",
 			"# Does not affect towns which are in the same nation.",
 			"# This will prevent someone founding a town right on your doorstep"),
     TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT(
@@ -223,6 +225,10 @@ public enum ConfigNodes {
     		"# Set to 0 to disable. When above 0 an outpost may only be claimed within the given number of townblocks from a townblock owned by the town.",
     		"# Setting this to any value above 0 will stop outposts being made off-world from the town's homeworld.",
     		"# Do not set lower than min_distance_for_outpost_from_plot above."),
+	TOWN_MIN_DISTANCE_BETWEEN_HOMEBLOCKS(
+			"town.min_distance_between_homeblocks",
+			"0",
+			"# Minimum distance between homeblocks."),
 	TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.max_distance_between_homeblocks",
 			"0",

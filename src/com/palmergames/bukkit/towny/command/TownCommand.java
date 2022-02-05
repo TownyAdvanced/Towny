@@ -2637,13 +2637,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (town.hasHomeBlock() && town.getHomeBlock().getWorldCoord().equals(townBlock.getWorldCoord()))
 				throw new TownyException(Translatable.of("msg_err_homeblock_already_set_here"));
 
-			final int minDistanceFromHomeblock = world.getMinDistanceFromOtherTowns(coord, town);
-			if (minDistanceFromHomeblock < TownySettings.getMinDistanceFromTownHomeblocks())
-				throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
+			if (world.hasTowns() &&
+				TownySettings.getMinDistanceFromTownHomeblocks() > 0 || 
+				TownySettings.getMaxDistanceBetweenHomeblocks() > 0 ||
+				TownySettings.getMinDistanceBetweenHomeblocks() > 0) {
+					
+				final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTowns(coord, town);
+				if (distanceToNextNearestHomeblock < TownySettings.getMinDistanceFromTownHomeblocks() ||  
+					distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks())
+					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
 
-			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0)
-				if ((minDistanceFromHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks()) && world.hasTowns())
+				if (distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
 					throw new TownyException(Translatable.of("msg_too_far"));
+			}
 			
 			if (TownySettings.getHomeBlockMovementDistanceInTownBlocks() > 0) {
 				double distance = MathUtil.distance(town.getHomeBlock().getX(), townBlock.getX(), town.getHomeBlock().getZ(), townBlock.getZ());
@@ -2885,17 +2891,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!TownyAPI.getInstance().isWilderness(player.getLocation()))
 				throw new TownyException(Translatable.of("msg_already_claimed_1", key));
 			
-			if (TownySettings.getMinDistanceFromTownPlotblocks() > 0
-				&& world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks())
+			if (world.hasTowns() &&
+				TownySettings.getMinDistanceFromTownPlotblocks() > 0 &&
+				world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks())
 				throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
 
 			
-			if (TownySettings.getMinDistanceFromTownHomeblocks() > 0 || TownySettings.getMaxDistanceBetweenHomeblocks() > 0) {
-				final int minDistFromOtherTowns = world.getMinDistanceFromOtherTowns(key);
-				if (minDistFromOtherTowns < TownySettings.getMinDistanceFromTownHomeblocks())
-					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
+			if (world.hasTowns() && 
+				TownySettings.getMinDistanceFromTownHomeblocks() > 0 ||
+				TownySettings.getMaxDistanceBetweenHomeblocks() > 0 ||
+				TownySettings.getMinDistanceBetweenHomeblocks() > 0) {
 				
-				if (minDistFromOtherTowns > TownySettings.getMaxDistanceBetweenHomeblocks() && world.hasTowns())
+				final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTowns(key);
+				if (distanceToNextNearestHomeblock < TownySettings.getMinDistanceFromTownHomeblocks() ||
+					distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
+					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
+
+				if (distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
 					throw new TownyException(Translatable.of("msg_too_far"));
 			}
 			

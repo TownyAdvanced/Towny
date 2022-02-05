@@ -2176,6 +2176,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.TOWN_MIN_DISTANCE_IGNORED_FOR_ALLIES);
 	}
 
+	public static int getMinDistanceBetweenHomeblocks() {
+		return getInt(ConfigNodes.TOWN_MIN_DISTANCE_BETWEEN_HOMEBLOCKS);
+	}
+	
 	public static int getMaxDistanceBetweenHomeblocks() {
 
 		return getInt(ConfigNodes.TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS);

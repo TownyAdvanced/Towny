@@ -666,14 +666,14 @@ public class TownyWorld extends TownyObject {
 		for (Town town : getTowns().values()) {
 			try {
 				Coord townCoord = town.getHomeBlock().getCoord();
-				if (homeTown != null)
+				if (homeTown != null) {
 					// If the townblock either: the town is the same as homeTown OR
 					// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
 					if (homeTown.getUUID().equals(town.getUUID())
 						|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNationOrNull().equals(homeTown.getNationOrNull()))
 						|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
 						continue;
-				
+				}
 				if (!town.getHomeblockWorld().equals(this)) continue;
 				
 				final double distSqr = MathUtil.distanceSquared((double) townCoord.getX() - keyX, (double) townCoord.getZ() - keyZ);

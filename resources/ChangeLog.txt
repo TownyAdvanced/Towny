@@ -7239,3 +7239,7 @@ v0.92.0.11:
     - This feature is a bit redundant because the king can withdraw from both banks anyways, but it might keep nation's from being deleted for not paying their upkeep.
     - Closes #5708.
   - Make the config's notification.plot.notforsale actually used.
+  - New Config Option: town.min_distance_between_homeblocks
+    - Default: 0
+    - Minimum distance between homeblocks.
+    - Closes #5713.
