@@ -1498,10 +1498,9 @@ public enum ConfigNodes {
 	NOTIFICATION_PLOT("notification.plot", ""),
 	NOTIFICATION_PLOT_SPLITTER("notification.plot.splitter", " "),
 	NOTIFICATION_PLOT_FORMAT("notification.plot.format", "%s"),
+	// TODO: Make the following 4 nodes use something that is translatable.
 	NOTIFICATION_PLOT_HOMEBLOCK("notification.plot.homeblock", "&b[Home]"),
-	NOTIFICATION_PLOT_OUTPOSTBLOCK(
-			"notification.plot.outpostblock",
-			"&b[Outpost]"),
+	NOTIFICATION_PLOT_OUTPOSTBLOCK("notification.plot.outpostblock","&b[Outpost]"),
 	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
 	NOTIFICATION_PLOT_NOTFORSALE("notification.plot.notforsale", "&e[Not For Sale]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
