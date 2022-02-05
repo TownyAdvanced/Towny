@@ -45,6 +45,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Towny message handling class
@@ -166,7 +167,8 @@ public class TownyMessaging {
 		if (sender == null || TownyComponents.plain(message).isEmpty())
 			return;
 
-		Towny.getAdventure().sender(sender).sendMessage(Translatable.of("default_towny_prefix").locale(sender).stripColors(sender instanceof ConsoleCommandSender).append(Colors.Green).append(message).component());
+		Towny.getAdventure().sender(Bukkit.getConsoleSender()).sendMessage(message);
+		Towny.getAdventure().sender(sender).sendMessage(Translatable.of("default_towny_prefix").locale(sender).stripColors(sender instanceof ConsoleCommandSender).append(Colors.DARK_GREEN).append(message).component());
 		
 		sendDevMsg(message);
 	}
@@ -190,18 +192,6 @@ public class TownyMessaging {
 			Player townyDev = BukkitTools.getPlayer(TownySettings.getDevName());
 			if (townyDev != null)
 				Towny.getAdventure().player(townyDev).sendMessage(Translatable.of("default_towny_prefix").locale(townyDev).append("DevMode: ").component().append(message.color(NamedTextColor.RED)));
-		}
-	}
-
-	/**
-	 * Sends a message (red) to the named Dev (if DevMode is enabled)
-	 * Uses default_towny_prefix
-	 *
-	 * @param msg the message to be sent
-	 */
-	public static void sendDevMsg(String[] msg) {
-		for (String line : msg) {
-			sendDevMsg(line);
 		}
 	}
 
@@ -519,19 +509,19 @@ public class TownyMessaging {
 	 */
 	public static void sendConfirmationMessage(CommandSender sender, Confirmation confirmation) {
 		final Translator translator = Translator.locale(Translation.getLocale(sender));
-		TextComponent firstLineComponent = Component.text(translator.of("confirmation_prefix") + confirmation.getTitle().forLocale(sender));
-		TextComponent lastLineComponent = Component.text(translator.of("this_message_will_expire2", confirmation.getDuration()));
+		Component firstLineComponent = TownyComponents.miniMessage(translator.of("confirmation_prefix") + confirmation.getTitle().forLocale(sender));
+		Component lastLineComponent = TownyComponents.miniMessage(translator.of("this_message_will_expire2", confirmation.getDuration()));
 
 		// Create confirm button based on given params.
-		TextComponent confirmComponent = Component.text("[/" + confirmation.getConfirmCommand() + "]")
+		Component confirmComponent = Component.text("[/" + confirmation.getConfirmCommand() + "]")
 			.color(NamedTextColor.GREEN)
-			.hoverEvent(HoverEvent.showText(Component.text(translator.of("msg_confirmation_spigot_click_accept", confirmation.getConfirmCommand(), "/" + confirmation.getConfirmCommand()))))
+			.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(translator.of("msg_confirmation_spigot_click_accept", confirmation.getConfirmCommand(), "/" + confirmation.getConfirmCommand()))))
 			.clickEvent(ClickEvent.runCommand("/" + confirmation.getPluginPrefix() + ":" + confirmation.getConfirmCommand()));
 
 		// Create cancel button based on given params.
-		TextComponent cancelComponent = Component.text("[/" + confirmation.getCancelCommand() + "]")
+		Component cancelComponent = Component.text("[/" + confirmation.getCancelCommand() + "]")
 			.color(NamedTextColor.RED)
-			.hoverEvent(HoverEvent.showText(Component.text(translator.of("msg_confirmation_spigot_click_cancel", confirmation.getCancelCommand(), "/" + confirmation.getCancelCommand()))))
+			.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(translator.of("msg_confirmation_spigot_click_cancel", confirmation.getCancelCommand(), "/" + confirmation.getCancelCommand()))))
 			.clickEvent(ClickEvent.runCommand("/" + confirmation.getPluginPrefix() + ":" + confirmation.getCancelCommand()));
 		
 		Towny.getAdventure().sender(sender).sendMessage(
@@ -548,42 +538,44 @@ public class TownyMessaging {
 	public static void sendTownList(CommandSender sender, List<TextComponent> towns, ComparatorType compType, int page, int total) {
 		int iMax = Math.min(page * 10, towns.size());
 
-		TextComponent[] townsformatted;
+		Component[] townsFormatted;
 		
 		if ((page * 10) > towns.size()) {
-			townsformatted = new TextComponent[towns.size() % 10];
+			townsFormatted = new Component[towns.size() % 10];
 		} else {
-			townsformatted = new TextComponent[10];
+			townsFormatted = new Component[10];
 		}
 		
 		// Populate the page with TextComponents.
-		for (int i = (page - 1) * 10; i < iMax; i++) {
-			townsformatted[i % 10] = towns.get(i);
-		}
+		for (int i = (page - 1) * 10; i < iMax; i++)
+			townsFormatted[i % 10] = towns.get(i);
 		
 		Audience audience = Towny.getAdventure().sender(sender);
 		sender.sendMessage(ChatTools.formatTitle(Translation.of("town_plu")));
-		sender.sendMessage(Colors.Blue + Translation.of("town_name") + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + Translation.of(compType.getName())));
-		for (TextComponent textComponent : townsformatted)
-			audience.sendMessage(textComponent);
+		audience.sendMessage(TownyComponents.miniMessage(Colors.DARK_AQUA + Translation.of("town_name") + (TownySettings.isTownListRandom() ? "" : Colors.DARK_GRAY + " - " + Colors.AQUA + Translation.of(compType.getName()))));
+		
+		for (Component component : townsFormatted)
+			audience.sendMessage(component);
 		
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("towny:town list", page, compType.getCommandString(), total);
+		Component pageFooter = getPageNavigationFooter("towny:town list", page, compType.getCommandString(), total, sender);
 		audience.sendMessage(pageFooter);
 	}
 
-	public static TextComponent getPageNavigationFooter(String prefix, int page, String arg, int total) {
-		TextComponent backButton = Component.text("<<<")
+	public static Component getPageNavigationFooter(String prefix, int page, String arg, int total, CommandSender sender) {
+		Locale locale = Translation.getLocale(sender);
+
+		Component backButton = Component.text("<<<")
 			.color(NamedTextColor.GOLD)
 			.clickEvent(ClickEvent.runCommand("/" + prefix + " " + (arg.isEmpty() ? "" : arg + " ") + (page - 1)))
-			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_hover_previous_page"))));
+			.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(Translation.of("msg_hover_previous_page", locale))));
 		
-		TextComponent forwardButton = Component.text(">>>")
+		Component forwardButton = Component.text(">>>")
 			.color(NamedTextColor.GOLD)
 			.clickEvent(ClickEvent.runCommand("/" + prefix + " " +  (arg.isEmpty() ? "" : arg + " ") + (page + 1)))
-			.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_hover_next_page"))));
+			.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(Translation.of("msg_hover_next_page", locale))));
 		
-		TextComponent pageText = Component.text("   " + Translation.of("LIST_PAGE", page, total) + "   ");
+		Component pageText = TownyComponents.miniMessage("   " + Translation.of("list_page", locale, page, total) + "   ");
 
 		if (page == 1 && page == total) {
 			backButton = backButton.clickEvent(null).hoverEvent(null).color(NamedTextColor.DARK_GRAY);
@@ -600,27 +592,26 @@ public class TownyMessaging {
 	public static void sendNationList(CommandSender sender, List<TextComponent> nations, ComparatorType compType, int page, int total) {
 		int iMax = Math.min(page * 10, nations.size());
 
-		TextComponent[] nationsformatted;
+		Component[] nationsFormatted;
 		if ((page * 10) > nations.size()) {
-			nationsformatted = new TextComponent[nations.size() % 10];
+			nationsFormatted = new Component[nations.size() % 10];
 		} else {
-			nationsformatted = new TextComponent[10];
+			nationsFormatted = new Component[10];
 		}
 		
 		// Populate the page with TextComponents.
-		for (int i = (page - 1) * 10; i < iMax; i++) {
-			nationsformatted[i % 10] = nations.get(i);
-		}
-
-		sender.sendMessage(ChatTools.formatTitle(Translatable.of("nation_plu").forLocale(sender)));
-		sender.sendMessage(Colors.Blue + Translatable.of("nation_name").forLocale(sender) + Colors.Gray + " - " + Colors.LightBlue + Translatable.of(compType.getName()).forLocale(sender));
+		for (int i = (page - 1) * 10; i < iMax; i++)
+			nationsFormatted[i % 10] = nations.get(i);
+		
 		Audience audience = Towny.getAdventure().sender(sender);
-		for (TextComponent textComponent : nationsformatted) {
-			audience.sendMessage(textComponent);
-		}
+		sender.sendMessage(ChatTools.formatTitle(Translatable.of("nation_plu").forLocale(sender)));
+		audience.sendMessage(TownyComponents.miniMessage(Colors.DARK_AQUA + Translatable.of("nation_name").forLocale(sender) + Colors.DARK_GRAY + " - " + Colors.AQUA + Translatable.of(compType.getName()).forLocale(sender)));
+		
+		for (Component component : nationsFormatted)
+			audience.sendMessage(component);
 
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("towny:nation list", page, compType.getCommandString(), total);
+		Component pageFooter = getPageNavigationFooter("towny:nation list", page, compType.getCommandString(), total, sender);
 		audience.sendMessage(pageFooter);
 	}
 
@@ -629,12 +620,12 @@ public class TownyMessaging {
 		int iMax = Math.min(page * 10, outpostsCount);
 		List<Location> outposts = town.getAllOutpostSpawns();
 		
-		TextComponent[] outpostsFormatted;
+		Component[] outpostsFormatted;
 		
 		if ((page * 10) > outpostsCount) {
-			outpostsFormatted = new TextComponent[outpostsCount % 10];
+			outpostsFormatted = new Component[outpostsCount % 10];
 		} else {
-			outpostsFormatted = new TextComponent[10];
+			outpostsFormatted = new Component[10];
 		}
 		
 		for (int i = (page - 1) * 10; i < iMax; i++) {
@@ -642,16 +633,17 @@ public class TownyMessaging {
 			TownBlock tb = TownyAPI.getInstance().getTownBlock(outpost);
 			if (tb == null)
 				continue;
+
 			String name = !tb.hasPlotObjectGroup() ? tb.getName() : tb.getPlotObjectGroup().getName();
-			TextComponent dash = Component.text(" - ").color(NamedTextColor.DARK_GRAY);		
-			TextComponent line = Component.text(Integer.toString(i + 1))
+			Component dash = Component.text(" - ", NamedTextColor.DARK_GRAY);		
+			Component line = Component.text(i + 1)
 				.color(NamedTextColor.GOLD)
 				.clickEvent(ClickEvent.runCommand("/towny:town outpost " + (i + 1)))
 				.append(dash);
 
-			TextComponent outpostName = Component.text(name).color(NamedTextColor.GREEN);
-			TextComponent worldName = Component.text(outpost.getWorld().getName()).color(NamedTextColor.BLUE);
-			TextComponent coords = Component.text("(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")").color(NamedTextColor.BLUE);
+			Component outpostName = Component.text(name, NamedTextColor.GREEN);
+			Component worldName = Component.text(outpost.getWorld().getName(), NamedTextColor.BLUE);
+			Component coords = Component.text("(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")", NamedTextColor.BLUE);
 
 			if (!name.equalsIgnoreCase("")) {
 				line = line.append(outpostName).append(dash);
@@ -663,18 +655,18 @@ public class TownyMessaging {
 			if (TownyEconomyHandler.isActive())
 				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 
-			line = line.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_click_spawn", name.equalsIgnoreCase("") ? "outpost" : name) + "\n" + spawnCost).color(NamedTextColor.GOLD)));
+			line = line.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(Colors.GOLD + Translatable.of("msg_click_spawn", name.equalsIgnoreCase("") ? "outpost" : name).forLocale(player) + "\n" + spawnCost)));
 			outpostsFormatted[i % 10] = line;
 		}
 		
 		Audience audience = Towny.getAdventure().player(player);
 		player.sendMessage(ChatTools.formatTitle(Translatable.of("outpost_plu").forLocale(player)));
-		for (TextComponent textComponent : outpostsFormatted) {
-			audience.sendMessage(textComponent);
+		for (Component component : outpostsFormatted) {
+			audience.sendMessage(component);
 		}
 		
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("towny:town outpost list", page, "", total);
+		Component pageFooter = getPageNavigationFooter("towny:town outpost list", page, "", total, player);
 		audience.sendMessage(pageFooter);
 	}
 	
@@ -683,12 +675,12 @@ public class TownyMessaging {
 		int iMax = Math.min(page * 10, jailCount);
 		List<Jail> jails = new ArrayList<>(town.getJails());
 		
-		TextComponent[] jailsFormatted;
+		Component[] jailsFormatted;
 		
 		if ((page * 10) > jailCount) {
-			jailsFormatted = new TextComponent[jailCount % 10];
+			jailsFormatted = new Component[jailCount % 10];
 		} else {
-			jailsFormatted = new TextComponent[10];
+			jailsFormatted = new Component[10];
 		}
 		String headerMsg = ChatColor.GOLD + "# " +
 							ChatColor.DARK_GRAY + "- "+
@@ -702,30 +694,30 @@ public class TownyMessaging {
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Jail jail = jails.get(i);
 
-			TextComponent name = Component.text(jail.getName()).color(NamedTextColor.GREEN);
-			TextComponent coord = Component.text(jail.getTownBlock().getWorldCoord().toString()).color(NamedTextColor.BLUE);
-			TextComponent cellCount = Component.text(String.valueOf(jail.getJailCellLocations().size())).color(NamedTextColor.YELLOW);
-			TextComponent dash = Component.text(" - ").color(NamedTextColor.DARK_GRAY);
+			Component name = Component.text(jail.getName(), NamedTextColor.GREEN);
+			Component coord = Component.text(jail.getTownBlock().getWorldCoord().toString(), NamedTextColor.BLUE);
+			Component cellCount = Component.text(String.valueOf(jail.getJailCellLocations().size()), NamedTextColor.YELLOW);
+			Component dash = Component.text(" - ", NamedTextColor.DARK_GRAY);
 
-			TextComponent line = Component.text(Integer.toString(i + 1)).color(NamedTextColor.GOLD);
+			Component line = Component.text(i + 1, NamedTextColor.GOLD);
 			if (jail.hasName())
 				line = line.append(dash).append(name);
 			line = line.append(dash).append(coord).append(dash).append(cellCount);
 				
 			if (town.getPrimaryJail().getUUID().equals(jail.getUUID()))
-				line = line.append(dash).append(Component.text("(Primary Jail)").color(NamedTextColor.RED));
+				line = line.append(dash).append(Component.text("(Primary Jail)", NamedTextColor.RED));
 
 			jailsFormatted[i % 10] = line;
 		}
 		Audience audience = Towny.getAdventure().player(player);
 		player.sendMessage(ChatTools.formatTitle(Translatable.of("jail_plu").forLocale(player)));
 		player.sendMessage(headerMsg);
-		for (TextComponent textComponent : jailsFormatted) {
-			audience.sendMessage(textComponent);
+		for (Component component : jailsFormatted) {
+			audience.sendMessage(component);
 		}
 		
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("towny:town jail list", page, "", total);
+		Component pageFooter = getPageNavigationFooter("towny:town jail list", page, "", total, player);
 		audience.sendMessage(pageFooter);
 	}
 	
@@ -734,11 +726,11 @@ public class TownyMessaging {
 		int iMax = Math.min(page * 10,  groupCount);
 		List<PlotGroup> groups = new ArrayList<>(town.getPlotGroups());
 		
-		TextComponent[] groupsFormatted;
+		Component[] groupsFormatted;
 		if ((page * 10) > groupCount) {
-			groupsFormatted = new TextComponent[groupCount % 10];
+			groupsFormatted = new Component[groupCount % 10];
 		} else {
-			groupsFormatted = new TextComponent[10];
+			groupsFormatted = new Component[10];
 		}
 		
 		String headerMsg = ChatColor.GOLD + "# " +
@@ -750,10 +742,10 @@ public class TownyMessaging {
 				ChatColor.BLUE + "For Sale";
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			PlotGroup group = groups.get(i);
-			TextComponent name = Component.text(group.getFormattedName()).color(NamedTextColor.GREEN);
-			TextComponent size = Component.text(String.valueOf(group.getTownBlocks().size())).color(NamedTextColor.YELLOW);
-			TextComponent dash = Component.text(" - ").color(NamedTextColor.DARK_GRAY);
-			TextComponent line = Component.text(Integer.toString(i + 1)).color(NamedTextColor.GOLD);
+			Component name = Component.text(group.getFormattedName(), NamedTextColor.GREEN);
+			Component size = Component.text(group.getTownBlocks().size(), NamedTextColor.YELLOW);
+			Component dash = Component.text(" - ", NamedTextColor.DARK_GRAY);
+			Component line = Component.text(i + 1, NamedTextColor.GOLD);
 			line = line.append(dash).append(name).append(dash).append(size);
 			
 			if (TownyEconomyHandler.isActive() && group.getPrice() != -1)
@@ -764,12 +756,12 @@ public class TownyMessaging {
 		Audience audience = Towny.getAdventure().sender(sender);
 		sender.sendMessage(ChatTools.formatTitle(town.getName() + " " + Translatable.of("plotgroup_plu").forLocale(sender)));
 		sender.sendMessage(headerMsg);
-		for (TextComponent textComponent : groupsFormatted) {
-			audience.sendMessage(textComponent);
-		}
+
+		for (Component component : groupsFormatted)
+			audience.sendMessage(component);
 		
 		// Page navigation
-		TextComponent pageFooter = getPageNavigationFooter("towny:town plotgrouplist" + town.getName(), page, "", total);
+		Component pageFooter = getPageNavigationFooter("towny:town plotgrouplist" + town.getName(), page, "", total, sender);
 		audience.sendMessage(pageFooter);
 	}
 	
