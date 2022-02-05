@@ -206,7 +206,7 @@ public enum ConfigNodes {
 			"town.min_distance_from_town_homeblock",
 			"5",
 			"",
-			"# Minimum number of plots any towns home plot must be from the next town.",
+			"# Minimum number of plots any towns home plot must be from the next town's homeblock.",
 			"# Does not affect towns which are in the same nation.",
 			"# This will prevent someone founding a town right on your doorstep"),
     TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT(
