@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.141
+version: 0.142
 language: norwegian
 author: Nectuz, Walbern
 website: 'http://townyadvanced.github.io/'
@@ -1434,3 +1434,6 @@ msg_your_locale: 'Towny bruker språket til din klient (%s) for å oversette mel
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Du må vente %s sekunder før du kan endre navnet på din by igjen.'
 #Added in 1.141
 msg_newday_already_scheduled_soon: 'En ny dagsoppgave er allerede planlagt å skje snart.'
+#Added in 0.142
+#Message shown when a player is toggling neutrality too fast.
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
