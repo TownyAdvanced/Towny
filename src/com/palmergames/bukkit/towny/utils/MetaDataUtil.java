@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
+import com.palmergames.bukkit.towny.object.metadata.ByteDataField;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.object.metadata.DecimalDataField;
 import com.palmergames.bukkit.towny.object.metadata.IntegerDataField;
@@ -63,6 +64,16 @@ public class MetaDataUtil {
 	 */
 	public static boolean hasMeta(TownyObject townyObject, DecimalDataField ddf) {
 		return townyObject.hasMeta(ddf.getKey());
+	}
+	
+	/**
+	 * Does the TownyObject have the ByteDataField meta?
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock. 
+	 * @param bdf ByteDataField to check for on the TownyObject.
+	 * @return true if the TownyObject has the ByteDataField meta.
+	 */
+	public static boolean hasMeta(TownyObject townyObject, ByteDataField bdf) {
+		return townyObject.hasMeta(bdf.getKey());
 	}
 
 	/**
@@ -137,6 +148,20 @@ public class MetaDataUtil {
 	}
 	
 	/**
+	 * Get a byte from a TownyObject's metadata.
+	 * 
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param bdf ByteDataField to get from the TownyObject.
+	 * @return byte from the metadata or 0.
+	 */
+	public static byte getByte(TownyObject townyObject, ByteDataField bdf) {
+		CustomDataField<?> cdf = townyObject.getMetadata(bdf.getKey());
+		if (cdf instanceof ByteDataField)
+			return ((ByteDataField) cdf).getValue();
+		return 0;
+	}
+	
+	/**
 	 * Adds a new StringDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
 	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
 	 * @param sdf StringDataField to apply to the TownyObject.
@@ -184,6 +209,16 @@ public class MetaDataUtil {
 	 */
 	public static void addNewMeta(TownyObject townyObject, DecimalDataField ddf, boolean save) {
 		townyObject.addMetaData(ddf, save);
+	}
+	
+	/**
+	 * Adds a new ByteDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param bdf ByteDataField to apply to the TownyObject.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewMeta(TownyObject townyObject, ByteDataField bdf, boolean save) {
+		townyObject.addMetaData(bdf, save);
 	}
 	
 	/**
@@ -239,6 +274,17 @@ public class MetaDataUtil {
 	 */
 	public static void addNewDoubleMeta(TownyObject townyObject, String key, double value, boolean save) {
 		addNewMeta(townyObject, new DecimalDataField(key, value), save);
+	}
+	
+	/**
+	 * Creates and adds a new ByteDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param key String name of the new ByteDataField key. 
+	 * @param value byte value of the ByteDataField key.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewByteMeta(TownyObject townyObject, String key, byte value, boolean save) {
+		addNewMeta(townyObject, new ByteDataField(key, value), save);
 	}
 	
 	/**
@@ -325,6 +371,24 @@ public class MetaDataUtil {
 		CustomDataField<?> cdf = townyObject.getMetadata(ddf.getKey());
 		if (cdf instanceof DecimalDataField) {
 			DecimalDataField value = (DecimalDataField) cdf;
+			value.setValue(num);
+			if (save)
+				townyObject.save();
+		}
+	}
+	
+	/**
+	 * Sets a ByteDataField metadata on a TownyObject.
+	 * 
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param bdf ByteDataField to apply to the TownyObject.
+	 * @param num value to apply to the ByteDataField.
+	 * @param save True to save the TownyObject after setting the metadata. 
+	 */
+	public static void setByte(TownyObject townyObject, ByteDataField bdf, byte num, boolean save) {
+		CustomDataField<?> cdf = townyObject.getMetadata(bdf.getKey());
+		if (cdf instanceof ByteDataField) {
+			ByteDataField value = (ByteDataField) cdf;
 			value.setValue(num);
 			if (save)
 				townyObject.save();

@@ -33,6 +33,7 @@ public class MetadataLoader {
 		deserializerMap.put(BooleanDataField.typeID(), TownyCDFDeserializer.BOOLEAN_DF);
 		deserializerMap.put(DecimalDataField.typeID(), TownyCDFDeserializer.DECIMAL_DF);
 		deserializerMap.put(LongDataField.typeID(), TownyCDFDeserializer.LONG_DF);
+		deserializerMap.put(ByteDataField.typeID(), TownyCDFDeserializer.BYTE_DF);
 	}
 
 	/**
