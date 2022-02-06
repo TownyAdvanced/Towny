@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.141
+version: 0.142
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1434,3 +1434,6 @@ msg_your_locale: 'Towny koristi Vaš lokalni klijent (%s) za prevođenje poruka.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Morate sačekati %s sekundi pre nego što ponovo budete mogli da promenite ime grada.'
 #Added in 1.141
 msg_newday_already_scheduled_soon: 'Novi dnevni zadatak je zakazan da se uskoro dogodi.'
+#Added in 0.142
+#Message shown when a player is toggling neutrality too fast.
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'

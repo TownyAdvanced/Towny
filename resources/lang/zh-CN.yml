@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.141
+version: 0.142
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1434,3 +1434,6 @@ msg_your_locale: 'Towny根据你本地的语言设置（%s）来翻译文字。�
 msg_you_must_wait_x_seconds_before_renaming_your_town: '你必须再等待%s秒才能重命名你的城镇。'
 #Added in 1.141
 msg_newday_already_scheduled_soon: '一个新的一天的任务已经被安排在之后执行。'
+#Added in 0.142
+#Message shown when a player is toggling neutrality too fast.
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
