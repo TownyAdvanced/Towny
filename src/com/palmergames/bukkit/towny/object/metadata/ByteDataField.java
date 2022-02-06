@@ -18,6 +18,10 @@ public class ByteDataField extends CustomDataField<Byte> {
 
 	@Override
 	public @NotNull String getTypeID() {
+		return typeID();
+	}
+	
+	public static String typeID() {
 		return "towny_bytedf";
 	}
 
