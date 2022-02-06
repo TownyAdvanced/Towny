@@ -7243,3 +7243,4 @@ v0.92.0.11:
     - Default: 0
     - Minimum distance between homeblocks.
     - Closes #5713.
+  - Create a new Byte datafield, courtesy of Warriorrrr with PR #5714.
