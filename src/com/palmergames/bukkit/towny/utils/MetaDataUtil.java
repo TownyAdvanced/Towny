@@ -382,7 +382,7 @@ public class MetaDataUtil {
 	 * 
 	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
 	 * @param bdf ByteDataField to apply to the TownyObject.
-	 * @param byte value to apply to the ByteDataField.
+	 * @param num value to apply to the ByteDataField.
 	 * @param save True to save the TownyObject after setting the metadata. 
 	 */
 	public static void setByte(TownyObject townyObject, ByteDataField bdf, byte num, boolean save) {
