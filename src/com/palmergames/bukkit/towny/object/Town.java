@@ -1140,7 +1140,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public boolean isOverClaimed() {
-		return TownySettings.getTownBlockRatio() > -1 && getTownBlocks().size() > getMaxTownBlocks();
+		return !TownySettings.areTownBlocksUnlimited() && getTownBlocks().size() > getMaxTownBlocks();
 	}
 	
 	/**

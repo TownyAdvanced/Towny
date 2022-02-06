@@ -3881,7 +3881,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				// Not enough available claims.
-				if (TownySettings.getTownBlockRatio() > -1 && selection.size() > town.availableTownBlocks())
+				if (!TownySettings.areTownBlocksUnlimited() && selection.size() > town.availableTownBlocks())
 					throw new TownyException(Translatable.of("msg_err_not_enough_blocks"));
 
 				// If this is a single claim and it is already claimed, by someone else.
