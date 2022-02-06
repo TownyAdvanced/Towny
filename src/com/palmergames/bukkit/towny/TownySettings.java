@@ -2567,6 +2567,11 @@ public class TownySettings {
 
 		return getInt(ConfigNodes.GTOWN_SETTINGS_PVP_COOLDOWN_TIMER);
 	}
+
+	public static int getPeacefulCoolDownTime() {
+
+		return getInt(ConfigNodes.GTOWN_SETTINGS_NEUTRAL_COOLDOWN_TIMER);
+	}
 	
 	public static String getTownAccountPrefix() {
 

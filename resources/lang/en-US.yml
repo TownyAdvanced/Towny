@@ -1,5 +1,5 @@
 name: Towny
-version: 0.141
+version: 0.142
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1621,3 +1621,8 @@ msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds
 
 #Added in 1.141
 msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'
+
+#Added in 0.142
+
+#Message shown when a player is toggling neutrality too fast.
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'

@@ -7244,3 +7244,8 @@ v0.92.0.11:
     - Minimum distance between homeblocks.
     - Closes #5713.
   - Create a new Byte datafield, courtesy of Warriorrrr with PR #5714.
+  - Bump language file to 0.142.
+  - New Config Option: global_town_settings.peaceful_cooldown_time
+    - Default: 30
+    - Number of seconds that must pass before peacfulness can be toggled by a town or nation.
+    - Closes #5716.

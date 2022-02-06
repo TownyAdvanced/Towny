@@ -597,7 +597,13 @@ public enum ConfigNodes {
 			"",
 			"# Number of seconds that must pass before pvp can be toggled by a town.",
 			"# Applies to residents of the town using /res toggle pvp, as well as",
-			"# plots having their PVP toggled using /plot toggle pvp."),	
+			"# plots having their PVP toggled using /plot toggle pvp."),
+	GTOWN_SETTINGS_NEUTRAL_COOLDOWN_TIMER(
+			"global_town_settings.peaceful_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before peacfulness can be toggled by a town or nation."),
+
 	GTOWN_SETTINGS_TOWN_RESPAWN(
 			"global_town_settings.town_respawn",
 			"false",

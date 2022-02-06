@@ -1565,6 +1565,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (split[0].equalsIgnoreCase("public")) {
+				
+				if (TownySettings.getPeacefulCoolDownTime() > 0 && 
+					!admin && 
+					CooldownTimerTask.hasCooldown(town.getName(), CooldownType.NEUTRALITY) && 
+					!permSource.testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode())) {
+					throw new TownyException(Translatable.of("msg_err_cannot_toggle_neutral_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.NEUTRALITY)));
+				}
 
 				// Fire cancellable event directly before setting the toggle.
 				TownTogglePublicEvent preEvent = new TownTogglePublicEvent(sender, town, admin, choice.orElse(!town.isPublic()));
@@ -1588,7 +1595,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					toggleTest((Player) sender, town, StringMgmt.join(split, " "));
 				
 					// Test to see if the pvp cooldown timer is active for the town.
-					if (TownySettings.getPVPCoolDownTime() > 0 && !admin && CooldownTimerTask.hasCooldown(town.getName(), CooldownType.PVP) && !permSource.testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode()))					 
+					if (TownySettings.getPVPCoolDownTime() > 0 && CooldownTimerTask.hasCooldown(town.getName(), CooldownType.PVP) && !permSource.testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode()))					 
 						throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.PVP)));
 
 					// Test to see if an outsider being inside of the Town would prevent toggling PVP.

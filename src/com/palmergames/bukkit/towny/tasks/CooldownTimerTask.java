@@ -12,6 +12,7 @@ public class CooldownTimerTask extends TownyTimerTask {
 
 	public enum CooldownType{
 		PVP(TownySettings.getPVPCoolDownTime()),
+		NEUTRALITY(TownySettings.getPeacefulCoolDownTime()),
 		TELEPORT(TownySettings.getSpawnCooldownTime()),
 		TOWN_RENAME(60),
 		OUTLAW_WARNING(TownySettings.getOutlawWarningMessageCooldown());
