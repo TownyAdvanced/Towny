@@ -2650,11 +2650,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownySettings.getMinDistanceBetweenHomeblocks() > 0) {
 					
 				final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTowns(coord, town);
-				if (distanceToNextNearestHomeblock < TownySettings.getMinDistanceFromTownHomeblocks() ||  
-					distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks())
+				if (distanceToNextNearestHomeblock < TownySettings.getMinDistanceFromTownHomeblocks() ||
+					distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
 					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
 
-				if (distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
+				if (TownySettings.getMinDistanceBetweenHomeblocks() > 0 &&
+					distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
 					throw new TownyException(Translatable.of("msg_too_far"));
 			}
 			
@@ -2914,7 +2915,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
 					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
 
-				if (distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
+				if (TownySettings.getMinDistanceBetweenHomeblocks() > 0 &&
+					distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
 					throw new TownyException(Translatable.of("msg_too_far"));
 			}
 			
