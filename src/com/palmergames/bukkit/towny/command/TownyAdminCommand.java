@@ -1371,7 +1371,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				town.save();
 				
 			} else if (split[1].equalsIgnoreCase("trust")) {
-				TownCommand.parseTownTrustCommand(player, StringMgmt.remArgs(split, 2), town);
+				TownCommand.parseTownTrustCommand(sender, StringMgmt.remArgs(split, 2), town);
 			} else if (split[1].equalsIgnoreCase("merge")) {
 				TownCommand.parseTownMergeCommand(sender, StringMgmt.remArgs(split, 2), town, true);
 			} else if (split[1].equalsIgnoreCase("forcemerge")) {
