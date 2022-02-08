@@ -142,12 +142,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			for (File worldfolder : worldFolders) {
 				String worldName = worldfolder.getName();
-				TownyWorld world;
-				try {
-					world = getWorld(worldName);
-				} catch (NotRegisteredException e) {
+				TownyWorld world = TownyUniverse.getInstance().getWorldMap().get(worldName);
+				if (world == null) {
 					newWorld(worldName);
-					world = getWorld(worldName);
+					world = TownyUniverse.getInstance().getWorldMap().get(worldName);
 				}
 				File worldFolder = new File(dataFolderPath + File.separator + "townblocks" + File.separator + worldName);
 				File[] townBlockFiles = worldFolder.listFiles(file->file.getName().endsWith(".data"));
@@ -797,9 +795,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("homeBlock");
 				if (line != null) {
 					tokens = line.split(",");
-					if (tokens.length == 3)
-						try {
-							TownyWorld world = getWorld(tokens[0]);
+					if (tokens.length == 3) {
+						TownyWorld world = TownyUniverse.getInstance().getWorldMap().get(tokens[0]); 
+						if (world == null)
+							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_world", town.getName()));
+						else {
 							try {
 								int x = Integer.parseInt(tokens[1]);
 								int z = Integer.parseInt(tokens[2]);
@@ -812,9 +812,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							} catch (TownyException e) {
 								TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_town_homeblock_not_exist", town.getName()));
 							}
-                        } catch (NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_world", town.getName()));
 						}
+					}
 				}
 				
 				line = keys.get("spawn");
@@ -1545,7 +1544,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String path;
 		
 
-		for (TownBlock townBlock : getAllTownBlocks()) {
+		for (TownBlock townBlock : TownyUniverse.getInstance().getTownBlocks().values()) {
 			path = getTownBlockFilename(townBlock);
 			
 			File fileTownBlock = new File(path);

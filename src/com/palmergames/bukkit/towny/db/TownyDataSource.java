@@ -472,6 +472,10 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTownBlocks(Town town);
 
+	/**
+	 * @deprecated as of 0.97.5.16, use {@link TownyUniverse#getTownBlocks().values()}
+	 */
+	@Deprecated
 	abstract public Collection<TownBlock> getAllTownBlocks();
 
 	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;

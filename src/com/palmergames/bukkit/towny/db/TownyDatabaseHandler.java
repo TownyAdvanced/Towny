@@ -595,6 +595,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * getWorlds methods.
 	 */
 
+	@Deprecated
 	@Override
 	public TownyWorld getWorld(String name) throws NotRegisteredException {
 
@@ -616,6 +617,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * getTownblocks methods.
 	 */
 
+	@Deprecated
 	@Override
 	public Collection<TownBlock> getAllTownBlocks() {
 		return TownyUniverse.getInstance().getTownBlocks().values();
@@ -1290,16 +1292,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public PlotBlockData loadPlotData(String worldName, int x, int z) {
 
-		try {
-			TownyWorld world = getWorld(worldName);
-			TownBlock townBlock = new TownBlock(x, z, world);
-
-			return loadPlotData(townBlock);
-		} catch (NotRegisteredException e) {
-			// Failed to get world
-			e.printStackTrace();
-		}
-		return null;
+		TownyWorld world = TownyUniverse.getInstance().getWorldMap().get(worldName); 
+		if (world == null)
+			return null;
+		
+		return loadPlotData(new TownBlock(x, z, world));
 	}
 
 	/**

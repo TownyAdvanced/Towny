@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.townblockstatus.NationZoneTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -353,10 +352,9 @@ public class TownyAPI {
      * @return true or false
      */
     public boolean isTownyWorld(World world) {
-    	try {
-			return townyUniverse.getDataSource().getWorld(world.getName()).isUsingTowny();
-		} catch (NotRegisteredException e) {}
-    	return false;
+    	TownyWorld townyWorld = townyUniverse.getWorldMap().get(world.getName()); 
+    	return townyWorld != null && townyWorld.isUsingTowny();
+
     }
     
     /**
@@ -367,11 +365,7 @@ public class TownyAPI {
      */
     @Nullable
     public TownyWorld getTownyWorld(String worldName) {
-    	try {
-			return townyUniverse.getDataSource().getWorld(worldName);
-    	} catch (NotRegisteredException ignored) {
-    		return null;
-		}
+    	return townyUniverse.getWorldMap().get(worldName);
     }
     
     /**

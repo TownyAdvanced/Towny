@@ -38,6 +38,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -792,14 +793,14 @@ public class Towny extends JavaPlugin {
 
 	public PlayerCache newCache(Player player) {
 
-		try {
-			PlayerCache cache = new PlayerCache(TownyUniverse.getInstance().getDataSource().getWorld(player.getWorld().getName()), player);
-			playerCache.put(player.getUniqueId(), cache);
-			return cache;
-		} catch (NotRegisteredException e) {
+		TownyWorld world = TownyUniverse.getInstance().getWorldMap().get(player.getWorld().getName());
+		if (world == null) {
 			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world (" + player.getWorld().getName() + ".");
-			return null;
+			return null;	
 		}
+		PlayerCache cache = new PlayerCache(world, player);
+		playerCache.put(player.getUniqueId(), cache);
+		return cache;
 
 	}
 
