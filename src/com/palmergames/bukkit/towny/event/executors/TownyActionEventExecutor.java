@@ -212,6 +212,17 @@ public class TownyActionEventExecutor {
 	}
 
 	/**
+	 * Can the player destroy this block?
+	 * 
+	 * @param player The player attempting to break the block.
+	 * @param block The block being broken.
+	 * @return true if allowed.
+	 */
+	public static boolean canDestroy(Player player, Block block) {
+		return canDestroy(player, block.getLocation(), block.getType());
+	}
+
+	/**
 	 * Can the player use switches of this material at this location?
 	 * 
 	 * @param player     - Player involved in the event.
