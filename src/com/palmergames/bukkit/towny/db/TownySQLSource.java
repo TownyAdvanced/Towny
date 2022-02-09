@@ -1009,10 +1009,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (line != null) {
 				search = (line.contains("#")) ? "#" : ",";
 				tokens = line.split(search);
-				if (tokens.length == 3)
-					try {
-						TownyWorld world = getWorld(tokens[0]);
-
+				if (tokens.length == 3) {
+					TownyWorld world = TownyUniverse.getInstance().getWorld(tokens[0]);
+					if (world == null)
+						TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+					else {
 						try {
 							int x = Integer.parseInt(tokens[1]);
 							int z = Integer.parseInt(tokens[2]);
@@ -1028,11 +1029,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						} catch (TownyException e) {
 							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
 						}
-
-					} catch (NotRegisteredException e) {
-						TownyMessaging.sendErrorMsg(
-								"[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
 					}
+				}
 			}
 
 			line = rs.getString("spawn");

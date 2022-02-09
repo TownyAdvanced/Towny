@@ -793,9 +793,16 @@ public class TownyUniverse {
 		return nationsTrie;
 	}
 	
-    public Map<String, TownyWorld> getWorldMap() {
+	// =========== World Methods ===========
+	
+	public Map<String, TownyWorld> getWorldMap() {
         return worlds;
     }
+	
+	@Nullable
+	public TownyWorld getWorld(String name) {
+		return worlds.get(name);
+	}
     
     /*
      * Towny Tree command output.
