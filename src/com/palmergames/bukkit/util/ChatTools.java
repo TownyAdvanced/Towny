@@ -94,6 +94,8 @@ public class ChatTools {
 
 	private static String legacyFormatTitle(String title) {
 		String line = ".oOo.__________________________________________________.oOo.";
+		if (title.length() > line.length())
+			title = title.substring(0, line.length());
 		int pivot = line.length() / 2;
 		String center = title;
 		String out = Translation.of("status_title_primary_colour") + line.substring(0, Math.max(0, (pivot - center.length() / 2)));

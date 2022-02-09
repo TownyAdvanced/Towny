@@ -7250,3 +7250,6 @@ v0.92.0.11:
     - Number of seconds that must pass before peacfulness can be toggled by a town or nation.
     - Closes #5716.
   - Fix regression with max-homeblock-distance.  
+0.97.5.17:
+  - Fix legacy status title-maker being terribly dumb.
+    - Closes #5721. 
