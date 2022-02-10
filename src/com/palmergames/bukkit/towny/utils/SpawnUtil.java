@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
@@ -84,7 +86,7 @@ public class SpawnUtil {
 		boolean isTownyAdmin = isTownyAdmin(player);
 		
 		// Get the location we're spawning to.
-		final Location spawnLoc = getSpawnLoc(player, resident, town, nation, spawnType, outpost, split);
+		final Location spawnLoc = getSpawnLoc(player, town, nation, spawnType, outpost, split);
 
 		// Set up either the townSpawnLevel or nationSpawnLevel variable.
 		// This determines whether a spawn is considered town, nation, public, allied, admin via TownSpawnLevel and NationSpawnLevel objects.
@@ -138,19 +140,25 @@ public class SpawnUtil {
 	 * @param outlaw Resident which is outlawed and being moved.
 	 */
 	public static void outlawTeleport(Town town, Resident outlaw) {
-		Location spawnLocation = town.getWorld().getSpawnLocation();
 		Player outlawedPlayer = outlaw.getPlayer();
-		if (!TownySettings.getOutlawTeleportWorld().equals("")) {
-			spawnLocation = Objects.requireNonNull(Bukkit.getWorld(TownySettings.getOutlawTeleportWorld())).getSpawnLocation();
-		}
+		if (outlawedPlayer == null)
+			return;
+
 		// sets tp location to their bedspawn only if it isn't in the town they're being teleported from.
-		Location bed = outlawedPlayer.getBedSpawnLocation();
-		if (bed != null && TownyAPI.getInstance().getTown(bed) != town)
-			spawnLocation = bed;
-		if (outlaw.hasTown() && TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer) != null)
-			spawnLocation = TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer);
-		TownyMessaging.sendMsg(outlaw, Translatable.of("msg_outlaw_kicked", town));
-		initiatePluginTeleport(outlaw, spawnLocation, true);
+		PaperLib.getBedSpawnLocationAsync(outlawedPlayer, true).thenAccept(bed -> {
+			Location spawnLocation = town.getWorld().getSpawnLocation();
+			if (!TownySettings.getOutlawTeleportWorld().equals(""))
+				spawnLocation = Objects.requireNonNull(Bukkit.getWorld(TownySettings.getOutlawTeleportWorld())).getSpawnLocation();
+			
+			if (bed != null && TownyAPI.getInstance().getTown(bed) != town)
+				spawnLocation = bed;
+			
+			if (outlaw.hasTown() && TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer) != null)
+				spawnLocation = TownyAPI.getInstance().getTownSpawnLocation(outlawedPlayer);
+			
+			TownyMessaging.sendMsg(outlaw, Translatable.of("msg_outlaw_kicked", town));
+			initiatePluginTeleport(outlaw, spawnLocation, true);
+		});		
 	}
 	
 	/**
@@ -327,7 +335,6 @@ public class SpawnUtil {
 	 * Get the destination location of this Spawn action.
 	 * 
 	 * @param player    Player spawning.
-	 * @param resident  Resident of the player spawning.
 	 * @param town      Town the player could be spawning to, or null.
 	 * @param nation    Nation the player could be spawning to, or null.
 	 * @param spawnType SpawnType of this Spawn action.
@@ -337,12 +344,12 @@ public class SpawnUtil {
 	 * @throws TownyException thrown when the eventual spawn location is invalid or
 	 *                        the player is outlawed at that location.
 	 */
-	private static Location getSpawnLoc(Player player, Resident resident, Town town, Nation nation, SpawnType spawnType, boolean outpost, String[] split) throws TownyException {
+	private static Location getSpawnLoc(Player player, Town town, Nation nation, SpawnType spawnType, boolean outpost, String[] split) throws TownyException {
 		Location spawnLoc = null;
 		switch (spawnType) {
 		case RESIDENT:
 			if (TownySettings.getBedUse() && player.getBedSpawnLocation() != null)
-				spawnLoc = player.getBedSpawnLocation();
+				spawnLoc = player.getBedSpawnLocation(); // TODO: Use PaperLib#getBedSpawnLocationAsync
 			else if (town != null && town.hasSpawn())
 				spawnLoc = town.getSpawnOrNull();
 			else
@@ -615,18 +622,15 @@ public class SpawnUtil {
 	 * @param resident Resident needing a location to spawn to.
 	 * @return bed spawn OR town spawn OR last world spawn
 	 */
-	private static Location getIdealLocation(Resident resident) {
+	private static CompletableFuture<Location> getIdealLocation(Resident resident) {
 		Town town = resident.getTownOrNull();
 		Location loc = resident.getPlayer().getWorld().getSpawnLocation();
 
 		if (town != null && town.hasSpawn())
 			loc = town.getSpawnOrNull();
 
-		Location bed = resident.getPlayer().getBedSpawnLocation();
-		if (bed != null)
-			loc = bed;
-		
-		return loc;
+		Location finalLoc = loc;
+		return PaperLib.getBedSpawnLocationAsync(resident.getPlayer(), true).thenApply(bed -> bed == null ? finalLoc : bed);
 	}
 	
 	/**
@@ -639,6 +643,10 @@ public class SpawnUtil {
 	 */
 	private static void initiatePluginTeleport(Resident resident, Location loc, boolean ignoreWarmup) {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> PaperLib.teleportAsync(resident.getPlayer(), loc, TeleportCause.PLUGIN),
-			ignoreWarmup ? 0 : TownySettings.getTeleportWarmupTime() * 20);
+			ignoreWarmup ? 0 : TownySettings.getTeleportWarmupTime() * 20L);
+	}
+	
+	private static void initiatePluginTeleport(Resident resident, CompletableFuture<Location> loc, boolean ignoreWarmup) {
+		loc.thenAccept(location -> initiatePluginTeleport(resident, location, ignoreWarmup));
 	}
 }

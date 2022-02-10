@@ -77,7 +77,6 @@ import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -896,13 +895,11 @@ public class TownyPlayerListener implements Listener {
 				if (TownySettings.getOutlawTeleportWarmup() > 0) {
 					TownyMessaging.sendMsg(outlaw, Translatable.of("msg_outlaw_kick_cooldown", town, TimeMgmt.formatCountdownTime(TownySettings.getOutlawTeleportWarmup())));
 				}
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						if (TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) != null && TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) == town && town.hasOutlaw(outlaw.getPlayer().getName())) 
-							SpawnUtil.outlawTeleport(town, outlaw);
-					}
-				}.runTaskLater(plugin, TownySettings.getOutlawTeleportWarmup() * 20);
+				
+				Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+					if (TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) != null && TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) == town && town.hasOutlaw(outlaw.getPlayer().getName()))
+						SpawnUtil.outlawTeleport(town, outlaw);
+				}, TownySettings.getOutlawTeleportWarmup() * 20L);
 			}
 		}
 	}
