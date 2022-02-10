@@ -67,44 +67,27 @@ public class SpawnUtil {
 		Resident resident = getResident(player);
 
 		// Set up town and nation variables.
-		Town town = null;
-		Nation nation = null;
-		switch (spawnType) {
-			case RESIDENT:
-				town = resident.getTownOrNull();
-				break;
-			case TOWN:
-				town = (Town) townyObject;
-				break;
-			case NATION:
-				nation = (Nation) townyObject;
-				break;
-			default:
-		}
+		final Town town = switch (spawnType) {
+			case RESIDENT -> resident.getTownOrNull();
+			case TOWN -> (Town) townyObject;
+			default -> null;
+		};
+
+		final Nation nation = spawnType == SpawnType.NATION ? (Nation) townyObject : null;
 		
 		// Is this an admin spawning?
 		boolean isTownyAdmin = isTownyAdmin(player);
-		
-		// Get the location we're spawning to.
-		final Location spawnLoc = getSpawnLoc(player, town, nation, spawnType, outpost, split);
 
 		// Set up either the townSpawnLevel or nationSpawnLevel variable.
 		// This determines whether a spawn is considered town, nation, public, allied, admin via TownSpawnLevel and NationSpawnLevel objects.
 		// Accounts for costs, permission, config settings and messages.
-		TownSpawnLevel townSpawnLevel = null;
-		NationSpawnLevel nationSpawnLevel = null;
-		switch (spawnType) {
-			case RESIDENT:
-				townSpawnLevel = isTownyAdmin ? TownSpawnLevel.ADMIN : TownSpawnLevel.TOWN_RESIDENT;
-				break;
-			case TOWN:
-				townSpawnLevel = isTownyAdmin ? TownSpawnLevel.ADMIN : getTownSpawnLevel(player, resident, town, outpost, split.length == 0);
-				break;
-			case NATION:
-				nationSpawnLevel = isTownyAdmin ? NationSpawnLevel.ADMIN : getNationSpawnLevel(player, resident, nation, split.length == 0);
-				break;
-			default:
-		}
+		final TownSpawnLevel townSpawnLevel = switch (spawnType) {
+			case RESIDENT -> isTownyAdmin ? TownSpawnLevel.ADMIN : TownSpawnLevel.TOWN_RESIDENT;
+			case TOWN -> isTownyAdmin ? TownSpawnLevel.ADMIN : getTownSpawnLevel(player, resident, town, outpost, split.length == 0);
+			default -> null;
+		};
+		
+		final NationSpawnLevel nationSpawnLevel = spawnType == SpawnType.NATION ? isTownyAdmin ? NationSpawnLevel.ADMIN : getNationSpawnLevel(player, resident, nation, split.length == 0) : null;
 
 		// Prevent spawn travel while in the config's disallowed zones.
 		// Throws a TownyException if the player is disallowed.
@@ -117,20 +100,26 @@ public class SpawnUtil {
 		// Don't allow if they cannot pay.
 		if (travelCost > 0 && !resident.getAccount().canPayFromHoldings(travelCost))
 			throw new TownyException(notAffordMSG);
-		
-		// Fire a cancellable event right before a player would actually pay.
-		// Throws a TownyException if the event is cancelled.
-		sendSpawnEvent(player, spawnType, spawnLoc);
-		
-		// There is a cost to spawn, prompt with confirmation unless ignoreWarn is true.
-		if (travelCost > 0) {
-			// Get paymentMsg for the money.csv and the Account being paid.
-			final String paymentMsg = getPaymentMsg(townSpawnLevel, nationSpawnLevel, spawnType);
-			final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : EconomyAccount.SERVER_ACCOUNT;
-			initiateCostedSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, ignoreWarn);
-		// No Cost so skip confirmation system.
-		} else
-			initiateSpawn(player, spawnLoc);
+
+		getSpawnLoc(player, town, nation, spawnType, outpost, split).thenAccept(spawnLoc -> {
+			// Fire a cancellable event right before a player would actually pay.
+			// Throws a TownyException if the event is cancelled.
+			try {
+				sendSpawnEvent(player, spawnType, spawnLoc);
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+			}
+
+			// There is a cost to spawn, prompt with confirmation unless ignoreWarn is true.
+			if (travelCost > 0) {
+				// Get paymentMsg for the money.csv and the Account being paid.
+				final String paymentMsg = getPaymentMsg(townSpawnLevel, nationSpawnLevel, spawnType);
+				final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : EconomyAccount.SERVER_ACCOUNT;
+				initiateCostedSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, ignoreWarn);
+				// No Cost so skip confirmation system.
+			} else
+				initiateSpawn(player, spawnLoc);
+		});
 	}
 
 	/**
@@ -344,30 +333,30 @@ public class SpawnUtil {
 	 * @throws TownyException thrown when the eventual spawn location is invalid or
 	 *                        the player is outlawed at that location.
 	 */
-	private static Location getSpawnLoc(Player player, Town town, Nation nation, SpawnType spawnType, boolean outpost, String[] split) throws TownyException {
-		Location spawnLoc = null;
-		switch (spawnType) {
-		case RESIDENT:
-			Location bedLoc;
-			if (TownySettings.getBedUse() && (bedLoc = player.getBedSpawnLocation()) != null) // TODO: Use PaperLib#getBedSpawnLocationAsync
-				spawnLoc = bedLoc;
-			else if (town != null && town.hasSpawn())
-				spawnLoc = town.getSpawnOrNull();
-			else
-				spawnLoc = plugin.getCache(player).getLastLocation().getWorld().getSpawnLocation();
-			break;
-		case TOWN:
-			if (outpost)
-				spawnLoc = getOutpostSpawnLocation(town, split);
-			else
-				spawnLoc = town.getSpawn();
-			break;
-		case NATION:
-			spawnLoc = nation.getSpawn();
-			break;
-		default:
-		}
-		return spawnLoc;
+	private static CompletableFuture<Location> getSpawnLoc(Player player, Town town, Nation nation, SpawnType spawnType, boolean outpost, String[] split) throws TownyException {
+		return switch (spawnType) {
+			case RESIDENT:
+				if (TownySettings.getBedUse()) {
+					yield PaperLib.getBedSpawnLocationAsync(player, true).thenApply(bedLoc -> {
+						if (bedLoc != null)
+							return bedLoc;
+						else if (town != null && town.hasSpawn())
+							return town.getSpawnOrNull();
+						else
+							return plugin.getCache(player).getLastLocation().getWorld().getSpawnLocation();
+					});
+				} else if (town != null && town.hasSpawn())
+					yield CompletableFuture.completedFuture(town.getSpawnOrNull());
+				else
+					yield CompletableFuture.completedFuture(plugin.getCache(player).getLastLocation().getWorld().getSpawnLocation());
+			case TOWN:
+				if (outpost)
+					yield CompletableFuture.completedFuture(getOutpostSpawnLocation(town, split));
+				else
+					yield CompletableFuture.completedFuture(town.getSpawn());
+			case NATION:
+				yield CompletableFuture.completedFuture(nation.getSpawn());
+		};
 	}
 
 	/**
