@@ -70,7 +70,7 @@ public class AreaSelectionUtil {
 			int available = claim ? 0 : 1009;
 			if (claim) {
 				if (owner instanceof Town town) {
-					available = TownySettings.areTownBlocksUnlimited() ? 1099 : town.availableTownBlocks();
+					available = TownySettings.areTownBlocksUnlimited() ? 1009 : town.availableTownBlocks();
 				} else if (owner instanceof Resident resident) {
 					available = TownySettings.getMaxResidentPlots(resident) - resident.getTownBlocks().size();
 				}
