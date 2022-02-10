@@ -7254,3 +7254,6 @@ v0.92.0.11:
   - Fix legacy status title-maker being terribly dumb.
     - Closes #5721. 
   - Send error message when the console tries to use /ta town NAME set spawn|homeblock|outpost|primaryjail.
+  - Fix comment for player_owned_plot_limited_commands in the config.
+  - Protect tnt from being primed with fire arrows, courtesy of Warriorrrr with PR #5723.
+  - Fix command feedback when using trust commands via console, courtesy of Warriorrrr with PR #5724. 

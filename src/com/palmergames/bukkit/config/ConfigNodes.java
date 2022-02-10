@@ -896,8 +896,7 @@ public enum ConfigNodes {
 			"# Players with the towny.claimed.townowned.* permission node will be able to run these commands",
 			"# inside of town-owned land. This would include mayors, assistants and possibly a builder rank.",
 			"# Players with the towny.claimed.owntown.* permission node (given to mayors/assistants usually,)",
-			"# will also not be limited by this command blacklist.",
-			"# Commands have to be on town_command_blacklisting.town_blacklisted_commands, else this is not going to be checked."
+			"# will also not be limited by this command blacklist."
 	),
 	
 	GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS(
