@@ -348,8 +348,9 @@ public class SpawnUtil {
 		Location spawnLoc = null;
 		switch (spawnType) {
 		case RESIDENT:
-			if (TownySettings.getBedUse() && player.getBedSpawnLocation() != null)
-				spawnLoc = player.getBedSpawnLocation(); // TODO: Use PaperLib#getBedSpawnLocationAsync
+			Location bedLoc;
+			if (TownySettings.getBedUse() && (bedLoc = player.getBedSpawnLocation()) != null) // TODO: Use PaperLib#getBedSpawnLocationAsync
+				spawnLoc = bedLoc;
 			else if (town != null && town.hasSpawn())
 				spawnLoc = town.getSpawnOrNull();
 			else
