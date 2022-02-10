@@ -4415,84 +4415,84 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_name"));
 	}
 	
-	public static void parseTownTrustCommand(Player player, String[] args, @Nullable Town town) {
+	public static void parseTownTrustCommand(CommandSender sender, String[] args, @Nullable Town town) {
 		
 		if (args.length < 1
 			|| args.length < 2 && (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove"))
 			|| args.length == 1 && !args[0].equalsIgnoreCase("list")) {
-			HelpMenu.TOWN_TRUST_HELP.send(player);
+			HelpMenu.TOWN_TRUST_HELP.send(sender);
 			return;
 		}
 		
-		if (town == null)
+		if (town == null && sender instanceof Player player)
 			town = TownyAPI.getInstance().getResident(player.getName()).getTownOrNull();
 		
 		if (town == null) {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_resident_doesnt_belong_to_any_town"));
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_resident_doesnt_belong_to_any_town"));
 			return;
 		}
 
 		if (args[0].equalsIgnoreCase("list")) {
 			List<String> output = town.getTrustedResidents().isEmpty()
-					? Collections.singletonList(Translatable.of("status_no_town").forLocale(player)) // String which is "None".
+					? Collections.singletonList(Translatable.of("status_no_town").forLocale(sender)) // String which is "None".
 					: town.getTrustedResidents().stream().map(res -> res.getName()).collect(Collectors.toList());
-			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedStrings(Translatable.of("status_trustedlist").forLocale(player), output));
+			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedStrings(Translatable.of("status_trustedlist").forLocale(sender), output));
 			return;
 		}
 		
-		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_TRUST.getNode())) {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_command_disable"));
+		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWN_TRUST.getNode())) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_command_disable"));
 			return;
 		}
 
 		Resident resident = TownyAPI.getInstance().getResident(args[1]);
 		if (resident == null || resident.isNPC()) {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", args[1]));
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", args[1]));
 			return;
 		}
 		
 		if (args[0].equalsIgnoreCase("add")) {
 			if (town.hasTrustedResident(resident)) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_already_trusted", resident.getName(), Translatable.of("town_sing")));
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_already_trusted", resident.getName(), Translatable.of("town_sing")));
 				return;
 			}
 
-			TownTrustAddEvent event = new TownTrustAddEvent(player, resident, town);
+			TownTrustAddEvent event = new TownTrustAddEvent(sender, resident, town);
 			Bukkit.getPluginManager().callEvent(event);
 			
 			if (event.isCancelled()) {
-				TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
+				TownyMessaging.sendErrorMsg(sender, event.getCancelMessage());
 				return;
 			}
 
 			town.addTrustedResident(resident);
 			plugin.deleteCache(resident);
 			
-			TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_added", resident.getName(), Translatable.of("town_sing")));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_added", resident.getName(), Translatable.of("town_sing")));
 			if (BukkitTools.isOnline(resident.getName()))
-				TownyMessaging.sendMsg(resident.getPlayer(), Translatable.of("msg_trusted_added_2", player.getName(), Translatable.of("town_sing"), town.getName()));
+				TownyMessaging.sendMsg(resident.getPlayer(), Translatable.of("msg_trusted_added_2", sender instanceof Player player ? player.getName() : "Console", Translatable.of("town_sing"), town.getName()));
 		} else if (args[0].equalsIgnoreCase("remove")) {
 			if (!town.hasTrustedResident(resident)) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_not_trusted", resident.getName(), Translatable.of("town_sing")));
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_trusted", resident.getName(), Translatable.of("town_sing")));
 				return;
 			}
 
-			TownTrustRemoveEvent event = new TownTrustRemoveEvent(player, resident, town);
+			TownTrustRemoveEvent event = new TownTrustRemoveEvent(sender, resident, town);
 			Bukkit.getPluginManager().callEvent(event);
 			
 			if (event.isCancelled()) {
-				TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
+				TownyMessaging.sendErrorMsg(sender, event.getCancelMessage());
 				return;
 			}
 			
 			town.removeTrustedResident(resident);
 			plugin.deleteCache(resident);
 			
-			TownyMessaging.sendMsg(player, Translatable.of("msg_trusted_removed", resident.getName(), Translatable.of("town_sing")));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_removed", resident.getName(), Translatable.of("town_sing")));
 			if (BukkitTools.isOnline(resident.getName()))
-				TownyMessaging.sendMsg(resident.getPlayer(), Translatable.of("msg_trusted_removed_2", player.getName(), Translatable.of("town_sing"), town.getName()));
+				TownyMessaging.sendMsg(resident.getPlayer(), Translatable.of("msg_trusted_removed_2", sender instanceof Player player ? player.getName() : "Console", Translatable.of("town_sing"), town.getName()));
 		} else {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", args[0]));
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", args[0]));
 			return;
 		}
 		
