@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.142
+version: 0.143
 language: português (Brasil)
 author: BannerGames, Plugner
 website: 'http://townyadvanced.github.io/'
@@ -1437,3 +1437,6 @@ msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happe
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
+#Added in 0.143
+#Message shown when a console sender uses a command meant for in game.
+msg_err_command_not_for_console_use: 'This command cannot be used from the console.'

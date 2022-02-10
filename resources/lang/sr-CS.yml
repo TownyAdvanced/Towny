@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.142
+version: 0.143
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -217,16 +217,16 @@ msg_world_expl: '&cNa ovom svetu su Eksplozije prisilno uključene.'
 msg_world_fire: '&cNa ovom svetu je širenje Vatre prisilno uključeno.'
 msg_plot_pvp: '&cPVP se ne može uključiti/isključiti u Plotu Arene.'
 msg_plot_regen_wrong_size: '&cRegen can only be performed when the default plot size (16) is used.'
-msg_reloaded: '&2Towny-jeve postavke su se ponovo učitale.'
+msg_reloaded: '&2Towny podešavanja ponovo učitana.'
 msg_undo_complete: '&2Poništavanje gotovo.'
-msg_give_total: '&bDadoste %s bonus. (Ukupno: %s)'
+msg_give_total: '&bDali ste %s bonus. (Ukupno: %s)'
 mag_backup_success: '&2Pravljenje rezervne kopije uspešno.'
 msg_xx_withdrew_xx: '&b%s podigao/la %s iz %s banke.'
 msg_xx_deposited_xx: '&b%s uplatio/la %s u %s banku.'
 msg_insuf_funds: '&cNemate toliko.'
 msg_err_withdraw_disabled: 'Podizanje iz ove banke je onemogućeno!'
 msg_err_deposit_capped: 'Nije moguće uplatiti novac. Ova banka je ograničena na %s.'
-msg_set_town_home: '&bBlok doma grada uspešno promenjen na %s'
+msg_set_town_home: '&bGradski blok doma uspešno promenjen na %s'
 msg_set_town_spawn: '&bUspešno promenjen spawn grada.'
 msg_set_outpost_spawn: '&bUspešno promenjen spawn periferije.'
 msg_set_title: '&b%s je dobio/la titulu ''%s&b''.'
@@ -1437,3 +1437,6 @@ msg_newday_already_scheduled_soon: 'Novi dnevni zadatak je zakazan da se uskoro 
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
+#Added in 0.143
+#Message shown when a console sender uses a command meant for in game.
+msg_err_command_not_for_console_use: 'This command cannot be used from the console.'
