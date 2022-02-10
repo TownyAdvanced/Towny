@@ -7253,3 +7253,4 @@ v0.92.0.11:
 0.97.5.17:
   - Fix legacy status title-maker being terribly dumb.
     - Closes #5721. 
+  - Send error message when the console tries to use /ta town NAME set spawn|homeblock|outpost|primaryjail.

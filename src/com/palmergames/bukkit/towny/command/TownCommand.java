@@ -2534,14 +2534,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 					
 				} else if (split[0].equalsIgnoreCase("homeblock")) {
+					if (player == null) //This was used via the Console with /ta town NAME set homeblock
+						throw new TownyException(Translatable.of("msg_err_command_not_for_console_use"));
 					
 					parseTownSetHomeblock(player, town, nation);
 					
 				} else if (split[0].equalsIgnoreCase("spawn")) {
+					if (player == null) //This was used via the Console with /ta town NAME set spawn
+						throw new TownyException(Translatable.of("msg_err_command_not_for_console_use"));
 					
 					parseTownSetSpawn(player, town, admin);
 
 				} else if (split[0].equalsIgnoreCase("outpost")) {
+					if (player == null) //This was used via the Console with /ta town NAME set outpost
+						throw new TownyException(Translatable.of("msg_err_command_not_for_console_use"));
 
 					try {
 						TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);						
@@ -2572,6 +2578,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					setTownBlockOwnerPermissions(player, town, newSplit);
 
 				} else if (split[0].equalsIgnoreCase("primaryjail")) {
+					if (player == null) //This was used via the Console with /ta town NAME set primaryjail
+						throw new TownyException(Translatable.of("msg_err_command_not_for_console_use"));
 					
 					setPrimaryJail(player, town);
 					
