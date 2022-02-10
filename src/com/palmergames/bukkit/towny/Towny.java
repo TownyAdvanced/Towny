@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException
 import com.palmergames.bukkit.towny.hooks.LuckPermsContexts;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.listeners.TownyPaperEvents;
 import com.palmergames.bukkit.towny.listeners.TownyBlockListener;
 import com.palmergames.bukkit.towny.listeners.TownyCustomListener;
 import com.palmergames.bukkit.towny.listeners.TownyEntityListener;
@@ -113,6 +114,7 @@ public class Towny extends JavaPlugin {
 	private final TownyInventoryListener inventoryListener = new TownyInventoryListener();
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
+	private final TownyPaperEvents paperEvents = new TownyPaperEvents(this);
 
 	private TownyUniverse townyUniverse;
 
@@ -669,6 +671,7 @@ public class Towny extends JavaPlugin {
 		pluginManager.registerEvents(entityListener, this);
 		pluginManager.registerEvents(inventoryListener, this);
 
+		paperEvents.register();
 	}
 
 	private void printChangelogToConsole() {
