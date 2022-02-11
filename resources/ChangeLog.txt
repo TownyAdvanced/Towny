@@ -7257,3 +7257,5 @@ v0.92.0.11:
   - Fix comment for player_owned_plot_limited_commands in the config.
   - Protect tnt from being primed with fire arrows, courtesy of Warriorrrr with PR #5723.
   - Fix command feedback when using trust commands via console, courtesy of Warriorrrr with PR #5724. 
+0.97.5.18:
+  - Actually fix regression with max-homeblock-distance.
