@@ -329,8 +329,16 @@ public abstract class TownyDataSource {
 	@Deprecated
 	abstract public List<Jail> getAllJails();
 
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidents(String[])} instead.
+	 */
+	@Deprecated
 	abstract public List<Resident> getResidents(String[] names);
 	
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidents(UUID[])} instead.
+	 */
+	@Deprecated
 	abstract public List<Resident> getResidents(UUID[] uuids);
 
 	/**
@@ -374,8 +382,14 @@ public abstract class TownyDataSource {
 	@Deprecated
 	abstract public boolean hasNation(String name);
 
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTowns(String[])} instead.
+	 */
 	abstract public List<Town> getTowns(String[] names);
 
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTowns(List)} instead.
+	 */
 	abstract public List<Town> getTowns(List<UUID> uuids);
 	
 	/**
@@ -411,6 +425,10 @@ public abstract class TownyDataSource {
 	@Deprecated
 	abstract public Town getTown(UUID uuid) throws NotRegisteredException;
 
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getNations(String[])} instead.
+	 */
+	@Deprecated
 	abstract public List<Nation> getNations(String[] names);
 
 	/**
@@ -495,7 +513,7 @@ public abstract class TownyDataSource {
 	abstract public void removeTownBlocks(Town town);
 
 	/**
-	 * @deprecated as of 0.97.5.16, use {@link TownyUniverse#getTownBlocks().values()}
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTownBlocks} instead.
 	 */
 	@Deprecated
 	abstract public Collection<TownBlock> getAllTownBlocks();

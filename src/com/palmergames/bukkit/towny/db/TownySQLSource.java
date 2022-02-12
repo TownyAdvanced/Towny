@@ -835,7 +835,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				line = rs.getString("friends");
 				if (line != null) {
 					search = (line.contains("#")) ? "#" : ",";
-					List<Resident> friends = getResidents(line.split(search));
+					List<Resident> friends = TownyAPI.getInstance().getResidents(line.split(search));
 					for (Resident friend : friends) {
 						try {
 							resident.addFriend(friend);
@@ -1182,7 +1182,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			line = rs.getString("trustedResidents");
 			if (line != null && !line.isEmpty()) {
 				search = (line.contains("#")) ? "#" : ",";
-				for (Resident resident : getResidents(toUUIDArray(line.split(search))))
+				for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(search))))
 					town.addTrustedResident(resident);
 			}
 			
@@ -1198,7 +1198,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				List<UUID> uuids = Arrays.stream(line.split(search))
 						.map(uuid -> UUID.fromString(uuid))
 						.collect(Collectors.toList());
-				town.loadAllies(getTowns(uuids));
+				town.loadAllies(TownyAPI.getInstance().getTowns(uuids));
 			}
 
 			line = rs.getString("enemies");
@@ -1207,7 +1207,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				List<UUID> uuids = Arrays.stream(line.split(search))
 						.map(uuid -> UUID.fromString(uuid))
 						.collect(Collectors.toList());
-				town.loadEnemies(getTowns(uuids));
+				town.loadEnemies(TownyAPI.getInstance().getTowns(uuids));
 			}
 			
 			return true;
@@ -1305,7 +1305,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			line = rs.getString("allies");
 			if (line != null) {
 				search = (line.contains("#")) ? "#" : ",";
-				List<Nation> allies = getNations(line.split(search));
+				List<Nation> allies = TownyAPI.getInstance().getNations(line.split(search));
 				for (Nation ally : allies)
 					nation.addAlly(ally);
 			}
@@ -1313,7 +1313,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			line = rs.getString("enemies");
 			if (line != null) {
 				search = (line.contains("#")) ? "#" : ",";
-				List<Nation> enemies = getNations(line.split(search));
+				List<Nation> enemies = TownyAPI.getInstance().getNations(line.split(search));
 				for (Nation enemy : enemies) 
 					nation.addEnemy(enemy);
 			}
@@ -1836,7 +1836,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					if (line != null && !line.isEmpty()) {
 						try {
 							UUID groupID = UUID.fromString(line.trim());
-							PlotGroup group = getPlotObjectGroup(groupID);
+							PlotGroup group = universe.getGroup(groupID);
 							if (group != null) {
 								townBlock.setPlotObjectGroup(group);
 								if (group.getPermissions() == null && townBlock.getPermissions() != null)
@@ -1854,7 +1854,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				line = rs.getString("trustedResidents");
 				if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
 					String search = (line.contains("#")) ? "#" : ",";
-					for (Resident resident : getResidents(toUUIDArray(line.split(search))))
+					for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(search))))
 						townBlock.addTrustedResident(resident);
 
 					if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.getTrustedResidents().size() > 0)

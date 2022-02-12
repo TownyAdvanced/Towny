@@ -1502,7 +1502,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[1].equalsIgnoreCase("kick")) {
 
-				NationCommand.nationKick(sender, nation, townyUniverse.getDataSource().getTowns(StringMgmt.remArgs(split, 2)));
+				NationCommand.nationKick(sender, nation, TownyAPI.getInstance().getTowns(StringMgmt.remArgs(split, 2)));
 
 			} else if (split[1].equalsIgnoreCase("delete")) {
 				if (!isConsole) {

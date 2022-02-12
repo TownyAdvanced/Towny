@@ -65,11 +65,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
@@ -348,22 +346,22 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * getResident methods.
 	 */
 	
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidents(String[])} instead.
+	 */
+	@Deprecated
 	@Override
 	public List<Resident> getResidents(String[] names) {
-
-		List<Resident> matches = new ArrayList<>();
-		for (String name : names) {
-			Resident matchRes = universe.getResident(name);
-			
-			if (matchRes != null)
-				matches.add(matchRes);
-		}
-		return matches;
+		return TownyAPI.getInstance().getResidents(names);
 	}
 	
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidents(UUID[])} instead.
+	 */
+	@Deprecated
 	@Override
 	public List<Resident> getResidents(UUID[] uuids) {
-		return Arrays.stream(uuids).filter(Objects::nonNull).map(universe::getResident).filter(Objects::nonNull).collect(Collectors.toList());
+		return TownyAPI.getInstance().getResidents(uuids);
 	}
 
 	/**
@@ -410,34 +408,22 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * getTowns methods.
 	 */	
 	
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTowns(String[])} instead.
+	 */
+	@Deprecated
 	@Override
 	public List<Town> getTowns(String[] names) {
-
-		List<Town> matches = new ArrayList<>();
-		for (String name : names) {
-			Town t = universe.getTown(name);
-			
-			if (t != null) {
-				matches.add(t);
-			}
-		}
-		
-		return matches;
+		return TownyAPI.getInstance().getTowns(names);
 	}
-	
+
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTowns(List)} instead.
+	 */
+	@Deprecated
 	@Override
 	public List<Town> getTowns(List<UUID> uuids) {
-
-		List<Town> matches = new ArrayList<>();
-		for (UUID uuid : uuids) {
-			Town t = universe.getTown(uuid);
-			
-			if (t != null) {
-				matches.add(t);
-			}
-		}
-		
-		return matches;
+		return TownyAPI.getInstance().getTowns(uuids);
 	}
 
 	/**
@@ -506,17 +492,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * getNations methods.
 	 */
 	
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getNations(String[])} instead.
+	 */
+	@Deprecated
 	@Override
 	public List<Nation> getNations(String[] names) {
-
-		List<Nation> matches = new ArrayList<>();
-		for (String name : names) {
-			Nation nation = universe.getNation(name);
-			
-			if (nation != null)
-				matches.add(nation);
-		}
-		return matches;
+		return TownyAPI.getInstance().getNations(names);
 	}
 
 	/**
@@ -605,6 +587,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * getTownblocks methods.
 	 */
 
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTownBlocks} instead.
+	 */
 	@Deprecated
 	@Override
 	public Collection<TownBlock> getAllTownBlocks() {
@@ -615,6 +600,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * getPlotGroups methods.
 	 */
 
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyUniverse#getGroup(UUID)} instead.
+	 */
+	@Deprecated
 	public PlotGroup getPlotObjectGroup(UUID groupID) {
 		return universe.getGroup(groupID);
 	}

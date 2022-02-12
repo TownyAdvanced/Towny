@@ -33,8 +33,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -137,6 +140,16 @@ public class TownyAPI {
     }
     
     /**
+     * Gets the nation from the given name.
+     * @param name String name of the nation.
+     * @return nation or null if it doesn't exist.
+     */
+    @Nullable
+    public Nation getNation(String name) {
+    	return TownyUniverse.getInstance().getNation(name);
+    }
+    
+    /**
      * Gets the nation from the given UUID.
      * @param uuid UUID of the nation.
      * @return nation or null if it doesn't exist.
@@ -145,15 +158,43 @@ public class TownyAPI {
     public Nation getNation(UUID uuid) {
     	return TownyUniverse.getInstance().getNation(uuid);
     }
+
+	/**
+	 * Gets a List of Nations using an array of names.
+	 * 
+	 * @param names Array of Strings representing possible Nation names.
+	 * @return List of Nations for which a name was matched.
+	 */
+	public List<Nation> getNations(String[] names) {
+		return Arrays.stream(names).filter(Objects::nonNull).map(townyUniverse::getNation).filter(Objects::nonNull)
+				.collect(Collectors.toList());
+	}
+	
+	/**
+	 * Gets a List of Nations using a List of UUIDs
+	 * 
+	 * @param uuids List of UUIDs representing possible Nations.
+	 * @return List of Nations for which a UUID was matched.
+	 */
+	public List<Nation> getNation(List<UUID> uuids) {
+		List<Nation> matches = new ArrayList<>();
+		for (UUID uuid : uuids) {
+			Nation n = townyUniverse.getNation(uuid);
+			if (n != null) {
+				matches.add(n);
+			}
+		}
+		return matches;
+	}
     
     /**
-     * Gets the town from the given UUID.
-     * @param uuid UUID name of the town.
-     * @return town or null if it doesn't exist.
+     * Gets the resident from the given name.
+     * @param name String name of the resident.
+     * @return resident or null if it doesn't exist.
      */
     @Nullable
-    public Town getTown(UUID uuid) {
-    	return TownyUniverse.getInstance().getTown(uuid);
+    public Resident getResident(String name) {
+    	return TownyUniverse.getInstance().getResident(name);
     }
     
     /**
@@ -177,36 +218,28 @@ public class TownyAPI {
     	return getResident(player.getUniqueId());
     }
 
-    /**
-     * Gets the nation from the given name.
-     * @param name String name of the nation.
-     * @return nation or null if it doesn't exist.
-     */
-    @Nullable
-    public Nation getNation(String name) {
-    	return TownyUniverse.getInstance().getNation(name);
-    }
-    
-    /**
-     * Gets the town from the given name.
-     * @param name String name of the town.
-     * @return town or null if it doesn't exist.
-     */
-    @Nullable
-    public Town getTown(String name) {
-    	return TownyUniverse.getInstance().getTown(name);
-    }
-    
-    /**
-     * Gets the resident from the given name.
-     * @param name String name of the resident.
-     * @return resident or null if it doesn't exist.
-     */
-    @Nullable
-    public Resident getResident(String name) {
-    	return TownyUniverse.getInstance().getResident(name);
-    }
-    
+	/**
+	 * Get a List of Resident from an array of names.
+	 * 
+	 * @param names Array of Strings representing resident names.
+	 * @return List of Residents which matched to a name.
+	 */
+	public List<Resident> getResidents(String[] names) {
+		return Arrays.stream(names).filter(Objects::nonNull).map(townyUniverse::getResident).filter(Objects::nonNull)
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Get a List of Resident from an array of UUIDs.
+	 * 
+	 * @param uuids Array of UUIDs representing resident uuids.
+	 * @return List of Residents which matched to a UUID.
+	 */
+	public List<Resident> getResidents(UUID[] uuids) {
+		return Arrays.stream(uuids).filter(Objects::nonNull).map(townyUniverse::getResident).filter(Objects::nonNull)
+				.collect(Collectors.toList());
+	}
+
 	/**
 	 * Gets a List of all of the Residents on the server.
 	 * 
@@ -228,6 +261,54 @@ public class TownyAPI {
 			if (!resident.hasTown())
 				residentFilter.add(resident);
 		return residentFilter;
+	}
+    
+    /**
+     * Gets the town from the given name.
+     * @param name String name of the town.
+     * @return town or null if it doesn't exist.
+     */
+    @Nullable
+    public Town getTown(String name) {
+    	return TownyUniverse.getInstance().getTown(name);
+    }
+
+    /**
+     * Gets the town from the given UUID.
+     * @param uuid UUID name of the town.
+     * @return town or null if it doesn't exist.
+     */
+    @Nullable
+    public Town getTown(UUID uuid) {
+    	return TownyUniverse.getInstance().getTown(uuid);
+    }
+
+	/**
+	 * Gets a List of Towns using an array of names.
+	 * 
+	 * @param names Array of Strings representing possible Town names.
+	 * @return List of Towns for which a name was matched.
+	 */
+	public List<Town> getTowns(String[] names) {
+		return Arrays.stream(names).filter(Objects::nonNull).map(townyUniverse::getTown).filter(Objects::nonNull)
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Gets a List of Towns using a List of UUIDs
+	 * 
+	 * @param uuids List of UUIDs representing possible Towns.
+	 * @return List of Towns for which a UUID was matched.
+	 */
+	public List<Town> getTowns(List<UUID> uuids) {
+		List<Town> matches = new ArrayList<>();
+		for (UUID uuid : uuids) {
+			Town t = townyUniverse.getTown(uuid);
+			if (t != null) {
+				matches.add(t);
+			}
+		}
+		return matches;
 	}
     
     /**
@@ -519,6 +600,15 @@ public class TownyAPI {
     	return wc.getTownBlockOrNull();
     }
 
+    /**
+     * Get a Collection of all of the TownBlocks.
+     * 
+     * @return Collection of TownBlocks.
+     */
+    public Collection<TownBlock> getTownBlocks() {
+    	return townyUniverse.getTownBlocks().values();
+    }
+    
 	/**
 	 * Get a list of active {@link Resident}s.
 	 *

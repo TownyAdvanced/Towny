@@ -513,7 +513,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("friends");
 				if (line != null) {
-					List<Resident> friends = getResidents(line.split(","));
+					List<Resident> friends = TownyAPI.getInstance().getResidents(line.split(","));
 					for (Resident friend : friends) {
 						try {
 							resident.addFriend(friend);
@@ -967,7 +967,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("trustedResidents");
 				if (line != null && !line.isEmpty()) {
-					for (Resident resident : getResidents(toUUIDArray(line.split(","))))
+					for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(","))))
 						town.addTrustedResident(resident);
 				}
 				
@@ -998,7 +998,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					List<UUID> uuids = Arrays.stream(line.split(","))
 							.map(uuid -> UUID.fromString(uuid))
 							.collect(Collectors.toList());
-					town.loadAllies(getTowns(uuids));
+					town.loadAllies(TownyAPI.getInstance().getTowns(uuids));
 				}
 				
 				line = keys.get("enemies");
@@ -1006,7 +1006,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					List<UUID> uuids = Arrays.stream(line.split(","))
 						.map(uuid -> UUID.fromString(uuid))
 						.collect(Collectors.toList());
-					town.loadEnemies(getTowns(uuids));
+					town.loadEnemies(TownyAPI.getInstance().getTowns(uuids));
 				}
 				
 			} catch (Exception e) {
@@ -1089,7 +1089,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("allies");
 				if (line != null) {
-					List<Nation> allies = getNations(line.split(","));
+					List<Nation> allies = TownyAPI.getInstance().getNations(line.split(","));
 					for (Nation ally : allies) {
 						nation.addAlly(ally);
 					}
@@ -1097,7 +1097,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("enemies");
 				if (line != null) {
-					List<Nation> enemies = getNations(line.split(","));
+					List<Nation> enemies = TownyAPI.getInstance().getNations(line.split(","));
 					for (Nation enemy : enemies) {
 						nation.addEnemy(enemy);
 					}
@@ -1664,7 +1664,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 					
 					if (groupID != null) {
-						PlotGroup group = getPlotObjectGroup(groupID);
+						PlotGroup group = universe.getGroup(groupID);
 						if (group != null) {
 							townBlock.setPlotObjectGroup(group);
 							if (group.getPermissions() == null && townBlock.getPermissions() != null) 
@@ -1678,7 +1678,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 					line = keys.get("trustedResidents");
 					if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
-						for (Resident resident : getResidents(toUUIDArray(line.split(","))))
+						for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(","))))
 							townBlock.addTrustedResident(resident);
 						
 						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.getTrustedResidents().size() > 0)
