@@ -7259,3 +7259,4 @@ v0.92.0.11:
   - Fix command feedback when using trust commands via console, courtesy of Warriorrrr with PR #5724. 
 0.97.5.18:
   - Actually fix regression with max-homeblock-distance.
+  - Fix /towny plotclearblocks always saying that towny is disabled, courtesy of Warriorrrr #5734.
