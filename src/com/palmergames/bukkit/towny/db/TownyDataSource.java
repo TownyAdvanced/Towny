@@ -14,7 +14,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
-import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -204,7 +204,7 @@ public abstract class TownyDataSource {
 	public boolean loadWorlds() {
 
 		TownyMessaging.sendDebugMsg("Loading Worlds");
-		for (TownyWorld world : getWorlds())
+		for (TownyWorld world : universe.getTownyWorlds())
 			if (!loadWorld(world)) {
 				plugin.getLogger().severe("Loading Error: Could not read world data '" + world.getName() + "'.");
 				return false;
@@ -214,7 +214,7 @@ public abstract class TownyDataSource {
 	
 	public boolean loadJails() {
 		TownyMessaging.sendDebugMsg("Loading Jails");
-		for (Jail jail : getAllJails()) {
+		for (Jail jail : universe.getJails()) {
 			if (!loadJail(jail)) {
 				plugin.getLogger().severe("Loading Error: Could not read jail data '" + jail.getUUID() + "'.");
 				return false;
@@ -225,7 +225,7 @@ public abstract class TownyDataSource {
 	
 	public boolean loadPlotGroups() {
 		TownyMessaging.sendDebugMsg("Loading PlotGroups");
-		for (PlotGroup group : getAllPlotGroups()) {
+		for (PlotGroup group : universe.getGroups()) {
 			if (!loadPlotGroup(group)) {
 				plugin.getLogger().severe("Loading Error: Could not read PlotGroup data: '" + group.getID() + "'.");
 				return false;
@@ -254,7 +254,7 @@ public abstract class TownyDataSource {
 	
 	public boolean savePlotGroups() {
 		TownyMessaging.sendDebugMsg("Saving PlotGroups");
-		for (PlotGroup plotGroup : getAllPlotGroups())
+		for (PlotGroup plotGroup : universe.getGroups())
 			/*
 			 * Only save plotgroups which actually have townblocks associated with them.
 			 */
@@ -267,7 +267,7 @@ public abstract class TownyDataSource {
 
 	public boolean saveJails() {
 		TownyMessaging.sendDebugMsg("Saving Jails");
-		for (Jail jail : getAllJails())
+		for (Jail jail : universe.getJails())
 			saveJail(jail);
 		return true;
 	}
@@ -291,7 +291,7 @@ public abstract class TownyDataSource {
 	public boolean saveWorlds() {
 
 		TownyMessaging.sendDebugMsg("Saving Worlds");
-		for (TownyWorld world : getWorlds())
+		for (TownyWorld world : universe.getTownyWorlds())
 			saveWorld(world);
 		return true;
 	}
@@ -306,8 +306,6 @@ public abstract class TownyDataSource {
 	}
 
 	// Database functions
-	abstract public List<Resident> getResidents(Player player, String[] names);
-
 	/**
 	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getResidents()} instead.
 	 * 
@@ -317,8 +315,17 @@ public abstract class TownyDataSource {
 	@Deprecated
 	abstract public List<Resident> getResidents();
 	
+	/**
+	 * @deprecated since 0.97.5.18 use {@link TownyUniverse#getGroups()} instead.
+	 * @return List of PlotGroups. 
+	 */
 	abstract public List<PlotGroup> getAllPlotGroups();
-	
+
+	/**
+	 * @deprecated since 0.97.5.18 use {@link TownyUniverse#getJails()} instead.
+	 * @return List of jails. 
+	 */
+	@Deprecated
 	abstract public List<Jail> getAllJails();
 
 	abstract public List<Resident> getResidents(String[] names);
@@ -439,8 +446,22 @@ public abstract class TownyDataSource {
 	@Deprecated
 	abstract public Nation getNation(UUID uuid) throws NotRegisteredException;
 
-	abstract public TownyWorld getWorld(String name) throws NotRegisteredException;
+	/**
+	 * @deprecated as of 0.97.5.18, Use {@link TownyUniverse#getWorld(String)} instead.
+	 *  
+	 * @param name Name of TownyWorld
+	 * @return TownyWorld matching the name or Null.
+	 */
+	@Deprecated
+	@Nullable
+	abstract public TownyWorld getWorld(String name);
 
+	/**
+	 * @deprecated as of 0.97.5.18, Use {@link TownyUniverse#getTownyWorlds()} instead.
+	 * 
+	 * @return List of TownyWorlds.
+	 */
+	@Deprecated
 	abstract public List<TownyWorld> getWorlds();
 
 	/**
@@ -461,7 +482,7 @@ public abstract class TownyDataSource {
 		}
 
 		// If this has failed the Town has no land claimed at all but should be given a world regardless.
-		return universe.getDataSource().getWorlds().get(0);
+		return universe.getTownyWorlds().get(0);
 	}
 
 	abstract public void removeResident(Resident resident);

@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.huds;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Bukkit;
@@ -63,13 +62,13 @@ public class HUDManager implements Listener{
 	}
 
 	@EventHandler
-	public void onPlayerMovePlotsEvent(PlayerChangePlotEvent event) throws NotRegisteredException {
+	public void onPlayerMovePlotsEvent(PlayerChangePlotEvent event) {
 		Player p = event.getPlayer();
 		if (permUsers.contains(p)) {
 			if (!isPermHUDActive(p))
 				permUsers.remove(p);
 			else {
-				if (event.getTo().getTownyWorld().isUsingTowny())
+				if (event.getTownyWorldTo().isUsingTowny())
 					PermHUD.updatePerms(p, event.getTo());
 				else
 					toggleAllOff(p);
@@ -78,7 +77,7 @@ public class HUDManager implements Listener{
 			if (!isMapHudActive(p))
 				mapUsers.remove(p);
 			else
-				if (event.getTo().getTownyWorld().isUsingTowny())
+				if (event.getTownyWorldTo().isUsingTowny())
 					MapHUD.updateMap(p, event.getTo());
 				else
 					toggleAllOff(p);

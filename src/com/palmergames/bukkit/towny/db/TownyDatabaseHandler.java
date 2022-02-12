@@ -49,7 +49,6 @@ import com.palmergames.util.FileMgmt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Nullable;
 
@@ -349,22 +348,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 */
 	
 	@Override
-	public List<Resident> getResidents(Player player, String[] names) {
-
-		List<Resident> invited = new ArrayList<>();
-		for (String name : names) {
-			Resident target = universe.getResident(name);
-			if (target == null) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", name));
-			}
-			else {
-				invited.add(target);
-			}
-		}
-		return invited;
-	}
-
-	@Override
 	public List<Resident> getResidents(String[] names) {
 
 		List<Resident> matches = new ArrayList<>();
@@ -595,22 +578,28 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * getWorlds methods.
 	 */
 
+	/**
+	 * @deprecated as of 0.97.5.18, Use {@link TownyUniverse#getWorld(String)} instead.
+	 *  
+	 * @param name Name of TownyWorld
+	 * @return TownyWorld matching the name or Null.
+	 */
 	@Deprecated
+	@Nullable
 	@Override
-	public TownyWorld getWorld(String name) throws NotRegisteredException {
-
-		TownyWorld world = universe.getWorldMap().get(name.toLowerCase());
-
-		if (world == null)
-			throw new NotRegisteredException("World not registered!");
-
-		return world;
+	public TownyWorld getWorld(String name){
+		return universe.getWorld(name);
 	}
 
+	/**
+	 * @deprecated as of 0.97.5.18, Use {@link TownyUniverse#getTownyWorlds()} instead.
+	 * 
+	 * @return List of TownyWorlds.
+	 */
+	@Deprecated
 	@Override
 	public List<TownyWorld> getWorlds() {
-
-		return new ArrayList<>(universe.getWorldMap().values());
+		return universe.getTownyWorlds();
 	}
 	
 	/*
@@ -620,7 +609,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Deprecated
 	@Override
 	public Collection<TownBlock> getAllTownBlocks() {
-		return TownyUniverse.getInstance().getTownBlocks().values();
+		return universe.getTownBlocks().values();
 	}
 	
 	/*
@@ -631,13 +620,20 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return universe.getGroup(groupID);
 	}
 
+	/**
+	 * @deprecated since 0.97.5.18 use {@link TownyUniverse#getGroups()} instead.
+	 * @return List of PlotGroups. 
+	 */
+	@Deprecated
 	public List<PlotGroup> getAllPlotGroups() {
 		return new ArrayList<>(universe.getGroups());
 	}
 	
-	/*
-	 * get Jails method.
+	/**
+	 * @deprecated since 0.97.5.18 use {@link TownyUniverse#getJails()} instead.
+	 * @return List of jails. 
 	 */
+	@Deprecated
 	public List<Jail> getAllJails() {
 		return new ArrayList<>(universe.getJailUUIDMap().values());
 	}
@@ -650,7 +646,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void removeResident(Resident resident) {
 
 		// Remove resident from towns' outlawlists.
-		for (Town townOutlaw : TownyUniverse.getInstance().getTowns()) {
+		for (Town townOutlaw : universe.getTowns()) {
 			if (townOutlaw.hasOutlaw(resident)) {
 				townOutlaw.removeOutlaw(resident);
 				saveTown(townOutlaw);
@@ -676,7 +672,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (town != null) {
 				// Delete the town if there are no more residents
 				if (town.getNumResidents() <= 1) {
-					TownyUniverse.getInstance().getDataSource().removeTown(town);
+					universe.getDataSource().removeTown(town);
 				}
 
 				resident.removeTown();
@@ -727,7 +723,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (townBlock.isJail() && townBlock.getJail() != null)
 			removeJail(townBlock.getJail());
 
-		TownyUniverse.getInstance().removeTownBlock(townBlock);
+		universe.removeTownBlock(townBlock);
 		deleteTownBlock(townBlock);
 
 
@@ -781,7 +777,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// Remove the Town's spawn particle.
 		if (town.hasSpawn()) {
 			try {
-				TownyUniverse.getInstance().removeSpawnPoint(town.getSpawn());
+				universe.removeSpawnPoint(town.getSpawn());
 			} catch (TownyException ignored) {}
 		}
 		
@@ -800,7 +796,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		// Look for residents inside of this town's jail(s) and free them, more than 
 		// likely the above removeTownBlocks(town) will have already set them free. 
-		new ArrayList<>(TownyUniverse.getInstance().getJailedResidentMap()).stream()
+		new ArrayList<>(universe.getJailedResidentMap()).stream()
 			.filter(resident -> resident.hasJailTown(town.getName()))
 			.forEach(resident -> JailUtil.unJailResident(resident, UnJailReason.JAIL_DELETED));
 
@@ -846,7 +842,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// Remove the Nation's spawn particle.
 		if (nation.hasSpawn()) {
 			try {
-				TownyUniverse.getInstance().removeSpawnPoint(nation.getSpawn());
+				universe.removeSpawnPoint(nation.getSpawn());
 			} catch (TownyException ignored) {}
 		}
 		
@@ -936,7 +932,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeJail(Jail jail) {
 		// Unjail residents jailed here.
-		new ArrayList<>(TownyUniverse.getInstance().getJailedResidentMap()).stream()
+		new ArrayList<>(universe.getJailedResidentMap()).stream()
 			.filter(resident -> resident.getJail().getUUID().equals(jail.getUUID()))
 			.forEach(resident -> JailUtil.unJailResident(resident, UnJailReason.JAIL_DELETED));
 		
@@ -949,14 +945,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			jail.getTown().removeJail(jail);
 		
 		// Unregister the jail from the Universe.
-		TownyUniverse.getInstance().unregisterJail(jail);
+		universe.unregisterJail(jail);
 		
 		deleteJail(jail);
 	}
 
 	@Override
 	public void removePlotGroup(PlotGroup group) {
-		TownyUniverse.getInstance().unregisterGroup(group);
+		universe.unregisterGroup(group);
 		deletePlotGroup(group);
 	}
 	
@@ -986,7 +982,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				throw new NotRegisteredException(e.getMessage());
 			}
 
-			if (TownyUniverse.getInstance().hasTown(filteredName))
+			if (universe.hasTown(filteredName))
 				throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
 
 			List<Resident> toSave = new ArrayList<>(town.getResidents());
@@ -1239,7 +1235,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				saveResident(toCheck);
 			
 			// Search and update all outlaw lists.
-			List<Town> toSaveTown = new ArrayList<>(TownyUniverse.getInstance().getTowns());
+			List<Town> toSaveTown = new ArrayList<>(universe.getTowns());
 			for (Town toCheckTown : toSaveTown) {
 				if (toCheckTown.hasOutlaw(oldResident)) {
 					toCheckTown.removeOutlaw(oldResident);
@@ -1292,7 +1288,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public PlotBlockData loadPlotData(String worldName, int x, int z) {
 
-		TownyWorld world = TownyUniverse.getInstance().getWorldMap().get(worldName); 
+		TownyWorld world = universe.getWorldMap().get(worldName); 
 		if (world == null)
 			return null;
 		
@@ -1607,7 +1603,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (NotRegisteredException ignored) {}
 		}
 		String mayorName = mergeFrom.getMayor().getName();
-		List<Jail> jails = TownyUniverse.getInstance().getJailUUIDMap().values().stream()
+		List<Jail> jails = universe.getJailUUIDMap().values().stream()
 				.filter(jail -> jail.getTown().equals(mergeFrom))
 				.collect(Collectors.toList());
 		List<Location> outposts = new ArrayList<Location>(mergeFrom.getAllOutpostSpawns());
@@ -1709,10 +1705,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		do {
 			String newName = name + ++i;
 			if (town) {
-				if (!TownyUniverse.getInstance().hasTown(newName))
+				if (!universe.hasTown(newName))
 					return newName;
 		    } else { 
-				if (!TownyUniverse.getInstance().hasNation(newName))
+				if (!universe.hasNation(newName))
 					return newName;
 		    }
 			if (i > 100000)

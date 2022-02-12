@@ -352,7 +352,7 @@ public class TownyAPI {
      * @return true or false
      */
     public boolean isTownyWorld(World world) {
-    	TownyWorld townyWorld = townyUniverse.getWorldMap().get(world.getName()); 
+    	TownyWorld townyWorld = getTownyWorld(world); 
     	return townyWorld != null && townyWorld.isUsingTowny();
 
     }
@@ -365,7 +365,7 @@ public class TownyAPI {
      */
     @Nullable
     public TownyWorld getTownyWorld(String worldName) {
-    	return townyUniverse.getWorldMap().get(worldName);
+    	return townyUniverse.getWorld(worldName);
     }
     
     /**

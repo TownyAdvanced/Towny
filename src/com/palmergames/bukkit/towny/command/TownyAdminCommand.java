@@ -341,7 +341,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				break;
 			case "tpplot":
 				if (args.length == 2) {
-					return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getWorlds()
+					return NameUtil.filterByStart(TownyUniverse.getInstance().getTownyWorlds()
 						.stream()
 						.map(TownyWorld::getName)
 						.collect(Collectors.toList()), args[1]);

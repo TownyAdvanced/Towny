@@ -624,12 +624,30 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			if (split[0].equalsIgnoreCase("add")) {
 
 				String[] names = StringMgmt.remFirstArg(split);
-				residentFriendAdd(player, resident, townyUniverse.getDataSource().getResidents(player, names));
+				List<Resident> invited = new ArrayList<>();
+				for (String name : names) {
+					Resident target = townyUniverse.getResident(name);
+					if (target == null) {
+						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", name));
+					} else {
+						invited.add(target);
+					}
+				}
+				residentFriendAdd(player, resident, invited);
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
 
 				String[] names = StringMgmt.remFirstArg(split);
-				residentFriendRemove(player, resident, townyUniverse.getDataSource().getResidents(player, names));
+				List<Resident> invited = new ArrayList<>();
+				for (String name : names) {
+					Resident target = townyUniverse.getResident(name);
+					if (target == null) {
+						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", name));
+					} else {
+						invited.add(target);
+					}
+				}
+				residentFriendRemove(player, resident, invited);
 			
 			} else if (split[0].equalsIgnoreCase("list")) {
 

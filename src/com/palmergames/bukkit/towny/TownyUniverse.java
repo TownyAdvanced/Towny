@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -801,7 +802,11 @@ public class TownyUniverse {
 	
 	@Nullable
 	public TownyWorld getWorld(String name) {
-		return worlds.get(name);
+		return worlds.get(name.toLowerCase(Locale.ROOT));
+	}
+	
+	public List<TownyWorld> getTownyWorlds() {
+		return new ArrayList<>(worlds.values());
 	}
     
     /*
@@ -1112,6 +1117,10 @@ public class TownyUniverse {
      * Jail Stuff
      */
 
+	public List<Jail> getJails() {
+		return new ArrayList<>(getJailUUIDMap().values());
+	}
+	
     public Map<UUID, Jail> getJailUUIDMap() {
     	return jailUUIDMap;
     }

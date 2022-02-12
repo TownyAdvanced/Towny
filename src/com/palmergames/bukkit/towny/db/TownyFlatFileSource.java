@@ -142,10 +142,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			for (File worldfolder : worldFolders) {
 				String worldName = worldfolder.getName();
-				TownyWorld world = TownyUniverse.getInstance().getWorldMap().get(worldName);
+				TownyWorld world = universe.getWorldMap().get(worldName);
 				if (world == null) {
 					newWorld(worldName);
-					world = TownyUniverse.getInstance().getWorldMap().get(worldName);
+					world = universe.getWorldMap().get(worldName);
 				}
 				File worldFolder = new File(dataFolderPath + File.separator + "townblocks" + File.separator + worldName);
 				File[] townBlockFiles = worldFolder.listFiles(file->file.getName().endsWith(".data"));
@@ -162,7 +162,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					int x = Integer.parseInt(coords[0]);
 					int z = Integer.parseInt(coords[1]);
 	                TownBlock townBlock = new TownBlock(x, z, world);
-	                TownyUniverse.getInstance().addTownBlock(townBlock);
+	                universe.addTownBlock(townBlock);
 					total++;
 				}
 				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_world_loaded_townblocks", worldName, total));
@@ -186,7 +186,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			return true; 
 		
 		for (File plotGroup : plotGroupFiles)
-			TownyUniverse.getInstance().newPlotGroupInternal(plotGroup.getName().replace(".data", ""));
+			universe.newPlotGroupInternal(plotGroup.getName().replace(".data", ""));
 		
 		return true;
 	}
@@ -240,7 +240,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			if (line != null)
 				registered = Long.parseLong(line);
 			if (registered > 0)
-				TownyUniverse.getInstance().registerHibernatedResident(uuid, registered);
+				universe.registerHibernatedResident(uuid, registered);
 		}
 		
 		return true;
@@ -266,7 +266,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 			
 			try {
-				TownyUniverse.getInstance().newTownInternal(name);
+				universe.newTownInternal(name);
 			} catch (AlreadyRegisteredException | InvalidNameException e) {
 				// Thrown if the town name does not pass the filters.
 				rejectedTowns.add(town);
@@ -281,10 +281,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		for (File town : rejectedTowns) {
 			String name = town.getName().replace(".txt", "");
 			String newName = generateReplacementName(true);
-			TownyUniverse.getInstance().getReplacementNameMap().put(name, newName);
+			universe.getReplacementNameMap().put(name, newName);
 			TownyMessaging.sendErrorMsg(String.format("The town %s tried to load an invalid name, attempting to rename it to %s.", name, newName));
 			try {
-				TownyUniverse.getInstance().newTownInternal(newName);
+				universe.newTownInternal(newName);
 			} catch (AlreadyRegisteredException | InvalidNameException e1) {
 				// We really hope this doesn't fail again.
 				e1.printStackTrace();
@@ -333,7 +333,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		for (File nation : rejectedNations) {
 			String name = nation.getName().replace(".txt", "");
 			String newName = generateReplacementName(false);
-			TownyUniverse.getInstance().getReplacementNameMap().put(name, newName);
+			universe.getReplacementNameMap().put(name, newName);
 			TownyMessaging.sendErrorMsg(String.format("The nation %s tried to load an invalid name, attempting to rename it to %s.", name, newName));
 			try {
 				newNation(newName);
@@ -398,7 +398,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		for (File jail : jailFiles) {
 			String uuid = jail.getName().replace(".txt", "");
-			TownyUniverse.getInstance().newJailInternal(uuid);
+			universe.newJailInternal(uuid);
 		}
 		
 		return true;
@@ -458,12 +458,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("uuid");
 				if (line != null) {
 					UUID uuid = UUID.fromString(line);
-					if (TownyUniverse.getInstance().hasResident(uuid)) {
-						Resident olderRes = TownyUniverse.getInstance().getResident(uuid);
+					if (universe.hasResident(uuid)) {
+						Resident olderRes = universe.getResident(uuid);
 						if (resident.getLastOnline() > olderRes.getLastOnline()) {
 							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_deleting_duplicate", olderRes.getName(), resident.getName()));
 							try {
-								TownyUniverse.getInstance().unregisterResident(olderRes);
+								universe.unregisterResident(olderRes);
 							} catch (NotRegisteredException ignored) {}
 							// Check if the older resident is a part of a town
 							if (olderRes.hasTown()) {
@@ -476,7 +476,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						} else {
 							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_deleting_duplicate", resident.getName(), olderRes.getName()));
 							try {
-								TownyUniverse.getInstance().unregisterResident(resident);
+								universe.unregisterResident(resident);
 							} catch (NotRegisteredException ignored) {}
 							deleteResident(resident);
 							save = false;
@@ -796,14 +796,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null) {
 					tokens = line.split(",");
 					if (tokens.length == 3) {
-						TownyWorld world = TownyUniverse.getInstance().getWorldMap().get(tokens[0]); 
+						TownyWorld world = universe.getWorldMap().get(tokens[0]); 
 						if (world == null)
 							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_world", town.getName()));
 						else {
 							try {
 								int x = Integer.parseInt(tokens[1]);
 								int z = Integer.parseInt(tokens[2]);
-								TownBlock homeBlock = TownyUniverse.getInstance().getTownBlock(new WorldCoord(world.getName(), x, z));
+								TownBlock homeBlock = universe.getTownBlock(new WorldCoord(world.getName(), x, z));
 								town.forceSetHomeBlock(homeBlock);
 							} catch (NumberFormatException e) {
 								TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_location", town.getName()));
@@ -879,11 +879,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 									loc.setYaw(Float.parseFloat(tokens[5]));
 								}
 
-								TownBlock tb = TownyUniverse.getInstance().getTownBlock(WorldCoord.parseWorldCoord(loc));
+								TownBlock tb = universe.getTownBlock(WorldCoord.parseWorldCoord(loc));
 								if (tb == null)
 									continue;
 								Jail jail = new Jail(UUID.randomUUID(), town, tb, new ArrayList<>(Collections.singleton(loc)));
-								TownyUniverse.getInstance().registerJail(jail);
+								universe.registerJail(jail);
 								town.addJail(jail);
 								tb.setJail(jail);
 								jail.save();
@@ -902,7 +902,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 					
 					town.setUUID(townUUID);
-					TownyUniverse.getInstance().registerTownUUID(town);
+					universe.registerTownUUID(town);
 				}
 				line = keys.get("registered");
 				if (line != null) {
@@ -961,8 +961,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("primaryJail");
 				if (line != null) {
 					UUID uuid = UUID.fromString(line);
-					if (TownyUniverse.getInstance().hasJail(uuid))
-						town.setPrimaryJail(TownyUniverse.getInstance().getJail(uuid));
+					if (universe.hasJail(uuid))
+						town.setPrimaryJail(universe.getJail(uuid));
 				}
 				
 				line = keys.get("trustedResidents");
@@ -1544,7 +1544,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String path;
 		
 
-		for (TownBlock townBlock : TownyUniverse.getInstance().getTownBlocks().values()) {
+		for (TownBlock townBlock : universe.getTownBlocks().values()) {
 			path = getTownBlockFilename(townBlock);
 			
 			File fileTownBlock = new File(path);
@@ -1557,7 +1557,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					if (line != null) {
 						if (line.isEmpty()) {
 							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_townblock_file_missing_town_delete", path));
-							TownyUniverse.getInstance().removeTownBlock(townBlock);
+							universe.removeTownBlock(townBlock);
 							deleteTownBlock(townBlock);
 							continue;
 						}
@@ -1569,7 +1569,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						
 						if (town == null) {
 							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_townblock_file_contains_unregistered_town_delete", line, path));
-							TownyUniverse.getInstance().removeTownBlock(townBlock);
+							universe.removeTownBlock(townBlock);
 							deleteTownBlock(townBlock);
 							continue;
 						}
@@ -1585,7 +1585,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} else {
 						// Town line is null, townblock is invalid.
 						TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_townblock_file_missing_town_delete", path));
-						TownyUniverse.getInstance().removeTownBlock(townBlock);
+						universe.removeTownBlock(townBlock);
 						deleteTownBlock(townBlock);
 						continue;
 					}
@@ -1714,7 +1714,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			} else {
 				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_townblock_file_unknown_err", path));
-				TownyUniverse.getInstance().removeTownBlock(townBlock);
+				universe.removeTownBlock(townBlock);
 				deleteTownBlock(townBlock);
 			}
 		}
@@ -1735,7 +1735,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				tokens = line.split(",");
 				TownBlock tb = null;
 				try {
-					tb = TownyUniverse.getInstance().getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+					tb = universe.getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
 					jail.setTownBlock(tb);
 					jail.setTown(tb.getTown());
 					tb.setJail(jail);
@@ -1791,7 +1791,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		List<String> list = new ArrayList<>();
 
-		for (TownyWorld world : getWorlds()) {
+		for (TownyWorld world : universe.getTownyWorlds()) {
 
 			list.add(world.getName());
 
