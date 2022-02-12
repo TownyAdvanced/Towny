@@ -476,7 +476,7 @@ public abstract class TownyDataSource {
 	@Deprecated // TODO: Scrap worlds holding Towns. Towns' homeblocks should be reliable enough to return a world when needed (if we need it at all anymore.)
 	public TownyWorld getTownWorld(String townName) {
 
-		for (TownyWorld world : universe.getWorldMap().values()) {
+		for (TownyWorld world : universe.getTownyWorlds()) {
 			if (world.hasTown(townName))
 				return world;
 		}

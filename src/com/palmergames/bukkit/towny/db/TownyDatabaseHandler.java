@@ -1288,7 +1288,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public PlotBlockData loadPlotData(String worldName, int x, int z) {
 
-		TownyWorld world = universe.getWorldMap().get(worldName); 
+		TownyWorld world = universe.getWorld(worldName); 
 		if (world == null)
 			return null;
 		

@@ -142,10 +142,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			for (File worldfolder : worldFolders) {
 				String worldName = worldfolder.getName();
-				TownyWorld world = universe.getWorldMap().get(worldName);
+				TownyWorld world = universe.getWorld(worldName);
 				if (world == null) {
 					newWorld(worldName);
-					world = universe.getWorldMap().get(worldName);
+					world = universe.getWorld(worldName);
 				}
 				File worldFolder = new File(dataFolderPath + File.separator + "townblocks" + File.separator + worldName);
 				File[] townBlockFiles = worldFolder.listFiles(file->file.getName().endsWith(".data"));
@@ -796,7 +796,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null) {
 					tokens = line.split(",");
 					if (tokens.length == 3) {
-						TownyWorld world = universe.getWorldMap().get(tokens[0]); 
+						TownyWorld world = universe.getWorld(tokens[0]); 
 						if (world == null)
 							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_world", town.getName()));
 						else {
