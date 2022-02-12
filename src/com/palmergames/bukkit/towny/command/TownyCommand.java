@@ -200,7 +200,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		try {
 
 			TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
-			if (world == null && split[0].equalsIgnoreCase("wildsblocks") || split[0].equalsIgnoreCase("plotclearblocks"))
+			if (world == null && (split[0].equalsIgnoreCase("wildsblocks") || split[0].equalsIgnoreCase("plotclearblocks")))
 				throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 				
 			if (split[0].equalsIgnoreCase("map")) {
