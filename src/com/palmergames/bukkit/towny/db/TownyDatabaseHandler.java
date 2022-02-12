@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -396,14 +397,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return res;
 	}
 
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidentsWithoutTown()} instead.
+	 */
+	@Deprecated
 	@Override
 	public List<Resident> getResidentsWithoutTown() {
-
-		List<Resident> residentFilter = new ArrayList<>();
-		for (Resident resident : universe.getResidents())
-			if (!resident.hasTown())
-				residentFilter.add(resident);
-		return residentFilter;
+		return TownyAPI.getInstance().getResidentsWithoutTown();
 	}
 	
 	/*
@@ -493,14 +493,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return town;
 	}
 
+	/**
+	 * @deprecated as of 0.97.5.18 use {@link TownyAPI#getTownsWithoutNation} instead.
+	 */
+	@Deprecated
 	@Override
 	public List<Town> getTownsWithoutNation() {
-
-		List<Town> townFilter = new ArrayList<>();
-		for (Town town : universe.getTowns())
-			if (!town.hasNation())
-				townFilter.add(town);
-		return townFilter;
+		return TownyAPI.getInstance().getTownsWithoutNation();
 	}
 	
 	/*

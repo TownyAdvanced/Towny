@@ -121,7 +121,7 @@ public class TownyAPI {
     @Nullable
     public Nation getResidentNationOrNull(Resident resident) {
     	if (resident.hasNation())
-    		return resident.getTownOrNull().getNationOrNull();    	
+    		return resident.getTownOrNull().getNationOrNull();
     	return null;
     }
     
@@ -206,6 +206,29 @@ public class TownyAPI {
     public Resident getResident(String name) {
     	return TownyUniverse.getInstance().getResident(name);
     }
+    
+	/**
+	 * Gets a List of all of the Residents on the server.
+	 * 
+	 * @return a List of Residents
+	 */
+	public List<Resident> getResidents() {
+		return new ArrayList<>(townyUniverse.getResidents());
+	}
+
+	/**
+	 * Gets a List of all the Residents which don't belong to a town.
+	 * 
+	 * @return A List of all townless Residents.
+	 */
+	public List<Resident> getResidentsWithoutTown() {
+
+		List<Resident> residentFilter = new ArrayList<>();
+		for (Resident resident : getResidents())
+			if (!resident.hasTown())
+				residentFilter.add(resident);
+		return residentFilter;
+	}
     
     /**
      * Find the the matching {@link Player} of the specified {@link Resident}.
@@ -428,7 +451,6 @@ public class TownyAPI {
     	return town != null ? town.getName() : null;
     }
     
-    
     /**
      * Get the {@link UUID} of a {@link Town} at the specified {@link Location}.
      *
@@ -440,6 +462,28 @@ public class TownyAPI {
     	Town town = getTown(location);
     	return town != null ? town.getUUID() : null;
     }
+
+	/**
+	 * Get a List of all the Towns.
+	 * 
+	 * @return a List of all the Towns.
+	 */
+	public List<Town> getTowns() {
+		return new ArrayList<>(townyUniverse.getTowns());
+	}
+
+	/**
+	 * Get a List of all the Towns that aren't a part of a Nation.
+	 * 
+	 * @return a List of all the nationless Towns.
+	 */
+	public List<Town> getTownsWithoutNation() {
+		List<Town> townFilter = new ArrayList<>();
+		for (Town town : getTowns())
+			if (!town.hasNation())
+				townFilter.add(town);
+		return townFilter;
+	}
     
     /**
      * Get the {@link TownBlock} at a specific {@link Location}.

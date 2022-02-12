@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -554,8 +555,16 @@ public abstract class TownyDataSource {
 	@Deprecated
 	abstract public Set<String> getNationsKeys();
 
+	/**
+	 * @deprecated as of 0.97.5.18 use {@link TownyAPI#getTownsWithoutNation} instead.
+	 */
+	@Deprecated
 	abstract public List<Town> getTownsWithoutNation();
 
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidentsWithoutTown()} instead.
+	 */
+	@Deprecated
 	abstract public List<Resident> getResidentsWithoutTown();
 
 	abstract public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException;

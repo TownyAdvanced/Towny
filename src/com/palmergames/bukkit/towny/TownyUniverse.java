@@ -833,13 +833,13 @@ public class TownyUniverse {
             out.addAll(nation.getTreeString(depth + 2));
         }
         
-        Collection<Town> townsWithoutNation = dataSource.getTownsWithoutNation();
+        Collection<Town> townsWithoutNation = TownyAPI.getInstance().getTownsWithoutNation();
         out.add(getTreeDepth(depth + 1) + "Towns (" + townsWithoutNation.size() + "):");
         for (Town town : townsWithoutNation) {
             out.addAll(town.getTreeString(depth + 2));
         }
         
-        Collection<Resident> residentsWithoutTown = dataSource.getResidentsWithoutTown();
+        Collection<Resident> residentsWithoutTown = TownyAPI.getInstance().getResidentsWithoutTown();
         out.add(getTreeDepth(depth + 1) + "Residents (" + residentsWithoutTown.size() + "):");
         for (Resident resident : residentsWithoutTown) {
             out.addAll(resident.getTreeString(depth + 2));
