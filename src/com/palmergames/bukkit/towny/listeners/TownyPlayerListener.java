@@ -241,7 +241,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		
 		// Test whether we can build in the place they are pouring their liquid.
-		event.setCancelled(!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace()).getLocation(), event.getBucket()));
+		event.setCancelled(!TownyActionEventExecutor.canBuild(event.getPlayer(), event.getBlock().getLocation(), event.getBucket()));
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
