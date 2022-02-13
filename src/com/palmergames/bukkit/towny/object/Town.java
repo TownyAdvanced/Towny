@@ -1338,9 +1338,6 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean isRuined() {
-		if(!ruined && residents.isEmpty()) {
-			ruined = true;  //If all residents have been deleted, flag town as ruined.
-		}
 		return ruined;
 	}
 	
