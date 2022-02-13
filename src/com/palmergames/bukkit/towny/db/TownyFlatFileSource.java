@@ -199,7 +199,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_resident_list"));
 		List<String> residents = receiveListFromLegacyFile("residents.txt");
 		File[] residentFiles = receiveObjectFiles("residents", ".txt");
-		assert residentFiles != null;
 
 		for (File resident : residentFiles) {
 			String name = resident.getName().replace(".txt", "");
@@ -233,7 +232,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean loadHibernatedResidents() {
 		TownyMessaging.sendDebugMsg("Loading hibernated residents.");
 		File[] residentFiles = receiveObjectFiles("residents" + File.separator + "hibernated", ".txt");
-		assert residentFiles != null;
+
 		for (File resident : residentFiles) {
 			UUID uuid = UUID.fromString(resident.getName().replace(".txt", ""));
 			HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(resident);
@@ -254,7 +253,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_town_list"));
 		List<String> towns = receiveListFromLegacyFile("towns.txt");
 		File[] townFiles = receiveObjectFiles("towns", ".txt");
-		assert townFiles != null;
+
 		List<File> rejectedTowns = new ArrayList<>();
 		
 		for (File town : townFiles) {
@@ -306,7 +305,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_nation_list"));
 		List<String> nations = receiveListFromLegacyFile("nations.txt");
 		File[] nationFiles = receiveObjectFiles("nations", ".txt");
-		assert nationFiles != null;
+
 		List<File> rejectedNations = new ArrayList<>();
 		
 		for (File nation : nationFiles) {
