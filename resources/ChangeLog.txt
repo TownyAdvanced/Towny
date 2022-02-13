@@ -7261,3 +7261,9 @@ v0.92.0.11:
   - Actually fix regression with max-homeblock-distance.
   - Fix /towny plotclearblocks always saying that towny is disabled, courtesy of Warriorrrr #5734.
   - Fix a town with 0 residents being assigned a ruined status.
+  - Remove assertions from flatfile source, courtesy of Warriorrrr #5738.
+  - Add some revert ignore blocks, courtesy of Warriorrrr #5735.
+    - ,PLAYER_HEAD,PLAYER_WALL_HEAD,SKELETON_SKULL,SKELETON_WALL_SKULL,CREEPER_HEAD,CREEPER_WALL_HEAD,ZOMBIE_HEAD,ZOMBIE_WALL_HEAD,DRAGON_HEAD,DRAGON_WALL_HEAD
+    - These will be automatically added to your config and world's block ignore lists.
+  - Remove animal tempt protection, courtesy of Warriorrrr #5733.
+    - Any place that this would have mattered, an animal could have walked away from naturally/been pushed.
