@@ -17,7 +17,7 @@ ___
 
 ### Current Recommended Versions
 * [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.14.* & 1.15.* & 1.16.* & 1.17.* & 1.18.
-* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.14.* & 1.15.* & 1.16.* & 1.17.* & 1.18.*.
+* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.16.* & 1.17.* & 1.18.*.
 
 <table>
 <tr><th> Minecraft Version</th><th>Towny Version</th></tr>
