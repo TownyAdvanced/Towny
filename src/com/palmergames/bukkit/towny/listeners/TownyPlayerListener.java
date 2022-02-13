@@ -790,7 +790,9 @@ public class TownyPlayerListener implements Listener {
 			// Caught players are tested for pvp at the location of the catch.
 			if (caught.getType().equals(EntityType.PLAYER)) {
 				TownyWorld world = TownyAPI.getInstance().getTownyWorld(event.getCaught().getWorld().getName());
-				assert world != null;
+				if (world == null)
+					return;
+
 				TownBlock tb = TownyAPI.getInstance().getTownBlock(event.getCaught().getLocation());
 				test = !CombatUtil.preventPvP(world, tb);
 			// Non-player catches are tested for destroy permissions.
