@@ -46,8 +46,6 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -165,35 +163,6 @@ public class TownyEntityListener implements Listener {
 		if (entity instanceof Monster)
 			if (TownyAPI.getInstance().getTownBlock(entity.getLocation()).getType() == TownBlockType.ARENA)
 				event.getDrops().clear();
-	}
-
-	/**
-	 * Prevents players from stealing animals in personally owned plots 
-	 * To tempt an animal in a personally owned plot requires the ability to also destroy dirt blocks there.
-	 * 
-	 * @param event - EntityTargetLivingEntityEvent
-	 */
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
-		if (plugin.isError()) {
-			return;
-		}
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
-			return;
-
-		if (event.getTarget() instanceof Player player) {
-			if (event.getReason().equals(EntityTargetEvent.TargetReason.TEMPT)) {
-				Location loc = event.getEntity().getLocation();
-				if (TownyAPI.getInstance().isWilderness(loc))
-					return;
-
-				if (!TownyAPI.getInstance().getTownBlock(loc).hasResident())
-					return;	
-
-				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, loc, Material.DIRT));
-			}
-		}
 	}
 	
 	/**
