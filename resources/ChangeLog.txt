@@ -7267,3 +7267,8 @@ v0.92.0.11:
     - These will be automatically added to your config and world's block ignore lists.
   - Remove animal tempt protection, courtesy of Warriorrrr #5733.
     - Any place that this would have mattered, an animal could have walked away from naturally/been pushed.
+0.97.5.19:
+  - Pre 0.98.0.0 deprecations.
+    - All of the getters in the TownyDataSource have been deprecated for removal in 0.99.0.0.
+    - Replacements for all of them exist in TownyAPI or in TownyUniverse.
+    - Plugins using the API need only check the javadocs for exact replacements.
