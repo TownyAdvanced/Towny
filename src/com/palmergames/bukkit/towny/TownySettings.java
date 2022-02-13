@@ -36,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -323,7 +324,7 @@ public class TownySettings {
 		List<String> switches = getStrArr(ConfigNodes.PROT_SWITCH_MAT);
 		for (String matName : switches) {
 			if (ItemLists.GROUPS.contains(matName)) {
-				switchUseMaterials.addAll(toMaterialSet(ItemLists.getGrouping(matName)));
+				switchUseMaterials.addAll(ItemLists.getGrouping(matName));
 			} else {
 				Material material = Material.matchMaterial(matName);
 				if (material != null)
@@ -339,7 +340,7 @@ public class TownySettings {
 		List<String> items = getStrArr(ConfigNodes.PROT_ITEM_USE_MAT);
 		for (String matName : items) {
 			if (ItemLists.GROUPS.contains(matName)) {
-				itemUseMaterials.addAll(toMaterialSet(ItemLists.getGrouping(matName)));
+				itemUseMaterials.addAll(ItemLists.getGrouping(matName));
 			} else {
 				Material material = Material.matchMaterial(matName);
 				if (material != null)
@@ -364,17 +365,6 @@ public class TownySettings {
 			Material material = Material.matchMaterial(materialName);
 			if (material != null)
 				materials.add(material);
-		}
-		
-		return materials;
-	}
-
-	public static Set<Material> toMaterialSet(List<String> materialList) {
-		Set<Material> materials = new HashSet<>();
-		for (String materialName : materialList) {
-			Material material = Material.matchMaterial(materialName);
-			if (material != null)
-				materials.add(material);				
 		}
 		
 		return materials;

@@ -14,31 +14,31 @@ import org.jetbrains.annotations.Nullable;
 import com.palmergames.bukkit.towny.TownyMessaging;
 
 public class EntityTypeUtil {
-	private static List<EntityType> ExplosiveEntityTypes = new ArrayList<>(Arrays.asList(
+	private static final List<EntityType> ExplosiveEntityTypes = Arrays.asList(
 			EntityType.CREEPER,
 			EntityType.DRAGON_FIREBALL, 
 			EntityType.FIREBALL, 
 			EntityType.SMALL_FIREBALL,
-			EntityType.FIREWORK, 
-			EntityType.MINECART_TNT, 
-			EntityType.PRIMED_TNT, 
-			EntityType.WITHER, 
+			EntityType.FIREWORK,
+			EntityType.MINECART_TNT,
+			EntityType.PRIMED_TNT,
+			EntityType.WITHER,
 			EntityType.WITHER_SKULL,
-			EntityType.ENDER_CRYSTAL));
+			EntityType.ENDER_CRYSTAL);
 	
-	private static List<EntityType> ExplosivePVMEntityTypes = new ArrayList<>(Arrays.asList(
+	private static final List<EntityType> ExplosivePVMEntityTypes = Arrays.asList(
 			EntityType.CREEPER,
-			EntityType.DRAGON_FIREBALL, 
-			EntityType.FIREBALL, 
+			EntityType.DRAGON_FIREBALL,
+			EntityType.FIREBALL,
 			EntityType.SMALL_FIREBALL,
-			EntityType.WITHER, 
+			EntityType.WITHER,
 			EntityType.WITHER_SKULL,
-			EntityType.ENDER_CRYSTAL));
+			EntityType.ENDER_CRYSTAL);
 
-	private static List<EntityType> ExplosivePVPEntityTypes = new ArrayList<>(Arrays.asList(
-			EntityType.FIREWORK, 
-			EntityType.MINECART_TNT, 
-			EntityType.PRIMED_TNT));
+	private static final List<EntityType> ExplosivePVPEntityTypes = Arrays.asList(
+			EntityType.FIREWORK,
+			EntityType.MINECART_TNT,
+			EntityType.PRIMED_TNT);
 	
 	public static boolean isInstanceOfAny(List<Class<?>> classes, Object obj) {
 
