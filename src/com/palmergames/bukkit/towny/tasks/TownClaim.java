@@ -71,7 +71,6 @@ public class TownClaim extends Thread {
 	public void run() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
-		List<TownyWorld> worlds = new ArrayList<>();
 		List<Town> towns = new ArrayList<>();
 		TownyWorld world = null;
 		if (player != null) {
@@ -87,8 +86,6 @@ public class TownClaim extends Thread {
 
 				try {
 					world = worldCoord.getTownyWorld();
-					if (!worlds.contains(world))
-						worlds.add(world);
 
 					if (claim) {
 						// Claim						
@@ -105,10 +102,6 @@ public class TownClaim extends Thread {
 					if (!towns.contains(town))
 						towns.add(town);
 					
-
-				} catch (NotRegisteredException e) {
-					// Invalid world
-					TownyMessaging.sendMsg(player, Translatable.of("msg_err_not_configured"));
 				} catch (TownyException x) {
 					TownyMessaging.sendErrorMsg(player, x.getMessage());
 				}
@@ -154,12 +147,6 @@ public class TownClaim extends Thread {
 
 		if (!towns.isEmpty()) {
 			for (Town test : towns) {
-				test.save();
-			}
-		}
-
-		if (!worlds.isEmpty()) {
-			for (TownyWorld test : worlds) {
 				test.save();
 			}
 		}

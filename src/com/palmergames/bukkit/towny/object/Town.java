@@ -717,7 +717,7 @@ public class Town extends Government implements TownBlockOwner {
 		if (homeBlock != null)
 			return homeBlock.getWorld();
 		
-		return TownyUniverse.getInstance().getDataSource().getWorlds().get(0);
+		return TownyUniverse.getInstance().getTownyWorlds().get(0);
 	}
 
 	public boolean hasMayor() {

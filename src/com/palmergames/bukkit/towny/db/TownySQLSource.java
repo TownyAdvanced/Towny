@@ -482,12 +482,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				rs = s.executeQuery("SELECT world,x,z FROM " + tb_prefix + "TOWNBLOCKS");
 				while (rs.next()) {
 
-					TownyWorld world = getWorld(rs.getString("world"));
+					String worldName = rs.getString("world");
+					TownyWorld world = universe.getWorld(worldName);
+					if (world == null)
+						throw new Exception("World " + worldName + " not registered!");
+					
 					int x = Integer.parseInt(rs.getString("x"));
 					int z = Integer.parseInt(rs.getString("z"));
 
 					TownBlock townBlock = new TownBlock(x, z, world);
-					TownyUniverse.getInstance().addTownBlock(townBlock);
+					universe.addTownBlock(townBlock);
 					total++;
 
 				}
@@ -496,9 +500,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			}
 			
 			return true;
-
+		} catch (SQLException s) {
+			s.printStackTrace();
 		} catch (Exception e) {
-			e.printStackTrace();
+			TownyMessaging.sendErrorMsg(e.getMessage());
 		}
 		return false;
 
@@ -567,7 +572,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 				while (rs.next()) {
 					try {
-						TownyUniverse.getInstance().newTownInternal(rs.getString("name"));
+						universe.newTownInternal(rs.getString("name"));
 					} catch (AlreadyRegisteredException ignored) {
 					}
 				}
@@ -652,7 +657,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				ResultSet rs = s.executeQuery("SELECT groupID FROM " + tb_prefix + "PLOTGROUPS");
 
 				while (rs.next()) {
-					TownyUniverse.getInstance().newPlotGroupInternal(rs.getString("groupID"));
+					universe.newPlotGroupInternal(rs.getString("groupID"));
 				}
 			}
 			
@@ -672,7 +677,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			try (Statement s = cntx.createStatement()) {
 				ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "JAILS");
 				while (rs.next()) {
-					TownyUniverse.getInstance().newJailInternal(rs.getString("uuid"));
+					universe.newJailInternal(rs.getString("uuid"));
 				}
 			}
 			return true;
@@ -752,12 +757,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				if (rs.getString("uuid") != null && !rs.getString("uuid").isEmpty()) {
 					
 					UUID uuid = UUID.fromString(rs.getString("uuid"));
-					if (TownyUniverse.getInstance().hasResident(uuid)) {
-						Resident olderRes = TownyUniverse.getInstance().getResident(uuid);
+					if (universe.hasResident(uuid)) {
+						Resident olderRes = universe.getResident(uuid);
 						if (resident.getLastOnline() > olderRes.getLastOnline()) {
 							TownyMessaging.sendDebugMsg("Deleting : " + olderRes.getName() + " which is a dupe of " + resident.getName());
 							try {
-								TownyUniverse.getInstance().unregisterResident(olderRes);
+								universe.unregisterResident(olderRes);
 							} catch (NotRegisteredException ignored) {}
 							// Check if the older resident is a part of a town
 							if (olderRes.hasTown()) {
@@ -770,7 +775,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						} else {
 							TownyMessaging.sendDebugMsg("Deleting resident : " + resident.getName() + " which is a dupe of " + olderRes.getName());
 							try {
-								TownyUniverse.getInstance().unregisterResident(resident);
+								universe.unregisterResident(resident);
 							} catch (NotRegisteredException ignored) {}
 							deleteResident(resident);
 							return true;
@@ -806,8 +811,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			if (rs.getString("jailUUID") != null && !rs.getString("jailUUID").isEmpty()) {
 				UUID uuid = UUID.fromString(rs.getString("jailUUID"));
-				if (TownyUniverse.getInstance().hasJail(uuid)) {
-					resident.setJail(TownyUniverse.getInstance().getJail(uuid));
+				if (universe.hasJail(uuid)) {
+					resident.setJail(universe.getJail(uuid));
 				}
 			}
 			if (resident.isJailed()) {
@@ -830,7 +835,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				line = rs.getString("friends");
 				if (line != null) {
 					search = (line.contains("#")) ? "#" : ",";
-					List<Resident> friends = getResidents(line.split(search));
+					List<Resident> friends = TownyAPI.getInstance().getResidents(line.split(search));
 					for (Resident friend : friends) {
 						try {
 							resident.addFriend(friend);
@@ -1009,14 +1014,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (line != null) {
 				search = (line.contains("#")) ? "#" : ",";
 				tokens = line.split(search);
-				if (tokens.length == 3)
-					try {
-						TownyWorld world = getWorld(tokens[0]);
-
+				if (tokens.length == 3) {
+					TownyWorld world = universe.getWorld(tokens[0]);
+					if (world == null)
+						TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+					else {
 						try {
 							int x = Integer.parseInt(tokens[1]);
 							int z = Integer.parseInt(tokens[2]);
-							TownBlock homeBlock = TownyUniverse.getInstance()
+							TownBlock homeBlock = universe
 									.getTownBlock(new WorldCoord(world.getName(), x, z));
 							town.forceSetHomeBlock(homeBlock);
 						} catch (NumberFormatException e) {
@@ -1028,11 +1034,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						} catch (TownyException e) {
 							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
 						}
-
-					} catch (NotRegisteredException e) {
-						TownyMessaging.sendErrorMsg(
-								"[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
 					}
+				}
 			}
 
 			line = rs.getString("spawn");
@@ -1099,11 +1102,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 								loc.setYaw(Float.parseFloat(tokens[5]));
 							}
 
-							TownBlock tb = TownyUniverse.getInstance().getTownBlock(WorldCoord.parseWorldCoord(loc));
+							TownBlock tb = universe.getTownBlock(WorldCoord.parseWorldCoord(loc));
 							if (tb == null)
 								continue;
 							Jail jail = new Jail(UUID.randomUUID(), town, tb, new ArrayList<>(Collections.singleton(loc)));
-							TownyUniverse.getInstance().registerJail(jail);
+							universe.registerJail(jail);
 							town.addJail(jail);
 							tb.setJail(jail);
 							jail.save();
@@ -1132,7 +1135,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (IllegalArgumentException | NullPointerException ee) {
 				town.setUUID(UUID.randomUUID());
 			}
-			TownyUniverse.getInstance().registerTownUUID(town);
+			universe.registerTownUUID(town);
 
 			int conqueredDays = rs.getInt("conqueredDays");
 			town.setConqueredDays(conqueredDays);
@@ -1172,14 +1175,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			line = rs.getString("primaryJail");
 			if (line != null && !line.isEmpty()) {
 				UUID uuid = UUID.fromString(line);
-				if (TownyUniverse.getInstance().hasJail(uuid))
-					town.setPrimaryJail(TownyUniverse.getInstance().getJail(uuid));
+				if (universe.hasJail(uuid))
+					town.setPrimaryJail(universe.getJail(uuid));
 			}
 			
 			line = rs.getString("trustedResidents");
 			if (line != null && !line.isEmpty()) {
 				search = (line.contains("#")) ? "#" : ",";
-				for (Resident resident : getResidents(toUUIDArray(line.split(search))))
+				for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(search))))
 					town.addTrustedResident(resident);
 			}
 			
@@ -1195,7 +1198,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				List<UUID> uuids = Arrays.stream(line.split(search))
 						.map(uuid -> UUID.fromString(uuid))
 						.collect(Collectors.toList());
-				town.loadAllies(getTowns(uuids));
+				town.loadAllies(TownyAPI.getInstance().getTowns(uuids));
 			}
 
 			line = rs.getString("enemies");
@@ -1204,7 +1207,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				List<UUID> uuids = Arrays.stream(line.split(search))
 						.map(uuid -> UUID.fromString(uuid))
 						.collect(Collectors.toList());
-				town.loadEnemies(getTowns(uuids));
+				town.loadEnemies(TownyAPI.getInstance().getTowns(uuids));
 			}
 			
 			return true;
@@ -1302,7 +1305,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			line = rs.getString("allies");
 			if (line != null) {
 				search = (line.contains("#")) ? "#" : ",";
-				List<Nation> allies = getNations(line.split(search));
+				List<Nation> allies = TownyAPI.getInstance().getNations(line.split(search));
 				for (Nation ally : allies)
 					nation.addAlly(ally);
 			}
@@ -1310,7 +1313,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			line = rs.getString("enemies");
 			if (line != null) {
 				search = (line.contains("#")) ? "#" : ",";
-				List<Nation> enemies = getNations(line.split(search));
+				List<Nation> enemies = TownyAPI.getInstance().getNations(line.split(search));
 				for (Nation enemy : enemies) 
 					nation.addEnemy(enemy);
 			}
@@ -1429,7 +1432,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		String worldName = null;
 		try {
 			worldName = rs.getString("name");
-			TownyWorld world = getWorld(worldName);
+			TownyWorld world = universe.getWorld(worldName);
+			if (world == null)
+				throw new Exception("World " + worldName + " not registered!");
 
 			TownyMessaging.sendDebugMsg("Loading world " + world.getName());
 
@@ -1700,8 +1705,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			TownyMessaging.sendErrorMsg(
 					"SQL: Load world sql error (" + (worldName != null ? worldName : "NULL") + ")" + e.getMessage());
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Load world unknown error - ");
-			e.printStackTrace();
+			TownyMessaging.sendErrorMsg(e.getMessage());
 		}
 		return false;
 	}
@@ -1727,7 +1731,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				int z = rs.getInt("z");
 
 				try {
-					townBlock = TownyUniverse.getInstance().getTownBlock(new WorldCoord(worldName, x, z));
+					townBlock = universe.getTownBlock(new WorldCoord(worldName, x, z));
 				} catch (NotRegisteredException ex) {
 					TownyMessaging.sendErrorMsg("Loading Error: Exception while fetching townblock: " + worldName + " "
 							+ x + " " + z + " from memory!");
@@ -1756,7 +1760,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line
 							+ " , deleting " + townBlock.getWorld().getName() + "," + townBlock.getX() + ","
 							+ townBlock.getZ());
-						TownyUniverse.getInstance().removeTownBlock(townBlock);
+						universe.removeTownBlock(townBlock);
 						deleteTownBlock(townBlock);
 						continue;
 					}
@@ -1832,7 +1836,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					if (line != null && !line.isEmpty()) {
 						try {
 							UUID groupID = UUID.fromString(line.trim());
-							PlotGroup group = getPlotObjectGroup(groupID);
+							PlotGroup group = universe.getGroup(groupID);
 							if (group != null) {
 								townBlock.setPlotObjectGroup(group);
 								if (group.getPermissions() == null && townBlock.getPermissions() != null)
@@ -1850,7 +1854,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				line = rs.getString("trustedResidents");
 				if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
 					String search = (line.contains("#")) ? "#" : ",";
-					for (Resident resident : getResidents(toUUIDArray(line.split(search))))
+					for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(search))))
 						townBlock.addTrustedResident(resident);
 
 					if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.getTrustedResidents().size() > 0)
@@ -2007,7 +2011,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				tokens = line.split("#");
 				TownBlock tb = null;
 				try {
-					tb = TownyUniverse.getInstance().getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+					tb = universe.getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
 					jail.setTownBlock(tb);
 					jail.setTown(tb.getTown());
 					tb.setJail(jail);

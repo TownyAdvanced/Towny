@@ -341,7 +341,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				break;
 			case "tpplot":
 				if (args.length == 2) {
-					return NameUtil.filterByStart(TownyUniverse.getInstance().getDataSource().getWorlds()
+					return NameUtil.filterByStart(TownyUniverse.getInstance().getTownyWorlds()
 						.stream()
 						.map(TownyWorld::getName)
 						.collect(Collectors.toList()), args[1]);
@@ -1502,7 +1502,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[1].equalsIgnoreCase("kick")) {
 
-				NationCommand.nationKick(sender, nation, townyUniverse.getDataSource().getTowns(StringMgmt.remArgs(split, 2)));
+				NationCommand.nationKick(sender, nation, TownyAPI.getInstance().getTowns(StringMgmt.remArgs(split, 2)));
 
 			} else if (split[1].equalsIgnoreCase("delete")) {
 				if (!isConsole) {
@@ -2266,7 +2266,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void toggleRegenerations(boolean choice) {
-		for (TownyWorld world : new ArrayList<>(TownyUniverse.getInstance().getWorldMap().values())) {
+		for (TownyWorld world : new ArrayList<>(TownyUniverse.getInstance().getTownyWorlds())) {
 			world.setUsingPlotManagementRevert(choice);
 			world.setUsingPlotManagementWildBlockRevert(choice);
 			world.setUsingPlotManagementWildEntityRevert(choice);
@@ -2275,14 +2275,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	private void toggleRevertUnclaim(boolean choice) {
-		for (TownyWorld world : new ArrayList<>(TownyUniverse.getInstance().getWorldMap().values())) {
+		for (TownyWorld world : new ArrayList<>(TownyUniverse.getInstance().getTownyWorlds())) {
 			world.setUsingPlotManagementRevert(choice);
 			world.save();
 		}
 	}
 
 	private void toggleWildernessUsage(boolean choice) {
-		for (TownyWorld world : new ArrayList<>(TownyUniverse.getInstance().getWorldMap().values())) {
+		for (TownyWorld world : new ArrayList<>(TownyUniverse.getInstance().getTownyWorlds())) {
 			world.setUnclaimedZoneBuild(choice);
 			world.setUnclaimedZoneDestroy(choice);
 			world.setUnclaimedZoneSwitch(choice);

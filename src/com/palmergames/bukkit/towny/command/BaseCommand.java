@@ -103,7 +103,7 @@ public class BaseCommand implements TabCompleter{
 		}
 
 		if (type.contains("w")) { // There aren't many worlds so check even if arg is empty
-			matches.addAll(NameUtil.filterByStart(NameUtil.getNames(townyUniverse.getWorldMap().values()), arg));
+			matches.addAll(NameUtil.filterByStart(NameUtil.getNames(townyUniverse.getTownyWorlds()), arg));
 		}
 
 		return matches;

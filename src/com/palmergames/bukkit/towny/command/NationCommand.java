@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
@@ -1214,7 +1213,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 * @throws TownyException generic
 	 */
 	public void nationAdd(Player player, String[] names) throws TownyException {
-		TownyDataSource dataSource = TownyUniverse.getInstance().getDataSource();
 
 		if (names.length < 1)
 			throw new TownyException("Eg: /nation add [names]");
@@ -1246,11 +1244,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		names = newtownlist.toArray(new String[0]);
 		String[] namestoremove = removeinvites.toArray(new String[0]);
 		if (namestoremove.length >= 1) {
-			nationRevokeInviteTown(player, nation, dataSource.getTowns(namestoremove));
+			nationRevokeInviteTown(player, nation, TownyAPI.getInstance().getTowns(namestoremove));
 		}
 
 		if (names.length >= 1) {
-			nationAdd(player, nation, dataSource.getTowns(names));
+			nationAdd(player, nation, TownyAPI.getInstance().getTowns(names));
 		}
 	}
 
@@ -1404,7 +1402,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		Nation nation = getNationFromPlayerOrThrow(player);
 
-		nationKick(player, nation, TownyUniverse.getInstance().getDataSource().getTowns(names));
+		nationKick(player, nation, TownyAPI.getInstance().getTowns(names));
 	}
 
 	public static void nationKick(CommandSender sender, Nation nation, List<Town> kicking) {

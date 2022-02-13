@@ -126,7 +126,7 @@ public class ConfigMigrator {
 
 		// Address any changes to the world files.
 		if (change.worldAction != null) {
-			for (TownyWorld world : TownyUniverse.getInstance().getWorldMap().values()) {
+			for (TownyWorld world : TownyUniverse.getInstance().getTownyWorlds()) {
 				TownyMessaging.sendDebugMsg("Updating " + world.getName() + " with " + change.value);
 				change.worldAction.getAction().accept(world, change);
 				world.save();

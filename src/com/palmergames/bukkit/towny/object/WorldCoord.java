@@ -106,13 +106,11 @@ public class WorldCoord extends Coord {
 	}
 
 	/**
-	 * Shortcut for TownyUniverse.getDataSource().getWorld(worldName)
-	 * 
-	 * @return the relevant TownyWorld instance
-	 * @throws NotRegisteredException if unable to return a TownyWorld instance
+	 * @return the relevant TownyWorld instance or null.
 	 */
-	public TownyWorld getTownyWorld() throws NotRegisteredException {
-		return TownyUniverse.getInstance().getDataSource().getWorld(worldName);
+	@Nullable
+	public TownyWorld getTownyWorld() {
+		return TownyUniverse.getInstance().getWorld(worldName); 
 	}
 
 	@Nullable

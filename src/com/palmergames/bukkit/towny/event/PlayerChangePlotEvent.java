@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -56,5 +57,13 @@ public class PlayerChangePlotEvent extends Event {
 	
 	public Player getPlayer() {
 		return player;
+	}
+	
+	public TownyWorld getTownyWorldFrom() {
+		return from.getTownyWorld();
+	}
+	
+	public TownyWorld getTownyWorldTo() {
+		return to.getTownyWorld();
 	}
 }

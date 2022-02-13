@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -793,9 +794,20 @@ public class TownyUniverse {
 		return nationsTrie;
 	}
 	
-    public Map<String, TownyWorld> getWorldMap() {
+	// =========== World Methods ===========
+	
+	public Map<String, TownyWorld> getWorldMap() {
         return worlds;
     }
+	
+	@Nullable
+	public TownyWorld getWorld(String name) {
+		return worlds.get(name.toLowerCase(Locale.ROOT));
+	}
+	
+	public List<TownyWorld> getTownyWorlds() {
+		return new ArrayList<>(worlds.values());
+	}
     
     /*
      * Towny Tree command output.
@@ -821,13 +833,13 @@ public class TownyUniverse {
             out.addAll(nation.getTreeString(depth + 2));
         }
         
-        Collection<Town> townsWithoutNation = dataSource.getTownsWithoutNation();
+        Collection<Town> townsWithoutNation = TownyAPI.getInstance().getTownsWithoutNation();
         out.add(getTreeDepth(depth + 1) + "Towns (" + townsWithoutNation.size() + "):");
         for (Town town : townsWithoutNation) {
             out.addAll(town.getTreeString(depth + 2));
         }
         
-        Collection<Resident> residentsWithoutTown = dataSource.getResidentsWithoutTown();
+        Collection<Resident> residentsWithoutTown = TownyAPI.getInstance().getResidentsWithoutTown();
         out.add(getTreeDepth(depth + 1) + "Residents (" + residentsWithoutTown.size() + "):");
         for (Resident resident : residentsWithoutTown) {
             out.addAll(resident.getTreeString(depth + 2));
@@ -1105,6 +1117,10 @@ public class TownyUniverse {
      * Jail Stuff
      */
 
+	public List<Jail> getJails() {
+		return new ArrayList<>(getJailUUIDMap().values());
+	}
+	
     public Map<UUID, Jail> getJailUUIDMap() {
     	return jailUUIDMap;
     }
