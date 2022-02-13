@@ -206,7 +206,7 @@ msg_changed_public: '&cПубличный статус города: %s.'
 msg_changed_expl: '&cВзрывы в %s теперь %s.'
 msg_changed_fire: '&cОгонь в %s теперь %s.'
 msg_changed_mobs: '&cСпавн монстров в %s теперь %s.'
-msg_the_plot_group: 'the Plot Group'
+msg_the_plot_group: 'группе участков'
 msg_changed_taxpercent: '&cНалог в виде процентной ставки: %s.'
 msg_changed_open: '&cВход без приглашения: %s.'
 msg_toggle_open_on_warning: 'Предупреждение: Заявки в город должны быть выключены, если город открыт. Введите "/town set perm off", для возврата: "/town set perm reset".'
@@ -987,7 +987,7 @@ towny_prices_price_shop: '&c            &2Магазин: &a%s &8| &2Посол�
 towny_prices_taxes_plot: '&c    [Налоги]    &2Игрок: &a%s &8| &2Участок: &a%s'
 towny_prices_taxes_shop: '&c            &2Магазин: &a%s &8| &2Посольство: &a%s'
 towny_prices_town_neutral_tax: '&c            &2Нейтралитет: &a%s'
-towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_plots: '&c    [Настройка участков]'
 towny_prices_type_single: '            &2%s: &a%s'
 towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&сНация: &6%s'
@@ -1281,7 +1281,7 @@ msg_setup_townblock_cost: 'Сколько должен стоить приват
 msg_setup_success: 'Параметры конфигурации успешно обновлены.'
 #Added in 0.125
 #Player has recently died and respawned and is invulnerable.
-msg_err_player_cannot_be_harmed: '%s появился недавно и ему не может быть причинен урон.'
+msg_err_player_cannot_be_harmed: '%s заспавнился недавно и имеет временную защиту.'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_invulnerability: 'Вы потеряли вашу неуязвимость.'
 #Added in 0.126
@@ -1294,7 +1294,7 @@ status_joined_nation: 'Присоединился к нации:'
 #Shown in status screen elements where a value is not known.
 status_unknown: 'неизвестно'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
-msg_nationzone_override_set_to: '%s установил nationzone на %s.'
+msg_nationzone_override_set_to: '%s установил национальную зону на %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
 msg_nationzone_override_removed: '%s отменил действие их национальной зоны.'
 #Added in 0.127
@@ -1375,7 +1375,7 @@ msg_jailed_handbook_4_cant: 'Вы не можете покинуть свой г
 #Jail handbook messages
 msg_jailed_handbook_bail_1: 'Вы можете освободиться из тюрьмы, заплатив залог с помощью ''/res jail paybail''.'
 #Jail handbook messages
-msg_jailed_handbook_bail_2: 'Bail will cost %s.'
+msg_jailed_handbook_bail_2: 'Залог составляет %s.'
 #Jail handbook messages
 msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
 #Jail handbook messages
