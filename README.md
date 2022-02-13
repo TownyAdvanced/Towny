@@ -24,7 +24,7 @@ ___
 <tr align=center><td> MC 1.18.*</td><td rowspan=3> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.98.0.0>0.98.0.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
 <tr align=center><td> MC 1.17.* </td>
 <tr align=center><td> MC 1.16.* </td>
-<tr align=center><td> MC 1.15.2 </td><td rowspan=2> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.98.0.0>0.98.0.0 for 1.15.2 & 1.14.4</a></td>
+<tr align=center><td> MC 1.15.2 </td><td rowspan=2> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.98.0.0>0.98.0.0</a></td>
 <tr align=center><td> MC 1.14.4 </td>
 <tr align=center><td> MC 1.13.2 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.96.2.0for1.13.2>0.96.2.0 for 1.13.2</a> </td>
 <tr align=center><td> MC 1.12.2 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.97.0.0for1.12.2>0.97.0.0 for 1.12.2</a> </td>
