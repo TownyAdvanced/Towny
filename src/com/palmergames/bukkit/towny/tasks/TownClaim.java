@@ -86,7 +86,6 @@ public class TownClaim extends Thread {
 
 				try {
 					world = worldCoord.getTownyWorld();
-					assert world != null;
 
 					if (claim) {
 						// Claim						
