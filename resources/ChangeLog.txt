@@ -7272,3 +7272,6 @@ v0.92.0.11:
     - All of the getters in the TownyDataSource have been deprecated for removal in 0.99.0.0.
     - Replacements for all of them exist in TownyAPI or in TownyUniverse.
     - Plugins using the API need only check the javadocs for exact replacements.
+  - Add possibility for towns to have unlimited claims.
+    - You can now set town_block_ratio to -1 to make towns have unlimited claims.
+    - If you enable this make sure townblocks cost money.
