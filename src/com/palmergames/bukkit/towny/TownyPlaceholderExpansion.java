@@ -409,7 +409,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		case "town_townblocks_natural_maximum": // %townyadvanced_town_townblocks_natural_maximum%
 			if (resident.hasTown()) {
 				Town restown = resident.getTownOrNull();
-				amount = TownySettings.areTownBlocksUnlimited() 
+				amount = restown.hasUnlimitedClaims()
 					? restown.getMaxTownBlocksAsAString()
 					: String.valueOf(restown.getMaxTownBlocks() - restown.getBonusBlocks() - restown.getPurchasedBlocks());
 			}

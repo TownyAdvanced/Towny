@@ -78,6 +78,7 @@ public class Town extends Government implements TownBlockOwner {
 	private double debtBalance = 0.0;
 	private Nation nation;
 	private boolean hasUpkeep = true;
+	private boolean hasUnlimitedClaims = false;
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 	private TownBlock homeBlock;
 	private TownyWorld world;
@@ -393,6 +394,20 @@ public class Town extends Government implements TownBlockOwner {
 		return hasUpkeep;
 	}
 
+	/**
+	 * @return whether the town hasUnlimitedClaims
+	 */
+	public boolean hasUnlimitedClaims() {
+		return TownySettings.areTownBlocksUnlimited() || hasUnlimitedClaims;
+	}
+
+	/**
+	 * @param hasUnlimitedClaims set whether the town has unlimited claims or not.
+	 */
+	public void setHasUnlimitedClaims(boolean hasUnlimitedClaims) {
+		this.hasUnlimitedClaims = hasUnlimitedClaims;
+	}
+
 	public void setHasMobs(boolean hasMobs) {
 
 		this.permissions.mobs = hasMobs;
@@ -482,7 +497,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public String getMaxTownBlocksAsAString() {
-		if (TownySettings.areTownBlocksUnlimited())
+		if (hasUnlimitedClaims())
 			return "∞";
 		else
 			return String.valueOf(getMaxTownBlocks());
@@ -1140,7 +1155,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public boolean isOverClaimed() {
-		return !TownySettings.areTownBlocksUnlimited() && getTownBlocks().size() > getMaxTownBlocks();
+		return !hasUnlimitedClaims() && getTownBlocks().size() > getMaxTownBlocks();
 	}
 	
 	/**

@@ -674,6 +674,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("hasUnlimitedClaims");
+				if (line != null)
+					try {
+						town.setHasUnlimitedClaims(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("taxpercent");
 				if (line != null)
 					try {
@@ -1929,6 +1936,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("spawnCost=" + town.getSpawnCost());
 		// Upkeep
 		list.add("hasUpkeep=" + town.hasUpkeep());
+		// UnlimitedClaims
+		list.add("hasUnlimitedClaims=" + town.hasUnlimitedClaims());
 		// Open
 		list.add("open=" + town.isOpen());
 		// PVP

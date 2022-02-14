@@ -1372,7 +1372,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		out.add(ChatTools.formatTitle(town + " Town Plots"));
 		out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + town.getMaxTownBlocksAsAString() 
-			+ (!TownySettings.areTownBlocksUnlimited() 
+			+ (!town.hasUnlimitedClaims() 
 				? (TownySettings.isSellingBonusBlocks(town) 
 						? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchasedBlocks(town) + "]" 
 						: "") 
@@ -3913,7 +3913,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				// Not enough available claims.
-				if (!TownySettings.areTownBlocksUnlimited() && selection.size() > town.availableTownBlocks())
+				if (!town.hasUnlimitedClaims() && selection.size() > town.availableTownBlocks())
 					throw new TownyException(Translatable.of("msg_err_not_enough_blocks"));
 
 				// If this is a single claim and it is already claimed, by someone else.

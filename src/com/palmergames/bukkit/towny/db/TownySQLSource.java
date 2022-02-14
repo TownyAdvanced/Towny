@@ -985,6 +985,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setTaxes(rs.getFloat("taxes"));
 			town.setMaxPercentTaxAmount(rs.getFloat("maxPercentTaxAmount"));
 			town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
+			town.setHasUnlimitedClaims(rs.getBoolean("hasUnlimitedClaims"));
 			town.setPlotPrice(rs.getFloat("plotPrice"));
 			town.setPlotTax(rs.getFloat("plotTax"));
 			town.setEmbassyPlotPrice(rs.getFloat("embassyPlotPrice"));
@@ -2152,6 +2153,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("plotTax", town.getPlotTax());
 			twn_hm.put("taxes", town.getTaxes());
 			twn_hm.put("hasUpkeep", town.hasUpkeep());
+			twn_hm.put("hasUnlimitedClaims", town.hasUnlimitedClaims());
 			twn_hm.put("taxpercent", town.isTaxPercentage());
 			twn_hm.put("maxPercentTaxAmount", town.getMaxPercentTaxAmount());
 			twn_hm.put("open", town.isOpen());

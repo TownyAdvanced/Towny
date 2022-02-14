@@ -80,6 +80,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Send a list of all general townyadmin help commands to player Command:
@@ -138,6 +139,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"merge",
 		"forcemerge"
 	);
+	private static final List<String> adminTownToggleTabCompletes = Stream.concat(TownCommand.townToggleTabCompletes.stream(),
+			Arrays.asList("forcepvp", "unlimitedclaims").stream()).collect(Collectors.toList()); 
 
 	private static final List<String> adminNationTabCompletes = Arrays.asList(
 		"add",
@@ -407,7 +410,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						}
 						case "toggle":
 							if (args.length == 4)
-								return NameUtil.filterByStart(TownCommand.townToggleTabCompletes, args[3]);
+								return NameUtil.filterByStart(adminTownToggleTabCompletes, args[3]);
 							else if (args.length == 5 && !args[3].equalsIgnoreCase("jail"))
 								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[4]);
 						case "outlaw":
@@ -1274,7 +1277,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					
 					town.save();
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_town_forcepvp_setting_set_to", town.getName(), town.isAdminEnabledPVP()));
+				} else if (split[2].equalsIgnoreCase("unlimitedclaims")) {
 					
+					town.setHasUnlimitedClaims(choice.orElse(!town.hasUnlimitedClaims()));
+					town.save();
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_town_unlimitedclaims_setting_set_to", town.getName(), town.hasUnlimitedClaims()));
 				} else
 					TownCommand.townToggle(sender, StringMgmt.remArgs(split, 2), true, town);
 				

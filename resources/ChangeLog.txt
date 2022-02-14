@@ -7275,3 +7275,6 @@ v0.92.0.11:
   - Add possibility for towns to have unlimited claims.
     - You can now set town_block_ratio to -1 to make towns have unlimited claims.
     - If you enable this make sure townblocks cost money.
+0.97.5.20:
+  - New command: /ta town NAME toggle unlimitedclaims
+    - Removes the townblock limit for the given town.

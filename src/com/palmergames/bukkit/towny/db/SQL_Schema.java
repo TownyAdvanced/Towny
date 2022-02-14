@@ -194,6 +194,7 @@ public class SQL_Schema {
 		columns.add("`nationZoneEnabled` bool NOT NULL DEFAULT '1'");
 		columns.add("`allies` mediumtext NOT NULL");
 		columns.add("`enemies` mediumtext NOT NULL");
+		columns.add("`hasUnlimitedClaims` bool NOT NULL DEFAULT '0'");
 		return columns;
 	}
 
