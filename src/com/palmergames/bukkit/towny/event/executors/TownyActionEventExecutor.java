@@ -164,7 +164,7 @@ public class TownyActionEventExecutor {
 	}
 
 	private static boolean isNotCampfire(Block block) {
-		return !ItemLists.CAMPFIRES.contains(block.getType().name());
+		return !ItemLists.CAMPFIRES.contains(block.getType());
 	}
 
 	private static boolean isNotPortal(Block block) {
@@ -172,7 +172,7 @@ public class TownyActionEventExecutor {
 	}
 	
 	private static boolean isNotCandle(Block block) {
-		return !ItemLists.CANDLES.contains(block.getType().name());
+		return !ItemLists.CANDLES.contains(block.getType());
 	}
 	
 	private static boolean isNotFireSpreadBypassMat(Block block) {

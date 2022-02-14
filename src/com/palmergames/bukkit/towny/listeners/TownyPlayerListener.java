@@ -315,7 +315,7 @@ public class TownyPlayerListener implements Listener {
 				 * Treat interaction as a Destroy test.
 				 */
 				if ((ItemLists.AXES.contains(item) && (ItemLists.UNSTRIPPED_WOOD.contains(clickedMat) || ItemLists.WAXED_BLOCKS.contains(clickedMat) || ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))) ||
-					(ItemLists.DYES.contains(item.name()) && Tag.SIGNS.isTagged(clickedMat)) ||
+					(ItemLists.DYES.contains(item) && Tag.SIGNS.isTagged(clickedMat)) ||
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
 					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
 
@@ -331,13 +331,13 @@ public class TownyPlayerListener implements Listener {
 				/*
 				 * Test putting candles on cakes. Treat interaction as a Build test.
 				 */
-				if (ItemLists.CANDLES.contains(item.name()) && clickedMat == Material.CAKE) 
+				if (ItemLists.CANDLES.contains(item) && clickedMat == Material.CAKE) 
 					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
 				
 				/*
 				 * Test wax usage. Treat interaction as a Build test.
 				 */
-				if (item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat.name()))
+				if (item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))
 					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
 
 				/*
@@ -370,10 +370,10 @@ public class TownyPlayerListener implements Listener {
 			 * 
 			 * Test interaction as a Destroy test. (These used to be switches pre-0.96.3.1)
 			 */
-			if (ItemLists.POTTED_PLANTS.contains(clickedMat.name()) ||
-				ItemLists.HARVESTABLE_BERRIES.contains(clickedMat.name()) ||
-				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat.name()) ||
-				ItemLists.CANDLES.contains(clickedMat.name()) ||
+			if (ItemLists.POTTED_PLANTS.contains(clickedMat) ||
+				ItemLists.HARVESTABLE_BERRIES.contains(clickedMat) ||
+				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat) ||
+				ItemLists.CANDLES.contains(clickedMat) ||
 				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
 				clickedMat == Material.COMMAND_BLOCK){
 				
@@ -541,7 +541,7 @@ public class TownyPlayerListener implements Listener {
 				case SHEEP:
 				case WOLF:
 					if (item != null) {
-						if (ItemLists.DYES.contains(item.name())) {
+						if (ItemLists.DYES.contains(item)) {
 							mat = item;
 							break;
 						}

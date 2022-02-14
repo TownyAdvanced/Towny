@@ -772,7 +772,7 @@ public class TownyEntityListener implements Listener {
 		
 		Block block = event.getHitBlock().getRelative(event.getHitBlockFace());
 		Material material = block.getType();
-		if (ItemLists.PROJECTILE_TRIGGERED_REDSTONE.contains(material.name()) && TownySettings.isSwitchMaterial(material, block.getLocation())) {
+		if (ItemLists.PROJECTILE_TRIGGERED_REDSTONE.contains(material) && TownySettings.isSwitchMaterial(material, block.getLocation())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), block.getLocation(), material)) {
 				/*

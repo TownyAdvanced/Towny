@@ -42,7 +42,11 @@ public class ItemLists {
 	private static ItemLists of(@NotNull String... taggedMaterials) {
 		return new ItemLists(Stream.of(taggedMaterials).collect(Collectors.toSet()));
 	}
-		
+
+	/**
+	 * @param matName Name of a {@link Material}.
+	 * @return Whether the item list contains the specified material.
+	 */
 	public boolean contains(@NotNull String matName) {
 		try {
 			return taggedMaterials.contains(Material.valueOf(matName));
@@ -50,13 +54,17 @@ public class ItemLists {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * @param material The bukkit material to test for.
+	 * @return Whether the item list contains the specified material.
+	 */
 	public boolean contains(@NotNull Material material) {
-		return contains(material.name());
+		return taggedMaterials.contains(material);
 	}
 	
 	public boolean contains(@NotNull ItemStack itemStack) {
-		return contains(itemStack.getType().name());
+		return contains(itemStack.getType());
 	}
 
 	/**
