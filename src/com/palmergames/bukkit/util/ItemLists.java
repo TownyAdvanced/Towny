@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -181,7 +182,7 @@ public class ItemLists {
 	/**
 	 * Config-useable material groups.
 	 */
-	public static final ItemLists GROUPS = new ItemLists(Arrays.stream(ItemLists.class.getFields()).map(Field::getName).filter(name -> !name.equals("GROUPS")).collect(Collectors.toSet()));
+	public static final Set<String> GROUPS = Arrays.stream(ItemLists.class.getFields()).filter(field -> Modifier.isStatic(field.getModifiers())).map(Field::getName).filter(name -> !name.equals("GROUPS")).collect(Collectors.toSet());
 	
 	/**
 	 * Returns a pre-configured list from the GROUPS.
@@ -257,7 +258,7 @@ public class ItemLists {
 		}
 
 		public PredicateListBuilder notStartsWith(@NotNull String notStartingWith) {
-			anyMatchPredicates.add((s) -> !s.startsWith(notStartingWith));
+			allMatchPredicates.add((s) -> !s.startsWith(notStartingWith));
 			return this;
 		}
 
