@@ -1371,7 +1371,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 		out.add(ChatTools.formatTitle(town + " Town Plots"));
-		out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + TownySettings.getMaxTownBlocks(town) + (TownySettings.isSellingBonusBlocks(town) ? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchasedBlocks(town) + "]" : "") + (town.getBonusBlocks() > 0 ? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" : "") + ((TownySettings.getNationBonusBlocks(town) > 0) ? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" : ""));
+		out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + town.getMaxTownBlocksAsAString() 
+			+ (!TownySettings.areTownBlocksUnlimited() 
+				? (TownySettings.isSellingBonusBlocks(town) 
+						? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchasedBlocks(town) + "]" 
+						: "") 
+					+ (town.getBonusBlocks() > 0 
+						? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" 
+						: "") 
+					+ (TownySettings.getNationBonusBlocks(town) > 0 
+						? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" 
+						: "")
+				: ""));
+		
 		out.add(Colors.Green + "Town Owned Land: " + Colors.LightGreen + townOwned);
 		out.add(Colors.Green + "Farms   : " + Colors.LightGreen + farm);
 		out.add(Colors.Green + "Arenas : " + Colors.LightGreen + arena);
@@ -3901,7 +3913,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				// Not enough available claims.
-				if (selection.size() > TownySettings.getMaxTownBlocks(town) - town.getTownBlocks().size())
+				if (!TownySettings.areTownBlocksUnlimited() && selection.size() > town.availableTownBlocks())
 					throw new TownyException(Translatable.of("msg_err_not_enough_blocks"));
 
 				// If this is a single claim and it is already claimed, by someone else.
