@@ -7278,3 +7278,5 @@ v0.92.0.11:
 0.97.5.20:
   - New command: /ta town NAME toggle unlimitedclaims
     - Removes the townblock limit for the given town.
+  - Remove all methods deprecated prior to 0.97.0.0.
+  - Fix safe mode message unable to be shown when a player joins.
