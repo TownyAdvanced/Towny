@@ -316,7 +316,7 @@ public abstract class TownyDataSource {
 	 */
 	@Deprecated
 	public List<Resident> getResidents() {
-		return new ArrayList<>(TownyUniverse.getInstance().getResidents());
+		return new ArrayList<>(universe.getResidents());
 	}
 	
 	/**
@@ -389,7 +389,7 @@ public abstract class TownyDataSource {
 	 */
 	@Deprecated
 	public List<Town> getTowns() {
-		return new ArrayList<>(TownyUniverse.getInstance().getTowns());
+		return new ArrayList<>(universe.getTowns());
 	}
 
 	/**
