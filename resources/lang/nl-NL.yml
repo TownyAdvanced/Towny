@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.143
+version: 0.144
 language: Dutch
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1440,3 +1440,8 @@ msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality
 #Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: 'This command cannot be used from the console.'
+#Added in 0.144
+#Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
+msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
+#Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
+did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to claim, did you want to turn on unlimited claiming for the town of %s'
