@@ -462,14 +462,4 @@ public final class FileMgmt {
 		}
 	}
 
-	/**
-	 * @deprecated as of 0.96.5.0, No longer used. You can get this yourself with {@link System#getProperty(String)}.
-	 * 
-	 * @return Returns a file separator System Property.
-	 */
-	@Deprecated
-	public static String fileSeparator() {
-
-		return System.getProperty("file.separator");
-	}
 }

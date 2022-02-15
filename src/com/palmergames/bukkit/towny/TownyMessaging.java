@@ -872,17 +872,6 @@ public class TownyMessaging {
 	 */
 	
 	/**
-	 * @param object - One receiving the message.
-	 * @param message - Message being sent.
-	 * 
-	 * @deprecated Deprecated as of 0.96.2.13 use {@link #sendMsg(CommandSender, String)} instead.
-	 */
-	@Deprecated
-	public static void sendMsg(Object object, String message) {
-		sendMsg((CommandSender) object, message);
-	}
-
-	/**
 	 * Sends a message (green) to the resident
 	 * and to the named Dev if DevMode is enabled.
 	 * Uses default_towny_prefix
