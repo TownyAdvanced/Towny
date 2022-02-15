@@ -1436,10 +1436,10 @@ msg_you_must_wait_x_seconds_before_renaming_your_town: 'Kasabanı yeniden adland
 msg_newday_already_scheduled_soon: 'Yeni bir günlük görevin yakında gerçekleşmesi planlandı.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
-msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Savaş durumunu değiştiremezsiniz, %s saniye kaldı.'
 #Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
-msg_err_command_not_for_console_use: 'This command cannot be used from the console.'
+msg_err_command_not_for_console_use: 'Konsol tarafından bu komut kullanılamaz.'
 #Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
