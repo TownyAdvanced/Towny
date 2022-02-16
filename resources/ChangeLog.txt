@@ -7280,3 +7280,9 @@ v0.92.0.11:
     - Removes the townblock limit for the given town.
   - Remove all methods deprecated prior to 0.97.0.0.
   - Fix safe mode message unable to be shown when a player joins.
+0.97.5.21:
+  - New Config Option: town_ruining.town_ruins.ruins_become_open
+    - Default: false
+    - If this is true, when a town becomes a ruin they also become open to join, meaning any townless player could join the town and reclaim it.
+    - You should expect this to be abused by players who will reclaim a town to prevent someone else reclaiming it.
+    - Closes #5751.

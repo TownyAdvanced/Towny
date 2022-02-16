@@ -94,7 +94,7 @@ public class TownRuinUtil {
 		town.setRuined(true);
 		town.setRuinedTime(System.currentTimeMillis());
 		town.setPublic(TownySettings.areRuinsMadePublic());
-		town.setOpen(false);
+		town.setOpen(TownySettings.areRuinsMadeOpen());
 		town.getPermissions().setAll(true);
 
 		//Return town blocks to the basic, unowned, type

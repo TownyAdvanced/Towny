@@ -3056,6 +3056,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.TOWN_RUINING_TOWNS_BECOME_PUBLIC);
 	}
 
+	public static boolean areRuinsMadeOpen() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_TOWNS_BECOME_OPEN);
+	}
+
 	public static void saveConfig() {
 		config.save();
 	}

@@ -2443,8 +2443,16 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If this is true, when a town becomes a ruin they also receive public status,",
-			"# meaning anyone can use /t spawn NAME to teleport to that town.");
+			"# meaning anyone can use /t spawn NAME to teleport to that town."),
+	TOWN_RUINING_TOWNS_BECOME_OPEN(
+			"town_ruining.town_ruins.ruins_become_open",
+			"false",
+			"",
+			"# If this is true, when a town becomes a ruin they also become open to join,",
+			"# meaning any townless player could join the town and reclaim it.",
+			"# You should expect this to be abused by players who will reclaim a town to prevent someone else reclaiming it.");
 
+	
 	private final String Root;
 	private final String Default;
 	private String[] comments;
