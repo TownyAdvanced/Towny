@@ -101,7 +101,6 @@ import java.util.logging.Level;
  */
 public class Towny extends JavaPlugin {
 	private static final Version OLDEST_MC_VER_SUPPORTED = Version.fromString("1.16");
-	private static final Version NETHER_VER = Version.fromString("1.16.1");
 	private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
 	private final String version = this.getDescription().getVersion();
 
@@ -1116,10 +1115,6 @@ public class Towny extends JavaPlugin {
 		return CUR_BUKKIT_VER.compareTo(OLDEST_MC_VER_SUPPORTED) >= 0;
 	}
 	
-	public static boolean is116Plus() {
-		return CUR_BUKKIT_VER.compareTo(NETHER_VER) >= 0;
-	}
-
 	/**
 	 * @return whether server is running spigot (and not CraftBukkit.)
 	 */

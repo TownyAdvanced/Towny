@@ -181,7 +181,7 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 		// If respawn anchors have higher precedence than town spawns, use them instead.
-		if (Towny.is116Plus() && event.isAnchorSpawn() && TownySettings.isRespawnAnchorHigherPrecedence()) {
+		if (event.isAnchorSpawn() && TownySettings.isRespawnAnchorHigherPrecedence()) {
 			return;
 		}
 

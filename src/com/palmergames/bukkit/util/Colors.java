@@ -3,7 +3,6 @@ package com.palmergames.bukkit.util;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.Nullable;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
@@ -36,9 +35,7 @@ public class Colors {
 
 	public static String translateColorCodes(String str) {
 		String out = ChatColor.translateAlternateColorCodes('&', str);
-		if (Towny.is116Plus())
-			out = StringMgmt.translateHexColors(out);
-		return out;
+		return StringMgmt.translateHexColors(out);
 	}
 
 	/**

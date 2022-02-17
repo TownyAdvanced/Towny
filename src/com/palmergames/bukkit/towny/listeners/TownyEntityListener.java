@@ -797,7 +797,7 @@ public class TownyEntityListener implements Listener {
 		/*
 		 * Bypass any occasion where there is no block being hit and the shooter isn't a player.
 		 */
-		if (plugin.isError() || !Towny.is116Plus() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
+		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
 			return;
 
 		if (event.getHitBlock().getType() == Material.TARGET && TownySettings.isSwitchMaterial(Material.TARGET, event.getHitBlock().getLocation())) {
