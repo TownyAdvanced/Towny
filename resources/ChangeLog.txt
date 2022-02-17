@@ -7286,3 +7286,5 @@ v0.92.0.11:
     - If this is true, when a town becomes a ruin they also become open to join, meaning any townless player could join the town and reclaim it.
     - You should expect this to be abused by players who will reclaim a town to prevent someone else reclaiming it.
     - Closes #5751.
+0.98.0.0:
+  - Bump version number for Release.
