@@ -528,7 +528,7 @@ tc_err_you_are_currently_muted_in_channel: 'Vous êtes actuellement muet dans &f
 tc_err_you_cannot_leave_channel: 'Vous ne pouvez pas partir de &f%s'
 tc_you_already_left_channel: '[TownyChat] Vous avez déjà quitté &f%s'
 tc_you_left_channel: '[TownyChat] Vous quittez &f%s'
-tc_you_are_now_talking_in_channel: '[TownyChat] Vous parler déjà dans &f%s'
+tc_you_are_now_talking_in_channel: '[TownyChat] Vous parlez déjà dans &f%s'
 tc_err_you_cannot_join_channel: 'Vous ne pouvez pas rejoindre &f%s'
 tc_you_are_already_in_channel: '[TownyChat] Vous êtes déjà dans &f%s'
 tc_you_joined_channel: '[TownyChat] Vous rejoignez &f%s'
