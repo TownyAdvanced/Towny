@@ -7291,3 +7291,5 @@ v0.92.0.11:
 0.98.0.1:
   - Bump language file to 0.145.
   - Add missing message shown when a conquered town tries to leave their nation.
+  - Add old mayor name to TownRuinEvent.
+    - Closes #5686.

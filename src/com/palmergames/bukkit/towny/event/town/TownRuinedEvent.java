@@ -10,10 +10,12 @@ public class TownRuinedEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	private final Town town;
+	private final String oldMayorName;
 	
-	public TownRuinedEvent(Town town) {
+	public TownRuinedEvent(Town town, String oldMayorName) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
+		this.oldMayorName = oldMayorName;
 	}
 
 	@Override
@@ -32,6 +34,15 @@ public class TownRuinedEvent extends Event {
 	 */
 	public Town getTown() {
 		return town;
+	}
+	
+	/**
+	 * The name of the previous mayor.
+	 * 
+	 * Might return "none" if no mayor was present upon ruining due to a bug.
+	 */
+	public String getOldMayorName() {
+		return oldMayorName;
 	}
 
 	
