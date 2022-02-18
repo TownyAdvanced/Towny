@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny;
+ package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
 import com.palmergames.bukkit.config.CommentedConfiguration;
@@ -100,6 +100,7 @@ import java.util.logging.Level;
  * @author Shade, ElgarL, LlmDl
  */
 public class Towny extends JavaPlugin {
+	private static final Version OLDEST_MC_VER_SUPPORTED = Version.fromString("1.16");
 	private static final Version NETHER_VER = Version.fromString("1.16.1");
 	private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
 	private final String version = this.getDescription().getVersion();
@@ -162,8 +163,9 @@ public class Towny extends JavaPlugin {
 			cycleTimers();
 			// Reset the player cache.
 			resetCache();
-			// Check for plugin updates
-			TownyUpdateChecker.checkForUpdates(this);
+			// Check for plugin updates if the Minecraft version is still supported.
+			if (isMinecraftVersionStillSupported())
+				TownyUpdateChecker.checkForUpdates(this);
 			// Initialize SpawnUtil only after the Translation class has figured out a language.
 			// N.B. Important that localization loaded correctly for this step.
 			SpawnUtil.initialize(this);
@@ -1108,6 +1110,10 @@ public class Towny extends JavaPlugin {
 		metrics.addCustomChart(new SimplePie("closed_economy_enabled", () -> String.valueOf(TownySettings.isEcoClosedEconomyEnabled())));
 		
 		metrics.addCustomChart(new SimplePie("resident_uuids_stored", TownySettings::getUUIDPercent));
+	}
+	
+	public static boolean isMinecraftVersionStillSupported() {
+		return CUR_BUKKIT_VER.compareTo(OLDEST_MC_VER_SUPPORTED) >= 0;
 	}
 	
 	public static boolean is116Plus() {
