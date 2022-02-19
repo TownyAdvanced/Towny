@@ -117,6 +117,10 @@ public class Town extends Government implements TownBlockOwner {
 		return Collections.unmodifiableCollection(townBlocks.values());
 	}
 
+	public int getNumTownBlocks() {
+		return getTownBlocks().size();
+	}
+
 	@Override
 	public boolean hasTownBlock(TownBlock townBlock) {
 		return hasTownBlock(townBlock.getWorldCoord());

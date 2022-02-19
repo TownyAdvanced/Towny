@@ -989,10 +989,9 @@ public class TownySettings {
 		int ratio = getTownBlockRatio();
 		int n = town.getBonusBlocks() + town.getPurchasedBlocks();
 
-		if (ratio == 0) {
+		if (ratio == 0)
 			n += (Integer) getTownLevel(town).get(TownySettings.TownLevel.TOWN_BLOCK_LIMIT);
-
-		} else
+		else
 			n += town.getNumResidents() * ratio;
 
 		n += getNationBonusBlocks(town);

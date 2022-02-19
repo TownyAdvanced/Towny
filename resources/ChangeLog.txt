@@ -7294,3 +7294,5 @@ v0.92.0.11:
   - Add old mayor name to TownRuinEvent.
     - Closes #5686.
   - Turn off update checker for servers older than MC 1.16.
+  - Fix town merging testing max-townblocks, when the remaining town is allowed unlimited claims.
+    - Closes #5758 Closes #5759.

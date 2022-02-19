@@ -4107,13 +4107,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		int newResidentsAmount = remainingTown.getResidents().size() + succumbingTown.getResidents().size();
+		int newResidentsAmount = remainingTown.getNumResidents() + succumbingTown.getNumResidents();
 		if (TownySettings.getMaxResidentsPerTown() > 0 && newResidentsAmount > TownySettings.getMaxResidentsForTown(remainingTown)) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_too_many_residents", TownySettings.getMaxResidentsForTown(remainingTown)));
 			return;
 		}
 		
-		if ((remainingTown.getTownBlocks().size() + succumbingTown.getTownBlocks().size()) > TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)) {
+		if (!remainingTown.hasUnlimitedClaims() && (remainingTown.getNumTownBlocks() + succumbingTown.getNumTownBlocks()) > TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_too_many_townblocks", TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)));
 			return;
 		}
@@ -4139,7 +4139,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		double cost = 0;
 		if (!admin && TownyEconomyHandler.isActive()) {
 			try {
-				townblockCost = remainingTown.getTownBlockCostN(succumbingTown.getTownBlocks().size()) * (TownySettings.getPercentageCostPerPlot() * 0.01);
+				townblockCost = remainingTown.getTownBlockCostN(succumbingTown.getNumTownBlocks()) * (TownySettings.getPercentageCostPerPlot() * 0.01);
 				if (succumbingTown.isBankrupt())
 					bankruptcyCost = Math.abs(succumbingTown.getAccount().getHoldingBalance());
 				
