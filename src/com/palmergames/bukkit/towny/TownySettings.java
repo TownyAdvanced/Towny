@@ -1030,6 +1030,8 @@ public class TownySettings {
 
 		if (ratio == 0)
 			amount += (int) getTownLevel(town, residents).get(TownySettings.TownLevel.TOWN_BLOCK_LIMIT);
+		else if (ratio == -1)
+			amount = Integer.MAX_VALUE;
 		else
 			amount += residents * ratio;
 
