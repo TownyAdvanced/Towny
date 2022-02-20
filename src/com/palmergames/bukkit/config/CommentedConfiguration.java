@@ -170,7 +170,7 @@ public class CommentedConfiguration extends YamlConfiguration {
 			// Spigot's addition of native SnakeYAML comment support in MC 1.18.1, requires
 			// us to ignore the comments in our own file, which will be replaced later on
 			// with up-to-date comments from the ConfigNodes enum.
-			if (line.trim().startsWith("#") || line.isEmpty())
+			if (line.trim().startsWith("#") || line.isEmpty() || line.trim().isEmpty())
 				continue;
 			
 			// If the line is a node (and not something like a list value)

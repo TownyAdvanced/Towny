@@ -9,11 +9,9 @@ import java.nio.file.Path;
 
 public enum DatabaseConfig {
 	DATABASE(
-			"database",
-			"",
-			"",
+			"database", "", ""),
+	DATABASE_LOAD("database.database_load", "flatfile", "",
 			"# Valid load and save types are: flatfile and mysql."),
-	DATABASE_LOAD("database.database_load", "flatfile"),
 	DATABASE_SAVE("database.database_save", "flatfile"),
 	DATABASE_SQL_HEADER(
 			"database.sql",
@@ -114,12 +112,15 @@ public enum DatabaseConfig {
 		newDatabaseConfig = new CommentedConfiguration(databaseConfigPath);
 		newDatabaseConfig.load();
 
-		for (DatabaseConfig root : DatabaseConfig.values())
+		for (DatabaseConfig root : DatabaseConfig.values()) {
+			String key = root.getRoot().toLowerCase();
 			if (root.getComments().length > 0)
-				newDatabaseConfig.addComment(root.getRoot(), root.getComments());
-			else
-				newDatabaseConfig.set(root.getRoot(), (databaseConfig.get(root.getRoot().toLowerCase()) != null) ? databaseConfig.get(root.getRoot().toLowerCase()) : root.getDefault());
-
+				newDatabaseConfig.addComment(key, root.getComments());
+			Object value = databaseConfig.get(key) != null
+				? databaseConfig.get(key)
+				: root.getDefault();
+			newDatabaseConfig.set(key, value);
+		}
 		databaseConfig = newDatabaseConfig;
 		newDatabaseConfig = null;
 	}
