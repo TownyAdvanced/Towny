@@ -638,7 +638,7 @@ msg_err_cannot_set_spawn_cost_more_than: '&c您不能將生產成本高於 %s'
 msg_err_ally_isnt_public: '&c您的盟國, %s, 沒有啟用公共傳送點. 傳送已被取消.'
 msg_nation_changed_public: '&c國家公開狀態變更為 %s.'
 #Added in 0.47:
-status_plot_type: 'Plot Type:'
+status_plot_type: '區域類型：'
 msg_no_self_jailing: '您不能監禁自己.'
 online2: ' &a(在線)'
 build: '建築'
