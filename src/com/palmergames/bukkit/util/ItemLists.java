@@ -272,16 +272,19 @@ public class ItemLists {
 			return this;
 		}
 
+		@SuppressWarnings("unused")
 		public PredicateListBuilder notEndsWith(@NotNull String notEndingWith) {
 			allMatchPredicates.add((s) -> !s.endsWith(notEndingWith));
 			return this;
 		}
 		
+		@SuppressWarnings("unused")
 		public PredicateListBuilder contains(@NotNull String containing) {
 			allMatchPredicates.add((s) -> s.contains(containing));
 			return this;
 		}
 		
+		@SuppressWarnings("unused")
 		public PredicateListBuilder notContains(@NotNull String notContaining) {
 			allMatchPredicates.add((s) -> !s.contains(notContaining));
 			return this;
