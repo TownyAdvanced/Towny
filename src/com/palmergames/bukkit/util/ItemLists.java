@@ -85,7 +85,8 @@ public class ItemLists {
 	/**
 	 * List of Potted Plants.
 	 */
-	public static final ItemLists POTTED_PLANTS = PredicateList.builder().startsWith("POTTED_").build();
+	public static final ItemLists POTTED_PLANTS = PredicateList.builder().startsWith("POTTED_").add("FLOWERING_AZALEA", "AZALEA").build();
+
 
 	/**
 	 * List of Boats.
