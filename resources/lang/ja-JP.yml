@@ -232,7 +232,7 @@ msg_set_outpost_spawn: '&bアウトポストのスポーンを変更しました
 msg_set_title: '&b%s は 「%s&b」のタイトルを獲得しました'
 msg_set_surname: '&b%s は「%s&b」の姓を獲得しました'
 msg_clear_title_surname: '&b %s の 「%s」 がリセットされました'
-msg_clear_plot_material: '&b%s のプロットが全消去されました'
+msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
 msg_set_perms: '&b権限を変更しました：'
 msg_set_claim: '&b%s のプロット獲得権限を %s に変更しました'
 msg_set_perms_reset: '&b全ての%sのプロットの権限をリセットしました'
@@ -1154,6 +1154,7 @@ msg_err_days_must_be_greater_than_0: '日数は0より大きくなければい�
 msg_err_outlawed_players_no_teleport: '&4You are outlawed in the town you are currently in and cannot teleport!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4You cannot use that command while in a town you are outlawed in.'
 #Added in 0.110
+msg_safe_mode: "[Error] Locked in safe mode!"
 msg_safe_mode_base: '[Error] Townyはエラーのためセーフモードでロックされています。 '
 msg_safe_mode_player: 'サーバーのコンソールを確認してください。'
 msg_safe_mode_admin: '詳細はサーバーのコンソールを確認してください。'
@@ -1448,3 +1449,5 @@ did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to c
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
+msg_err_console_only: 'This command can only be used by console.'
+msg_err_player_only: 'This command can only be used by a player.'
