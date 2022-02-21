@@ -5,6 +5,8 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.map.TownyMapData;
 
 import java.util.Map;
+
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -133,10 +135,10 @@ public class TownyAsciiMap {
 					else
 						townyMap[y][x] = townyMap[y][x].content(townblock.getType().getAsciiMapKey());
 					
-					TextComponent residentComponent = Component.empty();
-					TextComponent forSaleComponent = Component.empty();
-					TextComponent claimedAtComponent = Component.empty();
-					TextComponent groupComponent = Component.empty();
+					Component residentComponent = Component.empty();
+					Component forSaleComponent = Component.empty();
+					Component claimedAtComponent = Component.empty();
+					Component groupComponent = Component.empty();
 					
 					if (TownyEconomyHandler.isActive()) {
 						double cost = townblock.hasPlotObjectGroup() 
@@ -147,37 +149,37 @@ public class TownyAsciiMap {
 					}
 					
 					if (townblock.getClaimedAt() > 0)
-						claimedAtComponent = Component.text(Translatable.of("msg_plot_perm_claimed_at").forLocale(player)).color(NamedTextColor.DARK_GREEN)
+						claimedAtComponent = Translatable.of("msg_plot_perm_claimed_at").locale(player).component()
 							.append(Component.space())
 							.append(Component.text(TownyFormatter.registeredFormat.format(townblock.getClaimedAt())).color(NamedTextColor.GREEN))
 							.append(Component.newline());
 					
 					if (townblock.hasPlotObjectGroup())
-						groupComponent = Component.text(Translatable.of("map_hover_plot_group").forLocale(player)).color(NamedTextColor.DARK_GREEN)
-							.append(Component.text(townblock.getPlotObjectGroup().getFormattedName()).color(NamedTextColor.GREEN)
-							.append(Component.text(Translatable.of("map_hover_plot_group_size").forLocale(player)).color(NamedTextColor.DARK_GREEN)
-							.append(Component.text(Translatable.of("map_hover_plots", townblock.getPlotObjectGroup().getTownBlocks().size()).forLocale(player)).color(NamedTextColor.GREEN)
+						groupComponent = Translatable.of("map_hover_plot_group").locale(player).component()
+							.append(Component.text(townblock.getPlotObjectGroup().getFormattedName(), NamedTextColor.GREEN)
+							.append(Translatable.of("map_hover_plot_group_size").locale(player).component()
+							.append(Translatable.of("map_hover_plots", townblock.getPlotObjectGroup().getTownBlocks().size()).locale(player).component()
 							.append(Component.newline()))));
 					
 					if (townblock.hasResident())
 						residentComponent = Component.text(" (" + townblock.getResidentOrNull().getName() + ")");
 					
-					TextComponent townComponent = Component.text(Translatable.of("status_town").forLocale(player)).color(NamedTextColor.DARK_GREEN)
+					Component townComponent = Component.text(Translatable.of("status_town").forLocale(player)).color(NamedTextColor.DARK_GREEN)
 						.append(Component.space())
 						.append(Component.text(town.getName()).color(NamedTextColor.GREEN))
 						.append(residentComponent.color(NamedTextColor.GREEN))
 						.append(Component.text(" (" + tby + ", " + tbx + ")").color(NamedTextColor.WHITE)).append(Component.newline()); 
 					
-					TextComponent plotTypeComponent = Component.text(Translatable.of("status_plot_type").forLocale(player)).color(NamedTextColor.DARK_GREEN)
+					Component plotTypeComponent = Component.text(Translatable.of("status_plot_type").forLocale(player)).color(NamedTextColor.DARK_GREEN)
 						.append(Component.space())
 						.append(Component.text(townblock.getType().getName()).color(NamedTextColor.GREEN).append(Component.newline()));
 					
-					TextComponent hoverComponent = townComponent
+					Component hoverComponent = townComponent
 						.append(plotTypeComponent)
 						.append(groupComponent)
 						.append(forSaleComponent)
 						.append(claimedAtComponent)
-						.append(Component.text(Translatable.of("towny_map_detailed_information").forLocale(player)).color(NamedTextColor.DARK_GREEN));
+						.append(Translatable.of("towny_map_detailed_information").locale(player).component());
 					
 					ClickEvent clickEvent = forSaleComponent.equals(Component.empty()) 
 						? ClickEvent.runCommand("/towny:plot info " + tby + " " + tbx)
@@ -231,7 +233,7 @@ public class TownyAsciiMap {
 		String[] compass = generateCompass(player);
 
 		// Output
-		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translatable.of("towny_map_header").forLocale(player) + Colors.White + "(" + pos.toString() + ")"));
+		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translatable.of("towny_map_header").append(TownyComponents.miniMessage("<white>(" + pos + ")")).locale(player).component()));
 		String line;
 		String[] help = generateHelp(player);
 		int lineCount = 0;

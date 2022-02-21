@@ -1231,7 +1231,7 @@ msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
 msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
 
 #Added in 0.102
-towny_map_detailed_information: '&2Click to see detailed plot information.'
+towny_map_detailed_information: '<dark_green>Click to see detailed plot information.'
 msg_err_nation_capital_too_many_residents: '&cThe current capital city has too many residents to be replaced by %s.'
 msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your nation will mean your town is over the population limit of %d, resulting in the removal of %d residents.'
 
@@ -1241,7 +1241,7 @@ msg_command_limited: 'You can only use that command inside your own plots.'
 
 #Added in 0.104
 # Don't add a space to the end please
-msg_plot_perm_claimed_at: 'Claimed at:'
+msg_plot_perm_claimed_at: '<green>Claimed at:'
 
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'Wilderness use turned %s in all worlds.'
@@ -1313,9 +1313,9 @@ msg_plotgroup_empty_deleted: 'The plotgroup %s had no townblocks and has been de
 plotgroup_plu: 'Plot Groups'
 msg_err_this_town_has_no_plot_groups: 'The specified town has no plot groups.'
 msg_err_this_plot_is_already_part_of_the_plot_group_x: 'This townblock is already part of the plot group: %s'
-map_hover_plot_group: 'Plot Group: '
-map_hover_plot_group_size: ' Size: '
-map_hover_plots: '%s plots'
+map_hover_plot_group: '<dark_green>Plot Group: '
+map_hover_plot_group_size: ' <dark_green>Size: '
+map_hover_plots: '<green>%s plots'
 
 #Added in 0.112
 msg_checking_for_updates: 'Checking for updates...'
@@ -1489,7 +1489,7 @@ msg_perm_true: 'Permission True.'
 msg_err_perm_false: 'Permission False.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+status_towny_map_town_line: '<dark_green>Town: <green>%s <gray>| <dark_green>Owner: <green>%s'
 #Shown on /towny version
 msg_towny_version: '&2Towny Version: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
@@ -1585,7 +1585,7 @@ tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
 msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
 
 #Added in 0.136
-msg_view_on_web: 'Click to view on the web.'
+msg_view_on_web: '<gray>Click to view on the web.'
 
 #Added in 0.137
 
