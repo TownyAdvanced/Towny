@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.Colors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -117,11 +118,19 @@ public class Translatable {
 	}
 	
 	public String forLocale(Resident resident) {
-		return translate(Translation.getLocale(resident));
+		return translate(resident.locale());
 	}
 	
 	public String forLocale(CommandSender sender) {
 		return translate(Translation.getLocale(sender));
+	}
+	
+	public Component componentFor(Resident resident) {
+		return component(resident.locale());
+	}
+	
+	public Component componentFor(CommandSender sender) {
+		return component(Translation.getLocale(sender));
 	}
 	
 	public String defaultLocale() {
@@ -200,6 +209,12 @@ public class Translatable {
 	
 	@Override
 	public String toString() {
-		return translate();
+		return "Translatable{" +
+			"key='" + key + '\'' +
+			", args=" + Arrays.toString(args) +
+			", stripColors=" + stripColors +
+			", appended=" + appended +
+			", locale=" + locale +
+			'}';
 	}
 }

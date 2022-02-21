@@ -45,6 +45,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -912,5 +913,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public boolean isSeeingBorderTitles() {
 		BooleanDataField borderMeta = new BooleanDataField("bordertitles");
 		return !MetaDataUtil.hasMeta(this, borderMeta) || MetaDataUtil.getBoolean(this, borderMeta);
+	}
+
+	@NotNull
+	public Locale locale() {
+		return Translation.getLocale(this);
 	}
 }

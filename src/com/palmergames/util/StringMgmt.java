@@ -44,13 +44,8 @@ public class StringMgmt {
 	}
 
 	public static String join(Collection<?> args, String separator) {
-		StringJoiner joiner = new StringJoiner(separator);
-		
-		for (Object o : args) {
-			joiner.add(o.toString());
-		}
-		
-		return joiner.toString();
+		// TODO: If this is only used with Collection<String> args, replace with String.join
+		return args.stream().map(Object::toString).collect(Collectors.joining(separator));
 	}
 
 	public static String join(Object[] arr) {
