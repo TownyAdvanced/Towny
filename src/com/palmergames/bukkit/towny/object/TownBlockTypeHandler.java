@@ -149,11 +149,7 @@ public final class TownBlockTypeHandler {
 			EnumSet<Material> set = EnumSet.noneOf(Material.class);
 			for (String materialName : materialList.split(",")) {
 				if (ItemLists.GROUPS.contains(materialName)) {
-					for (String groupedItem : ItemLists.getGrouping(materialName)) {
-						Material material = matchMaterial(groupedItem, listName, typeName);
-						if (material != null)
-							set.add(material);
-					}
+					set.addAll(ItemLists.getGrouping(materialName));
 					continue;
 				}
 				

@@ -369,10 +369,10 @@ public class TownyBlockListener implements Listener {
 		
 		Material mat = event.getItem().getType();
 
-		if (ItemLists.BUCKETS.contains(mat.name()) && !TownySettings.getPreventFluidGriefingEnabled())
+		if (ItemLists.BUCKETS.contains(mat) && !TownySettings.getPreventFluidGriefingEnabled())
 			return;
 		
-		if (!ItemLists.BUCKETS.contains(mat.name()) && mat != Material.BONE_MEAL && mat != Material.HONEYCOMB)
+		if (!ItemLists.BUCKETS.contains(mat) && mat != Material.BONE_MEAL && mat != Material.HONEYCOMB)
 			return;
 		
 		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(((Directional) event.getBlock().getBlockData()).getFacing()), true))
