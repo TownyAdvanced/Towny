@@ -232,7 +232,7 @@ msg_set_outpost_spawn: '&bUspešno promenjen spawn periferije.'
 msg_set_title: '&b%s je dobio/la titulu ''%s&b''.'
 msg_set_surname: '&b%s je dobio/la prezime ''%s&b''.'
 msg_clear_title_surname: '&b%s je očišćeno za ''%s''.'
-msg_clear_plot_material: '&bPlot je očišćen od svih %s-a.'
+msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
 msg_set_perms: '&bDozvole uspešno promenjene na:'
 msg_set_claim: '&bUspešno promenjena mogućnost claim-ovanja %s na %s'
 msg_set_perms_reset: '&bUspešno resetovane dozvole na svim %s plotovima.'
@@ -1154,6 +1154,7 @@ msg_err_days_must_be_greater_than_0: 'Dani moraju biti veći od nule.'
 msg_err_outlawed_players_no_teleport: '&4Razbojnik ste u gradu u kome se trenutno nalazite i ne možete se teleportovati!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Ne možete koristiti tu komandu dok ste u gradu u kome ste razbojnik.'
 #Added in 0.110
+msg_safe_mode: "[Error] Locked in safe mode!"
 msg_safe_mode_base: '[Greška] Towny je zaključan u Sigurnom Modu zbog greške! '
 msg_safe_mode_player: 'Recite nekom adminu da proveri konzolu servera.'
 msg_safe_mode_admin: 'Proverite konzolu servera za još informacija.'
@@ -1448,3 +1449,5 @@ did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to c
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
+msg_err_console_only: 'This command can only be used by console.'
+msg_err_player_only: 'This command can only be used by a player.'
