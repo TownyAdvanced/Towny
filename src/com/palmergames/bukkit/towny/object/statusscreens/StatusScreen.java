@@ -159,6 +159,7 @@ public class StatusScreen {
 		return lines;
 	}
 	
+	//TODO TownyComponents.plain(child)
 	private String getContent(Component comp) {
 		if (comp.children().isEmpty())
 			return ((TextComponent) comp).content();

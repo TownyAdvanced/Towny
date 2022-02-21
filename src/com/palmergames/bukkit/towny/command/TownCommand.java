@@ -93,6 +93,7 @@ import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.towny.utils.TownUtil;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -127,6 +128,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -1325,37 +1327,42 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		List<String> out = new ArrayList<>();
+		List<Component> out = new ArrayList<>();
 		out.add(ChatTools.formatTitle(town + " Town Plots"));
-		out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + town.getMaxTownBlocksAsAString() 
-			+ (!town.hasUnlimitedClaims() 
-				? (TownySettings.isSellingBonusBlocks(town) 
-						? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchasedBlocks(town) + "]" 
-						: "") 
-					+ (town.getBonusBlocks() > 0 
-						? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" 
-						: "") 
-					+ (TownySettings.getNationBonusBlocks(town) > 0 
-						? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" 
-						: "")
-				: ""));
+		out.add(Component.text("Town Size: ", NamedTextColor.DARK_GREEN)
+			.append(Component.text(town.getTownBlocks().size() + " / " + town.getMaxTownBlocksAsAString(), NamedTextColor.GREEN))
+			.append(town.hasUnlimitedClaims() ?
+				TownySettings.isSellingBonusBlocks(town) ?
+					Component.text(" [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchasedBlocks(town) + "]", NamedTextColor.AQUA) :
+					Component.empty()
+						.append(town.getBonusBlocks() > 0 ?
+							Component.text(" [Bonus: " + town.getBonusBlocks() + "]", NamedTextColor.AQUA) :
+							Component.empty())
+						.append(TownySettings.getNationBonusBlocks(town) > 0 ?
+							Component.text(" [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]", NamedTextColor.AQUA) :
+							Component.empty())
+				: Component.empty()));
 		
 		TownBlockTypeCache typeCache = town.getTownBlockTypeCache();
-		out.add(Colors.Green + "Town Owned Land: " + Colors.LightGreen + (town.getTownBlocks().size() - (typeCache.getNumberOfResidentOwnedTownBlocks())));
-		out.add(Colors.Green + "Type: " 
-				+ Colors.LightGreen + "Player-Owned" + Colors.LightGray + " / "
-				+ Colors.LightBlue  + "ForSale" + Colors.LightGray + " / "
-				+ Colors.Yellow + "Total" + Colors.LightGray + " / "
-				+ Colors.Green + "Daily Revenue");
+		out.add(Component.text("Town Owned Land: ", NamedTextColor.DARK_GREEN)
+			.append(Component.text(town.getTownBlocks().size() - typeCache.getNumberOfResidentOwnedTownBlocks(), NamedTextColor.GREEN)));
+
+		out.add(Component.text("Type: ", NamedTextColor.DARK_GREEN)
+			.append(Component.text("Player-Owned", NamedTextColor.GREEN)).append(Component.text(" / ", NamedTextColor.GRAY))
+			.append(Component.text("ForSale", NamedTextColor.AQUA)).append(Component.text(" / ", NamedTextColor.GRAY))
+			.append(Component.text("Total", NamedTextColor.YELLOW)).append(Component.text(" / ", NamedTextColor.GRAY))
+			.append(Component.text("Daily Revenue", NamedTextColor.DARK_GREEN)));
+
 		for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
 			int residentOwned = typeCache.getNumTownBlocks(type, CacheType.RESIDENTOWNED);
-			out.add(Colors.Green + type.getFormattedName() + ": "
-				+ Colors.LightGreen + residentOwned + Colors.LightGray + " / "
-				+ Colors.LightBlue  + typeCache.getNumTownBlocks(type, CacheType.FORSALE) + Colors.LightGray + " / "
-				+ Colors.Yellow + typeCache.getNumTownBlocks(type, CacheType.ALL) + Colors.LightGray + " / "
-				+ Colors.Green + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)));
+			out.add(Component.text(type.getFormattedName() + ": ", NamedTextColor.DARK_GREEN)
+				.append(Component.text(residentOwned, NamedTextColor.GREEN)).append(Component.text(" / ", NamedTextColor.GRAY))
+				.append(Component.text(typeCache.getNumTownBlocks(type, CacheType.FORSALE), NamedTextColor.AQUA)).append(Component.text(" / ", NamedTextColor.GRAY))
+				.append(Component.text(typeCache.getNumTownBlocks(type, CacheType.ALL), NamedTextColor.YELLOW)).append(Component.text(" / ", NamedTextColor.GRAY))
+				.append(Component.text(TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)), NamedTextColor.DARK_GRAY)));
 		}
-		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
+
+		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").componentFor(player));
 		TownyMessaging.sendMessage(sender, out);
 
 	}

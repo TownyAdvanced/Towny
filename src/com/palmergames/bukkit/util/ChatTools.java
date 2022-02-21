@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.palmergames.bukkit.towny.utils.TownyComponents;
+import net.kyori.adventure.text.Component;
 import org.bukkit.map.MinecraftFont;
 
 import com.palmergames.bukkit.towny.object.TownyObject;
@@ -19,6 +22,7 @@ import com.palmergames.bukkit.towny.object.Translation;
  */
 
 public class ChatTools {
+	final static MinecraftFont font = new MinecraftFont();
 	final static int MAX_FONT_WIDTH = 321; // Two pixels less than the actual max width.
 	final static int SPACE_WIDTH = 4;
 	final static int UNDERSCORE_WIDTH = 6;
@@ -63,7 +67,7 @@ public class ChatTools {
 	 * @param object TownyObject (town or nation)
 	 * @return a title bar which won't exceed the allowed length.
 	 */
-	public static String formatTitle(TownyObject object) {
+	public static Component formatTitle(TownyObject object) {
 		
 		String title = object.getFormattedName();
 		if (title.length() > 51)
@@ -74,33 +78,44 @@ public class ChatTools {
 		return formatTitle(title);
 	}
 	
-	public static String formatTitle(String title) {
-		final MinecraftFont font = new MinecraftFont();
-		title = ".[ " + Translation.of("status_title_secondary_colour") + title + Translation.of("status_title_primary_colour") + " ].";
-		// Some language characters do not like being measured with the mojang font.
-		if (!font.isValid(title))
-			return legacyFormatTitle(title);
-		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
-		int remainder = MAX_FONT_WIDTH - (WIDGET_WIDTH * 2) - font.getWidth(Colors.strip(title)) - 2;
-		if (remainder < 1)
-			return Translation.of("status_title_primary_colour") + title;
-		if (remainder < 14)
-			return Translation.of("status_title_primary_colour") + WIDGET + title + WIDGET;
-		
-		int times = remainder / (UNDERSCORE_WIDTH * 2);
-		return Translation.of("status_title_primary_colour") + WIDGET + repeatChar(times, "_") + title + repeatChar(times, "_") + WIDGET;
+	public static Component formatTitle(String title) {
+		return formatTitle(TownyComponents.miniMessage(title));
 	}
 
+	// TODO: can probably be done better
+	public static Component formatTitle(Component title) {
+		title = TownyComponents.miniMessage(".[ " + Translation.of("status_title_secondary_colour")
+					+ TownyComponents.unMiniMessage(title)
+					+ Translation.of("status_title_primary_colour") + " ]."
+				);
 
-	private static String legacyFormatTitle(String title) {
+		String plainTitle = TownyComponents.plain(title);
+		// Some language characters do not like being measured with the mojang font.
+		if (!font.isValid(plainTitle))
+			return legacyFormatTitle(title);
+		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
+		int remainder = MAX_FONT_WIDTH - (WIDGET_WIDTH * 2) - font.getWidth(plainTitle) - 2;
+		if (remainder < 1)
+			return TownyComponents.miniMessage(Translation.of("status_title_primary_colour") + TownyComponents.unMiniMessage(title));
+		if (remainder < 14)
+			return TownyComponents.miniMessage(Translation.of("status_title_primary_colour") + WIDGET + TownyComponents.unMiniMessage(title) + WIDGET);
+
+		int times = remainder / (UNDERSCORE_WIDTH * 2);
+		return TownyComponents.miniMessage(Translation.of("status_title_primary_colour") + WIDGET + repeatChar(times, "_") + TownyComponents.unMiniMessage(title) + repeatChar(times, "_") + WIDGET);
+	}
+
+	private static Component legacyFormatTitle(Component title) {
 		String line = ".oOo.__________________________________________________.oOo.";
-		if (title.length() > line.length())
-			title = title.substring(0, line.length());
-		int pivot = line.length() / 2;
-		String center = title;
-		String out = Translation.of("status_title_primary_colour") + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
-		out += center + line.substring(pivot + center.length() / 2);
-		return out;
+
+		// TODO: can remove too much depending on mm tags
+		if (TownyComponents.stripTags(title).length() > line.length())
+			title = TownyComponents.miniMessage(TownyComponents.unMiniMessage(title).substring(0, line.length()));
+		
+		final int pivot = line.length() / 2;
+		final String plainTitle = TownyComponents.plain(title);
+		final String center = TownyComponents.unMiniMessage(title);
+		
+		return TownyComponents.miniMessage(Translation.of("status_title_primary_colour") + line.substring(0, Math.max(0, (pivot - plainTitle.length() / 2))) + center + line.substring(pivot + plainTitle.length() / 2));
 	}
 
 	public static String formatSubTitle(String subtitle) {
@@ -135,21 +150,22 @@ public class ChatTools {
 		return output;
 	}
 	
-	public static String formatCommand(String command, String subCommand, String help) {
+	public static Component formatCommand(String command, String subCommand, String help) {
 		return formatCommand("", command, subCommand, help);
 	}
 
-	public static String formatCommand(String requirement, String command, String subCommand, String help) {
+	public static Component formatCommand(String requirement, String command, String subCommand, String help) {
 
 		String out = "  ";
 		if (requirement.length() > 0)
-			out += Colors.Rose + requirement + ": ";
-		out += Colors.Blue + command;
+			out += "<red>" + requirement + ": ";
+		out += "<dark_aqua>" + command;
 		if (subCommand.length() > 0)
-			out += " " + Colors.LightBlue + subCommand;
+			out += " " + "<aqua>" + subCommand;
 		if (help.length() > 0)
-			out += " " + Colors.LightGray + " : " + help;
-		return out;
+			out += " <gray> : " + help;
+
+		return TownyComponents.miniMessage(out);
 	}
 
 	/**
@@ -160,12 +176,12 @@ public class ChatTools {
 	 * @return - Fully formatted output which should be sent to the player.
 	 * @author - Articdive
 	 */
-	public static String[] formatList(String title, String subject, List<String> list, String page) {
-		List<String> output = new ArrayList<>();
-		output.add(0, formatTitle(title));
-		output.add(1, subject);
-		output.addAll(list);
-		output.add(page);
-		return output.toArray(new String[0]);
+	public static List<Component> formatList(String title, String subject, List<String> list, String page) {
+		List<Component> output = new ArrayList<>();
+		output.add(formatTitle(title));
+		output.add(TownyComponents.miniMessage(subject));
+		output.addAll(list.stream().map(TownyComponents::miniMessage).collect(Collectors.toSet()));
+		output.add(TownyComponents.miniMessage(page));
+		return output;
 	}
 }

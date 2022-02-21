@@ -44,6 +44,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -217,6 +218,11 @@ public class TownyMessaging {
 	public static void sendMessage(Object sender, List<String> lines) {
 		sendMessage(sender, lines.toArray(new String[0]));
 	}
+	
+	public static void sendMessage(Object sender, Collection<Component> lines) {
+		for (Component line : lines)
+			sendMessage(sender, line);
+	}
 
 	/**
 	 * Send a message to a player with no Towny prefix.
@@ -274,8 +280,9 @@ public class TownyMessaging {
 	public static void sendGlobalMessage(String line) {
 		LOGGER.info(ChatTools.stripColour("[Global Message] " + line));
 		for (Player player : BukkitTools.getOnlinePlayers()) {
-			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
-				player.sendMessage(Translation.of("default_towny_prefix") + line);
+			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld())) {
+				Towny.getAdventure().player(player).sendMessage(Translatable.of("default_towny_prefix").locale(player).append(TownyComponents.miniMessage(line)).component());
+			}
 		}
 	}
 	
@@ -343,7 +350,7 @@ public class TownyMessaging {
 		String tbColor1 = Translation.of("townboard_message_colour_1");
 		String tbColor2 = Translation.of("townboard_message_colour_2");
 		
-		player.sendMessage(tbColor1 + "[" + StringMgmt.remUnderscore(town.getName()) + "] " + tbColor2 + town.getBoard());
+		Towny.getAdventure().player(player).sendMessage(TownyComponents.miniMessage(tbColor1 + "[" + StringMgmt.remUnderscore(town.getName()) + "] " + tbColor2 + town.getBoard()));
 	}
 	
 	/**
@@ -356,7 +363,7 @@ public class TownyMessaging {
 		String nbColor1 = Translation.of("nationboard_message_colour_1");
 		String nbColor2 = Translation.of("nationboard_message_colour_2");
 
-		sender.sendMessage(nbColor1 + "[" + StringMgmt.remUnderscore(nation.getName()) + "] " + nbColor2 + nation.getBoard());
+		Towny.getAdventure().sender(sender).sendMessage(TownyComponents.miniMessage(nbColor1 + "[" + StringMgmt.remUnderscore(nation.getName()) + "] " + nbColor2 + nation.getBoard()));
 	}
 	
 	/*
@@ -551,7 +558,7 @@ public class TownyMessaging {
 			townsFormatted[i % 10] = towns.get(i);
 		
 		Audience audience = Towny.getAdventure().sender(sender);
-		sender.sendMessage(ChatTools.formatTitle(Translation.of("town_plu")));
+		audience.sendMessage(ChatTools.formatTitle(Translation.of("town_plu")));
 		audience.sendMessage(TownyComponents.miniMessage(Colors.DARK_AQUA + Translation.of("town_name") + (TownySettings.isTownListRandom() ? "" : Colors.DARK_GRAY + " - " + Colors.AQUA + Translation.of(compType.getName()))));
 		
 		for (Component component : townsFormatted)
@@ -604,7 +611,7 @@ public class TownyMessaging {
 			nationsFormatted[i % 10] = nations.get(i);
 		
 		Audience audience = Towny.getAdventure().sender(sender);
-		sender.sendMessage(ChatTools.formatTitle(Translatable.of("nation_plu").forLocale(sender)));
+		audience.sendMessage(ChatTools.formatTitle(Translatable.of("nation_plu").forLocale(sender)));
 		audience.sendMessage(TownyComponents.miniMessage(Colors.DARK_AQUA + Translatable.of("nation_name").forLocale(sender) + Colors.DARK_GRAY + " - " + Colors.AQUA + Translatable.of(compType.getName()).forLocale(sender)));
 		
 		for (Component component : nationsFormatted)
@@ -660,7 +667,7 @@ public class TownyMessaging {
 		}
 		
 		Audience audience = Towny.getAdventure().player(player);
-		player.sendMessage(ChatTools.formatTitle(Translatable.of("outpost_plu").forLocale(player)));
+		audience.sendMessage(ChatTools.formatTitle(Translatable.of("outpost_plu").forLocale(player)));
 		for (Component component : outpostsFormatted) {
 			audience.sendMessage(component);
 		}
@@ -710,7 +717,7 @@ public class TownyMessaging {
 			jailsFormatted[i % 10] = line;
 		}
 		Audience audience = Towny.getAdventure().player(player);
-		player.sendMessage(ChatTools.formatTitle(Translatable.of("jail_plu").forLocale(player)));
+		audience.sendMessage(ChatTools.formatTitle(Translatable.of("jail_plu").forLocale(player)));
 		player.sendMessage(headerMsg);
 		for (Component component : jailsFormatted) {
 			audience.sendMessage(component);
@@ -754,7 +761,7 @@ public class TownyMessaging {
 			groupsFormatted[i % 10] = line;
 		}
 		Audience audience = Towny.getAdventure().sender(sender);
-		sender.sendMessage(ChatTools.formatTitle(town.getName() + " " + Translatable.of("plotgroup_plu").forLocale(sender)));
+		audience.sendMessage(ChatTools.formatTitle(town.getName() + " " + Translatable.of("plotgroup_plu").forLocale(sender)));
 		sender.sendMessage(headerMsg);
 
 		for (Component component : groupsFormatted)
