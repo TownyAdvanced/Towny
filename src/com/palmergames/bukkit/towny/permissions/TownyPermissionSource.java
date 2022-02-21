@@ -197,6 +197,10 @@ public abstract class TownyPermissionSource {
 	public boolean testPermission(Permissible permissible, String perm) {
 		return isTownyAdmin(permissible) || strictHas(permissible, perm);
 	}
+	
+	public boolean testPermission(Permissible permissible, PermissionNodes node) {
+		return testPermission(permissible, node.getNode());
+	}
 
 	/**
 	 * All local permission checks should go through here.
