@@ -19,6 +19,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -64,7 +65,6 @@ public class ResidentUtil {
 	 * Uses the BukkitTools.matchPlayer() rather than BukkitTools.getPlayerExact();
 	 * Used for:
 	 *  - Inviting
-	 *  - Kicking
 	 * 
 	 * @param sender - CommandSender.
 	 * @param names - Names to be converted.
@@ -84,6 +84,28 @@ public class ResidentUtil {
 				else
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", targetName));
 			}
+		}
+		return residents;
+	}
+	
+	/**
+	 * Transforms a String[] of names to a list of Residents.
+	 * Uses a town's resident list to validate names.
+	 * Used for:
+	 *  - Kicking
+	 *  
+	 * @param sender CommandSender who would see feedback.
+	 * @param town Town which is being searched.
+	 * @param names Names to be converted.
+	 * @return List of Residents to be used later.
+	 */
+	public static List<Resident> getValidatedResidentsOfTown(CommandSender sender, Town town, String[] names) {
+		List<Resident> residents = new ArrayList<>();
+		for (String name : names) {
+			if (town.hasResident(name))
+				residents.add(TownyAPI.getInstance().getResident(name));
+			else
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_same_town", name));
 		}
 		return residents;
 	}

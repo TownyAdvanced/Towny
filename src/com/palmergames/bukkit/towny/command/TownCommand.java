@@ -3261,7 +3261,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		townKickResidents(player, resident, town, ResidentUtil.getValidatedResidents(player, names));
+		townKickResidents(player, resident, town, ResidentUtil.getValidatedResidentsOfTown(player, town, names));
 
 		// Reset everyones cache permissions as this player leaving can affect
 		// multiple areas.
