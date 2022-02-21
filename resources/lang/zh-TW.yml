@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.144
+version: 0.145
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -638,7 +638,7 @@ msg_err_cannot_set_spawn_cost_more_than: '&c您不能將生產成本高於 %s'
 msg_err_ally_isnt_public: '&c您的盟國, %s, 沒有啟用公共傳送點. 傳送已被取消.'
 msg_nation_changed_public: '&c國家公開狀態變更為 %s.'
 #Added in 0.47:
-status_plot_type: 'Plot Type:'
+status_plot_type: '區域類型：'
 msg_no_self_jailing: '您不能監禁自己.'
 online2: ' &a(在線)'
 build: '建築'
@@ -1445,3 +1445,6 @@ msg_err_command_not_for_console_use: 'This command cannot be used from the conso
 msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
 did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to claim, did you want to turn on unlimited claiming for the town of %s'
+#Added in 0.145
+#Message shown when a conquered town tries to leave their nation.
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
