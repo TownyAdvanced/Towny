@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.ChatPaginator;
 
@@ -159,14 +160,13 @@ public class StatusScreen {
 		return lines;
 	}
 	
-	//TODO TownyComponents.plain(child)
 	private String getContent(Component comp) {
 		if (comp.children().isEmpty())
-			return ((TextComponent) comp).content();
+			return TownyComponents.plain(comp);
 		List<String> content = new ArrayList<>();
 		if (!comp.children().isEmpty())
 			for (Component child : comp.children())
-				content.add(((TextComponent) child).content());
+				content.add(TownyComponents.plain(child));
 		return StringMgmt.join(content, " ");
 	}
 
