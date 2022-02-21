@@ -19,6 +19,7 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
@@ -557,7 +558,7 @@ public class TownyRegenAPI {
 				for (int x = 0; x < plotSize; x++)
 					for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
 						Block block = world.getBlockAt(worldx + x, y, worldz + z);
-						if (townyWorld.isPlotManagementDeleteIds(block.getType().name()))
+						if (townyWorld.isPlotManagementDeleteIds(block.getType()))
 							block.setType(Material.AIR);
 
 						block = null;
@@ -573,18 +574,11 @@ public class TownyRegenAPI {
 	 */
 	public static void deleteTownBlockMaterial(TownBlock townBlock, Material material) {
 
-		//Block block = null;
 		int plotSize = TownySettings.getTownBlockSize();
 
 		World world = BukkitTools.getServer().getWorld(townBlock.getWorld().getName());
 
 		if (world != null) {
-			/*
-			 * if
-			 * (!world.isChunkLoaded(MinecraftTools.calcChunk(townBlock.getX()),
-			 * MinecraftTools.calcChunk(townBlock.getZ())))
-			 * return;
-			 */
 			int height = world.getMaxHeight() - 1;
 			int worldx = townBlock.getX() * plotSize, worldz = townBlock.getZ() * plotSize;
 
@@ -593,6 +587,33 @@ public class TownyRegenAPI {
 					for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
 						Block block = world.getBlockAt(worldx + x, y, worldz + z);
 						if (block.getType() == material) {
+							block.setType(Material.AIR);
+						}
+						block = null;
+					}
+		}
+	}
+	
+	/**
+	 * Deletes all blocks which are found in the given EnumSet of Materials
+	 * 
+	 * @param townBlock       TownBlock to delete blocks from.
+	 * @param materialEnumSet EnumSet of Materials from which to remove.
+	 */
+	public static void deleteMaterialsFromTownBlock(TownBlock townBlock, EnumSet<Material> materialEnumSet) {
+		int plotSize = TownySettings.getTownBlockSize();
+
+		World world = townBlock.getWorldCoord().getBukkitWorld();
+
+		if (world != null) {
+			int height = world.getMaxHeight() - 1;
+			int worldx = townBlock.getX() * plotSize, worldz = townBlock.getZ() * plotSize;
+
+			for (int z = 0; z < plotSize; z++)
+				for (int x = 0; x < plotSize; x++)
+					for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
+						Block block = world.getBlockAt(worldx + x, y, worldz + z);
+						if (materialEnumSet.contains(block.getType())) {
 							block.setType(Material.AIR);
 						}
 						block = null;

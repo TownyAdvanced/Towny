@@ -11,11 +11,13 @@ import com.palmergames.util.MathUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,23 +27,23 @@ public class TownyWorld extends TownyObject {
 	private HashMap<String, Town> towns = new HashMap<>();
 
 	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
-	private List<String> plotManagementDeleteIds = null;
+	private EnumSet<Material> plotManagementDeleteIds = null;
 	
 	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
-	private List<String> plotManagementMayorDelete = null;
+	private EnumSet<Material> plotManagementMayorDelete = null;
 	
 	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
-	private List<String> plotManagementIgnoreIds = null;
+	private EnumSet<Material> plotManagementIgnoreIds = null;
 
 	private boolean isUsingPlotManagementWildEntityRevert = TownySettings.isUsingPlotManagementWildEntityRegen();	
 	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
-	private List<String> entityExplosionProtection = null;
-	private List<String> plotManagementWildRevertBlockWhitelist = null;
+	private EnumSet<EntityType> entityExplosionProtection = null;
+	private EnumSet<Material> plotManagementWildRevertBlockWhitelist = null;
 	
 	private boolean isUsingPlotManagementWildBlockRevert = TownySettings.isUsingPlotManagementWildBlockRegen();
-	private List<String> blockExplosionProtection = null;
+	private EnumSet<Material> blockExplosionProtection = null;
 	
-	private List<String> unclaimedZoneIgnoreBlockMaterials = null;
+	private EnumSet<Material> unclaimedZoneIgnoreBlockMaterials = null;
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
 			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 
@@ -336,7 +338,7 @@ public class TownyWorld extends TownyObject {
 		return isUsingPlotManagementRevert;
 	}
 
-	public List<String> getPlotManagementDeleteIds() {
+	public EnumSet<Material> getPlotManagementDeleteIds() {
 
 		if (plotManagementDeleteIds == null)
 			return TownySettings.getPlotManagementDeleteIds();
@@ -344,17 +346,17 @@ public class TownyWorld extends TownyObject {
 			return plotManagementDeleteIds;
 	}
 
-	public boolean isPlotManagementDeleteIds(String id) {
+	public boolean isPlotManagementDeleteIds(Material material) {
 
-		return getPlotManagementDeleteIds().contains(id);
+		return getPlotManagementDeleteIds().contains(material);
 	}
 
 	public void setPlotManagementDeleteIds(List<String> plotManagementDeleteIds) {
 
-		this.plotManagementDeleteIds = plotManagementDeleteIds;
+		this.plotManagementDeleteIds = TownySettings.toMaterialEnumSet(plotManagementDeleteIds);
 	}
 
-	public List<String> getPlotManagementMayorDelete() {
+	public EnumSet<Material> getPlotManagementMayorDelete() {
 
 		if (plotManagementMayorDelete == null)
 			return TownySettings.getPlotManagementMayorDelete();
@@ -362,17 +364,17 @@ public class TownyWorld extends TownyObject {
 			return plotManagementMayorDelete;
 	}
 
-	public boolean isPlotManagementMayorDelete(String material) {
+	public boolean isPlotManagementMayorDelete(Material material) {
 
-		return getPlotManagementMayorDelete().contains(material.toUpperCase());
+		return getPlotManagementMayorDelete().contains(material);
 	}
 
 	public void setPlotManagementMayorDelete(List<String> plotManagementMayorDelete) {
 
-		this.plotManagementMayorDelete = plotManagementMayorDelete;
+		this.plotManagementMayorDelete = TownySettings.toMaterialEnumSet(plotManagementMayorDelete);
 	}
 
-	public List<String> getPlotManagementIgnoreIds() {
+	public EnumSet<Material> getPlotManagementIgnoreIds() {
 		
 		if (plotManagementIgnoreIds == null)
 			return TownySettings.getPlotManagementIgnoreIds();
@@ -381,12 +383,12 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public boolean isPlotManagementIgnoreIds(Material mat) {
-		return getPlotManagementIgnoreIds().contains(mat.toString());
+		return getPlotManagementIgnoreIds().contains(mat);
 	}
 
 	public void setPlotManagementIgnoreIds(List<String> plotManagementIgnoreIds) {
 
-		this.plotManagementIgnoreIds = plotManagementIgnoreIds;
+		this.plotManagementIgnoreIds = TownySettings.toMaterialEnumSet(plotManagementIgnoreIds);
 	}
 
 	/**
@@ -442,16 +444,14 @@ public class TownyWorld extends TownyObject {
 
 	public void setPlotManagementWildRevertEntities(List<String> entities) {
 
-		entityExplosionProtection = new ArrayList<>();
+		entityExplosionProtection = EnumSet.noneOf(EntityType.class);
 
-		for (String mob : entities)
-			if (!mob.equals("")) {
-				entityExplosionProtection.add(mob.toLowerCase());
-			}
+		for (EntityType mob : TownySettings.toEntityTypeEnumSet(entities))
+			entityExplosionProtection.add(mob);
 
 	}
 
-	public List<String> getPlotManagementWildRevertEntities() {
+	public EnumSet<EntityType> getPlotManagementWildRevertEntities() {
 
 		if (entityExplosionProtection == null)
 			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
@@ -464,22 +464,20 @@ public class TownyWorld extends TownyObject {
 		if (entityExplosionProtection == null)
 			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
 
-		return (entityExplosionProtection.contains(entity.getType().getEntityClass().getSimpleName().toLowerCase()));
+		return entityExplosionProtection.contains(entity.getType());
 
 	}
 
 	public void setPlotManagementWildRevertBlockWhitelist(List<String> mats) {
 
-		plotManagementWildRevertBlockWhitelist = new ArrayList<>();
+		plotManagementWildRevertBlockWhitelist = EnumSet.noneOf(Material.class);
 
-		for (String mat : mats)
-			if (!mat.equals("")) {
-				plotManagementWildRevertBlockWhitelist.add(mat);
-			}
+		for (Material mat : TownySettings.toMaterialEnumSet(mats))
+			plotManagementWildRevertBlockWhitelist.add(mat);
 
 	}
 
-	public List<String> getPlotManagementWildRevertBlockWhitelist() {
+	public EnumSet<Material> getPlotManagementWildRevertBlockWhitelist() {
 
 		if (plotManagementWildRevertBlockWhitelist == null)
 			setPlotManagementWildRevertBlockWhitelist(TownySettings.getWildExplosionRevertBlockWhitelist());
@@ -492,7 +490,7 @@ public class TownyWorld extends TownyObject {
 		if (plotManagementWildRevertBlockWhitelist == null)
 			setPlotManagementWildRevertBlockWhitelist(TownySettings.getWildExplosionRevertBlockWhitelist());
 
-		return plotManagementWildRevertBlockWhitelist.isEmpty() || plotManagementWildRevertBlockWhitelist.contains(mat.name());
+		return plotManagementWildRevertBlockWhitelist.isEmpty() || plotManagementWildRevertBlockWhitelist.contains(mat);
 	}
 
 	public boolean isBlockAllowedToRevert(Material mat) {
@@ -504,15 +502,14 @@ public class TownyWorld extends TownyObject {
 
 	public void setPlotManagementWildRevertMaterials(List<String> mats) {
 
-		blockExplosionProtection = new ArrayList<>();
+		blockExplosionProtection = EnumSet.noneOf(Material.class);
 
-		for (String mat : mats)
-			if (!mat.equals(""))
-				blockExplosionProtection.add(mat);
+		for (Material mat : TownySettings.toMaterialEnumSet(mats))
+			blockExplosionProtection.add(mat);
 
 	}
 
-	public List<String> getPlotManagementWildRevertBlocks() {
+	public EnumSet<Material> getPlotManagementWildRevertBlocks() {
 
 		if (blockExplosionProtection == null)
 			setPlotManagementWildRevertMaterials(TownySettings.getWildExplosionProtectionBlocks());
@@ -525,16 +522,16 @@ public class TownyWorld extends TownyObject {
 		if (blockExplosionProtection == null)
 			setPlotManagementWildRevertMaterials(TownySettings.getWildExplosionProtectionBlocks());
 
-		return (blockExplosionProtection.contains(material.toString()));
+		return (blockExplosionProtection.contains(material));
 
 	}
 
 	public void setUnclaimedZoneIgnore(List<String> unclaimedZoneIgnoreIds) {
 
-		this.unclaimedZoneIgnoreBlockMaterials = unclaimedZoneIgnoreIds;
+		this.unclaimedZoneIgnoreBlockMaterials = TownySettings.toMaterialEnumSet(unclaimedZoneIgnoreIds);
 	}
 	
-	public List<String> getUnclaimedZoneIgnoreMaterials() {
+	public EnumSet<Material> getUnclaimedZoneIgnoreMaterials() {
 
 		if (unclaimedZoneIgnoreBlockMaterials == null)
 			return TownySettings.getUnclaimedZoneIgnoreMaterials();
@@ -544,7 +541,7 @@ public class TownyWorld extends TownyObject {
 
 	public boolean isUnclaimedZoneIgnoreMaterial(Material mat) {
 
-		return getUnclaimedZoneIgnoreMaterials().contains(mat.name());
+		return getUnclaimedZoneIgnoreMaterials().contains(mat);
 	}
 
 
