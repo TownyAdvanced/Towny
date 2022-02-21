@@ -5,6 +5,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class ItemLists {
 
 		for (String mat : taggedMaterials) {
 			try {
-				this.taggedMaterials.add(Material.valueOf(mat));
+				this.taggedMaterials.add(Material.valueOf(mat.toUpperCase(Locale.ROOT)));
 			} catch (IllegalArgumentException ignored) {}
 		}
 	}
@@ -49,7 +50,7 @@ public class ItemLists {
 	 */
 	public boolean contains(@NotNull String matName) {
 		try {
-			return taggedMaterials.contains(Material.valueOf(matName));
+			return taggedMaterials.contains(Material.valueOf(matName.toUpperCase(Locale.ROOT)));
 		} catch (IllegalArgumentException e) {
 			return false;
 		}
@@ -85,7 +86,7 @@ public class ItemLists {
 	/**
 	 * List of Potted Plants.
 	 */
-	public static final ItemLists POTTED_PLANTS = PredicateList.builder().startsWith("POTTED_").add("FLOWERING_AZALEA", "AZALEA").build();
+	public static final ItemLists POTTED_PLANTS = PredicateList.builder().startsWith("POTTED_").build();
 
 
 	/**
@@ -292,7 +293,7 @@ public class ItemLists {
 
 			for (String name : names) {
 				try {
-					exceptions.add(Material.valueOf(name));
+					exceptions.add(Material.valueOf(name.toUpperCase(Locale.ROOT)));
 				} catch (IllegalArgumentException ignored) {}
 			}
 
