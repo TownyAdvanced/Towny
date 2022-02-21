@@ -232,7 +232,7 @@ msg_set_outpost_spawn: '&bУспешно изменен спавн аванпо�
 msg_set_title: '&b%s был удостоен звания ''%s&b''.'
 msg_set_surname: '&b%s был удостоен фамилии ''%s&b''.'
 msg_clear_title_surname: '&b%s ''%s'' был очищен.'
-msg_clear_plot_material: '&bУчасток был очищен от всех %s.'
+msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
 msg_set_perms: '&bУспешно изменены права:'
 msg_set_claim: '&bУспешно изменена возможность приватить территорию у %s на %s'
 msg_set_perms_reset: '&bУспешно сброшены все права на %s участках.'
@@ -1154,6 +1154,7 @@ msg_err_days_must_be_greater_than_0: 'Дни должни быть больше 
 msg_err_outlawed_players_no_teleport: '&4Вы вне закона в городе, в котором вы сейчас находитесь и не можете телепортироваться!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Вы не можете использовать эту команду находясь в городе, который объявил вас вне закона.'
 #Added in 0.110
+msg_safe_mode: "[Error] Locked in safe mode!"
 msg_safe_mode_base: '[Error] Towny перешёл в безопасный режим из-за ошибки! '
 msg_safe_mode_player: 'Попросите админа проверить консоль сервера.'
 msg_safe_mode_admin: 'Проверьте консоль сервера для большей информации.'
@@ -1448,3 +1449,5 @@ did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to c
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
+msg_err_console_only: 'This command can only be used by console.'
+msg_err_player_only: 'This command can only be used by a player.'

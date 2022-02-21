@@ -232,7 +232,7 @@ msg_set_outpost_spawn: '&bSuccessfully changed outpost''s spawn.'
 msg_set_title: '&b%s קיבל דרגה של ''%s&b''.'
 msg_set_surname: '&b%s was granted the surname of ''%s&b''.'
 msg_clear_title_surname: '&bThe %s for ''%s'' was cleared.'
-msg_clear_plot_material: '&bThe plot was cleared of all %s''s.'
+msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
 msg_set_perms: '&bSuccessfully changed permissions to:'
 msg_set_claim: '&bSuccessfully changed %s''s claimability to %s'
 msg_set_perms_reset: '&bSuccessfully reset permissions on all %s plots.'
@@ -1154,6 +1154,7 @@ msg_err_days_must_be_greater_than_0: 'כמות הימים צריכה להיות 
 msg_err_outlawed_players_no_teleport: '&4אתה נחשב פורע חוק בעיר שבא אתה כרגע ולכן לא יכול להשתגר!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4אתה לא יכול להשתמש בפקודה זאת בזמן שאתה בתוך עיר שבה אתה נחשב פורע חוק.'
 #Added in 0.110
+msg_safe_mode: "[Error] Locked in safe mode!"
 msg_safe_mode_base: '[שגיאה] Towny נעול במצב "Safe Mode" עקב תקלה! '
 msg_safe_mode_player: 'תאמר למנהל לבדוק את הקונסול של השרת.'
 msg_safe_mode_admin: 'אנא עיין בקונסולה של השרת למידע נוסף.'
@@ -1448,3 +1449,5 @@ did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to c
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
+msg_err_console_only: 'This command can only be used by console.'
+msg_err_player_only: 'This command can only be used by a player.'

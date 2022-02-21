@@ -232,7 +232,7 @@ msg_set_outpost_spawn: '&bPomyślnie zmieniono spawn wartowni.'
 msg_set_title: '&b%s otrzymał przydomek ''%s&b''.'
 msg_set_surname: '&b%s otrzymał przydomek ''%s&b''.'
 msg_clear_title_surname: '&bPrzydomek %s dla ''%s'' został wyczyszcony.'
-msg_clear_plot_material: '&bWszystkie działki %s zostały wyczyszczone.'
+msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
 msg_set_perms: '&bPomyślnie zmieniono uprawnienia na:'
 msg_set_claim: '&bPomyślnie zmieniono przejmowanie terenu %s na %s'
 msg_set_perms_reset: '&bPomyślnie zresetowano ustawienie dla wszystkich działek %s.'
@@ -1154,6 +1154,7 @@ msg_err_days_must_be_greater_than_0: 'Liczba dni musi być większa niż zero.'
 msg_err_outlawed_players_no_teleport: '&4Jesteś wygnańcem tego miasta, nie możesz się teleportować!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Nie możesz użyć tej komendy podczas pobytu w mieście, z którego zostałeś wygnany.'
 #Added in 0.110
+msg_safe_mode: "[Error] Locked in safe mode!"
 msg_safe_mode_base: '[Error] Towny jest zablokowany w trybie Safe Mode z powodu błędu! '
 msg_safe_mode_player: 'Zgłoś administratorowi, aby sprawdził konsolę serwera.'
 msg_safe_mode_admin: 'Sprawdź konsolę serwera, aby uzyskać więcej informacji.'
@@ -1448,3 +1449,5 @@ did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to c
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
+msg_err_console_only: 'This command can only be used by console.'
+msg_err_player_only: 'This command can only be used by a player.'
