@@ -232,7 +232,7 @@ msg_set_outpost_spawn: '&bSuccesvol de spawnplaats van de outpost veranderd.'
 msg_set_title: '&b%s kreeg de titel van ''%s&b'' toegewezen.'
 msg_set_surname: '&b%s kreeg de achternaam van ''%s&b'' toegewezen.'
 msg_clear_title_surname: '&bDe %s voor %s is gewist.'
-msg_clear_plot_material: '&bDe plot is gewist van alle %s''s.'
+msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
 msg_set_perms: '&bSuccesvol permissies gewijzigd naar:'
 msg_set_claim: '&bSuccesvol de claimability van %s gewijzigd naar %s'
 msg_set_perms_reset: '&bSuccesvol permissies gereset voor alle %s plots.'
@@ -1154,6 +1154,7 @@ msg_err_days_must_be_greater_than_0: 'Aantal dagen moeten groter zijn dan nul.'
 msg_err_outlawed_players_no_teleport: '&4Je bent outlawed in de stad waar je momenteel in bent en kan niet teleporteren!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&bJe kunt die commando niet gebruiken terwijl je in een stad bent waar je outlawed bent.'
 #Added in 0.110
+msg_safe_mode: "[Error] Locked in safe mode!"
 msg_safe_mode_base: '[Error] Towny is vergrendeld in veilige modus door een fout! '
 msg_safe_mode_player: 'Vertel een beheerder om de server console te controleren.'
 msg_safe_mode_admin: 'Controleer de server console voor meer informatie.'
@@ -1448,3 +1449,5 @@ did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to c
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
+msg_err_console_only: 'This command can only be used by console.'
+msg_err_player_only: 'This command can only be used by a player.'
