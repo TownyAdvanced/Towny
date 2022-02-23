@@ -7303,3 +7303,5 @@ v0.92.0.11:
   - Enumsets for townyworld Material and EntityTypes.
   - Redo /plot clear to be faster.
   - ItemLists overhaul, courtesy of Warriorrrr #5737.
+0.98.0.2:
+  - Fix potential NPE in TownRuinUtil.

@@ -204,7 +204,7 @@ public class TownRuinUtil {
 	private static void setMayor(Town town, Resident newMayor) {
 		Resident oldMayor = town.getMayor();
 		town.setMayor(newMayor);
-		if (oldMayor.isNPC()) {
+		if (oldMayor != null && oldMayor.isNPC()) {
 			// Delete the resident if the old mayor was an NPC.
 			oldMayor.removeTown();
 			TownyUniverse.getInstance().getDataSource().removeResident(oldMayor);
