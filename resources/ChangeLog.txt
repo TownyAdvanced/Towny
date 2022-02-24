@@ -7305,3 +7305,4 @@ v0.92.0.11:
   - ItemLists overhaul, courtesy of Warriorrrr #5737.
 0.98.0.2:
   - Fix potential NPE in TownRuinUtil.
+  - Fix database and townyperms files self-corrupting their yaml formatting on some servers.
