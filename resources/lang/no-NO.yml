@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.145
+version: 0
 language: norwegian
 author: Nectuz, Walbern
 website: 'http://townyadvanced.github.io/'
@@ -232,7 +232,7 @@ msg_set_outpost_spawn: '&bVellykket endret utpostens spawn.'
 msg_set_title: '&b%s ble gitt tittelen ''%s&b''.'
 msg_set_surname: '&b%s fikk etternavnet ''%s&b''.'
 msg_clear_title_surname: '&b %s for ''%s'' var fjernet.'
-msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
+msg_clear_plot_material: '&bPlotten ble fjernet av følgende blokktyper: %s.'
 msg_set_perms: '&bVellykket endret tillatelser til:'
 msg_set_claim: '&bVellykket endret %s''s krav til %s'
 msg_set_perms_reset: '&bVellykket gjenoppretting av alle tillatelser på alle %s tomter.'
@@ -1154,7 +1154,7 @@ msg_err_days_must_be_greater_than_0: 'Dager må være større enn null.'
 msg_err_outlawed_players_no_teleport: '&4Du er en lovløs i byen du nå er i og kan ikke teleportere!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Du kan ikke bruke den kommandoen mens du er i en by du er lovløs.'
 #Added in 0.110
-msg_safe_mode: "[Error] Locked in safe mode!"
+msg_safe_mode: "[Error] Låst i sikker modus!"
 msg_safe_mode_base: '[Error] Byen er låst i Sikker Modus på grunn av en feil! '
 msg_safe_mode_player: 'Fortell en admin å kontrollere serverens konsoll.'
 msg_safe_mode_admin: 'Sjekk serverkonsollen for mer informasjon.'
@@ -1437,17 +1437,17 @@ msg_you_must_wait_x_seconds_before_renaming_your_town: 'Du må vente %s sekunder
 msg_newday_already_scheduled_soon: 'En ny dagsoppgave er allerede planlagt å skje snart.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
-msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Du kan ikke skru av/på PvP, %s sekunder gjenstår.'
 #Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
-msg_err_command_not_for_console_use: 'This command cannot be used from the console.'
+msg_err_command_not_for_console_use: 'Denne kommandoen kan ikke brukes fra konsollen.'
 #Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
-msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
+msg_town_unlimitedclaims_setting_set_to: 'Byen %s har hatt sine ubegrensete kravinnstillinger satt til %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
-did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to claim, did you want to turn on unlimited claiming for the town of %s'
+did_you_want_to_toggle_unlimited_claims: 'Du har ikke nok byblokker å kreve, vil du slå på ubegrenset antall krav om byen %s'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
-msg_err_console_only: 'This command can only be used by console.'
-msg_err_player_only: 'This command can only be used by a player.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Du kan ikke forlate nasjonen, din by erobres.'
+msg_err_console_only: '&cDenne kommandoen kan bare utføres i konsollen.'
+msg_err_player_only: 'Denne kommandoen kan bare brukes av en spiller.'
