@@ -619,15 +619,14 @@ public class TownyPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event) {
-
+		// Let's ignore Citizens NPCs
+		if (BukkitTools.checkCitizens(event.getPlayer()))
+			return;
+		
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
-
-		// Let's ignore Citizens NPCs
-		if (BukkitTools.checkCitizens(event.getPlayer()))
-			return;
 
 		/*
 		 * Abort if we havn't really moved
