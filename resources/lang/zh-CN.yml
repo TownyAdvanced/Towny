@@ -232,7 +232,7 @@ msg_set_outpost_spawn: '&b成功改变前哨传送点.'
 msg_set_title: '&b%s 获得了 %s &b的头衔.'
 msg_set_surname: '&b%s 获得了 %s&b的后缀.'
 msg_clear_title_surname: '&b %s 的 %s 被清除了.'
-msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
+msg_clear_plot_material: '&b这块地皮已经被清除了以下块类型： %s'
 msg_set_perms: '&b成功将权限设置为:'
 msg_set_claim: '&b成功改变 %s 的可声明状态为 %s'
 msg_set_perms_reset: '&b成功重置 %s 的所有土地的权限.'
@@ -1154,7 +1154,7 @@ msg_err_days_must_be_greater_than_0: '天数必须大于0。'
 msg_err_outlawed_players_no_teleport: '&4你被你所在的城镇列为被放逐者了！你现在不能传送了。'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4你不能在把你列为被放逐者的城镇里使用此命令。'
 #Added in 0.110
-msg_safe_mode: "[Error] Locked in safe mode!"
+msg_safe_mode: "[Error] 已锁定安全模式！"
 msg_safe_mode_base: '[错误] Towny因产生了一个错误而被锁定于安全模式下！'
 msg_safe_mode_player: '告诉管理员去检查服务器后台。'
 msg_safe_mode_admin: '查看服务器后台以获取详细信息。'
