@@ -232,7 +232,7 @@ msg_set_outpost_spawn: '&bKarakolun doğma yeri başarıyla değiştirildi.'
 msg_set_title: '&b%s isimli kişiye "%s" unvanı verildi.'
 msg_set_surname: '&b%s isimli kişiye "%s" soyadı verildi.'
 msg_clear_title_surname: '&b%s isimli kişinin "%s" soyadı temizlendi.'
-msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
+msg_clear_plot_material: '&bArsa, aşağıdaki blok türlerinden temizlendi: %s.'
 msg_set_perms: '&bİzinleri başarıyla değiştirildi:'
 msg_set_claim: '&b%s nin hak talebinde bulunulabilirliği %s ile başarıyla değiştirildi'
 msg_set_perms_reset: '&bTüm %s alanlarındaki izinler başarıyla sıfırlandı.'
@@ -1154,7 +1154,7 @@ msg_err_days_must_be_greater_than_0: 'Günler sıfırdan büyük olmalıdır.'
 msg_err_outlawed_players_no_teleport: '&4Şu anda bulunduğunuz şehirde yasa dışısınız, ışınlanmanız mümkün değil!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Yasadışı olduğunuz bir kasabadayken bu komutu kullanamazsınız.'
 #Added in 0.110
-msg_safe_mode: "[Error] Locked in safe mode!"
+msg_safe_mode: "[Hata] Güvenli modda kilitlendi!"
 msg_safe_mode_base: '[Hata] Towny, bir hata nedeniyle Güvenli Modda kilitlendi! '
 msg_safe_mode_player: 'Bir yöneticiye sunucunun konsolunu kontrol etmesini söyleyin'
 msg_safe_mode_admin: 'Daha fazla bilgi için sunucunun konsolunu kontrol edin.'
@@ -1443,11 +1443,11 @@ msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Savaş durumunu değiştirem
 msg_err_command_not_for_console_use: 'Konsol tarafından bu komut kullanılamaz.'
 #Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
-msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
+msg_town_unlimitedclaims_setting_set_to: '%s kasabasının sınırsız claim talebi ayarı %s olarak ayarlandı.'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
-did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to claim, did you want to turn on unlimited claiming for the town of %s'
+did_you_want_to_toggle_unlimited_claims: 'Claim talebinde bulunmak için yeterli claim hakkınız yok, %s kasabası için sınırsız claim hakkı talebinde bulunmak istediniz mi?'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
-msg_err_console_only: 'This command can only be used by console.'
-msg_err_player_only: 'This command can only be used by a player.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ulusunuzu terk edemezsiniz, şehriniz fethedilir.'
+msg_err_console_only: 'Bu komut sadece konsol tarafından kullanılabilir.'
+msg_err_player_only: 'Bu komut sadece bir oyuncu tarafından kullanılabilir.'
