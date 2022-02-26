@@ -1176,7 +1176,7 @@ map_hover_plot_group_size: ' Velikost: '
 map_hover_plots: '%s pozemky'
 #Added in 0.112
 msg_checking_for_updates: 'Kontrola aktualizací...'
-msg_no_new_updates: 'No new updates found.'
+msg_no_new_updates: 'Nenalezeny žádné aktualizace.'
 msg_new_update_available: '&bNew update available: %s | Current version: %s'
 msg_download_here: 'Ke stažení zde: %s'
 msg_click_to_download: '&bClick here to download it.'
