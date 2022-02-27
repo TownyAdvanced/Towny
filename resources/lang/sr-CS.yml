@@ -232,7 +232,7 @@ msg_set_outpost_spawn: '&bUspešno promenjen spawn periferije.'
 msg_set_title: '&b%s je dobio/la titulu ''%s&b''.'
 msg_set_surname: '&b%s je dobio/la prezime ''%s&b''.'
 msg_clear_title_surname: '&b%s je očišćeno za ''%s''.'
-msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
+msg_clear_plot_material: '&bPlot očišćen od sledećih tipova blokova: %s.'
 msg_set_perms: '&bDozvole uspešno promenjene na:'
 msg_set_claim: '&bUspešno promenjena mogućnost claim-ovanja %s na %s'
 msg_set_perms_reset: '&bUspešno resetovane dozvole na svim %s plotovima.'
@@ -302,10 +302,10 @@ msg_err_not_same_nation: '&b%s ne pripada Vašoj naciji.'
 msg_err_rect_auto: '&cSamo gradovi i stanovnici mogu da koriste ''auto''.'
 msg_err_invalid_radius: '&cNevažeći poluprečnik. Koristite celi broj ili ''auto''.'
 msg_err_not_configured: '&cOvaj svet Towny nije konfigurisao.'
-msg_err_updating_item_perms: '&cGreška pri ažuriranju keša dozvolâ korišćenja predmeta.'
-msg_err_updating_switch_perms: '&cGreška pri ažuriranju keša dozvolâ prekidača.'
-msg_err_updating_destroy_perms: '&cGreška pri ažuriranju keša dozvolâ za uništavanje.'
-msg_err_updating_build_perms: '&cGreška pri ažuriranju keša dozvolâ za gradnju.'
+msg_err_updating_item_perms: '&cGreška pri ažuriranju keša dozvola korišćenja predmeta.'
+msg_err_updating_switch_perms: '&cGreška pri ažuriranju keša dozvola prekidača.'
+msg_err_updating_destroy_perms: '&cGreška pri ažuriranju keša dozvola za uništavanje.'
+msg_err_updating_build_perms: '&cGreška pri ažuriranju keša dozvola za gradnju.'
 msg_err_admin_only: '&cSamo admin može koristiti ovu komandu.'
 msg_err_admin_only_delete: '&cSamo admin može brisati ostale podatke o stanovnicima.'
 msg_err_admin_only_delete_town: '&cSamo admin može da briše ostale podatke o gradu.'
@@ -642,7 +642,7 @@ status_plot_type: 'Tip plota:'
 msg_no_self_jailing: 'Ne možete sami sebe staviti na robiju.'
 online2: ' &a(Online)'
 build: 'Gradi'
-destroy: 'Uništava'
+destroy: 'Uništavaju'
 switch: 'Prekidač'
 item_use: 'Predmeta_Korišćenje'
 owner_status: 'Vlasnik'
@@ -1154,7 +1154,7 @@ msg_err_days_must_be_greater_than_0: 'Dani moraju biti veći od nule.'
 msg_err_outlawed_players_no_teleport: '&4Razbojnik ste u gradu u kome se trenutno nalazite i ne možete se teleportovati!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Ne možete koristiti tu komandu dok ste u gradu u kome ste razbojnik.'
 #Added in 0.110
-msg_safe_mode: "[Error] Locked in safe mode!"
+msg_safe_mode: "[Greška] Zaključano u sigurnom modu!"
 msg_safe_mode_base: '[Greška] Towny je zaključan u Sigurnom Modu zbog greške! '
 msg_safe_mode_player: 'Recite nekom adminu da proveri konzolu servera.'
 msg_safe_mode_admin: 'Proverite konzolu servera za još informacija.'
@@ -1437,17 +1437,17 @@ msg_you_must_wait_x_seconds_before_renaming_your_town: 'Morate sačekati %s seku
 msg_newday_already_scheduled_soon: 'Novi dnevni zadatak je zakazan da se uskoro dogodi.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
-msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Ne možete paliti/gasiti neutralnost, %s sekundi preostalo.'
 #Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
-msg_err_command_not_for_console_use: 'This command cannot be used from the console.'
+msg_err_command_not_for_console_use: 'Ova komanda ne može biti korišćena iz konzole.'
 #Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
-msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
+msg_town_unlimitedclaims_setting_set_to: 'Grad %s ima unlimitedclaims postavku podešenu na %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
-did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to claim, did you want to turn on unlimited claiming for the town of %s'
+did_you_want_to_toggle_unlimited_claims: 'Nemate dovoljno gradskih blokova da claim-ujete, da li želite da uključite beskonačno claim-ovanje za grad %s'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
-msg_err_console_only: 'This command can only be used by console.'
-msg_err_player_only: 'This command can only be used by a player.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ne možete napustiti naciju, Vaš grad je osvojen.'
+msg_err_console_only: 'Ovu komandu može koristiti samo konzola.'
+msg_err_player_only: 'Ovu komandu može koristiti samo igrač.'
