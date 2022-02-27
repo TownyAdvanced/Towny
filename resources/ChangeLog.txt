@@ -7318,3 +7318,6 @@ v0.92.0.11:
   - Fix sheriff missing jailing permission nodes.
     - Your townyperms.yml will have the correct nodes added.
   - Fix revert explosion entities being wiped, courtesy of Warriorrrr with PR #5777.
+0.98.0.4:
+  - Fix explosion revert entities regression, courtesy of Warriorrrr with PR #5781.
+  - Small Blurb Update, courtesy of Goosius1 with PR #5779.
