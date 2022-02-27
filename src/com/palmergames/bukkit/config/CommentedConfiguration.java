@@ -305,7 +305,7 @@ public class CommentedConfiguration extends YamlConfiguration {
 		// Parse over all of the comment lines.
 		for (String commentLine : commentLines) {
 			// Add the leading spaces if commentLine isn't empty.
-			commentLine = !commentLine.isEmpty() ? leadingSpaces + commentLine : ""; 
+			commentLine = !commentLine.isEmpty() ? leadingSpaces + commentLine : "  "; 
 			// Add a new line if this comment block already has more than one line.
 			if (commentBlock.length() > 0)
 				commentBlock.append(newLine);
