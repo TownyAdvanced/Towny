@@ -443,7 +443,8 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementWildRevertEntities(List<String> entities) {
-		entityExplosionProtection.clear();
+		
+		entityExplosionProtection = EnumSet.noneOf(EntityType.class);
 		entityExplosionProtection.addAll(TownySettings.toEntityTypeEnumSet(entities));
 
 	}
