@@ -232,7 +232,7 @@ msg_set_outpost_spawn: '&bSpawn del outpost cambiado exitosamente.'
 msg_set_title: '&bA &b%s se le fue otorgado el título de ''%s&b''.'
 msg_set_surname: '&bA %s se le fue otorgado el apellido de ''%s&b''.'
 msg_clear_title_surname: '&bEl %s de ''%s'' fue borrado.'
-msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
+msg_clear_plot_material: '&bLa parcela ha sido borrada de los siguientes tipos de bloque: %s.'
 msg_set_perms: '&bPermisos cambiados exitosamente a:'
 msg_set_claim: '&bSe cambió exitosamente la reclamabilidad de %s a %s'
 msg_set_perms_reset: '&bSe reiniciaron los permisos de todos los terrenos %s.'
@@ -987,7 +987,7 @@ towny_prices_price_shop: '&c            &2Tienda: &a%s &8| &2Embajada: &a%s'
 towny_prices_taxes_plot: '&c    [Impuestos]    &2Residente: &a%s &8| &2Parcela: &a%s'
 towny_prices_taxes_shop: '&c            &aTienda: &a%s &8| &2Embajada: &a%s'
 towny_prices_town_neutral_tax: '&c            &2Paz: &a%s'
-towny_prices_plots: 'Ajustes del plot'
+towny_prices_plots: '&c    [Ajuste de Plotes]'
 towny_prices_type_single: '            &2%s: &a%s'
 towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cNación: &6%s'
@@ -1154,7 +1154,7 @@ msg_err_days_must_be_greater_than_0: 'Deben ser más de 0 días.'
 msg_err_outlawed_players_no_teleport: '&4¡Eres un bandido en la ciudad donde estás y no puedes teletransportarte!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4No puedes usar ese comando mientras estás en una ciudad donde eres un bandido.'
 #Added in 0.110
-msg_safe_mode: "[Error] Locked in safe mode!"
+msg_safe_mode: "[Error] ¡Bloqueado en modo seguro!"
 msg_safe_mode_base: '[Error] ¡Towny esta en modo seguro debido a un error! '
 msg_safe_mode_player: 'Dile a un administrador que revise la consola para más información.'
 msg_safe_mode_admin: 'Revisa la consola del servidor para más información.'
@@ -1437,17 +1437,17 @@ msg_you_must_wait_x_seconds_before_renaming_your_town: 'Debes esperar %s segundo
 msg_newday_already_scheduled_soon: 'Ya está programada una nueva tarea del día para suceder pronto.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
-msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'No puedes activar el combate por %s segundos más.'
 #Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
-msg_err_command_not_for_console_use: 'This command cannot be used from the console.'
+msg_err_command_not_for_console_use: 'Este comando no se puede usar desde la consola.'
 #Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
-msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
+msg_town_unlimitedclaims_setting_set_to: 'La ciudad %s ha establecido sus reclamaciones ilimitadas a %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
-did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to claim, did you want to turn on unlimited claiming for the town of %s'
+did_you_want_to_toggle_unlimited_claims: 'No tienes suficientes bloques de ciudad para reclamar, ¿quieres activar la reclamación ilimitada para la ciudad de %s'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
-msg_err_console_only: 'This command can only be used by console.'
-msg_err_player_only: 'This command can only be used by a player.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'No puedes abandonar tu nación, tu ciudad ha sido conquistada.'
+msg_err_console_only: 'Este comando sólo puede ser usado por la consola.'
+msg_err_player_only: 'Este comando sólo puede ser usado por un jugador.'
