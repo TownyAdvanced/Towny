@@ -349,18 +349,19 @@ public class TownySettings {
 
 	public static EnumSet<EntityType> toEntityTypeEnumSet(List<String> entityList) {
 		EnumSet<EntityType> entities = EnumSet.noneOf(EntityType.class);
-		for (String entityName : entityList) 
+		for (String entityName : entityList) {
 			try {
-				EntityType type = EntityType.valueOf(entityName);
-				entities.add(type);
+				entities.add(EntityType.valueOf(entityName.toUpperCase(Locale.ROOT)));
 			} catch (IllegalArgumentException ignored) {}
+		}
+
 		return entities;
 	}
 
 	public static EnumSet<Material> toMaterialEnumSet(List<String> materialList) {
 		EnumSet<Material> materials = EnumSet.noneOf(Material.class);
 		for (String materialName : materialList) {
-			Material material = Material.matchMaterial(materialName);
+			Material material = Material.matchMaterial(materialName.toUpperCase(Locale.ROOT));
 			if (material != null)
 				materials.add(material);
 		}

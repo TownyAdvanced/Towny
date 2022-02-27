@@ -460,7 +460,7 @@ public enum ConfigNodes {
 			"# wilderness by monsters exploding."),
 	NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",			
-			"Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart,Wither,WitherSkull",
+			"CREEPER,ENDER_CRYSTAL,ENDER_DRAGON,FIREBALL,SMALL_FIREBALL,LARGE_FIREBALL,PRIMED_TNT,MINECART_TNT,WITHER,WITHER_SKULL",
 			"# The list of entities whose explosions should be reverted."),
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_TIME(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion.delay",
