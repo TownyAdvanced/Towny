@@ -220,5 +220,17 @@
         "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
       }
     ]
+  },
+  {
+    "version": "0.98.0.3",
+    "changes": [
+      {
+        "type": "REPLACE",
+        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
+        "key": "Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart,Wither,WitherSkull",
+        "value": "CREEPER,ENDER_CRYSTAL,ENDER_DRAGON,FIREBALL,SMALL_FIREBALL,LARGE_FIREBALL,PRIMED_TNT,MINECART_TNT,WITHER,WITHER_SKULL",
+        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
+      }
+    ]
   }
 ]
