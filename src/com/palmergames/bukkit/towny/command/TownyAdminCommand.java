@@ -1287,7 +1287,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 			} else if (split[1].equalsIgnoreCase("set")) {
 				
-				TownCommand.townSet(player, StringMgmt.remArgs(split, 2), true, town);
+				TownCommand.townSet(sender, StringMgmt.remArgs(split, 2), true, town);
 			} else if (split[1].equalsIgnoreCase("meta")) {
 				
 				handleTownMetaCommand(player, town, split);

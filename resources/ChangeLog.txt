@@ -7314,3 +7314,4 @@ v0.92.0.11:
     - When false, the price_town_public_spawn_travel will be used for public spawn costs, despite what mayors have their town spawncost set at.
     - When true, the lower of either the town's spawncost or the config's price_town_public_spawn_travel setting will be used.
     - Closes #5776.
+  - Fix /ta town NAME set not working well from the console.
