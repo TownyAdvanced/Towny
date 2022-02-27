@@ -2742,6 +2742,10 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC);
 	}
 	
+	public static boolean isPublicSpawnCostAffectedByTownSpawncost() {
+		return getBoolean(ConfigNodes.ECO_PRICE_ALLOW_MAYORS_TO_OVERRIDE_PUBLIC_SPAWN_COST);
+	}
+	
 	public static boolean isAllySpawningRequiringPublicStatus() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_IS_ALLY_SPAWNING_REQUIRING_PUBLIC_STATUS);
 	}

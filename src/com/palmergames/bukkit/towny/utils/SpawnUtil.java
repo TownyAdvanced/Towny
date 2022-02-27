@@ -471,6 +471,11 @@ public class SpawnUtil {
 	private static double getTravelCost(Player player, Town town, Nation nation, TownSpawnLevel townSpawnLevel, NationSpawnLevel nationSpawnLevel, SpawnType spawnType) {
 		if (!TownyEconomyHandler.isActive() || playerHasFreeSpawn(player))
 			return 0.0;
+		
+		// If this is a "public" spawn and the Config doesn't allow mayors to override the Config price, use the Config price.
+		if (!TownySettings.isPublicSpawnCostAffectedByTownSpawncost() &&
+			(townSpawnLevel.equals(TownSpawnLevel.UNAFFILIATED) || nationSpawnLevel.equals(NationSpawnLevel.UNAFFILIATED)))
+			return TownySettings.getSpawnTravelCost();
 
 		return switch(spawnType) {
 		case RESIDENT -> town == null ? 0.0 : Math.min(townSpawnLevel.getCost(town), townSpawnLevel.getCost());

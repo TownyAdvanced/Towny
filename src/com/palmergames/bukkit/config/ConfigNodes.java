@@ -1887,6 +1887,12 @@ public enum ConfigNodes {
 			"",
 			"# Maximum cost to use /town spawn [town] that mayors can set using /t set spawncost.",
 			"# This is paid to the town you goto."),
+	ECO_PRICE_ALLOW_MAYORS_TO_OVERRIDE_PUBLIC_SPAWN_COST(
+			"economy.spawn_travel.is_public_spawn_cost_affected_by_town_spawncost",
+			"true",
+			"",
+			"# When false, the price_town_public_spawn_travel will be used for public spawn costs, despite what mayors have their town spawncost set at.",
+			"# When true, the lower of either the town's spawncost or the config's price_town_public_spawn_travel setting will be used."),
 	ECO_PRICE_TOWN_SPAWN_PAID_TO_TOWN(
 			"economy.spawn_travel.town_spawn_cost_paid_to_town",
 			"true",

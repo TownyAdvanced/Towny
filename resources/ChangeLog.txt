@@ -7308,3 +7308,9 @@ v0.92.0.11:
   - Fix database and townyperms files self-corrupting their yaml formatting on some servers.
 0.98.0.3:
   - Fix Citizens NPCs being moved to spawn when safe mode occurs.
+  - Fix no-NO.yml.
+  - New Config Option: economy.spawn_travel.is_public_spawn_cost_affected_by_town_spawncost
+    - Default: true
+    - When false, the price_town_public_spawn_travel will be used for public spawn costs, despite what mayors have their town spawncost set at.
+    - When true, the lower of either the town's spawncost or the config's price_town_public_spawn_travel setting will be used.
+    - Closes #5776.
