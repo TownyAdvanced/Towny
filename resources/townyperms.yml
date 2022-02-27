@@ -72,7 +72,9 @@ towns:
         vip:
             - foo.bar
         sheriff:
-            - towny.command.town.toggle.jail
+            - towny.command.town.jail
+            - towny.command.town.unjail
+            - towny.command.town.jail.list
             - towny.outlaw.jailer
             
 # This section of permissions covers players who are members of any town in a nation.

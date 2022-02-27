@@ -232,5 +232,35 @@
         "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
       }
     ]
+  },
+  {
+    "version": "0.98.0.3",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "towns.ranks.sheriff",
+        "value": "towny.command.town.jail"
+      }
+    ]
+  },
+  {
+    "version": "0.98.0.3",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "towns.ranks.sheriff",
+        "value": "towny.command.town.unjail"
+      }
+    ]
+  },
+  {
+    "version": "0.98.0.3",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "towns.ranks.sheriff",
+        "value": "towny.command.town.jail.list"
+      }
+    ]
   }
 ]

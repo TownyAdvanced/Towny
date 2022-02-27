@@ -7315,3 +7315,6 @@ v0.92.0.11:
     - When true, the lower of either the town's spawncost or the config's price_town_public_spawn_travel setting will be used.
     - Closes #5776.
   - Fix /ta town NAME set not working well from the console.
+  - Fix sheriff missing jailing permission nodes.
+    - Your townyperms.yml will have the correct nodes added.
+  - Fix revert explosion entities being wiped, courtesy of Warriorrrr with PR #5777.
