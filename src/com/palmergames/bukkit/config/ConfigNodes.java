@@ -2240,8 +2240,8 @@ public enum ConfigNodes {
 			"# Will bankrupt towns pay their nation tax?",
 			"# If false towns that are bankrupt will not pay any nation tax and will leave their nation.",
 			"# If true the town will go into debt up until their debt cap is reached.",
-			"# True is recommended when using a Siege War style war/conquering system,",
-			"# otherwise conquered towns will be able to leave the nation simply by not paying the nation tax.",
+			"# True is recommended if using a war system where towns are forced to join a conqueror's nation,",
+			"# otherwise conquered towns would be able to leave the nation by choosing to go bankrupt.",
 			"# False is recommended otherwise so that nations are not using abandoned towns to gather taxes."),
 	ECO_BANKRUPTCY_NATION_KICKS_TOWNS_THAT_REACH_DEBT_CAP(
 			"economy.bankruptcy.nation_tax.kick_towns_that_reach_debt_cap",
