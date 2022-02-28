@@ -7322,4 +7322,5 @@ v0.92.0.11:
   - Fix explosion revert entities regression, courtesy of Warriorrrr with PR #5781.
   - Small Blurb Update, courtesy of Goosius1 with PR #5779.
 0.98.0.5:
-  - Fix configs settings getting cramped together. 
+  - Fix configs settings getting cramped together.
+  - Fix /towny allowedblocks command.

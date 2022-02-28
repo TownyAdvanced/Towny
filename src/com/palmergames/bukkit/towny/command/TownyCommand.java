@@ -213,7 +213,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ITEMUSE);
 					break;
 				}
-				case "allowedblocks:": {
+				case "allowedblocks": {
 					catchConsole(sender);
 					if (world == null || !world.isUsingTowny())
 						throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
