@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.map.TownyMapData;
-import com.palmergames.bukkit.util.Colors;
 
 import net.kyori.adventure.text.TextComponent;
 import java.util.Map;
@@ -75,12 +74,12 @@ public class MapHUD {
 		objective.setDisplayName(ChatColor.GOLD + "Towny Map " + ChatColor.WHITE + "(" + wc.getX() + ", " + wc.getZ() + ")");
 
 		TownyWorld world = wc.getTownyWorldOrNull();
-		if (world == null || !world.isUsingTowny()) {
+		Resident resident = TownyAPI.getInstance().getResident(player.getName());
+		if (world == null || !world.isUsingTowny() || resident == null) {
 			HUDManager.toggleOff(player);
 			return;
 		}
 		
-		Resident resident = TownyAPI.getInstance().getResident(player.getName());
 		boolean hasTown = resident.hasTown();
 
 		int halfLineWidth = lineWidth/2;
@@ -91,35 +90,35 @@ public class MapHUD {
 		for (int tby = wc.getX() + (lineWidth - halfLineWidth - 1); tby >= wc.getX() - halfLineWidth; tby--) {
 			x = 0;
 			for (int tbx = wc.getZ() - halfLineHeight; tbx <= wc.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
-				map[y][x] = Colors.White;
+				map[y][x] = ChatColor.GOLD.toString();
 				try {
 					TownBlock townblock = world.getTownBlock(tby, tbx);
 					if (!townblock.hasTown())
 						throw new TownyException();
 					if (x == halfLineHeight && y == halfLineWidth)
 						// location
-						map[y][x] = Colors.Gold;
+						map[y][x] = ChatColor.GOLD.toString();
 					else if (hasTown) {
 						if (resident.getTown() == townblock.getTown()) {
 							// own town
-							map[y][x] = Colors.LightGreen;
+							map[y][x] = ChatColor.GREEN.toString();
 							try {
 								if (resident == townblock.getResident())
 									//own plot
-									map[y][x] = Colors.Yellow;
+									map[y][x] = ChatColor.YELLOW.toString();
 							} catch (NotRegisteredException e) {
 							}
 						} else if (resident.hasNation()) {
 							if (resident.getTown().getNation().hasTown(townblock.getTown()))
 								// towns
-								map[y][x] = Colors.Green;
+								map[y][x] = ChatColor.DARK_GREEN.toString();
 							else if (townblock.getTown().hasNation()) {
 								Nation nation = resident.getTown().getNation();
 								if (nation.hasAlly(townblock.getTown().getNation()))
-									map[y][x] = Colors.Green;
+									map[y][x] = ChatColor.DARK_GREEN.toString();
 								else if (nation.hasEnemy(townblock.getTown().getNation()))
 									// towns
-									map[y][x] = Colors.Red;
+									map[y][x] = ChatColor.DARK_RED.toString();
 							}
 						}
 					}
@@ -128,7 +127,7 @@ public class MapHUD {
 					if (townblock.getPlotPrice() != -1 || townblock.hasPlotObjectGroup() && townblock.getPlotObjectGroup().getPrice() != -1) {
 						// override the colour if it's a shop plot for sale
 						if (townblock.getType().equals(TownBlockType.COMMERCIAL))
-							map[y][x] = Colors.Blue;
+							map[y][x] = ChatColor.DARK_AQUA.toString();
 						map[y][x] += "$";
 					} else if (townblock.isHomeBlock())
 						map[y][x] += "H";
@@ -138,9 +137,9 @@ public class MapHUD {
 					// Unregistered town block
 					
 					if (x == halfLineHeight && y == halfLineWidth)
-						map[y][x] = Colors.Gold;
+						map[y][x] = ChatColor.GOLD.toString();
 					else
-						map[y][x] = Colors.Gray;
+						map[y][x] = ChatColor.DARK_GRAY.toString();
 
 					WorldCoord worldcoord = WorldCoord.parseWorldCoord(world.getName(), tby * townBlockSize , tbx* townBlockSize);
 					String symbol;

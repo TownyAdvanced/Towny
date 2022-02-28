@@ -14,8 +14,9 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -273,49 +274,47 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		int total = (int) Math.ceil(((double) list.size()) / ((double) 10));
-		if (page > total) {
+		if (page > total)
 			return;
-		}
-		List<String> invitesFormatted = new ArrayList<>();
+
+		List<Component> invitesFormatted = new ArrayList<>();
 		int iMax = page * 10;
 		if ((page * 10) > list.size()) {
 			iMax = list.size();
 		}
-		Translatable object = null;
+		Translatable translatable = null;
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Invite invite = list.get(i);
 			String name = invite.getDirectSender().getName();
 			
 			// If it's from the sender, do it differently
-			String output = null;
+			Component output;
 			if (fromSender) {
-				output = Colors.Blue + invite.getReceiver().getName() + Colors.Gray + " - " + Colors.Green + name;
-				if (invite.getSender() instanceof Town) { // If it's sent by a town to a resident
-					object = Translatable.of("player_sing");
-				}
+				output = Component.text(invite.getReceiver().getName(), NamedTextColor.DARK_AQUA).append(Component.text(" - ", NamedTextColor.GRAY)).append(Component.text(name, NamedTextColor.GREEN));
+				if (invite.getSender() instanceof Town) // If it's sent by a town to a resident
+					translatable = Translatable.of("player_sing");
+
 				if (invite.getSender() instanceof Nation) {
-					if (invite.getReceiver() instanceof Town) {
-						object = Translatable.of("town_sing");
-					}
-					if (invite.getReceiver() instanceof Nation) {
-						object = Translatable.of("nation_sing");
-					}
+					if (invite.getReceiver() instanceof Town)
+						translatable = Translatable.of("town_sing");
+
+					if (invite.getReceiver() instanceof Nation)
+						translatable = Translatable.of("nation_sing");
 				}
 			} else { // So it's not from the sender, then it's from the receiver so
-				output = Colors.Blue + invite.getSender().getName() + Colors.Gray + " - " + Colors.Green + name;
-				if (invite.getReceiver() instanceof Resident) {
-					object = Translatable.of("town_sing");
-				}
-				if (invite.getReceiver() instanceof Town || invite.getReceiver() instanceof Nation) {
-					object = Translatable.of("nation_sing");
-				}
+				output = Component.text(invite.getSender().getName(), NamedTextColor.DARK_AQUA).append(Component.text(" - ", NamedTextColor.GRAY)).append(Component.text(name, NamedTextColor.GREEN));
+				if (invite.getReceiver() instanceof Resident)
+					translatable = Translatable.of("town_sing");
+
+				if (invite.getReceiver() instanceof Town || invite.getReceiver() instanceof Nation)
+					translatable = Translatable.of("nation_sing");
 			}
 			invitesFormatted.add(output);
 		}
 
-		TownyMessaging.sendMessage(player, ChatTools.formatList(Translatable.of("invite_plu").forLocale(player),
-				Colors.Blue + object.forLocale(player) + Colors.Gray + " - " + Colors.LightBlue + Translatable.of("invite_sent_by").forLocale(player),
-				invitesFormatted, Translatable.of("LIST_PAGE", page, total).forLocale(player)
+		TownyMessaging.sendMessage(player, ChatTools.formatList(Translatable.of("invite_plu").componentFor(player),
+				Component.text(translatable.forLocale(player), NamedTextColor.DARK_AQUA).append(Component.text(" - ", NamedTextColor.GRAY)).append(Component.text(Translatable.of("invite_sent_by").forLocale(player), NamedTextColor.AQUA)),
+				invitesFormatted, Translatable.of("list_page", page, total).componentFor(player)
 		));
 	}
 }

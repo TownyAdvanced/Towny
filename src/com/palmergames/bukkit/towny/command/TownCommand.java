@@ -93,7 +93,6 @@ import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.towny.utils.TownUtil;
-import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -105,13 +104,11 @@ import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -1492,23 +1489,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				});
 			} else { 
 				// Make a randomly sorted output.
-				List<TextComponent> output = new ArrayList<>();
+				List<Component> output = new ArrayList<>();
 				List<Town> towns = new ArrayList<>(TownyUniverse.getInstance().getTowns());
 				Collections.shuffle(towns);
 				
 				for (Town town : towns) {
-					TextComponent townName = Component.text(Colors.LightBlue + StringMgmt.remUnderscore(town.getName()))
-							.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
-					townName = townName.append(Component.text(Colors.Gray + " - " + Colors.LightBlue + "(" + town.getResidents().size() + ")"));
+					Component townName = Component.text(StringMgmt.remUnderscore(town.getName()), NamedTextColor.AQUA)
+						.append(Component.text(" - ", NamedTextColor.DARK_GRAY)).append(Component.text("(" + town.getResidents().size() + ")", NamedTextColor.AQUA))
+						.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
 
 					if (town.isOpen())
-						townName = townName.append(Component.text(" " + Colors.LightBlue + Translatable.of("status_title_open").forLocale(sender)));
+						townName = townName.append(Component.space()).append(Translatable.of("status_title_open").componentFor(sender));
 					
-					String spawnCost = "Free";
+					Component spawnCost = Component.text("Free", NamedTextColor.GOLD);
 					if (TownyEconomyHandler.isActive())
-						spawnCost = ChatColor.RESET + Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost())).forLocale(sender);
+						spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost())).componentFor(sender);
 
-					townName = townName.hoverEvent(HoverEvent.showText(Component.text(Translatable.of("msg_click_spawn", town).forLocale(sender) + "\n" + spawnCost).color(NamedTextColor.GOLD)));
+					townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).componentFor(player).append(Component.newline()).append(spawnCost)));
 					output.add(townName);
 				}
 				TownyMessaging.sendTownList(sender, output, finalType, pageNumber, totalNumber);
@@ -2796,10 +2793,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if (split.length == 0) {
 			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/town buy"));
-			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
+			String line = "<yellow>[Purchased Bonus] <dark_green>Cost: <green>%s <dark_gray>| <dark_green>Max: <green>%d";
 			TownyMessaging.sendMessage(player, String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchasedBlocks(town)));
 			if (TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0)
-				TownyMessaging.sendMessage(player, Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
+				TownyMessaging.sendMessage(player, Component.text("Cost Increase per TownBlock: ", NamedTextColor.DARK_GREEN).append(Component.text("+" + new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1), NamedTextColor.GREEN)));
 			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
 		} else {
 			try {
@@ -3816,11 +3813,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_perms"));
-			TownyMessaging.sendMessage(sender, (Colors.Green + Translatable.of("status_perm").forLocale(sender) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-			TownyMessaging.sendMessage(sender, Colors.Green + Translatable.of("status_pvp").forLocale(sender) + " " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-											   Colors.Green + Translatable.of("explosions").forLocale(sender) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-											   Colors.Green + Translatable.of("firespread").forLocale(sender) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-											   Colors.Green + Translatable.of("mobspawns").forLocale(sender) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+			TownyMessaging.sendMessage(sender, Translatable.of("status_perm").forLocale(sender) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
+			TownyMessaging.sendMessage(sender, Translatable.of("status_pvp").locale(sender).append(" ").append(Translatable.of("status_" + (perm.pvp ? "on" : "off"))),
+											   Translatable.of("explosions").locale(sender).append(" ").append(Translatable.of("status_" + (perm.explosion ? "on" : "off"))),
+											   Translatable.of("firespread").locale(sender).append(" ").append(Translatable.of("status_" + (perm.fire ? "on" : "off"))),
+											   Translatable.of("mobspawns").locale(sender).append(" ").append(Translatable.of("status_" + (perm.mobs ? "on" : "off"))));
 
 			// Reset all caches as this can affect everyone.
 			plugin.resetCache();
@@ -4435,10 +4432,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (args[0].equalsIgnoreCase("list")) {
-			List<String> output = town.getTrustedResidents().isEmpty()
-					? Collections.singletonList(Translatable.of("status_no_town").forLocale(sender)) // String which is "None".
-					: town.getTrustedResidents().stream().map(res -> res.getName()).collect(Collectors.toList());
-			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedStrings(Translatable.of("status_trustedlist").forLocale(sender), output));
+			List<Component> output = town.getTrustedResidents().isEmpty()
+					? Collections.singletonList(Translatable.of("status_no_town").componentFor(sender)) // String which is "None".
+					: town.getTrustedResidents().stream().map(res -> Component.text(res.getName())).collect(Collectors.toList());
+			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedComponent(Translatable.of("status_trustedlist").forLocale(sender), output));
 			return;
 		}
 		

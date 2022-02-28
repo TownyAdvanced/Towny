@@ -17,8 +17,9 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -29,9 +30,9 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -208,14 +209,15 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		
 		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(Translatable.of("world_plu").forLocale(sender)));
 
-		ArrayList<String> formattedList = new ArrayList<>();
-		HashMap<String, Integer> playersPerWorld = BukkitTools.getPlayersPerWorld();
+		Component formatted = Component.empty();
+		Map<String, Integer> playersPerWorld = BukkitTools.getPlayersPerWorld();
+
 		for (TownyWorld world : TownyUniverse.getInstance().getTownyWorlds()) {
 			int numPlayers = playersPerWorld.getOrDefault(world.getName(), 0);
-			formattedList.add(Colors.LightBlue + world.getName() + Colors.Blue + " [" + numPlayers + "]" + Colors.White);
+			formatted = formatted.append(Component.text(world.getName(), NamedTextColor.DARK_AQUA)).append(Component.text(" [" + numPlayers + "]", NamedTextColor.AQUA)).append(Component.text(", ", NamedTextColor.WHITE));
 		}
 
-		TownyMessaging.sendMessage(sender, ChatTools.list(formattedList));
+		TownyMessaging.sendMessage(sender, formatted);
 	}
 
 	public void worldToggle(CommandSender sender, String[] split) throws TownyException {

@@ -21,13 +21,13 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.spawnlevel.SpawnLevel;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -854,7 +854,7 @@ public class TownySettings {
 	public static String getCapitalPostfix(Town town) {
 
 		try {
-			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_POSTFIX));
+			return Colors.translateColorCodes((String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_POSTFIX));
 		} catch (NotRegisteredException e) {
 			sendError("getCapitalPostfix.");
 			return "";
@@ -864,7 +864,7 @@ public class TownySettings {
 	public static String getTownPostfix(Town town) {
 
 		try {
-			return ChatColor.translateAlternateColorCodes('&',(String) getTownLevel(town).get(TownySettings.TownLevel.NAME_POSTFIX));
+			return Colors.translateColorCodes((String) getTownLevel(town).get(TownySettings.TownLevel.NAME_POSTFIX));
 		} catch (Exception e) {
 			sendError("getTownPostfix.");
 			return "";
@@ -874,7 +874,7 @@ public class TownySettings {
 	public static String getNationPostfix(Nation nation) {
 
 		try {
-			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(nation).get(TownySettings.NationLevel.NAME_POSTFIX));
+			return Colors.translateColorCodes((String) getNationLevel(nation).get(TownySettings.NationLevel.NAME_POSTFIX));
 		} catch (Exception e) {
 			sendError("getNationPostfix.");
 			return "";
@@ -884,7 +884,7 @@ public class TownySettings {
 	public static String getNationPrefix(Nation nation) {
 
 		try {
-			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(nation).get(TownySettings.NationLevel.NAME_PREFIX));
+			return Colors.translateColorCodes((String) getNationLevel(nation).get(TownySettings.NationLevel.NAME_PREFIX));
 		} catch (Exception e) {
 			sendError("getNationPrefix.");
 			return "";
@@ -894,7 +894,7 @@ public class TownySettings {
 	public static String getTownPrefix(Town town) {
 
 		try {
-			return ChatColor.translateAlternateColorCodes('&',(String) getTownLevel(town).get(TownySettings.TownLevel.NAME_PREFIX));
+			return Colors.translateColorCodes((String) getTownLevel(town).get(TownySettings.TownLevel.NAME_PREFIX));
 		} catch (Exception e) {
 			sendError("getTownPrefix.");
 			return "";
@@ -904,7 +904,7 @@ public class TownySettings {
 	public static String getCapitalPrefix(Town town) {
 
 		try {
-			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_PREFIX));
+			return Colors.translateColorCodes((String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_PREFIX));
 		} catch (NotRegisteredException e) {
 			sendError("getCapitalPrefix.");
 			return "";

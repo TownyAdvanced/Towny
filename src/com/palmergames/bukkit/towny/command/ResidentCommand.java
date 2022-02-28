@@ -28,8 +28,9 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -487,34 +488,35 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	private void notifyPerms(Player player, TownyPermission perm) {
 
 		TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-		TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
-
+		TownyMessaging.sendMessage(player,
+			Translatable.of("status_pvp").locale(player).append(" ").append(Translatable.of("status_" + (perm.pvp ? "on" : "off"))),
+			Translatable.of("explosions").locale(player).append(" ").append(Translatable.of("status_" + (perm.explosion ? "on" : "off"))),
+			Translatable.of("firespread").locale(player).append(" ").append(Translatable.of("status_" + (perm.fire ? "on" : "off"))),
+			Translatable.of("mobspawns").locale(player).append(" ").append(Translatable.of("status_" + (perm.mobs ? "on" : "off"))));
 	}
 	
 	public void listResidents(CommandSender sender) {
 
 		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(Translatable.of("res_list").forLocale(sender)));
-		String colour;
-		List<String> formattedList = new ArrayList<>();
+		Component formatted = Component.empty();
 		
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			Resident resident = TownyAPI.getInstance().getResident(player);
 			if (resident == null) {
-				formattedList.add(Colors.White + player.getName() + Colors.White);
+				formatted = formatted.append(Component.text(player.getName(), NamedTextColor.WHITE));
 				continue;
 			}
 			
+			NamedTextColor color = NamedTextColor.WHITE;
 			if (resident.isKing())
-				colour = Colors.Gold;
+				color = NamedTextColor.GOLD;
 			else if (resident.isMayor())
-				colour = Colors.LightBlue;
-			else
-				colour = Colors.White;
+				color = NamedTextColor.AQUA;
 
-			formattedList.add(colour + resident.getName() + Colors.White);
+			formatted = formatted.append(Component.text(resident.getName(), color));
 		}
 		
-		TownyMessaging.sendMessage(sender, ChatTools.list(formattedList));
+		TownyMessaging.sendMessage(sender, formatted);
 	}
 
 	/**
@@ -667,20 +669,20 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	private static void residentFriendList(Player player, Resident resident) {
 		
-		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translatable.of("friend_list").forLocale(player)));
-		String colour;
-		ArrayList<String> formatedList = new ArrayList<>();
-		for (Resident friends : resident.getFriends()) {
-			if (friends.isKing())
-				colour = Colors.Gold;
-			else if (friends.isMayor())
-				colour = Colors.LightBlue;
-			else
-				colour = Colors.White;
-			formatedList.add(colour + friends.getName() + Colors.White);
+		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translatable.of("friend_list").componentFor(player)));
+		Component formatted = Component.empty();
+
+		for (Resident friend : resident.getFriends()) {
+			NamedTextColor color = NamedTextColor.WHITE;
+			if (friend.isKing())
+				color = NamedTextColor.GOLD;
+			else if (friend.isMayor())
+				color = NamedTextColor.AQUA;
+
+			formatted = formatted.append(Component.text(friend.getName(), color));
 		}
 		
-		TownyMessaging.sendMessage(player, ChatTools.list(formatedList));
+		TownyMessaging.sendMessage(player, formatted);
 	}
 
 	public static void residentFriendAdd(Player player, Resident resident, List<Resident> invited) {

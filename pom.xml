@@ -204,6 +204,11 @@
             <artifactId>adventure-text-serializer-plain</artifactId>
             <version>4.10.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>solar.squares</groupId>
+            <artifactId>pixel-width-core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
     <pluginRepositories>
         <pluginRepository>
@@ -288,32 +293,33 @@
                             <include>org.bstats:bstats-bukkit</include>
                             <include>org.bstats:bstats-base</include>
                             <include>org.json:json</include>
+                            <include>solar.squares:pixel-width-core</include>
                         </includes>
                     </artifactSet>
                     <relocations>
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
-                            <shadedPattern>com.palmergames.paperlib</shadedPattern>
+                            <shadedPattern>com.palmergames.libs.paperlib</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.zaxxer.hikari</pattern>
-                            <shadedPattern>com.palmergames.hikaricp</shadedPattern>
+                            <shadedPattern>com.palmergames.libs.hikaricp</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.apache.commons.compress</pattern>
-                            <shadedPattern>com.palmergames.compress</shadedPattern>
+                            <shadedPattern>com.palmergames.libs.commons.compress</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>net.kyori.adventure</pattern>
-                            <shadedPattern>com.palmergames.adventure</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>net.kyori.examination</pattern>
-                            <shadedPattern>com.palmergames.examination</shadedPattern>
+                            <pattern>net.kyori</pattern>
+                            <shadedPattern>com.palmergames</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>com.palmergames.bukkit.metrics</shadedPattern>
+                            <shadedPattern>com.palmergames.libs.bstats</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>solar.squares.pixelwidth</pattern>
+                            <shadedPattern>com.palmergames.libs.pixelwidth</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

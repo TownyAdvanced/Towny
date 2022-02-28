@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -159,7 +160,7 @@ public abstract class CustomDataField<T> implements Cloneable {
 	 * @return formatted component of value.
 	 */
 	public Component formatValueAsComp() {
-		return Component.text(displayFormattedValue());
+		return TownyComponents.miniMessage(displayFormattedValue());
 	}
     
     @Override

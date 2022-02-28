@@ -54,7 +54,6 @@ import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
@@ -1024,11 +1023,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townBlock.save();
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-				TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
-				TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-												   Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-												   Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-												   Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+				TownyMessaging.sendMessage(player, Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
+				TownyMessaging.sendMessage(player,
+					Translatable.of("status_pvp").locale(player).append(" ").append(Translatable.of("status_" + (!CombatUtil.preventPvP(townBlock.getWorld(), townBlock) ? "on" : "off"))),
+					Translatable.of("explosions").locale(player).append(" ").append(Translatable.of("status_" + (perm.explosion ? "on" : "off"))),
+					Translatable.of("firespread").locale(player).append(" ").append(Translatable.of("status_" + (perm.fire ? "on" : "off"))),
+					Translatable.of("mobspawns").locale(player).append(" ").append(Translatable.of("status_" + (perm.mobs ? "on" : "off"))));
 			}
 
 
@@ -1696,11 +1696,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						
 						TownyPermission perm = plotGroup.getPermissions();
 						TownyMessaging.sendMessage(player, Translatable.of("msg_set_perms").forLocale(player));
-						TownyMessaging.sendMessage(player, (Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-						TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + (!(CombatUtil.preventPvP(townBlock.getWorld(), townBlock)) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-															Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-															Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-															Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+						TownyMessaging.sendMessage(player, Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
+						TownyMessaging.sendMessage(player, 
+							Translatable.of("status_pvp").locale(player).append(" ").append(Translatable.of("status_" + (!CombatUtil.preventPvP(townBlock.getWorld(), townBlock) ? "on" : "off"))),
+							Translatable.of("explosions").locale(player).append(" ").append(Translatable.of("status_" + (perm.explosion ? "on" : "off"))),
+							Translatable.of("firespread").locale(player).append(" ").append(Translatable.of("status_" + (perm.fire ? "on" : "off"))),
+							Translatable.of("mobspawns").locale(player).append(" ").append(Translatable.of("status_" + (perm.mobs ? "on" : "off"))));
 					}
 				};
 

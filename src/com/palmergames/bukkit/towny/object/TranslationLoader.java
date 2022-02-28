@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
+import com.palmergames.bukkit.util.Colors;
 import org.apache.commons.compress.utils.FileNameUtils;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +37,7 @@ public class TranslationLoader {
 	private final Path langFolderPath;
 	private final Plugin plugin;
 	private final Class<?> clazz;
+	private boolean convertLegacyCodes = false;
 	private static Map<String, Map<String, String>> newTranslations = new HashMap<>();
 	private static final Map<String, String> oldLangFileNames = createLegacyLangMap();
 	
@@ -136,8 +138,13 @@ public class TranslationLoader {
 				if (!newTranslations.containsKey(lang))
 					newTranslations.put(lang, new HashMap<>());
 				
-				for (Map.Entry<String, Object> entry : values.entrySet())
-					newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
+				for (Map.Entry<String, Object> entry : values.entrySet()) {
+					String value = String.valueOf(entry.getValue());
+					if (this.convertLegacyCodes)
+						value = Colors.translateColorCodes(value);
+					
+					newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), value);
+				}
 			} catch (Exception e) {
 				// An IO exception occured, or the file had invalid yaml
 				plugin.getLogger().log(Level.WARNING, "Failed to load/save '" + lang + ".yml'.", e);
@@ -228,8 +235,13 @@ public class TranslationLoader {
 
 						if (values != null) {
 							newTranslations.computeIfAbsent(lang, k -> new HashMap<>());
-							for (Map.Entry<String, Object> entry : values.entrySet())
-								newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
+							for (Map.Entry<String, Object> entry : values.entrySet()) {
+								String value = getTranslationValue(entry);
+								if (this.convertLegacyCodes)
+									value = Colors.translateColorCodes(value);
+									
+								newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), value);
+							}
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -349,7 +361,11 @@ public class TranslationLoader {
 	private void overwriteKeysWithGlobalOverrides(Map<String, Object> globalOverrides) {
 		for (Map.Entry<String, Object> entry : globalOverrides.entrySet())
 			for (String lang : newTranslations.keySet()) {
-				newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
+				String value = getTranslationValue(entry);
+				if (this.convertLegacyCodes)
+					value = Colors.translateColorCodes(value);
+				
+				newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), value);
 			}
 	}
 	
@@ -395,4 +411,11 @@ public class TranslationLoader {
 		return oldLangFileNames;
 	}
 
+	public void setConvertLegacyCodes(boolean convertLegacyCodes) {
+		this.convertLegacyCodes = convertLegacyCodes;
+	}
+
+	public boolean isConvertingLegacyCodes() {
+		return this.convertLegacyCodes;
+	}
 }

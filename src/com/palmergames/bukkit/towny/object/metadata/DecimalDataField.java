@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
-import com.palmergames.bukkit.util.Colors;
-
 public class DecimalDataField extends CustomDataField<Double> {
     public DecimalDataField(String key, Double value) {
         super(key, value);
@@ -42,7 +40,7 @@ public class DecimalDataField extends CustomDataField<Double> {
 	@Override
 	public String displayFormattedValue() {
 		double val = getValue();
-		return (val <= 0 ? Colors.Red : Colors.LightGreen) + val;
+		return (val <= 0 ? "<darK_red>" : "<green>") + val;
 	}
 
 	@Override
