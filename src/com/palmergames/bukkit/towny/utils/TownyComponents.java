@@ -20,6 +20,12 @@ public final class TownyComponents {
 		return MiniMessage.miniMessage().deserialize(input);
 	}
 	
+	public static Component miniMessage(@NotNull Component component) {
+		// Feels a bit hacky but seems like the easiest way
+		// Basically 'adds up' component colors in order to color it like legacy
+		return miniMessage(unMiniMessage(component));
+	}
+	
 	public static String unMiniMessage(@NotNull Component input) {
 		return MiniMessage.miniMessage().serialize(input);
 	}

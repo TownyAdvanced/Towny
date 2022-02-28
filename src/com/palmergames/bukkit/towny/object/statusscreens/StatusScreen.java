@@ -9,7 +9,6 @@ import java.util.Map;
 
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import org.bukkit.command.CommandSender;
-import org.bukkit.util.ChatPaginator;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -20,7 +19,7 @@ import solar.squares.pixelwidth.PixelWidthSource;
 public class StatusScreen {
 
 	Map<String, Component> components = new LinkedHashMap<>();
-	final static int MAX_WIDTH = ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH;
+	final static int MAX_WIDTH = 320;
 	private final PixelWidthSource source = PixelWidthSource.pixelWidth();
 	private final CommandSender sender;
 	
@@ -96,6 +95,8 @@ public class StatusScreen {
 				continue;
 			}
 			// We're dealing with a component made of children, probably the ExtraFields or AdditionalLines.
+			//TODO: Test if we can omit any other nextComp.children() stuff
+			/*
 			if (!nextComp.children().isEmpty()) {
 				// nextComp starts with a new line component with children to follow, start a new line.
 				if (nextComp.equals(Component.newline())) {
@@ -132,6 +133,7 @@ public class StatusScreen {
 				}
 				continue;
 			}
+			*/
 			// We're dealing with a Component that has no children.
 			if (lineWouldBeTooLong(currentLine, nextComp)) {
 				// We've found a component which will make the line too long,
