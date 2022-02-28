@@ -33,10 +33,10 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -56,6 +56,15 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	// protected static TownyUniverse universe;
 	private static Towny plugin;
+	private final Component[] heart = new Component[] {
+		Component.text("-", NamedTextColor.BLACK).append(Component.text("###", NamedTextColor.DARK_RED)).append(Component.text("---", NamedTextColor.BLACK)).append(Component.text("###", NamedTextColor.DARK_RED)).append(Component.text("-   ", NamedTextColor.BLACK)),
+		Component.text("#", NamedTextColor.DARK_RED).append(Component.text("###", NamedTextColor.RED)).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("-", NamedTextColor.BLACK)).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("###", NamedTextColor.RED)).append(Component.text("#   ", NamedTextColor.DARK_RED)),
+		Component.text("#", NamedTextColor.DARK_RED).append(Component.text("####", NamedTextColor.RED)).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("####", NamedTextColor.RED)).append(Component.text("#   ", NamedTextColor.DARK_RED)),
+		Component.text("-", NamedTextColor.BLACK).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("#######", NamedTextColor.RED)).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("-   ", NamedTextColor.BLACK)),
+		Component.text("--", NamedTextColor.BLACK).append(Component.text("##", NamedTextColor.DARK_RED)).append(Component.text("###", NamedTextColor.RED)).append(Component.text("##", NamedTextColor.DARK_RED)).append(Component.text("--   ", NamedTextColor.BLACK)),
+		Component.text("----", NamedTextColor.BLACK).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("#", NamedTextColor.RED)).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("----   ", NamedTextColor.BLACK)),
+		Component.text("-----", NamedTextColor.BLACK).append(Component.text("#", NamedTextColor.DARK_RED)).append(Component.text("-----   ", NamedTextColor.BLACK))
+	};
 
 	private static final List<String> townyTabCompletes = Arrays.asList(
 		"map",
@@ -265,8 +274,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-					for (String line : getUniverseStats(Translation.getLocale(sender)))
-						TownyMessaging.sendMessage(sender, line);
+					for (Component line : getUniverseStats(Translation.getLocale(player)))
+						TownyMessaging.sendMessage(player, line);
 					break;
 				}
 				case "version":
@@ -384,72 +393,73 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMessage(sender, line);
 	}
 
-	public List<String> getUniverseStats(Locale locale) {
+	public List<Component> getUniverseStats(Locale locale) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		List<String> output = new ArrayList<>();
+		List<Component> output = new ArrayList<>();
 		final Translator translator = Translator.locale(locale);
 		
-		output.add(""); // Intentionally left blank
-		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   " + Colors.Gold + "[" + Colors.Yellow + "Towny " + Colors.Green + plugin.getVersion() + Colors.Gold + "]");
-		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   " + Colors.Blue + translator.of("msg_universe_attribution") + Colors.LightBlue + "Chris H (Shade), ElgarL, LlmDl");
-		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   " + Colors.LightBlue + translator.of("msg_universe_contributors") + Colors.Rose + translator.of("msg_universe_heart"));
-		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
-		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + Colors.Blue + translator.of("res_list")+ ": " + Colors.LightBlue + townyUniverse.getNumResidents() + Colors.Gray + " | " + Colors.Blue + translator.of("town_plu") + ": " + Colors.LightBlue + townyUniverse.getTowns().size() + Colors.Gray + " | " + Colors.Blue + translator.of("nation_plu") + ": " + Colors.LightBlue + townyUniverse.getNumNations());
-		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + Colors.Blue + translator.of("world_plu") + ": " + Colors.LightBlue + townyUniverse.getTownyWorlds().size() + Colors.Gray + " | " + Colors.Blue + translator.of("townblock_plu") + ": " + Colors.LightBlue + townyUniverse.getTownBlocks().size());
-		output.add("\u00A70-----\u00A74#\u00A70-----   " + Colors.LightGreen + "https://TownyAdvanced.github.io/");
-		output.add(""); // Intentionally left blank
+		output.add(Component.empty()); // Intentionally left blank
+		output.add(heart[0].append(Component.text("[", NamedTextColor.GOLD)).append(Component.text("Towny ", NamedTextColor.YELLOW)).append(Component.text(plugin.getVersion(), NamedTextColor.DARK_GREEN)).append(Component.text("]", NamedTextColor.GOLD)));
+		output.add(heart[1].append(Component.text(translator.of("msg_universe_attribution"), NamedTextColor.DARK_AQUA)).append(Component.text("Chris H (Shade), ElgarL, LlmDl", NamedTextColor.AQUA)));
+		output.add(heart[2].append(Component.text(translator.of("msg_universe_contributors"), NamedTextColor.AQUA)).append(Component.text(translator.of("msg_universe_heart"), NamedTextColor.RED)));
+		output.add(heart[3]);
+		output.add(heart[4].append(Component.text(translator.of("res_list") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getNumResidents(), NamedTextColor.AQUA)).append(Component.text(" | ", NamedTextColor.DARK_GRAY)).append(Component.text(translator.of("town_plu") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getTowns().size(), NamedTextColor.AQUA)).append(Component.text(" | ", NamedTextColor.DARK_GRAY)).append(Component.text(translator.of("nation_plu") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getNumNations(), NamedTextColor.AQUA)));
+		output.add(heart[5].append(Component.text(translator.of("world_plu") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getTownyWorlds().size(), NamedTextColor.AQUA)).append(Component.text(" | ", NamedTextColor.DARK_GRAY)).append(Component.text(translator.of("townblock_plu") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getTownBlocks().size(), NamedTextColor.AQUA)));
+		output.add(heart[6].append(Component.text("https://TownyAdvanced.github.io/", NamedTextColor.GREEN)));
+		output.add(Component.empty()); // Intentionally left blank
 		
 
 		// Other TownyAdvanced plugins to report versions
 		int plugins = 0;
-		String townyPlugins = Colors.Gold + "[";
+		Component townyPlugins = Component.text("[", NamedTextColor.GOLD);
 		
 		// LlmDl Sponsor exclusive
 		Plugin tCamps = Bukkit.getServer().getPluginManager().getPlugin("TownyCamps");
 		if (tCamps != null) {
-			townyPlugins += Colors.Yellow + "TownyCamps " + Colors.Green + tCamps.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("TownyCamps ", NamedTextColor.YELLOW)).append(Component.text(tCamps.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 		
 		Plugin townyChat = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
 		if (townyChat != null){
-			townyPlugins += Colors.Yellow + "TownyChat " + Colors.Green + townyChat.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("TownyChat ", NamedTextColor.YELLOW)).append(Component.text(townyChat.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 		
 		Plugin tCult = Bukkit.getServer().getPluginManager().getPlugin("TownyCultures");
 		if (tCult != null) {
-			townyPlugins += Colors.Yellow + "TownyCultures " + Colors.Green + tCult.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("TownyCultures ", NamedTextColor.YELLOW)).append(Component.text(tCult.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 		
 		Plugin tFlight = Bukkit.getServer().getPluginManager().getPlugin("TownyFlight");
 		if (tFlight != null) {
-			townyPlugins += Colors.Yellow + "TownyFlight " + Colors.Green + tFlight.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("TownyFlight ", NamedTextColor.YELLOW)).append(Component.text(tFlight.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 
 		// LlmDl Sponsor exclusive
 		Plugin tHist = Bukkit.getServer().getPluginManager().getPlugin("TownyHistories");
 		if (tHist != null) {
-			townyPlugins += Colors.Yellow + "TownyHistories " + Colors.Green + tHist.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("TownyHistories ", NamedTextColor.YELLOW)).append(Component.text(tHist.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 		
 		Plugin flagWar = Bukkit.getServer().getPluginManager().getPlugin("FlagWar");
 		if (flagWar != null) {
-			townyPlugins += Colors.Yellow + "FlagWar " + Colors.Green + flagWar.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("FlagWar ", NamedTextColor.YELLOW)).append(Component.text(flagWar.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 		
 		Plugin siegeWar = Bukkit.getServer().getPluginManager().getPlugin("SiegeWar");
 		if (siegeWar != null) {
-			townyPlugins += Colors.Yellow + "SiegeWar " + Colors.Green + siegeWar.getDescription().getVersion() + " ";
+			townyPlugins = townyPlugins.append(Component.text("SiegeWar ", NamedTextColor.YELLOW)).append(Component.text(siegeWar.getDescription().getVersion() + " ", NamedTextColor.DARK_GREEN));
 			plugins++;
 		}
 
 		if (plugins > 0)
-			output.add(townyPlugins + Colors.Gold + "]");
+			output.add(townyPlugins.append(Component.text("]", NamedTextColor.GOLD)));
+
 		return output;
 	}
 

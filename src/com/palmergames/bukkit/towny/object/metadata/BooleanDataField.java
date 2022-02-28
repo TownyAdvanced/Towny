@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.object.metadata;
 
-import com.palmergames.bukkit.util.Colors;
-
 public class BooleanDataField extends CustomDataField<Boolean> {
     
     public BooleanDataField(String key, Boolean value) {
@@ -34,7 +32,7 @@ public class BooleanDataField extends CustomDataField<Boolean> {
 	@Override
 	public String displayFormattedValue() {
 		boolean val = getValue();
-		return (val ? Colors.LightGreen : Colors.Red) + val;
+		return (val ? "<green>" : "<red>") + val;
 	}
 
 	@Override

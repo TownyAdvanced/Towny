@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -36,6 +35,7 @@ public final class Translation {
 		translations.clear();
 		Path langFolder = Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("lang");
 		TranslationLoader loader = new TranslationLoader(langFolder, Towny.getPlugin(), Towny.class);
+		loader.setConvertLegacyCodes(true);
 		loader.updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
 
 		// Load built-in translations into memory.
@@ -98,7 +98,7 @@ public final class Translation {
 				return key;
 			}
 		}
-		return Colors.translateColorCodes(data);
+		return data;
 	}
 
 	/**
@@ -127,7 +127,7 @@ public final class Translation {
 			return of(key);
 		}
 
-		return Colors.translateColorCodes(data);
+		return data;
 	}
 	
 	/**

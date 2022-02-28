@@ -6,6 +6,8 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Utility class for common interactions with adventure components.
  */
@@ -32,5 +34,22 @@ public final class TownyComponents {
 	
 	public static String stripTags(@NotNull Component input) {
 		return MiniMessage.miniMessage().stripTags(unMiniMessage(input));
+	}
+	
+	public static Component prependMiniMessage(@NotNull Component component, @NotNull String prepend) {
+		return miniMessage(prepend + unMiniMessage(component));
+	}
+	
+	public static Component joinList(@NotNull List<@NotNull Component> components, @NotNull Component separator) {
+		Component full = Component.empty();
+		
+		for (int i = 0; i < components.size(); i++) {
+			full = full.append(components.get(i));
+			
+			if (i != components.size() - 1)
+				full = full.append(separator);
+		}
+
+		return full;
 	}
 }
