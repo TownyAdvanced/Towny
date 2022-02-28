@@ -542,7 +542,7 @@ public class TownyMessaging {
 	 * PAGINATED LIST METHODS
 	 */
 	
-	public static void sendTownList(CommandSender sender, List<TextComponent> towns, ComparatorType compType, int page, int total) {
+	public static void sendTownList(CommandSender sender, List<Component> towns, ComparatorType compType, int page, int total) {
 		int iMax = Math.min(page * 10, towns.size());
 
 		Component[] townsFormatted;
@@ -596,7 +596,7 @@ public class TownyMessaging {
 		return backButton.append(pageText).append(forwardButton);
 	}
 
-	public static void sendNationList(CommandSender sender, List<TextComponent> nations, ComparatorType compType, int page, int total) {
+	public static void sendNationList(CommandSender sender, List<Component> nations, ComparatorType compType, int page, int total) {
 		int iMax = Math.min(page * 10, nations.size());
 
 		Component[] nationsFormatted;
@@ -916,9 +916,7 @@ public class TownyMessaging {
 	 */
 	
 	public static void sendStatusScreen(CommandSender sender, StatusScreen screen) {
-		Audience audience = Towny.getAdventure().sender(sender);
-		for (Component string : screen.getFormattedStatusScreen())
-			audience.sendMessage(string);
+		Towny.getAdventure().sender(sender).sendMessage(screen.getFormattedStatusScreen());
 	}
 
 	/*

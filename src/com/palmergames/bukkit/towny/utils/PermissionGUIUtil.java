@@ -39,12 +39,12 @@ public class PermissionGUIUtil {
 	private static final int[] woolSlots = new int[]{21, 23, 30, 32};
 	
 	public enum SetPermissionType {
-		UNSET(Colors.Gray, Material.GRAY_WOOL),
-		SET(Colors.Green, Material.LIME_WOOL),
-		NEGATED(Colors.Red, Material.RED_WOOL);
+		UNSET(ChatColor.DARK_GRAY.toString(), Material.GRAY_WOOL),
+		SET(ChatColor.DARK_GREEN.toString(), Material.LIME_WOOL),
+		NEGATED(ChatColor.DARK_RED.toString(), Material.RED_WOOL);
 		
-		private String color;
-		private Material woolColour;
+		private final String color;
+		private final Material woolColour;
 		
 		SetPermissionType(String color, Material woolColour) {
 			this.color = color;
@@ -80,11 +80,11 @@ public class PermissionGUIUtil {
 			else
 				meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.getKey().getUUID()));
 			
-			meta.setDisplayName(Colors.Gold + entry.getKey().getName());
+			meta.setDisplayName(ChatColor.GOLD + entry.getKey().getName());
 
 			List<String> lore = new ArrayList<>();
-			lore.add(entry.getValue().getPermissionTypes()[ActionType.BUILD.getIndex()].getColor() + "Build" + Colors.Gray + "  | " + entry.getValue().getPermissionTypes()[ActionType.DESTROY.getIndex()].getColor() + "Destroy");
-			lore.add(entry.getValue().getPermissionTypes()[ActionType.SWITCH.getIndex()].getColor() + "Switch" + Colors.Gray + " | " + entry.getValue().getPermissionTypes()[ActionType.ITEM_USE.getIndex()].getColor() + "Item");
+			lore.add(entry.getValue().getPermissionTypes()[ActionType.BUILD.getIndex()].getColor() + "Build" + ChatColor.GRAY + "  | " + entry.getValue().getPermissionTypes()[ActionType.DESTROY.getIndex()].getColor() + "Destroy");
+			lore.add(entry.getValue().getPermissionTypes()[ActionType.SWITCH.getIndex()].getColor() + "Switch" + ChatColor.GRAY + " | " + entry.getValue().getPermissionTypes()[ActionType.ITEM_USE.getIndex()].getColor() + "Item");
 
 			if (canEdit) {
 				if (entry.getValue().getLastChangedAt() > 0 && !entry.getValue().getLastChangedBy().equals(""))
@@ -107,7 +107,7 @@ public class PermissionGUIUtil {
 		if (canEdit) {
 			ItemStack addButton = new ItemStack(Material.NAME_TAG);
 			ItemMeta addButtonMeta = addButton.getItemMeta();
-			addButtonMeta.setDisplayName(Colors.Gold + "Add Player");
+			addButtonMeta.setDisplayName(ChatColor.GOLD + "Add Player");
 			addButton.setItemMeta(addButtonMeta);
 
 			page.setItem(46, addButton);
@@ -142,16 +142,16 @@ public class PermissionGUIUtil {
 		
 		ItemStack saveButton = new ItemStack(Material.LIME_WOOL);
 		ItemMeta saveButtonMeta = saveButton.getItemMeta();
-		saveButtonMeta.setDisplayName(Colors.LightGreen + ChatColor.BOLD + "Save");
+		saveButtonMeta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Save");
 		saveButton.setItemMeta(saveButtonMeta);
 		
 		ItemStack backButton = new ItemStack(Material.RED_WOOL);
 		ItemMeta backButtonMeta = saveButton.getItemMeta();
-		backButtonMeta.setDisplayName(Colors.Red + ChatColor.BOLD + "Back");
+		backButtonMeta.setDisplayName(ChatColor.DARK_RED.toString() + ChatColor.BOLD + "Back");
 		backButton.setItemMeta(backButtonMeta);
 		
 		ItemStack deleteButton = new ItemStack(Material.RED_WOOL);
-		backButtonMeta.setDisplayName(Colors.Red + ChatColor.BOLD + "Delete");
+		backButtonMeta.setDisplayName(ChatColor.DARK_RED.toString() + ChatColor.BOLD + "Delete");
 		deleteButton.setItemMeta(backButtonMeta);
 		
 		inventory.setItem(48, saveButton);
