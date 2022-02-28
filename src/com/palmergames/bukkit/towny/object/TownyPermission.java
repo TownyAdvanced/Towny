@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
+import net.kyori.adventure.text.Component;
+
 import java.util.Arrays;
 
 public class TownyPermission {
@@ -276,6 +279,10 @@ public class TownyPermission {
 	
 	public String getColourString() {
 		return getColoredPermLevel(ActionType.BUILD) + " " + getColoredPermLevel(ActionType.DESTROY) + " " + getColoredPermLevel(ActionType.SWITCH) + " " + getColoredPermLevel(ActionType.ITEM_USE);
+	}
+	
+	public Component getColourComponent() {
+		return TownyComponents.miniMessage(getColourString());
 	}
 
 	public void loadDefault(TownBlockOwner owner) {
