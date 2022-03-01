@@ -234,10 +234,8 @@ public final class FileMgmt {
 	public static void tar(File destination, File... sources) throws IOException {
 		try {
 			readLock.lock();
-			try (TarArchiveOutputStream archive =
-					 new TarArchiveOutputStream(
-						 new GzipCompressorOutputStream(
-							 new FileOutputStream(destination)))) {
+			try (TarArchiveOutputStream archive = new TarArchiveOutputStream(new GzipCompressorOutputStream(new FileOutputStream(destination)))) {
+				archive.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
 				for (File source : sources) {
 					Files.walk(source.toPath()).forEach((path -> {
 						File file = path.toFile();
