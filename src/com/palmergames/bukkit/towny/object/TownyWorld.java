@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -8,6 +9,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.util.MathUtil;
 
+import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -443,10 +445,25 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementWildRevertEntities(List<String> entities) {
-		
 		entityExplosionProtection = EnumSet.noneOf(EntityType.class);
+		
+		// If entities isn't empty and the first string isn't entirely uppercase, convert the legacy names to the entitytype enum names.
+		if (entities.size() > 0 && !StringMgmt.isAllUpperCase(entities.get(0)))
+			convertLegacyEntityNames(entities);
+		
 		entityExplosionProtection.addAll(TownySettings.toEntityTypeEnumSet(entities));
-
+	}
+	
+	private void convertLegacyEntityNames(List<String> entities) {
+		for (int i = 0; i < entities.size(); i++) {
+			String entity = entities.get(i);
+			for (EntityType type : EntityType.values()) {
+				if (type.getEntityClass() != null && type.getEntityClass().getSimpleName().equalsIgnoreCase(entity)) {
+					entities.set(i, type.name());
+					break;
+				}					
+			}
+		}
 	}
 
 	public EnumSet<EntityType> getPlotManagementWildRevertEntities() {

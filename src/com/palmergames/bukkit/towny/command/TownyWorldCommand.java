@@ -419,12 +419,13 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("wildregen")) {
 
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart <world>");
+					TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildregen Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart");
 				else {
+					
+					String[] entities = String.join(",", StringMgmt.remFirstArg(split)).split(",");
+					List<String> entityList = new ArrayList<>(Arrays.asList(entities));
 
-					List<String> entities = new ArrayList<>(Arrays.asList(StringMgmt.remFirstArg(split)));
-
-					globalWorld.setPlotManagementWildRevertEntities(entities);
+					globalWorld.setPlotManagementWildRevertEntities(entityList);
 
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_regen", globalWorld.getName(), globalWorld.getPlotManagementWildRevertEntities()));
 				}
