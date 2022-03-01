@@ -232,4 +232,15 @@ public class StringMgmt {
 		}
 		return true;
 	}
+	
+	public static boolean isAllUpperCase(@NotNull Collection<String> collection) {
+		if (collection.isEmpty())
+			return false;
+		
+		for (String string : collection)
+			if (!isAllUpperCase(string))
+				return false;
+		
+		return true;
+	}
 }

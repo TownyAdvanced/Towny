@@ -448,7 +448,7 @@ public class TownyWorld extends TownyObject {
 		entityExplosionProtection = EnumSet.noneOf(EntityType.class);
 		
 		// If entities isn't empty and the first string isn't entirely uppercase, convert the legacy names to the entitytype enum names.
-		if (entities.size() > 0 && !StringMgmt.isAllUpperCase(entities.get(0)))
+		if (entities.size() > 0 && !StringMgmt.isAllUpperCase(entities))
 			convertLegacyEntityNames(entities);
 		
 		entityExplosionProtection.addAll(TownySettings.toEntityTypeEnumSet(entities));
