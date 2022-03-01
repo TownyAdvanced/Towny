@@ -191,7 +191,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 							town = resident.getTownOrNull();
 					}
 
-					for (String line : getTownyPrices(town, Translation.getLocale(player)))
+					for (String line : getTownyPrices(town, Translation.getLocale(sender)))
 						TownyMessaging.sendMessage(sender, line);
 					break;
 				}
@@ -257,15 +257,15 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-					TownyMessaging.sendMsg(player, Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime())));
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime())));
 					break;
 				}
 				case "universe": {
 					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-					for (String line : getUniverseStats(Translation.getLocale(player)))
-						TownyMessaging.sendMessage(player, line);
+					for (String line : getUniverseStats(Translation.getLocale(sender)))
+						TownyMessaging.sendMessage(sender, line);
 					break;
 				}
 				case "version":
@@ -274,12 +274,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
 					if (TownyUpdateChecker.shouldShowNotification()) {
-						TownyMessaging.sendMsg(player, Translatable.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion()));
+						TownyMessaging.sendMsg(sender, Translatable.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion()));
 					} else {
-						TownyMessaging.sendMsg(player, Translatable.of("msg_towny_version", plugin.getVersion()));
+						TownyMessaging.sendMsg(sender, Translatable.of("msg_towny_version", plugin.getVersion()));
 
 						if (TownyUpdateChecker.hasCheckedSuccessfully())
-							TownyMessaging.sendMsg(player, Translatable.of("msg_up_to_date"));
+							TownyMessaging.sendMsg(sender, Translatable.of("msg_up_to_date"));
 					}
 					break;
 				}

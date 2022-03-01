@@ -7324,3 +7324,4 @@ v0.92.0.11:
 0.98.0.5:
   - Fix configs settings getting cramped together.
   - Fix /towny allowedblocks command.
+  - Fix /towny commands (universe, time, version) now working via console. 
