@@ -499,7 +499,7 @@ public class TownyFormatter {
 			addNationMoneyComponentsToScreen(nation, translator, screen);
 
 		if (nation.isPublic()) {
-			Component homeComponent = Component.text(translator.of("status_home_element", (nation.hasSpawn() ? Coord.parseCoord(nation.getSpawnOrNull()).toString() : translator.of("status_no_town"))));
+			Component homeComponent = TownyComponents.miniMessage(translator.of("status_home_element", (nation.hasSpawn() ? Coord.parseCoord(nation.getSpawnOrNull()).toString() : translator.of("status_no_town"))));
 			
 			String webUrl = formatWebUrl(nation);
 			if (!webUrl.isEmpty())
@@ -862,10 +862,10 @@ public class TownyFormatter {
 		screen.addComponentOf("moneynewline", Component.newline());
 		screen.addComponentOf("bankString", colourKeyValue(translator.of("status_bank"), nation.getAccount().getHoldingFormattedBalance()));
 		if (TownySettings.getNationUpkeepCost(nation) > 0)
-			screen.addComponentOf("nationupkeep", translator.of("status_splitter") + colourKey(translator.of("status_bank_town2") + " " + colourKeyImportant(formatMoney(TownySettings.getNationUpkeepCost(nation)))));
+			screen.addComponentOf("nationupkeep", TownyComponents.miniMessage(translator.comp("status_splitter").append(colourKey(translator.of("status_bank_town2"))).append(Component.space()).append(colourKeyImportant(formatMoney(TownySettings.getNationUpkeepCost(nation))))));
 		if (nation.isNeutral() && TownySettings.getNationNeutralityCost() > 0)
-			screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(TownySettings.getNationNeutralityCost()))));
-		screen.addComponentOf("nationtax", translator.of("status_splitter") + colourKey(translator.of("status_nation_tax")) + " " + colourKeyImportant(formatMoney(nation.getTaxes())));
+			screen.addComponentOf("neutralityCost", TownyComponents.miniMessage(translator.comp("status_splitter").append(colourKey(translator.of("status_neutrality_cost"))).append(Component.space()).append(colourKeyImportant(formatMoney(TownySettings.getNationNeutralityCost())))));
+		screen.addComponentOf("nationtax", TownyComponents.miniMessage(translator.comp("status_splitter").append(colourKey(translator.of("status_nation_tax"))).append(Component.space()).append(colourKeyImportant(formatMoney(nation.getTaxes())))));
 	}
 
 	private static String formatMoney(double money) {

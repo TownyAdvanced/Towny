@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component;
 
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
+import net.kyori.adventure.text.format.Style;
 import solar.squares.pixelwidth.PixelWidthSource;
 
 /**
@@ -22,12 +23,12 @@ import solar.squares.pixelwidth.PixelWidthSource;
 
 public class ChatTools {
 	final static PixelWidthSource source = PixelWidthSource.pixelWidth();
-	final static int MAX_FONT_WIDTH = 321; // Two pixels less than the actual max width.
+	final static int MAX_FONT_WIDTH = 320;
 	final static int SPACE_WIDTH = 4;
-	final static int UNDERSCORE_WIDTH = 6;
-	final static int WIDGET_WIDTH = 22;
+	// Padding used for the main title formatting
 	final static String WIDGET = ".oOo.";
-	final static int SUBWIDGET_WIDTH = 22;
+	
+	// Padding used for subtitle formatting
 	final static String SUBWIDGET = " .]|[. ";
 	
 	public static String listArr(String[] args, String prefix) {
@@ -81,41 +82,34 @@ public class ChatTools {
 		return formatTitle(TownyComponents.miniMessage(title));
 	}
 
-	// TODO: can probably be done better
 	public static Component formatTitle(Component title) {
 		title = TownyComponents.miniMessage(".[ " + Translation.of("status_title_secondary_colour")
-					+ TownyComponents.unMiniMessage(title)
-					+ Translation.of("status_title_primary_colour") + " ]."
-				);
-
-		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
-		float remainder = MAX_FONT_WIDTH - (WIDGET_WIDTH * 2) - source.width(title) - 2;
-		if (remainder < 1)
-			return TownyComponents.prependMiniMessage(title, Translation.of("status_title_primary_colour"));
-		if (remainder < 14)
-			return TownyComponents.miniMessage(Translation.of("status_title_primary_colour") + WIDGET + TownyComponents.unMiniMessage(title) + WIDGET);
-
-		int times = (int) remainder / (UNDERSCORE_WIDTH * 2);
-		return TownyComponents.miniMessage(Translation.of("status_title_primary_colour") + WIDGET + repeatChar(times, "_") + TownyComponents.unMiniMessage(title) + repeatChar(times, "_") + WIDGET);
+			+ TownyComponents.unMiniMessage(title)
+			+ Translation.of("status_title_primary_colour") + " ]."
+		);
+		
+		return centerComponent(title, WIDGET, '_', source.width("_", Style.empty()));
 	}
 
 	public static Component formatSubTitle(Component subTitle) {
-		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
-		float remainder = MAX_FONT_WIDTH - (SUBWIDGET_WIDTH * 2) - source.width(subTitle) - 2;
-		if (remainder < 1)
-			return TownyComponents.prependMiniMessage(subTitle, Translation.of("status_title_primary_colour"));
-		if (remainder < 10)
-			return TownyComponents.miniMessage(Translation.of("status_title_primary_colour") + SUBWIDGET + TownyComponents.unMiniMessage(subTitle) + Translation.of("status_title_primary_colour") + SUBWIDGET);
-
-		int times = (int) remainder / (SPACE_WIDTH * 2);
-		return TownyComponents.miniMessage(Translation.of("status_title_primary_colour") + SUBWIDGET + repeatChar(times, " ") + TownyComponents.unMiniMessage(subTitle) + repeatChar(times, " ") + Translation.of("status_title_primary_colour")  + SUBWIDGET);
+		return centerComponent(subTitle, SUBWIDGET, ' ', SPACE_WIDTH);
 	}
 	
-	private static String repeatChar(int num, String character) {
-		String output = "";
-		for (int i = 0; i < num; i++)
-			output += character;
-		return output;
+	public static Component centerComponent(Component title, String sidePadding, char paddingChar, float paddingWidth) {
+		float sidePaddingWidth = source.width(Component.text(sidePadding));
+		float widthToPad = (MAX_FONT_WIDTH - (sidePaddingWidth * 2) - source.width(title)) / 2;
+
+		if (paddingWidth > widthToPad)
+			return TownyComponents.prependMiniMessage(title, Translation.of("status_title_primary_colour"));
+
+		StringBuilder paddingBuilder = new StringBuilder();
+		for (float i = paddingWidth; i < widthToPad; i += paddingWidth)
+			paddingBuilder.append(paddingChar);
+
+		String padding = paddingBuilder.toString();
+		String primaryColour = Translation.of("status_title_primary_colour");
+		
+		return TownyComponents.miniMessage(primaryColour + sidePadding  + padding + TownyComponents.unMiniMessage(title) + primaryColour + padding + sidePadding);
 	}
 	
 	public static Component formatCommand(String command, String subCommand, String help) {
