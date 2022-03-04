@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Useful functions related to strings, or arrays of them.
@@ -219,5 +220,27 @@ public class StringMgmt {
 			return false;
 		else
 			throw new Exception(Translation.of("msg_err_invalid_input", " on/off."));
+	}
+	
+	public static boolean isAllUpperCase(@NotNull String string) {
+		if (string.isEmpty())
+			return false;
+
+		for (int i = 0; i < string.length(); i++) {
+			if (!Character.isUpperCase(string.charAt(i)))
+				return false;
+		}
+		return true;
+	}
+	
+	public static boolean isAllUpperCase(@NotNull Collection<String> collection) {
+		if (collection.isEmpty())
+			return false;
+		
+		for (String string : collection)
+			if (!isAllUpperCase(string))
+				return false;
+		
+		return true;
 	}
 }
