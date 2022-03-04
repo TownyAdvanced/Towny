@@ -104,16 +104,16 @@ public class ComparatorCaches {
 				slug = Component.text("(" + town.getResidents().size() + ")", NamedTextColor.AQUA);
 				break;
 			}
-			townName = townName.append(Component.text(" - " + slug, NamedTextColor.DARK_GRAY));
+			townName = townName.append(Component.text(" - ", NamedTextColor.DARK_GRAY).append(slug));
 			
 			if (town.isOpen())
-				townName = townName.append(Component.text(" " + Translation.of("status_title_open"), NamedTextColor.AQUA));
+				townName = townName.append(TownyComponents.miniMessage(" " + Translation.of("status_title_open")));
 			
 			String spawnCost = "Free";
 			if (TownyEconomyHandler.isActive())
-				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+				spawnCost = Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 
-			townName = townName.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_click_spawn", town) + "\n" + spawnCost).color(NamedTextColor.GOLD)));
+			townName = townName.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(Translation.of("msg_click_spawn", town) + "\n" + spawnCost)));
 			output.add(townName);
 		}
 		return output;
@@ -134,49 +134,49 @@ public class ComparatorCaches {
 			Component nationName = Component.text(StringMgmt.remUnderscore(nation.getName()), NamedTextColor.AQUA)
 					.clickEvent(ClickEvent.runCommand("/towny:nation spawn " + nation + " -ignore"));
 
-			String slug = "";
+			Component slug = Component.empty();
 			switch (compType) {
 			case BALANCE:
-				slug = TownyEconomyHandler.getFormattedBalance(nation.getAccount().getCachedBalance());
+				slug = Component.text("(" + TownyEconomyHandler.getFormattedBalance(nation.getAccount().getCachedBalance()) + ")", NamedTextColor.AQUA);
 				break;
 			case TOWNBLOCKS:
 				int rawNumTownsBlocks = nation.getTownBlocks().size();
 				NationListDisplayedNumTownBlocksCalculationEvent tbEvent = new NationListDisplayedNumTownBlocksCalculationEvent(nation, rawNumTownsBlocks);
 				Bukkit.getPluginManager().callEvent(tbEvent);
-				slug = tbEvent.getDisplayedValue() + "";
+				slug = Component.text("(" + tbEvent.getDisplayedValue() + ")", NamedTextColor.AQUA);
 				break;
 			case TOWNS:
 				int rawNumTowns = nation.getTowns().size();
 				NationListDisplayedNumTownsCalculationEvent tEvent = new NationListDisplayedNumTownsCalculationEvent(nation, rawNumTowns);
 				Bukkit.getPluginManager().callEvent(tEvent);
-				slug = tEvent.getDisplayedValue() + "";
+				slug = Component.text("(" + tEvent.getDisplayedValue() + ")", NamedTextColor.AQUA);
 				break;
 			case ONLINE:
 				int rawNumOnlinePlayers = TownyAPI.getInstance().getOnlinePlayersInNation(nation).size();
 				NationListDisplayedNumOnlinePlayersCalculationEvent opEvent = new NationListDisplayedNumOnlinePlayersCalculationEvent(nation, rawNumOnlinePlayers);
 				Bukkit.getPluginManager().callEvent(opEvent);
-				slug = opEvent.getDisplayedValue() + "";
+				slug = Component.text("(" + opEvent.getDisplayedValue() + ")", NamedTextColor.AQUA);
 				break;
 			case FOUNDED:
 				if (nation.getRegistered() != 0)
-					slug = TownyFormatter.registeredFormat.format(nation.getRegistered());
+					slug = Component.text("(" + TownyFormatter.registeredFormat.format(nation.getRegistered()) + ")", NamedTextColor.AQUA);
 				break;
 			default:
 				int rawNumResidents = nation.getResidents().size();
 				NationListDisplayedNumResidentsCalculationEvent rEvent = new NationListDisplayedNumResidentsCalculationEvent(nation, rawNumResidents);
 				Bukkit.getPluginManager().callEvent(rEvent);
-				slug = rEvent.getDisplayedValue() + "";
+				slug = Component.text("(" + rEvent.getDisplayedValue() + ")", NamedTextColor.AQUA);
 				break;
 			}
 			
-			nationName = nationName.append(Component.text(" - ", NamedTextColor.DARK_GRAY)).append(Component.text("(" + slug + ")", NamedTextColor.AQUA));
+			nationName = nationName.append(Component.text(" - ", NamedTextColor.DARK_GRAY)).append(slug);
 
 			if (nation.isOpen())
 				nationName = nationName.append(TownyComponents.miniMessage(" " + Translation.of("status_title_open")));
 
 			String spawnCost = "Free";
 			if (TownyEconomyHandler.isActive())
-				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
+				spawnCost = Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
 			
 			nationName = nationName.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(Translation.of("msg_click_spawn", nation) + "\n" + spawnCost)));
 			output.add(nationName);
