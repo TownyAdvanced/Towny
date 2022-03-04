@@ -82,20 +82,22 @@ public class StatusScreen {
 		
 		// Cycle over all components in the status screen.
 		for (Component nextComp : components) {
-			if (nextComp.equals(Component.newline()) && nextComp.children().isEmpty()) {
+			if (nextComp.equals(Component.newline())) {
 				// We're dealing with a component which is just a new line, make a new line.
-				screen = screen.append(currentLine).append(Component.newline());
+				if (!currentLine.equals(Component.empty()))
+					screen = screen.append(currentLine);
+				
+				screen = screen.append(Component.newline());
 				currentLine = Component.empty();
 				continue;
 			}
-			if (currentLine.equals(Component.empty()) && nextComp.children().isEmpty()) {
+			if (currentLine.equals(Component.empty())) {
 				// We're dealing with a new line and the nextComp has no children to process,
 				// nextComp becomes the start of a line.
 				currentLine = nextComp;
 				continue;
 			}
 			// We're dealing with a component made of children, probably the ExtraFields or AdditionalLines.
-			//TODO: Test if we can omit any other nextComp.children() stuff
 			/*
 			if (!nextComp.children().isEmpty()) {
 				// nextComp starts with a new line component with children to follow, start a new line.

@@ -3,6 +3,7 @@ package com.palmergames.bukkit.util;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownySettings;
@@ -106,27 +107,27 @@ public class Colors {
 	}
 
 	/**
-	 * @param legacyColorCode The color code.
+	 * @param colorCode A legacy or MiniMessage color code.
 	 * @return the {@link NamedTextColor} for the entered color string, or null if it is invalid.
 	 */
-	public static @Nullable NamedTextColor toNamedTextColor(String legacyColorCode) {
-		return switch (legacyColorCode) {
-			case "\u00A70" -> NamedTextColor.BLACK;
-			case "\u00A71" -> NamedTextColor.DARK_BLUE;
-			case "\u00A72" -> NamedTextColor.DARK_GREEN;
-			case "\u00A73" -> NamedTextColor.DARK_AQUA;
-			case "\u00A74" -> NamedTextColor.DARK_RED;
-			case "\u00A75" -> NamedTextColor.DARK_PURPLE;
-			case "\u00A76" -> NamedTextColor.GOLD;
-			case "\u00A77" -> NamedTextColor.GRAY;
-			case "\u00A78" -> NamedTextColor.DARK_GRAY;
-			case "\u00A79" -> NamedTextColor.BLUE;
-			case "\u00A7a" -> NamedTextColor.GREEN;
-			case "\u00A7b" -> NamedTextColor.AQUA;
-			case "\u00A7c" -> NamedTextColor.RED;
-			case "\u00A7d" -> NamedTextColor.LIGHT_PURPLE;
-			case "\u00A7e" -> NamedTextColor.YELLOW;
-			case "\u00A7f" -> NamedTextColor.WHITE;
+	public static @Nullable NamedTextColor toNamedTextColor(String colorCode) {
+		return switch (colorCode) {
+			case "\u00A70", BLACK -> NamedTextColor.BLACK;
+			case "\u00A71", DARK_BLUE -> NamedTextColor.DARK_BLUE;
+			case "\u00A72", DARK_GREEN -> NamedTextColor.DARK_GREEN;
+			case "\u00A73", DARK_AQUA -> NamedTextColor.DARK_AQUA;
+			case "\u00A74", DARK_RED -> NamedTextColor.DARK_RED;
+			case "\u00A75", DARK_PURPLE -> NamedTextColor.DARK_PURPLE;
+			case "\u00A76", GOLD -> NamedTextColor.GOLD;
+			case "\u00A77", GRAY -> NamedTextColor.GRAY;
+			case "\u00A78", DARK_GRAY -> NamedTextColor.DARK_GRAY;
+			case "\u00A79", BLUE -> NamedTextColor.BLUE;
+			case "\u00A7a", GREEN -> NamedTextColor.GREEN;
+			case "\u00A7b", AQUA -> NamedTextColor.AQUA;
+			case "\u00A7c", RED -> NamedTextColor.RED;
+			case "\u00A7d", LIGHT_PURPLE -> NamedTextColor.LIGHT_PURPLE;
+			case "\u00A7e", YELLOW -> NamedTextColor.YELLOW;
+			case "\u00A7f", WHITE -> NamedTextColor.WHITE;
 			default -> null;
 		};
 	}
