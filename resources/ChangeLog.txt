@@ -7326,4 +7326,5 @@ v0.92.0.11:
   - Fix /towny allowedblocks command.
   - Fix /towny commands (universe, time, version) now working via console. 
   - Fix not being able to replace null mayors with /ta set mayor, courtesy of Warriorrrr with PR #5785.
-  - Fix long file names causing exceptions when backing up, courtesy of Warriorrrr with #5783.
+  - Fix long file names causing exceptions when backing up, courtesy of Warriorrrr with PR #5783.
+  - Convert legacy entity names to the new format, courtesy of Warriorrrr with PR #5786.
