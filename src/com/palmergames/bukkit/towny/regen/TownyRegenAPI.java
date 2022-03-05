@@ -716,10 +716,20 @@ public class TownyRegenAPI {
 	 * Cancel all regenerating tasks and clear all queues.
 	 */
 	public static void cancelProtectionRegenTasks() {
+		boolean replaceProtections = true;
+
+		try {
+			if (Class.forName("org.spigotmc.WatchdogThread").isInstance(Thread.currentThread())) {
+				Towny.getPlugin().getLogger().severe("Detected a watchdog crash, ongoing protection revert tasks will not be finished.");
+				replaceProtections = false;
+			}
+		} catch (Throwable ignored) {}
 
 		for (ProtectionRegenTask task : protectionRegenTasks.values()) {
 			BukkitTools.getServer().getScheduler().cancelTask(task.getTaskId());
-			task.replaceProtections();
+
+			if (replaceProtections)
+				task.replaceProtections();
 		}
 		protectionRegenTasks.clear();
 		protectionPlaceholders.clear();
