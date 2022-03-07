@@ -11,7 +11,12 @@ import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 
 import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -19,10 +24,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
@@ -30,6 +37,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.util.TimeMgmt;
 
 public class ResidentUtil {
 	
@@ -267,5 +275,49 @@ public class ResidentUtil {
 		
 		if (!toRemove.isEmpty())
 			toRemove.stream().forEach(res -> res.removeTown());
+	}
+	
+
+	/**
+	 * Method which will teleport an outlaw out of a town, if the player does not
+	 * have the bypass node and the outlaw teleport feature is active.
+	 * 
+	 * @param outlaw   Resident which is outlawed.
+	 * @param town     Town where the resident is outlawed.
+	 * @param location Location which the player is at.
+	 */
+	public static void outlawEnteredTown(Resident outlaw, Town town, Location location) {
+		// Throw a cancellable event so other plugins can prevent the outlaw being moved (in siegewar for instance.)
+		OutlawTeleportEvent outlawEvent = new OutlawTeleportEvent(outlaw, town, location);
+		Bukkit.getPluginManager().callEvent(outlawEvent);
+		if (outlawEvent.isCancelled())
+			return;
+		
+		boolean hasBypassNode = TownyUniverse.getInstance().getPermissionSource().testPermission(outlaw.getPlayer(), PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode());
+		
+		// Admins are omitted so towns won't be informed an admin might be spying on them.
+		if (TownySettings.doTownsGetWarnedOnOutlaw() && !hasBypassNode && !CooldownTimerTask.hasCooldown(outlaw.getName(), CooldownType.OUTLAW_WARNING)) {
+			if (TownySettings.getOutlawWarningMessageCooldown() > 0)
+				CooldownTimerTask.addCooldownTimer(outlaw.getName(), CooldownType.OUTLAW_WARNING);
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_outlaw_town_notify", outlaw.getFormattedName()));
+		}
+		// If outlaws can enter towns OR the outlaw has towny.admin.outlaw.teleport_bypass perm, player is warned but not teleported.
+		if (TownySettings.canOutlawsEnterTowns() || hasBypassNode) {
+			TownyMessaging.sendMsg(outlaw, Translatable.of("msg_you_are_an_outlaw_in_this_town", town));
+		} else {
+			if (TownySettings.getOutlawTeleportWarmup() > 0) {
+				TownyMessaging.sendMsg(outlaw, Translatable.of("msg_outlaw_kick_cooldown", town, TimeMgmt.formatCountdownTime(TownySettings.getOutlawTeleportWarmup())));
+			}
+			
+			Bukkit.getScheduler().runTaskLaterAsynchronously(Towny.getPlugin(), () -> {
+				if (TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) != null &&
+					TownyAPI.getInstance().getTown(outlaw.getPlayer().getLocation()) == town && 
+					town.hasOutlaw(outlaw.getPlayer().getName()))
+				{
+					SpawnUtil.outlawTeleport(town, outlaw);
+				}
+			}, TownySettings.getOutlawTeleportWarmup() * 20L);
+		}
+		
 	}
 }

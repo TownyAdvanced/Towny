@@ -7330,3 +7330,5 @@ v0.92.0.11:
   - Convert legacy entity names to the new format, courtesy of Warriorrrr with PR #5786.
 0.98.0.6:
   - Add workaround for watchdog crashes causing problems, courtesy of Warriorrrr with PR #5792.
+  - Fix outlaws being able to log out before they're teleported away.
+    - Closes #5753.

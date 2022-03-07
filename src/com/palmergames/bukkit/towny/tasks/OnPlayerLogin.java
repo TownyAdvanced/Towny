@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.tasks;
 
 import com.earth2me.essentials.Essentials;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -15,6 +16,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import net.kyori.adventure.audience.Audience;
@@ -159,6 +161,11 @@ public class OnPlayerLogin implements Runnable {
 				if (town.isRuined())
 					TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownySettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
 			}
+			
+			// Check if this is a player spawning into a Town in which they are outlawed.
+			Town town = TownyAPI.getInstance().getTown(player.getLocation());
+			if (town != null && town.hasOutlaw(resident))
+				ResidentUtil.outlawEnteredTown(resident, town, player.getLocation());
 
 			//Schedule to setup default modes when the player has finished loading
 			if (BukkitTools.scheduleSyncDelayedTask(new SetDefaultModes(player.getName(), false), 1) == -1)
