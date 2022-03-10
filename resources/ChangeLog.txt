@@ -7332,3 +7332,5 @@ v0.92.0.11:
   - Add workaround for watchdog crashes causing problems, courtesy of Warriorrrr with PR #5792.
   - Fix outlaws being able to log out before they're teleported away.
     - Closes #5753.
+  - Fix /ta unclaim not handling an empty selection.
+    - Closes #5798.

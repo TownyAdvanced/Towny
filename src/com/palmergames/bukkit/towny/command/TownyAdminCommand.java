@@ -1095,6 +1095,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				selection = AreaSelectionUtil.selectWorldCoordArea(null, new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)), split);
 				selection = AreaSelectionUtil.filterOutWildernessBlocks(selection);
 
+				if (selection.isEmpty())
+					throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
+
 				new TownClaim(plugin, player, null, selection, false, false, true).start();
 
 			} catch (TownyException x) {
