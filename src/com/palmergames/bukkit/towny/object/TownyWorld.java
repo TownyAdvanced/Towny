@@ -541,8 +541,10 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setUnclaimedZoneIgnore(List<String> unclaimedZoneIgnoreIds) {
-
-		this.unclaimedZoneIgnoreBlockMaterials = TownySettings.toMaterialEnumSet(unclaimedZoneIgnoreIds);
+		if (unclaimedZoneIgnoreIds == null)
+			this.unclaimedZoneIgnoreBlockMaterials = TownySettings.getUnclaimedZoneIgnoreMaterials();
+		else
+			this.unclaimedZoneIgnoreBlockMaterials = TownySettings.toMaterialEnumSet(unclaimedZoneIgnoreIds);
 	}
 	
 	public EnumSet<Material> getUnclaimedZoneIgnoreMaterials() {

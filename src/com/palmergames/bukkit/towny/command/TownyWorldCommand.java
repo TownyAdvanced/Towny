@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -385,11 +386,11 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_usedefault", globalWorld.getName()));
 				} else
 					try {
-						List<String> perms = Arrays.asList(StringMgmt.remFirstArg(split));
+						List<String> perms = Arrays.asList(String.join(",", StringMgmt.remFirstArg(split)).toLowerCase(Locale.ROOT).split(","));
 						globalWorld.setUnclaimedZoneBuild(perms.contains("build"));
 						globalWorld.setUnclaimedZoneDestroy(perms.contains("destroy"));
 						globalWorld.setUnclaimedZoneSwitch(perms.contains("switch"));
-						globalWorld.setUnclaimedZoneItemUse(perms.contains("itemuse"));
+						globalWorld.setUnclaimedZoneItemUse(perms.contains("itemuse") || perms.contains("item_use"));
 
 						plugin.resetCache();
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_perms", globalWorld.getName(), perms.toString()));
