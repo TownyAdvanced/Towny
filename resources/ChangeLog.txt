@@ -7334,3 +7334,4 @@ v0.92.0.11:
     - Closes #5753.
   - Fix /ta unclaim not handling an empty selection.
     - Closes #5798.
+  - Fix /tw set usedefault causing an NPE, courtesy of Warriorrrr with PR #5800.
