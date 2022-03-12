@@ -867,6 +867,9 @@ public class TownyPlayerListener implements Listener {
 			return;
 		
 		Town town = event.getEnteredtown();
+
+		if (outlaw.isJailed() && outlaw.getJailTown().equals(town))
+			return;
 		
 		if (town.hasOutlaw(outlaw))
 			ResidentUtil.outlawEnteredTown(outlaw, town, event.getPlayer().getLocation());
