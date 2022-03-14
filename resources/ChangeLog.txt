@@ -7336,3 +7336,5 @@ v0.92.0.11:
     - Closes #5798.
   - Fix /tw set usedefault causing an NPE, courtesy of Warriorrrr with PR #5800.
   - Fix outlaw teleport feature conflicting with jailing of outlaws.
+  - Protect rooted_dirt being hoe-able.
+    - Closes #5805.

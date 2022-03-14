@@ -411,6 +411,16 @@ public class TownyPlayerListener implements Listener {
 			}
 			
 			/*
+			 * Catches hoes taking dirt from Rooted Dirt blocks.
+			 */
+			if (block.getType().name().equals("ROOTED_DIRT") &&
+				event.getItem() != null && 
+				event.getItem().getType().name().toLowerCase().contains("_hoe")) {
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, block));
+				return;
+			}
+			
+			/*
 			 * Catches beds blowing up and allows us to track their explosions.
 			 */
 			if (Tag.BEDS.isTagged(block.getType()) && player.getWorld().getEnvironment().equals(Environment.NETHER)) {
