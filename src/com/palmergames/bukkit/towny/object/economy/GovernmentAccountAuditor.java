@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.util.Colors;
-import org.bukkit.ChatColor;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.object.TransactionType;
@@ -33,11 +32,11 @@ public class GovernmentAccountAuditor implements AccountAuditor {
 			history.add(Colors.translateColorCodes(TownySettings.getBankHistoryBookFormat()
 				.replace("{time}", transaction.getTime())
 				.replace("{type}", transaction.getType().getName())
-				.replace("{amount}", ChatColor.stripColor(TownyEconomyHandler.getFormattedBalance(transaction.getAmount())))
+				.replace("{amount}", Colors.strip(TownyEconomyHandler.getFormattedBalance(transaction.getAmount())))
 				.replace("{to-from}", (transaction.getType() == TransactionType.DEPOSIT ? " to " : " from "))
 				.replace("{name}", transaction.getAccount().getName())
 				.replace("{reason}", transaction.getReason())
-				.replace("{balance}", ChatColor.stripColor(TownyEconomyHandler.getFormattedBalance(transaction.getBalance())))
+				.replace("{balance}", Colors.strip(TownyEconomyHandler.getFormattedBalance(transaction.getBalance())))
 			));
 		}
 		

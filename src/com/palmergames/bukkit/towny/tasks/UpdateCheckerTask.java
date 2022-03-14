@@ -4,8 +4,8 @@ import com.google.gson.JsonParser;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyUpdateChecker;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.Version;
-import net.md_5.bungee.api.ChatColor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class UpdateCheckerTask extends Thread {
 						TownyUpdateChecker.setUpdate(true);
 						TownyUpdateChecker.setNewVersion(latestVersion);
 						
-						towny.getLogger().info(ChatColor.stripColor(Translation.of("msg_new_update_available", latestVersion, towny.getVersion())));
+						towny.getLogger().info(Colors.strip(Translation.of("msg_new_update_available", latestVersion, towny.getVersion())));
 						towny.getLogger().info(Translation.of("msg_download_here", "https://github.com/TownyAdvanced/Towny/releases/tag/" + latestVersion));
 					} else {
 						towny.getLogger().info(Translation.of("msg_no_new_updates"));
