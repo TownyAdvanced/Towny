@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

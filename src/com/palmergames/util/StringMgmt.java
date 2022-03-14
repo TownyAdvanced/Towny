@@ -2,12 +2,9 @@ package com.palmergames.util;
 
 import com.palmergames.bukkit.towny.object.Translation;
 
-import net.md_5.bungee.api.ChatColor;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;

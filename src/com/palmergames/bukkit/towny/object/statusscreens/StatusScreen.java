@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import solar.squares.pixelwidth.PixelWidthSource;
 
@@ -39,18 +40,18 @@ public class StatusScreen {
 		components.put(name, component);
 	}
 	
-	@Deprecated
+	@Deprecated @ApiStatus.ScheduledForRemoval(inVersion = "0.100.0.0")
 	public void addComponentOf(String name, String text, ClickEvent click) {
 		components.put(name, Component.text(text).clickEvent(click));
 	}
 	
-	@Deprecated
-	public void addComponentOf(String name, String text, HoverEvent hover) {
+	@Deprecated @ApiStatus.ScheduledForRemoval(inVersion = "0.100.0.0")
+	public void addComponentOf(String name, String text, HoverEvent<?> hover) {
 		components.put(name, Component.text(text).hoverEvent(hover));
 	}
 	
-	@Deprecated
-	public void addComponentOf(String name, String text, HoverEvent hover, ClickEvent click) {
+	@Deprecated @ApiStatus.ScheduledForRemoval(inVersion = "0.100.0.0")
+	public void addComponentOf(String name, String text, HoverEvent<?> hover, ClickEvent click) {
 		components.put(name, Component.text(text).hoverEvent(hover).clickEvent(click));
 	}
 
@@ -91,52 +92,14 @@ public class StatusScreen {
 				currentLine = Component.empty();
 				continue;
 			}
+			
 			if (currentLine.equals(Component.empty())) {
 				// We're dealing with a new line and the nextComp has no children to process,
 				// nextComp becomes the start of a line.
 				currentLine = nextComp;
 				continue;
 			}
-			// We're dealing with a component made of children, probably the ExtraFields or AdditionalLines.
-			/*
-			if (!nextComp.children().isEmpty()) {
-				// nextComp starts with a new line component with children to follow, start a new line.
-				if (nextComp.equals(Component.newline())) {
-					screen = screen.append(currentLine).append(Component.newline());
-					currentLine = Component.empty();
-				}
-				// Cycle over all child components.
-				for (Component child : nextComp.children()) {
-					if (child.equals(Component.newline())) {
-						// We're dealing with a child component which is just a new line, make a new line.
-						screen = screen.append(currentLine).append(Component.newline());
-						currentLine = Component.empty();
-						continue;
-					}
-					if (currentLine.equals(Component.empty())) {
-						// We're dealing with a new line, our child component becomes the start of a line.
-						currentLine = child;
-						continue;
-					}
-					if (lineWouldBeTooLong(currentLine, child)) {
-						// We've found a child which will make the line too long,
-						// Dump currentLine into lines and start over with nextChild starting the new line.
-						screen = screen.append(currentLine).append(Component.newline());
-						currentLine = child;
-						continue;
-					}
-					// We have a child which will fit onto the current line.
-					currentLine = currentLine.append(Component.space().append(child));
-				}
-				// The loop is done, if anything was left in the currentLine dump it into lines.
-				if (!currentLine.equals(Component.empty())) {
-					screen = screen.append(currentLine).append(Component.newline());
-					currentLine = Component.empty();
-				}
-				continue;
-			}
-			*/
-			// We're dealing with a Component that has no children.
+			
 			if (lineWouldBeTooLong(currentLine, nextComp)) {
 				// We've found a component which will make the line too long,
 				// Dump currentLine into lines and start over with nextComp starting the new line.
@@ -150,12 +113,12 @@ public class StatusScreen {
 		
 		// The loop is done, if anything was left in currentLine dump it into lines.
 		if (!currentLine.equals(Component.empty()))
-			screen = screen.append(currentLine).append(Component.newline());
+			screen = screen.append(currentLine);
 
 		return screen;
 	}
 	
 	private boolean lineWouldBeTooLong(Component line, Component comp) {
-		return source.width(line) + source.width(comp) + 1 > MAX_WIDTH;
+		return source.width(line) + source.width(comp) > MAX_WIDTH;
 	}
 }

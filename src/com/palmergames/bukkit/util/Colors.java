@@ -3,7 +3,6 @@ package com.palmergames.bukkit.util;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownySettings;
@@ -84,7 +83,7 @@ public class Colors {
 	}
 
 	public static String strip(String line) {
-		return ChatColor.stripColor(line);
+		return ChatColor.stripColor(TownyComponents.stripTags(line));
 	}
 	
 	public static Component strip(Component component) {
