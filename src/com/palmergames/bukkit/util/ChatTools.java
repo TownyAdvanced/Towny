@@ -99,7 +99,7 @@ public class ChatTools {
 		float sidePaddingWidth = source.width(Component.text(sidePadding));
 		float widthToPad = (MAX_FONT_WIDTH - (sidePaddingWidth * 2) - source.width(title)) / 2;
 
-		if (paddingWidth > widthToPad)
+		if (paddingWidth * 2 > widthToPad)
 			return TownyComponents.prependMiniMessage(title, Translation.of("status_title_primary_colour"));
 
 		StringBuilder paddingBuilder = new StringBuilder();

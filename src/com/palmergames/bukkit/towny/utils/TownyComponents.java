@@ -38,8 +38,8 @@ public final class TownyComponents {
 		return LegacyComponentSerializer.legacyAmpersand().serialize(component);
 	}
 	
-	public static String stripTags(@NotNull Component input) {
-		return MiniMessage.miniMessage().stripTags(unMiniMessage(input));
+	public static String stripTags(@NotNull String input) {
+		return MiniMessage.miniMessage().stripTags(input);
 	}
 	
 	public static Component prependMiniMessage(@NotNull Component component, @NotNull String prepend) {

@@ -47,14 +47,9 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-<<<<<<< HEAD
 import java.util.Map;
-import java.util.stream.Collectors;
-=======
->>>>>>> 2e4514c0e (Remove all legacy color codes.)
 
 public class TownyFormatter {
 	public static final SimpleDateFormat lastOnlineFormat = new SimpleDateFormat("MMMMM dd '@' HH:mm");
@@ -422,11 +417,7 @@ public class TownyFormatter {
 			if (residents.size() > 34)
 				residents = shortenOverlengthArray(residents, 35, translator);
 			screen.addComponentOf("residents", colourHoverKey(translator.of("res_list"))
-<<<<<<< HEAD
-				.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(getFormattedStrings(translator.of("res_list"), List.of(residents), town.getResidents().size()))
-=======
 				.hoverEvent(HoverEvent.showText(getFormattedComponent(translator.of("res_list"), residents, town.getResidents().size())
->>>>>>> 2e4514c0e (Remove all legacy color codes.)
 					.append(Component.newline())
 					.append(Component.text(translator.of("status_hover_click_for_more")))))
 				.clickEvent(ClickEvent.runCommand("/towny:town reslist " + town.getName())));
@@ -623,7 +614,7 @@ public class TownyFormatter {
 
 		// ___[ World (PvP) ]___
 		screen.addComponentOf("townyworld_title", ChatTools.formatTitle(world.getFormattedName()));
-		screen.addComponentOf("subtitle", ChatTools.formatSubTitle(TownyComponents.miniMessage(StringMgmt.join(getWorldSubtitle(world, translator), " "))));
+		screen.addComponentOf("subtitle", ChatTools.formatSubTitle(getWorldSubtitle(world, translator)));
 
 		if (!world.isUsingTowny()) {
 			screen.addComponentOf("not_using_towny", translator.comp("msg_set_use_towny_off"));
@@ -631,35 +622,43 @@ public class TownyFormatter {
 			// War will be allowed in this world.
 			screen.addComponentOf("war_allowed", colourKey(world.isWarAllowed() ? translator.of("msg_set_war_allowed_on") : translator.of("msg_set_war_allowed_off")));
 			// ForcePvP: ON | FriendlyFire: ON 
-			screen.addComponentOf("pvp", colourKeyValue(translator.of("status_world_forcepvp"), (world.isForcePVP() ? translator.of("status_on") : translator.of("status_off"))) + translator.of("status_splitter") + 
-					colourKeyValue(translator.of("status_world_friendlyfire"), (world.isFriendlyFireEnabled() ? translator.of("status_on") : translator.of("status_off"))));
+			screen.addComponentOf("pvp", colourKeyValue(translator.of("status_world_forcepvp"), (world.isForcePVP() ? translator.of("status_on") : translator.of("status_off")))
+				.append(translator.comp("status_splitter"))
+				.append(colourKeyValue(translator.of("status_world_friendlyfire"), (world.isFriendlyFireEnabled() ? translator.of("status_on") : translator.of("status_off")))));
 			// Fire: ON | ForceFire: ON
-			screen.addComponentOf("fire", colourKeyValue(translator.of("status_world_fire"), (world.isFire() ? translator.of("status_on") : translator.of("status_off"))) + translator.of("status_splitter") + 
-					colourKeyValue(translator.of("status_world_forcefire"), (world.isForceFire() ? translator.of("status_forced") : translator.of("status_adjustable"))));
+			screen.addComponentOf("fire", colourKeyValue(translator.of("status_world_fire"), (world.isFire() ? translator.of("status_on") : translator.of("status_off")))
+				.append(translator.comp("status_splitter"))
+				.append(colourKeyValue(translator.of("status_world_forcefire"), (world.isForceFire() ? translator.of("status_forced") : translator.of("status_adjustable")))));
 			// Explosion: ON | ForceExplosion: ON
-			screen.addComponentOf("explosions", colourKeyValue(translator.of("explosions"), (world.isExpl() ? translator.of("status_on") : translator.of("status_off"))) + translator.of("status_splitter") + 
-				    colourKeyValue(translator.of("status_world_forceexplosion"), (world.isForceExpl() ? translator.of("status_forced") : translator.of("status_adjustable"))));
+			screen.addComponentOf("explosions", colourKeyValue(translator.of("explosions"), (world.isExpl() ? translator.of("status_on") : translator.of("status_off")))
+				.append(translator.comp("status_splitter"))
+				.append(colourKeyValue(translator.of("status_world_forceexplosion"), (world.isForceExpl() ? translator.of("status_forced") : translator.of("status_adjustable")))));
 			// WorldMobs: ON | Wilderness Mobs: ON
-			screen.addComponentOf("mobs", colourKeyValue(translator.of("status_world_worldmobs"), (world.hasWorldMobs() ? translator.of("status_on") : translator.of("status_off"))) + translator.of("status_splitter") + 
-				    colourKeyValue(translator.of("status_world_wildernessmobs"), (world.hasWildernessMobs() ? translator.of("status_on") : translator.of("status_off"))));
+			screen.addComponentOf("mobs", colourKeyValue(translator.of("status_world_worldmobs"), (world.hasWorldMobs() ? translator.of("status_on") : translator.of("status_off")))
+				.append(translator.comp("status_splitter"))
+				.append(colourKeyValue(translator.of("status_world_wildernessmobs"), (world.hasWildernessMobs() ? translator.of("status_on") : translator.of("status_off")))));
 			// ForceTownMobs: ON
 			screen.addComponentOf("townmobs", colourKeyValue(translator.of("status_world_forcetownmobs"), (world.isForceTownMobs() ? translator.of("status_forced") : translator.of("status_adjustable"))));
 			// Unclaim Revert: ON
-			screen.addComponentOf("unclaim_revert", colourKeyValue("\n" + translator.of("status_world_unclaimrevert"), (world.isUsingPlotManagementRevert() ? translator.of("status_on_good") : translator.of("status_off_bad")))); 
+			screen.addComponentOf("unclaim_revert", colourKeyValue(translator.of("status_world_unclaimrevert"), (world.isUsingPlotManagementRevert() ? translator.of("status_on_good") : translator.of("status_off_bad")))); 
 			// Entity Explosion Revert: ON | Block Explosion Revert: ON
-			screen.addComponentOf("explosion_reverts", colourKeyValue(translator.of("status_world_explrevert_entity"), (world.isUsingPlotManagementWildEntityRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))) + translator.of("status_splitter") +
-					colourKeyValue(translator.of("status_world_explrevert_block"), (world.isUsingPlotManagementWildBlockRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))));
+			screen.addComponentOf("explosion_reverts", colourKeyValue(translator.of("status_world_explrevert_entity"), (world.isUsingPlotManagementWildEntityRevert() ? translator.of("status_on_good") : translator.of("status_off_bad")))
+				.append(translator.comp("status_splitter"))
+				.append(colourKeyValue(translator.of("status_world_explrevert_block"), (world.isUsingPlotManagementWildBlockRevert() ? translator.of("status_on_good") : translator.of("status_off_bad")))));
 			// Plot Clear Block Delete: ON (see /towny plotclearblocks) | OFF
 			screen.addComponentOf("plot_clear", colourKeyValue(translator.of("status_plot_clear_deletion"), (world.isUsingPlotManagementMayorDelete() ? translator.of("status_on") + " <green>(see /towny plotclearblocks)" : translator.of("status_off")))); 
 			// Wilderness:
 			//     Build, Destroy, Switch, ItemUse
 			//     Ignored Blocks: see /towny wildsblocks
-			screen.addComponentOf("wilderness", colourKey(world.getUnclaimedZoneName() + ": \n"));
+			screen.addComponentOf("wildernessnewline1", Component.newline());
+			screen.addComponentOf("wilderness", colourKey(world.getUnclaimedZoneName() + ": "));
+			screen.addComponentOf("wildernessnewline2", Component.newline());
 			screen.addComponentOf("perms1", TownyComponents.miniMessage("    " + (world.getUnclaimedZoneBuild() ? "<green>" : "<red>") + translator.of("build") + "<gray>, " + 
-													(world.getUnclaimedZoneDestroy() ? "green" : "<red>") + translator.of("destroy") + "<gray>, " + 
+													(world.getUnclaimedZoneDestroy() ? "<green>" : "<red>") + translator.of("destroy") + "<gray>, " + 
 													(world.getUnclaimedZoneSwitch() ? "<green>" : "<red>") + translator.of("switch") + "<gray>, " + 
 													(world.getUnclaimedZoneItemUse() ? "<green>" : "<red>") + translator.of("item_use")));
-			screen.addComponentOf("perms2", "    " + colourKey(translator.of("status_world_ignoredblocks") + " <green>see /towny wildsblocks"));
+			screen.addComponentOf("wildernessnewline3", Component.newline());
+			screen.addComponentOf("perms2", Component.text("    ").append(colourKey(translator.of("status_world_ignoredblocks"))).append(Component.text(" see /towny wildsblocks", NamedTextColor.GREEN)));
 
 			// Add any metadata which opt to be visible.
 			List<Component> fields = getExtraFields(world);
@@ -917,16 +916,17 @@ public class TownyFormatter {
 	 * @param translator Translator used in language selection.
 	 * @return Formatted 2nd line of the World StatusScreen.
 	 */
-	private static List<String> getWorldSubtitle(TownyWorld world, Translator translator) {
-		List<String> sub = new ArrayList<>();
-		if (world.isPVP() || world.isForcePVP())
-			sub.add(translator.of("status_title_pvp"));
-		if (world.isClaimable())
-			sub.add(translator.of("status_world_claimable"));
-		else 
-			sub.add(translator.of("status_world_noclaims"));
+	private static Component getWorldSubtitle(TownyWorld world, Translator translator) {
+		List<Component> subtitle = new ArrayList<>();
 		
-		return sub;
+		if (world.isPVP() || world.isForcePVP())
+			subtitle.add(translator.comp("status_title_pvp"));
+		if (world.isClaimable())
+			subtitle.add(translator.comp("status_world_claimable"));
+		else 
+			subtitle.add(translator.comp("status_world_noclaims"));
+		
+		return TownyComponents.joinList(subtitle, Component.space());
 	}
 	
 	/**
