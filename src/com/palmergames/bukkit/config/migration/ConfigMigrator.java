@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.bukkit.plugin.Plugin;
+
 /**
  * An object which manages the process of migrating towny config versions to 
  * up-to-date ones.
@@ -27,18 +29,50 @@ import java.util.Objects;
 public class ConfigMigrator {
 	
 	private final String migrationFilename;
+	private final String lastRunVersion;
 	private static final Gson GSON = new GsonBuilder()
 		.registerTypeAdapter(Version.class, new VersionDeserializer()).create();
 	private final CommentedConfiguration config;
 	private final CommentedConfiguration townyperms;
 	private final boolean earlyRun;
+	private final Plugin plugin;
 	
 	public ConfigMigrator(CommentedConfiguration config, String filename, boolean earlyRun) {
-		Objects.requireNonNull(config, filename);
+		Objects.requireNonNull(config, "ConfigMigrator: config cannot be null");
+		Objects.requireNonNull(filename, "ConfigMigrator: filename cannot be null");
 		this.migrationFilename = filename;
 		this.config = config;
 		this.townyperms = TownyPerms.getTownyPermsFile();
 		this.earlyRun = earlyRun;
+		this.plugin = Towny.getPlugin();
+		this.lastRunVersion = ConfigNodes.LAST_RUN_VERSION.getRoot();
+	}
+	
+	/**
+	 * A ConfigMigrator constructor which another plugin can use.
+	 * 
+	 * @param plugin         Plugin object used for Logging and getting your
+	 *                       resource folder.
+	 * @param config         CommentedConfiguration config file.
+	 * @param filename       String filename of your json file, ie:
+	 *                       config-migration.json, stored in your resources folder.
+	 * @param lastRunVersion String representing your config's version, from which
+	 *                       Towny will determine which config migrations to apply.
+	 * @param earlyRun       boolean whether this is an early run, used for
+	 *                       gathering config values used in the MOVE and REMOVE
+	 *                       MigrationType.
+	 */
+	public ConfigMigrator(Plugin plugin, CommentedConfiguration config, String filename, String lastRunVersion, boolean earlyRun) {
+		Objects.requireNonNull(config, "ConfigMigrator: config cannot be null");
+		Objects.requireNonNull(filename, "ConfigMigrator: filename cannot be null");
+		Objects.requireNonNull(lastRunVersion, "ConfigMigrator: lastRunVersion cannot be null");
+		Objects.requireNonNull(plugin, "ConfigMigrator: plugin cannot be null");
+		this.migrationFilename = filename;
+		this.config = config;
+		this.townyperms = TownyPerms.getTownyPermsFile();
+		this.earlyRun = earlyRun;
+		this.plugin = plugin;
+		this.lastRunVersion = lastRunVersion;
 	}
 
 	/**
@@ -46,7 +80,7 @@ public class ConfigMigrator {
 	 */
 	public void migrate() {
 		// Use the last run version as a reference.
-		Version configVersion = Version.fromString(config.getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), "0.0.0.0"));
+		Version configVersion = Version.fromString(config.getString(lastRunVersion, "0.0.0.0"));
 		boolean saveTownyperms = false;
 		int totalChangeCount = 0;
 
@@ -59,7 +93,7 @@ public class ConfigMigrator {
 				if (changeCount == 0)
 					continue;
 
-				Towny.getPlugin().getLogger().info("Config: " + migration.version + " applying " + changeCount + " automatic update" + (changeCount == 1 ? "" : "s") + " ...");
+				plugin.getLogger().info("Config: " + migration.version + " applying " + changeCount + " automatic update" + (changeCount == 1 ? "" : "s") + " ...");
 				for (Change change : migration.changes) {
 					// Only perform earlyRun changes on earlyRun-typed Migrations and vice versa.
 					if (change.type.early != earlyRun)
@@ -120,6 +154,13 @@ public class ConfigMigrator {
 				if (oldValue != null)
 					config.set(change.value, oldValue);
 				break;
+			case REMOVE:
+				Object path = config.get(change.path);
+				if (path != null) {
+					TownyMessaging.sendDebugMsg("Removing unneeded config entry: " + change.path);
+					config.set(change.path, null);
+				}
+				break;
 			default:
 				throw new UnsupportedOperationException("Unsupported Change type: " + change);
 		}
@@ -143,7 +184,7 @@ public class ConfigMigrator {
 	}
 
 	private List<Migration> readMigrator() {
-		try (Reader reader = new InputStreamReader(Towny.getPlugin().getResource(migrationFilename))) {
+		try (Reader reader = new InputStreamReader(plugin.getResource(migrationFilename))) {
 			
 			return GSON.fromJson(reader, new TypeToken<List<Migration>>(){}.getType());
 		} catch (IOException e) {

@@ -7,6 +7,7 @@ public enum MigrationType {
 	TOWN_LEVEL_ADD(false),
 	TOWNYPERMS_ADD(false),
 	REPLACE(false),
+	REMOVE(true),
 	MOVE(true);
 	
 	public boolean early;
