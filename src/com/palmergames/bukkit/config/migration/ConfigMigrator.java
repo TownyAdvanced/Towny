@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.palmergames.bukkit.config.CommentedConfiguration;
-import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An object which manages the process of migrating towny config versions to 
@@ -29,7 +30,7 @@ import org.bukkit.plugin.Plugin;
 public class ConfigMigrator {
 	
 	private final String migrationFilename;
-	private final String lastRunVersion;
+	private final Version lastRunVersion;
 	private static final Gson GSON = new GsonBuilder()
 		.registerTypeAdapter(Version.class, new VersionDeserializer()).create();
 	private final CommentedConfiguration config;
@@ -37,7 +38,7 @@ public class ConfigMigrator {
 	private final boolean earlyRun;
 	private final Plugin plugin;
 	
-	public ConfigMigrator(CommentedConfiguration config, String filename, boolean earlyRun) {
+	public ConfigMigrator(@NotNull CommentedConfiguration config, @NotNull String filename, boolean earlyRun) {
 		Objects.requireNonNull(config, "ConfigMigrator: config cannot be null");
 		Objects.requireNonNull(filename, "ConfigMigrator: filename cannot be null");
 		this.migrationFilename = filename;
@@ -45,7 +46,7 @@ public class ConfigMigrator {
 		this.townyperms = TownyPerms.getTownyPermsFile();
 		this.earlyRun = earlyRun;
 		this.plugin = Towny.getPlugin();
-		this.lastRunVersion = ConfigNodes.LAST_RUN_VERSION.getRoot();
+		this.lastRunVersion = Version.fromString(TownySettings.getLastRunVersion());
 	}
 	
 	/**
@@ -56,38 +57,37 @@ public class ConfigMigrator {
 	 * @param config         CommentedConfiguration config file.
 	 * @param filename       String filename of your json file, ie:
 	 *                       config-migration.json, stored in your resources folder.
-	 * @param lastRunVersion String representing your config's version, from which
+	 * @param lastRunVersion Version representing your config's version, from which
 	 *                       Towny will determine which config migrations to apply.
 	 * @param earlyRun       boolean whether this is an early run, used for
 	 *                       gathering config values used in the MOVE and REMOVE
 	 *                       MigrationType.
 	 */
-	public ConfigMigrator(Plugin plugin, CommentedConfiguration config, String filename, String lastRunVersion, boolean earlyRun) {
+	public ConfigMigrator(@NotNull Plugin plugin, @NotNull CommentedConfiguration config, @NotNull String filename, @NotNull Version lastRunVersion, boolean earlyRun) {
 		Objects.requireNonNull(config, "ConfigMigrator: config cannot be null");
 		Objects.requireNonNull(filename, "ConfigMigrator: filename cannot be null");
 		Objects.requireNonNull(lastRunVersion, "ConfigMigrator: lastRunVersion cannot be null");
 		Objects.requireNonNull(plugin, "ConfigMigrator: plugin cannot be null");
-		this.migrationFilename = filename;
-		this.config = config;
-		this.townyperms = TownyPerms.getTownyPermsFile();
-		this.earlyRun = earlyRun;
 		this.plugin = plugin;
+		this.config = config;
+		this.migrationFilename = filename;
 		this.lastRunVersion = lastRunVersion;
+		this.earlyRun = earlyRun;
+		this.townyperms = TownyPerms.getTownyPermsFile();
 	}
 
 	/**
 	 * Migrates configuration to latest version available in the given JSON file.
 	 */
 	public void migrate() {
-		// Use the last run version as a reference.
-		Version configVersion = Version.fromString(config.getString(lastRunVersion, "0.0.0.0"));
+
 		boolean saveTownyperms = false;
 		int totalChangeCount = 0;
 
 		// Go through each migration element.
 		for (Migration migration : readMigrator()) {
 			// If a migration version is greater than our version, upgrade with it.
-			if (configVersion.compareTo(migration.version) < 0) {
+			if (lastRunVersion.compareTo(migration.version) < 0) {
 				// Check if there are any applicable changes based on the early/normal run-order.
 				int changeCount = getChangeCount(migration);
 				if (changeCount == 0)
