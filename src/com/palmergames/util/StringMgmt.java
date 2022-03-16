@@ -1,6 +1,5 @@
 package com.palmergames.util;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Translation;
 
 import net.md_5.bungee.api.ChatColor;
@@ -31,9 +30,6 @@ public class StringMgmt {
 	public static final Pattern bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}");
 	
 	public static String translateHexColors(String str) {
-		if (!Towny.is116Plus()) {
-			return str;
-		}
 
 		final Matcher hexMatcher = hexPattern.matcher(str);
 		final Matcher ampMatcher = ampersandPattern.matcher(str);
