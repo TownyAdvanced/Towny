@@ -7338,3 +7338,5 @@ v0.92.0.11:
   - Fix outlaw teleport feature conflicting with jailing of outlaws.
   - Protect rooted_dirt being hoe-able.
     - Closes #5805.
+0.98.1.0:
+  - Bump version number for Release.
