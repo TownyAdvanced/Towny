@@ -252,6 +252,11 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_RESIDENT_TOGGLE_EXPLOSION("towny.command.resident.toggle.explosion"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_FIRE("towny.command.resident.toggle.fire"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_MOBS("towny.command.resident.toggle.mobs"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_PLOTBORDER("towny.command.resident.toggle.plotborder"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNCLAIM("towny.command.resident.toggle.townclaim"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_CONSTANTPLOTBORDER("towny.command.resident.toggle.constantplotborder"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREPLOTS("towny.command.resident.toggle.ignoreplots"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_BORDERTITLES("towny.command.resident.toggle.bordertitles"),
 	
 	TOWNY_COMMAND_RESIDENT_FRIEND("towny.command.resident.friend"),
 	TOWNY_COMMAND_RESIDENT_SPAWN("towny.command.resident.spawn"),	

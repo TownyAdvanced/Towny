@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 
 import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
+import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
@@ -40,6 +42,8 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.TimeMgmt;
 
 public class ResidentUtil {
+	
+	private static BooleanDataField borderMeta = new BooleanDataField("bordertitles");
 	
 	/** 
 	 * Return a list of Residents that can be seen (not vanished) by the viewer.
@@ -319,5 +323,11 @@ public class ResidentUtil {
 			}, TownySettings.getOutlawTeleportWarmup() * 20L);
 		}
 		
+	}
+
+	public static void toggleResidentBorderTitles(Resident resident, Optional<Boolean> choice) {
+		boolean borderTitleActive = choice.orElse(!resident.isSeeingBorderTitles());
+		MetaDataUtil.setBoolean(resident, borderMeta, borderTitleActive, true);
+		TownyMessaging.sendMsg(resident, Translatable.of("msg_border_titles_toggled", borderTitleActive ? Translatable.of("enabled") : Translatable.of("disabled")));
 	}
 }
