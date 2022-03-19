@@ -955,7 +955,7 @@ public class TownyPlayerListener implements Listener {
 		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 		Town town = event.getEnteredtown();
 		
-		if (resident != null && town != null && TownySettings.isNotificationUsingTitles()) {
+		if (resident != null && resident.isSeeingBorderTitles() && town != null && TownySettings.isNotificationUsingTitles()) {
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
 			
@@ -990,7 +990,7 @@ public class TownyPlayerListener implements Listener {
 		if (resident == null || worldName == null)
 			return;
 		
-		if (TownySettings.isNotificationUsingTitles() && event.getTo().getTownBlockOrNull() == null) {
+		if (TownySettings.isNotificationUsingTitles() && resident.isSeeingBorderTitles() && event.getTo().getTownBlockOrNull() == null) {
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
 			if (title.contains("{wilderness}")) {

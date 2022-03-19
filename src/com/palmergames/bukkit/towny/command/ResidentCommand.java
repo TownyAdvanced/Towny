@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
+import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -74,6 +75,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"plotborder",
 		"constantplotborder",
 		"ignoreplots",
+		"bordertitles",
 		"townclaim",
 		"map",
 		"spy",
@@ -461,6 +463,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			perm.explosion = choice.orElse(!perm.explosion);
 		} else if (newSplit[0].equalsIgnoreCase("mobs")) {
 			perm.mobs = choice.orElse(!perm.mobs);
+		} else if (newSplit[0].equalsIgnoreCase("bordertitles")) {
+			ResidentUtil.toggleResidentBorderTitles(resident, choice);
+			return;
 		} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_TOGGLE, newSplit[0])) {
 			TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_TOGGLE, newSplit[0]).execute(player, "resident", newSplit);
 		} else {

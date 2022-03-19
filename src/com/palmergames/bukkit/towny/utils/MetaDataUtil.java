@@ -288,7 +288,7 @@ public class MetaDataUtil {
 	}
 	
 	/**
-	 * Sets a StringDataField metadata on a TownyObject.
+	 * Sets a StringDataField metadata on a TownyObject, creating the metadata if it doesn't exist.
 	 * 
 	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
 	 * @param sdf StringDataField to apply to the TownyObject.
@@ -297,6 +297,11 @@ public class MetaDataUtil {
 	 */
 	public static void setString(TownyObject townyObject, StringDataField sdf, String string, boolean save) {
 		CustomDataField<?> cdf = townyObject.getMetadata(sdf.getKey());
+		if (cdf == null) {
+			addNewStringMeta(townyObject, sdf.getKey(), string, save);
+			return;
+		}
+		
 		if (cdf instanceof StringDataField) {
 			StringDataField value = (StringDataField) cdf;
 			value.setValue(string);
@@ -306,7 +311,7 @@ public class MetaDataUtil {
 	}
 
 	/**
-	 * Sets a BooleanDataField metadata on a TownyObject.
+	 * Sets a BooleanDataField metadata on a TownyObject, creating the metadata if it doesn't exist.
 	 * 
 	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
 	 * @param bdf BooleanDataField to apply to the TownyObject.
@@ -315,6 +320,11 @@ public class MetaDataUtil {
 	 */
 	public static void setBoolean(TownyObject townyObject, BooleanDataField bdf, boolean bool, boolean save) {
 		CustomDataField<?> cdf = townyObject.getMetadata(bdf.getKey());
+		if (cdf == null) {
+			addNewBooleanMeta(townyObject, bdf.getKey(), bool, save);
+			return;
+		}
+		
 		if (cdf instanceof BooleanDataField) {
 			BooleanDataField value = (BooleanDataField) cdf;
 			value.setValue(bool);
@@ -324,7 +334,7 @@ public class MetaDataUtil {
 	}
 
 	/**
-	 * Sets a LongDataField metadata on a TownyObject.
+	 * Sets a LongDataField metadata on a TownyObject, creating the metadata if it doesn't exist.
 	 * 
 	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
 	 * @param ldf LongDataField to apply to the TownyObject.
@@ -333,6 +343,11 @@ public class MetaDataUtil {
 	 */
 	public static void setLong(TownyObject townyObject, LongDataField ldf, long num, boolean save) {
 		CustomDataField<?> cdf = townyObject.getMetadata(ldf.getKey());
+		if (cdf == null) {
+			addNewLongMeta(townyObject, ldf.getKey(), num, save);
+			return;
+		}
+		
 		if (cdf instanceof LongDataField) {
 			LongDataField value = (LongDataField) cdf;
 			value.setValue(num);
@@ -342,7 +357,7 @@ public class MetaDataUtil {
 	}
 
 	/**
-	 * Sets a IntegerDataField metadata on a TownyObject.
+	 * Sets a IntegerDataField metadata on a TownyObject, creating the metadata if it doesn't exist.
 	 * 
 	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
 	 * @param idf IntegerDataField to apply to the TownyObject.
@@ -351,6 +366,11 @@ public class MetaDataUtil {
 	 */
 	public static void setInt(TownyObject townyObject, IntegerDataField idf, int num, boolean save) {
 		CustomDataField<?> cdf = townyObject.getMetadata(idf.getKey());
+		if (cdf == null) {
+			addNewIntegerMeta(townyObject, idf.getKey(), num, save);
+			return;
+		}
+		
 		if (cdf instanceof IntegerDataField) {
 			IntegerDataField value = (IntegerDataField) cdf;
 			value.setValue(num);
@@ -360,7 +380,7 @@ public class MetaDataUtil {
 	}
 	
 	/**
-	 * Sets a DecimalDataField metadata on a TownyObject.
+	 * Sets a DecimalDataField metadata on a TownyObject, creating the metadata if it doesn't exist.
 	 * 
 	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
 	 * @param ddf DecimalDataField to apply to the TownyObject.
@@ -369,6 +389,11 @@ public class MetaDataUtil {
 	 */
 	public static void setDouble(TownyObject townyObject, DecimalDataField ddf, double num, boolean save) {
 		CustomDataField<?> cdf = townyObject.getMetadata(ddf.getKey());
+		if (cdf == null) {
+			addNewDoubleMeta(townyObject, ddf.getKey(), num, save);
+			return;
+		}
+		
 		if (cdf instanceof DecimalDataField) {
 			DecimalDataField value = (DecimalDataField) cdf;
 			value.setValue(num);
@@ -378,7 +403,7 @@ public class MetaDataUtil {
 	}
 	
 	/**
-	 * Sets a ByteDataField metadata on a TownyObject.
+	 * Sets a ByteDataField metadata on a TownyObject, creating the metadata if it doesn't exist.
 	 * 
 	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
 	 * @param bdf ByteDataField to apply to the TownyObject.
@@ -387,6 +412,11 @@ public class MetaDataUtil {
 	 */
 	public static void setByte(TownyObject townyObject, ByteDataField bdf, byte num, boolean save) {
 		CustomDataField<?> cdf = townyObject.getMetadata(bdf.getKey());
+		if (cdf == null) {
+			addNewByteMeta(townyObject, bdf.getKey(), num, save);
+			return;
+		}
+		
 		if (cdf instanceof ByteDataField) {
 			ByteDataField value = (ByteDataField) cdf;
 			value.setValue(num);

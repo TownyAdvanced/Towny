@@ -586,6 +586,9 @@ permissions:
             towny.command.resident.toggle.plotborder: true
             towny.command.resident.toggle.pvp: true
             towny.command.resident.toggle.townclaim: true
+            towny.command.resident.toggle.constantplotborder: true
+            towny.command.resident.toggle.ignoreplots: true
+            towny.command.resident.toggle.bordertitles: true
 
     # TownyAdmin command permissions
     towny.command.townyadmin.*:

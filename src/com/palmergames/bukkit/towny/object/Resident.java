@@ -21,9 +21,11 @@ import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.jail.Jail;
+import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
+import com.palmergames.bukkit.towny.utils.MetaDataUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -865,5 +867,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public Audience audience() {
 		Player player = getPlayer();
 		return player == null ? Audience.empty() : Towny.getAdventure().player(player);
+	}
+	
+	public boolean isSeeingBorderTitles() {
+		BooleanDataField borderMeta = new BooleanDataField("bordertitles");
+		return !MetaDataUtil.hasMeta(this, borderMeta) || MetaDataUtil.getBoolean(this, borderMeta);
 	}
 }
