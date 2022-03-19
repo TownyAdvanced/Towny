@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.145
+version: 0.146
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1451,3 +1451,6 @@ did_you_want_to_toggle_unlimited_claims: 'Nemate dovoljno gradskih blokova da cl
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ne možete napustiti naciju, Vaš grad je osvojen.'
 msg_err_console_only: 'Ovu komandu može koristiti samo konzola.'
 msg_err_player_only: 'Ovu komandu može koristiti samo igrač.'
+#Added in 0.146
+#Message shown when a resident toggles bordertitles with /res toggle bordertitles
+msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
