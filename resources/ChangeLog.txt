@@ -7350,3 +7350,4 @@ v0.92.0.11:
     - Requires a json migration file in your plugin's resources folder.
   - Add REMOVE MigrationType to ConfigMigrator.
   - Bump language files to 0.146.
+  - Fix water being able to be placed in waterloggable blocks on plot borders, courtesy of Warriorrrr with PR #5736.
