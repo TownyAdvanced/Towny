@@ -887,15 +887,17 @@ public class Town extends Government implements TownBlockOwner {
 	 * @param spawn - Location to set an outpost's spawn point
 	 */
 	public void addOutpostSpawn(Location spawn) {
-
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(spawn);
+		if (townBlock == null || !townBlock.hasTown() || !townBlock.getTownOrNull().equals(this))
+			return;
+		
 		// Remove any potential previous outpost spawn at this location (when run via /t set outpost.)
 		removeOutpostSpawn(Coord.parseCoord(spawn));
 
 		// Set the TownBlock to be an outpost.
-		TownBlock outpost = TownyAPI.getInstance().getTownBlock(spawn);
-		if (outpost != null && !outpost.isOutpost()) {
-			outpost.setOutpost(true);
-			outpost.save();
+		if (!townBlock.isOutpost()) {
+			townBlock.setOutpost(true);
+			townBlock.save();
 		}
 
 		// Add to the towns' outpost list.
