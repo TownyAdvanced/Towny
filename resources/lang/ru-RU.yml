@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.145
+version: 0.146
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -1451,3 +1451,6 @@ did_you_want_to_toggle_unlimited_claims: 'У вас нет доступных д
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Вы не можете покинуть нацию – ваш город захвачен.'
 msg_err_console_only: 'Эту команду может использовать только консоль.'
 msg_err_player_only: 'Эту команду может использовать только игрок.'
+#Added in 0.146
+#Message shown when a resident toggles bordertitles with /res toggle bordertitles
+msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'

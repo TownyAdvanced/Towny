@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.145
+version: 0.146
 language: Turkish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1451,3 +1451,6 @@ did_you_want_to_toggle_unlimited_claims: 'Claim talebinde bulunmak için yeterli
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ulusunuzu terk edemezsiniz, şehriniz fethedilir.'
 msg_err_console_only: 'Bu komut sadece konsol tarafından kullanılabilir.'
 msg_err_player_only: 'Bu komut sadece bir oyuncu tarafından kullanılabilir.'
+#Added in 0.146
+#Message shown when a resident toggles bordertitles with /res toggle bordertitles
+msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'

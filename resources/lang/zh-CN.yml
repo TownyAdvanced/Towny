@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.145
+version: 0.146
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1451,3 +1451,6 @@ did_you_want_to_toggle_unlimited_claims: '你没有足够的圈地额度，你�
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: '你不能离开你的国家，你的城镇已被占领'
 msg_err_console_only: '此指令只能在控制台使用。'
 msg_err_player_only: '此指令只能玩家使用。'
+#Added in 0.146
+#Message shown when a resident toggles bordertitles with /res toggle bordertitles
+msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'

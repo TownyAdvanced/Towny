@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.145
+version: 0.146
 language: norwegian
 author: Nectuz, Walbern
 website: 'http://townyadvanced.github.io/'
@@ -1451,3 +1451,6 @@ did_you_want_to_toggle_unlimited_claims: 'Du har ikke nok byblokker å kreve, vi
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Du kan ikke forlate nasjonen, din by erobres.'
 msg_err_console_only: '&cDenne kommandoen kan bare utføres i konsollen.'
 msg_err_player_only: 'Denne kommandoen kan bare brukes av en spiller.'
+#Added in 0.146
+#Message shown when a resident toggles bordertitles with /res toggle bordertitles
+msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
