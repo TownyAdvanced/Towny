@@ -7349,3 +7349,4 @@ v0.92.0.11:
     - Able to be used by plugins which use Towny's internal CommentedConfiguration class.
     - Requires a json migration file in your plugin's resources folder.
   - Add REMOVE MigrationType to ConfigMigrator.
+  - Bump language files to 0.146.
