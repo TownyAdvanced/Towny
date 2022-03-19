@@ -1351,7 +1351,7 @@ msg_changed_nationzone: 'La zona de nacion que rodea la ciudad es ahora de %s'
 msg_err_your_town_has_no_nationzone_to_toggle: 'Tu ciudad no tiene una Zona de nacion para activar!'
 #Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
-towny_prices_nation_upkeep_based_on: '%7El mantenimiento de la nacion esta basado en &athe %s'
+towny_prices_nation_upkeep_based_on: '&7El mantenimiento de la nacion esta basado en &athe %s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'numero de ciudades.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
