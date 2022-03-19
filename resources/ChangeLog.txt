@@ -7353,3 +7353,4 @@ v0.92.0.11:
   - Fix water being able to be placed in waterloggable blocks on plot borders, courtesy of Warriorrrr with PR #5736.
 0.98.1.2:
   - Fix outpost spawns being able to be made in other towns in rare conditions. 
+  - Fix regression from 0.98.1.1 causing java.lang.NullPointerException on load.

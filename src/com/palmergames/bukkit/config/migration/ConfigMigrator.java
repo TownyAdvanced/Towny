@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.palmergames.bukkit.config.CommentedConfiguration;
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -46,7 +46,7 @@ public class ConfigMigrator {
 		this.townyperms = TownyPerms.getTownyPermsFile();
 		this.earlyRun = earlyRun;
 		this.plugin = Towny.getPlugin();
-		this.lastRunVersion = Version.fromString(TownySettings.getLastRunVersion());
+		this.lastRunVersion = Version.fromString(config.getString(ConfigNodes.LAST_RUN_VERSION.getRoot(), "0.0.0.0"));
 	}
 	
 	/**
