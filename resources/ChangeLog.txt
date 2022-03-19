@@ -7342,3 +7342,10 @@ v0.92.0.11:
   - Bump version number for Release.
 0.98.1.1:
   - Drop support for MC 1.14.* and 1.15.*.
+  - New Command: /res toggle bordertitles
+    - Allows a player to turn on/off the Title messages seen when entering/leaving a town, when using_titles is true in the config.
+    - Closes #5767.
+  - API: Allow other plugins to use ConfigMigrator.
+    - Able to be used by plugins which use Towny's internal CommentedConfiguration class.
+    - Requires a json migration file in your plugin's resources folder.
+  - Add REMOVE MigrationType to ConfigMigrator.
