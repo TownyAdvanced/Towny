@@ -2231,6 +2231,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void nationSetCapital(CommandSender sender, Nation nation, String[] split, boolean admin) {
+		if (split.length < 2) {
+			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set capital {town name}");
+			return;
+		}
+		
 		Town newCapital = TownyUniverse.getInstance().getTown(split[1]);
 		
 		if (newCapital == null) {
@@ -2238,57 +2243,45 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		if (TownySettings.getNumResidentsCreateNation() > 0 && newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation()) {
+		if (TownySettings.getNumResidentsCreateNation() > 0 && newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation() && !admin) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_enough_residents_capital", newCapital.getName()));
 			return;
 		}
 		
-		if (TownySettings.getMaxResidentsPerTown() > 0 && nation.getCapital().getNumResidents() > TownySettings.getMaxResidentsPerTown()) {
+		if (TownySettings.getMaxResidentsPerTown() > 0 && nation.getCapital().getNumResidents() > TownySettings.getMaxResidentsPerTown() && !admin) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_nation_capital_too_many_residents", newCapital.getName()));
 			return;
 		}
+		
+		Resident oldKing = nation.getKing();
+		Resident newKing = newCapital.getMayor();
 
-		if (split.length < 2)
-			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set capital {town name}");
-		else {
-			Resident oldKing = nation.getKing();
-			Resident newKing = newCapital.getMayor();
+		NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldKing, newKing);
+		Bukkit.getPluginManager().callEvent(nationKingChangeEvent);
+		if (nationKingChangeEvent.isCancelled() && !admin) {
+			TownyMessaging.sendErrorMsg(sender, nationKingChangeEvent.getCancelMessage());
+			return;
+		}
 
-			NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldKing, newKing);
-			Bukkit.getPluginManager().callEvent(nationKingChangeEvent);
-			if (nationKingChangeEvent.isCancelled() && !admin) {
-				TownyMessaging.sendErrorMsg(sender, nationKingChangeEvent.getCancelMessage());
-				return;
-			}
-
-			// Do proximity tests.
-			if (TownySettings.getNationRequiresProximity() > 0 ) {
-				List<Town> removedTowns = nation.gatherOutOfRangeTowns(nation.getTowns(), newCapital);
-				
-				// There are going to be some towns removed from the nation, so we'll do a Confirmation.
-				if (!removedTowns.isEmpty()) {
-					final Nation finalNation = nation;
-					Confirmation.runOnAccept(() -> {
-						finalNation.setCapital(newCapital);										
-						finalNation.removeOutOfRangeTowns();
-						plugin.resetCache();
-						TownyMessaging.sendPrefixedNationMessage(finalNation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
-						if (admin)
-							TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
-					})
-					.setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
-					.sendTo(sender);
-					
-				// No towns will be removed, skip the Confirmation.
-				} else {
-					nation.setCapital(newCapital);
+		// Do proximity tests.
+		if (TownySettings.getNationRequiresProximity() > 0 ) {
+			List<Town> removedTowns = nation.gatherOutOfRangeTowns(nation.getTowns(), newCapital);
+			
+			// There are going to be some towns removed from the nation, so we'll do a Confirmation.
+			if (!removedTowns.isEmpty()) {
+				final Nation finalNation = nation;
+				Confirmation.runOnAccept(() -> {
+					finalNation.setCapital(newCapital);										
+					finalNation.removeOutOfRangeTowns();
 					plugin.resetCache();
-					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
+					TownyMessaging.sendPrefixedNationMessage(finalNation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
 					if (admin)
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
-					nation.save();
-				}
-			// Proximity doesn't factor in.
+						TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
+				})
+				.setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
+				.sendTo(sender);
+				
+			// No towns will be removed, skip the Confirmation.
 			} else {
 				nation.setCapital(newCapital);
 				plugin.resetCache();
@@ -2297,6 +2290,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
 				nation.save();
 			}
+		// Proximity doesn't factor in.
+		} else {
+			nation.setCapital(newCapital);
+			plugin.resetCache();
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
+			if (admin)
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
+			nation.save();
 		}
 	}
 
@@ -2310,12 +2311,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Resident oldKing = nation.getKing();
 				Town newCapital = newKing.getTown();
 
-				if (TownySettings.getNumResidentsCreateNation() > 0 && newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation()) {
+				if (TownySettings.getNumResidentsCreateNation() > 0 && newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation() && !admin) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_enough_residents_capital", newCapital.getName()));
 					return;
 				}
 				
-				if (TownySettings.getMaxResidentsPerTown() > 0 && nation.getCapital().getNumResidents() > TownySettings.getMaxResidentsPerTown()) {
+				if (TownySettings.getMaxResidentsPerTown() > 0 && nation.getCapital().getNumResidents() > TownySettings.getMaxResidentsPerTown() && !admin) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_nation_capital_too_many_residents", newCapital.getName()));
 					return;
 				}
