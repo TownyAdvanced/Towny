@@ -1116,6 +1116,14 @@ public class Towny extends JavaPlugin {
 	}
 	
 	/**
+	 * @deprecated since 0.98.1.1. Towny will only support 1.16 and newer going forward.
+	 */
+	@Deprecated
+	public static boolean is116Plus() {
+		return true;
+	}
+
+	/**
 	 * @return whether server is running spigot (and not CraftBukkit.)
 	 */
 	private static boolean isSpigotOrDerivative() {
