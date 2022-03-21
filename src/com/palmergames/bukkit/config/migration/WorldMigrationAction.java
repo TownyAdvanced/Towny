@@ -35,6 +35,14 @@ public enum WorldMigrationAction {
 		else
 			townyWorld.setPlotManagementDeleteIds(splitMats(StringMgmt.join(townyWorld.getPlotManagementDeleteIds(), ",") + change.value));
 	})),
+	UPDATE_WILDERNESS_IGNORE_MATS(((townyWorld, change) -> {
+		if (change.type == MigrationType.REPLACE)
+			townyWorld.setUnclaimedZoneIgnore(replaceAll(townyWorld.getUnclaimedZoneIgnoreMaterials().stream()
+					.map(mat -> mat.name())
+					.collect(Collectors.toList()), change.key, change.value));
+		else
+			townyWorld.setUnclaimedZoneIgnore(splitMats(StringMgmt.join(townyWorld.getUnclaimedZoneIgnoreMaterials(), ",") + change.value));
+	})),
 	UPDATE_WORLD_EXPLOSION_REVERT_BLOCKS(((townyWorld, change) -> {
 		if (change.type == MigrationType.REPLACE)
 			townyWorld.setPlotManagementWildRevertMaterials(replaceAll(townyWorld.getPlotManagementWildRevertBlocks().stream()

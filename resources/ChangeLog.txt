@@ -7356,3 +7356,5 @@ v0.92.0.11:
   - Fix regression from 0.98.1.1 causing java.lang.NullPointerException on load.
 0.98.1.3:
   - Return is116Plus method to Towny so TownyChat will be happy.
+  - Add missing SUGAR_CANE to unclaimed zone ignore materials.
+    - This will automatically be added to your config and world files.

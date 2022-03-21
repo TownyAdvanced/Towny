@@ -262,5 +262,16 @@
         "value": "towny.command.town.jail.list"
       }
     ]
+  },
+  {
+    "version": "0.98.1.3",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "unclaimed.unclaimed_zone_ignore",
+        "value": ",SUGAR_CANE",
+        "worldAction": "UPDATE_WILDERNESS_IGNORE_MATS"
+      }
+    ]
   }
 ]
