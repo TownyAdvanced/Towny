@@ -1258,7 +1258,7 @@ status_home_element: ' &7[Ana Arsa: %s]'
 status_registered: 'Kayıt:'
 status_lastonline: 'Son_aktifliği:'
 status_fractions: '%s/%s'
-status_rank_list: 'Yetki Listesi'
+status_rank_list: 'Rütbe Listesi'
 status_hover_click_for_more: 'Daha fazla bilgi için tıklayın.'
 status_jailed: 'Hapis_Durumu:'
 status_bad_yes: '&cEVET'
@@ -1448,7 +1448,7 @@ msg_town_unlimitedclaims_setting_set_to: '%s kasabasının sınırsız claim tal
 did_you_want_to_toggle_unlimited_claims: 'Claim talebinde bulunmak için yeterli claim hakkınız yok, %s kasabası için sınırsız claim hakkı talebinde bulunmak istediniz mi?'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ulusunuzu terk edemezsiniz, şehriniz fethedilir.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ulusunu terk edemezsin, kasaban fethedilmiş.'
 msg_err_console_only: 'Bu komut sadece konsol tarafından kullanılabilir.'
 msg_err_player_only: 'Bu komut sadece bir oyuncu tarafından kullanılabilir.'
 #Added in 0.146
