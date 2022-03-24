@@ -571,7 +571,7 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Açık)'
 status_town_board: 'Pano:'
 status_founded: 'Bulundu:'
-status_town_size: 'Şehir_büyüklüğü:'
+status_town_size: 'Şehir büyüklüğü:'
 status_town_size_bought: 'Satın_aldı:'
 status_town_size_bonus: 'Bonus:'
 status_town_size_nationbonus: 'Ülke_bonusu:'
@@ -594,7 +594,7 @@ status_world_forceexplosion: 'Zorla Patlama:'
 status_world_worldmobs: 'Dünya Yaratıkları:'
 status_world_forcetownmobs: 'Zorla Kasaba Yaratıkları:'
 status_world_unclaimrevert: 'Geri alma işlemini iptal et:'
-status_world_explrevert: 'Patlama geri almasını iptal et:'
+status_world_explrevert: 'Patlama Geri Dönüşü:'
 status_world_ignoredblocks: 'Görmezden Gelinen Bloklar:'
 status_res_taxexempt: 'Yetkili, şehir vergilerini ödemekten muaftır.'
 status_res_tax: 'Şehir_vergisi:'
@@ -1386,7 +1386,7 @@ msg_jailed_teleport: 'Neyse ki, ender incilerin ve koro meyvesinin kaçmanıza y
 #Jail handbook messages
 msg_jailed_war_prisoner: "Bir savaş tutsağı olarak, yurttaşlarınız hapishane planının Canını 0''a indirebilirse veya hapse attığınız kasaba savaştan çıkarılırsa serbest bırakılırsınız.\n"
 #Jail handbook title
-msg_jailed_title: 'Demek hapse atıldın :('
+msg_jailed_title: 'Hapse atıldınız :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
 #Added in 0.130
