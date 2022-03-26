@@ -70,6 +70,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -352,6 +353,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 				break;
 			case "checkperm":
+				if (args.length == 2)
+					return NameUtil.filterByStart(BukkitTools.getOnlinePlayers()
+						.stream()
+						.map(Player::getName)
+						.collect(Collectors.toList()), args[1]);
+				if (args.length == 3)
+					return NameUtil.filterByStart(BukkitTools.getPluginManager().getPermissions()
+						.stream()
+						.map(Permission::getName)
+						.collect(Collectors.toList()), args[2]);
 			case "database":
 				if (args.length == 2)
 					return NameUtil.filterByStart(adminDatabaseTabCompletes, args[1]);
