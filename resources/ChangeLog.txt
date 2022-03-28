@@ -7358,3 +7358,7 @@ v0.92.0.11:
   - Return is116Plus method to Towny so TownyChat will be happy.
   - Add missing SUGAR_CANE to unclaimed zone ignore materials.
     - This will automatically be added to your config and world files.
+0.98.1.4:
+  - Bump language file to 0.147.
+  - Add confirmation to /ta reset.
+    - Closes #5829.

@@ -635,7 +635,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 			} else if (split[0].equalsIgnoreCase("reset")) {
 
-				reloadConfig(true);
+				Confirmation.runOnAccept(()-> reloadConfig(true))
+					.setTitle(Translatable.of("this_will_reset_your_config"))
+					.sendTo(sender);
 
 			} else if (split[0].equalsIgnoreCase("backup")) {
 
