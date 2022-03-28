@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationMergeEvent;
+import com.palmergames.bukkit.towny.event.nation.NationPreAddAllyEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownKickEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
@@ -1721,6 +1722,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (player == null)
 			throw new TownyException("Could not add " + targetNation + " as Ally because your Player is null! This shouldn't be possible!");
 		if (!targetNation.hasEnemy(nation)) {
+			NationPreAddAllyEvent preAddAllyEvent = new NationPreAddAllyEvent(nation, targetNation);
+			Bukkit.getPluginManager().callEvent(preAddAllyEvent);
+			if (preAddAllyEvent.isCancelled()) {
+				TownyMessaging.sendErrorMsg(player, preAddAllyEvent.getCancelMessage());
+				return;
+			}
 			if (!targetNation.getCapital().getMayor().isNPC()) {
 				nationCreateAllyRequest(player, nation, targetNation);
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_ally_req_sent", targetNation));
