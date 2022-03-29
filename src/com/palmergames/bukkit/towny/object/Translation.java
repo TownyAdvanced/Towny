@@ -196,10 +196,10 @@ public final class Translation {
 	}
 	
 	public static Component translateTranslatables(CommandSender sender, Translatable... translatables) {
-		return translateTranslatables(sender, " ", translatables);
+		return translateTranslatables(sender, Component.space(), translatables);
 	}
 	
-	public static Component translateTranslatables(CommandSender sender, String delimiter, Translatable... translatables) {
+	public static Component translateTranslatables(CommandSender sender, Component delimiter, Translatable... translatables) {
 		Locale locale = getLocale(sender);
 		
 		Component component = Component.empty();
@@ -207,7 +207,7 @@ public final class Translation {
 			component = component.append(translatables[i].component(locale));
 
 			if (i != translatables.length - 1)
-				component = component.append(Component.text(delimiter));
+				component = component.append(delimiter);
 		}
 
 		return component;

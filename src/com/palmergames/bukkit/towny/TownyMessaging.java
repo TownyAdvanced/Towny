@@ -496,13 +496,13 @@ public class TownyMessaging {
 		// Create confirm button based on given params.
 		TextComponent confirmComponent = Component.text("[/" + confirmline + "]")
 			.color(NamedTextColor.GREEN)
-			.hoverEvent(HoverEvent.showText(Component.text(translator.of("msg_confirmation_spigot_click_accept", confirmline, "/" + confirmline))))
+			.hoverEvent(HoverEvent.showText(translator.comp("msg_confirmation_spigot_click_accept", confirmline, "/" + confirmline)))
 			.clickEvent(ClickEvent.runCommand("/towny:" + confirmline));
 
 		// Create cancel button based on given params.
 		TextComponent cancelComponent = Component.text("[/" + cancelline + "]")
 			.color(NamedTextColor.RED)
-			.hoverEvent(HoverEvent.showText(Component.text(translator.of("msg_confirmation_spigot_click_cancel", cancelline, "/" + cancelline))))
+			.hoverEvent(HoverEvent.showText(translator.comp("msg_confirmation_spigot_click_cancel", cancelline, "/" + cancelline)))
 			.clickEvent(ClickEvent.runCommand("/towny:" + cancelline));
 		
 		Towny.getAdventure().sender(player).sendMessage(Component.text(firstline).append(Component.newline())
@@ -572,13 +572,11 @@ public class TownyMessaging {
 	public static Component getPageNavigationFooter(String prefix, int page, String arg, int total, CommandSender sender) {
 		Locale locale = Translation.getLocale(sender);
 
-		Component backButton = Component.text("<<<")
-			.color(NamedTextColor.GOLD)
+		Component backButton = Component.text("<<<", NamedTextColor.GOLD)
 			.clickEvent(ClickEvent.runCommand("/" + prefix + " " + (arg.isEmpty() ? "" : arg + " ") + (page - 1)))
 			.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(Translation.of("msg_hover_previous_page", locale))));
 		
-		Component forwardButton = Component.text(">>>")
-			.color(NamedTextColor.GOLD)
+		Component forwardButton = Component.text(">>>", NamedTextColor.GOLD)
 			.clickEvent(ClickEvent.runCommand("/" + prefix + " " +  (arg.isEmpty() ? "" : arg + " ") + (page + 1)))
 			.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(Translation.of("msg_hover_next_page", locale))));
 		
@@ -836,7 +834,7 @@ public class TownyMessaging {
 		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
 		
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			sendMessage(player, Translation.translateTranslatables(player, "", Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())), message));
+			sendMessage(player, Translation.translateTranslatables(player, Component.empty(), Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())), message));
 	}
 	
 	/**
@@ -850,7 +848,7 @@ public class TownyMessaging {
 		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + message.translate()));
 		
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			sendMessage(player, Translation.translateTranslatables(player, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), message));
+			sendMessage(player, Translation.translateTranslatables(player, Component.empty(), Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), message));
 	}
 	
 	/**
