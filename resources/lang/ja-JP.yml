@@ -815,7 +815,7 @@ msg_err_you_must_specify_a_group_name: 'グループ名を指定してくださ�
 msg_plot_was_put_into_group_x: 'プロット&9(%s,%s)&2はグループ%sに追加されました。'
 msg_err_plot_not_associated_with_a_group: 'このプロットは、グループと関連付けられていません。'
 msg_plot_was_removed_from_group_x: 'Plot &9(%s,%s) &2was removed from group %s'
-msg_plot_renamed_from_x_to_y: 'Plot %s has been renamed to %s.'
+msg_plot_renamed_from_x_to_y: '土地 %s を %s に改名しました。'
 msg_err_plot_group_specify_price: '価格を設定してください。例: /plot group fs [値段]'
 msg_player_put_group_up_for_sale: '%s put group %s up for sale for %s'
 msg_err_could_not_set_group_type: 'Could not set group type - '
@@ -1456,4 +1456,6 @@ msg_err_player_only: 'This command can only be used by a player.'
 msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
 #Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
-this_will_reset_your_config: 'Running this command resets your config.yml to the default file. Do you want to continue?'
+this_will_reset_your_config: 'このコマンドを実行すると、config.ymlがデフォルトにリセットされます。続行しますか?'
+#Message shown when an admin is setting a new king or capital and would override the config by doing so
+msg_warn_overriding_server_config: 'By doing this you are overriding the resident limits set in the server configuration. Do you want to continue anyway?'
