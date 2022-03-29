@@ -7364,3 +7364,4 @@ v0.92.0.11:
     - Closes #5829.
   - Add NationPreAddAllyEvent, courtesy of galacticwarrior9 with PR #5832.
   - Fix /ta checkperm having incorrect tab completions, courtesy of Altruiis with PR #5830. (First-Time Contributor!)
+  - Let admins bypass nation capital checks with confirmation, courtesy of Gamer153 with PR #5834.
