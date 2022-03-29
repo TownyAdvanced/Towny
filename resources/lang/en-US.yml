@@ -1656,3 +1656,5 @@ msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
 
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'Running this command resets your config.yml to the default file. Do you want to continue?'
+#Message shown when an admin is setting a new king or capital and would override the config by doing so
+msg_warn_overriding_server_config: 'By doing this you are overriding the resident limits set in the server configuration. Do you want to continue anyway?'

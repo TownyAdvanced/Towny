@@ -2231,6 +2231,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void nationSetCapital(CommandSender sender, Nation nation, String[] split, boolean admin) {
+		if (split.length < 2) {
+			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set capital {town name}");
+			return;
+		}
+		
 		Town newCapital = TownyUniverse.getInstance().getTown(split[1]);
 		
 		if (newCapital == null) {
@@ -2238,19 +2243,19 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		if (TownySettings.getNumResidentsCreateNation() > 0 && newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation()) {
+		boolean capitalNotEnoughResidents = TownySettings.getNumResidentsCreateNation() > 0 && newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation();
+		if (capitalNotEnoughResidents && !admin) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_enough_residents_capital", newCapital.getName()));
 			return;
 		}
 		
-		if (TownySettings.getMaxResidentsPerTown() > 0 && nation.getCapital().getNumResidents() > TownySettings.getMaxResidentsPerTown()) {
+		boolean capitalTooManyResidents = TownySettings.getMaxResidentsPerTown() > 0 && nation.getCapital().getNumResidents() > TownySettings.getMaxResidentsPerTown();
+		if (capitalTooManyResidents && !admin) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_nation_capital_too_many_residents", newCapital.getName()));
 			return;
 		}
-
-		if (split.length < 2)
-			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set capital {town name}");
-		else {
+		
+		Runnable processCommand = () -> {
 			Resident oldKing = nation.getKing();
 			Resident newKing = newCapital.getMayor();
 
@@ -2264,22 +2269,22 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			// Do proximity tests.
 			if (TownySettings.getNationRequiresProximity() > 0 ) {
 				List<Town> removedTowns = nation.gatherOutOfRangeTowns(nation.getTowns(), newCapital);
-				
+
 				// There are going to be some towns removed from the nation, so we'll do a Confirmation.
 				if (!removedTowns.isEmpty()) {
 					final Nation finalNation = nation;
 					Confirmation.runOnAccept(() -> {
-						finalNation.setCapital(newCapital);										
-						finalNation.removeOutOfRangeTowns();
-						plugin.resetCache();
-						TownyMessaging.sendPrefixedNationMessage(finalNation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
-						if (admin)
-							TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
-					})
-					.setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
-					.sendTo(sender);
-					
-				// No towns will be removed, skip the Confirmation.
+							finalNation.setCapital(newCapital);
+							finalNation.removeOutOfRangeTowns();
+							plugin.resetCache();
+							TownyMessaging.sendPrefixedNationMessage(finalNation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
+							if (admin)
+								TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
+						})
+						.setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
+						.sendTo(sender);
+
+					// No towns will be removed, skip the Confirmation.
 				} else {
 					nation.setCapital(newCapital);
 					plugin.resetCache();
@@ -2288,7 +2293,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
 					nation.save();
 				}
-			// Proximity doesn't factor in.
+				// Proximity doesn't factor in.
 			} else {
 				nation.setCapital(newCapital);
 				plugin.resetCache();
@@ -2297,7 +2302,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
 				nation.save();
 			}
-		}
+		};
+
+		if (capitalNotEnoughResidents || capitalTooManyResidents)
+			Confirmation.runOnAccept(processCommand)
+				.setTitle(Translatable.of("msg_warn_overriding_server_config"))
+				.sendTo(sender);
+		else processCommand.run();
 	}
 
 	private static void nationSetKing(CommandSender sender, Nation nation, String[] split, boolean admin) {
@@ -2310,12 +2321,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Resident oldKing = nation.getKing();
 				Town newCapital = newKing.getTown();
 
-				if (TownySettings.getNumResidentsCreateNation() > 0 && newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation()) {
+				if (TownySettings.getNumResidentsCreateNation() > 0 && newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation() && !admin) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_enough_residents_capital", newCapital.getName()));
 					return;
 				}
 				
-				if (TownySettings.getMaxResidentsPerTown() > 0 && nation.getCapital().getNumResidents() > TownySettings.getMaxResidentsPerTown()) {
+				if (TownySettings.getMaxResidentsPerTown() > 0 && nation.getCapital().getNumResidents() > TownySettings.getMaxResidentsPerTown() && !admin) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_nation_capital_too_many_residents", newCapital.getName()));
 					return;
 				}
