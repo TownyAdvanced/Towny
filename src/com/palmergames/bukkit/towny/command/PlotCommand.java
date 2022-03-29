@@ -1412,7 +1412,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			final boolean asMayorInUnowned = player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYORINUNOWNED.getNode());
 			boolean isSameTown = townBlock.getTownOrNull().hasResident(resident);
 
-			if (isSameTown && (!isMayor || !asMayorInUnowned))
+			if (isSameTown && !isMayor && !asMayorInUnowned)
 				throw new TownyException(Translatable.of("msg_not_mayor_ass"));
 
 			if (!isSameTown && !isAdmin)
