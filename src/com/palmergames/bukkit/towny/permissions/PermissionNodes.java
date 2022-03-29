@@ -190,6 +190,7 @@ public enum PermissionNodes {
 	 */
 	TOWNY_COMMAND_PLOT("towny.command.plot.*"),
 		TOWNY_COMMAND_PLOT_ASMAYOR("towny.command.plot.asmayor"),
+		TOWNY_COMMAND_PLOT_ASMAYORINUNOWNED("towny.command.plot.asmayorinunowned"),
 		TOWNY_COMMAND_PLOT_CLAIM("towny.command.plot.claim"),
 		TOWNY_COMMAND_PLOT_EVICT("towny.command.plot.evict"),
 		TOWNY_COMMAND_PLOT_UNCLAIM("towny.command.plot.unclaim"),
