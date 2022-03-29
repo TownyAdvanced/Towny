@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.146
+version: 0.147
 language: Turkish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -571,7 +571,7 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Açık)'
 status_town_board: 'Pano:'
 status_founded: 'Bulundu:'
-status_town_size: 'Şehir_büyüklüğü:'
+status_town_size: 'Şehir büyüklüğü:'
 status_town_size_bought: 'Satın_aldı:'
 status_town_size_bonus: 'Bonus:'
 status_town_size_nationbonus: 'Ülke_bonusu:'
@@ -594,7 +594,7 @@ status_world_forceexplosion: 'Zorla Patlama:'
 status_world_worldmobs: 'Dünya Yaratıkları:'
 status_world_forcetownmobs: 'Zorla Kasaba Yaratıkları:'
 status_world_unclaimrevert: 'Geri alma işlemini iptal et:'
-status_world_explrevert: 'Patlama geri almasını iptal et:'
+status_world_explrevert: 'Patlama Geri Dönüşü:'
 status_world_ignoredblocks: 'Görmezden Gelinen Bloklar:'
 status_res_taxexempt: 'Yetkili, şehir vergilerini ödemekten muaftır.'
 status_res_tax: 'Şehir_vergisi:'
@@ -1258,7 +1258,7 @@ status_home_element: ' &7[Ana Arsa: %s]'
 status_registered: 'Kayıt:'
 status_lastonline: 'Son_aktifliği:'
 status_fractions: '%s/%s'
-status_rank_list: 'Yetki Listesi'
+status_rank_list: 'Rütbe Listesi'
 status_hover_click_for_more: 'Daha fazla bilgi için tıklayın.'
 status_jailed: 'Hapis_Durumu:'
 status_bad_yes: '&cEVET'
@@ -1386,7 +1386,7 @@ msg_jailed_teleport: 'Neyse ki, ender incilerin ve koro meyvesinin kaçmanıza y
 #Jail handbook messages
 msg_jailed_war_prisoner: "Bir savaş tutsağı olarak, yurttaşlarınız hapishane planının Canını 0''a indirebilirse veya hapse attığınız kasaba savaştan çıkarılırsa serbest bırakılırsınız.\n"
 #Jail handbook title
-msg_jailed_title: 'Demek hapse atıldın :('
+msg_jailed_title: 'Hapse atıldınız :('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco.'
 #Added in 0.130
@@ -1448,9 +1448,12 @@ msg_town_unlimitedclaims_setting_set_to: '%s kasabasının sınırsız claim tal
 did_you_want_to_toggle_unlimited_claims: 'Claim talebinde bulunmak için yeterli claim hakkınız yok, %s kasabası için sınırsız claim hakkı talebinde bulunmak istediniz mi?'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ulusunuzu terk edemezsiniz, şehriniz fethedilir.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ulusunu terk edemezsin, kasaban fethedilmiş.'
 msg_err_console_only: 'Bu komut sadece konsol tarafından kullanılabilir.'
 msg_err_player_only: 'Bu komut sadece bir oyuncu tarafından kullanılabilir.'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: 'Sınırları aşmak %s olduğunda başlık mesajları gösterilir.'
+#Added in 0.147
+#Message shown confirming that an admin wants to reset their Towny config
+this_will_reset_your_config: 'Running this command resets your config.yml to the default file. Do you want to continue?'
