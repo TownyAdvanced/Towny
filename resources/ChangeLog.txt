@@ -7365,3 +7365,14 @@ v0.92.0.11:
   - Add NationPreAddAllyEvent, courtesy of galacticwarrior9 with PR #5832.
   - Fix /ta checkperm having incorrect tab completions, courtesy of Altruiis with PR #5830. (First-Time Contributor!)
   - Let admins bypass nation capital checks with confirmation, courtesy of Gamer153 with PR #5834.
+0.98.1.5:
+  - Add new asmayorinunowned permission node, courtesy of Warriorrrr with PR #5836.
+  - New Permission Node: towny.command.plot.asmayorinunowned
+    - Meant for an assistant-like rank, allowing them permission to complete mayor-like tasks, but only in town-owned plots with no resident owning said plots.
+    - These tasks include:
+      - managing plot groups,
+      - putting plots for sale, not for sale,
+      - altering jail cells,
+      - using /plot perm add|remove,
+      - using /plot trust add|remove
+    - This node is a child node of towny.command.plot.* and does not require any changes to your townyperms.yml.
