@@ -98,7 +98,7 @@ public abstract class CustomDataField<T> implements Cloneable {
 	 */
 	@NotNull
 	public Component getLabelAsComp() {
-		return Component.text(getLabel());
+		return TownyComponents.miniMessage(getLabel());
 	}
 	
 	public boolean hasLabel() {
