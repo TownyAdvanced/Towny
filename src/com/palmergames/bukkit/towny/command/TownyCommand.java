@@ -352,23 +352,28 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			} else
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
 		else if (args[0].equalsIgnoreCase("balance")) {
-			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<Government> list = new ArrayList<>();
-				list.addAll(universe.getTowns());
-				list.addAll(universe.getNations());
-				townyTop.add(ChatTools.formatTitle("Top Bank Balances"));
-				Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> townyTop.addAll(getTopBankBalance(list)));
-			} else if (args[1].equalsIgnoreCase("town")) {
-				List<Government> list = new ArrayList<>(universe.getTowns());
-				townyTop.add(ChatTools.formatTitle("Top Bank Balances by Town"));
-				Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> townyTop.addAll(getTopBankBalance(list)));
-			} else if (args[1].equalsIgnoreCase("nation")) {
-				List<Government> list = new ArrayList<>(universe.getNations());
-				townyTop.add(ChatTools.formatTitle("Top Bank Balances by Nation"));
-				Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> townyTop.addAll(getTopBankBalance(list)));
-			} else {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
-			}
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+				if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
+					List<Government> list = new ArrayList<>();
+					list.addAll(universe.getTowns());
+					list.addAll(universe.getNations());
+					townyTop.add(ChatTools.formatTitle("Top Bank Balances"));
+					townyTop.addAll(getTopBankBalance(list));
+				} else if (args[1].equalsIgnoreCase("town")) {
+					List<Government> list = new ArrayList<>(universe.getTowns());
+					townyTop.add(ChatTools.formatTitle("Top Bank Balances by Town"));
+					townyTop.addAll(getTopBankBalance(list));
+				} else if (args[1].equalsIgnoreCase("nation")) {
+					List<Government> list = new ArrayList<>(universe.getNations());
+					townyTop.add(ChatTools.formatTitle("Top Bank Balances by Nation"));
+					townyTop.addAll(getTopBankBalance(list));
+				} else {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
+				}
+				for (String line : townyTop)
+					TownyMessaging.sendMessage(sender, line);
+			});
+			return;
 		}
 		else
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
