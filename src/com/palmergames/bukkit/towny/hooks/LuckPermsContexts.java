@@ -28,8 +28,12 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 	private static final String INSIDEOWNPLOT_CONTEXT = "towny:insideownplot";
 	private static final String TOWN_RANK_CONTEXT = "towny:townrank";
 	private static final String NATION_RANK_CONTEXT = "towny:nationrank";
+	private static final String CAN_BREAK_CONTEXT = "towny:canbreakinplot";
+	private static final String CAN_PLACE_CONTEXT = "towny:canplaceinplot";
+	private static final String CAN_SWITCH_CONTEXT = "towny:canswitchinplot";
+	private static final String CAN_ITEMUSE_CONTEXT = "towny:canitemuseinplot";
 	
-	private static final List<String> booleanContexts = Arrays.asList(RESIDENT_CONTEXT, MAYOR_CONTEXT, KING_CONTEXT, INSIDETOWN_CONTEXT, INSIDEOWNTOWN_CONTEXT, INSIDEOWNPLOT_CONTEXT);
+	private static final List<String> booleanContexts = Arrays.asList(RESIDENT_CONTEXT, MAYOR_CONTEXT, KING_CONTEXT, INSIDETOWN_CONTEXT, INSIDEOWNTOWN_CONTEXT, INSIDEOWNPLOT_CONTEXT, CAN_BREAK_CONTEXT, CAN_PLACE_CONTEXT, CAN_SWITCH_CONTEXT, CAN_ITEMUSE_CONTEXT);
 	private static final String nationRankContext = NATION_RANK_CONTEXT;
 	private static final String TownRankContext = TOWN_RANK_CONTEXT;
 	

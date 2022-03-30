@@ -51,9 +51,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
@@ -524,33 +526,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						newResident(rs.getString("name"));
 					} catch (AlreadyRegisteredException ignored) {
 					}
-				}
-			}
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	@Override
-	public boolean loadHibernatedResidents() {
-		TownyMessaging.sendDebugMsg("Loading Hibernated Resident List");
-		if (!getContext())
-			return false;
-		try {
-			try (Statement s = cntx.createStatement()) {
-				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "HIBERNATEDRESIDENTS");
-				
-				while (rs.next()) {
-					UUID uuid = null;
-					long registered = 0;
-					if (rs.getString("uuid") != null && !rs.getString("uuid").isEmpty())
-						uuid = UUID.fromString(rs.getString("uuid"));
-					if (rs.getString("registered") != null && !rs.getString("registered").isEmpty())
-						registered = Long.parseLong(rs.getString("registered"));
-					if (uuid != null && registered > 0)
-						universe.registerHibernatedResident(uuid, registered);
 				}
 			}
 			return true;
@@ -2110,12 +2085,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 	
 	@Override
-	public synchronized boolean saveHibernatedResident(UUID uuid) {
+	public synchronized boolean saveHibernatedResident(UUID uuid, long registered) {
 		TownyMessaging.sendDebugMsg("Saving Hibernated Resident " + uuid);
 		try {
 			HashMap<String, Object> res_hm = new HashMap<>();
 			res_hm.put("uuid", uuid);
-			res_hm.put("registered", universe.getHibernatedResidentRegistered(uuid));
+			res_hm.put("registered", registered);
 
 			UpdateDB("HIBERNATEDRESIDENTS", res_hm, Collections.singletonList("uuid"));
 			return true;
@@ -2542,7 +2517,27 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		jail_hm.put("uuid", jail.getUUID());
 		DeleteDB("JAILS", jail_hm);
 	}
- 
+
+	@Override
+	public CompletableFuture<Optional<Long>> getHibernatedResidentRegistered(UUID uuid) {
+		return CompletableFuture.supplyAsync(() -> {
+			if (!getContext())
+				return Optional.empty();
+			
+			try (Statement statement = cntx.createStatement()) {
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tb_prefix + "HIBERNATEDRESIDENTS WHERE uuid = '" + uuid + "' LIMIT 1");
+				
+				final String registered;
+				if (resultSet.next() && (registered = resultSet.getString("registered")) != null && !registered.isEmpty()) {
+					return Optional.of(Long.parseLong(registered));
+				} else
+					return Optional.empty();
+			} catch (Exception e) {
+				return Optional.empty();
+			}
+		});
+	}
+
 	/*
 	 * Save keys (Unused by SQLSource)
 	 */

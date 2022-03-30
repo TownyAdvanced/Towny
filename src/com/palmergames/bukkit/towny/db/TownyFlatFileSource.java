@@ -40,7 +40,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
@@ -224,25 +226,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		return true;
 			
-	}
-	
-	@Override 
-	public boolean loadHibernatedResidents() {
-		TownyMessaging.sendDebugMsg("Loading hibernated residents.");
-		File[] residentFiles = receiveObjectFiles("residents" + File.separator + "hibernated", ".txt");
-
-		for (File resident : residentFiles) {
-			UUID uuid = UUID.fromString(resident.getName().replace(".txt", ""));
-			HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(resident);
-			long registered = 0;
-			String line = keys.get("registered");
-			if (line != null)
-				registered = Long.parseLong(line);
-			if (registered > 0)
-				universe.registerHibernatedResident(uuid, registered);
-		}
-		
-		return true;
 	}
 
 	@Override
@@ -1876,9 +1859,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	@Override
-	public boolean saveHibernatedResident(UUID uuid) {
+	public boolean saveHibernatedResident(UUID uuid, long registered) {
 		List<String> list = new ArrayList<>();
-		list.add("registered=" + universe.getHibernatedResidentRegistered(uuid));
+		list.add("registered=" + registered);
 		this.queryQueue.add(new FlatFileSaveTask(list, getHibernatedResidentFilename(uuid)));
 		return true;
 	}
@@ -2394,5 +2377,22 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		File file = new File(getJailFilename(jail));
 		queryQueue.add(new DeleteFileTask(file, false));
 	}
-	
+
+	@Override
+	public CompletableFuture<Optional<Long>> getHibernatedResidentRegistered(UUID uuid) {
+		return CompletableFuture.supplyAsync(() -> {
+			File hibernatedFile = new File(getHibernatedResidentFilename(uuid));
+			
+			if (!hibernatedFile.exists())
+				return Optional.empty();
+			
+			Map<String, String> keys = FileMgmt.loadFileIntoHashMap(hibernatedFile);
+			
+			try {
+				return Optional.of(Long.parseLong(keys.get("registered")));
+			} catch (NumberFormatException e) {
+				return Optional.empty();
+			}
+		});
+	}
 }

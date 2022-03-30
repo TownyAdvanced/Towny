@@ -79,7 +79,6 @@ public class TownyUniverse {
 	private final Map<Block, SpawnPoint> spawnPoints = new ConcurrentHashMap<>(); 
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final Map<UUID, Jail> jailUUIDMap = new ConcurrentHashMap<>();
-    private final Map<UUID, Long> hibernatedResidentMap = new ConcurrentHashMap<>();
     private final Map<String, String> replacementNamesMap = new ConcurrentHashMap<>();
     private final Map<UUID, PlotGroup> plotGroupUUIDMap = new ConcurrentHashMap<>();
     
@@ -125,7 +124,6 @@ public class TownyUniverse {
         jailUUIDMap.clear();
         plotGroupUUIDMap.clear();
         wildernessMapDataMap.clear();
-        hibernatedResidentMap.clear();
         replacementNamesMap.clear();
     }
     
@@ -451,29 +449,6 @@ public class TownyUniverse {
 	
     public List<Resident> getJailedResidentMap() {
         return jailedResidents;
-    }
-    
-    // =========== Hibernated Residents Methods ===========
-    
-    public void registerHibernatedResident(UUID uuid, long registered) {
-    	hibernatedResidentMap.put(uuid, registered);
-    }
-    
-    public void unregisterHibernatedResident(UUID uuid) {
-    	hibernatedResidentMap.remove(uuid);
-    }
-    
-    public boolean hasHibernatedResdient(UUID uuid) {
-    	return hibernatedResidentMap.containsKey(uuid);
-    }
-    
-    public Collection<UUID> getHibernatedResidents() {
-    	return Collections.unmodifiableCollection(hibernatedResidentMap.keySet());
-    }
-    
-    @Nullable
-    public long getHibernatedResidentRegistered(UUID uuid) {
-    	return hibernatedResidentMap.get(uuid); 
     }
 
 	// =========== Town Methods ===========

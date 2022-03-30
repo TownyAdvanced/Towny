@@ -423,12 +423,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		}
 
-		if (resident.hasUUID()) {
-			UUID uuid = resident.getUUID();
-			long registered = resident.getRegistered();
-			universe.registerHibernatedResident(uuid, registered);
-			saveHibernatedResident(uuid);
-		}
+		if (resident.hasUUID() && !resident.isNPC())
+			saveHibernatedResident(resident.getUUID(), resident.getRegistered());
 
 		// Delete the residents file.
 		deleteResident(resident);
@@ -698,12 +694,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void removePlotGroup(PlotGroup group) {
 		universe.unregisterGroup(group);
 		deletePlotGroup(group);
-	}
-	
-	@Override
-	public void removeHibernatedResident(UUID uuid) {
-		universe.unregisterHibernatedResident(uuid);
-		deleteHibernatedResident(uuid);
 	}
 
 	/*
