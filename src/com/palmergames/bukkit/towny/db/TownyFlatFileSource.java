@@ -2387,9 +2387,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				return Optional.empty();
 			
 			Map<String, String> keys = FileMgmt.loadFileIntoHashMap(hibernatedFile);
+			String registered = keys.get("registered");
+			if (registered == null || registered.isEmpty())
+				return Optional.empty();
 			
 			try {
-				return Optional.of(Long.parseLong(keys.get("registered")));
+				return Optional.of(Long.parseLong(registered));
 			} catch (NumberFormatException e) {
 				return Optional.empty();
 			}
