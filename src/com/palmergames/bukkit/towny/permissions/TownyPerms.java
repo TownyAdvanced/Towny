@@ -721,7 +721,7 @@ public class TownyPerms {
 				"#    - towny.command.plot.*                                                                 #",
 				"#    - -towny.command.plot.set.jail                                                         #",
 				"# In this example the user is given full rights to all of the /plot command nodes,          #",
-				"# but has had their ability to set a plot to a Jail plot type.                              #",
+				"# but has had their ability to set a plot to a Jail plot type disabled.                     #",
 				"#############################################################################################",
 				"",
 				"",
