@@ -1132,7 +1132,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean isOverOutpostLimit() {
-		return (getMaxOutpostSpawn() > getOutpostLimit());
+		return TownySettings.isOutpostsLimitedByLevels() && (getMaxOutpostSpawn() > getOutpostLimit());
 
 	}
 	
