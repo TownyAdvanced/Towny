@@ -22,7 +22,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -53,12 +55,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadSnapshotList() && loadHibernatedResidents();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorldList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList() && saveHibernatedResidents();
+		return saveWorldList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -76,8 +78,6 @@ public abstract class TownyDataSource {
 	abstract public boolean loadTownBlockList();
 
 	abstract public boolean loadResidentList();
-	
-	abstract public boolean loadHibernatedResidents();
 
 	abstract public boolean loadTownList();
 
@@ -115,7 +115,7 @@ public abstract class TownyDataSource {
 
 	abstract public boolean saveResident(Resident resident);
 
-	abstract public boolean saveHibernatedResident(UUID uuid);
+	abstract public boolean saveHibernatedResident(UUID uuid, long registered);
 	
 	abstract public boolean saveTown(Town town);
 	
@@ -156,6 +156,8 @@ public abstract class TownyDataSource {
 	abstract public void deletePlotGroup(PlotGroup group);
 	
 	abstract public void deleteJail(Jail jail);
+	
+	abstract public CompletableFuture<Optional<Long>> getHibernatedResidentRegistered(UUID uuid);
 
 	public boolean cleanup() {
 
@@ -245,12 +247,6 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Saving Residents");
 		for (Resident resident : universe.getResidents())
 			saveResident(resident);
-		return true;
-	}
-	
-	public boolean saveHibernatedResidents() { 
-		for (UUID uuid : universe.getHibernatedResidents())
-			saveHibernatedResident(uuid);
 		return true;
 	}
 	
@@ -507,8 +503,6 @@ public abstract class TownyDataSource {
 
 	abstract public void removeResident(Resident resident);
 
-	abstract public void removeHibernatedResident(UUID uuid);
-	
 	abstract public void removeTownBlock(TownBlock townBlock);
 
 	abstract public void removeTownBlocks(Town town);
