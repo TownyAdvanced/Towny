@@ -415,7 +415,7 @@ msg_err_max_residents_per_town_reached: '&cNúmero máximo de residentes (%s) al
 msg_err_resident_doesnt_meet_invite_cooldown: '&cEl jugador %s es muy nuevo para unirse a una ciudad. Espera un momento.'
 msg_cant_toggle_pvp_outsider_in_town: '¡No puedes cambiar el estado del combate en tu ciudad mientrás hay un extranjero en tus tierras!'
 msg_err_unclaim_not_outpost: '¡No se pudo abandonar el area, debido a que no es un outpost!'
-outpost_plu: 'Puesto'
+outpost_plu: 'Puestos avanzados'
 #Added in 0.36
 msg_err_not_enough_residents: 'No hay suficientes residentes para hacer esto.'
 #Added in 0.37
@@ -543,7 +543,7 @@ msg_err_over_outposts_limit: 'No puedes teletransportarte a tu outpost. Ya super
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Fuente:' #Used on /t outlawlist
+outlaws: 'Criminales:' #Used on /t outlawlist
 online: '&a(Conectado/a)'
 registered_last_online: '&2Registrado: &a%s &8| &2Última conexión: &a%s' #Used in mayor hover text in /town status screen.
 status_perm: 'Perm:' #Used on /plot perm, /res
@@ -1453,9 +1453,9 @@ msg_err_console_only: 'Este comando sólo puede ser usado por la consola.'
 msg_err_player_only: 'Este comando sólo puede ser usado por un jugador.'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
-msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
+msg_border_titles_toggled: 'Los mensajes de título que se muestran al cruzar fronteras son %s.'
 #Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
-this_will_reset_your_config: 'Running this command resets your config.yml to the default file. Do you want to continue?'
+this_will_reset_your_config: 'Ejecutar este comando restablece el archivo config.yml al predeterminado. ¿Desea continuar?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
-msg_warn_overriding_server_config: 'By doing this you are overriding the resident limits set in the server configuration. Do you want to continue anyway?'
+msg_warn_overriding_server_config: 'Al hacer esto estás sobreescribiendo el límite de residentes establecido en la configuración. ¿Quieres continuar de todos modos?'
