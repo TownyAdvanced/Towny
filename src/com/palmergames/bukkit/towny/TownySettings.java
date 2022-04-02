@@ -223,6 +223,10 @@ public class TownySettings {
 
 		return getNationLevel(nation.getLevel());
 	}
+	
+	public static Map<TownySettings.NationLevel, Object> getNationLevel(Nation nation, int residents) {
+		return getNationLevel(nation.getLevel(residents));
+	}
 
 	public static CommentedConfiguration getConfig() {
 		return config;
@@ -1027,6 +1031,18 @@ public class TownySettings {
 		return amount;
 	}
 	
+	public static int getMaxOutposts(Town town, int residents) {
+		
+		int townOutposts = (Integer) getTownLevel(town, residents).get(TownySettings.TownLevel.OUTPOST_LIMIT);
+		int nationOutposts = 0;
+		if (town.hasNation()) {
+			Nation nation = town.getNationOrNull();
+			if (nation != null)
+				nationOutposts = (Integer) getNationLevel(nation, residents).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
+		}
+		return townOutposts + nationOutposts;
+	}
+	
 	public static int getMaxOutposts(Town town) {
 		
 		int townOutposts = (Integer) getTownLevel(town).get(TownySettings.TownLevel.OUTPOST_LIMIT);
@@ -1037,6 +1053,11 @@ public class TownySettings {
 				nationOutposts = (Integer) getNationLevel(nation).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
 		}
 		return townOutposts + nationOutposts;
+	}
+	
+	public static int getMaxBonusBlocks(Town town, int residents) {
+		
+		return (Integer) getTownLevel(town, residents).get(TownySettings.TownLevel.TOWN_BLOCK_BUY_BONUS_LIMIT);
 	}
 	
 	public static int getMaxBonusBlocks(Town town) {
@@ -1345,6 +1366,13 @@ public class TownySettings {
 		return getInt(ConfigNodes.TOWN_LIMIT);
 	}
 
+	public static int getMaxPurchasedBlocks(Town town, int residents) {
+		if (isBonusBlocksPerTownLevel())
+			return getMaxBonusBlocks(town, residents);
+		else
+			return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
+	}
+	
 	public static int getMaxPurchasedBlocks(Town town) {
 
 		if (isBonusBlocksPerTownLevel())

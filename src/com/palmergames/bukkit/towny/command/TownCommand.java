@@ -4110,23 +4110,28 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		int newResidentsAmount = remainingTown.getNumResidents() + succumbingTown.getNumResidents();
-		if (TownySettings.getMaxResidentsPerTown() > 0 && newResidentsAmount > TownySettings.getMaxResidentsForTown(remainingTown)) {
+
+		if (TownySettings.getMaxResidentsPerTown() > 0 && 
+			newResidentsAmount > TownySettings.getMaxResidentsForTown(remainingTown)) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_too_many_residents", TownySettings.getMaxResidentsForTown(remainingTown)));
 			return;
 		}
 		
-		if (!remainingTown.hasUnlimitedClaims() && (remainingTown.getNumTownBlocks() + succumbingTown.getNumTownBlocks()) > TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)) {
+		if (!remainingTown.hasUnlimitedClaims() && 
+			(remainingTown.getNumTownBlocks() + succumbingTown.getNumTownBlocks()) > TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_too_many_townblocks", TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)));
 			return;
 		}
 
-		if ((remainingTown.getPurchasedBlocks() + succumbingTown.getPurchasedBlocks()) > TownySettings.getMaxPurchasedBlocks(remainingTown) && succumbingTown.getPurchasedBlocks() > 0) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_too_many_purchased_townblocks", TownySettings.getMaxPurchasedBlocks(remainingTown)));
+		if ((remainingTown.getPurchasedBlocks() + succumbingTown.getPurchasedBlocks()) > TownySettings.getMaxPurchasedBlocks(remainingTown, newResidentsAmount)) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_too_many_purchased_townblocks", TownySettings.getMaxPurchasedBlocks(remainingTown, newResidentsAmount)));
 			return;
 		}
 
-		if (TownySettings.isAllowingOutposts() && (remainingTown.getMaxOutpostSpawn() + succumbingTown.getMaxOutpostSpawn()) > remainingTown.getOutpostLimit() && succumbingTown.getMaxOutpostSpawn() > 0) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_too_many_outposts", remainingTown.getOutpostLimit()));
+		if (TownySettings.isAllowingOutposts() &&
+			TownySettings.isOutpostsLimitedByLevels() && 
+			(remainingTown.getMaxOutpostSpawn() + succumbingTown.getMaxOutpostSpawn()) > TownySettings.getMaxOutposts(remainingTown, newResidentsAmount)) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_too_many_outposts", TownySettings.getMaxOutposts(remainingTown, newResidentsAmount)));
 			return;
 		}
 
