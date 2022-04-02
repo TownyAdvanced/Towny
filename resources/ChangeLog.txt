@@ -7381,3 +7381,4 @@ v0.92.0.11:
   - Update townyperms comment, courtesy of Warriorrrr with PR #5841.
   - Fix merging towns with outposts, when the outposts are not being limited by the town_levels in the config.
     - Also probably fix max-bonus-bought blocks also causing a similar issue.
+  - Improve hibernated residents loading, courtesy of Warriorrrr with PR #5840
