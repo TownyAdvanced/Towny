@@ -839,7 +839,7 @@ public class Town extends Government implements TownBlockOwner {
 
 		if (hasTownBlock(townBlock)) {
 			// Remove the spawn point for this outpost.
-			if (townBlock.isOutpost()) {
+			if (townBlock.isOutpost() || isAnOutpost(townBlock.getCoord())) {
 				removeOutpostSpawn(townBlock.getCoord());
 			}
 			if (townBlock.isJail()) {
@@ -941,6 +941,11 @@ public class Town extends Government implements TownBlockOwner {
 
 	public boolean hasOutpostSpawn() {
 		return (!outpostSpawns.isEmpty());
+	}
+
+	// Used because (perhaps) some mysql databases do not properly save a townblock's outpost flag.
+	private boolean isAnOutpost(Coord coord) {
+		return new ArrayList<>(outpostSpawns).stream().anyMatch(spawn -> Coord.parseCoord(spawn).equals(coord));
 	}
 
 	/**
