@@ -98,16 +98,10 @@ public class DailyTimerTask extends TownyTimerTask {
 		 */
 		for (Town town : universe.getTowns()) {
 			if (town.isConquered()) {
-				if (town.getConqueredDays() == 1) {
-					TownUnconquerEvent event = new TownUnconquerEvent(town);
-					Bukkit.getPluginManager().callEvent(event);
-					if (event.isCancelled())
-						return;
-					
-					town.setConquered(false);
-					town.setConqueredDays(0);
-				} else
-					town.setConqueredDays(town.getConqueredDays() - 1);				
+				if (town.getConqueredDays() == 1)
+					Bukkit.getScheduler().runTask(plugin, () -> unconquer(town));
+				else
+					town.setConqueredDays(town.getConqueredDays() - 1);
 			}
 		}
 
@@ -139,6 +133,16 @@ public class DailyTimerTask extends TownyTimerTask {
 		// Run the new day scheduler again one minute later to begin scheduling the next New Day.
 		if (!NewDayScheduler.isNewDaySchedulerRunning())
 			Bukkit.getScheduler().runTaskLater(plugin, new NewDayScheduler(plugin), 60 * 20);
+	}
+
+	private void unconquer(Town town) {
+		TownUnconquerEvent event = new TownUnconquerEvent(town);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled())
+			return;
+		
+		town.setConquered(false);
+		town.setConqueredDays(0);
 	}
 
 	/**
