@@ -1930,7 +1930,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("public=" + town.isPublic());
 		// Conquered towns setting + date
 		list.add("conquered=" + town.isConquered());
-		list.add("conqueredDays " + town.getConqueredDays());
+		list.add("conqueredDays=" + town.getConqueredDays());
 		if (town.hasValidUUID()){
 			list.add("uuid=" + town.getUUID());
 		} else {

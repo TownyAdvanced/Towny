@@ -7382,3 +7382,5 @@ v0.92.0.11:
   - Fix merging towns with outposts, when the outposts are not being limited by the town_levels in the config.
     - Also probably fix max-bonus-bought blocks also causing a similar issue.
   - Improve hibernated residents loading, courtesy of Warriorrrr with PR #5840
+0.98.1.6:
+  - Fix formatting of a town's conqueredDays in the flatfile database.
