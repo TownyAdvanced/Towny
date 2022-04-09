@@ -7386,3 +7386,4 @@ v0.92.0.11:
   - Fix formatting of a town's conqueredDays in the flatfile database.
   - Fix new day unconquering task being run Async.
   - Re-add extra isOutpost test to Town#removeTownBlock for mysql-using servers.
+  - Fix potential NPE caused by /plot set reset. 
