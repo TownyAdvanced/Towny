@@ -7387,3 +7387,11 @@ v0.92.0.11:
   - Fix new day unconquering task being run Async.
   - Re-add extra isOutpost test to Town#removeTownBlock for mysql-using servers.
   - Fix potential NPE caused by /plot set reset. 
+  - New Command: /ta checkoutposts 
+    - Checks all the towns on the server for invalid outposts spawns, removing any that aren't within the town.
+  - New Command: /ta town TOWNNAME checkouposts 
+    - Checks the outpost spawns for a single town, removing any that aren't within the town.
+  - New Permission Nodes: (No TownyPerms.yml edits required.)
+    - towny.command.townyadmin.checkoutposts
+    - towny.command.townyadmin.town.checkoutposts
+  - Bump language file to 0.148.

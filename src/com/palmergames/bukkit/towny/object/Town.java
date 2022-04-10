@@ -954,16 +954,20 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return List of outpostSpawns
 	 */
 	public List<Location> getAllOutpostSpawns() {
-		return outpostSpawns;
+		return new ArrayList<>(outpostSpawns);
 	}
 
 	public void removeOutpostSpawn(Coord coord) {
-		new ArrayList<>(outpostSpawns).stream()
+		getAllOutpostSpawns().stream()
 			.filter(spawn -> Coord.parseCoord(spawn).equals(coord))
 			.forEach(spawn -> {
-				outpostSpawns.remove(spawn);
+				removeOutpostSpawn(spawn);
 				TownyUniverse.getInstance().removeSpawnPoint(spawn);
 			});
+	}
+
+	public void removeOutpostSpawn(Location loc) {
+		outpostSpawns.remove(loc);
 	}
 
 	public void setPlotPrice(double plotPrice) {

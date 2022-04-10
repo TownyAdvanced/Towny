@@ -599,6 +599,7 @@ permissions:
             towny.command.townyadmin: true
             towny.command.townyadmin.backup: true
             towny.command.townyadmin.checkperm: true
+            towny.command.townyadmin.checkoutposts: true
             towny.command.townyadmin.givebonus: true
             towny.command.townyadmin.nation.*: true
             towny.command.townyadmin.newday: true
@@ -651,6 +652,7 @@ permissions:
         default: false
         children:
             towny.command.townyadmin.town.add: true
+            towny.command.townyadmin.town.checkoutposts: true
             towny.command.townyadmin.town.delete: true
             towny.command.townyadmin.town.kick: true
             towny.command.townyadmin.town.new: true

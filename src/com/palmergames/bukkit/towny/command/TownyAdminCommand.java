@@ -105,6 +105,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"reload",
 		"backup",
 		"checkperm",
+		"checkoutposts",
 		"newday",
 		"newhour",
 		"unclaim",
@@ -138,6 +139,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"invite",
 		"unruin",
 		"trust",
+		"checkoutposts",
 		"merge",
 		"forcemerge"
 	);
@@ -701,6 +703,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("checkperm")) {
 				
 				parseAdminCheckPermCommand(StringMgmt.remFirstArg(split));
+			} else if (split[0].equalsIgnoreCase("checkoutposts")) {
+				
+				parseAdminCheckOutpostsCommand(null);
 			} else if (split[0].equalsIgnoreCase("townyperms")) {
 				
 				parseAdminTownyPermsCommand(StringMgmt.remFirstArg(split));
@@ -1024,6 +1029,28 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_perm_true"));
 		else
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_perm_false"));
+	}
+
+	private void parseAdminCheckOutpostsCommand(@Nullable Town specificTown) {
+		List<Town> towns = new ArrayList<>();
+		if (specificTown == null) 
+			towns.addAll(TownyAPI.getInstance().getTowns());
+		else 
+			towns.add(specificTown);
+		int removed = 0;
+		for (Town town : towns) {
+			for (Location loc : town.getAllOutpostSpawns()) {
+				boolean save = false;
+				if (TownyAPI.getInstance().isWilderness(loc) || !TownyAPI.getInstance().getTown(loc).getUUID().equals(town.getUUID())) {
+					town.removeOutpostSpawn(loc);
+					save = true;
+					removed++;
+				}
+				if (save)
+					town.save();
+			}
+		}
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_removed_x_invalid_outpost_spawns", removed));
 	}
 
 	private void parseAdminTpPlotCommand(String[] split) throws TownyException {
@@ -1393,7 +1420,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				// Sets the town to unruined with the existing NPC mayor still in place.
 				TownRuinUtil.reclaimTown(town.getMayor(), town);
 				town.save();
-				
+			} else if (split[1].equalsIgnoreCase("checkoutposts")) {
+				parseAdminCheckOutpostsCommand(town);
 			} else if (split[1].equalsIgnoreCase("trust")) {
 				TownCommand.parseTownTrustCommand(sender, StringMgmt.remArgs(split, 2), town);
 			} else if (split[1].equalsIgnoreCase("merge")) {
