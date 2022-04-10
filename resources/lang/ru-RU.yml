@@ -1341,7 +1341,7 @@ msg_purge_complete: 'Очистка игроков завершена: удал�
 #Message to the Town, shown when a town is given bonus blocks.
 msg_you_have_been_given_bonus_blocks: 'Вам было дано %s бонусных участков.'
 #Message shown when a town cannot purchase any more bonus blocks.
-msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Лимит участков достигнут. У вас нет доступных участков для покупки.'
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Ваш город больше не может приобретать бонусные блоки. Было достигнуто максимальное количество.'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Столицы наций не могут менять статус своего нейтралитета.'
@@ -1360,21 +1360,21 @@ towny_prices_upkeep_nation_level: 'уровне нации (количестве
 #Jail causes
 msg_jailed_mayor: 'Заключены в тюрьму мэром.'
 #Jail causes
-msg_jailed_outlaw: 'Убит обьявленным вне закона.'
+msg_jailed_outlaw: 'Убит, будучи объявленным преступником.'
 #Jail causes
 msg_jailed_war: 'Узник войны.'
 #Jail handbook messages
-msg_jailed_handbook_1: 'Похоже, вас заключили в тюрьму, причина: %s'
+msg_jailed_handbook_1: 'Похоже, вас заключили в тюрьму по причине: %s'
 #Jail handbook messages
-msg_jailed_handbook_2: 'Нехорошо, правда? Что-ж поделать. Вот несколько полезных советов для тебя, пока ты отбываешь своё наказание.'
+msg_jailed_handbook_2: 'Это довольно плохо, да. Ну и что ты можешь с этим поделать? Вот несколько полезных советов для тебя, пока ты отбываешь своё наказание.'
 #Jail handbook messages
 msg_jailed_handbook_3: 'Вы заключены в тюрьму на %s часов. Отбыв своё наказание, вы выйдете на свободу.'
 #Jail handbook messages
 msg_jailed_handbook_4_can: 'Вы можете избежать тюрьмы, покинув свой город с помощью ''/town leave''.'
 #Jail handbook messages
-msg_jailed_handbook_4_cant: 'Вы не можете покинуть свой город, сидя в тюрьме.'
+msg_jailed_handbook_4_cant: 'Вы не можете покинуть свой город, находясь в тюрьме.'
 #Jail handbook messages
-msg_jailed_handbook_bail_1: 'Вы можете освободиться из тюрьмы, заплатив залог с помощью ''/res jail paybail''.'
+msg_jailed_handbook_bail_1: 'Вы можете выйти из тюрьмы, заплатив залог, используя ''/res jail paybail''.'
 #Jail handbook messages
 msg_jailed_handbook_bail_2: 'Залог составляет %s.'
 #Jail handbook messages
@@ -1388,7 +1388,7 @@ msg_jailed_war_prisoner: 'Будучи пленником войны, вы бу�
 #Jail handbook title
 msg_jailed_title: 'Что-ж, тебя заключили в тюрьму :('
 #Jail handbook author
-msg_jailed_author: 'Тюрьма Towny'
+msg_jailed_author: 'Тюрьма Towny.'
 #Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Нет отображаемых союзников.'
@@ -1456,6 +1456,9 @@ msg_err_player_only: 'Эту команду может использовать 
 msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
 #Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
-this_will_reset_your_config: 'Running this command resets your config.yml to the default file. Do you want to continue?'
+this_will_reset_your_config: 'Выполнение этой команды сбросит ваш файл config.yml. Вы хотите продолжить?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
 msg_warn_overriding_server_config: 'By doing this you are overriding the resident limits set in the server configuration. Do you want to continue anyway?'
+#Added in 0.148
+#Message shown when invalid outpost spawns are removed using the /ta commands.
+msg_removed_x_invalid_outpost_spawns: 'Removed %d invalid outpost spawns.'
