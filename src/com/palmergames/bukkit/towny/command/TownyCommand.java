@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownyAsciiMap;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.TownyUpdateChecker;
@@ -257,7 +256,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime())));
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TimeMgmt.townyTime(true))));
 					break;
 				}
 				case "universe": {

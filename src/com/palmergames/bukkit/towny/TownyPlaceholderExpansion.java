@@ -17,6 +17,8 @@ import com.palmergames.util.StringMgmt;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
 
+import java.util.Locale;
+
 /**
  * This class will be registered through the register-method in the plugins
  * onEnable-method.
@@ -593,8 +595,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return resident.hasTown() ? resident.getTownOrNull().getBoard() : "";
 		case "nation_board": // %townyadvanced_nation_board%
 			return resident.hasTown() ? (resident.hasNation() ? resident.getNationOrNull().getBoard() : "") : "";
-		case "time_until_new_day_formatted": // %townyadvanced_time_until_new_day_formatted%
-			return Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime(), player.getPlayer())).forLocale(player.getPlayer()); 
+		case "time_until_new_day_formatted": {// %townyadvanced_time_until_new_day_formatted%
+			Locale locale = Translation.getLocale(player);
+			return Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TimeMgmt.townyTime(), locale)).translate(locale);
+		}
 		case "time_until_new_day_hours_formatted": // %townyadvanced_time_until_new_day_hours_formatted%
 			return TimeMgmt.formatCountdownTimeHours(TownyTimerHandler.townyTime(), player.getPlayer()); 
 		case "time_until_new_day_minutes_formatted": // %townyadvanced_time_until_new_day_minutes_formatted%

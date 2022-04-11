@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
@@ -160,7 +159,7 @@ public class TownyCustomListener implements Listener {
 		double upkeep = TownySettings.getTownUpkeepCost(town);
 		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily() && upkeep > 0) {
 			String cost = TownyEconomyHandler.getFormattedBalance(upkeep);
-			String time = TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime());
+			String time = TimeMgmt.formatCountdownTime(TimeMgmt.townyTime(true));
 			TownyMessaging.sendTownMessagePrefixed(town, Translatable.of("msg_new_town_advice", cost, time));
 		}
 		//TODO: at some point it might be nice to have a written_book given to mayors 

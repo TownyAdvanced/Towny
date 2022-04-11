@@ -11,9 +11,11 @@ import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.tasks.HourlyTimerTask;
 import com.palmergames.bukkit.towny.tasks.ShortTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus;
 
 
 /**
@@ -219,14 +221,18 @@ public class TownyTimerHandler{
 		return drawSpawnPointsTask != -1;
 	}
 
+	/**
+	 * @deprecated Deprecated, use {@link TimeMgmt#townyTime()}
+	 */
+	@Deprecated
+	@ApiStatus.ScheduledForRemoval
 	public static Long townyTime() {
-		return NewDayScheduler.townyTime();
+		return TimeMgmt.townyTime();
 	}
 
 	public static Long getTimeUntilNextHourInSeconds() {
 		long timeSinceLastHourMillis = System.currentTimeMillis() % (1000 * 60 * 60);
 		long timeSinceLastHourSeconds = timeSinceLastHourMillis / 1000;
-		long timeUntilNextHourSeconds = (60 * 60) - timeSinceLastHourSeconds;
-		return timeUntilNextHourSeconds;
+		return (60 * 60) - timeSinceLastHourSeconds;
 	}
 }
