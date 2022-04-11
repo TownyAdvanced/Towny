@@ -1,6 +1,11 @@
 package com.palmergames.bukkit.towny;
 
-import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translatable;
+
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 
 import com.palmergames.util.TimeMgmt;
