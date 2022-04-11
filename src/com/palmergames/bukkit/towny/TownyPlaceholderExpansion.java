@@ -590,7 +590,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		case "nation_board": // %townyadvanced_nation_board%
 			return resident.hasTown() ? (resident.hasNation() ? resident.getNationOrNull().getBoard() : "") : "";
 		case "time_until_new_day": // %townyadvanced_time_until_new_day%
-			return Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime())).toString(); 
+			return Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime())).translate(); 
 		case "time_until_new_day_hours": // %townyadvanced_time_until_new_day_hours%
 			return TimeMgmt.formatCountdownTimeHours(TownyTimerHandler.townyTime()); 
 		case "time_until_new_day_minutes": // %townyadvanced_time_until_new_day_minutes%
