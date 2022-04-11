@@ -113,26 +113,15 @@ public class TimeMgmt {
 	
 	// Returns translation of "msg_hours" formatted, ex: "12 hours"
 	public static String formatCountdownTimeHours(long l) {
-
-		String out = "";
-		int h = (int) (l / 3600.0);
-		out = h + Translation.of("msg_hours");
-		return out;
+		return Duration.ofSeconds(l).toHours() + Translation.of("msg_hours");
 	}
 	// Returns translation of "msg_minutes" formatted, ex: "737 minutes"
 	public static String formatCountdownTimeMinutes(long l) {
-
-		String out = "";
-		int m = (int) (l / 60.0);
-		out += (out.length() > 0 ? ", " : "") + m + Translation.of("msg_minutes");
-		return out;
+		return Duration.ofSeconds(l).toMinutes() % 60 + Translation.of("msg_minutes");
 	}
 	// Returns translation of "msg_seconds" formatted, ex: "44248 seconds"
 	public static String formatCountdownTimeSeconds(long l) {
-
-		String out = "";
-		out = l + Translation.of("msg_seconds");
-		return out;
+		return l % 60 + Translation.of("msg_seconds");
 	}
 	
 }
