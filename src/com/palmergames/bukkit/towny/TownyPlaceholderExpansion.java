@@ -1,11 +1,8 @@
 package com.palmergames.bukkit.towny;
 
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translatable;
-
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 
 import com.palmergames.util.TimeMgmt;
@@ -13,6 +10,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.util.StringMgmt;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -594,15 +593,22 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return resident.hasTown() ? resident.getTownOrNull().getBoard() : "";
 		case "nation_board": // %townyadvanced_nation_board%
 			return resident.hasTown() ? (resident.hasNation() ? resident.getNationOrNull().getBoard() : "") : "";
-		case "time_until_new_day": // %townyadvanced_time_until_new_day%
-			return Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime())).translate(); 
-		case "time_until_new_day_hours": // %townyadvanced_time_until_new_day_hours%
-			return TimeMgmt.formatCountdownTimeHours(TownyTimerHandler.townyTime()); 
-		case "time_until_new_day_minutes": // %townyadvanced_time_until_new_day_minutes%
-			return TimeMgmt.formatCountdownTimeMinutes(TownyTimerHandler.townyTime());
-		case "time_until_new_day_seconds": // %townyadvanced_time_until_new_day_seconds%
-			return TimeMgmt.formatCountdownTimeSeconds(TownyTimerHandler.townyTime());
-			
+		case "time_until_new_day_formatted": // %townyadvanced_time_until_new_day_formatted%
+			return Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime(), player.getPlayer())).forLocale(player.getPlayer()); 
+		case "time_until_new_day_hours_formatted": // %townyadvanced_time_until_new_day_hours_formatted%
+			return TimeMgmt.formatCountdownTimeHours(TownyTimerHandler.townyTime(), player.getPlayer()); 
+		case "time_until_new_day_minutes_formatted": // %townyadvanced_time_until_new_day_minutes_formatted%
+			return TimeMgmt.formatCountdownTimeMinutes(TownyTimerHandler.townyTime(), player.getPlayer());
+		case "time_until_new_day_seconds_formatted": // %townyadvanced_time_until_new_day_seconds_formatted%
+			return TimeMgmt.formatCountdownTimeSeconds(TownyTimerHandler.townyTime(), player.getPlayer());
+		case "time_until_new_day_hours_raw": // %townyadvanced_time_until_new_day_hours_raw%
+			return TimeMgmt.countdownTimeHoursRaw(TownyTimerHandler.townyTime()); 
+		case "time_until_new_day_minutes_raw": // %townyadvanced_time_until_new_day_minutes_raw%
+			return TimeMgmt.countdownTimeMinutesRaw(TownyTimerHandler.townyTime());
+		case "time_until_new_day_seconds_raw": // %townyadvanced_time_until_new_day_seconds_raw%
+			return TimeMgmt.countdownTimeSecondsRaw(TownyTimerHandler.townyTime());
+
+		
 		default:
 			return null;
 		}
