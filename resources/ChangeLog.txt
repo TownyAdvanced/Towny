@@ -7389,7 +7389,7 @@ v0.92.0.11:
   - Fix potential NPE caused by /plot set reset. 
   - New Command: /ta checkoutposts 
     - Checks all the towns on the server for invalid outposts spawns, removing any that aren't within the town.
-  - New Command: /ta town TOWNNAME checkouposts 
+  - New Command: /ta town TOWNNAME checkoutposts 
     - Checks the outpost spawns for a single town, removing any that aren't within the town.
   - New Permission Nodes: (No TownyPerms.yml edits required.)
     - towny.command.townyadmin.checkoutposts
