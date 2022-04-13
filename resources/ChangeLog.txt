@@ -7406,3 +7406,4 @@ v0.92.0.11:
     - %townyadvanced_time_until_new_day_hours_formatted% - Display the amount of hours until a new day, formatted and translated.
     - %townyadvanced_time_until_new_day_minutes_formatted% - Display the amount of minutes until a new day, formatted and translated.
     - %townyadvanced_time_until_new_day_seconds_formatted% - Display the amount of seconds until a new day, formatted and translated.
+  - Open baltop book synchronously, courtesy of Warriorrrr with PR #5861.
