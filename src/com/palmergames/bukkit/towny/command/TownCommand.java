@@ -111,6 +111,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -2743,8 +2744,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			int i = 0;
 			for (Resident res : residents)
 				sb.append(Translatable.of("msg_baltop_book_format", ++i, res.getName(), TownyEconomyHandler.getFormattedBalance(res.getAccount().getCachedBalance())).forLocale(player) + "\n");
-	
-			player.openBook(BookFactory.makeBook("Town Baltop", town.getName(), sb.toString()));
+
+			ItemStack book = BookFactory.makeBook("Town Baltop", town.getName(), sb.toString());
+			Bukkit.getScheduler().runTask(plugin, () -> player.openBook(book));
 		});
 	}
 	
