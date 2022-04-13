@@ -2967,14 +2967,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					try {
 						// Make town.
 						newTown(world, finalName, resident, key, spawnLocation, player);
+						TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
 					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 						e.printStackTrace();
 					}
-					TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
 				})
-					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())))
-					.sendTo(player);
+				.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())))
+				.sendTo(player);
 
 			// Or, if the town doesn't cost money to create, just make the Town.
 			} else {
