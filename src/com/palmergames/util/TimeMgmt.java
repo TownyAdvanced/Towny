@@ -1,11 +1,15 @@
 package com.palmergames.util;
 
 import java.text.NumberFormat;
+
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.entity.Player;
 
 public class TimeMgmt {
 
@@ -73,6 +77,49 @@ public class TimeMgmt {
 			out += (out.length() > 0 ? ", " : "") + l + Translation.of("msg_seconds");
 		return out;
 	}
+	
+	public static String formatCountdownTime(Long l, Player player) {
+		String out = "";
+		if (l >= 3600) {
+			int h = (int) (l / 3600.0);
+			out = h + Translatable.of("msg_hours").forLocale(player);
+			l -= h * 3600;
+		}
+		if (l >= 60) {
+			int m = (int) (l / 60.0);
+			out += (out.length() > 0 ? ", " : "") + m + Translatable.of("msg_minutes").forLocale(player);
+			l -= m * 60;
+		}
+		if (out.length() == 0 || l > 0)
+			out += (out.length() > 0 ? ", " : "") + l + Translatable.of("msg_seconds").forLocale(player);
+		return out;
+	}
+
+	// Returns raw number of hours, ex: "12"
+	public static String countdownTimeHoursRaw(long l) {
+		return String.valueOf(Duration.ofSeconds(l).toHours());
+	}
+	// Returns raw number of minutes, ex: "737"
+	public static String countdownTimeMinutesRaw(long l) {
+		return String.valueOf(Duration.ofSeconds(l).toMinutes() % 60);
+	}
+	// Returns raw number of seconds, ex: "44248"
+	public static String countdownTimeSecondsRaw(long l) {
+		return String.valueOf(l % 60);
+	}
+
+	// Returns translation of "msg_hours" formatted, ex: "12 hours"
+	public static String formatCountdownTimeHours(long l, Player player) {
+		return Duration.ofSeconds(l).toHours() + Translatable.of("msg_hours").forLocale(player);
+	}
+	// Returns translation of "msg_minutes" formatted, ex: "737 minutes"
+	public static String formatCountdownTimeMinutes(long l, Player player) {
+		return Duration.ofSeconds(l).toMinutes() % 60 + Translatable.of("msg_minutes").forLocale(player);
+	}
+	// Returns translation of "msg_seconds" formatted, ex: "44248 seconds"
+	public static String formatCountdownTimeSeconds(long l, Player player) {
+		return l % 60 + Translatable.of("msg_seconds").forLocale(player);
+	}
 
 	public static String getFormattedTimeValue(double timeMillis) {
         String timeUnit;
@@ -110,19 +157,4 @@ public class TimeMgmt {
             return "0" + Translation.of("msg_seconds");
         }
     }
-	
-	
-	// Returns translation of "msg_hours" formatted, ex: "12 hours"
-	public static String formatCountdownTimeHours(long l) {
-		return Duration.ofSeconds(l).toHours() + Translation.of("msg_hours");
-	}
-	// Returns translation of "msg_minutes" formatted, ex: "737 minutes"
-	public static String formatCountdownTimeMinutes(long l) {
-		return Duration.ofSeconds(l).toMinutes() % 60 + Translation.of("msg_minutes");
-	}
-	// Returns translation of "msg_seconds" formatted, ex: "44248 seconds"
-	public static String formatCountdownTimeSeconds(long l) {
-		return l % 60 + Translation.of("msg_seconds");
-	}
-	
 }
