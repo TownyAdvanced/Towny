@@ -24,37 +24,23 @@ public class TimeMgmt {
 	private static long cachedTownyTime = -1;
 
 	public static String formatCountdownTime(long l) {
- 
-		String out = "";
-		if (l >= 3600) {
-			int h = (int) (l / 3600.0);
-			out = h + Translation.of("msg_hours");
-			l -= h * 3600L;
-		}
-		if (l >= 60) {
-			int m = (int) (l / 60.0);
-			out += (out.length() > 0 ? ", " : "") + m + Translation.of("msg_minutes");
-			l -= m * 60L;
-		}
-		if (out.length() == 0 || l > 0)
-			out += (out.length() > 0 ? ", " : "") + l + Translation.of("msg_seconds");
-		return out;
+ 		return formatCountdownTime(l, Translation.getDefaultLocale());
 	}
 	
 	public static String formatCountdownTime(Long l, Locale locale) {
 		String out = "";
 		if (l >= 3600) {
 			int h = (int) (l / 3600.0);
-			out = h + Translatable.of("msg_hours").forLocale(player);
+			out = h + Translatable.of("msg_hours").translate(locale);
 			l -= h * 3600L;
 		}
 		if (l >= 60) {
 			int m = (int) (l / 60.0);
-			out += (out.length() > 0 ? ", " : "") + m + Translatable.of("msg_minutes").forLocale(player);
+			out += (out.length() > 0 ? ", " : "") + m + Translatable.of("msg_minutes").translate(locale);
 			l -= m * 60L;
 		}
 		if (out.length() == 0 || l > 0)
-			out += (out.length() > 0 ? ", " : "") + l + Translatable.of("msg_seconds").forLocale(player);
+			out += (out.length() > 0 ? ", " : "") + l + Translatable.of("msg_seconds").translate(locale);
 		return out;
 	}
 

@@ -209,8 +209,9 @@ public final class Translation {
 		return sender instanceof Player ? Translation.toLocale(((Player) sender).getLocale(), false) : defaultLocale;
 	}
 	
-	public static Locale getLocale(@NotNull OfflinePlayer offlinePlayer) {
-		return offlinePlayer.isOnline() ? toLocale(offlinePlayer.getPlayer().getLocale(), false) : defaultLocale;
+	// Named differently than getLocale on purpose
+	public static Locale getLocaleOffline(@NotNull OfflinePlayer offlinePlayer) {
+		return offlinePlayer.isOnline() ? getLocale(offlinePlayer.getPlayer()) : defaultLocale;
 	}
 	
 	public static Locale getLocale(Resident resident) {
