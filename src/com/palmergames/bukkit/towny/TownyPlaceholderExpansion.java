@@ -17,6 +17,8 @@ import com.palmergames.util.StringMgmt;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
 
+import java.util.Locale;
+
 /**
  * This class will be registered through the register-method in the plugins
  * onEnable-method.
@@ -593,20 +595,22 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return resident.hasTown() ? resident.getTownOrNull().getBoard() : "";
 		case "nation_board": // %townyadvanced_nation_board%
 			return resident.hasTown() ? (resident.hasNation() ? resident.getNationOrNull().getBoard() : "") : "";
-		case "time_until_new_day_formatted": // %townyadvanced_time_until_new_day_formatted%
-			return Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TownyTimerHandler.townyTime(), player.getPlayer())).forLocale(player.getPlayer()); 
+		case "time_until_new_day_formatted": {// %townyadvanced_time_until_new_day_formatted%
+			Locale locale = Translation.getLocaleOffline(player);
+			return Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TimeMgmt.townyTime(true), locale)).translate(locale);
+		}
 		case "time_until_new_day_hours_formatted": // %townyadvanced_time_until_new_day_hours_formatted%
-			return TimeMgmt.formatCountdownTimeHours(TownyTimerHandler.townyTime(), player.getPlayer()); 
+			return TimeMgmt.formatCountdownTimeHours(TimeMgmt.townyTime(true), player.getPlayer()); 
 		case "time_until_new_day_minutes_formatted": // %townyadvanced_time_until_new_day_minutes_formatted%
-			return TimeMgmt.formatCountdownTimeMinutes(TownyTimerHandler.townyTime(), player.getPlayer());
+			return TimeMgmt.formatCountdownTimeMinutes(TimeMgmt.townyTime(true), player.getPlayer());
 		case "time_until_new_day_seconds_formatted": // %townyadvanced_time_until_new_day_seconds_formatted%
-			return TimeMgmt.formatCountdownTimeSeconds(TownyTimerHandler.townyTime(), player.getPlayer());
+			return TimeMgmt.formatCountdownTimeSeconds(TimeMgmt.townyTime(true), player.getPlayer());
 		case "time_until_new_day_hours_raw": // %townyadvanced_time_until_new_day_hours_raw%
-			return TimeMgmt.countdownTimeHoursRaw(TownyTimerHandler.townyTime()); 
+			return TimeMgmt.countdownTimeHoursRaw(TimeMgmt.townyTime(true)); 
 		case "time_until_new_day_minutes_raw": // %townyadvanced_time_until_new_day_minutes_raw%
-			return TimeMgmt.countdownTimeMinutesRaw(TownyTimerHandler.townyTime());
+			return TimeMgmt.countdownTimeMinutesRaw(TimeMgmt.townyTime(true));
 		case "time_until_new_day_seconds_raw": // %townyadvanced_time_until_new_day_seconds_raw%
-			return TimeMgmt.countdownTimeSecondsRaw(TownyTimerHandler.townyTime());
+			return TimeMgmt.countdownTimeSecondsRaw(TimeMgmt.townyTime(true));
 
 		
 		default:

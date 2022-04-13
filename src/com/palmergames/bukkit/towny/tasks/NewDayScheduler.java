@@ -1,8 +1,5 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import java.util.Calendar;
-import java.util.TimeZone;
-
 import org.bukkit.Bukkit;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -11,6 +8,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
+import org.jetbrains.annotations.ApiStatus;
 
 public class NewDayScheduler extends TownyTimerTask {
 
@@ -23,7 +21,7 @@ public class NewDayScheduler extends TownyTimerTask {
 	
 	@Override
 	public void run() {
-		long secondsUntilNextNewDay = townyTime();
+		long secondsUntilNextNewDay = TimeMgmt.townyTime();
 		plugin.getLogger().info("Time until a New Day: " + TimeMgmt.formatCountdownTime(secondsUntilNextNewDay));
 
 		// If the next new day is less than 2 minutes away, schedule the new day.
@@ -89,25 +87,13 @@ public class NewDayScheduler extends TownyTimerTask {
 	 * Calculates the time in seconds until the next new day event.
 	 * TimeZone specific, including daylight savings.
 	 * 
+	 * @deprecated Deprecated, use {@link TimeMgmt#townyTime()}
+	 * 
 	 * @return seconds until event
 	 */
+	@Deprecated
+	@ApiStatus.ScheduledForRemoval
 	public static Long townyTime() {
-
-		long secondsInDay = TownySettings.getDayInterval();
-
-		// Get Calendar instance
-		Calendar now = Calendar.getInstance();
-
-		// Get current TimeZone
-		TimeZone timeZone = now.getTimeZone();
-		
-		// Get current system time in milliseconds
-		long timeMilli = System.currentTimeMillis();
-		
-		// Calculate the TimeZone specific offset (including DST)
-		int timeOffset = timeZone.getOffset(timeMilli)/1000;
-
-		return Math.floorMod(secondsInDay + (TownySettings.getNewDayTime() - ((timeMilli/1000) % secondsInDay) - timeOffset), secondsInDay);
+		return TimeMgmt.townyTime();
 	}
-
 }

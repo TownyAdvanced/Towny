@@ -9,8 +9,11 @@ import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -204,6 +207,11 @@ public final class Translation {
 	
 	public static Locale getLocale(CommandSender sender) {
 		return sender instanceof Player ? Translation.toLocale(((Player) sender).getLocale(), false) : defaultLocale;
+	}
+	
+	// Named differently than getLocale on purpose
+	public static Locale getLocaleOffline(@NotNull OfflinePlayer offlinePlayer) {
+		return offlinePlayer.isOnline() ? getLocale(offlinePlayer.getPlayer()) : defaultLocale;
 	}
 	
 	public static Locale getLocale(Resident resident) {
