@@ -1140,8 +1140,8 @@ msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s, %s ta
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s hapse atılacak kadar uzun oynamadı, %s daha bekleyin'
 #Added in 0.108
 msg_town_not_peaceful: '&bTown barışçıl bir devleti karşılayamazdı.'
-msg_town_already_peaceful: '&Şehir zaten barışçıl.'
-msg_town_already_not_peaceful: '&Kasaba zaten barışçıl değil.'
+msg_town_already_peaceful: '&bŞehir zaten barışçıl.'
+msg_town_already_not_peaceful: '&bKasaba zaten barışçıl değil.'
 msg_town_cant_peaceful: '&bKasaba, barışçıl bir kasaba olmayı göze alamazdı.'
 msg_town_paid_for_neutral_status: '&bKasabanız, barışçıl statünüzü korumak için %s altın ödedi.'
 msg_nation_paid_for_neutral_status: '&bUlusunuz, barışçıl statünüzü korumak için %s altın ödedi.'
