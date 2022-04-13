@@ -600,17 +600,17 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TimeMgmt.townyTime(true), locale)).translate(locale);
 		}
 		case "time_until_new_day_hours_formatted": // %townyadvanced_time_until_new_day_hours_formatted%
-			return TimeMgmt.formatCountdownTimeHours(TownyTimerHandler.townyTime(), player.getPlayer()); 
+			return TimeMgmt.formatCountdownTimeHours(TimeMgmt.townyTime(true), player.getPlayer()); 
 		case "time_until_new_day_minutes_formatted": // %townyadvanced_time_until_new_day_minutes_formatted%
-			return TimeMgmt.formatCountdownTimeMinutes(TownyTimerHandler.townyTime(), player.getPlayer());
+			return TimeMgmt.formatCountdownTimeMinutes(TimeMgmt.townyTime(true), player.getPlayer());
 		case "time_until_new_day_seconds_formatted": // %townyadvanced_time_until_new_day_seconds_formatted%
-			return TimeMgmt.formatCountdownTimeSeconds(TownyTimerHandler.townyTime(), player.getPlayer());
+			return TimeMgmt.formatCountdownTimeSeconds(TimeMgmt.townyTime(true), player.getPlayer());
 		case "time_until_new_day_hours_raw": // %townyadvanced_time_until_new_day_hours_raw%
-			return TimeMgmt.countdownTimeHoursRaw(TownyTimerHandler.townyTime()); 
+			return TimeMgmt.countdownTimeHoursRaw(TimeMgmt.townyTime(true)); 
 		case "time_until_new_day_minutes_raw": // %townyadvanced_time_until_new_day_minutes_raw%
-			return TimeMgmt.countdownTimeMinutesRaw(TownyTimerHandler.townyTime());
+			return TimeMgmt.countdownTimeMinutesRaw(TimeMgmt.townyTime(true));
 		case "time_until_new_day_seconds_raw": // %townyadvanced_time_until_new_day_seconds_raw%
-			return TimeMgmt.countdownTimeSecondsRaw(TownyTimerHandler.townyTime());
+			return TimeMgmt.countdownTimeSecondsRaw(TimeMgmt.townyTime(true));
 
 		
 		default:
