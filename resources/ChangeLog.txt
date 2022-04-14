@@ -7410,3 +7410,5 @@ v0.92.0.11:
   - Cache towny time, courtesy of Warriorrrr with PR #5859.
   - Fix a cancelled new town still broadcasting the creation of a new Town.
     - Closes #5852.
+0.98.1.8:
+  - Add descriptive error if Towny is being shaded, courtesy of Warriorrrr with #5864.
