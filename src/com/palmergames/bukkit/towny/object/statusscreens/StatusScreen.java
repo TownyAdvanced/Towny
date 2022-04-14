@@ -13,15 +13,15 @@ import org.bukkit.command.CommandSender;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import solar.squares.pixelwidth.PixelWidthSource;
 
 public class StatusScreen {
 
-	Map<String, Component> components = new LinkedHashMap<>();
-	final static int MAX_WIDTH = 320;
-	private final PixelWidthSource source = PixelWidthSource.pixelWidth();
+	private static final int MAX_WIDTH = 320;
+	private static final PixelWidthSource source = PixelWidthSource.pixelWidth();
+
+	private final Map<String, Component> components = new LinkedHashMap<>();
 	private final CommandSender sender;
 	
 	public StatusScreen(CommandSender sender) {
@@ -32,6 +32,7 @@ public class StatusScreen {
 		return sender;
 	}
 
+	@Deprecated
 	public void addComponentOf(String name, String text) {
 		components.put(name, TownyComponents.miniMessage(text));
 	}
@@ -40,17 +41,17 @@ public class StatusScreen {
 		components.put(name, component);
 	}
 	
-	@Deprecated @ApiStatus.ScheduledForRemoval(inVersion = "0.100.0.0")
+	@Deprecated
 	public void addComponentOf(String name, String text, ClickEvent click) {
 		components.put(name, Component.text(text).clickEvent(click));
 	}
 	
-	@Deprecated @ApiStatus.ScheduledForRemoval(inVersion = "0.100.0.0")
+	@Deprecated
 	public void addComponentOf(String name, String text, HoverEvent<?> hover) {
 		components.put(name, Component.text(text).hoverEvent(hover));
 	}
 	
-	@Deprecated @ApiStatus.ScheduledForRemoval(inVersion = "0.100.0.0")
+	@Deprecated
 	public void addComponentOf(String name, String text, HoverEvent<?> hover, ClickEvent click) {
 		components.put(name, Component.text(text).hoverEvent(hover).clickEvent(click));
 	}

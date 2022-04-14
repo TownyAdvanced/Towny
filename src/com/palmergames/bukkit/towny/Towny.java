@@ -708,9 +708,9 @@ public class Towny extends JavaPlugin {
 			if (startingIndex != 0) {
 				for (int i = startingIndex; i < changeLog.size(); i++) {
 					if (linesDisplayed > 100) {
-						plugin.getLogger().info("\u001B[33m<snip>");
-						plugin.getLogger().info("\u001B[33mChangelog continues for another " + (changeLog.size() - (startingIndex + 99)) + " lines.");
-						plugin.getLogger().info("\u001B[33mTo read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/resources/ChangeLog.txt#L" + ++startingIndex);
+						plugin.getLogger().warning("<snip>");
+						plugin.getLogger().warning("Changelog continues for another " + (changeLog.size() - (startingIndex + 99)) + " lines.");
+						plugin.getLogger().warning("To read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/resources/ChangeLog.txt#L" + ++startingIndex);
 						break;
 					} 
 					String line = changeLog.get(i);

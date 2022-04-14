@@ -392,7 +392,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage(player));
+			TownyMessaging.sendErrorMsg(player, x.message(player));
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage());
 		}

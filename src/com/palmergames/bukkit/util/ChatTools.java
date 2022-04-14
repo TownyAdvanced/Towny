@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
 import net.kyori.adventure.text.format.Style;
+import org.jetbrains.annotations.ApiStatus;
 import solar.squares.pixelwidth.PixelWidthSource;
 
 /**
@@ -22,14 +23,14 @@ import solar.squares.pixelwidth.PixelWidthSource;
  */
 
 public class ChatTools {
-	final static PixelWidthSource source = PixelWidthSource.pixelWidth();
-	final static int MAX_FONT_WIDTH = 320;
-	final static int SPACE_WIDTH = 4;
+	private final static PixelWidthSource source = PixelWidthSource.pixelWidth();
+	private final static int DEFAULT_CHAT_WIDTH = 320;
+	private final static float SPACE_WIDTH = 4;
 	// Padding used for the main title formatting
-	final static String WIDGET = ".oOo.";
+	private final static String WIDGET = ".oOo.";
 	
 	// Padding used for subtitle formatting
-	final static String SUBWIDGET = " .]|[. ";
+	private final static String SUBWIDGET = " .]|[. ";
 	
 	public static String listArr(String[] args, String prefix) {
 
@@ -48,17 +49,13 @@ public class ChatTools {
 		return prefix + String.join(", ", args);
 	}
 
+	/**
+	 * @deprecated Deprecated, use {@link Colors#strip(String)} instead.
+	 */
+	@Deprecated
+	@ApiStatus.ScheduledForRemoval
 	public static String stripColour(String s) {
-
-		StringBuilder out = new StringBuilder();
-		for (int i = 0; i < s.length(); i++) {
-			String c = s.substring(i, i + 1);
-			if (c.equals("\u00A7"))
-				i += 1;
-			else
-				out.append(c);
-		}
-		return out.toString();
+		return Colors.strip(s);
 	}
 
 	/**
@@ -97,7 +94,7 @@ public class ChatTools {
 	
 	public static Component centerComponent(Component title, String sidePadding, char paddingChar, float paddingWidth) {
 		float sidePaddingWidth = source.width(Component.text(sidePadding));
-		float widthToPad = (MAX_FONT_WIDTH - (sidePaddingWidth * 2) - source.width(title)) / 2;
+		float widthToPad = (DEFAULT_CHAT_WIDTH - (sidePaddingWidth * 2) - source.width(title)) / 2;
 
 		if (paddingWidth * 2 > widthToPad)
 			return TownyComponents.prependMiniMessage(title, Translation.of("status_title_primary_colour"));

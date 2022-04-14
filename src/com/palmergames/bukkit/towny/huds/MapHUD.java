@@ -90,7 +90,7 @@ public class MapHUD {
 		for (int tby = wc.getX() + (lineWidth - halfLineWidth - 1); tby >= wc.getX() - halfLineWidth; tby--) {
 			x = 0;
 			for (int tbx = wc.getZ() - halfLineHeight; tbx <= wc.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
-				map[y][x] = ChatColor.GOLD.toString();
+				map[y][x] = ChatColor.WHITE.toString();
 				try {
 					TownBlock townblock = world.getTownBlock(tby, tbx);
 					if (!townblock.hasTown())

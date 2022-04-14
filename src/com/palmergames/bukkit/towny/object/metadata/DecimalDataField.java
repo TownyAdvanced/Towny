@@ -40,7 +40,7 @@ public class DecimalDataField extends CustomDataField<Double> {
 	@Override
 	public String displayFormattedValue() {
 		double val = getValue();
-		return (val <= 0 ? "<darK_red>" : "<green>") + val;
+		return (val <= 0 ? "<dark_red>" : "<green>") + val;
 	}
 
 	@Override
