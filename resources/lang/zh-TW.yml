@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.147
+version: 0.148
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1461,4 +1461,4 @@ this_will_reset_your_config: '執行這個指令將重置config.yml。是否繼�
 msg_warn_overriding_server_config: '由此將會複寫伺服器配置中的居民限制設定。無論如何繼續？'
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
-msg_removed_x_invalid_outpost_spawns: 'Removed %d invalid outpost spawns.'
+msg_removed_x_invalid_outpost_spawns: '已移除%d個無效的崗哨。'
