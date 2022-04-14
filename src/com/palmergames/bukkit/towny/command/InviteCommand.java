@@ -141,7 +141,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_player_no_invites"));
 			}
 		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage(player));
+			TownyMessaging.sendErrorMsg(player, x.message(player));
 		}
 
 	}

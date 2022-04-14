@@ -201,7 +201,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			TownyMessaging.sendErrorMsg(sender, e.message(sender));
 		}
 	}
 

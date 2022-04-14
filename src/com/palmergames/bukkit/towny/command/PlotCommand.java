@@ -331,7 +331,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									try {
 										continuePlotClaimProcess(coords, resident, player);
 									} catch (TownyException e) {
-										TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+										TownyMessaging.sendErrorMsg(player, e.message(player));
 									}
 								})
 									.setTitle(Translatable.of("msg_you_must_join_this_town_to_claim_this_plot", town.getName()))
@@ -697,7 +697,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								// are only checking for an
 								// exception
 							} catch (TownyException e) {
-								TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+								TownyMessaging.sendErrorMsg(player, e.message(player));
 								return false;
 							}
 
@@ -737,7 +737,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										townBlock.setType(townBlockType, resident);
 										
 									} catch (TownyException e) {
-										TownyMessaging.sendErrorMsg(resident, e.getMessage(player));
+										TownyMessaging.sendErrorMsg(resident, e.message(player));
 										return;
 									}
 									TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_type", townBlockType));
@@ -751,7 +751,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_type", plotTypeName));
 							}
 						} catch (TownyException te){
-							TownyMessaging.sendErrorMsg(player, te.getMessage(player));
+							TownyMessaging.sendErrorMsg(player, te.message(player));
 						}
 
 					} else {
@@ -821,7 +821,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_err_invalid_property", split[0]));
 
 			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage(player));
+				TownyMessaging.sendErrorMsg(player, x.message(player));
 			}
 		}
 
@@ -880,7 +880,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 			}
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+			TownyMessaging.sendErrorMsg(player, e.message(player));
 		}
 	}
 	
@@ -1196,7 +1196,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				Bukkit.getServer().getPluginManager().callEvent(event);
 
 			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				TownyMessaging.sendErrorMsg(player, e.message(player));
 			}
 			
 			townBlock.save();
@@ -1334,7 +1334,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				
 
 			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				TownyMessaging.sendErrorMsg(player, e.message(player));
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage());
 			}
@@ -1742,7 +1742,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// are only checking for an
 					// exception
 				} catch (TownyException e) {
-					TownyMessaging.sendErrorMsg(resident, e.getMessage(player));
+					TownyMessaging.sendErrorMsg(resident, e.message(player));
 					return false;
 				}
 
@@ -1807,7 +1807,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				
 			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(resident, e.getMessage(player));
+				TownyMessaging.sendErrorMsg(resident, e.message(player));
 			}
 		} else if (split[0].equalsIgnoreCase("trust")) {
 			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_TRUST.getNode()))
@@ -1995,7 +1995,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			// If this fails it will trigger a TownyException.
 			plotTestOwner(TownyAPI.getInstance().getResident(player.getName()), townBlock);
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+			TownyMessaging.sendErrorMsg(player, e.message(player));
 			return;
 		}
 
@@ -2174,7 +2174,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				try {
 					plotTestOwner(getResidentOrThrow(player.getUniqueId()), townBlock);
 				} catch (TownyException e) {
-					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+					TownyMessaging.sendErrorMsg(player, e.message(player));
 					return;
 				}
 
@@ -2207,7 +2207,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				try {
 					plotTestOwner(getResidentOrThrow(player.getUniqueId()), townBlock);
 				} catch (TownyException e) {
-					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+					TownyMessaging.sendErrorMsg(player, e.message(player));
 					return;
 				}
 

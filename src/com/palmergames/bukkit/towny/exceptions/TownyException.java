@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.ApiStatus;
 
 public class TownyException extends Exception {
 
@@ -32,7 +33,20 @@ public class TownyException extends Exception {
 			return (String) message;
 	}
 	
-	public Component getMessage(CommandSender sender) {
+	/**
+	 * @deprecated Deprecated, use {@link #message(CommandSender)} instead.
+	 */
+	@Deprecated
+	@ApiStatus.ScheduledForRemoval
+	public String getMessage(CommandSender sender) {
+		if (message instanceof Translatable translatable)
+			return translatable.locale(sender).forLocale(sender);
+		else
+			// dumb legacy
+			return TownyComponents.toLegacy(TownyComponents.miniMessage((String) message));
+	}
+	
+	public Component message(CommandSender sender) {
 		if (message instanceof Translatable translatable)
 			return translatable.locale(sender).component();
 		else

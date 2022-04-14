@@ -60,7 +60,7 @@ public class MoneyUtil {
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 			
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+			TownyMessaging.sendErrorMsg(player, e.message(player));
 		}
 
 	}
@@ -90,7 +90,7 @@ public class MoneyUtil {
 			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
 			
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+			TownyMessaging.sendErrorMsg(player, e.message(player));
 		}
 
 	}
@@ -114,7 +114,7 @@ public class MoneyUtil {
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 			
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+			TownyMessaging.sendErrorMsg(player, e.message(player));
 		}
 		
 	}
@@ -138,7 +138,7 @@ public class MoneyUtil {
 			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
 			
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+			TownyMessaging.sendErrorMsg(player, e.message(player));
 		}
 	}
 	

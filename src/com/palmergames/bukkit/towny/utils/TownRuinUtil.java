@@ -172,7 +172,7 @@ public class TownRuinUtil {
 				reclaimTown(resident, town);
 			}
 		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+			TownyMessaging.sendErrorMsg(player, e.message(player));
 		}
 	}
 

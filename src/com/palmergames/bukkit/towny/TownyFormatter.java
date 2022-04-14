@@ -124,12 +124,12 @@ public class TownyFormatter {
 			screen.addComponentOf("extraFields", comp);
 		}
 		
-		TownBlockStatusScreenEvent event = new TownBlockStatusScreenEvent(screen, townBlock);
+		TownBlockStatusScreenEvent event = new TownBlockStatusScreenEvent(screen, player, townBlock);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines()) {
 			TextComponent comp = Component.empty();
 			for (int i = 0; i < event.getAdditionalLines().size(); i++)
-				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
+				comp = comp.append(Component.newline()).append(event.getAdditionalLines().get(i));
 			screen.addComponentOf("eventAddedLines", comp);
 		}
 		
@@ -261,13 +261,14 @@ public class TownyFormatter {
 			screen.addComponentOf("extraFields", comp);
 		}
 			
-		ResidentStatusScreenEvent event = new ResidentStatusScreenEvent(screen, resident);
+		ResidentStatusScreenEvent event = new ResidentStatusScreenEvent(screen, sender, resident);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines()) {
-			TextComponent comp = Component.empty();
-			for (int i = 0; i < event.getAdditionalLines().size(); i++)
-				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
-			screen.addComponentOf("eventAddedLines", comp);
+			Component eventAddedLines = Component.empty();
+			for (Component additionalLine : event.getAdditionalLines())
+				eventAddedLines = eventAddedLines.append(Component.newline()).append(additionalLine);
+			
+			screen.addComponentOf("eventAddedLines", eventAddedLines);
 		}
 		return screen;
 	}
@@ -446,12 +447,12 @@ public class TownyFormatter {
 			screen.addComponentOf("extraFields", comp);
 		}
 			
-		TownStatusScreenEvent event = new TownStatusScreenEvent(screen, town);
+		TownStatusScreenEvent event = new TownStatusScreenEvent(screen, sender, town);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines()) {
 			TextComponent comp = Component.empty();
 			for (int i = 0; i < event.getAdditionalLines().size(); i++)
-				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
+				comp = comp.append(Component.newline()).append(event.getAdditionalLines().get(i));
 			screen.addComponentOf("eventAddedLines", comp);
 		}
 		return screen;
@@ -464,7 +465,7 @@ public class TownyFormatter {
 	 * @param sender CommandSender who will be sent the status.   
 	 * @return StatusScreen containing the results.
 	 */
-	public static StatusScreen getStatus(Nation nation, CommandSender sender) {
+	public static StatusScreen getStatus(final Nation nation, final CommandSender sender) {
 
 		StatusScreen screen = new StatusScreen(sender);
 		Locale locale = Translation.getLocale(sender);
@@ -588,12 +589,12 @@ public class TownyFormatter {
 			screen.addComponentOf("extraFields", comp);
 		}
 		
-		NationStatusScreenEvent event = new NationStatusScreenEvent(screen, nation);
+		NationStatusScreenEvent event = new NationStatusScreenEvent(screen, sender, nation);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines()) {
 			TextComponent comp = Component.empty();
 			for (int i = 0; i < event.getAdditionalLines().size(); i++)
-				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
+				comp = comp.append(Component.newline()).append(event.getAdditionalLines().get(i));
 			screen.addComponentOf("eventAddedLines", comp);
 		}
 		return screen;

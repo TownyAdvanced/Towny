@@ -3,18 +3,21 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.Colors;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Translatable {
 	private String key;
 	private Object[] args;
 	private boolean stripColors;
-	private Component appended = Component.empty();
+	private final List<Object> appended = new ArrayList<>(0);
 	private Locale locale;
 	
 	private Translatable(String key) {
@@ -62,31 +65,31 @@ public class Translatable {
 	}
 	
 	public Translatable append(String append) {
-		appended = appended.append(TownyComponents.miniMessage(append));
+		appended.add(TownyComponents.miniMessage(append));
 		return this;
 	}
 	
 	public Translatable append(Component append) {
-		appended = appended.append(append);
+		appended.add(TownyComponents.miniMessage(append));
 		return this;
 	}
 	
 	public Translatable append(Translatable translatable) {
-		appended = appended.append(translatable.locale(this.locale).component());
+		appended.add(translatable);
 		return this;
 	}
 	
-	public Translatable locale(Locale locale) {
+	public Translatable locale(@Nullable Locale locale) {
 		this.locale = locale;
 		return this;
 	}
 	
-	public Translatable locale(Resident resident) {
+	public Translatable locale(@NotNull Resident resident) {
 		this.locale = Translation.getLocale(resident);
 		return this;
 	}
 	
-	public Translatable locale(CommandSender commandSender) {
+	public Translatable locale(@NotNull CommandSender commandSender) {
 		this.locale = Translation.getLocale(commandSender);
 		return this;
 	}
@@ -97,7 +100,7 @@ public class Translatable {
 
 		checkArgs(locale);
 		String translated = args == null ? Translation.of(key, locale) : Translation.of(key, locale, args);
-		translated += TownyComponents.toLegacy(appended);
+		translated += TownyComponents.toLegacy(appended());
 		
 		return stripColors ? Colors.strip(translated) : translated;
 	}
@@ -108,7 +111,7 @@ public class Translatable {
 
 		checkArgs(null);
 		String translated = args == null ? Translation.of(key) : Translation.of(key, args);
-		translated += TownyComponents.toLegacy(appended);
+		translated += TownyComponents.toLegacy(appended());
 		
 		return stripColors ? Colors.strip(translated) : translated;
 	}
@@ -134,12 +137,12 @@ public class Translatable {
 	}
 	
 	public Component component(@Nullable Locale locale) {
-		if (locale == null)
+		if (locale == null && (locale = this.locale) == null)
 			return component();
 
 		checkArgs(locale);
 		String translated = args == null ? Translation.of(key, locale) : Translation.of(key, locale, args);
-		Component parsed = TownyComponents.miniMessage(translated).append(appended);
+		Component parsed = TownyComponents.miniMessage(translated).append(appended());
 		
 		return stripColors ? Colors.strip(parsed) : parsed;
 	}
@@ -150,7 +153,7 @@ public class Translatable {
 
 		checkArgs(null);
 		String translated = args == null ? Translation.of(key) : Translation.of(key, args);
-		Component parsed = TownyComponents.miniMessage(translated).append(appended);
+		Component parsed = TownyComponents.miniMessage(translated).append(appended());
 
 		return stripColors ? Colors.strip(parsed) : parsed;
 	}
@@ -164,13 +167,26 @@ public class Translatable {
 				args[i] = ((Translatable) args[i]).translate(locale);
 	}
 	
+	private @NotNull Component appended() {
+		Component appended = Component.empty();
+		
+		for (Object object : this.appended) {
+			if (object instanceof Component component)
+				appended = appended.append(component);
+			else if (object instanceof Translatable translatable)
+				appended = appended.append(translatable.locale(this.locale).component());
+		}
+		
+		return appended;
+	}
+	
 	@Override
 	public String toString() {
 		return "Translatable{" +
 			"key='" + key + '\'' +
 			", args=" + Arrays.toString(args) +
 			", stripColors=" + stripColors +
-			", appended=" + TownyComponents.unMiniMessage(appended) +
+			", appended=" + TownyComponents.unMiniMessage(appended()) +
 			", locale=" + locale +
 			'}';
 	}
