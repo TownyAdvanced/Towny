@@ -381,7 +381,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				} else {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
 				}
-				for (String line : townyTop)
+				for (Component line : townyTop)
 					TownyMessaging.sendMessage(sender, line);
 			});
 			return;

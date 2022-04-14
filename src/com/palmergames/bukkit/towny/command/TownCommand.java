@@ -3434,7 +3434,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			if (!(sender instanceof Player kickingPlayer) || !town.hasResident(kickingPlayer)) {
 				// For when the an admin uses /ta town {name} kick {residents}
-				TownyMessaging.sendMessage(sender, Translation.translateTranslatables(sender, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), Translatable.of("msg_kicked", kickerName, message)));
+				TownyMessaging.sendMessage(sender, Translation.translateTranslatables(sender, Component.space(), Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), Translatable.of("msg_kicked", kickerName, message)));
 			}
 			town.save();
 		} else {
