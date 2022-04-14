@@ -131,6 +131,7 @@ public class Towny extends JavaPlugin {
 	private static BukkitAudiences adventure;
 	
 	public Towny() {
+		
 		plugin = this;
 	}
 
@@ -988,7 +989,7 @@ public class Towny extends JavaPlugin {
 	public static Towny getPlugin() {
 		if (plugin == null)
 			throw new IllegalStateException("Attempted to use getPlugin() while the plugin is null, are you shading Towny? If you do not understand this message, join the Towny discord using https://discord.com/invite/gnpVs5m and ask for support.");
-		
+
 		return plugin;
 	}
 
