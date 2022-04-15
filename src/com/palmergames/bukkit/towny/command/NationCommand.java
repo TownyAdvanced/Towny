@@ -121,12 +121,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"ally",
 		"spawn",
 		"king",
+		"leader",
 		"bankhistory",
 		"baltop"
 	);
 
 	private static final List<String> nationSetTabCompletes = Arrays.asList(
 		"king",
+		"leader",
 		"capital",
 		"board",
 		"taxes",
@@ -194,6 +196,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 					break;
 				case "king":
+				case "leader":
 					if (args.length == 2)
 						return NameUtil.filterByStart(nationKingTabCompletes, args[1]);
 					break;
@@ -352,6 +355,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			
 			switch (args[1].toLowerCase()) {
 				case "king":
+				case "leader":
 				case "title":
 				case "surname":
 					return NameUtil.filterByStart(NameUtil.getNames(nation.getResidents()), args[2]);
@@ -495,6 +499,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMessage(player, TownyFormatter.getRanksForNation(getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)), Translation.getLocale(player)));
 			break;
 		case "king":
+		case "leader":
 			nationKing(player, StringMgmt.remFirstArg(split));
 			break;
 		case "add":
@@ -1952,6 +1957,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		switch (split[0].toLowerCase()) {
+		case "leader":
 		case "king":
 			nationSetKing(sender, nation, split, admin);
 			break;
@@ -2314,7 +2320,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static void nationSetKing(CommandSender sender, Nation nation, String[] split, boolean admin) {
 
 		if (split.length < 2)
-			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set king Dumbo");
+			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set leader Dumbo");
 		else
 			try {
 				Resident newKing = getResidentOrThrow(split[1]);
