@@ -1346,9 +1346,9 @@ msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Ваш город больш
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Столицы наций не могут менять статус своего нейтралитета.'
 #Message shown as feedback for /t toggle nationzone command.
-msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
+msg_changed_nationzone: 'Зона вокруг Нации теперь %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
-msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
+msg_err_your_town_has_no_nationzone_to_toggle: 'В вашем городе нет национальных зон для переключения!'
 #Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
 towny_prices_nation_upkeep_based_on: '&7Цена содержания нации основана на &a%s'
@@ -1453,12 +1453,12 @@ msg_err_console_only: 'Эту команду может использовать
 msg_err_player_only: 'Эту команду может использовать только игрок.'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
-msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
+msg_border_titles_toggled: 'Титульные сообщения, показываемые при пересечении границ %s.'
 #Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'Выполнение этой команды сбросит ваш файл config.yml. Вы хотите продолжить?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
-msg_warn_overriding_server_config: 'By doing this you are overriding the resident limits set in the server configuration. Do you want to continue anyway?'
+msg_warn_overriding_server_config: 'При этом вы переопределяете установленные ограничения в конфигурации сервера. Вы все равно хотите продолжить?'
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
-msg_removed_x_invalid_outpost_spawns: 'Removed %d invalid outpost spawns.'
+msg_removed_x_invalid_outpost_spawns: 'Удалено %d недопустимых спаунов на аутпосте.'
