@@ -1604,10 +1604,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					line = keys.get("price");
 					if (line != null)
 						try {
-							double price = Double.parseDouble(line.trim());
-							if (price > -1)
-								townBlock.getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeForSale(townBlock.getType());
-							townBlock.setPlotPrice(price);
+							townBlock.setPlotPrice(Double.parseDouble(line.trim()));
 						} catch (Exception ignored) {
 						}
 					

@@ -1764,9 +1764,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				line = rs.getString("price");
 				if (line != null)
 					try {
-						float price = Float.parseFloat(line.trim());
-						if (price > -1)
-							townBlock.getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeForSale(townBlock.getType());
 						townBlock.setPlotPrice(Float.parseFloat(line.trim()));
 					} catch (Exception ignored) {
 					}

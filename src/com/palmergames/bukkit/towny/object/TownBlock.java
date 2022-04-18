@@ -193,10 +193,15 @@ public class TownBlock extends TownyObject {
 		return false;
 	}
 
-	public void setPlotPrice(double ForSale) {
+	public void setPlotPrice(double price) {
+		if (isForSale() && price == -1.0)
+			// Plot is no longer for sale.
+			getTownOrNull().getTownBlockTypeCache().removeTownBlockOfTypeForSale(this);
+		else if (!isForSale() && price > -1.0)
+			// Plot is being put up for sale.
+			getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeForSale(this);
 
-		this.plotPrice = ForSale;
-
+		this.plotPrice = price;
 	}
 
 	public double getPlotPrice() {
