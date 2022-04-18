@@ -206,7 +206,7 @@ msg_changed_public: '&cPubliczny status miasta jest teraz włączony: %s.'
 msg_changed_expl: '&cEksplozje w %s są teraz włączone: %s.'
 msg_changed_fire: '&cOgień w %s jest teraz włączony: %s.'
 msg_changed_mobs: '&cPotwory w %s są teraz włączone: %s.'
-msg_the_plot_group: 'the Plot Group'
+msg_the_plot_group: 'grupa tratw'
 msg_changed_taxpercent: '&cPodatki procentowe są teraz włączone: %s.'
 msg_changed_open: '&cOtwarte granice są teraz włączone: %s.'
 msg_toggle_open_on_warning: 'Ostrzeżenie: Uprawnienia miasta powinny być wyłączone, jeśli miasto jest otwarte. Użyj komendy "/town set perm off", a następnie "/town set perm reset".'
@@ -232,7 +232,7 @@ msg_set_outpost_spawn: '&bPomyślnie zmieniono spawn wartowni.'
 msg_set_title: '&b%s otrzymał przydomek ''%s&b''.'
 msg_set_surname: '&b%s otrzymał przydomek ''%s&b''.'
 msg_clear_title_surname: '&bPrzydomek %s dla ''%s'' został wyczyszcony.'
-msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
+msg_clear_plot_material: '&bTratwa została usunięta z następujących typów bloków: %s.'
 msg_set_perms: '&bPomyślnie zmieniono uprawnienia na:'
 msg_set_claim: '&bPomyślnie zmieniono przejmowanie terenu %s na %s'
 msg_set_perms_reset: '&bPomyślnie zresetowano ustawienie dla wszystkich działek %s.'
@@ -690,7 +690,7 @@ number_of_residents: '(Liczba rezydentów)'
 number_of_towns: '(Liczba miast)'
 town_name: 'Nazwa miasta'
 nation_name: 'Nazwa nacji'
-refund_message: '&aRefunded %s for unclaiming %s townblocks.'
+refund_message: '&aZwróć %s za zrzeczenie się bloków miejskich %s.'
 msg_bankrupt_town_multiple: '&bNastępujące miasta nie mogły sobie pozwolić na utrzymanie i zostały rozwiązane: '
 msg_bankrupt_nation_multiple: '&bNastępujące nacje nie mogły sobie pozwolić na utrzymanie i zostały rozwiązane: '
 msg_couldnt_pay_tax: '&b%s nie płacił podatków i został wyrzucony z %s.'
@@ -986,8 +986,8 @@ towny_prices_price_plot: '&c    [Ceny] &2Działka: &a%s &8| &2Wartownia: &a%s'
 towny_prices_price_shop: '&c            &2Sklep: &a%s &8| &2Ambasada: &a%s'
 towny_prices_taxes_plot: '&c    [Podatki]    &2Mieszkaniec: &a%s &8| &2Działka: &a%s'
 towny_prices_taxes_shop: '&c            &2Sklep: &a%s &8| &2Ambasada: &a%s'
-towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
-towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_town_neutral_tax: '&c            &2Świat: &a%s'
+towny_prices_plots: '&c    [Ustawienie tratwy]'
 towny_prices_type_single: '            &2%s: &a%s'
 towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cNacja: &6%s'
@@ -1007,7 +1007,7 @@ msg_del_town2: '&bMiasto %s zostało usunięte!'
 msg_ruin_town: '&bMiasto pod ręką %s wpadło w ruinę!'
 gui_title_select_plot_type: 'Wybierz typ działki'
 gui_title_no_restrictions: 'Brak ograniczeń dla tego typu działki.'
-gui_title_towny_allowedblocks: '%s AllowedBlocks List'
+gui_title_towny_allowedblocks: '%s Lista dozwolonych bloków'
 gui_title_towny_wildsblocks: 'Lista Bloków Dziczy w Towny'
 gui_title_towny_itemuse: 'Przykłady "ItemUse"'
 gui_title_towny_switch: 'Przykłady Przełączania'
@@ -1154,7 +1154,7 @@ msg_err_days_must_be_greater_than_0: 'Liczba dni musi być większa niż zero.'
 msg_err_outlawed_players_no_teleport: '&4Jesteś wygnańcem tego miasta, nie możesz się teleportować!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Nie możesz użyć tej komendy podczas pobytu w mieście, z którego zostałeś wygnany.'
 #Added in 0.110
-msg_safe_mode: "[Error] Locked in safe mode!"
+msg_safe_mode: "[Error] Zablokowany w trybie awaryjnym!"
 msg_safe_mode_base: '[Error] Towny jest zablokowany w trybie Safe Mode z powodu błędu! '
 msg_safe_mode_player: 'Zgłoś administratorowi, aby sprawdził konsolę serwera.'
 msg_safe_mode_admin: 'Sprawdź konsolę serwera, aby uzyskać więcej informacji.'
@@ -1434,31 +1434,31 @@ msg_your_locale: 'Towny używa języka twojej gry (%s) do tłumaczenia wiadomoś
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Musisz poczekać %s sekund przed ponowną zmianą nazwy miasta.'
 #Added in 1.141
-msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'
+msg_newday_already_scheduled_soon: 'Nowa codzienna misja jest już zaplanowana na najbliższą przyszłość.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
-msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Nie możesz zmienić neutralności, pozostało %s sekund.'
 #Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
-msg_err_command_not_for_console_use: 'This command cannot be used from the console.'
+msg_err_command_not_for_console_use: 'Tego polecenia nie można użyć z konsoli.'
 #Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
-msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
+msg_town_unlimitedclaims_setting_set_to: 'Dla miasta %s ustawienie nieograniczonych roszczeń jest ustawione na %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
-did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to claim, did you want to turn on unlimited claiming for the town of %s'
+did_you_want_to_toggle_unlimited_claims: 'Nie masz wystarczającej liczby bloków miejskich do przejęcia. Czy chcesz włączyć nieograniczoną liczbę przechwytywania dla miasta %s?'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
-msg_err_console_only: 'This command can only be used by console.'
-msg_err_player_only: 'This command can only be used by a player.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Nie możesz opuścić swojego narodu, twoje miasto jest podbite.'
+msg_err_console_only: 'To polecenie może być używane tylko przez konsolę.'
+msg_err_player_only: 'To polecenie może być używane tylko przez gracza.'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
-msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
+msg_border_titles_toggled: 'Komunikat tytułowy wyświetlany podczas przekraczania granic to %s.'
 #Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
-this_will_reset_your_config: 'Running this command resets your config.yml to the default file. Do you want to continue?'
+this_will_reset_your_config: 'Uruchomienie tego polecenia powoduje zresetowanie pliku config.yml do pliku domyślnego. Czy chcesz kontynuować?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
-msg_warn_overriding_server_config: 'By doing this you are overriding the resident limits set in the server configuration. Do you want to continue anyway?'
+msg_warn_overriding_server_config: 'W ten sposób omijasz ograniczenia rezydentne ustawione w konfiguracji serwera. Czy nadal chcesz kontynuować?'
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
-msg_removed_x_invalid_outpost_spawns: 'Removed %d invalid outpost spawns.'
+msg_removed_x_invalid_outpost_spawns: 'Usunięto %d nieprawidłowe miejsca odrodzenia posterunków.'
