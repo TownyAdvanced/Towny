@@ -1322,50 +1322,31 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		List<String> out = new ArrayList<>();
 
 		int townOwned = 0;
-		int resident = 0;
+		int resident = town.getTownBlockTypeCache().getNumTownBlocksOfType(TownBlockType.RESIDENTIAL);
 		int residentOwned = 0;
-		int residentOwnedFS = 0;
-		int embassy = 0;
+		int residentOwnedFS = town.getTownBlockTypeCache().getNumTownBlocksOfTypeForSale(TownBlockType.RESIDENTIAL);
+		int embassy = town.getTownBlockTypeCache().getNumTownBlocksOfType(TownBlockType.EMBASSY);
 		int embassyRO = 0;
-		int embassyFS = 0;
-		int shop = 0;
+		int embassyFS = town.getTownBlockTypeCache().getNumTownBlocksOfTypeForSale(TownBlockType.EMBASSY);
+		int shop = town.getTownBlockTypeCache().getNumTownBlocksOfType(TownBlockType.COMMERCIAL);
 		int shopRO = 0;
-		int shopFS = 0;
-		int farm = 0;
-		int arena = 0;
-		int wilds = 0;
-		int jail = 0;
-		int inn = 0;
+		int shopFS = town.getTownBlockTypeCache().getNumTownBlocksOfTypeForSale(TownBlockType.COMMERCIAL);
+		int farm = town.getTownBlockTypeCache().getNumTownBlocksOfType(TownBlockType.FARM);
+		int arena = town.getTownBlockTypeCache().getNumTownBlocksOfType(TownBlockType.ARENA);
+		int wilds = town.getTownBlockTypeCache().getNumTownBlocksOfType(TownBlockType.WILDS);
+		int jail = town.getTownBlockTypeCache().getNumTownBlocksOfType(TownBlockType.JAIL);
+		int inn = town.getTownBlockTypeCache().getNumTownBlocksOfType(TownBlockType.INN);
+		int bank = town.getTownBlockTypeCache().getNumTownBlocksOfType(TownBlockType.BANK);
 		for (TownBlock townBlock : town.getTownBlocks()) {
-
 			if (townBlock.getType() == TownBlockType.EMBASSY) {
-				embassy++;
 				if (townBlock.hasResident())
 					embassyRO++;
-				if (townBlock.isForSale())
-					embassyFS++;
 			} else if (townBlock.getType() == TownBlockType.COMMERCIAL) {
-				shop++;
 				if (townBlock.hasResident())
 					shopRO++;
-				if (townBlock.isForSale())
-					shopFS++;
-			} else if (townBlock.getType() == TownBlockType.FARM) {
-				farm++;
-			} else if (townBlock.getType() == TownBlockType.ARENA) {
-				arena++;
-			} else if (townBlock.getType() == TownBlockType.WILDS) {
-				wilds++;
-			} else if (townBlock.getType() == TownBlockType.JAIL) {
-				jail++;
-			} else if (townBlock.getType() == TownBlockType.INN) {
-				inn++;
 			} else if (townBlock.getType() == TownBlockType.RESIDENTIAL) {
-				resident++;
 				if (townBlock.hasResident())
 					residentOwned++;
-				if (townBlock.isForSale())
-					residentOwnedFS++;
 			}
 			if (!townBlock.hasResident()) {
 				townOwned++;
@@ -1387,10 +1368,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		out.add(Colors.Green + "Town Owned Land: " + Colors.LightGreen + townOwned);
 		out.add(Colors.Green + "Farms   : " + Colors.LightGreen + farm);
-		out.add(Colors.Green + "Arenas : " + Colors.LightGreen + arena);
-		out.add(Colors.Green + "Wilds    : " + Colors.LightGreen + wilds);
-		out.add(Colors.Green + "Jails    : " + Colors.LightGreen + jail);
+		out.add(Colors.Green + "Arenas  : " + Colors.LightGreen + arena);
+		out.add(Colors.Green + "Wilds   : " + Colors.LightGreen + wilds);
+		out.add(Colors.Green + "Jails   : " + Colors.LightGreen + jail);
 		out.add(Colors.Green + "Inns    : " + Colors.LightGreen + inn);
+		out.add(Colors.Green + "Banks   : " + Colors.LightGreen + bank);
 		out.add(Colors.Green + "Type: " + Colors.LightGreen + "Player-Owned / ForSale / Total / Daily Revenue");
 		out.add(Colors.Green + "Residential: " + Colors.LightGreen + residentOwned + " / " + residentOwnedFS + " / " + resident + " / " + (residentOwned * town.getPlotTax()));
 		out.add(Colors.Green + "Embassies : " + Colors.LightGreen + embassyRO + " / " + embassyFS + " / " + embassy + " / " + (embassyRO * town.getEmbassyPlotTax()));

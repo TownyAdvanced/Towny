@@ -13,8 +13,11 @@ import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
+import com.palmergames.bukkit.towny.event.plot.PlotNotForSaleEvent;
+import com.palmergames.bukkit.towny.event.plot.PlotSetForSaleEvent;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -210,4 +213,26 @@ public class TownyCustomListener implements Listener {
 			attacker.removeSpawnProtection();
 		}
 	}
+
+	@EventHandler (priority=EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlotChangePlotType(PlotChangeTypeEvent event) {
+		final Town town = event.getTownBlock().getTownOrNull();
+		town.getTownBlockTypeCache().removeTownBlockOfType(event.getOldType());
+		town.getTownBlockTypeCache().addTownBlockOfType(event.getNewType());
+		if (event.getTownBlock().isForSale()) {
+			town.getTownBlockTypeCache().removeTownBlockOfTypeForSale(event.getOldType());
+			town.getTownBlockTypeCache().addTownBlockOfTypeForSale(event.getOldType());
+		}
+	}
+	
+	@EventHandler (priority=EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlotSetForSale(PlotSetForSaleEvent event) {
+		event.getTown().getTownBlockTypeCache().addTownBlockOfType(event.getTownBlock());
+	}
+
+	@EventHandler (priority=EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlotSetNotForSale(PlotNotForSaleEvent event) {
+		event.getTown().getTownBlockTypeCache().removeTownBlockOfType(event.getTownBlock());
+	}
+
 }
