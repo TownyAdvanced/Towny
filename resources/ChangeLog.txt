@@ -7416,6 +7416,3 @@ v0.92.0.11:
   - Replace references to Kings in the english language files with the word Leader or Nation Leader.
     - Nation king commands now include aliases for leader.
     - Leader is now a banned town and nation name.
-0.98.1.9:
-  - Warn players of bankrupt towns they are in fact bankrupt.
-  - Bump language files to 0.149.
