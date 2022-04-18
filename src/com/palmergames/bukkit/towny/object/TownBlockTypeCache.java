@@ -13,19 +13,19 @@ public class TownBlockTypeCache {
 	}
 	
 	public void removeTownBlockOfType(TownBlock townBlock) {
-		typeCache.put(townBlock.getType(), typeCache.merge(townBlock.getType(), -1, Integer::sum));
+		typeCache.merge(townBlock.getType(), -1, Integer::sum);
 	}
 	
 	public void addTownBlockOfType(TownBlock townBlock) {
-		typeCache.put(townBlock.getType(), typeCache.merge(townBlock.getType(), 1, Integer::sum));
+		typeCache.merge(townBlock.getType(), 1, Integer::sum);
 	}
 	
 	public void removeTownBlockOfType(TownBlockType type) {
-		typeCache.put(type, typeCache.merge(type, -1, Integer::sum));
+		typeCache.merge(type, -1, Integer::sum);
 	}
 	
 	public void addTownBlockOfType(TownBlockType type) {
-		typeCache.put(type, typeCache.merge(type, 1, Integer::sum));
+		typeCache.merge(type, 1, Integer::sum);
 	}
 	
 	public int getNumTownBlocksOfType(TownBlockType type) {
@@ -37,19 +37,19 @@ public class TownBlockTypeCache {
 	}
 	
 	public void removeTownBlockOfTypeForSale(TownBlock townBlock) {
-		forSaleCache.put(townBlock.getType(), forSaleCache.merge(townBlock.getType(), -1, Integer::sum));
+		forSaleCache.merge(townBlock.getType(), -1, Integer::sum);
 	}
 	
 	public void addTownBlockOfTypeForSale(TownBlock townBlock) {
-		forSaleCache.put(townBlock.getType(), forSaleCache.merge(townBlock.getType(), 1, Integer::sum));
+		forSaleCache.merge(townBlock.getType(), 1, Integer::sum);
 	}
 	
 	public void removeTownBlockOfTypeForSale(TownBlockType type) {
-		forSaleCache.put(type, forSaleCache.merge(type, -1, Integer::sum));
+		forSaleCache.merge(type, -1, Integer::sum);
 	}
 	
 	public void addTownBlockOfTypeForSale(TownBlockType type) {
-		forSaleCache.put(type, forSaleCache.merge(type, 1, Integer::sum));
+		forSaleCache.merge(type, 1, Integer::sum);
 	}
 	
 	public int getNumTownBlocksOfTypeForSale(TownBlock townBlock) {
