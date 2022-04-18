@@ -45,6 +45,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_NATION_RANK_ASSISTANT("towny.command.nation.rank.assistant"),
 	
 	TOWNY_COMMAND_NATION_KING("towny.command.nation.king"),
+	TOWNY_COMMAND_NATION_LEADER("towny.command.nation.king"),
 	
 	//TOWNY_COMMAND_NATION_ASSISTANT("towny.command.nation.assistant"),
 	
