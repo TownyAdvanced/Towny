@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.147
+version: 0.149
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -1462,3 +1462,6 @@ msg_warn_overriding_server_config: 'При этом вы переопредел�
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: 'Удалено %d недопустимых спаунов на аутпосте.'
+#Added in 0.149
+#Message shown when a player logs in and their town is bankrupt.
+msg_your_town_is_bankrupt: 'Your town is bankrupt, add money to your bank using /town deposit {amount}.'
