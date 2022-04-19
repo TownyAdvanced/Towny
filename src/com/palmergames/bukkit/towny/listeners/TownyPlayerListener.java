@@ -12,6 +12,8 @@ import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.event.player.PlayerDeniedBedUseEvent;
+import com.palmergames.bukkit.towny.event.player.PlayerKeepsExperienceEvent;
+import com.palmergames.bukkit.towny.event.player.PlayerKeepsInventoryEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
@@ -888,57 +890,63 @@ public class TownyPlayerListener implements Listener {
 	/**
 	 * onPlayerDieInTown
 	 * - Handles death events and the KeepInventory/KeepLevel options are being used.
+	 * - Throws API events which can allow other plugins to cancel Towny saving
+	 *   inventory and/or experience.
 	 * 
-	 * @author - Articdive
+	 * @author - Articdive, LlmDl
 	 * @param event - PlayerDeathEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	// Why Highest??, so that we are the last ones to check for if it keeps their inventory, and then have no problems with it.
 	public void onPlayerDieInTown(PlayerDeathEvent event) {
+		Resident resident = TownyAPI.getInstance().getResident(event.getEntity());
+		TownBlock tb = TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation());
+		if (resident == null || tb == null)
+			return;
 		boolean keepInventory = event.getKeepInventory();
 		boolean keepLevel = event.getKeepLevel();
-		Player player = event.getEntity();
-		TownBlock tb = TownyAPI.getInstance().getTownBlock(player);
-		if (tb != null && tb.hasTown()) {
-			if (TownySettings.getKeepExperienceInTowns() && !keepLevel) {
-				event.setKeepLevel(true);
-				event.setDroppedExp(0);
-				keepLevel = true;
-			}
-
-			if (TownySettings.getKeepInventoryInTowns() && !keepInventory) {
-				event.setKeepInventory(true);
-				event.getDrops().clear();
-				keepInventory = true;
-			}
-
-			Resident resident = TownyAPI.getInstance().getResident(player); 
-			if (resident != null && resident.hasTown() && !keepInventory) {
-				Town town = resident.getTownOrNull();
-				Town tbTown = tb.getTownOrNull();
-				if (TownySettings.getKeepInventoryInOwnTown() && tbTown.equals(town)) {
-					event.setKeepInventory(true);
-					event.getDrops().clear();
-					keepInventory = true;
-				}
-				if (TownySettings.getKeepInventoryInAlliedTowns() && !keepInventory && tbTown.isAlliedWith(town)) {
-					event.setKeepInventory(true);
-					event.getDrops().clear();
-					keepInventory = true;
-				}
-			}
-			
-			if (TownySettings.getKeepInventoryInArenas() && !keepInventory && tb.getType() == TownBlockType.ARENA) {
-				event.setKeepInventory(true);
-				event.getDrops().clear();
-			}
-			
-			if (TownySettings.getKeepExperienceInArenas() && !keepLevel && tb.getType() == TownBlockType.ARENA) {
-				event.setKeepLevel(true);
-				event.setDroppedExp(0);
-			}
-
+		if (TownySettings.getKeepExperienceInTowns() && !keepLevel)
+			keepLevel = tryKeepExperience(event);
+		
+		if (TownySettings.getKeepInventoryInTowns() && !keepInventory)
+			keepInventory = tryKeepInventory(event);
+		
+		if (resident.hasTown() && !keepInventory) {
+			Town town = resident.getTownOrNull();
+			Town tbTown = tb.getTownOrNull();
+			if (TownySettings.getKeepInventoryInOwnTown() && tbTown.equals(town))
+				keepInventory = tryKeepInventory(event);
+			if (TownySettings.getKeepInventoryInAlliedTowns() && !keepInventory && tbTown.isAlliedWith(town))
+				keepInventory = tryKeepInventory(event);
 		}
+		
+		if (TownySettings.getKeepInventoryInArenas() && !keepInventory && tb.getType() == TownBlockType.ARENA)
+			tryKeepInventory(event);
+		
+		if (TownySettings.getKeepExperienceInArenas() && !keepLevel && tb.getType() == TownBlockType.ARENA)
+			tryKeepExperience(event);
+	}
+
+	private boolean tryKeepExperience(PlayerDeathEvent event) {
+		PlayerKeepsExperienceEvent pkee = new PlayerKeepsExperienceEvent(event.getEntity(), event.getEntity().getLocation());
+		Bukkit.getPluginManager().callEvent(pkee);
+		if (!pkee.isCancelled()) {
+			event.setKeepLevel(true);
+			event.setDroppedExp(0);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean tryKeepInventory(PlayerDeathEvent event) {
+		PlayerKeepsInventoryEvent pkie = new PlayerKeepsInventoryEvent(event.getEntity(), event.getEntity().getLocation());
+		Bukkit.getPluginManager().callEvent(pkie);
+		if (!pkie.isCancelled()) {
+			event.setKeepInventory(true);
+			event.getDrops().clear();
+			return true;
+		}
+		return false;
 	}
 
 

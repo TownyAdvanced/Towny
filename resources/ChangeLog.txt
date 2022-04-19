@@ -7419,3 +7419,7 @@ v0.92.0.11:
 0.98.1.9:
   - Add warning message on login telling players they are in fact bankrupt.
   - Bump language files to 0.149.
+  - API: New events:
+    - PlayerKeepsInventoryEvent
+    - PlayerKeepsExperienceEvent
+    - Two events that allow other plugins to cancel Towny saving player's inventory or xp orbs.
