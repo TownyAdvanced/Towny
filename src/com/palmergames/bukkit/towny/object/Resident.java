@@ -451,6 +451,23 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 //		}
 //	}	
 	
+	/**
+	 * @param node String representing a PermissionNode to test for.
+	 * @return true if the Player of the Resident has the permission node assigned
+	 *         to them according to the TownyPermissionSource.
+	 */
+	public boolean hasPermissionNode(String node) {
+		return getPlayer() != null && TownyUniverse.getInstance().getPermissionSource().has(getPlayer(), node);
+	}
+	
+	/**
+	 * @return true if the Player of the Resident is a server OP or has the
+	 *         towny.admin permission node according to the TownyPermissionSource.
+	 */
+	public boolean isAdmin() {
+		return getPlayer() != null && TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(getPlayer());
+	}
+	
 	public List<String> getModes() {
 		return Collections.unmodifiableList(modes);
 	}

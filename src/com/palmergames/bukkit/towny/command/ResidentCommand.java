@@ -405,8 +405,6 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	 * @throws TownyException
 	 */
 	private void residentToggle(Player player, String[] newSplit) throws TownyException {
-		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
-
 		Resident resident = TownyUniverse.getInstance().getResidentOpt(player.getUniqueId())
 							.orElseThrow(() -> new TownyException(Translatable.of("msg_err_not_registered_1", player.getName())));;
 
@@ -424,7 +422,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
-		if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE.getNode(newSplit[0].toLowerCase())))
+		if (!resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE.getNode(newSplit[0].toLowerCase())))
 			throw new TownyException(Translatable.of("msg_err_command_disable"));
 
 		TownyPermission perm = resident.getPermissions();
@@ -435,9 +433,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Special case chat spy
-		if (newSplit[0].equalsIgnoreCase("spy")) {
+		if (StringMgmt.containsIgnoreCase(Arrays.asList(newSplit), "spy")) {
 			
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode(newSplit[0].toLowerCase())))
+			if (!resident.hasPermissionNode(PermissionNodes.TOWNY_CHAT_SPY.getNode()))
 				throw new TownyException(Translatable.of("msg_err_command_disable"));
 			
 			resident.toggleMode(newSplit, true);
@@ -446,7 +444,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		} else if (newSplit[0].equalsIgnoreCase("pvp")) {
 			
 			// Test to see if the pvp cooldown timer is active for the town this resident belongs to.
-			if (TownySettings.getPVPCoolDownTime() > 0 && resident.hasTown()  && !permSource.testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode())) {
+			if (TownySettings.getPVPCoolDownTime() > 0 && resident.hasTown() && !resident.isAdmin()) {
 				if (CooldownTimerTask.hasCooldown(resident.getTown().getName(), CooldownType.PVP))
 					throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getTown().getName(), CooldownType.PVP))); 
 				if (CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.PVP))
@@ -455,7 +453,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			}
 			perm.pvp = choice.orElse(!perm.pvp);
 			// Add a task for the resident.
-			if (TownySettings.getPVPCoolDownTime() > 0 && !permSource.testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
+			if (TownySettings.getPVPCoolDownTime() > 0 && !resident.isAdmin())
 				CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.PVP);
 		} else if (newSplit[0].equalsIgnoreCase("fire")) {
 			perm.fire = choice.orElse(!perm.fire);

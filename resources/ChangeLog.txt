@@ -7423,3 +7423,8 @@ v0.92.0.11:
     - PlayerKeepsInventoryEvent
     - PlayerKeepsExperienceEvent
     - Two events that allow other plugins to cancel Towny saving player's inventory or xp orbs.
+  - Fix tricky players being able to able to spy on TownyChat.
+    - Closes #5869.
+  - API: 
+    - Add Resident#hasPermissionNode(String).
+    - Add Resident#isAdmin().
