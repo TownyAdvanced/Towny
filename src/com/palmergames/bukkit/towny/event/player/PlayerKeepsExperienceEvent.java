@@ -2,10 +2,14 @@ package com.palmergames.bukkit.towny.event.player;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -18,18 +22,19 @@ public class PlayerKeepsExperienceEvent extends Event implements Cancellable {
 	private boolean isCancelled = false;
 	private final Player player;
 	private final Location location;
+	private final PlayerDeathEvent event;
 
 	/**
 	 * An event thrown after a PlayerDeathEvent at HIGHEST priority.
 	 * Thrown when Towny would opt to keep someone's experience and clear the dropped XP orbs.
 	 * 
-	 * @param player Player who has died.
-	 * @param location Location where the player died.
+	 * @param event PlayerDeathEvent
 	 */
-	public PlayerKeepsExperienceEvent(Player player, Location location) {
+	public PlayerKeepsExperienceEvent(PlayerDeathEvent event) {
 		super(!Bukkit.getServer().isPrimaryThread());
-		this.player = player;
-		this.location = location;
+		this.player = event.getEntity();
+		this.location = event.getEntity().getLocation();
+		this.event = event;
 	}
 
 	@Override
@@ -74,7 +79,29 @@ public class PlayerKeepsExperienceEvent extends Event implements Cancellable {
 	public Location getLocation() {
 		return location;
 	}
+	
+	/**
+	 * @return the PlayerDeathEvent that killed the player.
+	 */
+	public PlayerDeathEvent getPlayerDeathEvent() {
+		return event;
+	}
 
+	/**
+	 * @return Resident that killed the player, if they died to another player, or null.
+	 */
+	@Nullable
+	public Resident getKiller() {
+		if (player.getLastDamageCause() instanceof EntityDamageByEntityEvent event) {
+			Entity attackerEntity = event.getDamager();
+			if (attackerEntity instanceof Projectile projectile
+				&& projectile.getShooter() instanceof Player player)
+				return TownyAPI.getInstance().getResident(player);
+			else if (attackerEntity instanceof Player player)
+				return TownyAPI.getInstance().getResident(player);
+		}
+		return null;
+	}
 	/**
 	 * @return town Town or null, if the player died in the wilderness.
 	 */

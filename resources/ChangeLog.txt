@@ -7428,3 +7428,5 @@ v0.92.0.11:
   - API: 
     - Add Resident#hasPermissionNode(String).
     - Add Resident#isAdmin().
+0.98.1.10:
+  - Improve PlayerKeepsInventoryEvent and PlayerKeepsExperienceEvent by making PlayerDeathEvent accessible and providing #getKiller.

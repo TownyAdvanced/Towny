@@ -928,7 +928,7 @@ public class TownyPlayerListener implements Listener {
 	}
 
 	private boolean tryKeepExperience(PlayerDeathEvent event) {
-		PlayerKeepsExperienceEvent pkee = new PlayerKeepsExperienceEvent(event.getEntity(), event.getEntity().getLocation());
+		PlayerKeepsExperienceEvent pkee = new PlayerKeepsExperienceEvent(event);
 		Bukkit.getPluginManager().callEvent(pkee);
 		if (!pkee.isCancelled()) {
 			event.setKeepLevel(true);
@@ -939,7 +939,7 @@ public class TownyPlayerListener implements Listener {
 	}
 
 	private boolean tryKeepInventory(PlayerDeathEvent event) {
-		PlayerKeepsInventoryEvent pkie = new PlayerKeepsInventoryEvent(event.getEntity(), event.getEntity().getLocation());
+		PlayerKeepsInventoryEvent pkie = new PlayerKeepsInventoryEvent(event);
 		Bukkit.getPluginManager().callEvent(pkie);
 		if (!pkie.isCancelled()) {
 			event.setKeepInventory(true);
