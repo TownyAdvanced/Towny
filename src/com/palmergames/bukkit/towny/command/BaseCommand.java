@@ -207,6 +207,25 @@ public class BaseCommand implements TabCompleter{
 		else 
 			return Collections.emptyList();
 	}
+	
+	/**
+	 * Returns a list of residents which are online and have no town, and can be seen by the sender.
+	 * 
+	 * @param arg the string to check if the resident's name starts with.
+	 * @return the residents names or an empty list.
+	 */
+	public List<String> getVisibleResidentsForPlayerWithoutTownsStartingWith(String arg, CommandSender sender) {
+		if (!(sender instanceof Player player))
+			return getResidentsWithoutTownStartingWith(arg);
+		List<String> residents = getOnlinePlayersWithoutTown().stream()
+			.filter(res -> player.canSee(res.getPlayer()))
+			.map(res -> res.getName())
+			.toList();
+		if (!residents.isEmpty())
+			return NameUtil.filterByStart(residents, arg);
+		else 
+			return Collections.emptyList();
+	}
 
 	/**
 	 * Parses the given string into a boolean choice.
