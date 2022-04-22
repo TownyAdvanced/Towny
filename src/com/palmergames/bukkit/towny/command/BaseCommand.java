@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class BaseCommand implements TabCompleter{
 	
@@ -220,11 +221,10 @@ public class BaseCommand implements TabCompleter{
 		List<String> residents = getOnlinePlayersWithoutTown().stream()
 			.filter(res -> player.canSee(res.getPlayer()))
 			.map(res -> res.getName())
-			.toList();
-		if (!residents.isEmpty())
-			return NameUtil.filterByStart(residents, arg);
-		else 
-			return Collections.emptyList();
+			.collect(Collectors.toUnmodifiableList());
+		return !residents.isEmpty()
+			? NameUtil.filterByStart(residents, arg)
+			: Collections.emptyList();
 	}
 
 	/**
