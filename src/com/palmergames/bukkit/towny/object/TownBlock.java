@@ -141,11 +141,13 @@ public class TownBlock extends TownyObject {
 		if (hasResident()) {
 			this.resident.removeTownBlock(this);
 			unclaim = true;
+			getTownOrNull().getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(this);
 		}
 		this.resident = resident;
 		try {
 			resident.addTownBlock(this);
 			successful = true;
+			getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeResidentOwned(this);
 		} catch (AlreadyRegisteredException | NullPointerException e) {
 			successful = false;
 		}

@@ -1586,6 +1586,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						} catch (Exception ignored) {
 						}
 					
+					line = keys.get("type");
+					if (line != null)
+						townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
+					
 					line = keys.get("resident");
 					if (line != null && !line.isEmpty()) {
 						Resident res = universe.getResident(line.trim());
@@ -1596,10 +1600,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_invalid_townblock_resident", townBlock.toString()));
 						}
 					}
-					
-					line = keys.get("type");
-					if (line != null)
-						townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
 
 					line = keys.get("price");
 					if (line != null)
