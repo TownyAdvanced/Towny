@@ -65,6 +65,10 @@ public class TownBlockTypeCache {
 	public int getNumTownBlocksOfTypeResidentOwned(TownBlockType type) {
 		return residentOwnedCache.get(type);
 	}
+	
+	public int getNumberOfResidentOwnedTownBlocks() {
+		return residentOwnedCache.values().stream().mapToInt(d-> d).sum();
+	}
 
 	public void removeTownBlockOfTypeResidentOwned(TownBlock townBlock) {
 		residentOwnedCache.merge(townBlock.getType(), -1, Integer::sum);
