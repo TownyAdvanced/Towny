@@ -221,7 +221,7 @@ public class BaseCommand implements TabCompleter{
 		List<String> residents = getOnlinePlayersWithoutTown().stream()
 			.filter(res -> player.canSee(res.getPlayer()))
 			.map(res -> res.getName())
-			.collect(Collectors.toUnmodifiableList());
+			.collect(Collectors.toCollection(ArrayList::new));
 		return !residents.isEmpty()
 			? NameUtil.filterByStart(residents, arg)
 			: Collections.emptyList();
