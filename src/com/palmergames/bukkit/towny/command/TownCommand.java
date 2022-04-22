@@ -1339,25 +1339,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownBlockTypeCache typeCache = town.getTownBlockTypeCache();
 		out.add(Colors.Green + "Town Owned Land: " + Colors.LightGreen + (town.getTownBlocks().size() - (typeCache.getNumberOfResidentOwnedTownBlocks())));
 		out.add(Colors.Green + "Type: " + Colors.LightGreen + "Player-Owned / ForSale / Total / Daily Revenue");
-		for (TownBlockType type : TownBlockTypeHandler.getTypes().values())
+		for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
+			int residentOwned = typeCache.getNumTownBlocksOfTypeResidentOwned(type);
 			out.add(Colors.Green + type.getFormattedName() + ": " + Colors.LightGreen 
-					+ typeCache.getNumTownBlocksOfTypeResidentOwned(type) + " / "
+					+ residentOwned + " / "
 					+ typeCache.getNumTownBlocksOfTypeForSale(type) + " / "
 					+ typeCache.getNumTownBlocksOfType(type) + " / "
-					+ TownyEconomyHandler.getFormattedBalance(getEstimatedTaxRevenue(town, type)));
+					+ TownyEconomyHandler.getFormattedBalance(residentOwned + type.getTax(town)));
+		}
 
 		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
 		TownyMessaging.sendMessage(sender, out);
-	}
-
-	private double getEstimatedTaxRevenue(Town town, TownBlockType type) {
-		int count = town.getTownBlockTypeCache().getNumTownBlocksOfTypeResidentOwned(type);
-		return switch(type.getName()) {
-		case "Default" -> count * town.getPlotTax();
-		case "Embassy" -> count * town.getEmbassyPlotTax();
-		case "Shop" -> count * town.getCommercialPlotTax();
-		default -> count * type.getTax(town);
-		};
 	}
 
 	private void parseTownOnlineCommand(Player player, String[] split) throws TownyException {
