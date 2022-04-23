@@ -1358,7 +1358,7 @@ towny_prices_upkeep_num_towns: 'количестве городов.'
 towny_prices_upkeep_nation_level: 'уровне нации (количестве участников.)'
 #Added in 0.130
 #Jail causes
-msg_jailed_mayor: 'Заключены в тюрьму мэром.'
+msg_jailed_mayor: 'Заключен в тюрьму мэром.'
 #Jail causes
 msg_jailed_outlaw: 'Убит, будучи объявленным преступником.'
 #Jail causes
@@ -1366,7 +1366,7 @@ msg_jailed_war: 'Узник войны.'
 #Jail handbook messages
 msg_jailed_handbook_1: 'Похоже, вас заключили в тюрьму по причине: %s'
 #Jail handbook messages
-msg_jailed_handbook_2: 'Это довольно плохо, да. Ну и что ты можешь с этим поделать? Вот несколько полезных советов для тебя, пока ты отбываешь своё наказание.'
+msg_jailed_handbook_2: 'Нехорошо, правда? Что-ж поделать. Вот несколько полезных советов для тебя, пока ты отбываешь своё наказание.'
 #Jail handbook messages
 msg_jailed_handbook_3: 'Вы заключены в тюрьму на %s часов. Отбыв своё наказание, вы выйдете на свободу.'
 #Jail handbook messages
