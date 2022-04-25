@@ -1335,7 +1335,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" 
 						: "")
 				: ""));
-
+		
 		TownBlockTypeCache typeCache = town.getTownBlockTypeCache();
 		out.add(Colors.Green + "Town Owned Land: " + Colors.LightGreen + (town.getTownBlocks().size() - (typeCache.getNumberOfResidentOwnedTownBlocks())));
 		out.add(Colors.Green + "Type: " 
@@ -1351,9 +1351,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				+ Colors.Yellow + typeCache.getNumTownBlocksOfType(type) + Colors.LightGray + " / "
 				+ Colors.Green + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)));
 		}
-
 		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
 		TownyMessaging.sendMessage(sender, out);
+
 	}
 
 	private void parseTownOnlineCommand(Player player, String[] split) throws TownyException {
