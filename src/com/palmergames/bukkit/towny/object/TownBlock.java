@@ -283,10 +283,23 @@ public class TownBlock extends TownyObject {
 			type = TownBlockType.RESIDENTIAL;
 		
 		if (!type.equals(this.type))
-			this.permissions.reset();		
+			this.permissions.reset();
 
-		this.type = type;
+		if (this.type != null) {
+			getTownOrNull().getTownBlockTypeCache().removeTownBlockOfType(this.type);
+			if (isForSale())
+				getTownOrNull().getTownBlockTypeCache().removeTownBlockOfTypeForSale(this.type);
+			if (hasResident())
+				getTownOrNull().getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(this.type);
+		}
+		getTownOrNull().getTownBlockTypeCache().addTownBlockOfType(type);
+		if (isForSale())
+			getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeForSale(this.type);
+		if (hasResident())
+			getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeResidentOwned(this.type);
 		
+		this.type = type;
+
 		Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type, this));
 
 		switch (type.getName().toLowerCase()) {

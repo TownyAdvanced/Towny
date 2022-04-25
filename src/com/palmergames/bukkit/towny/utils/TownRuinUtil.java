@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.util.TimeTools;
 
@@ -104,12 +105,12 @@ public class TownRuinUtil {
 		//Return town blocks to the basic, unowned, type
 		for(TownBlock townBlock: town.getTownBlocks()) {
 			if (townBlock.hasResident())
-				townBlock.setResident(null);     		// Removes any personal ownership.
-			townBlock.setType("default");        		// Sets the townblock's perm line to the Town's perm line set above.
-			townBlock.setPlotPrice(-1);          		// Makes the plot not for sale.
-			townBlock.removePlotObjectGroup();   		// Removes plotgroup if it were present.
-			townBlock.getPermissionOverrides().clear(); // Removes all permission overrides from the plot.
-			townBlock.getTrustedResidents().clear();	// Removes all trusted residents.
+				townBlock.setResident(null);              // Removes any personal ownership.
+			townBlock.setType(TownBlockType.RESIDENTIAL); // Sets the townblock's perm line to the Town's perm line set above.
+			townBlock.setPlotPrice(-1);                   // Makes the plot not for sale.
+			townBlock.removePlotObjectGroup();            // Removes plotgroup if it were present.
+			townBlock.getPermissionOverrides().clear();   // Removes all permission overrides from the plot.
+			townBlock.getTrustedResidents().clear();      // Removes all trusted residents.
 			townBlock.save();
 		}
 		

@@ -14,7 +14,7 @@ public class TownBlockTypeCache {
 	 */
 
 	public int getNumTownBlocksOfType(TownBlockType type) {
-		return typeCache.get(type);
+		return typeCache.containsKey(type) ? typeCache.get(type) : 0;
 	}
 
 	public void removeTownBlockOfType(TownBlock townBlock) {
@@ -38,7 +38,7 @@ public class TownBlockTypeCache {
 	 */
 
 	public int getNumTownBlocksOfTypeForSale(TownBlockType type) {
-		return forSaleCache.get(type);
+		return forSaleCache.containsKey(type) ? forSaleCache.get(type) : 0;
 	}
 
 	public void removeTownBlockOfTypeForSale(TownBlock townBlock) {
@@ -63,7 +63,7 @@ public class TownBlockTypeCache {
 	 */
 
 	public int getNumTownBlocksOfTypeResidentOwned(TownBlockType type) {
-		return residentOwnedCache.get(type);
+		return residentOwnedCache.containsKey(type) ? residentOwnedCache.get(type) : 0;
 	}
 	
 	public int getNumberOfResidentOwnedTownBlocks() {

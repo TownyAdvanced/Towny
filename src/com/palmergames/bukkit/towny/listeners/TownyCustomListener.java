@@ -13,7 +13,6 @@ import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
-import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -211,16 +210,4 @@ public class TownyCustomListener implements Listener {
 			attacker.removeSpawnProtection();
 		}
 	}
-
-	@EventHandler (priority=EventPriority.MONITOR, ignoreCancelled = true)
-	public void onPlotChangePlotType(PlotChangeTypeEvent event) {
-		final Town town = event.getTownBlock().getTownOrNull();
-		town.getTownBlockTypeCache().removeTownBlockOfType(event.getOldType());
-		town.getTownBlockTypeCache().addTownBlockOfType(event.getNewType());
-		if (event.getTownBlock().isForSale()) {
-			town.getTownBlockTypeCache().removeTownBlockOfTypeForSale(event.getOldType());
-			town.getTownBlockTypeCache().addTownBlockOfTypeForSale(event.getOldType());
-		}
-	}
-	
 }

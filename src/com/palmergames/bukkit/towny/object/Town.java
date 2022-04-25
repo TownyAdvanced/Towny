@@ -875,6 +875,10 @@ public class Town extends Government implements TownBlockOwner {
 
 			townBlocks.remove(townBlock.getWorldCoord());
 			getTownBlockTypeCache().removeTownBlockOfType(townBlock.getType());
+			if (townBlock.isForSale())
+				getTownBlockTypeCache().removeTownBlockOfTypeForSale(townBlock.getType());
+			if (townBlock.hasResident())
+				getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(townBlock.getType());
 			this.save();
 		}
 	}
