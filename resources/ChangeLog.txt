@@ -7430,3 +7430,5 @@ v0.92.0.11:
     - Add Resident#isAdmin().
 0.98.1.10:
   - Improve PlayerKeepsInventoryEvent and PlayerKeepsExperienceEvent by making PlayerDeathEvent accessible and providing #getKiller.
+  - Correctly hide online and vanished players from the tab complete commands.
+    - Closes #5872.
