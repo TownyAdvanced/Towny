@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -93,6 +94,15 @@ public class BukkitTools {
 	
 	public static Player getPlayer(UUID playerUUID) {
 		return server.getPlayer(playerUUID);
+	}
+	
+	public static Collection<? extends Player> getVisibleOnlinePlayers(CommandSender sender) {
+		if (!(sender instanceof Player player))
+			return Bukkit.getOnlinePlayers();
+		
+		return Bukkit.getOnlinePlayers().stream()
+			.filter(p -> player.canSee(p))
+			.collect(Collectors.toCollection(ArrayList::new));
 	}
 	
 	/**

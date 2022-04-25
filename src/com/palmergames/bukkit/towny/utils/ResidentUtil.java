@@ -53,23 +53,9 @@ public class ResidentUtil {
 	 * @return - List of residents that can actually be seen.
 	 */
 	public static List<Resident> getOnlineResidentsViewable(Player viewer, ResidentList residentList) {
-		
-		List<Resident> onlineResidents = new ArrayList<>();
-		for (Player player : BukkitTools.getOnlinePlayers()) {
-			if (player != null) {
-				/*
-				 * Loop town/nation resident list
-				 */
-				for (Resident resident : residentList.getResidents()) {
-					if (resident.getName().equalsIgnoreCase(player.getName()))
-						if ((viewer == null) || (viewer.canSee(BukkitTools.getPlayerExact(resident.getName())))) {
-							onlineResidents.add(resident);
-						}
-				}
-			}
-		}
-		
-		return onlineResidents;
+		return residentList.getResidents().stream()
+			.filter(res -> viewer != null ?  res.isOnline() && viewer.canSee(res.getPlayer()) : res.isOnline())
+			.collect(Collectors.toList());
 	}
 	
 	/**

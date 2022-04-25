@@ -379,7 +379,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					break;
 				case "add":
 					if (args.length == 2)
-						return getResidentsWithoutTownStartingWith(args[1]);
+						return getVisibleResidentsForPlayerWithoutTownsStartingWith(args[1], sender);
 					break;
 				case "kick":
 					if (args.length == 2)
@@ -419,7 +419,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 												.collect(Collectors.toList());
 									} catch (TownyException ignore) {}
 								} else {
-									return getResidentsWithoutTownStartingWith(args[1]);
+									return getVisibleResidentsForPlayerWithoutTownsStartingWith(args[1], sender);
 								}
 							}
 						case 3:
