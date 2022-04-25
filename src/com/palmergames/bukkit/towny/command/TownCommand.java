@@ -1299,66 +1299,61 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	private void townPlots(CommandSender sender, String[] args) {
 		
+		Player player = null;
+		if (sender instanceof Player)
+			player = (Player) sender;
+		
+		Town town = null;
 		try {
-			Player player = null;
-			if (sender instanceof Player)
-				player = (Player) sender;
-			
-			Town town = null;
-			try {
-				if (args.length == 1 && player != null) {
-					if (TownRuinUtil.isPlayersTownRuined(player))
-						throw new TownyException(Translatable.of("msg_err_cannot_use_command_because_town_ruined"));
+			if (args.length == 1 && player != null) {
+				if (TownRuinUtil.isPlayersTownRuined(player))
+					throw new TownyException(Translatable.of("msg_err_cannot_use_command_because_town_ruined"));
 
-					town = getResidentOrThrow(player.getUniqueId()).getTown();
-				} else {
-					town = TownyUniverse.getInstance().getTown(args[1]);
-				}
-			} catch (Exception e) {
+				town = getResidentOrThrow(player.getUniqueId()).getTown();
+			} else {
+				town = TownyUniverse.getInstance().getTown(args[1]);
 			}
-			
-			if (town == null) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_specify_name"));
-				return;
-			}
-
-			List<String> out = new ArrayList<>();
-			out.add(ChatTools.formatTitle(town + " Town Plots"));
-			out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + town.getMaxTownBlocksAsAString() 
-				+ (!town.hasUnlimitedClaims() 
-					? (TownySettings.isSellingBonusBlocks(town) 
-							? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchasedBlocks(town) + "]" 
-							: "") 
-						+ (town.getBonusBlocks() > 0 
-							? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" 
-							: "") 
-						+ (TownySettings.getNationBonusBlocks(town) > 0 
-							? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" 
-							: "")
-					: ""));
-
-			TownBlockTypeCache typeCache = town.getTownBlockTypeCache();
-			out.add(Colors.Green + "Town Owned Land: " + Colors.LightGreen + (town.getTownBlocks().size() - (typeCache.getNumberOfResidentOwnedTownBlocks())));
-			out.add(Colors.Green + "Type: " 
-					+ Colors.LightGreen + "Player-Owned" + Colors.LightGray + " / "
-					+ Colors.LightBlue  + "ForSale / " + Colors.LightGray + " / "
-					+ Colors.Yellow + "Total " + Colors.LightGray + " / "
-					+ Colors.Rose + "Daily Revenue");
-			for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
-				int residentOwned = typeCache.getNumTownBlocksOfTypeResidentOwned(type);
-				out.add(Colors.Green + type.getFormattedName() + ": "
-						+ Colors.LightGreen + residentOwned + Colors.LightGray + " / "
-						+ Colors.LightBlue  + typeCache.getNumTownBlocksOfTypeForSale(type) + Colors.LightGray + " / "
-						+ Colors.Yellow + typeCache.getNumTownBlocksOfType(type) + Colors.LightGray + " / "
-						+ Colors.Rose + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)));
-			}
-
-			out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
-			TownyMessaging.sendMessage(sender, out);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		
+		if (town == null) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_specify_name"));
+			return;
+		}
+
+		List<String> out = new ArrayList<>();
+		out.add(ChatTools.formatTitle(town + " Town Plots"));
+		out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + town.getMaxTownBlocksAsAString() 
+			+ (!town.hasUnlimitedClaims() 
+				? (TownySettings.isSellingBonusBlocks(town) 
+						? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchasedBlocks(town) + "]" 
+						: "") 
+					+ (town.getBonusBlocks() > 0 
+						? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" 
+						: "") 
+					+ (TownySettings.getNationBonusBlocks(town) > 0 
+						? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" 
+						: "")
+				: ""));
+
+		TownBlockTypeCache typeCache = town.getTownBlockTypeCache();
+		out.add(Colors.Green + "Town Owned Land: " + Colors.LightGreen + (town.getTownBlocks().size() - (typeCache.getNumberOfResidentOwnedTownBlocks())));
+		out.add(Colors.Green + "Type: " 
+				+ Colors.LightGreen + "Player-Owned" + Colors.LightGray + " / "
+				+ Colors.LightBlue  + "ForSale" + Colors.LightGray + " / "
+				+ Colors.Yellow + "Total" + Colors.LightGray + " / "
+				+ Colors.Green + "Daily Revenue");
+		for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
+			int residentOwned = typeCache.getNumTownBlocksOfTypeResidentOwned(type);
+			out.add(Colors.Green + type.getFormattedName() + ": "
+				+ Colors.LightGreen + residentOwned + Colors.LightGray + " / "
+				+ Colors.LightBlue  + typeCache.getNumTownBlocksOfTypeForSale(type) + Colors.LightGray + " / "
+				+ Colors.Yellow + typeCache.getNumTownBlocksOfType(type) + Colors.LightGray + " / "
+				+ Colors.Green + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)));
+		}
+
+		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
+		TownyMessaging.sendMessage(sender, out);
 	}
 
 	private void parseTownOnlineCommand(Player player, String[] split) throws TownyException {

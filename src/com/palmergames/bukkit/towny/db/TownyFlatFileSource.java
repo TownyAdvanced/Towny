@@ -1600,7 +1600,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_invalid_townblock_resident", townBlock.toString()));
 						}
 					}
-
+					
 					line = keys.get("price");
 					if (line != null)
 						try {
