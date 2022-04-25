@@ -356,7 +356,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				break;
 			case "checkperm":
 				if (args.length == 2)
-					return NameUtil.filterByStart(BukkitTools.getOnlinePlayers()
+					return NameUtil.filterByStart(BukkitTools.getVisibleOnlinePlayers(sender)
 						.stream()
 						.map(Player::getName)
 						.collect(Collectors.toList()), args[1]);
