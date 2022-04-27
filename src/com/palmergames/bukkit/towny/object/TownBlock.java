@@ -283,23 +283,13 @@ public class TownBlock extends TownyObject {
 			type = TownBlockType.RESIDENTIAL;
 		
 		if (!type.equals(this.type))
-			this.permissions.reset();
+			this.permissions.reset();		
 
-		if (this.type != null) {
-			getTownOrNull().getTownBlockTypeCache().removeTownBlockOfType(this.type);
-			if (isForSale())
-				getTownOrNull().getTownBlockTypeCache().removeTownBlockOfTypeForSale(this.type);
-			if (hasResident())
-				getTownOrNull().getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(this.type);
-		}
-		getTownOrNull().getTownBlockTypeCache().addTownBlockOfType(type);
-		if (isForSale())
-			getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeForSale(this.type);
-		if (hasResident())
-			getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeResidentOwned(this.type);
-		
+		if (getTownOrNull() != null)
+			adjustTownBlockTypeCache(getTownOrNull().getTownBlockTypeCache(), type);
+
 		this.type = type;
-
+		
 		Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type, this));
 
 		switch (type.getName().toLowerCase()) {
@@ -373,6 +363,37 @@ public class TownBlock extends TownyObject {
 			JailUtil.createJailPlot(this, getTown(), resident.getPlayer().getLocation());
 
 		this.save();
+	}
+	
+	/**
+	 * Towns track TownBlockTypes in a TownBlockTypeCache, allowing Towny to keep
+	 * track of how many plots of each type, their forSale status and their
+	 * hasResident status. When a TownBlock changes type the caches are adjusted for
+	 * the Town.
+	 * 
+	 * @param townBlockTypeCache TownBlockTypeCache which is being adjusted.
+	 * @param type               TownBlockType which is being set.
+	 */
+	private void adjustTownBlockTypeCache(@Nullable TownBlockTypeCache townBlockTypeCache, @NotNull TownBlockType type) {
+		if (townBlockTypeCache == null)
+			return;
+
+		if (this.type != null) {
+			// This townblock is not brand new, and not being loaded from the database,
+			// we must remove the previous type from the caches.
+			townBlockTypeCache.removeTownBlockOfType(this.type);
+			if (isForSale())
+				townBlockTypeCache.removeTownBlockOfTypeForSale(this.type);
+			if (hasResident())
+				townBlockTypeCache.removeTownBlockOfTypeResidentOwned(this.type);
+		}
+
+		// Add the townblock type to the Town's TownBlockTypeCache.
+		townBlockTypeCache.addTownBlockOfType(type);
+		if (isForSale())
+			townBlockTypeCache.addTownBlockOfTypeForSale(type);
+		if (hasResident())
+			townBlockTypeCache.addTownBlockOfTypeResidentOwned(type);
 	}
 
 	public boolean isHomeBlock() {
