@@ -1915,7 +1915,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						townyUniverse.getDataSource().removeResident(oldMayor);
 
 					// NPC mayors set their towns to not pay any upkeep.
-					town.setHasUpkeep(newMayor.isNPC());
+					town.setHasUpkeep(!newMayor.isNPC());
 
 					town.save();
 					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", newMayor));

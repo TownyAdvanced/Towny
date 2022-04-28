@@ -2293,7 +2293,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 							plugin.deleteCache(newMayor);
 							if (admin) {
-								town.setHasUpkeep(newMayor.isNPC());
+								town.setHasUpkeep(!newMayor.isNPC());
 								TownyMessaging.sendMsg(sender, Translatable.of("msg_new_mayor", newMayor.getName()));
 							}
 							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", newMayor.getName()));

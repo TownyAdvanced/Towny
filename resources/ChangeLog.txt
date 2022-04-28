@@ -7432,3 +7432,6 @@ v0.92.0.11:
   - Improve PlayerKeepsInventoryEvent and PlayerKeepsExperienceEvent by making PlayerDeathEvent accessible and providing #getKiller.
   - Correctly hide online and vanished players from the tab complete commands.
     - Closes #5872.
+0.98.1.11:
+  - Fix /ta set mayor command putting a town's hasUpkeep value in the opposite state.
+    - Closes #5882.
