@@ -1263,7 +1263,7 @@ public enum ConfigNodes {
 			"",
 			"# When using PlaceholderAPI, and a tag would show a nation, this will determine how it is formatted."),
 	FILTERS_PAPI_CHAT_FORMATTING_RANKS(
-			"filters_colour_chat.papi_chat_formatting.ranks", "",
+			"filters_colour_chat.papi_chat_formatting.ranks", "", "",
 			"# Colour code applied to player names using the %townyadvanced_towny_colour% placeholder."),
 	FILTERS_PAPI_CHAT_FORMATTING_RANKS_NOMAD(
 			"filters_colour_chat.papi_chat_formatting.ranks.nomad","&f"),
