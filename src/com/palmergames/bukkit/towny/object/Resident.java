@@ -7,9 +7,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
-import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
-import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -562,10 +560,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			townRanks.add(rank);
 			if (isOnline())
 				TownyPerms.assignPermissions(this, null);
-			BukkitTools.getPluginManager().callEvent(new TownAddResidentRankEvent(this, rank, town));
 			return true;
 		}
-
 		return false;
 	}
 
@@ -598,11 +594,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			townRanks.remove(rank);
 			if (isOnline())
 				TownyPerms.assignPermissions(this, null);
-
-			BukkitTools.getPluginManager().callEvent(new TownRemoveResidentRankEvent(this, rank, town));
 			return true;
 		}
-
 		return false;
 	}
 

@@ -17,8 +17,12 @@ import com.palmergames.bukkit.towny.conversation.SetupConversation;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
+import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
+import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
+import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
+import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -1468,8 +1472,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getTownRanks(), ", ")));
 
 		if (split[0].equalsIgnoreCase("add")) {
-			if (target.addTownRank(rank)) {
-				TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", "Town", rank));
+			if (!target.hasTownRank(rank)) {
+				BukkitTools.getPluginManager().callEvent(new TownAddResidentRankEvent(target, rank, town));
+				target.addTownRank(rank);
+				if (target.isOnline())
+					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", "Town", rank));
 				TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_given_rank", "Town", rank, target.getName()));
 			} else {
 				// Must already have this rank
@@ -1478,8 +1485,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else if (split[0].equalsIgnoreCase("remove")) {
-			if (target.removeTownRank(rank)) {
-				TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", "Town", rank));
+			if (target.hasTownRank(rank)) {
+				BukkitTools.getPluginManager().callEvent(new TownRemoveResidentRankEvent(target, rank, town));
+				target.removeTownRank(rank);
+				if (target.isOnline())
+					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", "Town", rank));
 				TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_taken_rank_from", "Town", rank, target.getName()));
 			} else {
 				// Doesn't have this rank
@@ -1697,22 +1707,26 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				switch(split[2].toLowerCase()) {
 					case "add":
-						if (target.addNationRank(rank)) {
-							if (BukkitTools.isOnline(target.getName())) {
+						if (!target.hasNationRank(rank)) {
+							Bukkit.getPluginManager().callEvent(new NationRankAddEvent(nation, rank, target));
+							target.addNationRank(rank);
+							if (target.isOnline()) {
 								TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", "Nation", rank));
 								plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 							}
 							TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_given_rank", "Nation", rank, target.getName()));
 							target.save();
+							return;
 						} else {
 							// Already has the rank.
 							TownyMessaging.sendMsg(player, Translatable.of("msg_resident_already_has_rank", target.getName(), "Nation"));
 							return;
 						}
-						return;
 					case "remove":
-						if (target.removeNationRank(rank)) {
-							if (BukkitTools.isOnline(target.getName())) {
+						if (target.hasNationRank(rank)) {
+							Bukkit.getPluginManager().callEvent(new NationRankRemoveEvent(nation, rank, target));
+							target.removeNationRank(rank);
+							if (target.isOnline()) {
 								TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", "Nation", rank));
 								plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 							}

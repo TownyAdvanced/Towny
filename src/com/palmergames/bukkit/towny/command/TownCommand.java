@@ -12,10 +12,12 @@ import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
+import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
+import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
@@ -2060,8 +2062,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			if (split[0].equalsIgnoreCase("add")) {
 
-				if (target.addTownRank(rank)) {
-					if (BukkitTools.isOnline(target.getName())) {
+				if (!target.hasTownRank(rank)) {
+					TownAddResidentRankEvent event = new TownAddResidentRankEvent(target, rank, town);
+					BukkitTools.getPluginManager().callEvent(event);
+					if (event.isCancelled()) {
+						TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
+						return;
+					}
+					target.addTownRank(rank);
+					if (target.isOnline()) {
 						TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", "Town", rank));
 						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}
@@ -2074,8 +2083,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
 
-				if (target.removeTownRank(rank)) {
-					if (BukkitTools.isOnline(target.getName())) {
+				if (target.hasTownRank(rank)) {
+					TownRemoveResidentRankEvent event = new TownRemoveResidentRankEvent(target, rank, town);
+					BukkitTools.getPluginManager().callEvent(event);
+					if (event.isCancelled()) {
+						TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
+						return;
+					}
+					target.removeTownRank(rank);
+					if (target.isOnline()) {
 						TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", "Town", rank));
 						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}

@@ -788,16 +788,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			if (split[0].equalsIgnoreCase("add")) {
 
-				NationRankAddEvent nationRankAddEvent = new NationRankAddEvent(town.getNation(), rank, target);
-				BukkitTools.getPluginManager().callEvent(nationRankAddEvent);
-				
-				if (nationRankAddEvent.isCancelled()) {
-					TownyMessaging.sendErrorMsg(player, nationRankAddEvent.getCancelMessage());
-					return;
-				}
-				
-				if (target.addNationRank(rank)) {
-					if (BukkitTools.isOnline(target.getName())) {
+				if (!target.hasNationRank(rank)) {
+					NationRankAddEvent nationRankAddEvent = new NationRankAddEvent(town.getNation(), rank, target);
+					BukkitTools.getPluginManager().callEvent(nationRankAddEvent);
+					if (nationRankAddEvent.isCancelled()) {
+						TownyMessaging.sendErrorMsg(player, nationRankAddEvent.getCancelMessage());
+						return;
+					}
+					target.addNationRank(rank);
+					if (target.isOnline()) {
 						TownyMessaging.sendMsg(target.getPlayer(), Translatable.of("msg_you_have_been_given_rank", "Nation", rank));
 						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}
@@ -810,16 +809,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
 
-				NationRankRemoveEvent nationRankRemoveEvent = new NationRankRemoveEvent(town.getNation(), rank, target);
-				BukkitTools.getPluginManager().callEvent(nationRankRemoveEvent);
-
-				if (nationRankRemoveEvent.isCancelled()) {
-					TownyMessaging.sendErrorMsg(player, nationRankRemoveEvent.getCancelMessage());
-					return;
-				}
-
-				if (target.removeNationRank(rank)) {
-					if (BukkitTools.isOnline(target.getName())) {
+				if (target.hasNationRank(rank)) {
+					NationRankRemoveEvent nationRankRemoveEvent = new NationRankRemoveEvent(town.getNation(), rank, target);
+					BukkitTools.getPluginManager().callEvent(nationRankRemoveEvent);
+					if (nationRankRemoveEvent.isCancelled()) {
+						TownyMessaging.sendErrorMsg(player, nationRankRemoveEvent.getCancelMessage());
+						return;
+					}
+					target.removeNationRank(rank);
+					if (target.isOnline()) {
 						TownyMessaging.sendMsg(target.getPlayer(), Translatable.of("msg_you_have_had_rank_taken", "Nation", rank));
 						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}

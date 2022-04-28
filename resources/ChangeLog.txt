@@ -7435,3 +7435,6 @@ v0.92.0.11:
 0.98.1.11:
   - Fix /ta set mayor command putting a town's hasUpkeep value in the opposite state.
     - Closes #5882.
+  - API: Make TownRemoveResidentRankEvent and TownAddResidentRankEvent cancellable.
+    - When an admin uses the /ta command to add or remove a rank, the events are thrown but not cancellable.
+  - API: Make NationRemoveResidentRankEvent and NationAddResidentRankEvents thrown when the admin uses the /ta commands.
