@@ -35,10 +35,6 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 	private static final String NATION_CONTEXT = "towny:nation";
 	
 	private static final List<String> booleanContexts = Arrays.asList(RESIDENT_CONTEXT, MAYOR_CONTEXT, KING_CONTEXT, INSIDETOWN_CONTEXT, INSIDEOWNTOWN_CONTEXT, INSIDEOWNPLOT_CONTEXT);
-	private static final String nationRankContext = NATION_RANK_CONTEXT;
-	private static final String TownRankContext = TOWN_RANK_CONTEXT;
-	private static final String townContext = TOWN_CONTEXT;
-	private static final String nationContext = NATION_CONTEXT;
 	
 	private static LuckPerms luckPerms;
 
@@ -92,10 +88,10 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 			builder.add(context, "true");
 			builder.add(context, "false");
 		}
-		for (String nationrank : TownyPerms.getNationRanks()) builder.add(nationRankContext, nationrank);
-		for (String townrank : TownyPerms.getTownRanks()) builder.add(TownRankContext, townrank);
-		for (Town town : TownyUniverse.getInstance().getTowns()) builder.add(townContext, town.getName());
-		for (Nation nation : TownyUniverse.getInstance().getNations()) builder.add(nationContext, nation.getName());
+		for (String nationrank : TownyPerms.getNationRanks()) builder.add(NATION_RANK_CONTEXT, nationrank);
+		for (String townrank : TownyPerms.getTownRanks()) builder.add(TOWN_RANK_CONTEXT, townrank);
+		for (Town town : TownyUniverse.getInstance().getTowns()) builder.add(TOWN_CONTEXT, town.getName());
+		for (Nation nation : TownyUniverse.getInstance().getNations()) builder.add(NATION_CONTEXT, nation.getName());
 		
 		return builder.build();
 	}
