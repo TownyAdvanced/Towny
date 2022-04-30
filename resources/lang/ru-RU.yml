@@ -703,8 +703,8 @@ status_embassy_town: 'Посольства в'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&bНеверный сравнитель. Попробуйте жителей, счёт, города, название, участки, онлайн.'
 msg_error_invalid_comparator_town: '&bНеверный сравнитель. Попробуйте жителей, счёт, имя, участки, онлайн, открытость.'
-msg_err_merging_for_kings_only: '&bMerging can only be done by a Nation Leader.'
-msg_err_king_of_that_nation_is_not_online: '&bThe Nation Leader of %s, %s, is not online. Merge failed.'
+msg_err_merging_for_kings_only: '&bСлияние может быть сделано только Лидером Нации.'
+msg_err_king_of_that_nation_is_not_online: '&bКороль %s, %s, не в сети. Слияние невозможно.'
 nation1_has_merged_with_nation2: '&6Нация %s договорился о слиянии с доминирующей нацией %s.'
 msg_would_you_merge_your_nation_into_other_nation: '&6Согласитесь ли вы распустить вашу нацию %s в нацию %s? Это переведет деньги всех городов и национальных банков в %s.'
 no_open_towns: 'Нет открытых городов.'
@@ -1297,10 +1297,10 @@ status_unknown: 'неизвестно'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
 msg_nationzone_override_set_to: '%s установил национальную зону на %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
-msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+msg_nationzone_override_removed: 'Национальня зона %s была удалена.'
 #Added in 0.127
 #Used in status screen:
-status_nation_zone_size: 'Размер зоны нации:'
+status_nation_zone_size: 'Размер Национальной Зоны:'
 #Shown when a player adds people to their friends list.
 msg_res_friend_added_to_list: '%s добавлен в список друзей.'
 #Shown when a player removes people from their friends list.
