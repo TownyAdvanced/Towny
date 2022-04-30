@@ -67,6 +67,7 @@ import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
@@ -1344,11 +1345,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				+ Colors.Yellow + "Total" + Colors.LightGray + " / "
 				+ Colors.Green + "Daily Revenue");
 		for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
-			int residentOwned = typeCache.getNumTownBlocksOfTypeResidentOwned(type);
+			int residentOwned = typeCache.getNumTownBlocks(type, CacheType.RESIDENTOWNED);
 			out.add(Colors.Green + type.getFormattedName() + ": "
 				+ Colors.LightGreen + residentOwned + Colors.LightGray + " / "
-				+ Colors.LightBlue  + typeCache.getNumTownBlocksOfTypeForSale(type) + Colors.LightGray + " / "
-				+ Colors.Yellow + typeCache.getNumTownBlocksOfType(type) + Colors.LightGray + " / "
+				+ Colors.LightBlue  + typeCache.getNumTownBlocks(type, CacheType.FORSALE) + Colors.LightGray + " / "
+				+ Colors.Yellow + typeCache.getNumTownBlocks(type, CacheType.ALL) + Colors.LightGray + " / "
 				+ Colors.Green + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)));
 		}
 		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));

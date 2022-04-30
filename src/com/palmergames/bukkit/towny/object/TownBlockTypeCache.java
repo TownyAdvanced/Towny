@@ -6,16 +6,31 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TownBlockTypeCache {
 
 	private Map<TownBlockType, Integer> typeCache = new ConcurrentHashMap<>();
-	private Map<TownBlockType, Integer> forSaleCache = new ConcurrentHashMap<>();
-	private Map<TownBlockType, Integer> residentOwnedCache = new ConcurrentHashMap<>();
+	private Map<TownBlockType, Integer> forSaleCache = new ConcurrentHashMap<>(0);
+	private Map<TownBlockType, Integer> residentOwnedCache = new ConcurrentHashMap<>(0);
+
+	/**
+	 * The main getter for a Town's TownBlockTypeCache. Use this is quickly get the
+	 * number of TownBlocks of a given TownBlockType.
+	 * 
+	 * Possible CacheTypes: ALL, FORSALE, RESIDENTOWNED
+	 * 
+	 * @param townBlockType TownBlockType which we want to get a count of.
+	 * @param cacheType     CacheType to filter by.
+	 * @return number of TownBlocks which have the TownBlockType and meet the
+	 *         CacheType requirement.
+	 */
+	public int getNumTownBlocks(TownBlockType townBlockType, CacheType cacheType) {
+		return switch (cacheType) {
+		case ALL -> typeCache.containsKey(townBlockType) ? typeCache.get(townBlockType) : 0;
+		case FORSALE -> forSaleCache.containsKey(townBlockType) ? forSaleCache.get(townBlockType) : 0;
+		case RESIDENTOWNED -> residentOwnedCache.containsKey(townBlockType) ? residentOwnedCache.get(townBlockType) : 0;
+		};
+	}
 	
 	/*
 	 * Type Cache methods
 	 */
-
-	public int getNumTownBlocksOfType(TownBlockType type) {
-		return typeCache.containsKey(type) ? typeCache.get(type) : 0;
-	}
 
 	public void removeTownBlockOfType(TownBlock townBlock) {
 		typeCache.merge(townBlock.getType(), -1, Integer::sum);
@@ -36,10 +51,6 @@ public class TownBlockTypeCache {
 	/*
 	 * ForSale by Type Cache methods
 	 */
-
-	public int getNumTownBlocksOfTypeForSale(TownBlockType type) {
-		return forSaleCache.containsKey(type) ? forSaleCache.get(type) : 0;
-	}
 
 	public void removeTownBlockOfTypeForSale(TownBlock townBlock) {
 		forSaleCache.merge(townBlock.getType(), -1, Integer::sum);
@@ -62,10 +73,6 @@ public class TownBlockTypeCache {
 	 * Resident-owned by Type Cache methods
 	 */
 
-	public int getNumTownBlocksOfTypeResidentOwned(TownBlockType type) {
-		return residentOwnedCache.containsKey(type) ? residentOwnedCache.get(type) : 0;
-	}
-	
 	public int getNumberOfResidentOwnedTownBlocks() {
 		return residentOwnedCache.values().stream().mapToInt(d-> d).sum();
 	}
@@ -85,5 +92,10 @@ public class TownBlockTypeCache {
 	public void addTownBlockOfTypeResidentOwned(TownBlockType type) {
 		residentOwnedCache.merge(type, 1, Integer::sum);
 	}
-	
+
+	public enum CacheType {
+		ALL,
+		FORSALE,
+		RESIDENTOWNED
+	}
 }
