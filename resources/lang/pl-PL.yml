@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.149
+version: 0.150
 language: polish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1465,3 +1465,14 @@ msg_removed_x_invalid_outpost_spawns: 'Usunięto %d nieprawidłowe miejsca odrod
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Your town is bankrupt, add money to your bank using /town deposit {amount}.'
+#Added in 0.150
+#Message shown when a player cannot do something because they have a town.
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+#Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
+msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+#Message shown when TownyRTP could not find any towns to teleport to.
+msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
+#Message showing payment for RTP.
+msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+#Message shown to a player when they use the town rtp command.
+msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'

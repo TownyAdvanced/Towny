@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.149
+version: 0.150
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -703,8 +703,8 @@ status_embassy_town: 'Посольства в'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&bНеверный сравнитель. Попробуйте жителей, счёт, города, название, участки, онлайн.'
 msg_error_invalid_comparator_town: '&bНеверный сравнитель. Попробуйте жителей, счёт, имя, участки, онлайн, открытость.'
-msg_err_merging_for_kings_only: '&bMerging can only be done by a Nation Leader.'
-msg_err_king_of_that_nation_is_not_online: '&bThe Nation Leader of %s, %s, is not online. Merge failed.'
+msg_err_merging_for_kings_only: '&bСлияние может быть сделано только Лидером Нации.'
+msg_err_king_of_that_nation_is_not_online: '&bКороль %s, %s, не в сети. Слияние невозможно.'
 nation1_has_merged_with_nation2: '&6Нация %s договорился о слиянии с доминирующей нацией %s.'
 msg_would_you_merge_your_nation_into_other_nation: '&6Согласитесь ли вы распустить вашу нацию %s в нацию %s? Это переведет деньги всех городов и национальных банков в %s.'
 no_open_towns: 'Нет открытых городов.'
@@ -1297,10 +1297,10 @@ status_unknown: 'неизвестно'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
 msg_nationzone_override_set_to: '%s установил национальную зону на %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
-msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+msg_nationzone_override_removed: 'Национальня зона %s была удалена.'
 #Added in 0.127
 #Used in status screen:
-status_nation_zone_size: 'Размер зоны нации:'
+status_nation_zone_size: 'Размер Национальной Зоны:'
 #Shown when a player adds people to their friends list.
 msg_res_friend_added_to_list: '%s добавлен в список друзей.'
 #Shown when a player removes people from their friends list.
@@ -1465,3 +1465,14 @@ msg_removed_x_invalid_outpost_spawns: 'Удалено %d недопустимы�
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Ваш город обанкротился, добавьте денег в казну используя /town deposit {amount}.'
+#Added in 0.150
+#Message shown when a player cannot do something because they have a town.
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+#Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
+msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+#Message shown when TownyRTP could not find any towns to teleport to.
+msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
+#Message showing payment for RTP.
+msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+#Message shown to a player when they use the town rtp command.
+msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
