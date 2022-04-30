@@ -562,7 +562,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
 			}
-
+		} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN, split[0])) {
+			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, split[0]).execute(sender, "town", split);
 		} else {
 			Town town = TownyUniverse.getInstance().getTown(split[0]);
 			
