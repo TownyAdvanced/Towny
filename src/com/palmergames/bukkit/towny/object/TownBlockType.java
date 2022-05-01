@@ -11,7 +11,12 @@ import java.util.Map;
  * @author dumptruckman
  */
 public class TownBlockType {
-	public static final TownBlockType RESIDENTIAL = new TownBlockType("Default"); // The default Block Type.
+	public static final TownBlockType RESIDENTIAL = new TownBlockType("Default", new TownBlockData() {
+		@Override
+		public double getTax(Town town) {
+			return town.getPlotTax();
+		}
+	}); // The default Block Type.
 	public static final TownBlockType COMMERCIAL = new TownBlockType("Shop", new TownBlockData() {
 		@Override
 		public double getTax(Town town) {

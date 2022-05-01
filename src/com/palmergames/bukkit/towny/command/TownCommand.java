@@ -62,11 +62,14 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeCache;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
@@ -1323,57 +1326,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		List<String> out = new ArrayList<>();
-
-		int townOwned = 0;
-		int resident = 0;
-		int residentOwned = 0;
-		int residentOwnedFS = 0;
-		int embassy = 0;
-		int embassyRO = 0;
-		int embassyFS = 0;
-		int shop = 0;
-		int shopRO = 0;
-		int shopFS = 0;
-		int farm = 0;
-		int arena = 0;
-		int wilds = 0;
-		int jail = 0;
-		int inn = 0;
-		for (TownBlock townBlock : town.getTownBlocks()) {
-
-			if (townBlock.getType() == TownBlockType.EMBASSY) {
-				embassy++;
-				if (townBlock.hasResident())
-					embassyRO++;
-				if (townBlock.isForSale())
-					embassyFS++;
-			} else if (townBlock.getType() == TownBlockType.COMMERCIAL) {
-				shop++;
-				if (townBlock.hasResident())
-					shopRO++;
-				if (townBlock.isForSale())
-					shopFS++;
-			} else if (townBlock.getType() == TownBlockType.FARM) {
-				farm++;
-			} else if (townBlock.getType() == TownBlockType.ARENA) {
-				arena++;
-			} else if (townBlock.getType() == TownBlockType.WILDS) {
-				wilds++;
-			} else if (townBlock.getType() == TownBlockType.JAIL) {
-				jail++;
-			} else if (townBlock.getType() == TownBlockType.INN) {
-				inn++;
-			} else if (townBlock.getType() == TownBlockType.RESIDENTIAL) {
-				resident++;
-				if (townBlock.hasResident())
-					residentOwned++;
-				if (townBlock.isForSale())
-					residentOwnedFS++;
-			}
-			if (!townBlock.hasResident()) {
-				townOwned++;
-			}
-		}
 		out.add(ChatTools.formatTitle(town + " Town Plots"));
 		out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + town.getMaxTownBlocksAsAString() 
 			+ (!town.hasUnlimitedClaims() 
@@ -1388,16 +1340,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						: "")
 				: ""));
 		
-		out.add(Colors.Green + "Town Owned Land: " + Colors.LightGreen + townOwned);
-		out.add(Colors.Green + "Farms   : " + Colors.LightGreen + farm);
-		out.add(Colors.Green + "Arenas : " + Colors.LightGreen + arena);
-		out.add(Colors.Green + "Wilds    : " + Colors.LightGreen + wilds);
-		out.add(Colors.Green + "Jails    : " + Colors.LightGreen + jail);
-		out.add(Colors.Green + "Inns    : " + Colors.LightGreen + inn);
-		out.add(Colors.Green + "Type: " + Colors.LightGreen + "Player-Owned / ForSale / Total / Daily Revenue");
-		out.add(Colors.Green + "Residential: " + Colors.LightGreen + residentOwned + " / " + residentOwnedFS + " / " + resident + " / " + (residentOwned * town.getPlotTax()));
-		out.add(Colors.Green + "Embassies : " + Colors.LightGreen + embassyRO + " / " + embassyFS + " / " + embassy + " / " + (embassyRO * town.getEmbassyPlotTax()));
-		out.add(Colors.Green + "Shops      : " + Colors.LightGreen + shopRO + " / " + shopFS + " / " + shop + " / " + (shop * town.getCommercialPlotTax()));
+		TownBlockTypeCache typeCache = town.getTownBlockTypeCache();
+		out.add(Colors.Green + "Town Owned Land: " + Colors.LightGreen + (town.getTownBlocks().size() - (typeCache.getNumberOfResidentOwnedTownBlocks())));
+		out.add(Colors.Green + "Type: " 
+				+ Colors.LightGreen + "Player-Owned" + Colors.LightGray + " / "
+				+ Colors.LightBlue  + "ForSale" + Colors.LightGray + " / "
+				+ Colors.Yellow + "Total" + Colors.LightGray + " / "
+				+ Colors.Green + "Daily Revenue");
+		for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
+			int residentOwned = typeCache.getNumTownBlocks(type, CacheType.RESIDENTOWNED);
+			out.add(Colors.Green + type.getFormattedName() + ": "
+				+ Colors.LightGreen + residentOwned + Colors.LightGray + " / "
+				+ Colors.LightBlue  + typeCache.getNumTownBlocks(type, CacheType.FORSALE) + Colors.LightGray + " / "
+				+ Colors.Yellow + typeCache.getNumTownBlocks(type, CacheType.ALL) + Colors.LightGray + " / "
+				+ Colors.Green + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)));
+		}
 		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
 		TownyMessaging.sendMessage(sender, out);
 

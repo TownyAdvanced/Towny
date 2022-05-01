@@ -63,6 +63,7 @@ public class Town extends Government implements TownBlockOwner {
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Jail> jails = null;
 	private HashMap<String, PlotGroup> plotGroups = null;
+	private TownBlockTypeCache plotTypeCache = new TownBlockTypeCache();
 	
 	private Resident mayor;
 	private int bonusBlocks = 0;
@@ -139,6 +140,7 @@ public class Town extends Government implements TownBlockOwner {
 			townBlocks.put(townBlock.getWorldCoord(), townBlock);
 			if (townBlocks.size() < 2 && !hasHomeBlock())
 				setHomeBlock(townBlock);
+			getTownBlockTypeCache().addTownBlockOfType(townBlock.getType());
 		}
 	}
 	
@@ -150,6 +152,13 @@ public class Town extends Government implements TownBlockOwner {
 	
 	public ConcurrentMap<WorldCoord, TownBlock> getTownBlockMap() {
 		return townBlocks;
+	}
+
+	/**
+	 * @return the plotTypeCache
+	 */
+	public TownBlockTypeCache getTownBlockTypeCache() {
+		return plotTypeCache;
 	}
 
 	public Resident getMayor() {
@@ -865,6 +874,11 @@ public class Town extends Government implements TownBlockOwner {
 			}
 
 			townBlocks.remove(townBlock.getWorldCoord());
+			getTownBlockTypeCache().removeTownBlockOfType(townBlock.getType());
+			if (townBlock.isForSale())
+				getTownBlockTypeCache().removeTownBlockOfTypeForSale(townBlock.getType());
+			if (townBlock.hasResident())
+				getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(townBlock.getType());
 			this.save();
 		}
 	}

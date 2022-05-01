@@ -1586,13 +1586,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						} catch (Exception ignored) {
 						}
 					
-					line = keys.get("price");
+					line = keys.get("type");
 					if (line != null)
-						try {
-							townBlock.setPlotPrice(Double.parseDouble(line.trim()));
-						} catch (Exception ignored) {
-						}
-
+						townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
+					
 					line = keys.get("resident");
 					if (line != null && !line.isEmpty()) {
 						Resident res = universe.getResident(line.trim());
@@ -1604,9 +1601,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					}
 					
-					line = keys.get("type");
+					line = keys.get("price");
 					if (line != null)
-						townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
+						try {
+							townBlock.setPlotPrice(Double.parseDouble(line.trim()));
+						} catch (Exception ignored) {
+						}
 					
 					line = keys.get("outpost");
 					if (line != null)

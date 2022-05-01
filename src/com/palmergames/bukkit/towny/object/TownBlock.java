@@ -141,11 +141,13 @@ public class TownBlock extends TownyObject {
 		if (hasResident()) {
 			this.resident.removeTownBlock(this);
 			unclaim = true;
+			getTownOrNull().getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(this);
 		}
 		this.resident = resident;
 		try {
 			resident.addTownBlock(this);
 			successful = true;
+			getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeResidentOwned(this);
 		} catch (AlreadyRegisteredException | NullPointerException e) {
 			successful = false;
 		}
@@ -193,10 +195,15 @@ public class TownBlock extends TownyObject {
 		return false;
 	}
 
-	public void setPlotPrice(double ForSale) {
+	public void setPlotPrice(double price) {
+		if (isForSale() && price == -1.0)
+			// Plot is no longer for sale.
+			getTownOrNull().getTownBlockTypeCache().removeTownBlockOfTypeForSale(this);
+		else if (!isForSale() && price > -1.0)
+			// Plot is being put up for sale.
+			getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeForSale(this);
 
-		this.plotPrice = ForSale;
-
+		this.plotPrice = price;
 	}
 
 	public double getPlotPrice() {
@@ -278,6 +285,9 @@ public class TownBlock extends TownyObject {
 		if (!type.equals(this.type))
 			this.permissions.reset();		
 
+		if (getTownOrNull() != null)
+			adjustTownBlockTypeCache(getTownOrNull().getTownBlockTypeCache(), type);
+
 		this.type = type;
 		
 		Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type, this));
@@ -353,6 +363,37 @@ public class TownBlock extends TownyObject {
 			JailUtil.createJailPlot(this, getTown(), resident.getPlayer().getLocation());
 
 		this.save();
+	}
+	
+	/**
+	 * Towns track TownBlockTypes in a TownBlockTypeCache, allowing Towny to keep
+	 * track of how many plots of each type, their forSale status and their
+	 * hasResident status. When a TownBlock changes type the caches are adjusted for
+	 * the Town.
+	 * 
+	 * @param townBlockTypeCache TownBlockTypeCache which is being adjusted.
+	 * @param type               TownBlockType which is being set.
+	 */
+	private void adjustTownBlockTypeCache(@Nullable TownBlockTypeCache townBlockTypeCache, @NotNull TownBlockType type) {
+		if (townBlockTypeCache == null)
+			return;
+
+		if (this.type != null) {
+			// This townblock is not brand new, and not being loaded from the database,
+			// we must remove the previous type from the caches.
+			townBlockTypeCache.removeTownBlockOfType(this.type);
+			if (isForSale())
+				townBlockTypeCache.removeTownBlockOfTypeForSale(this.type);
+			if (hasResident())
+				townBlockTypeCache.removeTownBlockOfTypeResidentOwned(this.type);
+		}
+
+		// Add the townblock type to the Town's TownBlockTypeCache.
+		townBlockTypeCache.addTownBlockOfType(type);
+		if (isForSale())
+			townBlockTypeCache.addTownBlockOfTypeForSale(type);
+		if (hasResident())
+			townBlockTypeCache.addTownBlockOfTypeResidentOwned(type);
 	}
 
 	public boolean isHomeBlock() {
