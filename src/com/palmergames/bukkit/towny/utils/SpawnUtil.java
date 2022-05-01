@@ -108,6 +108,7 @@ public class SpawnUtil {
 				sendSpawnEvent(player, spawnType, spawnLoc);
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				return;
 			}
 
 			// There is a cost to spawn, prompt with confirmation unless ignoreWarn is true.
