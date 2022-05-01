@@ -482,7 +482,7 @@ nation_received_requests: '&b국가가 %a/%m 동맹국 요청을 수신하였습
 nation_sent_invites: '&b국가가 %a/%m 초대를 전송하였습니다.'
 nation_sent_ally_requests: '&b국가가 %a/%m 동맹 요청을 전송하였습니다.'
 no_confirmations_open: '&c확인할 것이 아무것도 없습니다!'
-successful_cancel: '&c액션이 취소되었습니다!'
+successful_cancel: '&a작업이 취소되었습니다!'
 successful_deny: '&b초대가 성공적으로 거부되었습니다.'
 successful_deny_request: '&b동맹 요청이 성공적으로 거부되었습니다.'
 msg_ally_removed_successfully: '&b동맹이 성공적으로 파기되었습니다.'
@@ -638,7 +638,7 @@ msg_err_cannot_set_spawn_cost_more_than: '&c스폰 사용 요금은 %s보다 높
 msg_err_ally_isnt_public: '&c귀하의 동맹, %s은(는) 공용 스폰이 활성화되지 않았습니다. 이동이 거부되었습니다.'
 msg_nation_changed_public: '&c국가 공용 상태 : %s.'
 #Added in 0.47:
-status_plot_type: '토지 유형: -'
+status_plot_type: '토지 유형: '
 msg_no_self_jailing: '스스로 감옥에 들어갈 수 없습니다.'
 online2: ' &a(접속중)'
 build: '설치'
@@ -735,8 +735,8 @@ msg_err_player_too_far_from_town_spawn: '&c%s님은 마을에 초대를 받기�
 #Added in 0.58:
 msg_resident_bail_amount: '주민 보석금 가격: '
 msg_mayor_bail_amount: '시장 보석금 가격: '
-msg_king_bail_amount: 'Nation Leader Bail costs: '
-msg_has_paid_bail: '%s has paid bail and is free.'
+msg_king_bail_amount: '국가 지도자 보석금 가격: '
+msg_has_paid_bail: '%s이(가) 보석금을 지불하고 자유의 몸이 되었습니다.'
 msg_err_unable_to_pay_bail: '보석금을 내기엔 주머니가 여의치 않습니다.'
 msg_err_bail_not_enabled: '보석금이 허용되지 않습니다.'
 msg_you_have_been_freed_from_jail: '감옥에서 해방되었습니다.'
@@ -1374,9 +1374,9 @@ msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using 
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
 #Jail handbook messages
-msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
+msg_jailed_handbook_bail_1: '''/res jail paybail''을 사용하여 보석금을 지불하고 자유의 몸이 될 수 있습니다.'
 #Jail handbook messages
-msg_jailed_handbook_bail_2: 'Bail will cost %s.'
+msg_jailed_handbook_bail_2: '보석금의 가격은 %s 입니다.'
 #Jail handbook messages
 msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
 #Jail handbook messages
