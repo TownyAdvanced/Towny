@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
@@ -81,12 +82,24 @@ public class TownyMessaging {
 	 * @param msg the message to send
 	 */
 	public static void sendErrorMsg(Object sender, String msg) {
-		if (sender != null) {
-			CommandSender toSend = (CommandSender) sender;
+		if (sender != null && sender instanceof CommandSender toSend) {
 			if (toSend instanceof ConsoleCommandSender) {
+				// Console
 				toSend.sendMessage(Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + ChatColor.stripColor(msg));
 			} else {
+				// Player
 				toSend.sendMessage(Translation.of("default_towny_prefix") + ChatColor.RED + msg);
+			}
+		} else if (sender != null && sender instanceof TownyObject townySender) {
+			if (townySender instanceof Resident resident) {
+				// Resident
+				sendMessage(resident, Translation.of("default_towny_prefix") + ChatColor.RED + msg);
+			} else if (townySender instanceof Town town) {
+				// Town
+				sendPrefixedTownMessage(town, ChatColor.RED + msg);
+			} else if (townySender instanceof Nation nation) {
+				// Nation
+				sendPrefixedNationMessage(nation, ChatColor.RED + msg);
 			}
 		} else {
 			sendErrorMsg("Sender cannot be null!");
