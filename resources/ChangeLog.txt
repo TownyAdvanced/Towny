@@ -7444,3 +7444,5 @@ v0.92.0.11:
     - Towns now keep track of how many plots of each type, their forsale and hasresident status in memory.
     - This opens the door to a new set of features based on plot types.
   - Fix SpawnEvents not being cancelled correctly.
+  - Fix Error seen when a plugin cancels the NationPreAddEnemyEvent.
+    - Closes #5893.

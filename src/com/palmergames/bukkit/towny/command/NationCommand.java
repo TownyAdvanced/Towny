@@ -1838,14 +1838,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					list.add(enemy);
 			}
 			if (!list.isEmpty())
-				nationEnemy(resident, nation, list, add);
+				nationEnemy(player, nation, list, add);
 
 		} else {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", "[add/remove]"));
 		}
 	}
 
-	public void nationEnemy(Resident resident, Nation nation, List<Nation> enemies, boolean add) {
+	public void nationEnemy(Player player, Nation nation, List<Nation> enemies, boolean add) {
 
 		ArrayList<Nation> remove = new ArrayList<>();
 		for (Nation targetNation : enemies)
@@ -1865,7 +1865,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							nation.removeAlly(targetNation);
 							Bukkit.getPluginManager().callEvent(new NationRemoveAllyEvent(nation, targetNation));
 							TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_removed_ally", targetNation));
-							TownyMessaging.sendMsg(resident, Translatable.of("msg_ally_removed_successfully"));
+							TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
 						}
 						
 						// Remove the nation from the targetNation ally list if present.
@@ -1873,12 +1873,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							targetNation.removeAlly(nation);
 							Bukkit.getPluginManager().callEvent(new NationRemoveAllyEvent(targetNation, nation));
 							TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_ally", nation));
-							TownyMessaging.sendMsg(resident, Translatable.of("msg_ally_removed_successfully"));
+							TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
 						}
 
 						TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_added_enemy", nation));
 					} else {
-						TownyMessaging.sendErrorMsg(resident, npaee.getCancelMessage());
+						TownyMessaging.sendErrorMsg(player, npaee.getCancelMessage());
 						remove.add(targetNation);
 					}
 
@@ -1893,7 +1893,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						
 						TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_enemy", nation));
 					} else {
-						TownyMessaging.sendErrorMsg(resident, npree.getCancelMessage());
+						TownyMessaging.sendErrorMsg(player, npree.getCancelMessage());
 						remove.add(targetNation);
 					}
 				}
@@ -1913,15 +1913,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			msg = msg.substring(0, msg.length() - 2);
 			if (add)
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_enemy_nations", resident.getName(), msg));
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_enemy_nations", player.getName(), msg));
 			else
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_enemy_to_neutral", resident.getName(), msg));
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_enemy_to_neutral", player.getName(), msg));
 
 			TownyUniverse.getInstance().getDataSource().saveNations();
 
 			plugin.resetCache();
 		} else
-			TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_invalid_name"));
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
 	}
 
 	public static void nationSet(CommandSender sender, String[] split, boolean admin, Nation nation) throws TownyException {
