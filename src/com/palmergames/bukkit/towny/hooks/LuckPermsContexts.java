@@ -1,7 +1,10 @@
 package com.palmergames.bukkit.towny.hooks;
 
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
@@ -28,10 +31,10 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 	private static final String INSIDEOWNPLOT_CONTEXT = "towny:insideownplot";
 	private static final String TOWN_RANK_CONTEXT = "towny:townrank";
 	private static final String NATION_RANK_CONTEXT = "towny:nationrank";
+	private static final String TOWN_CONTEXT = "towny:town";
+	private static final String NATION_CONTEXT = "towny:nation";
 	
 	private static final List<String> booleanContexts = Arrays.asList(RESIDENT_CONTEXT, MAYOR_CONTEXT, KING_CONTEXT, INSIDETOWN_CONTEXT, INSIDEOWNTOWN_CONTEXT, INSIDEOWNPLOT_CONTEXT);
-	private static final String nationRankContext = NATION_RANK_CONTEXT;
-	private static final String TownRankContext = TOWN_RANK_CONTEXT;
 	
 	private static LuckPerms luckPerms;
 
@@ -51,6 +54,15 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 			
 		for (String townrank : resident.getTownRanks()) contextConsumer.accept(TOWN_RANK_CONTEXT, townrank);
 		for (String nationrank : resident.getNationRanks()) contextConsumer.accept(NATION_RANK_CONTEXT, nationrank);
+		Town town = resident.getTownOrNull();
+		if(town != null) {
+			contextConsumer.accept(TOWN_CONTEXT, town.getName());
+			// There is no point to check for nation if town is not registered
+			Nation nation = resident.getNationOrNull();
+			if(nation != null) {
+				contextConsumer.accept(NATION_CONTEXT, nation.getName());
+			}
+		}
 		
 		contextConsumer.accept(RESIDENT_CONTEXT, Boolean.toString(resident.hasTown()));
 		contextConsumer.accept(MAYOR_CONTEXT, Boolean.toString(resident.isMayor()));
@@ -76,8 +88,10 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 			builder.add(context, "true");
 			builder.add(context, "false");
 		}
-		for (String nationrank : TownyPerms.getNationRanks()) builder.add(nationRankContext, nationrank);
-		for (String townrank : TownyPerms.getTownRanks()) builder.add(TownRankContext, townrank);
+		for (String nationrank : TownyPerms.getNationRanks()) builder.add(NATION_RANK_CONTEXT, nationrank);
+		for (String townrank : TownyPerms.getTownRanks()) builder.add(TOWN_RANK_CONTEXT, townrank);
+		for (Town town : TownyUniverse.getInstance().getTowns()) builder.add(TOWN_CONTEXT, town.getName());
+		for (Nation nation : TownyUniverse.getInstance().getNations()) builder.add(NATION_CONTEXT, nation.getName());
 		
 		return builder.build();
 	}
