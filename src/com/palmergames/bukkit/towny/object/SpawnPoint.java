@@ -39,16 +39,12 @@ public class SpawnPoint {
 	}
 
 	public void drawParticle() {
-		if (!location.isWorldLoaded() ||
-			!location.getWorld().getChunkAt(location).isLoaded())
-			return;
-
 		Location origin = centreLocation(location);
 		int i = 0;
 
 		for (RingCoord ringPosition : RING_PATTERN) {
 			Location point = origin.clone().add(ringPosition.getX(), 0.0d, ringPosition.getZ());
-			Bukkit.getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), ()-> location.getWorld().spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0), i*4);
+			Bukkit.getScheduler().runTaskLaterAsynchronously(Towny.getPlugin(), ()-> location.getWorld().spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0), i*4);
 			i++;
 		}
 	}

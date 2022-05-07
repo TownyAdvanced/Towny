@@ -7448,6 +7448,6 @@ v0.92.0.11:
     - Closes #5893.
   - Add Town & Nation LuckPerms Contexts courtesy of Galster-dev, with PR #5883. (First-Time Contributor!)
     - These are contexts that apply per-town and per-nation, making it possible to give permissions to a single Town's members etc.
-  - Skip drawing SpawnPoint particles in unloaded chunks.
+  - Draw SpawnPoint particles Async.
     - Closes #5899.
   - Check player name async on login, courtesy of Warriorrrr with PR #5900.
