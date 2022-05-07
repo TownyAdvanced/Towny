@@ -67,7 +67,7 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 		registerContext("towny:town", resident -> resident.hasNation() ? Collections.singleton(resident.getNationOrNull().getName()) : Collections.emptyList(), () -> TownyUniverse.getInstance().getNations().stream().map(Nation::getName).collect(Collectors.toSet()));
 	
 		this.calculators.removeIf(calculator -> !TownySettings.isContextEnabled(calculator.context));
-		plugin.getLogger().info(this.calculators.stream().map(Calculator::context).collect(Collectors.joining(", ")));
+		plugin.getLogger().info("Enabled LuckPerms contexts: " + this.calculators.stream().map(Calculator::context).collect(Collectors.joining(", ")));
 	}
 	
 	public void registerContexts() {
