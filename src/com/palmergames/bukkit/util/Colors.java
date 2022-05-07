@@ -94,7 +94,7 @@ public class Colors {
 		return StringMgmt.translateHexColors(translateLegacyCharacters(input));
 	}
 	
-	private static String translateLegacyCharacters(String input) {
+	public static String translateLegacyCharacters(String input) {
 		final Matcher matcher = legacyPattern.matcher(input);
 
 		while (matcher.find()) {

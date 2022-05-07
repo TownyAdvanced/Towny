@@ -10,9 +10,8 @@ import net.kyori.adventure.text.Component;
 
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
-import net.kyori.adventure.text.format.Style;
+import org.bukkit.map.MinecraftFont;
 import org.jetbrains.annotations.ApiStatus;
-import solar.squares.pixelwidth.PixelWidthSource;
 
 /**
  * Useful function for use with the Minecraft Server chatbox.
@@ -23,14 +22,16 @@ import solar.squares.pixelwidth.PixelWidthSource;
  */
 
 public class ChatTools {
-	private final static PixelWidthSource source = PixelWidthSource.pixelWidth();
-	private final static int DEFAULT_CHAT_WIDTH = 320;
-	private final static float SPACE_WIDTH = 4;
+	private static final MinecraftFont font = new MinecraftFont();
+	private static final int DEFAULT_CHAT_WIDTH = 320;
+	private static final int SPACE_WIDTH = 4;
+	private static final int UNDERSCORE_WIDTH = 6;
 	// Padding used for the main title formatting
-	private final static String WIDGET = ".oOo.";
+	private static final String WIDGET = ".oOo.";
+	private static final int WIDGET_WIDTH = 22;
 	
 	// Padding used for subtitle formatting
-	private final static String SUBWIDGET = " .]|[. ";
+	private static final String SUBWIDGET = " .]|[. ";
 	
 	public static String listArr(String[] args, String prefix) {
 
@@ -85,7 +86,7 @@ public class ChatTools {
 			+ Translation.of("status_title_primary_colour") + " ]."
 		);
 		
-		return centerComponent(title, WIDGET, '_', source.width("_", Style.empty()));
+		return centerComponent(title, WIDGET, '_', UNDERSCORE_WIDTH);
 	}
 
 	public static Component formatSubTitle(Component subTitle) {
@@ -93,8 +94,10 @@ public class ChatTools {
 	}
 	
 	public static Component centerComponent(Component title, String sidePadding, char paddingChar, float paddingWidth) {
-		float sidePaddingWidth = source.width(Component.text(sidePadding));
-		float widthToPad = (DEFAULT_CHAT_WIDTH - (sidePaddingWidth * 2) - source.width(title)) / 2;
+		if (!font.isValid(TownyComponents.plain(title)))
+			return legacyFormatTitle(title);
+		
+		float widthToPad = (DEFAULT_CHAT_WIDTH - (WIDGET_WIDTH * 2) - (float) font.getWidth(TownyComponents.plain(title))) / 2;
 
 		if (paddingWidth * 2 > widthToPad)
 			return TownyComponents.prependMiniMessage(title, Translation.of("status_title_primary_colour"));
@@ -107,6 +110,22 @@ public class ChatTools {
 		String primaryColour = Translation.of("status_title_primary_colour");
 		
 		return TownyComponents.miniMessage(primaryColour + sidePadding  + padding + TownyComponents.unMiniMessage(title) + primaryColour + padding + sidePadding);
+	}
+
+	private static Component legacyFormatTitle(Component title) {
+		String line = ".oOo.__________________________________________________.oOo.";
+		
+		String legacy = TownyComponents.toLegacy(title);
+		if (legacy.length() > line.length())
+			legacy = legacy.substring(0, line.length());
+		
+		int pivot = line.length() / 2;
+		String center = legacy;
+		// minimessage -> component -> legacy feels wrong
+		String out = TownyComponents.toLegacy(TownyComponents.miniMessage(Translation.of("status_title_primary_colour"))) + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
+		
+		out += center + line.substring(pivot + center.length() / 2);
+		return TownyComponents.fromLegacy(out);
 	}
 	
 	public static Component formatCommand(String command, String subCommand, String help) {
