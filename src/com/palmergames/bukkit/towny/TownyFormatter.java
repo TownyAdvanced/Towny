@@ -189,7 +189,7 @@ public class TownyFormatter {
 			if (towns.size() > 10)
 				towns = shortenOverlengthArray(towns, 11, translator);
 
-			screen.addComponentOf("nation", colourKeyValue(translator.of("status_town_nation"), nation.getName() + formatPopulationBrackets(nation.getTowns().size()))
+			screen.addComponentOf("nation", colourKeyValue(translator.of("status_town_nation"), Component.text(nation.getName()).append(formatPopulationBrackets(nation.getTowns().size())))
 					.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), nation.getFormattedName())))
 							.append(Component.newline())
 							.append(colourKeyValue(translator.of("status_nation_king"), nation.getCapital().getMayor().getFormattedName()))
@@ -217,7 +217,7 @@ public class TownyFormatter {
 		screen.addComponentOf("mobspawns", colourKeyValue(translator.of("mobspawns"), (resident.getPermissions().mobs) ? translator.of("status_on"): translator.of("status_off")));
 		
 		if (resident.isNPC()) {
-			screen.addComponentOf("npcstatus", translator.of("msg_status_npc", resident.getName()));
+			screen.addComponentOf("npcstatus", translator.comp("msg_status_npc", resident.getName()));
 			// Add any metadata which opt to be visible.
 			List<Component> fields = getExtraFields(resident);
 			if (!fields.isEmpty()) {
@@ -367,7 +367,7 @@ public class TownyFormatter {
 
 			// Mayor: MrSand
 			screen.addComponentOf("mayor", colourKeyValue(translator.of("rank_list_mayor"), town.getMayor().getFormattedName())
-				.hoverEvent(HoverEvent.showText(Component.text(translator.of("registered_last_online", registeredFormat.format(town.getMayor().getRegistered()), lastOnlineFormatIncludeYear.format(town.getMayor().getLastOnline())))
+				.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(translator.of("registered_last_online", registeredFormat.format(town.getMayor().getRegistered()), lastOnlineFormatIncludeYear.format(town.getMayor().getLastOnline())))
 					.append(Component.newline())
 					.append(translator.comp("status_hover_click_for_more"))))
 				.clickEvent(ClickEvent.runCommand("/towny:resident " + town.getMayor().getName()))
@@ -386,15 +386,15 @@ public class TownyFormatter {
 						.append(Component.newline())
 						.append(colourKeyValue(translator.of("status_nation_king"), town.getNationOrNull().getCapital().getMayor().getFormattedName()))
 						.append(Component.newline())
-						.append(colourKeyValue(translator.of("town_plu"), StringMgmt.join(towns, ", ")));
+						.append(colourKeyValue(translator.of("town_plu") + ":", TownyComponents.joinList(towns, Component.text(", "))));
 				int nationZoneSize = town.getNationZoneSize();
 				if (nationZoneSize > 0)
 					hover = hover.append(Component.newline().append(colourKeyValue(translator.of("status_nation_zone_size"), town.isNationZoneEnabled() ? String.valueOf(nationZoneSize) : translator.of("status_off_bad"))));
 				hover = hover.append(Component.newline())
 						.append(translator.comp("status_hover_click_for_more"));
 				
-				screen.addComponentOf("nation", colourKeyValue(translator.of("status_town_nation"), town.getNationOrNull().getName() + formatPopulationBrackets(town.getNationOrNull().getTowns().size()))
-					.hoverEvent(hover.asHoverEvent())
+				screen.addComponentOf("nation", colourKeyValue(translator.of("status_town_nation"), Component.text(town.getNationOrNull().getName()).append(formatPopulationBrackets(town.getNationOrNull().getTowns().size())))
+					.hoverEvent(HoverEvent.showText(hover))
 					.clickEvent(ClickEvent.runCommand("/towny:nation " + town.getNationOrNull().getName()))
 				);
 			}

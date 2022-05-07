@@ -13,14 +13,13 @@ import org.bukkit.command.CommandSender;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import org.bukkit.util.ChatPaginator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import solar.squares.pixelwidth.PixelWidthSource;
 
 public class StatusScreen {
 
 	private static final int MAX_WIDTH = 320;
-	private static final PixelWidthSource source = PixelWidthSource.pixelWidth();
 
 	private final Map<String, Component> components = new LinkedHashMap<>();
 	private final CommandSender sender;
@@ -123,6 +122,6 @@ public class StatusScreen {
 	}
 	
 	private boolean lineWouldBeTooLong(Component line, Component comp) {
-		return source.width(line) + source.width(comp) > MAX_WIDTH;
+		return TownyComponents.plain(line).length() + TownyComponents.plain(comp).length() > ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH;
 	}
 }

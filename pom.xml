@@ -174,7 +174,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.0.1</version>
+            <version>4.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
@@ -203,11 +203,6 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-plain</artifactId>
             <version>4.10.1</version>
-        </dependency>
-        <dependency>
-            <groupId>solar.squares</groupId>
-            <artifactId>pixel-width-core</artifactId>
-            <version>1.0.0</version>
         </dependency>
     </dependencies>
     <pluginRepositories>
@@ -293,7 +288,6 @@
                             <include>org.bstats:bstats-bukkit</include>
                             <include>org.bstats:bstats-base</include>
                             <include>org.json:json</include>
-                            <include>solar.squares:pixel-width-core</include>
                         </includes>
                     </artifactSet>
                     <relocations>
