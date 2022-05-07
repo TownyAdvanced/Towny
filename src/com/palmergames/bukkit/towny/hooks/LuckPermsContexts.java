@@ -42,21 +42,21 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 		registerContext("towny:king", resident -> Collections.singleton(String.valueOf(resident.isKing())), () -> Arrays.asList("true", "false"));
 		registerContext("towny:insidetown", resident -> {
 			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
-			if (cache == null || cache.getLastTownBlock() == null)
+			if (cache == null)
 				return Collections.emptyList();
 			
 			return Collections.singleton(String.valueOf(cache.getLastTownBlock().hasTownBlock()));
 		}, () -> Arrays.asList("true", "false"));
 		registerContext("towny:insideowntown", resident -> {
 			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
-			if (cache == null || cache.getLastTownBlock() == null)
+			if (cache == null)
 				return Collections.emptyList();
 
 			return Optional.ofNullable(cache.getLastTownBlock().getTownOrNull()).map(town -> Collections.singleton(String.valueOf(town.hasResident(resident)))).orElse(Collections.emptySet());
 		}, () -> Arrays.asList("true", "false"));
 		registerContext("towny:insideownplot", resident -> {
 			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
-			if (cache == null || cache.getLastTownBlock() == null)
+			if (cache == null)
 				return Collections.emptyList();
 
 			return Optional.ofNullable(cache.getLastTownBlock().getTownBlockOrNull()).map(townBlock -> Collections.singleton(String.valueOf(townBlock.hasResident(resident)))).orElse(Collections.emptySet());
