@@ -116,6 +116,7 @@ public class Towny extends JavaPlugin {
 	private final TownyLoginListener loginListener = new TownyLoginListener();
 	private final HUDManager HUDManager = new HUDManager(this);
 	private final TownyPaperEvents paperEvents = new TownyPaperEvents(this);
+	private LuckPermsContexts luckPermsContexts;
 
 	private TownyUniverse townyUniverse;
 
@@ -453,6 +454,11 @@ public class Towny extends JavaPlugin {
 			adventure.close();
 			adventure = null;
 		}
+		
+		if (luckPermsContexts != null) {
+			luckPermsContexts.unregisterContexts();
+			luckPermsContexts = null;
+		}
 
 		this.townyUniverse = null;
 
@@ -544,7 +550,8 @@ public class Towny extends JavaPlugin {
 		
 		test = getServer().getPluginManager().getPlugin("LuckPerms");
 		if (test != null && TownySettings.isContextsEnabled()) {
-			new LuckPermsContexts();
+			this.luckPermsContexts = new LuckPermsContexts(this);
+			luckPermsContexts.registerContexts();
 			addons.add(String.format("%s v%s", "LuckPerms", test.getDescription().getVersion()));
 		}
 
@@ -843,6 +850,14 @@ public class Towny extends JavaPlugin {
 		}
 
 		return cache;
+	}
+
+	/**
+	 * @param uuid - UUID of the player to get the cache for.
+	 * @return The cache, or <code>null</code> if it doesn't exist.
+	 */
+	public PlayerCache getCacheOrNull(@NotNull UUID uuid) {
+		return playerCache.get(uuid);
 	}
 
 	/**

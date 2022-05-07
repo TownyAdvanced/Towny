@@ -1,13 +1,15 @@
 package com.palmergames.bukkit.towny.hooks;
 
+import com.github.bsideup.jabel.Desugar;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.context.ContextCalculator;
 import net.luckperms.api.context.ContextConsumer;
@@ -19,31 +21,71 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class LuckPermsContexts implements ContextCalculator<Player> {
-	
-	private static final String RESIDENT_CONTEXT = "towny:resident";
-	private static final String MAYOR_CONTEXT = "towny:mayor";
-	private static final String KING_CONTEXT = "towny:king";
-	private static final String INSIDETOWN_CONTEXT = "towny:insidetown";
-	private static final String INSIDEOWNTOWN_CONTEXT = "towny:insideowntown";
-	private static final String INSIDEOWNPLOT_CONTEXT = "towny:insideownplot";
-	private static final String TOWN_RANK_CONTEXT = "towny:townrank";
-	private static final String NATION_RANK_CONTEXT = "towny:nationrank";
-	private static final String TOWN_CONTEXT = "towny:town";
-	private static final String NATION_CONTEXT = "towny:nation";
-	
-	private static final List<String> booleanContexts = Arrays.asList(RESIDENT_CONTEXT, MAYOR_CONTEXT, KING_CONTEXT, INSIDETOWN_CONTEXT, INSIDEOWNTOWN_CONTEXT, INSIDEOWNPLOT_CONTEXT);
-	
-	private static LuckPerms luckPerms;
+	private Towny plugin;
+	private LuckPerms luckPerms;
+	private final Set<Calculator> calculators = new HashSet<>();
 
-	public LuckPermsContexts() {
+	public LuckPermsContexts(@NotNull Towny plugin) {
+		this.plugin = plugin;
+		
+		registerContext("towny:resident", resident -> Collections.singleton(String.valueOf(resident.hasTown())), () -> Arrays.asList("true", "false"));
+		registerContext("towny:mayor", resident -> Collections.singleton(String.valueOf(resident.isMayor())), () -> Arrays.asList("true", "false"));
+		registerContext("towny:king", resident -> Collections.singleton(String.valueOf(resident.isKing())), () -> Arrays.asList("true", "false"));
+		registerContext("towny:insidetown", resident -> {
+			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
+			if (cache == null || cache.getLastTownBlock() == null)
+				return Collections.emptyList();
+			
+			return Collections.singleton(String.valueOf(cache.getLastTownBlock().hasTownBlock()));
+		}, () -> Arrays.asList("true", "false"));
+		registerContext("towny:insideowntown", resident -> {
+			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
+			if (cache == null || cache.getLastTownBlock() == null)
+				return Collections.emptyList();
+
+			return Optional.ofNullable(cache.getLastTownBlock().getTownOrNull()).map(town -> Collections.singleton(String.valueOf(town.hasResident(resident)))).orElse(Collections.emptySet());
+		}, () -> Arrays.asList("true", "false"));
+		registerContext("towny:insideownplot", resident -> {
+			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
+			if (cache == null || cache.getLastTownBlock() == null)
+				return Collections.emptyList();
+
+			return Optional.ofNullable(cache.getLastTownBlock().getTownBlockOrNull()).map(townBlock -> Collections.singleton(String.valueOf(townBlock.hasResident(resident)))).orElse(Collections.emptySet());
+		}, () -> Arrays.asList("true", "false"));
+		registerContext("towny:townrank", Resident::getTownRanks, TownyPerms::getTownRanks);
+		registerContext("towny:nationrank", Resident::getNationRanks, TownyPerms::getNationRanks);
+		registerContext("towny:town", resident -> resident.hasTown() ? Collections.singleton(resident.getTownOrNull().getName()) : Collections.emptyList(), () -> TownyUniverse.getInstance().getTowns().stream().map(Town::getName).collect(Collectors.toSet()));
+		registerContext("towny:town", resident -> resident.hasNation() ? Collections.singleton(resident.getNationOrNull().getName()) : Collections.emptyList(), () -> TownyUniverse.getInstance().getNations().stream().map(Nation::getName).collect(Collectors.toSet()));
+	
+		this.calculators.removeIf(calculator -> !TownySettings.isContextEnabled(calculator.context));
+		plugin.getLogger().info(this.calculators.stream().map(Calculator::context).collect(Collectors.joining(", ")));
+	}
+	
+	public void registerContexts() {
 		RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
 		if (provider != null) {
-			luckPerms = provider.getProvider();
+			this.luckPerms = provider.getProvider();
 			luckPerms.getContextManager().registerCalculator(this);
-		}
+		} else
+			this.luckPerms = null;
+	}
+	
+	public void unregisterContexts() {
+		if (this.luckPerms != null)
+			this.luckPerms.getContextManager().unregisterCalculator(this);
+	}
+	
+	private void registerContext(String context, Function<Resident, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions) {
+		calculators.add(new Calculator(context, calculator, suggestions));
 	}
 	
 	@Override
@@ -51,48 +93,21 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 		Resident resident = TownyAPI.getInstance().getResident(player);
 		if (resident == null)
 			return;
-			
-		for (String townrank : resident.getTownRanks()) contextConsumer.accept(TOWN_RANK_CONTEXT, townrank);
-		for (String nationrank : resident.getNationRanks()) contextConsumer.accept(NATION_RANK_CONTEXT, nationrank);
-		Town town = resident.getTownOrNull();
-		if(town != null) {
-			contextConsumer.accept(TOWN_CONTEXT, town.getName());
-			// There is no point to check for nation if town is not registered
-			Nation nation = resident.getNationOrNull();
-			if(nation != null) {
-				contextConsumer.accept(NATION_CONTEXT, nation.getName());
-			}
-		}
 		
-		contextConsumer.accept(RESIDENT_CONTEXT, Boolean.toString(resident.hasTown()));
-		contextConsumer.accept(MAYOR_CONTEXT, Boolean.toString(resident.isMayor()));
-		contextConsumer.accept(KING_CONTEXT, Boolean.toString(resident.isKing()));
-
-		WorldCoord wc = PlayerCacheUtil.getCache(player).getLastTownBlock();
-		if (wc == null || TownyAPI.getInstance().isWilderness(wc)) {
-			contextConsumer.accept(INSIDETOWN_CONTEXT, "false");
-			contextConsumer.accept(INSIDEOWNPLOT_CONTEXT, "false");
-			contextConsumer.accept(INSIDEOWNTOWN_CONTEXT, "false");
-		} else {
-			contextConsumer.accept(INSIDETOWN_CONTEXT, "true");
-
-			contextConsumer.accept(INSIDEOWNTOWN_CONTEXT, Boolean.toString(wc.getTownBlockOrNull().getTownOrNull().hasResident(resident)));
-			contextConsumer.accept(INSIDEOWNPLOT_CONTEXT, Boolean.toString(wc.getTownBlockOrNull().hasResident() && wc.getTownBlockOrNull().getResidentOrNull().equals(resident)));
-		}
+		for (Calculator calculator : this.calculators)
+			calculator.function().apply(resident).forEach(value -> contextConsumer.accept(calculator.context, value));
 	}
 
 	@Override
 	public ContextSet estimatePotentialContexts() {
 		ImmutableContextSet.Builder builder = ImmutableContextSet.builder();
-		for (String context : booleanContexts) {
-			builder.add(context, "true");
-			builder.add(context, "false");
-		}
-		for (String nationrank : TownyPerms.getNationRanks()) builder.add(NATION_RANK_CONTEXT, nationrank);
-		for (String townrank : TownyPerms.getTownRanks()) builder.add(TOWN_RANK_CONTEXT, townrank);
-		for (Town town : TownyUniverse.getInstance().getTowns()) builder.add(TOWN_CONTEXT, town.getName());
-		for (Nation nation : TownyUniverse.getInstance().getNations()) builder.add(NATION_CONTEXT, nation.getName());
+		
+		for (Calculator calculator : this.calculators)
+			calculator.suggestions().get().forEach(value -> builder.add(calculator.context, value));
 		
 		return builder.build();
 	}
+	
+	@Desugar
+	private record Calculator(String context, Function<Resident, Iterable<String>> function, Supplier<Iterable<String>> suggestions) {}
 }
