@@ -188,6 +188,12 @@ public class ItemLists {
 	 * List of unstripped wood logs.
 	 */
 	public static final ItemLists UNSTRIPPED_WOOD = PredicateList.builder().endsWith("_LOG").notStartsWith("STRIPPED_").add("CRIMSON_STEM", "WARPED_STEM").build();
+	
+	/*
+	 * List of cauldrons.
+	 */
+	public static final ItemLists CAULDRONS = ItemLists.of("CAULDRON", "WATER_CAULDRON", "LAVA_CAULDRON");
+	public static final ItemLists FILLED_CAULDRONS = ItemLists.of("WATER_CAULDRON", "LAVA_CAULDRON");
 
 	/**
 	 * Config-useable material groups.

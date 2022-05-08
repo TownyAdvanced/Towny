@@ -315,7 +315,8 @@ public class TownyPlayerListener implements Listener {
 				if ((ItemLists.AXES.contains(item) && (ItemLists.UNSTRIPPED_WOOD.contains(clickedMat) || ItemLists.WAXED_BLOCKS.contains(clickedMat) || ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))) ||
 					(ItemLists.DYES.contains(item) && Tag.SIGNS.isTagged(clickedMat)) ||
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
-					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
+					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN)) ||
+					(ItemLists.FILLED_CAULDRONS.contains(clickedMat) && item == Material.BUCKET)) { 
 
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, loc, clickedMat));
 				}
@@ -344,6 +345,11 @@ public class TownyPlayerListener implements Listener {
 				if (item == Material.ARMOR_STAND || item == Material.END_CRYSTAL) 
 					event.setCancelled(!TownyActionEventExecutor.canBuild(player, clickedBlock.getRelative(event.getBlockFace()).getLocation(), item));
 
+				/*
+				 * Test cauldron filling with a build test.
+				 */
+				if ((item == Material.WATER_BUCKET || item == Material.LAVA_BUCKET) && clickedMat == Material.CAULDRON)
+					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
 			}
 		}
 		
