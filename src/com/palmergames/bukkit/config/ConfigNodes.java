@@ -1091,6 +1091,15 @@ public enum ConfigNodes {
 			"# If enabled, Towny contexts will be available in LuckPerms. https://luckperms.net/wiki/Context",
 			"# Towny will supply for LuckPerms: townyperms' ranks contexts, as well as location-based contexts."),
 	
+	PLUGIN_ENABLED_CONTEXTS(
+			"plugin.interfacing.enabled_contexts",
+			"*",
+			"",
+			"# Configure what contexts to enable/disable here, contexts must be separated by a comma.",
+			"# Available contexts: towny:resident, towny:mayor, towny:king, towny:insidetown, towny:insideowntown, towny:insideownplot, towny:townrank",
+			"# towny:nationrank, towny:town, towny:nation"
+	),
+	
 	PLUGIN_WEB_MAP_USING_STATUSSCREEN(
 			"plugin.interfacing.web_map.enabled",
 			"false",

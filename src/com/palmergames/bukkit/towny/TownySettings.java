@@ -3144,5 +3144,12 @@ public class TownySettings {
 	public static boolean doCapitalsPayNationTax() {
 		return getBoolean(ConfigNodes.ECO_DAILY_TAXES_DO_CAPITALS_PAY_NATION_TAX);
 	}
+	
+	public static boolean isContextEnabled(String id) {
+		if (getString(ConfigNodes.PLUGIN_ENABLED_CONTEXTS).equals("*"))
+			return true;
+		
+		return getStrArr(ConfigNodes.PLUGIN_ENABLED_CONTEXTS).contains(id);
+	}
 }
 
