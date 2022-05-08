@@ -7451,3 +7451,5 @@ v0.92.0.11:
   - Draw SpawnPoint particles Async.
     - Closes #5899.
   - Check player name async on login, courtesy of Warriorrrr with PR #5900.
+  - API: add setShowingPlotNotifications to the PlayerChangePlotEvent.
+    - Other plugins may use the API to disable plot notifications (or if they are disabled in the config, enable them.)

@@ -75,7 +75,7 @@ public class TownyCustomListener implements Listener {
 			BorderUtil.getPlotBorder(to).runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.sendToPlayer(player));
 
 		// Check if player has entered a new town/wilderness
-		if (TownySettings.getShowTownNotifications()) {
+		if (event.isShowingPlotNotifications()) {
 			String msg = null;
 			try {
 				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
