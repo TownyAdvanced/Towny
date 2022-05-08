@@ -1751,7 +1751,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				InviteHandler.addInvite(invite);
 				Player king = receivingNation.getKing().getPlayer();
 				if (king != null)
-					TownyMessaging.sendRequestMessage(king,invite);
+					TownyMessaging.sendRequestMessage(king, invite);
+				
+				// Player is not the king and has permissions to accept invites, show them the invite as well
+				for (Player player : TownyAPI.getInstance().getOnlinePlayers(receivingNation))
+					if (!player.getUniqueId().equals(receivingNation.getKing().getUUID()) && player.hasPermission(PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ACCEPT.getNode()))
+						TownyMessaging.sendRequestMessage(player, invite);
+				
 				Bukkit.getPluginManager().callEvent(new NationRequestAllyNationEvent(invite));
 			} else {
 				throw new TownyException(Translatable.of("msg_err_ally_already_requested", receivingNation));
