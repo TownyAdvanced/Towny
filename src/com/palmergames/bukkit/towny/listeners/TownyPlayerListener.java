@@ -348,7 +348,7 @@ public class TownyPlayerListener implements Listener {
 				/*
 				 * Test cauldron filling with a build test.
 				 */
-				if ((item == Material.WATER_BUCKET || item == Material.LAVA_BUCKET) && clickedMat == Material.CAULDRON)
+				if (ItemLists.CAULDRON_FILLABLE.contains(item) && clickedMat == Material.CAULDRON)
 					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
 			}
 		}

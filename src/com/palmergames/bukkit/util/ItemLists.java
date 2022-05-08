@@ -192,8 +192,13 @@ public class ItemLists {
 	/*
 	 * List of cauldrons.
 	 */
-	public static final ItemLists CAULDRONS = ItemLists.of("CAULDRON", "WATER_CAULDRON", "LAVA_CAULDRON");
-	public static final ItemLists FILLED_CAULDRONS = ItemLists.of("WATER_CAULDRON", "LAVA_CAULDRON");
+	public static final ItemLists CAULDRONS = ItemLists.of("CAULDRON", "WATER_CAULDRON", "LAVA_CAULDRON", "POWDER_SNOW_CAULDRON");
+	public static final ItemLists FILLED_CAULDRONS = ItemLists.of("WATER_CAULDRON", "LAVA_CAULDRON", "POWDER_SNOW_CAULDRON");
+	
+	/*
+	 * List of buckets that a cauldron can be filled with.
+	 */
+	public static final ItemLists CAULDRON_FILLABLE = ItemLists.of("WATER_BUCKET", "LAVA_BUCKET", "POWDER_SNOW_BUCKET");
 
 	/**
 	 * Config-useable material groups.
