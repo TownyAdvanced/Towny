@@ -1090,15 +1090,16 @@ public enum ConfigNodes {
 			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
 			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
 	
+	PLUGIN_LUCKPERMS_ROOT("plugin.interfacing.luckperms","",""),
 	PLUGIN_LUCKPERMS_CONTEXTS(
-			"plugin.interfacing.luckperms_contexts",
+			"plugin.interfacing.luckperms.contexts",
 			"false",
 			"",
 			"# If enabled, Towny contexts will be available in LuckPerms. https://luckperms.net/wiki/Context",
 			"# Towny will supply for LuckPerms: townyperms' ranks contexts, as well as location-based contexts."),
 	
 	PLUGIN_ENABLED_CONTEXTS(
-			"plugin.interfacing.enabled_contexts",
+			"plugin.interfacing.luckperms.enabled_contexts",
 			"*",
 			"",
 			"# Configure what contexts to enable/disable here, contexts must be separated by a comma.",
