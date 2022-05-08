@@ -611,6 +611,7 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When true Towny will handle respawning, with town or resident spawns."),
+	GTOWN_SETTINGS_RESPAWN_PROTECTION_ROOT("global_town_settings.respawn_protection", "", ""),
 	GTOWN_SETTINGS_RESPAWN_PROTECTION_TIME(
 			"global_town_settings.respawn_protection.time",
 			"10s",

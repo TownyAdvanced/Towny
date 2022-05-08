@@ -3106,7 +3106,7 @@ public class TownySettings {
 		config.save();
 	}
 
-	public static long getSpawnProtection() {
+	public static long getSpawnProtectionDuration() {
 		return TimeTools.getTicks(getString(ConfigNodes.GTOWN_SETTINGS_RESPAWN_PROTECTION_TIME));
 	}
 	

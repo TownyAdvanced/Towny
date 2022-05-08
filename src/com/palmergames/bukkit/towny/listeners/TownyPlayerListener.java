@@ -203,14 +203,14 @@ public class TownyPlayerListener implements Listener {
 		event.setRespawnLocation(respawn);
 		
 		// Handle Spawn protection
-		long protectionTime = TownySettings.getSpawnProtection();
+		long protectionTime = TownySettings.getSpawnProtectionDuration();
 		if (protectionTime > 0L) {
 			Resident res = TownyAPI.getInstance().getResident(player);
 			if (res == null)
 				return;
 			
-			int taskID = Bukkit.getScheduler().runTaskLater(plugin, ()-> res.removeSpawnProtection(), protectionTime).getTaskId();
-			res.setSpawnProtectionTaskID(taskID);
+			int taskID = Bukkit.getScheduler().runTaskLater(plugin, res::removeRespawnProtection, protectionTime).getTaskId();
+			res.setRespawnProtectionTaskID(taskID);
 		}
 	}
 	
@@ -771,8 +771,8 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Remove spawn protection if the player is teleporting since spawning.
 		 */
-		if (resident != null && resident.getSpawnProtectionTaskID() != -1) {
-			resident.removeSpawnProtection();
+		if (resident != null && resident.getRespawnProtectionTaskID() != -1) {
+			resident.removeRespawnProtection();
 		}
 		
 		onPlayerMove(event);
@@ -1305,6 +1305,13 @@ public class TownyPlayerListener implements Listener {
 		if (resident == null)
 			return;
 		
-		event.setCancelled(resident.hasSpawnProtection());
+		if (resident.hasRespawnProtection()) {
+			event.setCancelled(true);
+
+			if (!resident.isRespawnPickupWarningShown()) {
+				resident.setRespawnPickupWarningShown(true);
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_pickup_respawn_protection"));
+			}
+		}
 	}
 }

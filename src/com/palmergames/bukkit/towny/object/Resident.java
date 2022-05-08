@@ -76,7 +76,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	private ArrayList<Inventory> guiPages;
 	private int guiPageNum = 0;
-	private int spawnProtectionTaskID = -1;
+	private int respawnProtectionTaskID = -1;
+	private boolean respawnPickupWarningShown = false; // Prevents chat spam when a player attempts to pick up an item while under respawn protection.
 
 	public Resident(String name) {
 		super(name);
@@ -858,22 +859,31 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return BukkitTools.isOnline(getName());
 	}
 
-	public int getSpawnProtectionTaskID() {
-		return spawnProtectionTaskID;
+	public int getRespawnProtectionTaskID() {
+		return respawnProtectionTaskID;
 	}
 
-	public void setSpawnProtectionTaskID(int spawnProtectionTaskID) {
-		this.spawnProtectionTaskID = spawnProtectionTaskID;
+	public void setRespawnProtectionTaskID(int respawnProtectionTaskID) {
+		this.respawnProtectionTaskID = respawnProtectionTaskID;
 	}
 	
-	public boolean hasSpawnProtection() {
-		return spawnProtectionTaskID != -1 && Bukkit.getScheduler().isQueued(spawnProtectionTaskID);
+	public boolean hasRespawnProtection() {
+		return respawnProtectionTaskID != -1;
 	}
 	
-	public void removeSpawnProtection() {
-		Bukkit.getScheduler().cancelTask(getSpawnProtectionTaskID());
-		setSpawnProtectionTaskID(-1);
-		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_invulnerability"));
+	public void removeRespawnProtection() {
+		Bukkit.getScheduler().cancelTask(getRespawnProtectionTaskID());
+		setRespawnProtectionTaskID(-1);
+		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_respawn_protection"));
+		respawnPickupWarningShown = false;
+	}
+	
+	public boolean isRespawnPickupWarningShown() {
+		return this.respawnPickupWarningShown;
+	}
+
+	public void setRespawnPickupWarningShown(boolean respawnPickupWarningShown) {
+		this.respawnPickupWarningShown = respawnPickupWarningShown;
 	}
 
 	@NotNull

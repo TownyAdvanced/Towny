@@ -1440,7 +1440,7 @@ msg_setup_success: 'Successfully changed config values to your new values.'
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'
+msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
 msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
 
 #Added in 0.126
