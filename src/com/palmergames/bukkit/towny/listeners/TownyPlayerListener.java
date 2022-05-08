@@ -315,8 +315,8 @@ public class TownyPlayerListener implements Listener {
 				if ((ItemLists.AXES.contains(item) && (ItemLists.UNSTRIPPED_WOOD.contains(clickedMat) || ItemLists.WAXED_BLOCKS.contains(clickedMat) || ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))) ||
 					(ItemLists.DYES.contains(item) && Tag.SIGNS.isTagged(clickedMat)) ||
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
-					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN)) ||
-					(ItemLists.FILLED_CAULDRONS.contains(clickedMat) && item == Material.BUCKET)) { 
+					(ItemLists.FILLED_CAULDRONS.contains(clickedMat) && item == Material.BUCKET) ||
+					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
 
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, loc, clickedMat));
 				}
