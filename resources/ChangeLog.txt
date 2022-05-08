@@ -7454,3 +7454,9 @@ v0.92.0.11:
   - API: add setShowingPlotNotifications to the PlayerChangePlotEvent.
     - Other plugins may use the API to disable plot notifications (or if they are disabled in the config, enable them.)
   - Remove NotRegisteredException usage in calling PlayerEnterTownEvent and PlayerLeaveTownEvent.
+  - Allow specific luckperms contexts to be disabled, courtesy of Warriorrrr with PR #5898.
+  - New Config Option: plugin.interfacing.enabled_contexts
+    - Default: "*"
+    - Configure what contexts to enable/disable here, contexts must be separated by a comma.
+    - Available contexts: towny:resident, towny:mayor, towny:king, towny:insidetown, towny:insideowntown, towny:insideownplot, towny:townrank, towny:nationrank, towny:town, towny:nation
+  - Protect against cauldron filling/emptying, courtesy of Warriorrrr with PR #5901.
