@@ -877,6 +877,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public void addRespawnProtection(long protectionTime) {
+		if (protectionTime <= 0)
+			return;
+		
 		// Cancel existing respawn protection task without message
 		if (respawnProtectionTaskID != -1)
 			Bukkit.getScheduler().cancelTask(respawnProtectionTaskID);
