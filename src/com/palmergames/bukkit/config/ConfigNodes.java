@@ -1107,6 +1107,7 @@ public enum ConfigNodes {
 			"# towny:nationrank, towny:town, towny:nation"
 	),
 	
+	PLUGIN_WEB_MAP_ROOT("plugin.interfacing.web_map","",""),
 	PLUGIN_WEB_MAP_USING_STATUSSCREEN(
 			"plugin.interfacing.web_map.enabled",
 			"false",
