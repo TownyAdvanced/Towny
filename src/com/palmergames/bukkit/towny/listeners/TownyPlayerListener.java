@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.event.player.PlayerDeniedBedUseEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsExperienceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsInventoryEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -828,42 +827,28 @@ public class TownyPlayerListener implements Listener {
 	*/
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerChangePlotEvent(PlayerChangePlotEvent event) {
-
-		PlayerMoveEvent pme = event.getMoveEvent();
-		Player player = event.getPlayer();		
+		if (!TownyUniverse.getInstance().hasResident(event.getPlayer().getUniqueId()))
+			return;
 		WorldCoord from = event.getFrom();
 		WorldCoord to = event.getTo();
-		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-		
-		if (resident == null)
+		if (to.isWilderness() && from.isWilderness()) 
+			// Both are wilderness, no event will fire.
 			return;
-		
-		try {
-			try {
-				to.getTownBlock();
-				if (to.getTownBlock().hasTown()) { 
-					try {
-						Town fromTown = from.getTownBlock().getTown();
-						if (!to.getTownBlock().getTown().equals(fromTown)){
-							Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to,from,to.getTownBlock().getTown(), pme)); // From Town into different Town.
-							Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from,from.getTownBlock().getTown(), pme));//
-						}
-						// Both are the same town, do nothing, no Event should fire here.
-					} catch (NotRegisteredException e) { // From Wilderness into Town.
-						Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to, from, to.getTownBlock().getTown(), pme));
-					}
-				} else {
-					if (from.getTownBlock().hasTown() && !(to.getTownBlock().hasTown())){ // From has a town, to doesn't so: From Town into Wilderness
-						Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme));
-					}
-				}
-			} catch (NotRegisteredException e) {
-				Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme));
-			}
-
-		} catch (NotRegisteredException e) {
-			// If not registered, both to and from locations are wilderness.	
-		}		
+		if (to.isWilderness())
+			// Gone from a Town into the wilderness.
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
+		else if (from.isWilderness())
+			// Gone from wilderness into Town.
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
+		// Both to and from have towns.
+		else if (to.getTownOrNull().equals(from.getTownOrNull()))
+			// The towns are the same, no event will fire.
+			return;
+		else {
+			// Player has left one Town and immediately entered a different one.
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
+		}
 	}
 	
 	/*
