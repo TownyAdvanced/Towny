@@ -35,6 +35,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -859,23 +860,35 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return BukkitTools.isOnline(getName());
 	}
 
+	@Deprecated
+	@ApiStatus.ScheduledForRemoval
 	public int getRespawnProtectionTaskID() {
-		return respawnProtectionTaskID;
+		return -1;
 	}
 
+	@Deprecated
+	@ApiStatus.ScheduledForRemoval
 	public void setRespawnProtectionTaskID(int respawnProtectionTaskID) {
-		this.respawnProtectionTaskID = respawnProtectionTaskID;
+		
 	}
 	
 	public boolean hasRespawnProtection() {
 		return respawnProtectionTaskID != -1;
 	}
 	
-	public void removeRespawnProtection() {
-		Bukkit.getScheduler().cancelTask(getRespawnProtectionTaskID());
-		setRespawnProtectionTaskID(-1);
-		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_respawn_protection"));
+	public void addRespawnProtection(long protectionTime) {
+		// Cancel existing respawn protection task without message
+		if (respawnProtectionTaskID != -1)
+			Bukkit.getScheduler().cancelTask(respawnProtectionTaskID);
+
 		respawnPickupWarningShown = false;
+		this.respawnProtectionTaskID = Bukkit.getScheduler().runTaskLater(Towny.getPlugin(), this::removeRespawnProtection, protectionTime).getTaskId();
+	}
+	
+	public void removeRespawnProtection() {
+		Bukkit.getScheduler().cancelTask(respawnProtectionTaskID);
+		respawnProtectionTaskID = -1;
+		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_respawn_protection"));
 	}
 	
 	public boolean isRespawnPickupWarningShown() {

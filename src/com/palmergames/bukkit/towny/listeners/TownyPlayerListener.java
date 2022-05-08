@@ -209,8 +209,7 @@ public class TownyPlayerListener implements Listener {
 			if (res == null)
 				return;
 			
-			int taskID = Bukkit.getScheduler().runTaskLater(plugin, res::removeRespawnProtection, protectionTime).getTaskId();
-			res.setRespawnProtectionTaskID(taskID);
+			res.addRespawnProtection(protectionTime);
 		}
 	}
 	
@@ -771,7 +770,7 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Remove spawn protection if the player is teleporting since spawning.
 		 */
-		if (resident != null && resident.getRespawnProtectionTaskID() != -1) {
+		if (resident != null && resident.hasRespawnProtection()) {
 			resident.removeRespawnProtection();
 		}
 		
