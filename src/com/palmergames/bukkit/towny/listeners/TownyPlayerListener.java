@@ -56,6 +56,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -203,8 +204,11 @@ public class TownyPlayerListener implements Listener {
 		
 		// Handle Spawn protection
 		long protectionTime = TownySettings.getSpawnProtection();
-		if (protectionTime > 0l) {
+		if (protectionTime > 0L) {
 			Resident res = TownyAPI.getInstance().getResident(player);
+			if (res == null)
+				return;
+			
 			int taskID = Bukkit.getScheduler().runTaskLater(plugin, ()-> res.removeSpawnProtection(), protectionTime).getTaskId();
 			res.setSpawnProtectionTaskID(taskID);
 		}
@@ -767,7 +771,7 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Remove spawn protection if the player is teleporting since spawning.
 		 */
-		if (resident != null && resident.getSpawnProtectionTaskID() != 0) {
+		if (resident != null && resident.getSpawnProtectionTaskID() != -1) {
 			resident.removeSpawnProtection();
 		}
 		
@@ -1290,5 +1294,17 @@ public class TownyPlayerListener implements Listener {
 	public void onEggLand(PlayerEggThrowEvent event) {
 		if (TownySettings.isItemUseMaterial(Material.EGG, event.getEgg().getLocation()) && !TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getEgg().getLocation(), Material.EGG))
 			event.setHatching(false);
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerPickupItem(EntityPickupItemEvent event) {
+		if (TownySettings.getRespawnProtectionAllowPickup() || !(event.getEntity() instanceof Player player))
+			return;
+		
+		Resident resident = TownyAPI.getInstance().getResident(player);
+		if (resident == null)
+			return;
+		
+		event.setCancelled(resident.hasSpawnProtection());
 	}
 }

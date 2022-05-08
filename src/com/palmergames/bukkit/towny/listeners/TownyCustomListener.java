@@ -201,11 +201,11 @@ public class TownyCustomListener implements Listener {
 	public void onPlayerDamagePlayerEvent(TownyPlayerDamagePlayerEvent event) {
 		Resident victim = event.getVictimResident();
 		Resident attacker = event.getAttackingResident();
-		if (victim != null && victim.getSpawnProtectionTaskID() != 0) {
+		if (victim != null && victim.hasSpawnProtection()) {
 			event.setCancelled(true);
 			event.setMessage(Translatable.of("msg_err_player_cannot_be_harmed", victim.getName()).forLocale(attacker));
 		}
-		if (attacker != null && attacker.getSpawnProtectionTaskID() != 0) {
+		if (attacker != null && attacker.hasSpawnProtection()) {
 			event.setCancelled(true);
 			attacker.removeSpawnProtection();
 		}

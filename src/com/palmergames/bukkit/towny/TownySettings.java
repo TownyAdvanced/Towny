@@ -3107,7 +3107,7 @@ public class TownySettings {
 	}
 
 	public static long getSpawnProtection() {
-		return TimeTools.getTicks(getString(ConfigNodes.GTOWN_SETTINGS_RESPAWN_PROTECTION));
+		return TimeTools.getTicks(getString(ConfigNodes.GTOWN_SETTINGS_RESPAWN_PROTECTION_TIME));
 	}
 	
 	public static boolean isUsingWebMapStatusScreens() {
@@ -3150,6 +3150,10 @@ public class TownySettings {
 			return true;
 		
 		return getStrArr(ConfigNodes.PLUGIN_ENABLED_CONTEXTS).contains(id);
+	}
+	
+	public static boolean getRespawnProtectionAllowPickup() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_RESPAWN_PROTECTION_ALLOW_PICKUP);
 	}
 }
 

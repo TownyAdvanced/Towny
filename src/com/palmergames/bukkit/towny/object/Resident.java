@@ -76,7 +76,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	private ArrayList<Inventory> guiPages;
 	private int guiPageNum = 0;
-	private int spawnProtectionTaskID = 0;
+	private int spawnProtectionTaskID = -1;
 
 	public Resident(String name) {
 		super(name);
@@ -866,9 +866,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		this.spawnProtectionTaskID = spawnProtectionTaskID;
 	}
 	
+	public boolean hasSpawnProtection() {
+		return spawnProtectionTaskID != -1 && Bukkit.getScheduler().isQueued(spawnProtectionTaskID);
+	}
+	
 	public void removeSpawnProtection() {
 		Bukkit.getScheduler().cancelTask(getSpawnProtectionTaskID());
-		setSpawnProtectionTaskID(0);
+		setSpawnProtectionTaskID(-1);
 		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_invulnerability"));
 	}
 
