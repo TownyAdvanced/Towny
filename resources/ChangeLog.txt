@@ -7460,3 +7460,4 @@ v0.92.0.11:
     - Configure what contexts to enable/disable here, contexts must be separated by a comma.
     - Available contexts: towny:resident, towny:mayor, towny:king, towny:insidetown, towny:insideowntown, towny:insideownplot, towny:townrank, towny:nationrank, towny:town, towny:nation
   - Protect against cauldron filling/emptying, courtesy of Warriorrrr with PR #5901.
+  - Show ally requests to players with accept permissions, courtesy of Warriorrrr with PR #5903.
