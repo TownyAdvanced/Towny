@@ -79,7 +79,7 @@ admin_sing: 'Admin'
 town_sing: 'Stadt'
 nation_sing: 'Land'
 nation_plu: 'Nationen'
-king_sing: 'Leader'
+king_sing: 'Anführer'
 town_plu: 'Städte'
 world_plu: 'Welten'
 world_sing: 'Welt'
@@ -129,7 +129,7 @@ msg_friend_remove: '&b%s hat dich als Freund entfernt.'
 msg_left_town: '&b%s hat die Stadt verlassen'
 msg_you_left: '&bDu hast %s verlassen.'
 msg_not_mayor: '&bDu bist nicht der Bürgermeister.'
-msg_not_king: '&bYou are not the nation leader.'
+msg_not_king: '&bDu bist nicht der Anführer der Nation.'
 msg_not_mayor_ass: '&bDu bist weder der Bürgermeister noch ein Gehilfe.'
 msg_not_king_ass: '&bYou are not the nation leader or an assistant.'
 msg_own_nation_disallow: '&bDas kannst du in deiner eigenen Nation nicht tun.'
@@ -580,7 +580,7 @@ status_bank_town2: 'Tägliche Instandhaltung:'
 status_bank_town3: 'Steuer:'
 status_town_nation: 'Nation:'
 status_town_reslist_overlength: 'und mehr...'
-status_nation_king: 'Leader:'
+status_nation_king: 'Anführer:'
 status_nation_tax: 'Nationssteuern:'
 status_nation_towns: 'Städte'
 status_nation_allies: 'Verbündete'
@@ -1284,7 +1284,9 @@ msg_setup_success: 'Die Konfigurationswerte wurden erfolgreich auf Ihre neuen We
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s ist kürzlich gespawnt und kann nicht verletzt werden.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_invulnerability: 'Du hast deine Unverwundbarkeit verloren.'
+msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
+#Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
+msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: 'Hauptstadt:'
@@ -1476,3 +1478,7 @@ msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns 
 msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+#Used in the town's status screen to display plots
+status_plot_string: 'Plots'
+#Displays a plot type and the amount of townblocks of that type in the town
+status_plot_hover: '%s:'
