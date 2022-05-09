@@ -611,13 +611,19 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When true Towny will handle respawning, with town or resident spawns."),
-	GTOWN_SETTINGS_RESPAWN_PROTECTION(
-			"global_town_settings.respawn_protection",
+	GTOWN_SETTINGS_RESPAWN_PROTECTION_ROOT("global_town_settings.respawn_protection", "", ""),
+	GTOWN_SETTINGS_RESPAWN_PROTECTION_TIME(
+			"global_town_settings.respawn_protection.time",
 			"10s",
 			"",
 			"# When greater than 0s, the amount of time a player who has respawned is considered invulnerable.",
 			"# Invulnerable players who attack other players will lose their invulnerability.",
 			"# Invulnerable players who teleport after respawn will also lose their invulnerability."),
+	GTOWN_SETTINGS_RESPAWN_PROTECTION_ALLOW_PICKUP(
+			"global_town_settings.respawn_protection.allow_pickup",
+			"true",
+			"",
+			"# If disabled, players will not be able to pickup items while under respawn protection."),
 	GTOWN_SETTINGS_TOWN_RESPAWN_SAME_WORLD_ONLY(
 			"global_town_settings.town_respawn_same_world_only",
 			"false",
