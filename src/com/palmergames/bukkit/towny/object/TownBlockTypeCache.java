@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
+import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,7 +12,7 @@ public class TownBlockTypeCache {
 	private Map<TownBlockType, Integer> residentOwnedCache = new ConcurrentHashMap<>(0);
 
 	/**
-	 * The main getter for a Town's TownBlockTypeCache. Use this is quickly get the
+	 * The main getter for a Town's TownBlockTypeCache. Use this to quickly get the
 	 * number of TownBlocks of a given TownBlockType.
 	 * 
 	 * Possible CacheTypes: ALL, FORSALE, RESIDENTOWNED
@@ -25,6 +27,22 @@ public class TownBlockTypeCache {
 		case ALL -> typeCache.containsKey(townBlockType) ? typeCache.get(townBlockType) : 0;
 		case FORSALE -> forSaleCache.containsKey(townBlockType) ? forSaleCache.get(townBlockType) : 0;
 		case RESIDENTOWNED -> residentOwnedCache.containsKey(townBlockType) ? residentOwnedCache.get(townBlockType) : 0;
+		};
+	}
+
+	/**
+	 * Getter for easy access to each cache Map
+	 * 
+	 * Possible CacheTypes: ALL, FORSALE, RESIDENTOWNED
+	 * 
+	 * @param cacheType CacheType map to access
+	 * @return unmodifiable Map of each type to an integer
+	 */
+	public Map<TownBlockType, Integer> getCache(CacheType cacheType) {
+		return switch (cacheType) {
+			case ALL -> Collections.unmodifiableMap(typeCache);
+			case FORSALE -> Collections.unmodifiableMap(forSaleCache);
+			case RESIDENTOWNED -> Collections.unmodifiableMap(residentOwnedCache);
 		};
 	}
 	

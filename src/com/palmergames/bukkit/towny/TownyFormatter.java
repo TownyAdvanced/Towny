@@ -13,6 +13,8 @@ import com.palmergames.bukkit.towny.object.SpawnLocation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeCache;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -45,6 +47,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TownyFormatter {
@@ -412,6 +415,18 @@ public class TownyFormatter {
 					.append(Component.newline())
 					.append(Component.text(translator.of("status_hover_click_for_more")))),
 				ClickEvent.runCommand("/towny:town reslist "+ town.getName()));
+			
+			// Plots
+			screen.addComponentOf("plotsnewline", Component.newline());
+			TextComponent text = Component.empty();
+			Map<TownBlockType, Integer> cache = town.getTownBlockTypeCache().getCache(TownBlockTypeCache.CacheType.ALL);
+			for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
+				int value = cache.getOrDefault(type, 0);
+				text = text.append(Component.text(colourKeyValue(translator.of("status_plot_hover", type.getFormattedName()), String.valueOf(value))).append(Component.newline()));
+			}
+			text = text.append(Component.text(translator.of("status_hover_click_for_more")));
+			screen.addComponentOf("plots", colourHoverKey(translator.of("status_plot_string")), 
+				HoverEvent.showText(text), ClickEvent.runCommand("/towny:town plots"));
 
 		}
 		
