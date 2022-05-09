@@ -1680,6 +1680,7 @@ msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot tha
 msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
 
 #
-#Plots on Status Screen
+#Used in the town's status screen to display plots
 status_plot_string: 'Plots'
+#Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
