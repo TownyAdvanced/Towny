@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
 import java.util.Collections;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,9 +23,9 @@ public class TownBlockTypeCache {
 	 */
 	public int getNumTownBlocks(TownBlockType townBlockType, CacheType cacheType) {
 		return switch (cacheType) {
-		case ALL -> typeCache.containsKey(townBlockType) ? typeCache.get(townBlockType) : 0;
-		case FORSALE -> forSaleCache.containsKey(townBlockType) ? forSaleCache.get(townBlockType) : 0;
-		case RESIDENTOWNED -> residentOwnedCache.containsKey(townBlockType) ? residentOwnedCache.get(townBlockType) : 0;
+		case ALL -> typeCache.getOrDefault(townBlockType, 0);
+		case FORSALE -> forSaleCache.getOrDefault(townBlockType, 0);
+		case RESIDENTOWNED -> residentOwnedCache.getOrDefault(townBlockType, 0);
 		};
 	}
 

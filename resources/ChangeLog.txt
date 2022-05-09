@@ -7461,3 +7461,4 @@ v0.92.0.11:
     - Available contexts: towny:resident, towny:mayor, towny:king, towny:insidetown, towny:insideowntown, towny:insideownplot, towny:townrank, towny:nationrank, towny:town, towny:nation
   - Protect against cauldron filling/emptying, courtesy of Warriorrrr with PR #5901.
   - Show ally requests to players with accept permissions, courtesy of Warriorrrr with PR #5903.
+  - Add plot types component to the town status screen, courtesy of Altruiis with PR  #5905. (First-Time Contributor!)

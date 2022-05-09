@@ -416,8 +416,7 @@ public class TownyFormatter {
 					.append(Component.text(translator.of("status_hover_click_for_more")))),
 				ClickEvent.runCommand("/towny:town reslist "+ town.getName()));
 			
-			// Plots
-			screen.addComponentOf("plotsnewline", Component.newline());
+			// Plots 
 			TextComponent text = Component.empty();
 			Map<TownBlockType, Integer> cache = town.getTownBlockTypeCache().getCache(TownBlockTypeCache.CacheType.ALL);
 			for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
@@ -426,7 +425,7 @@ public class TownyFormatter {
 			}
 			text = text.append(Component.text(translator.of("status_hover_click_for_more")));
 			screen.addComponentOf("plots", colourHoverKey(translator.of("status_plot_string")), 
-				HoverEvent.showText(text), ClickEvent.runCommand("/towny:town plots"));
+				HoverEvent.showText(text), ClickEvent.runCommand("/towny:town plots" + town.getName()));
 
 		}
 		
