@@ -1284,7 +1284,9 @@ msg_setup_success: 'Yapılandırma değerleri başarıyla yeni değerlerinizle d
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s yakın zamanda ortaya çıktı ve zarar veremez.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_invulnerability: 'Dokunulmazlığınızı kaybettiniz.'
+msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
+#Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
+msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: 'Başkent:'
