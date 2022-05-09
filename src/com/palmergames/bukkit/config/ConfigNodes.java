@@ -229,6 +229,7 @@ public enum ConfigNodes {
 	TOWN_MIN_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.min_distance_between_homeblocks",
 			"0",
+			"",
 			"# Minimum distance between homeblocks."),
 	TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.max_distance_between_homeblocks",
@@ -1090,15 +1091,16 @@ public enum ConfigNodes {
 			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
 			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
 	
+	PLUGIN_LUCKPERMS_ROOT("plugin.interfacing.luckperms","",""),
 	PLUGIN_LUCKPERMS_CONTEXTS(
-			"plugin.interfacing.luckperms_contexts",
+			"plugin.interfacing.luckperms.contexts",
 			"false",
 			"",
 			"# If enabled, Towny contexts will be available in LuckPerms. https://luckperms.net/wiki/Context",
 			"# Towny will supply for LuckPerms: townyperms' ranks contexts, as well as location-based contexts."),
 	
 	PLUGIN_ENABLED_CONTEXTS(
-			"plugin.interfacing.enabled_contexts",
+			"plugin.interfacing.luckperms.enabled_contexts",
 			"*",
 			"",
 			"# Configure what contexts to enable/disable here, contexts must be separated by a comma.",
@@ -1106,6 +1108,7 @@ public enum ConfigNodes {
 			"# towny:nationrank, towny:town, towny:nation"
 	),
 	
+	PLUGIN_WEB_MAP_ROOT("plugin.interfacing.web_map","",""),
 	PLUGIN_WEB_MAP_USING_STATUSSCREEN(
 			"plugin.interfacing.web_map.enabled",
 			"false",
@@ -1197,6 +1200,8 @@ public enum ConfigNodes {
 		"# A blacklist used for validating town/nation names.",
 		"# Names must be seperated by a comma: name1,name2"
 	),
+	PLUGIN_UPDATE_NOTIFICATIONS_ROOT(
+			"plugin.update_notifications", "", ""),
 	PLUGIN_UPDATE_NOTIFICATIONS_ALERTS(
 		"plugin.update_notifications.alerts",
 		"true",
@@ -1808,7 +1813,8 @@ public enum ConfigNodes {
 			"",
 			"",
 			"# if enabled old residents will be deleted, losing their town, townblocks, friends",
-			"# after Two months (default) of not logging in"),
+			"# after Two months (default) of not logging in. If the player is a mayor their town",
+			"# will be inherited according to the order_of_mayoral_succession list in this config."),
 	RES_SETTING_DELETE_OLD_RESIDENTS_ENABLE(
 			"resident_settings.delete_old_residents.enable",
 			"false"),
@@ -1836,6 +1842,7 @@ public enum ConfigNodes {
 	RES_SETTING_IS_SHOWING_LOCALE_MESSAGE(
 			"resident_settings.is_showing_locale_message",
 			"true",
+			"",
 			"# If true, players who join the server for the first time will be informed about their locale, and about Towny translatable system."),
 	ECO(
 			"economy",

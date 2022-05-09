@@ -30,13 +30,10 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class LuckPermsContexts implements ContextCalculator<Player> {
-	private Towny plugin;
 	private LuckPerms luckPerms;
 	private final Set<Calculator> calculators = new HashSet<>();
 
 	public LuckPermsContexts(@NotNull Towny plugin) {
-		this.plugin = plugin;
-		
 		registerContext("towny:resident", resident -> Collections.singleton(String.valueOf(resident.hasTown())), () -> Arrays.asList("true", "false"));
 		registerContext("towny:mayor", resident -> Collections.singleton(String.valueOf(resident.isMayor())), () -> Arrays.asList("true", "false"));
 		registerContext("towny:king", resident -> Collections.singleton(String.valueOf(resident.isKing())), () -> Arrays.asList("true", "false"));
