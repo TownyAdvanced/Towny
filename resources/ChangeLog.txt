@@ -7462,3 +7462,7 @@ v0.92.0.11:
   - Protect against cauldron filling/emptying, courtesy of Warriorrrr with PR #5901.
   - Show ally requests to players with accept permissions, courtesy of Warriorrrr with PR #5903.
   - Add plot types component to the town status screen, courtesy of Altruiis with PR  #5905. (First-Time Contributor!)
+  - Add option to disable pickups while under respawn protection, courtesy of Warriorrrr with PR #5902.
+  - New Config Option: global_town_settings.respawn_protection.allow_pickup
+    - Default: true
+    - If disabled, players will not be able to pickup items while under respawn protection.
