@@ -419,7 +419,7 @@ public class TownyFormatter {
 			// Plots
 			screen.addComponentOf("plotsnewline", Component.newline());
 			TextComponent text = Component.empty();
-			Map<TownBlockType, Integer> cache = town.getTownBlockTypeCache().getCache(TownBlockTypeCache.CacheType.RESIDENTOWNED);
+			Map<TownBlockType, Integer> cache = town.getTownBlockTypeCache().getCache(TownBlockTypeCache.CacheType.ALL);
 			for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
 				int value = cache.getOrDefault(type, 0);
 				text = text.append(Component.text(colourKeyValue(translator.of("status_plot_hover", type.getFormattedName()), String.valueOf(value))).append(Component.newline()));
