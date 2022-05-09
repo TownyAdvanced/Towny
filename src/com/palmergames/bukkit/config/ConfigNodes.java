@@ -229,6 +229,7 @@ public enum ConfigNodes {
 	TOWN_MIN_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.min_distance_between_homeblocks",
 			"0",
+			"",
 			"# Minimum distance between homeblocks."),
 	TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.max_distance_between_homeblocks",
@@ -1199,6 +1200,8 @@ public enum ConfigNodes {
 		"# A blacklist used for validating town/nation names.",
 		"# Names must be seperated by a comma: name1,name2"
 	),
+	PLUGIN_UPDATE_NOTIFICATIONS_ROOT(
+			"plugin.update_notifications", "", ""),
 	PLUGIN_UPDATE_NOTIFICATIONS_ALERTS(
 		"plugin.update_notifications.alerts",
 		"true",
@@ -1810,7 +1813,8 @@ public enum ConfigNodes {
 			"",
 			"",
 			"# if enabled old residents will be deleted, losing their town, townblocks, friends",
-			"# after Two months (default) of not logging in"),
+			"# after Two months (default) of not logging in. If the player is a mayor their town",
+			"# will be inherited according to the order_of_mayoral_succession list in this config."),
 	RES_SETTING_DELETE_OLD_RESIDENTS_ENABLE(
 			"resident_settings.delete_old_residents.enable",
 			"false"),
@@ -1838,6 +1842,7 @@ public enum ConfigNodes {
 	RES_SETTING_IS_SHOWING_LOCALE_MESSAGE(
 			"resident_settings.is_showing_locale_message",
 			"true",
+			"",
 			"# If true, players who join the server for the first time will be informed about their locale, and about Towny translatable system."),
 	ECO(
 			"economy",
