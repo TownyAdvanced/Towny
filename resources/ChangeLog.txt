@@ -7468,3 +7468,5 @@ v0.92.0.11:
     - If disabled, players will not be able to pickup items while under respawn protection.
 0.98.1.13:
   - Fix runCommand for plots button, courtesy of Warriorrrr with PR #5910.
+  - Remove the last of the NotRegisteredExceptions from the TownyPlaceholderExpansion.
+    - Closes #5911.
