@@ -1408,7 +1408,7 @@ tc_player_channel_sound_unmuted: 'El sonido del canal ha sido desensordecido'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Hay un extranjero en tu plot, no puedes cambiar el estado pvp de tu plot!'
 #Added in 0.136
-msg_view_on_web: 'Haz click para ver en la internet.'
+msg_view_on_web: 'Haz click para ver en internet.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6La ciudad %s ha aceptado la union con la ciudad predominante de %s.'
@@ -1416,7 +1416,7 @@ town1_has_merged_with_town2: '&6La ciudad %s ha aceptado la union con la ciudad 
 status_neutrality_cost: 'Costo de la Neutralidad:'
 #Added in 0.138
 #Line 1 of the givebonus warning.
-msg_ptw_warning_1: 'Si has pagado dinero real por estos bonus de claim, por favor: el servidor en el que usted esta jugando esta violando la EULA de Minecraft y tambien la licencia de Towny.'
+msg_ptw_warning_1: 'Si has pagado dinero real por estos bonus de claim, por favor ten en cuenta: el servidor en el que usted esta jugando esta violando la EULA de Minecraft y tambien la licencia de Towny.'
 #Line 2 of the givebonus warning.
 msg_ptw_warning_2: 'El equipo de Towny nunca tuvo la intencion de que los bonus de claim sean comprados con dinero de la vida real.'
 #Line 3 of the givebonus warning.
