@@ -7466,3 +7466,5 @@ v0.92.0.11:
   - New Config Option: global_town_settings.respawn_protection.allow_pickup
     - Default: true
     - If disabled, players will not be able to pickup items while under respawn protection.
+0.98.1.13:
+  - Fix runCommand for plots button, courtesy of Warriorrrr with PR #5910.
