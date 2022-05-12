@@ -425,7 +425,7 @@ public class TownyFormatter {
 			}
 			text = text.append(Component.text(translator.of("status_hover_click_for_more")));
 			screen.addComponentOf("plots", colourHoverKey(translator.of("status_plot_string")), 
-				HoverEvent.showText(text), ClickEvent.runCommand("/towny:town plots" + town.getName()));
+				HoverEvent.showText(text), ClickEvent.runCommand("/towny:town plots " + town.getName()));
 
 		}
 		
