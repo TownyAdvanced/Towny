@@ -72,8 +72,8 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
-	LEVELS_TOWN_LEVEL("levels.town_level", ""),
-	LEVELS_NATION_LEVEL("levels.nation_level", ""),
+	LEVELS_TOWN_LEVEL("levels.town_level", "", "", "# Guide On How to Configure: https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#configuring-town_level-and-nation_level"),
+	LEVELS_NATION_LEVEL("levels.nation_level", "", "", "# Guide On How to Configure: https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#configuring-town_level-and-nation_level"),
 	TOWN(
 			"town",
 			"",
