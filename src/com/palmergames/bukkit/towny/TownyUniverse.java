@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
+import com.palmergames.bukkit.towny.object.Alliance;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -47,6 +48,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * Towny's class for internal API Methods
@@ -70,6 +72,10 @@ public class TownyUniverse {
     private final Map<String, Nation> nationNameMap = new ConcurrentHashMap<>();
 	private final Map<UUID, Nation> nationUUIDMap = new ConcurrentHashMap<>();
     private final Trie nationsTrie = new Trie();
+    
+    private final Map<String, Alliance> allianceNameMap = new ConcurrentHashMap<>();
+	private final Map<UUID, Alliance> allianceUUIDMap = new ConcurrentHashMap<>();
+    private final Trie alliancesTrie = new Trie();
     
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<String, CustomDataField<?>> registeredMetadata = new HashMap<>();
@@ -732,6 +738,167 @@ public class TownyUniverse {
 
 	public Trie getNationsTrie() {
 		return nationsTrie;
+	}
+	
+	// =========== Alliance Methods ===========
+
+	/**
+	 * Check if the alliance matching the given name exists.
+	 *
+	 * @param allianceName Name of the alliance to check.
+	 * @return whether the alliance matching the name exists.
+	 */
+	public boolean hasAlliance(@NotNull String allianceName) {
+		Validate.notNull(allianceName, "Alliance Name cannot be null!");
+
+		// Fast-fail if empty
+		if (allianceName.isEmpty())
+			return false;
+
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(allianceName).toLowerCase();
+		} catch (InvalidNameException ignored) {
+			return false;
+		}
+
+		return allianceNameMap.containsKey(filteredName);
+	}
+
+	/**
+	 * Check if the alliance matching the given UUID exists.
+	 * 
+	 * @param allianceUUID UUID of the alliance to check.
+	 * @return whether the alliance matching the UUID exists.
+	 */
+	public boolean hasAlliance(@NotNull UUID allianceUUID) {
+		Validate.notNull(allianceUUID, "Alliance UUID cannot be null!");
+		
+		return allianceUUIDMap.containsKey(allianceUUID);
+	}
+
+	/**
+	 * Get the alliance with the passed-in alliance name if it exists.
+	 * 
+	 * @param allianceName Name of the alliance to fetch.
+	 * @return the alliance matching the name or {@code null} if it doesn't exist.
+	 */
+	@Nullable
+	public Alliance getAlliance(@NotNull String allianceName) {
+		Validate.notNull(allianceName, "Alliance Name cannot be null!");
+		
+		// Fast-fail if empty
+		if (allianceName.isEmpty())
+			return null;
+
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(allianceName).toLowerCase();
+		} catch (InvalidNameException ignored) {
+			return null;
+		}
+		
+		return allianceNameMap.get(filteredName);
+	}
+
+	/**
+	 * Get the alliance with the given UUID if it exists.
+	 * 
+	 * @param allianceUUID UUID of the alliance to get.
+	 * @return the alliance with the given UUID or {@code null} if it doesn't exist.
+	 */
+	@Nullable
+	public Alliance getAlliance(@NotNull UUID allianceUUID) {
+		Validate.notNull(allianceUUID, "Alliance UUID cannot be null!");
+		
+		return allianceUUIDMap.get(allianceUUID);
+	}
+	
+	@Unmodifiable
+	public Collection<Alliance> getAlliances() {
+		return Collections.unmodifiableCollection(allianceNameMap.values());
+	}
+	
+	public List<UUID> getAllianceUUIDs() {
+		return allianceUUIDMap.keySet().stream().collect(Collectors.toList());
+	}
+	
+	public int getNumAlliances() {
+		return allianceNameMap.size();
+	}
+
+	public void registerAllianceUUID(@NotNull UUID allianceUUID) {
+		Validate.notNull(allianceUUID, "Alliance cannot be null!");
+
+		allianceUUIDMap.putIfAbsent(allianceUUID, new Alliance(allianceUUID));
+	}
+
+	/**
+	 * Used to register a alliance into the TownyUniverse internal maps.
+	 *
+	 * This does not create a new alliance, or save a new alliance.
+	 *
+	 * @param alliance Alliance to register.
+	 * @throws AlreadyRegisteredException Alliance is already in the universe maps.
+	 */
+	public void registerAlliance(@NotNull Alliance alliance) throws AlreadyRegisteredException {
+		Validate.notNull(alliance, "Alliance cannot be null!");
+
+		if (allianceNameMap.putIfAbsent(alliance.getName().toLowerCase(), alliance) != null) {
+			throw new AlreadyRegisteredException(String.format("The alliance with name '%s' is already registered!", alliance.getName()));
+		}
+
+		alliancesTrie.addKey(alliance.getName());
+//		registerAllianceUUID(alliance);
+	}
+
+	/**
+	 * Used to unregister a alliance from the TownyUniverse internal maps.
+	 *
+	 * This does not delete a alliance, nor perform any actions that affect the alliance internally.
+	 *
+	 * @param alliance Alliance to unregister
+	 * @throws NotRegisteredException Alliance is not registered in the universe maps.
+	 */
+	public void unregisterAlliance(@NotNull Alliance alliance) throws NotRegisteredException {
+		Validate.notNull(alliance, "Alliance cannot be null!");
+
+		if (allianceNameMap.remove(alliance.getName().toLowerCase()) == null) {
+			throw new NotRegisteredException(String.format("The alliance with the name '%s' is not registered!", alliance.getName()));
+		}
+
+		alliancesTrie.removeKey(alliance.getName());
+
+		if (alliance.getUUID() != null) {
+			if (allianceUUIDMap.remove(alliance.getUUID()) == null) {
+				throw new NotRegisteredException(String.format("The alliance with the UUID '%s' is not registered!", alliance.getUUID().toString()));
+			}
+		}
+	}
+	
+	/**
+	 * Used to unregister a alliance from the TownyUniverse internal maps.
+	 *
+	 * This does not delete a alliance, nor perform any actions that affect the alliance internally.
+	 *
+	 * @param allianceUUID Alliance UUID to unregister
+	 * @throws NotRegisteredException Alliance is not registered in the universe maps.
+	 */
+	public void unregisterAlliance(@NotNull UUID allianceUUID) {
+		Validate.notNull(allianceUUID, "Alliance cannot be null!");
+		Alliance alliance = getAlliance(allianceUUID);
+		if (alliance != null) {
+			allianceNameMap.remove(alliance.getName());
+			alliancesTrie.removeKey(alliance.getName());
+		}
+		
+		if (allianceUUIDMap.remove(alliance.getUUID()) == null) {
+			TownyMessaging.sendErrorMsg(String.format("The alliance with the UUID '%s' is not registered!", alliance.getUUID().toString()));
+		}
+	}
+
+	public Trie getAlliancesTrie() {
+		return alliancesTrie;
 	}
 	
 	// =========== World Methods ===========

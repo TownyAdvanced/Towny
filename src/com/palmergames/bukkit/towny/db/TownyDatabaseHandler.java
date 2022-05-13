@@ -6,11 +6,14 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyFlatFileSource.TownyDBFileType;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource.elements;
+import com.palmergames.bukkit.towny.event.DeleteAllianceEvent;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.DeletePlayerEvent;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
+import com.palmergames.bukkit.towny.event.PreDeleteAllianceEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteTownEvent;
 import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
@@ -24,6 +27,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.object.Alliance;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -66,6 +70,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
@@ -237,154 +242,62 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/*
-	 * getResident methods.
-	 */
-	
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidents(String[])} instead.
-	 */
-	@Deprecated
-	@Override
-	public List<Resident> getResidents(String[] names) {
-		return TownyAPI.getInstance().getResidents(names);
-	}
-	
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidents(UUID[])} instead.
-	 */
-	@Deprecated
-	@Override
-	public List<Resident> getResidents(UUID[] uuids) {
-		return TownyAPI.getInstance().getResidents(uuids);
-	}
-
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidentsWithoutTown()} instead.
-	 */
-	@Deprecated
-	@Override
-	public List<Resident> getResidentsWithoutTown() {
-		return TownyAPI.getInstance().getResidentsWithoutTown();
-	}
-	
-	/*
-	 * getTowns methods.
-	 */	
-	
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTowns(String[])} instead.
-	 */
-	@Deprecated
-	@Override
-	public List<Town> getTowns(String[] names) {
-		return TownyAPI.getInstance().getTowns(names);
-	}
-
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTowns(List)} instead.
-	 */
-	@Deprecated
-	@Override
-	public List<Town> getTowns(List<UUID> uuids) {
-		return TownyAPI.getInstance().getTowns(uuids);
-	}
-
-	/**
-	 * @deprecated as of 0.97.5.18 use {@link TownyAPI#getTownsWithoutNation} instead.
-	 */
-	@Deprecated
-	@Override
-	public List<Town> getTownsWithoutNation() {
-		return TownyAPI.getInstance().getTownsWithoutNation();
-	}
-	
-	/*
-	 * getNations methods.
-	 */
-	
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getNations(String[])} instead.
-	 */
-	@Deprecated
-	@Override
-	public List<Nation> getNations(String[] names) {
-		return TownyAPI.getInstance().getNations(names);
-	}
-
-	/*
-	 * getWorlds methods.
-	 */
-
-	/**
-	 * @deprecated as of 0.97.5.18, Use {@link TownyUniverse#getWorld(String)} instead.
-	 *  
-	 * @param name Name of TownyWorld
-	 * @return TownyWorld matching the name or Null.
-	 */
-	@Deprecated
-	@Nullable
-	@Override
-	public TownyWorld getWorld(String name){
-		return universe.getWorld(name);
-	}
-
-	/**
-	 * @deprecated as of 0.97.5.18, Use {@link TownyUniverse#getTownyWorlds()} instead.
+	 * New Load Object Methods
 	 * 
-	 * @return List of TownyWorlds.
+	 * These are called from the FlatFileSource and SQLSource which present Towny
+	 * with an object, UUID and the keys which are used to load an object.
 	 */
-	@Deprecated
-	@Override
-	public List<TownyWorld> getWorlds() {
-		return universe.getTownyWorlds();
+
+	public boolean loadAlliance(Alliance alliance, UUID uuid, HashMap<String, String> keys) {
+		try {
+			String line = "";
+			// Name
+			alliance.setName(keys.getOrDefault("name", generateMissingAllianceName()));
+			// Registered Date
+			alliance.setRegistered(Long.parseLong(keys.getOrDefault("registered", "0")));
+			// Founding Nation by UUID
+			line = keys.get("founderUUID");
+			if (line != null && universe.hasNation(UUID.fromString(line))) {
+				alliance.setFounderUUID(UUID.fromString(line));
+				alliance.setFounder(universe.getNation(UUID.fromString(line)));
+			} else
+				throw new Exception("Cannot load the UUID of the founding nation of the " + alliance.getName() + " alliance.");
+
+			// Enemy Alliances
+			line = keys.get("enemyUUIDs");
+			if (line != null && !line.isEmpty()) {
+				String[] allianceUUIDs = line.split(",");
+				for (String allianceUUID : allianceUUIDs) {
+					Alliance allianceEnemy = TownyAPI.getInstance().getAlliance(UUID.fromString(allianceUUID));
+					if (allianceEnemy != null)
+						alliance.addEnemy(allianceEnemy);
+				}
+			}
+
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
 	}
 	
-	/*
-	 * getTownblocks methods.
-	 */
-
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTownBlocks} instead.
-	 */
-	@Deprecated
-	@Override
-	public Collection<TownBlock> getAllTownBlocks() {
-		return universe.getTownBlocks().values();
-	}
-	
-	/*
-	 * getPlotGroups methods.
-	 */
-
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyUniverse#getGroup(UUID)} instead.
-	 */
-	@Deprecated
-	public PlotGroup getPlotObjectGroup(UUID groupID) {
-		return universe.getGroup(groupID);
-	}
-
-	/**
-	 * @deprecated since 0.97.5.18 use {@link TownyUniverse#getGroups()} instead.
-	 * @return List of PlotGroups. 
-	 */
-	@Deprecated
-	public List<PlotGroup> getAllPlotGroups() {
-		return new ArrayList<>(universe.getGroups());
-	}
-	
-	/**
-	 * @deprecated since 0.97.5.18 use {@link TownyUniverse#getJails()} instead.
-	 * @return List of jails. 
-	 */
-	@Deprecated
-	public List<Jail> getAllJails() {
-		return new ArrayList<>(universe.getJailUUIDMap().values());
-	}
-
 	/*
 	 * Remove Object Methods
 	 */
+
+	protected void removeFromUniverse(TownyDBFileType type, UUID uuid) {
+		switch (type) {
+		case ALLIANCE -> universe.unregisterAlliance(uuid);
+		case JAIL -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+		case NATION -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+		case PLOTGROUP -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+		case RESIDENT -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+		case TOWN -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+		case TOWNBLOCK -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+		case WORLD -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+		default -> throw new IllegalArgumentException("Unexpected value: " + type);
+		};
+	}
 	
 	@Override
 	public void removeResident(Resident resident) {
@@ -621,6 +534,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// Transfer any money to the warchest.
 		if (TownyEconomyHandler.isActive())
 			nation.getAccount().removeAccount();
+		
+		if (nation.hasAlliance() && nation.getAlliance().getMembers().size() == 1)
+			removeAlliance(nation.getAlliance());
 
 		//Delete nation and save towns
 		deleteNation(nation);
@@ -662,6 +578,40 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		BukkitTools.getPluginManager().callEvent(new DeleteNationEvent(nation, kingUUID));
 	}
 
+	@Override
+	public void removeAlliance(Alliance alliance) {
+		// Pre Event
+		PreDeleteAllianceEvent preEvent = new PreDeleteAllianceEvent(alliance);
+		BukkitTools.getPluginManager().callEvent(preEvent);
+		
+		if (preEvent.isCancelled())
+			return;
+		
+		UUID founderUUID = null;
+		if (alliance.getFounderUUID() != null)
+			founderUUID = alliance.getFounderUUID();
+		
+		// Remove this alliance from other alliances' enemy lists. 
+		for (Alliance enemy : universe.getAlliances()) {
+			if (enemy.hasEnemy(alliance)) {
+				enemy.removeEnemy(alliance);
+				enemy.save();
+			}
+		}
+		
+		// Remove this alliance from all of the nations which are members.
+		for (Nation nation : alliance.getMembers()) {
+			nation.removeAlliance();
+			nation.save();
+		}
+
+		// Post Event
+		BukkitTools.getPluginManager().callEvent(new DeleteAllianceEvent(alliance, founderUUID));
+		
+		removeFromUniverse(TownyDBFileType.ALLIANCE, alliance.getUUID());
+		deleteObject("ALLIANCE", alliance.getUUID());
+	}
+	
 	@Override
 	public void removeWorld(TownyWorld world) throws UnsupportedOperationException {
 
@@ -1431,7 +1381,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return replacementName;
 	}
 	
-	
 	private String getNextName(boolean town) throws TownyException  {
 		String name = town ? "Town" : "Nation";
 		
@@ -1448,5 +1397,152 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (i > 100000)
 				throw new TownyException("Too many replacement names.");
 		} while (true);
+	}
+	
+	
+	protected String generateMissingAllianceName() {
+		Random r = new Random();
+		String replacementName = "replacementname" + r.nextInt(99) + 1;
+		try {
+			replacementName = getNextAllianceName();
+		} catch (TownyException e) {
+			e.printStackTrace();
+		}
+		return replacementName;
+	}
+	
+	private String getNextAllianceName() throws TownyException {
+		String name = "Alliance";
+		
+		int i = 0;
+		do {
+			String newName = name + ++i;
+			if (!universe.hasAlliance(newName))
+				return newName;
+			if (i > 100000)
+				throw new TownyException("Too many replacement names.");
+		} while (true);
+	}
+
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidents(String[])} instead.
+	 */
+	@Deprecated
+	@Override
+	public List<Resident> getResidents(String[] names) {
+		return TownyAPI.getInstance().getResidents(names);
+	}
+	
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidents(UUID[])} instead.
+	 */
+	@Deprecated
+	@Override
+	public List<Resident> getResidents(UUID[] uuids) {
+		return TownyAPI.getInstance().getResidents(uuids);
+	}
+
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidentsWithoutTown()} instead.
+	 */
+	@Deprecated
+	@Override
+	public List<Resident> getResidentsWithoutTown() {
+		return TownyAPI.getInstance().getResidentsWithoutTown();
+	}
+	
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTowns(String[])} instead.
+	 */
+	@Deprecated
+	@Override
+	public List<Town> getTowns(String[] names) {
+		return TownyAPI.getInstance().getTowns(names);
+	}
+
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTowns(List)} instead.
+	 */
+	@Deprecated
+	@Override
+	public List<Town> getTowns(List<UUID> uuids) {
+		return TownyAPI.getInstance().getTowns(uuids);
+	}
+
+	/**
+	 * @deprecated as of 0.97.5.18 use {@link TownyAPI#getTownsWithoutNation} instead.
+	 */
+	@Deprecated
+	@Override
+	public List<Town> getTownsWithoutNation() {
+		return TownyAPI.getInstance().getTownsWithoutNation();
+	}
+	
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getNations(String[])} instead.
+	 */
+	@Deprecated
+	@Override
+	public List<Nation> getNations(String[] names) {
+		return TownyAPI.getInstance().getNations(names);
+	}
+
+	/**
+	 * @deprecated as of 0.97.5.18, Use {@link TownyUniverse#getWorld(String)} instead.
+	 *  
+	 * @param name Name of TownyWorld
+	 * @return TownyWorld matching the name or Null.
+	 */
+	@Deprecated
+	@Nullable
+	@Override
+	public TownyWorld getWorld(String name){
+		return universe.getWorld(name);
+	}
+
+	/**
+	 * @deprecated as of 0.97.5.18, Use {@link TownyUniverse#getTownyWorlds()} instead.
+	 * 
+	 * @return List of TownyWorlds.
+	 */
+	@Deprecated
+	@Override
+	public List<TownyWorld> getWorlds() {
+		return universe.getTownyWorlds();
+	}
+
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTownBlocks} instead.
+	 */
+	@Deprecated
+	@Override
+	public Collection<TownBlock> getAllTownBlocks() {
+		return universe.getTownBlocks().values();
+	}
+
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyUniverse#getGroup(UUID)} instead.
+	 */
+	@Deprecated
+	public PlotGroup getPlotObjectGroup(UUID groupID) {
+		return universe.getGroup(groupID);
+	}
+
+	/**
+	 * @deprecated since 0.97.5.18 use {@link TownyUniverse#getGroups()} instead.
+	 * @return List of PlotGroups. 
+	 */
+	@Deprecated
+	public List<PlotGroup> getAllPlotGroups() {
+		return new ArrayList<>(universe.getGroups());
+	}
+	
+	/**
+	 * @deprecated since 0.97.5.18 use {@link TownyUniverse#getJails()} instead.
+	 * @return List of jails. 
+	 */
+	@Deprecated
+	public List<Jail> getAllJails() {
+		return new ArrayList<>(universe.getJailUUIDMap().values());
 	}
 }

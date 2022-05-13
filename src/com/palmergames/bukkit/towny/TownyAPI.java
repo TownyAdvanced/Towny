@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.townblockstatus.NationZoneTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Alliance;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
@@ -186,7 +187,55 @@ public class TownyAPI {
 		}
 		return matches;
 	}
-    
+
+	/**
+	 * Gets the alliance from the given UUID.
+	 * @param uuid UUID of the Alliance.
+	 * @return alliance or null if it doesn't exist.
+	 */
+	public Alliance getAlliance(UUID uuid) {
+		return TownyUniverse.getInstance().getAlliance(uuid);
+	}
+
+	/**
+	 * Gets the alliance from the given name.
+	 * 
+	 * @param name String name of the alliance.
+	 * @return alliance or null if it doesn't exist.
+	 */
+	@Nullable
+	public Alliance getAlliance(String name) {
+		return TownyUniverse.getInstance().getAlliance(name);
+	}
+
+	/**
+	 * Gets a List of Alliances using an array of names.
+	 * 
+	 * @param names Array of Strings representing possible Alliance names.
+	 * @return List of Alliances for which a name was matched.
+	 */
+	public List<Alliance> getAlliances(String[] names) {
+		return Arrays.stream(names).filter(Objects::nonNull).map(townyUniverse::getAlliance).filter(Objects::nonNull)
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Gets a List of Alliances using a List of UUIDs
+	 * 
+	 * @param uuids List of UUIDs representing possible Alliances.
+	 * @return List of Alliances for which a UUID was matched.
+	 */
+	public List<Alliance> getAlliance(List<UUID> uuids) {
+		List<Alliance> matches = new ArrayList<>();
+		for (UUID uuid : uuids) {
+			Alliance n = townyUniverse.getAlliance(uuid);
+			if (n != null) {
+				matches.add(n);
+			}
+		}
+		return matches;
+	}
+	
     /**
      * Gets the resident from the given name.
      * @param name String name of the resident.
@@ -863,4 +912,5 @@ public class TownyAPI {
     public boolean isWarTime() {
     	return false;
     }
+
 }

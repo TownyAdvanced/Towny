@@ -74,6 +74,15 @@ public class SQL_Schema {
                 + ")";
     }
     
+
+	private static String getALLIANCES() {
+		
+		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "ALLIANCES ("
+				+ "`uuid` VARCHAR(36) NOT NULL,"
+				+ "PRIMARY KEY (`uuid`)"
+				+ ")";
+	}
+
     private static String getPLOTGROUPS() {
 		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "PLOTGROUPS ("
 			+ "`groupID` VARCHAR(36) NOT NULL,"
@@ -135,6 +144,14 @@ public class SQL_Schema {
 		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
 		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
 		columns.add("`metadata` text DEFAULT NULL");
+		return columns;
+	}
+
+	private static List<String> getAllianceColumns() {
+		List<String> columns = new ArrayList<>();
+		columns.add("`founderUUID` VARCHAR(36) DEFAULT NULL");
+		columns.add("`name` mediumtext");
+		columns.add("`enemiesUUIDs` mediumtext NOT NULL");
 		return columns;
 	}
 
@@ -337,6 +354,42 @@ public class SQL_Schema {
 			}
 		}
 		TownyMessaging.sendDebugMsg("Table NATIONS is updated!");
+		
+		/*
+		 * Fetch ALLIANCES Table schema.
+		 */
+		String alliance_create = SQL_Schema.getALLIANCES();
+
+		try {
+
+			Statement s = cntx.createStatement();
+			s.executeUpdate(alliance_create);
+			TownyMessaging.sendDebugMsg("Table ALLIANCES is ok!");
+
+		} catch (SQLException ee) {
+
+			TownyMessaging.sendErrorMsg("Error Creating table ALLIANCES : " + ee.getMessage());
+
+		}
+		/*
+		 * Add columns to alliance (if not already there)
+		 */
+		String alliance_update;
+		List<String> allianceColumns = getAllianceColumns();
+		for (String column : allianceColumns) {
+			try {
+				alliance_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "ALLIANCES` " + "ADD COLUMN "
+						+ column;
+
+				PreparedStatement ps = cntx.prepareStatement(alliance_update);
+				ps.executeUpdate();
+
+			} catch (SQLException ee) {
+				if (ee.getErrorCode() != 1060)
+					TownyMessaging.sendErrorMsg("Error updating table ALLIANCES :" + ee.getMessage());
+			}
+		}
+		TownyMessaging.sendDebugMsg("Table ALLIANCES is updated!");
 
 		/*
          *  Fetch TOWNS Table schema.

@@ -39,6 +39,7 @@ public class Nation extends Government {
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
+	private Alliance alliance;
 	private final List<Invite> sentAllyInvites = new ArrayList<>();
 
 	public Nation(String name) {
@@ -240,6 +241,28 @@ public class Nation extends Government {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * @return the alliance
+	 */
+	public Alliance getAlliance() {
+		return alliance;
+	}
+
+	/**
+	 * @param alliance the alliance to set
+	 */
+	public void setAlliance(Alliance alliance) {
+		this.alliance = alliance;
+	}
+	
+	public boolean hasAlliance() {
+		return alliance != null;
+	}
+	
+	public void removeAlliance() {
+		alliance = null;
 	}
 
 	@Override

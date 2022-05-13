@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Alliance;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -55,12 +56,13 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadAllianceList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() 
+				&& loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadAlliances() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadSnapshotList();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorldList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList();
+		return saveWorldList() && saveWorlds() && saveAlliances() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -74,6 +76,8 @@ public abstract class TownyDataSource {
 	}
 
 	abstract public void finishTasks();
+	
+	abstract public boolean loadAllianceList();
 
 	abstract public boolean loadTownBlockList();
 
@@ -98,6 +102,8 @@ public abstract class TownyDataSource {
 	abstract public boolean loadTown(Town town);
 
 	abstract public boolean loadNation(Nation nation);
+
+	abstract public boolean loadAllianceData(UUID uuid);
 
 	abstract public boolean loadWorld(TownyWorld world);
 	
@@ -124,6 +130,8 @@ public abstract class TownyDataSource {
 	abstract public boolean saveJail(Jail jail);
 
 	abstract public boolean saveNation(Nation nation);
+	
+	abstract public boolean saveAlliance(Alliance alliance);
 
 	abstract public boolean saveWorld(TownyWorld world);
 
@@ -137,6 +145,10 @@ public abstract class TownyDataSource {
 	
 	abstract public boolean hasPlotData(TownBlock townBlock);
 
+	abstract public void deleteObject(String type, UUID uuid);
+	
+	abstract public void deleteObject(String type, String name);
+	
 	abstract public void deletePlotData(PlotBlockData plotChunk);
 
 	abstract public void deleteResident(Resident resident);
@@ -204,6 +216,8 @@ public abstract class TownyDataSource {
 			}
 		return true;
 	}
+	
+	abstract public boolean loadAlliances();
 
 	public boolean loadWorlds() {
 
@@ -286,6 +300,13 @@ public abstract class TownyDataSource {
 		return true;
 	}
 
+	public boolean saveAlliances() {
+		TownyMessaging.sendDebugMsg("Saving Alliances");
+		for (Alliance alliance : universe.getAlliances())
+			saveAlliance(alliance);
+		return true;
+	}
+
 	public boolean saveWorlds() {
 
 		TownyMessaging.sendDebugMsg("Saving Worlds");
@@ -341,6 +362,8 @@ public abstract class TownyDataSource {
 	abstract public List<Resident> getResidents(UUID[] uuids);
 
 	abstract public void removeNation(Nation nation);
+
+	abstract public void removeAlliance(Alliance alliance);
 
 	/**
 	 * @deprecated as of 0.97.5.3, use {@link TownyUniverse#hasTown(String)} instead.
