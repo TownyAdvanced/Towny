@@ -1299,7 +1299,7 @@ status_unknown: 'неизвестно'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
 msg_nationzone_override_set_to: '%s установил национальную зону на %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
-msg_nationzone_override_removed: 'Национальня зона %s была удалена.'
+msg_nationzone_override_removed: 'Национальная зона %s была удалена.'
 #Added in 0.127
 #Used in status screen:
 status_nation_zone_size: 'Размер Национальной Зоны:'
@@ -1333,7 +1333,7 @@ status_towny_map_town_line: '&2Город: &a%s &7| &2Владелец: &a%s'
 #Shown on /towny version
 msg_towny_version: '&2Версия Towny: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&2Игрок с IP-адресом &c%s &2пытался войти, используя имя аккаунта %s, что могло нанести урон системе экономики вашего сервера, но его вход был предотвращен Towny. Задумайтесь о блокировке этого IP-адреса!'
+msg_admin_blocked_login: '&2Игрок с IP-адресом &c%s &2пытался войти под именем %s, что могло нанести урон экономике вашего сервера, но его вход был предотвращен Towny. Задумайтесь о блокировке этого IP-адреса!'
 #Shown during resident purge
 msg_scanning_for_old_residents: 'Поиск данных старых игроков...'
 #Shown during resident purge
@@ -1343,12 +1343,12 @@ msg_purge_complete: 'Очистка игроков завершена: удал�
 #Message to the Town, shown when a town is given bonus blocks.
 msg_you_have_been_given_bonus_blocks: 'Вам было дано %s бонусных участков.'
 #Message shown when a town cannot purchase any more bonus blocks.
-msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Ваш город больше не может приобретать бонусные блоки. Было достигнуто максимальное количество.'
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Лимит участков достигнут. У вас нет доступных участков для покупки.'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
-msg_err_capital_cannot_be_peaceful: 'Столицы наций не могут входить в нейтралитет.'
+msg_err_capital_cannot_be_peaceful: 'Столицы наций не могут менять статус своего нейтралитета.'
 #Message shown as feedback for /t toggle nationzone command.
-msg_changed_nationzone: 'Зона вокруг Нации теперь %s'
+msg_changed_nationzone: 'Национальная зона вокруг города теперь %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: 'В вашем городе нет национальных зон для переключения!'
 #Added in 0.129
@@ -1366,7 +1366,7 @@ msg_jailed_outlaw: 'Убит, будучи объявленным преступ
 #Jail causes
 msg_jailed_war: 'Узник войны.'
 #Jail handbook messages
-msg_jailed_handbook_1: 'Похоже, вас заключили в тюрьму по причине: %s'
+msg_jailed_handbook_1: 'Похоже, ты попал в тюрьму по причине %s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'Нехорошо, правда? Что-ж поделать. Вот несколько полезных советов для тебя, пока ты отбываешь своё наказание.'
 #Jail handbook messages
