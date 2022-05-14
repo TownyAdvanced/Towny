@@ -8,6 +8,7 @@ import java.util.UUID;
  * @author Suneet Tipirneni (Siris)
  */
 public abstract class ObjectGroup implements Nameable, Identifiable {
+
 	private UUID uuid;
 	private String name;
 

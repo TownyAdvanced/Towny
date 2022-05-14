@@ -17,8 +17,10 @@ import com.palmergames.bukkit.towny.object.spawnlevel.TownSpawnLevel;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -28,6 +30,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -659,5 +662,26 @@ public class SpawnUtil {
 	
 	private static void initiatePluginTeleport(Resident resident, CompletableFuture<Location> loc, boolean ignoreWarmup) {
 		loc.thenAccept(location -> initiatePluginTeleport(resident, location, ignoreWarmup));
+	}
+	
+	@Nullable
+	public static Location parseSpawnLocationFromDB(String raw) {
+		String[] tokens = raw.split(",");
+		if (tokens.length >= 4)
+			try {
+				World world = plugin.getServerWorld(tokens[0]);
+				double x = Double.parseDouble(tokens[1]);
+				double y = Double.parseDouble(tokens[2]);
+				double z = Double.parseDouble(tokens[3]);
+				
+				Location loc = new Location(world, x, y, z);
+				if (tokens.length == 6) {
+					loc.setPitch(Float.parseFloat(tokens[4]));
+					loc.setYaw(Float.parseFloat(tokens[5]));
+				}
+				return loc;
+			} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+			}
+		return null;
 	}
 }

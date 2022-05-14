@@ -4,6 +4,8 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyFlatFileSource.TownyDBFileType;
+import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
 import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.event.plot.changeowner.PlotClaimEvent;
 import com.palmergames.bukkit.towny.event.plot.changeowner.PlotPreClaimEvent;
@@ -28,9 +30,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 public class TownBlock extends TownyObject {
 
+	private UUID uuid;
 	private TownyWorld world;
 	private Town town = null;
 	private Resident resident = null;
@@ -54,6 +58,14 @@ public class TownBlock extends TownyObject {
 		this.x = x;
 		this.z = z;
 		this.setWorld(world);
+	}
+	
+	public UUID getUUID() {
+		return uuid;
+	}
+	
+	public void setUUID(UUID uuid) {
+		this.uuid = uuid;
 	}
 
 	public void setTown(Town town) {
@@ -546,6 +558,14 @@ public class TownBlock extends TownyObject {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+	}
+	
+	@Override
+	public String getSaveLocation() {
+		if (TownyUniverse.getInstance().getDataSource().isFlatFile())
+			return TownyDBFileType.TOWNBLOCK.getSaveLocation(getUUID().toString());
+		else 
+			return TownyDBTableType.TOWNBLOCK.getSaveLocation(getUUID().toString());
 	}
 
 	public long getClaimedAt() {

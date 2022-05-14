@@ -6,6 +6,8 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyFlatFileSource.TownyDBFileType;
+import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -29,6 +31,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Nation extends Government {
@@ -47,6 +50,11 @@ public class Nation extends Government {
 		// Set defaults
 		setBoard(TownySettings.getNationDefaultBoard());
 		setOpen(TownySettings.getNationDefaultOpen());
+	}
+	
+	public Nation(String name, UUID uuid) {
+		super(name);
+		this.uuid = uuid;
 	}
 
 	public void addAlly(Nation nation) throws AlreadyRegisteredException {
@@ -579,6 +587,14 @@ public class Nation extends Government {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
+	}
+	
+	@Override
+	public String getSaveLocation() {
+		if (TownyUniverse.getInstance().getDataSource().isFlatFile())
+			return TownyDBFileType.NATION.getSaveLocation(getUUID().toString());
+		else 
+			return TownyDBTableType.NATION.getSaveLocation(getUUID().toString());
 	}
 	
 	@Override

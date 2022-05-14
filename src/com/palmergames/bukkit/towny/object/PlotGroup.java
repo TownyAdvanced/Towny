@@ -2,6 +2,9 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyFlatFileSource.TownyDBFileType;
+import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -163,6 +166,14 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().savePlotGroup(this);
+	}
+	
+	@Override
+	public String getSaveLocation() {
+		if (TownyUniverse.getInstance().getDataSource().isFlatFile())
+			return TownyDBFileType.PLOTGROUP.getSaveLocation(getUUID().toString());
+		else 
+			return TownyDBTableType.PLOTGROUP.getSaveLocation(getUUID().toString());
 	}
 
 	public void setTrustedResidents(Set<Resident> trustedResidents) {

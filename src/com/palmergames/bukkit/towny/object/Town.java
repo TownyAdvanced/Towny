@@ -6,6 +6,8 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyFlatFileSource.TownyDBFileType;
+import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.BonusBlockPurchaseCostCalculationEvent;
@@ -1427,6 +1429,14 @@ public class Town extends Government implements TownBlockOwner {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
+	}
+	
+	@Override
+	public String getSaveLocation() {
+		if (TownyUniverse.getInstance().getDataSource().isFlatFile())
+			return TownyDBFileType.TOWN.getSaveLocation(getUUID().toString());
+		else 
+			return TownyDBTableType.TOWN.getSaveLocation(getUUID().toString());
 	}
 
 	public void saveTownBlocks() {

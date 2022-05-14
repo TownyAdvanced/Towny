@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.db;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -16,6 +15,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
+
+import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -51,6 +52,14 @@ public abstract class TownyDataSource {
 		this.universe = universe;
 	}
 
+	public boolean isFlatFile() {
+		return this instanceof TownyFlatFileSource;
+	}
+
+	public boolean isMySQL() {
+		return this instanceof TownySQLSource;
+	}
+
 	public abstract boolean backup() throws IOException;
 
 	public boolean loadAll() {
@@ -75,7 +84,13 @@ public abstract class TownyDataSource {
 
 	abstract public void finishTasks();
 
-	abstract public boolean loadTownBlockList();
+	/*
+	 * Load Lists (Gathering UUIDs to load in full later.)
+	 */
+
+	abstract public boolean loadJailList();
+
+	abstract public boolean loadPlotGroupList();
 
 	abstract public boolean loadResidentList();
 
@@ -85,14 +100,38 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadWorldList();
 
+	abstract public boolean loadTownBlockList();
+
 	abstract public boolean loadRegenList();
 
 	abstract public boolean loadSnapshotList();
 
+	/*
+	 * Load all objects of the given type, using the UUIDs gathered into TownyUniverse. 
+	 */
+
+	abstract public boolean loadJails();
+
+	abstract public boolean loadPlotGroups();
+
+	abstract public boolean loadResidents();
+
+	abstract public boolean loadTowns();
+
+	abstract public boolean loadNations();
+
+	abstract public boolean loadWorlds();
+
 	abstract public boolean loadTownBlocks();
 
-	abstract public boolean loadJailList();
-	
+	/*
+	 * Load object from the database into Memory, to be entered into the Objects themselves 
+	 */
+
+	abstract public boolean loadJail(Jail jail);
+
+	abstract public boolean loadPlotGroup(PlotGroup group);
+
 	abstract public boolean loadResident(Resident resident);
 
 	abstract public boolean loadTown(Town town);
@@ -100,18 +139,36 @@ public abstract class TownyDataSource {
 	abstract public boolean loadNation(Nation nation);
 
 	abstract public boolean loadWorld(TownyWorld world);
-	
-	abstract public boolean loadJail(Jail jail);
 
-	abstract public boolean loadPlotGroupList();
+	/*
+	 * Load object Data from the database into Memory, to be entered into the Objects themselves 
+	 */
 
-	abstract public boolean loadPlotGroup(PlotGroup group);
+	abstract public boolean loadJailData(UUID uuid);
+
+	abstract public boolean loadPlotGroupData(UUID uuid);
+
+	abstract public boolean loadResidentData(UUID uuid);
+
+	abstract public boolean loadTownData(UUID uuid);
+
+	abstract public boolean loadNationData(UUID uuid);
+
+	abstract public boolean loadWorldData(UUID uuid);
+
+	/*
+	 * Legacy database entries that still store a list of keys in a file. 
+	 */
 
 	abstract public boolean saveWorldList();
 
 	abstract public boolean saveRegenList();
 
 	abstract public boolean saveSnapshotList();
+
+	/*
+	 * Individual objects saving methods.
+	 */
 
 	abstract public boolean saveResident(Resident resident);
 
@@ -130,113 +187,6 @@ public abstract class TownyDataSource {
 	abstract public boolean saveTownBlock(TownBlock townBlock);
 
 	abstract public boolean savePlotData(PlotBlockData plotChunk);
-
-	abstract public PlotBlockData loadPlotData(String worldName, int x, int z);
-
-	abstract public PlotBlockData loadPlotData(TownBlock townBlock);
-	
-	abstract public boolean hasPlotData(TownBlock townBlock);
-
-	abstract public void deletePlotData(PlotBlockData plotChunk);
-
-	abstract public void deleteResident(Resident resident);
-
-	abstract public void deleteHibernatedResident(UUID uuid);
-	
-	abstract public void deleteTown(Town town);
-
-	abstract public void deleteNation(Nation nation);
-
-	abstract public void deleteWorld(TownyWorld world);
-
-	abstract public void deleteTownBlock(TownBlock townBlock);
-
-	abstract public void deleteFile(String file);
-	
-	abstract public void deletePlotGroup(PlotGroup group);
-	
-	abstract public void deleteJail(Jail jail);
-	
-	abstract public CompletableFuture<Optional<Long>> getHibernatedResidentRegistered(UUID uuid);
-
-	public boolean cleanup() {
-
-		return true;
-
-	}
-
-	public boolean loadResidents() {
-
-		TownyMessaging.sendDebugMsg("Loading Residents");
-
-		TownySettings.setUUIDCount(0);
-		
-		for (Resident resident : universe.getResidents()) {
-			if (!loadResident(resident)) {
-				plugin.getLogger().severe("Loading Error: Could not read resident data '" + resident.getName() + "'.");
-				return false;
-			}
-
-			if (resident.hasUUID())
-				TownySettings.incrementUUIDCount();
-		}
-		return true;
-	}
-
-	public boolean loadTowns() {
-
-		TownyMessaging.sendDebugMsg("Loading Towns");
-		for (Town town : universe.getTowns())
-			if (!loadTown(town)) {
-				plugin.getLogger().severe("Loading Error: Could not read town data '" + town.getName() + "'.");
-				return false;
-			}
-		return true;
-	}
-
-	public boolean loadNations() {
-
-		TownyMessaging.sendDebugMsg("Loading Nations");
-		for (Nation nation : universe.getNations())
-			if (!loadNation(nation)) {
-				plugin.getLogger().severe("Loading Error: Could not read nation data '" + nation.getName() + "'.");
-				return false;
-			}
-		return true;
-	}
-
-	public boolean loadWorlds() {
-
-		TownyMessaging.sendDebugMsg("Loading Worlds");
-		for (TownyWorld world : universe.getTownyWorlds())
-			if (!loadWorld(world)) {
-				plugin.getLogger().severe("Loading Error: Could not read world data '" + world.getName() + "'.");
-				return false;
-			}
-		return true;
-	}
-	
-	public boolean loadJails() {
-		TownyMessaging.sendDebugMsg("Loading Jails");
-		for (Jail jail : universe.getJails()) {
-			if (!loadJail(jail)) {
-				plugin.getLogger().severe("Loading Error: Could not read jail data '" + jail.getUUID() + "'.");
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	public boolean loadPlotGroups() {
-		TownyMessaging.sendDebugMsg("Loading PlotGroups");
-		for (PlotGroup group : universe.getGroups()) {
-			if (!loadPlotGroup(group)) {
-				plugin.getLogger().severe("Loading Error: Could not read PlotGroup data: '" + group.getUUID() + "'.");
-				return false;
-			}
-		}
-		return true;
-	}
 
 	/*
 	 * Save all of category
@@ -303,7 +253,62 @@ public abstract class TownyDataSource {
 		return true;
 	}
 
-	// Database functions
+	/*
+	 * PlotBlockData methods.
+	 */
+
+	abstract public PlotBlockData loadPlotData(String worldName, int x, int z);
+
+	abstract public PlotBlockData loadPlotData(TownBlock townBlock);
+
+	abstract public boolean hasPlotData(TownBlock townBlock);
+
+	/*
+	 * Delete methods.
+	 */
+
+	abstract public void deleteObject(String type, UUID uuid);
+
+	abstract public void deleteObject(String type, String name);
+
+	abstract public void deletePlotData(PlotBlockData plotChunk);
+
+	abstract public void deleteResident(Resident resident);
+
+	abstract public void deleteHibernatedResident(UUID uuid);
+
+	abstract public void deleteTown(Town town);
+
+	abstract public void deleteNation(Nation nation);
+
+	abstract public void deleteWorld(TownyWorld world);
+
+	abstract public void deleteTownBlock(TownBlock townBlock);
+
+	abstract public void deleteFile(String file);
+
+	abstract public void deletePlotGroup(PlotGroup group);
+
+	abstract public void deleteJail(Jail jail);
+
+	/*
+	 * Misc
+	 */
+
+	abstract public String getNameOfObject(String type, UUID uuid);
+
+	abstract public CompletableFuture<Optional<Long>> getHibernatedResidentRegistered(UUID uuid);
+
+	public boolean cleanup() {
+
+		return true;
+
+	}
+
+	/*
+	 * Deprecated Methods follow:
+	 */
+
 	/**
 	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getResidents()} instead.
 	 * 
@@ -513,6 +518,8 @@ public abstract class TownyDataSource {
 	@Deprecated
 	abstract public Collection<TownBlock> getAllTownBlocks();
 
+	abstract public void newWorld(World world);
+
 	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
@@ -537,8 +544,6 @@ public abstract class TownyDataSource {
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newNation(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
-
-	abstract public void newWorld(String name) throws AlreadyRegisteredException;
 
 	abstract public void removeTown(Town town);
 

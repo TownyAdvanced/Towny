@@ -16,6 +16,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.SpawnPointLocation;
 import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.db.TownyFlatFileSource.TownyDBFileType;
+import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
 
 public class Jail implements Savable {
 
@@ -104,6 +106,14 @@ public class Jail implements Savable {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveJail(this);
+	}
+	
+	@Override
+	public String getSaveLocation() {
+		if (TownyUniverse.getInstance().getDataSource().isFlatFile())
+			return TownyDBFileType.JAIL.getSaveLocation(getUUID().toString());
+		else 
+			return TownyDBTableType.JAIL.getSaveLocation(getUUID().toString());
 	}
 
 	public boolean hasCells() {

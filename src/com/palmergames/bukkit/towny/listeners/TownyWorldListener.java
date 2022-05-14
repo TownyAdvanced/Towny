@@ -67,7 +67,11 @@ public class TownyWorldListener implements Listener {
 	
 
 		// This is a world we've never seen before, make a new TownyWorld.
+<<<<<<< Upstream, based on origin/master
 		TownyUniverse.getInstance().newWorld(world);
+=======
+		TownyUniverse.getInstance().getDataSource().newWorld(world);
+>>>>>>> fefdff4 Progress towards new db flow. More progress, mostly in the town loading. More database progress. More progress More progress, might even build now. Reduce diff Maybe take care of world renaming.
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world.getUID());
 		if (townyWorld == null)
 			TownyMessaging.sendErrorMsg("Could not create data for " + world.getName());

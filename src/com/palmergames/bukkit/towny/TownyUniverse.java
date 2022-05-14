@@ -335,6 +335,7 @@ public class TownyUniverse {
 
 		if (res == null && TownySettings.isFakeResident(residentName)) {
 			Resident npc = new Resident(residentName);
+			npc.setUUID(UUID.randomUUID());
 			npc.setNPC(true);
 			return npc;
 		}
@@ -375,6 +376,16 @@ public class TownyUniverse {
 	@NotNull
 	public Optional<Resident> getResidentOpt(@NotNull UUID residentUUID) {
 		return Optional.ofNullable(getResident(residentUUID));
+	}
+	
+	public void newResidentInternal(@NotNull UUID residentUUID) {
+		String name = getDataSource().getNameOfObject("RESIDENT", residentUUID);
+		if (name == null || name.isEmpty())
+			return;
+		Resident resident = new Resident(name, residentUUID);
+		try {
+			registerResident(resident);
+		} catch (AlreadyRegisteredException ignored) {}
 	}
 	
 	// Internal Use Only
@@ -438,6 +449,10 @@ public class TownyUniverse {
     @Unmodifiable
     public Collection<Resident> getResidents() {
 		return Collections.unmodifiableCollection(residentNameMap.values());
+	}
+
+	public Set<UUID> getResidentUUIDs() {
+		return residentUUIDMap.keySet();
 	}
 
 	/**
@@ -508,13 +523,23 @@ public class TownyUniverse {
     	return Collections.unmodifiableCollection(townNameMap.values());
 	}
 
+	public Set<UUID> getTownUUIDs() {
+		return townUUIDMap.keySet();
+	}
+	
     public Trie getTownsTrie() {
     	return townsTrie;
 	}
 
 	// Internal use only.
-	public void newTownInternal(String name) throws AlreadyRegisteredException, com.palmergames.bukkit.towny.exceptions.InvalidNameException {
-    	newTown(name, false);
+	public void newTownInternal(@NotNull UUID townUUID) {
+		String name = getDataSource().getNameOfObject("TOWN", townUUID);
+		if (name == null || name.isEmpty())
+			return;
+		Town town = new Town(name, townUUID);
+		try {
+			registerTown(town);
+		} catch (AlreadyRegisteredException ignored) {}
 	}
 
 	/**
@@ -673,8 +698,22 @@ public class TownyUniverse {
 		return Collections.unmodifiableCollection(nationNameMap.values());
 	}
 	
+	public Set<UUID> getNationUUIDs() {
+		return nationUUIDMap.keySet();
+	}
+
 	public int getNumNations() {
 		return nationNameMap.size();
+	}
+
+	public void newNationInternal(@NotNull UUID nationUUID) {
+		String name = getDataSource().getNameOfObject("NATION", nationUUID);
+		if (name == null || name.isEmpty())
+			return;
+		Nation nation = new Nation(name, nationUUID);
+		try {
+			registerNation(nation);
+		} catch (AlreadyRegisteredException ignored) {}
 	}
 
 	// This is used internally since UUIDs are assigned after nation objects are created.
@@ -739,6 +778,14 @@ public class TownyUniverse {
 	}
 	
 	// =========== World Methods ===========
+
+	public void newWorldInternal(@NotNull UUID worldUUID) {
+		String name = getDataSource().getNameOfObject("WORLD", worldUUID);
+		if (name == null || name.isEmpty())
+			return;
+		TownyWorld world = new TownyWorld(name, worldUUID);
+		registerTownyWorld(world);
+	}
 
 	public void newWorld(@NotNull World world) {
 		Preconditions.checkNotNull(world, "World cannot be null!");
@@ -845,7 +892,6 @@ public class TownyUniverse {
     	PlotGroup group = new PlotGroup(uuid, null, null);
     	registerGroup(group);
     }
-    
 	
 	public void registerGroup(PlotGroup group) {
 		plotGroupUUIDMap.put(group.getUUID(), group);
@@ -1020,6 +1066,10 @@ public class TownyUniverse {
 		return new ArrayList<>(getJailUUIDMap().values());
 	}
 	
+	public Set<UUID> getJailUUIDs() {
+		return jailUUIDMap.keySet();
+	}
+	
     public Map<UUID, Jail> getJailUUIDMap() {
     	return jailUUIDMap;
     }
@@ -1039,9 +1089,18 @@ public class TownyUniverse {
     public void registerJail(Jail jail) {
     	jailUUIDMap.put(jail.getUUID(), jail);
     }
-    
+
+    /**
+     * @deprecated since 0.98.1.13 use {@link #unregisterJail(UUID)} instead.
+     * @param jail Jail to remove.
+     */
+    @Deprecated
     public void unregisterJail(Jail jail) {
     	jailUUIDMap.remove(jail.getUUID());
+    }
+    
+    public void unregisterJail(UUID uuid) {
+    	jailUUIDMap.remove(uuid);
     }
     
     /**
@@ -1049,9 +1108,9 @@ public class TownyUniverse {
      * 
      * @param uuid UUID of the given jail, taken from the Jail filename.
      */
-    public void newJailInternal(String uuid) {
+    public void newJailInternal(UUID uuid) {
     	// Remaining fields are set later on in the loading process.
-    	Jail jail = new Jail(UUID.fromString(uuid), null, null, null);
+    	Jail jail = new Jail(uuid, null, null, null);
     	registerJail(jail);
     }
 
@@ -1059,6 +1118,7 @@ public class TownyUniverse {
 		return wildernessMapDataMap;
 	}
 	
+	@Deprecated
 	public Map<String,String> getReplacementNameMap() {
 		return replacementNamesMap;
 	}
