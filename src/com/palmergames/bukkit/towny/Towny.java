@@ -952,8 +952,7 @@ public class Towny extends JavaPlugin {
 		metrics.addCustomChart(new SimplePie("town_block_size", () -> String.valueOf(TownySettings.getTownBlockSize())));
 		
 		metrics.addCustomChart(new SimplePie("closed_economy_enabled", () -> String.valueOf(TownySettings.isEcoClosedEconomyEnabled())));
-		
-		metrics.addCustomChart(new SimplePie("resident_uuids_stored", TownySettings::getUUIDPercent));
+
 	}
 	
 	public static boolean isMinecraftVersionStillSupported() {
