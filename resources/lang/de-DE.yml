@@ -131,7 +131,7 @@ msg_you_left: '&bDu hast %s verlassen.'
 msg_not_mayor: '&bDu bist nicht der Bürgermeister.'
 msg_not_king: '&bDu bist nicht der Anführer der Nation.'
 msg_not_mayor_ass: '&bDu bist weder der Bürgermeister noch ein Gehilfe.'
-msg_not_king_ass: '&bYou are not the nation leader or an assistant.'
+msg_not_king_ass: '&bDu bist weder der König noch ein Assistent.'
 msg_own_nation_disallow: '&bDas kannst du in deiner eigenen Nation nicht tun.'
 msg_no_perms_claim: '&bDir ist es nicht erlaubt, deine Stadt zu erweitern.'
 msg_outpost_disable: '&bAußenposten nicht verfügbar.'
@@ -926,7 +926,7 @@ msg_your_town_payed_upkeep_with_debt: '&cDeine Stadt hat deine tägliche Instand
 msg_payed_nation_tax_with_debt: '&cDeine Stadt hat deine tägliche Instandhaltung von %s mit Schulden bezahlt.'
 #Added in 0.90
 status_plot_clear_deletion: 'Hinzugefügt in 0.90:'
-msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'
+msg_err_plot_clear_disabled_in_this_world: 'Der Befehl /plot clear ist in dieser Welt deaktiviert.'
 #Added in 0.91
 msg_universe_attribution: 'Autoren: '
 msg_universe_contributors: ' And contributors like you. '
