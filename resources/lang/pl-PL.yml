@@ -565,17 +565,17 @@ status_town_ranks: 'Rangi Miasta:'
 status_nation_ranks: '&2Rangi w nacji: &a:'
 jailed_in_town: ' w mieście: %s'
 status_friends: 'Znajomi'
-rank_list_title: '&3Lista rang'
+rank_list_title: '%s: Lista Rang'
 rank_list_mayor: 'Burmistrz:'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Otwarte)'
 status_town_board: 'Tablica:'
-status_founded: 'Założona:'
+status_founded: 'Założono:'
 status_town_size: 'Rozmiar miasta:'
 status_town_size_bought: 'Kupiono:'
 status_town_size_bonus: 'Premia:'
-status_town_size_nationbonus: 'Narodowy Bonus:'
-status_town_outposts: 'Posterunki:'
+status_town_size_nationbonus: 'BonusNacji:'
+status_town_outposts: 'Placówki:'
 status_bank_town2: 'Dzienne utrzymanie:'
 status_bank_town3: 'Podatek:'
 status_town_nation: 'Nacja:'
@@ -719,7 +719,7 @@ msg_nation_changed_open: '&cNacja %s zmienila status na otwarty.'
 msg_err_already_in_a_nation: 'Twoje miasto należy już do nacji.'
 msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the nation leader or an assistant to join.'
 msg_err_nation_homeblock_in_another_world: '&cBlok centralny twojego miasta nie znajduje się w tym samym świecie, co blok centralny stolicy nacji.'
-status_bank_town_penalty_upkeep: 'Utrzymanie nadmiarowych chunków:'
+status_bank_town_penalty_upkeep: 'Koszty nadmiarowych chunków:'
 #Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Nie możesz tego użyć w %s, zostałeś stamtąd wygnany.'
 #Added in 0.55:
@@ -917,7 +917,7 @@ status_world_explrevert_block: 'Naprawianie eksplozji:'
 msg_nation_already_peaceful: '&cNacja już jest pokojowa.'
 msg_nation_already_not_peaceful: '&cNacja już nie jest pokojowa.'
 #Added in 0.89
-status_world_friendlyfire: 'Bratobójczy ogień:'
+status_world_friendlyfire: 'OgieńBratobójczy:'
 status_world_wildernessmobs: 'Potwory w Dziczy:'
 msg_outlaw_kick_cooldown: '&cMiasto %s uznaje cię za wygańca. Masz %s na opuszczenie tego terytorium. W preciwnym razie zostaniesz przeteleportowany do swojego punktu odrodzenia.'
 msg_outlaw_kicked: '&4Nie jesteś mile widziany w %s... Przeteleportowano cię .'
@@ -1005,7 +1005,7 @@ msg_bankrupt: '&c(Upadłość)'
 #Added in 0.98
 msg_del_town2: '&bMiasto %s zostało usunięte!'
 msg_ruin_town: '&bMiasto pod ręką %s wpadło w ruinę!'
-gui_title_select_plot_type: 'Wybierz typ działki'
+gui_title_select_plot_type: 'WybierzTypDziałki'
 gui_title_no_restrictions: 'Brak ograniczeń dla tego typu działki.'
 gui_title_towny_allowedblocks: '%s Lista dozwolonych bloków'
 gui_title_towny_wildsblocks: 'Lista Bloków Dziczy w Towny'
@@ -1154,7 +1154,7 @@ msg_err_days_must_be_greater_than_0: 'Liczba dni musi być większa niż zero.'
 msg_err_outlawed_players_no_teleport: '&4Jesteś wygnańcem tego miasta, nie możesz się teleportować!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Nie możesz użyć tej komendy podczas pobytu w mieście, z którego zostałeś wygnany.'
 #Added in 0.110
-msg_safe_mode: "[Error] Zablokowany w trybie awaryjnym!"
+msg_safe_mode: "[Error] Zablokowano w trybie awaryjnym!"
 msg_safe_mode_base: '[Error] Towny jest zablokowany w trybie Safe Mode z powodu błędu! '
 msg_safe_mode_player: 'Zgłoś administratorowi, aby sprawdził konsolę serwera.'
 msg_safe_mode_admin: 'Sprawdź konsolę serwera, aby uzyskać więcej informacji.'
@@ -1255,31 +1255,31 @@ status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a ho
 status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[Home: %s]'
-status_registered: 'Zarejestrowany:'
+status_registered: 'Zarejestrowano:'
 status_lastonline: 'Ostatnia aktywność:'
 status_fractions: '%s/%s'
 status_rank_list: 'Lista rang'
-status_hover_click_for_more: 'Kliknij tutaj aby zobaczyć więcej informacji.'
+status_hover_click_for_more: 'Kliknij tutaj, aby zobaczyć więcej informacji.'
 status_jailed: 'Uwięziony:'
 status_bad_yes: '&cTAK'
 status_good_no: '&aNIE'
 status_resident_tax_title: 'Podatek od %s'
 #Added in 0.122
-msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Ponieważ nie będą one wystarczająco bliskie twojej stolicy narodowej, następujące miasta zostaną usunięte, jeśli scalanie zostanie zakończone: %s.'
+msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Z uwagi na zbyt duże odległości od stolicy nacji, następujące miasta zostaną usunięte, jeśli scalanie zostanie zakończone: %s.'
 #Added in 0.123
-msg_err_invalid_townyworld: "%s nie jest prawidłową nazwą."
+msg_err_invalid_townyworld: "'%s' nie jest prawidłową nazwą świata."
 msg_err_enter_world_name_first: 'Najpierw wprowadź nazwę świata.'
 msg_wilderness_use_set_to: '&bDzicz została ustawiona na %s w %s.'
 #Added in 0.124
 msg_err_invalid_response: 'Nieprawidłowa odpowiedź! Wprowadź q, aby wyjść lub wrócić do poprzedniego pytania.'
 msg_setup_full_guide_link: '&bPo link do pełnego poradnika instalacji, kliknij tutaj.'
-msg_setup_wildernessuse: 'Czy chcesz włączyć Dzicze? Pozwoli to graczom zniszczyć/budować w Dziczy.'
-msg_setup_revertunclaim: 'Czy chciałbyś naprawiać ziemie porzucone? To spowoduje, że ziemie porzucone będą powoli odnawiane, odpóki nie zostaną ponownie zajęte.'
-msg_setup_town_block_ratio: 'Jak chcesz ustawić stosunek bloków dla miasta? Wartością domyślną jest 8 bloków na mieszkańca. Wyższe ilości pozwolą miastom zając więcej za każdego mieszkańca. Ustawienie tego na 0 sprawi, że użyje wartości z miejscowości_poziomów.'
-msg_setup_town_cost: 'Ile kosztuje utworzenie nowego miasta? Wartością domyślną jest 250.'
+msg_setup_wildernessuse: 'Czy chcesz włączyć Dzicz? Pozwoli to graczom zniszczyć/budować na nieprzejętych terenach.'
+msg_setup_revertunclaim: 'Cay chciałbyś, aby porzucane tereny ulegały erozji do stanu naturalnego? Zmiany dokonane przez byłych posiadaczy ziem zostaną cofnięte.'
+msg_setup_town_block_ratio: 'Jaki przelicznik ilości działek w miastach chcesz ustawić? Wartością domyślną jest 8 chunków na 1 mieszkańca. Zwiększenie tej liczby pozwoli miastom zająć więcej terenów za każdego mieszkańca. Ustawienie tego parametru na 0 sprawi, że zostaną użyte wartości ze zmiennej town_levels.'
+msg_setup_town_cost: 'Ile ma kosztować utworzenie nowego miasta? Wartością domyślną jest 250.'
 msg_setup_nation_cost: 'Ile kosztuje utworzenie nowego kraju? Wartością domyślną jest 1000.'
-msg_setup_townblock_cost: 'Ile powinno kosztować zajęcie terenu dla miasta? Wartością domyślną jest 25. Blok miasta jest taki sam jak chunk (ustawienia domyślne)'
-msg_setup_success: 'Pomyślnie zmieniono konfigurację wartości na Twoje nowe wartości.'
+msg_setup_townblock_cost: 'Ile powinno kosztować zajęcie nowego terenu? Wartością domyślną jest 25. Blok terenu jest rozmiaru chunka - 16x16 kratek (przy ustawieniach domyślnych)'
+msg_setup_success: 'Pomyślnie zaktualizowano wartości z pliku konfiguracyjnego.'
 #Added in 0.125
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s zrespił się ostatnio i nie może zostać ranny.'
@@ -1310,9 +1310,9 @@ msg_res_friend_removed_from_list: 'Usunięto %s z listy znajomych.'
 #Generic resident freed from jail message.
 msg_resident_unjailed: '%s został wypuszczony.'
 #Shown when an admin uses /ta toggle devmode.
-msg_admin_toggle_devmode: 'Tryb dev'
+msg_admin_toggle_devmode: 'Tryb Developerski: %s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: 'Tryb debugowania'
+msg_admin_toggle_debugmode: 'Tryb Debugowania: %s'
 #Shown when an admin uses /ta toggle townwithdraw
 msg_admin_toggle_townwithdraw: 'Wypłaty Miasta: %s'
 #Shown when an admin uses /ta toggle nationwithdraw
@@ -1324,45 +1324,45 @@ msg_process_town_unclaim: 'Porzucenie terenu...'
 #Shown when there is nothing to unclaim.
 msg_err_nothing_to_unclaim: 'Nie ma nic do porzucenia!'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: 'Uprawnienia są.'
+msg_perm_true: 'Uprawnienia przyznane.'
 #Given as feedback when /ta checkperm is used.
 msg_err_perm_false: 'Brak Uprawnień.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
 status_towny_map_town_line: '&2Miasto: &a%s &7| &2Właściciel: &a%s'
 #Shown on /towny version
-msg_towny_version: '&2Wersja Towny:&a%s'
+msg_towny_version: '&2Wersja Towny: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&2 Gracz korzystający z adresu IP &c%s &2próbował zalogować się przy użyciu nazwy konta %s, co mogłoby zaszkodzić gospodarce Twojego serwera, ale został uniemożliwiony przez Towny. Rozważ zbanowanie tego adresu IP!'
+msg_admin_blocked_login: '&2 Gracz korzystający z adresu IP &c%s &2próbował zalogować się przy użyciu konta %s, co mogłoby zaszkodzić gospodarce Twojego serwera, ale został zatrzymany przez Towny. Rozważ zbanowanie tego adresu IP!'
 #Shown during resident purge
 msg_scanning_for_old_residents: 'Skanowanie w poszukiwaniu starych mieszkańców...'
 #Shown during resident purge
 msg_deleting_resident: 'Usuwanie mieszkańca: %s.'
 #Shown during resident purge
-msg_purge_complete: 'Rzeź mieszkańców usunięto: %s'
+msg_purge_complete: 'Czystka mieszkańców ukończona. Pozbyto się %s rezydentów.'
 #Message to the Town, shown when a town is given bonus blocks.
-msg_you_have_been_given_bonus_blocks: 'Otrzymałeś(aś) %s dodatkowych chunków dla miasta.'
+msg_you_have_been_given_bonus_blocks: 'Twoje miasto otrzymało do dyspozycji %s bonusowych chunków.'
 #Message shown when a town cannot purchase any more bonus blocks.
-msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Twoje miasto nie może kupić więcej bonusowych bloków. Osiągnięto maksymalną ilość.'
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Twoje miasto nie może dokupić więcej bonusowych chunków. Osiągnięto ich maksymalną ilość.'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: 'Stolice nie mogą zmienić statusu pokojowego.'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Strefa nacji otaczająca miasto to teraz %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
-msg_err_your_town_has_no_nationzone_to_toggle: 'Twoje miasto nie ma Strefy nacji do włączenia!'
+msg_err_your_town_has_no_nationzone_to_toggle: 'Twoje miasto nie ma Strefy Nacji, aby móc ją przełączyć!'
 #Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
-towny_prices_nation_upkeep_based_on: '&7Kwota utrzymania Nacji wyliczana jest na podstawie &a%s'
+towny_prices_nation_upkeep_based_on: '&7Kwota utrzymania nacji wyliczana jest na podstawie: &a%s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'liczba miast.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
-towny_prices_upkeep_nation_level: 'poziom miasta (ilość rezydentów.)'
+towny_prices_upkeep_nation_level: 'poziom nacji (ilość rezydentów.)'
 #Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Zamknięty przez burmistrza.'
 #Jail causes
-msg_jailed_outlaw: 'Zabito jako bandytę.'
+msg_jailed_outlaw: 'Zabito jako wygnańca.'
 #Jail causes
 msg_jailed_war: 'Jeniec wojenny.'
 #Jail handbook messages
@@ -1370,13 +1370,13 @@ msg_jailed_handbook_1: 'Wygląda na to, że zostałeś więziony, z powodu %s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'Szkoda. Cóż, co możesz z tym zrobić? Oto kilka pomocnych wskazówek dla Ciebie, podczas gdy odbywasz karę.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'Zostałeś uwięziony przez %s godzin. Po odbyciu kary, zostaniesz wolny.'
+msg_jailed_handbook_3: 'Zostałeś uwięziony na %s godzin. Po odbyciu kary, zostaniesz uwolniony.'
 #Jail handbook messages
-msg_jailed_handbook_4_can: 'Możesz uciec z więzienia opuszczając swoje miasto za pomocą ''/town leave''.'
+msg_jailed_handbook_4_can: 'Możesz uciec z więzienia opuszczając swoje miasto uźywając ''/town leave''.'
 #Jail handbook messages
-msg_jailed_handbook_4_cant: 'Gdy jesteś więziony, nie będziesz mógł opuścić swojego miasta, aby uciec z więzienia.'
+msg_jailed_handbook_4_cant: 'Gdy jesteś więziony, nie możesz opuścić swojego miasta, w celu ucieczki z więzienia.'
 #Jail handbook messages
-msg_jailed_handbook_bail_1: 'Możesz zostać zwolniony z więzienia płacąc karę za pomocą ''/res jail payball''.'
+msg_jailed_handbook_bail_1: 'Możesz zostać zwolniony z kary więzienia płacąc kaucję za pomocą ''/res jail payball''.'
 #Jail handbook messages
 msg_jailed_handbook_bail_2: 'Wykupienie będzie kosztować %s.'
 #Jail handbook messages
@@ -1388,7 +1388,7 @@ msg_jailed_teleport: 'Na szczęście perły kresowe i owoce chorusa mogą być u
 #Jail handbook messages
 msg_jailed_war_prisoner: 'Jako więzień wojenny zostaniesz uwolniony, jeśli twoi rodacy będą mogli zmniejszyć HP działki Więzienia do 0, lub jeśli miasto, w którym jesteś więziony, zostanie usunięty z wojny.'
 #Jail handbook title
-msg_jailed_title: 'Więc zostałeś uwięziony :('
+msg_jailed_title: 'No i zostałeś zamknięty :('
 #Jail handbook author
 msg_jailed_author: 'Miastowe więzienie.'
 #Added in 0.130
@@ -1401,33 +1401,33 @@ msg_error_town_has_no_enemies: 'Miasto nie ma przeciwników.'
 msg_baltop_book_format: '%s. %s | %s'
 #Added in 0.133
 #Message shown when a confirmation times out.
-msg_confirmation_timed_out: 'Upłynął limit czasu potwierdzania.'
+msg_confirmation_timed_out: 'Upłynął limit czasu na potwierdzanie.'
 #Added in 0.134
-tc_player_channel_sound_muted: 'Kanał Dzwięku został wyciszony'
-tc_player_channel_sound_unmuted: 'Kanał Dzwięku został odciszony'
+tc_player_channel_sound_muted: 'Dzwięk na kanale został wyciszony'
+tc_player_channel_sound_unmuted: 'Dzwięk na kanale został odciszony'
 #Added in 0.135
-msg_cant_toggle_pvp_outsider_in_plot: 'Na działce znajduje się outsider, nie można zmienić statusu pvp!'
+msg_cant_toggle_pvp_outsider_in_plot: 'Na terenie twojej działki jest obcy, nie możesz zmienić statusu pvp!'
 #Added in 0.136
 msg_view_on_web: 'Kliknij, aby wyświetlić na stronie.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
-town1_has_merged_with_town2: '&6Miasto %s zgodziło się na połączenie z miastem %s.'
+town1_has_merged_with_town2: '&6Miasto %s wyraziło zgodę na wcielenie się do miasta %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Koszt neutralności:'
 #Added in 0.138
 #Line 1 of the givebonus warning.
-msg_ptw_warning_1: 'Jeśli zapłaciłeś prawdziwe pieniądze za te bloki miasta, zrozum: serwer na którym grasz narusza licencję Minecraft EULA i licencję Towny.'
+msg_ptw_warning_1: 'Jeśli zapłaciłeś realnymi pieniądzmi za ten zakup, zrozum: serwer na którym grasz narusza licencję Minecraft EULA i licencję pluginu Towny.'
 #Line 2 of the givebonus warning.
-msg_ptw_warning_2: 'Zespół Towny nigdy nie zamierzał aby bloki miasta były kupowane za prawdziwe pieniądze.'
+msg_ptw_warning_2: 'Zespół Towny nigdy nie zamierzał, aby zakupy związane z ekspansją miasta były realizowane przy pomocy realnych pieniędzy.'
 #Line 3 of the givebonus warning.
-msg_ptw_warning_3: 'Jeżeli zapłaciłeś prawdziwe pięniądze, powinieneś rozważyć zmianę serwera na taki, który szanuje życzenia zespołu Towny.'
+msg_ptw_warning_3: 'Jeżeli zakupu dokonałeś prawdziwymi pięniędzmi, powinieneś rozważyć zmianę serwera na taki, który szanuje życzenie zespołu Towny.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'Zostałeś zaproszony do dołączenia do %s&9 (Nacja: %s&9)'
 #Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
 msg_err_your_town_cannot_afford_unclaim: 'Twoje miasto nie może sobie pozwolić na wycofanie tego terenu. Potrzeba %s.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
-msg_your_town_paid_x_to_unclaim: 'Twoje miasto zapłaciło %s za wycofanie terenu.'
+msg_your_town_paid_x_to_unclaim: 'Twoje miasto zapłaciło %s za porzucenie terenu.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Wycofanie tego terenu będzie kosztować %s, czy chcesz kontynuować?'
 #Added in 0.140
@@ -1439,7 +1439,7 @@ msg_you_must_wait_x_seconds_before_renaming_your_town: 'Musisz poczekać %s seku
 msg_newday_already_scheduled_soon: 'Nowa codzienna misja jest już zaplanowana na najbliższą przyszłość.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
-msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Nie możesz zmienić neutralności, pozostało %s sekund.'
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Nie możesz zmienić statusu neutralności, odczekaj %s sekund.'
 #Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: 'Tego polecenia nie można użyć z konsoli.'
@@ -1447,15 +1447,15 @@ msg_err_command_not_for_console_use: 'Tego polecenia nie można użyć z konsoli
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: 'Dla miasta %s ustawienie nieograniczonych roszczeń jest ustawione na %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
-did_you_want_to_toggle_unlimited_claims: 'Nie masz wystarczającej liczby bloków miejskich do przejęcia. Czy chcesz włączyć nieograniczoną liczbę przechwytywania dla miasta %s?'
+did_you_want_to_toggle_unlimited_claims: 'Nie masz wystarczającej liczby chunków możliwych do przejęcia. Czy chcesz wyłączyć ten limit dla miasta %s?'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Nie możesz opuścić swojego narodu, twoje miasto jest podbite.'
-msg_err_console_only: 'To polecenie może być używane tylko przez konsolę.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Nie możesz opuścić swojej nacji, twoje miasto jest podbite.'
+msg_err_console_only: 'To polecenie może być wykonywane jedynie przez konsolę.'
 msg_err_player_only: 'To polecenie może być używane tylko przez gracza.'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
-msg_border_titles_toggled: 'Komunikat tytułowy wyświetlany podczas przekraczania granic to %s.'
+msg_border_titles_toggled: 'Wiadomość tytułowa wyświetlana podczas wkroczenia ma granicę to %s.'
 #Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'Uruchomienie tego polecenia powoduje zresetowanie pliku config.yml do pliku domyślnego. Czy chcesz kontynuować?'
@@ -1463,7 +1463,7 @@ this_will_reset_your_config: 'Uruchomienie tego polecenia powoduje zresetowanie 
 msg_warn_overriding_server_config: 'W ten sposób omijasz ograniczenia rezydentne ustawione w konfiguracji serwera. Czy nadal chcesz kontynuować?'
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
-msg_removed_x_invalid_outpost_spawns: 'Usunięto %d nieprawidłowe miejsca odrodzenia posterunków.'
+msg_removed_x_invalid_outpost_spawns: 'Usunięto %d nieprawidłowych punktów spawnu dla placówek.'
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Your town is bankrupt, add money to your bank using /town deposit {amount}.'
