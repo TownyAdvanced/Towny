@@ -703,7 +703,7 @@ status_embassy_town: 'Посольства в'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&bНеверный сравнитель. Попробуйте жителей, счёт, города, название, участки, онлайн.'
 msg_error_invalid_comparator_town: '&bНеверный сравнитель. Попробуйте жителей, счёт, имя, участки, онлайн, открытость.'
-msg_err_merging_for_kings_only: '&bСлияние может быть сделано только Лидером Нации.'
+msg_err_merging_for_kings_only: '&bСлияние может быть совершено только лидером нации.'
 msg_err_king_of_that_nation_is_not_online: '&bКороль %s, %s, не в сети. Слияние невозможно.'
 nation1_has_merged_with_nation2: '&6Нация %s договорился о слиянии с доминирующей нацией %s.'
 msg_would_you_merge_your_nation_into_other_nation: '&6Согласитесь ли вы распустить вашу нацию %s в нацию %s? Это переведет деньги всех городов и национальных банков в %s.'
@@ -1284,9 +1284,9 @@ msg_setup_success: 'Параметры конфигурации успешно �
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s заспавнился недавно и имеет временную защиту.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
+msg_you_have_lost_your_respawn_protection: 'Вы потеряли респавн-защиту.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
-msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
+msg_err_cannot_pickup_respawn_protection: 'Вы не можете подбирать предметы во время респавн-защиты.'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: 'Столица:'
@@ -1302,7 +1302,7 @@ msg_nationzone_override_set_to: '%s установил национальную 
 msg_nationzone_override_removed: 'Национальная зона %s была удалена.'
 #Added in 0.127
 #Used in status screen:
-status_nation_zone_size: 'Размер Национальной Зоны:'
+status_nation_zone_size: 'Размер национальной зоны:'
 #Shown when a player adds people to their friends list.
 msg_res_friend_added_to_list: '%s добавлен в список друзей.'
 #Shown when a player removes people from their friends list.
@@ -1335,7 +1335,7 @@ msg_towny_version: '&2Версия Towny: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
 msg_admin_blocked_login: '&2Игрок с IP-адресом &c%s &2пытался войти под именем %s, что могло нанести урон экономике вашего сервера, но его вход был предотвращен Towny. Задумайтесь о блокировке этого IP-адреса!'
 #Shown during resident purge
-msg_scanning_for_old_residents: 'Поиск данных старых игроков...'
+msg_scanning_for_old_residents: 'Поиск старых игроков...'
 #Shown during resident purge
 msg_deleting_resident: 'Удаление игрока: %s.'
 #Shown during resident purge
@@ -1386,11 +1386,11 @@ msg_jailed_handbook_6: 'Но смотри: не умирай до того, ка
 #Jail handbook messages
 msg_jailed_teleport: 'К счастью, для побега ты можешь использовать жемчуг эндера и плоды хоруса, если, конечно, у тебя они есть.'
 #Jail handbook messages
-msg_jailed_war_prisoner: 'Будучи пленником войны, вы будете освобождены, если ваши союзники смогут снизить здоровье участка тюрьмы до 0, или если город, в котором находится ваша тюрьма, выйдет из войны.'
+msg_jailed_war_prisoner: 'Будучи узником войны, вы будете освобождены, если ваши союзники смогут снизить здоровье участка тюрьмы до 0, или если город, в котором находится ваша тюрьма, выйдет из войны.'
 #Jail handbook title
 msg_jailed_title: 'Что-ж, тебя заключили в тюрьму :('
 #Jail handbook author
-msg_jailed_author: 'Тюрьма Towny.'
+msg_jailed_author: 'Тюрьма Towny'
 #Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'Нет отображаемых союзников.'
@@ -1406,7 +1406,7 @@ msg_confirmation_timed_out: 'Время ожидания подтвержден�
 tc_player_channel_sound_muted: 'Звук канала выключен'
 tc_player_channel_sound_unmuted: 'Звук канала включен'
 #Added in 0.135
-msg_cant_toggle_pvp_outsider_in_plot: 'В этом городском участке находится посторонний, вы не можете поменять статус PVP!'
+msg_cant_toggle_pvp_outsider_in_plot: 'В этом участке находится посторонний, вы не можете переключить PVP!'
 #Added in 0.136
 msg_view_on_web: 'Нажмите для просмотра в Интернете.'
 #Added in 0.137
@@ -1418,9 +1418,9 @@ status_neutrality_cost: 'Стоимость нейтралитета:'
 #Line 1 of the givebonus warning.
 msg_ptw_warning_1: 'Если вы заплатили реальные деньги за эти участки, пожалуйста, понимайте: сервер, на котором вы играете, нарушает Minecraft EULA и лицензию Towny.'
 #Line 2 of the givebonus warning.
-msg_ptw_warning_2: 'Команда Towny никогда не собиралась делать возможным продажу участков за реальные деньги.'
+msg_ptw_warning_2: 'Команда Towny никогда не хотела продавать участки за реальные деньги.'
 #Line 3 of the givebonus warning.
-msg_ptw_warning_3: 'Если вы всё-же платили реальные деньги, вы должны подумать об игре на сервере, который уважает решения Команды Towny.'
+msg_ptw_warning_3: 'Если вы всё-же платили реальные деньги, играйте лучше на серверах, которые уважают решения Команды Towny.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'Вас пригласили вступить в город %s&9 (Нация: %s&9)'
 #Added in 0.139
@@ -1439,20 +1439,20 @@ msg_you_must_wait_x_seconds_before_renaming_your_town: 'Вы сможете сн
 msg_newday_already_scheduled_soon: 'Задача уже запланирована.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
-msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Вы сможете стать нейтральным через %s секунд.'
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Вы сможете переключить нейтралитет через %s секунд.'
 #Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: 'Эту команду нельзя использовать в консоли.'
 #Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
-msg_town_unlimitedclaims_setting_set_to: 'Настройка unlimitedclaims у города %s теперь %s'
+msg_town_unlimitedclaims_setting_set_to: 'Параметр unlimitedclaims у города %s теперь %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
-did_you_want_to_toggle_unlimited_claims: 'У вас нет доступных для привата участков. Хотите ли вы включить безлимитный приват?'
+did_you_want_to_toggle_unlimited_claims: 'У вас нет доступных для привата участков. Хотите ли вы включить безлимитный приват для %s?'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Вы не можете покинуть нацию – ваш город захвачен.'
-msg_err_console_only: 'Эту команду может использовать только консоль.'
-msg_err_player_only: 'Эту команду может использовать только игрок.'
+msg_err_console_only: 'Эту команду можно выполнить только через консоль.'
+msg_err_player_only: 'Эту команду может выполнять только игрок.'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: 'Титульные сообщения, показываемые при пересечении границ %s.'
@@ -1469,16 +1469,16 @@ msg_removed_x_invalid_outpost_spawns: 'Удалено %d недопустимы�
 msg_your_town_is_bankrupt: 'Ваш город обанкротился, добавьте денег в казну используя /town deposit {amount}.'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
-msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Вы не можете использовать эту команду, так как уже являетесь членом города. Если вы хотите продолжить, вам придётся покинуть город используя ''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
-msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+msg_a_town_you_are_outlawed_in: 'городе, в котором вам не рады.'
 #Message shown when TownyRTP could not find any towns to teleport to.
-msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
+msg_err_could_not_find_any_towns_to_rtp: 'Не было найдено открытых городов с продающимися участками (которые вы можете себе позволить) для телепортации.'
 #Message showing payment for RTP.
-msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+msg_cost_spawn_rtp: '&bВы заплатили %s за телепорт к случайному продающемуся участку.'
 #Message shown to a player when they use the town rtp command.
-msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+msg_you_are_about_to_be_teleported_to_a_plot: 'Вы будете телепортированы к участку, выставленному на продажу в %s, купив его используя ''/plot claim'' вы сможете присоединиться к городу.'
 #Used in the town's status screen to display plots
-status_plot_string: 'Plots'
+status_plot_string: 'Участки'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
