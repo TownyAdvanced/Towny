@@ -12,7 +12,7 @@ import com.palmergames.bukkit.towny.object.TransactionType;
 
 public class GovernmentAccountAuditor implements AccountAuditor {
 
-	private final List<BankTransaction> transactions = new ArrayList<BankTransaction>();
+	private final List<BankTransaction> transactions = new ArrayList<>();
 	
 	@Override
 	public void withdrew(Account account, double amount, String reason) {
