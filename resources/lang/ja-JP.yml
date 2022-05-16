@@ -79,7 +79,7 @@ admin_sing: '管理者'
 town_sing: '町'
 nation_sing: '国'
 nation_plu: '国'
-king_sing: 'Leader'
+king_sing: 'リーダー'
 town_plu: '町'
 world_plu: 'ワールド'
 world_sing: 'ワールド'
@@ -580,7 +580,7 @@ status_bank_town2: 'Daily upkeep:'
 status_bank_town3: '税金:'
 status_town_nation: '国:'
 status_town_reslist_overlength: 'その他...'
-status_nation_king: 'Leader:'
+status_nation_king: 'リーダー：'
 status_nation_tax: '国の税金:'
 status_nation_towns: '町'
 status_nation_allies: '同盟国'
@@ -1451,7 +1451,7 @@ did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to c
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
-msg_err_console_only: 'This command can only be used by console.'
+msg_err_console_only: 'このコマンドはコンソールでのみ使用できます。'
 msg_err_player_only: 'This command can only be used by a player.'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
@@ -1481,4 +1481,4 @@ msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to
 #Used in the town's status screen to display plots
 status_plot_string: 'Plots'
 #Displays a plot type and the amount of townblocks of that type in the town
-status_plot_hover: '%s:'
+status_plot_hover: '%s：'
