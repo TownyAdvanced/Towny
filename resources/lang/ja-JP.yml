@@ -543,7 +543,7 @@ msg_err_over_outposts_limit: 'You cannot teleport to your outpost, you are over 
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Outlaws:' #Used on /t outlawlist
+outlaws: '無法者：' #Used on /t outlawlist
 online: '&a(オンライン)'
 registered_last_online: '&2登録日: &a%s &8| &2オンライン: &a%s' #Used in mayor hover text in /town status screen.
 status_perm: '権限:' #Used on /plot perm, /res
@@ -1331,7 +1331,7 @@ msg_err_perm_false: 'Permission False.'
 #First variable is townname or None, 2nd variable is plot owner's name or None.
 status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
 #Shown on /towny version
-msg_towny_version: '&2Townyのバージョン: &a%s'
+msg_towny_version: '&2Townyのバージョン：&a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
 msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
 #Shown during resident purge
