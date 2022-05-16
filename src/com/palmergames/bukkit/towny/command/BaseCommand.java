@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.command;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Alliance;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -102,6 +103,10 @@ public class BaseCommand implements TabCompleter{
 
 		if (type.contains("n")) {
 			matches.addAll(townyUniverse.getNationsTrie().getStringsFromKey(arg));
+		}
+
+		if (type.contains("a")) {
+			matches.addAll(townyUniverse.getAlliancesTrie().getStringsFromKey(arg));
 		}
 
 		if (type.contains("w")) { // There aren't many worlds so check even if arg is empty
@@ -303,6 +308,28 @@ public class BaseCommand implements TabCompleter{
 		if (!resident.hasNation())
 			throw new TownyException(Translatable.of("msg_err_dont_belong_nation"));
 		return resident.getNationOrNull();
+	}
+	
+	@NotNull
+	protected static Alliance getAllianceOrThrow(String allianceName) throws NotRegisteredException {
+		Alliance alliance = TownyUniverse.getInstance().getAlliance(allianceName);
+
+		if (alliance == null)
+			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", allianceName));
+
+		return alliance;
+	}
+
+	@NotNull
+	protected static Alliance getAllianceFromPlayerOrThrow(Player player) throws TownyException {
+		return getAllianceFromResidentOrThrow(getResidentOrThrow(player.getUniqueId()));
+	}
+
+	@NotNull
+	protected static Alliance getAllianceFromResidentOrThrow(Resident resident) throws TownyException {
+		if (!resident.hasAlliance())
+			throw new TownyException(Translatable.of("msg_err_dont_belong_alliance"));
+		return resident.getAllianceOrNull();
 	}
 
 	private static List<Resident> getOnlinePlayersWithoutTown() {

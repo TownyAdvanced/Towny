@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.event.statusscreen.NationStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.ResidentStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownBlockStatusScreenEvent;
 import com.palmergames.bukkit.towny.event.statusscreen.TownStatusScreenEvent;
+import com.palmergames.bukkit.towny.object.Alliance;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -586,7 +587,22 @@ public class TownyFormatter {
 		return screen;
 	}
 
-
+	/**
+	 * Gets the status screen of a Alliance.
+	 * 
+	 * @param alliance the allianceto check against.
+	 * @param sender CommandSender who will be sent the status.
+	 * @return StatusScreen containing the results.
+	 */
+	public static StatusScreen getStatus(Alliance alliance, CommandSender sender) {
+		StatusScreen screen = new StatusScreen(sender);
+		Locale locale = Translation.getLocale(sender);
+		final Translator translator = Translator.locale(locale);
+		screen.addComponentOf("Status Screen", Component.text("Some Screen for your Alliance Goes Here."));
+		
+		return screen;
+	}
+	
 	/**
 	 * Gets the status screen for a World.
 	 * 

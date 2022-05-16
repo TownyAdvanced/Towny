@@ -25,6 +25,7 @@ public class TownyCommandAddonAPI {
         NATION,
         NATION_SET,
         NATION_TOGGLE,
+        ALLIANCE,
         TOWN,
         TOWN_SET,
         TOWN_TOGGLE,

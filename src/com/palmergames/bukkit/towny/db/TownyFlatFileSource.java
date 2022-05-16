@@ -2114,7 +2114,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("capital=" + nation.getCapital().getName());
 
 		if (nation.hasAlliance())
-			list.add("alliance=" + nation.getAlliance().getUUID());
+			list.add("alliance=" + nation.getAllianceOrNull().getUUID());
 		
 		list.add("nationBoard=" + nation.getBoard());
 

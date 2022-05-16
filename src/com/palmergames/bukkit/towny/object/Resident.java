@@ -214,6 +214,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		return hasTown() && town.hasNation();
 	}
+	
+	public boolean hasAlliance() {
+		return hasNation() && town.getNationOrNull().hasAlliance();
+	}
 
 	public Town getTown() throws NotRegisteredException {
 
@@ -852,6 +856,18 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public Nation getNationOrNull() {
 		if (hasNation())
 			return getTownOrNull().getNationOrNull();
+		else
+			return null;
+	}
+	
+	public Alliance getAlliance() throws TownyException {
+		return getTown().getNation().getAlliance();
+	}
+	
+	@Nullable
+	public Alliance getAllianceOrNull() {
+		if (hasNation() && getNationOrNull().hasAlliance())
+			return getNationOrNull().getAllianceOrNull();
 		else
 			return null;
 	}

@@ -1686,3 +1686,10 @@ msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to
 status_plot_string: 'Plots'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
+
+#Added in 0.151
+
+#Error message shown when a player has no Alliance to use.
+msg_err_dont_belong_alliance: 'You don''t belong to an Alliance.'
+#Error message shown when a nation has no Alliance.
+msg_err_nation_doesnt_belong_to_any_alliance: 'Nation doesn''t belong to any alliance.'

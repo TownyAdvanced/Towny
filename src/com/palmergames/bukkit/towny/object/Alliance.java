@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -8,8 +9,11 @@ import java.util.stream.Collectors;
 import org.bukkit.entity.Player;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.InviteSender;
+import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 
-public class Alliance {
+public class Alliance implements Nameable, InviteSender {
 
 	private UUID uuid;
 	private String name;
@@ -195,5 +199,23 @@ public class Alliance {
 			return false;
 		
 		return hasTown(townBlock.getTownOrNull());
+	}
+
+	@Override
+	public Collection<Invite> getSentInvites() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void newSentInvite(Invite invite) throws TooManyInvitesException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteSentInvite(Invite invite) {
+		// TODO Auto-generated method stub
+		
 	}
 }

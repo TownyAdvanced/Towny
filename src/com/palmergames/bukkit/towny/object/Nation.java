@@ -243,12 +243,23 @@ public class Nation extends Government {
 		}
 	}
 
+	public Alliance getAlliance() throws NotRegisteredException {
+		if (hasAlliance())
+			return alliance;
+		else
+			throw new NotRegisteredException(Translation.of("msg_err_nation_doesnt_belong_to_any_alliance"));
+	}
+
 	/**
-	 * @return the alliance
+	 * Safe to use as long as {@link #hasAlliance()} has returned true.
+	 * 
+	 * @return Alliance of the Nation or null if no Alliance.
 	 */
-	public Alliance getAlliance() {
+	@Nullable
+	public Alliance getAllianceOrNull() {
 		return alliance;
 	}
+	
 
 	/**
 	 * @param alliance the alliance to set

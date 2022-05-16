@@ -535,8 +535,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (TownyEconomyHandler.isActive())
 			nation.getAccount().removeAccount();
 		
-		if (nation.hasAlliance() && nation.getAlliance().getMembers().size() == 1)
-			removeAlliance(nation.getAlliance());
+		if (nation.hasAlliance() && nation.getAllianceOrNull().getMembers().size() == 1)
+			removeAlliance(nation.getAllianceOrNull());
 
 		//Delete nation and save towns
 		deleteNation(nation);
