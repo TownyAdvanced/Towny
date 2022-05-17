@@ -717,7 +717,7 @@ msg_admin_has_given_you_a_plot: 'Bir yönetici sizin için bir arsa talep etti: 
 msg_town_forcepvp_setting_set_to: '%s kasabasının pvp ayarı %s'
 msg_nation_changed_open: '&cUlusun statüsü artık açk %s.'
 msg_err_already_in_a_nation: 'Kasabanız zaten bir ulusun içinde.'
-msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the nation leader or an assistant to join.'
+msg_err_nation_not_open: '&c%s ülkesinin kapıları herkese açık değil. Kralıdan veya bir asistandan kasabanızı davet etmesini isteyin.'
 msg_err_nation_homeblock_in_another_world: '&cKasabanızın ana bloğu, ulus başkentinin ana bloğu ile aynı dünyada değil.'
 status_bank_town_penalty_upkeep: 'Fazla vergi talep et:'
 #Added in 0.53:
@@ -735,7 +735,7 @@ msg_err_player_too_far_from_town_spawn: '&c%s kasabaya davet almak için kasaban
 #Added in 0.58:
 msg_resident_bail_amount: 'Yerleşik Kefalet masrafları: '
 msg_mayor_bail_amount: 'Belediye Başkanı Kefalet masrafları: '
-msg_king_bail_amount: 'Nation Leader Bail costs: '
+msg_king_bail_amount: 'Ulus Lideri Kefalet masrafları: '
 msg_has_paid_bail: '%s kefalet bedelini ödedi ve serbest kaldı.'
 msg_err_unable_to_pay_bail: 'Kefaleti karşılayamıyor.'
 msg_err_bail_not_enabled: 'Kefalet etkinleştirilmedi.'
@@ -1286,7 +1286,7 @@ msg_err_player_cannot_be_harmed: '%s yakın zamanda ortaya çıktı ve zarar ver
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_respawn_protection: 'Yeniden doğma korumanı kaybettin.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
-msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
+msg_err_cannot_pickup_respawn_protection: 'Respawn koruması aktif iken eşya alamazsınız.'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: 'Başkent:'
@@ -1458,18 +1458,18 @@ msg_err_player_only: 'Bu komut sadece bir oyuncu tarafından kullanılabilir.'
 msg_border_titles_toggled: 'Sınırları aşmak %s olduğunda başlık mesajları gösterilir.'
 #Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
-this_will_reset_your_config: 'Running this command resets your config.yml to the default file. Do you want to continue?'
+this_will_reset_your_config: 'Bu komut kullandığınızda config.yml sıfırlanacaktır ve default hale gelecektir. Devam etmek istiyor musunuz?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
-msg_warn_overriding_server_config: 'By doing this you are overriding the resident limits set in the server configuration. Do you want to continue anyway?'
+msg_warn_overriding_server_config: 'Bu komutu kullanarak hali hazırda bulunan kasaba üye sınırını değiştireceksiniz. Devam etmek istiyor musunuz?'
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: '%d geçersiz karakol spawnı kaldırıldı.'
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
-msg_your_town_is_bankrupt: 'Your town is bankrupt, add money to your bank using /town deposit {amount}.'
+msg_your_town_is_bankrupt: 'Kasaba bankanız iflans etmiş durumda, bankanıza /town deposit {amount} komutunu yazarak para ekleyin.'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
-msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Zaten bir kasabanın üyesi olduğunuz için bu komutu kullanamazsınız. Devam etmek istiyorsanız ''/t leave'' kullanmanız gerekecek.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
 msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
 #Message shown when TownyRTP could not find any towns to teleport to.
