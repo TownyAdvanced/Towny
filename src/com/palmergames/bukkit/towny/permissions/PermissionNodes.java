@@ -94,6 +94,19 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWN_INVITE_ACCEPT("towny.command.town.invite.accept"),
 	TOWNY_COMMAND_TOWN_INVITE_DENY("towny.command.town.invite.deny"),
 
+	/*
+	 * Alliance command permissions
+	 */
+	
+	TOWNY_COMMAND_ALLIANCE("towny.command.alliance.*"),
+	TOWNY_COMMAND_ALLIANCE_NEW("towny.command.alliance.new"),
+	TOWNY_COMMAND_ALLIANCE_ADD("towny.command.alliance.add"),
+	TOWNY_COMMAND_ALLIANCE_REMOVE("towny.command.alliance.remove"),
+	TOWNY_COMMAND_ALLIANCE_ENEMY("towny.command.alliance.enemy"),
+	TOWNY_COMMAND_ALLIANCE_MEMBERLIST("towny.command.alliance.memberlist"),
+	TOWNY_COMMAND_ALLIANCE_LIST("towny.command.alliance.list"),
+	TOWNY_COMMAND_ALLIANCE_ONLINE("towny.command.alliance.online"),
+	TOWNY_COMMAND_ALLIANCE_DELETE("towny.command.alliance.delete"),
 
 	
 	/*
@@ -313,7 +326,10 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_NATION_BANKHISTORY("towny.command.townyadmin.nation.bankhistory"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_ENEMY("towny.command.townyadmin.nation.enemy"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_ALLY("towny.command.townyadmin.nation.ally"),
-	
+
+	TOWNY_COMMAND_TOWNYADMIN_ALLIANCE("towny.command.townyadmin.alliance.*"),
+		TOWNY_COMMAND_TOWNYADMIN_ALLIANCE_DELETE("towny.command.townyadmin.alliance.delete"),
+
 	TOWNY_COMMAND_TOWNYADMIN_TOGGLE("towny.command.townyadmin.toggle.*"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEVMODE("towny.command.townyadmin.toggle.devmode"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEBUG("towny.command.townyadmin.toggle.debug"),

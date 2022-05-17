@@ -990,6 +990,16 @@ public class TownyFormatter {
 	}
 	
 	/**
+	 * Used to prefix, count and list Alliances.
+	 * @param prefix String applied to beginning of the list.
+	 * @param objectlist List of Alliances to list.
+	 * @return Formatted, prefixed list of Alliances
+	 */
+	public static String getFormattedAlliances(String prefix, List<Alliance> objectlist) {
+		return String.format(listPrefixFormat, prefix, objectlist.size(), Translation.of("status_format_list_1"), Translation.of("status_format_list_2"), Translation.of("status_format_list_3")) + StringMgmt.join(getFormattedAllianceNames(objectlist), ", "); 
+	}
+	
+	/**
 	 * Used to prefix, count and list the given strings.
 	 * @param prefix String applied to beginning of the list.
 	 * @param list List of Strings to list.
@@ -1018,6 +1028,21 @@ public class TownyFormatter {
 	public static List<String> getFormattedTownyNames(List<TownyObject> objs) {
 		List<String> names = new ArrayList<>();
 		for (TownyObject obj : objs) {
+			names.add(Colors.translateColorCodes(objs.size() < 20 ? obj.getFormattedName() : obj.getName()) + Colors.White);
+		}
+		
+		return names;
+	}
+	
+	/**
+	 * Returns a list of names, with ColourCodes translated.
+	 * If the list is under 20 long, it will use the formatted names.
+	 * @param objs List of Alliances of which to make a list of names.
+	 * @return List of Names coloured, and potentially formatted.
+	 */
+	public static List<String> getFormattedAllianceNames(List<Alliance> objs) {
+		List<String> names = new ArrayList<>();
+		for (Alliance obj : objs) {
 			names.add(Colors.translateColorCodes(objs.size() < 20 ? obj.getFormattedName() : obj.getName()) + Colors.White);
 		}
 		

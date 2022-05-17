@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -13,7 +14,7 @@ import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 
-public class Alliance implements Nameable, InviteSender {
+public class Alliance implements Nameable, InviteSender, ResidentList {
 
 	private UUID uuid;
 	private String name;
@@ -171,6 +172,14 @@ public class Alliance implements Nameable, InviteSender {
 	public boolean removeEnemy(Alliance alliance) {
 		return this.enemiesUUIDs.remove(alliance.getUUID());
 	}
+	
+	public List<Town> getTowns() {
+		List<Town> towns = new ArrayList<>();
+		for (Nation nation : new ArrayList<>(getMembers())) {
+			towns.addAll(nation.getTowns());
+		}
+		return towns;
+	}
 
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveAlliance(this);
@@ -185,6 +194,14 @@ public class Alliance implements Nameable, InviteSender {
 			return false;
 
 		return hasTown(res.getTownOrNull());
+	}
+
+	@Override
+	public boolean hasResident(String name) {
+		for (Town town : getTowns())
+			if (town.hasResident(name))
+				return true;
+		return false;
 	}
 
 	public boolean hasTown(Town town) {
@@ -217,5 +234,21 @@ public class Alliance implements Nameable, InviteSender {
 	public void deleteSentInvite(Invite invite) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Collection<Resident> getResidents() {
+		List<Resident> out = new ArrayList<>();
+		for (Town town : getTowns())
+			out.addAll(town.getResidents());
+		return Collections.unmodifiableList(out);
+	}
+
+	@Override
+	public Collection<Resident> getOutlaws() {
+		List<Resident> out = new ArrayList<>();
+		for (Town town : getTowns())
+			out.addAll(town.getOutlaws());
+		return Collections.unmodifiableList(out);
 	}
 }

@@ -1693,3 +1693,11 @@ status_plot_hover: '%s:'
 msg_err_dont_belong_alliance: 'You don''t belong to an Alliance.'
 #Error message shown when a nation has no Alliance.
 msg_err_nation_doesnt_belong_to_any_alliance: 'Nation doesn''t belong to any alliance.'
+#Message shown when there are no enemies to list in /alliance enemylist.
+msg_error_alliance_has_no_enemies: 'Alliance has no enemies to list.'
+#Message shown in /alliance online command.
+msg_alliance_online: 'Online in Alliance'
+#Message shown when a non-admin uses /alliance delete ALLIANCENAME
+msg_err_admin_only_delete_alliance: '&cOnly an admin can delete other alliance data.'
+#Message shown when an admin deletes an Alliance
+alliance_deleted_by_admin: '&bAlliance %s deleted successfully'
