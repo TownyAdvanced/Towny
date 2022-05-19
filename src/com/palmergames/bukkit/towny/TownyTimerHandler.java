@@ -67,7 +67,7 @@ public class TownyTimerHandler{
 	public static void toggleMobRemoval(boolean on) {
 
 		if (on && !isMobRemovalRunning()) {
-			mobRemoveTask = BukkitTools.scheduleSyncRepeatingTask(new MobRemovalTimerTask(plugin, BukkitTools.getServer()), 0, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
+			mobRemoveTask = BukkitTools.scheduleAsyncRepeatingTask(new MobRemovalTimerTask(plugin), 0, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
 			if (mobRemoveTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule mob removal loop.");
 		} else if (!on && isMobRemovalRunning()) {

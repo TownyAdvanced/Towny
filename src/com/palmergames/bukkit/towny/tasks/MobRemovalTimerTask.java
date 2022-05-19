@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -21,16 +22,13 @@ import java.util.List;
 
 public class MobRemovalTimerTask extends TownyTimerTask {
 
-	private final Server server;
 	public static List<Class<?>> classesOfWorldMobsToRemove = new ArrayList<>();
 	public static List<Class<?>> classesOfWildernessMobsToRemove = new ArrayList<>();
 	public static List<Class<?>> classesOfTownMobsToRemove = new ArrayList<>();
 	private final boolean isRemovingKillerBunny;
 
-	public MobRemovalTimerTask(Towny plugin, Server server) {
-
+	public MobRemovalTimerTask(Towny plugin) {
 		super(plugin);
-		this.server = server;
 
 		classesOfWorldMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWorldMobRemovalEntities(), "WorldMob: ");
 		classesOfWildernessMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWildernessMobRemovalEntities(),"WildernessMob: ");
@@ -53,9 +51,11 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 		// Build a list of mobs to be removed
-		List<LivingEntity> livingEntitiesToRemove = new ArrayList<>();
+		List<LivingEntity> entitiesToRemove = new ArrayList<>();
+		
+		final boolean skipRemovalEvent = MobRemovalEvent.getHandlerList().getRegisteredListeners().length == 0;
 
-		for (World world : server.getWorlds()) {
+		for (World world : Bukkit.getWorlds()) {
 			// Filter worlds not using towny.
 			if (!TownyAPI.getInstance().isTownyWorld(world))
 				continue;
@@ -68,18 +68,16 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			if (townyWorld.isForceTownMobs() && townyWorld.hasWorldMobs())
 				continue;
 
-			for (LivingEntity livingEntity : world.getLivingEntities()) {
-				Location livingEntityLoc = livingEntity.getLocation();
-				if (!world.isChunkLoaded(livingEntityLoc.getBlockX() >> 4, livingEntityLoc.getBlockZ() >> 4))
-					continue;
+			for (LivingEntity entity : world.getLivingEntities()) {
+				Location livingEntityLoc = entity.getLocation();
 
 				// Check if entity is a Citizens NPC
-				if (BukkitTools.checkCitizens(livingEntity))
+				if (BukkitTools.checkCitizens(entity))
 					continue;
 				
 				// Handles entities Globally.
-				if (!townyWorld.hasWorldMobs() && isRemovingWorldEntity(livingEntity)) {
-					livingEntitiesToRemove.add(livingEntity);
+				if (!townyWorld.hasWorldMobs() && isRemovingWorldEntity(entity)) {
+					entitiesToRemove.add(entity);
 					continue;
 				}
 				
@@ -87,44 +85,50 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 				if (TownyAPI.getInstance().isWilderness(livingEntityLoc)) {
 					if (townyWorld.hasWildernessMobs())
 						continue;
-					if (!isRemovingWildernessEntity(livingEntity))
+					if (!isRemovingWildernessEntity(entity))
 						continue;
-					
-					livingEntitiesToRemove.add(livingEntity);
-					continue;
+				} else {
+					// The entity is inside of a town.
+					TownBlock townBlock = TownyAPI.getInstance().getTownBlock(livingEntityLoc);
+
+					// Check if mobs are always allowed inside towns in this world.
+					if (townyWorld.isForceTownMobs() || townBlock.getPermissions().mobs)
+						continue;
+
+					// Check that Towny is removing this type of entity inside towns.
+					if (!isRemovingTownEntity(entity))
+						continue;
 				}
 
-				// The entity is inside of a town.
-				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(livingEntityLoc);
-
-				// Check if mobs are always allowed inside towns in this world.
-				if (townyWorld.isForceTownMobs() || townBlock.getPermissions().mobs)
-					continue;
-
-				// Check that Towny is removing this type of entity inside towns.
-				if (!isRemovingTownEntity(livingEntity))
-					continue;
-
-				if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)
+				if (TownySettings.isSkippingRemovalOfNamedMobs() && entity.getCustomName() != null)
 					continue;
 
 				// Special check if it's a rabbit, for the Killer Bunny variant.
-				if (livingEntity.getType().equals(EntityType.RABBIT))
-					if (isRemovingKillerBunny && ((Rabbit) livingEntity).getRabbitType().equals(Rabbit.Type.THE_KILLER_BUNNY)) {
-						livingEntitiesToRemove.add(livingEntity);							
-						continue;						
+				if (entity.getType().equals(EntityType.RABBIT)) {
+					if (isRemovingKillerBunny && ((Rabbit) entity).getRabbitType().equals(Rabbit.Type.THE_KILLER_BUNNY)) {
+						entitiesToRemove.add(entity);
+						continue;
 					}
+				}
 				
-				livingEntitiesToRemove.add(livingEntity);
+				// Ensure the entity hasn't been removed since
+				if (!entity.isValid())
+					continue;
+				
+				if (!skipRemovalEvent) {
+					MobRemovalEvent event = new MobRemovalEvent(entity);
+					Bukkit.getPluginManager().callEvent(event);
+					if (event.isCancelled())
+						continue;
+				}
+
+				entitiesToRemove.add(entity);
 			}
 		}
-		MobRemovalEvent mobRemovalEvent;
-		for (LivingEntity livingEntity : livingEntitiesToRemove) {
-			mobRemovalEvent = new MobRemovalEvent(livingEntity);
-			plugin.getServer().getPluginManager().callEvent(mobRemovalEvent);
-			if (!mobRemovalEvent.isCancelled()) {
-				livingEntity.remove();
-			}
-		}
+		
+		Bukkit.getScheduler().runTask(plugin, () -> {
+			for (LivingEntity entity : entitiesToRemove)
+				entity.remove();
+		});
 	}
 }
