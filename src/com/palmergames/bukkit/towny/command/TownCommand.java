@@ -1,47 +1,13 @@
 package com.palmergames.bukkit.towny.command;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.*;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.*;
-import com.palmergames.bukkit.towny.event.NewTownEvent;
-import com.palmergames.bukkit.towny.event.PreNewTownEvent;
-import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
-import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
-import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
-import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
-import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
-import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
-import com.palmergames.bukkit.towny.event.town.TownKickEvent;
-import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
-import com.palmergames.bukkit.towny.event.town.TownMayorChangeEvent;
-import com.palmergames.bukkit.towny.event.town.TownMergeEvent;
-import com.palmergames.bukkit.towny.event.town.TownPreInvitePlayerEvent;
-import com.palmergames.bukkit.towny.event.town.TownPreMergeEvent;
-import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
-import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
-import com.palmergames.bukkit.towny.event.town.TownSetSpawnEvent;
-import com.palmergames.bukkit.towny.event.town.TownTrustAddEvent;
-import com.palmergames.bukkit.towny.event.town.TownTrustRemoveEvent;
-import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
-import com.palmergames.bukkit.towny.event.town.toggle.TownToggleUnknownEvent;
-import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
-import com.palmergames.bukkit.towny.event.town.toggle.TownToggleFireEvent;
-import com.palmergames.bukkit.towny.event.town.toggle.TownToggleMobsEvent;
-import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNationZoneEvent;
-import com.palmergames.bukkit.towny.event.town.toggle.TownToggleOpenEvent;
-import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePVPEvent;
-import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePublicEvent;
-import com.palmergames.bukkit.towny.event.town.toggle.TownToggleTaxPercentEvent;
+import com.palmergames.bukkit.towny.event.town.*;
+import com.palmergames.bukkit.towny.event.town.toggle.*;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -51,25 +17,10 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.*;
+import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.SpawnType;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockOwner;
-import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownBlockTypeCache;
-import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
-import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.object.TownyPermissionChange;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
@@ -82,34 +33,18 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
-import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
-import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.towny.utils.JailUtil;
-import com.palmergames.bukkit.towny.utils.MapUtil;
-import com.palmergames.bukkit.towny.utils.MoneyUtil;
-import com.palmergames.bukkit.towny.utils.NameUtil;
-import com.palmergames.bukkit.towny.utils.OutpostUtil;
-import com.palmergames.bukkit.towny.utils.ResidentUtil;
-import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.utils.TownRuinUtil;
-import com.palmergames.bukkit.towny.utils.TownUtil;
-import com.palmergames.bukkit.util.BookFactory;
-import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.ChatTools;
-import com.palmergames.bukkit.util.Colors;
-import com.palmergames.bukkit.util.NameValidation;
+import com.palmergames.bukkit.towny.utils.*;
+import com.palmergames.bukkit.util.*;
 import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
-
 import me.wattguy.addon.Utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -136,6 +71,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static Towny plugin;
 
 	private static final List<String> townTabCompletes = Arrays.asList(
+		"builds", //todo: Lemar98 19.05.2022
 		"here",
 		"leave",
 		"list",
@@ -638,7 +574,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				
 				townStatusScreen(player, resident.getTown());
 				
-			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
+			}
+			//todo: Lemar98 19.05.2022 start
+			else if (split[0].equalsIgnoreCase("builds")) {
+				
+				//if 'TownyBuilds' is not enabled, then we don't need in this argument, throw exception
+				if (!Bukkit.getPluginManager().isPluginEnabled("TownyBuilds")) {
+					throw new TownyException(Translatable.of("msg_err_invalid_sub"));
+				}
+				
+				//This block of code is needed so that tabcomplete for the 'builds' 
+				//argument works and when you enter it, the plugin does not consider 
+				//that this argument does not exist.
+				//The implementation of this argument execution is in the 'TownyBuilds' plugin
+			}
+			//todo: Lemar98 19.05.2022 end
+			else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 				
 				//patch wattguy
 				//HelpMenu.TOWN_HELP.send(player);

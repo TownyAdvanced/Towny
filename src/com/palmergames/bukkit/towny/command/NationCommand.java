@@ -91,6 +91,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
 	private static final List<String> nationTabCompletes = Arrays.asList(
+		"builds", //todo: Lemar98 19.05.2022
 		"list",
 		"online",
 		"leave",
@@ -498,6 +499,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		switch (split[0].toLowerCase()) {
+		//todo: Lemar98 19.05.2022 start
+		case "builds": {
+			//if 'TownyBuilds' is not enabled, then we don't need in this argument, throw exception
+			if (!Bukkit.getPluginManager().isPluginEnabled("TownyBuilds"))
+				throw new TownyException(Translatable.of("msg_err_invalid_sub"));
+			//This block of code is needed so that tabcomplete for the 'builds' 
+			//argument works and when you enter it, the plugin does not consider 
+			//that this argument does not exist.
+			//The implementation of this argument execution is in the 'TownyBuilds' plugin
+			break;
+			//todo: Lemar98 19.05.2022 end
+		}
 		case "list":
 			listNations(player, split);
 			break;
