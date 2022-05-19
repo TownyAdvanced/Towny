@@ -502,7 +502,8 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public double getTownBlockCost() {
-		double price = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
+		//double price = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
+		double price = Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice();
 		double maxprice = TownySettings.getMaxClaimPrice();
 		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this, (maxprice == -1 ? price : Math.min(price, maxprice)), 1);
 		Bukkit.getPluginManager().callEvent(event);
@@ -523,8 +524,9 @@ public class Town extends Government implements TownBlockOwner {
 		boolean hasmaxprice = TownySettings.getMaxClaimPrice() != -1;
 		double maxprice = TownySettings.getMaxClaimPrice();
 		while (i < inputN){
-			nextprice = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size() + (double)i) * TownySettings.getClaimPrice());
-			
+			//nextprice = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size() + (double)i) * TownySettings.getClaimPrice());
+			nextprice = Math.pow(TownySettings.getClaimPriceIncreaseValue() , getTownBlocks().size() + (double)i) * TownySettings.getClaimPrice();
+
 			if(hasmaxprice && nextprice > maxprice) {
 				cost += maxprice * ( inputN - i);
 				break;
@@ -533,7 +535,8 @@ public class Town extends Government implements TownBlockOwner {
 			cost += nextprice;
 			i++;
 		}
-		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this, Math.round(cost), inputN);
+		//TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this, Math.round(cost), inputN);
+		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this, cost, inputN);
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getPrice();
 	}
@@ -595,7 +598,7 @@ public class Town extends Government implements TownBlockOwner {
 		this.purchasedBlocks += purchasedBlocks;
 	}
 
-	/**
+	/**6
 	 * Sets the HomeBlock of a town
 	 * 
 	 * @param homeBlock - The TownBlock to set as the HomeBlock

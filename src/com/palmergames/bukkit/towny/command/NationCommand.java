@@ -83,13 +83,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import java.io.InvalidObjectException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -184,21 +178,22 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-
+		List<String> result = new ArrayList<>(); //patch wattguy
+		
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 
 			switch (args[0].toLowerCase()) {
 				case "toggle":
 					if (args.length == 2)
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.NATION_TOGGLE, nationToggleTabCompletes), args[1]);
+						result.addAll(NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.NATION_TOGGLE, nationToggleTabCompletes), args[1]));
 					else if (args.length == 3)
-						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
+						result.addAll(NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]));
 					break;
 				case "king":
 				case "leader":
 					if (args.length == 2)
-						return NameUtil.filterByStart(nationKingTabCompletes, args[1]);
+						result.addAll(NameUtil.filterByStart(nationKingTabCompletes, args[1]));
 					break;
 				case "townlist":
 				case "allylist":
@@ -210,140 +205,165 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "merge":
 				case "baltop":
 					if (args.length == 2)
-						return getTownyStartingWith(args[1], "n");
+						result.addAll(getTownyStartingWith(args[1], "n"));
 					break;
 				case "spawn":
 					if (args.length == 2) {
 						List<String> nationOrIgnore = getTownyStartingWith(args[1], "n");
 						nationOrIgnore.add("-ignore");
-						return NameUtil.filterByStart(nationOrIgnore, args[1]);
+						result.addAll(NameUtil.filterByStart(nationOrIgnore, args[1]));
+						break;
 					}
 					if (args.length == 3) {
-						List<String> ignore = Collections.singletonList("-ignore");
-						return ignore;
+						//List<String> ignore = Collections.singletonList("-ignore");
+						result.add("-ignore");
+						break;
 					}
 				case "add":
-					return getTownyStartingWith(args[args.length - 1], "t");
+					result.addAll(getTownyStartingWith(args[args.length - 1], "t"));
+					break;
 				case "kick":
 					try {
 						Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 						if (res != null)
-							return NameUtil.filterByStart(NameUtil.getNames(res.getTown().getNation().getTowns()), args[args.length - 1]);
+							result.addAll(NameUtil.filterByStart(NameUtil.getNames(res.getTown().getNation().getTowns()), args[args.length - 1]));
 					} catch (TownyException ignored) {}
+					break;
 				case "ally":
 					if (args.length == 2) {
-						return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);
+						result.addAll(NameUtil.filterByStart(nationAllyTabCompletes, args[1]));
+						break;
 					} else if (args.length > 2){
 						switch (args[1].toLowerCase()) {
 							case "add":
 								if (args[args.length - 1].startsWith("-")) {
 									// Return only sent invites to revoked because the nation name starts with a hyphen, e.g. -exampleNationName
 									try {
-										return NameUtil.filterByStart(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getSentAllyInvites()
-											// Get names of sent invites
-											.stream()
-											.map(Invite::getReceiver)
-											.map(InviteReceiver::getName)
-											// Collect sent invite names and check with the last arg without the hyphen
-											.collect(Collectors.toList()), args[args.length - 1].substring(1))
+										result.addAll(NameUtil.filterByStart(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getSentAllyInvites()
+												// Get names of sent invites
+												.stream()
+												.map(Invite::getReceiver)
+												.map(InviteReceiver::getName)
+												// Collect sent invite names and check with the last arg without the hyphen
+												.collect(Collectors.toList()), args[args.length - 1].substring(1))
 											// Add the hyphen back to the beginning
 											.stream()
-											.map(e -> "-" + e)
-											.collect(Collectors.toList());
+											.map(e -> "-" + e).toList()
+										);
 									} catch (TownyException ignored) {}
 								} else {
 									// Otherwise return possible nations to send invites to
-									return getTownyStartingWith(args[args.length - 1], "n");
+									result.addAll(getTownyStartingWith(args[args.length - 1], "n"));
 								}
+								break;
 							case "remove":
 								// Return current allies to remove
 								try {
-									return NameUtil.filterByStart(NameUtil.getNames(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getAllies()), args[args.length - 1]);
+									result.addAll(NameUtil.filterByStart(NameUtil.getNames(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getAllies()), args[args.length - 1]));
 								} catch (TownyException ignore) {}
+								break;
 							case "accept":
 							case "deny":
 								// Return sent ally invites to accept or deny
 								try {
-									return NameUtil.filterByStart(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getReceivedInvites()
+									result.addAll(NameUtil.filterByStart(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getReceivedInvites()
 										.stream()
 										.map(Invite::getSender)
 										.map(InviteSender::getName)
-										.collect(Collectors.toList()), args[args.length - 1]);
+										.collect(Collectors.toList()), args[args.length - 1])
+									);
 								} catch (TownyException ignore) {}
-							default:
-								return Collections.emptyList();
+							/*default:
+								return Collections.emptyList();*/
+							break;
 						}
+						break;
 					}
 					break;
 				case "rank":
 					if (args.length == 2) {
-						return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
+						result.addAll(NameUtil.filterByStart(nationEnemyTabCompletes, args[1]));
+						break;
 					} else if (args.length > 2){
 						switch (args[1].toLowerCase()) {
 							case "add":
 							case "remove":
 								if (args.length == 3) {
 									try {
-										return NameUtil.filterByStart(NameUtil.getNames(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getResidents()), args[2]);
+										result.addAll(NameUtil.filterByStart(NameUtil.getNames(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getResidents()), args[2]));
 									} catch (NotRegisteredException e) {
-										return Collections.emptyList();
+										//return Collections.emptyList();
 									}
+									break;
 								} else if (args.length == 4) {
-									return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
+									 result.addAll(NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]));
+									 break;
 								}
-							default:
-								return Collections.emptyList();
+							/*default:
+								return Collections.emptyList();*/
 						}
+						break;
 					}
 					break;
 				case "enemy":
 					if (args.length == 2) {
-						return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
+						result.addAll(NameUtil.filterByStart(nationEnemyTabCompletes, args[1]));
+						break;
 					} else if (args.length >= 3){
 						switch (args[1].toLowerCase()) {
 							case "add":
-								return getTownyStartingWith(args[2], "n");
+								result.addAll(getTownyStartingWith(args[2], "n"));
+								break;
 							case "remove":
 								// Return enemies of nation
 								try {
-									return NameUtil.filterByStart(NameUtil.getNames(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getEnemies()), args[2]);
+									result.addAll(NameUtil.filterByStart(NameUtil.getNames(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getEnemies()), args[2]));
 								} catch (TownyException ignored) {}
-							default:
-								return Collections.emptyList();
+							/*default:
+								return Collections.emptyList();*/
+							break;
 						}
+						break;
 					}
 					break;
 				case "set":
 					try {
-						return nationSetTabComplete(sender, getResidentOrThrow(player.getUniqueId()).getTown().getNation(), args);
+						result.addAll(nationSetTabComplete(sender, getResidentOrThrow(player.getUniqueId()).getTown().getNation(), args));
 					} catch (NotRegisteredException e) {
 						return Collections.emptyList();
 					}
+					break;
 				case "list":
 					switch (args.length) {
 						case 2:
-							return Collections.singletonList("by");
+							result.addAll(Collections.singletonList("by"));
+							break;
 						case 3:
-							return NameUtil.filterByStart(nationListTabCompletes, args[2]);
-						default:
-							return Collections.emptyList();
+							result.addAll(NameUtil.filterByStart(nationListTabCompletes, args[2]));
+						/*default:
+							return Collections.emptyList();*/
+						break;
 					}
+					break;
 				default:
 					if (args.length == 1) {
 						List<String> nationNames = NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.NATION, nationTabCompletes), args[0]);
 						if (nationNames.size() > 0) {
-							return nationNames;
+							result.addAll(nationNames);
 						} else {
-							return getTownyStartingWith(args[0], "n");
+							result.addAll(getTownyStartingWith(args[0], "n"));
 						}
 					} else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.NATION, args[0]))
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, args[0]).getTabCompletion(sender, args), args[args.length-1]);
+						result.addAll(NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.NATION, args[0]).getTabCompletion(sender, args), args[args.length-1]));
 			}
 		} else if (args.length == 1) {
-			return filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n");
+			result.addAll(filterByStartOrGetTownyStartingWith(nationConsoleTabCompletes, args[0], "n"));
 		}
 
-		return Collections.emptyList();
+		/*return Collections.emptyList();*/
+		//patch wattguy
+		result = me.wattguy.addon.commands.towny.Nation.onTab(sender, command, alias, args, result);
+		return result;
 	}
 	
 	static List<String> nationSetTabComplete(CommandSender sender, Nation nation, String[] args) {
@@ -380,6 +400,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
+		//patch wattguy
+		try {
+			Map.Entry<Boolean, Boolean> entry = me.wattguy.addon.commands.towny.Nation.onExecute(sender, cmd, commandLabel, args);
+
+			if (entry != null && entry.getKey())
+				return entry.getValue();
+		}catch(Exception ignored) { }
+		//patch end
+		
 		if (sender instanceof Player) {
 			if (plugin.isError()) {
 				TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
@@ -415,7 +444,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 
-			HelpMenu.NATION_HELP_CONSOLE.send(sender);
+			//patch wattguy
+			//HelpMenu.NATION_HELP_CONSOLE.send(sender);
+			me.wattguy.addon.commands.towny.Nation.onConsoleHelp(sender);
 
 		} else if (split[0].equalsIgnoreCase("list")) {
 
@@ -438,12 +469,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
 		if (split.length == 0) {
-			nationStatusScreen(player, getNationFromPlayerOrThrow(player));
+			/*nationStatusScreen(player, getNationFromPlayerOrThrow(player));*/
+			//patch wattguy
+			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+			if (resident == null || !resident.hasNation())
+				throw new TownyException(Translatable.of("msg_err_dont_belong_nation"));
+			nationStatusScreen(player, resident.getNationOrNull());
+			me.wattguy.addon.commands.towny.Nation.onInfo(resident, resident.getNationOrNull());
 			return;
 		} 
 
 		if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-			HelpMenu.NATION_HELP.send(player);
+			/*HelpMenu.NATION_HELP.send(player);*/
+			//patch wattguy
+			//HelpMenu.NATION_HELP.send(player);
+			me.wattguy.addon.commands.towny.Nation.onHelp(player);
 			return;
 		}
 
@@ -1204,8 +1244,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	public void nationKing(Player player, String[] split) {
 
-		if (split.length == 0 || split[0].equalsIgnoreCase("?"))
-			HelpMenu.KING_HELP.send(player);
+		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {}
+			//patch wattguy//
+			//HelpMenu.KING_HELP.send(player);
+			me.wattguy.addon.commands.towny.Nation.onKingHelp(player);
 	}
 
 	/**

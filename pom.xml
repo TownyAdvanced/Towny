@@ -24,9 +24,10 @@
     </organization>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>16</java.version>
         <project.bukkitAPIVersion>1.16</project.bukkitAPIVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
     </properties>
 
     <!-- For use with GitHub Package Registry -->
@@ -53,6 +54,10 @@
     </scm>
 
     <repositories>
+        <repository>
+            <id>my-local-repo</id>
+            <url>file://C:\\Users\\Lemar98\\IdeaProjects\\Towny\\my-repo</url>
+        </repository>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -92,6 +97,17 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>me.wattguy</groupId>
+            <artifactId>townyaddon</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+            <!--<groupId>me.wattguy</groupId>
+            <artifactId>townyaddon</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}\resources\TownyAddon.jar</systemPath>-->
+        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -210,7 +226,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <release>8</release>
+                    <release>16</release>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <compilerArgs>
@@ -382,9 +398,9 @@
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
                             <release>${java.version}</release>
-                            <compilerArgs>
-                                <arg>--enable-preview</arg>
-                            </compilerArgs>
+                            <!--<compilerArgs>
+                                <arg>&#45;&#45;enable-preview</arg>
+                            </compilerArgs>-->
                         </configuration>
                     </plugin>
                 </plugins>

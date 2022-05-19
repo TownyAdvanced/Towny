@@ -1088,7 +1088,8 @@ public class Towny extends JavaPlugin {
 		/*
 		 * Register bStats Metrics
 		 */
-		Metrics metrics = new Metrics(this, 2244);
+		
+		/*Metrics metrics = new Metrics(this, 2244);
 		
 		metrics.addCustomChart(new SimplePie("language", () -> TownySettings.getString(ConfigNodes.LANGUAGE)));
 		
@@ -1112,7 +1113,7 @@ public class Towny extends JavaPlugin {
 		
 		metrics.addCustomChart(new SimplePie("closed_economy_enabled", () -> String.valueOf(TownySettings.isEcoClosedEconomyEnabled())));
 		
-		metrics.addCustomChart(new SimplePie("resident_uuids_stored", TownySettings::getUUIDPercent));
+		metrics.addCustomChart(new SimplePie("resident_uuids_stored", TownySettings::getUUIDPercent));*/
 	}
 	
 	public static boolean isMinecraftVersionStillSupported() {

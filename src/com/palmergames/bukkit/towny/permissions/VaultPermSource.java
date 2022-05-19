@@ -24,7 +24,7 @@ public class VaultPermSource extends TownyPermissionSource {
 	public String getPrefixSuffix(Resident resident, String node) {
 		Player player = BukkitTools.getPlayerExact(resident.getName());
 		if (player != null) {
-			// Fetch primary group
+			/// Fetch primary group
 			String primaryGroup = getPlayerGroup(player);
 
 			String groupPrefixSuffix = "";
