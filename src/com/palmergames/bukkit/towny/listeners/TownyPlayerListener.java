@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.event.player.PlayerDeniedBedUseEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsExperienceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsInventoryEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -57,6 +56,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -203,11 +203,13 @@ public class TownyPlayerListener implements Listener {
 		event.setRespawnLocation(respawn);
 		
 		// Handle Spawn protection
-		long protectionTime = TownySettings.getSpawnProtection();
-		if (protectionTime > 0l) {
+		long protectionTime = TownySettings.getSpawnProtectionDuration();
+		if (protectionTime > 0L) {
 			Resident res = TownyAPI.getInstance().getResident(player);
-			int taskID = Bukkit.getScheduler().runTaskLater(plugin, ()-> res.removeSpawnProtection(), protectionTime).getTaskId();
-			res.setSpawnProtectionTaskID(taskID);
+			if (res == null)
+				return;
+			
+			res.addRespawnProtection(protectionTime);
 		}
 	}
 	
@@ -315,6 +317,7 @@ public class TownyPlayerListener implements Listener {
 				if ((ItemLists.AXES.contains(item) && (ItemLists.UNSTRIPPED_WOOD.contains(clickedMat) || ItemLists.WAXED_BLOCKS.contains(clickedMat) || ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))) ||
 					(ItemLists.DYES.contains(item) && Tag.SIGNS.isTagged(clickedMat)) ||
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
+					(ItemLists.FILLED_CAULDRONS.contains(clickedMat) && item == Material.BUCKET) ||
 					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
 
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, loc, clickedMat));
@@ -344,6 +347,11 @@ public class TownyPlayerListener implements Listener {
 				if (item == Material.ARMOR_STAND || item == Material.END_CRYSTAL) 
 					event.setCancelled(!TownyActionEventExecutor.canBuild(player, clickedBlock.getRelative(event.getBlockFace()).getLocation(), item));
 
+				/*
+				 * Test cauldron filling with a build test.
+				 */
+				if (ItemLists.CAULDRON_FILLABLE.contains(item) && clickedMat == Material.CAULDRON)
+					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
 			}
 		}
 		
@@ -762,8 +770,8 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Remove spawn protection if the player is teleporting since spawning.
 		 */
-		if (resident != null && resident.getSpawnProtectionTaskID() != 0) {
-			resident.removeSpawnProtection();
+		if (resident != null && resident.hasRespawnProtection()) {
+			resident.removeRespawnProtection();
 		}
 		
 		onPlayerMove(event);
@@ -828,42 +836,28 @@ public class TownyPlayerListener implements Listener {
 	*/
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerChangePlotEvent(PlayerChangePlotEvent event) {
-
-		PlayerMoveEvent pme = event.getMoveEvent();
-		Player player = event.getPlayer();		
+		if (!TownyUniverse.getInstance().hasResident(event.getPlayer().getUniqueId()))
+			return;
 		WorldCoord from = event.getFrom();
 		WorldCoord to = event.getTo();
-		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-		
-		if (resident == null)
+		if (to.isWilderness() && from.isWilderness()) 
+			// Both are wilderness, no event will fire.
 			return;
-		
-		try {
-			try {
-				to.getTownBlock();
-				if (to.getTownBlock().hasTown()) { 
-					try {
-						Town fromTown = from.getTownBlock().getTown();
-						if (!to.getTownBlock().getTown().equals(fromTown)){
-							Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to,from,to.getTownBlock().getTown(), pme)); // From Town into different Town.
-							Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from,from.getTownBlock().getTown(), pme));//
-						}
-						// Both are the same town, do nothing, no Event should fire here.
-					} catch (NotRegisteredException e) { // From Wilderness into Town.
-						Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(player,to, from, to.getTownBlock().getTown(), pme));
-					}
-				} else {
-					if (from.getTownBlock().hasTown() && !(to.getTownBlock().hasTown())){ // From has a town, to doesn't so: From Town into Wilderness
-						Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme));
-					}
-				}
-			} catch (NotRegisteredException e) {
-				Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(player,to,from, from.getTownBlock().getTown(), pme));
-			}
-
-		} catch (NotRegisteredException e) {
-			// If not registered, both to and from locations are wilderness.	
-		}		
+		if (to.isWilderness())
+			// Gone from a Town into the wilderness.
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
+		else if (from.isWilderness())
+			// Gone from wilderness into Town.
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
+		// Both to and from have towns.
+		else if (to.getTownOrNull().equals(from.getTownOrNull()))
+			// The towns are the same, no event will fire.
+			return;
+		else {
+			// Player has left one Town and immediately entered a different one.
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
+			Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
+		}
 	}
 	
 	/*
@@ -1299,5 +1293,24 @@ public class TownyPlayerListener implements Listener {
 	public void onEggLand(PlayerEggThrowEvent event) {
 		if (TownySettings.isItemUseMaterial(Material.EGG, event.getEgg().getLocation()) && !TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getEgg().getLocation(), Material.EGG))
 			event.setHatching(false);
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerPickupItem(EntityPickupItemEvent event) {
+		if (TownySettings.getRespawnProtectionAllowPickup() || !(event.getEntity() instanceof Player player))
+			return;
+		
+		Resident resident = TownyAPI.getInstance().getResident(player);
+		if (resident == null)
+			return;
+		
+		if (resident.hasRespawnProtection()) {
+			event.setCancelled(true);
+
+			if (!resident.isRespawnPickupWarningShown()) {
+				resident.setRespawnPickupWarningShown(true);
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_pickup_respawn_protection"));
+			}
+		}
 	}
 }

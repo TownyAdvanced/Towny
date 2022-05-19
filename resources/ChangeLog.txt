@@ -7430,3 +7430,43 @@ v0.92.0.11:
     - Add Resident#isAdmin().
 0.98.1.10:
   - Improve PlayerKeepsInventoryEvent and PlayerKeepsExperienceEvent by making PlayerDeathEvent accessible and providing #getKiller.
+  - Correctly hide online and vanished players from the tab complete commands.
+    - Closes #5872.
+0.98.1.11:
+  - Fix /ta set mayor command putting a town's hasUpkeep value in the opposite state.
+    - Closes #5882.
+  - API: Make TownRemoveResidentRankEvent and TownAddResidentRankEvent cancellable.
+    - When an admin uses the /ta command to add or remove a rank, the events are thrown but not cancellable.
+  - API: Make NationRemoveResidentRankEvent and NationAddResidentRankEvents thrown when the admin uses the /ta commands.
+  - Fix message shown when outlaws try to t spawn from a town they are outlawed in.
+0.98.1.12:
+  - Add Plot type caching for towns.
+    - Towns now keep track of how many plots of each type, their forsale and hasresident status in memory.
+    - This opens the door to a new set of features based on plot types.
+  - Fix SpawnEvents not being cancelled correctly.
+  - Fix Error seen when a plugin cancels the NationPreAddEnemyEvent.
+    - Closes #5893.
+  - Add Town & Nation LuckPerms Contexts courtesy of Galster-dev, with PR #5883. (First-Time Contributor!)
+    - These are contexts that apply per-town and per-nation, making it possible to give permissions to a single Town's members etc.
+  - Draw SpawnPoint particles Async.
+    - Closes #5899.
+  - Check player name async on login, courtesy of Warriorrrr with PR #5900.
+  - API: add setShowingPlotNotifications to the PlayerChangePlotEvent.
+    - Other plugins may use the API to disable plot notifications (or if they are disabled in the config, enable them.)
+  - Remove NotRegisteredException usage in calling PlayerEnterTownEvent and PlayerLeaveTownEvent.
+  - Allow specific luckperms contexts to be disabled, courtesy of Warriorrrr with PR #5898.
+  - New Config Option: plugin.interfacing.enabled_contexts
+    - Default: "*"
+    - Configure what contexts to enable/disable here, contexts must be separated by a comma.
+    - Available contexts: towny:resident, towny:mayor, towny:king, towny:insidetown, towny:insideowntown, towny:insideownplot, towny:townrank, towny:nationrank, towny:town, towny:nation
+  - Protect against cauldron filling/emptying, courtesy of Warriorrrr with PR #5901.
+  - Show ally requests to players with accept permissions, courtesy of Warriorrrr with PR #5903.
+  - Add plot types component to the town status screen, courtesy of Altruiis with PR  #5905. (First-Time Contributor!)
+  - Add option to disable pickups while under respawn protection, courtesy of Warriorrrr with PR #5902.
+  - New Config Option: global_town_settings.respawn_protection.allow_pickup
+    - Default: true
+    - If disabled, players will not be able to pickup items while under respawn protection.
+0.98.1.13:
+  - Fix runCommand for plots button, courtesy of Warriorrrr with PR #5910.
+  - Remove the last of the NotRegisteredExceptions from the TownyPlaceholderExpansion.
+    - Closes #5911.

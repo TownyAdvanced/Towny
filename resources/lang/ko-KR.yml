@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.149
+version: 0.150
 language: 한국어
 author: Daybreak 새벽
 website: 'http://townyadvanced.github.io/'
@@ -51,10 +51,10 @@ nation_help_3: '해당 국가의 상태'
 nation_help_4: '국가 목록'
 nation_help_5: '국가 떠나기'
 nation_help_6: '새로운 국가 세우기'
-nation_help_7: 'List the nation leader commands'
+nation_help_7: '국가 리더의 명령어를 나열'
 nation_help_8: '새로운 국가 세우기'
 nation_help_9: '접속중인 국가원 목록'
-king_help_1: 'Nation Leader Help'
+king_help_1: '국가 리더 도움말'
 king_help_2: '동맹국 설정'
 king_help_3: '적국 설정'
 res_1: '귀하의 상태'
@@ -79,7 +79,7 @@ admin_sing: '관리자'
 town_sing: '마을'
 nation_sing: '국가'
 nation_plu: '국가 목록'
-king_sing: 'Leader'
+king_sing: '리더'
 town_plu: '마을'
 world_plu: '월드 목록'
 world_sing: '월드'
@@ -129,9 +129,9 @@ msg_friend_remove: '&b%s님이 귀하를 친구 목록에서 제거하였습니�
 msg_left_town: '&b%s 님이 도시를 떠났습니다.'
 msg_you_left: '&b%s 에서 나갔습니다.'
 msg_not_mayor: '&b당신은 시장이 아닙니다.'
-msg_not_king: '&bYou are not the nation leader.'
+msg_not_king: '&b당신은 국가의 리더가 아닙니다.'
 msg_not_mayor_ass: '&b귀하는 시장이나 부시장이 아닙니다.'
-msg_not_king_ass: '&bYou are not the nation leader or an assistant.'
+msg_not_king_ass: '&b당신은 국가의 리더 또는 보좌관이 아닙니다.'
 msg_own_nation_disallow: '&b당신은 이 행동을 할 국가권한이 없거나 충분하지 않습니다!'
 msg_no_perms_claim: '&b귀하는 도시를 넓힐 권한이 없습니다.'
 msg_outpost_disable: '&b전초기지가 비활성화되어 구매할 수 없습니다.'
@@ -259,10 +259,10 @@ msg_reset_town_tag: '&b%s 마을의 태그가 초기화되었습니다.'
 msg_mayor_abandon: '&b정말 마을 주민들을 버릴 생각이신가요? 확실하다면 /town set mayor <주민> 으로 다음 촌장을 정하십시오.'
 msg_new_day_tax: '&b새로운 하루가 시작되었습니다! 세금이 거둬집니다.'
 msg_new_day: '&b새로운 하루가 시작되었습니다!'
-msg_new_king: '&b%s is now the nation leader of %s!'
-msg_err_new_king_notmayor: '&cNew nation leader is not a mayor.'
-msg_err_king_not_in_nation: '&cNew nation leader doesn''t belong to this nation.'
-msg_err_fight_like_king: '&cPeace is not an option! Fight like a Leader!'
+msg_new_king: '&b%s이(가) 이제 국가 %s의 리더입니다!'
+msg_err_new_king_notmayor: '&c새 국가 리더가 시장이 아닙니다.'
+msg_err_king_not_in_nation: '&c새 국가 리더가 이 국가에 소속되어있지 않습니다.'
+msg_err_fight_like_king: '&c평화는 선택이 아닙니다! 군주처럼 싸우십시오!'
 msg_no_access_nation_bank: '&c국가 금고에 접근할 수 없습니다.'
 msg_err_no_money: '&c돈이 부족합니다.'
 msg_new_mayor: '&b%s님이 촌장이 되셨습니다!'
@@ -482,7 +482,7 @@ nation_received_requests: '&b국가가 %a/%m 동맹국 요청을 수신하였습
 nation_sent_invites: '&b국가가 %a/%m 초대를 전송하였습니다.'
 nation_sent_ally_requests: '&b국가가 %a/%m 동맹 요청을 전송하였습니다.'
 no_confirmations_open: '&c확인할 것이 아무것도 없습니다!'
-successful_cancel: '&c액션이 취소되었습니다!'
+successful_cancel: '&a작업이 취소되었습니다!'
 successful_deny: '&b초대가 성공적으로 거부되었습니다.'
 successful_deny_request: '&b동맹 요청이 성공적으로 거부되었습니다.'
 msg_ally_removed_successfully: '&b동맹이 성공적으로 파기되었습니다.'
@@ -580,7 +580,7 @@ status_bank_town2: '일일 유지비:'
 status_bank_town3: '세금:'
 status_town_nation: '국가:'
 status_town_reslist_overlength: '그리고 더...'
-status_nation_king: 'Leader:'
+status_nation_king: '리더:'
 status_nation_tax: '국가 세금:'
 status_nation_towns: '마을'
 status_nation_allies: '동맹'
@@ -638,7 +638,7 @@ msg_err_cannot_set_spawn_cost_more_than: '&c스폰 사용 요금은 %s보다 높
 msg_err_ally_isnt_public: '&c귀하의 동맹, %s은(는) 공용 스폰이 활성화되지 않았습니다. 이동이 거부되었습니다.'
 msg_nation_changed_public: '&c국가 공용 상태 : %s.'
 #Added in 0.47:
-status_plot_type: '토지 유형: -'
+status_plot_type: '토지 유형: '
 msg_no_self_jailing: '스스로 감옥에 들어갈 수 없습니다.'
 online2: ' &a(접속중)'
 build: '설치'
@@ -703,8 +703,8 @@ status_embassy_town: 'Embassies in'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&b잘못된 정렬 기준입니다. resident, balance, towns, name, townblocks, online을 시도해보십시오.'
 msg_error_invalid_comparator_town: '&b잘못된 정렬 기준입니다. resident, balance, name, townblocks, online, open을 시도해보십시오.'
-msg_err_merging_for_kings_only: '&bMerging can only be done by a Nation Leader.'
-msg_err_king_of_that_nation_is_not_online: '&bThe Nation Leader of %s, %s, is not online. Merge failed.'
+msg_err_merging_for_kings_only: '&합병은 국가 리더만 진행 할 수 있습니다.'
+msg_err_king_of_that_nation_is_not_online: '&b%s 국가 리더 %s이(가) 온라인 상태가 아닙니다. 합병을 실패했습니다.'
 nation1_has_merged_with_nation2: '&6국가 &s이(가) 우세한 국가 %s과(와)의 합병에 동의했습니다.'
 msg_would_you_merge_your_nation_into_other_nation: '&6귀하의 국가 %s을(를) %s 국가에 병합하는 것에 동의하시겠습니까? 동의하시면 귀하의 국가에 있는 모든 마을과 자금이 %s(으)로 이동됩니다.'
 no_open_towns: '나열할 공공 마을이 없습니다.'
@@ -717,7 +717,7 @@ msg_admin_has_given_you_a_plot: '관리자가 당신의 이름으로 토지를 �
 msg_town_forcepvp_setting_set_to: '마을 %s의 PVP 설정이 %s로 강제되었습니다.'
 msg_nation_changed_open: '&c이국가의 공공 설정이 %s로 변경되었습니다.'
 msg_err_already_in_a_nation: '귀하의 마을은 이미 국가에 소속되어 있습니다.'
-msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the nation leader or an assistant to join.'
+msg_err_nation_not_open: '&c국가 %s의 문은 아무에게나 열려있지 않습니다. 국가의 리더 또는 보좌관에게 가입을 요청하세요.'
 msg_err_nation_homeblock_in_another_world: '&c귀하의 마을의 홈블록이 국가 수도의 홈블록과 같은 월드에 있지 않습니다.'
 status_bank_town_penalty_upkeep: 'Overclaim upkeep:'
 #Added in 0.53:
@@ -735,8 +735,8 @@ msg_err_player_too_far_from_town_spawn: '&c%s님은 마을에 초대를 받기�
 #Added in 0.58:
 msg_resident_bail_amount: '주민 보석금 가격: '
 msg_mayor_bail_amount: '시장 보석금 가격: '
-msg_king_bail_amount: 'Nation Leader Bail costs: '
-msg_has_paid_bail: '%s has paid bail and is free.'
+msg_king_bail_amount: '국가 지도자 보석금 가격: '
+msg_has_paid_bail: '%s이(가) 보석금을 지불하고 자유의 몸이 되었습니다.'
 msg_err_unable_to_pay_bail: '보석금을 내기엔 주머니가 여의치 않습니다.'
 msg_err_bail_not_enabled: '보석금이 허용되지 않습니다.'
 msg_you_have_been_freed_from_jail: '감옥에서 해방되었습니다.'
@@ -1284,7 +1284,9 @@ msg_setup_success: 'Successfully changed config values to your new values.'
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_invulnerability: 'You have lost your invulnerability.'
+msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
+#Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
+msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: 'Capital:'
@@ -1374,9 +1376,9 @@ msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using 
 #Jail handbook messages
 msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
 #Jail handbook messages
-msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
+msg_jailed_handbook_bail_1: '''/res jail paybail''을 사용하여 보석금을 지불하고 자유의 몸이 될 수 있습니다.'
 #Jail handbook messages
-msg_jailed_handbook_bail_2: 'Bail will cost %s.'
+msg_jailed_handbook_bail_2: '보석금의 가격은 %s 입니다.'
 #Jail handbook messages
 msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
 #Jail handbook messages
@@ -1465,3 +1467,18 @@ msg_removed_x_invalid_outpost_spawns: 'Removed %d invalid outpost spawns.'
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Your town is bankrupt, add money to your bank using /town deposit {amount}.'
+#Added in 0.150
+#Message shown when a player cannot do something because they have a town.
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+#Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
+msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+#Message shown when TownyRTP could not find any towns to teleport to.
+msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
+#Message showing payment for RTP.
+msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+#Message shown to a player when they use the town rtp command.
+msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+#Used in the town's status screen to display plots
+status_plot_string: 'Plots'
+#Displays a plot type and the amount of townblocks of that type in the town
+status_plot_hover: '%s:'

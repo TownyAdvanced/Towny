@@ -1721,13 +1721,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 
-				line = rs.getString("price");
-				if (line != null)
-					try {
-						townBlock.setPlotPrice(Float.parseFloat(line.trim()));
-					} catch (Exception ignored) {
-					}
-
 				line = rs.getString("town");
 				if (line != null) {
 					Town town = universe.getTown(line.trim());
@@ -1750,6 +1743,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					} catch (AlreadyRegisteredException ignored) {
 					}
 				}
+
+				line = rs.getString("type");
+				if (line != null)
+					townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
+
 				line = rs.getString("resident");
 				if (line != null && !line.isEmpty()) {
 					Resident res = universe.getResident(line.trim());
@@ -1763,10 +1761,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					}
 				}
 
-				line = rs.getString("type");
+				line = rs.getString("price");
 				if (line != null)
-					townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
-
+					try {
+						townBlock.setPlotPrice(Float.parseFloat(line.trim()));
+					} catch (Exception ignored) {
+					}
+				
 				line = rs.getString("typeName");
 				if (line != null) 
 					townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));

@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.149
+version: 0.150
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -51,10 +51,10 @@ nation_help_3: 'Статус указанной нации'
 nation_help_4: 'Список наций'
 nation_help_5: 'Покинуть нацию'
 nation_help_6: 'Создать нацию'
-nation_help_7: 'List the nation leader commands'
+nation_help_7: 'Отображает команды для лидеров наций'
 nation_help_8: 'Создать нацию'
 nation_help_9: 'Список всех онлайн жителей нации'
-king_help_1: 'Nation Leader Help'
+king_help_1: 'Помощь для лидеров наций'
 king_help_2: 'Установить альянс.'
 king_help_3: 'Установить врагов.'
 res_1: 'Ваш статус'
@@ -79,7 +79,7 @@ admin_sing: 'Админ'
 town_sing: 'Город'
 nation_sing: 'Нация'
 nation_plu: 'Нации'
-king_sing: 'Leader'
+king_sing: 'Лидер'
 town_plu: 'Города'
 world_plu: 'Миры'
 world_sing: 'Мир'
@@ -129,9 +129,9 @@ msg_friend_remove: '&b%s удалил вас из друзей.'
 msg_left_town: '&b%s покинул город'
 msg_you_left: '&bВы покинули %s.'
 msg_not_mayor: '&bВы не Мэр.'
-msg_not_king: '&bYou are not the nation leader.'
+msg_not_king: '&cВы не являетесь лидером нации.'
 msg_not_mayor_ass: '&bВы не Мэр и не заместитель.'
-msg_not_king_ass: '&bYou are not the nation leader or an assistant.'
+msg_not_king_ass: '&cВы не являетесь лидером нации или ассистентом.'
 msg_own_nation_disallow: '&bне можете основать нацию (возможно, не хватает денег).'
 msg_no_perms_claim: '&bУ вас нет прав, чтобы расширить свой город.'
 msg_outpost_disable: '&bАванпосты недоступны.'
@@ -259,10 +259,10 @@ msg_reset_town_tag: '&b%s убрал тэг города.'
 msg_mayor_abandon: '&bХотите бросить всех своих людей? Введите ''/town set mayor'' чтобы сменить мэра, если уверены.'
 msg_new_day_tax: '&bНовый день! Налоги собраны!'
 msg_new_day: '&bНовый день настал!'
-msg_new_king: '&b%s is now the nation leader of %s!'
-msg_err_new_king_notmayor: '&cNew nation leader is not a mayor.'
-msg_err_king_not_in_nation: '&cNew nation leader doesn''t belong to this nation.'
-msg_err_fight_like_king: '&cPeace is not an option! Fight like a Leader!'
+msg_new_king: '&b%s стал лидером нации %s!'
+msg_err_new_king_notmayor: '&cНовый лидер нации не является мэром.'
+msg_err_king_not_in_nation: '&cНовый лидер нации не состоит в ней.'
+msg_err_fight_like_king: '&cНейтралитет не вариант, сражайтесь как лидер!'
 msg_no_access_nation_bank: '&cУ вас нет доступа к казне нации.'
 msg_err_no_money: '&cНе хватает денег в казне.'
 msg_new_mayor: '&b%s теперь мэр!'
@@ -580,7 +580,7 @@ status_bank_town2: 'Налог на содержание:'
 status_bank_town3: 'Налог:'
 status_town_nation: 'Нация:'
 status_town_reslist_overlength: 'и далее...'
-status_nation_king: 'Leader:'
+status_nation_king: 'Лидер:'
 status_nation_tax: 'Налог нации:'
 status_nation_towns: 'Города'
 status_nation_allies: 'Союзники'
@@ -703,8 +703,8 @@ status_embassy_town: 'Посольства в'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&bНеверный сравнитель. Попробуйте жителей, счёт, города, название, участки, онлайн.'
 msg_error_invalid_comparator_town: '&bНеверный сравнитель. Попробуйте жителей, счёт, имя, участки, онлайн, открытость.'
-msg_err_merging_for_kings_only: '&bMerging can only be done by a Nation Leader.'
-msg_err_king_of_that_nation_is_not_online: '&bThe Nation Leader of %s, %s, is not online. Merge failed.'
+msg_err_merging_for_kings_only: '&bСлияние может быть сделано только Лидером Нации.'
+msg_err_king_of_that_nation_is_not_online: '&bКороль %s, %s, не в сети. Слияние невозможно.'
 nation1_has_merged_with_nation2: '&6Нация %s договорился о слиянии с доминирующей нацией %s.'
 msg_would_you_merge_your_nation_into_other_nation: '&6Согласитесь ли вы распустить вашу нацию %s в нацию %s? Это переведет деньги всех городов и национальных банков в %s.'
 no_open_towns: 'Нет открытых городов.'
@@ -717,7 +717,7 @@ msg_admin_has_given_you_a_plot: 'Администратор заприватил
 msg_town_forcepvp_setting_set_to: 'В городе %s нстройки PVP принудительно установлены на %s'
 msg_nation_changed_open: '&cОткрытый статус Нации сейчас: %s.'
 msg_err_already_in_a_nation: 'Ваш город уже в нации.'
-msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the nation leader or an assistant to join.'
+msg_err_nation_not_open: '&c%s не принимает всех подряд. Попросите приглашения у лидера или ассистента.'
 msg_err_nation_homeblock_in_another_world: '&cДомашний блок вашего города не в том же мире, что и домашний блок столицы нации.'
 status_bank_town_penalty_upkeep: 'Налог на содержание превышающих текущий лимит участков:'
 #Added in 0.53:
@@ -735,7 +735,7 @@ msg_err_player_too_far_from_town_spawn: '&c%s слишком далеко от �
 #Added in 0.58:
 msg_resident_bail_amount: 'Расходы на залоги за горожан: '
 msg_mayor_bail_amount: 'Расходы на залог Мэра: '
-msg_king_bail_amount: 'Nation Leader Bail costs: '
+msg_king_bail_amount: 'Стоимость залога за лидера: '
 msg_has_paid_bail: '%s заплатил залог и был выпущен на свободу.'
 msg_err_unable_to_pay_bail: 'Нет возможности позволить себе залог.'
 msg_err_bail_not_enabled: 'Залог не включен.'
@@ -1154,7 +1154,7 @@ msg_err_days_must_be_greater_than_0: 'Дни должни быть больше 
 msg_err_outlawed_players_no_teleport: '&4Вы вне закона в городе, в котором вы сейчас находитесь и не можете телепортироваться!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Вы не можете использовать эту команду находясь в городе, который объявил вас вне закона.'
 #Added in 0.110
-msg_safe_mode: "[Error] Включён безопасный режим!"
+msg_safe_mode: "[Ошибка] Включён безопасный режим!"
 msg_safe_mode_base: '[Error] Towny перешёл в безопасный режим из-за ошибки! '
 msg_safe_mode_player: 'Попросите админа проверить консоль сервера.'
 msg_safe_mode_admin: 'Проверьте консоль сервера для большей информации.'
@@ -1284,7 +1284,9 @@ msg_setup_success: 'Параметры конфигурации успешно �
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s заспавнился недавно и имеет временную защиту.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_invulnerability: 'Вы потеряли вашу неуязвимость.'
+msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
+#Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
+msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: 'Столица:'
@@ -1297,10 +1299,10 @@ status_unknown: 'неизвестно'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
 msg_nationzone_override_set_to: '%s установил национальную зону на %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
-msg_nationzone_override_removed: '%s отменил действие их национальной зоны.'
+msg_nationzone_override_removed: 'Национальня зона %s была удалена.'
 #Added in 0.127
 #Used in status screen:
-status_nation_zone_size: 'Размер зоны нации:'
+status_nation_zone_size: 'Размер Национальной Зоны:'
 #Shown when a player adds people to their friends list.
 msg_res_friend_added_to_list: '%s добавлен в список друзей.'
 #Shown when a player removes people from their friends list.
@@ -1310,7 +1312,7 @@ msg_resident_unjailed: '%s был выпущен на свободу.'
 #Shown when an admin uses /ta toggle devmode.
 msg_admin_toggle_devmode: 'Режим разработчика: %s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: 'Режим debug: %s'
+msg_admin_toggle_debugmode: 'Дебаг: %s'
 #Shown when an admin uses /ta toggle townwithdraw
 msg_admin_toggle_townwithdraw: 'Снятия с баланса города: %s'
 #Shown when an admin uses /ta toggle nationwithdraw
@@ -1344,7 +1346,7 @@ msg_you_have_been_given_bonus_blocks: 'Вам было дано %s бонусн�
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Ваш город больше не может приобретать бонусные блоки. Было достигнуто максимальное количество.'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
-msg_err_capital_cannot_be_peaceful: 'Столицы наций не могут менять статус своего нейтралитета.'
+msg_err_capital_cannot_be_peaceful: 'Столицы наций не могут входить в нейтралитет.'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Зона вокруг Нации теперь %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
@@ -1358,7 +1360,7 @@ towny_prices_upkeep_num_towns: 'количестве городов.'
 towny_prices_upkeep_nation_level: 'уровне нации (количестве участников.)'
 #Added in 0.130
 #Jail causes
-msg_jailed_mayor: 'Заключены в тюрьму мэром.'
+msg_jailed_mayor: 'Заключен в тюрьму мэром.'
 #Jail causes
 msg_jailed_outlaw: 'Убит, будучи объявленным преступником.'
 #Jail causes
@@ -1366,7 +1368,7 @@ msg_jailed_war: 'Узник войны.'
 #Jail handbook messages
 msg_jailed_handbook_1: 'Похоже, вас заключили в тюрьму по причине: %s'
 #Jail handbook messages
-msg_jailed_handbook_2: 'Это довольно плохо, да. Ну и что ты можешь с этим поделать? Вот несколько полезных советов для тебя, пока ты отбываешь своё наказание.'
+msg_jailed_handbook_2: 'Нехорошо, правда? Что-ж поделать. Вот несколько полезных советов для тебя, пока ты отбываешь своё наказание.'
 #Jail handbook messages
 msg_jailed_handbook_3: 'Вы заключены в тюрьму на %s часов. Отбыв своё наказание, вы выйдете на свободу.'
 #Jail handbook messages
@@ -1464,4 +1466,19 @@ msg_warn_overriding_server_config: 'При этом вы переопредел�
 msg_removed_x_invalid_outpost_spawns: 'Удалено %d недопустимых спаунов на аутпосте.'
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
-msg_your_town_is_bankrupt: 'Your town is bankrupt, add money to your bank using /town deposit {amount}.'
+msg_your_town_is_bankrupt: 'Ваш город обанкротился, добавьте денег в казну используя /town deposit {amount}.'
+#Added in 0.150
+#Message shown when a player cannot do something because they have a town.
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+#Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
+msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+#Message shown when TownyRTP could not find any towns to teleport to.
+msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
+#Message showing payment for RTP.
+msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+#Message shown to a player when they use the town rtp command.
+msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+#Used in the town's status screen to display plots
+status_plot_string: 'Plots'
+#Displays a plot type and the amount of townblocks of that type in the town
+status_plot_hover: '%s:'

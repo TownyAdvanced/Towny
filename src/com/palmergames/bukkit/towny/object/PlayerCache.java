@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -27,7 +28,7 @@ public class PlayerCache {
 		setLastLocation(player.getLocation());
 	}
 
-	public PlayerCache(WorldCoord worldCoord) {
+	public PlayerCache(@NotNull WorldCoord worldCoord) {
 
 		this.setLastTownBlock(worldCoord);
 	}
@@ -37,7 +38,7 @@ public class PlayerCache {
 	 * 
 	 * @param worldCoord - World Coordinate to set as the lastWorldCoord
 	 */
-	public void setLastTownBlock(WorldCoord worldCoord) {
+	public void setLastTownBlock(@NotNull WorldCoord worldCoord) {
 
 		this.lastWorldCoord = worldCoord;
 	}
@@ -47,7 +48,7 @@ public class PlayerCache {
 	 * 
 	 * @param worldCoord - World Coordinate to setLastTownBlock
 	 */
-	public void resetAndUpdate(WorldCoord worldCoord) {
+	public void resetAndUpdate(@NotNull WorldCoord worldCoord) {
 		
 		reset();
 		setLastTownBlock(worldCoord);
@@ -58,6 +59,7 @@ public class PlayerCache {
 	 * 
 	 * @return WorldCoord of the last acted upon TownBlock
 	 */
+	@NotNull
 	public WorldCoord getLastTownBlock() {
 
 		return lastWorldCoord;
@@ -69,7 +71,7 @@ public class PlayerCache {
 	 * @param pos - WorldCoord to setLastTownBlock
 	 * @return true if changed.
 	 */
-	public boolean updateCoord(WorldCoord pos) {
+	public boolean updateCoord(@NotNull WorldCoord pos) {
 
 		if (!getLastTownBlock().equals(pos)) {
 			reset();

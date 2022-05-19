@@ -108,6 +108,7 @@ public class SpawnUtil {
 				sendSpawnEvent(player, spawnType, spawnLoc);
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				return;
 			}
 
 			// There is a cost to spawn, prompt with confirmation unless ignoreWarn is true.
@@ -444,7 +445,7 @@ public class SpawnUtil {
 
 			if (townAtPlayerLoc != null) {
 				if (townAtPlayerLoc.hasOutlaw(player.getName()) && disallowedZones.contains("outlaw"))
-					throw new TownyException(Translatable.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", townAtPlayerLoc));
+					throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", "RTP", Translatable.of("msg_a_town_you_are_outlawed_in")));
 				if (resident.hasNation() && townAtPlayerLoc.hasNation()) {
 					if (CombatUtil.isEnemy(resident.getTownOrNull(), townAtPlayerLoc) && disallowedZones.contains("enemy"))
 						throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translatable.of("msg_enemy_areas")));

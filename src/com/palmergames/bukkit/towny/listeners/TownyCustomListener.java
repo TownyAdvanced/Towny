@@ -75,7 +75,7 @@ public class TownyCustomListener implements Listener {
 			BorderUtil.getPlotBorder(to).runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.sendToPlayer(player));
 
 		// Check if player has entered a new town/wilderness
-		if (TownySettings.getShowTownNotifications()) {
+		if (event.isShowingPlotNotifications()) {
 			String msg = null;
 			try {
 				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
@@ -201,13 +201,13 @@ public class TownyCustomListener implements Listener {
 	public void onPlayerDamagePlayerEvent(TownyPlayerDamagePlayerEvent event) {
 		Resident victim = event.getVictimResident();
 		Resident attacker = event.getAttackingResident();
-		if (victim != null && victim.getSpawnProtectionTaskID() != 0) {
+		if (victim != null && victim.hasRespawnProtection()) {
 			event.setCancelled(true);
 			event.setMessage(Translatable.of("msg_err_player_cannot_be_harmed", victim.getName()).forLocale(attacker));
 		}
-		if (attacker != null && attacker.getSpawnProtectionTaskID() != 0) {
+		if (attacker != null && attacker.hasRespawnProtection()) {
 			event.setCancelled(true);
-			attacker.removeSpawnProtection();
+			attacker.removeRespawnProtection();
 		}
 	}
 }

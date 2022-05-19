@@ -273,5 +273,20 @@
         "worldAction": "UPDATE_WILDERNESS_IGNORE_MATS"
       }
     ]
+  },
+  {
+    "version": "0.98.1.12",
+    "changes": [
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.respawn_protection",
+        "value": "global_town_settings.respawn_protection.time"
+      },
+      {
+        "type": "MOVE",
+        "path": "plugin.interfacing.luckperms_contexts",
+        "value": "plugin.interfacing.luckperms.contexts"
+      }
+    ]
   }
 ]

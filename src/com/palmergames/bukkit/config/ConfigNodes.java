@@ -72,8 +72,8 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
-	LEVELS_TOWN_LEVEL("levels.town_level", ""),
-	LEVELS_NATION_LEVEL("levels.nation_level", ""),
+	LEVELS_TOWN_LEVEL("levels.town_level", "", "", "# Guide On How to Configure: https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#configuring-town_level-and-nation_level"),
+	LEVELS_NATION_LEVEL("levels.nation_level", "", "", "# Guide On How to Configure: https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#configuring-town_level-and-nation_level"),
 	TOWN(
 			"town",
 			"",
@@ -229,6 +229,7 @@ public enum ConfigNodes {
 	TOWN_MIN_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.min_distance_between_homeblocks",
 			"0",
+			"",
 			"# Minimum distance between homeblocks."),
 	TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS(
 			"town.max_distance_between_homeblocks",
@@ -611,13 +612,19 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When true Towny will handle respawning, with town or resident spawns."),
-	GTOWN_SETTINGS_RESPAWN_PROTECTION(
-			"global_town_settings.respawn_protection",
+	GTOWN_SETTINGS_RESPAWN_PROTECTION_ROOT("global_town_settings.respawn_protection", "", ""),
+	GTOWN_SETTINGS_RESPAWN_PROTECTION_TIME(
+			"global_town_settings.respawn_protection.time",
 			"10s",
 			"",
 			"# When greater than 0s, the amount of time a player who has respawned is considered invulnerable.",
 			"# Invulnerable players who attack other players will lose their invulnerability.",
 			"# Invulnerable players who teleport after respawn will also lose their invulnerability."),
+	GTOWN_SETTINGS_RESPAWN_PROTECTION_ALLOW_PICKUP(
+			"global_town_settings.respawn_protection.allow_pickup",
+			"true",
+			"",
+			"# If disabled, players will not be able to pickup items while under respawn protection."),
 	GTOWN_SETTINGS_TOWN_RESPAWN_SAME_WORLD_ONLY(
 			"global_town_settings.town_respawn_same_world_only",
 			"false",
@@ -1084,13 +1091,24 @@ public enum ConfigNodes {
 			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
 			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
 	
+	PLUGIN_LUCKPERMS_ROOT("plugin.interfacing.luckperms","",""),
 	PLUGIN_LUCKPERMS_CONTEXTS(
-			"plugin.interfacing.luckperms_contexts",
+			"plugin.interfacing.luckperms.contexts",
 			"false",
 			"",
 			"# If enabled, Towny contexts will be available in LuckPerms. https://luckperms.net/wiki/Context",
 			"# Towny will supply for LuckPerms: townyperms' ranks contexts, as well as location-based contexts."),
 	
+	PLUGIN_ENABLED_CONTEXTS(
+			"plugin.interfacing.luckperms.enabled_contexts",
+			"*",
+			"",
+			"# Configure what contexts to enable/disable here, contexts must be separated by a comma.",
+			"# Available contexts: towny:resident, towny:mayor, towny:king, towny:insidetown, towny:insideowntown, towny:insideownplot, towny:townrank",
+			"# towny:nationrank, towny:town, towny:nation"
+	),
+	
+	PLUGIN_WEB_MAP_ROOT("plugin.interfacing.web_map","",""),
 	PLUGIN_WEB_MAP_USING_STATUSSCREEN(
 			"plugin.interfacing.web_map.enabled",
 			"false",
@@ -1182,6 +1200,8 @@ public enum ConfigNodes {
 		"# A blacklist used for validating town/nation names.",
 		"# Names must be seperated by a comma: name1,name2"
 	),
+	PLUGIN_UPDATE_NOTIFICATIONS_ROOT(
+			"plugin.update_notifications", "", ""),
 	PLUGIN_UPDATE_NOTIFICATIONS_ALERTS(
 		"plugin.update_notifications.alerts",
 		"true",
@@ -1263,7 +1283,7 @@ public enum ConfigNodes {
 			"",
 			"# When using PlaceholderAPI, and a tag would show a nation, this will determine how it is formatted."),
 	FILTERS_PAPI_CHAT_FORMATTING_RANKS(
-			"filters_colour_chat.papi_chat_formatting.ranks", "",
+			"filters_colour_chat.papi_chat_formatting.ranks", "", "",
 			"# Colour code applied to player names using the %townyadvanced_towny_colour% placeholder."),
 	FILTERS_PAPI_CHAT_FORMATTING_RANKS_NOMAD(
 			"filters_colour_chat.papi_chat_formatting.ranks.nomad","&f"),
@@ -1793,7 +1813,8 @@ public enum ConfigNodes {
 			"",
 			"",
 			"# if enabled old residents will be deleted, losing their town, townblocks, friends",
-			"# after Two months (default) of not logging in"),
+			"# after Two months (default) of not logging in. If the player is a mayor their town",
+			"# will be inherited according to the order_of_mayoral_succession list in this config."),
 	RES_SETTING_DELETE_OLD_RESIDENTS_ENABLE(
 			"resident_settings.delete_old_residents.enable",
 			"false"),
@@ -1821,6 +1842,7 @@ public enum ConfigNodes {
 	RES_SETTING_IS_SHOWING_LOCALE_MESSAGE(
 			"resident_settings.is_showing_locale_message",
 			"true",
+			"",
 			"# If true, players who join the server for the first time will be informed about their locale, and about Towny translatable system."),
 	ECO(
 			"economy",

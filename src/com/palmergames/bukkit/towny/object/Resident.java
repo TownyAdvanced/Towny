@@ -7,9 +7,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
-import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
-import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -37,6 +35,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,7 +77,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	private ArrayList<Inventory> guiPages;
 	private int guiPageNum = 0;
-	private int spawnProtectionTaskID = 0;
+	private int respawnProtectionTaskID = -1;
+	private boolean respawnPickupWarningShown = false; // Prevents chat spam when a player attempts to pick up an item while under respawn protection.
 
 	public Resident(String name) {
 		super(name);
@@ -562,10 +562,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			townRanks.add(rank);
 			if (isOnline())
 				TownyPerms.assignPermissions(this, null);
-			BukkitTools.getPluginManager().callEvent(new TownAddResidentRankEvent(this, rank, town));
 			return true;
 		}
-
 		return false;
 	}
 
@@ -598,11 +596,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			townRanks.remove(rank);
 			if (isOnline())
 				TownyPerms.assignPermissions(this, null);
-
-			BukkitTools.getPluginManager().callEvent(new TownRemoveResidentRankEvent(this, rank, town));
 			return true;
 		}
-
 		return false;
 	}
 
@@ -865,18 +860,46 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return BukkitTools.isOnline(getName());
 	}
 
-	public int getSpawnProtectionTaskID() {
-		return spawnProtectionTaskID;
+	@Deprecated
+	@ApiStatus.ScheduledForRemoval
+	public int getRespawnProtectionTaskID() {
+		return -1;
 	}
 
-	public void setSpawnProtectionTaskID(int spawnProtectionTaskID) {
-		this.spawnProtectionTaskID = spawnProtectionTaskID;
+	@Deprecated
+	@ApiStatus.ScheduledForRemoval
+	public void setRespawnProtectionTaskID(int respawnProtectionTaskID) {
+		
 	}
 	
-	public void removeSpawnProtection() {
-		Bukkit.getScheduler().cancelTask(getSpawnProtectionTaskID());
-		setSpawnProtectionTaskID(0);
-		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_invulnerability"));
+	public boolean hasRespawnProtection() {
+		return respawnProtectionTaskID != -1;
+	}
+	
+	public void addRespawnProtection(long protectionTime) {
+		if (protectionTime <= 0)
+			return;
+		
+		// Cancel existing respawn protection task without message
+		if (respawnProtectionTaskID != -1)
+			Bukkit.getScheduler().cancelTask(respawnProtectionTaskID);
+
+		respawnPickupWarningShown = false;
+		this.respawnProtectionTaskID = Bukkit.getScheduler().runTaskLater(Towny.getPlugin(), this::removeRespawnProtection, protectionTime).getTaskId();
+	}
+	
+	public void removeRespawnProtection() {
+		Bukkit.getScheduler().cancelTask(respawnProtectionTaskID);
+		respawnProtectionTaskID = -1;
+		TownyMessaging.sendMsg(this, Translatable.of("msg_you_have_lost_your_respawn_protection"));
+	}
+	
+	public boolean isRespawnPickupWarningShown() {
+		return this.respawnPickupWarningShown;
+	}
+
+	public void setRespawnPickupWarningShown(boolean respawnPickupWarningShown) {
+		this.respawnPickupWarningShown = respawnPickupWarningShown;
 	}
 
 	@NotNull

@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class BaseCommand implements TabCompleter{
 	
@@ -206,6 +207,24 @@ public class BaseCommand implements TabCompleter{
 			return NameUtil.filterByStart(NameUtil.getNames(residents), str);
 		else 
 			return Collections.emptyList();
+	}
+	
+	/**
+	 * Returns a list of residents which are online and have no town, and can be seen by the sender.
+	 * 
+	 * @param arg the string to check if the resident's name starts with.
+	 * @return the residents names or an empty list.
+	 */
+	public List<String> getVisibleResidentsForPlayerWithoutTownsStartingWith(String arg, CommandSender sender) {
+		if (!(sender instanceof Player player))
+			return getResidentsWithoutTownStartingWith(arg);
+		List<String> residents = getOnlinePlayersWithoutTown().stream()
+			.filter(res -> player.canSee(res.getPlayer()))
+			.map(res -> res.getName())
+			.collect(Collectors.toCollection(ArrayList::new));
+		return !residents.isEmpty()
+			? NameUtil.filterByStart(residents, arg)
+			: Collections.emptyList();
 	}
 
 	/**
