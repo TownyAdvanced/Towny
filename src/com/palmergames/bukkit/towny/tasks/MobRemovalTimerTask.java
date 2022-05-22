@@ -68,67 +68,68 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			if (townyWorld.isForceTownMobs() && townyWorld.hasWorldMobs())
 				continue;
 
-			for (LivingEntity entity : world.getLivingEntities()) {
-				Location livingEntityLoc = entity.getLocation();
+			final List<LivingEntity> entities = world.getLivingEntities();
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+				for (LivingEntity entity : entities) {
+					Location livingEntityLoc = entity.getLocation();
 
-				// Check if entity is a Citizens NPC
-				if (BukkitTools.checkCitizens(entity))
-					continue;
-				
-				// Handles entities Globally.
-				if (!townyWorld.hasWorldMobs() && isRemovingWorldEntity(entity)) {
-					entitiesToRemove.add(entity);
-					continue;
-				}
-				
-				// Handles entities in the wilderness.
-				if (TownyAPI.getInstance().isWilderness(livingEntityLoc)) {
-					if (townyWorld.hasWildernessMobs())
-						continue;
-					if (!isRemovingWildernessEntity(entity))
-						continue;
-				} else {
-					// The entity is inside of a town.
-					TownBlock townBlock = TownyAPI.getInstance().getTownBlock(livingEntityLoc);
-
-					// Check if mobs are always allowed inside towns in this world.
-					if (townyWorld.isForceTownMobs() || townBlock.getPermissions().mobs)
+					// Check if entity is a Citizens NPC
+					if (BukkitTools.checkCitizens(entity))
 						continue;
 
-					// Check that Towny is removing this type of entity inside towns.
-					if (!isRemovingTownEntity(entity))
-						continue;
-				}
-
-				if (TownySettings.isSkippingRemovalOfNamedMobs() && entity.getCustomName() != null)
-					continue;
-
-				// Special check if it's a rabbit, for the Killer Bunny variant.
-				if (entity.getType().equals(EntityType.RABBIT)) {
-					if (isRemovingKillerBunny && ((Rabbit) entity).getRabbitType().equals(Rabbit.Type.THE_KILLER_BUNNY)) {
+					// Handles entities Globally.
+					if (!townyWorld.hasWorldMobs() && isRemovingWorldEntity(entity)) {
 						entitiesToRemove.add(entity);
 						continue;
 					}
-				}
-				
-				// Ensure the entity hasn't been removed since
-				if (!entity.isValid())
-					continue;
-				
-				if (!skipRemovalEvent) {
-					MobRemovalEvent event = new MobRemovalEvent(entity);
-					Bukkit.getPluginManager().callEvent(event);
-					if (event.isCancelled())
-						continue;
-				}
 
-				entitiesToRemove.add(entity);
-			}
+					// Handles entities in the wilderness.
+					if (TownyAPI.getInstance().isWilderness(livingEntityLoc)) {
+						if (townyWorld.hasWildernessMobs() || !isRemovingWildernessEntity(entity))
+							continue;
+					} else {
+						// The entity is inside of a town.
+						TownBlock townBlock = TownyAPI.getInstance().getTownBlock(livingEntityLoc);
+
+						// Check if mobs are always allowed inside towns in this world.
+						if (townyWorld.isForceTownMobs() || townBlock.getPermissions().mobs)
+							continue;
+
+						// Check that Towny is removing this type of entity inside towns.
+						if (!isRemovingTownEntity(entity))
+							continue;
+					}
+
+					if (TownySettings.isSkippingRemovalOfNamedMobs() && entity.getCustomName() != null)
+						continue;
+
+					// Special check if it's a rabbit, for the Killer Bunny variant.
+					if (entity.getType().equals(EntityType.RABBIT)) {
+						if (isRemovingKillerBunny && ((Rabbit) entity).getRabbitType().equals(Rabbit.Type.THE_KILLER_BUNNY)) {
+							entitiesToRemove.add(entity);
+							continue;
+						}
+					}
+
+					// Ensure the entity hasn't been removed since
+					if (!entity.isValid())
+						continue;
+
+					if (!skipRemovalEvent) {
+						MobRemovalEvent event = new MobRemovalEvent(entity);
+						Bukkit.getPluginManager().callEvent(event);
+						if (event.isCancelled())
+							continue;
+					}
+
+					entitiesToRemove.add(entity);
+				}
+				
+				Bukkit.getScheduler().runTask(plugin, () -> {
+					for (LivingEntity entity : entitiesToRemove)
+						entity.remove();
+				});
+			});
 		}
-		
-		Bukkit.getScheduler().runTask(plugin, () -> {
-			for (LivingEntity entity : entitiesToRemove)
-				entity.remove();
-		});
 	}
 }
