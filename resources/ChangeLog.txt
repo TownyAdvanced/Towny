@@ -7472,3 +7472,5 @@ v0.92.0.11:
     - Closes #5911.
   - Fix error that prevents using town and nation spawn commands when is_public_spawn_cost_affected_by_town_spawncost is set to false.
     - Closes #5921.
+  - Translate a couple things that weren't translated.
+    - Closes #5920.

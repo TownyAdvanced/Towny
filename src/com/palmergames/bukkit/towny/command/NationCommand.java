@@ -622,7 +622,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			String nationName;
 
 			if (args.length < 1)
-				throw new TownyException("Usage: /nation join [nation]");
+				throw new TownyException(Translatable.of("msg_usage", "/nation join [nation]"));
 
 			nationName = args[0];
 			
@@ -1478,7 +1478,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private void nationAllyAdd(Player player, Resident resident, Nation nation, String[] names) throws TownyException {
 		if (names.length == 0)
-			throw new TownyException("ex: /n ally add [names]");
+			throw new TownyException(Translatable.of("msg_usage", "/n ally add [names]"));
 		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		ArrayList<Nation> list = new ArrayList<>();
@@ -1527,7 +1527,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private void nationAllyRemove(Player player, Resident resident, Nation nation, String[] names) throws TownyException {
 		if (names.length == 0)
-			throw new TownyException("ex: /n ally add [names]");
+			throw new TownyException(Translatable.of("msg_usage", "/n ally add [names]"));
 		
 		ArrayList<Nation> list = new ArrayList<>();
 		Nation ally;

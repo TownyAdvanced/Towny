@@ -1196,7 +1196,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			 * Does the command have enough arguments?
 			 */
 			if (split.length < 2)
-				throw new TownyException("Eg: /town outlaw add/remove [name]");
+				throw new TownyException(Translatable.of("msg_usage", "/town outlaw add/remove [name]"));
 
 			if (!admin)
 				resident = getResidentOrThrow(sender.getName());
@@ -3492,7 +3492,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (sender instanceof Player) {
 				// Player
 				if (args.length < 1)
-					throw new TownyException("Usage: /town join [town]");
+					throw new TownyException(Translatable.of("msg_usage", "/town join [town]"));
 
 				Player player = (Player) sender;
 				residentName = player.getName();
@@ -3502,7 +3502,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else {
 				// Console
 				if (args.length < 2)
-					throw new TownyException("Usage: town join [resident] [town]");
+					throw new TownyException(Translatable.of("msg_usage", "town join [resident] [town]"));
 
 				residentName = args[0];
 				townName = args[1];
