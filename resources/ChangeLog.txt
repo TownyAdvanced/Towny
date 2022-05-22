@@ -7470,3 +7470,5 @@ v0.92.0.11:
   - Fix runCommand for plots button, courtesy of Warriorrrr with PR #5910.
   - Remove the last of the NotRegisteredExceptions from the TownyPlaceholderExpansion.
     - Closes #5911.
+  - Fix error that prevents using town and nation spawn commands when is_public_spawn_cost_affected_by_town_spawncost is set to false.
+    - Closes #5921.

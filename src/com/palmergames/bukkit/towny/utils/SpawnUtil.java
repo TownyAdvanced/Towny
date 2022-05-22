@@ -475,7 +475,7 @@ public class SpawnUtil {
 		
 		// If this is a "public" spawn and the Config doesn't allow mayors to override the Config price, use the Config price.
 		if (!TownySettings.isPublicSpawnCostAffectedByTownSpawncost() &&
-			(townSpawnLevel.equals(TownSpawnLevel.UNAFFILIATED) || nationSpawnLevel.equals(NationSpawnLevel.UNAFFILIATED)))
+			(isPublicSpawn(townSpawnLevel) || isPublicSpawn(nationSpawnLevel)))
 			return TownySettings.getSpawnTravelCost();
 
 		return switch(spawnType) {
@@ -484,6 +484,14 @@ public class SpawnUtil {
 		case NATION -> Math.min(nationSpawnLevel.getCost(nation), nationSpawnLevel.getCost());
 		};
 		
+	}
+
+	private static boolean isPublicSpawn(NationSpawnLevel nationSpawnLevel) {
+		return nationSpawnLevel != null && nationSpawnLevel.equals(NationSpawnLevel.UNAFFILIATED);
+	}
+
+	private static boolean isPublicSpawn(TownSpawnLevel townSpawnLevel) {
+		return townSpawnLevel != null && townSpawnLevel.equals(TownSpawnLevel.UNAFFILIATED);
 	}
 
 	/**
