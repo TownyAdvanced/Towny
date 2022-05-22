@@ -3961,7 +3961,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						double missingAmount = blockCost - town.getAccount().getHoldingBalance();
 						if (!town.getAccount().canPayFromHoldings(blockCost))
 							throw new TownyException(Translatable.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
-						town.getAccount().withdraw(blockCost, String.format("Town Claim (%d)", selection.size()));
+						town.getAccount().withdraw(blockCost, String.format("Town Claim (%d) by %s", selection.size(), player.getName()));
 					} catch (NullPointerException e2) {
 						throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
 					}
