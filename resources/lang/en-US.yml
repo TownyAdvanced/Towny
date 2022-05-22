@@ -28,6 +28,7 @@ description: >
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
+default_alliance_prefix: '&6[%s] &a'
 
 unclaimed_plot_name: 'Unowned'
 unclaimed_zone_name: 'Wilderness'
@@ -1701,3 +1702,19 @@ msg_alliance_online: 'Online in Alliance'
 msg_err_admin_only_delete_alliance: '&cOnly an admin can delete other alliance data.'
 #Message shown when an admin deletes an Alliance
 alliance_deleted_by_admin: '&bAlliance %s deleted successfully'
+#Message shown when an alliance cannot be found with that name.
+msg_err_no_alliance_with_that_name: 'No alliance found with name %s'
+#Message shown when an alliance is not allowed to do something to itself.
+msg_own_alliance_disallow: '&bYou can not do this to your own alliance.'
+#Error message shown when an alliance tries to remove a non-enemy as enemy.
+msg_err_alliance_not_enemies_with: '&cYour alliance isn''t enemies with %s.'
+#Error message shown when trying enemy and enemy alliance.
+msg_err_alliance_already_enemies_with: '&cYour alliance is already enemies with %s.'
+#Message shown when adding an alliance as an enemy.
+msg_added_enemy_alliance: '&b%s has developed a hatred towards your alliance.'
+#Message shown when removing an alliance as an enemy.
+msg_removed_enemy_alliance: '&b%s has become peaceful towards your alliance.'
+#Message shown when adding alliances as enemy.
+msg_enemy_alliance: '&b%s developed a hatred for the alliances %s.'
+#Message shown when removing alliance as enemy.
+msg_enemy_alliance_to_neutral: '&b%s has changed it''s status to peaceful towards %s.'

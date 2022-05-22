@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.object.Alliance;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -727,6 +728,20 @@ public class TownyMessaging {
 	}
 
 	/**
+	 * Send a message to All online residents of an alliance and log
+	 * preceded by the [AllianceName], translated for the end-user.
+	 * 
+	 * @param alliance Alliance to pass the message to, prefix message with.
+	 * @param message Translatable object to be messaged to the player using their locale.
+	 */
+	public static void sendPrefixedAllianceMessage(Alliance alliance, Translatable message) {
+		LOGGER.info(ChatTools.stripColour("[Alliance Msg] " + StringMgmt.remUnderscore(alliance.getName()) + ": " + message.translate()));
+		
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(alliance))
+			sendMessage(player, Translation.translateTranslatables(player, "", Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(alliance.getName())), message));
+	}
+	
+	/**
 	 * Send a message to All online residents of a nation and log
 	 * preceded by the [NationName], translated for the end-user.
 	 * 
@@ -752,6 +767,20 @@ public class TownyMessaging {
 		
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
 			sendMessage(player, Translation.translateTranslatables(player, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), message));
+	}
+
+	/**
+	 * Send a message to All online residents of an alliance and log, 
+	 * preceded by the default_towny_prefix
+	 * 
+	 * @param alliance Alliance which will receive the message.
+	 * @param message Translatable message to be shown to the town.
+	 */
+	public static void sendAllianceMessagePrefixed(Alliance alliance, Translatable message) {
+		LOGGER.info(ChatTools.stripColour("[Alliance Msg] " + StringMgmt.remUnderscore(alliance.getName()) + ": " + message.translate()));
+		
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(alliance))
+			sendMsg(player, message);
 	}
 	
 	/**

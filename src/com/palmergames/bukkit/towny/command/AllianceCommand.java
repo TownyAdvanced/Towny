@@ -18,6 +18,10 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.event.alliance.AllianceAddEnemyEvent;
+import com.palmergames.bukkit.towny.event.alliance.AlliancePreAddEnemyEvent;
+import com.palmergames.bukkit.towny.event.alliance.AlliancePreRemoveEnemyEvent;
+import com.palmergames.bukkit.towny.event.alliance.AllianceRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Alliance;
@@ -191,6 +195,12 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_command_disable"));
 
 			allianceDelete(player, StringMgmt.remFirstArg(split));
+		} else if (split[0].equalsIgnoreCase("enemy")) {
+
+			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_ENEMY.getNode()))
+				throw new TownyException(Translatable.of("msg_err_command_disable"));
+
+			allianceEnemy(player, StringMgmt.remFirstArg(split));
 		} else if (split[0].equalsIgnoreCase("online")) {
 
 			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_ONLINE.getNode()))
@@ -209,6 +219,108 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 	}
+
+	private void allianceEnemy(Player player, String[] split) throws TownyException {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
+		if (split.length < 2) {
+			TownyMessaging.sendErrorMsg(player, "Eg: /nation enemy [add/remove] [name]");
+			return;
+		}
+
+		Alliance alliance = getAllianceFromPlayerOrThrow(player);
+		
+		ArrayList<Alliance> list = new ArrayList<>();
+		Alliance enemy;
+		// test add or remove
+		String test = split[0];
+		String[] newSplit = StringMgmt.remFirstArg(split);
+		boolean add = test.equalsIgnoreCase("add");
+
+		if ((test.equalsIgnoreCase("remove") || test.equalsIgnoreCase("add")) && newSplit.length > 0) {
+			for (String name : newSplit) {
+				enemy = townyUniverse.getAlliance(name);
+
+				if (enemy == null) {
+					throw new TownyException(Translatable.of("msg_err_no_alliance_with_that_name", name));
+				}
+
+				if (alliance.equals(enemy))
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_own_alliance_disallow"));
+				else if (add && alliance.hasEnemy(enemy))
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_alliance_already_enemies_with", enemy.getName()));
+				else if (!add && !alliance.hasEnemy(enemy))
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_alliance_not_enemies_with", enemy.getName()));
+				else
+					list.add(enemy);
+			}
+			if (!list.isEmpty())
+				allianceEnemy(player, alliance, list, add);
+
+		} else {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", "[add/remove]"));
+		}
+	}
+
+
+	private void allianceEnemy(Player player, Alliance alliance, ArrayList<Alliance> enemies, boolean add) {
+
+		ArrayList<Alliance> remove = new ArrayList<>();
+		for (Alliance targetAlliance : enemies)
+			if (add && !alliance.getEnemies().contains(targetAlliance)) {
+				AlliancePreAddEnemyEvent apaee = new AlliancePreAddEnemyEvent(alliance, targetAlliance);
+				Bukkit.getPluginManager().callEvent(apaee);
+				
+				if (!apaee.isCancelled()) {
+					alliance.addEnemy(targetAlliance);
+					
+					AllianceAddEnemyEvent aaee = new AllianceAddEnemyEvent(alliance, targetAlliance);
+					Bukkit.getPluginManager().callEvent(aaee);
+
+					TownyMessaging.sendPrefixedAllianceMessage(targetAlliance, Translatable.of("msg_added_enemy_alliance", alliance));
+				} else {
+					TownyMessaging.sendErrorMsg(player, apaee.getCancelMessage());
+					remove.add(targetAlliance);
+				}
+
+			} else if (alliance.getEnemies().contains(targetAlliance)) {
+				AlliancePreRemoveEnemyEvent apree = new AlliancePreRemoveEnemyEvent(alliance, targetAlliance);
+				Bukkit.getPluginManager().callEvent(apree);
+				if (!apree.isCancelled()) {
+					alliance.removeEnemy(targetAlliance);
+
+					AllianceRemoveEnemyEvent aree = new AllianceRemoveEnemyEvent(alliance, targetAlliance);
+					Bukkit.getPluginManager().callEvent(aree);
+					
+					TownyMessaging.sendPrefixedAllianceMessage(targetAlliance, Translatable.of("msg_removed_enemy_alliance", alliance));
+				} else {
+					TownyMessaging.sendErrorMsg(player, apree.getCancelMessage());
+					remove.add(targetAlliance);
+				}
+			}
+		
+		for (Alliance newEnemy : remove)
+			enemies.remove(newEnemy);
+
+		if (enemies.size() > 0) {
+			String msg = "";
+
+			for (Alliance newEnemy : enemies)
+				msg += newEnemy.getName() + ", ";
+
+			msg = msg.substring(0, msg.length() - 2);
+			if (add)
+				TownyMessaging.sendPrefixedAllianceMessage(alliance, Translatable.of("msg_enemy_alliance", player.getName(), msg));
+			else
+				TownyMessaging.sendPrefixedAllianceMessage(alliance, Translatable.of("msg_enemy_alliance_to_neutral", player.getName(), msg));
+
+			TownyUniverse.getInstance().getDataSource().saveAlliances();
+
+			plugin.resetCache();
+		} else
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
+	}
+
 
 	private void allianceDelete(Player player, String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
