@@ -487,11 +487,11 @@ public class SpawnUtil {
 	}
 
 	private static boolean isPublicSpawn(NationSpawnLevel nationSpawnLevel) {
-		return nationSpawnLevel != null && nationSpawnLevel.equals(NationSpawnLevel.UNAFFILIATED);
+		return NationSpawnLevel.UNAFFILIATED.equals(nationSpawnLevel);
 	}
 
 	private static boolean isPublicSpawn(TownSpawnLevel townSpawnLevel) {
-		return townSpawnLevel != null && townSpawnLevel.equals(TownSpawnLevel.UNAFFILIATED);
+		return TownSpawnLevel.UNAFFILIATED.equals(townSpawnLevel);
 	}
 
 	/**

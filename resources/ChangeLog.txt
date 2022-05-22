@@ -7474,3 +7474,7 @@ v0.92.0.11:
     - Closes #5921.
   - Translate a couple things that weren't translated.
     - Closes #5920.
+  - Add player name to /t claim withdraw reason, courtesy of Warriorrrr with PR #5922.
+  - Make the mob removal task partially async, courtesy of Warriorrrr with PR #5918.
+  - Add AccountAuditor#getTransactions, courtesy of Warriorrrr with PR #5914.
+  - Handle different Objects which aren't CommandSenders in the main sendErrorMsg method. 
