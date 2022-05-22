@@ -51,7 +51,7 @@ nation_help_3: 'Estado de la nación seleccionada'
 nation_help_4: 'Lista de todas las naciones'
 nation_help_5: 'Abandonar tu nación'
 nation_help_6: 'Fundar una nueva nación'
-nation_help_7: 'List the nation leader commands'
+nation_help_7: 'Lista de comandos del líder nacional'
 nation_help_8: 'Fundar una nueva nación'
 nation_help_9: 'Lista de todos los habitantes conectados en tu nación'
 king_help_1: 'Nation Leader Help'
@@ -1482,3 +1482,7 @@ msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to
 status_plot_string: 'Plots'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
+#Usage:
+msg_usage: 'Usage: %s'
+#Shown in teh bank history books when there are no pages to display
+msg_err_no_pages_to_display: 'No pages to display!'
