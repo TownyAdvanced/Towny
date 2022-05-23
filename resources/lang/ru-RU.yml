@@ -1483,6 +1483,6 @@ status_plot_string: 'Участки'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
 #Usage:
-msg_usage: 'Usage: %s'
+msg_usage: 'Используется: %s/t'
 #Shown in teh bank history books when there are no pages to display
 msg_err_no_pages_to_display: 'No pages to display!'
