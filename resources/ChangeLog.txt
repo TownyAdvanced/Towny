@@ -7480,3 +7480,5 @@ v0.92.0.11:
   - Handle different Objects which aren't CommandSenders in the main sendErrorMsg method. 
 0.98.1.14:
   - Adds ability to suppress error messages sent by TownyActionEvents, courtesy of PestoNotPasta with PR #5925.
+0.98.2.0:
+  - Bump version for release.
