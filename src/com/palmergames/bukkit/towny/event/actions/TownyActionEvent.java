@@ -22,6 +22,7 @@ public abstract class TownyActionEvent extends Event implements Cancellable {
 	protected final Material mat;
 	protected final TownBlock townblock;
 	protected boolean cancelled;
+	protected boolean suppressMessage;
 	protected String message;
 
 	public TownyActionEvent(Player player, Location loc, Material mat, TownBlock townblock, boolean cancelled) {
@@ -29,6 +30,7 @@ public abstract class TownyActionEvent extends Event implements Cancellable {
 		this.loc = loc;
 		this.mat = mat;
 		this.townblock = townblock;
+		this.suppressMessage = false;
 		setCancelled(cancelled);
 	}
 
@@ -46,6 +48,15 @@ public abstract class TownyActionEvent extends Event implements Cancellable {
 	@Override
 	public void setCancelled(boolean cancel) {
 		cancelled = cancel;
+	}
+
+	
+	public boolean isMessageSupressed() {
+		return suppressMessage;
+	}
+
+	public void supressMessage(boolean suppressMessage) {
+		this.suppressMessage = suppressMessage;
 	}
 
 	/**
