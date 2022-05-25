@@ -156,17 +156,16 @@ public class TownyMessaging {
 			return;
 		
 		Audience audience = Towny.getAdventure().sender(sender);
-		audience.sendMessage(Translatable.of("default_towny_prefix").append("<dark_green>" + msg).stripColors(sender instanceof ConsoleCommandSender).componentFor(sender));
+		audience.sendMessage(Translatable.of("default_towny_prefix").append(Colors.GREEN + msg).stripColors(sender instanceof ConsoleCommandSender).componentFor(sender));
 		
 		sendDevMsg(msg);
 	}
 	
 	public static void sendMsg(CommandSender sender, Component message) {
-		if (sender == null || TownyComponents.plain(message).isEmpty())
+		if (sender == null || Component.empty().equals(message))
 			return;
 
-		Towny.getAdventure().sender(Bukkit.getConsoleSender()).sendMessage(message);
-		Towny.getAdventure().sender(sender).sendMessage(Translatable.of("default_towny_prefix").locale(sender).stripColors(sender instanceof ConsoleCommandSender).append(Colors.DARK_GREEN).append(message).component());
+		Towny.getAdventure().sender(sender).sendMessage(Translatable.of("default_towny_prefix").locale(sender).stripColors(sender instanceof ConsoleCommandSender).append(TownyComponents.prependMiniMessage(message, Colors.GREEN)).component());
 		
 		sendDevMsg(message);
 	}
@@ -776,6 +775,7 @@ public class TownyMessaging {
 	 *  
 	 * @param sender CommandSender who will see the message. 
 	 * @param translatables Translatble... object(s) which will be translated.
+	 * @deprecated Deprecated as of 0.98.2.1, use {@link #sendMsg(CommandSender, Translatable)} instead.
 	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval
@@ -788,6 +788,7 @@ public class TownyMessaging {
 	 *  
 	 * @param sender CommandSender who will see the message. 
 	 * @param translatables Translatble... object(s) which will be translated.
+	 * @deprecated Deprecated as of 0.98.2.1, use {@link #sendMessage(CommandSender, Translatable)} instead.   
 	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval
@@ -803,6 +804,7 @@ public class TownyMessaging {
 	 * 
 	 * @param sender CommandSender who will receive the error message.
 	 * @param translatables Translatable... object(s) to be translated using the locale of the end-user.
+	 * @deprecated Deprecated as of 0.98.2.1, use {@link #sendErrorMsg(CommandSender, Translatable)} instead.   
 	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval

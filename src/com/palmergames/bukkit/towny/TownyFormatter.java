@@ -641,7 +641,7 @@ public class TownyFormatter {
 			// ForceTownMobs: ON
 			screen.addComponentOf("townmobs", colourKeyValue(translator.of("status_world_forcetownmobs"), (world.isForceTownMobs() ? translator.of("status_forced") : translator.of("status_adjustable"))));
 			// Unclaim Revert: ON
-			screen.addComponentOf("unclaim_revert", colourKeyValue(translator.of("status_world_unclaimrevert"), (world.isUsingPlotManagementRevert() ? translator.of("status_on_good") : translator.of("status_off_bad")))); 
+			screen.addComponentOf("unclaim_revert", colourKeyValue("\n" + translator.of("status_world_unclaimrevert"), (world.isUsingPlotManagementRevert() ? translator.of("status_on_good") : translator.of("status_off_bad")))); 
 			// Entity Explosion Revert: ON | Block Explosion Revert: ON
 			screen.addComponentOf("explosion_reverts", colourKeyValue(translator.of("status_world_explrevert_entity"), (world.isUsingPlotManagementWildEntityRevert() ? translator.of("status_on_good") : translator.of("status_off_bad")))
 				.append(translator.comp("status_splitter"))
