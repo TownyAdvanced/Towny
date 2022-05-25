@@ -197,12 +197,18 @@ public final class Translation {
 		return translations.containsKey(locale) ? locale : defaultLocale.toString();
 	}
 	
+	/**
+	 * @deprecated Deprecated as of 0.98.2.1.
+	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval
 	public static String translateTranslatables(CommandSender sender, Translatable... translatables) {
 		return translateTranslatables(sender, " ", translatables);
 	}
 	
+	/**
+	 * @deprecated Deprecated as of 0.98.2.1.
+	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval
 	public static String translateTranslatables(CommandSender sender, String delimiter, Translatable... translatables) {

@@ -28,12 +28,18 @@ public class StatusScreen {
 		this.sender = sender;
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.98.2.1
+	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval
 	public CommandSender getCommandSender() {
 		return sender;
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.98.2.1, use {@link #addComponentOf(String, Component)} instead.
+	 */
 	@Deprecated
 	public void addComponentOf(String name, String text) {
 		components.put(name, TownyComponents.miniMessage(text));
@@ -43,16 +49,25 @@ public class StatusScreen {
 		components.put(name, component);
 	}
 	
+	/**
+	 * @deprecated Deprecated as of 0.98.2.1, use {@link #addComponentOf(String, Component)} instead.
+	 */
 	@Deprecated
 	public void addComponentOf(String name, String text, ClickEvent click) {
 		components.put(name, Component.text(text).clickEvent(click));
 	}
 	
+	/**
+	 * @deprecated Deprecated as of 0.98.2.1, use {@link #addComponentOf(String, Component)} instead.
+	 */
 	@Deprecated
 	public void addComponentOf(String name, String text, HoverEvent<?> hover) {
 		components.put(name, Component.text(text).hoverEvent(hover));
 	}
 	
+	/**
+	 * @deprecated Deprecated as of 0.98.2.1, use {@link #addComponentOf(String, Component)} instead.
+	 */
 	@Deprecated
 	public void addComponentOf(String name, String text, HoverEvent<?> hover, ClickEvent click) {
 		components.put(name, Component.text(text).hoverEvent(hover).clickEvent(click));
@@ -122,6 +137,6 @@ public class StatusScreen {
 	}
 	
 	private boolean lineWouldBeTooLong(Component line, Component comp) {
-		return TownyComponents.plain(line).length() + TownyComponents.plain(comp).length() > ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH;
+		return TownyComponents.plain(line).length() + TownyComponents.plain(comp).length() > ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH;
 	}
 }
