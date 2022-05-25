@@ -274,6 +274,7 @@ public class Nation extends Government {
 	}
 	
 	public void removeAlliance() {
+		alliance.removeMember(this);
 		alliance = null;
 	}
 

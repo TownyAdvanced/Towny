@@ -1720,5 +1720,11 @@ msg_enemy_alliance: '&b%s developed a hatred for the alliances %s.'
 msg_enemy_alliance_to_neutral: '&b%s has changed it''s status to peaceful towards %s.'
 #Message shown when an alliance tries to add a nation that is already a part of the nation:
 msg_err_nation_already_part_of_alliance: 'The nation %s is already a part of your alliance.'
+#Message shown when an alliance tries to remove a nation that isn't part of the nation:
+msg_err_nation_not_part_of_alliance: 'The nation %s is not part of your alliance.'
 #Message shown when a nation joins an alliance.
 msg_nation_has_joined_alliance: 'The nation %s has joined your alliance.'
+#Message shown when an Alliance has sent too many invites.
+msg_err_alliace_sent_too_many_requests: '&bAlliance has sent too many requests, revoke some before trying again!'
+#Message shown when an Alliance removes a nation.
+msg_alliance_removed_ally: '&b%s has been removed from your alliance.'

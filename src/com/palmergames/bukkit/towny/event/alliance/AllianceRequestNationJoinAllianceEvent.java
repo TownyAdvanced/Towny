@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 
-public class AllianceRequestNationJoinEvent extends Event {
+public class AllianceRequestNationJoinAllianceEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	private final AllianceNationInvite invite;
@@ -22,7 +22,7 @@ public class AllianceRequestNationJoinEvent extends Event {
 		return handlers;
 	}
 
-	public AllianceRequestNationJoinEvent(AllianceNationInvite invite) {
+	public AllianceRequestNationJoinAllianceEvent(AllianceNationInvite invite) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.invite = invite;
 	}

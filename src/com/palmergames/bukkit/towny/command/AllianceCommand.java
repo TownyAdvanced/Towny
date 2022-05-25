@@ -24,7 +24,8 @@ import com.palmergames.bukkit.towny.event.alliance.AlliancePreAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.alliance.AlliancePreAddNationEvent;
 import com.palmergames.bukkit.towny.event.alliance.AlliancePreRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.alliance.AllianceRemoveEnemyEvent;
-import com.palmergames.bukkit.towny.event.alliance.AllianceRequestNationJoinEvent;
+import com.palmergames.bukkit.towny.event.alliance.AllianceRemoveNationEvent;
+import com.palmergames.bukkit.towny.event.alliance.AllianceRequestNationJoinAllianceEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
@@ -319,7 +320,7 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 					if (player.hasPermission(PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ACCEPT.getNode()))
 						TownyMessaging.sendRequestMessage(player, invite);
 				
-				Bukkit.getPluginManager().callEvent(new AllianceRequestNationJoinEvent(invite));
+				Bukkit.getPluginManager().callEvent(new AllianceRequestNationJoinAllianceEvent(invite));
 			} else {
 				throw new TownyException(Translatable.of("msg_err_ally_already_requested", nation));
 			}
@@ -343,9 +344,54 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 	}
 
 
-	private void allianceRemove(Player player, String[] names) {
-		// TODO Auto-generated method stub
+	private void allianceRemove(Player player, String[] names) throws TownyException {
+		if (names.length == 0)
+			throw new TownyException(Translatable.of("msg_usage", "/alliance remove [name]"));
 		
+		Alliance alliance = getAllianceFromPlayerOrThrow(player);
+		ArrayList<Nation> removeList = new ArrayList<>();
+		for (String name : names) {
+			Nation nation = TownyUniverse.getInstance().getNation(name);
+			if (nation != null) {
+				if (!alliance.hasNation(nation)) {
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_nation_not_part_of_alliance", name));
+				} else {
+					removeList.add(nation);
+				}
+			}
+		}
+		if (!removeList.isEmpty())
+			allianceRemove(player, alliance, removeList);
+	}
+
+
+	private void allianceRemove(Player player, Alliance alliance, ArrayList<Nation> removeList) throws TownyException {
+		List<Nation> failed = new ArrayList<>(); 
+		for (Nation nation : removeList) {
+			if (!allianceRemoveAlly(player, alliance, nation))
+				// Will return false if the AllianceRemoveNationEvent is cancelled.
+				failed.add(nation);
+		}
+		for (Nation removedNation : failed)
+			removeList.remove(removedNation);
+		if (removeList.isEmpty())
+			throw new TownyException(Translatable.of("msg_invalid_name"));
+	}
+
+
+	private boolean allianceRemoveAlly(Player player, Alliance alliance, Nation nation) {
+		AllianceRemoveNationEvent arne = new AllianceRemoveNationEvent(alliance, nation);
+		Bukkit.getPluginManager().callEvent(arne);
+		if (arne.isCancelled()) {
+			TownyMessaging.sendErrorMsg(player, arne.getCancelMessage());
+			return false;
+		}
+
+		nation.removeAlliance();
+		nation.save();
+		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_removed_ally", alliance));
+		TownyMessaging.sendPrefixedAllianceMessage(alliance, Translatable.of("msg_alliance_removed_ally", nation));
+		return true;
 	}
 
 
