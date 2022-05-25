@@ -1329,8 +1329,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		out.add(ChatTools.formatTitle(town + " Town Plots"));
 		out.add(Component.text("Town Size: ", NamedTextColor.DARK_GREEN)
 			.append(Component.text(town.getTownBlocks().size() + " / " + town.getMaxTownBlocksAsAString(), NamedTextColor.GREEN))
-			.append(town.hasUnlimitedClaims() ?
-				TownySettings.isSellingBonusBlocks(town) ?
+			.append(town.hasUnlimitedClaims()
+				? Component.empty()
+				: TownySettings.isSellingBonusBlocks(town) ?
 					Component.text(" [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchasedBlocks(town) + "]", NamedTextColor.AQUA) :
 					Component.empty()
 						.append(town.getBonusBlocks() > 0 ?
@@ -1339,7 +1340,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						.append(TownySettings.getNationBonusBlocks(town) > 0 ?
 							Component.text(" [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]", NamedTextColor.AQUA) :
 							Component.empty())
-				: Component.empty()));
+			));
 		
 		TownBlockTypeCache typeCache = town.getTownBlockTypeCache();
 		out.add(Component.text("Town Owned Land: ", NamedTextColor.DARK_GREEN)
