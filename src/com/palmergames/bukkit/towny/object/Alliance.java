@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.invites.Invite;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 
@@ -23,6 +24,7 @@ public class Alliance implements Nameable, InviteSender, ResidentList {
 	private long registered;
 	private Nation founder;
 	private UUID founderUUID;
+	private final List<Invite> sentAllianceInvites = new ArrayList<>();
 
 	public Alliance(UUID uuid) {
 		this.setUUID(uuid);
@@ -250,5 +252,21 @@ public class Alliance implements Nameable, InviteSender, ResidentList {
 		for (Town town : getTowns())
 			out.addAll(town.getOutlaws());
 		return Collections.unmodifiableList(out);
+	}
+
+	public void newSentAllianceInvite(Invite invite) throws TooManyInvitesException {
+		if (sentAllianceInvites.size() <= InviteHandler.getSentAllyRequestsMaxAmount(this) - 1) {
+			sentAllianceInvites.add(invite);
+		} else {
+			throw new TooManyInvitesException(Translation.of("msg_err_alliace_sent_too_many_requests"));
+		}
+	}
+	
+	public void deleteSentAllianceInvite(Invite invite) {
+		sentAllianceInvites.remove(invite);
+	}
+	
+	public List<Invite> getSentAllianceInvites() {
+		return Collections.unmodifiableList(sentAllianceInvites);
 	}
 }

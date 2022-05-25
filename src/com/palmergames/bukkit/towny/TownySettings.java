@@ -2728,7 +2728,9 @@ public class TownySettings {
 	public static int getMaximumRequestsSentNation() {
 		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_REQUESTS_SENT_NATION);
 	}
-
+	public static int getMaximumAllianceRequestsSentNation() {
+		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_ALLIANCE_REQUESTS_SENT_NATION);
+	}
 	public static int getMaximumInvitesReceivedResident() {
 		return getInt(ConfigNodes.INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED_PLAYER);
 	}

@@ -1718,3 +1718,7 @@ msg_removed_enemy_alliance: '&b%s has become peaceful towards your alliance.'
 msg_enemy_alliance: '&b%s developed a hatred for the alliances %s.'
 #Message shown when removing alliance as enemy.
 msg_enemy_alliance_to_neutral: '&b%s has changed it''s status to peaceful towards %s.'
+#Message shown when an alliance tries to add a nation that is already a part of the nation:
+msg_err_nation_already_part_of_alliance: 'The nation %s is already a part of your alliance.'
+#Message shown when a nation joins an alliance.
+msg_nation_has_joined_alliance: 'The nation %s has joined your alliance.'

@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -20,15 +21,21 @@ import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.alliance.AllianceAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.alliance.AlliancePreAddEnemyEvent;
+import com.palmergames.bukkit.towny.event.alliance.AlliancePreAddNationEvent;
 import com.palmergames.bukkit.towny.event.alliance.AlliancePreRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.alliance.AllianceRemoveEnemyEvent;
+import com.palmergames.bukkit.towny.event.alliance.AllianceRequestNationJoinEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.Alliance;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
+import com.palmergames.bukkit.towny.object.inviteobjects.AllianceNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.utils.NameUtil;
@@ -238,19 +245,105 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		
 	}
 
-	private void allianceNew(Player player2, String[] remFirstArg) {
+	private void allianceNew(Player player, String[] names) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
-	private void allianceAdd(Player player2, String[] remFirstArg) {
-		// TODO Auto-generated method stub
+	private void allianceAdd(Player player, String[] names) throws TownyException {
+		if (names.length == 0)
+			throw new TownyException(Translatable.of("msg_usage", "/alliance add [name]"));
+		
+		Alliance alliance = getAllianceFromPlayerOrThrow(player);
+		ArrayList<Nation> inviteList = new ArrayList<>();
+		for (String name : names) {
+			Nation nation = TownyUniverse.getInstance().getNation(name);
+			if (nation != null) {
+				if (alliance.hasNation(nation)) {
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_nation_already_part_of_alliance", name));
+				} else {
+					inviteList.add(nation);
+				}
+			}
+		}
+		if (!inviteList.isEmpty())
+			allianceAdd(player, alliance, inviteList);
 		
 	}
 
 
-	private void allianceRemove(Player player2, String[] remFirstArg) {
+	private void allianceAdd(Player player, Alliance alliance, ArrayList<Nation> toInvite) throws TownyException {
+		List<Nation> removed = new ArrayList<>(); 
+		for (Nation nation : toInvite) {
+			if (!allianceInviteAlly(player, alliance, nation))
+				// Will return false if the AlliancePreAddNationEvent is cancelled or the player
+				// isn't allowed to invite an NPC nation.
+				removed.add(nation);
+		}
+		for (Nation removedNation : removed)
+			toInvite.remove(removedNation);
+		if (toInvite.isEmpty())
+			throw new TownyException(Translatable.of("msg_invalid_name"));
+	}
+
+
+	private boolean allianceInviteAlly(Player player, Alliance alliance, Nation nation) throws TownyException {
+		AlliancePreAddNationEvent apane = new AlliancePreAddNationEvent(alliance, nation);
+		Bukkit.getPluginManager().callEvent(apane);
+		if (apane.isCancelled()) {
+			TownyMessaging.sendErrorMsg(player, apane.getCancelMessage());
+			return false;
+		}
+		if (!nation.getCapital().getMayor().isNPC()) {
+			// Send an invite to the nation.
+			allianceCreateAllyRequest(player, alliance, nation);
+			TownyMessaging.sendPrefixedAllianceMessage(alliance, Translatable.of("msg_ally_req_sent", nation));
+			return true;
+		} else {
+			// Send the invite to the NPC, only successful if player is an admin.
+			return allianceAddNPCNationAsAlly(player, alliance, nation);
+		}
+	}
+
+
+	private void allianceCreateAllyRequest(CommandSender sender, Alliance alliance, Nation nation) throws TownyException {
+		AllianceNationInvite invite = new AllianceNationInvite(sender, nation, alliance);
+		try {
+			if (!InviteHandler.inviteIsActive(invite)) {
+				nation.newReceivedInvite(invite);
+				alliance.newSentAllianceInvite(invite);
+				InviteHandler.addInvite(invite);
+
+				for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
+					if (player.hasPermission(PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ACCEPT.getNode()))
+						TownyMessaging.sendRequestMessage(player, invite);
+				
+				Bukkit.getPluginManager().callEvent(new AllianceRequestNationJoinEvent(invite));
+			} else {
+				throw new TownyException(Translatable.of("msg_err_ally_already_requested", nation));
+			}
+		} catch (TooManyInvitesException e) {
+			nation.deleteReceivedInvite(invite);
+			alliance.deleteSentAllianceInvite(invite);
+			throw new TownyException(e.getMessage());
+		}
+	}
+
+	private boolean allianceAddNPCNationAsAlly(Player player, Alliance alliance, Nation nation) {
+		if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)) {
+			nation.setAlliance(alliance);
+			nation.save();
+			TownyMessaging.sendPrefixedAllianceMessage(alliance, Translatable.of("msg_nation_has_joined_alliance", nation));
+			return true;
+		} else {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_unable_ally_npc"));
+			return false;
+		}
+	}
+
+
+	private void allianceRemove(Player player, String[] names) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -266,6 +266,7 @@ public class Nation extends Government {
 	 */
 	public void setAlliance(Alliance alliance) {
 		this.alliance = alliance;
+		alliance.addMember(this);
 	}
 	
 	public boolean hasAlliance() {

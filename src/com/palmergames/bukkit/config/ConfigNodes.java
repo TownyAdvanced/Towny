@@ -1769,6 +1769,11 @@ public enum ConfigNodes {
 			"",
 			"# How many requests a nation can send out to other nations, to ally with the nation.",
 			"# Only used when war.disallow_one_way_alliance is set to true."),
+	INVITE_SYSTEM_MAXIMUM_ALLIANCE_REQUESTS_SENT_NATION(
+			"invite_system.maximum_invites_sent.alliance_tonation",
+			"35",
+			"",
+			"# How many requests an alliance can send out to other nations, to join the alliance."),
 	INVITE_SYSTEM_MAXIMUM_INVITES_RECEIVED(
 			"invite_system.maximum_invites_received",
 			"",

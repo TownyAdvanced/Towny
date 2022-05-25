@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.invites;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Alliance;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -101,6 +102,18 @@ public class InviteHandler {
 				return true;
 		}
 		return false;
+	}
+
+	public static int getSentAllyRequestsMaxAmount(Alliance sender) {
+		int amount = 0;
+		if (sender != null) {
+			if (TownySettings.getMaximumAllianceRequestsSentNation() == 0){
+				amount = 100;
+			} else {
+				amount = TownySettings.getMaximumAllianceRequestsSentNation();
+			}
+		}
+		return amount;
 	}
 
 	public static int getSentAllyRequestsMaxAmount(Nation sender) {
