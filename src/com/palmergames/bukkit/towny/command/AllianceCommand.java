@@ -189,6 +189,24 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 
 			Alliance alliance = getAllianceFromPlayerOrThrow(player);
 			allianceStatusScreen(player, alliance);
+		} else if (split[0].equalsIgnoreCase("new")) {
+
+			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_NEW.getNode()))
+				throw new TownyException(Translatable.of("msg_err_command_disable"));
+
+			allianceNew(player, StringMgmt.remFirstArg(split));
+		} else if (split[0].equalsIgnoreCase("add") || split[0].equalsIgnoreCase("invite")) {
+
+			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_ADD.getNode()))
+				throw new TownyException(Translatable.of("msg_err_command_disable"));
+
+			allianceAdd(player, StringMgmt.remFirstArg(split));
+		} else if (split[0].equalsIgnoreCase("remove") || split[0].equalsIgnoreCase("kick")) {
+
+			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_REMOVE.getNode()))
+				throw new TownyException(Translatable.of("msg_err_command_disable"));
+
+			allianceRemove(player, StringMgmt.remFirstArg(split));
 		} else if (split[0].equalsIgnoreCase("delete")) {
 
 			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_DELETE.getNode()))
@@ -220,30 +238,39 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		
 	}
 
-	private void allianceEnemy(Player player, String[] split) throws TownyException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+	private void allianceNew(Player player2, String[] remFirstArg) {
+		// TODO Auto-generated method stub
+		
+	}
 
-		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(player, "Eg: /nation enemy [add/remove] [name]");
-			return;
-		}
+
+	private void allianceAdd(Player player2, String[] remFirstArg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	private void allianceRemove(Player player2, String[] remFirstArg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	private void allianceEnemy(Player player, String[] split) throws TownyException {
+		if (split.length < 2)
+			throw new TownyException(Translatable.of("msg_usage", "/alliance enemy [add/remove] [name]"));
 
 		Alliance alliance = getAllianceFromPlayerOrThrow(player);
-		
-		ArrayList<Alliance> list = new ArrayList<>();
-		Alliance enemy;
-		// test add or remove
-		String test = split[0];
-		String[] newSplit = StringMgmt.remFirstArg(split);
-		boolean add = test.equalsIgnoreCase("add");
+		String test = split[0]; // Should be either add or remove
+		String[] names = StringMgmt.remFirstArg(split); // Remainder should be a list of names.
 
-		if ((test.equalsIgnoreCase("remove") || test.equalsIgnoreCase("add")) && newSplit.length > 0) {
-			for (String name : newSplit) {
-				enemy = townyUniverse.getAlliance(name);
+		if ((test.equalsIgnoreCase("remove") || test.equalsIgnoreCase("add")) && names.length > 0) {
+			ArrayList<Alliance> list = new ArrayList<>();
+			Alliance enemy;
+			boolean add = test.equalsIgnoreCase("add");
 
-				if (enemy == null) {
-					throw new TownyException(Translatable.of("msg_err_no_alliance_with_that_name", name));
-				}
+			for (String name : names) {
+				enemy = getAllianceOrThrow(name);
 
 				if (alliance.equals(enemy))
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_own_alliance_disallow"));
