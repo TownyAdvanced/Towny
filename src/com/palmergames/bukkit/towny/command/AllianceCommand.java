@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
@@ -23,9 +24,11 @@ import com.palmergames.bukkit.towny.event.alliance.AllianceAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.alliance.AlliancePreAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.alliance.AlliancePreAddNationEvent;
 import com.palmergames.bukkit.towny.event.alliance.AlliancePreRemoveEnemyEvent;
+import com.palmergames.bukkit.towny.event.alliance.AlliancePreRenameEvent;
 import com.palmergames.bukkit.towny.event.alliance.AllianceRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.alliance.AllianceRemoveNationEvent;
 import com.palmergames.bukkit.towny.event.alliance.AllianceRequestNationJoinAllianceEvent;
+import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
@@ -43,6 +46,7 @@ import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 
 public class AllianceCommand extends BaseCommand implements CommandExecutor {
@@ -57,7 +61,7 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	private static final List<String> allianceTabCompletes = Arrays.asList(
-		"new",
+		"set",
 		"add",
 		"invite",
 		"kick",
@@ -75,6 +79,10 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		"remove"
 	);
 	
+	private static final List<String> allianceSetTabCompletes = Arrays.asList(
+			"name"
+		);
+	
 	private static final List<String> allianceConsoleTabCompletes = Arrays.asList(
 		"?",
 		"help",
@@ -85,7 +93,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		if (sender instanceof Player player) {
 			switch (args[0].toLowerCase()) {
-			case "new":
 			case "list":
 			case "delete":
 				return Collections.emptyList();
@@ -120,6 +127,11 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 			case "memberlist":
 			case "online":
 				return getTownyStartingWith(args[args.length - 1], "a");
+			case "set":
+				if (args.length == 2) {
+					return NameUtil.filterByStart(allianceSetTabCompletes, args[1]);
+				}
+				return Collections.emptyList();
 			default:
 				if (args.length == 1)
 					return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.ALLIANCE, allianceTabCompletes), args[0], "a");
@@ -197,12 +209,12 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 
 			Alliance alliance = getAllianceFromPlayerOrThrow(player);
 			allianceStatusScreen(player, alliance);
-		} else if (split[0].equalsIgnoreCase("new")) {
+		} else if (split[0].equalsIgnoreCase("set")) {
 
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_NEW.getNode()))
+			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_SET.getNode()))
 				throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-			allianceNew(player, StringMgmt.remFirstArg(split));
+			allianceSet(player, StringMgmt.remFirstArg(split));
 		} else if (split[0].equalsIgnoreCase("add") || split[0].equalsIgnoreCase("invite")) {
 
 			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_ADD.getNode()))
@@ -246,9 +258,61 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		
 	}
 
-	private void allianceNew(Player player, String[] names) {
-		// TODO Auto-generated method stub
+	private void allianceSet(Player player, String[] split) throws TownyException {
+		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		
+		if (split.length == 0) {
+			//TODO: An alliance set help_menu.
+		} else if (split[0].equalsIgnoreCase("name")) {
+			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_SET_NAME.getNode()))
+				throw new TownyException(Translatable.of("msg_err_command_disable"));
+
+			allianceSetName(player, StringMgmt.remFirstArg(split));
+		}
+	}
+
+
+	private void allianceSetName(Player player, String[] names) throws TownyException {
+		Nation nation = getNationFromPlayerOrThrow(player);
+		Alliance alliance = nation.getAllianceOrNull();
+		if (!alliance.getFounder().equals(nation))
+			// Alliance isn't founded by the player's nation.
+			throw new TownyException(Translatable.of("msg_own_alliance_disallow"));
+		if (names.length == 0)
+			// No names were supplied.
+			throw new TownyException(Translatable.of("msg_specify_alliance_name"));
+
+		// Combine any words given into one string.
+		String name = StringMgmt.join(names, "_");
+
+		// Auto-capitalize.
+		if (TownySettings.getTownAutomaticCapitalisationEnabled())
+			name = StringMgmt.capitalizeStrings(name);
+
+		// Make sure this name passes the smell-test and isn't otherwise used.
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			filteredName = null;
+		}
+		if (filteredName == null || TownyUniverse.getInstance().hasAlliance(filteredName))
+			throw new TownyException(Translatable.of("msg_err_invalid_name", name));
+
+		// Call cancellable event.
+		AlliancePreRenameEvent apsne = new AlliancePreRenameEvent(alliance, filteredName);
+		Bukkit.getPluginManager().callEvent(apsne);
+		if (apsne.isCancelled())
+			throw new TownyException(apsne.getCancelMessage());
+
+		// Replace the previous name in the TU trie.
+		TownyUniverse.getInstance().getAlliancesTrie().removeKey(alliance.getName());
+		TownyUniverse.getInstance().getAlliancesTrie().addKey(filteredName);
+
+		// Rename and Save the alliance.
+		alliance.setName(filteredName);
+		alliance.save();
+		TownyMessaging.sendPrefixedAllianceMessage(alliance, Translatable.of("msg_alliance_set_name", player.getName(), alliance.getName()));
 	}
 
 

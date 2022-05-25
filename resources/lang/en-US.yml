@@ -1728,3 +1728,7 @@ msg_nation_has_joined_alliance: 'The nation %s has joined your alliance.'
 msg_err_alliace_sent_too_many_requests: '&bAlliance has sent too many requests, revoke some before trying again!'
 #Message shown when an Alliance removes a nation.
 msg_alliance_removed_ally: '&b%s has been removed from your alliance.'
+#Message shown when trying to set an empty alliance name.
+msg_specify_alliance_name: '&bSpecify alliance name'
+#Message shown when an alliance is renamed.
+msg_alliance_set_name: '&b%s renamed alliance to %s.'

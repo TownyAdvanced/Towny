@@ -99,7 +99,8 @@ public enum PermissionNodes {
 	 */
 	
 	TOWNY_COMMAND_ALLIANCE("towny.command.alliance.*"),
-	TOWNY_COMMAND_ALLIANCE_NEW("towny.command.alliance.new"),
+	TOWNY_COMMAND_ALLIANCE_SET("towny.command.alliance.set.*"),
+		TOWNY_COMMAND_ALLIANCE_SET_NAME("towny.command.alliance.set.name"),
 	TOWNY_COMMAND_ALLIANCE_ADD("towny.command.alliance.add"),
 	TOWNY_COMMAND_ALLIANCE_REMOVE("towny.command.alliance.remove"),
 	TOWNY_COMMAND_ALLIANCE_ENEMY("towny.command.alliance.enemy"),
