@@ -42,7 +42,7 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 			if (cache == null)
 				return Collections.emptyList();
 			
-			return Collections.singleton(String.valueOf(cache.getLastTownBlock().hasTownBlock()));
+			return Optional.ofNullable(cache.getLastTownBlock()).map(wc -> Collections.singleton(String.valueOf(wc.hasTownBlock()))).orElse(Collections.emptySet());
 		}, () -> Arrays.asList("true", "false"));
 		registerContext("towny:insideowntown", resident -> {
 			PlayerCache cache = plugin.getCacheOrNull(resident.getUUID());
