@@ -49,9 +49,6 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 
 	@Override
 	public void run() {
-		// Build a list of mobs to be removed
-		List<LivingEntity> entitiesToRemove = new ArrayList<>();
-		
 		final boolean skipRemovalEvent = MobRemovalEvent.getHandlerList().getRegisteredListeners().length == 0;
 
 		for (World world : Bukkit.getWorlds()) {
@@ -69,6 +66,9 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 
 			final List<LivingEntity> entities = world.getLivingEntities();
 			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+				// Build a list of mobs to be removed
+				List<LivingEntity> entitiesToRemove = new ArrayList<>();
+
 				for (LivingEntity entity : entities) {
 					Location livingEntityLoc = entity.getLocation();
 
@@ -103,15 +103,15 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 						continue;
 
 					// Special check if it's a rabbit, for the Killer Bunny variant.
-					if (entity.getType().equals(EntityType.RABBIT)) {
-						if (isRemovingKillerBunny && ((Rabbit) entity).getRabbitType().equals(Rabbit.Type.THE_KILLER_BUNNY)) {
+					if (entity instanceof Rabbit rabbit) {
+						if (isRemovingKillerBunny && rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY) {
 							entitiesToRemove.add(entity);
 							continue;
 						}
 					}
 
 					// Ensure the entity hasn't been removed since
-					if (!entity.isValid())
+					if (entity.isDead())
 						continue;
 
 					if (!skipRemovalEvent) {
