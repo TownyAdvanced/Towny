@@ -7482,3 +7482,6 @@ v0.92.0.11:
   - Adds ability to suppress error messages sent by TownyActionEvents, courtesy of PestoNotPasta with PR #5925.
 0.98.2.0:
   - Bump version for release.
+0.98.2.1:
+  - Fix potential comod error during mob removal, courtesy of Warriorrrr with #5930.
+    - Closes #5929.
