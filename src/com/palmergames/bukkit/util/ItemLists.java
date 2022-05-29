@@ -94,19 +94,39 @@ public class ItemLists {
 	public static final ItemLists PLANTS = ItemLists.of("TALL_GRASS","BROWN_MUSHROOM","RED_MUSHROOM","CACTUS","ALLIUM","AZURE_BLUET","BLUE_ORCHID","CORNFLOWER","DANDELION","LILAC","LILY_OF_THE_VALLEY","ORANGE_TULIP","OXEYE_DAISY","PEONY","PINK_TULIP","POPPY","RED_TULIP","ROSE_BUSH","SUNFLOWER","WHITE_TULIP","WITHER_ROSE","CRIMSON_FUNGUS","LARGE_FERN","PUMPKIN","VINE","NETHER_WART_BLOCK","COCOA","SUGAR_CANE");
 
 	/**
-	 * List of Ores.
+	 * List of Ores and Valuable Raw Materials.
 	 */
-	public static final ItemLists ORES = ItemLists.of("GOLD_ORE","IRON_ORE","COAL_ORE","COPPER_ORE","REDSTONE_ORE","EMERALD_ORE","LAPIS_ORE","DIAMOND_ORE","DEEPSLATE_COAL_ORE","DEEPSLATE_IRON_ORE","DEEPSLATE_COPPER_ORE","DEEPSLATE_GOLD_ORE","DEEPSLATE_EMERALD_ORE","DEEPSLATE_REDSTONE_ORE","DEEPSLATE_LAPIS_ORE","DEEPSLATE_DIAMOND_ORE","NETHER_GOLD_ORE","NETHER_QUARTZ_ORE","ANCIENT_DEBRIS","CLAY","GLOWSTONE");
+	public static final ItemLists ORES = PredicateList.builder().endsWith("_ORE").add("RAW_IRON_BLOCK","RAW_GOLD_BLOCK","ANCIENT_DEBRIS","CLAY","GLOWSTONE","GILDED_BLACKSTONE").build();
 
 	/**
 	 * List of Saplings.
 	 */
-	public static final ItemLists SAPLINGS = ItemLists.of("ACACIA_SAPLING","BAMBOO_SAPLING","BIRCH_SAPLING","DARK_OAK_SAPLING","JUNGLE_SAPLING","OAK_SAPLING","SPRUCE_SAPLING");
+	public static final ItemLists SAPLINGS = PredicateList.builder().endsWith("_SAPLING").add("MANGROVE_PROPAGULE").build();
 
 	/**
 	 * List of Trees and Leaves.
 	 */
 	public static final ItemLists TREES = ItemLists.of("OAK_LOG","SPRUCE_LOG","BIRCH_LOG","JUNGLE_LOG","ACACIA_LOG","DARK_OAK_LOG","CRIMSON_STEM","WARPED_STEM","ACACIA_LEAVES","OAK_LEAVES","DARK_OAK_LEAVES","JUNGLE_LEAVES","BIRCH_LEAVES","SPRUCE_LEAVES","CRIMSON_HYPHAE","WARPED_HYPHAE");
+
+	/**
+	 * List of Beds.
+	 */
+	public static final ItemLists BEDS = PredicateList.builder().endsWith("_BED").build();
+
+	/**
+	 * List of Signs.
+	 */
+	public static final ItemLists SIGNS = PredicateList.builder().endsWith("_SIGN").build();
+
+	/**
+	 * List of Torches
+	 */
+	public static final ItemLists TORCHES = PredicateList.builder().endsWith("TORCH").build();
+
+	/**
+	 * List of Skulls and Heads
+	 */
+	public static final ItemLists SKULLS = PredicateList.builder().endsWith("_HEAD").endsWith("_SKULL").build();
 
 	/**
 	 * List of Boats.
@@ -123,6 +143,11 @@ public class ItemLists {
 	 */
 	public static final ItemLists WOOD_DOORS = PredicateList.builder().endsWith("_DOOR").not("IRON_DOOR").build();
 
+	/**
+	 * List of Doors.
+	 */
+	public static final ItemLists DOORS = PredicateList.builder().endsWith("_DOOR").build();
+	
 	/**
 	 * List of Fence Gates.
 	 */
