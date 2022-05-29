@@ -365,9 +365,13 @@ public class TownySettings {
 	public static EnumSet<Material> toMaterialEnumSet(List<String> materialList) {
 		EnumSet<Material> materials = EnumSet.noneOf(Material.class);
 		for (String materialName : materialList) {
-			Material material = Material.matchMaterial(materialName.toUpperCase(Locale.ROOT));
-			if (material != null)
-				materials.add(material);
+			if (ItemLists.GROUPS.contains(materialName.toUpperCase(Locale.ROOT))) {
+				materials.addAll(ItemLists.getGrouping(materialName.toUpperCase(Locale.ROOT)));
+			} else {
+				Material material = Material.matchMaterial(materialName.toUpperCase(Locale.ROOT));
+				if (material != null)
+					materials.add(material);
+			}
 		}
 		
 		return materials;
