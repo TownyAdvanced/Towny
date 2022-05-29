@@ -96,17 +96,17 @@ public class ItemLists {
 	/**
 	 * List of Ores and Valuable Raw Materials.
 	 */
-	public static final ItemLists ORES = PredicateList.builder().endsWith("_ORE").add("RAW_IRON_BLOCK","RAW_GOLD_BLOCK","ANCIENT_DEBRIS","CLAY","GLOWSTONE","GILDED_BLACKSTONE").build();
+	public static final ItemLists ORES = PredicateList.builder().endsWith("_ORE").add("RAW_IRON_BLOCK","RAW_GOLD_BLOCK","RAW_COPPER_BLOCK","ANCIENT_DEBRIS","CLAY","GLOWSTONE","GILDED_BLACKSTONE").build();
 
 	/**
 	 * List of Saplings.
 	 */
-	public static final ItemLists SAPLINGS = PredicateList.builder().endsWith("_SAPLING").add("MANGROVE_PROPAGULE").build();
+	public static final ItemLists SAPLINGS = PredicateList.builder().endsWith("_SAPLING").add("MANGROVE_PROPAGULE","CRIMSON_FUNGUS","WARPED_FUNGUS").build();
 
 	/**
 	 * List of Trees and Leaves.
 	 */
-	public static final ItemLists TREES = ItemLists.of("OAK_LOG","SPRUCE_LOG","BIRCH_LOG","JUNGLE_LOG","ACACIA_LOG","DARK_OAK_LOG","CRIMSON_STEM","WARPED_STEM","ACACIA_LEAVES","OAK_LEAVES","DARK_OAK_LEAVES","JUNGLE_LEAVES","BIRCH_LEAVES","SPRUCE_LEAVES","CRIMSON_HYPHAE","WARPED_HYPHAE");
+	public static final ItemLists TREES = PredicateList.builder().endsWith("_WOOD").endsWith("_HYPHAE").notStartsWith("STRIPPED_").endsWith("_LEAVES").endsWith("_LOG").add("CRIMSON_STEM", "WARPED_STEM").build();
 
 	/**
 	 * List of Beds.
