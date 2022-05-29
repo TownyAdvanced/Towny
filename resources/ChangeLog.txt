@@ -7485,3 +7485,5 @@ v0.92.0.11:
 0.98.2.1:
   - Fix potential comod error during mob removal, courtesy of Warriorrrr with #5930.
     - Closes #5929.
+0.98.2.2:
+  - Add new ItemLists for plants, ores, saplings, trees & leaves.
