@@ -7491,3 +7491,4 @@ v0.92.0.11:
   - Make Material set loader for TownyWorld's Material lists be able to load ItemLists Groups.
     - The Config's lists for default new worlds can now be much shorter.
     - New configs will use the groupings.
+  - Fix CooldownTimerTask not running by default.

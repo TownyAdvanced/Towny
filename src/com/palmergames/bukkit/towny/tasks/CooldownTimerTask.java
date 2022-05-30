@@ -56,9 +56,7 @@ public class CooldownTimerTask extends TownyTimerTask {
 	
 	public static boolean hasCooldown(String object, CooldownType type) {
 		AbstractMap.SimpleEntry<String, CooldownType> map = new AbstractMap.SimpleEntry<String, CooldownTimerTask.CooldownType>(object, type);
-		if (cooldowns.containsKey(map))
-			return true;
-		return false;
+		return cooldowns.containsKey(map);
 	}
 	
 	public static int getCooldownRemaining(String object, CooldownType type) {
