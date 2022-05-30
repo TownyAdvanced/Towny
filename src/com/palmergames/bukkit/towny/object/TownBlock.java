@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.JailUtil;
@@ -349,7 +348,10 @@ public class TownBlock extends TownyObject {
 
 		if (TownBlockType.ARENA.equals(this.type) || TownBlockType.ARENA.equals(type)
 			&& TownySettings.getPVPCoolDownTime() > 0
-			&& !TownyUniverse.getInstance().getPermissionSource().testPermission(resident.getPlayer(), PermissionNodes.TOWNY_ADMIN.getNode())) {
+			&& !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(resident.getPlayer())) {
+			// Test to see if this town is on pvp cooldown.
+			if (CooldownTimerTask.hasCooldown(town.getUUID().toString(), CooldownType.PVP))
+				throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getUUID().toString(), CooldownType.PVP)));
 			// Test to see if the pvp cooldown timer is active for this plot.
 			if (CooldownTimerTask.hasCooldown(getWorldCoord().toString(), CooldownType.PVP))
 				throw new TownyException(Translation.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(getWorldCoord().toString(), CooldownType.PVP)));

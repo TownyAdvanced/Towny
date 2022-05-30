@@ -1538,13 +1538,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (split[0].equalsIgnoreCase("public")) {
-				
-				if (TownySettings.getPeacefulCoolDownTime() > 0 && 
-					!admin && 
-					CooldownTimerTask.hasCooldown(town.getName(), CooldownType.NEUTRALITY) && 
-					!permSource.testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode())) {
-					throw new TownyException(Translatable.of("msg_err_cannot_toggle_neutral_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.NEUTRALITY)));
-				}
 
 				// Fire cancellable event directly before setting the toggle.
 				TownTogglePublicEvent preEvent = new TownTogglePublicEvent(sender, town, admin, choice.orElse(!town.isPublic()));
@@ -1562,14 +1555,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("pvp")) {
 				
+				String uuid = town.getUUID().toString();
 				// If we aren't dealing with an admin using /t toggle pvp:
 				if (!admin) {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(town, StringMgmt.join(split, " "));
 				
 					// Test to see if the pvp cooldown timer is active for the town.
-					if (TownySettings.getPVPCoolDownTime() > 0 && CooldownTimerTask.hasCooldown(town.getName(), CooldownType.PVP) && !permSource.testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode()))					 
-						throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.PVP)));
+					if (TownySettings.getPVPCoolDownTime() > 0 &&
+						CooldownTimerTask.hasCooldown(uuid, CooldownType.PVP) &&
+						!permSource.isTownyAdmin(sender))
+						throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining",
+								CooldownTimerTask.getCooldownRemaining(uuid, CooldownType.PVP)));
 
 					// Test to see if an outsider being inside of the Town would prevent toggling PVP.
 					if (TownySettings.getOutsidersPreventPVPToggle() && choice.orElse(!town.isPVP())) {
@@ -1596,8 +1593,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_pvp", town.getName(), town.isPVP() ? Translatable.of("enabled") : Translatable.of("disabled")));
 				
 				// Add a cooldown to PVP toggling.
-				if (TownySettings.getPVPCoolDownTime() > 0 && !admin && !permSource.testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode()))
-					CooldownTimerTask.addCooldownTimer(town.getName(), CooldownType.PVP);
+				if (TownySettings.getPVPCoolDownTime() > 0 && !admin && !permSource.isTownyAdmin(sender))
+					CooldownTimerTask.addCooldownTimer(uuid, CooldownType.PVP);
 				
 			} else if (split[0].equalsIgnoreCase("explosion")) {
 
@@ -1702,7 +1699,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_toggle_open_on_warning"));
 				
 			} else if (split[0].equalsIgnoreCase("neutral") || split[0].equalsIgnoreCase("peaceful")) {
-				
+
+				String uuid = town.getUUID().toString();
+				if (TownySettings.getPeacefulCoolDownTime() > 0 && 
+					!admin && !permSource.isTownyAdmin(sender) &&
+					CooldownTimerTask.hasCooldown(uuid, CooldownType.NEUTRALITY))
+					throw new TownyException(Translatable.of("msg_err_cannot_toggle_neutral_x_seconds_remaining",
+							CooldownTimerTask.getCooldownRemaining(uuid, CooldownType.NEUTRALITY)));
+
 				boolean peacefulState = choice.orElse(!town.isNeutral());
 				double cost = TownySettings.getTownNeutralityCost();
 				
@@ -1734,6 +1738,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_peaceful", town.isNeutral() ? Translatable.of("enabled") : Translatable.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_peaceful", town.isNeutral() ? Translatable.of("enabled") : Translatable.of("disabled")));
+
+				// Add a cooldown to Peacful toggling.
+				if (TownySettings.getPeacefulCoolDownTime() > 0 && !admin && !permSource.isTownyAdmin(sender))
+					CooldownTimerTask.addCooldownTimer(uuid, CooldownType.NEUTRALITY);
 
 			} else if (split[0].equalsIgnoreCase("nationzone")) {
 

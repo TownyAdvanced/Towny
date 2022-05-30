@@ -50,19 +50,30 @@ public class CooldownTimerTask extends TownyTimerTask {
 	}
 	
 	public static void addCooldownTimer(String object, CooldownType type) {
-		AbstractMap.SimpleEntry<String, CooldownType> map = new AbstractMap.SimpleEntry<String, CooldownTimerTask.CooldownType>(object, type);
-		cooldowns.put(map, (System.currentTimeMillis() + (type.getSeconds() * 1000)));
+		cooldowns.put(mapOf(object, type), getCooldownEndTime(type));
 	}
-	
+
 	public static boolean hasCooldown(String object, CooldownType type) {
-		AbstractMap.SimpleEntry<String, CooldownType> map = new AbstractMap.SimpleEntry<String, CooldownTimerTask.CooldownType>(object, type);
-		return cooldowns.containsKey(map);
+		return cooldowns.containsKey(mapOf(object, type));
 	}
 	
 	public static int getCooldownRemaining(String object, CooldownType type) {
-		AbstractMap.SimpleEntry<String, CooldownType> map = new AbstractMap.SimpleEntry<String, CooldownTimerTask.CooldownType>(object, type);
+		AbstractMap.SimpleEntry<String, CooldownType> map = mapOf(object, type);
 		if (cooldowns.containsKey(map))
-			return (int) ((cooldowns.get(map) - System.currentTimeMillis())/1000);
+			return getSecondsRemaining(map);
 		return 0;
 	}
+
+	private static AbstractMap.SimpleEntry<String, CooldownType> mapOf(String object, CooldownType type) {
+		return new AbstractMap.SimpleEntry<String, CooldownTimerTask.CooldownType>(object, type);
+	}
+
+	private static long getCooldownEndTime(CooldownType type) {
+		return System.currentTimeMillis() + (type.getSeconds() * 1000);
+	}
+
+	private static int getSecondsRemaining(AbstractMap.SimpleEntry<String, CooldownType> map) {
+		return (int) ((cooldowns.get(map) - System.currentTimeMillis()) / 1000);
+	}
+
 }

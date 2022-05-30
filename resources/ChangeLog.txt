@@ -7492,3 +7492,6 @@ v0.92.0.11:
     - The Config's lists for default new worlds can now be much shorter.
     - New configs will use the groupings.
   - Fix CooldownTimerTask not running by default.
+  - Enhance CooldownTimerTask for readability, track town and nation cooldowns by their UUIDs.
+  - Fix CooldownTimerTask for neutrality on nations and towns not starting.
+  - Fix Arena plot setting not checking for a town pvp cooldown.

@@ -1108,10 +1108,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					
-					if (TownySettings.getPVPCoolDownTime() > 0 && !permSource.testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode())) {
+					if (TownySettings.getPVPCoolDownTime() > 0 && !permSource.isTownyAdmin(player)) {
 						// Test to see if the pvp cooldown timer is active for the town this plot belongs to.
-						if (CooldownTimerTask.hasCooldown(town.getName(), CooldownType.PVP))
-							throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.PVP)));
+						if (CooldownTimerTask.hasCooldown(town.getUUID().toString(), CooldownType.PVP))
+							throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getUUID().toString(), CooldownType.PVP)));
 	
 						// Test to see if the pvp cooldown timer is active for this plot.
 						if (CooldownTimerTask.hasCooldown(townBlock.getWorldCoord().toString(), CooldownType.PVP))
@@ -1141,7 +1141,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					townBlock.getPermissions().pvp = choice.orElse(!townBlock.getPermissions().pvp);
 					// Add a cooldown timer for this plot.
-					if (TownySettings.getPVPCoolDownTime() > 0 && !permSource.testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode()))
+					if (TownySettings.getPVPCoolDownTime() > 0 && !permSource.isTownyAdmin(player))
 						CooldownTimerTask.addCooldownTimer(townBlock.getWorldCoord().toString(), CooldownType.PVP);
 					TownyMessaging.sendMsg(player, Translatable.of("msg_changed_pvp", "Plot", townBlock.getPermissions().pvp ? Translatable.of("enabled") : Translatable.of("disabled")));
 
@@ -1239,10 +1239,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 
-						if (TownySettings.getPVPCoolDownTime() > 0) {
+						if (TownySettings.getPVPCoolDownTime() > 0 && !permSource.isTownyAdmin(player)) {
 							// Test to see if the pvp cooldown timer is active for the town this plot belongs to.
-							if (CooldownTimerTask.hasCooldown(town.getName(), CooldownType.PVP))
-								throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.PVP)));
+							if (CooldownTimerTask.hasCooldown(town.getUUID().toString(), CooldownType.PVP))
+								throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getUUID().toString(), CooldownType.PVP)));
 
 							// Test to see if the pvp cooldown timer is active for this plot.
 							if (CooldownTimerTask.hasCooldown(groupBlock.getWorldCoord().toString(), CooldownType.PVP))
@@ -1265,7 +1265,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						groupBlock.getPermissions().pvp = choice.orElse(!groupBlock.getPermissions().pvp);
 						// Add a cooldown timer for this plot.
-						if (TownySettings.getPVPCoolDownTime() > 0)
+						if (TownySettings.getPVPCoolDownTime() > 0 && !permSource.isTownyAdmin(player))
 							CooldownTimerTask.addCooldownTimer(groupBlock.getWorldCoord().toString(), CooldownType.PVP);
 						
 						endingMessage = Translatable.of("msg_changed_pvp", Translatable.of("msg_the_plot_group"), groupBlock.getPermissions().pvp ? Translatable.of("enabled") : Translatable.of("disabled"));

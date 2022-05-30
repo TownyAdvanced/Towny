@@ -445,8 +445,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			
 			// Test to see if the pvp cooldown timer is active for the town this resident belongs to.
 			if (TownySettings.getPVPCoolDownTime() > 0 && resident.hasTown() && !resident.isAdmin()) {
-				if (CooldownTimerTask.hasCooldown(resident.getTown().getName(), CooldownType.PVP))
-					throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getTown().getName(), CooldownType.PVP))); 
+				if (CooldownTimerTask.hasCooldown(resident.getTownOrNull().getUUID().toString(), CooldownType.PVP))
+					throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getTownOrNull().getUUID().toString(), CooldownType.PVP))); 
 				if (CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.PVP))
 					throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.PVP)));
 

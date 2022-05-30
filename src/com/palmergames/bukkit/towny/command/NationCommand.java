@@ -2474,12 +2474,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (peacefulState && TownyEconomyHandler.isActive() && !nation.getAccount().canPayFromHoldings(cost))
 			throw new TownyException(Translatable.of("msg_nation_cant_peaceful"));
 		
+		String uuid = nation.getUUID().toString();
+		
 		if (TownySettings.getPeacefulCoolDownTime() > 0 && 
 			!admin && 
-			CooldownTimerTask.hasCooldown(nation.getName(), CooldownType.NEUTRALITY) && 
-			!TownyUniverse.getInstance().getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode())) {
-			throw new TownyException(Translatable.of("msg_err_cannot_toggle_neutral_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(nation.getName(), CooldownType.NEUTRALITY)));
-		}
+			CooldownTimerTask.hasCooldown(uuid, CooldownType.NEUTRALITY) && 
+			!TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender))
+			throw new TownyException(Translatable.of("msg_err_cannot_toggle_neutral_x_seconds_remaining",
+					CooldownTimerTask.getCooldownRemaining(uuid, CooldownType.NEUTRALITY)));
 
 		// Fire cancellable event directly before setting the toggle.
 		NationToggleNeutralEvent preEvent = new NationToggleNeutralEvent(sender, nation, admin, peacefulState);
@@ -2498,6 +2500,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		// Send message feedback to the whole nation.
 		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_peaceful").append(nation.isNeutral() ? Colors.Green : Colors.Red + " not").append(" peaceful."));
+		
+		// Add a cooldown to Public toggling.
+		if (TownySettings.getPeacefulCoolDownTime() > 0 && !admin && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender))
+			CooldownTimerTask.addCooldownTimer(uuid, CooldownType.NEUTRALITY);
+
 	}
 
 	private static void nationTogglePublic(CommandSender sender, Nation nation, Optional<Boolean> choice, boolean admin) throws TownyException {
