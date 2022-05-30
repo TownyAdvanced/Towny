@@ -7495,3 +7495,4 @@ v0.92.0.11:
   - Enhance CooldownTimerTask for readability, track town and nation cooldowns by their UUIDs.
   - Fix CooldownTimerTask for neutrality on nations and towns not starting.
   - Fix Arena plot setting not checking for a town pvp cooldown.
+  - Fix potential NPE in towny:insidetown luckperms context.
