@@ -35,7 +35,6 @@ import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
 import com.palmergames.bukkit.towny.listeners.TownyServerListener;
 import com.palmergames.bukkit.towny.listeners.TownyVehicleListener;
 import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
@@ -879,7 +878,7 @@ public class Towny extends JavaPlugin {
 
 		for (Player player : BukkitTools.getOnlinePlayers())
 			if (player != null)
-				if (Coord.parseCoord(player).equals(worldCoord))
+				if (WorldCoord.parseWorldCoord(player).equals(worldCoord))
 					getCache(player).resetAndUpdate(worldCoord); // Automatically resets permissions.
 	}
 

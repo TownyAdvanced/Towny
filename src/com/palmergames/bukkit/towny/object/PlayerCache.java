@@ -50,8 +50,7 @@ public class PlayerCache {
 	 */
 	public void resetAndUpdate(@NotNull WorldCoord worldCoord) {
 		
-		reset();
-		setLastTownBlock(worldCoord);
+		reset(worldCoord);
 	}
 
 	/**
@@ -74,8 +73,7 @@ public class PlayerCache {
 	public boolean updateCoord(@NotNull WorldCoord pos) {
 
 		if (!getLastTownBlock().equals(pos)) {
-			reset();
-			setLastTownBlock(pos);
+			reset(pos);
 			return true;
 		} else
 			return false;
@@ -177,9 +175,9 @@ public class PlayerCache {
 		
 	}
 
-	private void reset() {
+	private void reset(WorldCoord wc) {
 
-		lastWorldCoord = null;
+		lastWorldCoord = wc;
 		townBlockStatus = null;
 		blockErrMsg = null;
 		
