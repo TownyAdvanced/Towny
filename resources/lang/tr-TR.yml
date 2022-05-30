@@ -1471,11 +1471,11 @@ msg_your_town_is_bankrupt: 'Kasaba bankanız iflans etmiş durumda, bankanıza /
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Zaten bir kasabanın üyesi olduğunuz için bu komutu kullanamazsınız. Devam etmek istiyorsanız ''/t leave'' kullanmanız gerekecek.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
-msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+msg_a_town_you_are_outlawed_in: 'bu kasaba Haydut ilan edildiğin bir kasaba.'
 #Message shown when TownyRTP could not find any towns to teleport to.
 msg_err_could_not_find_any_towns_to_rtp: 'Rtp için herhangi bir açık, halka açık kasaba ile birlikle (karşılayabileceğiniz,) satılık arsalar bulunamadı.'
 #Message showing payment for RTP.
-msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+msg_cost_spawn_rtp: '&bSatılık rastgele bir kasaba arsasına ışınlanmak için %s Kadar ücret Ödediniz.'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
 #Used in the town's status screen to display plots
@@ -1483,6 +1483,6 @@ status_plot_string: 'Arsalar'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
 #Usage:
-msg_usage: 'Usage: %s'
+msg_usage: 'Kullanım: %s'
 #Shown in teh bank history books when there are no pages to display
-msg_err_no_pages_to_display: 'No pages to display!'
+msg_err_no_pages_to_display: 'Görüntülenecek Sayfa yok!'
