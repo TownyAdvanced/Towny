@@ -172,6 +172,26 @@ permissions:
         description: User can look up other nations.
         default: true
 
+    # Alliance command permissions
+    towny.command.alliance.*
+        description: User can access all alliance commands.
+        default: false
+        children:
+            towny.command.alliance.set.*: true
+            towny.command.alliance.add: true
+            towny.command.alliance.remove: true
+            towny.command.alliance.enemy: true
+            towny.command.alliance.memberlist: true
+            towny.command.alliance.list: true
+            towny.command.alliance.online: true
+            towny.command.alliance.delete: true
+
+    towny.command.alliance.set.*
+        description: User can access all alliance set commands.
+        default: false
+        children:
+            towny.command.alliance.set.name: true
+
     # Nation command permissions
     towny.command.nation.*:
         description: User can access all nation commands.

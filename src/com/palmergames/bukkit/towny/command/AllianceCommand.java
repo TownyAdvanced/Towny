@@ -172,15 +172,15 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 	private void parseAllianceCommandForConsole(CommandSender sender, String[] split) {
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 
-//			HelpMenu.ALLIANCE_HELP_CONSOLE.send(sender);
+			HelpMenu.ALLIANCE_HELP_CONSOLE.send(sender);
 		
 		} else if (split[0].equalsIgnoreCase("list")) {
 
-//			try {
-////				listAlliances(sender, split);
-//			} catch (TownyException e) {
-//				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
-//			}
+			try {
+				allianceList(sender, split);
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			}
 			
 		} else if (split[0].equalsIgnoreCase("memberlist")) {
 
@@ -209,6 +209,10 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 
 			Alliance alliance = getAllianceFromPlayerOrThrow(player);
 			allianceStatusScreen(player, alliance);
+
+		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
+
+			HelpMenu.ALLIANCE_HELP.send(player);
 		} else if (split[0].equalsIgnoreCase("set")) {
 
 			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_SET.getNode()))
@@ -245,6 +249,12 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_command_disable"));
 	
 			allianceOnline(player, StringMgmt.remFirstArg(split));
+		} else if (split[0].equalsIgnoreCase("list")) {
+
+			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_LIST.getNode()))
+				throw new TownyException(Translatable.of("msg_err_command_disable"));
+	
+			allianceList(player, split);
 		} else if (split[0].equalsIgnoreCase("memberlist")) {
 
 			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_MEMBERLIST.getNode()))
@@ -258,11 +268,16 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		
 	}
 
+	private void allianceList(CommandSender sender, String[] split) throws TownyException {
+		// TODO: make this a thing.
+	}
+
+
 	private void allianceSet(Player player, String[] split) throws TownyException {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		
 		if (split.length == 0) {
-			//TODO: An alliance set help_menu.
+			HelpMenu.ALLIANCE_SET.send(player);
 		} else if (split[0].equalsIgnoreCase("name")) {
 			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_SET_NAME.getNode()))
 				throw new TownyException(Translatable.of("msg_err_command_disable"));
@@ -318,7 +333,7 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 
 	private void allianceAdd(Player player, String[] names) throws TownyException {
 		if (names.length == 0)
-			throw new TownyException(Translatable.of("msg_usage", "/alliance add [name]"));
+			throw new TownyException(Translatable.of("msg_usage", "/alliance add [nation name]"));
 		
 		Alliance alliance = getAllianceFromPlayerOrThrow(player);
 		ArrayList<Nation> inviteList = new ArrayList<>();
@@ -410,7 +425,7 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 
 	private void allianceRemove(Player player, String[] names) throws TownyException {
 		if (names.length == 0)
-			throw new TownyException(Translatable.of("msg_usage", "/alliance remove [name]"));
+			throw new TownyException(Translatable.of("msg_usage", "/alliance remove [nation name]"));
 		
 		Alliance alliance = getAllianceFromPlayerOrThrow(player);
 		ArrayList<Nation> removeList = new ArrayList<>();

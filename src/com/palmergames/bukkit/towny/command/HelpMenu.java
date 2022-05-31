@@ -747,6 +747,41 @@ public enum HelpMenu {
 		}
 	},
 
+	ALLIANCE_HELP_CONSOLE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("alliance")
+				.add("[alliance]", "")
+				.add("list", "")
+				.add("memberlist [alliance]", "");
+		}
+	},
+
+	ALLIANCE_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("alliance")
+				.add("[alliance]", "")
+				.add("add [nation]", "")
+				.add("remove [nation]", "")
+				.add("delete", "")
+				.add("enemy", "")
+				.add("online", "")
+				.add("list", "")
+				.add("memberlist", "")
+				.add("enemylist", "")
+				.add("set ?", "");
+		}
+	},
+	
+	ALLIANCE_SET {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("alliance set")
+				.add("name [new name]", "");
+		}
+	},
+
 	KING_HELP {
 		@Override
 		protected MenuBuilder load() {
