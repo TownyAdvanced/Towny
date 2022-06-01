@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class StatusScreen {
 
+	@SuppressWarnings("unused")
 	private static final int MAX_WIDTH = 320;
 
 	private final Map<String, Component> components = new LinkedHashMap<>();

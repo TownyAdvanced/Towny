@@ -474,27 +474,11 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		}
 
-		notifyPerms(player, perm);
+		TownyMessaging.sendPermissionLine(player, resident, perm);
 		resident.save();
 
 	}
 
-	/**
-	 * Show the player the new Permission settings after the toggle.
-	 * 
-	 * @param player
-	 * @param perm
-	 */
-	private void notifyPerms(Player player, TownyPermission perm) {
-
-		TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-		TownyMessaging.sendMessage(player,
-			Translatable.of("status_pvp").locale(player).append(" ").append(Translatable.of("status_" + (perm.pvp ? "on" : "off"))),
-			Translatable.of("explosions").locale(player).append(" ").append(Translatable.of("status_" + (perm.explosion ? "on" : "off"))),
-			Translatable.of("firespread").locale(player).append(" ").append(Translatable.of("status_" + (perm.fire ? "on" : "off"))),
-			Translatable.of("mobspawns").locale(player).append(" ").append(Translatable.of("status_" + (perm.mobs ? "on" : "off"))));
-	}
-	
 	public void listResidents(CommandSender sender) {
 
 		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(Translatable.of("res_list").forLocale(sender)));
