@@ -125,7 +125,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -1378,7 +1377,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (onlineResidents.size() > 0) {
 				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
 			} else {
-				TownyMessaging.sendMessage(player, Colors.White + "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_town_online").forLocale(player) + ": " + town));
+				TownyMessaging.sendMessage(player, NamedTextColor.WHITE + "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_town_online").forLocale(player) + ": " + town));
 			}
 		} else {
 			try {
@@ -3821,12 +3820,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 			}
 
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_perms"));
-			TownyMessaging.sendMessage(sender, Translatable.of("status_perm").forLocale(sender) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
-			TownyMessaging.sendMessage(sender, Translatable.of("status_pvp").locale(sender).append(" ").append(Translatable.of("status_" + (perm.pvp ? "on" : "off"))),
-											   Translatable.of("explosions").locale(sender).append(" ").append(Translatable.of("status_" + (perm.explosion ? "on" : "off"))),
-											   Translatable.of("firespread").locale(sender).append(" ").append(Translatable.of("status_" + (perm.fire ? "on" : "off"))),
-											   Translatable.of("mobspawns").locale(sender).append(" ").append(Translatable.of("status_" + (perm.mobs ? "on" : "off"))));
+			TownyMessaging.sendPermissionLine(sender, townBlockOwner, perm);
 
 			// Reset all caches as this can affect everyone.
 			plugin.resetCache();

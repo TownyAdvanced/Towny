@@ -9,13 +9,16 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -955,6 +958,28 @@ public class TownyMessaging {
 		Towny.getAdventure().sender(sender).sendMessage(screen.getFormattedStatusScreen());
 	}
 
+	/*
+	 * TOWN/RESIDENT/PLOT PERMISSION LINES
+	 */
+	public static void sendPermissionLine(CommandSender sender, TownBlockOwner townBlockOwner, TownyPermission perm) {
+		sendMsg(sender, Translatable.of("msg_set_perms"));
+		sendMessage(sender, Translatable.of("status_perm").forLocale(sender) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
+		sendMessage(sender, Translatable.of("status_pvp").locale(sender).append(" ").append(Translatable.of("status_" + (perm.pvp ? "on" : "off")))
+					.append(Translatable.of("explosions").locale(sender).append(" ").append(Translatable.of("status_" + (perm.explosion ? "on" : "off"))))
+					.append(Translatable.of("firespread").locale(sender).append(" ").append(Translatable.of("status_" + (perm.fire ? "on" : "off"))))
+					.append(Translatable.of("mobspawns").locale(sender).append(" ").append(Translatable.of("status_" + (perm.mobs ? "on" : "off")))));
+	}
+
+	public static void sendPlotPermissionLine(CommandSender sender, TownBlockOwner townBlockOwner, TownyPermission perm, TownBlock townBlock) {
+		sendMsg(sender, Translatable.of("msg_set_perms"));
+		sendMessage(sender, Translatable.of("status_perm").forLocale(sender) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
+		sendMessage(sender, Translatable.of("status_pvp").locale(sender).append(" ").append(Translatable.of("status_" + (!CombatUtil.preventPvP(townBlock.getWorld(), townBlock) ? "on" : "off")))
+					.append(Translatable.of("explosions").locale(sender).append(" ").append(Translatable.of("status_" + (perm.explosion ? "on" : "off"))))
+					.append(Translatable.of("firespread").locale(sender).append(" ").append(Translatable.of("status_" + (perm.fire ? "on" : "off"))))
+					.append(Translatable.of("mobspawns").locale(sender).append(" ").append(Translatable.of("status_" + (perm.mobs ? "on" : "off")))));
+	}
+	
+	
 	/*
 	 * ACTIONBAR METHODS
 	 */
