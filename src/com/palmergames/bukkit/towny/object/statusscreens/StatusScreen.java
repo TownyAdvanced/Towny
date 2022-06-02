@@ -27,7 +27,7 @@ public class StatusScreen {
 	}
 
 	/**
-	 * @deprecated Deprecated as of 0.98.2.1
+	 * @deprecated Deprecated as of 0.98.3.1
 	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval
@@ -36,7 +36,7 @@ public class StatusScreen {
 	}
 
 	/**
-	 * @deprecated Deprecated as of 0.98.2.1, use {@link #addComponentOf(String, Component)} instead.
+	 * @deprecated Deprecated as of 0.98.3.1, use {@link #addComponentOf(String, Component)} instead.
 	 */
 	@Deprecated
 	public void addComponentOf(String name, String text) {
@@ -48,7 +48,7 @@ public class StatusScreen {
 	}
 	
 	/**
-	 * @deprecated Deprecated as of 0.98.2.1, use {@link #addComponentOf(String, Component)} instead.
+	 * @deprecated Deprecated as of 0.98.3.1, use {@link #addComponentOf(String, Component)} instead.
 	 */
 	@Deprecated
 	public void addComponentOf(String name, String text, ClickEvent click) {
@@ -56,7 +56,7 @@ public class StatusScreen {
 	}
 	
 	/**
-	 * @deprecated Deprecated as of 0.98.2.1, use {@link #addComponentOf(String, Component)} instead.
+	 * @deprecated Deprecated as of 0.98.3.1, use {@link #addComponentOf(String, Component)} instead.
 	 */
 	@Deprecated
 	public void addComponentOf(String name, String text, HoverEvent<?> hover) {
@@ -64,7 +64,7 @@ public class StatusScreen {
 	}
 	
 	/**
-	 * @deprecated Deprecated as of 0.98.2.1, use {@link #addComponentOf(String, Component)} instead.
+	 * @deprecated Deprecated as of 0.98.3.1, use {@link #addComponentOf(String, Component)} instead.
 	 */
 	@Deprecated
 	public void addComponentOf(String name, String text, HoverEvent<?> hover, ClickEvent click) {

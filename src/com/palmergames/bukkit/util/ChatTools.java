@@ -51,7 +51,7 @@ public class ChatTools {
 	}
 
 	/**
-	 * @deprecated Deprecated as of 0.98.2.1, use {@link Colors#strip(String)} instead.
+	 * @deprecated Deprecated as of 0.98.3.1, use {@link Colors#strip(String)} instead.
 	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval

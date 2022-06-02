@@ -87,19 +87,13 @@ public class TownyMessaging {
 	 * and to the named Dev if DevMode is enabled.
 	 * Uses default_towny_prefix
 	 *
-	 * @param sender the Object sending the message
+	 * @param object the Object sending the message
 	 * @param msg the message to send
 	 */
-	public static void sendErrorMsg(Object sender, String msg) {
-		if (sender != null && sender instanceof CommandSender toSend) {
-			if (toSend instanceof ConsoleCommandSender) {
-				// Console
-				toSend.sendMessage(Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + Colors.strip(msg));
-			} else {
-				// Player
-				Towny.getAdventure().sender(toSend).sendMessage(Translatable.of("default_towny_prefix").append("<red>" + msg).componentFor(toSend));
-			}
-		} else if (sender != null && sender instanceof TownyObject townySender) {
+	public static void sendErrorMsg(Object object, String msg) {
+		if (object instanceof CommandSender sender) {
+			Towny.getAdventure().sender(sender).sendMessage(Translatable.of("default_towny_prefix").append("<red>" + msg).stripColors(sender instanceof ConsoleCommandSender).componentFor(sender));
+		} else if (object instanceof TownyObject townySender) {
 			if (townySender instanceof Resident resident) {
 				// Resident
 				sendMessage(resident, Translation.of("default_towny_prefix") + ChatColor.RED + msg);
@@ -111,7 +105,7 @@ public class TownyMessaging {
 				sendPrefixedNationMessage(nation, ChatColor.RED + msg);
 			}
 		} else {
-			sendErrorMsg("Sender cannot be null!");
+			throw new IllegalArgumentException("Invalid receiver: " + object.getClass().getName());
 		}
 		
 		sendDevMsg(msg);
@@ -215,6 +209,10 @@ public class TownyMessaging {
 		sendMessage(sender, lines.toArray(new String[0]));
 	}
 	
+	/**
+	 * @deprecated As of 98.3.1
+	 */
+	@Deprecated
 	public static void sendMessage(Object sender, Collection<Component> lines) {
 		for (Component line : lines)
 			sendMessage(sender, line);
@@ -227,20 +225,15 @@ public class TownyMessaging {
 	 * @param line the String to send
 	 */
 	public static void sendMessage(Object sendTo, String line) {
-		if (sendTo == null || line.isEmpty())
-			return;
-		
-		if (sendTo instanceof Player player) {
-			player.sendMessage(line);
-		} else if (sendTo instanceof CommandSender commandSender) {
-			commandSender.sendMessage(Colors.strip(line));
-		} else if (sendTo instanceof Resident resident) {
-			Player p = TownyAPI.getInstance().getPlayer(resident);
-			if (p != null)
-				p.sendMessage(line);
-		}
+		sendMessage(sendTo, TownyComponents.miniMessage(Colors.translateColorCodes(line)));
 	}
 	
+	/**
+	 * Send a message to a player with no Towny prefix.
+	 *
+	 * @param sendTo the Object to send the message to.
+	 * @param message the component to send
+	 */
 	public static void sendMessage(Object sendTo, Component message) {
 		if (sendTo == null || TownyComponents.plain(message).isEmpty())
 			return;
@@ -315,8 +308,7 @@ public class TownyMessaging {
 	
 	public static void sendPrefixedTownMessage(Town town, Component message) {
 		LOGGER.info(Colors.strip("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + TownyComponents.plain(message)));
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			sendMessage(player, Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())).append(message).component());
+		town.sendMessage(Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())).append(message).component());
 	}
 
 	/**
@@ -330,6 +322,11 @@ public class TownyMessaging {
 		LOGGER.info(Colors.strip("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
 			player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())) + line);
+	}
+
+	public static void sendPrefixedNationMessage(Nation nation, Component message) {
+		LOGGER.info(Colors.strip("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + TownyComponents.plain(message)));
+		nation.sendMessage(Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())).append(message).component());
 	}
 
 	/*
@@ -778,7 +775,7 @@ public class TownyMessaging {
 	 *  
 	 * @param sender CommandSender who will see the message. 
 	 * @param translatables Translatble... object(s) which will be translated.
-	 * @deprecated Deprecated as of 0.98.2.1, use {@link #sendMsg(CommandSender, Translatable)} instead.
+	 * @deprecated Deprecated as of 0.98.3.1, use {@link #sendMsg(CommandSender, Translatable)} instead.
 	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval
@@ -791,7 +788,7 @@ public class TownyMessaging {
 	 *  
 	 * @param sender CommandSender who will see the message. 
 	 * @param translatables Translatble... object(s) which will be translated.
-	 * @deprecated Deprecated as of 0.98.2.1, use {@link #sendMessage(CommandSender, Translatable)} instead.   
+	 * @deprecated Deprecated as of 0.98.3.1, use {@link #sendMessage(CommandSender, Translatable)} instead.   
 	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval
@@ -807,7 +804,7 @@ public class TownyMessaging {
 	 * 
 	 * @param sender CommandSender who will receive the error message.
 	 * @param translatables Translatable... object(s) to be translated using the locale of the end-user.
-	 * @deprecated Deprecated as of 0.98.2.1, use {@link #sendErrorMsg(CommandSender, Translatable)} instead.   
+	 * @deprecated Deprecated as of 0.98.3.1, use {@link #sendErrorMsg(CommandSender, Translatable)} instead.   
 	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval

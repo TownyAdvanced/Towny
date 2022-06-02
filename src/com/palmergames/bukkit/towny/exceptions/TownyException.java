@@ -34,7 +34,7 @@ public class TownyException extends Exception {
 	}
 	
 	/**
-	 * @deprecated Deprecated as of 0.98.2.1, use {@link #message(CommandSender)} instead.
+	 * @deprecated Deprecated as of 0.98.3.1, use {@link #message(CommandSender)} instead.
 	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval
