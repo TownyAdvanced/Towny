@@ -198,7 +198,7 @@ public final class Translation {
 	}
 	
 	/**
-	 * @deprecated Deprecated as of 0.98.2.1.
+	 * @deprecated Deprecated as of 0.98.3.1.
 	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval
@@ -207,7 +207,7 @@ public final class Translation {
 	}
 	
 	/**
-	 * @deprecated Deprecated as of 0.98.2.1.
+	 * @deprecated Deprecated as of 0.98.3.1.
 	 */
 	@Deprecated
 	@ApiStatus.ScheduledForRemoval
