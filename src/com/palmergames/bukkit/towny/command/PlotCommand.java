@@ -48,7 +48,6 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
-import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil;
@@ -1022,16 +1021,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			townBlock.setChanged(true);
 			townBlock.save();
-			if (!townBlock.hasPlotObjectGroup()) {
-				TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-				TownyMessaging.sendMessage(player, Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
-				TownyMessaging.sendMessage(player,
-					Translatable.of("status_pvp").locale(player).append(" ").append(Translatable.of("status_" + (!CombatUtil.preventPvP(townBlock.getWorld(), townBlock) ? "on" : "off"))),
-					Translatable.of("explosions").locale(player).append(" ").append(Translatable.of("status_" + (perm.explosion ? "on" : "off"))),
-					Translatable.of("firespread").locale(player).append(" ").append(Translatable.of("status_" + (perm.fire ? "on" : "off"))),
-					Translatable.of("mobspawns").locale(player).append(" ").append(Translatable.of("status_" + (perm.mobs ? "on" : "off"))));
-			}
-
+			if (!townBlock.hasPlotObjectGroup())
+				TownyMessaging.sendPlotPermissionLine(player, townBlockOwner, perm, townBlock);
 
 			//Change settings event
 			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(townBlock);
@@ -1695,14 +1686,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						plugin.resetCache();
 						
-						TownyPermission perm = plotGroup.getPermissions();
-						TownyMessaging.sendMessage(player, Translatable.of("msg_set_perms").forLocale(player));
-						TownyMessaging.sendMessage(player, Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
-						TownyMessaging.sendMessage(player, 
-							Translatable.of("status_pvp").locale(player).append(" ").append(Translatable.of("status_" + (!CombatUtil.preventPvP(townBlock.getWorld(), townBlock) ? "on" : "off"))),
-							Translatable.of("explosions").locale(player).append(" ").append(Translatable.of("status_" + (perm.explosion ? "on" : "off"))),
-							Translatable.of("firespread").locale(player).append(" ").append(Translatable.of("status_" + (perm.fire ? "on" : "off"))),
-							Translatable.of("mobspawns").locale(player).append(" ").append(Translatable.of("status_" + (perm.mobs ? "on" : "off"))));
+						TownyMessaging.sendPlotPermissionLine(player, townBlockOwner, plotGroup.getPermissions(), townBlock);
 					}
 				};
 
