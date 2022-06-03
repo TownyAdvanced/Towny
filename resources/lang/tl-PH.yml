@@ -1261,18 +1261,18 @@ status_fractions: '%s/%s'
 status_rank_list: 'Rank List'
 status_hover_click_for_more: 'Click for more information.'
 status_jailed: 'Jailed:'
-status_bad_yes: '&cYES'
-status_good_no: '&aNO'
-status_resident_tax_title: '%s''s Tax'
+status_bad_yes: '&cOO'
+status_good_no: '&aHINDI'
+status_resident_tax_title: 'Buwis ni %s'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Dahil hindi sila magiging malapit sa iyong kabisera ng bansa, ang mga sumusunod na bayan ay aalisin kung makumpleto ang pagsasanib: %s.'
 #Added in 0.123
-msg_err_invalid_townyworld: "'%s' is not a valid towny world."
-msg_err_enter_world_name_first: 'Please enter the name of the world first.'
-msg_wilderness_use_set_to: '&bWilderness use has been set to %s in %s.'
+msg_err_invalid_townyworld: "Ang '%s' ay hindi wastong mundo ng towny."
+msg_err_enter_world_name_first: 'Pakilagay muna ang pangalan ng mundo.'
+msg_wilderness_use_set_to: '&bAng paggamit sa kagubatan ay naitakda sa %s sa %s.'
 #Added in 0.124
-msg_err_invalid_response: 'Invalid response! Enter q to exit or back to go back to the previous question.'
-msg_setup_full_guide_link: '&bFor a link to the full install guide, click here.'
+msg_err_invalid_response: 'Di-wastong tugon! Ipasok ang Q upang lumabas o bumalik upang bumalik sa nakaraang tanong.'
+msg_setup_full_guide_link: '&bPara sa isang link sa buong gabay sa pag-install, mag-click dito.'
 msg_setup_wildernessuse: 'Would you like to enable wilderness use? This will allow players to break/build in the wilderness.'
 msg_setup_revertunclaim: 'Would you like to use revert on unclaim? This will make townblocks slowly regenerate when they are unclaimed.'
 msg_setup_town_block_ratio: 'What would you like to set your town block ratio at? The default is 8 townblocks per resident. Higher amounts will allow towns to claim more for each resident they have. Setting this to 0 will make it use values from the town_levels.'
