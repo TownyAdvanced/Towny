@@ -470,7 +470,7 @@ msg_err_nation_sent_too_many_invites: '&bНація надіслала зана�
 msg_err_nation_sent_too_many_requests: '&bНація надіслала занадто багато запрошень, відхиліть деякі, перед тим як спробувати знову!'
 msg_err_nation_has_too_many_requests: '&bНація %s має занадто багато запрошень, попросіть відхилити деякі з них, перед тим як спробувати знову.'
 player_received_invites: '&bВи отримали %a/%m повідомлень.'
-town_revoke_invite: '&bTown %s, revoked your invite to join them.'
+town_revoke_invite: '&bМісто %s відхилило ваше запрошення приєднатися до них.'
 town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town.'
 town_received_invites: '&bTown has received %a/%m invites.'
 town_sent_invites: '&bTown has sent %a/%m invites.'
