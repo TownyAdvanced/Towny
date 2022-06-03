@@ -1273,8 +1273,8 @@ msg_wilderness_use_set_to: '&bAng paggamit sa kagubatan ay naitakda sa %s sa %s.
 #Added in 0.124
 msg_err_invalid_response: 'Di-wastong tugon! Ipasok ang Q upang lumabas o bumalik upang bumalik sa nakaraang tanong.'
 msg_setup_full_guide_link: '&bPara sa isang link sa buong gabay sa pag-install, mag-click dito.'
-msg_setup_wildernessuse: 'Would you like to enable wilderness use? This will allow players to break/build in the wilderness.'
-msg_setup_revertunclaim: 'Would you like to use revert on unclaim? This will make townblocks slowly regenerate when they are unclaimed.'
+msg_setup_wildernessuse: 'Gusto mo bang paganahin ang paggamit sa ilang? Ito ay magbibigay-daan sa mga manlalaro na masira/magtayo sa ilang.'
+msg_setup_revertunclaim: 'Gusto mo bang gumamit ng revert sa unclaim? Gagawin nitong dahan-dahang muling bubuo ang mga townblock kapag hindi na-claim ang mga ito.'
 msg_setup_town_block_ratio: 'What would you like to set your town block ratio at? The default is 8 townblocks per resident. Higher amounts will allow towns to claim more for each resident they have. Setting this to 0 will make it use values from the town_levels.'
 msg_setup_town_cost: 'How much should the cost to create a new town be? The default is 250.'
 msg_setup_nation_cost: 'How much should the cost to create a new nation be? The default is 1000.'
