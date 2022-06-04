@@ -243,11 +243,8 @@ public class Nation extends Government {
 		}
 	}
 
-	public Alliance getAlliance() throws NotRegisteredException {
-		if (hasAlliance())
-			return alliance;
-		else
-			throw new NotRegisteredException(Translation.of("msg_err_nation_doesnt_belong_to_any_alliance"));
+	public Alliance getAlliance() {
+		return alliance;
 	}
 
 	/**

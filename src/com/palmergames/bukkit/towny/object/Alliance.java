@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.entity.Player;
+
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -268,5 +269,13 @@ public class Alliance implements Nameable, InviteSender, ResidentList {
 	
 	public List<Invite> getSentAllianceInvites() {
 		return Collections.unmodifiableList(sentAllianceInvites);
+	}
+
+	public Collection<TownBlock> getTownBlocks() {
+		List<TownBlock> townBlocks = new ArrayList<>();
+		for (Town town : this.getTowns())
+			townBlocks.addAll(town.getTownBlocks());
+		
+		return Collections.unmodifiableCollection(townBlocks);
 	}
 }

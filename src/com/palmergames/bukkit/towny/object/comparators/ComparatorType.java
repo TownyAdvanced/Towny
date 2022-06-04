@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object.comparators;
 
 import java.util.Comparator;
-import com.palmergames.bukkit.towny.object.Government;
 
 public enum ComparatorType {
 	RESIDENTS("msg_comptype_residents", GovernmentComparators.BY_NUM_RESIDENTS, "by residents"),
@@ -9,6 +8,7 @@ public enum ComparatorType {
 	BALANCE("msg_comptype_balance", GovernmentComparators.BY_BANK_BALANCE, "by balance"),
 	ONLINE("msg_comptype_online", GovernmentComparators.BY_NUM_ONLINE, "by online"),
 	TOWNS("msg_comptype_towns", NationComparators.BY_NUM_TOWNS, "by towns"),
+	NATIONS("msg_comptype_nations", AllianceComparators.BY_NUM_NATIONS, "by nations"),
 	FOUNDED("msg_comptype_founded", GovernmentComparators.BY_FOUNDED, "by founded"),
 	NAME("msg_comptype_name", GovernmentComparators.BY_NAME, "by name"),
 	OPEN("msg_comptype_open", GovernmentComparators.BY_OPEN, "by open"),
@@ -17,9 +17,9 @@ public enum ComparatorType {
 	BANKRUPT("msg_comptype_bankrupt", TownComparators.BY_BANKRUPT, "by bankrupt");
 
 	private final String name;
-	private final Comparator<? extends Government> comparator;
+	private final Comparator<?> comparator;
 	private final String commandString;
-	ComparatorType(String name, Comparator<? extends Government> comparator, String commandString) {
+	ComparatorType(String name, Comparator<?> comparator, String commandString) {
 		this.name = name;
 		this.comparator = comparator;
 		this.commandString = commandString;
@@ -27,7 +27,7 @@ public enum ComparatorType {
 	public String getName() {
 		return name;
 	}
-	public Comparator<? extends Government> getComparator() {
+	public Comparator<?> getComparator() {
 		return comparator;
 	}
 	public String getCommandString() {

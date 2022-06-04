@@ -16,11 +16,17 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.alliance.AllianceListDisplayedNumOnlinePlayersCalculationEvent;
+import com.palmergames.bukkit.towny.event.alliance.AllianceListDisplayedNumResidentsCalculationEvent;
+import com.palmergames.bukkit.towny.event.alliance.AllianceListDisplayedNumTownBlocksCalculationEvent;
+import com.palmergames.bukkit.towny.event.alliance.AllianceListDisplayedNumTownsCalculationEvent;
+import com.palmergames.bukkit.towny.event.alliance.DisplayedAlliancesListSortEvent;
 import com.palmergames.bukkit.towny.event.nation.DisplayedNationsListSortEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumOnlinePlayersCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumResidentsCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownBlocksCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownsCalculationEvent;
+import com.palmergames.bukkit.towny.object.Alliance;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -51,6 +57,14 @@ public class ComparatorCaches {
 				}
 			}); 
 	
+	private static LoadingCache<ComparatorType, List<Component>> allianceCompCache = CacheBuilder.newBuilder()
+			.expireAfterWrite(10, TimeUnit.MINUTES)
+			.build(new CacheLoader<ComparatorType, List<Component>>() {
+				public List<Component> load(ComparatorType compType) throws Exception {
+					return gatherAllianceLines(compType);
+				}
+			}); 
+	
 	public static List<TextComponent> getTownListCache(ComparatorType compType) {
 		try {
 			return townCompCache.get(compType);
@@ -63,6 +77,15 @@ public class ComparatorCaches {
 	public static List<TextComponent> getNationListCache(ComparatorType compType) {
 		try {
 			return nationCompCache.get(compType);
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
+	
+	public static List<Component> getAllianceListCache(ComparatorType compType) {
+		try {
+			return allianceCompCache.get(compType);
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 			return new ArrayList<>();
@@ -179,6 +202,74 @@ public class ComparatorCaches {
 				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
 			
 			nationName = nationName.hoverEvent(HoverEvent.showText(Component.text(Colors.Gold + Translation.of("msg_click_spawn", nation) + "\n" + spawnCost)));
+			output.add(nationName);
+		}
+		return output;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static List<Component> gatherAllianceLines(ComparatorType compType) {
+		List<Component> output = new ArrayList<>();
+		List<Alliance> alliances = new ArrayList<>(TownyUniverse.getInstance().getAlliances());
+
+		//Sort alliances
+		alliances.sort((Comparator<? super Alliance>) compType.getComparator());
+		DisplayedAlliancesListSortEvent allianceListSortEvent = new DisplayedAlliancesListSortEvent(alliances, compType);
+		Bukkit.getPluginManager().callEvent(allianceListSortEvent);
+		alliances = allianceListSortEvent.getAlliances();
+
+		for (Alliance alliance : alliances) {
+			TextComponent nationName = Component.text(Colors.LightBlue + StringMgmt.remUnderscore(alliance.getName()))
+					.clickEvent(ClickEvent.runCommand("/towny:alliance " + alliance));
+
+			String slug = "";
+			switch (compType) {
+			case TOWNBLOCKS:
+				int rawNumTownsBlocks = alliance.getTownBlocks().size();
+				AllianceListDisplayedNumTownBlocksCalculationEvent tbEvent = new AllianceListDisplayedNumTownBlocksCalculationEvent(alliance, rawNumTownsBlocks);
+				Bukkit.getPluginManager().callEvent(tbEvent);
+				slug = tbEvent.getDisplayedValue() + "";
+				break;
+			case TOWNS:
+				int rawNumTowns = alliance.getTowns().size();
+				AllianceListDisplayedNumTownsCalculationEvent tEvent = new AllianceListDisplayedNumTownsCalculationEvent(alliance, rawNumTowns);
+				Bukkit.getPluginManager().callEvent(tEvent);
+				slug = tEvent.getDisplayedValue() + "";
+				break;
+			case NATIONS:
+				int rawNumNations = alliance.getMembers().size();
+				AllianceListDisplayedNumTownsCalculationEvent nEvent = new AllianceListDisplayedNumTownsCalculationEvent(alliance, rawNumNations);
+				Bukkit.getPluginManager().callEvent(nEvent);
+				slug = nEvent.getDisplayedValue() + "";
+				break;
+			case ONLINE:
+				int rawNumOnlinePlayers = TownyAPI.getInstance().getOnlinePlayersInAlliance(alliance).size();
+				AllianceListDisplayedNumOnlinePlayersCalculationEvent opEvent = new AllianceListDisplayedNumOnlinePlayersCalculationEvent(alliance, rawNumOnlinePlayers);
+				Bukkit.getPluginManager().callEvent(opEvent);
+				slug = opEvent.getDisplayedValue() + "";
+				break;
+			case FOUNDED:
+				if (alliance.getRegistered() != 0)
+					slug = TownyFormatter.registeredFormat.format(alliance.getRegistered());
+				break;
+			default:
+				int rawNumResidents = alliance.getResidents().size();
+				AllianceListDisplayedNumResidentsCalculationEvent rEvent = new AllianceListDisplayedNumResidentsCalculationEvent(alliance, rawNumResidents);
+				Bukkit.getPluginManager().callEvent(rEvent);
+				slug = rEvent.getDisplayedValue() + "";
+				break;
+			}
+			
+			nationName = nationName.append(Component.text(Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")"));
+
+//			if (alliance.isOpen())
+//				nationName = nationName.append(Component.text(" " + Colors.LightBlue + Translation.of("status_title_open")));
+
+//			String spawnCost = "Free";
+//			if (TownyEconomyHandler.isActive())
+//				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(alliance.getSpawnCost()));
+			
+//			nationName = nationName.hoverEvent(HoverEvent.showText(Component.text(Colors.Gold + Translation.of("msg_click_spawn", alliance) + "\n" + spawnCost)));
 			output.add(nationName);
 		}
 		return output;

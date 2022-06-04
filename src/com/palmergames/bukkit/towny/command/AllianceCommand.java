@@ -39,6 +39,8 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
+import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
+import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.inviteobjects.AllianceNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
@@ -54,7 +56,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 	private CommandSender sender;
 	private Player player;
 	private Translator translator;
-
 
 	public AllianceCommand(Towny instance) {
 		plugin = instance;
@@ -80,8 +81,18 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 	);
 	
 	private static final List<String> allianceSetTabCompletes = Arrays.asList(
-			"name"
-		);
+		"name"
+	);
+	
+	private static final List<String> allianceListTabCompletes = Arrays.asList(
+		"residents",
+		"founded",
+		"name",		
+		"online",
+		"townblocks",
+		"towns",
+		"nations"
+	);
 	
 	private static final List<String> allianceConsoleTabCompletes = Arrays.asList(
 		"?",
@@ -94,6 +105,14 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		if (sender instanceof Player player) {
 			switch (args[0].toLowerCase()) {
 			case "list":
+				switch (args.length) {
+				case 2:
+					return Collections.singletonList("by");
+				case 3:
+					return NameUtil.filterByStart(allianceListTabCompletes, args[2]);
+				default:
+					return Collections.emptyList();
+			}
 			case "delete":
 				return Collections.emptyList();
 			case "add":
@@ -143,8 +162,7 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		}
 		return Collections.emptyList();
 	}
-
-		
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
@@ -169,6 +187,7 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 
 		return true;
 	}
+
 	private void parseAllianceCommandForConsole(CommandSender sender, String[] split) {
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 
@@ -207,9 +226,7 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		
 		if (split.length == 0) {
 
-			Alliance alliance = getAllianceFromPlayerOrThrow(player);
-			allianceStatusScreen(player, alliance);
-
+			allianceStatusScreen(player, getAllianceFromPlayerOrThrow(player));
 		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 
 			HelpMenu.ALLIANCE_HELP.send(player);
@@ -269,9 +286,84 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void allianceList(CommandSender sender, String[] split) throws TownyException {
-		// TODO: make this a thing.
-	}
+		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
+		boolean console = true;
+		if (sender instanceof Player player)
+			console = false;
 
+		/*
+		 * The default comparator on /alliance list is by residents, test it before we start anything else.
+		 */
+		if (split.length < 2 && !console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_LIST_RESIDENTS.getNode()))
+			throw new TownyException(Translatable.of("msg_err_command_disable"));
+		
+		List<Alliance> alliancesToSort = new ArrayList<>(TownyUniverse.getInstance().getAlliances());
+		int page = 1;
+		boolean pageSet = false;
+		boolean comparatorSet = false;
+		ComparatorType type = ComparatorType.RESIDENTS;
+		int total = (int) Math.ceil(((double) alliancesToSort.size()) / ((double) 10));
+		for (int i = 1; i < split.length; i++) {
+			if (split[i].equalsIgnoreCase("by")) { // Is a case of someone using /alliance list by {comparator}
+				if (comparatorSet) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_multiple_comparators"));
+					return;
+				}
+				i++;
+				if (i < split.length) {
+					comparatorSet = true;
+					if (split[i].equalsIgnoreCase("resident")) 
+						split[i] = "residents";
+					
+					if (!console && !permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_ALLIANCE_LIST.getNode(split[i])))
+						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					
+					if (!allianceListTabCompletes.contains(split[i].toLowerCase()))
+						throw new TownyException(Translatable.of("msg_error_invalid_comparator_alliance"));
+
+					type = ComparatorType.valueOf(split[i].toUpperCase());
+				} else {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_missing_comparator"));
+					return;
+				}
+				comparatorSet = true;
+			} else { // Is a case of someone using /alliance list, /alliance list # or /alliance list by {comparator} #
+				if (pageSet) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_too_many_pages"));
+					return;
+				}
+				try {
+					page = Integer.parseInt(split[i]);
+					if (page < 0) {
+						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative"));
+						return;
+					} else if (page == 0) {
+						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
+						return;
+					}
+					pageSet = true;
+				} catch (NumberFormatException e) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
+					return;
+				}
+			}
+		}
+		
+		if (page > total) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
+			return;
+		}
+
+		final ComparatorType finalType = type;
+		final int pageNumber = page;
+		try {
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+				TownyMessaging.sendAllianceList(sender, ComparatorCaches.getAllianceListCache(finalType), finalType, pageNumber, total);
+			});
+		} catch (RuntimeException e) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_comparator_failed"));
+		}
+	}
 
 	private void allianceSet(Player player, String[] split) throws TownyException {
 		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
@@ -285,7 +377,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 			allianceSetName(player, StringMgmt.remFirstArg(split));
 		}
 	}
-
 
 	private void allianceSetName(Player player, String[] names) throws TownyException {
 		Nation nation = getNationFromPlayerOrThrow(player);
@@ -330,7 +421,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendPrefixedAllianceMessage(alliance, Translatable.of("msg_alliance_set_name", player.getName(), alliance.getName()));
 	}
 
-
 	private void allianceAdd(Player player, String[] names) throws TownyException {
 		if (names.length == 0)
 			throw new TownyException(Translatable.of("msg_usage", "/alliance add [nation name]"));
@@ -352,7 +442,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		
 	}
 
-
 	private void allianceAdd(Player player, Alliance alliance, ArrayList<Nation> toInvite) throws TownyException {
 		List<Nation> removed = new ArrayList<>(); 
 		for (Nation nation : toInvite) {
@@ -366,7 +455,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		if (toInvite.isEmpty())
 			throw new TownyException(Translatable.of("msg_invalid_name"));
 	}
-
 
 	private boolean allianceInviteAlly(Player player, Alliance alliance, Nation nation) throws TownyException {
 		AlliancePreAddNationEvent apane = new AlliancePreAddNationEvent(alliance, nation);
@@ -385,7 +473,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 			return allianceAddNPCNationAsAlly(player, alliance, nation);
 		}
 	}
-
 
 	private void allianceCreateAllyRequest(CommandSender sender, Alliance alliance, Nation nation) throws TownyException {
 		AllianceNationInvite invite = new AllianceNationInvite(sender, nation, alliance);
@@ -422,7 +509,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-
 	private void allianceRemove(Player player, String[] names) throws TownyException {
 		if (names.length == 0)
 			throw new TownyException(Translatable.of("msg_usage", "/alliance remove [nation name]"));
@@ -443,7 +529,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 			allianceRemove(player, alliance, removeList);
 	}
 
-
 	private void allianceRemove(Player player, Alliance alliance, ArrayList<Nation> removeList) throws TownyException {
 		List<Nation> failed = new ArrayList<>(); 
 		for (Nation nation : removeList) {
@@ -456,7 +541,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		if (removeList.isEmpty())
 			throw new TownyException(Translatable.of("msg_invalid_name"));
 	}
-
 
 	private boolean allianceRemoveAlly(Player player, Alliance alliance, Nation nation) {
 		AllianceRemoveNationEvent arne = new AllianceRemoveNationEvent(alliance, nation);
@@ -472,7 +556,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendPrefixedAllianceMessage(alliance, Translatable.of("msg_alliance_removed_ally", nation));
 		return true;
 	}
-
 
 	private void allianceEnemy(Player player, String[] split) throws TownyException {
 		if (split.length < 2)
@@ -506,7 +589,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", "[add/remove]"));
 		}
 	}
-
 
 	private void allianceEnemy(Player player, Alliance alliance, ArrayList<Alliance> enemies, boolean add) {
 
@@ -566,7 +648,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
 	}
 
-
 	private void allianceDelete(Player player, String[] split) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
@@ -586,7 +667,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-
 	private void allianceOnline(Player player, String[] split) throws TownyException {
 		if (split.length > 0) {
 			Alliance alliance = getAllianceOrThrow(split[0]);
@@ -601,7 +681,6 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(translator.of("msg_alliance_online"), getAllianceFromPlayerOrThrow(player), player));
 		}
 	}
-
 
 	private void allianceEnemyList(Player player, String[] split) throws TownyException {
 		Alliance alliance = null;

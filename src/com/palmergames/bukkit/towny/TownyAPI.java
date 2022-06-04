@@ -444,14 +444,26 @@ public class TownyAPI {
      * @return {@link List} of all online {@link Player}s in the specified {@link Nation}s allies.
      */
     public List<Player> getOnlinePlayersAlliance(Nation nation) {
-		ArrayList<Player> players = new ArrayList<>(getOnlinePlayers(nation));
-        if (!nation.getAllies().isEmpty()) {
-			for (Nation nations : nation.getAllies()) {
+        return getOnlinePlayersInAlliance(nation.getAlliance());
+    }
+
+	/**
+	 * Gets all online {@link Player}s for a specific {@link Alliance}.
+	 * 
+	 * @param alliance {@link Alliance} of which you want all the online allied
+	 *                 {@link Player}s.
+	 * @return {@link List} of all online {@link Player}s in the specified
+	 *         {@link Alliance}.
+	 */
+	public List<Player> getOnlinePlayersInAlliance(Alliance alliance) {
+		ArrayList<Player> players = new ArrayList<>();
+		if (!alliance.getMembers().isEmpty()) {
+			for (Nation nations : alliance.getMembers()) {
 				players.addAll(getOnlinePlayers(nations));
 			}
-        }
-        return players;
-    }
+		}
+		return players;
+	}
     
     /**
      * Check if the specified {@link Block} is in the wilderness.

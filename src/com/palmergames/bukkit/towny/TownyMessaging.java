@@ -500,6 +500,33 @@ public class TownyMessaging {
 		return backButton.append(pageText).append(forwardButton);
 	}
 
+	public static void sendAllianceList(CommandSender sender, List<Component> alliances, ComparatorType compType, int page, int total) {
+		int iMax = Math.min(page * 10, alliances.size());
+
+		Component[] alliancesformatted;
+		if ((page * 10) > alliances.size()) {
+			alliancesformatted = new Component[alliances.size() % 10];
+		} else {
+			alliancesformatted = new Component[10];
+		}
+		
+		// Populate the page with TextComponents.
+		for (int i = (page - 1) * 10; i < iMax; i++) {
+			alliancesformatted[i % 10] = alliances.get(i);
+		}
+
+		sender.sendMessage(ChatTools.formatTitle(Translatable.of("alliance_plu").forLocale(sender)));
+		sender.sendMessage(Colors.Blue + Translatable.of("alliance_name").forLocale(sender) + Colors.Gray + " - " + Colors.LightBlue + Translatable.of(compType.getName()).forLocale(sender));
+		Audience audience = Towny.getAdventure().sender(sender);
+		for (Component component : alliancesformatted) {
+			audience.sendMessage(component);
+		}
+
+		// Page navigation
+		Component pageFooter = getPageNavigationFooter("towny:alliance list", page, compType.getCommandString(), total);
+		audience.sendMessage(pageFooter);
+	}
+	
 	public static void sendNationList(CommandSender sender, List<TextComponent> nations, ComparatorType compType, int page, int total) {
 		int iMax = Math.min(page * 10, nations.size());
 
