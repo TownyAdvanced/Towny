@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.150
+version: 0.151
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -1486,3 +1486,8 @@ status_plot_hover: '%s:'
 msg_usage: 'Используется: %s/t'
 #Shown in teh bank history books when there are no pages to display
 msg_err_no_pages_to_display: 'Нет файлов для отображения.'
+#Added in 0.151
+#Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
+msg_err_nation_unaffiliated: 'That nation is not affiliated with you.'
+#Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
+msg_err_town_unaffiliated: 'That town is not affiliated with you.'
