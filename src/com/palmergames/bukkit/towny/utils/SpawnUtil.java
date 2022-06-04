@@ -311,7 +311,7 @@ public class SpawnUtil {
 			}
 
 			if (nationSpawnLevel == NationSpawnLevel.UNAFFILIATED && !nation.isPublic())
-				throw new TownyException(Translatable.of("msg_err_nation_not_public"));
+				throw new TownyException(Translatable.of("msg_err_nation_unaffiliated"));
 		}
 
 		// Check if the player has the permission/config allows for this type of spawning.
