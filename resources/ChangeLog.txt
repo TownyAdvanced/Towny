@@ -7496,3 +7496,7 @@ v0.92.0.11:
   - Fix CooldownTimerTask for neutrality on nations and towns not starting.
   - Fix Arena plot setting not checking for a town pvp cooldown.
   - Fix potential NPE in towny:insidetown luckperms context.
+0.98.2.3:
+  - Add specific denial messages to nation and town spawn when the server has public spawning disabled entirely.
+    - Closes #5940. 
+  - Bump language file to 0.151.

@@ -262,8 +262,12 @@ public class SpawnUtil {
 				townSpawnLevel = TownSpawnLevel.UNAFFILIATED;
 			}
 
-			if (townSpawnLevel == TownSpawnLevel.UNAFFILIATED && !town.isPublic())
-				throw new TownyException(Translatable.of("msg_err_not_public"));
+			if (townSpawnLevel == TownSpawnLevel.UNAFFILIATED && !town.isPublic()) {
+				if (!TownySettings.isConfigAllowingPublicTownSpawnTravel()) // The server doesn't allow any public town spawning.
+					throw new TownyException(Translatable.of("msg_err_town_unaffiliated"));
+				else 
+					throw new TownyException(Translatable.of("msg_err_not_public"));
+			}
 		}
 
 		// Check if the player has the permission/config allows for this type of spawning.
@@ -310,8 +314,13 @@ public class SpawnUtil {
 				nationSpawnLevel = NationSpawnLevel.UNAFFILIATED;
 			}
 
-			if (nationSpawnLevel == NationSpawnLevel.UNAFFILIATED && !nation.isPublic())
-				throw new TownyException(Translatable.of("msg_err_nation_not_public"));
+			if (nationSpawnLevel == NationSpawnLevel.UNAFFILIATED && !nation.isPublic()) {
+				if (!TownySettings.isConfigAllowingPublicNationSpawnTravel()) // The server doesn't allow any public nation spawning.
+					throw new TownyException(Translatable.of("msg_err_nation_unaffiliated"));
+				else 
+					throw new TownyException(Translatable.of("msg_err_nation_not_public"));
+			}
+				
 		}
 
 		// Check if the player has the permission/config allows for this type of spawning.

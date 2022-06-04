@@ -1632,6 +1632,16 @@ public class TownySettings {
 		return getSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
 	}
 
+	public static boolean isConfigAllowingPublicTownSpawnTravel() {
+
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
+	}
+	
+	public static boolean isConfigAllowingPublicNationSpawnTravel() {
+
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL);
+	}
+
 	public static List<String> getDisallowedTownSpawnZones() {
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_PREVENT_TOWN_SPAWN_IN);
 	}
