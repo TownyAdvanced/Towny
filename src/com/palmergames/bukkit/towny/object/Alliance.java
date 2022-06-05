@@ -34,6 +34,7 @@ public class Alliance implements Nameable, InviteSender, ResidentList {
 	public Alliance(UUID uuid, String name, Nation founder) {
 		this.setUUID(uuid);
 		this.setName(name);
+		this.setFounder(founder);
 	}
 
 	/**

@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Nation extends Government {
@@ -244,6 +245,13 @@ public class Nation extends Government {
 	}
 
 	public Alliance getAlliance() {
+		if (alliance == null) {
+			Alliance newAlliance = new Alliance(UUID.randomUUID(), "Independent_" + getName(), this); 
+			try {
+				TownyUniverse.getInstance().registerAlliance(newAlliance);
+			} catch (AlreadyRegisteredException ignored) {}
+			setAlliance(newAlliance);
+		}
 		return alliance;
 	}
 
