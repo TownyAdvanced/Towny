@@ -444,9 +444,8 @@ public class TownyPlayerListener implements Listener {
 			 * Prevents setting the spawn point of the player using beds or respawn anchors, 
 			 * except in allowed plots (personally-owned and Inns)
 			 */
-			if (event.getAction() == Action.RIGHT_CLICK_BLOCK && (Tag.BEDS.isTagged(block.getType()) || (block.getWorld().isRespawnAnchorWorks() && block.getBlockData() instanceof RespawnAnchor anchor && anchor.getCharges() > 0 && (event.getItem() == null || (event.getItem().getType() != Material.GLOWSTONE || anchor.getCharges() >= anchor.getMaximumCharges()))))) {
-				if (!TownySettings.getBedUse())
-					return;
+			if (TownySettings.getBedUse() && event.getAction() == Action.RIGHT_CLICK_BLOCK
+				&& (Tag.BEDS.isTagged(block.getType()) || disallowedAnchorClick(event, block))) {
 
 				boolean isOwner = false;
 				boolean isInnPlot = false;
@@ -484,6 +483,20 @@ public class TownyPlayerListener implements Listener {
 				}
 			}
 		}
+	}
+
+	/*
+	 * This method will stop a player Right Clicking on a respawn anchor if:
+	 * - The world is an anchor-allowed world (the nether) and,
+	 * - The Block is an anchor and,
+	 * - The Anchor has charges and,
+	 * - The Item in their hand is nothing or (not-glowstone or the charges are full.) 
+	 */
+	private boolean disallowedAnchorClick(PlayerInteractEvent event, Block block) {
+		return block.getWorld().isRespawnAnchorWorks() 
+			&& block.getBlockData() instanceof RespawnAnchor anchor 
+			&& anchor.getCharges() > 0 
+			&& (event.getItem() == null || (event.getItem().getType() != Material.GLOWSTONE || anchor.getCharges() >= anchor.getMaximumCharges()));
 	}
 
 	/*
