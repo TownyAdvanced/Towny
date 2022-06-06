@@ -138,16 +138,16 @@ public class Alliance implements Nameable, InviteSender, ResidentList {
 		return this.membersUUIDs.remove(nation.getUUID());
 	}
 	
-	public boolean hasNation(Nation nation) {
+	public boolean hasMember(Nation nation) {
 		return this.membersUUIDs.contains(nation.getUUID());
 	}
 
 	/**
-	 * @return the enemies as a list of Alliances
+	 * @return the enemies as a list of Nations
 	 */
-	public List<Alliance> getEnemies() {
+	public List<Nation> getEnemies() {
 		return enemiesUUIDs.stream()
-			.map(uuid -> TownyAPI.getInstance().getAlliance(uuid))
+			.map(uuid -> TownyAPI.getInstance().getNation(uuid))
 			.collect(Collectors.toList());
 	}
 	
@@ -158,8 +158,8 @@ public class Alliance implements Nameable, InviteSender, ResidentList {
 		return enemiesUUIDs;
 	}
 
-	public boolean hasEnemy(Alliance alliance) {
-		return enemiesUUIDs.contains(alliance.getUUID());
+	public boolean hasEnemy(Nation nation) {
+		return enemiesUUIDs.contains(nation.getUUID());
 	}
 	
 	/**
@@ -169,12 +169,12 @@ public class Alliance implements Nameable, InviteSender, ResidentList {
 		this.enemiesUUIDs = enemiesUUIDs;
 	}
 
-	public boolean addEnemy(Alliance alliance) {
-		return this.enemiesUUIDs.add(alliance.getUUID());
+	public boolean addEnemy(Nation nation) {
+		return this.enemiesUUIDs.add(nation.getUUID());
 	}
 	
-	public boolean removeEnemy(Alliance alliance) {
-		return this.enemiesUUIDs.remove(alliance.getUUID());
+	public boolean removeEnemy(Nation nation) {
+		return this.enemiesUUIDs.remove(nation.getUUID());
 	}
 	
 	public List<Town> getTowns() {
@@ -212,7 +212,7 @@ public class Alliance implements Nameable, InviteSender, ResidentList {
 		if (town == null || !town.hasNation())
 			return false;
 		
-		return hasNation(town.getNationOrNull());
+		return hasMember(town.getNationOrNull());
 	}
 	
 	public boolean hasTownBlock(TownBlock townBlock) {

@@ -867,7 +867,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	@Nullable
 	public Alliance getAllianceOrNull() {
 		if (hasNation() && getNationOrNull().hasAlliance())
-			return getNationOrNull().getAllianceOrNull();
+			return getNationOrNull().getAlliance();
 		else
 			return null;
 	}

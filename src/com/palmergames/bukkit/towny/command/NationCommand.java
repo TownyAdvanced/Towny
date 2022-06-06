@@ -521,9 +521,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		case "ally":
 			nationAlly(player, StringMgmt.remFirstArg(split));
 			break;
-		case "enemy":
-			nationEnemy(player, StringMgmt.remFirstArg(split));
-			break;
+//		case "enemy":
+//			nationEnemy(player, StringMgmt.remFirstArg(split));
+//			break;
 		case "delete":
 			nationDelete(player, StringMgmt.remFirstArg(split));
 			break;
@@ -1808,127 +1808,127 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public void nationEnemy(Player player, String[] split) throws TownyException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+//	public void nationEnemy(Player player, String[] split) throws TownyException {
+//		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+//
+//		if (split.length < 2) {
+//			TownyMessaging.sendErrorMsg(player, "Eg: /nation enemy [add/remove] [name]");
+//			return;
+//		}
+//
+//		Resident resident = getResidentOrThrow(player.getUniqueId());
+//		Nation nation = getNationFromResidentOrThrow(resident);
+//		
+//		ArrayList<Nation> list = new ArrayList<>();
+//		Nation enemy;
+//		// test add or remove
+//		String test = split[0];
+//		String[] newSplit = StringMgmt.remFirstArg(split);
+//		boolean add = test.equalsIgnoreCase("add");
+//
+//		if ((test.equalsIgnoreCase("remove") || test.equalsIgnoreCase("add")) && newSplit.length > 0) {
+//			for (String name : newSplit) {
+//				enemy = townyUniverse.getNation(name);
+//
+//				if (enemy == null) {
+//					throw new TownyException(Translatable.of("msg_err_no_nation_with_that_name", name));
+//				}
+//
+//				if (nation.equals(enemy))
+//					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_own_nation_disallow"));
+//				else if (add && nation.hasEnemy(enemy))
+//					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_nation_already_enemies_with", enemy.getName()));
+//				else if (!add && !nation.hasEnemy(enemy))
+//					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_nation_not_enemies_with", enemy.getName()));
+//				else
+//					list.add(enemy);
+//			}
+//			if (!list.isEmpty())
+//				nationEnemy(player, nation, list, add);
+//
+//		} else {
+//			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", "[add/remove]"));
+//		}
+//	}
 
-		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(player, "Eg: /nation enemy [add/remove] [name]");
-			return;
-		}
-
-		Resident resident = getResidentOrThrow(player.getUniqueId());
-		Nation nation = getNationFromResidentOrThrow(resident);
-		
-		ArrayList<Nation> list = new ArrayList<>();
-		Nation enemy;
-		// test add or remove
-		String test = split[0];
-		String[] newSplit = StringMgmt.remFirstArg(split);
-		boolean add = test.equalsIgnoreCase("add");
-
-		if ((test.equalsIgnoreCase("remove") || test.equalsIgnoreCase("add")) && newSplit.length > 0) {
-			for (String name : newSplit) {
-				enemy = townyUniverse.getNation(name);
-
-				if (enemy == null) {
-					throw new TownyException(Translatable.of("msg_err_no_nation_with_that_name", name));
-				}
-
-				if (nation.equals(enemy))
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_own_nation_disallow"));
-				else if (add && nation.hasEnemy(enemy))
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_nation_already_enemies_with", enemy.getName()));
-				else if (!add && !nation.hasEnemy(enemy))
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_nation_not_enemies_with", enemy.getName()));
-				else
-					list.add(enemy);
-			}
-			if (!list.isEmpty())
-				nationEnemy(player, nation, list, add);
-
-		} else {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", "[add/remove]"));
-		}
-	}
-
-	public void nationEnemy(Player player, Nation nation, List<Nation> enemies, boolean add) {
-
-		ArrayList<Nation> remove = new ArrayList<>();
-		for (Nation targetNation : enemies)
-			try {
-				if (add && !nation.getEnemies().contains(targetNation)) {
-					NationPreAddEnemyEvent npaee = new NationPreAddEnemyEvent(nation, targetNation);
-					Bukkit.getPluginManager().callEvent(npaee);
-					
-					if (!npaee.isCancelled()) {
-						nation.addEnemy(targetNation);
-						
-						NationAddEnemyEvent naee = new NationAddEnemyEvent(nation, targetNation);
-						Bukkit.getPluginManager().callEvent(naee);
-
-						// Remove the targetNation from the nation ally list if present.
-						if (nation.hasAlly(targetNation)) {
-							nation.removeAlly(targetNation);
-							Bukkit.getPluginManager().callEvent(new NationRemoveAllyEvent(nation, targetNation));
-							TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_removed_ally", targetNation));
-							TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
-						}
-						
-						// Remove the nation from the targetNation ally list if present.
-						if (targetNation.hasAlly(nation)) {
-							targetNation.removeAlly(nation);
-							Bukkit.getPluginManager().callEvent(new NationRemoveAllyEvent(targetNation, nation));
-							TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_ally", nation));
-							TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
-						}
-
-						TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_added_enemy", nation));
-					} else {
-						TownyMessaging.sendErrorMsg(player, npaee.getCancelMessage());
-						remove.add(targetNation);
-					}
-
-				} else if (nation.getEnemies().contains(targetNation)) {
-					NationPreRemoveEnemyEvent npree = new NationPreRemoveEnemyEvent(nation, targetNation);
-					Bukkit.getPluginManager().callEvent(npree);
-					if (!npree.isCancelled()) {
-						nation.removeEnemy(targetNation);
-
-						NationRemoveEnemyEvent nree = new NationRemoveEnemyEvent(nation, targetNation);
-						Bukkit.getPluginManager().callEvent(nree);
-						
-						TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_enemy", nation));
-					} else {
-						TownyMessaging.sendErrorMsg(player, npree.getCancelMessage());
-						remove.add(targetNation);
-					}
-				}
-
-			} catch (AlreadyRegisteredException | NotRegisteredException e) {
-				remove.add(targetNation);
-			}
-		
-		for (Nation newEnemy : remove)
-			enemies.remove(newEnemy);
-
-		if (enemies.size() > 0) {
-			String msg = "";
-
-			for (Nation newEnemy : enemies)
-				msg += newEnemy.getName() + ", ";
-
-			msg = msg.substring(0, msg.length() - 2);
-			if (add)
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_enemy_nations", player.getName(), msg));
-			else
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_enemy_to_neutral", player.getName(), msg));
-
-			TownyUniverse.getInstance().getDataSource().saveNations();
-
-			plugin.resetCache();
-		} else
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
-	}
+//	public void nationEnemy(Player player, Nation nation, List<Nation> enemies, boolean add) {
+//
+//		ArrayList<Nation> remove = new ArrayList<>();
+//		for (Nation targetNation : enemies)
+//			try {
+//				if (add && !nation.getEnemies().contains(targetNation)) {
+//					NationPreAddEnemyEvent npaee = new NationPreAddEnemyEvent(nation, targetNation);
+//					Bukkit.getPluginManager().callEvent(npaee);
+//					
+//					if (!npaee.isCancelled()) {
+//						nation.addEnemy(targetNation);
+//						
+//						NationAddEnemyEvent naee = new NationAddEnemyEvent(nation, targetNation);
+//						Bukkit.getPluginManager().callEvent(naee);
+//
+//						// Remove the targetNation from the nation ally list if present.
+//						if (nation.hasAlly(targetNation)) {
+//							nation.removeAlly(targetNation);
+//							Bukkit.getPluginManager().callEvent(new NationRemoveAllyEvent(nation, targetNation));
+//							TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_removed_ally", targetNation));
+//							TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
+//						}
+//						
+//						// Remove the nation from the targetNation ally list if present.
+//						if (targetNation.hasAlly(nation)) {
+//							targetNation.removeAlly(nation);
+//							Bukkit.getPluginManager().callEvent(new NationRemoveAllyEvent(targetNation, nation));
+//							TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_ally", nation));
+//							TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
+//						}
+//
+//						TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_added_enemy", nation));
+//					} else {
+//						TownyMessaging.sendErrorMsg(player, npaee.getCancelMessage());
+//						remove.add(targetNation);
+//					}
+//
+//				} else if (nation.getEnemies().contains(targetNation)) {
+//					NationPreRemoveEnemyEvent npree = new NationPreRemoveEnemyEvent(nation, targetNation);
+//					Bukkit.getPluginManager().callEvent(npree);
+//					if (!npree.isCancelled()) {
+//						nation.removeEnemy(targetNation);
+//
+//						NationRemoveEnemyEvent nree = new NationRemoveEnemyEvent(nation, targetNation);
+//						Bukkit.getPluginManager().callEvent(nree);
+//						
+//						TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_enemy", nation));
+//					} else {
+//						TownyMessaging.sendErrorMsg(player, npree.getCancelMessage());
+//						remove.add(targetNation);
+//					}
+//				}
+//
+//			} catch (AlreadyRegisteredException | NotRegisteredException e) {
+//				remove.add(targetNation);
+//			}
+//		
+//		for (Nation newEnemy : remove)
+//			enemies.remove(newEnemy);
+//
+//		if (enemies.size() > 0) {
+//			String msg = "";
+//
+//			for (Nation newEnemy : enemies)
+//				msg += newEnemy.getName() + ", ";
+//
+//			msg = msg.substring(0, msg.length() - 2);
+//			if (add)
+//				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_enemy_nations", player.getName(), msg));
+//			else
+//				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_enemy_to_neutral", player.getName(), msg));
+//
+//			TownyUniverse.getInstance().getDataSource().saveNations();
+//
+//			plugin.resetCache();
+//		} else
+//			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
+//	}
 
 	public static void nationSet(CommandSender sender, String[] split, boolean admin, Nation nation) throws TownyException {
 		if (split.length == 0) {

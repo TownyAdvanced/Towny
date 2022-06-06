@@ -266,9 +266,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Enemy Alliances
 			line = keys.get("enemyUUIDs");
 			if (line != null && !line.isEmpty()) {
-				String[] allianceUUIDs = line.split(",");
-				for (String allianceUUID : allianceUUIDs) {
-					Alliance allianceEnemy = TownyAPI.getInstance().getAlliance(UUID.fromString(allianceUUID));
+				String[] enemyNationUUIDs = line.split(",");
+				for (String nationUUID : enemyNationUUIDs) {
+					Nation allianceEnemy = TownyAPI.getInstance().getNation(UUID.fromString(nationUUID));
 					if (allianceEnemy != null)
 						alliance.addEnemy(allianceEnemy);
 				}
@@ -499,24 +499,30 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (TownyException ignored) {}
 		}
 		
-		//search and remove from all ally/enemy lists
+		//search and remove from all ally lists
 		List<Nation> toSaveNation = new ArrayList<>();
 		for (Nation toCheck : new ArrayList<>(universe.getNations()))
-			if (toCheck.hasAlly(nation) || toCheck.hasEnemy(nation)) {
+			if (toCheck.hasAlly(nation)) {
 				try {
-					if (toCheck.hasAlly(nation))
-						toCheck.removeAlly(nation);
-					else
-						toCheck.removeEnemy(nation);
-
-					toSaveNation.add(toCheck);
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
+					toCheck.removeAlly(nation);
+				} catch (NotRegisteredException ignored) {}
+				toSaveNation.add(toCheck);
 			}
 
 		for (Nation toCheck : toSaveNation)
 			saveNation(toCheck);
+		
+		List<Alliance> toSaveAlliances = new ArrayList<>();
+		for (Alliance toCheck : new ArrayList<>(universe.getAlliances()))
+			if (toCheck.hasEnemy(nation) || toCheck.hasMember(nation)) {
+				if (toCheck.hasEnemy(nation))
+					toCheck.removeEnemy(nation);
+				if (toCheck.hasMember(nation))
+					toCheck.removeMember(nation);
+				toSaveAlliances.add(toCheck);
+			}
+		for (Alliance alliance : toSaveAlliances)
+			alliance.save();
 		
 		// Search and remove any ally invites sent to this nation.
 		for (Nation toCheck : new ArrayList<>(universe.getNations()))
@@ -535,8 +541,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (TownyEconomyHandler.isActive())
 			nation.getAccount().removeAccount();
 		
-		if (nation.hasAlliance() && nation.getAllianceOrNull().getMembers().size() == 1)
-			removeAlliance(nation.getAllianceOrNull());
+		if (nation.hasAlliance() && nation.getAlliance().getMembers().size() == 1)
+			removeAlliance(nation.getAlliance());
 
 		//Delete nation and save towns
 		deleteNation(nation);
@@ -590,14 +596,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		UUID founderUUID = null;
 		if (alliance.getFounderUUID() != null)
 			founderUUID = alliance.getFounderUUID();
-		
-		// Remove this alliance from other alliances' enemy lists. 
-		for (Alliance enemy : universe.getAlliances()) {
-			if (enemy.hasEnemy(alliance)) {
-				enemy.removeEnemy(alliance);
-				enemy.save();
-			}
-		}
 		
 		// Remove this alliance from all of the nations which are members.
 		for (Nation nation : alliance.getMembers()) {
@@ -827,18 +825,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			Nation oldNation = new Nation(oldName);
 			List<Nation> toSaveNation = new ArrayList<>(universe.getNations());
 			for (Nation toCheck : toSaveNation)
-				if (toCheck.hasAlly(oldNation) || toCheck.hasEnemy(oldNation)) {
+				if (toCheck.hasAlly(oldNation)) {
 					try {
-						if (toCheck.hasAlly(oldNation)) {
-							toCheck.removeAlly(oldNation);
-							toCheck.addAlly(nation);
-						} else {
-							toCheck.removeEnemy(oldNation);
-							toCheck.addEnemy(nation);
-						}
-					} catch (NotRegisteredException e) {
-						e.printStackTrace();
-					}
+						toCheck.removeAlly(oldNation);
+						toCheck.addAlly(nation);
+					} catch (NotRegisteredException ignored) {}
 				} else
 					toSave.remove(toCheck);
 

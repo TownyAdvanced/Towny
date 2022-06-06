@@ -56,9 +56,9 @@ public class Nation extends Government {
 		if (hasAlly(nation))
 			throw new AlreadyRegisteredException();
 		else {
-			try {
-				removeEnemy(nation);
-			} catch (NotRegisteredException ignored) {}
+//			try {
+//				removeEnemy(nation);
+//			} catch (NotRegisteredException ignored) {}
 			getAllies().add(nation);
 		}
 	}
@@ -122,20 +122,20 @@ public class Nation extends Government {
 		else
 			return getEnemies().remove(nation);
 	}
-
-	public boolean removeAllEnemies() {
-
-		for (Nation enemy : new ArrayList<>(getEnemies()))
-			try {
-				removeEnemy(enemy);
-				enemy.removeEnemy(this);
-			} catch (NotRegisteredException ignored) {}
-		return getEnemies().isEmpty();
-	}
-
+//
+//	public boolean removeAllEnemies() {
+//
+//		for (Nation enemy : new ArrayList<>(getEnemies()))
+//			try {
+//				removeEnemy(enemy);
+//				enemy.removeEnemy(this);
+//			} catch (NotRegisteredException ignored) {}
+//		return getEnemies().isEmpty();
+//	}
+//
 	public boolean hasEnemy(Nation nation) {
 
-		return getEnemies().contains(nation);
+		return getAlliance().hasEnemy(nation);
 	}
 
 	public List<Town> getTowns() {
@@ -161,7 +161,7 @@ public class Nation extends Government {
 
 		return town == getCapital();
 	}
-
+	
 	public boolean hasTown(String name) {
 
 		for (Town town : towns)
@@ -265,7 +265,6 @@ public class Nation extends Government {
 		return alliance;
 	}
 	
-
 	/**
 	 * @param alliance the alliance to set
 	 */
@@ -283,6 +282,10 @@ public class Nation extends Government {
 		alliance = null;
 	}
 
+	public boolean isAllianceFounder() {
+		return getAlliance().getFounderUUID() == this.getUUID();
+	}
+	
 	@Override
 	public Location getSpawn() throws TownyException {
 		if (spawn == null)
@@ -312,14 +315,14 @@ public class Nation extends Government {
 		return this.getResidents().stream().filter(assistant -> assistant.hasNationRank("assistant")).collect(Collectors.toList());
 	}
 
-	public void setEnemies(List<Nation> enemies) {
-
-		this.enemies = enemies;
-	}
+//	public void setEnemies(List<Nation> enemies) {
+//
+//		this.enemies = enemies;
+//	}
 
 	public List<Nation> getEnemies() {
 
-		return enemies;
+		return getAlliance().getEnemies();
 	}
 
 	public void setAllies(List<Nation> allies) {
@@ -392,7 +395,7 @@ public class Nation extends Government {
 	public void clear() {
 
 		removeAllAllies();
-		removeAllEnemies();
+//		removeAllEnemies();
 		removeAllTowns();
 		capital = null;
 	}
@@ -500,9 +503,9 @@ public class Nation extends Government {
 			out.add(String.format("%sAllies (%s): %s", 
 				getTreeDepth(depth + 1), getAllies().size(), Arrays.toString(getAllies().toArray(new Nation[0]))));
 		
-		if (!getEnemies().isEmpty())
-			out.add(String.format("%sEnemies (%s): %s", 
-				getTreeDepth(depth + 1), getEnemies().size(), Arrays.toString(getEnemies().toArray(new Nation[0]))));
+//		if (!getEnemies().isEmpty())
+//			out.add(String.format("%sEnemies (%s): %s", 
+//				getTreeDepth(depth + 1), getEnemies().size(), Arrays.toString(getEnemies().toArray(new Nation[0]))));
 		
 		out.add(String.format("%sTowns (%s):", getTreeDepth(depth + 1), getTowns().size()));
 		for (Town town : getTowns())

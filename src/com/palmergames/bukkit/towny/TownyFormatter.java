@@ -990,16 +990,6 @@ public class TownyFormatter {
 	}
 	
 	/**
-	 * Used to prefix, count and list Alliances.
-	 * @param prefix String applied to beginning of the list.
-	 * @param objectlist List of Alliances to list.
-	 * @return Formatted, prefixed list of Alliances
-	 */
-	public static String getFormattedAlliances(String prefix, List<Alliance> objectlist) {
-		return String.format(listPrefixFormat, prefix, objectlist.size(), Translation.of("status_format_list_1"), Translation.of("status_format_list_2"), Translation.of("status_format_list_3")) + StringMgmt.join(getFormattedAllianceNames(objectlist), ", "); 
-	}
-	
-	/**
 	 * Used to prefix, count and list the given strings.
 	 * @param prefix String applied to beginning of the list.
 	 * @param list List of Strings to list.

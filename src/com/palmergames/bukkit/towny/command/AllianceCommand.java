@@ -380,7 +380,7 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 
 	private void allianceSetName(Player player, String[] names) throws TownyException {
 		Nation nation = getNationFromPlayerOrThrow(player);
-		Alliance alliance = nation.getAllianceOrNull();
+		Alliance alliance = nation.getAlliance();
 		if (!alliance.getFounder().equals(nation))
 			// Alliance isn't founded by the player's nation.
 			throw new TownyException(Translatable.of("msg_own_alliance_disallow"));
@@ -430,7 +430,7 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		for (String name : names) {
 			Nation nation = TownyUniverse.getInstance().getNation(name);
 			if (nation != null) {
-				if (alliance.hasNation(nation)) {
+				if (alliance.hasMember(nation)) {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_nation_already_part_of_alliance", name));
 				} else {
 					inviteList.add(nation);
@@ -518,7 +518,7 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		for (String name : names) {
 			Nation nation = TownyUniverse.getInstance().getNation(name);
 			if (nation != null) {
-				if (!alliance.hasNation(nation)) {
+				if (!alliance.hasMember(nation)) {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_nation_not_part_of_alliance", name));
 				} else {
 					removeList.add(nation);
@@ -566,16 +566,14 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		String[] names = StringMgmt.remFirstArg(split); // Remainder should be a list of names.
 
 		if ((test.equalsIgnoreCase("remove") || test.equalsIgnoreCase("add")) && names.length > 0) {
-			ArrayList<Alliance> list = new ArrayList<>();
-			Alliance enemy;
+			ArrayList<Nation> list = new ArrayList<>();
+			Nation enemy;
 			boolean add = test.equalsIgnoreCase("add");
 
 			for (String name : names) {
-				enemy = getAllianceOrThrow(name);
+				enemy = getNationOrThrow(name);
 
-				if (alliance.equals(enemy))
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_own_alliance_disallow"));
-				else if (add && alliance.hasEnemy(enemy))
+				if (add && alliance.hasEnemy(enemy))
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_alliance_already_enemies_with", enemy.getName()));
 				else if (!add && !alliance.hasEnemy(enemy))
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_alliance_not_enemies_with", enemy.getName()));
@@ -590,54 +588,54 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private void allianceEnemy(Player player, Alliance alliance, ArrayList<Alliance> enemies, boolean add) {
+	private void allianceEnemy(Player player, Alliance alliance, ArrayList<Nation> enemies, boolean add) {
 
-		ArrayList<Alliance> remove = new ArrayList<>();
-		for (Alliance targetAlliance : enemies)
-			if (add && !alliance.getEnemies().contains(targetAlliance)) {
-				AlliancePreAddEnemyEvent apaee = new AlliancePreAddEnemyEvent(alliance, targetAlliance);
+		ArrayList<Nation> remove = new ArrayList<>();
+		for (Nation targetNation : enemies)
+			if (add && !alliance.getEnemies().contains(targetNation)) {
+				AlliancePreAddEnemyEvent apaee = new AlliancePreAddEnemyEvent(alliance, targetNation);
 				Bukkit.getPluginManager().callEvent(apaee);
 				
 				if (!apaee.isCancelled()) {
-					alliance.addEnemy(targetAlliance);
+					alliance.addEnemy(targetNation);
 					
-					AllianceAddEnemyEvent aaee = new AllianceAddEnemyEvent(alliance, targetAlliance);
+					AllianceAddEnemyEvent aaee = new AllianceAddEnemyEvent(alliance, targetNation);
 					Bukkit.getPluginManager().callEvent(aaee);
 
-					TownyMessaging.sendPrefixedAllianceMessage(targetAlliance, Translatable.of("msg_added_enemy_alliance", alliance));
+					TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_added_enemy", alliance));
 				} else {
 					TownyMessaging.sendErrorMsg(player, apaee.getCancelMessage());
-					remove.add(targetAlliance);
+					remove.add(targetNation);
 				}
 
-			} else if (alliance.getEnemies().contains(targetAlliance)) {
-				AlliancePreRemoveEnemyEvent apree = new AlliancePreRemoveEnemyEvent(alliance, targetAlliance);
+			} else if (alliance.getEnemies().contains(targetNation)) {
+				AlliancePreRemoveEnemyEvent apree = new AlliancePreRemoveEnemyEvent(alliance, targetNation);
 				Bukkit.getPluginManager().callEvent(apree);
 				if (!apree.isCancelled()) {
-					alliance.removeEnemy(targetAlliance);
+					alliance.removeEnemy(targetNation);
 
-					AllianceRemoveEnemyEvent aree = new AllianceRemoveEnemyEvent(alliance, targetAlliance);
+					AllianceRemoveEnemyEvent aree = new AllianceRemoveEnemyEvent(alliance, targetNation);
 					Bukkit.getPluginManager().callEvent(aree);
 					
-					TownyMessaging.sendPrefixedAllianceMessage(targetAlliance, Translatable.of("msg_removed_enemy_alliance", alliance));
+					TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_enemy", alliance));
 				} else {
 					TownyMessaging.sendErrorMsg(player, apree.getCancelMessage());
-					remove.add(targetAlliance);
+					remove.add(targetNation);
 				}
 			}
 		
-		for (Alliance newEnemy : remove)
+		for (Nation newEnemy : remove)
 			enemies.remove(newEnemy);
 
 		if (enemies.size() > 0) {
 			String msg = "";
 
-			for (Alliance newEnemy : enemies)
+			for (Nation newEnemy : enemies)
 				msg += newEnemy.getName() + ", ";
 
 			msg = msg.substring(0, msg.length() - 2);
 			if (add)
-				TownyMessaging.sendPrefixedAllianceMessage(alliance, Translatable.of("msg_enemy_alliance", player.getName(), msg));
+				TownyMessaging.sendPrefixedAllianceMessage(alliance, Translatable.of("msg_enemy_nations", player.getName(), msg));
 			else
 				TownyMessaging.sendPrefixedAllianceMessage(alliance, Translatable.of("msg_enemy_alliance_to_neutral", player.getName(), msg));
 
@@ -698,7 +696,7 @@ public class AllianceCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, translator.of("msg_error_alliance_has_no_enemies"));
 		else {
 			TownyMessaging.sendMessage(player, ChatTools.formatTitle(alliance.getName() + " " + translator.of("status_nation_enemies")));
-			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedAlliances(translator.of("status_nation_enemies"), new ArrayList<>(alliance.getEnemies())));
+			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_enemies").forLocale(player), new ArrayList<>(alliance.getEnemies())));
 		}
 	}
 

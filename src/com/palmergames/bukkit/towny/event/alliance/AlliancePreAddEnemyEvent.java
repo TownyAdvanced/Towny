@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.event.alliance;
 
 import com.palmergames.bukkit.towny.object.Alliance;
+import com.palmergames.bukkit.towny.object.Nation;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -11,7 +13,7 @@ public class AlliancePreAddEnemyEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled = false;
 	private final String enemyName;
-	private final Alliance enemy;
+	private final Nation enemy;
 	private final String allianceName;
 	private final Alliance alliance;
 	private String cancelMessage = "Sorry this event was cancelled";
@@ -25,7 +27,7 @@ public class AlliancePreAddEnemyEvent extends Event implements Cancellable {
 		return handlers;
 	}
 
-	public AlliancePreAddEnemyEvent(Alliance alliance, Alliance enemy) {
+	public AlliancePreAddEnemyEvent(Alliance alliance, Nation enemy) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.enemyName = enemy.getName();
 		this.enemy = enemy;
@@ -41,7 +43,7 @@ public class AlliancePreAddEnemyEvent extends Event implements Cancellable {
 		return allianceName;
 	}
 
-	public Alliance getEnemy() {
+	public Nation getEnemy() {
 		return enemy;
 	}
 
