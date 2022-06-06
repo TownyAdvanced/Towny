@@ -7500,3 +7500,5 @@ v0.92.0.11:
   - Add specific denial messages to nation and town spawn when the server has public spawning disabled entirely.
     - Closes #5940. 
   - Bump language file to 0.151.
+  - Save a town when it becomes a nation capital, making sure that their potentially-new peaceful/neutral status is also saved.
+    - Closes #5939.
