@@ -46,6 +46,7 @@ import org.bukkit.Tag;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.RespawnAnchor;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Entity;
@@ -413,9 +414,9 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Catches respawn anchors blowing up and allows us to track their explosions.
 			 */
-			if (block.getType().name().equals("RESPAWN_ANCHOR")) {
-				org.bukkit.block.data.type.RespawnAnchor anchor = ((org.bukkit.block.data.type.RespawnAnchor) block.getBlockData());
-				if (anchor.getCharges() == 4)
+			if (block.getType() == Material.RESPAWN_ANCHOR && event.getAction() == Action.RIGHT_CLICK_BLOCK && !block.getWorld().isRespawnAnchorWorks()) {
+				RespawnAnchor anchor = ((RespawnAnchor) block.getBlockData());
+				if (anchor.getCharges() > 0)
 					BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(player, blockLoc, null, block.getType()));
 				return;
 			}
@@ -440,10 +441,10 @@ public class TownyPlayerListener implements Listener {
 			}
 			
 			/*
-			 * Prevents setting the spawn point of the player using beds, 
+			 * Prevents setting the spawn point of the player using beds or respawn anchors, 
 			 * except in allowed plots (personally-owned and Inns)
 			 */
-			if (Tag.BEDS.isTagged(block.getType()) && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			if (event.getAction() == Action.RIGHT_CLICK_BLOCK && (Tag.BEDS.isTagged(block.getType()) || (block.getWorld().isRespawnAnchorWorks() && block.getBlockData() instanceof RespawnAnchor anchor && anchor.getCharges() > 0 && (event.getItem() == null || (event.getItem().getType() != Material.GLOWSTONE || anchor.getCharges() >= anchor.getMaximumCharges()))))) {
 				if (!TownySettings.getBedUse())
 					return;
 
