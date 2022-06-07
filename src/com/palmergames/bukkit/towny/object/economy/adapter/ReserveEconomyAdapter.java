@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object.economy.adapter;
 
+import com.palmergames.bukkit.towny.object.economy.Account;
 import net.tnemc.core.economy.EconomyAPI;
 import org.bukkit.World;
 
@@ -49,6 +50,42 @@ public class ReserveEconomyAdapter implements EconomyAdapter {
 	public boolean setBalance(String accountName, double amount, World world) {
 		BigDecimal bd = BigDecimal.valueOf(amount);
 		return economy.setHoldingsDetail(accountName, bd, world.getName()).success();
+	}
+
+	// TODO couldn't find reserve documentation/EconomyAPI source so this will have to do for now
+	@Override
+	public boolean add(Account account, double amount, World world) {
+		return add(account.getName(), amount, world);
+	}
+
+	@Override
+	public boolean subtract(Account account, double amount, World world) {
+		return subtract(account.getName(), amount, world);
+	}
+
+	@Override
+	public boolean hasAccount(Account account) {
+		return hasAccount(account.getName());
+	}
+
+	@Override
+	public double getBalance(Account account, World world) {
+		return getBalance(account.getName(), world);
+	}
+
+	@Override
+	public void newAccount(Account account) {
+		newAccount(account.getName());
+	}
+
+	@Override
+	public void deleteAccount(Account account) {
+		deleteAccount(account.getName());
+	}
+
+	@Override
+	public boolean setBalance(Account account, double amount, World world) {
+		return setBalance(account.getName(), amount, world);
 	}
 
 	@Override

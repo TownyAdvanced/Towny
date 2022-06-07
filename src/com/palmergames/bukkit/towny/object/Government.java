@@ -275,7 +275,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		if (account == null) {
 			String accountName = StringMgmt.trimMaxLength(getBankAccountPrefix() + getName(), 32);
 			World world = getWorld();
-			account = new BankAccount(accountName, world, getBankCap());
+			account = new BankAccount(accountName, this.uuid, world, getBankCap());
 			account.setAuditor(accountAuditor);
 		}
 

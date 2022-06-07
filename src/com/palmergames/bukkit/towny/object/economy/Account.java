@@ -6,14 +6,18 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.EconomyHandler;
+import com.palmergames.bukkit.towny.object.Identifiable;
 import com.palmergames.bukkit.towny.object.Nameable;
-import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Used to facilitate transactions regarding money, 
@@ -23,30 +27,31 @@ import java.util.List;
  * @see BankAccount
  * @see EconomyAccount
  */
-public abstract class Account implements Nameable {
+public abstract class Account implements Nameable, Identifiable {
 	private static final long CACHE_TIMEOUT = TownySettings.getCachedBankTimeout();
 	private static final AccountObserver GLOBAL_OBSERVER = new GlobalAccountObserver();
 	private final List<AccountObserver> observers = new ArrayList<>();
 	private AccountAuditor auditor;
-	protected CachedBalance cachedBalance = null;
+	protected CachedBalance cachedBalance;
+	private OfflinePlayer offlinePlayer = null;
 	
-	String name;
-	World world;
+	private String name;
+	private UUID uuid;
+	private @Nullable World world;
 	
-	public Account(String name) {
+	public Account(String name, UUID uuid) {
 		this.name = name;
-		observers.add(GLOBAL_OBSERVER);
-		this.cachedBalance = new CachedBalance(getHoldingBalance(false));
-	}
-	
-	public Account(String name, World world) {
-		this.name = name;
-		this.world = world;
-		
+		this.uuid = uuid;
+
 		// ALL account transactions will route auditing data through this
 		// central auditor.
 		observers.add(GLOBAL_OBSERVER);
 		this.cachedBalance = new CachedBalance(getHoldingBalance(false));
+	}
+	
+	public Account(String name, UUID uuid, @Nullable World world) {
+		this(name, uuid);
+		this.world = world;
 	}
 	
 	// Template methods
@@ -108,13 +113,13 @@ public abstract class Account implements Nameable {
 	protected boolean payToServer(double amount, String reason) {
 		
 		// Put it back into the server.
-		return TownyEconomyHandler.addToServer(amount, getBukkitWorld());
+		return TownyEconomyHandler.addToServer(amount, getWorld());
 	}
 	
 	protected boolean payFromServer(double amount, String reason) {
 		
 		// Remove it from the server economy.
-		return TownyEconomyHandler.subtractFromServer(amount, getBukkitWorld());
+		return TownyEconomyHandler.subtractFromServer(amount, getWorld());
 	}
 
 	/**
@@ -139,8 +144,8 @@ public abstract class Account implements Nameable {
 	 *
 	 * @return Bukkit world for the object
 	 */
-	public World getBukkitWorld() {
-		return BukkitTools.getWorlds().get(0);
+	public World getWorld() {
+		return world == null ? Bukkit.getWorlds().get(0) : world;
 	}
 
 	/**
@@ -177,7 +182,7 @@ public abstract class Account implements Nameable {
 	 * @return The amount in this account.
 	 */
 	public double getHoldingBalance(boolean setCache) {
-		double balance = TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+		double balance = TownyEconomyHandler.getBalance(this, getWorld());
 		if (setCache)
 			cachedBalance.setBalance(balance);
 		return balance;
@@ -190,7 +195,7 @@ public abstract class Account implements Nameable {
 	 * @return true if there is enough.
 	 */
 	public boolean canPayFromHoldings(double amount) {
-		return TownyEconomyHandler.hasEnough(getName(), amount, getBukkitWorld());
+		return TownyEconomyHandler.hasEnough(this, amount, getWorld());
 	}
 
 	/**
@@ -206,12 +211,22 @@ public abstract class Account implements Nameable {
 	 * Attempt to delete the economy account.
 	 */
 	public void removeAccount() {
-		TownyEconomyHandler.removeAccount(getName());
+		TownyEconomyHandler.removeAccount(this);
 	}
 
 	@Override
 	public String getName() {
 		return name;
+	}
+	
+	@Override
+	public UUID getUUID() {
+		return this.uuid;
+	}
+	
+	@Override
+	public void setUUID(UUID uuid) {
+		this.uuid = uuid;
 	}
 
 	public void setName(String name) {
@@ -321,5 +336,31 @@ public abstract class Account implements Nameable {
 			cachedBalance.updateCache();
 
 		return cachedBalance.getBalance();
+	}
+	
+	public OfflinePlayer asOfflinePlayer() {
+		if (this.offlinePlayer != null)
+			return this.offlinePlayer;
+
+		Player player = Bukkit.getPlayer(this.uuid);
+		if (player != null)
+			return player;
+
+		try {
+			Class<?> gameProfileClass = Class.forName("com.mojang.authlib.GameProfile");
+			Object gameProfile = gameProfileClass.getDeclaredConstructor(UUID.class, String.class).newInstance(uuid, name);
+
+			this.offlinePlayer = (OfflinePlayer) Class.forName("org.bukkit.craftbukkit." + getPackageVersion() + ".CraftServer").getDeclaredMethod("getOfflinePlayer", gameProfileClass).invoke(Bukkit.getServer(), gameProfile);
+			return this.offlinePlayer;
+		} catch (Exception e) {
+			// TODO remove printStackTrace
+			e.printStackTrace();
+			this.offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+			return this.offlinePlayer;
+		}
+	}
+	
+	private static String getPackageVersion() {
+		return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 	}
 }

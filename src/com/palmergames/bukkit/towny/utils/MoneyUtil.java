@@ -222,17 +222,18 @@ public class MoneyUtil {
 	/**
 	 * Will attempt to set a town's debtBalance if their old DebtAccount is above 0 and exists.
 	 */
+	@SuppressWarnings("deprecation")
 	public static void convertLegacyDebtAccounts() {
 		for (Town town : TownyUniverse.getInstance().getTowns()) {
 			final String name = "[DEBT]-" + town.getName();
 			if (TownyEconomyHandler.hasAccount(name)) {
 				if (!TownySettings.isEconomyAsync()) {
-					town.setDebtBalance(TownyEconomyHandler.getBalance(name, town.getAccount().getBukkitWorld()));
-					TownyEconomyHandler.setBalance(name, 0.0, town.getAccount().getBukkitWorld());
+					town.setDebtBalance(TownyEconomyHandler.getBalance(name, town.getAccount().getWorld()));
+					TownyEconomyHandler.setBalance(name, 0.0, town.getAccount().getWorld());
 				} else {
 					Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> {
-						town.setDebtBalance(TownyEconomyHandler.getBalance(name, town.getAccount().getBukkitWorld()));
-						TownyEconomyHandler.setBalance(name, 0.0, town.getAccount().getBukkitWorld());
+						town.setDebtBalance(TownyEconomyHandler.getBalance(name, town.getAccount().getWorld()));
+						TownyEconomyHandler.setBalance(name, 0.0, town.getAccount().getWorld());
 					});
 				}
 			}
