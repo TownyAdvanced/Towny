@@ -7503,3 +7503,5 @@ v0.92.0.11:
   - Save a town when it becomes a nation capital, making sure that their potentially-new peaceful/neutral status is also saved.
     - Closes #5939.
   - Make respawn anchors respect the deny bed use option, courtesy of Warriorrrr with #5942.
+  - API: add NewDayTaxAndUpkeepPreCollectionEvent.
+    - Cancellable event that can prevent Towny from collecting any tax or upkeep.

@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
+import com.palmergames.bukkit.towny.event.time.dailytaxes.NewDayTaxAndUpkeepPreCollectionEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.PreTownPaysNationTaxEvent;
 import com.palmergames.bukkit.towny.event.town.TownUnconquerEvent;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -54,15 +55,21 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * If enabled, collect taxes and then server upkeep costs.
 		 */		
 		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
-			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_day_tax"));
-			TownyMessaging.sendDebugMsg("Collecting Town Taxes");
-			collectTownTaxes();
-			TownyMessaging.sendDebugMsg("Collecting Nation Taxes");
-			collectNationTaxes();
-			TownyMessaging.sendDebugMsg("Collecting Town Costs");
-			collectTownCosts();
-			TownyMessaging.sendDebugMsg("Collecting Nation Costs");
-			collectNationCosts();
+			NewDayTaxAndUpkeepPreCollectionEvent event = new NewDayTaxAndUpkeepPreCollectionEvent();
+			Bukkit.getPluginManager().callEvent(event);
+			if (!event.isCancelled()) {
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_day_tax"));
+				TownyMessaging.sendDebugMsg("Collecting Town Taxes");
+				collectTownTaxes();
+				TownyMessaging.sendDebugMsg("Collecting Nation Taxes");
+				collectNationTaxes();
+				TownyMessaging.sendDebugMsg("Collecting Town Costs");
+				collectTownCosts();
+				TownyMessaging.sendDebugMsg("Collecting Nation Costs");
+				collectNationCosts();
+			} else {
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_day"));
+			}
 		} else
 			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_day"));
 
