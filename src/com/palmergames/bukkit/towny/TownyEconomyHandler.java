@@ -138,7 +138,7 @@ public class TownyEconomyHandler {
 	@Deprecated
 	public static void removeAccount(String accountName) {
 		economy.deleteAccount(accountName);
-	}	
+	}
 
 	/**
 	 * Returns the accounts current balance
@@ -202,6 +202,7 @@ public class TownyEconomyHandler {
 		return true;
 	}
 
+
 	/**
 	 * Attempts to remove an amount from an account
 	 * 
@@ -234,16 +235,16 @@ public class TownyEconomyHandler {
 		Player player = Bukkit.getServer().getPlayer(accountName);
 		Transaction transaction = new Transaction(TransactionType.SUBTRACT, player, amount);
 		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
-
+		
 		if (!runPreChecks(transaction, accountName)) {
 			return false;
 		}
-
+		
 		if (economy.subtract(accountName, amount, world)) {
 			BukkitTools.getPluginManager().callEvent(event);
 			return true;
 		}
-
+		
 		return false;
 	}
 
