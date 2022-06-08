@@ -1488,6 +1488,6 @@ msg_usage: 'Kullanım: %s'
 msg_err_no_pages_to_display: 'Görüntülenecek Sayfa yok!'
 #Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
-msg_err_nation_unaffiliated: 'That nation is not affiliated with you.'
+msg_err_nation_unaffiliated: 'O Ulus sana bağlı değil.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
-msg_err_town_unaffiliated: 'That town is not affiliated with you.'
+msg_err_town_unaffiliated: 'O Kasaba sana bağlı değil.'
