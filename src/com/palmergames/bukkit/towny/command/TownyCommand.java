@@ -190,7 +190,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 							town = resident.getTownOrNull();
 					}
 
-					for (String line : getTownyPrices(town, Translation.getLocale(sender)))
+					for (String line : getTownyPrices(town, Translator.locale(Translation.getLocale(sender))))
 						TownyMessaging.sendMessage(sender, line);
 					break;
 				}
@@ -263,7 +263,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-					for (String line : getUniverseStats(Translation.getLocale(sender)))
+					for (String line : getUniverseStats(Translator.locale(Translation.getLocale(sender))))
 						TownyMessaging.sendMessage(sender, line);
 					break;
 				}
@@ -381,10 +381,9 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMessage(sender, line);
 	}
 
-	public List<String> getUniverseStats(Locale locale) {
+	public List<String> getUniverseStats(Translator translator) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<String> output = new ArrayList<>();
-		final Translator translator = Translator.locale(locale);
 		
 		output.add(""); // Intentionally left blank
 		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   " + Colors.Gold + "[" + Colors.Yellow + "Towny " + Colors.Green + plugin.getVersion() + Colors.Gold + "]");
@@ -445,6 +444,18 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			plugins++;
 		}
 
+		Plugin eventWar = Bukkit.getServer().getPluginManager().getPlugin("EventWar");
+		if (eventWar != null) {
+			townyPlugins += Colors.Yellow + "EventWar " + Colors.Green + eventWar.getDescription().getVersion() + " ";
+			plugins++;
+		}
+
+		Plugin townyRTP = Bukkit.getServer().getPluginManager().getPlugin("TownyRTP");
+		if (townyRTP != null) {
+			townyPlugins += Colors.Yellow + "TownyRTP " + Colors.Green + townyRTP.getDescription().getVersion() + " ";
+			plugins++;
+		}
+
 		if (plugins > 0)
 			output.add(townyPlugins + Colors.Gold + "]");
 		return output;
@@ -464,12 +475,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Returns prices for town's taxes/upkeep.
 	 * @param town - The town being checked.
+	 * @param translator - The Translator to use.
 	 * @return - Prices screen for a town.
 	 */
-	public List<String> getTownyPrices(Town town, Locale locale) {
+	public List<String> getTownyPrices(Town town, Translator translator) {
 
 		List<String> output = new ArrayList<>();
-		final Translator translator = Translator.locale(locale);
 		Nation nation = null;
 
 		if (town != null)
@@ -489,7 +500,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				upkeepformula = translator.of("towny_prices_upkeep_num_towns");
 			else 
 				upkeepformula = translator.of("towny_prices_upkeep_nation_level");
-			output.add(Translation.of("towny_prices_nation_upkeep_based_on", upkeepformula));
+			output.add(translator.of("towny_prices_nation_upkeep_based_on", upkeepformula));
 			if (town.isOverClaimed() && TownySettings.getUpkeepPenalty() > 0)
 				output.add(translator.of("towny_prices_overclaimed_upkeep", getMoney(TownySettings.getTownPenaltyUpkeepCost(town))));
 			if (TownySettings.getUpkeepPenalty() > 0 )

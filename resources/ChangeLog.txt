@@ -7505,3 +7505,6 @@ v0.92.0.11:
   - Make respawn anchors respect the deny bed use option, courtesy of Warriorrrr with #5942.
   - API: add NewDayTaxAndUpkeepPreCollectionEvent.
     - Cancellable event that can prevent Towny from collecting any tax or upkeep.
+0.98.2.4:
+  - Fix nation upkeep string not being translated on /towny prices.
+    - Closes #5949.
