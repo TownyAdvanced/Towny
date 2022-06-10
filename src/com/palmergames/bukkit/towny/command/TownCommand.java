@@ -2936,7 +2936,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				
 				final String finalName = name;
 				Confirmation.runOnAccept(() -> {
-					if (callPreNewTownEvent(player, finalName))
+					if (callPreNewTownEvent(player, finalName, spawnLocation))
 						return;
 					
 					// Make the resident pay here.
