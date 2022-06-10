@@ -7508,3 +7508,4 @@ v0.92.0.11:
 0.98.2.4:
   - Fix nation upkeep string not being translated on /towny prices.
     - Closes #5949.
+  - API: Add #getBoundingBox(), #getUpperMostCornerLocation(), #getLowerMostCornerLocation() to WorldCoord.

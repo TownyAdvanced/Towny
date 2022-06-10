@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -206,6 +207,27 @@ public class WorldCoord extends Coord {
 	// Used to get a location representing sub coordinates of a WorldCoord, to ease the lookup of a corresponding Chunk. 
 	private Location getSubCorner(int x, int z) {
 		return getCorner().add(x * 16, 0, z * 16);
+	}
+	
+	/**
+	 * @return Return a Bukkit bounding box containg the space of the WorldCoord.
+	 */
+	public BoundingBox getBoundingBox() {
+		return BoundingBox.of(getLowerMostCornerLocation(), getUpperMostCornerLocation());
+	}
+	
+	/**
+	 * @return Location of the lower-most corner of a WorldCoord.
+	 */
+	public Location getLowerMostCornerLocation() {
+		return new Location(getBukkitWorld(), getX() * getCellSize(), getBukkitWorld().getMinHeight(), getZ() * getCellSize());
+	}
+	
+	/**
+	 * @return Location of the upper-most corner of a WorldCoord.
+	 */
+	public Location getUpperMostCornerLocation() {
+		return getCorner().add(getCellSize(), getBukkitWorld().getMaxHeight(), getCellSize());
 	}
 
 	/**
