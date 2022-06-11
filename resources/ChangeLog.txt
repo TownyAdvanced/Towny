@@ -7510,3 +7510,4 @@ v0.92.0.11:
     - Closes #5949.
   - API: Add #getBoundingBox(), #getUpperMostCornerLocation(), #getLowerMostCornerLocation() to WorldCoord.
   - Update mayor and previous mayor cache and perms when /ta set mayor is used.
+  - Improve accuracy of PreNewTownEvent#getTownLocation, courtesy of Warriorrrr with PR #5952.
