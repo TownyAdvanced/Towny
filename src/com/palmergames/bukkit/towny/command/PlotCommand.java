@@ -68,6 +68,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -968,14 +969,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				// Check if it is a perm level first
 				try {
-					TownyPermission.PermLevel permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase());
+					TownyPermission.PermLevel permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
 
 					permChange = new TownyPermissionChange(TownyPermissionChange.Action.PERM_LEVEL, b, permLevel);
 				}
 				catch (IllegalArgumentException permLevelException) {
 					// If it is not a perm level, then check if it is a action type
 					try {
-						TownyPermission.ActionType actionType = TownyPermission.ActionType.valueOf(split[0].toUpperCase());
+						TownyPermission.ActionType actionType = TownyPermission.ActionType.valueOf(split[0].toUpperCase(Locale.ROOT));
 
 						permChange = new TownyPermissionChange(TownyPermissionChange.Action.ACTION_TYPE, b, actionType);
 					} catch (IllegalArgumentException actionTypeException) {
@@ -999,8 +1000,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyPermission.ActionType actionType;
 
 				try {
-					permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase());
-					actionType = TownyPermission.ActionType.valueOf(split[1].toUpperCase());
+					permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
+					actionType = TownyPermission.ActionType.valueOf(split[1].toUpperCase(Locale.ROOT));
 				} catch (IllegalArgumentException ignore) {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_plot_set_perm_syntax_error"));
 					return null;

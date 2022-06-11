@@ -7512,3 +7512,4 @@ v0.92.0.11:
   - Update mayor and previous mayor cache and perms when /ta set mayor is used.
   - Improve accuracy of PreNewTownEvent#getTownLocation, courtesy of Warriorrrr with PR #5952.
   - Always consider en-US an enabled language in Towny, so that add-on plugins missing languages will still function.
+  - Specify Locale.ROOT when we're using toUpperCase() in a few classes.

@@ -128,6 +128,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -1441,7 +1442,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (!townListTabCompletes.contains(split[i].toLowerCase()))
 						throw new TownyException(Translatable.of("msg_error_invalid_comparator_town"));
 
-					type = ComparatorType.valueOf(split[i].toUpperCase());
+					type = ComparatorType.valueOf(split[i].toUpperCase(Locale.ROOT));
 
 				} else {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_missing_comparator"));
@@ -3752,14 +3753,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				// Check if it is a perm level first
 				try {
-					TownyPermission.PermLevel permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase());
+					TownyPermission.PermLevel permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
 
 					perm.change(TownyPermissionChange.Action.PERM_LEVEL, b, permLevel);
 				}
 				catch (IllegalArgumentException permLevelException) {
 					// If it is not a perm level, then check if it is a action type
 					try {
-						TownyPermission.ActionType actionType = TownyPermission.ActionType.valueOf(split[0].toUpperCase());
+						TownyPermission.ActionType actionType = TownyPermission.ActionType.valueOf(split[0].toUpperCase(Locale.ROOT));
 
 						perm.change(TownyPermissionChange.Action.ACTION_TYPE, b, actionType);
 					} catch (IllegalArgumentException actionTypeException) {
@@ -3784,8 +3785,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyPermission.ActionType actionType;
 
 				try {
-					permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase());
-					actionType = TownyPermission.ActionType.valueOf(split[1].toUpperCase());
+					permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
+					actionType = TownyPermission.ActionType.valueOf(split[1].toUpperCase(Locale.ROOT));
 				} catch (IllegalArgumentException ignore) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
 					return;

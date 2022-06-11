@@ -88,6 +88,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -897,7 +898,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (!nationListTabCompletes.contains(split[i].toLowerCase()))
 						throw new TownyException(Translatable.of("msg_error_invalid_comparator_nation"));
 
-					type = ComparatorType.valueOf(split[i].toUpperCase());
+					type = ComparatorType.valueOf(split[i].toUpperCase(Locale.ROOT));
 				} else {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_missing_comparator"));
 					return;
