@@ -7509,3 +7509,4 @@ v0.92.0.11:
   - Fix nation upkeep string not being translated on /towny prices.
     - Closes #5949.
   - API: Add #getBoundingBox(), #getUpperMostCornerLocation(), #getLowerMostCornerLocation() to WorldCoord.
+  - Update mayor and previous mayor cache and perms when /ta set mayor is used.
