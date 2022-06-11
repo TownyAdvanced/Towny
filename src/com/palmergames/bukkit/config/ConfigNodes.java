@@ -42,7 +42,8 @@ public enum ConfigNodes {
 			"",
 			"# The languages you wish to have enabled. Set to '*' to use all available languages.",
 			"# If you would like to only allow 4 languages use: en-US,ru-RU,es-ES,fr-FR",
-			"# If a player's locale isn't enabled or isn't available it will use the language above instead."),
+			"# If a player's locale isn't enabled or isn't available it will use the language above instead.",
+			"# For compatibility reasons, en-US will always be considered enabled."),
 
 	PERMS(
 			"permissions",

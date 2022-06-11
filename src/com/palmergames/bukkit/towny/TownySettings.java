@@ -3145,7 +3145,8 @@ public class TownySettings {
 	}
 	
 	public static boolean isLanguageEnabled(@NotNull String locale) {
-		if (getString(ConfigNodes.ENABLED_LANGUAGES).equals("*"))
+		if (getString(ConfigNodes.ENABLED_LANGUAGES).equals("*")
+		|| locale.toLowerCase().equals("en_us"))
 			return true;
 
 		List<String> enabledLanguages = new ArrayList<>();
