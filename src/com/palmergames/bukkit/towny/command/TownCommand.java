@@ -2936,7 +2936,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				
 				final String finalName = name;
 				Confirmation.runOnAccept(() -> {
-					if (callPreNewTownEvent(player, finalName))
+					if (callPreNewTownEvent(player, finalName, spawnLocation))
 						return;
 					
 					// Make the resident pay here.
@@ -2960,7 +2960,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// Or, if the town doesn't cost money to create, just make the Town.
 			} else {
-				if (callPreNewTownEvent(player, name))
+				if (callPreNewTownEvent(player, name, spawnLocation))
 					return;
 
 				newTown(world, name, resident, key, spawnLocation, player);
@@ -3044,8 +3044,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return town;
 	}
 	
-	private static boolean callPreNewTownEvent(Player player, String townName) {
-		PreNewTownEvent preEvent = new PreNewTownEvent(player, townName);
+	private static boolean callPreNewTownEvent(Player player, String townName, Location spawnLocation) {
+		PreNewTownEvent preEvent = new PreNewTownEvent(player, townName, spawnLocation);
 		Bukkit.getPluginManager().callEvent(preEvent);
 
 		if (preEvent.isCancelled()) {
