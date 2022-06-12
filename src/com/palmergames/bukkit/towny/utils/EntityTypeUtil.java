@@ -99,6 +99,7 @@ public class EntityTypeUtil {
 			case MINECART_HOPPER -> Material.HOPPER_MINECART;
 			case MINECART_TNT -> Material.TNT_MINECART;
 			case BOAT -> Material.OAK_BOAT;
+			case CHEST_BOAT -> Material.OAK_CHEST_BOAT;
 			default -> null;
 		};
 	}

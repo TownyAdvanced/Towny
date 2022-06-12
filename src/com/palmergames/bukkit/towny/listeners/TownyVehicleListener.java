@@ -73,6 +73,7 @@ public class TownyVehicleListener implements Listener {
 				case MINECART_COMMAND:
 				case MINECART_TNT:
 				case BOAT:
+				case CHEST_BOAT:
 					yield EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType());
 				default:
 					yield null;
@@ -135,6 +136,7 @@ public class TownyVehicleListener implements Listener {
 			Material vehicle = switch (event.getVehicle().getType()) {
 				case MINECART:
 				case BOAT:
+				case CHEST_BOAT:
 					yield EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType());
 				case HORSE:
 				case STRIDER:
