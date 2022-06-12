@@ -1284,9 +1284,9 @@ msg_setup_success: 'Konfigurasjonsverdiene ble endret til de nye verdiene.'
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s har nylig gjennoppstått og kan ikke bli skadet.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
+msg_you_have_lost_your_respawn_protection: 'Du har mistet din respawn-beskyttelse.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
-msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
+msg_err_cannot_pickup_respawn_protection: 'Du kan ikke plukke opp gjenstander når du er i respawn-beskyttelse.'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: 'Hovedstad:'
@@ -1469,9 +1469,9 @@ msg_removed_x_invalid_outpost_spawns: 'Fjernet %d ugyldige outpost spawns.'
 msg_your_town_is_bankrupt: 'Byen din er konkurs, legg til penger i banken din ved å bruke/by innskudd {amount}.'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
-msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Du kan ikke bruke denne kommandoen, fordi du allerede er medlem av byen. Hvis du vil fortsette må du bruke ''/t leave.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
-msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+msg_a_town_you_are_outlawed_in: 'en by du er fredløs i.'
 #Message shown when TownyRTP could not find any towns to teleport to.
 msg_err_could_not_find_any_towns_to_rtp: 'Kunne ikke finne noen åpne, offentlige byer med tomter for salg (som du kan ha råd til).'
 #Message showing payment for RTP.
