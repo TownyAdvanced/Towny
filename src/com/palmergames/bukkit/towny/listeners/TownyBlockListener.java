@@ -405,6 +405,8 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 		
+		// Prevent sculk catalysts from spreading sculk across borders
+		// Sculk catalysts spread sculk blocks in a small radius when an enemy is killed around one
 		if (event.getSource().getType().name().equals("SCULK_CATALYST"))
 			event.setCancelled(BorderUtil.allowedMove(event.getSource(), event.getBlock()));
 	}
