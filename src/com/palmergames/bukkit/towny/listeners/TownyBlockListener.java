@@ -37,6 +37,7 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -379,7 +380,7 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onBlockFertilize(BlockFertilizeEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -392,5 +393,19 @@ public class TownyBlockListener implements Listener {
 		List<BlockState> allowed = BorderUtil.allowedBlocks(event.getBlocks(), event.getBlock(), event.getPlayer());
 		event.getBlocks().clear();
         event.getBlocks().addAll(allowed);
+	}
+	
+	@EventHandler(ignoreCancelled = true)
+	public void onBlockSpread(BlockSpreadEvent event) {
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
+		
+		if (event.getSource().getType().name().equals("SCULK_CATALYST"))
+			event.setCancelled(BorderUtil.allowedMove(event.getSource(), event.getBlock()));
 	}
 }
