@@ -37,6 +37,7 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -379,7 +380,10 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 	}
 
-	@EventHandler
+	/*
+	 * Used to prevent bonemeal and moss growing into areas it shouldn't.
+	 */
+	@EventHandler(ignoreCancelled = true)
 	public void onBlockFertilize(BlockFertilizeEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -392,5 +396,25 @@ public class TownyBlockListener implements Listener {
 		List<BlockState> allowed = BorderUtil.allowedBlocks(event.getBlocks(), event.getBlock(), event.getPlayer());
 		event.getBlocks().clear();
         event.getBlocks().addAll(allowed);
+	}
+
+	/*
+	 * Used to prevent Sculk Spread.
+	 * 
+	 * TODO: A better system like we use for bonemeal and moss, when the spigot/paper api's can provide such.
+	 */
+	@EventHandler(ignoreCancelled = true)
+	public void onBlockSpread(BlockSpreadEvent event) {
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld())
+			|| !TownySettings.isSculkSpreadPreventWhereMobsAreDisabled()
+			|| !event.getSource().getType().name().startsWith("SCULK")) // SCULK and SCULK_VEIN
+			return;
+
+		event.setCancelled(!TownyAPI.getInstance().areMobsEnabled(event.getBlock().getLocation()));
 	}
 }

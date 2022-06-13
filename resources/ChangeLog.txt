@@ -7515,3 +7515,12 @@ v0.92.0.11:
   - Specify Locale.ROOT when we're using toUpperCase() in a few classes.
   - Update adventure bukkit to 4.1.1, courtesy of Warriorrrr with PR #5961.
   - Fix chest boats being breakable/stealable, courtesy of Warriorrrr with PR #5960.
+  - Prevent Sculk spread in areas where Towny removes mobs.
+    - This is likely a temporary measure, until there's a way to determine where the sculk spread is coming from.
+  - New Config Option: protection.prevent_sculk_spread_in_mobs_off_locations
+    - Default: true
+    - When set to true, sculk will not spread into areas which have mobs disabled.
+    - This uses the wildernessmobs world setting when in the Towny wilderness.
+    - This might be a temporary setting until there is an API for sculk spread.
+  - API: Add TownyAPI#areMobsEnabled(Location)
+    - Returns true if Towny would let a mob exist at the location.

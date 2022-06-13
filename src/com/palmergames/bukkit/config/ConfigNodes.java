@@ -1449,6 +1449,13 @@ public enum ConfigNodes {
 			"",
 			"# When set to true, players will never trample crops. When false, players will still",
 			"# have to be able to break the crop by hand in order to be able to trample crops."),
+	PROT_SCULK_SPREAD(
+			"protection.prevent_sculk_spread_in_mobs_off_locations",
+			"true",
+			"",
+			"# When set to true, sculk will not spread into areas which have mobs disabled.",
+			"# This uses the wildernessmobs world setting when in the Towny wilderness.",
+			"# This might be a temporary setting until there is an API for sculk spread."),
 	UNCLAIMED_ZONE(
 			"unclaimed",
 			"",
