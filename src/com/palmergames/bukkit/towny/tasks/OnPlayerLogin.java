@@ -174,8 +174,8 @@ public class OnPlayerLogin implements Runnable {
 				Audience audience = Towny.getAdventure().player(player);
 				ClickEvent clickEvent = ClickEvent.openUrl(TownyUpdateChecker.getUpdateURL());
 				
-				audience.sendMessage(Component.text(Translatable.of("default_towny_prefix").forLocale(player) + Translatable.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion()).forLocale(player)).clickEvent(clickEvent));
-				audience.sendMessage(Component.text(Translatable.of("default_towny_prefix").forLocale(player) + Translatable.of("msg_click_to_download").forLocale(player)).clickEvent(clickEvent));
+				audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion()).componentFor(player).clickEvent(clickEvent)).componentFor(player));
+				audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_click_to_download").componentFor(player).clickEvent(clickEvent)).componentFor(player));
 			}
 		}
 	}
