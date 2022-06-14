@@ -577,7 +577,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private void nationSay(Nation nation, String[] split) throws TownyException {
 		if (split.length == 0)
 			throw new TownyException("ex: /n say [message here]");
-		TownyMessaging.sendPrefixedNationMessage(nation, Component.text(StringMgmt.join(split)));
+		TownyMessaging.sendPrefixedNationMessage(nation, StringMgmt.join(split));
 
 	}
 
