@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.conversation;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.conversations.ConversationAbandonedListener;
@@ -19,7 +20,7 @@ public class TownyConversation implements ConversationPrefix, ConversationAbando
 	@NotNull
 	@Override
 	public String getPrefix(@NotNull ConversationContext context) {
-		return Translatable.of("default_towny_prefix").forLocale(getSender(context));
+		return TownyComponents.toLegacy(Translatable.of("default_towny_prefix").componentFor(getSender(context)));
 	}
 	
 	public Player getPlayer(@NotNull ConversationContext context) {
