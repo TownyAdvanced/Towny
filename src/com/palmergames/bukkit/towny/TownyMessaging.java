@@ -308,6 +308,13 @@ public class TownyMessaging {
 		sendPrefixedTownMessage(town, TownyComponents.miniMessage(line));
 	}
 	
+	/**
+	 * Send a message to All online residents of a town and log
+	 * preceded by the [Townname]
+	 * 
+	 * @param town Town to pass the message to, and prefix the message with
+	 * @param message Component message to show the town's residents.
+	 */
 	public static void sendPrefixedTownMessage(Town town, Component message) {
 		LOGGER.info(Colors.strip("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + TownyComponents.plain(message)));
 		town.sendMessage(Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())).append(message).component());
@@ -321,11 +328,16 @@ public class TownyMessaging {
 	 * @param line the message
 	 */
 	public static void sendPrefixedNationMessage(Nation nation, String line) {
-		LOGGER.info(Colors.strip("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())) + line);
+		sendPrefixedNationMessage(nation, TownyComponents.miniMessage(line));
 	}
 
+	/**
+	 * Send a message to All online residents of a nation and log
+	 * preceded by the [Nationname]
+	 * 
+	 * @param nation Nation to pass the message to, and prefix the message with
+	 * @param message Component message to show the nation's residents.
+	 */
 	public static void sendPrefixedNationMessage(Nation nation, Component message) {
 		LOGGER.info(Colors.strip("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + TownyComponents.plain(message)));
 		nation.sendMessage(Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())).append(message).component());

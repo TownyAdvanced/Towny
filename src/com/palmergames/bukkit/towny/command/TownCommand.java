@@ -93,6 +93,7 @@ import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.towny.utils.TownUtil;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -839,7 +840,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					Resident resident = getResidentOrThrow(player.getUniqueId());
 					if (!resident.hasTown())
 						throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
-					TownyMessaging.sendPrefixedTownMessage(resident.getTown(), StringMgmt.join(newSplit));
+					TownyMessaging.sendPrefixedTownMessage(resident.getTown(), TownyComponents.miniMessage(TownyComponents.stripClickTags(StringMgmt.join(split))));
 					
 				} else if (split[0].equalsIgnoreCase("outlaw") || split[0].equalsIgnoreCase("ban")) {
 

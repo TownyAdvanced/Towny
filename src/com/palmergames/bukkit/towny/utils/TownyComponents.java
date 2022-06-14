@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.utils;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +42,14 @@ public final class TownyComponents {
 	
 	public static String stripTags(@NotNull String input) {
 		return MiniMessage.miniMessage().stripTags(input);
+	}
+	
+	public static String stripTags(@NotNull String input, TagResolver resolvers) {
+		return MiniMessage.miniMessage().stripTags(input, resolvers);
+	}
+	
+	public static String stripClickTags(@NotNull String input) {
+		return stripTags(input, StandardTags.clickEvent());
 	}
 	
 	public static Component prependMiniMessage(@NotNull Component component, @NotNull String prepend) {
