@@ -28,6 +28,7 @@ import com.palmergames.util.StringMgmt;
 import net.kyori.adventure.title.Title;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.pattern.LineSeparatorPatternConverter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -52,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * Towny message handling class
@@ -211,16 +213,13 @@ public class TownyMessaging {
 	
 	/**
 	 * Sends multiple Component messages to a someone or something, with no Towny
-	 * prefix.
+	 * prefix, separated by a new line.
 	 * 
 	 * @param sender the Object receiving the message
 	 * @param lines  Collection of Components to send.
 	 */
 	public static void sendMessage(Object sender, Collection<Component> lines) {
-		Component out = Component.empty();
-		for (Component line : lines)
-			out = out.append(line);
-		sendMessage(sender, out);
+		sendMessage(sender, TownyComponents.joinList(new ArrayList<>(lines), Component.newline()));
 	}
 
 	/**
