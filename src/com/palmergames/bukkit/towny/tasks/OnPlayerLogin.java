@@ -171,11 +171,10 @@ public class OnPlayerLogin implements Runnable {
 				TownyMessaging.sendErrorMsg("Could not set default modes for " + player.getName() + ".");
 			
 			if (TownyUpdateChecker.shouldShowNotification() && player.hasPermission(PermissionNodes.TOWNY_ADMIN_UPDATEALERTS.getNode())) {
-				Audience audience = Towny.getAdventure().player(player);
 				ClickEvent clickEvent = ClickEvent.openUrl(TownyUpdateChecker.getUpdateURL());
 				
-				audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion()).componentFor(player).clickEvent(clickEvent)).componentFor(player));
-				audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_click_to_download").componentFor(player).clickEvent(clickEvent)).componentFor(player));
+				TownyMessaging.sendMsg(player, Translatable.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion()).componentFor(player).clickEvent(clickEvent));
+				TownyMessaging.sendMsg(player, Translatable.of("msg_click_to_download").componentFor(player).clickEvent(clickEvent));
 			}
 		}
 	}
