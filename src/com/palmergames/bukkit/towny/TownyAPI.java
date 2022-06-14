@@ -459,9 +459,10 @@ public class TownyAPI {
 	 * @since 0.98.2.4.
 	 */
 	public boolean areMobsEnabled(Location location) {
-		return !isTownyWorld(location.getWorld()) || isWilderness(location)
-			? getTownyWorld(location.getWorld()).hasWildernessMobs()
-			: getTownBlock(location).getPermissions().mobs;
+		TownyWorld townyWorld = getTownyWorld(location.getWorld());
+		return !townyWorld.isUsingTowny() || isWilderness(location)
+			? townyWorld.hasWildernessMobs()
+			: townyWorld.isForceTownMobs() || getTownBlock(location).getPermissions().mobs;
 	}
 	
     /**
