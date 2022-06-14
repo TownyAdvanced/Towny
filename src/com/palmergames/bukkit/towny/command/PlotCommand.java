@@ -1024,6 +1024,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (!townBlock.hasPlotObjectGroup())
 				TownyMessaging.sendPlotPermissionLine(player, townBlockOwner, perm, townBlock);
 
+
 			//Change settings event
 			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(townBlock);
 			Bukkit.getServer().getPluginManager().callEvent(event);

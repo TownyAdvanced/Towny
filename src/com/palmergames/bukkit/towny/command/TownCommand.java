@@ -1505,7 +1505,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					
 					Component spawnCost = Component.text("Free", NamedTextColor.GOLD);
 					if (TownyEconomyHandler.isActive())
-						spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost())).componentFor(sender);
+						spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost())).componentFor(sender).color(NamedTextColor.GOLD);
 
 					townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).componentFor(player).append(Component.newline()).append(spawnCost)));
 					output.add(townName);
