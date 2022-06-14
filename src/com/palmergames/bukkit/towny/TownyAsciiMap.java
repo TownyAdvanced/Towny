@@ -1,11 +1,12 @@
 package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.map.TownyMapData;
 
 import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -65,6 +66,7 @@ public class TownyAsciiMap {
 		// Collect Sample Data
 		boolean hasTown = false;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		final Translator translator = Translator.locale(Translation.getLocale(player));
 
 		Resident resident = townyUniverse.getResident(player.getUniqueId());
 		
@@ -147,32 +149,32 @@ public class TownyAsciiMap {
 							? townblock.getPlotObjectGroup().getPrice()
 							: townblock.getPlotPrice();
 						if (cost > -1)
-							forSaleComponent = Component.text(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(cost)).replaceAll("[\\[\\]]", "") + " " + Translatable.of("msg_click_purchase").forLocale(player)).color(NamedTextColor.YELLOW).append(Component.newline());
+							forSaleComponent = Component.text(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(cost)).replaceAll("[\\[\\]]", "") + " " + translator.of("msg_click_purchase")).color(NamedTextColor.YELLOW).append(Component.newline());
 					}
 					
 					if (townblock.getClaimedAt() > 0)
-						claimedAtComponent = Translatable.of("msg_plot_perm_claimed_at").locale(player).component()
+						claimedAtComponent = translator.comp("msg_plot_perm_claimed_at")
 							.append(Component.space())
 							.append(Component.text(TownyFormatter.registeredFormat.format(townblock.getClaimedAt())).color(NamedTextColor.GREEN))
 							.append(Component.newline());
 					
 					if (townblock.hasPlotObjectGroup())
-						groupComponent = Translatable.of("map_hover_plot_group").locale(player).component()
+						groupComponent = translator.comp("map_hover_plot_group")
 							.append(Component.text(townblock.getPlotObjectGroup().getFormattedName(), NamedTextColor.GREEN)
-							.append(Translatable.of("map_hover_plot_group_size").locale(player).component()
-							.append(Translatable.of("map_hover_plots", townblock.getPlotObjectGroup().getTownBlocks().size()).locale(player).component()
+							.append(translator.comp("map_hover_plot_group_size")
+							.append(translator.comp("map_hover_plots", townblock.getPlotObjectGroup().getTownBlocks().size())
 							.append(Component.newline()))));
 					
 					if (townblock.hasResident())
 						residentComponent = Component.text(" (" + townblock.getResidentOrNull().getName() + ")");
 					
-					Component townComponent = Component.text(Translatable.of("status_town").forLocale(player)).color(NamedTextColor.DARK_GREEN)
+					Component townComponent = translator.comp("status_town").color(NamedTextColor.DARK_GREEN)
 						.append(Component.space())
 						.append(Component.text(town.getName()).color(NamedTextColor.GREEN))
 						.append(residentComponent.color(NamedTextColor.GREEN))
 						.append(Component.text(" (" + tby + ", " + tbx + ")").color(NamedTextColor.WHITE)).append(Component.newline()); 
 					
-					Component plotTypeComponent = Component.text(Translatable.of("status_plot_type").forLocale(player)).color(NamedTextColor.DARK_GREEN)
+					Component plotTypeComponent = translator.comp("status_plot_type").color(NamedTextColor.DARK_GREEN)
 						.append(Component.space())
 						.append(Component.text(townblock.getType().getName()).color(NamedTextColor.GREEN).append(Component.newline()));
 					
@@ -181,7 +183,7 @@ public class TownyAsciiMap {
 						.append(groupComponent)
 						.append(forSaleComponent)
 						.append(claimedAtComponent)
-						.append(Translatable.of("towny_map_detailed_information").locale(player).component());
+						.append(translator.comp("towny_map_detailed_information"));
 					
 					ClickEvent clickEvent = forSaleComponent.equals(Component.empty()) 
 						? ClickEvent.runCommand("/towny:plot info " + tby + " " + tbx)
@@ -258,9 +260,9 @@ public class TownyAsciiMap {
 		}
 
 		TownBlock townblock = TownyAPI.getInstance().getTownBlock(plugin.getCache(player).getLastLocation());
-		TownyMessaging.sendMsg(player, Translatable.of("status_towny_map_town_line", 
-				(townblock != null && townblock.hasTown() ? townblock.getTownOrNull() : Translatable.of("status_no_town").forLocale(player)), 
-				(townblock != null && townblock.hasResident() ? townblock.getResidentOrNull() : Translatable.of("status_no_town").forLocale(player))).componentFor(player));
+		TownyMessaging.sendMsg(player, translator.comp("status_towny_map_town_line", 
+				(townblock != null && townblock.hasTown() ? townblock.getTownOrNull() : translator.of("status_no_town")), 
+				(townblock != null && townblock.hasResident() ? townblock.getResidentOrNull() : translator.of("status_no_town"))));
 	}
 	
 	private static Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {
