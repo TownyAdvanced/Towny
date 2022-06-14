@@ -202,7 +202,7 @@ public class TownyMessaging {
 	/**
 	 * Send a message to a player with no Towny prefix.
 	 *
-	 * @param sender the Object sending the message
+	 * @param sender the Object receiving the message
 	 * @param lines List of strings to send
 	 */
 	public static void sendMessage(Object sender, List<String> lines) {
@@ -210,12 +210,17 @@ public class TownyMessaging {
 	}
 	
 	/**
-	 * @deprecated As of 98.3.1
+	 * Sends multiple Component messages to a someone or something, with no Towny
+	 * prefix.
+	 * 
+	 * @param sender the Object receiving the message
+	 * @param lines  Collection of Components to send.
 	 */
-	@Deprecated
 	public static void sendMessage(Object sender, Collection<Component> lines) {
+		Component out = Component.empty();
 		for (Component line : lines)
-			sendMessage(sender, line);
+			out = out.append(line);
+		sendMessage(sender, out);
 	}
 
 	/**
