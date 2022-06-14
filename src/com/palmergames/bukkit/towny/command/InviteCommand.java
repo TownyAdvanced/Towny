@@ -12,6 +12,8 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.util.StringMgmt;
@@ -282,6 +284,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		if ((page * 10) > list.size()) {
 			iMax = list.size();
 		}
+		final Translator translator = Translator.locale(Translation.getLocale(player));
 		Translatable translatable = null;
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Invite invite = list.get(i);
@@ -312,9 +315,9 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			invitesFormatted.add(output);
 		}
 
-		TownyMessaging.sendMessage(player, ChatTools.formatList(Translatable.of("invite_plu").componentFor(player),
-				Component.text(translatable.forLocale(player), NamedTextColor.DARK_AQUA).append(Component.text(" - ", NamedTextColor.GRAY)).append(Component.text(Translatable.of("invite_sent_by").forLocale(player), NamedTextColor.AQUA)),
-				invitesFormatted, Translatable.of("list_page", page, total).componentFor(player)
+		TownyMessaging.sendMessage(player, ChatTools.formatList(translator.comp("invite_plu"),
+				Component.text(translatable.forLocale(player), NamedTextColor.DARK_AQUA).append(Component.text(" - ", NamedTextColor.GRAY)).append(translator.comp("invite_sent_by").color(NamedTextColor.AQUA)),
+				invitesFormatted, translator.comp("list_page", page, total)
 		));
 	}
 }
