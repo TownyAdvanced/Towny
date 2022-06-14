@@ -284,7 +284,6 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		if ((page * 10) > list.size()) {
 			iMax = list.size();
 		}
-		final Translator translator = Translator.locale(Translation.getLocale(player));
 		Translatable translatable = null;
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Invite invite = list.get(i);
@@ -314,7 +313,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			}
 			invitesFormatted.add(output);
 		}
-
+		final Translator translator = Translator.locale(Translation.getLocale(player));
 		TownyMessaging.sendMessage(player, ChatTools.formatList(translator.comp("invite_plu"),
 				Component.text(translatable.forLocale(player), NamedTextColor.DARK_AQUA).append(Component.text(" - ", NamedTextColor.GRAY)).append(translator.comp("invite_sent_by").color(NamedTextColor.AQUA)),
 				invitesFormatted, translator.comp("list_page", page, total)
