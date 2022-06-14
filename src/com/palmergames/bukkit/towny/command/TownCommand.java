@@ -1503,7 +1503,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (town.isOpen())
 						townName = townName.append(Component.space()).append(Translatable.of("status_title_open").componentFor(sender));
 					
-					Component spawnCost = Component.text("Free", NamedTextColor.GOLD);
+					Component spawnCost = Component.text("Free");
 					if (TownyEconomyHandler.isActive())
 						spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost())).componentFor(sender);
 

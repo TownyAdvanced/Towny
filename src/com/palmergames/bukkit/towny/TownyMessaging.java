@@ -639,7 +639,7 @@ public class TownyMessaging {
 		} else {
 			outpostsFormatted = new Component[10];
 		}
-		
+		final Translator translator = Translator.locale(Translation.getLocale(player));
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Location outpost = outposts.get(i);
 			TownBlock tb = TownyAPI.getInstance().getTownBlock(outpost);
@@ -662,12 +662,14 @@ public class TownyMessaging {
 			}
 			line = line.append(worldName).append(dash).append(coords);
 			
-			String spawnCost = "Free";
+			Component spawnCost = Component.text("Free");
 
 			if (TownyEconomyHandler.isActive())
-				spawnCost = Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+				spawnCost = translator.comp("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 
-			line = line.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(Translatable.of("msg_click_spawn", name.equalsIgnoreCase("") ? "outpost" : name).forLocale(player) + "\n" + spawnCost)));
+			line = line.hoverEvent(HoverEvent.showText(translator.comp("msg_click_spawn", name.equalsIgnoreCase("") ? "outpost" : name)
+					.append(Component.newline())
+					.append(spawnCost)));
 			outpostsFormatted[i % 10] = line;
 		}
 		
