@@ -323,9 +323,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			townyTop.add(ChatTools.formatCommand("", "/towny top", "residents [all/town/nation]", ""));
 			townyTop.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
 			townyTop.add(ChatTools.formatCommand("", "/towny top", "balance [all/town/nation]", ""));
-
-			for (Component line : townyTop)
-				TownyMessaging.sendMessage(sender, line);
+			TownyMessaging.sendMessage(sender, townyTop);
 			return;
 		} 
 		
@@ -386,8 +384,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		else
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
 
-		for (Component line : townyTop)
-			TownyMessaging.sendMessage(sender, line);
+		TownyMessaging.sendMessage(sender, townyTop);
 	}
 
 	public List<Component> getUniverseStats(Translator translator) {
@@ -396,8 +393,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		
 		output.add(Component.empty()); // Intentionally left blank
 		output.add(heart[0].append(Component.text("[", NamedTextColor.GOLD)).append(Component.text("Towny ", NamedTextColor.YELLOW)).append(Component.text(plugin.getVersion(), NamedTextColor.DARK_GREEN)).append(Component.text("]", NamedTextColor.GOLD)));
-		output.add(heart[1].append(Component.text(translator.of("msg_universe_attribution"), NamedTextColor.DARK_AQUA)).append(Component.text("Chris H (Shade), ElgarL, LlmDl", NamedTextColor.AQUA)));
-		output.add(heart[2].append(Component.text(translator.of("msg_universe_contributors"), NamedTextColor.AQUA)).append(Component.text(translator.of("msg_universe_heart"), NamedTextColor.RED)));
+		output.add(heart[1].append(translator.comp("msg_universe_attribution").color(NamedTextColor.DARK_AQUA)).append(Component.text("Chris H (Shade), ElgarL, LlmDl", NamedTextColor.AQUA)));
+		output.add(heart[2].append(translator.comp("msg_universe_contributors").color(NamedTextColor.AQUA)).append(translator.comp("msg_universe_heart").color(NamedTextColor.RED)));
 		output.add(heart[3]);
 		output.add(heart[4].append(Component.text(translator.of("res_list") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getNumResidents(), NamedTextColor.AQUA)).append(Component.text(" | ", NamedTextColor.DARK_GRAY)).append(Component.text(translator.of("town_plu") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getTowns().size(), NamedTextColor.AQUA)).append(Component.text(" | ", NamedTextColor.DARK_GRAY)).append(Component.text(translator.of("nation_plu") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getNumNations(), NamedTextColor.AQUA)));
 		output.add(heart[5].append(Component.text(translator.of("world_plu") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getTownyWorlds().size(), NamedTextColor.AQUA)).append(Component.text(" | ", NamedTextColor.DARK_GRAY)).append(Component.text(translator.of("townblock_plu") + ": ", NamedTextColor.DARK_AQUA)).append(Component.text(townyUniverse.getTownBlocks().size(), NamedTextColor.AQUA)));
