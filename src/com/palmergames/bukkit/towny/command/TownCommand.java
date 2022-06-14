@@ -840,7 +840,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					Resident resident = getResidentOrThrow(player.getUniqueId());
 					if (!resident.hasTown())
 						throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
-					TownyMessaging.sendPrefixedTownMessage(resident.getTown(), TownyComponents.miniMessage(TownyComponents.stripClickTags(StringMgmt.join(split))));
+					TownyMessaging.sendPrefixedTownMessage(resident.getTown(), TownyComponents.miniMessage(TownyComponents.stripClickTags(StringMgmt.join(StringMgmt.remFirstArg(split)))));
 					
 				} else if (split[0].equalsIgnoreCase("outlaw") || split[0].equalsIgnoreCase("ban")) {
 
