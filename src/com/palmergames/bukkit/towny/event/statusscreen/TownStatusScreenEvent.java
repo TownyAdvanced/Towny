@@ -16,4 +16,5 @@ public class TownStatusScreenEvent extends StatusScreenEvent {
 	public Town getTown() {
 		return town;
 	}
+	
 }

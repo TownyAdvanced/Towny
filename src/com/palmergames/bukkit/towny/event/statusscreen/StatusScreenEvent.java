@@ -85,4 +85,5 @@ public class StatusScreenEvent extends Event {
 		addedLines.clear();
 		addedLines = new ArrayList<>(lines);
 	}
+
 }

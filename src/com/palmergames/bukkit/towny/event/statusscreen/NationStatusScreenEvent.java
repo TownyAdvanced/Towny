@@ -16,4 +16,5 @@ public class NationStatusScreenEvent extends StatusScreenEvent {
 	public Nation getNation() {
 		return nation;
 	}
+	
 }
