@@ -117,7 +117,7 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(townBlock);
 		if (!fields.isEmpty()) {
-			TextComponent comp = Component.empty();
+			Component comp = Component.empty();
 			for (Component fieldComp : fields) {
 				comp = comp.append(Component.newline()).append(fieldComp);
 			}
@@ -127,7 +127,7 @@ public class TownyFormatter {
 		TownBlockStatusScreenEvent event = new TownBlockStatusScreenEvent(screen, player, townBlock);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines()) {
-			TextComponent comp = Component.empty();
+			Component comp = Component.empty();
 			for (int i = 0; i < event.getAdditionalLines().size(); i++)
 				comp = comp.append(Component.newline()).append(event.getAdditionalLines().get(i));
 			screen.addComponentOf("eventAddedLines", comp);
@@ -254,7 +254,7 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(resident);
 		if (!fields.isEmpty()) {
-			TextComponent comp = Component.empty();
+			Component comp = Component.empty();
 			for (Component fieldComp : fields) {
 				comp = comp.append(Component.newline()).append(fieldComp);
 			}
@@ -367,7 +367,7 @@ public class TownyFormatter {
 
 			// Mayor: MrSand
 			screen.addComponentOf("mayor", colourKeyValue(translator.of("rank_list_mayor"), town.getMayor().getFormattedName())
-				.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(translator.of("registered_last_online", registeredFormat.format(town.getMayor().getRegistered()), lastOnlineFormatIncludeYear.format(town.getMayor().getLastOnline())))
+				.hoverEvent(HoverEvent.showText(translator.comp("registered_last_online", registeredFormat.format(town.getMayor().getRegistered()), lastOnlineFormatIncludeYear.format(town.getMayor().getLastOnline()))
 					.append(Component.newline())
 					.append(translator.comp("status_hover_click_for_more"))))
 				.clickEvent(ClickEvent.runCommand("/towny:resident " + town.getMayor().getName()))
@@ -424,7 +424,7 @@ public class TownyFormatter {
 				.clickEvent(ClickEvent.runCommand("/towny:town reslist " + town.getName())));
 			
 			// Plots 
-			TextComponent text = Component.empty();
+			Component text = Component.empty();
 			Map<TownBlockType, Integer> cache = town.getTownBlockTypeCache().getCache(TownBlockTypeCache.CacheType.ALL);
 			for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
 				int value = cache.getOrDefault(type, 0);
@@ -440,7 +440,7 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(town);
 		if (!fields.isEmpty()) {
-			TextComponent comp = Component.empty();
+			Component comp = Component.empty();
 			for (Component fieldComp : fields) {
 				comp = comp.append(Component.newline()).append(fieldComp);
 			}
@@ -450,7 +450,7 @@ public class TownyFormatter {
 		TownStatusScreenEvent event = new TownStatusScreenEvent(screen, sender, town);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines()) {
-			TextComponent comp = Component.empty();
+			Component comp = Component.empty();
 			for (int i = 0; i < event.getAdditionalLines().size(); i++)
 				comp = comp.append(Component.newline()).append(event.getAdditionalLines().get(i));
 			screen.addComponentOf("eventAddedLines", comp);
@@ -491,7 +491,7 @@ public class TownyFormatter {
 			addNationMoneyComponentsToScreen(nation, translator, screen);
 
 		if (nation.isPublic()) {
-			Component homeComponent = TownyComponents.miniMessage(translator.of("status_home_element", (nation.hasSpawn() ? Coord.parseCoord(nation.getSpawnOrNull()).toString() : translator.of("status_no_town"))));
+			Component homeComponent = translator.comp("status_home_element", (nation.hasSpawn() ? Coord.parseCoord(nation.getSpawnOrNull()).toString() : translator.of("status_no_town")));
 			
 			String webUrl = formatWebUrl(nation);
 			if (!webUrl.isEmpty())
@@ -504,7 +504,7 @@ public class TownyFormatter {
 		if (nation.getNumTowns() > 0 && nation.hasCapital() && nation.getCapital().hasMayor()) {
 			Resident king = nation.getCapital().getMayor();
 			screen.addComponentOf("king", colourKeyValue(translator.of("status_nation_king"), king.getFormattedName())
-				.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(translator.of("registered_last_online", registeredFormat.format(king.getRegistered()), lastOnlineFormatIncludeYear.format(king.getLastOnline())))
+				.hoverEvent(HoverEvent.showText(translator.comp("registered_last_online", registeredFormat.format(king.getRegistered()), lastOnlineFormatIncludeYear.format(king.getLastOnline()))
 					.append(Component.newline())
 					.append(translator.comp("status_hover_click_for_more"))))
 				.clickEvent(ClickEvent.runCommand("/towny:resident " + king.getName()))
@@ -551,7 +551,7 @@ public class TownyFormatter {
 		screen.addComponentOf("towns", colourHoverKey(translator.of("status_nation_towns"))
 			.hoverEvent(HoverEvent.showText(getFormattedComponent(translator.of("status_nation_towns"), towns, nation.getTowns().size())
 				.append(Component.newline())
-				.append(TownyComponents.miniMessage(translator.of("status_hover_click_for_more")))))
+				.append(translator.comp("status_hover_click_for_more"))))
 			.clickEvent(ClickEvent.runCommand("/towny:nation townlist " + nation.getName()))
 		);
 		
@@ -563,7 +563,7 @@ public class TownyFormatter {
 			screen.addComponentOf("allies", colourHoverKey(translator.of("status_nation_allies"))
 				.hoverEvent(HoverEvent.showText(getFormattedComponent(translator.of("status_nation_allies"), allies, nation.getAllies().size())
 					.append(Component.newline())
-					.append(TownyComponents.miniMessage(translator.of("status_hover_click_for_more")))))
+					.append(translator.comp("status_hover_click_for_more"))))
 				.clickEvent(ClickEvent.runCommand("/towny:nation allylist " + nation.getName()))
 			);
 
@@ -582,7 +582,7 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(nation);
 		if (!fields.isEmpty()) {
-			TextComponent comp = Component.empty();
+			Component comp = Component.empty();
 			for (Component fieldComp : fields) {
 				comp = comp.append(Component.newline()).append(fieldComp);
 			}
@@ -592,7 +592,7 @@ public class TownyFormatter {
 		NationStatusScreenEvent event = new NationStatusScreenEvent(screen, sender, nation);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.hasAdditionalLines()) {
-			TextComponent comp = Component.empty();
+			Component comp = Component.empty();
 			for (int i = 0; i < event.getAdditionalLines().size(); i++)
 				comp = comp.append(Component.newline()).append(event.getAdditionalLines().get(i));
 			screen.addComponentOf("eventAddedLines", comp);
@@ -664,7 +664,7 @@ public class TownyFormatter {
 			// Add any metadata which opt to be visible.
 			List<Component> fields = getExtraFields(world);
 			if (!fields.isEmpty()) {
-				TextComponent comp = Component.empty();
+				Component comp = Component.empty();
 				for (Component fieldComp : fields) {
 					comp = comp.append(Component.newline()).append(fieldComp);
 				}
