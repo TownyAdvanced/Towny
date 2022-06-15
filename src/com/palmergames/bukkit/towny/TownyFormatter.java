@@ -520,7 +520,7 @@ public class TownyFormatter {
 					.append(Component.newline())
 					.append(colourKeyValue(translator.of("rank_list_mayor"), king.getFormattedName()))
 					.append(Component.newline())
-					.append(colourKeyValue(translator.of("res_list"), StringMgmt.join(residents, ", ")))
+					.append(colourKeyValue(translator.of("res_list"), TownyComponents.joinList(residents, Component.text(", "))))
 					.append(Component.newline())
 					.append(translator.comp("status_hover_click_for_more"))))
 				.clickEvent(ClickEvent.runCommand("/towny:town " + capital.getName()))
