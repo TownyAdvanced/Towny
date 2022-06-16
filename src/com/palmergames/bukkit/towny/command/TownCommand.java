@@ -68,6 +68,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
@@ -1367,28 +1368,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseTownOnlineCommand(Player player, String[] split) throws TownyException {
-
+		final Translator translator = Translator.locale(Translation.getLocale(player));
 		if (split.length > 0) {
-			Town town = TownyUniverse.getInstance().getTown(split[0]);
-			
-			if (town == null) {
-				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[0]));
-			}
-			
+			Town town = getTownOrThrow(split[0]); 
 			List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, town);
 			if (onlineResidents.size() > 0) {
-				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
+				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(translator.of("msg_town_online"), town, player));
 			} else {
-				TownyMessaging.sendMessage(player, NamedTextColor.WHITE + "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_town_online").forLocale(player) + ": " + town));
+				TownyMessaging.sendMsg(player, translator.of("msg_no_one_is_online_in_x", town));
 			}
 		} else {
-			try {
-				Resident resident = getResidentOrThrow(player.getUniqueId());
-				Town town = resident.getTown();
-				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
-			} catch (NotRegisteredException x) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_dont_belong_town"));
-			}
+			Town town = getTownFromPlayerOrThrow(player);
+			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(translator.of("msg_town_online"), town, player));
 		}
 	}
 

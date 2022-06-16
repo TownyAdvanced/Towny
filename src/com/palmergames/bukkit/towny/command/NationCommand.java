@@ -53,6 +53,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
@@ -720,18 +721,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseNationOnlineCommand(Player player, String[] split) throws TownyException {
-
+		final Translator translator = Translator.locale(Translation.getLocale(player));
 		if (split.length > 0) {
 			Nation nation = getNationOrThrow(split[0]);
 			List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, nation);
 			if (onlineResidents.size() > 0 ) {
-				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_nation_online").forLocale(player), nation, player));
+				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(translator.of("msg_nation_online"), nation, player));
 			} else {
-				TownyMessaging.sendMessage(player, TownyComponents.miniMessage("0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_nation_online").forLocale(player) + ": " + nation)));
+				TownyMessaging.sendMsg(player, translator.of("msg_no_one_is_online_in_x", nation));
 			}
 		} else {
 			Nation nation = getNationFromPlayerOrThrow(player);
-			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_nation_online").forLocale(player), nation, player));
+			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(translator.of("msg_nation_online"), nation, player));
 		}
 	}
 

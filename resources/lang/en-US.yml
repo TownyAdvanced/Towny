@@ -1698,3 +1698,6 @@ msg_err_no_pages_to_display: 'No pages to display!'
 msg_err_nation_unaffiliated: 'That nation is not affiliated with you.'
 # Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: 'That town is not affiliated with you.'
+
+#Message shown when no members of a town or nation are online.
+msg_no_one_is_online_in_x: 'Nobody is online in %s.'
