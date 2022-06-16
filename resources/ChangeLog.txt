@@ -7524,3 +7524,5 @@ v0.92.0.11:
     - This might be a temporary setting until there is an API for sculk spread.
   - API: Add TownyAPI#areMobsEnabled(Location)
     - Returns true if Towny would let a mob exist at the location.
+0.98.2.5:
+  - Fix nation tax message using inputted amount instead of what the taxes were actually set to, courtesy of partydev with PR #5974. (First-Time Contributor!)
