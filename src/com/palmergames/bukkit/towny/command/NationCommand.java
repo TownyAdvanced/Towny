@@ -2232,9 +2232,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			String name = (sender instanceof Player) ? ((Player)sender).getName() : "Console"; 
 			try {
 				nation.setTaxes(amount);
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_nation_tax", name, split[1]));
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_nation_tax", name, nation.getTaxes()));
 				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_nation_tax", name, split[1]));
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_nation_tax", name, nation.getTaxes()));
 			} catch (NumberFormatException e) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
 			}
