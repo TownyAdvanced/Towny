@@ -625,6 +625,7 @@ public class SpawnUtil {
 		if (resident.getAccount().payTo(travelCost, payee, paymentMsg)) {
 			TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(travelCost)));
 			resident.setTeleportCost(travelCost);
+			resident.setTeleportAccount(payee);
 			initiateSpawn(player, spawnLoc);
 		}
 	}

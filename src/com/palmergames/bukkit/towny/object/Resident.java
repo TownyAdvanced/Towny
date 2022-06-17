@@ -62,6 +62,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private long teleportRequestTime = -1;
 	private Location teleportDestination;
 	private double teleportCost = 0.0;
+	private Account teleportAccount;
 	private final List<String> modes = new ArrayList<>();
 	private transient Confirmation confirmation;
 	private final transient List<Invite> receivedInvites = new ArrayList<>();
@@ -389,6 +390,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void clearTeleportRequest() {
 		teleportCost = 0;
 		teleportRequestTime = -1;
+		teleportAccount = null;
 	}
 
 	public void setTeleportRequestTime() {
@@ -424,6 +426,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public double getTeleportCost() {
 
 		return teleportCost;
+	}
+	
+	public void setTeleportAccount(Account payee) {
+		teleportAccount = payee;
+	}
+	
+	public Account getTeleportAccount() {
+		return teleportAccount;
 	}
 
 	//TODO: Restore /tw regen and /tw regen undo functionality.
