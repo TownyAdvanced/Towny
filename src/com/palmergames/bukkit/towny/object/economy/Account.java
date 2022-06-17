@@ -308,7 +308,7 @@ public abstract class Account implements Nameable {
 				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> cachedBalance.setBalance(getHoldingBalance()));
 		}
 	}
-
+	
 	/**
 	 * Returns a cached balance of an {@link Account}, the value of which can be
 	 * brand new or up to 10 minutes old (time configurable in the config,) based on
@@ -317,7 +317,19 @@ public abstract class Account implements Nameable {
 	 * @return balance {@link Double} which is from a {@link CachedBalance#balance}.
 	 */
 	public double getCachedBalance() {
-		if (cachedBalance.isStale())
+		return getCachedBalance(true);
+	}
+
+	/**
+	 * Returns a cached balance of an {@link Account}, the value of which can be
+	 * brand new or up to 10 minutes old (time configurable in the config,) based on
+	 * whether the cache has been checked recently.
+	 *
+	 * @param refreshIfStale when true, if the cache is stale it will update.
+	 * @return balance {@link Double} which is from a {@link CachedBalance#balance}.
+	 */
+	public double getCachedBalance(boolean refreshIfStale) {
+		if (refreshIfStale && cachedBalance.isStale())
 			cachedBalance.updateCache();
 
 		return cachedBalance.getBalance();
