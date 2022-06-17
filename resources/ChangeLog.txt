@@ -7528,3 +7528,4 @@ v0.92.0.11:
   - Fix nation tax message using inputted amount instead of what the taxes were actually set to, courtesy of partydev with PR #5974. (First-Time Contributor!)
   - Fix teleport costs being refunded out of thin air.
     - Closes #5975.
+  - Fix possible stackoverflow exception for translations, courtesy of Warriorrrr with PR #5976.
