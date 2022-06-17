@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -90,7 +91,7 @@ public final class Translation {
 
 		if (data == null) {
 			// The default locale in the config is missing the language string, they are probably using a non-en_US locale.
-			data = of(key, englishLocale);
+			data = translations.getOrDefault(englishLocale.toString(), Collections.emptyMap()).get(key);
 			
 			if (data == null) {
 				// Even the en_US is missing this string, we're probably dealing with a typo.
