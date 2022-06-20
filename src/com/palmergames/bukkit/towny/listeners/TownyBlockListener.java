@@ -400,21 +400,31 @@ public class TownyBlockListener implements Listener {
 
 	/*
 	 * Used to prevent Sculk Spread.
-	 * 
-	 * TODO: A better system like we use for bonemeal and moss, when the spigot/paper api's can provide such.
 	 */
 	@EventHandler(ignoreCancelled = true)
-	public void onBlockSpread(BlockSpreadEvent event) {
+	public void onSculkSpread(BlockSpreadEvent event) {
+		String sourceName = event.getSource().getType().name();
+		if (!sourceName.startsWith("SCULK"))
+			return;
+
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld())
-			|| !TownySettings.isSculkSpreadPreventWhereMobsAreDisabled()
-			|| !event.getSource().getType().name().startsWith("SCULK")) // SCULK and SCULK_VEIN
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 
-		event.setCancelled(!TownyAPI.getInstance().areMobsEnabled(event.getBlock().getLocation()));
+		if (sourceName.equalsIgnoreCase("sculk_catalyst")) {
+			// Check if the sculk is passing across a border with differing owners, allowing
+			// sculk to spread from a town into the wilderness.
+			event.setCancelled(!canBlockMove(event.getSource(), event.getBlock(), true));
+		} else if (TownySettings.isSculkSpreadPreventWhereMobsAreDisabled()) {
+			// Early 1.19 versions of spigot did not correctly report the source as
+			// sculk_catalyst. We use a config setting that will cancel based on
+			// mobs-spawning plot perms.
+			// TODO: remove this when 1.19.1 is out.
+			event.setCancelled(!TownyAPI.getInstance().areMobsEnabled(event.getBlock().getLocation()));	
+		}
 	}
 }
