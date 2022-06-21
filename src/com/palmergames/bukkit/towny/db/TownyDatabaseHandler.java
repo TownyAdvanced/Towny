@@ -458,7 +458,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		if (event.isCancelled()) {
 			// Log as Warn because the event has been processed
-			logger.warn(event.getCancelMessage());
+			if (!event.getCancelMessage().isEmpty())
+				logger.warn(event.getCancelMessage());
 			return;
 		}
 		
