@@ -21,7 +21,7 @@ ___
 
 <table>
 <tr><th> Minecraft Version</th><th>Towny Version</th></tr>
-<tr align=center><td> MC 1.9 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases>The Latest Pre-Releases: 0.98.2.4+</a> </td>    
+<tr align=center><td> MC 1.19 </td><td> <a href=https://github.com/TownyAdvanced/Towny/releases>The Latest Pre-Releases: 0.98.2.4+</a> </td>    
 <tr align=center><td> MC 1.18.*</td><td rowspan=3> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.98.2.0>0.98.2.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
 <tr align=center><td> MC 1.17.* </td>
 <tr align=center><td> MC 1.16.* </td>
