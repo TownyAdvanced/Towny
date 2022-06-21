@@ -7533,3 +7533,7 @@ v0.92.0.11:
   - Protect borders from sculk spread, if the server is using a new enough version of spigot, which has fixed the API.
     - Spigot build June 20, 2022 and onwards will see the smarter sculk-spread logic.
     - The recently added protection.prevent_sculk_spread_in_mobs_off_locations will have no effect on servers which are up to date.
+0.98.2.6:
+  - API: Add TownPreRuinEvent.
+    - A cancellable event that prevents a town from being into a Ruined status.
+    - When cancelled the town is instead sent to be deleted.

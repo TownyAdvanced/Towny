@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.event.PreDeleteTownEvent;
 import com.palmergames.bukkit.towny.event.RenameNationEvent;
 import com.palmergames.bukkit.towny.event.RenameResidentEvent;
 import com.palmergames.bukkit.towny.event.RenameTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreRuinedEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent;
 import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
@@ -49,6 +50,7 @@ import com.palmergames.util.FileMgmt;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Nullable;
@@ -499,10 +501,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void removeTown(Town town, boolean delayFullRemoval) {
 		if (delayFullRemoval) {
 			/*
-			 * When Town ruining is active, send the Town into a ruined state, prior to real removal.
+			 * When Town ruining is active, send the Town into a ruined state, prior to real
+			 * removal, if the TownPreRuinedEvent is not cancelled.
 			 */
-			TownRuinUtil.putTownIntoRuinedState(town);
-			return;
+			TownPreRuinedEvent tpre = new TownPreRuinedEvent(town);
+			Bukkit.getPluginManager().callEvent(tpre);
+			if (!tpre.isCancelled()) {
+				TownRuinUtil.putTownIntoRuinedState(town);
+				return;
+			}
 		}
 
 		PreDeleteTownEvent preEvent = new PreDeleteTownEvent(town);
