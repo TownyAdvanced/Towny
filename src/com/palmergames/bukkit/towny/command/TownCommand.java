@@ -1346,15 +1346,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		out.add(Colors.Green + "Type: " 
 				+ Colors.LightGreen + "Player-Owned" + Colors.LightGray + " / "
 				+ Colors.LightBlue  + "ForSale" + Colors.LightGray + " / "
-				+ Colors.Yellow + "Total" + Colors.LightGray + " / "
-				+ Colors.Green + "Daily Revenue");
+				+ Colors.Yellow + "Total" + Colors.LightGray
+				+ (TownyEconomyHandler.isActive() ? " / " + Colors.Green + "Daily Revenue" : ""));
 		for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
 			int residentOwned = typeCache.getNumTownBlocks(type, CacheType.RESIDENTOWNED);
 			out.add(Colors.Green + type.getFormattedName() + ": "
 				+ Colors.LightGreen + residentOwned + Colors.LightGray + " / "
 				+ Colors.LightBlue  + typeCache.getNumTownBlocks(type, CacheType.FORSALE) + Colors.LightGray + " / "
-				+ Colors.Yellow + typeCache.getNumTownBlocks(type, CacheType.ALL) + Colors.LightGray + " / "
-				+ Colors.Green + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)));
+				+ Colors.Yellow + typeCache.getNumTownBlocks(type, CacheType.ALL) + Colors.LightGray
+				+ (TownyEconomyHandler.isActive() ? " / " + Colors.Green + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)) : ""));
 		}
 		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
 		TownyMessaging.sendMessage(sender, out);
