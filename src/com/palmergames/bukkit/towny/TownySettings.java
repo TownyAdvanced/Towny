@@ -3153,7 +3153,7 @@ public class TownySettings {
 		// have english translations and/or are missing a translation for the enabled
 		// language(s) on this server need to be able to inject their english
 		// tranlations.
-		if (getString(ConfigNodes.ENABLED_LANGUAGES).equals("*") || locale.equalsIgnoreCase("en_us.yml"))
+		if (getString(ConfigNodes.ENABLED_LANGUAGES).equals("*") || locale.equalsIgnoreCase("en_us"))
 			return true;
 		
 		String defaultLocale = getString(ConfigNodes.LANGUAGE);

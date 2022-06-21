@@ -7539,3 +7539,5 @@ v0.92.0.11:
     - When cancelled the town is instead sent to be deleted.
   - Fix README typo re: 1.19 version number, courtesy of AToska21 with PR #5983. (First-Time Contributor!)
   - Check if economy is enabled in town plots command, courtesy of Warriorrrr with PR #5985.
+0.98.2.7:
+  - Fix en-US locale not always being loaded into memory.
