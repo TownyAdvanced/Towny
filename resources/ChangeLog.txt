@@ -7541,3 +7541,4 @@ v0.92.0.11:
   - Check if economy is enabled in town plots command, courtesy of Warriorrrr with PR #5985.
 0.98.2.7:
   - Fix en-US locale not always being loaded into memory.
+  - Hide vanished players in /res list.

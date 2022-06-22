@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
@@ -497,7 +498,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		String colour;
 		List<String> formattedList = new ArrayList<>();
 		
-		for (Player player : Bukkit.getOnlinePlayers()) {
+		for (Player player : BukkitTools.getVisibleOnlinePlayers(sender)) {
 			Resident resident = TownyAPI.getInstance().getResident(player);
 			if (resident == null) {
 				formattedList.add(Colors.White + player.getName() + Colors.White);
