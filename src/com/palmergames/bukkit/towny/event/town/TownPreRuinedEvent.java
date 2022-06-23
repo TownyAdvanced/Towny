@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.event.town;
 
 import com.palmergames.bukkit.towny.object.Town;
+
+import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -18,6 +20,7 @@ public class TownPreRuinedEvent extends Event implements Cancellable {
 	boolean cancelled;
 
 	public TownPreRuinedEvent(Town town) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 	}
 

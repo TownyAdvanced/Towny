@@ -7542,3 +7542,4 @@ v0.92.0.11:
 0.98.2.7:
   - Fix en-US locale not always being loaded into memory.
   - Hide vanished players in /res list.
+  - Fix TownPreRuinedEvent firing Async.
