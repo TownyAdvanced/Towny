@@ -199,6 +199,17 @@ public class TownyActionEventExecutor {
 	}
 
 	/**
+	 * Can the player build this material at this location?
+	 *
+	 * @param player Player involved in the event.
+	 * @param block The block being built   
+	 * @return true if allowed.
+	 */
+	public static boolean canBuild(Player player, Block block) {
+		return canBuild(player, block.getLocation(), block.getType());
+	}
+
+	/**
 	 * Can the player destroy this material at this location?
 	 * 
 	 * @param player     - Player involved in the event.
