@@ -430,6 +430,7 @@ public class TownyBlockListener implements Listener {
 		}
 	}
 	
+	@SuppressWarnings("incomplete-switch")
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
 	public void onCauldronLevelChange(CauldronLevelChangeEvent event) {
 		if (!(event.getEntity() instanceof Player player))
