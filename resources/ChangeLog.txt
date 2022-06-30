@@ -7549,3 +7549,11 @@ v0.92.0.11:
   - Fix killed players that are sent to jail not keeping their So You've Been Jailed book.
     - Closes #5989.
   - Fix edge-case scenario where /t outpost PLOTNAME was not working.
+  - New Placeholders: (Closes #5936.)
+    - %townyadvanced_town_creation_cost% - Shows the cost of a town.
+    - %townyadvanced_nation_creation_cost% - Shows the cost of a nation.
+    - %townyadvanced_number_of_towns_in_server% - Shows the number of Towns on the server.
+    - %townyadvanced_number_of_neutral_towns_in_server% - Shows the number of neutral Towns on the server.
+    - %townyadvanced_number_of_towns_in_world% - Shows the number of Towns with homeblocks in the same world as the player.
+    - %townyadvanced_number_of_neutral_towns_in_world% - Shows the number of neutral Towns with homeblocks in the same world as the player.
+    
