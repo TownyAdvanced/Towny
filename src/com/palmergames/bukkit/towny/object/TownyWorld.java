@@ -27,6 +27,9 @@ public class TownyWorld extends TownyObject {
 
 	private HashMap<String, Town> towns = new HashMap<>();
 
+	private boolean isDeletingEntitiesOnUnclaim = TownySettings.isDeletingEntitiesOnUnclaim();
+	private EnumSet<EntityType> unclaimDeleteEntityTypes = null;
+	
 	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
 	private EnumSet<Material> plotManagementDeleteIds = null;
 	
@@ -317,6 +320,25 @@ public class TownyWorld extends TownyObject {
 	public boolean isUsingPlotManagementDelete() {
 
 		return isUsingPlotManagementDelete;
+	}
+
+	public void setDeletingEntitiesOnUnclaim(boolean using) {
+		isDeletingEntitiesOnUnclaim = using;
+	}
+
+	public boolean isDeletingEntitiesOnUnclaim() {
+		return isDeletingEntitiesOnUnclaim;
+	}
+
+	public EnumSet<EntityType> getUnclaimDeleteEntityTypes() {
+		if (unclaimDeleteEntityTypes == null)
+			return TownySettings.getUnclaimDeleteEntityTypes();
+		else 
+			return unclaimDeleteEntityTypes;
+	}
+
+	public void setUnclaimDeleteEntityTypes(List<String> entityTypes) {
+		this.unclaimDeleteEntityTypes = TownySettings.toEntityTypeEnumSet(entityTypes);
 	}
 
 	public void setUsingPlotManagementMayorDelete(boolean using) {

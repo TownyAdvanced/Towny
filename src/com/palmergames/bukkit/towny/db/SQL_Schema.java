@@ -50,6 +50,8 @@ public class SQL_Schema {
 		columns.add("`unclaimedZoneIgnoreIds` mediumtext NOT NULL");
 		columns.add("`usingPlotManagementDelete` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementDeleteIds` mediumtext NOT NULL");
+		columns.add("`isDeletingEntitiesOnUnclaim` bool NOT NULL DEFAULT '0'");
+		columns.add("`unclaimDeleteEntityTypes` mediumtext NOT NULL");
 		columns.add("`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementMayorDelete` mediumtext NOT NULL");
 		columns.add("`usingPlotManagementRevert` bool NOT NULL DEFAULT '0'");

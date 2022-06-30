@@ -14,11 +14,13 @@ import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -37,6 +39,9 @@ public class TownyRegenAPI {
 	
 	// table containing snapshot data of active reversions.
 	private static Hashtable<String, PlotBlockData> PlotChunks = new Hashtable<>();
+
+	// List of all old plots still to be procesws for Entity removal
+	private static List<WorldCoord> deleteTownBlockEntityQueue = new ArrayList<>();
 
 	// List of all old plots still to be processed for Block removal
 	private static List<WorldCoord> deleteTownBlockIdQueue = new ArrayList<>();
@@ -506,6 +511,59 @@ public class TownyRegenAPI {
 //
 //	}
 
+	/*
+	 * TownBlock Entity Deleting Queue.
+	 */
+	
+	/**
+	 * @return true if there are any chunks being processed.
+	 */
+	public static boolean hasDeleteTownBlockEntityQueue() {
+
+		return !deleteTownBlockEntityQueue.isEmpty();
+	}
+
+	public static boolean isDeleteTownBlockEntityQueue(WorldCoord plot) {
+
+		return deleteTownBlockEntityQueue.contains(plot);
+	}
+	
+	public static void addDeleteTownBlockEntityQueue(WorldCoord plot) {
+		if (!deleteTownBlockEntityQueue.contains(plot))
+			deleteTownBlockEntityQueue.add(plot);
+	}
+	
+	public static WorldCoord getDeleteTownBlockEntityQueue() {
+
+		if (!deleteTownBlockEntityQueue.isEmpty()) {
+			WorldCoord wc = deleteTownBlockEntityQueue.get(0);
+			deleteTownBlockEntityQueue.remove(0);
+			return wc;
+		}
+		return null;
+	}
+	
+
+	/**
+	 * Deletes all of a specified entity type from a TownBlock
+	 * 
+	 * @param worldCoord - WorldCoord for the Town Block
+	 */
+	public static void doDeleteTownBlockEntities(WorldCoord worldCoord) {
+		TownyWorld world = worldCoord.getTownyWorld();
+		if (!world.isDeletingEntitiesOnUnclaim())
+			return;
+		List<Entity> toRemove = new ArrayList<>();
+		Collection<Entity> entities = worldCoord.getBukkitWorld().getNearbyEntities(worldCoord.getBoundingBox());
+		for (Entity entity : entities) {
+			if (world.getUnclaimDeleteEntityTypes().contains(entity.getType()))
+				toRemove.add(entity);
+		}
+		
+		for (Entity entity : toRemove)
+			entity.remove();
+	}
+	
 	/*
 	 * TownBlock Material Deleting Queue.
 	 */

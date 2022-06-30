@@ -1535,6 +1535,25 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				} catch (Exception ignored) {
 				}
 
+			result = rs.getBoolean("isDeletingEntitiesOnUnclaim");
+			try {
+				world.setDeletingEntitiesOnUnclaim(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("unclaimDeleteEntityTypes");
+			if (line != null)
+				try {
+					List<String> entityTypes = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							entityTypes.add(split);
+
+					world.setUnclaimDeleteEntityTypes(entityTypes);
+				} catch (Exception ignored) {
+				}
+
 			result = rs.getBoolean("usingPlotManagementDelete");
 			try {
 				world.setUsingPlotManagementDelete(result);
@@ -2311,6 +2330,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			// Unclaimed Zone Ignore Ids
 			if (world.getUnclaimedZoneIgnoreMaterials() != null)
 				nat_hm.put("unclaimedZoneIgnoreIds", StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), "#"));
+
+			// Deleting EntityTypes from Townblocks on Unclaim.
+			nat_hm.put("isDeletingEntitiesOnUnclaim", world.isDeletingEntitiesOnUnclaim());
+			if (world.getUnclaimDeleteEntityTypes() != null)
+				nat_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(world.getUnclaimDeleteEntityTypes(), "#"));
 
 			// Using PlotManagement Delete
 			nat_hm.put("usingPlotManagementDelete", world.isUsingPlotManagementDelete());

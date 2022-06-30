@@ -406,6 +406,20 @@ public enum ConfigNodes {
 			"",
 			"# These items will be deleted upon a plot being unclaimed"),
 
+	NWS_PLOT_MANAGEMENT_ENTITY_DELETE_HEADER(
+			"new_world_settings.plot_management.entity_delete",
+			"",
+			"",
+			"# This section is applied to new worlds as default settings when new worlds are detected."),
+	NWS_PLOT_MANAGEMENT_ENTITY_DELETE_ENABLE(
+			"new_world_settings.plot_management.entity_delete.enabled",
+			"false"),
+	NWS_PLOT_MANAGEMENT_ENTITY_DELETE(
+			"new_world_settings.plot_management.entity_delete.unclaim_delete",
+			"ENDERCRYSTAL",
+			"",
+			"# These entities will be deleted upon a plot being unclaimed"),
+
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE_HEADER(
 			"new_world_settings.plot_management.mayor_plotblock_delete",
 			"",
