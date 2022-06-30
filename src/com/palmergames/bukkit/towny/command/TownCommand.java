@@ -68,6 +68,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
@@ -795,7 +796,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						else 
 							town = resident.getTownOrNull();
 					}
-					TownyMessaging.sendMessage(player, TownyFormatter.getRanksForTown(town, Translation.getLocale(player)));
+					TownyMessaging.sendMessage(player, TownyFormatter.getRanksForTown(town, Translator.locale(player)));
 
 				} else if (split[0].equalsIgnoreCase("add")) {
 
