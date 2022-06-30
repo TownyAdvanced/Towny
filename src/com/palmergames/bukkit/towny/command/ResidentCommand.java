@@ -17,7 +17,7 @@ import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
@@ -278,7 +278,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				else
 					res = getResidentOrThrow(player.getUniqueId());
 				
-				TownyMessaging.sendMessage(player, TownyFormatter.getTaxStatus(res, Translation.getLocale(player)));
+				TownyMessaging.sendMessage(player, TownyFormatter.getTaxStatus(res, Translator.locale(player)));
 
 			} else if (split[0].equalsIgnoreCase("jail")) {
 

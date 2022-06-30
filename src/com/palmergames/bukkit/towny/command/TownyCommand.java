@@ -25,7 +25,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
@@ -190,7 +189,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 							town = resident.getTownOrNull();
 					}
 
-					for (String line : getTownyPrices(town, Translator.locale(Translation.getLocale(sender))))
+					for (String line : getTownyPrices(town, Translator.locale(sender)))
 						TownyMessaging.sendMessage(sender, line);
 					break;
 				}
@@ -263,7 +262,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-					for (String line : getUniverseStats(Translator.locale(Translation.getLocale(sender))))
+					for (String line : getUniverseStats(Translator.locale(sender)))
 						TownyMessaging.sendMessage(sender, line);
 					break;
 				}

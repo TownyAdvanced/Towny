@@ -7544,3 +7544,5 @@ v0.92.0.11:
   - Hide vanished players in /res list.
   - Fix TownPreRuinedEvent firing Async.
   - Handle more kinds of changes to cauldrons, courtesy of Warriorrrr with PR #5990.
+0.98.2.8:
+  - Add simpler, more convenient way to get a Translator from a CommandSender.

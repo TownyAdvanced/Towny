@@ -376,7 +376,7 @@ public class TownyMessaging {
 	 */
 	
 	public static void sendRequestMessage(CommandSender player, Invite invite) {
-		final Translator translator = Translator.locale(Translation.getLocale(player));
+		final Translator translator = Translator.locale(player);
 		String senderName = invite.getSender().getName();
 		if (invite.getSender() instanceof Town town) { // Town invited Resident
 			String firstline = town.hasNation()
@@ -410,7 +410,7 @@ public class TownyMessaging {
 	 * @param cancelline - Line for sending the cancellation.
 	 */
 	public static void sendInvitationMessage(CommandSender player, String firstline, String confirmline, String cancelline) {
-		final Translator translator = Translator.locale(Translation.getLocale(player));
+		final Translator translator = Translator.locale(player);
 		// Create confirm button based on given params.
 		TextComponent confirmComponent = Component.text("[/" + confirmline + "]")
 			.color(NamedTextColor.GREEN)
@@ -433,7 +433,7 @@ public class TownyMessaging {
 	 * @param confirmation - Confirmation to send to the player.
 	 */
 	public static void sendConfirmationMessage(CommandSender sender, Confirmation confirmation) {
-		final Translator translator = Translator.locale(Translation.getLocale(sender));
+		final Translator translator = Translator.locale(sender);
 		TextComponent firstLineComponent = Component.text(translator.of("confirmation_prefix") + confirmation.getTitle().forLocale(sender));
 		TextComponent lastLineComponent = Component.text(translator.of("this_message_will_expire2", confirmation.getDuration()));
 

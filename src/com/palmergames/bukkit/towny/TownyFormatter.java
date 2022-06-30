@@ -46,7 +46,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -84,7 +83,7 @@ public class TownyFormatter {
 	public static StatusScreen getStatus(TownBlock townBlock, Player player) {
 
 		StatusScreen screen = new StatusScreen(player);
-		final Translator translator = Translator.locale(Translation.getLocale(player));
+		final Translator translator = Translator.locale(player);
 		
 		TownyObject owner;
 		Town town = townBlock.getTownOrNull();
@@ -145,7 +144,7 @@ public class TownyFormatter {
 	public static StatusScreen getStatus(Resident resident, CommandSender sender) {
 
 		StatusScreen screen = new StatusScreen(sender);
-		final Translator translator = Translator.locale(Translation.getLocale(sender));
+		final Translator translator = Translator.locale(sender);
 
 		// ___[ King Harlus ]___
 		screen.addComponentOf("title", ChatTools.formatTitle(resident.getFormattedName() + (playerIsOnlineAndVisible(resident.getName(), sender) ? translator.of("online2") : "")));
@@ -280,8 +279,7 @@ public class TownyFormatter {
 	 */
 	public static StatusScreen getStatus(Town town, CommandSender sender) {
 
-		final Locale locale = Translation.getLocale(sender);
-		final Translator translator = Translator.locale(locale);
+		final Translator translator = Translator.locale(sender);
 		StatusScreen screen = new StatusScreen(sender);
 		TownyWorld world = town.getHomeblockWorld();
 
@@ -398,7 +396,7 @@ public class TownyFormatter {
 			
 			screen.addComponentOf("newline", Component.newline());
 			// Assistants [2]: Sammy, Ginger
-			List<String> ranklist = getRanks(town, locale);
+			List<String> ranklist = getRanks(town, translator);
 			if (ranklist.size() > 0)
 				screen.addComponentOf("townranks", colourHoverKey(translator.of("status_rank_list")),
 						HoverEvent.showText(Component.text(String.join("\n", ranklist))
@@ -460,8 +458,7 @@ public class TownyFormatter {
 	public static StatusScreen getStatus(Nation nation, CommandSender sender) {
 
 		StatusScreen screen = new StatusScreen(sender);
-		Locale locale = Translation.getLocale(sender);
-		final Translator translator = Translator.locale(locale);
+		final Translator translator = Translator.locale(sender);
 
 		// ___[ Azur Empire (Open)]___
 		screen.addComponentOf("nation_title", ChatTools.formatTitle(nation));
@@ -525,7 +522,7 @@ public class TownyFormatter {
 		
 		screen.addComponentOf("newline", Component.newline());
 		// Assistants [2]: Sammy, Ginger
-		List<String> ranklist = getRanks(nation, locale);
+		List<String> ranklist = getRanks(nation, translator);
 		if (ranklist.size() > 0)
 			screen.addComponentOf("nationranks", colourHoverKey(translator.of("status_rank_list")),
 				HoverEvent.showText(Component.text(String.join("\n", ranklist))
@@ -597,7 +594,7 @@ public class TownyFormatter {
 	public static StatusScreen getStatus(TownyWorld world, CommandSender sender) {
 
 		StatusScreen screen = new StatusScreen(sender);
-		final Translator translator = Translator.locale(Translation.getLocale(sender));
+		final Translator translator = Translator.locale(sender);
 
 		// ___[ World (PvP) ]___
 		screen.addComponentOf("townyworld_title", ChatTools.formatTitle(world.getFormattedName()));
@@ -755,10 +752,10 @@ public class TownyFormatter {
 	/**
 	 * Returns a List of Strings, in which each string is formatted: RankName [#]: names, of, people, with, the, rank.
 	 * @param gov Government (Town or Nation) for which to gather ranks of.
-	 * @param locale Locale used in lang selection.
+	 * @param translator Translator used in lang selection.
 	 * @return List of Strings describe above.
 	 */
-	private static List<String> getRanks(Government gov, Locale locale) {
+	private static List<String> getRanks(Government gov, Translator translator) {
 		List<String> ranklist = new ArrayList<>();
 		List<Resident> residents = new ArrayList<>(gov.getResidents());
 		List<String> ranks;
@@ -782,7 +779,7 @@ public class TownyFormatter {
 			residentWithRank.clear();
 		}
 		if (gov instanceof Town town && town.getTrustedResidents().size() > 0)
-			ranklist.add(getFormattedTownyObjects(Translation.of("status_trustedlist", locale), new ArrayList<>(town.getTrustedResidents())));
+			ranklist.add(getFormattedTownyObjects(translator.of("status_trustedlist"), new ArrayList<>(town.getTrustedResidents())));
 		
 		return ranklist;
 	}
@@ -1026,13 +1023,12 @@ public class TownyFormatter {
 	 * Returns the tax info this resident will have to pay at the next new day.
 	 * 
 	 * @param resident the resident to check
-	 * @param locale Locale to use while translating   
+	 * @param Translator translator to localize messaging.
 	 * @return tax status message
 	 */
-	public static List<String> getTaxStatus(Resident resident, Locale locale) {
+	public static List<String> getTaxStatus(Resident resident, Translator translator) {
 
 		List<String> out = new ArrayList<>();
-		final Translator translator = Translator.locale(locale);
 		
 		Town town;
 		boolean taxExempt = TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt");
@@ -1085,15 +1081,15 @@ public class TownyFormatter {
 	 * Returns a Chat Formatted List of all town residents who hold a rank.
 	 * 
 	 * @param town the town for which to check against.
+	 * @param translator localization to use.
 	 * @return a list containing formatted rank data.
 	 */
-	public static List<String> getRanksForTown(Town town, Locale locale) {
-		final Translator translator = Translator.locale(locale);
+	public static List<String> getRanksForTown(Town town, Translator translator) {
 		List<String> ranklist = new ArrayList<>();
 		ranklist.add(ChatTools.formatTitle(translator.of("rank_list_title", town.getFormattedName())));
 		ranklist.add(colourKeyValue(translator.of("rank_list_mayor"), town.getMayor().getFormattedName()));
 
-		ranklist.addAll(getRanks(town, locale));
+		ranklist.addAll(getRanks(town, translator));
 		return ranklist;
 	}
 
@@ -1101,15 +1097,15 @@ public class TownyFormatter {
 	 * Returns a Chat Formatted List of all nation residents who hold a rank.
 	 * 
 	 * @param nation the nation for which to check against.
+	 * @param translator localization to use.
 	 * @return a list containing formatted rank data.
 	 */
-	public static List<String> getRanksForNation(Nation nation, Locale locale) {
-		final Translator translator = Translator.locale(locale);
+	public static List<String> getRanksForNation(Nation nation, Translator translator) {
 		List<String> ranklist = new ArrayList<>();
 		ranklist.add(ChatTools.formatTitle(translator.of("rank_list_title", nation.getFormattedName())));
 		ranklist.add(colourKeyValue(translator.of("status_nation_king"), nation.getKing().getFormattedName()));
 
-		ranklist.addAll(getRanks(nation, locale));
+		ranklist.addAll(getRanks(nation, translator));
 		return ranklist;
 	}
 	
