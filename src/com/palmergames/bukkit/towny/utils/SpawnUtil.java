@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -384,41 +385,19 @@ public class SpawnUtil {
 			throw new TownyException(Translatable.of("msg_err_outpost_spawn"));
 
 		Integer index = null;
+		String userInput = split[split.length - 1];
 		try {
-			if (!split[split.length - 1].contains("name:")) {
-				index = Integer.parseInt(split[split.length - 1]);
+			if (!userInput.contains("name:")) {
+				index = Integer.parseInt(userInput);
 			} else { // So now it say's name:123
-				split[split.length - 1] = split[split.length - 1].replace("name:", "").replace("_", " ");
-				for (Location loc : town.getAllOutpostSpawns()) {
-					TownBlock tboutpost = TownyAPI.getInstance().getTownBlock(loc);
-					if (tboutpost != null) {
-						String name = !tboutpost.hasPlotObjectGroup() ? tboutpost.getName() : tboutpost.getPlotObjectGroup().getName();
-						if (name.startsWith(split[split.length - 1])) {
-							index = 1 + town.getAllOutpostSpawns().indexOf(loc);
-						}
-					}
-				}
-				if (index == null) { // If it persists to be null, so it's not been given a value, set it to the fallback (1).
-					index = 1;
-				}
+				index = getOutpostIndexFromName(town, index, userInput.replace("name:", "").replace("_", " "));
 			}
 		} catch (NumberFormatException e) {
 			// invalid entry so assume the first outpost, also note: We DO NOT HAVE a number
 			// now, which means: if you type abc, you get brought to that outpost.
 			// Let's consider the fact however: an outpost name begins with "123" and there
 			// are 123 Outposts. Then we put the prefix name:123 and that solves that.
-			index = 1;
-			// Trying to get Outpost names.
-			split[split.length - 1] = split[split.length - 1].replace("_", " ");
-			for (Location loc : town.getAllOutpostSpawns()) {
-				TownBlock tboutpost = TownyAPI.getInstance().getTownBlock(loc);
-				if (tboutpost != null) {
-					String name = !tboutpost.hasPlotObjectGroup() ? tboutpost.getName() : tboutpost.getPlotObjectGroup().getName();
-					if (name.startsWith(split[split.length - 1].toLowerCase())) {
-						index = 1 + town.getAllOutpostSpawns().indexOf(loc);
-					}
-				}
-			}
+			index = getOutpostIndexFromName(town, index, userInput.replace("_", " "));
 		} catch (ArrayIndexOutOfBoundsException i) {
 			// Number not present so assume the first outpost.
 			index = 1;
@@ -432,6 +411,20 @@ public class SpawnUtil {
 		}
 
 		return town.getOutpostSpawn(Math.max(1, index));
+	}
+
+	private static Integer getOutpostIndexFromName(Town town, Integer index, String userInput) {
+		for (Location loc : town.getAllOutpostSpawns()) {
+			TownBlock tboutpost = TownyAPI.getInstance().getTownBlock(loc);
+			if (tboutpost != null) {
+				String name = !tboutpost.hasPlotObjectGroup() ? tboutpost.getName() : tboutpost.getPlotObjectGroup().getName();
+				if (name.toLowerCase(Locale.ROOT).startsWith(userInput.toLowerCase(Locale.ROOT)))
+					index = 1 + town.getAllOutpostSpawns().indexOf(loc);
+			}
+		}
+		if (index == null) // If it persists to be null, so it's not been given a value, set it to the fallback (1).
+			index = 1;
+		return index;
 	}
 
 	/**

@@ -7548,3 +7548,4 @@ v0.92.0.11:
   - Add simpler, more convenient way to get a Translator from a CommandSender.
   - Fix killed players that are sent to jail not keeping their So You've Been Jailed book.
     - Closes #5989.
+  - Fix edge-case scenario where /t outpost PLOTNAME was not working.
