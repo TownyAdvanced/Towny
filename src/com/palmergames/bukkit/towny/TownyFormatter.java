@@ -1023,7 +1023,7 @@ public class TownyFormatter {
 	 * Returns the tax info this resident will have to pay at the next new day.
 	 * 
 	 * @param resident the resident to check
-	 * @param Translator translator to localize messaging.
+	 * @param translator Translator to localize messaging.
 	 * @return tax status message
 	 */
 	public static List<String> getTaxStatus(Resident resident, Translator translator) {
