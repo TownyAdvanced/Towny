@@ -3154,29 +3154,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			ignoreWarning = true;
 		}
 		
-
-		Resident resident = getResidentOrThrow(player.getUniqueId());
 		Town town;
 		String notAffordMSG;
 
 		// Set target town and affiliated messages.
 		if (split.length == 0 || outpost || split[0].equals("-ignore")) {
 
-			if (!resident.hasTown()) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_dont_belong_town"));
-				return;
-			}
-
-			town = resident.getTown();
+			town = getTownFromPlayerOrThrow(player);
 			notAffordMSG = Translatable.of("msg_err_cant_afford_tp").forLocale(player);
-
 		} else {
 			// split.length > 1
-			town = TownyUniverse.getInstance().getTown(split[0]);
-			
-			if (town == null)
-				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[0]));
-			
+			town = getTownOrThrow(split[0]);
 			notAffordMSG = Translatable.of("msg_err_cant_afford_tp_town", town.getName()).forLocale(player);
 		}
 			

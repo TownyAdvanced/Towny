@@ -7559,3 +7559,5 @@ v0.92.0.11:
   - Fix Javadocs.
 0.98.3.0:
   - Bump version for release.
+0.98.3.1:
+  - Fix /t outpost generating a array index out of bounds.

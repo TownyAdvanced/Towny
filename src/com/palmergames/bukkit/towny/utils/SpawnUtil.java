@@ -384,6 +384,10 @@ public class SpawnUtil {
 		if (!town.hasOutpostSpawn())
 			throw new TownyException(Translatable.of("msg_err_outpost_spawn"));
 
+		// No arguments, send them to the first outpost.
+		if (split.length == 0)
+			return town.getOutpostSpawn(1);
+
 		Integer index = null;
 		String userInput = split[split.length - 1];
 		try {
