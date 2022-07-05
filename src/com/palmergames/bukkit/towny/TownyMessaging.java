@@ -119,9 +119,9 @@ public class TownyMessaging {
 			if (sender instanceof ConsoleCommandSender)
 				Towny.getAdventure().sender(sender).sendMessage(Translatable.of("default_towny_prefix").stripColors(true).append(Colors.strip(message)).component());
 			else
-				Towny.getAdventure().sender(sender).sendMessage(Translatable.of("default_towny_prefix").append(message).component());
+				Towny.getAdventure().sender(sender).sendMessage(Translatable.of("default_towny_prefix").append(message.color(NamedTextColor.RED)).component());
 		} else if (sendTo instanceof Resident resident) {
-			resident.audience().sendMessage(Translatable.of("default_towny_prefix").append(message).component());
+			resident.audience().sendMessage(Translatable.of("default_towny_prefix").append(message.color(NamedTextColor.RED)).component());
 		}
 		
 		sendDevMsg(message);

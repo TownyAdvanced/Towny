@@ -418,7 +418,7 @@ public class TownyFormatter {
 			screen.addComponentOf("residents", colourHoverKey(translator.of("res_list"))
 				.hoverEvent(HoverEvent.showText(getFormattedComponent(translator.of("res_list"), residents, town.getResidents().size())
 					.append(Component.newline())
-					.append(Component.text(translator.of("status_hover_click_for_more")))))
+					.append(translator.comp("status_hover_click_for_more"))))
 				.clickEvent(ClickEvent.runCommand("/towny:town reslist " + town.getName())));
 			
 			// Plots 
@@ -428,7 +428,7 @@ public class TownyFormatter {
 				int value = cache.getOrDefault(type, 0);
 				text = text.append(colourKeyValue(translator.of("status_plot_hover", type.getFormattedName()), String.valueOf(value))).append(Component.newline());
 			}
-			text = text.append(Component.text(translator.of("status_hover_click_for_more")));
+			text = text.append(translator.comp("status_hover_click_for_more"));
 			screen.addComponentOf("plots", colourHoverKey(translator.of("status_plot_string"))
 				.hoverEvent(HoverEvent.showText(text))
 				.clickEvent(ClickEvent.runCommand("/towny:town plots " + town.getName())));
@@ -492,7 +492,7 @@ public class TownyFormatter {
 			
 			String webUrl = formatWebUrl(nation);
 			if (!webUrl.isEmpty())
-				homeComponent = homeComponent.clickEvent(ClickEvent.openUrl(webUrl)).hoverEvent(HoverEvent.showText(Component.text(translator.of("msg_view_on_web"), NamedTextColor.GRAY)));
+				homeComponent = homeComponent.clickEvent(ClickEvent.openUrl(webUrl)).hoverEvent(HoverEvent.showText(translator.comp("msg_view_on_web").color(NamedTextColor.GRAY)));
 
 			screen.addComponentOf("home", homeComponent);
 		}
