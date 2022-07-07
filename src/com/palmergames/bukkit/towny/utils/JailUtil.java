@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
@@ -169,7 +168,7 @@ public class JailUtil {
 	 * @param reason JailReason the player is in jail for.
 	 */
 	private static void sendJailedBookToResident(Player player, JailReason reason) {
-		final Translator translator = Translator.locale(Translation.getLocale(player));
+		final Translator translator = Translator.locale(player);
 		
 		/*
 		 * A nice little book for the not so nice person in jail.

@@ -88,6 +88,45 @@ public class ItemLists {
 	 */
 	public static final ItemLists POTTED_PLANTS = PredicateList.builder().startsWith("POTTED_").build();
 
+	/**
+	 * List of Plants.
+	 */
+	public static final ItemLists PLANTS = ItemLists.of("TALL_GRASS","BROWN_MUSHROOM","RED_MUSHROOM","CACTUS","ALLIUM","AZURE_BLUET","BLUE_ORCHID","CORNFLOWER","DANDELION","LILAC","LILY_OF_THE_VALLEY","ORANGE_TULIP","OXEYE_DAISY","PEONY","PINK_TULIP","POPPY","RED_TULIP","ROSE_BUSH","SUNFLOWER","WHITE_TULIP","WITHER_ROSE","CRIMSON_FUNGUS","LARGE_FERN","PUMPKIN","VINE","TWISTING_VINE_PLANT","WEEPING_VINE_PLANT","NETHER_WART_BLOCK","COCOA","SUGAR_CANE","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF");
+
+	/**
+	 * List of Ores and Valuable Raw Materials.
+	 */
+	public static final ItemLists ORES = PredicateList.builder().endsWith("_ORE").add("RAW_IRON_BLOCK","RAW_GOLD_BLOCK","RAW_COPPER_BLOCK","ANCIENT_DEBRIS","CLAY","GLOWSTONE","GILDED_BLACKSTONE").build();
+
+	/**
+	 * List of Saplings.
+	 */
+	public static final ItemLists SAPLINGS = PredicateList.builder().endsWith("_SAPLING").add("MANGROVE_PROPAGULE","CRIMSON_FUNGUS","WARPED_FUNGUS").build();
+
+	/**
+	 * List of Trees and Leaves.
+	 */
+	public static final ItemLists TREES = PredicateList.builder().endsWith("_WOOD").endsWith("_HYPHAE").notStartsWith("STRIPPED_").endsWith("_LEAVES").endsWith("_LOG").add("CRIMSON_STEM", "WARPED_STEM").build();
+
+	/**
+	 * List of Beds.
+	 */
+	public static final ItemLists BEDS = PredicateList.builder().endsWith("_BED").build();
+
+	/**
+	 * List of Signs.
+	 */
+	public static final ItemLists SIGNS = PredicateList.builder().endsWith("_SIGN").build();
+
+	/**
+	 * List of Torches
+	 */
+	public static final ItemLists TORCHES = PredicateList.builder().endsWith("TORCH").build();
+
+	/**
+	 * List of Skulls and Heads
+	 */
+	public static final ItemLists SKULLS = PredicateList.builder().endsWith("_HEAD").endsWith("_SKULL").build();
 
 	/**
 	 * List of Boats.
@@ -104,6 +143,11 @@ public class ItemLists {
 	 */
 	public static final ItemLists WOOD_DOORS = PredicateList.builder().endsWith("_DOOR").not("IRON_DOOR").build();
 
+	/**
+	 * List of Doors.
+	 */
+	public static final ItemLists DOORS = PredicateList.builder().endsWith("_DOOR").build();
+	
 	/**
 	 * List of Fence Gates.
 	 */

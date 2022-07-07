@@ -16,6 +16,7 @@ import com.palmergames.bukkit.util.BlockUtil;
 import com.palmergames.bukkit.util.ItemLists;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -37,6 +38,8 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.block.CauldronLevelChangeEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -379,7 +382,10 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 	}
 
-	@EventHandler
+	/*
+	 * Used to prevent bonemeal and moss growing into areas it shouldn't.
+	 */
+	@EventHandler(ignoreCancelled = true)
 	public void onBlockFertilize(BlockFertilizeEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -392,5 +398,66 @@ public class TownyBlockListener implements Listener {
 		List<BlockState> allowed = BorderUtil.allowedBlocks(event.getBlocks(), event.getBlock(), event.getPlayer());
 		event.getBlocks().clear();
         event.getBlocks().addAll(allowed);
+	}
+
+	/*
+	 * Used to prevent Sculk Spread.
+	 */
+	@EventHandler(ignoreCancelled = true)
+	public void onSculkSpread(BlockSpreadEvent event) {
+		String sourceName = event.getSource().getType().name();
+		if (!sourceName.startsWith("SCULK"))
+			return;
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
+
+		if (sourceName.equalsIgnoreCase("sculk_catalyst")) {
+			// Check if the sculk is passing across a border with differing owners, allowing
+			// sculk to spread from a town into the wilderness.
+			event.setCancelled(!canBlockMove(event.getSource(), event.getBlock(), true));
+		} else if (TownySettings.isSculkSpreadPreventWhereMobsAreDisabled()) {
+			// Early 1.19 versions of spigot did not correctly report the source as
+			// sculk_catalyst. We use a config setting that will cancel based on
+			// mobs-spawning plot perms.
+			// TODO: remove this when 1.19.1 is out.
+			event.setCancelled(!TownyAPI.getInstance().areMobsEnabled(event.getBlock().getLocation()));	
+		}
+	}
+	
+	@SuppressWarnings("incomplete-switch")
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+	public void onCauldronLevelChange(CauldronLevelChangeEvent event) {
+		if (!(event.getEntity() instanceof Player player))
+			return;
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+			return;
+
+		switch (event.getReason()) {
+			case BOTTLE_EMPTY, BUCKET_EMPTY -> event.setCancelled(!TownyActionEventExecutor.canBuild(player, event.getBlock()));
+			case BUCKET_FILL, BOTTLE_FILL, ARMOR_WASH, SHULKER_WASH, BANNER_WASH -> event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock()));
+			case EXTINGUISH -> {
+				if (!TownyActionEventExecutor.canDestroy(player, event.getBlock())) {
+					event.setCancelled(true);
+					
+					// Extinguish the player instead of letting them burn
+					if (player.getFireTicks() > 0) {
+						player.setFireTicks(0);
+						player.getWorld().playSound(player, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 0.7f, 1.6f);
+					}
+				}
+			}
+		}
 	}
 }

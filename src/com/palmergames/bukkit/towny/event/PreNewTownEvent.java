@@ -15,13 +15,17 @@ public class PreNewTownEvent extends Event implements Cancellable {
 	
 	private final Player player;
 	private final String townName;
+	private final Location spawnLocation;
+	private final WorldCoord worldCoord;
 	private boolean isCancelled = false;
 	private String cancelMessage = "Sorry this event was cancelled";
 	
-	public PreNewTownEvent(Player player, String townName) {
+	public PreNewTownEvent(Player player, String townName, Location spawnLocation) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.player = player;
 		this.townName = townName;
+		this.spawnLocation = spawnLocation;
+		this.worldCoord = WorldCoord.parseWorldCoord(spawnLocation);
 	}
 	
 	@Override
@@ -60,10 +64,10 @@ public class PreNewTownEvent extends Event implements Cancellable {
 	}
 	
 	public Location getTownLocation() {
-		return player.getLocation();
+		return this.spawnLocation;
 	}
 	
 	public WorldCoord getTownWorldCoord() {
-		return WorldCoord.parseWorldCoord(player);
+		return this.worldCoord;
 	}
 }

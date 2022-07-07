@@ -365,9 +365,13 @@ public class TownySettings {
 	public static EnumSet<Material> toMaterialEnumSet(List<String> materialList) {
 		EnumSet<Material> materials = EnumSet.noneOf(Material.class);
 		for (String materialName : materialList) {
-			Material material = Material.matchMaterial(materialName.toUpperCase(Locale.ROOT));
-			if (material != null)
-				materials.add(material);
+			if (ItemLists.GROUPS.contains(materialName.toUpperCase(Locale.ROOT))) {
+				materials.addAll(ItemLists.getGrouping(materialName.toUpperCase(Locale.ROOT)));
+			} else {
+				Material material = Material.matchMaterial(materialName.toUpperCase(Locale.ROOT));
+				if (material != null)
+					materials.add(material);
+			}
 		}
 		
 		return materials;
@@ -1626,6 +1630,16 @@ public class TownySettings {
 	public static SpawnLevel isAllowingPublicTownSpawnTravel() {
 
 		return getSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
+	}
+
+	public static boolean isConfigAllowingPublicTownSpawnTravel() {
+
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
+	}
+	
+	public static boolean isConfigAllowingPublicNationSpawnTravel() {
+
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL);
 	}
 
 	public static List<String> getDisallowedTownSpawnZones() {
@@ -3022,6 +3036,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.PROT_CROP_TRAMPLE);
 	}
 
+	public static boolean isSculkSpreadPreventWhereMobsAreDisabled() {
+		return getBoolean(ConfigNodes.PROT_SCULK_SPREAD);
+	}
+
 	public static boolean isNotificationsAppearingOnBossbar() {
 		return getBoolean(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_ON_BOSSBAR);
 	}
@@ -3131,7 +3149,18 @@ public class TownySettings {
 	}
 	
 	public static boolean isLanguageEnabled(@NotNull String locale) {
-		if (getString(ConfigNodes.ENABLED_LANGUAGES).equals("*"))
+		// Either all languages are enabled or, we auto-enable English: Addons that only
+		// have english translations and/or are missing a translation for the enabled
+		// language(s) on this server need to be able to inject their english
+		// tranlations.
+		if (getString(ConfigNodes.ENABLED_LANGUAGES).equals("*") || locale.equalsIgnoreCase("en_us"))
+			return true;
+		
+		String defaultLocale = getString(ConfigNodes.LANGUAGE);
+		if (defaultLocale.isEmpty())
+			defaultLocale = ConfigNodes.LANGUAGE.getDefault();
+		
+		if (locale.equalsIgnoreCase(defaultLocale))
 			return true;
 
 		List<String> enabledLanguages = new ArrayList<>();

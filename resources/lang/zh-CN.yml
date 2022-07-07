@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.150
+version: 0.151
 language: Chinese
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -1284,9 +1284,9 @@ msg_setup_success: '配置修改成功。'
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s处于重生保护中，无法伤害。'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
+msg_you_have_lost_your_respawn_protection: '你失去了你的重生保护。'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
-msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
+msg_err_cannot_pickup_respawn_protection: '你在受到重生保护时不能拾取物品。'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: '首都：'
@@ -1469,16 +1469,25 @@ msg_removed_x_invalid_outpost_spawns: '删除了%d个无效的前哨出生点。
 msg_your_town_is_bankrupt: '你的城镇破产了，使用 /town deposit {amount} 存入资金。'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
-msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: '你无法使用这个命令，因为你已经是一个城镇的成员。 如果您想要继续，您将必须先使用命令“/t leave”。'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
-msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+msg_a_town_you_are_outlawed_in: '你在这个城镇被认为是法外狂徒。'
 #Message shown when TownyRTP could not find any towns to teleport to.
-msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
+msg_err_could_not_find_any_towns_to_rtp: '找不到任何拥有可出售地块的开放、公共城镇来随机传送。'
 #Message showing payment for RTP.
 msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
 #Used in the town's status screen to display plots
-status_plot_string: 'Plots'
+status_plot_string: '地块'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
+#Usage:
+msg_usage: '用法: %s'
+#Shown in teh bank history books when there are no pages to display
+msg_err_no_pages_to_display: '无可显示的页面。'
+#Added in 0.151
+#Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
+msg_err_nation_unaffiliated: '这个国家不隶属于你所在国。'
+#Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
+msg_err_town_unaffiliated: '这个城镇不隶属于你所在区域。'

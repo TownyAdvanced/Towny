@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.150
+version: 0.151
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu, ElMoha943, Ngzhiwei
 website: 'http://townyadvanced.github.io/'
@@ -51,7 +51,7 @@ nation_help_3: 'Estado del país seleccionado'
 nation_help_4: 'Lista de todos los paises'
 nation_help_5: 'Abandonar tu país'
 nation_help_6: 'Crear un nuevo país'
-nation_help_7: 'List the nation leader commands'
+nation_help_7: 'Lista de comandos del líder nacional'
 nation_help_8: 'Crear nuevo país'
 nation_help_9: 'Lista de los habitantes conectados del país'
 king_help_1: 'Nation Leader Help'
@@ -593,7 +593,7 @@ status_world_forcefire: 'Habilitar fuego:'
 status_world_forceexplosion: 'Habilitar Explosión:'
 status_world_worldmobs: 'Mobs del mundo:'
 status_world_forcetownmobs: 'Forzar MobsDeLaCiudad:'
-status_world_unclaimrevert: 'Revertir Desclaim:'
+status_world_unclaimrevert: 'Revertir Unclaim:'
 status_world_explrevert: 'Revertir Explosiones:'
 status_world_ignoredblocks: 'Bloques ignorados:'
 status_res_taxexempt: 'El staff esta exento de pagar los impuestos de la ciudad.'
@@ -1408,7 +1408,7 @@ tc_player_channel_sound_unmuted: 'El sonido del canal ha sido desensordecido'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Hay un extranjero en tu plot, no puedes cambiar el estado pvp de tu plot!'
 #Added in 0.136
-msg_view_on_web: 'Haz click para ver en la internet.'
+msg_view_on_web: 'Haz click para ver en internet.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6La ciudad %s ha aceptado la union con la ciudad predominante de %s.'
@@ -1416,7 +1416,7 @@ town1_has_merged_with_town2: '&6La ciudad %s ha aceptado la union con la ciudad 
 status_neutrality_cost: 'Costo de la Neutralidad:'
 #Added in 0.138
 #Line 1 of the givebonus warning.
-msg_ptw_warning_1: 'Si has pagado dinero real por estos bonus de claim, por favor: el servidor en el que usted esta jugando esta violando la EULA de Minecraft y tambien la licencia de Towny.'
+msg_ptw_warning_1: 'Si has pagado dinero real por estos bonus de claim, por favor ten en cuenta: el servidor en el que usted esta jugando esta violando la EULA de Minecraft y tambien la licencia de Towny.'
 #Line 2 of the givebonus warning.
 msg_ptw_warning_2: 'El equipo de Towny nunca tuvo la intencion de que los bonus de claim sean comprados con dinero de la vida real.'
 #Line 3 of the givebonus warning.
@@ -1482,3 +1482,12 @@ msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to
 status_plot_string: 'Plots'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
+#Usage:
+msg_usage: 'Usage: %s'
+#Shown in teh bank history books when there are no pages to display
+msg_err_no_pages_to_display: 'No pages to display!'
+#Added in 0.151
+#Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
+msg_err_nation_unaffiliated: 'That nation is not affiliated with you.'
+#Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
+msg_err_town_unaffiliated: 'That town is not affiliated with you.'

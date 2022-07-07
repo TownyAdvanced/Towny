@@ -21,6 +21,22 @@ import com.palmergames.bukkit.towny.object.*;
 import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.SpawnType;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeCache;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.object.TownyPermissionChange;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translator;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
@@ -796,7 +812,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						else 
 							town = resident.getTownOrNull();
 					}
-					TownyMessaging.sendMessage(player, TownyFormatter.getRanksForTown(town, Translation.getLocale(player)));
+					TownyMessaging.sendMessage(player, TownyFormatter.getRanksForTown(town, Translator.locale(player)));
 
 				} else if (split[0].equalsIgnoreCase("add")) {
 
@@ -1198,7 +1214,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			 * Does the command have enough arguments?
 			 */
 			if (split.length < 2)
-				throw new TownyException("Eg: /town outlaw add/remove [name]");
+				throw new TownyException(Translatable.of("msg_usage", "/town outlaw add/remove [name]"));
 
 			if (!admin)
 				resident = getResidentOrThrow(sender.getName());
@@ -1347,15 +1363,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		out.add(Colors.Green + "Type: " 
 				+ Colors.LightGreen + "Player-Owned" + Colors.LightGray + " / "
 				+ Colors.LightBlue  + "ForSale" + Colors.LightGray + " / "
-				+ Colors.Yellow + "Total" + Colors.LightGray + " / "
-				+ Colors.Green + "Daily Revenue");
+				+ Colors.Yellow + "Total" + Colors.LightGray
+				+ (TownyEconomyHandler.isActive() ? " / " + Colors.Green + "Daily Revenue" : ""));
 		for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
 			int residentOwned = typeCache.getNumTownBlocks(type, CacheType.RESIDENTOWNED);
 			out.add(Colors.Green + type.getFormattedName() + ": "
 				+ Colors.LightGreen + residentOwned + Colors.LightGray + " / "
 				+ Colors.LightBlue  + typeCache.getNumTownBlocks(type, CacheType.FORSALE) + Colors.LightGray + " / "
-				+ Colors.Yellow + typeCache.getNumTownBlocks(type, CacheType.ALL) + Colors.LightGray + " / "
-				+ Colors.Green + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)));
+				+ Colors.Yellow + typeCache.getNumTownBlocks(type, CacheType.ALL) + Colors.LightGray
+				+ (TownyEconomyHandler.isActive() ? " / " + Colors.Green + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)) : ""));
 		}
 		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
 		TownyMessaging.sendMessage(sender, out);
@@ -1443,7 +1459,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (!townListTabCompletes.contains(split[i].toLowerCase()))
 						throw new TownyException(Translatable.of("msg_error_invalid_comparator_town"));
 
-					type = ComparatorType.valueOf(split[i].toUpperCase());
+					type = ComparatorType.valueOf(split[i].toUpperCase(Locale.ROOT));
 
 				} else {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_missing_comparator"));
@@ -1540,13 +1556,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (split[0].equalsIgnoreCase("public")) {
-				
-				if (TownySettings.getPeacefulCoolDownTime() > 0 && 
-					!admin && 
-					CooldownTimerTask.hasCooldown(town.getName(), CooldownType.NEUTRALITY) && 
-					!permSource.testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode())) {
-					throw new TownyException(Translatable.of("msg_err_cannot_toggle_neutral_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.NEUTRALITY)));
-				}
 
 				// Fire cancellable event directly before setting the toggle.
 				TownTogglePublicEvent preEvent = new TownTogglePublicEvent(sender, town, admin, choice.orElse(!town.isPublic()));
@@ -1564,14 +1573,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("pvp")) {
 				
+				String uuid = town.getUUID().toString();
 				// If we aren't dealing with an admin using /t toggle pvp:
 				if (!admin) {
 					// Make sure we are allowed to set these permissions.
 					toggleTest(town, StringMgmt.join(split, " "));
 				
 					// Test to see if the pvp cooldown timer is active for the town.
-					if (TownySettings.getPVPCoolDownTime() > 0 && CooldownTimerTask.hasCooldown(town.getName(), CooldownType.PVP) && !permSource.testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode()))					 
-						throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getName(), CooldownType.PVP)));
+					if (TownySettings.getPVPCoolDownTime() > 0 &&
+						CooldownTimerTask.hasCooldown(uuid, CooldownType.PVP) &&
+						!permSource.isTownyAdmin(sender))
+						throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining",
+								CooldownTimerTask.getCooldownRemaining(uuid, CooldownType.PVP)));
 
 					// Test to see if an outsider being inside of the Town would prevent toggling PVP.
 					if (TownySettings.getOutsidersPreventPVPToggle() && choice.orElse(!town.isPVP())) {
@@ -1598,8 +1611,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_pvp", town.getName(), town.isPVP() ? Translatable.of("enabled") : Translatable.of("disabled")));
 				
 				// Add a cooldown to PVP toggling.
-				if (TownySettings.getPVPCoolDownTime() > 0 && !admin && !permSource.testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode()))
-					CooldownTimerTask.addCooldownTimer(town.getName(), CooldownType.PVP);
+				if (TownySettings.getPVPCoolDownTime() > 0 && !admin && !permSource.isTownyAdmin(sender))
+					CooldownTimerTask.addCooldownTimer(uuid, CooldownType.PVP);
 				
 			} else if (split[0].equalsIgnoreCase("explosion")) {
 
@@ -1704,7 +1717,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_toggle_open_on_warning"));
 				
 			} else if (split[0].equalsIgnoreCase("neutral") || split[0].equalsIgnoreCase("peaceful")) {
-				
+
+				String uuid = town.getUUID().toString();
+				if (TownySettings.getPeacefulCoolDownTime() > 0 && 
+					!admin && !permSource.isTownyAdmin(sender) &&
+					CooldownTimerTask.hasCooldown(uuid, CooldownType.NEUTRALITY))
+					throw new TownyException(Translatable.of("msg_err_cannot_toggle_neutral_x_seconds_remaining",
+							CooldownTimerTask.getCooldownRemaining(uuid, CooldownType.NEUTRALITY)));
+
 				boolean peacefulState = choice.orElse(!town.isNeutral());
 				double cost = TownySettings.getTownNeutralityCost();
 				
@@ -1736,6 +1756,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_peaceful", town.isNeutral() ? Translatable.of("enabled") : Translatable.of("disabled")));
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_peaceful", town.isNeutral() ? Translatable.of("enabled") : Translatable.of("disabled")));
+
+				// Add a cooldown to Peacful toggling.
+				if (TownySettings.getPeacefulCoolDownTime() > 0 && !admin && !permSource.isTownyAdmin(sender))
+					CooldownTimerTask.addCooldownTimer(uuid, CooldownType.NEUTRALITY);
 
 			} else if (split[0].equalsIgnoreCase("nationzone")) {
 
@@ -2939,7 +2963,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							return;
 						}
 					
-					if (callPreNewTownEvent(player, finalName))
+					if (callPreNewTownEvent(player, finalName, spawnLocation))
 						return;
 					
 					// Make the resident pay here.
@@ -2972,7 +2996,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				
-				if (callPreNewTownEvent(player, name))
+				if (callPreNewTownEvent(player, name, spawnLocation))
 					return;
 
 				newTown(world, name, resident, key, spawnLocation, player);
@@ -3056,8 +3080,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return town;
 	}
 	
-	private static boolean callPreNewTownEvent(Player player, String townName) {
-		PreNewTownEvent preEvent = new PreNewTownEvent(player, townName);
+	private static boolean callPreNewTownEvent(Player player, String townName, Location spawnLocation) {
+		PreNewTownEvent preEvent = new PreNewTownEvent(player, townName, spawnLocation);
 		Bukkit.getPluginManager().callEvent(preEvent);
 
 		if (preEvent.isCancelled()) {
@@ -3164,29 +3188,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			ignoreWarning = true;
 		}
 		
-
-		Resident resident = getResidentOrThrow(player.getUniqueId());
 		Town town;
 		String notAffordMSG;
 
 		// Set target town and affiliated messages.
 		if (split.length == 0 || outpost || split[0].equals("-ignore")) {
 
-			if (!resident.hasTown()) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_dont_belong_town"));
-				return;
-			}
-
-			town = resident.getTown();
+			town = getTownFromPlayerOrThrow(player);
 			notAffordMSG = Translatable.of("msg_err_cant_afford_tp").forLocale(player);
-
 		} else {
 			// split.length > 1
-			town = TownyUniverse.getInstance().getTown(split[0]);
-			
-			if (town == null)
-				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[0]));
-			
+			town = getTownOrThrow(split[0]);
 			notAffordMSG = Translatable.of("msg_err_cant_afford_tp_town", town.getName()).forLocale(player);
 		}
 			
@@ -3512,7 +3524,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (sender instanceof Player) {
 				// Player
 				if (args.length < 1)
-					throw new TownyException("Usage: /town join [town]");
+					throw new TownyException(Translatable.of("msg_usage", "/town join [town]"));
 
 				Player player = (Player) sender;
 				residentName = player.getName();
@@ -3522,7 +3534,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else {
 				// Console
 				if (args.length < 2)
-					throw new TownyException("Usage: town join [resident] [town]");
+					throw new TownyException(Translatable.of("msg_usage", "town join [resident] [town]"));
 
 				residentName = args[0];
 				townName = args[1];
@@ -3764,14 +3776,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				// Check if it is a perm level first
 				try {
-					TownyPermission.PermLevel permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase());
+					TownyPermission.PermLevel permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
 
 					perm.change(TownyPermissionChange.Action.PERM_LEVEL, b, permLevel);
 				}
 				catch (IllegalArgumentException permLevelException) {
 					// If it is not a perm level, then check if it is a action type
 					try {
-						TownyPermission.ActionType actionType = TownyPermission.ActionType.valueOf(split[0].toUpperCase());
+						TownyPermission.ActionType actionType = TownyPermission.ActionType.valueOf(split[0].toUpperCase(Locale.ROOT));
 
 						perm.change(TownyPermissionChange.Action.ACTION_TYPE, b, actionType);
 					} catch (IllegalArgumentException actionTypeException) {
@@ -3796,8 +3808,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyPermission.ActionType actionType;
 
 				try {
-					permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase());
-					actionType = TownyPermission.ActionType.valueOf(split[1].toUpperCase());
+					permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
+					actionType = TownyPermission.ActionType.valueOf(split[1].toUpperCase(Locale.ROOT));
 				} catch (IllegalArgumentException ignore) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
 					return;
@@ -3985,6 +3997,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 						double finalBlockCost = blockCost;
 						Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> Bukkit.getPluginManager().callEvent(new BoughtChunkEvent(town, finalBlockCost)));
+
 					} catch (NullPointerException e2) {
 						throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
 					}

@@ -415,6 +415,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				cost = resident.getNationOrNull().getTaxes();
 			}
 			return String.valueOf(cost);
+		case "town_creation_cost": // %townyadvanced_town_creation_cost%
+			return String.valueOf(TownySettings.getNewTownPrice());
+		case "nation_creation_cost": // %townyadvanced_nation_creation_cost%
+			return String.valueOf(TownySettings.getNewNationPrice());
 		case "has_town": // %townyadvanced_has_town%
 			return String.valueOf(resident.hasTown());
 		case "has_nation": // %townyadvanced_has_nation%
@@ -518,8 +522,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return TimeMgmt.countdownTimeMinutesRaw(TimeMgmt.townyTime(true));
 		case "time_until_new_day_seconds_raw": // %townyadvanced_time_until_new_day_seconds_raw%
 			return TimeMgmt.countdownTimeSecondsRaw(TimeMgmt.townyTime(true));
-
-		
+		case "number_of_towns_in_server": // %townyadvanced_number_of_towns_in_server%
+			return String.valueOf(TownyUniverse.getInstance().getTowns().size());
+		case "number_of_neutral_towns_in_server": // %townyadvanced_number_of_neutral_towns_in_server%
+			return String.valueOf(TownyUniverse.getInstance().getTowns().stream().filter(t -> t.isNeutral()).count());
 		default:
 			return null;
 		}
@@ -574,6 +580,15 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				return townblock != null ? townblock.getTownOrNull().getBoard() : "";
 			case "player_location_nation_board": // %townyadvanced_player_location_nation_board%
 				return townblock != null ? (townblock.getTownOrNull().hasNation() ? townblock.getTownOrNull().getNationOrNull().getBoard() : "") : "";
+			case "number_of_towns_in_world": // %townyadvanced_number_of_towns_in_world%
+				return String.valueOf(TownyUniverse.getInstance().getTowns().stream()
+						.filter(t -> t.getHomeblockWorld().equals(townblock.getWorld()))
+						.count());
+			case "number_of_neutral_towns_in_world": // %townyadvanced_number_of_neutral_towns_in_world%
+				return String.valueOf(TownyUniverse.getInstance().getTowns().stream()
+						.filter(t -> t.isNeutral())
+						.filter(t -> t.getHomeblockWorld().equals(townblock.getWorld()))
+						.count());
 			default:
 				return null;
 		}

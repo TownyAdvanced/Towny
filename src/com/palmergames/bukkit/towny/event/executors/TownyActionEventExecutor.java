@@ -77,7 +77,7 @@ public class TownyActionEventExecutor {
 		/*
 		 * Send any feedback when the action is denied.
 		 */
-		if (event.isCancelled() && event.getMessage() != null)
+		if (event.isCancelled() && event.getMessage() != null && !event.isMessageSupressed())
 			TownyMessaging.sendErrorMsg(player, event.getMessage());
 
 		return !event.isCancelled();
@@ -196,6 +196,17 @@ public class TownyActionEventExecutor {
 	public static boolean canBuild(Player player, Location loc, Material mat) {
 		TownyBuildEvent event = new TownyBuildEvent(player, loc, mat, getBlock(loc), TownyAPI.getInstance().getTownBlock(loc), false);
 		return isAllowedAction(player, loc, mat, ActionType.BUILD, event);
+	}
+
+	/**
+	 * Can the player build this material at this location?
+	 *
+	 * @param player Player involved in the event.
+	 * @param block The block being built   
+	 * @return true if allowed.
+	 */
+	public static boolean canBuild(Player player, Block block) {
+		return canBuild(player, block.getLocation(), block.getType());
 	}
 
 	/**
