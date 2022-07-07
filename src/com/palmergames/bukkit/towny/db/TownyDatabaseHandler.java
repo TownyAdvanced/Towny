@@ -935,7 +935,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				resident.getAccount().removeAccount();				
 			}
 			// Change account name over.
-			if (TownyEconomyHandler.isActive())
+			if (TownyEconomyHandler.isActive() && resident.getAccountOrNull() != null)
 				resident.getAccount().setName(newName);
 			
 			// Remove the resident from the universe name storage.

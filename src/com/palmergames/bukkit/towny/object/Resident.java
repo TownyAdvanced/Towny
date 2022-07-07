@@ -726,6 +726,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		
 		return account;
 	}
+	
+	public @Nullable Account getAccountOrNull() {
+		return account;
+	}
 
 	@Override
 	public String getFormattedName() {
