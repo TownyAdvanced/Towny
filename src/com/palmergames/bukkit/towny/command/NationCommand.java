@@ -52,7 +52,7 @@ import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
@@ -550,7 +550,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationRank(player, StringMgmt.remFirstArg(split));
 			break;
 		case "ranklist":
-			TownyMessaging.sendMessage(player, TownyFormatter.getRanksForNation(getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)), Translation.getLocale(player)));
+			TownyMessaging.sendMessage(player, TownyFormatter.getRanksForNation(getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)), Translator.locale(player)));
 			break;
 		case "king":
 		case "leader":
@@ -676,7 +676,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			String nationName;
 
 			if (args.length < 1)
-				throw new TownyException("Usage: /nation join [nation]");
+				throw new TownyException(Translatable.of("msg_usage", "/nation join [nation]"));
 
 			nationName = args[0];
 			
@@ -951,7 +951,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (!nationListTabCompletes.contains(split[i].toLowerCase()))
 						throw new TownyException(Translatable.of("msg_error_invalid_comparator_nation"));
 
-					type = ComparatorType.valueOf(split[i].toUpperCase());
+					type = ComparatorType.valueOf(split[i].toUpperCase(Locale.ROOT));
 				} else {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_missing_comparator"));
 					return;
@@ -1534,7 +1534,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private void nationAllyAdd(Player player, Resident resident, Nation nation, String[] names) throws TownyException {
 		if (names.length == 0)
-			throw new TownyException("ex: /n ally add [names]");
+			throw new TownyException(Translatable.of("msg_usage", "/n ally add [names]"));
 		
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		ArrayList<Nation> list = new ArrayList<>();
@@ -1583,7 +1583,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private void nationAllyRemove(Player player, Resident resident, Nation nation, String[] names) throws TownyException {
 		if (names.length == 0)
-			throw new TownyException("ex: /n ally add [names]");
+			throw new TownyException(Translatable.of("msg_usage", "/n ally add [names]"));
 		
 		ArrayList<Nation> list = new ArrayList<>();
 		Nation ally;
@@ -2287,9 +2287,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			String name = (sender instanceof Player) ? ((Player)sender).getName() : "Console"; 
 			try {
 				nation.setTaxes(amount);
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_nation_tax", name, split[1]));
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_nation_tax", name, nation.getTaxes()));
 				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_nation_tax", name, split[1]));
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_nation_tax", name, nation.getTaxes()));
 			} catch (NumberFormatException e) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
 			}
@@ -2530,12 +2530,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (peacefulState && TownyEconomyHandler.isActive() && !nation.getAccount().canPayFromHoldings(cost))
 			throw new TownyException(Translatable.of("msg_nation_cant_peaceful"));
 		
+		String uuid = nation.getUUID().toString();
+		
 		if (TownySettings.getPeacefulCoolDownTime() > 0 && 
 			!admin && 
-			CooldownTimerTask.hasCooldown(nation.getName(), CooldownType.NEUTRALITY) && 
-			!TownyUniverse.getInstance().getPermissionSource().testPermission((Player) sender, PermissionNodes.TOWNY_ADMIN.getNode())) {
-			throw new TownyException(Translatable.of("msg_err_cannot_toggle_neutral_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(nation.getName(), CooldownType.NEUTRALITY)));
-		}
+			CooldownTimerTask.hasCooldown(uuid, CooldownType.NEUTRALITY) && 
+			!TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender))
+			throw new TownyException(Translatable.of("msg_err_cannot_toggle_neutral_x_seconds_remaining",
+					CooldownTimerTask.getCooldownRemaining(uuid, CooldownType.NEUTRALITY)));
 
 		// Fire cancellable event directly before setting the toggle.
 		NationToggleNeutralEvent preEvent = new NationToggleNeutralEvent(sender, nation, admin, peacefulState);
@@ -2554,6 +2556,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		// Send message feedback to the whole nation.
 		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_peaceful").append(nation.isNeutral() ? Colors.Green : Colors.Red + " not").append(" peaceful."));
+		
+		// Add a cooldown to Public toggling.
+		if (TownySettings.getPeacefulCoolDownTime() > 0 && !admin && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender))
+			CooldownTimerTask.addCooldownTimer(uuid, CooldownType.NEUTRALITY);
+
 	}
 
 	private static void nationTogglePublic(CommandSender sender, Nation nation, Optional<Boolean> choice, boolean admin) throws TownyException {

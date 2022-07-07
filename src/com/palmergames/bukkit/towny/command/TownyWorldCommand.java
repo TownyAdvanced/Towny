@@ -406,7 +406,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					try {
 						List<String> mats = new ArrayList<>();
 						for (String s : StringMgmt.remFirstArg(split))
-							mats.add(Material.matchMaterial(s.trim().toUpperCase()).name());
+							mats.add(Material.matchMaterial(s.trim().toUpperCase(Locale.ROOT)).name());
 
 						globalWorld.setUnclaimedZoneIgnore(mats);
 

@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
@@ -81,12 +82,24 @@ public class TownyMessaging {
 	 * @param msg the message to send
 	 */
 	public static void sendErrorMsg(Object sender, String msg) {
-		if (sender != null) {
-			CommandSender toSend = (CommandSender) sender;
+		if (sender != null && sender instanceof CommandSender toSend) {
 			if (toSend instanceof ConsoleCommandSender) {
+				// Console
 				toSend.sendMessage(Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + ChatColor.stripColor(msg));
 			} else {
+				// Player
 				toSend.sendMessage(Translation.of("default_towny_prefix") + ChatColor.RED + msg);
+			}
+		} else if (sender != null && sender instanceof TownyObject townySender) {
+			if (townySender instanceof Resident resident) {
+				// Resident
+				sendMessage(resident, Translation.of("default_towny_prefix") + ChatColor.RED + msg);
+			} else if (townySender instanceof Town town) {
+				// Town
+				sendPrefixedTownMessage(town, ChatColor.RED + msg);
+			} else if (townySender instanceof Nation nation) {
+				// Nation
+				sendPrefixedNationMessage(nation, ChatColor.RED + msg);
 			}
 		} else {
 			sendErrorMsg("Sender cannot be null!");
@@ -363,7 +376,7 @@ public class TownyMessaging {
 	 */
 	
 	public static void sendRequestMessage(CommandSender player, Invite invite) {
-		final Translator translator = Translator.locale(Translation.getLocale(player));
+		final Translator translator = Translator.locale(player);
 		String senderName = invite.getSender().getName();
 		if (invite.getSender() instanceof Town town) { // Town invited Resident
 			String firstline = town.hasNation()
@@ -397,7 +410,7 @@ public class TownyMessaging {
 	 * @param cancelline - Line for sending the cancellation.
 	 */
 	public static void sendInvitationMessage(CommandSender player, String firstline, String confirmline, String cancelline) {
-		final Translator translator = Translator.locale(Translation.getLocale(player));
+		final Translator translator = Translator.locale(player);
 		// Create confirm button based on given params.
 		TextComponent confirmComponent = Component.text("[/" + confirmline + "]")
 			.color(NamedTextColor.GREEN)
@@ -420,7 +433,7 @@ public class TownyMessaging {
 	 * @param confirmation - Confirmation to send to the player.
 	 */
 	public static void sendConfirmationMessage(CommandSender sender, Confirmation confirmation) {
-		final Translator translator = Translator.locale(Translation.getLocale(sender));
+		final Translator translator = Translator.locale(sender);
 		TextComponent firstLineComponent = Component.text(translator.of("confirmation_prefix") + confirmation.getTitle().forLocale(sender));
 		TextComponent lastLineComponent = Component.text(translator.of("this_message_will_expire2", confirmation.getDuration()));
 

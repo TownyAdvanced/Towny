@@ -1911,6 +1911,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				try {
 					Town town = getTownOrThrow(split[1]);
 					@Nullable Resident oldMayor = town.getMayor();
+					boolean deleteOldMayor = oldMayor != null && oldMayor.isNPC();
 					
 					// New mayor is either an NPC resident or a resident by name from split[2].
 					Resident newMayor = split[2].equalsIgnoreCase("npc") 
@@ -1923,9 +1924,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 					// Set the new mayor.
 					town.setMayor(newMayor);
+					
+					// Reset caches and permissions.
+					if (!deleteOldMayor && oldMayor.isOnline()) {
+						Towny.getPlugin().deleteCache(oldMayor);
+						TownyPerms.assignPermissions(oldMayor, oldMayor.getPlayer());
+					}
+					if (newMayor.isOnline() && !newMayor.isNPC())
+						Towny.getPlugin().deleteCache(newMayor);
 
 					// If the previous mayor was an NPC make sure they're removed from the database.
-					if (oldMayor != null && oldMayor.isNPC())
+					if (deleteOldMayor)
 						townyUniverse.getDataSource().removeResident(oldMayor);
 
 					// NPC mayors set their towns to not pay any upkeep.

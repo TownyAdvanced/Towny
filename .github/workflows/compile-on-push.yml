@@ -12,9 +12,9 @@ jobs:
                 java: ['17']
         name: Java (Temurin) ${{ matrix.java }}
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - name: Set up Eclipse Temurin
-              uses: actions/setup-java@v2
+              uses: actions/setup-java@v3
               with:
                   distribution: 'temurin'
                   java-version: ${{ matrix.java }}

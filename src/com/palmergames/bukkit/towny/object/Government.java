@@ -346,7 +346,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		int size = getAccount().getAuditor().getAuditHistory().size();
 
 		if (size < 1) {
-			TownyMessaging.sendErrorMsg(player, "No pages to display!");
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_no_pages_to_display"));
 			return;
 		}
 

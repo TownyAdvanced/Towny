@@ -375,6 +375,7 @@ public class TownyAPI {
      * @return {@link List} of all online {@link Player}s in the specified {@link Town}.
      */
     public List<Player> getOnlinePlayersInTown(Town town){
+
     	return getOnlinePlayers(town);
     }
 
@@ -449,6 +450,21 @@ public class TownyAPI {
 		return !isTownyWorld(location.getWorld()) || !CombatUtil.preventPvP(getTownyWorld(location.getWorld().getName()), getTownBlock(location));
 	}
 
+	/**
+	 * Answers whether Towny has mobs enabled at a location.
+	 * 
+	 * @param location Location to check for mobs status.
+	 * @return true if Towny would let mobs spawn/exist at the given Location, or if
+	 *         Towny is disabled in the Location's world.
+	 * @since 0.98.2.4.
+	 */
+	public boolean areMobsEnabled(Location location) {
+		TownyWorld townyWorld = getTownyWorld(location.getWorld());
+		return !townyWorld.isUsingTowny() || isWilderness(location)
+			? townyWorld.hasWildernessMobs()
+			: townyWorld.isForceTownMobs() || getTownBlock(location).getPermissions().mobs;
+	}
+	
     /**
      * Returns value of usingTowny for the given world.
      * 

@@ -89,11 +89,12 @@ public class TownPreUnclaimEvent extends Event implements Cancellable {
     }
 
     /**
-     * Sets the cancellation message. If no message is passed, the previous listener's message or
-     * the default value will be used.
-     *
-     * @param cancelMessage Message to pass to the event when canceling.
-     */
+	 * Sets the cancellation message. If no message is passed, the previous
+	 * listener's message or the default value will be used. Set this to an empty
+	 * string to prevent message being outputted to the log.
+	 *
+	 * @param cancelMessage Message to pass to the event when canceling.
+	 */
     public void setCancelMessage(String cancelMessage) {
         this.cancelMessage = cancelMessage;
     }

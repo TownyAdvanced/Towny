@@ -7470,3 +7470,97 @@ v0.92.0.11:
   - Fix runCommand for plots button, courtesy of Warriorrrr with PR #5910.
   - Remove the last of the NotRegisteredExceptions from the TownyPlaceholderExpansion.
     - Closes #5911.
+  - Fix error that prevents using town and nation spawn commands when is_public_spawn_cost_affected_by_town_spawncost is set to false.
+    - Closes #5921.
+  - Translate a couple things that weren't translated.
+    - Closes #5920.
+  - Add player name to /t claim withdraw reason, courtesy of Warriorrrr with PR #5922.
+  - Make the mob removal task partially async, courtesy of Warriorrrr with PR #5918.
+  - Add AccountAuditor#getTransactions, courtesy of Warriorrrr with PR #5914.
+  - Handle different Objects which aren't CommandSenders in the main sendErrorMsg method. 
+0.98.1.14:
+  - Adds ability to suppress error messages sent by TownyActionEvents, courtesy of PestoNotPasta with PR #5925.
+0.98.2.0:
+  - Bump version for release.
+0.98.2.1:
+  - Fix potential comod error during mob removal, courtesy of Warriorrrr with #5930.
+    - Closes #5929.
+0.98.2.2:
+  - Add new ItemLists for plants, ores, saplings, trees & leaves.
+  - Add new ItemLists for doors, signs, torches, beds and skulls.
+  - Make Material set loader for TownyWorld's Material lists be able to load ItemLists Groups.
+    - The Config's lists for default new worlds can now be much shorter.
+    - New configs will use the groupings.
+  - Fix CooldownTimerTask not running by default.
+  - Enhance CooldownTimerTask for readability, track town and nation cooldowns by their UUIDs.
+  - Fix CooldownTimerTask for neutrality on nations and towns not starting.
+  - Fix Arena plot setting not checking for a town pvp cooldown.
+  - Fix potential NPE in towny:insidetown luckperms context.
+0.98.2.3:
+  - Add specific denial messages to nation and town spawn when the server has public spawning disabled entirely.
+    - Closes #5940. 
+  - Bump language file to 0.151.
+  - Save a town when it becomes a nation capital, making sure that their potentially-new peaceful/neutral status is also saved.
+    - Closes #5939.
+  - Make respawn anchors respect the deny bed use option, courtesy of Warriorrrr with #5942.
+  - API: add NewDayTaxAndUpkeepPreCollectionEvent.
+    - Cancellable event that can prevent Towny from collecting any tax or upkeep.
+0.98.2.4:
+  - Fix nation upkeep string not being translated on /towny prices.
+    - Closes #5949.
+  - API: Add #getBoundingBox(), #getUpperMostCornerLocation(), #getLowerMostCornerLocation() to WorldCoord.
+  - Update mayor and previous mayor cache and perms when /ta set mayor is used.
+  - Improve accuracy of PreNewTownEvent#getTownLocation, courtesy of Warriorrrr with PR #5952.
+  - Always consider en-US an enabled language in Towny, so that add-on plugins missing languages will still function.
+  - Specify Locale.ROOT when we're using toUpperCase() in a few classes.
+  - Update adventure bukkit to 4.1.1, courtesy of Warriorrrr with PR #5961.
+  - Fix chest boats being breakable/stealable, courtesy of Warriorrrr with PR #5960.
+  - Prevent Sculk spread in areas where Towny removes mobs.
+    - This is likely a temporary measure, until there's a way to determine where the sculk spread is coming from.
+  - New Config Option: protection.prevent_sculk_spread_in_mobs_off_locations
+    - Default: true
+    - When set to true, sculk will not spread into areas which have mobs disabled.
+    - This uses the wildernessmobs world setting when in the Towny wilderness.
+    - This might be a temporary setting until there is an API for sculk spread.
+  - API: Add TownyAPI#areMobsEnabled(Location)
+    - Returns true if Towny would let a mob exist at the location.
+0.98.2.5:
+  - Fix nation tax message using inputed amount instead of what the taxes were actually set to, courtesy of partydev with PR #5974. (First-Time Contributor!)
+  - Fix teleport costs being refunded out of thin air.
+    - Closes #5975.
+  - Fix possible stackoverflow exception for translations, courtesy of Warriorrrr with PR #5976.
+  - Protect the economy plugin being asked for bank balances during listing.
+  - Protect borders from sculk spread, if the server is using a new enough version of spigot, which has fixed the API.
+    - Spigot build June 20, 2022 and onwards will see the smarter sculk-spread logic.
+    - The recently added protection.prevent_sculk_spread_in_mobs_off_locations will have no effect on servers which are up to date.
+0.98.2.6:
+  - API: Add TownPreRuinEvent.
+    - A cancellable event that prevents a town from being into a Ruined status.
+    - When cancelled the town is instead sent to be deleted.
+  - Fix README typo re: 1.19 version number, courtesy of AToska21 with PR #5983. (First-Time Contributor!)
+  - Check if economy is enabled in town plots command, courtesy of Warriorrrr with PR #5985.
+0.98.2.7:
+  - Fix en-US locale not always being loaded into memory.
+  - Hide vanished players in /res list.
+  - Fix TownPreRuinedEvent firing Async.
+  - Handle more kinds of changes to cauldrons, courtesy of Warriorrrr with PR #5990.
+0.98.2.8:
+  - Add simpler, more convenient way to get a Translator from a CommandSender.
+  - Fix killed players that are sent to jail not keeping their So You've Been Jailed book.
+    - Closes #5989.
+  - Fix edge-case scenario where /t outpost PLOTNAME was not working.
+  - New Placeholders: (Closes #5936.)
+    - %townyadvanced_town_creation_cost% - Shows the cost of a town.
+    - %townyadvanced_nation_creation_cost% - Shows the cost of a nation.
+    - %townyadvanced_number_of_towns_in_server% - Shows the number of Towns on the server.
+    - %townyadvanced_number_of_neutral_towns_in_server% - Shows the number of neutral Towns on the server.
+    - %townyadvanced_number_of_towns_in_world% - Shows the number of Towns with homeblocks in the same world as the player.
+    - %townyadvanced_number_of_neutral_towns_in_world% - Shows the number of neutral Towns with homeblocks in the same world as the player.
+  - Fix Javadocs.
+0.98.3.0:
+  - Bump version for release.
+0.98.3.1:
+  - Fix /t outpost generating a array index out of bounds.
+0.98.3.2:
+  - Add Resident#getAccountOrNull, courtesy of Warriorrrr with PR #6006.
+    - Potentially fixing an issue when Accounts are being renamed.

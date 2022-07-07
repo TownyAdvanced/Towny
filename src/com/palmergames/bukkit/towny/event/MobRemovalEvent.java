@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.event;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Cancellable;
@@ -14,7 +13,7 @@ public class MobRemovalEvent extends Event implements Cancellable {
 	private final Entity entity;
 	
 	public MobRemovalEvent(Entity entity) {
-		super(!Bukkit.getServer().isPrimaryThread());
+		super(true);
 		this.entity = entity;
 	}
 	

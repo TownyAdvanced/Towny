@@ -46,6 +46,7 @@ import org.bukkit.Tag;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.RespawnAnchor;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Entity;
@@ -317,7 +318,6 @@ public class TownyPlayerListener implements Listener {
 				if ((ItemLists.AXES.contains(item) && (ItemLists.UNSTRIPPED_WOOD.contains(clickedMat) || ItemLists.WAXED_BLOCKS.contains(clickedMat) || ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))) ||
 					(ItemLists.DYES.contains(item) && Tag.SIGNS.isTagged(clickedMat)) ||
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
-					(ItemLists.FILLED_CAULDRONS.contains(clickedMat) && item == Material.BUCKET) ||
 					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
 
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, loc, clickedMat));
@@ -347,11 +347,6 @@ public class TownyPlayerListener implements Listener {
 				if (item == Material.ARMOR_STAND || item == Material.END_CRYSTAL) 
 					event.setCancelled(!TownyActionEventExecutor.canBuild(player, clickedBlock.getRelative(event.getBlockFace()).getLocation(), item));
 
-				/*
-				 * Test cauldron filling with a build test.
-				 */
-				if (ItemLists.CAULDRON_FILLABLE.contains(item) && clickedMat == Material.CAULDRON)
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
 			}
 		}
 		
@@ -413,9 +408,9 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Catches respawn anchors blowing up and allows us to track their explosions.
 			 */
-			if (block.getType().name().equals("RESPAWN_ANCHOR")) {
-				org.bukkit.block.data.type.RespawnAnchor anchor = ((org.bukkit.block.data.type.RespawnAnchor) block.getBlockData());
-				if (anchor.getCharges() == 4)
+			if (block.getType() == Material.RESPAWN_ANCHOR && event.getAction() == Action.RIGHT_CLICK_BLOCK && !block.getWorld().isRespawnAnchorWorks()) {
+				RespawnAnchor anchor = ((RespawnAnchor) block.getBlockData());
+				if (anchor.getCharges() > 0)
 					BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(player, blockLoc, null, block.getType()));
 				return;
 			}
@@ -440,12 +435,11 @@ public class TownyPlayerListener implements Listener {
 			}
 			
 			/*
-			 * Prevents setting the spawn point of the player using beds, 
+			 * Prevents setting the spawn point of the player using beds or respawn anchors, 
 			 * except in allowed plots (personally-owned and Inns)
 			 */
-			if (Tag.BEDS.isTagged(block.getType()) && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-				if (!TownySettings.getBedUse())
-					return;
+			if (TownySettings.getBedUse() && event.getAction() == Action.RIGHT_CLICK_BLOCK
+				&& (Tag.BEDS.isTagged(block.getType()) || disallowedAnchorClick(event, block))) {
 
 				boolean isOwner = false;
 				boolean isInnPlot = false;
@@ -483,6 +477,20 @@ public class TownyPlayerListener implements Listener {
 				}
 			}
 		}
+	}
+
+	/*
+	 * This method will stop a player Right Clicking on a respawn anchor if:
+	 * - The world is an anchor-allowed world (the nether) and,
+	 * - The Block is an anchor and,
+	 * - The Anchor has charges and,
+	 * - The Item in their hand is nothing or (not-glowstone or the charges are full.) 
+	 */
+	private boolean disallowedAnchorClick(PlayerInteractEvent event, Block block) {
+		return block.getWorld().isRespawnAnchorWorks() 
+			&& block.getBlockData() instanceof RespawnAnchor anchor 
+			&& anchor.getCharges() > 0 
+			&& (event.getItem() == null || (event.getItem().getType() != Material.GLOWSTONE || anchor.getCharges() >= anchor.getMaximumCharges()));
 	}
 
 	/*
