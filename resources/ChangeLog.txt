@@ -7561,3 +7561,6 @@ v0.92.0.11:
   - Bump version for release.
 0.98.3.1:
   - Fix /t outpost generating a array index out of bounds.
+0.98.3.2:
+  - Add Resident#getAccountOrNull, courtesy of Warriorrrr with PR #6006.
+    - Potentially fixing an issue when Accounts are being renamed.
