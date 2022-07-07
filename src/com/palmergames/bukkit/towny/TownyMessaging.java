@@ -191,7 +191,7 @@ public class TownyMessaging {
 	 * @param line   the String to send
 	 */
 	public static void sendMessage(Object sender, String line) {
-		sendMessage(sender, TownyComponents.miniMessage(Colors.translateColorCodes(line)));
+		sendComponent(sender, TownyComponents.miniMessage(Colors.translateColorCodes(line)));
 	}
 	
 	/**
@@ -219,20 +219,20 @@ public class TownyMessaging {
 	 * Send a message to a player with no Towny prefix.
 	 *
 	 * @param sendTo the Object to send the message to.
-	 * @param message the component to send
+	 * @param comp the component to send
 	 */
-	public static void sendMessage(Object sendTo, Component message) {
-		if (sendTo == null || TownyComponents.plain(message).isEmpty())
+	public static void sendComponent(Object sendTo, Component comp) {
+		if (sendTo == null || TownyComponents.plain(comp).isEmpty())
 			return;
 
 		if (sendTo instanceof Player player) {
-			Towny.getAdventure().player(player).sendMessage(message);
+			Towny.getAdventure().player(player).sendMessage(comp);
 		} else if (sendTo instanceof CommandSender commandSender) {
-			Towny.getAdventure().sender(commandSender).sendMessage(Colors.strip(message));
+			Towny.getAdventure().sender(commandSender).sendMessage(Colors.strip(comp));
 		} else if (sendTo instanceof Resident resident) {
 			Player p = TownyAPI.getInstance().getPlayer(resident);
 			if (p != null)
-				Towny.getAdventure().player(p).sendMessage(message);
+				Towny.getAdventure().player(p).sendMessage(comp);
 		}
 	}
 	
@@ -244,7 +244,7 @@ public class TownyMessaging {
 	 */
 	public static void sendComponents(Object sendTo, List<Component> components) {
 		for (Component component : components)
-			sendMessage(sendTo, component);
+			sendComponent(sendTo, component);
 	}
 
 	/**

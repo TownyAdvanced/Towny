@@ -595,7 +595,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private void nationTownList(Player player, Nation nation) {
 		TownyMessaging.sendMessage(player, ChatTools.formatTitle(nation.getName() + " " + Translatable.of("town_plu").forLocale(player)));
-		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_towns").forLocale(player), new ArrayList<>(nation.getTowns())));
+		TownyMessaging.sendComponent(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_towns").forLocale(player), new ArrayList<>(nation.getTowns())));
 	}
 
 	private void nationAllyList(Player player, Nation nation) throws TownyException {
@@ -603,7 +603,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_error_nation_has_no_allies")); 
 
 		TownyMessaging.sendMessage(player, ChatTools.formatTitle(nation.getName() + " " + Translatable.of("status_nation_allies").forLocale(player)));
-		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_allies").forLocale(player), new ArrayList<>(nation.getAllies())));
+		TownyMessaging.sendComponent(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_allies").forLocale(player), new ArrayList<>(nation.getAllies())));
 	}
 
 	private void nationEnemyList(Player player, Nation nation) throws TownyException {
@@ -611,7 +611,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_error_nation_has_no_enemies")); 
 
 		TownyMessaging.sendMessage(player, ChatTools.formatTitle(nation.getName() + " " + Translatable.of("status_nation_enemies").forLocale(player)));
-		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_enemies").forLocale(player), new ArrayList<>(nation.getEnemies())));
+		TownyMessaging.sendComponent(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_enemies").forLocale(player), new ArrayList<>(nation.getEnemies())));
 	}
 
 	private void parseNationJoin(Player player, String[] args) {
@@ -724,13 +724,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			Nation nation = getNationOrThrow(split[0]);
 			List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, nation);
 			if (onlineResidents.size() > 0 ) {
-				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_nation_online").forLocale(player), nation, player));
+				TownyMessaging.sendComponent(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_nation_online").forLocale(player), nation, player));
 			} else {
 				TownyMessaging.sendMessage(player, Colors.White +  "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_nation_online").forLocale(player) + ": " + nation));
 			}
 		} else {
 			Nation nation = getNationFromPlayerOrThrow(player);
-			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_nation_online").forLocale(player), nation, player));
+			TownyMessaging.sendComponent(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_nation_online").forLocale(player), nation, player));
 		}
 	}
 

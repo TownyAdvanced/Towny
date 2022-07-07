@@ -956,7 +956,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_town_has_no_enemies")); 
 		else {
 			TownyMessaging.sendMessage(player, ChatTools.formatTitle(town.getName() + " " + Translatable.of("status_nation_enemies").forLocale(player)));
-			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_enemies").forLocale(player), new ArrayList<>(town.getEnemies())));
+			TownyMessaging.sendComponent(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_enemies").forLocale(player), new ArrayList<>(town.getEnemies())));
 		}
 	}
 
@@ -977,7 +977,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_town_has_no_allies")); 
 		else {
 			TownyMessaging.sendMessage(player, ChatTools.formatTitle(town.getName() + " " + Translatable.of("status_nation_allies").forLocale(player)));
-			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_allies").forLocale(player), new ArrayList<>(town.getAllies())));
+			TownyMessaging.sendComponent(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_allies").forLocale(player), new ArrayList<>(town.getAllies())));
 		}
 	}
 
@@ -1373,7 +1373,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, town);
 			if (onlineResidents.size() > 0) {
-				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
+				TownyMessaging.sendComponent(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
 			} else {
 				TownyMessaging.sendMessage(player, Colors.White + "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_town_online").forLocale(player) + ": " + town));
 			}
@@ -1381,7 +1381,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				Resident resident = getResidentOrThrow(player.getUniqueId());
 				Town town = resident.getTown();
-				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
+				TownyMessaging.sendComponent(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
 			} catch (NotRegisteredException x) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_dont_belong_town"));
 			}
@@ -4339,7 +4339,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if (town != null) {
 			TownyMessaging.sendMessage(sender, ChatTools.formatTitle(town.getName() + " " + Translatable.of("res_list").forLocale(sender)));
-			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("res_list").forLocale(sender), new ArrayList<>(town.getResidents())));
+			TownyMessaging.sendComponent(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("res_list").forLocale(sender), new ArrayList<>(town.getResidents())));
 		} else 
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_specify_name"));
 	}
@@ -4403,7 +4403,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (town != null)
-			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("outlaws").forLocale(sender), new ArrayList<>(town.getOutlaws())));
+			TownyMessaging.sendComponent(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("outlaws").forLocale(sender), new ArrayList<>(town.getOutlaws())));
 		else 
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_name"));
 	}
