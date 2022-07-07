@@ -497,7 +497,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationRank(player, StringMgmt.remFirstArg(split));
 			break;
 		case "ranklist":
-			TownyMessaging.sendMessage(player, TownyFormatter.getRanksForNation(getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)), Translator.locale(player)));
+			TownyMessaging.sendComponents(player, TownyFormatter.getRanksForNation(getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)), Translator.locale(player)));
 			break;
 		case "king":
 		case "leader":

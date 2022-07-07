@@ -1,5 +1,8 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.utils.TownyComponents;
+import net.kyori.adventure.text.Component;
+
 import java.util.Locale;
 
 import org.bukkit.command.CommandSender;
@@ -25,5 +28,13 @@ public class Translator {
 	
 	public String of(String key, Object... args) {
 		return Translation.of(key, locale, args);
+	}
+	
+	public Component comp(String key) {
+		return TownyComponents.miniMessageAndColour(of(key));
+	}
+	
+	public Component comp(String key, Object... args) {
+		return TownyComponents.miniMessageAndColour(of(key, args));
 	}
 }

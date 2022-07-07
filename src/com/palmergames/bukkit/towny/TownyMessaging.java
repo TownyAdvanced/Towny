@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -39,8 +40,6 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,21 +84,21 @@ public class TownyMessaging {
 		if (sender != null && sender instanceof CommandSender toSend) {
 			if (toSend instanceof ConsoleCommandSender) {
 				// Console
-				toSend.sendMessage(Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + ChatColor.stripColor(msg));
+				sendMessage(toSend, Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + ChatColor.stripColor(msg));
 			} else {
 				// Player
-				toSend.sendMessage(Translation.of("default_towny_prefix") + ChatColor.RED + msg);
+				sendMessage(toSend, Translation.of("default_towny_prefix") + Colors.RED + msg);
 			}
 		} else if (sender != null && sender instanceof TownyObject townySender) {
 			if (townySender instanceof Resident resident) {
 				// Resident
-				sendMessage(resident, Translation.of("default_towny_prefix") + ChatColor.RED + msg);
+				sendMessage(resident, Translation.of("default_towny_prefix") + Colors.RED + msg);
 			} else if (townySender instanceof Town town) {
 				// Town
-				sendPrefixedTownMessage(town, ChatColor.RED + msg);
+				sendPrefixedTownMessage(town, Colors.RED + msg);
 			} else if (townySender instanceof Nation nation) {
 				// Nation
-				sendPrefixedNationMessage(nation, ChatColor.RED + msg);
+				sendPrefixedNationMessage(nation, Colors.RED + msg);
 			}
 		} else {
 			sendErrorMsg("Sender cannot be null!");
@@ -134,11 +133,11 @@ public class TownyMessaging {
 			return;
 		
 		if (sender instanceof Player p) {
-			p.sendMessage(Translatable.of("default_towny_prefix").forLocale(p) + ChatColor.GREEN + msg);
+			sendMessage(p, Translatable.of("default_towny_prefix").forLocale(p) + Colors.GREEN + msg);
 		} else if (sender instanceof ConsoleCommandSender) {
-			sender.sendMessage(Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + ChatColor.stripColor(msg));
+			sendMessage(sender, Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + ChatColor.stripColor(msg));
 		} else {
-			sender.sendMessage(Translatable.of("default_towny_prefix").forLocale(sender) + ChatColor.GREEN + msg);
+			sendMessage(sender, Translatable.of("default_towny_prefix").forLocale(sender) + Colors.GREEN + msg);
 		}
 		
 		sendDevMsg(msg);
@@ -154,7 +153,7 @@ public class TownyMessaging {
 		if (TownySettings.isDevMode()) {
 			Player townyDev = BukkitTools.getPlayer(TownySettings.getDevName());
 			if (townyDev != null)
-				townyDev.sendMessage(Translatable.of("default_towny_prefix").forLocale(townyDev) + " DevMode: " + ChatColor.RED + msg);
+				sendMessage(townyDev, Translatable.of("default_towny_prefix").forLocale(townyDev) + " DevMode: " + Colors.RED + msg);
 		}
 	}
 
@@ -183,8 +182,20 @@ public class TownyMessaging {
 		sendDevMsg(msg);
 	}
 
+
 	/**
-	 * Send a message to a player with no Towny prefix.
+	 * Send a message to an Audience. This is the main end point for all String
+	 * based messages before they are converted to Components for MiniMessage.
+	 *
+	 * @param sender the Object sending the message
+	 * @param line   the String to send
+	 */
+	public static void sendMessage(Object sender, String line) {
+		sendMessage(sender, TownyComponents.miniMessage(Colors.translateColorCodes(line)));
+	}
+	
+	/**
+	 * Send a multi-line message.
 	 *
 	 * @param sender the Object sending the message
 	 * @param lines List of strings to send
@@ -194,28 +205,7 @@ public class TownyMessaging {
 	}
 
 	/**
-	 * Send a message to a player with no Towny prefix.
-	 *
-	 * @param sender the Object sending the message
-	 * @param line the String to send
-	 */
-	public static void sendMessage(Object sender, String line) {
-		if (line.isEmpty())
-			return;
-		
-		if (sender instanceof Player player) {
-			player.sendMessage(line);
-		} else if (sender instanceof CommandSender commandSender) {
-			commandSender.sendMessage(Colors.strip(line));
-		} else if (sender instanceof Resident resident) {
-			Player p = TownyAPI.getInstance().getPlayer(resident);
-			if (p != null)
-				p.sendMessage(line);
-		}
-	}
-
-	/**
-	 * Send a message to a player with no Towny prefix.
+	 * Send a multi-line message.
 	 *
 	 * @param sender the Object sending the message
 	 * @param lines String array to send as message.
@@ -223,6 +213,38 @@ public class TownyMessaging {
 	public static void sendMessage(Object sender, String[] lines) {
 		for (String line : lines)
 			sendMessage(sender, line);
+	}
+	
+	/**
+	 * Send a message to a player with no Towny prefix.
+	 *
+	 * @param sendTo the Object to send the message to.
+	 * @param message the component to send
+	 */
+	public static void sendMessage(Object sendTo, Component message) {
+		if (sendTo == null || TownyComponents.plain(message).isEmpty())
+			return;
+
+		if (sendTo instanceof Player player) {
+			Towny.getAdventure().player(player).sendMessage(message);
+		} else if (sendTo instanceof CommandSender commandSender) {
+			Towny.getAdventure().sender(commandSender).sendMessage(Colors.strip(message));
+		} else if (sendTo instanceof Resident resident) {
+			Player p = TownyAPI.getInstance().getPlayer(resident);
+			if (p != null)
+				Towny.getAdventure().player(p).sendMessage(message);
+		}
+	}
+	
+	/**
+	 * Send a message to a player with no Towny prefix.
+	 *
+	 * @param sendTo the Object to send the message to.
+	 * @param components the component to send
+	 */
+	public static void sendComponents(Object sendTo, List<Component> components) {
+		for (Component component : components)
+			sendMessage(sendTo, component);
 	}
 
 	/**
@@ -235,7 +257,7 @@ public class TownyMessaging {
 		LOGGER.info(ChatTools.stripColour("[Global Message] " + line));
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
-				player.sendMessage(Translation.of("default_towny_prefix") + line);
+				sendMessage(player, Translation.of("default_towny_prefix") + line);
 		}
 	}
 	
@@ -249,8 +271,8 @@ public class TownyMessaging {
 		LOGGER.info(ChatTools.stripColour("[Global Message] " + line));
 		for (Player player : BukkitTools.getOnlinePlayers()) {
 			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
-				player.sendMessage(line);
-		}		
+				sendMessage(player, line);
+		}
 	}
 
 	/*
@@ -269,7 +291,7 @@ public class TownyMessaging {
 	public static void sendPrefixedTownMessage(Town town, String line) {
 		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			player.sendMessage(Translation.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())) + line);
+			sendMessage(player, Translation.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())) + line);
 	}
 
 	/**
@@ -282,7 +304,7 @@ public class TownyMessaging {
 	public static void sendPrefixedNationMessage(Nation nation, String line) {
 		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + line));
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			player.sendMessage(Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())) + line);
+			sendMessage(player, Translation.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())) + line);
 	}
 
 	/*
@@ -299,7 +321,7 @@ public class TownyMessaging {
 		String tbColor1 = Translation.of("townboard_message_colour_1");
 		String tbColor2 = Translation.of("townboard_message_colour_2");
 		
-		player.sendMessage(tbColor1 + "[" + StringMgmt.remUnderscore(town.getName()) + "] " + tbColor2 + town.getBoard());
+		sendMessage(player, tbColor1 + "[" + StringMgmt.remUnderscore(town.getName()) + "] " + tbColor2 + town.getBoard());
 	}
 	
 	/**
@@ -312,7 +334,7 @@ public class TownyMessaging {
 		String nbColor1 = Translation.of("nationboard_message_colour_1");
 		String nbColor2 = Translation.of("nationboard_message_colour_2");
 
-		sender.sendMessage(nbColor1 + "[" + StringMgmt.remUnderscore(nation.getName()) + "] " + nbColor2 + nation.getBoard());
+		sendMessage(sender, nbColor1 + "[" + StringMgmt.remUnderscore(nation.getName()) + "] " + nbColor2 + nation.getBoard());
 	}
 	
 	/*
@@ -832,9 +854,7 @@ public class TownyMessaging {
 	 */
 	
 	public static void sendStatusScreen(CommandSender sender, StatusScreen screen) {
-		Audience audience = Towny.getAdventure().sender(sender);
-		for (Component string : screen.getFormattedStatusScreen())
-			audience.sendMessage(string);
+		Towny.getAdventure().sender(sender).sendMessage(screen.getFormattedStatusScreen());
 	}
 
 	/*
@@ -847,16 +867,15 @@ public class TownyMessaging {
 	 * @param message {@link String} message which will be made into a {@link TextComponent} and shown in the ActioBar.
 	 */
 	public static void sendActionBarMessageToPlayer(Player player, String message) {
-		TextComponent component = LegacyComponentSerializer.builder().build().deserialize(message);
-		sendActionBarMessageToPlayer(player, component);
+		sendActionBarMessageToPlayer(player, TownyComponents.miniMessage(message));
 	}
 	
 	/**
 	 * Send an ActionBar message to the given player.
 	 * @param player {@link Player} who will be shown the message.
-	 * @param component {@link TextComponent} message which will be shown to the player.
+	 * @param component {@link Component} message which will be shown to the player.
 	 */
-	public static void sendActionBarMessageToPlayer(Player player, TextComponent component) {
+	public static void sendActionBarMessageToPlayer(Player player, Component component) {
 		Audience audience = Towny.getAdventure().player(player);
 		audience.sendActionBar(component); 
 	}
@@ -866,8 +885,7 @@ public class TownyMessaging {
 	 */
 	
 	public static void sendBossBarMessageToPlayer(Player player, String message, float progress, Color color, Overlay overlay) {
-		Component component = LegacyComponentSerializer.builder().build().deserialize(message);
-		sendBossBarMessageToPlayer(player, component, progress, color, overlay);
+		sendBossBarMessageToPlayer(player, TownyComponents.miniMessage(message), progress, color, overlay);
 	}
 	
 	public static void sendBossBarMessageToPlayer(Player player, Component component, float progress, Color color, Overlay overlay) {

@@ -100,7 +100,7 @@ public final class Translation {
 				return key;
 			}
 		}
-		return Colors.translateColorCodes(data);
+		return data;
 	}
 
 	/**
@@ -129,7 +129,7 @@ public final class Translation {
 			return of(key);
 		}
 
-		return Colors.translateColorCodes(data);
+		return data;
 	}
 	
 	/**

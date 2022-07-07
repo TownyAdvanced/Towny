@@ -278,7 +278,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				else
 					res = getResidentOrThrow(player.getUniqueId());
 				
-				TownyMessaging.sendMessage(player, TownyFormatter.getTaxStatus(res, Translator.locale(player)));
+				TownyMessaging.sendComponents(player, TownyFormatter.getTaxStatus(res, Translator.locale(player)));
 
 			} else if (split[0].equalsIgnoreCase("jail")) {
 

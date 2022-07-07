@@ -796,7 +796,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						else 
 							town = resident.getTownOrNull();
 					}
-					TownyMessaging.sendMessage(player, TownyFormatter.getRanksForTown(town, Translator.locale(player)));
+					TownyMessaging.sendComponents(player, TownyFormatter.getRanksForTown(town, Translator.locale(player)));
 
 				} else if (split[0].equalsIgnoreCase("add")) {
 
