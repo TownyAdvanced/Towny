@@ -49,22 +49,22 @@ public class ChunkNotification {
 	 */
 	public static void loadFormatStrings() {
 
-		notificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_FORMAT));
-		notificationSplitter = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_SPLITTER));
-		areaWildernessNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_WILDERNESS));
-		areaWildernessPvPNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_WILDERNESS_PVP));
-		areaTownNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_TOWN));
+		notificationFormat = TownySettings.getString(ConfigNodes.NOTIFICATION_FORMAT);
+		notificationSplitter = TownySettings.getString(ConfigNodes.NOTIFICATION_SPLITTER);
+		areaWildernessNotificationFormat = TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_WILDERNESS);
+		areaWildernessPvPNotificationFormat = TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_WILDERNESS_PVP);
+		areaTownNotificationFormat = TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_TOWN);
 		areaTownPvPNotificationFormat = TownySettings.getString(ConfigNodes.NOTIFICATION_AREA_TOWN_PVP);
-		ownerNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_OWNER));
-		noOwnerNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_NO_OWNER));
-		plotNotificationSplitter = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_SPLITTER));
-		plotNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_FORMAT));
-		homeBlockNotification = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_HOMEBLOCK));
-		outpostBlockNotification = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_OUTPOSTBLOCK));
-		forSaleNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_FORSALE));
-		notForSaleNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_NOTFORSALE));
-		plotTypeNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_TYPE));
-		groupNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_GROUP));
+		ownerNotificationFormat = TownySettings.getString(ConfigNodes.NOTIFICATION_OWNER);
+		noOwnerNotificationFormat = TownySettings.getString(ConfigNodes.NOTIFICATION_NO_OWNER);
+		plotNotificationSplitter = TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_SPLITTER);
+		plotNotificationFormat = TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_FORMAT);
+		homeBlockNotification = TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_HOMEBLOCK);
+		outpostBlockNotification = TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_OUTPOSTBLOCK);
+		forSaleNotificationFormat = TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_FORSALE);
+		notForSaleNotificationFormat = TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_NOTFORSALE);
+		plotTypeNotificationFormat = TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_TYPE);
+		groupNotificationFormat = TownySettings.getString(ConfigNodes.NOTIFICATION_GROUP);
 	}
 
 	WorldCoord from, to;
