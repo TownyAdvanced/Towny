@@ -1284,9 +1284,9 @@ msg_setup_success: 'Ändrade konfigurationsvärdena till dina nya värden.'
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s spawnade nyligen och kan ej skadas.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
+msg_you_have_lost_your_respawn_protection: 'Du har förlorat ditt återupplivningsskydd.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
-msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
+msg_err_cannot_pickup_respawn_protection: 'Du kan inte plocka upp föremål när du är under återupplivningsskydd.'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: 'Huvudstad:'
@@ -1469,25 +1469,25 @@ msg_removed_x_invalid_outpost_spawns: 'Tog bort %d ogiltiga utpostspawnar.'
 msg_your_town_is_bankrupt: 'Din stad är i konkurs, ge pengar till din bank genom genom att använda /town deposit {amount}.'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
-msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Du kan inte använda detta kommando, eftersom du redan är medlem i en stad. Om du vill fortsätta måste du använda ''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
-msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+msg_a_town_you_are_outlawed_in: 'en stad du inte är välkommen i.'
 #Message shown when TownyRTP could not find any towns to teleport to.
-msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
+msg_err_could_not_find_any_towns_to_rtp: 'Kunde inte hitta någon öppen, offentlig stad med tomter till salu (som du har råd med) att rtp till.'
 #Message showing payment for RTP.
-msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+msg_cost_spawn_rtp: '&bDu debiterades %s för att teleportera till en slumpmässig tomt som är till salu.'
 #Message shown to a player when they use the town rtp command.
-msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+msg_you_are_about_to_be_teleported_to_a_plot: 'Du håller på att teleporteras till en tomt som är till salu i %s som låter dig bosätta dig. Använd ''/plot claim'' för att göra anspråk på din tomt när du anländer.'
 #Used in the town's status screen to display plots
-status_plot_string: 'Plots'
+status_plot_string: 'Tomter'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
 #Usage:
-msg_usage: 'Usage: %s'
+msg_usage: 'Användning: %s'
 #Shown in teh bank history books when there are no pages to display
-msg_err_no_pages_to_display: 'No pages to display!'
+msg_err_no_pages_to_display: 'Inga sidor att visa!'
 #Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
-msg_err_nation_unaffiliated: 'That nation is not affiliated with you.'
+msg_err_nation_unaffiliated: 'Den nationen är inte kopplad till dig.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
-msg_err_town_unaffiliated: 'That town is not affiliated with you.'
+msg_err_town_unaffiliated: 'Den staden är inte kopplad till dig.'
