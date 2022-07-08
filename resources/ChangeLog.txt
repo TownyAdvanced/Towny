@@ -7564,3 +7564,6 @@ v0.92.0.11:
 0.98.3.2:
   - Add Resident#getAccountOrNull, courtesy of Warriorrrr with PR #6006.
     - Potentially fixing an issue when Accounts are being renamed.
+  - API: Add ChunkNotificationEvent
+    - Cancellable event that lets other plugins alter Towny's ChunkNotifications.
+    - Closes #6009.

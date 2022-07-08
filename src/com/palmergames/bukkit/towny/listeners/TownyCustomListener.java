@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.event.BedExplodeEvent;
+import com.palmergames.bukkit.towny.event.ChunkNotificationEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
@@ -86,6 +87,12 @@ public class TownyCustomListener implements Listener {
 				e.printStackTrace();
 			}
 			if (msg == null)
+				return;
+
+			ChunkNotificationEvent cne = new ChunkNotificationEvent(player, msg, to, from);
+			Bukkit.getPluginManager().callEvent(cne);
+			msg = cne.getMessage();
+			if (cne.isCancelled() || msg == null || msg.isEmpty())
 				return;
 
 			sendChunkNoticiation(player, msg);
