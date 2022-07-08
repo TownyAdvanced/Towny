@@ -52,6 +52,7 @@ import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
@@ -719,18 +720,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseNationOnlineCommand(Player player, String[] split) throws TownyException {
-
+		final Translator translator = Translator.locale(Translation.getLocale(player));
 		if (split.length > 0) {
 			Nation nation = getNationOrThrow(split[0]);
 			List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, nation);
 			if (onlineResidents.size() > 0 ) {
-				TownyMessaging.sendComponent(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_nation_online").forLocale(player), nation, player));
+				TownyMessaging.sendComponent(player, TownyFormatter.getFormattedOnlineResidents(translator.of("msg_nation_online"), nation, player));
 			} else {
-				TownyMessaging.sendMessage(player, Colors.White +  "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_nation_online").forLocale(player) + ": " + nation));
+				TownyMessaging.sendMsg(player, translator.of("msg_no_one_is_online_in_x", nation));
 			}
 		} else {
 			Nation nation = getNationFromPlayerOrThrow(player);
-			TownyMessaging.sendComponent(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_nation_online").forLocale(player), nation, player));
+			TownyMessaging.sendComponent(player, TownyFormatter.getFormattedOnlineResidents(translator.of("msg_nation_online"), nation, player));
 		}
 	}
 
@@ -2500,7 +2501,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation.setNeutral(peacefulState);
 
 		// Send message feedback to the whole nation.
-		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_peaceful").append(nation.isNeutral() ? Colors.Green : Colors.Red + " not").append(" peaceful."));
+		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_peaceful").append(nation.isNeutral() ? Colors.DARK_GREEN : Colors.DARK_RED+ " not").append(" peaceful."));
 		
 		// Add a cooldown to Public toggling.
 		if (TownySettings.getPeacefulCoolDownTime() > 0 && !admin && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender))

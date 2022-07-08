@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownsCalc
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
@@ -76,44 +77,44 @@ public class ComparatorCaches {
 		towns.sort((Comparator<? super Town>) compType.getComparator());
 		
 		for (Town town : towns) {
-			TextComponent townName = Component.text(Colors.LightBlue + StringMgmt.remUnderscore(town.getName()))
+			TextComponent townName = Component.text(StringMgmt.remUnderscore(town.getName()), NamedTextColor.AQUA)
 					.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
 				
 			String slug = "";
 			switch (compType) {
 			case BALANCE:
-				slug = Colors.LightBlue + "(" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance()) + ")";
+				slug = Colors.AQUA + "(" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance()) + ")";
 				break;
 			case TOWNBLOCKS:
-				slug = Colors.LightBlue + "(" + town.getTownBlocks().size() + ")";
+				slug = Colors.AQUA + "(" + town.getTownBlocks().size() + ")";
 				break;
 			case RUINED:
-				slug = Colors.LightBlue + "(" + town.getResidents().size() + ") " + (town.isRuined() ? Translation.of("msg_ruined"):"");
+				slug = Colors.AQUA + "(" + town.getResidents().size() + ") " + (town.isRuined() ? Translation.of("msg_ruined"):"");
 				break;
 			case BANKRUPT:
-				slug = Colors.LightBlue + "(" + town.getResidents().size() + ") " + (town.isBankrupt() ? Translation.of("msg_bankrupt"):"");
+				slug = Colors.AQUA + "(" + town.getResidents().size() + ") " + (town.isBankrupt() ? Translation.of("msg_bankrupt"):"");
 				break;
 			case ONLINE:
-				slug = Colors.LightBlue + "(" + TownyAPI.getInstance().getOnlinePlayersInTown(town).size() + ")";
+				slug = Colors.AQUA + "(" + TownyAPI.getInstance().getOnlinePlayersInTown(town).size() + ")";
 				break;
 			case FOUNDED:
 				if (town.getRegistered() != 0)
-					slug = Colors.LightBlue + "(" + TownyFormatter.registeredFormat.format(town.getRegistered()) + ")";
+					slug = Colors.AQUA + "(" + TownyFormatter.registeredFormat.format(town.getRegistered()) + ")";
 				break;
 			default:
-				slug = Colors.LightBlue + "(" + town.getResidents().size() + ")";
+				slug = Colors.AQUA + "(" + town.getResidents().size() + ")";
 				break;
 			}
-			townName = townName.append(Component.text(Colors.Gray + " - " + slug));
+			townName = townName.append(TownyComponents.miniMessageAndColour(Colors.DARK_GRAY + " - " + slug));
 			
 			if (town.isOpen())
-				townName = townName.append(Component.text(" " + Colors.LightBlue + Translation.of("status_title_open")));
+				townName = townName.append(TownyComponents.miniMessageAndColour(" " + Colors.AQUA + Translation.of("status_title_open")));
 			
 			String spawnCost = "Free";
 			if (TownyEconomyHandler.isActive())
 				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 
-			townName = townName.hoverEvent(HoverEvent.showText(Component.text(Translation.of("msg_click_spawn", town) + "\n" + spawnCost).color(NamedTextColor.GOLD)));
+			townName = townName.hoverEvent(HoverEvent.showText(TownyComponents.miniMessageAndColour(Colors.GOLD + Translation.of("msg_click_spawn", town) + "\n" + spawnCost)));
 			output.add(townName);
 		}
 		return output;
@@ -131,7 +132,7 @@ public class ComparatorCaches {
 		nations = nationListSortEvent.getNations();
 
 		for (Nation nation : nations) {
-			TextComponent nationName = Component.text(Colors.LightBlue + StringMgmt.remUnderscore(nation.getName()))
+			TextComponent nationName = Component.text(StringMgmt.remUnderscore(nation.getName()), NamedTextColor.AQUA)
 					.clickEvent(ClickEvent.runCommand("/towny:nation spawn " + nation + " -ignore"));
 
 			String slug = "";
@@ -169,16 +170,16 @@ public class ComparatorCaches {
 				break;
 			}
 			
-			nationName = nationName.append(Component.text(Colors.Gray + " - " + Colors.LightBlue + "(" + slug + ")"));
+			nationName = nationName.append(TownyComponents.miniMessageAndColour(Colors.DARK_GRAY + " - " + Colors.AQUA + "(" + slug + ")"));
 
 			if (nation.isOpen())
-				nationName = nationName.append(Component.text(" " + Colors.LightBlue + Translation.of("status_title_open")));
+				nationName = nationName.append(TownyComponents.miniMessageAndColour(" " + Colors.AQUA + Translation.of("status_title_open")));
 
 			String spawnCost = "Free";
 			if (TownyEconomyHandler.isActive())
 				spawnCost = ChatColor.RESET + Translation.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
 			
-			nationName = nationName.hoverEvent(HoverEvent.showText(Component.text(Colors.Gold + Translation.of("msg_click_spawn", nation) + "\n" + spawnCost)));
+			nationName = nationName.hoverEvent(HoverEvent.showText(TownyComponents.miniMessageAndColour(Colors.GOLD + Translation.of("msg_click_spawn", nation) + "\n" + spawnCost)));
 			output.add(nationName);
 		}
 		return output;

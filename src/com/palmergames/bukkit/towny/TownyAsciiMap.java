@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.map.TownyMapData;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 
 import java.util.Map;
 import org.bukkit.Bukkit;
@@ -35,13 +36,13 @@ public class TownyAsciiMap {
 	
 	public static String[] generateHelp(Player player) {
 		return new String[] {
-			"  " + Colors.Gray + "-" + Colors.LightGray + " = " + Translatable.of("towny_map_unclaimed").forLocale(player),
-			"  " + Colors.White + "+" + Colors.LightGray + " = " + Translatable.of("towny_map_claimed").forLocale(player),
-			"  " + Colors.White + "$" + Colors.LightGray + " = " + Translatable.of("towny_map_forsale").forLocale(player),
-			"  " + Colors.LightGreen + "+" + Colors.LightGray + " = " + Translatable.of("towny_map_yourtown").forLocale(player),
-			"  " + Colors.Yellow + "+" + Colors.LightGray + " = " + Translatable.of("towny_map_yourplot").forLocale(player),
-			"  " + Colors.Green + "+" + Colors.LightGray + " = " + Translatable.of("towny_map_ally").forLocale(player),
-			"  " + Colors.Red + "+" + Colors.LightGray + " = " + Translatable.of("towny_map_enemy").forLocale(player)
+			"  " + Colors.DARK_GRAY + "-" + Colors.GRAY + " = " + Translatable.of("towny_map_unclaimed").forLocale(player),
+			"  " + Colors.WHITE + "+" + Colors.GRAY + " = " + Translatable.of("towny_map_claimed").forLocale(player),
+			"  " + Colors.WHITE + "$" + Colors.GRAY + " = " + Translatable.of("towny_map_forsale").forLocale(player),
+			"  " + Colors.GREEN + "+" + Colors.GRAY + " = " + Translatable.of("towny_map_yourtown").forLocale(player),
+			"  " + Colors.YELLOW + "+" + Colors.GRAY + " = " + Translatable.of("towny_map_yourplot").forLocale(player),
+			"  " + Colors.DARK_GREEN + "+" + Colors.GRAY + " = " + Translatable.of("towny_map_ally").forLocale(player),
+			"  " + Colors.DARK_RED + "+" + Colors.GRAY + " = " + Translatable.of("towny_map_enemy").forLocale(player)
 		};
 	}
 
@@ -50,10 +51,10 @@ public class TownyAsciiMap {
 		Compass.Point dir = Compass.getCompassPointForDirection(player.getLocation().getYaw());
 
 		return new String[] {
-				Colors.Black + "  -----  ",
-				Colors.Black + "  -" + (dir == Compass.Point.NW ? Colors.Gold + "\\" : "-") + (dir == Compass.Point.N ? Colors.Gold : Colors.White) + "N" + (dir == Compass.Point.NE ? Colors.Gold + "/" + Colors.Black : Colors.Black + "-") + "-  ",
-				Colors.Black + "  -" + (dir == Compass.Point.W ? Colors.Gold + "W" : Colors.White + "W") + Colors.LightGray + "+" + (dir == Compass.Point.E ? Colors.Gold : Colors.White) + "E" + Colors.Black + "-  ",
-				Colors.Black + "  -" + (dir == Compass.Point.SW ? Colors.Gold + "/" : "-") + (dir == Compass.Point.S ? Colors.Gold : Colors.White) + "S" + (dir == Compass.Point.SE ? Colors.Gold + "\\" + Colors.Black : Colors.Black + "-") + "-  " };
+				Colors.BLACK + "  -----  ",
+				Colors.BLACK + "  -" + (dir == Compass.Point.NW ? Colors.GOLD + "\\" : "-") + (dir == Compass.Point.N ? Colors.GOLD : Colors.WHITE) + "N" + (dir == Compass.Point.NE ? Colors.GOLD + "/" + Colors.BLACK : Colors.BLACK + "-") + "-  ",
+				Colors.BLACK + "  -" + (dir == Compass.Point.W ? Colors.GOLD + "W" : Colors.WHITE + "W") + Colors.GRAY + "+" + (dir == Compass.Point.E ? Colors.GOLD : Colors.WHITE) + "E" + Colors.BLACK + "-  ",
+				Colors.BLACK + "  -" + (dir == Compass.Point.SW ? Colors.GOLD + "/" : "-") + (dir == Compass.Point.S ? Colors.GOLD : Colors.WHITE) + "S" + (dir == Compass.Point.SE ? Colors.GOLD + "\\" + Colors.BLACK : Colors.BLACK + "-") + "-  " };
 	}
 
 	public static void generateAndSend(Towny plugin, Player player, int lineHeight) {
@@ -231,7 +232,7 @@ public class TownyAsciiMap {
 		String[] compass = generateCompass(player);
 
 		// Output
-		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translatable.of("towny_map_header").forLocale(player) + Colors.White + "(" + pos.toString() + ")"));
+		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translatable.of("towny_map_header").forLocale(player) + Colors.WHITE + "(" + pos.toString() + ")"));
 		String line;
 		String[] help = generateHelp(player);
 		int lineCount = 0;
@@ -241,13 +242,13 @@ public class TownyAsciiMap {
 			if (lineCount < compass.length)
 				line = compass[lineCount];
 
-			TextComponent compassComponent = Component.text(line);
-			TextComponent fullComponent = Component.empty();
+			Component compassComponent = TownyComponents.miniMessageAndColour(line);
+			Component fullComponent = Component.empty();
 			for (int mx = lineWidth - 1; mx >= 0; mx--)
 				fullComponent = fullComponent.append(townyMap[mx][my]);
 
 			if (lineCount < help.length)
-				fullComponent = fullComponent.append(Component.text(help[lineCount]));
+				fullComponent = fullComponent.append(TownyComponents.miniMessageAndColour(help[lineCount]));
 
 			Towny.getAdventure().player(player).sendMessage(compassComponent.append(fullComponent));
 			lineCount++;

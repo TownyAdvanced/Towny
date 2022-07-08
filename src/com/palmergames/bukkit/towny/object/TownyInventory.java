@@ -38,7 +38,7 @@ public class TownyInventory implements InventoryHolder {
 
 		try {
 			// If the pressed item was a nextpage button
-			if (clickedItem.getItemMeta().getDisplayName().equals(Colors.Gold + "Next")) {
+			if (clickedItem.getItemMeta().getDisplayName().equals(Colors.GOLD + "Next")) {
 				// If there is no next page, don't do anything
 				if (resident.getGUIPageNum() >= resident.getGUIPages().size() - 1) {
 					return;
@@ -49,7 +49,7 @@ public class TownyInventory implements InventoryHolder {
 					playClickSound(player);
 				}
 				// if the pressed item was a previous page button
-			} else if (clickedItem.getItemMeta().getDisplayName().equals(Colors.Gold + "Back")) {
+			} else if (clickedItem.getItemMeta().getDisplayName().equals(Colors.GOLD + "Back")) {
 				// If the page number is more than 0 (So a previous page exists)
 				if (resident.getGUIPageNum() > 0) {
 					// Flip to previous page

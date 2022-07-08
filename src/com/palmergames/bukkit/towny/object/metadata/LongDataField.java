@@ -44,7 +44,7 @@ public class LongDataField extends CustomDataField<Long> {
 	@Override
 	public String displayFormattedValue() {
 		long lval = getValue();
-		return (lval <= 0 ? Colors.Red : Colors.LightGreen) + lval;
+		return (lval <= 0 ? Colors.DARK_RED : Colors.GREEN) + lval;
 	}
 
 	@Override

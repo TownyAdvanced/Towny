@@ -488,7 +488,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	private void notifyPerms(Player player, TownyPermission perm) {
 
 		TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-		TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+		TownyMessaging.sendMessage(player, Colors.DARK_GREEN + "PvP: " + ((perm.pvp) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + Colors.DARK_GREEN + "  Explosions: " + ((perm.explosion) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + Colors.DARK_GREEN + "  Firespread: " + ((perm.fire) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + Colors.DARK_GREEN + "  Mob Spawns: " + ((perm.mobs) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF"));
 
 	}
 	
@@ -501,18 +501,18 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		for (Player player : BukkitTools.getVisibleOnlinePlayers(sender)) {
 			Resident resident = TownyAPI.getInstance().getResident(player);
 			if (resident == null) {
-				formattedList.add(Colors.White + player.getName() + Colors.White);
+				formattedList.add(Colors.WHITE + player.getName() + Colors.WHITE);
 				continue;
 			}
 			
 			if (resident.isKing())
-				colour = Colors.Gold;
+				colour = Colors.GOLD;
 			else if (resident.isMayor())
-				colour = Colors.LightBlue;
+				colour = Colors.AQUA;
 			else
-				colour = Colors.White;
+				colour = Colors.WHITE;
 
-			formattedList.add(colour + resident.getName() + Colors.White);
+			formattedList.add(colour + resident.getName() + Colors.WHITE);
 		}
 		
 		TownyMessaging.sendMessage(sender, ChatTools.list(formattedList));
@@ -673,12 +673,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		ArrayList<String> formatedList = new ArrayList<>();
 		for (Resident friends : resident.getFriends()) {
 			if (friends.isKing())
-				colour = Colors.Gold;
+				colour = Colors.GOLD;
 			else if (friends.isMayor())
-				colour = Colors.LightBlue;
+				colour = Colors.AQUA;
 			else
-				colour = Colors.White;
-			formatedList.add(colour + friends.getName() + Colors.White);
+				colour = Colors.WHITE;
+			formatedList.add(colour + friends.getName() + Colors.WHITE);
 		}
 		
 		TownyMessaging.sendMessage(player, ChatTools.list(formatedList));

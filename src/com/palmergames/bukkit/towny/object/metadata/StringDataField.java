@@ -32,7 +32,7 @@ public class StringDataField extends CustomDataField<String> {
 
 	@Override
 	public String displayFormattedValue() {
-		return Colors.White + getValue();
+		return Colors.WHITE + getValue();
 	}
 
 	@Override

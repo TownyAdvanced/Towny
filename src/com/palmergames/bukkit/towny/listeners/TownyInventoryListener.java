@@ -51,25 +51,25 @@ public class TownyInventoryListener implements Listener {
 			ItemMeta meta = event.getCurrentItem().getItemMeta();
 			switch (event.getCurrentItem().getType()) {
 				case LIME_WOOL:
-					if (meta.getDisplayName().equals(Colors.LightGreen + ChatColor.BOLD + "Save")) {
+					if (meta.getDisplayName().equals(Colors.GREEN + ChatColor.BOLD + "Save")) {
 						editGUI.saveChanges();
 					} else {
-						meta.setDisplayName(Colors.Red + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
+						meta.setDisplayName(Colors.DARK_RED + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
 						event.getCurrentItem().setType(Material.RED_WOOL);
 					}
 					break;
 				case RED_WOOL:
-					if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Back")) {
+					if (meta.getDisplayName().equals(Colors.DARK_RED + ChatColor.BOLD + "Back")) {
 						editGUI.exitScreen();
-					} else if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Delete")) {
+					} else if (meta.getDisplayName().equals(Colors.DARK_RED + ChatColor.BOLD + "Delete")) {
 						editGUI.deleteResident();
 					} else {
-						meta.setDisplayName(Colors.Gray + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
+						meta.setDisplayName(Colors.DARK_GRAY + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
 						event.getCurrentItem().setType(Material.GRAY_WOOL);
 					}
 					break;
 				case GRAY_WOOL:
-					meta.setDisplayName(Colors.LightGreen + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
+					meta.setDisplayName(Colors.GREEN + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
 					event.getCurrentItem().setType(Material.LIME_WOOL);
 					break;
 				default:

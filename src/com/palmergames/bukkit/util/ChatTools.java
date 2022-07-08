@@ -143,12 +143,12 @@ public class ChatTools {
 
 		String out = "  ";
 		if (requirement.length() > 0)
-			out += Colors.Rose + requirement + ": ";
-		out += Colors.Blue + command;
+			out += Colors.RED + requirement + ": ";
+		out += Colors.DARK_AQUA + command;
 		if (subCommand.length() > 0)
-			out += " " + Colors.LightBlue + subCommand;
+			out += " " + Colors.AQUA + subCommand;
 		if (help.length() > 0)
-			out += " " + Colors.LightGray + " : " + help;
+			out += " " + Colors.GRAY + " : " + help;
 		return out;
 	}
 

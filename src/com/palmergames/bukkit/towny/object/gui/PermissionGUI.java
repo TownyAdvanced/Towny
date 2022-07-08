@@ -33,7 +33,7 @@ public class PermissionGUI extends TownyInventory {
 
 		try {
 			// If the pressed item was a nextpage button
-			if (clickedItem.getItemMeta().getDisplayName().equals(Colors.Gold + "Next")) {
+			if (clickedItem.getItemMeta().getDisplayName().equals(Colors.GOLD + "Next")) {
 				if (resident.getGUIPageNum() <= resident.getGUIPages().size() - 1) {
 					// Next page exists, flip the page
 					resident.setGUIPageNum(++currentPage);
@@ -41,7 +41,7 @@ public class PermissionGUI extends TownyInventory {
 					playClickSound(player);
 				}
 				// if the pressed item was a previous page button
-			} else if (clickedItem.getItemMeta().getDisplayName().equals(Colors.Gold + "Back")) {
+			} else if (clickedItem.getItemMeta().getDisplayName().equals(Colors.GOLD + "Back")) {
 				// If the page number is more than 0 (So a previous page exists)
 				if (resident.getGUIPageNum() > 0) {
 					// Flip to previous page

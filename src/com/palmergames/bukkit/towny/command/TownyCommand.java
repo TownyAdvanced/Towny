@@ -385,78 +385,78 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		List<String> output = new ArrayList<>();
 		
 		output.add(""); // Intentionally left blank
-		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   " + Colors.Gold + "[" + Colors.Yellow + "Towny " + Colors.Green + plugin.getVersion() + Colors.Gold + "]");
-		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   " + Colors.Blue + translator.of("msg_universe_attribution") + Colors.LightBlue + "Chris H (Shade), ElgarL, LlmDl");
-		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   " + Colors.LightBlue + translator.of("msg_universe_contributors") + Colors.Rose + translator.of("msg_universe_heart"));
+		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   " + Colors.GOLD + "[" + Colors.YELLOW + "Towny " + Colors.DARK_GREEN + plugin.getVersion() + Colors.GOLD + "]");
+		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   " + Colors.DARK_AQUA + translator.of("msg_universe_attribution") + Colors.AQUA + "Chris H (Shade), ElgarL, LlmDl");
+		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   " + Colors.AQUA + translator.of("msg_universe_contributors") + Colors.RED + translator.of("msg_universe_heart"));
 		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
-		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + Colors.Blue + translator.of("res_list")+ ": " + Colors.LightBlue + townyUniverse.getNumResidents() + Colors.Gray + " | " + Colors.Blue + translator.of("town_plu") + ": " + Colors.LightBlue + townyUniverse.getTowns().size() + Colors.Gray + " | " + Colors.Blue + translator.of("nation_plu") + ": " + Colors.LightBlue + townyUniverse.getNumNations());
-		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + Colors.Blue + translator.of("world_plu") + ": " + Colors.LightBlue + townyUniverse.getTownyWorlds().size() + Colors.Gray + " | " + Colors.Blue + translator.of("townblock_plu") + ": " + Colors.LightBlue + townyUniverse.getTownBlocks().size());
-		output.add("\u00A70-----\u00A74#\u00A70-----   " + Colors.LightGreen + "https://TownyAdvanced.github.io/");
+		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + Colors.DARK_AQUA + translator.of("res_list")+ ": " + Colors.AQUA + townyUniverse.getNumResidents() + Colors.DARK_GRAY + " | " + Colors.DARK_AQUA + translator.of("town_plu") + ": " + Colors.AQUA + townyUniverse.getTowns().size() + Colors.DARK_GRAY + " | " + Colors.DARK_AQUA + translator.of("nation_plu") + ": " + Colors.AQUA + townyUniverse.getNumNations());
+		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + Colors.DARK_AQUA + translator.of("world_plu") + ": " + Colors.AQUA + townyUniverse.getTownyWorlds().size() + Colors.DARK_GRAY + " | " + Colors.DARK_AQUA + translator.of("townblock_plu") + ": " + Colors.AQUA + townyUniverse.getTownBlocks().size());
+		output.add("\u00A70-----\u00A74#\u00A70-----   " + Colors.GREEN + "https://TownyAdvanced.github.io/");
 		output.add(""); // Intentionally left blank
 		
 
 		// Other TownyAdvanced plugins to report versions
 		int plugins = 0;
-		String townyPlugins = Colors.Gold + "[";
+		String townyPlugins = Colors.GOLD + "[";
 		
 		// LlmDl Sponsor exclusive
 		Plugin tCamps = Bukkit.getServer().getPluginManager().getPlugin("TownyCamps");
 		if (tCamps != null) {
-			townyPlugins += Colors.Yellow + "TownyCamps " + Colors.Green + tCamps.getDescription().getVersion() + " ";
+			townyPlugins += Colors.YELLOW + "TownyCamps " + Colors.DARK_GREEN + tCamps.getDescription().getVersion() + " ";
 			plugins++;
 		}
 		
 		Plugin townyChat = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
 		if (townyChat != null){
-			townyPlugins += Colors.Yellow + "TownyChat " + Colors.Green + townyChat.getDescription().getVersion() + " ";
+			townyPlugins += Colors.YELLOW + "TownyChat " + Colors.DARK_GREEN + townyChat.getDescription().getVersion() + " ";
 			plugins++;
 		}
 		
 		Plugin tCult = Bukkit.getServer().getPluginManager().getPlugin("TownyCultures");
 		if (tCult != null) {
-			townyPlugins += Colors.Yellow + "TownyCultures " + Colors.Green + tCult.getDescription().getVersion() + " ";
+			townyPlugins += Colors.YELLOW + "TownyCultures " + Colors.DARK_GREEN + tCult.getDescription().getVersion() + " ";
 			plugins++;
 		}
 		
 		Plugin tFlight = Bukkit.getServer().getPluginManager().getPlugin("TownyFlight");
 		if (tFlight != null) {
-			townyPlugins += Colors.Yellow + "TownyFlight " + Colors.Green + tFlight.getDescription().getVersion() + " ";
+			townyPlugins += Colors.YELLOW + "TownyFlight " + Colors.DARK_GREEN + tFlight.getDescription().getVersion() + " ";
 			plugins++;
 		}
 
 		// LlmDl Sponsor exclusive
 		Plugin tHist = Bukkit.getServer().getPluginManager().getPlugin("TownyHistories");
 		if (tHist != null) {
-			townyPlugins += Colors.Yellow + "TownyHistories " + Colors.Green + tHist.getDescription().getVersion() + " ";
+			townyPlugins += Colors.YELLOW + "TownyHistories " + Colors.DARK_GREEN + tHist.getDescription().getVersion() + " ";
 			plugins++;
 		}
 		
 		Plugin flagWar = Bukkit.getServer().getPluginManager().getPlugin("FlagWar");
 		if (flagWar != null) {
-			townyPlugins += Colors.Yellow + "FlagWar " + Colors.Green + flagWar.getDescription().getVersion() + " ";
+			townyPlugins += Colors.YELLOW + "FlagWar " + Colors.DARK_GREEN + flagWar.getDescription().getVersion() + " ";
 			plugins++;
 		}
 		
 		Plugin siegeWar = Bukkit.getServer().getPluginManager().getPlugin("SiegeWar");
 		if (siegeWar != null) {
-			townyPlugins += Colors.Yellow + "SiegeWar " + Colors.Green + siegeWar.getDescription().getVersion() + " ";
+			townyPlugins += Colors.YELLOW + "SiegeWar " + Colors.DARK_GREEN + siegeWar.getDescription().getVersion() + " ";
 			plugins++;
 		}
 
 		Plugin eventWar = Bukkit.getServer().getPluginManager().getPlugin("EventWar");
 		if (eventWar != null) {
-			townyPlugins += Colors.Yellow + "EventWar " + Colors.Green + eventWar.getDescription().getVersion() + " ";
+			townyPlugins += Colors.YELLOW + "EventWar " + Colors.DARK_GREEN + eventWar.getDescription().getVersion() + " ";
 			plugins++;
 		}
 
 		Plugin townyRTP = Bukkit.getServer().getPluginManager().getPlugin("TownyRTP");
 		if (townyRTP != null) {
-			townyPlugins += Colors.Yellow + "TownyRTP " + Colors.Green + townyRTP.getDescription().getVersion() + " ";
+			townyPlugins += Colors.YELLOW + "TownyRTP " + Colors.DARK_GREEN + townyRTP.getDescription().getVersion() + " ";
 			plugins++;
 		}
 
 		if (plugins > 0)
-			output.add(townyPlugins + Colors.Gold + "]");
+			output.add(townyPlugins + Colors.GOLD + "]");
 		return output;
 	}
 
@@ -563,7 +563,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && index > maxListing) {
 				break;
 			}
-			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", gov.getFormattedName(), getMoney(gov.getAccount().getCachedBalance())));
+			output.add(String.format(Colors.GRAY + "%-20s " + Colors.GOLD + "|" + Colors.DARK_AQUA + " %s", gov.getFormattedName(), getMoney(gov.getAccount().getCachedBalance())));
 		}
 		return output;
 	}
@@ -581,7 +581,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && n > maxListing)
 				break;
 
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", ((TownyObject) residentList).getFormattedName(), residentList.getResidents().size()));
+			output.add(String.format(Colors.DARK_AQUA + "%30s " + Colors.GOLD + "|" + Colors.GRAY + " %10d", ((TownyObject) residentList).getFormattedName(), residentList.getResidents().size()));
 		}
 
 		return output;
@@ -600,7 +600,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && n > maxListing)
 				break;
 
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", owner.getFormattedName(), owner.getTownBlocks().size()));
+			output.add(String.format(Colors.DARK_AQUA + "%30s " + Colors.GOLD + "|" + Colors.GRAY + " %10d", owner.getFormattedName(), owner.getTownBlocks().size()));
 		}
 
 		return output;

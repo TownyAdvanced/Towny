@@ -91,35 +91,35 @@ public class MapHUD {
 		for (int tby = wc.getX() + (lineWidth - halfLineWidth - 1); tby >= wc.getX() - halfLineWidth; tby--) {
 			x = 0;
 			for (int tbx = wc.getZ() - halfLineHeight; tbx <= wc.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
-				map[y][x] = Colors.White;
+				map[y][x] = Colors.WHITE;
 				try {
 					TownBlock townblock = world.getTownBlock(tby, tbx);
 					if (!townblock.hasTown())
 						throw new TownyException();
 					if (x == halfLineHeight && y == halfLineWidth)
 						// location
-						map[y][x] = Colors.Gold;
+						map[y][x] = Colors.GOLD;
 					else if (hasTown) {
 						if (resident.getTown() == townblock.getTown()) {
 							// own town
-							map[y][x] = Colors.LightGreen;
+							map[y][x] = Colors.GREEN;
 							try {
 								if (resident == townblock.getResident())
 									//own plot
-									map[y][x] = Colors.Yellow;
+									map[y][x] = Colors.YELLOW;
 							} catch (NotRegisteredException e) {
 							}
 						} else if (resident.hasNation()) {
 							if (resident.getTown().getNation().hasTown(townblock.getTown()))
 								// towns
-								map[y][x] = Colors.Green;
+								map[y][x] = Colors.DARK_GREEN;
 							else if (townblock.getTown().hasNation()) {
 								Nation nation = resident.getTown().getNation();
 								if (nation.hasAlly(townblock.getTown().getNation()))
-									map[y][x] = Colors.Green;
+									map[y][x] = Colors.DARK_GREEN;
 								else if (nation.hasEnemy(townblock.getTown().getNation()))
 									// towns
-									map[y][x] = Colors.Red;
+									map[y][x] = Colors.DARK_RED;
 							}
 						}
 					}
@@ -128,7 +128,7 @@ public class MapHUD {
 					if (townblock.getPlotPrice() != -1 || townblock.hasPlotObjectGroup() && townblock.getPlotObjectGroup().getPrice() != -1) {
 						// override the colour if it's a shop plot for sale
 						if (townblock.getType().equals(TownBlockType.COMMERCIAL))
-							map[y][x] = Colors.Blue;
+							map[y][x] = Colors.DARK_AQUA;
 						map[y][x] += "$";
 					} else if (townblock.isHomeBlock())
 						map[y][x] += "H";
@@ -138,9 +138,9 @@ public class MapHUD {
 					// Unregistered town block
 					
 					if (x == halfLineHeight && y == halfLineWidth)
-						map[y][x] = Colors.Gold;
+						map[y][x] = Colors.GOLD;
 					else
-						map[y][x] = Colors.Gray;
+						map[y][x] = Colors.DARK_GRAY;
 
 					WorldCoord worldcoord = WorldCoord.parseWorldCoord(world.getName(), tby * townBlockSize , tbx* townBlockSize);
 					String symbol;

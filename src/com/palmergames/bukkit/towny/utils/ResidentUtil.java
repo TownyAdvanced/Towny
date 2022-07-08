@@ -146,7 +146,7 @@ public class ResidentUtil {
 			ItemStack item = new ItemStack(Material.GRASS_BLOCK);
 			
 			ItemMeta meta = item.getItemMeta();
-			meta.setDisplayName(Colors.Gold + townBlockType.getFormattedName());
+			meta.setDisplayName(Colors.GOLD + townBlockType.getFormattedName());
 			item.setItemMeta(meta);
 
 			if (page.firstEmpty() == 46) {
@@ -196,12 +196,12 @@ public class ResidentUtil {
 
 		ItemStack nextpage = new ItemStack(Material.ARROW);
 		ItemMeta meta = nextpage.getItemMeta();
-		meta.setDisplayName(Colors.Gold + "Next");
+		meta.setDisplayName(Colors.GOLD + "Next");
 		nextpage.setItemMeta(meta);
 
 		ItemStack prevpage = new ItemStack(Material.ARROW);
 		meta = prevpage.getItemMeta();
-		meta.setDisplayName(Colors.Gold + "Back");
+		meta.setDisplayName(Colors.GOLD + "Back");
 		prevpage.setItemMeta(meta);
 
 		page.setItem(53, nextpage);

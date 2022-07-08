@@ -682,6 +682,7 @@ public class Towny extends JavaPlugin {
 		paperEvents.register();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void printChangelogToConsole() {
 
 		try {
@@ -689,8 +690,8 @@ public class Towny extends JavaPlugin {
 			int startingIndex = 0;
 			int linesDisplayed = 0;
 			String lastVersion = Version.fromString(TownySettings.getLastRunVersion()).toString(); // Parse out any trailing text after the *.*.*.* version, ie "-for-1.12.2".
-			plugin.getLogger().info("------------------------------------");
-			plugin.getLogger().info("ChangeLog since v" + lastVersion + ":");
+			Bukkit.getConsoleSender().sendMessage("------------------------------------");
+			Bukkit.getConsoleSender().sendMessage("ChangeLog since v" + lastVersion + ":");
 			
 			// Go backwards through the changelog to get to the last run version.
 			for (int i = changeLog.size() - 1; i >= 0; i--) {
@@ -709,21 +710,21 @@ public class Towny extends JavaPlugin {
 			if (startingIndex != 0) {
 				for (int i = startingIndex; i < changeLog.size(); i++) {
 					if (linesDisplayed > 100) {
-						plugin.getLogger().info(Colors.Yellow + "<snip>");
-						plugin.getLogger().info(Colors.Yellow + "Changelog continues for another " + (changeLog.size() - (startingIndex + 99)) + " lines.");
-						plugin.getLogger().info(Colors.Yellow + "To read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/resources/ChangeLog.txt#L" + ++startingIndex);
+						Bukkit.getConsoleSender().sendMessage(Colors.Yellow + "<snip>");
+						Bukkit.getConsoleSender().sendMessage(Colors.Yellow + "Changelog continues for another " + (changeLog.size() - (startingIndex + 99)) + " lines.");
+						Bukkit.getConsoleSender().sendMessage(Colors.Yellow + "To read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/resources/ChangeLog.txt#L" + ++startingIndex);
 						break;
 					} 
 					String line = changeLog.get(i);
 					if (line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
-						Bukkit.getLogger().info(line.trim().startsWith("-") ? line : Colors.Yellow + line);
+						Bukkit.getConsoleSender().sendMessage(line.trim().startsWith("-") ? line : Colors.Yellow + line);
 						++linesDisplayed;
 					}
 				}
 			} else {
 				plugin.getLogger().warning("Could not find starting index for the changelog.");	
 			}
-			plugin.getLogger().info("------------------------------------");
+			Bukkit.getConsoleSender().sendMessage("------------------------------------");
 		} catch (IOException e) {
 			plugin.getLogger().warning("Could not read ChangeLog.txt");
 		}

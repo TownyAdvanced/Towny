@@ -94,6 +94,7 @@ import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.towny.utils.TownUtil;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -1329,33 +1330,33 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		List<String> out = new ArrayList<>();
 		out.add(ChatTools.formatTitle(town + " Town Plots"));
-		out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + town.getMaxTownBlocksAsAString() 
+		out.add(Colors.DARK_GREEN + "Town Size: " + Colors.GREEN + town.getTownBlocks().size() + " / " + town.getMaxTownBlocksAsAString() 
 			+ (!town.hasUnlimitedClaims() 
 				? (TownySettings.isSellingBonusBlocks(town) 
-						? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchasedBlocks(town) + "]" 
+						? Colors.AQUA + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchasedBlocks(town) + "]" 
 						: "") 
 					+ (town.getBonusBlocks() > 0 
-						? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" 
+						? Colors.AQUA + " [Bonus: " + town.getBonusBlocks() + "]" 
 						: "") 
 					+ (TownySettings.getNationBonusBlocks(town) > 0 
-						? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" 
+						? Colors.AQUA + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" 
 						: "")
 				: ""));
 		
 		TownBlockTypeCache typeCache = town.getTownBlockTypeCache();
-		out.add(Colors.Green + "Town Owned Land: " + Colors.LightGreen + (town.getTownBlocks().size() - (typeCache.getNumberOfResidentOwnedTownBlocks())));
-		out.add(Colors.Green + "Type: " 
-				+ Colors.LightGreen + "Player-Owned" + Colors.LightGray + " / "
-				+ Colors.LightBlue  + "ForSale" + Colors.LightGray + " / "
-				+ Colors.Yellow + "Total" + Colors.LightGray
-				+ (TownyEconomyHandler.isActive() ? " / " + Colors.Green + "Daily Revenue" : ""));
+		out.add(Colors.DARK_GREEN + "Town Owned Land: " + Colors.GREEN + (town.getTownBlocks().size() - (typeCache.getNumberOfResidentOwnedTownBlocks())));
+		out.add(Colors.DARK_GREEN + "Type: " 
+				+ Colors.GREEN + "Player-Owned" + Colors.GRAY + " / "
+				+ Colors.AQUA  + "ForSale" + Colors.GRAY + " / "
+				+ Colors.YELLOW + "Total" + Colors.GRAY
+				+ (TownyEconomyHandler.isActive() ? " / " + Colors.DARK_GREEN + "Daily Revenue" : ""));
 		for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
 			int residentOwned = typeCache.getNumTownBlocks(type, CacheType.RESIDENTOWNED);
-			out.add(Colors.Green + type.getFormattedName() + ": "
-				+ Colors.LightGreen + residentOwned + Colors.LightGray + " / "
-				+ Colors.LightBlue  + typeCache.getNumTownBlocks(type, CacheType.FORSALE) + Colors.LightGray + " / "
-				+ Colors.Yellow + typeCache.getNumTownBlocks(type, CacheType.ALL) + Colors.LightGray
-				+ (TownyEconomyHandler.isActive() ? " / " + Colors.Green + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)) : ""));
+			out.add(Colors.DARK_GREEN + type.getFormattedName() + ": "
+				+ Colors.GREEN + residentOwned + Colors.GRAY + " / "
+				+ Colors.AQUA  + typeCache.getNumTownBlocks(type, CacheType.FORSALE) + Colors.GRAY + " / "
+				+ Colors.YELLOW + typeCache.getNumTownBlocks(type, CacheType.ALL) + Colors.GRAY
+				+ (TownyEconomyHandler.isActive() ? " / " + Colors.DARK_GREEN + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)) : ""));
 		}
 		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
 		TownyMessaging.sendMessage(sender, out);
@@ -1363,28 +1364,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseTownOnlineCommand(Player player, String[] split) throws TownyException {
-
+		final Translator translator = Translator.locale(Translation.getLocale(player));
 		if (split.length > 0) {
-			Town town = TownyUniverse.getInstance().getTown(split[0]);
-			
-			if (town == null) {
-				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[0]));
-			}
-			
+			Town town = getTownOrThrow(split[0]); 
 			List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, town);
 			if (onlineResidents.size() > 0) {
-				TownyMessaging.sendComponent(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
+				TownyMessaging.sendComponent(player, TownyFormatter.getFormattedOnlineResidents(translator.of("msg_town_online"), town, player));
 			} else {
-				TownyMessaging.sendMessage(player, Colors.White + "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_town_online").forLocale(player) + ": " + town));
+				TownyMessaging.sendMsg(player, translator.of("msg_no_one_is_online_in_x", town));
 			}
 		} else {
-			try {
-				Resident resident = getResidentOrThrow(player.getUniqueId());
-				Town town = resident.getTown();
-				TownyMessaging.sendComponent(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_town_online").forLocale(player), town, player));
-			} catch (NotRegisteredException x) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_dont_belong_town"));
-			}
+			Town town = getTownFromPlayerOrThrow(player);
+			TownyMessaging.sendComponent(player, TownyFormatter.getFormattedOnlineResidents(translator.of("msg_town_online"), town, player));
 		}
 	}
 
@@ -1492,18 +1483,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				Collections.shuffle(towns);
 				
 				for (Town town : towns) {
-					TextComponent townName = Component.text(Colors.LightBlue + StringMgmt.remUnderscore(town.getName()))
+					TextComponent townName = Component.text(StringMgmt.remUnderscore(town.getName()), NamedTextColor.AQUA)
 							.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
-					townName = townName.append(Component.text(Colors.Gray + " - " + Colors.LightBlue + "(" + town.getResidents().size() + ")"));
+					townName = townName.append(TownyComponents.miniMessageAndColour(Colors.DARK_GRAY + " - " + Colors.AQUA + "(" + town.getResidents().size() + ")"));
 
 					if (town.isOpen())
-						townName = townName.append(Component.text(" " + Colors.LightBlue + Translatable.of("status_title_open").forLocale(sender)));
+						townName = townName.append(TownyComponents.miniMessageAndColour(" " + Colors.AQUA + Translatable.of("status_title_open").forLocale(sender)));
 					
 					String spawnCost = "Free";
 					if (TownyEconomyHandler.isActive())
 						spawnCost = ChatColor.RESET + Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost())).forLocale(sender);
 
-					townName = townName.hoverEvent(HoverEvent.showText(Component.text(Translatable.of("msg_click_spawn", town).forLocale(sender) + "\n" + spawnCost).color(NamedTextColor.GOLD)));
+					townName = townName.hoverEvent(HoverEvent.showText(TownyComponents.miniMessageAndColour(Colors.GOLD + Translatable.of("msg_click_spawn", town).forLocale(sender) + "\n" + spawnCost)));
 					output.add(townName);
 				}
 				TownyMessaging.sendTownList(sender, output, finalType, pageNumber, totalNumber);
@@ -2799,10 +2790,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if (split.length == 0) {
 			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/town buy"));
-			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
+			String line = Colors.YELLOW + "[Purchased Bonus] " + Colors.DARK_GREEN + "Cost: " + Colors.GREEN + "%s" + Colors.DARK_GRAY + " | " + Colors.DARK_GREEN + "Max: " + Colors.GREEN + "%d";
 			TownyMessaging.sendMessage(player, String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchasedBlocks(town)));
 			if (TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0)
-				TownyMessaging.sendMessage(player, Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
+				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + "Cost Increase per TownBlock: " + Colors.GREEN + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
 			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
 		} else {
 			try {
@@ -3660,6 +3651,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public static void setTownBlockPermissions(CommandSender sender, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
+		Translator translator = Translator.locale(sender);
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 
 			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/... set perm"));
@@ -3806,12 +3798,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 			}
 
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_perms"));
-			TownyMessaging.sendMessage(sender, (Colors.Green + Translatable.of("status_perm").forLocale(sender) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-			TownyMessaging.sendMessage(sender, Colors.Green + Translatable.of("status_pvp").forLocale(sender) + " " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-											   Colors.Green + Translatable.of("explosions").forLocale(sender) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-											   Colors.Green + Translatable.of("firespread").forLocale(sender) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-											   Colors.Green + Translatable.of("mobspawns").forLocale(sender) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+			TownyMessaging.sendMsg(sender, translator.of("msg_set_perms"));
+			TownyMessaging.sendMessage(sender, (Colors.DARK_GREEN + translator.of("status_perm") + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+			TownyMessaging.sendMessage(sender, Colors.DARK_GREEN + translator.of("status_pvp") + " " + ((perm.pvp) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + 
+											   Colors.DARK_GREEN + translator.of("explosions") + " " + ((perm.explosion) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + 
+											   Colors.DARK_GREEN + translator.of("firespread") + " " + ((perm.fire) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + 
+											   Colors.DARK_GREEN + translator.of("mobspawns") + " " + ((perm.mobs) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF"));
 
 			// Reset all caches as this can affect everyone.
 			plugin.resetCache();
