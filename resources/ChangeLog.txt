@@ -7568,3 +7568,19 @@ v0.92.0.11:
     - Cancellable event that lets other plugins alter Towny's ChunkNotifications.
     - Closes #6009.
   - Add a small delay before we start the DrawSpawnPointsTask, because one server got a ConcurrentModificationException.
+  - New Placeholders:
+    - %townyadvanced_daily_town_per_plot_upkeep% - Shows the amount of upkeep paid per-plot by a Town.
+    - %townyadvanced_daily_town_overclaimed_per_plot_upkeep_penalty% - Shows the penalty paid per-plot by a Town.
+    - %townyadvanced_daily_town_upkeep_reduction_from_town_level% - Shows the percentage that a Town's upkeep is reduced by the TownLevel's upkeepModifier, or if the player has no Town what a 1 player town would receive.
+    - %townyadvanced_daily_town_upkeep_reduction_from_nation_level% - Shows the percentage that a Town's upkeep is reduced by the NationLevel's nationTownUpkeepModifier, or if the player has no Nation what a 1 player town would receive if they had a nation.
+    - %townyadvanced_daily_nation_per_town_upkeep% - Shows the amount of upkeep paid per-town by a Nation.
+    - %townyadvanced_daily_nation_upkeep_reduction_from_nation_level% - Shows the percentage that a Nation's upkeep is reduced by the NationLevel's upkeepModifier, or if the player has no Nation what a 1 player town would receive if they had a nation.
+    - %townyadvanced_town_merge_cost% - Shows the base cost to merge a town.
+    - %townyadvanced_town_merge_per_plot_percentage% - Shows the percentage of the TownBlock claim price that the merging Town will have to pay in order to do a merge.
+    - %townyadvanced_town_reclaim_cost% - Shows the cost to reclaim a town.
+    - %townyadvanced_town_reclaim_max_duration_hours% - Shows the maximum number of hours a town can be ruined before it is deleted.
+    - %townyadvanced_town_reclaim_min_duration_hours% - Shows the minimum number of hours a town can be ruined before it can be reclaimed.
+    - %townyadvanced_townblock_buy_bonus_price% - Shows the base price of buying a TownBlock using /t buy bonus.
+    - %townyadvanced_townblock_claim_price% - Shows the base price of claiming a TownBlocking using /t claim.
+    - %townyadvanced_townblock_unclaim_price% - Shows the base price of claiming a TownBlocking using /t unclaim.
+    - %townyadvanced_outpost_claim_price% - Shows the price of claiming an outpost using /t claim outpost.
