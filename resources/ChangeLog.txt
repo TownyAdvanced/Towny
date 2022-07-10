@@ -7567,3 +7567,4 @@ v0.92.0.11:
   - API: Add ChunkNotificationEvent
     - Cancellable event that lets other plugins alter Towny's ChunkNotifications.
     - Closes #6009.
+  - Add a small delay before we start the DrawSpawnPointsTask, because one server got a ConcurrentModificationException.

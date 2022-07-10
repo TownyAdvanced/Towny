@@ -161,7 +161,8 @@ public class TownyTimerHandler{
 	
 	public static void toggleDrawSpointsTask(boolean on) {
 		if (on && !isDrawSpawnPointsTaskRunning()) {
-			drawSpawnPointsTask = BukkitTools.scheduleAsyncRepeatingTask(new DrawSpawnPointsTask(plugin), 0, 52);
+			// This is given a delay because it was causing ConcurrentModificationExceptions on startup on one server.
+			drawSpawnPointsTask = BukkitTools.scheduleAsyncRepeatingTask(new DrawSpawnPointsTask(plugin), 40, 52);
 			if (drawSpawnPointsTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule draw spawn points loop");			
 		} else if (!on && isDrawSpawnPointsTaskRunning()) {
