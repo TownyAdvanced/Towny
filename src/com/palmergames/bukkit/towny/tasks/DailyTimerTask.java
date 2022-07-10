@@ -536,7 +536,8 @@ public class DailyTimerTask extends TownyTimerTask {
 				
 				// Charge towns for keeping a peaceful status.
 				if (neutralityCost > 0 && town.isNeutral()) {
-					if (!town.getAccount().withdraw(neutralityCost, "Town Peace Upkeep")) {
+					if ((town.isBankrupt() && !TownySettings.canBankruptTownsPayForNeutrality())
+						|| !town.getAccount().withdraw(neutralityCost, "Town Peace Upkeep")) {
 						town.setNeutral(false);
 						town.save();
 						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_not_peaceful"));

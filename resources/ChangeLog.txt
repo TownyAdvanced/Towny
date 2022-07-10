@@ -7584,3 +7584,7 @@ v0.92.0.11:
     - %townyadvanced_townblock_claim_price% - Shows the base price of claiming a TownBlocking using /t claim.
     - %townyadvanced_townblock_unclaim_price% - Shows the base price of claiming a TownBlocking using /t unclaim.
     - %townyadvanced_outpost_claim_price% - Shows the price of claiming an outpost using /t claim outpost.
+  - New Config Option: economy.bankruptcy.neutrality.can_bankrupt_towns_pay_for_neutrality
+    - Default: true
+    - If a town is bankrupt can they still pay for neutrality?
+    - Closes #6017.

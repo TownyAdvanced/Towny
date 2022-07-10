@@ -2973,6 +2973,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_UPKEEP_DELETE_TOWNS_THAT_REACH_DEBT_CAP);
 	}
 	
+	public static boolean canBankruptTownsPayForNeutrality() {
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_NEUTRALITY_CAN_BANKRUPT_TOWNS_PAY_NEUTRALITY);
+	}
+	
 	public static boolean isNationTaxKickingTownsThatReachDebtCap() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_NATION_KICKS_TOWNS_THAT_REACH_DEBT_CAP);
 	}

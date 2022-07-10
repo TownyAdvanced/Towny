@@ -2263,6 +2263,13 @@ public enum ConfigNodes {
 			"",
 			"# If a town has reached their debt cap and is unable to pay the upkeep with debt,",
 			"# will Towny delete them?"),
+	ECO_BANKRUPTCY_NEUTRALITY(
+			"economy.bankruptcy.neutrality", "", ""),
+	ECO_BANKRUPTCY_NEUTRALITY_CAN_BANKRUPT_TOWNS_PAY_NEUTRALITY(
+			"economy.bankruptcy.neutrality.can_bankrupt_towns_pay_for_neutrality",
+			"true",
+			"",
+			"# If a town is bankrupt can they still pay for neutrality?"),
 	ECO_BANKRUPTCY_NATION("economy.bankruptcy.nation_tax", "", ""),
 	ECO_BANKRUPTCY_DO_BANKRUPT_TOWNS_PAY_NATION_TAX(
 			"economy.bankruptcy.nation_tax.do_bankrupt_towns_pay_nation_tax",
