@@ -1255,8 +1255,8 @@ status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a ho
 status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[Home: %s]'
-status_registered: 'Registrado:'
-status_lastonline: 'Último online:'
+status_registered: 'Registado:'
+status_lastonline: 'Última vez online:'
 status_fractions: '%s/%s'
 status_rank_list: 'Lista de Classificação'
 status_hover_click_for_more: 'Clique para mais informações.'
