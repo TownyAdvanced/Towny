@@ -7588,3 +7588,4 @@ v0.92.0.11:
     - Default: true
     - If a town is bankrupt can they still pay for neutrality?
     - Closes #6017.
+  - Fix admins being unable to teleport out of Towns in which they are outlawed.
