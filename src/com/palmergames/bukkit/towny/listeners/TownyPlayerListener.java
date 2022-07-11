@@ -716,8 +716,10 @@ public class TownyPlayerListener implements Listener {
 		
 		Player player = event.getPlayer();
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		boolean isAdmin = resident.isAdmin()
+				|| resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode());
 		// Cancel teleport if Jailed by Towny and not an admin.
-		if (resident != null && resident.isJailed() && !resident.isAdmin()) {
+		if (resident != null && resident.isJailed() && !isAdmin) {
 			if ((event.getCause() == TeleportCause.COMMAND)) {
 				TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_jailed_players_no_teleport"));
 				event.setCancelled(true);
@@ -732,7 +734,7 @@ public class TownyPlayerListener implements Listener {
 		}
 		
 		// Cancel teleport if resident is outlawed in Town and not an admin.
-		if (resident != null && !TownySettings.canOutlawsTeleportOutOfTowns() && !resident.isAdmin()) {
+		if (resident != null && !TownySettings.canOutlawsTeleportOutOfTowns() && !isAdmin) {
 			TownBlock tb = TownyAPI.getInstance().getTownBlock(event.getFrom());
 			if (tb != null && tb.hasTown()) {
 				Town town = tb.getTownOrNull();
@@ -756,7 +758,7 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Test to see if CHORUS_FRUIT is in the item_use list.
 		 */
-		if (event.getCause() == TeleportCause.CHORUS_FRUIT && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT, event.getTo()) && !resident.isAdmin()) {
+		if (event.getCause() == TeleportCause.CHORUS_FRUIT && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT, event.getTo()) && !isAdmin) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getTo(), Material.CHORUS_FRUIT)) {
 				event.setCancelled(true);
@@ -767,7 +769,7 @@ public class TownyPlayerListener implements Listener {
 		/*
 		 * Test to see if Ender pearls are disabled.
 		 */		
-		if (event.getCause() == TeleportCause.ENDER_PEARL && TownySettings.isItemUseMaterial(Material.ENDER_PEARL, event.getTo()) && !resident.isAdmin()) {
+		if (event.getCause() == TeleportCause.ENDER_PEARL && TownySettings.isItemUseMaterial(Material.ENDER_PEARL, event.getTo()) && !isAdmin) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getTo(), Material.ENDER_PEARL)) {
 				event.setCancelled(true);
