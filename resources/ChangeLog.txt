@@ -7590,3 +7590,7 @@ v0.92.0.11:
     - Closes #6017.
   - Fix admins being unable to teleport out of Towns in which they are outlawed.
   - Adapt to PlaceholderAPI no longer parsing colours.
+  - Automatic Config Edit:
+    - ,OAK_CHEST_BOAT will be added to your protections.switch_ids list.
+    - This will make all chest boats require switching perms to open/enter.
+    - New configs will have OAK_CHEST_BOAT included in the switch_ids list. 

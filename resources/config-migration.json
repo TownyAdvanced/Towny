@@ -288,5 +288,15 @@
         "value": "plugin.interfacing.luckperms.contexts"
       }
     ]
+  },
+  {
+    "version": "0.98.3.2",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.switch_ids",
+        "value": ",OAK_CHEST_BOAT"
+      }
+    ]
   }
 ]
