@@ -15,6 +15,7 @@ import com.palmergames.util.StringMgmt;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
+import net.md_5.bungee.api.ChatColor;
 
 import java.text.DecimalFormat;
 import java.util.Locale;
@@ -105,7 +106,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 	
 	@Override
 	public String onPlaceholderRequest(Player player, Player player2, String identifier) {
+		return ChatColor.translateAlternateColorCodes('&', getRelationalPlaceholder(player, player2, identifier));
+	}
 
+	private String getRelationalPlaceholder(Player player, Player player2, String identifier) {
 		if (!identifier.equalsIgnoreCase("color"))
 			return null;
 
@@ -139,7 +143,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 	 */
 	@Override
 	public String onRequest(OfflinePlayer player, String identifier) {
+		return ChatColor.translateAlternateColorCodes('&', getOfflinePlayerPlaceholder(player, identifier));
+	}
 
+	private String getOfflinePlayerPlaceholder(OfflinePlayer player, String identifier) {
 		if (player == null) {
 			return "";
 		}
@@ -575,7 +582,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 	
 	@Override
 	public String onPlaceholderRequest(Player player, String identifier) {
+		return ChatColor.translateAlternateColorCodes('&', getPlayerPlaceholder(player, identifier));
+	}
 
+	private String getPlayerPlaceholder(Player player, String identifier) {
 		if (player == null) {
 			return "";
 		}
