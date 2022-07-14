@@ -70,7 +70,7 @@ public class Translatable {
 	}
 	
 	public Translatable append(Component append) {
-		appended.add(TownyComponents.miniMessage(append));
+		appended.add(append);
 		return this;
 	}
 	
@@ -142,7 +142,7 @@ public class Translatable {
 
 		checkArgs(locale);
 		String translated = args == null ? Translation.of(key, locale) : Translation.of(key, locale, args);
-		Component parsed = TownyComponents.miniMessage(translated).append(appended());
+		Component parsed = TownyComponents.miniMessage(translated + TownyComponents.unMiniMessage(appended()));
 		
 		return stripColors ? Colors.strip(parsed) : parsed;
 	}
@@ -153,7 +153,7 @@ public class Translatable {
 
 		checkArgs(null);
 		String translated = args == null ? Translation.of(key) : Translation.of(key, args);
-		Component parsed = TownyComponents.miniMessage(translated).append(appended());
+		Component parsed = TownyComponents.miniMessage(translated + TownyComponents.unMiniMessage(appended()));
 
 		return stripColors ? Colors.strip(parsed) : parsed;
 	}
