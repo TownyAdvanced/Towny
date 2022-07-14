@@ -873,10 +873,10 @@ bonus_townblocks: 'бонусні ділянки'
 nomad_sing: 'Кочівник'
 msg_new_town_advice: 'Вітаємо зі створенням свого міста! Ваше місто платитиме податок за щоденне обслуговування, який зараз оцінюється в %s. Ви можете внести гроші в банк вашого міста, використовуючи ''/t deposit #''. Без грошей на утримання міста ваше місто може бути вилучено. Ви можете подивитися свої витрати в будь-який час, використовуючи /towny prices. Наступний щоденний податок буде списано через %s.'
 #Added in 0.81
-msg_err_teleport_cancelled_damage: 'Damage has cancelled your teleport.'
+msg_err_teleport_cancelled_damage: 'Через пошкодження вашу телепортацію скасовано.'
 #Added in 0.82
-invitation_prefix: "&8[&7Invitation&8] &9"
-confirmation_prefix: "&8[&7Confirmation&8] &9"
+invitation_prefix: "&8[&7Запрошення&8] &9"
+confirmation_prefix: "&8[&7Підтвердження&8] &9"
 this_message_will_expire2: '&9This will auto-expire in %s seconds'
 msg_hover_next_page: 'Next Page'
 msg_hover_previous_page: 'Previous Page'
