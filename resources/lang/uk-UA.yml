@@ -877,11 +877,11 @@ msg_err_teleport_cancelled_damage: 'Через пошкодження вашу �
 #Added in 0.82
 invitation_prefix: "&8[&7Запрошення&8] &9"
 confirmation_prefix: "&8[&7Підтвердження&8] &9"
-this_message_will_expire2: '&9This will auto-expire in %s seconds'
-msg_hover_next_page: 'Next Page'
-msg_hover_previous_page: 'Previous Page'
+this_message_will_expire2: '&9Це питання зникне через %s секунд'
+msg_hover_next_page: 'Наступна сторінка'
+msg_hover_previous_page: 'Попередня сторінка'
 #Added in 0.83
-msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns with tax percentages."
+msg_max_tax_amount_only_for_percent: "Максимальна сума податку може бути встановлена лише для міст з відсотковими ставками."
 msg_town_set_tax_max_percent_amount: "%s has set the max tax percent amount to %s."
 #Added in 0.84
 msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group toggle'
