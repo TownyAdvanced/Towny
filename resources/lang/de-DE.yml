@@ -1099,16 +1099,16 @@ msg_err_nation_already_enemies_with_2: '&c%s ist bereits Feind mit %s.'
 msg_ta_allies_enemies_updated: '&bAllies/Feinde für %s aktualisiert.'
 #Added in 0.102
 towny_map_detailed_information: '&2Klicken um detaillierte Plot-Informationen zu sehen.'
-msg_err_nation_capital_too_many_residents: '&cThe current capital city has too many residents to be replaced by %s.'
-msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your nation will mean your town is over the population limit of %d, resulting in the removal of %d residents.'
+msg_err_nation_capital_too_many_residents: '&cDie aktuelle Hauptstadt hat zu viele Einwohner, um durch %s ersetzt zu werden.'
+msg_deleting_nation_will_result_in_losing_residents: '&cWarnung: Das Löschen deiner Nation bedeutet, dass deine Stadt über der Bevölkerungsgrenze von %d liegt, was die Entfernung von %d Einwohnern zur Folge hat.'
 #Added in 0.103
-msg_command_blocked_inside_towns: '&cYou cannot use that command inside towns.'
+msg_command_blocked_inside_towns: '&cDu kannst diesen Befehl nicht in Städten verwenden.'
 msg_command_limited: 'Du kannst diesen Befehl nur in deinen eigenen Grundstücken verwenden.'
 #Added in 0.104
 #Don't add a space to the end please
-msg_plot_perm_claimed_at: 'Claimed at:'
+msg_plot_perm_claimed_at: 'Hier beansprucht:'
 #Added in 0.105
-msg_wilderness_use_x_in_all_worlds: 'Wilderness use turned %s in all worlds.'
+msg_wilderness_use_x_in_all_worlds: 'Der Gebrauch der Wildnis wurde %s in allen Welten.'
 msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
 #Added in 0.106
 msg_command_outsider_blocked: 'You cannot run that command because you don''t live in %s.'
