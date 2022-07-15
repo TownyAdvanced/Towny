@@ -88,8 +88,6 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"map",
 		"townclaim",
 		"townunclaim",
-		"tc",
-		"nc",
 		"plotborder",
 		"constantplotborder",
 		"ignoreplots",
