@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 
@@ -24,8 +25,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 public class PermHUD {
-	
-	private static final String PLOTNAME_TITLE = "Plot: " + ChatColor.GRAY;
 
 	public static void updatePerms (Player p) {
 		WorldCoord worldCoord = new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p));
@@ -33,6 +32,7 @@ public class PermHUD {
 	}
 
 	public static void updatePerms(Player p, WorldCoord worldCoord) {
+		Translator translator = Translator.locale(p);
 		String plotName, build, destroy, switching, item, type, pvp, explosions, firespread, mobspawn, title;
 		Scoreboard board = p.getScoreboard();
 		// Due to tick delay (probably not confirmed), a HUD can actually be removed from the player.
@@ -62,16 +62,16 @@ public class PermHUD {
 			switching = (tp.getResidentPerm(ActionType.SWITCH) ? v : "-") + (tp.getNationPerm(ActionType.SWITCH) ? u : "-") + (tp.getAllyPerm(ActionType.SWITCH) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.SWITCH) ? "o" : "-");
 			item = (tp.getResidentPerm(ActionType.ITEM_USE) ? v : "-") + (tp.getNationPerm(ActionType.ITEM_USE) ? u : "-") + (tp.getAllyPerm(ActionType.ITEM_USE) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.ITEM_USE) ? "o" : "-");
 			type = (townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().getName());
-			pvp = (!CombatUtil.preventPvP(worldCoord.getTownyWorld(), townBlock)) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
-			explosions = (world.isForceExpl() || townBlock.getPermissions().explosion) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
-			firespread = (town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
-			mobspawn = (town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? ChatColor.DARK_RED + "ON" : ChatColor.GREEN + "OFF";
+			pvp = (!CombatUtil.preventPvP(worldCoord.getTownyWorld(), townBlock)) ? translator.of("status_on") : translator.of("status_off");
+			explosions = (world.isForceExpl() || townBlock.getPermissions().explosion) ? translator.of("status_on") : translator.of("status_off");
+			firespread = (town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? translator.of("status_on") : translator.of("status_off");
+			mobspawn = (town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? translator.of("status_on") : translator.of("status_off");
 			if (townBlock.hasResident()) {
 				title = ChatColor.GOLD + townBlock.getResidentOrNull().getName() + " (" + townBlock.getTown().getName() + ")";
 			} else {
 				title = ChatColor.GOLD + townBlock.getTown().getName();
 			}
-			plotName = (townBlock.getName().isEmpty() ? "" : (PLOTNAME_TITLE + townBlock.getName()));
+			plotName = (townBlock.getName().isEmpty() ? "" : (translator.of("msg_perm_hud_plot_name") + townBlock.getName()));
 		} catch (NotRegisteredException e) {
 			clearPerms(p);
 			return;
@@ -122,22 +122,23 @@ public class PermHUD {
 	}
 	
 	public static void toggleOn (Player p) {
+		Translator translator = Translator.locale(p);
 		String PERM_HUD_TITLE = ChatColor.GOLD + "";
-		String permsTitle_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Plot Perms";
+		String permsTitle_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + translator.of("msg_perm_hud_title");
 		String plotName_entry = ChatColor.DARK_GREEN + "";
-		String build_entry = ChatColor.DARK_GREEN + "Build: " + ChatColor.GRAY;
-		String destroy_entry = ChatColor.DARK_GREEN + "Destroy: " + ChatColor.GRAY;
-		String switching_entry = ChatColor.DARK_GREEN + "Switch: " + ChatColor.GRAY;
-		String item_entry = ChatColor.DARK_GREEN + "Item: " + ChatColor.GRAY;
-		String keyPlotType_entry = ChatColor.DARK_GREEN + "" + "Type: ";
-		String pvp_entry = ChatColor.DARK_GREEN + "PvP: ";
-		String explosions_entry = ChatColor.DARK_GREEN + "Explosions: ";
-		String firespread_entry = ChatColor.DARK_GREEN + "Firespread: ";
-		String mobspawn_entry = ChatColor.DARK_GREEN + "Mob Spawns: ";
-		String keyTitle_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "Key";
-		String keyResident_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "f" + ChatColor.WHITE + " - " + ChatColor.GRAY + "friend" + ChatColor.DARK_GREEN + " " + ChatColor.BOLD + "r" + ChatColor.WHITE + " - " + ChatColor.GRAY + "resident";
-		String keyNation_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "t" + ChatColor.WHITE + " - " + ChatColor.GRAY + "town" + ChatColor.DARK_GREEN + " " + ChatColor.BOLD + "n" + ChatColor.WHITE + " - " + ChatColor.GRAY + "nation";
-		String keyAlly_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "a" + ChatColor.WHITE + " - " + ChatColor.GRAY + "ally" + ChatColor.DARK_GREEN + " " + ChatColor.BOLD + "o" + ChatColor.WHITE + " - " + ChatColor.GRAY + "outsider";
+		String build_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_build") + ChatColor.GRAY;
+		String destroy_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_destroy") + ChatColor.GRAY;
+		String switching_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_switch") + ChatColor.GRAY;
+		String item_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_item_use") + ChatColor.GRAY;
+		String keyPlotType_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_plot_type");
+		String pvp_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_pvp") + " ";
+		String explosions_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_explosions") + " ";
+		String firespread_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_firespread") + " ";
+		String mobspawn_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_mobspawns") + " ";
+		String keyTitle_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + translator.of("msg_perm_hud_key");
+		String keyResident_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "f" + ChatColor.WHITE + " - " + ChatColor.GRAY + translator.of("msg_perm_hud_friend") + ChatColor.DARK_GREEN + " " + ChatColor.BOLD + "r" + ChatColor.WHITE + " - " + ChatColor.GRAY + translator.of("msg_perm_hud_resident");
+		String keyNation_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "t" + ChatColor.WHITE + " - " + ChatColor.GRAY + translator.of("msg_perm_hud_town") + ChatColor.DARK_GREEN + " " + ChatColor.BOLD + "n" + ChatColor.WHITE + " - " + ChatColor.GRAY + translator.of("msg_perm_hud_nation");
+		String keyAlly_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "a" + ChatColor.WHITE + " - " + ChatColor.GRAY + translator.of("msg_perm_hud_ally") + ChatColor.DARK_GREEN + " " + ChatColor.BOLD + "o" + ChatColor.WHITE + " - " + ChatColor.GRAY + translator.of("msg_perm_hud_outsider");
 
 		//init objective
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
