@@ -1475,9 +1475,9 @@ msg_a_town_you_are_outlawed_in: '你在这个城镇被认为是法外狂徒。'
 #Message shown when TownyRTP could not find any towns to teleport to.
 msg_err_could_not_find_any_towns_to_rtp: '找不到任何拥有可出售地块的开放、公共城镇来随机传送。'
 #Message showing payment for RTP.
-msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+msg_cost_spawn_rtp: '&bYou 被收取了传送到随机的销售城镇地皮的费用 %s。'
 #Message shown to a player when they use the town rtp command.
-msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+msg_you_are_about_to_be_teleported_to_a_plot: '您即将被传送到一块在 %s 中被禁止销售的地皮，这将让您加入。 当您到达时，使用“/绘图求偿”来声称您的地图。'
 #Used in the town's status screen to display plots
 status_plot_string: '地块'
 #Displays a plot type and the amount of townblocks of that type in the town
