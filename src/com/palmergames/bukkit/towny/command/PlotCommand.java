@@ -855,6 +855,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			if (args.length > 0) {
 				if (args[0].equalsIgnoreCase("add")) {
+					SpawnPointLocation cellLoc = SpawnPointLocation.parseSpawnPointLocation(player.getLocation());
+					
+					if (jail.hasJailCell(cellLoc))
+						throw new TownyException(Translatable.of("msg_err_this_location_already_has_a_jailcell"));
 					
 					jail.addJailCell(player.getLocation());
 					TownyMessaging.sendMsg(player, Translatable.of("msg_jail_cell_set"));

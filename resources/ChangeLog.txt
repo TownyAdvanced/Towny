@@ -7597,3 +7597,6 @@ v0.92.0.11:
   - Remove old tc, nc tab completes from /res set mode.
   - Fix WorldCoord#loadChunks and #unloadChunks from being called async.
     - Closes #6022.
+0.98.3.3:
+  - Bump language files to 0.152.
+  - Fix jailcells being able to be placed where a jailcell already exists.
