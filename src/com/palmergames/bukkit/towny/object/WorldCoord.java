@@ -161,18 +161,26 @@ public class WorldCoord extends Coord {
 	 * Uses PaperLib's getChunkAtAsync when Paper is present.
 	 */
 	public void loadChunks() {
+		Towny plugin = Towny.getPlugin();
+		if (!Bukkit.isPrimaryThread())
+			Bukkit.getScheduler().runTask(plugin, () -> loadChunks(plugin));
+		else
+			loadChunks(plugin);
+	}
+
+	private void loadChunks(Towny plugin) {
 		if (getCellSize() > 16) {
 			// Dealing with a townblocksize greater than 16, we will have multiple chunks per WorldCoord.
 			int side = Math.round(getCellSize() / 16);
 			for (int x = 0; x <= side; x++) {
 				for (int z = 0; z <= side; z++) {
 					CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getSubCorner(x, z));
-					futureChunk.thenAccept(chunk-> chunk.addPluginChunkTicket(Towny.getPlugin()));
+					futureChunk.thenAccept(chunk-> chunk.addPluginChunkTicket(plugin));
 				}
 			}
 		} else {
 			CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getCorner());
-			futureChunk.thenAccept(chunk-> chunk.addPluginChunkTicket(Towny.getPlugin()));
+			futureChunk.thenAccept(chunk-> chunk.addPluginChunkTicket(plugin));
 		}
 	}
 	
@@ -183,18 +191,26 @@ public class WorldCoord extends Coord {
 	 * Uses PaperLib's getChunkAtAsync when Paper is present.
 	 */
 	public void unloadChunks() {
+		Towny plugin = Towny.getPlugin();
+		if (!Bukkit.isPrimaryThread())
+			Bukkit.getScheduler().runTask(plugin, () -> unloadChunks(plugin));
+		else
+			unloadChunks(plugin);
+	}
+
+	private void unloadChunks(Towny plugin) {
 		if (getCellSize() > 16) {
 			// Dealing with a townblocksize greater than 16, we will have multiple chunks per WorldCoord.
 			int side = Math.round(getCellSize() / 16);
 			for (int x = 0; x <= side; x++) {
 				for (int z = 0; z <= side; z++) {
 					CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getSubCorner(x, z));
-					futureChunk.thenAccept(chunk-> chunk.removePluginChunkTicket(Towny.getPlugin()));
+					futureChunk.thenAccept(chunk-> chunk.removePluginChunkTicket(plugin));
 				}
 			}
 		} else {
 			CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getCorner());
-			futureChunk.thenAccept(chunk-> chunk.removePluginChunkTicket(Towny.getPlugin()));
+			futureChunk.thenAccept(chunk-> chunk.removePluginChunkTicket(plugin));
 		}
 	}
 

@@ -7595,3 +7595,5 @@ v0.92.0.11:
     - This will make all chest boats require switching perms to open/enter.
     - New configs will have OAK_CHEST_BOAT included in the switch_ids list. 
   - Remove old tc, nc tab completes from /res set mode.
+  - Fix WorldCoord#loadChunks and #unloadChunks from being called async.
+    - Closes #6022.
