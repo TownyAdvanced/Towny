@@ -858,7 +858,7 @@ msg_err_teleport_cancelled: 'テレポートがキャンセルされました。
 #Added in 0.79
 msg_cache_block_error_plot_friends: 'フレンド'
 msg_cache_block_error_plot_allies: '同盟国'
-msg_cache_block_error_plot_outsiders: 'outsiders'
+msg_cache_block_error_plot_outsiders: '部外者逹'
 msg_cache_block_error_plot_town_members: '町のメンバー'
 msg_err_invalid_nation_map_color: '&c地図の色が不明です。許可された色は%sです。'
 msg_nation_map_color_changed: '&b国の地図の色が%sに変更されました。'
