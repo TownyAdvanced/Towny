@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.gui.SelectionGUI.SelectionType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
@@ -78,6 +79,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	private ArrayList<Inventory> guiPages;
 	private int guiPageNum = 0;
+	private SelectionType guiSelectionType;
 	private int respawnProtectionTaskID = -1;
 	private boolean respawnPickupWarningShown = false; // Prevents chat spam when a player attempts to pick up an item while under respawn protection.
 
@@ -843,6 +845,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	public void setGUIPageNum(int currentInventoryPage) {
 		this.guiPageNum = currentInventoryPage;
+	}
+
+	public SelectionType getGUISelectionType() {
+		return guiSelectionType;
+	}
+
+	public void setGUISelectionType(SelectionType selectionType) {
+		this.guiSelectionType = selectionType;
 	}
 
 	@Override

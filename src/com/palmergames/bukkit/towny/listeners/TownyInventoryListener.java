@@ -113,6 +113,7 @@ public class TownyInventoryListener implements Listener {
 				case ITEMUSE -> Translatable.of("gui_title_towny_itemuse").forLocale(resident);
 			};
 
+			resident.setGUISelectionType(selectionGUI.getType());
 			selectionGUI.playClickSound(player);
 			ResidentUtil.openGUIInventory(resident, materialSet, title);
 		} else {

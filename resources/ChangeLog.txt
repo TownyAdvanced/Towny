@@ -7602,3 +7602,5 @@ v0.92.0.11:
   - Fix jailcells being able to be placed where a jailcell already exists.
   - Make the plot perm hud translatable.
   - Fix potential NPE in SelectionGUI.
+  - Fix the back button on the switch/itemuse/allowedblocks GUIs not working from the first page.
+    - Closes #6027.

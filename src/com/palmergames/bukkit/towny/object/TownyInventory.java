@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -56,6 +57,11 @@ public class TownyInventory implements InventoryHolder {
 					resident.setGUIPageNum(--currentPage);
 					new TownyInventory(resident, resident.getGUIPage(), inventoryView.getTitle());
 					playClickSound(player);
+				} else if (resident.getGUIPageNum() == 0) {
+					// No page to go back from: go back to the SelectionGUI for the SelectionType
+					// that the resident is currently browsing, let them choose a different plot type.
+					playClickSound(player);
+					ResidentUtil.openSelectionGUI(resident, resident.getGUISelectionType());
 				}
 			}
 		} catch (Exception ignored) {}
