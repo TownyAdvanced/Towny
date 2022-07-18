@@ -2,6 +2,9 @@ package com.palmergames.bukkit.towny.tasks;
 
 import java.util.ArrayList;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.Bukkit;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -12,6 +15,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
+
 
 /**
  * This class represents the hourly timer task
@@ -45,7 +49,7 @@ public class HourlyTimerTask extends TownyTimerTask {
 	}
 
 	/*
-	 * Reduce the number of hours jailed residents are jailed for.
+	 * Reduce the number of hours jailed residents are jailed for and remove hourly jail fee from town bank if possible
 	 */
 	private void decrementJailedHours() {
 		for (Resident resident : new ArrayList<>(universe.getJailedResidentMap()))
@@ -56,5 +60,24 @@ public class HourlyTimerTask extends TownyTimerTask {
 					resident.setJailHours(resident.getJailHours() - 1);
 					resident.save();
 				}
+		if (TownySettings.hourlyJailFee() >= 0)
+		{
+			// Check if towns can afford upkeep for prisoners and if not to release them
+			for (Resident resident : new ArrayList<>(universe.getJailedResidentMap()))
+			{
+				Town town = resident.getJailTown();
+				double hourlyJailFee = TownySettings.hourlyJailFee();
+				if (!town.getAccount().canPayFromHoldings(hourlyJailFee))
+				{
+					Bukkit.getScheduler().runTaskLater(plugin, () -> JailUtil.unJailResident(resident, UnJailReason.INSUFFICIENT_FUNDS), 20);
+				}
+				else
+				{
+					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x", hourlyJailFee,resident));
+					town.getAccount().withdraw(hourlyJailFee, "Jailee Upkeep");
+				}
+					
+			}
+		}
 	}
 }

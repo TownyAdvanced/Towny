@@ -2431,6 +2431,27 @@ public enum ConfigNodes {
 			"5",
 			"",
 			"#How many hours an attacking outlaw will be jailed for."),
+	JAIL_POW_JAIL_HOURS(
+		"jail.pow_jail_hours",
+		"5",
+		"",
+		"#How many hours an attacking enemy will be jailed for."),
+	JAIL_MAXSET_JAIL_HOURS(
+		"jail.maxset_jail_hours",
+		"5",
+		"",
+		"#The maximum hours that a mayor can set when jailing someone, full number expected."),
+	JAIL_FEE_INITIAL_AMOUNT(
+		"jail.fee_initial_amount",
+		"-1",
+		"",
+		"#Amount that it costs per player jailed. Set to -1 to disable"),
+	JAIL_FEE_HOURLY_AMOUNT(
+		"jail.fee_hourly_amount",
+		"-1",
+		"",
+		"#Amount that it costs per player jailed per hour. Set to -1 to disable"),
+	
 	JAIL_JAIL_ALLOWS_TELEPORT_ITEMS(
 			"jail.jail_allows_teleport_items",
 			"false",
@@ -2447,21 +2468,39 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"#If true players can pay a bail amount to be unjailed."),
+	JAIL_MAX_JAILED_COUNT(
+		"jail.max_jailed_count",
+		"-1",
+		"",
+		"#Amount of potential jailed players per town, set to -1 to disable."),
+	JAIL_MAX_JAILED_NEWJAIL_BEHAVIOR(
+		"jail.max_jailed_newjail_behavior",
+		"0",
+		"",
+		"#Behaviour for new jail attempts if max jailed count is reached",
+		"#0 = Unable to jail new players until a current prisoner is released",
+		"#1= A prisoner slot will be made by automatically releasing a prisoner based on remaining time",
+		"#2= A prisoner slot will be made by automatically releasing a prisoner based on lowest custom bail"),
 	JAIL_BAIL_BAIL_AMOUNT(
 			"jail.bail.bail_amount",
 			"10",
 			"",
 			"#Amount that bail costs for normal residents/nomads."),
+	JAIL_BAIL_BAILMAX_AMOUNT(
+			"jail.bail.bailmax_amount",
+			"100",
+			"",
+			"#Max bail cost that a mayor can set."),
 	JAIL_BAIL_BAIL_AMOUNT_MAYOR(
 			"jail.bail.bail_amount_mayor",
 			"10",
 			"",
-			"#Amount that bail costs for Town mayors."),
+			"#Amount that bail costs for Town mayors if captured."),
 	JAIL_BAIL_BAIL_AMOUNT_KING(
 			"jail.bail.bail_amount_king",
 			"10",
 			"",
-			"#Amount that bail costs for Nation kings."),
+			"#Amount that bail costs for Nation kings if captured."),
 	JAIL_BLACKLISTED_COMMANDS(
 			"jail.blacklisted_commands",
 			"home,spawn,teleport,tp,tpa,tphere,tpahere,back,dback,ptp,jump,kill,warp,suicide",

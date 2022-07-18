@@ -516,8 +516,9 @@ public enum HelpMenu {
 				.add("list", "")
 				.add("[resident]", "")
 				.add("[resident] [hours]", "")
-				.add("[resident] [hours] [jail]", "")
-				.add("[resident] [hours] [jail] [cell]", "");
+				.add("[resident] [hours] [bail]", "")
+				.add("[resident] [hours] [bail] [jail]", "")
+				.add("[resident] [hours] [bail] [jail] [cell]", "");
 		}
 	},
 	

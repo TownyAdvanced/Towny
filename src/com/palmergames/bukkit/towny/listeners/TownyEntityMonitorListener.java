@@ -392,7 +392,7 @@ public class TownyEntityMonitorListener implements Listener {
 				// Send to jail. Hours are set later on. Task is set 1 tick later so the Jail book isn't removed from their death.
 				Bukkit.getScheduler().runTaskLater(
 					plugin, ()-> 
-					JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 0, JailReason.OUTLAW_DEATH.getHours(), JailReason.OUTLAW_DEATH, attackerResident.getPlayer()),
+					JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 0, TownySettings.getJailedPOWJailHours(),TownySettings.getBailAmount(), JailReason.OUTLAW_DEATH, attackerResident.getPlayer()),
 					1);
 				return;
 			}

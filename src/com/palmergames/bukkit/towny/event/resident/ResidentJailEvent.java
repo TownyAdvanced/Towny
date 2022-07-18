@@ -56,4 +56,7 @@ public class ResidentJailEvent extends Event {
 	public Location getJailSpawnLocation() {
 		return resident.getJailSpawn();
 	}
+	
+	public double getBailAmount() {return resident.getJailBail();}
+
 }
