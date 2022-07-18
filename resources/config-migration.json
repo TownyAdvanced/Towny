@@ -298,5 +298,14 @@
         "value": ",OAK_CHEST_BOAT"
       }
     ]
+  },
+  {
+    "version": "0.98.3.3",
+    "changes": [
+      {
+        "type": "RUNNABLE",
+        "key": "migrate_notifications"
+      }
+    ]
   }
 ]

@@ -36,6 +36,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -100,12 +101,12 @@ public class TownyCustomListener implements Listener {
 	}
 	
 	private void sendChunkNoticiation(Player player, String msg) {
-		if (TownySettings.isNotificationsAppearingInActionBar() && !TownySettings.isNotificationsAppearingOnBossbar())
-			sendActionBarChunkNotification(player, LegacyComponentSerializer.builder().build().deserialize(msg));
-		else if (TownySettings.isNotificationsAppearingOnBossbar())
-			sendBossBarChunkNotification(player, BossBar.bossBar(LegacyComponentSerializer.builder().build().deserialize(msg), 1, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS));
-		else
-			TownyMessaging.sendMessage(player, msg);
+		switch (TownySettings.getNotificationsAppearAs().toLowerCase(Locale.ROOT)) {
+			case "bossbar" -> sendBossBarChunkNotification(player, BossBar.bossBar(LegacyComponentSerializer.builder().build().deserialize(msg), 0, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS));
+			case "chat" -> TownyMessaging.sendMessage(player, msg);
+			case "none" -> {}
+			default -> sendActionBarChunkNotification(player, LegacyComponentSerializer.builder().build().deserialize(msg));
+		}
 	}
 	
 	private void sendActionBarChunkNotification(Player player, TextComponent msgComponent) {
