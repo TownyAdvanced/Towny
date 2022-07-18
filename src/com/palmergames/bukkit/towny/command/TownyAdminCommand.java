@@ -144,6 +144,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"unruin",
 		"trust",
 		"checkoutposts",
+		"settownlevel",
 		"merge",
 		"forcemerge"
 	);
@@ -460,6 +461,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							if (args.length == 4) {
 								return NameUtil.filterByStart(adminMetaTabCompletes, args[3]);
 							}
+							break;
+						case "settownlevel":
+							if (args.length == 4)
+								return NameUtil.filterByStart(StringMgmt.addToList(numbers, "unset"), args[3]);
 							break;
 						case "trust":
 							if (args.length == 4)
@@ -1339,6 +1344,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("meta")) {
 				
 				handleTownMetaCommand(player, town, split);
+			} else if (split[1].equalsIgnoreCase("settownlevel")) {
+
+				setTownLevel(town, StringMgmt.remArgs(split, 2));
 			} else if (split[1].equalsIgnoreCase("bankhistory")) {
 
 				int pages = 10;
@@ -1448,6 +1456,33 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(getSender(), e.getMessage());
 		}
 		
+	}
+
+	private void setTownLevel(Town town, String[] split) throws TownyException {
+		if (split.length == 0)
+			throw new TownyException("Eg: /townyadmin town [townname] settownlevel 2");
+		
+		// Handle un-setting the manual override.
+		if (split[0].equalsIgnoreCase("unset")) {
+			town.setManualTownLevel(-1);
+			town.save();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_unset", town, town.getLevel()));
+			return;
+		}
+
+		// Handle applying a manual override.
+		int level = town.getLevel();
+		try {
+			level = Integer.parseInt(split[0]);
+		} catch (NumberFormatException e) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
+			return;
+		}
+		if (level > town.getMaxLevel() - 1)
+			level = town.getMaxLevel() - 1;
+		town.setManualTownLevel(level);
+		town.save();
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_overridden_with", town, level));
 	}
 
 	private void parseAdminTownRankCommand(Player player, Town town, String[] split) throws TownyException {

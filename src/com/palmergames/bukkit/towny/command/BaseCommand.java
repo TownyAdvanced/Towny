@@ -74,6 +74,18 @@ public class BaseCommand implements TabCompleter{
 		"off"
 	);
 	
+	public static final List<String> numbers = Arrays.asList(
+		"1",
+		"2",
+		"3",
+		"4",
+		"5",
+		"6",
+		"7",
+		"8",
+		"9"
+	);
+	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		return getTownyStartingWith(args[args.length - 1], "rtn");

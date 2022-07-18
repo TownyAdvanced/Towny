@@ -95,6 +95,7 @@ public class Town extends Government implements TownBlockOwner {
 	private long joinedNationAt;
 	private long movedHomeBlockAt;
 	private Jail primaryJail;
+	private int manualTownLevel = -1;
 
 	public Town(String name) {
 		super(name);
@@ -1641,9 +1642,17 @@ public class Town extends Government implements TownBlockOwner {
 	public int getLevel(int populationSize) {
 		if (this.isRuined())
 			return 0;
-		for (int level : TownySettings.getConfigTownLevel().keySet())
-			if (populationSize >= level)
+
+		int key = 0;
+		for (int level : TownySettings.getConfigTownLevel().keySet()) {
+			key++;
+			// Some towns might have their townlevel overridden.
+			if (getManualTownLevel() > -1 && key == getMaxLevel() - getManualTownLevel())
 				return level;
+			// No overridden townlevel, use population instead.
+			if (getManualTownLevel() == -1 && populationSize >= level)
+				return level;
+		}
 		return 0;
 	}
 
@@ -1684,6 +1693,20 @@ public class Town extends Government implements TownBlockOwner {
 		return townLevelId;
 	}
 
+	/**
+	 * @return the manualTownLevel
+	 */
+	public int getManualTownLevel() {
+		return manualTownLevel;
+	}
+
+	/**
+	 * @param manualTownLevel the manualTownLevel to set
+	 */
+	public void setManualTownLevel(int manualTownLevel) {
+		this.manualTownLevel = manualTownLevel;
+	}
+	
 	@Override
 	public @NotNull Iterable<? extends Audience> audiences() {
 		return TownyAPI.getInstance().getOnlinePlayers(this).stream().map(player -> Towny.getAdventure().player(player)).collect(Collectors.toSet());

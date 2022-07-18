@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 
 import net.md_5.bungee.api.ChatColor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -238,5 +239,11 @@ public class StringMgmt {
 				return false;
 		
 		return true;
+	}
+	
+	public static List<String> addToList(List<String> list, String addition) {
+		List<String> out = new ArrayList<>(list);
+		out.add(addition);
+		return out;
 	}
 }

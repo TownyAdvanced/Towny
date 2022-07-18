@@ -195,6 +195,7 @@ public class SQL_Schema {
 		columns.add("`allies` mediumtext NOT NULL");
 		columns.add("`enemies` mediumtext NOT NULL");
 		columns.add("`hasUnlimitedClaims` bool NOT NULL DEFAULT '0'");
+		columns.add("`manualTownLevel` BIGINT DEFAULT '-1'");
 		return columns;
 	}
 
