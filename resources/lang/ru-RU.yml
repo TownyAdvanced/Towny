@@ -1493,9 +1493,9 @@ msg_err_nation_unaffiliated: 'Эта нация не связана с вами.
 msg_err_town_unaffiliated: 'Этот город не связан с вами.'
 #Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
-msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
+msg_err_this_location_already_has_a_jailcell: 'В этом месте уже есть тюремная камера.'
 #Title line of the /plot perm hud.
-msg_perm_hud_title: 'Plot Perms'
+msg_perm_hud_title: 'Права для участка'
 #Seen in /plot perm hud:
 msg_perm_hud_build: 'Build: '
 #Seen in /plot perm hud:
