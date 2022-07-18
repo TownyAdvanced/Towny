@@ -906,6 +906,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty())
 					MetadataLoader.getInstance().deserializeMetadata(town, line.trim());
 				
+				line = keys.get("manualTownLevel");
+				if (line != null)
+					town.setManualTownLevel(Integer.parseInt(line));
+				
 				line = keys.get("nation");
 				if (line != null && !line.isEmpty()) {
 					Nation nation = null;
@@ -1967,6 +1971,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Metadata
 		list.add("metadata=" + serializeMetadata(town));
+		
+		// ManualTownLevel
+		list.add("manualTownLevel=" + town.getManualTownLevel());
 		
 		list.add("ruined=" + town.isRuined());
 		list.add("ruinedTime=" + town.getRuinedTime());

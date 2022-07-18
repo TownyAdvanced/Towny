@@ -956,6 +956,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				town.setTag(line);
 			town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
 			town.setBonusBlocks(rs.getInt("bonus"));
+			town.setManualTownLevel(rs.getInt("manualTownLevel"));
 			town.setTaxPercentage(rs.getBoolean("taxpercent"));
 			town.setTaxes(rs.getFloat("taxes"));
 			town.setMaxPercentTaxAmount(rs.getFloat("maxPercentTaxAmount"));
@@ -2117,6 +2118,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("tag", town.getTag());
 			twn_hm.put("protectionStatus", town.getPermissions().toString().replaceAll(",", "#"));
 			twn_hm.put("bonus", town.getBonusBlocks());
+			twn_hm.put("manualTownLevel", town.getManualTownLevel());
 			twn_hm.put("purchased", town.getPurchasedBlocks());
 			twn_hm.put("nationZoneOverride", town.getNationZoneOverride());
 			twn_hm.put("nationZoneEnabled", town.isNationZoneEnabled());
