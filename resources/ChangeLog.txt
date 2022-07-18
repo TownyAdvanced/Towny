@@ -7605,3 +7605,7 @@ v0.92.0.11:
   - Fix the back button on the switch/itemuse/allowedblocks GUIs not working from the first page.
     - Closes #6027.
   - Auto-supress event message if empty, courtesy of GNosii with PR #6028.
+  - Add a command to manually override a town's TownLevel.
+  - New Command: /ta town TOWNNAME settownlevel [#|unset]
+     - Manually overrides a town's townlevel to a number, 1 through x, where x is the last townlevel.
+     - unset subcommand removes the manual override and returns a town to using the normal townlevel based on resident count.
