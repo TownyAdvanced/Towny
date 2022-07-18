@@ -7601,3 +7601,4 @@ v0.92.0.11:
   - Bump language files to 0.152.
   - Fix jailcells being able to be placed where a jailcell already exists.
   - Make the plot perm hud translatable.
+  - Fix potential NPE in SelectionGUI.

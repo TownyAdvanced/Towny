@@ -93,8 +93,11 @@ public class TownyInventoryListener implements Listener {
 			}
 		} else if (event.getInventory().getHolder() instanceof SelectionGUI selectionGUI) {
 			TownBlockType type = TownBlockTypeHandler.getType(Colors.strip(event.getCurrentItem().getItemMeta().getDisplayName()));
-			if (type == null)
-				player.closeInventory();
+			if (type == null) {
+				// The player has clicked the back/next button or an empty spot..
+				selectionGUI.playClickSound(player);
+				return;
+			}
 
 			Set<Material> materialSet = switch (selectionGUI.getType()) {
 				case ITEMUSE -> type.getData().getItemUseIds();
