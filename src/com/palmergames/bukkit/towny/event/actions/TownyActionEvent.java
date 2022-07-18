@@ -119,7 +119,10 @@ public abstract class TownyActionEvent extends Event implements Cancellable {
 	 * @param message Message shown to players when their build attempts is cancelled.
 	 */
 	public void setMessage(String message) {
-		this.message = message;
+		if (message.equals(""))
+			this.supressMessage(true);
+		else
+			this.message = message;
 	}
 	
 }
