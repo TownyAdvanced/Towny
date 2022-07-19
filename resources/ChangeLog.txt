@@ -7623,3 +7623,12 @@ v0.92.0.11:
     - By default, notifications appear in the player's action bar.
     - Available options: action_bar, chat, bossbar, or none.
   - Automatic Config Edit: previous notification setting will be migrated to the new home: notification.notifications_appear_as
+  - Add unclaimEntityTypeDelete to TownyWorld.
+    - Allows Towny to delete all Entities of a given type from a TownBlock when it is unclaimed by a town.
+    - Closes #5953.
+  - New Config Options:
+    - new_world_settings.plot_management.entity_delete.enabled
+      - Default: false
+    - new_world_settings.plot_management.entity_delete.unclaim_delete
+      - Default: "ENDERCRYSTAL"
+      - These entities will be deleted upon a plot being unclaimed
