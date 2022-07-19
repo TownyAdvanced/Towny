@@ -8,6 +8,7 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -181,6 +182,15 @@ public abstract class TownyPermissionSource {
 
 		return (permissible == null) || permissible.isOp() || strictHas(permissible, PermissionNodes.TOWNY_ADMIN.getNode());
 
+	}
+	
+	public void testPermissionOrThrow(Player player, String perm) throws NoPermissionException {
+		testPermissionOrThrow((Permissible) player, perm);
+	}
+	
+	public void testPermissionOrThrow(Permissible permissible, String perm) throws NoPermissionException {
+		if (!testPermission(permissible, perm))
+			throw new NoPermissionException();
 	}
 
 	public boolean testPermission(Player player, String perm) {
