@@ -659,6 +659,8 @@ permissions:
             towny.command.townyadmin.town.rank: true
             towny.command.townyadmin.town.rename: true
             towny.command.townyadmin.town.set: true
+            towny.command.townyadmin.town.settownlevel: true
+            towny.command.townyadmin.town.giveboughtblocks: true
             towny.command.townyadmin.town.toggle: true
             towny.command.townyadmin.town.meta: true
             towny.command.townyadmin.town.bankhistory: true

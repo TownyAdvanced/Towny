@@ -296,6 +296,8 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_RENAME("towny.command.townyadmin.town.rename"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_TOGGLE("towny.command.townyadmin.town.toggle"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_SET("towny.command.townyadmin.town.set"),
+		TOWNY_COMMAND_TOWNYADMIN_TOWN_SETTOWNLEVEL("towny.command.townyadmin.town.settownlevel"),
+		TOWNY_COMMAND_TOWNYADMIN_TOWN_GIVEBOUGHTBLOCKS("towny.command.townyadmin.town.giveboughtblocks"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE("towny.command.townyadmin.town.spawn.freecharge"),
 	    TOWNY_COMMAND_TOWNYADMIN_TOWN_META("towny.command.townyadmin.town.meta"),
 	    TOWNY_COMMAND_TOWNYADMIN_TOWN_BANKHISTORY("towny.command.townyadmin.town.bankhistory"),

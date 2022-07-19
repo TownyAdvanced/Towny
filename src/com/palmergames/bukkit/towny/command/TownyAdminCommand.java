@@ -147,6 +147,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"trust",
 		"checkoutposts",
 		"settownlevel",
+		"giveboughtblocks",
 		"merge",
 		"forcemerge"
 	);
@@ -464,6 +465,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(adminMetaTabCompletes, args[3]);
 							}
 							break;
+						case "giveboughtblocks":
 						case "settownlevel":
 							if (args.length == 4)
 								return NameUtil.filterByStart(StringMgmt.addToList(numbers, "unset"), args[3]);
@@ -1340,6 +1342,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("meta")) {
 				
 				handleTownMetaCommand(player, town, split);
+			} else if (split[1].equalsIgnoreCase("giveboughtblocks")) {
+
+				giveTownBoughtTownBlocks(town, StringMgmt.remArgs(split, 2));
 			} else if (split[1].equalsIgnoreCase("settownlevel")) {
 
 				setTownLevel(town, StringMgmt.remArgs(split, 2));
@@ -1435,7 +1440,31 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		
 	}
 
+	private void giveTownBoughtTownBlocks(Town town, String[] split) throws TownyException {
+		// The number is missing.
+		if (split.length == 0)
+			throw new TownyException("Eg: /townyadmin town [townname] giveboughtblocks 2");
+
+		if (TownySettings.getMaxBonusBlocks(town) == 0)
+			throw new TownyException(Translatable.of("msg_err_town_not_allowed_purchased_blocks", town));
+
+		// Handle removing all bought blocks
+		if (split[0].equalsIgnoreCase("unset")) {
+			town.setPurchasedBlocks(0);
+			town.save();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_purchased_blocks_unset", town));
+			return;
+		}
+
+		// Handle modifying the town's bought blocks.
+		int blocks = MathUtil.getIntOrThrow(split[0]);
+		town.setPurchasedBlocks(Math.max(town.getPurchasedBlocks() + blocks, 0)); // Don't go below 0 or something will probably break.
+		town.save();
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_purchased_blocks_changed", town, blocks, town.getPurchasedBlocks()));
+	}
+
 	private void setTownLevel(Town town, String[] split) throws TownyException {
+		// The number is missing.
 		if (split.length == 0)
 			throw new TownyException("Eg: /townyadmin town [townname] settownlevel 2");
 		

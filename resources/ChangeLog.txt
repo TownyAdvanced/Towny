@@ -7607,6 +7607,11 @@ v0.92.0.11:
   - Auto-supress event message if empty, courtesy of GNosii with PR #6028.
   - Add a command to manually override a town's TownLevel.
   - New Command: /ta town TOWNNAME settownlevel [#|unset]
-     - Manually overrides a town's townlevel to a number, 1 through x, where x is the last townlevel.
-     - unset subcommand removes the manual override and returns a town to using the normal townlevel based on resident count.
+    - Manually overrides a town's townlevel to a number, 1 through x, where x is the last townlevel.
+    - unset subcommand removes the manual override and returns a town to using the normal townlevel based on resident count.
   - Add some int and money validations to reduce duplication in commands.
+  - New Command: /ta town TOWNNAME giveboughtblocks [#|unset]
+    - Command that lets the admin modify the number of purchased townblocks a town has.
+    - unset subcommand removes all purchased townblocks from the town.
+    - Use negative numbers to take purchased townblocks from the town.
+    - Closes #6034.
