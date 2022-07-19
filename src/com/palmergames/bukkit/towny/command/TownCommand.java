@@ -855,7 +855,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_BANKHISTORY.getNode()))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-					int pages = MathUtil.getIntOrThrow(newSplit[0]);
+					int pages = 10;
+					if (newSplit.length > 0)
+						pages = MathUtil.getIntOrThrow(newSplit[0]);
+
 					TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().generateBankHistoryBook(player, pages);
 				} else if (split[0].equalsIgnoreCase("merge")) {
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_MERGE.getNode()))
