@@ -7615,3 +7615,11 @@ v0.92.0.11:
     - unset subcommand removes all purchased townblocks from the town.
     - Use negative numbers to take purchased townblocks from the town.
     - Closes #6034.
+  - Condense action bar and bossbar notification options into one, courtesy of Warriorrrr with PR #6033.
+  - Add Runnable type to ConfigMigrator, courtesy of Warriorrrr with PR #6033.
+  - New Config Option: notification.notifications_appear_as
+    - Default: "action_bar"
+    - This setting controls where chunk notifications are displayed for players.
+    - By default, notifications appear in the player's action bar.
+    - Available options: action_bar, chat, bossbar, or none.
+  - Automatic Config Edit: previous notification setting will be migrated to the new home: notification.notifications_appear_as
