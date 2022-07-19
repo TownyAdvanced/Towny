@@ -469,6 +469,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		universe.removeTownBlock(townBlock);
 		deleteTownBlock(townBlock);
 
+		if (townBlock.getWorld().isDeletingEntitiesOnUnclaim())
+			TownyRegenAPI.addDeleteTownBlockEntityQueue(townBlock.getWorldCoord());
 
 		if (townBlock.getWorld().isUsingPlotManagementDelete())
 			TownyRegenAPI.addDeleteTownBlockIdQueue(townBlock.getWorldCoord());

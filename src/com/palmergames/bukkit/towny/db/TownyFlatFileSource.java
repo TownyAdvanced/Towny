@@ -1334,6 +1334,25 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("isDeletingEntitiesOnUnclaim");
+				if (line != null)
+					try {
+						world.setDeletingEntitiesOnUnclaim(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				
+				line = keys.get("unclaimDeleteEntityTypes");
+				if (line != null)
+					try {
+						List<String> entityTypes = new ArrayList<>();
+						for (String s : line.split(","))
+							if (!s.isEmpty())
+								entityTypes.add(s);
+						
+						world.setUnclaimDeleteEntityTypes(entityTypes);
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("usingPlotManagementDelete");
 				if (line != null)
 					try {
@@ -2145,6 +2164,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Plot Management Delete Ids
 		if (world.getPlotManagementDeleteIds() != null)
 			list.add("plotManagementDeleteIds=" + StringMgmt.join(world.getPlotManagementDeleteIds(), ","));
+
+		// EntityType removal on unclaim.
+		list.add("");
+		list.add("# The following settings control what EntityTypes are deleted upon a townblock being unclaimed");
+		list.add("# Valid EntityTypes are listed here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html");
+		list.add("isDeletingEntitiesOnUnclaim=" + world.isDeletingEntitiesOnUnclaim());
+		if (world.getUnclaimDeleteEntityTypes() != null)
+			list.add("unclaimDeleteEntityTypes=" + StringMgmt.join(world.getUnclaimDeleteEntityTypes(), ","));
 
 		// PlotManagement
 		list.add("");

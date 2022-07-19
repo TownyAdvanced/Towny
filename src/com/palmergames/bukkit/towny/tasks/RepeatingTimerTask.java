@@ -34,6 +34,10 @@ public class RepeatingTimerTask extends TownyTimerTask {
 			makeNextPlotSnapshot();
 		}
 
+		// Perform the next plot_management entity_delete
+		if (TownyRegenAPI.hasDeleteTownBlockEntityQueue())
+			TownyRegenAPI.doDeleteTownBlockEntities(TownyRegenAPI.getDeleteTownBlockEntityQueue());
+
 		// Perform the next plot_management block_delete
 		if (TownyRegenAPI.hasDeleteTownBlockIdQueue()) {
 			TownyRegenAPI.doDeleteTownBlockIds(TownyRegenAPI.getDeleteTownBlockIdQueue());

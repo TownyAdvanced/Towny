@@ -2047,6 +2047,14 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_FORCE_FIRE_ON);
 	}
 
+	public static boolean isDeletingEntitiesOnUnclaim() {
+		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_ENTITY_DELETE_ENABLE);
+	}
+	
+	public static List<String> getUnclaimDeleteEntityTypes() {
+		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_ENTITY_DELETE);
+	}
+	
 	public static boolean isUsingPlotManagementDelete() {
 
 		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE_ENABLE);
