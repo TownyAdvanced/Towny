@@ -2051,8 +2051,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_ENTITY_DELETE_ENABLE);
 	}
 	
-	public static EnumSet<EntityType> getUnclaimDeleteEntityTypes() {
-		return toEntityTypeEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_ENTITY_DELETE));
+	public static List<String> getUnclaimDeleteEntityTypes() {
+		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_ENTITY_DELETE);
 	}
 	
 	public static boolean isUsingPlotManagementDelete() {

@@ -332,9 +332,9 @@ public class TownyWorld extends TownyObject {
 
 	public EnumSet<EntityType> getUnclaimDeleteEntityTypes() {
 		if (unclaimDeleteEntityTypes == null)
-			return TownySettings.getUnclaimDeleteEntityTypes();
-		else 
-			return unclaimDeleteEntityTypes;
+			setUnclaimDeleteEntityTypes(TownySettings.getUnclaimDeleteEntityTypes());
+
+		return unclaimDeleteEntityTypes;
 	}
 
 	public void setUnclaimDeleteEntityTypes(List<String> entityTypes) {
