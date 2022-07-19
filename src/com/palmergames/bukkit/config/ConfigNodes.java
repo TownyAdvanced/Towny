@@ -2485,7 +2485,7 @@ public enum ConfigNodes {
 			"jail.bail.bail_amount",
 			"10",
 			"",
-			"#Amount that bail costs for normal residents/nomads."),
+			"#Amount that bail costs for outlaw or POW arrests."),
 	JAIL_BAIL_BAILMAX_AMOUNT(
 			"jail.bail.bailmax_amount",
 			"100",

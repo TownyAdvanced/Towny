@@ -1778,7 +1778,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						JailUtil.maxJailedUnjail(maxJailedNewJailBehavior, town);
 					}
 				
-				JailUtil.jailResident(jailedResident, jail, cell, hours, bail, JailReason.MAYOR, sender);
+				JailUtil.jailResidentWithBail(jailedResident, jail, cell, hours, bail, JailReason.MAYOR, sender);
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), jailNum));
 				// If fee exists (already sanitised for) deduct it from Town bank and inform in chat
