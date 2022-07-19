@@ -8,10 +8,16 @@ public enum MigrationType {
 	TOWNYPERMS_ADD(false),
 	REPLACE(false),
 	REMOVE(true),
-	MOVE(true);
+	MOVE(true),
+	RUNNABLE(true);
 	
-	public boolean early;
+	public final boolean early;
+	
 	MigrationType(boolean early) {
 		this.early = early;
+	}
+
+	public boolean isEarly() {
+		return early;
 	}
 }

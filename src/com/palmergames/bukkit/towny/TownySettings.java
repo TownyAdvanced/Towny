@@ -1173,7 +1173,7 @@ public class TownySettings {
 	}
 	
 	public static boolean isNotificationsAppearingInActionBar() {
-		return getBoolean(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_IN_ACTION_BAR);
+		return getString(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_AS).equalsIgnoreCase("action_bar");
 	}
 
 	public static boolean getShowTownBoardOnLogin() {
@@ -3045,7 +3045,7 @@ public class TownySettings {
 	}
 
 	public static boolean isNotificationsAppearingOnBossbar() {
-		return getBoolean(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_ON_BOSSBAR);
+		return getString(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_AS).equalsIgnoreCase("bossbar");
 	}
 	
 	public static boolean allowTownCommandBlacklisting() {
@@ -3187,6 +3187,10 @@ public class TownySettings {
 	
 	public static boolean getRespawnProtectionAllowPickup() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_RESPAWN_PROTECTION_ALLOW_PICKUP);
+	}
+	
+	public static String getNotificationsAppearAs() {
+		return getString(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_AS);
 	}
 }
 

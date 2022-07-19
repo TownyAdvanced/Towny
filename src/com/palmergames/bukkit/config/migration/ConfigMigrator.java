@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +38,7 @@ public class ConfigMigrator {
 	private final CommentedConfiguration townyperms;
 	private final boolean earlyRun;
 	private final Plugin plugin;
+	private final RunnableMigrations runnableMigrations = new RunnableMigrations();
 	
 	public ConfigMigrator(@NotNull CommentedConfiguration config, @NotNull String filename, boolean earlyRun) {
 		Objects.requireNonNull(config, "ConfigMigrator: config cannot be null");
@@ -93,7 +95,7 @@ public class ConfigMigrator {
 				if (changeCount == 0)
 					continue;
 
-				plugin.getLogger().info("Config: " + migration.version + " applying " + changeCount + " automatic update" + (changeCount == 1 ? "" : "s") + " ...");
+				plugin.getLogger().info("Config: " + migration.version + " applying " + changeCount + " automatic update" + (changeCount == 1 ? "" : "s") + "...");
 				for (Change change : migration.changes) {
 					// Only perform earlyRun changes on earlyRun-typed Migrations and vice versa.
 					if (change.type.early != earlyRun)
@@ -161,6 +163,13 @@ public class ConfigMigrator {
 					config.set(change.path, null);
 				}
 				break;
+			case RUNNABLE:
+				Consumer<CommentedConfiguration> consumer = runnableMigrations.getByName(change.key);
+				if (consumer != null)
+					consumer.accept(config);
+				else 
+					plugin.getLogger().warning("Config Migrator: Could not find runnable migration with key " + change.key);
+				break;
 			default:
 				throw new UnsupportedOperationException("Unsupported Change type: " + change);
 		}
@@ -212,6 +221,10 @@ public class ConfigMigrator {
 		}
 
 		config.set("levels.nation_level", mapList);
+	}
+
+	public RunnableMigrations getRunnableMigrations() {
+		return runnableMigrations;
 	}
 
 	/**
