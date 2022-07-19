@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.151
+version: 0.152
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
@@ -1491,3 +1491,47 @@ msg_err_no_pages_to_display: 'Нечего отображать!'
 msg_err_nation_unaffiliated: 'Эта нация не связана с вами.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: 'Этот город не связан с вами.'
+#Added in 0.152
+#Message shown when a player tries to add a jail cell location where one already exists.
+msg_err_this_location_already_has_a_jailcell: 'В этом месте уже есть тюремная камера.'
+#Title line of the /plot perm hud.
+msg_perm_hud_title: 'Права для участка'
+#Seen in /plot perm hud:
+msg_perm_hud_build: 'Строительство: '
+#Seen in /plot perm hud:
+msg_perm_hud_destroy: 'Разрушение: '
+#Seen in /plot perm hud:
+msg_perm_hud_switch: 'Переключение: '
+#Seen in /plot perm hud:
+msg_perm_hud_item_use: 'Использование предметов: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_type: 'Тип: '
+#Seen in /plot perm hud:
+msg_perm_hud_pvp: 'ПВП: '
+#Seen in /plot perm hud:
+msg_perm_hud_explosions: 'Взрывы: '
+#Seen in /plot perm hud:
+msg_perm_hud_firespread: 'Распространение огня: '
+#Seen in /plot perm hud:
+msg_perm_hud_mobspawns: 'Спавн мобов: '
+#Seen in /plot perm hud:
+msg_perm_hud_key: 'Key'
+#Seen in /plot perm hud:
+msg_perm_hud_friend: 'друг'
+#Seen in /plot perm hud:
+msg_perm_hud_town: 'город'
+#Seen in /plot perm hud:
+msg_perm_hud_ally: 'союзник'
+#Seen in /plot perm hud:
+msg_perm_hud_resident: 'житель'
+#Seen in /plot perm hud:
+msg_perm_hud_nation: 'нация'
+#Seen in /plot perm hud:
+msg_perm_hud_outsider: 'чужак'
+#Seen in /plot perm hud:
+msg_perm_hud_plot_name: 'Участок: '
+#Added in 0.153
+#Message shown confirming /ta town NAME settownlevel # command.
+msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
+#Message shown when unsetting a manual town level.
+msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
