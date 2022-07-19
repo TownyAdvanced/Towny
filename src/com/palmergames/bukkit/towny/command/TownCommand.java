@@ -855,15 +855,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_BANKHISTORY.getNode()))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-					int pages = 10;
-					if (newSplit.length > 0)
-						try {
-							pages = Integer.parseInt(newSplit[0]);
-						} catch (NumberFormatException e) {
-							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_int"));
-							return;
-						}
-
+					int pages = MathUtil.getIntOrThrow(newSplit[0]);
 					TownyUniverse.getInstance().getResident(player.getUniqueId()).getTown().generateBankHistoryBook(player, pages);
 				} else if (split[0].equalsIgnoreCase("merge")) {
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_MERGE.getNode()))
@@ -4150,12 +4142,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
 			
 			if (args.length == 2) {
-				int amount;
-				try {
-					amount = Integer.parseInt(args[1].trim());
-				} catch (NumberFormatException ex) {
-					throw new TownyException(Translatable.of("msg_error_must_be_int"));
-				}
+				int amount = MathUtil.getIntOrThrow(args[1].trim());
 
 				if (withdraw)
 					MoneyUtil.townWithdraw(player, resident, resident.getTown(), amount);

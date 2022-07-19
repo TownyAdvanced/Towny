@@ -53,6 +53,7 @@ import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
@@ -2547,20 +2548,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 	
-	private void parseAdminDepositAllCommand(String[] split) {
+	private void parseAdminDepositAllCommand(String[] split) throws TownyException {
 		if (split.length != 1) {
 			HelpMenu.TA_DEPOSITALL.send(sender);
 			return;
 		}
 		String reason = "townyadmin depositall";
-		double amount = 0;
-		try {
-			amount = Double.parseDouble(split[0]);				
-		} catch (NumberFormatException e) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_num"));
-			return;
-		}
-		
+		double amount = MoneyUtil.getMoneyAboveZeroOrThrow(split[0]);
 		for (Nation nation : TownyUniverse.getInstance().getNations())
 			nation.getAccount().deposit(amount, reason);
 		
