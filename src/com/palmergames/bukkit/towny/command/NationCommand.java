@@ -909,20 +909,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_too_many_pages"));
 					return;
 				}
-				try {
-					page = Integer.parseInt(split[i]);
-					if (page < 0) {
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative"));
-						return;
-					} else if (page == 0) {
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
-						return;
-					}
-					pageSet = true;
-				} catch (NumberFormatException e) {
+				page = MathUtil.getPositiveIntOrThrow(split[i]);
+				if (page == 0) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
 					return;
 				}
+				pageSet = true;
 			}
 		}
 
@@ -2193,29 +2185,19 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static void nationSetSpawnCost(CommandSender sender, Nation nation, String[] split, boolean admin) {
+	private static void nationSetSpawnCost(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {
 		if (split.length < 2)
 			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set spawncost 70");
 		else {
-			try {
-				double amount = Double.parseDouble(split[1]);
-				if (amount < 0) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative_money"));
-					return;
-				}
-				if (TownySettings.getSpawnTravelCost() < amount) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_cannot_set_spawn_cost_more_than", TownySettings.getSpawnTravelCost()));
-					return;
-				}
-				nation.setSpawnCost(amount);
-				String name = (sender instanceof Player) ? ((Player)sender).getName() : "Console"; 
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_spawn_cost_set_to", name, Translatable.of("nation_sing"), split[1]));
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_spawn_cost_set_to", name, Translatable.of("nation_sing"), split[1]));
-			} catch (NumberFormatException e) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_num"));
-				return;
-			}
+			double amount = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+			if (TownySettings.getSpawnTravelCost() < amount)
+				throw new TownyException(Translatable.of("msg_err_cannot_set_spawn_cost_more_than", TownySettings.getSpawnTravelCost()));
+
+			nation.setSpawnCost(amount);
+			String name = (sender instanceof Player) ? ((Player)sender).getName() : "Console"; 
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_spawn_cost_set_to", name, Translatable.of("nation_sing"), split[1]));
+			if (admin)
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_spawn_cost_set_to", name, Translatable.of("nation_sing"), split[1]));
 		}
 	}
 
@@ -2223,8 +2205,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length < 2)
 			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set taxes 70");
 		else {
-			int amount = Integer.parseInt(split[1].trim());
-			if (amount < 0) {
+			int amount;
+			try {
+				amount = MathUtil.getPositiveIntOrThrow(split[1].trim());
+			} catch (TownyException ignored) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative_money"));
 				return;
 			}

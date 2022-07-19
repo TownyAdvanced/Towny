@@ -239,4 +239,16 @@ public class MoneyUtil {
 		}
 		Towny.getPlugin().saveResource("debtAccountsConverted.txt", false);
 	}
+	
+	public static double getMoneyAboveZeroOrThrow(String input) throws TownyException {
+		double amount;
+		try {
+			amount = Double.parseDouble(input);
+		} catch (NumberFormatException e) {
+			throw new TownyException(Translatable.of("msg_error_must_be_num"));
+		}
+		if (amount < 0)
+			throw new TownyException(Translatable.of("msg_err_negative_money"));
+		return amount;
+	}
 }

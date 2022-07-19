@@ -53,6 +53,7 @@ import com.palmergames.bukkit.towny.tasks.ResidentPurge;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
@@ -61,6 +62,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
+import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 import net.kyori.adventure.text.Component;
@@ -1106,13 +1108,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			town = target.getTownOrNull();
 		}
 		
-		int extraBlocks;
-		
-		try {
-			extraBlocks = Integer.parseInt(split[1].trim());
-		} catch (NumberFormatException ex) {
-			throw new TownyException(Translatable.of("msg_error_must_be_int"));
-		}
+		int extraBlocks = MathUtil.getIntOrThrow(split[1]);
 
 		town.setBonusBlocks(town.getBonusBlocks() + extraBlocks);
 		TownyMessaging.sendMsg(getSender(), Translatable.of("msg_give_total", town.getName(), split[1], town.getBonusBlocks()));
@@ -1351,31 +1347,19 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				int pages = 10;
 				if (split.length > 2)
-					try {
-						pages = Integer.parseInt(split[2]);
-					} catch (NumberFormatException e) {
-						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_int"));
-						return;
-					}
-
+					pages = MathUtil.getIntOrThrow(split[2]);
+				
 				town.generateBankHistoryBook(player, pages);
 			} else if (split[1].equalsIgnoreCase("deposit")) {
 				
 				if (!TownyEconomyHandler.isActive())
 					throw new TownyException(Translatable.of("msg_err_no_economy"));
 				
-				int amount;
-				
 				// Handle incorrect number of arguments
 				if (split.length != 3)
 					throw new TownyException(Translatable.of("msg_err_invalid_input", "deposit [amount]"));
 				
-				try {
-					amount = Integer.parseInt(split[2]);
-				} catch (NumberFormatException ex) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_int"));
-					return;
-				}
+				int amount = MathUtil.getIntOrThrow(split[2]);
 				
 				if (town.getAccount().deposit(amount, "Admin Deposit")) {
 					// Send notifications
@@ -1390,20 +1374,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				if (!TownyEconomyHandler.isActive())
 					throw new TownyException(Translatable.of("msg_err_no_economy"));
-				
-				int amount;
 
 				// Handle incorrect number of arguments
 				if (split.length != 3)
 					throw new TownyException(Translatable.of("msg_err_invalid_input", "withdraw [amount]"));
 				
-				try {
-					amount = Integer.parseInt(split[2]);
-				} catch (NumberFormatException ex) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_int"));
-					return;
-				}
-
+				int amount = MathUtil.getIntOrThrow(split[2]);
+				
 				if (town.getAccount().withdraw(amount, "Admin Withdraw")) {				
 					// Send notifications
 					Translatable withdrawMessage = Translatable.of("msg_xx_withdrew_xx", (isConsole ? "Console" : player.getName()), amount,  Translatable.of("town_sing"));
@@ -1471,13 +1448,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Handle applying a manual override.
-		int level = town.getLevel();
-		try {
-			level = Integer.parseInt(split[0]);
-		} catch (NumberFormatException e) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
-			return;
-		}
+		int level = MathUtil.getPositiveIntOrThrow(split[0]);
 		if (level > town.getMaxLevel() - 1)
 			level = town.getMaxLevel() - 1;
 		town.setManualTownLevel(level);
@@ -2073,15 +2044,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (town == null)
 				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[1]));
 
-			int size;
-			try {
-				size = Integer.parseInt(split[2]);
-			} catch (NumberFormatException e) {
-				throw new TownyException(Translatable.of("msg_error_must_be_int"));
-			}
-			
-			if (size < 0)
-				throw new TownyException(Translatable.of("msg_err_negative"));
+			int size = MathUtil.getPositiveIntOrThrow(split[2]);
 			
 			town.setNationZoneOverride(size);
 			town.save();
@@ -2585,20 +2548,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		return true;
 	}
 	
-	private void parseAdminDepositAllCommand(String[] split) {
+	private void parseAdminDepositAllCommand(String[] split) throws TownyException {
 		if (split.length != 1) {
 			HelpMenu.TA_DEPOSITALL.send(sender);
 			return;
 		}
 		String reason = "townyadmin depositall";
-		double amount = 0;
-		try {
-			amount = Double.parseDouble(split[0]);				
-		} catch (NumberFormatException e) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_num"));
-			return;
-		}
-		
+		double amount = MoneyUtil.getMoneyAboveZeroOrThrow(split[0]);
 		for (Nation nation : TownyUniverse.getInstance().getNations())
 			nation.getAccount().deposit(amount, reason);
 		
