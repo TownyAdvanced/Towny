@@ -1769,7 +1769,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				// Check if Town has reached max potential jailed and react according to maxJailedNewJailBehavior in config
-				if (TownySettings.getMaxJailedPlayerCount() >= 0 && town.getJailedPlayerCount(town.getJailed()) >= TownySettings.getMaxJailedPlayerCount())
+				if (TownySettings.getMaxJailedPlayerCount() >= 1 && town.getJailedPlayerCount(town.getJailed()) >= TownySettings.getMaxJailedPlayerCount())
 					// simple mode, rejects new jailed people outright
 					if (maxJailedNewJailBehavior == 0) {
 						throw new TownyException(Translatable.of("msg_town_has_no_jailslots"));

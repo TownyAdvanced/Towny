@@ -164,7 +164,7 @@ public class JailUtil {
 			break;
 		case JAILBREAK:
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_been_freed_via_jailbreak"));			
-			break; 
+			break;
 		default:
 		}
 
