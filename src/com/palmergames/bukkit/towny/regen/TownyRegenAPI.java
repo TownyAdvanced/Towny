@@ -40,7 +40,7 @@ public class TownyRegenAPI {
 	// table containing snapshot data of active reversions.
 	private static Hashtable<String, PlotBlockData> PlotChunks = new Hashtable<>();
 
-	// List of all old plots still to be procesws for Entity removal
+	// List of all old plots still to be processed for Entity removal
 	private static List<WorldCoord> deleteTownBlockEntityQueue = new ArrayList<>();
 
 	// List of all old plots still to be processed for Block removal

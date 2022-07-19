@@ -416,9 +416,10 @@ public enum ConfigNodes {
 			"false"),
 	NWS_PLOT_MANAGEMENT_ENTITY_DELETE(
 			"new_world_settings.plot_management.entity_delete.unclaim_delete",
-			"ENDERCRYSTAL",
+			"ENDER_CRYSTAL",
 			"",
-			"# These entities will be deleted upon a plot being unclaimed"),
+			"# These entities will be deleted upon a plot being unclaimed.",
+			"# Valid EntityTypes can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html"),
 
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE_HEADER(
 			"new_world_settings.plot_management.mayor_plotblock_delete",

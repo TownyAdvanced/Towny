@@ -2161,6 +2161,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// EntityType removal on unclaim.
 		list.add("");
 		list.add("# The following settings control what EntityTypes are deleted upon a townblock being unclaimed");
+		list.add("# Valid EntityTypes are listed here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html");
 		list.add("isDeletingEntitiesOnUnclaim=" + world.isDeletingEntitiesOnUnclaim());
 		if (world.getUnclaimDeleteEntityTypes() != null)
 			list.add("unclaimDeleteEntityTypes=" + StringMgmt.join(world.getUnclaimDeleteEntityTypes(), ","));
