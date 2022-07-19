@@ -2445,12 +2445,12 @@ public enum ConfigNodes {
 		"jail.fee_initial_amount",
 		"-1",
 		"",
-		"#Amount that it costs per player jailed. Set to -1 to disable"),
+		"#Amount that it costs per player jailed for a town, this is withdrawn from the Town bank. Set to -1 to disable"),
 	JAIL_FEE_HOURLY_AMOUNT(
 		"jail.fee_hourly_amount",
 		"-1",
 		"",
-		"#Amount that it costs per player jailed per hour. Set to -1 to disable"),
+		"#Amount that it costs per player jailed per hour for a town, this is withdrawn from the Town bank. Set to -1 to disable"),
 	
 	JAIL_JAIL_ALLOWS_TELEPORT_ITEMS(
 			"jail.jail_allows_teleport_items",

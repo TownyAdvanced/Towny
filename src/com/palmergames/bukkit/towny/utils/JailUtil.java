@@ -156,8 +156,8 @@ public class JailUtil {
 			break;
 		case JAILBREAK:
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_been_freed_via_jailbreak"));			
-			break;
-			default:
+			break; 
+		default:
 		}
 
 		TownyUniverse.getInstance().getJailedResidentMap().remove(resident);
@@ -256,9 +256,7 @@ public class JailUtil {
 			unjailedresident = jailedResidents.stream()
 					.min(Comparator.comparingInt(Resident::getJailHours))
 					.get();
-		}
-		else if (setting == 2)
-		{
+		} else if (setting == 2) {
 			//use stream and create resident from jailed player with lowest set Bail
 			unjailedresident = jailedResidents.stream()
 				.min(Comparator.comparingDouble(Resident::getJailBail))

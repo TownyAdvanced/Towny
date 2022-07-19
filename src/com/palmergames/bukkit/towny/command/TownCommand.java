@@ -1694,7 +1694,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 				// If using initialJailFee option check they can actually afford to jail someone.
-				if (initialJailFee >= 0 && !town.getAccount().canPayFromHoldings(initialJailFee))
+				// Check if economy is on
+				if (TownyEconomyHandler.isActive() && initialJailFee >= 0 && !town.getAccount().canPayFromHoldings(initialJailFee))
 					throw new TownyException(Translatable.of("msg_not_enough_money_in_bank_to_jail_x_fee_is_x", jailedResident, initialJailFee));
 				
 				if (jailedResident.isJailed())
@@ -1767,13 +1768,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 
-				// Check if Town has reached max potential jailed and react according to maxJailedNewJailBehavior in config, sanitise for between 0-2
-				if (TownySettings.getMaxJailedPlayerCount() >= 0 && TownySettings.getMaxJailedPlayerCount() <= 2  && town.getJailedPlayerCount(town.getJailed()) >= TownySettings.getMaxJailedPlayerCount())
+				// Check if Town has reached max potential jailed and react according to maxJailedNewJailBehavior in config
+				if (TownySettings.getMaxJailedPlayerCount() >= 0 && town.getJailedPlayerCount(town.getJailed()) >= TownySettings.getMaxJailedPlayerCount())
 					// simple mode, rejects new jailed people outright
 					if (maxJailedNewJailBehavior == 0) {
 						throw new TownyException(Translatable.of("msg_town_has_no_jailslots"));
-					}
-					else {
+					} else {
 						//Pass to JailUtil method
 						JailUtil.maxJailedUnjail(maxJailedNewJailBehavior, town);
 					}
@@ -1782,7 +1782,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), jailNum));
 				// If fee exists (already sanitised for) deduct it from Town bank and inform in chat
-				if (initialJailFee >= 0)
+				if (TownyEconomyHandler.isActive() && initialJailFee >= 0)
 				{
 					town.getAccount().withdraw(initialJailFee, "New Prisoner");
 					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_x_has_been_withdrawn_for_jailing_of_prisoner_x", initialJailFee,jailedResident));
