@@ -1,6 +1,8 @@
 package com.palmergames.util;
 
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Translatable;
 
 public class MathUtil {
 
@@ -54,5 +56,22 @@ public class MathUtil {
 	
 	public static double distance(Coord coord1, Coord coord2) {
 		return distance(coord1.getX(), coord2.getX(), coord1.getZ(), coord2.getZ());
+	}
+	
+	public static int getIntOrThrow(String input) throws TownyException {
+		int i;
+		try {
+			i = Integer.parseInt(input);
+		} catch (NumberFormatException e) {
+			throw new TownyException(Translatable.of("msg_error_must_be_int"));
+		}
+		return i;
+	}
+	
+	public static int getPositiveIntOrThrow(String input) throws TownyException {
+		int i = getIntOrThrow(input);
+		if (i < 0)
+			throw new TownyException(Translatable.of("msg_err_negative"));
+		return i;
 	}
 }

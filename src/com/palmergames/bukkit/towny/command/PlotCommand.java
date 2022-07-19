@@ -49,6 +49,7 @@ import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil;
@@ -507,17 +508,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						// Check that it's not: /plot forsale within rect 3
 						if (areaSelectPivot != 1) {
-							try {
-								// command was 'plot fs $'
-								plotPrice = Double.parseDouble(split[1]);
-								if (plotPrice < 0) {
-									TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_negative_money"));
-									return true;
-								}
-							} catch (NumberFormatException e) {
-								TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_num"));
-								return true;
-							}
+							// command was 'plot fs $'
+							plotPrice = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
 						}
 
 						// Set each WorldCoord in selection for sale.
@@ -1588,19 +1580,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				return false;
 			}
 			
-			int price = 0;
-			try {
-				price = Integer.parseInt(split[1]);
-			} catch (NumberFormatException e) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_must_be_num"));
-				return false;
-			}
-			
-			if (price < 0) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_negative_money"));
-				return false;
-			}
-
+			double price = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
 			group.setPrice(price);
 			
 			// Save

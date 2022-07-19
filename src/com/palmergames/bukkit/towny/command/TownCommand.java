@@ -1455,20 +1455,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_too_many_pages"));
 					return;
 				}
-				try {
-					page = Integer.parseInt(split[i]);
-					if (page < 0) {
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative"));
-						return;
-					} else if (page == 0) {
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
-						return;
-					}
-					pageSet = true;
-				} catch (NumberFormatException e) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
-					return;
-				}
+				page = MathUtil.getPositiveIntOrThrow(split[i]);
+				if (page == 0)
+					throw new TownyException(Translatable.of("msg_error_must_be_int"));
+				pageSet = true;
 			}
 		}
 
@@ -1939,16 +1929,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			int page = 1;
 			int total = (int) Math.ceil(((double) town.getJails().size()) / ((double) 10));
 			if (args.length == 1) {
-				try {
-					page = Integer.parseInt(args[0]);
-					if (page < 0) {
-						throw new TownyException(Translatable.of("msg_err_negative"));
-					} else if (page == 0) {
-						throw new TownyException(Translatable.of("msg_error_must_be_int"));
-					}
-				} catch (NumberFormatException e) {
+				page = MathUtil.getPositiveIntOrThrow(args[0]);
+				if (page == 0)
 					throw new TownyException(Translatable.of("msg_error_must_be_int"));
-				}
+
 			}
 			if (page > total)
 				throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
@@ -2292,28 +2276,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(sender, "Eg: /town set taxes 7");
 						return;
 					} else {
-						try {
-							Double amount = Double.parseDouble(split[1]);
-							if (amount < 0) {
-								TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative_money"));
-								return;
-							}
-							if (town.isTaxPercentage() && amount > 100) {
-								TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_percentage"));
-								return;
-							}
-							if (TownySettings.getTownDefaultTaxMinimumTax() > amount) {
-								TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_tax_minimum_not_met", TownySettings.getTownDefaultTaxMinimumTax()));
-								return;
-							}
-							town.setTaxes(amount);
-							if (admin)
-								TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_tax", sender.getName(), town.getTaxes()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_tax", sender.getName(), town.getTaxes()));
-						} catch (NumberFormatException e) {
-							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_num"));
+						double amount = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+
+						if (town.isTaxPercentage() && amount > 100) {
+							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_percentage"));
 							return;
 						}
+						if (TownySettings.getTownDefaultTaxMinimumTax() > amount) {
+							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_tax_minimum_not_met", TownySettings.getTownDefaultTaxMinimumTax()));
+							return;
+						}
+						town.setTaxes(amount);
+						if (admin)
+							TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_tax", sender.getName(), town.getTaxes()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_tax", sender.getName(), town.getTaxes()));
 					}
 
 				} else if (split[0].equalsIgnoreCase("plottax")) {
@@ -2322,20 +2298,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(sender, "Eg: /town set plottax 10");
 						return;
 					} else {
-						try {
-							Double amount = Double.parseDouble(split[1]);
-							if (amount < 0) {
-								TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative_money"));
-								return;
-							}
-							town.setPlotTax(amount);
-							if (admin)
-								TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_plottax", sender.getName(), town.getPlotTax()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_plottax", sender.getName(), town.getPlotTax()));
-						} catch (NumberFormatException e) {
-							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_num"));
-							return;
-						}
+						double amount = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+						town.setPlotTax(amount);
+						if (admin)
+							TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_plottax", sender.getName(), town.getPlotTax()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_plottax", sender.getName(), town.getPlotTax()));
 					}
 				} else if (split[0].equalsIgnoreCase("shoptax")) {
 
@@ -2343,20 +2310,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(sender, "Eg: /town set shoptax 10");
 						return;
 					} else {
-						try {
-							Double amount = Double.parseDouble(split[1]);
-							if (amount < 0) {
-								TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative_money"));
-								return;
-							}
-							town.setCommercialPlotTax(amount);
-							if (admin)
-								TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_alttax", sender.getName(), "shop", town.getCommercialPlotTax()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_alttax", sender.getName(), "shop", town.getCommercialPlotTax()));
-						} catch (NumberFormatException e) {
-							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_num"));
-							return;
-						}
+						double amount = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+						town.setCommercialPlotTax(amount);
+						if (admin)
+							TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_alttax", sender.getName(), "shop", town.getCommercialPlotTax()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_alttax", sender.getName(), "shop", town.getCommercialPlotTax()));
 					}
 
 				} else if (split[0].equalsIgnoreCase("embassytax")) {
@@ -2365,20 +2323,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(sender, "Eg: /town set embassytax 10");
 						return;
 					} else {
-						try {
-							Double amount = Double.parseDouble(split[1]);
-							if (amount < 0) {
-								TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative_money"));
-								return;
-							}
-							town.setEmbassyPlotTax(amount);
-							if (admin)
-								TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_alttax", sender.getName(), "embassy", town.getEmbassyPlotTax()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_alttax", sender.getName(), "embassy", town.getEmbassyPlotTax()));
-						} catch (NumberFormatException e) {
-							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_num"));
-							return;
-						}
+						double amount = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+						town.setEmbassyPlotTax(amount);
+						if (admin)
+							TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_alttax", sender.getName(), "embassy", town.getEmbassyPlotTax()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_alttax", sender.getName(), "embassy", town.getEmbassyPlotTax()));
 					}
 
 				} else if (split[0].equalsIgnoreCase("plotprice")) {
@@ -2387,20 +2336,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(sender, "Eg: /town set plotprice 50");
 						return;
 					} else {
-						try {
-							Double amount = Double.parseDouble(split[1]);
-							if (amount < 0) {
-								TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative_money"));
-								return;
-							}
-							town.setPlotPrice(amount);
-							if (admin)
-								TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_plotprice", sender.getName(), town.getPlotPrice()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_plotprice", sender.getName(), town.getPlotPrice()));
-						} catch (NumberFormatException e) {
-							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_num"));
-							return;
-						}
+						double amount = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+						town.setPlotPrice(amount);
+						if (admin)
+							TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_plotprice", sender.getName(), town.getPlotPrice()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_plotprice", sender.getName(), town.getPlotPrice()));
 					}
 
 				} else if (split[0].equalsIgnoreCase("shopprice")) {
@@ -2409,20 +2349,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(sender, "Eg: /town set shopprice 50");
 						return;
 					} else {
-						try {
-							Double amount = Double.parseDouble(split[1]);
-							if (amount < 0) {
-								TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative_money"));
-								return;
-							}
-							town.setCommercialPlotPrice(amount);
-							if (admin)
-								TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_altprice", sender.getName(), "shop", town.getCommercialPlotPrice()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_altprice", sender.getName(), "shop", town.getCommercialPlotPrice()));
-						} catch (NumberFormatException e) {
-							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_num"));
-							return;
-						}
+						double amount = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+						town.setCommercialPlotPrice(amount);
+						if (admin)
+							TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_altprice", sender.getName(), "shop", town.getCommercialPlotPrice()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_altprice", sender.getName(), "shop", town.getCommercialPlotPrice()));
 					}
 				} else if (split[0].equalsIgnoreCase("embassyprice")) {
 
@@ -2430,20 +2361,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(sender, "Eg: /town set embassyprice 50");
 						return;
 					} else {
-						try {
-							Double amount = Double.parseDouble(split[1]);
-							if (amount < 0) {
-								TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative_money"));
-								return;
-							}
-							town.setEmbassyPlotPrice(amount);
-							if (admin)
-								TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_altprice", sender.getName(), "embassy", town.getEmbassyPlotPrice()));
-							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_altprice", sender.getName(), "embassy", town.getEmbassyPlotPrice()));
-						} catch (NumberFormatException e) {
-							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_num"));
-							return;
-						}
+						double amount = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+						town.setEmbassyPlotPrice(amount);
+						if (admin)
+							TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_altprice", sender.getName(), "embassy", town.getEmbassyPlotPrice()));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_altprice", sender.getName(), "embassy", town.getEmbassyPlotPrice()));
 					}
 
 				} else if (split[0].equalsIgnoreCase("spawncost")) {
@@ -2452,24 +2374,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(sender, "Eg: /town set spawncost 50");
 						return;
 					} else {
-						try {
-							Double amount = Double.parseDouble(split[1]);
-							if (amount < 0) {
-								TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative_money"));
-								return;
-							}
-							if (TownySettings.getSpawnTravelCost() < amount) {
-								TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_cannot_set_spawn_cost_more_than", TownySettings.getSpawnTravelCost()));
-								return;
-							}
-							town.setSpawnCost(amount);
-							if (admin)
-								TownyMessaging.sendMsg(sender, Translatable.of("msg_spawn_cost_set_to", sender.getName(), Translatable.of("town_sing"), split[1]));
-							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_spawn_cost_set_to", sender.getName(), Translatable.of("town_sing"), split[1]));
-						} catch (NumberFormatException e) {
-							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_num"));
+						double amount = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+						if (TownySettings.getSpawnTravelCost() < amount) {
+							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_cannot_set_spawn_cost_more_than", TownySettings.getSpawnTravelCost()));
 							return;
 						}
+						town.setSpawnCost(amount);
+						if (admin)
+							TownyMessaging.sendMsg(sender, Translatable.of("msg_spawn_cost_set_to", sender.getName(), Translatable.of("town_sing"), split[1]));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_spawn_cost_set_to", sender.getName(), Translatable.of("town_sing"), split[1]));
 					}
 
 				} else if (split[0].equalsIgnoreCase("name")) {
@@ -4281,16 +4194,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					int page = 1;
 					int total = (int) Math.ceil(((double) outposts.size()) / ((double) 10));
 					if (args.length == 3) {
-						try {
-							page = Integer.parseInt(args[2]);
-							if (page < 0) {
-								throw new TownyException(Translatable.of("msg_err_negative"));
-							} else if (page == 0) {
-								throw new TownyException(Translatable.of("msg_error_must_be_int"));
-							}
-						} catch (NumberFormatException e) {
+						page = MathUtil.getPositiveIntOrThrow(args[2]);
+						if (page == 0)
 							throw new TownyException(Translatable.of("msg_error_must_be_int"));
-						}
 					}
 					if (page > total)
 						throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
@@ -4371,14 +4277,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		int page = 1;		
 		int total = (int) Math.ceil(((double) town.getPlotGroups().size()) / ((double) 10));
 		if (args.length > 1) {
-			try {
-				page = Integer.parseInt(args[args.length - 1]);
-				if (page < 0) {
-					throw new TownyException(Translatable.of("msg_err_negative"));
-				} else if (page == 0) {
-					throw new TownyException(Translatable.of("msg_error_must_be_int"));
-				}
-			} catch (NumberFormatException ignored) {} // page will continue to be one.
+			page = MathUtil.getPositiveIntOrThrow(args[args.length - 1]);
+			if (page == 0)
+				throw new TownyException(Translatable.of("msg_error_must_be_int"));
+			// Page will continue to be one.
 		}
 		if (page > total)
 			throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
