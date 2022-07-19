@@ -60,7 +60,7 @@ public class HourlyTimerTask extends TownyTimerTask {
 					resident.setJailHours(resident.getJailHours() - 1);
 					resident.save();
 				}
-		if (TownyEconomyHandler.isActive() && TownySettings.hourlyJailFee() >= 0)
+		if (TownyEconomyHandler.isActive() && TownySettings.hourlyJailFee() > 0)
 		{
 			// Check if towns can afford upkeep for prisoners and if not to release them
 			for (Resident resident : new ArrayList<>(universe.getJailedResidentMap()))
