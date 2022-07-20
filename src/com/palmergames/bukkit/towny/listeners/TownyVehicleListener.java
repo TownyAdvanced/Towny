@@ -153,6 +153,6 @@ public class TownyVehicleListener implements Listener {
 				if (TownySettings.isSwitchMaterial(vehicle, event.getVehicle().getLocation()))
 					event.setCancelled(!TownyActionEventExecutor.canSwitch(player, event.getVehicle().getLocation(), vehicle));
 			}
-		}
+		}	
 	}
 }
