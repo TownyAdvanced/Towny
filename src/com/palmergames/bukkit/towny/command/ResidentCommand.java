@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -20,7 +21,6 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.JailUtil;
@@ -243,7 +243,6 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseResidentCommand(final Player player, String[] split) {
-		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
 		try {
 
@@ -257,15 +256,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("list")) {
 
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_LIST.getNode()))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_LIST.getNode());
 
 				listResidents(player);
 
 			} else if (split[0].equalsIgnoreCase("tax")) {
 
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TAX.getNode()))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TAX.getNode());
 
 				if (!TownyEconomyHandler.isActive())
 					throw new TownyException(Translatable.of("msg_err_no_economy"));
@@ -280,8 +277,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("jail")) {
 
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_JAIL.getNode()))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_JAIL.getNode());
 
 				if (!TownySettings.isAllowingBail()) {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_bail_not_enabled"));
@@ -345,48 +341,34 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("set")) {
 
-				/*
-				 * perms checked in method.
-				 */
-				String[] newSplit = StringMgmt.remFirstArg(split);
-				residentSet(player, newSplit);
+				/* perms checked in method.*/
+				residentSet(player, StringMgmt.remFirstArg(split));
 
 			} else if (split[0].equalsIgnoreCase("toggle")) {
-
-				/*
-				 * 
-				 */
-				String[] newSplit = StringMgmt.remFirstArg(split);
-				residentToggle(player, newSplit);
+				/* perms checked in method. */
+				residentToggle(player, StringMgmt.remFirstArg(split));
 
 			} else if (split[0].equalsIgnoreCase("friend")) {
 
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_FRIEND.getNode()))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
-
-				String[] newSplit = StringMgmt.remFirstArg(split);
-				residentFriend(player, newSplit, false, null);
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_FRIEND.getNode());
+				residentFriend(player, StringMgmt.remFirstArg(split), false, null);
 
 			} else if (split[0].equalsIgnoreCase("spawn")) {
 
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SPAWN.getNode()))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SPAWN.getNode());
+				SpawnUtil.sendToTownySpawn(player, split, getResidentOrThrow(player.getUniqueId()), Translatable.of("msg_err_cant_afford_tp").forLocale(player), false, false, SpawnType.RESIDENT);
 
-				Resident res = getResidentOrThrow(player.getUniqueId());
-				
-				SpawnUtil.sendToTownySpawn(player, split, res, Translatable.of("msg_err_cant_afford_tp").forLocale(player), false, false, SpawnType.RESIDENT);
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT, split[0]).execute(player, "resident", split);
 			} else {
 				final Resident resident = TownyUniverse.getInstance().getResidentOpt(split[0])
 											.orElseThrow(() -> new TownyException(Translatable.of("msg_err_not_registered_1", split[0])));
 
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_OTHERRESIDENT.getNode()) && (!resident.getName().equals(player.getName()))) {
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
-				}
+				if (!resident.getName().equals(player.getName()))
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_OTHERRESIDENT.getNode());
+
 				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(),
-					() -> TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(resident, player))
-				);
+					() -> TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(resident, player)));
 			}
 
 		} catch (TownyException x) {
@@ -420,10 +402,6 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			plugin.removePlayerMode(player);
 			return;
 		}
-		
-		if (!resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE.getNode(newSplit[0].toLowerCase())))
-			throw new TownyException(Translatable.of("msg_err_command_disable"));
-
 		TownyPermission perm = resident.getPermissions();
 		
 		Optional<Boolean> choice = Optional.empty();
@@ -433,14 +411,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		// Special case chat spy
 		if (StringMgmt.containsIgnoreCase(Arrays.asList(newSplit), "spy")) {
-			
-			if (!resident.hasPermissionNode(PermissionNodes.TOWNY_CHAT_SPY.getNode()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
-			
+			checkPermOrThrow(player, PermissionNodes.TOWNY_CHAT_SPY.getNode());
+
 			resident.toggleMode(newSplit, true);
 			return;
 			
 		} else if (newSplit[0].equalsIgnoreCase("pvp")) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_PVP.getNode());
 			
 			// Test to see if the pvp cooldown timer is active for the town this resident belongs to.
 			if (TownySettings.getPVPCoolDownTime() > 0 && resident.hasTown() && !resident.isAdmin()) {
@@ -455,12 +432,16 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			if (TownySettings.getPVPCoolDownTime() > 0 && !resident.isAdmin())
 				CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.PVP);
 		} else if (newSplit[0].equalsIgnoreCase("fire")) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_FIRE.getNode());
 			perm.fire = choice.orElse(!perm.fire);
 		} else if (newSplit[0].equalsIgnoreCase("explosion")) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_EXPLOSION.getNode());
 			perm.explosion = choice.orElse(!perm.explosion);
 		} else if (newSplit[0].equalsIgnoreCase("mobs")) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_MOBS.getNode());
 			perm.mobs = choice.orElse(!perm.mobs);
 		} else if (newSplit[0].equalsIgnoreCase("bordertitles")) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_BORDERTITLES.getNode());
 			ResidentUtil.toggleResidentBorderTitles(resident, choice);
 			return;
 		} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_TOGGLE, newSplit[0])) {
@@ -545,18 +526,16 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			Resident resident = resOpt.get();
 
-			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET.getNode(split[0].toLowerCase())))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
-
 			if (split[0].equalsIgnoreCase("perm")) {
 
-				String[] newSplit = StringMgmt.remFirstArg(split);
-				TownCommand.setTownBlockPermissions(player, resident, resident.getPermissions(), newSplit, true);
+				townyUniverse.getPermissionSource().testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_PERM.getNode());
+				TownCommand.setTownBlockPermissions(player, resident, resident.getPermissions(), StringMgmt.remFirstArg(split), true);
 
 			} else if (split[0].equalsIgnoreCase("mode")) {
 
-				String[] newSplit = StringMgmt.remFirstArg(split);
-				setMode(player, newSplit);
+				townyUniverse.getPermissionSource().testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_MODE.getNode());
+				setMode(player, StringMgmt.remFirstArg(split));
+
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, split[0]).execute(player, "resident", split);
 			} else {
@@ -570,7 +549,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private void setMode(Player player, String[] split) {
+	private void setMode(Player player, String[] split) throws NoPermissionException {
 
 		if (split.length == 0) {
 			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/resident set mode", "clear", ""));
@@ -594,10 +573,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		List<String> list = Arrays.asList(split);
-		if ((list.contains("spy")) && !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_CHAT_SPY.getNode())) {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_command_disable"));
-			return;
-		}
+		if (list.contains("spy"))
+			TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(player, PermissionNodes.TOWNY_CHAT_SPY.getNode());
 
 		plugin.setPlayerMode(player, split, true);
 

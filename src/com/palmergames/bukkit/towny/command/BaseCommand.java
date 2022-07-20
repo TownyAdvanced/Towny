@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -16,6 +17,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -336,5 +338,9 @@ public class BaseCommand implements TabCompleter{
 	public static void catchConsole(CommandSender sender) throws TownyException {
 		if (sender instanceof ConsoleCommandSender)
 			throw new TownyException(Translatable.of("msg_err_player_only"));
+	}
+	
+	public static void checkPermOrThrow(Permissible permissible, String node) throws NoPermissionException {
+		TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(permissible, node);
 	}
 }

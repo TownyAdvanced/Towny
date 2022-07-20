@@ -289,8 +289,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				if (split[0].equalsIgnoreCase("claim")) {
 
-					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLAIM.getNode()))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLAIM.getNode());
 
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split), true);
 					
@@ -348,8 +347,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 				} else if (split[0].equalsIgnoreCase("evict")) {
 
-					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode()))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode());
 
 					if (!townBlock.hasResident()) {
 						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_no_one_to_evict"));						
@@ -380,8 +378,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				} else if (split[0].equalsIgnoreCase("unclaim")) {
 
-					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_UNCLAIM.getNode()))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_UNCLAIM.getNode());
 
 					if (split.length == 2 && split[1].equalsIgnoreCase("all")) {
 						// Start the unclaim task
@@ -426,8 +423,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				} else if (split[0].equalsIgnoreCase("notforsale") || split[0].equalsIgnoreCase("nfs")) {
 
-					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_NOTFORSALE.getNode()))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_NOTFORSALE.getNode());
 
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
 					selection = AreaSelectionUtil.filterPlotsForSale(selection);
@@ -468,8 +464,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				} else if (split[0].equalsIgnoreCase("forsale") || split[0].equalsIgnoreCase("fs")) {
 
-					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_FORSALE.getNode()))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_FORSALE.getNode());
 
 					WorldCoord pos = new WorldCoord(world, Coord.parseCoord(player));
 					Town town = townBlock.getTownOrNull();
@@ -545,8 +540,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					parsePlotPermCommand(player, StringMgmt.remFirstArg(split));
 					
 				} else if (split[0].equalsIgnoreCase("info")) {
-					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_INFO.getNode()))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_INFO.getNode());
 					
 					sendPlotInfo(player, StringMgmt.remFirstArg(split));
 				} else if (split[0].equalsIgnoreCase("toggle")) {
@@ -577,9 +571,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					} else if (split.length > 0) {
 
-						if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase())))
-							throw new TownyException(Translatable.of("msg_err_command_disable"));
-						
 						// Make sure that the player is only operating on a plot object group if one exists.
 						if (townBlock.hasPlotObjectGroup()) {
 							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_plot_belongs_to_group_set"));
@@ -587,7 +578,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						if (split[0].equalsIgnoreCase("perm")) {
-
+							checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET_PERM.getNode());
 							// Set plot level permissions (if the plot owner) or
 							// Mayor/Assistant of the town.
 							
@@ -599,7 +590,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							return true;
 
 						} else if (split[0].equalsIgnoreCase("name")) {
-							
+							checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET_NAME.getNode());
 							// Test we are allowed to work on this plot
 							plotTestOwner(resident, townBlock);
 							if (split.length == 1) {
@@ -629,8 +620,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						} else if (split[0].equalsIgnoreCase("outpost")) {
 
 							if (TownySettings.isAllowingOutposts()) {
-								if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode()))
-									throw new TownyException(Translatable.of("msg_err_command_disable"));
+								checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode());
 								
 								// Test we are allowed to work on this plot
 								plotTestOwner(resident, townBlock);
@@ -671,6 +661,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						/*
 						 * After trying all of the other /plot set subcommands, attempt to set the townblock type.
 						 */
+						
+						checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase()));
 						
 						try {
 							String plotTypeName = split[0];
@@ -754,8 +746,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				} else if (split[0].equalsIgnoreCase("clear")) {
 
-					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLEAR.getNode()))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLEAR.getNode());
 					
 					if (townBlock != null) {
 						
@@ -802,8 +793,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					return true;
 					
 				} else if (split[0].equalsIgnoreCase("trust")) {
-					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_TRUST.getNode()))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TRUST.getNode());
 
 					parsePlotTrustCommand(player, StringMgmt.remFirstArg(split));
 					return true;
@@ -827,8 +817,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.PLOT_JAILCELL.send(player);
 
 		try {
-			if (!TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_COMMAND_PLOT_JAILCELL.getNode()))
-				throw new TownyException("msg_err_command_disable");
+			TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_JAILCELL.getNode());
 
 			// Fail if the resident isn't registered. (Very unlikely.)
 			Resident resident = TownyAPI.getInstance().getResident(player.getUniqueId());
@@ -1095,9 +1084,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			try {
 
-				if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE.getNode(split[0].toLowerCase())))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
-				
 				Town town = townBlock.getTownOrNull();
 				if (town == null)
 					throw new TownyException(Translatable.of("msg_not_claimed_1"));
@@ -1108,6 +1094,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				if (split[0].equalsIgnoreCase("pvp")) {
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_PVP.getNode());
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					
@@ -1149,6 +1136,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(player, Translatable.of("msg_changed_pvp", "Plot", townBlock.getPermissions().pvp ? Translatable.of("enabled") : Translatable.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("explosion")) {
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_EXPLOSION.getNode());
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					// Fire cancellable event directly before setting the toggle.
@@ -1161,6 +1149,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(player, Translatable.of("msg_changed_expl", "the Plot", townBlock.getPermissions().explosion ? Translatable.of("enabled") : Translatable.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("fire")) {
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_FIRE.getNode());
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					// Fire cancellable event directly before setting the toggle.
@@ -1173,6 +1162,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(player, Translatable.of("msg_changed_fire", "the Plot", townBlock.getPermissions().fire ? Translatable.of("enabled") : Translatable.of("disabled")));
 
 				} else if (split[0].equalsIgnoreCase("mobs")) {
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_MOBS.getNode());
 					// Make sure we are allowed to set these permissions.
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					// Fire cancellable event directly before setting the toggle.
@@ -1234,11 +1224,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					Town town = groupBlock.getTownOrNull();
 					if (town == null) continue;
-					
-					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE.getNode(split[0].toLowerCase())))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
 					if (split[0].equalsIgnoreCase("pvp")) {
+						checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_PVP.getNode());
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 
@@ -1274,6 +1262,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						endingMessage = Translatable.of("msg_changed_pvp", Translatable.of("msg_the_plot_group"), groupBlock.getPermissions().pvp ? Translatable.of("enabled") : Translatable.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("explosion")) {
+						checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_EXPLOSION.getNode());
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 
@@ -1288,6 +1277,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						endingMessage = Translatable.of("msg_changed_expl", Translatable.of("msg_the_plot_group"), groupBlock.getPermissions().explosion ? Translatable.of("enabled") : Translatable.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("fire")) {
+						checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_FIRE.getNode());
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 
@@ -1302,6 +1292,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						endingMessage = Translatable.of("msg_changed_fire", Translatable.of("msg_the_plot_group"), groupBlock.getPermissions().fire ? Translatable.of("enabled") : Translatable.of("disabled"));
 
 					} else if (split[0].equalsIgnoreCase("mobs")) {
+						checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_MOBS.getNode());
 						// Make sure we are allowed to set these permissions.
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 
@@ -1428,8 +1419,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	private boolean handlePlotGroupCommand(String[] split, Player player) throws TownyException {
 
-		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
-
 		Resident resident = getResidentOrThrow(player.getUniqueId());
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
 		if (townBlock == null)
@@ -1454,8 +1443,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		if (split[0].equalsIgnoreCase("add") || split[0].equalsIgnoreCase("new") || split[0].equalsIgnoreCase("create")) {
 
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_ADD.getNode()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_ADD.getNode());
 			
 			if (split.length == 1) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_you_must_specify_a_group_name"));
@@ -1508,8 +1496,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else if (split[0].equalsIgnoreCase("delete")) {
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_DELETE.getNode()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_DELETE.getNode());
 			
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_plot_not_associated_with_a_group"));
@@ -1524,8 +1511,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}).sendTo(player);
 			
 		} else if (split[0].equalsIgnoreCase("remove")) {
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_REMOVE.getNode()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_REMOVE.getNode());
 			
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_plot_not_associated_with_a_group"));
@@ -1550,8 +1536,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else if (split[0].equalsIgnoreCase("rename")) {
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_RENAME.getNode()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_RENAME.getNode());
 
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_plot_not_associated_with_a_group"));
@@ -1570,8 +1555,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(player, Translatable.of("msg_plot_renamed_from_x_to_y", oldName, newName));
 
 		} else if (split[0].equalsIgnoreCase("forsale") || split[0].equalsIgnoreCase("fs")) {
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_FORSALE.getNode()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_FORSALE.getNode());
 			
 			// This means the player wants to fs the plot group they are in.
 			PlotGroup group = townBlock.getPlotObjectGroup();
@@ -1598,8 +1582,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (!resident.hasTown() || resident.getTownOrNull() != town)
 				TownyMessaging.sendMsg(player, message);
 		} else if (split[0].equalsIgnoreCase("notforsale") || split[0].equalsIgnoreCase("nfs")) {
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_NOTFORSALE.getNode()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_NOTFORSALE.getNode());
 			
 			// This means the player wants to nfs the plot group they are in.
 			PlotGroup group = townBlock.getPlotObjectGroup();
@@ -1619,8 +1602,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (!resident.hasTown() || resident.getTownOrNull() != town)
 				TownyMessaging.sendMsg(player, Translatable.of("msg_player_made_group_not_for_sale", player.getName(), group.getName()));
 		} else if (split[0].equalsIgnoreCase("toggle")) {
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_TOGGLE.getNode()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_TOGGLE.getNode());
 
 			if (townBlock.getPlotObjectGroup() == null) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_plot_not_associated_with_a_group"));
@@ -1638,8 +1620,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			return true;
 		} else if (split[0].equalsIgnoreCase("set")) {
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_SET.getNode()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_SET.getNode());
 			
 			// Check if group is present.
 			if (townBlock.getPlotObjectGroup() == null) {
@@ -1809,8 +1790,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(resident, e.getMessage(player));
 			}
 		} else if (split[0].equalsIgnoreCase("trust")) {
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_TRUST.getNode()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_TRUST.getNode());
 			
 			if (split.length < 3) {
 				HelpMenu.PLOT_GROUP_TRUST_HELP.send(player);
@@ -1880,8 +1860,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} else if (split[0].equalsIgnoreCase("perm")) {
-			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_PERM.getNode()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_PERM.getNode());
 			
 			if (split.length < 2) {
 				HelpMenu.PLOT_GROUP_PERM_HELP.send(player);
@@ -2136,17 +2115,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		
 	public void parsePlotPermCommand(Player player, String[] args) throws TownyException {
 		if (args.length == 0) {
-			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_INFO.getNode()))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_INFO.getNode());
 
 			sendPlotInfo(player, args);
 			return;
 		}
 
-		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM.getNode(args[0].toLowerCase())))
-			throw new TownyException(Translatable.of("msg_err_command_disable"));
-		
 		if (args[0].equalsIgnoreCase("hud")) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_HUD.getNode());
 			HUDManager.togglePermHUD(player);
 		} else {
 			// All other subcommands require the player to be in a claimed area
@@ -2157,6 +2133,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			if (args[0].equalsIgnoreCase("gui")) {
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_GUI.getNode());
 				Resident resident = TownyAPI.getInstance().getResident(player.getName());
 				if (resident == null) {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered"));
@@ -2165,6 +2142,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				PermissionGUIUtil.openPermissionGUI(resident, townBlock);
 			} else if (args[0].equalsIgnoreCase("remove")) {
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_REMOVE.getNode());
 				if (args.length < 2) {
 					HelpMenu.PLOT_PERM_HELP.send(player);
 					return;
@@ -2198,6 +2176,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				
 				TownyMessaging.sendMsg(player, Translatable.of("msg_overrides_removed", resident.getName()));
 			} else if (args[0].equalsIgnoreCase("add")) {
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_ADD.getNode());
 				if (args.length < 2) {
 					HelpMenu.PLOT_PERM_HELP.send(player);
 					return;

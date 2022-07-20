@@ -27,7 +27,6 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.util.ChatTools;
@@ -140,7 +139,6 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseTownyCommand(CommandSender sender, String[] split) {
-		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		if (split.length == 0) {
 			HelpMenu.GENERAL_HELP.send(sender);
 			return;
@@ -160,8 +158,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			switch(split[0].toLowerCase(Locale.ROOT)) {
 				case "map": {
 					catchConsole(sender);
-					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode()))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode());
 					if (split.length > 1 && split[1].equalsIgnoreCase("big"))
 						TownyAsciiMap.generateAndSend(plugin, player, 18);
 					else if (split.length > 1 && split[1].equalsIgnoreCase("hud"))
@@ -244,23 +241,20 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				}
 				case "tree": {
 					catchPlayer(sender);
-					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode());
 
 					for (String line : TownyUniverse.getInstance().getTreeString(0))
 						TownyMessaging.sendMessage(sender, line);
 					break;
 				}
 				case "time": {
-					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode());
 
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TimeMgmt.townyTime(true))));
 					break;
 				}
 				case "universe": {
-					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode());
 
 					for (String line : getUniverseStats(Translator.locale(sender)))
 						TownyMessaging.sendMessage(sender, line);
@@ -268,8 +262,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				}
 				case "version":
 				case "v": {
-					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode());
 
 					if (TownyUpdateChecker.shouldShowNotification()) {
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion()));
@@ -283,9 +276,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				}
 				case "spy": {
 					catchConsole(sender);
-					
-					if (!permSource.testPermission(sender, PermissionNodes.TOWNY_CHAT_SPY.getNode()))
-						throw new TownyException(Translatable.of("msg_err_command_disable"));
+					checkPermOrThrow(sender, PermissionNodes.TOWNY_CHAT_SPY.getNode());
 
 					Resident resident = getResidentOrThrow(player.getUniqueId());
 					resident.toggleMode(split, true);
@@ -317,11 +308,9 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMessage(sender, line);
 			return;
 		} 
-		
-		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP.getNode(args[0].toLowerCase())))
-			throw new TownyException(Translatable.of("msg_err_command_disable"));
-		
-		if (args[0].equalsIgnoreCase("residents"))
+
+		if (args[0].equalsIgnoreCase("residents")) {
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_RESIDENTS.getNode());
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<ResidentList> list = new ArrayList<>(universe.getTowns());
 				list.addAll(universe.getNations());
@@ -335,7 +324,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				townyTop.addAll(getMostResidents(new ArrayList<>(universe.getNations())));
 			} else
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
-		else if (args[0].equalsIgnoreCase("land"))
+		} else if (args[0].equalsIgnoreCase("land")) {
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_LAND.getNode());
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<TownBlockOwner> list = new ArrayList<>(universe.getResidents());
 				list.addAll(universe.getTowns());
@@ -349,7 +339,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				townyTop.addAll(getMostLand(new ArrayList<>(universe.getTowns())));
 			} else
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
-		else if (args[0].equalsIgnoreCase("balance")) {
+		} else if (args[0].equalsIgnoreCase("balance")) {
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_BALANCE.getNode());
 			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 				if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 					List<Government> list = new ArrayList<>();
