@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +23,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class TownyWorld extends TownyObject {
 
@@ -71,7 +73,7 @@ public class TownyWorld extends TownyObject {
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
 	
 	public Map<Location, Material> bedMap = new HashMap<>();
-	public List<String> tridentStrikeMap = new ArrayList<>();
+	public final List<UUID> tridentStrikeList = new ArrayList<>(0);
 
 	public TownyWorld(String name) {
 		super(name);
@@ -457,8 +459,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	/**
-	 * @param plotManagementWildRevertDelay the plotManagementWildRevertDelay to
-	 *            set
+	 * @param plotManagementWildRevertDelay the plotManagementWildRevertDelay to set
 	 */
 	public void setPlotManagementWildRevertDelay(long plotManagementWildRevertDelay) {
 
@@ -880,6 +881,7 @@ public class TownyWorld extends TownyObject {
 	 * @param location Location to test.
 	 * @return true when the bed map contains the location.
 	 */
+	@ApiStatus.Internal
 	public boolean hasBedExplosionAtBlock(Location location) {
 		return bedMap.containsKey(location);
 	}
@@ -890,32 +892,37 @@ public class TownyWorld extends TownyObject {
 	 * @return material of the bed or null if the bedMap doesn't contain the location.
 	 */
 	@Nullable
+	@ApiStatus.Internal
 	public Material getBedExplosionMaterial(Location location) {
 		if (hasBedExplosionAtBlock(location))
 			return bedMap.get(location);
 		return null;
 	}
 	
+	@ApiStatus.Internal
 	public void addBedExplosionAtBlock(Location location, Material material) {
 		bedMap.put(location, material);
 	}
 
+	@ApiStatus.Internal
 	public void removeBedExplosionAtBlock(Location location) {
 		if (hasBedExplosionAtBlock(location))
 			bedMap.remove(location);
 	}
 	
-	public boolean hasTridentStrike(int entityID) {
-		return tridentStrikeMap.contains(String.valueOf(entityID));
+	@ApiStatus.Internal
+	public boolean hasTridentStrike(UUID uuid) {
+		return tridentStrikeList.contains(uuid);
 	}
 
-	public void addTridentStrike(int entityID) {
-		tridentStrikeMap.add(String.valueOf(entityID));
+	@ApiStatus.Internal
+	public void addTridentStrike(UUID uuid) {
+		tridentStrikeList.add(uuid);
 	}
 	
-	public void removeTridentStrike(int entityID) {
-		if (hasTridentStrike(entityID))
-			tridentStrikeMap.remove(String.valueOf(entityID));
+	@ApiStatus.Internal
+	public void removeTridentStrike(UUID uuid) {
+		tridentStrikeList.remove(uuid);
 	}
 
 	public void setFriendlyFire(boolean parseBoolean) {

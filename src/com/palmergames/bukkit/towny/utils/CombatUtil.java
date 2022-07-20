@@ -254,7 +254,7 @@ public class CombatUtil {
 				}
 				
 				if (attackingEntity instanceof LightningStrike 
-					&& world.hasTridentStrike(attackingEntity.getEntityId())
+					&& world.hasTridentStrike(attackingEntity.getUniqueId())
 					&& preventPvP(world, defenderTB)) {
 					return true;
 				}
