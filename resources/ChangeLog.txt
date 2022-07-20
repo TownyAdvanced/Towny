@@ -7632,3 +7632,7 @@ v0.92.0.11:
     - new_world_settings.plot_management.entity_delete.unclaim_delete
       - Default: "ENDERCRYSTAL"
       - These entities will be deleted upon a plot being unclaimed
+0.98.3.4:
+  - Fix vehicles not being killed by lava, courtesy of Warriorrrr with PR #6044.
+  - Make townyworld's trident strike list use uuid instead of eid, courtesy of Warriorrrr with PR #6043.
+  - Add baltop as banned name, courtesy of Warriorrrr with PR #6046.
