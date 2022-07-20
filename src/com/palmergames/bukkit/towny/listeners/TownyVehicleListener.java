@@ -47,7 +47,7 @@ public class TownyVehicleListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getVehicle().getWorld()))
+		if (!TownyAPI.getInstance().isTownyWorld(event.getVehicle().getWorld()) || (event.getAttacker() == null && event.getVehicle().getFireTicks() > 0))
 			return;
 
 		if (event.getAttacker() == null) {  // Probably a respawn anchor or a TNT minecart or TNT lit by redstone.
@@ -153,6 +153,6 @@ public class TownyVehicleListener implements Listener {
 				if (TownySettings.isSwitchMaterial(vehicle, event.getVehicle().getLocation()))
 					event.setCancelled(!TownyActionEventExecutor.canSwitch(player, event.getVehicle().getLocation(), vehicle));
 			}
-		}	
+		}
 	}
 }
