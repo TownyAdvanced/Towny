@@ -226,6 +226,7 @@ permissions:
             towny.command.nation.list.founded: true
             towny.command.nation.list.townblocks: true
             towny.command.nation.list.online: true
+            towny.command.nation.list.upkeep: true
 
     towny.command.nation.list.*:
         description: Users are able to use all the various methods of sorting the nation list.
@@ -387,6 +388,7 @@ permissions:
             towny.command.town.list.founded: true
             towny.command.town.list.ruined: true
             towny.command.town.list.bankrupt: true
+            towny.comamnd.town.list.upkeep: true
 
     towny.command.town.claim.*:
         description: User can access all town claim related commands.

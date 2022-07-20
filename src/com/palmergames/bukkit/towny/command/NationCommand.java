@@ -151,7 +151,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"open",
 		"public",
 		"townblocks",
-		"towns"
+		"towns",
+		"upkeep"
 	);
 	
 	static final List<String> nationToggleTabCompletes = Arrays.asList(

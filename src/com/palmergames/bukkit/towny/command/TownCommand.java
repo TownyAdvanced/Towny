@@ -216,7 +216,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"open",
 		"public",
 		"ruined",
-		"townblocks"
+		"townblocks",
+		"upkeep"
 	);
 	static final List<String> townToggleTabCompletes = Arrays.asList(
 		"explosion",
