@@ -183,11 +183,7 @@ public abstract class TownyPermissionSource {
 		return (permissible == null) || permissible.isOp() || strictHas(permissible, PermissionNodes.TOWNY_ADMIN.getNode());
 
 	}
-	
-	public void testPermissionOrThrow(Player player, String perm) throws NoPermissionException {
-		testPermissionOrThrow((Permissible) player, perm);
-	}
-	
+
 	public void testPermissionOrThrow(Permissible permissible, String perm) throws NoPermissionException {
 		if (!testPermission(permissible, perm))
 			throw new NoPermissionException();

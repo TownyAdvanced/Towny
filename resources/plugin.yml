@@ -682,16 +682,23 @@ permissions:
         description: User can access the admin nation commands.
         default: false
         children:
-            towny.command.townyadmin.nation.new: true
             towny.command.townyadmin.nation.add: true
-            towny.command.townyadmin.nation.delete: true
-            towny.command.townyadmin.nation.rename: true
-            towny.command.townyadmin.nation.merge: true
-            towny.command.townyadmin.nation.toggle: true
-            towny.command.townyadmin.nation.set: true
-            towny.command.townyadmin.nation.bankhistory: true
-            towny.command.townyadmin.nation.enemy: true
             towny.command.townyadmin.nation.ally: true
+            towny.command.townyadmin.nation.bankhistory: true
+            towny.command.townyadmin.nation.delete: true
+            towny.command.townyadmin.nation.deposit: true
+            towny.command.townyadmin.nation.enemy: true
+            towny.command.townyadmin.nation.forcemerge: true
+            towny.command.townyadmin.nation.kick: true
+            towny.command.townyadmin.nation.merge: true
+            towny.command.townyadmin.nation.new: true
+            towny.command.townyadmin.nation.rank: true
+            towny.command.townyadmin.nation.recheck: true
+            towny.command.townyadmin.nation.rename: true
+            towny.command.townyadmin.nation.set: true
+            towny.command.townyadmin.nation.toggle: true
+            towny.command.townyadmin.nation.transfer: true
+            towny.command.townyadmin.nation.withdraw: true
 
     towny.command.townyadmin.plot.*:
         description: User can access the admin plot commands.
@@ -709,7 +716,10 @@ permissions:
             towny.command.townyadmin.toggle.devmode: true
             towny.command.townyadmin.toggle.debug: true
             towny.command.townyadmin.toggle.nationwithdraw: true
+            towny.command.townyadmin.toggle.npc: true
+            towny.command.townyadmin.toggle.regenerations: true
             towny.command.townyadmin.toggle.townwithdraw: true
+            towny.command.townyadmin.toggle.wildernessuse: true
 
     # Towny command permissions
     towny.command.towny.*:

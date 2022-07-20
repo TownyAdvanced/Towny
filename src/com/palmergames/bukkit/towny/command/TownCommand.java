@@ -1876,7 +1876,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Player player = null;
 			if (sender instanceof Player) {
 				player = (Player) sender;
-				TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_JAIL_LIST.getNode());
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_JAIL_LIST.getNode());
 				
 				Resident resident = TownyAPI.getInstance().getResident(player.getUniqueId());					
 				if (resident == null || !resident.hasTown())
@@ -4133,7 +4133,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		try {
 			if (args.length >= 2) {
 				if (args[1].equalsIgnoreCase("list")) {
-					TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTPOST_LIST.getNode());
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTPOST_LIST.getNode());
 
 					Town town = getTownFromPlayerOrThrow(player);
 					List<Location> outposts = town.getAllOutpostSpawns();

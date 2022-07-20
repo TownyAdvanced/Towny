@@ -528,12 +528,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 			if (split[0].equalsIgnoreCase("perm")) {
 
-				townyUniverse.getPermissionSource().testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_PERM.getNode());
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_PERM.getNode());
 				TownCommand.setTownBlockPermissions(player, resident, resident.getPermissions(), StringMgmt.remFirstArg(split), true);
 
 			} else if (split[0].equalsIgnoreCase("mode")) {
 
-				townyUniverse.getPermissionSource().testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_MODE.getNode());
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_MODE.getNode());
 				setMode(player, StringMgmt.remFirstArg(split));
 
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, split[0])) {
@@ -574,7 +574,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		List<String> list = Arrays.asList(split);
 		if (list.contains("spy"))
-			TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(player, PermissionNodes.TOWNY_CHAT_SPY.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_CHAT_SPY.getNode());
 
 		plugin.setPlayerMode(player, split, true);
 

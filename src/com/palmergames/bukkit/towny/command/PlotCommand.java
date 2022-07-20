@@ -817,7 +817,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.PLOT_JAILCELL.send(player);
 
 		try {
-			TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_JAILCELL.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_JAILCELL.getNode());
 
 			// Fail if the resident isn't registered. (Very unlikely.)
 			Resident resident = TownyAPI.getInstance().getResident(player.getUniqueId());

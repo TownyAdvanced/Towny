@@ -59,7 +59,6 @@ import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
 import com.palmergames.bukkit.towny.object.inviteobjects.TownJoinNationInvite;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
@@ -437,7 +436,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseNationCommand(final Player player, String[] split) throws TownyException, Exception {
-		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
 		if (split.length == 0) {
 			nationStatusScreen(player, getNationFromPlayerOrThrow(player));
@@ -451,40 +449,40 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		switch (split[0].toLowerCase()) {
 		case "list":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode());
 			listNations(player, split);
 			break;
 		case "townlist":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_TOWNLIST.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_TOWNLIST.getNode());
 			nationTownList(player, getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
 			break;
 		case "allylist":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLYLIST.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLYLIST.getNode());
 			nationAllyList(player, getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
 			break;
 		case "enemylist":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ENEMYLIST.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ENEMYLIST.getNode());
 			nationEnemyList(player, getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
 			break;
 		case "new":
 		case "create":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_NEW.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_NEW.getNode());
 			newNation(player, split);
 			break;
 		case "join":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_JOIN.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_JOIN.getNode());
 			parseNationJoin(player, StringMgmt.remFirstArg(split));
 			break;
 		case "merge":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_MERGE.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_MERGE.getNode());
 			mergeNation(player, split);
 			break;
 		case "withdraw":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_WITHDRAW.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_WITHDRAW.getNode());
 			nationTransaction(player, split, true);
 			break;
 		case "leave":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LEAVE.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LEAVE.getNode());
 			nationLeave(player);
 			break;
 		case "spawn":
@@ -493,7 +491,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationSpawn(player, StringMgmt.remFirstArg(split), ignoreWarning);
 			break;
 		case "deposit":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT.getNode());
 			nationTransaction(player, split, false);
 			break;
 		case "rank":
@@ -501,16 +499,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationRank(player, StringMgmt.remFirstArg(split));
 			break;
 		case "ranklist":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_RANKLIST.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_RANKLIST.getNode());
 			TownyMessaging.sendMessage(player, TownyFormatter.getRanksForNation(getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)), Translator.locale(player)));
 			break;
 		case "king":
 		case "leader":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_KING.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_KING.getNode());
 			nationKing(player, StringMgmt.remFirstArg(split));
 			break;
 		case "add":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_ADD.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_ADD.getNode());
 			nationAdd(player, StringMgmt.remFirstArg(split));
 			break;
 		case "invite":
@@ -519,7 +517,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			parseInviteCommand(player, StringMgmt.remFirstArg(split));
 			break;
 		case "kick":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_KICK.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_KICK.getNode());
 			nationKick(player, StringMgmt.remFirstArg(split));
 			break;
 		case "set":
@@ -535,27 +533,27 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationAlly(player, StringMgmt.remFirstArg(split));
 			break;
 		case "enemy":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ENEMY.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ENEMY.getNode());
 			nationEnemy(player, StringMgmt.remFirstArg(split));
 			break;
 		case "delete":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DELETE.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DELETE.getNode());
 			nationDelete(player, StringMgmt.remFirstArg(split));
 			break;
 		case "online":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ONLINE.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ONLINE.getNode());
 			parseNationOnlineCommand(player, StringMgmt.remFirstArg(split));
 			break;
 		case "say":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_SAY.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_SAY.getNode());
 			nationSay(getNationFromPlayerOrThrow(player), StringMgmt.remFirstArg(split));
 			break;
 		case "bankhistory":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_BANKHISTORY.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_BANKHISTORY.getNode());
 			nationBankHistory(player, StringMgmt.remFirstArg(split));
 			break;
 		case "baltop":
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_BALTOP.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_BALTOP.getNode());
 			parseNationBaltop(player, getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
 			break;
 		default:
@@ -575,7 +573,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Nation nation = TownyUniverse.getInstance().getNation(split[0]);
 		if (nation != null) {
 			if (!nation.hasResident(player.getName()))
-				TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode());
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode());
 
 			nationStatusScreen(player, nation);
 			return true;
@@ -696,7 +694,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseInviteCommand(Player player, String[] newSplit) throws TownyException {
-		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 		Resident resident = getResidentOrThrow(player.getUniqueId());
 		String sent = Translatable.of("nation_sent_invites").forLocale(player)
 				.replace("%a", Integer.toString(resident.getTown().getNation().getSentInvites().size())
@@ -704,7 +701,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				.replace("%m", Integer.toString(InviteHandler.getSentInvitesMaxAmount(resident.getTown().getNation())));
 
 		if (newSplit.length == 0) { // (/nation invite)
-			permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_SEE_HOME.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_SEE_HOME.getNode());
 			HelpMenu.NATION_INVITE.send(player);
 			TownyMessaging.sendMessage(player, sent);
 			return;
@@ -715,13 +712,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			if (newSplit[0].equalsIgnoreCase("sent")) { //  /invite(remfirstarg) sent args[1]
-				permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_LIST_SENT.getNode());
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_LIST_SENT.getNode());
 				List<Invite> sentinvites = resident.getTown().getNation().getSentInvites();
 				InviteCommand.sendInviteList(player, sentinvites, getPage(newSplit, 1), true);
 				TownyMessaging.sendMessage(player, sent);
 				return;
 			} else {
-				permSource.testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_ADD.getNode());
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_INVITE_ADD.getNode());
 				nationAdd(player, newSplit);
 				// It's none of those 4 subcommands, so it's a townname, I just expect it to be ok.
 				// If it is invalid it is handled in townAdd() so, I'm good
@@ -1450,31 +1447,30 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 		Resident resident = getResidentOrThrow(player.getUniqueId());
 		Nation nation = getNationFromResidentOrThrow(resident);
-		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
 		switch (split[0].toLowerCase()) {
 		case "add":
-			permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ADD.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ADD.getNode());
 			nationAllyAdd(player, resident, nation, StringMgmt.remFirstArg(split));
 			break;
 		case "remove":
-			permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_REMOVE.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_REMOVE.getNode());
 			nationAllyRemove(player, resident, nation, StringMgmt.remFirstArg(split));
 			break;
 		case "sent":
-			permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_LIST_SENT.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_LIST_SENT.getNode());
 			nationAllySent(player, nation, StringMgmt.remFirstArg(split));
 			break;
 		case "received":
-			permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_LIST_RECEIVED.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_LIST_RECEIVED.getNode());
 			nationAllyReceived(player, nation, StringMgmt.remFirstArg(split));
 			break;
 		case "accept":
-			permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ACCEPT.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ACCEPT.getNode());
 			nationAllyAccept(player, nation, split);
 			break;
 		case "deny":
-			permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_DENY.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_DENY.getNode());
 			nationAllyDeny(player, nation, split);
 			break;
 		default:
@@ -2592,7 +2588,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_must_specify_amnt", "/nation withdraw"));
 
 			if (args.length == 3) {
-				TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT_OTHER.getNode());
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT_OTHER.getNode());
 				
 				Town town = TownyUniverse.getInstance().getTown(args[2]);
 				if (town != null) {
