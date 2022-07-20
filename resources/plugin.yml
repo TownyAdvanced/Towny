@@ -615,8 +615,6 @@ permissions:
             towny.command.townyadmin.set.*: true
             towny.command.townyadmin.toggle.*: true
             towny.command.townyadmin.town.*: true
-            towny.command.townyadmin.town.spawn: true
-            towny.command.townyadmin.town.spawn.freecharge: true
             towny.command.townyadmin.townyperms: true
             towny.command.townyadmin.unclaim: true
             towny.command.townyadmin.plot.*: true
@@ -657,19 +655,28 @@ permissions:
         default: false
         children:
             towny.command.townyadmin.town.add: true
+            towny.command.townyadmin.town.bankhistory: true
             towny.command.townyadmin.town.checkoutposts: true
             towny.command.townyadmin.town.delete: true
+            towny.command.townyadmin.town.deposit: true
+            towny.command.townyadmin.town.forcemerge: true
+            towny.command.townyadmin.town.giveboughtblocks: true
+            towny.command.townyadmin.town.invite: true
             towny.command.townyadmin.town.kick: true
+            towny.command.townyadmin.town.merge: true
+            towny.command.townyadmin.town.meta: true
             towny.command.townyadmin.town.new: true
+            towny.command.townyadmin.town.outpost: true
+            towny.command.townyadmin.town.outlaw: true
             towny.command.townyadmin.town.rank: true
             towny.command.townyadmin.town.rename: true
             towny.command.townyadmin.town.set: true
             towny.command.townyadmin.town.settownlevel: true
-            towny.command.townyadmin.town.giveboughtblocks: true
+            towny.command.townyadmin.town.spawn.*: true
             towny.command.townyadmin.town.toggle: true
-            towny.command.townyadmin.town.meta: true
-            towny.command.townyadmin.town.bankhistory: true
             towny.command.townyadmin.town.trust: true
+            towny.command.townyadmin.town.unruin: true
+            towny.command.townyadmin.town.withdraw: true
 
     towny.command.townyadmin.nation.*:
         description: User can access the admin nation commands.
