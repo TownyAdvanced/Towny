@@ -413,13 +413,13 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return String.valueOf(TownySettings.getUpkeepPenalty());
 		case "daily_town_upkeep_reduction_from_town_level": // %townyadvanced_daily_town_upkeep_reduction_from_town_level%
 			cost = resident.hasTown() 
-				? Double.parseDouble(TownySettings.getTownLevel(resident.getTownOrNull()).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())
-				: Double.parseDouble(TownySettings.getTownLevel(1).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
+				? TownySettings.getTownLevel(resident.getTownOrNull()).upkeepModifier()
+				: TownySettings.getTownLevel(1).upkeepModifier();
 			return cost == 1.0 ? "0" : String.valueOf(dFormat.format((1.0 - cost) * 100));
 		case "daily_town_upkeep_reduction_from_nation_level": // %townyadvanced_daily_town_upkeep_reduction_from_nation_level%
 			cost = resident.hasNation() 
-				? Double.parseDouble(TownySettings.getNationLevel(resident.getNationOrNull()).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString())
-				: Double.parseDouble(TownySettings.getNationLevel(1).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
+				? TownySettings.getNationLevel(resident.getNationOrNull()).nationTownUpkeepModifier()
+				: TownySettings.getNationLevel(1).nationTownUpkeepModifier();
 			return cost == 1.0 ? "0" : String.valueOf(dFormat.format((1.0 - cost) * 100));
 		case "daily_nation_upkeep": // %townyadvanced_daily_nation_upkeep%
 			if (resident.hasNation()) {
@@ -430,8 +430,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return String.valueOf(TownySettings.getNationUpkeep());
 		case "daily_nation_upkeep_reduction_from_nation_level": // %townyadvanced_daily_nation_upkeep_reduction_from_nation_level%
 			cost = resident.hasNation() 
-				? Double.parseDouble(TownySettings.getNationLevel(resident.getNationOrNull()).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString())
-				: Double.parseDouble(TownySettings.getNationLevel(1).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
+				? TownySettings.getNationLevel(resident.getNationOrNull()).upkeepModifier()
+				: TownySettings.getNationLevel(1).upkeepModifier();
 			return cost == 1.0 ? "0" : String.valueOf(dFormat.format((1.0 - cost) * 100));
 		case "daily_town_tax": // %townyadvanced_daily_town_tax%
 			boolean percentage = false;
