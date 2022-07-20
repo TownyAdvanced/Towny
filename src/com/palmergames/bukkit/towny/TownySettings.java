@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.db.DatabaseConfig;
@@ -46,26 +47,23 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class TownySettings {
 
 	// Town Level
-	public enum TownLevel {
-		NAME_PREFIX, NAME_POSTFIX, MAYOR_PREFIX, MAYOR_POSTFIX, TOWN_BLOCK_LIMIT, UPKEEP_MULTIPLIER, OUTPOST_LIMIT, TOWN_BLOCK_BUY_BONUS_LIMIT, DEBT_CAP_MODIFIER
-	}
+	@Desugar
+	public record TownLevel(String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double upkeepModifier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier) {}
 
 	// Nation Level
-	public enum NationLevel {
-		NAME_PREFIX, NAME_POSTFIX, CAPITAL_PREFIX, CAPITAL_POSTFIX, KING_PREFIX, KING_POSTFIX, TOWN_BLOCK_LIMIT_BONUS, UPKEEP_MULTIPLIER, NATION_TOWN_UPKEEP_MULTIPLIER, NATIONZONES_SIZE, NATION_BONUS_OUTPOST_LIMIT
-	}
+	@Desugar
+	public record NationLevel(String namePrefix, String namePostfix, String capitalPrefix, String capitalPostfix, String kingPrefix, String kingPostfix, int townBlockLimitBonus, double upkeepModifier, double nationTownUpkeepModifier, int nationZonesSize, int nationBonusOutpostLimit) {}
 
 	private static CommentedConfiguration config;
 	private static CommentedConfiguration newConfig;
 	private static int uuidCount;
 
-	private static final SortedMap<Integer, Map<TownySettings.TownLevel, Object>> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
-	private static final SortedMap<Integer, Map<TownySettings.NationLevel, Object>> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
+	private static final SortedMap<Integer, TownLevel> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
+	private static final SortedMap<Integer, NationLevel> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
 	
 	private static final EnumSet<Material> itemUseMaterials = EnumSet.noneOf(Material.class);
 	private static final EnumSet<Material> switchUseMaterials = EnumSet.noneOf(Material.class);
@@ -73,34 +71,34 @@ public class TownySettings {
 	
 	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier) {
 
-		ConcurrentHashMap<TownySettings.TownLevel, Object> m = new ConcurrentHashMap<>();
-		m.put(TownySettings.TownLevel.NAME_PREFIX, namePrefix);
-		m.put(TownySettings.TownLevel.NAME_POSTFIX, namePostfix);
-		m.put(TownySettings.TownLevel.MAYOR_PREFIX, mayorPrefix);
-		m.put(TownySettings.TownLevel.MAYOR_POSTFIX, mayorPostfix);
-		m.put(TownySettings.TownLevel.TOWN_BLOCK_LIMIT, townBlockLimit);
-		m.put(TownySettings.TownLevel.UPKEEP_MULTIPLIER, townUpkeepMultiplier);
-		m.put(TownySettings.TownLevel.OUTPOST_LIMIT, townOutpostLimit);
-		m.put(TownySettings.TownLevel.TOWN_BLOCK_BUY_BONUS_LIMIT, townBlockBuyBonusLimit);
-		m.put(TownySettings.TownLevel.DEBT_CAP_MODIFIER, debtCapModifier);
-		configTownLevel.put(numResidents, m);
+		configTownLevel.put(numResidents, new TownLevel(
+			namePrefix,
+			namePostfix,
+			mayorPrefix,
+			mayorPostfix,
+			townBlockLimit,
+			townUpkeepMultiplier,
+			townOutpostLimit,
+			townBlockBuyBonusLimit,
+			debtCapModifier
+		));
 	}
 
 	public static void newNationLevel(int numResidents, String namePrefix, String namePostfix, String capitalPrefix, String capitalPostfix, String kingPrefix, String kingPostfix, int townBlockLimitBonus, double nationUpkeepMultiplier, double nationTownUpkeepMultiplier, int nationZonesSize, int nationBonusOutpostLimit) {
 
-		ConcurrentHashMap<TownySettings.NationLevel, Object> m = new ConcurrentHashMap<>();
-		m.put(TownySettings.NationLevel.NAME_PREFIX, namePrefix);
-		m.put(TownySettings.NationLevel.NAME_POSTFIX, namePostfix);
-		m.put(TownySettings.NationLevel.CAPITAL_PREFIX, capitalPrefix);
-		m.put(TownySettings.NationLevel.CAPITAL_POSTFIX, capitalPostfix);
-		m.put(TownySettings.NationLevel.KING_PREFIX, kingPrefix);
-		m.put(TownySettings.NationLevel.KING_POSTFIX, kingPostfix);
-		m.put(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS, townBlockLimitBonus);
-		m.put(TownySettings.NationLevel.UPKEEP_MULTIPLIER, nationUpkeepMultiplier);
-		m.put(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER, nationTownUpkeepMultiplier);
-		m.put(TownySettings.NationLevel.NATIONZONES_SIZE, nationZonesSize);
-		m.put(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT, nationBonusOutpostLimit);
-		configNationLevel.put(numResidents, m);
+		configNationLevel.put(numResidents, new NationLevel(
+			namePrefix,
+			namePostfix,
+			capitalPrefix,
+			capitalPostfix,
+			kingPrefix,
+			kingPostfix,
+			townBlockLimitBonus,
+			nationUpkeepMultiplier,
+			nationTownUpkeepMultiplier,
+			nationZonesSize,
+			nationBonusOutpostLimit
+		));
 	}
 
 	/**
@@ -200,31 +198,27 @@ public class TownySettings {
 		}
 	}
 
-	public static Map<TownySettings.TownLevel, Object> getTownLevel(int numResidents) {
-
+	public static TownLevel getTownLevel(int numResidents) {
 		return configTownLevel.get(numResidents);
 	}
 
-	public static Map<TownySettings.NationLevel, Object> getNationLevel(int numResidents) {
-
+	public static NationLevel getNationLevel(int numResidents) {
 		return configNationLevel.get(numResidents);
 	}
 
-	public static Map<TownySettings.TownLevel, Object> getTownLevel(Town town) {
-
+	public static TownLevel getTownLevel(Town town) {
 		return getTownLevel(town.getLevel());
 	}
 
-	public static Map<TownySettings.TownLevel, Object> getTownLevel(Town town, int residents) {
+	public static TownLevel getTownLevel(Town town, int residents) {
 		return getTownLevel(town.getLevel(residents));
 	}
 
-	public static Map<TownySettings.NationLevel, Object> getNationLevel(Nation nation) {
-
+	public static NationLevel getNationLevel(Nation nation) {
 		return getNationLevel(nation.getLevel());
 	}
 	
-	public static Map<TownySettings.NationLevel, Object> getNationLevel(Nation nation, int residents) {
+	public static NationLevel getNationLevel(Nation nation, int residents) {
 		return getNationLevel(nation.getLevel(residents));
 	}
 
@@ -838,7 +832,7 @@ public class TownySettings {
 	public static String getKingPrefix(Resident resident) {
 
 		try {
-			return (String) getNationLevel(resident.getTown().getNation()).get(TownySettings.NationLevel.KING_PREFIX);
+			return getNationLevel(resident.getTown().getNation()).kingPrefix();
 		} catch (NotRegisteredException e) {
 			sendError("getKingPrefix.");
 			return "";
@@ -848,7 +842,7 @@ public class TownySettings {
 	public static String getMayorPrefix(Resident resident) {
 
 		try {
-			return (String) getTownLevel(resident.getTown()).get(TownySettings.TownLevel.MAYOR_PREFIX);
+			return getTownLevel(resident.getTown()).mayorPrefix();
 		} catch (NotRegisteredException e) {
 			sendError("getMayorPrefix.");
 			return "";
@@ -858,7 +852,7 @@ public class TownySettings {
 	public static String getCapitalPostfix(Town town) {
 
 		try {
-			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_POSTFIX));
+			return ChatColor.translateAlternateColorCodes('&', getNationLevel(town.getNation()).capitalPostfix());
 		} catch (NotRegisteredException e) {
 			sendError("getCapitalPostfix.");
 			return "";
@@ -868,7 +862,7 @@ public class TownySettings {
 	public static String getTownPostfix(Town town) {
 
 		try {
-			return ChatColor.translateAlternateColorCodes('&',(String) getTownLevel(town).get(TownySettings.TownLevel.NAME_POSTFIX));
+			return ChatColor.translateAlternateColorCodes('&', getTownLevel(town).namePostfix());
 		} catch (Exception e) {
 			sendError("getTownPostfix.");
 			return "";
@@ -878,7 +872,7 @@ public class TownySettings {
 	public static String getNationPostfix(Nation nation) {
 
 		try {
-			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(nation).get(TownySettings.NationLevel.NAME_POSTFIX));
+			return ChatColor.translateAlternateColorCodes('&', getNationLevel(nation).namePostfix());
 		} catch (Exception e) {
 			sendError("getNationPostfix.");
 			return "";
@@ -888,7 +882,7 @@ public class TownySettings {
 	public static String getNationPrefix(Nation nation) {
 
 		try {
-			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(nation).get(TownySettings.NationLevel.NAME_PREFIX));
+			return ChatColor.translateAlternateColorCodes('&', getNationLevel(nation).namePrefix());
 		} catch (Exception e) {
 			sendError("getNationPrefix.");
 			return "";
@@ -898,7 +892,7 @@ public class TownySettings {
 	public static String getTownPrefix(Town town) {
 
 		try {
-			return ChatColor.translateAlternateColorCodes('&',(String) getTownLevel(town).get(TownySettings.TownLevel.NAME_PREFIX));
+			return ChatColor.translateAlternateColorCodes('&', getTownLevel(town).namePrefix());
 		} catch (Exception e) {
 			sendError("getTownPrefix.");
 			return "";
@@ -908,7 +902,7 @@ public class TownySettings {
 	public static String getCapitalPrefix(Town town) {
 
 		try {
-			return ChatColor.translateAlternateColorCodes('&',(String) getNationLevel(town.getNation()).get(TownySettings.NationLevel.CAPITAL_PREFIX));
+			return ChatColor.translateAlternateColorCodes('&', getNationLevel(town.getNation()).capitalPrefix());
 		} catch (NotRegisteredException e) {
 			sendError("getCapitalPrefix.");
 			return "";
@@ -918,7 +912,7 @@ public class TownySettings {
 	public static String getKingPostfix(Resident resident) {
 
 		try {
-			return (String) getNationLevel(resident.getTown().getNation()).get(TownySettings.NationLevel.KING_POSTFIX);
+			return getNationLevel(resident.getTown().getNation()).kingPostfix();
 		} catch (NotRegisteredException e) {
 			sendError("getKingPostfix.");
 			return "";
@@ -928,7 +922,7 @@ public class TownySettings {
 	public static String getMayorPostfix(Resident resident) {
 
 		try {
-			return (String) getTownLevel(resident.getTown()).get(TownySettings.TownLevel.MAYOR_POSTFIX);
+			return getTownLevel(resident.getTown()).mayorPostfix();
 		} catch (NotRegisteredException e) {
 			sendError("getMayorPostfix.");
 			return "";
@@ -1009,7 +1003,7 @@ public class TownySettings {
 		int n = town.getBonusBlocks() + town.getPurchasedBlocks();
 
 		if (ratio == 0)
-			n += (Integer) getTownLevel(town).get(TownySettings.TownLevel.TOWN_BLOCK_LIMIT);
+			n += getTownLevel(town).townBlockLimit();
 		else
 			n += town.getNumResidents() * ratio;
 
@@ -1027,7 +1021,7 @@ public class TownySettings {
 		int amount = town.getBonusBlocks() + town.getPurchasedBlocks();
 
 		if (ratio == 0)
-			amount += (int) getTownLevel(town, residents).get(TownySettings.TownLevel.TOWN_BLOCK_LIMIT);
+			amount += getTownLevel(town, residents).townBlockLimit();
 		else
 			amount += residents * ratio;
 
@@ -1037,40 +1031,41 @@ public class TownySettings {
 	
 	public static int getMaxOutposts(Town town, int residents) {
 		
-		int townOutposts = (Integer) getTownLevel(town, residents).get(TownySettings.TownLevel.OUTPOST_LIMIT);
+		int townOutposts = getTownLevel(town, residents).townOutpostLimit();
 		int nationOutposts = 0;
 		if (town.hasNation()) {
 			Nation nation = town.getNationOrNull();
 			if (nation != null)
-				nationOutposts = (Integer) getNationLevel(nation, residents).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
+				nationOutposts = getNationLevel(nation, residents).nationBonusOutpostLimit();
 		}
 		return townOutposts + nationOutposts;
 	}
 	
 	public static int getMaxOutposts(Town town) {
 		
-		int townOutposts = (Integer) getTownLevel(town).get(TownySettings.TownLevel.OUTPOST_LIMIT);
+		int townOutposts = getTownLevel(town).townOutpostLimit();
 		int nationOutposts = 0;
 		if (town.hasNation()) {
 			Nation nation = town.getNationOrNull();
 			if (nation != null)
-				nationOutposts = (Integer) getNationLevel(nation).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
+				nationOutposts = getNationLevel(nation).nationBonusOutpostLimit();
 		}
+		
 		return townOutposts + nationOutposts;
 	}
 	
 	public static int getMaxBonusBlocks(Town town, int residents) {
 		
-		return (Integer) getTownLevel(town, residents).get(TownySettings.TownLevel.TOWN_BLOCK_BUY_BONUS_LIMIT);
+		return getTownLevel(town, residents).townBlockBuyBonusLimit();
 	}
 	
 	public static int getMaxBonusBlocks(Town town) {
 		
-		return (Integer) getTownLevel(town).get(TownySettings.TownLevel.TOWN_BLOCK_BUY_BONUS_LIMIT);
+		return getMaxBonusBlocks(town, town.getNumResidents());
 	}
 
 	public static int getNationBonusBlocks(Nation nation) {
-		int bonusBlocks = (Integer) getNationLevel(nation).get(TownySettings.NationLevel.TOWN_BLOCK_LIMIT_BONUS);
+		int bonusBlocks = getNationLevel(nation).townBlockLimitBonus();
 		NationBonusCalculationEvent calculationEvent = new NationBonusCalculationEvent(nation, bonusBlocks);
 		Bukkit.getPluginManager().callEvent(calculationEvent);
 		return calculationEvent.getBonusBlocks();
@@ -1818,7 +1813,7 @@ public class TownySettings {
 			if (isUpkeepByPlot()) {
 				multiplier = town.getTownBlocks().size();
 			} else {
-				multiplier = Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
+				multiplier = getTownLevel(town).upkeepModifier();
 			}
 		}
 		
@@ -1826,12 +1821,12 @@ public class TownySettings {
 			Nation nation = town.getNationOrNull();
 			double nationMultiplier = 1.0;
 			if (nation != null) {
-				nationMultiplier = Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.NATION_TOWN_UPKEEP_MULTIPLIER).toString());
+				nationMultiplier = getNationLevel(nation).nationTownUpkeepModifier();
 			}
 			if (isUpkeepByPlot()) {
 				double amount;
 				if (isTownLevelModifiersAffectingPlotBasedUpkeep())
-					amount = (((getTownUpkeep() * multiplier) * Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString())) * nationMultiplier);
+					amount = (((getTownUpkeep() * multiplier) * getTownLevel(town).upkeepModifier()) * nationMultiplier);
 				else
 					amount = (getTownUpkeep() * multiplier) * nationMultiplier;
 				if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0)
@@ -1845,7 +1840,7 @@ public class TownySettings {
 			if (isUpkeepByPlot()) {
 				double amount;
 				if (isTownLevelModifiersAffectingPlotBasedUpkeep() && town != null)
-					amount = (getTownUpkeep() * multiplier) * Double.parseDouble(getTownLevel(town).get(TownySettings.TownLevel.UPKEEP_MULTIPLIER).toString());
+					amount = (getTownUpkeep() * multiplier) * getTownLevel(town).upkeepModifier();
 				else
 					amount = getTownUpkeep() * multiplier;
 				if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0)
@@ -1940,16 +1935,16 @@ public class TownySettings {
 			if (isNationUpkeepPerPlot()) {
 				int plotCount = nation.getTowns().stream().mapToInt(town -> town.getTownBlocks().size()).sum();
 				if (isNationLevelModifierAffectingNationUpkeepPerTown())
-					return (getNationUpkeep() * plotCount) * Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
+					return (getNationUpkeep() * plotCount) * getNationLevel(nation).upkeepModifier();
 				else
 					return (getNationUpkeep() * plotCount);
 			} else if (isNationUpkeepPerTown()) {
 				if (isNationLevelModifierAffectingNationUpkeepPerTown())
-					return (getNationUpkeep() * nation.getTowns().size()) * Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
+					return (getNationUpkeep() * nation.getTowns().size()) * getNationLevel(nation).upkeepModifier();
 				else
 					return (getNationUpkeep() * nation.getTowns().size());
 			} else {
-				multiplier = Double.parseDouble(getNationLevel(nation).get(TownySettings.NationLevel.UPKEEP_MULTIPLIER).toString());
+				multiplier = getNationLevel(nation).upkeepModifier();
 			}
 		}
 		return getNationUpkeep() * multiplier;
@@ -3148,11 +3143,11 @@ public class TownySettings {
 		return getString(ConfigNodes.PLUGIN_WEB_MAP_URL);
 	}
 	
-	public static SortedMap<Integer, Map<TownLevel, Object>> getConfigTownLevel(){
+	public static Map<Integer, TownLevel> getConfigTownLevel() {
 		return configTownLevel;
 	}
 	
-	public static SortedMap<Integer, Map<NationLevel, Object>> getConfigNationLevel() {
+	public static Map<Integer, NationLevel> getConfigNationLevel() {
 		return configNationLevel;
 	}
 

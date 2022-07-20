@@ -585,7 +585,8 @@ public class Nation extends Government {
 	public int getNationZoneSize() {
 		if (!TownySettings.getNationZonesEnabled())
 			return 0;
-		return Integer.parseInt(TownySettings.getNationLevel(this).get(TownySettings.NationLevel.NATIONZONES_SIZE).toString());
+		
+		return TownySettings.getNationLevel(this).nationZonesSize();
 	}
 
 	/**
