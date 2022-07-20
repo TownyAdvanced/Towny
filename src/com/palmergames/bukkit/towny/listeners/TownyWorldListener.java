@@ -84,16 +84,15 @@ public class TownyWorldListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getWorld()))
 			return;
 
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getWorld().getName());
-
 		/*
 		 * Add trident-caused lightning strikes to a map temporarily. 
 		 */
 		if (event.getCause().equals(LightningStrikeEvent.Cause.TRIDENT)) {
-			townyWorld.addTridentStrike(event.getLightning().getEntityId());
+			final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getWorld().getName());
 			
-			final TownyWorld finalWorld = townyWorld;
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> finalWorld.removeTridentStrike(event.getLightning().getEntityId()), 20L);
+			townyWorld.addTridentStrike(event.getLightning().getUniqueId());
+			
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> townyWorld.removeTridentStrike(event.getLightning().getUniqueId()), 20L);
 		}
 	}
 	

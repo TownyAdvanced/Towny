@@ -226,7 +226,7 @@ public class ItemLists {
 	/*
 	 * List of blocks which will be allowed to kill Minecarts.
 	 */
-	public static final ItemLists MINECART_KILLERS = ItemLists.of("CACTUS", "LAVA_CAULDRON");
+	public static final ItemLists MINECART_KILLERS = ItemLists.of("CACTUS");
 	
 	/*
 	 * List of unstripped wood logs.
