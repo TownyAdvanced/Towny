@@ -45,7 +45,11 @@ public class JailUtil {
 	 * @param jailer CommandSender of who did the jailing or null.
 	 */
 	public static void jailResident(Resident resident, Jail jail, int cell, int hours, JailReason reason, CommandSender jailer){
-		jailResidentWithBail(resident, jail,cell, hours, 0.0, reason, jailer );
+		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive()) {
+			jailResidentWithBail(resident, jail, cell, hours, TownySettings.getBailAmount(), reason, jailer);
+		} else {
+			jailResidentWithBail(resident, jail, cell, hours, 0.0, reason, jailer);
+		}
 	}
 	public static void jailResidentWithBail(Resident resident, Jail jail, int cell, int hours, double bail, JailReason reason, CommandSender jailer) {
 		
