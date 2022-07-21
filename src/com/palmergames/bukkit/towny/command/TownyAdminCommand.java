@@ -181,7 +181,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"debug",
 		"devmode",
 		"townwithdraw",
-		"nationwithdraw"
+		"nationwithdraw",
+		"forceallneutral"
 	);
 	
 	private static final List<String> adminPlotTabCompletes = Arrays.asList(
@@ -2340,6 +2341,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_choice"));
 			}
+		}else if (split[0].equalsIgnoreCase("forceallneutral")){
+			try{
+				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_admin_toggle_forceallneutral", choice.orElse(true)));
+				toggleAllTownsNeutral(choice.orElse(true));
+			}catch (Exception e){
+				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_choice"));
+			}
 			
 		} else if (split[0].equalsIgnoreCase("npc")) {
 			
@@ -2389,6 +2397,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			world.setUnclaimedZoneSwitch(choice);
 			world.setUnclaimedZoneItemUse(choice);
 			world.save();
+		}
+	}
+	
+	private void toggleAllTownsNeutral(boolean choice) {
+		for (Town town : new ArrayList<>(TownyUniverse.getInstance().getTowns())){
+			town.setNeutral(choice);
 		}
 	}
 
