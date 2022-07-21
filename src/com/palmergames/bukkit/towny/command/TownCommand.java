@@ -1437,7 +1437,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 					
 					if (!townListTabCompletes.contains(split[i].toLowerCase()))
-						throw new TownyException(Translatable.of("msg_error_invalid_comparator_town", String.join(", ", townListTabCompletes)));
+						throw new TownyException(Translatable.of("msg_error_invalid_comparator_town", townListTabCompletes.stream().filter(comp -> sender.hasPermission(PermissionNodes.TOWNY_COMMAND_TOWN_LIST.getNode(comp))).collect(Collectors.joining(", "))));
 
 					type = ComparatorType.valueOf(split[i].toUpperCase(Locale.ROOT));
 
