@@ -584,7 +584,7 @@ public class Towny extends JavaPlugin {
 		test = getServer().getPluginManager().getPlugin("Questioner");
 		if (test != null) {
 			String questioner = "Warning: Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder.";
-			plugin.getLogger().info(StringMgmt.wrap(questioner, 55, System.lineSeparator() + "                           ", true));
+			plugin.getLogger().info(StringMgmt.wrap(questioner, 55, System.lineSeparator() + "                           "));
 		}
 	}
 	
