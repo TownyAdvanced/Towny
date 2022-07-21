@@ -89,14 +89,11 @@ public class JailUtil {
 		resident.setJailBail(bail);
 		resident.save();
 		TownyUniverse.getInstance().getJailedResidentMap().add(resident);
-		
+
 		// Tell the resident how long they've been jailed for and provide bail information if allowing bail and using economy
-		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive())
-		{
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_you've_been_jailed_for_x_hours", hours, Translatable.of("msg_you_have_been_jailed_your_bail_is_x", bail)));
-		} else {
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_you've_been_jailed_for_x_hours", hours));
-		}
+		TownyMessaging.sendMsg(resident, Translatable.of("msg_you've_been_jailed_for_x_hours", hours,
+		if (TownySettings.isAllowingBail() && bail > 0 && TownyEconomyHandler.isActive())
+			Translatable.of("msg_you_have_been_jailed_your_bail_is_x", bail)));
 
 		// Teleport them (if possible.)
 		teleportToJail(resident);

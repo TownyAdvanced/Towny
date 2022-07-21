@@ -1695,7 +1695,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 				// If using initialJailFee option check they can actually afford to jail someone.
 				// Check if economy is on
-				if (TownyEconomyHandler.isActive() && initialJailFee >= 0 && !town.getAccount().canPayFromHoldings(initialJailFee))
+				if (TownyEconomyHandler.isActive() && initialJailFee > 0 && !town.getAccount().canPayFromHoldings(initialJailFee))
 					throw new TownyException(Translatable.of("msg_not_enough_money_in_bank_to_jail_x_fee_is_x", jailedResident, initialJailFee));
 				
 				if (jailedResident.isJailed())
@@ -1734,9 +1734,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						HelpMenu.TOWN_JAIL.send(sender);
 						return;
 					}
-					
 					hours = Integer.valueOf(split[1]);
-					if (hours < 1) 
+					if (hours < 1)
 						hours = 1;
 					if (hours > TownySettings.getJailedMaxSetHours())
 					{
@@ -1782,7 +1781,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), jailNum));
 				// If fee exists (already sanitised for) deduct it from Town bank and inform in chat
-				if (TownyEconomyHandler.isActive() && initialJailFee >= 0)
+				if (TownyEconomyHandler.isActive() && initialJailFee > 0)
 				{
 					town.getAccount().withdraw(initialJailFee, "New Prisoner");
 					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_x_has_been_withdrawn_for_jailing_of_prisoner_x", initialJailFee,jailedResident));

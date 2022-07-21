@@ -1278,7 +1278,7 @@ public class Town extends Government implements TownBlockOwner {
 		return JailedPlayerCount;
 	}
 
-	// Iterates through residents in town and adds to Resident List if jailed
+	// Iterates through residents in TownyUniverse.getJailedResidentMap() and adds to residentsJailed list if jailed in this town
 	public List<Resident> getJailed() {
 
 		List<Resident> residentsJailedMap = TownyUniverse.getInstance().getJailedResidentMap();
