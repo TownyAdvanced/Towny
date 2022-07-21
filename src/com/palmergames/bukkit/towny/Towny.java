@@ -1,7 +1,6 @@
  package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
-import com.google.common.base.Splitter;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.config.migration.ConfigMigrator;
@@ -585,7 +584,7 @@ public class Towny extends JavaPlugin {
 		test = getServer().getPluginManager().getPlugin("Questioner");
 		if (test != null) {
 			String questioner = "Warning: Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder.";
-			plugin.getLogger().info(Word.wrap(questioner, 55, System.lineSeparator() + "                           ", true));
+			plugin.getLogger().info(StringMgmt.wrap(questioner, 55, System.lineSeparator() + "                           ", true));
 		}
 	}
 	
