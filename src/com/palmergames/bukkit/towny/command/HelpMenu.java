@@ -198,6 +198,7 @@ public enum HelpMenu {
 			return new MenuBuilder("townyadmin toggle")
 				.add("wildernessuse", "")
 				.add("regenerations", "")
+				.add("forceallneutral", "")
 				.add("peaceful", "")
 				.add("devmode", "")
 				.add("debug", "")
