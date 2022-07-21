@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.annotations.Unmodifiable;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
@@ -27,7 +28,6 @@ import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -276,7 +276,7 @@ public class TownyUniverse {
 	 * @return whether Towny has a resident matching that name.
 	 */
 	public boolean hasResident(@NotNull String residentName) {
-		Validate.notNull(residentName, "Resident name cannot be null!");
+		Preconditions.checkNotNull(residentName, "Resident name cannot be null!");
 		
 		if (residentName.isEmpty())
 			return false;
@@ -301,7 +301,7 @@ public class TownyUniverse {
 	 * @return whether the resident matching the UUID exists.
 	 */
 	public boolean hasResident(@NotNull UUID residentUUID) {
-		Validate.notNull(residentUUID, "Resident uuid cannot be null!");
+		Preconditions.checkNotNull(residentUUID, "Resident uuid cannot be null!");
 		
 		return residentUUIDMap.containsKey(residentUUID);
 	}
@@ -316,7 +316,7 @@ public class TownyUniverse {
 	 */
 	@Nullable
 	public Resident getResident(@NotNull String residentName) {
-		Validate.notNull(residentName, "Resident name cannot be null!");
+		Preconditions.checkNotNull(residentName, "Resident name cannot be null!");
 
 		if (residentName.isEmpty())
 			return null;
@@ -357,7 +357,7 @@ public class TownyUniverse {
 	 */
 	@Nullable
 	public Resident getResident(@NotNull UUID residentUUID) {
-		Validate.notNull(residentUUID, "Resident uuid cannot be null!");
+		Preconditions.checkNotNull(residentUUID, "Resident uuid cannot be null!");
 		
 		return residentUUIDMap.get(residentUUID);
 	}
@@ -375,7 +375,7 @@ public class TownyUniverse {
 	
 	// Internal Use Only
 	public void registerResidentUUID(@NotNull Resident resident) throws AlreadyRegisteredException {
-		Validate.notNull(resident, "Resident cannot be null!");
+		Preconditions.checkNotNull(resident, "Resident cannot be null!");
 		
 		if (resident.getUUID() != null) {
 			if (residentUUIDMap.putIfAbsent(resident.getUUID(), resident) != null) {
@@ -398,7 +398,7 @@ public class TownyUniverse {
 	 * @throws AlreadyRegisteredException if another resident has been registered with the same name or UUID.
 	 */
 	public void registerResident(@NotNull Resident resident) throws AlreadyRegisteredException {
-		Validate.notNull(resident, "Resident cannot be null!");
+		Preconditions.checkNotNull(resident, "Resident cannot be null!");
 
 		if (residentNameMap.putIfAbsent(resident.getName().toLowerCase(), resident) != null) {
 			throw new AlreadyRegisteredException(String.format("The resident with name '%s' is already registered!", resident.getName()));
@@ -416,7 +416,7 @@ public class TownyUniverse {
 	 * @throws NotRegisteredException if the resident's name or UUID was not registered.
 	 */
 	public void unregisterResident(@NotNull Resident resident) throws NotRegisteredException {
-		Validate.notNull(resident, "Resident cannot be null!");
+		Preconditions.checkNotNull(resident, "Resident cannot be null!");
 
 		if (residentNameMap.remove(resident.getName().toLowerCase()) == null) {
 			throw new NotRegisteredException(String.format("The resident with the name '%s' is not registered!", resident.getName()));
@@ -454,7 +454,7 @@ public class TownyUniverse {
 	// =========== Town Methods ===========
 	
 	public boolean hasTown(@NotNull String townName) {
-		Validate.notNull(townName, "Town Name cannot be null!");
+		Preconditions.checkNotNull(townName, "Town Name cannot be null!");
 		
 		// Fast-fail
 		if (townName.isEmpty())
@@ -471,14 +471,14 @@ public class TownyUniverse {
 	}
 	
 	public boolean hasTown(@NotNull UUID townUUID) {
-		Validate.notNull(townUUID, "Town UUID cannot be null!");
+		Preconditions.checkNotNull(townUUID, "Town UUID cannot be null!");
     	
     	return townUUIDMap.containsKey(townUUID);
 	}
 	
 	@Nullable
 	public Town getTown(@NotNull String townName) {
-    	Validate.notNull(townName, "Town Name cannot be null!");
+    	Preconditions.checkNotNull(townName, "Town Name cannot be null!");
     	
     	// Fast-fail empty names
     	if (townName.isEmpty())
@@ -521,7 +521,7 @@ public class TownyUniverse {
 	 * @throws InvalidNameException Town name is invalid.
 	 */
 	public void newTown(@NotNull String name) throws AlreadyRegisteredException, InvalidNameException {
-		Validate.notNull(name, "Name cannot be null!");
+		Preconditions.checkNotNull(name, "Name cannot be null!");
 		
 		newTown(name, true);
 	}
@@ -535,7 +535,7 @@ public class TownyUniverse {
 	
 	// This is used internally since UUIDs are assigned after town objects are created.
 	public void registerTownUUID(@NotNull Town town) throws AlreadyRegisteredException {
-		Validate.notNull(town, "Town cannot be null!");
+		Preconditions.checkNotNull(town, "Town cannot be null!");
 		
 		if (town.getUUID() != null) {
 			
@@ -556,7 +556,7 @@ public class TownyUniverse {
 	 * @throws AlreadyRegisteredException Town is already in the universe maps.
 	 */
 	public void registerTown(@NotNull Town town) throws AlreadyRegisteredException {
-		Validate.notNull(town, "Town cannot be null!");
+		Preconditions.checkNotNull(town, "Town cannot be null!");
 		
 		if (townNameMap.putIfAbsent(town.getName().toLowerCase(), town) != null) {
 			throw new AlreadyRegisteredException(String.format("The town with name '%s' is already registered!", town.getName()));
@@ -575,7 +575,7 @@ public class TownyUniverse {
 	 * @throws NotRegisteredException Town is not registered in the universe maps.
 	 */
 	public void unregisterTown(@NotNull Town town) throws NotRegisteredException {
-		Validate.notNull(town, "Town cannot be null!");
+		Preconditions.checkNotNull(town, "Town cannot be null!");
 		
 		if (townNameMap.remove(town.getName().toLowerCase()) == null) {
 			throw new NotRegisteredException(String.format("The town with the name '%s' is not registered!", town.getName()));
@@ -599,7 +599,7 @@ public class TownyUniverse {
 	 * @return whether the nation matching the name exists.
 	 */
 	public boolean hasNation(@NotNull String nationName) {
-		Validate.notNull(nationName, "Nation Name cannot be null!");
+		Preconditions.checkNotNull(nationName, "Nation Name cannot be null!");
 
 		// Fast-fail if empty
 		if (nationName.isEmpty())
@@ -622,7 +622,7 @@ public class TownyUniverse {
 	 * @return whether the nation matching the UUID exists.
 	 */
 	public boolean hasNation(@NotNull UUID nationUUID) {
-		Validate.notNull(nationUUID, "Nation UUID cannot be null!");
+		Preconditions.checkNotNull(nationUUID, "Nation UUID cannot be null!");
 		
 		return nationUUIDMap.containsKey(nationUUID);
 	}
@@ -635,7 +635,7 @@ public class TownyUniverse {
 	 */
 	@Nullable
 	public Nation getNation(@NotNull String nationName) {
-		Validate.notNull(nationName, "Nation Name cannot be null!");
+		Preconditions.checkNotNull(nationName, "Nation Name cannot be null!");
 		
 		// Fast-fail if empty
 		if (nationName.isEmpty())
@@ -659,7 +659,7 @@ public class TownyUniverse {
 	 */
 	@Nullable
 	public Nation getNation(@NotNull UUID nationUUID) {
-		Validate.notNull(nationUUID, "Nation UUID cannot be null!");
+		Preconditions.checkNotNull(nationUUID, "Nation UUID cannot be null!");
 		
 		return nationUUIDMap.get(nationUUID);
 	}
@@ -675,7 +675,7 @@ public class TownyUniverse {
 
 	// This is used internally since UUIDs are assigned after nation objects are created.
 	public void registerNationUUID(@NotNull Nation nation) throws AlreadyRegisteredException {
-		Validate.notNull(nation, "Nation cannot be null!");
+		Preconditions.checkNotNull(nation, "Nation cannot be null!");
 
 		if (nation.getUUID() != null) {
 
@@ -696,7 +696,7 @@ public class TownyUniverse {
 	 * @throws AlreadyRegisteredException Nation is already in the universe maps.
 	 */
 	public void registerNation(@NotNull Nation nation) throws AlreadyRegisteredException {
-		Validate.notNull(nation, "Nation cannot be null!");
+		Preconditions.checkNotNull(nation, "Nation cannot be null!");
 
 		if (nationNameMap.putIfAbsent(nation.getName().toLowerCase(), nation) != null) {
 			throw new AlreadyRegisteredException(String.format("The nation with name '%s' is already registered!", nation.getName()));
@@ -715,7 +715,7 @@ public class TownyUniverse {
 	 * @throws NotRegisteredException Nation is not registered in the universe maps.
 	 */
 	public void unregisterNation(@NotNull Nation nation) throws NotRegisteredException {
-		Validate.notNull(nation, "Nation cannot be null!");
+		Preconditions.checkNotNull(nation, "Nation cannot be null!");
 
 		if (nationNameMap.remove(nation.getName().toLowerCase()) == null) {
 			throw new NotRegisteredException(String.format("The nation with the name '%s' is not registered!", nation.getName()));

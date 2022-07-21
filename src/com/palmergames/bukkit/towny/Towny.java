@@ -1,6 +1,7 @@
  package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
+import com.google.common.base.Splitter;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.config.migration.ConfigMigrator;
@@ -62,7 +63,6 @@ import com.palmergames.util.StringMgmt;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.milkbowl.vault.permission.Permission;
 
-import org.apache.commons.lang.WordUtils;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -572,9 +572,9 @@ public class Towny extends JavaPlugin {
 		if (!economy.isEmpty())
 			plugin.getLogger().info(economy);
 		if (!addons.isEmpty())
-			plugin.getLogger().info("  Add-ons: " + WordUtils.wrap(StringMgmt.join(addons, ", "), 52, System.lineSeparator() + "                           ", true));
+			plugin.getLogger().info("  Add-ons: " + StringMgmt.wrap(String.join(", ", addons), 52, System.lineSeparator() + "                           "));
 		if (!ecowarn.isEmpty())
-			plugin.getLogger().info(WordUtils.wrap(ecowarn, 55, System.lineSeparator() + "                           ", true));
+			plugin.getLogger().info(StringMgmt.wrap(ecowarn, 55, System.lineSeparator() + "                           "));
 
 		//Add our chat handler to TheNewChat via the API.
 		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
@@ -585,7 +585,7 @@ public class Towny extends JavaPlugin {
 		test = getServer().getPluginManager().getPlugin("Questioner");
 		if (test != null) {
 			String questioner = "Warning: Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder.";
-			plugin.getLogger().info(WordUtils.wrap(questioner, 55, System.lineSeparator() + "                           ", true));
+			plugin.getLogger().info(Word.wrap(questioner, 55, System.lineSeparator() + "                           ", true));
 		}
 	}
 	
