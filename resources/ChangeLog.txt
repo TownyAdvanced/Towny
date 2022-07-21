@@ -7639,3 +7639,4 @@ v0.92.0.11:
   - Fix messages from cancelled Nation ally adding and removal events not displaying to the command user.
     - Closes #6049.
   - Exclude transitive bukkit api dependency, courtesy of Warriorrrr with PR #6051.
+  - Replace town/nation levels with records, courtesy of Warriorrrr with PR #6041.
