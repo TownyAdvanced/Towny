@@ -1688,6 +1688,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				} catch (TownyException e) {
 					// One of the Allies was not added because the nationCreateAllyRequest() method
 					// threw an exception or a non-admin player tried to ally an NPC-led nation, continue;
+					TownyMessaging.sendErrorMsg(resident, e.getMessage());
 					remove.add(targetNation);
 					continue;
 				}
@@ -1697,6 +1698,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					nationRemoveAlly(resident, nation, targetNation);
 				} catch (TownyException e) {
 					// One of the Allies was not removed because the NationRemoveAllyEvent was cancelled, continue;
+					TownyMessaging.sendErrorMsg(resident, e.getMessage());
 					remove.add(targetNation);
 					continue;
 				}

@@ -7636,3 +7636,5 @@ v0.92.0.11:
   - Fix vehicles not being killed by lava, courtesy of Warriorrrr with PR #6044.
   - Make townyworld's trident strike list use uuid instead of eid, courtesy of Warriorrrr with PR #6043.
   - Add baltop as banned name, courtesy of Warriorrrr with PR #6046.
+  - Fix messages from cancelled Nation ally adding and removal events not displaying to the command user.
+    - Closes #6049.
