@@ -1,5 +1,7 @@
 package com.palmergames.util;
 
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.palmergames.bukkit.towny.object.Translation;
 
 import net.md_5.bungee.api.ChatColor;
@@ -14,7 +16,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -97,7 +98,7 @@ public class StringMgmt {
 
 	public static String repeat(String sequence, int repetitions) {
 
-		return StringUtils.repeat(sequence, repetitions);
+		return Strings.repeat(sequence, repetitions);
 	}
 	
 	public static String[] remFirstArg(String[] arr) {
@@ -245,5 +246,10 @@ public class StringMgmt {
 		List<String> out = new ArrayList<>(list);
 		out.add(addition);
 		return out;
+	}
+	
+	@SuppressWarnings("UnstableApiUsage")
+	public static String wrap(String string, int wrapLength, String newlineString) {
+		return Splitter.fixedLength(wrapLength).splitToStream(string).collect(Collectors.joining(newlineString));
 	}
 }

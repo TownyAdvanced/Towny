@@ -1,8 +1,8 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.annotations.Unmodifiable;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
-import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,7 +77,7 @@ public abstract class TownyObject implements Nameable, Savable {
 	// Exists to maintain backwards compatibility
 	// DO NOT OVERRIDE THIS METHOD ANYWHERE
 	public void addMetaData(@NotNull CustomDataField<?> md, boolean save) {
-		Validate.notNull(md);
+		Preconditions.checkNotNull(md);
 		if (metadata == null)
 			metadata = new HashMap<>();
 
@@ -113,7 +113,7 @@ public abstract class TownyObject implements Nameable, Savable {
 	// Exists to maintain backwards compatibility
 	// DO NOT OVERRIDE THIS METHOD ANYWHERE
 	public boolean removeMetaData(@NotNull CustomDataField<?> md, boolean save) {
-		Validate.notNull(md);
+		Preconditions.checkNotNull(md);
 		if (!hasMeta())
 			return false;
 
@@ -154,7 +154,7 @@ public abstract class TownyObject implements Nameable, Savable {
 	 */
 	@Nullable
 	public CustomDataField<?> getMetadata(@NotNull String key) {
-		Validate.notNull(key);
+		Preconditions.checkNotNull(key);
 		
 		if(metadata != null)
 			return metadata.get(key);
@@ -174,8 +174,8 @@ public abstract class TownyObject implements Nameable, Savable {
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public <T extends CustomDataField<?>> T getMetadata(@NotNull String key, @NotNull Class<T> cdfClass) {
-		Validate.notNull(cdfClass);
-		Validate.notNull(key);
+		Preconditions.checkNotNull(cdfClass);
+		Preconditions.checkNotNull(key);
 		
 		if(metadata != null) {
 			CustomDataField<?> cdf = metadata.get(key);
@@ -202,7 +202,7 @@ public abstract class TownyObject implements Nameable, Savable {
 	 * @return whether metadata associated with the key exists.
 	 */
 	public boolean hasMeta(@NotNull String key) {
-		Validate.notNull(key);
+		Preconditions.checkNotNull(key);
 		if (metadata != null)
 			return metadata.containsKey(key);
 		
@@ -219,8 +219,8 @@ public abstract class TownyObject implements Nameable, Savable {
 	 * @return whether metadata associated with the key and class exists.
 	 */
 	public <T extends CustomDataField<?>> boolean hasMeta(@NotNull String key, @NotNull Class<T> cdfClass) {
-		Validate.notNull(cdfClass);
-		Validate.notNull(key);
+		Preconditions.checkNotNull(cdfClass);
+		Preconditions.checkNotNull(key);
 
 		if(metadata != null) {
 			CustomDataField<?> cdf = metadata.get(key);
