@@ -898,7 +898,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 					
 					if (!nationListTabCompletes.contains(split[i].toLowerCase()))
-						throw new TownyException(Translatable.of("msg_error_invalid_comparator_nation", String.join(", ", nationListTabCompletes)));
+						throw new TownyException(Translatable.of("msg_error_invalid_comparator_nation", nationListTabCompletes.stream().filter(comp -> sender.hasPermission(PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode(comp))).collect(Collectors.joining(", "))));
 
 					type = ComparatorType.valueOf(split[i].toUpperCase(Locale.ROOT));
 				} else {
