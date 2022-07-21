@@ -150,6 +150,8 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_SET_EMBASSYTAX("towny.command.town.set.embassytax"),
 			TOWNY_COMMAND_TOWN_SET_SPAWNCOST("towny.command.town.set.spawncost"),
 			TOWNY_COMMAND_TOWN_SET_PLOTPRICE("towny.command.town.set.plotprice"),
+			TOWNY_COMMAND_TOWN_SET_EMBASSYPRICE("towny.command.town.set.embassyprice"),
+			TOWNY_COMMAND_TOWN_SET_SHOPPRICE("towny.command.town.set.shopprice"),
 			TOWNY_COMMAND_TOWN_SET_MAPCOLOR("towny.command.town.set.mapcolor"),
 			TOWNY_COMMAND_TOWN_SET_NAME("towny.command.town.set.name"),
 			TOWNY_COMMAND_TOWN_SET_TAG("towny.command.town.set.tag"),
