@@ -472,6 +472,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationEnemyList(player, getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
 			break;
 		case "new":
+		case "create":
 			newNation(player, split);
 			break;
 		case "join":
