@@ -151,7 +151,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"open",
 		"public",
 		"townblocks",
-		"towns"
+		"towns",
+		"upkeep"
 	);
 	
 	static final List<String> nationToggleTabCompletes = Arrays.asList(
@@ -897,7 +898,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 					
 					if (!nationListTabCompletes.contains(split[i].toLowerCase()))
-						throw new TownyException(Translatable.of("msg_error_invalid_comparator_nation"));
+						throw new TownyException(Translatable.of("msg_error_invalid_comparator_nation", String.join(", ", nationListTabCompletes)));
 
 					type = ComparatorType.valueOf(split[i].toUpperCase(Locale.ROOT));
 				} else {

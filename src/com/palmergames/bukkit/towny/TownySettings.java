@@ -1801,12 +1801,18 @@ public class TownySettings {
 	}
 
 	public static double getTownUpkeepCost(Town town) {
-		TownUpkeepCalculationEvent event = new TownUpkeepCalculationEvent(town,getTownUpkeepCostRaw(town));
+		if (!TownySettings.isTaxingDaily())
+			return 0.0;
+		
+		TownUpkeepCalculationEvent event = new TownUpkeepCalculationEvent(town, getTownUpkeepCostRaw(town));
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getUpkeep();
 	}
 
 	private static double getTownUpkeepCostRaw(Town town) {
+		if (town != null && !town.hasUpkeep())
+			return 0.0;
+		
 		double multiplier = 1.0;
 
 		if (town != null) {
@@ -1922,12 +1928,17 @@ public class TownySettings {
 	}
 
 	public static double getNationUpkeepCost(Nation nation) {
+		if (!TownySettings.isTaxingDaily())
+			return 0.0;
+		
 		NationUpkeepCalculationEvent event = new NationUpkeepCalculationEvent(nation, getNationUpkeepCostRaw(nation));
 		Bukkit.getPluginManager().callEvent(event);
 		return event.getUpkeep();
 	}
 
 	private static double getNationUpkeepCostRaw(Nation nation) {
+		if (nation != null && nation.getCapital() != null && !nation.getCapital().hasUpkeep())
+			return 0.0;
 
 		double multiplier = 1.0;
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import com.palmergames.bukkit.towny.TownySettings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -100,6 +101,9 @@ public class ComparatorCaches {
 				if (town.getRegistered() != 0)
 					slug = Colors.LightBlue + "(" + TownyFormatter.registeredFormat.format(town.getRegistered()) + ")";
 				break;
+			case UPKEEP:
+				slug = Colors.LightBlue + "(" + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)) + ")";
+				break;
 			default:
 				slug = Colors.LightBlue + "(" + town.getResidents().size() + ")";
 				break;
@@ -160,6 +164,9 @@ public class ComparatorCaches {
 			case FOUNDED:
 				if (nation.getRegistered() != 0)
 					slug = TownyFormatter.registeredFormat.format(nation.getRegistered());
+				break;
+			case UPKEEP:
+				slug = TownyEconomyHandler.getFormattedBalance(TownySettings.getNationUpkeepCost(nation));
 				break;
 			default:
 				int rawNumResidents = nation.getResidents().size();
