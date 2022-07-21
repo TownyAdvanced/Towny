@@ -1335,7 +1335,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_town_unlimitedclaims_setting_set_to", town.getName(), town.hasUnlimitedClaims()));
 				} else if (split[2].equalsIgnoreCase("upkeep")) {
 					
-					town.setHasUpkeep(!town.hasUpkeep());
+					town.setHasUpkeep(choice.orElse(!town.hasUpkeep()));
 					town.save();
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_town_upkeep_setting_set_to", town.getName(), town.hasUpkeep()));
 				} else

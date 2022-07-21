@@ -1756,5 +1756,3 @@ msg_comptype_upkeep: 'Upkeep'
 # Added in 0.155
 # Message shown when toggling town upkeep admin setting
 msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
-# Message shown when toggling nation upkeep admin setting
-msg_nation_upkeep_setting_set_to: 'The nation %s has had their upkeep setting set to %s.'
