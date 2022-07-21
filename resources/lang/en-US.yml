@@ -1749,3 +1749,5 @@ msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase to
 msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks removed.'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+#Message shown when /ta toggle forceallneutral # is used.
+msg_admin_toggle_forceallneutral: 'Neutrality turned %s in all towns.'
