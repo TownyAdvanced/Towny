@@ -7638,3 +7638,4 @@ v0.92.0.11:
   - Add baltop as banned name, courtesy of Warriorrrr with PR #6046.
   - Fix messages from cancelled Nation ally adding and removal events not displaying to the command user.
     - Closes #6049.
+  - Exclude transitive bukkit api dependency, courtesy of Warriorrrr with PR #6051.
