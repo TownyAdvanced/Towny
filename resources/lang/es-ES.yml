@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.152
+version: 0.154
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu, ElMoha943, Ngzhiwei
 website: 'http://townyadvanced.github.io/'
@@ -701,8 +701,8 @@ msg_bankrupt_town2: '&b%s no pudo mantenerse como ciudad.'
 msg_bankrupt_nation2: '&b%s no pudo mantenerse como nacion.'
 status_embassy_town: 'Embajadas en'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bComparador invalido. Prueba con ciudadano, balance, ciudades, nombres, bloques de ciudad, en linea.'
-msg_error_invalid_comparator_town: '&bComparador invalido. Prueba con ciudadano, balance, ciudades, nombres, bloques de ciudad, en linea, abierto.'
+msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
 msg_err_merging_for_kings_only: '&bLa fusión sólo puede ser realizada por un líder de nación.'
 msg_err_king_of_that_nation_is_not_online: '&bEl líder de la nación de %s, %s, no está conectado. Fusión fallida.'
 nation1_has_merged_with_nation2: '&6La nacion %s acepto la union con la nacion de %s.'
@@ -1541,3 +1541,5 @@ msg_err_town_not_allowed_purchased_blocks: 'La ciudad %s es incapaz de comprar b
 msg_purchased_blocks_unset: 'La ciudad %s ha eliminado los bloques de ciudad comprados.'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'La ciudad %s ha recibido %s townblocks comprados, actualmente tiene %s townblocks.'
+#Added in 0.154
+msg_comptype_upkeep: 'Upkeep'
