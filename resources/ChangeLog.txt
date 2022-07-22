@@ -7642,3 +7642,5 @@ v0.92.0.11:
   - Replace town/nation levels with records, courtesy of Warriorrrr with PR #6041.
   - Add upkeep comparator type, courtesy of Warriorrrr with PR #6042.
   - Add perm check to invalid comp type message, courtesy of Warriorrrr with PR #6054.
+  - Fix using World#isRespawnAnchorWorks() which did not exist in 1.16.5 api.
+    - Closes #6056. 

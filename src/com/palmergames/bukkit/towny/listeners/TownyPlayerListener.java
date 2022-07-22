@@ -487,7 +487,7 @@ public class TownyPlayerListener implements Listener {
 	 * - The Item in their hand is nothing or (not-glowstone or the charges are full.) 
 	 */
 	private boolean disallowedAnchorClick(PlayerInteractEvent event, Block block) {
-		return block.getWorld().isRespawnAnchorWorks() 
+		return block.getWorld().getEnvironment().equals(Environment.NETHER)
 			&& block.getBlockData() instanceof RespawnAnchor anchor 
 			&& anchor.getCharges() > 0 
 			&& (event.getItem() == null || (event.getItem().getType() != Material.GLOWSTONE || anchor.getCharges() >= anchor.getMaximumCharges()));
