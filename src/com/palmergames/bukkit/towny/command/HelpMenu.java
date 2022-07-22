@@ -508,8 +508,18 @@ public enum HelpMenu {
 				.add("all", Translation.of("mayor_help_8"));
 		}
 	},
-	
 	TOWN_JAIL {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town jail")
+				.add("list", "")
+				.add("[resident]", "")
+				.add("[resident] [hours]", "")
+				.add("[resident] [hours] [jail]", "")
+				.add("[resident] [hours] [jail] [cell]", "");
+		}
+	},
+	TOWN_JAILWITHBAIL {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("town jail")

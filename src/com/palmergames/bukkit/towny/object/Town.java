@@ -1273,19 +1273,16 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	// Returns the number of players imprisoned in the town as an integer
-	public int getJailedPlayerCount(List<Resident> residentsJailed) {
-		int JailedPlayerCount = residentsJailed.size();
+	public int getJailedPlayerCount() {
+		int JailedPlayerCount = getJailedResidents().size();
 		return JailedPlayerCount;
 	}
-
 	// Iterates through residents in TownyUniverse.getJailedResidentMap() and adds to residentsJailed list if jailed in this town
-	public List<Resident> getJailed() {
+	public List<Resident> getJailedResidents() {
+		List<Resident> residentsJailed = new ArrayList<>();
 
-		List<Resident> residentsJailedMap = TownyUniverse.getInstance().getJailedResidentMap();
-		List<Resident> residentsJailed = new ArrayList<Resident>();
-		
-		for (Resident resident : residentsJailedMap) {
-			if (resident.getJailTown() == this)
+		for (Resident resident : new ArrayList<>(TownyUniverse.getInstance().getJailedResidentMap())) {
+			if (resident.hasJailTown(getName()))
 				residentsJailed.add(resident);
 		}
 		return Collections.unmodifiableList(residentsJailed);

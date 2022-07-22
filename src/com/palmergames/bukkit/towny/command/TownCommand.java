@@ -1673,8 +1673,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		int cell = 0;
 		Jail jail = town.getPrimaryJail();
 		if (split.length == 0) {
-			
-			HelpMenu.TOWN_JAIL.send(sender);
+			if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive())
+				HelpMenu.TOWN_JAILWITHBAIL.send(sender);
+			else
+				HelpMenu.TOWN_JAIL.send(sender);
 
 		} else if (split[0].equalsIgnoreCase("list")) {
 
@@ -1721,54 +1723,86 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							throw new TownyException(Translatable.of("msg_err_resident_cannot_be_jailed_because_they_are_enemied_there"));
 				}
 
-				if (split.length > 1) {
-					try {
-						Integer.parseInt(split[1]);
-						if (split.length > 2)
-							Double.parseDouble(split[2]);
-						if (split.length > 3)
-							Integer.parseInt(split[3]);
-						if (split.length > 4)
-							Integer.parseInt(split[4]);
-					} catch (NumberFormatException e) {
-						HelpMenu.TOWN_JAIL.send(sender);
-						return;
-					}
-					hours = Integer.valueOf(split[1]);
-					if (hours < 1)
-						hours = 1;
-					if (hours > TownySettings.getJailedMaxSetHours())
-					{
-						hours = TownySettings.getJailedMaxSetHours();
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_hours_x", TownySettings.getJailedOutlawJailHours()));
-					}
-
-					if (split.length >= 3) {
-						bail = Double.valueOf(split[2]);
-						if (bail < 1)
-							bail = 1;
-						if (bail > TownySettings.getBailMaxAmount())
+				if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive())
+					if (split.length > 1) {
+						try {
+							Integer.parseInt(split[1]);
+							if (split.length > 2)
+								Double.parseDouble(split[2]);
+							if (split.length > 3)
+								Integer.parseInt(split[3]);
+							if (split.length > 4)
+								Integer.parseInt(split[4]);
+						} catch (NumberFormatException e) {
+							HelpMenu.TOWN_JAIL.send(sender);
+							return;
+						}
+						hours = Integer.valueOf(split[1]);
+						if (hours < 1)
+							hours = 1;
+						if (hours > TownySettings.getJailedMaxSetHours())
 						{
-							bail = TownySettings.getBailMaxAmount();
-							TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_bail_x", TownySettings.getBailMaxAmount()));
+							hours = TownySettings.getJailedMaxSetHours();
+							TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_hours_x", TownySettings.getJailedOutlawJailHours()));
+						}
+	
+						if (split.length >= 3) {
+							bail = Double.valueOf(split[2]);
+							if (bail < 1)
+								bail = 1;
+							if (bail > TownySettings.getBailMaxAmount())
+							{
+								bail = TownySettings.getBailMaxAmount();
+								TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_bail_x", TownySettings.getBailMaxAmount()));
+							}
+						}
+						if (split.length == 4) {
+							jailNum = Integer.valueOf(split[3]);
+							jail = town.getJail(jailNum);
+							if (jail == null) 
+								throw new TownyException(Translatable.of("msg_err_the_town_does_not_have_that_many_jails"));
+						}
+	
+						if (split.length == 5) {
+							cell = Integer.valueOf(split[4]) - 1;
+							if (!jail.hasJailCell(cell))
+								throw new TownyException(Translatable.of("msg_err_that_jail_plot_does_not_have_that_many_cells"));
 						}
 					}
-					if (split.length == 4) {
-						jailNum = Integer.valueOf(split[3]);
-						jail = town.getJail(jailNum);
-						if (jail == null) 
-							throw new TownyException(Translatable.of("msg_err_the_town_does_not_have_that_many_jails"));
-					}
+				else
+					if (split.length > 1) {
+						try {
+							Integer.parseInt(split[1]);
+							if (split.length > 2)
+								Integer.parseInt(split[2]);
+							if (split.length > 3)
+								Integer.parseInt(split[3]);
+						} catch (NumberFormatException e) {
+							HelpMenu.TOWN_JAIL.send(sender);
+							return;
+						}
+						hours = Integer.valueOf(split[1]);
+						if (hours < 1)
+							hours = 1;
 
-					if (split.length == 5) {
-						cell = Integer.valueOf(split[4]) - 1;
-						if (!jail.hasJailCell(cell))
-							throw new TownyException(Translatable.of("msg_err_that_jail_plot_does_not_have_that_many_cells"));
+						if (split.length >= 3) {
+							jailNum = Integer.valueOf(split[2]);
+							jail = town.getJail(jailNum);
+							if (jail == null)
+								throw new TownyException(Translatable.of("msg_err_the_town_does_not_have_that_many_jails"));
+						}
+
+						if (split.length == 4) {
+							cell = Integer.valueOf(split[3]) - 1;
+							if (!jail.hasJailCell(cell))
+								throw new TownyException(Translatable.of("msg_err_that_jail_plot_does_not_have_that_many_cells"));
+						}
+						bail = 0.0;
 					}
-				}
+					
 
 				// Check if Town has reached max potential jailed and react according to maxJailedNewJailBehavior in config
-				if (TownySettings.getMaxJailedPlayerCount() >= 1 && town.getJailedPlayerCount(town.getJailed()) >= TownySettings.getMaxJailedPlayerCount())
+				if (TownySettings.getMaxJailedPlayerCount() >= 1 && town.getJailedPlayerCount() >= TownySettings.getMaxJailedPlayerCount())
 					// simple mode, rejects new jailed people outright
 					if (maxJailedNewJailBehavior == 0) {
 						throw new TownyException(Translatable.of("msg_town_has_no_jailslots"));

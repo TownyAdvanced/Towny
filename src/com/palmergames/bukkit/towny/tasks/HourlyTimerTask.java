@@ -40,7 +40,7 @@ public class HourlyTimerTask extends TownyTimerTask {
 			InviteHandler.searchForExpiredInvites();
 
 		if (!universe.getJailedResidentMap().isEmpty())
-			decrementJailedHours();
+			decrementJailedHoursAndIncurJailFees();
 		
 		/*
 		 * Fire an event other plugins can use.
@@ -51,34 +51,31 @@ public class HourlyTimerTask extends TownyTimerTask {
 	/*
 	 * Reduce the number of hours jailed residents are jailed for and remove hourly jail fee from town bank if possible
 	 */
-	private void decrementJailedHours() {
+	
+	// Declare variables
+	Town selectedJailTown = null;
+	double hourlyJailFee = TownySettings.hourlyJailFee();
+
+	private void decrementJailedHoursAndIncurJailFees() {
 		for (Resident resident : new ArrayList<>(universe.getJailedResidentMap()))
 			if (resident.hasJailTime())
 				if (resident.getJailHours() <= 1)
 					Bukkit.getScheduler().runTaskLater(plugin, () -> JailUtil.unJailResident(resident, UnJailReason.SENTENCE_SERVED), 20);
-				else {
+				else if (TownyEconomyHandler.isActive() && TownySettings.hourlyJailFee() > 0){
+					selectedJailTown = resident.getJailTown();
+					if (!selectedJailTown.getAccount().canPayFromHoldings(hourlyJailFee))
+					{
+						Bukkit.getScheduler().runTaskLater(plugin, () -> JailUtil.unJailResident(resident, UnJailReason.INSUFFICIENT_FUNDS), 20);
+					} else {
+						resident.setJailHours(resident.getJailHours() - 1);
+						resident.save();
+						TownyMessaging.sendPrefixedTownMessage(selectedJailTown, Translatable.of("msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x", hourlyJailFee,resident));
+						String reason = "Jailee Upkeep for " + resident.getName();
+						selectedJailTown.getAccount().withdraw(hourlyJailFee, reason);
+					}
+				} else {
 					resident.setJailHours(resident.getJailHours() - 1);
 					resident.save();
 				}
-		if (TownyEconomyHandler.isActive() && TownySettings.hourlyJailFee() > 0)
-		{
-			// Check if towns can afford upkeep for prisoners and if not to release them
-			for (Resident resident : new ArrayList<>(universe.getJailedResidentMap()))
-			{
-				Town town = resident.getJailTown();
-				double hourlyJailFee = TownySettings.hourlyJailFee();
-				if (!town.getAccount().canPayFromHoldings(hourlyJailFee))
-				{
-					Bukkit.getScheduler().runTaskLater(plugin, () -> JailUtil.unJailResident(resident, UnJailReason.INSUFFICIENT_FUNDS), 20);
-				}
-				else
-				{
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x", hourlyJailFee,resident));
-					String reason = "Jailee Upkeep for " + resident.getName();
-					town.getAccount().withdraw(hourlyJailFee, reason);
-				}
-					
-			}
-		}
 	}
 }

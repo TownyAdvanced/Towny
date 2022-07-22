@@ -2481,6 +2481,11 @@ public enum ConfigNodes {
 		"#0 = Unable to jail new players until a current prisoner is released",
 		"#1= A prisoner slot will be made by automatically releasing a prisoner based on remaining time",
 		"#2= A prisoner slot will be made by automatically releasing a prisoner based on lowest custom bail"),
+	JAIL_IS_JAILBOOK_ENABLED(
+		"jail.is_jailbook_enabled",
+		"true",
+		"",
+		"#If false players will not be provided with a book upon being jailed."),
 	JAIL_BAIL_BAIL_AMOUNT(
 			"jail.bail.bail_amount",
 			"10",

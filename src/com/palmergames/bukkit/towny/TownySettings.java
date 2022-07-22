@@ -1778,6 +1778,10 @@ public class TownySettings {
 	public static int getMaxJailedNewJailBehavior() {
 		return getInt(ConfigNodes.JAIL_MAX_JAILED_NEWJAIL_BEHAVIOR);
 	}
+
+	public static boolean isJailBookEnabled() {
+		return getBoolean(ConfigNodes.JAIL_IS_JAILBOOK_ENABLED);
+	}
 	
 	public static boolean isJailingAttackingOutlaws() {
 		
