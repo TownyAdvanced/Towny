@@ -250,6 +250,11 @@ public class StringMgmt {
 	
 	@SuppressWarnings("UnstableApiUsage")
 	public static String wrap(String string, int wrapLength, String newlineString) {
-		return Splitter.fixedLength(wrapLength).splitToStream(string).collect(Collectors.joining(newlineString));
+		try {
+			return Splitter.fixedLength(wrapLength).splitToStream(string).collect(Collectors.joining(newlineString));
+		} catch (NoSuchMethodError e) {
+			// Splitter is not included google commons in 1.16, return the unwrapped string.
+			return string;
+		}
 	}
 }
