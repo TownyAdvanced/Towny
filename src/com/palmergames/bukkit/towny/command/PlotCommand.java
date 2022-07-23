@@ -1758,6 +1758,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// Handle payment via a confirmation to avoid suprise costs.
 				if (cost > 0 && TownyEconomyHandler.isActive()) {
 					Confirmation.runOnAccept(() -> {
+						if (townBlock.getPlotObjectGroup() == null)
+							return;
+						
 						final double finalCost = type.getCost() * townBlock.getPlotObjectGroup().getTownBlocks().size();
 				
 						if (!resident.getAccount().withdraw(finalCost, String.format("Plot group (" + townBlock.getPlotObjectGroup().getTownBlocks().size() + ") set to %s", type))) {
