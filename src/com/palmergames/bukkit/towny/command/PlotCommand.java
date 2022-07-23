@@ -1758,13 +1758,14 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// Handle payment via a confirmation to avoid suprise costs.
 				if (cost > 0 && TownyEconomyHandler.isActive()) {
 					Confirmation.runOnAccept(() -> {
+						final double finalCost = type.getCost() * townBlock.getPlotObjectGroup().getTownBlocks().size();
 				
-						if (!resident.getAccount().withdraw(cost, String.format("Plot (" + amount + ") set to %s", type))) {
-							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost)));
+						if (!resident.getAccount().withdraw(finalCost, String.format("Plot group (" + townBlock.getPlotObjectGroup().getTownBlocks().size() + ") set to %s", type))) {
+							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(finalCost)));
 							return;
 						}					
 
-						TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), type));
+						TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(finalCost), type));
 
 						for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
 							try {
