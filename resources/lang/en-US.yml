@@ -310,6 +310,7 @@ msg_new_mayor: '&b%s is now the mayor!'
 msg_new_nation: '&b%s created a new nation called %s'
 msg_new_town: '&b%s created a new town called %s'
 msg_plot_for_sale: '&b%s put the plot (%s) up for sale!'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
 msg_plot_set_type: '&bPlot type set to %s'
 
 msg_cache_block_error: '&cYou have not been registered with Towny. Try relogging.'

@@ -1059,10 +1059,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		townBlock.setPlotPrice(Math.min(TownySettings.getMaxPlotPrice(), forSale));
 
 		if (forSale != -1) {
-			TownyMessaging.sendPrefixedTownMessage(townBlock.getTownOrNull(), Translatable.of("MSG_PLOT_FOR_SALE", resident.getName(), worldCoord.toString()));
+			Translatable message = TownyEconomyHandler.isActive()
+				? Translatable.of("msg_plot_for_sale_amount", resident.getName(), worldCoord.toString(), TownyEconomyHandler.getFormattedBalance(townBlock.getPlotPrice()))
+				: Translatable.of("msg_plot_for_sale", resident.getName(), worldCoord.toString());
+			
+			TownyMessaging.sendPrefixedTownMessage(townBlock.getTownOrNull(), message);
+			
 			if (!resident.hasTown() || (resident.hasTown() && townBlock.getTownOrNull() != resident.getTownOrNull()))
-				TownyMessaging.sendMsg(resident, Translatable.of("MSG_PLOT_FOR_SALE", resident.getName(), worldCoord.toString()));
-			Bukkit.getPluginManager().callEvent(new PlotSetForSaleEvent(resident, forSale, townBlock));
+				TownyMessaging.sendMsg(resident, message);
+			
+			Bukkit.getPluginManager().callEvent(new PlotSetForSaleEvent(resident, townBlock.getPlotPrice(), townBlock));
 		} else {
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_to_nfs"));
 			Bukkit.getPluginManager().callEvent(new PlotNotForSaleEvent(resident, townBlock));
