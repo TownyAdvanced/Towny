@@ -2560,6 +2560,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void nationTransaction(Player player, String[] args, boolean withdraw) {
+		if (TownySettings.isEconomyAsync() && Bukkit.isPrimaryThread()) {
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> nationTransaction(player, args, withdraw));
+			return;
+		}
+		
 		try {
 			Resident resident = getResidentOrThrow(player.getUniqueId());
 			Nation nation = getNationFromResidentOrThrow(resident);
