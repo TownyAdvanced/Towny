@@ -2794,7 +2794,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				filteredName = null;
 			}
 
-			if ((filteredName == null) || TownyUniverse.getInstance().hasTown(filteredName) || (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(filteredName)))
+			if (filteredName == null || TownyUniverse.getInstance().hasTown(filteredName) || (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(filteredName)))
 				throw new TownyException(Translatable.of("msg_err_invalid_name", name));
 			
 			name = filteredName;
