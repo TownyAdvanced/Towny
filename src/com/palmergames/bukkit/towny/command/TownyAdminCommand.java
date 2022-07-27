@@ -1284,11 +1284,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 				
-				String name;
-				if (split.length == 3)
-					name = split[2];
-				else
-					name = String.join("_", Arrays.copyOfRange(split, 2, split.length));
+				String name = String.join("_", StringMgmt.remArgs(split, 2));
 				
 				TownPreRenameEvent event = new TownPreRenameEvent(town, name);
 				Bukkit.getServer().getPluginManager().callEvent(event);
@@ -1627,11 +1623,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 
-				String name;
-				if (split.length == 3)
-					name = split[2];
-				else
-					name = String.join("_", Arrays.copyOfRange(split, 2, split.length));
+				String name = String.join("_", StringMgmt.remArgs(split, 2));
 
 				NationPreRenameEvent event = new NationPreRenameEvent(nation, name);
 				Bukkit.getServer().getPluginManager().callEvent(event);
