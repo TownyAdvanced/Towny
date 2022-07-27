@@ -17,7 +17,8 @@ public class NameValidation {
 
 	private static Pattern namePattern = null;
 	private static Pattern stringPattern = null;
-	private static Collection<String> bannedNames;
+	private static final Collection<String> bannedNames;
+	private static final Pattern numberPattern = Pattern.compile("\\d");
 	
 	static {
 		bannedNames = new HashSet<>(
@@ -174,5 +175,9 @@ public class NameValidation {
 	
 	public static String filterCommas(String input) {
 		return input.replace(",", "_");
+	}
+	
+	public static boolean containsNumbers(String input) {
+		return numberPattern.matcher(input).find();
 	}
 }

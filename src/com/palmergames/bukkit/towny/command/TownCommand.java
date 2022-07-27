@@ -2390,8 +2390,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					String name = split[1];
 					
-					if (NameValidation.isBlacklistName(name) 
-						|| TownyUniverse.getInstance().hasTown(name))
+					if (NameValidation.isBlacklistName(name) || TownyUniverse.getInstance().hasTown(name) || (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(name)))
 						throw new TownyException(Translatable.of("msg_invalid_name"));
 
         			if (TownySettings.getTownAutomaticCapitalisationEnabled())
@@ -2795,7 +2794,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				filteredName = null;
 			}
 
-			if ((filteredName == null) || TownyUniverse.getInstance().hasTown(filteredName))
+			if ((filteredName == null) || TownyUniverse.getInstance().hasTown(filteredName) || (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(filteredName)))
 				throw new TownyException(Translatable.of("msg_err_invalid_name", name));
 			
 			name = filteredName;

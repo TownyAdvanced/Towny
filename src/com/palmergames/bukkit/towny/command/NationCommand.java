@@ -979,7 +979,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				filteredName = null;
 			}
 
-			if ((filteredName == null) || TownyUniverse.getInstance().hasNation(filteredName))
+			if (filteredName == null || TownyUniverse.getInstance().hasNation(filteredName) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(filteredName)))
 				throw new TownyException(Translatable.of("msg_err_invalid_name", filteredName));
 
 			PreNewNationEvent preEvent = new PreNewNationEvent(capitalTown, filteredName);
@@ -2156,8 +2156,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			
 			String name = split[1];
 			
-			if (NameValidation.isBlacklistName(name)
-				|| TownyUniverse.getInstance().hasNation(name))
+			if (NameValidation.isBlacklistName(name) || TownyUniverse.getInstance().hasNation(name) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(name)))
 				throw new TownyException(Translatable.of("msg_invalid_name"));
 			
 			if (TownySettings.getTownAutomaticCapitalisationEnabled())

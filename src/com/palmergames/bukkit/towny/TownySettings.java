@@ -3206,5 +3206,13 @@ public class TownySettings {
 	public static String getNotificationsAppearAs() {
 		return getString(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_AS);
 	}
+	
+	public static boolean areNumbersAllowedInTownNames() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_NUMBERS_IN_TOWN_NAME);
+	}
+	
+	public static boolean areNumbersAllowedInNationNames() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_ALLOW_NUMBERS_IN_NATION_NAME);
+	}
 }
 
