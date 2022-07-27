@@ -701,8 +701,8 @@ msg_bankrupt_town2: '&bМісто %s не змогло сплатити за у�
 msg_bankrupt_nation2: '&bНація %s не змогла сплатити за утримання і розформувалась.'
 status_embassy_town: 'Посольства у'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
-msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_nation: '&bНевірний компаратор. Спробуйте %s.'
+msg_error_invalid_comparator_town: '&bНевірний компаратор. Спробуйте %s.'
 msg_err_merging_for_kings_only: '&bЗлиття може бути зроблено тільки лідером нації.'
 msg_err_king_of_that_nation_is_not_online: '&bЛідер нації %s, %s, не є онлайн. Злиття не вдалося.'
 nation1_has_merged_with_nation2: '&6Нація %s погодилася злитися разом з домінуючою нацією %s.'
