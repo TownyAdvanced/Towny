@@ -200,6 +200,16 @@
             <version>0.4.2</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
     </dependencies>
     <pluginRepositories>
         <pluginRepository>
@@ -282,6 +292,8 @@
                             <include>org.bstats:bstats-bukkit</include>
                             <include>org.bstats:bstats-base</include>
                             <include>org.json:json</include>
+                            <include>org.apache.commons:commons-text</include>
+                            <include>org.apache.commons:commons-lang3</include>
                         </includes>
                     </artifactSet>
                     <relocations>
@@ -308,6 +320,14 @@
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>com.palmergames.bukkit.metrics</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.commons.text</pattern>
+                            <shadedPattern>com.palmergames.libs.commons.text</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.commons.lang3</pattern>
+                            <shadedPattern>com.palmergames.libs.commons.lang3</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

@@ -571,9 +571,9 @@ public class Towny extends JavaPlugin {
 		if (!economy.isEmpty())
 			plugin.getLogger().info(economy);
 		if (!addons.isEmpty())
-			plugin.getLogger().info("  Add-ons: " + StringMgmt.wrap(String.join(", ", addons), 52, System.lineSeparator() + "                           "));
+			plugin.getLogger().info("  Add-ons: " + StringMgmt.wrap(String.join(", ", addons), 52, System.lineSeparator() + "                           ", true));
 		if (!ecowarn.isEmpty())
-			plugin.getLogger().info(StringMgmt.wrap(ecowarn, 55, System.lineSeparator() + "                           "));
+			plugin.getLogger().info(StringMgmt.wrap(ecowarn, 55, System.lineSeparator() + "                           ", true));
 
 		//Add our chat handler to TheNewChat via the API.
 		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
@@ -584,7 +584,7 @@ public class Towny extends JavaPlugin {
 		test = getServer().getPluginManager().getPlugin("Questioner");
 		if (test != null) {
 			String questioner = "Warning: Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder.";
-			plugin.getLogger().info(StringMgmt.wrap(questioner, 55, System.lineSeparator() + "                           "));
+			plugin.getLogger().info(StringMgmt.wrap(questioner, 55, System.lineSeparator() + "                           ", true));
 		}
 	}
 	

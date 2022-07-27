@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -248,8 +249,11 @@ public class StringMgmt {
 		return out;
 	}
 	
-	@SuppressWarnings("UnstableApiUsage")
-	public static String wrap(String string, int wrapLength, String newlineString) {
-		return Splitter.fixedLength(wrapLength).splitToStream(string).collect(Collectors.joining(newlineString));
+	public static String wrap(String string, int wrapLength, String newlineString, boolean wrapLongWords) {
+		return WordUtils.wrap(string, wrapLength, newlineString, wrapLongWords);
+	}
+	
+	public static String wrap(String string, int wrapLength, String newlineString, boolean wrapLongWords, String wrapOn) {
+		return WordUtils.wrap(string, wrapLength, newlineString, wrapLongWords, wrapOn);
 	}
 }
