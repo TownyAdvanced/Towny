@@ -1284,15 +1284,21 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 				
-				TownPreRenameEvent event = new TownPreRenameEvent(town, split[2]);
+				String name;
+				if (split.length == 3)
+					name = split[2];
+				else
+					name = String.join("_", Arrays.copyOfRange(split, 2, split.length));
+				
+				TownPreRenameEvent event = new TownPreRenameEvent(town, name);
 				Bukkit.getServer().getPluginManager().callEvent(event);
 				if (event.isCancelled()) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_rename_cancelled"));
 					return;
 				}
 
-				if (!NameValidation.isBlacklistName(split[2]) && (TownySettings.areNumbersAllowedInTownNames() || !NameValidation.containsNumbers(split[2]))) {
-					townyUniverse.getDataSource().renameTown(town, split[2]);
+				if (!NameValidation.isBlacklistName(name) && (TownySettings.areNumbersAllowedInTownNames() || !NameValidation.containsNumbers(name))) {
+					townyUniverse.getDataSource().renameTown(town, name);
 					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_name", ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), town.getName()));
 					TownyMessaging.sendMsg(getSender(), Translatable.of("msg_town_set_name", ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), town.getName()));
 				} else {
@@ -1621,16 +1627,23 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[1].equalsIgnoreCase("rename")) {
 
-				NationPreRenameEvent event = new NationPreRenameEvent(nation, split[2]);
+				String name;
+				if (split.length == 3)
+					name = split[2];
+				else
+					name = String.join("_", Arrays.copyOfRange(split, 2, split.length));
+
+				NationPreRenameEvent event = new NationPreRenameEvent(nation, name);
 				Bukkit.getServer().getPluginManager().callEvent(event);
 				if (event.isCancelled()) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_rename_cancelled"));
 					return;
 				}
 				
-				if (!NameValidation.isBlacklistName(split[2]) && (TownySettings.areNumbersAllowedInNationNames() || !NameValidation.containsNumbers(split[2]))) {
-					townyUniverse.getDataSource().renameNation(nation, split[2]);
+				if (!NameValidation.isBlacklistName(name) && (TownySettings.areNumbersAllowedInNationNames() || !NameValidation.containsNumbers(name))) {
+					townyUniverse.getDataSource().renameNation(nation, name);
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_set_name", ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), nation.getName()));
+					TownyMessaging.sendMsg(getSender(), Translatable.of("msg_nation_set_name", ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), nation.getName()));
 				} else
 					TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_invalid_name"));
 
