@@ -948,8 +948,8 @@ msg_time_remaining_before_full_removal: 'Залишилось часу пере�
 msg_time_until_reclaim_available: 'Залишилось часу перед можливістю відновлення: %d годин.'
 msg_reclaim_available: 'Відновлення доступне.'
 #Added in 0.93
-msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
-msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'
+msg_changed_peaceful: '&cНейтралітет/мирність міста зараз %s.'
+msg_err_town_unclaim_canceled: '&cРозприват скасований. Ви не можете розприватити цю територію зараз.'
 #Added in 0.94
 msg_comptype_residents: 'Кількість містян'
 msg_comptype_townblocks: 'Кількість ділянок в місті'
