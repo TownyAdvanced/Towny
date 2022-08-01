@@ -1513,7 +1513,7 @@ msg_perm_hud_explosions: 'Explosions: '
 #Seen in /plot perm hud:
 msg_perm_hud_firespread: 'Firespread: '
 #Seen in /plot perm hud:
-msg_perm_hud_mobspawns: 'Mob Spawns: '
+msg_perm_hud_mobspawns: 'Spawn de Mobs: '
 #Seen in /plot perm hud:
 msg_perm_hud_key: 'Key'
 #Seen in /plot perm hud:
