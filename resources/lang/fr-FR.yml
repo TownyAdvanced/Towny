@@ -701,7 +701,7 @@ msg_bankrupt_town2: '&b%s n''a pas pu se permettre de rester une ville.'
 msg_bankrupt_nation2: '&b%s n''a pas pu se permettre de rester une nation.'
 status_embassy_town: 'Embassades dans'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_nation: '&bComparateur invalide. Essayez %s.'
 msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
 msg_err_merging_for_kings_only: '&bSeul un Dirigeant de Nation peut fusionner.'
 msg_err_king_of_that_nation_is_not_online: '&bLe Dirigeant de Nation de %s, %s, n''est pas en ligne. La fusion a échouée.'
@@ -1493,29 +1493,29 @@ msg_err_nation_unaffiliated: 'Cette nation n''est pas affiliée à vous.'
 msg_err_town_unaffiliated: 'Cette ville n''est pas affiliée à vous.'
 #Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
-msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
+msg_err_this_location_already_has_a_jailcell: 'Cet emplacement contient déjà une cellule de prison.'
 #Title line of the /plot perm hud.
-msg_perm_hud_title: 'Plot Perms'
+msg_perm_hud_title: 'Permissions de parcelle'
 #Seen in /plot perm hud:
 msg_perm_hud_build: 'Build: '
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Destroy: '
+msg_perm_hud_destroy: 'Détuire:'
 #Seen in /plot perm hud:
 msg_perm_hud_switch: 'Switch: '
 #Seen in /plot perm hud:
-msg_perm_hud_item_use: 'Item: '
+msg_perm_hud_item_use: 'Objet:'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_type: 'Type: '
 #Seen in /plot perm hud:
 msg_perm_hud_pvp: 'PVP: '
 #Seen in /plot perm hud:
-msg_perm_hud_explosions: 'Explosions: '
+msg_perm_hud_explosions: 'Explosions : '
 #Seen in /plot perm hud:
 msg_perm_hud_firespread: 'Firespread: '
 #Seen in /plot perm hud:
 msg_perm_hud_mobspawns: 'Mob Spawns: '
 #Seen in /plot perm hud:
-msg_perm_hud_key: 'Key'
+msg_perm_hud_key: 'Clé'
 #Seen in /plot perm hud:
 msg_perm_hud_friend: 'friend'
 #Seen in /plot perm hud:
