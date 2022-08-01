@@ -701,8 +701,8 @@ msg_bankrupt_town2: '&b%s no pudo seguir manteniendo una ciudad.'
 msg_bankrupt_nation2: '&b%s no pudo seguir manteniendo una nación.'
 status_embassy_town: 'Embajadas en'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
-msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_nation: '&bComparador inválido. Prueba a usar %s.'
+msg_error_invalid_comparator_town: '&bComparador inválido. Prueba a usar %s.'
 msg_err_merging_for_kings_only: '&bLa fusión sólo puede ser realizada por un líder de nación.'
 msg_err_king_of_that_nation_is_not_online: '&bEl líder de la nación de %s, %s, no está conectado. Fusión fallida.'
 nation1_has_merged_with_nation2: '&6La nación de %s ha accedido a fusionarse con la creciente nación de %s.'
@@ -1466,7 +1466,7 @@ msg_warn_overriding_server_config: 'Al hacer esto estás sobreescribiendo el lí
 msg_removed_x_invalid_outpost_spawns: 'Removed %d invalid outpost spawns.'
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
-msg_your_town_is_bankrupt: 'Your town is bankrupt, add money to your bank using /town deposit {amount}.'
+msg_your_town_is_bankrupt: 'Tu ciudad ha caído en bancarrota, añade dinero a tu banco usando /town deposit {amount}.'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
@@ -1513,7 +1513,7 @@ msg_perm_hud_explosions: 'Explosions: '
 #Seen in /plot perm hud:
 msg_perm_hud_firespread: 'Firespread: '
 #Seen in /plot perm hud:
-msg_perm_hud_mobspawns: 'Mob Spawns: '
+msg_perm_hud_mobspawns: 'Spawn de Mobs: '
 #Seen in /plot perm hud:
 msg_perm_hud_key: 'Key'
 #Seen in /plot perm hud:
