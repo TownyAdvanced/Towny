@@ -1587,13 +1587,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			double price = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
-			group.setPrice(price);
+			group.setPrice(Math.min(price, TownySettings.getMaxPlotPrice()));
 			
 			// Save
 			group.save();
 
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_player_put_group_up_for_sale", player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice())));
+			Translatable message = Translatable.of("msg_player_put_group_up_for_sale", player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice()));
+			TownyMessaging.sendPrefixedTownMessage(town, message);
 			
+			if (!resident.hasTown() || resident.getTownOrNull() != town)
+				TownyMessaging.sendMsg(player, message);
 		} else if (split[0].equalsIgnoreCase("notforsale") || split[0].equalsIgnoreCase("nfs")) {
 			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_NOTFORSALE.getNode()))
 				throw new TownyException(Translatable.of("msg_err_command_disable"));
@@ -1612,6 +1615,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			group.save();
 
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_player_made_group_not_for_sale", player.getName(), group.getName()));
+			
+			if (!resident.hasTown() || resident.getTownOrNull() != town)
+				TownyMessaging.sendMsg(player, Translatable.of("msg_player_made_group_not_for_sale", player.getName(), group.getName()));
 		} else if (split[0].equalsIgnoreCase("toggle")) {
 			if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_TOGGLE.getNode()))
 				throw new TownyException(Translatable.of("msg_err_command_disable"));
