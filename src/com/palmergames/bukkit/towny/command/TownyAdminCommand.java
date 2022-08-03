@@ -1291,7 +1291,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 
-				if (!NameValidation.isBlacklistName(split[2])) {
+				if (!NameValidation.isBlacklistName(split[2]) && (TownySettings.areNumbersAllowedInTownNames() || !NameValidation.containsNumbers(split[2]))) {
 					townyUniverse.getDataSource().renameTown(town, split[2]);
 					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_name", ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), town.getName()));
 					TownyMessaging.sendMsg(getSender(), Translatable.of("msg_town_set_name", ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), town.getName()));
@@ -1628,7 +1628,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				
-				if (!NameValidation.isBlacklistName(split[2])) {
+				if (!NameValidation.isBlacklistName(split[2]) && (TownySettings.areNumbersAllowedInNationNames() || !NameValidation.containsNumbers(split[2]))) {
 					townyUniverse.getDataSource().renameNation(nation, split[2]);
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_set_name", ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), nation.getName()));
 				} else
