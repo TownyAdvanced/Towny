@@ -7644,3 +7644,16 @@ v0.92.0.11:
   - Add perm check to invalid comp type message, courtesy of Warriorrrr with PR #6054.
   - Fix using World#isRespawnAnchorWorks() which did not exist in 1.16.5 api.
     - Closes #6056. 
+  - Create our own wrapper impl, courtesy of Warriorrrr with PR #6075.
+  - Add option to disallow numbers in town/nation names, courtesy of Warriorrrr with PR #6068.
+    - Closes #5954.
+  - Allow spaces to be used in town/nation rename commands, courtesy of Warriorrrr with PR #6067.
+  - Make it easier to debug lang file formatting errors, courtesy of Warriorrrr with PR #6066.
+    - Closes #6036.
+  - Fix /t deposit & /n deposit running sync, courtesy of Warriorrrr with PR #6064.
+  - Include the plot price in the /plot fs feedback message, courtesy of Warriorrrr with PR #6062.
+  - Ensure player gets feedback message when setting a group for sale, courtesy of Warriorrrr with PR #6060.
+  - Re-check group set cost after confirmation is accepted, courtesy of Warriorrrr with PR #6058.
+  - Add admin town command upkeep toggle, courtesy of Gamer153 with PR #6052. (First-Time Contributor!)
+  - New Command: /ta town NAME toggle upkeep
+    - Toggles upkeep on or off for the given town.
