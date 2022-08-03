@@ -717,8 +717,7 @@ public class TownyPlayerListener implements Listener {
 		
 		Player player = event.getPlayer();
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-		boolean isAdmin = resident.isAdmin()
-				|| resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode());
+		boolean isAdmin = resident != null && (resident.isAdmin() || resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode()));
 		// Cancel teleport if Jailed by Towny and not an admin.
 		if (resident != null && resident.isJailed() && !isAdmin) {
 			if ((event.getCause() == TeleportCause.COMMAND)) {
