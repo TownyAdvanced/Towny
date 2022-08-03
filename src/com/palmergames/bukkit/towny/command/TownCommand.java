@@ -4139,6 +4139,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	private static void townTransaction(Player player, String[] args, boolean withdraw) {
+		if (TownySettings.isEconomyAsync() && Bukkit.isPrimaryThread()) {
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> townTransaction(player, args, withdraw));
+			return;
+		}
+		
 		try {
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 			if (resident == null || !resident.hasTown())
