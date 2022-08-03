@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.IllegalFormatException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -111,7 +112,15 @@ public final class Translation {
 	 * @return The localized string.
 	 */
 	public static String of(String key, Object... args) {
-		return String.format(of(key), args);
+		String translated = of(key);
+		
+		try {
+			return String.format(translated, args);
+		} catch (IllegalFormatException e) {
+			Towny.getPlugin().getLogger().warning("An exception occurred when formatting translation '" + translated + "' for {key=" + key + ",args=" + Arrays.toString(args) + "}, see the below error for more details");
+			e.printStackTrace();
+			return translated;
+		}
 	}
 
 	/**
@@ -141,7 +150,15 @@ public final class Translation {
 	 * @return The localized string.
 	 */
 	public static String of(String key, Locale locale, Object... args) {
-		return String.format(of(key, locale), args);
+		String translated = of(key, locale);
+		
+		try {
+			return String.format(of(key, locale), args);
+		} catch (IllegalFormatException e) {
+			Towny.getPlugin().getLogger().warning("An exception occurred when formatting translation '" + translated + "' for {key=" + key + ",locale=" + locale.toString() + ",args=" + Arrays.toString(args) + "}, see the below error for more details");
+			e.printStackTrace();
+			return translated;
+		}
 	}
 	
 	public static String of(String key, CommandSender sender) {
@@ -149,7 +166,7 @@ public final class Translation {
 	}
 	
 	public static String of(String key, CommandSender sender, Object... args) {
-		return String.format(of(key, getLocale(sender)), args);
+		return of(key, getLocale(sender), args);
 	}
 	
 	public static String of(String key, Resident resident) {
@@ -157,7 +174,7 @@ public final class Translation {
 	}
 	
 	public static String of(String key, Resident resident, Object... args) {
-		return String.format(of(key, getLocale(resident)), args);
+		return of(key, getLocale(resident), args);
 	}
 
 	public static Locale toLocale(String fileName, boolean shouldWarn) {
