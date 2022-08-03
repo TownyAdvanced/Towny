@@ -129,7 +129,8 @@ public class Translatable {
 	}
 	
 	public Component component(@NotNull Locale locale) {
-		return LegacyComponentSerializer.legacySection().deserialize(translate(locale));
+		this.locale = locale;
+		return component();
 	}
 	
 	public Component component() {
