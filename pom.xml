@@ -311,10 +311,6 @@
                             <pattern>org.bstats</pattern>
                             <shadedPattern>com.palmergames.libs.bstats</shadedPattern>
                         </relocation>
-                        <relocation>
-                            <pattern>solar.squares.pixelwidth</pattern>
-                            <shadedPattern>com.palmergames.libs.pixelwidth</shadedPattern>
-                        </relocation>
                     </relocations>
                     <filters>
                         <filter>
