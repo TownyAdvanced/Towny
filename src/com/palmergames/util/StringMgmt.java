@@ -1,6 +1,5 @@
 package com.palmergames.util;
 
-import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.palmergames.bukkit.towny.object.Translation;
 
@@ -248,8 +247,15 @@ public class StringMgmt {
 		return out;
 	}
 	
-	@SuppressWarnings("UnstableApiUsage")
 	public static String wrap(String string, int wrapLength, String newlineString) {
-		return Splitter.fixedLength(wrapLength).splitToStream(string).collect(Collectors.joining(newlineString));
+		int index = 0;
+		StringBuilder stringBuilder = new StringBuilder(string);
+
+		while (index + wrapLength < stringBuilder.length() && (index = stringBuilder.lastIndexOf(" ", index + wrapLength)) != -1) {
+			stringBuilder.replace(index, index + 1, newlineString);
+			index += newlineString.length();
+		}
+		
+		return stringBuilder.toString();
 	}
 }
