@@ -7657,3 +7657,5 @@ v0.92.0.11:
   - Add admin town command upkeep toggle, courtesy of Gamer153 with PR #6052. (First-Time Contributor!)
   - New Command: /ta town NAME toggle upkeep
     - Toggles upkeep on or off for the given town.
+  - Add null check to teleport listener, courtesy of Warriorrrr with PR #6077.
+    - Closes #6072.
