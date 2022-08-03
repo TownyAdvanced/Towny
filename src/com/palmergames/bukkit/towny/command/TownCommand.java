@@ -2388,7 +2388,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 
-					String name = split[1];
+					String name = String.join("_", StringMgmt.remFirstArg(split));
 					
 					if (NameValidation.isBlacklistName(name) || TownyUniverse.getInstance().hasTown(name) || (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(name)))
 						throw new TownyException(Translatable.of("msg_invalid_name"));

@@ -2154,7 +2154,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set name Plutoria");				
 		else {
 			
-			String name = split[1];
+			String name = String.join("_", StringMgmt.remFirstArg(split));
 			
 			if (NameValidation.isBlacklistName(name) || TownyUniverse.getInstance().hasNation(name) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(name)))
 				throw new TownyException(Translatable.of("msg_invalid_name"));
