@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.154
+version: 0.155
 language: 한국어
 author: Daybreak 새벽
 website: 'http://townyadvanced.github.io/'
@@ -269,6 +269,7 @@ msg_new_mayor: '&b%s님이 촌장이 되셨습니다!'
 msg_new_nation: '&b%s님이 %s(이)라는 국가를 세웠습니다.'
 msg_new_town: '&b%s님이 %s(이)라는 마을을 만들었습니다.'
 msg_plot_for_sale: '&b%s님이 (%s) 만큼의 토지를 판매합니다.'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
 msg_plot_set_type: '&b토지 유형이 %s(으)로 설정되었습니다.'
 msg_cache_block_error: '&c귀하는 타우니에 등록되지 않았습니다. 다시 접속해보세요.'
 msg_cache_block_error_wild: '&c야생에서는 %s할 수 없습니다.'
@@ -1543,3 +1544,6 @@ msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks remo
 msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
 #Added in 0.154
 msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
