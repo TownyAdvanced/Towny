@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.154
+version: 0.155
 language: dansk
 author: LifeOnEarth
 website: 'http://townyadvanced.github.io/'
@@ -269,6 +269,7 @@ msg_new_mayor: '&b%s er nu borgmester!'
 msg_new_nation: '&b%s oprettede en ny nation som hedder %s'
 msg_new_town: '&b%s oprettede en ny by som hedder %s'
 msg_plot_for_sale: '&b%s satte grunden (%s) til salg!'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
 msg_plot_set_type: '&bGrundtype sat til %s'
 msg_cache_block_error: '&cDu er ikke blevet registreret af Towny. Prøv at logge ind igen.'
 msg_cache_block_error_wild: '&cDet er ikke tilladt at %s i ødemarken.'
@@ -1543,3 +1544,6 @@ msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks remo
 msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
 #Added in 0.154
 msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
