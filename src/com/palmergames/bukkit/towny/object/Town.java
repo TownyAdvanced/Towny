@@ -1712,7 +1712,6 @@ public class Town extends Government implements TownBlockOwner {
 	 * @param type The townblock type to get the limit for.
 	 * @return The townblock type limit, or -1 if no limit is configured.
 	 */
-	@SuppressWarnings("unchecked")
 	public int getTownBlockTypeLimit(TownBlockType type) {
 		if (!TownySettings.areLevelTypeLimitsConfigured())
 			return -1;
