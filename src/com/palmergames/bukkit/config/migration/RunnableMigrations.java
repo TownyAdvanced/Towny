@@ -13,6 +13,7 @@ public class RunnableMigrations {
 	
 	public RunnableMigrations() {
 		BY_NAME.put("migrate_notifications", MIGRATE_NOTIFICATIONS);
+		BY_NAME.put("add_townblocktype_limits", ADD_TOWNBLOCKTYPE_LIMITS);
 	}
 	
 	@Nullable
@@ -35,5 +36,11 @@ public class RunnableMigrations {
 			config.set("notification.notifications_appear_as", "bossbar");
 		else 
 			config.set("notification.notifications_appear_as", "chat");
+	};
+	
+	@SuppressWarnings("unchecked")
+	private final Consumer<CommentedConfiguration> ADD_TOWNBLOCKTYPE_LIMITS = config -> {
+		for (Map<?, ?> level : config.getMapList("levels.town_level"))
+			((Map<String, Object>) level).put("townBlockTypeLimits", new HashMap<>());
 	};
 }

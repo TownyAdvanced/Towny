@@ -44,6 +44,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -1705,6 +1706,18 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public void setManualTownLevel(int manualTownLevel) {
 		this.manualTownLevel = manualTownLevel;
+	}
+
+	/**
+	 * @param type The townblock type to get the limit for.
+	 * @return The townblock type limit, or -1 if no limit is configured.
+	 */
+	@SuppressWarnings("unchecked")
+	public int getTownBlockTypeLimit(TownBlockType type) {
+		if (!TownySettings.areLevelTypeLimitsConfigured())
+			return -1;
+		
+		return TownySettings.getTownLevel(this).townBlockTypeLimits().getOrDefault(type.getName().toLowerCase(Locale.ROOT), -1);
 	}
 	
 	@Override

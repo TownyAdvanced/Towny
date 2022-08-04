@@ -340,6 +340,10 @@ public class TownBlock extends TownyObject {
 	 */
 	public void setType(TownBlockType type, Resident resident) throws TownyException {
 		
+		int typeLimit = town.getTownBlockTypeLimit(type);
+		if (typeLimit >= 0 && (typeLimit == 0 || town.getTownBlockTypeCache().getNumTownBlocks(type, TownBlockTypeCache.CacheType.ALL) >= typeLimit))
+			throw new TownyException(Translatable.of("msg_town_plot_type_limit_reached", typeLimit, type.getFormattedName()));
+		
 		// Delete a jail if this is no longer going to be a jail.
 		if (this.isJail() && !TownBlockType.JAIL.equals(type) && getJail() != null) {
 			TownyUniverse.getInstance().getDataSource().removeJail(getJail());

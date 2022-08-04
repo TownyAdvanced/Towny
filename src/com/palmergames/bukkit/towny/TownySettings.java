@@ -32,6 +32,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -47,12 +48,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class TownySettings {
 
 	// Town Level
 	@Desugar
-	public record TownLevel(String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double upkeepModifier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier) {}
+	public record TownLevel(String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double upkeepModifier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier, Map<String, Integer> townBlockTypeLimits) {}
 
 	// Nation Level
 	@Desugar
@@ -61,6 +64,7 @@ public class TownySettings {
 	private static CommentedConfiguration config;
 	private static CommentedConfiguration newConfig;
 	private static int uuidCount;
+	private static boolean areLevelTypeLimitsConfigured;
 
 	private static final SortedMap<Integer, TownLevel> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, NationLevel> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
@@ -69,7 +73,7 @@ public class TownySettings {
 	private static final EnumSet<Material> switchUseMaterials = EnumSet.noneOf(Material.class);
 	private static final List<Class<?>> protectedMobs = new ArrayList<>();
 	
-	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier) {
+	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier, Map<String, Integer> townBlockTypeLimits) {
 
 		configTownLevel.put(numResidents, new TownLevel(
 			namePrefix,
@@ -80,7 +84,8 @@ public class TownySettings {
 			townUpkeepMultiplier,
 			townOutpostLimit,
 			townBlockBuyBonusLimit,
-			debtCapModifier
+			debtCapModifier,
+			townBlockTypeLimits.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().toLowerCase(Locale.ROOT), Map.Entry::getValue))
 		));
 	}
 
@@ -112,14 +117,26 @@ public class TownySettings {
 	 *
 	 * @throws IOException if unable to load the Town Levels
 	 */
+	@SuppressWarnings("unchecked")
 	public static void loadTownLevelConfig() throws IOException {
 
 		// Some configs end up having their numResident: 0 level removed which causes big errors.
 		// Add a 0 level town_level here which may get replaced when the config's town_levels are loaded below.
-		newTownLevel(0, "", " Ruins", "Spirit", "", 1, 1.0, 0, 0, 1.0);
+		newTownLevel(0, "", " Ruins", "Spirit", "", 1, 1.0, 0, 0, 1.0, new HashMap<>());
 		
 		List<Map<?, ?>> levels = config.getMapList("levels.town_level");
-		for (Map<?, ?> level : levels) {
+		for (Map<?, ?> genericLevel : levels) {
+			
+			Map<String, Object> level = (Map<String, Object>) genericLevel;
+
+			Map<String, Integer> townBlockTypeLimits;
+			if (level.get("townBlockTypeLimits") instanceof List<?> list)
+				townBlockTypeLimits = ((List<Object>) list).stream().map(Object::toString).map(s -> s.replaceAll("[{}]", "")).collect(Collectors.toMap(e -> e.split("=")[0], e -> Integer.parseInt(e.split("=")[1])));
+			else 
+				townBlockTypeLimits = new HashMap<>();
+
+			if (!townBlockTypeLimits.isEmpty())
+				areLevelTypeLimitsConfigured = true;
 
 			try {
 				/*
@@ -138,7 +155,8 @@ public class TownySettings {
 					Double.parseDouble(level.get("upkeepModifier").toString()),
 					Integer.parseInt(level.get("townOutpostLimit").toString()),
 					Integer.parseInt(level.get("townBlockBuyBonusLimit").toString()),
-					Double.parseDouble(level.get("debtCapModifier").toString())
+					Double.parseDouble(level.get("debtCapModifier").toString()),
+					townBlockTypeLimits
 				);
 			} catch (NullPointerException e) {
 				Towny.getPlugin().getLogger().warning("The town_level section of you Towny config.yml is out of date.");
@@ -523,6 +541,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 0);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 1);
@@ -535,6 +554,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 0);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 2);
@@ -547,6 +567,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 1);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 6);
@@ -559,6 +580,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 1);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 10);
@@ -571,6 +593,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 2);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 14);
@@ -583,6 +606,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 2);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 20);
@@ -595,6 +619,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 3);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 24);
@@ -607,6 +632,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 3);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 28);
@@ -619,6 +645,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 4);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
 			level.clear();
 			newConfig.set(ConfigNodes.LEVELS_TOWN_LEVEL.getRoot(), levels);
@@ -3213,6 +3240,11 @@ public class TownySettings {
 	
 	public static boolean areNumbersAllowedInNationNames() {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_ALLOW_NUMBERS_IN_NATION_NAME);
+	}
+	
+	@ApiStatus.Internal
+	public static boolean areLevelTypeLimitsConfigured() {
+		return areLevelTypeLimitsConfigured;
 	}
 }
 
