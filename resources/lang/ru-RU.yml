@@ -1543,7 +1543,7 @@ msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks remo
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
 #Added in 0.154
-msg_comptype_upkeep: 'Upkeep'
+msg_comptype_upkeep: 'Налог на содержание'
 #Added in 0.155
 #Message shown when toggling town upkeep admin setting
-msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+msg_town_upkeep_setting_set_to: 'Налог на содержание у города %s теперь %s.'
