@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.152
+version: 0.155
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -269,6 +269,7 @@ msg_new_mayor: '&b%s ngayon ay isa nang alkalde!'
 msg_new_nation: '&b%s gumawa nang isang bagong nasyon na pangalan ay %s'
 msg_new_town: '&b%s gumawa nang bagong bayan na pangalan ay %s'
 msg_plot_for_sale: '&b%s ay naglagay nang lote na lupa (%s) na ngayon ay ibebenta!'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
 msg_plot_set_type: '&bAng type nang lote ng lupa ay na i-takda sa %s'
 msg_cache_block_error: '&cIkaw ay hindi naka-register sa Towny. Subukukin mag-relog muli.'
 msg_cache_block_error_wild: '&cHindi ka pinapayagan sa %s sa magubat.'
@@ -701,8 +702,8 @@ msg_bankrupt_town2: '&bHindi kayang manatiling isang bayan ang %s.'
 msg_bankrupt_nation2: '&bHindi kayang manatiling isang bansa ang %s.'
 status_embassy_town: 'Mga embahada sa'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bDi-wastong comparator. Subukan ang mga residente, balanse, bayan, pangalan, townblock, online.'
-msg_error_invalid_comparator_town: '&bDi-wastong comparator. Subukan ang mga residente, balanse, pangalan, townblock, online, bukas.'
+msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
 msg_err_merging_for_kings_only: '&bMagagawa lamang ng isang Pinuno ng Bansa ang pagsasama.'
 msg_err_king_of_that_nation_is_not_online: '&bAng Piunong ng Bansa ng %s, %s, ay hindi online. Nabigo ang pagsasama.'
 nation1_has_merged_with_nation2: '&6Ang bansang %s ay sumang-ayon na sumanib kasama ang nangingibabaw na bansa ng %s.'
@@ -1541,3 +1542,10 @@ msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase to
 msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks removed.'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+#Added in 0.154
+msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'

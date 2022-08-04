@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.152
+version: 0.155
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu, ElMoha943, Ngzhiwei
 website: 'http://townyadvanced.github.io/'
@@ -269,6 +269,7 @@ msg_new_mayor: '&b%s es ahora el alcalde!'
 msg_new_nation: '&b%s creó un nuevo país llamado %s'
 msg_new_town: '&b%s creó una nueva ciudad llamada %s'
 msg_plot_for_sale: '&b%s puso la parcela (%s) a la venta!'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
 msg_plot_set_type: '&bTipo de parcela cambiado a %s'
 msg_cache_block_error: '&cNo fuiste registrado en Towny. Prueba a entrar nuevamente.'
 msg_cache_block_error_wild: '&cEn salvaje no tenes permiso para: %s'
@@ -701,8 +702,8 @@ msg_bankrupt_town2: '&b%s no pudo mantenerse como ciudad.'
 msg_bankrupt_nation2: '&b%s no pudo mantenerse como nacion.'
 status_embassy_town: 'Embajadas en'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bComparador invalido. Prueba con ciudadano, balance, ciudades, nombres, bloques de ciudad, en linea.'
-msg_error_invalid_comparator_town: '&bComparador invalido. Prueba con ciudadano, balance, ciudades, nombres, bloques de ciudad, en linea, abierto.'
+msg_error_invalid_comparator_nation: '&bComparador inválido. Prueba a usar %s.'
+msg_error_invalid_comparator_town: '&bComparador inválido. Prueba a usar %s.'
 msg_err_merging_for_kings_only: '&bLa fusión sólo puede ser realizada por un líder de nación.'
 msg_err_king_of_that_nation_is_not_online: '&bEl líder de la nación de %s, %s, no está conectado. Fusión fallida.'
 nation1_has_merged_with_nation2: '&6La nacion %s acepto la union con la nacion de %s.'
@@ -1312,34 +1313,34 @@ msg_resident_unjailed: '%s ha sido liberado.'
 #Shown when an admin uses /ta toggle devmode.
 msg_admin_toggle_devmode: 'Modo Dev: %s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: 'Debug Mode: %s'
+msg_admin_toggle_debugmode: 'Debug Modo: %s'
 #Shown when an admin uses /ta toggle townwithdraw
-msg_admin_toggle_townwithdraw: 'Town Withdrawls: %s'
+msg_admin_toggle_townwithdraw: 'Cantidad quitada de la ciudad: %s'
 #Shown when an admin uses /ta toggle nationwithdraw
-msg_admin_toggle_nationwithdraw: 'Nation Withdrawls: %s'
+msg_admin_toggle_nationwithdraw: 'Cantidad quitada de la nación: %s'
 #Shown when claiming a town block for the town.
-msg_process_town_claim: 'Processing Town Claim...'
+msg_process_town_claim: 'Procesando el reclamo de la ciudad...'
 #Shown when unclaiming a town block for the town.
-msg_process_town_unclaim: 'Processing Town Unclaim...'
+msg_process_town_unclaim: 'Procesando el des-reclamo de la ciudad...'
 #Shown when there is nothing to unclaim.
-msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
+msg_err_nothing_to_unclaim: '¡Nada que des-reclamar!'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: 'Permission True.'
+msg_perm_true: 'Permiso verdadero.'
 #Given as feedback when /ta checkperm is used.
-msg_err_perm_false: 'Permission False.'
+msg_err_perm_false: 'Permiso falso.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+status_towny_map_town_line: '&2Ciudad: &a%s &7| &2Propietario: &a%s'
 #Shown on /towny version
-msg_towny_version: '&2Towny Version: &a%s'
+msg_towny_version: '&2Versión de Towny: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
+msg_admin_blocked_login: '&2Un jugador usando la IP &c%s &2ha intentado entrar con un nombre de cuenta %s, que podría dañar la economía del servidor. Pero se ha prevenido con Towny. ¡Considera bloquear esta dirección IP!'
 #Shown during resident purge
-msg_scanning_for_old_residents: 'Scanning for old residents...'
+msg_scanning_for_old_residents: 'Escaneando por residentes antiguos...'
 #Shown during resident purge
-msg_deleting_resident: 'Deleting resident: %s.'
+msg_deleting_resident: 'Eliminando residente: %s.'
 #Shown during resident purge
-msg_purge_complete: 'Resident purge complete: %s deleted.'
+msg_purge_complete: 'Purga de residentes completada: %s eliminados.'
 #Message to the Town, shown when a town is given bonus blocks.
 msg_you_have_been_given_bonus_blocks: 'Haz recibido %s de bonus para la ciudad.'
 #Message shown when a town cannot purchase any more bonus blocks.
@@ -1439,34 +1440,34 @@ msg_you_must_wait_x_seconds_before_renaming_your_town: 'Tienes que esperar %s se
 msg_newday_already_scheduled_soon: 'Una nueva tarea diaria ha sido programada para que ocurra pronto.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
-msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'No puedes cambiar la neutralidad, quedan %s segundos.'
 #Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
-msg_err_command_not_for_console_use: 'This command cannot be used from the console.'
+msg_err_command_not_for_console_use: 'Este comando no se puede utilizar desde la consola.'
 #Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
-msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
+msg_town_unlimitedclaims_setting_set_to: 'La ciudad %s tiene su configuración de "unlimitedclaims" puesta en %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
-did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to claim, did you want to turn on unlimited claiming for the town of %s'
+did_you_want_to_toggle_unlimited_claims: 'No tienes los bloques de ciudad suficientes para reclamar, ¿Quieres activar la opción de reclamo infinito para la ciudad "%s"?'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
-msg_err_console_only: 'This command can only be used by console.'
-msg_err_player_only: 'This command can only be used by a player.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'No puedes salir de tu nación, tu ciudad está conquistada.'
+msg_err_console_only: 'Este comando solo se puede utilizar en consola.'
+msg_err_player_only: 'Este comando solo se puede utilizar un jugador.'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
 #Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
-this_will_reset_your_config: 'Running this command resets your config.yml to the default file. Do you want to continue?'
+this_will_reset_your_config: 'Ejecutar este comando tu config.yml al predeterminado. ¿Desea continuar?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
-msg_warn_overriding_server_config: 'By doing this you are overriding the resident limits set in the server configuration. Do you want to continue anyway?'
+msg_warn_overriding_server_config: 'Al hacer esto, está sobreescribiendo los límites de residentes establecidos en la configuración del servidor. ¿Desea continuar de todas formas?'
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: 'Removed %d invalid outpost spawns.'
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
-msg_your_town_is_bankrupt: 'Your town is bankrupt, add money to your bank using /town deposit {amount}.'
+msg_your_town_is_bankrupt: 'Tu ciudad ha caído en bancarrota, añade dinero a tu banco usando /town deposit {amount}.'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
@@ -1513,7 +1514,7 @@ msg_perm_hud_explosions: 'Explosions: '
 #Seen in /plot perm hud:
 msg_perm_hud_firespread: 'Firespread: '
 #Seen in /plot perm hud:
-msg_perm_hud_mobspawns: 'Mob Spawns: '
+msg_perm_hud_mobspawns: 'Spawn de Mobs: '
 #Seen in /plot perm hud:
 msg_perm_hud_key: 'Key'
 #Seen in /plot perm hud:
@@ -1541,3 +1542,10 @@ msg_err_town_not_allowed_purchased_blocks: 'La ciudad %s es incapaz de comprar b
 msg_purchased_blocks_unset: 'La ciudad %s ha eliminado los bloques de ciudad comprados.'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'La ciudad %s ha recibido %s townblocks comprados, actualmente tiene %s townblocks.'
+#Added in 0.154
+msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'

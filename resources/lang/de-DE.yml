@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.152
+version: 0.155
 language: german
 author: ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih
 website: 'http://townyadvanced.github.io/'
@@ -269,6 +269,7 @@ msg_new_mayor: '&b%s ist nun der Bürgermeister!'
 msg_new_nation: '&b%s hat die Nation %s gegründet.'
 msg_new_town: '&b%s hat die Stadt %s gegründet.'
 msg_plot_for_sale: '&b%s gab das Grundstück (%s) zum Verkauf frei!'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
 msg_plot_set_type: '&bGrundstücksttyp wurde auf %s gesetzt.'
 msg_cache_block_error: '&cDu wirst von Towny nicht erkannt. Versuche dich neu einzuloggen.'
 msg_cache_block_error_wild: '&c %s ist in der Wildnis nicht erlaubt.'
@@ -701,8 +702,8 @@ msg_bankrupt_town2: '&b%s konnte es sich nicht leisten, weiterhin eine Stadt zu 
 msg_bankrupt_nation2: '&b%s konnte es sich nicht leisten, weiterhin eine Nation zu bleiben.'
 status_embassy_town: 'Botschaften in'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bUngültiger Vergleichswert. Versuch doch mal: resident, balance, towns, name, townblocks, online.'
-msg_error_invalid_comparator_town: '&bUngültiger Vergleichswert. Versuch doch mal: resident, balance, name, townblocks, online, open.'
+msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
 msg_err_merging_for_kings_only: '&bDie Zusammenführung kann nur von einem Nationalführer durchgeführt werden.'
 msg_err_king_of_that_nation_is_not_online: '&bDer Nationalführer von %s, %s, ist nicht online. Zusammenführung fehlgeschlagen.'
 nation1_has_merged_with_nation2: '&6Die Nation %s hat zugestimmt, mit der vorherrschenden  Nation %s zusammenzuschließen.'
@@ -1541,3 +1542,10 @@ msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase to
 msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks removed.'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+#Added in 0.154
+msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'

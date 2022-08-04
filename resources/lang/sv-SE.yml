@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.152
+version: 0.155
 language: swedish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -269,6 +269,7 @@ msg_new_mayor: '&b%s är nu borgmästare!'
 msg_new_nation: '&b%s skapade en ny nation som heter %s'
 msg_new_town: '&b%s skapade en ny stad som heter %s'
 msg_plot_for_sale: '&b%s satte upp marken (%s) till salu!'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
 msg_plot_set_type: '&bMarktyp satt till %s'
 msg_cache_block_error: '&cDu har inte registrerats hos Towny. Försök att logga igen.'
 msg_cache_block_error_wild: '&cInte tillåtet att %s i vildmarken.'
@@ -701,8 +702,8 @@ msg_bankrupt_town2: '&b%s hade inte råd att fortsätta vara en stad.'
 msg_bankrupt_nation2: '&b%s hade inte råd att fortsätta vara en nation.'
 status_embassy_town: 'Ambassader i'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bOgiltig comparator. Try residents, balance, towns, name, townblocks, online.'
-msg_error_invalid_comparator_town: '&bOgiltig comparator. Try residents, balance, name, townblocks, online, open.'
+msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
 msg_err_merging_for_kings_only: '&bSammanslagning kan enbart göras utav Nations Ledaren.'
 msg_err_king_of_that_nation_is_not_online: '&bNations Ledaren av %s, %s, är inte online. Sammanslagning misslyckades.'
 nation1_has_merged_with_nation2: '&6Nationen %s har gått med på att slås samman med den rådande nationen %s.'
@@ -1541,3 +1542,10 @@ msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase to
 msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks removed.'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+#Added in 0.154
+msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
