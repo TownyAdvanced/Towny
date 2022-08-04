@@ -307,5 +307,14 @@
         "key": "migrate_notifications"
       }
     ]
+  },
+  {
+    "version": "0.98.3.4",
+    "changes": [
+      {
+        "type": "RUNNABLE",
+        "key": "add_townblocktype_limits"
+      }
+    ]
   }
 ]

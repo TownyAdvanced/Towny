@@ -1757,3 +1757,5 @@ msg_comptype_upkeep: 'Upkeep'
 # Added in 0.155
 # Message shown when toggling town upkeep admin setting
 msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
