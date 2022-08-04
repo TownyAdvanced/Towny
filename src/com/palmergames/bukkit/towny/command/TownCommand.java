@@ -4150,7 +4150,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
 			
 			if (args.length == 2) {
-				int amount = MathUtil.getIntOrThrow(args[1].trim());
+				int amount;
+				if ("all".equalsIgnoreCase(args[1].trim()))
+					amount = (int) Math.floor(withdraw ? resident.getTown().getAccount().getHoldingBalance() : resident.getAccount().getHoldingBalance());
+				else
+					amount = MathUtil.getIntOrThrow(args[1].trim());
 
 				if (withdraw)
 					MoneyUtil.townWithdraw(player, resident, resident.getTown(), amount);

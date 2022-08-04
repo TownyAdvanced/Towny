@@ -2572,11 +2572,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_must_specify_amnt", "/nation" + (withdraw ? " withdraw" : " deposit")));
 
 			int amount;
-			try {
-				amount = Integer.parseInt(args[1].trim());
-			} catch (NumberFormatException ex) {
-				throw new TownyException(Translatable.of("msg_error_must_be_int"));
-			}
+			if ("all".equalsIgnoreCase(args[1].trim()))
+				amount = (int) Math.floor(withdraw ? nation.getAccount().getHoldingBalance() : resident.getAccount().getHoldingBalance());
+			else 
+				amount = MathUtil.getIntOrThrow(args[1].trim());
 			
 			if (args.length == 2) {
 				if (withdraw)
