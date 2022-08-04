@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.154
+version: 0.155
 language: zh-TW
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -269,6 +269,7 @@ msg_new_mayor: '&b%s成為了新的鎮長！'
 msg_new_nation: '&b%s建立了一個名為%s的國家'
 msg_new_town: '&b%s建立了一個名為%s的城鎮'
 msg_plot_for_sale: '&b%s將（%s）地段開始出售！'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
 msg_plot_set_type: '&b設定地段類型為%s'
 msg_cache_block_error: '&c城鎮沒有您的資訊。 請嘗試重新註冊。'
 msg_cache_block_error_wild: '&c您不能在荒野中%s。'
@@ -1543,3 +1544,6 @@ msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks remo
 msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
 #Added in 0.154
 msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
