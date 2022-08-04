@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.154
+version: 0.155
 language: es-cl
 author: GNosii
 website: 'http://townyadvanced.github.io/'
@@ -269,6 +269,7 @@ msg_new_mayor: '&b¡%s es el nuevo alcalde de la ciudad!'
 msg_new_nation: '&b%s fundó una nueva nación llamada %s'
 msg_new_town: '&b%s fundó una nueva ciudad llamada %s'
 msg_plot_for_sale: '&b¡%s puso el terreno (%s) a la venta!'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
 msg_plot_set_type: '&bTipo de terreno cambiado a %s'
 msg_cache_block_error: '&cNo estás registrado en Towny, intenta reconectarte.'
 msg_cache_block_error_wild: '&cNo está permitido %s en el Exterior.'
@@ -1543,3 +1544,6 @@ msg_purchased_blocks_unset: 'La ciudad %s ha eliminado los bloques de ciudad com
 msg_purchased_blocks_changed: 'La ciudad %s ha recibido %s townblocks comprados, actualmente tiene %s townblocks.'
 #Added in 0.154
 msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
