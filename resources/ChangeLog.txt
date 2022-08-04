@@ -7665,3 +7665,13 @@ v0.92.0.11:
     - /t deposit all - deposit all your money into the town bank.
     - /n withdraw all - remove all money from the nation bank.
     - /n deposit all - deposit all your money into the nation bank.
+  - Update platform bukkit to 4.1.2, courtesy of Warriorrrr with PR #6079.
+  - Update translatable with changes from MiniMessage PR, courtesy of Warriorrrr with PR #6078.
+  - Add configurable plot type limits, courtesy of Warriorrrr with PR #6038.
+    - Closes #5889.
+    - If you want to limit plot types amounts per-town based on their town_level you will fill out the new section in this fashion:
+      townBlockTypeLimits:
+      - shop: 2
+      - arena: 2
+  - Automatic Config Edit: your config's town_level sections will have an empty townBlockTypeLimits: added.
+   
