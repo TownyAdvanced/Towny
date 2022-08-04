@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.154
+version: 0.155
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -269,6 +269,7 @@ msg_new_mayor: '&b%s は新しい市長です！'
 msg_new_nation: '&b%s は %s という名前の新しい国家を設立しました'
 msg_new_town: '&b%s は %s という名前の新しい町を設立しました'
 msg_plot_for_sale: '&b%s はプロット（%s）を売りに出しました！'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
 msg_plot_set_type: '&bプロットの種類を %s に変更しました'
 msg_cache_block_error: '&cあなたはまだ町に登録されていません。再ログインしてください。'
 msg_cache_block_error_wild: '&c荒野での%sは許可されていません。'
@@ -1543,3 +1544,6 @@ msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks remo
 msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
 #Added in 0.154
 msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
