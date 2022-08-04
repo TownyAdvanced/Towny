@@ -697,20 +697,43 @@ public class TownyMessaging {
 	 * translated to the end-user's locale.
 	 *  
 	 * @param sender CommandSender who will see the message. 
-	 * @param translatables Translatble... object(s) which will be translated.
+	 * @param translatables Translatable object(s) which will be translated, joined with a space.
+	 * @see #sendMsg(CommandSender, Translatable)
 	 */
 	public static void sendMsg(CommandSender sender, Translatable... translatables) {
 		sendMsg(sender, Translation.translateTranslatables(sender, translatables));
 	}
 
 	/**
+	 * Sends a message in green, prefixed by the default_towny_prefix to the sender,
+	 * translated to the end-user's locale.
+	 *
+	 * @param sender CommandSender who will see the message. 
+	 * @param translatable Translatable object which will be translated.
+	 */
+	public static void sendMsg(CommandSender sender, Translatable translatable) {
+		sendMsg(sender, translatable.locale(sender).translate());
+	}
+
+	/**
 	 * Sends a message translated to the end-user's locale, with no prefix.
 	 *  
 	 * @param sender CommandSender who will see the message. 
-	 * @param translatables Translatble... object(s) which will be translated.
+	 * @param translatables Translatable... object(s) which will be translated.
+	 * @see #sendMessage(CommandSender, Translatable)    
 	 */
 	public static void sendMessage(CommandSender sender, Translatable... translatables) {
 		sendMessage(sender, Translation.translateTranslatables(sender, translatables));
+	}
+
+	/**
+	 * Sends a message translated to the end-user's locale, with no prefix.
+	 *
+	 * @param sender CommandSender who will see the message. 
+	 * @param translatable Translatable object which will be translated.
+	 */
+	public static void sendMessage(CommandSender sender, Translatable translatable) {
+		sendMessage(sender, translatable.locale(sender).translate());
 	}
 	
 	/**
@@ -721,9 +744,23 @@ public class TownyMessaging {
 	 * 
 	 * @param sender CommandSender who will receive the error message.
 	 * @param translatables Translatable... object(s) to be translated using the locale of the end-user.
+	 * @see #sendErrorMsg(CommandSender, Translatable)    
 	 */
 	public static void sendErrorMsg(CommandSender sender, Translatable... translatables) {
 		sendErrorMsg(sender, Translation.translateTranslatables(sender, translatables));
+	}
+
+	/**
+	 * Sends an Error message (red) to the sender
+	 * and to the named Dev if DevMode is enabled.
+	 * Uses default_towny_prefix.
+	 * Translates to the end-user's locale.
+	 *
+	 * @param sender CommandSender who will receive the error message.
+	 * @param translatable Translatable object to be translated using the locale of the end-user.
+	 */
+	public static void sendErrorMsg(CommandSender sender, Translatable translatable) {
+		sendErrorMsg(sender, translatable.locale(sender).translate());
 	}
 	
 	/**

@@ -2,15 +2,23 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.util.Colors;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class Translatable {
 	private String key;
 	private Object[] args;
 	private boolean stripColors;
-	private String appended = "";
+	private final List<Object> appended = new ArrayList<>(0);
+	private Locale locale;
 	
 	private Translatable(String key) {
 		this.key = key;
@@ -42,7 +50,18 @@ public class Translatable {
 	}
 	
 	public String appended() {
-		return appended;
+		StringBuilder appended = new StringBuilder();
+
+		for (Object object : this.appended) {
+			if (object instanceof String string)
+				appended.append(string);
+			else if (object instanceof Translatable translatable)
+				appended.append(translatable.locale(this.locale).translate());
+			else if (object instanceof Component component)
+				appended.append(LegacyComponentSerializer.legacySection().serialize(component));
+		}
+
+		return appended.toString();
 	}
 	
 	public Translatable key(String key) {
@@ -61,24 +80,61 @@ public class Translatable {
 	}
 	
 	public Translatable append(String append) {
-		appended += append;
+		appended.add(append);
 		return this;
 	}
 	
-	public String translate(Locale locale) {
-		checkArgs(locale);
-		String translated = args == null ? Translation.of(key, locale) : Translation.of(key, locale, args);
-		translated += appended;
+	public Translatable append(Component append) {
+		appended.add(append);
+		return this;
+	}
+	
+	public Translatable append(Translatable translatable) {
+		appended.add(translatable);
+		return this;
+	}
+
+	public Translatable locale(@Nullable Locale locale) {
+		this.locale = locale;
+		return this;
+	}
+
+	public Translatable locale(@NotNull Resident resident) {
+		this.locale = Translation.getLocale(resident);
+		return this;
+	}
+	
+	public Translatable locale(@NotNull CommandSender commandSender) {
+		this.locale = Translation.getLocale(commandSender);
+		return this;
+	}
+	
+	public String translate(@NotNull Locale locale) {
+		this.locale = locale;
+		return translate();
+	}
+	
+	public String translate() {
+		translateArgs(this.locale);
+		
+		String translated;
+		if (args == null)
+			translated = locale == null ? Translation.of(key) : Translation.of(key, locale);
+		else 
+			translated = locale == null ? Translation.of(key, args) : Translation.of(key, locale, args);
+		
+		translated += appended();
 		
 		return stripColors ? Colors.strip(translated) : translated;
 	}
 	
-	public String translate() {
-		checkArgs();
-		String translated = args == null ? Translation.of(key) : Translation.of(key, args);
-		translated += appended;
-		
-		return stripColors ? Colors.strip(translated) : translated;
+	public Component component(@NotNull Locale locale) {
+		this.locale = locale;
+		return component();
+	}
+	
+	public Component component() {
+		return LegacyComponentSerializer.legacySection().deserialize(translate());
 	}
 	
 	public String forLocale(Resident resident) {
@@ -93,26 +149,23 @@ public class Translatable {
 		return translate(Translation.getDefaultLocale());
 	}
 
-	private void checkArgs() {
+	private void translateArgs(@Nullable Locale locale) {
 		if (args == null)
 			return;
 		
 		for (int i = 0; i < args.length; i++)
 			if (args[i] instanceof Translatable)
-				args[i] = ((Translatable) args[i]).translate();
-	}
-	
-	private void checkArgs(Locale locale) {
-		if (args == null)
-			return;
-		
-		for (int i = 0; i < args.length; i++)
-			if (args[i] instanceof Translatable)
-				args[i] = ((Translatable) args[i]).translate(locale);
+				args[i] = ((Translatable) args[i]).locale(locale).translate();
 	}
 	
 	@Override
 	public String toString() {
-		return translate();
+		return "Translatable{" +
+			"key='" + key + '\'' +
+			", args=" + Arrays.toString(args) +
+			", stripColors=" + stripColors +
+			", appended=" + appended() +
+			", locale=" + locale +
+			'}';
 	}
 }
