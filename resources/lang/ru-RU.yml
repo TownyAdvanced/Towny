@@ -1541,7 +1541,7 @@ msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase to
 #Message shown when unsetting all purchased townblocks from a town.
 msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks removed.'
 #Message shown when /ta town name giveboughtblocks # is used.
-msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+msg_purchased_blocks_changed: 'Город %s получил %s участков, всего %s.'
 #Added in 0.154
 msg_comptype_upkeep: 'Налог на содержание'
 #Added in 0.155
