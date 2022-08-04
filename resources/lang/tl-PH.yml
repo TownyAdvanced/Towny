@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.154
+version: 0.155
 language: english
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
@@ -269,6 +269,7 @@ msg_new_mayor: '&b%s ngayon ay isa nang alkalde!'
 msg_new_nation: '&b%s gumawa nang isang bagong nasyon na pangalan ay %s'
 msg_new_town: '&b%s gumawa nang bagong bayan na pangalan ay %s'
 msg_plot_for_sale: '&b%s ay naglagay nang lote na lupa (%s) na ngayon ay ibebenta!'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
 msg_plot_set_type: '&bAng type nang lote ng lupa ay na i-takda sa %s'
 msg_cache_block_error: '&cIkaw ay hindi naka-register sa Towny. Subukukin mag-relog muli.'
 msg_cache_block_error_wild: '&cHindi ka pinapayagan sa %s sa magubat.'
@@ -1543,3 +1544,6 @@ msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks remo
 msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
 #Added in 0.154
 msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
