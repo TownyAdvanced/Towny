@@ -1,6 +1,6 @@
 ---
 name: Towny
-version: 0.154
+version: 0.155
 language: german
 author: ElgarL, translated by Articdive, Wolf2323, BlocK, Yasu-San and enterih
 website: 'http://townyadvanced.github.io/'
@@ -269,6 +269,7 @@ msg_new_mayor: '&b%s ist nun der Bürgermeister!'
 msg_new_nation: '&b%s hat die Nation %s gegründet.'
 msg_new_town: '&b%s hat die Stadt %s gegründet.'
 msg_plot_for_sale: '&b%s gab das Grundstück (%s) zum Verkauf frei!'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
 msg_plot_set_type: '&bGrundstücksttyp wurde auf %s gesetzt.'
 msg_cache_block_error: '&cDu wirst von Towny nicht erkannt. Versuche dich neu einzuloggen.'
 msg_cache_block_error_wild: '&c %s ist in der Wildnis nicht erlaubt.'
@@ -1543,3 +1544,6 @@ msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks remo
 msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
 #Added in 0.154
 msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
