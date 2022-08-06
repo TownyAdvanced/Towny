@@ -1188,7 +1188,7 @@ msg_you_must_join_this_town_to_claim_this_plot: 'Ви повинні приєд�
 #Added in 0.113
 status_trustedlist: 'Довірені'
 msg_click_to_edit: '&6Клацніть, щоб редагувати.'
-permission_gui_header: 'Towny Permission GUI'
+permission_gui_header: 'Інтерфейс прав Towny'
 msg_last_edited: '&7&oLast changed at %s by %s.'
 msg_trusted_added: '&bAdded %s as trusted in this %s.' #Last %s is either town or townblock
 msg_already_trusted: '&b%s is already trusted in this %s.'
