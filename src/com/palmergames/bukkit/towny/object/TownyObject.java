@@ -92,7 +92,6 @@ public abstract class TownyObject implements Nameable, Savable {
 	 * The metadata does not need to be the same instance of the one added,
 	 * but must have the same key.
 	 * Most implementations will save the TownyObject after removing the metadata.
-	 *
 	 * 
 	 * @param md CustomDataField to remove.
 	 */
@@ -114,10 +113,35 @@ public abstract class TownyObject implements Nameable, Savable {
 	// DO NOT OVERRIDE THIS METHOD ANYWHERE
 	public boolean removeMetaData(@NotNull CustomDataField<?> md, boolean save) {
 		Preconditions.checkNotNull(md);
+		return removeMetaData(md.getKey(), save);
+	}
+
+	/**
+	 * Remove a specific metadata from the TownyObject.
+	 * Most implementations will save the TownyObject after removing the metadata.
+	 *
+	 * @param key Key of the data field to remove.
+	 * @return whether the metadata was successfully removed.    
+	 */
+	public boolean removeMetaData(@NotNull String key) {
+		return removeMetaData(key, false);
+	}
+
+	/**
+	 * Remove a specific metadata from the TownyObject.
+	 *
+	 * @param key Key of the data field to remove.
+	 * @param save whether to save the object or not after the metadata is removed.
+	 *
+	 * @return whether the metadata was successfully removed. 
+	 */
+	public boolean removeMetaData(@NotNull String key, boolean save) {
+		Preconditions.checkNotNull(key);
+		
 		if (!hasMeta())
 			return false;
 
-		final boolean removed = metadata.remove(md.getKey()) != null;
+		final boolean removed = metadata.remove(key) != null;
 
 		if (metadata.isEmpty())
 			this.metadata = null;
