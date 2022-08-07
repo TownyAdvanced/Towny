@@ -269,7 +269,7 @@ msg_new_mayor: '&b%s şimdi belediye başkanı!'
 msg_new_nation: '&b%s isimli kişi &e%s &badında bir ulus kurdu'
 msg_new_town: '&b%s isimli kişi &e%s &badında bir kasaba kurdu h.o'
 msg_plot_for_sale: '&b%s arsayı (%s) satışa sundu!'
-msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
+msg_plot_for_sale_amount: '&b%s, (%s) arsayı %s fiyata satışa sundu!'
 msg_plot_set_type: '&bArsa türü %s olarak ayarlandı'
 msg_cache_block_error: '&cTowny ye kayıtlı değilsiniz. Yeniden günlüğe kaydetmeyi deneyin.'
 msg_cache_block_error_wild: '&cVahşi doğada %s izin verilmez.'
@@ -1500,9 +1500,9 @@ msg_perm_hud_title: 'Arsa Yetkileri'
 #Seen in /plot perm hud:
 msg_perm_hud_build: 'Yapı: '
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Destroy: '
+msg_perm_hud_destroy: 'Sil: '
 #Seen in /plot perm hud:
-msg_perm_hud_switch: 'Switch: '
+msg_perm_hud_switch: 'Değiştir: '
 #Seen in /plot perm hud:
 msg_perm_hud_item_use: 'Eşya: '
 #Seen in /plot perm hud:
@@ -1524,11 +1524,11 @@ msg_perm_hud_town: 'kasaba'
 #Seen in /plot perm hud:
 msg_perm_hud_ally: 'müttefik'
 #Seen in /plot perm hud:
-msg_perm_hud_resident: 'resident'
+msg_perm_hud_resident: 'sakin'
 #Seen in /plot perm hud:
 msg_perm_hud_nation: 'ulus'
 #Seen in /plot perm hud:
-msg_perm_hud_outsider: 'outsider'
+msg_perm_hud_outsider: 'yabancı'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_name: 'Arsa: '
 #Added in 0.153
