@@ -201,7 +201,7 @@ public class SpawnUtil {
 	 * @return true if this player has towny.admin.spawn in their permission nodes.
 	 */
 	private static boolean isTownyAdmin(Player player) {
-		return TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_SPAWN_ADMIN.getNode());
+		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player);
 	}
 	
 	/**
@@ -212,8 +212,8 @@ public class SpawnUtil {
 	 */
 	private static boolean playerHasFreeSpawn(Player player) {
 		TownyPermissionSource perms = TownyUniverse.getInstance().getPermissionSource();
-		return perms.has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())
-				|| perms.has(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCHARGE.getNode());
+		return perms.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())
+				|| perms.testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCHARGE.getNode());
 	}
 	
 	/**

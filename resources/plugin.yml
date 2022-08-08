@@ -178,6 +178,7 @@ permissions:
         default: false
         children:
             towny.command.nation.ally.*: true
+            towny.command.nation.baltop: true
             towny.command.nation.bankhistory: true
             towny.command.nation.delete: true
             towny.command.nation.deposit: true
@@ -605,6 +606,7 @@ permissions:
             towny.command.townyadmin.givebonus: true
             towny.command.townyadmin.nation.*: true
             towny.command.townyadmin.newday: true
+            towny.command.townyadmin.newhour: true
             towny.command.townyadmin.purge: true
             towny.command.townyadmin.reload: true
             towny.command.townyadmin.mysqldump: true
@@ -613,11 +615,10 @@ permissions:
             towny.command.townyadmin.set.*: true
             towny.command.townyadmin.toggle.*: true
             towny.command.townyadmin.town.*: true
-            towny.command.townyadmin.town.spawn: true
-            towny.command.townyadmin.town.spawn.freecharge: true
             towny.command.townyadmin.townyperms: true
             towny.command.townyadmin.unclaim: true
             towny.command.townyadmin.plot.*: true
+            towny.command.townyadmin.tpplot: true
             towny.command.townyadmin.resident.*: true
             towny.command.townyadmin.depositall: true
             towny.command.townyadmin.install: true
@@ -654,34 +655,50 @@ permissions:
         default: false
         children:
             towny.command.townyadmin.town.add: true
+            towny.command.townyadmin.town.bankhistory: true
             towny.command.townyadmin.town.checkoutposts: true
             towny.command.townyadmin.town.delete: true
+            towny.command.townyadmin.town.deposit: true
+            towny.command.townyadmin.town.forcemerge: true
+            towny.command.townyadmin.town.giveboughtblocks: true
+            towny.command.townyadmin.town.invite: true
             towny.command.townyadmin.town.kick: true
+            towny.command.townyadmin.town.merge: true
+            towny.command.townyadmin.town.meta: true
             towny.command.townyadmin.town.new: true
+            towny.command.townyadmin.town.outpost: true
+            towny.command.townyadmin.town.outlaw: true
             towny.command.townyadmin.town.rank: true
             towny.command.townyadmin.town.rename: true
             towny.command.townyadmin.town.set: true
             towny.command.townyadmin.town.settownlevel: true
-            towny.command.townyadmin.town.giveboughtblocks: true
+            towny.command.townyadmin.town.spawn.*: true
             towny.command.townyadmin.town.toggle: true
-            towny.command.townyadmin.town.meta: true
-            towny.command.townyadmin.town.bankhistory: true
             towny.command.townyadmin.town.trust: true
+            towny.command.townyadmin.town.unruin: true
+            towny.command.townyadmin.town.withdraw: true
 
     towny.command.townyadmin.nation.*:
         description: User can access the admin nation commands.
         default: false
         children:
-            towny.command.townyadmin.nation.new: true
             towny.command.townyadmin.nation.add: true
-            towny.command.townyadmin.nation.delete: true
-            towny.command.townyadmin.nation.rename: true
-            towny.command.townyadmin.nation.merge: true
-            towny.command.townyadmin.nation.toggle: true
-            towny.command.townyadmin.nation.set: true
-            towny.command.townyadmin.nation.bankhistory: true
-            towny.command.townyadmin.nation.enemy: true
             towny.command.townyadmin.nation.ally: true
+            towny.command.townyadmin.nation.bankhistory: true
+            towny.command.townyadmin.nation.delete: true
+            towny.command.townyadmin.nation.deposit: true
+            towny.command.townyadmin.nation.enemy: true
+            towny.command.townyadmin.nation.forcemerge: true
+            towny.command.townyadmin.nation.kick: true
+            towny.command.townyadmin.nation.merge: true
+            towny.command.townyadmin.nation.new: true
+            towny.command.townyadmin.nation.rank: true
+            towny.command.townyadmin.nation.recheck: true
+            towny.command.townyadmin.nation.rename: true
+            towny.command.townyadmin.nation.set: true
+            towny.command.townyadmin.nation.toggle: true
+            towny.command.townyadmin.nation.transfer: true
+            towny.command.townyadmin.nation.withdraw: true
 
     towny.command.townyadmin.plot.*:
         description: User can access the admin plot commands.
@@ -699,7 +716,10 @@ permissions:
             towny.command.townyadmin.toggle.devmode: true
             towny.command.townyadmin.toggle.debug: true
             towny.command.townyadmin.toggle.nationwithdraw: true
+            towny.command.townyadmin.toggle.npc: true
+            towny.command.townyadmin.toggle.regenerations: true
             towny.command.townyadmin.toggle.townwithdraw: true
+            towny.command.townyadmin.toggle.wildernessuse: true
 
     # Towny command permissions
     towny.command.towny.*:
@@ -754,9 +774,17 @@ permissions:
             towny.command.townyworld.toggle.forceexplosion: true
             towny.command.townyworld.toggle.forcefire: true
             towny.command.townyworld.toggle.forcepvp: true
+            towny.command.townyworld.toggle.friendlyfire: true
+            towny.command.townyworld.toggle.plotcleardelete: true
             towny.command.townyworld.toggle.pvp: true
             towny.command.townyworld.toggle.revertunclaim: true
             towny.command.townyworld.toggle.revertexpl: true
+            towny.command.townyworld.toggle.revertentityexpl: true
+            towny.command.townyworld.toggle.revertblockexpl: true
             towny.command.townyworld.toggle.townmobs: true
+            towny.command.townyworld.toggle.unclaimblockdelete: true
             towny.command.townyworld.toggle.usingtowny: true
+            towny.command.townyworld.toggle.warallowed: true
+            towny.command.townyworld.toggle.wildernessmobs: true
+            towny.command.townyworld.toggle.wildernessuse: true
             towny.command.townyworld.toggle.worldmobs: true

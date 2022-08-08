@@ -1108,6 +1108,10 @@ public class TownyPlayerListener implements Listener {
 			|| !TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
+		// Let admins run commands.
+		if (TownyUniverse.getInstance().getPermissionSource().testPermission(event.getPlayer(), PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
+			return;
+		
 		Player player = event.getPlayer();
 		String command = event.getMessage().substring(1).split(" ")[0];
 
@@ -1116,8 +1120,8 @@ public class TownyPlayerListener implements Listener {
 		 */
 		if (listContainsCommand(TownySettings.getTownBlacklistedCommands(), command) && listContainsCommand(TownySettings.getTouristBlockedCommands(), command)) {
 			// Let admins and globally welcomed players run commands.
-			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode())
-			|| TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOURIST_COMMAND_LIMITATION_BYPASS.getNode()))
+			if (TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode())
+			|| TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_TOURIST_COMMAND_LIMITATION_BYPASS.getNode()))
 				return;
 			
 			Town town = TownyAPI.getInstance().getTown(player.getLocation());
@@ -1142,9 +1146,6 @@ public class TownyPlayerListener implements Listener {
 		 * Commands are sometimes blocked from being run inside any town.
 		 */
 		if (listContainsCommand(TownySettings.getTownBlacklistedCommands(), command) && !TownyAPI.getInstance().isWilderness(player.getLocation())) {
-			// Let admins run commands.
-			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
-				return;
 			
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_command_blocked_inside_towns"));
 			event.setCancelled(true);
@@ -1155,9 +1156,6 @@ public class TownyPlayerListener implements Listener {
 		 * Commands are sometimes limited to only plots that players personally own.
 		 */
 		if (listContainsCommand(TownySettings.getPlayerOwnedPlotLimitedCommands(), command)) {
-			// Let admins run commands.
-			if (TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
-				return;
 			
 			// Stop the command being run because this is in the wilderness.
 			if (TownyAPI.getInstance().isWilderness(player.getLocation())) {

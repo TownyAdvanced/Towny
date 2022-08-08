@@ -103,7 +103,7 @@ public class BlockUtil {
 	}
 	
 	private static boolean isResidentActingMayorOfTown(Resident resident, Town town) {
-		return TownyUniverse.getInstance().getPermissionSource().has(resident.getPlayer(), PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())
+		return TownyUniverse.getInstance().getPermissionSource().testPermission(resident.getPlayer(), PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())
 				&& resident.hasTown()
 				&& town.getUUID().equals(TownyAPI.getInstance().getResidentTownOrNull(resident).getUUID());
 	}

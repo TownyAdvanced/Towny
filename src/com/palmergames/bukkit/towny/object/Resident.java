@@ -469,7 +469,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	 *         to them according to the TownyPermissionSource.
 	 */
 	public boolean hasPermissionNode(String node) {
-		return getPlayer() != null && TownyUniverse.getInstance().getPermissionSource().has(getPlayer(), node);
+		return getPlayer() != null && TownyUniverse.getInstance().getPermissionSource().testPermission(getPlayer(), node);
 	}
 	
 	/**
