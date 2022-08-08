@@ -124,12 +124,6 @@ public class TownyFormatter {
 		
 		TownBlockStatusScreenEvent event = new TownBlockStatusScreenEvent(screen, townBlock);
 		Bukkit.getPluginManager().callEvent(event);
-		if (event.hasAdditionalLines()) {
-			TextComponent comp = Component.empty();
-			for (int i = 0; i < event.getAdditionalLines().size(); i++)
-				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
-			screen.addComponentOf("eventAddedLines", comp);
-		}
 		
 		return screen;
 	}
@@ -261,12 +255,7 @@ public class TownyFormatter {
 			
 		ResidentStatusScreenEvent event = new ResidentStatusScreenEvent(screen, resident);
 		Bukkit.getPluginManager().callEvent(event);
-		if (event.hasAdditionalLines()) {
-			TextComponent comp = Component.empty();
-			for (int i = 0; i < event.getAdditionalLines().size(); i++)
-				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
-			screen.addComponentOf("eventAddedLines", comp);
-		}
+		
 		return screen;
 	}
 
@@ -439,12 +428,7 @@ public class TownyFormatter {
 			
 		TownStatusScreenEvent event = new TownStatusScreenEvent(screen, town);
 		Bukkit.getPluginManager().callEvent(event);
-		if (event.hasAdditionalLines()) {
-			TextComponent comp = Component.empty();
-			for (int i = 0; i < event.getAdditionalLines().size(); i++)
-				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
-			screen.addComponentOf("eventAddedLines", comp);
-		}
+		
 		return screen;
 	}
 
@@ -574,12 +558,7 @@ public class TownyFormatter {
 		
 		NationStatusScreenEvent event = new NationStatusScreenEvent(screen, nation);
 		Bukkit.getPluginManager().callEvent(event);
-		if (event.hasAdditionalLines()) {
-			TextComponent comp = Component.empty();
-			for (int i = 0; i < event.getAdditionalLines().size(); i++)
-				comp = comp.append(Component.newline()).append(Component.text(event.getAdditionalLines().get(i)));
-			screen.addComponentOf("eventAddedLines", comp);
-		}
+		
 		return screen;
 	}
 
