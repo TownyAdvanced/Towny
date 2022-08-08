@@ -1961,7 +1961,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SURNAME.getNode());
 			townSetSurname(sender, split, admin, town, resident, player);
 
-
 		} else if (split[0].equalsIgnoreCase("mayor")) {
 
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_MAYOR.getNode());
@@ -2021,13 +2020,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			catchConsole(sender);
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_HOMEBLOCK.getNode());
-			parseTownSetHomeblock(player, town, nation);
+			townSetHomeblock(player, town, nation);
 			
 		} else if (split[0].equalsIgnoreCase("spawn")) {
 
 			catchConsole(sender);
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SPAWN.getNode());
-			parseTownSetSpawn(player, town, admin);
+			townSetSpawn(player, town, admin);
 
 		} else if (split[0].equalsIgnoreCase("outpost")) {
 
@@ -2046,7 +2045,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			catchConsole(sender);
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_PRIMARYJAIL.getNode());
-			setPrimaryJail(player, town);
+			townSetPrimaryJail(player, town);
 			
 		} else if (split[0].equalsIgnoreCase("mapcolor")) {
 
@@ -2369,6 +2368,116 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
+	public static void townSetHomeblock(Player player, Town town, @Nullable Nation nation) throws TownyException {
+		Coord coord = Coord.parseCoord(player);
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+
+		if (world == null || townBlock == null || !townBlock.hasTown() || townBlock.getTownOrNull() != town)
+			throw new TownyException(Translatable.of("msg_area_not_own"));
+
+		if (TownySettings.getHomeBlockMovementCooldownHours() > 0 
+			&& town.getMovedHomeBlockAt() > 0
+			&& TimeTools.getHours(System.currentTimeMillis() - town.getMovedHomeBlockAt()) < TownySettings.getHomeBlockMovementCooldownHours()) {
+			long timeRemaining = ((town.getMovedHomeBlockAt() + TimeTools.getMillis(TownySettings.getHomeBlockMovementCooldownHours() + "h")) - System.currentTimeMillis());
+			throw new TownyException(Translatable.of("msg_err_you_have_moved_your_homeblock_too_recently_wait_x", TimeMgmt.getFormattedTimeValue(timeRemaining)));
+		}
+		
+		if (town.hasHomeBlock() && town.getHomeBlock().getWorldCoord().equals(townBlock.getWorldCoord()))
+			throw new TownyException(Translatable.of("msg_err_homeblock_already_set_here"));
+
+		if (world.hasTowns() &&
+			TownySettings.getMinDistanceFromTownHomeblocks() > 0 || 
+			TownySettings.getMaxDistanceBetweenHomeblocks() > 0 ||
+			TownySettings.getMinDistanceBetweenHomeblocks() > 0) {
+				
+			final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTowns(coord, town);
+			if (distanceToNextNearestHomeblock < TownySettings.getMinDistanceFromTownHomeblocks() ||
+				distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
+				throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
+
+			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0 &&
+				distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
+				throw new TownyException(Translatable.of("msg_too_far"));
+		}
+		
+		if (TownySettings.getHomeBlockMovementDistanceInTownBlocks() > 0) {
+			double distance = MathUtil.distance(town.getHomeBlock().getX(), townBlock.getX(), town.getHomeBlock().getZ(), townBlock.getZ());
+			if (distance > TownySettings.getHomeBlockMovementDistanceInTownBlocks())
+				throw new TownyException(Translatable.of("msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x", TownySettings.getHomeBlockMovementDistanceInTownBlocks(), Math.floor(distance)));
+		}
+
+		TownPreSetHomeBlockEvent preEvent = new TownPreSetHomeBlockEvent(town, townBlock, player);
+		Bukkit.getPluginManager().callEvent(preEvent);
+		if (preEvent.isCancelled()) 
+			throw new TownyException(preEvent.getCancelMessage());
+		
+		// Test whether towns will be removed from the nation
+		if (nation != null && TownySettings.getNationRequiresProximity() > 0 && town.isCapital()) {
+			// Determine if some of the nation's towns' homeblocks will be out of range.
+			List<Town> removedTowns = nation.gatherOutOfRangeTowns(nation.getTowns(), town);
+			
+			// Oh no, some the nation will lose at least one town, better make a confirmation.
+			if (!removedTowns.isEmpty()) {
+				final Town finalTown = town;
+				final TownBlock finalTB = townBlock;
+				final Nation finalNation = nation;
+				final Location playerLocation = player.getLocation();
+				Confirmation.runOnAccept(() -> {
+					// Set town homeblock and remove the out of range towns.
+					finalTown.setHomeBlock(finalTB);
+					finalTown.setSpawn(playerLocation);
+					town.setMovedHomeBlockAt(System.currentTimeMillis());
+					finalNation.removeOutOfRangeTowns();
+					TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_home", coord.toString()));
+				}).setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
+				  .sendTo(player);
+
+			// Phew, the nation won't lose any towns, let's do this.
+			} else {
+				town.setHomeBlock(townBlock);
+				town.setSpawn(player.getLocation());		
+				town.setMovedHomeBlockAt(System.currentTimeMillis());
+				TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_home", coord.toString()));
+			}
+		// No nation to check proximity for/proximity isn't tested anyways.
+		} else {
+			town.setHomeBlock(townBlock);
+			town.setSpawn(player.getLocation());
+			town.setMovedHomeBlockAt(System.currentTimeMillis());
+			TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_home", coord.toString()));
+		}
+	}
+
+	public static void townSetSpawn(Player player, Town town, boolean admin) throws TownyException {
+		// Towns can only set their spawn if they have a homeblock.
+		if (!town.hasHomeBlock())
+			throw new TownyException(Translatable.of("msg_err_homeblock_has_not_been_set"));
+
+		TownSetSpawnEvent event = new TownSetSpawnEvent(town, player, player.getLocation());
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled() && 
+			!admin && 
+			!event.getCancelMessage().isEmpty())
+				throw new TownyException(event.getCancelMessage());
+
+		Location newSpawn = admin ? player.getLocation() : event.getNewSpawn();
+
+		TownBlock tb = TownyAPI.getInstance().getTownBlock(newSpawn);
+
+		// The townblock needs to exist, belong to the town and also be inside of the homeblock.
+		if (tb == null || !tb.hasTown() || !tb.getTownOrNull().equals(town) || !town.getHomeBlock().getWorldCoord().equals(tb.getWorldCoord()))
+			throw new TownyException(Translatable.of("msg_err_spawn_not_within_homeblock"));
+
+		// Throw unset event, for SpawnPoint particles.
+		if (town.getSpawnOrNull() != null)
+			TownyUniverse.getInstance().removeSpawnPoint(town.getSpawnOrNull());
+
+		// Set the spawn point and send feedback message.
+		town.setSpawn(newSpawn);
+		TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_spawn"));
+	}
+
 	public static void townSetOutpost(CommandSender sender, Town town, Player player) throws TownyException {
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
 		if (townBlock == null || !townBlock.hasTown() || !townBlock.isOutpost())
@@ -2381,22 +2490,28 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_not_own_area"));
 	}
 
-	public static void townSetMapColor(CommandSender sender, String[] split, Town town) {
-		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(sender, "Eg: /town set mapcolor brown.");
-			return;
-		} else {
-			String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+	public static void townSetPrimaryJail(Player player, Town town) throws TownyException {
 
-			if (!TownySettings.getTownColorsMap().containsKey(line.toLowerCase())) {
-				String allowedColorsListAsString = TownySettings.getTownColorsMap().keySet().toString();
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_nation_map_color", allowedColorsListAsString));
-				return;
-			}
+		TownBlock tb = TownyAPI.getInstance().getTownBlock(player);
+		if (tb == null || !tb.isJail())
+			throw new TownyException(Translatable.of("msg_err_location_is_not_within_a_jail_plot"));
+		
+		Jail jail = tb.getJail();
+		town.setPrimaryJail(jail);
+		TownyMessaging.sendMsg(player, Translatable.of("msg_primary_jail_set_for_town"));
+	}
 
-			town.setMapColorHexCode(TownySettings.getTownColorsMap().get(line.toLowerCase()));
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_map_color_changed", line.toLowerCase()));
-		}
+	public static void townSetMapColor(CommandSender sender, String[] split, Town town) throws TownyException {
+		if (split.length < 2)
+			throw new TownyException("Eg: /town set mapcolor brown.");
+
+		String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+
+		if (!TownySettings.getTownColorsMap().containsKey(line.toLowerCase()))
+			throw new TownyException(Translatable.of("msg_err_invalid_nation_map_color", TownySettings.getTownColorsMap().keySet().toString()));
+
+		town.setMapColorHexCode(TownySettings.getTownColorsMap().get(line.toLowerCase()));
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_map_color_changed", line.toLowerCase()));
 	}
 
 	public static void townSetTaxPercent(CommandSender sender, String[] split, Town town) throws TownyException {
@@ -2411,110 +2526,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_tax_max_percent_amount", sender.getName(), TownyEconomyHandler.getFormattedBalance(town.getMaxPercentTaxAmount())));
 	}
 
-	private static void setPrimaryJail(Player player, Town town) {
-		
-		try {
-			TownBlock tb = TownyAPI.getInstance().getTownBlock(player);
-			if (tb == null || !tb.isJail())
-				throw new TownyException(Translatable.of("msg_err_location_is_not_within_a_jail_plot"));
-			
-			Jail jail = tb.getJail();
-			town.setPrimaryJail(jail);
-			TownyMessaging.sendMsg(player, Translatable.of("msg_primary_jail_set_for_town"));
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-		}
-		
-	}
-
-	private static void parseTownSetHomeblock(Player player, Town town, @Nullable Nation nation) {
-		Coord coord = Coord.parseCoord(player);
-		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
-
-		try {
-
-			if (world == null || townBlock == null || !townBlock.hasTown() || townBlock.getTownOrNull() != town)
-				throw new TownyException(Translatable.of("msg_area_not_own"));
-
-			if (TownySettings.getHomeBlockMovementCooldownHours() > 0 
-				&& town.getMovedHomeBlockAt() > 0
-				&& TimeTools.getHours(System.currentTimeMillis() - town.getMovedHomeBlockAt()) < TownySettings.getHomeBlockMovementCooldownHours()) {
-				long timeRemaining = ((town.getMovedHomeBlockAt() + TimeTools.getMillis(TownySettings.getHomeBlockMovementCooldownHours() + "h")) - System.currentTimeMillis());
-				throw new TownyException(Translatable.of("msg_err_you_have_moved_your_homeblock_too_recently_wait_x", TimeMgmt.getFormattedTimeValue(timeRemaining)));
-			}
-			
-			if (town.hasHomeBlock() && town.getHomeBlock().getWorldCoord().equals(townBlock.getWorldCoord()))
-				throw new TownyException(Translatable.of("msg_err_homeblock_already_set_here"));
-
-			if (world.hasTowns() &&
-				TownySettings.getMinDistanceFromTownHomeblocks() > 0 || 
-				TownySettings.getMaxDistanceBetweenHomeblocks() > 0 ||
-				TownySettings.getMinDistanceBetweenHomeblocks() > 0) {
-					
-				final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTowns(coord, town);
-				if (distanceToNextNearestHomeblock < TownySettings.getMinDistanceFromTownHomeblocks() ||
-					distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
-					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
-
-				if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0 &&
-					distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
-					throw new TownyException(Translatable.of("msg_too_far"));
-			}
-			
-			if (TownySettings.getHomeBlockMovementDistanceInTownBlocks() > 0) {
-				double distance = MathUtil.distance(town.getHomeBlock().getX(), townBlock.getX(), town.getHomeBlock().getZ(), townBlock.getZ());
-				if (distance > TownySettings.getHomeBlockMovementDistanceInTownBlocks())
-					throw new TownyException(Translatable.of("msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x", TownySettings.getHomeBlockMovementDistanceInTownBlocks(), Math.floor(distance)));
-			}
-
-			TownPreSetHomeBlockEvent preEvent = new TownPreSetHomeBlockEvent(town, townBlock, player);
-			Bukkit.getPluginManager().callEvent(preEvent);
-			if (preEvent.isCancelled()) 
-				throw new TownyException(preEvent.getCancelMessage());
-			
-			// Test whether towns will be removed from the nation
-			if (nation != null && TownySettings.getNationRequiresProximity() > 0 && town.isCapital()) {
-				// Determine if some of the nation's towns' homeblocks will be out of range.
-				List<Town> removedTowns = nation.gatherOutOfRangeTowns(nation.getTowns(), town);
-				
-				// Oh no, some the nation will lose at least one town, better make a confirmation.
-				if (!removedTowns.isEmpty()) {
-					final Town finalTown = town;
-					final TownBlock finalTB = townBlock;
-					final Nation finalNation = nation;
-					final Location playerLocation = player.getLocation();
-					Confirmation.runOnAccept(() -> {
-						// Set town homeblock and remove the out of range towns.
-						finalTown.setHomeBlock(finalTB);
-						finalTown.setSpawn(playerLocation);
-						town.setMovedHomeBlockAt(System.currentTimeMillis());
-						finalNation.removeOutOfRangeTowns();
-						TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_home", coord.toString()));
-					}).setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
-					  .sendTo(player);
-
-				// Phew, the nation won't lose any towns, let's do this.
-				} else {
-					town.setHomeBlock(townBlock);
-					town.setSpawn(player.getLocation());		
-					town.setMovedHomeBlockAt(System.currentTimeMillis());
-					TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_home", coord.toString()));
-				}
-			// No nation to check proximity for/proximity isn't tested anyways.
-			} else {
-				town.setHomeBlock(townBlock);
-				town.setSpawn(player.getLocation());
-				town.setMovedHomeBlockAt(System.currentTimeMillis());
-				TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_home", coord.toString()));
-			}
-
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-			return;
-		}
-	}
-	
 	private static void parseTownBaltop(Player player, Town town) {
 		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 			StringBuilder sb = new StringBuilder();
@@ -2528,42 +2539,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			ItemStack book = BookFactory.makeBook("Town Baltop", town.getName(), sb.toString());
 			Bukkit.getScheduler().runTask(plugin, () -> player.openBook(book));
 		});
-	}
-	
-	private static void parseTownSetSpawn(Player player, Town town, boolean admin) {
-		try {
-			// Towns can only set their spawn if they have a homeblock.
-			if (!town.hasHomeBlock())
-				throw new TownyException(Translatable.of("msg_err_homeblock_has_not_been_set"));
-
-			TownSetSpawnEvent event = new TownSetSpawnEvent(town, player, player.getLocation());
-			Bukkit.getPluginManager().callEvent(event);
-			if (event.isCancelled() && !admin) {
-				if (!event.getCancelMessage().isEmpty())
-					TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
-
-				return;
-			}
-			
-			Location newSpawn = admin ? player.getLocation() : event.getNewSpawn();
-
-			TownBlock tb = TownyAPI.getInstance().getTownBlock(newSpawn);
-			
-			// The townblock needs to exist, belong to the town and also be inside of the homeblock.
-			if (tb == null || !tb.hasTown() || !tb.getTownOrNull().equals(town) || !town.getHomeBlock().getWorldCoord().equals(tb.getWorldCoord()))
-				throw new TownyException(Translatable.of("msg_err_spawn_not_within_homeblock"));
-
-			// Throw unset event, for SpawnPoint particles.
-			if (town.getSpawnOrNull() != null)
-				TownyUniverse.getInstance().removeSpawnPoint(town.getSpawnOrNull());
-			
-			// Set the spawn point and send feedback message.
-			town.setSpawn(newSpawn);
-			TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_spawn"));
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-			return;
-		}
 	}
 
 	public void townBuy(Player player, String[] split) {
