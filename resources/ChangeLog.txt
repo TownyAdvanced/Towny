@@ -7674,4 +7674,8 @@ v0.92.0.11:
       - shop: 2
       - arena: 2
   - Automatic Config Edit: your config's town_level sections will have an empty townBlockTypeLimits: added.
-   
+0.98.3.5:
+  - Add Translator#component, courtesy of Warriorrrr with PR #6088.
+  - Add component support for status screen events, courtesy of Warriorrrr with PR #6091.
+  - Allow removing metadata by key, courtesy of Warriorrrr with PR #6089.
+  - Simplify permission-checking code with NoPermissionException.
