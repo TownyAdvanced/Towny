@@ -14,8 +14,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class WorldCoord extends Coord {
@@ -157,7 +162,7 @@ public class WorldCoord extends Coord {
 	/**
 	 * Loads the chunks represented by a WorldCoord. Creates a PluginChunkTicket so
 	 * that the WorldCoord will remain loaded, even when no players are present.
-	 * 
+	 * <p>
 	 * Uses PaperLib's getChunkAtAsync when Paper is present.
 	 */
 	public void loadChunks() {
@@ -169,25 +174,13 @@ public class WorldCoord extends Coord {
 	}
 
 	private void loadChunks(Towny plugin) {
-		if (getCellSize() > 16) {
-			// Dealing with a townblocksize greater than 16, we will have multiple chunks per WorldCoord.
-			int side = Math.round(getCellSize() / 16);
-			for (int x = 0; x <= side; x++) {
-				for (int z = 0; z <= side; z++) {
-					CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getSubCorner(x, z));
-					futureChunk.thenAccept(chunk-> chunk.addPluginChunkTicket(plugin));
-				}
-			}
-		} else {
-			CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getCorner());
-			futureChunk.thenAccept(chunk-> chunk.addPluginChunkTicket(plugin));
-		}
+		getChunks().forEach(future -> future.thenAccept(chunk -> chunk.addPluginChunkTicket(plugin)));
 	}
 	
 	/**
 	 * Unloads the chunks presented by a WorldCoord. Removes a PluginChunkTicket so
 	 * that the WorldCoord will no longer remain loaded.
-	 * 
+	 * <p> 
 	 * Uses PaperLib's getChunkAtAsync when Paper is present.
 	 */
 	public void unloadChunks() {
@@ -199,18 +192,31 @@ public class WorldCoord extends Coord {
 	}
 
 	private void unloadChunks(Towny plugin) {
+		getChunks().forEach(future -> future.thenAccept(chunk -> chunk.addPluginChunkTicket(plugin)));
+	}
+
+	/**
+	 * Loads & returns the chunk(s) inside this WorldCoord.
+	 * <p>
+	 * Chunks are loaded async on servers using paper.
+	 * @return An unmodifiable collection of chunk futures.
+	 */
+	@Unmodifiable
+	public Collection<CompletableFuture<Chunk>> getChunks() {
 		if (getCellSize() > 16) {
 			// Dealing with a townblocksize greater than 16, we will have multiple chunks per WorldCoord.
-			int side = Math.round(getCellSize() / 16);
+			final Set<CompletableFuture<Chunk>> chunkFutures = new HashSet<>();
+			
+			int side = Math.round(getCellSize() / 16f);
 			for (int x = 0; x <= side; x++) {
 				for (int z = 0; z <= side; z++) {
-					CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getSubCorner(x, z));
-					futureChunk.thenAccept(chunk-> chunk.removePluginChunkTicket(plugin));
+					chunkFutures.add(PaperLib.getChunkAtAsync(getSubCorner(x, z)));
 				}
 			}
+			
+			return Collections.unmodifiableSet(chunkFutures);
 		} else {
-			CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getCorner());
-			futureChunk.thenAccept(chunk-> chunk.removePluginChunkTicket(plugin));
+			return Collections.singleton(PaperLib.getChunkAtAsync(getCorner()));
 		}
 	}
 
