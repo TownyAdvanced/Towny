@@ -47,6 +47,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable, ForwardingAudience.Single {
 	private List<Resident> friends = new ArrayList<>();
@@ -702,16 +703,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		if (account == null) {
 
 			String accountName = StringMgmt.trimMaxLength(getName(), 32);
-			World world;
 
-			Player player = getPlayer();
-			if (player != null) {
-				world = player.getWorld();
-			} else {
-				world = BukkitTools.getWorlds().get(0);
-			}
+			Supplier<World> worldSupplier = () -> {
+				Player player = getPlayer();
+				return player != null ? player.getWorld() : Bukkit.getWorlds().get(0);
+			};			
 
-			account = new EconomyAccount(accountName, this.uuid, world);
+			account = new EconomyAccount(accountName, this.uuid, worldSupplier);
 		}
 		
 		return account;

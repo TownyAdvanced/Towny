@@ -5,10 +5,13 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.economy.adapter.EssentialsOfflinePlayerAdapter;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * A variant of an account that implements
@@ -20,8 +23,8 @@ public class BankAccount extends Account {
 	private double balanceCap;
 	private double debtCap;
 
-	public BankAccount(String name, UUID uuid, World world, double balanceCap) {
-		super(name, uuid, world);
+	public BankAccount(String name, UUID uuid, Supplier<World> worldSupplier, double balanceCap) {
+		super(name, uuid, worldSupplier);
 		this.balanceCap = balanceCap;
 	}
 
@@ -215,5 +218,14 @@ public class BankAccount extends Account {
 	private void setTownDebt(double amount) {
 		getTown().setDebtBalance(amount);
 		getTown().save();
+	}
+	
+	@Override
+	public OfflinePlayer asOfflinePlayer() {
+		if (this.offlinePlayer != null)
+			return this.offlinePlayer;
+
+		this.offlinePlayer = new EssentialsOfflinePlayerAdapter(this.getName(), this.getUUID());
+		return this.offlinePlayer;
 	}
 }

@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
 import org.bukkit.World;
 
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * Economy object which provides an interface with the Economy Handler.
@@ -17,8 +18,8 @@ import java.util.UUID;
 public class EconomyAccount extends Account {
 	public static final TownyServerAccount SERVER_ACCOUNT = new TownyServerAccount();
 	
-	protected EconomyAccount(String name, UUID uuid, World world) {
-		super(name, uuid, world);
+	public EconomyAccount(String name, UUID uuid, Supplier<World> worldSupplier) {
+		super(name, uuid, worldSupplier);
 	}
 
 	@Override

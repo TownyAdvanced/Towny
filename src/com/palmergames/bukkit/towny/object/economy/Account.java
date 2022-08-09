@@ -8,16 +8,16 @@ import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.Identifiable;
 import com.palmergames.bukkit.towny.object.Nameable;
+import com.palmergames.bukkit.towny.object.economy.adapter.OfflinePlayerAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * Used to facilitate transactions regarding money, 
@@ -30,18 +30,20 @@ import java.util.UUID;
 public abstract class Account implements Nameable, Identifiable {
 	private static final long CACHE_TIMEOUT = TownySettings.getCachedBankTimeout();
 	private static final AccountObserver GLOBAL_OBSERVER = new GlobalAccountObserver();
+	public static final Supplier<World> DEFAULT_SUPPLIER = () -> Bukkit.getWorlds().get(0);
 	private final List<AccountObserver> observers = new ArrayList<>();
 	private AccountAuditor auditor;
 	protected CachedBalance cachedBalance;
-	private OfflinePlayer offlinePlayer = null;
+	public OfflinePlayer offlinePlayer = null;
 	
 	private String name;
 	private UUID uuid;
-	private @Nullable World world;
+	private Supplier<World> worldSupplier;
 	
 	public Account(String name, UUID uuid) {
 		this.name = name;
 		this.uuid = uuid;
+		this.worldSupplier = DEFAULT_SUPPLIER;
 
 		// ALL account transactions will route auditing data through this
 		// central auditor.
@@ -49,9 +51,9 @@ public abstract class Account implements Nameable, Identifiable {
 		this.cachedBalance = new CachedBalance(getHoldingBalance(false));
 	}
 	
-	public Account(String name, UUID uuid, @Nullable World world) {
+	public Account(String name, UUID uuid, Supplier<World> worldSupplier) {
 		this(name, uuid);
-		this.world = world;
+		this.worldSupplier = worldSupplier;
 	}
 	
 	// Template methods
@@ -145,7 +147,7 @@ public abstract class Account implements Nameable, Identifiable {
 	 * @return Bukkit world for the object
 	 */
 	public World getWorld() {
-		return world == null ? Bukkit.getWorlds().get(0) : world;
+		return worldSupplier.get();
 	}
 
 	/**
@@ -342,25 +344,7 @@ public abstract class Account implements Nameable, Identifiable {
 		if (this.offlinePlayer != null)
 			return this.offlinePlayer;
 
-		Player player = Bukkit.getPlayer(this.uuid);
-		if (player != null)
-			return player;
-
-		try {
-			Class<?> gameProfileClass = Class.forName("com.mojang.authlib.GameProfile");
-			Object gameProfile = gameProfileClass.getDeclaredConstructor(UUID.class, String.class).newInstance(uuid, name);
-
-			this.offlinePlayer = (OfflinePlayer) Class.forName("org.bukkit.craftbukkit." + getPackageVersion() + ".CraftServer").getDeclaredMethod("getOfflinePlayer", gameProfileClass).invoke(Bukkit.getServer(), gameProfile);
-			return this.offlinePlayer;
-		} catch (Exception e) {
-			// TODO remove printStackTrace
-			e.printStackTrace();
-			this.offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-			return this.offlinePlayer;
-		}
-	}
-	
-	private static String getPackageVersion() {
-		return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+		this.offlinePlayer = new OfflinePlayerAdapter(this.name, this.uuid);
+		return this.offlinePlayer;
 	}
 }
