@@ -1275,72 +1275,72 @@ msg_wilderness_use_set_to: '&bВикористання дикої природи
 msg_err_invalid_response: 'Неправильна відповідь! Уведіть q, щоб вийти або повернутися до попереднього запитання.'
 msg_setup_full_guide_link: '&bНатисніть сюди для переходу до інструкції з встановлення.'
 msg_setup_wildernessuse: 'Чи хотіли б ви увімкнути use у диких землях? Ця дія дозволить гравцям ламати/будувати блоки на диких землях.'
-msg_setup_revertunclaim: 'Would you like to use revert on unclaim? This will make townblocks slowly regenerate when they are unclaimed.'
-msg_setup_town_block_ratio: 'What would you like to set your town block ratio at? The default is 8 townblocks per resident. Higher amounts will allow towns to claim more for each resident they have. Setting this to 0 will make it use values from the town_levels.'
-msg_setup_town_cost: 'How much should the cost to create a new town be? The default is 250.'
-msg_setup_nation_cost: 'How much should the cost to create a new nation be? The default is 1000.'
-msg_setup_townblock_cost: 'How much should it cost to claim a townblock? The default is 25. A townblock is the same size as a chunk (default settings)'
-msg_setup_success: 'Successfully changed config values to your new values.'
+msg_setup_revertunclaim: 'Чи хотіли б ви увімкнути відновлення ділянок при розприваті? Це призведе до того, що ділянки відновлюватимуться довше, коли вони розпривачені.'
+msg_setup_town_block_ratio: 'Яким повинно бути додавання ділянок? За замовчуванням це 8 блоків на жителя. Вищі значення даватимуть містам більше ділянок для кожного містянина. При значенні 0 будуть використовуватися значення з town_levels.'
+msg_setup_town_cost: 'Якою повинна бути вартість для створення міста? За замовчуванням 250.'
+msg_setup_nation_cost: 'Скільки повинно коштувати створення нації? За замовчуванням 1000.'
+msg_setup_townblock_cost: 'Скільки повинен коштувати приват ділянки? За замовчуванням 25. Стандартні розміри ділянки та чанку однакові'
+msg_setup_success: 'Дані конфігурації успішно змінено на нові.'
 #Added in 0.125
 #Player has recently died and respawned and is invulnerable.
-msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
+msg_err_player_cannot_be_harmed: '%s заспаввнився недавно і має тимчасовий захист.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
+msg_you_have_lost_your_respawn_protection: 'Ви втратили ваш респавн-захист.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
-msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
+msg_err_cannot_pickup_respawn_protection: 'Ви не можете підіймати речі під час респавн-захисту.'
 #Added in 0.126
 #Used in the nation screen:
-status_capital: 'Capital:'
+status_capital: 'Столиця:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
-status_joined_town: 'Joined town:'
+status_joined_town: 'Доєднався до міста:'
 #Used in the town screen's nation hover, to denote when a town joined a nation.
-status_joined_nation: 'Joined nation:'
+status_joined_nation: 'Доєднався до нації:'
 #Shown in status screen elements where a value is not known.
-status_unknown: 'unknown'
+status_unknown: 'невідомо'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
-msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
+msg_nationzone_override_set_to: '%s установив зону нації на %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
-msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+msg_nationzone_override_removed: 'Національну зону %s вилучено.'
 #Added in 0.127
 #Used in status screen:
-status_nation_zone_size: 'Nation Zone Size:'
+status_nation_zone_size: 'Розмір національної зони:'
 #Shown when a player adds people to their friends list.
-msg_res_friend_added_to_list: 'Added %s to your friend list.'
+msg_res_friend_added_to_list: '%s доданий до списку друзів.'
 #Shown when a player removes people from their friends list.
-msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
+msg_res_friend_removed_from_list: '%s вилучений зі списку друзів.'
 #Generic resident freed from jail message.
-msg_resident_unjailed: '%s has been unjailed.'
+msg_resident_unjailed: '%s тепер вільний.'
 #Shown when an admin uses /ta toggle devmode.
-msg_admin_toggle_devmode: 'Dev Mode: %s'
+msg_admin_toggle_devmode: 'Режим розробника: %s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: 'Debug Mode: %s'
+msg_admin_toggle_debugmode: 'Дебаг: %s'
 #Shown when an admin uses /ta toggle townwithdraw
-msg_admin_toggle_townwithdraw: 'Town Withdrawls: %s'
+msg_admin_toggle_townwithdraw: 'Зняття з балансу міста: %s'
 #Shown when an admin uses /ta toggle nationwithdraw
-msg_admin_toggle_nationwithdraw: 'Nation Withdrawls: %s'
+msg_admin_toggle_nationwithdraw: 'Зняття з балансу нації: %s'
 #Shown when claiming a town block for the town.
 msg_process_town_claim: 'Ділянка анексується...'
 #Shown when unclaiming a town block for the town.
 msg_process_town_unclaim: 'Відмовляємося від ділянки...'
 #Shown when there is nothing to unclaim.
-msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
+msg_err_nothing_to_unclaim: 'Нема чого розпривачувати!'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: 'Permission True.'
+msg_perm_true: 'Правильно.'
 #Given as feedback when /ta checkperm is used.
-msg_err_perm_false: 'Permission False.'
+msg_err_perm_false: 'Неправильно.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+status_towny_map_town_line: '&2Місто: &a%s &7| &2Власник: &a%s'
 #Shown on /towny version
-msg_towny_version: '&2Towny Version: &a%s'
+msg_towny_version: '&2Версія Towny: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
+msg_admin_blocked_login: '&2Гравець з IP-адресою &c%s &2намагався увійти під ім''ям %s, яке могло заподіяти шкоду економіці вашого сервера, але вхід було відхилено Towny. Задумайтесь про бан цієї IP-адреси!'
 #Shown during resident purge
-msg_scanning_for_old_residents: 'Scanning for old residents...'
+msg_scanning_for_old_residents: 'Пошук старих гравців...'
 #Shown during resident purge
-msg_deleting_resident: 'Deleting resident: %s.'
+msg_deleting_resident: 'Вилучення гравця: %s.'
 #Shown during resident purge
-msg_purge_complete: 'Resident purge complete: %s deleted.'
+msg_purge_complete: 'Очистку гравців завершено: %s вилучено.'
 #Message to the Town, shown when a town is given bonus blocks.
 msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
 #Message shown when a town cannot purchase any more bonus blocks.
