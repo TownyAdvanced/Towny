@@ -281,7 +281,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			try {
 				
 				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
-				if (townBlock == null && !split[0].equalsIgnoreCase("perm") && !split[0].equalsIgnoreCase("claim"))
+				if (townBlock == null && !split[0].equalsIgnoreCase("perm") && !split[0].equalsIgnoreCase("claim") && !"info".equalsIgnoreCase(split[0]))
 					throw new TownyException(Translatable.of("msg_not_claimed_1"));
 				
 				if (!TownyAPI.getInstance().isWilderness(player.getLocation()) && townBlock.getTownOrNull().isRuined())
@@ -2215,12 +2215,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	public void sendPlotInfo(Player player, String[] args) {
 		WorldCoord coord = WorldCoord.parseWorldCoord(player);
-		String world = player.getWorld().getName();
 
 		try {
-			coord = new WorldCoord(world, Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-		} catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {
-		}
+			coord = new WorldCoord(player.getWorld().getName(), Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+		} catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {}
 
 		if (TownyAPI.getInstance().isWilderness(coord))
 			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownyWorldOrNull(), player));
