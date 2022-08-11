@@ -7,9 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.palmergames.bukkit.util.Colors;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import org.bukkit.command.CommandSender;
 
 import net.kyori.adventure.text.Component;
@@ -35,7 +33,7 @@ public class StatusScreen {
 	}
 
 	public void addComponentOf(String name, String text) {
-		components.put(name, LegacyComponentSerializer.legacySection().deserialize(Colors.translateColorCodes(text)));
+		components.put(name, TownyComponents.legacy(text));
 	}
 
 	public void addComponentOf(String name, Component component) {
@@ -43,15 +41,15 @@ public class StatusScreen {
 	}
 	
 	public void addComponentOf(String name, String text, ClickEvent click) {
-		components.put(name, LegacyComponentSerializer.legacySection().deserialize(Colors.translateColorCodes(text)).clickEvent(click));
+		components.put(name, TownyComponents.legacy(text).clickEvent(click));
 	}
 	
 	public void addComponentOf(String name, String text, HoverEvent<?> hover) {
-		components.put(name, LegacyComponentSerializer.legacySection().deserialize(Colors.translateColorCodes(text)).hoverEvent(hover));
+		components.put(name, TownyComponents.legacy(text).hoverEvent(hover));
 	}
 	
 	public void addComponentOf(String name, String text, HoverEvent<?> hover, ClickEvent click) {
-		components.put(name, LegacyComponentSerializer.legacySection().deserialize(Colors.translateColorCodes(text)).hoverEvent(hover).clickEvent(click));
+		components.put(name, TownyComponents.legacy(text).hoverEvent(hover).clickEvent(click));
 	}
 
 	public void removeStatusComponent(String name) {
@@ -117,12 +115,8 @@ public class StatusScreen {
 
 		return screen;
 	}
-	
-	private String getContent(Component comp) {
-		return PlainTextComponentSerializer.plainText().serialize(comp);
-	}
 
 	private boolean lineWouldBeTooLong(Component line, Component comp) {
-		return getContent(line).length() + getContent(comp).length() > GUARANTEED_NO_WRAP_CHAT_WIDTH;
+		return TownyComponents.plain(line).length() + TownyComponents.plain(comp).length() > GUARANTEED_NO_WRAP_CHAT_WIDTH;
 	}
 }
