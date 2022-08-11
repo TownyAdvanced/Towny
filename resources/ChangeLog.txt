@@ -7680,3 +7680,4 @@ v0.92.0.11:
   - Allow removing metadata by key, courtesy of Warriorrrr with PR #6089.
   - Simplify permission-checking code with NoPermissionException.
   - Add WorldCoord#getChunks, courtesy of Warriorrrr with PR #6098.
+  - Fix max_distance_between_homeblocks config setting being triggered when there are no towns yet.

@@ -2860,6 +2860,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
 
 				if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0 &&
+					TownyUniverse.getInstance().getTowns().size() > 0 &&
 					distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
 					throw new TownyException(Translatable.of("msg_too_far"));
 			}
