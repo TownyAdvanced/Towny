@@ -7,7 +7,7 @@ import com.palmergames.bukkit.towny.object.map.TownyMapData;
 
 import java.util.Map;
 
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -153,7 +153,7 @@ public class TownyAsciiMap {
 							? townblock.getPlotObjectGroup().getPrice()
 							: townblock.getPlotPrice();
 						if (cost > -1)
-							forSaleComponent = LegacyComponentSerializer.legacySection().deserialize(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(cost)).replaceAll("[\\[\\]]", "") + " " + translator.of("msg_click_purchase")).color(NamedTextColor.YELLOW).append(Component.newline());
+							forSaleComponent = TownyComponents.legacy(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(cost)).replaceAll("[\\[\\]]", "") + " " + translator.of("msg_click_purchase")).color(NamedTextColor.YELLOW).append(Component.newline());
 					}
 					
 					if (townblock.getClaimedAt() > 0)
