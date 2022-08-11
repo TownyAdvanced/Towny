@@ -15,11 +15,14 @@ import org.bukkit.command.CommandSender;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import org.bukkit.util.ChatPaginator;
 import org.jetbrains.annotations.Nullable;
 
 public class StatusScreen {
 
+	/**
+	 * Taken from {@link org.bukkit.util.ChatPaginator#GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH}
+	 */
+	private static final int GUARANTEED_NO_WRAP_CHAT_WIDTH = 55;
 	private final Map<String, Component> components = new LinkedHashMap<>();
 	private final CommandSender sender;
 	
@@ -40,15 +43,15 @@ public class StatusScreen {
 	}
 	
 	public void addComponentOf(String name, String text, ClickEvent click) {
-		components.put(name, Component.text(text).clickEvent(click));
+		components.put(name, LegacyComponentSerializer.legacySection().deserialize(Colors.translateColorCodes(text)).clickEvent(click));
 	}
 	
 	public void addComponentOf(String name, String text, HoverEvent<?> hover) {
-		components.put(name, Component.text(text).hoverEvent(hover));
+		components.put(name, LegacyComponentSerializer.legacySection().deserialize(Colors.translateColorCodes(text)).hoverEvent(hover));
 	}
 	
 	public void addComponentOf(String name, String text, HoverEvent<?> hover, ClickEvent click) {
-		components.put(name, Component.text(text).hoverEvent(hover).clickEvent(click));
+		components.put(name, LegacyComponentSerializer.legacySection().deserialize(Colors.translateColorCodes(text)).hoverEvent(hover).clickEvent(click));
 	}
 
 	public void removeStatusComponent(String name) {
@@ -120,6 +123,6 @@ public class StatusScreen {
 	}
 
 	private boolean lineWouldBeTooLong(Component line, Component comp) {
-		return getContent(line).length() + getContent(comp).length() > ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH;
+		return getContent(line).length() + getContent(comp).length() > GUARANTEED_NO_WRAP_CHAT_WIDTH;
 	}
 }
