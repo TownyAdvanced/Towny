@@ -1553,19 +1553,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					toggleTest(town, StringMgmt.join(split, " "));
 				
 				// Fire cancellable event directly before setting the toggle.
-				TownToggleExplosionEvent preEvent = new TownToggleExplosionEvent(sender, town, admin, choice.orElse(!town.isBANG()));
+				TownToggleExplosionEvent preEvent = new TownToggleExplosionEvent(sender, town, admin, choice.orElse(!town.isExplosion()));
 				Bukkit.getPluginManager().callEvent(preEvent);
 				if (preEvent.isCancelled())
 					throw new TownyException(preEvent.getCancellationMsg());
 
 				// Set the toggle setting.
-				town.setBANG(preEvent.getFutureState());
+				town.setExplosion(preEvent.getFutureState());
 				permChanged = true;
 
 				// Send message feedback.
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_expl", town.getName(), town.isBANG() ? Translatable.of("enabled") : Translatable.of("disabled")));
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_expl", town.getName(), town.isExplosion() ? Translatable.of("enabled") : Translatable.of("disabled")));
 				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_expl", town.getName(), town.isBANG() ? Translatable.of("enabled") : Translatable.of("disabled")));
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_expl", town.getName(), town.isExplosion() ? Translatable.of("enabled") : Translatable.of("disabled")));
 
 			} else if (split[0].equalsIgnoreCase("fire")) {
 

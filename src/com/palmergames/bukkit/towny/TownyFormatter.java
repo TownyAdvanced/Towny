@@ -331,7 +331,7 @@ public class TownyFormatter {
 
 		// Permissions: B=rnao D=---- S=rna- I=rnao
 		screen.addComponentOf("perm", colourKeyValue(translator.of("status_perm"), town.getPermissions().getColourString().replace("f", "r")));
-		screen.addComponentOf("explosion", colourKeyValue(translator.of("explosions"), (town.isBANG() || world.isForceExpl()) ? translator.of("status_on"): translator.of("status_off")));
+		screen.addComponentOf("explosion", colourKeyValue(translator.of("explosions"), (town.isExplosion() || world.isForceExpl()) ? translator.of("status_on"): translator.of("status_off")));
 		screen.addComponentOf("firespread", colourKeyValue(translator.of("firespread"), (town.isFire() || world.isForceFire()) ? translator.of("status_on"): translator.of("status_off"))); 
 		screen.addComponentOf("mobspawns", colourKeyValue(translator.of("mobspawns"), (town.hasMobs() || world.isForceTownMobs()) ? translator.of("status_on"): translator.of("status_off")));
 
