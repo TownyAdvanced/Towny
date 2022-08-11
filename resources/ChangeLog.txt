@@ -7679,3 +7679,4 @@ v0.92.0.11:
   - Add component support for status screen events, courtesy of Warriorrrr with PR #6091.
   - Allow removing metadata by key, courtesy of Warriorrrr with PR #6089.
   - Simplify permission-checking code with NoPermissionException.
+  - Add WorldCoord#getChunks, courtesy of Warriorrrr with PR #6098.
