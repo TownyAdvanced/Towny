@@ -449,13 +449,21 @@ public class Town extends Government implements TownBlockOwner {
 		return this.adminEnabledPVP;
 	}
 
+	@Deprecated
 	public void setBANG(boolean isBANG) {
-
-		this.permissions.explosion = isBANG;
+		setExplosion(isBANG);
 	}
 
+	@Deprecated
 	public boolean isBANG() {
-
+		return isExplosion();
+	}
+	
+	public void setExplosion(boolean isExplosion) {
+		this.permissions.explosion = isExplosion;
+	}
+	
+	public boolean isExplosion() {
 		return this.permissions.explosion;
 	}
 

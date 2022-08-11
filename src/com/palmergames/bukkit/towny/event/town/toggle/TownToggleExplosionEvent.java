@@ -6,7 +6,7 @@ import com.palmergames.bukkit.towny.object.Town;
 public class TownToggleExplosionEvent extends TownToggleStateEvent {
 	
 	public TownToggleExplosionEvent(CommandSender sender, Town town, boolean admin, boolean newState) {
-		super(sender, town, admin, town.isBANG(), newState);
+		super(sender, town, admin, town.isExplosion(), newState);
 	}
 
 }
