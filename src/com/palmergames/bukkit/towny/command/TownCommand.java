@@ -692,7 +692,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				/*
 				 * town spawn handles it's own perms.
 				 */
-				boolean ignoreWarning = split.length > 2 && split[2].equals("-ignore") ? true : false;
+				boolean ignoreWarning = split.length > 2 && split[2].equals("-ignore");
 
 				townSpawn(player, StringMgmt.remFirstArg(split), false, ignoreWarning);
 
@@ -750,7 +750,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					/*
 					 * outposts check its own perms. 
 					 */
-					townOutpost(player, split);
+					townOutpost(player, newSplit);
 
 				} else if (split[0].equalsIgnoreCase("delete")) {
 
@@ -2541,52 +2541,33 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		});
 	}
 
-	public void townBuy(Player player, String[] split) {
+	public void townBuy(Player player, String[] split) throws TownyException {
 		
-		if (!TownyEconomyHandler.isActive()) {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_no_economy"));
-			return;
-		}
-		
-		Resident resident;
-		Town town;
-		try {
-			resident = getResidentOrThrow(player.getUniqueId());
-			town = resident.getTown();
+		if (!TownyEconomyHandler.isActive())
+			throw new TownyException(Translatable.of("msg_err_no_economy"));
 
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage(player));
-			return;
-		}
-		
-		if (!TownySettings.isSellingBonusBlocks(town) && !TownySettings.isBonusBlocksPerTownLevel()) {
-			TownyMessaging.sendErrorMsg(player, "Config.yml has bonus blocks diabled at max_purchased_blocks: '0' ");
-			return;
-		} else if (TownySettings.isBonusBlocksPerTownLevel() && TownySettings.getMaxBonusBlocks(town) == 0) {
-			TownyMessaging.sendErrorMsg(player, "Config.yml has bonus blocks disabled at town_level section: townBlockBonusBuyAmount: 0");
-			return;
-		}
-			
-		
-		if (split.length == 0) {
+		Town town = getTownFromPlayerOrThrow(player);
+
+		if (!TownySettings.isSellingBonusBlocks(town) && !TownySettings.isBonusBlocksPerTownLevel())
+			throw new TownyException("Config.yml has bonus blocks diabled at max_purchased_blocks: '0' ");
+		else if (TownySettings.isBonusBlocksPerTownLevel() && TownySettings.getMaxBonusBlocks(town) == 0)
+			throw new TownyException("Config.yml has bonus blocks disabled at town_level section: townBlockBonusBuyAmount: 0");
+
+		if (split.length == 0 || !split[0].equalsIgnoreCase("bonus")) {
 			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/town buy"));
 			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
 			TownyMessaging.sendMessage(player, String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchasedBlocks(town)));
 			if (TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0)
 				TownyMessaging.sendMessage(player, Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
 			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
-		} else {
-			try {
-				if (split[0].equalsIgnoreCase("bonus")) {
-					if (split.length == 2)
-						townBuyBonusTownBlocks(town, Integer.parseInt(split[1].trim()), player);
-					else
-						throw new TownyException(Translatable.of("msg_must_specify_amnt", "/town buy bonus"));
-				}
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage(player));
-			}
+			return;
 		}
+		
+		// They have used `/t buy bonus`, check that they have specified an amount to purchase.
+		if (split.length == 2)
+			townBuyBonusTownBlocks(town, MathUtil.getIntOrThrow(split[1].trim()), player);
+		else
+			throw new TownyException(Translatable.of("msg_must_specify_amnt", "/town buy bonus"));
 	}
 
 	/**
@@ -2864,49 +2845,38 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public void townLeave(Player player) {
+	public void townLeave(Player player) throws TownyException {
 
-		try {
-			Resident resident = getResidentOrThrow(player.getUniqueId());
-			
-			if (!resident.hasTown())
-				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
-			
-			Town town = resident.getTown();
-			
-			if (resident.isMayor())
-				throw new TownyException(Translatable.of("msg_mayor_abandon"));
-			
-			if (resident.isJailed() && TownySettings.JailDeniesTownLeave() && resident.getJailTown().getName().equals(town.getName()))
-				throw new TownyException(Translatable.of("msg_cannot_abandon_town_while_jailed"));
-			
-			TownLeaveEvent event = new TownLeaveEvent(resident, town);
-			Bukkit.getPluginManager().callEvent(event);
-			if (event.isCancelled()) 
-				throw new TownyException(event.getCancelMessage());
+		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Town town = getTownFromResidentOrThrow(resident);
 
-			Confirmation.runOnAccept(() -> {
-				if (resident.isJailed() && resident.getJailTown().getUUID().equals(town.getUUID()))
-					JailUtil.unJailResident(resident, UnJailReason.LEFT_TOWN);
+		if (resident.isMayor())
+			throw new TownyException(Translatable.of("msg_mayor_abandon"));
 
-				if (town.hasResident(resident))
-					resident.removeTown();
+		if (resident.isJailed() && TownySettings.JailDeniesTownLeave() && resident.getJailTown().getName().equals(town.getName()))
+			throw new TownyException(Translatable.of("msg_cannot_abandon_town_while_jailed"));
 
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_left_town", resident.getName()));
-				TownyMessaging.sendMsg(player, Translatable.of("msg_left_town", resident.getName()));
+		TownLeaveEvent event = new TownLeaveEvent(resident, town);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled()) 
+			throw new TownyException(event.getCancelMessage());
 
-				try {
-					checkTownResidents(town, resident);
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
-			}).sendTo(player);
+		Confirmation.runOnAccept(() -> {
+			if (resident.isJailed() && resident.getJailTown().getUUID().equals(town.getUUID()))
+				JailUtil.unJailResident(resident, UnJailReason.LEFT_TOWN);
 
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage(player));
-			return;
-		}
+			if (town.hasResident(resident))
+				resident.removeTown();
 
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_left_town", resident.getName()));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_left_town", resident.getName()));
+
+			try {
+				checkTownResidents(town, resident);
+			} catch (NotRegisteredException e) {
+				e.printStackTrace();
+			}
+		}).sendTo(player);
 	}
 
 	/**
@@ -2943,50 +2913,32 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	public void townDelete(Player player, String[] split) {
+	public void townDelete(Player player, String[] split) throws TownyException {
 
-		final Town town;
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		final Town town = split.length == 0
+				? getTownFromPlayerOrThrow(player)
+				: getTownOrThrow(split[0]);
 
+		// No argument, a player is deleting their own town.
 		if (split.length == 0) {
-			try {
-				Resident resident = getResidentOrThrow(player.getUniqueId());
-
-				if (TownySettings.getTownRuinsEnabled()) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted", TownySettings.getTownRuinsMaxDurationHours()));
-					if (TownySettings.getTownRuinsReclaimEnabled())
-						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted2", TownySettings.getTownRuinsMinDurationHours()));
-				}
-				town = resident.getTown();
-				Confirmation.runOnAccept(() -> {
-					TownyUniverse.getInstance().getDataSource().removeTown(town);
-				})
-					.sendTo(player);
-				
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage(player));
+			if (TownySettings.getTownRuinsEnabled()) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted", TownySettings.getTownRuinsMaxDurationHours()));
+				if (TownySettings.getTownRuinsReclaimEnabled())
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted2", TownySettings.getTownRuinsMinDurationHours()));
 			}
-		} else {
-			if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE.getNode())) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_admin_only_delete_town"));
-				return;
-			}
-			
-			town = townyUniverse.getTown(split[0]);
-			
-			if (town == null) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", split[0]));
-				return;
-			}
-
-			Confirmation.runOnAccept(() -> {
-				TownyMessaging.sendMsg(player, Translatable.of("town_deleted_by_admin", town.getName()));
-				TownyUniverse.getInstance().getDataSource().removeTown(town);
-			})
-				.sendTo(player);
-			
+			Confirmation.runOnAccept(() -> townyUniverse.getDataSource().removeTown(town)).sendTo(player);
+			return;
 		}
 
+		// An argument has been passed in the command, an admin is deleting a town.
+		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE.getNode()))
+			throw new TownyException(Translatable.of("msg_err_admin_only_delete_town"));
+
+		Confirmation.runOnAccept(() -> {
+			TownyMessaging.sendMsg(player, Translatable.of("town_deleted_by_admin", town.getName()));
+			townyUniverse.getDataSource().removeTown(town);
+		}).sendTo(player);
 	}
 
 	/**
@@ -3448,379 +3400,362 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (townBlockOwner instanceof Resident)
 				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Eg", "/resident set perm", "friend build on", ""));
 
-		} else {
+			return;
+		}
 
-			// reset the friend to resident so the perm settings don't fail
-			if (friend && split[0].equalsIgnoreCase("friend"))
+		// reset the friend to resident so the perm settings don't fail
+		if (friend && split[0].equalsIgnoreCase("friend"))
+			split[0] = "resident";
+		// reset the town to nation so the perm settings don't fail
+		if (friend && split[0].equalsIgnoreCase("town"))
+			split[0] = "nation";
+
+		if (split.length == 1) {
+
+			if (split[0].equalsIgnoreCase("reset")) {
+
+				// reset all townBlock permissions (by town/resident)
+				for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
+
+					if ((townBlockOwner instanceof Town && !townBlock.hasResident()) || 
+						(townBlockOwner instanceof Resident && townBlock.hasResident())) {
+
+						// Reset permissions
+						townBlock.setType(townBlock.getType());
+						townBlock.save();
+					}
+				}
+				if (townBlockOwner instanceof Town)
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_set_perms_reset", "Town owned"));
+				else
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_set_perms_reset", "your"));
+
+				// Reset all caches as this can affect everyone.
+				plugin.resetCache();
+				return;
+
+			} else {
+				// Set all perms to On or Off
+				// '/town set perm off'
+
+				try {
+					boolean b = StringMgmt.parseOnOff(split[0]);
+					
+					perm.change(TownyPermissionChange.Action.ALL_PERMS, b);
+				} catch (Exception e) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
+					return;
+				}
+			}
+
+		} else if (split.length == 2) {
+			boolean b;
+
+			try {
+				b = StringMgmt.parseOnOff(split[1]);
+			} catch (Exception e) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
+				return;
+			}
+
+			if (split[0].equalsIgnoreCase("friend"))
+				split[0] = "resident";
+			else if (split[0].equalsIgnoreCase("town"))
+				split[0] = "nation";
+			else if (split[0].equalsIgnoreCase("itemuse"))
+				split[0] = "item_use";
+
+			// Check if it is a perm level first
+			try {
+				TownyPermission.PermLevel permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
+
+				perm.change(TownyPermissionChange.Action.PERM_LEVEL, b, permLevel);
+			}
+			catch (IllegalArgumentException permLevelException) {
+				// If it is not a perm level, then check if it is a action type
+				try {
+					TownyPermission.ActionType actionType = TownyPermission.ActionType.valueOf(split[0].toUpperCase(Locale.ROOT));
+
+					perm.change(TownyPermissionChange.Action.ACTION_TYPE, b, actionType);
+				} catch (IllegalArgumentException actionTypeException) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
+					return;
+				}
+			}
+
+		} else if (split.length == 3) {
+			// Reset the friend to resident so the perm settings don't fail
+			if (split[0].equalsIgnoreCase("friend"))
 				split[0] = "resident";
 			// reset the town to nation so the perm settings don't fail
-			if (friend && split[0].equalsIgnoreCase("town"))
+			else if (split[0].equalsIgnoreCase("town"))
 				split[0] = "nation";
+			if (split[1].equalsIgnoreCase("itemuse"))
+				split[1] = "item_use";
 
-			if (split.length == 1) {
+			TownyPermission.PermLevel permLevel;
+			TownyPermission.ActionType actionType;
 
-				if (split[0].equalsIgnoreCase("reset")) {
-
-					// reset all townBlock permissions (by town/resident)
-					for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
-
-						if (((townBlockOwner instanceof Town) && (!townBlock.hasResident())) || ((townBlockOwner instanceof Resident) && (townBlock.hasResident()))) {
-
-							// Reset permissions
-							townBlock.setType(townBlock.getType());
-							townBlock.save();
-						}
-					}
-					if (townBlockOwner instanceof Town)
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_set_perms_reset", "Town owned"));
-					else
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_set_perms_reset", "your"));
-
-					// Reset all caches as this can affect everyone.
-					plugin.resetCache();
-					return;
-
-				} else {
-					// Set all perms to On or Off
-					// '/town set perm off'
-
-					try {
-						boolean b = StringMgmt.parseOnOff(split[0]);
-						
-						perm.change(TownyPermissionChange.Action.ALL_PERMS, b);
-					} catch (Exception e) {
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
-						return;
-					}
-				}
-
-			} else if (split.length == 2) {
-				boolean b;
-
-				try {
-					b = StringMgmt.parseOnOff(split[1]);
-				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
-					return;
-				}
-
-				if (split[0].equalsIgnoreCase("friend"))
-					split[0] = "resident";
-				else if (split[0].equalsIgnoreCase("town"))
-					split[0] = "nation";
-				else if (split[0].equalsIgnoreCase("itemuse"))
-					split[0] = "item_use";
-
-				// Check if it is a perm level first
-				try {
-					TownyPermission.PermLevel permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
-
-					perm.change(TownyPermissionChange.Action.PERM_LEVEL, b, permLevel);
-				}
-				catch (IllegalArgumentException permLevelException) {
-					// If it is not a perm level, then check if it is a action type
-					try {
-						TownyPermission.ActionType actionType = TownyPermission.ActionType.valueOf(split[0].toUpperCase(Locale.ROOT));
-
-						perm.change(TownyPermissionChange.Action.ACTION_TYPE, b, actionType);
-					} catch (IllegalArgumentException actionTypeException) {
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
-						return;
-					}
-				}
-
-			} else if (split.length == 3) {
-				// Reset the friend to resident so the perm settings don't fail
-				if (split[0].equalsIgnoreCase("friend"))
-					split[0] = "resident";
-
-					// reset the town to nation so the perm settings don't fail
-				else if (split[0].equalsIgnoreCase("town"))
-					split[0] = "nation";
-
-				if (split[1].equalsIgnoreCase("itemuse"))
-					split[1] = "item_use";
-
-				TownyPermission.PermLevel permLevel;
-				TownyPermission.ActionType actionType;
-
-				try {
-					permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
-					actionType = TownyPermission.ActionType.valueOf(split[1].toUpperCase(Locale.ROOT));
-				} catch (IllegalArgumentException ignore) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
-					return;
-				}
-				
-				try {
-					boolean b = StringMgmt.parseOnOff(split[2]);
-
-					perm.change(TownyPermissionChange.Action.SINGLE_PERM, b, permLevel, actionType);
-
-				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
-					return;
-				}
-			}
-
-			// Propagate perms to all unchanged townblocks
-			for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
-				if ((townBlockOwner instanceof Town) && (!townBlock.hasResident())) {
-					if (!townBlock.isChanged()) {
-						townBlock.setType(townBlock.getType());
-						townBlock.save();
-					}
-				} else if (townBlockOwner instanceof Resident)
-					if (!townBlock.isChanged()) {
-						townBlock.setType(townBlock.getType());
-						townBlock.save();
-					}
-			}
-
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_perms"));
-			TownyMessaging.sendMessage(sender, (Colors.Green + Translatable.of("status_perm").forLocale(sender) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-			TownyMessaging.sendMessage(sender, Colors.Green + Translatable.of("status_pvp").forLocale(sender) + " " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-											   Colors.Green + Translatable.of("explosions").forLocale(sender) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-											   Colors.Green + Translatable.of("firespread").forLocale(sender) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-											   Colors.Green + Translatable.of("mobspawns").forLocale(sender) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
-
-			// Reset all caches as this can affect everyone.
-			plugin.resetCache();
-		}
-	}
-
-	public static void parseTownClaimCommand(Player player, String[] split) {
-		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
-		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
-			HelpMenu.TOWN_CLAIM.send(player);
-		} else {
-			Resident resident;
-			Town town;
-			TownyWorld world;
 			try {
+				permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
+				actionType = TownyPermission.ActionType.valueOf(split[1].toUpperCase(Locale.ROOT));
+			} catch (IllegalArgumentException ignore) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
+				return;
+			}
+			
+			try {
+				boolean b = StringMgmt.parseOnOff(split[2]);
 
-				resident = getResidentOrThrow(player.getUniqueId());
-				town = resident.getTown();
+				perm.change(TownyPermissionChange.Action.SINGLE_PERM, b, permLevel, actionType);
 
-				// Allow a bankrupt town to claim a single plot.
-				if (town.isBankrupt() && town.getTownBlocks().size() != 0)
-					throw new TownyException(Translatable.of("msg_err_bankrupt_town_cannot_claim"));
-
-				world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
-
-				if (!world.isUsingTowny())
-					throw new TownyException(Translatable.of("msg_set_use_towny_off"));
-				
-				if (!world.isClaimable())
-					throw new TownyException(Translatable.of("msg_not_claimable"));
-
-				List<WorldCoord> selection;
-				boolean outpost = false;
-				boolean isAdmin = permSource.isTownyAdmin(player);
-				Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
-
-				/*
-				 * Make initial selection of WorldCoord(s)
-				 */
-				if (split.length == 1 && split[0].equalsIgnoreCase("outpost")) {
-
-					if (TownySettings.isAllowingOutposts()) {
-						checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode());
-						
-						// Run various tests required by configuration/permissions through Util.
-						OutpostUtil.OutpostTests(town, resident, world, key, isAdmin, false);
-						
-						if (!TownyAPI.getInstance().isWilderness(plugin.getCache(player).getLastLocation()))
-							throw new TownyException(Translatable.of("msg_already_claimed_1", key));
-
-						// Select a single WorldCoord using the AreaSelectionUtil.
-						selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0], true);
-						outpost = true;
-					} else
-						throw new TownyException(Translatable.of("msg_outpost_disable"));
-				} else {
-					
-					// Prevent someone manually running /t claim world x z (a command which should only be run via /plot claim world x z)
-					if (split.length != 0 && TownyAPI.getInstance().getTownyWorld(split[0]) != null)
-						throw new TownyException(Translatable.of("tc_err_invalid_command"));
-
-					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN.getNode());
-
-					// Select the area, can be one or many.
-					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split, true);
-					
-					if (selection.size() > 1) 
-						checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode());
-
-					// TODO: deny using selection claiming from unclaimed land.
-//					if (selection.size() > 1 && TownyAPI.getInstance().isWilderness(player.getLocation()))
-//						throw new TownyException();
-				}
-
-				// Not enough available claims.
-				if (!town.hasUnlimitedClaims() && selection.size() > town.availableTownBlocks())
-					throw new TownyException(Translatable.of("msg_err_not_enough_blocks"));
-
-				// If this is a single claim and it is already claimed, by someone else.
-				if (selection.size() == 1 && selection.get(0).getTownOrNull() != null)
-					throw new TownyException(Translatable.of("msg_already_claimed", selection.get(0).getTownOrNull()));
-				
-				/*
-				 * Filter out any unallowed claims.
-				 */
-				TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
-				
-				// Filter out townblocks already owned.
-				selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
-				if (selection.isEmpty())
-					throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
-
-				// Filter out townblocks too close to another Town's homeblock.
-				selection = AreaSelectionUtil.filterInvalidProximityToHomeblock(selection, town);
-				if (selection.isEmpty())
-					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
-
-				// Filter out townblocks too close to other Towns' normal townblocks.
-				selection = AreaSelectionUtil.filterInvalidProximityTownBlocks(selection, town);
-				if (selection.isEmpty())
-					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
-				
-				TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
-				
-				// When not claiming an outpost, make sure at least one of the selection is attached to a claimed plot.
-				if (!outpost && !isEdgeBlock(town, selection) && !town.getTownBlocks().isEmpty())
-					throw new TownyException(Translatable.of("msg_err_not_attached_edge"));
-								
-				/*
-				 * Allow other plugins to have a say in whether the claim is allowed.
-				 */
-				int blockedClaims = 0;
-
-				String cancelMessage = "";
-				boolean isHomeblock = town.getTownBlocks().size() == 0;
-				for (WorldCoord coord : selection) {
-					//Use the user's current world
-					TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player, outpost, isHomeblock);
-					BukkitTools.getPluginManager().callEvent(preClaimEvent);
-					if(preClaimEvent.isCancelled()) {
-						blockedClaims++;
-						cancelMessage = preClaimEvent.getCancelMessage();
-					}
-				}
-
-				if (blockedClaims > 0) {
-					throw new TownyException(String.format(cancelMessage, blockedClaims, selection.size()));
-				}
-				
-				/*
-				 * See if the Town can pay (if required.)
-				 */
-				if (TownyEconomyHandler.isActive()) {
-					double blockCost = 0;
-					try {					
-						if (outpost)
-							blockCost = TownySettings.getOutpostCost();
-						else if (selection.size() == 1)
-							blockCost = town.getTownBlockCost();
-						else
-							blockCost = town.getTownBlockCostN(selection.size());
-	
-						double missingAmount = blockCost - town.getAccount().getHoldingBalance();
-						if (!town.getAccount().canPayFromHoldings(blockCost))
-							throw new TownyException(Translatable.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
-						town.getAccount().withdraw(blockCost, String.format("Town Claim (%d) by %s", selection.size(), player.getName()));
-					} catch (NullPointerException e2) {
-						throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
-					}
-				}
-				
-				/*
-				 * Actually start the claiming process.
-				 */
-				new TownClaim(plugin, player, town, selection, outpost, true, false).start();
-
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage(player));
+			} catch (Exception e) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
 				return;
 			}
 		}
+
+		// Propagate perms to all unchanged townblocks
+		for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
+			// The townBlock has custom permissions compared to what the townBlockOwner has as default.
+			if (townBlock.isChanged())
+				continue;
+
+			if (townBlockOwner instanceof Town && !townBlock.hasResident()) {
+				townBlock.setType(townBlock.getType());
+				townBlock.save();
+			} else if (townBlockOwner instanceof Resident) {
+				townBlock.setType(townBlock.getType());
+				townBlock.save();
+			}
+		}
+
+		Translator translator = Translator.locale(sender);
+		TownyMessaging.sendMsg(sender, translator.of("msg_set_perms"));
+		TownyMessaging.sendMessage(sender, (Colors.Green + translator.of("status_perm") + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+		TownyMessaging.sendMessage(sender, Colors.Green + translator.of("status_pvp") + " " + (perm.pvp ? translator.of("status_on") : translator.of("status_off")) + 
+										   Colors.Green + translator.of("explosions") + " " + (perm.explosion ? translator.of("status_on") : translator.of("status_off")) + 
+										   Colors.Green + translator.of("firespread") + " " + (perm.fire ? translator.of("status_on") : translator.of("status_off")) + 
+										   Colors.Green + translator.of("mobspawns") + " " + (perm.mobs ? translator.of("status_on") : translator.of("status_off")));
+
+		// Reset all caches as this can affect everyone.
+		plugin.resetCache();
+
 	}
 
-	public static void parseTownUnclaimCommand(Player player, String[] split) {
+	public static void parseTownClaimCommand(Player player, String[] split) throws TownyException {
+
+		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
+			HelpMenu.TOWN_CLAIM.send(player);
+			return;
+		}
+
+		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Town town = getTownFromResidentOrThrow(resident);
+
+		// Allow a bankrupt town to claim a single plot.
+		if (town.isBankrupt() && town.getTownBlocks().size() != 0)
+			throw new TownyException(Translatable.of("msg_err_bankrupt_town_cannot_claim"));
+
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+
+		if (!world.isUsingTowny())
+			throw new TownyException(Translatable.of("msg_set_use_towny_off"));
+		
+		if (!world.isClaimable())
+			throw new TownyException(Translatable.of("msg_not_claimable"));
+
+		List<WorldCoord> selection;
+		boolean outpost = false;
+		boolean isAdmin = resident.isAdmin();
+		Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
+
+		/*
+		 * Make initial selection of WorldCoord(s)
+		 */
+		if (split.length == 1 && split[0].equalsIgnoreCase("outpost")) {
+
+			if (TownySettings.isAllowingOutposts()) {
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode());
+				
+				// Run various tests required by configuration/permissions through Util.
+				OutpostUtil.OutpostTests(town, resident, world, key, isAdmin, false);
+				
+				if (!TownyAPI.getInstance().isWilderness(plugin.getCache(player).getLastLocation()))
+					throw new TownyException(Translatable.of("msg_already_claimed_1", key));
+
+				// Select a single WorldCoord using the AreaSelectionUtil.
+				selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0], true);
+				outpost = true;
+			} else
+				throw new TownyException(Translatable.of("msg_outpost_disable"));
+		} else {
+			
+			// Prevent someone manually running /t claim world x z (a command which should only be run via /plot claim world x z)
+			if (split.length != 0 && TownyAPI.getInstance().getTownyWorld(split[0]) != null)
+				throw new TownyException(Translatable.of("tc_err_invalid_command"));
+
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN.getNode());
+
+			// Select the area, can be one or many.
+			selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split, true);
+			
+			if (selection.size() > 1) 
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode());
+
+			// TODO: deny using selection claiming from unclaimed land.
+//				if (selection.size() > 1 && TownyAPI.getInstance().isWilderness(player.getLocation()))
+//					throw new TownyException();
+		}
+
+		// Not enough available claims.
+		if (!town.hasUnlimitedClaims() && selection.size() > town.availableTownBlocks())
+			throw new TownyException(Translatable.of("msg_err_not_enough_blocks"));
+
+		// If this is a single claim and it is already claimed, by someone else.
+		if (selection.size() == 1 && selection.get(0).getTownOrNull() != null)
+			throw new TownyException(Translatable.of("msg_already_claimed", selection.get(0).getTownOrNull()));
+		
+		/*
+		 * Filter out any unallowed claims.
+		 */
+		TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
+		
+		// Filter out townblocks already owned.
+		selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
+		if (selection.isEmpty())
+			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
+
+		// Filter out townblocks too close to another Town's homeblock.
+		selection = AreaSelectionUtil.filterInvalidProximityToHomeblock(selection, town);
+		if (selection.isEmpty())
+			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
+
+		// Filter out townblocks too close to other Towns' normal townblocks.
+		selection = AreaSelectionUtil.filterInvalidProximityTownBlocks(selection, town);
+		if (selection.isEmpty())
+			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
+		
+		TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
+		
+		// When not claiming an outpost, make sure at least one of the selection is attached to a claimed plot.
+		if (!outpost && !isEdgeBlock(town, selection) && !town.getTownBlocks().isEmpty())
+			throw new TownyException(Translatable.of("msg_err_not_attached_edge"));
+						
+		/*
+		 * Allow other plugins to have a say in whether the claim is allowed.
+		 */
+		int blockedClaims = 0;
+
+		String cancelMessage = "";
+		boolean isHomeblock = town.getTownBlocks().size() == 0;
+		for (WorldCoord coord : selection) {
+			//Use the user's current world
+			TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player, outpost, isHomeblock);
+			BukkitTools.getPluginManager().callEvent(preClaimEvent);
+			if(preClaimEvent.isCancelled()) {
+				blockedClaims++;
+				cancelMessage = preClaimEvent.getCancelMessage();
+			}
+		}
+
+		if (blockedClaims > 0) {
+			throw new TownyException(String.format(cancelMessage, blockedClaims, selection.size()));
+		}
+		
+		/*
+		 * See if the Town can pay (if required.)
+		 */
+		if (TownyEconomyHandler.isActive()) {
+			double blockCost = 0;
+			try {					
+				if (outpost)
+					blockCost = TownySettings.getOutpostCost();
+				else if (selection.size() == 1)
+					blockCost = town.getTownBlockCost();
+				else
+					blockCost = town.getTownBlockCostN(selection.size());
+
+				double missingAmount = blockCost - town.getAccount().getHoldingBalance();
+				if (!town.getAccount().canPayFromHoldings(blockCost))
+					throw new TownyException(Translatable.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
+				town.getAccount().withdraw(blockCost, String.format("Town Claim (%d) by %s", selection.size(), player.getName()));
+			} catch (NullPointerException e2) {
+				throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
+			}
+		}
+		
+		/*
+		 * Actually start the claiming process.
+		 */
+		new TownClaim(plugin, player, town, selection, outpost, true, false).start();
+	}
+
+	public static void parseTownUnclaimCommand(Player player, String[] split) throws TownyException {
 		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TOWN_UNCLAIM.send(player);
+			return;
+		}
+
+		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Town town = getTownFromResidentOrThrow(resident);
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+
+		TownPreUnclaimCmdEvent event = new TownPreUnclaimCmdEvent(town, resident, world);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled())
+			throw new TownyException(event.getCancelMessage());
+		
+		if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode());
+
+			new TownClaim(plugin, player, town, null, false, false, false).start();
+
 		} else {
-			Resident resident;
-			Town town;
-			TownyWorld world;
-			try {
-				resident = getResidentOrThrow(player.getUniqueId());
-				town = resident.getTown();
-				world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+			// Check permissions here because of the townunclaim mode.
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM.getNode());
+			
+			// Prevent someone manually running /t unclaim world x z (a command which should only be run via /plot claim world x z)
+			if (split.length == 3 && TownyAPI.getInstance().getTownyWorld(split[0]) != null)
+				throw new TownyException(Translatable.of("tc_err_invalid_command"));
+			
+			List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
+			selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
+			if (selection.isEmpty())
+				throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 
-				TownPreUnclaimCmdEvent event = new TownPreUnclaimCmdEvent(town, resident, world);
-				Bukkit.getPluginManager().callEvent(event);
-				if (event.isCancelled())
-					throw new TownyException(event.getCancelMessage());
-				
-				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
-					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode());
-
-					new TownClaim(plugin, player, town, null, false, false, false).start();
-					// townUnclaimAll(town);
-					// If the unclaim code knows its an outpost or not, doesnt matter its only used once the world deletes the townblock, where it takes the value from the townblock.
-					// Which is why in AreaSelectionUtil, since outpost is not parsed in the main claiming of a section, it is parsed in the unclaiming with the circle, rect & all options.
-				} else {
-					// Check permissions here because of the townunclaim mode.
-					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM.getNode());
-					
-					// Prevent someone manually running /t unclaim world x z (a command which should only be run via /plot claim world x z)
-					if (split.length == 3 && TownyAPI.getInstance().getTownyWorld(split[0]) != null)
-						throw new TownyException(Translatable.of("tc_err_invalid_command"));
-					
-					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
-					selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
-					if (selection.isEmpty())
-						throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
-
-					if (selection.get(0).getTownBlock().isHomeBlock())
-						throw new TownyException(Translatable.of("msg_err_cannot_unclaim_homeblock"));
-					
-					if (AreaSelectionUtil.filterHomeBlock(town, selection)) {
-						// Do not stop the entire unclaim, just warn that the homeblock cannot be unclaimed
-						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_unclaim_homeblock"));
-					}
-					
-					// Handle a negative unclaim refund (yes, where someone is being charged money to unclaim their land. It's a thing.)
-					if (TownySettings.getClaimRefundPrice() < 0) {
-						double cost = Math.abs(TownySettings.getClaimRefundPrice() * selection.size());
-						if (!town.getAccount().canPayFromHoldings(cost)) {
-							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", TownyEconomyHandler.getFormattedBalance(cost)));
-							return;
-						}
-						List<WorldCoord> finalSelection = selection;
-						Confirmation.runOnAccept(()-> {
-							if (!town.getAccount().canPayFromHoldings(cost)) {
-								TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", TownyEconomyHandler.getFormattedBalance(cost)));
-								return;
-							}
-							// Set the area to unclaim
-							new TownClaim(plugin, player, town, finalSelection, false, false, false).start();
-						})
-						.setTitle(Translatable.of("confirmation_unclaiming_costs", TownyEconomyHandler.getFormattedBalance(cost)))
-						.sendTo(player);
+			if (selection.get(0).getTownBlock().isHomeBlock())
+				throw new TownyException(Translatable.of("msg_err_cannot_unclaim_homeblock"));
+			
+			if (AreaSelectionUtil.filterHomeBlock(town, selection)) {
+				// Do not stop the entire unclaim, just warn that the homeblock cannot be unclaimed
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_unclaim_homeblock"));
+			}
+			
+			// Handle a negative unclaim refund (yes, where someone is being charged money to unclaim their land. It's a thing.)
+			if (TownySettings.getClaimRefundPrice() < 0) {
+				double cost = Math.abs(TownySettings.getClaimRefundPrice() * selection.size());
+				if (!town.getAccount().canPayFromHoldings(cost)) {
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", TownyEconomyHandler.getFormattedBalance(cost)));
+					return;
+				}
+				List<WorldCoord> finalSelection = selection;
+				Confirmation.runOnAccept(()-> {
+					if (!town.getAccount().canPayFromHoldings(cost)) {
+						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", TownyEconomyHandler.getFormattedBalance(cost)));
 						return;
 					}
 					// Set the area to unclaim
-					new TownClaim(plugin, player, town, selection, false, false, false).start();
-
-					TownyMessaging.sendMsg(player, Translatable.of("msg_abandoned_area", Arrays.toString(selection.toArray(new WorldCoord[0]))));
-				}
-
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage(player));
+					new TownClaim(plugin, player, town, finalSelection, false, false, false).start();
+				})
+				.setTitle(Translatable.of("confirmation_unclaiming_costs", TownyEconomyHandler.getFormattedBalance(cost)))
+				.sendTo(player);
 				return;
 			}
+			// Set the area to unclaim
+			new TownClaim(plugin, player, town, selection, false, false, false).start();
+
+			TownyMessaging.sendMsg(player, Translatable.of("msg_abandoned_area", Arrays.toString(selection.toArray(new WorldCoord[0]))));
 		}
 	}
 	
@@ -3833,74 +3768,52 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (args.length <= 0) // /t merge
 			throw new TownyException(Translatable.of("msg_specify_name"));
 
-		if (!admin && sender instanceof Player player && !getResidentOrThrow(player.getUniqueId()).isMayor()) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_mayor_only"));
-			return;
-		}
+		if (!admin && sender instanceof Player player && !getResidentOrThrow(player.getUniqueId()).isMayor())
+			throw new TownyException(Translatable.of("msg_town_merge_err_mayor_only"));
+
 		Town succumbingTown = TownyUniverse.getInstance().getTown(args[0]);
 
 		// A lot of checks.
-		if (succumbingTown == null || succumbingTown.getName().equals(remainingTown.getName())) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_name", args[0]));
-			return;
-		}
-		
-		if (TownySettings.getMaxDistanceForTownMerge() > 0 && homeBlockDistance(remainingTown, succumbingTown) > TownySettings.getMaxDistanceForTownMerge()) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_not_close", succumbingTown.getName(), TownySettings.getMaxDistanceForTownMerge()));
-			return;
-		}
+		if (succumbingTown == null || succumbingTown.getName().equals(remainingTown.getName()))
+			throw new TownyException(Translatable.of("msg_err_invalid_name", args[0]));
+
+		if (TownySettings.getMaxDistanceForTownMerge() > 0 && homeBlockDistance(remainingTown, succumbingTown) > TownySettings.getMaxDistanceForTownMerge())
+			throw new TownyException(Translatable.of("msg_town_merge_err_not_close", succumbingTown.getName(), TownySettings.getMaxDistanceForTownMerge()));
 
 		int newResidentsAmount = remainingTown.getNumResidents() + succumbingTown.getNumResidents();
 
 		if (TownySettings.getMaxResidentsPerTown() > 0 && 
-			newResidentsAmount > TownySettings.getMaxResidentsForTown(remainingTown)) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_too_many_residents", TownySettings.getMaxResidentsForTown(remainingTown)));
-			return;
-		}
-		
-		if (!remainingTown.hasUnlimitedClaims() && 
-			(remainingTown.getNumTownBlocks() + succumbingTown.getNumTownBlocks()) > TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_too_many_townblocks", TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)));
-			return;
-		}
+			newResidentsAmount > TownySettings.getMaxResidentsForTown(remainingTown))
+			throw new TownyException(Translatable.of("msg_town_merge_err_too_many_residents", TownySettings.getMaxResidentsForTown(remainingTown)));
 
-		if ((remainingTown.getPurchasedBlocks() + succumbingTown.getPurchasedBlocks()) > TownySettings.getMaxPurchasedBlocks(remainingTown, newResidentsAmount)) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_too_many_purchased_townblocks", TownySettings.getMaxPurchasedBlocks(remainingTown, newResidentsAmount)));
-			return;
-		}
+		if (!remainingTown.hasUnlimitedClaims() && 
+			(remainingTown.getNumTownBlocks() + succumbingTown.getNumTownBlocks()) > TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount))
+			throw new TownyException(Translatable.of("msg_town_merge_err_too_many_townblocks", TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)));
+
+		if ((remainingTown.getPurchasedBlocks() + succumbingTown.getPurchasedBlocks()) > TownySettings.getMaxPurchasedBlocks(remainingTown, newResidentsAmount))
+			throw new TownyException(Translatable.of("msg_town_merge_err_too_many_purchased_townblocks", TownySettings.getMaxPurchasedBlocks(remainingTown, newResidentsAmount)));
 
 		if (TownySettings.isAllowingOutposts() &&
 			TownySettings.isOutpostsLimitedByLevels() && 
-			(remainingTown.getMaxOutpostSpawn() + succumbingTown.getMaxOutpostSpawn()) > TownySettings.getMaxOutposts(remainingTown, newResidentsAmount)) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_too_many_outposts", TownySettings.getMaxOutposts(remainingTown, newResidentsAmount)));
-			return;
-		}
+			(remainingTown.getMaxOutpostSpawn() + succumbingTown.getMaxOutpostSpawn()) > TownySettings.getMaxOutposts(remainingTown, newResidentsAmount))
+			throw new TownyException(Translatable.of("msg_town_merge_err_too_many_outposts", TownySettings.getMaxOutposts(remainingTown, newResidentsAmount)));
 
-		if (!BukkitTools.isOnline(succumbingTown.getMayor().getName()) || succumbingTown.getMayor().isNPC()) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_other_offline", succumbingTown.getName(), succumbingTown.getMayor().getName()));
-			return;
-		}
+		if (!BukkitTools.isOnline(succumbingTown.getMayor().getName()) || succumbingTown.getMayor().isNPC())
+			throw new TownyException(Translatable.of("msg_town_merge_other_offline", succumbingTown.getName(), succumbingTown.getMayor().getName()));
 
 		double baseCost = TownySettings.getBaseCostForTownMerge();
 		double townblockCost = 0;
 		double bankruptcyCost = 0;
 		double cost = 0;
 		if (!admin && TownyEconomyHandler.isActive()) {
-			try {
-				townblockCost = remainingTown.getTownBlockCostN(succumbingTown.getNumTownBlocks()) * (TownySettings.getPercentageCostPerPlot() * 0.01);
-				if (succumbingTown.isBankrupt())
-					bankruptcyCost = Math.abs(succumbingTown.getAccount().getHoldingBalance());
-				
-				cost = baseCost + townblockCost + bankruptcyCost;
+			townblockCost = remainingTown.getTownBlockCostN(succumbingTown.getNumTownBlocks()) * (TownySettings.getPercentageCostPerPlot() * 0.01);
+			if (succumbingTown.isBankrupt())
+				bankruptcyCost = Math.abs(succumbingTown.getAccount().getHoldingBalance());
+			
+			cost = baseCost + townblockCost + bankruptcyCost;
 
-				if (!remainingTown.getAccount().canPayFromHoldings(cost)) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_not_enough_money", TownyEconomyHandler.getFormattedBalance(remainingTown.getAccount().getHoldingBalance()), TownyEconomyHandler.getFormattedBalance(cost)));
-					return;
-				}
-			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_failed"));
-				return;
-			}			
+			if (!remainingTown.getAccount().canPayFromHoldings(cost))
+				throw new TownyException(Translatable.of("msg_town_merge_err_not_enough_money", TownyEconomyHandler.getFormattedBalance(remainingTown.getAccount().getHoldingBalance()), TownyEconomyHandler.getFormattedBalance(cost)));
 		}
 		
 		if (cost > 0) {
@@ -4008,17 +3921,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (resident == null || !resident.hasTown())
 				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
 			
+			Town town = resident.getTownOrNull();
 			if (args.length == 2) {
 				int amount;
 				if ("all".equalsIgnoreCase(args[1].trim()))
-					amount = (int) Math.floor(withdraw ? resident.getTown().getAccount().getHoldingBalance() : resident.getAccount().getHoldingBalance());
+					amount = (int) Math.floor(withdraw ? town.getAccount().getHoldingBalance() : resident.getAccount().getHoldingBalance());
 				else
 					amount = MathUtil.getIntOrThrow(args[1].trim());
 
 				if (withdraw)
-					MoneyUtil.townWithdraw(player, resident, resident.getTown(), amount);
+					MoneyUtil.townWithdraw(player, resident, town, amount);
 				else
-					MoneyUtil.townDeposit(player, resident, resident.getTown(), null, amount);
+					MoneyUtil.townDeposit(player, resident, town, null, amount);
 				
 			} else {
 				String command;
@@ -4035,41 +3949,31 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static void townOutpost(Player player, String[] args) {
+	private static void townOutpost(Player player, String[] args) throws TownyException {
 		
-		try {
-			if (args.length >= 2) {
-				if (args[1].equalsIgnoreCase("list")) {
-					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTPOST_LIST.getNode());
+		if (args.length >= 1) {
+			if (args[0].equalsIgnoreCase("list")) {
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTPOST_LIST.getNode());
 
-					Town town = getTownFromPlayerOrThrow(player);
-					List<Location> outposts = town.getAllOutpostSpawns();
-					int page = 1;
-					int total = (int) Math.ceil(((double) outposts.size()) / ((double) 10));
-					if (args.length == 3) {
-						page = MathUtil.getPositiveIntOrThrow(args[2]);
-						if (page == 0)
-							throw new TownyException(Translatable.of("msg_error_must_be_int"));
-					}
-					if (page > total)
-						throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
-
-					TownyMessaging.sendOutpostList(player, town, page, total);
-				} else {
-					boolean ignoreWarning = false;
-
-					if (args.length == 2) {
-						if (args[1].equals("-ignore")) {
-							ignoreWarning = true;
-						}
-					}
-					townSpawn(player, StringMgmt.remFirstArg(args), true, ignoreWarning);
+				Town town = getTownFromPlayerOrThrow(player);
+				List<Location> outposts = town.getAllOutpostSpawns();
+				int page = 1;
+				int total = (int) Math.ceil(((double) outposts.size()) / ((double) 10));
+				if (args.length == 2) {
+					page = MathUtil.getPositiveIntOrThrow(args[1]);
+					if (page == 0)
+						throw new TownyException(Translatable.of("msg_error_must_be_int"));
 				}
+				if (page > total)
+					throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
+
+				TownyMessaging.sendOutpostList(player, town, page, total);
 			} else {
-				townSpawn(player, StringMgmt.remFirstArg(args), true, false);
+				boolean ignoreWarning = args.length == 1 && args[0].equals("-ignore");
+				townSpawn(player, args, true, ignoreWarning);
 			}
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+		} else {
+			townSpawn(player, args, true, false);
 		}
 	}
 	
@@ -4091,16 +3995,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (TownRuinUtil.isPlayersTownRuined(player))
 				throw new TownyException(Translatable.of("msg_err_cannot_use_command_because_town_ruined"));
 			
-			town = getResidentOrThrow(player.getUniqueId()).getTown();
+			town = getTownFromPlayerOrThrow(player);
 		} else if (args.length == 2){
-			town = TownyUniverse.getInstance().getTown(args[1]);
+			town = getTownOrThrow(args[1]);
 		}
 		
-		if (town != null) {
-			TownyMessaging.sendMessage(sender, ChatTools.formatTitle(town.getName() + " " + Translatable.of("res_list").forLocale(sender)));
-			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("res_list").forLocale(sender), new ArrayList<>(town.getResidents())));
-		} else 
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_specify_name"));
+		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(town.getName() + " " + Translatable.of("res_list").forLocale(sender)));
+		TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("res_list").forLocale(sender), new ArrayList<>(town.getResidents())));
 	}
 	
 	private void townPlotGroupList(CommandSender sender, String[] args) throws TownyException {
@@ -4117,12 +4018,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (args.length > 1) // not just /town plotgrouplist
 			town = TownyUniverse.getInstance().getTown(args[1]);
 
-		if (town == null && player != null) { // Probably a number and not a town name.
-			Resident res = getResidentOrThrow(player.getUniqueId());
-			if (!res.hasTown()) // If the player has no town we cannot go on.
-				throw new TownyException(Translatable.of("msg_specify_name"));	
-			town = res.getTownOrNull();
-		}
+		if (town == null && player != null) // Probably a number and not a town name.
+			town = getTownFromPlayerOrThrow(player);
 		
 		if (!town.hasPlotGroups())
 			throw new TownyException(Translatable.of("msg_err_this_town_has_no_plot_groups"));
@@ -4152,15 +4049,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (TownRuinUtil.isPlayersTownRuined(player))
 				throw new TownyException(Translatable.of("msg_err_cannot_use_command_because_town_ruined"));
 			
-			town = getResidentOrThrow(player.getUniqueId()).getTown();
-		} else {
-			town = TownyUniverse.getInstance().getTown(args[1]);
+			town = getTownFromPlayerOrThrow(player);
+		} else if (args.length == 2){
+			town = getTownOrThrow(args[1]);
 		}
 		
-		if (town != null)
-			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("outlaws").forLocale(sender), new ArrayList<>(town.getOutlaws())));
-		else 
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_name"));
+		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("outlaws").forLocale(sender), new ArrayList<>(town.getOutlaws())));
 	}
 	
 	public static void parseTownTrustCommand(CommandSender sender, String[] args, @Nullable Town town) throws NoPermissionException {
