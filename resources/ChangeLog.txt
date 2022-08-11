@@ -7683,3 +7683,4 @@ v0.92.0.11:
   - Fix max_distance_between_homeblocks config setting being triggered when there are no towns yet.
   - Fix plot info command not being usable in wilderness, courtesy of Warriorrrr with PR #6104.
   - Rename town explosion methods, courtesy of Warriorrrr with PR #6102.
+  - Add TownyComponents class, courtesy of Warriorrrr with PR #6105.
