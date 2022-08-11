@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -39,7 +40,6 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -884,18 +884,16 @@ public class TownyMessaging {
 	 * @param message {@link String} message which will be made into a {@link TextComponent} and shown in the ActioBar.
 	 */
 	public static void sendActionBarMessageToPlayer(Player player, String message) {
-		TextComponent component = LegacyComponentSerializer.builder().build().deserialize(message);
-		sendActionBarMessageToPlayer(player, component);
+		sendActionBarMessageToPlayer(player, TownyComponents.legacySection(message));
 	}
 	
 	/**
 	 * Send an ActionBar message to the given player.
 	 * @param player {@link Player} who will be shown the message.
-	 * @param component {@link TextComponent} message which will be shown to the player.
+	 * @param component {@link Component} message which will be shown to the player.
 	 */
-	public static void sendActionBarMessageToPlayer(Player player, TextComponent component) {
-		Audience audience = Towny.getAdventure().player(player);
-		audience.sendActionBar(component); 
+	public static void sendActionBarMessageToPlayer(Player player, Component component) {
+		Towny.getAdventure().player(player).sendActionBar(component); 
 	}
 	
 	/*
@@ -903,18 +901,15 @@ public class TownyMessaging {
 	 */
 	
 	public static void sendBossBarMessageToPlayer(Player player, String message, float progress, Color color, Overlay overlay) {
-		Component component = LegacyComponentSerializer.builder().build().deserialize(message);
-		sendBossBarMessageToPlayer(player, component, progress, color, overlay);
+		sendBossBarMessageToPlayer(player, TownyComponents.legacySection(message), progress, color, overlay);
 	}
 	
 	public static void sendBossBarMessageToPlayer(Player player, Component component, float progress, Color color, Overlay overlay) {
-		Audience audience = Towny.getAdventure().player(player);
-		audience.showBossBar(BossBar.bossBar(component, progress, color, overlay));
+		Towny.getAdventure().player(player).showBossBar(BossBar.bossBar(component, progress, color, overlay));
 	}
 	
 	public static void sendBossBarMessageToPlayer(Player player, BossBar bossBar) {
-		Audience audience = Towny.getAdventure().player(player);
-		audience.showBossBar(bossBar);
+		Towny.getAdventure().player(player).showBossBar(bossBar);
 	}
 	
 	/*

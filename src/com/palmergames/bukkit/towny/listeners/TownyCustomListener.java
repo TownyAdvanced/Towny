@@ -23,12 +23,12 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import com.palmergames.util.TimeMgmt;
 
 import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.Component;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -102,14 +102,14 @@ public class TownyCustomListener implements Listener {
 	
 	private void sendChunkNoticiation(Player player, String msg) {
 		switch (TownySettings.getNotificationsAppearAs().toLowerCase(Locale.ROOT)) {
-			case "bossbar" -> sendBossBarChunkNotification(player, BossBar.bossBar(LegacyComponentSerializer.builder().build().deserialize(msg), 0, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS));
+			case "bossbar" -> sendBossBarChunkNotification(player, BossBar.bossBar(TownyComponents.legacySection(msg), 0, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS));
 			case "chat" -> TownyMessaging.sendMessage(player, msg);
 			case "none" -> {}
-			default -> sendActionBarChunkNotification(player, LegacyComponentSerializer.builder().build().deserialize(msg));
+			default -> sendActionBarChunkNotification(player, TownyComponents.legacySection(msg));
 		}
 	}
 	
-	private void sendActionBarChunkNotification(Player player, TextComponent msgComponent) {
+	private void sendActionBarChunkNotification(Player player, Component msgComponent) {
 		int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION);
 		if (seconds > 3) {
 			// Towny is showing the actionbar message longer than vanilla MC allows, using a scheduled task.
