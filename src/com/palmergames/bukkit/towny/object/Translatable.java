@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.Colors;
 
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.List;
 import java.util.Locale;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,7 +58,7 @@ public class Translatable {
 			else if (object instanceof Translatable translatable)
 				appended.append(translatable.locale(this.locale).translate());
 			else if (object instanceof Component component)
-				appended.append(LegacyComponentSerializer.legacySection().serialize(component));
+				appended.append(TownyComponents.toLegacy(component));
 		}
 
 		return appended.toString();
@@ -134,7 +134,7 @@ public class Translatable {
 	}
 	
 	public Component component() {
-		return LegacyComponentSerializer.legacySection().deserialize(translate());
+		return TownyComponents.legacy(translate());
 	}
 	
 	public String forLocale(Resident resident) {
