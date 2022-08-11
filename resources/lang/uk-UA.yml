@@ -1342,7 +1342,7 @@ msg_deleting_resident: 'Вилучення гравця: %s.'
 #Shown during resident purge
 msg_purge_complete: 'Очистку гравців завершено: %s вилучено.'
 #Message to the Town, shown when a town is given bonus blocks.
-msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
+msg_you_have_been_given_bonus_blocks: 'Вам надано %s бонусних ділянок.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
 #Added in 0.128
