@@ -102,10 +102,10 @@ public class TownyCustomListener implements Listener {
 	
 	private void sendChunkNoticiation(Player player, String msg) {
 		switch (TownySettings.getNotificationsAppearAs().toLowerCase(Locale.ROOT)) {
-			case "bossbar" -> sendBossBarChunkNotification(player, BossBar.bossBar(TownyComponents.legacySection(msg), 0, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS));
+			case "bossbar" -> sendBossBarChunkNotification(player, BossBar.bossBar(TownyComponents.legacy(msg), 0, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS));
 			case "chat" -> TownyMessaging.sendMessage(player, msg);
 			case "none" -> {}
-			default -> sendActionBarChunkNotification(player, TownyComponents.legacySection(msg));
+			default -> sendActionBarChunkNotification(player, TownyComponents.legacy(msg));
 		}
 	}
 	

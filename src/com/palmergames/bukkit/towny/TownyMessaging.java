@@ -884,7 +884,7 @@ public class TownyMessaging {
 	 * @param message {@link String} message which will be made into a {@link TextComponent} and shown in the ActioBar.
 	 */
 	public static void sendActionBarMessageToPlayer(Player player, String message) {
-		sendActionBarMessageToPlayer(player, TownyComponents.legacySection(message));
+		sendActionBarMessageToPlayer(player, TownyComponents.legacy(message));
 	}
 	
 	/**
@@ -901,7 +901,7 @@ public class TownyMessaging {
 	 */
 	
 	public static void sendBossBarMessageToPlayer(Player player, String message, float progress, Color color, Overlay overlay) {
-		sendBossBarMessageToPlayer(player, TownyComponents.legacySection(message), progress, color, overlay);
+		sendBossBarMessageToPlayer(player, TownyComponents.legacy(message), progress, color, overlay);
 	}
 	
 	public static void sendBossBarMessageToPlayer(Player player, Component component, float progress, Color color, Overlay overlay) {

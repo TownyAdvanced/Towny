@@ -134,7 +134,7 @@ public class Translatable {
 	}
 	
 	public Component component() {
-		return TownyComponents.legacySection(translate());
+		return TownyComponents.legacy(translate());
 	}
 	
 	public String forLocale(Resident resident) {

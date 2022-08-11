@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
+import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -17,12 +18,8 @@ public class TownyComponents {
 		return PlainTextComponentSerializer.plainText().serialize(component);
 	}
 	
-	public static Component legacySection(@NotNull String string) {
-		return LegacyComponentSerializer.legacySection().deserialize(string);
-	}
-	
-	public static Component legacyAmpersand(@NotNull String string) {
-		return LegacyComponentSerializer.legacyAmpersand().deserialize(string);
+	public static Component legacy(@NotNull String string) {
+		return LegacyComponentSerializer.legacySection().deserialize(Colors.translateColorCodes(string));
 	}
 	
 	public static String toLegacy(@NotNull Component component) {
