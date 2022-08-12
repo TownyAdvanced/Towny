@@ -7684,3 +7684,4 @@ v0.92.0.11:
   - Fix plot info command not being usable in wilderness, courtesy of Warriorrrr with PR #6104.
   - Rename town explosion methods, courtesy of Warriorrrr with PR #6102.
   - Add TownyComponents class, courtesy of Warriorrrr with PR #6105.
+  - Make the ASCII map fully use components, courtesy of Warriorrrr with PR #6103.
