@@ -11,6 +11,8 @@ import org.bukkit.map.MinecraftFont;
 
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
+import net.kyori.adventure.text.format.TextDecoration;
+import solar.squares.pixelwidth.DefaultCharacterWidthFunction;
 import solar.squares.pixelwidth.PixelWidthSource;
 
 /**
@@ -22,7 +24,19 @@ import solar.squares.pixelwidth.PixelWidthSource;
  */
 
 public class ChatTools {
-	private static final PixelWidthSource widthSource = PixelWidthSource.pixelWidth();
+	private static final MinecraftFont font = new MinecraftFont();
+	private static final PixelWidthSource widthSource = PixelWidthSource.pixelWidth(new DefaultCharacterWidthFunction() {
+		@Override
+		public float handleMissing(int codepoint, Style style) {
+			// Use MinecraftFont as a backup
+			try {
+				return font.getWidth(String.valueOf((char) codepoint) + (style.hasDecoration(TextDecoration.BOLD) ? 1 : 0);
+			} catch (IllegalArgumentException e) {
+				return 6.0f;
+			}
+		}
+	});
+	
 	private static final int DEFAULT_CHAT_WIDTH = 320;
 	private static final float SPACE_WIDTH = widthSource.width(' ', Style.empty());
 	private static final float UNDERSCORE_WIDTH = widthSource.width('_', Style.empty());
@@ -85,6 +99,9 @@ public class ChatTools {
 	public static String formatTitle(String title) {
 		title = ".[ " + Translation.of("status_title_secondary_colour") + title + Translation.of("status_title_primary_colour") + " ].";
 		
+		if (!font.isValid(title))
+			return legacyFormatTitle(title);
+		
 		final float width = widthSource.width(TownyComponents.legacy(title));
 		
 		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
@@ -111,6 +128,9 @@ public class ChatTools {
 	}
 
 	public static String formatSubTitle(String subtitle) {
+		if (!font.isValid(subtitle))
+			return legacyFormatSubtitle(subtitle);
+		
 		final float width = widthSource.width(TownyComponents.legacy(subtitle));
 		
 		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
