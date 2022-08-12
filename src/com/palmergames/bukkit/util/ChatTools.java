@@ -30,7 +30,7 @@ public class ChatTools {
 		public float handleMissing(int codepoint, Style style) {
 			// Use MinecraftFont as a backup
 			try {
-				return font.getWidth(String.valueOf((char) codepoint) + (style.hasDecoration(TextDecoration.BOLD) ? 1 : 0);
+				return font.getWidth(String.valueOf((char) codepoint) + (style.hasDecoration(TextDecoration.BOLD) ? 1 : 0));
 			} catch (IllegalArgumentException e) {
 				return 6.0f;
 			}
