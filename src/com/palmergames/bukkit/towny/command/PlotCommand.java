@@ -572,7 +572,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					} else if (split.length > 0) {
 
 						// Make sure that the player is only operating on a plot object group if one exists.
-						if (townBlock.hasPlotObjectGroup()) {
+						// Commands such as /plot set name or commands added via the api are excluded from this.
+						if (townBlock.hasPlotObjectGroup() && !"name".equalsIgnoreCase(split[0]) && !TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, split[0])) {
 							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_plot_belongs_to_group_set"));
 							return false;
 						}
