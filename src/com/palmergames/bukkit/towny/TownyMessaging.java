@@ -82,15 +82,9 @@ public class TownyMessaging {
 	 * @param msg the message to send
 	 */
 	public static void sendErrorMsg(Object sender, String msg) {
-		if (sender != null && sender instanceof CommandSender toSend) {
-			if (toSend instanceof ConsoleCommandSender) {
-				// Console
-				sendMessage(toSend, Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + ChatColor.stripColor(msg));
-			} else {
-				// Player
-				sendMessage(toSend, Translation.of("default_towny_prefix") + Colors.Red + msg);
-			}
-		} else if (sender != null && sender instanceof TownyObject townySender) {
+		if (sender instanceof CommandSender toSend) {
+			sendMessage(toSend, Translatable.of("default_towny_prefix").stripColors(sender instanceof ConsoleCommandSender).append(Colors.Red + msg).forLocale(toSend));
+		} else if (sender instanceof TownyObject townySender) {
 			if (townySender instanceof Resident resident) {
 				// Resident
 				sendMessage(resident, Translation.of("default_towny_prefix") + Colors.Red + msg);
@@ -102,7 +96,7 @@ public class TownyMessaging {
 				sendPrefixedNationMessage(nation, Colors.Red + msg);
 			}
 		} else {
-			sendErrorMsg("Sender cannot be null!");
+			sendErrorMsg(String.format("Unsupported TownyMessaging#sendErrorMsg sender class type: %s", sender.getClass().getName()));
 		}
 		
 		sendDevMsg(msg);
