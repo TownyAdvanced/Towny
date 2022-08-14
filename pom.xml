@@ -205,6 +205,11 @@
             <artifactId>adventure-text-serializer-plain</artifactId>
             <version>4.11.0</version>
         </dependency>
+        <dependency>
+            <groupId>solar.squares</groupId>
+            <artifactId>pixel-width-core</artifactId>
+            <version>1.1.0</version>
+        </dependency>
     </dependencies>
     <pluginRepositories>
         <pluginRepository>
@@ -288,6 +293,7 @@
                             <include>org.bstats:bstats-bukkit</include>
                             <include>org.bstats:bstats-base</include>
                             <include>org.json:json</include>
+                            <include>solar.squares:pixel-width-core</include>
                         </includes>
                     </artifactSet>
                     <relocations>
@@ -314,6 +320,10 @@
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>com.palmergames.bukkit.metrics</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>solar.squares.pixelwidth</pattern>
+                            <shadedPattern>com.palmergames.bukkit.towny.libs.pixelwidth</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>
