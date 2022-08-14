@@ -40,6 +40,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,16 +82,10 @@ public class TownyMessaging {
 	 * @param sender the Object sending the message
 	 * @param msg the message to send
 	 */
-	public static void sendErrorMsg(Object sender, String msg) {
-		if (sender != null && sender instanceof CommandSender toSend) {
-			if (toSend instanceof ConsoleCommandSender) {
-				// Console
-				toSend.sendMessage(Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + ChatColor.stripColor(msg));
-			} else {
-				// Player
-				toSend.sendMessage(Translation.of("default_towny_prefix") + ChatColor.RED + msg);
-			}
-		} else if (sender != null && sender instanceof TownyObject townySender) {
+	public static void sendErrorMsg(@NotNull Object sender, @NotNull String msg) {
+		if (sender instanceof CommandSender toSend) {
+			sendMessage(toSend, Translatable.of("default_towny_prefix").stripColors(sender instanceof ConsoleCommandSender).append(msg).forLocale(toSend));
+		} else if (sender instanceof TownyObject townySender) {
 			if (townySender instanceof Resident resident) {
 				// Resident
 				sendMessage(resident, Translation.of("default_towny_prefix") + ChatColor.RED + msg);
@@ -102,7 +97,7 @@ public class TownyMessaging {
 				sendPrefixedNationMessage(nation, ChatColor.RED + msg);
 			}
 		} else {
-			sendErrorMsg("Sender cannot be null!");
+			sendErrorMsg(String.format("Unsupported TownyMessaging#sendErrorMsg sender class type: %s", sender.getClass().getName()));
 		}
 		
 		sendDevMsg(msg);
