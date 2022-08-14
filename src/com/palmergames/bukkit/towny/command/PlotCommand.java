@@ -738,7 +738,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			// Create confirmation.
 			Confirmation.runOnAccept(() -> new PlotClaim(Towny.getPlugin(), player, resident, groupSelection, false, false, false).start())
-				.setTitle(Translatable.of("msg_plot_group_unclaim_confirmation", townBlock.getPlotObjectGroup().getTownBlocks().size()).append(" " + Translatable.of("are_you_sure_you_want_to_continue")))
+				.setTitle(Translatable.of("msg_plot_group_unclaim_confirmation", townBlock.getPlotObjectGroup().getTownBlocks().size()).append(" ").append(Translatable.of("are_you_sure_you_want_to_continue")))
 				.sendTo(player);
 			return;
 		}
@@ -1496,7 +1496,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		// Create confirmation.
 		Confirmation.runOnAccept(permHandler)
-			.setTitle(Translatable.of("msg_plot_group_set_perm_confirmation", plotGroup.getTownBlocks().size()).append(" " + Translatable.of("are_you_sure_you_want_to_continue")))
+			.setTitle(Translatable.of("msg_plot_group_set_perm_confirmation", plotGroup.getTownBlocks().size()).append(" ").append(Translatable.of("are_you_sure_you_want_to_continue")))
 			.sendTo(player);
 	}
 
@@ -1589,7 +1589,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 			}
 		})
-		.setTitle(Translatable.of("msg_plot_group_toggle_confirmation", group.getTownBlocks().size()).append(" " + Translatable.of("are_you_sure_you_want_to_continue")))
+		.setTitle(Translatable.of("msg_plot_group_toggle_confirmation", group.getTownBlocks().size()).append(" ").append(Translatable.of("are_you_sure_you_want_to_continue")))
 		.sendTo(player);
 	}
 
@@ -1811,7 +1811,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						// Execute the plot claim.
 						new PlotClaim(Towny.getPlugin(), player, resident, coords, true, false, true).start();
 					})
-					.setTitle(Translatable.of("msg_plot_group_claim_confirmation", group.getTownBlocks().size()).append(" " + TownyEconomyHandler.getFormattedBalance(group.getPrice())).append(". " + Translatable.of("are_you_sure_you_want_to_continue")))
+					.setTitle(Translatable.of("msg_plot_group_claim_confirmation", group.getTownBlocks().size()).append(" ").append(TownyEconomyHandler.getFormattedBalance(group.getPrice())).append(". ").append(Translatable.of("are_you_sure_you_want_to_continue")))
 					.sendTo(player);
 					
 					return;

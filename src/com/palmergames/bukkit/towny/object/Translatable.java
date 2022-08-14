@@ -18,6 +18,7 @@ public class Translatable {
 	private Object[] args;
 	private boolean stripColors;
 	private final List<Object> appended = new ArrayList<>(0);
+	private final List<Object> prepended = new ArrayList<>(0);
 	private Locale locale;
 	
 	private Translatable(String key) {
@@ -50,18 +51,29 @@ public class Translatable {
 	}
 	
 	public String appended() {
-		StringBuilder appended = new StringBuilder();
+		return convert(this.appended);
+	}
+	
+	public String prepended() {
+		return convert(this.prepended);
+	}
+	
+	private String convert(List<Object> objects) {
+		if (objects.isEmpty())
+			return "";
+		
+		StringBuilder converted = new StringBuilder();
 
-		for (Object object : this.appended) {
+		for (Object object : objects) {
 			if (object instanceof String string)
-				appended.append(string);
+				converted.append(string);
 			else if (object instanceof Translatable translatable)
-				appended.append(translatable.locale(this.locale).translate());
+				converted.append(translatable.locale(this.locale).translate());
 			else if (object instanceof Component component)
-				appended.append(TownyComponents.toLegacy(component));
+				converted.append(TownyComponents.toLegacy(component));
 		}
 
-		return appended.toString();
+		return converted.toString();
 	}
 	
 	public Translatable key(String key) {
@@ -91,6 +103,21 @@ public class Translatable {
 	
 	public Translatable append(Translatable translatable) {
 		appended.add(translatable);
+		return this;
+	}
+	
+	public Translatable prepend(String prepend) {
+		prepended.add(prepend);
+		return this;
+	}
+	
+	public Translatable prepend(Component prepend) {
+		prepended.add(prepend);
+		return this;
+	}
+	
+	public Translatable prepend(Translatable translatable) {
+		prepended.add(translatable);
 		return this;
 	}
 
@@ -123,7 +150,7 @@ public class Translatable {
 		else 
 			translated = locale == null ? Translation.of(key, args) : Translation.of(key, locale, args);
 		
-		translated += appended();
+		translated = prepended() + translated + appended();
 		
 		return stripColors ? Colors.strip(translated) : translated;
 	}
@@ -171,6 +198,7 @@ public class Translatable {
 			", args=" + Arrays.toString(args) +
 			", stripColors=" + stripColors +
 			", appended=" + appended() +
+			", prepended=" + prepended() +
 			", locale=" + locale +
 			'}';
 	}
