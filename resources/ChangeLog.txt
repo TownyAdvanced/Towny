@@ -7685,3 +7685,5 @@ v0.92.0.11:
   - Rename town explosion methods, courtesy of Warriorrrr with PR #6102.
   - Add TownyComponents class, courtesy of Warriorrrr with PR #6105.
   - Make the ASCII map fully use components, courtesy of Warriorrrr with PR #6103.
+  - Handle bold characters in titles using pixelwidth, courtesy of Warriorrrr with PR #6107.
+  - Allow /plot set name to be used on plots in groups, courtesy of Warriorrrr with PR #6108.
