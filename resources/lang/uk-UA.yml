@@ -269,7 +269,7 @@ msg_new_mayor: '&b%s тепер мер!'
 msg_new_nation: '&b%s створив нову націю, яку назвав %s'
 msg_new_town: '&b%s створив нове місто, яке назвав %s'
 msg_plot_for_sale: '&b%s виставив ділянку землі (%s) на продаж!'
-msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
+msg_plot_for_sale_amount: '&b%s виставив ділянку (%s) на продаж за %s!'
 msg_plot_set_type: '&bТип ділянки землі зараз %s'
 msg_cache_block_error: '&cВи не зареєстровані в Towny. Спробуйте перезайти.'
 msg_cache_block_error_wild: '&cЗаборонено гравцю %s у диких землях.'
@@ -1188,60 +1188,60 @@ msg_you_must_join_this_town_to_claim_this_plot: 'Ви повинні приєд�
 #Added in 0.113
 status_trustedlist: 'Довірені'
 msg_click_to_edit: '&6Клацніть, щоб редагувати.'
-permission_gui_header: 'Towny Permission GUI'
-msg_last_edited: '&7&oLast changed at %s by %s.'
-msg_trusted_added: '&bAdded %s as trusted in this %s.' #Last %s is either town or townblock
-msg_already_trusted: '&b%s is already trusted in this %s.'
-msg_trusted_added_2: '&b%s has trusted you in a %s: %s.' #Last %s is the town name or worldcoord.
-msg_not_trusted: '&b%s is not trusted in this %s.'
-msg_trusted_removed: '&bRemoved %s as trusted in this %s.'
-msg_trusted_removed_2: '&b%s has removed you as trusted in a %s: %s.'
-msg_overrides_removed: '&bRemoved permission overrides for %s.'
-msg_overrides_added: '&bAdded default permission overrides for %s.'
-msg_no_overrides_set: '&b%s does not have any overrides set for this %s.'
-msg_overrides_already_set: '&b%s already has overrides set for this %s.'
-msg_cache_block_err: '&cYou are not allowed to %s here.'
-msg_err_plot_belongs_to_group: '&cPlot belongs to a group, use %s.'
-plotgroup_sing: 'Plot Group'
-msg_err_ally_limit_reached: 'Your nation has reached the ally limit, unable to accept.'
+permission_gui_header: 'Інтерфейс прав Towny'
+msg_last_edited: '&7&оВостаннє змінено о %s користувачем %s.'
+msg_trusted_added: '&bДоданий %s як довірений у цьому %s.' #Last %s is either town or townblock
+msg_already_trusted: '&b%s уже довірений у цьому %s.'
+msg_trusted_added_2: '&b%s довірив вам у %s: %s.' #Last %s is the town name or worldcoord.
+msg_not_trusted: '&b%s не є довіреним у цьому %s.'
+msg_trusted_removed: '&b%s більше не довірений у цьому %s.'
+msg_trusted_removed_2: '&b%s вилучив вас з посади довіреного у %s: %s.'
+msg_overrides_removed: '&bВилучено корекцію прав для %s.'
+msg_overrides_added: '&bДодано корекцію прав для %s.'
+msg_no_overrides_set: '&b%s не має ніяких перевизначень для цього %s.'
+msg_overrides_already_set: '&b%s уже має перевизначення для цього %s.'
+msg_cache_block_err: '&сВам заборонено %s тут.'
+msg_err_plot_belongs_to_group: '&сДілянка належить групі, використовуйте %s.'
+plotgroup_sing: 'Група ділянок'
+msg_err_ally_limit_reached: 'Ваша нація досягнула ліміту союзників, неможливо прийняти.'
 #Added in 0.114
-msg_err_group_not_found: 'Group %s not found.'
-msg_err_expected_command_format: 'Incorrect syntax, expected: %s'
-msg_err_group_already_has_node: 'The group %s already has the node %s.'
-msg_err_group_doesnt_have_node: 'The group %s does not have the node %s.'
-msg_successfully_added_node_to_group: 'Successfully added %s to %s.'
-msg_successfully_removed_node_from_group: 'Successfully removed %s from %s.'
-msg_err_there_is_already_a_town_or_nationrank_called_x: 'There is already a %s named %s.'
-msg_err_there_is_no_town_or_nationrank_called_x: 'There is no %s named %s.'
-msg_successfully_add_rank_to_the_town_or_nation_rank: 'Successfully added %s to the %s.'
-msg_successfully_removed_rank_from_the_town_or_nation_rank: 'Successfully removed %s from the %s.'
-msg_err_group_has_no_nodes: 'The group %s has no permission nodes assigned.'
-msg_title_group_permissions: '%s Permissions'
-help_ta_perms_listgroups: 'List groups.'
-help_ta_perms_group: 'Show permission nodes in group'
-help_ta_perms_groupaddpermnode: 'Add a node to a group.'
-help_ta_perms_groupremovepermnode: 'Remove a node from a group.'
-help_ta_perms_townrankadd: 'Adds a townrank to the townyperms file.'
-help_ta_perms_townrankremove: 'Removes a townrank from the townyperms file.'
-help_ta_perms_nationrankadd: 'Adds a nationrank to the townyperms file.'
-help_ta_perms_nationrankremove: 'Removes a nationrank from the townyperms file.'
-msg_err_that_resident_doesnt_belong_to_that_nation: 'That resident doesn''t belong to that nation.'
+msg_err_group_not_found: 'Групу %s не знайдено.'
+msg_err_expected_command_format: 'Неправильний синтаксис, очікувалось: %s'
+msg_err_group_already_has_node: 'Група %s уже має пункт %s.'
+msg_err_group_doesnt_have_node: 'Група %s не має пункту %s.'
+msg_successfully_added_node_to_group: 'Успішно додано %s до %s.'
+msg_successfully_removed_node_from_group: 'Успішно вилучено %s з %s.'
+msg_err_there_is_already_a_town_or_nationrank_called_x: 'Уже є %s з назвою %s.'
+msg_err_there_is_no_town_or_nationrank_called_x: 'Нема %s з назвою %s.'
+msg_successfully_add_rank_to_the_town_or_nation_rank: 'Успішно додано %s до %s.'
+msg_successfully_removed_rank_from_the_town_or_nation_rank: 'Успішно вилучено %s з %s.'
+msg_err_group_has_no_nodes: 'Група %s не має зазначених прав.'
+msg_title_group_permissions: 'Права групи %s'
+help_ta_perms_listgroups: 'Список груп.'
+help_ta_perms_group: 'Показати пункти дозволів у групі'
+help_ta_perms_groupaddpermnode: 'Додати право групі.'
+help_ta_perms_groupremovepermnode: 'Вилучити право від групи.'
+help_ta_perms_townrankadd: 'Додає міське звання у файл townyperms.'
+help_ta_perms_townrankremove: 'Вилучає міське звання з файлу townyperms.'
+help_ta_perms_nationrankadd: 'Додає звання нації до файлу townyperms.'
+help_ta_perms_nationrankremove: 'Вилучає звання нації з файлу townyperms.'
+msg_err_that_resident_doesnt_belong_to_that_nation: 'Цей громадянин не належить нації.'
 #Added in 0.115
-msg_comptype_founded: 'Founded Date'
-msg_err_must_be_greater_than_or_equal_to: 'Amount must be greater than or equal to %s'
-err_invalid_yaml: 'Loading error: Failed to load file %s (does it pass a yaml parser?).'
+msg_comptype_founded: 'Дата заснування'
+msg_err_must_be_greater_than_or_equal_to: 'Кількість повинна бути більшою або рівною %s'
+err_invalid_yaml: 'Помилка завантаження: Не вдалося завантажити файл %s (чи проходить він через парсер yaml?).'
 #Added in 0.116
-msg_town_map_color_changed: '&bThe town map color was changed to %s.'
+msg_town_map_color_changed: '&bКолір міста на карті змінено на %s.'
 #Added in 0.117
-msg_err_this_townblock_doesnt_match_the_groups_type: 'This townblock cannot be added to the group because it is not of type: %s'
+msg_err_this_townblock_doesnt_match_the_groups_type: 'Ця ділянка не можна додати до групи, оскільки вона не є типом: %s'
 #Added in 0.118
 status_title_nopvp: '&a(Без PVP)'
 #Added in 0.119
-msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'You cannot jail your resident because they are in a location where they are outlawed.'
-msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'You cannot jail your resident because they are in a location where they are considered an enemy.'
+msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Ви не можете посадити громадянина у в''язницю, оскільки він перебуває в зоні, у якій він оголошений поза законом.'
+msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Ви не можете посадити громадянина у в''язницю, оскільки він перебуває в зоні, де він оголошений ворогом.'
 #Added in 0.120
-msg_resident_prompt: 'Enter the name of the player in chat, or q to exit. This will automatically time out in 30 seconds.'
-msg_prompt_cancel: 'Prompt cancelled or timed out.'
+msg_resident_prompt: 'Уведіть ім''я гравця в чаті або q, щоб вийти. Цей запит зникне через 30 секунд.'
+msg_prompt_cancel: 'Запит скасовано або час на прийняття минув.'
 #Added in 0.121
 status_title_primary_colour: '&6' #Used to colour the majority of the title bar.
 status_title_secondary_colour: '&e' #Used to colour the words in the title bar.
@@ -1255,297 +1255,297 @@ status_format_hover_key: '&a' #Colour applied to a status screen element which i
 status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a hover-able status screen element.
 status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
-status_home_element: ' &7[Home: %s]'
-status_registered: 'Registered:'
-status_lastonline: 'Last Online:'
+status_home_element: ' &7[Дім: %s]'
+status_registered: 'Зареєстровано:'
+status_lastonline: 'Останній раз в мережі:'
 status_fractions: '%s/%s'
-status_rank_list: 'Rank List'
-status_hover_click_for_more: 'Click for more information.'
-status_jailed: 'Jailed:'
-status_bad_yes: '&cYES'
-status_good_no: '&aNO'
-status_resident_tax_title: '%s''s Tax'
+status_rank_list: 'Список звань'
+status_hover_click_for_more: 'Натисніть для більш детальної інформації.'
+status_jailed: 'Ув''язнено:'
+status_bad_yes: '&сТАК'
+status_good_no: '&аНІ'
+status_resident_tax_title: 'Податок %s'
 #Added in 0.122
-msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because they will not be close enough to your nation capital, the following towns will be removed if the merge is completed: %s.'
+msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Міста %s покинуть вашу націю, оскільки після злуки вони не будуть достатньо близько до нової столиці.'
 #Added in 0.123
-msg_err_invalid_townyworld: "'%s' is not a valid towny world."
-msg_err_enter_world_name_first: 'Please enter the name of the world first.'
+msg_err_invalid_townyworld: "'%s' не є світом Towny."
+msg_err_enter_world_name_first: 'Будь ласка, уведіть спочатку назву світу.'
 msg_wilderness_use_set_to: '&bВикористання дикої природи встановлено %s в %s.'
 #Added in 0.124
-msg_err_invalid_response: 'Invalid response! Enter q to exit or back to go back to the previous question.'
-msg_setup_full_guide_link: '&bFor a link to the full install guide, click here.'
-msg_setup_wildernessuse: 'Would you like to enable wilderness use? This will allow players to break/build in the wilderness.'
-msg_setup_revertunclaim: 'Would you like to use revert on unclaim? This will make townblocks slowly regenerate when they are unclaimed.'
-msg_setup_town_block_ratio: 'What would you like to set your town block ratio at? The default is 8 townblocks per resident. Higher amounts will allow towns to claim more for each resident they have. Setting this to 0 will make it use values from the town_levels.'
-msg_setup_town_cost: 'How much should the cost to create a new town be? The default is 250.'
-msg_setup_nation_cost: 'How much should the cost to create a new nation be? The default is 1000.'
-msg_setup_townblock_cost: 'How much should it cost to claim a townblock? The default is 25. A townblock is the same size as a chunk (default settings)'
-msg_setup_success: 'Successfully changed config values to your new values.'
+msg_err_invalid_response: 'Неправильна відповідь! Уведіть q, щоб вийти або повернутися до попереднього запитання.'
+msg_setup_full_guide_link: '&bНатисніть сюди для переходу до інструкції з встановлення.'
+msg_setup_wildernessuse: 'Чи хотіли б ви увімкнути use у диких землях? Ця дія дозволить гравцям ламати/будувати блоки на диких землях.'
+msg_setup_revertunclaim: 'Чи хотіли б ви увімкнути відновлення ділянок при розприваті? Це призведе до того, що ділянки відновлюватимуться довше, коли вони розпривачені.'
+msg_setup_town_block_ratio: 'Яким повинно бути додавання ділянок? За замовчуванням це 8 блоків на жителя. Вищі значення даватимуть містам більше ділянок для кожного містянина. При значенні 0 будуть використовуватися значення з town_levels.'
+msg_setup_town_cost: 'Якою повинна бути вартість для створення міста? За замовчуванням 250.'
+msg_setup_nation_cost: 'Скільки повинно коштувати створення нації? За замовчуванням 1000.'
+msg_setup_townblock_cost: 'Скільки повинен коштувати приват ділянки? За замовчуванням 25. Стандартні розміри ділянки та чанку однакові'
+msg_setup_success: 'Дані конфігурації успішно змінено на нові.'
 #Added in 0.125
 #Player has recently died and respawned and is invulnerable.
-msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
+msg_err_player_cannot_be_harmed: '%s заспаввнився недавно і має тимчасовий захист.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
+msg_you_have_lost_your_respawn_protection: 'Ви втратили ваш респавн-захист.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
-msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
+msg_err_cannot_pickup_respawn_protection: 'Ви не можете підіймати речі під час респавн-захисту.'
 #Added in 0.126
 #Used in the nation screen:
-status_capital: 'Capital:'
+status_capital: 'Столиця:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
-status_joined_town: 'Joined town:'
+status_joined_town: 'Доєднався до міста:'
 #Used in the town screen's nation hover, to denote when a town joined a nation.
-status_joined_nation: 'Joined nation:'
+status_joined_nation: 'Доєднався до нації:'
 #Shown in status screen elements where a value is not known.
-status_unknown: 'unknown'
+status_unknown: 'невідомо'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
-msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
+msg_nationzone_override_set_to: '%s установив зону нації на %s.'
 #Feedback given for the /ta set nationzoneoverride [townname] 0 command.
-msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+msg_nationzone_override_removed: 'Національну зону %s вилучено.'
 #Added in 0.127
 #Used in status screen:
-status_nation_zone_size: 'Nation Zone Size:'
+status_nation_zone_size: 'Розмір національної зони:'
 #Shown when a player adds people to their friends list.
-msg_res_friend_added_to_list: 'Added %s to your friend list.'
+msg_res_friend_added_to_list: '%s доданий до списку друзів.'
 #Shown when a player removes people from their friends list.
-msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
+msg_res_friend_removed_from_list: '%s вилучений зі списку друзів.'
 #Generic resident freed from jail message.
-msg_resident_unjailed: '%s has been unjailed.'
+msg_resident_unjailed: '%s тепер вільний.'
 #Shown when an admin uses /ta toggle devmode.
-msg_admin_toggle_devmode: 'Dev Mode: %s'
+msg_admin_toggle_devmode: 'Режим розробника: %s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: 'Debug Mode: %s'
+msg_admin_toggle_debugmode: 'Дебаг: %s'
 #Shown when an admin uses /ta toggle townwithdraw
-msg_admin_toggle_townwithdraw: 'Town Withdrawls: %s'
+msg_admin_toggle_townwithdraw: 'Зняття з балансу міста: %s'
 #Shown when an admin uses /ta toggle nationwithdraw
-msg_admin_toggle_nationwithdraw: 'Nation Withdrawls: %s'
+msg_admin_toggle_nationwithdraw: 'Зняття з балансу нації: %s'
 #Shown when claiming a town block for the town.
 msg_process_town_claim: 'Ділянка анексується...'
 #Shown when unclaiming a town block for the town.
 msg_process_town_unclaim: 'Відмовляємося від ділянки...'
 #Shown when there is nothing to unclaim.
-msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
+msg_err_nothing_to_unclaim: 'Нема чого розпривачувати!'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: 'Permission True.'
+msg_perm_true: 'Правильно.'
 #Given as feedback when /ta checkperm is used.
-msg_err_perm_false: 'Permission False.'
+msg_err_perm_false: 'Неправильно.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+status_towny_map_town_line: '&2Місто: &a%s &7| &2Власник: &a%s'
 #Shown on /towny version
-msg_towny_version: '&2Towny Version: &a%s'
+msg_towny_version: '&2Версія Towny: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
+msg_admin_blocked_login: '&2Гравець з IP-адресою &c%s &2намагався увійти під ім''ям %s, яке могло заподіяти шкоду економіці вашого сервера, але вхід було відхилено Towny. Задумайтесь про бан цієї IP-адреси!'
 #Shown during resident purge
-msg_scanning_for_old_residents: 'Scanning for old residents...'
+msg_scanning_for_old_residents: 'Пошук старих гравців...'
 #Shown during resident purge
-msg_deleting_resident: 'Deleting resident: %s.'
+msg_deleting_resident: 'Вилучення гравця: %s.'
 #Shown during resident purge
-msg_purge_complete: 'Resident purge complete: %s deleted.'
+msg_purge_complete: 'Очистку гравців завершено: %s вилучено.'
 #Message to the Town, shown when a town is given bonus blocks.
-msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
+msg_you_have_been_given_bonus_blocks: 'Вам надано %s бонусних ділянок.'
 #Message shown when a town cannot purchase any more bonus blocks.
-msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Ваше місто не може придбати бонусні ділянки. Ліміт досягнуто.'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
-msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
+msg_err_capital_cannot_be_peaceful: 'Столиці міст не може змінити мирний статус.'
 #Message shown as feedback for /t toggle nationzone command.
-msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
+msg_changed_nationzone: 'Зона нації навколо міста тепер %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
-msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
+msg_err_your_town_has_no_nationzone_to_toggle: 'Ваше місто не має національних зон для перемикання!'
 #Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
-towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
+towny_prices_nation_upkeep_based_on: '&7Ціна утримання нації заснована на &a%s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
-towny_prices_upkeep_num_towns: 'number of towns.'
+towny_prices_upkeep_num_towns: 'кількість міст.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
-towny_prices_upkeep_nation_level: 'nation level (num residents.)'
+towny_prices_upkeep_nation_level: 'рівень нації (кількість жителів)'
 #Added in 0.130
 #Jail causes
-msg_jailed_mayor: 'Jailed by mayor.'
+msg_jailed_mayor: 'Ув''язнений мером.'
 #Jail causes
-msg_jailed_outlaw: 'Killed as an outlaw.'
+msg_jailed_outlaw: 'Вбитий, оскільки був злочинцем.'
 #Jail causes
 msg_jailed_war: 'Воєнний в''язень.'
 #Jail handbook messages
-msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
+msg_jailed_handbook_1: 'Схоже, вас ув''язнено з причини %s'
 #Jail handbook messages
-msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
+msg_jailed_handbook_2: 'Недобре, правда? Що ж поробиш. Ось декілька корисних порад, поки ти відбуваєш своє покарання.'
 #Jail handbook messages
-msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
+msg_jailed_handbook_3: 'Вас ув''язнено на %s годин. Відбувши своє покарання, ви станете вільним.'
 #Jail handbook messages
-msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
+msg_jailed_handbook_4_can: 'Ви можете втекти з в''язниці, якщо покинете своє місто, використовуючи команду ''/town leave ''.'
 #Jail handbook messages
-msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
+msg_jailed_handbook_4_cant: 'Під час ув''язнення ви не зможете покинути своє місто, якщо ви у в''язниці.'
 #Jail handbook messages
-msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
+msg_jailed_handbook_bail_1: 'Вас можуть звільнити з в''язниці, якщо ви оплатите заставу, використовуючи ''/res jail paybail''.'
 #Jail handbook messages
-msg_jailed_handbook_bail_2: 'Bail will cost %s.'
+msg_jailed_handbook_bail_2: 'Застава коштуватиме %s.'
 #Jail handbook messages
-msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
+msg_jailed_handbook_5: 'Якщо ви докладете зусилля для втечі з в''язниці й зможете попасти на нейтральну зону, тоді ви також отримаєте свободу.'
 #Jail handbook messages
-msg_jailed_handbook_6: 'But don''t die before you reach the wilderness or you''ll end up right back in jail.'
+msg_jailed_handbook_6: 'Але не помріть перед тим, як потрапити до нейтральної території, інакше ви знову потрапите до в''язниці.'
 #Jail handbook messages
-msg_jailed_teleport: 'Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you''ve just got to get a hold of some.'
+msg_jailed_teleport: 'На ваше щастя, ви можете використовувати для втечі перлини ендера й плоди хоруса, якщо, звичайно, вони у вас є.'
 #Jail handbook messages
-msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your countrymen can reduce the jail plot''s HP to 0, or if the town you are jailed in is removed from the war.'
+msg_jailed_war_prisoner: 'Якщо ви в''язень війни, вас буде звільнено, якщо ваші союзники зможуть знизити здоров''я ділянки в''язниці до 0 або якщо місто, у якому є ваша в''язниця вийде з війни.'
 #Jail handbook title
-msg_jailed_title: 'So you''ve been jailed :('
+msg_jailed_title: 'Що ж, вас ув''язнено :('
 #Jail handbook author
-msg_jailed_author: 'Towny Jailco.'
+msg_jailed_author: 'В''язниця Towny.'
 #Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
-msg_error_town_has_no_allies: 'Town has no allies to list.'
+msg_error_town_has_no_allies: 'Місто не має союзників згідно зі списком.'
 #Message shown when there are no enemies to list in /town enemylist.
-msg_error_town_has_no_enemies: 'Town has no enemies to list.'
+msg_error_town_has_no_enemies: 'Місто не має ворогів згідно зі списком.'
 #Added in 0.132
 #Message shown in the lines of the baltop books
 msg_baltop_book_format: '%s. %s | %s'
 #Added in 0.133
 #Message shown when a confirmation times out.
-msg_confirmation_timed_out: 'Confirmation Timed Out.'
+msg_confirmation_timed_out: 'Час на підтвердження минув.'
 #Added in 0.134
-tc_player_channel_sound_muted: 'The channel sound has been muted'
-tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
+tc_player_channel_sound_muted: 'Звук каналу вимкнено'
+tc_player_channel_sound_unmuted: 'Звук каналу увімкнено'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'На вашій ділянці знаходиться чужинець. Ви не можете змінити свій статус PvP!'
 #Added in 0.136
-msg_view_on_web: 'Click to view on the web.'
+msg_view_on_web: 'Натисніть для перегляду в інтернеті.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
-town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
+town1_has_merged_with_town2: '&6Місто %s погодилося на злуку з містом, яке переважає %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
-status_neutrality_cost: 'Neutrality Cost:'
+status_neutrality_cost: 'Вартість нейтралітету:'
 #Added in 0.138
 #Line 1 of the givebonus warning.
-msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+msg_ptw_warning_1: 'Якщо ви заплатили реальні гроші за ці ділянки, будь ласка, розумійте: сервер, на якому ви граєте порушує Minecraft EULA і ліцензію Towny.'
 #Line 2 of the givebonus warning.
-msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchaseable with real money.'
+msg_ptw_warning_2: 'Команда Towny ніколи не планувала, щоб ділянки оплачувалися за реальні гроші.'
 #Line 3 of the givebonus warning.
-msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
+msg_ptw_warning_3: 'Якщо ви все-таки заплатили реальні гроші, вам варто розглянути гру на серверах, які поважають рішення команди Towny.'
 #Message shown when a town invites a player to join, and that town has a nation.
-you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+you_have_been_invited_to_join3: 'Вас запросили приєднатися до міста %s&9 (Нація: %s&9)'
 #Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
-msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+msg_err_your_town_cannot_afford_unclaim: 'Вашому місту недостатньо грошей, щоб розприватити цю ділянку: %s вимагається.'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
-msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+msg_your_town_paid_x_to_unclaim: 'Ваше місто заплатило %s, щоб розприватити цю ділянку.'
 #Confirmation message shown when a player will unclaim land that costs money.
-confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+confirmation_unclaiming_costs: 'Зняття привату з цієї ділянки коштуватиме %s, чи хочете ви продовжити?'
 #Added in 0.140
 #Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
 msg_your_locale: 'Towny використовує мову вашого клієнта (%s), щоб перекладати свої повідомлення. Майте на увазі, що переклади можуть бути незавершеними.'
 #Message shown when a player tries to rename their town too quickly.
-msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'Зачекайте %s секунд перед тим, як ви зможете змінити ім''я вашого міста знову.'
 #Added in 1.141
-msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'
+msg_newday_already_scheduled_soon: 'Задача вже запланована.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
-msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Ви зможете перемкнути нейтралітет через %s секунд.'
 #Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
-msg_err_command_not_for_console_use: 'This command cannot be used from the console.'
+msg_err_command_not_for_console_use: 'Цю команду не можна використовувати в консолі.'
 #Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
-msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
+msg_town_unlimitedclaims_setting_set_to: 'Параметр unlimitedclaims у місті %s тепер %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
-did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to claim, did you want to turn on unlimited claiming for the town of %s'
+did_you_want_to_toggle_unlimited_claims: 'Ви не маєте доступних для привату ділянок чи хочете ви увімкнути безлімітний приват для %s?'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
-msg_err_console_only: 'This command can only be used by console.'
-msg_err_player_only: 'This command can only be used by a player.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ви не можете покинути свою націю: ваше місто завойоване.'
+msg_err_console_only: 'Ця команда може бути використана лише за допомогою консолі.'
+msg_err_player_only: 'Цю команду може використати лише гравець.'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
-msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
+msg_border_titles_toggled: 'Титульні сповіщення, які буде показано під час перетину кордонів є %s.'
 #Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
-this_will_reset_your_config: 'Running this command resets your config.yml to the default file. Do you want to continue?'
+this_will_reset_your_config: 'Виконання цієї команди призведе до скидання файлу config.yml. Чи бажаєте продовжити?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
-msg_warn_overriding_server_config: 'By doing this you are overriding the resident limits set in the server configuration. Do you want to continue anyway?'
+msg_warn_overriding_server_config: 'Роблячи це, ви перевизначаєте установлені обмеження для мешканців у конфігурації сервера. Ви все одно хочете продовжити?'
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
-msg_removed_x_invalid_outpost_spawns: 'Removed %d invalid outpost spawns.'
+msg_removed_x_invalid_outpost_spawns: 'Вилучено %d недопустимі пункти спаунів на аутпості.'
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
-msg_your_town_is_bankrupt: 'Your town is bankrupt, add money to your bank using /town deposit {amount}.'
+msg_your_town_is_bankrupt: 'Ваше місто збанкрутувало, додайте грошей до вашого банку, використовуючи команду /town deposit {amount}.'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
-msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Ви не можете використовувати цю команду, тому що ви вже є членом міста. Якщо ви хочете продовжити, вам необхідно буде покинути його, використовуючи команду ''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
-msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+msg_a_town_you_are_outlawed_in: 'місто, у якому вас вважають злочинцем.'
 #Message shown when TownyRTP could not find any towns to teleport to.
-msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
+msg_err_could_not_find_any_towns_to_rtp: 'Не було знайдено відкритих міст з ділянками для продажу (які ви могли б собі дозволити) для телепортації.'
 #Message showing payment for RTP.
-msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+msg_cost_spawn_rtp: '&bВи заплатили %s за телепорт до випадкової ділянки, яка продається.'
 #Message shown to a player when they use the town rtp command.
-msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+msg_you_are_about_to_be_teleported_to_a_plot: 'Ось-ось вас буде телепортовано до ділянки, яка продається в %s. Використавши ''/plot claim'', ви зможете купити ділянку і приєднатися до міста.'
 #Used in the town's status screen to display plots
-status_plot_string: 'Plots'
+status_plot_string: 'Ділянки'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
 #Usage:
-msg_usage: 'Usage: %s'
+msg_usage: 'Використання: %s'
 #Shown in teh bank history books when there are no pages to display
-msg_err_no_pages_to_display: 'No pages to display!'
+msg_err_no_pages_to_display: 'Нема чого зображати!'
 #Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
-msg_err_nation_unaffiliated: 'That nation is not affiliated with you.'
+msg_err_nation_unaffiliated: 'Ця нація не пов''язана з вами.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
-msg_err_town_unaffiliated: 'That town is not affiliated with you.'
+msg_err_town_unaffiliated: 'Це місто не пов''язане з вами.'
 #Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
-msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
+msg_err_this_location_already_has_a_jailcell: 'Це місце вже має тюремну камеру.'
 #Title line of the /plot perm hud.
-msg_perm_hud_title: 'Plot Perms'
+msg_perm_hud_title: 'Права для ділянки'
 #Seen in /plot perm hud:
-msg_perm_hud_build: 'Build: '
+msg_perm_hud_build: 'Будівництво: '
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Destroy: '
+msg_perm_hud_destroy: 'Руйнування: '
 #Seen in /plot perm hud:
-msg_perm_hud_switch: 'Switch: '
+msg_perm_hud_switch: 'Перемикання: '
 #Seen in /plot perm hud:
-msg_perm_hud_item_use: 'Item: '
+msg_perm_hud_item_use: 'Предмет: '
 #Seen in /plot perm hud:
-msg_perm_hud_plot_type: 'Type: '
+msg_perm_hud_plot_type: 'Тип: '
 #Seen in /plot perm hud:
-msg_perm_hud_pvp: 'PVP: '
+msg_perm_hud_pvp: 'ПВП: '
 #Seen in /plot perm hud:
-msg_perm_hud_explosions: 'Explosions: '
+msg_perm_hud_explosions: 'Вибухи: '
 #Seen in /plot perm hud:
-msg_perm_hud_firespread: 'Firespread: '
+msg_perm_hud_firespread: 'Поширення вогню: '
 #Seen in /plot perm hud:
-msg_perm_hud_mobspawns: 'Mob Spawns: '
+msg_perm_hud_mobspawns: 'Спавни мобів: '
 #Seen in /plot perm hud:
-msg_perm_hud_key: 'Key'
+msg_perm_hud_key: 'Ключ'
 #Seen in /plot perm hud:
-msg_perm_hud_friend: 'friend'
+msg_perm_hud_friend: 'друг'
 #Seen in /plot perm hud:
-msg_perm_hud_town: 'town'
+msg_perm_hud_town: 'місто'
 #Seen in /plot perm hud:
-msg_perm_hud_ally: 'ally'
+msg_perm_hud_ally: 'союзник'
 #Seen in /plot perm hud:
-msg_perm_hud_resident: 'resident'
+msg_perm_hud_resident: 'мешканець'
 #Seen in /plot perm hud:
-msg_perm_hud_nation: 'nation'
+msg_perm_hud_nation: 'нація'
 #Seen in /plot perm hud:
-msg_perm_hud_outsider: 'outsider'
+msg_perm_hud_outsider: 'чужинець'
 #Seen in /plot perm hud:
-msg_perm_hud_plot_name: 'Plot: '
+msg_perm_hud_plot_name: 'Ділянка: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
-msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
+msg_town_level_overridden_with: 'Місто %s установило свій рівень %s.'
 #Message shown when unsetting a manual town level.
-msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
+msg_town_level_unset: 'Місто %s має свій власний рівень з встановленим користувачем рівнем міста. Поточний рівень міста — %s.'
 #Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
-msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase townblocks based on the config rules.'
+msg_err_town_not_allowed_purchased_blocks: 'Місто %s не може придбати ділянки згідно з правилами конфігу.'
 #Message shown when unsetting all purchased townblocks from a town.
-msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks removed.'
+msg_purchased_blocks_unset: 'Місто %s позбулося придбаних ділянок.'
 #Message shown when /ta town name giveboughtblocks # is used.
-msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+msg_purchased_blocks_changed: 'Місто %s отримало %s ділянок, на цей час усього %s.'
 #Added in 0.154
-msg_comptype_upkeep: 'Upkeep'
+msg_comptype_upkeep: 'Утримання'
 #Added in 0.155
 #Message shown when toggling town upkeep admin setting
-msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+msg_town_upkeep_setting_set_to: 'Податок на утримання в міста %s тепер %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
-msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
+msg_town_plot_type_limit_reached: 'Ваше місто досягнуло ліміту %d %s ділянок.'

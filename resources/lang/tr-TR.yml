@@ -269,7 +269,7 @@ msg_new_mayor: '&b%s şimdi belediye başkanı!'
 msg_new_nation: '&b%s isimli kişi &e%s &badında bir ulus kurdu'
 msg_new_town: '&b%s isimli kişi &e%s &badında bir kasaba kurdu h.o'
 msg_plot_for_sale: '&b%s arsayı (%s) satışa sundu!'
-msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
+msg_plot_for_sale_amount: '&b%s, (%s) arsayı %s fiyata satışa sundu!'
 msg_plot_set_type: '&bArsa türü %s olarak ayarlandı'
 msg_cache_block_error: '&cTowny ye kayıtlı değilsiniz. Yeniden günlüğe kaydetmeyi deneyin.'
 msg_cache_block_error_wild: '&cVahşi doğada %s izin verilmez.'
@@ -1500,9 +1500,9 @@ msg_perm_hud_title: 'Arsa Yetkileri'
 #Seen in /plot perm hud:
 msg_perm_hud_build: 'Yapı: '
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Destroy: '
+msg_perm_hud_destroy: 'Sil: '
 #Seen in /plot perm hud:
-msg_perm_hud_switch: 'Switch: '
+msg_perm_hud_switch: 'Değiştir: '
 #Seen in /plot perm hud:
 msg_perm_hud_item_use: 'Eşya: '
 #Seen in /plot perm hud:
@@ -1524,28 +1524,28 @@ msg_perm_hud_town: 'kasaba'
 #Seen in /plot perm hud:
 msg_perm_hud_ally: 'müttefik'
 #Seen in /plot perm hud:
-msg_perm_hud_resident: 'resident'
+msg_perm_hud_resident: 'sakin'
 #Seen in /plot perm hud:
 msg_perm_hud_nation: 'ulus'
 #Seen in /plot perm hud:
-msg_perm_hud_outsider: 'outsider'
+msg_perm_hud_outsider: 'yabancı'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_name: 'Arsa: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
-msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
+msg_town_level_overridden_with: '%s kasabasının seviyesi %s olarak ayarlandı.'
 #Message shown when unsetting a manual town level.
-msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
+msg_town_level_unset: '%s kasabasının el ile ayarlanmış seviyesi sıfırlandı. Şu anki seviyesi %s.'
 #Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
-msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase townblocks based on the config rules.'
+msg_err_town_not_allowed_purchased_blocks: '%s kasabası configde yapılan ayara göre townblock satın alamaz.'
 #Message shown when unsetting all purchased townblocks from a town.
-msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks removed.'
+msg_purchased_blocks_unset: '%s kasabasının satın alınan townblockları kaldırıldı.'
 #Message shown when /ta town name giveboughtblocks # is used.
-msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+msg_purchased_blocks_changed: '%s kasabasına %s townblock verildi, şu an %s townblockları mevcut.'
 #Added in 0.154
-msg_comptype_upkeep: 'Upkeep'
+msg_comptype_upkeep: 'Bakım'
 #Added in 0.155
 #Message shown when toggling town upkeep admin setting
-msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+msg_town_upkeep_setting_set_to: '%s kasabasının bakım ayarı %s olarak ayarlandı.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
-msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
+msg_town_plot_type_limit_reached: 'Kasaban %d olan %s limitine ulaştı.'

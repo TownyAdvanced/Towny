@@ -269,7 +269,7 @@ msg_new_mayor: '&b¡%s es el nuevo alcalde de la ciudad!'
 msg_new_nation: '&b%s fundó una nueva nación llamada %s'
 msg_new_town: '&b%s fundó una nueva ciudad llamada %s'
 msg_plot_for_sale: '&b¡%s puso el terreno (%s) a la venta!'
-msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
+msg_plot_for_sale_amount: '&b¡%s puso el terreno (%s) a la venta por %s!'
 msg_plot_set_type: '&bTipo de terreno cambiado a %s'
 msg_cache_block_error: '&cNo estás registrado en Towny, intenta reconectarte.'
 msg_cache_block_error_wild: '&cNo está permitido %s en el Exterior.'
@@ -702,8 +702,8 @@ msg_bankrupt_town2: '&b%s no pudo seguir manteniendo una ciudad.'
 msg_bankrupt_nation2: '&b%s no pudo seguir manteniendo una nación.'
 status_embassy_town: 'Embajadas en'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bComparador inválido. Prueba a usar %s.'
-msg_error_invalid_comparator_town: '&bComparador inválido. Prueba a usar %s.'
+msg_error_invalid_comparator_nation: '&bComparador inválido. Intenta %s.'
+msg_error_invalid_comparator_town: '&bComparador inválido. Intenta %s.'
 msg_err_merging_for_kings_only: '&bSolo el líder de la nación puede solicitar una fusión.'
 msg_err_king_of_that_nation_is_not_online: '&bEl líder de %s, %s, no está conectado. La fusión ha fallado.'
 nation1_has_merged_with_nation2: '&6La nación de %s ha accedido a fusionarse con la creciente nación de %s.'
@@ -1484,68 +1484,68 @@ status_plot_string: 'Terrenos'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
 #Usage:
-msg_usage: 'Usage: %s'
+msg_usage: 'Uso: %s'
 #Shown in teh bank history books when there are no pages to display
-msg_err_no_pages_to_display: 'No pages to display!'
+msg_err_no_pages_to_display: '¡No hay páginas que mostrar!'
 #Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
-msg_err_nation_unaffiliated: 'That nation is not affiliated with you.'
+msg_err_nation_unaffiliated: 'Esa nación no está afiliada contigo.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
-msg_err_town_unaffiliated: 'That town is not affiliated with you.'
+msg_err_town_unaffiliated: 'Esa ciudad no estáa afiliada contigo.'
 #Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
-msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
+msg_err_this_location_already_has_a_jailcell: 'Esta ubicación ya tiene una celda carcelaria.'
 #Title line of the /plot perm hud.
-msg_perm_hud_title: 'Plot Perms'
+msg_perm_hud_title: 'Permisos'
 #Seen in /plot perm hud:
-msg_perm_hud_build: 'Build: '
+msg_perm_hud_build: 'Construir: '
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Destroy: '
+msg_perm_hud_destroy: 'Destruir: '
 #Seen in /plot perm hud:
-msg_perm_hud_switch: 'Switch: '
+msg_perm_hud_switch: 'Interactuar: '
 #Seen in /plot perm hud:
-msg_perm_hud_item_use: 'Item: '
+msg_perm_hud_item_use: 'Uso Ítems: '
 #Seen in /plot perm hud:
-msg_perm_hud_plot_type: 'Type: '
+msg_perm_hud_plot_type: 'Tipo: '
 #Seen in /plot perm hud:
-msg_perm_hud_pvp: 'PVP: '
+msg_perm_hud_pvp: 'Combate: '
 #Seen in /plot perm hud:
-msg_perm_hud_explosions: 'Explosions: '
+msg_perm_hud_explosions: 'Explosiones: '
 #Seen in /plot perm hud:
-msg_perm_hud_firespread: 'Firespread: '
+msg_perm_hud_firespread: 'Incendios: '
 #Seen in /plot perm hud:
-msg_perm_hud_mobspawns: 'Spawn de Mobs: '
+msg_perm_hud_mobspawns: 'Aparición Mobs: '
 #Seen in /plot perm hud:
-msg_perm_hud_key: 'Key'
+msg_perm_hud_key: 'Llave'
 #Seen in /plot perm hud:
-msg_perm_hud_friend: 'friend'
+msg_perm_hud_friend: 'amigo'
 #Seen in /plot perm hud:
 msg_perm_hud_town: 'ciudad'
 #Seen in /plot perm hud:
 msg_perm_hud_ally: 'aliado'
 #Seen in /plot perm hud:
-msg_perm_hud_resident: 'habitante'
+msg_perm_hud_resident: 'residente'
 #Seen in /plot perm hud:
 msg_perm_hud_nation: 'nación'
 #Seen in /plot perm hud:
-msg_perm_hud_outsider: 'forastero'
+msg_perm_hud_outsider: 'extranjero'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_name: 'Parcela: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
-msg_town_level_overridden_with: 'La ciudad %s ha establecido su nivel de ciudad en %s.'
+msg_town_level_overridden_with: 'Se estableció el nivel de ciudad de %s en %s.'
 #Message shown when unsetting a manual town level.
-msg_town_level_unset: 'La ciudad %s ha perdido su nivel de ciudad establecido manualmente. El nivel de ciudad actual es %s.'
+msg_town_level_unset: 'Se quitó el nivel de ciudad establecido manualmente de %s. El nivel de ciudad actual es %s.'
 #Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
-msg_err_town_not_allowed_purchased_blocks: 'La ciudad %s es incapaz de comprar bloques de ciudad basados en las reglas de configuración.'
+msg_err_town_not_allowed_purchased_blocks: 'La ciudad %s no puede comprar terrenos basado en las reglas configuradas.'
 #Message shown when unsetting all purchased townblocks from a town.
-msg_purchased_blocks_unset: 'La ciudad %s ha eliminado los bloques de ciudad comprados.'
+msg_purchased_blocks_unset: 'Se quitaron los terrenos comprados de %s.'
 #Message shown when /ta town name giveboughtblocks # is used.
-msg_purchased_blocks_changed: 'La ciudad %s ha recibido %s townblocks comprados, actualmente tiene %s townblocks.'
+msg_purchased_blocks_changed: 'La ciudad %s recibió %s terrenos comprados, actualmente tienen %s en total.'
 #Added in 0.154
-msg_comptype_upkeep: 'Upkeep'
+msg_comptype_upkeep: 'Mantención'
 #Added in 0.155
 #Message shown when toggling town upkeep admin setting
-msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+msg_town_upkeep_setting_set_to: 'Se estableció la mantención de %s a %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
-msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
+msg_town_plot_type_limit_reached: 'Tu ciudad llegó al límite de %d terrenos del tipo %s.'

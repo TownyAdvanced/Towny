@@ -269,7 +269,7 @@ msg_new_mayor: '&b%s est désormais le maire!'
 msg_new_nation: '&b%s a créé une nouvelle nation appelée %s'
 msg_new_town: '&b%s a créé une nouvelle ville appelée %s'
 msg_plot_for_sale: '&b%s a mis la parcelle (%s) en vente !'
-msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
+msg_plot_for_sale_amount: '&b%s a mis le terrain (%s) en vente pour %s!'
 msg_plot_set_type: '&bType de la parcelle fixé à %s'
 msg_cache_block_error: '&cVous n''avez pas été enregistré avec Towny. Essayez de vous reconnecter.'
 msg_cache_block_error_wild: '&cPas autorisé à %s dans la nature.'
@@ -703,7 +703,7 @@ msg_bankrupt_nation2: '&b%s n''a pas pu se permettre de rester une nation.'
 status_embassy_town: 'Embassades dans'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&bComparateur invalide. Essayez %s.'
-msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_town: '&bComparateur invalide. Essayez %s.'
 msg_err_merging_for_kings_only: '&bSeul un Dirigeant de Nation peut fusionner.'
 msg_err_king_of_that_nation_is_not_online: '&bLe Dirigeant de Nation de %s, %s, n''est pas en ligne. La fusion a échouée.'
 nation1_has_merged_with_nation2: '&6La nation %s a accepté de fusionner avec la nation de %s.'
@@ -1498,54 +1498,54 @@ msg_err_this_location_already_has_a_jailcell: 'Cet emplacement contient déjà u
 #Title line of the /plot perm hud.
 msg_perm_hud_title: 'Permissions de parcelle'
 #Seen in /plot perm hud:
-msg_perm_hud_build: 'Build: '
+msg_perm_hud_build: 'Construire: '
 #Seen in /plot perm hud:
 msg_perm_hud_destroy: 'Détuire:'
 #Seen in /plot perm hud:
-msg_perm_hud_switch: 'Switch: '
+msg_perm_hud_switch: 'Ouvrir/Fermer: '
 #Seen in /plot perm hud:
 msg_perm_hud_item_use: 'Objet:'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_type: 'Type: '
 #Seen in /plot perm hud:
-msg_perm_hud_pvp: 'PVP: '
+msg_perm_hud_pvp: 'PVP : '
 #Seen in /plot perm hud:
 msg_perm_hud_explosions: 'Explosions : '
 #Seen in /plot perm hud:
-msg_perm_hud_firespread: 'Firespread: '
+msg_perm_hud_firespread: 'L''expansion du feu : '
 #Seen in /plot perm hud:
-msg_perm_hud_mobspawns: 'Mob Spawns: '
+msg_perm_hud_mobspawns: 'Apparition de créatures : '
 #Seen in /plot perm hud:
 msg_perm_hud_key: 'Clé'
 #Seen in /plot perm hud:
-msg_perm_hud_friend: 'friend'
+msg_perm_hud_friend: 'amis'
 #Seen in /plot perm hud:
-msg_perm_hud_town: 'town'
+msg_perm_hud_town: 'ville'
 #Seen in /plot perm hud:
-msg_perm_hud_ally: 'ally'
+msg_perm_hud_ally: 'allié'
 #Seen in /plot perm hud:
-msg_perm_hud_resident: 'resident'
+msg_perm_hud_resident: 'résident'
 #Seen in /plot perm hud:
-msg_perm_hud_nation: 'nation'
+msg_perm_hud_nation: 'pays'
 #Seen in /plot perm hud:
-msg_perm_hud_outsider: 'outsider'
+msg_perm_hud_outsider: 'étrangers'
 #Seen in /plot perm hud:
-msg_perm_hud_plot_name: 'Plot: '
+msg_perm_hud_plot_name: 'Parcelles: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
-msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
+msg_town_level_overridden_with: 'La ville %s a vu son niveau de ville fixé à %s.'
 #Message shown when unsetting a manual town level.
-msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
+msg_town_level_unset: 'La ville %s a perdu son niveau de ville défini manuellement. Le niveau de ville actuel est %s.'
 #Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
-msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase townblocks based on the config rules.'
+msg_err_town_not_allowed_purchased_blocks: 'La ville %s ne peut pas acheter de blocs de ville en fonction des règles de configuration.'
 #Message shown when unsetting all purchased townblocks from a town.
-msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks removed.'
+msg_purchased_blocks_unset: 'La ville %s a supprimé leurs blocs de ville achetés.'
 #Message shown when /ta town name giveboughtblocks # is used.
-msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+msg_purchased_blocks_changed: 'La ville %s a reçu %s blocs de ville achetés, %s ont acheté des blocs de ville.'
 #Added in 0.154
-msg_comptype_upkeep: 'Upkeep'
+msg_comptype_upkeep: 'Entretien'
 #Added in 0.155
 #Message shown when toggling town upkeep admin setting
-msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+msg_town_upkeep_setting_set_to: 'La ville %s a été paramétrée à %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
-msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
+msg_town_plot_type_limit_reached: 'Votre ville a atteint la limite de %d %s parcelles.'
