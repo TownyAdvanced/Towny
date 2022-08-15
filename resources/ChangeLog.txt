@@ -7689,3 +7689,6 @@ v0.92.0.11:
   - Allow /plot set name to be used on plots in groups, courtesy of Warriorrrr with PR #6108.
   - Fix regression from 0.98.3.4 that resulted in some command output breaking due to #6078.
   - Apply new font-measuring to BookFactory, fixing potential Invalid Book Tag books being made.
+  - Reflow TownyMessaging.
+    - Re-directs TownyMessaging from having many end points for messages, into the sendMessage(Sender, String) method.
+    - Plugins that want to cancel Towny events and prevent those events showing cancellation messages to the user should be able to do so. 
