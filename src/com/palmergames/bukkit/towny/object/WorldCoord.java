@@ -196,7 +196,7 @@ public class WorldCoord extends Coord {
 	}
 
 	/**
-	 * Loads & returns the chunk(s) inside this WorldCoord.
+	 * Loads and returns the chunk(s) inside this WorldCoord.
 	 * <p>
 	 * Chunks are loaded async on servers using paper.
 	 * @return An unmodifiable collection of chunk futures.
