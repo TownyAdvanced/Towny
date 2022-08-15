@@ -108,7 +108,7 @@ public class BookFactory {
 						}
 
 						// Current line + word is too long to be one line
-						if (font.getWidth(line + " " + word) + spaces > maxLineWidth) {
+						if (FontUtil.measureWidth(line + " " + word) + spaces > maxLineWidth) {
 							// Add our current line
 							lines.add(line + "\n");
 							// Set our next line to start off with this word

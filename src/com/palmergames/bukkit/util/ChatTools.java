@@ -6,14 +6,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.utils.TownyComponents;
-import net.kyori.adventure.text.format.Style;
-import org.bukkit.map.MinecraftFont;
-
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
-import net.kyori.adventure.text.format.TextDecoration;
-import solar.squares.pixelwidth.DefaultCharacterWidthFunction;
-import solar.squares.pixelwidth.PixelWidthSource;
 
 /**
  * Useful function for use with the Minecraft Server chatbox.
@@ -24,30 +18,17 @@ import solar.squares.pixelwidth.PixelWidthSource;
  */
 
 public class ChatTools {
-	private static final MinecraftFont font = new MinecraftFont();
-	private static final PixelWidthSource widthSource = PixelWidthSource.pixelWidth(new DefaultCharacterWidthFunction() {
-		@Override
-		public float handleMissing(int codepoint, Style style) {
-			// Use MinecraftFont as a backup
-			try {
-				return font.getWidth(String.valueOf((char) codepoint) + (style.hasDecoration(TextDecoration.BOLD) ? 1 : 0));
-			} catch (IllegalArgumentException e) {
-				return 6.0f;
-			}
-		}
-	});
-	
 	private static final int DEFAULT_CHAT_WIDTH = 320;
-	private static final float SPACE_WIDTH = widthSource.width(' ', Style.empty());
-	private static final float UNDERSCORE_WIDTH = widthSource.width('_', Style.empty());
+	private static final float SPACE_WIDTH = FontUtil.measureWidth(' ');
+	private static final float UNDERSCORE_WIDTH = FontUtil.measureWidth('_');
 	
 	// Padding used for the main title formatting
 	private static final String WIDGET = ".oOo.";
-	private static final float WIDGET_WIDTH = widthSource.width(WIDGET, Style.empty());
+	private static final float WIDGET_WIDTH = FontUtil.measureWidth(WIDGET);
 	
 	// Padding used for subtitle formatting
 	private static final String SUBWIDGET = " .]|[. ";
-	private static final float SUBWIDGET_WIDTH = widthSource.width(SUBWIDGET, Style.empty());
+	private static final float SUBWIDGET_WIDTH = FontUtil.measureWidth(SUBWIDGET);
 	
 	public static String listArr(String[] args, String prefix) {
 
@@ -99,10 +80,10 @@ public class ChatTools {
 	public static String formatTitle(String title) {
 		title = ".[ " + Translation.of("status_title_secondary_colour") + title + Translation.of("status_title_primary_colour") + " ].";
 		
-		if (!font.isValid(title))
+		if (!FontUtil.isValidMinecraftFont(title))
 			return legacyFormatTitle(title);
 		
-		final float width = widthSource.width(TownyComponents.legacy(title));
+		final float width = FontUtil.measureWidth(TownyComponents.legacy(title));
 		
 		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
 		float remainder = DEFAULT_CHAT_WIDTH - (WIDGET_WIDTH * 2) - width - 2;
@@ -128,10 +109,10 @@ public class ChatTools {
 	}
 
 	public static String formatSubTitle(String subtitle) {
-		if (!font.isValid(subtitle))
+		if (!FontUtil.isValidMinecraftFont(subtitle))
 			return legacyFormatSubtitle(subtitle);
 		
-		final float width = widthSource.width(TownyComponents.legacy(subtitle));
+		final float width = FontUtil.measureWidth(TownyComponents.legacy(subtitle));
 		
 		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
 		float remainder = DEFAULT_CHAT_WIDTH - (SUBWIDGET_WIDTH * 2) - width - 2;
