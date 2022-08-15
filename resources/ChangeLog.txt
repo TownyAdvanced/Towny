@@ -7687,3 +7687,4 @@ v0.92.0.11:
   - Make the ASCII map fully use components, courtesy of Warriorrrr with PR #6103.
   - Handle bold characters in titles using pixelwidth, courtesy of Warriorrrr with PR #6107.
   - Allow /plot set name to be used on plots in groups, courtesy of Warriorrrr with PR #6108.
+  - Fix regression from 0.98.3.4 that resulted in some command output breaking due to #6078.

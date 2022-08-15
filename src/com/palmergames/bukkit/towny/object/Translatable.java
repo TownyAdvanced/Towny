@@ -160,6 +160,12 @@ public class Translatable {
 	
 	@Override
 	public String toString() {
+		// Something is causing our translatable to become a string, this is usually
+		// cause for translating it and appending it to an ongoing string.
+		return translate();
+	}
+	
+	public String debug() {
 		return "Translatable{" +
 			"key='" + key + '\'' +
 			", args=" + Arrays.toString(args) +
