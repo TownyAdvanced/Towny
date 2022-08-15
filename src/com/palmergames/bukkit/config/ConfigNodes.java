@@ -2519,7 +2519,30 @@ public enum ConfigNodes {
 			"",
 			"# If this is true, when a town becomes a ruin they also become open to join,",
 			"# meaning any townless player could join the town and reclaim it.",
-			"# You should expect this to be abused by players who will reclaim a town to prevent someone else reclaiming it.");
+			"# You should expect this to be abused by players who will reclaim a town to prevent someone else reclaiming it."),
+	ASCII_MAP_SYMBOLS("ascii_map_symbols", "", "", "",
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |                  ASCII MAP SYMBOLS                   | #",
+			"# |                                                      | #",
+			"# | Used in the ascii maps for symbols not determined by | #",
+			"# | townblocktype. See Town Block Types section for more | #",
+			"# | options.                                             | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################",
+			""),
+	ASCII_MAP_SYMBOLS_HOME("ascii_map_symbols.home",
+			"H",
+			"",
+			"# The character used for the home symbol."),
+	ASCII_MAP_SYMBOLS_FORSALE("ascii_map_symbols.forsale",
+			"$",
+			"",
+			"# The character used for plots which are forsale."),
+	ASCII_MAP_SYMBOLS_WILDERNESS("ascii_map_symbols.wilderness",
+			"-",
+			"",
+			"# The character used for plots which are unclaimed.");
 
 	
 	private final String Root;

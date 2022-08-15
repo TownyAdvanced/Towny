@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.huds;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyAsciiMap;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.asciimap.WildernessMapEvent;
@@ -129,9 +130,9 @@ public class MapHUD {
 						// override the colour if it's a shop plot for sale
 						if (townblock.getType().equals(TownBlockType.COMMERCIAL))
 							map[y][x] = Colors.Blue;
-						map[y][x] += "$";
+						map[y][x] += TownyAsciiMap.forSaleSymbol;
 					} else if (townblock.isHomeBlock())
-						map[y][x] += "H";
+						map[y][x] += TownyAsciiMap.homeSymbol;
 					else
 						map[y][x] += townblock.getType().getAsciiMapKey();
 				} catch (TownyException e) {

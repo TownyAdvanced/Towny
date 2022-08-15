@@ -3245,5 +3245,18 @@ public class TownySettings {
 	public static boolean areLevelTypeLimitsConfigured() {
 		return areLevelTypeLimitsConfigured;
 	}
+	
+	public static String homeBlockMapSymbol() {
+		return getString(ConfigNodes.ASCII_MAP_SYMBOLS_HOME);
+	}
+	
+	public static String forSaleMapSymbol() {
+		return getString(ConfigNodes.ASCII_MAP_SYMBOLS_FORSALE);
+	}
+
+	public static String wildernessMapSymbol() {
+		return getString(ConfigNodes.ASCII_MAP_SYMBOLS_WILDERNESS);
+	}
+
 }
 

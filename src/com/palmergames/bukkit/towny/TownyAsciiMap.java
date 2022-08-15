@@ -8,6 +8,8 @@ import com.palmergames.bukkit.towny.object.map.TownyMapData;
 import java.util.Map;
 
 import com.palmergames.bukkit.towny.utils.TownyComponents;
+
+import org.apache.commons.text.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -38,6 +40,9 @@ public class TownyAsciiMap {
 	public static final int lineWidth = 27;
 	public static final int halfLineWidth = lineWidth / 2;
 	private static final int townBlockSize = TownySettings.getTownBlockSize();
+	public static final String forSaleSymbol = parseSymbol(TownySettings.forSaleMapSymbol());
+	public static final String homeSymbol = parseSymbol(TownySettings.homeBlockMapSymbol());
+	public static final String wildernessSymbol = parseSymbol(TownySettings.wildernessMapSymbol());
 	
 	public static Component[] generateHelp(Player player) {
 		final Translator translator = Translator.locale(player);
@@ -137,9 +142,9 @@ public class TownyAsciiMap {
 						// override the colour if it's a shop plot for sale
 						if (townblock.getType().equals(TownBlockType.COMMERCIAL))
 							townyMap[y][x] = townyMap[y][x].color(NamedTextColor.BLUE);
-						townyMap[y][x] = townyMap[y][x].content("$");
+						townyMap[y][x] = townyMap[y][x].content(forSaleSymbol);
 					} else if (townblock.isHomeBlock())
-						townyMap[y][x] = townyMap[y][x].content("H");
+						townyMap[y][x] = townyMap[y][x].content(homeSymbol);
 					else
 						townyMap[y][x] = townyMap[y][x].content(townblock.getType().getAsciiMapKey());
 					
@@ -274,5 +279,13 @@ public class TownyAsciiMap {
 	
 	private static Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {
 		return TownyUniverse.getInstance().getWildernessMapDataMap();
+	}
+
+	public static String parseSymbol(String symbol) {
+		if (symbol.startsWith("\\"))
+			return StringEscapeUtils.unescapeJava(symbol);
+		else 
+			return symbol.substring(0, 1);
+
 	}
 }

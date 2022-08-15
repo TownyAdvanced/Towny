@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.98.3.5</version>
+    <version>0.98.3.6</version>
 
     <licenses>
         <license>
@@ -172,6 +172,11 @@
             <version>1.21</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.9</version>
+        </dependency>
+        <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>22.0.0</version>
@@ -290,6 +295,7 @@
                             <include>com.zaxxer:HikariCP</include>
                             <include>io.papermc:paperlib</include>
                             <include>org.apache.commons:commons-compress</include>
+                            <include>org.apache.commons:commons-text</include>
                             <include>org.bstats:bstats-bukkit</include>
                             <include>org.bstats:bstats-base</include>
                             <include>org.json:json</include>
@@ -308,6 +314,10 @@
                         <relocation>
                             <pattern>org.apache.commons.compress</pattern>
                             <shadedPattern>com.palmergames.compress</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.commons.text</pattern>
+                            <shadedPattern>com.palmergames.text</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>net.kyori.adventure</pattern>
