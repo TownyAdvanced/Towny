@@ -869,9 +869,7 @@ public class TownyMessaging {
 	 */
 	
 	public static void sendStatusScreen(CommandSender sender, StatusScreen screen) {
-		Audience audience = Towny.getAdventure().sender(sender);
-		for (Component string : screen.getFormattedStatusScreen())
-			audience.sendMessage(string);
+		Towny.getAdventure().sender(sender).sendMessage(screen.getFormattedStatusScreen());
 	}
 
 	/*
