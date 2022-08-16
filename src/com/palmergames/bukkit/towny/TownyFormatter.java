@@ -114,13 +114,8 @@ public class TownyFormatter {
 		
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(townBlock);
-		if (!fields.isEmpty()) {
-			TextComponent comp = Component.empty();
-			for (Component fieldComp : fields) {
-				comp = comp.append(Component.newline()).append(fieldComp);
-			}
-			screen.addComponentOf("extraFields", comp);
-		}
+		if (!fields.isEmpty())
+			screen.addComponentOf("extraFields", getExtraFieldsComponent(fields));
 		
 		TownBlockStatusScreenEvent event = new TownBlockStatusScreenEvent(screen, townBlock);
 		Bukkit.getPluginManager().callEvent(event);
@@ -245,13 +240,8 @@ public class TownyFormatter {
 		
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(resident);
-		if (!fields.isEmpty()) {
-			TextComponent comp = Component.empty();
-			for (Component fieldComp : fields) {
-				comp = comp.append(Component.newline()).append(fieldComp);
-			}
-			screen.addComponentOf("extraFields", comp);
-		}
+		if (!fields.isEmpty())
+			screen.addComponentOf("extraFields", getExtraFieldsComponent(fields));
 			
 		ResidentStatusScreenEvent event = new ResidentStatusScreenEvent(screen, resident);
 		Bukkit.getPluginManager().callEvent(event);
@@ -418,13 +408,8 @@ public class TownyFormatter {
 		
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(town);
-		if (!fields.isEmpty()) {
-			TextComponent comp = Component.empty();
-			for (Component fieldComp : fields) {
-				comp = comp.append(Component.newline()).append(fieldComp);
-			}
-			screen.addComponentOf("extraFields", comp);
-		}
+		if (!fields.isEmpty())
+			screen.addComponentOf("extraFields", getExtraFieldsComponent(fields));
 			
 		TownStatusScreenEvent event = new TownStatusScreenEvent(screen, town);
 		Bukkit.getPluginManager().callEvent(event);
@@ -548,13 +533,8 @@ public class TownyFormatter {
 
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(nation);
-		if (!fields.isEmpty()) {
-			TextComponent comp = Component.empty();
-			for (Component fieldComp : fields) {
-				comp = comp.append(Component.newline()).append(fieldComp);
-			}
-			screen.addComponentOf("extraFields", comp);
-		}
+		if (!fields.isEmpty())
+			screen.addComponentOf("extraFields", getExtraFieldsComponent(fields));
 		
 		NationStatusScreenEvent event = new NationStatusScreenEvent(screen, nation);
 		Bukkit.getPluginManager().callEvent(event);
@@ -617,13 +597,8 @@ public class TownyFormatter {
 
 			// Add any metadata which opt to be visible.
 			List<Component> fields = getExtraFields(world);
-			if (!fields.isEmpty()) {
-				TextComponent comp = Component.empty();
-				for (Component fieldComp : fields) {
-					comp = comp.append(Component.newline()).append(fieldComp);
-				}
-				screen.addComponentOf("extraFields", comp);
-			}
+			if (!fields.isEmpty())
+				screen.addComponentOf("extraFields", getExtraFieldsComponent(fields));
 		}
 		
 		return screen;
@@ -907,6 +882,25 @@ public class TownyFormatter {
 		}
 
 		return extraFields;
+	}
+
+	/**
+	 * Returns a Component used for the Extra Fields generated from metadata.
+	 * 
+	 * @param fields List of Components which represent individual metadatas that
+	 *               have chosen to be visible.
+	 * @return Component suitable for the status screen.
+	 */
+	private static Component getExtraFieldsComponent(List<Component> fields) {
+		Component comp = Component.empty();
+		boolean first = true;
+		for (Component fieldComp : fields) {
+			if (!first)
+				comp = comp.append(Component.newline());
+			comp = comp.append(fieldComp);
+			first = false;
+		}
+		return comp;
 	}
 
 	/**
