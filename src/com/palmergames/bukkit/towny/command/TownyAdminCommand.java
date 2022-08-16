@@ -1268,18 +1268,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (split[1].equalsIgnoreCase("invite")) {
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_INVITE.getNode());
 				// Give admins the ability to invite a player to town, invite still requires acceptance.
+				if (split.length < 3)
+					throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta town TOWNNAME invite PLAYERNAME"));
 				TownCommand.townAdd(getSender(), town, StringMgmt.remArgs(split, 2));
 				
 			} else if (split[1].equalsIgnoreCase("add")) {
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_ADD.getNode());
 				// Force-join command for admins to use to bypass invites system.
-				Resident resident = townyUniverse.getResident(split[2]);
-				
-				if (resident == null) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_no_player_with_that_name", split[2]));
-					return;
-				}
-				
+				if (split.length < 3)
+					throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta town TOWNNAME add PLAYERNAME"));
+				Resident resident = getResidentOrThrow(split[2]);
 				TownCommand.townAddResident(town, resident);
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_join_town", resident.getName()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_join_town", resident.getName()));
@@ -1300,6 +1298,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("rename")) {
 
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_RENAME.getNode());
+				if (split.length < 3)
+					throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta town TOWNNAME rename NEWNAME"));
 				String name = String.join("_", StringMgmt.remArgs(split, 2));
 				
 				TownPreRenameEvent event = new TownPreRenameEvent(town, name);
@@ -1461,6 +1461,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownCommand.parseTownMergeCommand(sender, StringMgmt.remArgs(split, 2), town, true);
 			} else if (split[1].equalsIgnoreCase("forcemerge")) {
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_FORCEMERGE.getNode());
+				if (split.length < 3)
+					throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta town TOWNNAME forcemerge OTHERTOWN"));
 				Town remainingTown = townyUniverse.getTown(split[2]);
 
 				if (remainingTown == null || remainingTown.equals(town))

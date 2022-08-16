@@ -7707,3 +7707,5 @@ v0.92.0.11:
     - ascii_map_symbols.wilderness
       - Default: "-"
       - The character used for plots which are unclaimed.
+  - Fix many ArrayIndexOutOfBoundsExceptions in the /ta town NAME command.
+    - Progress towards #6120.
