@@ -7709,3 +7709,4 @@ v0.92.0.11:
       - The character used for plots which are unclaimed.
   - Fix many ArrayIndexOutOfBoundsExceptions in the /ta town NAME command.
     - Progress towards #6120.
+  - Add status screen changes from minimessage branch, courtesy of Warriorrrr with PR #6090.
