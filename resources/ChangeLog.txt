@@ -7711,3 +7711,4 @@ v0.92.0.11:
     - Progress towards #6120.
   - Add status screen changes from minimessage branch, courtesy of Warriorrrr with PR #6090.
   - Adds NewResidentEvent, courtesy of PestoNotPasta with PR #6121.
+  - Big refactor on TownCommand, making use of newer methods and making the code more readable.
