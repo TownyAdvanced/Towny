@@ -3820,7 +3820,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static boolean isEdgeBlock(TownBlockOwner owner, List<WorldCoord> worldCoords) {
 
 		// TODO: Better algorithm that doesn't duplicates checks.
-
 		for (WorldCoord worldCoord : worldCoords)
 			if (isEdgeBlock(owner, worldCoord))
 				return true;
@@ -3829,17 +3828,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static boolean isEdgeBlock(TownBlockOwner owner, WorldCoord worldCoord) {
 
-		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
-		for (int i = 0; i < 4; i++)
-			try {
-				TownBlock edgeTownBlock = worldCoord.getTownyWorldOrNull().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
-				if (edgeTownBlock.isOwner(owner)) {
-					TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = True.");
-					return true;
-				}
-			} catch (NotRegisteredException e) {
-			}
-		TownyMessaging.sendDebugMsg("[Towny] Debug: isEdgeBlock(" + worldCoord.toString() + ") = False.");
+		for (WorldCoord wc : worldCoord.getCardinallyAdjacentWorldCoords()) {
+			if (wc.isWilderness())
+				continue;
+			if (!wc.getTownBlockOrNull().isOwner(owner))
+				continue;
+			return true;
+		}
 		return false;
 	}
 

@@ -16,9 +16,11 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -274,5 +276,14 @@ public class WorldCoord extends Coord {
 		return toCell(from.getBlockX()) != toCell(to.getBlockX()) ||
 			   toCell(from.getBlockZ()) != toCell(to.getBlockZ()) ||
 			   !Objects.equals(from.getWorld(), to.getWorld());
+	}
+
+	public List<WorldCoord> getCardinallyAdjacentWorldCoords() {
+		List<WorldCoord> list = new ArrayList<>(4);
+		list.add(this.add(0,-1));
+		list.add(this.add(0,1));
+		list.add(this.add(1,0));
+		list.add(this.add(-1,0));
+		return list;
 	}
 }
