@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyUpdateChecker;
+import com.palmergames.bukkit.towny.event.resident.NewResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -111,6 +112,8 @@ public class OnPlayerLogin implements Runnable {
 					}
 					
 					resident.save();
+					NewResidentEvent nre = new NewResidentEvent(resident);
+					Bukkit.getPluginManager().callEvent(nre);
 					
 				} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
 
