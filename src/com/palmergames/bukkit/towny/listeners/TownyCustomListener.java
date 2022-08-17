@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -67,10 +68,14 @@ public class TownyCustomListener implements Listener {
 		if (resident == null)
 			return;
 
-		if (resident.hasMode("townclaim"))
-			TownCommand.parseTownClaimCommand(player, new String[] {});
-		if (resident.hasMode("townunclaim"))
-			TownCommand.parseTownUnclaimCommand(player, new String[] {});
+		try {
+			if (resident.hasMode("townclaim"))
+				TownCommand.parseTownClaimCommand(player, new String[] {});
+			if (resident.hasMode("townunclaim"))
+				TownCommand.parseTownUnclaimCommand(player, new String[] {});
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+		}
 		if (resident.hasMode("map"))
 			TownyCommand.showMap(player);
 		if (resident.hasMode("plotborder"))
