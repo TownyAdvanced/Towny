@@ -964,6 +964,15 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.RES_SETTING_DENY_BED_USE);
 	}
+	
+	
+	public static String getDatabaseVersion() {
+		return DatabaseConfig.getString(DatabaseConfig.DATEBASE_VERSION);
+	}
+	
+	public static void setDatabaseVersion(String version) {
+		DatabaseConfig.setDatabaseVersion(version);
+	}
 
 	public static String getLoadDatabase() {
 
