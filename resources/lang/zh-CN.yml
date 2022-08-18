@@ -269,7 +269,7 @@ msg_new_mayor: '&b%s 成为了新一届的城主!'
 msg_new_nation: '&b%s 建立了一个名为 %s 的国家'
 msg_new_town: '&b%s 建立了一个名为 %s 的城镇'
 msg_plot_for_sale: '&b%s 将 (%s) 区块挂出出售!'
-msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
+msg_plot_for_sale_amount: '&b%s 出售土地 (%s) 售价：%s！'
 msg_plot_set_type: '&b设置土地类型为 %s'
 msg_cache_block_error: '&c城镇没有你的信息. 请尝试重新登录.'
 msg_cache_block_error_wild: '&c你不能在荒野中 %s .'
@@ -702,8 +702,8 @@ msg_bankrupt_town2: '&b%s 城镇因资金不足而倒闭.'
 msg_bankrupt_nation2: '&b%s 因国库已空而灭亡.'
 status_embassy_town: '驻有大使馆于'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
-msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_nation: '&b无效的比较器。你或许可以试试%s。'
+msg_error_invalid_comparator_town: '&b无效的比较器。你或许可以试试%s。'
 msg_err_merging_for_kings_only: '&b只有国家领导者能合并。'
 msg_err_king_of_that_nation_is_not_online: '&b合并失败： %s 和 %s 的国家领导者不在线。'
 nation1_has_merged_with_nation2: '&6国家 %s t同意与 %s 合并.'
@@ -1494,27 +1494,27 @@ msg_err_nation_unaffiliated: '这个国家不隶属于你所在国。'
 msg_err_town_unaffiliated: '这个城镇不隶属于你所在区域。'
 #Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
-msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
+msg_err_this_location_already_has_a_jailcell: '这个位置已经有一个监狱了。'
 #Title line of the /plot perm hud.
-msg_perm_hud_title: 'Plot Perms'
+msg_perm_hud_title: '土地权限'
 #Seen in /plot perm hud:
-msg_perm_hud_build: 'Build: '
+msg_perm_hud_build: '建造: '
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Destroy: '
+msg_perm_hud_destroy: '破坏: '
 #Seen in /plot perm hud:
-msg_perm_hud_switch: 'Switch: '
+msg_perm_hud_switch: '交互: '
 #Seen in /plot perm hud:
-msg_perm_hud_item_use: 'Item: '
+msg_perm_hud_item_use: '使用物品: '
 #Seen in /plot perm hud:
-msg_perm_hud_plot_type: 'Type: '
+msg_perm_hud_plot_type: '类型: '
 #Seen in /plot perm hud:
 msg_perm_hud_pvp: 'PVP: '
 #Seen in /plot perm hud:
-msg_perm_hud_explosions: 'Explosions: '
+msg_perm_hud_explosions: '爆炸: '
 #Seen in /plot perm hud:
-msg_perm_hud_firespread: 'Firespread: '
+msg_perm_hud_firespread: '火焰蔓延: '
 #Seen in /plot perm hud:
-msg_perm_hud_mobspawns: 'Mob Spawns: '
+msg_perm_hud_mobspawns: '生物生成: '
 #Seen in /plot perm hud:
 msg_perm_hud_key: 'Key'
 #Seen in /plot perm hud:
