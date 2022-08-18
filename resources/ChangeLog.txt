@@ -7716,3 +7716,4 @@ v0.92.0.11:
     - Returns a List of WorldCoords directly N, E, S, W from the WorldCoord. 
   - Clean up edgeblock test in TownCommand.
   - Add version numbering to the database.yml.
+  - Capitalize the returned value of the %townyadvanced_player_plot_type% placeholder.

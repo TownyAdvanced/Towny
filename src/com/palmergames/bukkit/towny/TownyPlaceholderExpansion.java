@@ -599,7 +599,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		switch (identifier) {
 
 			case "player_plot_type": // %townyadvanced_player_plot_type%
-				return townblock != null ? townblock.getType().toString() : "";
+				return townblock != null ? StringMgmt.capitalize(townblock.getType().toString()) : "";
 			case "player_plot_owner": // %townyadvanced_player_plot_owner%
 				return townblock != null ? String.valueOf(townblock.isOwner(resident)) : "false";
 			case "player_location_town_or_wildname": // %townyadvanced_player_location_town_or_wildname%
