@@ -3,11 +3,11 @@ package com.palmergames.bukkit.towny.db;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.util.FileMgmt;
 
-import java.util.List;
+import java.util.HashMap;
 
 public class FlatFileSaveTask implements Runnable {
 
-	private final List<String> list;
+	private final HashMap<String, Object> map;
 	private final String path;
 	
 	/**
@@ -15,15 +15,15 @@ public class FlatFileSaveTask implements Runnable {
 	 * @param list - list to save.
 	 * @param path - path on filesystem.
 	 */
-	public FlatFileSaveTask(List<String> list, String path) {
-		this.list = list;
+	public FlatFileSaveTask(HashMap<String, Object> map, String path) {
+		this.map = map;
 		this.path = path;	
 	}
 
 	@Override
 	public void run() {
 		try {
-			FileMgmt.listToFile(list, path);
+			FileMgmt.mapToFile(map, path);
 		} catch (NullPointerException ex) {
 			TownyMessaging.sendErrorMsg("Null Error saving to file - " + path);
 		}

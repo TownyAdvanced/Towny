@@ -69,12 +69,12 @@ public abstract class TownyDataSource {
 
 	public boolean saveAll() {
 
-		return saveWorldList() && saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList();
+		return saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList();
 	}
 
 	public boolean saveAllWorlds() {
 
-		return saveWorldList() && saveWorlds();
+		return saveWorlds();
 	}
 
 	public boolean saveQueues() {
@@ -159,8 +159,6 @@ public abstract class TownyDataSource {
 	/*
 	 * Legacy database entries that still store a list of keys in a file. 
 	 */
-
-	abstract public boolean saveWorldList();
 
 	abstract public boolean saveRegenList();
 
