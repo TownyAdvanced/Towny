@@ -363,9 +363,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Name
 			resident.setName(keys.getOrDefault("name", generateMissingName()));
 			// Registered Date
-			resident.setRegistered(getOrDefault(keys, "registered", 0));
+			resident.setRegistered(getOrDefault(keys, "registered", 0l));
 			// Last Online Date
-			resident.setLastOnline(getOrDefault(keys, "lastOnline", 0));
+			resident.setLastOnline(getOrDefault(keys, "lastOnline", 0l));
 			// isNPC
 			resident.setNPC(getOrDefault(keys, "isNPC", false));
 			// jail
@@ -466,9 +466,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				}
 
 			town.setName(keys.getOrDefault("name", generateMissingName()));
-			town.setRegistered(getOrDefault(keys, "registered", 0));
+			town.setRegistered(getOrDefault(keys, "registered", 0l));
 			town.setRuined(getOrDefault(keys, "ruined", false));
-			town.setRuinedTime(getOrDefault(keys, "ruinedTime", 0));
+			town.setRuinedTime(getOrDefault(keys, "ruinedTime", 0l));
 			town.setNeutral(getOrDefault(keys, "neutral", TownySettings.getTownDefaultNeutral()));
 			town.setOpen(getOrDefault(keys, "open", TownySettings.getTownDefaultOpen()));
 			town.setPublic(getOrDefault(keys, "public", TownySettings.getTownDefaultPublic()));
@@ -488,9 +488,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.setPlotPrice(getOrDefault(keys, "plotPrice", 0.0));
 			town.setPlotTax(getOrDefault(keys, "plotTax", TownySettings.getTownDefaultPlotTax()));
 			town.setCommercialPlotTax(getOrDefault(keys, "commercialPlotTax", TownySettings.getTownDefaultShopTax()));
-			town.setCommercialPlotPrice(getOrDefault(keys, "commercialPlotPrice", 0));
+			town.setCommercialPlotPrice(getOrDefault(keys, "commercialPlotPrice", 0.0));
 			town.setEmbassyPlotTax(getOrDefault(keys, "embassyPlotTax", TownySettings.getTownDefaultEmbassyTax()));
-			town.setEmbassyPlotPrice(getOrDefault(keys, "embassyPlotPrice", 0));
+			town.setEmbassyPlotPrice(getOrDefault(keys, "embassyPlotPrice", 0.0));
 			town.setMaxPercentTaxAmount(getOrDefault(keys, "maxPercentTaxAmount", TownySettings.getMaxTownTaxPercentAmount()));
 			town.setSpawnCost(getOrDefault(keys, "spawnCost", TownySettings.getSpawnTravelCost()));
 			town.setMapColorHexCode(keys.getOrDefault("mapColorHexCode", MapUtil.generateRandomTownColourAsHexCode()));
@@ -498,13 +498,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.setAdminEnabledPVP(getOrDefault(keys, "adminEnabledPvP", false));
 			town.setManualTownLevel(getOrDefault(keys, "manualTownLevel", -1));
 			town.setPermissions(keys.getOrDefault("protectionStatus", ""));
-			town.setJoinedNationAt(getOrDefault(keys, "joinedNationAt", 0));
-			town.setMovedHomeBlockAt(getOrDefault(keys, "movedHomeBlockAt", 0));
+			town.setJoinedNationAt(getOrDefault(keys, "joinedNationAt", 0l));
+			town.setMovedHomeBlockAt(getOrDefault(keys, "movedHomeBlockAt", 0l));
 			line = keys.get("homeBlock");
 			if (line != null) {
 				tokens = line.split(",");
 				if (tokens.length == 3) {
-					TownyWorld world = universe.getWorld(tokens[0]); 
+					TownyWorld world = universe.getWorld(UUID.fromString(tokens[0])); 
 					if (world == null)
 						TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_world", town.getName()));
 					else {
@@ -549,8 +549,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			line = keys.get("nation");
 			if (line != null && !line.isEmpty()) {
 				Nation nation = null;
-				if (universe.hasNation(line))
-					nation = universe.getNation(line);
+				if (universe.hasNation(UUID.fromString(line)))
+					nation = universe.getNation(UUID.fromString(line));
 //				else if (universe.getReplacementNameMap().containsKey(line))
 //					nation = universe.getNation(universe.getReplacementNameMap().get(line));
 
@@ -602,7 +602,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			line = keys.get("capital");
 			String cantLoadCapital = Translation.of("flatfile_err_nation_could_not_load_capital_disband", nation.getName());
 			if (line != null) {
-				Town town = universe.getTown(line);
+				Town town = universe.getTown(UUID.fromString(line));
 				if (town != null) {
 					try {
 						nation.forceSetCapital(town);
@@ -633,7 +633,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			nation.setTaxes(getOrDefault(keys, "taxes", 0.0));
 			nation.setSpawnCost(getOrDefault(keys, "spawnCost", TownySettings.getSpawnTravelCost()));
 			nation.setNeutral(getOrDefault(keys, "neutral", false));
-			nation.setRegistered(getOrDefault(keys, "registered", 0));
+			nation.setRegistered(getOrDefault(keys, "registered", 0l));
 			nation.setPublic(getOrDefault(keys, "isPublic", false));
 			nation.setOpen(getOrDefault(keys, "isOpen", TownySettings.getNationDefaultOpen()));
 			nation.setBoard(keys.getOrDefault("nationBoard", TownySettings.getNationDefaultBoard()));

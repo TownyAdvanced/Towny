@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.utils;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
@@ -30,7 +31,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -669,7 +669,9 @@ public class SpawnUtil {
 		String[] tokens = raw.split(",");
 		if (tokens.length >= 4)
 			try {
-				World world = plugin.getServerWorld(tokens[0]);
+				World world = Bukkit.getWorld(UUID.fromString(tokens[0]));
+				if (world == null)
+					return null;
 				double x = Double.parseDouble(tokens[1]);
 				double y = Double.parseDouble(tokens[2]);
 				double z = Double.parseDouble(tokens[3]);
@@ -680,7 +682,7 @@ public class SpawnUtil {
 					loc.setYaw(Float.parseFloat(tokens[5]));
 				}
 				return loc;
-			} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+			} catch (NumberFormatException | NullPointerException ignored) {
 			}
 		return null;
 	}
