@@ -89,7 +89,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
 /**
- * @author ElgarL
+ * @author ElgarL, LlmDL
  */
 public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String rootFolderPath;
@@ -291,15 +291,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	
 	public boolean loadJail(Jail jail, HashMap<String, String> keys) {
 		String line = "";
-		String[] tokens;
 		line = keys.get("townblock");
 		if (line != null) {
-			tokens = line.split(",");
-			TownBlock tb = null;
 			try {
-				tb = universe.getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+				TownBlock tb = parseTownBlockFromDB(line);
 				jail.setTownBlock(tb);
-				jail.setTown(tb.getTown());
+				jail.setTown(tb.getTownOrNull());
 				tb.setJail(jail);
 				tb.getTown().addJail(jail);
 			} catch (NumberFormatException | NotRegisteredException e) {
@@ -387,7 +384,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			line = keys.get("friends");
 			if (line != null) {
-				TownyAPI.getInstance().getResidents(toUUIDArray(line.split(","))).stream().forEach(friend -> {
+				TownyAPI.getInstance().getResidents(toUUIDArray(line.split("#"))).stream().forEach(friend -> {
 					try {
 						resident.addFriend(friend);
 					} catch (AlreadyRegisteredException e) {}
@@ -425,13 +422,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					try {
 						line = keys.get("town-ranks");
 						if (line != null)
-							resident.setTownRanks(Arrays.asList((line.split(","))));
+							resident.setTownRanks(Arrays.asList((line.split("#"))));
 					} catch (Exception e) {}
 	
 					try {
 						line = keys.get("nation-ranks");
 						if (line != null)
-							resident.setNationRanks(Arrays.asList((line.split(","))));
+							resident.setNationRanks(Arrays.asList((line.split("#"))));
 					} catch (Exception e) {}
 	
 					line = keys.get("joinedTownAt");
@@ -451,7 +448,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public boolean loadTown(Town town, HashMap<String, String> keys) {
 		String line = "";
 		try {
-			String[] tokens;
 			line = keys.get("mayor");
 			if (line != null)
 				try {
@@ -506,28 +502,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.setMovedHomeBlockAt(getOrDefault(keys, "movedHomeBlockAt", 0l));
 			line = keys.get("homeBlock");
 			if (line != null) {
-				tokens = line.split(",");
-				if (tokens.length == 3) {
-					TownyWorld world = universe.getWorld(UUID.fromString(tokens[0])); 
-					if (world == null)
-						TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_world", town.getName()));
-					else {
-						try {
-							int x = Integer.parseInt(tokens[1]);
-							int z = Integer.parseInt(tokens[2]);
-							TownBlock homeBlock = universe.getTownBlock(new WorldCoord(world.getName(), x, z));
-							town.forceSetHomeBlock(homeBlock);
-						} catch (NumberFormatException e) {
-							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_location", town.getName()));
-						} catch (NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_townblock", town.getName()));
-						} catch (TownyException e) {
-							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_town_homeblock_not_exist", town.getName()));
-						}
-					}
+				try {
+					town.setHomeBlock(parseTownBlockFromDB(line));
+				} catch (NumberFormatException e) {
+					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_location", town.getName()));
+				} catch (NotRegisteredException e) {
+					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_townblock", town.getName()));
 				}
 			}
-			
+
 			line = keys.get("spawn");
 			if (line != null) {
 				Location loc = SpawnUtil.parseSpawnLocationFromDB(line);
@@ -572,19 +555,19 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			
 			line = keys.get("trustedResidents");
 			if (line != null && !line.isEmpty())
-				TownyAPI.getInstance().getResidents(toUUIDArray(line.split(","))).stream().forEach(res -> town.addTrustedResident(res));
+				TownyAPI.getInstance().getResidents(toUUIDArray(line.split("#"))).stream().forEach(res -> town.addTrustedResident(res));
 
 			line = keys.get("allies");
 			if (line != null && !line.isEmpty())
-				town.loadAllies(TownyAPI.getInstance().getTowns(toUUIDArray(line.split(","))));
+				town.loadAllies(TownyAPI.getInstance().getTowns(toUUIDArray(line.split("#"))));
 			
 			line = keys.get("enemies");
 			if (line != null && !line.isEmpty())
-				town.loadEnemies(TownyAPI.getInstance().getTowns(toUUIDArray(line.split(","))));
+				town.loadEnemies(TownyAPI.getInstance().getTowns(toUUIDArray(line.split("#"))));
 			
 			line = keys.get("outlaws");
 			if (line != null && !line.isEmpty())
-				TownyAPI.getInstance().getResidents(toUUIDArray(line.split(","))).stream().forEach(res -> {
+				TownyAPI.getInstance().getResidents(toUUIDArray(line.split("#"))).stream().forEach(res -> {
 					try {
 						town.addOutlaw(res);
 					} catch (AlreadyRegisteredException ignored) {}
@@ -647,7 +630,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			
 			line = keys.get("allies");
 			if (line != null)
-				TownyAPI.getInstance().getNations(toUUIDArray(line.split(","))).stream().forEach(ally -> {
+				TownyAPI.getInstance().getNations(toUUIDArray(line.split("#"))).stream().forEach(ally -> {
 					try {
 						nation.addAlly(ally);
 					} catch (AlreadyRegisteredException ignored) {}
@@ -655,7 +638,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			
 			line = keys.get("enemies");
 			if (line != null)
-				TownyAPI.getInstance().getNations(toUUIDArray(line.split(","))).stream().forEach(enemy -> {
+				TownyAPI.getInstance().getNations(toUUIDArray(line.split("#"))).stream().forEach(enemy -> {
 					try {
 						nation.addEnemy(enemy);
 					} catch (AlreadyRegisteredException ignored) {}
@@ -743,16 +726,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		try {
 			HashMap<String, Object> jail_hm = new HashMap<>();
 			jail_hm.put("uuid", jail.getUUID());
-			jail_hm.put("townBlock", jail.getTownBlock().getWorld().getName() + "#" + jail.getTownBlock().getX() + "#" + jail.getTownBlock().getZ());
+			jail_hm.put("townBlock", getTownBlockForSaving(jail.getTownBlock()));
 			
 			StringBuilder jailCellArray = new StringBuilder();
 			if (jail.hasCells())
-				for (Location cell : new ArrayList<>(jail.getJailCellLocations())) {
-					jailCellArray.append(cell.getWorld().getUID()).append("#").append(cell.getX()).append("#")
-							.append(cell.getY()).append("#").append(cell.getZ()).append("#").append(cell.getPitch())
-							.append("#").append(cell.getYaw()).append(";");
-				}
-			
+				for (Location cell : new ArrayList<>(jail.getJailCellLocations()))
+					jailCellArray.append(parseLocationForSaving(cell)).append(";");
+
 			jail_hm.put("spawns", jailCellArray);
 			
 			return jail_hm;
@@ -801,7 +781,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
 			res_hm.put("metadata", resident.hasMeta() ? serializeMetadata(resident) : "");
 			return res_hm;
-
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Saving: Town HashMap could not be made.");
 			e.printStackTrace();
@@ -835,26 +814,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			tb_hm.put("typeName", townBlock.getTypeName());
 			tb_hm.put("outpost", townBlock.isOutpost());
 			tb_hm.put("permissions",
-					(townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
+					townBlock.isChanged() ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
 			tb_hm.put("locked", townBlock.isLocked());
 			tb_hm.put("changed", townBlock.isChanged());
 			tb_hm.put("claimedAt", townBlock.getClaimedAt());
-			if (townBlock.hasPlotObjectGroup())
-				tb_hm.put("groupID", townBlock.getPlotObjectGroup().getUUID().toString());
-			else
-				tb_hm.put("groupID", "");
-			if (townBlock.hasMeta())
-				tb_hm.put("metadata", serializeMetadata(townBlock));
-			else
-				tb_hm.put("metadata", "");
-			
+			tb_hm.put("groupID", townBlock.hasPlotObjectGroup() ? townBlock.getPlotObjectGroup().getUUID().toString() : "");
+			tb_hm.put("metadata", townBlock.hasMeta() ? serializeMetadata(townBlock) : "");
 			tb_hm.put("trustedResidents", StringMgmt.join(toUUIDList(townBlock.getTrustedResidents()), "#"));
 
 			Map<String, String> stringMap = new HashMap<>();
-			for (Map.Entry<Resident, PermissionData> entry : townBlock.getPermissionOverrides().entrySet()) {
+			for (Map.Entry<Resident, PermissionData> entry : townBlock.getPermissionOverrides().entrySet())
 				stringMap.put(entry.getKey().getUUID().toString(), entry.getValue().toString());
-			}
-			
 			tb_hm.put("customPermissionData", new Gson().toJson(stringMap));
 
 			return tb_hm;
@@ -869,6 +839,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		try {
 			HashMap<String, Object> twn_hm = new HashMap<>();
 			twn_hm.put("name", town.getName());
+			twn_hm.put("uuid", town.hasValidUUID() ? town.getUUID() : UUID.randomUUID()); //TODO: Do we really want this?
 			twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
 			twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getUUID() : "");
 			twn_hm.put("nation", town.hasNation() ? town.getNation().getUUID() : "");
@@ -902,52 +873,25 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			twn_hm.put("joinedNationAt", town.getJoinedNationAt());
 			twn_hm.put("mapColorHexCode", town.getMapColorHexCode());
 			twn_hm.put("movedHomeBlockAt", town.getMovedHomeBlockAt());
-			if (town.hasMeta())
-				twn_hm.put("metadata", serializeMetadata(town));
-			else
-				twn_hm.put("metadata", "");
-
-			twn_hm.put("homeblock",
-					town.hasHomeBlock()
-							? town.getHomeBlock().getWorld().getUUID() + "#" + town.getHomeBlock().getX() + "#"
-									+ town.getHomeBlock().getZ()
-							: "");
-			twn_hm.put("spawn",
-					town.hasSpawn()
-							? town.getSpawn().getWorld().getUID() + "#" + town.getSpawn().getX() + "#"
-									+ town.getSpawn().getY() + "#" + town.getSpawn().getZ() + "#"
-									+ town.getSpawn().getPitch() + "#" + town.getSpawn().getYaw()
-							: "");
-			// Outpost Spawns
+			twn_hm.put("metadata", town.hasMeta() ? serializeMetadata(town) : "");
+			twn_hm.put("homeblock", town.hasHomeBlock() ? getTownBlockForSaving(town.getHomeBlock()) : "");
+			twn_hm.put("spawn", town.hasSpawn() ? parseLocationForSaving(town.getSpawn()) : "");
 			StringBuilder outpostArray = new StringBuilder();
 			if (town.hasOutpostSpawn())
-				for (Location spawn : new ArrayList<>(town.getAllOutpostSpawns())) {
-					outpostArray.append(spawn.getWorld().getUID()).append("#").append(spawn.getX()).append("#")
-							.append(spawn.getY()).append("#").append(spawn.getZ()).append("#").append(spawn.getPitch())
-							.append("#").append(spawn.getYaw()).append(";");
-				}
+				for (Location spawn : new ArrayList<>(town.getAllOutpostSpawns()))
+					outpostArray.append(parseLocationForSaving(spawn)).append(";");
 			twn_hm.put("outpostSpawns", outpostArray.toString());
-			if (town.hasValidUUID()) {
-				twn_hm.put("uuid", town.getUUID());
-			} else {
-				twn_hm.put("uuid", UUID.randomUUID());
-			}
 			twn_hm.put("registered", town.getRegistered());
 			twn_hm.put("ruined", town.isRuined());
 			twn_hm.put("ruinedTime", town.getRuinedTime());
 			twn_hm.put("neutral", town.isNeutral());
 			twn_hm.put("debtBalance", town.getDebtBalance());
-
 			if (town.getPrimaryJail() != null)
 				twn_hm.put("primaryJail", town.getPrimaryJail().getUUID());
-			
 			twn_hm.put("trustedResidents", StringMgmt.join(toUUIDList(town.getTrustedResidents()), "#"));
-			
 			twn_hm.put("allies", StringMgmt.join(town.getAlliesUUIDs(), "#"));
-			
 			twn_hm.put("enemies", StringMgmt.join(town.getEnemiesUUIDs(), "#"));
 			return twn_hm;
-
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Saving: Town HashMap could not be made.");
 			e.printStackTrace();
@@ -959,6 +903,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		try {
 			HashMap<String, Object> nat_hm = new HashMap<>();
 			nat_hm.put("name", nation.getName());
+			nat_hm.put("uuid", nation.hasValidUUID() ? nation.getUUID() : UUID.randomUUID()); //TODO: Do we really want this?
 			nat_hm.put("capital", nation.hasCapital() ? nation.getCapital().getUUID() : "");
 			nat_hm.put("nationBoard", nation.getBoard());
 			nat_hm.put("mapColorHexCode", nation.getMapColorHexCode());
@@ -968,28 +913,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			nat_hm.put("taxes", nation.getTaxes());
 			nat_hm.put("spawnCost", nation.getSpawnCost());
 			nat_hm.put("neutral", nation.isNeutral());
-			nat_hm.put("nationSpawn",
-					nation.hasSpawn()
-							? nation.getSpawn().getWorld().getUID() + "#" + nation.getSpawn().getX() + "#"
-									+ nation.getSpawn().getY() + "#" + nation.getSpawn().getZ() + "#"
-									+ nation.getSpawn().getPitch() + "#" + nation.getSpawn().getYaw()
-							: "");
-			if (nation.hasValidUUID()) {
-				nat_hm.put("uuid", nation.getUUID());
-			} else {
-				nat_hm.put("uuid", UUID.randomUUID());
-			}
+			nat_hm.put("nationSpawn", nation.hasSpawn() ? parseLocationForSaving(nation.getSpawn()) : "");
 			nat_hm.put("registered", nation.getRegistered());
 			nat_hm.put("isPublic", nation.isPublic());
 			nat_hm.put("isOpen", nation.isOpen());
-
-			if (nation.hasMeta())
-				nat_hm.put("metadata", serializeMetadata(nation));
-			else
-				nat_hm.put("metadata", "");
-
+			nat_hm.put("metadata", nation.hasMeta() ? serializeMetadata(nation) : "");
 			return nat_hm;
-
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Saving: Nation HashMap could not be made.");
 			e.printStackTrace();
@@ -1002,41 +931,26 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			HashMap<String, Object> world_hm = new HashMap<>();
 
 			world_hm.put("name", world.getName());
-
-			// PvP
+			world_hm.put("usingTowny", world.isUsingTowny());
+			world_hm.put("warAllowed", world.isWarAllowed());
 			world_hm.put("pvp", world.isPVP());
-			// Force PvP
 			world_hm.put("forcepvp", world.isForcePVP());
-			// Friendly Fire
 			world_hm.put("friendlyFire", world.isFriendlyFireEnabled());
-			// Claimable
 			world_hm.put("claimable", world.isClaimable());
-			// has monster spawns
 			world_hm.put("worldmobs", world.hasWorldMobs());
-			// has wilderness monster spawns
 			world_hm.put("wildernessmobs", world.hasWildernessMobs());
-			// force town mob spawns
 			world_hm.put("forcetownmobs", world.isForceTownMobs());
-			// has firespread enabled
 			world_hm.put("firespread", world.isFire());
 			world_hm.put("forcefirespread", world.isForceFire());
-			// has explosions enabled
 			world_hm.put("explosions", world.isExpl());
 			world_hm.put("forceexplosions", world.isForceExpl());
-			// Enderman block protection
 			world_hm.put("endermanprotect", world.isEndermanProtect());
-			// CreatureTrample
 			world_hm.put("disablecreaturetrample", world.isDisableCreatureTrample());
 
-			// Unclaimed Zone Build
 			world_hm.put("unclaimedZoneBuild", world.getUnclaimedZoneBuild());
-			// Unclaimed Zone Destroy
 			world_hm.put("unclaimedZoneDestroy", world.getUnclaimedZoneDestroy());
-			// Unclaimed Zone Switch
 			world_hm.put("unclaimedZoneSwitch", world.getUnclaimedZoneSwitch());
-			// Unclaimed Zone Item Use
 			world_hm.put("unclaimedZoneItemUse", world.getUnclaimedZoneItemUse());
-			// Unclaimed Zone Name
 			if (world.getUnclaimedZoneName() != null)
 				world_hm.put("unclaimedZoneName", world.getUnclaimedZoneName());
 
@@ -1073,13 +987,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			// Wilderness Explosion Protection entities
 			if (world.getPlotManagementWildRevertEntities() != null)
-				world_hm.put("PlotManagementWildRegenEntities",
-						StringMgmt.join(world.getPlotManagementWildRevertEntities(), "#"));
+				world_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(world.getPlotManagementWildRevertEntities(), "#"));
 
 			// Wilderness Explosion Protection Block Whitelist
 			if (world.getPlotManagementWildRevertBlockWhitelist() != null)
-				world_hm.put("PlotManagementWildRegenBlockWhitelist",
-						StringMgmt.join(world.getPlotManagementWildRevertBlockWhitelist(), "#"));
+				world_hm.put("PlotManagementWildRegenBlockWhitelist", StringMgmt.join(world.getPlotManagementWildRevertBlockWhitelist(), "#"));
 
 			// Using PlotManagement Wild Regen Delay
 			world_hm.put("plotManagementWildRegenSpeed", world.getPlotManagementWildRevertDelay());
@@ -1089,19 +1001,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			// Wilderness Explosion Protection blocks
 			if (world.getPlotManagementWildRevertBlocks() != null)
-				world_hm.put("PlotManagementWildRegenBlocks",
-						StringMgmt.join(world.getPlotManagementWildRevertBlocks(), "#"));
+				world_hm.put("PlotManagementWildRegenBlocks", StringMgmt.join(world.getPlotManagementWildRevertBlocks(), "#"));
 
-			// Using Towny
-			world_hm.put("usingTowny", world.isUsingTowny());
-
-			// War allowed in this world.
-			world_hm.put("warAllowed", world.isWarAllowed());
-
-			if (world.hasMeta())
-				world_hm.put("metadata", serializeMetadata(world));
-			else
-				world_hm.put("metadata", "");
+			world_hm.put("metadata", world.hasMeta() ? serializeMetadata(world) : "");
 
 			return world_hm;
 
@@ -1136,7 +1038,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<String> mats = new ArrayList<>();
 		if (string != null)
 			try {
-				for (String s : string.split(","))
+				for (String s : string.split("#"))
 					if (!s.isEmpty())
 						mats.add(s);
 			} catch (Exception ignored) {
@@ -1144,6 +1046,26 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		return mats;
 	}
 
+	private String getTownBlockForSaving(TownBlock tb) {
+		return tb.getWorld().getUUID() + "#" + tb.getX() + "#" + tb.getZ();
+	}
+
+	private TownBlock parseTownBlockFromDB(String input) throws NumberFormatException, NotRegisteredException {
+		String[] tokens = input.split("#");
+		if (universe.getWorld(UUID.fromString(tokens[0])) == null)
+			throw new NotRegisteredException("TownBlock tried to load an invalid world!");
+		return universe.getTownBlock(new WorldCoord(UUID.fromString(tokens[0]), Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+	}
+	
+	private String parseLocationForSaving(Location loc) {
+		return loc.getWorld().getUID().toString() + "#" 
+				+ loc.getX() + "#"
+				+ loc.getY() + "#"
+				+ loc.getZ() + "#"
+				+ loc.getPitch() + "#"
+				+ loc.getYaw();
+	}
+	
 	/*
 	 * Remove Object Methods
 	 */
@@ -2211,7 +2133,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 		return replacementName;
 	}
-	
 	
 	private String getNextName(boolean town) throws TownyException  {
 		String name = town ? "Town" : "Nation";
