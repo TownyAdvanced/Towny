@@ -7717,3 +7717,4 @@ v0.92.0.11:
   - Clean up edgeblock test in TownCommand.
   - Add version numbering to the database.yml.
   - Capitalize the returned value of the %townyadvanced_player_plot_type% placeholder.
+  - Prevent towns and nations being named with only underscores.

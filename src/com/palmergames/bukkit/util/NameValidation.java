@@ -41,6 +41,9 @@ public class NameValidation {
 		if (out.isEmpty())
 			throw new InvalidNameException(name + " is an invalid name.");
 
+		if (isAllUnderscores(out))
+			throw new InvalidNameException(name + " is an invalid name.");
+
 		if (isBlacklistName(out))
 			throw new InvalidNameException(out + " is an invalid name.");
 
@@ -81,6 +84,14 @@ public class NameValidation {
 
 		return arr;
 	}
+
+	private static boolean isAllUnderscores(String out) {
+		for (char letter : out.toCharArray())
+			if (letter != '_')
+				return false;
+		return true;
+	}
+
 	/**
 	 * Is this name in our blacklist?
 	 * If not a blacklist, call isValidName and
