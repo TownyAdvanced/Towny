@@ -1236,7 +1236,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (split.length != 3)
 					throw new TownyException(Translatable.of("msg_err_not_enough_variables") + "/ta town new [name] [mayor]");
 
-				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_NEW.getNode());
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_NEW.getNode());
 
 				Optional<Resident> resOpt = TownyUniverse.getInstance().getResidentOpt(split[2]);
 				
@@ -1244,8 +1244,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_not_registered_1", split[2]));
 					return;
 				}
-				
-				TownCommand.newTown(player, split[1], resOpt.get(), true);
+				Resident resident = resOpt.get();
+				// If the command is being run from console, try to sub in the specfied player.
+				if (player == null) {
+					if (resident.isOnline()) {
+						player = resident.getPlayer();
+					} else {
+						throw new TownyException(Translatable.of("msg_player_is_not_online", split[2]));
+					}
+				}
+				TownCommand.newTown(player, split[1], resident, true);
 				return;
 			}
 			
