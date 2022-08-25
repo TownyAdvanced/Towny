@@ -445,6 +445,21 @@ public class TownyUniverse {
 			}
 		}
 	}
+	
+	/**
+	 * Unregister a resident from the internal structures.
+	 * This does not modify the resident internally, nor performs any database operations using the resident.
+	 * 
+	 * @param uuid UUID of resident to unregister
+	 */
+	public void unregisterResident(@NotNull UUID uuid) {
+		Preconditions.checkNotNull(uuid, "UUID cannot be null!");
+		Resident resident = residentUUIDMap.get(uuid);
+		Preconditions.checkNotNull(uuid, "Resident cannot be null!");
+		residentNameMap.remove(resident.getName().toLowerCase());
+		residentsTrie.removeKey(resident.getName());
+		residentUUIDMap.remove(resident.getUUID());
+	}
 
     @Unmodifiable
     public Collection<Resident> getResidents() {
@@ -618,6 +633,22 @@ public class TownyUniverse {
 			}
 		}
 	}
+	
+	/**
+	 * Used to unregister a town from the TownyUniverse internal maps.
+	 * 
+	 * This does not delete a town, nor perform any actions that affect the town internally.
+	 * 
+	 * @param uuid UUID of Town to unregister
+	 */
+	public void unregisterTown(@NotNull UUID uuid) {
+		Preconditions.checkNotNull(uuid, "UUID cannot be null!");
+		Town town = townUUIDMap.get(uuid);
+		Preconditions.checkNotNull(town, "Town cannot be null!");
+		townNameMap.remove(town.getName().toLowerCase());
+		townsTrie.removeKey(town.getName());
+		townUUIDMap.remove(town.getUUID());
+	}
 
 	// =========== Nation Methods ===========
 
@@ -771,6 +802,22 @@ public class TownyUniverse {
 				throw new NotRegisteredException(String.format("The nation with the UUID '%s' is not registered!", nation.getUUID().toString()));
 			}
 		}
+	}
+
+	/**
+	 * Used to unregister a nation from the TownyUniverse internal maps.
+	 *
+	 * This does not delete a nation, nor perform any actions that affect the nation internally.
+	 *
+	 * @param uuid UUID of Nation to unregister
+	 */
+	public void unregisterNation(@NotNull UUID uuid) {
+		Preconditions.checkNotNull(uuid, "UUID cannot be null!");
+		Nation nation = nationUUIDMap.get(uuid);
+		Preconditions.checkNotNull(nation, "Nation cannot be null!");
+		nationNameMap.remove(nation.getName().toLowerCase());
+		nationsTrie.removeKey(nation.getName());
+		nationUUIDMap.remove(nation.getUUID());
 	}
 
 	public Trie getNationsTrie() {
