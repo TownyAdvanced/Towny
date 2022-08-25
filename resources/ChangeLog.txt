@@ -7719,3 +7719,7 @@ v0.92.0.11:
   - Capitalize the returned value of the %townyadvanced_player_plot_type% placeholder.
   - Prevent towns and nations being named with only underscores.
   - Fix /ta town new NAME MAYOR not being able to be run from console.
+  - API: Add new outlaw add/remove events.
+    - TownOutlawAddEvent
+    - TownOutlawRemoveEvent
+    - Cancellable events that are thrown when a town is modifying who is outlawed.

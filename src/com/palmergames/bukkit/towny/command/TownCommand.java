@@ -25,6 +25,8 @@ import com.palmergames.bukkit.towny.event.town.TownKickEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownMayorChangeEvent;
 import com.palmergames.bukkit.towny.event.town.TownMergeEvent;
+import com.palmergames.bukkit.towny.event.town.TownOutlawAddEvent;
+import com.palmergames.bukkit.towny.event.town.TownOutlawRemoveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreMergeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreSetHomeBlockEvent;
@@ -1069,6 +1071,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (resident.getTown().getMayor().equals(target))
 						return;
 
+					// Call cancellable event.
+					TownOutlawAddEvent toae = new TownOutlawAddEvent(sender, target, town);
+					Bukkit.getPluginManager().callEvent(toae);
+					if (toae.isCancelled())
+						throw new TownyException(toae.getCancelMessage());
+
 					// Kick outlaws from town if they are residents.
 					if (targetTown != null && targetTown.getUUID().equals(town.getUUID())) {
 						target.removeTown();
@@ -1122,8 +1130,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("remove")) {
 				if (town.hasOutlaw(target)) {
+
+					// Call cancellable event.
+					TownOutlawRemoveEvent tore = new TownOutlawRemoveEvent(sender, target, town);
+					Bukkit.getPluginManager().callEvent(tore);
+					if (tore.isCancelled())
+						throw new TownyException(tore.getCancelMessage());
+					
 					town.removeOutlaw(target);
 					town.save();
+
+					// Send feedback messages.
 					if (target.getPlayer() != null && target.getPlayer().isOnline())
 						TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_undeclared_outlaw", town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_you_have_undeclared_an_outlaw", target.getName(), town.getName()));
