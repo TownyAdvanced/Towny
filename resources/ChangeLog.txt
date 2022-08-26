@@ -7723,3 +7723,5 @@ v0.92.0.11:
     - TownOutlawAddEvent
     - TownOutlawRemoveEvent
     - Cancellable events that are thrown when a town is modifying who is outlawed.
+0.98.3.7:
+  - Alter CooldownTimerTask to accept strings alongside the pre-configured enum, allowing for third-party plugins to create simple cooldowns.
