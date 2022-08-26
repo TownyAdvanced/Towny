@@ -540,7 +540,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		case RESIDENT -> loadResidentData(uuid);
 		case TOWN -> loadTownData(uuid);
 		case TOWNBLOCK -> throw new UnsupportedOperationException("Unimplemented case: " + type);
-		case WORLD -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+		case WORLD -> loadWorldData(uuid);
 		default -> throw new IllegalArgumentException("Unexpected value: " + type);
 		};
 	}
@@ -799,727 +799,729 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		}
 	}
 
-//	
-//	private boolean loadTown(ResultSet rs) {
-//		String line;
-//		String[] tokens;
-//		String search;
-//		String name = null;
-//		try {
-//			Town town = universe.getTown(rs.getString("name"));
-//			
-//			if (town == null) {
-//				TownyMessaging.sendErrorMsg("SQL: Load Town " + rs.getString("name") + ". Town was not registered properly on load!");
-//				return false;
-//			}
-//			
-//			name = town.getName();
-//
-//			TownyMessaging.sendDebugMsg("Loading town " + name);
-//
-//			try {
-//				Resident res = universe.getResident(rs.getString("mayor"));
-//				
-//				if (res == null)
-//					throw new TownyException();
-//					
-//				town.forceSetMayor(res);
-//			} catch (TownyException e1) {
-//				e1.getMessage();
-//				if (town.getResidents().size() == 0) {
-//					deleteTown(town);
-//					return true;
-//				} else {
-//					town.findNewMayor();
-//				}
-//			}
-//
-//			town.setBoard(rs.getString("townBoard"));
-//			line = rs.getString("tag");
-//			if (line != null)
-//				town.setTag(line);
-//			town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
-//			town.setBonusBlocks(rs.getInt("bonus"));
-//			town.setManualTownLevel(rs.getInt("manualTownLevel"));
-//			town.setTaxPercentage(rs.getBoolean("taxpercent"));
-//			town.setTaxes(rs.getFloat("taxes"));
-//			town.setMaxPercentTaxAmount(rs.getFloat("maxPercentTaxAmount"));
-//			town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
-//			town.setHasUnlimitedClaims(rs.getBoolean("hasUnlimitedClaims"));
-//			town.setPlotPrice(rs.getFloat("plotPrice"));
-//			town.setPlotTax(rs.getFloat("plotTax"));
-//			town.setEmbassyPlotPrice(rs.getFloat("embassyPlotPrice"));
-//			town.setEmbassyPlotTax(rs.getFloat("embassyPlotTax"));
-//			town.setCommercialPlotPrice(rs.getFloat("commercialPlotPrice"));
-//			town.setCommercialPlotTax(rs.getFloat("commercialPlotTax"));
-//			town.setSpawnCost(rs.getFloat("spawnCost"));
-//			town.setOpen(rs.getBoolean("open"));
-//			town.setPublic(rs.getBoolean("public"));
-//			town.setConquered(rs.getBoolean("conquered"));
-//			town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
-//			town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
-//			town.setJoinedNationAt(rs.getLong("joinedNationAt"));
-//			town.setMovedHomeBlockAt(rs.getLong("movedHomeBlockAt"));
-//
-//			town.setPurchasedBlocks(rs.getInt("purchased"));
-//			town.setNationZoneOverride(rs.getInt("nationZoneOverride"));
-//			town.setNationZoneEnabled(rs.getBoolean("nationZoneEnabled"));
-//			
-//			line = rs.getString("maxPercentTaxAmount");
-//			if (line != null)
-//				town.setMaxPercentTaxAmount(Double.parseDouble(line));
-//			else 
-//				town.setMaxPercentTaxAmount(TownySettings.getMaxTownTaxPercentAmount());
-//
-//			line = rs.getString("homeBlock");
-//			if (line != null) {
-//				search = (line.contains("#")) ? "#" : ",";
-//				tokens = line.split(search);
-//				if (tokens.length == 3) {
-//					TownyWorld world = universe.getWorld(tokens[0]);
-//					if (world == null)
-//						TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
-//					else {
-//						try {
-//							int x = Integer.parseInt(tokens[1]);
-//							int z = Integer.parseInt(tokens[2]);
-//							TownBlock homeBlock = universe
-//									.getTownBlock(new WorldCoord(world.getName(), x, z));
-//							town.forceSetHomeBlock(homeBlock);
-//						} catch (NumberFormatException e) {
-//							TownyMessaging.sendErrorMsg(
-//									"[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
-//						} catch (NotRegisteredException e) {
-//							TownyMessaging.sendErrorMsg(
-//									"[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
-//						} catch (TownyException e) {
-//							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
-//						}
-//					}
-//				}
-//			}
-//
-//			line = rs.getString("spawn");
-//			if (line != null) {
-//				search = (line.contains("#")) ? "#" : ",";
-//				tokens = line.split(search);
-//				if (tokens.length >= 4)
-//					try {
-//						World world = plugin.getServerWorld(tokens[0]);
-//						double x = Double.parseDouble(tokens[1]);
-//						double y = Double.parseDouble(tokens[2]);
-//						double z = Double.parseDouble(tokens[3]);
-//
-//						Location loc = new Location(world, x, y, z);
-//						if (tokens.length == 6) {
-//							loc.setPitch(Float.parseFloat(tokens[4]));
-//							loc.setYaw(Float.parseFloat(tokens[5]));
-//						}
-//						town.setSpawn(loc);
-//					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-//					}
-//			}
-//			// Load outpost spawns
-//			line = rs.getString("outpostSpawns");
-//			if (line != null) {
-//				String[] outposts = line.split(";");
-//				for (String spawn : outposts) {
-//					search = (line.contains("#")) ? "#" : ",";
-//					tokens = spawn.split(search);
-//					if (tokens.length >= 4)
-//						try {
-//							World world = plugin.getServerWorld(tokens[0]);
-//							double x = Double.parseDouble(tokens[1]);
-//							double y = Double.parseDouble(tokens[2]);
-//							double z = Double.parseDouble(tokens[3]);
-//
-//							Location loc = new Location(world, x, y, z);
-//							if (tokens.length == 6) {
-//								loc.setPitch(Float.parseFloat(tokens[4]));
-//								loc.setYaw(Float.parseFloat(tokens[5]));
-//							}
-//							town.forceAddOutpostSpawn(loc);
-//						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-//						}
-//				}
-//			}
-//			// Load legacy jail spawns into new Jail objects.
-//			line = rs.getString("jailSpawns");
-//			if (line != null) {
-//				String[] jails = line.split(";");
-//				for (String spawn : jails) {
-//					search = (line.contains("#")) ? "#" : ",";
-//					tokens = spawn.split(search);
-//					if (tokens.length >= 4)
-//						try {
-//							World world = plugin.getServerWorld(tokens[0]);
-//							double x = Double.parseDouble(tokens[1]);
-//							double y = Double.parseDouble(tokens[2]);
-//							double z = Double.parseDouble(tokens[3]);
-//
-//							Location loc = new Location(world, x, y, z);
-//							if (tokens.length == 6) {
-//								loc.setPitch(Float.parseFloat(tokens[4]));
-//								loc.setYaw(Float.parseFloat(tokens[5]));
-//							}
-//
-//							TownBlock tb = universe.getTownBlock(WorldCoord.parseWorldCoord(loc));
-//							if (tb == null)
-//								continue;
-//							Jail jail = new Jail(UUID.randomUUID(), town, tb, new ArrayList<>(Collections.singleton(loc)));
-//							universe.registerJail(jail);
-//							town.addJail(jail);
-//							tb.setJail(jail);
-//							jail.save();
-//						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-//						}
-//				}
-//			}
-//			line = rs.getString("outlaws");
-//			if (line != null) {
-//				search = (line.contains("#")) ? "#" : ",";
-//				tokens = line.split(search);
-//				for (String token : tokens) {
-//					if (!token.isEmpty()) {
-//						Resident resident = universe.getResident(token);
-//						if (resident != null)
-//							town.addOutlaw(resident);
-//						else {
-//							plugin.getLogger().warning(String.format("Loading Error: Cannot load outlaw with name '%s' for town '%s'! Skipping adding outlaw to town...", token, town.getName()));
-//						}
-//					}
-//				}
-//			}
-//
-//			try {
-//				town.setUUID(UUID.fromString(rs.getString("uuid")));
-//			} catch (IllegalArgumentException | NullPointerException ee) {
-//				town.setUUID(UUID.randomUUID());
-//			}
-//			universe.registerTownUUID(town);
-//
-//			int conqueredDays = rs.getInt("conqueredDays");
-//			town.setConqueredDays(conqueredDays);
-//
-//			try {
-//				long registered = rs.getLong("registered");
-//				town.setRegistered(registered);
-//			} catch (Exception ignored) {
-//				town.setRegistered(0);
-//			}
-//
-//			try {
-//				line = rs.getString("metadata");
-//				if (line != null && !line.isEmpty()) {
-//					MetadataLoader.getInstance().deserializeMetadata(town, line);
-//				}
-//			} catch (SQLException ignored) {
-//			}
-//
-//			try {
-//				line = rs.getString("nation");
-//				if (line != null && !line.isEmpty()) {
-//					Nation nation = universe.getNation(line);
-//					// Only set nation if it exists
-//					if (nation != null)
-//						town.setNation(nation, false);
-//				}
-//			} catch (SQLException ignored) {
-//			}
-//
-//			town.setRuined(rs.getBoolean("ruined"));
-//			town.setRuinedTime(rs.getLong("ruinedTime"));
-//			town.setNeutral(rs.getBoolean("neutral"));
-//
-//			town.setDebtBalance(rs.getFloat("debtBalance"));
-//			
-//			line = rs.getString("primaryJail");
-//			if (line != null && !line.isEmpty()) {
-//				UUID uuid = UUID.fromString(line);
-//				if (universe.hasJail(uuid))
-//					town.setPrimaryJail(universe.getJail(uuid));
-//			}
-//			
-//			line = rs.getString("trustedResidents");
-//			if (line != null && !line.isEmpty()) {
-//				search = (line.contains("#")) ? "#" : ",";
-//				for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(search))))
-//					town.addTrustedResident(resident);
-//			}
-//			
-//			line = rs.getString("mapColorHexCode");
-//			if (line != null)
-//				town.setMapColorHexCode(line);
-//			else
-//				town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
-//
-//			line = rs.getString("allies");
-//			if (line != null && !line.isEmpty()) {
-//				search = (line.contains("#")) ? "#" : ",";
-//				List<UUID> uuids = Arrays.stream(line.split(search))
-//						.map(uuid -> UUID.fromString(uuid))
-//						.collect(Collectors.toList());
-//				town.loadAllies(TownyAPI.getInstance().getTowns(uuids));
-//			}
-//
-//			line = rs.getString("enemies");
-//			if (line != null && !line.isEmpty()) {
-//				search = (line.contains("#")) ? "#" : ",";
-//				List<UUID> uuids = Arrays.stream(line.split(search))
-//						.map(uuid -> UUID.fromString(uuid))
-//						.collect(Collectors.toList());
-//				town.loadEnemies(TownyAPI.getInstance().getTowns(uuids));
-//			}
-//			
-//			return true;
-//		} catch (SQLException e) {
-//			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " sql Error - " + e.getMessage());
-//		} catch (Exception e) {
-//			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " unknown Error - ");
-//			e.printStackTrace();
-//		}
-//
-//		return false;
-//	}
-//
-//	private boolean loadNation(ResultSet rs) {
-//		String line;
-//		String[] tokens;
-//		String search;
-//		String name = null;
-//		try {
-//			Nation nation = universe.getNation(rs.getString("name"));
-//			
-//			// Could not find nation in universe maps
-//			if (nation == null) {
-//				plugin.getLogger().warning(String.format("Error: The nation with the name '%s' was not registered and cannot be loaded!", rs.getString("name")));
-//				return false;
-//			}
-//			
-//			name = nation.getName();
-//
-//			TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
-//
-//			Town town = universe.getTown(rs.getString("capital"));
-//			if (town != null) {
-//				try {
-//					nation.forceSetCapital(town);
-//				} catch (EmptyNationException e1) {
-//					plugin.getLogger().warning("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
-//					removeNation(nation);
-//					return true;
-//				}
-//			}
-//			else {
-//				TownyMessaging.sendDebugMsg("Nation " + name + " could not set capital to " + rs.getString("capital") + ", selecting a new capital...");
-//				if (!nation.findNewCapital()) {
-//					plugin.getLogger().warning("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
-//					removeNation(nation);
-//					return true;
-//				}
-//			}
-//
-//			line = rs.getString("nationBoard");
-//			if (line != null)
-//				nation.setBoard(rs.getString("nationBoard"));
-//			else
-//				nation.setBoard("");
-//
-//			line = rs.getString("mapColorHexCode");
-//			if (line != null)
-//				nation.setMapColorHexCode(line);
-//			else
-//				nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
-//
-//			nation.setTag(rs.getString("tag"));
-//
-//			line = rs.getString("allies");
-//			if (line != null) {
-//				search = (line.contains("#")) ? "#" : ",";
-//				List<Nation> allies = TownyAPI.getInstance().getNations(line.split(search));
-//				for (Nation ally : allies)
-//					nation.addAlly(ally);
-//			}
-//
-//			line = rs.getString("enemies");
-//			if (line != null) {
-//				search = (line.contains("#")) ? "#" : ",";
-//				List<Nation> enemies = TownyAPI.getInstance().getNations(line.split(search));
-//				for (Nation enemy : enemies) 
-//					nation.addEnemy(enemy);
-//			}
-//
-//			nation.setTaxes(rs.getDouble("taxes"));
-//			nation.setSpawnCost(rs.getFloat("spawnCost"));
-//			nation.setNeutral(rs.getBoolean("neutral"));
-//			try {
-//				nation.setUUID(UUID.fromString(rs.getString("uuid")));
-//			} catch (IllegalArgumentException | NullPointerException ee) {
-//				nation.setUUID(UUID.randomUUID());
-//			}
-//			universe.registerNationUUID(nation);
-//
-//			line = rs.getString("nationSpawn");
-//			if (line != null) {
-//				search = (line.contains("#")) ? "#" : ",";
-//				tokens = line.split(search);
-//				if (tokens.length >= 4)
-//					try {
-//						World world = plugin.getServerWorld(tokens[0]);
-//						double x = Double.parseDouble(tokens[1]);
-//						double y = Double.parseDouble(tokens[2]);
-//						double z = Double.parseDouble(tokens[3]);
-//
-//						Location loc = new Location(world, x, y, z);
-//						if (tokens.length == 6) {
-//							loc.setPitch(Float.parseFloat(tokens[4]));
-//							loc.setYaw(Float.parseFloat(tokens[5]));
-//						}
-//						nation.setSpawn(loc);
-//					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-//					}
-//			}
-//
-//			nation.setPublic(rs.getBoolean("isPublic"));
-//
-//			nation.setOpen(rs.getBoolean("isOpen"));
-//
-//			try {
-//				line = rs.getString("registered");
-//				if (line != null) {
-//					nation.setRegistered(Long.parseLong(line));
-//				} else {
-//					nation.setRegistered(0);
-//				}
-//			} catch (SQLException ignored) {
-//			} catch (NumberFormatException | NullPointerException e) {
-//				nation.setRegistered(0);
-//			}
-//
-//			try {
-//				line = rs.getString("metadata");
-//				if (line != null && !line.isEmpty()) {
-//					MetadataLoader.getInstance().deserializeMetadata(nation, line);
-//				}
-//			} catch (SQLException ignored) {
-//			}
-//
-//			return true;
-//		} catch (SQLException e) {
-//			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " SQL Error - " + e.getMessage());
-//		} catch (TownyException ex) {
-//			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " unknown Error - ");
-//			ex.printStackTrace();
-//		}
-//
-//		return false;
-//	}
-//
-//	private boolean loadWorld(ResultSet rs) {
-//		String line;
-//		boolean result;
-//		long resultLong;
-//		String search;
-//		String worldName = null;
-//		try {
-//			worldName = rs.getString("name");
-//			TownyWorld world = universe.getWorld(worldName);
-//			if (world == null)
-//				throw new Exception("World " + worldName + " not registered!");
-//
-//			TownyMessaging.sendDebugMsg("Loading world " + world.getName());
-//
-//			result = rs.getBoolean("claimable");
-//			try {
-//				world.setClaimable(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("pvp");
-//			try {
-//				world.setPVP(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("forcepvp");
-//			try {
-//				world.setForcePVP(result);
-//			} catch (Exception ignored) {
-//			}
-//			
-//			result = rs.getBoolean("friendlyFire");
-//			try {
-//				world.setFriendlyFire(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("forcetownmobs");
-//			try {
-//				world.setForceTownMobs(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("wildernessmobs");
-//			try {
-//				world.setWildernessMobs(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("worldmobs");
-//			try {
-//				world.setWorldMobs(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("firespread");
-//			try {
-//				world.setFire(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("forcefirespread");
-//			try {
-//				world.setForceFire(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("explosions");
-//			try {
-//				world.setExpl(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("forceexplosions");
-//			try {
-//				world.setForceExpl(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("endermanprotect");
-//			try {
-//				world.setEndermanProtect(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("disablecreaturetrample");
-//			try {
-//				world.setDisableCreatureTrample(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("unclaimedZoneBuild");
-//			try {
-//				world.setUnclaimedZoneBuild(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("unclaimedZoneDestroy");
-//			try {
-//				world.setUnclaimedZoneDestroy(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("unclaimedZoneSwitch");
-//			try {
-//				world.setUnclaimedZoneSwitch(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("unclaimedZoneItemUse");
-//			try {
-//				world.setUnclaimedZoneItemUse(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			line = rs.getString("unclaimedZoneName");
-//			try {
-//				world.setUnclaimedZoneName(line);
-//			} catch (Exception ignored) {
-//			}
-//
-//			line = rs.getString("unclaimedZoneIgnoreIds");
-//			if (line != null)
-//				try {
-//					List<String> mats = new ArrayList<>();
-//					search = (line.contains("#")) ? "#" : ",";
-//					for (String split : line.split(search))
-//						if (!split.isEmpty())
-//							mats.add(split);
-//
-//					world.setUnclaimedZoneIgnore(mats);
-//				} catch (Exception ignored) {
-//				}
-//
-//			result = rs.getBoolean("isDeletingEntitiesOnUnclaim");
-//			try {
-//				world.setDeletingEntitiesOnUnclaim(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			line = rs.getString("unclaimDeleteEntityTypes");
-//			if (line != null)
-//				try {
-//					List<String> entityTypes = new ArrayList<>();
-//					search = (line.contains("#")) ? "#" : ",";
-//					for (String split : line.split(search))
-//						if (!split.isEmpty())
-//							entityTypes.add(split);
-//
-//					world.setUnclaimDeleteEntityTypes(entityTypes);
-//				} catch (Exception ignored) {
-//				}
-//
-//			result = rs.getBoolean("usingPlotManagementDelete");
-//			try {
-//				world.setUsingPlotManagementDelete(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			line = rs.getString("plotManagementDeleteIds");
-//			if (line != null)
-//				try {
-//					List<String> mats = new ArrayList<>();
-//					search = (line.contains("#")) ? "#" : ",";
-//					for (String split : line.split(search))
-//						if (!split.isEmpty())
-//							mats.add(split);
-//
-//					world.setPlotManagementDeleteIds(mats);
-//				} catch (Exception ignored) {
-//				}
-//
-//			result = rs.getBoolean("usingPlotManagementMayorDelete");
-//			try {
-//				world.setUsingPlotManagementMayorDelete(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			line = rs.getString("plotManagementMayorDelete");
-//			if (line != null)
-//				try {
-//					List<String> materials = new ArrayList<>();
-//					search = (line.contains("#")) ? "#" : ",";
-//					for (String split : line.split(search))
-//						if (!split.isEmpty())
-//							try {
-//								materials.add(split.toUpperCase().trim());
-//							} catch (NumberFormatException ignored) {
-//							}
-//					world.setPlotManagementMayorDelete(materials);
-//				} catch (Exception ignored) {
-//				}
-//
-//			result = rs.getBoolean("usingPlotManagementRevert");
-//			try {
-//				world.setUsingPlotManagementRevert(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			line = rs.getString("plotManagementIgnoreIds");
-//			if (line != null)
-//				try {
-//					List<String> mats = new ArrayList<>();
-//					search = (line.contains("#")) ? "#" : ",";
-//					for (String split : line.split(search))
-//						if (!split.isEmpty())
-//							mats.add(split);
-//
-//					world.setPlotManagementIgnoreIds(mats);
-//				} catch (Exception ignored) {
-//				}
-//
-//			result = rs.getBoolean("usingPlotManagementWildRegen");
-//			try {
-//				world.setUsingPlotManagementWildEntityRevert(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			line = rs.getString("plotManagementWildRegenEntities");
-//			if (line != null)
-//				try {
-//					List<String> entities = new ArrayList<>();
-//					search = (line.contains("#")) ? "#" : ",";
-//					for (String split : line.split(search))
-//						if (!split.isEmpty())
-//							try {
-//								entities.add(split.trim());
-//							} catch (NumberFormatException ignored) {
-//							}
-//					world.setPlotManagementWildRevertEntities(entities);
-//				} catch (Exception ignored) {
-//				}
-//
-//			line = rs.getString("plotManagementWildRegenBlockWhitelist");
-//			if (line != null)
-//				try {
-//					List<String> materials = new ArrayList<>();
-//					search = (line.contains("#")) ? "#" : ",";
-//					for (String split : line.split(search))
-//						if (!split.isEmpty())
-//							try {
-//								materials.add(split.trim());
-//							} catch (NumberFormatException ignored) {
-//							}
-//					world.setPlotManagementWildRevertBlockWhitelist(materials);
-//				} catch (Exception ignored) {
-//				}
-//
-//			resultLong = rs.getLong("plotManagementWildRegenSpeed");
-//			try {
-//				world.setPlotManagementWildRevertDelay(resultLong);
-//			} catch (Exception ignored) {
-//			}
-//			
-//			result = rs.getBoolean("usingPlotManagementWildRegenBlocks");
-//			try {
-//				world.setUsingPlotManagementWildBlockRevert(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			line = rs.getString("plotManagementWildRegenBlocks");
-//			if (line != null)
-//				try {
-//					List<String> materials = new ArrayList<>();
-//					search = (line.contains("#")) ? "#" : ",";
-//					for (String split : line.split(search))
-//						if (!split.isEmpty())
-//							try {
-//								materials.add(split.trim());
-//							} catch (NumberFormatException ignored) {
-//							}
-//					world.setPlotManagementWildRevertMaterials(materials);
-//				} catch (Exception ignored) {
-//				}
-//
-//			result = rs.getBoolean("usingTowny");
-//			try {
-//				world.setUsingTowny(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			result = rs.getBoolean("warAllowed");
-//			try {
-//				world.setWarAllowed(result);
-//			} catch (Exception ignored) {
-//			}
-//
-//			try {
-//				line = rs.getString("metadata");
-//				if (line != null && !line.isEmpty()) {
-//					MetadataLoader.getInstance().deserializeMetadata(world, line);
-//				}
-//			} catch (SQLException ignored) {
-//			}
-//			return true;
-//		} catch (SQLException e) {
-//			TownyMessaging.sendErrorMsg(
-//					"SQL: Load world sql error (" + (worldName != null ? worldName : "NULL") + ")" + e.getMessage());
-//		} catch (Exception e) {
-//			TownyMessaging.sendErrorMsg(e.getMessage());
-//		}
-//		return false;
-//	}
+/*	
+	private boolean loadTown(ResultSet rs) {
+		String line;
+		String[] tokens;
+		String search;
+		String name = null;
+		try {
+			Town town = universe.getTown(rs.getString("name"));
+			
+			if (town == null) {
+				TownyMessaging.sendErrorMsg("SQL: Load Town " + rs.getString("name") + ". Town was not registered properly on load!");
+				return false;
+			}
+			
+			name = town.getName();
 
+			TownyMessaging.sendDebugMsg("Loading town " + name);
+
+			try {
+				Resident res = universe.getResident(rs.getString("mayor"));
+				
+				if (res == null)
+					throw new TownyException();
+					
+				town.forceSetMayor(res);
+			} catch (TownyException e1) {
+				e1.getMessage();
+				if (town.getResidents().size() == 0) {
+					deleteTown(town);
+					return true;
+				} else {
+					town.findNewMayor();
+				}
+			}
+
+			town.setBoard(rs.getString("townBoard"));
+			line = rs.getString("tag");
+			if (line != null)
+				town.setTag(line);
+			town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
+			town.setBonusBlocks(rs.getInt("bonus"));
+			town.setManualTownLevel(rs.getInt("manualTownLevel"));
+			town.setTaxPercentage(rs.getBoolean("taxpercent"));
+			town.setTaxes(rs.getFloat("taxes"));
+			town.setMaxPercentTaxAmount(rs.getFloat("maxPercentTaxAmount"));
+			town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
+			town.setHasUnlimitedClaims(rs.getBoolean("hasUnlimitedClaims"));
+			town.setPlotPrice(rs.getFloat("plotPrice"));
+			town.setPlotTax(rs.getFloat("plotTax"));
+			town.setEmbassyPlotPrice(rs.getFloat("embassyPlotPrice"));
+			town.setEmbassyPlotTax(rs.getFloat("embassyPlotTax"));
+			town.setCommercialPlotPrice(rs.getFloat("commercialPlotPrice"));
+			town.setCommercialPlotTax(rs.getFloat("commercialPlotTax"));
+			town.setSpawnCost(rs.getFloat("spawnCost"));
+			town.setOpen(rs.getBoolean("open"));
+			town.setPublic(rs.getBoolean("public"));
+			town.setConquered(rs.getBoolean("conquered"));
+			town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
+			town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
+			town.setJoinedNationAt(rs.getLong("joinedNationAt"));
+			town.setMovedHomeBlockAt(rs.getLong("movedHomeBlockAt"));
+
+			town.setPurchasedBlocks(rs.getInt("purchased"));
+			town.setNationZoneOverride(rs.getInt("nationZoneOverride"));
+			town.setNationZoneEnabled(rs.getBoolean("nationZoneEnabled"));
+			
+			line = rs.getString("maxPercentTaxAmount");
+			if (line != null)
+				town.setMaxPercentTaxAmount(Double.parseDouble(line));
+			else 
+				town.setMaxPercentTaxAmount(TownySettings.getMaxTownTaxPercentAmount());
+
+			line = rs.getString("homeBlock");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				tokens = line.split(search);
+				if (tokens.length == 3) {
+					TownyWorld world = universe.getWorld(tokens[0]);
+					if (world == null)
+						TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid world.");
+					else {
+						try {
+							int x = Integer.parseInt(tokens[1]);
+							int z = Integer.parseInt(tokens[2]);
+							TownBlock homeBlock = universe
+									.getTownBlock(new WorldCoord(world.getName(), x, z));
+							town.forceSetHomeBlock(homeBlock);
+						} catch (NumberFormatException e) {
+							TownyMessaging.sendErrorMsg(
+									"[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
+						} catch (NotRegisteredException e) {
+							TownyMessaging.sendErrorMsg(
+									"[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+						} catch (TownyException e) {
+							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
+						}
+					}
+				}
+			}
+
+			line = rs.getString("spawn");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				tokens = line.split(search);
+				if (tokens.length >= 4)
+					try {
+						World world = plugin.getServerWorld(tokens[0]);
+						double x = Double.parseDouble(tokens[1]);
+						double y = Double.parseDouble(tokens[2]);
+						double z = Double.parseDouble(tokens[3]);
+
+						Location loc = new Location(world, x, y, z);
+						if (tokens.length == 6) {
+							loc.setPitch(Float.parseFloat(tokens[4]));
+							loc.setYaw(Float.parseFloat(tokens[5]));
+						}
+						town.setSpawn(loc);
+					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+					}
+			}
+			// Load outpost spawns
+			line = rs.getString("outpostSpawns");
+			if (line != null) {
+				String[] outposts = line.split(";");
+				for (String spawn : outposts) {
+					search = (line.contains("#")) ? "#" : ",";
+					tokens = spawn.split(search);
+					if (tokens.length >= 4)
+						try {
+							World world = plugin.getServerWorld(tokens[0]);
+							double x = Double.parseDouble(tokens[1]);
+							double y = Double.parseDouble(tokens[2]);
+							double z = Double.parseDouble(tokens[3]);
+
+							Location loc = new Location(world, x, y, z);
+							if (tokens.length == 6) {
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+							}
+							town.forceAddOutpostSpawn(loc);
+						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+						}
+				}
+			}
+			// Load legacy jail spawns into new Jail objects.
+			line = rs.getString("jailSpawns");
+			if (line != null) {
+				String[] jails = line.split(";");
+				for (String spawn : jails) {
+					search = (line.contains("#")) ? "#" : ",";
+					tokens = spawn.split(search);
+					if (tokens.length >= 4)
+						try {
+							World world = plugin.getServerWorld(tokens[0]);
+							double x = Double.parseDouble(tokens[1]);
+							double y = Double.parseDouble(tokens[2]);
+							double z = Double.parseDouble(tokens[3]);
+
+							Location loc = new Location(world, x, y, z);
+							if (tokens.length == 6) {
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+							}
+
+							TownBlock tb = universe.getTownBlock(WorldCoord.parseWorldCoord(loc));
+							if (tb == null)
+								continue;
+							Jail jail = new Jail(UUID.randomUUID(), town, tb, new ArrayList<>(Collections.singleton(loc)));
+							universe.registerJail(jail);
+							town.addJail(jail);
+							tb.setJail(jail);
+							jail.save();
+						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+						}
+				}
+			}
+			line = rs.getString("outlaws");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				tokens = line.split(search);
+				for (String token : tokens) {
+					if (!token.isEmpty()) {
+						Resident resident = universe.getResident(token);
+						if (resident != null)
+							town.addOutlaw(resident);
+						else {
+							plugin.getLogger().warning(String.format("Loading Error: Cannot load outlaw with name '%s' for town '%s'! Skipping adding outlaw to town...", token, town.getName()));
+						}
+					}
+				}
+			}
+
+			try {
+				town.setUUID(UUID.fromString(rs.getString("uuid")));
+			} catch (IllegalArgumentException | NullPointerException ee) {
+				town.setUUID(UUID.randomUUID());
+			}
+			universe.registerTownUUID(town);
+
+			int conqueredDays = rs.getInt("conqueredDays");
+			town.setConqueredDays(conqueredDays);
+
+			try {
+				long registered = rs.getLong("registered");
+				town.setRegistered(registered);
+			} catch (Exception ignored) {
+				town.setRegistered(0);
+			}
+
+			try {
+				line = rs.getString("metadata");
+				if (line != null && !line.isEmpty()) {
+					MetadataLoader.getInstance().deserializeMetadata(town, line);
+				}
+			} catch (SQLException ignored) {
+			}
+
+			try {
+				line = rs.getString("nation");
+				if (line != null && !line.isEmpty()) {
+					Nation nation = universe.getNation(line);
+					// Only set nation if it exists
+					if (nation != null)
+						town.setNation(nation, false);
+				}
+			} catch (SQLException ignored) {
+			}
+
+			town.setRuined(rs.getBoolean("ruined"));
+			town.setRuinedTime(rs.getLong("ruinedTime"));
+			town.setNeutral(rs.getBoolean("neutral"));
+
+			town.setDebtBalance(rs.getFloat("debtBalance"));
+			
+			line = rs.getString("primaryJail");
+			if (line != null && !line.isEmpty()) {
+				UUID uuid = UUID.fromString(line);
+				if (universe.hasJail(uuid))
+					town.setPrimaryJail(universe.getJail(uuid));
+			}
+			
+			line = rs.getString("trustedResidents");
+			if (line != null && !line.isEmpty()) {
+				search = (line.contains("#")) ? "#" : ",";
+				for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(search))))
+					town.addTrustedResident(resident);
+			}
+			
+			line = rs.getString("mapColorHexCode");
+			if (line != null)
+				town.setMapColorHexCode(line);
+			else
+				town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
+
+			line = rs.getString("allies");
+			if (line != null && !line.isEmpty()) {
+				search = (line.contains("#")) ? "#" : ",";
+				List<UUID> uuids = Arrays.stream(line.split(search))
+						.map(uuid -> UUID.fromString(uuid))
+						.collect(Collectors.toList());
+				town.loadAllies(TownyAPI.getInstance().getTowns(uuids));
+			}
+
+			line = rs.getString("enemies");
+			if (line != null && !line.isEmpty()) {
+				search = (line.contains("#")) ? "#" : ",";
+				List<UUID> uuids = Arrays.stream(line.split(search))
+						.map(uuid -> UUID.fromString(uuid))
+						.collect(Collectors.toList());
+				town.loadEnemies(TownyAPI.getInstance().getTowns(uuids));
+			}
+			
+			return true;
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " sql Error - " + e.getMessage());
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " unknown Error - ");
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+*/
+/*
+	private boolean loadNation(ResultSet rs) {
+		String line;
+		String[] tokens;
+		String search;
+		String name = null;
+		try {
+			Nation nation = universe.getNation(rs.getString("name"));
+			
+			// Could not find nation in universe maps
+			if (nation == null) {
+				plugin.getLogger().warning(String.format("Error: The nation with the name '%s' was not registered and cannot be loaded!", rs.getString("name")));
+				return false;
+			}
+			
+			name = nation.getName();
+
+			TownyMessaging.sendDebugMsg("Loading nation " + nation.getName());
+
+			Town town = universe.getTown(rs.getString("capital"));
+			if (town != null) {
+				try {
+					nation.forceSetCapital(town);
+				} catch (EmptyNationException e1) {
+					plugin.getLogger().warning("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
+					removeNation(nation);
+					return true;
+				}
+			}
+			else {
+				TownyMessaging.sendDebugMsg("Nation " + name + " could not set capital to " + rs.getString("capital") + ", selecting a new capital...");
+				if (!nation.findNewCapital()) {
+					plugin.getLogger().warning("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
+					removeNation(nation);
+					return true;
+				}
+			}
+
+			line = rs.getString("nationBoard");
+			if (line != null)
+				nation.setBoard(rs.getString("nationBoard"));
+			else
+				nation.setBoard("");
+
+			line = rs.getString("mapColorHexCode");
+			if (line != null)
+				nation.setMapColorHexCode(line);
+			else
+				nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
+
+			nation.setTag(rs.getString("tag"));
+
+			line = rs.getString("allies");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				List<Nation> allies = TownyAPI.getInstance().getNations(line.split(search));
+				for (Nation ally : allies)
+					nation.addAlly(ally);
+			}
+
+			line = rs.getString("enemies");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				List<Nation> enemies = TownyAPI.getInstance().getNations(line.split(search));
+				for (Nation enemy : enemies) 
+					nation.addEnemy(enemy);
+			}
+
+			nation.setTaxes(rs.getDouble("taxes"));
+			nation.setSpawnCost(rs.getFloat("spawnCost"));
+			nation.setNeutral(rs.getBoolean("neutral"));
+			try {
+				nation.setUUID(UUID.fromString(rs.getString("uuid")));
+			} catch (IllegalArgumentException | NullPointerException ee) {
+				nation.setUUID(UUID.randomUUID());
+			}
+			universe.registerNationUUID(nation);
+
+			line = rs.getString("nationSpawn");
+			if (line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				tokens = line.split(search);
+				if (tokens.length >= 4)
+					try {
+						World world = plugin.getServerWorld(tokens[0]);
+						double x = Double.parseDouble(tokens[1]);
+						double y = Double.parseDouble(tokens[2]);
+						double z = Double.parseDouble(tokens[3]);
+
+						Location loc = new Location(world, x, y, z);
+						if (tokens.length == 6) {
+							loc.setPitch(Float.parseFloat(tokens[4]));
+							loc.setYaw(Float.parseFloat(tokens[5]));
+						}
+						nation.setSpawn(loc);
+					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+					}
+			}
+
+			nation.setPublic(rs.getBoolean("isPublic"));
+
+			nation.setOpen(rs.getBoolean("isOpen"));
+
+			try {
+				line = rs.getString("registered");
+				if (line != null) {
+					nation.setRegistered(Long.parseLong(line));
+				} else {
+					nation.setRegistered(0);
+				}
+			} catch (SQLException ignored) {
+			} catch (NumberFormatException | NullPointerException e) {
+				nation.setRegistered(0);
+			}
+
+			try {
+				line = rs.getString("metadata");
+				if (line != null && !line.isEmpty()) {
+					MetadataLoader.getInstance().deserializeMetadata(nation, line);
+				}
+			} catch (SQLException ignored) {
+			}
+
+			return true;
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " SQL Error - " + e.getMessage());
+		} catch (TownyException ex) {
+			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " unknown Error - ");
+			ex.printStackTrace();
+		}
+
+		return false;
+	}
+*/
+/*
+	private boolean loadWorld(ResultSet rs) {
+		String line;
+		boolean result;
+		long resultLong;
+		String search;
+		String worldName = null;
+		try {
+			worldName = rs.getString("name");
+			TownyWorld world = universe.getWorld(worldName);
+			if (world == null)
+				throw new Exception("World " + worldName + " not registered!");
+
+			TownyMessaging.sendDebugMsg("Loading world " + world.getName());
+
+			result = rs.getBoolean("claimable");
+			try {
+				world.setClaimable(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("pvp");
+			try {
+				world.setPVP(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("forcepvp");
+			try {
+				world.setForcePVP(result);
+			} catch (Exception ignored) {
+			}
+			
+			result = rs.getBoolean("friendlyFire");
+			try {
+				world.setFriendlyFire(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("forcetownmobs");
+			try {
+				world.setForceTownMobs(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("wildernessmobs");
+			try {
+				world.setWildernessMobs(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("worldmobs");
+			try {
+				world.setWorldMobs(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("firespread");
+			try {
+				world.setFire(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("forcefirespread");
+			try {
+				world.setForceFire(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("explosions");
+			try {
+				world.setExpl(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("forceexplosions");
+			try {
+				world.setForceExpl(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("endermanprotect");
+			try {
+				world.setEndermanProtect(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("disablecreaturetrample");
+			try {
+				world.setDisableCreatureTrample(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("unclaimedZoneBuild");
+			try {
+				world.setUnclaimedZoneBuild(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("unclaimedZoneDestroy");
+			try {
+				world.setUnclaimedZoneDestroy(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("unclaimedZoneSwitch");
+			try {
+				world.setUnclaimedZoneSwitch(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("unclaimedZoneItemUse");
+			try {
+				world.setUnclaimedZoneItemUse(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("unclaimedZoneName");
+			try {
+				world.setUnclaimedZoneName(line);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("unclaimedZoneIgnoreIds");
+			if (line != null)
+				try {
+					List<String> mats = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							mats.add(split);
+
+					world.setUnclaimedZoneIgnore(mats);
+				} catch (Exception ignored) {
+				}
+
+			result = rs.getBoolean("isDeletingEntitiesOnUnclaim");
+			try {
+				world.setDeletingEntitiesOnUnclaim(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("unclaimDeleteEntityTypes");
+			if (line != null)
+				try {
+					List<String> entityTypes = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							entityTypes.add(split);
+
+					world.setUnclaimDeleteEntityTypes(entityTypes);
+				} catch (Exception ignored) {
+				}
+
+			result = rs.getBoolean("usingPlotManagementDelete");
+			try {
+				world.setUsingPlotManagementDelete(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("plotManagementDeleteIds");
+			if (line != null)
+				try {
+					List<String> mats = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							mats.add(split);
+
+					world.setPlotManagementDeleteIds(mats);
+				} catch (Exception ignored) {
+				}
+
+			result = rs.getBoolean("usingPlotManagementMayorDelete");
+			try {
+				world.setUsingPlotManagementMayorDelete(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("plotManagementMayorDelete");
+			if (line != null)
+				try {
+					List<String> materials = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							try {
+								materials.add(split.toUpperCase().trim());
+							} catch (NumberFormatException ignored) {
+							}
+					world.setPlotManagementMayorDelete(materials);
+				} catch (Exception ignored) {
+				}
+
+			result = rs.getBoolean("usingPlotManagementRevert");
+			try {
+				world.setUsingPlotManagementRevert(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("plotManagementIgnoreIds");
+			if (line != null)
+				try {
+					List<String> mats = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							mats.add(split);
+
+					world.setPlotManagementIgnoreIds(mats);
+				} catch (Exception ignored) {
+				}
+
+			result = rs.getBoolean("usingPlotManagementWildRegen");
+			try {
+				world.setUsingPlotManagementWildEntityRevert(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("plotManagementWildRegenEntities");
+			if (line != null)
+				try {
+					List<String> entities = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							try {
+								entities.add(split.trim());
+							} catch (NumberFormatException ignored) {
+							}
+					world.setPlotManagementWildRevertEntities(entities);
+				} catch (Exception ignored) {
+				}
+
+			line = rs.getString("plotManagementWildRegenBlockWhitelist");
+			if (line != null)
+				try {
+					List<String> materials = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							try {
+								materials.add(split.trim());
+							} catch (NumberFormatException ignored) {
+							}
+					world.setPlotManagementWildRevertBlockWhitelist(materials);
+				} catch (Exception ignored) {
+				}
+
+			resultLong = rs.getLong("plotManagementWildRegenSpeed");
+			try {
+				world.setPlotManagementWildRevertDelay(resultLong);
+			} catch (Exception ignored) {
+			}
+			
+			result = rs.getBoolean("usingPlotManagementWildRegenBlocks");
+			try {
+				world.setUsingPlotManagementWildBlockRevert(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("plotManagementWildRegenBlocks");
+			if (line != null)
+				try {
+					List<String> materials = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							try {
+								materials.add(split.trim());
+							} catch (NumberFormatException ignored) {
+							}
+					world.setPlotManagementWildRevertMaterials(materials);
+				} catch (Exception ignored) {
+				}
+
+			result = rs.getBoolean("usingTowny");
+			try {
+				world.setUsingTowny(result);
+			} catch (Exception ignored) {
+			}
+
+			result = rs.getBoolean("warAllowed");
+			try {
+				world.setWarAllowed(result);
+			} catch (Exception ignored) {
+			}
+
+			try {
+				line = rs.getString("metadata");
+				if (line != null && !line.isEmpty()) {
+					MetadataLoader.getInstance().deserializeMetadata(world, line);
+				}
+			} catch (SQLException ignored) {
+			}
+			return true;
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg(
+					"SQL: Load world sql error (" + (worldName != null ? worldName : "NULL") + ")" + e.getMessage());
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+		}
+		return false;
+	}
+*/
 	@Override
 	public boolean loadTownBlocks() {
 
@@ -1705,124 +1707,125 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return true;
 	}
 
-//	private boolean loadPlotGroup(ResultSet rs) {
-//		String line = null;
-//		String uuid = null;
-//		
-//		try {
-//			PlotGroup group = universe.getGroup(UUID.fromString(rs.getString("groupID")));
-//			if (group == null) {
-//				TownyMessaging.sendErrorMsg("SQL: A plot group was not registered properly on load!");
-//				return true;
-//			}
-//			uuid = group.getUUID().toString();
-//			
-//			line = rs.getString("groupName");
-//			if (line != null)
-//				try {
-//					group.setName(line.trim());
-//				} catch (Exception ignored) {
-//				}
-//			
-//			line = rs.getString("town");
-//			if (line != null) {
-//				Town town = universe.getTown(line.trim());
-//				if (town != null) {
-//					group.setTown(town);
-//				} else {
-//					deletePlotGroup(group);
-//					return true;
-//				}
-//			}
-//			
-//			line = rs.getString("groupPrice");
-//			if (line != null) {
-//				try {
-//					group.setPrice(Float.parseFloat(line.trim()));
-//				} catch (Exception ignored) {}
-//			}
-//		} catch (SQLException e) {
-//			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading plot group: " + uuid
-//			+ " at line: " + line + " in the sql database");
-//			e.printStackTrace();
-//			return false;
-//		}
-//		return true;
-//	}
-//
-//	private boolean loadJail(ResultSet rs) {
-//		String line;
-//		String[] tokens;
-//		String uuid = null;
-//		try {
-//			Jail jail = universe.getJail(UUID.fromString(rs.getString("uuid")));
-//			if (jail == null) {
-//				TownyMessaging.sendErrorMsg("SQL: A jail was not registered properly on load!");
-//				return true;
-//			}
-//			uuid = jail.getUUID().toString();
-//			
-//			line = rs.getString("townBlock");
-//			if (line != null) {
-//				tokens = line.split("#");
-//				TownBlock tb = null;
-//				try {
-//					tb = universe.getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
-//					jail.setTownBlock(tb);
-//					jail.setTown(tb.getTown());
-//					tb.setJail(jail);
-//					tb.getTown().addJail(jail);
-//				} catch (NumberFormatException | NotRegisteredException e) {
-//					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid townblock " + line + " deleting jail.");
-//					removeJail(jail);
-//					deleteJail(jail);
-//					return true;
-//				}
-//			}
-//			
-//			line = rs.getString("spawns");
-//			if (line != null) {
-//				String[] jails = line.split(";");
-//				for (String spawn : jails) {
-//					tokens = spawn.split("#");
-//					if (tokens.length >= 4)
-//						try {
-//							World world = plugin.getServerWorld(tokens[0]);
-//							double x = Double.parseDouble(tokens[1]);
-//							double y = Double.parseDouble(tokens[2]);
-//							double z = Double.parseDouble(tokens[3]);
-//							
-//							Location loc = new Location(world, x, y, z);
-//							if (tokens.length == 6) {
-//								loc.setPitch(Float.parseFloat(tokens[4]));
-//								loc.setYaw(Float.parseFloat(tokens[5]));
-//							}
-//							jail.addJailCell(loc);
-//						} catch (NumberFormatException | NullPointerException | NotRegisteredException e) {
-//							TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid spawn " + line + " skipping.");
-//							continue;
-//						}
-//				}
-//				if (jail.getJailCellLocations().size() < 1) {
-//					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " loaded with zero spawns " + line + " deleting jail.");
-//					removeJail(jail);
-//					deleteJail(jail);
-//					return true;
-//				}
-//			}
-//			
-//				
-//			return true;
-//		} catch (SQLException e) {
-//			TownyMessaging.sendErrorMsg("SQL: Load Jail " + uuid + " sql Error - " + e.getMessage());
-//		} catch (Exception e) {
-//			TownyMessaging.sendErrorMsg("SQL: Load Jail " + uuid + " unknown Error - ");
-//			e.printStackTrace();
-//		}
-//
-//		return false;
-//	}
-	
+/*	private boolean loadPlotGroup(ResultSet rs) {
+		String line = null;
+		String uuid = null;
+		
+		try {
+			PlotGroup group = universe.getGroup(UUID.fromString(rs.getString("groupID")));
+			if (group == null) {
+				TownyMessaging.sendErrorMsg("SQL: A plot group was not registered properly on load!");
+				return true;
+			}
+			uuid = group.getUUID().toString();
+			
+			line = rs.getString("groupName");
+			if (line != null)
+				try {
+					group.setName(line.trim());
+				} catch (Exception ignored) {
+				}
+			
+			line = rs.getString("town");
+			if (line != null) {
+				Town town = universe.getTown(line.trim());
+				if (town != null) {
+					group.setTown(town);
+				} else {
+					deletePlotGroup(group);
+					return true;
+				}
+			}
+			
+			line = rs.getString("groupPrice");
+			if (line != null) {
+				try {
+					group.setPrice(Float.parseFloat(line.trim()));
+				} catch (Exception ignored) {}
+			}
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading plot group: " + uuid
+			+ " at line: " + line + " in the sql database");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+*/
+/*	private boolean loadJail(ResultSet rs) {
+		String line;
+		String[] tokens;
+		String uuid = null;
+		try {
+			Jail jail = universe.getJail(UUID.fromString(rs.getString("uuid")));
+			if (jail == null) {
+				TownyMessaging.sendErrorMsg("SQL: A jail was not registered properly on load!");
+				return true;
+			}
+			uuid = jail.getUUID().toString();
+			
+			line = rs.getString("townBlock");
+			if (line != null) {
+				tokens = line.split("#");
+				TownBlock tb = null;
+				try {
+					tb = universe.getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+					jail.setTownBlock(tb);
+					jail.setTown(tb.getTown());
+					tb.setJail(jail);
+					tb.getTown().addJail(jail);
+				} catch (NumberFormatException | NotRegisteredException e) {
+					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid townblock " + line + " deleting jail.");
+					removeJail(jail);
+					deleteJail(jail);
+					return true;
+				}
+			}
+			
+			line = rs.getString("spawns");
+			if (line != null) {
+				String[] jails = line.split(";");
+				for (String spawn : jails) {
+					tokens = spawn.split("#");
+					if (tokens.length >= 4)
+						try {
+							World world = plugin.getServerWorld(tokens[0]);
+							double x = Double.parseDouble(tokens[1]);
+							double y = Double.parseDouble(tokens[2]);
+							double z = Double.parseDouble(tokens[3]);
+							
+							Location loc = new Location(world, x, y, z);
+							if (tokens.length == 6) {
+								loc.setPitch(Float.parseFloat(tokens[4]));
+								loc.setYaw(Float.parseFloat(tokens[5]));
+							}
+							jail.addJailCell(loc);
+						} catch (NumberFormatException | NullPointerException | NotRegisteredException e) {
+							TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid spawn " + line + " skipping.");
+							continue;
+						}
+				}
+				if (jail.getJailCellLocations().size() < 1) {
+					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " loaded with zero spawns " + line + " deleting jail.");
+					removeJail(jail);
+					deleteJail(jail);
+					return true;
+				}
+			}
+			
+				
+			return true;
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Jail " + uuid + " sql Error - " + e.getMessage());
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Jail " + uuid + " unknown Error - ");
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+*/	
+
 	/*
 	 * Save individual towny objects
 	 */
