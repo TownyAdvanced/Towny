@@ -5,11 +5,14 @@ import org.bukkit.map.MinecraftFont;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.jetbrains.annotations.ApiStatus;
 import solar.squares.pixelwidth.DefaultCharacterWidthFunction;
 import solar.squares.pixelwidth.PixelWidthSource;
 
 public class FontUtil {
-	private static final MinecraftFont font = new MinecraftFont();
+	@ApiStatus.Internal
+	public static final MinecraftFont font = new MinecraftFont();
+	
 	private static final PixelWidthSource widthSource = PixelWidthSource
 			.pixelWidth(new DefaultCharacterWidthFunction() {
 				@Override
