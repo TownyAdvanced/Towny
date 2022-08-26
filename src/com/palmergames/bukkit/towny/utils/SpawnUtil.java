@@ -669,7 +669,12 @@ public class SpawnUtil {
 		String[] tokens = raw.split(",");
 		if (tokens.length >= 4)
 			try {
-				World world = Bukkit.getWorld(UUID.fromString(tokens[0]));
+				World world = null;
+				try {
+					world = Bukkit.getWorld(UUID.fromString(tokens[0]));
+				} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
+					world = Bukkit.getWorld(tokens[0]);
+				}
 				if (world == null)
 					return null;
 				double x = Double.parseDouble(tokens[1]);
