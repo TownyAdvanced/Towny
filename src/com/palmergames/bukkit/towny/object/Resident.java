@@ -47,12 +47,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable, ForwardingAudience.Single {
-	private List<Resident> friends = new ArrayList<>();
+	private Map<UUID, Resident> friends = new LinkedHashMap<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private UUID uuid = null;
 	private Town town = null;
@@ -329,25 +332,38 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		// Reset everyones cache permissions as this player losing their could affect multiple areas
 		Towny.getPlugin().resetCache();
 	}
+	
+	/**
+	 * Only to be used when loading the database.
+	 * @param residents List&lt;Resident&gt; which will be loaded in as friends.
+	 */
+	public void loadFriends(List<Resident> residents) {
+		for (Resident resident : residents)
+			friends.put(resident.getUUID(), resident);
+	}
+	
+	public List<UUID> getFriendsUUIDs() {
+		return Collections.unmodifiableList(friends.keySet().stream().collect(Collectors.toList()));
+	}
 
 	public void setFriends(List<Resident> newFriends) {
 
-		friends = newFriends;
+		loadFriends(newFriends);
 	}
 
 	public List<Resident> getFriends() {
-		return Collections.unmodifiableList(friends);
+		return Collections.unmodifiableList(new ArrayList<>(friends.values()));
 	}
 
 	public void removeFriend(Resident resident) {
 
 		if (hasFriend(resident))
-			friends.remove(resident);
+			friends.remove(resident.getUUID());
 	}
 
 	public boolean hasFriend(Resident resident) {
 
-		return friends.contains(resident);
+		return friends.containsKey(resident.getUUID());
 	}
 
 	public void addFriend(Resident resident) throws AlreadyRegisteredException {
@@ -355,7 +371,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		if (hasFriend(resident) || this.equals(resident) || resident.isNPC())
 			throw new AlreadyRegisteredException();
 		else
-			friends.add(resident);
+			friends.put(resident.getUUID(), resident);
 	}
 
 	public void removeAllFriends() {

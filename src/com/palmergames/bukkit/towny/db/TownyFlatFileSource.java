@@ -514,6 +514,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					TownyMessaging.sendErrorMsg(
 							Translation.of("flatfile_err_exception_reading_townblock_file_at_line", path, line));
 					return false;
+				} finally {
+					saveTownBlock(townBlock);
 				}
 
 			} else {
@@ -829,14 +831,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	private void renameLegacyFile(File file, TownyDBFileType type, UUID uuid) {
 		File newFile = new File(dataFolderPath + File.separator + type.folderName + File.separator + uuid.toString() + type.fileExtension);
 		boolean delete = false;
+		String fileName = file.getName().replace(type.fileExtension, "");
 		if (newFile.exists()) {
 			plugin.getLogger().warning(type.folderName + "\\" +  file.getName() + " could not be saved in UUID format because a file with the UUID " + uuid.toString() + " already exists! The non-UUID formatted file will be removed.");
 			delete = true;
 		} else {
 			delete = file.renameTo(newFile);
+			TownyLegacyFlatFileConverter.applyName(newFile, fileName);
 		}
 		if (delete)
-			deleteFileByTypeAndName(type, file.getName().replace(type.fileExtension, ""));
+			deleteFileByTypeAndName(type, fileName);
 	}
 	
 	private void renameLegacyFolder(File folder, TownyDBFileType type, UUID uuid) {

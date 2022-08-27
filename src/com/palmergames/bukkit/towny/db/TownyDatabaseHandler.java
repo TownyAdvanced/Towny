@@ -390,11 +390,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
 					residentFriends = TownyAPI.getInstance().getResidents(line.split(","));
 				}
-				residentFriends.stream().forEach(friend -> {
-					try {
-						resident.addFriend(friend);
-					} catch (AlreadyRegisteredException ignored) {}
-				});
+				resident.loadFriends(residentFriends);
 			}
 
 			resident.setPermissions(keys.getOrDefault("protectionStatus", ""));
@@ -450,6 +446,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(e.getMessage());
 			return false;
+		} finally {
+			saveResident(resident);
 		}
 	}
 	
@@ -663,11 +661,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
 					allyNations = TownyAPI.getInstance().getNations(line.split(","));
 				}
-				allyNations.stream().forEach(ally -> {
-					try {
-						nation.addAlly(ally);
-					} catch (AlreadyRegisteredException ignored) {}
-				});
+				nation.loadAllies(allyNations);
 			}
 			
 			line = keys.get("enemies");
@@ -678,11 +672,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
 					enemyNations = TownyAPI.getInstance().getNations(line.split(","));
 				}
-				enemyNations.stream().forEach(enemy -> {
-					try {
-						nation.addEnemy(enemy);
-					} catch (AlreadyRegisteredException ignored) {}
-				});
+				nation.loadEnemies(enemyNations);
 			}
 
 			line = keys.get("nationSpawn");
@@ -818,7 +808,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			res_hm.put("town", resident.hasTown() ? resident.getTown().getUUID() : "");
 			res_hm.put("town-ranks", resident.hasTown() ? StringMgmt.join(resident.getTownRanks(), "#") : "");
 			res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
-			res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
+			res_hm.put("friends", StringMgmt.join(resident.getFriendsUUIDs(), "#"));
 			res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
 			res_hm.put("metadata", resident.hasMeta() ? serializeMetadata(resident) : "");
 			return res_hm;
@@ -949,8 +939,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			nat_hm.put("nationBoard", nation.getBoard());
 			nat_hm.put("mapColorHexCode", nation.getMapColorHexCode());
 			nat_hm.put("tag", nation.hasTag() ? nation.getTag() : "");
-			nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
-			nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
+			nat_hm.put("allies", StringMgmt.join(nation.getAlliesUUIDs(), "#"));
+			nat_hm.put("enemies", StringMgmt.join(nation.getEnemiesUUIDs(), "#"));
 			nat_hm.put("taxes", nation.getTaxes());
 			nat_hm.put("spawnCost", nation.getSpawnCost());
 			nat_hm.put("neutral", nation.isNeutral());
