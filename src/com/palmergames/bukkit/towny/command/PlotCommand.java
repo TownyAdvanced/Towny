@@ -438,9 +438,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 						return true;
 					}
-					
+					Town town = townBlock.getTownOrNull();
+					if (town == null)
+						throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
+
 					// The follow test will clean up the initial selection fairly well, the plotTestOwner later on in the setPlotForSale will ultimately stop any funny business.
-					if (permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && (resident.hasTown() && townBlock.hasTown() && resident.getTown() == townBlock.getTownOrNull())) {
+					if (
+						(permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && town.hasResident(resident))
+						|| (permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYORINUNOWNED.getNode()) && town.hasResident(resident) && !townBlock.hasResident())
+						) {
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection); // Treat it as a mayor able to set their town's plots not for sale.
 					} else {
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection); // Treat it as a resident making their own plots not for sale.
@@ -486,7 +492,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.subArray(split, areaSelectPivot + 1, split.length));
 							
 							// The follow test will clean up the initial selection fairly well, the plotTestOwner later on in the setPlotForSale will ultimately stop any funny business.
-							if (permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && (resident.hasTown() && resident.getTown() == town)) {
+							if (
+								(permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && town.hasResident(resident))
+								|| (permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYORINUNOWNED.getNode()) && town.hasResident(resident) && !townBlock.hasResident())
+								) {
 								selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection); // Treat it as a mayor able to put their town's plots for sale.
 								selection = AreaSelectionUtil.filterOutResidentBlocks(resident, selection); // Filter out any resident-owned plots.
 							} else {

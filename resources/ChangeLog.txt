@@ -7726,3 +7726,4 @@ v0.92.0.11:
 0.98.3.7:
   - Alter CooldownTimerTask to accept strings alongside the pre-configured enum, allowing for third-party plugins to create simple cooldowns.
   - Use FontUtil's minecraftfont constant for bookfactory, courtesy of Warriorrrr with PR #6133.
+  - Fix towny.command.plot.asmayorinunowned permission node not working for /plot nfs, due to area selection.
