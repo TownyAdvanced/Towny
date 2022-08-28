@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.ObjectCouldNotBeLoadedException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
@@ -522,13 +523,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return false;
 	}
 	
-	public boolean loadResultSetOfType(TownyDBTableType type, Set<UUID> uuids) {
-		for (UUID uuid : uuids) {
-			if (!loadResultSet(type, uuid)) {
-				plugin.getLogger().severe(type.getLoadErrorMsg(uuid));
-				return false;
-			}
-		}
+	public boolean loadResultSetOfType(TownyDBTableType type, Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		for (UUID uuid : uuids)
+			if (!loadResultSet(type, uuid))
+				throw new ObjectCouldNotBeLoadedException(type.getLoadErrorMsg(uuid));
 		return true;
 	}
 
@@ -653,33 +651,33 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 */
 	
 	@Override
-	public boolean loadJails() {
-		return loadResultSetOfType(TownyDBTableType.JAIL, universe.getJailUUIDs());
+	public boolean loadJailUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		return loadResultSetOfType(TownyDBTableType.JAIL, uuids);
 	}
 	
 	@Override
-	public boolean loadPlotGroups() {
-		return loadResultSetOfType(TownyDBTableType.PLOTGROUP, universe.getPlotGroupUUIDs());
+	public boolean loadPlotGroupUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		return loadResultSetOfType(TownyDBTableType.PLOTGROUP, uuids);
 	}
 	
 	@Override
-	public boolean loadResidents() {
-		return loadResultSetOfType(TownyDBTableType.RESIDENT, universe.getResidentUUIDs());
+	public boolean loadResidentUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		return loadResultSetOfType(TownyDBTableType.RESIDENT, uuids);
 	}
 
 	@Override
-	public boolean loadTowns() {
-		return loadResultSetOfType(TownyDBTableType.TOWN, universe.getTownUUIDs());
+	public boolean loadTownUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		return loadResultSetOfType(TownyDBTableType.TOWN, uuids);
 	}
 	
 	@Override
-	public boolean loadNations() {
-		return loadResultSetOfType(TownyDBTableType.NATION, universe.getNationUUIDs());
+	public boolean loadNationUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		return loadResultSetOfType(TownyDBTableType.NATION, uuids);
 	}
 	
 	@Override
-	public boolean loadWorlds() {
-		return loadResultSetOfType(TownyDBTableType.WORLD, universe.getWorldUUIDs());
+	public boolean loadWorldUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		return loadResultSetOfType(TownyDBTableType.WORLD, uuids);
 	}
 	
 	/*

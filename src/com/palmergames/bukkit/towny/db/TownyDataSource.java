@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.ObjectCouldNotBeLoadedException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -25,6 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.locks.Lock;
@@ -110,7 +112,7 @@ public abstract class TownyDataSource {
 
 	/*
 	 * Load all objects of the given type, using the UUIDs gathered into TownyUniverse.
-	 * Methods are found in TownyFlatfile/SQlSource classes.
+	 * Methods are found in TownyDatabaseHandler.
 	 */
 
 	abstract public boolean loadJails();
@@ -126,6 +128,23 @@ public abstract class TownyDataSource {
 	abstract public boolean loadWorlds();
 
 	abstract public boolean loadTownBlocks();
+
+	/*
+	 * Load all objects of the given type, using the UUIDs gathered into TownyUniverse.
+	 * Methods are found in TownyFlatfile/SQlSource classes.
+	 */
+
+	abstract public boolean loadJailUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
+
+	abstract public boolean loadPlotGroupUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
+
+	abstract public boolean loadResidentUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
+
+	abstract public boolean loadTownUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
+
+	abstract public boolean loadNationUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
+
+	abstract public boolean loadWorldUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
 
 	/*
 	 * Load object Data from the database into Memory, to be entered into the Objects themselves.

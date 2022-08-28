@@ -23,6 +23,7 @@ import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.ObjectCouldNotBeLoadedException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
@@ -177,6 +178,64 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		case "none": {
 			return false;
 		}
+		}
+	}
+
+	/*
+	 * Load all Objects of each type.
+	 */
+
+	public boolean loadJails() {
+		try {
+			return loadJailUUIDs(universe.getJailUUIDs());
+		} catch (ObjectCouldNotBeLoadedException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean loadPlotGroups() {
+		try {
+			return loadPlotGroupUUIDs(universe.getPlotGroupUUIDs());
+		} catch (ObjectCouldNotBeLoadedException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean loadResidents() {
+		try {
+			return loadResidentUUIDs(universe.getResidentUUIDs());
+		} catch (ObjectCouldNotBeLoadedException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean loadTowns() {
+		try {
+			return loadTownUUIDs(universe.getTownUUIDs());
+		} catch (ObjectCouldNotBeLoadedException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean loadNations() {
+		try {
+			return loadNationUUIDs(universe.getNationUUIDs());
+		} catch (ObjectCouldNotBeLoadedException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean loadWorlds() {
+		try {
+			return loadWorldUUIDs(universe.getWorldUUIDs());
+		} catch (ObjectCouldNotBeLoadedException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
 		}
 	}
 

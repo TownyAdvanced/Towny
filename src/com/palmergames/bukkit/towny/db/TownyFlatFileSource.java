@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.ObjectCouldNotBeLoadedException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
@@ -146,13 +147,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 	}
 
-	private boolean loadFlatFilesOfType(TownyDBFileType type, Set<UUID> uuids) {
-		for (UUID uuid : uuids) {
-			if (!loadFile(type, uuid)) {
-				plugin.getLogger().severe(type.getLoadErrorMsg(uuid));
-				return false;
-			}
-		}
+	private boolean loadFlatFilesOfType(TownyDBFileType type, Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		for (UUID uuid : uuids)
+			if (!loadFile(type, uuid))
+				throw new ObjectCouldNotBeLoadedException(type.getLoadErrorMsg(uuid));
 		return true;
 	}
 
@@ -300,33 +298,33 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 */
 
 	@Override
-	public boolean loadJails() {
-		return loadFlatFilesOfType(TownyDBFileType.JAIL, universe.getJailUUIDs());
+	public boolean loadJailUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		return loadFlatFilesOfType(TownyDBFileType.JAIL, uuids);
 	}
 
 	@Override
-	public boolean loadPlotGroups() {
-		return loadFlatFilesOfType(TownyDBFileType.PLOTGROUP, universe.getPlotGroupUUIDs());
+	public boolean loadPlotGroupUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		return loadFlatFilesOfType(TownyDBFileType.PLOTGROUP, uuids);
 	}
 
 	@Override
-	public boolean loadResidents() {
-		return loadFlatFilesOfType(TownyDBFileType.RESIDENT, universe.getResidentUUIDs());
+	public boolean loadResidentUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		return loadFlatFilesOfType(TownyDBFileType.RESIDENT, uuids);
 	}
 
 	@Override
-	public boolean loadTowns() {
-		return loadFlatFilesOfType(TownyDBFileType.TOWN, universe.getTownUUIDs());
+	public boolean loadTownUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		return loadFlatFilesOfType(TownyDBFileType.TOWN, uuids);
 	}
 
 	@Override
-	public boolean loadNations() {
-		return loadFlatFilesOfType(TownyDBFileType.NATION, universe.getNationUUIDs());
+	public boolean loadNationUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		return loadFlatFilesOfType(TownyDBFileType.NATION, uuids);
 	}
 
 	@Override
-	public boolean loadWorlds() {
-		return loadFlatFilesOfType(TownyDBFileType.WORLD, universe.getWorldUUIDs());
+	public boolean loadWorldUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
+		return loadFlatFilesOfType(TownyDBFileType.WORLD, uuids);
 	}
 
 	@Override
