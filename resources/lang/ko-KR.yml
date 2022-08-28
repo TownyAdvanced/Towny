@@ -889,7 +889,7 @@ msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group 
 #Added in 0.85
 msg_set_perms_reset_single: '&bSuccessfully reset permissions on this plot.'
 #Added in 0.86
-status_bank_bankrupt: '(BANKRUPT)'
+status_bank_bankrupt: '(파산)'
 msg_warning_bankrupt: '&4*** 경고, %s 는 금고에 돈이 없어 새 날이 되면 파산할 것 입니다 ***'
 msg_town_bankrupt_by_upkeep: '&b%s 마을이 유지비를 감당 할 수 없어 파산 하였습니다.'
 msg_town_bankrupt_by_upkeep_multiple: '&b다음 마을들이 유지비를 감당 할 수 없어 파산하였습니다.: '
@@ -930,7 +930,7 @@ status_plot_clear_deletion: 'PlotClearBlockDelete:'
 msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'
 #Added in 0.91
 msg_universe_attribution: '제작자들: '
-msg_universe_contributors: ' And contributors like you. '
+msg_universe_contributors: ' 그리고 당신 같은 조력자들 말이에요. '
 msg_universe_heart: '<3'
 townblock_plu: 'TownBlocks'
 #Added in 0.92
