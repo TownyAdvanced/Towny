@@ -527,9 +527,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 	}
 
-	// TODO: bring the loadObject methods from TownyDataSource and into the FlatFile
-	// and SQL sources.
-
 	/*
 	 * Return Loadable Objects as HashMaps for TownyDataBaseHandler to load. 
 	 */
@@ -816,8 +813,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	/**
-	 * @deprecated as of 0.98.1.13, use
-	 *             {@link #getFileOfTypeWithName(TownyDBFileType, String)} instead.
+	 * @deprecated as of 0.98.4.0, use {@link #getFileOfTypeWithName(TownyDBFileType, String)} instead.
 	 * @param resident Resident whose file you want to get.
 	 * @return {@link #getFileOfTypeWithName(TownyDBFileType, String)}
 	 */
@@ -827,8 +823,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	/**
-	 * @deprecated as of 0.98.1.13, use
-	 *             {@link #getFileOfTypeWithUUID(TownyDBFileType, UUID)} instead.
+	 * @deprecated as of 0.98.4.0, use {@link #getFileOfTypeWithUUID(TownyDBFileType, UUID)} instead.
 	 * @param uuid UUID of the hibernated resident whose file you want to get.
 	 * @return {@link #getFileOfTypeWithUUID(TownyDBFileType, UUID)}
 	 */
@@ -838,8 +833,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	/**
-	 * @deprecated as of 0.98.1.13, use
-	 *             {@link #getFileOfTypeWithName(TownyDBFileType, String)} instead.
+	 * @deprecated as of 0.98.4.0, use {@link #getFileOfTypeWithName(TownyDBFileType, String)} instead.
 	 * @param town Town whose file you want to get.
 	 * @return {@link #getFileOfTypeWithName(TownyDBFileType, String)}
 	 */
@@ -849,8 +843,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	/**
-	 * @deprecated as of 0.98.1.13, use
-	 *             {@link #getFileOfTypeWithName(TownyDBFileType, String)} instead.
+	 * @deprecated as of 0.98.4.0, use {@link #getFileOfTypeWithName(TownyDBFileType, String)} instead.
 	 * @param nation Nation whose file you want to get.
 	 * @return {@link #getFileOfTypeWithName(TownyDBFileType, String)}
 	 */
@@ -860,8 +853,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	/**
-	 * @deprecated as of 0.98.1.13, use
-	 *             {@link #getFileOfTypeWithName(TownyDBFileType, String)} instead.
+	 * @deprecated as of 0.98.4.0, use {@link #getFileOfTypeWithName(TownyDBFileType, String)} instead.
 	 * @param world TownyWorld whose file you want to get.
 	 * @return {@link #getFileOfTypeWithName(TownyDBFileType, String)}
 	 */
@@ -871,8 +863,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	/**
-	 * @deprecated as of 0.98.1.13, use
-	 *             {@link #getFileOfTypeWithUUID(TownyDBFileType, UUID)} instead.
+	 * @deprecated as of 0.98.4.0, use {@link #getFileOfTypeWithUUID(TownyDBFileType, UUID)} instead.
 	 * @param group PlotGroup whose file you want to get.
 	 * @return {@link #getFileOfTypeWithUUID(TownyDBFileType, UUID)}
 	 */
@@ -882,8 +873,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	/**
-	 * @deprecated as of 0.98.1.13, use
-	 *             {@link #getFileOfTypeWithUUID(TownyDBFileType, UUID)} instead.
+	 * @deprecated as of 0.98.4.0, use {@link #getFileOfTypeWithUUID(TownyDBFileType, UUID)} instead.
 	 * @param jail Jail whose file you want to get.
 	 * @return {@link #getFileOfTypeWithUUID(TownyDBFileType, UUID)}
 	 */
