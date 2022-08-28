@@ -6,7 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -28,7 +31,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.utils.MapUtil;
-import com.palmergames.bukkit.towny.utils.SpawnUtil;
 
 public class ObjectLoadUtil {
 	
@@ -69,7 +71,7 @@ public class ObjectLoadUtil {
 		if (line != null) {
 			String[] jails = line.split(";");
 			for (String spawn : jails) {
-				Location loc = SpawnUtil.parseSpawnLocationFromDB(spawn);
+				Location loc = parseSpawnLocationFromDB(spawn);
 				if (loc != null)
 					jail.addJailCell(loc);
 			}
@@ -283,7 +285,7 @@ public class ObjectLoadUtil {
 
 			line = keys.get("spawn");
 			if (line != null) {
-				Location loc = SpawnUtil.parseSpawnLocationFromDB(line);
+				Location loc = parseSpawnLocationFromDB(line);
 				if (loc != null)
 					town.setSpawn(loc);
 			}
@@ -293,7 +295,7 @@ public class ObjectLoadUtil {
 			if (line != null) {
 				String[] outposts = line.split(";");
 				for (String spawn : outposts) {
-					Location loc = SpawnUtil.parseSpawnLocationFromDB(spawn);
+					Location loc = parseSpawnLocationFromDB(spawn);
 					if (loc != null)
 						town.forceAddOutpostSpawn(loc);
 				}
@@ -436,7 +438,7 @@ public class ObjectLoadUtil {
 
 			line = keys.get("nationSpawn");
 			if (line != null) {
-				Location loc = SpawnUtil.parseSpawnLocationFromDB(line);
+				Location loc = parseSpawnLocationFromDB(line);
 				if (loc != null)
 					nation.setSpawn(loc);
 			}
@@ -553,6 +555,34 @@ public class ObjectLoadUtil {
 				throw new NotRegisteredException("TownBlock tried to load an invalid world!");
 			return universe.getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
 		}
+	}
+
+	@Nullable
+	private Location parseSpawnLocationFromDB(String raw) {
+		String[] tokens = raw.split(",");
+		if (tokens.length >= 4)
+			try {
+				World world = null;
+				try {
+					world = Bukkit.getWorld(UUID.fromString(tokens[0]));
+				} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
+					world = Bukkit.getWorld(tokens[0]);
+				}
+				if (world == null)
+					return null;
+				double x = Double.parseDouble(tokens[1]);
+				double y = Double.parseDouble(tokens[2]);
+				double z = Double.parseDouble(tokens[3]);
+				
+				Location loc = new Location(world, x, y, z);
+				if (tokens.length == 6) {
+					loc.setPitch(Float.parseFloat(tokens[4]));
+					loc.setYaw(Float.parseFloat(tokens[5]));
+				}
+				return loc;
+			} catch (NumberFormatException | NullPointerException ignored) {
+			}
+		return null;
 	}
 
 	// TODO: return this to private once TownBlock loading is made new. 
