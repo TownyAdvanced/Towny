@@ -308,6 +308,11 @@ public enum ConfigNodes {
 
 	NWS_WORLD_USING_TOWNY("new_world_settings.using_towny", "true",
 			"# Do new worlds have Towny enabled by default?"),
+	NWS_WORLD_CLAIMABLE("new_world_settings.are_new_world_claimable",
+			"true",
+			"",
+			"# Are new worlds claimable by default?",
+			"# Setting this to false means that Towny will still be active but no land can be claimed by towns."),
 
 	NWS_WORLD_PVP_HEADER("new_world_settings.pvp", "", ""),
 	NWS_WORLD_PVP(

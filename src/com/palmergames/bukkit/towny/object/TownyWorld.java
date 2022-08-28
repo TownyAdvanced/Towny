@@ -56,7 +56,7 @@ public class TownyWorld extends TownyObject {
 	private String unclaimedZoneName = null;
 
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
-	private boolean isClaimable = true;
+	private boolean isClaimable = TownySettings.isNewWorldClaimable();
 	private boolean isWarAllowed = TownySettings.isWarAllowed();
 	private boolean isPVP = TownySettings.isPvP();
 	private boolean isForcePVP = TownySettings.isForcingPvP();

@@ -2038,6 +2038,10 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.NWS_WORLD_USING_TOWNY);
 	}
+	
+	public static boolean isNewWorldClaimable() {
+		return getBoolean(ConfigNodes.NWS_WORLD_CLAIMABLE);
+	}
 
 	public static boolean isPvP() {
 
