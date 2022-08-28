@@ -104,15 +104,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 	}
 
-	public String getFileOfTypeWithUUID(TownyDBFileType type, UUID uuid) {
+	private String getFileOfTypeWithUUID(TownyDBFileType type, UUID uuid) {
 		return dataFolderPath + File.separator + type.folderName + File.separator + uuid + type.fileExtension;
 	}
 
-	public String getFileOfTypeWithName(TownyDBFileType type, String name) {
+	private String getFileOfTypeWithName(TownyDBFileType type, String name) {
 		return dataFolderPath + File.separator + type.folderName + File.separator + name + type.fileExtension;
 	}
 
-	public boolean loadFlatFileListOfType(TownyDBFileType type, Consumer<UUID> consumer) {
+	private boolean loadFlatFileListOfType(TownyDBFileType type, Consumer<UUID> consumer) {
 		TownyMessaging.sendDebugMsg("Searching for " + type.folderName + "...");
 		File[] files = new File(dataFolderPath + File.separator + type.folderName)
 				.listFiles(file -> file.getName().toLowerCase().endsWith(type.fileExtension));
@@ -146,7 +146,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 	}
 
-	public boolean loadFlatFilesOfType(TownyDBFileType type, Set<UUID> uuids) {
+	private boolean loadFlatFilesOfType(TownyDBFileType type, Set<UUID> uuids) {
 		for (UUID uuid : uuids) {
 			if (!loadFile(type, uuid)) {
 				plugin.getLogger().severe(type.getLoadErrorMsg(uuid));
@@ -184,7 +184,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return null;
 	}
 
-	public String getTownBlockFilename(TownBlock townBlock) {
+	private String getTownBlockFilename(TownBlock townBlock) {
 
 		return dataFolderPath + File.separator + "townblocks" + File.separator + townBlock.getWorld().getUUID()
 				+ File.separator + townBlock.getX() + "_" + townBlock.getZ() + "_" + TownySettings.getTownBlockSize()
@@ -225,7 +225,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (plugin != null) {
 			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_server_world_list"));
 			for (World world : plugin.getServer().getWorlds()) {
-				newWorld(world);
+				universe.newWorld(world);
 			}
 		}
 
@@ -259,7 +259,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					World bukkitWorld = Bukkit.getWorld(worldUUID);
 					if (bukkitWorld == null)
 						continue;
-					newWorld(bukkitWorld);
+					universe.newWorld(bukkitWorld);
 					world = universe.getWorld(worldUUID);
 				}
 				File worldFolder = new File(
@@ -477,8 +477,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 					line = keys.get("trustedResidents");
 					if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
-						for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(","))))
-							townBlock.addTrustedResident(resident);
+						townBlock.addTrustedResidents(TownyAPI.getInstance().getResidents(ObjectLoadUtil.toUUIDArray(line.split(","))));
 
 						if (townBlock.hasPlotObjectGroup()
 								&& townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty()
@@ -647,7 +646,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		 * Make sure we only save in async
 		 */
 		try {
-			this.queryQueue.add(new FlatFileSaveTask(getResidentHashMapForSaving(resident),
+			this.queryQueue.add(new FlatFileSaveTask(getResidentMap(resident),
 					getFileOfTypeWithUUID(TownyDBFileType.RESIDENT, resident.getUUID())));
 			return true;
 		} catch (Exception e) {
@@ -659,7 +658,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveHibernatedResident(UUID uuid, long registered) {
 		try {
-			this.queryQueue.add(new FlatFileSaveTask(getHibernatedResidentHashMapForSaving(uuid, registered),
+			this.queryQueue.add(new FlatFileSaveTask(getHibernatedResidentMap(uuid, registered),
 					getFileOfTypeWithUUID(TownyDBFileType.HIBERNATED_RESIDENT, uuid)));
 			return true;
 		} catch (Exception e) {
@@ -671,7 +670,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveTown(Town town) {
 		try {
-			this.queryQueue.add(new FlatFileSaveTask(getTownHashMapForSaving(town),
+			this.queryQueue.add(new FlatFileSaveTask(getTownMap(town),
 					getFileOfTypeWithUUID(TownyDBFileType.TOWN, town.getUUID())));
 			return true;
 		} catch (Exception e) {
@@ -683,7 +682,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean savePlotGroup(PlotGroup group) {
 		try {
-			this.queryQueue.add(new FlatFileSaveTask(getPlotGroupHashMapForSaving(group),
+			this.queryQueue.add(new FlatFileSaveTask(getPlotGroupMap(group),
 					getFileOfTypeWithUUID(TownyDBFileType.PLOTGROUP, group.getUUID())));
 			return true;
 		} catch (Exception e) {
@@ -695,7 +694,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveNation(Nation nation) {
 		try {
-			this.queryQueue.add(new FlatFileSaveTask(getNationHashMapForSaving(nation),
+			this.queryQueue.add(new FlatFileSaveTask(getNationMap(nation),
 					getFileOfTypeWithUUID(TownyDBFileType.NATION, nation.getUUID())));
 			return true;
 		} catch (Exception e) {
@@ -707,7 +706,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveWorld(TownyWorld world) {
 		try {
-			this.queryQueue.add(new FlatFileSaveTask(getWorldHashMapForSaving(world),
+			this.queryQueue.add(new FlatFileSaveTask(getWorldMap(world),
 					getFileOfTypeWithUUID(TownyDBFileType.WORLD, world.getUUID())));
 			return true;
 		} catch (Exception e) {
@@ -720,7 +719,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean saveTownBlock(TownBlock townBlock) {
 		try {
 			this.queryQueue.add(
-					new FlatFileSaveTask(getTownBlockHashMapForSaving(townBlock), getTownBlockFilename(townBlock)));
+					new FlatFileSaveTask(getTownBlockMap(townBlock), getTownBlockFilename(townBlock)));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("FlatFile: Save TownBlock unknown error " + e.getMessage());
@@ -730,7 +729,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	public boolean saveJail(Jail jail) {
 		try {
-			this.queryQueue.add(new FlatFileSaveTask(getJailHashMapForSaving(jail),
+			this.queryQueue.add(new FlatFileSaveTask(getJailMap(jail),
 					getFileOfTypeWithUUID(TownyDBFileType.JAIL, jail.getUUID())));
 			return true;
 		} catch (Exception e) {

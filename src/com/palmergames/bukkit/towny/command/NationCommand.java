@@ -89,7 +89,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -1011,7 +1010,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					try {
 						// Actually make nation.
 						newNation(finalName, capitalTown);
-					} catch (AlreadyRegisteredException | NotRegisteredException e) {
+					} catch (AlreadyRegisteredException | NotRegisteredException | InvalidNameException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 					}
 					TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", player.getName(), StringMgmt.remUnderscore(finalName)));
@@ -1030,12 +1029,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
+	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException, InvalidNameException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
-		UUID nationUUID = UUID.randomUUID();
-		townyUniverse.getDataSource().newNation(name, nationUUID);
-		Nation nation = townyUniverse.getNation(nationUUID);
+		townyUniverse.newNation(name);
+		Nation nation = townyUniverse.getNation(name);
 		
 		// Should never happen
 		if (nation == null) {

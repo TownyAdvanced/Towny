@@ -1430,7 +1430,11 @@ public class Town extends Government implements TownBlockOwner {
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
 	}
-	
+
+	public void saveTownBlocks() {
+		townBlocks.values().stream().forEach(tb -> tb.save());
+	}
+
 	@Override
 	public String getSaveLocation() {
 		if (TownyUniverse.getInstance().getDataSource().isFlatFile())

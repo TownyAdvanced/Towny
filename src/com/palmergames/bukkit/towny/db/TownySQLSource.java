@@ -1667,8 +1667,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				line = rs.getString("trustedResidents");
 				if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
 					String search = (line.contains("#")) ? "#" : ",";
-					for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(search))))
-						townBlock.addTrustedResident(resident);
+					townBlock.addTrustedResidents(TownyAPI.getInstance().getResidents(ObjectLoadUtil.toUUIDArray(line.split(search))));
 
 					if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.getTrustedResidents().size() > 0)
 						townBlock.getPlotObjectGroup().setTrustedResidents(townBlock.getTrustedResidents());
@@ -1834,7 +1833,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean saveResident(Resident resident) {
 		TownyMessaging.sendDebugMsg("Saving Resident " + resident.getName());
 		try {
-			UpdateDB("RESIDENTS", getResidentHashMapForSaving(resident), Collections.singletonList("name"));
+			UpdateDB("RESIDENTS", getResidentMap(resident), Collections.singletonList("name"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Resident unknown error " + e.getMessage());
@@ -1846,7 +1845,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean saveHibernatedResident(UUID uuid, long registered) {
 		TownyMessaging.sendDebugMsg("Saving Hibernated Resident " + uuid);
 		try {
-			UpdateDB("HIBERNATEDRESIDENTS", getHibernatedResidentHashMapForSaving(uuid, registered), Collections.singletonList("uuid"));
+			UpdateDB("HIBERNATEDRESIDENTS", getHibernatedResidentMap(uuid, registered), Collections.singletonList("uuid"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Hibernated Resident unknown error " + e.getMessage());
@@ -1858,7 +1857,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean saveTown(Town town) {
 		TownyMessaging.sendDebugMsg("Saving town " + town.getName());
 		try {
-			UpdateDB("TOWNS", getTownHashMapForSaving(town), Collections.singletonList("name"));
+			UpdateDB("TOWNS", getTownMap(town), Collections.singletonList("name"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Town unknown error");
@@ -1871,7 +1870,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean savePlotGroup(PlotGroup group) {
 		TownyMessaging.sendDebugMsg("Saving group " + group.getName());
 		try {
-			UpdateDB("PLOTGROUPS", getPlotGroupHashMapForSaving(group), Collections.singletonList("groupID"));
+			UpdateDB("PLOTGROUPS", getPlotGroupMap(group), Collections.singletonList("groupID"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Plot groups unknown error");
@@ -1884,7 +1883,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean saveNation(Nation nation) {
 		TownyMessaging.sendDebugMsg("Saving nation " + nation.getName());
 		try {
-			UpdateDB("NATIONS", getNationHashMapForSaving(nation), Collections.singletonList("name"));
+			UpdateDB("NATIONS", getNationMap(nation), Collections.singletonList("name"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
@@ -1897,7 +1896,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean saveWorld(TownyWorld world) {
 		TownyMessaging.sendDebugMsg("Saving world " + world.getName());
 		try {
-			UpdateDB("WORLDS", getWorldHashMapForSaving(world), Collections.singletonList("name"));
+			UpdateDB("WORLDS", getWorldMap(world), Collections.singletonList("name"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save world unknown error (" + world.getName() + ")");
@@ -1911,7 +1910,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Saving town block " + townBlock.getWorld().getName() + ":" + townBlock.getX() + "x"
 				+ townBlock.getZ());
 		try {
-			UpdateDB("TOWNBLOCKS", getTownBlockHashMapForSaving(townBlock), Arrays.asList("world", "x", "z"));
+			UpdateDB("TOWNBLOCKS", getTownBlockMap(townBlock), Arrays.asList("world", "x", "z"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save TownBlock unknown error");
@@ -1924,7 +1923,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public synchronized boolean saveJail(Jail jail) {
 		TownyMessaging.sendDebugMsg("Saving jail " + jail.getUUID());
 		try {
-			UpdateDB("JAILS", getJailHashMapForSaving(jail), Collections.singletonList("uuid"));
+			UpdateDB("JAILS", getJailMap(jail), Collections.singletonList("uuid"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save jail unknown error");

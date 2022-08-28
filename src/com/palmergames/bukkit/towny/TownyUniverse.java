@@ -378,6 +378,13 @@ public class TownyUniverse {
 		return Optional.ofNullable(getResident(residentUUID));
 	}
 	
+	public void newResident(@NotNull UUID residentUUID, String residentName) throws AlreadyRegisteredException, InvalidNameException {
+		Preconditions.checkNotNull(residentUUID, "UUID cannot be null!");
+		Preconditions.checkNotNull(residentName, "Name cannot be null!");
+		Resident resident = new Resident(NameValidation.checkAndFilterPlayerName(residentName), residentUUID);
+		registerResident(resident);
+	}
+	
 	public void newResidentInternal(@NotNull UUID residentUUID) {
 		String name = getDataSource().getNameOfObject("RESIDENT", residentUUID);
 		if (name == null || name.isEmpty())
@@ -745,6 +752,18 @@ public class TownyUniverse {
 		try {
 			registerNation(nation);
 		} catch (AlreadyRegisteredException ignored) {}
+	}
+
+	public void newNation(@NotNull String name) throws InvalidNameException, AlreadyRegisteredException {
+		Preconditions.checkNotNull(name, "Name cannot be null!");
+		
+		newNation(name, true);
+	}
+	
+	private void newNation(@NotNull String name, boolean assignUUID) throws InvalidNameException, AlreadyRegisteredException {
+		String filteredName = NameValidation.checkAndFilterName(name);
+		Nation nation = new Nation(filteredName, assignUUID ? UUID.randomUUID() : null);
+		registerNation(nation);
 	}
 
 	// This is used internally since UUIDs are assigned after nation objects are created.

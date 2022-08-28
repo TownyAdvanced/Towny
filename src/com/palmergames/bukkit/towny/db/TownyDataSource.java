@@ -86,6 +86,7 @@ public abstract class TownyDataSource {
 
 	/*
 	 * Load Lists (Gathering UUIDs to load in full later.)
+	 * Methods are found in TownyFlatfile/SQlSource classes.
 	 */
 
 	abstract public boolean loadJailList();
@@ -107,7 +108,8 @@ public abstract class TownyDataSource {
 	abstract public boolean loadSnapshotList();
 
 	/*
-	 * Load all objects of the given type, using the UUIDs gathered into TownyUniverse. 
+	 * Load all objects of the given type, using the UUIDs gathered into TownyUniverse.
+	 * Methods are found in TownyFlatfile/SQlSource classes.
 	 */
 
 	abstract public boolean loadJails();
@@ -125,23 +127,36 @@ public abstract class TownyDataSource {
 	abstract public boolean loadTownBlocks();
 
 	/*
-	 * Load object from the database into Memory, to be entered into the Objects themselves 
+	 * Load object from the database into Memory, to be entered into the Objects
+	 * themselves, not used by Towny itself.
 	 */
+	public boolean loadJail(Jail jail) {
+		return loadJailData(jail.getUUID());
+	}
 
-	abstract public boolean loadJail(Jail jail);
+	public boolean loadPlotGroup(PlotGroup group) {
+		return loadPlotGroupData(group.getUUID());
+	}
 
-	abstract public boolean loadPlotGroup(PlotGroup group);
+	public boolean loadResident(Resident resident) {
+		return loadResidentData(resident.getUUID());
+	}
 
-	abstract public boolean loadResident(Resident resident);
+	public boolean loadTown(Town town) {
+		return loadTownData(town.getUUID());
+	}
 
-	abstract public boolean loadTown(Town town);
+	public boolean loadNation(Nation nation) {
+		return loadNationData(nation.getUUID());
+	}
 
-	abstract public boolean loadNation(Nation nation);
-
-	abstract public boolean loadWorld(TownyWorld world);
+	public boolean loadWorld(TownyWorld world) {
+		return loadWorldData(world.getUUID());
+	}
 
 	/*
-	 * Load object Data from the database into Memory, to be entered into the Objects themselves 
+	 * Load object Data from the database into Memory, to be entered into the Objects themselves.
+	 * Methods are found in TownyFlatfile/SQlSource classes.
 	 */
 
 	abstract public boolean loadJailData(UUID uuid);
@@ -157,7 +172,8 @@ public abstract class TownyDataSource {
 	abstract public boolean loadWorldData(UUID uuid);
 
 	/*
-	 * Legacy database entries that still store a list of keys in a file. 
+	 * Legacy database entries that still store a list of keys in a file.
+	 * Methods are found in TownyDatabaseHandler.
 	 */
 
 	abstract public boolean saveRegenList();
@@ -165,7 +181,7 @@ public abstract class TownyDataSource {
 	abstract public boolean saveSnapshotList();
 
 	/*
-	 * Individual objects saving methods.
+	 * Individual objects saving methods. Methods are found in TownyFlatfile/SQlSource classes.
 	 */
 
 	abstract public boolean saveResident(Resident resident);
@@ -184,92 +200,67 @@ public abstract class TownyDataSource {
 
 	abstract public boolean saveTownBlock(TownBlock townBlock);
 
-	abstract public boolean savePlotData(PlotBlockData plotChunk);
-
 	/*
 	 * Save all of category
 	 */
 
-	public boolean saveResidents() {
-
-		TownyMessaging.sendDebugMsg("Saving Residents");
-		for (Resident resident : universe.getResidents())
-			saveResident(resident);
-		return true;
-	}
-	
-	public boolean savePlotGroups() {
-		TownyMessaging.sendDebugMsg("Saving PlotGroups");
-		for (PlotGroup plotGroup : universe.getGroups())
-			/*
-			 * Only save plotgroups which actually have townblocks associated with them.
-			 */
-			if (plotGroup.hasTownBlocks())
-				savePlotGroup(plotGroup);
-			else
-				deletePlotGroup(plotGroup); 
-		return true;
-	}
-
 	public boolean saveJails() {
-		TownyMessaging.sendDebugMsg("Saving Jails");
-		for (Jail jail : universe.getJails())
-			saveJail(jail);
+		TownyMessaging.sendDebugMsg("Saving all Jails");
+		universe.getJails().stream().forEach(j -> saveJail(j));
+		return true;
+	}
+
+	public boolean savePlotGroups() {
+		TownyMessaging.sendDebugMsg("Saving all PlotGroups");
+		universe.getGroups().stream().forEach(g -> vetPlotGroupForSaving(g));
 		return true;
 	}
 	
-	public boolean saveTowns() {
+	private void vetPlotGroupForSaving(PlotGroup g) {
+		// Only save plotgroups which actually have townblocks associated with them.
+		if (g.hasTownBlocks())
+			savePlotGroup(g);
+		else
+			deletePlotGroup(g);
+	}
 
-		TownyMessaging.sendDebugMsg("Saving Towns");
-		for (Town town : universe.getTowns())
-			saveTown(town);
+	public boolean saveResidents() {
+		TownyMessaging.sendDebugMsg("Saving all Residents");
+		universe.getResidents().stream().forEach(r -> saveResident(r));
+		return true;
+	}
+
+	public boolean saveTowns() {
+		TownyMessaging.sendDebugMsg("Saving all Towns");
+		universe.getTowns().stream().forEach(t -> saveTown(t));
 		return true;
 	}
 
 	public boolean saveNations() {
-
-		TownyMessaging.sendDebugMsg("Saving Nations");
-		for (Nation nation : universe.getNations())
-			saveNation(nation);
+		TownyMessaging.sendDebugMsg("Saving all Nations");
+		universe.getNations().stream().forEach(n -> saveNation(n));
 		return true;
 	}
 
 	public boolean saveWorlds() {
-
-		TownyMessaging.sendDebugMsg("Saving Worlds");
-		for (TownyWorld world : universe.getTownyWorlds())
-			saveWorld(world);
+		TownyMessaging.sendDebugMsg("Saving all Worlds");
+		universe.getTownyWorlds().stream().forEach(w -> saveWorld(w));
 		return true;
 	}
-	
+
 	public boolean saveTownBlocks() {
-		TownyMessaging.sendDebugMsg("Saving Townblocks");
-		for (Town town : universe.getTowns()) {
-			for (TownBlock townBlock : town.getTownBlocks())
-				saveTownBlock(townBlock);
-		}
+		TownyMessaging.sendDebugMsg("Saving all Townblocks");
+		universe.getTowns().stream().forEach(t -> t.saveTownBlocks());
 		return true;
 	}
 
 	/*
-	 * PlotBlockData methods.
-	 */
-
-	abstract public PlotBlockData loadPlotData(String worldName, int x, int z);
-
-	abstract public PlotBlockData loadPlotData(TownBlock townBlock);
-
-	abstract public boolean hasPlotData(TownBlock townBlock);
-
-	/*
-	 * Delete methods.
+	 * Delete methods found in the TownyFlatfile/SQLSource classes.
 	 */
 
 	abstract public void deleteObject(String type, UUID uuid);
 
 	abstract public void deleteObject(String type, String name);
-
-	abstract public void deletePlotData(PlotBlockData plotChunk);
 
 	abstract public void deleteResident(Resident resident);
 
@@ -290,8 +281,60 @@ public abstract class TownyDataSource {
 	abstract public void deleteJail(Jail jail);
 
 	/*
+	 * PlotBlockData methods found in TownyDatabaseHandler (used by Flatfile and SQL Sources.)
+	 */
+
+	abstract public boolean savePlotData(PlotBlockData plotChunk);
+
+	abstract public PlotBlockData loadPlotData(String worldName, int x, int z);
+
+	abstract public PlotBlockData loadPlotData(TownBlock townBlock);
+
+	abstract public boolean hasPlotData(TownBlock townBlock);
+
+	abstract public void deletePlotData(PlotBlockData plotChunk);
+
+	/*
+	 * Remove Object methods found in TownyDatabaseHandler
+	 */
+
+	abstract public void removeResident(Resident resident);
+
+	abstract public void removeTownBlock(TownBlock townBlock);
+
+	abstract public void removeTownBlocks(Town town);
+
+	abstract public void removeTown(Town town);
+
+	abstract public void removeTown(Town town, boolean delayFullRemoval);
+
+	abstract public void removeNation(Nation nation);
+
+	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
+
+	abstract public void removeJail(Jail jail);
+	
+	abstract public void removePlotGroup(PlotGroup group);
+	
+	/*
+	 * Rename Object methods found in TownyDatabaseHandler
+	 */
+	
+	abstract public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException;
+
+	abstract public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException;
+
+	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
+
+	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
+
+	/*
 	 * Misc
 	 */
+
+	abstract public void mergeNation(Nation succumbingNation, Nation prevailingNation);
+
+	abstract public void mergeTown(Town mergeInto, Town mergeFrom);
 
 	abstract public String getNameOfObject(String type, UUID uuid);
 
@@ -342,8 +385,6 @@ public abstract class TownyDataSource {
 	 */
 	@Deprecated
 	abstract public List<Resident> getResidents(UUID[] uuids);
-
-	abstract public void removeNation(Nation nation);
 
 	/**
 	 * @deprecated as of 0.97.5.3, use {@link TownyUniverse#hasTown(String)} instead.
@@ -504,23 +545,52 @@ public abstract class TownyDataSource {
 	@Deprecated
 	abstract public List<TownyWorld> getWorlds();
 
-	abstract public void removeResident(Resident resident);
-
-	abstract public void removeTownBlock(TownBlock townBlock);
-
-	abstract public void removeTownBlocks(Town town);
-
 	/**
 	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTownBlocks} instead.
 	 */
 	@Deprecated
 	abstract public Collection<TownBlock> getAllTownBlocks();
 
-	abstract public void newWorld(World world);
+	/**
+	 * @deprecated as of 0.97.5.18 use {@link TownyAPI#getTownsWithoutNation} instead.
+	 */
+	@Deprecated
+	abstract public List<Town> getTownsWithoutNation();
 
-	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
+	/**
+	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidentsWithoutTown()} instead.
+	 */
+	@Deprecated
+	abstract public List<Resident> getResidentsWithoutTown();
 
-	abstract public void newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
+	/*
+	 * New Object methods which have been deprecated.
+	 */
+
+	/**
+	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newResident(UUID, String) instead.
+	 * @param name
+	 * @throws AlreadyRegisteredException
+	 * @throws NotRegisteredException
+	 * @throws InvalidNameException 
+	 */
+	@Deprecated
+	public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException, InvalidNameException {
+		universe.newResident(UUID.randomUUID(), name);
+	}
+
+	/**
+	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newResident(UUID, String) instead.
+	 * @param name
+	 * @param uuid
+	 * @throws AlreadyRegisteredException
+	 * @throws NotRegisteredException
+	 * @throws InvalidNameException 
+	 */
+	@Deprecated
+	public void newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException, InvalidNameException {
+		universe.newResident(uuid, name);
+	}
 	
 	/**
 	 * @deprecated as of 0.97.5.3, use {@link TownyUniverse#newTown(String)} instead.
@@ -539,41 +609,36 @@ public abstract class TownyDataSource {
 		}
 	}
 
-	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;
-
-	abstract public void newNation(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
-
-	abstract public void removeTown(Town town);
-
-	abstract public void removeTown(Town town, boolean delayFullRemoval);
-
-	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
-
-	abstract public void removeJail(Jail jail);
-	
-	abstract public void removePlotGroup(PlotGroup group);
-
 	/**
-	 * @deprecated as of 0.97.5.18 use {@link TownyAPI#getTownsWithoutNation} instead.
+	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newNation(String) instead.
+	 * @param name
+	 * @throws AlreadyRegisteredException
+	 * @throws NotRegisteredException
+	 * @throws InvalidNameException 
 	 */
 	@Deprecated
-	abstract public List<Town> getTownsWithoutNation();
+	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException, InvalidNameException {
+		universe.newNation(name);
+	}
 
 	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidentsWithoutTown()} instead.
+	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newNation(String) instead.
+	 * @param name
+	 * @throws AlreadyRegisteredException
+	 * @throws NotRegisteredException
+	 * @throws InvalidNameException 
 	 */
 	@Deprecated
-	abstract public List<Resident> getResidentsWithoutTown();
+	public void newNation(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException, InvalidNameException {
+		universe.newNation(name);
+	}
 
-	abstract public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException;
-
-	abstract public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException;
-	
-	abstract public void mergeNation(Nation succumbingNation, Nation prevailingNation);
-
-	abstract public void mergeTown(Town mergeInto, Town mergeFrom);
-
-	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
-
-	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
+	/**
+	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newWorld(String) instead.
+	 * @param world
+	 */
+	@Deprecated
+	public void newWorld(World world) {
+		universe.newWorld(world);
+	}
 }
