@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -127,6 +128,23 @@ public abstract class TownyDataSource {
 	abstract public boolean loadTownBlocks();
 
 	/*
+	 * Load object Data from the database into Memory, to be entered into the Objects themselves.
+	 * Methods are found in the TownyDatabaseHandler class.
+	 */
+
+	abstract public boolean loadJailData(UUID uuid);
+
+	abstract public boolean loadPlotGroupData(UUID uuid);
+
+	abstract public boolean loadResidentData(UUID uuid);
+
+	abstract public boolean loadTownData(UUID uuid);
+
+	abstract public boolean loadNationData(UUID uuid);
+
+	abstract public boolean loadWorldData(UUID uuid);
+
+	/*
 	 * Load object from the database into Memory, to be entered into the Objects
 	 * themselves, not used by Towny itself.
 	 */
@@ -155,21 +173,20 @@ public abstract class TownyDataSource {
 	}
 
 	/*
-	 * Load object Data from the database into Memory, to be entered into the Objects themselves.
-	 * Methods are found in TownyFlatfile/SQlSource classes.
+	 * Get objects as Maps for loading. Methods found in TownyFlatfile/SQLSource classes.
 	 */
 
-	abstract public boolean loadJailData(UUID uuid);
+	abstract public HashMap<String, String> getJailMap(UUID uuid);
 
-	abstract public boolean loadPlotGroupData(UUID uuid);
+	abstract public HashMap<String, String> getPlotGroupMap(UUID uuid);
 
-	abstract public boolean loadResidentData(UUID uuid);
+	abstract public HashMap<String, String> getResidentMap(UUID uuid);
 
-	abstract public boolean loadTownData(UUID uuid);
+	abstract public HashMap<String, String> getTownMap(UUID uuid);
 
-	abstract public boolean loadNationData(UUID uuid);
+	abstract public HashMap<String, String> getNationMap(UUID uuid);
 
-	abstract public boolean loadWorldData(UUID uuid);
+	abstract public HashMap<String, String> getWorldMap(UUID uuid);
 
 	/*
 	 * Legacy database entries that still store a list of keys in a file.
@@ -184,6 +201,26 @@ public abstract class TownyDataSource {
 	 * Individual objects saving methods. Methods are found in TownyFlatfile/SQlSource classes.
 	 */
 
+	abstract public boolean saveResident(Resident resident, HashMap<String, Object> data);
+
+	abstract public boolean saveHibernatedResident(UUID uuid, HashMap<String, Object> data);
+
+	abstract public boolean saveTown(Town town, HashMap<String, Object> data);
+
+	abstract public boolean savePlotGroup(PlotGroup group, HashMap<String, Object> data);
+
+	abstract public boolean saveJail(Jail jail, HashMap<String, Object> data);
+
+	abstract public boolean saveNation(Nation nation, HashMap<String, Object> data);
+
+	abstract public boolean saveWorld(TownyWorld world, HashMap<String, Object> data);
+
+	abstract public boolean saveTownBlock(TownBlock townBlock, HashMap<String, Object> data);
+
+	/*
+	 * Individual objects saving methods. Methods are found in TownyDataBaseHandler.
+	 */
+	
 	abstract public boolean saveResident(Resident resident);
 
 	abstract public boolean saveHibernatedResident(UUID uuid, long registered);
@@ -257,10 +294,6 @@ public abstract class TownyDataSource {
 	/*
 	 * Delete methods found in the TownyFlatfile/SQLSource classes.
 	 */
-
-	abstract public void deleteObject(String type, UUID uuid);
-
-	abstract public void deleteObject(String type, String name);
 
 	abstract public void deleteResident(Resident resident);
 

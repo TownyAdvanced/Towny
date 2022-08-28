@@ -683,122 +683,86 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 	
 	/*
-	 * Load individual towny object
+	 * Methods that return objects as HashMaps for loading.
 	 */
+
 	@Override
-	public boolean loadJailData(UUID uuid) {
+	public HashMap<String, String> getJailMap(UUID uuid) {
 		if (!getContext())
-			return false;
-		Jail jail = universe.getJail(uuid);
-		if (jail == null) {
-			TownyMessaging.sendErrorMsg("Cannot find a jail with the UUID " + uuid.toString() + " in the TownyUniverse.");
-			return false; 
-		}
-	
+			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "JAILS WHERE uuid='" + uuid + "'")) {
-			return loadJail(jail, loadResultSetIntoHashMap(rs));
+			return loadResultSetIntoHashMap(rs);
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load jail sql Error - " + e.getMessage());
-			return false;
+			TownyMessaging.sendErrorMsg("SQL: Unabled to find jail with UUID " + uuid.toString() + " in the database!");
+			return null;
 		}
 	}
-	
+
 	@Override
-	public boolean loadPlotGroupData(UUID uuid) {
+	public HashMap<String, String> getPlotGroupMap(UUID uuid) {
 		if (!getContext())
-			return false;
-		PlotGroup plotGroup = universe.getGroup(uuid);
-		if (plotGroup == null) {
-			TownyMessaging.sendErrorMsg("Cannot find a plotgroup with the UUID " + uuid.toString() + " in the TownyUniverse.");
-			return false; 
-		}
-	
+			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT groupID FROM " + tb_prefix + "PLOTGROUPS WHERE groupID='" + uuid + "'")) {
-			return loadPlotGroup(plotGroup, loadResultSetIntoHashMap(rs));
+			return loadResultSetIntoHashMap(rs);
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load plotgroup sql Error - " + e.getMessage());
-			return false;
+			TownyMessaging.sendErrorMsg("SQL: Unabled to find plotgroup with UUID " + uuid.toString() + " in the database!");
+			return null;
 		}
 	}
-	
+
 	@Override
-	public boolean loadResidentData(UUID uuid) {
+	public HashMap<String, String> getResidentMap(UUID uuid) {
 		if (!getContext())
-			return false;
-		Resident resident = universe.getResident(uuid);
-		if (resident == null) {
-			TownyMessaging.sendErrorMsg("Cannot find a resident with the UUID " + uuid.toString() + " in the TownyUniverse.");
-			return false; 
-		}
-	
+			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "RESIDENTS WHERE uuid='" + uuid + "'")) {
-			return loadResident(resident, loadResultSetIntoHashMap(rs));
+			return loadResultSetIntoHashMap(rs);
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load resident sql Error - " + e.getMessage());
-			return false;
+			TownyMessaging.sendErrorMsg("SQL: Unabled to find resident with UUID " + uuid.toString() + " in the database!");
+			return null;
 		}
 	}
-	
+
 	@Override
-	public boolean loadTownData(UUID uuid) {
+	public HashMap<String, String> getTownMap(UUID uuid) {
 		if (!getContext())
-			return false;
-		Town town = universe.getTown(uuid);
-		if (town == null) {
-			TownyMessaging.sendErrorMsg("Cannot find a town with the UUID " + uuid.toString() + " in the TownyUniverse.");
-			return false; 
-		}
-	
+			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "TOWNS WHERE uuid='" + uuid + "'")) {
-			return loadTown(town, loadResultSetIntoHashMap(rs));
+			return loadResultSetIntoHashMap(rs);
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load town sql Error - " + e.getMessage());
-			return false;
+			TownyMessaging.sendErrorMsg("SQL: Unabled to find town with UUID " + uuid.toString() + " in the database!");
+			return null;
 		}
 	}
-	
+
 	@Override
-	public boolean loadNationData(UUID uuid) {
+	public HashMap<String, String> getNationMap(UUID uuid) {
 		if (!getContext())
-			return false;
-		Nation nation = universe.getNation(uuid);
-		if (nation == null) {
-			TownyMessaging.sendErrorMsg("Cannot find a nation with the UUID " + uuid.toString() + " in the TownyUniverse.");
-			return false; 
-		}
-	
+			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "NATIONS WHERE uuid='" + uuid + "'")) {
-			return loadNation(nation, loadResultSetIntoHashMap(rs));
+			return loadResultSetIntoHashMap(rs);
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load nation sql Error - " + e.getMessage());
-			return false;
+			TownyMessaging.sendErrorMsg("SQL: Unabled to find nation with UUID " + uuid.toString() + " in the database!");
+			return null;
 		}
 	}
 
 	@Override
-	public boolean loadWorldData(UUID uuid) {
+	public HashMap<String, String> getWorldMap(UUID uuid) {
 		if (!getContext())
-			return false;
-		TownyWorld world = universe.getWorld(uuid);
-		if (world == null) {
-			TownyMessaging.sendErrorMsg("Cannot find a world with the UUID " + uuid.toString() + " in the TownyUniverse.");
-			return false; 
-		}
-	
+			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "WORLDS WHERE uuid='" + uuid + "'")) {
-			return loadWorld(world, loadResultSetIntoHashMap(rs));
+			return loadResultSetIntoHashMap(rs);
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Load world sql Error - " + e.getMessage());
-			return false;
+			TownyMessaging.sendErrorMsg("SQL: Unabled to find nation with UUID " + uuid.toString() + " in the database!");
+			return null;
 		}
 	}
-
 /*	
 	private boolean loadTown(ResultSet rs) {
 		String line;
@@ -1830,47 +1794,23 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 */
 
 	@Override
-	public synchronized boolean saveResident(Resident resident) {
-		TownyMessaging.sendDebugMsg("Saving Resident " + resident.getName());
+	public synchronized boolean saveJail(Jail jail, HashMap<String, Object> data) {
+		TownyMessaging.sendDebugMsg("Saving jail " + jail.getUUID());
 		try {
-			UpdateDB("RESIDENTS", getResidentMap(resident), Collections.singletonList("name"));
+			UpdateDB("JAILS", data, Collections.singletonList("uuid"));
 			return true;
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save Resident unknown error " + e.getMessage());
-		}
-		return false;
-	}
-	
-	@Override
-	public synchronized boolean saveHibernatedResident(UUID uuid, long registered) {
-		TownyMessaging.sendDebugMsg("Saving Hibernated Resident " + uuid);
-		try {
-			UpdateDB("HIBERNATEDRESIDENTS", getHibernatedResidentMap(uuid, registered), Collections.singletonList("uuid"));
-			return true;
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save Hibernated Resident unknown error " + e.getMessage());
-		}
-		return false;
-	}
-
-	@Override
-	public synchronized boolean saveTown(Town town) {
-		TownyMessaging.sendDebugMsg("Saving town " + town.getName());
-		try {
-			UpdateDB("TOWNS", getTownMap(town), Collections.singletonList("name"));
-			return true;
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save Town unknown error");
+			TownyMessaging.sendErrorMsg("SQL: Save jail unknown error");
 			e.printStackTrace();
 		}
 		return false;
 	}
 
 	@Override
-	public synchronized boolean savePlotGroup(PlotGroup group) {
+	public synchronized boolean savePlotGroup(PlotGroup group, HashMap<String, Object> data) {
 		TownyMessaging.sendDebugMsg("Saving group " + group.getName());
 		try {
-			UpdateDB("PLOTGROUPS", getPlotGroupMap(group), Collections.singletonList("groupID"));
+			UpdateDB("PLOTGROUPS", data, Collections.singletonList("groupID"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Plot groups unknown error");
@@ -1880,10 +1820,47 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveNation(Nation nation) {
+	public synchronized boolean saveResident(Resident resident, HashMap<String, Object> data) {
+		TownyMessaging.sendDebugMsg("Saving Resident " + resident.getName());
+		try {
+			UpdateDB("RESIDENTS", data, Collections.singletonList("name"));
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save Resident unknown error " + e.getMessage());
+		}
+		return false;
+	}
+	
+	@Override
+	public synchronized boolean saveHibernatedResident(UUID uuid, HashMap<String, Object> data) {
+		TownyMessaging.sendDebugMsg("Saving Hibernated Resident " + uuid);
+		try {
+			UpdateDB("HIBERNATEDRESIDENTS", data, Collections.singletonList("uuid"));
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save Hibernated Resident unknown error " + e.getMessage());
+		}
+		return false;
+	}
+
+	@Override
+	public synchronized boolean saveTown(Town town, HashMap<String, Object> data) {
+		TownyMessaging.sendDebugMsg("Saving town " + town.getName());
+		try {
+			UpdateDB("TOWNS", data, Collections.singletonList("name"));
+			return true;
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg("SQL: Save Town unknown error");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public synchronized boolean saveNation(Nation nation, HashMap<String, Object> data) {
 		TownyMessaging.sendDebugMsg("Saving nation " + nation.getName());
 		try {
-			UpdateDB("NATIONS", getNationMap(nation), Collections.singletonList("name"));
+			UpdateDB("NATIONS", data, Collections.singletonList("name"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
@@ -1893,10 +1870,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveWorld(TownyWorld world) {
+	public synchronized boolean saveWorld(TownyWorld world, HashMap<String, Object> data) {
 		TownyMessaging.sendDebugMsg("Saving world " + world.getName());
 		try {
-			UpdateDB("WORLDS", getWorldMap(world), Collections.singletonList("name"));
+			UpdateDB("WORLDS", data, Collections.singletonList("name"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save world unknown error (" + world.getName() + ")");
@@ -1906,27 +1883,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveTownBlock(TownBlock townBlock) {
+	public synchronized boolean saveTownBlock(TownBlock townBlock, HashMap<String, Object> data) {
 		TownyMessaging.sendDebugMsg("Saving town block " + townBlock.getWorld().getName() + ":" + townBlock.getX() + "x"
 				+ townBlock.getZ());
 		try {
-			UpdateDB("TOWNBLOCKS", getTownBlockMap(townBlock), Arrays.asList("world", "x", "z"));
+			UpdateDB("TOWNBLOCKS", data, Arrays.asList("world", "x", "z"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save TownBlock unknown error");
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	@Override
-	public synchronized boolean saveJail(Jail jail) {
-		TownyMessaging.sendDebugMsg("Saving jail " + jail.getUUID());
-		try {
-			UpdateDB("JAILS", getJailMap(jail), Collections.singletonList("uuid"));
-			return true;
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save jail unknown error");
 			e.printStackTrace();
 		}
 		return false;
@@ -1935,17 +1899,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	/*
 	 * Delete objects
 	 */
-	
-	@Override
-	public void deleteObject(String type, UUID uuid) {
-		deleteRowOfColumnAndUUID(TownyDBTableType.valueOf(type), uuid);
-	}
 
-	@Override
-	public void deleteObject(String type, String name) {
-		deleteRowOfColumnAndName(TownyDBTableType.valueOf(type), name);
-	}
-	
 	private void deleteRowOfColumnAndUUID(TownyDBTableType type, UUID uuid) {
 		deleteRowOfColumnAndName(type, String.valueOf(uuid));
 	}

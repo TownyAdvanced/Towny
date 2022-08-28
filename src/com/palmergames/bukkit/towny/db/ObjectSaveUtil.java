@@ -90,7 +90,7 @@ public class ObjectSaveUtil {
 			res_hm.put("metadata", resident.hasMeta() ? ObjectSaveUtil.serializeMetadata(resident) : "");
 			return res_hm;
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving: Town HashMap could not be made.");
+			TownyMessaging.sendErrorMsg("Saving: Resident HashMap could not be made.");
 			e.printStackTrace();
 			throw new Exception(e);
 		}

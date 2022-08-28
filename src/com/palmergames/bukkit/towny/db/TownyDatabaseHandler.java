@@ -181,72 +181,142 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/*
-	 * New Load Object Methods
-	 * 
-	 * These are called from the FlatFileSource and SQLSource which present Towny
-	 * with an object, UUID and the keys which are used to load an object.
+	 * Object loading methods which pull HashMaps from FlatFile/SQLSources 
 	 */
-	
-	public boolean loadJail(Jail jail, HashMap<String, String> keys) {
-		return loader.loadJail(jail, keys);
+
+	public boolean loadJailData(UUID uuid) {
+		Jail jail = TownyUniverse.getInstance().getJail(uuid);
+		if (jail == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a jail with the UUID " + uuid.toString() + " in the TownyUniverse.");
+			return false;
+		}
+		HashMap<String, String> jailAsMap = getJailMap(uuid);
+		if (jailAsMap == null)
+			return false;
+		return loader.loadJail(jail, jailAsMap);
 	}
-	
-	public boolean loadPlotGroup(PlotGroup group, HashMap<String, String> keys) {
-		return loader.loadPlotGroup(group, keys);
+
+	public boolean loadPlotGroupData(UUID uuid) {
+		PlotGroup plotGroup = TownyUniverse.getInstance().getGroup(uuid);
+		if (plotGroup == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a plotgroup with the UUID " + uuid.toString() + " in the TownyUniverse.");
+			return false;
+		}
+		HashMap<String, String> groupAsMap = getPlotGroupMap(uuid);
+		if (groupAsMap == null)
+			return false;
+		return loader.loadPlotGroup(plotGroup, groupAsMap);
 	}
-	
-	public boolean loadResident(Resident resident, HashMap<String, String> keys) {
-		return loader.loadResident(resident, keys);
+
+	public boolean loadResidentData(UUID uuid) {
+		Resident resident = TownyUniverse.getInstance().getResident(uuid);
+		if (resident == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a resident with the UUID " + uuid.toString() + " in the TownyUniverse.");
+			return false;
+		}
+		HashMap<String, String> residentAsMap = getResidentMap(uuid);
+		if (residentAsMap == null)
+			return false;
+		return loader.loadResident(resident, residentAsMap);
 	}
-	
-	public boolean loadTown(Town town, HashMap<String, String> keys) {
-		return loader.loadTown(town, keys);
+
+	public boolean loadTownData(UUID uuid) {
+		Town town = TownyUniverse.getInstance().getTown(uuid);
+		if (town == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a town with the UUID " + uuid.toString() + " in the TownyUniverse.");
+			return false;
+		}
+		HashMap<String, String> townAsMap = getTownMap(uuid);
+		if (townAsMap == null)
+			return false;
+		return loader.loadTown(town, townAsMap);
 	}
-	
-	public boolean loadNation(Nation nation, HashMap<String, String> keys) {
-		return loader.loadNation(nation, keys);
+
+	public boolean loadNationData(UUID uuid) {
+		Nation nation = TownyUniverse.getInstance().getNation(uuid);
+		if (nation == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a nation with the UUID " + uuid.toString() + " in the TownyUniverse.");
+			return false;
+		}
+		HashMap<String, String> nationAsMap = getNationMap(uuid);
+		if (nationAsMap == null)
+			return false;
+		return loader.loadNation(nation, nationAsMap);
 	}
-	
-	public boolean loadWorld(TownyWorld world, HashMap<String, String> keys) {
-		return loader.loadWorld(world, keys);
+
+	public boolean loadWorldData(UUID uuid) {
+		TownyWorld world = TownyUniverse.getInstance().getWorld(uuid);
+		if (world == null) {
+			TownyMessaging.sendErrorMsg("Cannot find a world with the UUID " + uuid.toString() + " in the TownyUniverse.");
+			return false;
+		}
+		HashMap<String, String> worldAsMap = getWorldMap(uuid);
+		if (worldAsMap == null)
+			return false;
+		return loader.loadWorld(world, worldAsMap);
 	}
 
 	/*
-	 * New Save Object Methods
+	 * Save Object Methods that call Flatfile/SQLSources after gathering the objects as HashMaps.
 	 */
+
+	public boolean saveJail(Jail jail) {
+		try {
+			return saveJail(jail, ObjectSaveUtil.getJailMap(jail));
+		} catch (Exception ignore) {}
+		return false;
+	}
 	
-	public HashMap<String, Object> getJailMap(Jail jail) throws Exception {
-		return ObjectSaveUtil.getJailMap(jail);
+	public boolean savePlotGroup(PlotGroup group) {
+		try {
+			return savePlotGroup(group, ObjectSaveUtil.getPlotGroupMap(group));
+		} catch (Exception ignored) {}
+		return false;
 	}
 
-	public HashMap<String, Object> getPlotGroupMap(PlotGroup group) throws Exception {
-		return ObjectSaveUtil.getPlotGroupMap(group);
+	public boolean saveResident(Resident resident) {
+		try {
+			return saveResident(resident, ObjectSaveUtil.getResidentMap(resident));
+		} catch (Exception ignored) {}
+		return false;
 	}
 
-	public HashMap<String, Object> getResidentMap(Resident resident) throws Exception {
-		return ObjectSaveUtil.getResidentMap(resident);
+	public boolean saveHibernatedResident(UUID uuid, long registered) {
+		try {
+			return saveHibernatedResident(uuid, ObjectSaveUtil.getHibernatedResidentMap(uuid, registered));
+		} catch (Exception ignored) {}
+		return false;
 	}
 
-	public HashMap<String, Object> getHibernatedResidentMap(UUID uuid, long registered) throws Exception {
-		return ObjectSaveUtil.getHibernatedResidentMap(uuid, registered);
+	public boolean saveTown(Town town) {
+		try {
+			return saveTown(town, ObjectSaveUtil.getTownMap(town));
+		} catch (Exception ignored) {}
+		return false;
 	}
 
-	public HashMap<String, Object> getTownMap(Town town) throws Exception {
-		return ObjectSaveUtil.getTownMap(town);
+	public boolean saveNation(Nation nation) {
+		try {
+			return saveNation(nation, ObjectSaveUtil.getNationMap(nation));
+		} catch (Exception ignored) {}
+		return false;
 	}
 
-	public HashMap<String, Object> getNationMap(Nation nation) throws Exception {
-		return ObjectSaveUtil.getNationMap(nation);
+	public boolean saveWorld(TownyWorld world) {
+		try {
+			return saveWorld(world, ObjectSaveUtil.getWorldMap(world));
+		} catch (Exception ignored) {}
+		return false;
 	}
 
-	public HashMap<String, Object> getWorldMap(TownyWorld world) throws Exception {
-		return ObjectSaveUtil.getWorldMap(world);
+	public boolean saveTownBlock(TownBlock townBlock) {
+		try {
+			return saveTownBlock(townBlock, ObjectSaveUtil.getTownBlockMap(townBlock));
+		} catch (Exception ignored) {}
+		return false;
 	}
-
-	public HashMap<String, Object> getTownBlockMap(TownBlock townBlock) throws Exception {
-		return ObjectSaveUtil.getTownBlockMap(townBlock);
-	}
-
+	
+	
 	/*
 	 * Remove Object Methods
 	 */
