@@ -6,8 +6,6 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.db.TownyFlatFileSource.TownyDBFileType;
-import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -605,14 +603,6 @@ public class Nation extends Government {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
-	}
-	
-	@Override
-	public String getSaveLocation() {
-		if (TownyUniverse.getInstance().getDataSource().isFlatFile())
-			return TownyDBFileType.NATION.getSaveLocation(getUUID().toString());
-		else 
-			return TownyDBTableType.NATION.getSaveLocation(getUUID().toString());
 	}
 	
 	@Override

@@ -96,9 +96,9 @@ public class ObjectLoadUtil {
 				if (town != null) {
 					group.setTown(town);
 				} else {
-					TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_group_file_missing_town_delete", group.getSaveLocation()));
+					TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_group_file_missing_town_delete", group.getUUID()));
 					source.deletePlotGroup(group); 
-					TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_group_entry", group.getSaveLocation()));
+					TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_group_entry", group.getUUID()));
 					return true;
 				}
 			} else {
@@ -112,7 +112,7 @@ public class ObjectLoadUtil {
 
 			return true;
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_group_file_at_line", group.getSaveLocation(), line));
+			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_group_file_at_line", group.getUUID(), line));
 			return false;
 		}
 	}

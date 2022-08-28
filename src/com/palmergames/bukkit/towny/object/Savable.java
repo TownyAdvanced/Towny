@@ -12,6 +12,4 @@ public interface Savable {
 	 * Schedules the object to be saved to the database.
 	 */
 	void save();
-	
-	String getSaveLocation();
 }
