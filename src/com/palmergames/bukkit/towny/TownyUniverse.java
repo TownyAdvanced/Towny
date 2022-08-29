@@ -28,8 +28,6 @@ import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
-
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -751,7 +749,7 @@ public class TownyUniverse {
 	}
 
 	public void registerTownyWorld(@NotNull TownyWorld world) {
-		Validate.notNull(world, "World cannot be null!");
+		Preconditions.checkNotNull(world, "World cannot be null!");
 		worldIDMap.putIfAbsent(world.getUUID(), world);
 		worlds.putIfAbsent(world.getName().toLowerCase(Locale.ROOT), world);
 	}
