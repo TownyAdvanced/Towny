@@ -793,10 +793,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			// Update all townBlocks with the new name
 
-			for (TownBlock townBlock : town.getTownBlocks()) {
-				//townBlock.setTown(town);
-				saveTownBlock(townBlock);
-			}
+			town.saveTownBlocks();
 			
 			if (town.hasPlotGroups())
 				for (PlotGroup pg : town.getPlotGroups()) {
