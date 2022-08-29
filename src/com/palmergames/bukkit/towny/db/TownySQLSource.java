@@ -632,7 +632,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				ResultSet rs = s.executeQuery("SELECT groupID FROM " + tb_prefix + "PLOTGROUPS");
 
 				while (rs.next()) {
-					universe.newPlotGroupInternal(rs.getString("groupID"));
+					universe.newPlotGroupInternal(UUID.fromString(rs.getString("groupID")));
 				}
 			}
 			
@@ -1922,7 +1922,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				TownyMessaging.sendErrorMsg("SQL: A plot group was not registered properly on load!");
 				return true;
 			}
-			uuid = group.getID().toString();
+			uuid = group.getUUID().toString();
 			
 			line = rs.getString("groupName");
 			if (line != null)
@@ -2224,7 +2224,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Saving group " + group.getName());
 		try {
 			HashMap<String, Object> pltgrp_hm = new HashMap<>();
-			pltgrp_hm.put("groupID", group.getID());
+			pltgrp_hm.put("groupID", group.getUUID().toString());
 			pltgrp_hm.put("groupName", group.getName());
 			pltgrp_hm.put("groupPrice", group.getPrice());
 			pltgrp_hm.put("town", group.getTown().toString());
@@ -2424,7 +2424,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			tb_hm.put("changed", townBlock.isChanged());
 			tb_hm.put("claimedAt", townBlock.getClaimedAt());
 			if (townBlock.hasPlotObjectGroup())
-				tb_hm.put("groupID", townBlock.getPlotObjectGroup().getID().toString());
+				tb_hm.put("groupID", townBlock.getPlotObjectGroup().getUUID().toString());
 			else
 				tb_hm.put("groupID", "");
 			if (townBlock.hasMeta())
@@ -2533,7 +2533,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public void deletePlotGroup(PlotGroup group) {
 
 		HashMap<String, Object> pltgrp_hm = new HashMap<>();
-		pltgrp_hm.put("groupID", group.getID());
+		pltgrp_hm.put("groupID", group.getUUID());
 		DeleteDB("PLOTGROUPS", pltgrp_hm);
 	}
 	

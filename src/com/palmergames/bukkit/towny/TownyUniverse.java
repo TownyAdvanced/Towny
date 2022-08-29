@@ -74,7 +74,7 @@ public class TownyUniverse {
     private final Trie nationsTrie = new Trie();
     
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
-    private final Map<UUID, TownyWorld> worldIDMap = new ConcurrentHashMap<>();
+    private final Map<UUID, TownyWorld> worldUUIDMap = new ConcurrentHashMap<>();
     
     private final Map<String, CustomDataField<?>> registeredMetadata = new HashMap<>();
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
@@ -531,7 +531,7 @@ public class TownyUniverse {
 	}
 
 	private void newTown(String name, boolean assignUUID) throws AlreadyRegisteredException, InvalidNameException {
-		String filteredName = NameValidation.checkAndFilterName(name);;
+		String filteredName = NameValidation.checkAndFilterName(name);
 
 		Town town = new Town(filteredName, assignUUID ? UUID.randomUUID() : null);
 		registerTown(town);
@@ -751,21 +751,21 @@ public class TownyUniverse {
 
 	public void registerTownyWorld(@NotNull TownyWorld world) {
 		Preconditions.checkNotNull(world, "World cannot be null!");
-		worldIDMap.putIfAbsent(world.getUUID(), world);
+		worldUUIDMap.putIfAbsent(world.getUUID(), world);
 		worlds.putIfAbsent(world.getName().toLowerCase(Locale.ROOT), world);
 	}
 
 	public Map<UUID, TownyWorld> getWorldIDMap() {
-		return worldIDMap;
+		return worldUUIDMap;
 	}
 
 	@Nullable
 	public TownyWorld getWorld(UUID uuid) {
-		return worldIDMap.get(uuid);
+		return worldUUIDMap.get(uuid);
 	}
 	
 	public Set<UUID> getWorldUUIDs() {
-		return worldIDMap.keySet();
+		return worldUUIDMap.keySet();
 	}
 
 	public Map<String, TownyWorld> getWorldMap() {
@@ -841,19 +841,22 @@ public class TownyUniverse {
      * Used in loading only.
      * @param uuid UUID to assign to the PlotGroup.
      */
-    public void newPlotGroupInternal(String uuid) {
-    	PlotGroup group = new PlotGroup(UUID.fromString(uuid), null, null);
+    public void newPlotGroupInternal(UUID uuid) {
+    	PlotGroup group = new PlotGroup(uuid, null, null);
     	registerGroup(group);
     }
     
 	
 	public void registerGroup(PlotGroup group) {
-		plotGroupUUIDMap.put(group.getID(), group);
+		plotGroupUUIDMap.put(group.getUUID(), group);
 	}
 
-	public void unregisterGroup(PlotGroup group) {
+	public void unregisterGroup(UUID uuid) {
+		PlotGroup group = plotGroupUUIDMap.get(uuid);
+		if (group == null)
+			return;
 		group.getTown().removePlotGroup(group);
-		plotGroupUUIDMap.remove(group.getID());
+		plotGroupUUIDMap.remove(uuid);
 	}
 
 	/**
@@ -864,6 +867,10 @@ public class TownyUniverse {
 	 */
 	public Collection<PlotGroup> getGroups() {
     	return new ArrayList<>(plotGroupUUIDMap.values());
+	}
+
+	public Set<UUID> getPlotGroupUUIDs() {
+		return plotGroupUUIDMap.keySet();
 	}
 
 	/**

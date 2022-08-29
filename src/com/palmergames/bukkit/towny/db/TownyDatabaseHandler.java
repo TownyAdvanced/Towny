@@ -698,7 +698,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void removePlotGroup(PlotGroup group) {
-		universe.unregisterGroup(group);
+		universe.unregisterGroup(group.getUUID());
 		deletePlotGroup(group);
 	}
 

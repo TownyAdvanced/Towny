@@ -116,15 +116,15 @@ public class BukkitTools {
 	}
 	
 	public static List<World> getWorlds() {
-		return  getServer().getWorlds();
+		return getServer().getWorlds();
 	}
 	
 	public static World getWorld(String name) {
-		return  getServer().getWorld(name);
+		return getServer().getWorld(name);
 	}
 	
 	public static World getWorld(UUID worldUID) {
-		return  getServer().getWorld(worldUID);
+		return getServer().getWorld(worldUID);
 	}
 	
 	public static Server getServer() {
