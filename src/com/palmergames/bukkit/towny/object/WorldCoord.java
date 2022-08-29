@@ -4,6 +4,8 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.util.BukkitTools;
+
 import io.papermc.lib.PaperLib;
 
 import org.bukkit.Bukkit;
@@ -23,29 +25,40 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class WorldCoord extends Coord {
 
-	private final String worldName;
+	private final World world;
 
 	public WorldCoord(String worldName, int x, int z) {
 		super(x, z);
-		this.worldName = worldName;
+		this.world = BukkitTools.getWorld(worldName);
 	}
 
 	public WorldCoord(String worldName, Coord coord) {
 		super(coord);
-		this.worldName = worldName;
+		this.world = BukkitTools.getWorld(worldName);
+	}
+
+	public WorldCoord(UUID worldUID, int x, int z) {
+		super(x, z);
+		this.world = BukkitTools.getWorld(worldUID);
+	}
+
+	public WorldCoord(UUID worldUID, Coord coord) {
+		super(coord);
+		this.world = BukkitTools.getWorld(worldUID);
 	}
 
 	public WorldCoord(WorldCoord worldCoord) {
 		super(worldCoord);
-		this.worldName = worldCoord.getWorldName();
+		this.world = worldCoord.getBukkitWorld();
 	}
 
 	public String getWorldName() {
-		return worldName;
+		return world.getName();
 	}
 
 	public Coord getCoord() {
@@ -77,7 +90,7 @@ public class WorldCoord extends Coord {
 	public int hashCode() {
 
 		int hash = 17;
-		hash = hash * 27 + (worldName == null ? 0 : worldName.hashCode());
+		hash = hash * 27 + (getWorldName() == null ? 0 : getWorldName().hashCode());
 		hash = hash * 27 + getX();
 		hash = hash * 27 + getZ();
 		return hash;
@@ -96,12 +109,12 @@ public class WorldCoord extends Coord {
 		}
 
 		WorldCoord that = (WorldCoord) obj;
-		return this.getX() == that.getX() && this.getZ() == that.getZ() && (Objects.equals(this.worldName, that.worldName));
+		return this.getX() == that.getX() && this.getZ() == that.getZ() && (Objects.equals(this.getWorldName(), that.getWorldName()));
 	}
 
 	@Override
 	public String toString() {
-		return worldName + "," + super.toString();
+		return getWorldName() + "," + super.toString();
 	}
 
 	/**
@@ -110,7 +123,7 @@ public class WorldCoord extends Coord {
 	 * @return the relevant org.bukkit.World instance
 	 */
 	public World getBukkitWorld() {
-		return Bukkit.getWorld(worldName);
+		return world;
 	}
 
 	/**
@@ -118,12 +131,12 @@ public class WorldCoord extends Coord {
 	 */
 	@Nullable
 	public TownyWorld getTownyWorld() {
-		return TownyUniverse.getInstance().getWorld(worldName); 
+		return TownyUniverse.getInstance().getWorld(getWorldName()); 
 	}
 
 	@Nullable
 	public TownyWorld getTownyWorldOrNull() {
-		return TownyAPI.getInstance().getTownyWorld(worldName);
+		return TownyAPI.getInstance().getTownyWorld(world);
 	}
 	
 	/**

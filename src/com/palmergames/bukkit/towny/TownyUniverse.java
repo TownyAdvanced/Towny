@@ -28,6 +28,8 @@ import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
+
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -44,6 +46,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -72,6 +75,8 @@ public class TownyUniverse {
     private final Trie nationsTrie = new Trie();
     
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
+    private final Map<UUID, TownyWorld> worldIDMap = new ConcurrentHashMap<>();
+    
     private final Map<String, CustomDataField<?>> registeredMetadata = new HashMap<>();
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private CompletableFuture<Void> backupFuture;
@@ -735,7 +740,35 @@ public class TownyUniverse {
 	}
 	
 	// =========== World Methods ===========
+
+	public void newWorld(@NotNull World world) {
+		Preconditions.checkNotNull(world, "World cannot be null!");
+		if (getWorldIDMap().containsKey(world.getUID()))
+			return;
+		TownyWorld townyWorld = new TownyWorld(world.getName(), world.getUID());
+		registerTownyWorld(townyWorld);
+		townyWorld.save();
+	}
+
+	public void registerTownyWorld(@NotNull TownyWorld world) {
+		Validate.notNull(world, "World cannot be null!");
+		worldIDMap.putIfAbsent(world.getUUID(), world);
+		worlds.putIfAbsent(world.getName().toLowerCase(Locale.ROOT), world);
+	}
+
+	public Map<UUID, TownyWorld> getWorldIDMap() {
+		return worldIDMap;
+	}
+
+	@Nullable
+	public TownyWorld getWorld(UUID uuid) {
+		return worldIDMap.get(uuid);
+	}
 	
+	public Set<UUID> getWorldUUIDs() {
+		return worldIDMap.keySet();
+	}
+
 	public Map<String, TownyWorld> getWorldMap() {
         return worlds;
     }

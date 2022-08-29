@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -557,6 +558,10 @@ public class TownBlock extends TownyObject {
 
 	public Map<Resident, PermissionData> getPermissionOverrides() {
 		return permissionOverrides;
+	}
+
+	public void addTrustedResidents(List<Resident> residents) {
+		residents.stream().forEach(r -> addTrustedResident(r));
 	}
 
 	public Set<Resident> getTrustedResidents() {

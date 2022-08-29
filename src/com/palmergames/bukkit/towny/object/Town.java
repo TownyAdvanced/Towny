@@ -1139,7 +1139,15 @@ public class Town extends Government implements TownBlockOwner {
 	public void removeOutlaw(Resident resident) {
 
 		if (hasOutlaw(resident))
-			outlaws.remove(resident);			
+			outlaws.remove(resident);
+	}
+	
+	public void loadOutlaws(List<Resident> outlaws) {
+		outlaws.stream().forEach(o -> {
+			try {
+				addOutlaw(o);
+			} catch (AlreadyRegisteredException ignored) {}
+		});
 	}
 
 	public boolean hasValidUUID() {
@@ -1419,6 +1427,10 @@ public class Town extends Government implements TownBlockOwner {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
+	}
+
+	public void saveTownBlocks() {
+		townBlocks.values().stream().forEach(tb -> tb.save());
 	}
 
 	public int getNationZoneOverride() {

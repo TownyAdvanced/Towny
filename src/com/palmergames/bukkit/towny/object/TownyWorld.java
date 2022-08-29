@@ -9,8 +9,11 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.util.MathUtil;
 
 import com.palmergames.util.StringMgmt;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
@@ -26,6 +29,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class TownyWorld extends TownyObject {
+	private UUID uuid;
 
 	private HashMap<String, Town> towns = new HashMap<>();
 
@@ -79,6 +83,23 @@ public class TownyWorld extends TownyObject {
 		super(name);
 	}
 
+	public TownyWorld(String name, UUID uuid) {
+		super(name);
+		this.uuid = uuid;
+	}
+	
+	public UUID getUUID() {
+		return uuid;
+	}
+	
+	public void setUUID(UUID uuid) {
+		this.uuid = uuid;
+	}
+
+	public World getBukkitWorld() {
+		return Bukkit.getWorld(uuid);
+	}
+	
 	public HashMap<String, Town> getTowns() {
 
 		return towns;

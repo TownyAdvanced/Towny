@@ -123,6 +123,10 @@ public class BukkitTools {
 		return  getServer().getWorld(name);
 	}
 	
+	public static World getWorld(UUID worldUID) {
+		return  getServer().getWorld(worldUID);
+	}
+	
 	public static Server getServer() {
 		synchronized(server) {
 			return server;
