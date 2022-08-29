@@ -74,7 +74,7 @@ public class TownyUniverse {
     private final Trie nationsTrie = new Trie();
     
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
-    private final Map<UUID, TownyWorld> worldIDMap = new ConcurrentHashMap<>();
+    private final Map<UUID, TownyWorld> worldUUIDMap = new ConcurrentHashMap<>();
     
     private final Map<String, CustomDataField<?>> registeredMetadata = new HashMap<>();
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
@@ -751,21 +751,21 @@ public class TownyUniverse {
 
 	public void registerTownyWorld(@NotNull TownyWorld world) {
 		Preconditions.checkNotNull(world, "World cannot be null!");
-		worldIDMap.putIfAbsent(world.getUUID(), world);
+		worldUUIDMap.putIfAbsent(world.getUUID(), world);
 		worlds.putIfAbsent(world.getName().toLowerCase(Locale.ROOT), world);
 	}
 
 	public Map<UUID, TownyWorld> getWorldIDMap() {
-		return worldIDMap;
+		return worldUUIDMap;
 	}
 
 	@Nullable
 	public TownyWorld getWorld(UUID uuid) {
-		return worldIDMap.get(uuid);
+		return worldUUIDMap.get(uuid);
 	}
 	
 	public Set<UUID> getWorldUUIDs() {
-		return worldIDMap.keySet();
+		return worldUUIDMap.keySet();
 	}
 
 	public Map<String, TownyWorld> getWorldMap() {
