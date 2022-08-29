@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -88,15 +87,13 @@ public class ObjectLoadUtil {
 	public boolean loadPlotGroup(PlotGroup group, HashMap<String, String> keys) {
 		String line = "";
 		try {
-			line = keys.get("groupName");
-			if (line != null)
-				group.setName(line.trim());
-			
 			line = keys.get("town");
 			if (line != null && !line.isEmpty()) {
-				Town town = universe.getTown(line.trim());
+				Town town = getTownFromDB(line);
 				if (town != null) {
 					group.setTown(town);
+					group.setName(keys.getOrDefault("groupName", ""));
+					group.setPrice(getOrDefault(keys, "groupPrice", -1.0));
 				} else {
 					TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_group_file_missing_town_delete", group.getUUID()));
 					source.deletePlotGroup(group); 
@@ -107,10 +104,6 @@ public class ObjectLoadUtil {
 				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_could_not_add_to_town"));
 				source.deletePlotGroup(group);
 			}
-			
-			line = keys.get("groupPrice");
-			if (line != null && !line.isEmpty())
-				group.setPrice(Double.parseDouble(line.trim()));
 
 			return true;
 		} catch (Exception e) {
@@ -118,7 +111,7 @@ public class ObjectLoadUtil {
 			return false;
 		}
 	}
-	
+
 	public boolean loadResident(Resident resident, HashMap<String, String> keys) {
 		try {
 			String line = "";
@@ -138,62 +131,48 @@ public class ObjectLoadUtil {
 				line = keys.get("jailCell");
 				if (line != null)
 					resident.setJailCell(Integer.parseInt(line));
-				
+
 				line = keys.get("jailHours");
 				if (line != null)
 					resident.setJailHours(Integer.parseInt(line));
 			}
 			line = keys.get("friends");
-			if (line != null) {
-				List<Resident> residentFriends = new ArrayList<>();
-				try {
-					residentFriends = TownyAPI.getInstance().getResidents(toUUIDArray(line.split("#")));
-				} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
-					residentFriends = TownyAPI.getInstance().getResidents(line.split(","));
-				}
-				resident.loadFriends(residentFriends);
-			}
+			if (line != null)
+				resident.loadFriends(getResidentsFromDB(line));
 
 			resident.setPermissions(keys.getOrDefault("protectionStatus", ""));
-	
+
 			line = keys.get("metadata");
 			if (line != null && !line.isEmpty())
 				MetadataLoader.getInstance().deserializeMetadata(resident, line.trim());
-	
+
 			line = keys.get("town");
 			if (line != null) {
-				Town town = null;
-				try {
-					town = universe.getTown(UUID.fromString(line));
-				} catch (IllegalArgumentException e1) { // Legacy DB used Names instead of UUIDs.
-					town = universe.getTown(line);
-				}
-	//			} else if (universe.getReplacementNameMap().containsKey(line)) {
-	//				town = universe.getTown(universe.getReplacementNameMap().get(line));
+				Town town = getTownFromDB(line);
 				if (town == null)
 					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_resident_tried_load_invalid_town", resident.getName(), line));
 
 				if (town != null) {
 					resident.setTown(town, false);
-					
+
 					line = keys.get("title");
 					if (line != null)
 						resident.setTitle(line);
-					
+
 					line = keys.get("surname");
 					if (line != null)
 						resident.setSurname(line);
-					
+
 					try {
 						line = keys.get("town-ranks");
 						if (line != null)
-							resident.setTownRanks(Arrays.asList((line.split("#"))));
+							resident.setTownRanks(Arrays.asList(line.split(getSplitter(line))));
 					} catch (Exception e) {}
 	
 					try {
 						line = keys.get("nation-ranks");
 						if (line != null)
-							resident.setNationRanks(Arrays.asList((line.split("#"))));
+							resident.setNationRanks(Arrays.asList(line.split(getSplitter(line))));
 					} catch (Exception e) {}
 	
 					line = keys.get("joinedTownAt");
@@ -218,15 +197,9 @@ public class ObjectLoadUtil {
 			line = keys.get("mayor");
 			if (line != null)
 				try {
-					Resident res = null;
-					try {
-						res = universe.getResident(UUID.fromString(line));
-					} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
-						res = universe.getResident(line);
-					}
+					Resident res = getResidentFromDB(line);
 					if (res == null)
 						throw new TownyException();
-					
 					town.forceSetMayor(res);
 				} catch (TownyException e1) {
 					if (town.getResidents().isEmpty())
@@ -289,7 +262,7 @@ public class ObjectLoadUtil {
 				if (loc != null)
 					town.setSpawn(loc);
 			}
-			
+
 			// Load outpost spawns
 			line = keys.get("outpostspawns");
 			if (line != null) {
@@ -307,16 +280,7 @@ public class ObjectLoadUtil {
 			
 			line = keys.get("nation");
 			if (line != null && !line.isEmpty()) {
-				Nation nation = null;
-				try {
-					nation = universe.getNation(UUID.fromString(line));
-				} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
-					nation = universe.getNation(line);
-				}
-//				else if (universe.getReplacementNameMap().containsKey(line))
-//					nation = universe.getNation(universe.getReplacementNameMap().get(line));
-
-				// Only set the nation if it exists
+				Nation nation = getNationFromDB(line);
 				if (nation != null)
 					town.setNation(nation, false);
 			}
@@ -327,38 +291,23 @@ public class ObjectLoadUtil {
 				if (universe.hasJail(jailUUID))
 					town.setPrimaryJail(universe.getJail(jailUUID));
 			}
-			
+
 			line = keys.get("trustedResidents");
 			if (line != null && !line.isEmpty())
-				TownyAPI.getInstance().getResidents(toUUIDArray(line.split("#"))).stream().forEach(res -> town.addTrustedResident(res));
+				getResidentsFromDB(line).stream().forEach(res -> town.addTrustedResident(res));
 
 			line = keys.get("allies");
-			if (line != null && !line.isEmpty()) {
-				String search = line.contains("#") ? "#" : ","; // Legacy DB used , instead of #.
-				town.loadAllies(TownyAPI.getInstance().getTowns(toUUIDArray(line.split(search))));
-			}
-			
+			if (line != null && !line.isEmpty())
+				town.loadAllies(TownyAPI.getInstance().getTowns(toUUIDArray(line.split(getSplitter(line)))));
+
 			line = keys.get("enemies");
-			if (line != null && !line.isEmpty()) {
-				String search = line.contains("#") ? "#" : ","; // Legacy DB used , instead of #.
-				town.loadEnemies(TownyAPI.getInstance().getTowns(toUUIDArray(line.split(search))));
-			}
-			
+			if (line != null && !line.isEmpty())
+				town.loadEnemies(TownyAPI.getInstance().getTowns(toUUIDArray(line.split(getSplitter(line)))));
+
 			line = keys.get("outlaws");
-			if (line != null && !line.isEmpty()) {
-				List<Resident> outlawResidents = new ArrayList<>();
-				try {
-					outlawResidents = TownyAPI.getInstance().getResidents(toUUIDArray(line.split("#")));
-				} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
-					outlawResidents = TownyAPI.getInstance().getResidents(line.split(","));
-				}
-				outlawResidents.stream().forEach(res -> {
-					try {
-						town.addOutlaw(res);
-					} catch (AlreadyRegisteredException ignored) {}
-				});
-			}
-			
+			if (line != null && !line.isEmpty())
+				town.loadOutlaws(getResidentsFromDB(line));
+
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_town_file_at_line", town.getName(), line, town.getUUID().toString()));
 			e.printStackTrace();
@@ -368,14 +317,14 @@ public class ObjectLoadUtil {
 		}
 		return true;
 	}
-	
+
 	public boolean loadNation(Nation nation, HashMap<String, String> keys) {
 		String line = "";
 		try {
 			line = keys.get("capital");
 			String cantLoadCapital = Translation.of("flatfile_err_nation_could_not_load_capital_disband", nation.getName());
 			if (line != null) {
-				Town town = universe.getTown(UUID.fromString(line));
+				Town town = getTownFromDB(line);
 				if (town != null) {
 					try {
 						nation.forceSetCapital(town);
@@ -413,28 +362,13 @@ public class ObjectLoadUtil {
 			nation.setMapColorHexCode(keys.getOrDefault("mapColorHexCode", MapUtil.generateRandomNationColourAsHexCode()));
 			nation.setTag(keys.getOrDefault("tag", ""));
 
-			
 			line = keys.get("allies");
-			if (line != null && !line.isEmpty()) {
-				List<Nation> allyNations = new ArrayList<>();
-				try {
-					allyNations = TownyAPI.getInstance().getNations(toUUIDArray(line.split("#")));
-				} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
-					allyNations = TownyAPI.getInstance().getNations(line.split(","));
-				}
-				nation.loadAllies(allyNations);
-			}
-			
+			if (line != null && !line.isEmpty())
+				nation.loadAllies(getNationsFromDB(line));
+
 			line = keys.get("enemies");
-			if (line != null && !line.isEmpty()) {
-				List<Nation> enemyNations = new ArrayList<>();
-				try {
-					enemyNations = TownyAPI.getInstance().getNations(toUUIDArray(line.split("#"))); 
-				} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
-					enemyNations = TownyAPI.getInstance().getNations(line.split(","));
-				}
-				nation.loadEnemies(enemyNations);
-			}
+			if (line != null && !line.isEmpty())
+				nation.loadEnemies(getNationsFromDB(line));
 
 			line = keys.get("nationSpawn");
 			if (line != null) {
@@ -443,7 +377,6 @@ public class ObjectLoadUtil {
 					nation.setSpawn(loc);
 			}
 
-			
 			line = keys.get("metadata");
 			if (line != null && !line.isEmpty())
 				MetadataLoader.getInstance().deserializeMetadata(nation, line.trim());
@@ -500,7 +433,7 @@ public class ObjectLoadUtil {
 			line = keys.get("metadata");
 			if (line != null && !line.isEmpty())
 				MetadataLoader.getInstance().deserializeMetadata(world, line.trim());
-			
+
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_world_file_at_line", world.getName(), line, world.getUUID().toString()));
 			return false;
@@ -510,11 +443,10 @@ public class ObjectLoadUtil {
 		return true;
 	}
 	
-	
 	/*
 	 * Private methods used to read a key and set a default value from the config if it isn't present.
 	 */
-	
+
 	private boolean getOrDefault(HashMap<String, String> keys, String key, boolean bool) {
 		return Boolean.parseBoolean(keys.getOrDefault(key, String.valueOf(bool)));
 	}
@@ -530,12 +462,12 @@ public class ObjectLoadUtil {
 	private int getOrDefault(HashMap<String, String> keys, String key, int num) {
 		return Integer.parseInt(keys.getOrDefault(key, String.valueOf(num)));
 	}
-	
+
 	private List<String> toList(String string) {
 		List<String> mats = new ArrayList<>();
 		if (string != null)
 			try {
-				for (String s : string.split("#"))
+				for (String s : string.split(getSplitter(string)))
 					if (!s.isEmpty())
 						mats.add(s);
 			} catch (Exception ignored) {
@@ -543,8 +475,63 @@ public class ObjectLoadUtil {
 		return mats;
 	}
 
+	@Nullable
+	private Resident getResidentFromDB(String line) {
+		Resident resident = null;
+		try {
+			resident = universe.getResident(UUID.fromString(line.trim()));
+		} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
+			resident = universe.getResident(line.trim());
+		}
+		return resident;
+	}
+
+	@Nullable
+	private List<Resident> getResidentsFromDB(String line) {
+		List<Resident> residents = new ArrayList<>();
+		try {
+			residents = TownyAPI.getInstance().getResidents(toUUIDArray(line.split("#")));
+		} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
+			residents = TownyAPI.getInstance().getResidents(line.split(","));
+		}
+		return residents;
+	}
+
+	@Nullable
+	private Town getTownFromDB(String line) {
+		Town town = null;
+		try {
+			town = universe.getTown(UUID.fromString(line.trim()));
+		} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
+			town = universe.getTown(line.trim());
+		}
+		return town;
+	}
+
+	@Nullable
+	private Nation getNationFromDB(String line) {
+		Nation nation = null;
+		try {
+			nation = universe.getNation(UUID.fromString(line.trim()));
+		} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
+			nation = universe.getNation(line.trim());
+		}
+		return nation;
+	}
+
+	@Nullable
+	private List<Nation> getNationsFromDB(String line) {
+		List<Nation> nations = new ArrayList<>();
+		try {
+			nations = TownyAPI.getInstance().getNations(toUUIDArray(line.split("#"))); 
+		} catch (IllegalArgumentException e) { // Legacy DB used Names instead of UUIDs.
+			nations = TownyAPI.getInstance().getNations(line.split(","));
+		}
+		return nations;
+	}
+
 	private TownBlock parseTownBlockFromDB(String input) throws NumberFormatException, NotRegisteredException {
-		String[] tokens = input.split("#");
+		String[] tokens = input.split(getSplitter(input));
 		try {
 			UUID uuid = UUID.fromString(tokens[0]);
 			if (universe.getWorld(uuid) == null)
@@ -559,7 +546,7 @@ public class ObjectLoadUtil {
 
 	@Nullable
 	private Location parseSpawnLocationFromDB(String raw) {
-		String[] tokens = raw.split(",");
+		String[] tokens = raw.split(getSplitter(raw));
 		if (tokens.length >= 4)
 			try {
 				World world = null;
@@ -573,7 +560,7 @@ public class ObjectLoadUtil {
 				double x = Double.parseDouble(tokens[1]);
 				double y = Double.parseDouble(tokens[2]);
 				double z = Double.parseDouble(tokens[3]);
-				
+
 				Location loc = new Location(world, x, y, z);
 				if (tokens.length == 6) {
 					loc.setPitch(Float.parseFloat(tokens[4]));
@@ -588,15 +575,24 @@ public class ObjectLoadUtil {
 	// TODO: return this to private once TownBlock loading is made new. 
 	static UUID[] toUUIDArray(String[] uuidArray) throws IllegalArgumentException {
 		UUID[] uuids = new UUID[uuidArray.length];
-		
+
 		for (int i = 0; i < uuidArray.length; i++)
 			uuids[i] = UUID.fromString(uuidArray[i]);
-		
+
 		return uuids;
 	}
 
 	private String generateMissingName() {
 		// TODO: Make this a thing.
 		return "bob";
+	}
+
+	/**
+	 * Legacy DB used , instead of #.
+	 * @param raw Text from DB
+	 * @return splitter character.
+	 */
+	private String getSplitter(String raw) {
+		return raw.contains("#") ? "#" : ",";
 	}
 }

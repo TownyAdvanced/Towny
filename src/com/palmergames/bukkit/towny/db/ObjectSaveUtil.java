@@ -57,7 +57,7 @@ public class ObjectSaveUtil {
 			pltgrp_hm.put("groupID", group.getUUID());
 			pltgrp_hm.put("groupName", group.getName());
 			pltgrp_hm.put("groupPrice", group.getPrice());
-			pltgrp_hm.put("town", group.getTown().toString());
+			pltgrp_hm.put("town", group.getTown().getUUID());
 
 			return pltgrp_hm;
 
