@@ -231,7 +231,7 @@ public abstract class TownyDataSource {
 		TownyMessaging.sendDebugMsg("Loading PlotGroups");
 		for (PlotGroup group : universe.getGroups()) {
 			if (!loadPlotGroup(group)) {
-				plugin.getLogger().severe("Loading Error: Could not read PlotGroup data: '" + group.getID() + "'.");
+				plugin.getLogger().severe("Loading Error: Could not read PlotGroup data: '" + group.getUUID() + "'.");
 				return false;
 			}
 		}

@@ -7,7 +7,7 @@ import java.util.UUID;
  * 
  * @author Suneet Tipirneni (Siris)
  */
-public abstract class ObjectGroup implements Nameable {
+public abstract class ObjectGroup implements Nameable, Identifiable {
 	private UUID id;
 	private String name;
 
@@ -21,12 +21,21 @@ public abstract class ObjectGroup implements Nameable {
 		this.name = name;
 	}
 	
+	@Deprecated
 	public UUID getID() {
 		return id;
 	}
 	
 	public void setID(UUID ID) {
 		this.id = ID;
+	}
+	
+	public UUID getUUID() {
+		return id;
+	}
+	
+	public void setUUID(UUID id) {
+		this.id = id;
 	}
 	
 	@Override

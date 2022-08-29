@@ -120,7 +120,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	public String getPlotGroupFilename(PlotGroup group) {
-		return dataFolderPath + File.separator + "plotgroups" + File.separator + group.getID() + ".data";
+		return dataFolderPath + File.separator + "plotgroups" + File.separator + group.getUUID() + ".data";
 	}
 
 	public String getJailFilename(Jail jail) {
@@ -188,7 +188,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			return true; 
 		
 		for (File plotGroup : plotGroupFiles)
-			universe.newPlotGroupInternal(plotGroup.getName().replace(".data", ""));
+			universe.newPlotGroupInternal(UUID.fromString(plotGroup.getName().replace(".data", "")));
 		
 		return true;
 	}
@@ -2299,7 +2299,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Group ID
 		StringBuilder groupID = new StringBuilder();
 		if (townBlock.hasPlotObjectGroup()) {
-			groupID.append(townBlock.getPlotObjectGroup().getID());
+			groupID.append(townBlock.getPlotObjectGroup().getUUID());
 		}
 		
 		list.add("groupID=" + groupID);
