@@ -1157,7 +1157,7 @@ public class TownyUniverse {
     }
 
     /**
-     * @deprecated since 0.98.1.13 use {@link #unregisterJail(UUID)} instead.
+     * @deprecated since 0.98.4.0 use {@link #unregisterJail(UUID)} instead.
      * @param jail Jail to remove.
      */
     @Deprecated
@@ -1184,6 +1184,9 @@ public class TownyUniverse {
 		return wildernessMapDataMap;
 	}
 	
+	/**
+	 * @deprecated since 0.98.4.0 with no replacement.
+	 */
 	@Deprecated
 	public Map<String,String> getReplacementNameMap() {
 		return replacementNamesMap;
