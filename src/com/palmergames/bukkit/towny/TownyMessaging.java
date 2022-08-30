@@ -130,7 +130,7 @@ public class TownyMessaging {
 		if (sender instanceof Player p) {
 			sendMessage(p, Translatable.of("default_towny_prefix").forLocale(p) + Colors.LightGreen + msg);
 		} else if (sender instanceof ConsoleCommandSender) {
-			sendMessage(sender, Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + ChatColor.stripColor(msg));
+			sendMessage(sender, Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + Colors.strip(msg));
 		} else {
 			sendMessage(sender, Translatable.of("default_towny_prefix").forLocale(sender) + Colors.LightGreen + msg);
 		}
