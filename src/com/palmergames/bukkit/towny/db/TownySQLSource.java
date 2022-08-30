@@ -55,7 +55,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	private BukkitTask task = null;
 
 	private final String dsn;
-	private final String db_name;
 	private final String username;
 	private final String password;
 	private final String tb_prefix;
@@ -77,10 +76,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		/*
 		 * Setup SQL connection
 		 */
-		db_name = TownySettings.getSQLDBName();
 		tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
 		
-		this.dsn = ("jdbc:mysql://" + TownySettings.getSQLHostName() + ":" + TownySettings.getSQLPort() + "/" + db_name + TownySettings.getSQLFlags());
+		this.dsn = ("jdbc:mysql://" + TownySettings.getSQLHostName() + ":" + TownySettings.getSQLPort() + "/" + TownySettings.getSQLDBName() + TownySettings.getSQLFlags());
 		this.config = new HikariConfig();
 		
 		config.setPoolName("Towny MySQL");
@@ -144,7 +142,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		/*
 		 * Initialise database Schema.
 		 */
-		SQL_Schema.initTables(cntx, db_name);
+		SQL_Schema.initTables(cntx);
 
 		/*
 		 * Start our Async queue for pushing data to the database.
@@ -452,7 +450,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 
-		SQL_Schema.cleanup(cntx, db_name);
+		SQL_Schema.cleanup(cntx);
 
 		return true;
 	}
@@ -476,6 +474,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			this.tableName = tableName;
 			this.queryString = queryString;
 			this.primaryKey = primaryKey;
+		}
+		
+		public String tableName() {
+			return tableName;
 		}
 		
 		private String getSingular() {

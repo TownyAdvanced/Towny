@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -17,25 +18,104 @@ import java.util.List;
  */
 public class SQL_Schema {
 
-    private static final String tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
+	private static final String SQLDB_NAME = TownySettings.getSQLDBName();
+	private static final String TABLE_PREFIX = TownySettings.getSQLTablePrefix().toUpperCase();
 
-	private static String getJAILS() {
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "JAILS ("
-			+ "`uuid` VARCHAR(36) NOT NULL,"
-			+ "PRIMARY KEY (`uuid`)" + ")";
+	/**
+	 * Create and update database schema.
+	 *
+	 * @param cntx    a database connection
+	 */
+	public static void initTables(Connection cntx) {
+
+		initTable(cntx, TownyDBTableType.WORLD);
+		updateTable(cntx, TownyDBTableType.WORLD, getWorldColumns());
+
+		initTable(cntx, TownyDBTableType.NATION);
+		updateTable(cntx, TownyDBTableType.NATION, getNationColumns());
+
+		initTable(cntx, TownyDBTableType.TOWN);
+		updateTable(cntx, TownyDBTableType.TOWN, getTownColumns());
+
+		initTable(cntx, TownyDBTableType.RESIDENT);
+		updateTable(cntx, TownyDBTableType.RESIDENT, getResidentColumns());
+
+		initTable(cntx, TownyDBTableType.TOWNBLOCK);
+		updateTable(cntx, TownyDBTableType.TOWNBLOCK, getTownBlockColumns());
+
+		initTable(cntx, TownyDBTableType.PLOTGROUP);
+		updateTable(cntx, TownyDBTableType.PLOTGROUP, getPlotGroupColumns());
+
+		initTable(cntx, TownyDBTableType.JAIL);
+		updateTable(cntx, TownyDBTableType.JAIL, getJailsColumns());
+
+		initTable(cntx, TownyDBTableType.HIBERNATED_RESIDENT);
+		updateTable(cntx, TownyDBTableType.HIBERNATED_RESIDENT, getHibernatedResidentsColumns());
 	}
 
+	/*
+	 * Check that the tables are created.
+	 */
+	private static void initTable(Connection cntx, TownyDBTableType tableType) {
+		try {
+			Statement s = cntx.createStatement();
+			s.executeUpdate(fetchTableSchema(tableType));
+			TownyMessaging.sendDebugMsg("Table " + tableType.tableName() + " is ok!");
+		} catch (SQLException ee) {
+			TownyMessaging.sendErrorMsg("Error Creating table " + tableType.tableName() + " : " + ee.getMessage());
+		}
+	}
+
+	/*
+	 * Get create table slug for the given TownyDBTableType. TownBlocks are keyed differently.
+	 */
+	private static String fetchTableSchema(TownyDBTableType tableType) {
+		return switch(tableType) {
+		case TOWNBLOCK -> tryCreateTownBlocksTable();
+		default -> tryCreateUUIDKeyedTable(tableType);
+		};
+	}
+
+	/*
+	 * Generic create table statement for the UUID keyed TownyDBTableTypes
+	 */
+	private static String tryCreateUUIDKeyedTable(TownyDBTableType tableType) {
+		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`uuid` VARCHAR(36) NOT NULL,PRIMARY KEY (`uuid`))";
+	}
+
+	/*
+	 * Special create table statement for the TownBlock TownyDBTableType
+	 */
+	private static String tryCreateTownBlocksTable() {
+		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + "TOWNBLOCKS (`world` VARCHAR(36) NOT NULL,`x` mediumint NOT NULL,`z` mediumint NOT NULL,PRIMARY KEY (`world`,`x`,`z`))";
+	}
+
+	/*
+	 * Update a table in the database to make sure that each column is present. 
+	 */
+	private static void updateTable(Connection cntx, TownyDBTableType tableType, List<String> columns) {
+		String update = "ALTER TABLE `" + SQLDB_NAME + "`.`" + TABLE_PREFIX + tableType.tableName() + "` ADD COLUMN ";
+		for (String column : columns) {
+			try {
+				PreparedStatement ps = cntx.prepareStatement(update + column);
+				ps.executeUpdate();
+			} catch (SQLException ee) {
+				if (ee.getErrorCode() != 1060)
+					TownyMessaging.sendErrorMsg("Error updating table " + tableType.tableName() + ":" + ee.getMessage());
+			}
+		}
+		TownyMessaging.sendDebugMsg("Table " + tableType.tableName() + " is updated!");
+	}
+
+	/*
+	 * Columns of each Object type follow:
+	 */
+	
 	private static List<String> getJailsColumns() {
 		List<String> columns = new ArrayList<>();
 		columns.add("`townBlock` mediumtext NOT NULL");
 		columns.add("`spawns`  mediumtext DEFAULT NULL");
 		return columns;
-	}
-
-	private static String getPLOTGROUPS() {
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "PLOTGROUPS ("
-			+ "`uuid` VARCHAR(36) NOT NULL,"
-			+ "PRIMARY KEY (`uuid`)" + ")";
 	}
 
 	private static List<String> getPlotGroupColumns() {
@@ -44,12 +124,6 @@ public class SQL_Schema {
 		columns.add("`groupPrice` float DEFAULT NULL");
 		columns.add("`town` VARCHAR(36) NOT NULL");
 		return columns;
-	}
-
-	private static String getRESIDENTS() {
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "RESIDENTS (" 
-			+ " `uuid` VARCHAR(36) NOT NULL,"
-			+ "PRIMARY KEY (`uuid`)" + ")";
 	}
 
 	private static List<String> getResidentColumns(){
@@ -74,22 +148,10 @@ public class SQL_Schema {
 		return columns;
 	}
 
-	private static String getHIBERNATEDRESIDENTS() {
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "HIBERNATEDRESIDENTS ("
-			+ "`uuid` VARCHAR(36) NOT NULL,"
-			+ "PRIMARY KEY (`uuid`)" + ")";
-	}
-
 	private static List<String> getHibernatedResidentsColumns() {
 		List<String> columns = new ArrayList<>();
 		columns.add("`registered` BIGINT DEFAULT NULL");
 		return columns;
-	}
-
-	private static String getTOWNS() {
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNS (" 
-			+ "`uuid` VARCHAR(36) NOT NULL,"
-			+ "PRIMARY KEY (`uuid`)" + ")";
 	}
 
 	private static List<String> getTownColumns() {
@@ -146,12 +208,6 @@ public class SQL_Schema {
 		return columns;
 	}
 
-	private static String getNATIONS() {
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "NATIONS (" 
-			+ "`uuid` VARCHAR(36) NOT NULL,"
-			+ "PRIMARY KEY (`uuid`)" + ")";
-	}
-
 	private static List<String> getNationColumns(){
 		List<String> columns = new ArrayList<>();
 		columns.add("`name` VARCHAR(32) NOT NULL");
@@ -171,12 +227,6 @@ public class SQL_Schema {
 		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
 		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
-	}
-
-	private static String getWORLDS() {
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "WORLDS ("
-			+ "`uuid` VARCHAR(36) NOT NULL,"
-			+ "PRIMARY KEY (`uuid`)" + ")";
 	}
 
 	private static List<String> getWorldColumns() {
@@ -221,12 +271,6 @@ public class SQL_Schema {
 		return columns;
 	}
 
-	private static String getTOWNBLOCKS() {
-		return "CREATE TABLE IF NOT EXISTS " + tb_prefix + "TOWNBLOCKS (" 
-			+ "`world` VARCHAR(36) NOT NULL,"
-			+ "`x` mediumint NOT NULL," + "`z` mediumint NOT NULL," + "PRIMARY KEY (`world`,`x`,`z`)" + ")";
-	}
-
 	private static List<String> getTownBlockColumns() {
 		List<String> columns = new ArrayList<>();
 		columns.add("`name` mediumtext");
@@ -248,321 +292,78 @@ public class SQL_Schema {
 	}
 
 	/**
-	 * Create and update database schema.
+	 * Call after loading to remove any old database elements we no longer need.
 	 *
-	 * @param cntx    a database connection
-	 * @param db_name the name of a database
+	 * @param cntx    Connection.
 	 */
-	public static void initTables(Connection cntx, String db_name) {
+	public static void cleanup(Connection cntx) {
 
-		/*
-		 * Fetch WORLDS Table schema.
-		 */
+		List<ColumnUpdate> cleanups = new ArrayList<ColumnUpdate>();
+		cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
+		cleanups.add(ColumnUpdate.of("NATIONS", "assistants"));
+		cleanups.add(ColumnUpdate.of("NATIONS", "towns"));
+		cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
+		cleanups.add(ColumnUpdate.of("WORLDS", "plotManagementRevertSpeed"));
+		cleanups.add(ColumnUpdate.of("PLOTGROUPS", "claimedAt"));
+		cleanups.add(ColumnUpdate.of("RESIDENTS", "isJailed"));
+		cleanups.add(ColumnUpdate.of("RESIDENTS", "JailSpawn"));
+		cleanups.add(ColumnUpdate.of("RESIDENTS", "JailDays"));
+		cleanups.add(ColumnUpdate.of("RESIDENTS", "JailTown"));
+		cleanups.add(ColumnUpdate.of("TOWNS", "jailSpawns"));
+		cleanups.add(ColumnUpdate.of("WORLDS", "disableplayertrample"));
 
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(getWORLDS());
-			TownyMessaging.sendDebugMsg("Table WORLDS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Error Creating table WORLDS : " + ee.getMessage());
-		}
-
-		/*
-		 * Add columns to world (if not already there)
-		 */
-
-		for (String column : getWorldColumns()) {
-			try {
-				String world_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "WORLDS` " + "ADD COLUMN "
-						+ column;
-				PreparedStatement ps = cntx.prepareStatement(world_update);
-				ps.executeUpdate();
-			} catch (SQLException ee) {
-				if (ee.getErrorCode() != 1060)
-					TownyMessaging.sendErrorMsg("Error updating table WORLDS :" + ee.getMessage());
-			}
-		}
-		TownyMessaging.sendDebugMsg("Table WORLDS is updated!");
-
-		/*
-		 * Fetch NATIONS Table schema.
-		 */
-
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(getNATIONS());
-			TownyMessaging.sendDebugMsg("Table NATIONS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Error Creating table NATIONS : " + ee.getMessage());
-		}
-
-		/*
-		 * Add columns to nation (if not already there)
-		 */
-
-		for (String column : getNationColumns()) {
-			try {
-				String nation_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "NATIONS` " + "ADD COLUMN "
-						+ column;
-				PreparedStatement ps = cntx.prepareStatement(nation_update);
-				ps.executeUpdate();
-			} catch (SQLException ee) {
-				if (ee.getErrorCode() != 1060)
-					TownyMessaging.sendErrorMsg("Error updating table NATIONS :" + ee.getMessage());
-			}
-		}
-		TownyMessaging.sendDebugMsg("Table NATIONS is updated!");
-
-		/*
-		 * Fetch TOWNS Table schema.
-		 */
-
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(getTOWNS());
-			TownyMessaging.sendDebugMsg("Table TOWNS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Creating table TOWNS :" + ee.getMessage());
-		}
-
-		/*
-		 * Add columns to town (if not already there)
-		 */
-
-		for (String column : getTownColumns()) {
-			try {
-				String town_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNS` " + "ADD COLUMN " + column;
-				PreparedStatement ps = cntx.prepareStatement(town_update);
-				ps.executeUpdate();
-
-			} catch (SQLException ee) {
-				if (ee.getErrorCode() != 1060)
-					TownyMessaging.sendErrorMsg("Error updating table TOWNS :" + ee.getMessage());
-			}
-		}
-		TownyMessaging.sendDebugMsg("Table TOWNS is updated!");
-
-		/*
-		 * Fetch RESIDENTS Table schema.
-		 */
-
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(getRESIDENTS());
-			TownyMessaging.sendDebugMsg("Table RESIDENTS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Error Creating table RESIDENTS :" + ee.getMessage());
-		}
-
-		/*
-		 * Add columns to residents (if not already there)
-		 */
-
-		for (String column : getResidentColumns()) {
-			try {
-				String resident_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "RESIDENTS` " + "ADD COLUMN "
-						+ column;
-				PreparedStatement ps = cntx.prepareStatement(resident_update);
-				ps.executeUpdate();
-			} catch (SQLException ee) {
-				if (ee.getErrorCode() != 1060)
-					TownyMessaging.sendErrorMsg("Error updating table RESIDENTS :" + ee.getMessage());
-			}
-		}
-		TownyMessaging.sendDebugMsg("Table RESIDENTS is updated!");
-
-		/*
-		 * Fetch TOWNBLOCKS Table schema.
-		 */
-
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(getTOWNBLOCKS());
-			TownyMessaging.sendDebugMsg("Table TOWNBLOCKS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Error Creating table TOWNBLOCKS : " + ee.getMessage());
-		}
-
-		/*
-		 * Add columns to townblocks (if not already there)
-		 */
-
-		for (String column : getTownBlockColumns()) {
-			try {
-				String townblocks_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "TOWNBLOCKS` "
-						+ "ADD COLUMN " + column;
-				PreparedStatement ps = cntx.prepareStatement(townblocks_update);
-				ps.executeUpdate();
-			} catch (SQLException ee) {
-				if (ee.getErrorCode() != 1060)
-					TownyMessaging.sendErrorMsg("Error updating table TOWNBLOCKS :" + ee.getMessage());
-			}
-		}
-		TownyMessaging.sendDebugMsg("Table TOWNBLOCKS is updated!");
-
-		/*
-		 * Fetch PLOTGROUPS table schema
-		 */
-
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(getPLOTGROUPS());
-			TownyMessaging.sendDebugMsg("Table PLOTGROUPS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Error Creating table PLOTGROUPS : " + ee.getMessage());
-		}
-
-		/*
-		 * Add columns to plotgroups (if not already there)
-		 */
-
-		for (String column : getPlotGroupColumns()) {
-			try {
-				String plotGroups_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "PLOTGROUPS` "
-						+ "ADD COLUMN " + column;
-				PreparedStatement ps = cntx.prepareStatement(plotGroups_update);
-				ps.executeUpdate();
-			} catch (SQLException ee) {
-				if (ee.getErrorCode() != 1060)
-					TownyMessaging.sendErrorMsg("Error updating table PLOTGROUPS :" + ee.getMessage());
-			}
-			TownyMessaging.sendDebugMsg("Table PLOTGROUPS is updated!");
-		}
-
-		/*
-		 * Fetch JAILS Table schema.
-		 */
-
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(getJAILS());
-			TownyMessaging.sendDebugMsg("Table JAILS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Creating table JAILS :" + ee.getMessage());
-		}
-
-		/*
-		 * Add columns to jails (if not already there)
-		 */
-
-		for (String column : getJailsColumns()) {
-			try {
-				String jail_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "JAILS` " + "ADD COLUMN " + column;
-				PreparedStatement ps = cntx.prepareStatement(jail_update);
-				ps.executeUpdate();
-			} catch (SQLException ee) {
-				if (ee.getErrorCode() != 1060)
-					TownyMessaging.sendErrorMsg("Error updating table JAILS :" + ee.getMessage());
-			}
-		}
-		TownyMessaging.sendDebugMsg("Table JAILS is updated!");
-
-		/*
-		 * Fetch HIBERNATEDRESIDENTS Table schema.
-		 */
-
-		try {
-			Statement s = cntx.createStatement();
-			s.executeUpdate(getHIBERNATEDRESIDENTS());
-			TownyMessaging.sendDebugMsg("Table JAILS is ok!");
-		} catch (SQLException ee) {
-			TownyMessaging.sendErrorMsg("Creating table JAILS :" + ee.getMessage());
-		}
-
-		/*
-		 * Add columns to hibernated residents (if not already there)
-		 */
-
-		for (String column : getHibernatedResidentsColumns()) {
-			try {
-				String hibres_update = "ALTER TABLE `" + db_name + "`.`" + tb_prefix + "HIBERNATEDRESIDENTS` "
-						+ "ADD COLUMN " + column;
-				PreparedStatement ps = cntx.prepareStatement(hibres_update);
-				ps.executeUpdate();
-			} catch (SQLException ee) {
-				if (ee.getErrorCode() != 1060)
-					TownyMessaging.sendErrorMsg("Error updating table HIBERNATEDRESIDENTS :" + ee.getMessage());
-			}
-		}
-		TownyMessaging.sendDebugMsg("Table HIBERNATEDRESIDENTS is updated!");
-
+		for (ColumnUpdate update : cleanups)
+			dropColumn(cntx, update.getTable(), update.getColumn());
 	}
-    
-    /**
-     * Call after loading to remove any old database elements we no longer need.
-     *
-     * @param cntx - Connection.
-     * @param db_name - Name of database.
-     */
-    public static void cleanup(Connection cntx, String db_name) {
-    	
-    	List<ColumnUpdate> cleanups = new ArrayList<ColumnUpdate>();
-    	cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
-    	cleanups.add(ColumnUpdate.of("NATIONS", "assistants"));
-    	cleanups.add(ColumnUpdate.of("NATIONS", "towns"));
-    	cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
-    	cleanups.add(ColumnUpdate.of("WORLDS", "plotManagementRevertSpeed"));
-    	cleanups.add(ColumnUpdate.of("PLOTGROUPS", "claimedAt"));
-    	cleanups.add(ColumnUpdate.of("RESIDENTS", "isJailed"));
-    	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailSpawn"));
-    	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailDays"));
-    	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailTown"));
-    	cleanups.add(ColumnUpdate.of("TOWNS", "jailSpawns"));
-    	cleanups.add(ColumnUpdate.of("WORLDS", "disableplayertrample"));
 
-    	for (ColumnUpdate update : cleanups)
-    		dropColumn(cntx, db_name, update.getTable(), update.getColumn());
-    }
-    
-    /**
-     * Drops the given column from the given table, if the column is present.
-     * 
-     * @param cntx database connection.
-     * @param db_name database name.
-     * @param table table name.
-     * @param column column to drop from the given table.
-     */
-    private static void dropColumn(Connection cntx, String db_name, String table, String column) {
-    	String update;
-    	
-    	try {
-    		DatabaseMetaData md = cntx.getMetaData();
-        	ResultSet rs = md.getColumns(null, null, table, column);
-        	if (!rs.next())
-        		return;
-        	
-    		update = "ALTER TABLE `" + db_name + "`.`" + table + "` DROP COLUMN `" + column + "`";
-    		
-    		Statement s = cntx.createStatement();
-    		s.executeUpdate(update);
-    		
-    		TownyMessaging.sendDebugMsg("Table " + table + " has dropped the " + column + " column.");
-        	
-    	} catch (SQLException ee) {
-    		if (ee.getErrorCode() != 1060)
-    			TownyMessaging.sendErrorMsg("Error updating table " + table + ":" + ee.getMessage());
-    	}
-    }
-    
-    private static class ColumnUpdate {
-    	private String table;
-    	private String column;
-    	
-    	private ColumnUpdate(String table, String column) {
-    		this.table = SQL_Schema.tb_prefix + table;
-    		this.column = column;
-    	}
-    	    	
-    	private String getTable() {
-    		return this.table;
-    	}
-    	
-    	private String getColumn() {
-    		return this.column;
-    	}
-    	
-    	private static ColumnUpdate of(String table, String column) {
-    		return new ColumnUpdate(table, column);
-    	}
-    }
- }
+	/**
+	 * Drops the given column from the given table, if the column is present.
+	 * 
+	 * @param cntx    database connection.
+	 * @param table   table name.
+	 * @param column  column to drop from the given table.
+	 */
+	private static void dropColumn(Connection cntx, String table, String column) {
+		String update;
+
+		try {
+			DatabaseMetaData md = cntx.getMetaData();
+			ResultSet rs = md.getColumns(null, null, table, column);
+			if (!rs.next())
+				return;
+
+			update = "ALTER TABLE `" + SQLDB_NAME + "`.`" + table + "` DROP COLUMN `" + column + "`";
+
+			Statement s = cntx.createStatement();
+			s.executeUpdate(update);
+
+			TownyMessaging.sendDebugMsg("Table " + table + " has dropped the " + column + " column.");
+
+		} catch (SQLException ee) {
+			if (ee.getErrorCode() != 1060)
+				TownyMessaging.sendErrorMsg("Error updating table " + table + ":" + ee.getMessage());
+		}
+	}
+
+	private static class ColumnUpdate {
+		private String table;
+		private String column;
+
+		private ColumnUpdate(String table, String column) {
+			this.table = SQL_Schema.TABLE_PREFIX + table;
+			this.column = column;
+		}
+
+		private String getTable() {
+			return this.table;
+		}
+
+		private String getColumn() {
+			return this.column;
+		}
+
+		private static ColumnUpdate of(String table, String column) {
+			return new ColumnUpdate(table, column);
+		}
+	}
+}
