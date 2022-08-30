@@ -354,7 +354,7 @@ public class TownyMessaging {
 
 	/**
 	 * Send the player a Title message
-	 * 
+	 * <p>
 	 * As of MC 1.18 a null title will mean the message is never sent, so we are
 	 * changing empty Strings to " ".
 	 * 
@@ -787,7 +787,7 @@ public class TownyMessaging {
 		LOGGER.info(ChatTools.stripColour("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
 		
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			sendMessage(player, Translation.translateTranslatables(player, "", Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())), message));
+			sendMessage(player, Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())).append(message));
 	}
 	
 	/**
@@ -801,7 +801,7 @@ public class TownyMessaging {
 		LOGGER.info(ChatTools.stripColour("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + message.translate()));
 		
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			sendMessage(player, Translation.translateTranslatables(player, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), message));
+			sendMessage(player, Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())).append(message));
 	}
 	
 	/**

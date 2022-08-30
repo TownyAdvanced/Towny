@@ -10,11 +10,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,34 +28,26 @@ import org.jetbrains.annotations.NotNull;
 
 public class StringMgmt {
 
-	public static final Pattern hexPattern = Pattern.compile("(?<!\\\\)(#[a-fA-F0-9]{6})");
-	public static final Pattern ampersandPattern = Pattern.compile("(?<!\\\\)(&#[a-fA-F0-9]{6})");
-	public static final Pattern bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}");
-	
-	public static String translateHexColors(String str) {
+	public static final Pattern hexPattern = Pattern.compile("(?<!\\\\)((&|\\{|)#[a-fA-F0-9]{6})(}|)");
+	public static final @Deprecated Pattern ampersandPattern = Pattern.compile("(?<!\\\\)(&#[a-fA-F0-9]{6})");
+	public static final @Deprecated Pattern bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}");
 
-		final Matcher hexMatcher = hexPattern.matcher(str);
-		final Matcher ampMatcher = ampersandPattern.matcher(str);
-		final Matcher bracketMatcher = bracketPattern.matcher(str);
+	private static final Function<String, String> legacyHexFunction = (hex) -> ChatColor.of(hex).toString();
+
+	public static String translateHexColors(String string) {
+		return translateHexColors(string, legacyHexFunction);
+	}
+	
+	@ApiStatus.Internal
+	public static String translateHexColors(String string, Function<String, String> hexFunction) {
+		final Matcher hexMatcher = hexPattern.matcher(string);
 
 		while (hexMatcher.find()) {
 			String hex = hexMatcher.group();
-			str = str.replace(hex, ChatColor.of(hex).toString());
+			string = string.replace(hex, hexFunction.apply(hex.replaceAll("[&{}]", "")));
 		}
 
-		while (ampMatcher.find()) {
-			String hex = ampMatcher.group().replace("&", "");
-			str = str.replace(hex, ChatColor.of(hex).toString());
-			str = str.replace("&", "");
-		}
-
-		while (bracketMatcher.find()) {
-			String hex = bracketMatcher.group().replace("{", "").replace("}", "");
-			str = str.replace(hex, ChatColor.of(hex).toString());
-			str = str.replace("{", "").replace("}", "");
-		}
-
-		return str;
+		return string;
 	}
 
 	public static String join(Collection<?> args) {
