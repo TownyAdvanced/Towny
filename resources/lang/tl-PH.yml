@@ -1409,7 +1409,7 @@ tc_player_channel_sound_unmuted: 'Na-unmute ang tunog ng channel'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'May taga labas sa balangkas mo, hindi mo mababago ang kalagayn ng mo sa pvp!'
 #Added in 0.136
-msg_view_on_web: 'I-click upang tingnan sa web.'
+msg_view_on_web: '&7Click to view on the web.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6Ang bayan %s ay sumang-ayon na sumanib sa namamayaning bayan ng %s.'
