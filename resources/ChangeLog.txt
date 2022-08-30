@@ -7732,3 +7732,4 @@ v0.92.0.11:
     - Are new worlds claimable by default?
     - Setting this to false means that Towny will still be active but no land can be claimed by towns.
   - Stop removing title/surname when nation is deleted, courtesy of partydev with PR #6136.
+  - Prevent axolotls from targeting protected mobs, courtesy of Akiranya with PR #6140. (First-Time Contributor!)
