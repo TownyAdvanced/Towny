@@ -21,7 +21,6 @@ import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -177,8 +176,8 @@ public class OnPlayerLogin implements Runnable {
 				Audience audience = Towny.getAdventure().player(player);
 				ClickEvent clickEvent = ClickEvent.openUrl(TownyUpdateChecker.getUpdateURL());
 				
-				audience.sendMessage(Component.text(Translatable.of("default_towny_prefix").forLocale(player) + Translatable.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion()).forLocale(player)).clickEvent(clickEvent));
-				audience.sendMessage(Component.text(Translatable.of("default_towny_prefix").forLocale(player) + Translatable.of("msg_click_to_download").forLocale(player)).clickEvent(clickEvent));
+				audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion())).locale(player).component().clickEvent(clickEvent));
+				audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_click_to_download")).locale(player).component().clickEvent(clickEvent));
 			}
 		}
 	}
