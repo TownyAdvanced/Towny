@@ -1586,7 +1586,7 @@ tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
 msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
 
 #Added in 0.136
-msg_view_on_web: 'Click to view on the web.'
+msg_view_on_web: '&7Click to view on the web.'
 
 #Added in 0.137
 
