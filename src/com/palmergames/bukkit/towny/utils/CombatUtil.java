@@ -24,7 +24,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LightningStrike;
@@ -294,8 +293,6 @@ public class CombatUtil {
 				}
 				
 				if (attackingEntity.getType().name().equals("AXOLOTL") && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
-					//TODO: Targeting not actually removed
-					((Axolotl) attackingEntity).setTarget(null);
 					return true;
 				}
 			}
