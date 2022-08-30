@@ -1409,7 +1409,7 @@ tc_player_channel_sound_unmuted: '頻道已解除靜音'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: '有外來者在您的地段上，您不能切換PVP狀態！'
 #Added in 0.136
-msg_view_on_web: '點擊前往網頁查看。'
+msg_view_on_web: '&7Click to view on the web.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6城鎮%st同意與%s合併。'
