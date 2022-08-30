@@ -152,12 +152,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	private boolean loadFile(TownyDBFileType type, UUID uuid) {
 		return switch (type) {
 		case JAIL -> loadJailData(uuid);
-		case NATION -> loadNationData(uuid);
 		case PLOTGROUP -> loadPlotGroupData(uuid);
 		case RESIDENT -> loadResidentData(uuid);
 		case TOWN -> loadTownData(uuid);
-		case TOWNBLOCK -> throw new UnsupportedOperationException("Unimplemented case: " + type);
+		case NATION -> loadNationData(uuid);
 		case WORLD -> loadWorldData(uuid);
+		case TOWNBLOCK -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 		default -> throw new IllegalArgumentException("Unexpected value: " + type);
 		};
 	}

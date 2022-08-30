@@ -92,18 +92,39 @@ public abstract class TownyDataSource {
 	 * Methods are found in TownyFlatfile/SQlSource classes.
 	 */
 
+	/**
+	 * @return true after loading all of the Jails' UUIDs into {@link TownyUniverse#newJailInternal(UUID)}
+	 */
 	abstract public boolean loadJailList();
 
+	/**
+	 * @return true after loading all of the PlotGroups' UUIDs into {@link TownyUniverse#newPlotGroupInternal(UUID)}
+	 */
 	abstract public boolean loadPlotGroupList();
 
+	/**
+	 * @return true after loading all of the Residents' UUIDs into {@link TownyUniverse#newResidentInternal(UUID)}
+	 */
 	abstract public boolean loadResidentList();
 
+	/**
+	 * @return true after loading all of the Towns' UUIDs into {@link TownyUniverse#newTownInternal(UUID)}
+	 */
 	abstract public boolean loadTownList();
 
+	/**
+	 * @return true after loading all of the Nations' UUIDs into {@link TownyUniverse#newNationInternal(UUID)}
+	 */
 	abstract public boolean loadNationList();
 
+	/**
+	 * @return true after loading all of the Worlds' UUIDs into {@link TownyUniverse#newWorldInternal(UUID)}
+	 */
 	abstract public boolean loadWorldList();
 
+	/**
+	 * @return true after loading all of the TownBlocks into {@link TownyUniverse#addTownBlock(TownBlock)}
+	 */
 	abstract public boolean loadTownBlockList();
 
 	abstract public boolean loadRegenList();
@@ -134,18 +155,81 @@ public abstract class TownyDataSource {
 	 * Methods are found in TownyFlatfile/SQlSource classes.
 	 */
 
+	/**
+	 * @param  uuids Set of UUIDs to use.
+	 * @return true after calling {@link #loadJailData(UUID)} on each of the given
+	 *         UUIDs.
+	 * @throws ObjectCouldNotBeLoadedException if {@link #loadJailData(UUID)} is
+	 *                                         unsuccessful. Your error message
+	 *                                         should specify which file failed to
+	 *                                         load and where it is in the database.
+	 */
 	abstract public boolean loadJailUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
 
+	/**
+	 * @param  uuids Set of UUIDs to use.
+	 * @return true after calling {@link #loadPlotGroupData(UUID)} on each of the
+	 *         given UUIDs.
+	 * @throws ObjectCouldNotBeLoadedException if {@link #loadPlotGroupData(UUID)}
+	 *                                         is unsuccessful. Your error message
+	 *                                         should specify which file failed to
+	 *                                         load and where it is in the database.
+	 */
 	abstract public boolean loadPlotGroupUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
 
+	/**
+	 * @param  uuids Set of UUIDs to use.
+	 * @return true after calling {@link #loadResidentData(UUID)} on each of the
+	 *         given UUIDs.
+	 * @throws ObjectCouldNotBeLoadedException if {@link #loadResidentData(UUID)} is
+	 *                                         unsuccessful. Your error message
+	 *                                         should specify which file failed to
+	 *                                         load and where it is in the database.
+	 */
 	abstract public boolean loadResidentUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
 
+	/**
+	 * @param  uuids Set of UUIDs to use.
+	 * @return true after calling {@link #loadTownData(UUID)} on each of the given
+	 *         UUIDs.
+	 * @throws ObjectCouldNotBeLoadedException if {@link #loadTownData(UUID)} is
+	 *                                         unsuccessful. Your error message
+	 *                                         should specify which file failed to
+	 *                                         load and where it is in the database.
+	 */
 	abstract public boolean loadTownUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
 
+	/**
+	 * @param  uuids Set of UUIDs to use.
+	 * @return true after calling {@link #loadNationData(UUID)} on each of the given
+	 *         UUIDs.
+	 * @throws ObjectCouldNotBeLoadedException if {@link #loadNationData(UUID)} is
+	 *                                         unsuccessful. Your error message
+	 *                                         should specify which file failed to
+	 *                                         load and where it is in the database.
+	 */
 	abstract public boolean loadNationUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
 
+	/**
+	 * @param  uuids Set of UUIDs to use.
+	 * @return true after calling {@link #loadWorldData(UUID)} on each of the given
+	 *         UUIDs.
+	 * @throws ObjectCouldNotBeLoadedException if {@link #loadWorldData(UUID)} is
+	 *                                         unsuccessful. Your error message
+	 *                                         should specify which file failed to
+	 *                                         load and where it is in the database.
+	 */
 	abstract public boolean loadWorldUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
 
+	/**
+	 * @param  townBlocks Collection of TownBlocks to use.
+	 * @return true after calling {@link #loadTownBlock(TownBlock)} on each of the
+	 *         given TownBlocks.
+	 * @throws ObjectCouldNotBeLoadedException if {@link #loadTownBlock(TownBlock)}
+	 *                                         is unsuccessful. Your error message
+	 *                                         should specify which file failed to
+	 *                                         load and where it is in the database.
+	 */
 	abstract public boolean loadTownBlocks(Collection<TownBlock> townBlocks) throws ObjectCouldNotBeLoadedException;
 	
 	/*
@@ -165,10 +249,13 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadWorldData(UUID uuid);
 
+	abstract public boolean loadTownBlock(TownBlock townBlock);
+
 	/*
 	 * Load object from the database into Memory, to be entered into the Objects
 	 * themselves, not used by Towny itself.
 	 */
+
 	public boolean loadJail(Jail jail) {
 		return loadJailData(jail.getUUID());
 	}
@@ -197,18 +284,60 @@ public abstract class TownyDataSource {
 	 * Get objects as Maps for loading. Methods found in TownyFlatfile/SQLSource classes.
 	 */
 
+	/**
+	 * @param uuid UUID to use.
+	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 *         values for a jail with the given UUID, which will be used to load the
+	 *         jail with data.
+	 */
 	abstract public HashMap<String, String> getJailMap(UUID uuid);
 
+	/**
+	 * @param uuid UUID to use.
+	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 *         values for a plot group with the given UUID, which will be used to
+	 *         load the plot group with data.
+	 */
 	abstract public HashMap<String, String> getPlotGroupMap(UUID uuid);
 
+	/**
+	 * @param uuid UUID to use.
+	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 *         values for a resident with the given UUID, which will be used to load
+	 *         the resident with data.
+	 */
 	abstract public HashMap<String, String> getResidentMap(UUID uuid);
 
+	/**
+	 * @param uuid UUID to use.
+	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 *         values for a town with the given UUID, which will be used to load the
+	 *         town with data.
+	 */
 	abstract public HashMap<String, String> getTownMap(UUID uuid);
 
+	/**
+	 * @param uuid UUID to use.
+	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 *         values for a nation with the given UUID, which will be used to load
+	 *         the nation with data.
+	 */
 	abstract public HashMap<String, String> getNationMap(UUID uuid);
 
+	/**
+	 * @param uuid UUID to use.
+	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 *         values for a world with the given UUID, which will be used to load
+	 *         the world with data.
+	 */
 	abstract public HashMap<String, String> getWorldMap(UUID uuid);
 
+	/**
+	 * @param townBlock TownBlock to use.
+	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 *         values for the given TownBlock, which will be used to load the
+	 *         townblock with data.
+	 */
 	abstract public HashMap<String, String> getTownBlockMap(TownBlock townBlock);
 
 	/*
@@ -224,35 +353,85 @@ public abstract class TownyDataSource {
 	 * Individual objects saving methods. Methods are found in TownyFlatfile/SQlSource classes.
 	 */
 
-	abstract public boolean saveResident(Resident resident, HashMap<String, Object> data);
 
-	abstract public boolean saveHibernatedResident(UUID uuid, HashMap<String, Object> data);
-
-	abstract public boolean saveTown(Town town, HashMap<String, Object> data);
-
-	abstract public boolean savePlotGroup(PlotGroup group, HashMap<String, Object> data);
-
+	/**
+	 * @param jail Jail to save.
+	 * @param data HashMap&lt;String, Object&gt; which contains the keys and values
+	 *             representing a Jail's data.
+	 * @return true when the Jail is saved to the database successfully.
+	 */
 	abstract public boolean saveJail(Jail jail, HashMap<String, Object> data);
 
+	/**
+	 * @param group PlotGroup to save.
+	 * @param data  HashMap&lt;String, Object&gt; which contains the keys and values
+	 *              representing a PlotGroup's data.
+	 * @return true when the PlotGroup is saved to the database successfully.
+	 */
+	abstract public boolean savePlotGroup(PlotGroup group, HashMap<String, Object> data);
+
+	/**
+	 * @param resident Resident to save.
+	 * @param data     HashMap&lt;String, Object&gt; which contains the keys and
+	 *                 values representing a Resident's data.
+	 * @return true when the Resident is saved to the database successfully.
+	 */
+	abstract public boolean saveResident(Resident resident, HashMap<String, Object> data);
+
+	/**
+	 * @param uuid UUID to save.
+	 * @param data HashMap&lt;String, Object&gt; which contains the keys and values
+	 *             representing a HibernatedResident's data.
+	 * @return true when the HibernatedResident is saved to the database
+	 *         successfully.
+	 */
+	abstract public boolean saveHibernatedResident(UUID uuid, HashMap<String, Object> data);
+
+	/**
+	 * @param town Town to save.
+	 * @param data HashMap&lt;String, Object&gt; which contains the keys and values
+	 *             representing a Town's data.
+	 * @return true when the Town is saved to the database successfully.
+	 */
+	abstract public boolean saveTown(Town town, HashMap<String, Object> data);
+
+	/**
+	 * @param nation Nation to save.
+	 * @param data   HashMap&lt;String, Object&gt; which contains the keys and
+	 *               values representing a Nation's data.
+	 * @return true when the Nation is saved to the database successfully.
+	 */
 	abstract public boolean saveNation(Nation nation, HashMap<String, Object> data);
 
+	/**
+	 * @param world TownyWorld to save.
+	 * @param data  HashMap&lt;String, Object&gt; which contains the keys and values
+	 *              representing a TownyWorld's data.
+	 * @return true when the TownyWorld is saved to the database successfully.
+	 */
 	abstract public boolean saveWorld(TownyWorld world, HashMap<String, Object> data);
 
+	/**
+	 * @param townBlock TownBlock to save.
+	 * @param data      HashMap&lt;String, Object&gt; which contains the keys and
+	 *                  values representing a TownBlock's data.
+	 * @return true when the TownBlock is saved to the database successfully.
+	 */
 	abstract public boolean saveTownBlock(TownBlock townBlock, HashMap<String, Object> data);
 
 	/*
 	 * Individual objects saving methods. Methods are found in TownyDataBaseHandler.
 	 */
-	
+
+	abstract public boolean saveJail(Jail jail);
+
+	abstract public boolean savePlotGroup(PlotGroup group);
+
 	abstract public boolean saveResident(Resident resident);
 
 	abstract public boolean saveHibernatedResident(UUID uuid, long registered);
 	
 	abstract public boolean saveTown(Town town);
-	
-	abstract public boolean savePlotGroup(PlotGroup group);
-	
-	abstract public boolean saveJail(Jail jail);
 
 	abstract public boolean saveNation(Nation nation);
 
@@ -318,23 +497,50 @@ public abstract class TownyDataSource {
 	 * Delete methods found in the TownyFlatfile/SQLSource classes.
 	 */
 
-	abstract public void deleteResident(Resident resident);
+	/**
+	 * @param jail Jail to delete from the Database.
+	 */
+	abstract public void deleteJail(Jail jail);
 
-	abstract public void deleteHibernatedResident(UUID uuid);
-
-	abstract public void deleteTown(Town town);
-
-	abstract public void deleteNation(Nation nation);
-
-	abstract public void deleteWorld(TownyWorld world);
-
-	abstract public void deleteTownBlock(TownBlock townBlock);
-
-	abstract public void deleteFile(String file);
-
+	/**
+	 * @param group PlotGroup to delete from the Database.
+	 */
 	abstract public void deletePlotGroup(PlotGroup group);
 
-	abstract public void deleteJail(Jail jail);
+	/**
+	 * @param resident Resident to delete from the Database.
+	 */
+	abstract public void deleteResident(Resident resident);
+
+	/**
+	 * @param uuid UUID of the HibernatedResident to delete from the Database.
+	 */
+	abstract public void deleteHibernatedResident(UUID uuid);
+
+	/**
+	 * @param town Town to delete from the Database.
+	 */
+	abstract public void deleteTown(Town town);
+
+	/**
+	 * @param nation Nation to delete from the Database.
+	 */
+	abstract public void deleteNation(Nation nation);
+
+	/**
+	 * @param world TownyWorld to delete from the Database.
+	 */
+	abstract public void deleteWorld(TownyWorld world);
+
+	/**
+	 * @param townBlock TownBlock to delete from the Database.
+	 */
+	abstract public void deleteTownBlock(TownBlock townBlock);
+
+	/*
+	 * Used in TownyDatabaseHandler.
+	 */
+	abstract public void deleteFile(String file);
 
 	/*
 	 * PlotBlockData methods found in TownyDatabaseHandler (used by Flatfile and SQL Sources.)
@@ -392,8 +598,18 @@ public abstract class TownyDataSource {
 
 	abstract public void mergeTown(Town mergeInto, Town mergeFrom);
 
+	/**
+	 * @param type Object type by name, RESIDENT, TOWN, etc.
+	 * @param uuid UUID of the Object to get a name for.
+	 * @return name by which the given UUID is known.
+	 */
 	abstract public String getNameOfObject(String type, UUID uuid);
 
+	/**
+	 * @param uuid UUID of the HibernatedResident
+	 * @return a CompletableFuture that should result in the Long value representing
+	 *         the residents registered time.
+	 */
 	abstract public CompletableFuture<Optional<Long>> getHibernatedResidentRegistered(UUID uuid);
 
 	public boolean cleanup() {
