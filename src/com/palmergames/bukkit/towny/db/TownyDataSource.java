@@ -633,7 +633,7 @@ public abstract class TownyDataSource {
 	/**
 	 * @param uuid UUID of the HibernatedResident
 	 * @return a CompletableFuture that should result in the Long value representing
-	 *         the residents registered time.
+	 *         the resident's registered time.
 	 */
 	abstract public CompletableFuture<Optional<Long>> getHibernatedResidentRegistered(UUID uuid);
 
@@ -865,7 +865,7 @@ public abstract class TownyDataSource {
 	 */
 
 	/**
-	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newResident(UUID, String) instead.
+	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newResident(UUID, String)} instead.
 	 * @param name
 	 * @throws AlreadyRegisteredException
 	 * @throws NotRegisteredException
@@ -877,7 +877,7 @@ public abstract class TownyDataSource {
 	}
 
 	/**
-	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newResident(UUID, String) instead.
+	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newResident(UUID, String)} instead.
 	 * @param name
 	 * @param uuid
 	 * @throws AlreadyRegisteredException
@@ -907,7 +907,7 @@ public abstract class TownyDataSource {
 	}
 
 	/**
-	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newNation(String) instead.
+	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newNation(String)} instead.
 	 * @param name
 	 * @throws AlreadyRegisteredException
 	 * @throws NotRegisteredException
@@ -919,7 +919,7 @@ public abstract class TownyDataSource {
 	}
 
 	/**
-	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newNation(String) instead.
+	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newNation(String)} instead.
 	 * @param name
 	 * @throws AlreadyRegisteredException
 	 * @throws NotRegisteredException
@@ -931,7 +931,7 @@ public abstract class TownyDataSource {
 	}
 
 	/**
-	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newWorld(String) instead.
+	 * @deprecated as of 0.98.4.0 use {@link TownyUniverse#newWorld(World)} instead.
 	 * @param world
 	 */
 	@Deprecated

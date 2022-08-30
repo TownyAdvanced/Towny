@@ -11,9 +11,9 @@ public class FlatFileSaveTask implements Runnable {
 	private final String path;
 	
 	/**
-	 * Constructor to save a list
-	 * @param list - list to save.
-	 * @param path - path on filesystem.
+	 * Constructor to save a HashMap to a file.
+	 * @param map HashMap to save.
+	 * @param path String path on filesystem.
 	 */
 	public FlatFileSaveTask(HashMap<String, Object> map, String path) {
 		this.map = map;
