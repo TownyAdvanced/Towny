@@ -7733,3 +7733,5 @@ v0.92.0.11:
     - Setting this to false means that Towny will still be active but no land can be claimed by towns.
   - Stop removing title/surname when nation is deleted, courtesy of partydev with PR #6136.
   - Prevent axolotls from targeting protected mobs, courtesy of Akiranya with PR #6140. (First-Time Contributor!)
+  - Add colors class changes from minimessage branch, courtesy of Warriorrrr with PR #6132.
+  - Replace Component.texts with alternatives in formatter, courtesy of Warriorrrr with PR #6134.
