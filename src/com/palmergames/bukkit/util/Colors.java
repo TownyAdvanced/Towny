@@ -83,7 +83,7 @@ public class Colors {
 		return input;
 	}
 
-	private static final Function<String, String> modernHexFunction = (hex) -> "<" + hex + ">";
+	private static final Function<String, String> modernHexFunction = (hex) -> "<#" + hex + ">";
 
 	/**
 	 * Converts non-minimessage hex formats to minimessage.
