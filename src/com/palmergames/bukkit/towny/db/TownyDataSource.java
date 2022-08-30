@@ -33,18 +33,43 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /*
+ * The TownyDataSource acts as an abstract plan for operating upon
+ * the Towny database. Methods are contained primarily in the 
+ * TownyDatabaseHandler class, which relies upon a Source class: 
+ * ie: TownyFlatfileSource or TownySQLSource, which will then 
+ * complete operations that require directly reading/writing from
+ * the database. 
+ * 
+ * TownyDatabaseHandler is responsible for using the database source
+ * methods, removing individual objects, renaming objects, operating
+ * with aspects of the Database which are always stored in Flatfile:
+ * PlotBlockData, Snapshot and Regen queues.
+ * 
+ * The database source classes are responsible for providing keys,
+ * loading and saving objects using HashMaps, deleting objects.  
+ * 
+ * Creating new database sources is achieved by creating a new class
+ * which extends TownyDatabaseHandler, and implementing the required
+ * methods, following the instructions found in those methods'
+ * javadocs.
+ * 
  * --- : Loading process : ---
  *
- * Load all the names/keys for each world, nation, town, and resident.
- * Load each world, which loads it's town blocks.
- * Load nations, towns, and residents.
+ * - Load all the keys for each world, nation, town, and resident, jail,
+ *   plotgroup, townblock into TownyUniverse.
+ * - Parse over each key loaded into TownyUniverse, loading each object
+ *   by requesting HashMaps made up of each object's data from the 
+ *   DatabaseSource classes.
+ *   
+ * --- : Saving process : ---
+ * 
+ * - Save objects by dumping their data into HashMaps which are then
+ *   processed by the DatabaseSource classes.
  */
 
-/*
- * Loading Towns:
- * Make sure to load TownBlocks, then HomeBlock, then Spawn.
+/**
+ * @author LlmDl
  */
-
 public abstract class TownyDataSource {
 	final Lock lock = new ReentrantLock();
 	protected final Towny plugin;
