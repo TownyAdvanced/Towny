@@ -1409,7 +1409,7 @@ tc_player_channel_sound_unmuted: 'Звук канала включен'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'В этом участке находится посторонний, вы не можете переключить PVP!'
 #Added in 0.136
-msg_view_on_web: 'Нажмите для просмотра в Интернете.'
+msg_view_on_web: '&7Click to view on the web.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6Город %s согласился на слияние с превалирующим городом %s.'
