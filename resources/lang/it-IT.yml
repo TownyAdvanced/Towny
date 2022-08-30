@@ -1409,7 +1409,7 @@ tc_player_channel_sound_unmuted: 'Il canale è stato rimosso dall''elenco dei ca
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'C''è un estraneo nella tua città, non puoi cambiare lo stato del pvp!'
 #Added in 0.136
-msg_view_on_web: 'Clicca per visualizzare sul web.'
+msg_view_on_web: '&7Click to view on the web.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6La città %s ha accettato di fondersi con la città di %s.'
