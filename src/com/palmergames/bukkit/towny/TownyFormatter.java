@@ -755,6 +755,7 @@ public class TownyFormatter {
 	 * @param translator Translator used to select language for message.
 	 * @return Shortened Array of Strings.
 	 */
+	@SuppressWarnings("unused")
 	private static String[] shortenOverlengthArray(String[] array, int i, Translator translator) {
 		String[] entire = array;
 		array = new String[i + 1];
