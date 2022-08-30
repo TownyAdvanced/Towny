@@ -67,6 +67,7 @@ import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -592,7 +593,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private void nationSay(Nation nation, String[] split) throws TownyException {
 		if (split.length == 0)
 			throw new TownyException("ex: /n say [message here]");
-		TownyMessaging.sendPrefixedNationMessage(nation, StringMgmt.join(split));
+		TownyMessaging.sendPrefixedNationMessage(nation, TownyComponents.stripClickTags(StringMgmt.join(split)));
 
 	}
 

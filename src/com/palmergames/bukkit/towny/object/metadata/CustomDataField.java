@@ -98,7 +98,7 @@ public abstract class CustomDataField<T> implements Cloneable {
 	 */
 	@NotNull
 	public Component getLabelAsComp() {
-		return TownyComponents.legacy(getLabel());
+		return TownyComponents.miniMessage(getLabel());
 	}
 	
 	public boolean hasLabel() {
@@ -160,7 +160,7 @@ public abstract class CustomDataField<T> implements Cloneable {
 	 * @return formatted component of value.
 	 */
 	public Component formatValueAsComp() {
-		return TownyComponents.legacy(displayFormattedValue());
+		return TownyComponents.miniMessage(displayFormattedValue());
 	}
     
     @Override

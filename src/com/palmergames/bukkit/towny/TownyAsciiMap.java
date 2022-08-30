@@ -158,7 +158,7 @@ public class TownyAsciiMap {
 							? townblock.getPlotObjectGroup().getPrice()
 							: townblock.getPlotPrice();
 						if (cost > -1)
-							forSaleComponent = TownyComponents.legacy(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(cost)).replaceAll("[\\[\\]]", "") + " " + translator.of("msg_click_purchase")).color(NamedTextColor.YELLOW).append(Component.newline());
+							forSaleComponent = TownyComponents.miniMessage(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(cost)).replaceAll("[\\[\\]]", "") + " " + translator.of("msg_click_purchase")).color(NamedTextColor.YELLOW).append(Component.newline());
 					}
 					
 					if (townblock.getClaimedAt() > 0)
