@@ -1409,7 +1409,7 @@ tc_player_channel_sound_unmuted: 'Kanalljudet har avtystats'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Det finns en utomstående i din stad, du kan inte ändra din pvp-status!'
 #Added in 0.136
-msg_view_on_web: 'Klicka för att visa på webben.'
+msg_view_on_web: '&7Click to view on the web.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6Staden %s har gått med på att slås samman med den segrande staden %s.'
