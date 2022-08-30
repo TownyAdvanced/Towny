@@ -25,12 +25,14 @@ import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,6 +48,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -140,6 +143,22 @@ public class TownyEntityListener implements Listener {
 			if (attacker instanceof Projectile && !attacker.getType().equals(EntityType.TRIDENT))
 				attacker.remove();
 
+			event.setCancelled(true);
+		}
+	}
+
+	/**
+	 * Prevent axolotl from targeting protected mobs.
+	 *
+	 * @param event - EntityTargetLivingEntityEvent
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onAxolotlTarget(EntityTargetLivingEntityEvent event) {
+		if (event.getEntity() instanceof Mob attacker &&
+			attacker.getType().name().equals("AXOLOTL") &&
+			event.getTarget() instanceof Mob defender &&
+			CombatUtil.preventDamageCall(attacker, defender, DamageCause.ENTITY_ATTACK)) {
+			attacker.setMemory(MemoryKey.HAS_HUNTING_COOLDOWN, true);
 			event.setCancelled(true);
 		}
 	}
