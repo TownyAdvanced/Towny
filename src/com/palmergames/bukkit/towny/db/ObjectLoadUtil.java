@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -11,19 +12,23 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
 
+import com.google.gson.Gson;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -42,13 +47,7 @@ public class ObjectLoadUtil {
 		this.source = source;
 		this.universe = universe;
 	}
-	/*
-	 * New Load Object Methods
-	 * 
-	 * These are called from the FlatFileSource and SQLSource which present Towny
-	 * with an object, UUID and the keys which are used to load an object.
-	 */
-	
+
 	public boolean loadJail(Jail jail, HashMap<String, String> keys) {
 		String line = "";
 		line = keys.get("townblock");
@@ -443,6 +442,103 @@ public class ObjectLoadUtil {
 		return true;
 	}
 	
+	public boolean loadTownBlock(TownBlock townBlock, HashMap<String, String> keys) {
+		String line = "";
+		try {
+			Town town = getTownFromDB(keys.get("town"));
+			if (town == null) {
+				TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line
+				+ ", deleting " + townBlock.getWorld().getName() + "," + townBlock.getX() + ","
+				+ townBlock.getZ());
+				universe.removeTownBlock(townBlock);
+				source.deleteTownBlock(townBlock);
+				return true;
+			}
+			townBlock.setTown(town, false);
+			try {
+				town.addTownBlock(townBlock);
+				TownyWorld townyWorld = townBlock.getWorld();
+				if (townyWorld != null && !townyWorld.hasTown(town))
+					townyWorld.addTown(town);
+			} catch (AlreadyRegisteredException ignored) {}
+
+			line = keys.get("resident");
+			if (line != null && !line.isEmpty()) {
+				Resident resident = getResidentFromDB(line);
+				if (resident != null)
+					townBlock.setResident(resident, false);
+				else {
+					TownyMessaging.sendErrorMsg(String.format(
+					"Error fetching resident '%s' for townblock '%s'!",
+					line.trim(), townBlock.toString()));
+				}
+			}
+
+			townBlock.setName(keys.getOrDefault("name", ""));
+			townBlock.setType(TownBlockTypeHandler.getTypeInternal(keys.getOrDefault("typeName", "default")));
+			townBlock.setOutpost(getOrDefault(keys, "outpost", false));
+
+			line = keys.get("price");
+			if (line != null && !line.isEmpty())
+				townBlock.setPlotPrice(Float.parseFloat(line.trim()));
+			line = keys.get("permissions");
+			if (line != null && !line.isEmpty())
+				townBlock.setPermissions(line.trim().replaceAll("#", ","));
+			line = keys.get("changed");
+			if (line != null && !line.isEmpty())
+				townBlock.setChanged(getOrDefault(keys, line, false));
+			line = keys.get("locked");
+			if (line != null && !line.isEmpty())
+				townBlock.setLocked(getOrDefault(keys, line, false));
+			line = keys.get("claimedAt");
+			if (line != null && !line.isEmpty())
+				townBlock.setClaimedAt(getOrDefault(keys, "claimedAt", 0l));
+			line = keys.get("metadata");
+			if (line != null && !line.isEmpty())
+				MetadataLoader.getInstance().deserializeMetadata(townBlock, line.trim());
+
+			line = keys.get("groupID");
+			if (line != null && !line.isEmpty())
+				try {
+					PlotGroup group = universe.getGroup(UUID.fromString(line.trim()));
+					if (group != null) {
+						townBlock.setPlotObjectGroup(group);
+						if (group.getPermissions() == null && townBlock.getPermissions() != null)
+							group.setPermissions(townBlock.getPermissions());
+						if (townBlock.hasResident())
+							group.setResident(townBlock.getResidentOrNull());
+					}
+				} catch (Exception ignored) {}
+
+			line = keys.get("trustedResidents");
+			if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
+				townBlock.addTrustedResidents(TownyAPI.getInstance().getResidents(ObjectLoadUtil.toUUIDArray(line.split(getSplitter(line)))));
+				if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.getTrustedResidents().size() > 0)
+					townBlock.getPlotObjectGroup().setTrustedResidents(townBlock.getTrustedResidents());
+			}
+
+			line = keys.get("customPermissionData");
+			if (line != null && !line.isEmpty() && townBlock.getPermissionOverrides().isEmpty()) {
+				Map<String, String> map = new Gson().fromJson(line, Map.class);
+
+				for (Map.Entry<String, String> entry : map.entrySet()) {
+					Resident resident = getResidentFromDB(entry.getKey());
+					if (resident != null)
+						townBlock.getPermissionOverrides().put(resident, new PermissionData(entry.getValue()));
+				}
+
+				if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPermissionOverrides().isEmpty() && townBlock.getPermissionOverrides().size() > 0)
+					townBlock.getPlotObjectGroup().setPermissionOverrides(townBlock.getPermissionOverrides());
+			}
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_townblock_file_at_line", townBlock.toString(), line));
+			return false;
+		} finally {
+			source.saveTownBlock(townBlock);
+		}
+		return true;
+	}
+
 	/*
 	 * Private methods used to read a key and set a default value from the config if it isn't present.
 	 */

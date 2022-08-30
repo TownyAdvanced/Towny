@@ -87,7 +87,7 @@ public class ObjectSaveUtil {
 			res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
 			res_hm.put("friends", StringMgmt.join(resident.getFriendsUUIDs(), "#"));
 			res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
-			res_hm.put("metadata", resident.hasMeta() ? ObjectSaveUtil.serializeMetadata(resident) : "");
+			res_hm.put("metadata", resident.hasMeta() ? serializeMetadata(resident) : "");
 			return res_hm;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("Saving: Resident HashMap could not be made.");

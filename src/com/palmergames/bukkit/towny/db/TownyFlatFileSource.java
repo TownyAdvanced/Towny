@@ -1,24 +1,18 @@
 package com.palmergames.bukkit.towny.db;
 
-import com.google.gson.Gson;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.ObjectCouldNotBeLoadedException;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -30,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -328,200 +323,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public boolean loadTownBlocks() {
-
-		String line = "";
-		String path;
-
-		for (TownBlock townBlock : universe.getTownBlocks().values()) {
-			path = getTownBlockFilename(townBlock);
-
-			File fileTownBlock = new File(path);
-			if (fileTownBlock.exists() && fileTownBlock.isFile()) {
-
-				try {
-					HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileTownBlock);
-
-					line = keys.get("town");
-					if (line != null) {
-						if (line.isEmpty()) {
-							TownyMessaging.sendErrorMsg(
-									Translation.of("flatfile_err_townblock_file_missing_town_delete", path));
-							universe.removeTownBlock(townBlock);
-							deleteTownBlock(townBlock);
-							continue;
-						}
-						Town town = null;
-						try {
-							town = universe.getTown(UUID.fromString(line.trim()));
-						} catch (IllegalArgumentException e) {
-							// This is a legacy file opening a townblock that records the Town by the Town's name instead of UUID.
-							town = universe.getTown(line.trim());
-						}
-//						else if (universe.getReplacementNameMap().containsKey(line.trim()))
-//							town = universe.getTown(universe.getReplacementNameMap().get(line).trim());
-
-						if (town == null) {
-							TownyMessaging.sendErrorMsg(Translation
-									.of("flatfile_err_townblock_file_contains_unregistered_town_delete", line, path));
-							universe.removeTownBlock(townBlock);
-							deleteTownBlock(townBlock);
-							continue;
-						}
-
-						townBlock.setTown(town, false);
-						try {
-							town.addTownBlock(townBlock);
-							TownyWorld townyWorld = townBlock.getWorld();
-							if (townyWorld != null && !townyWorld.hasTown(town))
-								townyWorld.addTown(town);
-						} catch (AlreadyRegisteredException ignored) {
-						}
-					} else {
-						// Town line is null, townblock is invalid.
-						TownyMessaging
-								.sendErrorMsg(Translation.of("flatfile_err_townblock_file_missing_town_delete", path));
-						universe.removeTownBlock(townBlock);
-						deleteTownBlock(townBlock);
-						continue;
-					}
-
-					line = keys.get("name");
-					if (line != null)
-						try {
-							townBlock.setName(line.trim());
-						} catch (Exception ignored) {
-						}
-
-					line = keys.get("type");
-					if (line != null)
-						townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
-
-					line = keys.get("resident");
-					if (line != null && !line.isEmpty()) {
-						Resident res = universe.getResident(line.trim());
-						if (res != null) {
-							townBlock.setResident(res, false);
-						} else {
-							TownyMessaging.sendErrorMsg(
-									Translation.of("flatfile_err_invalid_townblock_resident", townBlock.toString()));
-						}
-					}
-
-					line = keys.get("price");
-					if (line != null)
-						try {
-							townBlock.setPlotPrice(Double.parseDouble(line.trim()));
-						} catch (Exception ignored) {
-						}
-
-					line = keys.get("outpost");
-					if (line != null)
-						try {
-							townBlock.setOutpost(Boolean.parseBoolean(line));
-						} catch (Exception ignored) {
-						}
-
-					line = keys.get("permissions");
-					if ((line != null) && !line.isEmpty())
-						try {
-							townBlock.setPermissions(line.trim());
-						} catch (Exception ignored) {
-						}
-
-					line = keys.get("changed");
-					if (line != null)
-						try {
-							townBlock.setChanged(Boolean.parseBoolean(line.trim()));
-						} catch (Exception ignored) {
-						}
-
-					line = keys.get("locked");
-					if (line != null)
-						try {
-							townBlock.setLocked(Boolean.parseBoolean(line.trim()));
-						} catch (Exception ignored) {
-						}
-
-					line = keys.get("claimedAt");
-					if (line != null)
-						try {
-							townBlock.setClaimedAt(Long.parseLong(line));
-						} catch (Exception ignored) {
-						}
-
-					line = keys.get("metadata");
-					if (line != null && !line.isEmpty())
-						MetadataLoader.getInstance().deserializeMetadata(townBlock, line.trim());
-
-					line = keys.get("groupID");
-					UUID groupID = null;
-					if (line != null && !line.isEmpty()) {
-						groupID = UUID.fromString(line.trim());
-					}
-
-					if (groupID != null) {
-						PlotGroup group = universe.getGroup(groupID);
-						if (group != null) {
-							townBlock.setPlotObjectGroup(group);
-							if (group.getPermissions() == null && townBlock.getPermissions() != null)
-								group.setPermissions(townBlock.getPermissions());
-							if (townBlock.hasResident())
-								group.setResident(townBlock.getResidentOrNull());
-						} else {
-							townBlock.removePlotObjectGroup();
-						}
-					}
-
-					line = keys.get("trustedResidents");
-					if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
-						townBlock.addTrustedResidents(TownyAPI.getInstance().getResidents(ObjectLoadUtil.toUUIDArray(line.split(","))));
-
-						if (townBlock.hasPlotObjectGroup()
-								&& townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty()
-								&& townBlock.getTrustedResidents().size() > 0)
-							townBlock.getPlotObjectGroup().setTrustedResidents(townBlock.getTrustedResidents());
-					}
-
-					line = keys.get("customPermissionData");
-					if (line != null && !line.isEmpty() && townBlock.getPermissionOverrides().isEmpty()) {
-						Map<String, String> map = new Gson().fromJson(line, Map.class);
-
-						for (Map.Entry<String, String> entry : map.entrySet()) {
-							Resident resident;
-							try {
-								resident = TownyAPI.getInstance().getResident(UUID.fromString(entry.getKey()));
-							} catch (IllegalArgumentException e) {
-								continue;
-							}
-
-							if (resident == null)
-								continue;
-
-							townBlock.getPermissionOverrides().put(resident, new PermissionData(entry.getValue()));
-						}
-
-						if (townBlock.hasPlotObjectGroup()
-								&& townBlock.getPlotObjectGroup().getPermissionOverrides().isEmpty()
-								&& townBlock.getPermissionOverrides().size() > 0)
-							townBlock.getPlotObjectGroup().setPermissionOverrides(townBlock.getPermissionOverrides());
-					}
-
-				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg(
-							Translation.of("flatfile_err_exception_reading_townblock_file_at_line", path, line));
-					return false;
-				} finally {
-					saveTownBlock(townBlock);
-				}
-
-			} else {
-				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_townblock_file_unknown_err", path));
-				universe.removeTownBlock(townBlock);
-				deleteTownBlock(townBlock);
-			}
-		}
-
+	public boolean loadTownBlocks(Collection<TownBlock> townBlocks) throws ObjectCouldNotBeLoadedException {
+		for (TownBlock townBlock : townBlocks)
+			if (!loadTownBlock(townBlock))
+				throw new ObjectCouldNotBeLoadedException("The Townblock: '" + townBlock.toString() + "' could not be read from the database!");
 		return true;
 	}
 
@@ -580,6 +385,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (worldFile.exists() && worldFile.isFile())
 			return FileMgmt.loadFileIntoHashMap(worldFile);
 		TownyMessaging.sendErrorMsg("Cannot find a world file with the UUID " + uuid.toString() + "!");
+		return null;
+	}
+
+	@Override
+	public HashMap<String, String> getTownBlockMap(TownBlock townBlock) {
+		File fileTownBlock = new File(getTownBlockFilename(townBlock));
+		if (fileTownBlock.exists() && fileTownBlock.isFile())
+			return FileMgmt.loadFileIntoHashMap(fileTownBlock);	
+		TownyMessaging.sendErrorMsg("Cannot find a townBlock file for " + townBlock.toString() + "!");
 		return null;
 	}
 

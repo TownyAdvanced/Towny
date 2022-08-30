@@ -239,6 +239,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 	}
 
+	public boolean loadTownBlocks() {
+		try {
+			return loadTownBlocks(universe.getTownBlocks().values());
+		} catch (ObjectCouldNotBeLoadedException e) {
+			TownyMessaging.sendErrorMsg(e.getMessage());
+			return false;
+		} 
+	}
+
 	/*
 	 * Object loading methods which pull HashMaps from FlatFile/SQLSources 
 	 */
@@ -313,6 +322,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (worldAsMap == null)
 			return false;
 		return loader.loadWorld(world, worldAsMap);
+	}
+
+	public boolean loadTownBlock(TownBlock townBlock) {
+		HashMap<String, String> townBlockAsMap = getTownBlockMap(townBlock);
+		if (townBlockAsMap == null)
+			return false;
+		return loader.loadTownBlock(townBlock, townBlockAsMap);
 	}
 
 	/*

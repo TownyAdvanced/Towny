@@ -5,25 +5,17 @@
  */
 package com.palmergames.bukkit.towny.db;
 
-import com.google.gson.Gson;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.ObjectCouldNotBeLoadedException;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -42,6 +34,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -679,7 +672,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public boolean loadWorldUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException {
 		return loadResultSetOfType(TownyDBTableType.WORLD, uuids);
 	}
-	
+
+	public boolean loadTownBlocks(Collection<TownBlock> townBlocks) throws ObjectCouldNotBeLoadedException {
+		for (TownBlock townblock : townBlocks)
+			if (!loadTownBlock(townblock))
+				throw new ObjectCouldNotBeLoadedException("The Townblock: '" + townblock.toString() + "' could not be read from the database!");
+		return true;
+	}
+
 	/*
 	 * Methods that return objects as HashMaps for loading.
 	 */
@@ -758,6 +758,20 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			return loadResultSetIntoHashMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unabled to find nation with UUID " + uuid.toString() + " in the database!");
+			return null;
+		}
+	}
+
+	@Override
+	public HashMap<String, String> getTownBlockMap(TownBlock townBlock) {
+		if (!getContext())
+			return null;
+		try (Statement s = cntx.createStatement();
+			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS")) {
+			return loadResultSetIntoHashMap(rs);
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock: "
+					+ (townBlock != null ? townBlock : "NULL") + " in the sql database");
 			return null;
 		}
 	}
@@ -1484,8 +1498,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return false;
 	}
 */
-	@Override
-	public boolean loadTownBlocks() {
+/*	public boolean loadTownBlocks() {
 
 		String line = "";
 		boolean result;
@@ -1667,7 +1680,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		return true;
 	}
-
+*/
 /*	private boolean loadPlotGroup(ResultSet rs) {
 		String line = null;
 		String uuid = null;

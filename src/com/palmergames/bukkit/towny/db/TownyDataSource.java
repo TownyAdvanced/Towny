@@ -146,6 +146,8 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadWorldUUIDs(Set<UUID> uuids) throws ObjectCouldNotBeLoadedException;
 
+	abstract public boolean loadTownBlocks(Collection<TownBlock> townBlocks) throws ObjectCouldNotBeLoadedException;
+	
 	/*
 	 * Load object Data from the database into Memory, to be entered into the Objects themselves.
 	 * Methods are found in the TownyDatabaseHandler class.
@@ -206,6 +208,8 @@ public abstract class TownyDataSource {
 	abstract public HashMap<String, String> getNationMap(UUID uuid);
 
 	abstract public HashMap<String, String> getWorldMap(UUID uuid);
+
+	abstract public HashMap<String, String> getTownBlockMap(TownBlock townBlock);
 
 	/*
 	 * Legacy database entries that still store a list of keys in a file.
