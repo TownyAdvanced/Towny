@@ -21,6 +21,7 @@ import com.palmergames.util.MathUtil;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,6 +55,17 @@ public class Nation extends Government {
 	
 	public Nation(String name, UUID uuid) {
 		super(name);
+		this.uuid = uuid;
+	}
+
+	/**
+	 * Only to be used in Loading process.
+	 * <p>
+	 * @param uuid UUID to set on the Nation.
+	 */
+	@Internal
+	public Nation(@NotNull UUID uuid) {
+		super(null);
 		this.uuid = uuid;
 	}
 

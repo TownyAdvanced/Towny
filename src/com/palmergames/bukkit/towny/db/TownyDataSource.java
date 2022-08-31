@@ -624,13 +624,6 @@ public abstract class TownyDataSource {
 	abstract public void mergeTown(Town mergeInto, Town mergeFrom);
 
 	/**
-	 * @param type Object type by name, RESIDENT, TOWN, etc.
-	 * @param uuid UUID of the Object to get a name for.
-	 * @return name by which the given UUID is known.
-	 */
-	abstract public String getNameOfObject(String type, UUID uuid);
-
-	/**
 	 * @param uuid UUID of the HibernatedResident
 	 * @return a CompletableFuture that should result in the Long value representing
 	 *         the resident's registered time.

@@ -547,26 +547,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		return keys;
 	}
-	
-	public String getNameOfObject(String type, UUID uuid) {
-		if (!getContext())
-			return null;
-		
-		TownyDBTableType tableType = TownyDBTableType.valueOf(type.toUpperCase(Locale.ROOT));
-		try {
-			try (Statement s = cntx.createStatement()) {
-				ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + tableType.tableName + " WHERE uuid='" + uuid + "'");
-				while (rs.next())
-					return rs.getString("name");
-			}
-		} catch (SQLException s) {
-			s.printStackTrace();
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(e.getMessage());
-		}
-		TownyMessaging.sendErrorMsg("A Name could not be found for the " + tableType.getSingular() + " with the UUID: " + uuid.toString() + ".");
-		return null;
-	}
 
 	@Override
 	public CompletableFuture<Optional<Long>> getHibernatedResidentRegistered(UUID uuid) {

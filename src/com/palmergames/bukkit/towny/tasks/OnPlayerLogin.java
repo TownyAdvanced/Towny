@@ -84,12 +84,10 @@ public class OnPlayerLogin implements Runnable {
 				 */
 				try {
 					universe.newResident(player.getUniqueId(), player.getName());
-					TownySettings.incrementUUIDCount();
-					
 					resident = universe.getResident(player.getUniqueId());
 					
 					if (TownySettings.isShowingLocaleMessage())
-					    TownyMessaging.sendMsg(resident, Translatable.of("msg_your_locale", player.getLocale()));
+						TownyMessaging.sendMsg(resident, Translatable.of("msg_your_locale", player.getLocale()));
 
 					resident.setRegistered(System.currentTimeMillis());
 
@@ -205,12 +203,7 @@ public class OnPlayerLogin implements Runnable {
 		}
 		if (!resident.hasUUID()) {
 			resident.setUUID(player.getUniqueId());
-			try {
-				TownyUniverse.getInstance().registerResidentUUID(resident);
-			} catch (AlreadyRegisteredException e) {
-				e.printStackTrace();
-			}
-			TownySettings.incrementUUIDCount();
+			TownyUniverse.getInstance().registerResidentUUID(resident);
 		}
 		resident.save();
 			

@@ -33,6 +33,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -190,7 +191,6 @@ public class TownyUniverse {
 
         long time = System.currentTimeMillis() - startTime;
         towny.getLogger().info("Database: Loaded in " + time + "ms.");
-        towny.getLogger().info("Database: " + TownySettings.getUUIDPercent() + " of residents have stored UUIDs."); // TODO: remove this when we're using UUIDs directly in the database.
 
         // Throw Event.
         Bukkit.getPluginManager().callEvent(new TownyLoadedDatabaseEvent());
@@ -384,27 +384,26 @@ public class TownyUniverse {
 		Resident resident = new Resident(NameValidation.checkAndFilterPlayerName(residentName), residentUUID);
 		registerResident(resident);
 	}
-	
+
+	/**
+	 * Registers a Resident with only a UUID present as data.
+	 * Meant only to be used by Towny in the loading process.
+	 * @param residentUUID UUID to put onto the Resident.
+	 */
+	@Internal
 	public void newResidentInternal(@NotNull UUID residentUUID) {
-		String name = getDataSource().getNameOfObject("RESIDENT", residentUUID);
-		if (name == null || name.isEmpty())
-			return;
-		Resident resident = new Resident(name, residentUUID);
-		try {
-			registerResident(resident);
-		} catch (AlreadyRegisteredException ignored) {}
+		Resident resident = new Resident(residentUUID);
+		registerResidentUUID(resident);
 	}
-	
-	// Internal Use Only
-	public void registerResidentUUID(@NotNull Resident resident) throws AlreadyRegisteredException {
+
+	@Internal
+	public void registerResidentUUID(@NotNull Resident resident) {
 		Preconditions.checkNotNull(resident, "Resident cannot be null!");
 		
 		if (resident.getUUID() != null) {
-			if (residentUUIDMap.putIfAbsent(resident.getUUID(), resident) != null) {
-				throw new AlreadyRegisteredException(
-					String.format("UUID '%s' was already registered for resident '%s'!", resident.getUUID().toString(), resident.getName())
-				);
-			}
+			if (residentUUIDMap.containsKey(resident.getUUID()))
+				return;
+			residentUUIDMap.put(resident.getUUID(), resident);
 		}
 	}
 
@@ -553,15 +552,15 @@ public class TownyUniverse {
     	return townsTrie;
 	}
 
-	// Internal use only.
+	/**
+	 * Registers a Town with only a UUID present as data.
+	 * Meant only to be used by Towny in the loading process.
+	 * @param townUUID UUID to put onto the Town.
+	 */
+	@Internal
 	public void newTownInternal(@NotNull UUID townUUID) {
-		String name = getDataSource().getNameOfObject("TOWN", townUUID);
-		if (name == null || name.isEmpty())
-			return;
-		Town town = new Town(name, townUUID);
-		try {
-			registerTown(town);
-		} catch (AlreadyRegisteredException ignored) {}
+		Town town = new Town(townUUID);
+		registerTownUUID(town);
 	}
 
 	/**
@@ -584,16 +583,15 @@ public class TownyUniverse {
 		registerTown(town);
 	}
 	
-	// This is used internally since UUIDs are assigned after town objects are created.
-	public void registerTownUUID(@NotNull Town town) throws AlreadyRegisteredException {
+	@Internal
+	public void registerTownUUID(@NotNull Town town) {
 		Preconditions.checkNotNull(town, "Town cannot be null!");
 		
 		if (town.getUUID() != null) {
 			
-			if (townUUIDMap.containsKey(town.getUUID())) {
-				throw new AlreadyRegisteredException("UUID of town " + town.getName() + " was already registered!");
-			}
-			
+			if (townUUIDMap.containsKey(town.getUUID()))
+				return;
+
 			townUUIDMap.put(town.getUUID(), town);
 		}
 	}
@@ -744,14 +742,15 @@ public class TownyUniverse {
 		return nationNameMap.size();
 	}
 
+	/**
+	 * Registers a Nation with only a UUID present as data.
+	 * Meant only to be used by Towny in the loading process.
+	 * @param nationUUID UUID to put onto the Nation.
+	 */
+	@Internal
 	public void newNationInternal(@NotNull UUID nationUUID) {
-		String name = getDataSource().getNameOfObject("NATION", nationUUID);
-		if (name == null || name.isEmpty())
-			return;
-		Nation nation = new Nation(name, nationUUID);
-		try {
-			registerNation(nation);
-		} catch (AlreadyRegisteredException ignored) {}
+		Nation nation = new Nation(nationUUID);
+		registerNationUUID(nation);
 	}
 
 	public void newNation(@NotNull String name) throws InvalidNameException, AlreadyRegisteredException {
@@ -767,14 +766,13 @@ public class TownyUniverse {
 	}
 
 	// This is used internally since UUIDs are assigned after nation objects are created.
-	public void registerNationUUID(@NotNull Nation nation) throws AlreadyRegisteredException {
+	public void registerNationUUID(@NotNull Nation nation) {
 		Preconditions.checkNotNull(nation, "Nation cannot be null!");
 
 		if (nation.getUUID() != null) {
 
-			if (nationUUIDMap.containsKey(nation.getUUID())) {
-				throw new AlreadyRegisteredException("UUID of nation " + nation.getName() + " was already registered!");
-			}
+			if (nationUUIDMap.containsKey(nation.getUUID()))
+				return;
 
 			nationUUIDMap.put(nation.getUUID(), nation);
 		}
@@ -845,12 +843,27 @@ public class TownyUniverse {
 	
 	// =========== World Methods ===========
 
+	/**
+	 * Registers a TOwnyWorld with only a UUID present as data.
+	 * Meant only to be used by Towny in the loading process.
+	 * @param worldUUID UUID to put onto the TownyWorld.
+	 */
+	@Internal
 	public void newWorldInternal(@NotNull UUID worldUUID) {
-		String name = getDataSource().getNameOfObject("WORLD", worldUUID);
-		if (name == null || name.isEmpty())
-			return;
-		TownyWorld world = new TownyWorld(name, worldUUID);
-		registerTownyWorld(world);
+		TownyWorld world = new TownyWorld(worldUUID);
+		registerTownyWorldUUID(world);
+	}
+
+	public void registerTownyWorldUUID(TownyWorld world) {
+		Preconditions.checkNotNull(world, "TownyWorld cannot be null!");
+
+		if (world.getUUID() != null) {
+
+			if (worldUUIDMap.containsKey(world.getUUID()))
+				return;
+
+			worldUUIDMap.put(world.getUUID(), world);
+		}
 	}
 
 	public void newWorld(@NotNull World world) {
@@ -864,7 +877,7 @@ public class TownyUniverse {
 
 	public void registerTownyWorld(@NotNull TownyWorld world) {
 		Preconditions.checkNotNull(world, "World cannot be null!");
-		worldUUIDMap.putIfAbsent(world.getUUID(), world);
+		registerTownyWorldUUID(world);
 		worlds.putIfAbsent(world.getName().toLowerCase(Locale.ROOT), world);
 	}
 

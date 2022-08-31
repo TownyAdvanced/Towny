@@ -189,6 +189,9 @@ public class ObjectLoadUtil {
 			return false;
 		} finally {
 			source.saveResident(resident);
+			try {
+				universe.registerResident(resident);
+			} catch (AlreadyRegisteredException ignored) {}
 		}
 	}
 	
@@ -315,6 +318,9 @@ public class ObjectLoadUtil {
 			return false;
 		} finally {
 			source.saveTown(town);
+			try {
+				universe.registerTown(town);
+			} catch (AlreadyRegisteredException ignored) {}
 		}
 		return true;
 	}
@@ -388,6 +394,9 @@ public class ObjectLoadUtil {
 			return false;
 		} finally {
 			source.saveNation(nation);
+			try {
+				universe.registerNation(nation);
+			} catch (AlreadyRegisteredException ignored) {}
 		}
 		return true;
 	}
@@ -440,6 +449,7 @@ public class ObjectLoadUtil {
 			return false;
 		} finally {
 			source.saveWorld(world);
+			universe.registerTownyWorld(world);
 		}
 		return true;
 	}

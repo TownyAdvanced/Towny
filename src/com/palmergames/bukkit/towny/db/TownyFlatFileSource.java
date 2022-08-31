@@ -20,16 +20,10 @@ import com.palmergames.util.FileMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -163,21 +157,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		case TOWNBLOCK -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 		default -> throw new IllegalArgumentException("Unexpected value: " + type);
 		};
-	}
-
-	public String getNameOfObject(String type, UUID uuid) {
-		File file = new File(getFileOfTypeWithUUID(TownyDBFileType.valueOf(type.toUpperCase(Locale.ROOT)), uuid));
-		if (file.exists() && file.isFile()) {
-			try (FileInputStream fis = new FileInputStream(file);
-					InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
-				Properties properties = new Properties();
-				properties.load(isr);
-				return properties.getProperty("name");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
 	}
 
 	private String getTownBlockFilename(TownBlock townBlock) {

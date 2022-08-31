@@ -32,6 +32,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -113,6 +114,17 @@ public class Town extends Government implements TownBlockOwner {
 	public Town(String name, UUID uuid) {
 		this(name);
 		setUUID(uuid);
+	}
+
+	/**
+	 * Only to be used in Loading process.
+	 * <p>
+	 * @param uuid UUID to set on the Town.
+	 */
+	@Internal
+	public Town(@NotNull UUID uuid) {
+		super(null);
+		this.uuid = uuid;
 	}
 
 	@Override

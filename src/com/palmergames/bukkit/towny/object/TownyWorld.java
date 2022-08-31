@@ -19,6 +19,7 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.ApiStatus.Internal;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -87,7 +88,18 @@ public class TownyWorld extends TownyObject {
 		super(name);
 		this.uuid = uuid;
 	}
-	
+
+	/**
+	 * Only to be used in Loading process.
+	 * <p>
+	 * @param uuid UUID to set on the TownyWorld.
+	 */
+	@Internal
+	public TownyWorld(@NotNull UUID uuid) {
+		super(null);
+		this.uuid = uuid;
+	}
+
 	public UUID getUUID() {
 		return uuid;
 	}

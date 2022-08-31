@@ -37,6 +37,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -93,6 +94,17 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	
 	public Resident(String name, UUID uuid) {
 		super(name);
+		this.uuid = uuid;
+	}
+
+	/**
+	 * Only to be used in Loading process.
+	 * <p>
+	 * @param uuid UUID to set on the Resident.
+	 */
+	@Internal
+	public Resident(@NotNull UUID uuid) {
+		super(null);
 		this.uuid = uuid;
 	}
 
