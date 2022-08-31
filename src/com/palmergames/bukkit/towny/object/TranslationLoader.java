@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.util.FileMgmt;
+import org.yaml.snakeyaml.parser.ParserException;
 
 public class TranslationLoader {
 	private final Path langFolderPath;
@@ -125,12 +126,12 @@ public class TranslationLoader {
 		// Load bundled language files
 		for (String lang : getLangFileNamesFromPlugin()) {
 			try (InputStream is = clazz.getResourceAsStream("/lang/" + lang + ".yml")) {
-				if (is == null) {
+				if (is == null)
 					throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR", TownyInitException.TownyError.LOCALIZATION);
-				}
+				
 				Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
 				
-				saveReferenceFile(values.get("version"), lang);
+				saveReferenceFile(values.get("version"), lang, is);
 				
 				lang = lang.replace("-", "_"); // Locale#toString uses underscores instead of dashes
 				if (!newTranslations.containsKey(lang))
@@ -170,7 +171,7 @@ public class TranslationLoader {
 	 * @param currentVersion Object what will be the version number of the lang file. 
 	 * @param lang String locale and file name to be used for the reference file.
 	 */
-	private void saveReferenceFile(@Nullable Object currentVersion, String lang) {
+	private void saveReferenceFile(@Nullable Object currentVersion, String lang, InputStream resource) {
 		if (currentVersion == null)
 			return;
 
@@ -179,13 +180,7 @@ public class TranslationLoader {
 		// Files.copy takes care of the creation of lang.yml AS LONG AS the parent directory exists
 		// Which we take care of right before the languages are looped through.
 		
-		// Get the resource
-		try (InputStream resource = clazz.getResourceAsStream("/lang/" + lang + ".yml")) {
-
-			if (resource == null) {
-				throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR.", TownyInitException.TownyError.LOCALIZATION);
-			}
-
+		try {
 			// Check the existing lang file for the version, and if necessary, replace it.
 			try (InputStream is = Files.newInputStream(langPath)) {
 				Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
@@ -196,13 +191,31 @@ public class TranslationLoader {
 					// Copy resource to location.
 					Files.copy(resource, langPath);
 				}
-			} catch (NoSuchFileException e) {
-				// We haven't got this file in the reference folder yet.
+			} catch (NoSuchFileException | ParserException e) {
+				// We haven't got this file in the reference folder yet, or a parser exception occurred while attempting to check the version.
+				// A parser exception will usually mean someone tried to manually edit a reference file and failed, which isn't really intended.
+				
+				// Be kind to the user and copy their edited file to somewhere else.
+				if (e instanceof ParserException) {
+					plugin.getLogger().warning("A yaml error occurred while trying to read a reference file! (" + langPath.toAbsolutePath() + "), editing reference files is unintended and does not work.");
+					plugin.getLogger().warning("For information on how to correctly edit lang files, please see https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.");
+
+					Path movedPath = langFolderPath.resolve("reference").resolve(lang + "-edited.yml");
+					plugin.getLogger().warning("Attempting to move edited reference file to " + movedPath.toAbsolutePath() + "...");
+					
+					try {
+						Files.move(langPath, movedPath, StandardCopyOption.REPLACE_EXISTING);
+					} catch (Exception e2) {
+						// Exception occurred while moving the lang file away, print it and abandon salvaging it.
+						plugin.getLogger().warning("An exception occurred while attempting to salvage edited reference file " + langPath.toAbsolutePath() + ".");
+						e2.printStackTrace();
+					}
+				}
+				
 				Files.copy(resource, langPath);
 			}
-			resource.close();
 		} catch (IOException e) {
-			throw new TownyInitException("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath + " during a langauge file update.'", TownyInitException.TownyError.LOCALIZATION, e);
+			throw new TownyInitException("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath + " during a language file update.'", TownyInitException.TownyError.LOCALIZATION, e);
 		}
 	}
 
