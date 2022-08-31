@@ -87,7 +87,7 @@ public class ObjectLoadUtil {
 		String line = "";
 		try {
 			line = keys.get("town");
-			if (line != null && !line.isEmpty()) {
+			if (hasData(line)) {
 				Town town = getTownFromDB(line);
 				if (town != null) {
 					group.setTown(town);
@@ -108,6 +108,8 @@ public class ObjectLoadUtil {
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_group_file_at_line", group.getUUID(), line));
 			return false;
+		} finally {
+			source.savePlotGroup(group);
 		}
 	}
 
@@ -124,29 +126,29 @@ public class ObjectLoadUtil {
 			resident.setNPC(getOrDefault(keys, "isNPC", false));
 			// jail
 			line = keys.get("jail");
-			if (line != null && universe.hasJail(UUID.fromString(line)))
+			if (hasData(line) && universe.hasJail(UUID.fromString(line)))
 				resident.setJail(universe.getJail(UUID.fromString(line)));
 			if (resident.isJailed()) {
 				line = keys.get("jailCell");
-				if (line != null)
+				if (hasData(line))
 					resident.setJailCell(Integer.parseInt(line));
 
 				line = keys.get("jailHours");
-				if (line != null)
+				if (hasData(line))
 					resident.setJailHours(Integer.parseInt(line));
 			}
 			line = keys.get("friends");
-			if (line != null)
+			if (hasData(line))
 				resident.loadFriends(getResidentsFromDB(line));
 
 			resident.setPermissions(keys.getOrDefault("protectionStatus", ""));
 
 			line = keys.get("metadata");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				MetadataLoader.getInstance().deserializeMetadata(resident, line.trim());
 
 			line = keys.get("town");
-			if (line != null) {
+			if (hasData(line)) {
 				Town town = getTownFromDB(line);
 				if (town == null)
 					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_resident_tried_load_invalid_town", resident.getName(), line));
@@ -155,27 +157,27 @@ public class ObjectLoadUtil {
 					resident.setTown(town, false);
 
 					line = keys.get("title");
-					if (line != null)
+					if (hasData(line))
 						resident.setTitle(line);
 
 					line = keys.get("surname");
-					if (line != null)
+					if (hasData(line))
 						resident.setSurname(line);
 
 					try {
 						line = keys.get("town-ranks");
-						if (line != null)
+						if (hasData(line))
 							resident.setTownRanks(Arrays.asList(line.split(getSplitter(line))));
 					} catch (Exception e) {}
 	
 					try {
 						line = keys.get("nation-ranks");
-						if (line != null)
+						if (hasData(line))
 							resident.setNationRanks(Arrays.asList(line.split(getSplitter(line))));
 					} catch (Exception e) {}
 	
 					line = keys.get("joinedTownAt");
-					if (line != null) {
+					if (hasData(line)) {
 						resident.setJoinedTownAt(Long.valueOf(line));
 					}
 				}
@@ -256,7 +258,7 @@ public class ObjectLoadUtil {
 			}
 
 			line = keys.get("spawn");
-			if (line != null) {
+			if (hasData(line)) {
 				Location loc = parseSpawnLocationFromDB(line);
 				if (loc != null)
 					town.setSpawn(loc);
@@ -264,7 +266,7 @@ public class ObjectLoadUtil {
 
 			// Load outpost spawns
 			line = keys.get("outpostspawns");
-			if (line != null) {
+			if (hasData(line)) {
 				String[] outposts = line.split(";");
 				for (String spawn : outposts) {
 					Location loc = parseSpawnLocationFromDB(spawn);
@@ -274,37 +276,37 @@ public class ObjectLoadUtil {
 			}
 
 			line = keys.get("metadata");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				MetadataLoader.getInstance().deserializeMetadata(town, line.trim());
 			
 			line = keys.get("nation");
-			if (line != null && !line.isEmpty()) {
+			if (hasData(line)) {
 				Nation nation = getNationFromDB(line);
 				if (nation != null)
 					town.setNation(nation, false);
 			}
 
 			line = keys.get("primaryJail");
-			if (line != null) {
+			if (hasData(line)) {
 				UUID jailUUID = UUID.fromString(line);
 				if (universe.hasJail(jailUUID))
 					town.setPrimaryJail(universe.getJail(jailUUID));
 			}
 
 			line = keys.get("trustedResidents");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				getResidentsFromDB(line).stream().forEach(res -> town.addTrustedResident(res));
 
 			line = keys.get("allies");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				town.loadAllies(TownyAPI.getInstance().getTowns(toUUIDArray(line.split(getSplitter(line)))));
 
 			line = keys.get("enemies");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				town.loadEnemies(TownyAPI.getInstance().getTowns(toUUIDArray(line.split(getSplitter(line)))));
 
 			line = keys.get("outlaws");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				town.loadOutlaws(getResidentsFromDB(line));
 
 		} catch (Exception e) {
@@ -362,22 +364,22 @@ public class ObjectLoadUtil {
 			nation.setTag(keys.getOrDefault("tag", ""));
 
 			line = keys.get("allies");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				nation.loadAllies(getNationsFromDB(line));
 
 			line = keys.get("enemies");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				nation.loadEnemies(getNationsFromDB(line));
 
 			line = keys.get("nationSpawn");
-			if (line != null) {
+			if (hasData(line)) {
 				Location loc = parseSpawnLocationFromDB(line);
 				if (loc != null)
 					nation.setSpawn(loc);
 			}
 
 			line = keys.get("metadata");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				MetadataLoader.getInstance().deserializeMetadata(nation, line.trim());
 
 		} catch (Exception e) {
@@ -430,7 +432,7 @@ public class ObjectLoadUtil {
 			world.setUsingPlotManagementWildBlockRevert(getOrDefault(keys, "usingPlotManagementWildRegenBlocks", TownySettings.isUsingPlotManagementWildBlockRegen()));
 			world.setPlotManagementWildRevertDelay(getOrDefault(keys, "usingPlotManagementWildRegenDelay", TownySettings.getPlotManagementWildRegenDelay()));
 			line = keys.get("metadata");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				MetadataLoader.getInstance().deserializeMetadata(world, line.trim());
 
 		} catch (Exception e) {
@@ -463,7 +465,7 @@ public class ObjectLoadUtil {
 			} catch (AlreadyRegisteredException ignored) {}
 
 			line = keys.get("resident");
-			if (line != null && !line.isEmpty()) {
+			if (hasData(line)) {
 				Resident resident = getResidentFromDB(line);
 				if (resident != null)
 					townBlock.setResident(resident, false);
@@ -471,6 +473,7 @@ public class ObjectLoadUtil {
 					TownyMessaging.sendErrorMsg(String.format(
 					"Error fetching resident '%s' for townblock '%s'!",
 					line.trim(), townBlock.toString()));
+					townBlock.setResident(null);
 				}
 			}
 
@@ -479,26 +482,26 @@ public class ObjectLoadUtil {
 			townBlock.setOutpost(getOrDefault(keys, "outpost", false));
 
 			line = keys.get("price");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				townBlock.setPlotPrice(Float.parseFloat(line.trim()));
 			line = keys.get("permissions");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				townBlock.setPermissions(line.trim().replaceAll("#", ","));
 			line = keys.get("changed");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				townBlock.setChanged(getOrDefault(keys, line, false));
 			line = keys.get("locked");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				townBlock.setLocked(getOrDefault(keys, line, false));
 			line = keys.get("claimedAt");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				townBlock.setClaimedAt(getOrDefault(keys, "claimedAt", 0l));
 			line = keys.get("metadata");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				MetadataLoader.getInstance().deserializeMetadata(townBlock, line.trim());
 
 			line = keys.get("groupID");
-			if (line != null && !line.isEmpty())
+			if (hasData(line))
 				try {
 					PlotGroup group = universe.getGroup(UUID.fromString(line.trim()));
 					if (group != null) {
@@ -511,14 +514,14 @@ public class ObjectLoadUtil {
 				} catch (Exception ignored) {}
 
 			line = keys.get("trustedResidents");
-			if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
+			if (hasData(line) && townBlock.getTrustedResidents().isEmpty()) {
 				townBlock.addTrustedResidents(TownyAPI.getInstance().getResidents(ObjectLoadUtil.toUUIDArray(line.split(getSplitter(line)))));
 				if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.getTrustedResidents().size() > 0)
 					townBlock.getPlotObjectGroup().setTrustedResidents(townBlock.getTrustedResidents());
 			}
 
 			line = keys.get("customPermissionData");
-			if (line != null && !line.isEmpty() && townBlock.getPermissionOverrides().isEmpty()) {
+			if (hasData(line) && townBlock.getPermissionOverrides().isEmpty()) {
 				Map<String, String> map = new Gson().fromJson(line, Map.class);
 
 				for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -557,6 +560,10 @@ public class ObjectLoadUtil {
 
 	private int getOrDefault(HashMap<String, String> keys, String key, int num) {
 		return Integer.parseInt(keys.getOrDefault(key, String.valueOf(num)));
+	}
+
+	private boolean hasData(String line) {
+		return line != null && !line.isEmpty();
 	}
 
 	private List<String> toList(String string) {

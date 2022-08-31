@@ -10,6 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.UUID;
 
+import com.palmergames.bukkit.util.BukkitTools;
+
 public class TownyLegacyFlatFileConverter {
 
 	public static UUID getUUID(File file) {
@@ -51,6 +53,22 @@ public class TownyLegacyFlatFileConverter {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public static void updateWorldFile(File file) {
+		String worldName = file.getName().replace(".txt", "");
+		String uuid = BukkitTools.getWorld(worldName).getUID().toString();
+		if (worldName == null || worldName.isEmpty() || uuid == null || uuid.isEmpty())
+			return;
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+			bw.append("name=" + worldName);
+			bw.newLine();
+			bw.append("uuid=" + uuid);
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

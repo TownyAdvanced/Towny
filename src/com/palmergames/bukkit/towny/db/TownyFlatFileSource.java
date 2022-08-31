@@ -123,6 +123,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				consumer.accept(UUID.fromString(file.getName().replace(type.fileExtension, "")));
 			} catch (IllegalArgumentException ignored) {
 				/* A file which isn't a UUID was found, likely an old Database file. */
+				if (type.equals(TownyDBFileType.WORLD))
+					TownyLegacyFlatFileConverter.updateWorldFile(file);
+
 				UUID uuid = TownyLegacyFlatFileConverter.getUUID(file);
 				if (uuid == null) {
 					plugin.getLogger().warning("No UUID could be found in the " + type.folderName + "\\" + file.getName() 
