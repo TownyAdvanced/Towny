@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -460,4 +461,9 @@ public final class FileMgmt {
 		}
 	}
 
+	public static void writeString(Path path, String string) throws IOException {
+		try (FileOutputStream fos = new FileOutputStream(path.toFile())) {
+			fos.write(string.getBytes(StandardCharsets.UTF_8));
+		}
+	}
 }

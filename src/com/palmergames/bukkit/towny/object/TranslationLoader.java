@@ -1,12 +1,13 @@
 package com.palmergames.bukkit.towny.object;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -20,6 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.compress.utils.FileNameUtils;
@@ -180,11 +182,13 @@ public class TranslationLoader {
 			if (resource == null)
 				return;
 
-			String string = new String(resource.readAllBytes(), StandardCharsets.UTF_8);
+			try (BufferedReader br = new BufferedReader(new InputStreamReader(resource)); Stream<String> lines = Files.lines(langPath)) {
+				String string = br.lines().collect(Collectors.joining("\n"));
 
-			// If the contents of the jar's lang file don't match the saved reference file's contents, replace the contents.
-			if (!string.equals(Files.readString(langPath)))
-				Files.writeString(langPath, string);
+				// If the contents of the jar's lang file don't match the saved reference file's contents, replace the contents.
+				if (!string.equals(lines.collect(Collectors.joining("\n"))))
+					FileMgmt.writeString(langPath, string);
+			}
 		} catch (IOException e) {
 			plugin.getLogger().warning("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath.toAbsolutePath() + " during a language file update.'");
 		}
