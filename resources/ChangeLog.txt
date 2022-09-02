@@ -7735,3 +7735,5 @@ v0.92.0.11:
   - Prevent axolotls from targeting protected mobs, courtesy of Akiranya with PR #6140. (First-Time Contributor!)
   - Add colors class changes from minimessage branch, courtesy of Warriorrrr with PR #6132.
   - Replace Component.texts with alternatives in formatter, courtesy of Warriorrrr with PR #6134.
+  - Fix missing outlaws-cannot-spawn-to-towns feature that used to exist.
+    - Closes #6147.

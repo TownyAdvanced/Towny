@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.ChunkNotificationEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -222,5 +223,19 @@ public class TownyCustomListener implements Listener {
 			event.setCancelled(true);
 			attacker.removeRespawnProtection();
 		}
+	}
+
+	/**
+	 * Used to deny outlawed players spawning into Towns they are enemied in.
+	 * @param event SpawnEvent which ResidentSpawnEvent, TownSpawnEvent, NationSpawnEvent extend.
+	 */
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPlayerSpawnsWithTown(SpawnEvent event) {
+
+		Town town = TownyAPI.getInstance().getTown(event.getTo());
+		if (town == null || !town.hasOutlaw(event.getPlayer().getName()))
+			return;
+		event.setCancelled(true);
+		event.setCancelMessage(Translatable.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", town.getName()).forLocale(event.getPlayer()));
 	}
 }
