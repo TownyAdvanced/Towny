@@ -50,6 +50,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				dataFolderPath + File.separator + "jails" + File.separator + "deleted")) {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_cannot_create_defaults"));
 		}
+		
+		if (TownySettings.getDatabaseVersion().equals("1")) {
+			TownyLegacyFlatFileConverter converter = new TownyLegacyFlatFileConverter(plugin, this);
+			plugin.getLogger().info("** Legacy Database Detected! Attempting UUID update! **");
+			long startTime = System.currentTimeMillis();
+			if (converter.updateLegacyFlatFileDB()) {
+//				TownySettings.setDatabaseVersion("2");
+				long time = System.currentTimeMillis() - startTime;
+				plugin.getLogger().info("** Database converted in " + time + "ms. **");
+				plugin.getLogger().info("** Legacy Database Update Complete! **");
+			} else {
+				plugin.getLogger().warning("** Legacy Database Update Unsuccessful! **");
+			}
+		}
 	}
 
 	public enum elements {
@@ -70,8 +84,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		HIBERNATED_RESIDENT("residents" + File.separator + "hibernated", ".txt"), JAIL("jails", ".txt"),
 		WORLD("worlds", ".txt"), TOWNBLOCK("townblocks", ".data"), PLOTGROUP("plotgroups", ".data");
 
-		private String folderName;
-		private String fileExtension;
+		String folderName;
+		String fileExtension;
 
 		TownyDBFileType(String folderName, String fileExtension) {
 			this.folderName = folderName;
@@ -81,6 +95,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		private String getSingular() {
 			// Hibernated Residents are never loaded so this method is never called on them.
 			return folderName.substring(folderName.length() - 1);
+		}
+
+		public String getFolderName() {
+			return folderName;
 		}
 
 		public String getSaveLocation(String fileName) {
@@ -110,32 +128,33 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (files.length != 0)
 			TownyMessaging.sendDebugMsg("Loading " + files.length + " entries from the " + type.folderName + " folder...");
 
-		int convertedFiles = 0;
+//		int convertedFiles = 0;
 		for (File file : files)
 			try {
 				// Send our UUID to the consumer.
 				consumer.accept(UUID.fromString(file.getName().replace(type.fileExtension, "")));
 			} catch (IllegalArgumentException ignored) {
-				/* A file which isn't a UUID was found, likely an old Database file. */
-				if (type.equals(TownyDBFileType.WORLD))
-					TownyLegacyFlatFileConverter.updateWorldFile(file);
+				plugin.getLogger().warning("The file: " + file.getName() + " in the " + type.folderName + " folder could not be read!");
 
-				UUID uuid = TownyLegacyFlatFileConverter.getUUID(file);
-				if (uuid == null) {
-					plugin.getLogger().warning("No UUID could be found in the " + type.folderName + "\\" + file.getName() 
-						+ " file! This file will not be loaded into the TownyUniverse!");
-					continue;
-				}
-				convertedFiles++;
-				// Rename and delete the legacy file.
-				renameLegacyFile(file, type, uuid);
-				// Send our recovered UUID to the consumer.
-				consumer.accept(uuid);
-
+				//				/* A file which isn't a UUID was found, likely an old Database file. */
+//				if (type.equals(TownyDBFileType.WORLD))
+//					TownyLegacyFlatFileConverter.updateWorldFile(file);
+//
+//				UUID uuid = TownyLegacyFlatFileConverter.getUUID(file);
+//				if (uuid == null) {
+//					plugin.getLogger().warning("No UUID could be found in the " + type.folderName + "\\" + file.getName() 
+//						+ " file! This file will not be loaded into the TownyUniverse!");
+//					continue;
+//				}
+//				convertedFiles++;
+//				// Rename and delete the legacy file.
+//				renameLegacyFile(file, type, uuid);
+//				// Send our recovered UUID to the consumer.
+//				TownyLegacyFlatFileConverter.registerObject(type, file.getName().replace(type.fileExtension, ""), uuid);
 			}
-
-		if (convertedFiles > 0)
-			plugin.getLogger().info("Towny converted " + convertedFiles + " files from legacy to UUID format in the " + type.folderName + " folder.");
+//
+//		if (convertedFiles > 0)
+//			plugin.getLogger().info("Towny converted " + convertedFiles + " files from legacy to UUID format in the " + type.folderName + " folder.");
 		return true;
 	}
 
@@ -485,7 +504,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	// Private FlatFile method for deleting legacy database objects keyed by names.
-	private void deleteFileByTypeAndName(TownyDBFileType type, String name) {
+	void deleteFileByTypeAndName(TownyDBFileType type, String name) {
 		File file = new File(getFileOfTypeWithName(type, name));
 		queryQueue.add(new DeleteFileTask(file, false));
 	}
@@ -553,21 +572,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 * Legacy DB Methods
 	 */
 
-	private void renameLegacyFile(File file, TownyDBFileType type, UUID uuid) {
-		File newFile = new File(dataFolderPath + File.separator + type.folderName + File.separator + uuid.toString() + type.fileExtension);
-		boolean delete = false;
-		String fileName = file.getName().replace(type.fileExtension, "");
-		if (newFile.exists()) {
-			plugin.getLogger().warning(type.folderName + "\\" +  file.getName() + " could not be saved in UUID format because a file with the UUID " + uuid.toString() + " already exists! The non-UUID formatted file will be removed.");
-			delete = true;
-		} else {
-			delete = file.renameTo(newFile);
-			TownyLegacyFlatFileConverter.applyName(newFile, fileName);
-		}
-		if (delete)
-			deleteFileByTypeAndName(type, fileName);
-	}
-	
 	private void renameLegacyFolder(File folder, TownyDBFileType type, UUID uuid) {
 		File newFile = new File(dataFolderPath + File.separator + type.folderName + File.separator + uuid.toString());
 		boolean delete = false;
