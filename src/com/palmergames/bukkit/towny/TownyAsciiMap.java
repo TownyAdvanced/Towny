@@ -249,27 +249,25 @@ public class TownyAsciiMap {
 
 		// Output
 		TownyMessaging.sendMessage(player, ChatTools.formatTitle(translator.of("towny_map_header") + Colors.White + "(" + pos + ")"));
-		Component map = Component.empty();
+		Component[] map = new Component[lineHeight];
 		Component[] help = generateHelp(player);
 		
 		int lineCount = 0;
 		// Variables have been rotated to fit N/S/E/W properly
 		for (int my = 0; my < lineHeight; my++) {
-			if (lineCount != 0)
-				map = map.append(Component.newline());
-
-			map = map.append(compass[lineCount < compass.length ? lineCount : 0]);
+			map[lineCount] = Component.empty().append(compass[lineCount < compass.length ? lineCount : 0]);
 
 			for (int mx = lineWidth - 1; mx >= 0; mx--)
-				map = map.append(townyMap[mx][my]);
+				map[lineCount] = map[lineCount].append(townyMap[mx][my]);
 
 			if (lineCount < help.length)
-				map = map.append(help[lineCount]);
+				map[lineCount] = map[lineCount].append(help[lineCount]);
 
 			lineCount++;
 		}
 		
-		Towny.getAdventure().player(player).sendMessage(map);
+		for (Component component : map)
+			Towny.getAdventure().player(player).sendMessage(component);
 
 		TownBlock townblock = TownyAPI.getInstance().getTownBlock(plugin.getCache(player).getLastLocation());
 		TownyMessaging.sendMsg(player, translator.of("status_towny_map_town_line", 
