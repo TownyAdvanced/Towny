@@ -7,8 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
-import net.md_5.bungee.api.ChatColor;
-
 /**
  * @author LlmDl
  */
@@ -80,7 +78,7 @@ public class BookFactory {
 				// We have an actual section with some content
 				else {
 					// Iterate through all the words of the section
-					String[] words = ChatColor.stripColor(section).split(" ");
+					String[] words = Colors.strip(section).split(" ");
 					String line = "";
 					for (int index = 0; index < words.length; index++) {
 						String word = words[index];
