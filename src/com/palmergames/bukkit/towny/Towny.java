@@ -60,6 +60,7 @@ import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bstats.bukkit.Metrics;
@@ -76,6 +77,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,6 +87,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -567,7 +570,10 @@ public class Towny extends JavaPlugin {
 		 * Output discovered plugins and warnings.
 		 */
 		plugin.getLogger().info("Plugins found: ");
-		plugin.getLogger().info(permissions);
+		
+		for (String string : permissions.split("\n"))
+			plugin.getLogger().info(string);
+		
 		if (!economy.isEmpty())
 			plugin.getLogger().info(economy);
 		if (!addons.isEmpty())
@@ -602,19 +608,23 @@ public class Towny extends JavaPlugin {
 			// Try Vault
 			test = getServer().getPluginManager().getPlugin("Vault");
 			if (test != null) {
-				net.milkbowl.vault.chat.Chat chat = getServer().getServicesManager().load(net.milkbowl.vault.chat.Chat.class);
-				if (chat == null) {
+				RegisteredServiceProvider<Chat> chatProvider = findChatImplementation();
+				RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(Permission.class);
+
+				if (chatProvider == null) {
 					// No Chat implementation
 					test = null;
 					// Fall back to BukkitPermissions below
 				} else {
-					TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(this, chat));
-					RegisteredServiceProvider<Permission> vaultPermProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-					if (vaultPermProvider != null) {
-						output += vaultPermProvider.getPlugin().getName() + " " + vaultPermProvider.getPlugin().getDescription().getVersion() + " via Vault";
+					TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(this, chatProvider.getProvider()));
+					
+					if (permissionProvider != null) {
+						output += permissionProvider.getPlugin().getName() + " v" + permissionProvider.getPlugin().getDescription().getVersion() + " via Vault";
 					} else {
-						output += String.format("%s v%s", "Vault", test.getDescription().getVersion());
+						output += String.format("Vault v%s", test.getDescription().getVersion());
 					}
+					
+					output += String.format("\n  Chat: %s v%s via Vault", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getDescription().getVersion());
 				}
 			}
 
@@ -624,6 +634,39 @@ public class Towny extends JavaPlugin {
 			}
 		}
 		return output;		
+	}
+	
+	@Nullable
+	private RegisteredServiceProvider<Chat> findChatImplementation() {
+		Iterator<RegisteredServiceProvider<Chat>> iterator = Bukkit.getServicesManager().getRegistrations(Chat.class).iterator();
+		
+		while (iterator.hasNext()) {
+			RegisteredServiceProvider<Chat> chatProvider = iterator.next();
+			
+			if (chatProvider == null)
+				continue;
+			
+			try {
+				// If the 'perms' field in the chat implementation is null, log some warning messages.
+				// The perms field being null causes issues with plot claiming, and is caused by a faulty chat implementation.
+				Field field = Chat.class.getDeclaredField("perms");
+				field.setAccessible(true);
+				
+				if (field.get(chatProvider.getProvider()) == null) {
+					getLogger().warning(String.format("WARNING: Plugin %s v%s has an improper Chat implementation, please inform the authors about the following:", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getDescription().getVersion()));
+					getLogger().warning(String.format("Class '%s' has a null Permission field, which is not supported.", chatProvider.getProvider().getClass().getName()));
+					
+					if (!iterator.hasNext())
+						return chatProvider;
+					else 
+						continue;
+				}
+			} catch (Exception ignored) {}
+			
+			return chatProvider;
+		}
+		
+		return null;
 	}
 	
 	private void cycleTimers() {
