@@ -114,7 +114,6 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -1326,18 +1325,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				Collections.shuffle(towns);
 				
 				for (Town town : towns) {
-					TextComponent townName = Component.text(Colors.LightBlue + StringMgmt.remUnderscore(town.getName()))
+					TextComponent townName = Component.text(StringMgmt.remUnderscore(town.getName()), NamedTextColor.AQUA)
 							.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
-					townName = townName.append(Component.text(Colors.Gray + " - " + Colors.LightBlue + "(" + town.getResidents().size() + ")"));
+					townName = townName.append(Component.text(" - ", NamedTextColor.DARK_GRAY).append(Component.text("(" + town.getResidents().size() + ")", NamedTextColor.AQUA)));
 
 					if (town.isOpen())
-						townName = townName.append(Component.text(" " + Colors.LightBlue + Translatable.of("status_title_open").forLocale(sender)));
+						townName = townName.append(Component.space()).append(Translatable.of("status_title_open").locale(sender).component());
 					
-					String spawnCost = "Free";
+					Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
 					if (TownyEconomyHandler.isActive())
-						spawnCost = ChatColor.RESET + Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost())).forLocale(sender);
+						spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 
-					townName = townName.hoverEvent(HoverEvent.showText(Component.text(Translatable.of("msg_click_spawn", town).forLocale(sender) + "\n" + spawnCost).color(NamedTextColor.GOLD)));
+					townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).locale(sender).component()));
 					output.add(townName);
 				}
 				TownyMessaging.sendTownList(sender, output, finalType, pageNumber, totalNumber);
