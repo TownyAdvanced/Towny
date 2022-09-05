@@ -7737,3 +7737,12 @@ v0.92.0.11:
   - Replace Component.texts with alternatives in formatter, courtesy of Warriorrrr with PR #6134.
   - Fix missing outlaws-cannot-spawn-to-towns feature that used to exist.
     - Closes #6147.
+  - Fix /towny map big kicking players in rare cases, courtesy of Warriorrrr with PR #6151.
+  - Remove lang file versions, courtesy of Warriorrrr with PR #6146.
+  - Remove instances of legacy making it into components, courtesy of Warriorrrr with PR #6141.
+  - Replace ChatColor.stripColor uses with Colors.strip, courtesy of Warriorrrr with PR #6143.
+  - Add a catch to Account's constructor, courtesy of Warriorrrr with PR #6144.
+  - Adoption of MiniMessage throughout the remaining codespaces, courtesy of Warriorrrr with PR #6142!
+    - As of this moment, all messaging is using minimessage. All language strings can accept MiniMessage tags and,
+    - Hex is available everywhere in just about any tag style you can imagine.
+    - If you have previously been using hex gradients you might have to update your tags to the MiniMessage way of things. 
