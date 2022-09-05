@@ -181,6 +181,9 @@ public class TranslationLoader {
 		try (InputStream resource = clazz.getResourceAsStream("/lang/" + lang + ".yml")) {
 			if (resource == null)
 				return;
+			
+			if (!Files.exists(langPath))
+				Files.createFile(langPath);
 
 			try (BufferedReader br = new BufferedReader(new InputStreamReader(resource)); Stream<String> lines = Files.lines(langPath)) {
 				String string = br.lines().collect(Collectors.joining("\n"));
@@ -190,7 +193,8 @@ public class TranslationLoader {
 					FileMgmt.writeString(langPath, string);
 			}
 		} catch (IOException e) {
-			plugin.getLogger().warning("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath.toAbsolutePath() + " during a language file update.'");
+			plugin.getLogger().warning("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath.toAbsolutePath() + "' during a reference language file update.");
+			e.printStackTrace();
 		}
 	}
 
