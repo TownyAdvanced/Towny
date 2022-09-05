@@ -7745,4 +7745,6 @@ v0.92.0.11:
   - Adoption of MiniMessage throughout the remaining codespaces, courtesy of Warriorrrr with PR #6142!
     - As of this moment, all messaging is using minimessage. All language strings can accept MiniMessage tags and,
     - Hex is available everywhere in just about any tag style you can imagine.
-    - If you have previously been using hex gradients you might have to update your tags to the MiniMessage way of things. 
+    - If you have previously been using hex gradients you might have to update your tags to the MiniMessage way of things.
+0.98.3.8:
+  - Fallback to another Vault chat implementation if an invalid one is detected, courtesy of Warriorrrr with PR #6155.
