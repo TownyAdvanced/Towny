@@ -1,6 +1,5 @@
 ---
 name: Towny
-version: 0.155
 language: es-cl
 author: GNosii
 website: 'http://townyadvanced.github.io/'
@@ -1549,3 +1548,5 @@ msg_comptype_upkeep: 'Mantención'
 msg_town_upkeep_setting_set_to: 'Se estableció la mantención de %s a %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: 'Tu ciudad llegó al límite de %d terrenos del tipo %s.'
+#Added in 0.156
+msg_spawn_cost_free: 'Free'
