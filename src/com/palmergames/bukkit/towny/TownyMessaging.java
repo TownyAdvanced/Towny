@@ -189,13 +189,11 @@ public class TownyMessaging {
 			return;
 		
 		if (sender instanceof Player player) {
-			player.sendMessage(line);
+			Towny.getAdventure().player(player).sendMessage(TownyComponents.miniMessage(line));
 		} else if (sender instanceof CommandSender commandSender) {
 			commandSender.sendMessage(Colors.strip(line));
 		} else if (sender instanceof Resident resident) {
-			Player p = TownyAPI.getInstance().getPlayer(resident);
-			if (p != null)
-				p.sendMessage(line);
+			resident.sendMessage(TownyComponents.miniMessage(line));
 		}
 	}
 
@@ -876,7 +874,7 @@ public class TownyMessaging {
 	 * @param message {@link String} message which will be made into a {@link TextComponent} and shown in the ActioBar.
 	 */
 	public static void sendActionBarMessageToPlayer(Player player, String message) {
-		sendActionBarMessageToPlayer(player, TownyComponents.legacy(message));
+		sendActionBarMessageToPlayer(player, TownyComponents.miniMessage(message));
 	}
 	
 	/**
@@ -893,7 +891,7 @@ public class TownyMessaging {
 	 */
 	
 	public static void sendBossBarMessageToPlayer(Player player, String message, float progress, Color color, Overlay overlay) {
-		sendBossBarMessageToPlayer(player, TownyComponents.legacy(message), progress, color, overlay);
+		sendBossBarMessageToPlayer(player, TownyComponents.miniMessage(message), progress, color, overlay);
 	}
 	
 	public static void sendBossBarMessageToPlayer(Player player, Component component, float progress, Color color, Overlay overlay) {

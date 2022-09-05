@@ -33,7 +33,7 @@ public class StatusScreen {
 	}
 
 	public void addComponentOf(String name, String text) {
-		components.put(name, TownyComponents.legacy(text));
+		components.put(name, TownyComponents.miniMessage(text));
 	}
 
 	public void addComponentOf(String name, Component component) {
@@ -41,15 +41,15 @@ public class StatusScreen {
 	}
 	
 	public void addComponentOf(String name, String text, ClickEvent click) {
-		components.put(name, TownyComponents.legacy(text).clickEvent(click));
+		components.put(name, TownyComponents.miniMessage(text).clickEvent(click));
 	}
 	
 	public void addComponentOf(String name, String text, HoverEvent<?> hover) {
-		components.put(name, TownyComponents.legacy(text).hoverEvent(hover));
+		components.put(name, TownyComponents.miniMessage(text).hoverEvent(hover));
 	}
 	
 	public void addComponentOf(String name, String text, HoverEvent<?> hover, ClickEvent click) {
-		components.put(name, TownyComponents.legacy(text).hoverEvent(hover).clickEvent(click));
+		components.put(name, TownyComponents.miniMessage(text).hoverEvent(hover).clickEvent(click));
 	}
 
 	public void removeStatusComponent(String name) {

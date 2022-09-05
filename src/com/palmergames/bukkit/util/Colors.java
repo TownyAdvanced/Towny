@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.util;
 
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,7 +65,7 @@ public class Colors {
 	public static final String BLACK = "<black>";
 
 	public static String strip(String line) {
-		return ChatColor.stripColor(line); // TODO: Strip minimessage tags once dependency is added
+		return TownyComponents.stripTags(ChatColor.stripColor(line));
 	}
 
 	public static String translateColorCodes(String str) {
@@ -82,7 +83,7 @@ public class Colors {
 		return input;
 	}
 
-	private static final Function<String, String> modernHexFunction = (hex) -> "<" + hex + ">";
+	private static final Function<String, String> modernHexFunction = (hex) -> "<#" + hex + ">";
 
 	/**
 	 * Converts non-minimessage hex formats to minimessage.

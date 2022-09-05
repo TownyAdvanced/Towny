@@ -158,13 +158,13 @@ public class TownyFormatter {
 				shortenOverLengthList(residents, 35, translator);
 			
 			screen.addComponentOf("town", townLine,
-				HoverEvent.showText(TownyComponents.legacy(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingTown(), town.getFormattedName())))
+				HoverEvent.showText(TownyComponents.miniMessage(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingTown(), town.getFormattedName())))
 					.append(Component.newline())
-					.append(TownyComponents.legacy(getResidentJoinedTownDate(resident, translator)))
+					.append(TownyComponents.miniMessage(getResidentJoinedTownDate(resident, translator)))
 					.append(Component.newline())
-					.append(TownyComponents.legacy(colourKeyValue(translator.of("rank_list_mayor"), town.getMayor().getFormattedName())))
+					.append(TownyComponents.miniMessage(colourKeyValue(translator.of("rank_list_mayor"), town.getMayor().getFormattedName())))
 					.append(Component.newline())
-					.append(TownyComponents.legacy(colourKeyValue(translator.of("res_list"), StringMgmt.join(residents, ", "))))
+					.append(TownyComponents.miniMessage(colourKeyValue(translator.of("res_list"), StringMgmt.join(residents, ", "))))
 					.append(Component.newline())
 					.append(translator.component("status_hover_click_for_more"))),
 				ClickEvent.runCommand("/towny:town " + town.getName())
@@ -180,11 +180,11 @@ public class TownyFormatter {
 				shortenOverLengthList(towns, 11, translator);
 
 			screen.addComponentOf("nation", colourKeyValue(translator.of("status_town_nation"), nation.getName() + formatPopulationBrackets(nation.getTowns().size())), 
-					HoverEvent.showText(TownyComponents.legacy(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), nation.getFormattedName())))
+					HoverEvent.showText(TownyComponents.miniMessage(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), nation.getFormattedName())))
 							.append(Component.newline())
-							.append(TownyComponents.legacy(colourKeyValue(translator.of("status_nation_king"), nation.getCapital().getMayor().getFormattedName())))
+							.append(TownyComponents.miniMessage(colourKeyValue(translator.of("status_nation_king"), nation.getCapital().getMayor().getFormattedName())))
 							.append(Component.newline())
-							.append(TownyComponents.legacy(colourKeyValue(translator.of("town_plu"), StringMgmt.join(towns, ", "))))
+							.append(TownyComponents.miniMessage(colourKeyValue(translator.of("town_plu"), StringMgmt.join(towns, ", "))))
 							.append(Component.newline())
 							.append(translator.component("status_hover_click_for_more"))),
 					ClickEvent.runCommand("/towny:nation " + nation.getName())
@@ -292,7 +292,7 @@ public class TownyFormatter {
 			screen.addComponentOf("townblocks", colourKeyValue(translator.of("status_town_size"), translator.of("status_fractions", town.getTownBlocks().size(), town.getMaxTownBlocksAsAString())));
 
 		if (town.isPublic()) {
-			Component homeComponent = TownyComponents.legacy(!town.isPublic() ? "" : (translator.of("status_home_element", (TownySettings.getTownDisplaysXYZ() ?
+			Component homeComponent = TownyComponents.miniMessage(!town.isPublic() ? "" : (translator.of("status_home_element", (TownySettings.getTownDisplaysXYZ() ?
 				(town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawnOrNull()) : translator.of("status_no_town")) :
 				(town.hasHomeBlock() ? town.getHomeBlockOrNull().getCoord().toString() : translator.of("status_no_town"))
 			))));
@@ -357,17 +357,17 @@ public class TownyFormatter {
 				if (towns.size() > 10)
 					shortenOverLengthList(towns, 11, translator);
 
-				Component hover = TownyComponents.legacy(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), town.getNationOrNull().getFormattedName())))
+				Component hover = TownyComponents.miniMessage(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), town.getNationOrNull().getFormattedName())))
 						.append(Component.newline())
-						.append(TownyComponents.legacy(getTownJoinedNationDate(town, translator)))
+						.append(TownyComponents.miniMessage(getTownJoinedNationDate(town, translator)))
 						.append(Component.newline())
-						.append(TownyComponents.legacy(colourKeyValue(translator.of("status_nation_king"), town.getNationOrNull().getCapital().getMayor().getFormattedName())))
+						.append(TownyComponents.miniMessage(colourKeyValue(translator.of("status_nation_king"), town.getNationOrNull().getCapital().getMayor().getFormattedName())))
 						.append(Component.newline())
-						.append(TownyComponents.legacy(colourKeyValue(translator.of("town_plu"), StringMgmt.join(towns, ", "))));
+						.append(TownyComponents.miniMessage(colourKeyValue(translator.of("town_plu"), StringMgmt.join(towns, ", "))));
 				
 				int nationZoneSize = town.getNationZoneSize();
 				if (nationZoneSize > 0)
-					hover = hover.append(Component.newline().append(TownyComponents.legacy(colourKeyValue(translator.of("status_nation_zone_size"), town.isNationZoneEnabled() ? String.valueOf(nationZoneSize) : translator.of("status_off_bad")))));
+					hover = hover.append(Component.newline().append(TownyComponents.miniMessage(colourKeyValue(translator.of("status_nation_zone_size"), town.isNationZoneEnabled() ? String.valueOf(nationZoneSize) : translator.of("status_off_bad")))));
 				
 				hover = hover.append(Component.newline())
 						.append(translator.component("status_hover_click_for_more"));
@@ -383,7 +383,7 @@ public class TownyFormatter {
 			List<String> ranklist = getRanks(town, translator);
 			if (ranklist.size() > 0)
 				screen.addComponentOf("townranks", colourHoverKey(translator.of("status_rank_list")),
-						HoverEvent.showText(TownyComponents.legacy(String.join("\n", ranklist))
+						HoverEvent.showText(TownyComponents.miniMessage(String.join("\n", ranklist))
 							.append(Component.newline())
 							.append(translator.component("status_hover_click_for_more"))),
 						ClickEvent.runCommand("/towny:town ranklist " + town.getName()));
@@ -394,7 +394,7 @@ public class TownyFormatter {
 				shortenOverLengthList(residents, 35, translator);
 			
 			screen.addComponentOf("residents", colourHoverKey(translator.of("res_list")),
-				HoverEvent.showText(TownyComponents.legacy(getFormattedStrings(translator.of("res_list"), residents, town.getResidents().size()))
+				HoverEvent.showText(TownyComponents.miniMessage(getFormattedStrings(translator.of("res_list"), residents, town.getResidents().size()))
 					.append(Component.newline())
 					.append(translator.component("status_hover_click_for_more"))),
 				ClickEvent.runCommand("/towny:town reslist "+ town.getName()));
@@ -404,7 +404,7 @@ public class TownyFormatter {
 			Map<TownBlockType, Integer> cache = town.getTownBlockTypeCache().getCache(TownBlockTypeCache.CacheType.ALL);
 			for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
 				int value = cache.getOrDefault(type, 0);
-				text = text.append(TownyComponents.legacy(colourKeyValue(translator.of("status_plot_hover", type.getFormattedName()), String.valueOf(value))).append(Component.newline()));
+				text = text.append(TownyComponents.miniMessage(colourKeyValue(translator.of("status_plot_hover", type.getFormattedName()), String.valueOf(value))).append(Component.newline()));
 			}
 			text = text.append(translator.component("status_hover_click_for_more"));
 			screen.addComponentOf("plots", colourHoverKey(translator.of("status_plot_string")), 
@@ -481,11 +481,11 @@ public class TownyFormatter {
 				shortenOverLengthList(residents, 35, translator);
 			
 			screen.addComponentOf("capital", colourKeyValue(translator.of("status_capital"), nation.getCapital().getFormattedName()),
-				HoverEvent.showText(TownyComponents.legacy(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingTown(), capital.getFormattedName())))
+				HoverEvent.showText(TownyComponents.miniMessage(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingTown(), capital.getFormattedName())))
 					.append(Component.newline())
-					.append(TownyComponents.legacy(colourKeyValue(translator.of("rank_list_mayor"), king.getFormattedName())))
+					.append(TownyComponents.miniMessage(colourKeyValue(translator.of("rank_list_mayor"), king.getFormattedName())))
 					.append(Component.newline())
-					.append(TownyComponents.legacy(colourKeyValue(translator.of("res_list"), StringMgmt.join(residents, ", "))))
+					.append(TownyComponents.miniMessage(colourKeyValue(translator.of("res_list"), StringMgmt.join(residents, ", "))))
 					.append(Component.newline())
 					.append(translator.component("status_hover_click_for_more"))),
 				ClickEvent.runCommand("/towny:town " + capital.getName())
@@ -501,7 +501,7 @@ public class TownyFormatter {
 		List<String> ranklist = getRanks(nation, translator);
 		if (ranklist.size() > 0)
 			screen.addComponentOf("nationranks", colourHoverKey(translator.of("status_rank_list")),
-				HoverEvent.showText(TownyComponents.legacy(String.join("\n", ranklist))
+				HoverEvent.showText(TownyComponents.miniMessage(String.join("\n", ranklist))
 						.append(Component.newline())
 						.append(translator.component("status_hover_click_for_more"))),
 				ClickEvent.runCommand("/towny:nation ranklist " + nation.getName()));
@@ -512,7 +512,7 @@ public class TownyFormatter {
 			shortenOverLengthList(towns, 11, translator);
 		
 		screen.addComponentOf("towns", colourHoverKey(translator.of("status_nation_towns")),
-			HoverEvent.showText(TownyComponents.legacy(getFormattedStrings(translator.of("status_nation_towns"), towns, nation.getTowns().size()))
+			HoverEvent.showText(TownyComponents.miniMessage(getFormattedStrings(translator.of("status_nation_towns"), towns, nation.getTowns().size()))
 					.append(Component.newline())
 					.append(translator.component("status_hover_click_for_more"))),
 			ClickEvent.runCommand("/towny:nation townlist " + nation.getName()));
@@ -524,7 +524,7 @@ public class TownyFormatter {
 		
 		if (allies.size() > 0)
 			screen.addComponentOf("allies", colourHoverKey(translator.of("status_nation_allies")),
-				HoverEvent.showText(TownyComponents.legacy(getFormattedStrings(translator.of("status_nation_allies"), allies, nation.getAllies().size()))
+				HoverEvent.showText(TownyComponents.miniMessage(getFormattedStrings(translator.of("status_nation_allies"), allies, nation.getAllies().size()))
 						.append(Component.newline())
 						.append(translator.component("status_hover_click_for_more"))),
 				ClickEvent.runCommand("/towny:nation allylist " + nation.getName()));
@@ -536,7 +536,7 @@ public class TownyFormatter {
 		
 		if (enemies.size() > 0)
 			screen.addComponentOf("enemies", colourHoverKey(translator.of("status_nation_enemies")),
-				HoverEvent.showText(TownyComponents.legacy(getFormattedStrings(translator.of("status_nation_enemies"), enemies, nation.getEnemies().size()))
+				HoverEvent.showText(TownyComponents.miniMessage(getFormattedStrings(translator.of("status_nation_enemies"), enemies, nation.getEnemies().size()))
 						.append(Component.newline())
 						.append(translator.component("status_hover_click_for_more"))),
 				ClickEvent.runCommand("/towny:nation enemylist " + nation.getName()));

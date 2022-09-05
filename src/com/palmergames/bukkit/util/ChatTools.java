@@ -83,7 +83,7 @@ public class ChatTools {
 		if (!FontUtil.isValidMinecraftFont(title))
 			return legacyFormatTitle(title);
 		
-		final float width = FontUtil.measureWidth(TownyComponents.legacy(title));
+		final float width = FontUtil.measureWidth(TownyComponents.miniMessage(title));
 		
 		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
 		float remainder = DEFAULT_CHAT_WIDTH - (WIDGET_WIDTH * 2) - width - 2;
@@ -112,7 +112,7 @@ public class ChatTools {
 		if (!FontUtil.isValidMinecraftFont(subtitle))
 			return legacyFormatSubtitle(subtitle);
 		
-		final float width = FontUtil.measureWidth(TownyComponents.legacy(subtitle));
+		final float width = FontUtil.measureWidth(TownyComponents.miniMessage(subtitle));
 		
 		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
 		float remainder = DEFAULT_CHAT_WIDTH - (SUBWIDGET_WIDTH * 2) - width - 2;
