@@ -607,7 +607,16 @@ public class TownyUniverse {
 	public void registerTown(@NotNull Town town) throws AlreadyRegisteredException {
 		Preconditions.checkNotNull(town, "Town cannot be null!");
 		
-		if (townNameMap.putIfAbsent(town.getName().toLowerCase(), town) != null) {
+		String name = null;
+		try {
+			name = town.getName().toLowerCase();
+		} catch (Exception e) {
+			towny.getLogger().warning("Town did not have a name to Register! : " + town.getUUID().toString());
+			return;
+		}
+		
+		
+		if (townNameMap.putIfAbsent(name, town) != null) {
 			throw new AlreadyRegisteredException(String.format("The town with name '%s' is already registered!", town.getName()));
 		}
 		

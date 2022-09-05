@@ -328,6 +328,7 @@ public class ObjectLoadUtil {
 	public boolean loadNation(Nation nation, HashMap<String, String> keys) {
 		String line = "";
 		try {
+			nation.setName(keys.getOrDefault("name", generateMissingName()));
 			line = keys.get("capital");
 			String cantLoadCapital = Translation.of("flatfile_err_nation_could_not_load_capital_disband", nation.getName());
 			if (line != null) {
@@ -358,7 +359,6 @@ public class ObjectLoadUtil {
 				}
 			}
 
-			nation.setName(keys.getOrDefault("name", generateMissingName()));
 			nation.setTaxes(getOrDefault(keys, "taxes", 0.0));
 			nation.setSpawnCost(getOrDefault(keys, "spawnCost", TownySettings.getSpawnTravelCost()));
 			nation.setNeutral(getOrDefault(keys, "neutral", false));
@@ -456,10 +456,11 @@ public class ObjectLoadUtil {
 	
 	public boolean loadTownBlock(TownBlock townBlock, HashMap<String, String> keys) {
 		String line = "";
+		boolean save = false;
 		try {
 			Town town = getTownFromDB(keys.get("town"));
 			if (town == null) {
-				TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line
+				TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + keys.get("town")
 				+ ", deleting " + townBlock.getWorld().getName() + "," + townBlock.getX() + ","
 				+ townBlock.getZ());
 				universe.removeTownBlock(townBlock);
@@ -484,6 +485,7 @@ public class ObjectLoadUtil {
 					"Error fetching resident '%s' for townblock '%s'!",
 					line.trim(), townBlock.toString()));
 					townBlock.setResident(null);
+					save = true;
 				}
 			}
 
@@ -547,7 +549,8 @@ public class ObjectLoadUtil {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_townblock_file_at_line", townBlock.toString(), line));
 			return false;
 		} finally {
-			source.saveTownBlock(townBlock);
+			if (save)
+				source.saveTownBlock(townBlock);
 		}
 		return true;
 	}

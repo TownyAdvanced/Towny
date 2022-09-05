@@ -15,7 +15,6 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -56,7 +55,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			plugin.getLogger().info("** Legacy Database Detected! Attempting UUID update! **");
 			long startTime = System.currentTimeMillis();
 			if (converter.updateLegacyFlatFileDB()) {
-//				TownySettings.setDatabaseVersion("2");
+				TownySettings.setDatabaseVersion("2");
 				long time = System.currentTimeMillis() - startTime;
 				plugin.getLogger().info("** Database converted in " + time + "ms. **");
 				plugin.getLogger().info("** Legacy Database Update Complete! **");
@@ -239,14 +238,16 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			for (File worldfolder : worldFolders) {
 				String worldUUIDAsString = worldfolder.getName();
-				UUID worldUUID;
+				UUID worldUUID = null;
 				try {
 					worldUUID = UUID.fromString(worldUUIDAsString);
 				} catch (IllegalArgumentException e) {
-					World world = BukkitTools.getWorld(worldfolder.getName());
-					worldUUID = world.getUID();
-					renameLegacyFolder(worldfolder, TownyDBFileType.TOWNBLOCK, worldUUID);
-					worldUUIDAsString = worldUUID.toString();
+					System.out.println("World folder in TownBlocks folder not readable...");
+					continue;
+//					World world = BukkitTools.getWorld(worldfolder.getName());
+//					worldUUID = world.getUID();
+//					renameLegacyFolder(worldfolder, TownyDBFileType.TOWNBLOCK, worldUUID);
+//					worldUUIDAsString = worldUUID.toString();
 				}
 				TownyWorld world = universe.getWorld(worldUUID);
 				if (world == null) {

@@ -39,7 +39,7 @@ public class TownyLegacyFlatFileConverter {
 	}
 
 	public boolean updateLegacyFlatFileDB() {
-		return updateResidents() && updateTowns() && updateNations() && updateWorlds();// && updateTownBlocks();
+		return updateResidents() && updateTowns() && updateNations() && updateWorlds() && updateTownBlocks();
 	}
 
 	private boolean updateResidents() {
@@ -111,15 +111,39 @@ public class TownyLegacyFlatFileConverter {
 		File newFile = new File(databasePath + File.separator + type.folderName + File.separator + uuid + type.fileExtension);
 		boolean delete = false;
 		String fileName = file.getName().replace(type.fileExtension, "");
+		if (fileName == null) {
+			plugin.getLogger().warning("While converting a file Towny was passed a null fileName!" + " Guily file: " + file.getAbsolutePath());
+			return;
+		}
 		if (newFile.exists()) {
 			plugin.getLogger().warning(type.folderName + "\\" +  file.getName() + " could not be saved in UUID format because a file with the UUID " + uuid.toString() + " already exists! The non-UUID formatted file will be removed.");
 			delete = true;
 		} else {
 			delete = file.renameTo(newFile);
-			applyName(newFile, fileName);
+			if (!type.equals(TownyDBFileType.WORLD))
+				applyName(newFile, fileName);
 		}
 		if (delete)
 			source.deleteFileByTypeAndName(type, fileName);
+	}
+
+	private void updateResidentIn(File file) {
+		if (!hasKey(file, "resident"))
+			return;
+		String residentName = getValue(file, "resident");
+		UUID uuid = null;
+		if (residentNameMap.containsKey(residentName)) {
+			uuid = residentNameMap.get(residentName);
+		} else {
+			uuid = getUUID(getResidentFile(residentName));
+		}
+		if (uuid == null) {
+			logger.warning("The resident named " + residentName + " did not store a UUID!");
+		} else {
+			if (!residentNameMap.containsKey(residentName))
+				residentNameMap.put(residentName, uuid);
+			setKeyValueInFile("resident", residentName, uuid.toString(), file);
+		}
 	}
 
 	private void updateMayorIn(File file) {
@@ -223,17 +247,19 @@ public class TownyLegacyFlatFileConverter {
 		}
 		return null;
 	}
-	
+
 	private static String getValue(File file, String key) {
 		if (file.exists() && file.isFile()) {
-			try (FileInputStream fis = new FileInputStream(file);
-					InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
-				Properties properties = new Properties();
-				properties.load(isr);
-				return properties.getProperty(key);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			try {
+				String search = key + "=";
+				try (Scanner sc = new Scanner(file)) {
+					while (sc.hasNextLine()) {
+						String line = sc.nextLine();
+						if (line.contains(search))
+							return line.replace(search , ""); 
+					}
+				}
+			} catch (FileNotFoundException ignored) {}
 		}
 		return null;
 	}
@@ -245,6 +271,21 @@ public class TownyLegacyFlatFileConverter {
 			try {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
 				bw.append("name=" + name);
+				bw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private static void applyUUID(File file, String name, String uuid) {
+		if (file.exists() && file.isFile()) {
+			try {
+				BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+				if (!hasKey(file, "uuid"))
+					bw.append("uuid=" + uuid + "\n");
+				if (!hasKey(file, "name"))
+					bw.append("name=" + name);
 				bw.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -295,6 +336,8 @@ public class TownyLegacyFlatFileConverter {
 		logger.info("Updating legacy World files...");
 		int convertedFiles = 0;
 		File[] files = getFiles(TownyDBFileType.WORLD);
+		if (files.length != 0)
+			logger.info("Found " + files.length + " files in the worlds folder...");
 		for (File file : files) {
 			String fileName = file.getName().replace(".txt", "");
 			if (alreadyUUIDFile(fileName))
@@ -313,17 +356,39 @@ public class TownyLegacyFlatFileConverter {
 		String uuid = BukkitTools.getWorld(worldName).getUID().toString();
 		if (worldName == null || worldName.isEmpty() || uuid == null || uuid.isEmpty())
 			return;
-		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
-			bw.append("uuid=" + uuid);
-			bw.append("name=" + worldName);
-			bw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		applyUUID(file, worldName, uuid);
 		renameLegacyFile(file, TownyDBFileType.WORLD, uuid);
 
+	}
+
+	private boolean updateTownBlocks() {
+		logger.info("Updating legacy TownBlocks files...");
+		File townblocksFolder = new File(databasePath + File.separator + "townblocks");
+		File[] worldFolders = townblocksFolder.listFiles(File::isDirectory);
+		if (worldFolders.length != 0)
+			logger.info("Found " + worldFolders.length + " folders in the townblocks folder...");
+		for (File worldfolder : worldFolders) {
+			if (alreadyUUIDFile(worldfolder.getName()))
+				continue;
+			UUID uuid = BukkitTools.getWorld(worldfolder.getName()).getUID();
+			File newFolder = new File(databasePath + File.separator + "townblocks" + File.separator + uuid.toString());
+			logger.info("Renaming TownBlock world folder " + worldfolder.getName() + "...");
+			worldfolder.renameTo(newFolder);
+			worldfolder.delete();
+
+//			File[] townBlockFiles = newFolder.listFiles(file -> file.getName().endsWith(".data"));
+//			if (townBlockFiles.length != 0)
+//				logger.info("Found " + townBlockFiles.length + " townblocks files in the " + worldfolder.getName() + " folder...");
+//			int convertedTBs = 0;
+//			for (File townBlockFile : townBlockFiles) {
+//				updateTownIn(townBlockFile);
+//				updateResidentIn(townBlockFile);
+//				convertedTBs++;
+//			}
+//			if (convertedTBs > 0)
+//				plugin.getLogger().info("Towny converted " + convertedTBs + " townblocks from legacy to UUID format in the " + worldfolder.getName() + " folder.");
+		}
+		return true;
 	}
 
 	private File getResidentFile(String mayorName) {
