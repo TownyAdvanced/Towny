@@ -35,18 +35,24 @@ public abstract class Account implements Nameable {
 	
 	public Account(String name) {
 		this.name = name;
-		observers.add(GLOBAL_OBSERVER);
-		this.cachedBalance = new CachedBalance(getHoldingBalance(false));
-	}
-	
-	public Account(String name, World world) {
-		this.name = name;
-		this.world = world;
 		
 		// ALL account transactions will route auditing data through this
 		// central auditor.
 		observers.add(GLOBAL_OBSERVER);
-		this.cachedBalance = new CachedBalance(getHoldingBalance(false));
+		
+		try {
+			this.cachedBalance = new CachedBalance(getHoldingBalance(false));
+		} catch (Exception e) {
+			Towny.getPlugin().getLogger().warning(String.format("An exception occurred when initializing cached balance for an account (name: %s), see the below error for more details.", name));
+			e.printStackTrace();
+			
+			this.cachedBalance = new CachedBalance(0);
+		}
+	}
+	
+	public Account(String name, World world) {
+		this(name);
+		this.world = world;
 	}
 	
 	// Template methods
