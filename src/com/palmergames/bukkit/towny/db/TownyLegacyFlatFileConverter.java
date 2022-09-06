@@ -295,8 +295,11 @@ public class TownyLegacyFlatFileConverter {
 	}
 
 	private void updateTownIn(File file, String townOrCapital) {
+		if (!hasKey(file, townOrCapital))
+			return;
+
 		String townName = getValue(file, townOrCapital);
-		
+
 		UUID uuid = null;
 		if (townNameMap.containsKey(townName)) {
 			uuid = townNameMap.get(townName);
