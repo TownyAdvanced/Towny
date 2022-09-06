@@ -566,7 +566,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	
 	@Nullable
 	public Player getPlayer() {
-		return BukkitTools.getPlayer(getName());
+		return BukkitTools.getPlayerExact(getName());
 	}
 
 	public boolean addTownRank(String rank) {
