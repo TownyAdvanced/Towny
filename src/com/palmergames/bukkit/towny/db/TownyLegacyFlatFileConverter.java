@@ -30,7 +30,25 @@ public class TownyLegacyFlatFileConverter {
 	private HashMap<String, UUID> residentNameMap = new HashMap<String, UUID>(0);
 	private HashMap<String, UUID> townNameMap = new HashMap<String, UUID>(0);
 	private HashMap<String, UUID> nationNameMap = new HashMap<String, UUID>(0);
-	
+
+	/**
+	 * The goal of the {@link TownyLegacyFlatFileConverter} is to pre-edit Towny
+	 * database files to the point that the {@link ObjectLoadUtil} is able to finish
+	 * the job. This is required because of the order that Towny's database objects
+	 * are loaded, leading to unknowns when converting.
+	 * <p>
+	 * This class edits:
+	 * <p>
+	 * - the mentions of mayors, towns and nations in the Resident, Town and Nation files;
+	 * - the names are stored in the Resident, Town and Nation files;
+	 * - the World files are given names and UUIDs;
+	 * - Resident, Town, Nation and World files are renamed to their UUID;
+	 * - the TownBlocks' world folders are renamed;
+	 * all before they are loaded into memory.
+	 * 
+	 * @param plugin {@link Towny} plugin instance.
+	 * @param source {@link TownyFlatFileSource} instance.
+	 */
 	public TownyLegacyFlatFileConverter(Towny plugin, TownyFlatFileSource source) {
 		this.plugin = plugin;
 		this.logger = plugin.getLogger();
