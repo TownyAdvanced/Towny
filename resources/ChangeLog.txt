@@ -7749,3 +7749,4 @@ v0.92.0.11:
 0.98.3.8:
   - Fallback to another Vault chat implementation if an invalid one is detected, courtesy of Warriorrrr with PR #6155.
   - Fix new reference file creation not working, courtesy of Warriorrrr with PR #6156.
+  - Use getPlayerExact for resident#getPlayer, courtesy of Warriorrrr with PR #6154.
