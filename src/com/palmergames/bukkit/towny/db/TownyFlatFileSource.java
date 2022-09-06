@@ -127,33 +127,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (files.length != 0)
 			TownyMessaging.sendDebugMsg("Loading " + files.length + " entries from the " + type.folderName + " folder...");
 
-//		int convertedFiles = 0;
 		for (File file : files)
 			try {
 				// Send our UUID to the consumer.
 				consumer.accept(UUID.fromString(file.getName().replace(type.fileExtension, "")));
 			} catch (IllegalArgumentException ignored) {
+				// TownyLegacyFlatFileConverter should have taken care of things before we get here.
 				plugin.getLogger().warning("The file: " + file.getName() + " in the " + type.folderName + " folder could not be read!");
-
-				//				/* A file which isn't a UUID was found, likely an old Database file. */
-//				if (type.equals(TownyDBFileType.WORLD))
-//					TownyLegacyFlatFileConverter.updateWorldFile(file);
-//
-//				UUID uuid = TownyLegacyFlatFileConverter.getUUID(file);
-//				if (uuid == null) {
-//					plugin.getLogger().warning("No UUID could be found in the " + type.folderName + "\\" + file.getName() 
-//						+ " file! This file will not be loaded into the TownyUniverse!");
-//					continue;
-//				}
-//				convertedFiles++;
-//				// Rename and delete the legacy file.
-//				renameLegacyFile(file, type, uuid);
-//				// Send our recovered UUID to the consumer.
-//				TownyLegacyFlatFileConverter.registerObject(type, file.getName().replace(type.fileExtension, ""), uuid);
+				plugin.getLogger().warning("If your database did not convert to UUIDs in full you may open your database.yml and set the version back to 1 in order to try again.");
 			}
-//
-//		if (convertedFiles > 0)
-//			plugin.getLogger().info("Towny converted " + convertedFiles + " files from legacy to UUID format in the " + type.folderName + " folder.");
 		return true;
 	}
 
@@ -242,12 +224,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				try {
 					worldUUID = UUID.fromString(worldUUIDAsString);
 				} catch (IllegalArgumentException e) {
-					System.out.println("World folder in TownBlocks folder not readable...");
+					System.out.println("World folder " + worldfolder + " in TownBlocks folder not readable...");
 					continue;
-//					World world = BukkitTools.getWorld(worldfolder.getName());
-//					worldUUID = world.getUID();
-//					renameLegacyFolder(worldfolder, TownyDBFileType.TOWNBLOCK, worldUUID);
-//					worldUUIDAsString = worldUUID.toString();
 				}
 				TownyWorld world = universe.getWorld(worldUUID);
 				if (world == null) {
@@ -257,8 +235,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					universe.newWorld(bukkitWorld);
 					world = universe.getWorld(worldUUID);
 				}
-				File worldFolder = new File(
-						dataFolderPath + File.separator + "townblocks" + File.separator + worldUUIDAsString);
+				File worldFolder = new File(dataFolderPath + File.separator + "townblocks" + File.separator + worldUUIDAsString);
 				File[] townBlockFiles = worldFolder.listFiles(file -> file.getName().endsWith(".data"));
 				int total = 0;
 				for (File townBlockFile : townBlockFiles) {
@@ -569,23 +546,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		deleteFileByTypeAndUUID(TownyDBFileType.JAIL, jail.getUUID());
 	}
 
-	/*
-	 * Legacy DB Methods
-	 */
-
-	private void renameLegacyFolder(File folder, TownyDBFileType type, UUID uuid) {
-		File newFile = new File(dataFolderPath + File.separator + type.folderName + File.separator + uuid.toString());
-		boolean delete = false;
-		if (newFile.exists()) {
-			plugin.getLogger().warning(type.folderName + "\\" +  folder.getName() + " folder could not be saved in UUID format because a folder with the UUID " + uuid.toString() + " already exists! The non-UUID formatted folder will be removed.");
-			delete = true;
-		} else {
-			delete = folder.renameTo(newFile);
-		}
-		if (delete)
-			folder.delete();
-	}
-	
 	/*
 	 * Misc Methods
 	 */

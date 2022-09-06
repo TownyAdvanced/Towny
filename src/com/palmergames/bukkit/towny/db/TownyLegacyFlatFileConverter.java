@@ -42,6 +42,10 @@ public class TownyLegacyFlatFileConverter {
 		return updateResidents() && updateTowns() && updateNations() && updateWorlds() && updateTownBlocks();
 	}
 
+	/*
+	 * Updaters
+	 */
+
 	private boolean updateResidents() {
 		return updateObjectType(TownyDBFileType.RESIDENT);
 	}
@@ -77,7 +81,7 @@ public class TownyLegacyFlatFileConverter {
 			switch (type) {
 			case RESIDENT:
 				residentNameMap.put(fileName, uuid);
-				updateTownIn(file);
+				updateTownIn(file, "town");
 				break;
 			case TOWN:
 				townNameMap.put(fileName, uuid);
@@ -86,7 +90,7 @@ public class TownyLegacyFlatFileConverter {
 				break;
 			case NATION:
 				nationNameMap.put(fileName, uuid);
-				updateCapitalIn(file);
+				updateTownIn(file, "capital");
 				break;
 			default:
 				break;
@@ -107,122 +111,56 @@ public class TownyLegacyFlatFileConverter {
 		return true;
 	}
 
-	private void renameLegacyFile(File file, TownyDBFileType type, String uuid) {
-		File newFile = new File(databasePath + File.separator + type.folderName + File.separator + uuid + type.fileExtension);
-		boolean delete = false;
-		String fileName = file.getName().replace(type.fileExtension, "");
-		if (fileName == null) {
-			plugin.getLogger().warning("While converting a file Towny was passed a null fileName!" + " Guily file: " + file.getAbsolutePath());
-			return;
+	private boolean updateWorlds() {
+		logger.info("Updating legacy World files...");
+		int convertedFiles = 0;
+		File[] files = getFiles(TownyDBFileType.WORLD);
+		if (files.length != 0)
+			logger.info("Found " + files.length + " files in the worlds folder...");
+		for (File file : files) {
+			String fileName = file.getName().replace(".txt", "");
+			if (alreadyUUIDFile(fileName))
+				continue;
+
+			updateWorldFile(file);
+			convertedFiles++;
 		}
-		if (newFile.exists()) {
-			plugin.getLogger().warning(type.folderName + "\\" +  file.getName() + " could not be saved in UUID format because a file with the UUID " + uuid.toString() + " already exists! The non-UUID formatted file will be removed.");
-			delete = true;
-		} else {
-			delete = file.renameTo(newFile);
-			if (!type.equals(TownyDBFileType.WORLD))
-				applyName(newFile, fileName);
-		}
-		if (delete)
-			source.deleteFileByTypeAndName(type, fileName);
+		if (convertedFiles > 0)
+			plugin.getLogger().info("Towny converted " + convertedFiles + " files from legacy to UUID format in the worlds folder.");
+		return true;
 	}
 
-	private void updateResidentIn(File file) {
-		if (!hasKey(file, "resident"))
+	private void updateWorldFile(File file) {
+		String worldName = file.getName().replace(".txt", "");
+		String uuid = BukkitTools.getWorld(worldName).getUID().toString();
+		if (worldName == null || worldName.isEmpty() || uuid == null || uuid.isEmpty())
 			return;
-		String residentName = getValue(file, "resident");
-		UUID uuid = null;
-		if (residentNameMap.containsKey(residentName)) {
-			uuid = residentNameMap.get(residentName);
-		} else {
-			uuid = getUUID(getResidentFile(residentName));
-		}
-		if (uuid == null) {
-			logger.warning("The resident named " + residentName + " did not store a UUID!");
-		} else {
-			if (!residentNameMap.containsKey(residentName))
-				residentNameMap.put(residentName, uuid);
-			setKeyValueInFile("resident", residentName, uuid.toString(), file);
-		}
+		applyUUIDAndName(file, worldName, uuid);
+		renameLegacyFile(file, TownyDBFileType.WORLD, uuid);
+
 	}
 
-	private void updateMayorIn(File file) {
-		if (!hasKey(file, "mayor"))
-			return;
-		String mayorName = getValue(file, "mayor");
-		UUID uuid = null;
-		if (residentNameMap.containsKey(mayorName)) {
-			uuid = residentNameMap.get(mayorName);
-		} else {
-			uuid = getUUID(getResidentFile(mayorName));
+	private boolean updateTownBlocks() {
+		logger.info("Updating legacy TownBlocks files...");
+		File townblocksFolder = new File(databasePath + File.separator + "townblocks");
+		File[] worldFolders = townblocksFolder.listFiles(File::isDirectory);
+		if (worldFolders.length != 0)
+			logger.info("Found " + worldFolders.length + " folders in the townblocks folder...");
+		for (File worldfolder : worldFolders) {
+			if (alreadyUUIDFile(worldfolder.getName()))
+				continue;
+			UUID uuid = BukkitTools.getWorld(worldfolder.getName()).getUID();
+			File newFolder = new File(databasePath + File.separator + "townblocks" + File.separator + uuid.toString());
+			logger.info("Renaming TownBlock world folder " + worldfolder.getName() + "...");
+			worldfolder.renameTo(newFolder);
+			worldfolder.delete();
 		}
-		if (uuid == null) {
-			logger.warning("The mayor named " + mayorName + " did not store a UUID!");
-		} else {
-			if (!residentNameMap.containsKey(mayorName))
-				residentNameMap.put(mayorName, uuid);
-			setKeyValueInFile("mayor", mayorName, uuid.toString(), file);
-		}
+		return true;
 	}
 
-	private void updateNationIn(File file) {
-		if (!hasKey(file, "nation"))
-			return;
-		String nationName = getValue(file, "nation");
-		UUID uuid = null;
-		if (nationNameMap.containsKey(nationName)) {
-			uuid = nationNameMap.get(nationName);
-		} else {
-			uuid = getUUID(getNationFile(nationName));
-		}
-		if (uuid == null) {
-			logger.warning("The nation named " + nationName + " did not store a UUID!");
-		} else {
-			if (!nationNameMap.containsKey(nationName))
-				nationNameMap.put(nationName, uuid);
-			setKeyValueInFile("nation", nationName, uuid.toString(), file);
-		}
-	}
-
-	private void updateTownIn(File file) {
-		if (!hasKey(file, "town"))
-			return;
-		String townName = getValue(file, "town");
-		
-		UUID uuid = null;
-		if (townNameMap.containsKey(townName)) {
-			uuid = townNameMap.get(townName);
-		} else {
-			uuid = getUUID(getTownFile(townName)); 
-		}
-		if (uuid == null) {
-			logger.warning("The town named " + townName + " did not store a UUID!");
-		} else {
-			if (!townNameMap.containsKey(townName))
-				townNameMap.put(townName, uuid);
-			setKeyValueInFile("town", townName, uuid.toString(), file);
-		}
-	}
-
-	private void updateCapitalIn(File file) {
-		if (!hasKey(file, "capital"))
-			return;
-		String townName = getValue(file, "capital");
-		
-		UUID uuid = null;
-		if (townNameMap.containsKey(townName)) {
-			uuid = townNameMap.get(townName);
-		} else {
-			uuid = getUUID(getTownFile(townName)); 
-		}
-		if (uuid == null) {
-			logger.warning("The capital named " + townName + " did not store a UUID!");
-		} else {
-			if (!townNameMap.containsKey(townName))
-				townNameMap.put(townName, uuid);
-			setKeyValueInFile("capital", townName, uuid.toString(), file);
-		}
-	}
+	/*
+	 * Getters
+	 */
 
 	private File[] getFiles(TownyDBFileType type) {
 		File[] files = new File(databasePath + File.separator + type.folderName)
@@ -264,6 +202,98 @@ public class TownyLegacyFlatFileConverter {
 		return null;
 	}
 
+	private File getResidentFile(String mayorName) {
+		return new File(databasePath + File.separator + "residents" + File.separator + mayorName + ".txt");
+	}
+
+	private File getNationFile(String nationName) {
+		return new File(databasePath + File.separator + "nations" + File.separator + nationName + ".txt");
+	}
+
+	private File getTownFile(String townName) {
+		return new File(databasePath + File.separator + "towns" + File.separator  + townName + ".txt");
+	}
+
+	/*
+	 * Setters
+	 */
+
+	private void renameLegacyFile(File file, TownyDBFileType type, String uuid) {
+		File newFile = new File(databasePath + File.separator + type.folderName + File.separator + uuid + type.fileExtension);
+		boolean delete = false;
+		String fileName = file.getName().replace(type.fileExtension, "");
+		if (fileName == null) {
+			plugin.getLogger().warning("While converting a file Towny was passed a null fileName!" + " Guily file: " + file.getAbsolutePath());
+			return;
+		}
+		if (newFile.exists()) {
+			plugin.getLogger().warning(type.folderName + "\\" +  file.getName() + " could not be saved in UUID format because a file with the UUID " + uuid.toString() + " already exists! The non-UUID formatted file will be removed.");
+			delete = true;
+		} else {
+			delete = file.renameTo(newFile);
+			if (!type.equals(TownyDBFileType.WORLD))
+				applyName(newFile, fileName);
+		}
+		if (delete)
+			source.deleteFileByTypeAndName(type, fileName);
+	}
+
+	private void updateMayorIn(File file) {
+		if (!hasKey(file, "mayor"))
+			return;
+		String mayorName = getValue(file, "mayor");
+		UUID uuid = null;
+		if (residentNameMap.containsKey(mayorName)) {
+			uuid = residentNameMap.get(mayorName);
+		} else {
+			uuid = getUUID(getResidentFile(mayorName));
+		}
+		if (uuid == null) {
+			logger.warning("The mayor named " + mayorName + " did not store a UUID!");
+		} else {
+			if (!residentNameMap.containsKey(mayorName))
+				residentNameMap.put(mayorName, uuid);
+			setKeyValueInFile("mayor", mayorName, uuid.toString(), file);
+		}
+	}
+
+	private void updateNationIn(File file) {
+		if (!hasKey(file, "nation"))
+			return;
+		String nationName = getValue(file, "nation");
+		UUID uuid = null;
+		if (nationNameMap.containsKey(nationName)) {
+			uuid = nationNameMap.get(nationName);
+		} else {
+			uuid = getUUID(getNationFile(nationName));
+		}
+		if (uuid == null) {
+			logger.warning("The nation named " + nationName + " did not store a UUID!");
+		} else {
+			if (!nationNameMap.containsKey(nationName))
+				nationNameMap.put(nationName, uuid);
+			setKeyValueInFile("nation", nationName, uuid.toString(), file);
+		}
+	}
+
+	private void updateTownIn(File file, String townOrCapital) {
+		String townName = getValue(file, townOrCapital);
+		
+		UUID uuid = null;
+		if (townNameMap.containsKey(townName)) {
+			uuid = townNameMap.get(townName);
+		} else {
+			uuid = getUUID(getTownFile(townName)); 
+		}
+		if (uuid == null) {
+			logger.warning("The " + townOrCapital + " named " + townName + " did not store a UUID!");
+		} else {
+			if (!townNameMap.containsKey(townName))
+				townNameMap.put(townName, uuid);
+			setKeyValueInFile(townOrCapital, townName, uuid.toString(), file);
+		}
+	}
+
 	private static void applyName(File file, String name) {
 		if (file.exists() && file.isFile()) {
 			if (hasKey(file, "name"))
@@ -278,7 +308,7 @@ public class TownyLegacyFlatFileConverter {
 		}
 	}
 
-	private static void applyUUID(File file, String name, String uuid) {
+	private static void applyUUIDAndName(File file, String name, String uuid) {
 		if (file.exists() && file.isFile()) {
 			try {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
@@ -291,21 +321,6 @@ public class TownyLegacyFlatFileConverter {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	private static boolean hasKey(File file, String key) {
-		try (FileInputStream fis = new FileInputStream(file);
-				InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
-			Properties properties = new Properties();
-			properties.load(isr);
-			if (!properties.containsKey(key))
-				return false;
-			String value = (String) properties.get(key);
-			return value != null && !value.isEmpty();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 
 	private void setKeyValueInFile(String key, String oldValue, String newValue, File file) {
@@ -332,75 +347,23 @@ public class TownyLegacyFlatFileConverter {
 		}
 	}
 
-	private boolean updateWorlds() {
-		logger.info("Updating legacy World files...");
-		int convertedFiles = 0;
-		File[] files = getFiles(TownyDBFileType.WORLD);
-		if (files.length != 0)
-			logger.info("Found " + files.length + " files in the worlds folder...");
-		for (File file : files) {
-			String fileName = file.getName().replace(".txt", "");
-			if (alreadyUUIDFile(fileName))
-				continue;
+	/*
+	 * Is-ers
+	 */
 
-			updateWorldFile(file);
-			convertedFiles++;
+	private static boolean hasKey(File file, String key) {
+		try (FileInputStream fis = new FileInputStream(file);
+				InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
+			Properties properties = new Properties();
+			properties.load(isr);
+			if (!properties.containsKey(key))
+				return false;
+			String value = (String) properties.get(key);
+			return value != null && !value.isEmpty();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		if (convertedFiles > 0)
-			plugin.getLogger().info("Towny converted " + convertedFiles + " files from legacy to UUID format in the worlds folder.");
-		return true;
-	}
-
-	private void updateWorldFile(File file) {
-		String worldName = file.getName().replace(".txt", "");
-		String uuid = BukkitTools.getWorld(worldName).getUID().toString();
-		if (worldName == null || worldName.isEmpty() || uuid == null || uuid.isEmpty())
-			return;
-		applyUUID(file, worldName, uuid);
-		renameLegacyFile(file, TownyDBFileType.WORLD, uuid);
-
-	}
-
-	private boolean updateTownBlocks() {
-		logger.info("Updating legacy TownBlocks files...");
-		File townblocksFolder = new File(databasePath + File.separator + "townblocks");
-		File[] worldFolders = townblocksFolder.listFiles(File::isDirectory);
-		if (worldFolders.length != 0)
-			logger.info("Found " + worldFolders.length + " folders in the townblocks folder...");
-		for (File worldfolder : worldFolders) {
-			if (alreadyUUIDFile(worldfolder.getName()))
-				continue;
-			UUID uuid = BukkitTools.getWorld(worldfolder.getName()).getUID();
-			File newFolder = new File(databasePath + File.separator + "townblocks" + File.separator + uuid.toString());
-			logger.info("Renaming TownBlock world folder " + worldfolder.getName() + "...");
-			worldfolder.renameTo(newFolder);
-			worldfolder.delete();
-
-//			File[] townBlockFiles = newFolder.listFiles(file -> file.getName().endsWith(".data"));
-//			if (townBlockFiles.length != 0)
-//				logger.info("Found " + townBlockFiles.length + " townblocks files in the " + worldfolder.getName() + " folder...");
-//			int convertedTBs = 0;
-//			for (File townBlockFile : townBlockFiles) {
-//				updateTownIn(townBlockFile);
-//				updateResidentIn(townBlockFile);
-//				convertedTBs++;
-//			}
-//			if (convertedTBs > 0)
-//				plugin.getLogger().info("Towny converted " + convertedTBs + " townblocks from legacy to UUID format in the " + worldfolder.getName() + " folder.");
-		}
-		return true;
-	}
-
-	private File getResidentFile(String mayorName) {
-		return new File(databasePath + File.separator + "residents" + File.separator + mayorName + ".txt");
-	}
-
-	private File getNationFile(String nationName) {
-		return new File(databasePath + File.separator + "nations" + File.separator + nationName + ".txt");
-	}
-
-	private File getTownFile(String townName) {
-		return new File(databasePath + File.separator + "towns" + File.separator  + townName + ".txt");
+		return false;
 	}
 
 	private boolean alreadyUUIDFile(String fileName) {
