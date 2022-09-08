@@ -175,13 +175,16 @@ public class CombatUtil {
 				if (defenderTB != null) {
 					
 					/*
-					 * Protect tamed dogs in town land which are not owned by the attacking player.
+					 * Protect tamed dogs in town land which are not owned by the attacking player,
+					 * unless they are angry and attacking the player.
 					 */
 					if (defendingEntity instanceof Wolf wolf) {
-						if (!isOwner(wolf, attackingPlayer)) {
+						if (!isOwner(wolf, attackingPlayer) && !isTargetingPlayer(wolf, attackingPlayer)) {
 							if (EntityTypeUtil.isProtectedEntity(defendingEntity))
 								return !(defenderTB.getPermissions().pvp || TownyActionEventExecutor.canDestroy(attackingPlayer, wolf.getLocation(), Material.STONE));
 						} else
+							// The player doesn't own the wolf, and the wolf is actively angry and targeting the player.
+							// Allow the combat.
 							return false;
 					}
 					
@@ -194,7 +197,7 @@ public class CombatUtil {
 					/*
 					 * Config's protected entities: Animals,WaterMob,NPC,Snowman,ArmorStand,Villager
 					 */
-					if (EntityTypeUtil.isProtectedEntity(defendingEntity)) 						
+					if (EntityTypeUtil.isProtectedEntity(defendingEntity))
 						return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT);
 				}
 				
@@ -246,9 +249,9 @@ public class CombatUtil {
 				 * 
 				 * Prevent pvp and remove Wolf targeting.
 				 */
-				if (attackingEntity instanceof Wolf && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB))) {
-					((Wolf) attackingEntity).setTarget(null);
-					((Wolf) attackingEntity).setAngry(false);
+				if (attackingEntity instanceof Wolf wolf && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB))) {
+					wolf.setTarget(null);
+					wolf.setAngry(false);
 					return true;
 				}
 				
@@ -665,7 +668,11 @@ public class CombatUtil {
 	private static boolean isOwner(Wolf wolf, Player attackingPlayer) {
 		return wolf.getOwner() instanceof HumanEntity owner && owner.getUniqueId().equals(attackingPlayer.getUniqueId());
 	}
-	
+
+	private static boolean isTargetingPlayer(Wolf wolf, Player attackingPlayer) {
+		return wolf.isAngry() && wolf.getTarget() != null && wolf.getTarget().equals(attackingPlayer);
+	}
+
 	private static boolean isATamedWolfWithAOnlinePlayer(Wolf wolf) {
 		return wolf.getOwner() instanceof HumanEntity owner && Bukkit.getPlayer(owner.getUniqueId()) != null;
 	}
