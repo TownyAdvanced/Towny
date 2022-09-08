@@ -7752,3 +7752,5 @@ v0.92.0.11:
   - Use getPlayerExact for resident#getPlayer, courtesy of Warriorrrr with PR #6154.
 0.98.3.9:
   - Fix angry wolves not being attackable while in Towns when wolves are a protected entity.
+  - Protect lily pads in towns from being destroyed by boats.
+    - Closes #6160.
