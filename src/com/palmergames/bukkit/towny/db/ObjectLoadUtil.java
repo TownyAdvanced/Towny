@@ -542,12 +542,12 @@ public class ObjectLoadUtil {
 				if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPermissionOverrides().isEmpty() && townBlock.getPermissionOverrides().size() > 0)
 					townBlock.getPlotObjectGroup().setPermissionOverrides(townBlock.getPermissionOverrides());
 			}
+			
+			if (save)
+				source.saveTownBlock(townBlock);
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_townblock_file_at_line", townBlock.toString(), line));
 			return false;
-		} finally {
-			if (save)
-				source.saveTownBlock(townBlock);
 		}
 		return true;
 	}
