@@ -256,7 +256,7 @@ public class TownyLegacyFlatFileConverter {
 
 	private void updateMayorIn(File file) {
 		String mayorName = getValue(file, "mayor");
-		if (mayorName == null)
+		if (mayorName == null || mayorName.isEmpty())
 			return;
 
 		UUID uuid = null;
@@ -276,7 +276,7 @@ public class TownyLegacyFlatFileConverter {
 
 	private void updateNationIn(File file) {
 		String nationName = getValue(file, "nation");
-		if (nationName == null)
+		if (nationName == null || nationName.isEmpty())
 			return;
 
 		UUID uuid = null;
@@ -296,7 +296,7 @@ public class TownyLegacyFlatFileConverter {
 
 	private void updateTownIn(File file, String townOrCapital) {
 		String townName = getValue(file, townOrCapital);
-		if (townName == null)
+		if (townName == null || townName.isEmpty())
 			return;
 
 		UUID uuid = null;
