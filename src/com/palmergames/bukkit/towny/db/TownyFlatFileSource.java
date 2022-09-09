@@ -224,7 +224,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				try {
 					worldUUID = UUID.fromString(worldUUIDAsString);
 				} catch (IllegalArgumentException e) {
-					System.out.println("World folder " + worldfolder + " in TownBlocks folder not readable...");
+					plugin.getLogger().warning("World folder " + worldfolder + " in TownBlocks folder not readable...");
 					continue;
 				}
 				TownyWorld world = universe.getWorld(worldUUID);
