@@ -102,14 +102,13 @@ public class ObjectLoadUtil {
 			} else {
 				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_could_not_add_to_town"));
 				source.deletePlotGroup(group);
+				return true;
 			}
-
+			source.savePlotGroup(group);
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_group_file_at_line", group.getUUID(), line));
 			return false;
-		} finally {
-			source.savePlotGroup(group);
 		}
 	}
 
@@ -182,16 +181,15 @@ public class ObjectLoadUtil {
 					}
 				}
 			}
-			
+
+			try {
+				universe.registerResident(resident);
+			} catch (AlreadyRegisteredException ignored) {}
+			source.saveResident(resident);
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(e.getMessage());
 			return false;
-		} finally {
-			source.saveResident(resident);
-			try {
-				universe.registerResident(resident);
-			} catch (AlreadyRegisteredException ignored) {}
 		}
 	}
 	
@@ -312,15 +310,15 @@ public class ObjectLoadUtil {
 			if (hasData(line))
 				town.loadOutlaws(getResidentsFromDB(line));
 
+			try {
+				universe.registerTown(town);
+			} catch (AlreadyRegisteredException ignored) {}
+			source.saveTown(town);
+
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_town_file_at_line", town.getName(), line, town.getUUID().toString()));
 			e.printStackTrace();
 			return false;
-		} finally {
-			source.saveTown(town);
-			try {
-				universe.registerTown(town);
-			} catch (AlreadyRegisteredException ignored) {}
 		}
 		return true;
 	}
@@ -388,15 +386,15 @@ public class ObjectLoadUtil {
 			if (hasData(line))
 				MetadataLoader.getInstance().deserializeMetadata(nation, line.trim());
 
+			try {
+				universe.registerNation(nation);
+			} catch (AlreadyRegisteredException ignored) {}
+			source.saveNation(nation);
+
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_nation_file_at_line", nation.getName(), line, nation.getUUID().toString()));
 			e.printStackTrace();
 			return false;
-		} finally {
-			source.saveNation(nation);
-			try {
-				universe.registerNation(nation);
-			} catch (AlreadyRegisteredException ignored) {}
 		}
 		return true;
 	}
@@ -444,12 +442,11 @@ public class ObjectLoadUtil {
 			if (hasData(line))
 				MetadataLoader.getInstance().deserializeMetadata(world, line.trim());
 
+			universe.registerTownyWorld(world);
+			source.saveWorld(world);
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_world_file_at_line", world.getName(), line, world.getUUID().toString()));
 			return false;
-		} finally {
-			source.saveWorld(world);
-			universe.registerTownyWorld(world);
 		}
 		return true;
 	}
