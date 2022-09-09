@@ -206,14 +206,12 @@ public class TownyLegacyFlatFileConverter {
 
 	private static String getValue(File file, String key) {
 		if (file.exists() && file.isFile()) {
-			try {
-				String search = key + "=";
-				try (Scanner sc = new Scanner(file)) {
-					while (sc.hasNextLine()) {
-						String line = sc.nextLine();
-						if (line.contains(search))
-							return line.replace(search , ""); 
-					}
+			String search = key + "=";
+			try (Scanner sc = new Scanner(file)) {
+				while (sc.hasNextLine()) {
+					String line = sc.nextLine();
+					if (line.contains(search))
+						return line.replace(search , ""); 
 				}
 			} catch (FileNotFoundException ignored) {}
 		}
@@ -257,9 +255,10 @@ public class TownyLegacyFlatFileConverter {
 	}
 
 	private void updateMayorIn(File file) {
-		if (!hasKey(file, "mayor"))
-			return;
 		String mayorName = getValue(file, "mayor");
+		if (mayorName == null)
+			return;
+
 		UUID uuid = null;
 		if (residentNameMap.containsKey(mayorName)) {
 			uuid = residentNameMap.get(mayorName);
@@ -276,9 +275,10 @@ public class TownyLegacyFlatFileConverter {
 	}
 
 	private void updateNationIn(File file) {
-		if (!hasKey(file, "nation"))
-			return;
 		String nationName = getValue(file, "nation");
+		if (nationName == null)
+			return;
+
 		UUID uuid = null;
 		if (nationNameMap.containsKey(nationName)) {
 			uuid = nationNameMap.get(nationName);
@@ -295,10 +295,9 @@ public class TownyLegacyFlatFileConverter {
 	}
 
 	private void updateTownIn(File file, String townOrCapital) {
-		if (!hasKey(file, townOrCapital))
-			return;
-
 		String townName = getValue(file, townOrCapital);
+		if (townName == null)
+			return;
 
 		UUID uuid = null;
 		if (townNameMap.containsKey(townName)) {
@@ -319,25 +318,19 @@ public class TownyLegacyFlatFileConverter {
 		if (file.exists() && file.isFile()) {
 			if (hasKey(file, "name"))
 				return;
-			try {
-				BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+			try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) { 
 				bw.append("name=" + name);
-				bw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} catch (IOException ignored) {}
 		}
 	}
 
 	private static void applyUUIDAndName(File file, String name, String uuid) {
 		if (file.exists() && file.isFile()) {
-			try {
-				BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+			try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
 				if (!hasKey(file, "uuid"))
 					bw.append("uuid=" + uuid + "\n");
 				if (!hasKey(file, "name"))
 					bw.append("name=" + name);
-				bw.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -348,23 +341,20 @@ public class TownyLegacyFlatFileConverter {
 		String oldLine = key + "=" + oldValue;
 		String newLine = key + "=" + newValue;
 
-		try {
-			Scanner sc = new Scanner(file);
-			StringBuffer buffer = new StringBuffer();
+		try (Scanner sc = new Scanner(file)) {
+			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while (sc.hasNextLine()) {
 				line = sc.nextLine();
 				if (line.contains(oldLine))
 					line = newLine;
-				buffer.append(line + System.lineSeparator());
+				sb.append(line + System.lineSeparator());
 			}
 			sc.close();
-			String fileContents = buffer.toString();
-			try {
-				FileWriter writer = new FileWriter(file);
+			String fileContents = sb.toString();
+			try (FileWriter writer = new FileWriter(file)) {
 				writer.append(fileContents);
 				writer.flush();
-				writer.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
