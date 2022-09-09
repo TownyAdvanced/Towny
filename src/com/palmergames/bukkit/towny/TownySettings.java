@@ -31,6 +31,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +49,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class TownySettings {
@@ -71,6 +73,8 @@ public class TownySettings {
 	private static final EnumSet<Material> itemUseMaterials = EnumSet.noneOf(Material.class);
 	private static final EnumSet<Material> switchUseMaterials = EnumSet.noneOf(Material.class);
 	private static final List<Class<?>> protectedMobs = new ArrayList<>();
+	
+	private static final Map<NamespacedKey, Consumer<CommentedConfiguration>> CONFIG_RELOAD_LISTENERS = new HashMap<>();
 	
 	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier, Map<String, Integer> townBlockTypeLimits) {
 
@@ -317,6 +321,9 @@ public class TownySettings {
 		loadProtectedMobsList();
 		ChunkNotification.loadFormatStrings();
 		TownBlockTypeHandler.Migrator.migrate();
+		
+		// Always run reload consumers after everything else is reloaded.
+		CONFIG_RELOAD_LISTENERS.values().forEach(consumer -> consumer.accept(config));
 	}
 	
 	private static void loadProtectedMobsList() {
@@ -3271,5 +3278,13 @@ public class TownySettings {
 		return getString(ConfigNodes.ASCII_MAP_SYMBOLS_WILDERNESS);
 	}
 
+	public static void addReloadListener(NamespacedKey key, Consumer<CommentedConfiguration> consumer) {
+		if (!CONFIG_RELOAD_LISTENERS.containsKey(key))
+			CONFIG_RELOAD_LISTENERS.put(key, consumer);
+	}
+	
+	public static void removeReloadListener(NamespacedKey key) {
+		CONFIG_RELOAD_LISTENERS.remove(key);
+	}
 }
 
