@@ -351,11 +351,15 @@ public class TownyLegacyFlatFileConverter {
 		try {
 			Scanner sc = new Scanner(file);
 			StringBuffer buffer = new StringBuffer();
-			while (sc.hasNextLine())
-				buffer.append(sc.nextLine() + System.lineSeparator());
-			String fileContents = buffer.toString();
+			String line = null;
+			while (sc.hasNextLine()) {
+				line = sc.nextLine();
+				if (line.contains(oldLine))
+					line = newLine;
+				buffer.append(line + System.lineSeparator());
+			}
 			sc.close();
-			fileContents = fileContents.replaceAll(oldLine, newLine);
+			String fileContents = buffer.toString();
 			try {
 				FileWriter writer = new FileWriter(file);
 				writer.append(fileContents);
