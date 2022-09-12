@@ -1841,13 +1841,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 				target.addTownRank(rank);
 				if (target.isOnline()) {
-					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", "Town", rank));
+					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", Translatable.of("town_sing"), rank));
 					plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 				}
-				TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_given_rank", "Town", rank, target.getName()));
+				TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_given_rank", Translatable.of("town_sing"), rank, target.getName()));
 			} else {
 				// Must already have this rank
-				TownyMessaging.sendMsg(player, Translatable.of("msg_resident_already_has_rank", target.getName(), "Town"));
+				TownyMessaging.sendMsg(player, Translatable.of("msg_resident_already_has_rank", target.getName(), Translatable.of("town_sing")));
 				return;
 			}
 
@@ -1862,13 +1862,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 				target.removeTownRank(rank);
 				if (target.isOnline()) {
-					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", "Town", rank));
+					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", Translatable.of("town_sing"), rank));
 					plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 				}
-				TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_taken_rank_from", "Town", rank, target.getName()));
+				TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_taken_rank_from", Translatable.of("town_sing"), rank, target.getName()));
 			} else {
 				// Doesn't have this rank
-				TownyMessaging.sendMsg(player, Translatable.of("msg_resident_doesnt_have_rank", target.getName(), "Town"));
+				TownyMessaging.sendMsg(player, Translatable.of("msg_resident_doesnt_have_rank", target.getName(), Translatable.of("town_sing")));
 				return;
 			}
 
@@ -3066,11 +3066,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public static void townKickResidents(CommandSender sender, Resident resident, Town town, List<Resident> kicking) {
 
-		Player player = null;
-
-		if (sender instanceof Player)
-			player = (Player) sender;
-
 		for (Resident member : new ArrayList<>(kicking)) {
 			if (!town.getResidents().contains(member)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_resident_not_your_town"));
@@ -3094,11 +3089,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					Bukkit.getPluginManager().callEvent(townKickEvent);
 
 					if (townKickEvent.isCancelled()) {
-						if (player != null)
-							TownyMessaging.sendErrorMsg(player, townKickEvent.getCancelMessage());
-						else
-							TownyMessaging.sendErrorMsg(sender, townKickEvent.getCancelMessage());
-						
+						TownyMessaging.sendErrorMsg(sender, townKickEvent.getCancelMessage());
 						kicking.remove(member);
 					} else
 						member.removeTown();
@@ -3108,7 +3099,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if (kicking.size() > 0) {
 			String message = kicking.stream().map(Resident::getName).collect(Collectors.joining(", "));
-			String kickerName = player != null ? player.getName() : "CONSOLE";
+			String kickerName = sender instanceof Player player ? player.getName() : "CONSOLE";
 
 			for (Resident member : kicking)
 				TownyMessaging.sendMsg(member, Translatable.of("msg_kicked_by", kickerName));
