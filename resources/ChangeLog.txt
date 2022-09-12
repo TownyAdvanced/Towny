@@ -7754,3 +7754,7 @@ v0.92.0.11:
   - Fix angry wolves not being attackable while in Towns when wolves are a protected entity.
   - Protect lily pads in towns from being destroyed by boats.
     - Closes #6160.
+  - Use "town_sing" translation in TownCommand, courtesy of Warriorrrr with PR #6167.
+  - API: Add TownyAPI#getTown(Player), courtesy of Warriorrrr with PR #6166.
+  - Make TownyAPI#getOnlinePlayers(ResidentList) thread safe, courtesy of Warriorrrr with PR #6165.
+  - Improve command blocking, courtesy of Warriorrrr with PR #6163.
