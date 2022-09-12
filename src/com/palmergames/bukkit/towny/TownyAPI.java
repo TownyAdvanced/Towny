@@ -910,4 +910,11 @@ public class TownyAPI {
 	public boolean isActiveResident(Resident resident) {
 		return resident.isOnline();
 	}
+	
+	@Nullable
+	public Town getTown(@NotNull Player player) {
+		Resident resident = getResident(player);
+		
+		return resident == null ? null : resident.getTownOrNull();
+	}
 }
