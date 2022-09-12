@@ -374,8 +374,11 @@ public class TownyAPI {
      * @return {@link List} of all online {@link Player}s in the specified {@link ResidentList}.
      */
     public List<Player> getOnlinePlayers(ResidentList owner) {
-        return Bukkit.getOnlinePlayers().stream().filter(player -> owner.hasResident(player.getName())).collect(Collectors.toList());
-    }
+		final List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
+		
+		players.removeIf(player -> !owner.hasResident(player.getName()));
+		return players;
+	}
     
     /**
      * Gets all online {@link Player}s for a specific {@link Town}.
