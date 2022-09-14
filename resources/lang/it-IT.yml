@@ -563,7 +563,7 @@ status_town: 'Città:'
 status_no_town: 'Nessuna'
 status_town_ranks: 'Ranghi Città:'
 status_nation_ranks: 'Ranghi Nazione:'
-jailed_in_town: ' nella Città: %s'
+jailed_in_town: ' in Città: %s'
 status_friends: 'Amici'
 rank_list_title: '%s Lista Ranghi'
 rank_list_mayor: 'Sindaco:'
@@ -581,7 +581,7 @@ status_bank_town3: 'Tassa:'
 status_town_nation: 'Nazione:'
 status_town_reslist_overlength: 'e altri...'
 status_nation_king: 'Re:'
-status_nation_tax: 'Tassa Nazione:'
+status_nation_tax: 'Tassa della Nazione:'
 status_nation_towns: 'Città'
 status_nation_allies: 'Alleati'
 status_nation_enemies: 'Nemici'
@@ -589,7 +589,7 @@ status_world_claimable: '&aRivendicabile'
 status_world_noclaims: '&cSenzaRivendicazioni'
 status_world_forcepvp: 'Forza il PVP:'
 status_world_fire: 'Fuoco:'
-status_world_forcefire: 'Forza Fuoco:'
+status_world_forcefire: 'Forza Il Fuoco:'
 status_world_forceexplosion: 'Forza Esplosione:'
 status_world_worldmobs: 'Mob del Mondo:'
 status_world_forcetownmobs: 'Forza Cellulare:'
@@ -618,7 +618,7 @@ msg_err_cant_afford_tp_nation: '&cNon puoi permetterti di teletrasportarti %s.'
 msg_err_nationspawn_has_not_been_set: '&cLo spawn della nazione non è stato impostato.'
 msg_err_spawn_not_within_nationtowns: '&cLo spawn della nazione deve essere in una città che fa parte della nazione.'
 msg_err_spawn_not_within_capital: '&cLo spawn della nazione deve essere nella capitale.'
-msg_err_nation_spawn_war: '&cGli spawn della nazione non sono consentiti durante il periodo di guerra.'
+msg_err_nation_spawn_war: '&cSpawnare in nazione non è consentito durante il periodo di guerra.'
 msg_err_nation_not_public: '&cQuella nazione non è pubblica.'
 msg_nation_toggle_public: '&aCambiata con successo l''impostazione pubblica della nazione.'
 status_yes: '&aSI'
@@ -1429,7 +1429,7 @@ msg_err_your_town_cannot_afford_unclaim: 'La tua città non può permettersi il 
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
 msg_your_town_paid_x_to_unclaim: 'La tua città ha pagato %s per rimuovere il lotto.'
 #Confirmation message shown when a player will unclaim land that costs money.
-confirmation_unclaiming_costs: 'Disdire questo terreno costerà %s, desideri continuare?'
+confirmation_unclaiming_costs: 'Rimuovere questo lotto costerà %s, si desidera continuare?'
 #Added in 0.140
 #Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
 msg_your_locale: 'Towny utilizza la localizzazione del tuo client (%s) per tradurre i suoi messaggi. Essere consapevoli delle traduzioni potrebbero essere stringhe mancanti.'
@@ -1536,17 +1536,17 @@ msg_town_level_overridden_with: 'La città %s ha il suo livello di città impost
 #Message shown when unsetting a manual town level.
 msg_town_level_unset: 'La città %s ha il livello urbano impostato manualmente. Il livello attuale è %s.'
 #Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
-msg_err_town_not_allowed_purchased_blocks: 'La città %s non è in grado di acquistare lotti in base alle regole di configurazione.'
+msg_err_town_not_allowed_purchased_blocks: 'La città %s non è in grado di acquistare blocchi in base alle regole di configurazione.'
 #Message shown when unsetting all purchased townblocks from a town.
-msg_purchased_blocks_unset: 'La città %s ha fatto rimuovere i suoi lotti acquistati.'
+msg_purchased_blocks_unset: 'La città %s ha fatto rimuovere i suoi blocchi acquistati.'
 #Message shown when /ta town name giveboughtblocks # is used.
-msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+msg_purchased_blocks_changed: 'Alla città %s sono stti assegnati %s blocchi, attualmente hanno %s blocchi.'
 #Added in 0.154
-msg_comptype_upkeep: 'Upkeep'
+msg_comptype_upkeep: 'Manutenzione'
 #Added in 0.155
 #Message shown when toggling town upkeep admin setting
-msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+msg_town_upkeep_setting_set_to: 'L''impostazione di manutenzione della città %s è stata impostata su %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
-msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
+msg_town_plot_type_limit_reached: 'La tua città ha raggiunto il limite di %d %s lotti.'
 #Added in 0.156
-msg_spawn_cost_free: 'Free'
+msg_spawn_cost_free: 'Gratuito'
