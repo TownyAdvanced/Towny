@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
@@ -269,7 +268,7 @@ public class BaseCommand implements TabCompleter{
 		Resident res = TownyUniverse.getInstance().getResident(playerUUID);
 
 		if (res == null) {
-			throw new NotRegisteredException(Translation.of("msg_err_not_registered"));
+			throw new NotRegisteredException(Translatable.of("msg_err_not_registered"));
 		}
 
 		return res;
@@ -280,7 +279,7 @@ public class BaseCommand implements TabCompleter{
 		Resident res = TownyUniverse.getInstance().getResident(residentName);
 
 		if (res == null) {
-			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", residentName));
+			throw new NotRegisteredException(Translatable.of("msg_err_not_registered_1", residentName));
 		}
 
 		return res;
@@ -291,7 +290,7 @@ public class BaseCommand implements TabCompleter{
 		Town town = TownyUniverse.getInstance().getTown(townName);
 
 		if (town == null) {
-			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", townName));
+			throw new NotRegisteredException(Translatable.of("msg_err_not_registered_1", townName));
 		}
 
 		return town;
@@ -302,7 +301,7 @@ public class BaseCommand implements TabCompleter{
 		Nation nation = TownyUniverse.getInstance().getNation(nationName);
 
 		if (nation == null)
-			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", nationName));
+			throw new NotRegisteredException(Translatable.of("msg_err_not_registered_1", nationName));
 
 		return nation;
 	}
