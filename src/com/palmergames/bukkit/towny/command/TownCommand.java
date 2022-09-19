@@ -2080,24 +2080,30 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @throws TownyException If the title wasn't able to be set.
 	 */
 	public static void townSetTitle(@NotNull CommandSender sender, @NotNull Resident resident, @NotNull String title, boolean admin) throws TownyException {
-		if (!admin && sender instanceof Player player && !CombatUtil.isSameTown(getResidentOrThrow(player), resident))
+		final boolean sameTown = sender instanceof Player player && !CombatUtil.isSameTown(getResidentOrThrow(player), resident);
+		
+		if (!admin && !sameTown)
 			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
 		
 		title = NameValidation.filterName(title);
 		
 		if (title.length() > TownySettings.getMaxTitleLength())
 			throw new TownyException(Translatable.of("msg_err_input_too_long"));
-		
+
 		if (NameValidation.isConfigBlacklistedName(title))
 			throw new TownyException(Translatable.of("msg_invalid_name"));
 
 		resident.setTitle(title);
 		resident.save();
 
-		if (resident.hasTitle())
-			TownyMessaging.sendPrefixedTownMessage(resident.getTownOrNull(), Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
-		else
-			TownyMessaging.sendPrefixedTownMessage(resident.getTownOrNull(), Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
+		Translatable message = resident.hasTitle()
+			? Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle()))
+			: Translatable.of("msg_clear_title_surname", "Title", resident.getName());
+		
+		TownyMessaging.sendPrefixedTownMessage(resident, message);
+
+		if (admin && !sameTown)
+			TownyMessaging.sendMsg(sender, message);
 	}
 
 	@Deprecated

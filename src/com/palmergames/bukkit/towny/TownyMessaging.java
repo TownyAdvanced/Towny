@@ -795,6 +795,22 @@ public class TownyMessaging {
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
 			sendMessage(player, Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())).append(message));
 	}
+
+	/**
+	 * Sends a message to all online residents of the specified resident's town, if they have one.
+	 * If the resident does not have a town, the message will be sent to the resident instead.
+	 * 
+	 * @param resident The resident.
+	 * @param message The translatable message to be sent to the resident and/or their town.
+	 */
+	public static void sendPrefixedTownMessage(Resident resident, Translatable message) {
+		Town town = resident.getTownOrNull();
+		
+		if (town == null)
+			sendMsg(resident, message);
+		else 
+			sendPrefixedTownMessage(town, message);
+	}
 	
 	/**
 	 * Send a message to All online residents of a nation and log, 
