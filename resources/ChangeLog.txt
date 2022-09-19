@@ -7760,3 +7760,4 @@ v0.92.0.11:
   - Improve command blocking, courtesy of Warriorrrr with PR #6163.
   - Fix legacy hex code parsing not working, courtesy of Warriorrrr with PR #6176.
   - Use translatable over direct translation in BaseCommand, courtesy of Warriorrrr with PR #6172.
+  - Simplify parameters used for TownCommand title & surname methods, courtesy of Warriorrrr with PR #6171.
