@@ -2080,7 +2080,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @throws TownyException If the title wasn't able to be set.
 	 */
 	public static void townSetTitle(@NotNull CommandSender sender, @NotNull Resident resident, @NotNull String title, boolean admin) throws TownyException {
-		final boolean sameTown = sender instanceof Player player && !CombatUtil.isSameTown(getResidentOrThrow(player), resident);
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE.getNode());
+
+		final boolean sameTown = sender instanceof Player player && CombatUtil.isSameTown(getResidentOrThrow(player), resident);
 		
 		if (!admin && !sameTown)
 			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
@@ -2132,7 +2134,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void townSetSurname(@NotNull CommandSender sender, @NotNull Resident resident, @NotNull String surname, boolean admin) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SURNAME.getNode());
 		
-		if (!admin && sender instanceof Player player && !CombatUtil.isSameTown(getResidentOrThrow(player), resident))
+		final boolean sameTown = sender instanceof Player player && CombatUtil.isSameTown(getResidentOrThrow(player), resident);
+		
+		if (!admin && !sameTown)
 			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
 		
 		surname = NameValidation.filterName(surname);
@@ -2146,10 +2150,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		resident.setSurname(surname);
 		resident.save();
 
-		if (resident.hasSurname())
-			TownyMessaging.sendPrefixedTownMessage(resident.getTownOrNull(), Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
-		else
-			TownyMessaging.sendPrefixedTownMessage(resident.getTownOrNull(), Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
+		Translatable message = resident.hasSurname()
+			? Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname()))
+			: Translatable.of("msg_clear_title_surname", "Surname", resident.getName());
+
+		TownyMessaging.sendPrefixedTownMessage(resident, message);
+		
+		if (admin && !sameTown)
+			TownyMessaging.sendMsg(sender, message);
 	}
 
 	public static void townSetMayor(CommandSender sender, String[] split, boolean admin, Town town, Resident resident) throws TownyException, NotRegisteredException {
