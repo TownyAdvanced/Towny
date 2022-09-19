@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 public class StringMgmt {
 
 	public static final Pattern hexPattern = Pattern.compile("((&|\\{|<|)(#|§x))([a-fA-F0-9]|§[a-fA-F0-9]){6}(}|>|)");
-	public static final Pattern hexReplacePattern = Pattern.compile("(§x|[&{}<>§])");
+	public static final Pattern hexReplacePattern = Pattern.compile("(§x|[&{}<>§#])");
 	public static final @Deprecated Pattern ampersandPattern = Pattern.compile("(?<!\\\\)(&#[a-fA-F0-9]{6})");
 	public static final @Deprecated Pattern bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}");
 
