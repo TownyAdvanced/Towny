@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.command;
 
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -17,7 +18,9 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -272,6 +275,17 @@ public class BaseCommand implements TabCompleter{
 		}
 
 		return res;
+	}
+	
+	@NotNull
+	@Contract("null -> fail")
+	protected static Resident getResidentOrThrow(@Nullable Player player) throws NotRegisteredException {
+		Resident resident = player == null ? null : TownyAPI.getInstance().getResident(player);
+		
+		if (resident == null)
+			throw new NotRegisteredException(Translatable.of("msg_err_not_registered"));
+		
+		return resident;
 	}
 
 	@NotNull

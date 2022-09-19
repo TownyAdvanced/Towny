@@ -1894,10 +1894,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Resident resident;
 		Nation nation = null;
 		Player player = null;
-		if (sender instanceof Player)
-			player = (Player) sender;
+		if (sender instanceof Player p)
+			player = p;
 		
-		if (!admin) {
+		if (!admin && player != null) {
 			resident = getResidentOrThrow(player.getUniqueId());
 			town = resident.getTown();
 		} else // Have the resident being tested be the mayor.
@@ -1914,7 +1914,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("title")) {
 
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE.getNode());
-			townSetTitle(sender, split, admin, town, resident, player);
+			townSetTitle(sender, split, admin);
 
 		} else if (split[0].equalsIgnoreCase("taxpercentcap")) {
 
@@ -1924,7 +1924,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("surname")) {
 
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SURNAME.getNode());
-			townSetSurname(sender, split, admin, town, resident, player);
+			townSetSurname(sender, split, admin);
 
 		} else if (split[0].equalsIgnoreCase("mayor")) {
 
@@ -2056,17 +2056,39 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendTownBoard(player, town);
 	}
 
+	@Deprecated
 	public static void townSetTitle(CommandSender sender, String[] split, boolean admin, Town town, Resident resident, Player player) throws TownyException {
+		townSetTitle(sender, split, admin);
+	}
+
+	public static void townSetTitle(@NotNull CommandSender sender, @NotNull String[] split, boolean admin) throws TownyException {
 		// Give the resident a title
 		if (split.length < 2)
-			throw new TownyException("Eg: /town set title bilbo Jester ");
+			throw new TownyException("Eg: /town set title bilbo Jester");
 
-		resident = getResidentOrThrow(split[1]);
-
-		if (!admin && !CombatUtil.isSameTown(getResidentOrThrow(player.getUniqueId()), resident))
-			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
-
+		Resident resident = getResidentOrThrow(split[1]);
 		String title = StringMgmt.join(NameValidation.checkAndFilterArray(StringMgmt.remArgs(split, 2)));
+		
+		townSetTitle(sender, resident, title, admin);
+	}
+
+	/**
+	 * @param sender The command sender who initiated the command.
+	 * @param resident The resident to set the title for.
+	 * @param title The title to set.
+	 * @param admin Whether to skip the same-town test.
+	 * @throws TownyException If the title wasn't able to be set.
+	 */
+	public static void townSetTitle(@NotNull CommandSender sender, @NotNull Resident resident, @NotNull String title, boolean admin) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE.getNode());
+
+		final boolean sameTown = sender instanceof Player player && CombatUtil.isSameTown(getResidentOrThrow(player), resident);
+		
+		if (!admin && !sameTown)
+			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
+		
+		title = NameValidation.filterName(title);
+		
 		if (title.length() > TownySettings.getMaxTitleLength())
 			throw new TownyException(Translatable.of("msg_err_input_too_long"));
 
@@ -2076,23 +2098,49 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		resident.setTitle(title);
 		resident.save();
 
-		if (resident.hasTitle())
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
-		else
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
+		Translatable message = resident.hasTitle()
+			? Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle()))
+			: Translatable.of("msg_clear_title_surname", "Title", resident.getName());
+		
+		TownyMessaging.sendPrefixedTownMessage(resident, message);
+
+		if (admin && !sameTown)
+			TownyMessaging.sendMsg(sender, message);
 	}
 
+	@Deprecated
 	public static void townSetSurname(CommandSender sender, String[] split, boolean admin, Town town, Resident resident, Player player) throws TownyException {
-		// Give the resident a title
+		townSetSurname(sender, split, admin);
+	}
+	
+	public static void townSetSurname(CommandSender sender, String[] split, boolean admin) throws TownyException {
+		// Give the resident a surname
 		if (split.length < 2)
 			throw new TownyException("Eg: /town set surname bilbo the dwarf ");
-
-		resident = getResidentOrThrow(split[1]);
-
-		if (!admin && !CombatUtil.isSameTown(getResidentOrThrow(player.getUniqueId()), resident))
-			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
-
+		
+		Resident resident = getResidentOrThrow(split[1]);
 		String surname = StringMgmt.join(NameValidation.checkAndFilterArray(StringMgmt.remArgs(split, 2)));
+		
+		townSetSurname(sender, resident, surname, admin);
+	}
+
+	/**
+	 * @param sender The command sender who initiated the command.
+	 * @param resident The resident to set the surname for.
+	 * @param surname The surname to set.
+	 * @param admin Whether to skip the same-town test.
+	 * @throws TownyException If the surname wasn't able to be set.
+	 */
+	public static void townSetSurname(@NotNull CommandSender sender, @NotNull Resident resident, @NotNull String surname, boolean admin) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SURNAME.getNode());
+		
+		final boolean sameTown = sender instanceof Player player && CombatUtil.isSameTown(getResidentOrThrow(player), resident);
+		
+		if (!admin && !sameTown)
+			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
+		
+		surname = NameValidation.filterName(surname);
+
 		if (surname.length() > TownySettings.getMaxTitleLength())
 			throw new TownyException(Translatable.of("msg_err_input_too_long"));
 
@@ -2102,10 +2150,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		resident.setSurname(surname);
 		resident.save();
 
-		if (resident.hasSurname())
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
-		else
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
+		Translatable message = resident.hasSurname()
+			? Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname()))
+			: Translatable.of("msg_clear_title_surname", "Surname", resident.getName());
+
+		TownyMessaging.sendPrefixedTownMessage(resident, message);
+		
+		if (admin && !sameTown)
+			TownyMessaging.sendMsg(sender, message);
 	}
 
 	public static void townSetMayor(CommandSender sender, String[] split, boolean admin, Town town, Resident resident) throws TownyException, NotRegisteredException {
