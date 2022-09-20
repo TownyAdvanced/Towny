@@ -3288,7 +3288,7 @@ public class TownySettings {
 	}
 	
 	public static boolean doesNewDayUseTimer() {
-		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_USES_TIMER);
+		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_USES_JAVA_TIMER);
 	}
 }
 
