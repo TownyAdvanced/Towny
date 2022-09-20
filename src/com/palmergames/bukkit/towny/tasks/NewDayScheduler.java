@@ -19,9 +19,11 @@ public class NewDayScheduler extends TownyTimerTask {
 		super(plugin);
 	}
 	
+	private static long newDayInterval = -1;
+
 	static {
 		TownySettings.addReloadListener(NamespacedKey.fromString("towny:new-day-scheduler"), config -> {
-			if (TownySettings.doesNewDayUseTimer() && isNewDaySchedulerRunning()) {
+			if (newDayInterval != TownySettings.getDayInterval() && isNewDaySchedulerRunning()) {
 				cancelScheduledNewDay();
 				new NewDayScheduler(Towny.getPlugin()).run();
 			}
@@ -37,6 +39,8 @@ public class NewDayScheduler extends TownyTimerTask {
 		logTime();
 		cancelScheduledNewDay();
 		
+		newDayInterval = TownySettings.getDayInterval();
+
 		if (!TownySettings.doesNewDayUseTimer()) {
 			long secondsUntilNextNewDay = TimeMgmt.townyTime();
 			
