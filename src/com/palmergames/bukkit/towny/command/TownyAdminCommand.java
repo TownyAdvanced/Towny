@@ -480,7 +480,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return getTownyStartingWith(args[3], "t");
 						default:
 							if (args.length == 3)
-								return NameUtil.filterByStart(adminTownTabCompletes, args[2]);
+								return NameUtil.filterByStart(
+									TownyCommandAddonAPI.getTabCompletes(
+										CommandType.TOWNYADMIN_TOWN, adminTownTabCompletes
+									), args[2]);
 					}
 				} else if (args.length == 4 && args[1].equalsIgnoreCase("new")) {
 					return getTownyStartingWith(args[3], "r");
@@ -529,7 +532,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return getTownyStartingWith(args[4], "n");
 						default:
 							if (args.length == 3)
-								return NameUtil.filterByStart(adminNationTabCompletes, args[2]);
+								return NameUtil.filterByStart(
+									TownyCommandAddonAPI.getTabCompletes(
+										CommandType.TOWNYADMIN_NATION, adminNationTabCompletes
+									), args[2]);
 					}
 				} else if (args.length == 4 && args[1].equalsIgnoreCase("new")) {
 					return getTownyStartingWith(args[3], "t");
@@ -1479,6 +1485,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					townyUniverse.getDataSource().mergeTown(town, remainingTown);
 					TownyMessaging.sendGlobalMessage(Translatable.of("town1_has_merged_with_town2", town, remainingTown));
 				}).sendTo(sender);
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_TOWN, split[1])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOWN, split[1]).execute(sender, split);
 			} else {
 				HelpMenu.TA_TOWN.send(sender);
 				return;
@@ -1933,6 +1941,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_nation_not_enemies_with_2", nation.getName(), enemy.getName()));
 				} else
 					TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_input", "/ta nation [nation] enemy [add/remove] [nation]"));
+			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_NATION, split[1])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_NATION, split[1]).execute(sender, split);
 			}
 
 		} catch (NotRegisteredException | AlreadyRegisteredException | InvalidNameException e) {

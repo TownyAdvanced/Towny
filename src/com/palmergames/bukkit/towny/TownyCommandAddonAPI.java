@@ -33,6 +33,8 @@ public class TownyCommandAddonAPI {
         PLOT_TOGGLE,
         TOWNY,
         TOWNYADMIN,
+		TOWNYADMIN_TOWN,
+		TOWNYADMIN_NATION,
         TOWNYADMIN_SET,
         TOWNYADMIN_TOGGLE,
 		TOWNYADMIN_RELOAD,
