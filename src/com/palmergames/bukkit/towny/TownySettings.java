@@ -3286,5 +3286,9 @@ public class TownySettings {
 	public static void removeReloadListener(NamespacedKey key) {
 		CONFIG_RELOAD_LISTENERS.remove(key);
 	}
+	
+	public static boolean doesNewDayUseTimer() {
+		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_USES_TIMER);
+	}
 }
 
