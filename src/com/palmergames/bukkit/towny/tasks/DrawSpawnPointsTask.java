@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.SpawnPoint;
 
 public class DrawSpawnPointsTask extends TownyTimerTask {
 	public DrawSpawnPointsTask(Towny plugin) {
@@ -10,7 +11,7 @@ public class DrawSpawnPointsTask extends TownyTimerTask {
 
 	@Override
 	public void run() {
-		TownyUniverse.getInstance().getSpawnPoints().values().stream()
-			.forEach(spawn -> spawn.drawParticle());
+		for (SpawnPoint spawnPoint : TownyUniverse.getInstance().getSpawnPoints().values())
+			spawnPoint.drawParticle();
 	}
 }
