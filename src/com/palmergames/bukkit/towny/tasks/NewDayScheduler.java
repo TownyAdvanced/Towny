@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.util.TimeMgmt;
+import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Timer;
@@ -16,6 +17,15 @@ public class NewDayScheduler extends TownyTimerTask {
 
 	public NewDayScheduler(Towny plugin) {
 		super(plugin);
+	}
+	
+	static {
+		TownySettings.addReloadListener(NamespacedKey.fromString("towny:new-day-scheduler"), config -> {
+			if (TownySettings.doesNewDayUseTimer() && isNewDaySchedulerRunning()) {
+				cancelScheduledNewDay();
+				new NewDayScheduler(Towny.getPlugin()).run();
+			}
+		});
 	}
 
 	private static Timer newDayTimer;
