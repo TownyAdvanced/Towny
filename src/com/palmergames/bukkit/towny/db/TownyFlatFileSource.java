@@ -93,7 +93,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		private String getSingular() {
 			// Hibernated Residents are never loaded so this method is never called on them.
-			return folderName.substring(folderName.length() - 1);
+			return folderName.substring(0, folderName.length() - 1);
 		}
 
 		public String getFolderName() {
@@ -200,11 +200,24 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (plugin != null) {
 			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_server_world_list"));
 			for (World world : plugin.getServer().getWorlds()) {
-				universe.newWorld(world);
+				File worldFile = new File(getFileOfTypeWithUUID(TownyDBFileType.WORLD, world.getUID()));
+				TownyWorld townyWorld = new TownyWorld(world.getName(), world.getUID());
+				universe.registerTownyWorld(townyWorld);
+				if (!worldFile.exists())
+					saveNewTownyWorldFile(townyWorld);
 			}
 		}
 
 		return loadFlatFileListOfType(TownyDBFileType.WORLD, uuid -> universe.newWorldInternal(uuid));
+	}
+
+	private void saveNewTownyWorldFile(TownyWorld townyWorld) {
+		try {
+			FileMgmt.mapToFile(ObjectSaveUtil.getWorldMap(townyWorld), getFileOfTypeWithUUID(TownyDBFileType.WORLD, townyWorld.getUUID()));
+		} catch (Exception e) {
+			logger.warn("Could not save new world file for TownyWorld: " + townyWorld.getUUID());
+			e.printStackTrace();
+		}
 	}
 
 	@Override
