@@ -66,6 +66,8 @@ public class ConfirmationHandler {
 			revokeConfirmation(sender);
 		}
 		
+		Bukkit.getPluginManager().callEvent(new ConfirmationSendEvent(confirmation, sender));
+		
 		// Send the confirmation message.
 		TownyMessaging.sendConfirmationMessage(sender, confirmation);
 
