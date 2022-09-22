@@ -1909,7 +1909,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split[0].equalsIgnoreCase("board")) {
 
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_BOARD.getNode());
-			townSetBoard(sender, split, town, player);
+			townSetBoard(sender, String.join(" ", StringMgmt.remFirstArg(split)), town);
 
 		} else if (split[0].equalsIgnoreCase("title")) {
 
@@ -2031,29 +2031,30 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	public static void townSetBoard(CommandSender sender, String[] split, Town town, Player player) throws TownyException {
+	public static void townSetBoard(CommandSender sender, String board, Town town) throws TownyException {
 
-		if (split.length < 2)
+		if (board.isEmpty())
 			throw new TownyException("Eg: /town set board " + Translatable.of("town_help_9").forLocale(sender));
 
-		String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
-		
-		if (!line.equals("none")) {
-			if (!NameValidation.isValidString(line)) {
+		if ("none".equalsIgnoreCase(board) || "clear".equalsIgnoreCase(board) || "reset".equalsIgnoreCase(board)) {
+			board = TownySettings.getTownDefaultBoard();
+			
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_board_reset"));
+		} else {
+			if (!NameValidation.isValidString(board)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_string_board_not_set"));
 				return;
 			}
+			
 			// TownyFormatter shouldn't be given any string longer than 159, or it has trouble splitting lines.
-			if (line.length() > 159)
-				line = line.substring(0, 159);
-		} else 
-			line = "";
+			if (board.length() > 159)
+				board = board.substring(0, 159);
+		}
 		
-		town.setBoard(line);
-		// Player is null when set via the /townyadmin command.
-		if (player == null)
-			return;
-		TownyMessaging.sendTownBoard(player, town);
+		town.setBoard(board);
+		town.save();
+		
+		TownyMessaging.sendTownBoard(sender, town);
 	}
 
 	@Deprecated
