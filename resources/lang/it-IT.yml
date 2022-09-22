@@ -1550,3 +1550,5 @@ msg_town_upkeep_setting_set_to: 'L''impostazione di manutenzione della città %s
 msg_town_plot_type_limit_reached: 'La tua città ha raggiunto il limite di %d %s lotti.'
 #Added in 0.156
 msg_spawn_cost_free: 'Gratuito'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'This plot is already a %s type.'
