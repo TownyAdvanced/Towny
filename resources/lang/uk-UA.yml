@@ -1550,3 +1550,5 @@ msg_town_upkeep_setting_set_to: 'Податок на утримання в мі�
 msg_town_plot_type_limit_reached: 'Ваше місто досягнуло ліміту %d %s ділянок.'
 #Added in 0.156
 msg_spawn_cost_free: 'Безкоштовно'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'This plot is already a %s type.'
