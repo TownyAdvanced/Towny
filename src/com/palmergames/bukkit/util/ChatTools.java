@@ -48,16 +48,7 @@ public class ChatTools {
 	}
 
 	public static String stripColour(String s) {
-
-		StringBuilder out = new StringBuilder();
-		for (int i = 0; i < s.length(); i++) {
-			String c = s.substring(i, i + 1);
-			if (c.equals("\u00A7"))
-				i += 1;
-			else
-				out.append(c);
-		}
-		return out.toString();
+		return Colors.strip(s);
 	}
 
 	/**
