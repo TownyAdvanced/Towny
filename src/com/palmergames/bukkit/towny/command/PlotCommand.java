@@ -685,6 +685,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							if (townBlockType == null)
 								throw new TownyException(Translatable.of("msg_err_not_block_type"));
+
+							if (townBlockType == townBlock.getType())
+								throw new TownyException(Translatable.of("msg_plot_already_of_type", townBlockType.getName()));
 							
 							try {
 								// Test we are allowed to work on this plot

@@ -7768,3 +7768,5 @@ v0.92.0.11:
     - Default: false
     - If enabled (disabled by default), a Java Timer will be used for scheduling new days, which is more accurate than Towny's Bukkit timer task but uses an extra thread.
   - Catch exceptions from spawn point particle spawning, courtesy of Warriorrrr with PR #6180.
+  - Fix being able to set a townblock to the type it already is.
+    - Closes #6183.
