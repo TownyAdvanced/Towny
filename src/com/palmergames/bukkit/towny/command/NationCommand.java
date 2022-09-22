@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
 import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
@@ -1003,21 +1004,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
 
 				final String finalName = filteredName;
-				Confirmation.runOnAccept(() -> {				
-					// Town pays for nation here.
-					if (!capitalTown.getAccount().withdraw(TownySettings.getNewNationPrice(), "New Nation Cost")) {
-						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
-						return;
-					}
+				Confirmation.runOnAccept(() -> {
 					try {
-						// Actually make nation.
 						newNation(finalName, capitalTown);
 					} catch (AlreadyRegisteredException | NotRegisteredException e) {
 						TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+						return;
 					}
 					TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", player.getName(), StringMgmt.remUnderscore(finalName)));
 
 				})
+					.setCost(new ConfirmationTransaction(TownySettings.getNewNationPrice(), capitalTown.getAccount(), "New Nation Cost",
+							Translatable.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice())))
 					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())))
 					.sendTo(player);
 				
@@ -2174,19 +2172,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				final Nation finalNation = nation;
 				final String finalName = name;
-				Confirmation.runOnAccept(() -> {
-					//Check if nation can still pay rename costs.
-					if (!finalNation.getAccount().canPayFromHoldings(TownySettings.getNationRenameCost())) {
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())));
-						return;
-					}
-					
-					finalNation.getAccount().withdraw(TownySettings.getNationRenameCost(), String.format("Nation renamed to: %s", finalName));
-						
-					nationRename((Player) sender, finalNation, finalName);
-				})
-				.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())))
-				.sendTo(sender);
+				Confirmation.runOnAccept(() -> nationRename((Player) sender, finalNation, finalName))
+					.setCost(new ConfirmationTransaction(TownySettings.getNationRenameCost(), nation.getAccount(), String.format("Nation renamed to: %s", finalName)))
+					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())))
+					.sendTo(sender);
 
 			} else {
 				nationRename((Player) sender, nation, name);

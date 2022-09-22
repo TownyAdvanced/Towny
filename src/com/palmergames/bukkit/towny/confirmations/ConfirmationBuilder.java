@@ -16,6 +16,7 @@ public class ConfirmationBuilder {
 	String cancelCommand = TownySettings.getCancelCommand();
 	String pluginPrefix = "towny";
 	int duration = TownySettings.getConfirmationTimeoutSeconds();
+	ConfirmationTransaction transaction;
 	boolean runAsync;
 
 	/**
@@ -55,6 +56,17 @@ public class ConfirmationBuilder {
 	 */
 	public ConfirmationBuilder setDuration(int duration) {
 		this.duration = duration;
+		return this;
+	}
+
+	/**
+	 * Sets the ConfirmationTransaction that must succeed for the confirmation to process. 
+	 * 
+	 * @param transaction ConfirmationTransaction.
+	 * @return A builder reference of this object.
+	 */
+	public ConfirmationBuilder setTransaction(ConfirmationTransaction transaction) {
+		this.transaction = transaction;
 		return this;
 	}
 
@@ -119,5 +131,15 @@ public class ConfirmationBuilder {
 	public void sendTo(CommandSender sender) {
 		Confirmation confirmation = build();
 		ConfirmationHandler.sendConfirmation(sender, confirmation);
+	}
+
+	/**
+	 * Builds and sends this confirmation to the given CommandSender.
+	 * 
+	 * @param confirmationTransaction The ConfirmationTransaction to apply to the confirmation.
+	 */
+	public ConfirmationBuilder setCost(ConfirmationTransaction confirmationTransaction) {
+		this.transaction = confirmationTransaction;
+		return this;
 	}
 }

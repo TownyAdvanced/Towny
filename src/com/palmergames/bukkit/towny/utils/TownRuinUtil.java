@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
 import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -158,16 +159,10 @@ public class TownRuinUtil {
 				throw new TownyException(Translatable.of("msg_err_cannot_reclaim_town_yet", TownySettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town)));
 
 			if (TownyEconomyHandler.isActive() && townReclaimCost > 0) { 
-				Confirmation.runOnAccept(() -> {
-					if (!resident.getAccount().canPayFromHoldings(townReclaimCost)) {
-						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_insuf_funds"));
-						return;
-					}
-					resident.getAccount().withdraw(townReclaimCost, "Cost of town reclaim.");
-					reclaimTown(resident, town);
-				})
-				.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(townReclaimCost)))
-				.sendTo(player);
+				Confirmation.runOnAccept(() -> reclaimTown(resident, town))
+					.setCost(new ConfirmationTransaction(townReclaimCost, resident.getAccount(), "Cost of town reclaim.", Translatable.of("msg_insuf_funds")))
+					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(townReclaimCost)))
+					.sendTo(player);
 			} else {
 				reclaimTown(resident, town);
 			}
