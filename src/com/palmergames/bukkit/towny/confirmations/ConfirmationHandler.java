@@ -105,6 +105,8 @@ public class ConfirmationHandler {
 		// Check if there is a Transaction required for this confirmation.
 		if (TownyEconomyHandler.isActive() && context.confirmation.hasCost()) {
 			ConfirmationTransaction transaction = context.confirmation.getTransaction();
+			// Determine the cost, done in this phase in case the cost could be manipulated before confirming.
+			transaction.supplyCost();
 			double cost = transaction.getCost();
 			// Can they pay the cost?
 			if (cost > 0) {

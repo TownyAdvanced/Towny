@@ -1,11 +1,14 @@
 package com.palmergames.bukkit.towny.confirmations;
 
+import java.util.function.Supplier;
+
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.economy.Account;
 
 public class ConfirmationTransaction {
-	private final double cost;
+	private final Supplier<Double> costSupplier;
+	private double cost;
 	private final Account payee;
 	private final String loggedMessage;
 	private final Translatable insufficientFundsMessage;
@@ -13,13 +16,13 @@ public class ConfirmationTransaction {
 	/**
 	 * A transaction which must succeed for a Confirmation to complete.
 	 * <p>
-	 * @param cost cost of the transaction. 
+	 * @param costSupplier cost of the transaction. 
 	 * @param payee Account which will have to pay.
 	 * @param loggedMessage The message logged in the money.csv file.
 	 * @param insufficientFundsMessage Transatable which will display the cannot pay message.
 	 */
-	public ConfirmationTransaction(double cost, Account payee, String loggedMessage, Translatable insufficientFundsMessage) {
-		this.cost = cost;
+	public ConfirmationTransaction(Supplier<Double> costSupplier, Account payee, String loggedMessage, Translatable insufficientFundsMessage) {
+		this.costSupplier = costSupplier;
 		this.payee = payee;
 		this.loggedMessage = loggedMessage;
 		this.insufficientFundsMessage = insufficientFundsMessage;
@@ -29,15 +32,19 @@ public class ConfirmationTransaction {
 	 * A transaction which must succeed for a Confirmation to complete.
 	 * Uses the default no money error message.
 	 * <p>
-	 * @param cost cost of the transaction. 
+	 * @param costSupplier cost of the transaction. 
 	 * @param payee Account which will have to pay.
 	 * @param loggedMessage The message logged in the money.csv file.
 	 */
-	public ConfirmationTransaction(double cost, Account payee, String loggedMessage) {
-		this.cost = cost;
+	public ConfirmationTransaction(Supplier<Double> costSupplier, Account payee, String loggedMessage) {
+		this.costSupplier = costSupplier;
 		this.payee = payee;
 		this.loggedMessage = loggedMessage;
-		this.insufficientFundsMessage = Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(cost));
+		this.insufficientFundsMessage = null;
+	}
+
+	public void supplyCost() {
+		this.cost = costSupplier.get();
 	}
 
 	public double getCost() {
@@ -53,6 +60,6 @@ public class ConfirmationTransaction {
 	}
 
 	public Translatable getInsufficientFundsMessage() {
-		return insufficientFundsMessage;
+		return insufficientFundsMessage != null ? insufficientFundsMessage : Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(getCost()));
 	}
 }

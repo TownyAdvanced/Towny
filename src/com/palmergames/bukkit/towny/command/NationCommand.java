@@ -1014,7 +1014,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", player.getName(), StringMgmt.remUnderscore(finalName)));
 
 				})
-					.setCost(new ConfirmationTransaction(TownySettings.getNewNationPrice(), capitalTown.getAccount(), "New Nation Cost",
+					.setCost(new ConfirmationTransaction(() -> TownySettings.getNewNationPrice(), capitalTown.getAccount(), "New Nation Cost",
 							Translatable.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice())))
 					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())))
 					.sendTo(player);

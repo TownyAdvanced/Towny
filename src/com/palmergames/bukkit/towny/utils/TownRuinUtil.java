@@ -160,7 +160,7 @@ public class TownRuinUtil {
 
 			if (TownyEconomyHandler.isActive() && townReclaimCost > 0) { 
 				Confirmation.runOnAccept(() -> reclaimTown(resident, town))
-					.setCost(new ConfirmationTransaction(townReclaimCost, resident.getAccount(), "Cost of town reclaim.", Translatable.of("msg_insuf_funds")))
+					.setCost(new ConfirmationTransaction(() -> townReclaimCost, resident.getAccount(), "Cost of town reclaim.", Translatable.of("msg_insuf_funds")))
 					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(townReclaimCost)))
 					.sendTo(player);
 			} else {

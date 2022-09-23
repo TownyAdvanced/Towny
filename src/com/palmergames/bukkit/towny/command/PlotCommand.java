@@ -652,7 +652,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										town.addOutpostSpawn(player.getLocation());
 										TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translatable.of("outpost")));
 									})
-									.setCost(new ConfirmationTransaction(TownySettings.getOutpostCost(), town.getAccount(), "PlotSetOutpost", Translatable.of("msg_err_cannot_afford_to_set_outpost")))
+									.setCost(new ConfirmationTransaction(() -> TownySettings.getOutpostCost(), town.getAccount(), "PlotSetOutpost", Translatable.of("msg_err_cannot_afford_to_set_outpost")))
 									.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())))
 									.sendTo(player);
 								}
@@ -729,7 +729,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									}
 									TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_type", townBlockType));
 								})
-									.setCost(new ConfirmationTransaction(cost, resident.getAccount(), String.format("Plot set to %s", townBlockType),
+									.setCost(new ConfirmationTransaction(() -> cost, resident.getAccount(), String.format("Plot set to %s", townBlockType),
 											Translatable.of("msg_err_cannot_afford_plot_set_type_cost", townBlockType, TownyEconomyHandler.getFormattedBalance(cost))))
 									.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 									.sendTo(BukkitTools.getPlayerExact(resident.getName()));
@@ -1770,7 +1770,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendMsg(player, Translatable.of("msg_set_group_type_to_x", type));
 						
 					})
-						.setCost(new ConfirmationTransaction(cost,
+						.setCost(new ConfirmationTransaction(() -> type.getCost() * townBlock.getPlotObjectGroup().getTownBlocks().size(),
 								resident.getAccount(),
 								String.format("Plot group (" + townBlock.getPlotObjectGroup().getTownBlocks().size() + ") set to %s", type),
 								Translatable.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost))))
