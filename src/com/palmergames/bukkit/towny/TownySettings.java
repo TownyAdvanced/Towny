@@ -3100,10 +3100,6 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.PROT_CROP_TRAMPLE);
 	}
 
-	public static boolean isSculkSpreadPreventWhereMobsAreDisabled() {
-		return getBoolean(ConfigNodes.PROT_SCULK_SPREAD);
-	}
-
 	public static boolean isNotificationsAppearingOnBossbar() {
 		return getString(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_AS).equalsIgnoreCase("bossbar");
 	}
