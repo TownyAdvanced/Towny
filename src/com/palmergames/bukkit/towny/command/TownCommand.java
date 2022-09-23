@@ -259,11 +259,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"all"
 	);
 	
-	private static List<String> townInviteTabCompletes = Arrays.asList(
+	private static final List<String> townInviteTabCompletes = Arrays.asList(
 		"sent",
 		"received",
 		"accept",
 		"deny"
+	);
+	
+	private static final List<String> townSetBoardTabCompletes = Arrays.asList(
+		"none",
+		"reset"
 	);
 
 	public TownCommand(Towny instance) {
@@ -274,8 +279,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
-		if (sender instanceof Player) {
-			Player player = (Player) sender;
+		if (sender instanceof Player player) {
 			
 			switch (args[0].toLowerCase()) {
 				case "online":
@@ -525,6 +529,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				case "surname":
 					if (args.length == 3)
 						return NameUtil.filterByStart(NameUtil.getNames(town.getResidents()), args[2]);
+				case "board":
+					if (args.length == 3)
+						return NameUtil.filterByStart(townSetBoardTabCompletes, args[2]);
 				default:
 					return Collections.emptyList();
 			}
@@ -2036,10 +2043,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (board.isEmpty())
 			throw new TownyException("Eg: /town set board " + Translatable.of("town_help_9").forLocale(sender));
 
-		if ("none".equalsIgnoreCase(board) || "clear".equalsIgnoreCase(board) || "reset".equalsIgnoreCase(board)) {
+		if ("reset".equalsIgnoreCase(board)) {
 			board = TownySettings.getTownDefaultBoard();
 			
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_board_reset"));
+		} else if ("none".equalsIgnoreCase(board) || "clear".equalsIgnoreCase(board)) {
+			board = "";
 		} else {
 			if (!NameValidation.isValidString(board)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_string_board_not_set"));
