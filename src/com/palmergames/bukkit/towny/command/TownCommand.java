@@ -2352,7 +2352,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			final Town finalTown = town;
 			final String finalName = name;
 			Confirmation.runOnAccept(() -> townRename(sender, finalTown, finalName))
-				.setCost(new ConfirmationTransaction(TownySettings.getTownRenameCost(), town.getAccount(), String.format("Town renamed to: %s", finalName)))
 				.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())))
 				.sendTo(sender);
 		} else {
@@ -2700,7 +2699,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				Confirmation.runOnAccept(() -> {
 					if (callPreNewTownEvent(player, finalName, spawnLocation))
 						return;
-
+					
+					// Make the resident pay here.
+					if (!resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost")) {
+						// Send economy message
+						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
+						return;
+					}
+					
 					try {
 						// Make town.
 						newTown(world, finalName, resident, key, spawnLocation, player);
@@ -2710,8 +2716,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						e.printStackTrace();
 					}
 				})
-				.setCost(new ConfirmationTransaction(TownySettings.getNewTownPrice(), resident.getAccount(), "New Town Cost",
-					Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice())))
 				.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())))
 				.sendTo(player);
 
@@ -2828,6 +2832,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Bukkit.getServer().getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_rename_cancelled"));
+			return;
+		}
+
+		double renameCost = TownySettings.getTownRenameCost();
+		if (TownyEconomyHandler.isActive() && renameCost > 0 && !town.getAccount().withdraw(renameCost, String.format("Town renamed to: %s", newName))) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(renameCost)));
 			return;
 		}
 
@@ -3841,6 +3851,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
+			if (TownyEconomyHandler.isActive() && cost > 0 &&
+				!remainingTown.getAccount().withdraw(cost, Translation.of("msg_town_merge_cost_withdraw"))) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_not_enough_money", (int) remainingTown.getAccount().getHoldingBalance(), (int) cost));
+				return;
+			}
+
 			UUID succumbingTownUUID = succumbingTown.getUUID();
 			String succumbingTownName = succumbingTown.getName();
 
@@ -3853,10 +3869,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}).runOnCancel(() -> {
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_request_denied"));
 			TownyMessaging.sendMsg(succumbingTown.getMayor(), Translatable.of("msg_town_merge_cancelled"));
-		})
-		.setCost(new ConfirmationTransaction(cost, remainingTown.getAccount(), Translation.of("msg_town_merge_cost_withdraw"),
-				Translatable.of("msg_town_merge_err_not_enough_money", (int) remainingTown.getAccount().getHoldingBalance(), (int) cost)))
-		.sendTo(BukkitTools.getPlayerExact(succumbingTown.getMayor().getName()));
+		}).sendTo(BukkitTools.getPlayerExact(succumbingTown.getMayor().getName()));
 	}
 
 	public static boolean isEdgeBlock(TownBlockOwner owner, List<WorldCoord> worldCoords) {

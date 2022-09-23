@@ -2173,7 +2173,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				final Nation finalNation = nation;
 				final String finalName = name;
 				Confirmation.runOnAccept(() -> nationRename((Player) sender, finalNation, finalName))
-					.setCost(new ConfirmationTransaction(TownySettings.getNationRenameCost(), nation.getAccount(), String.format("Nation renamed to: %s", finalName)))
 					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNationRenameCost())))
 					.sendTo(sender);
 
@@ -2520,7 +2519,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_rename_cancelled"));
 			return;
 		}
-		
+
+		double renameCost = TownySettings.getNationRenameCost();
+		if (TownyEconomyHandler.isActive() && renameCost > 0 && !nation.getAccount().withdraw(renameCost, String.format("Nation renamed to: %s", newName))) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(renameCost)));
+			return;
+		}
+
 		try {
 			TownyUniverse.getInstance().getDataSource().renameNation(nation, newName);
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_set_name", player.getName(), nation.getName()));

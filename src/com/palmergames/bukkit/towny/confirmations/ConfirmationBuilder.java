@@ -60,13 +60,12 @@ public class ConfirmationBuilder {
 	}
 
 	/**
-	 * Sets the ConfirmationTransaction that must succeed for the confirmation to process. 
+	 * Builds and sends this confirmation to the given CommandSender.
 	 * 
-	 * @param transaction ConfirmationTransaction.
-	 * @return A builder reference of this object.
+	 * @param confirmationTransaction The ConfirmationTransaction to apply to the confirmation.
 	 */
-	public ConfirmationBuilder setTransaction(ConfirmationTransaction transaction) {
-		this.transaction = transaction;
+	public ConfirmationBuilder setCost(ConfirmationTransaction confirmationTransaction) {
+		this.transaction = confirmationTransaction;
 		return this;
 	}
 
@@ -131,15 +130,5 @@ public class ConfirmationBuilder {
 	public void sendTo(CommandSender sender) {
 		Confirmation confirmation = build();
 		ConfirmationHandler.sendConfirmation(sender, confirmation);
-	}
-
-	/**
-	 * Builds and sends this confirmation to the given CommandSender.
-	 * 
-	 * @param confirmationTransaction The ConfirmationTransaction to apply to the confirmation.
-	 */
-	public ConfirmationBuilder setCost(ConfirmationTransaction confirmationTransaction) {
-		this.transaction = confirmationTransaction;
-		return this;
 	}
 }

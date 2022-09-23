@@ -103,7 +103,7 @@ public class Confirmation {
 	}
 	
 	/**
-	 * @return True when there is a ConfirmationTransaction;
+	 * @return True when there is a ConfirmationTransaction.
 	 */
 	public boolean hasCost() {
 		return transaction != null;
