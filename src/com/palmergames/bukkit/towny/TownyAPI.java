@@ -920,4 +920,11 @@ public class TownyAPI {
 		
 		return resident == null ? null : resident.getTownOrNull();
 	}
+	
+	@Nullable
+	public Nation getNation(@NotNull Player player) {
+		Resident resident = getResident(player);
+		
+		return resident == null ? null : resident.getNationOrNull();
+	}
 }
