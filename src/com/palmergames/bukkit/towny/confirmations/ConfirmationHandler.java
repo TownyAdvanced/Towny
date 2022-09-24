@@ -2,11 +2,13 @@ package com.palmergames.bukkit.towny.confirmations;
 
 import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.confirmations.event.ConfirmationCancelEvent;
 import com.palmergames.bukkit.towny.confirmations.event.ConfirmationConfirmEvent;
 import com.palmergames.bukkit.towny.confirmations.event.ConfirmationSendEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.economy.Account;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
@@ -122,6 +124,23 @@ public class ConfirmationHandler {
 
 		// Remove confirmation as it's been handled.
 		confirmations.remove(sender);
+
+		// Check if there is a Transaction required for this confirmation.
+		if (TownyEconomyHandler.isActive() && context.confirmation.hasCost()) {
+			ConfirmationTransaction transaction = context.confirmation.getTransaction();
+			// Determine the cost, done in this phase in case the cost could be manipulated before confirming.
+			transaction.supplyCost();
+			double cost = transaction.getCost();
+			// Can they pay the cost?
+			if (cost > 0) {
+				Account payee = transaction.getPayee();
+				if (!payee.canPayFromHoldings(cost)) {
+					TownyMessaging.sendErrorMsg(sender, transaction.getInsufficientFundsMessage());
+					return;
+				}
+				payee.withdraw(cost, transaction.getLoggedMessage());
+			}
+		}
 
 		// Execute handler.
 		if (context.confirmation.isAsync()) {

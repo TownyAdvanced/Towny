@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
@@ -2360,19 +2361,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			final Town finalTown = town;
 			final String finalName = name;
-			Confirmation.runOnAccept(() -> {
-				// Check if town can still pay rename cost
-				if (!finalTown.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost())) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
-					return;
-				}
-
-				finalTown.getAccount().withdraw(TownySettings.getTownRenameCost(), String.format("Town renamed to: %s", finalName));
-				townRename(sender, finalTown, finalName);
-			})
-			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())))
-			.sendTo(sender);
-			
+			Confirmation.runOnAccept(() -> townRename(sender, finalTown, finalName))
+				.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())))
+				.sendTo(sender);
 		} else {
 			townRename(sender, town, name);
 		}
@@ -2628,14 +2619,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 		
 		Confirmation.runOnAccept(() -> {
-			if (!town.getAccount().withdraw(cost, String.format("Town Buy Bonus (%d)", n))) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
-				return;
-			}
 			town.addPurchasedBlocks(n);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 			town.save();
 		})
+			.setCost(new ConfirmationTransaction(() -> cost, town.getAccount(), String.format("Town Buy Bonus (%d)", n),
+					Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost))))
 			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 			.sendTo(player); 
 	}
@@ -2853,6 +2842,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Bukkit.getServer().getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_rename_cancelled"));
+			return;
+		}
+
+		double renameCost = TownySettings.getTownRenameCost();
+		if (TownyEconomyHandler.isActive() && renameCost > 0 && !town.getAccount().withdraw(renameCost, String.format("Town renamed to: %s", newName))) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(renameCost)));
 			return;
 		}
 
@@ -3858,9 +3853,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMsg(succumbingTown.getMayor(), Translatable.of("msg_town_merge_request_received", remainingTown.getName(), sender.getName(), remainingTown.getName()));
 
 		Confirmation.runOnAccept(() -> {
-			if (cost > 0 && TownyEconomyHandler.isActive() && !remainingTown.getAccount().canPayFromHoldings(cost))
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_not_enough_money", (int) remainingTown.getAccount().getHoldingBalance(), (int) cost));
-
 			TownPreMergeEvent townPreMergeEvent = new TownPreMergeEvent(remainingTown, succumbingTown);
 			Bukkit.getPluginManager().callEvent(townPreMergeEvent);
 			if (townPreMergeEvent.isCancelled()) {
@@ -3869,13 +3861,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
+			if (TownyEconomyHandler.isActive() && cost > 0 &&
+				!remainingTown.getAccount().withdraw(cost, Translation.of("msg_town_merge_cost_withdraw"))) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_merge_err_not_enough_money", (int) remainingTown.getAccount().getHoldingBalance(), (int) cost));
+				return;
+			}
+
 			UUID succumbingTownUUID = succumbingTown.getUUID();
 			String succumbingTownName = succumbingTown.getName();
 
 			// Start merge
-			if (cost > 0) {
-				remainingTown.getAccount().withdraw(cost, Translation.of("msg_town_merge_cost_withdraw"));
-			}
 			TownyUniverse.getInstance().getDataSource().mergeTown(remainingTown, succumbingTown);
 			TownyMessaging.sendGlobalMessage(Translatable.of("town1_has_merged_with_town2", succumbingTown, remainingTown));
 

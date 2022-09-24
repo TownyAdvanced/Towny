@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
 import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
 import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
@@ -647,17 +648,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									 
 									// Create a confirmation for setting outpost.
 									Confirmation.runOnAccept(() -> {
-										// Make them pay.
-										if (TownyEconomyHandler.isActive() && TownySettings.getOutpostCost() > 0 
-											&& !town.getAccount().withdraw(TownySettings.getOutpostCost(), "Plot Set Outpost")) {
-												TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_afford_to_set_outpost"));
-												return;
-										}
-
 										// Set the outpost spawn and display feedback.
 										town.addOutpostSpawn(player.getLocation());
 										TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translatable.of("outpost")));
 									})
+									.setCost(new ConfirmationTransaction(() -> TownySettings.getOutpostCost(), town.getAccount(), "PlotSetOutpost", Translatable.of("msg_err_cannot_afford_to_set_outpost")))
 									.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())))
 									.sendTo(player);
 								}
@@ -723,12 +718,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							// Handle payment via a confirmation to avoid suprise costs.
 							if (cost > 0 && TownyEconomyHandler.isActive()) {
 								Confirmation.runOnAccept(() -> {
-							
-									if (!resident.getAccount().withdraw(cost, String.format("Plot set to %s", townBlockType))) {
-										TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_afford_plot_set_type_cost", townBlockType, TownyEconomyHandler.getFormattedBalance(cost)));
-										return;
-									}
-
 									TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), townBlockType));
 
 									try {
@@ -740,6 +729,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 									}
 									TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_type", townBlockType));
 								})
+									.setCost(new ConfirmationTransaction(() -> cost, resident.getAccount(), String.format("Plot set to %s", townBlockType),
+											Translatable.of("msg_err_cannot_afford_plot_set_type_cost", townBlockType, TownyEconomyHandler.getFormattedBalance(cost))))
 									.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 									.sendTo(BukkitTools.getPlayerExact(resident.getName()));
 							
@@ -1766,15 +1757,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					Confirmation.runOnAccept(() -> {
 						if (townBlock.getPlotObjectGroup() == null)
 							return;
-						
-						final double finalCost = type.getCost() * townBlock.getPlotObjectGroup().getTownBlocks().size();
-				
-						if (!resident.getAccount().withdraw(finalCost, String.format("Plot group (" + townBlock.getPlotObjectGroup().getTownBlocks().size() + ") set to %s", type))) {
-							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(finalCost)));
-							return;
-						}					
 
-						TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(finalCost), type));
+						TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(cost), type));
 
 						for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
 							try {
@@ -1786,6 +1770,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendMsg(player, Translatable.of("msg_set_group_type_to_x", type));
 						
 					})
+						.setCost(new ConfirmationTransaction(() -> type.getCost() * townBlock.getPlotObjectGroup().getTownBlocks().size(),
+								resident.getAccount(),
+								String.format("Plot group (" + townBlock.getPlotObjectGroup().getTownBlocks().size() + ") set to %s", type),
+								Translatable.of("msg_err_cannot_afford_plot_set_type_cost", type, TownyEconomyHandler.getFormattedBalance(cost))))
 						.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
 						.sendTo(BukkitTools.getPlayerExact(resident.getName()));
 				
