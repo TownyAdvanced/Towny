@@ -421,16 +421,9 @@ public class TownyBlockListener implements Listener {
 			// Check if the sculk is passing across a border with differing owners, allowing
 			// sculk to spread from a town into the wilderness.
 			event.setCancelled(!canBlockMove(event.getSource(), event.getBlock(), true));
-		} else if (TownySettings.isSculkSpreadPreventWhereMobsAreDisabled()) {
-			// Early 1.19 versions of spigot did not correctly report the source as
-			// sculk_catalyst. We use a config setting that will cancel based on
-			// mobs-spawning plot perms.
-			// TODO: remove this when 1.19.1 is out.
-			event.setCancelled(!TownyAPI.getInstance().areMobsEnabled(event.getBlock().getLocation()));	
 		}
 	}
 	
-	@SuppressWarnings("incomplete-switch")
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
 	public void onCauldronLevelChange(CauldronLevelChangeEvent event) {
 		if (!(event.getEntity() instanceof Player player))
@@ -458,6 +451,7 @@ public class TownyBlockListener implements Listener {
 					}
 				}
 			}
+			default -> {}
 		}
 	}
 }
