@@ -7770,3 +7770,16 @@ v0.92.0.11:
   - Catch exceptions from spawn point particle spawning, courtesy of Warriorrrr with PR #6180.
   - Fix being able to set a townblock to the type it already is.
     - Closes #6183.
+  - API: Add TownyAPI#getNation(Player), courtesy of Warriorrrr with PR #6190.
+  - Remove old sculk spread option, courtesy of Warriorrrr with PR #6189.
+  - Town board command improvements, courtesy of Warriorrrr with PR #6186.
+  - Replace ChatTools.stripColour with Colors.strip, courtesy of Warriorrrr with PR #6185.
+  - API: Add Confirmation related events, courtesy of Warriorrrr with PR #6182.
+    - ConfirmationEvent
+    - ConfirmationCancelEvent
+    - ConfirmationConfirmEvent
+    - ConfirmationSendEvent
+      - Includes the ability "hide" the confirmation for plugin authors to replace with their own selection/display.
+  - API: Add a ConfirmationTransaction to Confirmations.
+    - This enables cost-requirements to be baked-in to Confirmations.
+    - Costs are passed in as a Supplier<Double> so that calculations can be made after the player accepts.
