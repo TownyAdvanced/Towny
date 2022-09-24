@@ -1,7 +1,11 @@
 package com.palmergames.bukkit.towny.confirmations;
 
+import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.confirmations.event.ConfirmationCancelEvent;
+import com.palmergames.bukkit.towny.confirmations.event.ConfirmationConfirmEvent;
+import com.palmergames.bukkit.towny.confirmations.event.ConfirmationSendEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -20,15 +24,8 @@ public class ConfirmationHandler {
 	private final static Towny plugin = Towny.getPlugin();
 	private final static Map<CommandSender, ConfirmationContext> confirmations = new ConcurrentHashMap<>();
 	
-	private static final class ConfirmationContext {
-		final Confirmation confirmation;
-		final int taskID;
-		
-		ConfirmationContext(Confirmation confirmation, int taskID) {
-			this.confirmation = confirmation;
-			this.taskID = taskID;
-		}
-	}
+	@Desugar
+	private record ConfirmationContext(Confirmation confirmation, int taskID) {}
 
 	/**
 	 * Revokes the confirmation associated with the given sender.
@@ -37,6 +34,10 @@ public class ConfirmationHandler {
 	 */
 	public static void revokeConfirmation(CommandSender sender) {
 		ConfirmationContext context = confirmations.get(sender);
+		
+		// Only continue if player has an active confirmation
+		if (context == null)
+			return;
 		
 		Bukkit.getScheduler().cancelTask(context.taskID);
 		Confirmation confirmation = context.confirmation;
@@ -50,6 +51,8 @@ public class ConfirmationHandler {
 			TownyMessaging.sendMsg(sender, Translatable.of("successful_cancel"));
 
 		}
+		
+		Bukkit.getPluginManager().callEvent(new ConfirmationCancelEvent(confirmation, sender, false));
 	}
 
 	/**
@@ -59,6 +62,13 @@ public class ConfirmationHandler {
 	 * @param confirmation The confirmation to add.
 	 */
 	public static void sendConfirmation(CommandSender sender, Confirmation confirmation) {
+		ConfirmationSendEvent event = new ConfirmationSendEvent(confirmation, sender);
+		Bukkit.getPluginManager().callEvent(event);
+
+		if (event.isCancelled()) {
+			TownyMessaging.sendErrorMsg(sender, event.getCancelMessage());
+			return;
+		}
 		
 		// Check if confirmation is already active and perform appropriate actions.
 		if (confirmations.containsKey(sender)) {
@@ -67,7 +77,8 @@ public class ConfirmationHandler {
 		}
 		
 		// Send the confirmation message.
-		TownyMessaging.sendConfirmationMessage(sender, confirmation);
+		if (event.isSendingMessage())
+			TownyMessaging.sendConfirmationMessage(sender, confirmation);
 
 		// Set up the task to show the timeout message after the expiration.
 		int taskID = Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -75,6 +86,7 @@ public class ConfirmationHandler {
 			if (hasConfirmation(sender)) {
 				confirmations.remove(sender);
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_confirmation_timed_out"));
+				Bukkit.getPluginManager().callEvent(new ConfirmationCancelEvent(confirmation, sender, true));
 			}
 		}, (20L * confirmation.getDuration())).getTaskId();
 
@@ -90,6 +102,17 @@ public class ConfirmationHandler {
 	public static void acceptConfirmation(CommandSender sender) {
 		// Get confirmation
 		ConfirmationContext context = confirmations.get(sender);
+		
+		if (context == null)
+			return;
+		
+		ConfirmationConfirmEvent event = new ConfirmationConfirmEvent(context.confirmation, sender);
+		Bukkit.getPluginManager().callEvent(event);
+		
+		if (event.isCancelled()) {
+			TownyMessaging.sendErrorMsg(event.getCancelMessage());
+			return;
+		}
 
 		// Get handler
 		Runnable handler = context.confirmation.getAcceptHandler();
