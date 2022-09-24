@@ -1552,3 +1552,4 @@ msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plot
 msg_spawn_cost_free: 'Gratis'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'This plot is already a %s type.'
+msg_town_board_reset: '&bTown board reset.'
