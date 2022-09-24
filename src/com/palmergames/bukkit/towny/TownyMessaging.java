@@ -285,14 +285,14 @@ public class TownyMessaging {
 	/**
 	 * Send the town board to a player (in yellow)
 	 *
-	 * @param player player to show to
+	 * @param sender sender to show to
 	 * @param town the town for which to show it's board
 	 */
-	public static void sendTownBoard(Player player, Town town) {
+	public static void sendTownBoard(CommandSender sender, Town town) {
 		String tbColor1 = Translation.of("townboard_message_colour_1");
 		String tbColor2 = Translation.of("townboard_message_colour_2");
 		
-		sendMessage(player, tbColor1 + "[" + StringMgmt.remUnderscore(town.getName()) + "] " + tbColor2 + town.getBoard());
+		sendMessage(sender, tbColor1 + "[" + StringMgmt.remUnderscore(town.getName()) + "] " + tbColor2 + town.getBoard());
 	}
 	
 	/**

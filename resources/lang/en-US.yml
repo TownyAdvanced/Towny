@@ -1764,3 +1764,5 @@ msg_spawn_cost_free: 'Free'
 
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'This plot is already a %s type.'
+
+msg_town_board_reset: '&bTown board reset.'
