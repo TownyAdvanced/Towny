@@ -268,7 +268,7 @@ msg_new_mayor: '&b¡%s es el nuevo alcalde de la ciudad!'
 msg_new_nation: '&b%s fundó una nueva nación llamada %s'
 msg_new_town: '&b%s fundó una nueva ciudad llamada %s'
 msg_plot_for_sale: '&b¡%s puso el terreno (%s) a la venta!'
-msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
+msg_plot_for_sale_amount: '&b%s pon la parcela (%s) a la venta por %s!'
 msg_plot_set_type: '&bTipo de terreno cambiado a %s'
 msg_cache_block_error: '&cNo estás registrado en Towny, intenta reconectarte.'
 msg_cache_block_error_wild: '&cNo está permitido %s en el Exterior.'
@@ -1550,3 +1550,6 @@ msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to
 msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
 #Added in 0.156
 msg_spawn_cost_free: 'Free'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'This plot is already a %s type.'
+msg_town_board_reset: '&bTown board reset.'

@@ -1189,7 +1189,7 @@ status_trustedlist: 'De confiance'
 msg_click_to_edit: 'Cliquez pour modifier.'
 permission_gui_header: 'Interface de permission de la ville'
 msg_last_edited: '&7&oDernière modification à %s par %s.'
-msg_trusted_added: '&b %s a été ajouté comme fiable dans ce %s.' #Last %s is either town or townblock
+msg_trusted_added: '&b %s a été ajouté comme fiable dans cette %s.' #Last %s is either town or townblock
 msg_already_trusted: '&b%s est déjà de confiance dans ce %s.'
 msg_trusted_added_2: '&b%s vous a fait confiance dans %s: %s.' #Last %s is the town name or worldcoord.
 msg_not_trusted: '&b%s n''est pas encore de confiance dans ce %s.'
@@ -1550,3 +1550,6 @@ msg_town_upkeep_setting_set_to: 'La ville %s a été paramétrée à %s.'
 msg_town_plot_type_limit_reached: 'Votre ville a atteint la limite de %d %s parcelles.'
 #Added in 0.156
 msg_spawn_cost_free: 'Free'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'This plot is already a %s type.'
+msg_town_board_reset: '&bTown board reset.'

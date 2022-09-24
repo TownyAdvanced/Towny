@@ -268,7 +268,7 @@ msg_new_mayor: '&b%s jest teraz burmistrzem!'
 msg_new_nation: '&b%s utworzył nację o nazwie "%s"!'
 msg_new_town: '&b%s utworzył miasto o nazwie "%s"'
 msg_plot_for_sale: '&b%s wystawił działkę (%s) na sprzedaż!'
-msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
+msg_plot_for_sale_amount: '&b%s wystawił działkę (%s) na sprzedaż za %s!'
 msg_plot_set_type: '&btyp działki został zmieniony na %s'
 msg_cache_block_error: '&cNie jesteś zarejestrowany w Towny. Spróbuj wyjść i wejść.'
 msg_cache_block_error_wild: '&cNie masz uprawnienia do czynności "%s" na dzikich terenach.'
@@ -701,7 +701,7 @@ msg_bankrupt_town2: '&bNastępujące miasta nie były w stanie zapłacić podatk
 msg_bankrupt_nation2: '&bNacji %s nie stać na zapłacenie podatków.'
 status_embassy_town: 'Ambasady w'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_nation: '&bNieprawidłowy komparator. Spróbuj %s.'
 msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
 msg_err_merging_for_kings_only: '&bScalenie może zostać przeprowadzone jedynie przez Lidera Nacji.'
 msg_err_king_of_that_nation_is_not_online: '&bLider Nacji %s, %s nie jest online. Scalenie nie powiodło się.'
@@ -1495,19 +1495,19 @@ msg_err_town_unaffiliated: 'To miasto nie jest z tobą w żaden sposób powiąza
 #Message shown when a player tries to add a jail cell location where one already exists.
 msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
 #Title line of the /plot perm hud.
-msg_perm_hud_title: 'Plot Perms'
+msg_perm_hud_title: 'Uprawnienia działki'
 #Seen in /plot perm hud:
-msg_perm_hud_build: 'Build: '
+msg_perm_hud_build: 'Buduj: '
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Destroy: '
+msg_perm_hud_destroy: 'Niszczenie: '
 #Seen in /plot perm hud:
-msg_perm_hud_switch: 'Switch: '
+msg_perm_hud_switch: 'Przełączanie: '
 #Seen in /plot perm hud:
 msg_perm_hud_item_use: 'Item: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_type: 'Type: '
 #Seen in /plot perm hud:
-msg_perm_hud_pvp: 'PVP: '
+msg_perm_hud_pvp: 'Walka: '
 #Seen in /plot perm hud:
 msg_perm_hud_explosions: 'Explosions: '
 #Seen in /plot perm hud:
@@ -1547,6 +1547,9 @@ msg_comptype_upkeep: 'Upkeep'
 #Message shown when toggling town upkeep admin setting
 msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
-msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
+msg_town_plot_type_limit_reached: 'Twoje miasto osiągneło limit %d %s działek.'
 #Added in 0.156
 msg_spawn_cost_free: 'Free'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'This plot is already a %s type.'
+msg_town_board_reset: '&bTown board reset.'

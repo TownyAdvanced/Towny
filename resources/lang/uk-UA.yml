@@ -1408,7 +1408,7 @@ tc_player_channel_sound_unmuted: 'Звук каналу увімкнено'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'На вашій ділянці знаходиться чужинець. Ви не можете змінити свій статус PvP!'
 #Added in 0.136
-msg_view_on_web: '&7Click to view on the web.'
+msg_view_on_web: '&7Натисніть для перегляду на сайті.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6Місто %s погодилося на злуку з містом, яке переважає %s.'
@@ -1549,4 +1549,7 @@ msg_town_upkeep_setting_set_to: 'Податок на утримання в мі�
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: 'Ваше місто досягнуло ліміту %d %s ділянок.'
 #Added in 0.156
-msg_spawn_cost_free: 'Free'
+msg_spawn_cost_free: 'Безкоштовно'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'This plot is already a %s type.'
+msg_town_board_reset: '&bTown board reset.'

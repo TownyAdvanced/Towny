@@ -1497,42 +1497,42 @@ msg_err_this_location_already_has_a_jailcell: 'This location already has a jail 
 #Title line of the /plot perm hud.
 msg_perm_hud_title: 'Plot Perms'
 #Seen in /plot perm hud:
-msg_perm_hud_build: 'Build: '
+msg_perm_hud_build: 'Bygg: '
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Destroy: '
+msg_perm_hud_destroy: 'Ødelegg: '
 #Seen in /plot perm hud:
-msg_perm_hud_switch: 'Switch: '
+msg_perm_hud_switch: 'Bruk: '
 #Seen in /plot perm hud:
-msg_perm_hud_item_use: 'Item: '
+msg_perm_hud_item_use: 'Gjenstand: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_type: 'Type: '
 #Seen in /plot perm hud:
 msg_perm_hud_pvp: 'PVP: '
 #Seen in /plot perm hud:
-msg_perm_hud_explosions: 'Explosions: '
+msg_perm_hud_explosions: 'Eksplosjoner: '
 #Seen in /plot perm hud:
-msg_perm_hud_firespread: 'Firespread: '
+msg_perm_hud_firespread: 'Brannspredning: '
 #Seen in /plot perm hud:
-msg_perm_hud_mobspawns: 'Mob Spawns: '
+msg_perm_hud_mobspawns: 'Mob spawns: '
 #Seen in /plot perm hud:
-msg_perm_hud_key: 'Key'
+msg_perm_hud_key: 'Nøkkel'
 #Seen in /plot perm hud:
-msg_perm_hud_friend: 'friend'
+msg_perm_hud_friend: 'venn'
 #Seen in /plot perm hud:
-msg_perm_hud_town: 'town'
+msg_perm_hud_town: 'by'
 #Seen in /plot perm hud:
-msg_perm_hud_ally: 'ally'
+msg_perm_hud_ally: 'alliert'
 #Seen in /plot perm hud:
-msg_perm_hud_resident: 'resident'
+msg_perm_hud_resident: 'innbygger'
 #Seen in /plot perm hud:
-msg_perm_hud_nation: 'nation'
+msg_perm_hud_nation: 'nasjon'
 #Seen in /plot perm hud:
-msg_perm_hud_outsider: 'outsider'
+msg_perm_hud_outsider: 'utsider'
 #Seen in /plot perm hud:
-msg_perm_hud_plot_name: 'Plot: '
+msg_perm_hud_plot_name: 'Tomt: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
-msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
+msg_town_level_overridden_with: 'Byen %s har fått bynivået sitt satt til %s.'
 #Message shown when unsetting a manual town level.
 msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
 #Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
@@ -1549,4 +1549,7 @@ msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
 #Added in 0.156
-msg_spawn_cost_free: 'Free'
+msg_spawn_cost_free: 'Gratis'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'This plot is already a %s type.'
+msg_town_board_reset: '&bTown board reset.'
