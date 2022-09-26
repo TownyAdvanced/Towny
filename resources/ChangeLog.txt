@@ -7783,3 +7783,6 @@ v0.92.0.11:
   - API: Add a ConfirmationTransaction to Confirmations.
     - This enables cost-requirements to be baked-in to Confirmations.
     - Costs are passed in as a Supplier<Double> so that calculations can be made after the player accepts.
+0.98.3.11:
+  - Add tab completion for setting town and nation map colours.
+    - Closes #6188.

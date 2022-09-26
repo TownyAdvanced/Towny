@@ -367,6 +367,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "tag":
 					if (args.length == 3)
 						return NameUtil.filterByStart(Collections.singletonList("clear"), args[2]);
+					break;
+				case "mapcolor":
+					if (args.length == 3)
+						return NameUtil.filterByStart(TownySettings.getNationColorsMap().keySet().stream().collect(Collectors.toList()), args[2]);
+					break;
 				default:
 					return Collections.emptyList();
 			}

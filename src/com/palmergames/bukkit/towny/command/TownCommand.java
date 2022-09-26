@@ -526,13 +526,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				case "tag":
 					if (args.length == 3)
 						return NameUtil.filterByStart(Collections.singletonList("clear"), args[2]);
+					break;
 				case "title":
 				case "surname":
 					if (args.length == 3)
 						return NameUtil.filterByStart(NameUtil.getNames(town.getResidents()), args[2]);
+					break;
 				case "board":
 					if (args.length == 3)
 						return NameUtil.filterByStart(townSetBoardTabCompletes, args[2]);
+					break;
+				case "mapcolor":
+					if (args.length == 3)
+						return NameUtil.filterByStart(TownySettings.getTownColorsMap().keySet().stream().collect(Collectors.toList()), args[2]);
+					break;
 				default:
 					return Collections.emptyList();
 			}
