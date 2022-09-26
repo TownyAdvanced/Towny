@@ -2241,7 +2241,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Eg: /town set plottax 10");
 		try {
 			Double amount = Double.parseDouble(split[1]);
-			if (amount < 0)
+			if (!TownySettings.isNegativePlotTaxAllowed() && amount < 0)
 				throw new TownyException(Translatable.of("msg_err_negative_money"));
 			town.setPlotTax(amount);
 			if (admin) TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_plottax", sender.getName(), town.getPlotTax()));
@@ -2256,7 +2256,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Eg: /town set shoptax 10");
 		try {
 			Double amount = Double.parseDouble(split[1]);
-			if (amount < 0)
+			if (!TownySettings.isNegativePlotTaxAllowed() && amount < 0)
 				throw new TownyException(Translatable.of("msg_err_negative_money"));
 			town.setCommercialPlotTax(amount);
 			if (admin) TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_alttax", sender.getName(), "shop", town.getCommercialPlotTax()));
@@ -2271,7 +2271,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Eg: /town set embassytax 10");
 		try {
 			Double amount = Double.parseDouble(split[1]);
-			if (amount < 0)
+			if (!TownySettings.isNegativePlotTaxAllowed() && amount < 0)
 				throw new TownyException(Translatable.of("msg_err_negative_money"));
 			town.setEmbassyPlotTax(amount);
 			if (admin) TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_alttax", sender.getName(), "embassy", town.getEmbassyPlotTax()));

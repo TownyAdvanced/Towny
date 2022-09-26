@@ -1933,6 +1933,10 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.ECO_UPKEEP_PLOTPAYMENTS);
 	}
+	
+	public static boolean isNegativePlotTaxAllowed() {
+		return getBoolean(ConfigNodes.ECO_UPKEEP_PLAYEROWNEDPLOTPAYMENTS);
+	}
 
 	public static double getTownPenaltyUpkeepCost(Town town) {
 		TownUpkeepPenalityCalculationEvent event = new TownUpkeepPenalityCalculationEvent(town, getTownPenaltyUpkeepCostRaw(town));

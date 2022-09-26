@@ -2258,6 +2258,13 @@ public enum ConfigNodes {
 			"# If enabled and you set a negative upkeep for the town",
 			"# any funds the town gains via upkeep at a new day",
 			"# will be shared out between the plot owners."),
+	ECO_UPKEEP_PLAYEROWNEDPLOTPAYMENTS(
+			"economy.daily_taxes.allow_negative_plot_tax",
+			"false",
+			"",
+			"# If enabled, if a plot tax is set to a negative amount",
+			"# it will result in the resident that owns it being paid",
+			"# by the town bank (if the town can afford it.)"),
 	
 	ECO_BANKRUPTCY("economy.bankruptcy", "", "", 
 			"# The Bankruptcy system in Towny will make it so that when a town cannot pay their upkeep costs,",

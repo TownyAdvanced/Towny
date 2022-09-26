@@ -384,7 +384,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			townBlock = townBlockItr.next();
 			double tax = townBlock.getType().getTax(town);
 
-			if (!townBlock.hasResident() || tax < 1)
+			if (!townBlock.hasResident() || !TownySettings.isNegativePlotTaxAllowed() && tax < 1)
 				continue;
 
 			Resident resident = townBlock.getResidentOrNull();
@@ -398,6 +398,13 @@ public class DailyTimerTask extends TownyTimerTask {
 				if (resident.hasTown() && resident.getTownOrNull() == town)
 					if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
 						continue;
+
+				// The PlotTax might be negative, in order to pay the resident for owning a special plot type.
+				if (tax < 0 && town.getAccount().canPayFromHoldings(Math.abs(tax))) {
+					tax = Math.abs(tax);
+					town.getAccount().payTo(tax, resident.getAccount(), String.format("Plot Tax Payment To Resident (%s)", townBlock.getType()));
+					continue;
+				}
 
 				// If the tax would put the town over the bank cap we reduce what will be
 				// paid by the plot owner to what will be allowed.
