@@ -555,7 +555,7 @@ status_forced: '&cZorla'
 status_adjustable: '&aAyarlanabilir'
 status_pvp: 'PVP:'
 explosions: 'Patlamalar:'
-firespread: 'Ateş Yayılması:'
+firespread: 'Ateş Yayılımı:'
 mobspawns: 'Yaratık Doğumu:'
 owner_of_x_plots: '%s arsanın sahibi.'
 status_bank: 'Banka:'
@@ -1408,7 +1408,7 @@ tc_player_channel_sound_unmuted: 'Kanal susturulması kalktı'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Arsanızda bir yabancı var, pvp durumunuzu değiştiremezsiniz!'
 #Added in 0.136
-msg_view_on_web: '&7Click to view on the web.'
+msg_view_on_web: '&7Webde görüntülemek için tıkla.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6%s Kasabası, %s Kasabası ile birleşmeyi kabul etti.'
@@ -1549,7 +1549,7 @@ msg_town_upkeep_setting_set_to: '%s kasabasının bakım ayarı %s olarak ayarla
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: 'Kasaban %d olan %s limitine ulaştı.'
 #Added in 0.156
-msg_spawn_cost_free: 'Free'
+msg_spawn_cost_free: 'Ücretsiz'
 #Message shown when someone tries to set a plot's type to one already set.
-msg_plot_already_of_type: 'This plot is already a %s type.'
-msg_town_board_reset: '&bTown board reset.'
+msg_plot_already_of_type: 'Bu arsa çoktan %s tipinde.'
+msg_town_board_reset: '&bKasaba tahtası temizlendi.'
