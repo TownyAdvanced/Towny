@@ -384,7 +384,8 @@ public class DailyTimerTask extends TownyTimerTask {
 			townBlock = townBlockItr.next();
 			double tax = townBlock.getType().getTax(town);
 
-			if (!townBlock.hasResident() || !TownySettings.isNegativePlotTaxAllowed() && tax < 1)
+			if (!townBlock.hasResident() || tax == 0 ||
+				!TownySettings.isNegativePlotTaxAllowed() && tax < 1)
 				continue;
 
 			Resident resident = townBlock.getResidentOrNull();
