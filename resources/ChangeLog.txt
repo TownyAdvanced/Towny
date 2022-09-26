@@ -7790,3 +7790,17 @@ v0.92.0.11:
     - Default: &f
     - Given to players who have no town.
     - Closes #6169.
+  - New entering-town-placeholders:
+    - When players see town/wilderness notifications for entering towns there are now new options:
+      - {nationname} - Name of the nation.
+      - {nationcapital} - Name of the nation capital and nation.
+      - {nation_motd} - Shows the nationboard message.
+      - {nation_residents} - Shows the number of residents in the nation.
+      - {nation_residents_online} - Shows the number of residents online currently.
+    - Closes #6159.
+  - New Config Option: notification.titles.nationname_format
+    - Default: "&6Nation of %s"
+    - The format used to format the {nationame} option. The name of the nation will replace %s.
+  - New Config Option: notification.titles.nationcapital_format
+    - Default: "&6Entering %s, Capital City of %s"
+    - The format used to format the {nationcapital} option. The name of the capital city and nation will replace the %s and %s.

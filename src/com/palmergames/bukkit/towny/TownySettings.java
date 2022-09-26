@@ -2869,6 +2869,14 @@ public class TownySettings {
 		return getString(ConfigNodes.NOTIFICATION_TITLES_WILDERNESS_SUBTITLE);
 	}
 
+	public static String getNotificationTitlesNationNameFormat() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_NATIONNAME_FORMAT);
+	}
+	
+	public static String getNotificationTitlesNationCapitalFormat() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_NATIONCAPITAL_FORMAT);
+	}
+	
 	public static double getTownRenameCost() {
 		return getDouble(ConfigNodes.ECO_TOWN_RENAME_COST);
 	}

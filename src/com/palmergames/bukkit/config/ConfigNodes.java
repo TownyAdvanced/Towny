@@ -1607,6 +1607,11 @@ public enum ConfigNodes {
 			"# {town_motd} - Shows the townboard message.",
 			"# {town_residents} - Shows the number of residents in the town.",
 			"# {town_residents_online} - Shows the number of residents online currently.",
+			"# {nationname} - Name of the nation, formatted below,",
+			"# {nationcapital} - Name of the nation capital and nation, formatted below,",
+			"# {nation_motd} - Shows the nationboard message.",
+			"# {nation_residents} - Shows the number of residents in the nation.",
+			"# {nation_residents_online} - Shows the number of residents online currently.",
 			"# The notification.town_names_are_verbose setting will affect the {townname} placeholder."),
 	NOTIFICATION_TITLES_TOWN_TITLE(
 			"notification.titles.town_title",
@@ -1628,6 +1633,16 @@ public enum ConfigNodes {
 			"&2{wilderness}",
 			"",
 			"# Entering Wilderness Lower Subtitle line."),
+	NOTIFICATION_TITLES_NATIONNAME_FORMAT(
+			"notification.titles.nationname_format",
+			"&6Nation of %s",
+			"",
+			"# The format used to format the {nationame} option. The name of the nation will replace %s."),
+	NOTIFICATION_TITLES_NATIONCAPITAL_FORMAT(
+			"notification.titles.nationcapital_format",
+			"&6Entering %s, Capital City of %s",
+			"",
+			"# The format used to format the {nationcapital} option. The name of the capital city and nation will replace the %s and %s."),
 	NOTIFICATION_OWNER_SHOWS_NATION_TITLE("notification.owner_shows_nation_title", 
 			"false", 
 			"",
