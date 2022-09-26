@@ -7786,3 +7786,7 @@ v0.92.0.11:
 0.98.3.11:
   - Add tab completion for setting town and nation map colours.
     - Closes #6188.
+  - New Config Option: filters_colour_chat.papi_relational_formatting.no_town
+    - Default: &f
+    - Given to players who have no town.
+    - Closes #6169.

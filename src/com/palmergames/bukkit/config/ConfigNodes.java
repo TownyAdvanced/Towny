@@ -1342,6 +1342,11 @@ public enum ConfigNodes {
 			"filters_colour_chat.papi_relational_formatting.none",
 			"&f",
 			"# Used when two players have no special relationship."),
+	FILTERS_PAPI_REL_FORMATTING_NO_TOWN(
+			"filters_colour_chat.papi_relational_formatting.no_town",
+			"&f",
+			"",
+			"# Given to players who have no town."),
 	FILTERS_PAPI_REL_FORMATTING_SAME_TOWN(
 			"filters_colour_chat.papi_relational_formatting.same_town",
 			"&2",

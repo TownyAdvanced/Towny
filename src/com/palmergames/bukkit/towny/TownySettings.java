@@ -2920,6 +2920,10 @@ public class TownySettings {
 		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_NONE);
 	}
 	
+	public static String getPAPIRelationNoTown() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_NO_TOWN);
+	}
+	
 	public static String getPAPIRelationSameTown() {
 		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_SAME_TOWN);
 	}
