@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -44,9 +46,12 @@ public class JailUtil {
 	 * @param jailer CommandSender of who did the jailing or null.
 	 */
 	public static void jailResident(Resident resident, Jail jail, int cell, int hours, JailReason reason, CommandSender jailer){
-		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive())
-			jailResidentWithBail(resident, jail, cell, hours, TownySettings.getBailAmount(), reason, jailer);
-		else
+		if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive()) {
+			double bail = TownySettings.getBailAmount();
+			if (resident.isMayor())
+				bail = resident.isKing() ? TownySettings.getBailAmountKing() : TownySettings.getBailAmountMayor();
+			jailResidentWithBail(resident, jail, cell, hours, bail, reason, jailer);
+		} else
 			jailResidentWithBail(resident, jail, cell, hours, 0.0, reason, jailer);
 	}
 
@@ -81,12 +86,11 @@ public class JailUtil {
 			return;
 		}
 
-		
 		// Give players an informative book.
 		if (TownySettings.isJailBookEnabled())
 			sendJailedBookToResident(jailedPlayer, reason, hours, bail);
 
-		// Send feedback messages.
+		// Do per-jail-reason operations here.
 		switch(reason) {
 		case MAYOR:
 			// Mayor-initiated Jailings can use a teleport warmup. Prevent logging out.
@@ -98,7 +102,6 @@ public class JailUtil {
 		default:
 		}
 
-		// Declare jail object
 		String jailName = jail.hasName() ? jail.getName() : Translatable.of("jail_sing").toString();
 		// Send feedback message to arresting town
 		if (TownySettings.isAllowingBail() && bail > 0 && TownyEconomyHandler.isActive())
@@ -279,23 +282,14 @@ public class JailUtil {
 		return queuedJailedResidents.contains(resident);
 	}
 	
-	public static void maxJailedUnjail (int setting, Town town) {
+	public static void maxJailedUnjail(Town town) {
 		// Grab jailedResidents list from town
-		List<Resident> jailedResidents = town.getJailedResidents();
-		Resident unjailedresident = null;
-		if (setting == 1)
-		{
-			//use stream and create resident from jailed player with lowest JailHours
-			unjailedresident = jailedResidents.stream()
-					.min(Comparator.comparingInt(Resident::getJailHours))
-					.get();
-		} else if (setting == 2) {
-			//use stream and create resident from jailed player with lowest set Bail
-			unjailedresident = jailedResidents.stream()
-				.min(Comparator.comparingDouble(Resident::getJailBailCost))
-				.get();
-		}
-		
+		Stream<Resident> jailedResidents = town.getJailedResidents().stream();
+		Resident unjailedresident = TownySettings.getMaxJailedNewJailBehavior() == 1
+				// Setting 1 gets the jailed player with lowest JailHours
+				? jailedResidents.min(Comparator.comparingInt(Resident::getJailHours)).get()
+				// Setting 2 gets the jailed player with lowest set Bail
+				: jailedResidents.min(Comparator.comparingDouble(Resident::getJailBailCost)).get();
 		unJailResident(unjailedresident, UnJailReason.OUT_OF_SPACE);
 	}
 }

@@ -1659,11 +1659,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void parseJailCommand(CommandSender sender, Town town, String[] split, boolean admin) throws TownyException {
-
-
+		
 		if (!admin)
 			town = getTownFromPlayerOrThrow((Player) sender);
-
+			
 		if (!town.hasJails())
 			throw new TownyException(Translatable.of("msg_town_has_no_jails"));
 
@@ -1737,7 +1736,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (offset == 0)
 				bail = 0.0;
 
-			// Begin getting hours, bails, jail and cell numbers from the inputted arguments.
+			// Begin getting hours, bail, jail and cell numbers from the inputted arguments.
 			if (split.length > 1) {
 				/*
 				 * Make sure that the arguments being passed in are actually numbers we can use.
@@ -1762,9 +1761,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				hours = Integer.valueOf(split[1]);
 				if (hours < 2)
 					hours = 2;
-				if (hours > TownySettings.getJailedMaxSetHours()) {
-					hours = TownySettings.getJailedMaxSetHours();
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_hours_x", TownySettings.getJailedOutlawJailHours()));
+				if (hours > TownySettings.getJailedMaxHours()) {
+					hours = TownySettings.getJailedMaxHours();
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_hours_x", TownySettings.getJailedMaxHours()));
 				}
 
 				// Set the bail if bailing is enabled and if the argument is given.
@@ -1796,13 +1795,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// Check if Town has reached max potential jailed and react according to maxJailedNewJailBehavior in config
 			if (TownySettings.getMaxJailedPlayerCount() >= 1 && town.getJailedPlayerCount() >= TownySettings.getMaxJailedPlayerCount()) {
-				int maxJailedNewJailBehavior = TownySettings.getMaxJailedNewJailBehavior();
-				if (maxJailedNewJailBehavior == 0)
+				if (TownySettings.getMaxJailedNewJailBehavior() == 0)
 					// simple mode, rejects new jailed people outright
 					throw new TownyException(Translatable.of("msg_town_has_no_jailslots"));
 				else
 					//Pass to JailUtil method
-					JailUtil.maxJailedUnjail(maxJailedNewJailBehavior, town);
+					JailUtil.maxJailedUnjail(town);
 			}
 
 			// Jail the resident.
@@ -1813,8 +1811,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), jailNum));
 
 			// If fee exists (already sanitised for) deduct it from Town bank and inform in chat
-			if (TownyEconomyHandler.isActive() && initialJailFee > 0) {
-				town.getAccount().withdraw(initialJailFee, "New Prisoner");
+			if (initialJailFee > 0) {
+				town.getAccount().withdraw(initialJailFee, "New Prisoner fee for " + jailedResident.getName());
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_x_has_been_withdrawn_for_jailing_of_prisoner_x", initialJailFee,jailedResident));
 			}
 

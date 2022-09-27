@@ -508,6 +508,7 @@ public enum HelpMenu {
 				.add("all", Translation.of("mayor_help_8"));
 		}
 	},
+	
 	TOWN_JAIL {
 		@Override
 		protected MenuBuilder load() {
@@ -519,6 +520,7 @@ public enum HelpMenu {
 				.add("[resident] [hours] [jail] [cell]", "");
 		}
 	},
+
 	TOWN_JAILWITHBAIL {
 		@Override
 		protected MenuBuilder load() {

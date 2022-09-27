@@ -1782,7 +1782,7 @@ public class TownySettings {
 	public static boolean isJailBookEnabled() {
 		return getBoolean(ConfigNodes.JAIL_IS_JAILBOOK_ENABLED);
 	}
-	
+
 	public static boolean isJailingAttackingOutlaws() {
 		
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_OUTLAWS);
@@ -1792,12 +1792,13 @@ public class TownySettings {
 		
 		return getInt(ConfigNodes.JAIL_OUTLAW_JAIL_HOURS);
 	}
-	
+
 	public static int getJailedPOWJailHours() {
 		return getInt(ConfigNodes.JAIL_POW_JAIL_HOURS);
 	}
-	public static int getJailedMaxSetHours() {
-		return getInt(ConfigNodes.JAIL_MAXSET_JAIL_HOURS);
+
+	public static int getJailedMaxHours() {
+		return getInt(ConfigNodes.JAIL_MAX_JAIL_HOURS);
 	}
 
 	public static boolean JailAllowsTeleportItems() {

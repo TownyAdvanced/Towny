@@ -1282,9 +1282,9 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return an unmodifiable List of Residents which are jailed in the town.
 	 */
 	public List<Resident> getJailedResidents() {
-		return Collections.unmodifiableList(new ArrayList<>(TownyUniverse.getInstance().getJailedResidentMap()).stream()
+		return new ArrayList<>(TownyUniverse.getInstance().getJailedResidentMap()).stream()
 				.filter(res -> res.hasJailTown(getName()))
-				.collect(Collectors.toList()));
+				.collect(Collectors.toUnmodifiableList());
 	}
 
 	public void renamePlotGroup(String oldName, PlotGroup group) {

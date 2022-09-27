@@ -10,7 +10,6 @@ public enum JailReason {
 	JailReason(String cause) {
 		this.cause = cause;
 	}
-
 	public String getCause() {
 		return cause;
 	}

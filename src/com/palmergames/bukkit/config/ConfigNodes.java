@@ -2436,8 +2436,8 @@ public enum ConfigNodes {
 			"5",
 			"",
 			"# How many hours an attacking enemy will be jailed for."),
-	JAIL_MAXSET_JAIL_HOURS(
-			"jail.maxset_jail_hours",
+	JAIL_MAX_JAIL_HOURS(
+			"jail.maximum_jail_hours",
 			"5",
 			"",
 			"# The maximum hours that a mayor can set when jailing someone, full number expected."),
