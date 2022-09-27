@@ -1659,172 +1659,168 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void parseJailCommand(CommandSender sender, Town town, String[] split, boolean admin) throws TownyException {
-		int maxJailedNewJailBehavior = TownySettings.getMaxJailedNewJailBehavior();
-		double initialJailFee = TownySettings.initialJailFee();
+
 
 		if (!admin)
 			town = getTownFromPlayerOrThrow((Player) sender);
 
 		if (!town.hasJails())
 			throw new TownyException(Translatable.of("msg_town_has_no_jails"));
-		int hours = 2; // default set to two in relation to https://github.com/TownyAdvanced/Towny/issues/6029
-		double bail = TownySettings.getBailAmount();
-		int jailNum = 1;
-		int cell = 0;
-		Jail jail = town.getPrimaryJail();
+
 		if (split.length == 0) {
 			if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive())
 				HelpMenu.TOWN_JAILWITHBAIL.send(sender);
 			else
 				HelpMenu.TOWN_JAIL.send(sender);
+			return;
+		} 
 
-		} else if (split[0].equalsIgnoreCase("list")) {
-
+		if (split[0].equalsIgnoreCase("list")) {
 			parseJailListCommand(sender, town, StringMgmt.remFirstArg(split));
+			return;
+		}
 
-		} else {
-			
-			try {
-				Resident jailedResident = TownyUniverse.getInstance().getResident(split[0]);
-				if (jailedResident == null || !town.hasResident(jailedResident))
-					throw new TownyException(Translatable.of("msg_resident_not_your_town"));
-				
-				if (TownySettings.newPlayerJailImmunity() > 0) {
-					long time = (jailedResident.getRegistered() + TownySettings.newPlayerJailImmunity()) - System.currentTimeMillis();
-					if (time > 0) {
-						throw new TownyException(Translatable.of("msg_resident_has_not_played_long_enough_to_be_jailed", jailedResident.getName(), TimeMgmt.getFormattedTimeValue(time)));
-					}
-				}
-				// If using initialJailFee option check they can actually afford to jail someone.
-				// Check if economy is on
-				if (TownyEconomyHandler.isActive() && initialJailFee > 0 && !town.getAccount().canPayFromHoldings(initialJailFee))
-					throw new TownyException(Translatable.of("msg_not_enough_money_in_bank_to_jail_x_fee_is_x", jailedResident, initialJailFee));
-				
-				if (jailedResident.isJailed())
-					throw new TownyException(Translatable.of("msg_err_resident_is_already_jailed", jailedResident.getName()));
-				
-				Player jailedPlayer = jailedResident.getPlayer();
-				if (jailedPlayer == null)
-					throw new TownyException(Translatable.of("msg_player_is_not_online", jailedResident.getName()));
+		// Set default values.
+		int hours = 2; // default set to two in relation to https://github.com/TownyAdvanced/Towny/issues/6029
+		double bail = TownySettings.getBailAmount();
+		int jailNum = 1;
+		int cell = 0;
+		Jail jail = town.getPrimaryJail();
+		double initialJailFee = TownyEconomyHandler.isActive() && TownySettings.initialJailFee() > 0 ? TownySettings.initialJailFee() : 0;
 
-				if (!admin && jailedPlayer.getUniqueId().equals(((Player) sender).getUniqueId()))
-					throw new TownyException(Translatable.of("msg_no_self_jailing"));
-				
-				// Test if a player is located where they are outlawed/enemied and unable to teleport.
-				if (!TownyAPI.getInstance().isWilderness(jailedPlayer.getLocation())) {
-					Town jaileeLocTown = TownyAPI.getInstance().getTown(jailedPlayer.getLocation());
-					if (!TownySettings.canOutlawsTeleportOutOfTowns() && jaileeLocTown.hasOutlaw(jailedResident))
-						throw new TownyException(Translatable.of("msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there"));
-					
-					if (jaileeLocTown.hasNation() && 
-						jailedResident.hasNation() &&
-						TownySettings.getDisallowedTownSpawnZones().contains("enemy") &&
-						jaileeLocTown.getNationOrNull().hasEnemy(jailedResident.getNationOrNull()))
-							throw new TownyException(Translatable.of("msg_err_resident_cannot_be_jailed_because_they_are_enemied_there"));
-				}
+		try {
+			Resident jailedResident = TownyUniverse.getInstance().getResident(split[0]);
 
-				if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive())
-					if (split.length > 1) {
-						try {
-							Integer.parseInt(split[1]);
-							if (split.length > 2)
-								Double.parseDouble(split[2]);
-							if (split.length > 3)
-								Integer.parseInt(split[3]);
-							if (split.length > 4)
-								Integer.parseInt(split[4]);
-						} catch (NumberFormatException e) {
-							HelpMenu.TOWN_JAIL.send(sender);
-							return;
-						}
-						hours = Integer.valueOf(split[1]);
-						if (hours < 1)
-							hours = 1;
-						if (hours > TownySettings.getJailedMaxSetHours())
-						{
-							hours = TownySettings.getJailedMaxSetHours();
-							TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_hours_x", TownySettings.getJailedOutlawJailHours()));
-						}
-	
-						if (split.length >= 3) {
-							bail = Double.valueOf(split[2]);
-							if (bail < 1)
-								bail = 1;
-							if (bail > TownySettings.getBailMaxAmount())
-							{
-								bail = TownySettings.getBailMaxAmount();
-								TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_bail_x", TownySettings.getBailMaxAmount()));
-							}
-						}
-						if (split.length == 4) {
-							jailNum = Integer.valueOf(split[3]);
-							jail = town.getJail(jailNum);
-							if (jail == null) 
-								throw new TownyException(Translatable.of("msg_err_the_town_does_not_have_that_many_jails"));
-						}
-	
-						if (split.length == 5) {
-							cell = Integer.valueOf(split[4]) - 1;
-							if (!jail.hasJailCell(cell))
-								throw new TownyException(Translatable.of("msg_err_that_jail_plot_does_not_have_that_many_cells"));
-						}
-					}
-				else
-					if (split.length > 1) {
-						try {
-							Integer.parseInt(split[1]);
-							if (split.length > 2)
-								Integer.parseInt(split[2]);
-							if (split.length > 3)
-								Integer.parseInt(split[3]);
-						} catch (NumberFormatException e) {
-							HelpMenu.TOWN_JAIL.send(sender);
-							return;
-						}
-						hours = Integer.valueOf(split[1]);
-						if (hours < 1)
-							hours = 1;
+			// You can only jail your members of your own town.
+			if (jailedResident == null || !town.hasResident(jailedResident))
+				throw new TownyException(Translatable.of("msg_resident_not_your_town"));
 
-						if (split.length >= 3) {
-							jailNum = Integer.valueOf(split[2]);
-							jail = town.getJail(jailNum);
-							if (jail == null)
-								throw new TownyException(Translatable.of("msg_err_the_town_does_not_have_that_many_jails"));
-						}
+			// Make sure they aren't already jailed.
+			if (jailedResident.isJailed())
+				throw new TownyException(Translatable.of("msg_err_resident_is_already_jailed", jailedResident.getName()));
 
-						if (split.length == 4) {
-							cell = Integer.valueOf(split[3]) - 1;
-							if (!jail.hasJailCell(cell))
-								throw new TownyException(Translatable.of("msg_err_that_jail_plot_does_not_have_that_many_cells"));
-						}
-						bail = 0.0;
-					}
-					
-
-				// Check if Town has reached max potential jailed and react according to maxJailedNewJailBehavior in config
-				if (TownySettings.getMaxJailedPlayerCount() >= 1 && town.getJailedPlayerCount() >= TownySettings.getMaxJailedPlayerCount())
-					// simple mode, rejects new jailed people outright
-					if (maxJailedNewJailBehavior == 0) {
-						throw new TownyException(Translatable.of("msg_town_has_no_jailslots"));
-					} else {
-						//Pass to JailUtil method
-						JailUtil.maxJailedUnjail(maxJailedNewJailBehavior, town);
-					}
-				
-				JailUtil.jailResidentWithBail(jailedResident, jail, cell, hours, bail, JailReason.MAYOR, sender);
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), jailNum));
-				// If fee exists (already sanitised for) deduct it from Town bank and inform in chat
-				if (TownyEconomyHandler.isActive() && initialJailFee > 0)
-				{
-					town.getAccount().withdraw(initialJailFee, "New Prisoner");
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_x_has_been_withdrawn_for_jailing_of_prisoner_x", initialJailFee,jailedResident));
-				}
-
-			} catch (NullPointerException e) {
-				e.printStackTrace();
-				return;
+			// Make sure they're not a new player who is jail-immune.
+			if (TownySettings.newPlayerJailImmunity() > 0) {
+				long time = (jailedResident.getRegistered() + TownySettings.newPlayerJailImmunity()) - System.currentTimeMillis();
+				if (time > 0)
+					throw new TownyException(Translatable.of("msg_resident_has_not_played_long_enough_to_be_jailed", jailedResident.getName(), TimeMgmt.getFormattedTimeValue(time)));
 			}
+
+			// Make sure the town can afford to jail. 
+			if (initialJailFee > 0 && !town.getAccount().canPayFromHoldings(initialJailFee))
+				throw new TownyException(Translatable.of("msg_not_enough_money_in_bank_to_jail_x_fee_is_x", jailedResident, initialJailFee));
+
+			// Make sure the to-be-jailed resident is online.
+			if (jailedResident.isOnline())
+				throw new TownyException(Translatable.of("msg_player_is_not_online", jailedResident.getName()));
+
+			// Make sure this isn't someone jailing themselves to get a free teleport.
+			Player jailedPlayer = jailedResident.getPlayer();
+			if (!admin && jailedPlayer.getUniqueId().equals(((Player) sender).getUniqueId()))
+				throw new TownyException(Translatable.of("msg_no_self_jailing"));
+
+			// Test if a player is located where they are outlawed/enemied and unable to teleport.
+			Town jaileeLocTown = TownyAPI.getInstance().getTown(jailedPlayer.getLocation());
+			if (jaileeLocTown != null) {
+				if (!TownySettings.canOutlawsTeleportOutOfTowns() && jaileeLocTown.hasOutlaw(jailedResident))
+					throw new TownyException(Translatable.of("msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there"));
+
+				if (jaileeLocTown.hasNation() && 
+					jailedResident.hasNation() &&
+					TownySettings.getDisallowedTownSpawnZones().contains("enemy") &&
+					jaileeLocTown.getNationOrNull().hasEnemy(jailedResident.getNationOrNull()))
+						throw new TownyException(Translatable.of("msg_err_resident_cannot_be_jailed_because_they_are_enemied_there"));
+			}
+
+			// offset is used to determine what argument in split is used for bail, jail # and cell #. 
+			int offset = TownySettings.isAllowingBail() && TownyEconomyHandler.isActive() ? 1 : 0;
+			if (offset == 0)
+				bail = 0.0;
+
+			// Begin getting hours, bails, jail and cell numbers from the inputted arguments.
+			if (split.length > 1) {
+				/*
+				 * Make sure that the arguments being passed in are actually numbers we can use.
+				 */
+				try {
+					Integer.parseInt(split[1]); // Hours
+					if (offset == 1 && split.length > 2)
+						Double.parseDouble(split[2]); // Bail
+					if (split.length > 2 + offset)
+						Integer.parseInt(split[2 + offset]); // Jail
+					if (split.length > 3 + offset)
+						Integer.parseInt(split[3 + offset]); // Cell
+				} catch (NumberFormatException e) {
+					if (offset == 1)
+						HelpMenu.TOWN_JAILWITHBAIL.send(sender);
+					else 
+						HelpMenu.TOWN_JAIL.send(sender);
+					return;
+				}
+
+				// Set the hours.
+				hours = Integer.valueOf(split[1]);
+				if (hours < 2)
+					hours = 2;
+				if (hours > TownySettings.getJailedMaxSetHours()) {
+					hours = TownySettings.getJailedMaxSetHours();
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_hours_x", TownySettings.getJailedOutlawJailHours()));
+				}
+
+				// Set the bail if bailing is enabled and if the argument is given.
+				if (offset > 0 && split.length >= 3) {
+					bail = Double.valueOf(split[2]);
+					if (bail < 1)
+						bail = 1;
+					if (bail > TownySettings.getBailMaxAmount()) {
+						bail = TownySettings.getBailMaxAmount();
+						TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_bail_x", TownySettings.getBailMaxAmount()));
+					}
+				}
+
+				// Set the jail number if the argument is given.
+				if (split.length >= 3 + offset) {
+					jailNum = Integer.valueOf(split[3 + offset]);
+					jail = town.getJail(jailNum);
+					if (jail == null) 
+						throw new TownyException(Translatable.of("msg_err_the_town_does_not_have_that_many_jails"));
+				}
+
+				// Set the jail cell if the argument is given.
+				if (split.length == 4 + offset) {
+					cell = Integer.valueOf(split[3 + offset]) - 1;
+					if (!jail.hasJailCell(cell))
+						throw new TownyException(Translatable.of("msg_err_that_jail_plot_does_not_have_that_many_cells"));
+				}
+			}
+
+			// Check if Town has reached max potential jailed and react according to maxJailedNewJailBehavior in config
+			if (TownySettings.getMaxJailedPlayerCount() >= 1 && town.getJailedPlayerCount() >= TownySettings.getMaxJailedPlayerCount()) {
+				int maxJailedNewJailBehavior = TownySettings.getMaxJailedNewJailBehavior();
+				if (maxJailedNewJailBehavior == 0)
+					// simple mode, rejects new jailed people outright
+					throw new TownyException(Translatable.of("msg_town_has_no_jailslots"));
+				else
+					//Pass to JailUtil method
+					JailUtil.maxJailedUnjail(maxJailedNewJailBehavior, town);
+			}
+
+			// Jail the resident.
+			JailUtil.jailResidentWithBail(jailedResident, jail, cell, hours, bail, JailReason.MAYOR, sender);
+
+			// Send an admin a message if the player was jailed via Admin.
+			if (admin)
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_player_has_been_sent_to_jail_number", jailedPlayer.getName(), jailNum));
+
+			// If fee exists (already sanitised for) deduct it from Town bank and inform in chat
+			if (TownyEconomyHandler.isActive() && initialJailFee > 0) {
+				town.getAccount().withdraw(initialJailFee, "New Prisoner");
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_x_has_been_withdrawn_for_jailing_of_prisoner_x", initialJailFee,jailedResident));
+			}
+
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			return;
 		}
 	}
 

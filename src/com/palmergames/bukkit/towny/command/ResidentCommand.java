@@ -306,7 +306,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					final Town jailTown = resident.getJailTown();
 
 					// Set cost of bail.
-					double cost = resident.getJailBail();
+					double cost = resident.getJailBailCost();
 					if (resident.isMayor())
 						cost = TownySettings.getBailAmountMayor();
 					if (resident.isKing())

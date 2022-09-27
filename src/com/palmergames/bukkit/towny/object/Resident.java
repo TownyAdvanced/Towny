@@ -163,11 +163,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		jailHours = hours;
 	}
 
-	public double getJailBail() {
+	public double getJailBailCost() {
 		return jailBail;
 	}
 
-	public void setJailBail(Double bail) {
+	public void setJailBailCost(double bail) {
 		jailBail = bail;
 	}
 	

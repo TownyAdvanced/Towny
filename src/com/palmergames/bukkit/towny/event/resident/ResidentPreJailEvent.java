@@ -66,8 +66,10 @@ public class ResidentPreJailEvent extends Event implements Cancellable {
 	public int getHours() {
 		return hours;
 	}
-	
-	public double getBail() {return bail;}
+
+	public double getBail() {
+		return bail;
+	}
 
 	public JailReason getReason() {
 		return reason;

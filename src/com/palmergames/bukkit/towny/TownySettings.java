@@ -1794,11 +1794,9 @@ public class TownySettings {
 	}
 	
 	public static int getJailedPOWJailHours() {
-
 		return getInt(ConfigNodes.JAIL_POW_JAIL_HOURS);
 	}
 	public static int getJailedMaxSetHours() {
-
 		return getInt(ConfigNodes.JAIL_MAXSET_JAIL_HOURS);
 	}
 
@@ -1823,17 +1821,18 @@ public class TownySettings {
 	}
 
 	public static double getBailMaxAmount() {
-
 		return getDouble(ConfigNodes.JAIL_BAIL_BAILMAX_AMOUNT);
 	}
+
 	public static double initialJailFee() {
 		return getDouble(ConfigNodes.JAIL_FEE_INITIAL_AMOUNT);
 	}
+
 	public static double hourlyJailFee() {
 		return getDouble(ConfigNodes.JAIL_FEE_HOURLY_AMOUNT);
 	}
-	public static int getMaxJailedPlayerCount() {
 
+	public static int getMaxJailedPlayerCount() {
 		return getInt(ConfigNodes.JAIL_MAX_JAILED_COUNT);
 	}
 	

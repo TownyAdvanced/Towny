@@ -97,7 +97,6 @@ public class Town extends Government implements TownBlockOwner {
 	private long movedHomeBlockAt;
 	private Jail primaryJail;
 	private int manualTownLevel = -1;
-	private int jailedPlayerCount;
 
 	public Town(String name) {
 		super(name);
@@ -1271,21 +1270,21 @@ public class Town extends Government implements TownBlockOwner {
 			return getJail(1);
 		return primaryJail;
 	}
-
-	// Returns the number of players imprisoned in the town as an integer
+	
+	/**
+	 * @return the number of jailed residents in the town.
+	 */
 	public int getJailedPlayerCount() {
-		int JailedPlayerCount = getJailedResidents().size();
-		return JailedPlayerCount;
+		return getJailedResidents().size();
 	}
-	// Iterates through residents in TownyUniverse.getJailedResidentMap() and adds to residentsJailed list if jailed in this town
-	public List<Resident> getJailedResidents() {
-		List<Resident> residentsJailed = new ArrayList<>();
 
-		for (Resident resident : new ArrayList<>(TownyUniverse.getInstance().getJailedResidentMap())) {
-			if (resident.hasJailTown(getName()))
-				residentsJailed.add(resident);
-		}
-		return Collections.unmodifiableList(residentsJailed);
+	/**
+	 * @return an unmodifiable List of Residents which are jailed in the town.
+	 */
+	public List<Resident> getJailedResidents() {
+		return Collections.unmodifiableList(new ArrayList<>(TownyUniverse.getInstance().getJailedResidentMap()).stream()
+				.filter(res -> res.hasJailTown(getName()))
+				.collect(Collectors.toList()));
 	}
 
 	public void renamePlotGroup(String oldName, PlotGroup group) {

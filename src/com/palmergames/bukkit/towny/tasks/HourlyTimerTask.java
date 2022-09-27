@@ -51,31 +51,31 @@ public class HourlyTimerTask extends TownyTimerTask {
 	/*
 	 * Reduce the number of hours jailed residents are jailed for and remove hourly jail fee from town bank if possible
 	 */
-	
-	// Declare variables
-	Town selectedJailTown = null;
-	double hourlyJailFee = TownySettings.hourlyJailFee();
-
 	private void decrementJailedHoursAndIncurJailFees() {
+		double hourlyJailFee = TownyEconomyHandler.isActive() && TownySettings.hourlyJailFee() > 0 ? TownySettings.hourlyJailFee() : 0;
 		for (Resident resident : new ArrayList<>(universe.getJailedResidentMap()))
-			if (resident.hasJailTime())
-				if (resident.getJailHours() <= 1)
+			if (resident.hasJailTime()) {
+				// Resident has served their sentence.
+				if (resident.getJailHours() <= 1) {
 					Bukkit.getScheduler().runTaskLater(plugin, () -> JailUtil.unJailResident(resident, UnJailReason.SENTENCE_SERVED), 20);
-				else if (TownyEconomyHandler.isActive() && TownySettings.hourlyJailFee() > 0){
-					selectedJailTown = resident.getJailTown();
-					if (!selectedJailTown.getAccount().canPayFromHoldings(hourlyJailFee))
-					{
-						Bukkit.getScheduler().runTaskLater(plugin, () -> JailUtil.unJailResident(resident, UnJailReason.INSUFFICIENT_FUNDS), 20);
-					} else {
-						resident.setJailHours(resident.getJailHours() - 1);
-						resident.save();
-						TownyMessaging.sendPrefixedTownMessage(selectedJailTown, Translatable.of("msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x", hourlyJailFee,resident));
-						String reason = "Jailee Upkeep for " + resident.getName();
-						selectedJailTown.getAccount().withdraw(hourlyJailFee, reason);
-					}
-				} else {
-					resident.setJailHours(resident.getJailHours() - 1);
-					resident.save();
+					continue;
 				}
+
+				// The jailing Town might have to pay to keep the resident locked up.
+				if (hourlyJailFee > 0) {
+					Town jailTown = resident.getJailTown();
+					if (!jailTown.getAccount().withdraw(hourlyJailFee, "Jailee Hourly Fee for " + resident.getName())) {
+						// Town receives unjail message stating lack of money from within JailUtil.
+						Bukkit.getScheduler().runTaskLater(plugin, () -> JailUtil.unJailResident(resident, UnJailReason.INSUFFICIENT_FUNDS), 20);
+						continue;
+					} else {
+						TownyMessaging.sendPrefixedTownMessage(jailTown, Translatable.of("msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x", hourlyJailFee,resident));
+					}
+				}
+
+				// Reduce the hours and save the resident.
+				resident.setJailHours(resident.getJailHours() - 1);
+				resident.save();
+			}
 	}
 }
