@@ -2445,12 +2445,12 @@ public enum ConfigNodes {
 			"jail.fee_initial_amount",
 			"-1",
 			"",
-			"# Amount that it costs per player jailed for a town, this is withdrawn from the Town bank. Set to -1 to disable"),
+			"# Amount that it costs per player jailed for a town, this is withdrawn from the Town bank. Set to -1 to disable."),
 	JAIL_FEE_HOURLY_AMOUNT(
 			"jail.fee_hourly_amount",
 			"-1",
 			"",
-			"# Amount that it costs per player jailed per hour for a town, this is withdrawn from the Town bank. Set to -1 to disable"),
+			"# Amount that it costs per player jailed per hour for a town, this is withdrawn from the Town bank. Set to -1 to disable."),
 	JAIL_JAIL_ALLOWS_TELEPORT_ITEMS(
 			"jail.jail_allows_teleport_items",
 			"false",
@@ -2497,9 +2497,9 @@ public enum ConfigNodes {
 			"0",
 			"",
 			"# Behaviour for new jail attempts if max jailed count is reached",
-			"# 0 = Unable to jail new players until a current prisoner is released",
-			"# 1= A prisoner slot will be made by automatically releasing a prisoner based on remaining time",
-			"# 2= A prisoner slot will be made by automatically releasing a prisoner based on lowest custom bail"),
+			"# 0 = Unable to jail new players until a current prisoner is released.",
+			"# 1 = A prisoner slot will be made by automatically releasing a prisoner based on lowest remaining time.",
+			"# 2 = A prisoner slot will be made by automatically releasing a prisoner based on lowest custom bail."),
 	JAIL_IS_JAILBOOK_ENABLED(
 			"jail.is_jailbook_enabled",
 			"true",
