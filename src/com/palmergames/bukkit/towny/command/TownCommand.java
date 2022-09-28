@@ -1683,7 +1683,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		int hours = 2; // default set to two in relation to https://github.com/TownyAdvanced/Towny/issues/6029
 		double bail = TownySettings.getBailAmount();
 		int jailNum = 1;
-		int cell = 0;
+		int cell = 1;
 		Jail jail = town.getPrimaryJail();
 		double initialJailFee = TownyEconomyHandler.isActive() && TownySettings.initialJailFee() > 0 ? TownySettings.initialJailFee() : 0;
 
@@ -1710,7 +1710,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_not_enough_money_in_bank_to_jail_x_fee_is_x", jailedResident, initialJailFee));
 
 			// Make sure the to-be-jailed resident is online.
-			if (jailedResident.isOnline())
+			if (!jailedResident.isOnline())
 				throw new TownyException(Translatable.of("msg_player_is_not_online", jailedResident.getName()));
 
 			// Make sure this isn't someone jailing themselves to get a free teleport.
@@ -1779,7 +1779,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				// Set the jail number if the argument is given.
 				if (split.length >= 3 + offset) {
-					jailNum = Integer.valueOf(split[3 + offset]);
+					jailNum = Integer.valueOf(split[2 + offset]);
 					jail = town.getJail(jailNum);
 					if (jail == null) 
 						throw new TownyException(Translatable.of("msg_err_the_town_does_not_have_that_many_jails"));
@@ -1787,7 +1787,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				// Set the jail cell if the argument is given.
 				if (split.length == 4 + offset) {
-					cell = Integer.valueOf(split[3 + offset]) - 1;
+					cell = Integer.valueOf(split[3 + offset]);
 					if (!jail.hasJailCell(cell))
 						throw new TownyException(Translatable.of("msg_err_that_jail_plot_does_not_have_that_many_cells"));
 				}
