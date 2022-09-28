@@ -1681,7 +1681,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Set default values.
 		int hours = 2; // default set to two in relation to https://github.com/TownyAdvanced/Towny/issues/6029
-		double bail = TownySettings.getBailAmount();
+		double bail = TownySettings.isAllowingBail() && TownyEconomyHandler.isActive() ? TownySettings.getBailAmount() : 0.0;
 		int jailNum = 1;
 		int cell = 1;
 		Jail jail = town.getPrimaryJail();
@@ -1733,8 +1733,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// offset is used to determine what argument in split is used for bail, jail # and cell #. 
 			int offset = TownySettings.isAllowingBail() && TownyEconomyHandler.isActive() ? 1 : 0;
-			if (offset == 0)
-				bail = 0.0;
 
 			// Begin getting hours, bail, jail and cell numbers from the inputted arguments.
 			if (split.length > 1) {
