@@ -15,7 +15,7 @@ public class ConfirmationTransaction {
 
 	/**
 	 * A transaction which must succeed for a Confirmation to complete.
-	 * <p>
+	 *
 	 * @param costSupplier cost of the transaction. 
 	 * @param payee Account which will have to pay.
 	 * @param loggedMessage The message logged in the money.csv file.
@@ -31,7 +31,7 @@ public class ConfirmationTransaction {
 	/**
 	 * A transaction which must succeed for a Confirmation to complete.
 	 * Uses the default no money error message.
-	 * <p>
+	 *
 	 * @param costSupplier cost of the transaction. 
 	 * @param payee Account which will have to pay.
 	 * @param loggedMessage The message logged in the money.csv file.
