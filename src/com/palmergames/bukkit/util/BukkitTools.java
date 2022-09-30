@@ -14,6 +14,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scoreboard.Criteria;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -267,5 +272,17 @@ public class BukkitTools {
 			
 		}
 		return false;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static Objective objective(Scoreboard board, @NotNull String name, @NotNull String displayName) {
+		Objective objective;
+		try {
+			objective = board.registerNewObjective(name, Criteria.DUMMY, displayName);
+		} catch (NoClassDefFoundError e) {
+			// TODO: Remove when 1.19.2 is the lowest supported version.
+			objective = board.registerNewObjective(name, "dummy", displayName);
+		}
+		return objective;
 	}
 }

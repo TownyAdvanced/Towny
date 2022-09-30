@@ -7809,3 +7809,4 @@ v0.92.0.11:
     - If enabled, if a plot tax is set to a negative amount it will result in the resident that owns it being paid by the town bank (if the town can afford it.)
     - Make it possible for plot taxes to be negative, as a way for mayors to pay residents for owning plots.
     - Closes #6047.
+  - Adopt new Spigot Criteria Scoreboard API.
