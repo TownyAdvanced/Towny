@@ -1551,5 +1551,5 @@ msg_town_plot_type_limit_reached: 'La tua città ha raggiunto il limite di %d %s
 #Added in 0.156
 msg_spawn_cost_free: 'Gratuito'
 #Message shown when someone tries to set a plot's type to one already set.
-msg_plot_already_of_type: 'This plot is already a %s type.'
-msg_town_board_reset: '&bTown board reset.'
+msg_plot_already_of_type: 'Questo plot è già di tipo %s.'
+msg_town_board_reset: '&bRipristino bordo della città.'
