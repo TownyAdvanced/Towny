@@ -989,7 +989,7 @@ public class TownyPlayerListener implements Listener {
 				placeholders.put("{nation_residents_online}", TownyAPI.getInstance().getOnlinePlayers(nation).size());
 				placeholders.put("{nation_motd}", nation.getBoard());
 				if (town.isCapital()) 
-					placeholders.put("{nationcapital}", String.format(TownySettings.getNotificationTitlesNationCapitalFormat(), town.getName(), nation.getName()));
+					placeholders.put("{nationcapital}", getCapitalSlug(town.getName(), nation.getName()));
 			}
 			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
@@ -999,6 +999,14 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 	
+	private Object getCapitalSlug(String townName, String nationName) {
+		String format = TownySettings.getNotificationTitlesNationCapitalFormat();
+		if (format.contains("%t") || format.contains("%n"))
+			return format.replace("%t", townName).replace("%n", nationName);
+		else 
+			return String.format(format, nationName);
+	}
+
 	/**
 	 * PlayerLeaveTownEvent
 	 * Currently used for:
