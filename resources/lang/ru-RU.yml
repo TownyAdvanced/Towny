@@ -1532,7 +1532,7 @@ msg_perm_hud_outsider: 'чужак'
 msg_perm_hud_plot_name: 'Участок: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
-msg_town_level_overridden_with: 'Город %s имеет уровень города %s.sdas'
+msg_town_level_overridden_with: 'Городу %s установлен уровень %s.'
 #Message shown when unsetting a manual town level.
 msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
 #Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
@@ -1549,7 +1549,7 @@ msg_town_upkeep_setting_set_to: 'Налог на содержание у гор�
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: 'Ваш город достиг лимита в %d %s участков.'
 #Added in 0.156
-msg_spawn_cost_free: 'Free'
+msg_spawn_cost_free: 'Бесплатно'
 #Message shown when someone tries to set a plot's type to one already set.
-msg_plot_already_of_type: 'This plot is already a %s type.'
-msg_town_board_reset: '&bTown board reset.'
+msg_plot_already_of_type: 'Этот участок уже %s вида.'
+msg_town_board_reset: '&bДоска объявлений очищена.'
