@@ -1199,7 +1199,7 @@ msg_overrides_removed: '&bRemoved permission overrides for %s.'
 msg_overrides_added: '&bAdded default permission overrides for %s.'
 msg_no_overrides_set: '&b%s does not have any overrides set for this %s.'
 msg_overrides_already_set: '&b%s already has overrides set for this %s.'
-msg_cache_block_err: '&cYou are not allowed to %s here.'
+msg_cache_block_err: 'Kamu tidak diizinkan untuk %s disini.'
 msg_err_plot_belongs_to_group: '&cPlot belongs to a group, use %s.'
 plotgroup_sing: 'Plot Group'
 msg_err_ally_limit_reached: 'Your nation has reached the ally limit, unable to accept.'
@@ -1416,11 +1416,11 @@ town1_has_merged_with_town2: '&6The town %s has agreed to merge together with th
 status_neutrality_cost: 'Neutrality Cost:'
 #Added in 0.138
 #Line 1 of the givebonus warning.
-msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+msg_ptw_warning_1: 'Jika kamu membayar dengan uang asli untuk town block tersebut harus dipahami bahwa: server yang sedang kamu mainkan saat ini melanggar Minecraft EULA dan Lisensi Towny.'
 #Line 2 of the givebonus warning.
-msg_ptw_warning_2: 'Tim Towny tidak pernah bermaksud menjadikan blokkota dapat dibeli dengan uang nyata.'
+msg_ptw_warning_2: 'Tim Towny tidak pernah menginginkan blokkota dapat dibeli dengan uang asli.'
 #Line 3 of the givebonus warning.
-msg_ptw_warning_3: 'Jika Anda bermain dengan uang nyata Anda harus mempertimbangkan bermain di server Towny yang tunduk pada permintaan tim Towny.'
+msg_ptw_warning_3: 'Jika kamu membayar dengan uang asli, kami sarankan untuk bermain di server Towny lainnya yang menghormati harapan dari Tim Towny.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'Anda telah diundang untuk bergabung %s&9 (Negara: %s&9)'
 #Added in 0.139
