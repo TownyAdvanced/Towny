@@ -1136,7 +1136,6 @@ msg_err_you_cannot_remove_the_last_cell: 'Anda tidak dapat menghapus sel penjara
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Jangan keluar sebelum diteleportasi ke penjara, akibatnya bisa fatal.'
 jail_plu: 'Penjara'
 jail_sing: 'Penjara'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s telah dikirim ke %s ke sel nomor %s selama %s jam oleh %s.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s belum bermain cukup lama untuk dipenjara, tunggu hingga %s'
 #Added in 0.108
 msg_town_not_peaceful: '&bKota tidak mampu menjaga kedamaiannya.'
@@ -1199,7 +1198,7 @@ msg_overrides_removed: '&bRemoved permission overrides for %s.'
 msg_overrides_added: '&bAdded default permission overrides for %s.'
 msg_no_overrides_set: '&b%s does not have any overrides set for this %s.'
 msg_overrides_already_set: '&b%s already has overrides set for this %s.'
-msg_cache_block_err: '&cYou are not allowed to %s here.'
+msg_cache_block_err: 'Kamu tidak diizinkan untuk %s disini.'
 msg_err_plot_belongs_to_group: '&cPlot belongs to a group, use %s.'
 plotgroup_sing: 'Plot Group'
 msg_err_ally_limit_reached: 'Your nation has reached the ally limit, unable to accept.'
@@ -1416,11 +1415,11 @@ town1_has_merged_with_town2: '&6The town %s has agreed to merge together with th
 status_neutrality_cost: 'Neutrality Cost:'
 #Added in 0.138
 #Line 1 of the givebonus warning.
-msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+msg_ptw_warning_1: 'Jika kamu membayar dengan uang asli untuk town block tersebut harus dipahami bahwa: server yang sedang kamu mainkan saat ini melanggar Minecraft EULA dan Lisensi Towny.'
 #Line 2 of the givebonus warning.
-msg_ptw_warning_2: 'Tim Towny tidak pernah bermaksud menjadikan blokkota dapat dibeli dengan uang nyata.'
+msg_ptw_warning_2: 'Tim Towny tidak pernah menginginkan blokkota dapat dibeli dengan uang asli.'
 #Line 3 of the givebonus warning.
-msg_ptw_warning_3: 'Jika Anda bermain dengan uang nyata Anda harus mempertimbangkan bermain di server Towny yang tunduk pada permintaan tim Towny.'
+msg_ptw_warning_3: 'Jika kamu membayar dengan uang asli, kami sarankan untuk bermain di server Towny lainnya yang menghormati harapan dari Tim Towny.'
 #Message shown when a town invites a player to join, and that town has a nation.
 you_have_been_invited_to_join3: 'Anda telah diundang untuk bergabung %s&9 (Negara: %s&9)'
 #Added in 0.139
@@ -1553,3 +1552,16 @@ msg_spawn_cost_free: 'Free'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'This plot is already a %s type.'
 msg_town_board_reset: '&bTown board reset.'
+msg_town_has_no_jailslots: 'The town jail is full.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s telah dikirim ke %s ke sel nomor %s selama %s jam oleh %s.'
+msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s has been released to make space for another prisoner.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
