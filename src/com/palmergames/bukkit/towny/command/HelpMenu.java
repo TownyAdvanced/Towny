@@ -520,6 +520,19 @@ public enum HelpMenu {
 				.add("[resident] [hours] [jail] [cell]", "");
 		}
 	},
+
+	TOWN_JAILWITHBAIL {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town jail")
+				.add("list", "")
+				.add("[resident]", "")
+				.add("[resident] [hours]", "")
+				.add("[resident] [hours] [bail]", "")
+				.add("[resident] [hours] [bail] [jail]", "")
+				.add("[resident] [hours] [bail] [jail] [cell]", "");
+		}
+	},
 	
 	TOWN_UNJAIL {
 		@Override

@@ -1775,6 +1775,14 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_ENEMIES);
 	}
 	
+	public static int getMaxJailedNewJailBehavior() {
+		return getInt(ConfigNodes.JAIL_MAX_JAILED_NEWJAIL_BEHAVIOR);
+	}
+
+	public static boolean isJailBookEnabled() {
+		return getBoolean(ConfigNodes.JAIL_IS_JAILBOOK_ENABLED);
+	}
+
 	public static boolean isJailingAttackingOutlaws() {
 		
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_OUTLAWS);
@@ -1783,6 +1791,14 @@ public class TownySettings {
 	public static int getJailedOutlawJailHours() {
 		
 		return getInt(ConfigNodes.JAIL_OUTLAW_JAIL_HOURS);
+	}
+
+	public static int getJailedPOWJailHours() {
+		return getInt(ConfigNodes.JAIL_POW_JAIL_HOURS);
+	}
+
+	public static int getJailedMaxHours() {
+		return getInt(ConfigNodes.JAIL_MAX_JAIL_HOURS);
 	}
 
 	public static boolean JailAllowsTeleportItems() {
@@ -1803,6 +1819,22 @@ public class TownySettings {
 	public static double getBailAmount() {
 		
 		return getDouble(ConfigNodes.JAIL_BAIL_BAIL_AMOUNT);
+	}
+
+	public static double getBailMaxAmount() {
+		return getDouble(ConfigNodes.JAIL_BAIL_BAILMAX_AMOUNT);
+	}
+
+	public static double initialJailFee() {
+		return getDouble(ConfigNodes.JAIL_FEE_INITIAL_AMOUNT);
+	}
+
+	public static double hourlyJailFee() {
+		return getDouble(ConfigNodes.JAIL_FEE_HOURLY_AMOUNT);
+	}
+
+	public static int getMaxJailedPlayerCount() {
+		return getInt(ConfigNodes.JAIL_MAX_JAILED_COUNT);
 	}
 	
 	public static double getBailAmountMayor() {

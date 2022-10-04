@@ -19,15 +19,17 @@ public class ResidentPreJailEvent extends Event implements Cancellable {
 	private final Jail jail;
 	private final int cell;
 	private final int hours;
+	private final double bail;
 	private final JailReason reason;
 	private boolean isCancelled = false;
 	private String cancelMessage = Translation.of("msg_err_command_disable");
 	
-	public ResidentPreJailEvent(Resident resident, Jail jail, int cell, int hours, JailReason reason) {
+	public ResidentPreJailEvent(Resident resident, Jail jail, int cell, int hours, double bail, JailReason reason) {
 		this.resident = resident;
 		this.jail = jail;
 		this.cell = cell;
 		this.hours = hours;
+		this.bail = bail;
 		this.reason = reason;
 	}
 
@@ -63,6 +65,10 @@ public class ResidentPreJailEvent extends Event implements Cancellable {
 
 	public int getHours() {
 		return hours;
+	}
+
+	public double getBail() {
+		return bail;
 	}
 
 	public JailReason getReason() {
