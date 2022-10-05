@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.huds;
 
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -49,32 +48,31 @@ public class PermHUD {
 			return;                                       // will throw NPEs if we continue.
 		}
 
-		try {
-			TownBlock townBlock = worldCoord.getTownBlock();
-			TownBlockOwner owner = townBlock.hasResident() ? townBlock.getResidentOrNull() : townBlock.getTown();
-			TownyWorld world = townBlock.getWorld();
-			TownyPermission tp = townBlock.getPermissions();
-			String v = (owner instanceof Resident) ? "f" : "r";
-			String u = (owner instanceof Resident) ? "t" : "n";
-			build = (tp.getResidentPerm(ActionType.BUILD) ? v : "-") + (tp.getNationPerm(ActionType.BUILD) ? u : "-") + (tp.getAllyPerm(ActionType.BUILD) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.BUILD) ? "o" : "-");
-			destroy = (tp.getResidentPerm(ActionType.DESTROY) ? v : "-") + (tp.getNationPerm(ActionType.DESTROY) ? u : "-") + (tp.getAllyPerm(ActionType.DESTROY) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.DESTROY) ? "o" : "-");
-			switching = (tp.getResidentPerm(ActionType.SWITCH) ? v : "-") + (tp.getNationPerm(ActionType.SWITCH) ? u : "-") + (tp.getAllyPerm(ActionType.SWITCH) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.SWITCH) ? "o" : "-");
-			item = (tp.getResidentPerm(ActionType.ITEM_USE) ? v : "-") + (tp.getNationPerm(ActionType.ITEM_USE) ? u : "-") + (tp.getAllyPerm(ActionType.ITEM_USE) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.ITEM_USE) ? "o" : "-");
-			type = (townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().getName());
-			pvp = (!CombatUtil.preventPvP(worldCoord.getTownyWorld(), townBlock)) ? translator.of("status_on") : translator.of("status_off");
-			explosions = (world.isForceExpl() || townBlock.getPermissions().explosion) ? translator.of("status_on") : translator.of("status_off");
-			firespread = (world.isForceFire() || townBlock.getPermissions().fire) ? translator.of("status_on") : translator.of("status_off");
-			mobspawn = (world.isForceTownMobs() || townBlock.getPermissions().mobs) ? translator.of("status_on") : translator.of("status_off");
-			if (townBlock.hasResident()) {
-				title = ChatColor.GOLD + townBlock.getResidentOrNull().getName() + " (" + townBlock.getTown().getName() + ")";
-			} else {
-				title = ChatColor.GOLD + townBlock.getTown().getName();
-			}
-			plotName = (townBlock.getName().isEmpty() ? "" : (translator.of("msg_perm_hud_plot_name") + townBlock.getName()));
-		} catch (NotRegisteredException e) {
+		if (worldCoord.isWilderness()) {
 			clearPerms(p);
 			return;
 		}
+
+		TownBlock townBlock = worldCoord.getTownBlockOrNull();
+		TownBlockOwner owner = townBlock.getTownBlockOwner();
+		TownyWorld world = townBlock.getWorld();
+		TownyPermission tp = townBlock.getPermissions();
+		String v = (owner instanceof Resident) ? "f" : "r";
+		String u = (owner instanceof Resident) ? "t" : "n";
+		build = (tp.getResidentPerm(ActionType.BUILD) ? v : "-") + (tp.getNationPerm(ActionType.BUILD) ? u : "-") + (tp.getAllyPerm(ActionType.BUILD) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.BUILD) ? "o" : "-");
+		destroy = (tp.getResidentPerm(ActionType.DESTROY) ? v : "-") + (tp.getNationPerm(ActionType.DESTROY) ? u : "-") + (tp.getAllyPerm(ActionType.DESTROY) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.DESTROY) ? "o" : "-");
+		switching = (tp.getResidentPerm(ActionType.SWITCH) ? v : "-") + (tp.getNationPerm(ActionType.SWITCH) ? u : "-") + (tp.getAllyPerm(ActionType.SWITCH) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.SWITCH) ? "o" : "-");
+		item = (tp.getResidentPerm(ActionType.ITEM_USE) ? v : "-") + (tp.getNationPerm(ActionType.ITEM_USE) ? u : "-") + (tp.getAllyPerm(ActionType.ITEM_USE) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.ITEM_USE) ? "o" : "-");
+		type = townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().getName();
+		pvp = !CombatUtil.preventPvP(worldCoord.getTownyWorld(), townBlock) ? translator.of("status_on") : translator.of("status_off");
+		explosions = (world.isForceExpl() || tp.explosion) ? translator.of("status_on") : translator.of("status_off");
+		firespread = (world.isForceFire() || tp.fire) ? translator.of("status_on") : translator.of("status_off");
+		mobspawn = (world.isForceTownMobs() || tp.mobs) ? translator.of("status_on") : translator.of("status_off");
+
+		// Displays the name of the owner, and if the owner is a resident the town name as well.
+		title = ChatColor.GOLD + owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : ""); 
+
+		plotName = townBlock.getName().isEmpty() ? "" : translator.of("msg_perm_hud_plot_name") + townBlock.getName();
 		if (!plotName.isEmpty())
 			board.getTeam("plot").setSuffix(HUDManager.check(plotName));
 		else

@@ -6,10 +6,10 @@ import com.palmergames.bukkit.towny.TownyAsciiMap;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.asciimap.WildernessMapEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -83,7 +83,6 @@ public class MapHUD {
 		}
 		
 		Resident resident = TownyAPI.getInstance().getResident(player.getName());
-		boolean hasTown = resident.hasTown();
 
 		int halfLineWidth = lineWidth/2;
 		int halfLineHeight = lineHeight/2;
@@ -98,33 +97,30 @@ public class MapHUD {
 					TownBlock townblock = world.getTownBlock(tby, tbx);
 					if (!townblock.hasTown())
 						throw new TownyException();
+					Town town = townblock.getTownOrNull();
 					if (x == halfLineHeight && y == halfLineWidth)
-						// location
+						// This is the player's location, colour it special.
 						map[y][x] = Colors.Gold;
-					else if (hasTown) {
-						if (resident.getTown() == townblock.getTown()) {
+					else if (townblock.hasResident(resident))
+						//own plot
+						map[y][x] = Colors.Yellow;
+					else if (resident.hasTown())
+						if (town.hasResident(resident)) {
 							// own town
 							map[y][x] = Colors.LightGreen;
-							try {
-								if (resident == townblock.getResident())
-									//own plot
-									map[y][x] = Colors.Yellow;
-							} catch (NotRegisteredException e) {
-							}
 						} else if (resident.hasNation()) {
-							if (resident.getTown().getNation().hasTown(townblock.getTown()))
-								// towns
+							Nation resNation = resident.getNationOrNull();
+							if (resNation.hasTown(townblock.getTown()))
+								// own nation
 								map[y][x] = Colors.Green;
-							else if (townblock.getTown().hasNation()) {
-								Nation nation = resident.getTown().getNation();
-								if (nation.hasAlly(townblock.getTown().getNation()))
+							else if (town.hasNation()) {
+								Nation townBlockNation = town.getNationOrNull();
+								if (resNation.hasAlly(townBlockNation))
 									map[y][x] = Colors.Green;
-								else if (nation.hasEnemy(townblock.getTown().getNation()))
-									// towns
+								else if (resNation.hasEnemy(townBlockNation))
 									map[y][x] = Colors.Red;
 							}
 						}
-					}
 
 					// Registered town block
 					if (townblock.getPlotPrice() != -1 || townblock.hasPlotObjectGroup() && townblock.getPlotObjectGroup().getPrice() != -1) {

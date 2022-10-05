@@ -83,17 +83,12 @@ public class TownyAsciiMap {
 	public static void generateAndSend(Towny plugin, Player player, int lineHeight) {
 
 		// Collect Sample Data
-		boolean hasTown = false;
-
 		Resident resident = TownyAPI.getInstance().getResident(player);
 		
 		if (resident == null) {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered"));
 			return;
 		}
-		
-		if (resident.hasTown())
-			hasTown = true;
 
 		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 		if (world == null) { 
@@ -123,29 +118,28 @@ public class TownyAsciiMap {
 						throw new TownyException();
 					Town town = townblock.getTownOrNull();
 					if (x == halfLineHeight && y == halfLineWidth)
-						// location
+						// This is the player's location, colour it special.
 						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.GOLD);
-					else if (hasTown) {
-						if (resident.getTown() == town) {
-							// own town
-							townyMap[y][x] = townyMap[y][x].color(NamedTextColor.GREEN);
-							if (townblock.hasResident() && resident == townblock.getResidentOrNull())
-								//own plot
-								townyMap[y][x] = townyMap[y][x].color(NamedTextColor.YELLOW);
+					else if (townblock.hasResident(resident))
+						//own plot
+						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.YELLOW);
+					else if (resident.hasTown())
+						if (town.hasResident(resident)) {
+								// own town
+								townyMap[y][x] = townyMap[y][x].color(NamedTextColor.GREEN);
 						} else if (resident.hasNation()) {
-							if (resident.getTown().getNation().hasTown(town))
-								// towns
+							Nation resNation = resident.getNationOrNull();
+							if (resNation.hasTown(town))
+								// own nation
 								townyMap[y][x] = townyMap[y][x].color(NamedTextColor.DARK_GREEN);
 							else if (town.hasNation()) {
-								Nation nation = resident.getTown().getNation();
-								if (nation.hasAlly(town.getNation()))
+								Nation townBlockNation = town.getNationOrNull();
+								if (resNation.hasAlly(townBlockNation))
 									townyMap[y][x] = townyMap[y][x].color(NamedTextColor.GREEN);
-								else if (nation.hasEnemy(town.getNation()))
-									// towns
+								else if (resNation.hasEnemy(townBlockNation))
 									townyMap[y][x] = townyMap[y][x].color(NamedTextColor.DARK_RED);
 							}
 						}
-					}
 
 					// Registered town block
 					if (townblock.getPlotPrice() != -1 || townblock.hasPlotObjectGroup() && townblock.getPlotObjectGroup().getPrice() != -1) {

@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MetaDataUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
@@ -692,20 +693,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public boolean isAlliedWith(Resident otherresident) {
-		if (this.hasNation() && this.hasTown() && otherresident.hasTown() && otherresident.hasNation()) {
-			try {
-				if (this.getTown().getNation().hasAlly(otherresident.getTown().getNation())) {
-					return true;
-				} else {
-					
-					return this.getTown().getNation().equals(otherresident.getTown().getNation());
-				}
-			} catch (NotRegisteredException e) {
-				return false;
-			}
-		} else {
-			return false;
-		}
+		return CombatUtil.isAlly(this, otherresident);
 	}
 
 	@Override
@@ -904,10 +892,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	
 	@Nullable
 	public Nation getNationOrNull() {
-		if (hasNation())
-			return getTownOrNull().getNationOrNull();
-		else
+		if (!hasNation())
 			return null;
+		return getTownOrNull().getNationOrNull();
 	}
 	
 	public boolean isOnline() {

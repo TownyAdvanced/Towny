@@ -736,6 +736,14 @@ public enum HelpMenu {
 		}
 	},
 	
+	NATION_RANK {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("nation rank")
+				.add("add/remove [resident] rank", "");
+		}
+	},
+	
 	NATION_LIST {
 		@Override
 		protected MenuBuilder load() {

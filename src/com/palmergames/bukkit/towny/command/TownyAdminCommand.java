@@ -1861,13 +1861,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.TA_SET_CAPITAL.send(sender);
 			return;
 		}
-		final Town newCapital = getTownOrThrow(split[1]);
-		try {
-			Nation nation = newCapital.getNation();
-			NationCommand.nationSet(sender, split, true, nation);
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(sender, e.getMessage());
-		}
+		final Nation nation = getNationFromTownOrThrow(getTownOrThrow(split[1]));
+		NationCommand.nationSet(sender, split, true, nation);
 	}
 
 	private void adminSetFounder(CommandSender sender, String[] split) throws TownyException {

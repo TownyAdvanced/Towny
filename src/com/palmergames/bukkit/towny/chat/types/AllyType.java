@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.chat.types;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import net.tnemc.tnc.core.common.chat.ChatType;
@@ -29,26 +28,22 @@ public class AllyType extends ChatType {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Resident res = townyUniverse.getResident(player.getUniqueId());
 		
-		if (res == null)
+		if (res == null || !res.hasNation())
 			return recipients;
 		
-		try {
-			final Nation nation = res.getTown().getNation();
+		final Nation nation = res.getNationOrNull();
 
-			Collection<Player> newRecipients = new HashSet<>();
+		Collection<Player> newRecipients = new HashSet<>();
 
-			for(Player p : recipients) {
-				Resident playerRes = townyUniverse.getResident(p.getUniqueId());
-				
-				if (playerRes != null && playerRes.hasNation()) {
-					Nation playerNation = playerRes.getTown().getNation();
-					if (playerNation.getUUID().equals(nation.getUUID()) || playerNation.hasAlly(nation))
-						newRecipients.add(p);
-				}
+		for(Player p : recipients) {
+			Resident playerRes = townyUniverse.getResident(p.getUniqueId());
+			
+			if (playerRes != null && playerRes.hasNation()) {
+				Nation playerNation = playerRes.getNationOrNull();
+				if (playerNation.getUUID().equals(nation.getUUID()) || playerNation.hasAlly(nation))
+					newRecipients.add(p);
 			}
-			return newRecipients;
-		} catch(NotRegisteredException ignore) {
 		}
-		return recipients;
+		return newRecipients;
 	}
 }

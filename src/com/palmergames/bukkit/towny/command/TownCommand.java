@@ -1990,7 +1990,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			resident = town.getMayor();
 
 		if (town.hasNation())
-			nation = town.getNation();
+			nation = town.getNationOrNull();
 
 		if (split[0].equalsIgnoreCase("board")) {
 
@@ -3246,21 +3246,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void checkTownResidents(Town town, Resident removedResident) throws NotRegisteredException {
 		if (!town.hasNation())
 			return;
-		Nation nation = town.getNation();
-		if ((town.isCapital()) && (TownySettings.getNumResidentsCreateNation() > 0) && (town.getNumResidents() < TownySettings.getNumResidentsCreateNation())) {
-			for (Town newCapital : town.getNation().getTowns())
+		Nation nation = town.getNationOrNull();
+		if (town.isCapital() && TownySettings.getNumResidentsCreateNation() > 0 && town.getNumResidents() < TownySettings.getNumResidentsCreateNation()) {
+			for (Town newCapital : nation.getTowns())
 				if (newCapital.getNumResidents() >= TownySettings.getNumResidentsCreateNation()) {
-					town.getNation().setCapital(newCapital);
-					if ((TownySettings.getNumResidentsJoinNation() > 0) && (removedResident.getTown().getNumResidents() < TownySettings.getNumResidentsJoinNation())) {
+					nation.setCapital(newCapital);
+					if (TownySettings.getNumResidentsJoinNation() > 0 && removedResident.getTown().getNumResidents() < TownySettings.getNumResidentsJoinNation()) {
 						town.removeNation();
 						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_capital_not_enough_residents_left_nation", town.getName()));
 					}
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_not_enough_residents_no_longer_capital", newCapital.getName()));
 					return;
 				}
-			TownyMessaging.sendPrefixedNationMessage(town.getNation(), Translatable.of("msg_nation_disbanded_town_not_enough_residents", town.getName()));
-			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", town.getNation()));
-			TownyUniverse.getInstance().getDataSource().removeNation(town.getNation());
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_disbanded_town_not_enough_residents", town.getName()));
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation));
+			TownyUniverse.getInstance().getDataSource().removeNation(nation);
 
 			if (TownyEconomyHandler.isActive() && TownySettings.isRefundNationDisbandLowResidents()) {
 				town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");

@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
 import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -47,17 +46,8 @@ public class TownRuinUtil {
 	 * @return true if ruined, false if not
 	 */
 	public static boolean isPlayersTownRuined(Player player) {
-		try {
-			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-
-			if(resident != null && resident.hasTown() && resident.getTown().isRuined())
-				return true;
-
-		} catch (NotRegisteredException ignored) {
-			// Ignored - Maybe add to a debug logger later?
-		}
-		
-		return false;
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		return resident != null && resident.hasTown() && resident.getTownOrNull().isRuined();
 	}
 
 	/**
