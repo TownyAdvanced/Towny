@@ -624,16 +624,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<Nation> toSaveNation = new ArrayList<>();
 		for (Nation toCheck : new ArrayList<>(universe.getNations()))
 			if (toCheck.hasAlly(nation) || toCheck.hasEnemy(nation)) {
-				try {
-					if (toCheck.hasAlly(nation))
-						toCheck.removeAlly(nation);
-					else
-						toCheck.removeEnemy(nation);
+				if (toCheck.hasAlly(nation))
+					toCheck.removeAlly(nation);
+				else
+					toCheck.removeEnemy(nation);
 
-					toSaveNation.add(toCheck);
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
+				toSaveNation.add(toCheck);
 			}
 
 		for (Nation toCheck : toSaveNation)
@@ -901,16 +897,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			List<Nation> toSaveNation = new ArrayList<>(universe.getNations());
 			for (Nation toCheck : toSaveNation)
 				if (toCheck.hasAlly(oldNation) || toCheck.hasEnemy(oldNation)) {
-					try {
-						if (toCheck.hasAlly(oldNation)) {
-							toCheck.removeAlly(oldNation);
-							toCheck.addAlly(nation);
-						} else {
-							toCheck.removeEnemy(oldNation);
-							toCheck.addEnemy(nation);
-						}
-					} catch (NotRegisteredException e) {
-						e.printStackTrace();
+					if (toCheck.hasAlly(oldNation)) {
+						toCheck.removeAlly(oldNation);
+						toCheck.addAlly(nation);
+					} else {
+						toCheck.removeEnemy(oldNation);
+						toCheck.addEnemy(nation);
 					}
 				} else
 					toSave.remove(toCheck);

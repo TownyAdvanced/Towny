@@ -90,10 +90,7 @@ public class TownyAPI {
 		if (resident == null || !resident.hasNation())
 			return null;
 
-		Nation nation = resident.getNationOrNull();
-		if (nation.hasSpawn())
-			return nation.getSpawnOrNull();
-		return null;
+		return resident.getNationOrNull().getSpawnOrNull();
 	}
  
     /**
@@ -206,7 +203,7 @@ public class TownyAPI {
     /**
      * Gets the resident from the given Player.
      * 
-     * @p)aram player Player to get the resident from.
+     * @param player Player to get the resident from.
      * @return resident or null if it doesn't exist.
      */
     @Nullable
