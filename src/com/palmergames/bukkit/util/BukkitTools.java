@@ -290,9 +290,9 @@ public class BukkitTools {
 
 	/**
 	 * @param event The event to call
-	 * @return {@code false} if the event is cancellable and was cancelled, otherwise {@code true}.
+	 * @return {@code true} if the event is cancellable and was cancelled, otherwise {@code false}.
 	 */
-	public static boolean callEvent(@NotNull Event event) {
+	public static boolean isEventCancelled(@NotNull Event event) {
 		Bukkit.getPluginManager().callEvent(event);
 		
 		if (event instanceof Cancellable cancellable)
