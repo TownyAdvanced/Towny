@@ -38,7 +38,8 @@ public class EntityTypeUtil {
 	private static final List<EntityType> ExplosivePVPEntityTypes = Arrays.asList(
 			EntityType.FIREWORK,
 			EntityType.MINECART_TNT,
-			EntityType.PRIMED_TNT);
+			EntityType.PRIMED_TNT,
+			EntityType.ENDER_CRYSTAL);
 	
 	public static boolean isInstanceOfAny(List<Class<?>> classes, Object obj) {
 
