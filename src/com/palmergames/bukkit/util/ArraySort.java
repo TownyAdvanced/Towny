@@ -6,8 +6,9 @@ import org.bukkit.block.Block;
 
 /**
  * @author ElgarL
- * 
+ * @deprecated Deprecated as of 0.98.3.13, please use {@code Comparator.comparingInt(Block::getY())} instead.
  */
+@Deprecated
 public class ArraySort implements Comparator<Block> {
 
 	@Override
