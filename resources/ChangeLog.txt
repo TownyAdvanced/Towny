@@ -7860,3 +7860,18 @@ v0.92.0.11:
     - If your server has bail allowed: jail.bail.is_allowing_bail, the jail command will now accept a bail amount:
     - /t jail [playername] {hours} {bail} {jail} {cell}
     - If bail is not allowed the old command is used: /t jail [playername] {hours} {jail} {cell}
+0.98.3.13:
+  - Add BukkitTools#isEventCancelled, courtesy of Warriorrrr with PR #6209.
+  - Put brick info tool behind infotool resident mode, courtesy of Warriorrrr with PR #6212.
+  - New Commands:
+    - /res toggle infotool
+    - /res set mode infotool
+    - Allows an admin to use the clay brick tool to determine the Bukkit names/classes of blocks and entities.
+  - Use getPlayerExact for BukkitTools#isOnline, courtesy of Warriorrrr with PR #6208.
+  - Add /townyadmin town new townname npc, courtesy of Warriorrrr with PR #6207.
+  - New Command: /townyadmin town new TOWNNAME npc 
+    - Creates a new town with an NPC mayor, allowing admins to make a new town without having to leave their own.
+  - Replace old ArraySort class with comparator, courtesy of Warriorrrr with PR #6211.
+  - API: Add ResidentToggleModeEvent, courtesy of Warriorrrr with PR #6210.
+  - Protect against ender crystal damage in pvp disabled areas, courtesy of Warriorrrr with PR #6203.
+  - Remove resident as trusted in towns/plots upon deletion, courtesy of Warriorrrr with PR #6199.
