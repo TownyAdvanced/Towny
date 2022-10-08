@@ -296,8 +296,8 @@ public class BukkitTools {
 		Bukkit.getPluginManager().callEvent(event);
 		
 		if (event instanceof Cancellable cancellable)
-			return !cancellable.isCancelled();
+			return cancellable.isCancelled();
 		else
-			return true;
+			return false;
 	}
 }
