@@ -81,7 +81,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"map",
 		"spy",
 		"reset",
-		"clear"
+		"clear",
+		"infotool"
 	);
 	
 	private static final List<String> residentModeTabCompletes = Arrays.asList(
@@ -92,7 +93,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"constantplotborder",
 		"ignoreplots",
 		"reset",
-		"clear"
+		"clear",
+		"infotool"
 	);
 	
 	private static final List<String> residentConsoleTabCompletes = Arrays.asList(
