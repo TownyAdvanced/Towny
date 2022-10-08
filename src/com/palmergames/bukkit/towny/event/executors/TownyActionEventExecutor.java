@@ -115,7 +115,7 @@ public class TownyActionEventExecutor {
 				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(loc);
 				canExplode = world.isForceExpl() || townBlock.getPermissions().explosion;
 				
-				TownBlockExplosionTestEvent event = new TownBlockExplosionTestEvent(townBlock, canExplode);
+				TownBlockExplosionTestEvent event = new TownBlockExplosionTestEvent(townBlock, townBlock.getTownOrNull(), canExplode);
 				Bukkit.getPluginManager().callEvent(event);
 				canExplode = event.isExplosion();
 			}

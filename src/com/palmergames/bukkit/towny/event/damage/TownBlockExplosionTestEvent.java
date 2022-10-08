@@ -4,19 +4,21 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * An event thrown when Towny will determine the PVP status of 
+ * An event thrown when Towny will determine the explosion status of 
  * a townblock, or plot, in a town.
  */
 public class TownBlockExplosionTestEvent extends Event {
 
 		private static final HandlerList handlers = new HandlerList();
+		private final Town town;
 		private final TownBlock townBlock;
 		private boolean explosion;
 
-		public TownBlockExplosionTestEvent(TownBlock townBlock, boolean explosion) {
+		public TownBlockExplosionTestEvent(TownBlock townBlock, Town town, boolean explosion) {
+			this.town = town;
 			this.townBlock = townBlock;
 			this.setExplosion(explosion);
 		}
@@ -33,16 +35,17 @@ public class TownBlockExplosionTestEvent extends Event {
 		/**
 		 * @return the TownBlock which is having its explosion status decided.
 		 */
+		@NotNull
 		public TownBlock getTownBlock() {
 			return townBlock;
 		}
 
 		/**
-		 * @return the Town where this test is made, should never return null.
+		 * @return the Town where this test is made.
 		 */
-		@Nullable
+		@NotNull
 		public Town getTown() {
-			return townBlock.getTownOrNull();
+			return town;
 		}
 
 		/**
