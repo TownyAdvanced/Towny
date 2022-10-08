@@ -2846,6 +2846,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
 		town.setSpawn(spawn);
+		
+		// Disable upkeep if the mayor is an npc
+		if (resident.isNPC())
+			town.setHasUpkeep(false);
 
 		if (world.isUsingPlotManagementRevert()) {
 			PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
