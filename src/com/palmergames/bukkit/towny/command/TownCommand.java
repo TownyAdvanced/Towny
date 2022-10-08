@@ -2829,8 +2829,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
 		townBlock.setTown(town);
 		TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, townBlock, player, false, true);
-		BukkitTools.getPluginManager().callEvent(preClaimEvent);
-		if(preClaimEvent.isCancelled()) {
+		
+		if (!BukkitTools.callEvent(preClaimEvent)) {
 			TownyUniverse.getInstance().removeTownBlock(townBlock);
 			TownyUniverse.getInstance().unregisterTown(town);
 			town = null;
@@ -2889,9 +2889,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	
 	private static boolean callPreNewTownEvent(Player player, String townName, Location spawnLocation) {
 		PreNewTownEvent preEvent = new PreNewTownEvent(player, townName, spawnLocation);
-		Bukkit.getPluginManager().callEvent(preEvent);
 
-		if (preEvent.isCancelled()) {
+		if (!BukkitTools.callEvent(preEvent)) {
 			TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 			return true;
 		}
@@ -2952,8 +2951,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_cannot_abandon_town_while_jailed"));
 
 		TownLeaveEvent event = new TownLeaveEvent(resident, town);
-		Bukkit.getPluginManager().callEvent(event);
-		if (event.isCancelled()) 
+		if (!BukkitTools.callEvent(event))
 			throw new TownyException(event.getCancelMessage());
 
 		Confirmation.runOnAccept(() -> {

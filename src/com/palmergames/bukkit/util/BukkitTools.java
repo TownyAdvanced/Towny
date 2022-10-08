@@ -12,6 +12,8 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Criteria;
@@ -284,5 +286,18 @@ public class BukkitTools {
 			objective = board.registerNewObjective(name, "dummy", displayName);
 		}
 		return objective;
+	}
+
+	/**
+	 * @param event The event to call
+	 * @return {@code false} if the event is cancellable and was cancelled, otherwise {@code true}.
+	 */
+	public static boolean callEvent(@NotNull Event event) {
+		Bukkit.getPluginManager().callEvent(event);
+		
+		if (event instanceof Cancellable cancellable)
+			return !cancellable.isCancelled();
+		else
+			return true;
 	}
 }
