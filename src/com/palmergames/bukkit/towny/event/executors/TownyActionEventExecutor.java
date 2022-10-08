@@ -3,6 +3,9 @@ package com.palmergames.bukkit.towny.event.executors;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.event.damage.TownBlockExplosionTestEvent;
+import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -104,12 +107,17 @@ public class TownyActionEventExecutor {
 				if (world.isForceExpl() || world.isExpl())
 					canExplode = true;
 				else if (!world.isExpl())
-					canExplode = false;			
+					canExplode = false;	
 			} else {
 				/*
 				 * Must be inside of a town.
 				 */
-				canExplode = world.isForceExpl() || TownyAPI.getInstance().getTownBlock(loc).getPermissions().explosion;			
+				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(loc);
+				canExplode = world.isForceExpl() || townBlock.getPermissions().explosion;
+				
+				TownBlockExplosionTestEvent event = new TownBlockExplosionTestEvent(townBlock, canExplode);
+				Bukkit.getPluginManager().callEvent(event);
+				canExplode = event.isExplosion();
 			}
 		}
 
