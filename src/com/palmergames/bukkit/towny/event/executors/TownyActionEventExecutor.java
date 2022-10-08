@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.event.executors;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -28,7 +29,6 @@ import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.util.ArraySort;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 
@@ -278,7 +278,7 @@ public class TownyActionEventExecutor {
 		 * Sort blocks into lowest Y to highest Y in order to preserve
 		 * blocks affected by gravity or tile entities requiring a base. 
 		 */
-		blockList.sort(ArraySort.getInstance());
+		blockList.sort(Comparator.comparingInt(Block::getY));
 
 		/*
 		 * Filter out any blocks which are not allowed to explode based 
