@@ -49,6 +49,8 @@ import org.bukkit.Tag;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.RespawnAnchor;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.WallSign;
@@ -1216,11 +1218,12 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+		if (event.getHand() == EquipmentSlot.OFF_HAND || !TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
 		if (event.hasItem()
-				&& event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool()) 
+				&& event.getPlayer().getInventory().getItemInMainHand().getType().name().equalsIgnoreCase(TownySettings.getTool()) 
+				&& plugin.hasPlayerMode(event.getPlayer(), "infotool")
 				&& TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer())
 				&& event.getClickedBlock() != null) {
 					Player player = event.getPlayer();
@@ -1272,21 +1275,20 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
-		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+		if (event.getHand() == EquipmentSlot.OFF_HAND || !TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 
 		if (event.getRightClicked() != null
-				&& event.getPlayer().getInventory().getItemInMainHand() != null
-				&& event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())
+				&& event.getPlayer().getInventory().getItemInMainHand().getType().name().equalsIgnoreCase(TownySettings.getTool())
+				&& plugin.hasPlayerMode(event.getPlayer(), "infotool")
 				&& TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer())) {
-				if (event.getHand().equals(EquipmentSlot.OFF_HAND))
-					return;
 
 				Entity entity = event.getRightClicked();
 
 				TownyMessaging.sendMessage(event.getPlayer(), Arrays.asList(
 						ChatTools.formatTitle("Entity Info"),
-						ChatTools.formatCommand("", "Entity Class", "", entity.getType().getEntityClass().getSimpleName())
+						ChatTools.formatCommand("", "Entity Class", "", entity.getType().getEntityClass().getSimpleName()),
+						ChatTools.formatCommand("", "Entity Type", "", entity.getType().name() + " (" + entity.getType().getKey() + ")")
 						));
 
 				event.setCancelled(true);
