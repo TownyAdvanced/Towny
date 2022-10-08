@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.event.damage.TownBlockExplosionTestEvent;
-import com.palmergames.bukkit.towny.event.damage.TownBlockPVPTestEvent;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -107,7 +106,7 @@ public class TownyActionEventExecutor {
 				if (world.isForceExpl() || world.isExpl())
 					canExplode = true;
 				else if (!world.isExpl())
-					canExplode = false;	
+					canExplode = false;			
 			} else {
 				/*
 				 * Must be inside of a town.
