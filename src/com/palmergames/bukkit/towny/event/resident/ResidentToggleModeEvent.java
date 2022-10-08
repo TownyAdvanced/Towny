@@ -14,7 +14,7 @@ public class ResidentToggleModeEvent extends Event implements Cancellable {
 	private final String mode;
 	private final boolean toggleOn;
 	
-	public ResidentToggleModeEvent(Resident resident, String mode, boolean toggleOn) {
+	public ResidentToggleModeEvent(Resident resident, String mode) {
 		this.resident = resident;
 		this.mode = mode;
 		this.toggleOn = !resident.hasMode(mode);

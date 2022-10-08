@@ -518,9 +518,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			
 			boolean modeEnabled = this.modes.contains(mode);
 			
-			ResidentToggleModeEvent event = new ResidentToggleModeEvent(this, mode, choice.orElse(!modeEnabled));
-			Bukkit.getPluginManager().callEvent(event);
-			if (event.isCancelled()) {
+			ResidentToggleModeEvent event = new ResidentToggleModeEvent(this, mode);
+			if (BukkitTools.isEventCancelled(event)) {
 				TownyMessaging.sendErrorMsg(this, event.getCancelMessage());				
 				continue;
 			}
