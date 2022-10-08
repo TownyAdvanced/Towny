@@ -117,7 +117,7 @@ public class BukkitTools {
 	 * @return a true value if online
 	 */
 	public static boolean isOnline(String name) {
-		return Bukkit.getPlayer(name) != null;
+		return Bukkit.getPlayerExact(name) != null;
 	}
 	
 	public static List<World> getWorlds() {
