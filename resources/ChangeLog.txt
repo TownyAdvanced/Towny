@@ -7877,3 +7877,5 @@ v0.92.0.11:
   - Remove resident as trusted in towns/plots upon deletion, courtesy of Warriorrrr with PR #6199.
   - Fix PlaceholderExpansion remaining registered during Towny reloads.
     - Closes #6218.
+  - API: Add TownBlockExplosionTestEvent, courtesy of galacticwarrior9 with PR #6204.
+    - Closes #5970.
