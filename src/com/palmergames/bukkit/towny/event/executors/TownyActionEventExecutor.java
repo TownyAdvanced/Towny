@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.event.damage.TownBlockExplosionTestEvent;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -109,7 +111,12 @@ public class TownyActionEventExecutor {
 				/*
 				 * Must be inside of a town.
 				 */
-				canExplode = world.isForceExpl() || TownyAPI.getInstance().getTownBlock(loc).getPermissions().explosion;			
+				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(loc);
+				canExplode = world.isForceExpl() || townBlock.getPermissions().explosion;
+				
+				TownBlockExplosionTestEvent event = new TownBlockExplosionTestEvent(townBlock, townBlock.getTownOrNull(), canExplode);
+				Bukkit.getPluginManager().callEvent(event);
+				canExplode = event.isExplosion();
 			}
 		}
 
