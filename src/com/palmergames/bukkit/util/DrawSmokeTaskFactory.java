@@ -24,6 +24,7 @@ public class DrawSmokeTaskFactory {
 	 * 
 	 * @param player - {@link Player} to send smoke effect
      * @return {@link LocationRunnable}
+	 * @deprecated Deprecated as of 0.98.3.13, please use {@link #showToPlayer(Player)} instead.
      */
 	@Deprecated
     public static LocationRunnable sendToPlayer(final Player player) {
