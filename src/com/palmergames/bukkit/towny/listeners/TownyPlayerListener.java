@@ -49,8 +49,6 @@ import org.bukkit.Tag;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.RespawnAnchor;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.WallSign;

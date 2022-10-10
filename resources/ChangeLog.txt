@@ -7875,3 +7875,5 @@ v0.92.0.11:
   - API: Add ResidentToggleModeEvent, courtesy of Warriorrrr with PR #6210.
   - Protect against ender crystal damage in pvp disabled areas, courtesy of Warriorrrr with PR #6203.
   - Remove resident as trusted in towns/plots upon deletion, courtesy of Warriorrrr with PR #6199.
+  - Fix PlaceholderExpansion remaining registered during Towny reloads.
+    - Closes #6218.
