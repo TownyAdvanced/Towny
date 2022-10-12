@@ -39,7 +39,7 @@ public class AddonCommand extends Command {
 	}
 
 	public boolean execute(@NotNull CommandSender sender, @NotNull String[] args) {
-		return commandExecutor.onCommand(sender, this, this.name, StringMgmt.remFirstArg(args));
+		return commandExecutor.onCommand(sender, this, this.name, args);
 	}
 
 	public CommandType getCommandType() {
