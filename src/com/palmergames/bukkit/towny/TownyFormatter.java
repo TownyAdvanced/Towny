@@ -783,15 +783,19 @@ public class TownyFormatter {
 				town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
 			screen.addComponentOf("bankrupt", translator.of("status_bank_bankrupt") + " " + colourKeyValue(translator.of("status_debtcap"), "-" + formatMoney(town.getAccount().getDebtCap())));
 		}
-		if (town.hasUpkeep() && TownySettings.isTaxingDaily())
-			screen.addComponentOf("upkeep", translator.of("status_splitter") + colourKey(translator.of("status_bank_town2")) + " " + colourKeyImportant(formatMoney(BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue())));
-		if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
-			screen.addComponentOf("upkeepPenalty", translator.of("status_splitter") + colourKey(translator.of("status_bank_town_penalty_upkeep")) + " " + colourKeyImportant(formatMoney(TownySettings.getTownPenaltyUpkeepCost(town))));
-		if (town.isNeutral() && TownySettings.getTownNeutralityCost() > 0)
-			screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(TownySettings.getTownNeutralityCost()))));
 		
-		if (TownySettings.isTaxingDaily())
+		if (TownySettings.isTaxingDaily()) {
+			if (town.hasUpkeep())
+				screen.addComponentOf("upkeep", translator.of("status_splitter") + colourKey(translator.of("status_bank_town2")) + " " + colourKeyImportant(formatMoney(BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue())));
+			
+			if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
+				screen.addComponentOf("upkeepPenalty", translator.of("status_splitter") + colourKey(translator.of("status_bank_town_penalty_upkeep")) + " " + colourKeyImportant(formatMoney(TownySettings.getTownPenaltyUpkeepCost(town))));
+			
+			if (town.isNeutral() && TownySettings.getTownNeutralityCost() > 0)
+				screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(TownySettings.getTownNeutralityCost()))));
+
 			screen.addComponentOf("towntax", translator.of("status_splitter") + colourKey(translator.of("status_bank_town3")) + " " + colourKeyImportant(town.isTaxPercentage() ? town.getTaxes() + "%" : formatMoney(town.getTaxes())));
+		}
 	}
 
 	/**
@@ -803,13 +807,15 @@ public class TownyFormatter {
 	private static void addNationMoneyComponentsToScreen(Nation nation, Translator translator, StatusScreen screen) {
 		screen.addComponentOf("moneynewline", Component.newline());
 		screen.addComponentOf("bankString", colourKeyValue(translator.of("status_bank"), nation.getAccount().getHoldingFormattedBalance()));
-		if (TownySettings.getNationUpkeepCost(nation) > 0)
-			screen.addComponentOf("nationupkeep", translator.of("status_splitter") + colourKey(translator.of("status_bank_town2") + " " + colourKeyImportant(formatMoney(TownySettings.getNationUpkeepCost(nation)))));
-		if (nation.isNeutral() && TownySettings.getNationNeutralityCost() > 0)
-			screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(TownySettings.getNationNeutralityCost()))));
 		
-		if (TownySettings.isTaxingDaily())
+		if (TownySettings.isTaxingDaily()) {
+			if (TownySettings.getNationUpkeepCost(nation) > 0)
+				screen.addComponentOf("nationupkeep", translator.of("status_splitter") + colourKey(translator.of("status_bank_town2") + " " + colourKeyImportant(formatMoney(TownySettings.getNationUpkeepCost(nation)))));
+			if (nation.isNeutral() && TownySettings.getNationNeutralityCost() > 0)
+				screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(TownySettings.getNationNeutralityCost()))));
+
 			screen.addComponentOf("nationtax", translator.of("status_splitter") + colourKey(translator.of("status_nation_tax")) + " " + colourKeyImportant(formatMoney(nation.getTaxes())));
+		}
 	}
 
 	private static String formatMoney(double money) {
