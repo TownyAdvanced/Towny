@@ -7879,4 +7879,5 @@ v0.92.0.11:
     - Closes #6218.
   - API: Add TownBlockExplosionTestEvent, courtesy of galacticwarrior9 with PR #6204.
     - Closes #5970.
-  - Fix potential NPE in TownyPlaceholderExpansion. 
+  - Fix potential NPE in TownyPlaceholderExpansion.
+  - Fix TOWNYADMIN_TOWN and TOWNYADMIN_NATION addon CommandTypes having their town and nation args removed.

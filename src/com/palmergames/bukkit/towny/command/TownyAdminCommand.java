@@ -1490,7 +1490,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(Translatable.of("town1_has_merged_with_town2", town, remainingTown));
 				}).sendTo(sender);
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_TOWN, split[1])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOWN, split[1]).execute(sender, split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOWN, split[1]).execute(sender, split, town);
 			} else {
 				HelpMenu.TA_TOWN.send(sender);
 				return;
@@ -1946,7 +1946,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				} else
 					TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_invalid_input", "/ta nation [nation] enemy [add/remove] [nation]"));
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_NATION, split[1])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_NATION, split[1]).execute(sender, split);
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_NATION, split[1]).execute(sender, split, nation);
 			}
 
 		} catch (NotRegisteredException | AlreadyRegisteredException | InvalidNameException e) {
