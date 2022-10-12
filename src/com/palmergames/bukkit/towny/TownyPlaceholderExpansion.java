@@ -163,7 +163,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		
 		if (resident == null)
-			return null;
+			return "";
 
 		String town = "";
 		String nation = "";
