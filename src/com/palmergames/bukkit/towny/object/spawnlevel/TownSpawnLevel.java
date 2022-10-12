@@ -17,36 +17,42 @@ public enum TownSpawnLevel {
 			"msg_err_town_spawn_forbidden_war",
 			"msg_err_town_spawn_forbidden_peace",
 			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL,
-			PermissionNodes.TOWNY_SPAWN_TOWN.getNode()),
+			PermissionNodes.TOWNY_SPAWN_TOWN.getNode(),
+			ConfigNodes.GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER),
 	TOWN_RESIDENT_OUTPOST(
 			ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN,
 			"msg_err_town_spawn_forbidden",
 			"msg_err_town_spawn_forbidden_war",
 			"msg_err_town_spawn_forbidden_peace",
 			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL,
-			PermissionNodes.TOWNY_SPAWN_OUTPOST.getNode()),
+			PermissionNodes.TOWNY_SPAWN_OUTPOST.getNode(),
+			ConfigNodes.GTOWN_SETTINGS_OUTPOST_COOLDOWN_TIMER),
 	PART_OF_NATION(
 			ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL_NATION,
 			"msg_err_town_spawn_nation_forbidden",
 			"msg_err_town_spawn_nation_forbidden_war",
 			"msg_err_town_spawn_nation_forbidden_peace",
 			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_NATION,
-			PermissionNodes.TOWNY_SPAWN_NATION.getNode()),
+			PermissionNodes.TOWNY_SPAWN_NATION.getNode(),
+			ConfigNodes.GTOWN_SETTINGS_NATION_MEMBER_COOLDOWN_TIMER),
 	NATION_ALLY(
 			ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL_ALLY,
 			"msg_err_town_spawn_ally_forbidden",
 			"msg_err_town_spawn_nation_forbidden_war",
 			"msg_err_town_spawn_nation_forbidden_peace",
 			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_ALLY,
-			PermissionNodes.TOWNY_SPAWN_ALLY.getNode()),
+			PermissionNodes.TOWNY_SPAWN_ALLY.getNode(),
+			ConfigNodes.GTOWN_SETTINGS_NATION_ALLY_COOLDOWN_TIMER),
 	UNAFFILIATED(
 			ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL,
 			"msg_err_public_spawn_forbidden",
 			"msg_err_town_spawn_forbidden_war",
 			"msg_err_town_spawn_forbidden_peace",
 			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC,
-			PermissionNodes.TOWNY_SPAWN_PUBLIC.getNode()),
+			PermissionNodes.TOWNY_SPAWN_PUBLIC.getNode(),
+			ConfigNodes.GTOWN_SETTINGS_UNAFFILIATED_COOLDOWN_TIMER),
 	ADMIN(
+			null,
 			null,
 			null,
 			null,
@@ -56,8 +62,9 @@ public enum TownSpawnLevel {
 
 	private ConfigNodes isAllowingConfigNode, ecoPriceConfigNode;
 	private String permissionNode, notAllowedLangNode, notAllowedLangNodeWar, notAllowedLangNodePeace;
+	private int cooldown;
 
-	TownSpawnLevel(ConfigNodes isAllowingConfigNode, String notAllowedLangNode, String notAllowedLangNodeWar, String notAllowedLangNodePeace, ConfigNodes ecoPriceConfigNode, String permissionNode) {
+	TownSpawnLevel(ConfigNodes isAllowingConfigNode, String notAllowedLangNode, String notAllowedLangNodeWar, String notAllowedLangNodePeace, ConfigNodes ecoPriceConfigNode, String permissionNode, ConfigNodes cooldownConfigNode) {
 
 		this.isAllowingConfigNode = isAllowingConfigNode;
 		this.notAllowedLangNode = notAllowedLangNode;
@@ -65,6 +72,7 @@ public enum TownSpawnLevel {
 		this.notAllowedLangNodePeace = notAllowedLangNodePeace;
 		this.ecoPriceConfigNode = ecoPriceConfigNode;
 		this.permissionNode = permissionNode;
+		this.cooldown = cooldownConfigNode == null ? 0 : TownySettings.getInt(cooldownConfigNode);
 	}
 
 	public void checkIfAllowed(Player player, Town town) throws TownyException {
@@ -101,5 +109,12 @@ public enum TownSpawnLevel {
 	public double getCost(Town town) {
 
 		return this == TownSpawnLevel.ADMIN ? 0 : town.getSpawnCost();
+	}
+
+	/**
+	 * @return the cooldown
+	 */
+	public int getCooldown() {
+		return cooldown;
 	}
 }
