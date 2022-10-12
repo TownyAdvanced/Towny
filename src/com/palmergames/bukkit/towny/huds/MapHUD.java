@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.map.TownyMapData;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 
 import net.kyori.adventure.text.TextComponent;
@@ -34,7 +35,7 @@ public class MapHUD {
 	
 	public static void toggleOn(Player player) {
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-		Objective objective = board.registerNewObjective("MAP_HUD_OBJ", "dummy", "maphud");
+		Objective objective = BukkitTools.objective(board, "MAP_HUD_OBJ", "maphud");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		int score = lineHeight + 2;

@@ -118,7 +118,9 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		if (res == null || res2 == null)
 			return null;
 		
-		if (CombatUtil.isSameTown(res, res2))
+		if (!res2.hasTown()) 
+			return TownySettings.getPAPIRelationNoTown();
+		else if (CombatUtil.isSameTown(res, res2))
 			return TownySettings.getPAPIRelationSameTown();
 		else if (CombatUtil.isSameNation(res, res2))
 			return TownySettings.getPAPIRelationSameNation();
@@ -126,7 +128,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return TownySettings.getPAPIRelationAlly();
 		else if (CombatUtil.isEnemy(res, res2))
 			return TownySettings.getPAPIRelationEnemy();
-		else 
+		else
 			return TownySettings.getPAPIRelationNone();
 	}
 
@@ -179,6 +181,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			if (resident.hasTown())
 				town = String.format(TownySettings.getPAPIFormattingTown(), resident.getTownOrNull().getName());
 			return StringMgmt.remUnderscore(town);
+		case "town_unformatted": // %townyadvanced_town_unformatted%
+			if (resident.hasTown())
+				town = resident.getTownOrNull().getName();
+			return StringMgmt.remUnderscore(town);
 		case "town_formatted": // %townyadvanced_town_formatted%
 			if (resident.hasTown())
 				town = String.format(TownySettings.getPAPIFormattingTown(), resident.getTownOrNull().getFormattedName());
@@ -186,6 +192,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		case "nation": // %townyadvanced_nation%
 			if (resident.hasNation())
 				nation = String.format(TownySettings.getPAPIFormattingNation(), resident.getNationOrNull().getName());
+			return StringMgmt.remUnderscore(nation);
+		case "nation_unformatted": // %townyadvanced_nation_unformatted%
+			if (resident.hasNation())
+				nation = resident.getNationOrNull().getName();
 			return StringMgmt.remUnderscore(nation);
 		case "nation_formatted": // %townyadvanced_nation_formatted%
 			if (resident.hasNation())

@@ -803,6 +803,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				try {
+					if (rs.getString("jailBail") != null && !rs.getString("jailBail").isEmpty())
+						resident.setJailBailCost(rs.getDouble("jailBail"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 			String line;
@@ -2083,6 +2089,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("jailUUID", resident.isJailed() ? resident.getJail().getUUID() : "");
 			res_hm.put("jailCell", resident.getJailCell());
 			res_hm.put("jailHours", resident.getJailHours());
+			res_hm.put("jailBail", resident.getJailBailCost());
 			res_hm.put("title", resident.getTitle());
 			res_hm.put("surname", resident.getSurname());
 			res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");

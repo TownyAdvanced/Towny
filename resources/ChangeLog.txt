@@ -7761,3 +7761,121 @@ v0.92.0.11:
   - Fix legacy hex code parsing not working, courtesy of Warriorrrr with PR #6176.
   - Use translatable over direct translation in BaseCommand, courtesy of Warriorrrr with PR #6172.
   - Simplify parameters used for TownCommand title & surname methods, courtesy of Warriorrrr with PR #6171.
+0.98.3.10:
+  - API: Add TOWNYADMIN_TOWN and TOWNYADMIN_NATION CommandTypes, courtesy of Lemar98 with PR #6179. (First-Time Contributor!)
+  - Add option to use a timer for new day scheduling, courtesy of Warriorrrr with PR #6181.
+  - New Config Option: plugin.day_timer.uses_java_timer
+    - Default: false
+    - If enabled (disabled by default), a Java Timer will be used for scheduling new days, which is more accurate than Towny's Bukkit timer task but uses an extra thread.
+  - Catch exceptions from spawn point particle spawning, courtesy of Warriorrrr with PR #6180.
+  - Fix being able to set a townblock to the type it already is.
+    - Closes #6183.
+  - API: Add TownyAPI#getNation(Player), courtesy of Warriorrrr with PR #6190.
+  - Remove old sculk spread option, courtesy of Warriorrrr with PR #6189.
+  - Town board command improvements, courtesy of Warriorrrr with PR #6186.
+  - Replace ChatTools.stripColour with Colors.strip, courtesy of Warriorrrr with PR #6185.
+  - API: Add Confirmation related events, courtesy of Warriorrrr with PR #6182.
+    - ConfirmationEvent
+    - ConfirmationCancelEvent
+    - ConfirmationConfirmEvent
+    - ConfirmationSendEvent
+      - Includes the ability "hide" the confirmation for plugin authors to replace with their own selection/display.
+  - API: Add a ConfirmationTransaction to Confirmations.
+    - This enables cost-requirements to be baked-in to Confirmations.
+    - Costs are passed in as a Supplier<Double> so that calculations can be made after the player accepts.
+0.98.3.11:
+  - Add tab completion for setting town and nation map colours.
+    - Closes #6188.
+  - New Config Option: filters_colour_chat.papi_relational_formatting.no_town
+    - Default: &f
+    - Given to players who have no town.
+    - Closes #6169.
+  - New entering-town-placeholders:
+    - When players see town/wilderness notifications for entering towns there are now new options:
+      - {nationname} - Name of the nation.
+      - {nationcapital} - Name of the nation capital and nation.
+      - {nation_motd} - Shows the nationboard message.
+      - {nation_residents} - Shows the number of residents in the nation.
+      - {nation_residents_online} - Shows the number of residents online currently.
+    - Closes #6159.
+  - New Config Option: notification.titles.nationname_format
+    - Default: "&6Nation of %s"
+    - The format used to format the {nationame} option. The name of the nation will replace %s.
+  - New Config Option: notification.titles.nationcapital_format
+    - Default: "&6Entering %s, Capital City of %s"
+    - The format used to format the {nationcapital} option. The name of the capital city and nation will replace the %s and %s.
+  - New Config Option: economy.daily_taxes.allow_negative_plot_tax",
+    - Default: false
+    - If enabled, if a plot tax is set to a negative amount it will result in the resident that owns it being paid by the town bank (if the town can afford it.)
+    - Make it possible for plot taxes to be negative, as a way for mayors to pay residents for owning plots.
+    - Closes #6047.
+  - Adopt new Spigot Criteria Scoreboard API.
+0.98.3.12:
+  - Change to Config Option: notification.titles.nationcapital_format
+    - Default: "&6Entering %s, Capital City of %s"
+    - The format used to format the {nationcapital} option. The name of the capital city and nation will replace the %s and %s.
+    - Alternatively, you can use %t for townname and %n for nationname and show either one or both.
+  - New PAPI Placeholders:
+    - %townyadvanced_town_unformatted% - Shows the player's townname, if they have one.
+    - %townyadvanced_nation_unformatted% -  Shows the player's nationname, if they have one.
+    - Closes #6197.
+  - Jail Overhaul courtesy of Kali and LlmDL with PR #6031.
+    - Includes the ability for mayors to set bail amounts.
+      - Admins can limit the upper limit on bail costs.
+    - Includes the optional ability for admins to set a jail-upkeep.
+      - Towns can be made to pay an initial fee to jail someone.
+      - Towns can be made to pay hourly to house prisoners.
+    - Includes the ability to limit how many players can be jailed in one town.
+      - There is also a configurable system that decides when happens when a town has reached their jailed-residents limit.
+    - Includes the ability to give or not give the jail book received by newly jailed players.
+  - New Config Options:
+    - jail.pow_jail_hours
+      - Default: 5
+      - How many hours an attacking enemy will be jailed for.
+    - jail.maximum_jail_hours
+      - Default: 5
+      - The maximum hours that a mayor can set when jailing someone, full number expected.
+    - jail.fee_initial_amount
+      - Default: -1
+      - Amount that it costs per player jailed for a town, this is withdrawn from the Town bank. Set to -1 to disable.
+    - jail.fee_hourly_amount
+      - Default: -1
+      - Amount that it costs per player jailed per hour for a town, this is withdrawn from the Town bank. Set to -1 to disable.
+    - jail.bail.bailmax_amount
+      - Default: 100
+      - Max bail cost that a mayor can set.
+    - jail.max_jailed_count
+      - Default: -1
+      - Amount of potential jailed players per town, set to -1 to disable.
+    - jail.max_jailed_newjail_behavior
+      - Default: 0
+      - Behaviour for new jail attempts if max jailed count is reached.
+      - 0 = Unable to jail new players until a current prisoner is released.
+      - 1 = A prisoner slot will be made by automatically releasing a prisoner based on remaining time.
+      - 2 = A prisoner slot will be made by automatically releasing a prisoner based on lowest custom bail.
+    - jail.is_jailbook_enabled
+      - Default: true
+      - If false players will not be provided with a book upon being jailed.
+  - Changed command: /t jail.
+    - If your server has bail allowed: jail.bail.is_allowing_bail, the jail command will now accept a bail amount:
+    - /t jail [playername] {hours} {bail} {jail} {cell}
+    - If bail is not allowed the old command is used: /t jail [playername] {hours} {jail} {cell}
+0.98.3.13:
+  - Add BukkitTools#isEventCancelled, courtesy of Warriorrrr with PR #6209.
+  - Put brick info tool behind infotool resident mode, courtesy of Warriorrrr with PR #6212.
+  - New Commands:
+    - /res toggle infotool
+    - /res set mode infotool
+    - Allows an admin to use the clay brick tool to determine the Bukkit names/classes of blocks and entities.
+  - Use getPlayerExact for BukkitTools#isOnline, courtesy of Warriorrrr with PR #6208.
+  - Add /townyadmin town new townname npc, courtesy of Warriorrrr with PR #6207.
+  - New Command: /townyadmin town new TOWNNAME npc 
+    - Creates a new town with an NPC mayor, allowing admins to make a new town without having to leave their own.
+  - Replace old ArraySort class with comparator, courtesy of Warriorrrr with PR #6211.
+  - API: Add ResidentToggleModeEvent, courtesy of Warriorrrr with PR #6210.
+  - Protect against ender crystal damage in pvp disabled areas, courtesy of Warriorrrr with PR #6203.
+  - Remove resident as trusted in towns/plots upon deletion, courtesy of Warriorrrr with PR #6199.
+  - Fix PlaceholderExpansion remaining registered during Towny reloads.
+    - Closes #6218.
+  - API: Add TownBlockExplosionTestEvent, courtesy of galacticwarrior9 with PR #6204.
+    - Closes #5970.

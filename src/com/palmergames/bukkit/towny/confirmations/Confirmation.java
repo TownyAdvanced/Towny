@@ -15,6 +15,7 @@ public class Confirmation {
 	private final Runnable cancelHandler;
 	private final Translatable title;
 	private final int duration;
+	private final ConfirmationTransaction transaction;
 	private final String confirmCommand;
 	private final String cancelCommand;
 	private final boolean isAsync;
@@ -56,6 +57,7 @@ public class Confirmation {
 		this.cancelHandler = builder.cancelHandler;
 		this.title = builder.title;
 		this.duration = builder.duration;
+		this.transaction = builder.transaction;
 		this.isAsync = builder.runAsync;
 		this.confirmCommand = builder.confirmCommand;
 		this.cancelCommand = builder.cancelCommand;
@@ -100,6 +102,21 @@ public class Confirmation {
 		return duration;
 	}
 	
+	/**
+	 * @return True when there is a ConfirmationTransaction.
+	 */
+	public boolean hasCost() {
+		return transaction != null;
+	}
+
+	/**
+	 * Gets the ConfirmationTransaction.
+	 * @return the transaction.
+	 */
+	public ConfirmationTransaction getTransaction() {
+		return transaction;
+	}
+
 	public String getConfirmCommand() {
 		return confirmCommand;
 	}

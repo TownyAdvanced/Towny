@@ -81,7 +81,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"map",
 		"spy",
 		"reset",
-		"clear"
+		"clear",
+		"infotool"
 	);
 	
 	private static final List<String> residentModeTabCompletes = Arrays.asList(
@@ -92,7 +93,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"constantplotborder",
 		"ignoreplots",
 		"reset",
-		"clear"
+		"clear",
+		"infotool"
 	);
 	
 	private static final List<String> residentConsoleTabCompletes = Arrays.asList(
@@ -306,18 +308,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					final Town jailTown = resident.getJailTown();
 
 					// Set cost of bail.
-					double cost = TownySettings.getBailAmount();
-					if (resident.isMayor())
-						cost = TownySettings.getBailAmountMayor();
-					if (resident.isKing())
-						cost = TownySettings.getBailAmountKing();
-					
+					double cost = resident.getJailBailCost();
 					if (cost > 0) {
 						if (resident.getAccount().canPayFromHoldings(cost)) {
 							final double finalCost = cost;
 							Confirmation.runOnAccept(() -> {
 								if (resident.getAccount().canPayFromHoldings(finalCost)) {
-									resident.getAccount().payTo(finalCost, jailTown, "Bail");
+									resident.getAccount().payTo(finalCost, jailTown, "Bail paid to " + jailTown.getName());
 									JailUtil.unJailResident(resident, UnJailReason.BAIL);
 								} else {
 									TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_unable_to_pay_bail"));

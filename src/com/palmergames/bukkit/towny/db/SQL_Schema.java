@@ -221,6 +221,7 @@ public class SQL_Schema {
 		columns.add("`jailUUID` VARCHAR(36) DEFAULT NULL");
 		columns.add("`jailCell` mediumint");
 		columns.add("`jailHours` mediumint");
+		columns.add("`jailBail` float DEFAULT NULL");
 		columns.add("`title` mediumtext");
 		columns.add("`surname` mediumtext");
 		columns.add("`protectionStatus` mediumtext");

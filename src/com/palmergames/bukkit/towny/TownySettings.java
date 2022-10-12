@@ -1775,6 +1775,14 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_ENEMIES);
 	}
 	
+	public static int getMaxJailedNewJailBehavior() {
+		return getInt(ConfigNodes.JAIL_MAX_JAILED_NEWJAIL_BEHAVIOR);
+	}
+
+	public static boolean isJailBookEnabled() {
+		return getBoolean(ConfigNodes.JAIL_IS_JAILBOOK_ENABLED);
+	}
+
 	public static boolean isJailingAttackingOutlaws() {
 		
 		return getBoolean(ConfigNodes.JAIL_IS_JAILING_ATTACKING_OUTLAWS);
@@ -1783,6 +1791,14 @@ public class TownySettings {
 	public static int getJailedOutlawJailHours() {
 		
 		return getInt(ConfigNodes.JAIL_OUTLAW_JAIL_HOURS);
+	}
+
+	public static int getJailedPOWJailHours() {
+		return getInt(ConfigNodes.JAIL_POW_JAIL_HOURS);
+	}
+
+	public static int getJailedMaxHours() {
+		return getInt(ConfigNodes.JAIL_MAX_JAIL_HOURS);
 	}
 
 	public static boolean JailAllowsTeleportItems() {
@@ -1803,6 +1819,22 @@ public class TownySettings {
 	public static double getBailAmount() {
 		
 		return getDouble(ConfigNodes.JAIL_BAIL_BAIL_AMOUNT);
+	}
+
+	public static double getBailMaxAmount() {
+		return getDouble(ConfigNodes.JAIL_BAIL_BAILMAX_AMOUNT);
+	}
+
+	public static double initialJailFee() {
+		return getDouble(ConfigNodes.JAIL_FEE_INITIAL_AMOUNT);
+	}
+
+	public static double hourlyJailFee() {
+		return getDouble(ConfigNodes.JAIL_FEE_HOURLY_AMOUNT);
+	}
+
+	public static int getMaxJailedPlayerCount() {
+		return getInt(ConfigNodes.JAIL_MAX_JAILED_COUNT);
 	}
 	
 	public static double getBailAmountMayor() {
@@ -1932,6 +1964,10 @@ public class TownySettings {
 	public static boolean isUpkeepPayingPlots() {
 
 		return getBoolean(ConfigNodes.ECO_UPKEEP_PLOTPAYMENTS);
+	}
+	
+	public static boolean isNegativePlotTaxAllowed() {
+		return getBoolean(ConfigNodes.ECO_UPKEEP_PLAYEROWNEDPLOTPAYMENTS);
 	}
 
 	public static double getTownPenaltyUpkeepCost(Town town) {
@@ -2869,6 +2905,14 @@ public class TownySettings {
 		return getString(ConfigNodes.NOTIFICATION_TITLES_WILDERNESS_SUBTITLE);
 	}
 
+	public static String getNotificationTitlesNationNameFormat() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_NATIONNAME_FORMAT);
+	}
+	
+	public static String getNotificationTitlesNationCapitalFormat() {
+		return getString(ConfigNodes.NOTIFICATION_TITLES_NATIONCAPITAL_FORMAT);
+	}
+	
 	public static double getTownRenameCost() {
 		return getDouble(ConfigNodes.ECO_TOWN_RENAME_COST);
 	}
@@ -2918,6 +2962,10 @@ public class TownySettings {
 	
 	public static String getPAPIRelationNone() {
 		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_NONE);
+	}
+	
+	public static String getPAPIRelationNoTown() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_NO_TOWN);
 	}
 	
 	public static String getPAPIRelationSameTown() {
@@ -3098,10 +3146,6 @@ public class TownySettings {
 	
 	public static boolean isPlayerCropTramplePrevented() {
 		return getBoolean(ConfigNodes.PROT_CROP_TRAMPLE);
-	}
-
-	public static boolean isSculkSpreadPreventWhereMobsAreDisabled() {
-		return getBoolean(ConfigNodes.PROT_SCULK_SPREAD);
 	}
 
 	public static boolean isNotificationsAppearingOnBossbar() {
@@ -3285,6 +3329,10 @@ public class TownySettings {
 	
 	public static void removeReloadListener(NamespacedKey key) {
 		CONFIG_RELOAD_LISTENERS.remove(key);
+	}
+	
+	public static boolean doesNewDayUseTimer() {
+		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_USES_JAVA_TIMER);
 	}
 }
 

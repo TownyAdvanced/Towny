@@ -118,6 +118,7 @@ public class Towny extends JavaPlugin {
 	private final HUDManager HUDManager = new HUDManager(this);
 	private final TownyPaperEvents paperEvents = new TownyPaperEvents(this);
 	private LuckPermsContexts luckPermsContexts;
+	private TownyPlaceholderExpansion papiExpansion = null;
 
 	private TownyUniverse townyUniverse;
 
@@ -249,6 +250,8 @@ public class Towny extends JavaPlugin {
 		loadLocalization(reload);
 		// Then load permissions
 		loadPermissions(reload);
+		// Unregister PAPIExpansion.
+		unloadPAPIExpansion(reload);
 
 		// Initialize the type handler after the config is loaded and before the database is.
 		TownBlockTypeHandler.initialize();
@@ -273,6 +276,9 @@ public class Towny extends JavaPlugin {
 
 		// Loads Town and Nation Levels after migration has occured.
 		loadTownAndNationLevels();
+
+		// Re-register PAPIExpansion.
+		loadPAPIExpansion(reload);
 
 		// Run both the cleanup and backup async.
 		townyUniverse.performCleanupAndBackup();
@@ -324,6 +330,16 @@ public class Towny extends JavaPlugin {
 			// Update everyone who is online with the changes made.
 			TownyPerms.updateOnlinePerms();
 		}
+	}
+
+	private void loadPAPIExpansion(boolean reload) {
+		if (reload && isPAPI())
+			papiExpansion.register();
+	}
+
+	private void unloadPAPIExpansion(boolean reload) {
+		if (reload && isPAPI())
+			papiExpansion.unregister();
 	}
 
 	/**
@@ -461,6 +477,9 @@ public class Towny extends JavaPlugin {
 			luckPermsContexts = null;
 		}
 
+		if (isPAPI())
+			unloadPAPIExpansion(true);
+
 		this.townyUniverse = null;
 
 		plugin.getLogger().info("Version: " + version + " - Plugin Disabled");
@@ -545,7 +564,8 @@ public class Towny extends JavaPlugin {
 
 		test = getServer().getPluginManager().getPlugin("PlaceholderAPI");
 		if (test != null) {
-            new TownyPlaceholderExpansion(this).register();
+			papiExpansion = new TownyPlaceholderExpansion(this);
+			papiExpansion.register();
             addons.add(String.format("%s v%s", "PlaceholderAPI", test.getDescription().getVersion()));
 		}
 		
@@ -829,6 +849,10 @@ public class Towny extends JavaPlugin {
 			return essentials;
 	}
 
+	public boolean isPAPI() {
+		return papiExpansion != null;
+	}
+	
 	public World getServerWorld(String name) throws NotRegisteredException {
 		World world = BukkitTools.getWorld(name);
 		

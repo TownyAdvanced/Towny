@@ -391,11 +391,35 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void removeResident(Resident resident) {
 
-		// Remove resident from towns' outlawlists.
-		for (Town townOutlaw : universe.getTowns()) {
-			if (townOutlaw.hasOutlaw(resident)) {
-				townOutlaw.removeOutlaw(resident);
-				saveTown(townOutlaw);
+		// Remove resident from towns' outlaw & trusted lists.
+		for (Town town : universe.getTowns()) {
+			boolean save = false;
+			
+			if (town.hasOutlaw(resident)) {
+				town.removeOutlaw(resident);
+				save = true;
+			}
+			
+			if (town.hasTrustedResident(resident)) {
+				town.removeTrustedResident(resident);
+				save = true;
+			}
+			
+			if (save)
+				town.save();
+		}
+		
+		for (PlotGroup group : universe.getGroups()) {
+			if (group.hasTrustedResident(resident)) {
+				group.removeTrustedResident(resident);
+				group.save();
+			}
+		}
+		
+		for (TownBlock townBlock : universe.getTownBlocks().values()) {
+			if (townBlock.hasTrustedResident(resident)) {
+				townBlock.removeTrustedResident(resident);
+				townBlock.save();
 			}
 		}
 

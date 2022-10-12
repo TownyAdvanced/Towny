@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.event.player.PlayerKeepsExperienceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsInventoryEvent;
 import com.palmergames.bukkit.towny.object.CommandList;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -78,7 +79,6 @@ import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -982,7 +982,15 @@ public class TownyPlayerListener implements Listener {
 			placeholders.put("{town_motd}", town.getBoard());
 			placeholders.put("{town_residents}", town.getNumResidents());
 			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(town).size());
-
+			if (town.hasNation()) {
+				Nation nation = town.getNationOrNull();
+				placeholders.put("{nationname}", String.format(TownySettings.getNotificationTitlesNationNameFormat(), nation.getName()));
+				placeholders.put("{nation_residents}", nation.getNumResidents());
+				placeholders.put("{nation_residents_online}", TownyAPI.getInstance().getOnlinePlayers(nation).size());
+				placeholders.put("{nation_motd}", nation.getBoard());
+				if (town.isCapital()) 
+					placeholders.put("{nationcapital}", getCapitalSlug(town.getName(), nation.getName()));
+			}
 			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
 				subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
@@ -991,6 +999,14 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 	
+	private Object getCapitalSlug(String townName, String nationName) {
+		String format = TownySettings.getNotificationTitlesNationCapitalFormat();
+		if (format.contains("%t") || format.contains("%n"))
+			return format.replace("%t", townName).replace("%n", nationName);
+		else 
+			return String.format(format, nationName);
+	}
+
 	/**
 	 * PlayerLeaveTownEvent
 	 * Currently used for:
@@ -1023,7 +1039,7 @@ public class TownyPlayerListener implements Listener {
 			if (subtitle.contains("{townname}")) {
 				subtitle = subtitle.replace("{townname}", StringMgmt.remUnderscore(event.getFrom().getTownOrNull().getName()));
 			}
-			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);		
+			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
 		}
 
 		if (resident.isJailed())
@@ -1200,11 +1216,12 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+		if (event.getHand() == EquipmentSlot.OFF_HAND || !TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
 		if (event.hasItem()
-				&& event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool()) 
+				&& event.getPlayer().getInventory().getItemInMainHand().getType().name().equalsIgnoreCase(TownySettings.getTool()) 
+				&& plugin.hasPlayerMode(event.getPlayer(), "infotool")
 				&& TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer())
 				&& event.getClickedBlock() != null) {
 					Player player = event.getPlayer();
@@ -1256,21 +1273,20 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
-		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+		if (event.getHand() == EquipmentSlot.OFF_HAND || !TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 
 		if (event.getRightClicked() != null
-				&& event.getPlayer().getInventory().getItemInMainHand() != null
-				&& event.getPlayer().getInventory().getItemInMainHand().getType() == Material.getMaterial(TownySettings.getTool())
+				&& event.getPlayer().getInventory().getItemInMainHand().getType().name().equalsIgnoreCase(TownySettings.getTool())
+				&& plugin.hasPlayerMode(event.getPlayer(), "infotool")
 				&& TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer())) {
-				if (event.getHand().equals(EquipmentSlot.OFF_HAND))
-					return;
 
 				Entity entity = event.getRightClicked();
 
 				TownyMessaging.sendMessage(event.getPlayer(), Arrays.asList(
 						ChatTools.formatTitle("Entity Info"),
-						ChatTools.formatCommand("", "Entity Class", "", entity.getType().getEntityClass().getSimpleName())
+						ChatTools.formatCommand("", "Entity Class", "", entity.getType().getEntityClass().getSimpleName()),
+						ChatTools.formatCommand("", "Entity Type", "", entity.getType().name() + " (" + entity.getType().getKey() + ")")
 						));
 
 				event.setCancelled(true);

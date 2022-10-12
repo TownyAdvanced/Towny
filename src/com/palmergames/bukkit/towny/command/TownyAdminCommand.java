@@ -1244,13 +1244,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_NEW.getNode());
 
-				Optional<Resident> resOpt = TownyUniverse.getInstance().getResidentOpt(split[2]);
+				Resident resident;
+				if ("npc".equalsIgnoreCase(split[2]) && player != null) // Avoid creating a new npc resident if command is ran from console.
+					resident = ResidentUtil.createAndGetNPCResident();
+				else
+					resident = TownyUniverse.getInstance().getResident(split[2]);
 				
-				if (!resOpt.isPresent()) {
+				if (resident == null) {
 					TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_not_registered_1", split[2]));
 					return;
 				}
-				Resident resident = resOpt.get();
+				
 				// If the command is being run from console, try to sub in the specfied player.
 				if (player == null) {
 					if (resident.isOnline()) {

@@ -491,6 +491,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					line = keys.get("jailHours");
 					if (line != null)
 						resident.setJailHours(Integer.parseInt(line));
+					
+					line = keys.get("jailBail");
+					if (line != null)
+						resident.setJailBailCost(Double.parseDouble(line));
 				}
 				
 				line = keys.get("friends");
@@ -1847,6 +1851,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("jailCell=" + resident.getJailCell());
 			// jailHours
 			list.add("jailHours=" + resident.getJailHours());
+			// jailBail
+			list.add("jailBail=" + resident.getJailBailCost());
 		}
 		
 		// title

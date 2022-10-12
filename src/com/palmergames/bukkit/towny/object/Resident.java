@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
+import com.palmergames.bukkit.towny.event.resident.ResidentToggleModeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -46,6 +47,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -71,6 +73,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private Jail jail = null;
 	private int jailCell;
 	private int jailHours;
+	private double jailBail;
 
 	private final List<String> townRanks = new ArrayList<>();
 	private final List<String> nationRanks = new ArrayList<>();
@@ -160,6 +163,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	
 	public void setJailHours(Integer hours) {
 		jailHours = hours;
+	}
+
+	public double getJailBailCost() {
+		return jailBail;
+	}
+
+	public void setJailBailCost(double bail) {
+		jailBail = bail;
 	}
 	
 	public boolean hasJailTime() {
@@ -494,18 +505,25 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		 * Toggle any modes passed to us on/off.
 		 */
 		for (int i = 0; i < newModes.length; i++) {
-			String mode = newModes[i].toLowerCase();
+			String mode = newModes[i].toLowerCase(Locale.ROOT);
 			
 			Optional<Boolean> choice = Optional.empty();
 			if (i + 1 < newModes.length) {
-				String bool = newModes[i + 1].toLowerCase();
+				String bool = newModes[i + 1].toLowerCase(Locale.ROOT);
 				if (BaseCommand.setOnOffCompletes.contains(bool)) {
-					choice = Optional.of(bool.equals("on"));
+					choice = Optional.of(bool.equalsIgnoreCase("on"));
 					i++;
 				}
 			}
 			
 			boolean modeEnabled = this.modes.contains(mode);
+			
+			ResidentToggleModeEvent event = new ResidentToggleModeEvent(this, mode);
+			if (BukkitTools.isEventCancelled(event)) {
+				TownyMessaging.sendErrorMsg(this, event.getCancelMessage());				
+				continue;
+			}
+			
 			if (choice.orElse(!modeEnabled)) {
 				if (!modeEnabled) {
 					this.modes.add(mode);

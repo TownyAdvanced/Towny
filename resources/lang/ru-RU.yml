@@ -1136,7 +1136,6 @@ msg_err_you_cannot_remove_the_last_cell: 'Вы не можете удалить 
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Не выходите с сервера, прежде чем телепортироваться в тюрьму, иначе вы умрёте.'
 jail_plu: 'Тюрьмы'
 jail_sing: 'Тюрьма'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%5$s отправил %1$s в %2$s в камеру №%3$s на %4$s часов.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s должны наиграть ещё %s, чтобы их можно было поместить в тюрьму'
 #Added in 0.108
 msg_town_not_peaceful: '&bНация не смогла себе позволить быть мирной.'
@@ -1408,7 +1407,7 @@ tc_player_channel_sound_unmuted: 'Звук канала включен'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'В этом участке находится посторонний, вы не можете переключить PVP!'
 #Added in 0.136
-msg_view_on_web: '&7Click to view on the web.'
+msg_view_on_web: '&Нажмите для просмотра в браузере.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6Город %s согласился на слияние с превалирующим городом %s.'
@@ -1532,13 +1531,13 @@ msg_perm_hud_outsider: 'чужак'
 msg_perm_hud_plot_name: 'Участок: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
-msg_town_level_overridden_with: 'Город %s имеет уровень города %s.sdas'
+msg_town_level_overridden_with: 'Городу %s установлен уровень %s.'
 #Message shown when unsetting a manual town level.
-msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
+msg_town_level_unset: 'У города %s был снят уровень. Текущий уровень %s.'
 #Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
-msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase townblocks based on the config rules.'
+msg_err_town_not_allowed_purchased_blocks: 'Город %s не может покупать участки из-за настроек плагина.'
 #Message shown when unsetting all purchased townblocks from a town.
-msg_purchased_blocks_unset: 'В городе %s были удалены купленные городские кварталы.'
+msg_purchased_blocks_unset: 'У города %s были удалены купленные городские участки.'
 #Message shown when /ta town name giveboughtblocks # is used.
 msg_purchased_blocks_changed: 'Город %s получил %s участков, всего %s.'
 #Added in 0.154
@@ -1549,4 +1548,20 @@ msg_town_upkeep_setting_set_to: 'Налог на содержание у гор�
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: 'Ваш город достиг лимита в %d %s участков.'
 #Added in 0.156
-msg_spawn_cost_free: 'Free'
+msg_spawn_cost_free: 'Бесплатно'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'Этот участок уже %s вида.'
+msg_town_board_reset: '&bДоска объявлений очищена.'
+msg_town_has_no_jailslots: 'The town jail is full.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%5$s отправил %1$s в %2$s в камеру №%3$s на %4$s часов.'
+msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s has been released to make space for another prisoner.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'

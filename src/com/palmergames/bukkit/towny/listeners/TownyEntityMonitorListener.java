@@ -389,10 +389,10 @@ public class TownyEntityMonitorListener implements Listener {
 				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(attackerPlayer, PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
 					return;
 				
-				// Send to jail. Hours are set later on. Task is set 1 tick later so the Jail book isn't removed from their death.
+				// Send to jail. Hours are pulled from configuration. Task is set 1 tick later so the Jail book isn't removed from their death.
 				Bukkit.getScheduler().runTaskLater(
 					plugin, ()-> 
-					JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 0, JailReason.OUTLAW_DEATH.getHours(), JailReason.OUTLAW_DEATH, attackerResident.getPlayer()),
+					JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 0, TownySettings.getJailedOutlawJailHours(), JailReason.OUTLAW_DEATH, attackerResident.getPlayer()),
 					1);
 				return;
 			}
