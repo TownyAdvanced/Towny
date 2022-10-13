@@ -150,7 +150,7 @@ public class TownyTimerHandler{
 	
 	public static void toggleDrawSmokeTask(boolean on) {
 		if (on && !isDrawSmokeTaskRunning()) {
-			drawSmokeTask = BukkitTools.scheduleAsyncRepeatingTask(new DrawSmokeTask(plugin), 0, 100);
+			drawSmokeTask = BukkitTools.scheduleAsyncRepeatingTask(new DrawSmokeTask(plugin), 0, 40);
 			if (drawSmokeTask == -1)
 				TownyMessaging.sendErrorMsg("Could not schedule draw smoke loop");			
 		} else if (!on && isDrawSmokeTaskRunning()) {

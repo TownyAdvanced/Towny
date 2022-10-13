@@ -79,8 +79,8 @@ public class TownyCustomListener implements Listener {
 		}
 		if (resident.hasMode("map"))
 			TownyCommand.showMap(player);
-		if (resident.hasMode("plotborder"))
-			BorderUtil.getPlotBorder(to).runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.sendToPlayer(player));
+		if (resident.hasMode("plotborder") || resident.hasMode("constantplotborder"))
+			BorderUtil.getPlotBorder(to).runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, to));
 
 		// Check if player has entered a new town/wilderness
 		if (event.isShowingPlotNotifications()) {
