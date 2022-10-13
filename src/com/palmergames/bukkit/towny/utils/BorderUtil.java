@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.CellBorder;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 
@@ -156,6 +157,12 @@ public class BorderUtil {
 		
 		// One is player owned and the other isn't.
 		if (currentTownBlock.hasResident() != destinationTownBlock.hasResident())
+			return false;
+		
+		Resident resident = player != null ? TownyAPI.getInstance().getResident(player) : null;
+
+		// Player is trusted in one of the townblocks but not the other
+		if (resident != null && currentTownBlock.hasTrustedResident(resident) && !destinationTownBlock.hasTrustedResident(resident) && destinationTownBlock.getResidentOrNull() != resident)
 			return false;
 
 		// Both townblocks are owned by the same resident.
