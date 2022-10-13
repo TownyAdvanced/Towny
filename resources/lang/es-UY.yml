@@ -1454,7 +1454,7 @@ msg_err_console_only: 'Este comando solo se puede utilizar en consola.'
 msg_err_player_only: 'Este comando solo se puede utilizar un jugador.'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
-msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
+msg_border_titles_toggled: 'Los mensajes de título que se muestran al cruzar fronteras son %s.'
 #Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'Ejecutar este comando tu config.yml al predeterminado. ¿Desea continuar?'

@@ -1552,7 +1552,7 @@ msg_spawn_cost_free: 'Бесплатно'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Этот участок уже %s вида.'
 msg_town_board_reset: '&bДоска объявлений очищена.'
-msg_town_has_no_jailslots: 'The town jail is full.'
+msg_town_has_no_jailslots: 'Городская тюрьма переполнена.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%5$s отправил %1$s в %2$s в камеру №%3$s на %4$s часов.'
 msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
