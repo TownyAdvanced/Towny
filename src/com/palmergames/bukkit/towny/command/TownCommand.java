@@ -3197,35 +3197,35 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public static void townKickResidents(CommandSender sender, Resident resident, Town town, List<Resident> kicking) {
 
+		Resident senderResident = sender instanceof Player player ? TownyAPI.getInstance().getResident(player) : null;
+		
 		for (Resident member : new ArrayList<>(kicking)) {
 			if (!town.getResidents().contains(member)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_resident_not_your_town"));
 				kicking.remove(member);
 				continue;
 			}
+
 			if (resident == member) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_you_cannot_kick_yourself"));
 				kicking.remove(member);
 				continue;
 			}
-			if (member.isMayor() || town.hasResidentWithRank(member, "assistant")) {
+
+			if (!town.hasResident(member) 
+				|| member.isMayor() 
+				|| (senderResident != null && !senderResident.isMayor() && TownySettings.getTownUnkickableRanks().stream().anyMatch(member::hasTownRank))) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_you_cannot_kick_this_resident", member));
 				kicking.remove(member);
 				continue;
-			} else {
-				if (!town.hasResident(member))
-					kicking.remove(member);
-				else {
-					TownKickEvent townKickEvent = new TownKickEvent(member, sender);
-					Bukkit.getPluginManager().callEvent(townKickEvent);
-
-					if (townKickEvent.isCancelled()) {
-						TownyMessaging.sendErrorMsg(sender, townKickEvent.getCancelMessage());
-						kicking.remove(member);
-					} else
-						member.removeTown();
-				}
 			}
+
+			TownKickEvent townKickEvent = new TownKickEvent(member, sender);
+			if (BukkitTools.isEventCancelled(townKickEvent)) {
+				TownyMessaging.sendErrorMsg(sender, townKickEvent.getCancelMessage());
+				kicking.remove(member);
+			} else
+				member.removeTown();
 		}
 		
 		if (kicking.size() > 0) {
