@@ -413,15 +413,15 @@ public class TownySettings {
 
 	public static boolean getBoolean(ConfigNodes node) {
 
-		return Boolean.parseBoolean(config.getString(node.getRoot().toLowerCase(), node.getDefault()));
+		return Boolean.parseBoolean(config.getString(node.getRoot().toLowerCase(Locale.ROOT), node.getDefault()));
 	}
 
 	public static double getDouble(ConfigNodes node) {
 
 		try {
-			return Double.parseDouble(config.getString(node.getRoot().toLowerCase(), node.getDefault()).trim());
+			return Double.parseDouble(config.getString(node.getRoot().toLowerCase(Locale.ROOT), node.getDefault()).trim());
 		} catch (NumberFormatException e) {
-			sendError(node.getRoot().toLowerCase() + " from config.yml");
+			sendError(node.getRoot().toLowerCase(Locale.ROOT) + " from config.yml");
 			return 0.0;
 		}
 	}
@@ -429,23 +429,23 @@ public class TownySettings {
 	public static int getInt(ConfigNodes node) {
 
 		try {
-			return Integer.parseInt(config.getString(node.getRoot().toLowerCase(), node.getDefault()).trim());
+			return Integer.parseInt(config.getString(node.getRoot().toLowerCase(Locale.ROOT), node.getDefault()).trim());
 		} catch (NumberFormatException e) {
-			sendError(node.getRoot().toLowerCase() + " from config.yml");
+			sendError(node.getRoot().toLowerCase(Locale.ROOT) + " from config.yml");
 			return 0;
 		}
 	}
 
 	public static String getString(ConfigNodes node) {
 
-		return config.getString(node.getRoot().toLowerCase(), node.getDefault());
+		return config.getString(node.getRoot().toLowerCase(Locale.ROOT), node.getDefault());
 	}
 
 	public static String getString(String root, String def) {
 
-		String data = config.getString(root.toLowerCase(), def);
+		String data = config.getString(root.toLowerCase(Locale.ROOT), def);
 		if (data == null) {
-			sendError(root.toLowerCase() + " from config.yml");
+			sendError(root.toLowerCase(Locale.ROOT) + " from config.yml");
 			return "";
 		}
 		return data;
@@ -460,7 +460,7 @@ public class TownySettings {
 				try {
 					list.add(Integer.parseInt(aStrArray.trim()));
 				} catch (NumberFormatException e) {
-					sendError(node.getRoot().toLowerCase() + " from config.yml");
+					sendError(node.getRoot().toLowerCase(Locale.ROOT) + " from config.yml");
 				}
 			}
 		return list;
@@ -468,7 +468,7 @@ public class TownySettings {
 
 	public static List<String> getStrArr(ConfigNodes node) {
 
-		String[] strArray = getString(node.getRoot().toLowerCase(), node.getDefault()).split(",");
+		String[] strArray = getString(node.getRoot().toLowerCase(Locale.ROOT), node.getDefault()).split(",");
 		List<String> list = new ArrayList<>();
 		if (strArray.length > 0) {
 			for (String aStrArray : strArray)
@@ -483,14 +483,14 @@ public class TownySettings {
 		try {
 			return TimeTools.getSeconds(getString(node));
 		} catch (NumberFormatException e) {
-			sendError(node.getRoot().toLowerCase() + " from config.yml");
+			sendError(node.getRoot().toLowerCase(Locale.ROOT) + " from config.yml");
 			return 1;
 		}
 	}
 
 	public static void addComment(String root, String... comments) {
 
-		newConfig.addComment(root.toLowerCase(), comments);
+		newConfig.addComment(root.toLowerCase(Locale.ROOT), comments);
 	}
 
 	/**
@@ -523,7 +523,7 @@ public class TownySettings {
 				setNewProperty(root.getRoot(), root.getDefault());
 				setTownBlockTypes();
 			} else	
-				setNewProperty(root.getRoot(), (config.get(root.getRoot().toLowerCase()) != null) ? config.get(root.getRoot().toLowerCase()) : root.getDefault());
+				setNewProperty(root.getRoot(), (config.get(root.getRoot().toLowerCase(Locale.ROOT)) != null) ? config.get(root.getRoot().toLowerCase(Locale.ROOT)) : root.getDefault());
 
 		}
 
@@ -1568,16 +1568,16 @@ public class TownySettings {
 
 	public static void setProperty(String root, Object value) {
 
-		config.set(root.toLowerCase(), value.toString());
+		config.set(root.toLowerCase(Locale.ROOT), value.toString());
 	}
 
 	private static void setNewProperty(String root, Object value) {
 
 		if (value == null) {
-			TownyMessaging.sendDebugMsg("value is null for " + root.toLowerCase());
+			TownyMessaging.sendDebugMsg("value is null for " + root.toLowerCase(Locale.ROOT));
 			value = "";
 		}
-		newConfig.set(root.toLowerCase(), value.toString());
+		newConfig.set(root.toLowerCase(Locale.ROOT), value.toString());
 	}
 	
 	public static void setLanguage(String lang) {
@@ -1587,7 +1587,7 @@ public class TownySettings {
 
 	public static Object getProperty(String root) {
 
-		return config.get(root.toLowerCase());
+		return config.get(root.toLowerCase(Locale.ROOT));
 	}
 
 	public static double getClaimPrice() {
