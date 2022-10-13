@@ -158,17 +158,17 @@ public class BorderUtil {
 		// One is player owned and the other isn't.
 		if (currentTownBlock.hasResident() != destinationTownBlock.hasResident())
 			return false;
+		
+		Resident resident = player != null ? TownyAPI.getInstance().getResident(player) : null;
+
+		// Player is trusted in one of the townblocks but not the other
+		if (resident != null && currentTownBlock.hasTrustedResident(resident) && !destinationTownBlock.hasTrustedResident(resident) && destinationTownBlock.getResidentOrNull() != resident)
+			return false;
 
 		// Both townblocks are owned by the same resident.
 		if (currentTownBlock.hasResident() && destinationTownBlock.hasResident() 
 			&& currentTownBlock.getResidentOrNull() == destinationTownBlock.getResidentOrNull())
 			return true;
-
-		Resident resident = player != null ? TownyAPI.getInstance().getResident(player) : null;
-		
-		// Player is trusted in one of the townblocks but not the other
-		if (resident != null && currentTownBlock.hasTrustedResident(resident) && !destinationTownBlock.hasTrustedResident(resident) && destinationTownBlock.getResidentOrNull() != resident)
-			return false;
 
 		// Both townblocks are owned by the same town.
 		return currentTownBlock.getTownOrNull() == destinationTownBlock.getTownOrNull() 
