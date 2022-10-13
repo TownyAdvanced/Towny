@@ -1863,6 +1863,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (BukkitTools.isEventCancelled(npree)) {
 					TownyMessaging.sendErrorMsg(player, npree.getCancelMessage());
 					remove.add(targetNation);
+					continue;
 				}
 
 				nation.removeEnemy(targetNation);
