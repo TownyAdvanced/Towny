@@ -680,7 +680,7 @@ public class TownyAPI {
 		requestTeleport(player, spawnLoc, 0);
 	}
 
-    public void requestTeleport(Player player, Location spawnLoc , int cooldown) {
+    public void requestTeleport(Player player, Location spawnLoc, int cooldown) {
     	
     	Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
     	

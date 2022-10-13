@@ -60,7 +60,7 @@ public enum NationSpawnLevel {
 		this.notAllowedLangNodePeace = notAllowedLangNodePeace;
 		this.ecoPriceConfigNode = ecoPriceConfigNode;
 		this.permissionNode = permissionNode;
-		this.cooldown = cooldownConfigNode == null ? 0 :TownySettings.getInt(cooldownConfigNode);
+		this.cooldown = cooldownConfigNode == null ? 0 : TownySettings.getInt(cooldownConfigNode);
 	}
 
 	public void checkIfAllowed(Player player, Nation nation) throws TownyException {
