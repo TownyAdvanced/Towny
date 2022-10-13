@@ -3200,7 +3200,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Resident senderResident = sender instanceof Player player ? TownyAPI.getInstance().getResident(player) : null;
 		
 		for (Resident member : new ArrayList<>(kicking)) {
-			if (!town.getResidents().contains(member)) {
+			if (!town.hasResident(member)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_resident_not_your_town"));
 				kicking.remove(member);
 				continue;
@@ -3212,9 +3212,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				continue;
 			}
 
-			if (!town.hasResident(member) 
-				|| member.isMayor() 
-				|| (senderResident != null && !senderResident.isMayor() && TownySettings.getTownUnkickableRanks().stream().anyMatch(member::hasTownRank))) {
+			// The player being kicked is either the mayor or has an 'unkickable' rank (usually an assistant)
+			// The rank check is bypassed if the sender is either not a player or not in the same town as the player being kicked, for townyadmin purposes
+			if (member.isMayor() || (senderResident != null && !senderResident.isMayor() && town.hasResident(senderResident) && TownySettings.getTownUnkickableRanks().stream().anyMatch(member::hasTownRank))) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_you_cannot_kick_this_resident", member));
 				kicking.remove(member);
 				continue;
