@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.compress.utils.FileNameUtils;
 import org.bukkit.plugin.Plugin;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 
@@ -130,7 +131,7 @@ public class TranslationLoader {
 				if (is == null)
 					throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR", TownyInitException.TownyError.LOCALIZATION);
 				
-				Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
+				Map<String, Object> values = new Yaml(new SafeConstructor(new LoaderOptions())).load(is);
 				
 				saveReferenceFile(lang);
 				
@@ -215,7 +216,7 @@ public class TranslationLoader {
 				if (file.isFile() && FileNameUtils.getExtension(file.getName()).equalsIgnoreCase("yml") 
 					&& !file.getName().equalsIgnoreCase("global.yml") && TownySettings.isLanguageEnabled(FileNameUtils.getBaseName(file.getName()).replaceAll("-", "_"))) {
 					try (FileInputStream is = new FileInputStream(file)) {
-						Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
+						Map<String, Object> values = new Yaml(new SafeConstructor(new LoaderOptions())).load(is);
 						String lang = FileNameUtils.getBaseName(file.getName()).replaceAll("-", "_");
 
 						if (values != null) {
@@ -324,7 +325,7 @@ public class TranslationLoader {
 	private Map<String, Object> loadGlobalFile(Path globalYMLPath) {
 		Map<String, Object> globalOverrides = new HashMap<>();
 		try (InputStream is = Files.newInputStream(globalYMLPath)) {
-			globalOverrides = new Yaml(new SafeConstructor()).load(is);
+			globalOverrides = new Yaml(new SafeConstructor(new LoaderOptions())).load(is);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
