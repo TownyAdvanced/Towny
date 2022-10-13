@@ -961,6 +961,11 @@ public enum ConfigNodes {
 			"# This setting determines the list of allowed town map colors.",
 			"# The color codes are in hex format."
 	),
+	GTOWN_SETTINGS_UNKICKABLE_RANKS(
+			"global_town_settings.unkickable_ranks",
+			"assistant",
+			"",
+			"# List of ranks (separated by a comma) that will prevent a player from being kicked from a town."),
 	
 	GNATION_SETTINGS(
 			"global_nation_settings",
