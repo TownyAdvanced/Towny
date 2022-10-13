@@ -605,11 +605,33 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When set to true, if players are damaged in any way while in a spawn warmup, their spawning will be cancelled."),
+	GTOWN_SETTINGS_COOLDOWN_ROOT(
+			"global_town_settings.spawning_cooldowns", "", ""),
 	GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER(
-			"global_town_settings.spawn_cooldown_time",
+			"global_town_settings.spawning_cooldowns.town_spawn_cooldown_time",
 			"30",
 			"",
 			"# Number of seconds that must pass before a player can use /t spawn or /res spawn."),
+	GTOWN_SETTINGS_OUTPOST_COOLDOWN_TIMER(
+			"global_town_settings.spawning_cooldowns.outpost_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player can use /t outpost."),
+	GTOWN_SETTINGS_NATION_MEMBER_COOLDOWN_TIMER(
+			"global_town_settings.spawning_cooldowns.nation_member_town_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player of the same nation can use /t spawn."),
+	GTOWN_SETTINGS_NATION_ALLY_COOLDOWN_TIMER(
+			"global_town_settings.spawning_cooldowns.nation_ally_town_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player in an allied nation can use /t spawn."),
+	GTOWN_SETTINGS_UNAFFILIATED_COOLDOWN_TIMER(
+			"global_town_settings.spawning_cooldowns.unaffiliated_town_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player who is not a member or ally of town can use /t spawn."),
 	GTOWN_SETTINGS_SPAWN_WARNINGS(
 			"global_town_settings.spawn_warnings",
 			"true",
@@ -1054,6 +1076,23 @@ public enum ConfigNodes {
 			"# Valid values are: true, false, war, peace",
 			"# When war or peace is set, it is only possible to teleport to the nations,",
 			"# when there is a war or peace."),
+	GNATION_SETTINGS_COOLDOWN_ROOT(
+			"global_nation_settings.spawning_cooldowns", "", ""),
+	GNATION_SETTINGS_NATION_MEMBER_COOLDOWN_TIMER(
+			"global_nation_settings.spawning_cooldowns.nation_member_nation_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player of the same nation can use /n spawn."),
+	GNATION_SETTINGS_NATION_ALLY_COOLDOWN_TIMER(
+			"global_nation_settings.spawning_cooldowns.nation_ally_nation_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player allied with the nation can use /n spawn."),
+	GNATION_SETTINGS_NATION_UNAFFILIATED_COOLDOWN_TIMER(
+			"global_nation_settings.spawning_cooldowns.unaffiliated_nation_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player who is not a member or ally can use /n spawn."),
 	GNATION_SETTINGS_MAX_TOWNS_PER_NATION(
 			"global_nation_settings.max_towns_per_nation",
 			"0",

@@ -90,6 +90,8 @@ public class SpawnUtil {
 		
 		final NationSpawnLevel nationSpawnLevel = spawnType == SpawnType.NATION ? isTownyAdmin ? NationSpawnLevel.ADMIN : getNationSpawnLevel(player, resident, nation, split.length == 0) : null;
 
+		int cooldown = player.hasPermission(PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()) ? 0 : townSpawnLevel != null ? townSpawnLevel.getCooldown() : nationSpawnLevel.getCooldown();
+		
 		// Prevent spawn travel while in the config's disallowed zones.
 		// Throws a TownyException if the player is disallowed.
 		if (!isTownyAdmin)
@@ -117,12 +119,13 @@ public class SpawnUtil {
 				// Get paymentMsg for the money.csv and the Account being paid.
 				final String paymentMsg = getPaymentMsg(townSpawnLevel, nationSpawnLevel, spawnType);
 				final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : EconomyAccount.SERVER_ACCOUNT;
-				initiateCostedSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, ignoreWarn);
+				initiateCostedSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, ignoreWarn, cooldown);
 				// No Cost so skip confirmation system.
 			} else
-				initiateSpawn(player, spawnLoc);
+				initiateSpawn(player, spawnLoc, cooldown);
 		});
 	}
+
 
 	/**
 	 * Handles moving outlaws from outside of towns they are outlawed in.
@@ -569,7 +572,7 @@ public class SpawnUtil {
 	 * @param player   Player being spawned.
 	 * @param spawnLoc Location being spawned to.
 	 */
-	private static void initiateSpawn(Player player, Location spawnLoc) {
+	private static void initiateSpawn(Player player, Location spawnLoc, int cooldown) {
 		if (TownyTimerHandler.isTeleportWarmupRunning() && !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP.getNode())) {
 			// Use teleport warmup
 			TownyMessaging.sendMsg(player, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
@@ -580,7 +583,7 @@ public class SpawnUtil {
 				player.getVehicle().eject();
 			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
 			if (TownySettings.getSpawnCooldownTime() > 0 && !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()))
-				CooldownTimerTask.addCooldownTimer(player.getName(), CooldownType.TELEPORT);
+				CooldownTimerTask.addCooldownTimer(player.getName(), "teleport", cooldown);
 		}
 	}
 
@@ -596,13 +599,13 @@ public class SpawnUtil {
 	 * @param ignoreWarn boolean which is true if the player opted to ignore the
 	 *                   cost confirmation.
 	 */
-	private static void initiateCostedSpawn(Player player, Resident resident, Location spawnLoc, double travelCost, Account payee, String paymentMsg, boolean ignoreWarn) {
+	private static void initiateCostedSpawn(Player player, Resident resident, Location spawnLoc, double travelCost, Account payee, String paymentMsg, boolean ignoreWarn, int cooldown) {
 		if (ignoreWarn || !TownySettings.isSpawnWarnConfirmationUsed())
 			// Skipping the confirmation.
-			payAndThenSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg);
+			payAndThenSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, cooldown);
 		else
 			// Sending the confirmation.
-			Confirmation.runOnAccept(() -> payAndThenSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg))
+			Confirmation.runOnAccept(() -> payAndThenSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, cooldown))
 						.setTitle(Translatable.of("msg_spawn_warn", TownyEconomyHandler.getFormattedBalance(travelCost)))
 						.sendTo(player);
 	}
@@ -618,12 +621,12 @@ public class SpawnUtil {
 	 * @param payee      Account which will be paid.
 	 * @param paymentMsg Message being left in the Towny money.csv log.
 	 */
-	private static void payAndThenSpawn(Player player, Resident resident, Location spawnLoc, double travelCost, Account payee, String paymentMsg) {
+	private static void payAndThenSpawn(Player player, Resident resident, Location spawnLoc, double travelCost, Account payee, String paymentMsg, int cooldown) {
 		if (resident.getAccount().payTo(travelCost, payee, paymentMsg)) {
 			TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(travelCost)));
 			resident.setTeleportCost(travelCost);
 			resident.setTeleportAccount(payee);
-			initiateSpawn(player, spawnLoc);
+			initiateSpawn(player, spawnLoc, cooldown);
 		}
 	}
 

@@ -676,11 +676,16 @@ public class TownyAPI {
         return onlineResidents;
     }
     
-    public void requestTeleport(Player player, Location spawnLoc) {
+	public void requestTeleport(Player player, Location spawnLoc) {
+		requestTeleport(player, spawnLoc, 0);
+	}
+
+    public void requestTeleport(Player player, Location spawnLoc, int cooldown) {
+    	
     	Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
     	
     	if (resident != null) {
-			TeleportWarmupTimerTask.requestTeleport(resident, spawnLoc);
+			TeleportWarmupTimerTask.requestTeleport(resident, spawnLoc, cooldown);
 		}
     }
     

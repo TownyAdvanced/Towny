@@ -316,5 +316,50 @@
         "key": "add_townblocktype_limits"
       }
     ]
+  },
+  {
+    "version": "0.98.3.13",
+    "changes": [
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawn_cooldown_time",
+        "value": "global_town_settings.spawning_cooldowns.town_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawn_cooldown_time",
+        "value": "global_town_settings.spawning_cooldowns.outpost_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawn_cooldown_time",
+        "value": "global_town_settings.spawning_cooldowns.nation_member_town_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawn_cooldown_time",
+        "value": "global_town_settings.spawning_cooldowns.nation_ally_town_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawn_cooldown_time",
+        "value": "global_town_settings.spawning_cooldowns.unaffiliated_town_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawn_cooldown_time",
+        "value": "global_nation_settings.spawning_cooldowns.nation_member_nation_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawn_cooldown_time",
+        "value": "global_nation_settings.spawning_cooldowns.nation_ally_nation_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawn_cooldown_time",
+        "value": "global_nation_settings.spawning_cooldowns.unaffiliated_nation_spawn_cooldown_time"
+      }
+    ]
   }
 ]

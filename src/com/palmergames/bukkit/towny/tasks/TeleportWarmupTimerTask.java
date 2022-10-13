@@ -8,8 +8,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
-
 import io.papermc.lib.PaperLib;
 
 import org.bukkit.Location;
@@ -42,14 +40,15 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			if (resident == null)
 				break;
 			if (currentTime > resident.getTeleportRequestTime() + (TownySettings.getTeleportWarmupTime() * 1000)) {
+				int cooldown = resident.getTeleportCooldown();
 				resident.clearTeleportRequest();
 				
 				Player p = TownyAPI.getInstance().getPlayer(resident);
 				// Only teleport & add cooldown if player is valid
 				if (p != null) {
 					PaperLib.teleportAsync(p, resident.getTeleportDestination(), TeleportCause.COMMAND);
-					if (TownySettings.getSpawnCooldownTime() > 0)
-						CooldownTimerTask.addCooldownTimer(resident.getName(), CooldownType.TELEPORT);
+					if (cooldown > 0)
+						CooldownTimerTask.addCooldownTimer(resident.getName(), "teleport", cooldown);
 				}
 				
 				teleportQueue.poll();
@@ -60,9 +59,13 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	}
 
 	public static void requestTeleport(Resident resident, Location spawnLoc) {
+		requestTeleport(resident, spawnLoc, 0);
+	}
 
+	public static void requestTeleport(Resident resident, Location spawnLoc, int cooldown) {
 		resident.setTeleportRequestTime();
 		resident.setTeleportDestination(spawnLoc);
+		resident.setTeleportCooldown(cooldown);
 		try {
 			if (teleportQueue.contains(resident))
 				teleportQueue.remove(resident);

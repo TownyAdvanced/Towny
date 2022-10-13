@@ -64,6 +64,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private String surname = "";
 	private long teleportRequestTime = -1;
 	private Location teleportDestination;
+	private int teleportCooldown;
 	private double teleportCost = 0.0;
 	private Account teleportAccount;
 	private final List<String> modes = new ArrayList<>();
@@ -404,6 +405,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		teleportCost = 0;
 		teleportRequestTime = -1;
 		teleportAccount = null;
+		teleportCooldown = 0;
 	}
 
 	public void setTeleportRequestTime() {
@@ -424,6 +426,16 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public Location getTeleportDestination() {
 
 		return teleportDestination;
+	}
+
+	public void setTeleportCooldown(int cooldown) {
+
+		teleportCooldown = cooldown;
+	}
+
+	public int getTeleportCooldown() {
+
+		return teleportCooldown;
 	}
 
 	public boolean hasRequestedTeleport() {
