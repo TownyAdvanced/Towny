@@ -1004,7 +1004,7 @@ public class TownyPlayerListener implements Listener {
 		if (format.contains("%t") || format.contains("%n"))
 			return format.replace("%t", townName).replace("%n", nationName);
 		else 
-			return String.format(format, nationName);
+			return String.format(format, nationName, townName);
 	}
 
 	/**
