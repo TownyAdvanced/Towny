@@ -11,6 +11,8 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.util.BukkitTools;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -615,11 +617,9 @@ public class TownyRegenAPI {
 			for (int z = 0; z < plotSize; z++)
 				for (int x = 0; x < plotSize; x++)
 					for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
-						Block block = world.getBlockAt(worldx + x, y, worldz + z);
+						final Block block = world.getBlockAt(worldx + x, y, worldz + z);
 						if (townyWorld.isPlotManagementDeleteIds(block.getType()))
-							block.setType(Material.AIR);
-
-						block = null;
+							Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> block.setType(Material.AIR));
 					}
 		}
 	}

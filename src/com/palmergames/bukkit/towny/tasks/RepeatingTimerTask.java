@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import org.bukkit.Bukkit;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -40,7 +42,8 @@ public class RepeatingTimerTask extends TownyTimerTask {
 
 		// Perform the next plot_management block_delete
 		if (TownyRegenAPI.hasDeleteTownBlockIdQueue()) {
-			TownyRegenAPI.doDeleteTownBlockIds(TownyRegenAPI.getDeleteTownBlockIdQueue());
+			Bukkit.getScheduler().runTaskAsynchronously(plugin,
+				() -> TownyRegenAPI.doDeleteTownBlockIds(TownyRegenAPI.getDeleteTownBlockIdQueue()));
 		}
 	}
 

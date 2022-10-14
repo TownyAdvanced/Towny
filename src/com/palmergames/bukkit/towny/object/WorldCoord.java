@@ -165,6 +165,10 @@ public class WorldCoord extends Coord {
 	public boolean hasTownBlock() {
 		return TownyUniverse.getInstance().hasTownBlock(this);
 	}
+	
+	public boolean hasTown(Town town) {
+		return hasTownBlock() && getTownOrNull().equals(town);
+	}
 
 	/**
 	 * Identical to !{@link WorldCoord#hasTownBlock()}, but is better readable.
