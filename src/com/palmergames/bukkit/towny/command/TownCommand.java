@@ -3762,7 +3762,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		/*
 		 * Actually start the claiming process.
 		 */
-		new TownClaim(plugin, player, town, selection, outpost, true, false).start();
+		Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, selection, outpost, true, false));
 	}
 
 	public static void parseTownUnclaimCommand(Player player, String[] split) throws TownyException {
@@ -3780,7 +3780,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode());
 
-			new TownClaim(plugin, player, town, null, false, false, false).start();
+			Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, null, false, false, false));
 
 		} else {
 			// Check permissions here because of the townunclaim mode.
@@ -3817,14 +3817,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 					// Set the area to unclaim
-					new TownClaim(plugin, player, town, finalSelection, false, false, false).start();
+					Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, finalSelection, false, false, false));
 				})
 				.setTitle(Translatable.of("confirmation_unclaiming_costs", TownyEconomyHandler.getFormattedBalance(cost)))
 				.sendTo(player);
 				return;
 			}
 			// Set the area to unclaim
-			new TownClaim(plugin, player, town, selection, false, false, false).start();
+			Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, selection, false, false, false));
 
 			TownyMessaging.sendMsg(player, Translatable.of("msg_abandoned_area", Arrays.toString(selection.toArray(new WorldCoord[0]))));
 		}
