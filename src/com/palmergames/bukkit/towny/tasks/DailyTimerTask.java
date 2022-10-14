@@ -82,7 +82,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 		
 		//Clean up unused NPC residents
-		new NPCCleanupTask().start();
+		Bukkit.getScheduler().runTaskAsynchronously(plugin, new NPCCleanupTask());
 
 		/*
 		 * If enabled, remove all 0-plot towns.
