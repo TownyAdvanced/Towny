@@ -7931,3 +7931,6 @@ v0.92.0.11:
   - Make NPCCleanupTask implement Runnable.
   - Prevent tadpoles being stolen with a bucket.
     - Closes #6241.
+  - New PAPI placeholders, courtesy of PainOchoco with PR #6240, closing #6230.
+    - %townyadvanced_player_town_is_trusted% - returns True or False based on whether the player is in a town, and is trusted in the town.
+    - %townyadvanced_player_plot_is_trusted% - returns True or False based on whether the player is in a town, and is trusted in the plot.
