@@ -82,6 +82,7 @@ public class EntityTypeUtil {
 	@Nullable
 	public static Material parseEntityToMaterial(EntityType entityType) {
 		return switch (entityType) {
+			case TADPOLE -> Material.TADPOLE_BUCKET;
 			case AXOLOTL -> Material.AXOLOTL_BUCKET;
 			case COD -> Material.COD;
 			case SALMON -> Material.SALMON;
