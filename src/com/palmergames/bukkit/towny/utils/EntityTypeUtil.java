@@ -87,6 +87,7 @@ public class EntityTypeUtil {
 			case SALMON -> Material.SALMON;
 			case PUFFERFISH -> Material.PUFFERFISH;
 			case TROPICAL_FISH -> Material.TROPICAL_FISH;
+			case TADPOLE -> Material.TADPOLE_BUCKET;
 			case ITEM_FRAME -> Material.ITEM_FRAME;
 			case GLOW_ITEM_FRAME -> Material.GLOW_ITEM_FRAME;
 			case PAINTING -> Material.PAINTING;
