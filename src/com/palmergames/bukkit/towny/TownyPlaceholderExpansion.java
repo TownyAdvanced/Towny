@@ -482,11 +482,6 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return String.valueOf(resident.hasTown());
 		case "has_nation": // %townyadvanced_has_nation%
 			return String.valueOf(resident.hasNation());
-        case "is_trusted": // %townyadvanced_is_trusted%
-            if (resident.hasTown()) {
-                return String.valueOf(resident.getTownOrNull().getTrustedResidents().contains(resident));
-            }
-            return "";
 		case "nation_tag_town_formatted": // %townyadvanced_nation_tag_town_formatted%
 			if (resident.hasTown()) {
 				town = resident.getTownOrNull().getFormattedName();
@@ -647,6 +642,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				return townblock != null ? townblock.getTownOrNull().getBoard() : "";
 			case "player_location_nation_board": // %townyadvanced_player_location_nation_board%
 				return townblock != null ? (townblock.getTownOrNull().hasNation() ? townblock.getTownOrNull().getNationOrNull().getBoard() : "") : "";
+            case "is_trusted": // %townyadvanced_player_is_trusted%
+                return townblock != null ? String.valueOf(townblock.getTownOrNull().hasTrustedResident(resident)) : "";
 			case "number_of_towns_in_world": // %townyadvanced_number_of_towns_in_world%
 				return String.valueOf(TownyUniverse.getInstance().getTowns().stream()
 						.filter(t -> t.getHomeblockWorld().equals(townblock.getWorld()))
