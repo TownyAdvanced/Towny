@@ -612,6 +612,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				return townblock != null ? StringMgmt.capitalize(townblock.getType().toString()) : "";
 			case "player_plot_owner": // %townyadvanced_player_plot_owner%
 				return townblock != null ? String.valueOf(townblock.isOwner(resident)) : "false";
+            case "player_plot_is_trusted": // %townyadvanced_player_plot_is_trusted%
+                return townblock != null ? String.valueOf(townblock.hasTrustedResident(resident)) : "";
 			case "player_location_town_or_wildname": // %townyadvanced_player_location_town_or_wildname%
 				return townblock != null ? townblock.getTownOrNull().getName() : TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).getUnclaimedZoneName();
 			case "player_location_formattedtown_or_wildname": // %townyadvanced_player_location_formattedtown_or_wildname%
@@ -642,6 +644,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				return townblock != null ? townblock.getTownOrNull().getBoard() : "";
 			case "player_location_nation_board": // %townyadvanced_player_location_nation_board%
 				return townblock != null ? (townblock.getTownOrNull().hasNation() ? townblock.getTownOrNull().getNationOrNull().getBoard() : "") : "";
+            case "player_town_is_trusted": // %townyadvanced_player_town_is_trusted%
+                return townblock != null ? String.valueOf(townblock.getTownOrNull().hasTrustedResident(resident)) : "";
 			case "number_of_towns_in_world": // %townyadvanced_number_of_towns_in_world%
 				return String.valueOf(TownyUniverse.getInstance().getTowns().stream()
 						.filter(t -> t.getHomeblockWorld().equals(townblock.getWorld()))
