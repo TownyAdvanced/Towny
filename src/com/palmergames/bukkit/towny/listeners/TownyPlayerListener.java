@@ -40,7 +40,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -417,7 +416,7 @@ public class TownyPlayerListener implements Listener {
 			if (block.getType() == Material.RESPAWN_ANCHOR && event.getAction() == Action.RIGHT_CLICK_BLOCK && !block.getWorld().isRespawnAnchorWorks()) {
 				RespawnAnchor anchor = ((RespawnAnchor) block.getBlockData());
 				if (anchor.getCharges() > 0)
-					BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(player, blockLoc, null, block.getType()));
+					BukkitTools.fireEvent(new BedExplodeEvent(player, blockLoc, null, block.getType()));
 				return;
 			}
 			
@@ -436,7 +435,7 @@ public class TownyPlayerListener implements Listener {
 			 */
 			if (Tag.BEDS.isTagged(block.getType()) && player.getWorld().getEnvironment().equals(Environment.NETHER)) {
 				org.bukkit.block.data.type.Bed bed = ((org.bukkit.block.data.type.Bed) block.getBlockData());
-				BukkitTools.getPluginManager().callEvent(new BedExplodeEvent(player, blockLoc, block.getRelative(bed.getFacing()).getLocation(), block.getType()));
+				BukkitTools.fireEvent(new BedExplodeEvent(player, blockLoc, block.getRelative(bed.getFacing()).getLocation(), block.getType()));
 				return;
 			}
 			
@@ -475,8 +474,7 @@ public class TownyPlayerListener implements Listener {
 					
 					// Fire a cancellable event prior to us denying bed use.
 					PlayerDeniedBedUseEvent pdbue = new PlayerDeniedBedUseEvent(player, blockLoc, isEnemy, denialMessage);
-					Bukkit.getPluginManager().callEvent(pdbue);
-					if (!pdbue.isCancelled()) {
+					if (!BukkitTools.isEventCancelled(pdbue)) {
 						event.setCancelled(true);
 						TownyMessaging.sendErrorMsg(player, pdbue.getDenialMessage());
 					}
@@ -845,7 +843,7 @@ public class TownyPlayerListener implements Listener {
 		plugin.getCache(player).updateCoord(to);
 
 		PlayerChangePlotEvent event = new PlayerChangePlotEvent(player, from, to, moveEvent);
-		Bukkit.getServer().getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 	}
 	
 	/*
@@ -862,18 +860,18 @@ public class TownyPlayerListener implements Listener {
 			return;
 		if (to.isWilderness())
 			// Gone from a Town into the wilderness.
-			Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
+			BukkitTools.fireEvent(new PlayerLeaveTownEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
 		else if (from.isWilderness())
 			// Gone from wilderness into Town.
-			Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
+			BukkitTools.fireEvent(new PlayerEnterTownEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
 		// Both to and from have towns.
 		else if (to.getTownOrNull().equals(from.getTownOrNull()))
 			// The towns are the same, no event will fire.
 			return;
 		else {
 			// Player has left one Town and immediately entered a different one.
-			Bukkit.getServer().getPluginManager().callEvent(new PlayerEnterTownEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
-			Bukkit.getServer().getPluginManager().callEvent(new PlayerLeaveTownEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
+			BukkitTools.fireEvent(new PlayerEnterTownEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
+			BukkitTools.fireEvent(new PlayerLeaveTownEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
 		}
 	}
 	
@@ -940,8 +938,7 @@ public class TownyPlayerListener implements Listener {
 
 	private boolean tryKeepExperience(PlayerDeathEvent event) {
 		PlayerKeepsExperienceEvent pkee = new PlayerKeepsExperienceEvent(event);
-		Bukkit.getPluginManager().callEvent(pkee);
-		if (!pkee.isCancelled()) {
+		if (!BukkitTools.isEventCancelled(pkee)) {
 			event.setKeepLevel(true);
 			event.setDroppedExp(0);
 			return true;
@@ -951,8 +948,7 @@ public class TownyPlayerListener implements Listener {
 
 	private boolean tryKeepInventory(PlayerDeathEvent event) {
 		PlayerKeepsInventoryEvent pkie = new PlayerKeepsInventoryEvent(event);
-		Bukkit.getPluginManager().callEvent(pkie);
-		if (!pkie.isCancelled()) {
+		if (!BukkitTools.isEventCancelled(pkie)) {
 			event.setKeepInventory(true);
 			event.getDrops().clear();
 			return true;

@@ -137,8 +137,7 @@ public class TownyEntityMonitorListener implements Listener {
 			 * - check for jailing attacking residents,
 			 */
 			if (attackerPlayer != null && attackerResident != null) {
-				PlayerKilledPlayerEvent deathEvent = new PlayerKilledPlayerEvent(attackerPlayer, defenderPlayer, attackerResident, defenderResident, defenderPlayer.getLocation(), event);
-				BukkitTools.getPluginManager().callEvent(deathEvent);
+				BukkitTools.fireEvent(new PlayerKilledPlayerEvent(attackerPlayer, defenderPlayer, attackerResident, defenderResident, defenderPlayer.getLocation(), event));
 
 				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
 				isJailingAttackers(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
@@ -191,8 +190,7 @@ public class TownyEntityMonitorListener implements Listener {
 			
 			// Call event.
 			PlayerPaysDeathPriceEvent ppdpe = new PlayerPaysDeathPriceEvent(defenderResident.getAccount(), price, defenderResident, null);
-			Bukkit.getPluginManager().callEvent(ppdpe);
-			if (!ppdpe.isCancelled()) {
+			if (!BukkitTools.isEventCancelled(ppdpe)) {
 				price = ppdpe.getAmount();
 
 				defenderResident.getAccount().withdraw(price, "Death Payment");
@@ -214,8 +212,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 			// Call event.
 			TownPaysDeathPriceEvent tpdpe = new TownPaysDeathPriceEvent(defenderResident.getAccount(), price, defenderResident, null, town);
-			Bukkit.getPluginManager().callEvent(tpdpe);
-			if (!tpdpe.isCancelled()) {
+			if (!BukkitTools.isEventCancelled(tpdpe)) {
 				price = tpdpe.getAmount();
 
 				town.getAccount().withdraw(price, "Death Payment Town");
@@ -237,8 +234,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 			// Call event.
 			NationPaysDeathPriceEvent npdpe = new NationPaysDeathPriceEvent(defenderResident.getAccount(), price, defenderResident, null, nation);
-			Bukkit.getPluginManager().callEvent(npdpe);
-			if (!npdpe.isCancelled()) {
+			if (!BukkitTools.isEventCancelled(npdpe)) {
 				price = npdpe.getAmount();
 
 				nation.getAccount().withdraw(price, "Death Payment Nation");
@@ -284,8 +280,7 @@ public class TownyEntityMonitorListener implements Listener {
 					price = defenderResident.getAccount().getHoldingBalance();
 
 				PlayerPaysDeathPriceEvent ppdpe = new PlayerPaysDeathPriceEvent(defenderResident.getAccount(), price, defenderResident, defenderPlayer);
-				Bukkit.getPluginManager().callEvent(ppdpe);
-				if (!ppdpe.isCancelled()) {
+				if (!BukkitTools.isEventCancelled(ppdpe)) {
 					price = ppdpe.getAmount();
 					defenderResident.getAccount().payTo(price, attackerResident, "Death Payment");
 
@@ -307,8 +302,7 @@ public class TownyEntityMonitorListener implements Listener {
 					price = town.getAccount().getHoldingBalance();
 
 				TownPaysDeathPriceEvent tpdpe = new TownPaysDeathPriceEvent(town.getAccount(), price, defenderResident, defenderPlayer, town);
-				Bukkit.getPluginManager().callEvent(tpdpe);
-				if (!tpdpe.isCancelled()) {
+				if (!BukkitTools.isEventCancelled(tpdpe)) {
 					price = tpdpe.getAmount();
 					town.getAccount().payTo(price, attackerResident, "Death Payment Town");
 
@@ -330,8 +324,7 @@ public class TownyEntityMonitorListener implements Listener {
 					price = nation.getAccount().getHoldingBalance();
 
 				NationPaysDeathPriceEvent npdpe = new NationPaysDeathPriceEvent(nation.getAccount(), price, defenderResident, defenderPlayer, nation);
-				Bukkit.getPluginManager().callEvent(npdpe);
-				if (!npdpe.isCancelled()) {
+				if (!BukkitTools.isEventCancelled(npdpe)) {
 					price = npdpe.getAmount();
 					nation.getAccount().payTo(price, attackerResident, "Death Payment Nation");
 					

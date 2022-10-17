@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
 import com.palmergames.bukkit.util.BukkitTools;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -243,7 +242,7 @@ public class PlayerCacheUtil {
 	public static TownBlockStatus fetchTownBlockStatus(Player player, WorldCoord worldCoord) {
 		TownBlockStatus status = getTownBlockStatus(player, worldCoord);
 		PlayerCacheGetTownBlockStatusEvent event = new PlayerCacheGetTownBlockStatusEvent(player, worldCoord, status);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 		return event.getTownBlockStatus();
 	}
 	

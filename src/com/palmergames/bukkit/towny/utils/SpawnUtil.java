@@ -40,6 +40,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
+import com.palmergames.bukkit.util.BukkitTools;
 
 public class SpawnUtil {
 
@@ -545,8 +546,7 @@ public class SpawnUtil {
 	 */
 	private static void sendSpawnEvent(Player player, SpawnType spawnType, Location spawnLoc) throws TownyException {
 		SpawnEvent spawnEvent = getSpawnEvent(player, spawnType, spawnLoc);
-		Bukkit.getPluginManager().callEvent(spawnEvent);
-		if (spawnEvent.isCancelled())
+		if (BukkitTools.isEventCancelled(spawnEvent))
 			throw new TownyException(spawnEvent.getCancelMessage());
 	}
 	

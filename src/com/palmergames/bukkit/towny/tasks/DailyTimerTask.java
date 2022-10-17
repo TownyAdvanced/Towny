@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		removedTowns.clear();
 		removedNations.clear();
 
-		Bukkit.getPluginManager().callEvent(new PreNewDayEvent()); // Pre-New Day Event
+		BukkitTools.fireEvent(new PreNewDayEvent()); // Pre-New Day Event
 		
 		TownyMessaging.sendDebugMsg("New Day");
 
@@ -55,9 +56,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * If enabled, collect taxes and then server upkeep costs.
 		 */		
 		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
-			NewDayTaxAndUpkeepPreCollectionEvent event = new NewDayTaxAndUpkeepPreCollectionEvent();
-			Bukkit.getPluginManager().callEvent(event);
-			if (!event.isCancelled()) {
+			if (!BukkitTools.isEventCancelled(new NewDayTaxAndUpkeepPreCollectionEvent())) {
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_day_tax"));
 				TownyMessaging.sendDebugMsg("Collecting Town Taxes");
 				collectTownTaxes();
@@ -120,7 +119,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 
 		// Fire the new-day event.
-		Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(bankruptedTowns, removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
+		BukkitTools.fireEvent(new NewDayEvent(bankruptedTowns, removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
 		
 		TownyMessaging.sendDebugMsg("Finished New Day Code");
 		TownyMessaging.sendDebugMsg("Universe Stats:");
@@ -143,9 +142,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	}
 
 	private void unconquer(Town town) {
-		TownUnconquerEvent event = new TownUnconquerEvent(town);
-		Bukkit.getPluginManager().callEvent(event);
-		if (event.isCancelled())
+		if (BukkitTools.isEventCancelled(new TownUnconquerEvent(town)))
 			return;
 		
 		town.setConquered(false);
@@ -200,8 +197,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						continue;
 					
 					PreTownPaysNationTaxEvent event = new PreTownPaysNationTaxEvent(town, nation, taxAmount);
-					Bukkit.getPluginManager().callEvent(event);
-					if (event.isCancelled()) {
+					if (BukkitTools.isEventCancelled(event)) {
 						TownyMessaging.sendPrefixedTownMessage(town, event.getCancellationMessage());
 						continue;
 					}

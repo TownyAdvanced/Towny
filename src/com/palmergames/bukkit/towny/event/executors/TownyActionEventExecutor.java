@@ -74,7 +74,7 @@ public class TownyActionEventExecutor {
 		/*
 		 * Fire the event to let other plugins/Towny's internal war make changes.
 		 */
-		BukkitTools.getPluginManager().callEvent((Event) event);
+		BukkitTools.fireEvent((Event) event);
 
 		/*
 		 * Send any feedback when the action is denied.
@@ -115,7 +115,7 @@ public class TownyActionEventExecutor {
 				canExplode = world.isForceExpl() || townBlock.getPermissions().explosion;
 				
 				TownBlockExplosionTestEvent event = new TownBlockExplosionTestEvent(townBlock, townBlock.getTownOrNull(), canExplode);
-				Bukkit.getPluginManager().callEvent(event);
+				BukkitTools.fireEvent(event);
 				canExplode = event.isExplosion();
 			}
 		}
@@ -298,7 +298,7 @@ public class TownyActionEventExecutor {
 		 * and other plugins have a say in the results.
 		 */
 		TownyExplodingBlocksEvent event = new TownyExplodingBlocksEvent(blockList, filteredBlocks, mat, entity, bukkitExplodeEvent);
-		BukkitTools.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 
 		/*
 		 * Finally, return the results of the TownyExplodingBlockEvent
@@ -335,13 +335,12 @@ public class TownyActionEventExecutor {
 		 * and other plugins have a say in the results.
 		 */
 		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, harmedEntity, cause, TownyAPI.getInstance().getTownBlock(loc), cancelled);
-		BukkitTools.getPluginManager().callEvent(event);
 
 		/*
 		 * Finally return the results after Towny lets its own 
 		 * war systems and other plugins have a say.
 		 */
-		return !event.isCancelled();
+		return !BukkitTools.isEventCancelled(event);
 	}
 
 	/**
@@ -366,12 +365,11 @@ public class TownyActionEventExecutor {
 		 * and other plugins have a say in the results.
 		 */
 		TownyBurnEvent event = new TownyBurnEvent(block, block.getLocation(), TownyAPI.getInstance().getTownBlock(block.getLocation()), cancelled);
-		BukkitTools.getPluginManager().callEvent(event);
 		
 		/*
 		 * Finally return the results after Towny lets its own 
 		 * war systems and other plugins have a say.
 		 */
-		return !event.isCancelled();
+		return !BukkitTools.isEventCancelled(event);
 	}
 }

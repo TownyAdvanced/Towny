@@ -702,9 +702,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							}
 							
 							PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(townBlockType, townBlock, resident);
-							BukkitTools.getPluginManager().callEvent(preEvent);
-
-							if (preEvent.isCancelled()) {
+							if (BukkitTools.isEventCancelled(preEvent)) {
 								TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 								return false;
 							}
@@ -764,9 +762,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						plotTestOwner(resident, townBlock);
 
 						PlotPreClearEvent preEvent = new PlotPreClearEvent(townBlock);
-						BukkitTools.getPluginManager().callEvent(preEvent);
-						
-						if (preEvent.isCancelled()) {
+						if (BukkitTools.isEventCancelled(preEvent)) {
 							TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 							return false;
 						}
@@ -779,7 +775,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						// Raise an event for the claim
-						BukkitTools.getPluginManager().callEvent(new PlotClearEvent(townBlock));
+						BukkitTools.fireEvent(new PlotClearEvent(townBlock));
 
 					} else {
 						// Shouldn't ever reach here as a null townBlock should
@@ -1023,8 +1019,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 
 			//Change settings event
-			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(townBlock);
-			Bukkit.getServer().getPluginManager().callEvent(event);
+			BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(townBlock));
 
 			// Reset all caches as this can affect everyone.
 			plugin.resetCache();
@@ -1061,10 +1056,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (!resident.hasTown() || (resident.hasTown() && townBlock.getTownOrNull() != resident.getTownOrNull()))
 				TownyMessaging.sendMsg(resident, message);
 			
-			Bukkit.getPluginManager().callEvent(new PlotSetForSaleEvent(resident, townBlock.getPlotPrice(), townBlock));
+			BukkitTools.fireEvent(new PlotSetForSaleEvent(resident, townBlock.getPlotPrice(), townBlock));
 		} else {
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_set_to_nfs"));
-			Bukkit.getPluginManager().callEvent(new PlotNotForSaleEvent(resident, townBlock));
+			BukkitTools.fireEvent(new PlotNotForSaleEvent(resident, townBlock));
 		}
 
 		// Save this townblock so the for sale status is remembered.
@@ -1129,8 +1124,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					// Fire cancellable event directly before setting the toggle.
 					PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(townBlock, player, choice.orElse(!townBlock.getPermissions().pvp));
-					Bukkit.getPluginManager().callEvent(plotTogglePvpEvent);
-					if (plotTogglePvpEvent.isCancelled())
+					if (BukkitTools.isEventCancelled(plotTogglePvpEvent))
 						throw new TownyException(plotTogglePvpEvent.getCancellationMsg());
 
 					townBlock.getPermissions().pvp = choice.orElse(!townBlock.getPermissions().pvp);
@@ -1145,8 +1139,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					// Fire cancellable event directly before setting the toggle.
 					PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(townBlock, player, choice.orElse(!townBlock.getPermissions().explosion));
-					Bukkit.getPluginManager().callEvent(plotToggleExplosionEvent);
-					if (plotToggleExplosionEvent.isCancelled())
+					if (BukkitTools.isEventCancelled(plotToggleExplosionEvent))
 						throw new TownyException(plotToggleExplosionEvent.getCancellationMsg());
 
 					townBlock.getPermissions().explosion = choice.orElse(!townBlock.getPermissions().explosion);
@@ -1158,8 +1151,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					// Fire cancellable event directly before setting the toggle.
 					PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(townBlock, player, choice.orElse(!townBlock.getPermissions().fire));
-					Bukkit.getPluginManager().callEvent(plotToggleFireEvent);
-					if (plotToggleFireEvent.isCancelled())
+					if (BukkitTools.isEventCancelled(plotToggleFireEvent))
 						throw new TownyException(plotToggleFireEvent.getCancellationMsg());
 
 					townBlock.getPermissions().fire = choice.orElse(!townBlock.getPermissions().fire);
@@ -1171,8 +1163,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					toggleTest(player, townBlock, StringMgmt.join(split, " "));
 					// Fire cancellable event directly before setting the toggle.
 					PlotToggleMobsEvent plotToggleMobsEvent= new PlotToggleMobsEvent(townBlock, player, choice.orElse(!townBlock.getPermissions().mobs));
-					Bukkit.getPluginManager().callEvent(plotToggleMobsEvent);
-					if (plotToggleMobsEvent.isCancelled())
+					if (BukkitTools.isEventCancelled(plotToggleMobsEvent))
 						throw new TownyException(plotToggleMobsEvent.getCancellationMsg());
 
 					townBlock.getPermissions().mobs = choice.orElse(!townBlock.getPermissions().mobs);
@@ -1189,7 +1180,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 				//Change settings event
 				TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(townBlock);
-				Bukkit.getServer().getPluginManager().callEvent(event);
+				BukkitTools.fireEvent(event);
 
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
@@ -1252,8 +1243,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						}
 
 						PlotTogglePvpEvent plotTogglePvpEvent = new PlotTogglePvpEvent(groupBlock, player, choice.orElse(!groupBlock.getPermissions().pvp));
-						Bukkit.getPluginManager().callEvent(plotTogglePvpEvent);
-						if (plotTogglePvpEvent.isCancelled()) {
+						if (BukkitTools.isEventCancelled(plotTogglePvpEvent)) {
 							TownyMessaging.sendErrorMsg(player, plotTogglePvpEvent.getCancellationMsg());
 							return;
 						}
@@ -1271,8 +1261,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 
 						PlotToggleExplosionEvent plotToggleExplosionEvent = new PlotToggleExplosionEvent(groupBlock, player, choice.orElse(!groupBlock.getPermissions().explosion));
-						Bukkit.getPluginManager().callEvent(plotToggleExplosionEvent);
-						if (plotToggleExplosionEvent.isCancelled()) {
+						if (BukkitTools.isEventCancelled(plotToggleExplosionEvent)) {
 							TownyMessaging.sendErrorMsg(player, plotToggleExplosionEvent.getCancellationMsg());
 							return;
 						}
@@ -1286,8 +1275,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 
 						PlotToggleFireEvent plotToggleFireEvent = new PlotToggleFireEvent(groupBlock, player, choice.orElse(!groupBlock.getPermissions().fire));
-						Bukkit.getPluginManager().callEvent(plotToggleFireEvent);
-						if (plotToggleFireEvent.isCancelled()) {
+						if (BukkitTools.isEventCancelled(plotToggleFireEvent)) {
 							TownyMessaging.sendErrorMsg(player, plotToggleFireEvent.getCancellationMsg());
 							return;
 						}
@@ -1301,8 +1289,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						toggleTest(player, groupBlock, StringMgmt.join(split, " "));
 
 						PlotToggleMobsEvent plotToggleMobsEvent = new PlotToggleMobsEvent(groupBlock, player, choice.orElse(!groupBlock.getPermissions().mobs));
-						Bukkit.getPluginManager().callEvent(plotToggleMobsEvent);
-						if (plotToggleMobsEvent.isCancelled()) {
+						if (BukkitTools.isEventCancelled(plotToggleMobsEvent)) {
 							TownyMessaging.sendErrorMsg(player, plotToggleMobsEvent.getCancellationMsg());
 							return;
 						}
@@ -1318,9 +1305,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					groupBlock.setChanged(true);
 
 					//Change settings event
-					TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(groupBlock);
-					Bukkit.getServer().getPluginManager().callEvent(event);
-					
+					BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(groupBlock));
+
 					// Save
 					groupBlock.save();
 				}
@@ -1670,8 +1656,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								tb.setChanged(!tb.getPermissions().toString().equals(town.getPermissions().toString()));
 								tb.save();
 								// Change settings event
-								TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(tb);
-								Bukkit.getServer().getPluginManager().callEvent(event);
+								BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(tb));
 							});
 
 						plugin.resetCache();
@@ -1735,10 +1720,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				
 				// Allow for PlotPreChangeTypeEvent to trigger
 				PlotPreChangeTypeEvent preEvent = new PlotPreChangeTypeEvent(type, tb, resident);
-				BukkitTools.getPluginManager().callEvent(preEvent);
-				
 				// If any one of the townblocks is not allowed to be set, cancel setting all of them.
-				if (preEvent.isCancelled()) {
+				if (BukkitTools.isEventCancelled(preEvent)) {
 					TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
 					return false;
 				}
@@ -1818,9 +1801,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				PlotTrustAddEvent event = new PlotTrustAddEvent(new ArrayList<>(group.getTownBlocks()), trustedResident, player);
-				Bukkit.getPluginManager().callEvent(event);
-
-				if (event.isCancelled()) {
+				if (BukkitTools.isEventCancelled(event)) {
 					TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
 					return false;
 				}
@@ -1840,9 +1821,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				PlotTrustRemoveEvent event = new PlotTrustRemoveEvent(new ArrayList<>(group.getTownBlocks()), trustedResident, player);
-				Bukkit.getPluginManager().callEvent(event);
-
-				if (event.isCancelled()) {
+				if (BukkitTools.isEventCancelled(event)) {
 					TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
 					return false;
 				}
@@ -1996,9 +1975,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			PlotTrustAddEvent event = new PlotTrustAddEvent(townBlock, resident, player);
-			Bukkit.getPluginManager().callEvent(event);
-			
-			if (event.isCancelled()) {
+			if (BukkitTools.isEventCancelled(event)) {
 				TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
 				return;
 			}
@@ -2016,9 +1993,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			PlotTrustRemoveEvent event = new PlotTrustRemoveEvent(townBlock, resident, player);
-			Bukkit.getPluginManager().callEvent(event);
-			
-			if (event.isCancelled()) {
+			if (BukkitTools.isEventCancelled(event)) {
 				TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
 				return;
 			}

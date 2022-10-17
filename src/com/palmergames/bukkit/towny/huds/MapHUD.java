@@ -159,7 +159,7 @@ public class MapHUD {
 						if (getWildernessMapDataMap().containsKey(worldcoord))
 							getWildernessMapDataMap().remove(worldcoord);
 						WildernessMapEvent wildMapEvent = new WildernessMapEvent(worldcoord);
-						Bukkit.getPluginManager().callEvent(wildMapEvent);
+						BukkitTools.fireEvent(wildMapEvent);
 						symbol = wildMapEvent.getMapSymbol();
 						hoverText = wildMapEvent.getHoverText();
 						clickCommand = wildMapEvent.getClickCommand();

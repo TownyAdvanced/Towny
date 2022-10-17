@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -51,7 +50,7 @@ public final class Translation {
 		
 		// Fire the TranslationLoadEvent, allowing other plugins to add Translations.
 		TranslationLoadEvent translationLoadEvent = new TranslationLoadEvent();
-		Bukkit.getPluginManager().callEvent(translationLoadEvent);
+		BukkitTools.fireEvent(translationLoadEvent);
 		// If another plugin added translations, add them to the transations hashmap.
 		if (!translationLoadEvent.getAddedTranslations().isEmpty()) {
 			addTranslations(translationLoadEvent.getAddedTranslations());

@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.util.BookFactory;
+import com.palmergames.bukkit.util.BukkitTools;
 
 public class JailUtil {
 
@@ -73,8 +74,7 @@ public class JailUtil {
 
 		// Fire cancellable event.
 		ResidentPreJailEvent event = new ResidentPreJailEvent(resident, jail, cell, hours, bail, reason);
-		Bukkit.getPluginManager().callEvent(event);
-		if (event.isCancelled()) {
+		if (BukkitTools.isEventCancelled(event)) {
 			TownyMessaging.sendErrorMsg(jailer, event.getCancelMessage());
 			return;
 		}
@@ -130,7 +130,7 @@ public class JailUtil {
 		teleportToJail(resident);
 		
 		// Call ResidentJailEvent.
-		Bukkit.getPluginManager().callEvent(new ResidentJailEvent(resident));
+		BukkitTools.fireEvent(new ResidentJailEvent(resident));
 	
 	}
 
@@ -206,7 +206,7 @@ public class JailUtil {
 		resident.setJailBailCost(0.00);
 		resident.save();
 		
-		Bukkit.getPluginManager().callEvent(new ResidentUnjailEvent(resident));
+		BukkitTools.fireEvent(new ResidentUnjailEvent(resident));
 	}
 
 

@@ -37,7 +37,6 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -119,8 +118,7 @@ public class TownyFormatter {
 		if (!fields.isEmpty())
 			screen.addComponentOf("extraFields", getExtraFieldsComponent(fields));
 		
-		TownBlockStatusScreenEvent event = new TownBlockStatusScreenEvent(screen, townBlock);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(new TownBlockStatusScreenEvent(screen, townBlock));
 		
 		return screen;
 	}
@@ -246,9 +244,8 @@ public class TownyFormatter {
 		if (!fields.isEmpty())
 			screen.addComponentOf("extraFields", getExtraFieldsComponent(fields));
 			
-		ResidentStatusScreenEvent event = new ResidentStatusScreenEvent(screen, resident);
-		Bukkit.getPluginManager().callEvent(event);
-		
+		BukkitTools.fireEvent(new ResidentStatusScreenEvent(screen, resident));
+
 		return screen;
 	}
 
@@ -417,8 +414,7 @@ public class TownyFormatter {
 		if (!fields.isEmpty())
 			screen.addComponentOf("extraFields", getExtraFieldsComponent(fields));
 			
-		TownStatusScreenEvent event = new TownStatusScreenEvent(screen, town);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(new TownStatusScreenEvent(screen, town));
 		
 		return screen;
 	}
@@ -546,8 +542,7 @@ public class TownyFormatter {
 		if (!fields.isEmpty())
 			screen.addComponentOf("extraFields", getExtraFieldsComponent(fields));
 		
-		NationStatusScreenEvent event = new NationStatusScreenEvent(screen, nation);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(new NationStatusScreenEvent(screen, nation));
 		
 		return screen;
 	}

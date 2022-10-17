@@ -277,7 +277,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		if (updateJoinedAt) {
 			setJoinedTownAt(System.currentTimeMillis());
-			BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
+			BukkitTools.fireEvent(new TownAddResidentEvent(this, town));
 		}
 	}
 	
@@ -288,7 +288,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		Town town = this.town;
 		
-		BukkitTools.getPluginManager().callEvent(new TownPreRemoveResidentEvent(this, town));
+		BukkitTools.fireEvent(new TownPreRemoveResidentEvent(this, town));
 		
 		try {
 			
@@ -299,7 +299,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		} catch (EmptyTownException ignore) {
 		}
 
-		BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(this, town));
+		BukkitTools.fireEvent(new TownRemoveResidentEvent(this, town));
 
 		// Use an iterator to be able to keep track of element modifications.
 		Iterator<TownBlock> townBlockIterator = townBlocks.iterator();

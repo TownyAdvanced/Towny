@@ -22,12 +22,12 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.spawnlevel.SpawnLevel;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -1109,7 +1109,7 @@ public class TownySettings {
 	public static int getNationBonusBlocks(Nation nation) {
 		int bonusBlocks = getNationLevel(nation).townBlockLimitBonus();
 		NationBonusCalculationEvent calculationEvent = new NationBonusCalculationEvent(nation, bonusBlocks);
-		Bukkit.getPluginManager().callEvent(calculationEvent);
+		BukkitTools.fireEvent(calculationEvent);
 		return calculationEvent.getBonusBlocks();
 	}
 
@@ -1879,7 +1879,7 @@ public class TownySettings {
 			return 0.0;
 		
 		TownUpkeepCalculationEvent event = new TownUpkeepCalculationEvent(town, getTownUpkeepCostRaw(town));
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 		return event.getUpkeep();
 	}
 
@@ -1972,7 +1972,7 @@ public class TownySettings {
 
 	public static double getTownPenaltyUpkeepCost(Town town) {
 		TownUpkeepPenalityCalculationEvent event = new TownUpkeepPenalityCalculationEvent(town, getTownPenaltyUpkeepCostRaw(town));
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 		return event.getUpkeep();
 	}
 
@@ -2010,7 +2010,7 @@ public class TownySettings {
 			return 0.0;
 		
 		NationUpkeepCalculationEvent event = new NationUpkeepCalculationEvent(nation, getNationUpkeepCostRaw(nation));
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 		return event.getUpkeep();
 	}
 

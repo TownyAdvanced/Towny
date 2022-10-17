@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.object.Resident;
-import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -14,6 +13,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 
 public class HealthRegenTimerTask extends TownyTimerTask {
 
@@ -61,7 +61,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 			player.setHealth(Math.min(maxHP, ++currentHP));
 
 			// Raise an event so other plugins can keep in sync.
-			Bukkit.getServer().getPluginManager().callEvent(new EntityRegainHealthEvent(player, currentHP, RegainReason.REGEN));
+			BukkitTools.fireEvent(new EntityRegainHealthEvent(player, currentHP, RegainReason.REGEN));
 		}
 	}
 }

@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.object.metadata;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.event.LoadedMetadataEvent;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.util.BukkitTools;
+
 import org.bukkit.Bukkit;
 
 import java.io.IOException;
@@ -134,7 +136,7 @@ public class MetadataLoader {
 		storedMetadata.trimToSize();
 		
 		// Call event
-		Bukkit.getPluginManager().callEvent(new LoadedMetadataEvent());
+		BukkitTools.fireEvent(new LoadedMetadataEvent());
 	}
 	
 	private CustomDataField<?> convertRawMetadata(RawDataField rdf) {

@@ -9,6 +9,8 @@ import com.palmergames.bukkit.towny.confirmations.event.ConfirmationConfirmEvent
 import com.palmergames.bukkit.towny.confirmations.event.ConfirmationSendEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.util.BukkitTools;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
@@ -54,7 +56,7 @@ public class ConfirmationHandler {
 
 		}
 		
-		Bukkit.getPluginManager().callEvent(new ConfirmationCancelEvent(confirmation, sender, false));
+		BukkitTools.fireEvent(new ConfirmationCancelEvent(confirmation, sender, false));
 	}
 
 	/**
@@ -65,9 +67,7 @@ public class ConfirmationHandler {
 	 */
 	public static void sendConfirmation(CommandSender sender, Confirmation confirmation) {
 		ConfirmationSendEvent event = new ConfirmationSendEvent(confirmation, sender);
-		Bukkit.getPluginManager().callEvent(event);
-
-		if (event.isCancelled()) {
+		if (BukkitTools.isEventCancelled(event)) {
 			TownyMessaging.sendErrorMsg(sender, event.getCancelMessage());
 			return;
 		}
@@ -88,7 +88,7 @@ public class ConfirmationHandler {
 			if (hasConfirmation(sender)) {
 				confirmations.remove(sender);
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_confirmation_timed_out"));
-				Bukkit.getPluginManager().callEvent(new ConfirmationCancelEvent(confirmation, sender, true));
+				BukkitTools.fireEvent(new ConfirmationCancelEvent(confirmation, sender, true));
 			}
 		}, (20L * confirmation.getDuration())).getTaskId();
 
@@ -109,9 +109,7 @@ public class ConfirmationHandler {
 			return;
 		
 		ConfirmationConfirmEvent event = new ConfirmationConfirmEvent(context.confirmation, sender);
-		Bukkit.getPluginManager().callEvent(event);
-		
-		if (event.isCancelled()) {
+		if (BukkitTools.isEventCancelled(event)) {
 			TownyMessaging.sendErrorMsg(event.getCancelMessage());
 			return;
 		}

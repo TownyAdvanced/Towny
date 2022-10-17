@@ -156,10 +156,9 @@ public class CombatUtil {
 				 * A player has attempted to damage a player. Throw a TownPlayerDamagePlayerEvent.
 				 */
 				TownyPlayerDamagePlayerEvent event = new TownyPlayerDamagePlayerEvent(defendingPlayer.getLocation(), defendingPlayer, cause, defenderTB, cancelled, attackingPlayer);
-				BukkitTools.getPluginManager().callEvent(event);
 
 				// A cancelled event should contain a message.
-				if (event.isCancelled() && event.getMessage() != null)
+				if (BukkitTools.isEventCancelled(event) && event.getMessage() != null)
 					TownyMessaging.sendErrorMsg(attackingPlayer, event.getMessage());
 				
 				return event.isCancelled();
@@ -333,7 +332,7 @@ public class CombatUtil {
 			 * Check the attackers TownBlock and it's Town for their PvP status.
 			 */
 			TownBlockPVPTestEvent event = new TownBlockPVPTestEvent(townBlock, isPvP(townBlock));
-			Bukkit.getPluginManager().callEvent(event);
+			BukkitTools.fireEvent(event);
 			return !event.isPvp();
 
 		} else {
@@ -342,7 +341,7 @@ public class CombatUtil {
 			 * Attacker isn't in a TownBlock so check the wilderness PvP status.
 			 */
 			WildernessPVPTestEvent event = new WildernessPVPTestEvent(world, isWorldPvP(world));
-			Bukkit.getPluginManager().callEvent(event);
+			BukkitTools.fireEvent(event);
 			return !event.isPvp();
 		}
 	}
@@ -394,7 +393,7 @@ public class CombatUtil {
 					return false;
 
 				TownyFriendlyFireTestEvent event = new TownyFriendlyFireTestEvent(attacker, defender, world);
-				Bukkit.getPluginManager().callEvent(event);
+				BukkitTools.fireEvent(event);
 	
 				if (!event.isPVP() && !event.getCancelledMessage().isEmpty())
 					TownyMessaging.sendErrorMsg(attacker, event.getCancelledMessage());
@@ -690,9 +689,6 @@ public class CombatUtil {
 		if (!isArenaPlot(dispenserTB, defenderTB))
 			preventDamage = preventPvP(world, dispenserTB) || preventPvP(world, defenderTB);
 
-		TownyDispenserDamageEntityEvent event = new TownyDispenserDamageEntityEvent(entity.getLocation(), entity, cause, defenderTB, preventDamage, dispenser);
-		Bukkit.getPluginManager().callEvent(event);
-		
-		return event.isCancelled();
+		return BukkitTools.isEventCancelled(new TownyDispenserDamageEntityEvent(entity.getLocation(), entity, cause, defenderTB, preventDamage, dispenser));
 	}
 }
