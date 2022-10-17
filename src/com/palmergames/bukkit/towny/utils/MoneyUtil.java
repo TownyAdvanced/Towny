@@ -48,9 +48,7 @@ public class MoneyUtil {
 			
 			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
 			
-			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
-			if (BukkitTools.isEventCancelled(preEvent))
-				throw new TownyException(preEvent.getCancelMessage());
+			BukkitTools.ifCancelledThenThrow(new TownPreTransactionEvent(town, transaction));
 			
 			// Withdraw from bank.
 			town.withdrawFromBank(resident, amount);
@@ -71,9 +69,7 @@ public class MoneyUtil {
 
 			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
 			
-			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
-			if (BukkitTools.isEventCancelled(preEvent))
-				throw new TownyException(preEvent.getCancelMessage());
+			BukkitTools.ifCancelledThenThrow(new TownPreTransactionEvent(town, transaction));
 			
 			if (nation == null) {
 				// Deposit into town from a town resident.
@@ -100,9 +96,7 @@ public class MoneyUtil {
 
 			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
 			
-			NationPreTransactionEvent preEvent = new NationPreTransactionEvent(nation, transaction);
-			if (BukkitTools.isEventCancelled(preEvent))
-				throw new TownyException(preEvent.getCancelMessage());
+			BukkitTools.ifCancelledThenThrow(new NationPreTransactionEvent(nation, transaction));
 
 			// Withdraw from bank.
 			nation.withdrawFromBank(resident, amount);
@@ -122,9 +116,7 @@ public class MoneyUtil {
 
 			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
 			
-			NationPreTransactionEvent preEvent = new NationPreTransactionEvent(nation, transaction);
-			if (BukkitTools.isEventCancelled(preEvent))
-				throw new TownyException(preEvent.getCancelMessage());
+			BukkitTools.ifCancelledThenThrow(new NationPreTransactionEvent(nation, transaction));
 			
 			// Deposit into nation.
 			nation.depositToBank(resident, amount);

@@ -99,7 +99,9 @@ public abstract class TownyActionEvent extends CancellableTownyEvent {
 
 	/**
 	 * @param message Message shown to players when their build attempts is cancelled.
+	 * @deprecated since 0.98.4.0 use {@link #setCancelMessage(String)}	instead.
 	 */
+	@Deprecated
 	public void setMessage(String message) {
 		if (message.equals(""))
 			this.supressMessage(true);
