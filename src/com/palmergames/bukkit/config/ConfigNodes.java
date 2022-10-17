@@ -446,6 +446,8 @@ public enum ConfigNodes {
 			"",
 			"",
 			"# This section is applied to new worlds as default settings when new worlds are detected."),
+	        "# You can adjust these settings for existing worlds using /townyworld ?"),
+	
 	NWS_PLOT_MANAGEMENT_REVERT_ENABLE(
 			"new_world_settings.plot_management.revert_on_unclaim.enabled",
 			"true",
