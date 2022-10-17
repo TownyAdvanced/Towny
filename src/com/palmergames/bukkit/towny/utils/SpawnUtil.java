@@ -545,9 +545,7 @@ public class SpawnUtil {
 	 * @throws TownyException when the event is cancelled.
 	 */
 	private static void sendSpawnEvent(Player player, SpawnType spawnType, Location spawnLoc) throws TownyException {
-		SpawnEvent spawnEvent = getSpawnEvent(player, spawnType, spawnLoc);
-		if (BukkitTools.isEventCancelled(spawnEvent))
-			throw new TownyException(spawnEvent.getCancelMessage());
+		BukkitTools.ifCancelledThenThrow(getSpawnEvent(player, spawnType, spawnLoc));
 	}
 	
 	/**

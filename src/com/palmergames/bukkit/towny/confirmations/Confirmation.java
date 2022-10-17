@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.confirmations;
 
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
 
 /**
@@ -20,6 +21,7 @@ public class Confirmation {
 	private final String cancelCommand;
 	private final boolean isAsync;
 	private String pluginPrefix;
+	private final CancellableTownyEvent event;
 
 	/**
 	 * Creates a new {@link ConfirmationBuilder} with the supplied accept handler.
@@ -62,6 +64,7 @@ public class Confirmation {
 		this.confirmCommand = builder.confirmCommand;
 		this.cancelCommand = builder.cancelCommand;
 		this.pluginPrefix = builder.pluginPrefix;
+		this.event = builder.event;
 	}
 	
 	/**
@@ -127,6 +130,10 @@ public class Confirmation {
 	
 	public String getPluginPrefix() {
 		return pluginPrefix;
+	}
+	
+	public CancellableTownyEvent getEvent() {
+		return event;
 	}
 
 	/**

@@ -1,24 +1,17 @@
 package com.palmergames.bukkit.towny.event.town;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Town;
 
-public class TownAddAlliedTownEvent extends Event implements Cancellable {
-	
-	private static final HandlerList handlers = new HandlerList();
-	boolean cancelled;
+public class TownAddAlliedTownEvent extends CancellableTownyEvent {
+
 	private final Town town;
 	private final Town newAlly;
-	private String cancelMessage = "A town alliance was cancelled by another plugin.";
-	
+
 	public TownAddAlliedTownEvent(Town town, Town newAlly) {
-		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.newAlly = newAlly;
+		setCancelMessage("A town alliance was cancelled by another plugin.");
 	}
 
 	/**
@@ -33,28 +26,5 @@ public class TownAddAlliedTownEvent extends Event implements Cancellable {
 	 */
 	public Town getNewAlly() {
 		return newAlly;
-	}
-
-	public boolean isCancelled() {
-		return cancelled;
-	}
-
-	public void setCancelled(boolean cancel) {
-		cancelled = cancel;
-	}
-	
-	public void setCancelMessage(String cancelMessage) {
-		this.cancelMessage = cancelMessage;
-	}
-	
-	public String getCancelMessage() { return this.cancelMessage; }
-
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
 	}
 }

@@ -1,27 +1,21 @@
 package com.palmergames.bukkit.towny.event.nation;
 
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translation;
 
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-
-public class NationRankRemoveEvent extends Event implements Cancellable {
-
-	private static final HandlerList handlers = new HandlerList();
+public class NationRankRemoveEvent extends CancellableTownyEvent {
 
 	private final Nation nation;
 	private final Resident res;
 	private final String rank;
-	private boolean isCancelled = false;
-	private String cancelMessage = Translation.of("msg_err_command_disable");
 
 	public NationRankRemoveEvent(Nation nation, String rank, Resident res) {
 		this.nation = nation;
 		this.rank = rank;
 		this.res = res;
+		setCancelMessage(Translation.of("msg_err_command_disable"));
 	}
 
 	public Nation getNation() {
@@ -35,32 +29,4 @@ public class NationRankRemoveEvent extends Event implements Cancellable {
 	public String getRank() {
 		return rank;
 	}
-
-	public void setCancelMessage(String s) {
-		cancelMessage = s;
-	}
-
-	public String getCancelMessage() {
-		return cancelMessage;
-	}
-
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean b) {
-		this.isCancelled = b;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-
 }

@@ -3,50 +3,27 @@ package com.palmergames.bukkit.towny.event;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
 /**
  * Runs before town banks are charged
  * Provides raw town block
  * */
-public class TownPreClaimEvent extends Event implements Cancellable{
+public class TownPreClaimEvent extends CancellableTownyEvent {
 
-    private static final HandlerList handlers = new HandlerList();
     private final TownBlock townBlock;
     private final Town town;
     private final Player player;
-    private boolean isCancelled = false;
     private boolean isHomeblock = false;
     private boolean isOutpost = false;
-    private String cancelMessage = Translation.of("msg_claim_error");
-
-    @Override
-    public HandlerList getHandlers() {
-
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-
-        return handlers;
-    }
 
     public TownPreClaimEvent(Town _town, TownBlock _townBlock, Player _player, boolean _isOutpost, boolean _isHomeblock) {
-        super(!Bukkit.getServer().isPrimaryThread());
         this.town = _town;
         this.townBlock = _townBlock;
         this.player = _player;
         this.isOutpost = _isOutpost;
         this.isHomeblock = _isHomeblock;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return isCancelled;
+        setCancelMessage(Translation.of("msg_claim_error"));
     }
 
     /**
@@ -56,7 +33,7 @@ public class TownPreClaimEvent extends Event implements Cancellable{
      */
     @Override
     public void setCancelled(boolean cancelled) {
-        isCancelled = cancelled;
+        setCancelled(cancelled);
     }
 
     /**
@@ -117,15 +94,6 @@ public class TownPreClaimEvent extends Event implements Cancellable{
     public Player getPlayer() {
     	return player;
     }
-    
-    /** 
-     * Returns the cancelMessage for this event.
-     * 
-     * @return the cancelMessage.
-     */
-	public String getCancelMessage() {
-		return cancelMessage;
-	}
 
 	/**
 	 * Message should requires two variables using %s placeholders, akin to the default message. 
@@ -134,7 +102,8 @@ public class TownPreClaimEvent extends Event implements Cancellable{
 	 * 
 	 * @param cancelMessage the message which will be shown for cancelled events.
 	 */
+	@Override
 	public void setCancelMessage(String cancelMessage) {
-		this.cancelMessage = cancelMessage;
+		setCancelMessage(cancelMessage);
 	}
 }

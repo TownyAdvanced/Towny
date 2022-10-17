@@ -1320,11 +1320,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta town TOWNNAME rename NEWNAME"));
 				String name = String.join("_", StringMgmt.remArgs(split, 2));
 				
-				TownPreRenameEvent event = new TownPreRenameEvent(town, name);
-				if (BukkitTools.isEventCancelled(event)) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_rename_cancelled"));
-					return;
-				}
+				BukkitTools.ifCancelledThenThrow(new TownPreRenameEvent(town, name));
 
 				if (!NameValidation.isBlacklistName(name) && (TownySettings.areNumbersAllowedInTownNames() || !NameValidation.containsNumbers(name))) {
 					townyUniverse.getDataSource().renameTown(town, name);
@@ -1688,12 +1684,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_RENAME.getNode());
 				String name = String.join("_", StringMgmt.remArgs(split, 2));
 
-				NationPreRenameEvent event = new NationPreRenameEvent(nation, name);
-				if (BukkitTools.isEventCancelled(event)) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_rename_cancelled"));
-					return;
-				}
-				
+				BukkitTools.ifCancelledThenThrow(new NationPreRenameEvent(nation, name));
+
 				if (!NameValidation.isBlacklistName(name) && (TownySettings.areNumbersAllowedInNationNames() || !NameValidation.containsNumbers(name))) {
 					townyUniverse.getDataSource().renameNation(nation, name);
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_set_name", ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), nation.getName()));

@@ -1,32 +1,15 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Nation;
-import org.bukkit.Bukkit;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
-public class NationPreAddEnemyEvent extends Event implements Cancellable {
+public class NationPreAddEnemyEvent extends CancellableTownyEvent {
 
-	private static final HandlerList handlers = new HandlerList();
-	private boolean cancelled = false;
 	private final String enemyName;
 	private final Nation enemy;
 	private final String nationName;
 	private final Nation nation;
-	private String cancelMessage = "Sorry this event was cancelled";
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
 
 	public NationPreAddEnemyEvent(Nation nation, Nation enemy) {
-		super(!Bukkit.getServer().isPrimaryThread());
 		this.enemyName = enemy.getName();
 		this.enemy = enemy;
 		this.nation = nation;
@@ -47,23 +30,5 @@ public class NationPreAddEnemyEvent extends Event implements Cancellable {
 
 	public Nation getNation() {
 		return nation;
-	}
-	
-	@Override
-	public boolean isCancelled() {
-		return cancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
-	}
-
-	public String getCancelMessage() {
-		return cancelMessage;
-	}
-
-	public void setCancelMessage(String cancelMessage) {
-		this.cancelMessage = cancelMessage;
 	}
 }
