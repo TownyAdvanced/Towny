@@ -7927,6 +7927,11 @@ v0.92.0.11:
   - Bump maven-shade-plugin from 3.3.1-SNAPSHOT to 3.4.0.
   - Bump maven-javadoc-plugin from 3.3.1 to 3.4.1.
   - Bump annotations from 22.0.0 to 23.0.0.
+  - Bump placeholderapi from 2.10.9 to 2.11.2.
+  - Bump log4j-core from 2.17.1 to 2.19.0.
+  - Bump VaultAPI from 1.7 to 1.7.1.
+  - Bump bstats-bukkit from 2.2.1 to 3.0.0.
+  - Bump LuckPerms api from 5.3 to 5.4.
   - Fix MissingFormatArgumentException in PlayerEnterTownEvent usage of getCapitalSlug.
   - Make NPCCleanupTask implement Runnable.
   - Prevent tadpoles being stolen with a bucket.
