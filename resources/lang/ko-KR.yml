@@ -699,7 +699,7 @@ msg_couldnt_pay_town_tax_multiple: '&b다음 주민들은 마을 세금을 감�
 msg_couldnt_pay_plot_taxes_multiple: '&b다음 주민들은 자신들이 소유하는 토지들의 일부 또는 전체에 대하여 세금을 감당할 수 없었습니다: '
 msg_bankrupt_town2: '&b%s은(는) 마을을 유지할 여유가 없었습니다.'
 msg_bankrupt_nation2: '&b%s은(는) 국가를 유지할 여유가 없었습니다.'
-status_embassy_town: 'Embassies in'
+status_embassy_town: '대사관'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
 msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
@@ -1111,7 +1111,7 @@ msg_plot_perm_claimed_at: 'Claimed at:'
 msg_wilderness_use_x_in_all_worlds: 'Wilderness use turned %s in all worlds.'
 msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
 #Added in 0.106
-msg_command_outsider_blocked: 'You cannot run that command because you don''t live in %s.'
+msg_command_outsider_blocked: '%s에서 거주하고 있지 않기 때문에 해당 명령어를 실행할 수 없습니다.'
 #Added in 0.107
 msg_jailed_for_x_hours: ' for %s hours.'
 msg_err_this_jail_has_no_cells: 'This jail has no cells.'
@@ -1405,7 +1405,7 @@ msg_confirmation_timed_out: 'Confirmation Timed Out.'
 tc_player_channel_sound_muted: 'The channel sound has been muted'
 tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
 #Added in 0.135
-msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
+msg_cant_toggle_pvp_outsider_in_plot: '외부인이 귀하의 마을에 있습니다. 마을 PVP 설정을 변경할 수 없습니다.'
 #Added in 0.136
 msg_view_on_web: '&7Click to view on the web.'
 #Added in 0.137
@@ -1516,17 +1516,17 @@ msg_perm_hud_mobspawns: 'Mob Spawns: '
 #Seen in /plot perm hud:
 msg_perm_hud_key: 'Key'
 #Seen in /plot perm hud:
-msg_perm_hud_friend: 'friend'
+msg_perm_hud_friend: '친구'
 #Seen in /plot perm hud:
-msg_perm_hud_town: 'town'
+msg_perm_hud_town: '마을'
 #Seen in /plot perm hud:
-msg_perm_hud_ally: 'ally'
+msg_perm_hud_ally: '동맹'
 #Seen in /plot perm hud:
-msg_perm_hud_resident: 'resident'
+msg_perm_hud_resident: '시민'
 #Seen in /plot perm hud:
-msg_perm_hud_nation: 'nation'
+msg_perm_hud_nation: '국가'
 #Seen in /plot perm hud:
-msg_perm_hud_outsider: 'outsider'
+msg_perm_hud_outsider: '외부인'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_name: 'Plot: '
 #Added in 0.153
