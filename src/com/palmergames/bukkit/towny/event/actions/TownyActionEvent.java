@@ -90,7 +90,7 @@ public abstract class TownyActionEvent extends CancellableTownyEvent {
 
 	/**
 	 * @return cancellation message shown to players when their build attempt is cancelled or null.
-	 * @deprecated since 0.98.4.0, use 
+	 * @deprecated since 0.98.4.0, use {@link #getCancelMessage()} instead.
 	 */
 	@Deprecated
 	public String getMessage() {
