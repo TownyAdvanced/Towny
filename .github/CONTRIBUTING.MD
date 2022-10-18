@@ -1,5 +1,5 @@
 # Contributing to Towny
-Thanks for deciding to contribute to Towny! We really appreciate contributions, but to maintain everything cool around here, we need to enforce some guidelines to keep the project as efficient as possible. :shipit:
+Thanks for deciding to contribute to Towny! We really appreciate contributions, but to keep everything running smoothly and get contributions merged in a timely manner, we need to enforce some guidelines. :shipit:
 
 Contributions are welcomed via GitHub Pull Requests.
 You must fork this repository and then open it via your IDE.   
@@ -7,24 +7,29 @@ You can always ask for help on your contribution in the [Towny Discord](https://
 
 ## Before contributing
 - Make sure to read the [Towny license](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md).
-- By contributing, you agree to distribute your changes under the Towny license and all its terms.
+- By opening an pull request, you:
+    - represent that you have the right to waive your changes' copyright and any related rights.
+    - acknowledge that the TownyAdvanced organization is allowed to use or modify your changes in any way it sees fit and in accordance with the [Towny license](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md)
 
-If you do not agree with the terms of our license, do not contribute to the Towny project.
+If you do not agree with the terms of our license, **do not contribute to the Towny project**.
 
 # About pull requests
-1. Keep your commit messages self-explainatory, the description should be a brief explanation and include an issue reference if applicable.
-2. Pull requests should be straight-forward and focus only on one feature. Changed files should only show a difference where code has been actually modified.
-3. Test your changes before sending them in! You should look for bugs, test configuration values, commands, and anything you've touched!
+> Pull requests will have their commits squashed upon merge, commit messages will be summarized.
+
+1. Keep your commit messages self-explanatory. Keep them short but informative!
+2. Pull requests should address a single topic, or be as closed in scope as you can reasonably make it. Small pull requests are easier to review and thus, can result in an faster merge.
+3. Pull request forms should be filled out to the best of your abilities; describe your changes and reference issues/pull requests whenever applicable.
+4. Test your changes before sending them in! You should look for bugs, test configuration values, commands, and anything you've touched!
 
 # About Java code
 > Towny uses an [.editorconfig](https://editorconfig.org) file. IDEs that have [native EditorConfig support](https://editorconfig.org/#pre-installed) will automatically follow these rules.
     
 1. You must use tabs for indentation. 
 2. Keep your environment in Java 16-17. The code will automatically be converted into code compatible with Java 8 by [Jabel](https://github.com/bsideup/jabel).[^jabel-warning]
-3. Avoid using wildcard imports.
-4. Do not format entire class files.   
+3. Do not use wildcard imports.
+4. Do not make unnecessary changes.[^changes]
    - All IDEs are different, we do this to keep consistency in the codebase.
-   - This also keeps code differences in GitHub clean and simple.
+   - This keeps code differences in GitHub clean and simple.
 5. Do not use NMS (`net.minecraft.server`)[^nms], or reflection. We aim at only using the Spigot API.
 6. Do not directly interact with the Minecraft protocol.
    - This includes the usage of ProtocolLib or Netty.
@@ -46,7 +51,10 @@ For the sanity of the rest of us, and the maintainability of the project, please
 # About translation
 All translation on the core Towny plugin is done via [Crowdin](https://crowdin.com/project/townyadvanced).
 
-Strings are formatted using [Java's `java.util.Formatter`](https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/util/Formatter.html) allowing specification of variable order, and more.
+Strings are formatted using [Java's `java.util.Formatter`](https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/util/Formatter.html) allowing specification of variable order, and more. This means that if you find that a line has multiple variables which would be in a different order in your language, you can change them to `%NUMBER$s` (replacing `NUMBER` with the variable index) to change their order. 
 
 [^jabel-warning]: Keep in mind that, while you will be able to use modern language features that way (like patterns), some standard library methods added after JDK 8 will not work **even after being processed** and cause "Cannot find symbol" errors when building (like `String#isBlank`).
+
+[^changes]: This includes formatting and whitespace changes.
+
 [^nms]: The `net.minecraft.server` is the Minecraft server source package. While this allows for "lower-level" coding, it's also pretty hard to maintain due to its obfuscation, no cross-version compatibility, and possibility to corrupt data.
