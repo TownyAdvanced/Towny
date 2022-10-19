@@ -39,7 +39,6 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
-import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.util.BukkitTools;
 
 public class SpawnUtil {
@@ -188,8 +187,8 @@ public class SpawnUtil {
 			throw new TownyException(Translatable.of("msg_err_not_registered_1", player.getName()));
 			
 		// Test if the resident is in a teleport cooldown.
-		if (TownySettings.getSpawnCooldownTime() > 0 && CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.TELEPORT))
-			throw new TownyException(Translatable.of("msg_err_cannot_spawn_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.TELEPORT)));
+		if (CooldownTimerTask.hasCooldown(resident.getName(), "teleport"))
+			throw new TownyException(Translatable.of("msg_err_cannot_spawn_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), "teleport")));
 
 		// Disallow jailed players from teleporting.
 		if (resident.isJailed())
