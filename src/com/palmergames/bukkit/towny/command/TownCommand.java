@@ -3825,8 +3825,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 			// Set the area to unclaim
 			Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, selection, false, false, false));
-
-			TownyMessaging.sendMsg(player, Translatable.of("msg_abandoned_area", Arrays.toString(selection.toArray(new WorldCoord[0]))));
 		}
 	}
 	
