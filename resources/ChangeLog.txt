@@ -7939,3 +7939,10 @@ v0.92.0.11:
   - New PAPI placeholders, courtesy of PainOchoco with PR #6240, closing #6230.
     - %townyadvanced_player_town_is_trusted% - returns True or False based on whether the player is in a town, and is trusted in the town.
     - %townyadvanced_player_plot_is_trusted% - returns True or False based on whether the player is in a town, and is trusted in the plot.
+  - Event firing overhaul:
+    - Make most Cancellable Events into CancellableTownyEvents as long as they are Cancellable and have a cancel message.
+    - Change code to use new BukkitTools#ifCancelledThenThrow() so we can one-line throwing events that only need to display their cancel message.
+    - Add CancelledEventException which extends TownyException, making the error message return the CancellableTownyEvent#getCancelMessage.
+    - Replace all event firing with BukkitTools#fireEvent(Event).
+    - Some Cancellable events have had their one-off getCancellationMessage/setCancellationMessages deprecated and replaced with the uniform CancellableTownyEvent#getCancelMessage/#setCancelMessage(String).
+    - Add the ability to make Confirmations with a pre-set CancellableTownyEvent which is fire before money is paid, or the onAccept() code is ran. See ConfirmationBuilder#setCancellableEvent(CancellableTownyEvent) for details.
