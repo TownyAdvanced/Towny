@@ -76,7 +76,9 @@ public class TownyMessaging {
 	/**
 	 * Sends an Error message (red) to the Player or console
 	 * and to the named Dev if DevMode is enabled.
-	 * Uses default_towny_prefix
+	 * Uses default_towny_prefix. 
+	 * 
+	 * If msg is empty nothing will be sent.
 	 *
 	 * @param sender the Object sending the message
 	 * @param msg the message to send
