@@ -20,9 +20,9 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeTools;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -93,8 +93,7 @@ public class TownRuinUtil {
 		town.setHasUpkeep(false);
 
 		// Call the TownRuinEvent.
-		TownRuinedEvent event = new TownRuinedEvent(town, oldMayorName);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(new TownRuinedEvent(town, oldMayorName));
 		
 		// Set Town settings.
 		town.setRuined(true);
@@ -190,8 +189,7 @@ public class TownRuinUtil {
 		town.save();
 		Towny.getPlugin().resetCache();
 		
-		TownReclaimedEvent event = new TownReclaimedEvent(town, resident);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(new TownReclaimedEvent(town, resident));
 
 		TownyMessaging.sendGlobalMessage(Translatable.of("msg_town_reclaimed", resident.getName(), town.getName()));
 		

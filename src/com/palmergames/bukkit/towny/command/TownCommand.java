@@ -1087,10 +1087,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						return;
 
 					// Call cancellable event.
-					TownOutlawAddEvent toae = new TownOutlawAddEvent(sender, target, town);
-					Bukkit.getPluginManager().callEvent(toae);
-					if (toae.isCancelled())
-						throw new TownyException(toae.getCancelMessage());
+					BukkitTools.ifCancelledThenThrow(new TownOutlawAddEvent(sender, target, town));
 
 					// Kick outlaws from town if they are residents.
 					if (targetTown != null && targetTown.getUUID().equals(town.getUUID())) {
@@ -1117,8 +1114,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							&& TownyAPI.getInstance().getTown(loc) == town) {
 							
 							OutlawTeleportEvent event = new OutlawTeleportEvent(target, town, loc);
-							Bukkit.getPluginManager().callEvent(event);
-							if (event.isCancelled())
+							if (BukkitTools.isEventCancelled(event))
 								return;
 							
 							if (TownySettings.getOutlawTeleportWarmup() > 0)
@@ -1147,11 +1143,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (town.hasOutlaw(target)) {
 
 					// Call cancellable event.
-					TownOutlawRemoveEvent tore = new TownOutlawRemoveEvent(sender, target, town);
-					Bukkit.getPluginManager().callEvent(tore);
-					if (tore.isCancelled())
-						throw new TownyException(tore.getCancelMessage());
-					
+					BukkitTools.ifCancelledThenThrow(new TownOutlawRemoveEvent(sender, target, town));
+
 					town.removeOutlaw(target);
 					town.save();
 
@@ -1385,9 +1378,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				// Fire cancellable event directly before setting the toggle.
 				TownTogglePublicEvent preEvent = new TownTogglePublicEvent(sender, town, admin, choice.orElse(!town.isPublic()));
-				Bukkit.getPluginManager().callEvent(preEvent);
-				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancellationMsg());
+				if (BukkitTools.isEventCancelled(preEvent))
+					throw new TownyException(preEvent.getCancelMessage());
 
 				// Set the toggle setting.
 				town.setPublic(preEvent.getFutureState());
@@ -1423,9 +1415,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				// Fire cancellable event directly before setting the toggle.
 				TownTogglePVPEvent preEvent = new TownTogglePVPEvent(sender, town, admin, choice.orElse(!town.isPVP()));
-				Bukkit.getPluginManager().callEvent(preEvent);
-				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancellationMsg());
+				if (BukkitTools.isEventCancelled(preEvent))
+					throw new TownyException(preEvent.getCancelMessage());
 
 				// Set the toggle setting.
 				town.setPVP(preEvent.getFutureState());
@@ -1448,9 +1439,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				
 				// Fire cancellable event directly before setting the toggle.
 				TownToggleExplosionEvent preEvent = new TownToggleExplosionEvent(sender, town, admin, choice.orElse(!town.isExplosion()));
-				Bukkit.getPluginManager().callEvent(preEvent);
-				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancellationMsg());
+				if (BukkitTools.isEventCancelled(preEvent))
+					throw new TownyException(preEvent.getCancelMessage());
 
 				// Set the toggle setting.
 				town.setExplosion(preEvent.getFutureState());
@@ -1469,9 +1459,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				
 				// Fire cancellable event directly before setting the toggle.
 				TownToggleFireEvent preEvent = new TownToggleFireEvent(sender, town, admin, choice.orElse(!town.isFire()));
-				Bukkit.getPluginManager().callEvent(preEvent);
-				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancellationMsg());
+				if (BukkitTools.isEventCancelled(preEvent))
+					throw new TownyException(preEvent.getCancelMessage());
 
 				// Set the toggle setting.
 				town.setFire(preEvent.getFutureState());
@@ -1490,9 +1479,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				// Fire cancellable event directly before setting the toggle.
 				TownToggleMobsEvent preEvent = new TownToggleMobsEvent(sender, town, admin, choice.orElse(!town.hasMobs()));
-				Bukkit.getPluginManager().callEvent(preEvent);
-				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancellationMsg());
+				if (BukkitTools.isEventCancelled(preEvent))
+					throw new TownyException(preEvent.getCancelMessage());
 
 				// Set the toggle setting.
 				town.setHasMobs(preEvent.getFutureState());
@@ -1507,9 +1495,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				// Fire cancellable event directly before setting the toggle.
 				TownToggleTaxPercentEvent preEvent = new TownToggleTaxPercentEvent(sender, town, admin, choice.orElse(!town.isTaxPercentage()));
-				Bukkit.getPluginManager().callEvent(preEvent);
-				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancellationMsg());
+				if (BukkitTools.isEventCancelled(preEvent))
+					throw new TownyException(preEvent.getCancelMessage());
 
 				// Set the toggle setting.
 				town.setTaxPercentage(preEvent.getFutureState());
@@ -1526,9 +1513,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				// Fire cancellable event directly before setting the toggle.
 				TownToggleOpenEvent preEvent = new TownToggleOpenEvent(sender, town, admin, choice.orElse(!town.isOpen()));
-				Bukkit.getPluginManager().callEvent(preEvent);
-				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancellationMsg());
+				if (BukkitTools.isEventCancelled(preEvent))
+					throw new TownyException(preEvent.getCancelMessage());
 
 				// Set the toggle setting.
 				town.setOpen(preEvent.getFutureState());
@@ -1565,9 +1551,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				
 				// Fire cancellable event directly before setting the toggle.
 				TownToggleNeutralEvent preEvent = new TownToggleNeutralEvent(sender, town, admin, choice.orElse(!town.isNeutral()));
-				Bukkit.getPluginManager().callEvent(preEvent);
-				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancellationMsg());
+				if (BukkitTools.isEventCancelled(preEvent))
+					throw new TownyException(preEvent.getCancelMessage());
 
 				// If they setting neutral status on send a message confirming they paid something, if they did.
 				if (peacefulState && TownyEconomyHandler.isActive() && cost > 0) {
@@ -1595,9 +1580,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				
 				// Fire cancellable event directly before setting the toggle.
 				TownToggleNationZoneEvent preEvent = new TownToggleNationZoneEvent(sender, town, admin, choice.orElse(!town.isNationZoneEnabled()));
-				Bukkit.getPluginManager().callEvent(preEvent);
-				if (preEvent.isCancelled())
-					throw new TownyException(preEvent.getCancellationMsg());
+				if (BukkitTools.isEventCancelled(preEvent))
+					throw new TownyException(preEvent.getCancelMessage());
 				
 				// Set the toggle setting.
 				town.setNationZoneEnabled(preEvent.getFutureState());
@@ -1617,9 +1601,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
             	 * a) uncancel the event, or b) alters the cancellation message.
             	 */
 				TownToggleUnknownEvent event = new TownToggleUnknownEvent(sender, town, admin, split);
-				Bukkit.getPluginManager().callEvent(event);
-				if (event.isCancelled())
-					throw new TownyException(event.getCancellationMsg());
+				if (BukkitTools.isEventCancelled(event))
+					throw new TownyException(event.getCancelMessage());
 			}
 
 			//Propagate perms to all unchanged, town owned, townblocks
@@ -1632,7 +1615,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 
 			//Change settings event
-			Bukkit.getServer().getPluginManager().callEvent(new TownBlockSettingsChangedEvent(town));
+			BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(town));
 
 			// Save the Town.
 			town.save();
@@ -1913,12 +1896,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split[0].equalsIgnoreCase("add")) {
 
 			if (!target.hasTownRank(rank)) {
-				TownAddResidentRankEvent event = new TownAddResidentRankEvent(target, rank, town);
-				BukkitTools.getPluginManager().callEvent(event);
-				if (event.isCancelled()) {
-					TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
-					return;
-				}
+				BukkitTools.ifCancelledThenThrow(new TownAddResidentRankEvent(target, rank, town));
+
 				target.addTownRank(rank);
 				if (target.isOnline()) {
 					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", Translatable.of("town_sing"), rank));
@@ -1934,12 +1913,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		} else if (split[0].equalsIgnoreCase("remove")) {
 
 			if (target.hasTownRank(rank)) {
-				TownRemoveResidentRankEvent event = new TownRemoveResidentRankEvent(target, rank, town);
-				BukkitTools.getPluginManager().callEvent(event);
-				if (event.isCancelled()) {
-					TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
-					return;
-				}
+				BukkitTools.ifCancelledThenThrow(new TownRemoveResidentRankEvent(target, rank, town));
+
 				target.removeTownRank(rank);
 				if (target.isOnline()) {
 					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", Translatable.of("town_sing"), rank));
@@ -2256,14 +2231,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_mayor_doesnt_belong_to_town"));
 
 		TownMayorChangeEvent townMayorChangeEvent = new TownMayorChangeEvent(oldMayor, newMayor);
-		Bukkit.getPluginManager().callEvent(townMayorChangeEvent);
-		if (townMayorChangeEvent.isCancelled() && !admin)
+		if (BukkitTools.isEventCancelled(townMayorChangeEvent) && !admin)
 			throw new TownyException(townMayorChangeEvent.getCancelMessage());
 
 		if (town.isCapital()) {
 			NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldMayor, newMayor);
-			Bukkit.getPluginManager().callEvent(nationKingChangeEvent);
-			if (nationKingChangeEvent.isCancelled() && !admin)
+			if (BukkitTools.isEventCancelled(nationKingChangeEvent) && !admin)
 				throw new TownyException(nationKingChangeEvent.getCancelMessage());
 		}
 		
@@ -2497,11 +2470,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x", TownySettings.getHomeBlockMovementDistanceInTownBlocks(), Math.floor(distance)));
 		}
 
-		TownPreSetHomeBlockEvent preEvent = new TownPreSetHomeBlockEvent(town, townBlock, player);
-		Bukkit.getPluginManager().callEvent(preEvent);
-		if (preEvent.isCancelled()) 
-			throw new TownyException(preEvent.getCancelMessage());
-		
+		BukkitTools.ifCancelledThenThrow(new TownPreSetHomeBlockEvent(town, townBlock, player));
+
 		// Test whether towns will be removed from the nation
 		if (nation != null && TownySettings.getNationRequiresProximity() > 0 && town.isCapital()) {
 			// Determine if some of the nation's towns' homeblocks will be out of range.
@@ -2545,8 +2515,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_homeblock_has_not_been_set"));
 
 		TownSetSpawnEvent event = new TownSetSpawnEvent(town, player, player.getLocation());
-		Bukkit.getPluginManager().callEvent(event);
-		if (event.isCancelled() && 
+		if (BukkitTools.isEventCancelled(event) && 
 			!admin && 
 			!event.getCancelMessage().isEmpty())
 				throw new TownyException(event.getCancelMessage());
@@ -2779,9 +2748,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				
 				final String finalName = name;
 				Confirmation.runOnAccept(() -> {
-					if (callPreNewTownEvent(player, finalName, spawnLocation))
-						return;
-					
 					// Make the resident pay here.
 					if (!resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost")) {
 						// Send economy message
@@ -2798,6 +2764,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						e.printStackTrace();
 					}
 				})
+				.setCancellableEvent(new PreNewTownEvent(player, name, spawnLocation))
 				.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())))
 				.sendTo(player);
 
@@ -2829,6 +2796,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
 		townBlock.setTown(town);
 		TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, townBlock, player, false, true);
+		preClaimEvent.setCancelMessage(Translation.of("msg_claim_error", 1, 1));
 		
 		if (BukkitTools.isEventCancelled(preClaimEvent)) {
 			TownyUniverse.getInstance().removeTownBlock(townBlock);
@@ -2886,7 +2854,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Reset cache permissions for anyone in this TownBlock
 		plugin.updateCache(townBlock.getWorldCoord());
 
-		BukkitTools.getPluginManager().callEvent(new NewTownEvent(town));
+		BukkitTools.fireEvent(new NewTownEvent(town));
 
 		return town;
 	}
@@ -2914,8 +2882,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Fire a cancellable event.
 		TownPreRenameEvent event = new TownPreRenameEvent(town, newName);
-		Bukkit.getServer().getPluginManager().callEvent(event);
-		if (event.isCancelled()) {
+		if (BukkitTools.isEventCancelled(event)) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_rename_cancelled"));
 			return;
 		}
@@ -2954,10 +2921,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (resident.isJailed() && TownySettings.JailDeniesTownLeave() && resident.getJailTown().getName().equals(town.getName()))
 			throw new TownyException(Translatable.of("msg_cannot_abandon_town_while_jailed"));
 
-		TownLeaveEvent event = new TownLeaveEvent(resident, town);
-		if (BukkitTools.isEventCancelled(event))
-			throw new TownyException(event.getCancelMessage());
-
 		Confirmation.runOnAccept(() -> {
 			if (resident.isJailed() && resident.getJailTown().getUUID().equals(town.getUUID()))
 				JailUtil.unJailResident(resident, UnJailReason.LEFT_TOWN);
@@ -2973,7 +2936,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} catch (NotRegisteredException e) {
 				e.printStackTrace();
 			}
-		}).sendTo(player);
+		})
+		.setCancellableEvent(new TownLeaveEvent(resident, town))
+		.sendTo(player);
 	}
 
 	/**
@@ -3079,19 +3044,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		for (Resident newMember : new ArrayList<>(invited)) {
 			try {
 
-				if (!admin) {
-					TownPreAddResidentEvent preEvent = new TownPreAddResidentEvent(town, newMember);
-					Bukkit.getPluginManager().callEvent(preEvent);
-	
-					if (preEvent.isCancelled()) {
-						TownyMessaging.sendErrorMsg(sender, preEvent.getCancelMessage());
-						return;
-					}
-				}
-				
+				if (!admin)
+					BukkitTools.ifCancelledThenThrow(new TownPreAddResidentEvent(town, newMember));
+
 				// only add players with the right permissions.
-				if (BukkitTools.matchPlayer(newMember.getName()).isEmpty()) { // Not
-																				// online
+				if (BukkitTools.matchPlayer(newMember.getName()).isEmpty()) { // Not online
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_offline_no_join", newMember.getName()));
 					invited.remove(newMember);
 				} else if (!TownyUniverse.getInstance().getPermissionSource().testPermission(BukkitTools.getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
@@ -3144,11 +3101,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		PlayerJoinTownInvite invite = new PlayerJoinTownInvite(sender, newMember, town);
 
-		TownPreInvitePlayerEvent townPreInvitePlayerEvent = new TownPreInvitePlayerEvent(invite);
-		Bukkit.getPluginManager().callEvent(townPreInvitePlayerEvent);
-		if (townPreInvitePlayerEvent.isCancelled())
-			throw new TownyException(townPreInvitePlayerEvent.getCancelMessage());
-		
+		BukkitTools.ifCancelledThenThrow(new TownPreInvitePlayerEvent(invite));
+
 		try {
 			if (!InviteHandler.inviteIsActive(invite)) {
 				newMember.newReceivedInvite(invite);
@@ -3157,7 +3111,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				Player player = TownyAPI.getInstance().getPlayer(newMember);
 				if (player != null)
 					TownyMessaging.sendRequestMessage(player,invite);
-				Bukkit.getPluginManager().callEvent(new TownInvitePlayerEvent(invite));
+				BukkitTools.fireEvent(new TownInvitePlayerEvent(invite));
 			} else {
 				throw new TownyException(Translatable.of("msg_err_player_already_invited", newMember.getName()));
 			}
@@ -3342,13 +3296,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_err_outlaw_in_open_town"));
 			}
 
-			TownPreAddResidentEvent preEvent = new TownPreAddResidentEvent(town, resident);
-			Bukkit.getPluginManager().callEvent(preEvent);
-
-			if (preEvent.isCancelled()) {
-				TownyMessaging.sendErrorMsg(sender, preEvent.getCancelMessage());
-				return;
-			}
+			BukkitTools.ifCancelledThenThrow(new TownPreAddResidentEvent(town, resident));
 
 			// Check if player is already in selected town (Pointless)
 			// Then add player to town.
@@ -3740,8 +3688,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		for (WorldCoord coord : selection) {
 			//Use the user's current world
 			TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player, outpost, isHomeblock);
-			BukkitTools.getPluginManager().callEvent(preClaimEvent);
-			if(preClaimEvent.isCancelled()) {
+			if(BukkitTools.isEventCancelled(preClaimEvent)) {
 				blockedClaims++;
 				cancelMessage = preClaimEvent.getCancelMessage();
 			}
@@ -3789,11 +3736,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Town town = getTownFromResidentOrThrow(resident);
 		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
 
-		TownPreUnclaimCmdEvent event = new TownPreUnclaimCmdEvent(town, resident, world);
-		Bukkit.getPluginManager().callEvent(event);
-		if (event.isCancelled())
-			throw new TownyException(event.getCancelMessage());
-		
+		BukkitTools.ifCancelledThenThrow(new TownPreUnclaimCmdEvent(town, resident, world));
+
 		if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode());
 
@@ -3928,8 +3872,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Confirmation.runOnAccept(() -> {
 			TownPreMergeEvent townPreMergeEvent = new TownPreMergeEvent(remainingTown, succumbingTown);
-			Bukkit.getPluginManager().callEvent(townPreMergeEvent);
-			if (townPreMergeEvent.isCancelled()) {
+			if (BukkitTools.isEventCancelled(townPreMergeEvent)) {
 				TownyMessaging.sendErrorMsg(succumbingTown.getMayor().getPlayer(), townPreMergeEvent.getCancelMessage());
 				TownyMessaging.sendErrorMsg(sender, townPreMergeEvent.getCancelMessage());
 				return;
@@ -3949,7 +3892,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendGlobalMessage(Translatable.of("town1_has_merged_with_town2", succumbingTown, remainingTown));
 
 			TownMergeEvent townMergeEvent = new TownMergeEvent(remainingTown, succumbingTownName, succumbingTownUUID);
-			Bukkit.getPluginManager().callEvent(townMergeEvent);
+			BukkitTools.fireEvent(townMergeEvent);
 		}).runOnCancel(() -> {
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_request_denied"));
 			TownyMessaging.sendMsg(succumbingTown.getMayor(), Translatable.of("msg_town_merge_cancelled"));
@@ -4136,7 +4079,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("outlaws").forLocale(sender), new ArrayList<>(town.getOutlaws())));
 	}
 	
-	public static void parseTownTrustCommand(CommandSender sender, String[] args, @Nullable Town town) throws NoPermissionException {
+	public static void parseTownTrustCommand(CommandSender sender, String[] args, @Nullable Town town) throws TownyException {
 		
 		if (args.length < 1
 			|| args.length < 2 && (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove"))
@@ -4175,13 +4118,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
-			TownTrustAddEvent event = new TownTrustAddEvent(sender, resident, town);
-			Bukkit.getPluginManager().callEvent(event);
-			
-			if (event.isCancelled()) {
-				TownyMessaging.sendErrorMsg(sender, event.getCancelMessage());
-				return;
-			}
+			BukkitTools.ifCancelledThenThrow(new TownTrustAddEvent(sender, resident, town));
 
 			town.addTrustedResident(resident);
 			plugin.deleteCache(resident);
@@ -4195,14 +4132,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
-			TownTrustRemoveEvent event = new TownTrustRemoveEvent(sender, resident, town);
-			Bukkit.getPluginManager().callEvent(event);
-			
-			if (event.isCancelled()) {
-				TownyMessaging.sendErrorMsg(sender, event.getCancelMessage());
-				return;
-			}
-			
+			BukkitTools.ifCancelledThenThrow(new TownTrustRemoveEvent(sender, resident, town));
+
 			town.removeTrustedResident(resident);
 			plugin.deleteCache(resident);
 			

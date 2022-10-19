@@ -113,12 +113,8 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					if (entity.isDead())
 						continue;
 
-					if (!skipRemovalEvent) {
-						MobRemovalEvent event = new MobRemovalEvent(entity);
-						Bukkit.getPluginManager().callEvent(event);
-						if (event.isCancelled())
-							continue;
-					}
+					if (!skipRemovalEvent && BukkitTools.isEventCancelled(new MobRemovalEvent(entity)))
+						continue;
 
 					entitiesToRemove.add(entity);
 				}

@@ -29,7 +29,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.Trie;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -193,7 +192,7 @@ public class TownyUniverse {
         towny.getLogger().info("Database: " + TownySettings.getUUIDPercent() + " of residents have stored UUIDs."); // TODO: remove this when we're using UUIDs directly in the database.
 
         // Throw Event.
-        Bukkit.getPluginManager().callEvent(new TownyLoadedDatabaseEvent());
+        BukkitTools.fireEvent(new TownyLoadedDatabaseEvent());
         
         // Congratulations the Database loaded.
        	return true;

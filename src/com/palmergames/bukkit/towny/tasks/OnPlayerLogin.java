@@ -111,8 +111,7 @@ public class OnPlayerLogin implements Runnable {
 					}
 					
 					resident.save();
-					NewResidentEvent nre = new NewResidentEvent(resident);
-					Bukkit.getPluginManager().callEvent(nre);
+					BukkitTools.fireEvent(new NewResidentEvent(resident));
 					
 				} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
 

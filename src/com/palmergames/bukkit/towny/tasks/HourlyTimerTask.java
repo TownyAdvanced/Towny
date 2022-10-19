@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * This class represents the hourly timer task
@@ -45,7 +46,7 @@ public class HourlyTimerTask extends TownyTimerTask {
 		/*
 		 * Fire an event other plugins can use.
 		 */
-		Bukkit.getPluginManager().callEvent(new NewHourEvent(System.currentTimeMillis()));
+		BukkitTools.fireEvent(new NewHourEvent(System.currentTimeMillis()));
 	}
 
 	/*

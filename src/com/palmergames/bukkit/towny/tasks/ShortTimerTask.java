@@ -1,10 +1,9 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import org.bukkit.Bukkit;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.event.time.NewShortTimeEvent;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.util.BukkitTools;
 
 /**
  * This class represents the short timer task
@@ -31,6 +30,6 @@ public class ShortTimerTask extends TownyTimerTask {
 		/*
 		 * Fire an event other plugins can use.
 		 */
-		Bukkit.getPluginManager().callEvent(new NewShortTimeEvent(System.currentTimeMillis()));
+		BukkitTools.fireEvent(new NewShortTimeEvent(System.currentTimeMillis()));
 	}
 }

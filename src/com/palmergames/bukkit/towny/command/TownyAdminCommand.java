@@ -974,7 +974,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyUniverse.getInstance().clearAllObjects();			
 			if (TownyUniverse.getInstance().getDataSource().loadAll()) {
 				TownyMessaging.sendMsg(getSender(), Translatable.of("msg_load_success"));
-				Bukkit.getPluginManager().callEvent(new TownyLoadedDatabaseEvent());
+				BukkitTools.fireEvent(new TownyLoadedDatabaseEvent());
 			}
 		} else if (split[0].equalsIgnoreCase("remove")) {
 			parseAdminDatabaseRemoveCommand(StringMgmt.remFirstArg(split));
@@ -1320,12 +1320,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta town TOWNNAME rename NEWNAME"));
 				String name = String.join("_", StringMgmt.remArgs(split, 2));
 				
-				TownPreRenameEvent event = new TownPreRenameEvent(town, name);
-				Bukkit.getServer().getPluginManager().callEvent(event);
-				if (event.isCancelled()) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_rename_cancelled"));
-					return;
-				}
+				BukkitTools.ifCancelledThenThrow(new TownPreRenameEvent(town, name));
 
 				if (!NameValidation.isBlacklistName(name) && (TownySettings.areNumbersAllowedInTownNames() || !NameValidation.containsNumbers(name))) {
 					townyUniverse.getDataSource().renameTown(town, name);
@@ -1570,7 +1565,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		if (split[0].equalsIgnoreCase("add")) {
 			if (!target.hasTownRank(rank)) {
-				BukkitTools.getPluginManager().callEvent(new TownAddResidentRankEvent(target, rank, town));
+				BukkitTools.fireEvent(new TownAddResidentRankEvent(target, rank, town));
 				target.addTownRank(rank);
 				if (target.isOnline())
 					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", "Town", rank));
@@ -1583,7 +1578,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		} else if (split[0].equalsIgnoreCase("remove")) {
 			if (target.hasTownRank(rank)) {
-				BukkitTools.getPluginManager().callEvent(new TownRemoveResidentRankEvent(target, rank, town));
+				BukkitTools.fireEvent(new TownRemoveResidentRankEvent(target, rank, town));
 				target.removeTownRank(rank);
 				if (target.isOnline())
 					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", "Town", rank));
@@ -1689,13 +1684,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_RENAME.getNode());
 				String name = String.join("_", StringMgmt.remArgs(split, 2));
 
-				NationPreRenameEvent event = new NationPreRenameEvent(nation, name);
-				Bukkit.getServer().getPluginManager().callEvent(event);
-				if (event.isCancelled()) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_rename_cancelled"));
-					return;
-				}
-				
+				BukkitTools.ifCancelledThenThrow(new NationPreRenameEvent(nation, name));
+
 				if (!NameValidation.isBlacklistName(name) && (TownySettings.areNumbersAllowedInNationNames() || !NameValidation.containsNumbers(name))) {
 					townyUniverse.getDataSource().renameNation(nation, name);
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_set_name", ((getSender() instanceof Player) ? player.getName() : "CONSOLE"), nation.getName()));
@@ -1822,7 +1812,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				switch(split[2].toLowerCase()) {
 					case "add":
 						if (!target.hasNationRank(rank)) {
-							Bukkit.getPluginManager().callEvent(new NationRankAddEvent(nation, rank, target));
+							BukkitTools.fireEvent(new NationRankAddEvent(nation, rank, target));
 							target.addNationRank(rank);
 							if (target.isOnline()) {
 								TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", "Nation", rank));
@@ -1838,7 +1828,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						}
 					case "remove":
 						if (target.hasNationRank(rank)) {
-							Bukkit.getPluginManager().callEvent(new NationRankRemoveEvent(nation, rank, target));
+							BukkitTools.fireEvent(new NationRankRemoveEvent(nation, rank, target));
 							target.removeNationRank(rank);
 							if (target.isOnline()) {
 								TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", "Nation", rank));

@@ -3,10 +3,9 @@ package com.palmergames.bukkit.towny.event.actions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.TownBlock;
 
 /**
@@ -16,14 +15,12 @@ import com.palmergames.bukkit.towny.object.TownBlock;
  * 
  * @author LlmDl
  */
-public abstract class TownyActionEvent extends Event implements Cancellable {
+public abstract class TownyActionEvent extends CancellableTownyEvent {
 	protected final Player player;
 	protected final Location loc;
 	protected final Material mat;
 	protected final TownBlock townblock;
-	protected boolean cancelled;
 	protected boolean suppressMessage;
-	protected String message;
 
 	public TownyActionEvent(Player player, Location loc, Material mat, TownBlock townblock, boolean cancelled) {
 		this.player = player;
@@ -34,29 +31,12 @@ public abstract class TownyActionEvent extends Event implements Cancellable {
 		setCancelled(cancelled);
 	}
 
-	/**
-	 * Whether the event has been cancelled.
-	 */
-	@Override
-	public boolean isCancelled() {
-		return cancelled;
-	}
-
-	/**
-	 * Set the event to cancelled.
-	 */
-	@Override
-	public void setCancelled(boolean cancel) {
-		cancelled = cancel;
-	}
-
-	
 	public boolean isMessageSupressed() {
-		return suppressMessage;
+		return getCancelMessage() == "";
 	}
 
 	public void supressMessage(boolean suppressMessage) {
-		this.suppressMessage = suppressMessage;
+		setCancelMessage("");
 	}
 
 	/**
@@ -110,19 +90,23 @@ public abstract class TownyActionEvent extends Event implements Cancellable {
 
 	/**
 	 * @return cancellation message shown to players when their build attempt is cancelled or null.
+	 * @deprecated since 0.98.4.0, use {@link #getCancelMessage()} instead.
 	 */
+	@Deprecated
 	public String getMessage() {
-		return message;
+		return getCancelMessage();
 	}
 
 	/**
 	 * @param message Message shown to players when their build attempts is cancelled.
+	 * @deprecated since 0.98.4.0 use {@link #setCancelMessage(String)}	instead.
 	 */
+	@Deprecated
 	public void setMessage(String message) {
 		if (message.equals(""))
 			this.supressMessage(true);
 		else
-			this.message = message;
+			setCancelMessage(message);
 	}
 	
 }

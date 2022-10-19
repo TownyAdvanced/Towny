@@ -200,7 +200,7 @@ public class TownClaim extends Thread {
 			townBlock.save();
 			
 			// Raise an event for the claim
-			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock, player));
+			BukkitTools.fireEvent(new TownClaimEvent(townBlock, player));
 				
 		}
 	}

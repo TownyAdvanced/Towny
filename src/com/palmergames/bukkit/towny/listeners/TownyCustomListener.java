@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import com.palmergames.util.TimeMgmt;
 
@@ -97,7 +98,7 @@ public class TownyCustomListener implements Listener {
 				return;
 
 			ChunkNotificationEvent cne = new ChunkNotificationEvent(player, msg, to, from);
-			Bukkit.getPluginManager().callEvent(cne);
+			BukkitTools.fireEvent(cne);
 			msg = cne.getMessage();
 			if (cne.isCancelled() || msg == null || msg.isEmpty())
 				return;

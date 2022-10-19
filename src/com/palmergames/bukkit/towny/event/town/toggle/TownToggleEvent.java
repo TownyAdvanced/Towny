@@ -1,27 +1,21 @@
 package com.palmergames.bukkit.towny.event.town.toggle;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 
-public abstract class TownToggleEvent extends Event implements Cancellable {
+public abstract class TownToggleEvent extends CancellableTownyEvent {
 
-	private static final HandlerList handlers = new HandlerList();
 	private final Town town;
 	private final CommandSender sender;
 	private final boolean isAdminAction;
-	private boolean isCancelled = false;
-	private String cancellationMsg = Translation.of("msg_err_command_disable");
-	
+
 	/**
 	 * A generic cancellable event thrown when a player uses the /town toggle {args} command.
 	 * 
@@ -30,29 +24,10 @@ public abstract class TownToggleEvent extends Event implements Cancellable {
 	 * @param admin Whether this was executed by an admin.
 	 */
 	public TownToggleEvent(CommandSender sender, Town town, boolean admin) {
-		super(!Bukkit.getServer().isPrimaryThread());
 		this.sender = sender;
 		this.town = town;
 		this.isAdminAction = admin;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean cancel) {
-		this.isCancelled = cancel;
+		setCancelMessage(Translation.of("msg_err_command_disable"));
 	}
 
 	@Nullable
@@ -77,12 +52,22 @@ public abstract class TownToggleEvent extends Event implements Cancellable {
 		return sender;
 	}
 
+	/**
+	 * @return {@link #getCancelMessage()}
+	 * @deprecated since 0.98.4.0 use {@link #getCancelMessage()}
+	 */
+	@Deprecated
 	public String getCancellationMsg() {
-		return cancellationMsg;
+		return getCancelMessage();
 	}
 
+	/**
+	 * @param cancellationMsg String to set the cancellation message to.
+	 * @deprecated since 0.98.4.0 use {@link #setCancelMessage(String)}
+	 */
+	@Deprecated
 	public void setCancellationMsg(String cancellationMsg) {
-		this.cancellationMsg = cancellationMsg;
+		setCancelMessage(cancellationMsg);
 	}
 
 	/**

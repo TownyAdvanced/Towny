@@ -18,7 +18,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -372,8 +371,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			globalWorld.save();
 			
 			//Change settings event
-			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(globalWorld);
-			Bukkit.getServer().getPluginManager().callEvent(event);
+			BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(globalWorld));
 		}
 
 	}

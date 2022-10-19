@@ -762,9 +762,7 @@ public class TownyAPI {
 		int nationZoneRadius = nearestTown.getNationZoneSize();
 
 		if (distance <= nationZoneRadius) {
-			NationZoneTownBlockStatusEvent event = new NationZoneTownBlockStatusEvent(nearestTown);
-			Bukkit.getPluginManager().callEvent(event);
-			if (event.isCancelled())
+			if (BukkitTools.isEventCancelled(new NationZoneTownBlockStatusEvent(nearestTown)))
 				return TownBlockStatus.UNCLAIMED_ZONE;
 			
 			return TownBlockStatus.NATION_ZONE;

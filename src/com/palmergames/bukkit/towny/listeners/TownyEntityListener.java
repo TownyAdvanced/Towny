@@ -391,10 +391,8 @@ public class TownyEntityListener implements Listener {
 			if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)
 				return;
 
-			MobSpawnRemovalEvent mobSpawnRemovalEvent;
-			mobSpawnRemovalEvent = new MobSpawnRemovalEvent(event.getEntity());
-			plugin.getServer().getPluginManager().callEvent(mobSpawnRemovalEvent);
-			if(mobSpawnRemovalEvent.isCancelled()) return;
+			if(BukkitTools.isEventCancelled(new MobSpawnRemovalEvent(event.getEntity())))
+				return;
 
 			Location loc = event.getLocation();
 			TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());

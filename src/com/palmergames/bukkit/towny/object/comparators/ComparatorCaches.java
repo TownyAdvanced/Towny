@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Translatable;
-import org.bukkit.Bukkit;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -24,6 +23,7 @@ import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownsCalc
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
 import net.kyori.adventure.text.Component;
@@ -130,7 +130,7 @@ public class ComparatorCaches {
 		//Sort nations
 		nations.sort((Comparator<? super Nation>) compType.getComparator());
 		DisplayedNationsListSortEvent nationListSortEvent = new DisplayedNationsListSortEvent(nations, compType);
-		Bukkit.getPluginManager().callEvent(nationListSortEvent);
+		BukkitTools.fireEvent(nationListSortEvent);
 		nations = nationListSortEvent.getNations();
 
 		for (Nation nation : nations) {
@@ -145,19 +145,19 @@ public class ComparatorCaches {
 			case TOWNBLOCKS:
 				int rawNumTownsBlocks = nation.getTownBlocks().size();
 				NationListDisplayedNumTownBlocksCalculationEvent tbEvent = new NationListDisplayedNumTownBlocksCalculationEvent(nation, rawNumTownsBlocks);
-				Bukkit.getPluginManager().callEvent(tbEvent);
+				BukkitTools.fireEvent(tbEvent);
 				slug = tbEvent.getDisplayedValue() + "";
 				break;
 			case TOWNS:
 				int rawNumTowns = nation.getTowns().size();
 				NationListDisplayedNumTownsCalculationEvent tEvent = new NationListDisplayedNumTownsCalculationEvent(nation, rawNumTowns);
-				Bukkit.getPluginManager().callEvent(tEvent);
+				BukkitTools.fireEvent(tEvent);
 				slug = tEvent.getDisplayedValue() + "";
 				break;
 			case ONLINE:
 				int rawNumOnlinePlayers = TownyAPI.getInstance().getOnlinePlayersInNation(nation).size();
 				NationListDisplayedNumOnlinePlayersCalculationEvent opEvent = new NationListDisplayedNumOnlinePlayersCalculationEvent(nation, rawNumOnlinePlayers);
-				Bukkit.getPluginManager().callEvent(opEvent);
+				BukkitTools.fireEvent(opEvent);
 				slug = opEvent.getDisplayedValue() + "";
 				break;
 			case FOUNDED:
@@ -170,7 +170,7 @@ public class ComparatorCaches {
 			default:
 				int rawNumResidents = nation.getResidents().size();
 				NationListDisplayedNumResidentsCalculationEvent rEvent = new NationListDisplayedNumResidentsCalculationEvent(nation, rawNumResidents);
-				Bukkit.getPluginManager().callEvent(rEvent);
+				BukkitTools.fireEvent(rEvent);
 				slug = rEvent.getDisplayedValue() + "";
 				break;
 			}

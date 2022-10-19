@@ -3,50 +3,46 @@ package com.palmergames.bukkit.towny.event;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
 /**
  * Runs before town banks are charged
  * Provides raw town block
  * */
-public class TownPreClaimEvent extends Event implements Cancellable{
+public class TownPreClaimEvent extends CancellableTownyEvent {
 
-    private static final HandlerList handlers = new HandlerList();
     private final TownBlock townBlock;
     private final Town town;
     private final Player player;
-    private boolean isCancelled = false;
     private boolean isHomeblock = false;
     private boolean isOutpost = false;
-    private String cancelMessage = Translation.of("msg_claim_error");
 
-    @Override
-    public HandlerList getHandlers() {
-
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-
-        return handlers;
-    }
-
+	/**
+	 * This event runs when a town is made and when a town attempts to claim land.
+	 * 
+	 * When a selection of townblocks are claimed, if even one townblock is
+	 * prevented using this event, all the claims will be prevented.
+	 * 
+	 * This event will throw an error message to the player that requires 2 %s, the
+	 * first of which will be the number of blocked claims in a selection. The
+	 * second of which is the total number of townblocks that were in the selection.
+	 * 
+	 * If you are using {@link #setCancelMessage(String)} on this event be sure to
+	 * supply two instances of %s.
+	 * 
+	 * @param _town Town which is claiming.
+	 * @param _townBlock TownBlock which is being claimed.
+	 * @param _player Player who is doing the claiming.
+	 * @param _isOutpost True if the TownBlock will become an outpost.
+	 * @param _isHomeblock True if the TownBlock will become a homeblock.
+	 */
     public TownPreClaimEvent(Town _town, TownBlock _townBlock, Player _player, boolean _isOutpost, boolean _isHomeblock) {
-        super(!Bukkit.getServer().isPrimaryThread());
         this.town = _town;
         this.townBlock = _townBlock;
         this.player = _player;
         this.isOutpost = _isOutpost;
         this.isHomeblock = _isHomeblock;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return isCancelled;
+        setCancelMessage(Translation.of("msg_claim_error"));
     }
 
     /**
@@ -56,7 +52,7 @@ public class TownPreClaimEvent extends Event implements Cancellable{
      */
     @Override
     public void setCancelled(boolean cancelled) {
-        isCancelled = cancelled;
+        setCancelled(cancelled);
     }
 
     /**
@@ -117,24 +113,4 @@ public class TownPreClaimEvent extends Event implements Cancellable{
     public Player getPlayer() {
     	return player;
     }
-    
-    /** 
-     * Returns the cancelMessage for this event.
-     * 
-     * @return the cancelMessage.
-     */
-	public String getCancelMessage() {
-		return cancelMessage;
-	}
-
-	/**
-	 * Message should requires two variables using %s placeholders, akin to the default message. 
-	 * 
-	 * Default message: &nbsp;&quot;&amp;cAnother plugin stopped the claim of (%s)/(%s) town blocks, could not complete the operation.&quot;
-	 * 
-	 * @param cancelMessage the message which will be shown for cancelled events.
-	 */
-	public void setCancelMessage(String cancelMessage) {
-		this.cancelMessage = cancelMessage;
-	}
 }

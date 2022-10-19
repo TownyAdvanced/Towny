@@ -1,58 +1,42 @@
 package com.palmergames.bukkit.towny.event.plot.toggle;
 
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
-public abstract class PlotToggleEvent extends Event implements Cancellable {
+public abstract class PlotToggleEvent extends CancellableTownyEvent {
 
-	private static final HandlerList handlers = new HandlerList();
 	private final TownBlock townBlock;
 	private final Town town;
 	private final boolean futureState;
 	private final Player player;
-	private boolean isCancelled = false;
-	private String cancellationMsg = Translation.of("msg_err_command_disable");
 
 	public PlotToggleEvent(TownBlock townBlock, Player player, boolean futureState) {
 		this.townBlock = townBlock;
 		this.town = townBlock.getTownOrNull();
 		this.player = player;
 		this.futureState = futureState;
+		setCancelMessage(Translation.of("msg_err_command_disable"));
 	}
 
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean isCancelled) {
-		this.isCancelled = isCancelled;
-	}
-	
+	/**
+	 * @deprecated since 0.98.4.0, use {@link #getCancelMessage()}
+	 */
+	@Deprecated 
 	public String getCancellationMsg() {
-		return cancellationMsg;
+		return getCancelMessage();
 	}
 
+	/**
+	 * @deprecated since 0.98.4.0, use {@link #setCancelMessage(String)}
+	 * @param cancellationMsg
+	 */
+	@Deprecated
 	public void setCancellationMsg(String cancellationMsg) {
-		this.cancellationMsg = cancellationMsg;
-	}
-
-	@NotNull
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
+		setCancelMessage(cancellationMsg);
 	}
 
 	public TownBlock getTownBlock() {

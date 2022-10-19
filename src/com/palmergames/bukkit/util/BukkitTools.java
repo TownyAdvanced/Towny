@@ -3,6 +3,9 @@ package com.palmergames.bukkit.util;
 import com.google.common.base.Charsets;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
+import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
+
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -293,11 +296,25 @@ public class BukkitTools {
 	 * @return {@code true} if the event is cancellable and was cancelled, otherwise {@code false}.
 	 */
 	public static boolean isEventCancelled(@NotNull Event event) {
-		Bukkit.getPluginManager().callEvent(event);
+		fireEvent(event);
 		
 		if (event instanceof Cancellable cancellable)
 			return cancellable.isCancelled();
 		else
 			return false;
+	}
+
+	/**
+	 * @param event CancellableTownyEvent to be fired which might be cancelled.
+	 * @throws CancelledEventException with the Event's cancelMessage.
+	 */
+	public static void ifCancelledThenThrow(@NotNull CancellableTownyEvent event) throws CancelledEventException {
+		fireEvent(event);
+		if (event.isCancelled())
+			throw new CancelledEventException(event);
+	}
+
+	public static void fireEvent(@NotNull Event event) {
+		Bukkit.getPluginManager().callEvent(event);
 	}
 }

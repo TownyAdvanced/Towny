@@ -17,8 +17,8 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.JailUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -110,8 +110,7 @@ public class TownBlock extends TownyObject {
 			// There is a resident here already who is being replaced.
 			if (this.resident != null && !this.resident.equals(resident)) {
 				PlotPreUnclaimEvent plotPreUnclaimEvent = new PlotPreUnclaimEvent(this.resident, resident, this);
-				Bukkit.getPluginManager().callEvent(plotPreUnclaimEvent);
-				if (plotPreUnclaimEvent.isCancelled()) {
+				if (BukkitTools.isEventCancelled(plotPreUnclaimEvent)) {
 					if (!plotPreUnclaimEvent.getCancelMessage().isEmpty()) { 
 						if (this.resident != null)
 							TownyMessaging.sendErrorMsg(this.resident, plotPreUnclaimEvent.getCancelMessage());
@@ -125,9 +124,7 @@ public class TownBlock extends TownyObject {
 			// This is being claimed by a resident.
 			if (resident != null && !resident.equals(this.resident)) {
 				PlotPreClaimEvent plotPreClaimEvent = new PlotPreClaimEvent(this.resident, resident, this);
-				Bukkit.getPluginManager().callEvent(plotPreClaimEvent);
-	
-				if (plotPreClaimEvent.isCancelled()) {
+				if (BukkitTools.isEventCancelled(plotPreClaimEvent)) {
 					if (!plotPreClaimEvent.getCancelMessage().isEmpty() && resident != null)
 						TownyMessaging.sendErrorMsg(resident, plotPreClaimEvent.getCancelMessage());
 	
@@ -153,10 +150,10 @@ public class TownBlock extends TownyObject {
 		}
 		
 		if (successful && callEvent)
-			Bukkit.getPluginManager().callEvent(new PlotClaimEvent(this.resident, resident, this));
+			BukkitTools.fireEvent(new PlotClaimEvent(this.resident, resident, this));
 		
 		if (unclaim && callEvent)
-			Bukkit.getPluginManager().callEvent(new PlotUnclaimEvent(this.resident, resident, this));
+			BukkitTools.fireEvent(new PlotUnclaimEvent(this.resident, resident, this));
 		
 		this.resident = resident;
 		permissionOverrides.clear();
@@ -290,7 +287,7 @@ public class TownBlock extends TownyObject {
 
 		this.type = type;
 		
-		Bukkit.getPluginManager().callEvent(new PlotChangeTypeEvent(this.type, type, this));
+		BukkitTools.fireEvent(new PlotChangeTypeEvent(this.type, type, this));
 
 		switch (type.getName().toLowerCase()) {
 			case "default":

@@ -28,7 +28,6 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -258,7 +257,7 @@ public class Town extends Government implements TownBlockOwner {
 		setJoinedNationAt(0);
 		
 		this.save();
-		BukkitTools.getPluginManager().callEvent(new NationRemoveTownEvent(this, oldNation));
+		BukkitTools.fireEvent(new NationRemoveTownEvent(this, oldNation));
 	}
 	
 	public void setNation(Nation nation) throws AlreadyRegisteredException {
@@ -285,7 +284,7 @@ public class Town extends Government implements TownBlockOwner {
 			setJoinedNationAt(System.currentTimeMillis());
 
 		TownyPerms.updateTownPerms(this);
-		BukkitTools.getPluginManager().callEvent(new NationAddTownEvent(this, nation));
+		BukkitTools.fireEvent(new NationAddTownEvent(this, nation));
 	}
 
 	private boolean residentsSorted = false;
@@ -522,7 +521,7 @@ public class Town extends Government implements TownBlockOwner {
 		double price = (Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()) * TownySettings.getPurchasedBonusBlocksCost());
 		double maxprice = TownySettings.getPurchasedBonusBlocksMaxPrice();
 		BonusBlockPurchaseCostCalculationEvent event = new BonusBlockPurchaseCostCalculationEvent(this, (maxprice == -1 ? price : Math.min(price, maxprice)), 1);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 		return event.getPrice();
 	}
 	
@@ -530,7 +529,7 @@ public class Town extends Government implements TownBlockOwner {
 		double price = Math.round(Math.pow(TownySettings.getClaimPriceIncreaseValue(), getTownBlocks().size()) * TownySettings.getClaimPrice());
 		double maxprice = TownySettings.getMaxClaimPrice();
 		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this, (maxprice == -1 ? price : Math.min(price, maxprice)), 1);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 		return event.getPrice();
 	}
 
@@ -559,7 +558,7 @@ public class Town extends Government implements TownBlockOwner {
 			i++;
 		}
 		TownBlockClaimCostCalculationEvent event = new TownBlockClaimCostCalculationEvent(this, Math.round(cost), inputN);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 		return event.getPrice();
 	}
 	
@@ -596,7 +595,7 @@ public class Town extends Government implements TownBlockOwner {
 			i++;
 		}
 		BonusBlockPurchaseCostCalculationEvent event = new BonusBlockPurchaseCostCalculationEvent(this, Math.round(cost), inputN);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 		return event.getPrice();
 	}
 
@@ -1423,7 +1422,7 @@ public class Town extends Government implements TownBlockOwner {
 	public String getMapColorHexCode() {
 		String rawMapColorHexCode = super.getMapColorHexCode();
 		TownMapColourLocalCalculationEvent event = new TownMapColourLocalCalculationEvent(this, rawMapColorHexCode);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 		return event.getMapColorHexCode();
 	}
 
@@ -1436,7 +1435,7 @@ public class Town extends Government implements TownBlockOwner {
 	public String getNationMapColorHexCode() {
 		String rawMapColorHexCode = hasNation() ? nation.getMapColorHexCode() : null;
 		TownMapColourNationalCalculationEvent event = new TownMapColourNationalCalculationEvent(this, rawMapColorHexCode);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 		return event.getMapColorHexCode();
 	}
 
@@ -1525,8 +1524,7 @@ public class Town extends Government implements TownBlockOwner {
 	
 	public void addAlly(Town town) {
 		TownAddAlliedTownEvent taate = new TownAddAlliedTownEvent(this, town);
-		Bukkit.getPluginManager().callEvent(taate);
-		if (taate.isCancelled()) {
+		if (BukkitTools.isEventCancelled(taate)) {
 			TownyMessaging.sendMsg(taate.getCancelMessage());
 			return;
 		}
@@ -1536,8 +1534,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	public void removeAlly(Town town) {
 		TownRemoveAlliedTownEvent trate = new TownRemoveAlliedTownEvent(this, town);
-		Bukkit.getPluginManager().callEvent(trate);
-		if (trate.isCancelled()) {
+		if (BukkitTools.isEventCancelled(trate)) {
 			TownyMessaging.sendMsg(trate.getCancelMessage());
 			return;
 		}
@@ -1572,8 +1569,7 @@ public class Town extends Government implements TownBlockOwner {
 	
 	public void addEnemy(Town town) {
 		TownAddEnemiedTownEvent taete = new TownAddEnemiedTownEvent(this, town);
-		Bukkit.getPluginManager().callEvent(taete);
-		if (taete.isCancelled()) {
+		if (BukkitTools.isEventCancelled(taete)) {
 			TownyMessaging.sendMsg(taete.getCancelMessage());
 			return;
 		}
@@ -1583,8 +1579,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	public void removeEnemy(Town town) {
 		TownRemoveEnemiedTownEvent trete = new TownRemoveEnemiedTownEvent(this, town);
-		Bukkit.getPluginManager().callEvent(trete);
-		if (trete.isCancelled()) {
+		if (BukkitTools.isEventCancelled(trete)) {
 			TownyMessaging.sendMsg(trete.getCancelMessage());
 			return;
 		}

@@ -279,8 +279,7 @@ public class ResidentUtil {
 	public static void outlawEnteredTown(Resident outlaw, Town town, Location location) {
 		// Throw a cancellable event so other plugins can prevent the outlaw being moved (in siegewar for instance.)
 		OutlawTeleportEvent outlawEvent = new OutlawTeleportEvent(outlaw, town, location);
-		Bukkit.getPluginManager().callEvent(outlawEvent);
-		if (outlawEvent.isCancelled())
+		if (BukkitTools.isEventCancelled(outlawEvent))
 			return;
 		
 		boolean hasBypassNode = TownyUniverse.getInstance().getPermissionSource().testPermission(outlaw.getPlayer(), PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode());

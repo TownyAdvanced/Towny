@@ -28,6 +28,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.Compass;
@@ -224,7 +225,7 @@ public class TownyAsciiMap {
 						if (getWildernessMapDataMap().containsKey(wc))
 							getWildernessMapDataMap().remove(wc);
 						WildernessMapEvent wildMapEvent = new WildernessMapEvent(wc);
-						Bukkit.getPluginManager().callEvent(wildMapEvent);
+						BukkitTools.fireEvent(wildMapEvent);
 						symbol = wildMapEvent.getMapSymbol();
 						hoverText = wildMapEvent.getHoverText();
 						clickCommand = wildMapEvent.getClickCommand();
