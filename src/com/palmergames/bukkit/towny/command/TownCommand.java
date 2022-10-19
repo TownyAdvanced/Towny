@@ -3780,8 +3780,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode());
 
-			Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, null, false, false, false));
-
+			if (TownyEconomyHandler.isActive() && TownySettings.getClaimRefundPrice() < 0) {
+				// Unclaiming will cost the player money because of a negative refund price. Have them confirm the cost.
+				Confirmation
+					.runOnAccept(() -> Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, null, false, false, false))) 
+					.setTitle(Translatable.of("confirmation_unclaiming_costs",
+						TownyEconomyHandler.getFormattedBalance(Math.abs(TownySettings.getClaimRefundPrice() * town.getTownBlocks().size() - 1))))
+					.sendTo(player);
+			} else {
+				// No cost to unclaim the land.
+				Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, null, false, false, false));
+			}
 		} else {
 			// Check permissions here because of the townunclaim mode.
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM.getNode());

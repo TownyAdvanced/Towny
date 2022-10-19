@@ -196,6 +196,7 @@ public class TownClaim implements Runnable {
 			// transaction when there are multiple plots being unclaimed, easing strain on
 			// the economy plugin and making the bankhistory book cleaner.
 			runningRefund = runningRefund + unclaimRefund;
+
 			// If the unclaim refund is negative (costing the town money,) make sure that
 			// the Town can pay for the new runningCost total amount.
 			if (unclaimRefund < 0 && !town.getAccount().canPayFromHoldings(Math.abs(runningRefund))) {
@@ -213,21 +214,23 @@ public class TownClaim implements Runnable {
 			return false;
 		}
 
-		// Send confirmation message,
+		// Send confirmation message before unclaiming everything, processing potential refund for unclaim.
 		Confirmation.runOnAccept(() -> {
-			if (TownyEconomyHandler.isActive()) {
-				int finalTownSize = town.getTownBlocks().size() - 1;
-				double finalRefund = TownySettings.getClaimRefundPrice() * finalTownSize;
+			if (TownyEconomyHandler.isActive() && TownySettings.getClaimRefundPrice() != 0.0) {
+				int unclaimSize = town.getTownBlocks().size() - 1;
+				double totalRefund = TownySettings.getClaimRefundPrice() * unclaimSize;
 
-				if (finalRefund < 0.0 && !town.getAccount().canPayFromHoldings(Math.abs(finalRefund))) { // Town Cannot afford the negative refund (cost) to unclaim all.
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", TownyEconomyHandler.getFormattedBalance(finalRefund)));
+				if (totalRefund < 0.0 && !town.getAccount().canPayFromHoldings(Math.abs(totalRefund))) { // Town Cannot afford the negative refund (cost) to unclaim all.
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", TownyEconomyHandler.getFormattedBalance(totalRefund)));
 					return;
 				}
-				if (finalRefund != 0.0) // There is a refund of some type occuring.
-					refundForUnclaim(finalRefund, finalTownSize);
+				if (totalRefund != 0.0) // There is a refund of some type occuring.
+					refundForUnclaim(totalRefund, unclaimSize);
 			}
 			townUnclaimAll(town);
-		}).sendTo(player);
+		})
+		.setTitle(Translatable.of("confirmation_did_you_want_to_unclaim_all"))
+		.sendTo(player);
 
 		return true;
 	}

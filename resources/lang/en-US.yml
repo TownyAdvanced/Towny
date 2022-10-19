@@ -1858,3 +1858,6 @@ msg_founder_set: 'The town of %s has had the founder set to %s.'
 
 # Message shown when toggling town allowed to war admin setting
 msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
