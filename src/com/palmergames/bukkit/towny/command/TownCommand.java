@@ -3787,10 +3787,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					.setTitle(Translatable.of("confirmation_unclaiming_costs",
 						TownyEconomyHandler.getFormattedBalance(Math.abs(TownySettings.getClaimRefundPrice() * town.getTownBlocks().size() - 1))))
 					.sendTo(player);
-			} else {
-				// No cost to unclaim the land.
-				Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, null, false, false, false));
+				return;
 			}
+			// No cost to unclaim the land.
+			Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, null, false, false, false));
 		} else {
 			// Check permissions here because of the townunclaim mode.
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM.getNode());
@@ -3813,7 +3813,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			// Handle a negative unclaim refund (yes, where someone is being charged money to unclaim their land. It's a thing.)
-			if (TownySettings.getClaimRefundPrice() < 0) {
+			if (TownyEconomyHandler.isActive() && TownySettings.getClaimRefundPrice() < 0) {
 				double cost = Math.abs(TownySettings.getClaimRefundPrice() * selection.size());
 				if (!town.getAccount().canPayFromHoldings(cost)) {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", TownyEconomyHandler.getFormattedBalance(cost)));
