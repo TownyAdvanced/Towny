@@ -8,8 +8,9 @@ You can always ask for help on your contribution in the [Towny Discord](https://
 ## Before contributing
 - Make sure to read the [Towny license](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md).
 - By opening an pull request, you:
-    - represent that you have the right to waive your changes' copyright and any related rights.
-    - acknowledge that the TownyAdvanced organization is allowed to use or modify your changes in any way it sees fit and in accordance with the [Towny license](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md)
+    - represent that you have the right to waive copyright and related rights to your contributions
+    - agree that all copyright and related rights in your contributions will be waived
+    - acknowledge that the TownyAdvanced organization has the copyright to use and modify your contributions under the [Towny license](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md) for perpetuity
 
 If you do not agree with the terms of our license, do not contribute to the Towny project.
 
