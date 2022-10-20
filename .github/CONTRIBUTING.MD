@@ -1,7 +1,7 @@
 # Contributing to Towny
 Thanks for deciding to contribute to Towny! We really appreciate contributions, but to keep everything running smoothly and get contributions merged in a timely manner, we need to enforce some guidelines. :shipit:
 
-Contributions are welcomed via GitHub Pull Requests.
+Contributions are welcome via GitHub Pull Requests.
 You must fork this repository and then open it via your IDE.   
 You can always ask for help on your contribution in the [Towny Discord](https://discord.gg/gnpVs5m).    
 
@@ -11,7 +11,7 @@ You can always ask for help on your contribution in the [Towny Discord](https://
     - represent that you have the right to waive your changes' copyright and any related rights.
     - acknowledge that the TownyAdvanced organization is allowed to use or modify your changes in any way it sees fit and in accordance with the [Towny license](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md)
 
-If you do not agree with the terms of our license, **do not contribute to the Towny project**.
+If you do not agree with the terms of our license, do not contribute to the Towny project.
 
 # About pull requests
 > Pull requests will have their commits squashed upon merge, commit messages will be summarized.
