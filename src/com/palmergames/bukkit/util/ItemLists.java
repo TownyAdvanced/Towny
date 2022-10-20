@@ -116,6 +116,7 @@ public class ItemLists {
 	/**
 	 * List of Signs.
 	 */
+	// TODO: Verify that the hanging sign material ends with _SIGN
 	public static final ItemLists SIGNS = PredicateList.builder().endsWith("_SIGN").build();
 
 	/**
@@ -131,7 +132,8 @@ public class ItemLists {
 	/**
 	 * List of Boats.
 	 */
-	public static final ItemLists BOATS = PredicateList.builder().endsWith("_BOAT").build();
+	// TODO: Verify that bamboo raft w/ chest material ends with _RAFT
+	public static final ItemLists BOATS = PredicateList.builder().endsWith("_BOAT").endsWith("_RAFT").build();
 	
 	/**
 	 * List of Minecarts.
