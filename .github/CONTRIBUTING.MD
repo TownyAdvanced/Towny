@@ -17,7 +17,7 @@ If you do not agree with the terms of our license, **do not contribute to the To
 > Pull requests will have their commits squashed upon merge, commit messages will be summarized.
 
 1. Keep your commit messages self-explanatory. Keep them short but informative!
-2. Pull requests should address a single topic, or be as closed in scope as you can reasonably make it. Small pull requests are easier to review and thus, can result in an faster merge.
+2. Pull requests should address a single topic, or be as closed in scope as you can reasonably make it. Small pull requests are easier to review and thus, can result in a faster merge.
 3. Pull request forms should be filled out to the best of your abilities; describe your changes and reference issues/pull requests whenever applicable.
 4. Test your changes before sending them in! You should look for bugs, test configuration values, commands, and anything you've touched!
 
