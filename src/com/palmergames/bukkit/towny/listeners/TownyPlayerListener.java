@@ -352,6 +352,18 @@ public class TownyPlayerListener implements Listener {
 				if (item == Material.ARMOR_STAND || item == Material.END_CRYSTAL) 
 					event.setCancelled(!TownyActionEventExecutor.canBuild(player, clickedBlock.getRelative(event.getBlockFace()).getLocation(), item));
 
+				/*
+				 * Test if we're putting a book into a BookContainer.
+				 */
+				if (ItemLists.PLACEABLE_BOOKS.contains(item) && ItemLists.BOOK_CONTAINERS.contains(clickedMat))
+					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
+
+				/*
+				 * Catches hoes taking dirt from Rooted Dirt blocks.
+				 */
+				if (clickedMat.name().equals("ROOTED_DIRT") && item.name().toLowerCase().contains("_hoe"))
+					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock));
+
 			}
 		}
 		
@@ -380,6 +392,7 @@ public class TownyPlayerListener implements Listener {
 				ItemLists.HARVESTABLE_BERRIES.contains(clickedMat) ||
 				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat) ||
 				ItemLists.CANDLES.contains(clickedMat) ||
+				ItemLists.BOOK_CONTAINERS.contains(clickedMat) ||
 				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
 				clickedMat == Material.COMMAND_BLOCK){
 				
@@ -417,16 +430,6 @@ public class TownyPlayerListener implements Listener {
 				RespawnAnchor anchor = ((RespawnAnchor) block.getBlockData());
 				if (anchor.getCharges() > 0)
 					BukkitTools.fireEvent(new BedExplodeEvent(player, blockLoc, null, block.getType()));
-				return;
-			}
-			
-			/*
-			 * Catches hoes taking dirt from Rooted Dirt blocks.
-			 */
-			if (block.getType().name().equals("ROOTED_DIRT") &&
-				event.getItem() != null && 
-				event.getItem().getType().name().toLowerCase().contains("_hoe")) {
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, block));
 				return;
 			}
 			

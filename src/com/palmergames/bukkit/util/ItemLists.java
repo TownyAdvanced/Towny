@@ -221,6 +221,16 @@ public class ItemLists {
 	public static final ItemLists CAMPFIRES = ItemLists.of("CAMPFIRE","SOUL_CAMPFIRE");
 	
 	/**
+	 * List of blocks that can hold books
+	 */
+	public static final ItemLists BOOK_CONTAINERS = ItemLists.of("CHISELED_BOOKSHELF","LECTERN");
+
+	/**
+	 * List of placeable books
+	 */
+	public static final ItemLists PLACEABLE_BOOKS = ItemLists.of("BOOK", "ENCHANTED_BOOK", "WRITEABLE_BOOK", "WRITTEN_BOOK");
+	
+	/**
 	 * List of harvestable berries
 	 */
 	public static final ItemLists HARVESTABLE_BERRIES = ItemLists.of("CAVE_VINES_PLANT","SWEET_BERRY_BUSH");
