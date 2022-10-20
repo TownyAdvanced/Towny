@@ -115,7 +115,7 @@ public class PermHUD {
 	private static String getFormattedWildernessName(World w) {
 		StringBuilder wildernessName = new StringBuilder().append(ChatColor.DARK_RED).append(ChatColor.BOLD);
 		if (TownyAPI.getInstance().isTownyWorld(w)) 
-			wildernessName.append(TownyAPI.getInstance().getTownyWorld(w.getName()).getUnclaimedZoneName());
+			wildernessName.append(TownyAPI.getInstance().getTownyWorld(w).getFormattedUnclaimedZoneName());
 		else 
 			wildernessName.append("Unknown");
 

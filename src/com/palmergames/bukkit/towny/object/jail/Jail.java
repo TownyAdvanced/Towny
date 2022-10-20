@@ -98,7 +98,7 @@ public class Jail implements Savable {
 	}
 	
 	public String getWildName() {
-		return getTownBlock().getWorld().getUnclaimedZoneName();
+		return getTownBlock().getWorld().getFormattedUnclaimedZoneName();
 	}
 	
 	@Override

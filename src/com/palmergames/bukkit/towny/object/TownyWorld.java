@@ -668,6 +668,10 @@ public class TownyWorld extends TownyObject {
 			return unclaimedZoneName;
 	}
 
+	public String getFormattedUnclaimedZoneName() {
+		return StringMgmt.remUnderscore(getUnclaimedZoneName());
+	}
+
 	public void setUnclaimedZoneName(String unclaimedZoneName) {
 
 		this.unclaimedZoneName = unclaimedZoneName;

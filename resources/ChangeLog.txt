@@ -7950,3 +7950,4 @@ v0.92.0.11:
   - Fix scenario where no teleport type cooldowns would be tested if the /t spawn cooldown is 0.
   - Fix another scenario where cooldowns wouldn't be applied.
   - Fix a couple places we didn't parse out underscores in 2 placeholders.
+  - Fix the rest of the places we didn't parse out underscores in wilderness names throughout Towny.

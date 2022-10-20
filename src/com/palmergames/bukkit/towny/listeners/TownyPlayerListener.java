@@ -1015,7 +1015,7 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerLeaveTown(PlayerLeaveTownEvent event) {
 		Resident resident = TownyAPI.getInstance().getResident(event.getPlayer().getUniqueId());
-		String worldName = TownyAPI.getInstance().getTownyWorld(event.getPlayer().getWorld().getName()).getUnclaimedZoneName();
+		String worldName = TownyAPI.getInstance().getTownyWorld(event.getPlayer().getWorld()).getFormattedUnclaimedZoneName();
 
 		// Likely a Citizens NPC.
 		if (resident == null || worldName == null)
@@ -1025,10 +1025,10 @@ public class TownyPlayerListener implements Listener {
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle());
 			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
 			if (title.contains("{wilderness}")) {
-				title = title.replace("{wilderness}", StringMgmt.remUnderscore(worldName));
+				title = title.replace("{wilderness}", worldName);
 			}
 			if (subtitle.contains("{wilderness}")) {
-				subtitle = subtitle.replace("{wilderness}", StringMgmt.remUnderscore(worldName));
+				subtitle = subtitle.replace("{wilderness}", worldName);
 			}
 			if (title.contains("{townname}")) {
 				subtitle = subtitle.replace("{townname}", StringMgmt.remUnderscore(event.getFrom().getTownOrNull().getName()));

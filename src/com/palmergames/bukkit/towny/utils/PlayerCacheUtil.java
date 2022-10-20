@@ -441,7 +441,7 @@ public class PlayerCacheUtil {
 					return true;
 
 				// The player is not a nation member of this NationZone.
-				cacheBlockErrMsg(player, Translatable.of("nation_zone_this_area_under_protection_of", pos.getTownyWorldOrNull().getUnclaimedZoneName(), nearestNation.getName()).forLocale(player));
+				cacheBlockErrMsg(player, Translatable.of("nation_zone_this_area_under_protection_of", pos.getTownyWorldOrNull().getFormattedUnclaimedZoneName(), nearestNation.getName()).forLocale(player));
 				return false;
 			}
 		}
