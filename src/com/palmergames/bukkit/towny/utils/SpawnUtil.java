@@ -573,7 +573,7 @@ public class SpawnUtil {
 		if (TownyTimerHandler.isTeleportWarmupRunning() && !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP.getNode())) {
 			// Use teleport warmup
 			TownyMessaging.sendMsg(player, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
-			TownyAPI.getInstance().requestTeleport(player, spawnLoc);
+			TownyAPI.getInstance().requestTeleport(player, spawnLoc, cooldown);
 		} else {
 			// Don't use teleport warmup
 			if (player.getVehicle() != null)

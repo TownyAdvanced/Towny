@@ -7948,3 +7948,4 @@ v0.92.0.11:
     - Add the ability to make Confirmations with a pre-set CancellableTownyEvent which is fire before money is paid, or the onAccept() code is ran. See ConfirmationBuilder#setCancellableEvent(CancellableTownyEvent) for details.
 0.98.3.15:
   - Fix scenario where no teleport type cooldowns would be tested if the /t spawn cooldown is 0.
+  - Fix another scenario where cooldowns wouldn't be applied.
