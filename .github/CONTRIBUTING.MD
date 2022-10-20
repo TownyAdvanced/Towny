@@ -8,14 +8,14 @@ You can always ask for help on your contribution in the [Towny Discord](https://
 ## Before contributing
 - Make sure to read the [Towny license](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md).
 - By opening an pull request, you:
-    - represent that you have the right to waive copyright and related rights to your contributions
-    - agree that all copyright and related rights in your contributions will be waived
-    - acknowledge that the TownyAdvanced organization has the copyright to use and modify your contributions under the [Towny license](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md) for perpetuity
+    - represent that you have the right to waive copyright and related rights to your contributions,
+    - agree that all copyright and related rights in your contributions will be waived,
+    - acknowledge that the TownyAdvanced organization has the copyright to use and modify your contributions under the [Towny license](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md) for perpetuity.
 
 If you do not agree with the terms of our license, do not contribute to the Towny project.
 
 # About pull requests
-> Pull requests will have their commits squashed upon merge, this also includes commit messages! Take this into account when commiting.
+> Pull requests will have their commits squashed upon merge, and your various commits' messages will be used in the squashed commit. Take this into account when making your commits.
 
 1. Keep your commit messages self-explanatory. Keep them short but informative!
 2. Pull requests should address a single topic, or be as closed in scope as you can reasonably make it. Small pull requests are easier to review and thus, can result in a faster merge.
