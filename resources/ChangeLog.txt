@@ -7953,3 +7953,5 @@ v0.92.0.11:
   - Fix the rest of the places we didn't parse out underscores in wilderness names throughout Towny.
   - Add bamboo raft to boats item list, courtesy of Warriorrrr with PR #6253.
   - Add protection to Chiseled Bookshelves for when they're added to the game.
+  - New Command: /ta resetbanks [amount].
+    - Resets all town and nation banks to the given amount.

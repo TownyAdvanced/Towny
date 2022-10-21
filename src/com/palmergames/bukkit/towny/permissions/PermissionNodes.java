@@ -361,6 +361,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWNYADMIN_UNCLAIM("towny.command.townyadmin.unclaim"),
 	TOWNY_COMMAND_TOWNYADMIN_RESIDNET_DELETE("towny.command.townyadmin.resident.delete"),
 	TOWNY_COMMAND_TOWNYADMIN_DEPOSITALL("towny.command.townyadmin.depositall"),
+	TOWNY_COMMAND_TOWNYADMIN_RESETBANKS("towny.command.townyadmin.resetbanks"),
 	TOWNY_COMMAND_TOWNYADMIN_TOWNYPERMS("towny.command.townyadmin.townyperms"),
 	TOWNY_COMMAND_TOWNYADMIN_TPPLOT("towny.command.townyadmin.tpplot"),
 	TOWNY_COMMAND_TOWNYADMIN_INSTALL("towny.command.townyadmin.install"),

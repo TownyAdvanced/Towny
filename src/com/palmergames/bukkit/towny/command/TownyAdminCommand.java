@@ -121,6 +121,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"database",
 		"townyperms",
 		"depositall",
+		"resetbanks",
 		"install"
 	);
 
@@ -756,6 +757,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_DEPOSITALL.getNode());
 				parseAdminDepositAllCommand(StringMgmt.remFirstArg(split));
+			} else if (split[0].equalsIgnoreCase("resetbanks")) {
+				if (!TownyEconomyHandler.isActive())
+					throw new TownyException(Translatable.of("msg_err_no_economy"));
+				
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESETBANKS.getNode());
+				parseAdminResetBanksCommand(StringMgmt.remFirstArg(split));
 			} else if (split[0].equalsIgnoreCase("install")) {
 
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_INSTALL.getNode());
@@ -2668,5 +2675,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_ta_deposit_all_success", TownyEconomyHandler.getFormattedBalance(amount)));
 	}
-	
+
+	private void parseAdminResetBanksCommand(String[] args) throws TownyException {
+		final double amount = args.length == 1 ? MathUtil.getIntOrThrow(args[0]) : 0.0;
+ 		Confirmation.runOnAccept(() -> {
+ 			for (Town town : TownyUniverse.getInstance().getTowns())
+ 				town.getAccount().setBalance(amount, "Admin used /ta resetbanks");
+ 			
+ 			for (Nation nation : TownyUniverse.getInstance().getNations())
+ 				nation.getAccount().setBalance(amount, "Admin used /ta resetbanks");
+ 		})
+ 		.setTitle(Translatable.of("confirmation_are_you_sure_you_want_to_reset_all_banks", TownyEconomyHandler.getFormattedBalance(amount)))
+ 		.sendTo(sender);
+	}
 }
