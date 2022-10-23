@@ -2,6 +2,9 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+
+import javax.annotation.Nullable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -52,4 +55,16 @@ public class TownAddResidentEvent extends Event {
         return town;
     }
 
+	/**
+	 * If this event has been thrown by a resident starting a new town, the town
+	 * will not have set their mayor yet. You should delay your EventHandler by 1
+	 * tick if you need the mayor of the town in your EventHandler.
+	 * 
+	 * @return the Mayor of the town which has added a resident, or null if this
+	 *         event has been thrown upon a resident creating a new town.
+	 */
+	@Nullable
+	public Resident getMayor() {
+		return town.hasMayor() ? town.getMayor() : null;
+	}
 }
