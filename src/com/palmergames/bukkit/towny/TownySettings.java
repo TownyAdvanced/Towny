@@ -1715,7 +1715,6 @@ public class TownySettings {
 	}
 	
 	public static double getMaxTownTaxPercentAmount() { 
-        
         return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT_AMOUNT); 
 	}
     

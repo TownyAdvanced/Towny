@@ -297,7 +297,7 @@ public enum ConfigNodes {
 			"# Default amount of tax of a new nation. This must be lower than the economy.daily_taxes.max_nation_tax_amount setting."),
     NATION_DEF_TAXES_TAXPERCENTAGE(
             "nation.default_taxes.taxpercentage",
-            "true",
+            "false",
             "",
             "# Default status of new nation's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount."),
     NATION_DEF_TAXES_MINIMUMTAX(

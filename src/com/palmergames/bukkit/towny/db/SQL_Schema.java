@@ -137,6 +137,7 @@ public class SQL_Schema {
 		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
 		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
         columns.add("`taxpercent` bool NOT NULL DEFAULT '0'");
+        columns.add("`maxPercentTaxAmount` float DEFAULT NULL");
 		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
