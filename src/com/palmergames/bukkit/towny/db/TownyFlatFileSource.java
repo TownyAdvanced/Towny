@@ -1170,6 +1170,19 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						nation.setOpen(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
+                
+                line = keys.get("taxpercent");
+                if (line != null)
+                    try {
+                        nation.setTaxPercentage(Boolean.parseBoolean(line));
+                    } catch (Exception ignored) {
+                    }
+
+                line = keys.get("maxPercentTaxAmount");
+                if (line != null)
+                    nation.setMaxPercentTaxAmount(Double.parseDouble(line));
+                else 
+                    nation.setMaxPercentTaxAmount(TownySettings.getMaxTownTaxPercentAmount());
 				
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
@@ -2068,6 +2081,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		list.add("enemies=" + StringMgmt.join(nation.getEnemies(), ","));
 
+        // Taxpercent
+		list.add("taxpercent=" + nation.isTaxPercentage());
+		// Taxpercent Cap
+		list.add("maxPercentTaxAmount=" + nation.getMaxPercentTaxAmount());
 		// Taxes
 		list.add("taxes=" + nation.getTaxes());
 		// Nation Spawn Cost

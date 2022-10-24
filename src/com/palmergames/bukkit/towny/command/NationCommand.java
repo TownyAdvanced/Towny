@@ -31,6 +31,7 @@ import com.palmergames.bukkit.towny.event.nation.PreNewNationEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleNeutralEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleOpenEvent;
 import com.palmergames.bukkit.towny.event.nation.toggle.NationTogglePublicEvent;
+import com.palmergames.bukkit.towny.event.nation.toggle.NationToggleTaxPercentEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveAllyEvent;
@@ -140,7 +141,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"title",
 		"surname",
 		"tag",
-		"mapcolor"
+		"mapcolor",
+        "taxpercentcap"
 	);
 	
 	private static final List<String> nationListTabCompletes = Arrays.asList(
@@ -160,7 +162,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"neutral",
 		"peaceful",
 		"public",
-		"open"
+		"open",
+        "taxpercent"
 	);
 	
 	private static final List<String> nationEnemyTabCompletes = Arrays.asList(
@@ -1910,6 +1913,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_TAXES.getNode());
 			nationSetTaxes(sender, nation, split, admin);
 			break;
+        case "taxpercentcap":
+            checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_TAXPERCENTCAP.getNode());
+            nationSetTaxPercent(sender, split, nation);
+            break;
 		case "spawncost":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_SPAWNCOST.getNode());
 			nationSetSpawnCost(sender, nation, split, admin);
@@ -2137,28 +2144,35 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static void nationSetTaxes(CommandSender sender, Nation nation, String[] split, boolean admin) {
+	private static void nationSetTaxes(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {
 		if (split.length < 2)
-			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set taxes 70");
-		else {
-			int amount;
-			try {
-				amount = MathUtil.getPositiveIntOrThrow(split[1].trim());
-			} catch (TownyException ignored) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_negative_money"));
-				return;
-			}
-
-			String name = (sender instanceof Player) ? ((Player)sender).getName() : "Console"; 
-			try {
-				nation.setTaxes(amount);
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_nation_tax", name, nation.getTaxes()));
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_nation_tax", name, nation.getTaxes()));
-			} catch (NumberFormatException e) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
-			}
+            throw new TownyException("Eg: /nation set taxes 70");
+        try {
+			Double amount = Double.parseDouble(split[1]);
+			if (amount < 0)
+				throw new TownyException(Translatable.of("msg_err_negative_money"));
+			if (nation.isTaxPercentage() && amount > 100)
+				throw new TownyException(Translatable.of("msg_err_not_percentage"));
+			if (TownySettings.getNationDefaultTaxMinimumTax() > amount)
+				throw new TownyException(Translatable.of("msg_err_tax_minimum_not_met", TownySettings.getNationDefaultTaxMinimumTax()));
+			nation.setTaxes(amount);
+			if (admin) TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_nation_tax", sender.getName(), nation.getTaxes()));
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_nation_tax", sender.getName(), nation.getTaxes()));
+		} catch (NumberFormatException e) {
+			throw new TownyException(Translatable.of("msg_error_must_be_num"));
 		}
+	}
+
+    public static void nationSetTaxPercent(CommandSender sender, String[] split, Nation nation) throws TownyException {
+		if (!nation.isTaxPercentage())
+			throw new TownyException(Translatable.of("msg_max_tax_amount_only_for_percent"));
+
+		if (split.length < 2) 
+			throw new TownyException("Eg. /nation set taxpercentcap 10000");
+
+		nation.setMaxPercentTaxAmount(Double.parseDouble(split[1]));
+
+		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_tax_max_percent_amount", sender.getName(), TownyEconomyHandler.getFormattedBalance(nation.getMaxPercentTaxAmount())));
 	}
 
 	private static void nationSetCapital(CommandSender sender, Nation nation, String[] split, boolean admin) {
@@ -2357,6 +2371,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_OPEN.getNode());
 			nationToggleOpen(sender, nation, choice, admin);
 			break;
+        case "taxpercent":
+            checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_TAXPERCENT.getNode());
+            nationToggleTaxPercent(sender, nation, choice, admin);
+            break;
 		default:
 			// Check if this is an add-on command.
 			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_TOGGLE, split[0])) {
@@ -2439,6 +2457,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		// Send message feedback.
 		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_changed_open", nation.isOpen() ? Translatable.of("enabled") : Translatable.of("disabled")));
 	}
+
+    private static void nationToggleTaxPercent(CommandSender sender, Nation nation, Optional<Boolean> choice, boolean admin) throws TownyException {
+        	// Fire cancellable event directly before setting the toggle.
+		NationToggleTaxPercentEvent preEvent = new NationToggleTaxPercentEvent(sender, nation, admin, choice.orElse(!nation.isTaxPercentage()));
+		if (BukkitTools.isEventCancelled(preEvent))
+			throw new TownyException(preEvent.getCancelMessage());
+		// Set the toggle setting.
+		nation.setTaxPercentage(preEvent.getFutureState());
+		
+		// Send message feedback.
+		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_changed_taxpercent", nation.isTaxPercentage() ? Translatable.of("enabled") : Translatable.of("disabled")));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_taxpercent", nation.isTaxPercentage() ? Translatable.of("enabled") : Translatable.of("disabled")));
+    }
 
 	public static void nationRename(Player player, Nation nation, String newName) {
 		try {

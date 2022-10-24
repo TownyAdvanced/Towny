@@ -329,6 +329,7 @@ permissions:
             towny.command.nation.toggle.neutral: true
             towny.command.nation.toggle.public: true
             towny.command.nation.toggle.open: true
+            towny.command.nation.toggle.taxpercent: true
 
     # Town command permissions
     towny.command.town.*:
