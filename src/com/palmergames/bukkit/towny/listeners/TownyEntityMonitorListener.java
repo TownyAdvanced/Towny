@@ -168,7 +168,7 @@ public class TownyEntityMonitorListener implements Listener {
 		if (townBlock != null && (townBlock.getType().equals(TownBlockType.ARENA) || townBlock.getType().equals(TownBlockType.JAIL)))
 			return;
 		
-		if (defenderPlayer != null && TownyUniverse.getInstance().getPermissionSource().testPermission(defenderPlayer, PermissionNodes.TOWNY_BYPASS_DEATH_COSTS.getNode()))
+		if (defenderResident.hasPermissionNode(PermissionNodes.TOWNY_BYPASS_DEATH_COSTS.getNode()))
 			return;
 		
 		if (defenderResident.isJailed())
@@ -259,7 +259,7 @@ public class TownyEntityMonitorListener implements Listener {
 		if (townBlock != null && (townBlock.getType().equals(TownBlockType.ARENA) || townBlock.getType().equals(TownBlockType.JAIL)))
 			return;
 		
-		if (defenderPlayer != null && TownyUniverse.getInstance().getPermissionSource().testPermission(defenderPlayer, PermissionNodes.TOWNY_BYPASS_DEATH_COSTS.getNode()))
+		if (defenderResident.hasPermissionNode(PermissionNodes.TOWNY_BYPASS_DEATH_COSTS.getNode()))
 			return;
 
 		if (TownySettings.isChargingDeath() && attackerPlayer != null) {
@@ -379,7 +379,7 @@ public class TownyEntityMonitorListener implements Listener {
 			// Try outlaw jailing first
 			if (attackerTown.hasOutlaw(defenderResident)) {
 				// Not if they don't have the jailer node.
-				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(attackerPlayer, PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
+				if (!attackerResident.hasPermissionNode(PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
 					return;
 				
 				// Send to jail. Hours are pulled from configuration. Task is set 1 tick later so the Jail book isn't removed from their death.

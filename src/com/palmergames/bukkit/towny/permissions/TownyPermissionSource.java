@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.util.BukkitTools;
 
 /**
@@ -187,6 +188,11 @@ public abstract class TownyPermissionSource {
 	public void testPermissionOrThrow(Permissible permissible, String perm) throws NoPermissionException {
 		if (!testPermission(permissible, perm))
 			throw new NoPermissionException();
+	}
+	
+	public void testPermissionOrThrow(Permissible permissible, String perm, Translatable errormsg) throws NoPermissionException {
+		if (!testPermission(permissible, perm))
+			throw new NoPermissionException(errormsg);
 	}
 
 	public boolean testPermission(Player player, String perm) {

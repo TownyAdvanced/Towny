@@ -791,10 +791,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			 * Only allow the player to assign ranks if they have the grant perm
 			 * for it.
 			 */
-			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank.toLowerCase()))) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_no_permission_to_give_rank"));
-				return;
-			}
+			checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank.toLowerCase()), Translatable.of("msg_no_permission_to_give_rank"));
 
 			if (split[0].equalsIgnoreCase("add")) {
 
@@ -1152,8 +1149,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		// Admin is using "/n delete NATIONNAME"
 		} else
 			try {
-				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode()))
-					throw new TownyException(Translatable.of("msg_err_admin_only_delete_nation"));
+				checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode(), Translatable.of("msg_err_admin_only_delete_nation"));
 
 				Nation nation = getNationOrThrow(split[0]);
 				Confirmation.runOnAccept(() -> {

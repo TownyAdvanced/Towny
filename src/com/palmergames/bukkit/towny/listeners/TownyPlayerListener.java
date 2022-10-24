@@ -1132,7 +1132,7 @@ public class TownyPlayerListener implements Listener {
 			return false;
 		
 		// Let admins run commands.
-		if (TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
+		if (resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_TOWN_COMMAND_BLACKLIST_BYPASS.getNode()))
 			return false;
 		
 		final Town town = townBlock == null ? null : townBlock.getTownOrNull();
@@ -1142,7 +1142,7 @@ public class TownyPlayerListener implements Listener {
 		 */
 		if (town != null && blockedTownCommands.containsCommand(command) && blockedTouristCommands.containsCommand(command)) {
 			// Allow own town & let globally welcomed players run commands.
-			if (town.hasResident(resident) || TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_TOURIST_COMMAND_LIMITATION_BYPASS.getNode()))
+			if (town.hasResident(resident) || resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_TOURIST_COMMAND_LIMITATION_BYPASS.getNode()))
 				return false;
 			
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_command_outsider_blocked", town.getName()));

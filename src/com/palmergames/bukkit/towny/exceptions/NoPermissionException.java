@@ -9,5 +9,9 @@ public class NoPermissionException extends TownyException {
 	public NoPermissionException() {
 		super(Translatable.of("msg_err_command_disable"));
 	}
+	
+	public NoPermissionException(Translatable errormsg) {
+		super(errormsg);
+	}
 
 }

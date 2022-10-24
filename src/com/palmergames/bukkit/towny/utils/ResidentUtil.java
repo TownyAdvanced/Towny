@@ -282,7 +282,7 @@ public class ResidentUtil {
 		if (BukkitTools.isEventCancelled(outlawEvent))
 			return;
 		
-		boolean hasBypassNode = TownyUniverse.getInstance().getPermissionSource().testPermission(outlaw.getPlayer(), PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode());
+		boolean hasBypassNode = outlaw.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode());
 		
 		// Admins are omitted so towns won't be informed an admin might be spying on them.
 		if (TownySettings.doTownsGetWarnedOnOutlaw() && !hasBypassNode && !CooldownTimerTask.hasCooldown(outlaw.getName(), CooldownType.OUTLAW_WARNING)) {

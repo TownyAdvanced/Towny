@@ -1890,8 +1890,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		 * Only allow the player to assign ranks if they have the grant perm
 		 * for it.
 		 */
-		if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_RANK.getNode(rank.toLowerCase())))
-			throw new TownyException(Translatable.of("msg_no_permission_to_give_rank"));
+		checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_TOWN_RANK.getNode(rank.toLowerCase()), Translatable.of("msg_no_permission_to_give_rank"));
 
 		if (split[0].equalsIgnoreCase("add")) {
 
@@ -2982,8 +2981,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				? getTownFromPlayerOrThrow(player)
 				: getTownOrThrow(split[0]);
 
-		// No argument, a player is deleting their own town.
-		if (split.length == 0) {
+		if (split.length == 0 // No args, self deleting town. OR player supplied the town name unnecessarily.
+			|| (town.hasResident(player) && townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DELETE))) {
+			// Send information about ruining if enabled.
 			if (TownySettings.getTownRuinsEnabled()) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted", TownySettings.getTownRuinsMaxDurationHours()));
 				if (TownySettings.getTownRuinsReclaimEnabled())
@@ -2993,9 +2993,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		// An argument has been passed in the command, an admin is deleting a town.
-		if (!townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE.getNode()))
-			throw new TownyException(Translatable.of("msg_err_admin_only_delete_town"));
+		// An argument has been passed in the command, and the command sender is not a member of the town and able to delete it.
+		checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE.getNode(), Translatable.of("msg_err_admin_only_delete_town"));
 
 		Confirmation.runOnAccept(() -> {
 			TownyMessaging.sendMsg(player, Translatable.of("town_deleted_by_admin", town.getName()));
@@ -3051,7 +3050,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (BukkitTools.matchPlayer(newMember.getName()).isEmpty()) { // Not online
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_offline_no_join", newMember.getName()));
 					invited.remove(newMember);
-				} else if (!TownyUniverse.getInstance().getPermissionSource().testPermission(BukkitTools.getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
+				} else if (!newMember.hasPermissionNode(PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_allowed_join", newMember.getName()));
 					invited.remove(newMember);
 				} else if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town)){

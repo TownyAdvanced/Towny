@@ -37,7 +37,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
 
@@ -214,9 +213,8 @@ public class SpawnUtil {
 	 * @return true if this player has either free spawning nodes.
 	 */
 	private static boolean playerHasFreeSpawn(Player player) {
-		TownyPermissionSource perms = TownyUniverse.getInstance().getPermissionSource();
-		return perms.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())
-				|| perms.testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCHARGE.getNode());
+		return hasPerm(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE)
+				|| hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCHARGE);
 	}
 	
 	/**
@@ -570,7 +568,7 @@ public class SpawnUtil {
 	 * @param spawnLoc Location being spawned to.
 	 */
 	private static void initiateSpawn(Player player, Location spawnLoc, int cooldown) {
-		if (TownyTimerHandler.isTeleportWarmupRunning() && !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP.getNode())) {
+		if (TownyTimerHandler.isTeleportWarmupRunning() && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP)) {
 			// Use teleport warmup
 			TownyMessaging.sendMsg(player, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 			TownyAPI.getInstance().requestTeleport(player, spawnLoc, cooldown);
@@ -579,7 +577,7 @@ public class SpawnUtil {
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
 			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
-			if (TownySettings.getSpawnCooldownTime() > 0 && !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()))
+			if (cooldown > 0 && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN))
 				CooldownTimerTask.addCooldownTimer(player.getName(), "teleport", cooldown);
 		}
 	}
@@ -659,5 +657,9 @@ public class SpawnUtil {
 	
 	private static void initiatePluginTeleport(Resident resident, CompletableFuture<Location> loc, boolean ignoreWarmup) {
 		loc.thenAccept(location -> initiatePluginTeleport(resident, location, ignoreWarmup));
+	}
+	
+	private static boolean hasPerm(Player player, PermissionNodes node) {
+		return TownyUniverse.getInstance().getPermissionSource().has(player, node.getNode());
 	}
 }

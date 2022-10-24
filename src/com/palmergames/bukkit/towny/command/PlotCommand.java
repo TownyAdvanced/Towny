@@ -264,7 +264,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public boolean parsePlotCommand(Player player, String[] split) {
-		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			HelpMenu.PLOT_HELP.send(player);
@@ -429,7 +428,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
 					selection = AreaSelectionUtil.filterPlotsForSale(selection);
 					
-					if (permSource.testPermission(player, PermissionNodes.TOWNY_ADMIN.getNode())) {
+					if (resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN.getNode())) {
 						for (WorldCoord worldCoord : selection) {
 							if (worldCoord.getTownBlock().hasPlotObjectGroup()) {
 								TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_plot_belongs_to_group_plot_nfs", worldCoord));
@@ -445,8 +444,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					// The follow test will clean up the initial selection fairly well, the plotTestOwner later on in the setPlotForSale will ultimately stop any funny business.
 					if (
-						(permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && town.hasResident(resident))
-						|| (permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYORINUNOWNED.getNode()) && town.hasResident(resident) && !townBlock.hasResident())
+						(resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && town.hasResident(resident))
+						|| (resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYORINUNOWNED.getNode()) && town.hasResident(resident) && !townBlock.hasResident())
 						) {
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection); // Treat it as a mayor able to set their town's plots not for sale.
 					} else {
@@ -494,8 +493,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							// The follow test will clean up the initial selection fairly well, the plotTestOwner later on in the setPlotForSale will ultimately stop any funny business.
 							if (
-								(permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && town.hasResident(resident))
-								|| (permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYORINUNOWNED.getNode()) && town.hasResident(resident) && !townBlock.hasResident())
+								(resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && town.hasResident(resident))
+								|| (resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYORINUNOWNED.getNode()) && town.hasResident(resident) && !townBlock.hasResident())
 								) {
 								selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection); // Treat it as a mayor able to put their town's plots for sale.
 								selection = AreaSelectionUtil.filterOutResidentBlocks(resident, selection); // Filter out any resident-owned plots.
@@ -638,10 +637,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								
 								Town town = townBlock.getTownOrNull();
 								TownyWorld townyWorld = townBlock.getWorld();
-								boolean isAdmin = permSource.isTownyAdmin(player);
 								Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
 								
-								if (OutpostUtil.OutpostTests(town, resident, townyWorld, key, isAdmin, true)) {
+								if (OutpostUtil.OutpostTests(town, resident, townyWorld, key, resident.isAdmin(), true)) {
 									// Test if they can pay.
 									if (TownyEconomyHandler.isActive() && !town.getAccount().canPayFromHoldings(TownySettings.getOutpostCost())) 
 										throw new TownyException(Translatable.of("msg_err_cannot_afford_to_set_outpost"));

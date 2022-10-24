@@ -1158,13 +1158,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_UNCLAIM.send((CommandSender) getSender());
 		} else {
-
-			if (isConsole) {
-				TownyMessaging.sendMessage(sender, "[Towny] InputError: This command was designed for use in game only.");
-				return;
-			}
-
 			try {
+				catchConsole(sender);
+
 				List<WorldCoord> selection;
 				selection = AreaSelectionUtil.selectWorldCoordArea(null, new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)), split);
 				selection = AreaSelectionUtil.filterOutWildernessBlocks(selection);
@@ -1175,7 +1171,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				new TownClaim(plugin, player, null, selection, false, false, true).start();
 
 			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
+				TownyMessaging.sendErrorMsg(sender, x.getMessage());
 				return;
 			}
 		}
@@ -1420,7 +1416,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				if (town.getAccount().deposit(amount, "Admin Deposit")) {
 					// Send notifications
-					Translatable depositMessage = Translatable.of("msg_xx_deposited_xx", (isConsole ? "Console" : player.getName()), amount,  Translatable.of("town_sing"));
+					Translatable depositMessage = Translatable.of("msg_xx_deposited_xx", getSenderFormatted(), amount,  Translatable.of("town_sing"));
 					TownyMessaging.sendMsg(sender, depositMessage);
 					TownyMessaging.sendPrefixedTownMessage(town, depositMessage);
 				} else {
@@ -1441,7 +1437,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				
 				if (town.getAccount().withdraw(amount, "Admin Withdraw")) {				
 					// Send notifications
-					Translatable withdrawMessage = Translatable.of("msg_xx_withdrew_xx", (isConsole ? "Console" : player.getName()), amount,  Translatable.of("town_sing"));
+					Translatable withdrawMessage = Translatable.of("msg_xx_withdrew_xx", getSenderFormatted(), amount,  Translatable.of("town_sing"));
 					TownyMessaging.sendMsg(sender, withdrawMessage);
 					TownyMessaging.sendPrefixedTownMessage(town, withdrawMessage);
 				} else {
@@ -1668,17 +1664,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("delete")) {
 
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode());
-				if (!isConsole) {
-					TownyMessaging.sendMsg(sender, Translatable.of("nation_deleted_by_admin", nation.getName()));
-					TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
-					townyUniverse.getDataSource().removeNation(nation);
-				} else {
-					Confirmation.runOnAccept(() -> {
-						TownyUniverse.getInstance().getDataSource().removeNation(nation);
-						TownyMessaging.sendGlobalMessage(Translatable.of("MSG_DEL_NATION", nation.getName()));
-					})
-					.sendTo(sender); // It takes the nation, an admin deleting another town has no confirmation.
-				}
+				Confirmation.runOnAccept(() -> {
+					if (!isConsole)
+						TownyMessaging.sendMsg(sender, Translatable.of("nation_deleted_by_admin", nation.getName()));
+					TownyUniverse.getInstance().getDataSource().removeNation(nation);
+					TownyMessaging.sendGlobalMessage(Translatable.of("MSG_DEL_NATION", nation.getName()));
+				}).sendTo(sender);
 
 			} else if(split[1].equalsIgnoreCase("recheck")) {
 				
@@ -1952,7 +1943,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private String getSenderFormatted() {
-		return isConsole ? "CONSOLE" : ((Player) getSender()).getName();
+		return isConsole ? "Console" : player.getName();
 	}
 
 	/**
@@ -2285,54 +2276,30 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	 * Remove residents who havn't logged in for X amount of days.
 	 * 
 	 * @param split - Current command arguments.
+	 * @throws TownyException when an error message needs to be returned.
 	 */
-	public void purge(String[] split) {
+	public void purge(String[] split) throws TownyException {
 
 		if (split.length == 0) {
 			// command was '/townyadmin purge'
 			HelpMenu.TA_PURGE.send(sender);
 			return;
 		}
-		
-		boolean townless = false;
-		Town town = null;
-		int days = 0;
+
+		checkPermOrThrowWithMessage(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode(), Translatable.of("msg_err_admin_only"));
+
+		boolean townless = split.length == 2 && split[1].equalsIgnoreCase("townless");
+		Town town = !townless && split.length == 2 ? TownyUniverse.getInstance().getTown(split[1]) : null;
+		if (!townless && town == null)
+			throw new TownyException(Translatable.of("msg_err_not_registered_1", split[1]));
+
 		try {
-			days = Integer.parseInt(split[0]);
+			int days = Integer.parseInt(split[0]);
+			Confirmation.runOnAccept(() -> 
+				new ResidentPurge(plugin, sender, TimeTools.getMillis(days + "d"), townless, town).start()
+			).sendTo(sender);
 		} catch (NumberFormatException e) {
-			TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_error_must_be_int"));
-			return;
-		}
-
-		if (split.length == 2 && split[1].equalsIgnoreCase("townless")) {
-			townless = true;
-		}
-		
-		if (!townless && split.length == 2) {
-			town = TownyUniverse.getInstance().getTown(split[1]);
-			if (town == null) {
-				TownyMessaging.sendErrorMsg(getSender(), Translatable.of("msg_err_not_registered_1", split[1]));
-				return;
-			}
-		}
-
-		final int numDays = days;
-		final boolean finalTownless = townless;
-		final Town finalTown = town;
-		if (!isConsole) {
-			Confirmation.runOnAccept(() -> {
-				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode())) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_admin_only"));
-					return;
-				}
-				new ResidentPurge(plugin, player, TimeTools.getMillis(numDays + "d"), finalTownless, finalTown).start();
-			})
-			.sendTo(player);
-		} else { // isConsole
-			Confirmation.runOnAccept(() -> {
-				new ResidentPurge(plugin, sender, TimeTools.getMillis(numDays + "d"), finalTownless, finalTown).start();
-			})
-			.sendTo(sender);
+			throw new TownyException(Translatable.of("msg_error_must_be_int"));
 		}
 	}
 

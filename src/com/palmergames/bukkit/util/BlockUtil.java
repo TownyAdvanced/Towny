@@ -8,7 +8,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -103,9 +102,9 @@ public class BlockUtil {
 	}
 	
 	private static boolean isResidentActingMayorOfTown(Resident resident, Town town) {
-		return TownyUniverse.getInstance().getPermissionSource().testPermission(resident.getPlayer(), PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())
+		return resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())
 				&& resident.hasTown()
-				&& town.getUUID().equals(TownyAPI.getInstance().getResidentTownOrNull(resident).getUUID());
+				&& town.hasResident(resident);
 	}
 
 	public static boolean sameWorldCoord(Block b1, Block b2) {

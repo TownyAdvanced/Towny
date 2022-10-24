@@ -7956,3 +7956,4 @@ v0.92.0.11:
   - New Command: /ta resetbanks [amount].
     - Resets all town and nation banks to the given amount.
   - Bump Jabel to 1.0.0, courtesy of Warriorrrr with PR #6259.
+  - Simplify and condense permission tests, by giving NoPermissionException the ability to accept a Translatable.

@@ -356,4 +356,8 @@ public class BaseCommand implements TabCompleter{
 	public static void checkPermOrThrow(Permissible permissible, String node) throws NoPermissionException {
 		TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(permissible, node);
 	}
+	
+	public static void checkPermOrThrowWithMessage(Permissible permissible, String node, Translatable errormsg) throws NoPermissionException {
+		TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(permissible, node, errormsg);
+	}
 }
