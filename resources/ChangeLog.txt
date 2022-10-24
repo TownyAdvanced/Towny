@@ -7955,3 +7955,4 @@ v0.92.0.11:
   - Add protection to Chiseled Bookshelves for when they're added to the game.
   - New Command: /ta resetbanks [amount].
     - Resets all town and nation banks to the given amount.
+  - Bump Jabel to 1.0.0, courtesy of Warriorrrr with PR #6259.
