@@ -18,7 +18,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -411,20 +410,22 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("wildignore")) {
 
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE <world>");
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "/townyworld set wildignore OAK_SAPLING GOLD_ORE IRON_ORE"));
 				else
 					try {
 						List<String> mats = new ArrayList<>();
-						for (String s : StringMgmt.remFirstArg(split))
-							mats.add(Material.matchMaterial(s.trim().toUpperCase(Locale.ROOT)).name());
-
+						for (String s : StringMgmt.remFirstArg(split)) {
+							String matName = BukkitTools.matchMaterialName(s);
+							if (matName != null)
+								mats.add(matName);
+						}
 						globalWorld.setUnclaimedZoneIgnore(mats);
 
 						plugin.resetCache();
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_ignore", globalWorld.getName(), globalWorld.getUnclaimedZoneIgnoreMaterials()));
 
 					} catch (Exception e) {
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", " on/off."));
+						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "/townyworld set wildignore OAK_SAPLING GOLD_ORE IRON_ORE"));
 					}
 
 			} else if (split[0].equalsIgnoreCase("wildregen")) {

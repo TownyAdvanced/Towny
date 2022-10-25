@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -316,5 +318,9 @@ public class BukkitTools {
 
 	public static void fireEvent(@NotNull Event event) {
 		Bukkit.getPluginManager().callEvent(event);
+	}
+
+	public static String matchMaterialName(String name) {
+		return Material.matchMaterial(name.trim().toUpperCase(Locale.ROOT)).name();
 	}
 }

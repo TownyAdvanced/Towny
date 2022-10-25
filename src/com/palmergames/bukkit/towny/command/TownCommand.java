@@ -2577,7 +2577,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_max_tax_amount_only_for_percent"));
 
 		if (split.length < 2) 
-			throw new TownyException("Eg. /town set taxMax 10000");
+			throw new TownyException("Eg. /town set taxpercentcap 10000");
 
 		town.setMaxPercentTaxAmount(Double.parseDouble(split[1]));
 
