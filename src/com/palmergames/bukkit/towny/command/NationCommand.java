@@ -670,7 +670,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	        		throw new TownyException(Translatable.of("msg_err_nation_over_town_limit", TownySettings.getMaxTownsPerNation()));
 
             if (TownySettings.getMaxResidentsPerNation() > 0) {
-                if (nation.getResidents().size() >= TownySettings.getMaxResidentsPerNation())
+                if (nation.getResidents().size() + town.getResidents().size() >= TownySettings.getMaxResidentsPerNation())
                    throw new TownyException(Translatable.of("msg_err_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
             }
 
@@ -1197,9 +1197,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (TownySettings.getMaxTownsPerNation() > 0 && nation.getTowns().size() >= TownySettings.getMaxTownsPerNation())
 			throw new TownyException(Translatable.of("msg_err_nation_over_town_limit", TownySettings.getMaxTownsPerNation()));
 
-        if (TownySettings.getMaxResidentsPerNation() > 0 && nation.getResidents().size() >= TownySettings.getMaxResidentsPerNation())
-            throw new TownyException(Translatable.of("msg_err_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
-
 		// The list of valid invites.
 		List<String> newtownlist = new ArrayList<>();
 		// List of invites to be removed.
@@ -1216,6 +1213,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				removeinvites.add(townname);
 				continue;
 			}
+
+            if (TownySettings.getMaxResidentsPerNation() > 0 && 
+                nation.getResidents().size() + TownyAPI.getInstance().getTown(townname).getResidents().size() >= TownySettings.getMaxResidentsPerNation()) {
+                // Town has too many residents to join the nation
+                removeinvites.add(townname);
+                continue;
+            }
+
 			// add them to adding.
 			newtownlist.add(townname); 
 		}
