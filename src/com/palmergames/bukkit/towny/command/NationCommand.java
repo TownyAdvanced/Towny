@@ -669,6 +669,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	        	if (nation.getTowns().size() >= TownySettings.getMaxTownsPerNation())
 	        		throw new TownyException(Translatable.of("msg_err_nation_over_town_limit", TownySettings.getMaxTownsPerNation()));
 
+            if (TownySettings.getMaxResidentsPerNation() > 0) {
+                if (nation.getResidents().size() >= TownySettings.getMaxResidentsPerNation())
+                   throw new TownyException(Translatable.of("msg_err_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
+            }
+
 			if (TownySettings.getNationRequiresProximity() > 0) {
 				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
 				Coord townCoord = town.getHomeBlock().getCoord();
@@ -1191,6 +1196,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		
 		if (TownySettings.getMaxTownsPerNation() > 0 && nation.getTowns().size() >= TownySettings.getMaxTownsPerNation())
 			throw new TownyException(Translatable.of("msg_err_nation_over_town_limit", TownySettings.getMaxTownsPerNation()));
+
+        if (TownySettings.getMaxResidentsPerNation() > 0 && nation.getResidents().size() >= TownySettings.getMaxResidentsPerNation())
+            throw new TownyException(Translatable.of("msg_err_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
 
 		// The list of valid invites.
 		List<String> newtownlist = new ArrayList<>();
