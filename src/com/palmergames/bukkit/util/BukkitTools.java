@@ -33,6 +33,8 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
+
 /**
  * A class of functions related to Bukkit in general.
  * 
@@ -320,7 +322,15 @@ public class BukkitTools {
 		Bukkit.getPluginManager().callEvent(event);
 	}
 
+	/**
+	 * Used to parse user-inputted material names into valid material names.
+	 * 
+	 * @param name String which should be a material. 
+	 * @return String name of the material or null if no match could be made.
+	 */
+	@Nullable
 	public static String matchMaterialName(String name) {
-		return Material.matchMaterial(name.trim().toUpperCase(Locale.ROOT)).name();
+		Material mat = Material.matchMaterial(name.trim().toUpperCase(Locale.ROOT));
+		return mat == null ? null : mat.name(); 
 	}
 }
