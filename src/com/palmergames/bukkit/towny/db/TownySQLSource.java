@@ -1335,14 +1335,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nation.setPublic(rs.getBoolean("isPublic"));
 
 			nation.setOpen(rs.getBoolean("isOpen"));
-            
-            nation.setTaxPercentage(rs.getBoolean("taxpercent"));
 
-            line = rs.getString("maxPercentTaxAmount");
+			nation.setTaxPercentage(rs.getBoolean("taxpercent"));
+
+			line = rs.getString("maxPercentTaxAmount");
 			if (line != null)
 				nation.setMaxPercentTaxAmount(Double.parseDouble(line));
 			else 
-				nation.setMaxPercentTaxAmount(TownySettings.getMaxTownTaxPercentAmount());
+				nation.setMaxPercentTaxAmount(TownySettings.getMaxNationTaxPercentAmount());
 
 			try {
 				line = rs.getString("registered");

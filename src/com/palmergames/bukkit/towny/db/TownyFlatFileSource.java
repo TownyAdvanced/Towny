@@ -1170,19 +1170,19 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						nation.setOpen(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
-                
-                line = keys.get("taxpercent");
-                if (line != null)
-                    try {
-                        nation.setTaxPercentage(Boolean.parseBoolean(line));
-                    } catch (Exception ignored) {
-                    }
 
-                line = keys.get("maxPercentTaxAmount");
-                if (line != null)
-                    nation.setMaxPercentTaxAmount(Double.parseDouble(line));
-                else 
-                    nation.setMaxPercentTaxAmount(TownySettings.getMaxTownTaxPercentAmount());
+				line = keys.get("taxpercent");
+				if (line != null)
+					try {
+						nation.setTaxPercentage(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+
+				line = keys.get("maxPercentTaxAmount");
+				if (line != null)
+					nation.setMaxPercentTaxAmount(Double.parseDouble(line));
+				else
+					nation.setMaxPercentTaxAmount(TownySettings.getMaxNationTaxPercentAmount());
 				
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())

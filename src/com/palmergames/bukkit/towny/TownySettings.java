@@ -1715,18 +1715,19 @@ public class TownySettings {
 	}
 	
 	public static double getMaxTownTaxPercentAmount() { 
-        return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT_AMOUNT); 
+		
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_TOWN_TAX_PERCENT_AMOUNT); 
 	}
-    
-    public static double getMaxNationTaxPercentAmount() { 
-        
-        return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_NATION_TAX_PERCENT_AMOUNT); 
-    }
 
-    public static double getMaxNationTaxPercent() {
-        
-        return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_NATION_TAX_PERCENT);
-    }
+	public static double getMaxNationTaxPercentAmount() {
+
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_NATION_TAX_PERCENT_AMOUNT);
+	}
+
+	public static double getMaxNationTaxPercent() {
+
+		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_NATION_TAX_PERCENT);
+	}
 	
 	public static boolean isBackingUpDaily() {
 
@@ -2072,18 +2073,18 @@ public class TownySettings {
 		return getString(ConfigNodes.NATION_DEF_BOARD);
 	}
 
-    public static double getNationDefaultTax() {
+	public static double getNationDefaultTax() {
 
 		return getDouble(ConfigNodes.NATION_DEF_TAXES_TAX);
 	}
 
-    public static boolean getNationDefaultTaxPercentage() {
+	public static boolean getNationDefaultTaxPercentage() {
 
 		return getBoolean(ConfigNodes.NATION_DEF_TAXES_TAXPERCENTAGE);
 	}
 
-    public static double getNationDefaultTaxMinimumTax() {
-		
+	public static double getNationDefaultTaxMinimumTax() {
+
 		return getDouble(ConfigNodes.NATION_DEF_TAXES_MINIMUMTAX);
 	}
 

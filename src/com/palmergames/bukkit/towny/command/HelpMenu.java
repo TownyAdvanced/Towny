@@ -837,7 +837,7 @@ public enum HelpMenu {
 				.add("", "/nation toggle", "peaceful/neutral", "")
 				.add("", "/nation toggle", "public", "")
 				.add("", "/nation toggle", "open", "")
-                .add("", "/nation toggle", "taxpercent", "");
+				.add("", "/nation toggle", "taxpercent", "");
 		}
 	}, 
 	

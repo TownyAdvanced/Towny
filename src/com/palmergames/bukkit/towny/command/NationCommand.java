@@ -142,7 +142,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"surname",
 		"tag",
 		"mapcolor",
-        "taxpercentcap"
+		"taxpercentcap"
 	);
 	
 	private static final List<String> nationListTabCompletes = Arrays.asList(
@@ -163,7 +163,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"peaceful",
 		"public",
 		"open",
-        "taxpercent"
+		"taxpercent"
 	);
 	
 	private static final List<String> nationEnemyTabCompletes = Arrays.asList(
@@ -1913,10 +1913,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_TAXES.getNode());
 			nationSetTaxes(sender, nation, split, admin);
 			break;
-        case "taxpercentcap":
-            checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_TAXPERCENTCAP.getNode());
-            nationSetTaxPercent(sender, split, nation);
-            break;
+		case "taxpercentcap":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_TAXPERCENTCAP.getNode());
+			nationSetTaxPercentCap(sender, split, nation);
+			break;
 		case "spawncost":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_SPAWNCOST.getNode());
 			nationSetSpawnCost(sender, nation, split, admin);
@@ -2146,31 +2146,26 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private static void nationSetTaxes(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {
 		if (split.length < 2)
-            throw new TownyException("Eg: /nation set taxes 70");
-        try {
-			Double amount = Double.parseDouble(split[1]);
-			if (amount < 0)
-				throw new TownyException(Translatable.of("msg_err_negative_money"));
-			if (nation.isTaxPercentage() && amount > 100)
-				throw new TownyException(Translatable.of("msg_err_not_percentage"));
-			if (TownySettings.getNationDefaultTaxMinimumTax() > amount)
-				throw new TownyException(Translatable.of("msg_err_tax_minimum_not_met", TownySettings.getNationDefaultTaxMinimumTax()));
-			nation.setTaxes(amount);
-			if (admin) TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_nation_tax", sender.getName(), nation.getTaxes()));
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_nation_tax", sender.getName(), nation.getTaxes()));
-		} catch (NumberFormatException e) {
-			throw new TownyException(Translatable.of("msg_error_must_be_num"));
-		}
+			throw new TownyException("Eg: /nation set taxes 70");
+		int amount = MathUtil.getPositiveIntOrThrow(split[1].trim());
+		if (nation.isTaxPercentage() && amount > 100)
+			throw new TownyException(Translatable.of("msg_err_not_percentage"));
+		if (TownySettings.getNationDefaultTaxMinimumTax() > amount)
+			throw new TownyException(Translatable.of("msg_err_tax_minimum_not_met", TownySettings.getNationDefaultTaxMinimumTax()));
+		nation.setTaxes(amount);
+		if (admin) 
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_nation_tax", sender.getName(), nation.getTaxes()));
+		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_nation_tax", sender.getName(), nation.getTaxes()));
 	}
 
-    public static void nationSetTaxPercent(CommandSender sender, String[] split, Nation nation) throws TownyException {
+	public static void nationSetTaxPercentCap(CommandSender sender, String[] split, Nation nation) throws TownyException {
 		if (!nation.isTaxPercentage())
 			throw new TownyException(Translatable.of("msg_max_tax_amount_only_for_percent"));
 
 		if (split.length < 2) 
 			throw new TownyException("Eg. /nation set taxpercentcap 10000");
 
-		nation.setMaxPercentTaxAmount(Double.parseDouble(split[1]));
+		nation.setMaxPercentTaxAmount(MathUtil.getPositiveIntOrThrow(split[1]));
 
 		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_tax_max_percent_amount", sender.getName(), TownyEconomyHandler.getFormattedBalance(nation.getMaxPercentTaxAmount())));
 	}

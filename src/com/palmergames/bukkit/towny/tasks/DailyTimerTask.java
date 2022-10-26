@@ -196,17 +196,16 @@ public class DailyTimerTask extends TownyTimerTask {
 					if ((town.isCapital() && !TownySettings.doCapitalsPayNationTax()) || !town.hasUpkeep() || town.isRuined())
 						continue;
 					
-                    if (nation.isTaxPercentage()) {
-                        taxAmount = town.getAccount().getHoldingBalance() * taxAmount / 100;
-                        taxAmount = Math.min(taxAmount, nation.getMaxPercentTaxAmount());
-                    }
+					if (nation.isTaxPercentage()) {
+						taxAmount = town.getAccount().getHoldingBalance() * taxAmount / 100;
+						taxAmount = Math.min(taxAmount, nation.getMaxPercentTaxAmount());
+					}
 
 					PreTownPaysNationTaxEvent event = new PreTownPaysNationTaxEvent(town, nation, taxAmount);
 					if (BukkitTools.isEventCancelled(event)) {
 						TownyMessaging.sendPrefixedTownMessage(town, event.getCancelMessage());
 						continue;
 					}
-
 					taxAmount = event.getTax();
 					
 					if (town.getAccount().canPayFromHoldings(taxAmount)) {
