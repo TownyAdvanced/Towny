@@ -836,7 +836,8 @@ public enum HelpMenu {
 			return new MenuBuilder("nation toggle")
 				.add("", "/nation toggle", "peaceful/neutral", "")
 				.add("", "/nation toggle", "public", "")
-				.add("", "/nation toggle", "open", "");
+				.add("", "/nation toggle", "open", "")
+				.add("", "/nation toggle", "taxpercent", "");
 		}
 	}, 
 	

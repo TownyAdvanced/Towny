@@ -1336,6 +1336,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			nation.setOpen(rs.getBoolean("isOpen"));
 
+			nation.setTaxPercentage(rs.getBoolean("taxpercent"));
+
+			line = rs.getString("maxPercentTaxAmount");
+			if (line != null)
+				nation.setMaxPercentTaxAmount(Double.parseDouble(line));
+			else 
+				nation.setMaxPercentTaxAmount(TownySettings.getMaxNationTaxPercentAmount());
+
 			try {
 				line = rs.getString("registered");
 				if (line != null) {
@@ -2259,6 +2267,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
 			nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
 			nat_hm.put("taxes", nation.getTaxes());
+            nat_hm.put("taxpercent", nation.isTaxPercentage());
+			nat_hm.put("maxPercentTaxAmount", nation.getMaxPercentTaxAmount());
 			nat_hm.put("spawnCost", nation.getSpawnCost());
 			nat_hm.put("neutral", nation.isNeutral());
 			nat_hm.put("nationSpawn",

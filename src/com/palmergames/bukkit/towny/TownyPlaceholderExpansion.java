@@ -175,6 +175,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		String rank = "";
 		String hex = "";
 		Double cost = 0.0;
+		boolean percentage = false;
 
 		switch (identifier) {
 		case "town": // %townyadvanced_town%
@@ -452,7 +453,6 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				: TownySettings.getNationLevel(1).upkeepModifier();
 			return cost == 1.0 ? "0" : String.valueOf(dFormat.format((1.0 - cost) * 100));
 		case "daily_town_tax": // %townyadvanced_daily_town_tax%
-			boolean percentage = false;
 			if (resident.hasTown()) {
 				cost = resident.getTownOrNull().getTaxes();
 				percentage = resident.getTownOrNull().isTaxPercentage();
@@ -461,8 +461,9 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		case "daily_nation_tax": // %townyadvanced_daily_nation_tax%
 			if (resident.hasNation()) {
 				cost = resident.getNationOrNull().getTaxes();
+				percentage = resident.getNationOrNull().isTaxPercentage();
 			}
-			return String.valueOf(cost);
+			return String.valueOf(cost) + (percentage ? "%" : "");
 		case "town_creation_cost": // %townyadvanced_town_creation_cost%
 			return String.valueOf(TownySettings.getNewTownPrice());
 		case "nation_creation_cost": // %townyadvanced_nation_creation_cost%

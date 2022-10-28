@@ -285,6 +285,24 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Setting this to true will set a nation's tag automatically using the first four characters of the nation's name."),
+	NATION_DEF_TAXES("nation.default_taxes",
+			"",
+			"",
+			"# Default tax settings for new nations."),
+	NATION_DEF_TAXES_TAX("nation.default_taxes.tax",
+			"0.0",
+			"",
+			"# Default amount of tax of a new nation. This must be lower than the economy.daily_taxes.max_nation_tax_amount setting."),
+	NATION_DEF_TAXES_TAXPERCENTAGE("nation.default_taxes.taxpercentage",
+			"false",
+			"",
+			"# Default status of new nation's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount."),
+	NATION_DEF_TAXES_MINIMUMTAX(
+			"nation.default_taxes.minimumtax",
+			"0.0",
+			"",
+			"# A required minimum tax amount for the default_tax, will not change any nations which already have a tax set.",
+			"# Do not forget to set the default_tax to more than 0 or new nations will still begin with a tax of zero."),
 	
 	NWS(
 			"new_world_settings",
@@ -2234,6 +2252,16 @@ public enum ConfigNodes {
 			"",
 			"# The maximum amount of money that can be taken from a balance when using a percent tax, this is the default for all new towns."
 			),
+	ECO_DAILY_TAXES_MAX_NATION_TAX_PERCENT(
+			"economy.daily_taxes.max_nation_tax_percent",
+			"25",
+			"",
+			"# Maximum tax percentage allowed when taxing by percentages for nations."),
+	ECO_DAILY_TAXES_MAX_NATION_TAX_PERCENT_AMOUNT(
+			"economy.daily_taxes.max_nation_tax_percent_amount",
+			"10000",
+			"",
+			"# The maximum amount of money that can be taken from a balance when using a percent tax, this is the default for all new nations."),
 	ECO_DAILY_TAXES_DO_CAPITALS_PAY_NATION_TAX(
 			"economy.daily_taxes.do_nation_capitals_pay_nation_tax",
 			"false",

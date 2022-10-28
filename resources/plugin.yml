@@ -321,6 +321,7 @@ permissions:
             towny.command.nation.set.taxes: true
             towny.command.nation.set.title: true
             towny.command.nation.set.mapcolor: true
+            towny.command.nation.set.taxpercentcap: true
 
     towny.command.nation.toggle.*:
         description: User can toggle any available nation setting.
@@ -329,6 +330,7 @@ permissions:
             towny.command.nation.toggle.neutral: true
             towny.command.nation.toggle.public: true
             towny.command.nation.toggle.open: true
+            towny.command.nation.toggle.taxpercent: true
 
     # Town command permissions
     towny.command.town.*:

@@ -40,11 +40,15 @@ public class Nation extends Government {
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
 	private final List<Invite> sentAllyInvites = new ArrayList<>();
+	private boolean isTaxPercentage = TownySettings.getNationDefaultTaxPercentage();
+	private double maxPercentTaxAmount = TownySettings.getMaxNationTaxPercentAmount();
+
 
 	public Nation(String name) {
 		super(name);
 		
 		// Set defaults
+		setTaxes(TownySettings.getNationDefaultTax());
 		setBoard(TownySettings.getNationDefaultBoard());
 		setOpen(TownySettings.getNationDefaultOpen());
 	}
@@ -349,7 +353,33 @@ public class Nation extends Government {
 	}
 
 	public void setTaxes(double taxes) {
-		this.taxes = Math.min(taxes, TownySettings.getMaxNationTax());
+		this.taxes = Math.min(taxes, isTaxPercentage ? TownySettings.getMaxNationTaxPercent() : TownySettings.getMaxNationTax());
+		
+		// Fix invalid taxes
+		if (this.taxes < 0)
+			this.taxes = TownySettings.getNationDefaultTax();
+	}
+
+	public double getMaxPercentTaxAmount() {
+		return maxPercentTaxAmount;
+	}
+
+	public void setMaxPercentTaxAmount(double maxPercentTaxAmount) {
+		// Max tax amount cannot go over amount defined in config.
+		this.maxPercentTaxAmount = Math.min(maxPercentTaxAmount, TownySettings.getMaxNationTaxPercentAmount());
+	}
+
+	public void setTaxPercentage(boolean isPercentage) {
+
+		this.isTaxPercentage = isPercentage;
+		if (this.getTaxes() > 100) {
+			this.setTaxes(0);
+		}
+	}
+
+	public boolean isTaxPercentage() {
+
+		return isTaxPercentage;
 	}
 
 	public void clear() {
