@@ -671,7 +671,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
             if (TownySettings.getMaxResidentsPerNation() > 0) {
                 if (nation.getResidents().size() + town.getResidents().size() >= TownySettings.getMaxResidentsPerNation())
-                   throw new TownyException(Translatable.of("msg_err_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
+                   throw new TownyException(Translatable.of("msg_err_cannot_add_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
             }
 
 			if (TownySettings.getNationRequiresProximity() > 0) {
@@ -1218,6 +1218,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
                 nation.getResidents().size() + TownyAPI.getInstance().getTown(townname).getResidents().size() >= TownySettings.getMaxResidentsPerNation()) {
                 // Town has too many residents to join the nation
                 removeinvites.add(townname);
+                TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
                 continue;
             }
 
