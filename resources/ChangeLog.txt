@@ -7959,3 +7959,38 @@ v0.92.0.11:
   - Simplify and condense permission tests, by giving NoPermissionException the ability to accept a Translatable.
 0.98.3.16:
   - Fix feedback on /tw set wildignore showing wrong help messages.
+  - Added unformatted town/nation balance placeholders, courtesy of PainOchoco with PR #6263.
+  - New Placeholders:
+    - %townyadvanced_town_balance_unformatted% - Shows the town's raw cached bank balance.
+    - %townyadvanced_nation_balance_unformatted% - Shows the nation's raw cached bank balance.
+  - Added max residents per nation, courtesy of PainOchoco with PR #6264.
+  - New Config Option: global_nation_settings.max_residents_per_nation
+    - Default: 0
+    - If higher than 0, it will limit how many residents can join a nation. Does not affect existing nations that are already over the limit.
+  - Added Nation tax percent, courtesy of PainOchoco with PR #6262.
+    - It is possible for nations to use /n toggle taxpercent, and tax their towns a percent of the town bank, instead of a flat rate.
+    - This prevents towns being kicked for non-payment, as the amount just shrinks as the town gets poorer.
+  - New Config Options:
+    - nation.default_taxes.tax
+      - Default: 0.0
+      - Default amount of tax of a new nation. This must be lower than the economy.daily_taxes.max_nation_tax_amount setting.
+    - nation.default_taxes.taxpercentage
+      - Default: false
+      - Default status of new nation's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount.
+    - nation.default_taxes.minimumtax
+      - Default: 0.0
+      - A required minimum tax amount for the default_tax, will not change any nations which already have a tax set.
+      - Do not forget to set the default_tax to more than 0 or new nations will still begin with a tax of zero.
+    - economy.daily_taxes.max_nation_tax_percent
+      - Default: 25
+      - Maximum tax percentage allowed when taxing by percentages for nations.
+    - economy.daily_taxes.max_nation_tax_percent_amount
+      - Default: 10000
+      - The maximum amount of money that can be taken from a balance when using a percent tax, this is the default for all new nations.
+  - New Commands:
+    - `/nation toggle taxpercent` - Toggle percentage nationtax on or off.
+    - `/nation set taxpercentcap` - Sets the max amount of money which can be gotten via percent nationtax, from a town.
+  - New Permission Nodes:
+    - `towny.command.nation.toggle.taxpercent` - Child node of towny.command.nation.toggle.*.
+    - ` towny.command.nation.set.taxpercentcap` - Child node of towny.command.nation.set.*.
+    - No changes to townyperms.yml required.
