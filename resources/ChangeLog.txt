@@ -7996,3 +7996,5 @@ v0.92.0.11:
     - No changes to townyperms.yml required.
   - Specify .github/workflows/ directory for CI/CD label, courtesy of Warriorrrr with PR #6265.
   - Bump maven-compiler-plugin from 3.8.1 to 3.10.1.
+0.98.3.17:
+  - Make sure all TownyWorld settings are being reset to the config's settings when /tw set usedefault is run, add confirmation.

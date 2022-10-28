@@ -333,6 +333,43 @@ public class TownyWorld extends TownyObject {
 		setUnclaimedZoneItemUse(null);
 		setUnclaimedZoneIgnore(null);
 		setUnclaimedZoneName(null);
+		setUsingTowny(TownySettings.isUsingTowny());
+		setClaimable(TownySettings.isNewWorldClaimable());
+		setWarAllowed(TownySettings.isWarAllowed());
+		setPVP(TownySettings.isPvP());
+		setForcePVP(TownySettings.isForcingPvP());
+		setFriendlyFire(TownySettings.isFriendlyFireEnabled());
+		setFire(TownySettings.isFire());
+		setForceFire(TownySettings.isForcingFire());
+		setWorldMobs(TownySettings.isWorldMonstersOn());
+		setWildernessMobs(TownySettings.isWildernessMonstersOn());
+		setForceTownMobs(TownySettings.isForcingMonsters());
+		setExpl(TownySettings.isExplosions());
+		setForceExpl(TownySettings.isForcingExplosions());
+		setEndermanProtect(TownySettings.getEndermanProtect());
+		setDisableCreatureTrample(TownySettings.isCreatureTramplingCropsDisabled());
+		// reset unclaiming deletes entities.
+		setUnclaimDeleteEntityTypes(null);
+		setDeletingEntitiesOnUnclaim(TownySettings.isDeletingEntitiesOnUnclaim());
+		// reset unclaiming deletes blocks.
+		setUsingPlotManagementDelete(TownySettings.isUsingPlotManagementDelete());
+		plotManagementDeleteIds = null;
+		// mayor's plot clear
+		setUsingPlotManagementMayorDelete(TownySettings.isUsingPlotManagementMayorDelete());
+		plotManagementMayorDelete = null;
+		// revert on unclaim
+		setUsingPlotManagementRevert(TownySettings.isUsingPlotManagementRevert());
+		// revert ignore
+		plotManagementIgnoreIds = null;
+		// wilderness entity explosion revert
+		setUsingPlotManagementWildEntityRevert(TownySettings.isUsingPlotManagementWildEntityRegen());
+		entityExplosionProtection = null;
+		// wilderness block explosion revert
+		setUsingPlotManagementWildBlockRevert(TownySettings.isUsingPlotManagementWildBlockRegen());
+		blockExplosionProtection = null;
+		plotManagementWildRevertBlockWhitelist = null;
+		// Entities protected from explosions
+		entityExplosionProtection = null;
 	}
 
 	public void setUsingPlotManagementDelete(boolean using) {

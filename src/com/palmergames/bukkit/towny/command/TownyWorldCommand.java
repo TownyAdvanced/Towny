@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -383,9 +384,13 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			if (split[0].equalsIgnoreCase("usedefault")) {
 
-				globalWorld.setUsingDefault();
-				plugin.resetCache();
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_usedefault", globalWorld.getName()));
+				Confirmation.runOnAccept(() -> {
+					globalWorld.setUsingDefault();
+					plugin.resetCache();
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_usedefault", globalWorld.getName()));
+				})
+				.setTitle(Translatable.of("confirmation_are_you_sure_you_want_to_reset_this_worlds_settings"))
+				.sendTo(sender);
 
 			} else if (split[0].equalsIgnoreCase("wildperm")) {
 
