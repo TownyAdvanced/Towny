@@ -7998,3 +7998,6 @@ v0.92.0.11:
   - Bump maven-compiler-plugin from 3.8.1 to 3.10.1.
 0.98.3.17:
   - Make sure all TownyWorld settings are being reset to the config's settings when /tw set usedefault is run, add confirmation.
+  - New Command: /ta town TOWNNAME toggle forcedisablepvp
+    - Changes a town's forcedisabledpvp setting, which can make a town have PVP off while the world is forcepvp=true.
+    - Good for admin/server towns.
