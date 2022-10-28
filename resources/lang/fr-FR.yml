@@ -1407,7 +1407,7 @@ tc_player_channel_sound_unmuted: 'Le son du canal a été rétabli'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Il y a un étranger dans votre parcelle, vous ne pouvez pas changer le statut de pvp!'
 #Added in 0.136
-msg_view_on_web: '&7Click to view on the web.'
+msg_view_on_web: '&7Cliquez pour voir sur le web.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6La ville %s a accepté de fusionner avec la ville régnante de %s.'
@@ -1548,20 +1548,28 @@ msg_town_upkeep_setting_set_to: 'La ville %s a été paramétrée à %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
 msg_town_plot_type_limit_reached: 'Votre ville a atteint la limite de %d %s parcelles.'
 #Added in 0.156
-msg_spawn_cost_free: 'Free'
+msg_spawn_cost_free: 'Gratuit'
 #Message shown when someone tries to set a plot's type to one already set.
-msg_plot_already_of_type: 'This plot is already a %s type.'
-msg_town_board_reset: '&bTown board reset.'
-msg_town_has_no_jailslots: 'The town jail is full.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
+msg_plot_already_of_type: 'Ce plot est déjà du type %s.'
+msg_town_board_reset: '&bAffiche de ville réinitialisée.'
+msg_town_has_no_jailslots: 'La prison de ville est pleine.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s a été envoyé vers %s dans la cellule numéro %s pour %s heures avec une caution de %s par %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s a été envoyé à %s dans la cellule %s pendant %s heures par %s.'
-msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
-msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
-msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
-msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
-msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
-msg_x_has_been_released_as_jail_slots_ran_out: '%s has been released to make space for another prisoner.'
-msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
-msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
-msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
-msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+msg_you_have_been_jailed_your_bail_is_x: 'Vous avez été emprisonné, votre caution est de %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Votre caution est plus haute que le maximum qui est de %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Le nombre d''heures est plus haut que le maximum qui est de %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Il n''y a pas assez dans la banque pour emprisonnez %s, les frais sont de %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Vos geôliers vous laissent libre pour faire de la place.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s a été libéré pour faire de la place pour un autre prisonnier.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Vous avez été libéré car vos geôliers ne peuvent plus se permettre de vous garder emprisonné.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s a été libéré en raison d''un manque de fonds dans la banque de Ville.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s a retiré de l''argent de la banque de Ville pour l''entretien du prisonnier %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s a retiré de l''argent de la banque de Ville pour payer la prison de %s.'
+#Message shown in the confirmation for /ta resetbanks {amount}.
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'Êtes-vous sûr de vouloir réinitialiser toutes les banques de ville et de nation à %s ?'
+#Message shown when a nation cannot add a town because of the max-residents-limit.
+msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
+#Message shown to a town when they cannot join a nation because of the max-residents-limit.
+msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
+#Message shown to a town because the nation has hit their max-towns-limit.
+msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
