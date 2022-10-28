@@ -205,10 +205,18 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			if (resident.hasTown() && TownyEconomyHandler.isActive())
 				balance = TownyEconomyHandler.getFormattedBalance(resident.getTownOrNull().getAccount().getCachedBalance());
 			return balance;
+        case "town_balance_unformatted": // %townyadvanced_town_balance_unformatted%
+			if (resident.hasTown() && TownyEconomyHandler.isActive())
+				balance = String.valueOf(resident.getTownOrNull().getAccount().getCachedBalance());
+            return balance;
 		case "nation_balance": // %townyadvanced_nation_balance%
 			if (resident.hasNation() && TownyEconomyHandler.isActive())
 				balance = TownyEconomyHandler.getFormattedBalance(resident.getTownOrNull().getNationOrNull().getAccount().getCachedBalance());
 			return balance;
+        case "nation_balance_unformatted": // %townyadvanced_nation_balance_unformatted%
+			if (resident.hasNation() && TownyEconomyHandler.isActive())
+				balance = String.valueOf(resident.getTownOrNull().getNationOrNull().getAccount().getCachedBalance());
+            return balance;
 		case "town_tag": // %townyadvanced_town_tag%
 			if (resident.hasTown())
 				tag = String.format(TownySettings.getPAPIFormattingTown(), resident.getTownOrNull().getTag());
