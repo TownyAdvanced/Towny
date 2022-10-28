@@ -7994,3 +7994,5 @@ v0.92.0.11:
     - `towny.command.nation.toggle.taxpercent` - Child node of towny.command.nation.toggle.*.
     - ` towny.command.nation.set.taxpercentcap` - Child node of towny.command.nation.set.*.
     - No changes to townyperms.yml required.
+  - Specify .github/workflows/ directory for CI/CD label, courtesy of Warriorrrr with PR #6265.
+  - Bump maven-compiler-plugin from 3.8.1 to 3.10.1.
