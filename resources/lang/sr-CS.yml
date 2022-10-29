@@ -715,6 +715,7 @@ msg_error_ta_plot_claim: 'Ime igrača nedostaje, pr: /ta plot claim ImeIgračaOv
 msg_error_no_player_with_that_name: 'Nije nađen igrač po imenu %s'
 msg_admin_has_given_you_a_plot: 'Admin je claim-ovao plot za Vas na: %s'
 msg_town_forcepvp_setting_set_to: 'Grad %s je forsirao PvP podešavanje na %s'
+msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cOtvoreni status nacije je sada %s.'
 msg_err_already_in_a_nation: 'Vaš grad je već u naciji.'
 msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the nation leader or an assistant to join.'
