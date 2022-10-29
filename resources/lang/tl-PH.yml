@@ -715,6 +715,7 @@ msg_error_ta_plot_claim: 'Nawawalang playername, hal: /ta plot claim PlayerNameH
 msg_error_no_player_with_that_name: 'Walang nakitang manlalaro na may pangalang %s'
 msg_admin_has_given_you_a_plot: 'Isang admin ang nag-claim ng plot para sa iyo sa: %s'
 msg_town_forcepvp_setting_set_to: 'Ang bayan na %s ay pinilit ang kanilang pvp setting na %s'
+msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cAng bukas na katayuan ng Nation ay %s na ngayon.'
 msg_err_already_in_a_nation: 'Ang iyong bayan ay nasa isang bansa na.'
 msg_err_nation_not_open: '&cAng bansang %s ay hindi bukas sa lahat. Hilingin sa pinuno ng bansa o isang katulong na sumali.'
