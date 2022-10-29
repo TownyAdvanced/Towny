@@ -715,6 +715,7 @@ msg_error_ta_plot_claim: 'Отсутствует имя игрока. Приме
 msg_error_no_player_with_that_name: 'Игрок с именем %s не найден'''
 msg_admin_has_given_you_a_plot: 'Администратор заприватил для вас участок по адресу: %s'
 msg_town_forcepvp_setting_set_to: 'В городе %s нстройки PVP принудительно установлены на %s'
+msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cОткрытый статус Нации сейчас: %s.'
 msg_err_already_in_a_nation: 'Ваш город уже в нации.'
 msg_err_nation_not_open: '&c%s не принимает всех подряд. Попросите приглашения у лидера или ассистента.'
