@@ -8001,3 +8001,4 @@ v0.92.0.11:
   - New Command: /ta town TOWNNAME toggle forcedisablepvp
     - Changes a town's forcedisabledpvp setting, which can make a town have PVP off while the world is forcepvp=true.
     - Good for admin/server towns.
+  - Fix nations unable to add towns.

@@ -1190,7 +1190,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		Nation nation = getNationFromPlayerOrThrow(player);
 		
-		if (testNationMaxTowns(nation))
+		if (!testNationMaxTowns(nation))
 			throw new TownyException(Translatable.of("msg_err_nation_over_town_limit", TownySettings.getMaxTownsPerNation()));
 
 		// The list of valid invites.
