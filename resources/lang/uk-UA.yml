@@ -715,6 +715,7 @@ msg_error_ta_plot_claim: 'Не вказано ім''я гравця, до при
 msg_error_no_player_with_that_name: 'Не знайдено гравця з іменем %s'
 msg_admin_has_given_you_a_plot: 'Адміністратор надав вам ділянку %s'
 msg_town_forcepvp_setting_set_to: 'Місто %s було примушене встановити статус PVP як %s'
+msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cВідкритий статус нації тепер %s.'
 msg_err_already_in_a_nation: 'Ваше місто вже в нації.'
 msg_err_nation_not_open: '&cНація %s не відкриває усім свої двері. Попросіть у лідера або помічника запрошення.'
