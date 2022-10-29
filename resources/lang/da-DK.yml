@@ -715,6 +715,7 @@ msg_error_ta_plot_claim: 'Manglende spillernavn, f.eks.: /ta plot claim PlayerNa
 msg_error_no_player_with_that_name: 'Ingen spiller fundet ved navn %s'
 msg_admin_has_given_you_a_plot: 'En adminstrator har gjort krav på en grund for dig på: %s'
 msg_town_forcepvp_setting_set_to: 'Byen %s har fået deres PVP-indstilling tvunget til %s'
+msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cNationens åbenstatus er nu %s.'
 msg_err_already_in_a_nation: 'Byen er allerede i en nation.'
 msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the nation leader or an assistant to join.'
