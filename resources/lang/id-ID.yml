@@ -715,6 +715,7 @@ msg_error_ta_plot_claim: 'Membutuhkan nama pemain, contoh: /ta plot claim namape
 msg_error_no_player_with_that_name: 'Tidak ada pemain ditemukan dengan nama %s'
 msg_admin_has_given_you_a_plot: 'Admin memberikan lahan untukmu di: %s'
 msg_town_forcepvp_setting_set_to: 'Kota %s mengatur pvp mode menjadi %s'
+msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cStatus terbuka negara sekarang menjadi %s.'
 msg_err_already_in_a_nation: 'Kota mu sudah menjadi bagian dari suatu negara.'
 msg_err_nation_not_open: '&cNegara %s tidak dibuka untuk umum. Tanyakan pemimpin negara atau asisten untuk bergabung.'
