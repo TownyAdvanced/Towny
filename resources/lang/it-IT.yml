@@ -715,6 +715,7 @@ msg_error_ta_plot_claim: 'Nome del giocatore mancante, es.: /ta plot claim NomeG
 msg_error_no_player_with_that_name: 'Nessun giocatore trovato col nome %s'
 msg_admin_has_given_you_a_plot: 'Un amministratore ha rivendicato un plotto per te a: %s'
 msg_town_forcepvp_setting_set_to: 'La città %s ha avuto la loro impostazione di pvp forzata a %s'
+msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cLo stato pubblico della Nazione è ora %s.'
 msg_err_already_in_a_nation: 'La tua città è già in una nazione.'
 msg_err_nation_not_open: '&cLa nazione %s non ha le porte aperte a tutti. Chiedi al re o ad un assistente per unirti.'
