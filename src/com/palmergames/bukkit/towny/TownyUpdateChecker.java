@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.tasks.UpdateCheckerTask;
 import com.palmergames.bukkit.util.Version;
+import org.bukkit.Bukkit;
 
 public class TownyUpdateChecker {
 	private static boolean update = false;
@@ -9,7 +10,7 @@ public class TownyUpdateChecker {
 	private static Version newVersion;
 	
 	public static void checkForUpdates(Towny towny) {
-		new UpdateCheckerTask(towny).start();
+		Bukkit.getScheduler().runTaskAsynchronously(towny, new UpdateCheckerTask(towny));
 	}
 
 	public static void setUpdate(boolean update) {

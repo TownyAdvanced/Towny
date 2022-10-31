@@ -14,11 +14,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class UpdateCheckerTask extends Thread {
-	private Towny towny;
+public class UpdateCheckerTask implements Runnable {
+	private final Towny towny;
 	
 	public UpdateCheckerTask(Towny towny) {
-		super();
 		this.towny = towny;
 	}
 	
