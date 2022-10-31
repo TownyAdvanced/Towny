@@ -41,7 +41,6 @@ public class TownyTimerHandler{
 	private static int teleportWarmupTask = -1;
 	private static int cooldownTimerTask = -1;
 	private static int drawSmokeTask = -1;
-	private static int gatherResidentUUIDTask = -1;
 	private static int drawSpawnPointsTask = -1;
 
 	public static void newHour() {
@@ -212,9 +211,12 @@ public class TownyTimerHandler{
 		return drawSmokeTask != -1;
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.98.3.18, the gather resident uuid task has not existed since 0.97.2.8.
+	 */
+	@Deprecated
 	public static boolean isGatherResidentUUIDTaskRunning() {
-		
-		return gatherResidentUUIDTask != -1;
+		return false;
 	}
 	
 	public static boolean isDrawSpawnPointsTaskRunning() {
