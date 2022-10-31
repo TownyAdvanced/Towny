@@ -24,6 +24,7 @@ import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,8 +33,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
 
 /**
  * A class of functions related to Bukkit in general.
@@ -98,14 +97,17 @@ public class BukkitTools {
 			return null;
 	}
 	
+	@Nullable
 	public static Player getPlayerExact(String name) {
 		return getServer().getPlayerExact(name);
 	}
 	
+	@Nullable
 	public static Player getPlayer(String playerId) {
 		return getServer().getPlayer(playerId);
 	}
 	
+	@Nullable
 	public static Player getPlayer(UUID playerUUID) {
 		return server.getPlayer(playerUUID);
 	}
@@ -115,7 +117,7 @@ public class BukkitTools {
 			return Bukkit.getOnlinePlayers();
 		
 		return Bukkit.getOnlinePlayers().stream()
-			.filter(p -> player.canSee(p))
+			.filter(player::canSee)
 			.collect(Collectors.toCollection(ArrayList::new));
 	}
 	

@@ -1035,7 +1035,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 
-			Player player = BukkitTools.getPlayer(sender.getName());
+			Player player = BukkitTools.getPlayerExact(sender.getName());
 			String world = player.getWorld().getName();
 			List<WorldCoord> selection = new ArrayList<>();
 			selection.add(new WorldCoord(world, Coord.parseCoord(player)));
@@ -1060,7 +1060,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (split.length !=2 ) {
 			throw new TownyException(Translatable.of("msg_err_invalid_input", "Eg: /ta checkperm {name} {node}"));
 		}
-		Player player = BukkitTools.getPlayer(split[0]);
+		Player player = BukkitTools.getPlayerExact(split[0]);
 		if (player == null) {
 			throw new TownyException("Player couldn't be found");
 		}
@@ -1210,7 +1210,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (isConsole)
 					throw new TownyException("/ta resident {resident} friend cannot be run from console.");
 
-				ResidentCommand.residentFriend(BukkitTools.getPlayer(sender.getName()), StringMgmt.remArgs(split, 2), true, resident);
+				ResidentCommand.residentFriend(BukkitTools.getPlayerExact(sender.getName()), StringMgmt.remArgs(split, 2), true, resident);
 
 			} else if(split[1].equalsIgnoreCase("unjail")) {
 				

@@ -146,7 +146,7 @@ public class TownyMessaging {
 	 */
 	public static void sendDevMsg(String msg) {
 		if (TownySettings.isDevMode()) {
-			Player townyDev = BukkitTools.getPlayer(TownySettings.getDevName());
+			Player townyDev = BukkitTools.getPlayerExact(TownySettings.getDevName());
 			if (townyDev != null)
 				sendMessage(townyDev, Translatable.of("default_towny_prefix").forLocale(townyDev) + " DevMode: " + Colors.Red + msg);
 		}
