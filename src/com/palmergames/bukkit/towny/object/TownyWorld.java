@@ -349,7 +349,7 @@ public class TownyWorld extends TownyObject {
 		setEndermanProtect(TownySettings.getEndermanProtect());
 		setDisableCreatureTrample(TownySettings.isCreatureTramplingCropsDisabled());
 		// reset unclaiming deletes entities.
-		setUnclaimDeleteEntityTypes(null);
+		unclaimDeleteEntityTypes = null;
 		setDeletingEntitiesOnUnclaim(TownySettings.isDeletingEntitiesOnUnclaim());
 		// reset unclaiming deletes blocks.
 		setUsingPlotManagementDelete(TownySettings.isUsingPlotManagementDelete());

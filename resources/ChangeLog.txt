@@ -8002,3 +8002,5 @@ v0.92.0.11:
     - Changes a town's forcedisabledpvp setting, which can make a town have PVP off while the world is forcepvp=true.
     - Good for admin/server towns.
   - Fix nations unable to add towns.
+  - Async the EntityDelete calls in TownyRegenAPI.
+  - Fix outlaws being killed not getting sent to jail correctly.

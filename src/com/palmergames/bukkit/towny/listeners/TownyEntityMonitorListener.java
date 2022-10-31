@@ -24,7 +24,6 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -382,11 +381,8 @@ public class TownyEntityMonitorListener implements Listener {
 				if (!attackerResident.hasPermissionNode(PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
 					return;
 				
-				// Send to jail. Hours are pulled from configuration. Task is set 1 tick later so the Jail book isn't removed from their death.
-				Bukkit.getScheduler().runTaskLater(
-					plugin, ()-> 
-					JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 0, TownySettings.getJailedOutlawJailHours(), JailReason.OUTLAW_DEATH, attackerResident.getPlayer()),
-					1);
+				// Send to jail. Hours are pulled from configuration.
+				JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 1, TownySettings.getJailedOutlawJailHours(), JailReason.OUTLAW_DEATH, attackerResident.getPlayer());
 				return;
 			}
 		}

@@ -218,9 +218,18 @@ public class JailUtil {
 	 */
 	private static void sendJailedBookToResident(Player player, JailReason reason, int hours, double cost) {
 		final Translator translator = Translator.locale(player);
-		/*
-		 * A nice little book for the not so nice person in jail.
-		 */
+
+		// A nice little book for the not so nice person in jail.
+		String pages = getJailBookPages(player, reason, hours, cost, translator);
+
+		// Send the book off to the BookFactory to be made.
+		ItemStack jailBook = new ItemStack(BookFactory.makeBook(translator.of("msg_jailed_title"), translator.of("msg_jailed_author"), pages));
+
+		// Run one tick later in case the player died being put in jail.
+		Bukkit.getScheduler().runTaskLater(Towny.getPlugin(), ()-> player.getInventory().addItem(jailBook), 1L);
+	}
+
+	private static String getJailBookPages(Player player, JailReason reason, int hours, double cost, Translator translator) {
 		String pages = translator.of("msg_jailed_handbook_1", translator.of(reason.getCause()));
 		pages += translator.of("msg_jailed_handbook_2") + "\n\n";
 		pages += translator.of("msg_jailed_handbook_3", hours) + "\n\n";
@@ -241,11 +250,8 @@ public class JailUtil {
 		pages += "\n\n";
 		if (reason.equals(JailReason.PRISONER_OF_WAR))
 			pages += translator.of("msg_jailed_war_prisoner");
-		
-		/*
-		 * Send the book off to the BookFactory to be made.
-		 */
-		player.getInventory().addItem(new ItemStack(BookFactory.makeBook(translator.of("msg_jailed_title"), translator.of("msg_jailed_author"), pages)));
+
+		return pages;
 	}
 
 	public static void createJailPlot(TownBlock townBlock, Town town, Location location) throws TownyException {
