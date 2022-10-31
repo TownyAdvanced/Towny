@@ -530,7 +530,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 			if (nation != null) {
 				output.add(translator.of("towny_prices_nationname", nation.getFormattedName()));
-				output.add(translator.of("towny_prices_nation_tax", nation.getTaxes(), getMoney(TownySettings.getNationNeutralityCost())));
+				output.add(translator.of("towny_prices_nation_tax", (nation.isTaxPercentage() ? nation.getTaxes() + "%" : getMoney(nation.getTaxes())), getMoney(TownySettings.getNationNeutralityCost())));
 			}
 		}
 		return output;

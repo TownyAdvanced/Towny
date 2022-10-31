@@ -38,8 +38,7 @@ public class RepeatingTimerTask extends TownyTimerTask {
 
 		// Perform the next plot_management entity_delete
 		if (TownyRegenAPI.hasDeleteTownBlockEntityQueue())
-			Bukkit.getScheduler().runTaskAsynchronously(plugin,
-				() -> TownyRegenAPI.doDeleteTownBlockEntities(TownyRegenAPI.getDeleteTownBlockEntityQueue()));
+			TownyRegenAPI.doDeleteTownBlockEntities(TownyRegenAPI.getDeleteTownBlockEntityQueue());
 
 		// Perform the next plot_management block_delete
 		if (TownyRegenAPI.hasDeleteTownBlockIdQueue()) {

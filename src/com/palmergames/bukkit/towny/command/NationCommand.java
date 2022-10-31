@@ -1219,7 +1219,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				continue;
 			}
 
-			if (testNationMaxResidents(nation, town)) {
+			if (!testNationMaxResidents(nation, town)) {
 				// Town has too many residents to join the nation
 				removeinvites.add(townname);
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation(), townname));
@@ -1359,16 +1359,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		int maxResidentPerNation = TownySettings.getMaxResidentsPerNation();
 		if (maxResidentPerNation < 1)
 			return true;
-		return nation.getResidents().size() + town.getResidents().size() > maxResidentPerNation;
+		return !(nation.getResidents().size() + town.getResidents().size() > maxResidentPerNation);
 
 	}
 
 	private static boolean testTownHasEnoughResidents(Town town) {
-		return TownySettings.getNumResidentsJoinNation() > 0 && town.getNumResidents() < TownySettings.getNumResidentsJoinNation();
+		if (TownySettings.getNumResidentsJoinNation() < 1)
+			return true;
+		return !(town.getNumResidents() < TownySettings.getNumResidentsJoinNation());
 	}
 
 	private static boolean testNationMaxTowns(Nation nation) {
-		return TownySettings.getMaxTownsPerNation() > 0 && nation.getTowns().size() >= TownySettings.getMaxTownsPerNation();
+		if (TownySettings.getMaxTownsPerNation() < 1)
+			return true;
+		return !(nation.getTowns().size() >= TownySettings.getMaxTownsPerNation());
 	}
 
 	private static void nationRevokeInviteTown(CommandSender sender, Nation nation, List<Town> towns) {

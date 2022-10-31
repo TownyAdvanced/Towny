@@ -563,7 +563,8 @@ public class TownyRegenAPI {
 		}
 		
 		for (Entity entity : toRemove)
-			entity.remove();
+			Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> entity.remove());
+
 	}
 	
 	/*
