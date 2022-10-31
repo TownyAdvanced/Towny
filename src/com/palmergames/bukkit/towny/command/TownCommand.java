@@ -3354,10 +3354,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 			Location spawnLoc = town.getSpawn();
 			ArrayList<String> newNames = new ArrayList<>();
+			int maxDistance = TownySettings.getMaxDistanceFromTownSpawnForInvite();
+
 			for (String nameForDistanceTest : names) {
-				
-				int maxDistance = TownySettings.getMaxDistanceFromTownSpawnForInvite();
 				Player player = BukkitTools.getPlayerExact(nameForDistanceTest);
+				if (player == null)
+					continue;
+				
 				Location playerLoc = player.getLocation();
 				
 				double distance;
