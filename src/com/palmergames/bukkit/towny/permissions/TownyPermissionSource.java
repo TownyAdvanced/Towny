@@ -46,7 +46,9 @@ public abstract class TownyPermissionSource {
 		 * Bukkit doesn't support non boolean nodes
 		 * so treat the same as bPerms
 		 */
-		Player player = BukkitTools.getPlayer(playerName);
+		Player player = BukkitTools.getPlayerExact(playerName);
+		if (player == null)
+			return -1;
 
 		int biggest = -1;
 		for (PermissionAttachmentInfo test : player.getEffectivePermissions()) {

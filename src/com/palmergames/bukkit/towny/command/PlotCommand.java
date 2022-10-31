@@ -1341,7 +1341,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public static void plotTestOwner(Resident resident, TownBlock townBlock) throws TownyException {
 
-		Player player = BukkitTools.getPlayer(resident.getName());
+		Player player = resident.getPlayer();
 		boolean isAdmin = TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player);
 		boolean isMayor = player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
 

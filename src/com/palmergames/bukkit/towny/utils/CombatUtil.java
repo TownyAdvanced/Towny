@@ -285,7 +285,7 @@ public class CombatUtil {
 				*/
 				if (attackingEntity instanceof Wolf wolf && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
 					if (isATamedWolfWithAOnlinePlayer(wolf)) {
-						Player owner = BukkitTools.getPlayer(wolf.getOwner().getName());
+						Player owner = BukkitTools.getPlayerExact(wolf.getOwner().getName());
 						return !PlayerCacheUtil.getCachePermission(owner, defendingEntity.getLocation(), Material.AIR, ActionType.DESTROY);
 					} else {
 						wolf.setTarget(null);

@@ -140,7 +140,7 @@ public class TownyPerms {
 			if (resident == null)
 				return;
 		} else {
-			player = BukkitTools.getPlayer(resident.getName());
+			player = resident.getPlayer();
 		}
 
 		/*
@@ -162,7 +162,7 @@ public class TownyPerms {
 		else
 			// DungeonsXL sometimes moves players which aren't online out of dungeon worlds causing an error in the log to appear.
 			try {
-				playersAttachment = BukkitTools.getPlayer(resident.getName()).addAttachment(plugin);
+				playersAttachment = resident.getPlayer().addAttachment(plugin);
 			} catch (Exception e) {
 				return;
 			}
