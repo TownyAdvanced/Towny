@@ -8008,4 +8008,7 @@ v0.92.0.11:
   - Fix Errors on EntityDelete calls by removing async aspect.
   - Fix /nation add regression again.
   - Display nation tax percentage in /towny prices when applicable. 
-  - Prevent TownBlockPVPTestEvent & WildernessPVPTestEvent being run async.
+  - Allow TownBlockPVPTestEvent & WildernessPVPTestEvent to be run async.
+  - Deprecate leftover uuid task method, courtesy of Warriorrrr with PR #6272.
+  - Make UpdateCheckerTask implement runnable, courtesy of Warriorrrr with PR #6270.
+  - Use getPlayerExact in more places, courtesy of Warriorrrr with PR #6273.
