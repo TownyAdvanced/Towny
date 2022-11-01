@@ -7992,7 +7992,7 @@ v0.92.0.11:
     - `/nation set taxpercentcap` - Sets the max amount of money which can be gotten via percent nationtax, from a town.
   - New Permission Nodes:
     - `towny.command.nation.toggle.taxpercent` - Child node of towny.command.nation.toggle.*.
-    - ` towny.command.nation.set.taxpercentcap` - Child node of towny.command.nation.set.*.
+    - `towny.command.nation.set.taxpercentcap` - Child node of towny.command.nation.set.*.
     - No changes to townyperms.yml required.
   - Specify .github/workflows/ directory for CI/CD label, courtesy of Warriorrrr with PR #6265.
   - Bump maven-compiler-plugin from 3.8.1 to 3.10.1.
@@ -8012,3 +8012,5 @@ v0.92.0.11:
   - Deprecate leftover uuid task method, courtesy of Warriorrrr with PR #6272.
   - Make UpdateCheckerTask implement runnable, courtesy of Warriorrrr with PR #6270.
   - Use getPlayerExact in more places, courtesy of Warriorrrr with PR #6273.
+0.98.3.19:
+  - Fix sending empty error messages.

@@ -82,6 +82,9 @@ public class TownyMessaging {
 	 * @param msg the message to send
 	 */
 	public static void sendErrorMsg(Object sender, String msg) {
+		if (sender == null || msg.isEmpty())
+			return;
+
 		if (sender instanceof CommandSender toSend) {
 			sendMessage(toSend, Translatable.of("default_towny_prefix").stripColors(sender instanceof ConsoleCommandSender).append(Colors.Red + msg).forLocale(toSend));
 		} else if (sender instanceof TownyObject townySender) {

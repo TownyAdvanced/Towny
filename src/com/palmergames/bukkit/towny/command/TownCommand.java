@@ -4091,12 +4091,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (town == null && sender instanceof Player player)
-			town = TownyAPI.getInstance().getResident(player.getName()).getTownOrNull();
-		
-		if (town == null) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_resident_doesnt_belong_to_any_town"));
-			return;
-		}
+			town = getTownFromPlayerOrThrow(player);
 
 		if (args[0].equalsIgnoreCase("list")) {
 			List<String> output = town.getTrustedResidents().isEmpty()
