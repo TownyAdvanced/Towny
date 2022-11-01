@@ -968,6 +968,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.addTrustedResident(resident);
 				}
 				
+				line = keys.get("trustedTowns");
+				if (line != null && !line.isEmpty()) {
+					List<UUID> uuids = Arrays.stream(line.split(","))
+						.map(uuid -> UUID.fromString(uuid))
+						.collect(Collectors.toList());
+					town.loadTrusted(TownyAPI.getInstance().getTowns(uuids));
+				}
+
 				line = keys.get("mapColorHexCode");
 				if (line != null) {
 					try {
@@ -2026,6 +2034,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("primaryJail=" + town.getPrimaryJail().getUUID());
 		
 		list.add("trustedResidents=" + StringMgmt.join(toUUIDList(town.getTrustedResidents()), ","));
+		list.add("trustedTowns=" + StringMgmt.join(town.getTrustedTownsUUIDS(), ","));
 		
 		list.add("mapColorHexCode=" + town.getMapColorHexCode());
 		list.add("nationZoneOverride=" + town.getNationZoneOverride());

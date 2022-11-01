@@ -1169,6 +1169,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					town.addTrustedResident(resident);
 			}
 			
+			line = rs.getString("trustedTowns");
+			if (line != null && !line.isEmpty()) {
+				search = (line.contains("#")) ? "#" : ",";
+				List<UUID> uuids = Arrays.stream(line.split(search))
+					.map(uuid -> UUID.fromString(uuid))
+					.collect(Collectors.toList());
+				town.loadTrusted(TownyAPI.getInstance().getTowns(uuids));
+			}
+			
 			line = rs.getString("mapColorHexCode");
 			if (line != null)
 				town.setMapColorHexCode(line);
@@ -2219,6 +2228,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				twn_hm.put("primaryJail", town.getPrimaryJail().getUUID());
 			
 			twn_hm.put("trustedResidents", StringMgmt.join(toUUIDList(town.getTrustedResidents()), "#"));
+			twn_hm.put("trustedTowns", StringMgmt.join(town.getTrustedTownsUUIDS(), "#"));
 			
 			twn_hm.put("allies", StringMgmt.join(town.getAlliesUUIDs(), "#"));
 			

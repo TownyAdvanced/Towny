@@ -880,6 +880,16 @@ public enum HelpMenu {
 		}
 	},
 	
+	TOWN_TRUSTTOWN_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town trusttown")
+				.add("add [town]", "")
+				.add("remove [town]", "")
+				.add("list", "");
+		}
+	},
+	
 	PLOT_GROUP_TRUST_HELP {
 		@Override
 		protected MenuBuilder load() {

@@ -183,6 +183,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"jail",
 		"unjail",
 		"trust",
+		"trusttown",
 		"allylist",
 		"enemylist",
 		"baltop"
@@ -498,6 +499,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						default:
 							return Collections.emptyList();
 					}
+				case "trusttown":
+					switch (args.length) {
+						case 2:
+							return NameUtil.filterByStart(Arrays.asList("add", "remove", "list"), args[1]);
+						case 3:
+							if (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))
+								return getTownyStartingWith(args[2], "t");
+							else
+								return Collections.emptyList();
+						default:
+							return Collections.emptyList();
+					}
 				default:
 					if (args.length == 1)
 						return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, townTabCompletes), args[0], "t");
@@ -801,6 +814,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "trust":
 			catchRuinedTown(player);
 			parseTownTrustCommand(player, StringMgmt.remFirstArg(split), null);
+			break;
+		case "trusttown":
+			catchRuinedTown(player);
+			parseTownTrustTownCommand(player, StringMgmt.remFirstArg(split), null);
 			break;
 		case "baltop":
 			catchRuinedTown(player);
@@ -4145,6 +4162,73 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
+		town.save();
+	}
+
+	public static void parseTownTrustTownCommand(CommandSender sender, String[] args, @Nullable Town town) throws TownyException {
+
+		if (args.length < 1
+			|| args.length < 2 && (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove"))
+			|| args.length == 1 && !args[0].equalsIgnoreCase("list")) {
+			HelpMenu.TOWN_TRUSTTOWN_HELP.send(sender);
+			return;
+		}
+
+		if (town == null && sender instanceof Player player)
+			town = TownyAPI.getInstance().getResident(player.getName()).getTownOrNull();
+
+		if (town == null) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_resident_doesnt_belong_to_any_town"));
+			return;
+		}
+
+		if (args[0].equalsIgnoreCase("list")) {
+			//TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedStrings(Translatable.of("status_trustedlist").forLocale(sender), output));
+			
+			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_trustedlist").forLocale(sender), new ArrayList<>(town.getTrusted())));
+			
+			return;
+		}
+
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_TRUSTTOWN.getNode());
+
+		Town trustTown = TownyAPI.getInstance().getTown(args[1]);
+		if (trustTown == null) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", args[1]));
+			return;
+		}
+
+		if (args[0].equalsIgnoreCase("add")) {
+			if (town.hasTrusted(trustTown)) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_already_trusted", trustTown.getName(), Translatable.of("town_sing")));
+				return;
+			}
+			else if (town == trustTown) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_already_trusted", trustTown.getName(), Translatable.of("town_sing")));
+				return;
+			}
+			town.addTrusted(trustTown);
+			for (Resident res : trustTown.getResidents()) {
+				plugin.deleteCache(res);
+			}
+
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_added", trustTown.getName(), Translatable.of("town_sing")));
+		} else if (args[0].equalsIgnoreCase("remove")) {
+			if (!town.hasTrusted(trustTown)) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_trusted", trustTown.getName(), Translatable.of("town_sing")));
+				return;
+			}
+			
+			town.removeTrusted(trustTown);
+			for (Resident res : trustTown.getResidents()) {
+				plugin.deleteCache(res);
+			}
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_removed", trustTown.getName(), Translatable.of("town_sing")));
+		} else {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", args[0]));
+			return;
+		}
+
 		town.save();
 	}
 

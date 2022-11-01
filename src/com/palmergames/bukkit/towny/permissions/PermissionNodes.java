@@ -133,6 +133,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_UNJAIL("towny.command.town.unjail"),
 		TOWNY_COMMAND_TOWN_PLOTGROUPLIST("towny.command.town.plotgrouplist"),
 		TOWNY_COMMAND_TOWN_TRUST("towny.command.town.trust"),
+		TOWNY_COMMAND_TOWN_TRUSTTOWN("towny.command.town.trusttown"),
 		
 		// Covers all assignable ranks
 		TOWNY_COMMAND_TOWN_RANK("towny.command.town.rank.*"),
@@ -317,6 +318,7 @@ public enum PermissionNodes {
 	    TOWNY_COMMAND_TOWNYADMIN_TOWN_META("towny.command.townyadmin.town.meta"),
 	    TOWNY_COMMAND_TOWNYADMIN_TOWN_BANKHISTORY("towny.command.townyadmin.town.bankhistory"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_TRUST("towny.command.townyadmin.town.trust"),
+		TOWNY_COMMAND_TOWNYADMIN_TOWN_TRUSTTOWN("towny.command.townyadmin.town.trusttown"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_UNRUIN("towny.command.townyadmin.town.unruin"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_CHECKOUTPOSTS("towny.command.townyadmin.town.checkoutposts"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_WITHDRAW("towny.command.townyadmin.town.withdraw"),
