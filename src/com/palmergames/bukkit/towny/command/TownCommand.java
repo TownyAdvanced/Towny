@@ -4183,10 +4183,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (args[0].equalsIgnoreCase("list")) {
-			//TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedStrings(Translatable.of("status_trustedlist").forLocale(sender), output));
-			
 			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_trustedlist").forLocale(sender), new ArrayList<>(town.getTrusted())));
-			
 			return;
 		}
 
