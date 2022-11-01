@@ -8014,3 +8014,4 @@ v0.92.0.11:
   - Use getPlayerExact in more places, courtesy of Warriorrrr with PR #6273.
 0.98.3.19:
   - Fix sending empty error messages.
+  - Fix towns being able to add residents/be joined when their nation would become over the new nation resident limits.

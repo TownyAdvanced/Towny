@@ -3056,6 +3056,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} else if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town)){
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
 					invited.remove(newMember);
+				} else if (town.hasNation() && TownySettings.getMaxResidentsPerNation() > 0 && town.getNationOrNull().getResidents().size() >= TownySettings.getMaxResidentsPerNation()) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_cannot_add_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation(), newMember.getName()));
+					invited.remove(newMember);
 				} else if (!admin && TownySettings.getTownInviteCooldown() > 0 && ( (System.currentTimeMillis()/1000 - newMember.getRegistered()/1000) < (TownySettings.getTownInviteCooldown()) )) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_resident_doesnt_meet_invite_cooldown", newMember));
 					invited.remove(newMember);
@@ -3287,6 +3290,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				// Check if town is town is free to join.
 				if (!town.isOpen())
 					throw new TownyException(Translatable.of("msg_err_not_open", town.getFormattedName()));
+				if (town.hasNation() && TownySettings.getMaxResidentsPerNation() > 0 && town.getNationOrNull().getResidents().size() >= TownySettings.getMaxResidentsPerNation())
+					throw new TownyException(Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
 				if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town))
 					throw new TownyException(Translatable.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
 				if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() >= TownySettings.getMaxNumResidentsWithoutNation())

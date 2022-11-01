@@ -672,7 +672,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_nation_over_town_limit", TownySettings.getMaxTownsPerNation()));
 
 			if (!testNationMaxResidents(nation, town))
-				throw new TownyException(Translatable.of("msg_err_cannot_add_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
+				throw new TownyException(Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
 
 			if (TownySettings.getNationRequiresProximity() > 0) {
 				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
