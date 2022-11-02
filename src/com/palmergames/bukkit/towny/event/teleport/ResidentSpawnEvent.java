@@ -5,6 +5,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -14,8 +16,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ResidentSpawnEvent extends SpawnEvent {
 	
-	Town fromTown;
-	private Town toTown;
+	private final Town fromTown;
+	private final Town toTown;
 	
 	public ResidentSpawnEvent(Player player, Location from, Location to) {
 		super(player, from, to);

@@ -4,8 +4,11 @@ import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class NationPreTownLeaveEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
 	private final String townName;
 	private final Town town;
@@ -41,5 +44,15 @@ public class NationPreTownLeaveEvent extends CancellableTownyEvent {
 
 	public Nation getNation() {
 		return nation;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

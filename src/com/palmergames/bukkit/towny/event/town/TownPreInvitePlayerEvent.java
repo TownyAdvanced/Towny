@@ -4,13 +4,17 @@ import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Cancellable event that gets fired before a resident is invited to a town.
  * @since 0.96.7.12
  */
 public class TownPreInvitePlayerEvent extends CancellableTownyEvent {
-    private final Invite invite;
+	private static final HandlerList HANDLER_LIST = new HandlerList();
+	
+	private final Invite invite;
 
     public TownPreInvitePlayerEvent(Invite invite) {
         this.invite = invite;
@@ -36,4 +40,14 @@ public class TownPreInvitePlayerEvent extends CancellableTownyEvent {
     public Town getTown() {
         return (Town) invite.getSender();
     }
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
+	}
 }

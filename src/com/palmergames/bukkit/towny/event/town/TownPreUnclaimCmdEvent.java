@@ -5,6 +5,8 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An event fired when a '/town unclaim [args]' command is issued, prior to any
@@ -18,6 +20,7 @@ import com.palmergames.bukkit.towny.object.Translation;
  * the {@link com.palmergames.bukkit.towny.db.TownyDatabaseHandler}.
  */
 public class TownPreUnclaimCmdEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
 	private final Town town;
 	private final Resident resident;
@@ -57,5 +60,15 @@ public class TownPreUnclaimCmdEvent extends CancellableTownyEvent {
 	 */
 	public TownyWorld getTownyWorld() {
 		return townyWorld;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

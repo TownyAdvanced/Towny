@@ -2,10 +2,14 @@ package com.palmergames.bukkit.towny.event.nation.toggle;
 
 import com.palmergames.bukkit.towny.object.Nation;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 abstract class NationToggleStateEvent extends NationToggleEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
-	private boolean oldState, newState;
+	private final boolean oldState;
+	private final boolean newState;
 
 	public NationToggleStateEvent(CommandSender sender, Nation nation, boolean admin, boolean oldState, boolean newState) {
 		super(sender, nation, admin);
@@ -27,4 +31,12 @@ abstract class NationToggleStateEvent extends NationToggleEvent {
 		return newState;
 	}
 	
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@Override
+	public @NotNull HandlerList getHandlers() {
+		return HANDLER_LIST;
+	}
 }

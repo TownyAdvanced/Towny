@@ -1,8 +1,11 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Nation;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class NationDenyAllyRequestEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
 	private final Nation receiverNation;
 	private final Nation senderNation;
@@ -18,5 +21,15 @@ public class NationDenyAllyRequestEvent extends CancellableTownyEvent {
 	}
 	public Nation getSenderNation() {
 		return senderNation;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

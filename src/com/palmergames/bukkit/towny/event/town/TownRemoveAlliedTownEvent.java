@@ -2,8 +2,11 @@ package com.palmergames.bukkit.towny.event.town;
 
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class TownRemoveAlliedTownEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 	
 	private final Town town;
 	private final Town removedAlly;
@@ -26,5 +29,15 @@ public class TownRemoveAlliedTownEvent extends CancellableTownyEvent {
 	 */
 	public Town getRemovedAlly() {
 		return removedAlly;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

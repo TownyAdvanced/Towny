@@ -3,8 +3,6 @@ package com.palmergames.bukkit.towny.event;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 import com.palmergames.bukkit.towny.confirmations.ConfirmationBuilder;
 import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
@@ -13,11 +11,11 @@ import com.palmergames.bukkit.util.BukkitTools;
 /**
  * A class extended by Towny Events which are Cancellable and which contain a
  * cancelMessage.
- * 
+ * <p>
  * Having a getCancelMessage() available to us allows us to throw a
  * {@link CancelledEventException} which can use the cancelMessage in feedback
  * messaging or logging.
- * 
+ * <p>
  * Used primarily in the
  * {@link ConfirmationBuilder#setCancellableEvent(CancellableTownyEvent)} and
  * {@link BukkitTools#ifCancelledThenThrow(CancellableTownyEvent)} code.
@@ -26,22 +24,11 @@ import com.palmergames.bukkit.util.BukkitTools;
  * @since 0.98.4.0.
  */
 public abstract class CancellableTownyEvent extends Event implements Cancellable {
-	private static final HandlerList handlers = new HandlerList();
 	private boolean isCancelled = false;
-	private String cancelMessage = "Sorry this event was cancelled";
+	private String cancelMessage = "Sorry, this event was cancelled.";
 
 	public CancellableTownyEvent() {
 		super(!Bukkit.getServer().isPrimaryThread());
-	}
-
-	@NotNull
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
 	}
 
 	/**

@@ -3,9 +3,13 @@ package com.palmergames.bukkit.towny.event;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class PlotPreChangeTypeEvent extends CancellableTownyEvent {
-    private final TownBlockType newType;
+	private static final HandlerList HANDLER_LIST = new HandlerList();
+
+	private final TownBlockType newType;
     private final TownBlock townBlock;
 	private final Resident resident;
 
@@ -35,5 +39,15 @@ public class PlotPreChangeTypeEvent extends CancellableTownyEvent {
 
 	public Resident getResident() {
 		return resident;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

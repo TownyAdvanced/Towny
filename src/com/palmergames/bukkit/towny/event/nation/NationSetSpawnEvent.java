@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * Fired when a player uses /nation set spawn
  */
 public class NationSetSpawnEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
 	private final Nation nation;
 	private final Player player;
@@ -63,5 +65,15 @@ public class NationSetSpawnEvent extends CancellableTownyEvent {
 	 */
 	public void setNewSpawn(@NotNull Location newSpawn) {
 		this.newSpawn = newSpawn;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

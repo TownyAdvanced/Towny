@@ -4,12 +4,15 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Runs before town banks are charged
  * Provides raw town block
  * */
 public class TownPreClaimEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
     private final TownBlock townBlock;
     private final Town town;
@@ -19,40 +22,30 @@ public class TownPreClaimEvent extends CancellableTownyEvent {
 
 	/**
 	 * This event runs when a town is made and when a town attempts to claim land.
-	 * 
+	 * <p>
 	 * When a selection of townblocks are claimed, if even one townblock is
 	 * prevented using this event, all the claims will be prevented.
-	 * 
+	 * <p>
 	 * This event will throw an error message to the player that requires 2 %s, the
 	 * first of which will be the number of blocked claims in a selection. The
 	 * second of which is the total number of townblocks that were in the selection.
-	 * 
+	 * <p>
 	 * If you are using {@link #setCancelMessage(String)} on this event be sure to
 	 * supply two instances of %s.
 	 * 
-	 * @param _town Town which is claiming.
-	 * @param _townBlock TownBlock which is being claimed.
-	 * @param _player Player who is doing the claiming.
-	 * @param _isOutpost True if the TownBlock will become an outpost.
-	 * @param _isHomeblock True if the TownBlock will become a homeblock.
+	 * @param town Town which is claiming.
+	 * @param townBlock TownBlock which is being claimed.
+	 * @param player Player who is doing the claiming.
+	 * @param isOutpost True if the TownBlock will become an outpost.
+	 * @param isHomeblock True if the TownBlock will become a homeblock.
 	 */
-    public TownPreClaimEvent(Town _town, TownBlock _townBlock, Player _player, boolean _isOutpost, boolean _isHomeblock) {
-        this.town = _town;
-        this.townBlock = _townBlock;
-        this.player = _player;
-        this.isOutpost = _isOutpost;
-        this.isHomeblock = _isHomeblock;
+    public TownPreClaimEvent(Town town, TownBlock townBlock, Player player, boolean isOutpost, boolean isHomeblock) {
+        this.town = town;
+        this.townBlock = townBlock;
+        this.player = player;
+        this.isOutpost = isOutpost;
+        this.isHomeblock = isHomeblock;
         setCancelMessage(Translation.of("msg_claim_error"));
-    }
-
-    /**
-     * Cancels the claiming of a townblock. If a group of townblocks are being claimed 
-     * using a single command, and one cancellation occurs, all of the townblock claims
-     * will be cancelled.
-     */
-    @Override
-    public void setCancelled(boolean cancelled) {
-        setCancelled(cancelled);
     }
 
     /**
@@ -113,4 +106,14 @@ public class TownPreClaimEvent extends CancellableTownyEvent {
     public Player getPlayer() {
     	return player;
     }
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
+	}
 }
