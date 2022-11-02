@@ -8015,3 +8015,6 @@ v0.92.0.11:
 0.98.3.19:
   - Fix sending empty error messages.
   - Fix towns being able to add residents/be joined when their nation would become over the new nation resident limits.
+  - Prevent sharing handler lists for cancellable events, courtesy of Warriorrrr with PR #6279.
+  - Fix lecterns requiring destroy perms to open, courtesy of Warriorrrr with PR #6280.
+  - Fix action event isMessageSupressed method, courtesy of Warriorrrr with PR #6281.
