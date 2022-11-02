@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.event.town.toggle;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -11,6 +13,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 
 public abstract class TownToggleEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
 	private final Town town;
 	private final CommandSender sender;
@@ -75,5 +78,15 @@ public abstract class TownToggleEvent extends CancellableTownyEvent {
 	 */
 	public boolean isAdminAction() {
 		return isAdminAction;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

@@ -4,11 +4,14 @@ import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class PreTownPaysNationTaxEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
-	private Town town;
-	private Nation nation;
+	private final Town town;
+	private final Nation nation;
 	private double tax;
 
 	/**
@@ -57,5 +60,15 @@ public class PreTownPaysNationTaxEvent extends CancellableTownyEvent {
 	 */
 	public void setCancellationMessage(String cancellationMessage) {
 		setCancelMessage(cancellationMessage);
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

@@ -6,8 +6,11 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class PlotToggleEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
 	private final TownBlock townBlock;
 	private final Town town;
@@ -55,4 +58,13 @@ public abstract class PlotToggleEvent extends CancellableTownyEvent {
 		return player;
 	}
 	
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
+	}
 }

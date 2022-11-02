@@ -5,10 +5,15 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
 public class PlotTrustAddEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
+	
 	private final List<TownBlock> townBlocks;
 	private final Resident trustedResident;
 	private final Player player;
@@ -43,5 +48,15 @@ public class PlotTrustAddEvent extends CancellableTownyEvent {
 	 */
 	public Player getPlayer() {
 		return player;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

@@ -5,9 +5,12 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 public class TownOutlawRemoveEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
+	
 	private final Town town;
 	private final Resident outlawedResident;
 	private final CommandSender sender;
@@ -36,5 +39,15 @@ public class TownOutlawRemoveEvent extends CancellableTownyEvent {
 	@NotNull
 	public CommandSender getSender() {
 		return sender;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

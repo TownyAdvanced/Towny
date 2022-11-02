@@ -2,8 +2,11 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Translation;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class NationPreRenameEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
 	private final String oldName;
 	private final String newName;
@@ -37,5 +40,15 @@ public class NationPreRenameEvent extends CancellableTownyEvent {
 	 */
 	public Nation getNation() {
 		return this.nation;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

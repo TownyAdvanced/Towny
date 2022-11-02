@@ -5,6 +5,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -13,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Suneet Tipirneni (Siris)
  */
 public class NationSpawnEvent extends SpawnEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 	
 	private Nation toNation;
 	private Nation fromNation;
@@ -53,5 +56,15 @@ public class NationSpawnEvent extends SpawnEvent {
 	@Nullable
 	public Nation getFromNation() {
 		return fromNation;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

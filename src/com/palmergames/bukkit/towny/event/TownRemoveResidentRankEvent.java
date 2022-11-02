@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.event;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Artuto
@@ -10,6 +12,8 @@ import com.palmergames.bukkit.towny.object.Translation;
  *         Fired after a Resident has been removed from a Town rank.
  */
 public class TownRemoveResidentRankEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
+	
 	private final Resident resident;
 	private final String rank;
 	private final Town town;
@@ -43,5 +47,15 @@ public class TownRemoveResidentRankEvent extends CancellableTownyEvent {
 	 */
 	public Town getTown() {
 		return town;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }
