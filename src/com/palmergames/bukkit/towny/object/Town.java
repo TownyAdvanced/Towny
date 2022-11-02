@@ -1489,17 +1489,8 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public boolean hasTrustedResident(Resident resident) {
-		Boolean isTrusted = false;
 		Town residentsTown = resident.getTownOrNull();
-		if (residentsTown != null) {
-			if (this.hasTrusted(residentsTown)) {
-				isTrusted = true;
-			}
-		}
-		if (!isTrusted) {
-			isTrusted = trustedResidents.contains(resident);
-		}
-		return isTrusted;
+		return trustedResidents.contains(resident) || (residentsTown != null && this.hasTrustedTown(residentsTown));
 	}
 	
 	public void addTrustedResident(Resident resident) {
@@ -1571,27 +1562,28 @@ public class Town extends Government implements TownBlockOwner {
 	 * Only to be used when loading the database.
 	 * @param towns List&lt;Town&gt; which will be loaded in as trusted towns.
 	 */
-	public void loadTrusted(List<Town> towns) {
-		for (Town town : towns)
-			trustedTowns.put(town.getUUID(), town);
+	public void loadTrustedTowns(List<Town> towns) {
+		for (Town trustTown : towns) {
+			trustedTowns.put(trustTown.getUUID(), trustTown);
+		}
 	}
 
-	public void addTrusted(Town town) {
+	public void addTrustedTown(Town town) {
 		trustedTowns.put(town.getUUID(), town);
 	}
 
-	public void removeTrusted(Town town) {
+	public void removeTrustedTown(Town town) {
 		trustedTowns.remove(town.getUUID());
 	}
 
-	public boolean removeAllTrusted() {
+	public boolean removeAllTrustedTowns() {
 		for (Town trusted : new ArrayList<>(getAllies())) {
-			removeTrusted(trusted);
+			removeTrustedTown(trusted);
 		}
-		return getTrusted().isEmpty();
+		return getTrustedTowns().isEmpty();
 	}
 
-	public boolean hasTrusted(Town town) {
+	public boolean hasTrustedTown(Town town) {
 		return trustedTowns.containsKey(town.getUUID());
 	}
 	
@@ -1644,7 +1636,7 @@ public class Town extends Government implements TownBlockOwner {
 		return Collections.unmodifiableList(allies.values().stream().collect(Collectors.toList()));
 	}
 
-	public List<Town> getTrusted() {
+	public List<Town> getTrustedTowns() {
 		return Collections.unmodifiableList(trustedTowns.values().stream().collect(Collectors.toList()));
 	}
 	

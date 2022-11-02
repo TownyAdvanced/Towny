@@ -504,10 +504,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						case 2:
 							return NameUtil.filterByStart(Arrays.asList("add", "remove", "list"), args[1]);
 						case 3:
-							if (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))
-								return getTownyStartingWith(args[2], "t");
-							else
-								return Collections.emptyList();
+							if (args[1].equalsIgnoreCase("add")) {
+								List<String> townsList = getTownyStartingWith(args[2], "t");
+								townsList.removeAll(getTrustedTownsFromResidentOrThrow(player));
+								return townsList;
+							}
+							if (args[1].equalsIgnoreCase("remove")) {
+								return NameUtil.filterByStart(getTrustedTownsFromResidentOrThrow(player), args[2]);
+							}
+							return Collections.emptyList();
 						default:
 							return Collections.emptyList();
 					}
@@ -4173,30 +4178,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.TOWN_TRUSTTOWN_HELP.send(sender);
 			return;
 		}
-
-		if (town == null && sender instanceof Player player)
-			town = TownyAPI.getInstance().getResident(player.getName()).getTownOrNull();
-
-		if (town == null) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_resident_doesnt_belong_to_any_town"));
-			return;
+		
+		if (town == null && sender instanceof Player player) {
+			town = getTownFromPlayerOrThrow(player);
 		}
-
 		if (args[0].equalsIgnoreCase("list")) {
-			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_trustedlist").forLocale(sender), new ArrayList<>(town.getTrusted())));
+			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_trustedlist").forLocale(sender), new ArrayList<>(town.getTrustedTowns())));
 			return;
 		}
 
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_TRUSTTOWN.getNode());
 
-		Town trustTown = TownyAPI.getInstance().getTown(args[1]);
-		if (trustTown == null) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", args[1]));
-			return;
-		}
+		Town trustTown = getTownOrThrow(args[1]);
 
 		if (args[0].equalsIgnoreCase("add")) {
-			if (town.hasTrusted(trustTown)) {
+			if (town.hasTrustedTown(trustTown)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_already_trusted", trustTown.getName(), Translatable.of("town_sing")));
 				return;
 			}
@@ -4204,19 +4200,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_already_trusted", trustTown.getName(), Translatable.of("town_sing")));
 				return;
 			}
-			town.addTrusted(trustTown);
+			town.addTrustedTown(trustTown);
 			for (Resident res : trustTown.getResidents()) {
 				plugin.deleteCache(res);
 			}
 
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_added", trustTown.getName(), Translatable.of("town_sing")));
 		} else if (args[0].equalsIgnoreCase("remove")) {
-			if (!town.hasTrusted(trustTown)) {
+			if (!town.hasTrustedTown(trustTown)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_trusted", trustTown.getName(), Translatable.of("town_sing")));
 				return;
 			}
 			
-			town.removeTrusted(trustTown);
+			town.removeTrustedTown(trustTown);
 			for (Resident res : trustTown.getResidents()) {
 				plugin.deleteCache(res);
 			}

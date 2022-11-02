@@ -1173,9 +1173,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (line != null && !line.isEmpty()) {
 				search = (line.contains("#")) ? "#" : ",";
 				List<UUID> uuids = Arrays.stream(line.split(search))
-					.map(uuid -> UUID.fromString(uuid))
+					.map(UUID::fromString)
 					.collect(Collectors.toList());
-				town.loadTrusted(TownyAPI.getInstance().getTowns(uuids));
+				town.loadTrustedTowns(TownyAPI.getInstance().getTowns(uuids));
 			}
 			
 			line = rs.getString("mapColorHexCode");
