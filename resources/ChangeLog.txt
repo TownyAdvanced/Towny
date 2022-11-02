@@ -8018,3 +8018,4 @@ v0.92.0.11:
   - Prevent sharing handler lists for cancellable events, courtesy of Warriorrrr with PR #6279.
   - Fix lecterns requiring destroy perms to open, courtesy of Warriorrrr with PR #6280.
   - Fix action event isMessageSupressed method, courtesy of Warriorrrr with PR #6281.
+  - Fix ActionEventExecutor showing cancellation messages for cached action denials.

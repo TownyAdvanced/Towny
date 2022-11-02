@@ -69,6 +69,8 @@ public class TownyActionEventExecutor {
 			PlayerCache cache = PlayerCacheUtil.getCache(player);
 			if (cache.hasBlockErrMsg())
 				event.setCancelMessage(cache.getBlockErrMsg());
+			else
+				event.suppressMessage();
 		}
 
 		/*
