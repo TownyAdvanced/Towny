@@ -20,22 +20,36 @@ public abstract class TownyActionEvent extends CancellableTownyEvent {
 	protected final Location loc;
 	protected final Material mat;
 	protected final TownBlock townblock;
-	protected boolean suppressMessage;
 
 	public TownyActionEvent(Player player, Location loc, Material mat, TownBlock townblock, boolean cancelled) {
 		this.player = player;
 		this.loc = loc;
 		this.mat = mat;
 		this.townblock = townblock;
-		this.suppressMessage = false;
 		setCancelled(cancelled);
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.98.3.18, please use {@link #isMessageSuppressed()} instead.
+	 */
+	@Deprecated
 	public boolean isMessageSupressed() {
-		return getCancelMessage() == "";
+		return isMessageSuppressed();
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.98.3.18, please use {@link #suppressMessage()} instead.
+	 */
+	@Deprecated
 	public void supressMessage(boolean suppressMessage) {
+		suppressMessage();
+	}
+	
+	public boolean isMessageSuppressed() {
+		return getCancelMessage() == null || getCancelMessage().isEmpty();
+	}
+	
+	public void suppressMessage() {
 		setCancelMessage("");
 	}
 
