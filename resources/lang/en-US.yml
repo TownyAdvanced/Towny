@@ -1835,5 +1835,5 @@ msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <y
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 
-
-
+#Message giving confirmation warning for trusttown
+confirmation_msg_trusttown_consequences: 'Are you sure you wish to trust all residents in this town? This may include future residents of this town if not revoked.'

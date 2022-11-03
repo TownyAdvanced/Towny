@@ -361,7 +361,7 @@ public class BaseCommand implements TabCompleter{
 		TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(permissible, node, errormsg);
 	}
 
-	public static List<String> getTrustedTownsFromResidentOrThrow(Player player){
+	public static List<String> getTrustedTownsFromResident(Player player){
 		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
 		if (res != null && res.hasTown()) {

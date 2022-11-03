@@ -506,11 +506,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						case 3:
 							if (args[1].equalsIgnoreCase("add")) {
 								List<String> townsList = getTownyStartingWith(args[2], "t");
-								townsList.removeAll(getTrustedTownsFromResidentOrThrow(player));
+								townsList.removeAll(getTrustedTownsFromResident(player));
 								return townsList;
 							}
 							if (args[1].equalsIgnoreCase("remove")) {
-								return NameUtil.filterByStart(getTrustedTownsFromResidentOrThrow(player), args[2]);
+								return NameUtil.filterByStart(getTrustedTownsFromResident(player), args[2]);
 							}
 							return Collections.emptyList();
 						default:
@@ -4200,12 +4200,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_already_trusted", trustTown.getName(), Translatable.of("town_sing")));
 				return;
 			}
-			town.addTrustedTown(trustTown);
-			for (Resident res : trustTown.getResidents()) {
-				plugin.deleteCache(res);
-			}
+			@Nullable Town finalTown = town;
+			Confirmation.runOnAccept(()-> {
+					for (Resident res : trustTown.getResidents()) {
+						plugin.deleteCache(res);
+					}
 
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_added", trustTown.getName(), Translatable.of("town_sing")));
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_added", trustTown.getName(), Translatable.of("town_sing")));
+					finalTown.addTrustedTown(trustTown);
+				})
+				.setTitle(Translatable.of("confirmation_msg_trusttown_consequences"))
+				.sendTo(sender);
 		} else if (args[0].equalsIgnoreCase("remove")) {
 			if (!town.hasTrustedTown(trustTown)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_trusted", trustTown.getName(), Translatable.of("town_sing")));
