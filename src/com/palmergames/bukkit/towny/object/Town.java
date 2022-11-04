@@ -1577,7 +1577,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean removeAllTrustedTowns() {
-		for (Town trusted : new ArrayList<>(getAllies())) {
+		for (Town trusted : new ArrayList<>(getTrustedTowns())) {
 			removeTrustedTown(trusted);
 		}
 		return getTrustedTowns().isEmpty();

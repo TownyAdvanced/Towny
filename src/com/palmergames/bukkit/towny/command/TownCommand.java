@@ -45,6 +45,8 @@ import com.palmergames.bukkit.towny.event.town.toggle.TownToggleOpenEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePVPEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePublicEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleTaxPercentEvent;
+import com.palmergames.bukkit.towny.event.town.TownTrustTownAddEvent;
+import com.palmergames.bukkit.towny.event.town.TownTrustTownRemoveEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
@@ -4192,7 +4194,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Town trustTown = getTownOrThrow(args[1]);
 
-		if ("add".equalsIgnoreCase(args[0])) {
+		if (args[0].equalsIgnoreCase("add")) {
 			if (town.hasTrustedTown(trustTown)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_already_trusted", trustTown.getName(), Translatable.of("town_sing")));
 				return;
@@ -4201,6 +4203,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_already_trusted", trustTown.getName(), Translatable.of("town_sing")));
 				return;
 			}
+			BukkitTools.ifCancelledThenThrow(new TownTrustTownAddEvent(sender, trustTown, town));
 			@Nullable Town finalTown = town;
 			Confirmation.runOnAccept(()-> {
 					trustTown.getResidents().forEach(res -> plugin.deleteCache(res));
@@ -4210,12 +4213,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				})
 				.setTitle(Translatable.of("confirmation_msg_trusttown_consequences"))
 				.sendTo(sender);
-		} else if ("remove".equalsIgnoreCase(args[0])) {
+		} else if (args[0].equalsIgnoreCase("remove")) {
 			if (!town.hasTrustedTown(trustTown)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_trusted", trustTown.getName(), Translatable.of("town_sing")));
 				return;
 			}
-			
+			BukkitTools.ifCancelledThenThrow(new TownTrustTownRemoveEvent(sender, trustTown, town));
 			town.removeTrustedTown(trustTown);
 			trustTown.getResidents().forEach(res -> plugin.deleteCache(res));
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_removed", trustTown.getName(), Translatable.of("town_sing")));
