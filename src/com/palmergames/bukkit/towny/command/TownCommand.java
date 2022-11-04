@@ -79,6 +79,7 @@ import com.palmergames.bukkit.towny.object.inviteobjects.PlayerJoinTownInvite;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.JailReason;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -4173,8 +4174,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void parseTownTrustTownCommand(CommandSender sender, String[] args, @Nullable Town town) throws TownyException {
 
 		if (args.length < 1
-			|| args.length < 2 && (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove"))
-			|| args.length == 1 && !args[0].equalsIgnoreCase("list")) {
+			|| args.length < 2 && ("add".equalsIgnoreCase(args[0]) || "remove".equalsIgnoreCase(args[0]))
+			|| args.length == 1 && !"list".equalsIgnoreCase(args[0])) {
 			HelpMenu.TOWN_TRUSTTOWN_HELP.send(sender);
 			return;
 		}
@@ -4182,7 +4183,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (town == null && sender instanceof Player player) {
 			town = getTownFromPlayerOrThrow(player);
 		}
-		if (args[0].equalsIgnoreCase("list")) {
+		if ("list".equalsIgnoreCase(args[0])) {
 			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_trustedlist").forLocale(sender), new ArrayList<>(town.getTrustedTowns())));
 			return;
 		}
@@ -4191,7 +4192,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Town trustTown = getTownOrThrow(args[1]);
 
-		if (args[0].equalsIgnoreCase("add")) {
+		if ("add".equalsIgnoreCase(args[0])) {
 			if (town.hasTrustedTown(trustTown)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_already_trusted", trustTown.getName(), Translatable.of("town_sing")));
 				return;
@@ -4202,25 +4203,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 			@Nullable Town finalTown = town;
 			Confirmation.runOnAccept(()-> {
-					for (Resident res : trustTown.getResidents()) {
-						plugin.deleteCache(res);
-					}
+					trustTown.getResidents().forEach(res -> plugin.deleteCache(res));
 
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_added", trustTown.getName(), Translatable.of("town_sing")));
 					finalTown.addTrustedTown(trustTown);
 				})
 				.setTitle(Translatable.of("confirmation_msg_trusttown_consequences"))
 				.sendTo(sender);
-		} else if (args[0].equalsIgnoreCase("remove")) {
+		} else if ("remove".equalsIgnoreCase(args[0])) {
 			if (!town.hasTrustedTown(trustTown)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_trusted", trustTown.getName(), Translatable.of("town_sing")));
 				return;
 			}
 			
 			town.removeTrustedTown(trustTown);
-			for (Resident res : trustTown.getResidents()) {
-				plugin.deleteCache(res);
-			}
+			trustTown.getResidents().forEach(res -> plugin.deleteCache(res));
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_removed", trustTown.getName(), Translatable.of("town_sing")));
 		} else {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", args[0]));
@@ -4228,6 +4225,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		town.save();
+	}
+	
+	public static List<String> getTrustedTownsFromResident(Player player){
+		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+
+		if (res != null && res.hasTown()) {
+			return res.getTownOrNull().getTrustedTowns().stream().map(TownyObject::getName)
+				.collect(Collectors.toList());
+		}
+
+		return Collections.emptyList();
 	}
 
 	private static int homeBlockDistance(Town town1, Town town2) {

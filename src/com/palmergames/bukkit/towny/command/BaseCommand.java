@@ -360,15 +360,4 @@ public class BaseCommand implements TabCompleter{
 	public static void checkPermOrThrowWithMessage(Permissible permissible, String node, Translatable errormsg) throws NoPermissionException {
 		TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(permissible, node, errormsg);
 	}
-
-	public static List<String> getTrustedTownsFromResident(Player player){
-		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
-
-		if (res != null && res.hasTown()) {
-			return res.getTownOrNull().getTrustedTowns().stream().map(Town ->Town.getName())
-				.collect(Collectors.toList());
-		}
-
-		return Collections.emptyList();
-	}
 }
