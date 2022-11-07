@@ -690,7 +690,7 @@ number_of_residents: '(Número de Residentes)'
 number_of_towns: '(Número de Ciudades)'
 town_name: 'Nombre de la Ciudad'
 nation_name: 'Nombre de la Nación'
-refund_message: '&aReembolsado $%s por eliminar %s bloques de ciudad.'
+refund_message: '&aReembolsado $%s por unclaimear %s bloques de ciudad.'
 msg_bankrupt_town_multiple: '&bLas siguientes ciudades no pudieron pagar su mantención y han caído en la ruina: '
 msg_bankrupt_nation_multiple: '&bLas siguientes naciones no pudieron pagar su mantención y han caído en la ruina: '
 msg_couldnt_pay_tax: '&b%s no pudo pagar los impuestos y fue expulsado de %s.'
@@ -701,7 +701,7 @@ msg_bankrupt_town2: '&b%s no pudo seguir manteniendo una ciudad.'
 msg_bankrupt_nation2: '&b%s no pudo seguir manteniendo una nación.'
 status_embassy_town: 'Embajadas en'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bComparador inválido. Prueba a usar %s.'
+msg_error_invalid_comparator_nation: '&bComparador inválido. Prueba %s.'
 msg_error_invalid_comparator_town: '&bComparador inválido. Prueba a usar %s.'
 msg_err_merging_for_kings_only: '&bLa fusión sólo puede ser realizada por un líder de nación.'
 msg_err_king_of_that_nation_is_not_online: '&bEl líder de la nación de %s, %s, no está conectado. Fusión fallida.'
@@ -1493,31 +1493,31 @@ msg_err_nation_unaffiliated: 'Esa nación no está afiliada a usted.'
 msg_err_town_unaffiliated: 'Esa ciudad no está afiliada a usted.'
 #Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
-msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
+msg_err_this_location_already_has_a_jailcell: 'Esta ubicación ya tiene una celda de la cárcel.'
 #Title line of the /plot perm hud.
-msg_perm_hud_title: 'Plot Perms'
+msg_perm_hud_title: 'Permisos de parcela'
 #Seen in /plot perm hud:
-msg_perm_hud_build: 'Build: '
+msg_perm_hud_build: 'Construcción: '
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Destroy: '
+msg_perm_hud_destroy: 'Destrucción: '
 #Seen in /plot perm hud:
-msg_perm_hud_switch: 'Switch: '
+msg_perm_hud_switch: 'Interacción: '
 #Seen in /plot perm hud:
-msg_perm_hud_item_use: 'Item: '
+msg_perm_hud_item_use: 'Objeto: '
 #Seen in /plot perm hud:
-msg_perm_hud_plot_type: 'Type: '
+msg_perm_hud_plot_type: 'Tipo: '
 #Seen in /plot perm hud:
-msg_perm_hud_pvp: 'PVP: '
+msg_perm_hud_pvp: 'PvP: '
 #Seen in /plot perm hud:
-msg_perm_hud_explosions: 'Explosions: '
+msg_perm_hud_explosions: 'Explosiones: '
 #Seen in /plot perm hud:
-msg_perm_hud_firespread: 'Firespread: '
+msg_perm_hud_firespread: 'Incendios: '
 #Seen in /plot perm hud:
 msg_perm_hud_mobspawns: 'Spawn de Mobs: '
 #Seen in /plot perm hud:
-msg_perm_hud_key: 'Key'
+msg_perm_hud_key: 'Clave'
 #Seen in /plot perm hud:
-msg_perm_hud_friend: 'friend'
+msg_perm_hud_friend: 'amigo'
 #Seen in /plot perm hud:
 msg_perm_hud_town: 'ciudad'
 #Seen in /plot perm hud:
