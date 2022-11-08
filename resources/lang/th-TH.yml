@@ -715,6 +715,7 @@ msg_error_ta_plot_claim: 'ไม่มีชื่อผู้เล่น เ�
 msg_error_no_player_with_that_name: 'ไม่พบผู้เล่นที่มีชื่อ %s'
 msg_admin_has_given_you_a_plot: 'ผู้ดูแลได้ Claim Plot ให้คุณที่: %s'
 msg_town_forcepvp_setting_set_to: 'Town %s ถูกบังคับให้ตั้ง pvp เป็น %s'
+msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cสถานะของ Nation ตอนนี้คือ %s .'
 msg_err_already_in_a_nation: 'Town ของคุณมีอยู่แล้วใน Nation'
 msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the nation leader or an assistant to join.'
@@ -1573,3 +1574,5 @@ msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the ma
 msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
 #Message shown to a town because the nation has hit their max-towns-limit.
 msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
+#Message shown confirming /tw set usedefaults
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'

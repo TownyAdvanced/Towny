@@ -715,6 +715,7 @@ msg_error_ta_plot_claim: 'nom de joueur manquant, ex: /ta plot claim NomDuJoueur
 msg_error_no_player_with_that_name: 'Aucun joueur trouvé avec le nom %s'
 msg_admin_has_given_you_a_plot: 'Un admin a revendiqué une parcelle pour vous à %s'
 msg_town_forcepvp_setting_set_to: 'La ville %s a l''option de pvp forcé en mode %s'
+msg_town_forcedisabledpvp_setting_set_to: 'La ville %s a l''option admindisabledpvp forcé à %s'
 msg_nation_changed_open: '&cL''accès à la nation est maintenant %s.'
 msg_err_already_in_a_nation: 'Votre ville est déjà dans une nation.'
 msg_err_nation_not_open: '&cLa nation %s n''a pas ses portes ouvertes à tout le monde. Demandez au dirigeant de la nation ou à un assistant de rejoindre.'
@@ -1568,8 +1569,10 @@ msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s a retiré de l''argent d
 #Message shown in the confirmation for /ta resetbanks {amount}.
 confirmation_are_you_sure_you_want_to_reset_all_banks: 'Êtes-vous sûr de vouloir réinitialiser toutes les banques de ville et de nation à %s ?'
 #Message shown when a nation cannot add a town because of the max-residents-limit.
-msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
+msg_err_cannot_add_nation_over_resident_limit: '&cVotre nation a atteint le nombre maximum de résidents autorisés par nation, %s, et ne peut pas ajouter %s.'
 #Message shown to a town when they cannot join a nation because of the max-residents-limit.
-msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
+msg_err_cannot_join_nation_over_resident_limit: '&cVous ne pouvez pas rejoindre cette nation car elle dépasserait la limite des résidents par nation de %s.'
 #Message shown to a town because the nation has hit their max-towns-limit.
-msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
+msg_err_cannot_join_nation_over_town_limit: '&cVous ne pouvez pas rejoindre cette nation, elle a atteint le nombre maximum de villes autorisées par nation qui est de %s.'
+#Message shown confirming /tw set usedefaults
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Êtes-vous sûr de vouloir réinitialiser tous les paramètres de ce monde à ceux qui sont définis dans la configuration ?'

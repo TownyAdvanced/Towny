@@ -259,9 +259,9 @@ msg_mayor_abandon: '&b¿Abandonarás a tu gente? Elige a otro alcalde con ''/tow
 msg_new_day_tax: '&b¡Un nuevo día ha llegado! Los impuestos y la renta han sido recolectados'
 msg_new_day: '&b¡Un nuevo día ha llegado!'
 msg_new_king: '&b%s es ahora el líder de %s!'
-msg_err_new_king_notmayor: '&cEl nuevo líder de nación no es un alcalde.'
+msg_err_new_king_notmayor: '&cEl nuevo líder nacional no es un alcalde.'
 msg_err_king_not_in_nation: '&cEl nuevo líder de la nación no pertenece a esta nación.'
-msg_err_fight_like_king: '&cLa Paz no es una opción! Lucha como un líder!'
+msg_err_fight_like_king: '&c¡La paz nunca fue una opción! ¡Lucha como un rey!'
 msg_no_access_nation_bank: '&cNo tienes acceso al banco de la nación.'
 msg_err_no_money: '&cNo hay suficiente dinero en el banco.'
 msg_new_mayor: '&b¡%s es el nuevo alcalde de la ciudad!'
@@ -690,7 +690,7 @@ number_of_residents: '(Número de Residentes)'
 number_of_towns: '(Número de Ciudades)'
 town_name: 'Nombre de la Ciudad'
 nation_name: 'Nombre de la Nación'
-refund_message: '&aReembolsado $%s por eliminar %s bloques de ciudad.'
+refund_message: '&aReembolsado $%s por unclaimear %s bloques de ciudad.'
 msg_bankrupt_town_multiple: '&bLas siguientes ciudades no pudieron pagar su mantención y han caído en la ruina: '
 msg_bankrupt_nation_multiple: '&bLas siguientes naciones no pudieron pagar su mantención y han caído en la ruina: '
 msg_couldnt_pay_tax: '&b%s no pudo pagar los impuestos y fue expulsado de %s.'
@@ -701,7 +701,7 @@ msg_bankrupt_town2: '&b%s no pudo seguir manteniendo una ciudad.'
 msg_bankrupt_nation2: '&b%s no pudo seguir manteniendo una nación.'
 status_embassy_town: 'Embajadas en'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bComparador inválido. Prueba a usar %s.'
+msg_error_invalid_comparator_nation: '&bComparador inválido. Prueba %s.'
 msg_error_invalid_comparator_town: '&bComparador inválido. Prueba a usar %s.'
 msg_err_merging_for_kings_only: '&bLa fusión sólo puede ser realizada por un líder de nación.'
 msg_err_king_of_that_nation_is_not_online: '&bEl líder de la nación de %s, %s, no está conectado. Fusión fallida.'
@@ -715,6 +715,7 @@ msg_error_ta_plot_claim: 'Falta el nombre del jugador, ejemplo: /ta plot claim N
 msg_error_no_player_with_that_name: 'No se encontró a ningún jugador llamado %s'
 msg_admin_has_given_you_a_plot: 'Un administrador reclamó un terreno a tu nombre en: %s'
 msg_town_forcepvp_setting_set_to: 'La ciudad de %s ha sido forzada a cambiar la configuración del combate a %s'
+msg_town_forcedisabledpvp_setting_set_to: 'La ciudad de %s ha sido forzada a cambiar la configuración del combate a %s'
 msg_nation_changed_open: '&cLa membresía sin invitación en la nación ahora está %s.'
 msg_err_already_in_a_nation: 'Tu ciudad ya es miembro de una nación.'
 msg_err_nation_not_open: '&cLa nación %s no tiene puertas abiertas para todos. Pídele al líder de la nación o a un asistente que te una.'
@@ -1407,7 +1408,7 @@ tc_player_channel_sound_unmuted: 'El sonido del canal ha sido reactivado'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: '¡Hay un extranjero en tus tierras, no puedes cambiar el estado del combate!'
 #Added in 0.136
-msg_view_on_web: '&7Click to view on the web.'
+msg_view_on_web: '&Haga click para ver en la web.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6La ciudad %s ha accedido a una fusión con la creciente ciudad de %s.'
@@ -1462,61 +1463,61 @@ this_will_reset_your_config: 'Ejecutar este comando restablece el archivo config
 msg_warn_overriding_server_config: 'Al hacer esto estás sobreescribiendo el límite de residentes establecido en la configuración. ¿Quieres continuar de todos modos?'
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
-msg_removed_x_invalid_outpost_spawns: 'Removed %d invalid outpost spawns.'
+msg_removed_x_invalid_outpost_spawns: 'Se han eliminado %d apariciones no válidas.'
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Tu ciudad ha caído en bancarrota, añade dinero a tu banco usando /town deposit {amount}.'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
-msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'No puedes usar este comando, porque ya eres miembro de una ciudad. Si quieres continuar tendrás que usar ''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
-msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+msg_a_town_you_are_outlawed_in: 'una ciudad en la que usted es un proscrito.'
 #Message shown when TownyRTP could not find any towns to teleport to.
-msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
+msg_err_could_not_find_any_towns_to_rtp: 'No se pudo encontrar ningún pueblo abierto, público con parcelas a la venta (que usted puede permitirse,) a rtp to.'
 #Message showing payment for RTP.
-msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+msg_cost_spawn_rtp: '&bHas sido cobrado %s para teletransportarte a una parcela de ciudad aleatoria que está a la venta.'
 #Message shown to a player when they use the town rtp command.
-msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+msg_you_are_about_to_be_teleported_to_a_plot: 'Estás a punto de ser teletransportado a una parcela que está prohibida en %s que te permitirá unirte. Usa ''/plot claim'' para reclamar tu parcela cuando llegas.'
 #Used in the town's status screen to display plots
-status_plot_string: 'Plots'
+status_plot_string: 'Parcelas'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
 #Usage:
-msg_usage: 'Usage: %s'
+msg_usage: 'Uso: %s'
 #Shown in teh bank history books when there are no pages to display
-msg_err_no_pages_to_display: 'No pages to display!'
+msg_err_no_pages_to_display: 'No hay novedades para mostrar!'
 #Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
-msg_err_nation_unaffiliated: 'That nation is not affiliated with you.'
+msg_err_nation_unaffiliated: 'Esa nación no está afiliada a usted.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
-msg_err_town_unaffiliated: 'That town is not affiliated with you.'
+msg_err_town_unaffiliated: 'Esa ciudad no está afiliada a usted.'
 #Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
-msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
+msg_err_this_location_already_has_a_jailcell: 'Esta ubicación ya tiene una celda de la cárcel.'
 #Title line of the /plot perm hud.
-msg_perm_hud_title: 'Plot Perms'
+msg_perm_hud_title: 'Permisos de parcela'
 #Seen in /plot perm hud:
-msg_perm_hud_build: 'Build: '
+msg_perm_hud_build: 'Construcción: '
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Destroy: '
+msg_perm_hud_destroy: 'Destrucción: '
 #Seen in /plot perm hud:
-msg_perm_hud_switch: 'Switch: '
+msg_perm_hud_switch: 'Interacción: '
 #Seen in /plot perm hud:
-msg_perm_hud_item_use: 'Item: '
+msg_perm_hud_item_use: 'Objeto: '
 #Seen in /plot perm hud:
-msg_perm_hud_plot_type: 'Type: '
+msg_perm_hud_plot_type: 'Tipo: '
 #Seen in /plot perm hud:
-msg_perm_hud_pvp: 'PVP: '
+msg_perm_hud_pvp: 'PvP: '
 #Seen in /plot perm hud:
-msg_perm_hud_explosions: 'Explosions: '
+msg_perm_hud_explosions: 'Explosiones: '
 #Seen in /plot perm hud:
-msg_perm_hud_firespread: 'Firespread: '
+msg_perm_hud_firespread: 'Incendios: '
 #Seen in /plot perm hud:
 msg_perm_hud_mobspawns: 'Spawn de Mobs: '
 #Seen in /plot perm hud:
-msg_perm_hud_key: 'Key'
+msg_perm_hud_key: 'Clave'
 #Seen in /plot perm hud:
-msg_perm_hud_friend: 'friend'
+msg_perm_hud_friend: 'amigo'
 #Seen in /plot perm hud:
 msg_perm_hud_town: 'ciudad'
 #Seen in /plot perm hud:
@@ -1573,3 +1574,5 @@ msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the ma
 msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
 #Message shown to a town because the nation has hit their max-towns-limit.
 msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
+#Message shown confirming /tw set usedefaults
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
