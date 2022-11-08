@@ -12,8 +12,8 @@ description: >
 # Before you edit this file, read about how Towny handles 
 # language files:
 # https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-
-
+#
+#
 # A note on text formatting (how Towny inserts words.)
 # ----------------------------------------------------
 #
@@ -28,8 +28,8 @@ description: >
 # to %1$s, %2$s, %4$s, %3$s to change their order. ie: %4$s
 # will always use the 4th variable, no matter where it is
 # placed on the line.
-
-
+#
+#
 # A note on text colouring and formatting.
 # ----------------------------------------
 #
@@ -41,6 +41,8 @@ description: >
 # This language file also supports using MiniMessage for colours
 # and formatting. Learn about MiniMessage formatting here:
 # https://docs.adventure.kyori.net/minimessage/format.html
+#
+#
 
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
