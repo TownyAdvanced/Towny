@@ -593,6 +593,16 @@ public class TownyAPI {
 	}
 
 	/**
+	 * Get a List of all the Nations.
+	 * 
+	 * @return a List of all the Nations.
+	 * @since 0.98.4.1.
+	 */
+	public List<Nation> getNations() {
+		return new ArrayList<>(townyUniverse.getNations());
+	}
+
+	/**
 	 * Get a List of all the Towns that aren't a part of a Nation.
 	 * 
 	 * @return a List of all the nationless Towns.
