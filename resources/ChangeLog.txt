@@ -8025,3 +8025,5 @@ v0.92.0.11:
   - Improve comments found in the locale files.
 0.98.4.0:
   - Update pom for release.
+0.98.4.1:
+  - Make /town plots output translatable.

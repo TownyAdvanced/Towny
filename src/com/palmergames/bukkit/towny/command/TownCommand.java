@@ -1189,38 +1189,36 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			town = getTownOrThrow(args[1]);
 		}
 		
+		Translator translator = Translator.locale(sender);
+		
 		if (town == null)
-			throw new TownyException(Translatable.of("msg_specify_name"));
+			throw new TownyException(translator.of("msg_specify_name"));
 
 		List<String> out = new ArrayList<>();
-		out.add(ChatTools.formatTitle(town + " Town Plots"));
-		out.add(Colors.Green + "Town Size: " + Colors.LightGreen + town.getTownBlocks().size() + " / " + town.getMaxTownBlocksAsAString() 
-			+ (!town.hasUnlimitedClaims() 
-				? (TownySettings.isSellingBonusBlocks(town) 
-						? Colors.LightBlue + " [Bought: " + town.getPurchasedBlocks() + "/" + TownySettings.getMaxPurchasedBlocks(town) + "]" 
-						: "") 
-					+ (town.getBonusBlocks() > 0 
-						? Colors.LightBlue + " [Bonus: " + town.getBonusBlocks() + "]" 
-						: "") 
-					+ (TownySettings.getNationBonusBlocks(town) > 0 
-						? Colors.LightBlue + " [NationBonus: " + TownySettings.getNationBonusBlocks(town) + "]" 
-						: "")
-				: ""));
-		
+		out.add(ChatTools.formatTitle(town + translator.of("msg_town_plots_title")));
+		String townSize = translator.of("msg_town_plots_town_size", town.getTownBlocks().size(), town.getMaxTownBlocksAsAString());
+		if (!town.hasUnlimitedClaims()) {
+			if (TownySettings.isSellingBonusBlocks(town))
+				townSize += translator.of("msg_town_plots_town_bought", town.getPurchasedBlocks(), TownySettings.getMaxPurchasedBlocks(town));
+			if (town.getBonusBlocks() > 0)
+				townSize += translator.of("msg_town_plots_town_bonus", town.getBonusBlocks());
+			if (TownySettings.getNationBonusBlocks(town) > 0)
+				townSize += translator.of("msg_town_plots_town_nationbonus", TownySettings.getNationBonusBlocks(town));
+		}
+		out.add(townSize);
 		TownBlockTypeCache typeCache = town.getTownBlockTypeCache();
-		out.add(Colors.Green + "Town Owned Land: " + Colors.LightGreen + (town.getTownBlocks().size() - (typeCache.getNumberOfResidentOwnedTownBlocks())));
-		out.add(Colors.Green + "Type: " 
-				+ Colors.LightGreen + "Player-Owned" + Colors.LightGray + " / "
-				+ Colors.LightBlue  + "ForSale" + Colors.LightGray + " / "
-				+ Colors.Yellow + "Total" + Colors.LightGray
-				+ (TownyEconomyHandler.isActive() ? " / " + Colors.Green + "Daily Revenue" : ""));
+		out.add(translator.of("msg_town_plots_town_owned_land", (town.getTownBlocks().size() - typeCache.getNumberOfResidentOwnedTownBlocks())));
+		String typeHeader = translator.of("msg_town_plots_type_header");
+		if (TownyEconomyHandler.isActive())
+			typeHeader += translator.of("msg_town_plots_type_header_revenue");
+		out.add(typeHeader);
 		for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
 			int residentOwned = typeCache.getNumTownBlocks(type, CacheType.RESIDENTOWNED);
-			out.add(Colors.Green + type.getFormattedName() + ": "
-				+ Colors.LightGreen + residentOwned + Colors.LightGray + " / "
-				+ Colors.LightBlue  + typeCache.getNumTownBlocks(type, CacheType.FORSALE) + Colors.LightGray + " / "
-				+ Colors.Yellow + typeCache.getNumTownBlocks(type, CacheType.ALL) + Colors.LightGray
-				+ (TownyEconomyHandler.isActive() ? " / " + Colors.Green + TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)) : ""));
+			String plotTypeLine = translator.of("msg_town_plots_type_line", type.getFormattedName(), residentOwned, 
+				typeCache.getNumTownBlocks(type, CacheType.FORSALE), typeCache.getNumTownBlocks(type, CacheType.ALL));
+			if (TownyEconomyHandler.isActive())
+				plotTypeLine += translator.of("msg_town_plots_type_line_revenue", TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)));
+			out.add(plotTypeLine);
 		}
 		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
 		TownyMessaging.sendMessage(sender, out);
