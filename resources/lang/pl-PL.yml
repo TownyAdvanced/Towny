@@ -719,7 +719,7 @@ msg_bankrupt_nation2: '&bNacji %s nie stać na zapłacenie podatków.'
 status_embassy_town: 'Ambasady w'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&bNieprawidłowy komparator. Spróbuj %s.'
-msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_town: '&bNieprawidłowy komparator. Spróbuj %s.'
 msg_err_merging_for_kings_only: '&bScalenie może zostać przeprowadzone jedynie przez Lidera Nacji.'
 msg_err_king_of_that_nation_is_not_online: '&bLider Nacji %s, %s nie jest online. Scalenie nie powiodło się.'
 nation1_has_merged_with_nation2: '&6Nacja %s wyraziła zgodę na scalenie się ze zwierzchniczą nacją %s.'
@@ -732,7 +732,7 @@ msg_error_ta_plot_claim: 'Zabraklo nicku gracza. Uzyj pelnej komendy /ta plot cl
 msg_error_no_player_with_that_name: 'Nie znaleziono gracza o nicku %s'
 msg_admin_has_given_you_a_plot: 'Administrator przydzielił Ci działkę: %s'
 msg_town_forcepvp_setting_set_to: 'Miasto %s ma ustawione na %s'
-msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
+msg_town_forcedisabledpvp_setting_set_to: 'Miasto %s wymusiło ustawienie admindisabledpvp do %s'
 msg_nation_changed_open: '&cNacja %s zmienila status na otwarty.'
 msg_err_already_in_a_nation: 'Twoje miasto należy już do nacji.'
 msg_err_nation_not_open: '&cNacja %s nie otwiera swoich drzwi każdemu. Poproś lidera nacji, lub jego asystenta, aby dołączyć.'
@@ -1425,7 +1425,7 @@ tc_player_channel_sound_unmuted: 'Dźwięki wiadomości z tego kanału zostały 
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Na terenie twojej działki jest obcy, nie możesz zmienić statusu pvp!'
 #Added in 0.136
-msg_view_on_web: '&7Click to view on the web.'
+msg_view_on_web: '&Kliknij, aby wyświetlić na stronie.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6Miasto %s wyraziło zgodę na scalenie się z miastem zwierzchniczym %s.'
@@ -1510,7 +1510,7 @@ msg_err_nation_unaffiliated: 'Ta nacja nie jest z tobą w żaden sposób powią
 msg_err_town_unaffiliated: 'To miasto nie jest z tobą w żaden sposób powiązane.'
 #Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
-msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
+msg_err_this_location_already_has_a_jailcell: 'Ta lokalizacja ma już komórkę więzienia.'
 #Title line of the /plot perm hud.
 msg_perm_hud_title: 'Uprawnienia działki'
 #Seen in /plot perm hud:
@@ -1520,23 +1520,23 @@ msg_perm_hud_destroy: 'Niszczenie: '
 #Seen in /plot perm hud:
 msg_perm_hud_switch: 'Przełączanie: '
 #Seen in /plot perm hud:
-msg_perm_hud_item_use: 'Item: '
+msg_perm_hud_item_use: 'Przedmiot: '
 #Seen in /plot perm hud:
-msg_perm_hud_plot_type: 'Type: '
+msg_perm_hud_plot_type: 'Rodzaj: '
 #Seen in /plot perm hud:
 msg_perm_hud_pvp: 'Walka: '
 #Seen in /plot perm hud:
-msg_perm_hud_explosions: 'Explosions: '
+msg_perm_hud_explosions: 'Wybuchy: '
 #Seen in /plot perm hud:
-msg_perm_hud_firespread: 'Firespread: '
+msg_perm_hud_firespread: 'Rozprzestrzenianie się ognia: '
 #Seen in /plot perm hud:
-msg_perm_hud_mobspawns: 'Mob Spawns: '
+msg_perm_hud_mobspawns: 'Spawn Mobów: '
 #Seen in /plot perm hud:
-msg_perm_hud_key: 'Key'
+msg_perm_hud_key: 'Klucz'
 #Seen in /plot perm hud:
-msg_perm_hud_friend: 'friend'
+msg_perm_hud_friend: 'przyjaciel'
 #Seen in /plot perm hud:
-msg_perm_hud_town: 'town'
+msg_perm_hud_town: 'miasto'
 #Seen in /plot perm hud:
 msg_perm_hud_ally: 'ally'
 #Seen in /plot perm hud:
