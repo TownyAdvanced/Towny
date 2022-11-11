@@ -1579,7 +1579,7 @@ msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the ma
 msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
 msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
 msg_x_has_been_released_as_jail_slots_ran_out: '%s has been released to make space for another prisoner.'
-msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Bạn đã được thả ra vì những người cai tù của bạn không còn đủ khả năng để giam cầm bạn.'
 msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
 msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
 msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
