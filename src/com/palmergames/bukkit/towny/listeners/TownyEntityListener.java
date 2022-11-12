@@ -315,9 +315,6 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		ThrownPotion potion = event.getPotion();
-		Entity attacker = null;
-
 		boolean detrimental = false;
 
 		/*
@@ -325,7 +322,7 @@ public class TownyEntityListener implements Listener {
 		 */
 		List<String> detrimentalPotions = TownySettings.getPotionTypes();
 		
-		for (PotionEffect effect : potion.getEffects()) {
+		for (PotionEffect effect : event.getPotion().getEffects()) {
 
 			/*
 			 * Check to see if any of the potion effects are protected.
@@ -339,33 +336,11 @@ public class TownyEntityListener implements Listener {
 		
 		if (!detrimental)
 			return;
-
-		Object source = potion.getShooter();
-		Block dispenser = null;
-
-		if (source instanceof BlockProjectileSource blockProjectileSource) {
-			dispenser = blockProjectileSource.getBlock();
-		} else if (source instanceof Entity entity) {
-			attacker = entity;
-		} else {
-			// The source is not a block (dispenser) and not an entity somehow.
-			// Probably caused by a faulty "custom entities" plugin.
-			return;
-		}
 		
 		for (LivingEntity defender : event.getAffectedEntities()) {
-			if (dispenser != null) {
-				if (CombatUtil.preventDispenserDamage(dispenser, defender, DamageCause.MAGIC))
-					event.setIntensity(defender, -1.0);
-			} else 
-			/*
-			 * Don't block potion use on ourselves
-			 * yet allow the use of beneficial potions on all.
-			 */
-			if (attacker != defender)
-				if (CombatUtil.preventDamageCall(attacker, defender, DamageCause.MAGIC)) {
-					event.setIntensity(defender, -1.0);
-				}
+			if (CombatUtil.preventDamageCall(event.getPotion(), defender, DamageCause.MAGIC)) {
+				event.setIntensity(defender, -1.0);
+			}
 		}
 	}
 
