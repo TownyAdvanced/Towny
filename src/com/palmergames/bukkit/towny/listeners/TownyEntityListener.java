@@ -255,6 +255,27 @@ public class TownyEntityListener implements Listener {
 			return;
 		
 		ThrownPotion potion = event.getEntity();
+		boolean detrimental = false;
+
+		/*
+		 * List of potion effects blocked from PvP.
+		 */
+		List<String> detrimentalPotions = TownySettings.getPotionTypes();
+
+		for (PotionEffect effect : potion.getEffects()) {
+
+			/*
+			 * Check to see if any of the potion effects are protected.
+			 */
+			if (detrimentalPotions.contains(effect.getType().getName())) {
+				detrimental = true;
+				break;
+			}
+		}
+
+		if (!detrimental)
+			return;
+		
 		Location loc = potion.getLocation();		
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
 		float radius = event.getAreaEffectCloud().getRadius();
@@ -267,30 +288,11 @@ public class TownyEntityListener implements Listener {
 			    if (b.getType().equals(Material.AIR)) blocks.add(b);
 			}		   
 		}
-		
-		List<PotionEffect> effects = (List<PotionEffect>) potion.getEffects();
-		boolean detrimental = false;
-
-		/*
-		 * List of potion effects blocked from PvP.
-		 */
-		List<String> prots = TownySettings.getPotionTypes();
-				
-		for (PotionEffect effect : effects) {
-
-			/*
-			 * Check to see if any of the potion effects are protected.
-			 */
-			if (prots.contains(effect.getType().getName())) {
-				detrimental = true;
-			}
-		}
 
 		for (Block block : blocks) {
 						
 			if (!TownyAPI.getInstance().isWilderness(block.getLocation()) 
-					&& CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(block.getLocation())) 
-					&& detrimental) {
+					&& CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(block.getLocation()))) {
 				event.setCancelled(true);
 				break;
 			}			
@@ -313,43 +315,47 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		List<LivingEntity> affectedEntities = (List<LivingEntity>) event.getAffectedEntities();
 		ThrownPotion potion = event.getPotion();
 		Entity attacker = null;
 
-		List<PotionEffect> effects = (List<PotionEffect>) potion.getEffects();
 		boolean detrimental = false;
 
 		/*
 		 * List of potion effects blocked from PvP.
 		 */
-		List<String> prots = TownySettings.getPotionTypes();
+		List<String> detrimentalPotions = TownySettings.getPotionTypes();
 		
-		
-		for (PotionEffect effect : effects) {
+		for (PotionEffect effect : potion.getEffects()) {
 
 			/*
 			 * Check to see if any of the potion effects are protected.
 			 */
 			
-			if (prots.contains(effect.getType().getName())) {
+			if (detrimentalPotions.contains(effect.getType().getName())) {
 				detrimental = true;
+				break;
 			}
-
 		}
+		
+		if (!detrimental)
+			return;
 
 		Object source = potion.getShooter();
 		Block dispenser = null;
 
 		if (source instanceof BlockProjectileSource blockProjectileSource) {
 			dispenser = blockProjectileSource.getBlock();
+		} else if (source instanceof Entity entity) {
+			attacker = entity;
 		} else {
-			attacker = (Entity) source;
+			// The source is not a block (dispenser) and not an entity somehow.
+			// Probably caused by a faulty "custom entities" plugin.
+			return;
 		}
 		
-		for (LivingEntity defender : affectedEntities) {
+		for (LivingEntity defender : event.getAffectedEntities()) {
 			if (dispenser != null) {
-				if (CombatUtil.preventDispenserDamage(dispenser, defender, DamageCause.MAGIC) && detrimental)
+				if (CombatUtil.preventDispenserDamage(dispenser, defender, DamageCause.MAGIC))
 					event.setIntensity(defender, -1.0);
 			} else 
 			/*
@@ -357,7 +363,7 @@ public class TownyEntityListener implements Listener {
 			 * yet allow the use of beneficial potions on all.
 			 */
 			if (attacker != defender)
-				if (CombatUtil.preventDamageCall(attacker, defender, DamageCause.MAGIC) && detrimental) {
+				if (CombatUtil.preventDamageCall(attacker, defender, DamageCause.MAGIC)) {
 					event.setIntensity(defender, -1.0);
 				}
 		}
