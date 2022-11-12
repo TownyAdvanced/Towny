@@ -8028,3 +8028,7 @@ v0.92.0.11:
 0.98.4.1:
   - Make /town plots output translatable.
   - API: Add TownyAPI#getNations which returns a list of all nations.
+  - Fix potion splash event edge case, courtesy of Warriorrrr with PR #6296.
+  - Replace unmodifiable annotation with jetbrains equivalent, courtesy of Warriorrrr with PR #6292.
+  - Minor regen api refactor, courtesy of Warriorrrr with PR #6271.
+  - Reformat Contributing.md, courtesy of GNosii with PR #6254.
