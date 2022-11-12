@@ -3367,5 +3367,9 @@ public class TownySettings {
 	public static List<String> getTownUnkickableRanks() {
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_UNKICKABLE_RANKS);
 	}
+	
+	public static boolean areProtectedEntitiesProtectedAgainstMobs() {
+		return getBoolean(ConfigNodes.PROT_MOB_TYPES_MOB_VS_MOB_BYPASS);
+	}
 }
 

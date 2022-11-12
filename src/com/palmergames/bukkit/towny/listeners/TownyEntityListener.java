@@ -115,6 +115,7 @@ public class TownyEntityListener implements Listener {
 			 * First we protect all protectedMobs as long as the location cannot explode.
 			 */
 			if (EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defender)
+				&& TownySettings.areProtectedEntitiesProtectedAgainstMobs()
 				&& !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause()))
 				cancelExplosiveDamage = true;
 			

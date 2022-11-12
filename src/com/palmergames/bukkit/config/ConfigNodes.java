@@ -1566,6 +1566,12 @@ public enum ConfigNodes {
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
 			"",
 			"# Protect living entities within a town's boundaries from being killed by players or mobs."),
+	PROT_MOB_TYPES_MOB_VS_MOB_BYPASS(
+			"protection.are_mob_types_protected_against_mobs",
+			"true",
+			"",
+			"# Setting this to false will allow non-player entities to harm the above protected mobs.",
+			"# This would include withers damaging protected mobs, and can be quite harmful."),
 	PROT_POTION_TYPES(
 			"protection.potion_types",
 			"BLINDNESS,CONFUSION,HARM,HUNGER,POISON,SLOW,SLOW_DIGGING,WEAKNESS,WITHER",

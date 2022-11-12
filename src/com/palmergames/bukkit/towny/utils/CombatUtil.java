@@ -272,6 +272,12 @@ public class CombatUtil {
 				if (defenderTB == null)
 					return false;
 
+				/*
+				 * The config is set up so that non-players (mobs) are allowed to hurt the normally-protected entity types.
+				 */
+				if (!TownySettings.areProtectedEntitiesProtectedAgainstMobs())
+					return false;
+
 			    /*
 			     * Prevents projectiles fired by non-players harming non-player entities.
 			     * Could be a monster or it could be a dispenser.
