@@ -8033,4 +8033,4 @@ v0.92.0.11:
   - Minor regen api refactor, courtesy of Warriorrrr with PR #6271.
   - Reformat Contributing.md, courtesy of GNosii with PR #6254.
   - Add more comments to the Config's new world section, making it even clearer how to adjust world settings.
-    - Closes #6297.
+    - Closes #6244.
