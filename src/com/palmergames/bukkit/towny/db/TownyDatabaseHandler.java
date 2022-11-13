@@ -677,11 +677,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		plugin.resetCache();
 		
-		UUID kingUUID = null;
-		if (king != null)
-			kingUUID = king.getUUID();
-
-		BukkitTools.fireEvent(new DeleteNationEvent(nation, kingUUID));
+		BukkitTools.fireEvent(new DeleteNationEvent(nation, king));
 	}
 
 	@Override
