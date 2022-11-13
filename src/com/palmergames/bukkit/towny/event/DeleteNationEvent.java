@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,10 +24,13 @@ public class DeleteNationEvent extends TownyObjDeleteEvent  {
 	}
 
     private final UUID kingUUID;
-    
-    public DeleteNationEvent(Nation nation, UUID uuid) {
+    private final Resident king;
+
+    public DeleteNationEvent(Nation nation, Resident king) {
         super(nation.getName(), nation.getUUID(), nation.getRegistered());
-        kingUUID = uuid;
+        
+        this.king = king;
+        this.kingUUID = king == null ? null : king.getUUID();
     }
 
     /**
@@ -51,10 +56,27 @@ public class DeleteNationEvent extends TownyObjDeleteEvent  {
 	}
 	
 	/**
+     * @deprecated in favor of {@link #getKingUUID()} 
 	 * @return deleted nation king uuid.
 	 */
 	@Nullable
 	public UUID getNationKing() {
 		return kingUUID;
+	}
+
+    /**
+	 * @return the deleted nation's king's UUID, or {@code null}.
+	 */
+	@Nullable
+	public UUID getKingUUID() {
+		return kingUUID;
+	}
+
+	/**
+	 * @return The deleted nation's king, or {@code null}.
+	 */
+	@Nullable
+	public Resident getKing() {
+		return king;
 	}
 }
