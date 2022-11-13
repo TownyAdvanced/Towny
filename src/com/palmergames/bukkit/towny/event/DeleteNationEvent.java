@@ -67,18 +67,19 @@ public class DeleteNationEvent extends TownyObjDeleteEvent  {
 	}
 
     /**
-	 * @return the deleted nation's king's UUID, or {@code null}.
+	 * @return the deleted nation's leader's UUID, or {@code null}.
 	 */
 	@Nullable
-	public UUID getKingUUID() {
+	public UUID getLeaderUUID() {
 		return kingUUID;
 	}
 
 	/**
-	 * @return The deleted nation's king, or {@code null}.
+	 * @return The deleted nation's leader's Resident object, or {@code null}.
 	 */
 	@Nullable
-	public Resident getKing() {
+	public Resident getLeader() {
 		return king;
 	}
+
 }
