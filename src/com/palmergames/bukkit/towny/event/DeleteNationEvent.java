@@ -56,11 +56,13 @@ public class DeleteNationEvent extends TownyObjDeleteEvent  {
 	}
 	
 	/**
-     * @deprecated in favor of {@link #getKingUUID()} 
-	 * @return deleted nation king uuid.
+     * @deprecated since 0.98.4.2 in favor of {@link #getLeaderUUID()} 
+	 * @return deleted nation leader uuid.
 	 */
 	@Nullable
+	@Deprecated
 	public UUID getNationKing() {
+
 		return kingUUID;
 	}
 
