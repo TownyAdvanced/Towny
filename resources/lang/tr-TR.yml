@@ -1596,7 +1596,7 @@ confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure 
 #Part of the /town plots output.
 msg_town_plots_title: ' Kasaba Arazileri'
 #Part of the /town plots output.
-msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+msg_town_plots_town_size: '<dark_green>Kasaba Büyüklüğü: <green>%s/%s'
 #Part of the /town plots output.
 msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
 #Part of the /town plots output.
