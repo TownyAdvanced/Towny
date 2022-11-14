@@ -60,6 +60,7 @@ public class Town extends Government implements TownBlockOwner {
 	private Map<UUID, Town> allies = new LinkedHashMap<>();
 	private Map<UUID, Town> enemies = new LinkedHashMap<>();
 	private final Set<Resident> trustedResidents = new HashSet<>();
+	private final Map<UUID, Town> trustedTowns = new LinkedHashMap<>();
 	private List<Location> outpostSpawns = new ArrayList<>();
 	private List<Jail> jails = null;
 	private HashMap<String, PlotGroup> plotGroups = null;
@@ -1488,7 +1489,8 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public boolean hasTrustedResident(Resident resident) {
-		return trustedResidents.contains(resident);
+		Town residentsTown = resident.getTownOrNull();
+		return trustedResidents.contains(resident) || (residentsTown != null && this.hasTrustedTown(residentsTown));
 	}
 	
 	public void addTrustedResident(Resident resident) {
@@ -1556,7 +1558,35 @@ public class Town extends Government implements TownBlockOwner {
 	public boolean hasMutualAlly(Town town) {
 		return hasAlly(town) && town.hasAlly(this);
 	}
+	/**
+	 * Only to be used when loading the database.
+	 * @param towns List&lt;Town&gt; which will be loaded in as trusted towns.
+	 */
+	public void loadTrustedTowns(List<Town> towns) {
+		for (Town trustTown : towns) {
+			trustedTowns.put(trustTown.getUUID(), trustTown);
+		}
+	}
 
+	public void addTrustedTown(Town town) {
+		trustedTowns.put(town.getUUID(), town);
+	}
+
+	public void removeTrustedTown(Town town) {
+		trustedTowns.remove(town.getUUID());
+	}
+
+	public boolean removeAllTrustedTowns() {
+		for (Town trusted : new ArrayList<>(getTrustedTowns())) {
+			removeTrustedTown(trusted);
+		}
+		return getTrustedTowns().isEmpty();
+	}
+
+	public boolean hasTrustedTown(Town town) {
+		return trustedTowns.containsKey(town.getUUID());
+	}
+	
 	/**
 	 * Only to be used when loading the database.
 	 * @param towns List&lt;Town&gt; which will be loaded in as enemies.
@@ -1605,6 +1635,10 @@ public class Town extends Government implements TownBlockOwner {
 	public List<Town> getAllies() {
 		return Collections.unmodifiableList(allies.values().stream().collect(Collectors.toList()));
 	}
+
+	public List<Town> getTrustedTowns() {
+		return Collections.unmodifiableList(trustedTowns.values().stream().collect(Collectors.toList()));
+	}
 	
 	public List<Town> getMutualAllies() {
 		List<Town> result = new ArrayList<>();
@@ -1623,6 +1657,9 @@ public class Town extends Government implements TownBlockOwner {
 		return Collections.unmodifiableList(enemies.keySet().stream().collect(Collectors.toList()));
 	}
 	
+	public List<UUID> getTrustedTownsUUIDS() {
+		return Collections.unmodifiableList(trustedTowns.keySet().stream().collect(Collectors.toList()));
+	}
 	public boolean isNationZoneEnabled() {
 		return nationZoneEnabled;
 	}

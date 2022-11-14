@@ -194,6 +194,7 @@ public class SQL_Schema {
 		columns.add("`primaryJail` VARCHAR(36) DEFAULT NULL");
 		columns.add("`movedHomeBlockAt` BIGINT NOT NULL");
 		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
+		columns.add("`trustedTowns` mediumtext NOT NULL");
 		columns.add("`nationZoneOverride` int(11) DEFAULT 0");
 		columns.add("`nationZoneEnabled` bool NOT NULL DEFAULT '1'");
 		columns.add("`allies` mediumtext NOT NULL");

@@ -146,6 +146,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"invite",
 		"unruin",
 		"trust",
+		"trusttown",
 		"checkoutposts",
 		"settownlevel",
 		"giveboughtblocks",
@@ -1478,6 +1479,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[1].equalsIgnoreCase("trust")) {
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_TRUST.getNode());
 				TownCommand.parseTownTrustCommand(sender, StringMgmt.remArgs(split, 2), town);
+			} else if (split[1].equalsIgnoreCase("trusttown")) {
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_TRUSTTOWN.getNode());
+				TownCommand.parseTownTrustTownCommand(sender, StringMgmt.remArgs(split, 2), town);
 			} else if (split[1].equalsIgnoreCase("merge")) {
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_MERGE.getNode());
 				TownCommand.parseTownMergeCommand(sender, StringMgmt.remArgs(split, 2), town, true);
