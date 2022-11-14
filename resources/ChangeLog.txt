@@ -8041,3 +8041,4 @@ v0.92.0.11:
     - This would include withers damaging protected mobs, and can be quite harmful.
     - Closes #6299.
   - Fix towny.admin.spawn not also being tested for in spawning.
+  - Improve javadocs with <group> tags, courtesy of GNosii with PR #6304.
