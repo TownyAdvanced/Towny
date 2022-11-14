@@ -8043,3 +8043,20 @@ v0.92.0.11:
   - Fix towny.admin.spawn not also being tested for in spawning.
   - Improve javadocs with <group> tags, courtesy of GNosii with PR #6304.
   - API: DeleteNationEvent continuity fix, courtesy of PainOchoco with PR #6301.
+  - New TrustedTowns feature, courtesy of Kali0033 with PR #6276.
+    - It is now possible for a town to add another town as trusted.
+    - This means that anyone in the 2nd town can do any build/destroy/switch/itemuse as if they were a mayor in the first town.
+    - Obviously this should only be given out under very limited circumstances, anyone added to the 2nd town after trust is given will also have full plot perm rights in the first town.
+    - There is a confirmation warning the player that uses the /t trusttown add command.
+  - New Command: /ta [townname] trusttown
+    - Requires towny.command.townyadmin.town.trusttown permission node.
+    - Subcommands:
+      - add *townname*
+      - remove *townname*
+      - list
+  - New Command: /t trusttown
+    - Requires towny.command.town.trusttown permission node.
+    - Subcommands:
+      - add [townname]
+      - remove [townname]
+      - list
