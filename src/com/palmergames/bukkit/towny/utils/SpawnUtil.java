@@ -200,10 +200,10 @@ public class SpawnUtil {
 	 * Is this a player with the admin spawn node.
 	 * 
 	 * @param player Player to test permissions for.
-	 * @return true if this player has towny.admin.spawn in their permission nodes.
+	 * @return true if this player has towny.admin or towny.admin.spawn in their permission nodes.
 	 */
 	private static boolean isTownyAdmin(Player player) {
-		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player);
+		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) || hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN);
 	}
 	
 	/**

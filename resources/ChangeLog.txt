@@ -8040,3 +8040,4 @@ v0.92.0.11:
     - Setting this to false will allow non-player entities to harm the above protected mobs.
     - This would include withers damaging protected mobs, and can be quite harmful.
     - Closes #6299.
+  - Fix towny.admin.spawn not also being tested for in spawning.
