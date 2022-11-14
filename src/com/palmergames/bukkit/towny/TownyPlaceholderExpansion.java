@@ -593,7 +593,13 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		case "number_of_towns_in_server": // %townyadvanced_number_of_towns_in_server%
 			return String.valueOf(TownyUniverse.getInstance().getTowns().size());
 		case "number_of_neutral_towns_in_server": // %townyadvanced_number_of_neutral_towns_in_server%
-			return String.valueOf(TownyUniverse.getInstance().getTowns().stream().filter(t -> t.isNeutral()).count());
+			return String.valueOf(TownyUniverse.getInstance().getTowns().stream().filter(Town::isNeutral).count());
+		case "nation_or_town_name":	// %townyadvanced_nation_or_town_name%
+			return !resident.hasTown() 
+				? ""
+				: resident.hasNation()
+					? String.format(TownySettings.getPAPIFormattingNation(), resident.getNationOrNull().getName())
+					: String.format(TownySettings.getPAPIFormattingTown(), resident.getTownOrNull().getName());
 		default:
 			return null;
 		}
