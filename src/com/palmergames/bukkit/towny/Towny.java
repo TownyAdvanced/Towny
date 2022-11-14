@@ -92,10 +92,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 /**
- * Towny Plugin for Bukkit
- * 
- * Website &amp; Source: https://github.com/TownyAdvanced/Towny
- * 
+ * Main class for <a href="https://github.com/TownyAdvanced/Towny">Towny</a>
  * @author Shade, ElgarL, LlmDl
  */
 public class Towny extends JavaPlugin {
