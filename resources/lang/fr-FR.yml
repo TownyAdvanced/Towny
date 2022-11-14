@@ -1594,23 +1594,23 @@ msg_err_cannot_join_nation_over_town_limit: '&cVous ne pouvez pas rejoindre cett
 #Message shown confirming /tw set usedefaults
 confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Êtes-vous sûr de vouloir réinitialiser tous les paramètres de ce monde à ceux qui sont définis dans la configuration ?'
 #Part of the /town plots output.
-msg_town_plots_title: ' Town Plots'
+msg_town_plots_title: ' Parcelles de Ville'
 #Part of the /town plots output.
-msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+msg_town_plots_town_size: '<dark_green>Taille de la Ville : <green>%s/%s'
 #Part of the /town plots output.
-msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
+msg_town_plots_town_bought: ' <aqua>[Acheté : %s/%s]'
 #Part of the /town plots output.
-msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
+msg_town_plots_town_bonus: ' <aqua>[Bonus : %s]'
 #Part of the /town plots output.
-msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+msg_town_plots_town_nationbonus: ' <aqua>[Bonus de Nation : %s]'
 #Part of the /town plots output.
-msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
+msg_town_plots_town_owned_land: '<dark_green>Terrain possédé par la Ville: <green>%s'
 #Part of the /town plots output.
-msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+msg_town_plots_type_header: '<dark_green>Type : <green>Possédé par des joueurs <gray>/ <aqua>En vente <gray>/ <yellow>Total'
 #Part of the /town plots output.
-msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Revenus quotidiens'
 #Part of the /town plots output.
-msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
+msg_town_plots_type_line: '<dark_green>%s = <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 
