@@ -221,7 +221,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>3.4.1</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -231,8 +231,43 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <source>16</source>
+                    <source>${java.version}</source>
                     <doclint>all,-missing</doclint>
+                    <doctitle>Towny - ${project.version}</doctitle>
+                    <groups>
+                        <group>
+                            <title>Events</title>
+                            <packages>com.palmergames.bukkit.towny.event*</packages>
+                        </group>
+                        <group>
+                            <title>Objects</title>
+                            <packages>com.palmergames.bukkit.towny.object*</packages>
+                        </group>
+                        <group>
+                            <title>Tasks</title>
+                            <packages>com.palmergames.bukkit.towny.regen*:com.palmergames.bukkit.towny.tasks</packages>
+                        </group>
+                        <group>
+                            <title>Plugin</title>
+                            <packages>com.palmergames.bukkit.towny.command*:com.palmergames.bukkit.towny.listeners*:com.palmergames.bukkit.towny:com.palmergames.bukkit.config*:com.palmergames.bukkit.towny.db*</packages>
+                        </group>
+                        <group>
+                            <title>Player</title>
+                            <packages>com.palmergames.bukkit.towny.confirmations:com.palmergames.bukkit.towny.invites:com.palmergames.bukkit.towny.conversation:com.palmergames.bukkit.towny.huds</packages>
+                        </group>
+                        <group>
+                            <title>Hooks</title>
+                            <packages>com.palmergames.bukkit.towny.permissions:com.palmergames.bukkit.towny.hooks:com.palmergames.bukkit.towny.chat*</packages>
+                        </group>
+                        <group>
+                            <title>Exceptions</title>
+                            <packages>com.palmergames.bukkit.towny.exceptions*:com.palmergames.bukkit.towny.invites.exceptions</packages>
+                        </group>
+                        <group>
+                            <title>Utilities</title>
+                            <packages>com.palmergames.annotations:com.palmergames.util:com.palmergames.bukkit.util:com.palmergames.bukkit.towny.utils</packages>
+                        </group>
+                    </groups>
                 </configuration>
             </plugin>
             <plugin>  <!-- Create sources.jar -->
@@ -345,7 +380,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.4.1</version>
                         <executions>
                             <execution>
                                 <phase>none</phase>
