@@ -477,7 +477,7 @@ public class TownyPlayerListener implements Listener {
 					
 					// Fire a cancellable event prior to us denying bed use.
 					PlayerDeniedBedUseEvent pdbue = new PlayerDeniedBedUseEvent(player, blockLoc, isEnemy, denialMessage);
-					if (!BukkitTools.isEventCancelled(pdbue)) {
+					if (BukkitTools.isEventCancelled(pdbue)) {
 						event.setCancelled(true);
 						TownyMessaging.sendErrorMsg(player, pdbue.getDenialMessage());
 					}
