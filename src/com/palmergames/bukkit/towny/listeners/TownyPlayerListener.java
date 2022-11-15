@@ -426,7 +426,7 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Catches respawn anchors blowing up and allows us to track their explosions.
 			 */
-			if (block.getType() == Material.RESPAWN_ANCHOR && event.getAction() == Action.RIGHT_CLICK_BLOCK && !block.getWorld().isRespawnAnchorWorks()) {
+			if (block.getType() == Material.RESPAWN_ANCHOR && event.getAction() == Action.RIGHT_CLICK_BLOCK && !isRespawnAnchorWorking(block)) {
 				RespawnAnchor anchor = ((RespawnAnchor) block.getBlockData());
 				if (anchor.getCharges() > 0)
 					BukkitTools.fireEvent(new BedExplodeEvent(player, blockLoc, null, block.getType()));
@@ -486,6 +486,18 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 
+	private boolean isRespawnAnchorWorking(Block block) {
+		boolean allowedInWorld = false;
+		try {
+			allowedInWorld = block.getWorld().isRespawnAnchorWorks();
+		} catch (NoSuchMethodError ignored) {
+			// Pre-1.18 versions of the Bukkit API do not have an isRespawnAnchorWorks() method.
+			// TODO: Drop this when Towny no longer supports earlier than MC 1.18.
+			allowedInWorld = block.getWorld().getEnvironment().equals(Environment.NETHER);
+		}
+		return allowedInWorld;
+	}
+
 	/*
 	 * This method will stop a player Right Clicking on a respawn anchor if:
 	 * - The world is an anchor-allowed world (the nether) and,
@@ -494,7 +506,7 @@ public class TownyPlayerListener implements Listener {
 	 * - The Item in their hand is nothing or (not-glowstone or the charges are full.) 
 	 */
 	private boolean disallowedAnchorClick(PlayerInteractEvent event, Block block) {
-		return block.getWorld().getEnvironment().equals(Environment.NETHER)
+		return isRespawnAnchorWorking(block)
 			&& block.getBlockData() instanceof RespawnAnchor anchor 
 			&& anchor.getCharges() > 0 
 			&& (event.getItem() == null || (event.getItem().getType() != Material.GLOWSTONE || anchor.getCharges() >= anchor.getMaximumCharges()));

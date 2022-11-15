@@ -8060,3 +8060,4 @@ v0.92.0.11:
       - add [townname]
       - remove [townname]
       - list
+  - Fix NoSuchMethodError on 1.16.5 servers regarding World#isRespawnAnchorWorks.
