@@ -459,7 +459,6 @@ public class TownyEntityListener implements Listener {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	/**
 	 * Handles:
 	 *  Enderman thieving protected blocks.
@@ -470,16 +469,19 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event - onEntityChangeBlockEvent
 	 */
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
-		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
-			return;
 
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName());
+
+		if (townyWorld == null || !townyWorld.isUsingTowny())
+			return;
+
 		
 		// Crop trampling protection done here.
 		if (event.getBlock().getType().equals(Material.FARMLAND)) {
@@ -495,16 +497,14 @@ public class TownyEntityListener implements Listener {
 			}
 		}
 
-		// Switch over name instead of EntityType to maintain pre-1.19 compatibility. (For chest_boats.)
-		switch (event.getEntity().getType().name()) {
-	
-			case "ENDERMAN":
+		switch (event.getEntity().getType()) {
+			case ENDERMAN -> {
 				if (townyWorld.isEndermanProtect())
 					event.setCancelled(true);
-				break;
+			}
 
 			/* Protect lily pads. */
-			case "BOAT", "CHEST_BOAT":
+			case BOAT, CHEST_BOAT -> {
 				if (!event.getBlock().getType().equals(Material.LILY_PAD))
 					return;
 				Boat boat = (Boat) event.getEntity();
@@ -514,25 +514,26 @@ public class TownyEntityListener implements Listener {
 				else if (!TownyAPI.getInstance().isWilderness(event.getBlock()))
 					// Protect townland from non-player-ridden boats. (Maybe someone is pushing a boat?)
 					event.setCancelled(true);
-				break;
+			}
 
-			case "RAVAGER":
+			case RAVAGER -> {
 				if (townyWorld.isDisableCreatureTrample())
 					event.setCancelled(true);
-				break;
+			}
 
-			case "WITHER":
+			case WITHER -> {
 				List<Block> allowed = TownyActionEventExecutor.filterExplodableBlocks(Collections.singletonList(event.getBlock()), event.getBlock().getType(), event.getEntity(), event);
 				event.setCancelled(allowed.isEmpty());
-				break;
+			}
 
 			/* Protect campfires from SplashWaterBottles. Uses a destroy test. */
-			case "SPLASH_POTION":
+			case SPLASH_POTION -> {
 				if (event.getBlock().getType() != Material.CAMPFIRE && ((ThrownPotion) event.getEntity()).getShooter() instanceof Player)
 					return;
 				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) ((ThrownPotion) event.getEntity()).getShooter(), event.getBlock().getLocation(), Material.CAMPFIRE));
-				break;
-			default:
+			}
+			
+			default -> {}
 		}
 	}
 
