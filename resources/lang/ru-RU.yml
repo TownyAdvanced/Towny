@@ -1594,24 +1594,24 @@ msg_err_cannot_join_nation_over_town_limit: '&cВы не можете присо
 #Message shown confirming /tw set usedefaults
 confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Вы уверены, что хотите сбросить все настройки этого мира к тем, что указаны в конфигурации?'
 #Part of the /town plots output.
-msg_town_plots_title: ' Town Plots'
+msg_town_plots_title: ' Городские участки'
 #Part of the /town plots output.
-msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+msg_town_plots_town_size: '<dark_green>Размер Города: <green>%s/%s'
 #Part of the /town plots output.
-msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
+msg_town_plots_town_bought: ' <aqua>Куплено: %s/%s]'
 #Part of the /town plots output.
-msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
+msg_town_plots_town_bonus: ' <aqua>[Бонус: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+msg_town_plots_town_nationbonus: ' <aqua>[НациональныйБонус: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
+msg_town_plots_town_owned_land: '<dark_green>Земля В Собственности Города: <green>%s'
 #Part of the /town plots output.
-msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+msg_town_plots_type_header: '<dark_green>Тип: <green>Принадлежащие Игрокам <gray>/ <aqua>Продается <gray>/ <yellow>Всего'
 #Part of the /town plots output.
-msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Ежедневный доход'
 #Part of the /town plots output.
 msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
-confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'
+confirmation_msg_trusttown_consequences: 'Вы собираетесь дать полные права на участок всему городу. Это означает, что мэр города сможет решать, кто получит разрешение на строительство и снос в вашем городе, добавляя жителей. Если этот город открыт, то любой может присоединиться и получить полный доступ к вашему городу. Вы уверены, что хотите доверять всем жителям (включая будущих жителей) этого города?'
