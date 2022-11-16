@@ -147,7 +147,7 @@ msg_you_left: '&bVous avez quitté %s.'
 msg_not_mayor: '&bVous n''êtes pas le maire de la ville.'
 msg_not_king: '&bVous n''êtes pas le dirigeant de la nation.'
 msg_not_mayor_ass: '&bVous n''êtes pas le maire ni un assistant de la ville.'
-msg_not_king_ass: '&bVous n''êtes pas le dirigeant de la nation ou un assistant.'
+msg_not_king_ass: '&bVous n''êtes ni le dirigeant de la nation ni un assistant.'
 msg_own_nation_disallow: '&bVous ne pouvez pas faire ceci à votre propre nation.'
 msg_no_perms_claim: '&bVous n''avez pas la permission d''étendre votre ville.'
 msg_outpost_disable: '&bLes avant-postes ne sont pas disponibles.'
@@ -1613,6 +1613,5 @@ msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Revenus quotidiens'
 msg_town_plots_type_line: '<dark_green>%s = <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
-
-
-
+#Message giving confirmation warning for trusttown
+confirmation_msg_trusttown_consequences: 'Vous êtes sur le point d''accorder des autorisations complètes à une ville entière. Cela signifie que le maire de la ville pourra décider qui obtiendra l''autorisation de construire et de detruire dans votre ville, en ajoutant des habitants. Si cette ville est ouverte, alors n''importe qui peut rejoindre et obtenir un accès complet à votre ville. Êtes-vous sûr de vouloir faire confiance à tous les résidents (y compris les futurs résidents) de cette ville ?'
