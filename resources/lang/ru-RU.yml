@@ -1594,9 +1594,9 @@ msg_err_cannot_join_nation_over_town_limit: '&cВы не можете присо
 #Message shown confirming /tw set usedefaults
 confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Вы уверены, что хотите сбросить все настройки этого мира к тем, что указаны в конфигурации?'
 #Part of the /town plots output.
-msg_town_plots_title: ' Городские участки'
+msg_town_plots_title: ' Участки города'
 #Part of the /town plots output.
-msg_town_plots_town_size: '<dark_green>Размер Города: <green>%s/%s'
+msg_town_plots_town_size: '<dark_green>Размер города: <green>%s/%s'
 #Part of the /town plots output.
 msg_town_plots_town_bought: ' <aqua>Куплено: %s/%s]'
 #Part of the /town plots output.
@@ -1604,9 +1604,9 @@ msg_town_plots_town_bonus: ' <aqua>[Бонус: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_nationbonus: ' <aqua>[НациональныйБонус: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_owned_land: '<dark_green>Земля В Собственности Города: <green>%s'
+msg_town_plots_town_owned_land: '<dark_green>Земли во владении города: <green>%s'
 #Part of the /town plots output.
-msg_town_plots_type_header: '<dark_green>Тип: <green>Принадлежащие Игрокам <gray>/ <aqua>Продается <gray>/ <yellow>Всего'
+msg_town_plots_type_header: '<dark_green>Тип: <green>Принадлежат игрокам <gray>/ <aqua>Продаются <gray>/ <yellow>Всего'
 #Part of the /town plots output.
 msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Ежедневный доход'
 #Part of the /town plots output.
