@@ -1744,6 +1744,10 @@ public class TownySettings {
 		return getString(ConfigNodes.ECO_PRICE_DEATH_TYPE).equalsIgnoreCase("fixed");
 	}
 	
+	public static boolean isDeathPricePercentBased() {
+		return !isDeathPriceType();
+	}
+	
 	public static double getDeathPricePercentageCap() {
 		
 		return getDouble(ConfigNodes.ECO_PRICE_DEATH_PERCENTAGE_CAP);
