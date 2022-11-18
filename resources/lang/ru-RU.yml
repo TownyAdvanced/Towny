@@ -1602,7 +1602,7 @@ msg_town_plots_town_bought: ' <aqua>Куплено: %s/%s]'
 #Part of the /town plots output.
 msg_town_plots_town_bonus: ' <aqua>[Бонус: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_nationbonus: ' <aqua>[НациональныйБонус: %s]'
+msg_town_plots_town_nationbonus: ' <aqua>[Бонус нации: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_owned_land: '<dark_green>Земли во владении города: <green>%s'
 #Part of the /town plots output.
@@ -1614,4 +1614,4 @@ msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <y
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
-confirmation_msg_trusttown_consequences: 'Вы собираетесь дать полные права на участок всему городу. Это означает, что мэр города сможет решать, кто получит разрешение на строительство и снос в вашем городе, добавляя жителей. Если этот город открыт, то любой может присоединиться и получить полный доступ к вашему городу. Вы уверены, что хотите доверять всем жителям (включая будущих жителей) этого города?'
+confirmation_msg_trusttown_consequences: 'Вы собираетесь дать полные права на участок всему городу. Это означает, что мэр города сможет решать, кто получит разрешение на строительство и разрушение в вашем городе, добавляя жителей. Если этот город открыт, то любой игрок может присоединиться и получить полный доступ к вашему городу. Вы уверены, что хотите доверять всем жителям этого города (включая новых игроков)?'
