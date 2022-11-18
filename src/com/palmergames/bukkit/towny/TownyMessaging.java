@@ -875,6 +875,17 @@ public class TownyMessaging {
 		LOGGER.warn("Error: " + message.stripColors(true).translate());
 	}
 
+	/**
+	 * Send a message to All online ops or players with towny.admin, and the log.
+	 * @param message Translatable message to send.
+	 */
+	public static void sendMsgToOnlineAdmins(Translatable message) {
+		sendMsg(message);
+		for (Player player : Bukkit.getOnlinePlayers())
+			if (player.isOp() || player.hasPermission("towny.admin"))
+				sendMsg(player, message);
+	}
+	
 	/*
 	 * TOWN/RESIDENT/NATION/TOWNBLCOK STATUS SCREENS
 	 */
