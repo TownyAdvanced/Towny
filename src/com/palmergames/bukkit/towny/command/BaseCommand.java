@@ -348,9 +348,11 @@ public class BaseCommand implements TabCompleter{
 			throw new TownyException(Translatable.of("msg_err_console_only"));
 	}
 	
-	public static void catchConsole(CommandSender sender) throws TownyException {
-		if (sender instanceof ConsoleCommandSender)
+	public static Player catchConsole(CommandSender sender) throws TownyException {
+		if (!(sender instanceof Player player))
 			throw new TownyException(Translatable.of("msg_err_player_only"));
+		
+		return player;
 	}
 	
 	public static void checkPermOrThrow(Permissible permissible, String node) throws NoPermissionException {
