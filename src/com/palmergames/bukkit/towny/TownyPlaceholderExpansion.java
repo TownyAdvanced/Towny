@@ -598,8 +598,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return !resident.hasTown() 
 				? ""
 				: resident.hasNation()
-					? String.format(TownySettings.getPAPIFormattingNation(), resident.getNationOrNull().getName())
-					: String.format(TownySettings.getPAPIFormattingTown(), resident.getTownOrNull().getName());
+					? String.format(TownySettings.getPAPIFormattingNation(), StringMgmt.remUnderscore(resident.getNationOrNull().getName()))
+					: String.format(TownySettings.getPAPIFormattingTown(), StringMgmt.remUnderscore(resident.getTownOrNull().getName()));
 		default:
 			return null;
 		}

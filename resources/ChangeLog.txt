@@ -8074,3 +8074,5 @@ v0.92.0.11:
   - Fix nation and town taxes potentially being set to 0 when taxpercent is toggled off.
   - Fix NPE on startup, courtesy of Warriorrrr with PR #6322.
   - Improve /ta tpplot, courtesy of Warriorrrr with PR #6323.
+  - Remove underscores from %townyadvanced_nation_or_town_name% placeholder.
+    - Closes #6324.
