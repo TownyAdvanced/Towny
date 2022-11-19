@@ -8072,3 +8072,5 @@ v0.92.0.11:
   - API: Add TownyMessaging#sendMsgToOnlineAdmins.
   - Fix nation setting their taxes before setting taxpercent when the db loads.
   - Fix nation and town taxes potentially being set to 0 when taxpercent is toggled off.
+  - Fix NPE on startup, courtesy of Warriorrrr with PR #6322.
+  - Improve /ta tpplot, courtesy of Warriorrrr with PR #6323.
