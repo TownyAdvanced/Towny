@@ -8076,3 +8076,4 @@ v0.92.0.11:
   - Improve /ta tpplot, courtesy of Warriorrrr with PR #6323.
   - Remove underscores from %townyadvanced_nation_or_town_name% placeholder.
     - Closes #6324.
+  - Add warning on startup about PowerRanks.
