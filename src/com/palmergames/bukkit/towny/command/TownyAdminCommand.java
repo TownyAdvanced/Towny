@@ -65,6 +65,7 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
+import io.papermc.lib.PaperLib;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
@@ -1101,21 +1102,24 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		Player player = (Player) sender;
-		World world;
-		double x;
-		double y = 1.0;
-		double z;
-		Location loc;
-		if (Bukkit.getServer().getWorld(split[0]) != null ) {
-			world =  Bukkit.getServer().getWorld(split[0]);
-			x = Double.parseDouble(split[1]) * TownySettings.getTownBlockSize();
-			z = Double.parseDouble(split[2]) * TownySettings.getTownBlockSize();
-		} else {
+		World world = Bukkit.getWorld(split[0]);
+
+		if (world == null)
 			throw new TownyException(Translatable.of("msg_err_invalid_input", "Eg: /ta tpplot world x z"));
+		
+		int x, z;
+		try {
+			x = Integer.parseInt(split[1]) * TownySettings.getTownBlockSize();
+			z = Integer.parseInt(split[2]) * TownySettings.getTownBlockSize();
+		} catch (NumberFormatException e) {
+			throw new TownyException(Translatable.of("msg_error_input_must_be_int", "x and z"));
 		}
-		y = Bukkit.getWorld(world.getName()).getHighestBlockYAt(new Location(world, x, y, z));
-		loc = new Location(world, x, y, z);
-		player.teleport(loc, TeleportCause.PLUGIN);
+		
+		PaperLib.getChunkAtAsync(world, x, z).thenAccept(chunk -> {
+			int y = world.getHighestBlockYAt(x, z) + 1;
+			
+			Bukkit.getScheduler().runTask(plugin, () -> PaperLib.teleportAsync(player, new Location(world, x, y, z)));
+		});
 	}
 
 	private void giveBonus(String[] split) throws TownyException {
