@@ -1108,14 +1108,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 				
-				line = keys.get("taxes");
-				if (line != null)
-					try {
-						nation.setTaxes(Double.parseDouble(line));
-					} catch (Exception e) {
-						nation.setTaxes(0.0);
-					}
-				
 				line = keys.get("spawnCost");
 				if (line != null)
 					try {
@@ -1191,6 +1183,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					nation.setMaxPercentTaxAmount(Double.parseDouble(line));
 				else
 					nation.setMaxPercentTaxAmount(TownySettings.getMaxNationTaxPercentAmount());
+				
+				line = keys.get("taxes");
+				if (line != null)
+					try {
+						nation.setTaxes(Double.parseDouble(line));
+					} catch (Exception e) {
+						nation.setTaxes(0.0);
+					}
 				
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())

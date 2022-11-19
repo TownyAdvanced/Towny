@@ -476,7 +476,7 @@ public class Town extends Government implements TownBlockOwner {
 	public void setTaxPercentage(boolean isPercentage) {
 
 		this.isTaxPercentage = isPercentage;
-		if (this.getTaxes() > 100) {
+		if (isPercentage && this.getTaxes() > 100) {
 			this.setTaxes(0);
 		}
 	}

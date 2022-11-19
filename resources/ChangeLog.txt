@@ -8070,3 +8070,5 @@ v0.92.0.11:
 0.98.4.3:
   - Refactor TownyLoginListener.
   - API: Add TownyMessaging#sendMsgToOnlineAdmins.
+  - Fix nation setting their taxes before setting taxpercent when the db loads.
+  - Fix nation and town taxes potentially being set to 0 when taxpercent is toggled off.
