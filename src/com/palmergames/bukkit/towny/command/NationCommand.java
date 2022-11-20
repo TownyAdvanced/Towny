@@ -954,15 +954,19 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		newNation(player, nationName, resident.getTown(), noCharge);
 	}
 	
+	public static void newNation(Player player, String name, Town capitalTown, boolean noCharge) {
+		newNation((CommandSender) player, name, capitalTown, noCharge);
+	}
+	
 	/**
 	 * Create a new nation. Command: /nation new [nation] *[capital]
 	 *
-	 * @param player - Player creating the new nation.
-	 * @param name - Nation name.
-	 * @param capitalTown - Capital city town.
-	 * @param noCharge - charging for creation - /ta nation new NAME CAPITAL has no charge.
+	 * @param sender Sender who initiated the creation of the nation.
+	 * @param name Nation name.
+	 * @param capitalTown Capital city town.
+	 * @param noCharge charging for creation - /ta nation new NAME CAPITAL has no charge.
 	 */
-	public static void newNation(Player player, String name, Town capitalTown, boolean noCharge) {
+	public static void newNation(CommandSender sender, String name, Town capitalTown, boolean noCharge) {
 
 		try {
 			if (capitalTown.hasNation())
@@ -995,24 +999,24 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					try {
 						newNation(finalName, capitalTown);
 					} catch (AlreadyRegisteredException | NotRegisteredException e) {
-						TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+						TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
 						return;
 					}
-					TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", player.getName(), StringMgmt.remUnderscore(finalName)));
+					TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), StringMgmt.remUnderscore(finalName)));
 
 				})
-					.setCost(new ConfirmationTransaction(() -> TownySettings.getNewNationPrice(), capitalTown.getAccount(), "New Nation Cost",
+					.setCost(new ConfirmationTransaction(TownySettings::getNewNationPrice, capitalTown.getAccount(), "New Nation Cost",
 							Translatable.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice())))
 					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())))
-					.sendTo(player);
+					.sendTo(sender);
 				
 			// Or, it is free, so just make the nation.
 			} else {
 				newNation(filteredName, capitalTown);
-				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", player.getName(), StringMgmt.remUnderscore(filteredName)));
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), StringMgmt.remUnderscore(filteredName)));
 			}
 		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage(player));
+			TownyMessaging.sendErrorMsg(sender, x.getMessage(sender));
 		}
 	}
 
