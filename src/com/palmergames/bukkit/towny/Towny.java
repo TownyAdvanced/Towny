@@ -577,7 +577,7 @@ public class Towny extends JavaPlugin {
 		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
 			TNCRegister.initialize();
 		}
-		
+
 		/*
 		 * Test for Citizens2 so we can avoid removing their NPC's
 		 */
@@ -606,9 +606,18 @@ public class Towny extends JavaPlugin {
 		//Legacy check to see if questioner.jar is still present.
 		test = getServer().getPluginManager().getPlugin("Questioner");
 		if (test != null) {
-			String questioner = "Warning: Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder.";
-			plugin.getLogger().info(StringMgmt.wrap(questioner, 55, System.lineSeparator() + "                           "));
+			String questioner = "  Warning: Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder.";
+			plugin.getLogger().warning(StringMgmt.wrap(questioner, 55, System.lineSeparator() + "                           "));
 		}
+
+		//Add warning about PowerRanks.
+		test = getServer().getPluginManager().getPlugin("PowerRanks");
+		if (test != null) {
+			String powerranks = "  Warning: PowerRanks is incompatible with Towny. PowerRanks will override Towny's ability to give permissions via the townyperms.yml file."
+							+ " You can expect issues with Towny permissions (and other permission providers,) while PowerRanks is installed.";
+			plugin.getLogger().warning(StringMgmt.wrap(powerranks, 55, System.lineSeparator() + "                           "));
+		}
+
 	}
 	
 	private String returnPermissionsProviders() {

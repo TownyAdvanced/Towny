@@ -8,16 +8,25 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translatable;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 public class TownyLoginListener implements Listener {
 	
-	String[] disallowedNames = populateDisallowedNames();
+	@MonotonicNonNull
+	private Set<String> disallowedNames = null;
+	
+	public TownyLoginListener() {
+		TownySettings.addReloadListener(NamespacedKey.fromString("towny:login-listener"), config -> disallowedNames = populateDisallowedNames());
+	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerLogin(AsyncPlayerPreLoginEvent event) {
@@ -39,7 +48,7 @@ public class TownyLoginListener implements Listener {
 	}
 
 	private boolean isServerAccount(String logInName) {
-		return Arrays.stream(disallowedNames).anyMatch(name -> logInName.equals(name));
+		return disallowedNames.contains(logInName);
 	}
 
 	private boolean isGovernmentAccount(String logInName) {
@@ -58,8 +67,8 @@ public class TownyLoginListener implements Listener {
 		return logInName.startsWith(disallowedName) || logInName.startsWith(disallowedName.replace("-", "_")); 
 	}
 
-	private String[] populateDisallowedNames() {
+	private Set<String> populateDisallowedNames() {
 		String serverAccount = TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
-		return new String[]{"towny-war-chest", "towny_war_chest", serverAccount, serverAccount.replace("-", "_")};
+		return new HashSet<>(Arrays.asList("towny-war-chest", "towny_war_chest", serverAccount, serverAccount.replace("-", "_")));
 	}
 }
