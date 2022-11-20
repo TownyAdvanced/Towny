@@ -7,14 +7,15 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 
 public class PlayerCache {
 
-	private final HashMap<Material, Boolean> buildMatPermission = new HashMap<>();
-	private final HashMap<Material, Boolean> destroyMatPermission = new HashMap<>();
-	private final HashMap<Material, Boolean> switchMatPermission = new HashMap<>();
-	private final HashMap<Material, Boolean> itemUseMatPermission = new HashMap<>();
+	private final EnumMap<Material, Boolean> buildMatPermission = new EnumMap<>(Material.class);
+	private final EnumMap<Material, Boolean> destroyMatPermission = new EnumMap<>(Material.class);
+	private final EnumMap<Material, Boolean> switchMatPermission = new EnumMap<>(Material.class);
+	private final EnumMap<Material, Boolean> itemUseMatPermission = new EnumMap<>(Material.class);
 
 	private WorldCoord lastWorldCoord;
 	private String blockErrMsg;
@@ -151,7 +152,7 @@ public class PlayerCache {
 		
 	}
 	
-	private void updateMaps(HashMap<Material, Boolean> blockMap, Material material, Boolean value) {
+	private void updateMaps(EnumMap<Material, Boolean> blockMap, Material material, Boolean value) {
 		
 		if (!blockMap.containsKey(material)) {
 			/*
@@ -166,7 +167,7 @@ public class PlayerCache {
 		}
 	}
 	
-	private boolean getBlockPermission(HashMap<Material, Boolean> blockMap, Material material) throws NullPointerException {
+	private boolean getBlockPermission(EnumMap<Material, Boolean> blockMap, Material material) throws NullPointerException {
 		
 		if (!blockMap.containsKey(material))
 			throw new NullPointerException();
