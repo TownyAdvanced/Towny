@@ -1514,11 +1514,11 @@ public class TownySettings {
 	}
 	
 	public static boolean isSwitchMaterial(Material material, Location location) {
-		if (!TownyAPI.getInstance().isWilderness(location)) {
-
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
+		
+		if (townBlock != null)
 			return townBlock.getData().getSwitchIds().contains(material);
-		} else
+		else
 			return switchUseMaterials.contains(material);
 	}
 
@@ -1534,11 +1534,11 @@ public class TownySettings {
 	}
 	
 	public static boolean isItemUseMaterial(Material material, Location location) {
-		if (!TownyAPI.getInstance().isWilderness(location)) {
-
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
+		
+		if (townBlock != null)
 			return townBlock.getData().getItemUseIds().contains(material);
-		} else
+		else
 			return itemUseMaterials.contains(material);
 	}
 	
