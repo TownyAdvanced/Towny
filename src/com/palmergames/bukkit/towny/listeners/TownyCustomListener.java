@@ -233,6 +233,9 @@ public class TownyCustomListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerSpawnsWithTown(SpawnEvent event) {
 
+		if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer()))
+			return;
+
 		Town town = TownyAPI.getInstance().getTown(event.getTo());
 		if (town == null || !town.hasOutlaw(event.getPlayer().getName()))
 			return;
