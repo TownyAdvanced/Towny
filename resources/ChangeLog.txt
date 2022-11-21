@@ -8080,3 +8080,5 @@ v0.92.0.11:
   - Remove townyadmin's getSender(), courtesy of Warriorrrr with PR #6321.
   - Refactor EntityMonitorListener.
   - Remove redundant isWilderness check, courtesy of Warriorrrr with PR #6327.
+0.98.4.4:
+  - Fix admins and ops being blocked by the blocked-commands lists.

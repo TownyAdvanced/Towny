@@ -1088,8 +1088,9 @@ public class TownyPlayerListener implements Listener {
 		
 		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 
-		// More than likely another plugin using a fake player to run a command. 
-		if (resident == null)
+		// More than likely another plugin using a fake player to run a command or,
+		// the player is an admin/op.
+		if (resident == null || resident.isAdmin())
 			return;
 		
 		final String command = event.getMessage().split(" ")[0];
