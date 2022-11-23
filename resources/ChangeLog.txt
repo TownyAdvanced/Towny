@@ -8083,4 +8083,4 @@ v0.92.0.11:
 0.98.4.4:
   - Fix admins and ops being blocked by the blocked-commands lists.
   - Fix admins and ops being denied the ability to teleport in towns they are outlawed in.
-  - Update pom.xml.
+  - Update plugin.yml.
