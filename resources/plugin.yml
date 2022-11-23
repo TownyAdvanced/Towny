@@ -2,12 +2,12 @@ name: Towny
 main: com.palmergames.bukkit.towny.Towny
 version: ${project.version}
 api-version: ${project.bukkitAPIVersion}
-author: Shade, Modified by FuzzeWuzze. Forked by ElgarL. Forked by LlmDl.
-website: 'http://townyadvanced.github.io/'
+author: LlmDl, Warrior, and many contributors. Past lead devs: Shade, ElgarL.
+website: 'https://townyadvanced.github.io/'
 prefix: Towny
 description: >
-    Resident-Town-Nation heirarchy combined with a grid based
-    protection system. Including a war event.
+    Resident-Town-Nation hierarchy combined with a grid based
+    protection system, many features and an expansive API.
 
 softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,Reserve,MultiWorld,TheNewChat,PlaceholderAPI,Essentials,Hyperverse,GroupManager,iConomy,LuckPerms]
 
