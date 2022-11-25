@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.permissions;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -20,6 +19,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -41,26 +42,27 @@ import java.util.Set;
  */
 public class TownyPerms {
 
-	protected static LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<>();
-	protected static HashMap<String, PermissionAttachment> attachments = new HashMap<>();
-	private static HashMap<String, List<String>> groupPermsMap = new HashMap<>();
+	protected static final LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<>();
+	protected static final HashMap<String, PermissionAttachment> attachments = new HashMap<>();
+	private static final HashMap<String, List<String>> groupPermsMap = new HashMap<>();
 	private static CommentedConfiguration perms;
 	private static Towny plugin;
-	private static List<String> vitalGroups = new ArrayList<>(Arrays.asList("nomad","towns.default","towns.mayor","towns.ranks","nations.default","nations.king","nations.ranks"));
+	private static final List<String> vitalGroups = Arrays.asList("nomad","towns.default","towns.mayor","towns.ranks","nations.default","nations.king","nations.ranks");
 	
 	public static void initialize(Towny plugin) {
 		TownyPerms.plugin = plugin;
 	}
 	
-	private static Field permissions;
+	private static final MethodHandle permissions;
 
 	// Setup reflection (Thanks to Codename_B for the reflection source)
 	static {
 		try {
-			permissions = PermissionAttachment.class.getDeclaredField("permissions");
-			permissions.setAccessible(true);
-		} catch (SecurityException | NoSuchFieldException e) {
-			e.printStackTrace();
+			Field permissionsField = PermissionAttachment.class.getDeclaredField("permissions");
+			permissionsField.setAccessible(true);
+			permissions = MethodHandles.lookup().unreflectGetter(permissionsField);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -129,12 +131,9 @@ public class TownyPerms {
 	 */
 	public static void assignPermissions(Resident resident, Player player) {
 
-		PermissionAttachment playersAttachment;
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
 		if (resident == null) {
 			if (player != null)
-				resident = townyUniverse.getResident(player.getUniqueId());
+				resident = TownyAPI.getInstance().getResident(player);
 
 			// failed to get resident
 			if (resident == null)
@@ -148,24 +147,18 @@ public class TownyPerms {
 		 * online)
 		 */
 
-		if ((player == null) || !player.isOnline()) {
+		if (player == null || !player.isOnline()) {
 			attachments.remove(resident.getName());
 			return;
 		}
 
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+		final TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 		if (world == null)
 			return;
 
-		if (attachments.containsKey(resident.getName()))
-			playersAttachment = attachments.get(resident.getName());
-		else
-			// DungeonsXL sometimes moves players which aren't online out of dungeon worlds causing an error in the log to appear.
-			try {
-				playersAttachment = resident.getPlayer().addAttachment(plugin);
-			} catch (Exception e) {
-				return;
-			}
+		PermissionAttachment attachment = attachments.get(resident.getName());
+		if (attachment == null)
+			attachment = player.addAttachment(plugin);
 
 		/*
 		 * Set all our Towny default permissions using reflection else bukkit
@@ -173,36 +166,33 @@ public class TownyPerms {
 		 */
 
 		try {
-			synchronized (playersAttachment) {
-				@SuppressWarnings("unchecked")
-				Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(playersAttachment);
-				/*
-				 * Clear the map (faster than removing the attachment and
-				 * recalculating)
-				 */
-				orig.clear();
+			@SuppressWarnings("unchecked")
+			final Map<String, Boolean> orig = (Map<String, Boolean>) permissions.invoke(attachment);
+			/*
+			 * Clear the map (faster than removing the attachment and
+			 * recalculating)
+			*/
+			orig.clear();
 
-				if (world.isUsingTowny()) {
-					/*
-					 * Fill with the fresh perm nodes
-					 */
-					orig.putAll(TownyPerms.getResidentPerms(resident));
-
-					// System.out.print("Perms set for: " + resident.getName());
-				}
+			if (world.isUsingTowny()) {
 				/*
-				 * Tell bukkit to update it's permissions
-				 */
-				playersAttachment.getPermissible().recalculatePermissions();
+				 * Fill with the fresh perm nodes
+			     */
+				orig.putAll(TownyPerms.getResidentPerms(resident));
 			}
-		} catch (IllegalArgumentException | IllegalAccessException e) {
+			
+			/*
+			 * Tell bukkit to update it's permissions
+			*/
+			player.recalculatePermissions();
+		} catch (final Throwable e) {
 			e.printStackTrace();
 		}
 		
 		/*
 		 * Store the attachment for future reference
 		 */
-		attachments.put(resident.getName(), playersAttachment);
+		attachments.put(resident.getName(), attachment);
 
 	}
 	

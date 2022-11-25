@@ -21,15 +21,16 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.lang.reflect.Method;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @ApiStatus.Internal
 public class TownyPaperEvents implements Listener {
 	private final Towny plugin;
-	private Method getOrigin = null;
-	private Method getPrimerEntity = null;
+	private MethodHandle getOrigin = null;
+	private MethodHandle getPrimerEntity = null;
 	
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
@@ -49,13 +50,13 @@ public class TownyPaperEvents implements Listener {
 	private void initializeReflections() {
 		try {
 			//https://jd.papermc.io/paper/1.19/org/bukkit/entity/Entity.html#getOrigin()
-			getOrigin = Entity.class.getMethod("getOrigin");
+			this.getOrigin = MethodHandles.publicLookup().unreflect(Entity.class.getMethod("getOrigin"));
 			TownyMessaging.sendDebugMsg("Entity#getOrigin found, using falling block listener.");
-		} catch (NoSuchMethodException ignored) {}
+		} catch (ReflectiveOperationException ignored) {}
 		
 		try {
 			// https://jd.papermc.io/paper/1.19/com/destroystokyo/paper/event/block/TNTPrimeEvent.html#getPrimerEntity()
-			getPrimerEntity = Class.forName("com.destroystokyo.paper.event.block.TNTPrimeEvent").getMethod("getPrimerEntity");
+			this.getPrimerEntity = MethodHandles.publicLookup().unreflect(Class.forName("com.destroystokyo.paper.event.block.TNTPrimeEvent").getMethod("getPrimerEntity"));
 			TownyMessaging.sendDebugMsg("TNTPRimeEvent#getPrimerEntity method found, using TNTPrimeEvent listener.");
 		} catch (ReflectiveOperationException ignored) {}
 	}
@@ -79,7 +80,7 @@ public class TownyPaperEvents implements Listener {
 			Entity primerEntity;
 			try {
 				primerEntity = (Entity) getPrimerEntity.invoke(event);
-			} catch (ReflectiveOperationException | IllegalArgumentException e) {
+			} catch (final Throwable e) {
 				// Should not happen, unless the getPrimerEntity method is renamed.
 				e.printStackTrace();
 				return;
@@ -108,7 +109,7 @@ public class TownyPaperEvents implements Listener {
 			Location origin;
 			try {
 				origin = (Location) getOrigin.invoke(event.getEntity());
-			} catch (ReflectiveOperationException | IllegalArgumentException e) {
+			} catch (final Throwable e) {
 				e.printStackTrace();
 				return;
 			}
