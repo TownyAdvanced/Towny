@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -11,6 +12,7 @@ import com.palmergames.bukkit.towny.utils.TownyComponents;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
@@ -41,9 +43,17 @@ public class TownyAsciiMap {
 	public static final int lineWidth = 27;
 	public static final int halfLineWidth = lineWidth / 2;
 	private static final int townBlockSize = TownySettings.getTownBlockSize();
-	public static final String forSaleSymbol = parseSymbol(TownySettings.forSaleMapSymbol());
-	public static final String homeSymbol = parseSymbol(TownySettings.homeBlockMapSymbol());
-	public static final String wildernessSymbol = parseSymbol(TownySettings.wildernessMapSymbol());
+	public static String forSaleSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_FORSALE.getDefault();
+	public static String homeSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_HOME.getDefault();
+	public static String wildernessSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_WILDERNESS.getDefault();
+	
+	static {
+		TownySettings.addReloadListener(NamespacedKey.fromString("towny:ascii-map-symbols"), config -> {
+			forSaleSymbol = parseSymbol(TownySettings.forSaleMapSymbol());
+			homeSymbol = parseSymbol(TownySettings.homeBlockMapSymbol());
+			wildernessSymbol = parseSymbol(TownySettings.wildernessMapSymbol());
+		});
+	}
 	
 	public static Component[] generateHelp(Player player) {
 		final Translator translator = Translator.locale(player);
