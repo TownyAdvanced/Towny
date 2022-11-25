@@ -156,9 +156,14 @@ public class TownyPerms {
 		if (world == null)
 			return;
 
-		PermissionAttachment attachment = attachments.get(resident.getName());
-		if (attachment == null)
-			attachment = player.addAttachment(plugin);
+		final PermissionAttachment attachment;
+		try {
+			attachment = attachments.getOrDefault(resident.getName(), player.addAttachment(plugin));
+		} catch (Exception e) {
+			// Adding an attachment can sometimes, somehow cause an error with DungeonsXL when they teleport players to a different world.
+			// https://github.com/TownyAdvanced/Towny/issues/3178
+			return;
+		}
 
 		/*
 		 * Set all our Towny default permissions using reflection else bukkit
