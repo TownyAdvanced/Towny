@@ -15,9 +15,9 @@ jobs:
             extends: default
             rules:
               new-line-at-end-of-file:
-                level: ignore
+                level: warning
               trailing-spaces:
-                level: ignore
+                level: warning
               document-start:
                 present: false
               line-length:
