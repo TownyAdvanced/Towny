@@ -14,10 +14,10 @@ jobs:
           config_data: |
             extends: default
             rules:
-                commas:
-                  max-spaces-before: -1
-                  min-spaces-after: -1
-                  max-spaces-after: -1
+              commas:
+                max-spaces-before: -1
+                min-spaces-after: -1
+                max-spaces-after: -1
               new-line-at-end-of-file:
                 level: warning
               trailing-spaces:
