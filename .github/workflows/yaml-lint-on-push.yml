@@ -14,6 +14,10 @@ jobs:
           config_data: |
             extends: default
             rules:
+                commas:
+                  max-spaces-before: -1
+                  min-spaces-after: -1
+                  max-spaces-after: -1
               new-line-at-end-of-file:
                 level: warning
               trailing-spaces:
@@ -21,7 +25,7 @@ jobs:
               document-start:
                 present: false
               line-length:
-                max: 240
+                max: 800
               comments:
                 require-starting-space: false
                 ignore-shebangs: true
