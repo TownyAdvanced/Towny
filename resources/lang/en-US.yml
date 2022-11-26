@@ -43,7 +43,7 @@ description: >
 # https://docs.adventure.kyori.net/minimessage/format.html
 #
 #
-
+	we_break_the_yaml_on_purpose: 'rip'
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
