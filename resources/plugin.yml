@@ -2,7 +2,6 @@ name: Towny
 main: com.palmergames.bukkit.towny.Towny
 version: ${project.version}
 api-version: ${project.bukkitAPIVersion}
-author2: LlmDl, Warrior, and many contributors. Past lead devs: Shade, ElgarL.
 author: 'LlmDl, Warrior, and many contributors. Past lead devs: Shade, ElgarL.'
 website: 'https://townyadvanced.github.io/'
 prefix: Towny
