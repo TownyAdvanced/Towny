@@ -12,17 +12,17 @@ jobs:
         uses: ibiqlik/action-yamllint@v3
         with:
           config_data: |
-          extends: default
-          rules:
-            new-line-at-end-of-file:
-              level: ignore
-            trailing-spaces:
-              level: ignore
-            document-start:
-              present: false
-            line-length:
-              max: 240
-            comments:
-              require-starting-space: false
-              ignore-shebangs: true
-              min-spaces-from-content: 2
+            extends: default
+            rules:
+              new-line-at-end-of-file:
+                level: ignore
+              trailing-spaces:
+                level: ignore
+              document-start:
+                present: false
+              line-length:
+                max: 240
+              comments:
+                require-starting-space: false
+                ignore-shebangs: true
+                min-spaces-from-content: 2
