@@ -14,6 +14,11 @@ jobs:
           config_data: |
             extends: default
             rules:
+              colons:
+                max-spaces-before: -1
+                max-spaces-after: -1
+              new-lines:
+                level: warning
               commas:
                 max-spaces-before: -1
                 min-spaces-after: -1
