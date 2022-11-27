@@ -475,7 +475,6 @@ public class MetaDataUtil {
 				townyObject.save();
 		}
 	}
-
 	
 	/**
 	 * Sets a LocationDataField metadata on a TownyObject, creating the metadata if it doesn't exist.
