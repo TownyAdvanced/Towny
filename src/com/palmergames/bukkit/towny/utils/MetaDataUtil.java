@@ -104,7 +104,7 @@ public class MetaDataUtil {
 		}
 		return "";
 	}
-	
+
 	/**
 	 * Get a boolean from a TownyObject's metadata.
 	 * 
@@ -250,7 +250,7 @@ public class MetaDataUtil {
 	public static void addNewMeta(TownyObject townyObject, ByteDataField bdf, boolean save) {
 		townyObject.addMetaData(bdf, save);
 	}
-
+	
 	/**
 	 * Adds a new LocationDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
 	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
@@ -326,7 +326,7 @@ public class MetaDataUtil {
 	public static void addNewByteMeta(TownyObject townyObject, String key, byte value, boolean save) {
 		addNewMeta(townyObject, new ByteDataField(key, value), save);
 	}
-
+	
 	/**
 	 * Creates and adds a new LocationDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
 	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
