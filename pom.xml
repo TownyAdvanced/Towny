@@ -208,7 +208,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.11.0</version>
+            <version>4.12.0</version>
         </dependency>
         <dependency>
             <groupId>solar.squares</groupId>
