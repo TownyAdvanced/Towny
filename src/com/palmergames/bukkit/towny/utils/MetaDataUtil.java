@@ -19,7 +19,17 @@ import com.palmergames.bukkit.towny.object.metadata.StringDataField;
  *
  */
 public class MetaDataUtil {
-	
+
+	/**
+	 * Does the TownyObject have meta stored with the given key?
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param key String representing the meta's Key.
+	 * @return true if the TownyObject has meta using the given key.
+	 */
+	public static boolean hasMeta(TownyObject townyObject, String key) {
+		return townyObject.hasMeta(key);
+	}
+
 	/**
 	 * Does the TownyObject have the StringDataField meta?
 	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock. 
@@ -334,7 +344,7 @@ public class MetaDataUtil {
 	 * @param value Location value of the LocationDataField key.
 	 * @param save set true to save the object after applying the MetaData.
 	 */
-	public static void addNewByteMeta(TownyObject townyObject, String key, Location value, boolean save) {
+	public static void addNewLocationMeta(TownyObject townyObject, String key, Location value, boolean save) {
 		addNewMeta(townyObject, new LocationDataField(key, value), save);
 	}
 
@@ -487,7 +497,7 @@ public class MetaDataUtil {
 	public static void setLocation(TownyObject townyObject, LocationDataField ldf, Location loc, boolean save) {
 		CustomDataField<?> cdf = townyObject.getMetadata(ldf.getKey());
 		if (cdf == null) {
-			addNewByteMeta(townyObject, ldf.getKey(), loc, save);
+			addNewLocationMeta(townyObject, ldf.getKey(), loc, save);
 			return;
 		}
 		
