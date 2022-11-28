@@ -8085,3 +8085,10 @@ v0.92.0.11:
   - Fix admins and ops being denied the ability to teleport in towns they are outlawed in.
   - Update plugin.yml.
   - Fix typo in PlayerEnterTownEvent.
+  - Fix possible tab complete npe, courtesy of Warriorrrr with PR #6331.
+  - Use method handles in townyperms, courtesy of Warriorrrr with PR #6332.
+  - Make ascii map symbol options reloadable, courtesy of Warriorrrr with PR #6333.
+  - API: Add new MetaDataType: Location.
+  - Use the world's wild revert delay, courtesy of Warriorrrr with PR #6343.
+  - Bump adventure-text-minimessage from 4.11.0 to 4.12.0.
+  - Bump adventure-text-serializer-plain from 4.11.0 to 4.12.0.

@@ -902,7 +902,7 @@ public class TownyPlayerListener implements Listener {
 		if (outlaw == null)
 			return;
 		
-		Town town = event.getEnteredtown();
+		Town town = event.getEnteredTown();
 
 		if (outlaw.isJailed() && outlaw.getJailTown().equals(town))
 			return;
@@ -983,7 +983,7 @@ public class TownyPlayerListener implements Listener {
 	public void onPlayerEnterTown(PlayerEnterTownEvent event) {
 		
 		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
-		Town town = event.getEnteredtown();
+		Town town = event.getEnteredTown();
 		
 		if (resident != null && resident.isSeeingBorderTitles() && town != null && TownySettings.isNotificationUsingTitles()) {
 			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());

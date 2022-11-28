@@ -165,7 +165,6 @@ public class TownyPerms {
 		 */
 
 		try {
-			@SuppressWarnings("unchecked")
 			final Map<String, Boolean> orig = (Map<String, Boolean>) permissions.invoke(attachment);
 			/*
 			 * Clear the map (faster than removing the attachment and
