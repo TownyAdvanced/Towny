@@ -234,8 +234,9 @@ public class BaseCommand implements TabCompleter{
 		if (!(sender instanceof Player player))
 			return getResidentsWithoutTownStartingWith(arg);
 		List<String> residents = getOnlinePlayersWithoutTown().stream()
-			.filter(res -> player.canSee(res.getPlayer()))
-			.map(res -> res.getName())
+			.map(Resident::getPlayer)
+			.filter(p -> p != null && player.canSee(p))
+			.map(Player::getName)
 			.collect(Collectors.toCollection(ArrayList::new));
 		return !residents.isEmpty()
 			? NameUtil.filterByStart(residents, arg)
