@@ -636,4 +636,11 @@ public class TownBlock extends TownyObject {
 	public TownBlockData getData() {
 		return type.getData();
 	}
+	
+	public void evictOwnerFromTownBlock() {
+		this.setResident(null);
+		this.setPlotPrice(-1);
+		this.setType(getType());
+		this.save();
+	}
 }
