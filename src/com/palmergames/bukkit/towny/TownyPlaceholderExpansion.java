@@ -425,11 +425,11 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			if (resident.hasTown()) {
 				cost = TownySettings.getTownUpkeepCost(resident.getTownOrNull());
 			}
-			return String.valueOf(cost);
+			return TownyEconomyHandler.getFormattedBalance(cost);
 		case "daily_town_per_plot_upkeep": // %townyadvanced_daily_town_per_plot_upkeep%
-			return String.valueOf(TownySettings.getTownUpkeep());
+			return TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeep());
 		case "daily_town_overclaimed_per_plot_upkeep_penalty": // %townyadvanced_daily_town_overclaimed_per_plot_upkeep_penalty%
-			return String.valueOf(TownySettings.getUpkeepPenalty());
+			return TownyEconomyHandler.getFormattedBalance(TownySettings.getUpkeepPenalty());
 		case "daily_town_upkeep_reduction_from_town_level": // %townyadvanced_daily_town_upkeep_reduction_from_town_level%
 			cost = resident.hasTown() 
 				? TownySettings.getTownLevel(resident.getTownOrNull()).upkeepModifier()
@@ -444,7 +444,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			if (resident.hasNation()) {
 				cost = TownySettings.getNationUpkeepCost(resident.getNationOrNull());
 			}
-			return String.valueOf(cost);
+			return TownyEconomyHandler.getFormattedBalance(cost);
 		case "daily_nation_per_town_upkeep": // %townyadvanced_daily_nation_per_town_upkeep%
 			return String.valueOf(TownySettings.getNationUpkeep());
 		case "daily_nation_upkeep_reduction_from_nation_level": // %townyadvanced_daily_nation_upkeep_reduction_from_nation_level%
@@ -465,27 +465,27 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			}
 			return String.valueOf(cost) + (percentage ? "%" : "");
 		case "town_creation_cost": // %townyadvanced_town_creation_cost%
-			return String.valueOf(TownySettings.getNewTownPrice());
+			return TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice());
 		case "nation_creation_cost": // %townyadvanced_nation_creation_cost%
-			return String.valueOf(TownySettings.getNewNationPrice());
+			return TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice());
 		case "town_merge_cost": // %townyadvanced_town_merge_cost%
-			return String.valueOf(TownySettings.getBaseCostForTownMerge());
+			return TownyEconomyHandler.getFormattedBalance(TownySettings.getBaseCostForTownMerge());
 		case "town_merge_per_plot_percentage": // %townyadvanced_town_merge_per_plot_percentage%
 			return String.valueOf(TownySettings.getPercentageCostPerPlot());
 		case "town_reclaim_cost": // %townyadvanced_town_reclaim_cost%
-			return String.valueOf(TownySettings.getEcoPriceReclaimTown());
+			return TownyEconomyHandler.getFormattedBalance(TownySettings.getEcoPriceReclaimTown());
 		case "town_reclaim_max_duration_hours": // %townyadvanced_town_reclaim_max_duration_hours%
 			return String.valueOf(TownySettings.getTownRuinsMaxDurationHours());
 		case "town_reclaim_min_duration_hours": // %townyadvanced_town_reclaim_max_duration_hours%
 			return String.valueOf(TownySettings.getTownRuinsMinDurationHours());
 		case "townblock_buy_bonus_price": // %townyadvanced_townblock_buy_bonus_price%
-			return String.valueOf(TownySettings.getPurchasedBonusBlocksCost());
+			return TownyEconomyHandler.getFormattedBalance(TownySettings.getPurchasedBonusBlocksCost());
 		case "townblock_claim_price": // %townyadvanced_townblock_claim_price%
-			return String.valueOf(TownySettings.getClaimPrice());
+			return TownyEconomyHandler.getFormattedBalance(TownySettings.getClaimPrice());
 		case "townblock_unclaim_price": // %townyadvanced_townblock_unclaim_price%
-			return String.valueOf(TownySettings.getClaimRefundPrice());
+			return TownyEconomyHandler.getFormattedBalance(TownySettings.getClaimRefundPrice());
 		case "outpost_claim_price": // %townyadvanced_outpost_claim_price%
-			return String.valueOf(TownySettings.getOutpostCost());
+			return TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost());
 
 		case "has_town": // %townyadvanced_has_town%
 			return String.valueOf(resident.hasTown());

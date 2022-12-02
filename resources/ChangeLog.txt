@@ -8092,3 +8092,5 @@ v0.92.0.11:
   - Use the world's wild revert delay, courtesy of Warriorrrr with PR #6343.
   - Bump adventure-text-minimessage from 4.11.0 to 4.12.0.
   - Bump adventure-text-serializer-plain from 4.11.0 to 4.12.0.
+0.98.4.5:
+  - Fix some of the economy-related placeholders not formatting themselves for the economy.
