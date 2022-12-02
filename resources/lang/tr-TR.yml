@@ -260,9 +260,9 @@ msg_set_wild_regen: '&b%s nin vahşi yenilenmesi şu şekilde başarıyla deği�
 msg_set_use_towny_on: '&bBu dünya artık kasaba kurallarını takip ediyor.'
 msg_set_use_towny_off: '&cBu dünya tüm şehir etkileşimlerinden muaftır.'
 msg_error_must_be_int: '&bMiktar tam sayı olmalıdır.'
-msg_error_input_must_be_int: '&c%s must be an integer'
+msg_error_input_must_be_int: '&c%s bir tam sayı olmalı'
 msg_error_must_be_num: '&bMiktar bir sayı olmalıdır.'
-msg_error_input_must_be_num: '&c%s must be a number'
+msg_error_input_must_be_num: '&c%s bir sayı olmalı'
 msg_must_specify_amnt: '&bMiktarı belirtmelidir. Örneğin %s 54'
 msg_town_set_tax: '&b%s, günlük ikamet vergisini %s olarak ayarladı'
 msg_town_set_plottax: '&b%s, parsellerin günlük vergisini %s olarak belirledi'
@@ -1600,15 +1600,15 @@ msg_town_plots_title: ' Kasaba Arazileri'
 #Part of the /town plots output.
 msg_town_plots_town_size: '<dark_green>Kasaba Büyüklüğü: <green>%s/%s'
 #Part of the /town plots output.
-msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
+msg_town_plots_town_bought: ' <aqua>[Alış: %s/%s]'
 #Part of the /town plots output.
 msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+msg_town_plots_town_nationbonus: ' <aqua>[UlusBonusu: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
 #Part of the /town plots output.
-msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+msg_town_plots_type_header: '<dark_green>Tür: <green>Oyuncu-Sahipli <gray>/ <aqua>Satışta <gray>/ <yellow>Toplam'
 #Part of the /town plots output.
 msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
 #Part of the /town plots output.
