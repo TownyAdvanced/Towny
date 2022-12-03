@@ -43,7 +43,7 @@ public class PlayerLeaveTownEvent extends Event {
 		return pme;
 	}
 
-	public Town getLefttown() {
+	public Town getLeftTown() {
 		return lefttown;
 	}
 
