@@ -1737,3 +1737,10 @@ msg_perm_hud_nation: 'nation'
 msg_perm_hud_outsider: 'outsider'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_name: 'Plot: '
+
+#Header for the compatibility report
+msg_compat_found: '*** COMPATIBILITY REPORT - %d MATCHES ***'
+#Message shown when the server does not have an supported economy plugin installed and using_economy is true
+msg_compat_no_economy: 'No compatible economy plugins were found. Install Vault or Reserve with any supported economy plugin or disable economy by setting ''using_economy'' to false.'
+#Message shown when an valid economy provider is present on the server
+msg_compat_using_economy: 'Using %s as the economy provider.'

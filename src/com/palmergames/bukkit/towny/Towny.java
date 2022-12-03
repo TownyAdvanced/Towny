@@ -1,95 +1,64 @@
  package com.palmergames.bukkit.towny;
 
-import com.earth2me.essentials.Essentials;
-import com.palmergames.bukkit.config.CommentedConfiguration;
-import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.config.migration.ConfigMigrator;
-import com.palmergames.bukkit.towny.chat.TNCRegister;
-import com.palmergames.bukkit.towny.command.InviteCommand;
-import com.palmergames.bukkit.towny.command.NationCommand;
-import com.palmergames.bukkit.towny.command.PlotCommand;
-import com.palmergames.bukkit.towny.command.ResidentCommand;
-import com.palmergames.bukkit.towny.command.TownCommand;
-import com.palmergames.bukkit.towny.command.TownyAdminCommand;
-import com.palmergames.bukkit.towny.command.TownyCommand;
-import com.palmergames.bukkit.towny.command.TownyWorldCommand;
-import com.palmergames.bukkit.towny.command.commandobjects.AcceptCommand;
-import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
-import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
-import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
-import com.palmergames.bukkit.towny.db.DatabaseConfig;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
-import com.palmergames.bukkit.towny.hooks.LuckPermsContexts;
-import com.palmergames.bukkit.towny.huds.HUDManager;
-import com.palmergames.bukkit.towny.invites.InviteHandler;
-import com.palmergames.bukkit.towny.listeners.TownyPaperEvents;
-import com.palmergames.bukkit.towny.listeners.TownyBlockListener;
-import com.palmergames.bukkit.towny.listeners.TownyCustomListener;
-import com.palmergames.bukkit.towny.listeners.TownyEntityListener;
-import com.palmergames.bukkit.towny.listeners.TownyEntityMonitorListener;
-import com.palmergames.bukkit.towny.listeners.TownyInventoryListener;
-import com.palmergames.bukkit.towny.listeners.TownyLoginListener;
-import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
-import com.palmergames.bukkit.towny.listeners.TownyServerListener;
-import com.palmergames.bukkit.towny.listeners.TownyVehicleListener;
-import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
-import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
-import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
-import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
-import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
-import com.palmergames.bukkit.towny.permissions.TownyPerms;
-import com.palmergames.bukkit.towny.permissions.VaultPermSource;
-import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
-import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
-import com.palmergames.bukkit.towny.utils.MoneyUtil;
-import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.Colors;
-import com.palmergames.bukkit.util.Version;
-import com.palmergames.util.FileMgmt;
-import com.palmergames.util.JavaUtil;
-import com.palmergames.util.StringMgmt;
+ import com.earth2me.essentials.Essentials;
+ import com.palmergames.bukkit.config.CommentedConfiguration;
+ import com.palmergames.bukkit.config.ConfigNodes;
+ import com.palmergames.bukkit.config.migration.ConfigMigrator;
+ import com.palmergames.bukkit.towny.chat.TNCRegister;
+ import com.palmergames.bukkit.towny.command.*;
+ import com.palmergames.bukkit.towny.command.commandobjects.AcceptCommand;
+ import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
+ import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
+ import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
+ import com.palmergames.bukkit.towny.db.DatabaseConfig;
+ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+ import com.palmergames.bukkit.towny.exceptions.TownyException;
+ import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
+ import com.palmergames.bukkit.towny.hooks.LuckPermsContexts;
+ import com.palmergames.bukkit.towny.huds.HUDManager;
+ import com.palmergames.bukkit.towny.invites.InviteHandler;
+ import com.palmergames.bukkit.towny.listeners.*;
+ import com.palmergames.bukkit.towny.object.*;
+ import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
+ import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
+ import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
+ import com.palmergames.bukkit.towny.permissions.TownyPerms;
+ import com.palmergames.bukkit.towny.permissions.VaultPermSource;
+ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+ import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
+ import com.palmergames.bukkit.towny.utils.MoneyUtil;
+ import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+ import com.palmergames.bukkit.towny.utils.SpawnUtil;
+ import com.palmergames.bukkit.util.BukkitTools;
+ import com.palmergames.bukkit.util.Colors;
+ import com.palmergames.bukkit.util.SupportUtil;
+ import com.palmergames.bukkit.util.Version;
+ import com.palmergames.util.FileMgmt;
+ import com.palmergames.util.JavaUtil;
+ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+ import net.milkbowl.vault.permission.Permission;
+ import org.bstats.bukkit.Metrics;
+ import org.bstats.charts.SimplePie;
+ import org.bukkit.Bukkit;
+ import org.bukkit.World;
+ import org.bukkit.command.Command;
+ import org.bukkit.command.CommandExecutor;
+ import org.bukkit.command.CommandMap;
+ import org.bukkit.command.TabCompleter;
+ import org.bukkit.entity.Player;
+ import org.bukkit.plugin.Plugin;
+ import org.bukkit.plugin.PluginManager;
+ import org.bukkit.plugin.RegisteredServiceProvider;
+ import org.bukkit.plugin.java.JavaPlugin;
+ import org.jetbrains.annotations.NotNull;
 
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.milkbowl.vault.permission.Permission;
-
-import org.apache.commons.lang.WordUtils;
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SimplePie;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Level;
+ import java.io.File;
+ import java.io.IOException;
+ import java.lang.reflect.Field;
+ import java.nio.file.Files;
+ import java.nio.file.Path;
+ import java.util.*;
+ import java.util.logging.Level;
 
 /**
  * Towny Plugin for Bukkit
@@ -101,6 +70,9 @@ import java.util.logging.Level;
 public class Towny extends JavaPlugin {
 	private static final Version OLDEST_MC_VER_SUPPORTED = Version.fromString("1.16");
 	private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
+	
+	private final PluginManager pluginManager = Bukkit.getPluginManager();
+	
 	private final String version = this.getDescription().getVersion();
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
@@ -155,9 +127,10 @@ public class Towny extends JavaPlugin {
 			// Load the foundation of Towny, containing config, locales, database.
 			loadFoundation(false);
 
-			// Check for plugins that we use or we develop.
-			// N.B. Includes the hook for TownyChat
-			checkPlugins();
+			// Check for plugins, checking known problematic classes and initializing special hooks.
+			// Namely TheNewChat, Citizens
+			checkSupport();
+			
 			// Make sure the timers are stopped for a reset, then started.
 			cycleTimers();
 			// Reset the player cache.
@@ -465,128 +438,40 @@ public class Towny extends JavaPlugin {
 		Bukkit.getLogger().info("=============================================================");
 	}
 	
-	private void checkPlugins() {
+	private void checkSupport() {
+		Map<String, SupportUtil.Support> results = SupportUtil.test();
 		
-		plugin.getLogger().info("Searching for third-party plugins...");
-		String ecowarn = "";
-		List<String> addons = new ArrayList<>();
-		Plugin test;
-
-	 	//Check for permission source.
-		String permissions = returnPermissionsProviders();
-		String economy = "";
-		/*
-		 * Check for economy source.
-		 */
-		if (TownySettings.isUsingEconomy()) {			
+		// Compatibility report
+		if (!results.isEmpty()) {
+			plugin.getLogger().warning(Translation.of("msg_compat_found", results.size()));
+			results.forEach((clazz, support) -> {
+				plugin.getLogger().warning(clazz + ": " + support.description);
+			});
+			// Makes the footer the same size as the header
+			plugin.getLogger().warning(Translation.of("msg_compat_found").replaceAll(".", "*"));
+		}
+		
+		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.setupEconomy()) {
-				economy = "  Economy: " + TownyEconomyHandler.getVersion();				
-				if (TownyEconomyHandler.isEssentials())
-					ecowarn = "Warning: EssentialsX Economy has been known to reset town and nation bank accounts on rare occasions.";
-				
-		        File f = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");                   // For a short time Towny stored debt accounts in the server's
-		        if (!f.exists())                                                                                               // economy plugin. This practice had to end, being replaced 
-		        	Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> MoneyUtil.convertLegacyDebtAccounts(), 600l); // with the debtBalance which is stored in the Town object.
-					
+				plugin.getLogger().info(Translation.of("msg_compat_using_economy", TownyEconomyHandler.getVersion()));
+
+				/*
+				 * For a short time Towny stored debt accounts in the server's
+				 * economy plugin. This practice had to end, being replaced
+				 * with the debtBalance value which is stored in the Town object.
+				 */
+				File f = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");                 
+				if (!f.exists())
+					Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> MoneyUtil.convertLegacyDebtAccounts(), 600l);
 			} else {
-				ecowarn = "Warning: No compatible Economy plugins found. Install Vault.jar or Reserve.jar with any of the supported eco systems. If you do not want an economy to be used, set using_economy: false in your Towny config.yml.";
+				plugin.getLogger().warning(Translation.of("msg_compat_no_economy"));
 			}
-		}
 		
-		/*
-		 * Check add-ons and third-party plugins we use.
-		 */
-		// LlmDl Sponsor exclusive
-		test = getServer().getPluginManager().getPlugin("TownyCamps");
-		if (test != null) {
-			addons.add(String.format("%s v%s", "TownyCamps", test.getDescription().getVersion()));
-		}
-		
-		test = getServer().getPluginManager().getPlugin("TownyChat");
-		if (test != null) {
-			addons.add(String.format("%s v%s", "TownyChat", test.getDescription().getVersion()));			
-		}
-		
-		test = getServer().getPluginManager().getPlugin("TownyCultures");
-		if (test != null) {
-			addons.add(String.format("%s v%s", "TownyCultures", test.getDescription().getVersion()));
-		}
-
-		test = getServer().getPluginManager().getPlugin("TownyFlight");
-		if (test != null) {
-			addons.add(String.format("%s v%s", "TownyFlight", test.getDescription().getVersion()));			
-		}
-
-		// LlmDl Sponsor exclusive
-		test = getServer().getPluginManager().getPlugin("TownyHistories");
-		if (test != null) {
-			addons.add(String.format("%s v%s", "TownyHistories", test.getDescription().getVersion()));
-		}
-		
-		test = getServer().getPluginManager().getPlugin("SiegeWar");
-		if (test != null) {
-			addons.add(String.format("%s v%s", "SiegeWar", test.getDescription().getVersion()));
-		}
-		
-		test = getServer().getPluginManager().getPlugin("FlagWar");
-		if (test != null) {
-			addons.add(String.format("%s v%s", "FlagWar", test.getDescription().getVersion()));
-		}
-		
-		test = getServer().getPluginManager().getPlugin("Essentials");
-		if (test == null) {
-			TownySettings.setUsingEssentials(false);
-		} else if (TownySettings.isUsingEssentials()) {
-			this.essentials = (Essentials) test;
-			addons.add(String.format("%s v%s", "Essentials", test.getDescription().getVersion()));
-		}
-
-		test = getServer().getPluginManager().getPlugin("PlaceholderAPI");
-		if (test != null) {
-            new TownyPlaceholderExpansion(this).register();
-            addons.add(String.format("%s v%s", "PlaceholderAPI", test.getDescription().getVersion()));
-		}
-		
-		test = getServer().getPluginManager().getPlugin("LuckPerms");
-		if (test != null && TownySettings.isContextsEnabled()) {
-			this.luckPermsContexts = new LuckPermsContexts(this);
-			luckPermsContexts.registerContexts();
-			addons.add(String.format("%s v%s", "LuckPerms", test.getDescription().getVersion()));
-		}
-
-		//Add our chat handler to TheNewChat via the API.
-		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
+		if (pluginManager.isPluginEnabled("TheNewChat"))
 			TNCRegister.initialize();
-		}
 		
-		/*
-		 * Test for Citizens2 so we can avoid removing their NPC's
-		 */
-		setCitizens2(getServer().getPluginManager().isPluginEnabled("Citizens"));
-
-		/*
-		 * Output discovered plugins and warnings.
-		 */
-		plugin.getLogger().info("Plugins found: ");
-		plugin.getLogger().info(permissions);
-		if (!economy.isEmpty())
-			plugin.getLogger().info(economy);
-		if (!addons.isEmpty())
-			plugin.getLogger().info("  Add-ons: " + WordUtils.wrap(StringMgmt.join(addons, ", "), 52, System.lineSeparator() + "                           ", true));
-		if (!ecowarn.isEmpty())
-			plugin.getLogger().info(WordUtils.wrap(ecowarn, 55, System.lineSeparator() + "                           ", true));
-
-		//Add our chat handler to TheNewChat via the API.
-		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
-			TNCRegister.initialize();
-		}
-
-		//Legacy check to see if questioner.jar is still present.
-		test = getServer().getPluginManager().getPlugin("Questioner");
-		if (test != null) {
-			String questioner = "Warning: Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder.";
-			plugin.getLogger().info(WordUtils.wrap(questioner, 55, System.lineSeparator() + "                           ", true));
-		}
+		if (pluginManager.isPluginEnabled("Citizens2"))
+			setCitizens2(true);
 	}
 	
 	private String returnPermissionsProviders() {
