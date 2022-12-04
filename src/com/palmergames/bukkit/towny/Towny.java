@@ -54,11 +54,10 @@ import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
-import com.palmergames.bukkit.util.SupportUtil;
+import com.palmergames.bukkit.util.PluginSupportUtil;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
-import com.palmergames.util.StringMgmt;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.milkbowl.vault.chat.Chat;
@@ -78,18 +77,14 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -99,7 +94,6 @@ import java.util.logging.Level;
 public class Towny extends JavaPlugin {
 	private static final Version OLDEST_MC_VER_SUPPORTED = Version.fromString("1.16");
 	private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
-	
 	private final String version = this.getDescription().getVersion();
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
@@ -115,7 +109,7 @@ public class Towny extends JavaPlugin {
 	private final HUDManager HUDManager = new HUDManager(this);
 	private final TownyPaperEvents paperEvents = new TownyPaperEvents(this);
 	private LuckPermsContexts luckPermsContexts;
-
+	private TownyPlaceholderExpansion papiExpansion = null;
 	private TownyUniverse townyUniverse;
 
 	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
@@ -247,6 +241,8 @@ public class Towny extends JavaPlugin {
 		loadLocalization(reload);
 		// Then load permissions
 		loadPermissions(reload);
+		// Unregister PAPIExpansion.
+		unloadPAPIExpansion(reload);
 
 		// Initialize the type handler after the config is loaded and before the database is.
 		TownBlockTypeHandler.initialize();
@@ -272,6 +268,9 @@ public class Towny extends JavaPlugin {
 		// Loads Town and Nation Levels after migration has occured.
 		loadTownAndNationLevels();
 
+		// Re-register PAPIExpansion.
+		loadPAPIExpansion(reload);
+		
 		// Run both the cleanup and backup async.
 		townyUniverse.performCleanupAndBackup();
 	}
@@ -324,6 +323,16 @@ public class Towny extends JavaPlugin {
 		}
 	}
 
+	private void loadPAPIExpansion(boolean reload) {
+		if (reload && isPAPI())
+			papiExpansion.register();
+	}
+	
+	private void unloadPAPIExpansion(boolean reload) {
+		if (reload && isPAPI())
+			papiExpansion.unregister();
+	}
+	
 	/**
 	 * Loads the Town and Nation Levels from the config.yml
 	 *
@@ -458,6 +467,9 @@ public class Towny extends JavaPlugin {
 			luckPermsContexts.unregisterContexts();
 			luckPermsContexts = null;
 		}
+		
+		if (isPAPI())
+			unloadPAPIExpansion(true);
 
 		this.townyUniverse = null;
 
@@ -466,72 +478,139 @@ public class Towny extends JavaPlugin {
 	}
 	
 	private void checkSupport() {
-		final Map<String, SupportUtil.Support> results = SupportUtil.test();
+		final Map<String, PluginSupportUtil.Support> results = PluginSupportUtil.test();
+
+		// Permission providers
+		final String providers = returnPermissionsProviders();
+		getLogger().info(Translation.of("msg_compat_perm_providers", providers));
+		
+		// Economy provider
+		String economy = Translation.of("disabled");
+		if (TownySettings.isUsingEconomy()) {
+			if (TownyEconomyHandler.setupEconomy()) {
+				economy = Translation.of("msg_compat_eco", TownyEconomyHandler.getVersion());
+				
+				/*
+				 * For a short time Towny stored debt accounts in the server's economy plugin.
+				 * This practice had to end, being replaced by 'debtBalance', which is stored in the Town object.
+				 */
+				File debtFile = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");
+				if (!debtFile.exists())
+					Bukkit.getScheduler().runTaskLaterAsynchronously(this, MoneyUtil::convertLegacyDebtAccounts, 600L);
+			} else {
+				getLogger().warning(Translation.of("msg_compat_no_economy"));
+			}
+		}
+		
+		getLogger().info(economy);
+		
+		// Plugins that don't throw warnings, but inform their compatibility anyways.
+		final ArrayList<String> discovered = new ArrayList<>();
 		
 		// Compatibility report
 		if (!results.isEmpty()) {
-			plugin.getLogger().warning(Translation.of("msg_compat_found", results.size()));
+			getLogger().warning(Translation.of("msg_compat_found", results.size()));
 			
-			// Plugins that don't throw warnings, but inform their compatibility anyways.
-			final ArrayList<String> discovered = new ArrayList<>();
 			results.forEach((tested, support) -> {
-				if (support.type.shouldWarn) {
+				if (!support.type.shouldWarn) {
 					discovered.add(tested);
 				} else {
-					plugin.getLogger().warning(tested + ": " + support.description);
+					getLogger().warning(String.format("[%s] %s: %s", support.type.toString(), tested, support.description));
 				}
 			});
-			// Makes the footer the same size as the header
-			plugin.getLogger().warning(Translation.of("msg_compat_found").replaceAll(".", "*"));
 			
-			if (!discovered.isEmpty()) {
-				plugin.getLogger().info(Translation.of("msg_compat_discovered", discovered.size(), String.join(",", discovered)));
-			}
+			// Makes the footer the same size as the header
+			getLogger().warning(Translation.of("msg_compat_found").replaceAll(".", "="));
 		}
+		
+		// Specific-plugin hooks
+		if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null && TownySettings.isContextsEnabled())
+			new LuckPermsContexts(this);
+		
+		if (Bukkit.getPluginManager().getPlugin("Essentials") != null && TownySettings.isUsingEssentials())
+			this.essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+		
+		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
+			new TownyPlaceholderExpansion(this).register();
 		
 		if (Bukkit.getPluginManager().isPluginEnabled("TheNewChat"))
 			TNCRegister.initialize();
 		
 		if (Bukkit.getPluginManager().isPluginEnabled("Citizens2"))
 			setCitizens2(true);
+
+		if (!discovered.isEmpty()) {
+			plugin.getLogger().info(Translation.of("msg_compat_discovered", discovered.size(), String.join(", ", discovered)));
+		}
 	}
-	
+
 	private String returnPermissionsProviders() {
-		// TownyPerms is always present.
-		String output = "  Permissions: TownyPerms, ";
-		
-		// Test for GroupManager being present.
-		Plugin test = getServer().getPluginManager().getPlugin("GroupManager");
-		if (test != null) {
-			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(this, test));
-			output += String.format("%s v%s", "GroupManager", test.getDescription().getVersion());
-		// Else test for vault being present.
+		StringBuilder builder = new StringBuilder();
+		builder.append("TownyPerms");
+
+		// Test the presence of GroupManager.
+		final @Nullable Plugin gm = getServer().getPluginManager().getPlugin("GroupManager");
+		if (gm != null) {
+			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(this, gm));
+			builder.append(String.format(", GroupManager %s", gm.getDescription().getVersion()));
 		} else {
-			// Try Vault
-			test = getServer().getPluginManager().getPlugin("Vault");
-			if (test != null) {
-				net.milkbowl.vault.chat.Chat chat = getServer().getServicesManager().load(net.milkbowl.vault.chat.Chat.class);
+			// If GroupManager is not present, test the presence of Vault.
+			final @Nullable Plugin vault = getServer().getPluginManager().getPlugin("Vault");
+			if (vault != null) {
+				RegisteredServiceProvider<Chat> chat = findChatImplementation();
+				RegisteredServiceProvider<Permission> permissions = getServer().getServicesManager().getRegistration(Permission.class);
+
 				if (chat == null) {
-					// No Chat implementation
-					test = null;
-					// Fall back to BukkitPermissions below
+					// No chat implementation
+					builder.append(Translation.of("msg_compat_chat_provider", "None", "Vault", vault.getDescription().getVersion()));
 				} else {
-					TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(this, chat));
-					RegisteredServiceProvider<Permission> vaultPermProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-					if (vaultPermProvider != null) {
-						output += vaultPermProvider.getPlugin().getName() + " " + vaultPermProvider.getPlugin().getDescription().getVersion() + " via Vault";
+					builder.append(Translation.of("msg_compat_chat_provider", chat.getPlugin().getName(), "Vault", vault.getDescription().getVersion()));
+					TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(this, chat.getProvider()));
+
+					builder.append("\n");
+					if (permissions != null) {
+						builder.append(String.format(", %s %s (via Vault %s)", 
+							permissions.getPlugin().getName(), 
+							permissions.getPlugin().getDescription().getVersion(), 
+							vault.getDescription().getVersion()));
 					} else {
-						output += String.format("%s v%s", "Vault", test.getDescription().getVersion());
+						builder.append(Translation.of("msg_compat_chat_provider", "Vault", "Vault", vault.getDescription().getVersion()));
 					}
 				}
-			}
-
-			if (test == null) {
+			} else {
 				TownyUniverse.getInstance().setPermissionSource(new BukkitPermSource(this));
-				output += "BukkitPermissions";
+				builder.append(", BukkitPermissions");
 			}
 		}
-		return output;		
+		return builder.toString();
+	}
+	
+	@Nullable
+	private RegisteredServiceProvider<Chat> findChatImplementation() {
+		Iterator<RegisteredServiceProvider<Chat>> iterator = Bukkit.getServicesManager().getRegistrations(Chat.class).iterator();
+		
+		while (iterator.hasNext()) {
+			RegisteredServiceProvider<Chat> chatProvider = iterator.next();
+			
+			if (chatProvider == null)
+				continue;
+			
+			try {
+				// If the 'perms' field in the chat implementation is null, log some warning messages.
+				// The perms field being null causes issues with plot claiming, and is caused by a faulty chat implementation.
+				Field field = Chat.class.getDeclaredField("perms");
+				field.setAccessible(true);
+				
+				if (field.get(chatProvider.getProvider()) == null) {
+					getLogger().warning(String.format("WARNING: Plugin %s v%s has an improper Chat implementation, please inform the authors about the following:", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getDescription().getVersion()));
+					getLogger().warning(String.format("Class '%s' has a null Permission field, which is not supported.", chatProvider.getProvider().getClass().getName()));
+				}
+			} catch (Exception ignored) {}
+			
+			return chatProvider;
+		}
+		
+		return null;
 	}
 	
 	private void cycleTimers() {
@@ -692,6 +771,10 @@ public class Towny extends JavaPlugin {
 			throw new TownyException("Essentials is not installed, or not enabled!");
 		else
 			return essentials;
+	}
+	
+	public boolean isPAPI() {
+		return papiExpansion != null;
 	}
 
 	public World getServerWorld(String name) throws NotRegisteredException {

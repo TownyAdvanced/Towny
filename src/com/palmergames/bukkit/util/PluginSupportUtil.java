@@ -13,7 +13,7 @@ import java.util.WeakHashMap;
  * @author GNosii
  */
 @ApiStatus.Internal
-public class SupportUtil {
+public class PluginSupportUtil {
 
 	private static final WeakHashMap<String, Support> TESTS = getSupportData();
 
@@ -26,16 +26,16 @@ public class SupportUtil {
 		
 		TESTS.forEach((test, support) -> {
 			if (test.startsWith("platform:")) {
-				if (Bukkit.getName().contains(test.replace("platform:", ""))) {
-					map.put(test, support);
+				if (Bukkit.getName().contains(cleanTest(test))) {
+					map.put(cleanTest(test), support);
 				}
 			} else if (test.startsWith("plugin:")) {
-				if (Bukkit.getPluginManager().getPlugin(test.replace("plugin:", "")) != null) {
-					map.put(test, support);
+				if (Bukkit.getPluginManager().getPlugin(cleanTest(test)) != null) {
+					map.put(cleanTest(test), support);
 				}
 			} else if (test.startsWith("economy:")){
-				if (TownyEconomyHandler.getVersion().contains(test.replace("economy:", ""))) {
-					
+				if (TownyEconomyHandler.getVersion().contains(cleanTest(test))) {
+					map.put(cleanTest(test), support);
 				}
 			} else {
 				try {
@@ -63,9 +63,9 @@ public class SupportUtil {
 		 * map.put("plugin:Towny", new Support(SupportType.EXTENSION)
 		 */
 		
-		map.put("plugin:Questioner", new Support(SupportType.UNNECESSARY, "Towny no longer requires Questioner for questions and you can safely remove this plugin."));
+		map.put("plugin:MDCQuestioner", new Support(SupportType.UNNECESSARY, "Towny no longer requires Questioner for questions and you can safely remove this plugin."));
 		map.put("plugin:TownyNameUpdater", new Support(SupportType.UNNECESSARY, "Towny no longer depends on TownyNameUpdater for username changes and you can safely remove this plugin."));
-		
+		 
 		map.put("plugin:floodgate", new Support(SupportType.UNSUPPORTED_PLUGIN, "Floodgate is known to cause issues regarding their username format."));
 		
 		map.put("economy:Essentials Economy", new Support(SupportType.UNSUPPORTED_ECONOMY, "Essentials Economy is known to reset town/nation balances on rare occasions. Be careful if you're using Essentials Economy."));
@@ -90,7 +90,8 @@ public class SupportUtil {
 		map.put("plugin:Citizens", new Support(SupportType.SUPPORTED));
 		map.put("plugin:GroupManager", new Support(SupportType.SUPPORTED));
 		map.put("plugin:Vault", new Support(SupportType.SUPPORTED));
-
+		map.put("plugin:Essentials", new Support(SupportType.SUPPORTED));
+		
 		// Commit #87421e0
 		map.put("plugin:PowerRanks", new Support(SupportType.UNSUPPORTED_PLUGIN, "PowerRanks prevents townyperms.yml and other permission providers from working correctly."));
 		
@@ -101,7 +102,7 @@ public class SupportUtil {
 	 * Removes the prefix for the test. Namely "plugin:" and "platform"
 	 * @return clean test string
 	 */
-	private static String cleanTest(String test) {
+	public static String cleanTest(String test) {
 		return test.split("plugin:|platform:|.*", 2)[1];
 	}
 	
@@ -128,12 +129,12 @@ public class SupportUtil {
 		}
 
 		/**
-		 * Support information without an description, defaults to {@link SupportType#toString()}
+		 * Support information without an description, defaults to {@link SupportType#defaultDescription}
 		 * @param type Level of support
 		 */
 		public Support(@NotNull SupportType type) {
 			this.type = type;
-			this.description = type.toString();
+			this.description = type.defaultDescription;
 		}
 	}
 
@@ -148,47 +149,49 @@ public class SupportUtil {
 		 * Plugin built as an extension to Towny
 		 * Example: TownyChat, SiegeWar
 		 */
-		EXTENSION(false),
+		EXTENSION(false, ""),
 
 		/**
 		 * No issues have been reported for this plugin and we can help troubleshoot
 		 * these issues
-		 * Example: PlaceholderAPI, HolographicDisplays
+		 * Example: PlaceholderAPI
 		 */
-		SUPPORTED(false),
+		SUPPORTED(false, ""),
 
 		/**
 		 * Plugin was required by Towny, no longer needed
 		 * Example: TownyNameUpdater and Questioner
 		 */
-		UNNECESSARY(true),
+		UNNECESSARY(true, "This plugin is no longer needed."),
 		
 		/**
 		 * Economy plugin does not implement Vault/Reserve methods correctly 
 		 * and won't work with Towny
 		 */
-		UNSUPPORTED_ECONOMY(true),
+		UNSUPPORTED_ECONOMY(true, "This economy provider is not supported."),
 
 		/**
 		 * Plugin can cause issues with Towny
 		 * Example: Floodgate (issues related to user data)
 		 */
-		UNSUPPORTED_PLUGIN(true),
+		UNSUPPORTED_PLUGIN(true, "This plugin is not supported."),
 
 		/**
 		 * Fork/platform can cause issues with Towny
 		 * As of now, no platform is known to conflict with Towny
 		 */
-		UNSUPPORTED_PLATFORM(true);
+		UNSUPPORTED_PLATFORM(true, "This platform is not supported.");
 		
 		public final boolean shouldWarn;
-
+		private final String defaultDescription;
+		
 		/**
 		 * Constructor for the {@link SupportType} enum
 		 * @param warn Defines if this support level should emit warnings to console
 		 */
-		SupportType(Boolean warn) {
+		SupportType(boolean warn, String defaultDescription) {
 			this.shouldWarn = warn;
+			this.defaultDescription = defaultDescription;
 		}
 	}
 }
