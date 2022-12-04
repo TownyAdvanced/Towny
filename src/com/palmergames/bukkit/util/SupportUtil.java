@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.util;
 
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -19,18 +20,22 @@ public class SupportUtil {
 	public static HashMap<String, Support> test() {
 		final HashMap<String, Support> map = new HashMap<>();
 		
-		TESTS.forEach((clazz, support) -> {
-			try {
-				/*
-				 * I'd love to not need to do Class#forName
-				 * Sadly, if the plugin is not loaded (most of the time)
-				 * the warning will not be shown (as the plugin is not yet enabled
-				 */
-				Class.forName(clazz);
-				if (support.type.shouldWarn) {
-					map.put(clazz, support);
+		TESTS.forEach((test, support) -> {
+			if (test.startsWith("platform:")) {
+				if (Bukkit.getName().contains(test.replace("platform:", ""))) {
+					map.put(test, support);
 				}
-			} catch (final ClassNotFoundException ignored) {}
+			}
+			if (test.startsWith("plugin:")) {
+				if (Bukkit.getPluginManager().getPlugin(test.replace("plugin:", "")) != null) {
+					map.put(test, support);
+				}
+			} else {
+				try {
+					Class.forName(test);
+					map.put(test, support);
+				} catch (final ClassNotFoundException ignored) {}
+			}
 		});
 		
 		return map;
@@ -44,19 +49,53 @@ public class SupportUtil {
 		final HashMap<String, Support> map = new HashMap<>();
 		
 		/* 
-		 * To add an plugin to this list: Paste the classpath as it appears on plugin.yml's main field
-		 * For example, if you were to add Towny (why would you?):
+		 * To add an class to this list, copy and paste its qualified name:
 		 * map.put("com.palmergames.bukkit.towny.Towny", new Support(SupportType.EXTENSION, "Optional description."));
+		 * 
+		 * If the plugin loads before Towny does, and it's available on Bukkit's PluginManager you can use this syntax:
+		 * map.put("plugin:Towny", new Support(SupportType.EXTENSION)
 		 */
-		map.put("com.mdc.mib.questioner.Question", new Support(SupportType.UNNECESSARY, "Towny no longer requires Questioner for questions and you can safely remove this plugin."));
-		map.put("com.palmergames.townynameupdater.TownyNameUpdater", new Support(SupportType.UNNECESSARY, "Towny no longer depends on TownyNameUpdater for username changes and you can safely remove this plugin."));
+		
+		map.put("plugin:Questioner", new Support(SupportType.UNNECESSARY, "Towny no longer requires Questioner for questions and you can safely remove this plugin."));
+		map.put("plugin:TownyNameUpdater", new Support(SupportType.UNNECESSARY, "Towny no longer depends on TownyNameUpdater for username changes and you can safely remove this plugin."));
 		
 		map.put("org.geysermc.floodgate.SpigotPlugin", new Support(SupportType.UNSUPPORTED_PLUGIN, "Floodgate is known to cause issues regarding their username format."));
 		map.put("com.earth2me.essentials.economy.vault.VaultEconomyProvider", new Support(SupportType.UNSUPPORTED_ECONOMY, "Essentials Economy is known to reset town/nation balances on rare occasions. Be careful if you're using EssentialsEco."));
 		
+		// TownyAdvanced plugins
+		map.put("plugin:TownyCamps", new Support(SupportType.EXTENSION));
+		map.put("plugin:TownyChat", new Support(SupportType.EXTENSION));
+		map.put("plugin:TownyCultures", new Support(SupportType.EXTENSION));
+		map.put("plugin:TownyFlight", new Support(SupportType.EXTENSION));
+		map.put("plugin:TownyHistories", new Support(SupportType.EXTENSION));
+		
+		// Official war plugins
+		map.put("plugin:SiegeWar", new Support(SupportType.EXTENSION));
+		map.put("plugin:FlagWar", new Support(SupportType.EXTENSION));
+		map.put("plugin:EventWar", new Support(SupportType.EXTENSION));
+
+		// Plugins we hook with
+		map.put("plugin:PlaceholderAPI", new Support(SupportType.SUPPORTED));
+		map.put("plugin:TheNewChat", new Support(SupportType.SUPPORTED));
+		map.put("plugin:LuckPerms", new Support(SupportType.SUPPORTED));
+		map.put("plugin:Citizens", new Support(SupportType.SUPPORTED));
+		map.put("plugin:GroupManager", new Support(SupportType.SUPPORTED));
+		map.put("plugin:Vault", new Support(SupportType.SUPPORTED));
+
+		// Commit #87421e0
+		map.put("plugin:PowerRanks", new Support(SupportType.UNSUPPORTED_PLUGIN, "PowerRanks prevents townyperms.yml and other permission providers from working correctly."));
+		
 		return map;
 	}
 
+	/**
+	 * Removes the prefix for the test. Namely "plugin:" and "platform"
+	 * @return clean test string
+	 */
+	private static String cleanTest(String test) {
+		return test.split("plugin:|platform:|.*", 2)[1];
+	}
+	
 	/**
 	 * Defines the level of support for an certain class, including the support level, and an
 	 * optional explanation of why it's tested for
@@ -133,7 +172,7 @@ public class SupportUtil {
 		 */
 		UNSUPPORTED_PLATFORM(true);
 		
-		final boolean shouldWarn;
+		public final boolean shouldWarn;
 
 		/**
 		 * Constructor for the {@link SupportType} enum

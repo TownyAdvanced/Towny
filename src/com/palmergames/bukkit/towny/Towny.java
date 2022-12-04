@@ -471,16 +471,27 @@ public class Towny extends JavaPlugin {
 	}
 	
 	private void checkSupport() {
-		Map<String, SupportUtil.Support> results = SupportUtil.test();
+		final Map<String, SupportUtil.Support> results = SupportUtil.test();
 		
 		// Compatibility report
 		if (!results.isEmpty()) {
 			plugin.getLogger().warning(Translation.of("msg_compat_found", results.size()));
-			results.forEach((clazz, support) -> {
-				plugin.getLogger().warning(clazz + ": " + support.description);
+			
+			// Plugins that don't throw warnings, but inform their compatibility anyways.
+			final ArrayList<String> discovered = new ArrayList<>();
+			results.forEach((tested, support) -> {
+				if (support.type.shouldWarn) {
+					discovered.add(tested);
+				} else {
+					plugin.getLogger().warning(tested + ": " + support.description);
+				}
 			});
 			// Makes the footer the same size as the header
 			plugin.getLogger().warning(Translation.of("msg_compat_found").replaceAll(".", "*"));
+			
+			if (!discovered.isEmpty()) {
+				plugin.getLogger().info(Translation.of("msg_compat_discovered", discovered.size(), String.join(",", discovered)));
+			}
 		}
 		
 		if (TownySettings.isUsingEconomy())
@@ -493,8 +504,9 @@ public class Towny extends JavaPlugin {
 				 * with the debtBalance value which is stored in the Town object.
 				 */
 				File f = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");                 
-				if (!f.exists())
+				if (!f.exists()) {
 					Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> MoneyUtil.convertLegacyDebtAccounts(), 600l);
+				}
 			} else {
 				plugin.getLogger().warning(Translation.of("msg_compat_no_economy"));
 			}
