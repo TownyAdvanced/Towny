@@ -43,4 +43,4 @@ Label-Languages:
     - src/com/palmergames/bukkit/towny/object/Translation.java
 
 Label-CI/CD:
-    - .github/*
+    - .github/workflows/*

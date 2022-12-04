@@ -1,37 +1,16 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.Bukkit;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
-/*
- * @author LlmDl
- *
- */
-
-public class PreDeleteTownEvent extends Event implements Cancellable {
-	private static final HandlerList handlers = new HandlerList();
-
+public class PreDeleteTownEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
+	
 	private final String townName;
 	private final Town town;
-	private boolean isCancelled = false;
-	private String cancelMessage = "Sorry this event was cancelled";
-
-	@Override
-	public HandlerList getHandlers() {
-
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-
-		return handlers;
-	}
 
 	public PreDeleteTownEvent(Town town) {
-		super(!Bukkit.getServer().isPrimaryThread());
 		this.townName = town.getName();
 		this.town = town;
 	}
@@ -50,17 +29,13 @@ public class PreDeleteTownEvent extends Event implements Cancellable {
 		return town;
 	}
 
-	@Override
-	public boolean isCancelled() { return isCancelled; }
-
-	@Override
-	public void setCancelled(boolean cancelled) { isCancelled = cancelled; }
-	
-	public String getCancelMessage() {
-		return cancelMessage;
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
 	}
 
-	public void setCancelMessage(String cancelMessage) {
-		this.cancelMessage = cancelMessage;
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

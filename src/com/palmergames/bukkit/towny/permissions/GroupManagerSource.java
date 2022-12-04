@@ -48,9 +48,11 @@ public class GroupManagerSource extends TownyPermissionSource {
 	 */
 	@Override
 	public String getPrefixSuffix(Resident resident, String node) {
+		Player player = resident.getPlayer();
+		if (player == null)
+			return "";
 
 		String group = "", user = "";
-		Player player = BukkitTools.getPlayer(resident.getName());
 
 		//sendDebugMsg("    GroupManager installed.");
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
@@ -98,7 +100,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 		int iReturn = -1;
 		
-		Player player = BukkitTools.getPlayer(playerName);
+		Player player = BukkitTools.getPlayerExact(playerName);
 
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
 		iReturn  = handler.getPermissionInteger(playerName, node);
@@ -112,13 +114,12 @@ public class GroupManagerSource extends TownyPermissionSource {
 	
 	@Override
 	public int getPlayerPermissionIntNode(String playerName, String node) {
-		
-		int iReturn = -1;
-		
-		Player player = BukkitTools.getPlayer(playerName);
+		Player player = BukkitTools.getPlayerExact(playerName);
+		if (player == null)
+			return -1;
 
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
-		iReturn  = handler.getPermissionInteger(playerName, node);
+		int iReturn = handler.getPermissionInteger(playerName, node);
 		
 		if (iReturn == -1)
 			iReturn = getEffectivePermIntNode(playerName, node);
@@ -135,7 +136,9 @@ public class GroupManagerSource extends TownyPermissionSource {
 	@Override
 	public String getPlayerPermissionStringNode(String playerName, String node) {
 
-		Player player = BukkitTools.getPlayer(playerName);
+		Player player = BukkitTools.getPlayerExact(playerName);
+		if (player == null)
+			return "";
 
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldData(player).getPermissionsHandler();
 

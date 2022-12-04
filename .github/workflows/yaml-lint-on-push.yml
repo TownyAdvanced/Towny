@@ -1,0 +1,37 @@
+---
+
+name: Yaml Lint
+on: [push]  # yamllint disable-line rule:truthy
+
+jobs:
+  lintAllTheThings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: yaml-lint
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          config_data: |
+            extends: default
+            rules:
+              colons:
+                max-spaces-before: -1
+                max-spaces-after: -1
+              new-lines:
+                level: warning
+              commas:
+                max-spaces-before: -1
+                min-spaces-after: -1
+                max-spaces-after: -1
+              new-line-at-end-of-file:
+                level: warning
+              trailing-spaces:
+                level: warning
+              document-start:
+                present: false
+              line-length:
+                max: 800
+              comments:
+                require-starting-space: false
+                ignore-shebangs: true
+                min-spaces-from-content: 2

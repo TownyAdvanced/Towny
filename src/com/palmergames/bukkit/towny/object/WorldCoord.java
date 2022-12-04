@@ -4,6 +4,8 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.util.BukkitTools;
+
 import io.papermc.lib.PaperLib;
 
 import org.bukkit.Bukkit;
@@ -14,31 +16,49 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class WorldCoord extends Coord {
 
-	private final String worldName;
+	private final World world;
 
 	public WorldCoord(String worldName, int x, int z) {
 		super(x, z);
-		this.worldName = worldName;
+		this.world = BukkitTools.getWorld(worldName);
 	}
 
 	public WorldCoord(String worldName, Coord coord) {
 		super(coord);
-		this.worldName = worldName;
+		this.world = BukkitTools.getWorld(worldName);
+	}
+
+	public WorldCoord(UUID worldUID, int x, int z) {
+		super(x, z);
+		this.world = BukkitTools.getWorld(worldUID);
+	}
+
+	public WorldCoord(UUID worldUID, Coord coord) {
+		super(coord);
+		this.world = BukkitTools.getWorld(worldUID);
 	}
 
 	public WorldCoord(WorldCoord worldCoord) {
 		super(worldCoord);
-		this.worldName = worldCoord.getWorldName();
+		this.world = worldCoord.getBukkitWorld();
 	}
 
 	public String getWorldName() {
-		return worldName;
+		return world.getName();
 	}
 
 	public Coord getCoord() {
@@ -70,7 +90,7 @@ public class WorldCoord extends Coord {
 	public int hashCode() {
 
 		int hash = 17;
-		hash = hash * 27 + (worldName == null ? 0 : worldName.hashCode());
+		hash = hash * 27 + (getWorldName() == null ? 0 : getWorldName().hashCode());
 		hash = hash * 27 + getX();
 		hash = hash * 27 + getZ();
 		return hash;
@@ -89,12 +109,12 @@ public class WorldCoord extends Coord {
 		}
 
 		WorldCoord that = (WorldCoord) obj;
-		return this.getX() == that.getX() && this.getZ() == that.getZ() && (Objects.equals(this.worldName, that.worldName));
+		return this.getX() == that.getX() && this.getZ() == that.getZ() && (Objects.equals(this.getWorldName(), that.getWorldName()));
 	}
 
 	@Override
 	public String toString() {
-		return worldName + "," + super.toString();
+		return getWorldName() + "," + super.toString();
 	}
 
 	/**
@@ -103,7 +123,7 @@ public class WorldCoord extends Coord {
 	 * @return the relevant org.bukkit.World instance
 	 */
 	public World getBukkitWorld() {
-		return Bukkit.getWorld(worldName);
+		return world;
 	}
 
 	/**
@@ -111,12 +131,12 @@ public class WorldCoord extends Coord {
 	 */
 	@Nullable
 	public TownyWorld getTownyWorld() {
-		return TownyUniverse.getInstance().getWorld(worldName); 
+		return TownyUniverse.getInstance().getWorld(getWorldName()); 
 	}
 
 	@Nullable
 	public TownyWorld getTownyWorldOrNull() {
-		return TownyAPI.getInstance().getTownyWorld(worldName);
+		return TownyAPI.getInstance().getTownyWorld(world);
 	}
 	
 	/**
@@ -145,6 +165,10 @@ public class WorldCoord extends Coord {
 	public boolean hasTownBlock() {
 		return TownyUniverse.getInstance().hasTownBlock(this);
 	}
+	
+	public boolean hasTown(Town town) {
+		return hasTownBlock() && getTownOrNull().equals(town);
+	}
 
 	/**
 	 * Identical to !{@link WorldCoord#hasTownBlock()}, but is better readable.
@@ -157,7 +181,7 @@ public class WorldCoord extends Coord {
 	/**
 	 * Loads the chunks represented by a WorldCoord. Creates a PluginChunkTicket so
 	 * that the WorldCoord will remain loaded, even when no players are present.
-	 * 
+	 * <p>
 	 * Uses PaperLib's getChunkAtAsync when Paper is present.
 	 */
 	public void loadChunks() {
@@ -169,25 +193,13 @@ public class WorldCoord extends Coord {
 	}
 
 	private void loadChunks(Towny plugin) {
-		if (getCellSize() > 16) {
-			// Dealing with a townblocksize greater than 16, we will have multiple chunks per WorldCoord.
-			int side = Math.round(getCellSize() / 16);
-			for (int x = 0; x <= side; x++) {
-				for (int z = 0; z <= side; z++) {
-					CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getSubCorner(x, z));
-					futureChunk.thenAccept(chunk-> chunk.addPluginChunkTicket(plugin));
-				}
-			}
-		} else {
-			CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getCorner());
-			futureChunk.thenAccept(chunk-> chunk.addPluginChunkTicket(plugin));
-		}
+		getChunks().forEach(future -> future.thenAccept(chunk -> chunk.addPluginChunkTicket(plugin)));
 	}
 	
 	/**
 	 * Unloads the chunks presented by a WorldCoord. Removes a PluginChunkTicket so
 	 * that the WorldCoord will no longer remain loaded.
-	 * 
+	 * <p> 
 	 * Uses PaperLib's getChunkAtAsync when Paper is present.
 	 */
 	public void unloadChunks() {
@@ -199,18 +211,31 @@ public class WorldCoord extends Coord {
 	}
 
 	private void unloadChunks(Towny plugin) {
+		getChunks().forEach(future -> future.thenAccept(chunk -> chunk.addPluginChunkTicket(plugin)));
+	}
+
+	/**
+	 * Loads and returns the chunk(s) inside this WorldCoord.
+	 * <p>
+	 * Chunks are loaded async on servers using paper.
+	 * @return An unmodifiable collection of chunk futures.
+	 */
+	@Unmodifiable
+	public Collection<CompletableFuture<Chunk>> getChunks() {
 		if (getCellSize() > 16) {
 			// Dealing with a townblocksize greater than 16, we will have multiple chunks per WorldCoord.
-			int side = Math.round(getCellSize() / 16);
+			final Set<CompletableFuture<Chunk>> chunkFutures = new HashSet<>();
+			
+			int side = Math.round(getCellSize() / 16f);
 			for (int x = 0; x <= side; x++) {
 				for (int z = 0; z <= side; z++) {
-					CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getSubCorner(x, z));
-					futureChunk.thenAccept(chunk-> chunk.removePluginChunkTicket(plugin));
+					chunkFutures.add(PaperLib.getChunkAtAsync(getSubCorner(x, z)));
 				}
 			}
+			
+			return Collections.unmodifiableSet(chunkFutures);
 		} else {
-			CompletableFuture<Chunk> futureChunk = PaperLib.getChunkAtAsync(getCorner());
-			futureChunk.thenAccept(chunk-> chunk.removePluginChunkTicket(plugin));
+			return Collections.singleton(PaperLib.getChunkAtAsync(getCorner()));
 		}
 	}
 
@@ -268,5 +293,14 @@ public class WorldCoord extends Coord {
 		return toCell(from.getBlockX()) != toCell(to.getBlockX()) ||
 			   toCell(from.getBlockZ()) != toCell(to.getBlockZ()) ||
 			   !Objects.equals(from.getWorld(), to.getWorld());
+	}
+
+	public List<WorldCoord> getCardinallyAdjacentWorldCoords() {
+		List<WorldCoord> list = new ArrayList<>(4);
+		list.add(this.add(0,-1));
+		list.add(this.add(0,1));
+		list.add(this.add(1,0));
+		list.add(this.add(-1,0));
+		return list;
 	}
 }

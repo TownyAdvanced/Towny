@@ -50,6 +50,8 @@ public class SQL_Schema {
 		columns.add("`unclaimedZoneIgnoreIds` mediumtext NOT NULL");
 		columns.add("`usingPlotManagementDelete` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementDeleteIds` mediumtext NOT NULL");
+		columns.add("`isDeletingEntitiesOnUnclaim` bool NOT NULL DEFAULT '0'");
+		columns.add("`unclaimDeleteEntityTypes` mediumtext NOT NULL");
 		columns.add("`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementMayorDelete` mediumtext NOT NULL");
 		columns.add("`usingPlotManagementRevert` bool NOT NULL DEFAULT '0'");
@@ -134,6 +136,8 @@ public class SQL_Schema {
 		columns.add("`nationSpawn` mediumtext DEFAULT NULL");
 		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
 		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
+		columns.add("`taxpercent` bool NOT NULL DEFAULT '0'");
+		columns.add("`maxPercentTaxAmount` float DEFAULT NULL");
 		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
@@ -190,11 +194,13 @@ public class SQL_Schema {
 		columns.add("`primaryJail` VARCHAR(36) DEFAULT NULL");
 		columns.add("`movedHomeBlockAt` BIGINT NOT NULL");
 		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
+		columns.add("`trustedTowns` mediumtext NOT NULL");
 		columns.add("`nationZoneOverride` int(11) DEFAULT 0");
 		columns.add("`nationZoneEnabled` bool NOT NULL DEFAULT '1'");
 		columns.add("`allies` mediumtext NOT NULL");
 		columns.add("`enemies` mediumtext NOT NULL");
 		columns.add("`hasUnlimitedClaims` bool NOT NULL DEFAULT '0'");
+		columns.add("`manualTownLevel` BIGINT DEFAULT '-1'");
 		return columns;
 	}
 
@@ -218,6 +224,7 @@ public class SQL_Schema {
 		columns.add("`jailUUID` VARCHAR(36) DEFAULT NULL");
 		columns.add("`jailCell` mediumint");
 		columns.add("`jailHours` mediumint");
+		columns.add("`jailBail` float DEFAULT NULL");
 		columns.add("`title` mediumtext");
 		columns.add("`surname` mediumtext");
 		columns.add("`protectionStatus` mediumtext");

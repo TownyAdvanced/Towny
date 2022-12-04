@@ -44,7 +44,12 @@ public class SpawnPoint {
 
 		for (RingCoord ringPosition : RING_PATTERN) {
 			Location point = origin.clone().add(ringPosition.getX(), 0.0d, ringPosition.getZ());
-			Bukkit.getScheduler().runTaskLaterAsynchronously(Towny.getPlugin(), ()-> location.getWorld().spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0), i*4);
+			Bukkit.getScheduler().runTaskLaterAsynchronously(Towny.getPlugin(), () -> {
+				try {
+					// This can potentially throw an exception if we're running this async and a player disconnects while it's sending particles.
+					location.getWorld().spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0);
+				} catch (Exception ignored) {}
+			}, i * 4L);
 			i++;
 		}
 	}

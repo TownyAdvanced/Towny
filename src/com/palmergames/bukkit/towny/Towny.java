@@ -61,9 +61,9 @@ import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 
-import org.apache.commons.lang.WordUtils;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -93,10 +93,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 /**
- * Towny Plugin for Bukkit
- * 
- * Website &amp; Source: https://github.com/TownyAdvanced/Towny
- * 
+ * Main class for <a href="https://github.com/TownyAdvanced/Towny">Towny</a>
  * @author Shade, ElgarL, LlmDl
  */
 public class Towny extends JavaPlugin {
@@ -469,39 +466,21 @@ public class Towny extends JavaPlugin {
 	}
 	
 	private void checkSupport() {
-		if (TownySettings.isUsingEconomy())
-			if (TownyEconomyHandler.setupEconomy()) {
-				plugin.getLogger().info(Translation.of("msg_compat_using_economy", TownyEconomyHandler.getVersion()));
-
-				/*
-				 * For a short time Towny stored debt accounts in the server's
-				 * economy plugin. This practice had to end, being replaced
-				 * with the debtBalance value which is stored in the Town object.
-				 */
-				File f = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");
-				if (!f.exists()) {
-					Bukkit.getScheduler().runTaskLaterAsynchronously(this, MoneyUtil::convertLegacyDebtAccounts, 600l);
-				}
-			} else {
-				plugin.getLogger().warning(Translation.of("msg_compat_no_economy"));
-			}
-		
 		final Map<String, SupportUtil.Support> results = SupportUtil.test();
 		
 		// Compatibility report
 		if (!results.isEmpty()) {
-			plugin.getLogger().warning(Translation.of("msg_compat_found"));
+			plugin.getLogger().warning(Translation.of("msg_compat_found", results.size()));
 			
 			// Plugins that don't throw warnings, but inform their compatibility anyways.
 			final ArrayList<String> discovered = new ArrayList<>();
 			results.forEach((tested, support) -> {
-				if (!support.type.shouldWarn) {
+				if (support.type.shouldWarn) {
 					discovered.add(tested);
 				} else {
-					plugin.getLogger().info(tested + ": " + support.description);
+					plugin.getLogger().warning(tested + ": " + support.description);
 				}
 			});
-
 			// Makes the footer the same size as the header
 			plugin.getLogger().warning(Translation.of("msg_compat_found").replaceAll(".", "*"));
 			

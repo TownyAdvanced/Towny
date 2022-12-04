@@ -1,23 +1,19 @@
 package com.palmergames.bukkit.towny.event.time.dailytaxes;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
-public class PreTownPaysNationTaxEvent extends Event implements Cancellable {
+public class PreTownPaysNationTaxEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
-	private static final HandlerList handlers = new HandlerList();
-	private boolean isCancelled;
-	private Town town;
-	private Nation nation;
+	private final Town town;
+	private final Nation nation;
 	private double tax;
-	private String cancellationMessage = Translation.of("msg_your_town_was_exempt_from_the_nation_tax");
-	
+
 	/**
 	 * Cancellable event that precedes a town paying the nation tax.
 	 * 
@@ -26,10 +22,10 @@ public class PreTownPaysNationTaxEvent extends Event implements Cancellable {
 	 * @param tax the amount the town will pay.
 	 */
 	public PreTownPaysNationTaxEvent(Town town, Nation nation, double tax) {
-		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.nation = nation;
 		this.tax = tax;
+		setCancelMessage(Translation.of("msg_your_town_was_exempt_from_the_nation_tax"));
 	}
 	
 	public Town getTown() {
@@ -48,31 +44,31 @@ public class PreTownPaysNationTaxEvent extends Event implements Cancellable {
 		this.tax = tax;
 	}
 
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean cancel) {
-		this.isCancelled = cancel;
-	}
-
+	/**
+	 * 
+	 * @return {@link #getCancelMessage()}
+	 * @deprecated since 0.98.4.0 use {@link #getCancelMessage()}
+	 */
+	@Deprecated
 	public String getCancellationMessage() {
-		return cancellationMessage;
+		return getCancelMessage();
 	}
 
+	/**
+	 * @param cancellationMessage String that will display if this Event is cancelled.
+	 * @deprecated since 0.98.4.0 use {@link #setCancelMessage(String)}
+	 */
 	public void setCancellationMessage(String cancellationMessage) {
-		this.cancellationMessage = cancellationMessage;
+		setCancelMessage(cancellationMessage);
 	}
-	
+
 	public static HandlerList getHandlerList() {
-		return handlers;
+		return HANDLER_LIST;
 	}
-	
+
+	@NotNull
 	@Override
 	public HandlerList getHandlers() {
-		return handlers;
+		return HANDLER_LIST;
 	}
-
 }

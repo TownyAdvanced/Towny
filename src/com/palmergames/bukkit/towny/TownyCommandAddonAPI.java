@@ -33,6 +33,10 @@ public class TownyCommandAddonAPI {
         PLOT_TOGGLE,
         TOWNY,
         TOWNYADMIN,
+        /** This CommandType will always execute using a CommandExecutor with the Town name prepended to the String[] args to which this command should apply. */
+        TOWNYADMIN_TOWN,
+        /** This CommandType will always execute using a CommandExecutor with the Nation name prepended to the String[] args to which this command should apply. */
+        TOWNYADMIN_NATION,
         TOWNYADMIN_SET,
         TOWNYADMIN_TOGGLE,
 		TOWNYADMIN_RELOAD,

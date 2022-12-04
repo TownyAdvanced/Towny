@@ -60,7 +60,7 @@ public class BankAccount extends Account {
 				TownyMessaging.sendErrorMsg(String.format("Error fetching debt cap for town %s because town is not registered!", townName));
 			}
 			
-			return Double.parseDouble(TownySettings.getTownLevel(town).get(TownySettings.TownLevel.DEBT_CAP_MODIFIER).toString()) * TownySettings.getDebtCapOverride();
+			return TownySettings.getTownLevel(town).debtCapModifier() * TownySettings.getDebtCapOverride();
 		}
 		
 		if (TownySettings.getDebtCapOverride() != 0.0)

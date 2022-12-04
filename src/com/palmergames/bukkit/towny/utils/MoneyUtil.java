@@ -48,16 +48,13 @@ public class MoneyUtil {
 			
 			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
 			
-			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
-			BukkitTools.getPluginManager().callEvent(preEvent);
-			if (preEvent.isCancelled())
-				throw new TownyException(preEvent.getCancelMessage());
+			BukkitTools.ifCancelledThenThrow(new TownPreTransactionEvent(town, transaction));
 			
 			// Withdraw from bank.
 			town.withdrawFromBank(resident, amount);
 
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_xx_withdrew_xx", resident.getName(), amount, Translatable.of("town_sing")));
-			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
+			BukkitTools.fireEvent(new TownTransactionEvent(town, transaction));
 			
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
@@ -72,10 +69,7 @@ public class MoneyUtil {
 
 			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
 			
-			TownPreTransactionEvent preEvent = new TownPreTransactionEvent(town, transaction);
-			BukkitTools.getPluginManager().callEvent(preEvent);
-			if (preEvent.isCancelled())
-				throw new TownyException(preEvent.getCancelMessage());
+			BukkitTools.ifCancelledThenThrow(new TownPreTransactionEvent(town, transaction));
 			
 			if (nation == null) {
 				// Deposit into town from a town resident.
@@ -87,7 +81,7 @@ public class MoneyUtil {
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_deposited_xx", resident.getName(), amount, town + " " + Translatable.of("town_sing")));
 			}
 			
-			BukkitTools.getPluginManager().callEvent(new TownTransactionEvent(town, transaction));
+			BukkitTools.fireEvent(new TownTransactionEvent(town, transaction));
 			
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
@@ -102,16 +96,12 @@ public class MoneyUtil {
 
 			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
 			
-			NationPreTransactionEvent preEvent = new NationPreTransactionEvent(nation, transaction);
-			BukkitTools.getPluginManager().callEvent(preEvent);
-			
-			if (preEvent.isCancelled())
-				throw new TownyException(preEvent.getCancelMessage());
+			BukkitTools.ifCancelledThenThrow(new NationPreTransactionEvent(nation, transaction));
 
 			// Withdraw from bank.
 			nation.withdrawFromBank(resident, amount);
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_withdrew_xx", resident.getName(), amount, Translatable.of("nation_sing")));
-			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
+			BukkitTools.fireEvent(new NationTransactionEvent(nation, transaction));
 			
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
@@ -126,16 +116,13 @@ public class MoneyUtil {
 
 			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
 			
-			NationPreTransactionEvent preEvent = new NationPreTransactionEvent(nation, transaction);
-			BukkitTools.getPluginManager().callEvent(preEvent);
-			if (preEvent.isCancelled())
-				throw new TownyException(preEvent.getCancelMessage());
+			BukkitTools.ifCancelledThenThrow(new NationPreTransactionEvent(nation, transaction));
 			
 			// Deposit into nation.
 			nation.depositToBank(resident, amount);
 			
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_deposited_xx", resident.getName(), amount, Translatable.of("nation_sing")));
-			BukkitTools.getPluginManager().callEvent(new NationTransactionEvent(nation, transaction));
+			BukkitTools.fireEvent(new NationTransactionEvent(nation, transaction));
 			
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
@@ -238,5 +225,17 @@ public class MoneyUtil {
 			}
 		}
 		Towny.getPlugin().saveResource("debtAccountsConverted.txt", false);
+	}
+	
+	public static double getMoneyAboveZeroOrThrow(String input) throws TownyException {
+		double amount;
+		try {
+			amount = Double.parseDouble(input);
+		} catch (NumberFormatException e) {
+			throw new TownyException(Translatable.of("msg_error_must_be_num"));
+		}
+		if (amount < 0)
+			throw new TownyException(Translatable.of("msg_err_negative_money"));
+		return amount;
 	}
 }

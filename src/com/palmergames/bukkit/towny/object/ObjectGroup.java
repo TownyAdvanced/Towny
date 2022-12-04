@@ -7,8 +7,8 @@ import java.util.UUID;
  * 
  * @author Suneet Tipirneni (Siris)
  */
-public abstract class ObjectGroup implements Nameable {
-	private UUID id;
+public abstract class ObjectGroup implements Nameable, Identifiable {
+	private UUID uuid;
 	private String name;
 
 	/**
@@ -17,16 +17,26 @@ public abstract class ObjectGroup implements Nameable {
 	 * @param name An alias for the id used for player in-game interaction via commands.
 	 */
 	public ObjectGroup(UUID id, String name) {
-		this.id = id;
+		this.uuid = id;
 		this.name = name;
 	}
 	
+	@Deprecated
 	public UUID getID() {
-		return id;
+		return uuid;
 	}
 	
+	@Deprecated
 	public void setID(UUID ID) {
-		this.id = ID;
+		this.uuid = ID;
+	}
+	
+	public UUID getUUID() {
+		return uuid;
+	}
+	
+	public void setUUID(UUID id) {
+		this.uuid = id;
 	}
 	
 	@Override
@@ -45,7 +55,7 @@ public abstract class ObjectGroup implements Nameable {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ObjectGroup) {
-			return ((ObjectGroup) obj).id.equals(this.id);
+			return ((ObjectGroup) obj).uuid.equals(this.uuid);
 		}
 		return false;
 	}
@@ -56,7 +66,7 @@ public abstract class ObjectGroup implements Nameable {
 	 */
 	@Override
 	public String toString() {
-		return name + "," + id;
+		return name + "," + uuid;
 	}
 
 	/**
@@ -67,6 +77,6 @@ public abstract class ObjectGroup implements Nameable {
 	 */
 	@Override
 	public int hashCode() {
-		return id.hashCode();
+		return uuid.hashCode();
 	}
 }

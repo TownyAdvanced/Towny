@@ -1,20 +1,36 @@
 ---
 name: Towny
-version: 0.151
 language: Turkish
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
 description: >
-  Language file for all game messages.  Do not alter this file. If you wish to change any of the entries, make a copy named something else. Alternate language files can be enabled by altering the [language] entry in config.yml
+  Language file for all game messages for this Locale.
+#A note on editing this file.
+#----------------------------
+#Do not alter this file if it is in the reference folder.
+#Before you edit this file, read about how Towny handles
+#language files:
+#https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
+#A note on text formatting (how Towny inserts words.)
+#----------------------------------------------------
 #You MUST retain spacing in the texts.
-#If a text begins or ends with a space, it must remain that way.
+#If a text begins or ends with a space, it must remain that
+#way.
 #%s = data to be supplied by the plugin.
-#Text colouring
-#--------------
+#If you find that a line has multiple %s variables which would
+#be in a different order in your language, you can change them
+#to %1$s, %2$s, %4$s, %3$s to change their order. ie: %4$s
+#will always use the 4th variable, no matter where it is
+#placed on the line.
+#A note on text colouring and formatting.
+#----------------------------------------
 #Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
 #Purple = &5, Gold = &6, LightGray = &7, Gray = &8
 #DarkPurple = &9, LightGreen = &a, LightBlue = &b
 #Rose = &c, LightPurple = &d, Yellow = &e, White = &f
+#This language file also supports using MiniMessage for colours
+#and formatting. Learn about MiniMessage formatting here:
+#https://docs.adventure.kyori.net/minimessage/format.html
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
@@ -244,7 +260,9 @@ msg_set_wild_regen: '&b%s nin vahşi yenilenmesi şu şekilde başarıyla deği�
 msg_set_use_towny_on: '&bBu dünya artık kasaba kurallarını takip ediyor.'
 msg_set_use_towny_off: '&cBu dünya tüm şehir etkileşimlerinden muaftır.'
 msg_error_must_be_int: '&bMiktar tam sayı olmalıdır.'
+msg_error_input_must_be_int: '&c%s must be an integer'
 msg_error_must_be_num: '&bMiktar bir sayı olmalıdır.'
+msg_error_input_must_be_num: '&c%s must be a number'
 msg_must_specify_amnt: '&bMiktarı belirtmelidir. Örneğin %s 54'
 msg_town_set_tax: '&b%s, günlük ikamet vergisini %s olarak ayarladı'
 msg_town_set_plottax: '&b%s, parsellerin günlük vergisini %s olarak belirledi'
@@ -269,6 +287,7 @@ msg_new_mayor: '&b%s şimdi belediye başkanı!'
 msg_new_nation: '&b%s isimli kişi &e%s &badında bir ulus kurdu'
 msg_new_town: '&b%s isimli kişi &e%s &badında bir kasaba kurdu h.o'
 msg_plot_for_sale: '&b%s arsayı (%s) satışa sundu!'
+msg_plot_for_sale_amount: '&b%s, (%s) arsayı %s fiyata satışa sundu!'
 msg_plot_set_type: '&bArsa türü %s olarak ayarlandı'
 msg_cache_block_error: '&cTowny ye kayıtlı değilsiniz. Yeniden günlüğe kaydetmeyi deneyin.'
 msg_cache_block_error_wild: '&cVahşi doğada %s izin verilmez.'
@@ -555,7 +574,7 @@ status_forced: '&cZorla'
 status_adjustable: '&aAyarlanabilir'
 status_pvp: 'PVP:'
 explosions: 'Patlamalar:'
-firespread: 'Ateş Yayılması:'
+firespread: 'Ateş Yayılımı:'
 mobspawns: 'Yaratık Doğumu:'
 owner_of_x_plots: '%s arsanın sahibi.'
 status_bank: 'Banka:'
@@ -701,8 +720,8 @@ msg_bankrupt_town2: '&b%s bir kasaba olarak kalamazdı.'
 msg_bankrupt_nation2: '&b%s ulus olarak kalamazdı.'
 status_embassy_town: 'Şu kasabalarda toprakları var'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bGeçersiz karşılaştırıcı. Yerleşik, denge, kasaba, isim, kasaba blokları, çevrimiçi deneyin.'
-msg_error_invalid_comparator_town: '&bGeçersiz karşılaştırıcı. Yerleşik, denge, isim, kasaba blokları, çevrimiçi, açık deneyin.'
+msg_error_invalid_comparator_nation: '&bGeçersiz karşılaştırıcı. %s deneyin.'
+msg_error_invalid_comparator_town: '&bGeçersiz karşılaştırıcı. %s deneyin.'
 msg_err_merging_for_kings_only: '&bBirleştirme yalnızca bir Ulus Lideri tarafından yapılabilir.'
 msg_err_king_of_that_nation_is_not_online: '&b%s Ulusunun Lideri,%s çevrimiçi değil. Birleştirme başarısız oldu.'
 nation1_has_merged_with_nation2: '&6%s ülkesi, hüküm süren milletiyle birleşmeyi kabul etti: %s.'
@@ -715,6 +734,7 @@ msg_error_ta_plot_claim: 'Eksik oyuncu adı, örneğin:/ta plot claim OyuncuAdı
 msg_error_no_player_with_that_name: 'İsimli oyuncu bulunamadı %s'
 msg_admin_has_given_you_a_plot: 'Bir yönetici sizin için bir arsa talep etti: %s'
 msg_town_forcepvp_setting_set_to: '%s kasabasının pvp ayarı %s'
+msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cUlusun statüsü artık açk %s.'
 msg_err_already_in_a_nation: 'Kasabanız zaten bir ulusun içinde.'
 msg_err_nation_not_open: '&c%s ülkesinin kapıları herkese açık değil. Kralıdan veya bir asistandan kasabanızı davet etmesini isteyin.'
@@ -1136,7 +1156,6 @@ msg_err_you_cannot_remove_the_last_cell: 'Başka bir hücre eklenene kadar bu ha
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Hapse ışınlanmadan önce çıkış yapmayın, bu ölümcül olur.'
 jail_plu: 'Hapishaneler'
 jail_sing: 'Hapis'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s, %s tarafından %s saat boyunca %s hücre numarasına %s için gönderildi.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s hapse atılacak kadar uzun oynamadı, %s daha bekleyin'
 #Added in 0.108
 msg_town_not_peaceful: '&bTown barışçıl bir devleti karşılayamazdı.'
@@ -1408,7 +1427,7 @@ tc_player_channel_sound_unmuted: 'Kanal susturulması kalktı'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Arsanızda bir yabancı var, pvp durumunuzu değiştiremezsiniz!'
 #Added in 0.136
-msg_view_on_web: 'Web üzerinde görüntülemek için tıklayın.'
+msg_view_on_web: '&7Webde görüntülemek için tıkla.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6%s Kasabası, %s Kasabası ile birleşmeyi kabul etti.'
@@ -1491,3 +1510,110 @@ msg_err_no_pages_to_display: 'Görüntülenecek Sayfa yok!'
 msg_err_nation_unaffiliated: 'O Ulus sana bağlı değil.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: 'O Kasaba sana bağlı değil.'
+#Added in 0.152
+#Message shown when a player tries to add a jail cell location where one already exists.
+msg_err_this_location_already_has_a_jailcell: 'Bu alanın zaten bir hapishane hücresi var.'
+#Title line of the /plot perm hud.
+msg_perm_hud_title: 'Arsa Yetkileri'
+#Seen in /plot perm hud:
+msg_perm_hud_build: 'Yapı: '
+#Seen in /plot perm hud:
+msg_perm_hud_destroy: 'Sil: '
+#Seen in /plot perm hud:
+msg_perm_hud_switch: 'Değiştir: '
+#Seen in /plot perm hud:
+msg_perm_hud_item_use: 'Eşya: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_type: 'Tür: '
+#Seen in /plot perm hud:
+msg_perm_hud_pvp: 'PVP: '
+#Seen in /plot perm hud:
+msg_perm_hud_explosions: 'Patlamalar: '
+#Seen in /plot perm hud:
+msg_perm_hud_firespread: 'Ateş Yayılması: '
+#Seen in /plot perm hud:
+msg_perm_hud_mobspawns: 'Yaratık Doğması: '
+#Seen in /plot perm hud:
+msg_perm_hud_key: 'Anahtar'
+#Seen in /plot perm hud:
+msg_perm_hud_friend: 'arkadaş'
+#Seen in /plot perm hud:
+msg_perm_hud_town: 'kasaba'
+#Seen in /plot perm hud:
+msg_perm_hud_ally: 'müttefik'
+#Seen in /plot perm hud:
+msg_perm_hud_resident: 'sakin'
+#Seen in /plot perm hud:
+msg_perm_hud_nation: 'ulus'
+#Seen in /plot perm hud:
+msg_perm_hud_outsider: 'yabancı'
+#Seen in /plot perm hud:
+msg_perm_hud_plot_name: 'Arsa: '
+#Added in 0.153
+#Message shown confirming /ta town NAME settownlevel # command.
+msg_town_level_overridden_with: '%s kasabasının seviyesi %s olarak ayarlandı.'
+#Message shown when unsetting a manual town level.
+msg_town_level_unset: '%s kasabasının el ile ayarlanmış seviyesi sıfırlandı. Şu anki seviyesi %s.'
+#Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
+msg_err_town_not_allowed_purchased_blocks: '%s kasabası configde yapılan ayara göre townblock satın alamaz.'
+#Message shown when unsetting all purchased townblocks from a town.
+msg_purchased_blocks_unset: '%s kasabasının satın alınan townblockları kaldırıldı.'
+#Message shown when /ta town name giveboughtblocks # is used.
+msg_purchased_blocks_changed: '%s kasabasına %s townblock verildi, şu an %s townblockları mevcut.'
+#Added in 0.154
+msg_comptype_upkeep: 'Bakım'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: '%s kasabasının bakım ayarı %s olarak ayarlandı.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'Kasaban %d olan %s limitine ulaştı.'
+#Added in 0.156
+msg_spawn_cost_free: 'Ücretsiz'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'Bu arsa çoktan %s tipinde.'
+msg_town_board_reset: '&bKasaba tahtası temizlendi.'
+msg_town_has_no_jailslots: 'Kasaba hapishanesi dolu.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s, %s tarafından %s saat boyunca %s hücre numarasına %s için gönderildi.'
+msg_you_have_been_jailed_your_bail_is_x: 'Hapse düştün, kefaret bedelin %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s has been released to make space for another prisoner.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+#Message shown in the confirmation for /ta resetbanks {amount}.
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'Tüm kasaba ve ulus bankalarını %s''e eşitlemek istediğinizden emin misiniz?'
+#Message shown when a nation cannot add a town because of the max-residents-limit.
+msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
+#Message shown to a town when they cannot join a nation because of the max-residents-limit.
+msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
+#Message shown to a town because the nation has hit their max-towns-limit.
+msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
+#Message shown confirming /tw set usedefaults
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
+#Part of the /town plots output.
+msg_town_plots_title: ' Kasaba Arazileri'
+#Part of the /town plots output.
+msg_town_plots_town_size: '<dark_green>Kasaba Büyüklüğü: <green>%s/%s'
+#Part of the /town plots output.
+msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
+#Part of the /town plots output.
+msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
+#Part of the /town plots output.
+msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+#Part of the /town plots output.
+msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
+#Part of the /town plots output.
+msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+#Part of the /town plots output.
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+#Part of the /town plots output.
+msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
+#Part of the /town plots output.
+msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
+#Message giving confirmation warning for trusttown
+confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'

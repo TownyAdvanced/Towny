@@ -9,10 +9,14 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.util.MathUtil;
 
 import com.palmergames.util.StringMgmt;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,11 +26,16 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class TownyWorld extends TownyObject {
+	private UUID uuid;
 
 	private HashMap<String, Town> towns = new HashMap<>();
 
+	private boolean isDeletingEntitiesOnUnclaim = TownySettings.isDeletingEntitiesOnUnclaim();
+	private EnumSet<EntityType> unclaimDeleteEntityTypes = null;
+	
 	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
 	private EnumSet<Material> plotManagementDeleteIds = null;
 	
@@ -51,7 +60,7 @@ public class TownyWorld extends TownyObject {
 	private String unclaimedZoneName = null;
 
 	private boolean isUsingTowny = TownySettings.isUsingTowny();
-	private boolean isClaimable = true;
+	private boolean isClaimable = TownySettings.isNewWorldClaimable();
 	private boolean isWarAllowed = TownySettings.isWarAllowed();
 	private boolean isPVP = TownySettings.isPvP();
 	private boolean isForcePVP = TownySettings.isForcingPvP();
@@ -68,12 +77,29 @@ public class TownyWorld extends TownyObject {
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
 	
 	public Map<Location, Material> bedMap = new HashMap<>();
-	public List<String> tridentStrikeMap = new ArrayList<>();
+	public final List<UUID> tridentStrikeList = new ArrayList<>(0);
 
 	public TownyWorld(String name) {
 		super(name);
 	}
 
+	public TownyWorld(String name, UUID uuid) {
+		super(name);
+		this.uuid = uuid;
+	}
+	
+	public UUID getUUID() {
+		return uuid;
+	}
+	
+	public void setUUID(UUID uuid) {
+		this.uuid = uuid;
+	}
+
+	public World getBukkitWorld() {
+		return Bukkit.getWorld(uuid);
+	}
+	
 	public HashMap<String, Town> getTowns() {
 
 		return towns;
@@ -307,6 +333,43 @@ public class TownyWorld extends TownyObject {
 		setUnclaimedZoneItemUse(null);
 		setUnclaimedZoneIgnore(null);
 		setUnclaimedZoneName(null);
+		setUsingTowny(TownySettings.isUsingTowny());
+		setClaimable(TownySettings.isNewWorldClaimable());
+		setWarAllowed(TownySettings.isWarAllowed());
+		setPVP(TownySettings.isPvP());
+		setForcePVP(TownySettings.isForcingPvP());
+		setFriendlyFire(TownySettings.isFriendlyFireEnabled());
+		setFire(TownySettings.isFire());
+		setForceFire(TownySettings.isForcingFire());
+		setWorldMobs(TownySettings.isWorldMonstersOn());
+		setWildernessMobs(TownySettings.isWildernessMonstersOn());
+		setForceTownMobs(TownySettings.isForcingMonsters());
+		setExpl(TownySettings.isExplosions());
+		setForceExpl(TownySettings.isForcingExplosions());
+		setEndermanProtect(TownySettings.getEndermanProtect());
+		setDisableCreatureTrample(TownySettings.isCreatureTramplingCropsDisabled());
+		// reset unclaiming deletes entities.
+		unclaimDeleteEntityTypes = null;
+		setDeletingEntitiesOnUnclaim(TownySettings.isDeletingEntitiesOnUnclaim());
+		// reset unclaiming deletes blocks.
+		setUsingPlotManagementDelete(TownySettings.isUsingPlotManagementDelete());
+		plotManagementDeleteIds = null;
+		// mayor's plot clear
+		setUsingPlotManagementMayorDelete(TownySettings.isUsingPlotManagementMayorDelete());
+		plotManagementMayorDelete = null;
+		// revert on unclaim
+		setUsingPlotManagementRevert(TownySettings.isUsingPlotManagementRevert());
+		// revert ignore
+		plotManagementIgnoreIds = null;
+		// wilderness entity explosion revert
+		setUsingPlotManagementWildEntityRevert(TownySettings.isUsingPlotManagementWildEntityRegen());
+		entityExplosionProtection = null;
+		// wilderness block explosion revert
+		setUsingPlotManagementWildBlockRevert(TownySettings.isUsingPlotManagementWildBlockRegen());
+		blockExplosionProtection = null;
+		plotManagementWildRevertBlockWhitelist = null;
+		// Entities protected from explosions
+		entityExplosionProtection = null;
 	}
 
 	public void setUsingPlotManagementDelete(boolean using) {
@@ -317,6 +380,25 @@ public class TownyWorld extends TownyObject {
 	public boolean isUsingPlotManagementDelete() {
 
 		return isUsingPlotManagementDelete;
+	}
+
+	public void setDeletingEntitiesOnUnclaim(boolean using) {
+		isDeletingEntitiesOnUnclaim = using;
+	}
+
+	public boolean isDeletingEntitiesOnUnclaim() {
+		return isDeletingEntitiesOnUnclaim;
+	}
+
+	public EnumSet<EntityType> getUnclaimDeleteEntityTypes() {
+		if (unclaimDeleteEntityTypes == null)
+			setUnclaimDeleteEntityTypes(TownySettings.getUnclaimDeleteEntityTypes());
+
+		return unclaimDeleteEntityTypes;
+	}
+
+	public void setUnclaimDeleteEntityTypes(List<String> entityTypes) {
+		this.unclaimDeleteEntityTypes = TownySettings.toEntityTypeEnumSet(entityTypes);
 	}
 
 	public void setUsingPlotManagementMayorDelete(boolean using) {
@@ -435,8 +517,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	/**
-	 * @param plotManagementWildRevertDelay the plotManagementWildRevertDelay to
-	 *            set
+	 * @param plotManagementWildRevertDelay the plotManagementWildRevertDelay to set
 	 */
 	public void setPlotManagementWildRevertDelay(long plotManagementWildRevertDelay) {
 
@@ -622,6 +703,10 @@ public class TownyWorld extends TownyObject {
 			return TownySettings.getUnclaimedZoneName();
 		else
 			return unclaimedZoneName;
+	}
+
+	public String getFormattedUnclaimedZoneName() {
+		return StringMgmt.remUnderscore(getUnclaimedZoneName());
 	}
 
 	public void setUnclaimedZoneName(String unclaimedZoneName) {
@@ -858,6 +943,7 @@ public class TownyWorld extends TownyObject {
 	 * @param location Location to test.
 	 * @return true when the bed map contains the location.
 	 */
+	@ApiStatus.Internal
 	public boolean hasBedExplosionAtBlock(Location location) {
 		return bedMap.containsKey(location);
 	}
@@ -868,32 +954,37 @@ public class TownyWorld extends TownyObject {
 	 * @return material of the bed or null if the bedMap doesn't contain the location.
 	 */
 	@Nullable
+	@ApiStatus.Internal
 	public Material getBedExplosionMaterial(Location location) {
 		if (hasBedExplosionAtBlock(location))
 			return bedMap.get(location);
 		return null;
 	}
 	
+	@ApiStatus.Internal
 	public void addBedExplosionAtBlock(Location location, Material material) {
 		bedMap.put(location, material);
 	}
 
+	@ApiStatus.Internal
 	public void removeBedExplosionAtBlock(Location location) {
 		if (hasBedExplosionAtBlock(location))
 			bedMap.remove(location);
 	}
 	
-	public boolean hasTridentStrike(int entityID) {
-		return tridentStrikeMap.contains(String.valueOf(entityID));
+	@ApiStatus.Internal
+	public boolean hasTridentStrike(UUID uuid) {
+		return tridentStrikeList.contains(uuid);
 	}
 
-	public void addTridentStrike(int entityID) {
-		tridentStrikeMap.add(String.valueOf(entityID));
+	@ApiStatus.Internal
+	public void addTridentStrike(UUID uuid) {
+		tridentStrikeList.add(uuid);
 	}
 	
-	public void removeTridentStrike(int entityID) {
-		if (hasTridentStrike(entityID))
-			tridentStrikeMap.remove(String.valueOf(entityID));
+	@ApiStatus.Internal
+	public void removeTridentStrike(UUID uuid) {
+		tridentStrikeList.remove(uuid);
 	}
 
 	public void setFriendlyFire(boolean parseBoolean) {

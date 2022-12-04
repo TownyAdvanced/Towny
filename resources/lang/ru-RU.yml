@@ -1,20 +1,36 @@
 ---
 name: Towny
-version: 0.151
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
 website: 'http://townyadvanced.github.io/'
 description: >
-  Файл локализации для всех сообщений плагина. Не изменяйте этот файл. Если вы желаете изменить что-либо, создайте копию с другим названием. Изменить язык плагина можно путём изменения строчки [language] в файле config.yml
+  Language file for all game messages for this Locale.
+#A note on editing this file.
+#----------------------------
+#Do not alter this file if it is in the reference folder.
+#Before you edit this file, read about how Towny handles
+#language files:
+#https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
+#A note on text formatting (how Towny inserts words.)
+#----------------------------------------------------
 #You MUST retain spacing in the texts.
-#If a text begins or ends with a space, it must remain that way.
+#If a text begins or ends with a space, it must remain that
+#way.
 #%s = data to be supplied by the plugin.
-#Text colouring
-#--------------
+#If you find that a line has multiple %s variables which would
+#be in a different order in your language, you can change them
+#to %1$s, %2$s, %4$s, %3$s to change their order. ie: %4$s
+#will always use the 4th variable, no matter where it is
+#placed on the line.
+#A note on text colouring and formatting.
+#----------------------------------------
 #Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
 #Purple = &5, Gold = &6, LightGray = &7, Gray = &8
 #DarkPurple = &9, LightGreen = &a, LightBlue = &b
 #Rose = &c, LightPurple = &d, Yellow = &e, White = &f
+#This language file also supports using MiniMessage for colours
+#and formatting. Learn about MiniMessage formatting here:
+#https://docs.adventure.kyori.net/minimessage/format.html
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
@@ -244,7 +260,9 @@ msg_set_wild_regen: '&bУспешно изменено восстановлен�
 msg_set_use_towny_on: '&bТеперь в этом мире Towny включен.'
 msg_set_use_towny_off: '&cВ этом мире Towny отключен.'
 msg_error_must_be_int: '&bКол-во должно быть целым.'
+msg_error_input_must_be_int: '&c%s must be an integer'
 msg_error_must_be_num: '&bДолжно быть число.'
+msg_error_input_must_be_num: '&c%s must be a number'
 msg_must_specify_amnt: '&bНадо указать количество. Например: %s 54'
 msg_town_set_tax: '&b%s установил налоги в размере %s'
 msg_town_set_plottax: '&b%s установил налоги на территорию в размере %s'
@@ -269,6 +287,7 @@ msg_new_mayor: '&b%s теперь мэр!'
 msg_new_nation: '&b%s создал нацию %s'
 msg_new_town: '&b%s создал новый город %s'
 msg_plot_for_sale: '&b%s выставил участок (%s) на продажу!'
+msg_plot_for_sale_amount: '&b%s выставил участок (%s) на продажу за %s!'
 msg_plot_set_type: '&bТип участка теперь %s'
 msg_cache_block_error: '&cВы не были зарегистрированы в Towny. Пожалуйста, перезайдите.'
 msg_cache_block_error_wild: '&cЗапрещено %s в Диких Землях.'
@@ -701,8 +720,8 @@ msg_bankrupt_town2: '&b%s не смог позволить себе остать
 msg_bankrupt_nation2: '&b%s не смогла позволить себе остаться нацией.'
 status_embassy_town: 'Посольства в'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bНеверный сравнитель. Попробуйте жителей, счёт, города, название, участки, онлайн.'
-msg_error_invalid_comparator_town: '&bНеверный сравнитель. Попробуйте жителей, счёт, имя, участки, онлайн, открытость.'
+msg_error_invalid_comparator_nation: '&bНеверный аргумент. Попробуйте %s.'
+msg_error_invalid_comparator_town: '&bНеверный аргумент. Попробуйте %s.'
 msg_err_merging_for_kings_only: '&bСлияние может быть совершено только лидером нации.'
 msg_err_king_of_that_nation_is_not_online: '&bКороль %s, %s, не в сети. Слияние невозможно.'
 nation1_has_merged_with_nation2: '&6Нация %s договорился о слиянии с доминирующей нацией %s.'
@@ -715,6 +734,7 @@ msg_error_ta_plot_claim: 'Отсутствует имя игрока. Приме
 msg_error_no_player_with_that_name: 'Игрок с именем %s не найден'''
 msg_admin_has_given_you_a_plot: 'Администратор заприватил для вас участок по адресу: %s'
 msg_town_forcepvp_setting_set_to: 'В городе %s нстройки PVP принудительно установлены на %s'
+msg_town_forcedisabledpvp_setting_set_to: 'Настройка admindisabledpvp в городе %s теперь %s'
 msg_nation_changed_open: '&cОткрытый статус Нации сейчас: %s.'
 msg_err_already_in_a_nation: 'Ваш город уже в нации.'
 msg_err_nation_not_open: '&c%s не принимает всех подряд. Попросите приглашения у лидера или ассистента.'
@@ -1136,7 +1156,6 @@ msg_err_you_cannot_remove_the_last_cell: 'Вы не можете удалить 
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Не выходите с сервера, прежде чем телепортироваться в тюрьму, иначе вы умрёте.'
 jail_plu: 'Тюрьмы'
 jail_sing: 'Тюрьма'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%5$s отправил %1$s в %2$s в камеру №%3$s на %4$s часов.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s должны наиграть ещё %s, чтобы их можно было поместить в тюрьму'
 #Added in 0.108
 msg_town_not_peaceful: '&bНация не смогла себе позволить быть мирной.'
@@ -1408,7 +1427,7 @@ tc_player_channel_sound_unmuted: 'Звук канала включен'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'В этом участке находится посторонний, вы не можете переключить PVP!'
 #Added in 0.136
-msg_view_on_web: 'Нажмите для просмотра в Интернете.'
+msg_view_on_web: '&Нажмите для просмотра в браузере.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6Город %s согласился на слияние с превалирующим городом %s.'
@@ -1491,3 +1510,110 @@ msg_err_no_pages_to_display: 'Нечего отображать!'
 msg_err_nation_unaffiliated: 'Эта нация не связана с вами.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: 'Этот город не связан с вами.'
+#Added in 0.152
+#Message shown when a player tries to add a jail cell location where one already exists.
+msg_err_this_location_already_has_a_jailcell: 'В этом месте уже есть тюремная камера.'
+#Title line of the /plot perm hud.
+msg_perm_hud_title: 'Права для участка'
+#Seen in /plot perm hud:
+msg_perm_hud_build: 'Строительство: '
+#Seen in /plot perm hud:
+msg_perm_hud_destroy: 'Разрушение: '
+#Seen in /plot perm hud:
+msg_perm_hud_switch: 'Переключение: '
+#Seen in /plot perm hud:
+msg_perm_hud_item_use: 'Использование предметов: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_type: 'Тип: '
+#Seen in /plot perm hud:
+msg_perm_hud_pvp: 'ПВП: '
+#Seen in /plot perm hud:
+msg_perm_hud_explosions: 'Взрывы: '
+#Seen in /plot perm hud:
+msg_perm_hud_firespread: 'Распространение огня: '
+#Seen in /plot perm hud:
+msg_perm_hud_mobspawns: 'Спавн мобов: '
+#Seen in /plot perm hud:
+msg_perm_hud_key: 'Ключ'
+#Seen in /plot perm hud:
+msg_perm_hud_friend: 'друг'
+#Seen in /plot perm hud:
+msg_perm_hud_town: 'город'
+#Seen in /plot perm hud:
+msg_perm_hud_ally: 'союзник'
+#Seen in /plot perm hud:
+msg_perm_hud_resident: 'житель'
+#Seen in /plot perm hud:
+msg_perm_hud_nation: 'нация'
+#Seen in /plot perm hud:
+msg_perm_hud_outsider: 'чужак'
+#Seen in /plot perm hud:
+msg_perm_hud_plot_name: 'Участок: '
+#Added in 0.153
+#Message shown confirming /ta town NAME settownlevel # command.
+msg_town_level_overridden_with: 'Городу %s установлен уровень %s.'
+#Message shown when unsetting a manual town level.
+msg_town_level_unset: 'У города %s был снят уровень. Текущий уровень %s.'
+#Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
+msg_err_town_not_allowed_purchased_blocks: 'Город %s не может покупать участки из-за настроек плагина.'
+#Message shown when unsetting all purchased townblocks from a town.
+msg_purchased_blocks_unset: 'У города %s были удалены купленные городские участки.'
+#Message shown when /ta town name giveboughtblocks # is used.
+msg_purchased_blocks_changed: 'Город %s получил %s участков, всего %s.'
+#Added in 0.154
+msg_comptype_upkeep: 'Налог на содержание'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'Налог на содержание у города %s теперь %s.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'Ваш город достиг лимита в %d %s участков.'
+#Added in 0.156
+msg_spawn_cost_free: 'Бесплатно'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'Этот участок уже %s вида.'
+msg_town_board_reset: '&bДоска объявлений очищена.'
+msg_town_has_no_jailslots: 'Городская тюрьма переполнена.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s был заключен в %s в камеру №%s на %s часов с залогом в %s игроком %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%5$s отправил %1$s в %2$s в камеру №%3$s на %4$s часов.'
+msg_you_have_been_jailed_your_bail_is_x: 'Вы были заключены в тюрьму, ваш залог: %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Ваш установленный залог был выше, чем максимальный: %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Ваш установленный срок был выше, чем максимальный: %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Недостаточно средств в городской казне для заключения %s, сбор %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Вас выпустили из тюрьмы, чтобы освободить место.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s был выпущен на свободу, чтобы освободить место для другого заключенного.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Вас выпустили из тюрьмы, так как город больше не может содержать вас.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s был выпущен на свободу из-за нехватки средств в городской казне.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s изъято из городской казны на содержание заключенного %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s изъято из городской казны на заключение %s в тюрьму.'
+#Message shown in the confirmation for /ta resetbanks {amount}.
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'Вы уверены, что хотите сбросить все городские и национальные казны к %s?'
+#Message shown when a nation cannot add a town because of the max-residents-limit.
+msg_err_cannot_add_nation_over_resident_limit: '&cВаша нация достигла максимального количества жителей (%s), нельзя добавить %s.'
+#Message shown to a town when they cannot join a nation because of the max-residents-limit.
+msg_err_cannot_join_nation_over_resident_limit: '&cВы не можете присоединиться к этой нации, достигнуто максимальное количество жителей (%s).'
+#Message shown to a town because the nation has hit their max-towns-limit.
+msg_err_cannot_join_nation_over_town_limit: '&cВы не можете присоединиться к этой нации, достигнут максимальный лимит городов (%s).'
+#Message shown confirming /tw set usedefaults
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Вы уверены, что хотите сбросить все настройки этого мира к тем, что указаны в конфигурации?'
+#Part of the /town plots output.
+msg_town_plots_title: ' Участки города'
+#Part of the /town plots output.
+msg_town_plots_town_size: '<dark_green>Размер города: <green>%s/%s'
+#Part of the /town plots output.
+msg_town_plots_town_bought: ' <aqua>Куплено: %s/%s]'
+#Part of the /town plots output.
+msg_town_plots_town_bonus: ' <aqua>[Бонус: %s]'
+#Part of the /town plots output.
+msg_town_plots_town_nationbonus: ' <aqua>[Бонус нации: %s]'
+#Part of the /town plots output.
+msg_town_plots_town_owned_land: '<dark_green>Земли во владении города: <green>%s'
+#Part of the /town plots output.
+msg_town_plots_type_header: '<dark_green>Тип: <green>Принадлежат игрокам <gray>/ <aqua>Продаются <gray>/ <yellow>Всего'
+#Part of the /town plots output.
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Ежедневный доход'
+#Part of the /town plots output.
+msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
+#Part of the /town plots output.
+msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
+#Message giving confirmation warning for trusttown
+confirmation_msg_trusttown_consequences: 'Вы собираетесь дать полные права на участок всему городу. Это означает, что мэр города сможет решать, кто получит разрешение на строительство и разрушение в вашем городе, добавляя жителей. Если этот город открыт, то любой игрок может присоединиться и получить полный доступ к вашему городу. Вы уверены, что хотите доверять всем жителям этого города (включая новых игроков)?'

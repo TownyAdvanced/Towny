@@ -10,6 +10,8 @@ import java.nio.file.Path;
 public enum DatabaseConfig {
 	DATABASE(
 			"database", "", ""),
+	DATEBASE_VERSION("database.version", "1", "",
+			"# The Database version number. Do not change."),
 	DATABASE_LOAD("database.database_load", "flatfile", "",
 			"# Valid load and save types are: flatfile and mysql."),
 	DATABASE_SAVE("database.database_save", "flatfile"),
@@ -123,6 +125,11 @@ public enum DatabaseConfig {
 		}
 		databaseConfig = newDatabaseConfig;
 		newDatabaseConfig = null;
+	}
+	
+	public static void setDatabaseVersion(String version) {
+		databaseConfig.set("database.version", version);
+		databaseConfig.save();
 	}
 	
 	public static String getString(DatabaseConfig node) {

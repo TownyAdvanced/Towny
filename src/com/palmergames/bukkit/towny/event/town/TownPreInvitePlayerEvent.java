@@ -1,26 +1,24 @@
 package com.palmergames.bukkit.towny.event.town;
 
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.Bukkit;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Cancellable event that gets fired before a resident is invited to a town.
  * @since 0.96.7.12
  */
-public class TownPreInvitePlayerEvent extends Event implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
-    private final Invite invite;
-    private boolean cancelled = false;
-    private String cancelMessage = "You cannot invite this player to your town.";
+public class TownPreInvitePlayerEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
+	
+	private final Invite invite;
 
     public TownPreInvitePlayerEvent(Invite invite) {
-        super(!Bukkit.getServer().isPrimaryThread());
         this.invite = invite;
+        setCancelMessage("You cannot invite this player to your town.");
     }
 
     public Invite getInvite() {
@@ -43,28 +41,13 @@ public class TownPreInvitePlayerEvent extends Event implements Cancellable {
         return (Town) invite.getSender();
     }
 
-    public boolean isCancelled() {
-        return cancelled;
-    }
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
 
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
-    }
-
-    public String getCancelMessage() {
-        return cancelMessage;
-    }
-
-    public void setCancelMessage(String cancelMessage) {
-        this.cancelMessage = cancelMessage;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
+	}
 }

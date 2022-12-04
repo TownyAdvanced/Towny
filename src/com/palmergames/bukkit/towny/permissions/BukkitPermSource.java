@@ -22,7 +22,9 @@ public class BukkitPermSource extends TownyPermissionSource {
 		 * so treat the same as bPerms
 		 */
 
-		Player player = BukkitTools.getPlayer(resident.getName());
+		Player player = resident.getPlayer();
+		if (player == null)
+			return "";
 
 		for (PermissionAttachmentInfo test : player.getEffectivePermissions()) {
 			if (test.getPermission().startsWith(node + ".")) {
@@ -30,6 +32,7 @@ public class BukkitPermSource extends TownyPermissionSource {
 				return split[split.length - 1];
 			}
 		}
+		
 		return "";
 	}
 
@@ -65,7 +68,9 @@ public class BukkitPermSource extends TownyPermissionSource {
 		 * so treat the same as bPerms
 		 */
 
-		Player player = BukkitTools.getPlayer(playerName);
+		Player player = BukkitTools.getPlayerExact(playerName);
+		if (player == null)
+			return "";
 
 		for (PermissionAttachmentInfo test : player.getEffectivePermissions()) {
 			if (test.getPermission().startsWith(node + ".")) {

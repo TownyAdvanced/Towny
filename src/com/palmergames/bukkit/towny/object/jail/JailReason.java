@@ -1,23 +1,16 @@
 package com.palmergames.bukkit.towny.object.jail;
 
-import com.palmergames.bukkit.towny.TownySettings;
-
 public enum JailReason {
 
-	MAYOR("msg_jailed_mayor", 1), // hours is unused, always specified by the mayor when jailing. 
-	OUTLAW_DEATH("msg_jailed_outlaw", TownySettings.getJailedOutlawJailHours()),
-	PRISONER_OF_WAR("msg_jailed_war", 99);
+	MAYOR("msg_jailed_mayor"),
+	OUTLAW_DEATH("msg_jailed_outlaw"),
+	PRISONER_OF_WAR("msg_jailed_war");
 	
 	private final String cause;
-	private final int hours;
-	JailReason(String cause, int hours) {
+	JailReason(String cause) {
 		this.cause = cause;
-		this.hours = hours;
 	}
 	public String getCause() {
 		return cause;
-	}
-	public int getHours() {
-		return hours;
 	}
 }

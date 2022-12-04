@@ -5,8 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.bukkit.map.MinecraftFont;
-
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
 
@@ -19,13 +18,17 @@ import com.palmergames.bukkit.towny.object.Translation;
  */
 
 public class ChatTools {
-	final static int MAX_FONT_WIDTH = 321; // Two pixels less than the actual max width.
-	final static int SPACE_WIDTH = 4;
-	final static int UNDERSCORE_WIDTH = 6;
-	final static int WIDGET_WIDTH = 22;
-	final static String WIDGET = ".oOo.";
-	final static int SUBWIDGET_WIDTH = 22;
-	final static String SUBWIDGET = " .]|[. ";
+	private static final int DEFAULT_CHAT_WIDTH = 320;
+	private static final float SPACE_WIDTH = FontUtil.measureWidth(' ');
+	private static final float UNDERSCORE_WIDTH = FontUtil.measureWidth('_');
+	
+	// Padding used for the main title formatting
+	private static final String WIDGET = ".oOo.";
+	private static final float WIDGET_WIDTH = FontUtil.measureWidth(WIDGET);
+	
+	// Padding used for subtitle formatting
+	private static final String SUBWIDGET = " .]|[. ";
+	private static final float SUBWIDGET_WIDTH = FontUtil.measureWidth(SUBWIDGET);
 	
 	public static String listArr(String[] args, String prefix) {
 
@@ -45,16 +48,7 @@ public class ChatTools {
 	}
 
 	public static String stripColour(String s) {
-
-		StringBuilder out = new StringBuilder();
-		for (int i = 0; i < s.length(); i++) {
-			String c = s.substring(i, i + 1);
-			if (c.equals("\u00A7"))
-				i += 1;
-			else
-				out.append(c);
-		}
-		return out.toString();
+		return Colors.strip(s);
 	}
 
 	/**
@@ -75,19 +69,21 @@ public class ChatTools {
 	}
 	
 	public static String formatTitle(String title) {
-		final MinecraftFont font = new MinecraftFont();
 		title = ".[ " + Translation.of("status_title_secondary_colour") + title + Translation.of("status_title_primary_colour") + " ].";
-		// Some language characters do not like being measured with the mojang font.
-		if (!font.isValid(title))
+		
+		if (!FontUtil.isValidMinecraftFont(title))
 			return legacyFormatTitle(title);
+		
+		final float width = FontUtil.measureWidth(TownyComponents.miniMessage(title));
+		
 		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
-		int remainder = MAX_FONT_WIDTH - (WIDGET_WIDTH * 2) - font.getWidth(Colors.strip(title)) - 2;
+		float remainder = DEFAULT_CHAT_WIDTH - (WIDGET_WIDTH * 2) - width - 2;
 		if (remainder < 1)
 			return Translation.of("status_title_primary_colour") + title;
 		if (remainder < 14)
 			return Translation.of("status_title_primary_colour") + WIDGET + title + WIDGET;
 		
-		int times = remainder / (UNDERSCORE_WIDTH * 2);
+		int times = (int) Math.floor(remainder / (UNDERSCORE_WIDTH * 2));
 		return Translation.of("status_title_primary_colour") + WIDGET + repeatChar(times, "_") + title + repeatChar(times, "_") + WIDGET;
 	}
 
@@ -104,18 +100,19 @@ public class ChatTools {
 	}
 
 	public static String formatSubTitle(String subtitle) {
-		final MinecraftFont font = new MinecraftFont();
-		// Some language characters do not like being measured with the mojang font.
-		if (!font.isValid(subtitle))
+		if (!FontUtil.isValidMinecraftFont(subtitle))
 			return legacyFormatSubtitle(subtitle);
+		
+		final float width = FontUtil.measureWidth(TownyComponents.miniMessage(subtitle));
+		
 		// Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.) 
-		int remainder = MAX_FONT_WIDTH - (SUBWIDGET_WIDTH * 2) - font.getWidth(Colors.strip(subtitle)) - 2;
+		float remainder = DEFAULT_CHAT_WIDTH - (SUBWIDGET_WIDTH * 2) - width - 2;
 		if (remainder < 1)
 			return Translation.of("status_title_primary_colour") + subtitle;
 		if (remainder < 10)
 			return Translation.of("status_title_primary_colour") + SUBWIDGET+ subtitle + Translation.of("status_title_primary_colour") + SUBWIDGET;
 
-		int times = remainder / (SPACE_WIDTH * 2);
+		int times = (int) Math.floor(remainder / (SPACE_WIDTH * 2));
 		return Translation.of("status_title_primary_colour") + SUBWIDGET + repeatChar(times, " ") + subtitle + repeatChar(times, " ") + Translation.of("status_title_primary_colour")  + SUBWIDGET;
 	}
 

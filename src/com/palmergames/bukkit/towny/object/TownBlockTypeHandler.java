@@ -8,10 +8,10 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.TownBlockTypeRegisterEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +43,7 @@ public final class TownBlockTypeHandler {
 		
 		townBlockTypeMap = newData;
 		
-		Bukkit.getPluginManager().callEvent(new TownBlockTypeRegisterEvent());
+		BukkitTools.fireEvent(new TownBlockTypeRegisterEvent());
 		
 		Towny.getPlugin().getLogger().info(String.format("Config: Loaded %d townblock types: %s.", townBlockTypeMap.size(), StringMgmt.join(townBlockTypeMap.keySet(), ", ")));
 	}

@@ -4,7 +4,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.CommandSender;
 
 abstract class TownToggleStateEvent extends TownToggleEvent {
-	private boolean newState, currState;
+	private final boolean currState;
+	private final boolean newState;
 	
 	TownToggleStateEvent(CommandSender sender, Town town, boolean admin, boolean currState, boolean newState) {
 		super(sender, town, admin);

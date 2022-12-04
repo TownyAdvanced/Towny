@@ -17,14 +17,15 @@ public class NameValidation {
 
 	private static Pattern namePattern = null;
 	private static Pattern stringPattern = null;
-	private static Collection<String> bannedNames;
+	private static final Collection<String> bannedNames;
+	private static final Pattern numberPattern = Pattern.compile("\\d");
 	
 	static {
 		bannedNames = new HashSet<>(
 			Arrays.asList("here","leave","list","online","new","plots","add","kick","claim","unclaim","withdraw","delete",
 					"outlawlist","deposit","outlaw","outpost","ranklist","rank","reclaim","reslist","say","set","toggle","join",
 					"invite","buy","mayor","bankhistory","enemy","ally","townlist","allylist","enemylist","king","merge","jail",
-					"plotgrouplist","trust","purge","leader"));
+					"plotgrouplist","trust","purge","leader", "baltop"));
 	}
 
 	/**
@@ -38,6 +39,9 @@ public class NameValidation {
 
 		String out = filterName(name);
 		if (out.isEmpty())
+			throw new InvalidNameException(name + " is an invalid name.");
+
+		if (isAllUnderscores(out))
 			throw new InvalidNameException(name + " is an invalid name.");
 
 		if (isBlacklistName(out))
@@ -80,6 +84,14 @@ public class NameValidation {
 
 		return arr;
 	}
+
+	private static boolean isAllUnderscores(String out) {
+		for (char letter : out.toCharArray())
+			if (letter != '_')
+				return false;
+		return true;
+	}
+
 	/**
 	 * Is this name in our blacklist?
 	 * If not a blacklist, call isValidName and
@@ -174,5 +186,9 @@ public class NameValidation {
 	
 	public static String filterCommas(String input) {
 		return input.replace(",", "_");
+	}
+	
+	public static boolean containsNumbers(String input) {
+		return numberPattern.matcher(input).find();
 	}
 }

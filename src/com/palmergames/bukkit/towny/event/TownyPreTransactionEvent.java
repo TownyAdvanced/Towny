@@ -2,44 +2,16 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.object.Transaction;
-import org.bukkit.Bukkit;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
-public class TownyPreTransactionEvent extends Event implements Cancellable {
+public class TownyPreTransactionEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
+
 	private final Transaction transaction;
-	private static final HandlerList handlers = new HandlerList();
-	private boolean isCancelled = false;
-	private final String cancelMessage = "Sorry this event was cancelled.";
 
 	public TownyPreTransactionEvent(Transaction transaction) {
-		super(!Bukkit.getServer().isPrimaryThread());
 		this.transaction = transaction;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean cancelled) {
-		this.isCancelled = cancelled;
-	}
-
-	public String getCancelMessage() {
-		return cancelMessage;
-	}
-
-	public static HandlerList getHandlerList() {
-
-		return handlers;
 	}
 
 	public Transaction getTransaction() {
@@ -61,5 +33,15 @@ public class TownyPreTransactionEvent extends Event implements Cancellable {
 		}
 		
 		return 0;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

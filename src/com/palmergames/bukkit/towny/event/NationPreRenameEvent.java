@@ -1,34 +1,22 @@
 package com.palmergames.bukkit.towny.event;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Translation;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
-public class NationPreRenameEvent extends Event implements Cancellable {
+public class NationPreRenameEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
-	private static final HandlerList handlers = new HandlerList();
 	private final String oldName;
 	private final String newName;
 	private final Nation nation;
-	private boolean isCancelled = false;
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
 
 	public NationPreRenameEvent(Nation nation, String newName) {
-		super(!Bukkit.getServer().isPrimaryThread());
 		this.oldName = nation.getName();
 		this.nation = nation;
 		this.newName = newName;
+		this.setCancelMessage(Translation.of("msg_err_rename_cancelled"));
 	}
 
 	/**
@@ -54,13 +42,13 @@ public class NationPreRenameEvent extends Event implements Cancellable {
 		return this.nation;
 	}
 
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
 	}
 
+	@NotNull
 	@Override
-	public void setCancelled(boolean cancel) {
-		this.isCancelled = cancel;
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

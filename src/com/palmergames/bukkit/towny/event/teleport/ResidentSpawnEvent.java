@@ -14,8 +14,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ResidentSpawnEvent extends SpawnEvent {
 	
-	Town fromTown;
-	private Town toTown;
+	private final Town fromTown;
+	private final Town toTown;
 	
 	public ResidentSpawnEvent(Player player, Location from, Location to) {
 		super(player, from, to);

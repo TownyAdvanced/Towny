@@ -43,7 +43,16 @@ public class PlayerEnterTownEvent extends Event {
 		return pme;
 	}
 
+	/**
+	 * @deprecated since 0.98.4.4 use {@link #getEnteredTown()} instead.
+	 * @return
+	 */
+	@Deprecated
 	public Town getEnteredtown() {
+		return getEnteredTown();
+	}
+
+	public Town getEnteredTown() {
 		return enteredtown;
 	}
 

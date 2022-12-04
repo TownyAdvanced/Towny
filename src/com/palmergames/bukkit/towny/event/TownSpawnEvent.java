@@ -13,8 +13,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TownSpawnEvent extends SpawnEvent {
 	
-	Town fromTown;
-	private Town toTown;
+	private final Town fromTown;
+	private final Town toTown;
 	
 	public TownSpawnEvent(Player player, Location from, Location to) {
 		super(player, from, to);

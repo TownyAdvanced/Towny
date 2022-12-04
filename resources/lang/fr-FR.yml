@@ -1,20 +1,36 @@
 ---
 name: Towny
-version: 0.151
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious,PainOchoco
 website: 'http://townyadvanced.github.io/'
 description: >
-  Language file for all game messages.  Do not alter this file. If you wish to change any of the entries, make a copy named something else. Alternate language files can be enabled by altering the [language] entry in config.yml
+  Language file for all game messages for this Locale.
+#A note on editing this file.
+#----------------------------
+#Do not alter this file if it is in the reference folder.
+#Before you edit this file, read about how Towny handles
+#language files:
+#https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
+#A note on text formatting (how Towny inserts words.)
+#----------------------------------------------------
 #You MUST retain spacing in the texts.
-#If a text begins or ends with a space, it must remain that way.
+#If a text begins or ends with a space, it must remain that
+#way.
 #%s = data to be supplied by the plugin.
-#Text colouring
-#--------------
+#If you find that a line has multiple %s variables which would
+#be in a different order in your language, you can change them
+#to %1$s, %2$s, %4$s, %3$s to change their order. ie: %4$s
+#will always use the 4th variable, no matter where it is
+#placed on the line.
+#A note on text colouring and formatting.
+#----------------------------------------
 #Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
 #Purple = &5, Gold = &6, LightGray = &7, Gray = &8
 #DarkPurple = &9, LightGreen = &a, LightBlue = &b
 #Rose = &c, LightPurple = &d, Yellow = &e, White = &f
+#This language file also supports using MiniMessage for colours
+#and formatting. Learn about MiniMessage formatting here:
+#https://docs.adventure.kyori.net/minimessage/format.html
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
@@ -131,7 +147,7 @@ msg_you_left: '&bVous avez quitté %s.'
 msg_not_mayor: '&bVous n''êtes pas le maire de la ville.'
 msg_not_king: '&bVous n''êtes pas le dirigeant de la nation.'
 msg_not_mayor_ass: '&bVous n''êtes pas le maire ni un assistant de la ville.'
-msg_not_king_ass: '&bVous n''êtes pas le dirigeant de la nation ou un assistant.'
+msg_not_king_ass: '&bVous n''êtes ni le dirigeant de la nation ni un assistant.'
 msg_own_nation_disallow: '&bVous ne pouvez pas faire ceci à votre propre nation.'
 msg_no_perms_claim: '&bVous n''avez pas la permission d''étendre votre ville.'
 msg_outpost_disable: '&bLes avant-postes ne sont pas disponibles.'
@@ -244,7 +260,9 @@ msg_set_wild_regen: '&bRégénération de la nature de %s changé avec succès �
 msg_set_use_towny_on: '&bCe monde est maintenant géré par les règles de Towny.'
 msg_set_use_towny_off: '&cCe monde est exempté de toutes les interactions de Towny.'
 msg_error_must_be_int: '&bLe montant doit être un nombre entier.'
+msg_error_input_must_be_int: '&c%s must be an integer'
 msg_error_must_be_num: '&bLe montant doit être un nombre.'
+msg_error_input_must_be_num: '&c%s must be a number'
 msg_must_specify_amnt: '&bVous devez préciser le montant. Ex: %s 54'
 msg_town_set_tax: '&b%s a fixé les impôts résidentiels quotidiens à %s'
 msg_town_set_plottax: '&b%s a fixé les impôts quotidiens des parcelles à %s'
@@ -269,6 +287,7 @@ msg_new_mayor: '&b%s est désormais le maire!'
 msg_new_nation: '&b%s a créé une nouvelle nation appelée %s'
 msg_new_town: '&b%s a créé une nouvelle ville appelée %s'
 msg_plot_for_sale: '&b%s a mis la parcelle (%s) en vente !'
+msg_plot_for_sale_amount: '&b%s a mis le terrain (%s) en vente pour %s!'
 msg_plot_set_type: '&bType de la parcelle fixé à %s'
 msg_cache_block_error: '&cVous n''avez pas été enregistré avec Towny. Essayez de vous reconnecter.'
 msg_cache_block_error_wild: '&cPas autorisé à %s dans la nature.'
@@ -701,8 +720,8 @@ msg_bankrupt_town2: '&b%s n''a pas pu se permettre de rester une ville.'
 msg_bankrupt_nation2: '&b%s n''a pas pu se permettre de rester une nation.'
 status_embassy_town: 'Embassades dans'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bComparateur invalide. Essayez resident, balance, towns, name, townblocks, online.'
-msg_error_invalid_comparator_town: '&bComparateur invalide. Essayez resident, balance, name, townblocks, online, open.'
+msg_error_invalid_comparator_nation: '&bComparateur invalide. Essayez %s.'
+msg_error_invalid_comparator_town: '&bComparateur invalide. Essayez %s.'
 msg_err_merging_for_kings_only: '&bSeul un Dirigeant de Nation peut fusionner.'
 msg_err_king_of_that_nation_is_not_online: '&bLe Dirigeant de Nation de %s, %s, n''est pas en ligne. La fusion a échouée.'
 nation1_has_merged_with_nation2: '&6La nation %s a accepté de fusionner avec la nation de %s.'
@@ -715,6 +734,7 @@ msg_error_ta_plot_claim: 'nom de joueur manquant, ex: /ta plot claim NomDuJoueur
 msg_error_no_player_with_that_name: 'Aucun joueur trouvé avec le nom %s'
 msg_admin_has_given_you_a_plot: 'Un admin a revendiqué une parcelle pour vous à %s'
 msg_town_forcepvp_setting_set_to: 'La ville %s a l''option de pvp forcé en mode %s'
+msg_town_forcedisabledpvp_setting_set_to: 'La ville %s a l''option admindisabledpvp forcé à %s'
 msg_nation_changed_open: '&cL''accès à la nation est maintenant %s.'
 msg_err_already_in_a_nation: 'Votre ville est déjà dans une nation.'
 msg_err_nation_not_open: '&cLa nation %s n''a pas ses portes ouvertes à tout le monde. Demandez au dirigeant de la nation ou à un assistant de rejoindre.'
@@ -1136,7 +1156,6 @@ msg_err_you_cannot_remove_the_last_cell: 'Vous ne pouvez pas retirer la dernièr
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Ne déconnectez pas avant d''être téléporté en prison, si vous ne voulez pas mourir.'
 jail_plu: 'Les prisons'
 jail_sing: 'Prison'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s a été envoyé à %s dans la cellule %s pendant %s heures par %s.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s n''a pas joué assez longtemps pour être emprisonné, attendez encore %s'
 #Added in 0.108
 msg_town_not_peaceful: '&bLa nation n’avait pas les moyens de garder son état pacifique.'
@@ -1189,7 +1208,7 @@ status_trustedlist: 'De confiance'
 msg_click_to_edit: 'Cliquez pour modifier.'
 permission_gui_header: 'Interface de permission de la ville'
 msg_last_edited: '&7&oDernière modification à %s par %s.'
-msg_trusted_added: '&b %s a été ajouté comme fiable dans ce %s.' #Last %s is either town or townblock
+msg_trusted_added: '&b %s a été ajouté comme fiable dans cette %s.' #Last %s is either town or townblock
 msg_already_trusted: '&b%s est déjà de confiance dans ce %s.'
 msg_trusted_added_2: '&b%s vous a fait confiance dans %s: %s.' #Last %s is the town name or worldcoord.
 msg_not_trusted: '&b%s n''est pas encore de confiance dans ce %s.'
@@ -1408,7 +1427,7 @@ tc_player_channel_sound_unmuted: 'Le son du canal a été rétabli'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Il y a un étranger dans votre parcelle, vous ne pouvez pas changer le statut de pvp!'
 #Added in 0.136
-msg_view_on_web: 'Cliquez pour voir sur le web.'
+msg_view_on_web: '&7Cliquez pour voir sur le web.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6La ville %s a accepté de fusionner avec la ville régnante de %s.'
@@ -1491,3 +1510,110 @@ msg_err_no_pages_to_display: 'Aucune page à afficher !'
 msg_err_nation_unaffiliated: 'Cette nation n''est pas affiliée à vous.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: 'Cette ville n''est pas affiliée à vous.'
+#Added in 0.152
+#Message shown when a player tries to add a jail cell location where one already exists.
+msg_err_this_location_already_has_a_jailcell: 'Cet emplacement contient déjà une cellule de prison.'
+#Title line of the /plot perm hud.
+msg_perm_hud_title: 'Permissions de parcelle'
+#Seen in /plot perm hud:
+msg_perm_hud_build: 'Construire: '
+#Seen in /plot perm hud:
+msg_perm_hud_destroy: 'Détuire:'
+#Seen in /plot perm hud:
+msg_perm_hud_switch: 'Ouvrir/Fermer: '
+#Seen in /plot perm hud:
+msg_perm_hud_item_use: 'Objet:'
+#Seen in /plot perm hud:
+msg_perm_hud_plot_type: 'Type: '
+#Seen in /plot perm hud:
+msg_perm_hud_pvp: 'PVP : '
+#Seen in /plot perm hud:
+msg_perm_hud_explosions: 'Explosions : '
+#Seen in /plot perm hud:
+msg_perm_hud_firespread: 'L''expansion du feu : '
+#Seen in /plot perm hud:
+msg_perm_hud_mobspawns: 'Apparition de créatures : '
+#Seen in /plot perm hud:
+msg_perm_hud_key: 'Clé'
+#Seen in /plot perm hud:
+msg_perm_hud_friend: 'amis'
+#Seen in /plot perm hud:
+msg_perm_hud_town: 'ville'
+#Seen in /plot perm hud:
+msg_perm_hud_ally: 'allié'
+#Seen in /plot perm hud:
+msg_perm_hud_resident: 'résident'
+#Seen in /plot perm hud:
+msg_perm_hud_nation: 'pays'
+#Seen in /plot perm hud:
+msg_perm_hud_outsider: 'étrangers'
+#Seen in /plot perm hud:
+msg_perm_hud_plot_name: 'Parcelles: '
+#Added in 0.153
+#Message shown confirming /ta town NAME settownlevel # command.
+msg_town_level_overridden_with: 'La ville %s a vu son niveau de ville fixé à %s.'
+#Message shown when unsetting a manual town level.
+msg_town_level_unset: 'La ville %s a perdu son niveau de ville défini manuellement. Le niveau de ville actuel est %s.'
+#Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
+msg_err_town_not_allowed_purchased_blocks: 'La ville %s ne peut pas acheter de blocs de ville en fonction des règles de configuration.'
+#Message shown when unsetting all purchased townblocks from a town.
+msg_purchased_blocks_unset: 'La ville %s a supprimé leurs blocs de ville achetés.'
+#Message shown when /ta town name giveboughtblocks # is used.
+msg_purchased_blocks_changed: 'La ville %s a reçu %s blocs de ville achetés, %s ont acheté des blocs de ville.'
+#Added in 0.154
+msg_comptype_upkeep: 'Entretien'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'La ville %s a été paramétrée à %s.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'Votre ville a atteint la limite de %d %s parcelles.'
+#Added in 0.156
+msg_spawn_cost_free: 'Gratuit'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'Ce plot est déjà du type %s.'
+msg_town_board_reset: '&bAffiche de ville réinitialisée.'
+msg_town_has_no_jailslots: 'La prison de ville est pleine.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s a été envoyé vers %s dans la cellule numéro %s pour %s heures avec une caution de %s par %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s a été envoyé à %s dans la cellule %s pendant %s heures par %s.'
+msg_you_have_been_jailed_your_bail_is_x: 'Vous avez été emprisonné, votre caution est de %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Votre caution est plus haute que le maximum qui est de %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Le nombre d''heures est plus haut que le maximum qui est de %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Il n''y a pas assez dans la banque pour emprisonnez %s, les frais sont de %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Vos geôliers vous laissent libre pour faire de la place.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s a été libéré pour faire de la place pour un autre prisonnier.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Vous avez été libéré car vos geôliers ne peuvent plus se permettre de vous garder emprisonné.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s a été libéré en raison d''un manque de fonds dans la banque de Ville.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s a retiré de l''argent de la banque de Ville pour l''entretien du prisonnier %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s a retiré de l''argent de la banque de Ville pour payer la prison de %s.'
+#Message shown in the confirmation for /ta resetbanks {amount}.
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'Êtes-vous sûr de vouloir réinitialiser toutes les banques de ville et de nation à %s ?'
+#Message shown when a nation cannot add a town because of the max-residents-limit.
+msg_err_cannot_add_nation_over_resident_limit: '&cVotre nation a atteint le nombre maximum de résidents autorisés par nation, %s, et ne peut pas ajouter %s.'
+#Message shown to a town when they cannot join a nation because of the max-residents-limit.
+msg_err_cannot_join_nation_over_resident_limit: '&cVous ne pouvez pas rejoindre cette nation car elle dépasserait la limite des résidents par nation de %s.'
+#Message shown to a town because the nation has hit their max-towns-limit.
+msg_err_cannot_join_nation_over_town_limit: '&cVous ne pouvez pas rejoindre cette nation, elle a atteint le nombre maximum de villes autorisées par nation qui est de %s.'
+#Message shown confirming /tw set usedefaults
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Êtes-vous sûr de vouloir réinitialiser tous les paramètres de ce monde à ceux qui sont définis dans la configuration ?'
+#Part of the /town plots output.
+msg_town_plots_title: ' Parcelles de Ville'
+#Part of the /town plots output.
+msg_town_plots_town_size: '<dark_green>Taille de la Ville : <green>%s/%s'
+#Part of the /town plots output.
+msg_town_plots_town_bought: ' <aqua>[Acheté : %s/%s]'
+#Part of the /town plots output.
+msg_town_plots_town_bonus: ' <aqua>[Bonus : %s]'
+#Part of the /town plots output.
+msg_town_plots_town_nationbonus: ' <aqua>[Bonus de Nation : %s]'
+#Part of the /town plots output.
+msg_town_plots_town_owned_land: '<dark_green>Terrain possédé par la Ville: <green>%s'
+#Part of the /town plots output.
+msg_town_plots_type_header: '<dark_green>Type : <green>Possédé par des joueurs <gray>/ <aqua>En vente <gray>/ <yellow>Total'
+#Part of the /town plots output.
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Revenus quotidiens'
+#Part of the /town plots output.
+msg_town_plots_type_line: '<dark_green>%s = <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
+#Part of the /town plots output.
+msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
+#Message giving confirmation warning for trusttown
+confirmation_msg_trusttown_consequences: 'Vous êtes sur le point d''accorder des autorisations complètes à une ville entière. Cela signifie que le maire de la ville pourra décider qui obtiendra l''autorisation de construire et de detruire dans votre ville, en ajoutant des habitants. Si cette ville est ouverte, alors n''importe qui peut rejoindre et obtenir un accès complet à votre ville. Êtes-vous sûr de vouloir faire confiance à tous les résidents (y compris les futurs résidents) de cette ville ?'

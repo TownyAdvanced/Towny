@@ -1,11 +1,15 @@
 package com.palmergames.bukkit.towny.utils;
 
+import org.bukkit.Location;
+import org.jetbrains.annotations.Nullable;
+
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
 import com.palmergames.bukkit.towny.object.metadata.ByteDataField;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.object.metadata.DecimalDataField;
 import com.palmergames.bukkit.towny.object.metadata.IntegerDataField;
+import com.palmergames.bukkit.towny.object.metadata.LocationDataField;
 import com.palmergames.bukkit.towny.object.metadata.LongDataField;
 import com.palmergames.bukkit.towny.object.metadata.StringDataField;
 
@@ -15,7 +19,17 @@ import com.palmergames.bukkit.towny.object.metadata.StringDataField;
  *
  */
 public class MetaDataUtil {
-	
+
+	/**
+	 * Does the TownyObject have meta stored with the given key?
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param key String representing the meta's Key.
+	 * @return true if the TownyObject has meta using the given key.
+	 */
+	public static boolean hasMeta(TownyObject townyObject, String key) {
+		return townyObject.hasMeta(key);
+	}
+
 	/**
 	 * Does the TownyObject have the StringDataField meta?
 	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock. 
@@ -74,6 +88,16 @@ public class MetaDataUtil {
 	 */
 	public static boolean hasMeta(TownyObject townyObject, ByteDataField bdf) {
 		return townyObject.hasMeta(bdf.getKey());
+	}
+
+	/**
+	 * Does the TownyObject have the LocationDataField meta?
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock. 
+	 * @param ldf LocationDataField to check for on the TownyObject.
+	 * @return true if the TownyObject has the LocationDataField meta.
+	 */
+	public static boolean hasMeta(TownyObject townyObject, LocationDataField ldf) {
+		return townyObject.hasMeta(ldf.getKey());
 	}
 
 	/**
@@ -160,6 +184,22 @@ public class MetaDataUtil {
 			return ((ByteDataField) cdf).getValue();
 		return 0;
 	}
+
+	/**
+	 * Get a Location from a TownyObject's metadata.
+	 * 
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param ldf LocationDataField to get from the TownyObject.
+	 * @return Location from the metadata or null.
+	 */
+	@Nullable
+	public static Location getLocation(TownyObject townyObject, LocationDataField ldf) {
+		CustomDataField<?> cdf = townyObject.getMetadata(ldf.getKey());
+		if (cdf instanceof LocationDataField) {
+			return ((LocationDataField) cdf).getValue();
+		}
+		return null;
+	}
 	
 	/**
 	 * Adds a new StringDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
@@ -219,6 +259,16 @@ public class MetaDataUtil {
 	 */
 	public static void addNewMeta(TownyObject townyObject, ByteDataField bdf, boolean save) {
 		townyObject.addMetaData(bdf, save);
+	}
+	
+	/**
+	 * Adds a new LocationDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param ldf LocationDataField to apply to the TownyObject.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewMeta(TownyObject townyObject, LocationDataField ldf, boolean save) {
+		townyObject.addMetaData(ldf, save);
 	}
 	
 	/**
@@ -287,6 +337,17 @@ public class MetaDataUtil {
 		addNewMeta(townyObject, new ByteDataField(key, value), save);
 	}
 	
+	/**
+	 * Creates and adds a new LocationDataField MetaData to a TownyObject, overriding any existing MetaData with the same key.
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param key String name of the new ByteDataField key. 
+	 * @param value Location value of the LocationDataField key.
+	 * @param save set true to save the object after applying the MetaData.
+	 */
+	public static void addNewLocationMeta(TownyObject townyObject, String key, Location value, boolean save) {
+		addNewMeta(townyObject, new LocationDataField(key, value), save);
+	}
+
 	/**
 	 * Sets a StringDataField metadata on a TownyObject, creating the metadata if it doesn't exist.
 	 * 
@@ -420,6 +481,29 @@ public class MetaDataUtil {
 		if (cdf instanceof ByteDataField) {
 			ByteDataField value = (ByteDataField) cdf;
 			value.setValue(num);
+			if (save)
+				townyObject.save();
+		}
+	}
+	
+	/**
+	 * Sets a LocationDataField metadata on a TownyObject, creating the metadata if it doesn't exist.
+	 * 
+	 * @param townyObject TownyObject, ie: Resident, Town, Nation, TownBlock.
+	 * @param ldf LocationDataField to apply to the TownyObject.
+	 * @param loc value to apply to the ByteDataField.
+	 * @param save True to save the TownyObject after setting the metadata. 
+	 */
+	public static void setLocation(TownyObject townyObject, LocationDataField ldf, Location loc, boolean save) {
+		CustomDataField<?> cdf = townyObject.getMetadata(ldf.getKey());
+		if (cdf == null) {
+			addNewLocationMeta(townyObject, ldf.getKey(), loc, save);
+			return;
+		}
+		
+		if (cdf instanceof LocationDataField) {
+			LocationDataField value = (LocationDataField) cdf;
+			value.setValue(loc);
 			if (save)
 				townyObject.save();
 		}

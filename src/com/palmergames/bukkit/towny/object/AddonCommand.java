@@ -42,6 +42,18 @@ public class AddonCommand extends Command {
 		return commandExecutor.onCommand(sender, this, this.name, StringMgmt.remFirstArg(args));
 	}
 
+	/**
+	 * Used when an AddonCommand should receive a TownyObject name as a preceding argument.
+	 * 
+	 * @param sender CommandSender using the addon command.
+	 * @param args String[] args which will have the Town or Nation name as the first String.
+	 * @param object A TownyObject, not actually used except to specify the desire to use this method.
+	 * @return true if the {@link CommandExecutor#onCommand(CommandSender, Command, String, String[])} is successful.
+	 */
+	public boolean execute(@NotNull CommandSender sender, @NotNull String[] args, TownyObject object) {
+		return commandExecutor.onCommand(sender, this, this.name, args);
+	}
+
 	public CommandType getCommandType() {
 		return commandType;
 	}

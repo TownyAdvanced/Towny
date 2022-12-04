@@ -120,7 +120,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 	
 	public String getPlotGroupFilename(PlotGroup group) {
-		return dataFolderPath + File.separator + "plotgroups" + File.separator + group.getID() + ".data";
+		return dataFolderPath + File.separator + "plotgroups" + File.separator + group.getUUID() + ".data";
 	}
 
 	public String getJailFilename(Jail jail) {
@@ -188,7 +188,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			return true; 
 		
 		for (File plotGroup : plotGroupFiles)
-			universe.newPlotGroupInternal(plotGroup.getName().replace(".data", ""));
+			universe.newPlotGroupInternal(UUID.fromString(plotGroup.getName().replace(".data", "")));
 		
 		return true;
 	}
@@ -491,6 +491,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					line = keys.get("jailHours");
 					if (line != null)
 						resident.setJailHours(Integer.parseInt(line));
+					
+					line = keys.get("jailBail");
+					if (line != null)
+						resident.setJailBailCost(Double.parseDouble(line));
 				}
 				
 				line = keys.get("friends");
@@ -906,6 +910,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty())
 					MetadataLoader.getInstance().deserializeMetadata(town, line.trim());
 				
+				line = keys.get("manualTownLevel");
+				if (line != null)
+					town.setManualTownLevel(Integer.parseInt(line));
+				
 				line = keys.get("nation");
 				if (line != null && !line.isEmpty()) {
 					Nation nation = null;
@@ -960,6 +968,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.addTrustedResident(resident);
 				}
 				
+				line = keys.get("trustedTowns");
+				if (line != null && !line.isEmpty()) {
+					List<UUID> uuids = Arrays.stream(line.split(","))
+						.map(UUID::fromString)
+						.collect(Collectors.toList());
+					town.loadTrustedTowns(TownyAPI.getInstance().getTowns(uuids));
+				}
+
 				line = keys.get("mapColorHexCode");
 				if (line != null) {
 					try {
@@ -1092,14 +1108,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 				
-				line = keys.get("taxes");
-				if (line != null)
-					try {
-						nation.setTaxes(Double.parseDouble(line));
-					} catch (Exception e) {
-						nation.setTaxes(0.0);
-					}
-				
 				line = keys.get("spawnCost");
 				if (line != null)
 					try {
@@ -1161,6 +1169,27 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					try {
 						nation.setOpen(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
+					}
+
+				line = keys.get("taxpercent");
+				if (line != null)
+					try {
+						nation.setTaxPercentage(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+
+				line = keys.get("maxPercentTaxAmount");
+				if (line != null)
+					nation.setMaxPercentTaxAmount(Double.parseDouble(line));
+				else
+					nation.setMaxPercentTaxAmount(TownySettings.getMaxNationTaxPercentAmount());
+				
+				line = keys.get("taxes");
+				if (line != null)
+					try {
+						nation.setTaxes(Double.parseDouble(line));
+					} catch (Exception e) {
+						nation.setTaxes(0.0);
 					}
 				
 				line = keys.get("metadata");
@@ -1327,6 +1356,25 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								mats.add(s);
 						
 						world.setUnclaimedZoneIgnore(mats);
+					} catch (Exception ignored) {
+					}
+				
+				line = keys.get("isDeletingEntitiesOnUnclaim");
+				if (line != null)
+					try {
+						world.setDeletingEntitiesOnUnclaim(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				
+				line = keys.get("unclaimDeleteEntityTypes");
+				if (line != null)
+					try {
+						List<String> entityTypes = new ArrayList<>();
+						for (String s : line.split(","))
+							if (!s.isEmpty())
+								entityTypes.add(s);
+						
+						world.setUnclaimDeleteEntityTypes(entityTypes);
 					} catch (Exception ignored) {
 					}
 				
@@ -1824,6 +1872,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("jailCell=" + resident.getJailCell());
 			// jailHours
 			list.add("jailHours=" + resident.getJailHours());
+			// jailBail
+			list.add("jailBail=" + resident.getJailBailCost());
 		}
 		
 		// title
@@ -1968,6 +2018,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Metadata
 		list.add("metadata=" + serializeMetadata(town));
 		
+		// ManualTownLevel
+		list.add("manualTownLevel=" + town.getManualTownLevel());
+		
 		list.add("ruined=" + town.isRuined());
 		list.add("ruinedTime=" + town.getRuinedTime());
 		// Peaceful
@@ -1981,6 +2034,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("primaryJail=" + town.getPrimaryJail().getUUID());
 		
 		list.add("trustedResidents=" + StringMgmt.join(toUUIDList(town.getTrustedResidents()), ","));
+		list.add("trustedTowns=" + StringMgmt.join(town.getTrustedTownsUUIDS(), ","));
 		
 		list.add("mapColorHexCode=" + town.getMapColorHexCode());
 		list.add("nationZoneOverride=" + town.getNationZoneOverride());
@@ -2036,6 +2090,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		list.add("enemies=" + StringMgmt.join(nation.getEnemies(), ","));
 
+        // Taxpercent
+		list.add("taxpercent=" + nation.isTaxPercentage());
+		// Taxpercent Cap
+		list.add("maxPercentTaxAmount=" + nation.getMaxPercentTaxAmount());
 		// Taxes
 		list.add("taxes=" + nation.getTaxes());
 		// Nation Spawn Cost
@@ -2138,6 +2196,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Plot Management Delete Ids
 		if (world.getPlotManagementDeleteIds() != null)
 			list.add("plotManagementDeleteIds=" + StringMgmt.join(world.getPlotManagementDeleteIds(), ","));
+
+		// EntityType removal on unclaim.
+		list.add("");
+		list.add("# The following settings control what EntityTypes are deleted upon a townblock being unclaimed");
+		list.add("# Valid EntityTypes are listed here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html");
+		list.add("isDeletingEntitiesOnUnclaim=" + world.isDeletingEntitiesOnUnclaim());
+		if (world.getUnclaimDeleteEntityTypes() != null)
+			list.add("unclaimDeleteEntityTypes=" + StringMgmt.join(world.getUnclaimDeleteEntityTypes(), ","));
 
 		// PlotManagement
 		list.add("");
@@ -2265,7 +2331,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Group ID
 		StringBuilder groupID = new StringBuilder();
 		if (townBlock.hasPlotObjectGroup()) {
-			groupID.append(townBlock.getPlotObjectGroup().getID());
+			groupID.append(townBlock.getPlotObjectGroup().getUUID());
 		}
 		
 		list.add("groupID=" + groupID);

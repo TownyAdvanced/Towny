@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -114,7 +115,7 @@ public class PermHUD {
 	private static String getFormattedWildernessName(World w) {
 		StringBuilder wildernessName = new StringBuilder().append(ChatColor.DARK_RED).append(ChatColor.BOLD);
 		if (TownyAPI.getInstance().isTownyWorld(w)) 
-			wildernessName.append(TownyAPI.getInstance().getTownyWorld(w.getName()).getUnclaimedZoneName());
+			wildernessName.append(TownyAPI.getInstance().getTownyWorld(w).getFormattedUnclaimedZoneName());
 		else 
 			wildernessName.append("Unknown");
 
@@ -142,7 +143,7 @@ public class PermHUD {
 
 		//init objective
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-		Objective obj = board.registerNewObjective("PERM_HUD_OBJ", "dummy", PERM_HUD_TITLE);
+		Objective obj = BukkitTools.objective(board, "PERM_HUD_OBJ", PERM_HUD_TITLE);
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName(PERM_HUD_TITLE);
 		//register teams

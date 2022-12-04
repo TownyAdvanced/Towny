@@ -1,20 +1,23 @@
 package com.palmergames.bukkit.towny.event.statusscreen;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
+import org.jetbrains.annotations.NotNull;
 
 public class StatusScreenEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
-	private List<String> addedLines = new ArrayList<>();
-	private StatusScreen screen;
+	private final StatusScreen screen;
+	private int addedLineCount = 0;
 	
 	public StatusScreenEvent(StatusScreen screen) {
 		super(!Bukkit.getServer().isPrimaryThread());
@@ -22,6 +25,7 @@ public class StatusScreenEvent extends Event {
 	}
 	
 	@Override
+	@NotNull
 	public HandlerList getHandlers() {
 		return handlers;
 	}
@@ -44,22 +48,108 @@ public class StatusScreenEvent extends Event {
 		return screen.getCommandSender();
 	}
 
+	@Deprecated
 	public boolean hasAdditionalLines() {
- 		return !addedLines.isEmpty();
+ 		return false;
  	}
 	
-	public List<String> getAdditionalLines() {
-		return addedLines;
+	@Deprecated 
+	public List<Component> getAdditionalLines() {
+		return new ArrayList<>(0);
 	}
 	
+	// String methods
+
+	/**
+	 * Adds all lines to the status screen, with unique keys.
+	 * <br>
+	 * Lines added via this event are added on new lines, in order to add components on the same line use {@link StatusScreen#addComponentOf(String, String)}.
+	 * 
+	 * @param lines The line(s) to add.
+	 * @see #addLine(String, String)
+	 * @see StatusScreen#addComponentOf(String, String) 
+	 */
 	public void addLines(List<String> lines) {
 		for (String line : lines)
-			addedLines.add(line);
+			addLine(line);
 	}
 	
+	/**
+	 * Adds the line to the status screen, with a unique key.
+	 * <br>
+	 * Lines added via this event are added on new lines, in order to add components on the same line use {@link StatusScreen#addComponentOf(String, String)}.
+	 * 
+	 * @param line The line to add
+	 * @see #addLine(String, String)    
+	 * @see StatusScreen#addComponentOf(String, String)    
+	 */
+	public void addLine(String line) {
+		addLine(getNextKey(), line);
+	}
+	
+	/**
+	 * Adds the line to the status screen, with a unique key.
+	 * <br>
+	 * Lines added via this event are added on new lines, in order to add components on the same line use {@link StatusScreen#addComponentOf(String, String)}.
+	 * 
+	 * @param key The key/name of the component to add.
+	 * @param line The line to add.
+	 */
+	public void addLine(String key, String line) {
+		this.screen.addComponentOf(key, "\n" + line);
+	}
+	
+	/**
+	 * @deprecated Deprecated, please use {@link #addLines(List)} instead.
+	 */
+	@Deprecated
 	public void setLines(List<String> lines) {
-		addedLines.clear();
-		addedLines = lines;
+		addLines(lines);
+	}
+	
+	// Component methods
+
+	/**
+	 * Adds all lines to the status screen, with unique keys.
+	 * <br>
+	 * Lines added via this event are added on new lines, in order to add components on the same line use {@link StatusScreen#addComponentOf(String, Component)}.
+	 * 
+	 * @param lines The line(s) to add.
+	 * @see #addLine(String, Component)
+	 * @see StatusScreen#addComponentOf(String, Component)
+	 */
+	public void addLines(Collection<Component> lines) {
+		for (Component line : lines)
+			addLine(line);
+	}
+	
+	/**
+	 * Adds the line to the status screen, with a unique key.
+	 * <br>
+	 * Lines added via this event are added on new lines, in order to add components on the same line use {@link StatusScreen#addComponentOf(String, Component)}.
+	 * 
+	 * @param line The line to add.
+	 * @see #addLine(String, Component)
+	 * @see StatusScreen#addComponentOf(String, Component)
+	 */
+	public void addLine(Component line) {
+		addLine(getNextKey(), line);
 	}
 
+	/**
+	 * Adds the line to the status screen, with the specified key
+	 * <br>
+	 * Lines added via this event are added on new lines, in order to add components on the same line use {@link StatusScreen#addComponentOf(String, Component)}.
+	 * 
+	 * @param key Key/name of the component to add.
+	 * @param line The line to add.
+	 * @see StatusScreen#addComponentOf(String, Component)
+	 */
+	public void addLine(String key, Component line) {
+		this.screen.addComponentOf(key, Component.newline().append(line));
+	}
+
+	private String getNextKey() {
+		return String.format("eventAddedLine-%d", ++addedLineCount);
+	}
 }

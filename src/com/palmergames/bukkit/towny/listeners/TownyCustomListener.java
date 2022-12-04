@@ -14,8 +14,10 @@ import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.ChunkNotificationEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -23,12 +25,13 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import com.palmergames.util.TimeMgmt;
 
 import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.Component;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -36,6 +39,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -66,14 +70,18 @@ public class TownyCustomListener implements Listener {
 		if (resident == null)
 			return;
 
-		if (resident.hasMode("townclaim"))
-			TownCommand.parseTownClaimCommand(player, new String[] {});
-		if (resident.hasMode("townunclaim"))
-			TownCommand.parseTownUnclaimCommand(player, new String[] {});
+		try {
+			if (resident.hasMode("townclaim"))
+				TownCommand.parseTownClaimCommand(player, new String[] {});
+			if (resident.hasMode("townunclaim"))
+				TownCommand.parseTownUnclaimCommand(player, new String[] {});
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+		}
 		if (resident.hasMode("map"))
 			TownyCommand.showMap(player);
-		if (resident.hasMode("plotborder"))
-			BorderUtil.getPlotBorder(to).runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.sendToPlayer(player));
+		if (resident.hasMode("plotborder") || resident.hasMode("constantplotborder"))
+			BorderUtil.getPlotBorder(to).runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, to));
 
 		// Check if player has entered a new town/wilderness
 		if (event.isShowingPlotNotifications()) {
@@ -90,7 +98,7 @@ public class TownyCustomListener implements Listener {
 				return;
 
 			ChunkNotificationEvent cne = new ChunkNotificationEvent(player, msg, to, from);
-			Bukkit.getPluginManager().callEvent(cne);
+			BukkitTools.fireEvent(cne);
 			msg = cne.getMessage();
 			if (cne.isCancelled() || msg == null || msg.isEmpty())
 				return;
@@ -100,15 +108,15 @@ public class TownyCustomListener implements Listener {
 	}
 	
 	private void sendChunkNoticiation(Player player, String msg) {
-		if (TownySettings.isNotificationsAppearingInActionBar() && !TownySettings.isNotificationsAppearingOnBossbar())
-			sendActionBarChunkNotification(player, LegacyComponentSerializer.builder().build().deserialize(msg));
-		else if (TownySettings.isNotificationsAppearingOnBossbar())
-			sendBossBarChunkNotification(player, BossBar.bossBar(LegacyComponentSerializer.builder().build().deserialize(msg), 1, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS));
-		else
-			TownyMessaging.sendMessage(player, msg);
+		switch (TownySettings.getNotificationsAppearAs().toLowerCase(Locale.ROOT)) {
+			case "bossbar" -> sendBossBarChunkNotification(player, BossBar.bossBar(TownyComponents.miniMessage(msg), 0, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS));
+			case "chat" -> TownyMessaging.sendMessage(player, msg);
+			case "none" -> {}
+			default -> sendActionBarChunkNotification(player, TownyComponents.miniMessage(msg));
+		}
 	}
 	
-	private void sendActionBarChunkNotification(Player player, TextComponent msgComponent) {
+	private void sendActionBarChunkNotification(Player player, Component msgComponent) {
 		int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION);
 		if (seconds > 3) {
 			// Towny is showing the actionbar message longer than vanilla MC allows, using a scheduled task.
@@ -216,5 +224,22 @@ public class TownyCustomListener implements Listener {
 			event.setCancelled(true);
 			attacker.removeRespawnProtection();
 		}
+	}
+
+	/**
+	 * Used to deny outlawed players spawning into Towns they are enemied in.
+	 * @param event SpawnEvent which ResidentSpawnEvent, TownSpawnEvent, NationSpawnEvent extend.
+	 */
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPlayerSpawnsWithTown(SpawnEvent event) {
+
+		if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer()))
+			return;
+
+		Town town = TownyAPI.getInstance().getTown(event.getTo());
+		if (town == null || !town.hasOutlaw(event.getPlayer().getName()))
+			return;
+		event.setCancelled(true);
+		event.setCancelMessage(Translatable.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", town.getName()).forLocale(event.getPlayer()));
 	}
 }

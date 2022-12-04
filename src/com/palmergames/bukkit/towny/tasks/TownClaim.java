@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -201,32 +200,20 @@ public class TownClaim extends Thread {
 			townBlock.save();
 			
 			// Raise an event for the claim
-			BukkitTools.getPluginManager().callEvent(new TownClaimEvent(townBlock, player));
+			BukkitTools.fireEvent(new TownClaimEvent(townBlock, player));
 				
 		}
 	}
 
 	// Unclaim event comes later in removeTownBlock().
 	private void townUnclaim(final Town town, final WorldCoord worldCoord, boolean force) throws TownyException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		
-		try {
-			final TownBlock townBlock = worldCoord.getTownBlock();
-			if (town != townBlock.getTown() && !force) {
-				throw new TownyException(Translatable.of("msg_area_not_own"));
-			}
-
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-
-				
-				townyUniverse.getDataSource().removeTownBlock(townBlock);
-				
-			}, 1);
-			
-
-		} catch (NotRegisteredException e) {
+		if (worldCoord.isWilderness())
 			throw new TownyException(Translatable.of("msg_not_claimed_1"));
-		}
+		if (!worldCoord.hasTown(town) && !force)
+			throw new TownyException(Translatable.of("msg_area_not_own"));
+
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, 
+				() -> TownyUniverse.getInstance().getDataSource().removeTownBlock(worldCoord.getTownBlockOrNull()), 1);
 	}
 
 	// Unclaim event comes later in removeTownBlock().

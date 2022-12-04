@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.command.CommandSender;
 
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 
 /**
  * A class responsible for assembling confirmations.
@@ -16,7 +17,9 @@ public class ConfirmationBuilder {
 	String cancelCommand = TownySettings.getCancelCommand();
 	String pluginPrefix = "towny";
 	int duration = TownySettings.getConfirmationTimeoutSeconds();
+	ConfirmationTransaction transaction;
 	boolean runAsync;
+	CancellableTownyEvent event;
 
 	/**
 	 * The code to run on cancellation.
@@ -55,6 +58,21 @@ public class ConfirmationBuilder {
 	 */
 	public ConfirmationBuilder setDuration(int duration) {
 		this.duration = duration;
+		return this;
+	}
+
+	/**
+	 * Builds and sends this confirmation to the given CommandSender.
+	 * 
+	 * @param confirmationTransaction The ConfirmationTransaction to apply to the confirmation.
+	 */
+	public ConfirmationBuilder setCost(ConfirmationTransaction confirmationTransaction) {
+		this.transaction = confirmationTransaction;
+		return this;
+	}
+	
+	public ConfirmationBuilder setCancellableEvent(CancellableTownyEvent event) {
+		this.event = event;
 		return this;
 	}
 

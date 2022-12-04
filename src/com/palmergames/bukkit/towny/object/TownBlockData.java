@@ -1,7 +1,9 @@
 package com.palmergames.bukkit.towny.object;
 
- import com.palmergames.bukkit.towny.TownySettings;
- import org.bukkit.Material;
+ import com.palmergames.bukkit.towny.TownyAsciiMap;
+import com.palmergames.bukkit.towny.TownySettings;
+
+import org.bukkit.Material;
 
  import java.util.EnumSet;
  import java.util.Set;
@@ -19,7 +21,7 @@ public class TownBlockData {
 	}
 	
 	public void setMapKey(String mapKey) {
-		this.mapKey = mapKey.substring(0, 1);
+		this.mapKey = TownyAsciiMap.parseSymbol(mapKey);
 	}
 	
 	public double getCost() {

@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.damage;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Nullable;
@@ -20,6 +21,7 @@ public class TownBlockPVPTestEvent extends Event {
 	private boolean pvp;
 	
 	public TownBlockPVPTestEvent(TownBlock townBlock, boolean pvp) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.townBlock = townBlock;
 		this.setPvp(pvp);
 	}

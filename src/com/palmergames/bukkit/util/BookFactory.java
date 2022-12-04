@@ -6,14 +6,13 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.map.MinecraftFont;
-
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * @author LlmDl
  */
 public class BookFactory {
+	
+	private static final float MAX_LINE_WIDTH = FontUtil.measureWidth("LLLLLLLLLLLLLLLLLLL"); // 113 pixels.
 
 	/**
 	 * Returns a book itemstack with the given title, author and rawText.
@@ -58,19 +57,14 @@ public class BookFactory {
 
 	/**
 	 * A method to feed raw text out of which lines for pages.
-	 * 
+	 * <p> 
 	 * Heavily inspired by
-	 * https://www.spigotmc.org/threads/book-multipage-wrapping-text.383001/#post-3474541
+	 * <a href="https://www.spigotmc.org/threads/book-multipage-wrapping-text.383001/#post-3474541">https://www.spigotmc.org/threads/book-multipage-wrapping-text.383001/#post-3474541</a>
 	 * 
-	 * @param rawText
+	 * @param rawText The raw text
 	 * @return lines as a List of Strings.
 	 */
 	private static List<String> getLines(String rawText) {
-		// Note that the only flaw with using MinecraftFont is that it can't account for
-		// some UTF-8 symbols, it will throw an IllegalArgumentException
-		final MinecraftFont font = new MinecraftFont();
-		final int maxLineWidth = font.getWidth("LLLLLLLLLLLLLLLLLLL"); // 113 pixels.
-
 		// An arraylist to store all of the individual lines which are made to fit a
 		// book's line width.
 		List<String> lines = new ArrayList<>();
@@ -84,7 +78,7 @@ public class BookFactory {
 				// We have an actual section with some content
 				else {
 					// Iterate through all the words of the section
-					String[] words = ChatColor.stripColor(section).split(" ");
+					String[] words = Colors.strip(section).split(" ");
 					String line = "";
 					for (int index = 0; index < words.length; index++) {
 						String word = words[index];
@@ -100,7 +94,7 @@ public class BookFactory {
 						 * believe a space is only 2 pixels wide while it is in fact 3 pixels wide.
 						 */
 						int spaces = 0; // Number of pixels to add to the line length test later on.
-						if (font.getWidth(" ") == 2) {
+						if (FontUtil.font.getWidth(" ") == 2) {
 							spaces = 1; // Because one space will be added in the test.
 							for (int i = 0; i < line.length(); ++i)
 								if (line.charAt(i) == ' ')
@@ -108,7 +102,7 @@ public class BookFactory {
 						}
 
 						// Current line + word is too long to be one line
-						if (font.getWidth(line + " " + word) + spaces > maxLineWidth) {
+						if (FontUtil.measureWidth(line + " " + word) + spaces > MAX_LINE_WIDTH) {
 							// Add our current line
 							lines.add(line + "\n");
 							// Set our next line to start off with this word
