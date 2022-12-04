@@ -20,7 +20,7 @@ public class TownToggleUnknownEvent extends TownToggleEvent {
 		super(sender, town, admin);
 		this.args = args;
 		setCancelled(true);
-		setCancellationMsg(Translation.of("msg_err_invalid_property", args[0]));
+		setCancelMessage(Translation.of("msg_err_invalid_property", args[0]));
 	}
 
 	/**

@@ -8,9 +8,11 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.util.BukkitTools;
 
 /**
@@ -44,7 +46,9 @@ public abstract class TownyPermissionSource {
 		 * Bukkit doesn't support non boolean nodes
 		 * so treat the same as bPerms
 		 */
-		Player player = BukkitTools.getPlayer(playerName);
+		Player player = BukkitTools.getPlayerExact(playerName);
+		if (player == null)
+			return -1;
 
 		int biggest = -1;
 		for (PermissionAttachmentInfo test : player.getEffectivePermissions()) {
@@ -181,6 +185,16 @@ public abstract class TownyPermissionSource {
 
 		return (permissible == null) || permissible.isOp() || strictHas(permissible, PermissionNodes.TOWNY_ADMIN.getNode());
 
+	}
+
+	public void testPermissionOrThrow(Permissible permissible, String perm) throws NoPermissionException {
+		if (!testPermission(permissible, perm))
+			throw new NoPermissionException();
+	}
+	
+	public void testPermissionOrThrow(Permissible permissible, String perm, Translatable errormsg) throws NoPermissionException {
+		if (!testPermission(permissible, perm))
+			throw new NoPermissionException(errormsg);
 	}
 
 	public boolean testPermission(Player player, String perm) {

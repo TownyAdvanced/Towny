@@ -1,20 +1,36 @@
 ---
 name: Towny
-version: 0.151
 language: Dutch
 author: ElgarL
 website: 'http://townyadvanced.github.io/'
 description: >
-  Language file for all game messages.  Do not alter this file. If you wish to change any of the entries, make a copy named something else. Alternate language files can be enabled by altering the [language] entry in config.yml
+  Language file for all game messages for this Locale.
+#A note on editing this file.
+#----------------------------
+#Do not alter this file if it is in the reference folder.
+#Before you edit this file, read about how Towny handles
+#language files:
+#https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
+#A note on text formatting (how Towny inserts words.)
+#----------------------------------------------------
 #You MUST retain spacing in the texts.
-#If a text begins or ends with a space, it must remain that way.
+#If a text begins or ends with a space, it must remain that
+#way.
 #%s = data to be supplied by the plugin.
-#Text colouring
-#--------------
+#If you find that a line has multiple %s variables which would
+#be in a different order in your language, you can change them
+#to %1$s, %2$s, %4$s, %3$s to change their order. ie: %4$s
+#will always use the 4th variable, no matter where it is
+#placed on the line.
+#A note on text colouring and formatting.
+#----------------------------------------
 #Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
 #Purple = &5, Gold = &6, LightGray = &7, Gray = &8
 #DarkPurple = &9, LightGreen = &a, LightBlue = &b
 #Rose = &c, LightPurple = &d, Yellow = &e, White = &f
+#This language file also supports using MiniMessage for colours
+#and formatting. Learn about MiniMessage formatting here:
+#https://docs.adventure.kyori.net/minimessage/format.html
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
@@ -244,7 +260,9 @@ msg_set_wild_regen: '&bSuccesvol de wildernis regeneratie van %s gewijzigd naar 
 msg_set_use_towny_on: '&bDeze wereld volgt nu Towny regels.'
 msg_set_use_towny_off: '&cDeze wereld is uitgezonderd van alle Towny interacties.'
 msg_error_must_be_int: '&bHoeveelheid moet een nummer zijn.'
+msg_error_input_must_be_int: '&c%s must be an integer'
 msg_error_must_be_num: '&bHoeveelheid moet een nummer zijn.'
+msg_error_input_must_be_num: '&c%s must be a number'
 msg_must_specify_amnt: '&bMoet bedrag opgeven. Bijv: %s 54'
 msg_town_set_tax: '&b%s heeft de dagelijkse inwoner belasting ingesteld op %s'
 msg_town_set_plottax: '&b%s heeft de dagelijkse plot belasting ingesteld op %s'
@@ -269,6 +287,7 @@ msg_new_mayor: '&b%s is nu de burgemeester!'
 msg_new_nation: '&b%s heeft een nieuwe natie gemaakt genaamd %s'
 msg_new_town: '&b%s heeft een nieuwe stad gemaakt genaamd %s'
 msg_plot_for_sale: '&b%s heeft het plot (%s) te koop gezet!'
+msg_plot_for_sale_amount: '&b%s heeft het plot (%s) te koop gezet voor %s!'
 msg_plot_set_type: '&bPlot type ingesteld op %s'
 msg_cache_block_error: '&cJe bent niet geregistreerd bij Towny. Probeer opnieuw in te loggen.'
 msg_cache_block_error_wild: '&cNiet toegestaan te %s in het wild.'
@@ -423,8 +442,8 @@ msg_err_friendly_fire_disable: 'Vriendelijk vuur is uitgeschakeld!'
 #Added in 0.38
 msg_claim_error: '&cEen andere plugin heeft de claim van (%s)/(%s) townblocks gestopt, waardoor de bewerking niet kon worden voltooid.'
 #Added in 0.39
-msg_err_town_spawn_forbidden_war: '&cTown spawn travel is only allowed during war.'
-msg_err_town_spawn_forbidden_peace: '&cTown spawn travel is forbidden during war.'
+msg_err_town_spawn_forbidden_war: '&cNaar de Stadspawn reizen is alleen toegestaan tijdens oorlogen.'
+msg_err_town_spawn_forbidden_peace: '&cNaar de Stadspawn reizen is verboden tijdens oorlogen.'
 msg_err_town_spawn_nation_forbidden_war: '&cTown spawn travel to other towns in your nation is only allowed during war.'
 msg_err_town_spawn_nation_forbidden_peace: '&cTown spawn travel to other towns in your nation is forbidden during war.'
 msg_err_town_spawn_ally_forbidden_war: '&cTown spawn travel to towns allied with your nation is only allowed during war.'
@@ -442,10 +461,10 @@ invite_help_3: 'Toon al je uitnodigingen'
 town_invite_help_1: 'Nodig een speler uit voor je stad'
 town_invite_help_2: 'Trek een uitnodiging in, die is verzonden naar een speler'
 town_invite_help_3: 'Toon een lijst van al je gestuurde uitnodigingen'
-town_invite_help_4: 'Lists all of the invites you''ve received'
-town_invite_help_5: 'Accept a request to join a nation'
-town_invite_help_6: 'Deny a request to join a nation'
-nation_invite_help_1: 'Invite a town to your nation'
+town_invite_help_4: 'Toont alle uitnodigingen die je hebt ontvangen'
+town_invite_help_5: 'Accepteer een verzoek om lid te worden van een natie'
+town_invite_help_6: 'Weiger een verzoek om lid te worden van een natie'
+nation_invite_help_1: 'Nodig een stad uit voor uw natie'
 nation_invite_help_2: 'Revoke an invite, that was sent to a town'
 nation_invite_help_3: 'List all of the invites sent to towns'
 nation_ally_help_1: 'Try to add an ally to your nation'
@@ -459,13 +478,13 @@ msg_err_player_no_invites: '&cYou do not have any invites!'
 msg_err_player_has_multiple_invites: '&cYou have multiple invites, please specify!'
 msg_err_player_has_too_many_invites: '%s has too many invites, ask them to decline some, before inviting again.'
 msg_err_player_already_invited: '&bYou have already invited %s to join your town!'
-msg_err_town_no_invites: '&bTown does not have any invites!'
-msg_err_town_specify_invite: '&cPlease specify the invite!'
+msg_err_town_no_invites: '&bStad heeft geen uitnodigingen!'
+msg_err_town_specify_invite: '&cSpecificeer de uitnodiging!'
 msg_err_town_has_too_many_invites: '&bTown %s has too many invites, ask them to decline some, before inviting again.'
 msg_err_town_sent_too_many_invites: '&bTown has sent too many invites, revoke some before trying again!'
 msg_err_town_already_invited: '&bYou have already invited %s to join your nation!'
-msg_err_nation_specify_invite: '&cPlease specify the request!'
-msg_err_nation_no_requests: '&bNation does not have any ally requests!'
+msg_err_nation_specify_invite: '&cSpecificeer de aanvraag!'
+msg_err_nation_no_requests: '&bNatie heeft geen ally verzoeken!'
 msg_err_nation_sent_too_many_invites: '&bNation has sent too many invites, revoke some before trying again!'
 msg_err_nation_sent_too_many_requests: '&bNation has sent too many requests, revoke some before trying again!'
 msg_err_nation_has_too_many_requests: '&bNation %s has too many requests, ask them to decline some, before requesting again.'
@@ -481,9 +500,9 @@ nation_revoke_ally_successful: '&bYou have successfully revoked an ally request.
 nation_received_requests: '&bNation has received %a/%m ally requests.'
 nation_sent_invites: '&bNation has sent %a/%m invites.'
 nation_sent_ally_requests: '&bNation has sent %a/%m ally requests.'
-no_confirmations_open: '&cYou have nothing to confirm!'
-successful_cancel: '&cAction cancelled!'
-successful_deny: '&bInvite has been denied successfully.'
+no_confirmations_open: '&cJe hebt niets om te bevestigen!'
+successful_cancel: '&cActie geannuleerd!'
+successful_deny: '&bUitnodiging is met succes geweigerd.'
 successful_deny_request: '&bAlly request has been denied successfully.'
 msg_ally_removed_successfully: '&bAlly has been removed successfully.'
 town_deleted_by_admin: '&bTown %s deleted successfully'
@@ -505,7 +524,7 @@ msg_err_homeblock_has_not_been_set: 'Home Block has not been set, use ''/town se
 msg_err_spawn_not_within_homeblock: 'Spawn is not within the homeBlock, use ''/town set homeblock'' first.'
 #Added in 0.44
 #TownyChat language strings
-tc_err_invalid_command: 'Error: Invalid command!'
+tc_err_invalid_command: 'Fout: ongeldige commando!'
 tc_settings_reloaded: '[TownyChat] Instellingen herladen!'
 tc_err_unrecognized_command_format: 'Error: niet herkende commando formaat!'
 tc_channel_list_status: '(Status)'
@@ -531,10 +550,10 @@ tc_you_left_channel: '[TownyChat] Je hebt &f%s verlaten'
 tc_you_are_now_talking_in_channel: '[TownyChat] Je spreekt nu in &f%s'
 tc_err_you_cannot_join_channel: 'Je kunt niet deelnemen aan &f%s'
 tc_you_are_already_in_channel: '[TownyChat] Je bent al in &f%s'
-tc_you_joined_channel: '[TownyChat] You joined &f%s'
+tc_you_joined_channel: '[TownyChat] Je bent toegetreden tot &f%s'
 tc_err_you_are_already_talking_in_default_channel_help: 'You are already talking in the default channel. To switch to another channel use that channel''s command.'
-tc_err_unable_to_talk_essentials_mute: 'Unable to talk...You are currently muted!'
-tc_err_unable_to_talk_you_are_spamming: 'Unable to talk...You are spamming!'
+tc_err_unable_to_talk_essentials_mute: 'Kan niet praten... U bent momenteel gedempt!'
+tc_err_unable_to_talk_you_are_spamming: 'Kan niet praten... Je bent aan het spammen!'
 msg_admin_set_plot_help_1: 'Wanneer in een stad.'
 msg_admin_set_plot_help_2: 'Wanneer in de wildernis.'
 msg_err_not_enough_outposts_free_to_claim: 'Niet genoeg outposts beschikbaar om te claimen %s/%s'
@@ -580,46 +599,46 @@ status_bank_town2: 'Dagelijkse onderhoud:'
 status_bank_town3: 'Belasting:'
 status_town_nation: 'Natie:'
 status_town_reslist_overlength: 'en meer...'
-status_nation_king: 'Leader:'
+status_nation_king: 'Leider:'
 status_nation_tax: 'NatieBelasting:'
 status_nation_towns: 'Steden'
-status_nation_allies: 'Allies'
-status_nation_enemies: 'Enemies'
-status_world_claimable: '&aClaimable'
-status_world_noclaims: '&cNoClaims'
-status_world_forcepvp: 'ForcePVP:'
-status_world_fire: 'Fire:'
-status_world_forcefire: 'Force Fire:'
-status_world_forceexplosion: 'Force Explosion:'
-status_world_worldmobs: 'World Mobs:'
-status_world_forcetownmobs: 'Force TownMobs:'
-status_world_unclaimrevert: 'Unclaim Revert:'
-status_world_explrevert: 'Explosion Revert:'
-status_world_ignoredblocks: 'Ignored Blocks:'
-status_res_taxexempt: 'Staff are exempt from paying town taxes.'
-status_res_tax: 'Town Tax:'
-status_res_plottax: 'Total Plot Taxes:'
-status_res_totaltax: 'Total Tax to pay:'
+status_nation_allies: 'Bondgenoten'
+status_nation_enemies: 'Vijanden'
+status_world_claimable: '&aClaimbaar'
+status_world_noclaims: '&cGeenClaims'
+status_world_forcepvp: 'ForceerPVP:'
+status_world_fire: 'Vuur:'
+status_world_forcefire: 'Forceer Vuur:'
+status_world_forceexplosion: 'Forceer Explosie:'
+status_world_worldmobs: 'Wereld Mobs:'
+status_world_forcetownmobs: 'Forceer TownMobs:'
+status_world_unclaimrevert: 'Unclaim Herstel:'
+status_world_explrevert: 'Explosie Herstel:'
+status_world_ignoredblocks: 'Genegeerde Blokken:'
+status_res_taxexempt: 'Staff is vrijgesteld van stadsbelastingen te betalen.'
+status_res_tax: 'Stad Belasting:'
+status_res_plottax: 'Totale Plot Belasting:'
+status_res_totaltax: 'Totaal te betalen belasting:'
 #Added in 0.45
-msg_err_unable_to_use_bank_outside_nation_capital: 'You cannot make use of your nation bank outside of the nation capital.'
-msg_err_unable_to_use_bank_outside_your_town: 'You cannot make use of your town bank outside of your town.'
-msg_time_until_a_new_day: 'Time until a New Day: '
+msg_err_unable_to_use_bank_outside_nation_capital: 'Je kunt geen gebruik maken van de nationale bank buiten de hoofdstad van je natie.'
+msg_err_unable_to_use_bank_outside_your_town: 'Je kunt geen gebruik maken van je stadsbank buiten je stad.'
+msg_time_until_a_new_day: 'Tijd tot een Nieuwe Dag: '
 msg_hours: ' uren'
 msg_minutes: ' minuten'
 msg_seconds: ' seconden'
-msg_err_invalid_string_nationboard_not_set: 'Invalid string, Nation Board not set.'
-msg_plot_evict: 'Plot successfully evicted.'
-msg_no_one_to_evict: 'No one to evict from this plot.'
+msg_err_invalid_string_nationboard_not_set: 'Ongeldige string, natie boord niet ingesteld.'
+msg_plot_evict: 'Plot succesvol uitgezet.'
+msg_no_one_to_evict: 'Niemand om dit plot uit te zetten.'
 #Added in 0.46
-nation_help_10: 'Teleport to the nations spawn.'
+nation_help_10: 'Teleporteer naar de spawnplaats van de natie.'
 msg_nation_spawn_warmup: '&bWachten om te teleporteren...'
-msg_set_nation_spawn: '&bSuccessfully changed nation''s spawn.'
-msg_err_cant_afford_tp_nation: '&cCannot afford to teleport to %s.'
-msg_err_nationspawn_has_not_been_set: '&cNation spawn has not been set.'
-msg_err_spawn_not_within_nationtowns: '&cThe nation spawn has to be in a town that is part of the nation.'
-msg_err_spawn_not_within_capital: '&cThe nation spawn has to be in the capital town.'
-msg_err_nation_spawn_war: '&cNation spawns are not allowed during war time.'
-msg_err_nation_not_public: '&cThat nation is not public.'
+msg_set_nation_spawn: '&bSuccesvol de spawn van de natie veranderd.'
+msg_err_cant_afford_tp_nation: '&cKan het niet betalen om naar %s te teleporteren.'
+msg_err_nationspawn_has_not_been_set: '&cNatie spawn is nog niet ingesteld.'
+msg_err_spawn_not_within_nationtowns: '&cDe natie spawn moet in een stad liggen die deel uitmaakt van de natie.'
+msg_err_spawn_not_within_capital: '&cDe natie spawn moet in de hoofdstad zijn.'
+msg_err_nation_spawn_war: '&cNatie spawns zijn niet toegestaan tijdens oorlogstijd.'
+msg_err_nation_not_public: '&cDat land is niet openbaar.'
 msg_nation_toggle_public: '&aSuccessfully toggled the nation setting public.'
 status_yes: '&aJA'
 status_no: '&cNEE'
@@ -701,8 +720,8 @@ msg_bankrupt_town2: '&b%s couldn''t afford to remain a town.'
 msg_bankrupt_nation2: '&b%s couldn''t afford to remain a nation.'
 status_embassy_town: 'Ambassades in'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bInvalid comparator. Try residents, balance, towns, name, townblocks, online.'
-msg_error_invalid_comparator_town: '&bInvalid comparator. Try residents, balance, name, townblocks, online, open.'
+msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
 msg_err_merging_for_kings_only: '&bMerging can only be done by a Nation Leader.'
 msg_err_king_of_that_nation_is_not_online: '&bThe Nation Leader of %s, %s, is not online. Merge failed.'
 nation1_has_merged_with_nation2: '&6The nation %s has agreed to merge together with the prevailing nation of %s.'
@@ -715,6 +734,7 @@ msg_error_ta_plot_claim: 'Missing playername, ex: /ta plot claim PlayerNameHere'
 msg_error_no_player_with_that_name: 'No player found with name %s'
 msg_admin_has_given_you_a_plot: 'An admin has claimed a plot for you at: %s'
 msg_town_forcepvp_setting_set_to: 'The town %s has had their pvp setting forced to %s'
+msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cThe Nation''s open status is now %s.'
 msg_err_already_in_a_nation: 'Your town is already in a nation.'
 msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the nation leader or an assistant to join.'
@@ -1136,7 +1156,6 @@ msg_err_you_cannot_remove_the_last_cell: 'U kunt de laatste gevangenis cel niet 
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Log niet uit voordat je naar de gevangenis geteleporteerd wordt, dat zou fataal zijn.'
 jail_plu: 'Gevangenissen'
 jail_sing: 'Gevangenis'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s is verzonden naar %s naar cel nummer %s gedurende %s uur door %s.'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s heeft niet lang genoeg gespeeld om gevangen te worden gezet, wacht een andere %s'
 #Added in 0.108
 msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
@@ -1408,7 +1427,7 @@ tc_player_channel_sound_unmuted: 'Het kanaal geluid is ingeschakeld'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Er is een buitenstaander op je plot, Je kunt je pvp status niet aanpassen!'
 #Added in 0.136
-msg_view_on_web: 'Click to view on the web.'
+msg_view_on_web: '&7Click to view on the web.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
@@ -1491,3 +1510,110 @@ msg_err_no_pages_to_display: 'No pages to display!'
 msg_err_nation_unaffiliated: 'That nation is not affiliated with you.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
 msg_err_town_unaffiliated: 'That town is not affiliated with you.'
+#Added in 0.152
+#Message shown when a player tries to add a jail cell location where one already exists.
+msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
+#Title line of the /plot perm hud.
+msg_perm_hud_title: 'Plot Perms'
+#Seen in /plot perm hud:
+msg_perm_hud_build: 'Build: '
+#Seen in /plot perm hud:
+msg_perm_hud_destroy: 'Destroy: '
+#Seen in /plot perm hud:
+msg_perm_hud_switch: 'Switch: '
+#Seen in /plot perm hud:
+msg_perm_hud_item_use: 'Item: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_type: 'Type: '
+#Seen in /plot perm hud:
+msg_perm_hud_pvp: 'PVP: '
+#Seen in /plot perm hud:
+msg_perm_hud_explosions: 'Explosions: '
+#Seen in /plot perm hud:
+msg_perm_hud_firespread: 'Firespread: '
+#Seen in /plot perm hud:
+msg_perm_hud_mobspawns: 'Mob Spawns: '
+#Seen in /plot perm hud:
+msg_perm_hud_key: 'Key'
+#Seen in /plot perm hud:
+msg_perm_hud_friend: 'friend'
+#Seen in /plot perm hud:
+msg_perm_hud_town: 'town'
+#Seen in /plot perm hud:
+msg_perm_hud_ally: 'ally'
+#Seen in /plot perm hud:
+msg_perm_hud_resident: 'resident'
+#Seen in /plot perm hud:
+msg_perm_hud_nation: 'nation'
+#Seen in /plot perm hud:
+msg_perm_hud_outsider: 'outsider'
+#Seen in /plot perm hud:
+msg_perm_hud_plot_name: 'Plot: '
+#Added in 0.153
+#Message shown confirming /ta town NAME settownlevel # command.
+msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
+#Message shown when unsetting a manual town level.
+msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
+#Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
+msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase townblocks based on the config rules.'
+#Message shown when unsetting all purchased townblocks from a town.
+msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks removed.'
+#Message shown when /ta town name giveboughtblocks # is used.
+msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+#Added in 0.154
+msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
+#Added in 0.156
+msg_spawn_cost_free: 'Free'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'This plot is already a %s type.'
+msg_town_board_reset: '&bTown board reset.'
+msg_town_has_no_jailslots: 'The town jail is full.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s is verzonden naar %s naar cel nummer %s gedurende %s uur door %s.'
+msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s has been released to make space for another prisoner.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+#Message shown in the confirmation for /ta resetbanks {amount}.
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'Are you sure you want to reset all town and nation banks to %s?'
+#Message shown when a nation cannot add a town because of the max-residents-limit.
+msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
+#Message shown to a town when they cannot join a nation because of the max-residents-limit.
+msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
+#Message shown to a town because the nation has hit their max-towns-limit.
+msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
+#Message shown confirming /tw set usedefaults
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
+#Part of the /town plots output.
+msg_town_plots_title: ' Town Plots'
+#Part of the /town plots output.
+msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+#Part of the /town plots output.
+msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
+#Part of the /town plots output.
+msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
+#Part of the /town plots output.
+msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+#Part of the /town plots output.
+msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
+#Part of the /town plots output.
+msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+#Part of the /town plots output.
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+#Part of the /town plots output.
+msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
+#Part of the /town plots output.
+msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
+#Message giving confirmation warning for trusttown
+confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'

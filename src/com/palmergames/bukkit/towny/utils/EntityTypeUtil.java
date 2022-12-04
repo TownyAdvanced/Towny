@@ -38,7 +38,8 @@ public class EntityTypeUtil {
 	private static final List<EntityType> ExplosivePVPEntityTypes = Arrays.asList(
 			EntityType.FIREWORK,
 			EntityType.MINECART_TNT,
-			EntityType.PRIMED_TNT);
+			EntityType.PRIMED_TNT,
+			EntityType.ENDER_CRYSTAL);
 	
 	public static boolean isInstanceOfAny(List<Class<?>> classes, Object obj) {
 
@@ -86,6 +87,7 @@ public class EntityTypeUtil {
 			case SALMON -> Material.SALMON;
 			case PUFFERFISH -> Material.PUFFERFISH;
 			case TROPICAL_FISH -> Material.TROPICAL_FISH;
+			case TADPOLE -> Material.TADPOLE_BUCKET;
 			case ITEM_FRAME -> Material.ITEM_FRAME;
 			case GLOW_ITEM_FRAME -> Material.GLOW_ITEM_FRAME;
 			case PAINTING -> Material.PAINTING;

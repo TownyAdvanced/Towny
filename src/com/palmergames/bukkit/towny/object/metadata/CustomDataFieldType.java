@@ -6,7 +6,8 @@ public enum CustomDataFieldType {
 	StringField(1, "String"),
 	BooleanField(2, "Boolean"),
 	DecimalField(3,"Decimal"),
-	LongField(4, "Long");
+	LongField(4, "Long"),
+	LocationField(5, "Location");
     
     private final Integer value;
     private final String typeName;
@@ -43,6 +44,9 @@ public enum CustomDataFieldType {
 				break;
 			case 4:
 				type = LongField;
+				break;
+			case 5:
+				type = LocationField;
 				break;
 			default:
 		}

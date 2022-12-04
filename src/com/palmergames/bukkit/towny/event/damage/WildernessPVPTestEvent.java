@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.damage;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -18,6 +19,7 @@ public class WildernessPVPTestEvent extends Event {
 	private boolean pvp;
 	
 	public WildernessPVPTestEvent(TownyWorld world, boolean pvp) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.world = world;
 		this.setPvp(pvp);
 	}

@@ -520,6 +520,19 @@ public enum HelpMenu {
 				.add("[resident] [hours] [jail] [cell]", "");
 		}
 	},
+
+	TOWN_JAILWITHBAIL {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town jail")
+				.add("list", "")
+				.add("[resident]", "")
+				.add("[resident] [hours]", "")
+				.add("[resident] [hours] [bail]", "")
+				.add("[resident] [hours] [bail] [jail]", "")
+				.add("[resident] [hours] [bail] [jail] [cell]", "");
+		}
+	},
 	
 	TOWN_UNJAIL {
 		@Override
@@ -823,7 +836,8 @@ public enum HelpMenu {
 			return new MenuBuilder("nation toggle")
 				.add("", "/nation toggle", "peaceful/neutral", "")
 				.add("", "/nation toggle", "public", "")
-				.add("", "/nation toggle", "open", "");
+				.add("", "/nation toggle", "open", "")
+				.add("", "/nation toggle", "taxpercent", "");
 		}
 	}, 
 	
@@ -862,6 +876,16 @@ public enum HelpMenu {
 			return new MenuBuilder("town trust")
 				.add("add [resident]", "")
 				.add("remove [resident]", "")
+				.add("list", "");
+		}
+	},
+	
+	TOWN_TRUSTTOWN_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town trusttown")
+				.add("add [town]", "")
+				.add("remove [town]", "")
 				.add("list", "");
 		}
 	},

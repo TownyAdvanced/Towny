@@ -37,9 +37,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
-import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
+import com.palmergames.bukkit.util.BukkitTools;
 
 public class SpawnUtil {
 
@@ -90,6 +89,8 @@ public class SpawnUtil {
 		
 		final NationSpawnLevel nationSpawnLevel = spawnType == SpawnType.NATION ? isTownyAdmin ? NationSpawnLevel.ADMIN : getNationSpawnLevel(player, resident, nation, split.length == 0) : null;
 
+		int cooldown = player.hasPermission(PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()) ? 0 : townSpawnLevel != null ? townSpawnLevel.getCooldown() : nationSpawnLevel.getCooldown();
+		
 		// Prevent spawn travel while in the config's disallowed zones.
 		// Throws a TownyException if the player is disallowed.
 		if (!isTownyAdmin)
@@ -117,12 +118,13 @@ public class SpawnUtil {
 				// Get paymentMsg for the money.csv and the Account being paid.
 				final String paymentMsg = getPaymentMsg(townSpawnLevel, nationSpawnLevel, spawnType);
 				final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : EconomyAccount.SERVER_ACCOUNT;
-				initiateCostedSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, ignoreWarn);
+				initiateCostedSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, ignoreWarn, cooldown);
 				// No Cost so skip confirmation system.
 			} else
-				initiateSpawn(player, spawnLoc);
+				initiateSpawn(player, spawnLoc, cooldown);
 		});
 	}
+
 
 	/**
 	 * Handles moving outlaws from outside of towns they are outlawed in.
@@ -184,8 +186,8 @@ public class SpawnUtil {
 			throw new TownyException(Translatable.of("msg_err_not_registered_1", player.getName()));
 			
 		// Test if the resident is in a teleport cooldown.
-		if (TownySettings.getSpawnCooldownTime() > 0 && CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.TELEPORT))
-			throw new TownyException(Translatable.of("msg_err_cannot_spawn_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.TELEPORT)));
+		if (CooldownTimerTask.hasCooldown(resident.getName(), "teleport"))
+			throw new TownyException(Translatable.of("msg_err_cannot_spawn_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), "teleport")));
 
 		// Disallow jailed players from teleporting.
 		if (resident.isJailed())
@@ -198,10 +200,10 @@ public class SpawnUtil {
 	 * Is this a player with the admin spawn node.
 	 * 
 	 * @param player Player to test permissions for.
-	 * @return true if this player has towny.admin.spawn in their permission nodes.
+	 * @return true if this player has towny.admin or towny.admin.spawn in their permission nodes.
 	 */
 	private static boolean isTownyAdmin(Player player) {
-		return TownyUniverse.getInstance().getPermissionSource().has(player, PermissionNodes.TOWNY_SPAWN_ADMIN.getNode());
+		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) || hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN);
 	}
 	
 	/**
@@ -211,9 +213,8 @@ public class SpawnUtil {
 	 * @return true if this player has either free spawning nodes.
 	 */
 	private static boolean playerHasFreeSpawn(Player player) {
-		TownyPermissionSource perms = TownyUniverse.getInstance().getPermissionSource();
-		return perms.has(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE.getNode())
-				|| perms.has(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCHARGE.getNode());
+		return hasPerm(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE)
+				|| hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCHARGE);
 	}
 	
 	/**
@@ -541,10 +542,7 @@ public class SpawnUtil {
 	 * @throws TownyException when the event is cancelled.
 	 */
 	private static void sendSpawnEvent(Player player, SpawnType spawnType, Location spawnLoc) throws TownyException {
-		SpawnEvent spawnEvent = getSpawnEvent(player, spawnType, spawnLoc);
-		Bukkit.getPluginManager().callEvent(spawnEvent);
-		if (spawnEvent.isCancelled())
-			throw new TownyException(spawnEvent.getCancelMessage());
+		BukkitTools.ifCancelledThenThrow(getSpawnEvent(player, spawnType, spawnLoc));
 	}
 	
 	/**
@@ -569,18 +567,18 @@ public class SpawnUtil {
 	 * @param player   Player being spawned.
 	 * @param spawnLoc Location being spawned to.
 	 */
-	private static void initiateSpawn(Player player, Location spawnLoc) {
-		if (TownyTimerHandler.isTeleportWarmupRunning() && !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP.getNode())) {
+	private static void initiateSpawn(Player player, Location spawnLoc, int cooldown) {
+		if (TownyTimerHandler.isTeleportWarmupRunning() && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP)) {
 			// Use teleport warmup
 			TownyMessaging.sendMsg(player, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
-			TownyAPI.getInstance().requestTeleport(player, spawnLoc);
+			TownyAPI.getInstance().requestTeleport(player, spawnLoc, cooldown);
 		} else {
 			// Don't use teleport warmup
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
 			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
-			if (TownySettings.getSpawnCooldownTime() > 0 && !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()))
-				CooldownTimerTask.addCooldownTimer(player.getName(), CooldownType.TELEPORT);
+			if (cooldown > 0 && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN))
+				CooldownTimerTask.addCooldownTimer(player.getName(), "teleport", cooldown);
 		}
 	}
 
@@ -596,13 +594,13 @@ public class SpawnUtil {
 	 * @param ignoreWarn boolean which is true if the player opted to ignore the
 	 *                   cost confirmation.
 	 */
-	private static void initiateCostedSpawn(Player player, Resident resident, Location spawnLoc, double travelCost, Account payee, String paymentMsg, boolean ignoreWarn) {
+	private static void initiateCostedSpawn(Player player, Resident resident, Location spawnLoc, double travelCost, Account payee, String paymentMsg, boolean ignoreWarn, int cooldown) {
 		if (ignoreWarn || !TownySettings.isSpawnWarnConfirmationUsed())
 			// Skipping the confirmation.
-			payAndThenSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg);
+			payAndThenSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, cooldown);
 		else
 			// Sending the confirmation.
-			Confirmation.runOnAccept(() -> payAndThenSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg))
+			Confirmation.runOnAccept(() -> payAndThenSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, cooldown))
 						.setTitle(Translatable.of("msg_spawn_warn", TownyEconomyHandler.getFormattedBalance(travelCost)))
 						.sendTo(player);
 	}
@@ -618,12 +616,12 @@ public class SpawnUtil {
 	 * @param payee      Account which will be paid.
 	 * @param paymentMsg Message being left in the Towny money.csv log.
 	 */
-	private static void payAndThenSpawn(Player player, Resident resident, Location spawnLoc, double travelCost, Account payee, String paymentMsg) {
+	private static void payAndThenSpawn(Player player, Resident resident, Location spawnLoc, double travelCost, Account payee, String paymentMsg, int cooldown) {
 		if (resident.getAccount().payTo(travelCost, payee, paymentMsg)) {
 			TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(travelCost)));
 			resident.setTeleportCost(travelCost);
 			resident.setTeleportAccount(payee);
-			initiateSpawn(player, spawnLoc);
+			initiateSpawn(player, spawnLoc, cooldown);
 		}
 	}
 
@@ -659,5 +657,9 @@ public class SpawnUtil {
 	
 	private static void initiatePluginTeleport(Resident resident, CompletableFuture<Location> loc, boolean ignoreWarmup) {
 		loc.thenAccept(location -> initiatePluginTeleport(resident, location, ignoreWarmup));
+	}
+	
+	private static boolean hasPerm(Player player, PermissionNodes node) {
+		return TownyUniverse.getInstance().getPermissionSource().has(player, node.getNode());
 	}
 }

@@ -2,10 +2,13 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.util.DrawUtil;
 import com.palmergames.bukkit.util.LocationRunnable;
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
 
+@SuppressWarnings("deprecation")
 public class CellBorder extends WorldCoord {
 
 	public boolean[] border;
@@ -75,7 +78,7 @@ public class CellBorder extends WorldCoord {
 		return getZ() * getCellSize();
 	}
 
-	public void runBorderedOnSurface(int wallHeight, int cornerHeight, LocationRunnable runnable) {
+	public void runBorderedOnSurface(int wallHeight, int cornerHeight, Consumer<Location> locationConsumer) {
 
 		int x = getBlockX(); // positive x is east, negative x is west
 		int z = getBlockZ(); // positive z is south, negative z is north
@@ -87,34 +90,42 @@ public class CellBorder extends WorldCoord {
 				if ((section.getType() == Section.Type.WALL && wallHeight > 0) || section.getType() == Section.Type.CORNER && cornerHeight > 0) {
 					switch (section) {
 					case N:
-						DrawUtil.runOnSurface(world, x, z, x, z + w, wallHeight, runnable);
+						DrawUtil.runOnSurface(world, x, z, x, z + w, wallHeight, locationConsumer);
 						break;
 					case NE:
-						DrawUtil.runOnSurface(world, x, z, x, z, cornerHeight, runnable);
+						DrawUtil.runOnSurface(world, x, z, x, z, cornerHeight, locationConsumer);
 						break;
 					case E:
-						DrawUtil.runOnSurface(world, x, z, x + w, z, wallHeight, runnable);
+						DrawUtil.runOnSurface(world, x, z, x + w, z, wallHeight, locationConsumer);
 						break;
 					case SE:
-						DrawUtil.runOnSurface(world, x + w, z, x + w, z, cornerHeight, runnable);
+						DrawUtil.runOnSurface(world, x + w, z, x + w, z, cornerHeight, locationConsumer);
 						break;
 					case S:
-						DrawUtil.runOnSurface(world, x + w, z, x + w, z + w, wallHeight, runnable);
+						DrawUtil.runOnSurface(world, x + w, z, x + w, z + w, wallHeight, locationConsumer);
 						break;
 					case SW:
-						DrawUtil.runOnSurface(world, x + w, z + w, x + w, z + w, cornerHeight, runnable);
+						DrawUtil.runOnSurface(world, x + w, z + w, x + w, z + w, cornerHeight, locationConsumer);
 						break;
 					case W:
-						DrawUtil.runOnSurface(world, x, z + w, x + w, z + w, wallHeight, runnable);
+						DrawUtil.runOnSurface(world, x, z + w, x + w, z + w, wallHeight, locationConsumer);
 						break;
 					case NW:
-						DrawUtil.runOnSurface(world, x, z + w, x, z + w, cornerHeight, runnable);
+						DrawUtil.runOnSurface(world, x, z + w, x, z + w, cornerHeight, locationConsumer);
 						break;
 					default:
 					}
 				}
 			}
 		}
+	}
+	
+	/**
+	 * @deprecated Deprecated as of 0.98.3.13, please use {@link #runBorderedOnSurface(int, int, Consumer)} instead.
+	 */
+	@Deprecated
+	public void runBorderedOnSurface(int wallHeight, int cornerHeight, LocationRunnable runnable) {
+		runBorderedOnSurface(wallHeight, cornerHeight, (Consumer<Location>) runnable::run);
 	}
 
 	@Override

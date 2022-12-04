@@ -20,17 +20,20 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,6 +49,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -111,6 +115,7 @@ public class TownyEntityListener implements Listener {
 			 * First we protect all protectedMobs as long as the location cannot explode.
 			 */
 			if (EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defender)
+				&& TownySettings.areProtectedEntitiesProtectedAgainstMobs()
 				&& !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause()))
 				cancelExplosiveDamage = true;
 			
@@ -140,6 +145,22 @@ public class TownyEntityListener implements Listener {
 			if (attacker instanceof Projectile && !attacker.getType().equals(EntityType.TRIDENT))
 				attacker.remove();
 
+			event.setCancelled(true);
+		}
+	}
+
+	/**
+	 * Prevent axolotl from targeting protected mobs.
+	 *
+	 * @param event - EntityTargetLivingEntityEvent
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onAxolotlTarget(EntityTargetLivingEntityEvent event) {
+		if (event.getEntity() instanceof Mob attacker &&
+			attacker.getType().name().equals("AXOLOTL") &&
+			event.getTarget() instanceof Mob defender &&
+			CombatUtil.preventDamageCall(attacker, defender, DamageCause.ENTITY_ATTACK)) {
+			attacker.setMemory(MemoryKey.HAS_HUNTING_COOLDOWN, true);
 			event.setCancelled(true);
 		}
 	}
@@ -235,6 +256,27 @@ public class TownyEntityListener implements Listener {
 			return;
 		
 		ThrownPotion potion = event.getEntity();
+		boolean detrimental = false;
+
+		/*
+		 * List of potion effects blocked from PvP.
+		 */
+		List<String> detrimentalPotions = TownySettings.getPotionTypes();
+
+		for (PotionEffect effect : potion.getEffects()) {
+
+			/*
+			 * Check to see if any of the potion effects are protected.
+			 */
+			if (detrimentalPotions.contains(effect.getType().getName())) {
+				detrimental = true;
+				break;
+			}
+		}
+
+		if (!detrimental)
+			return;
+		
 		Location loc = potion.getLocation();		
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
 		float radius = event.getAreaEffectCloud().getRadius();
@@ -247,30 +289,11 @@ public class TownyEntityListener implements Listener {
 			    if (b.getType().equals(Material.AIR)) blocks.add(b);
 			}		   
 		}
-		
-		List<PotionEffect> effects = (List<PotionEffect>) potion.getEffects();
-		boolean detrimental = false;
-
-		/*
-		 * List of potion effects blocked from PvP.
-		 */
-		List<String> prots = TownySettings.getPotionTypes();
-				
-		for (PotionEffect effect : effects) {
-
-			/*
-			 * Check to see if any of the potion effects are protected.
-			 */
-			if (prots.contains(effect.getType().getName())) {
-				detrimental = true;
-			}
-		}
 
 		for (Block block : blocks) {
 						
 			if (!TownyAPI.getInstance().isWilderness(block.getLocation()) 
-					&& CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(block.getLocation())) 
-					&& detrimental) {
+					&& CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(block.getLocation()))) {
 				event.setCancelled(true);
 				break;
 			}			
@@ -293,53 +316,32 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		List<LivingEntity> affectedEntities = (List<LivingEntity>) event.getAffectedEntities();
-		ThrownPotion potion = event.getPotion();
-		Entity attacker = null;
-
-		List<PotionEffect> effects = (List<PotionEffect>) potion.getEffects();
 		boolean detrimental = false;
 
 		/*
 		 * List of potion effects blocked from PvP.
 		 */
-		List<String> prots = TownySettings.getPotionTypes();
+		List<String> detrimentalPotions = TownySettings.getPotionTypes();
 		
-		
-		for (PotionEffect effect : effects) {
+		for (PotionEffect effect : event.getPotion().getEffects()) {
 
 			/*
 			 * Check to see if any of the potion effects are protected.
 			 */
 			
-			if (prots.contains(effect.getType().getName())) {
+			if (detrimentalPotions.contains(effect.getType().getName())) {
 				detrimental = true;
+				break;
 			}
-
-		}
-
-		Object source = potion.getShooter();
-		Block dispenser = null;
-
-		if (source instanceof BlockProjectileSource blockProjectileSource) {
-			dispenser = blockProjectileSource.getBlock();
-		} else {
-			attacker = (Entity) source;
 		}
 		
-		for (LivingEntity defender : affectedEntities) {
-			if (dispenser != null) {
-				if (CombatUtil.preventDispenserDamage(dispenser, defender, DamageCause.MAGIC) && detrimental)
-					event.setIntensity(defender, -1.0);
-			} else 
-			/*
-			 * Don't block potion use on ourselves
-			 * yet allow the use of beneficial potions on all.
-			 */
-			if (attacker != defender)
-				if (CombatUtil.preventDamageCall(attacker, defender, DamageCause.MAGIC) && detrimental) {
-					event.setIntensity(defender, -1.0);
-				}
+		if (!detrimental)
+			return;
+		
+		for (LivingEntity defender : event.getAffectedEntities()) {
+			if (CombatUtil.preventDamageCall(event.getPotion(), defender, DamageCause.MAGIC)) {
+				event.setIntensity(defender, -1.0);
+			}
 		}
 	}
 
@@ -371,10 +373,8 @@ public class TownyEntityListener implements Listener {
 			if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)
 				return;
 
-			MobSpawnRemovalEvent mobSpawnRemovalEvent;
-			mobSpawnRemovalEvent = new MobSpawnRemovalEvent(event.getEntity());
-			plugin.getServer().getPluginManager().callEvent(mobSpawnRemovalEvent);
-			if(mobSpawnRemovalEvent.isCancelled()) return;
+			if(BukkitTools.isEventCancelled(new MobSpawnRemovalEvent(event.getEntity())))
+				return;
 
 			Location loc = event.getLocation();
 			TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
@@ -469,16 +469,19 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event - onEntityChangeBlockEvent
 	 */
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
-		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
-			return;
 
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName());
+
+		if (townyWorld == null || !townyWorld.isUsingTowny())
+			return;
+
 		
 		// Crop trampling protection done here.
 		if (event.getBlock().getType().equals(Material.FARMLAND)) {
@@ -495,32 +498,42 @@ public class TownyEntityListener implements Listener {
 		}
 
 		switch (event.getEntity().getType()) {
-	
-			case ENDERMAN:
-	
+			case ENDERMAN -> {
 				if (townyWorld.isEndermanProtect())
 					event.setCancelled(true);
-				break;
-				
-			case RAVAGER:
-				
+			}
+
+			/* Protect lily pads. */
+			case BOAT, CHEST_BOAT -> {
+				if (!event.getBlock().getType().equals(Material.LILY_PAD))
+					return;
+				Boat boat = (Boat) event.getEntity();
+				if (boat.getPassenger() != null && boat.getPassenger() instanceof Player player)
+					// Test if the player can break here.
+					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock()));
+				else if (!TownyAPI.getInstance().isWilderness(event.getBlock()))
+					// Protect townland from non-player-ridden boats. (Maybe someone is pushing a boat?)
+					event.setCancelled(true);
+			}
+
+			case RAVAGER -> {
 				if (townyWorld.isDisableCreatureTrample())
 					event.setCancelled(true);
-				break;
-		
-			case WITHER:
+			}
+
+			case WITHER -> {
 				List<Block> allowed = TownyActionEventExecutor.filterExplodableBlocks(Collections.singletonList(event.getBlock()), event.getBlock().getType(), event.getEntity(), event);
 				event.setCancelled(allowed.isEmpty());
-				break;
-			/*
-			 * Protect campfires from SplashWaterBottles. Uses a destroy test.
-			 */
-			case SPLASH_POTION:			
+			}
+
+			/* Protect campfires from SplashWaterBottles. Uses a destroy test. */
+			case SPLASH_POTION -> {
 				if (event.getBlock().getType() != Material.CAMPFIRE && ((ThrownPotion) event.getEntity()).getShooter() instanceof Player)
 					return;
 				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) ((ThrownPotion) event.getEntity()).getShooter(), event.getBlock().getLocation(), Material.CAMPFIRE));
-				break;
-			default:
+			}
+			
+			default -> {}
 		}
 	}
 
@@ -637,7 +650,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		Entity hanging = event.getEntity();		
+		Entity hanging = event.getEntity();
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(hanging.getWorld().getName());
 
 		// Prevent an item_frame or painting from breaking if it is attached to something which will be regenerated.

@@ -1,24 +1,21 @@
 package com.palmergames.bukkit.towny.event;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A class which provides the basis for spawn events.
  * 
  * @author Suneet Tipirneni (Siris)
  */
-public abstract class SpawnEvent extends Event implements Cancellable {
+public abstract class SpawnEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
+	
 	private final Location from;
 	private final Location to;
 	private final Player player;
-	private String cancelMessage = "Sorry, this event was cancelled.";
-	private static final HandlerList handlers = new HandlerList();
-	private boolean isCancelled;
 
 	/**
 	 * Creates a Spawn event.
@@ -28,19 +25,9 @@ public abstract class SpawnEvent extends Event implements Cancellable {
 	 * @param to The to location.
 	 */
 	public SpawnEvent(Player player, Location from, Location to) {
-		super(!Bukkit.getServer().isPrimaryThread());
 		this.player = player;
 		this.to = to;
 		this.from = from;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-	
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
 	}
 
 	/**
@@ -70,30 +57,13 @@ public abstract class SpawnEvent extends Event implements Cancellable {
 		return player;
 	}
 
-	/**
-	 * The message sent when the event is cancelled.
-	 * 
-	 * @return The cancel message.
-	 */
-	public String getCancelMessage() {
-		return cancelMessage;
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
 	}
 
-	public boolean isCancelled() {
-		return isCancelled;
-	}
-
+	@NotNull
 	@Override
-	public void setCancelled(boolean cancel) {
-		this.isCancelled = cancel;
-	}
-
-	/**
-	 * Sets the cancel message for the event.
-	 * 
-	 * @param cancelMessage The cancel message to use when cancelling.
-	 */
-	public void setCancelMessage(String cancelMessage) {
-		this.cancelMessage = cancelMessage;
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

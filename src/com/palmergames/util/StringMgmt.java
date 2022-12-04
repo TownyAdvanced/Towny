@@ -1,19 +1,22 @@
 package com.palmergames.util;
 
+import com.google.common.base.Strings;
 import com.palmergames.bukkit.towny.object.Translation;
 
 import net.md_5.bungee.api.ChatColor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,34 +28,27 @@ import org.jetbrains.annotations.NotNull;
 
 public class StringMgmt {
 
-	public static final Pattern hexPattern = Pattern.compile("(?<!\\\\)(#[a-fA-F0-9]{6})");
-	public static final Pattern ampersandPattern = Pattern.compile("(?<!\\\\)(&#[a-fA-F0-9]{6})");
-	public static final Pattern bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}");
-	
-	public static String translateHexColors(String str) {
+	public static final Pattern hexPattern = Pattern.compile("((&|\\{|<|)(#|§x))([a-fA-F0-9]|§[a-fA-F0-9]){6}(}|>|)");
+	public static final Pattern hexReplacePattern = Pattern.compile("(§x|[&{}<>§#])");
+	public static final @Deprecated Pattern ampersandPattern = Pattern.compile("(?<!\\\\)(&#[a-fA-F0-9]{6})");
+	public static final @Deprecated Pattern bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}");
 
-		final Matcher hexMatcher = hexPattern.matcher(str);
-		final Matcher ampMatcher = ampersandPattern.matcher(str);
-		final Matcher bracketMatcher = bracketPattern.matcher(str);
+	private static final Function<String, String> legacyHexFunction = (hex) -> ChatColor.of("#" + hex).toString();
+
+	public static String translateHexColors(String string) {
+		return translateHexColors(string, legacyHexFunction);
+	}
+	
+	@ApiStatus.Internal
+	public static String translateHexColors(String string, Function<String, String> hexFunction) {
+		final Matcher hexMatcher = hexPattern.matcher(string);
 
 		while (hexMatcher.find()) {
 			String hex = hexMatcher.group();
-			str = str.replace(hex, ChatColor.of(hex).toString());
+			string = string.replace(hex, hexFunction.apply(hexReplacePattern.matcher(hex).replaceAll("")));
 		}
 
-		while (ampMatcher.find()) {
-			String hex = ampMatcher.group().replace("&", "");
-			str = str.replace(hex, ChatColor.of(hex).toString());
-			str = str.replace("&", "");
-		}
-
-		while (bracketMatcher.find()) {
-			String hex = bracketMatcher.group().replace("{", "").replace("}", "");
-			str = str.replace(hex, ChatColor.of(hex).toString());
-			str = str.replace("{", "").replace("}", "");
-		}
-
-		return str;
+		return string;
 	}
 
 	public static String join(Collection<?> args) {
@@ -96,7 +92,7 @@ public class StringMgmt {
 
 	public static String repeat(String sequence, int repetitions) {
 
-		return StringUtils.repeat(sequence, repetitions);
+		return Strings.repeat(sequence, repetitions);
 	}
 	
 	public static String[] remFirstArg(String[] arr) {
@@ -238,5 +234,23 @@ public class StringMgmt {
 				return false;
 		
 		return true;
+	}
+	
+	public static List<String> addToList(List<String> list, String addition) {
+		List<String> out = new ArrayList<>(list);
+		out.add(addition);
+		return out;
+	}
+	
+	public static String wrap(String string, int wrapLength, String newlineString) {
+		int index = 0;
+		StringBuilder stringBuilder = new StringBuilder(string);
+
+		while (index + wrapLength < stringBuilder.length() && (index = stringBuilder.lastIndexOf(" ", index + wrapLength)) != -1) {
+			stringBuilder.replace(index, index + 1, newlineString);
+			index += newlineString.length();
+		}
+		
+		return stringBuilder.toString();
 	}
 }

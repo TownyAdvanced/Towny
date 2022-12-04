@@ -13,9 +13,9 @@ import com.palmergames.bukkit.towny.object.economy.BankEconomyHandler;
 import com.palmergames.bukkit.towny.object.economy.BankAccount;
 import com.palmergames.bukkit.towny.object.economy.GovernmentAccountAuditor;
 import com.palmergames.bukkit.util.BookFactory;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import net.kyori.adventure.audience.ForwardingAudience;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -217,7 +217,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		this.tag = text.toUpperCase();
 		if (this.tag.matches(" "))
 			this.tag = "";
-		Bukkit.getPluginManager().callEvent(new GovernmentTagChangeEvent(this.tag, this));
+		BukkitTools.fireEvent(new GovernmentTagChangeEvent(this.tag, this));
 	}
 
 	/**

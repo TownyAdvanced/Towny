@@ -11,14 +11,21 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.util.BukkitTools;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -36,19 +43,22 @@ public class TownyRegenAPI {
 	private static List<WorldCoord> regenWorldCoordList = new ArrayList<>();
 	
 	// table containing snapshot data of active reversions.
-	private static Hashtable<String, PlotBlockData> PlotChunks = new Hashtable<>();
+	private static Hashtable<String, PlotBlockData> plotChunks = new Hashtable<>();
+
+	// List of all old plots still to be processed for Entity removal
+	private static final List<WorldCoord> deleteTownBlockEntityQueue = new ArrayList<>();
 
 	// List of all old plots still to be processed for Block removal
-	private static List<WorldCoord> deleteTownBlockIdQueue = new ArrayList<>();
+	private static final List<WorldCoord> deleteTownBlockIdQueue = new ArrayList<>();
 
 	// A list of worldCoords which are needing snapshots
-	private static List<WorldCoord> worldCoords = new ArrayList<>();
+	private static final List<WorldCoord> worldCoords = new ArrayList<>();
 	
 	// A holder for each protection regen task
-	private static  Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<>();
+	private static final Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<>();
 	
 	// List of protection blocks placed to prevent blockPhysics.
-	private static  Set<Block> protectionPlaceholders = new HashSet<>();
+	private static final Set<Block> protectionPlaceholders = new HashSet<>();
 
 	/**
 	 * Removes a TownyWorld from the various Revert-on-Unclaim feature Lists/Table.
@@ -94,8 +104,7 @@ public class TownyRegenAPI {
 	 */
 	public static void removeWorldCoord(WorldCoord worldCoord) {
 
-		if (worldCoords.contains(worldCoord))
-			worldCoords.remove(worldCoord);
+		worldCoords.remove(worldCoord);
 	}
 	
 	/**
@@ -178,9 +187,9 @@ public class TownyRegenAPI {
 	 * the list of queued regenerations of the world.
 	 * @param world TownyWorld to remove from the queue.
 	 */
-	private static void removeRegenQueueListOfWorld(TownyWorld world) {
+	private static void removeRegenQueueListOfWorld(@NotNull TownyWorld world) {
 		regenWorldCoordList = getRegenQueueList().stream()
-			.filter(wc -> !wc.getTownyWorldOrNull().equals(world))
+			.filter(wc -> !world.equals(wc.getTownyWorldOrNull()))
 			.collect(Collectors.toList());
 		TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
@@ -240,18 +249,18 @@ public class TownyRegenAPI {
 	 */
 	public static Hashtable<String, PlotBlockData> getPlotChunks() {
 
-		return PlotChunks;
+		return plotChunks;
 	}
 
 	public static List<PlotBlockData> getActivePlotBlockDatas() {
-		return new ArrayList<>(PlotChunks.values());
+		return new ArrayList<>(plotChunks.values());
 	}
 	/**
 	 * @return true if there are any chunks being processed.
 	 */
 	public static boolean hasActiveRegenerations() {
 
-		return !PlotChunks.isEmpty();
+		return !plotChunks.isEmpty();
 	}
 
 	/**
@@ -259,7 +268,7 @@ public class TownyRegenAPI {
 	 * @return true if this WorldCoord is actively being processed.
 	 */
 	public static boolean hasActiveRegeneration(WorldCoord wc) {
-		return PlotChunks.containsKey(getPlotKey(wc));
+		return plotChunks.containsKey(getPlotKey(wc));
 	}
 
 	/**
@@ -275,7 +284,7 @@ public class TownyRegenAPI {
 				plotChunks.put(key, getPlotChunks().get(key));
 
 		// Set the new plotchunks.
-		PlotChunks = plotChunks;
+		TownyRegenAPI.plotChunks = plotChunks;
 	}
 
 	/**
@@ -285,8 +294,7 @@ public class TownyRegenAPI {
 	 */
 	public static void removeFromActiveRegeneration(PlotBlockData plotChunk) {
 
-		if (PlotChunks.containsKey(getPlotKey(plotChunk)))
-			PlotChunks.remove(getPlotKey(plotChunk));
+		plotChunks.remove(getPlotKey(plotChunk));
 	}
 	
 	/**
@@ -296,9 +304,9 @@ public class TownyRegenAPI {
 	 */
 	public static void addToActiveRegeneration(PlotBlockData plotChunk) {
 
-		if (!PlotChunks.containsKey(getPlotKey(plotChunk))) {
+		if (!plotChunks.containsKey(getPlotKey(plotChunk))) {
 			//plotChunk.initialize();
-			PlotChunks.put(getPlotKey(plotChunk), plotChunk);
+			plotChunks.put(getPlotKey(plotChunk), plotChunk);
 		}
 	}
 
@@ -334,11 +342,7 @@ public class TownyRegenAPI {
 	 * @return loads the PlotData for the given townBlock or returns null.   
 	 */
 	public static PlotBlockData getPlotChunkSnapshot(TownBlock townBlock) {
-		PlotBlockData data = TownyUniverse.getInstance().getDataSource().loadPlotData(townBlock);
-		if (data != null) 
-			return data;
-		else
-			return null;
+		return TownyUniverse.getInstance().getDataSource().loadPlotData(townBlock);
 	}
 
 	/**
@@ -349,8 +353,8 @@ public class TownyRegenAPI {
 	 */
 	public static PlotBlockData getPlotChunk(TownBlock townBlock) {
 
-		if (PlotChunks.containsKey(getPlotKey(townBlock))) {
-			return PlotChunks.get(getPlotKey(townBlock));
+		if (plotChunks.containsKey(getPlotKey(townBlock))) {
+			return plotChunks.get(getPlotKey(townBlock));
 		}
 		return null;
 	}
@@ -369,11 +373,11 @@ public class TownyRegenAPI {
 		return "[" + wc.getWorldName() + "|" + wc.getX() + "|" + wc.getZ() + "]";
 	}
 
-	/**
-	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
-	 * 
-	 * @param player
-	 */
+//	/**
+//	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
+//	 * 
+//	 * @param player
+//	 */
 //	public static void regenChunk(Player player) {
 //		
 //		try {
@@ -507,6 +511,59 @@ public class TownyRegenAPI {
 //	}
 
 	/*
+	 * TownBlock Entity Deleting Queue.
+	 */
+	
+	/**
+	 * @return true if there are any chunks being processed.
+	 */
+	public static boolean hasDeleteTownBlockEntityQueue() {
+
+		return !deleteTownBlockEntityQueue.isEmpty();
+	}
+
+	public static boolean isDeleteTownBlockEntityQueue(WorldCoord plot) {
+
+		return deleteTownBlockEntityQueue.contains(plot);
+	}
+	
+	public static void addDeleteTownBlockEntityQueue(WorldCoord plot) {
+		if (!deleteTownBlockEntityQueue.contains(plot))
+			deleteTownBlockEntityQueue.add(plot);
+	}
+	
+	@Nullable
+	public static WorldCoord getDeleteTownBlockEntityQueue() {
+
+		if (!deleteTownBlockEntityQueue.isEmpty())
+			return deleteTownBlockEntityQueue.remove(0);
+		
+		return null;
+	}
+	
+
+	/**
+	 * Deletes all of a specified entity type from a TownBlock
+	 * 
+	 * @param worldCoord - WorldCoord for the Town Block
+	 */
+	public static void doDeleteTownBlockEntities(WorldCoord worldCoord) {
+		TownyWorld world = worldCoord.getTownyWorld();
+		if (world == null || !world.isUsingTowny() || !world.isDeletingEntitiesOnUnclaim())
+			return;
+		
+		List<Entity> toRemove = new ArrayList<>();
+		Collection<Entity> entities = worldCoord.getBukkitWorld().getNearbyEntities(worldCoord.getBoundingBox());
+		for (Entity entity : entities) {
+			if (world.getUnclaimDeleteEntityTypes().contains(entity.getType()))
+				toRemove.add(entity);
+		}
+		
+		for (Entity entity : toRemove)
+			entity.remove();
+	}
+	
+	/*
 	 * TownBlock Material Deleting Queue.
 	 */
 	
@@ -529,13 +586,12 @@ public class TownyRegenAPI {
 			deleteTownBlockIdQueue.add(plot);
 	}
 
+	@Nullable
 	public static WorldCoord getDeleteTownBlockIdQueue() {
 
-		if (!deleteTownBlockIdQueue.isEmpty()) {
-			WorldCoord wc = deleteTownBlockIdQueue.get(0);
-			deleteTownBlockIdQueue.remove(0);
-			return wc;
-		}
+		if (!deleteTownBlockIdQueue.isEmpty())
+			return deleteTownBlockIdQueue.remove(0);
+		
 		return null;
 	}
 
@@ -545,25 +601,11 @@ public class TownyRegenAPI {
 	 * @param worldCoord - WorldCoord for the Town Block
 	 */
 	public static void doDeleteTownBlockIds(WorldCoord worldCoord) {
-
-		World world = worldCoord.getBukkitWorld();
-		TownyWorld townyWorld = worldCoord.getTownyWorldOrNull();
-		int plotSize = TownySettings.getTownBlockSize();
-
-		if (world != null && townyWorld != null) {
-			int height = world.getMaxHeight() - 1;
-			int worldx = worldCoord.getX() * plotSize, worldz = worldCoord.getZ() * plotSize;
-
-			for (int z = 0; z < plotSize; z++)
-				for (int x = 0; x < plotSize; x++)
-					for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
-						Block block = world.getBlockAt(worldx + x, y, worldz + z);
-						if (townyWorld.isPlotManagementDeleteIds(block.getType()))
-							block.setType(Material.AIR);
-
-						block = null;
-					}
-		}
+		TownyWorld world = worldCoord.getTownyWorldOrNull();
+		if (world == null)
+			return;
+		
+		deleteMaterialsFromWorldCoord(worldCoord, world.getPlotManagementDeleteIds());
 	}
 
 	/**
@@ -573,52 +615,46 @@ public class TownyRegenAPI {
 	 * @param material - Material to delete
 	 */
 	public static void deleteTownBlockMaterial(TownBlock townBlock, Material material) {
+		deleteMaterialsFromWorldCoord(townBlock.getWorldCoord(), Collections.singleton(material));
+	}
 
-		int plotSize = TownySettings.getTownBlockSize();
-
-		World world = BukkitTools.getServer().getWorld(townBlock.getWorld().getName());
-
-		if (world != null) {
-			int height = world.getMaxHeight() - 1;
-			int worldx = townBlock.getX() * plotSize, worldz = townBlock.getZ() * plotSize;
-
-			for (int z = 0; z < plotSize; z++)
-				for (int x = 0; x < plotSize; x++)
-					for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
-						Block block = world.getBlockAt(worldx + x, y, worldz + z);
-						if (block.getType() == material) {
-							block.setType(Material.AIR);
-						}
-						block = null;
-					}
-		}
+	@Deprecated
+	public static void deleteMaterialsFromTownBlock(TownBlock townBlock, EnumSet<Material> materialEnumSet) {
+		deleteMaterialsFromWorldCoord(townBlock.getWorldCoord(), materialEnumSet);
 	}
 	
 	/**
 	 * Deletes all blocks which are found in the given EnumSet of Materials
 	 * 
-	 * @param townBlock       TownBlock to delete blocks from.
-	 * @param materialEnumSet EnumSet of Materials from which to remove.
+	 * @param coord WorldCoord to delete blocks from.
+	 * @param collection Collection of Materials from which to remove.
 	 */
-	public static void deleteMaterialsFromTownBlock(TownBlock townBlock, EnumSet<Material> materialEnumSet) {
+	public static void deleteMaterialsFromWorldCoord(WorldCoord coord, Collection<Material> collection) {
 		int plotSize = TownySettings.getTownBlockSize();
 
-		World world = townBlock.getWorldCoord().getBukkitWorld();
+		World world = coord.getBukkitWorld();
+		if (world == null)
+			return;
+		
+		int height = world.getMaxHeight() - 1;
+		int worldX = coord.getX() * plotSize, worldZ = coord.getZ() * plotSize;
+		List<Block> toRemove = new ArrayList<>();
 
-		if (world != null) {
-			int height = world.getMaxHeight() - 1;
-			int worldx = townBlock.getX() * plotSize, worldz = townBlock.getZ() * plotSize;
-
-			for (int z = 0; z < plotSize; z++)
-				for (int x = 0; x < plotSize; x++)
-					for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
-						Block block = world.getBlockAt(worldx + x, y, worldz + z);
-						if (materialEnumSet.contains(block.getType())) {
-							block.setType(Material.AIR);
-						}
-						block = null;
-					}
-		}
+		for (int z = 0; z < plotSize; z++)
+			for (int x = 0; x < plotSize; x++)
+				for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
+					Block block = world.getBlockAt(worldX + x, y, worldZ + z);
+					if (collection.contains(block.getType()))
+						toRemove.add(block);
+				}
+		
+		if (toRemove.isEmpty())
+			return;
+		
+		if (Bukkit.isPrimaryThread())
+			toRemove.forEach(block -> block.setType(Material.AIR));
+		else 
+			Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> toRemove.forEach(block -> block.setType(Material.AIR)));
 	}
 
 	/*
@@ -640,13 +676,13 @@ public class TownyRegenAPI {
 		if (!hasProtectionRegenTask(new BlockLocation(block.getLocation()))) {
 			// Piston extensions which are broken by explosions ahead of the base block
 			// cause baseblocks to drop as items and no base block to be regenerated.
-			if (block.getType().equals(Material.PISTON_HEAD)) {
+			if (block.getType() == Material.PISTON_HEAD) {
 				org.bukkit.block.data.type.PistonHead blockData = (org.bukkit.block.data.type.PistonHead) block.getBlockData(); 
 				Block baseBlock = block.getRelative(blockData.getFacing().getOppositeFace());
 				block = baseBlock;
 			}
 			ProtectionRegenTask task = new ProtectionRegenTask(Towny.getPlugin(), block);
-			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, (TownySettings.getPlotManagementWildRegenDelay() + count) * 20));
+			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, (world.getPlotManagementWildRevertDelay() + count) * 20));
 			addProtectionRegenTask(task);
 
 			// If this was a TownyExplodingBlocksEvent we want to get the bukkit event from it first.

@@ -1,60 +1,61 @@
 # Contributing to Towny
-   
+Thanks for deciding to contribute to Towny! We really appreciate contributions, but to keep everything running smoothly and get contributions merged in a timely manner, we need to enforce some guidelines. :shipit:
+
+Contributions are welcome via GitHub Pull Requests.
+You must fork this repository and then open it via your IDE.   
+You can always ask for help on your contribution in the [Towny Discord](https://discord.gg/gnpVs5m).    
+
+## Before contributing
+- Make sure to read the [Towny license](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md).
+- By opening an pull request, you:
+    - represent that you have the right to waive copyright and related rights to your contributions,
+    - agree that all copyright and related rights in your contributions will be waived,
+    - acknowledge that the TownyAdvanced organization has the copyright to use and modify your contributions under the [Towny license](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md) for perpetuity.
+
+If you do not agree with the terms of our license, do not contribute to the Towny project.
+
+# About pull requests
+> Pull requests will have their commits squashed upon merge, and your various commits' messages will be used in the squashed commit. Take this into account when making your commits.
+
+1. Keep your commit messages self-explanatory. Keep them short but informative!
+2. Pull requests should address a single topic, or be as closed in scope as you can reasonably make it. Small pull requests are easier to review and thus, can result in a faster merge.
+3. Pull request forms should be filled out to the best of your abilities; describe your changes and reference issues/pull requests whenever applicable.
+4. Test your changes before sending them in! You should look for bugs, test configuration values, commands, and anything you've touched!
+
+# About Java code
+> Towny uses an [.editorconfig](https://editorconfig.org) file. IDEs that have [native EditorConfig support](https://editorconfig.org/#pre-installed) will automatically follow these rules.
     
-## Contributing Code    
-Code contributions are welcome and are made via GitHub's Pull Request. 
-You must fork the Towny repository (this) and then open it via your IDE.   
-You can ask for any information/help on your idea/contribution in the [Towny Discord](https://discord.gg/gnpVs5m).    
+1. You must use tabs for indentation. 
+2. Keep your environment in Java 16-17. The code will automatically be converted into code compatible with Java 8 by [Jabel](https://github.com/bsideup/jabel).[^jabel-warning]
+3. Do not use wildcard imports.
+4. Do not make unnecessary changes.[^changes]
+   - All IDEs are different, we do this to keep consistency in the codebase.
+   - This keeps code differences in GitHub clean and simple.
+5. Do not use NMS (`net.minecraft.server`)[^nms], or reflection. We aim at only using the Spigot API.
+6. Do not directly interact with the Minecraft protocol.
+   - This includes the usage of ProtocolLib or Netty.
 
-* Please make sure to read our [License](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md). If you do not agree with the terms and conditions of our license, please do not contribute any code.
-* By making a pull request, you represent that you have the right to waive copyright and related rights to your contribution, and agree that all copyright and related rights in your contributions are waived, and you acknowledge that the TownyAdvanced organization has the copyright to use and modify your contribution under our [License](https://github.com/TownyAdvanced/Towny/blob/master/LICENSE.md) for perpetuity.
+# About dependencies
+For the sanity of the rest of us, and the maintainability of the project, please adhere to the following guidelines when attempting to include a dependency or an third party library.
 
-# Pull & Code Requirements    
-## Pull-Request Requirements
-1. Keep your commit message(s) self-explanitory, description should be a brief explanation and include an issue reference (if applicable.).   
-2. Pull Requests should be simple and straight-forward. One pull request for one feature. Changed Files should only show a difference where code has been removed or added, no re-formatting of entire files.   
-3. Test everything you've touched before pull-requesting. (Exception being language files, we don't expect you to check all lang strings.)    
-
-## General Code Requirements
-> With the inclusion of the Maven build system, Towny also makes use of a [EditorConfig](https://editorconfig.org) file. IDEs that support it should automatically follow parts of this section.
-    
-1. You must use Tabs (Size 4 Spaces).    
-2. Keep your environment in Java 16/17. The code will automatically be transpiled to Java 8 by the Maven plugin Jabel. Keep in mind that, while you will be able to use modern language features that way (like patterns), some standard library methods added after jdk 8 will not work and cause "cannot find symbol" errors when building (like String.isBlank),   
-3. Avoid using Wildcard imports (It's not preferred, but it's allowed.)   
-4. Don't run IDE Formatters over entire class files, unless it's a new class-file you're implementing.   
-   - This is done to avoid us changing the lines everytime, each IDE is different so we don't have a constant here and there.
-   - This also keeps file compares on github simple.
-5. Do not use NMS (Net Minecraft Server) or Craftbukkit code. Towny uses the Spigot/Bukkit API only.
-6. Reflection should be a last resort.   
-7. No Packet-Handling (Netty or ProtcolLib)   
-
-## Dependency Inclusion
-For the sanity of the rest of us, please adhere to the following guidelines when attempting to
-include a dependency or 3rd-party library.
-1. Libraries need to be approved by the current maintainer before being merged. Preferably, ask before commiting.     
-1. Prevent Class Not Found errors    
+1. Libraries need to be approved by the maintainer before being merged. We recommend you ask before commiting.     
+2. Prevent `ClassNotFound` exceptions.
    - Do not reference a plugin in a loaded class, unless that plugin is enabled.
-2. Do not embed your own plugins within Towny
-   - Dependencies should be within the 'Provided' scope.
-   - They will also need peer-review.
-3. No "Black Box" or Obufscated dependencies.
-   - All dependencies should have their source open and auditable.
+3. Do not add plugin support directly into Towny **unless** it can benefit the project (such as economy/permission bridges).
+   - For Towny support, you should be using the [`TownyAPI`](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI) instead.
+   - Even if you believe it can benefit the project, please ask the maintainer first.
+4. Do not embed dependencies directly into Towny.
+   - All dependencies should use the `provided` scope instead. This means that the dependency will be provided by the plugin JAR (e.g. Vault), or the server JAR (e.g. Adventure).
+5. Do not add closed source dependencies.
+   - All dependencies should have open and auditable source code.
 
-## Updating Language Files
-> As of August 2021, translation for the Towny project is being done on [Crowdin](https://crowdin.com/project/townyadvanced).
+# About translation
+All translation on the core Towny plugin is done via [Crowdin](https://crowdin.com/project/townyadvanced).
 
-The language files are stored in the resources section of the project. (`resources/lang/"language".yml`).
-If you want to create a new language file, contact us on [Discord](https://discord.gg/gnpVs5m).
+Strings are formatted using [Java's `java.util.Formatter`](https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/util/Formatter.html) allowing specification of variable order, and more. This means that if you find that a line has multiple variables which would be in a different order in your language, you can change them to `%NUMBER$s` (replacing `NUMBER` with the variable index) to change their order. 
 
-If you find that a line has multiple variables which would be in a different order in your language, you can change them to `%Variable number$s` to change their order. 
-An example of this: `%4$s` will **always use the 4th variable**, no matter where it is placed on the line.
+[^jabel-warning]: Keep in mind that, while you will be able to use modern language features that way (like patterns), some standard library methods added after JDK 8 will not work **even after being processed** and cause "Cannot find symbol" errors when building (like `String#isBlank`).
 
-You can read more about this on [Java Platform SE's Javadocs regarding the Formatter](https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html).
+[^changes]: This includes formatting and whitespace changes.
 
-<!--Pre-Crowdin language file tutorial-->
-<!--To update / change an existing language file, fork this repo and then edit the "language".yml in your fork.    
-Pull-Request your updated version. Please try to keep the title simple and include the version number:    
-e.g "German Translation v0.42"    
-If you are creating a new language file, feel-free to use either the english translation e.g "norwegian.yml" or the global placeholder e.g "es-mx"    
-If you are editing a language which contains the '(apostrophe) character such as French, please make sure you run it all through a YAML Parser,    
-You have to double up the '' when you want one ' to appear. It may help to do this anyways, as other characters may also require an escape sequence.-->
+[^nms]: The `net.minecraft.server` is the Minecraft server source package. While this allows for "lower-level" coding, it's also pretty hard to maintain due to its obfuscation, no cross-version compatibility, and possibility to corrupt data.

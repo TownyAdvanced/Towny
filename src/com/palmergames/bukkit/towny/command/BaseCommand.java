@@ -1,22 +1,25 @@
 package com.palmergames.bukkit.towny.command;
 
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permissible;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,6 +75,18 @@ public class BaseCommand implements TabCompleter{
 		"itemuse",
 		"on",
 		"off"
+	);
+	
+	public static final List<String> numbers = Arrays.asList(
+		"1",
+		"2",
+		"3",
+		"4",
+		"5",
+		"6",
+		"7",
+		"8",
+		"9"
 	);
 	
 	@Override
@@ -219,8 +234,9 @@ public class BaseCommand implements TabCompleter{
 		if (!(sender instanceof Player player))
 			return getResidentsWithoutTownStartingWith(arg);
 		List<String> residents = getOnlinePlayersWithoutTown().stream()
-			.filter(res -> player.canSee(res.getPlayer()))
-			.map(res -> res.getName())
+			.map(Resident::getPlayer)
+			.filter(p -> p != null && player.canSee(p))
+			.map(Player::getName)
 			.collect(Collectors.toCollection(ArrayList::new));
 		return !residents.isEmpty()
 			? NameUtil.filterByStart(residents, arg)
@@ -255,10 +271,21 @@ public class BaseCommand implements TabCompleter{
 		Resident res = TownyUniverse.getInstance().getResident(playerUUID);
 
 		if (res == null) {
-			throw new NotRegisteredException(Translation.of("msg_err_not_registered"));
+			throw new NotRegisteredException(Translatable.of("msg_err_not_registered"));
 		}
 
 		return res;
+	}
+	
+	@NotNull
+	@Contract("null -> fail")
+	protected static Resident getResidentOrThrow(@Nullable Player player) throws NotRegisteredException {
+		Resident resident = player == null ? null : TownyAPI.getInstance().getResident(player);
+		
+		if (resident == null)
+			throw new NotRegisteredException(Translatable.of("msg_err_not_registered"));
+		
+		return resident;
 	}
 
 	@NotNull
@@ -266,7 +293,7 @@ public class BaseCommand implements TabCompleter{
 		Resident res = TownyUniverse.getInstance().getResident(residentName);
 
 		if (res == null) {
-			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", residentName));
+			throw new NotRegisteredException(Translatable.of("msg_err_not_registered_1", residentName));
 		}
 
 		return res;
@@ -277,7 +304,7 @@ public class BaseCommand implements TabCompleter{
 		Town town = TownyUniverse.getInstance().getTown(townName);
 
 		if (town == null) {
-			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", townName));
+			throw new NotRegisteredException(Translatable.of("msg_err_not_registered_1", townName));
 		}
 
 		return town;
@@ -288,7 +315,7 @@ public class BaseCommand implements TabCompleter{
 		Nation nation = TownyUniverse.getInstance().getNation(nationName);
 
 		if (nation == null)
-			throw new NotRegisteredException(Translation.of("msg_err_not_registered_1", nationName));
+			throw new NotRegisteredException(Translatable.of("msg_err_not_registered_1", nationName));
 
 		return nation;
 	}
@@ -321,8 +348,18 @@ public class BaseCommand implements TabCompleter{
 			throw new TownyException(Translatable.of("msg_err_console_only"));
 	}
 	
-	public static void catchConsole(CommandSender sender) throws TownyException {
-		if (sender instanceof ConsoleCommandSender)
+	public static Player catchConsole(CommandSender sender) throws TownyException {
+		if (!(sender instanceof Player player))
 			throw new TownyException(Translatable.of("msg_err_player_only"));
+		
+		return player;
+	}
+	
+	public static void checkPermOrThrow(Permissible permissible, String node) throws NoPermissionException {
+		TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(permissible, node);
+	}
+	
+	public static void checkPermOrThrowWithMessage(Permissible permissible, String node, Translatable errormsg) throws NoPermissionException {
+		TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(permissible, node, errormsg);
 	}
 }

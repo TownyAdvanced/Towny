@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Towny's class for external API Methods
@@ -169,14 +170,14 @@ public class TownyAPI {
 		return Arrays.stream(names).filter(Objects::nonNull).map(townyUniverse::getNation).filter(Objects::nonNull)
 				.collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * Gets a List of Nations using a List of UUIDs
 	 * 
 	 * @param uuids List of UUIDs representing possible Nations.
 	 * @return List of Nations for which a UUID was matched.
 	 */
-	public List<Nation> getNation(List<UUID> uuids) {
+	public List<Nation> getNations(List<UUID> uuids) {
 		List<Nation> matches = new ArrayList<>();
 		for (UUID uuid : uuids) {
 			Nation n = townyUniverse.getNation(uuid);
@@ -186,7 +187,11 @@ public class TownyAPI {
 		}
 		return matches;
 	}
-    
+
+	public List<Nation> getNations(UUID[] uuids) {
+		return getNations(Stream.of(uuids).collect(Collectors.toList()));
+	}
+	
     /**
      * Gets the resident from the given name.
      * @param name String name of the resident.
@@ -310,6 +315,10 @@ public class TownyAPI {
 		}
 		return matches;
 	}
+	
+	public List<Town> getTowns(UUID[] uuids) {
+		return getTowns(Stream.of(uuids).collect(Collectors.toList()));
+	}
     
     /**
      * Find the the matching {@link Player} of the specified {@link Resident}.
@@ -365,8 +374,11 @@ public class TownyAPI {
      * @return {@link List} of all online {@link Player}s in the specified {@link ResidentList}.
      */
     public List<Player> getOnlinePlayers(ResidentList owner) {
-        return Bukkit.getOnlinePlayers().stream().filter(player -> owner.hasResident(player.getName())).collect(Collectors.toList());
-    }
+		final List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
+		
+		players.removeIf(player -> !owner.hasResident(player.getName()));
+		return players;
+	}
     
     /**
      * Gets all online {@link Player}s for a specific {@link Town}.
@@ -491,6 +503,17 @@ public class TownyAPI {
     /**
      * Returns {@link TownyWorld} unless it is null.
      * 
+     * @param worldUUID - the uuid of the world to get.
+     * @return TownyWorld or {@code null}.
+     */
+    @Nullable
+    public TownyWorld getTownyWorld(UUID worldUUID) {
+    	return townyUniverse.getWorld(worldUUID);
+    }
+    
+    /**
+     * Returns {@link TownyWorld} unless it is null.
+     * 
      * @param world - the world to get.
      * @return TownyWorld or {@code null}.
      */
@@ -570,6 +593,16 @@ public class TownyAPI {
 	}
 
 	/**
+	 * Get a List of all the Nations.
+	 * 
+	 * @return a List of all the Nations.
+	 * @since 0.98.4.1.
+	 */
+	public List<Nation> getNations() {
+		return new ArrayList<>(townyUniverse.getNations());
+	}
+
+	/**
 	 * Get a List of all the Towns that aren't a part of a Nation.
 	 * 
 	 * @return a List of all the nationless Towns.
@@ -625,29 +658,6 @@ public class TownyAPI {
     	return townyUniverse.getTownBlocks().values();
     }
     
-	/**
-	 * Get a list of active {@link Resident}s.
-	 *
-	 * @return {@link List} of active {@link Resident}s.
-	 * @deprecated This is deprecated as of 0.97.2.6, and will be removed in a future release.
-	 */
-	@Deprecated
-	public List<Resident> getActiveResidents() {
-		return new ArrayList<>(townyUniverse.getResidents());
-	}
-
-	/**
-	 * Check if the specified {@link Resident} is an active Resident.
-	 *
-	 * @param resident {@link Resident} to test for activity.
-	 * @return true if the player is active, false otherwise.
-	 * @deprecated This is deprecated as of 0.97.2.6, and will be removed in a future release.
-	 */
-	@Deprecated
-	public boolean isActiveResident(Resident resident) {
-		return resident.isOnline();
-	}
-    
     /**
      * Gets Towny's saving Database
      *
@@ -676,24 +686,16 @@ public class TownyAPI {
         return onlineResidents;
     }
     
-    /**
-     * Teleports the Player to the specified jail {@link Location}.
-     *
-     * @param player   {@link Player} to be teleported to jail.
-     * @param location {@link Location} of the jail to be teleported to.
-	 * @deprecated Since 0.97.3.0 use {@link com.palmergames.bukkit.towny.utils.SpawnUtil#jailTeleport(Resident)} or {@link com.palmergames.bukkit.towny.utils.SpawnUtil#jailAwayTeleport(Resident)} instead.
-     */
-	@Deprecated
-    public void jailTeleport(final Player player, final Location location) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(towny, () -> PaperLib.teleportAsync(player, location, PlayerTeleportEvent.TeleportCause.PLUGIN),
-			(long) TownySettings.getTeleportWarmupTime() * 20);
-    }
-    
-    public void requestTeleport(Player player, Location spawnLoc) {
+	public void requestTeleport(Player player, Location spawnLoc) {
+		requestTeleport(player, spawnLoc, 0);
+	}
+
+    public void requestTeleport(Player player, Location spawnLoc, int cooldown) {
+    	
     	Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
     	
     	if (resident != null) {
-			TeleportWarmupTimerTask.requestTeleport(resident, spawnLoc);
+			TeleportWarmupTimerTask.requestTeleport(resident, spawnLoc, cooldown);
 		}
     }
     
@@ -770,9 +772,7 @@ public class TownyAPI {
 		int nationZoneRadius = nearestTown.getNationZoneSize();
 
 		if (distance <= nationZoneRadius) {
-			NationZoneTownBlockStatusEvent event = new NationZoneTownBlockStatusEvent(nearestTown);
-			Bukkit.getPluginManager().callEvent(event);
-			if (event.isCancelled())
+			if (BukkitTools.isEventCancelled(new NationZoneTownBlockStatusEvent(nearestTown)))
 				return TownBlockStatus.UNCLAIMED_ZONE;
 			
 			return TownBlockStatus.NATION_ZONE;
@@ -871,6 +871,17 @@ public class TownyAPI {
 		return BaseCommand.getResidentsWithoutTownStartingWith(str);
 	}
 
+	
+	/**
+	 * @deprecated as of 0.98.3.7, use {@link TownyAPI#getNations(UUID[])} instead.
+	 * @param uuids List of UUIDs representing possible Nations.
+	 * @return {@link TownyAPI#getNations(UUID[])}
+	 */
+	@Deprecated
+	public List<Nation> getNation(List<UUID> uuids) {
+		return getNations(uuids);
+	}
+
 	/**
      * @deprecated since 0.97.3.0 use {@link Town#hasActiveWar()} or {@link Nation#hasActiveWar()} instead.
      * @return false.
@@ -879,4 +890,54 @@ public class TownyAPI {
     public boolean isWarTime() {
     	return false;
     }
+
+    /**
+     * Teleports the Player to the specified jail {@link Location}.
+     *
+     * @param player   {@link Player} to be teleported to jail.
+     * @param location {@link Location} of the jail to be teleported to.
+	 * @deprecated Since 0.97.3.0 use {@link com.palmergames.bukkit.towny.utils.SpawnUtil#jailTeleport(Resident)} or {@link com.palmergames.bukkit.towny.utils.SpawnUtil#jailAwayTeleport(Resident)} instead.
+     */
+	@Deprecated
+    public void jailTeleport(final Player player, final Location location) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(towny, () -> PaperLib.teleportAsync(player, location, PlayerTeleportEvent.TeleportCause.PLUGIN),
+			(long) TownySettings.getTeleportWarmupTime() * 20);
+	}
+
+	/**
+	 * Get a list of active {@link Resident}s.
+	 *
+	 * @return {@link List} of active {@link Resident}s.
+	 * @deprecated This is deprecated as of 0.97.2.6, and will be removed in a future release.
+	 */
+	@Deprecated
+	public List<Resident> getActiveResidents() {
+		return new ArrayList<>(townyUniverse.getResidents());
+	}
+
+	/**
+	 * Check if the specified {@link Resident} is an active Resident.
+	 *
+	 * @param resident {@link Resident} to test for activity.
+	 * @return true if the player is active, false otherwise.
+	 * @deprecated This is deprecated as of 0.97.2.6, and will be removed in a future release.
+	 */
+	@Deprecated
+	public boolean isActiveResident(Resident resident) {
+		return resident.isOnline();
+	}
+	
+	@Nullable
+	public Town getTown(@NotNull Player player) {
+		Resident resident = getResident(player);
+		
+		return resident == null ? null : resident.getTownOrNull();
+	}
+	
+	@Nullable
+	public Nation getNation(@NotNull Player player) {
+		Resident resident = getResident(player);
+		
+		return resident == null ? null : resident.getNationOrNull();
+	}
 }

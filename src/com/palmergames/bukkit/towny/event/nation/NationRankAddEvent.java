@@ -1,20 +1,17 @@
 package com.palmergames.bukkit.towny.event.nation;
 
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
-public class NationRankAddEvent extends Event implements Cancellable {
-
-	private static final HandlerList handlers = new HandlerList();
+public class NationRankAddEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
 	private final Nation nation;
 	private final Resident res;
 	private final String rank;
-	private boolean isCancelled = false;
-	private String cancelMessage = "Sorry this event was cancelled.";
 
 	public NationRankAddEvent(Nation nation, String rank, Resident res) {
 		this.nation = nation;
@@ -34,30 +31,13 @@ public class NationRankAddEvent extends Event implements Cancellable {
 		return rank;
 	}
 
-	public void setCancelMessage(String s) {
-		cancelMessage = s;
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
 	}
 
-	public String getCancelMessage() {
-		return cancelMessage;
-	}
-
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean b) {
-		this.isCancelled = b;
-	}
-
+	@NotNull
 	@Override
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
+		return HANDLER_LIST;
 	}
 }

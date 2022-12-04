@@ -1,32 +1,19 @@
 package com.palmergames.bukkit.towny.event.nation;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
-public class NationPreTownKickEvent extends Event implements Cancellable {
+public class NationPreTownKickEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
 
-	private static final HandlerList handlers = new HandlerList();
 	private final String townName;
 	private final Town town;
 	private final String nationName;
 	private final Nation nation;
-	private boolean isCancelled = false;
-	private String cancelMessage = Translation.of("msg_err_command_disable");
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
 
 	/**
 	 * Cancellable event thrown when a nation kicks a town using /n kick.
@@ -35,11 +22,11 @@ public class NationPreTownKickEvent extends Event implements Cancellable {
 	 * @param town Town leaving the nation.
 	 */
 	public NationPreTownKickEvent(Nation nation, Town town) {
-		super(!Bukkit.getServer().isPrimaryThread());
 		this.townName = town.getName();
 		this.town = town;
 		this.nation = nation;
 		this.nationName = nation.getName();
+		setCancelMessage(Translation.of("msg_err_command_disable"));
 	}
 
 	public String getTownName() {
@@ -58,21 +45,13 @@ public class NationPreTownKickEvent extends Event implements Cancellable {
 		return nation;
 	}
 
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
 	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean cancelled) {
-		isCancelled = cancelled;
-	}
-
-	public String getCancelMessage() {
-		return cancelMessage;
-	}
-
-	public void setCancelMessage(String cancelMessage) {
-		this.cancelMessage = cancelMessage;
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
 	}
 }

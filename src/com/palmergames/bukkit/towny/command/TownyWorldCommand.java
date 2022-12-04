@@ -6,21 +6,19 @@ import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -131,8 +129,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseWorldCommand(CommandSender sender, String[] split) {
-		TownyPermissionSource permSource = TownyUniverse.getInstance().getPermissionSource();
-		
+
 		if (sender instanceof Player player) {
 			if (split.length > 0 && !townyWorldTabCompletes.contains(split[0].toLowerCase()) && TownyAPI.getInstance().getTownyWorld(split[0]) != null) {
 				globalWorld = TownyAPI.getInstance().getTownyWorld(split[0]);
@@ -178,15 +175,13 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					HelpMenu.TOWNYWORLD_HELP_CONSOLE.send(sender);
 			} else if (split[0].equalsIgnoreCase("list")) {
 
-				if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_LIST.getNode()))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_LIST.getNode());
 
 				listWorlds(sender);
 
 			} else if (split[0].equalsIgnoreCase("set")) {
 
-				if (!permSource.testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_SET.getNode()))
-					throw new TownyException(Translatable.of("msg_err_command_disable"));
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_SET.getNode());
 
 				worldSet(sender, StringMgmt.remFirstArg(split));
 
@@ -227,9 +222,6 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 		} else {
 
-			if (!TownyUniverse.getInstance().getPermissionSource().testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE.getNode(split[0].toLowerCase())))
-				throw new TownyException(Translatable.of("msg_err_command_disable"));
-			
 			if (!globalWorld.isUsingTowny() && !split[0].equalsIgnoreCase("usingtowny"))
 				throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 
@@ -240,11 +232,13 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			if (split[0].equalsIgnoreCase("claimable")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_CLAIMABLE.getNode());
 				globalWorld.setClaimable(choice.orElse(!globalWorld.isClaimable()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_set_claim", globalWorld.getName(), formatBool(globalWorld.isClaimable())));
 
 			} else if (split[0].equalsIgnoreCase("usingtowny")) {
-				
+
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_USINGTOWNY.getNode());
 				globalWorld.setUsingTowny(choice.orElse(!globalWorld.isUsingTowny()));
 				plugin.resetCache();
 				TownyMessaging.sendMsg(sender, globalWorld.isUsingTowny() ? Translatable.of("msg_set_use_towny_on") : Translatable.of("msg_set_use_towny_off"));
@@ -255,62 +249,74 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			
 			} else if (split[0].equalsIgnoreCase("warallowed")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_WARALLOWED.getNode());
 				globalWorld.setWarAllowed(choice.orElse(!globalWorld.isWarAllowed()));
 				plugin.resetCache();
 				TownyMessaging.sendMsg(sender, globalWorld.isWarAllowed() ? Translatable.of("msg_set_war_allowed_on") : Translatable.of("msg_set_war_allowed_off"));
 				
 			} else if (split[0].equalsIgnoreCase("pvp")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_PVP.getNode());
 				globalWorld.setPVP(choice.orElse(!globalWorld.isPVP()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Global PVP", globalWorld.getName(), formatBool(globalWorld.isPVP())));
 
 			} else if (split[0].equalsIgnoreCase("forcepvp")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_FORCEPVP.getNode());
 				globalWorld.setForcePVP(choice.orElse(!globalWorld.isForcePVP()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Force town PVP", globalWorld.getName(), formatBool(globalWorld.isForcePVP(), "forced", "adjustable")));
 
 			} else if (split[0].equalsIgnoreCase("friendlyfire")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_FRIENDLYFIRE.getNode());
 				globalWorld.setFriendlyFire(choice.orElse(!globalWorld.isFriendlyFireEnabled()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Friendly Fire", globalWorld.getName(), formatBool(globalWorld.isFriendlyFireEnabled())));
 
 			} else if (split[0].equalsIgnoreCase("explosion")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_EXPLOSION.getNode());
 				globalWorld.setExpl(choice.orElse(!globalWorld.isExpl()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Explosions", globalWorld.getName(), formatBool(globalWorld.isExpl())));
 
 			} else if (split[0].equalsIgnoreCase("forceexplosion")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_FORCEEXPLOSION.getNode());
 				globalWorld.setForceExpl(choice.orElse(!globalWorld.isForceExpl()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Force town Explosions", globalWorld.getName(), formatBool(globalWorld.isForceExpl(), "forced", "adjustable")));
 
 			} else if (split[0].equalsIgnoreCase("fire")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_FIRE.getNode());
 				globalWorld.setFire(choice.orElse(!globalWorld.isFire()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Fire Spread", globalWorld.getName(), formatBool(globalWorld.isFire())));
 
 			} else if (split[0].equalsIgnoreCase("forcefire")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_FORCEFIRE.getNode());
 				globalWorld.setForceFire(choice.orElse(!globalWorld.isForceFire()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Force town Fire Spread", globalWorld.getName(), formatBool(globalWorld.isForceFire(), "forced", "adjustable")));
 
 			} else if (split[0].equalsIgnoreCase("townmobs")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_TOWNMOBS.getNode());
 				globalWorld.setForceTownMobs(choice.orElse(!globalWorld.isForceTownMobs()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Town Mob spawns", globalWorld.getName(), formatBool(globalWorld.isForceTownMobs(), "forced", "adjustable")));
 
 			} else if (split[0].equalsIgnoreCase("worldmobs")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_WORLDMOBS.getNode());
 				globalWorld.setWorldMobs(choice.orElse(!globalWorld.hasWorldMobs()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "World Mob spawns", globalWorld.getName(), formatBool(globalWorld.hasWorldMobs())));
 
 			} else if (split[0].equalsIgnoreCase("wildernessmobs")) {
-				
+
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_WILDERNESSMOBS.getNode());
 				globalWorld.setWildernessMobs(choice.orElse(!globalWorld.hasWildernessMobs()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Wilderness Mob spawns", globalWorld.getName(), formatBool(globalWorld.hasWildernessMobs())));
 
 			} else if (split[0].equalsIgnoreCase("revertunclaim")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_REVERTUNCLAIM.getNode());
 				globalWorld.setUsingPlotManagementRevert(choice.orElse(!globalWorld.isUsingPlotManagementRevert()));
 
 				if (!globalWorld.isUsingPlotManagementRevert()) 
@@ -320,26 +326,31 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			} else if (split[0].equalsIgnoreCase("revertentityexpl")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_REVERTENTITYEXPL.getNode());
 				globalWorld.setUsingPlotManagementWildEntityRevert(choice.orElse(!globalWorld.isUsingPlotManagementWildEntityRevert()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Wilderness Entity Explosion Revert", globalWorld.getName(), formatBool(globalWorld.isUsingPlotManagementWildEntityRevert())));
 
 			} else if (split[0].equalsIgnoreCase("revertblockexpl")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_REVERTBLOCKEXPL.getNode());
 				globalWorld.setUsingPlotManagementWildBlockRevert(choice.orElse(!globalWorld.isUsingPlotManagementWildBlockRevert()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Wilderness Block Explosion Revert", globalWorld.getName(), formatBool(globalWorld.isUsingPlotManagementWildBlockRevert())));
 
 			} else if (split[0].equalsIgnoreCase("plotcleardelete")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_PLOTCLEARDELETE.getNode());
 				globalWorld.setUsingPlotManagementMayorDelete(choice.orElse(!globalWorld.isUsingPlotManagementMayorDelete()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Plot Clear Delete", globalWorld.getName(), formatBool(globalWorld.isUsingPlotManagementMayorDelete())));
 
 			} else if (split[0].equalsIgnoreCase("unclaimblockdelete")) {
 
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_UNCLAIMBLOCKDELETE.getNode());
 				globalWorld.setUsingPlotManagementDelete(choice.orElse(!globalWorld.isUsingPlotManagementDelete()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Unclaim Block Delete", globalWorld.getName(), formatBool(globalWorld.isUsingPlotManagementDelete())));
 
 			} else if (split[0].equalsIgnoreCase("wildernessuse")) {
-				
+
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_WILDERNESSUSE.getNode());
 				String value = split.length > 1 ? split[1] : "";
 				boolean toggle = parseToggleChoice(value).orElse(!globalWorld.getUnclaimedZoneBuild());
 				
@@ -360,8 +371,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			globalWorld.save();
 			
 			//Change settings event
-			TownBlockSettingsChangedEvent event = new TownBlockSettingsChangedEvent(globalWorld);
-			Bukkit.getServer().getPluginManager().callEvent(event);
+			BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(globalWorld));
 		}
 
 	}
@@ -374,9 +384,13 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 			if (split[0].equalsIgnoreCase("usedefault")) {
 
-				globalWorld.setUsingDefault();
-				plugin.resetCache();
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_usedefault", globalWorld.getName()));
+				Confirmation.runOnAccept(() -> {
+					globalWorld.setUsingDefault();
+					plugin.resetCache();
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_usedefault", globalWorld.getName()));
+				})
+				.setTitle(Translatable.of("confirmation_are_you_sure_you_want_to_reset_this_worlds_settings"))
+				.sendTo(sender);
 
 			} else if (split[0].equalsIgnoreCase("wildperm")) {
 
@@ -401,20 +415,22 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			} else if (split[0].equalsIgnoreCase("wildignore")) {
 
 				if (split.length < 2)
-					TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildignore SAPLING,GOLD_ORE,IRON_ORE <world>");
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "/townyworld set wildignore OAK_SAPLING GOLD_ORE IRON_ORE"));
 				else
 					try {
 						List<String> mats = new ArrayList<>();
-						for (String s : StringMgmt.remFirstArg(split))
-							mats.add(Material.matchMaterial(s.trim().toUpperCase(Locale.ROOT)).name());
-
+						for (String s : StringMgmt.remFirstArg(split)) {
+							String matName = BukkitTools.matchMaterialName(s);
+							if (matName != null)
+								mats.add(matName);
+						}
 						globalWorld.setUnclaimedZoneIgnore(mats);
 
 						plugin.resetCache();
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_ignore", globalWorld.getName(), globalWorld.getUnclaimedZoneIgnoreMaterials()));
 
 					} catch (Exception e) {
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", " on/off."));
+						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "/townyworld set wildignore OAK_SAPLING GOLD_ORE IRON_ORE"));
 					}
 
 			} else if (split[0].equalsIgnoreCase("wildregen")) {

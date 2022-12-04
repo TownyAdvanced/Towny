@@ -632,7 +632,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				ResultSet rs = s.executeQuery("SELECT groupID FROM " + tb_prefix + "PLOTGROUPS");
 
 				while (rs.next()) {
-					universe.newPlotGroupInternal(rs.getString("groupID"));
+					universe.newPlotGroupInternal(UUID.fromString(rs.getString("groupID")));
 				}
 			}
 			
@@ -803,6 +803,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				try {
+					if (rs.getString("jailBail") != null && !rs.getString("jailBail").isEmpty())
+						resident.setJailBailCost(rs.getDouble("jailBail"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 			String line;
@@ -956,6 +962,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				town.setTag(line);
 			town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
 			town.setBonusBlocks(rs.getInt("bonus"));
+			town.setManualTownLevel(rs.getInt("manualTownLevel"));
 			town.setTaxPercentage(rs.getBoolean("taxpercent"));
 			town.setTaxes(rs.getFloat("taxes"));
 			town.setMaxPercentTaxAmount(rs.getFloat("maxPercentTaxAmount"));
@@ -1162,6 +1169,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					town.addTrustedResident(resident);
 			}
 			
+			line = rs.getString("trustedTowns");
+			if (line != null && !line.isEmpty()) {
+				search = (line.contains("#")) ? "#" : ",";
+				List<UUID> uuids = Arrays.stream(line.split(search))
+					.map(UUID::fromString)
+					.collect(Collectors.toList());
+				town.loadTrustedTowns(TownyAPI.getInstance().getTowns(uuids));
+			}
+			
 			line = rs.getString("mapColorHexCode");
 			if (line != null)
 				town.setMapColorHexCode(line);
@@ -1294,7 +1310,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					nation.addEnemy(enemy);
 			}
 
-			nation.setTaxes(rs.getDouble("taxes"));
 			nation.setSpawnCost(rs.getFloat("spawnCost"));
 			nation.setNeutral(rs.getBoolean("neutral"));
 			try {
@@ -1328,6 +1343,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nation.setPublic(rs.getBoolean("isPublic"));
 
 			nation.setOpen(rs.getBoolean("isOpen"));
+
+			nation.setTaxPercentage(rs.getBoolean("taxpercent"));
+			nation.setTaxes(rs.getDouble("taxes"));
+
+			line = rs.getString("maxPercentTaxAmount");
+			if (line != null)
+				nation.setMaxPercentTaxAmount(Double.parseDouble(line));
+			else 
+				nation.setMaxPercentTaxAmount(TownySettings.getMaxNationTaxPercentAmount());
 
 			try {
 				line = rs.getString("registered");
@@ -1532,6 +1556,25 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							mats.add(split);
 
 					world.setUnclaimedZoneIgnore(mats);
+				} catch (Exception ignored) {
+				}
+
+			result = rs.getBoolean("isDeletingEntitiesOnUnclaim");
+			try {
+				world.setDeletingEntitiesOnUnclaim(result);
+			} catch (Exception ignored) {
+			}
+
+			line = rs.getString("unclaimDeleteEntityTypes");
+			if (line != null)
+				try {
+					List<String> entityTypes = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							entityTypes.add(split);
+
+					world.setUnclaimDeleteEntityTypes(entityTypes);
 				} catch (Exception ignored) {
 				}
 
@@ -1902,7 +1945,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				TownyMessaging.sendErrorMsg("SQL: A plot group was not registered properly on load!");
 				return true;
 			}
-			uuid = group.getID().toString();
+			uuid = group.getUUID().toString();
 			
 			line = rs.getString("groupName");
 			if (line != null)
@@ -2063,6 +2106,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("jailUUID", resident.isJailed() ? resident.getJail().getUUID() : "");
 			res_hm.put("jailCell", resident.getJailCell());
 			res_hm.put("jailHours", resident.getJailHours());
+			res_hm.put("jailBail", resident.getJailBailCost());
 			res_hm.put("title", resident.getTitle());
 			res_hm.put("surname", resident.getSurname());
 			res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
@@ -2117,6 +2161,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("tag", town.getTag());
 			twn_hm.put("protectionStatus", town.getPermissions().toString().replaceAll(",", "#"));
 			twn_hm.put("bonus", town.getBonusBlocks());
+			twn_hm.put("manualTownLevel", town.getManualTownLevel());
 			twn_hm.put("purchased", town.getPurchasedBlocks());
 			twn_hm.put("nationZoneOverride", town.getNationZoneOverride());
 			twn_hm.put("nationZoneEnabled", town.isNationZoneEnabled());
@@ -2183,6 +2228,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				twn_hm.put("primaryJail", town.getPrimaryJail().getUUID());
 			
 			twn_hm.put("trustedResidents", StringMgmt.join(toUUIDList(town.getTrustedResidents()), "#"));
+			twn_hm.put("trustedTowns", StringMgmt.join(town.getTrustedTownsUUIDS(), "#"));
 			
 			twn_hm.put("allies", StringMgmt.join(town.getAlliesUUIDs(), "#"));
 			
@@ -2203,7 +2249,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Saving group " + group.getName());
 		try {
 			HashMap<String, Object> pltgrp_hm = new HashMap<>();
-			pltgrp_hm.put("groupID", group.getID());
+			pltgrp_hm.put("groupID", group.getUUID().toString());
 			pltgrp_hm.put("groupName", group.getName());
 			pltgrp_hm.put("groupPrice", group.getPrice());
 			pltgrp_hm.put("town", group.getTown().toString());
@@ -2231,6 +2277,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
 			nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
 			nat_hm.put("taxes", nation.getTaxes());
+            nat_hm.put("taxpercent", nation.isTaxPercentage());
+			nat_hm.put("maxPercentTaxAmount", nation.getMaxPercentTaxAmount());
 			nat_hm.put("spawnCost", nation.getSpawnCost());
 			nat_hm.put("neutral", nation.isNeutral());
 			nat_hm.put("nationSpawn",
@@ -2311,6 +2359,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			// Unclaimed Zone Ignore Ids
 			if (world.getUnclaimedZoneIgnoreMaterials() != null)
 				nat_hm.put("unclaimedZoneIgnoreIds", StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), "#"));
+
+			// Deleting EntityTypes from Townblocks on Unclaim.
+			nat_hm.put("isDeletingEntitiesOnUnclaim", world.isDeletingEntitiesOnUnclaim());
+			if (world.getUnclaimDeleteEntityTypes() != null)
+				nat_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(world.getUnclaimDeleteEntityTypes(), "#"));
 
 			// Using PlotManagement Delete
 			nat_hm.put("usingPlotManagementDelete", world.isUsingPlotManagementDelete());
@@ -2398,7 +2451,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			tb_hm.put("changed", townBlock.isChanged());
 			tb_hm.put("claimedAt", townBlock.getClaimedAt());
 			if (townBlock.hasPlotObjectGroup())
-				tb_hm.put("groupID", townBlock.getPlotObjectGroup().getID().toString());
+				tb_hm.put("groupID", townBlock.getPlotObjectGroup().getUUID().toString());
 			else
 				tb_hm.put("groupID", "");
 			if (townBlock.hasMeta())
@@ -2507,7 +2560,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public void deletePlotGroup(PlotGroup group) {
 
 		HashMap<String, Object> pltgrp_hm = new HashMap<>();
-		pltgrp_hm.put("groupID", group.getID());
+		pltgrp_hm.put("groupID", group.getUUID());
 		DeleteDB("PLOTGROUPS", pltgrp_hm);
 	}
 	

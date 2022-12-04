@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		removedTowns.clear();
 		removedNations.clear();
 
-		Bukkit.getPluginManager().callEvent(new PreNewDayEvent()); // Pre-New Day Event
+		BukkitTools.fireEvent(new PreNewDayEvent()); // Pre-New Day Event
 		
 		TownyMessaging.sendDebugMsg("New Day");
 
@@ -55,9 +56,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * If enabled, collect taxes and then server upkeep costs.
 		 */		
 		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
-			NewDayTaxAndUpkeepPreCollectionEvent event = new NewDayTaxAndUpkeepPreCollectionEvent();
-			Bukkit.getPluginManager().callEvent(event);
-			if (!event.isCancelled()) {
+			if (!BukkitTools.isEventCancelled(new NewDayTaxAndUpkeepPreCollectionEvent())) {
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_day_tax"));
 				TownyMessaging.sendDebugMsg("Collecting Town Taxes");
 				collectTownTaxes();
@@ -82,7 +81,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 		
 		//Clean up unused NPC residents
-		new NPCCleanupTask().start();
+		Bukkit.getScheduler().runTaskAsynchronously(plugin, new NPCCleanupTask());
 
 		/*
 		 * If enabled, remove all 0-plot towns.
@@ -120,7 +119,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 
 		// Fire the new-day event.
-		Bukkit.getServer().getPluginManager().callEvent(new NewDayEvent(bankruptedTowns, removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
+		BukkitTools.fireEvent(new NewDayEvent(bankruptedTowns, removedTowns, removedNations, totalTownUpkeep, totalNationUpkeep, start));
 		
 		TownyMessaging.sendDebugMsg("Finished New Day Code");
 		TownyMessaging.sendDebugMsg("Universe Stats:");
@@ -143,9 +142,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	}
 
 	private void unconquer(Town town) {
-		TownUnconquerEvent event = new TownUnconquerEvent(town);
-		Bukkit.getPluginManager().callEvent(event);
-		if (event.isCancelled())
+		if (BukkitTools.isEventCancelled(new TownUnconquerEvent(town)))
 			return;
 		
 		town.setConquered(false);
@@ -199,10 +196,14 @@ public class DailyTimerTask extends TownyTimerTask {
 					if ((town.isCapital() && !TownySettings.doCapitalsPayNationTax()) || !town.hasUpkeep() || town.isRuined())
 						continue;
 					
+					if (nation.isTaxPercentage()) {
+						taxAmount = town.getAccount().getHoldingBalance() * taxAmount / 100;
+						taxAmount = Math.min(taxAmount, nation.getMaxPercentTaxAmount());
+					}
+
 					PreTownPaysNationTaxEvent event = new PreTownPaysNationTaxEvent(town, nation, taxAmount);
-					Bukkit.getPluginManager().callEvent(event);
-					if (event.isCancelled()) {
-						TownyMessaging.sendPrefixedTownMessage(town, event.getCancellationMessage());
+					if (BukkitTools.isEventCancelled(event)) {
+						TownyMessaging.sendPrefixedTownMessage(town, event.getCancelMessage());
 						continue;
 					}
 					taxAmount = event.getTax();
@@ -384,7 +385,8 @@ public class DailyTimerTask extends TownyTimerTask {
 			townBlock = townBlockItr.next();
 			double tax = townBlock.getType().getTax(town);
 
-			if (!townBlock.hasResident() || tax < 1)
+			if (!townBlock.hasResident() || tax == 0 ||
+				!TownySettings.isNegativePlotTaxAllowed() && tax < 1)
 				continue;
 
 			Resident resident = townBlock.getResidentOrNull();
@@ -398,6 +400,13 @@ public class DailyTimerTask extends TownyTimerTask {
 				if (resident.hasTown() && resident.getTownOrNull() == town)
 					if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC())
 						continue;
+
+				// The PlotTax might be negative, in order to pay the resident for owning a special plot type.
+				if (tax < 0 && town.getAccount().canPayFromHoldings(Math.abs(tax))) {
+					tax = Math.abs(tax);
+					town.getAccount().payTo(tax, resident.getAccount(), String.format("Plot Tax Payment To Resident (%s)", townBlock.getType()));
+					continue;
+				}
 
 				// If the tax would put the town over the bank cap we reduce what will be
 				// paid by the plot owner to what will be allowed.

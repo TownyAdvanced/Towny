@@ -23,7 +23,6 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
 import com.palmergames.bukkit.util.BukkitTools;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -243,7 +242,7 @@ public class PlayerCacheUtil {
 	public static TownBlockStatus fetchTownBlockStatus(Player player, WorldCoord worldCoord) {
 		TownBlockStatus status = getTownBlockStatus(player, worldCoord);
 		PlayerCacheGetTownBlockStatusEvent event = new PlayerCacheGetTownBlockStatusEvent(player, worldCoord, status);
-		Bukkit.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 		return event.getTownBlockStatus();
 	}
 	
@@ -425,7 +424,7 @@ public class PlayerCacheUtil {
 			 */
 			if (TownySettings.getNationZonesEnabled() && status == TownBlockStatus.NATION_ZONE) {
 				// Admins that also have wilderness permission can bypass the nation zone.
-				if (townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()))
+				if (res.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_NATION_ZONE.getNode()))
 					return true;
 
 				// Wasn't able to build in the wilderness, regardless.
@@ -442,7 +441,7 @@ public class PlayerCacheUtil {
 					return true;
 
 				// The player is not a nation member of this NationZone.
-				cacheBlockErrMsg(player, Translatable.of("nation_zone_this_area_under_protection_of", pos.getTownyWorldOrNull().getUnclaimedZoneName(), nearestNation.getName()).forLocale(player));
+				cacheBlockErrMsg(player, Translatable.of("nation_zone_this_area_under_protection_of", pos.getTownyWorldOrNull().getFormattedUnclaimedZoneName(), nearestNation.getName()).forLocale(player));
 				return false;
 			}
 		}

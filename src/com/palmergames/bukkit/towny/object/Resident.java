@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
+import com.palmergames.bukkit.towny.event.resident.ResidentToggleModeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -46,6 +47,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -62,6 +64,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private String surname = "";
 	private long teleportRequestTime = -1;
 	private Location teleportDestination;
+	private int teleportCooldown;
 	private double teleportCost = 0.0;
 	private Account teleportAccount;
 	private final List<String> modes = new ArrayList<>();
@@ -71,6 +74,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private Jail jail = null;
 	private int jailCell;
 	private int jailHours;
+	private double jailBail;
 
 	private final List<String> townRanks = new ArrayList<>();
 	private final List<String> nationRanks = new ArrayList<>();
@@ -160,6 +164,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	
 	public void setJailHours(Integer hours) {
 		jailHours = hours;
+	}
+
+	public double getJailBailCost() {
+		return jailBail;
+	}
+
+	public void setJailBailCost(double bail) {
+		jailBail = bail;
 	}
 	
 	public boolean hasJailTime() {
@@ -265,7 +277,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		if (updateJoinedAt) {
 			setJoinedTownAt(System.currentTimeMillis());
-			BukkitTools.getPluginManager().callEvent(new TownAddResidentEvent(this, town));
+			BukkitTools.fireEvent(new TownAddResidentEvent(this, town));
 		}
 	}
 	
@@ -276,7 +288,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		Town town = this.town;
 		
-		BukkitTools.getPluginManager().callEvent(new TownPreRemoveResidentEvent(this, town));
+		BukkitTools.fireEvent(new TownPreRemoveResidentEvent(this, town));
 		
 		try {
 			
@@ -287,7 +299,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		} catch (EmptyTownException ignore) {
 		}
 
-		BukkitTools.getPluginManager().callEvent(new TownRemoveResidentEvent(this, town));
+		BukkitTools.fireEvent(new TownRemoveResidentEvent(this, town));
 
 		// Use an iterator to be able to keep track of element modifications.
 		Iterator<TownBlock> townBlockIterator = townBlocks.iterator();
@@ -393,6 +405,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		teleportCost = 0;
 		teleportRequestTime = -1;
 		teleportAccount = null;
+		teleportCooldown = 0;
 	}
 
 	public void setTeleportRequestTime() {
@@ -413,6 +426,16 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public Location getTeleportDestination() {
 
 		return teleportDestination;
+	}
+
+	public void setTeleportCooldown(int cooldown) {
+
+		teleportCooldown = cooldown;
+	}
+
+	public int getTeleportCooldown() {
+
+		return teleportCooldown;
 	}
 
 	public boolean hasRequestedTeleport() {
@@ -469,7 +492,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	 *         to them according to the TownyPermissionSource.
 	 */
 	public boolean hasPermissionNode(String node) {
-		return getPlayer() != null && TownyUniverse.getInstance().getPermissionSource().has(getPlayer(), node);
+		return getPlayer() != null && TownyUniverse.getInstance().getPermissionSource().testPermission(getPlayer(), node);
 	}
 	
 	/**
@@ -494,18 +517,25 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		 * Toggle any modes passed to us on/off.
 		 */
 		for (int i = 0; i < newModes.length; i++) {
-			String mode = newModes[i].toLowerCase();
+			String mode = newModes[i].toLowerCase(Locale.ROOT);
 			
 			Optional<Boolean> choice = Optional.empty();
 			if (i + 1 < newModes.length) {
-				String bool = newModes[i + 1].toLowerCase();
+				String bool = newModes[i + 1].toLowerCase(Locale.ROOT);
 				if (BaseCommand.setOnOffCompletes.contains(bool)) {
-					choice = Optional.of(bool.equals("on"));
+					choice = Optional.of(bool.equalsIgnoreCase("on"));
 					i++;
 				}
 			}
 			
 			boolean modeEnabled = this.modes.contains(mode);
+			
+			ResidentToggleModeEvent event = new ResidentToggleModeEvent(this, mode);
+			if (BukkitTools.isEventCancelled(event)) {
+				TownyMessaging.sendErrorMsg(this, event.getCancelMessage());				
+				continue;
+			}
+			
 			if (choice.orElse(!modeEnabled)) {
 				if (!modeEnabled) {
 					this.modes.add(mode);
@@ -566,7 +596,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	
 	@Nullable
 	public Player getPlayer() {
-		return BukkitTools.getPlayer(getName());
+		return BukkitTools.getPlayerExact(getName());
 	}
 
 	public boolean addTownRank(String rank) {

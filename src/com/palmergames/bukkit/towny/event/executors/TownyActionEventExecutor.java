@@ -1,8 +1,11 @@
 package com.palmergames.bukkit.towny.event.executors;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.event.damage.TownBlockExplosionTestEvent;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,7 +31,6 @@ import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.util.ArraySort;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 
@@ -66,19 +68,21 @@ public class TownyActionEventExecutor {
 			event.setCancelled(true);
 			PlayerCache cache = PlayerCacheUtil.getCache(player);
 			if (cache.hasBlockErrMsg())
-				event.setMessage(cache.getBlockErrMsg());
+				event.setCancelMessage(cache.getBlockErrMsg());
+			else
+				event.suppressMessage();
 		}
 
 		/*
 		 * Fire the event to let other plugins/Towny's internal war make changes.
 		 */
-		BukkitTools.getPluginManager().callEvent((Event) event);
+		BukkitTools.fireEvent((Event) event);
 
 		/*
 		 * Send any feedback when the action is denied.
 		 */
-		if (event.isCancelled() && event.getMessage() != null && !event.isMessageSupressed())
-			TownyMessaging.sendErrorMsg(player, event.getMessage());
+		if (event.isCancelled() && !event.isMessageSuppressed())
+			TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
 
 		return !event.isCancelled();
 	}
@@ -109,7 +113,12 @@ public class TownyActionEventExecutor {
 				/*
 				 * Must be inside of a town.
 				 */
-				canExplode = world.isForceExpl() || TownyAPI.getInstance().getTownBlock(loc).getPermissions().explosion;			
+				TownBlock townBlock = TownyAPI.getInstance().getTownBlock(loc);
+				canExplode = world.isForceExpl() || townBlock.getPermissions().explosion;
+				
+				TownBlockExplosionTestEvent event = new TownBlockExplosionTestEvent(townBlock, townBlock.getTownOrNull(), canExplode);
+				BukkitTools.fireEvent(event);
+				canExplode = event.isExplosion();
 			}
 		}
 
@@ -278,7 +287,7 @@ public class TownyActionEventExecutor {
 		 * Sort blocks into lowest Y to highest Y in order to preserve
 		 * blocks affected by gravity or tile entities requiring a base. 
 		 */
-		blockList.sort(ArraySort.getInstance());
+		blockList.sort(Comparator.comparingInt(Block::getY));
 
 		/*
 		 * Filter out any blocks which are not allowed to explode based 
@@ -291,7 +300,7 @@ public class TownyActionEventExecutor {
 		 * and other plugins have a say in the results.
 		 */
 		TownyExplodingBlocksEvent event = new TownyExplodingBlocksEvent(blockList, filteredBlocks, mat, entity, bukkitExplodeEvent);
-		BukkitTools.getPluginManager().callEvent(event);
+		BukkitTools.fireEvent(event);
 
 		/*
 		 * Finally, return the results of the TownyExplodingBlockEvent
@@ -324,17 +333,11 @@ public class TownyActionEventExecutor {
 		boolean cancelled = !isAllowedExplosion(loc);
 
 		/*
-		 * Fire a TownyExplosionDamagesEntityEvent to let Towny's war systems 
-		 * and other plugins have a say in the results.
+		 * Fire a TownyExplosionDamagesEntityEvent to let Towny's war systems and other
+		 * plugins have a say in the results. Finally return the results after Towny
+		 * lets its own war systems and other plugins have a say.
 		 */
-		TownyExplosionDamagesEntityEvent event = new TownyExplosionDamagesEntityEvent(loc, harmedEntity, cause, TownyAPI.getInstance().getTownBlock(loc), cancelled);
-		BukkitTools.getPluginManager().callEvent(event);
-
-		/*
-		 * Finally return the results after Towny lets its own 
-		 * war systems and other plugins have a say.
-		 */
-		return !event.isCancelled();
+		return !BukkitTools.isEventCancelled(new TownyExplosionDamagesEntityEvent(loc, harmedEntity, cause, TownyAPI.getInstance().getTownBlock(loc), cancelled));
 	}
 
 	/**
@@ -355,16 +358,10 @@ public class TownyActionEventExecutor {
 		boolean cancelled = !isAllowedBurn(block);
 		
 		/*
-		 * Fire a TownyBurnEvent to let Towny's war system
-		 * and other plugins have a say in the results.
+		 * Fire a TownyBurnEvent to let Towny's war system and other plugins have a say
+		 * in the results. Finally return the results after Towny lets its own war
+		 * systems and other plugins have a say.
 		 */
-		TownyBurnEvent event = new TownyBurnEvent(block, block.getLocation(), TownyAPI.getInstance().getTownBlock(block.getLocation()), cancelled);
-		BukkitTools.getPluginManager().callEvent(event);
-		
-		/*
-		 * Finally return the results after Towny lets its own 
-		 * war systems and other plugins have a say.
-		 */
-		return !event.isCancelled();
+		return !BukkitTools.isEventCancelled(new TownyBurnEvent(block, block.getLocation(), TownyAPI.getInstance().getTownBlock(block.getLocation()), cancelled));
 	}
 }

@@ -7604,3 +7604,493 @@ v0.92.0.11:
   - Fix potential NPE in SelectionGUI.
   - Fix the back button on the switch/itemuse/allowedblocks GUIs not working from the first page.
     - Closes #6027.
+  - Auto-supress event message if empty, courtesy of GNosii with PR #6028.
+  - Add a command to manually override a town's TownLevel.
+  - New Command: /ta town TOWNNAME settownlevel [#|unset]
+    - Manually overrides a town's townlevel to a number, 1 through x, where x is the last townlevel.
+    - unset subcommand removes the manual override and returns a town to using the normal townlevel based on resident count.
+  - Add some int and money validations to reduce duplication in commands.
+  - New Command: /ta town TOWNNAME giveboughtblocks [#|unset]
+    - Command that lets the admin modify the number of purchased townblocks a town has.
+    - unset subcommand removes all purchased townblocks from the town.
+    - Use negative numbers to take purchased townblocks from the town.
+    - Closes #6034.
+  - Condense action bar and bossbar notification options into one, courtesy of Warriorrrr with PR #6033.
+  - Add Runnable type to ConfigMigrator, courtesy of Warriorrrr with PR #6033.
+  - New Config Option: notification.notifications_appear_as
+    - Default: "action_bar"
+    - This setting controls where chunk notifications are displayed for players.
+    - By default, notifications appear in the player's action bar.
+    - Available options: action_bar, chat, bossbar, or none.
+  - Automatic Config Edit: previous notification setting will be migrated to the new home: notification.notifications_appear_as
+  - Add unclaimEntityTypeDelete to TownyWorld.
+    - Allows Towny to delete all Entities of a given type from a TownBlock when it is unclaimed by a town.
+    - Closes #5953.
+  - New Config Options:
+    - new_world_settings.plot_management.entity_delete.enabled
+      - Default: false
+    - new_world_settings.plot_management.entity_delete.unclaim_delete
+      - Default: "ENDERCRYSTAL"
+      - These entities will be deleted upon a plot being unclaimed
+0.98.3.4:
+  - Fix vehicles not being killed by lava, courtesy of Warriorrrr with PR #6044.
+  - Make townyworld's trident strike list use uuid instead of eid, courtesy of Warriorrrr with PR #6043.
+  - Add baltop as banned name, courtesy of Warriorrrr with PR #6046.
+  - Fix messages from cancelled Nation ally adding and removal events not displaying to the command user.
+    - Closes #6049.
+  - Exclude transitive bukkit api dependency, courtesy of Warriorrrr with PR #6051.
+  - Replace town/nation levels with records, courtesy of Warriorrrr with PR #6041.
+  - Add upkeep comparator type, courtesy of Warriorrrr with PR #6042.
+  - Add perm check to invalid comp type message, courtesy of Warriorrrr with PR #6054.
+  - Fix using World#isRespawnAnchorWorks() which did not exist in 1.16.5 api.
+    - Closes #6056. 
+  - Create our own wrapper impl, courtesy of Warriorrrr with PR #6075.
+  - Add option to disallow numbers in town/nation names, courtesy of Warriorrrr with PR #6068.
+    - Closes #5954.
+  - Allow spaces to be used in town/nation rename commands, courtesy of Warriorrrr with PR #6067.
+  - Make it easier to debug lang file formatting errors, courtesy of Warriorrrr with PR #6066.
+    - Closes #6036.
+  - Fix /t deposit & /n deposit running sync, courtesy of Warriorrrr with PR #6064.
+  - Include the plot price in the /plot fs feedback message, courtesy of Warriorrrr with PR #6062.
+  - Ensure player gets feedback message when setting a group for sale, courtesy of Warriorrrr with PR #6060.
+  - Re-check group set cost after confirmation is accepted, courtesy of Warriorrrr with PR #6058.
+  - Add admin town command upkeep toggle, courtesy of Gamer153 with PR #6052. (First-Time Contributor!)
+  - New Command: /ta town NAME toggle upkeep
+    - Toggles upkeep on or off for the given town.
+  - Add null check to teleport listener, courtesy of Warriorrrr with PR #6077.
+    - Closes #6072.
+  - Add all subcommand to /t and /n withdraw and deposit commands, courtesy of Warriorrrr with PR #6081.
+  - New Commands:
+    - /t withdraw all - remove all money from the town bank.
+    - /t deposit all - deposit all your money into the town bank.
+    - /n withdraw all - remove all money from the nation bank.
+    - /n deposit all - deposit all your money into the nation bank.
+  - Update platform bukkit to 4.1.2, courtesy of Warriorrrr with PR #6079.
+  - Update translatable with changes from MiniMessage PR, courtesy of Warriorrrr with PR #6078.
+  - Add configurable plot type limits, courtesy of Warriorrrr with PR #6038.
+    - Closes #5889.
+    - If you want to limit plot types amounts per-town based on their town_level you will fill out the new section in this fashion:
+      townBlockTypeLimits:
+      - shop: 2
+      - arena: 2
+  - Automatic Config Edit: your config's town_level sections will have an empty townBlockTypeLimits: added.
+0.98.3.5:
+  - Add Translator#component, courtesy of Warriorrrr with PR #6088.
+  - Add component support for status screen events, courtesy of Warriorrrr with PR #6091.
+  - Allow removing metadata by key, courtesy of Warriorrrr with PR #6089.
+  - Simplify permission-checking code with NoPermissionException.
+  - Add WorldCoord#getChunks, courtesy of Warriorrrr with PR #6098.
+  - Fix max_distance_between_homeblocks config setting being triggered when there are no towns yet.
+  - Fix plot info command not being usable in wilderness, courtesy of Warriorrrr with PR #6104.
+  - Rename town explosion methods, courtesy of Warriorrrr with PR #6102.
+  - Add TownyComponents class, courtesy of Warriorrrr with PR #6105.
+  - Make the ASCII map fully use components, courtesy of Warriorrrr with PR #6103.
+  - Handle bold characters in titles using pixelwidth, courtesy of Warriorrrr with PR #6107.
+  - Allow /plot set name to be used on plots in groups, courtesy of Warriorrrr with PR #6108.
+  - Fix regression from 0.98.3.4 that resulted in some command output breaking due to #6078.
+  - Apply new font-measuring to BookFactory, fixing potential Invalid Book Tag books being made.
+  - Reflow TownyMessaging.
+    - Re-directs TownyMessaging from having many end points for messages, into the sendMessage(Sender, String) method.
+    - Plugins that want to cancel Towny events and prevent those events showing cancellation messages to the user should be able to do so. 
+0.98.3.6:
+  - Make it possible to use Unicode symbols in the ASCII maps.
+    - Closes #6114.
+  - Make unconfigurable map symbols configurable.
+    - Closes #6113.
+  - New Config Options:
+    - ascii_map_symbols.home
+      - Default: "H"
+      - The character used for the home symbol.
+    - ascii_map_symbols.forsale
+      - Default: "$"
+      - The character used for plots which are forsale.
+    - ascii_map_symbols.wilderness
+      - Default: "-"
+      - The character used for plots which are unclaimed.
+  - Fix many ArrayIndexOutOfBoundsExceptions in the /ta town NAME command.
+    - Progress towards #6120.
+  - Add status screen changes from minimessage branch, courtesy of Warriorrrr with PR #6090.
+  - API: Add NewResidentEvent, courtesy of PestoNotPasta with PR #6121.
+  - Big refactor on TownCommand, making use of newer methods and making the code more readable.
+  - API: Add WorldCoord#getCardinallyAdjacentWorldCoords
+    - Returns a List of WorldCoords directly N, E, S, W from the WorldCoord. 
+  - Clean up edgeblock test in TownCommand.
+  - Add version numbering to the database.yml.
+  - Capitalize the returned value of the %townyadvanced_player_plot_type% placeholder.
+  - Prevent towns and nations being named with only underscores.
+  - Fix /ta town new NAME MAYOR not being able to be run from console.
+  - API: Add new outlaw add/remove events.
+    - TownOutlawAddEvent
+    - TownOutlawRemoveEvent
+    - Cancellable events that are thrown when a town is modifying who is outlawed.
+0.98.3.7:
+  - Alter CooldownTimerTask to accept strings alongside the pre-configured enum, allowing for third-party plugins to create simple cooldowns.
+  - Use FontUtil's minecraftfont constant for bookfactory, courtesy of Warriorrrr with PR #6133.
+  - Fix towny.command.plot.asmayorinunowned permission node not working for /plot nfs, due to area selection.
+  - New Config Option: new_world_settings.are_new_world_claimable
+    - Default: true
+    - Are new worlds claimable by default?
+    - Setting this to false means that Towny will still be active but no land can be claimed by towns.
+  - Stop removing title/surname when nation is deleted, courtesy of partydev with PR #6136.
+  - Prevent axolotls from targeting protected mobs, courtesy of Akiranya with PR #6140. (First-Time Contributor!)
+  - Add colors class changes from minimessage branch, courtesy of Warriorrrr with PR #6132.
+  - Replace Component.texts with alternatives in formatter, courtesy of Warriorrrr with PR #6134.
+  - Fix missing outlaws-cannot-spawn-to-towns feature that used to exist.
+    - Closes #6147.
+  - Fix /towny map big kicking players in rare cases, courtesy of Warriorrrr with PR #6151.
+  - Remove lang file versions, courtesy of Warriorrrr with PR #6146.
+  - Remove instances of legacy making it into components, courtesy of Warriorrrr with PR #6141.
+  - Replace ChatColor.stripColor uses with Colors.strip, courtesy of Warriorrrr with PR #6143.
+  - Add a catch to Account's constructor, courtesy of Warriorrrr with PR #6144.
+  - Adoption of MiniMessage throughout the remaining codespaces, courtesy of Warriorrrr with PR #6142!
+    - As of this moment, all messaging is using minimessage. All language strings can accept MiniMessage tags and,
+    - Hex is available everywhere in just about any tag style you can imagine.
+    - If you have previously been using hex gradients you might have to update your tags to the MiniMessage way of things.
+0.98.3.8:
+  - Fallback to another Vault chat implementation if an invalid one is detected, courtesy of Warriorrrr with PR #6155.
+  - Fix new reference file creation not working, courtesy of Warriorrrr with PR #6156.
+  - Use getPlayerExact for resident#getPlayer, courtesy of Warriorrrr with PR #6154.
+0.98.3.9:
+  - Fix angry wolves not being attackable while in Towns when wolves are a protected entity.
+  - Protect lily pads in towns from being destroyed by boats.
+    - Closes #6160.
+  - Use "town_sing" translation in TownCommand, courtesy of Warriorrrr with PR #6167.
+  - API: Add TownyAPI#getTown(Player), courtesy of Warriorrrr with PR #6166.
+  - Make TownyAPI#getOnlinePlayers(ResidentList) thread safe, courtesy of Warriorrrr with PR #6165.
+  - Improve command blocking, courtesy of Warriorrrr with PR #6163.
+  - Fix legacy hex code parsing not working, courtesy of Warriorrrr with PR #6176.
+  - Use translatable over direct translation in BaseCommand, courtesy of Warriorrrr with PR #6172.
+  - Simplify parameters used for TownCommand title & surname methods, courtesy of Warriorrrr with PR #6171.
+0.98.3.10:
+  - API: Add TOWNYADMIN_TOWN and TOWNYADMIN_NATION CommandTypes, courtesy of Lemar98 with PR #6179. (First-Time Contributor!)
+  - Add option to use a timer for new day scheduling, courtesy of Warriorrrr with PR #6181.
+  - New Config Option: plugin.day_timer.uses_java_timer
+    - Default: false
+    - If enabled (disabled by default), a Java Timer will be used for scheduling new days, which is more accurate than Towny's Bukkit timer task but uses an extra thread.
+  - Catch exceptions from spawn point particle spawning, courtesy of Warriorrrr with PR #6180.
+  - Fix being able to set a townblock to the type it already is.
+    - Closes #6183.
+  - API: Add TownyAPI#getNation(Player), courtesy of Warriorrrr with PR #6190.
+  - Remove old sculk spread option, courtesy of Warriorrrr with PR #6189.
+  - Town board command improvements, courtesy of Warriorrrr with PR #6186.
+  - Replace ChatTools.stripColour with Colors.strip, courtesy of Warriorrrr with PR #6185.
+  - API: Add Confirmation related events, courtesy of Warriorrrr with PR #6182.
+    - ConfirmationEvent
+    - ConfirmationCancelEvent
+    - ConfirmationConfirmEvent
+    - ConfirmationSendEvent
+      - Includes the ability "hide" the confirmation for plugin authors to replace with their own selection/display.
+  - API: Add a ConfirmationTransaction to Confirmations.
+    - This enables cost-requirements to be baked-in to Confirmations.
+    - Costs are passed in as a Supplier<Double> so that calculations can be made after the player accepts.
+0.98.3.11:
+  - Add tab completion for setting town and nation map colours.
+    - Closes #6188.
+  - New Config Option: filters_colour_chat.papi_relational_formatting.no_town
+    - Default: &f
+    - Given to players who have no town.
+    - Closes #6169.
+  - New entering-town-placeholders:
+    - When players see town/wilderness notifications for entering towns there are now new options:
+      - {nationname} - Name of the nation.
+      - {nationcapital} - Name of the nation capital and nation.
+      - {nation_motd} - Shows the nationboard message.
+      - {nation_residents} - Shows the number of residents in the nation.
+      - {nation_residents_online} - Shows the number of residents online currently.
+    - Closes #6159.
+  - New Config Option: notification.titles.nationname_format
+    - Default: "&6Nation of %s"
+    - The format used to format the {nationame} option. The name of the nation will replace %s.
+  - New Config Option: notification.titles.nationcapital_format
+    - Default: "&6Entering %s, Capital City of %s"
+    - The format used to format the {nationcapital} option. The name of the capital city and nation will replace the %s and %s.
+  - New Config Option: economy.daily_taxes.allow_negative_plot_tax",
+    - Default: false
+    - If enabled, if a plot tax is set to a negative amount it will result in the resident that owns it being paid by the town bank (if the town can afford it.)
+    - Make it possible for plot taxes to be negative, as a way for mayors to pay residents for owning plots.
+    - Closes #6047.
+  - Adopt new Spigot Criteria Scoreboard API.
+0.98.3.12:
+  - Change to Config Option: notification.titles.nationcapital_format
+    - Default: "&6Entering %s, Capital City of %s"
+    - The format used to format the {nationcapital} option. The name of the capital city and nation will replace the %s and %s.
+    - Alternatively, you can use %t for townname and %n for nationname and show either one or both.
+  - New PAPI Placeholders:
+    - %townyadvanced_town_unformatted% - Shows the player's townname, if they have one.
+    - %townyadvanced_nation_unformatted% -  Shows the player's nationname, if they have one.
+    - Closes #6197.
+  - Jail Overhaul courtesy of Kali and LlmDL with PR #6031.
+    - Includes the ability for mayors to set bail amounts.
+      - Admins can limit the upper limit on bail costs.
+    - Includes the optional ability for admins to set a jail-upkeep.
+      - Towns can be made to pay an initial fee to jail someone.
+      - Towns can be made to pay hourly to house prisoners.
+    - Includes the ability to limit how many players can be jailed in one town.
+      - There is also a configurable system that decides when happens when a town has reached their jailed-residents limit.
+    - Includes the ability to give or not give the jail book received by newly jailed players.
+  - New Config Options:
+    - jail.pow_jail_hours
+      - Default: 5
+      - How many hours an attacking enemy will be jailed for.
+    - jail.maximum_jail_hours
+      - Default: 5
+      - The maximum hours that a mayor can set when jailing someone, full number expected.
+    - jail.fee_initial_amount
+      - Default: -1
+      - Amount that it costs per player jailed for a town, this is withdrawn from the Town bank. Set to -1 to disable.
+    - jail.fee_hourly_amount
+      - Default: -1
+      - Amount that it costs per player jailed per hour for a town, this is withdrawn from the Town bank. Set to -1 to disable.
+    - jail.bail.bailmax_amount
+      - Default: 100
+      - Max bail cost that a mayor can set.
+    - jail.max_jailed_count
+      - Default: -1
+      - Amount of potential jailed players per town, set to -1 to disable.
+    - jail.max_jailed_newjail_behavior
+      - Default: 0
+      - Behaviour for new jail attempts if max jailed count is reached.
+      - 0 = Unable to jail new players until a current prisoner is released.
+      - 1 = A prisoner slot will be made by automatically releasing a prisoner based on remaining time.
+      - 2 = A prisoner slot will be made by automatically releasing a prisoner based on lowest custom bail.
+    - jail.is_jailbook_enabled
+      - Default: true
+      - If false players will not be provided with a book upon being jailed.
+  - Changed command: /t jail.
+    - If your server has bail allowed: jail.bail.is_allowing_bail, the jail command will now accept a bail amount:
+    - /t jail [playername] {hours} {bail} {jail} {cell}
+    - If bail is not allowed the old command is used: /t jail [playername] {hours} {jail} {cell}
+0.98.3.13:
+  - Add BukkitTools#isEventCancelled, courtesy of Warriorrrr with PR #6209.
+  - Put brick info tool behind infotool resident mode, courtesy of Warriorrrr with PR #6212.
+  - New Commands:
+    - /res toggle infotool
+    - /res set mode infotool
+    - Allows an admin to use the clay brick tool to determine the Bukkit names/classes of blocks and entities.
+  - Use getPlayerExact for BukkitTools#isOnline, courtesy of Warriorrrr with PR #6208.
+  - Add /townyadmin town new townname npc, courtesy of Warriorrrr with PR #6207.
+  - New Command: /townyadmin town new TOWNNAME npc 
+    - Creates a new town with an NPC mayor, allowing admins to make a new town without having to leave their own.
+  - Replace old ArraySort class with comparator, courtesy of Warriorrrr with PR #6211.
+  - API: Add ResidentToggleModeEvent, courtesy of Warriorrrr with PR #6210.
+  - Protect against ender crystal damage in pvp disabled areas, courtesy of Warriorrrr with PR #6203.
+  - Remove resident as trusted in towns/plots upon deletion, courtesy of Warriorrrr with PR #6199.
+  - Fix PlaceholderExpansion remaining registered during Towny reloads.
+    - Closes #6218.
+  - API: Add TownBlockExplosionTestEvent, courtesy of galacticwarrior9 with PR #6204.
+    - Closes #5970.
+  - Fix potential NPE in TownyPlaceholderExpansion.
+  - Fix TOWNYADMIN_TOWN and TOWNYADMIN_NATION addon CommandTypes having their town and nation args removed.
+  - Fix allowedMove edge case, courtesy of Warriorrrr with PR #6228.
+  - Make unkickable ranks configurable, courtesy of Warriorrrr with PR #6226.
+  - New config option: global_town_settings.unkickable_ranks
+    - Default value: assistant
+    - List of ranks (separated by a comma) that will prevent a player from being kicked from a town.
+  - Use toLowerCase(Locale.ROOT) in TownySettings, courtesy of Warriorrrr with PR #6227.
+  - Hide tax component on status screens if taxes are off, courtesy of Warriorrrr with PR #6221.
+  - Change border smoke color based on affiliation, courtesy of Warriorrrr with PR #6219.
+  - Allow for all nation spawn and town spawn types to have individual spawn cooldowns.
+    - Your previous global_town_settings.spawn_cooldown_time setting will be migrated to the new settings.
+    - Closes #6224.
+  - New Config Nodes: 
+    - global_town_settings.spawning_cooldowns.town_spawn_cooldown_time
+      - Default: 30 
+      - Number of seconds that must pass before a player can use /t spawn or /res spawn.
+    - global_town_settings.spawning_cooldowns.outpost_cooldown_time 
+      - Default: 30 
+      - Number of seconds that must pass before a player can use /t outpost.
+    - global_town_settings.spawning_cooldowns.nation_member_town_spawn_cooldown_time
+      - Default: 30
+      - Number of seconds that must pass before a player of the same nation can use /t spawn.
+    - global_town_settings.spawning_cooldowns.nation_ally_town_spawn_cooldown_time 
+      - Default: 30 
+      - Number of seconds that must pass before a player in an allied nation can use /t spawn.
+    - global_town_settings.spawning_cooldowns.unaffiliated_town_spawn_cooldown_time
+      - Default: 30
+      - Number of seconds that must pass before a player who is not a member or ally of town can use /t spawn.
+    - global_nation_settings.spawning_cooldowns.nation_member_nation_spawn_cooldown_time 
+      - Default: 30 
+      - Number of seconds that must pass before a player of the same nation can use /n spawn.
+    - global_nation_settings.spawning_cooldowns.nation_ally_nation_spawn_cooldown_time
+      - Default: 30
+      - Number of seconds that must pass before a player allied with the nation can use /n spawn.
+    - global_nation_settings.spawning_cooldowns.unaffiliated_nation_spawn_cooldown_time 
+      - Default: 30 
+      - Number of seconds that must pass before a player who is not a member or ally can use /n spawn.
+  - Removed Config Option: global_town_settings.spawn_cooldown_time
+0.98.3.14:
+  - Make plotManagementDeleteIDs operate async.
+  - API: Add WorldCoord#hasTown(Town).
+  - Update commons-text, courtesy of Warriorrrr with PR #6232.
+  - Bump HikariCP from 5.0.0 to 5.0.1.
+  - Bump paperlib from 1.0.6 to 1.0.7.
+  - Bump maven-shade-plugin from 3.3.1-SNAPSHOT to 3.4.0.
+  - Bump maven-javadoc-plugin from 3.3.1 to 3.4.1.
+  - Bump annotations from 22.0.0 to 23.0.0.
+  - Bump placeholderapi from 2.10.9 to 2.11.2.
+  - Bump log4j-core from 2.17.1 to 2.19.0.
+  - Bump VaultAPI from 1.7 to 1.7.1.
+  - Bump bstats-bukkit from 2.2.1 to 3.0.0.
+  - Bump LuckPerms api from 5.3 to 5.4.
+  - Fix MissingFormatArgumentException in PlayerEnterTownEvent usage of getCapitalSlug.
+  - Make NPCCleanupTask implement Runnable.
+  - Prevent tadpoles being stolen with a bucket.
+    - Closes #6241.
+  - New PAPI placeholders, courtesy of PainOchoco with PR #6240, closing #6230.
+    - %townyadvanced_player_town_is_trusted% - returns True or False based on whether the player is in a town, and is trusted in the town.
+    - %townyadvanced_player_plot_is_trusted% - returns True or False based on whether the player is in a town, and is trusted in the plot.
+  - Event firing overhaul:
+    - Make most Cancellable Events into CancellableTownyEvents as long as they are Cancellable and have a cancel message.
+    - Change code to use new BukkitTools#ifCancelledThenThrow() so we can one-line throwing events that only need to display their cancel message.
+    - Add CancelledEventException which extends TownyException, making the error message return the CancellableTownyEvent#getCancelMessage.
+    - Replace all event firing with BukkitTools#fireEvent(Event).
+    - Some Cancellable events have had their one-off getCancellationMessage/setCancellationMessages deprecated and replaced with the uniform CancellableTownyEvent#getCancelMessage/#setCancelMessage(String).
+    - Add the ability to make Confirmations with a pre-set CancellableTownyEvent which is fire before money is paid, or the onAccept() code is ran. See ConfirmationBuilder#setCancellableEvent(CancellableTownyEvent) for details.
+0.98.3.15:
+  - Fix scenario where no teleport type cooldowns would be tested if the /t spawn cooldown is 0.
+  - Fix another scenario where cooldowns wouldn't be applied.
+  - Fix a couple places we didn't parse out underscores in 2 placeholders.
+  - Fix the rest of the places we didn't parse out underscores in wilderness names throughout Towny.
+  - Add bamboo raft to boats item list, courtesy of Warriorrrr with PR #6253.
+  - Add protection to Chiseled Bookshelves for when they're added to the game.
+  - New Command: /ta resetbanks [amount].
+    - Resets all town and nation banks to the given amount.
+  - Bump Jabel to 1.0.0, courtesy of Warriorrrr with PR #6259.
+  - Simplify and condense permission tests, by giving NoPermissionException the ability to accept a Translatable.
+0.98.3.16:
+  - Fix feedback on /tw set wildignore showing wrong help messages.
+  - Added unformatted town/nation balance placeholders, courtesy of PainOchoco with PR #6263.
+  - New Placeholders:
+    - %townyadvanced_town_balance_unformatted% - Shows the town's raw cached bank balance.
+    - %townyadvanced_nation_balance_unformatted% - Shows the nation's raw cached bank balance.
+  - Added max residents per nation, courtesy of PainOchoco with PR #6264.
+  - New Config Option: global_nation_settings.max_residents_per_nation
+    - Default: 0
+    - If higher than 0, it will limit how many residents can join a nation. Does not affect existing nations that are already over the limit.
+  - Added Nation tax percent, courtesy of PainOchoco with PR #6262.
+    - It is possible for nations to use /n toggle taxpercent, and tax their towns a percent of the town bank, instead of a flat rate.
+    - This prevents towns being kicked for non-payment, as the amount just shrinks as the town gets poorer.
+  - New Config Options:
+    - nation.default_taxes.tax
+      - Default: 0.0
+      - Default amount of tax of a new nation. This must be lower than the economy.daily_taxes.max_nation_tax_amount setting.
+    - nation.default_taxes.taxpercentage
+      - Default: false
+      - Default status of new nation's taxpercentage. True means that the default_tax is treated as a percentage instead of a fixed amount.
+    - nation.default_taxes.minimumtax
+      - Default: 0.0
+      - A required minimum tax amount for the default_tax, will not change any nations which already have a tax set.
+      - Do not forget to set the default_tax to more than 0 or new nations will still begin with a tax of zero.
+    - economy.daily_taxes.max_nation_tax_percent
+      - Default: 25
+      - Maximum tax percentage allowed when taxing by percentages for nations.
+    - economy.daily_taxes.max_nation_tax_percent_amount
+      - Default: 10000
+      - The maximum amount of money that can be taken from a balance when using a percent tax, this is the default for all new nations.
+  - New Commands:
+    - `/nation toggle taxpercent` - Toggle percentage nationtax on or off.
+    - `/nation set taxpercentcap` - Sets the max amount of money which can be gotten via percent nationtax, from a town.
+  - New Permission Nodes:
+    - `towny.command.nation.toggle.taxpercent` - Child node of towny.command.nation.toggle.*.
+    - `towny.command.nation.set.taxpercentcap` - Child node of towny.command.nation.set.*.
+    - No changes to townyperms.yml required.
+  - Specify .github/workflows/ directory for CI/CD label, courtesy of Warriorrrr with PR #6265.
+  - Bump maven-compiler-plugin from 3.8.1 to 3.10.1.
+0.98.3.17:
+  - Make sure all TownyWorld settings are being reset to the config's settings when /tw set usedefault is run, add confirmation.
+  - New Command: /ta town TOWNNAME toggle forcedisablepvp
+    - Changes a town's forcedisabledpvp setting, which can make a town have PVP off while the world is forcepvp=true.
+    - Good for admin/server towns.
+  - Fix nations unable to add towns.
+  - Async the EntityDelete calls in TownyRegenAPI.
+  - Fix outlaws being killed not getting sent to jail correctly.
+0.98.3.18:
+  - Fix Errors on EntityDelete calls by removing async aspect.
+  - Fix /nation add regression again.
+  - Display nation tax percentage in /towny prices when applicable. 
+  - Allow TownBlockPVPTestEvent & WildernessPVPTestEvent to be run async.
+  - Deprecate leftover uuid task method, courtesy of Warriorrrr with PR #6272.
+  - Make UpdateCheckerTask implement runnable, courtesy of Warriorrrr with PR #6270.
+  - Use getPlayerExact in more places, courtesy of Warriorrrr with PR #6273.
+0.98.3.19:
+  - Fix sending empty error messages.
+  - Fix towns being able to add residents/be joined when their nation would become over the new nation resident limits.
+  - Prevent sharing handler lists for cancellable events, courtesy of Warriorrrr with PR #6279.
+  - Fix lecterns requiring destroy perms to open, courtesy of Warriorrrr with PR #6280.
+  - Fix action event isMessageSupressed method, courtesy of Warriorrrr with PR #6281.
+  - Fix ActionEventExecutor showing cancellation messages for cached action denials.
+0.98.3.20:  
+  - Bump commons-compress from 1.21 to 1.22.
+  - Bump maven-shade-plugin from 3.4.0 to 3.4.1.
+  - Improve comments found in the locale files.
+0.98.4.0:
+  - Update pom for release.
+0.98.4.1:
+  - Make /town plots output translatable.
+  - API: Add TownyAPI#getNations which returns a list of all nations.
+  - Fix potion splash event edge case, courtesy of Warriorrrr with PR #6296.
+  - Replace unmodifiable annotation with jetbrains equivalent, courtesy of Warriorrrr with PR #6292.
+  - Minor regen api refactor, courtesy of Warriorrrr with PR #6271.
+  - Reformat Contributing.md, courtesy of GNosii with PR #6254.
+  - Add more comments to the Config's new world section, making it even clearer how to adjust world settings.
+    - Closes #6244.
+0.98.4.2:
+  - New Config Option: protection.are_mob_types_protected_against_mobs
+    - Default: true
+    - Setting this to false will allow non-player entities to harm the above protected mobs.
+    - This would include withers damaging protected mobs, and can be quite harmful.
+    - Closes #6299.
+  - Fix towny.admin.spawn not also being tested for in spawning.
+  - Improve javadocs with <group> tags, courtesy of GNosii with PR #6304.
+  - API: DeleteNationEvent continuity fix, courtesy of PainOchoco with PR #6301.
+  - New TrustedTowns feature, courtesy of Kali0033 with PR #6276.
+    - It is now possible for a town to add another town as trusted.
+    - This means that anyone in the 2nd town can do any build/destroy/switch/itemuse as if they were a mayor in the first town.
+    - Obviously this should only be given out under very limited circumstances, anyone added to the 2nd town after trust is given will also have full plot perm rights in the first town.
+    - There is a confirmation warning the player that uses the /t trusttown add command.
+  - New Command: /ta [townname] trusttown
+    - Requires towny.command.townyadmin.town.trusttown permission node.
+    - Subcommands:
+      - add *townname*
+      - remove *townname*
+      - list
+  - New Command: /t trusttown
+    - Requires towny.command.town.trusttown permission node.
+    - Subcommands:
+      - add [townname]
+      - remove [townname]
+      - list
+  - Fix NoSuchMethodError on 1.16.5 servers regarding World#isRespawnAnchorWorks.
+  - PAPI: Add %townyadvanced_nation_or_town_name%, courtesy of Warriorrrr with PR #6307.
+    - Displays a player's nation name or, if no nation, their town name or, blank if they have no town.
+    - Closes #6294.
+  - Prevent falling blocks from being launched into towns, courtesy of Warriorrrr with PR #6314.
+    - Requires your server to be using Paper, Spigot does not have this in their API.
+    - Closes #6312.
+0.98.4.3:
+  - Refactor TownyLoginListener.
+  - API: Add TownyMessaging#sendMsgToOnlineAdmins.
+  - Fix nation setting their taxes before setting taxpercent when the db loads.
+  - Fix nation and town taxes potentially being set to 0 when taxpercent is toggled off.
+  - Fix NPE on startup, courtesy of Warriorrrr with PR #6322.
+  - Improve /ta tpplot, courtesy of Warriorrrr with PR #6323.
+  - Remove underscores from %townyadvanced_nation_or_town_name% placeholder.
+    - Closes #6324.
+  - Add warning on startup about PowerRanks.
+  - Remove townyadmin's getSender(), courtesy of Warriorrrr with PR #6321.
+  - Refactor EntityMonitorListener.
+  - Remove redundant isWilderness check, courtesy of Warriorrrr with PR #6327.
+0.98.4.4:
+  - Fix admins and ops being blocked by the blocked-commands lists.
+  - Fix admins and ops being denied the ability to teleport in towns they are outlawed in.
+  - Update plugin.yml.
+  - Fix typo in PlayerEnterTownEvent.
+  - Fix possible tab complete npe, courtesy of Warriorrrr with PR #6331.
+  - Use method handles in townyperms, courtesy of Warriorrrr with PR #6332.
+  - Make ascii map symbol options reloadable, courtesy of Warriorrrr with PR #6333.
+  - API: Add new MetaDataType: Location.
+  - Use the world's wild revert delay, courtesy of Warriorrrr with PR #6343.
+  - Bump adventure-text-minimessage from 4.11.0 to 4.12.0.
+  - Bump adventure-text-serializer-plain from 4.11.0 to 4.12.0.
+0.98.4.5:
+  - Fix some of the economy-related placeholders not formatting themselves for the economy.

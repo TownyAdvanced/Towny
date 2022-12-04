@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
@@ -168,16 +167,16 @@ public class ChunkNotification {
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
 			if (toWild) {
 				if (TownySettings.getNationZonesEnabled() && TownySettings.getNationZonesShowNotifications()) {
-					Player player = BukkitTools.getPlayer(resident.getName());
+					Player player = resident.getPlayer();
 					TownyWorld toWorld = to.getTownyWorldOrNull();
 					if (PlayerCacheUtil.fetchTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE)) {
 						Town nearestTown = null; 
 						nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
-						return String.format(areaWildernessNotificationFormat, Translatable.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNationOrNull().getName()).forLocale(resident));
+						return String.format(areaWildernessNotificationFormat, Translatable.of("nation_zone_this_area_under_protection_of", toWorld.getFormattedUnclaimedZoneName(), nearestTown.getNationOrNull().getName()).forLocale(resident));
 					}
 				}
 				
-				return String.format(areaWildernessNotificationFormat, to.getTownyWorldOrNull().getUnclaimedZoneName());
+				return String.format(areaWildernessNotificationFormat, to.getTownyWorldOrNull().getFormattedUnclaimedZoneName());
 			
 			} else if (TownySettings.isNotificationsTownNamesVerbose())
 				return String.format(areaTownNotificationFormat, toTown.getFormattedName());
@@ -186,14 +185,14 @@ public class ChunkNotification {
 			
 		} else if (fromWild && toWild)
 			if (TownySettings.getNationZonesEnabled() && TownySettings.getNationZonesShowNotifications()) {
-				Player player = BukkitTools.getPlayer(resident.getName());
+				Player player = resident.getPlayer();
 				TownyWorld toWorld = this.to.getTownyWorldOrNull();
 				if (PlayerCacheUtil.fetchTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE) && PlayerCacheUtil.fetchTownBlockStatus(player, this.from).equals(TownBlockStatus.UNCLAIMED_ZONE)) {
 					Town nearestTown = null; 
 					nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
-					return String.format(areaWildernessNotificationFormat, Translatable.of("nation_zone_this_area_under_protection_of", toWorld.getUnclaimedZoneName(), nearestTown.getNationOrNull().getName()).forLocale(resident));
+					return String.format(areaWildernessNotificationFormat, Translatable.of("nation_zone_this_area_under_protection_of", toWorld.getFormattedUnclaimedZoneName(), nearestTown.getNationOrNull().getName()).forLocale(resident));
 				} else if (PlayerCacheUtil.fetchTownBlockStatus(player, this.to).equals(TownBlockStatus.UNCLAIMED_ZONE) && PlayerCacheUtil.fetchTownBlockStatus(player, this.from).equals(TownBlockStatus.NATION_ZONE)) {
-					return String.format(areaWildernessNotificationFormat, to.getTownyWorldOrNull().getUnclaimedZoneName());
+					return String.format(areaWildernessNotificationFormat, to.getTownyWorldOrNull().getFormattedUnclaimedZoneName());
 				}
 			}
 		return null;

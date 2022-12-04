@@ -1,16 +1,17 @@
 package com.palmergames.bukkit.towny.object;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Collections;
@@ -20,10 +21,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.compress.utils.FileNameUtils;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.Nullable;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 
@@ -125,12 +128,12 @@ public class TranslationLoader {
 		// Load bundled language files
 		for (String lang : getLangFileNamesFromPlugin()) {
 			try (InputStream is = clazz.getResourceAsStream("/lang/" + lang + ".yml")) {
-				if (is == null) {
+				if (is == null)
 					throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR", TownyInitException.TownyError.LOCALIZATION);
-				}
-				Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
 				
-				saveReferenceFile(values.get("version"), lang);
+				Map<String, Object> values = new Yaml(new SafeConstructor(new LoaderOptions())).load(is);
+				
+				saveReferenceFile(lang);
 				
 				lang = lang.replace("-", "_"); // Locale#toString uses underscores instead of dashes
 				if (!newTranslations.containsKey(lang))
@@ -153,11 +156,11 @@ public class TranslationLoader {
 		final URI uri;
 		try {
 			uri = clazz.getResource("").toURI();
-			final FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap());
-			Files.list(fs.getRootDirectories().iterator().next().resolve("/lang"))
-				.filter(p -> TownySettings.isLanguageEnabled(FileNameUtils.getBaseName(p.toString().replace("-", "_"))))
-				.forEach(p -> lang.add(FileNameUtils.getBaseName(p.toString())));
-			fs.close();
+			
+			try (final FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap()); Stream<Path> stream  = Files.list(fs.getRootDirectories().iterator().next().resolve("/lang"))) {
+				stream.filter(p -> TownySettings.isLanguageEnabled(FileNameUtils.getBaseName(p.toString().replace("-", "_"))))
+					.forEach(p -> lang.add(FileNameUtils.getBaseName(p.toString())));
+			}
 		} catch (URISyntaxException | IOException e) {
 			e.printStackTrace();
 		}
@@ -167,13 +170,9 @@ public class TranslationLoader {
 	/**
 	 * Saves a copy of the language file for admin reference.
 	 * 
-	 * @param currentVersion Object what will be the version number of the lang file. 
 	 * @param lang String locale and file name to be used for the reference file.
 	 */
-	private void saveReferenceFile(@Nullable Object currentVersion, String lang) {
-		if (currentVersion == null)
-			return;
-
+	private void saveReferenceFile(String lang) {
 		// Resolves langfolder/reference/whatever_language.yml
 		Path langPath = langFolderPath.resolve("reference").resolve(lang + ".yml");
 		// Files.copy takes care of the creation of lang.yml AS LONG AS the parent directory exists
@@ -181,28 +180,22 @@ public class TranslationLoader {
 		
 		// Get the resource
 		try (InputStream resource = clazz.getResourceAsStream("/lang/" + lang + ".yml")) {
+			if (resource == null)
+				return;
+			
+			if (!Files.exists(langPath))
+				Files.createFile(langPath);
 
-			if (resource == null) {
-				throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR.", TownyInitException.TownyError.LOCALIZATION);
-			}
+			try (BufferedReader br = new BufferedReader(new InputStreamReader(resource)); Stream<String> lines = Files.lines(langPath)) {
+				String string = br.lines().collect(Collectors.joining("\n"));
 
-			// Check the existing lang file for the version, and if necessary, replace it.
-			try (InputStream is = Files.newInputStream(langPath)) {
-				Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
-				if (values == null || (double) currentVersion != (double) values.get("version")) {
-					is.close();
-					// Remove the old reference file.
-					langPath.toFile().delete();
-					// Copy resource to location.
-					Files.copy(resource, langPath);
-				}
-			} catch (NoSuchFileException e) {
-				// We haven't got this file in the reference folder yet.
-				Files.copy(resource, langPath);
+				// If the contents of the jar's lang file don't match the saved reference file's contents, replace the contents.
+				if (!string.equals(lines.collect(Collectors.joining("\n"))))
+					FileMgmt.writeString(langPath, string);
 			}
-			resource.close();
 		} catch (IOException e) {
-			throw new TownyInitException("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath + " during a langauge file update.'", TownyInitException.TownyError.LOCALIZATION, e);
+			plugin.getLogger().warning("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath.toAbsolutePath() + "' during a reference language file update.");
+			e.printStackTrace();
 		}
 	}
 
@@ -223,7 +216,7 @@ public class TranslationLoader {
 				if (file.isFile() && FileNameUtils.getExtension(file.getName()).equalsIgnoreCase("yml") 
 					&& !file.getName().equalsIgnoreCase("global.yml") && TownySettings.isLanguageEnabled(FileNameUtils.getBaseName(file.getName()).replaceAll("-", "_"))) {
 					try (FileInputStream is = new FileInputStream(file)) {
-						Map<String, Object> values = new Yaml(new SafeConstructor()).load(is);
+						Map<String, Object> values = new Yaml(new SafeConstructor(new LoaderOptions())).load(is);
 						String lang = FileNameUtils.getBaseName(file.getName()).replaceAll("-", "_");
 
 						if (values != null) {
@@ -332,7 +325,7 @@ public class TranslationLoader {
 	private Map<String, Object> loadGlobalFile(Path globalYMLPath) {
 		Map<String, Object> globalOverrides = new HashMap<>();
 		try (InputStream is = Files.newInputStream(globalYMLPath)) {
-			globalOverrides = new Yaml(new SafeConstructor()).load(is);
+			globalOverrides = new Yaml(new SafeConstructor(new LoaderOptions())).load(is);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
