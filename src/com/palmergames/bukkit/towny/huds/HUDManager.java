@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class HUDManager implements Listener{
 
@@ -50,8 +51,8 @@ public class HUDManager implements Listener{
 			toggleOff(p);
 	}
 	
-	public static void toggleOff(Player p) {
-		p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+	public static void toggleOff(final Player player) {
+		Optional.ofNullable(Bukkit.getScoreboardManager()).ifPresent(manager -> player.setScoreboard(manager.getMainScoreboard()));
 	}
 
 	//**EVENTS**//
