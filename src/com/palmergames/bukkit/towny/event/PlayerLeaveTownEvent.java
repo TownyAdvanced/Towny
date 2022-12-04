@@ -43,6 +43,14 @@ public class PlayerLeaveTownEvent extends Event {
 		return pme;
 	}
 
+	/**
+	 * @deprecated since 0.98.4.5 use {@link #getLeftTown()} instead
+	 */
+	@Deprecated
+	public Town getLefttown() {
+	    return getLeftTown();
+	}
+	
 	public Town getLeftTown() {
 		return lefttown;
 	}
