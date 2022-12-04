@@ -280,6 +280,10 @@ public class TownyEconomyHandler {
 		return economy.hasAccount(accountName);
 	}
 
+	/**
+	 * @deprecated no longer used to test for Essentials, replaced by SupportUtil tests.
+	 */
+	@Deprecated
 	public static boolean isEssentials() {
 		return getVersion().startsWith("EssentialsX Economy") || getVersion().startsWith("Essentials Economy");
 	}

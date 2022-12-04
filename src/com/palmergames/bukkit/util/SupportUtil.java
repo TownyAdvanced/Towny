@@ -1,17 +1,21 @@
 package com.palmergames.bukkit.util;
 
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.WeakHashMap;
 
 /**
  * Allows testing support for known unsupported classes
  * @author GNosii
  */
+@ApiStatus.Internal
 public class SupportUtil {
 
-	private static final HashMap<String, Support> TESTS = getSupportData();
+	private static final WeakHashMap<String, Support> TESTS = getSupportData();
 
 	/**
 	 * Run tests defined in {@link #getSupportData()}
@@ -25,10 +29,13 @@ public class SupportUtil {
 				if (Bukkit.getName().contains(test.replace("platform:", ""))) {
 					map.put(test, support);
 				}
-			}
-			if (test.startsWith("plugin:")) {
+			} else if (test.startsWith("plugin:")) {
 				if (Bukkit.getPluginManager().getPlugin(test.replace("plugin:", "")) != null) {
 					map.put(test, support);
+				}
+			} else if (test.startsWith("economy:")){
+				if (TownyEconomyHandler.getVersion().contains(test.replace("economy:", ""))) {
+					
 				}
 			} else {
 				try {
@@ -45,8 +52,8 @@ public class SupportUtil {
 	 * Defines which classes should be tested for, and describe their support level and description.
 	 * @return hard-coded map with the qualified name for the class and the support data.
 	 */
-	private static HashMap<String, Support> getSupportData() {
-		final HashMap<String, Support> map = new HashMap<>();
+	private static WeakHashMap<String, Support> getSupportData() {
+		final WeakHashMap<String, Support> map = new WeakHashMap<>();
 		
 		/* 
 		 * To add an class to this list, copy and paste its qualified name:
@@ -59,8 +66,10 @@ public class SupportUtil {
 		map.put("plugin:Questioner", new Support(SupportType.UNNECESSARY, "Towny no longer requires Questioner for questions and you can safely remove this plugin."));
 		map.put("plugin:TownyNameUpdater", new Support(SupportType.UNNECESSARY, "Towny no longer depends on TownyNameUpdater for username changes and you can safely remove this plugin."));
 		
-		map.put("org.geysermc.floodgate.SpigotPlugin", new Support(SupportType.UNSUPPORTED_PLUGIN, "Floodgate is known to cause issues regarding their username format."));
-		map.put("com.earth2me.essentials.economy.vault.VaultEconomyProvider", new Support(SupportType.UNSUPPORTED_ECONOMY, "Essentials Economy is known to reset town/nation balances on rare occasions. Be careful if you're using EssentialsEco."));
+		map.put("plugin:floodgate", new Support(SupportType.UNSUPPORTED_PLUGIN, "Floodgate is known to cause issues regarding their username format."));
+		
+		map.put("economy:Essentials Economy", new Support(SupportType.UNSUPPORTED_ECONOMY, "Essentials Economy is known to reset town/nation balances on rare occasions. Be careful if you're using Essentials Economy."));
+		map.put("economy:EssentialsX Economy", new Support(SupportType.UNSUPPORTED_ECONOMY, "Essentials Economy is known to reset town/nation balances on rare occasions. Be careful if you're using EssentialsX Economy."));
 		
 		// TownyAdvanced plugins
 		map.put("plugin:TownyCamps", new Support(SupportType.EXTENSION));

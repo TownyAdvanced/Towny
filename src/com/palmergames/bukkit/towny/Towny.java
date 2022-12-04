@@ -103,8 +103,6 @@ public class Towny extends JavaPlugin {
 	private static final Version OLDEST_MC_VER_SUPPORTED = Version.fromString("1.16");
 	private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
 	
-	private final PluginManager pluginManager = Bukkit.getPluginManager();
-	
 	private final String version = this.getDescription().getVersion();
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
@@ -471,29 +469,6 @@ public class Towny extends JavaPlugin {
 	}
 	
 	private void checkSupport() {
-		final Map<String, SupportUtil.Support> results = SupportUtil.test();
-		
-		// Compatibility report
-		if (!results.isEmpty()) {
-			plugin.getLogger().warning(Translation.of("msg_compat_found", results.size()));
-			
-			// Plugins that don't throw warnings, but inform their compatibility anyways.
-			final ArrayList<String> discovered = new ArrayList<>();
-			results.forEach((tested, support) -> {
-				if (support.type.shouldWarn) {
-					discovered.add(tested);
-				} else {
-					plugin.getLogger().warning(tested + ": " + support.description);
-				}
-			});
-			// Makes the footer the same size as the header
-			plugin.getLogger().warning(Translation.of("msg_compat_found").replaceAll(".", "*"));
-			
-			if (!discovered.isEmpty()) {
-				plugin.getLogger().info(Translation.of("msg_compat_discovered", discovered.size(), String.join(",", discovered)));
-			}
-		}
-		
 		if (TownySettings.isUsingEconomy())
 			if (TownyEconomyHandler.setupEconomy()) {
 				plugin.getLogger().info(Translation.of("msg_compat_using_economy", TownyEconomyHandler.getVersion()));
@@ -503,18 +478,42 @@ public class Towny extends JavaPlugin {
 				 * economy plugin. This practice had to end, being replaced
 				 * with the debtBalance value which is stored in the Town object.
 				 */
-				File f = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");                 
+				File f = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");
 				if (!f.exists()) {
-					Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> MoneyUtil.convertLegacyDebtAccounts(), 600l);
+					Bukkit.getScheduler().runTaskLaterAsynchronously(this, MoneyUtil::convertLegacyDebtAccounts, 600l);
 				}
 			} else {
 				plugin.getLogger().warning(Translation.of("msg_compat_no_economy"));
 			}
 		
-		if (pluginManager.isPluginEnabled("TheNewChat"))
+		final Map<String, SupportUtil.Support> results = SupportUtil.test();
+		
+		// Compatibility report
+		if (!results.isEmpty()) {
+			plugin.getLogger().warning(Translation.of("msg_compat_found"));
+			
+			// Plugins that don't throw warnings, but inform their compatibility anyways.
+			final ArrayList<String> discovered = new ArrayList<>();
+			results.forEach((tested, support) -> {
+				if (!support.type.shouldWarn) {
+					discovered.add(tested);
+				} else {
+					plugin.getLogger().info(tested + ": " + support.description);
+				}
+			});
+
+			// Makes the footer the same size as the header
+			plugin.getLogger().warning(Translation.of("msg_compat_found").replaceAll(".", "*"));
+			
+			if (!discovered.isEmpty()) {
+				plugin.getLogger().info(Translation.of("msg_compat_discovered", discovered.size(), String.join(",", discovered)));
+			}
+		}
+		
+		if (Bukkit.getPluginManager().isPluginEnabled("TheNewChat"))
 			TNCRegister.initialize();
 		
-		if (pluginManager.isPluginEnabled("Citizens2"))
+		if (Bukkit.getPluginManager().isPluginEnabled("Citizens2"))
 			setCitizens2(true);
 	}
 	
