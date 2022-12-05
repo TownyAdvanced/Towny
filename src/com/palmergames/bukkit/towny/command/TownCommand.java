@@ -302,6 +302,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "t");
 					break;
+				case "deposit":
+					if (args.length == 3)
+						return getTownyStartingWith(args[2], "t");
+					break;
 				case "spawn":
 					if (args.length == 2) {
 						List<String> townOrIgnore = getTownyStartingWith(args[1], "t");
@@ -683,11 +687,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "withdraw":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_WITHDRAW.getNode());
-			townTransaction(player, split, true);
+			townTransaction(player, StringMgmt.remFirstArg(split), true);
 			break;
 		case "deposit":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT.getNode());
-			townTransaction(player, split, false);
+			townTransaction(player, StringMgmt.remFirstArg(split), false);
 			break;
 		case "plots":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_PLOTS.getNode());
@@ -3971,35 +3975,42 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> townTransaction(player, args, withdraw));
 			return;
 		}
-		
-		try {
-			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-			if (resident == null || !resident.hasTown())
-				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
-			
-			Town town = resident.getTownOrNull();
-			if (args.length == 2) {
-				int amount;
-				if ("all".equalsIgnoreCase(args[1].trim()))
-					amount = (int) Math.floor(withdraw ? town.getAccount().getHoldingBalance() : resident.getAccount().getHoldingBalance());
-				else
-					amount = MathUtil.getIntOrThrow(args[1].trim());
 
-				if (withdraw)
-					MoneyUtil.townWithdraw(player, resident, town, amount);
-				else
-					MoneyUtil.townDeposit(player, resident, town, null, amount);
-				
-			} else {
-				String command;
-				if (withdraw)
-					command = "/town withdraw";
-				else 
-					command = "/town deposit";
-				
-				throw new TownyException(Translatable.of("msg_must_specify_amnt", command));
-			}
+		try {
+			if (args.length == 0)
+				throw new TownyException(Translatable.of("msg_must_specify_amnt", withdraw ? "/town withdraw" : "/town deposit"));
 			
+			Resident resident = getResidentOrThrow(player);
+			Town town = null;
+
+			// Check if this is a case of someone supplying a town name, to deposit to another town.
+			if (!withdraw && args.length == 2) {
+				town = getTownOrThrow(args[1]);
+				if (!town.hasResident(player))
+					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT_OTHERTOWN.getNode());
+			}
+
+			// Catch a null resident and if town is still null check if the resident has a town.
+			if (resident == null || (town == null && !resident.hasTown()))
+				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
+
+			// If the town is still null, the resident has to have a town.
+			if (town == null)
+				town = resident.getTownOrNull();
+
+			// Figure out how much to deposit or withdraw.
+			int amount;
+			if ("all".equalsIgnoreCase(args[0].trim()))
+				amount = (int) Math.floor(withdraw ? town.getAccount().getHoldingBalance() : resident.getAccount().getHoldingBalance());
+			else
+				amount = MathUtil.getIntOrThrow(args[0].trim());
+
+			// Attempt to do the actual bank transaction.
+			if (withdraw)
+				MoneyUtil.townWithdraw(player, resident, town, amount);
+			else
+				MoneyUtil.townDeposit(player, resident, town, null, amount);
+
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}
