@@ -3979,7 +3979,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		try {
 			if (args.length == 0)
 				throw new TownyException(Translatable.of("msg_must_specify_amnt", withdraw ? "/town withdraw" : "/town deposit"));
-			
+
 			Resident resident = getResidentOrThrow(player);
 			Town town = null;
 
@@ -3990,8 +3990,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_DEPOSIT_OTHERTOWN.getNode());
 			}
 
-			// Catch a null resident and if town is still null check if the resident has a town.
-			if (resident == null || (town == null && !resident.hasTown()))
+			// Catch if town is still null, check if the resident has a town.
+			if (town == null && !resident.hasTown())
 				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
 
 			// If the town is still null, the resident has to have a town.
