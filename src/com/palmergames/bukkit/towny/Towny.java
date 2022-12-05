@@ -485,11 +485,8 @@ public class Towny extends JavaPlugin {
 		getLogger().info(Translation.of("msg_compat_perm_providers", providers));
 		
 		// Economy provider
-		String economy = Translation.of("disabled");
 		if (TownySettings.isUsingEconomy()) {
 			if (TownyEconomyHandler.setupEconomy()) {
-				economy = Translation.of("msg_compat_eco", TownyEconomyHandler.getVersion());
-				
 				/*
 				 * For a short time Towny stored debt accounts in the server's economy plugin.
 				 * This practice had to end, being replaced by 'debtBalance', which is stored in the Town object.
@@ -497,30 +494,27 @@ public class Towny extends JavaPlugin {
 				File debtFile = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");
 				if (!debtFile.exists())
 					Bukkit.getScheduler().runTaskLaterAsynchronously(this, MoneyUtil::convertLegacyDebtAccounts, 600L);
+
+				getLogger().info(Translation.of("msg_compat_eco", TownyEconomyHandler.getVersion()));
 			} else {
 				getLogger().warning(Translation.of("msg_compat_no_economy"));
 			}
+		} else {
+			getLogger().info("msg_compat_eco_disabled");
 		}
-		
-		getLogger().info(economy);
 		
 		// Plugins that don't throw warnings, but inform their compatibility anyways.
 		final ArrayList<String> discovered = new ArrayList<>();
 		
 		// Compatibility report
 		if (!results.isEmpty()) {
-			getLogger().warning(Translation.of("msg_compat_found", results.size()));
-			
 			results.forEach((tested, support) -> {
-				if (!support.type.shouldWarn) {
+				if (!support.type.warn) {
 					discovered.add(tested);
 				} else {
-					getLogger().warning(String.format("[%s] %s: %s", support.type.toString(), tested, support.description));
+					getLogger().warning(String.format("[%s] %s: %s", support.type, tested, support.description));
 				}
 			});
-			
-			// Makes the footer the same size as the header
-			getLogger().warning(Translation.of("msg_compat_found").replaceAll(".", "="));
 		}
 		
 		// Specific-plugin hooks
@@ -546,13 +540,13 @@ public class Towny extends JavaPlugin {
 
 	private String returnPermissionsProviders() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("TownyPerms");
+		builder.append("TownyPerms, ");
 
 		// Test the presence of GroupManager.
 		final @Nullable Plugin gm = getServer().getPluginManager().getPlugin("GroupManager");
 		if (gm != null) {
 			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(this, gm));
-			builder.append(String.format(", GroupManager %s", gm.getDescription().getVersion()));
+			builder.append("GroupManager");
 		} else {
 			// If GroupManager is not present, test the presence of Vault.
 			final @Nullable Plugin vault = getServer().getPluginManager().getPlugin("Vault");
@@ -560,26 +554,20 @@ public class Towny extends JavaPlugin {
 				RegisteredServiceProvider<Chat> chat = findChatImplementation();
 				RegisteredServiceProvider<Permission> permissions = getServer().getServicesManager().getRegistration(Permission.class);
 
+				if (permissions != null) {
+					builder.append(permissions.getPlugin().getName());
+				}
+				
 				if (chat == null) {
 					// No chat implementation
-					builder.append(Translation.of("msg_compat_chat_provider", "None", "Vault", vault.getDescription().getVersion()));
+					getLogger().info(Translation.of("msg_compat_chat_provider", "None"));
 				} else {
-					builder.append(Translation.of("msg_compat_chat_provider", chat.getPlugin().getName(), "Vault", vault.getDescription().getVersion()));
 					TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(this, chat.getProvider()));
-
-					builder.append("\n");
-					if (permissions != null) {
-						builder.append(String.format(", %s %s (via Vault %s)", 
-							permissions.getPlugin().getName(), 
-							permissions.getPlugin().getDescription().getVersion(), 
-							vault.getDescription().getVersion()));
-					} else {
-						builder.append(Translation.of("msg_compat_chat_provider", "Vault", "Vault", vault.getDescription().getVersion()));
-					}
+					getLogger().info(Translation.of("msg_compat_chat_provider", chat.getPlugin().getName()));
 				}
 			} else {
 				TownyUniverse.getInstance().setPermissionSource(new BukkitPermSource(this));
-				builder.append(", BukkitPermissions");
+				builder.append("BukkitPermissions");
 			}
 		}
 		return builder.toString();

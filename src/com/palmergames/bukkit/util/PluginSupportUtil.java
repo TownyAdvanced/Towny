@@ -5,7 +5,9 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
@@ -15,7 +17,7 @@ import java.util.WeakHashMap;
 @ApiStatus.Internal
 public class PluginSupportUtil {
 
-	private static final WeakHashMap<String, Support> TESTS = getSupportData();
+	private static final Map<String, Support> TESTS = getSupportData();
 
 	/**
 	 * Run tests defined in {@link #getSupportData()}
@@ -38,6 +40,7 @@ public class PluginSupportUtil {
 					map.put(cleanTest(test), support);
 				}
 			} else {
+				// Always try to avoid these tests!
 				try {
 					Class.forName(test);
 					map.put(test, support);
@@ -52,8 +55,8 @@ public class PluginSupportUtil {
 	 * Defines which classes should be tested for, and describe their support level and description.
 	 * @return hard-coded map with the qualified name for the class and the support data.
 	 */
-	private static WeakHashMap<String, Support> getSupportData() {
-		final WeakHashMap<String, Support> map = new WeakHashMap<>();
+	private static Map<String, Support> getSupportData() {
+		final Map<String, Support> map = new WeakHashMap<>();
 		
 		/* 
 		 * To add an class to this list, copy and paste its qualified name:
@@ -69,7 +72,13 @@ public class PluginSupportUtil {
 		map.put("plugin:floodgate", new Support(SupportType.UNSUPPORTED_PLUGIN, "Floodgate is known to cause issues regarding their username format."));
 		
 		map.put("economy:Essentials Economy", new Support(SupportType.UNSUPPORTED_ECONOMY, "Essentials Economy is known to reset town/nation balances on rare occasions. Be careful if you're using Essentials Economy."));
-		map.put("economy:EssentialsX Economy", new Support(SupportType.UNSUPPORTED_ECONOMY, "Essentials Economy is known to reset town/nation balances on rare occasions. Be careful if you're using EssentialsX Economy."));
+		map.put("economy:EssentialsX Economy", new Support(SupportType.UNSUPPORTED_ECONOMY, "EssentialsX Economy is known to reset town/nation balances on rare occasions. Be careful if you're using EssentialsX Economy."));
+		
+		// Unsupported economies, most of them don't implement Vault correctly.
+		map.put("plugin:EconomyX", new Support(SupportType.UNSUPPORTED_ECONOMY));
+		map.put("plugin:DKCoins", new Support(SupportType.UNSUPPORTED_ECONOMY));
+		map.put("plugin:Economy", new Support(SupportType.UNSUPPORTED_ECONOMY));
+		map.put("plugin:LiteEco", new Support(SupportType.UNSUPPORTED_ECONOMY));
 		
 		// TownyAdvanced plugins
 		map.put("plugin:TownyCamps", new Support(SupportType.EXTENSION));
@@ -95,15 +104,15 @@ public class PluginSupportUtil {
 		// Commit #87421e0
 		map.put("plugin:PowerRanks", new Support(SupportType.UNSUPPORTED_PLUGIN, "PowerRanks prevents townyperms.yml and other permission providers from working correctly."));
 		
-		return map;
+		return Collections.unmodifiableMap(map);
 	}
 
 	/**
-	 * Removes the prefix for the test. Namely "plugin:" and "platform"
+	 * Removes the prefix for the test. Namely "plugin", "platform" and "economy"
 	 * @return clean test string
 	 */
 	public static String cleanTest(String test) {
-		return test.split("plugin:|platform:|.*", 2)[1];
+		return test.replaceFirst("(plugin|platform|economy|)\\:", "");
 	}
 	
 	/**
@@ -149,49 +158,60 @@ public class PluginSupportUtil {
 		 * Plugin built as an extension to Towny
 		 * Example: TownyChat, SiegeWar
 		 */
-		EXTENSION(false, ""),
+		EXTENSION(false),
 
 		/**
 		 * No issues have been reported for this plugin and we can help troubleshoot
 		 * these issues
 		 * Example: PlaceholderAPI
 		 */
-		SUPPORTED(false, ""),
+		SUPPORTED(false),
 
 		/**
 		 * Plugin was required by Towny, no longer needed
 		 * Example: TownyNameUpdater and Questioner
 		 */
-		UNNECESSARY(true, "This plugin is no longer needed."),
+		UNNECESSARY(true, "This plugin is no longer needed.", "Unnecessary"),
 		
 		/**
 		 * Economy plugin does not implement Vault/Reserve methods correctly 
 		 * and won't work with Towny
 		 */
-		UNSUPPORTED_ECONOMY(true, "This economy provider is not supported."),
+		UNSUPPORTED_ECONOMY(true, "This economy provider is not supported.", "UnsupportedEconomy"),
 
 		/**
 		 * Plugin can cause issues with Towny
 		 * Example: Floodgate (issues related to user data)
 		 */
-		UNSUPPORTED_PLUGIN(true, "This plugin is not supported."),
+		UNSUPPORTED_PLUGIN(true, "This plugin is not supported.", "UnsupportedPlugin"),
 
 		/**
 		 * Fork/platform can cause issues with Towny
 		 * As of now, no platform is known to conflict with Towny
 		 */
-		UNSUPPORTED_PLATFORM(true, "This platform is not supported.");
+		UNSUPPORTED_PLATFORM(true, "This platform is not supported.", "UnsupportedPlatform");
 		
-		public final boolean shouldWarn;
+		public final boolean warn;
+		
 		private final String defaultDescription;
 		
-		/**
-		 * Constructor for the {@link SupportType} enum
-		 * @param warn Defines if this support level should emit warnings to console
-		 */
-		SupportType(boolean warn, String defaultDescription) {
-			this.shouldWarn = warn;
-			this.defaultDescription = defaultDescription;
+		private final String name;
+		
+		SupportType(boolean warn) {
+			this.warn = warn;
+			this.defaultDescription = "";
+			this.name = "";
+		}
+		
+		SupportType(boolean warn, String desc, String name) {
+			this.warn = warn;
+			this.defaultDescription = desc;
+			this.name = name;
+		}
+
+		@Override
+		public String toString() {
+			return this.name;
 		}
 	}
 }
