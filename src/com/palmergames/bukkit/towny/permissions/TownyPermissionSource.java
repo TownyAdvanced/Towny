@@ -86,7 +86,7 @@ public abstract class TownyPermissionSource {
 		 *  or
 		 * no node set but we are using permissions so check world settings
 		 */
-		return has(player, blockPerm) || unclaimedZoneAction(world, material, action);
+		return testPermission(player, blockPerm) || unclaimedZoneAction(world, material, action);
 
 	}
 
@@ -177,8 +177,13 @@ public abstract class TownyPermissionSource {
 		return has(player, blockPerm);
 	}
 	
+	/**
+	 * Tests if a Player is considered an admin.
+	 * @param player Player to check.
+	 * @return true if the player is not in adminbypass mode, and they are considered a admin Permissible.
+	 */
 	public boolean isTownyAdmin(Player player) {
-		return isTownyAdmin((Permissible) player);
+		return !Towny.getPlugin().hasPlayerMode(player, "adminbypass") && isTownyAdmin((Permissible) player);
 	}
 
 	public boolean isTownyAdmin(Permissible permissible) {
@@ -209,9 +214,22 @@ public abstract class TownyPermissionSource {
 	 * @return true if the player has the permission node or is considered an admin.
 	 */
 	public boolean testPermission(Permissible permissible, String perm) {
+		if (permissible instanceof Player player)
+			// This shunts the test through #isTownyAdmin(Player) which will test if the
+			// Player has the adminbypass mode enabled.
+			return isTownyAdmin(player) || strictHas(permissible, perm);
+
 		return isTownyAdmin(permissible) || strictHas(permissible, perm);
 	}
 	
+	/**
+	 * Unused by Towny, scheduled for removal.
+	 * @deprecated since 0.98.4.6 use {@link #testPermission(Permissible, String)} instead.
+	 * @param permissible Permissible to check.
+	 * @param node PermissionNode to check for.
+	 * @return true if the Permissble has the PermissionNodes.
+	 */
+	@Deprecated
 	public boolean testPermission(Permissible permissible, PermissionNodes node) {
 		return testPermission(permissible, node.getNode());
 	}
@@ -228,7 +246,7 @@ public abstract class TownyPermissionSource {
 	 * @return true if the player has this permission node or is Op.
 	 */
 	public boolean has(Player player, String node) {
-		return player.isOp() || strictHas(player, node);
+		return isTownyAdmin(player) || strictHas(player, node);
 	}
 
 	/**

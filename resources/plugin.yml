@@ -722,6 +722,7 @@ permissions:
         description: User can access the admin toggle commands.
         default: false
         children:
+            towny.command.townyadmin.toggle.bypassadminmode: true
             towny.command.townyadmin.toggle.devmode: true
             towny.command.townyadmin.toggle.debug: true
             towny.command.townyadmin.toggle.nationwithdraw: true

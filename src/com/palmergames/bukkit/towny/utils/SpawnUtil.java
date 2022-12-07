@@ -660,6 +660,6 @@ public class SpawnUtil {
 	}
 	
 	private static boolean hasPerm(Player player, PermissionNodes node) {
-		return TownyUniverse.getInstance().getPermissionSource().has(player, node.getNode());
+		return TownyUniverse.getInstance().getPermissionSource().testPermission(player, node.getNode());
 	}
 }
