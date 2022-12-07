@@ -1491,8 +1491,6 @@ msg_res_friend_added_to_list: 'Added %s to your friend list.'
 msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
 #Generic resident freed from jail message.
 msg_resident_unjailed: '%s has been unjailed.'
-#Shown when an admin uses /ta toggle bypassadminmode.
-msg_admin_toggle_bypassadmin: 'BypassAdmin Mode: %s - When enabled you will be treated like a normal player.'
 #Shown when an admin uses /ta toggle devmode.
 msg_admin_toggle_devmode: 'Dev Mode: %s'
 #Shown when an admin uses /ta toggle debug.

@@ -345,7 +345,6 @@ public enum PermissionNodes {
 	
 	TOWNY_COMMAND_TOWNYADMIN_TOGGLE("towny.command.townyadmin.toggle.*"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEVMODE("towny.command.townyadmin.toggle.devmode"),
-//		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_BYPASSADMINMODE("towny.command.townyadmin.toggle.bypassadminmode"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEBUG("towny.command.townyadmin.toggle.debug"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_NATIONWITHDRAW("towny.command.townyadmin.toggle.nationwithdraw"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_NPC("towny.command.townyadmin.toggle.npc"),

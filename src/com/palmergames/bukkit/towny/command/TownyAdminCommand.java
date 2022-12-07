@@ -184,7 +184,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"npc",
 		"debug",
 		"devmode",
-//		"bypassadminmode",
 		"townwithdraw",
 		"nationwithdraw"
 	);
@@ -2360,18 +2359,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_choice"));
 			}
-/*		} else if (split[0].equalsIgnoreCase("bypassadminmode")) {
-
-			Player player = catchConsole(sender);
-			// Do not test them for the node if they are already in bypass mode.
-			if (!Towny.getPlugin().hasPlayerMode(player, "adminbypass"))
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_BYPASSADMINMODE.getNode());
-			togglePlayerAdminBypass(player, choice);
-			try {
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_bypassadmin", (Towny.getPlugin().hasPlayerMode(player, "adminbypass") ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_choice"));
-			} */
 		} else if (split[0].equalsIgnoreCase("debug")) {
 
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEBUG.getNode());
@@ -2426,19 +2413,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_choice"));
 		}
 	}
-
-/*	private void togglePlayerAdminBypass(Player player, Optional<Boolean> choice) {
-		boolean enable = choice.orElse(!Towny.getPlugin().hasPlayerMode(player, "adminbypass"));
-
-		List<String> modes = new ArrayList<>(Towny.getPlugin().getPlayerMode(player));
-		if (!enable && modes.contains("adminbypass"))
-			modes.remove("adminbypass");
-		if (enable && !modes.contains("adminbypass"))
-			modes.add("adminbypass");
-
-		Towny.getPlugin().setPlayerMode(player, modes.toArray(new String[0]), true);
-		Towny.getPlugin().updateCache(player);
-	} */
 
 	private void toggleRegenerations(boolean choice) {
 		for (TownyWorld world : new ArrayList<>(TownyUniverse.getInstance().getTownyWorlds())) {
