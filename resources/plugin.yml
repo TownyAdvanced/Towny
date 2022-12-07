@@ -486,6 +486,10 @@ permissions:
             towny.command.town.unclaim: true
             towny.command.town.unclaim.all: true
 
+    towny.command.town.deposit.othertown:
+        description: User can deposit money into another town bank using /t deposit amount townname.
+        default: false
+
       # Plot command permissions
     towny.command.plot.*:
         description: User can access all town related commands.
