@@ -8097,3 +8097,11 @@ v0.92.0.11:
   - Delete unused es-419, courtesy of GNosii with PR #6351.
   - Fix typo in PlayerLeaveTownEvent, courtesy of Senkoco, GNosii & LlmDL with PR #6349.
   - Set to main scoreboard when toggling hud off, courtesy of Warriorrrr with PR #6345.
+  - Make it possible to use /t deposit [amount] {townname}.
+    - Doing so will allow a player to deposit money into any town bank.
+    - This feature will require an admin to give the node to their players in the townyperms.yml, it is disabled by default.
+    - Closes #6346.
+  - New Command: /t deposit {amount} {townname}
+  - New Permission Node: towny.command.town.deposit.othertown
+    - Not a child node of towny.command.town.deposit.
+    - Must be given manually for servers that want to enable players to deposit into towns they are not a part of.
