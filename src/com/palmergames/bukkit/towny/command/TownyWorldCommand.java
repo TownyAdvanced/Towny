@@ -67,6 +67,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"revertblockexpl",
 		"warallowed",
 		"unclaimblockdelete",
+		"unclaimentitydelete",
 		"plotcleardelete",
 		"wildernessuse"
 	);
@@ -347,6 +348,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_UNCLAIMBLOCKDELETE.getNode());
 				globalWorld.setUsingPlotManagementDelete(choice.orElse(!globalWorld.isUsingPlotManagementDelete()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Unclaim Block Delete", globalWorld.getName(), formatBool(globalWorld.isUsingPlotManagementDelete())));
+
+			} else if (split[0].equalsIgnoreCase("unclaimentitydelete")) {
+
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_UNCLAIMENTITYDELETE.getNode());
+				globalWorld.setDeletingEntitiesOnUnclaim(choice.orElse(!globalWorld.isDeletingEntitiesOnUnclaim()));
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Unclaim Entity Delete", globalWorld.getName(), formatBool(globalWorld.isDeletingEntitiesOnUnclaim())));
 
 			} else if (split[0].equalsIgnoreCase("wildernessuse")) {
 

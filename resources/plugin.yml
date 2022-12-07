@@ -792,6 +792,7 @@ permissions:
             towny.command.townyworld.toggle.revertblockexpl: true
             towny.command.townyworld.toggle.townmobs: true
             towny.command.townyworld.toggle.unclaimblockdelete: true
+            towny.command.townyworld.toggle.unclaimentitydelete: true
             towny.command.townyworld.toggle.usingtowny: true
             towny.command.townyworld.toggle.warallowed: true
             towny.command.townyworld.toggle.wildernessmobs: true

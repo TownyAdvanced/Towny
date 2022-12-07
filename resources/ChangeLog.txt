@@ -8105,3 +8105,11 @@ v0.92.0.11:
   - New Permission Node: towny.command.town.deposit.othertown
     - Not a child node of towny.command.town.deposit.
     - Must be given manually for servers that want to enable players to deposit into towns they are not a part of.
+0.98.4.6:
+  - Add the ability to toggle a world's delete-entities-on-unclaim feature.
+    - Closes #6297.
+  - New Command: /tw toggle unclaimentitydelete {on|off}
+    - Toggles a world's unclaiming-deletes-entities feature off and on.
+  - New Permission Node: towny.command.townyworld.toggle.unclaimentitydelete
+    - Child node of towny.command.townyworld.toggle.*.
+    - No changes required to your townyperms.yml.
