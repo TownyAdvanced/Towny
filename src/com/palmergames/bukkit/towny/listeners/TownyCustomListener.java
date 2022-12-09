@@ -41,6 +41,7 @@ import org.bukkit.event.Listener;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -190,18 +191,18 @@ public class TownyCustomListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL) 
 	public void onBedExplodeEvent(BedExplodeEvent event) {
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(event.getLocation().getWorld().getName());
+		final TownyWorld world = Optional.ofNullable(event.getLocation().getWorld()).map(w -> TownyAPI.getInstance().getTownyWorld(w)).orElse(null);
+		if (world == null)
+			return;
+		
 		world.addBedExplosionAtBlock(event.getLocation(), event.getMaterial());
-		if (event.getLocation2() != null);
+		if (event.getLocation2() != null)
 			world.addBedExplosionAtBlock(event.getLocation2(), event.getMaterial());
-		final TownyWorld finalWorld = world;
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-                finalWorld.removeBedExplosionAtBlock(event.getLocation());
-                finalWorld.removeBedExplosionAtBlock(event.getLocation2());
-            }
-        }, 20L);
+		
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+			world.removeBedExplosionAtBlock(event.getLocation());
+			world.removeBedExplosionAtBlock(event.getLocation2());
+		}, 20L);
 	}
 	
 	@EventHandler(priority = EventPriority.LOWEST) 
