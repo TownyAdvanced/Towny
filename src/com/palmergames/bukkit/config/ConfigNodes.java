@@ -803,6 +803,11 @@ public enum ConfigNodes {
 			"somecommandhere,othercommandhere",
 			"",
 			"# Commands an outlawed player cannot use while in the town they are outlawed in."),
+	GTOWN_SETTINGS_WAR_BLACKLISTED_COMMANDS(
+			"global_town_settings.war_blacklisted_commands",
+			"somecommandhere,othercommandhere",
+			"",
+			"# Commands that cannot be run by players who have an active war."),
 	GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION(
 			"global_town_settings.maximum_number_residents_without_nation",
 			"0",

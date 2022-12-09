@@ -3164,7 +3164,11 @@ public class TownySettings {
 	public static List<String> getOutlawBlacklistedCommands() {
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_OUTLAW_BLACKLISTED_COMMANDS);
 	}
-	
+
+	public static List<String> getWarBlacklistedCommands() {
+		return getStrArr(ConfigNodes.GTOWN_SETTINGS_WAR_BLACKLISTED_COMMANDS);
+	}
+
 	public static boolean getVisualizedSpawnPointsEnabled() {
 		return getBoolean(ConfigNodes.PLUGIN_VISUALIZED_SPAWN_POINTS_ENABLED);
 	}

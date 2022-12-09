@@ -96,6 +96,7 @@ public class TownyPlayerListener implements Listener {
 	private CommandList blockedTownCommands;
 	private CommandList blockedTouristCommands;
 	private CommandList blockedOutlawCommands;
+	private CommandList blockedWarCommands;
 	private CommandList ownPlotLimitedCommands;
 
 	public TownyPlayerListener(Towny plugin) {
@@ -1100,12 +1101,26 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
+		// Potentially blocks players with a war from using the command.
+		if (blockWarPlayerCommand(event.getPlayer(), resident, command)) {
+			event.setCancelled(true);
+			return;
+		}
+		
 		// Location-dependent blocked commands
 		final TownBlock townBlock = TownyAPI.getInstance().getTownBlock(event.getPlayer());
 		if (blockOutlawedPlayerCommand(event.getPlayer(), resident, townBlock, command) || blockCommandInsideTown(event.getPlayer(), resident, townBlock, command))
 			event.setCancelled(true);
 	}
 
+	public boolean blockWarPlayerCommand(Player player, Resident resident, String command) {
+		if (resident.hasTown() && resident.getTownOrNull().hasActiveWar() && blockedWarCommands.containsCommand(command)) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_command_war_blocked"));
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Blocks outlawed players using blacklisted commands.
 	 * @return Whether the command has been blocked.   
@@ -1150,6 +1165,10 @@ public class TownyPlayerListener implements Listener {
 		
 		final Town town = townBlock == null ? null : townBlock.getTownOrNull();
 
+		if (town != null && town.hasActiveWar() && blockedWarCommands.containsCommand(command)) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_command_war_blocked"));
+			return true;
+		}
 		/*
 		 * Commands are sometimes blocked from being run by outsiders on an town.
 		 */
@@ -1336,6 +1355,7 @@ public class TownyPlayerListener implements Listener {
 		this.blockedTouristCommands = new CommandList(TownySettings.getTouristBlockedCommands());
 		this.blockedTownCommands = new CommandList(TownySettings.getTownBlacklistedCommands());
 		this.blockedOutlawCommands = new CommandList(TownySettings.getOutlawBlacklistedCommands());
+		this.blockedWarCommands = new CommandList(TownySettings.getWarBlacklistedCommands());
 		this.ownPlotLimitedCommands = new CommandList(TownySettings.getPlayerOwnedPlotLimitedCommands());
 	}
 }

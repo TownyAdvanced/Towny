@@ -8119,3 +8119,15 @@ v0.92.0.11:
     - You can now begin using \u10000 and larger.
   - Bump adventure-platform-bukkit from 4.1.2 to 4.2.0.
   - Add support MC 1.19.3.
+0.98.4.7:
+  - Add /res toggle adminbypass.
+    - Bypasses the permissions tests that make ops/players with towny.admin able to act as admins.
+    - Useful for staff that want to play like normal players.
+    - Closes #3939.
+  - New Command: /res toggle adminbypass - Used to make admins play as non-admins.
+  - Tidy TownyPermissionSource.
+  - Add ability to disallow commands being run by players that have an active war.
+    - Closes #3953.
+  - New Config Option: global_town_settings.war_blacklisted_commands
+    - Default: somecommandhere,othercommandhere
+    - Commands that cannot be run by players who have an active war.
