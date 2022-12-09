@@ -8113,6 +8113,7 @@ v0.92.0.11:
   - New Permission Node: towny.command.townyworld.toggle.unclaimentitydelete
     - Child node of towny.command.townyworld.toggle.*.
     - No changes required to your townyperms.yml.
-  - Allow the TownyMap system to properly parse Supplementary Unicode characters U10000 and greater.
+  - Allow the TownyMap system to properly parse Unicode characters U10000 and greater.
     - Anyone using unicode characters for the TownBlockType map symbols should already be using the \u#### format in the config.
-    - You can now begin using \u10000 and larger. 
+    - The value you use should be the HTML-code variable of the Unicode you want to use.
+    - You can now begin using \u10000 and larger.
