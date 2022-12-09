@@ -1617,3 +1617,5 @@ msg_town_plots_type_line: '<dark_green>%s = <green>%s <gray>/ <aqua>%s <gray>/ <
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
 confirmation_msg_trusttown_consequences: 'Vous êtes sur le point d''accorder des autorisations complètes à une ville entière. Cela signifie que le maire de la ville pourra décider qui obtiendra l''autorisation de construire et de detruire dans votre ville, en ajoutant des habitants. Si cette ville est ouverte, alors n''importe qui peut rejoindre et obtenir un accès complet à votre ville. Êtes-vous sûr de vouloir faire confiance à tous les résidents (y compris les futurs résidents) de cette ville ?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'You cannot run that command because your town is at war.'
