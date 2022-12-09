@@ -458,9 +458,10 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 				if (split.length < 2) {
 					TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildname Wildy");
-				} else
+				} else {
 					globalWorld.setUnclaimedZoneName(split[1]);
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_name", globalWorld.getName(), split[1]));
+				}
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD_SET, split[0])) {
 				try {
 					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_SET, split[0]).execute(sender, "townyworld", split);
