@@ -292,9 +292,13 @@ public class TownyAsciiMap {
 
 	public static String parseSymbol(String symbol) {
 		if (symbol.startsWith("\\"))
-			return StringEscapeUtils.unescapeJava(symbol);
+			return symbol.length() > 6 ? parseSupplementaryUnicode(symbol) : StringEscapeUtils.unescapeJava(symbol);
 		else 
 			return symbol.substring(0, 1);
 
+	}
+
+	private static String parseSupplementaryUnicode(String symbol) {
+		return String.valueOf(Character.toChars(Integer.parseInt(symbol.substring(2))));
 	}
 }
