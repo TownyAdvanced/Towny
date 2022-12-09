@@ -8117,3 +8117,4 @@ v0.92.0.11:
     - Anyone using unicode characters for the TownBlockType map symbols should already be using the \u#### format in the config.
     - The value you use should be the HTML-code variable of the Unicode you want to use.
     - You can now begin using \u10000 and larger.
+  - Bump adventure-platform-bukkit from 4.1.2 to 4.2.0.
