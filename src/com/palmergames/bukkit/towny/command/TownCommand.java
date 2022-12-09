@@ -3009,7 +3009,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				: getTownOrThrow(split[0]);
 
 		if (split.length == 0 // No args, self deleting town. OR player supplied the town name unnecessarily.
-			|| (town.hasResident(player) && townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DELETE))) {
+			|| (town.hasResident(player) && townyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_DELETE.getNode()))) {
 			// Send information about ruining if enabled.
 			if (TownySettings.getTownRuinsEnabled()) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted", TownySettings.getTownRuinsMaxDurationHours()));

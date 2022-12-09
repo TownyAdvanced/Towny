@@ -34,8 +34,6 @@ public abstract class TownyPermissionSource {
 	
 	abstract public int getPlayerPermissionIntNode(String playerName, String node);
 
-	//abstract public boolean hasPermission(Player player, String node);
-
 	abstract public String getPlayerGroup(Player player);
 
 	abstract public String getPlayerPermissionStringNode(String playerName, String node);
@@ -65,28 +63,24 @@ public abstract class TownyPermissionSource {
 	}
 
 	/**
-	 * Test if the player has a wild override to permit this action.
-	 *  
-	 * @param world - TownyWorld object.
-	 * @param player - Player.
-	 * @param material - Material being tested.
-	 * @param action - Action type.
+	 * Test if the player has permission to permit this action in the wilderness.
+	 * 
+	 * @param world    TownyWorld object.
+	 * @param player   Player.
+	 * @param material Material being tested.
+	 * @param action   Action type.
 	 * @return true if the action is permitted.
 	 */
 	public boolean hasWildOverride(TownyWorld world, Player player, Material material, TownyPermission.ActionType action) {
 
-		// check for permissions
-
+		// Figure out what permission node this would be.
 		String blockPerm = PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + material);
 
 		/*
-		 * If the player has the data node permission registered directly
-		 *  or
-		 * the player has the block permission and the data node isn't registered
-		 *  or
-		 * no node set but we are using permissions so check world settings
+		 * Test if the player is an admin or actually has the specific permission node or,
+		 * Test if the player the world explicitly allows this action or material type.
 		 */
-		return has(player, blockPerm) || unclaimedZoneAction(world, material, action);
+		return testPermission(player, blockPerm) || unclaimedZoneAction(world, material, action);
 
 	}
 
@@ -109,98 +103,134 @@ public abstract class TownyPermissionSource {
 	}
 
 	/**
-	 * Test if the player has an own town (or all town) override to permit this action.
+	 * Test if the player has an own town (or all town) override to permit this
+	 * action.
 	 * 
-	 * @param player - Player.
-	 * @param material - Material being tested.
-	 * @param action - ActionType.
+	 * @param player   Player.
+	 * @param material Material being tested.
+	 * @param action   ActionType.
 	 * @return true if the action is permitted.
 	 */
 	public boolean hasOwnTownOverride(Player player, Material material, TownyPermission.ActionType action) {
 
-		//check for permissions
+		// Figure out what permission node this would be.
 		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("owntown." + action.toString().toLowerCase() + "." + material);
 
 		/*
-		 * If the player has the data node permission registered directly
-		 *  or
-		 * the player has the block permission and the data node isn't registered
-		 *  or
-		 * the player has an All town Override
+		 * Test if the player is an admin or actually has the specific permission node or,
+		 * Test if the player is allowed permissions in all towns for the material and action.
 		 */
-		return has(player, blockPerm) || hasAllTownOverride(player, material, action);
+		return testPermission(player, blockPerm) || hasAllTownOverride(player, material, action);
 	}
 
 	/**
-	 * Test if the player has a 'town owned', 'Own town' or 'all town' override to permit this action.
+	 * Test if the player has a 'town owned', 'Own town' or 'all town' override to
+	 * permit this action.
 	 * 
-	 * @param player - Player.
-	 * @param material - Material being tested.
-	 * @param action - ActionType.
-	 * @return - True if action is permitted.
+	 * @param player   Player.
+	 * @param material Material being tested.
+	 * @param action   ActionType.
+	 * @return true if action is permitted.
 	 */
 	public boolean hasTownOwnedOverride(Player player, Material material, TownyPermission.ActionType action) {
 
-		//check for permissions
+		// Figure out what permission node this would be.
 		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("townowned." + action.toString().toLowerCase() + "." + material);
 
 		/*
-		 * If the player has the data node permission registered directly
-		 *  or
-		 * the player has the block permission and the data node isn't registered
-		 *  or
-		 * the player has an Own Town Override
-		 *  or
-		 * the player has an All town Override
+		 * Test if the player is an admin or actually has the specific permission node or,
+		 * Test if the player is allowed permissions everywhere in their own town for the material and action or, 
+		 * Test if the player is allowed permissions in all towns for the material and action.
 		 */
-		return has(player, blockPerm) || hasOwnTownOverride(player, material, action) || hasAllTownOverride(player, material, action);
+		return testPermission(player, blockPerm) || hasOwnTownOverride(player, material, action) || hasAllTownOverride(player, material, action);
 	}
 
 	/**
 	 * Test if the player has an all town override to permit this action.
 	 * 
-	 * @param player - Player.
-	 * @param material - Material being tested.
-	 * @param action - ActionType.
+	 * @param player   Player.
+	 * @param material Material being tested.
+	 * @param action   ActionType.
 	 * @return true if the action is permitted.
 	 */
 	public boolean hasAllTownOverride(Player player, Material material, TownyPermission.ActionType action) {
 
-		//check for permissions
+		// Figure out what permission node this would be.
 		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALL.getNode("alltown." + action.toString().toLowerCase() + "." + material);
 
 		/*
-		 * If the player has the data node permission registered directly
-		 *  or
-		 * the player has the block permission and the data node isn't registered
+		 * Test if the player is an admin or actually has the specific permission node or,
+		 * Test if the player is allowed permissions in all towns for the material and action.
 		 */
-		return has(player, blockPerm);
+		return testPermission(player, blockPerm);
 	}
-	
+
+	/**
+	 * Tests if a Player is considered an admin and does not currenctly have the
+	 * adminbypass mode enabled.
+	 * 
+	 * @param player Player to check.
+	 * @return true if the player is not in adminbypass mode, and they are
+	 *         considered a admin Permissible.
+	 */
 	public boolean isTownyAdmin(Player player) {
-		return isTownyAdmin((Permissible) player);
+		return !Towny.getPlugin().hasPlayerMode(player, "adminbypass") && isTownyAdmin((Permissible) player);
 	}
 
+	/**
+	 * The final destination for isTownyAdmin tests.
+	 * 
+	 * @param permissible Permissible object, a player or a console.
+	 * @return true if the permissible is null or op or has the towny.admin node.
+	 */
 	public boolean isTownyAdmin(Permissible permissible) {
-
-		return (permissible == null) || permissible.isOp() || strictHas(permissible, PermissionNodes.TOWNY_ADMIN.getNode());
-
+		return permissible == null || permissible.isOp() || strictHas(permissible, PermissionNodes.TOWNY_ADMIN.getNode());
 	}
 
+	/**
+	 * A method to test if a Permissible has a specific permission node.
+	 * 
+	 * @param permissible Permissible object, a player or a console.
+	 * @param perm        String representing the node to test for.
+	 * @throws NoPermissionException thrown when the player does not have the
+	 *                               required node.
+	 */
 	public void testPermissionOrThrow(Permissible permissible, String perm) throws NoPermissionException {
 		if (!testPermission(permissible, perm))
 			throw new NoPermissionException();
 	}
-	
+
+	/**
+	 * A method to test if a Permissible has a specific permission node, which will
+	 * show a non-generic no permission message if the Permissible does not have the
+	 * node.
+	 * 
+	 * @param permissible Permissible object, a player or a console.
+	 * @param perm        String representing the node to test for.
+	 * @param errormsg    Translatable used when the Permissible has no permission.
+	 * @throws NoPermissionException thrown when the player does not have the
+	 *                               required node, with custom Translatable
+	 *                               message.
+	 */
 	public void testPermissionOrThrow(Permissible permissible, String perm, Translatable errormsg) throws NoPermissionException {
 		if (!testPermission(permissible, perm))
 			throw new NoPermissionException(errormsg);
 	}
 
+	/**
+	 * A method that will check if a Player has a permission node or is otherwise
+	 * allowed by Towny to do something, be it because they are OP, have the
+	 * towny.admin permission node, or have the specified permission node (or a
+	 * wildcard parent node.)
+	 * 
+	 * @param player Player to test.
+	 * @param perm   String representing the node to test for.
+	 * @return true if the player has the permission node or is otherwise allowed.
+	 */
 	public boolean testPermission(Player player, String perm) {
 		return testPermission((Permissible) player, perm);
 	}
-	
+
 	/**
 	 * Primary test for a permission node, used throughout Towny.
 	 * 
@@ -209,36 +239,45 @@ public abstract class TownyPermissionSource {
 	 * @return true if the player has the permission node or is considered an admin.
 	 */
 	public boolean testPermission(Permissible permissible, String perm) {
+		if (permissible instanceof Player player)
+			// This shunts the test through #isTownyAdmin(Player) which will test if the
+			// Player has the adminbypass mode enabled.
+			return isTownyAdmin(player) || strictHas(permissible, perm);
+
 		return isTownyAdmin(permissible) || strictHas(permissible, perm);
 	}
 	
+	/**
+	 * Unused by Towny, scheduled for removal.
+	 * @deprecated since 0.98.4.6 use {@link #testPermission(Permissible, String)} instead.
+	 * @param permissible Permissible to check.
+	 * @param node PermissionNode to check for.
+	 * @return true if the Permissble has the PermissionNodes.
+	 */
+	@Deprecated
 	public boolean testPermission(Permissible permissible, PermissionNodes node) {
 		return testPermission(permissible, node.getNode());
 	}
 
 	/**
-	 * All local permission checks should go through here.
-	 * 
-	 * Return true if a player has a certain permission node or is Op.
-	 *
-	 * If {@link Player#isOp()} has already been called, {@link #strictHas(Permissible, String)} should be used instead.
-	 * 
 	 * @param player Player to check
 	 * @param node Permission node to check for
 	 * @return true if the player has this permission node or is Op.
+	 * @deprecated since 0.98.4.6 use {@link #testPermission(Player, String)} instead.
 	 */
+	@Deprecated
 	public boolean has(Player player, String node) {
-		return player.isOp() || strictHas(player, node);
+		return isTownyAdmin(player) || strictHas(player, node);
 	}
 
 	/**
-	 * Return true if a player has a certain permission node.
-	 *
-	 * Should be used in place of {@link #has(Player, String)} if {@link Player#isOp()} has already been called.
+	 * Return true if a player has a certain, specific permission node or a parent
+	 * wildcard node.
 	 *
 	 * @param permissible Permissible to check
-	 * @param node Permission node to check for
-	 * @return true if the player has this permission node.
+	 * @param node        Permission node to check for
+	 * @return true if the player has this permission node or a parent wildcard
+	 *         node.
 	 */
 	private boolean strictHas(Permissible permissible, String node) {
 
