@@ -8135,3 +8135,4 @@ v0.92.0.11:
   - Remove old powdered snow workaround, courtesy of Warriorrrr with PR #6360.
   - Fix possible /tw set wildname NPE, courtesy of Warriorrrr with PR #6361.
   - Better feedback message when an override lang file is not able to pass a yaml test. 
+  - Fix /plot clear not going all the way to the bottom of 1.19 worlds.

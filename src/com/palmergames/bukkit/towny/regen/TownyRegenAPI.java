@@ -642,7 +642,7 @@ public class TownyRegenAPI {
 
 		for (int z = 0; z < plotSize; z++)
 			for (int x = 0; x < plotSize; x++)
-				for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
+				for (int y = height; y > world.getMinHeight(); y--) { //Check from bottom up else minecraft won't remove doors
 					Block block = world.getBlockAt(worldX + x, y, worldZ + z);
 					if (collection.contains(block.getType()))
 						toRemove.add(block);
