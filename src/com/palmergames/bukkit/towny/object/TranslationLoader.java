@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -143,7 +142,8 @@ public class TranslationLoader {
 					newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
 			} catch (Exception e) {
 				// An IO exception occured, or the file had invalid yaml
-				plugin.getLogger().log(Level.WARNING, "Failed to load/save '" + lang + ".yml'.", e);
+				plugin.getLogger().warning("Unabled to read yaml file: '" + lang + ".yml' from within the " + plugin.getName() + ".jar.");
+				e.printStackTrace();
 			}
 		}
 	}
@@ -225,6 +225,7 @@ public class TranslationLoader {
 								newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
 						}
 					} catch (Exception e) {
+						plugin.getLogger().warning("Unabled to read yaml file: '" + file.getName() + "' in the override folder.");
 						e.printStackTrace();
 					}
 				}

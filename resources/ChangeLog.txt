@@ -8134,3 +8134,4 @@ v0.92.0.11:
   - Add javadocs & annotations for bed explode event, courtesy of Warriorrrr with PR #6359.
   - Remove old powdered snow workaround, courtesy of Warriorrrr with PR #6360.
   - Fix possible /tw set wildname NPE, courtesy of Warriorrrr with PR #6361.
+  - Better feedback message when an override lang file is not able to pass a yaml test. 
