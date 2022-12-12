@@ -5,11 +5,6 @@ env:
   CURR_VER: 0.0.0.0
   SUPPORTED: " for MC 1.16.* & 1.17.* & 1.18.* & 1.19.*"
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
   deploy_prerelease:
     runs-on: ubuntu-latest
     strategy:
@@ -17,6 +12,8 @@ jobs:
         java: ['17']
     name: Deploying Towny Prerelease
     steps:
+      - name: checkout repo content
+        uses: actions/checkout@v3 # checkout the repository content to github runner.
       - name: Set up Eclipse Temurin
         uses: actions/setup-java@v3
         with:
@@ -28,8 +25,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: mvn -B clean package -P no-apidoc
-      - name: checkout repo content
-        uses: actions/checkout@v3 # checkout the repository content to github runner.
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
