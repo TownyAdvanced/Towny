@@ -46,7 +46,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body_path: ./staging/prerelease.txt
-          draft: true
           prerelease: true
           token: ${{ github.token }}
           tag_name: ${{ env.CURR_VER }}
