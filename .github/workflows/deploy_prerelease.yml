@@ -14,19 +14,19 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-	java: ['17']
+        java: ['17']
     name: Deploying Towny Prerelease
     steps:
     - name: Set up Eclipse Temurin
       uses: actions/setup-java@v3
       with:
-	  distribution: 'temurin'
-	  java-version: ${{ matrix.java }}
-	  java-package: jdk
-	  cache: 'maven'
+        distribution: 'temurin'
+        java-version: ${{ matrix.java }}
+        java-package: jdk
+        cache: 'maven'
     - name: Compile Towny with Maven
       env:
-	  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: mvn -B clean package -P no-apidoc
     - name: checkout repo content
       uses: actions/checkout@v3 # checkout the repository content to github runner.
