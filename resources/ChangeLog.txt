@@ -8136,3 +8136,6 @@ v0.92.0.11:
   - Fix possible /tw set wildname NPE, courtesy of Warriorrrr with PR #6361.
   - Better feedback message when an override lang file is not able to pass a yaml test. 
   - Fix /plot clear not going all the way to the bottom of 1.19 worlds.
+0.98.4.8:
+  - Replace deprecated getPassenger, courtesy of Warriorrrr with PR #6370.
+  - Bump annotations from 23.0.0 to 23.1.0.
