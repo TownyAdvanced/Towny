@@ -469,7 +469,6 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event - onEntityChangeBlockEvent
 	 */
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
 		if (plugin.isError()) {
@@ -507,8 +506,10 @@ public class TownyEntityListener implements Listener {
 			case BOAT, CHEST_BOAT -> {
 				if (!event.getBlock().getType().equals(Material.LILY_PAD))
 					return;
-				Boat boat = (Boat) event.getEntity();
-				if (boat.getPassenger() != null && boat.getPassenger() instanceof Player player)
+				
+				final List<Entity> passengers = event.getEntity().getPassengers();
+				
+				if (!passengers.isEmpty() && passengers.get(0) instanceof Player player)
 					// Test if the player can break here.
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock()));
 				else if (!TownyAPI.getInstance().isWilderness(event.getBlock()))
