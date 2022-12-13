@@ -1845,7 +1845,7 @@ msg_compat_no_economy: 'No compatible economy plugins were found. Install Vault 
 #Message shown when an valid economy provider is present on the server
 msg_compat_using_economy: 'Using %s as the economy provider.'
 #Message shown when compatible plugins were detected
-msg_compat_discovered: 'Discovered plugins (%d): %s'
+msg_compat_discovered: 'Add-ons: %s'
 #Message shown when no incompatible issues were detected
 msg_compat_no_issue: 'No incompatible plugins were found.'
 #Prefix for the chat provider

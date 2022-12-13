@@ -2,6 +2,7 @@ package com.palmergames.bukkit.util;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +24,7 @@ public class PluginSupportUtil {
 	 * Run tests defined in {@link #getSupportData()}
 	 * @return map with classes detected and their support data
 	 */
-	public static HashMap<String, Support> test() {
+	public static Map<String, Support> test() {
 		final HashMap<String, Support> map = new HashMap<>();
 		
 		TESTS.forEach((test, support) -> {
@@ -32,8 +33,9 @@ public class PluginSupportUtil {
 					map.put(cleanTest(test), support);
 				}
 			} else if (test.startsWith("plugin:")) {
-				if (Bukkit.getPluginManager().getPlugin(cleanTest(test)) != null) {
-					map.put(cleanTest(test), support);
+				final Plugin plugin = Bukkit.getPluginManager().getPlugin(cleanTest(test));
+				if (plugin != null) {
+					map.put(cleanTest(test) + " " + plugin.getDescription().getVersion(), support);
 				}
 			} else if (test.startsWith("economy:")){
 				if (TownyEconomyHandler.getVersion().contains(cleanTest(test))) {
@@ -48,7 +50,7 @@ public class PluginSupportUtil {
 			}
 		});
 		
-		return map;
+		return Collections.unmodifiableMap(map);
 	}
 
 	/**
@@ -59,6 +61,7 @@ public class PluginSupportUtil {
 		final Map<String, Support> map = new WeakHashMap<>();
 		
 		/* 
+		 * Note: There's no current way of checking specific plugin versions.
 		 * To add an class to this list, copy and paste its qualified name:
 		 * map.put("com.palmergames.bukkit.towny.Towny", new Support(SupportType.EXTENSION, "Optional description."));
 		 * 
@@ -66,7 +69,7 @@ public class PluginSupportUtil {
 		 * map.put("plugin:Towny", new Support(SupportType.EXTENSION)
 		 */
 		
-		map.put("plugin:MDCQuestioner", new Support(SupportType.UNNECESSARY, "Towny no longer requires Questioner for questions and you can safely remove this plugin."));
+		map.put("plugin:MDCQuestioner", new Support(SupportType.UNNECESSARY, " Questioner present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder."));
 		map.put("plugin:TownyNameUpdater", new Support(SupportType.UNNECESSARY, "Towny no longer depends on TownyNameUpdater for username changes and you can safely remove this plugin."));
 		 
 		map.put("plugin:floodgate", new Support(SupportType.UNSUPPORTED_PLUGIN, "Floodgate is known to cause issues regarding their username format."));
@@ -102,13 +105,13 @@ public class PluginSupportUtil {
 		map.put("plugin:Essentials", new Support(SupportType.SUPPORTED));
 		
 		// Commit #87421e0
-		map.put("plugin:PowerRanks", new Support(SupportType.UNSUPPORTED_PLUGIN, "PowerRanks prevents townyperms.yml and other permission providers from working correctly."));
+		map.put("plugin:PowerRanks", new Support(SupportType.UNSUPPORTED_PLUGIN, "PowerRanks is incompatible with Towny. PowerRanks will override Towny's ability to give permissions via the townyperms.yml file. You can expect issues with Towny permissions (and other permission providers) while PowerRanks is installed."));
 		
 		return Collections.unmodifiableMap(map);
 	}
 
 	/**
-	 * Removes the prefix for the test. Namely "plugin", "platform" and "economy"
+	 * Removes the prefix for the test. Namely, "plugin", "platform" and "economy"
 	 * @return clean test string
 	 */
 	public static String cleanTest(String test) {

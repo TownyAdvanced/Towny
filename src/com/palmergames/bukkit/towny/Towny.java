@@ -59,6 +59,7 @@ import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 
+import com.palmergames.util.StringMgmt;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -84,7 +85,13 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -503,7 +510,7 @@ public class Towny extends JavaPlugin {
 			getLogger().info("msg_compat_eco_disabled");
 		}
 		
-		// Plugins that don't throw warnings, but inform their compatibility anyways.
+		// Plugins that don't throw warnings, but inform their compatibility anyway.
 		final ArrayList<String> discovered = new ArrayList<>();
 		
 		// Compatibility report
@@ -512,7 +519,7 @@ public class Towny extends JavaPlugin {
 				if (!support.type.warn) {
 					discovered.add(tested);
 				} else {
-					getLogger().warning(String.format("[%s] %s: %s", support.type, tested, support.description));
+					getLogger().warning(String.format("[%s] %s: %s", support.type, tested, StringMgmt.wrap(support.description, 52, System.lineSeparator() + "        ")));
 				}
 			});
 		}
@@ -534,7 +541,7 @@ public class Towny extends JavaPlugin {
 			setCitizens2(true);
 
 		if (!discovered.isEmpty()) {
-			plugin.getLogger().info(Translation.of("msg_compat_discovered", discovered.size(), String.join(", ", discovered)));
+			plugin.getLogger().info(Translation.of("msg_compat_discovered", discovered.size(), StringMgmt.wrap(String.join(", ", discovered), 52, System.lineSeparator() + "        ")));
 		}
 	}
 
