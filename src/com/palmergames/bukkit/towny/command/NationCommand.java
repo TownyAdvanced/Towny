@@ -984,7 +984,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			if (filteredName == null || TownyUniverse.getInstance().hasNation(filteredName) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(filteredName)))
-				throw new TownyException(Translatable.of("msg_err_invalid_name", filteredName));
+				throw new TownyException(Translatable.of("msg_err_invalid_name", name));
 
 			BukkitTools.ifCancelledThenThrow(new PreNewNationEvent(capitalTown, filteredName));
 
