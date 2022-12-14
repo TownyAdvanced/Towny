@@ -3,6 +3,8 @@ package com.palmergames.bukkit.towny.event.economy;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Transaction;
+import com.palmergames.bukkit.towny.object.economy.Account;
+
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
