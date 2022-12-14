@@ -1,24 +1,24 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.player;
 
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-/**
- * @deprecated since 0.98.4.9 use PlayerExitsFromTownBorderEvent instead.
- */
-public class PlayerLeaveTownEvent extends Event {
-	private static final HandlerList handlers = new HandlerList();
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 
-	private final Town lefttown;
+/**
+ * Thrown when a player crosses into Town border.
+ */
+public class PlayerEntersIntoTownBorderEvent extends Event {
+	private static final HandlerList handlers = new HandlerList();
+	private final Town enteredTown;
 	private final PlayerMoveEvent pme;
 	private final WorldCoord from;
-	private final Player player;
 	private final WorldCoord to;
+	private final Player player;
 
 	@Override
 	public HandlerList getHandlers() {
@@ -29,9 +29,9 @@ public class PlayerLeaveTownEvent extends Event {
 		return handlers;
 	}
 
-	public PlayerLeaveTownEvent(Player player, WorldCoord to, WorldCoord from, Town lefttown, PlayerMoveEvent pme) {
+	public PlayerEntersIntoTownBorderEvent(Player player, WorldCoord to, WorldCoord from, Town enteredTown, PlayerMoveEvent pme) {
 		super(!Bukkit.getServer().isPrimaryThread());
-		this.lefttown = lefttown;
+		this.enteredTown = enteredTown;
 		this.player = player;
 		this.from = from;
 		this.pme = pme;
@@ -46,16 +46,8 @@ public class PlayerLeaveTownEvent extends Event {
 		return pme;
 	}
 
-	/**
-	 * @deprecated since 0.98.4.5 use {@link #getLeftTown()} instead
-	 */
-	@Deprecated
-	public Town getLefttown() {
-	    return getLeftTown();
-	}
-	
-	public Town getLeftTown() {
-		return lefttown;
+	public Town getEnteredTown() {
+		return enteredTown;
 	}
 
 	public WorldCoord getFrom() {

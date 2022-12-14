@@ -8143,3 +8143,7 @@ v0.92.0.11:
   - Show correct invalid name when a nation is improperly named.
   - Expose unformatted time in BankTransaction, courtesy of Warriorrrr with PR #6372.
 0.98.4.9:
+  - API: New (replacement) events: 
+    - PlayerEntersIntoTownBorderEvent - Thrown when a player crosses into a town.
+    - PlayerExitsFromTownBorderEvent - Thrown when a player crosses out of a town.
+    - These events replace the now-deprecated PlayerEnterTownEvent and PlayerLeaveTownEvent which had names which were too ambiguous.

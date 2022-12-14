@@ -8,6 +8,10 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+/**
+ * @deprecated since 0.98.4.9 use PLayerEntersIntoTownBorderEvent instead.
+ */
+@Deprecated
 public class PlayerEnterTownEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 

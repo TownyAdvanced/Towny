@@ -12,6 +12,8 @@ import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.event.player.PlayerDeniedBedUseEvent;
+import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent;
+import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsExperienceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsInventoryEvent;
 import com.palmergames.bukkit.towny.object.CommandList;
@@ -89,6 +91,7 @@ import java.util.Map;
  * @author Shade/ElgarL
  * 
  */
+@SuppressWarnings("deprecation")
 public class TownyPlayerListener implements Listener {
 
 	private final Towny plugin;
@@ -874,18 +877,25 @@ public class TownyPlayerListener implements Listener {
 		if (to.isWilderness() && from.isWilderness()) 
 			// Both are wilderness, no event will fire.
 			return;
-		if (to.isWilderness())
+		if (to.isWilderness()) {
 			// Gone from a Town into the wilderness.
+			BukkitTools.fireEvent(new PlayerExitsFromTownBorderEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
+			// Old event which will be removed later on.
 			BukkitTools.fireEvent(new PlayerLeaveTownEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
-		else if (from.isWilderness())
+		} else if (from.isWilderness()) {
 			// Gone from wilderness into Town.
+			BukkitTools.fireEvent(new PlayerEntersIntoTownBorderEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
+			// Old event which will be removed later on.
 			BukkitTools.fireEvent(new PlayerEnterTownEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
 		// Both to and from have towns.
-		else if (to.getTownOrNull().equals(from.getTownOrNull()))
+		} else if (to.getTownOrNull().equals(from.getTownOrNull())) {
 			// The towns are the same, no event will fire.
 			return;
-		else {
+		} else {
 			// Player has left one Town and immediately entered a different one.
+			BukkitTools.fireEvent(new PlayerEntersIntoTownBorderEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
+			BukkitTools.fireEvent(new PlayerExitsFromTownBorderEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
+			// Old events which will be removed later on.
 			BukkitTools.fireEvent(new PlayerEnterTownEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
 			BukkitTools.fireEvent(new PlayerLeaveTownEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
 		}
@@ -896,7 +906,7 @@ public class TownyPlayerListener implements Listener {
 	 * - Handles outlaws entering a town they are outlawed in.
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onOutlawEnterTown(PlayerEnterTownEvent event) {
+	public void onOutlawEnterTown(PlayerEntersIntoTownBorderEvent event) {
 
 		Resident outlaw = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 		
@@ -981,7 +991,7 @@ public class TownyPlayerListener implements Listener {
 	 * @param event - PlayerEnterTownEvent
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerEnterTown(PlayerEnterTownEvent event) {
+	public void onPlayerEnterTown(PlayerEntersIntoTownBorderEvent event) {
 		
 		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 		Town town = event.getEnteredTown();
@@ -1029,7 +1039,7 @@ public class TownyPlayerListener implements Listener {
 	 * @param event - PlayerLeaveTownEvent
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerLeaveTown(PlayerLeaveTownEvent event) {
+	public void onPlayerLeaveTown(PlayerExitsFromTownBorderEvent event) {
 		Resident resident = TownyAPI.getInstance().getResident(event.getPlayer().getUniqueId());
 		String worldName = TownyAPI.getInstance().getTownyWorld(event.getPlayer().getWorld()).getFormattedUnclaimedZoneName();
 
