@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.economy;
 
 import com.palmergames.bukkit.towny.object.Transaction;
 import org.bukkit.Bukkit;
@@ -6,15 +6,20 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * This event is no longer called.
- * @deprecated since 0.98.4.9 use com.palmergames.bukkit.towny.event.economy.TownyTransactionEvent instead.
+ * An event thrown when any {@link Transaction} has occured because of Towny.
+ * This includes players, towns, nations and special accounts internal to Towny.
  */
-@Deprecated
 public class TownyTransactionEvent extends Event {
-	
+
 	private final Transaction transaction;
 	private static final HandlerList handlers = new HandlerList();
-	
+
+	/**
+	 * An event thrown when any {@link Transaction} has occured because of Towny.
+	 * This includes players, towns, nations and special accounts internal to Towny.
+	 * 
+	 * @param transaction {@link Transaction} which has occured.
+	 */
 	public TownyTransactionEvent(Transaction transaction) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.transaction = transaction;
@@ -30,6 +35,9 @@ public class TownyTransactionEvent extends Event {
 		return handlers;
 	}
 
+	/**
+	 * @return {@link Transaction} which has occured.
+	 */
 	public Transaction getTransaction() {
 		return transaction;
 	}

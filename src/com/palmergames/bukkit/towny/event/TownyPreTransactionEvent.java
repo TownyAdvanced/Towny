@@ -5,6 +5,11 @@ import com.palmergames.bukkit.towny.object.Transaction;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * This event is no longer called.
+ * @deprecated since 0.98.4.9 use com.palmergames.bukkit.towny.event.economy.TownyPreTransactionEvent instead.
+ */
+@Deprecated
 public class TownyPreTransactionEvent extends CancellableTownyEvent {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 
