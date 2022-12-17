@@ -8147,3 +8147,5 @@ v0.92.0.11:
     - PlayerEntersIntoTownBorderEvent - Thrown when a player crosses into a town.
     - PlayerExitsFromTownBorderEvent - Thrown when a player crosses out of a town.
     - These events replace the now-deprecated PlayerEnterTownEvent and PlayerLeaveTownEvent which had names which were too ambiguous.
+  - Lookup towny worlds via uuid, courtesy of Warriorrrr with PR #6375.
+  - Deprecate redundant WorldCoord#getTownyWorldOrNull method, courtesy of Warriorrrr with PR #6376.
