@@ -64,14 +64,19 @@ public class TownyWorldListener implements Listener {
 				return;
 			}
 		}
-	
 
 		// This is a world we've never seen before, make a new TownyWorld.
 		TownyUniverse.getInstance().newWorld(world);
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world.getUID());
-		if (townyWorld == null)
+		
+		if (townyWorld == null) {
 			TownyMessaging.sendErrorMsg("Could not create data for " + world.getName());
-		else if (world.getName().startsWith("DXL_") &&
+			return;
+		}
+		
+		TownyUniverse.getInstance().getDataSource().loadWorld(townyWorld);
+		
+		if (world.getName().startsWith("DXL_") &&
 				Bukkit.getServer().getPluginManager().getPlugin("DungeonsXL") != null) {
 			townyWorld.setUsingTowny(false);
 			townyWorld.save();

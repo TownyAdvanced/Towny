@@ -70,8 +70,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "plotgroups" + File.separator + "deleted",
 			dataFolderPath + File.separator + "jails",
 			dataFolderPath + File.separator + "jails" + File.separator + "deleted"
-		) || !FileMgmt.checkOrCreateFiles(
-			dataFolderPath + File.separator + "worlds.txt"
 		)) {
 			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_cannot_create_defaults"));
 		}
@@ -345,39 +343,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (plugin != null) {
 			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_server_world_list"));
 			for (World world : plugin.getServer().getWorlds()) {
-				try {
-					newWorld(world.getName());
-				} catch (AlreadyRegisteredException e) {
-					//e.printStackTrace();
-				}
+				universe.newWorld(world);
 			}
 		}
 		
-		// Can no longer reply on Bukkit to report ALL available worlds.
-		
-		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_world_list"));
-		
-		String line = null;
-		
-		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "worlds.txt"), StandardCharsets.UTF_8))) {
-			
-			while ((line = fin.readLine()) != null)
-				if (!line.equals(""))
-					newWorld(line);
-			
-			return true;
-			
-		} catch (AlreadyRegisteredException e) {
-			// Ignore this as the world may have been passed to us by bukkit
-			return true;
-			
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_loading_world_list_at_line", line));
-			e.printStackTrace();
-			return false;
-			
-		}
-		
+		return true;
 	}
 
 	public boolean loadJailList() {
@@ -1245,6 +1215,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileWorld);
 				
+				line = keys.get("uuid");
+				if (line != null && !line.isEmpty()) {
+					try {
+						world.setUUID(UUID.fromString(line));
+					} catch (IllegalArgumentException ignored) {
+						// Invalid UUID
+					}
+				}
+				
 				line = keys.get("claimable");
 				if (line != null)
 					try {
@@ -1837,30 +1816,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		return true;
 	}
-	
-	/*
-	 * Save keys
-	 */
-
-	@Override
-	public boolean saveWorldList() {
-
-		List<String> list = new ArrayList<>();
-
-		for (TownyWorld world : universe.getTownyWorlds()) {
-
-			list.add(world.getName());
-
-		}
-
-		/*
-		 *  Make sure we only save in async
-		 */
-		this.queryQueue.add(new FlatFileSaveTask(list, dataFolderPath + File.separator + "worlds.txt"));
-
-		return true;
-
-	}
 
 	/*
 	 * Save individual towny objects
@@ -2157,6 +2112,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean saveWorld(TownyWorld world) {
 
 		List<String> list = new ArrayList<>();
+		
+		list.add("name=" + world.getName());
+		
+		if (world.getUUID() != null)
+			list.add("uuid=" + world.getUUID());
 
 		// PvP
 		list.add("pvp=" + world.isPVP());

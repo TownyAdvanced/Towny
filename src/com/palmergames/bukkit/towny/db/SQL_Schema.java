@@ -64,6 +64,7 @@ public class SQL_Schema {
 		columns.add("`plotManagementWildRegenBlocks` mediumtext NOT NULL");		
 		columns.add("`usingTowny` bool NOT NULL DEFAULT '0'");
 		columns.add("`warAllowed` bool NOT NULL DEFAULT '0'");
+		columns.add("`uuid` varchar(36) NOT NULL");
 		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
