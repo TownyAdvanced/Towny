@@ -52,11 +52,8 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 
 		for (World world : Bukkit.getWorlds()) {
 			// Filter worlds not using towny.
-			if (!TownyAPI.getInstance().isTownyWorld(world))
-				continue;
-
-			TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world.getName());
-			if (townyWorld == null)
+			TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world);
+			if (townyWorld == null || !townyWorld.isUsingTowny())
 				continue;
 
 			// Filter worlds that will always pass all checks in a world, regardless of possible conditions.
