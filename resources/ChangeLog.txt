@@ -8151,3 +8151,5 @@ v0.92.0.11:
   - Deprecate redundant WorldCoord#getTownyWorldOrNull method, courtesy of Warriorrrr with PR #6376.
 0.98.4.10:
   - Fix /tw toggle for console helpmenu display wrong args order.
+  - Temporarily use name for world lookups again, courtesy of Warriorrrr with PR #6378.
+    - Patchs issue present in 0.98.4.9.
