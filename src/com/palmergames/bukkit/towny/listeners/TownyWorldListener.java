@@ -48,6 +48,8 @@ public class TownyWorldListener implements Listener {
 	}
 
 	private void newWorld(World world) {
+		checkWorlds();
+		
 		// Check if this world was already loaded by Towny and present in the DB.
 		if (TownyUniverse.getInstance().getWorldIDMap().containsKey(world.getUID())) {
 			if (TownyUniverse.getInstance().getWorld(world.getUID()).getName().equalsIgnoreCase(world.getName()))
@@ -80,6 +82,19 @@ public class TownyWorldListener implements Listener {
 				Bukkit.getServer().getPluginManager().getPlugin("DungeonsXL") != null) {
 			townyWorld.setUsingTowny(false);
 			townyWorld.save();
+		}
+	}
+
+	/**
+	 * Attaches UUIDs to worlds that might not have them
+	 */
+	private void checkWorlds() {
+		for (World world : Bukkit.getServer().getWorlds()) {
+			TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world.getName());
+			if (townyWorld != null && townyWorld.getUUID() == null) {
+				townyWorld.setUUID(world.getUID());
+				townyWorld.save();
+			}
 		}
 	}
 
