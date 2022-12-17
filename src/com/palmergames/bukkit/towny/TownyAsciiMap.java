@@ -95,7 +95,7 @@ public class TownyAsciiMap {
 		if (resident.hasTown())
 			hasTown = true;
 
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 		if (world == null) { 
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_configured"));
 			return;

@@ -709,8 +709,8 @@ public class TownyPlayerListener implements Listener {
 		
 		if (WorldCoord.cellChanged(from, to)) {
 
-			TownyWorld fromWorld = TownyAPI.getInstance().getTownyWorld(from.getWorld().getName());				
-			TownyWorld toWorld = TownyAPI.getInstance().getTownyWorld(to.getWorld().getName());
+			TownyWorld fromWorld = TownyAPI.getInstance().getTownyWorld(from.getWorld());				
+			TownyWorld toWorld = TownyAPI.getInstance().getTownyWorld(to.getWorld());
 			if (fromWorld == null || toWorld == null) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("not_registered"));
 				cache.setLastLocation(to);
@@ -835,7 +835,7 @@ public class TownyPlayerListener implements Listener {
 			
 			// Caught players are tested for pvp at the location of the catch.
 			if (caught.getType().equals(EntityType.PLAYER)) {
-				TownyWorld world = TownyAPI.getInstance().getTownyWorld(event.getCaught().getWorld().getName());
+				TownyWorld world = TownyAPI.getInstance().getTownyWorld(event.getCaught().getWorld());
 				if (world == null)
 					return;
 

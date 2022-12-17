@@ -208,11 +208,11 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 		
-		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+		final TownyWorld world = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld());
+		if (world == null || !world.isUsingTowny())
 			return;
 		
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName());
-		boolean allowWild = world != null && world.getUnclaimedZoneBuild();
+		boolean allowWild = world.getUnclaimedZoneBuild();
 
 		if (!canBlockMove(event.getBlock(), event.getBlock().getRelative(event.getDirection()), allowWild))
 			event.setCancelled(true);
@@ -267,10 +267,10 @@ public class TownyBlockListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
+		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld());
+		if (townyWorld == null || !townyWorld.isUsingTowny())
 			return;
 		
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName());
 		Material material = event.getBlock().getType();
 		/*
 		 * event.getBlock() doesn't return the bed when a bed or respawn anchor is the cause of the explosion, so we use this workaround.

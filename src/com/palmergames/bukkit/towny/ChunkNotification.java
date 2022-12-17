@@ -168,7 +168,7 @@ public class ChunkNotification {
 			if (toWild) {
 				if (TownySettings.getNationZonesEnabled() && TownySettings.getNationZonesShowNotifications()) {
 					Player player = resident.getPlayer();
-					TownyWorld toWorld = to.getTownyWorldOrNull();
+					TownyWorld toWorld = to.getTownyWorld();
 					if (PlayerCacheUtil.fetchTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE)) {
 						Town nearestTown = null; 
 						nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
@@ -176,7 +176,7 @@ public class ChunkNotification {
 					}
 				}
 				
-				return String.format(areaWildernessNotificationFormat, to.getTownyWorldOrNull().getFormattedUnclaimedZoneName());
+				return String.format(areaWildernessNotificationFormat, to.getTownyWorld().getFormattedUnclaimedZoneName());
 			
 			} else if (TownySettings.isNotificationsTownNamesVerbose())
 				return String.format(areaTownNotificationFormat, toTown.getFormattedName());
@@ -186,13 +186,13 @@ public class ChunkNotification {
 		} else if (fromWild && toWild)
 			if (TownySettings.getNationZonesEnabled() && TownySettings.getNationZonesShowNotifications()) {
 				Player player = resident.getPlayer();
-				TownyWorld toWorld = this.to.getTownyWorldOrNull();
+				TownyWorld toWorld = this.to.getTownyWorld();
 				if (PlayerCacheUtil.fetchTownBlockStatus(player, this.to).equals(TownBlockStatus.NATION_ZONE) && PlayerCacheUtil.fetchTownBlockStatus(player, this.from).equals(TownBlockStatus.UNCLAIMED_ZONE)) {
 					Town nearestTown = null; 
 					nearestTown = toWorld.getClosestTownWithNationFromCoord(this.to.getCoord(), nearestTown);
 					return String.format(areaWildernessNotificationFormat, Translatable.of("nation_zone_this_area_under_protection_of", toWorld.getFormattedUnclaimedZoneName(), nearestTown.getNationOrNull().getName()).forLocale(resident));
 				} else if (PlayerCacheUtil.fetchTownBlockStatus(player, this.to).equals(TownBlockStatus.UNCLAIMED_ZONE) && PlayerCacheUtil.fetchTownBlockStatus(player, this.from).equals(TownBlockStatus.NATION_ZONE)) {
-					return String.format(areaWildernessNotificationFormat, to.getTownyWorldOrNull().getFormattedUnclaimedZoneName());
+					return String.format(areaWildernessNotificationFormat, to.getTownyWorld().getFormattedUnclaimedZoneName());
 				}
 			}
 		return null;
@@ -202,7 +202,7 @@ public class ChunkNotification {
 
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
 			if (toWild)
-				return String.format(areaWildernessPvPNotificationFormat, ((to.getTownyWorldOrNull().isPVP() && testWorldPVP()) ? " " + Translatable.of("status_title_pvp").forLocale(resident) : ""));
+				return String.format(areaWildernessPvPNotificationFormat, ((to.getTownyWorld().isPVP() && testWorldPVP()) ? " " + Translatable.of("status_title_pvp").forLocale(resident) : ""));
 		}
 		return null;
 	}
@@ -228,14 +228,14 @@ public class ChunkNotification {
 	public String getTownPVPNotification(Resident resident) {
 
 		if (!toWild && ((fromWild) || (toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp))) {
-			return String.format(areaTownPvPNotificationFormat, ( !CombatUtil.preventPvP(to.getTownyWorldOrNull(), toTownBlock) ? Translatable.of("status_title_pvp").forLocale(resident) : Translatable.of("status_title_nopvp").forLocale(resident)));
+			return String.format(areaTownPvPNotificationFormat, ( !CombatUtil.preventPvP(to.getTownyWorld(), toTownBlock) ? Translatable.of("status_title_pvp").forLocale(resident) : Translatable.of("status_title_nopvp").forLocale(resident)));
 		}
 		return null;
 	}
 
 	private boolean testWorldPVP() {
 
-		return to.getTownyWorldOrNull().isPVP();
+		return to.getTownyWorld().isPVP();
 	}
 
 	public String getPlotNotification() {

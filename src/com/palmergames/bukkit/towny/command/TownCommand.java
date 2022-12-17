@@ -2460,7 +2460,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static void townSetHomeblock(Player player, Town town, @Nullable Nation nation) throws TownyException {
 		Coord coord = Coord.parseCoord(player);
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 
 		if (world == null || townBlock == null || !townBlock.hasTown() || townBlock.getTownOrNull() != town)
 			throw new TownyException(Translatable.of("msg_area_not_own"));
@@ -2729,10 +2729,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (resident.hasTown())
 				throw new TownyException(Translatable.of("msg_err_already_res", resident.getName()));
 
-			if (!TownyAPI.getInstance().isTownyWorld(player.getWorld()))
-				throw new TownyException(Translatable.of("msg_set_use_towny_off"));
+			final TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 
-			TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+			if (world == null || !world.isUsingTowny())
+				throw new TownyException(Translatable.of("msg_set_use_towny_off"));
 			
 			if (!world.isClaimable())
 				throw new TownyException(Translatable.of("msg_not_claimable"));
@@ -3627,9 +3627,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (town.isBankrupt() && town.getTownBlocks().size() != 0)
 			throw new TownyException(Translatable.of("msg_err_bankrupt_town_cannot_claim"));
 
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+		final TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 
-		if (!world.isUsingTowny())
+		if (world == null || !world.isUsingTowny())
 			throw new TownyException(Translatable.of("msg_set_use_towny_off"));
 		
 		if (!world.isClaimable())
@@ -3768,7 +3768,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Resident resident = getResidentOrThrow(player.getUniqueId());
 		Town town = getTownFromResidentOrThrow(resident);
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 
 		BukkitTools.ifCancelledThenThrow(new TownPreUnclaimCmdEvent(town, resident, world));
 
