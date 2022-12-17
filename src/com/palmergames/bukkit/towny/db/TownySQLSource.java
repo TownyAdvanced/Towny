@@ -605,9 +605,17 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			try (Statement s = cntx.createStatement()) {
 				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "WORLDS");
 				while (rs.next()) {
+					UUID uuid = null;
 					try {
-						newWorld(rs.getString("name"));
-					} catch (AlreadyRegisteredException ignored) {
+						uuid = UUID.fromString(rs.getString("uuid"));
+					} catch (IllegalArgumentException | NullPointerException ignored) {}
+					
+					if (uuid != null) {
+						universe.registerTownyWorld(new TownyWorld(rs.getString("name"), uuid));
+					} else {
+						try {
+							newWorld(rs.getString("name"));
+						} catch (AlreadyRegisteredException ignored) {}
 					}
 				}
 			}
