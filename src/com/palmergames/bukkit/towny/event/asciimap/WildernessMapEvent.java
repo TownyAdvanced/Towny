@@ -19,7 +19,7 @@ public class WildernessMapEvent extends Event {
 	
 	public WildernessMapEvent(WorldCoord worldCoord) {
 		this.worldCoord = worldCoord;
-		this.hoverText = Component.text(worldCoord.getTownyWorldOrNull().getFormattedUnclaimedZoneName(), NamedTextColor.DARK_RED).append(Component.text(" (" + worldCoord.getX() + ", " + worldCoord.getZ() + ")", NamedTextColor.WHITE));
+		this.hoverText = Component.text(worldCoord.getTownyWorld().getFormattedUnclaimedZoneName(), NamedTextColor.DARK_RED).append(Component.text(" (" + worldCoord.getX() + ", " + worldCoord.getZ() + ")", NamedTextColor.WHITE));
 	}
 
 	/**
