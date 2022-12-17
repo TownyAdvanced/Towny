@@ -875,7 +875,7 @@ public class Towny extends JavaPlugin {
 
 	public PlayerCache newCache(Player player) {
 
-		TownyWorld world = TownyUniverse.getInstance().getWorld(player.getWorld().getName());
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 		if (world == null) {
 			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world (" + player.getWorld().getName() + ".");
 			return null;	

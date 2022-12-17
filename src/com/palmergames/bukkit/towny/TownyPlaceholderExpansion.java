@@ -648,7 +648,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			case "player_location_town_postfix": // %townyadvanced_player_location_town_postfix%
 				return townblock != null ? townblock.getTownOrNull().getPostfix(): "";
 			case "player_location_pvp": // %townyadvanced_player_location_pvp%
-				return townblock != null ? (townblock.getPermissions().pvp ? Translation.of("status_title_pvp"): Translation.of("status_title_nopvp")) : (TownyAPI.getInstance().getTownyWorld(player.getWorld().getName()).isPVP() ? Translation.of("status_title_pvp"):"");
+				return townblock != null ? (townblock.getPermissions().pvp ? Translation.of("status_title_pvp"): Translation.of("status_title_nopvp")) : (TownyAPI.getInstance().getTownyWorld(player.getWorld()).isPVP() ? Translation.of("status_title_pvp"):"");
 			case "player_location_town_resident_count": // %townyadvanced_player_location_town_resident_count%
 				return townblock != null ? Integer.toString(townblock.getTownOrNull().getResidents().size()) : "";
 			case "player_location_town_mayor_name": // %townyadvanced_player_location_town_mayor_name%
