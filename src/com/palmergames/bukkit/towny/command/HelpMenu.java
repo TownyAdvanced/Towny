@@ -389,7 +389,7 @@ public enum HelpMenu {
 	TOWNYWORLD_TOGGLE_CONSOLE {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("townyworld toggle {worldname}")
+			return new MenuBuilder("townyworld {worldname} toggle")
 				.add("claimable", "")
 				.add("usingtowny", "")
 				.add("warallowed", "")

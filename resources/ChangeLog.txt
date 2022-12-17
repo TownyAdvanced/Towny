@@ -8149,3 +8149,5 @@ v0.92.0.11:
     - These events replace the now-deprecated PlayerEnterTownEvent and PlayerLeaveTownEvent which had names which were too ambiguous.
   - Lookup towny worlds via uuid, courtesy of Warriorrrr with PR #6375.
   - Deprecate redundant WorldCoord#getTownyWorldOrNull method, courtesy of Warriorrrr with PR #6376.
+0.98.4.10:
+  - Fix /tw toggle for console helpmenu display wrong args order.
