@@ -53,4 +53,4 @@ jobs:
             [
               "glare"
             ]
-      - run: mvn deploy
+      - run: mvn help:active-profiles 
