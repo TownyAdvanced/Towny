@@ -25,33 +25,14 @@ jobs:
       - name: maven-settings-action
         uses: whelk-io/maven-settings-xml-action@v20
         with:
-          repositories: |
-            [
-              {
-                "id": "glare",
-                "name": "Towny",
-                "url": "https://repo.glaremasters.me/repository/towny/",
-                "releases": {
-                  "enabled": "true"
-                }
-              }
-            ]
-          plugin_repositories: '[{ "id": "some-plugin-repository", "url": "http://some.plugin.repository.url" }]'  
-#          profiles: |
-#            [
-#              {
-#                "id": "glare",
-#                "url": "https://repo.glaremasters.me/"
-#              }
-#            ]
           servers: |
             [{
-              "id": "glare",
+              "id": "nexus",
               "username": "${{ secrets.GLAREREPO_USERNAME }}",
               "password": "${{ secrets.GLAREREPO_PASSWORD }}"
             }]
           active_profiles: |
             [
-              "glare"
+              "nexus"
             ]
       - run: mvn deploy
