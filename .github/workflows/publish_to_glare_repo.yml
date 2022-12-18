@@ -23,12 +23,22 @@ jobs:
           java-package: jdk
           cache: 'maven'
       - name: maven-settings-action
-        uses: s4u/maven-settings-action@v2.8.0
+        uses: whelk-io/maven-settings-xml-action@v20
         with:
-          githubServer: false
+          repositories: |
+            [
+              {
+                "id": "glare",
+                "name": "Glare Repo",
+                "url": "https://repo.glaremasters.me/",
+                "releases": {
+                  "enabled": "true"
+                }
+              }
+            ]
           servers: |
             [{
-              "id": "nexus",
+              "id": "glare",
               "username": "${{ secrets.GLAREREPO_USERNAME }}",
               "password": "${{ secrets.GLAREREPO_PASSWORD }}"
             }]
