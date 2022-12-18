@@ -42,5 +42,4 @@ jobs:
               "username": "${{ secrets.GLAREREPO_USERNAME }}",
               "password": "${{ secrets.GLAREREPO_PASSWORD }}"
             }]
-      - run: mvn verify
-      - run: mvn help:active-profiles
+      - run: mvn deploy
