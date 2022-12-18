@@ -49,4 +49,8 @@ jobs:
               "username": "${{ secrets.GLAREREPO_USERNAME }}",
               "password": "${{ secrets.GLAREREPO_PASSWORD }}"
             }]
+          active_profiles: |
+            [
+              "glare"
+            ]
       - run: mvn deploy
