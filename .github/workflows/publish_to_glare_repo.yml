@@ -40,7 +40,7 @@ jobs:
             [
               {
                 "id": "glare",
-                "url": "https://repo.glaremasters.me/",
+                "url": "https://repo.glaremasters.me/"
               }
             ]
           servers: |
