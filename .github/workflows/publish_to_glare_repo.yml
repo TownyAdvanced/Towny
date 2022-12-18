@@ -29,11 +29,18 @@ jobs:
             [
               {
                 "id": "glare",
-                "name": "Glare Repo",
-                "url": "https://repo.glaremasters.me/",
+                "name": "Towny",
+                "url": "https://repo.glaremasters.me/repository/towny/",
                 "releases": {
                   "enabled": "true"
                 }
+              }
+            ]
+          profiles: |
+            [
+              {
+                "id": "glare",
+                "url": "https://repo.glaremasters.me/",
               }
             ]
           servers: |
