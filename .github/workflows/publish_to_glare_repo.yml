@@ -23,16 +23,14 @@ jobs:
           java-package: jdk
           cache: 'maven'
       - name: maven-settings-action
-        uses: whelk-io/maven-settings-xml-action@v20
+        uses: s4u/maven-settings-action@v2.8.0
         with:
+          githubServer: false
           servers: |
             [{
               "id": "nexus",
               "username": "${{ secrets.GLAREREPO_USERNAME }}",
               "password": "${{ secrets.GLAREREPO_PASSWORD }}"
             }]
-          active_profiles: |
-            [
-              "nexus"
-            ]
+
       - run: mvn deploy
