@@ -1,9 +1,8 @@
 name: Publish to Glare Repo
-on:
-  workflow_dispatch:
-#on: 
-#  released:
-#    type: [release,prerelease]
+
+on: 
+  release:
+    type: [published]
 
 jobs:
   deploy_to_glare_repo:
