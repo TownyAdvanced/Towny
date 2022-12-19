@@ -1116,56 +1116,37 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
             byte[] key = new byte[3];
             fin.read(key, 0, 3);
             String test = new String(key);
-            
-            if (elements.fromString(test) == elements.VER) {// Read the file version
-                version = fin.read();
-                plotBlockData.setVersion(version);
-                
-                // next entry is the plot height
-                plotBlockData.setHeight(fin.readInt());
-            } else {
-                /*
-                 * no version field so set height
-                 * and push rest to queue
-                 */
-                plotBlockData.setVersion(version);
-                // First entry is the plot height
-                fin.reset();
-                plotBlockData.setHeight(fin.readInt());
-                blockArr.add(fin.readUTF());
-                blockArr.add(fin.readUTF());
-            }
-            
-            /*
-             * Load plot block data based upon the stored version number.
-             */
-            switch (version) {
-                
-                default:
-                case 4:
-                case 3:
-                case 1:
-                    
-                    // load remainder of file
-                    while ((value = fin.readUTF()) != null) {
-                        blockArr.add(value);
-                    }
-                    
-                    break;
-                
-                case 2: {
-                    
-                    // load remainder of file
-                    int temp = 0;
-                    while ((temp = fin.readInt()) >= 0) {
-                        blockArr.add(temp + "");
-                    }
-                    
-                    break;
-                }
-            }
-            
-            
+
+			if (elements.fromString(test) != elements.VER)
+				// This is too old to be used by modern Towny.
+				// Return null so that we do not regenerate this plot, or, we queue up a new
+				// plotsnapshot to be made.
+				return null;
+
+			version = fin.read();
+			if (version < 4)
+				// This is too old to be used by modern Towny.
+				// Return null so that we do not regenerate this plot, or, we queue up a new
+				// plotsnapshot to be made.
+				return null;
+
+			// set the version
+			plotBlockData.setVersion(version);
+
+			// next entry is the plot height
+			plotBlockData.setHeight(fin.readInt());
+
+			// Snapshots taken before 0.98.4.11 did not account for Mojang's lowered World
+			// Height, and there will be no blocks stored below y=0.
+			// Versions 5 and newer store the world's min-height as an int here.
+			plotBlockData.setMinHeight(version == 4 ? 0 : fin.readInt());
+
+			/*
+			 * Load plot block data off of the remaining file.
+			 */
+			while ((value = fin.readUTF()) != null)
+				blockArr.add(value);
+
         } catch (EOFException ignored) {
         } catch (IOException e) {
             e.printStackTrace();
