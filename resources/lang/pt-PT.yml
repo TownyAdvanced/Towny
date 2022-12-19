@@ -565,7 +565,7 @@ msg_err_over_outposts_limit: 'Você não pode se teleportar para o seu posto ava
 outlaws: 'Fora-da-Lei:' #Used on /t outlawlist
 online: '&a(Online)'
 registered_last_online: '&2Registrado: &a%s &8| &2Última vez online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Perm:' #Used on /plot perm, /res
+status_perm: 'Permissão:' #Used on /plot perm, /res
 status_on: '&4ATIVADO'
 status_off: '&aDESATIVADO'
 status_on_good: '&aATIVADO'
@@ -575,7 +575,7 @@ status_adjustable: '&aAjustável'
 status_pvp: 'PVP:'
 explosions: 'Explosões:'
 firespread: 'Propagação do fogo:'
-mobspawns: 'Mob Spawns:'
+mobspawns: 'Spawn de Mobs:'
 owner_of_x_plots: 'Dono de %s plots.'
 status_bank: 'Banco:'
 status_town: 'Cidade:'
@@ -592,14 +592,14 @@ status_town_board: 'Lema:'
 status_founded: 'Fundada a:'
 status_town_size: 'Tamanho da Cidade:'
 status_town_size_bought: 'Comprado:'
-status_town_size_bonus: 'Bonus:'
+status_town_size_bonus: 'Bónus:'
 status_town_size_nationbonus: 'Bónus da Nação:'
 status_town_outposts: 'Postos avançados:'
 status_bank_town2: 'Manutenção diária:'
 status_bank_town3: 'Imposto:'
 status_town_nation: 'Nação:'
 status_town_reslist_overlength: 'e mais...'
-status_nation_king: 'Leader:'
+status_nation_king: 'Líder:'
 status_nation_tax: 'Imposto da Nação:'
 status_nation_towns: 'Cidades'
 status_nation_allies: 'Aliados'
@@ -709,7 +709,7 @@ number_of_residents: '(Número de Habitantes)'
 number_of_towns: '(Número de Cidades)'
 town_name: 'Nome da Cidade'
 nation_name: 'Nome da Nação'
-refund_message: '&aRefunded %s for unclaiming %s townblocks.'
+refund_message: '&aReembolsado $%s por abandonar %s terrenos.'
 msg_bankrupt_town_multiple: '&bAs cidades seguintes não podiam pagar a sua manunteção e foram desfeitas: '
 msg_bankrupt_nation_multiple: '&bAs nações seguintes não podiam pagar a sua manunteção e foram desfeitas: '
 msg_couldnt_pay_tax: '&b%s não consegui pagar os impostos e foi expulso de %s.'
@@ -755,7 +755,7 @@ msg_err_player_too_far_from_town_spawn: '&c%s está demasiado longe do spawn de 
 #Added in 0.58:
 msg_resident_bail_amount: 'A fiança de habitante custa: '
 msg_mayor_bail_amount: 'A fiança do prefeito custa: '
-msg_king_bail_amount: 'Nation Leader Bail costs: '
+msg_king_bail_amount: 'Custos da caução do líder da nação: '
 msg_has_paid_bail: ' pagou a fiança e agora está livre.'
 msg_err_unable_to_pay_bail: 'Você não tem dinheiro suficiente para pagar a fiança.'
 msg_err_bail_not_enabled: 'A fiança não está habilitada.'
@@ -951,7 +951,7 @@ msg_err_plot_clear_disabled_in_this_world: 'O /plot clear comando está desabili
 msg_universe_attribution: 'Autores: '
 msg_universe_contributors: ' E contribuidores como você. '
 msg_universe_heart: '<3'
-townblock_plu: 'TownBlocks'
+townblock_plu: 'Terrenos da cidade'
 #Added in 0.92
 #Town Ruins
 admin_panel_4: 'Execute o novo código de hora'
@@ -1001,12 +1001,12 @@ towny_prices_upkeep_town_level: 'nível da cidade (núm residentes.)'
 towny_prices_overclaimed_based_on: '&8A manutenção sobreavaliada é baseada em &a %s %s'
 towny_prices_overclaimed_num_plots: 'o número de parcelas sobre-reivindicadas *'
 towny_prices_overclaimed_flat_cost: 'um custo fixo de'
-towny_prices_townname: '&cTown: &b%s'
+towny_prices_townname: '&cCidade: &b%s'
 towny_prices_price_plot: '&c    [Preço] &2Plot: &a%s &8| &2Posto avançado: &a%s'
 towny_prices_price_shop: '&c            &2Shop: &a%s &8| &2Embaixada: &a%s'
 towny_prices_taxes_plot: '&c    [Taxas]    &2Residente: &a%s &8| &2Plot: &a%s'
 towny_prices_taxes_shop: '&c            &2Loja: &a%s &8| &2Embaixada: &a%s'
-towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
+towny_prices_town_neutral_tax: '&c            &2Paz: &a%s'
 towny_prices_plots: '&c    [Setting Plots]'
 towny_prices_type_single: '            &2%s: &a%s'
 towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
@@ -1025,9 +1025,9 @@ msg_bankrupt: '&c(Banco falido)'
 #Added in 0.98
 msg_del_town2: '&bA cidade de %s foi excluída!'
 msg_ruin_town: '&bA cidade de %s caiu em ruínas!'
-gui_title_select_plot_type: 'Select PlotType'
+gui_title_select_plot_type: 'Selecionar Tipo de Terreno'
 gui_title_no_restrictions: 'Não há restrições para este tipo de terreno.'
-gui_title_towny_allowedblocks: '%s AllowedBlocks List'
+gui_title_towny_allowedblocks: '%s Lista de Blocos Permitidos'
 gui_title_towny_wildsblocks: 'Lista de Blocos selvagens da Cidade'
 gui_title_towny_itemuse: 'Lista de uso de itens da Cidade'
 gui_title_towny_switch: 'Lista de troca da Cidade'
@@ -1112,7 +1112,7 @@ msg_err_nation_not_allied_with: '&cSua nação não é aliada de %s.'
 msg_err_nation_not_enemies_with: '&cSua nação não é inimiga de %s.'
 msg_err_nation_already_enemies_with: '&cSua nação já é inimiga de %s.'
 msg_err_ally_already_requested: '&cVocê já pediu para se aliar com %s.'
-msg_err_nation_not_allied_with_2: '&c%s isn''t allied with %s.'
+msg_err_nation_not_allied_with_2: '&c%s não é aliado de %s.'
 msg_err_nation_not_enemies_with_2: '&c%s não é inimigo de %s.'
 msg_err_nation_already_allied_with_2: '&c%s já está aliado com %s.'
 msg_err_nation_already_enemies_with_2: '&c%s já é inimigo de %s.'
@@ -1151,7 +1151,7 @@ msg_you_have_been_freed_via_jailbreak: 'Houve uma fuga de presos, você está li
 msg_you_have_served_your_sentence_and_are_free: 'Você cumpriu sua pena de prisão e está livre.'
 msg_x_has_served_their_sentence_and_is_free: '%s cumpriu a pena de prisão e está livre.'
 msg_you've_been_jailed_for_x_hours: 'Você está preso há %s horas.'
-msg_you_are_being_sent_to_jail: 'You are being sent to jail.'
+msg_you_are_being_sent_to_jail: 'Estás a ser preso.'
 msg_err_you_cannot_remove_the_last_cell: 'Você não pode remover a última célula de prisão nesta prisão, até que outra célula seja adicionada'
 msg_do_not_log_out_while_waiting_to_be_teleported: 'Não saia antes de ser teletransportado para a prisão, seria fatal.'
 jail_plu: 'Prisões'
@@ -1192,7 +1192,7 @@ msg_err_this_town_has_no_plot_groups: 'A cidade especificada não possui grupos 
 msg_err_this_plot_is_already_part_of_the_plot_group_x: 'Este bloco urbano já faz parte do grupo de trama: %s'
 map_hover_plot_group: 'Grupo de lote: '
 map_hover_plot_group_size: ' Tamanho: '
-map_hover_plots: '%s plots'
+map_hover_plots: '%s terrenos'
 #Added in 0.112
 msg_checking_for_updates: 'À procura de atualizações...'
 msg_no_new_updates: 'Não foram encontradas novas atualizações.'
@@ -1206,7 +1206,7 @@ msg_you_must_join_this_town_to_claim_this_plot: 'Deves juntar-te a %s, para reiv
 #Added in 0.113
 status_trustedlist: 'Confiado'
 msg_click_to_edit: '&6Clica para editar.'
-permission_gui_header: 'Towny Permission GUI'
+permission_gui_header: 'Interface de Permissões do Towny'
 msg_last_edited: '&7&oÚltima alteração em %s por %s.'
 msg_trusted_added: '&bAdicionado %s como confiável neste %s.' #Last %s is either town or townblock
 msg_already_trusted: '&b%s já é confiável nisso %s.'
@@ -1303,9 +1303,9 @@ msg_setup_success: 'Valores de configuração alterados com sucesso para seus no
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s spawnou recentemente e não pode ser ferido.'
 #Player was invulnerable after respawning and has lost their invulnerability.
-msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
+msg_you_have_lost_your_respawn_protection: 'Perdeste a tua proteção de renascimento.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
-msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
+msg_err_cannot_pickup_respawn_protection: 'Não podes pegar em itens enquanto estiveres sob a proteção de renascimento.'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: 'Capital:'
@@ -1321,17 +1321,17 @@ msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.
 msg_nationzone_override_removed: '%s has had their nationzone override removed.'
 #Added in 0.127
 #Used in status screen:
-status_nation_zone_size: 'Nation Zone Size:'
+status_nation_zone_size: 'Tamanho da Zona da Nação:'
 #Shown when a player adds people to their friends list.
 msg_res_friend_added_to_list: 'Adicionaste %s à tua lista de amigos.'
 #Shown when a player removes people from their friends list.
 msg_res_friend_removed_from_list: 'Removeste %s da tua lista de amigos.'
 #Generic resident freed from jail message.
-msg_resident_unjailed: '%s has been unjailed.'
+msg_resident_unjailed: '%s foi solto da prisão.'
 #Shown when an admin uses /ta toggle devmode.
-msg_admin_toggle_devmode: 'Dev Mode: %s'
+msg_admin_toggle_devmode: 'Modo de Desenvolvedor: %s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: 'Debug Mode: %s'
+msg_admin_toggle_debugmode: 'Modo de Depuração: %s'
 #Shown when an admin uses /ta toggle townwithdraw
 msg_admin_toggle_townwithdraw: 'Town Withdrawls: %s'
 #Shown when an admin uses /ta toggle nationwithdraw
@@ -1341,20 +1341,20 @@ msg_process_town_claim: 'Processing Town Claim...'
 #Shown when unclaiming a town block for the town.
 msg_process_town_unclaim: 'Processing Town Unclaim...'
 #Shown when there is nothing to unclaim.
-msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
+msg_err_nothing_to_unclaim: 'Nada para abandonar!'
 #Given as feedback when /ta checkperm is used.
 msg_perm_true: 'Permissão Adquirida.'
 #Given as feedback when /ta checkperm is used.
 msg_err_perm_false: 'Permissão Removida.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+status_towny_map_town_line: '&Cidade: &a%s &7| &Dono: &a%s'
 #Shown on /towny version
-msg_towny_version: '&2Towny Version: &a%s'
+msg_towny_version: '&2Versão do Towny: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
-msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
+msg_admin_blocked_login: '&2 Um jogador de endereço de IP &c%s &2tentou iniciar sessão usando o nome de utilizador %s o que pode danificar a economia do teu servidor, mas foi prevenido pelo Towny. Considera banir este endereço de IP!'
 #Shown during resident purge
-msg_scanning_for_old_residents: 'Scanning for old residents...'
+msg_scanning_for_old_residents: 'À procura de antigos habitantes...'
 #Shown during resident purge
 msg_deleting_resident: 'Deleting resident: %s.'
 #Shown during resident purge
@@ -1403,7 +1403,7 @@ msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you m
 #Jail handbook messages
 msg_jailed_handbook_6: 'But don''t die before you reach the wilderness or you''ll end up right back in jail.'
 #Jail handbook messages
-msg_jailed_teleport: 'Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you''ve just got to get a hold of some.'
+msg_jailed_teleport: 'Felizmente, pérolas do ender e frutas do coro são permitidas para te ajudarem a escapar, agora só tens de conseguir algumas.'
 #Jail handbook messages
 msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your countrymen can reduce the jail plot''s HP to 0, or if the town you are jailed in is removed from the war.'
 #Jail handbook title
