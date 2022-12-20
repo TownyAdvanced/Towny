@@ -8167,3 +8167,4 @@ v0.92.0.11:
       - Towny.isUsingEssentials(),
       - Towny.getEssentials().
 0.98.4.13:
+  - Deprecate old TownComparators class.
