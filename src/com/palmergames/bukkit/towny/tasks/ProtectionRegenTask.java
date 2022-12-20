@@ -4,6 +4,8 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
+import io.papermc.lib.PaperLib;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -53,7 +55,11 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	@Override
 	public void run() {
 
-		replaceProtections();
+		if (PaperLib.isPaper())
+			PaperLib.getChunkAtAsync(this.state.getLocation()).thenRun(() -> Bukkit.getServer().getScheduler().runTask(plugin, this::replaceProtections));
+		else
+			replaceProtections();
+		
 		TownyRegenAPI.removeProtectionRegenTask(this);
 	}
 
