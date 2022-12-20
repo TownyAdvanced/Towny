@@ -2,7 +2,7 @@ name: Publish to Glare Repo
 
 on: 
   release:
-    types: [published]
+    types: [released, prereleased]
 
 jobs:
   deploy_to_glare_repo:
