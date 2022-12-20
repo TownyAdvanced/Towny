@@ -110,7 +110,7 @@ public class TownyCustomListener implements Listener {
 	
 	private void sendChunkNoticiation(Player player, String msg) {
 		switch (TownySettings.getNotificationsAppearAs().toLowerCase(Locale.ROOT)) {
-			case "bossbar" -> sendBossBarChunkNotification(player, BossBar.bossBar(TownyComponents.miniMessage(msg), 0, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS));
+			case "bossbar" -> sendBossBarChunkNotification(player, TownyComponents.miniMessage(msg));
 			case "chat" -> TownyMessaging.sendMessage(player, msg);
 			case "none" -> {}
 			default -> sendActionBarChunkNotification(player, TownyComponents.miniMessage(msg));
@@ -141,19 +141,24 @@ public class TownyCustomListener implements Listener {
 		}
 	}
 
-	private void sendBossBarChunkNotification(Player player, BossBar bossBar) {
-		int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION) * 20;
+	private void sendBossBarChunkNotification(Player player, Component message) {
+		int ticks = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION) * 20;
 		if (playerBossBarMap.containsKey(player)) {
 			removePlayerActionTasks(player);
 			removePlayerBossBar(player);
 		}
+		
+		final BossBar.Color color = BossBar.Color.NAMES.valueOr(TownySettings.getBossBarNotificationColor().toLowerCase(Locale.ROOT), BossBar.Color.WHITE);
+		final BossBar.Overlay overlay = BossBar.Overlay.NAMES.valueOr(TownySettings.getBossBarNotificationOverlay().toLowerCase(Locale.ROOT), BossBar.Overlay.PROGRESS);
+		
+		final BossBar bossBar = BossBar.bossBar(message, TownySettings.getBossBarNotificationProgress(), color, overlay);
 
 		TownyMessaging.sendBossBarMessageToPlayer(player, bossBar);
 
 		int taskID = Bukkit.getScheduler().runTaskLater(plugin, () -> {
 			playerActionTasks.remove(player);
 			removePlayerBossBar(player);
-		}, seconds).getTaskId();
+		}, ticks).getTaskId();
 
 		playerBossBarMap.put(player, bossBar);
 		playerActionTasks.put(player, taskID);
