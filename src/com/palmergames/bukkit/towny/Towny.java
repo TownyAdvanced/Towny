@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
 import com.palmergames.bukkit.towny.db.DatabaseConfig;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.hooks.LuckPermsContexts;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -121,7 +120,6 @@ public class Towny extends JavaPlugin {
 
 	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
 
-	private Essentials essentials = null;
 	private boolean citizens2 = false;
 	
 	private final List<TownyInitException.TownyError> errors = new ArrayList<>();
@@ -550,14 +548,6 @@ public class Towny extends JavaPlugin {
 		if (test != null) {
 			addons.add(String.format("%s v%s", "FlagWar", test.getDescription().getVersion()));
 		}
-		
-		test = getServer().getPluginManager().getPlugin("Essentials");
-		if (test == null) {
-			TownySettings.setUsingEssentials(false);
-		} else if (TownySettings.isUsingEssentials()) {
-			this.essentials = (Essentials) test;
-			addons.add(String.format("%s v%s", "Essentials", test.getDescription().getVersion()));
-		}
 
 		test = getServer().getPluginManager().getPlugin("PlaceholderAPI");
 		if (test != null) {
@@ -826,10 +816,13 @@ public class Towny extends JavaPlugin {
 		return errors;
 	}
 
-	// is Essentials active
+	/**
+	 * @deprecated since 0.98.4.12, Towny no longer checks for essentials usage internally.
+	 * @return false
+	 */
+	@Deprecated
 	public boolean isEssentials() {
-
-		return (TownySettings.isUsingEssentials() && (this.essentials != null));
+		return false;
 	}
 
 	// is Citizens2 active
@@ -844,15 +837,12 @@ public class Towny extends JavaPlugin {
 	}
 
 	/**
-	 * @return Essentials object
-	 * @throws TownyException - If Towny can't find Essentials.
+	 * @deprecated since 0.98.4.12, Towny no longer uses an internal Essentials instance.
+	 * @return a Essentials plugin instance or null
 	 */
-	public Essentials getEssentials() throws TownyException {
-
-		if (essentials == null)
-			throw new TownyException("Essentials is not installed, or not enabled!");
-		else
-			return essentials;
+	@Deprecated
+	public Essentials getEssentials() {
+		return (Essentials) getServer().getPluginManager().getPlugin("Essentials");
 	}
 
 	public boolean isPAPI() {
