@@ -1211,11 +1211,6 @@ public enum ConfigNodes {
 			"plugin.interfacing.tekkit.fake_residents",
 			"[IndustrialCraft],[BuildCraft],[Redpower],[Forestry],[Turtle]",
 			"# Add any fake players for client/server mods (aka Tekkit) here"),
-	PLUGIN_USING_ESSENTIALS(
-			"plugin.interfacing.using_essentials",
-			"false",
-			"",
-			"# Enable using_essentials if you are using cooldowns in essentials for teleports."),
 	PLUGIN_USING_ECONOMY(
 			"plugin.interfacing.using_economy",
 			"true",

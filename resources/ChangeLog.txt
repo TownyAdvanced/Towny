@@ -8155,3 +8155,14 @@ v0.92.0.11:
     - Patchs issue present in 0.98.4.9.
 0.98.4.11:
   - Support for y less than 0 for revert-on-unclaim.
+0.98.4.12:
+  - Improve vanished-wont-affect-resident-last-online support, from using only Essentials, to supporting all plugins that use the "vanished" metadata on the player.
+    - Also prevents setting last-online when a player logs out.
+    - Plugins which work: SuperVanish, Essentials.
+    - Plugins which still do not work: VanishNoPacket.
+  - Remove internal usage of Essentials.
+    - Removed Config Node: using_essentials.
+    - Deprecated: 
+      - TownySettings.isUsingEssentials,
+      - Towny.isUsingEssentials(),
+      - Towny.getEssentials().
