@@ -361,5 +361,16 @@
         "value": "global_nation_settings.spawning_cooldowns.unaffiliated_nation_spawn_cooldown_time"
       }
     ]
+  },
+  {
+    "version": "0.98.4.13",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "new_world_settings.plot_management.revert_on_unclaim.block_ignore",
+        "value": "DRAGON_EGG",
+        "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
+      }
+    ]
   }
 ]
