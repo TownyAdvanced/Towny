@@ -3378,5 +3378,17 @@ public class TownySettings {
 	public static boolean areProtectedEntitiesProtectedAgainstMobs() {
 		return getBoolean(ConfigNodes.PROT_MOB_TYPES_MOB_VS_MOB_BYPASS);
 	}
+	
+	public static String getBossBarNotificationColor() {
+		return getString(ConfigNodes.NOTIFICATION_BOSSBARS_COLOR);
+	}
+	
+	public static String getBossBarNotificationOverlay() {
+		return getString(ConfigNodes.NOTIFICATION_BOSSBARS_OVERLAY);
+	}
+	
+	public static float getBossBarNotificationProgress() {
+		return (float) getDouble(ConfigNodes.NOTIFICATION_BOSSBARS_PROGRESS);
+	}
 }
 
