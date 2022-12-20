@@ -55,7 +55,11 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	@Override
 	public void run() {
 
-		PaperLib.getChunkAtAsync(this.state.getLocation()).thenRun(() -> Bukkit.getServer().getScheduler().runTask(plugin, this::replaceProtections));
+		if (PaperLib.isPaper())
+			PaperLib.getChunkAtAsync(this.state.getLocation()).thenRun(() -> Bukkit.getServer().getScheduler().runTask(plugin, this::replaceProtections));
+		else
+			replaceProtections();
+		
 		TownyRegenAPI.removeProtectionRegenTask(this);
 	}
 
