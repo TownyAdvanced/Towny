@@ -8173,3 +8173,20 @@ v0.92.0.11:
     - Add DRAGON_EGG to revert-on-unclaim block ignore.
     - Will automatically update each world as well.
     - Supercedes #6386.
+  - Make bossbar chunk notifications configurable, courtesy of Warriorrrr with PR #6384.
+    - Closes #6363.
+  - New Config Options:
+    - notification.bossbars.color
+      - Default: "white"
+      - The color to use for bossbar notifications.
+      -Valid colors are blue, green, pink, purple, red, white, or yellow.
+    - notification.bossbars.overlay
+      - Default: "progress"
+      - The overlay to use for bossbar notifications.
+      - Valid options are progress, notched_6, notched_10, notched_12, notched_20"
+    - notification.bossbars.progress
+      - Default: "0"
+      - The progress to use for the bossbar, between 0 and 1."
+   - Load chunk async for protection regen task, courtesy of Warriorrrr with PR #6385.
+     - Requires you to be using Paper to take advantage.
+     - Closes #6337.
