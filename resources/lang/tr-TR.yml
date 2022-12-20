@@ -861,7 +861,7 @@ msg_err_you_aren't currently jailed: 'Şu anda hapiste değilsin.'
 #Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Bu konumda bu portalın diğer tarafını yaratmanıza izin verilmiyor.'
 #Added in 0.75
-msg_already_ally: 'Ulusun zaten müttefik %s.'
+msg_already_ally: 'Ulusun zaten %s ile müttefik.'
 #Added in 0.76
 msg_you: 'Sen'
 #Added in 0.77
@@ -1583,12 +1583,12 @@ msg_you_were_released_as_town_ran_out_of_slots: 'Gardiyanların alan kazanmak i�
 msg_x_has_been_released_as_jail_slots_ran_out: '%s, başka bir tutsağa yer açması için serbest bırakıldı.'
 msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Gardiyanların seni tutuklu bırakmaya mali gücü yetmediği için serbest bırakıldın.'
 msg_x_has_been_released_ran_out_of_upkeep_funds: '%s, Şehir kasasındaki kaynak eksikliğinden ötürü serbest bırakıldı.'
-msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
-msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: 'Şehir kasasından %s çekildi, %s tutsağının bakım masrafı için ödenecek.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: 'Şehir kasasından %s çekildi, %s tutsağının hapsedilmesi için ödenecek.'
 #Message shown in the confirmation for /ta resetbanks {amount}.
 confirmation_are_you_sure_you_want_to_reset_all_banks: 'Tüm kasaba ve ulus bankalarını %s''e eşitlemek istediğinizden emin misiniz?'
 #Message shown when a nation cannot add a town because of the max-residents-limit.
-msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
+msg_err_cannot_add_nation_over_resident_limit: '&cUlusun maksimum izin verilen ulus başına vatandaş sayısına ulaştı, %s ve %s eklenilemiyor.'
 #Message shown to a town when they cannot join a nation because of the max-residents-limit.
 msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
 #Message shown to a town because the nation has hit their max-towns-limit.
