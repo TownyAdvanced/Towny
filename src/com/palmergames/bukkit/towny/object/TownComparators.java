@@ -1,8 +1,16 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
+
 import java.util.Comparator;
 
+/**
+ * @deprecated in 0.98.4.13 use
+ *             {@link com.palmergames.bukkit.towny.object.comparators.TownComparators}
+ *             and {@link GovernmentComparators} instead.
+ */
+@Deprecated
 public class TownComparators {
 	public static final Comparator<Town> BY_NUM_RESIDENTS = (t1, t2) -> t2.getNumResidents() - t1.getNumResidents();
 	public static final Comparator<Town> BY_OPEN = (t1, t2) -> {
