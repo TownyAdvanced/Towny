@@ -1619,3 +1619,5 @@ msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 confirmation_msg_trusttown_consequences: 'Stai per dare il permesso di trust completo a un''intera città. Ciò significa che il sindaco della città sarà in grado di decidere chi ottiene il permesso di costruire e rompere nella vostra città, aggiungendo i residenti. Se questa città è aperta, chiunque può unirsi e ottenere pieno accesso alla tua città. Sei sicuro di voler fidarti di tutti i residenti (inclusi i futuri residenti), di questa città?'
 #Message shown when a player uses a command that is blocked because their location has an active war.
 msg_command_war_blocked: 'You cannot run that command because your town is at war.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
