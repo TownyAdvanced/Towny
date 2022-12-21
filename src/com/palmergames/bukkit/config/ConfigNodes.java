@@ -869,6 +869,13 @@ public enum ConfigNodes {
 			"",
 			"# If Towny should show players the townboard when they login"
 	),
+	GTOWN_SETTINGS_OUTSIDERS_PREVENT_UNCLAIM_TOWNBLOCK(
+			"global_town_settings.outsiders_prevent_unclaim_townblock",
+			"false",
+			"",
+			"# If set to true, Towny will prevent a townblock from being unclaimed while an outsider is within the townblock's boundaries.",
+			"# When active this feature can cause a bit of lag when the /t unclaim command is used, depending on how many players are online."
+	),
 	GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE(
 			"global_town_settings.outsiders_prevent_pvp_toggle",
 			"false",

@@ -2645,6 +2645,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE);
 	}
 	
+	public static boolean getOutsidersUnclaimingTownBlocks() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_UNCLAIM_TOWNBLOCK);
+	}
+	
 	public static boolean isForcePvpNotAffectingHomeblocks() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP);
 	}
