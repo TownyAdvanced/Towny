@@ -1842,3 +1842,6 @@ confirmation_msg_trusttown_consequences: 'You are about to give full plot permis
 
 #Message shown when a player uses a command that is blocked because their location has an active war.
 msg_command_war_blocked: 'You cannot run that command because your town is at war.'
+
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
