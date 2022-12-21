@@ -8187,6 +8187,24 @@ v0.92.0.11:
     - notification.bossbars.progress
       - Default: "0"
       - The progress to use for the bossbar, between 0 and 1."
-   - Load chunk async for protection regen task, courtesy of Warriorrrr with PR #6385.
-     - Requires you to be using Paper to take advantage.
-     - Closes #6337.
+  - Load chunk async for protection regen task, courtesy of Warriorrrr with PR #6385.
+    - Requires you to be using Paper to take advantage.
+    - Closes #6337.
+0.98.4.14:
+  - New Permission Nodes:
+    - towny.town.spawn.nation.bypasspublic:
+      - description: User is permitted to use /town spawn when:
+        - they are a member of the same nation and, 
+        - the town isn't public and,
+        - is_nation_ally_spawning_requiring_public_status is true.
+      - default: false, and not a child node of towny.town.spawn.*
+    - towny.town.spawn.ally.bypasspublic:
+      - description: User is permitted to use /town spawn when:
+        - they are a member of an allied nation and,
+        - the town isn't public and,
+        - is_nation_ally_spawning_requiring_public_status is true.
+      - default: false, and not a child node of towny.town.spawn.*
+    - Give either of these nodes to allow a king or otherwise special nation member to still travel
+      to an allied town when other nation members/allies are stopped, because the town is not public,
+      and the config requires public status.
+    - Closes #6367.
