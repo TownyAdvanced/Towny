@@ -17,9 +17,11 @@ import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -247,5 +249,33 @@ public class TownyCustomListener implements Listener {
 			return;
 		event.setCancelled(true);
 		event.setCancelMessage(Translatable.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", town.getName()).forLocale(event.getPlayer()));
+	}
+
+	/**
+	 * Used to prevent unclaiming when there is an outsider in the TownBlock,
+	 * and the config does not allow for this.
+	 * 
+	 * @param event {@link TownPreUnclaimCmdEvent} thrown when someone runs /t unclaim.
+	 */
+	@EventHandler(ignoreCancelled = true)
+	public void onTownUnclaim(TownPreUnclaimCmdEvent event) {
+		Player player = event.getResident().getPlayer();
+		if (!TownySettings.getOutsidersUnclaimingTownBlocks() || player == null)
+			return;
+
+		TownBlock townblock = TownyAPI.getInstance().getTownBlock(player);
+		if (townblock == null)
+			return;
+
+		Town town = event.getTown();
+		for (Player target : Bukkit.getOnlinePlayers()) {
+			if (!town.hasResident(target) &&
+				!TownyAPI.getInstance().isWilderness(target.getLocation()) &&
+				townblock.equals(TownyAPI.getInstance().getTownBlock(target.getLocation()))) {
+				event.setCancelled(true);
+				event.setCancelMessage(Translatable.of("msg_cant_unclaim_outsider_in_town").forLocale(event.getResident()));
+				break;
+			}
+		}
 	}
 }
