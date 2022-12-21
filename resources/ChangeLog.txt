@@ -8192,13 +8192,13 @@ v0.92.0.11:
     - Closes #6337.
 0.98.4.14:
   - New Permission Nodes:
-    - towny.town.spawn.nation.bypasspublic:
+    - towny.town.spawn.nation.bypass_public:
       - description: User is permitted to use /town spawn when:
         - they are a member of the same nation and, 
         - the town isn't public and,
         - is_nation_ally_spawning_requiring_public_status is true.
       - default: false, and not a child node of towny.town.spawn.*
-    - towny.town.spawn.ally.bypasspublic:
+    - towny.town.spawn.ally.bypass_public:
       - description: User is permitted to use /town spawn when:
         - they are a member of an allied nation and,
         - the town isn't public and,
