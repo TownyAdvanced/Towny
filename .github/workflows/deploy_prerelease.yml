@@ -54,3 +54,15 @@ jobs:
             ./target/towny-${{ env.CURR_VER }}.jar
         env:
           GITHUB_REPOSITORY: my_gh_org/my_gh_repo
+      - name: prepare maven settings.xml
+        uses: s4u/maven-settings-action@v2.8.0
+        with:
+          githubServer: false
+          servers: |
+            [{
+              "id": "nexus",
+              "username": "${{ secrets.GLAREREPO_USERNAME }}",
+              "password": "${{ secrets.GLAREREPO_PASSWORD }}"
+            }]
+      - name: deploy to glaremaster repo
+        run: mvn deploy
