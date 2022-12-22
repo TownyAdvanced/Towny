@@ -41,7 +41,9 @@ import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -486,6 +488,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		if (townBlock.isJail() && townBlock.getJail() != null)
 			removeJail(townBlock.getJail());
+
+		if (TownySettings.getTownUnclaimCoolDownTime() > 0)
+			CooldownTimerTask.addCooldownTimer(townBlock.getWorldCoord().toString(), CooldownType.TOWNBLOCK_UNCLAIM);
 
 		universe.removeTownBlock(townBlock);
 		deleteTownBlock(townBlock);

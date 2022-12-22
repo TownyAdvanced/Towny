@@ -692,7 +692,17 @@ public enum ConfigNodes {
 			"30",
 			"",
 			"# Number of seconds that must pass before peacfulness can be toggled by a town or nation."),
-
+	GTOWN_SETTINGS_TOWN_DELETE_COOLDOWN_TIMER(
+			"global_town_settings.town_delete_cooldown_time",
+			"0",
+			"",
+			"# Number of seconds that must pass before a player that has deleted their town can create a new one."),
+	GTOWN_SETTINGS_TOWN_UNCLAIM_COOLDOWN_TIMER(
+			"global_town_settings.town_unclaim_cooldown_time",
+			"0",
+			"",
+			"# Number of seconds that must pass before a town that has unclaimed a townblock can claim it again."),
+	
 	GTOWN_SETTINGS_TOWN_RESPAWN(
 			"global_town_settings.town_respawn",
 			"false",

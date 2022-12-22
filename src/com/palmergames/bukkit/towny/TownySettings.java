@@ -2726,6 +2726,16 @@ public class TownySettings {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_NEUTRAL_COOLDOWN_TIMER);
 	}
 	
+	public static int getTownDeleteCoolDownTime() {
+
+		return getInt(ConfigNodes.GTOWN_SETTINGS_TOWN_DELETE_COOLDOWN_TIMER);
+	}
+	
+	public static int getTownUnclaimCoolDownTime() {
+
+		return getInt(ConfigNodes.GTOWN_SETTINGS_TOWN_UNCLAIM_COOLDOWN_TIMER);
+	}
+	
 	public static String getTownAccountPrefix() {
 
 		return getString(ConfigNodes.ECO_TOWN_PREFIX);
