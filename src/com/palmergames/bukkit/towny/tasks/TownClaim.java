@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -170,6 +171,11 @@ public class TownClaim extends Thread {
 		if (TownyUniverse.getInstance().hasTownBlock(worldCoord))
 				throw new AlreadyRegisteredException(Translatable.of("msg_already_claimed", "some town").forLocale(player));
 		else {
+			// Check townblock unclaim cooldown.
+			if (CooldownTimerTask.hasCooldown(worldCoord.toString(), CooldownType.TOWNBLOCK_UNCLAIM))
+				throw new TownyException(Translatable.of("msg_err_cannot_claim_townblock_x_seconds_remaining",
+					worldCoord.toString(), CooldownTimerTask.getCooldownRemaining(worldCoord.toString(), CooldownType.TOWNBLOCK_UNCLAIM)));
+
 			TownBlock townBlock = new TownBlock(worldCoord.getX(), worldCoord.getZ(), worldCoord.getTownyWorld());
 			townBlock.setTown(town);
 			// Set the plot permissions to mirror the towns.

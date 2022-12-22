@@ -2710,6 +2710,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (TownySettings.hasTownLimit() && TownyUniverse.getInstance().getTowns().size() >= TownySettings.getTownLimit())
 				throw new TownyException(Translatable.of("msg_err_universe_limit"));
 
+			// Check if the player has a cooldown since deleting their town.
+			if (!resident.isAdmin() && CooldownTimerTask.hasCooldown(player.getName(), CooldownType.TOWN_DELETE))
+				throw new TownyException(Translatable.of("msg_err_cannot_create_new_town_x_seconds_remaining",
+						CooldownTimerTask.getCooldownRemaining(player.getName(), CooldownType.TOWN_DELETE)));
+			
 			if (TownySettings.getTownAutomaticCapitalisationEnabled())
 				name = StringMgmt.capitalizeStrings(name);
 			
@@ -3016,7 +3021,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (TownySettings.getTownRuinsReclaimEnabled())
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted2", TownySettings.getTownRuinsMinDurationHours()));
 			}
-			Confirmation.runOnAccept(() -> townyUniverse.getDataSource().removeTown(town)).sendTo(player);
+			Confirmation.runOnAccept(() -> {
+				townyUniverse.getDataSource().removeTown(town);
+				if (TownySettings.getTownUnclaimCoolDownTime() > 0)
+					CooldownTimerTask.addCooldownTimer(player.getName(), CooldownType.TOWN_DELETE);
+			}).sendTo(player);
 			return;
 		}
 
