@@ -960,6 +960,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			line = rs.getString("tag");
 			if (line != null)
 				town.setTag(line);
+			line = rs.getString("founder");
+			if (line != null)
+				town.setFounder(line);
 			town.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
 			town.setBonusBlocks(rs.getInt("bonus"));
 			town.setManualTownLevel(rs.getInt("manualTownLevel"));
@@ -2159,6 +2162,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("assistants", StringMgmt.join(town.getRank("assistant"), "#"));
 			twn_hm.put("townBoard", town.getBoard());
 			twn_hm.put("tag", town.getTag());
+			twn_hm.put("founder", town.getFounder());
 			twn_hm.put("protectionStatus", town.getPermissions().toString().replaceAll(",", "#"));
 			twn_hm.put("bonus", town.getBonusBlocks());
 			twn_hm.put("manualTownLevel", town.getManualTownLevel());
