@@ -2836,6 +2836,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
 		resident.setTown(town);
 		town.setMayor(resident);
+		town.setFounder(resident.getName());
 
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
