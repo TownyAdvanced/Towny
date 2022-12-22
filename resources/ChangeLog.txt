@@ -8208,3 +8208,8 @@ v0.92.0.11:
       to an allied town when other nation members/allies are stopped, because the town is not public,
       and the config requires public status.
     - Closes #6367.
+  - New Config Option: global_town_settings.outsiders_prevent_unclaim_townblock
+    - Default: false
+    - If set to true, Towny will prevent a townblock from being unclaimed while an outsider is within the townblock's boundaries.
+    - When active this feature can cause a bit of lag when the /t unclaim command is used, depending on how many players are online.
+0.98.4.15:
