@@ -622,6 +622,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					town.setBoard(line);
 
+				line = keys.get("founder");
+				if (line != null)
+					town.setFounder(line);
+
 				line = keys.get("tag");
 				if (line != null)
 					town.setTag(line);
@@ -1941,6 +1945,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("townBoard=" + town.getBoard());
 		// tag
 		list.add("tag=" + town.getTag());
+		// founder
+		list.add("founder=" + town.getFounder());
 		// Town Protection
 		list.add("protectionStatus=" + town.getPermissions().toString());
 		// Bonus Blocks

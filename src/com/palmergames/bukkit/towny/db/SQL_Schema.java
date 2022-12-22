@@ -157,6 +157,7 @@ public class SQL_Schema {
 		columns.add("`assistants` text DEFAULT NULL");
 		columns.add("`townBoard` mediumtext DEFAULT NULL");
 		columns.add("`tag` mediumtext DEFAULT NULL");
+		columns.add("`founder` mediumtext DEFAULT NULL");
 		columns.add("`protectionStatus` mediumtext DEFAULT NULL");
 		columns.add("`bonus` int(11) DEFAULT 0");
 		columns.add("`purchased` int(11)  DEFAULT 0");

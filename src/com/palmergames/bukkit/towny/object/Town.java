@@ -67,6 +67,7 @@ public class Town extends Government implements TownBlockOwner {
 	private TownBlockTypeCache plotTypeCache = new TownBlockTypeCache();
 	
 	private Resident mayor;
+	private String founderName;
 	private int bonusBlocks = 0;
 	private int purchasedBlocks = 0;
 	private double plotTax= TownySettings.getTownDefaultPlotTax();
@@ -202,6 +203,14 @@ public class Town extends Government implements TownBlockOwner {
 		this.mayor = mayor;
 		
 		TownyPerms.assignPermissions(mayor, null);	
+	}
+
+	public String getFounder() {
+		return founderName != null ? founderName : getMayor().getName();
+	}
+
+	public void setFounder(String founderName) {
+		this.founderName = founderName;
 	}
 
 	public Nation getNation() throws NotRegisteredException {
