@@ -8226,3 +8226,5 @@ v0.92.0.11:
     - If founderName is null it will pull the existing mayor's name.
     - Founder is displayed in the town status screen next to Founded: 'Date'.
     - Closes #6306.
+  - Fix tab completion for /t rank remove {player} not using the player's ranks.
+  - Improve tab completion for /n rank.
