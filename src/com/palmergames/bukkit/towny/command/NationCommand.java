@@ -282,26 +282,27 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					break;
 				case "rank":
-					if (args.length == 2) {
+					switch (args.length) {
+					case 2:
 						return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
-					} else if (args.length > 2){
+					case 3:
+						return getNationResidentNamesOfPlayerStartingWith(player, args[2]);
+					case 4:
 						switch (args[1].toLowerCase()) {
 							case "add":
-							case "remove":
-								if (args.length == 3) {
-									try {
-										return NameUtil.filterByStart(NameUtil.getNames(getResidentOrThrow(player.getUniqueId()).getTown().getNation().getResidents()), args[2]);
-									} catch (NotRegisteredException e) {
-										return Collections.emptyList();
-									}
-								} else if (args.length == 4) {
-									return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
-								}
+								return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
+							case "remove": {
+								Resident res = TownyUniverse.getInstance().getResident(args[2]);
+								if (res != null)
+									return res.getNationRanks().isEmpty() ? Collections.emptyList() : NameUtil.filterByStart(res.getNationRanks(), args[3]);
+								break;
+							}
 							default:
 								return Collections.emptyList();
 						}
+					default:
+						return Collections.emptyList();
 					}
-					break;
 				case "enemy":
 					if (args.length == 2) {
 						return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);

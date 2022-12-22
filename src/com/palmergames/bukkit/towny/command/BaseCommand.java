@@ -175,7 +175,24 @@ public class BaseCommand implements TabCompleter{
 		
 		return Collections.emptyList();
 	}
-	
+
+	/**
+	 * Returns the names a player's nation's residents that start with a string
+	 *
+	 * @param player the player to get the nation's residents of
+	 * @param str the string to check if the nation's residents start with
+	 * @return the resident names that match str
+	 */
+	public static List<String> getNationResidentNamesOfPlayerStartingWith(Player player, String str){
+		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		
+		if (res != null && res.hasNation()) {
+			return NameUtil.filterByStart(NameUtil.getNames(res.getNationOrNull().getResidents()), str);
+		}
+
+		return Collections.emptyList();
+	}
+
 	/**
 	 * Returns the names a player's town's residents that start with a string
 	 *

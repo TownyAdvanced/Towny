@@ -327,11 +327,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								case "add":
 									return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[3]);
 								case "remove": {
-									Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
-									
-									if (res != null) {
-										return NameUtil.filterByStart(res.getTownRanks(), args[3]);
-									}
+									Resident res = TownyUniverse.getInstance().getResident(args[2]);
+									if (res != null)
+										return res.getTownRanks().isEmpty() ? Collections.emptyList() : NameUtil.filterByStart(res.getTownRanks(), args[3]);
 									break;
 								}
 								default:
