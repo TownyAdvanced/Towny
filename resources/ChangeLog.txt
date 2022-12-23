@@ -8228,3 +8228,6 @@ v0.92.0.11:
     - Closes #6306.
   - Fix tab completion for /t rank remove {player} not using the player's ranks.
   - Improve tab completion for /n rank.
+0.98.4.16:
+  - API: add StatusScreen#getComponentKeys
+    - When a plugin wants to know the keys the back the StatusScreen#getComponents collection.

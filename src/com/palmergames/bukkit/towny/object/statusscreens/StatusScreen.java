@@ -56,6 +56,10 @@ public class StatusScreen {
 		components.remove(name);
 	}
 	
+	public Collection<String> getComponentKeys() {
+		return Collections.unmodifiableCollection(components.keySet());
+	}
+	
 	public Collection<Component> getComponents() {
 		return Collections.unmodifiableCollection(components.values());
 	}
