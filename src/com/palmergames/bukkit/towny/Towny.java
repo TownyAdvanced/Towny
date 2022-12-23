@@ -526,9 +526,6 @@ public class Towny extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null && TownySettings.isContextsEnabled())
 			new LuckPermsContexts(this);
 		
-		if (Bukkit.getPluginManager().getPlugin("Essentials") != null && TownySettings.isUsingEssentials())
-			this.essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-		
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
 			new TownyPlaceholderExpansion(this).register();
 		
